@@ -1,0 +1,98 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "Opportunités",
+        "loading": "Chargement des opportunités",
+        "empty": "Ce contact n'a pas encore d'opportunités.",
+        "unavailable": "Les opportunités ne sont pas disponibles avec votre offre, ou votre rôle n'y donne pas accès.",
+        "listLabel": "Opportunités de ce contact",
+        "openRollup": "{count, plural, one {# opportunité ouverte} other {# opportunités ouvertes}}",
+        "wonRollup": "{count, plural, one {# opportunité gagnée} other {# opportunités gagnées}}",
+        "noValue": "Sans montant",
+        "capped": "Affichage des {count} premières opportunités. Les totaux ci-dessus les incluent toutes.",
+        "pipeline": "Pipeline {name}",
+        "closes": "Clôture prévue {date}",
+        "owner": "Propriétaire {name}",
+        "status": {
+          "open": "Ouverte",
+          "won": "Gagnée",
+          "lost": "Perdue"
+        }
+      },
+      "conversations": {
+        "title": "Conversations",
+        "loading": "Chargement des conversations",
+        "empty": "Aucune conversation trouvée pour ce contact.",
+        "listLabel": "Conversations de ce contact",
+        "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+        "open": "Ouvrir",
+        "openLabel": "Ouvrir la conversation {title}",
+        "noPreview": "Pas encore de messages",
+        "lastMessage": "Dernier message {time}",
+        "assignedTo": "Attribuée à {name}",
+        "unassigned": "Non attribuée",
+        "footnote": "Trouvées via le numéro de téléphone, l'adresse e-mail ou le nom du contact. Les conversations archivées ne sont pas listées.",
+        "status": {
+          "open": "Ouverte",
+          "snoozed": "Reportée",
+          "resolved": "Résolue",
+          "closed": "Fermée",
+          "spam": "Spam"
+        }
+      },
+      "history": {
+        "button": "Historique des champs du contact",
+        "title": "Historique des champs du contact",
+        "close": "Fermer",
+        "loading": "Chargement de l'historique",
+        "empty": "Aucune modification de champ n'a encore été enregistrée pour ce contact.",
+        "loadMore": "Charger plus",
+        "changedTo": "modifié en",
+        "noValue": "vide",
+        "by": "Par {actor}",
+        "actor": {
+          "user": "un utilisateur",
+          "system": "le système",
+          "api": "l'API"
+        },
+        "fields": {
+          "name": "Nom",
+          "firstName": "Prénom",
+          "lastName": "Nom de famille",
+          "email": "E-mail",
+          "phone": "Téléphone",
+          "companyId": "Entreprise",
+          "ownerId": "Propriétaire",
+          "lifecycleStage": "Étape du cycle de vie",
+          "lifecycleState": "État du cycle de vie",
+          "status": "Statut",
+          "lostReason": "Motif de perte",
+          "leadScore": "Score du lead",
+          "source": "Source",
+          "isUnsubscribed": "Désabonné"
+        }
+      },
+      "stats": {
+        "title": "Statistiques de communication",
+        "loading": "Chargement des statistiques",
+        "conversations": "Conversations",
+        "unread": "Messages non lus",
+        "lastInbound": "Dernier message reçu",
+        "lastOutbound": "Dernier message envoyé",
+        "calls": "Appels",
+        "callsAnswered": "Appels répondus",
+        "callsMissed": "Appels manqués",
+        "callMinutes": "Minutes d'appel",
+        "openTasks": "Tâches ouvertes",
+        "leadScore": "Score du lead",
+        "lastActivity": "Dernière activité",
+        "created": "Créé",
+        "none": "Aucun pour l'instant",
+        "atLeast": "{count}+",
+        "footnote": "Les chiffres des messages couvrent les conversations trouvées pour ce contact (par numéro de téléphone, adresse e-mail ou nom). Les chiffres des appels couvrent la dernière année, selon le numéro de téléphone ou le nom.",
+        "callsPartial": "Plus d'appels correspondaient que ce qui a pu être lu ; les chiffres des appels peuvent donc être incomplets."
+      }
+    }
+  }
+}

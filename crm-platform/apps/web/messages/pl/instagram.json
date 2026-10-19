@@ -85,7 +85,8 @@
       "outsideWindow": "Poza 24 h",
       "selected": "{count, plural, one {Zaznaczono: #} few {Zaznaczono: #} many {Zaznaczono: #} other {Zaznaczono: #}}",
       "sent": "Wysłano wiadomość masową Instagram — dostarczono: {sent}{failed, plural, =0 {} one {, nieudana: #} few {, nieudane: #} many {, nieudanych: #} other {, nieudanych: #}}.",
-      "sentNone": "Nie udało się wysłać do żadnego odbiorcy. Sprawdź połączenie z Instagramem."
+      "sentNone": "Nie udało się wysłać do żadnego odbiorcy. Sprawdź połączenie z Instagramem.",
+      "skipped": "Nie wysłano wiadomości z powodu zgody: {count}"
     }
   }
 }

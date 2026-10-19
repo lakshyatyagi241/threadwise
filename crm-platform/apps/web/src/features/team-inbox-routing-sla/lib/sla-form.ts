@@ -11,7 +11,6 @@ export interface SlaDraft {
   name: string;
   firstResponse: string;
   resolution: string;
-  pause: boolean;
   businessHours: boolean;
   isDefault: boolean;
   /** Per priority: [first reply, resolve] text boxes. */
@@ -22,7 +21,6 @@ export const emptyDraft = (isFirst: boolean): SlaDraft => ({
   name: '',
   firstResponse: '',
   resolution: '',
-  pause: true,
   businessHours: true,
   isDefault: isFirst,
   overrides: Object.fromEntries(CONVERSATION_PRIORITIES.map((p) => [p, ['', '']])),
@@ -33,7 +31,6 @@ export function draftOf(p: InboxSlaPolicy): SlaDraft {
     name: p.name,
     firstResponse: p.firstResponseMinutes === null ? '' : String(p.firstResponseMinutes),
     resolution: p.resolutionMinutes === null ? '' : String(p.resolutionMinutes),
-    pause: p.pauseWhenWaitingOnCustomer,
     businessHours: p.respectBusinessHours,
     isDefault: p.isDefault,
     overrides: Object.fromEntries(
@@ -88,7 +85,6 @@ export function toInput(d: SlaDraft): DraftResult {
       name,
       firstResponseMinutes: first,
       resolutionMinutes: resolution,
-      pauseWhenWaitingOnCustomer: d.pause,
       respectBusinessHours: d.businessHours,
       priorityOverrides: overrides,
       isDefault: d.isDefault,

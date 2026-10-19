@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { calendarSyncSchema } from '../google-account/drift';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import { dealValueSchema } from '../deals-pipelines/money';
@@ -94,6 +95,36 @@ export const appointmentPaymentSchema = z.object({
 });
 export type AppointmentPayment = z.infer<typeof appointmentPaymentSchema>;
 
+/**
+ * One reminder or follow-up of a booking and what became of it (BL-283). `scheduled` is a rule that has not come due yet (computed, no
+ * row); the others are the recorded run. `reason` is a stable code (quiet_hours, opted_out, no_sender, ...), never a message or an address.
+ */
+export const APPOINTMENT_REMINDER_STATUSES = [
+  'scheduled',
+  'pending',
+  'sending',
+  'held',
+  'sent',
+  'skipped',
+  'failed',
+  'cancelled',
+] as const;
+export const appointmentReminderStatusSchema = z.enum(APPOINTMENT_REMINDER_STATUSES);
+export type AppointmentReminderStatus = z.infer<typeof appointmentReminderStatusSchema>;
+
+export const appointmentReminderSchema = z.object({
+  kind: z.enum(['before', 'after']),
+  offsetMinutes: z.number().int(),
+  label: z.string().nullable(),
+  /** The moment the message is due (start minus the offset, or end plus it). */
+  dueAt: z.string().datetime(),
+  status: appointmentReminderStatusSchema,
+  reason: z.string().nullable(),
+  channel: z.enum(['whatsapp', 'sms', 'email']).nullable(),
+  sentAt: z.string().datetime().nullable(),
+});
+export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
+
 export const appointmentResponseSchema = z.object({
   id: uuidSchema,
   status: appointmentStatusSchema,
@@ -135,9 +166,13 @@ export const appointmentResponseSchema = z.object({
   calendar: z.object({
     eventId: z.string().nullable(),
     calendarId: z.string().nullable(),
+    /** Whether the Google event still matches (TW-GACC-011). Null on a row from a server that predates it. */
+    sync: calendarSyncSchema.nullable().optional(),
   }),
   /** The customer's manage link (reschedule or cancel); staff can copy it. */
   manageUrl: z.string().nullable(),
+  /** The reminders and follow-ups of this booking and their outcome. Only on a single booking read, not on a list. */
+  reminders: z.array(appointmentReminderSchema).optional(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

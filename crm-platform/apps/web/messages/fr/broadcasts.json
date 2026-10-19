@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "En pause : le plafond d’envoi quotidien a été atteint. Elle reprend automatiquement après {when}.",
         "halt": "En pause : l’envoi est suspendu pour cet espace de travail. Il reprend quand la suspension est levée.",
-        "manual": "En pause."
+        "manual": "En pause.",
+        "quiet_hours": "En pause : certains destinataires sont dans leurs heures de silence. L’envoi reprend tout seul après {when}."
       },
       "delete": "Supprimer",
       "deleteTitle": "Supprimer la diffusion ?",
@@ -145,7 +146,8 @@
         "queued": "En file d’attente",
         "queuedHint": "en attente d’envoi",
         "failed": "Échoués",
-        "failedPct": "{pct} % de taux d’échec"
+        "failedPct": "{pct} % de taux d’échec",
+        "queuedHeld": "{count} retenus pendant les heures de silence"
       },
       "tab": {
         "overview": "Vue d’ensemble",
@@ -193,7 +195,8 @@
         "lastClick": "Dernier clic : {when}",
         "empty": "Aucun destinataire associé.",
         "more": "Charger plus",
-        "loading": "Chargement"
+        "loading": "Chargement",
+        "heldUntil": "Retenu jusqu’à {when} (heures de silence)"
       },
       "failures": {
         "kicker": "Raisons des échecs",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Non officiel (désactivé)"
     },
     "compose": {
-      "back": "Retour aux diffusions",
-      "crumb": "Diffusions / Nouvelle",
-      "title": "Créer une nouvelle",
-      "titleAccent": "diffusion",
-      "draft": "Brouillon / non enregistré",
-      "submit": "Ajouter la diffusion",
-      "submitting": "Ajout en cours…",
-      "created": "Diffusion ajoutée.",
-      "createdMany": "{count} diffusions ajoutées, une par expéditeur.",
-      "failed": "Impossible d’ajouter la diffusion.",
-      "fixName": "Saisissez un nom de diffusion.",
-      "fixTemplate": "Choisissez un modèle approuvé.",
-      "fixSchedule": "Choisissez une date et une heure d’envoi.",
-      "loading": "Chargement",
-      "loadError": "Impossible de charger les données de composition.",
-      "retry": "Réessayer",
-      "setup": "Configuration de la diffusion",
-      "templateMessage": "message de modèle",
-      "name": "Nom de la diffusion",
-      "namePlaceholder": "ex. Envoi du modèle de l’offre de mai",
-      "nameHint": "Libellé interne utilisé dans les rapports de diffusion.",
-      "template": "Sélectionner le message de modèle",
-      "pickTemplate": "— Choisir un modèle approuvé —",
-      "noTemplates": "Aucun modèle approuvé pour le moment.",
       "createOne": "En créer un",
-      "templateHint": "Les diffusions n’envoient que des modèles approuvés.",
-      "twilioHint": "Les envois conformes à Twilio exigent un Content SID par modèle : marquez un modèle comme « Twilio ready » via /templates/{id}/edit. Les modèles sans ContentSid seront envoyés en texte brut (perte de l’approbation du modèle par Meta).",
-      "device": "Envoyer depuis l’appareil",
-      "devices": "Envoyer depuis les appareils",
-      "multiDevice": "Multi-appareils : cochez tous ceux qui conviennent",
-      "noDevices": "Aucun appareil connecté.",
-      "connectOne": "En connecter un →",
-      "share": "part",
-      "shareHint": "Cochez les appareils et définissez les poids de répartition : par exemple 7 / 3 envoie 70 % des contacts via le premier appareil et 30 % via le second. Des poids égaux répartissent à parts égales.",
       "audience": "À qui voulez-vous l’envoyer ?",
       "audienceHint": "Choisissez des segments, des étiquettes, des groupes ou des contacts. Chaque personne choisie n’est comptée qu’une fois.",
       "selected": "{count} sélectionné(s)",
@@ -276,27 +246,10 @@
       "noContacts": "Aucun contact pour le moment.",
       "addSome": "En ajouter →",
       "noMatch": "Aucun contact ne correspond à la recherche.",
-      "when": "Quand voulez-vous envoyer votre diffusion ?",
-      "whenHint": "Envoyez immédiatement ou choisissez une date / heure future.",
-      "sendNow": "Envoyer maintenant",
-      "sendNowHint": "Envoyer après la validation finale.",
-      "sendLater": "Planifier pour plus tard",
-      "sendLaterHint": "Choisissez un jour et une heure précis.",
-      "sendDate": "Date d’envoi",
-      "sendTime": "Heure d’envoi",
-      "timezone": "Fuseau horaire",
-      "preview": "Aperçu du modèle",
-      "previewTitle": "Aperçu de la diffusion",
-      "previewSub": "Message de modèle",
-      "pickToPreview": "Choisissez un modèle pour l’aperçu…",
-      "previewSelected": "Sélectionné",
-      "previewSchedule": "Planification",
-      "now": "Maintenant",
-      "later": "Plus tard",
-      "media": "Aperçu {kind}",
       "contactsDenied": "Vous n’avez pas accès à la liste de contacts. Choisissez des contacts via des groupes ou des étiquettes.",
       "unofficialDisabled": "L’envoi via des numéros WhatsApp personnels (l’API non officielle) n’est pas activé pour votre espace de travail. Choisissez un numéro de l’API WhatsApp Business officielle.",
-      "previewLabel": "Aperçu du modèle"
+      "colEmail": "E-mail",
+      "noEmail": "Aucune adresse e-mail"
     },
     "overrides": {
       "title": "Renseigner cet envoi",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Écrivez aux personnes déjà présentes dans vos messages privés Instagram : aucune approbation de modèle.",
         "cta": "Créer une diffusion Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envoyez un message Messenger aux personnes qui ont écrit à votre Page ces dernières 24 heures.",
+        "cta": "Créer une diffusion Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Envoyez un message sous forme d'e-mail depuis une boîte mail connectée, avec un lien de désabonnement.",
+        "cta": "Créer une campagne e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte LINE.",
+        "cta": "Créer une diffusion LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envoyez un message aux personnes qui discutent déjà avec votre compte Viber.",
+        "cta": "Créer une diffusion Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envoyez un message de masse à tous les abonnés, à un tag ou à des utilisateurs sélectionnés de votre compte officiel.",
+        "cta": "Créer une diffusion WeChat"
       }
     }
   }

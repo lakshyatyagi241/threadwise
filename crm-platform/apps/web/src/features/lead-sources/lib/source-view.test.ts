@@ -6,8 +6,11 @@ import {
   STATUS_TONE,
   attentionHref,
   attentionTotal,
+  canDeleteHere,
   canRotate,
+  hasOwnUrl,
   isConnector,
+  isMetaForm,
   isUuid,
   parseTab,
   sourceHref,
@@ -44,6 +47,22 @@ describe('the sources list', () => {
     expect(canRotate(c)).toBe(false);
     expect(sourceRow(c)).toMatchObject({ connector: true, tokenHint: null });
     expect(canRotate(source())).toBe(true);
+  });
+
+  it('a Meta lead form source has no token to show either, is told apart and is ended on the Ads tab', () => {
+    const m = source({ kind: 'meta_lead_ads', tokenHint: 'zz99' });
+    expect(isMetaForm(m)).toBe(true);
+    expect(isConnector(m)).toBe(false);
+    expect(hasOwnUrl(m)).toBe(false);
+    expect(canRotate(m)).toBe(false);
+    expect(canDeleteHere(m)).toBe(false);
+    expect(sourceRow(m)).toMatchObject({ meta: true, connector: false, tokenHint: null });
+    // webhooks and connectors keep what they had
+    expect(hasOwnUrl(source())).toBe(true);
+    expect(canDeleteHere(source())).toBe(true);
+    expect(canDeleteHere(source({ kind: 'connector' }))).toBe(true);
+    expect(hasOwnUrl(source({ kind: 'connector' }))).toBe(false);
+    expect(sourceRow(source())).toMatchObject({ meta: false });
   });
 
   it('keeps a source of a kind without a door in the list, with its kind', () => {
@@ -89,7 +108,8 @@ describe('addresses', () => {
     expect(isUuid('../x')).toBe(false);
   });
 
-  it('lists the four providers without a door as coming soon', () => {
-    expect([...COMING_SOON_PROVIDERS]).toEqual(['meta', 'linkedin', 'tiktok', 'google']);
+  it('lists the three providers without a door as coming soon (Meta lead forms has one now)', () => {
+    expect([...COMING_SOON_PROVIDERS]).toEqual(['linkedin', 'tiktok', 'google']);
+    expect(COMING_SOON_PROVIDERS as readonly string[]).not.toContain('meta');
   });
 });

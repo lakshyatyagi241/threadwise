@@ -4,8 +4,14 @@ import {
   flbCleanAskFileExtensions,
   type FlbAskGiveUp,
 } from './ask-media';
-import { flbCleanAskInputType, flbCleanDateFormat } from './ask-input';
+import {
+  flbCleanAgeWhenUnder,
+  flbCleanAskInputType,
+  flbCleanDateFormat,
+  flbCleanMinAge,
+} from './ask-input';
 import { flbSanitizeConditionGroup } from './condition-group';
+import { flbParseCoordinate } from './location';
 import type { FlbNodeData } from './node-catalogue';
 
 /**
@@ -411,6 +417,10 @@ const SHAPERS: Record<string, Shaper> = {
       inputType: flbCleanAskInputType(d.validate),
       dateFormat: flbCleanDateFormat(d.dateFormat),
       wrongReplyText: s(d.wrongReply).trim(),
+      // The age question (BL-218): its own minimum (null = the workspace's), what to do when under, and the neutral closing line.
+      ageMinAge: flbCleanMinAge(d.ageMinAge),
+      ageWhenUnder: flbCleanAgeWhenUnder(d.ageWhenUnder),
+      ageEndText: s(d.ageEndText).trim(),
       maxRetries: Math.min(FLB_ASK_MAX_RETRIES, Math.max(0, retries)),
       onGiveUp: (FLB_ASK_GIVE_UP_MODES as readonly string[]).includes(mode) ? mode : 'continue',
       savePropertyKey: toBool(d.saveProperty) ? s(d.propertyKey).trim() : '',
@@ -552,8 +562,11 @@ const SHAPERS: Record<string, Shaper> = {
   },
 
   location: (d) => ({
-    latitude: toFloat(coalesce(d.lat, d.latitude)),
-    longitude: toFloat(coalesce(d.lng, d.longitude)),
+    // Not PHP's (float) cast: that turns a blank or garbled coordinate into 0 and sends a pin at the equator. A coordinate that is not a
+    // plain number is `null` (JSON-safe, it is stored on a run), and the Location executor refuses to send it. (`18,5204` with a
+    // decimal comma reads as 18.5204.)
+    latitude: flbParseCoordinate(coalesce(d.lat, d.latitude)),
+    longitude: flbParseCoordinate(coalesce(d.lng, d.longitude)),
     address: s(d.address),
     title: s(d.title),
   }),

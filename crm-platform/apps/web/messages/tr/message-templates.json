@@ -54,13 +54,30 @@
       "time": "10:30",
       "copyCode": "Kodu kopyala",
       "buttonUnnamed": "Düğme",
-      "moreButtons": "{count, plural, other {+# düğme daha}}"
+      "moreButtons": "{count, plural, other {+# düğme daha}}",
+      "live": "Canlı önizleme",
+      "business": "Bloomly",
+      "online": "çevrimiçi"
     },
     "card": {
       "rejected": "Reddedildi: {reason}",
       "view": "Görüntüle",
       "edit": "Düzenle",
-      "delete": "Sil"
+      "delete": "Sil",
+      "curl": "cURL: bu şablonu API ile gönder",
+      "curlNamed": "{name} göndermek için cURL",
+      "engine": "Meta WABA",
+      "type": {
+        "standard": "Standart",
+        "media": "Medya",
+        "auth": "Doğrulama",
+        "carousel": "Karusel",
+        "catalog": "Katalog",
+        "limited_time_offer": "Sınırlı süreli teklif"
+      },
+      "rejectedLabel": "Reddedildi:",
+      "viewTitle": "Ayrıntıları ve Meta inceleme durumunu görüntüle",
+      "deleteNamed": "{name} öğesini sil"
     },
     "library": {
       "title": "Şablon kütüphanesi",
@@ -89,7 +106,56 @@
       "emptyFilteredTitle": "Eşleşen şablon yok",
       "emptyFilteredBody": "Daha fazla şablon görmek için filtreleri değiştirin veya temizleyin.",
       "clearFilters": "Filtreleri temizle",
-      "loadMore": "Daha fazla yükle"
+      "loadMore": "Daha fazla yükle",
+      "crumb": "Kampanyalar / Şablonlar",
+      "titleA": "Şablon",
+      "titleB": "kitaplığı",
+      "tipTitle": "İpucu",
+      "tip": "Şablonlarınızı net ve değişkenlere uygun metinlerle gönderin ('{{name}}', '{{order_id}}'). Gövde metni promosyon tetikleyicilerinden kaçındığında ve seçilen Meta kategorisine uyduğunda onay süresi 24 saatin altında kalır.",
+      "statusTitle": "Durum",
+      "statusTab": {
+        "all": "Tümü",
+        "approved": "Onaylandı",
+        "pending": "İncelemede",
+        "rejected": "Reddedildi"
+      },
+      "quickStartTitle": "Hızlı başlangıç",
+      "quickStart": "Onay sürelerini 24 saatin altında tutmak için Meta'ya göndermeden önce <link>Şablon Yönergeleri</link>'ni okuyun.",
+      "createTemplate": "Şablon oluştur",
+      "syncFailedLabel": "Meta'dan eşitleme başarısız oldu:",
+      "categories": "Kategoriler",
+      "tabAll": "Tümü",
+      "sortLabel": "Şablonları sırala",
+      "sort": {
+        "newest": "En yeni",
+        "oldest": "En eski",
+        "name-asc": "Ad A→Z",
+        "name-desc": "Ad Z→A"
+      },
+      "showing": "Gösterilen",
+      "of": "/",
+      "filteredTemplates": "filtrelenmiş şablon",
+      "showingRange": "{total} şablondan 1-{shown} arası gösteriliyor",
+      "legend": {
+        "approved": "Onaylandı",
+        "pending": "İncelemede",
+        "rejected": "Reddedildi"
+      },
+      "helpLabel": "Yardım - 0{n}",
+      "help": {
+        "one": {
+          "title": "Şablon mesajı nedir?",
+          "body": "Meta'nın, 24 saatlik hizmet penceresi dışında müşterilerle yeni görüşmeler başlatmak için zorunlu kıldığı, önceden onaylanmış mesaj biçimidir."
+        },
+        "two": {
+          "title": "Onay süreleri nasıl kısaltılır?",
+          "body": "Mesaj gövdesini net tutun, Yardımcı kategorisinde aşırı promosyon dilinden kaçının ve değişkenler için her zaman örnek değerler girin."
+        },
+        "three": {
+          "title": "Şablonum neden reddedildi?",
+          "body": "Yaygın nedenler arasında hatalı biçimlendirme, uyumsuz kategori veya taciz içerikli metin bulunur. Ret nedenini kontrol edin ve yeniden göndermek için düzenleyin."
+        }
+      }
     },
     "delete": {
       "title": "Şablonu sil",
@@ -289,6 +355,11 @@
         "saved": "Taslak olarak kaydedildi.",
         "warnings": "Meta incelemeden önce bakmaya değer:",
         "open": "Şablonu aç"
+      },
+      "ai": {
+        "open": "Yapay zekayla oluştur",
+        "applied": "Şablon taslağı yapay zekayla dolduruldu. Göndermeden önce inceleyin.",
+        "authHint": "Kimlik doğrulama şablonlarının metni sabittir, bu yüzden taslak hazırlanacak bir şey yok."
       }
     },
     "detail": {
@@ -315,7 +386,15 @@
         "paused": "Meta tarafından duraklatıldı. Meta duraklatmayı kaldırana kadar gönderilemez.",
         "pausedUntil": "Meta tarafından {when} tarihine kadar duraklatıldı.",
         "disabled": "Meta tarafından devre dışı bırakıldı. Gönderilemez.",
-        "deleted": "Meta bu şablonu artık listelemiyor. Burada saklanıyor; yeniden eşitleyin veya silin."
+        "deleted": "Meta bu şablonu artık listelemiyor. Burada saklanıyor; yeniden eşitleyin veya silin.",
+        "notSubmitted": "Henüz Meta'ya gönderilmedi",
+        "notSubmittedBody": "Bu şablon burada kayıtlı ancak Meta Şablon Kimliği yok: Meta onu hiç kabul etmedi, bu yüzden incelenemiyor veya gönderilemiyor. İncelemeyi başlatmak için gönderin.",
+        "notSubmittedNoWaba": "Bu şablonun Meta Şablon Kimliği yok. Bir WhatsApp Business (WABA) hesabı bağlayın, ardından incelemeye gönderin.",
+        "pendingBody": "Çoğu şablon dakikalar içinde onaylanır; Meta en fazla 48 saat sürebilir. Durum beklemedeyken bu sayfa her 30 saniyede bir otomatik yenilenir.",
+        "submittedAgo": "Gönderildi: {when}",
+        "checkedAgo": "son kontrol: {when}",
+        "code": "Kod:",
+        "pausedBody": "Tekrarlanan olumsuz geri bildirimler (engellemeler veya spam bildirimleri) bu şablonu duraklattı. Yeniden gönderilebilmesi için kalite puanının düzelmesi gerekir."
       },
       "facts": {
         "title": "Meta eşitlemesi",
@@ -354,7 +433,171 @@
         "title": "Meta yükü",
         "hint": "İnceleme için Meta'ya gönderilen, oluşturulduğu haliyle tam içerik.",
         "empty": "Henüz bir şey oluşturulmadı."
+      },
+      "curl": {
+        "title": "API ile gönder (cURL)",
+        "intro": "Onaylı bu şablonu tek bir numaraya gönderin. Örnek değerleri kendi değerlerinizle değiştirin.",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "copyFailed": "Kopyalanamadı. Metni seçip elle kopyalayın.",
+        "keyHint": "YOUR_API_KEY yerine API anahtarınızı yazın.",
+        "keyLink": "API anahtarı al",
+        "loading": "API anahtarlarınız kontrol ediliyor…",
+        "noKey": "Bu çalışma alanında henüz API anahtarı yok. Önce bir API anahtarı oluşturun, sonra bu cURL'ü kullanın.",
+        "keysUnknown": "API anahtarlarınız kontrol edilemedi. Anahtar oluşturmak veya incelemek için Geliştiriciler sayfasını açın, sonra bu cURL'ü kullanın.",
+        "createKey": "API anahtarı oluştur"
+      },
+      "refreshNow": "Şimdi yenile",
+      "editTemplate": "Şablonu düzenle",
+      "editResubmit": "Düzenle ve yeniden gönder",
+      "submitToMeta": "Meta'ya gönder",
+      "wabaAccount": "WhatsApp Business hesabı",
+      "noWaba": "Bağlı WABA hesabı yok.",
+      "connectOne": "Bir tane bağlayın",
+      "noWabaTail": "ve şablonları Meta'ya gönderin.",
+      "related": "İlgili",
+      "useInBroadcast": "Toplu gönderimde kullan",
+      "crumbTemplates": "Şablonlar",
+      "crumbDetail": "Ayrıntı",
+      "notSubmittedPill": "Gönderilmedi",
+      "qualityPill": "Kalite · {quality}",
+      "preview": {
+        "title": "Önizleme",
+        "hint": "WhatsApp'ta nasıl görünür"
+      },
+      "rejection": {
+        "ABUSIVE_CONTENT": "İçerik taciz edici veya tehdit edici olarak işaretlendi.",
+        "INVALID_FORMAT": "Biçim, Meta'nın şablon kurallarını ihlal ediyor (yer tutucular, satır sonları, uzunluk).",
+        "PROMOTIONAL": "Bu kategoride pazarlama dili kullanılamaz.",
+        "TAG_CONTENT_MISMATCH": "Kategori içerikle uyuşmuyor (ör. UTILITY şablonunda promosyon metni).",
+        "SCAM": "Meta şablonu olası dolandırıcılık olarak işaretledi. İddiaları ve dili gözden geçirin."
       }
+    },
+    "ai": {
+      "eyebrow": "Şablonlar / Yapay zeka",
+      "title": "Şununla oluştur:",
+      "titleAccent": "Yapay zeka",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "generate": "Şablon oluştur",
+      "intro": "Kısa bir özetten WhatsApp şablonu taslağı hazırlayın: ad, üst bilgi, gövde, alt bilgi ve düğmeler. Siz kendiniz yapmadıkça hiçbir şey gönderilmez.",
+      "model": "Yapay zeka modeli",
+      "modelsError": "Modeller yüklenemedi.",
+      "noModels": "Bu çalışma alanında etkin bir yapay zeka sağlayıcısı yok. Bir yöneticiden birini etkinleştirmesini isteyin.",
+      "loadingModels": "Modeller yükleniyor…",
+      "pickModel": "Model seçin",
+      "yourKey": "anahtarınız",
+      "business": "İşletme adı",
+      "businessPlaceholder": "Bloomly Florals",
+      "industry": "Sektör",
+      "pickIndustry": "Sektör seçin",
+      "occasion": "Vesile",
+      "pickOccasion": "Vesile seçin",
+      "purpose": "Amaç",
+      "pickPurpose": "Amaç seçin",
+      "action": "Ana eylem",
+      "pickAction": "Ana eylem seçin",
+      "tone": "Ton",
+      "pickTone": "Ton seçin",
+      "language": "Dil",
+      "languageHint": "Taslak, formun dilinde yazılır.",
+      "notes": "Özel istem",
+      "notesNote": "isteğe bağlı / en fazla 2000",
+      "notesPlaceholder": "Eklenmesini istediğiniz her şey: değişkenler, bağlantılar, mutlaka geçmesi gereken ifadeler, kaçınılacaklar…",
+      "industries": {
+        "retail": "Perakende / E-ticaret",
+        "food": "Yiyecek ve İçecek",
+        "healthcare": "Sağlık",
+        "education": "Eğitim",
+        "travel": "Seyahat ve Konaklama",
+        "finance": "Finans ve Bankacılık",
+        "realEstate": "Gayrimenkul",
+        "beauty": "Güzellik ve Sağlıklı Yaşam",
+        "logistics": "Lojistik ve Teslimat",
+        "services": "Profesyonel Hizmetler",
+        "nonprofit": "Kâr amacı gütmeyen",
+        "other": "Diğer"
+      },
+      "occasions": {
+        "launch": "Ürün lansmanı",
+        "sale": "Satış / indirim",
+        "orderConfirmation": "Sipariş onayı",
+        "shipping": "Kargo güncellemesi",
+        "appointment": "Randevu hatırlatması",
+        "welcome": "Hoş geldin / başlangıç",
+        "feedback": "Geri bildirim isteği",
+        "abandonedCart": "Terk edilen sepet",
+        "reengage": "Yeniden etkileşim",
+        "event": "Etkinlik daveti",
+        "festival": "Bayram tebriği",
+        "other": "Diğer"
+      },
+      "purposes": {
+        "inform": "Bilgilendir",
+        "promote": "Tanıt",
+        "confirm": "Onayla",
+        "remind": "Hatırlat",
+        "collectFeedback": "Geri bildirim topla",
+        "reengage": "Yeniden etkileşim kur",
+        "purchase": "Satın almayı teşvik et",
+        "booking": "Rezervasyonu teşvik et"
+      },
+      "actions": {
+        "website": "Web sitesini ziyaret et",
+        "call": "Bizi arayın",
+        "book": "Randevu al",
+        "order": "Sipariş ver",
+        "catalog": "Kataloğu görüntüle",
+        "code": "Kodla yanıt ver",
+        "other": "Diğer"
+      },
+      "tones": {
+        "friendly": "Samimi",
+        "professional": "Profesyonel",
+        "concise": "Özlü",
+        "empathetic": "Empatik",
+        "excited": "Heyecanlı",
+        "formal": "Resmi"
+      },
+      "errors": {
+        "businessRequired": "İşletme adı zorunludur.",
+        "noKey": "Bu çalışma alanında etkin bir yapay zeka sağlayıcısı yok. Bir yöneticiden anahtar eklemesini isteyin.",
+        "limitReached": "Bu çalışma alanı bu ayki yapay zeka kullanım hakkını doldurdu.",
+        "providerFailed": "Yapay zeka sağlayıcısı yanıt vermedi. Biraz sonra tekrar deneyin.",
+        "badJson": "Modelin yanıtı kullanılabilir bir şablon değildi. Tekrar deneyin veya özeti iyileştirin.",
+        "invalid": "Özeti kontrol edin: işletme adı zorunludur ve bazı alanlar çok uzun.",
+        "forbidden": "Şablon oluşturma izniniz yok.",
+        "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+        "failed": "Şablon oluşturulamadı. Tekrar deneyin."
+      }
+    },
+    "gallery": {
+      "title": "Şablon galerisi",
+      "intro": "Kullanıma göre hazır WhatsApp şablonları. Birini seçin, kaydetmeden önce değiştirebileceğiniz yeni bir şablon olarak açılır.",
+      "search": "Galeride ara",
+      "categoryFilter": "Galeri kategorileri",
+      "all": "Tümü",
+      "loading": "Galeri yükleniyor",
+      "loadError": "Galeri yüklenemedi.",
+      "retry": "Tekrar dene",
+      "empty": "Eşleşen şablon yok",
+      "emptyHint": "Başka bir sözcük deneyin veya başka bir kategori seçin.",
+      "use": "Bu şablonu kullan",
+      "useNamed": "{name} şablonunu kullan",
+      "count": "{count, plural, one {# şablon} other {# şablon}}",
+      "categories": {
+        "ecommerce": "E-ticaret",
+        "food_delivery": "Yemek siparişi",
+        "festival_season": "Bayram sezonu",
+        "education": "Eğitim",
+        "travel": "Seyahat",
+        "others": "Diğer"
+      }
+    },
+    "home": {
+      "label": "Şablon görünümleri",
+      "saved": "Kayıtlı şablonlar",
+      "gallery": "Şablon galerisi"
     }
   }
 }

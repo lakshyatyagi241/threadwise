@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "자동화",
+    "title": "레코드 배정 규칙",
+    "intro": "새 {contacts}, 회사, {deals}을(를) 알맞은 영업 담당자에게 자동으로 배정합니다.",
+    "crossNote": "이 기능은 {contacts}, 회사, {deals}을(를) 배정합니다. 대화를 상담원에게 배정하려면 <link>자동 배정</link>을 참고하세요.",
+    "master": {
+      "title": "레코드 배정 켜기",
+      "hint": "직접 켜기 전에는 꺼져 있습니다. 켜면 아래 규칙에 따라 담당자가 없는 새 {contact}, 회사 또는 {deal}이(가) 팀원에게 배정됩니다.",
+      "on": "레코드 배정이 켜져 있습니다.",
+      "off": "레코드 배정이 꺼져 있습니다."
+    },
+    "imports": {
+      "title": "가져온 레코드도 배정",
+      "hint": "대량 가져오기로 기존 담당자가 바뀌지 않도록 기본값은 꺼짐입니다."
+    },
+    "ownerRule": {
+      "title": "담당자가 없는 레코드만 배정됩니다",
+      "body": "사람이 지정한 담당자는 절대 바뀌지 않으며, 일부러 비운 담당자도 마찬가지입니다. 엔진은 새 레코드의 빈 담당자만 채웁니다. 규칙에서 업데이트 시 재배정을 켜면, 엔진이 이전에 직접 배정한 레코드는 그 후 아무도 담당자를 바꾸지 않은 경우에 한해 이동할 수도 있습니다."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "모듈"
+    },
+    "views": {
+      "rules": "규칙",
+      "log": "실행 로그"
+    },
+    "how": {
+      "title": "우선순위 작동 방식",
+      "p1": "규칙은 우선순위 1부터 차례로 시도됩니다. 조건에 맞고 배정 가능한 사람을 찾은 첫 번째 규칙이 레코드를 가져갑니다.",
+      "p2": "활성 규칙만 우선순위가 매겨집니다. 일시중지된 규칙은 목록에서 자리를 유지하지만 실행되지 않습니다.",
+      "p3": "조건이 없는 규칙은 모든 레코드와 일치하며, 목록 어디에 있든 다른 모든 규칙 뒤에 실행됩니다. 이것이 대체 규칙입니다.",
+      "p4": "여러 규칙과 일치하는 레코드는 우선순위가 가장 높은 규칙으로 갑니다.",
+      "p5": "행을 드래그하거나 화살표 버튼으로 순서를 바꿀 수 있습니다. 대체 규칙과 일시중지된 규칙은 맨 아래 자체 그룹에 유지됩니다."
+    },
+    "list": {
+      "title": {
+        "contact": "{contacts} 규칙",
+        "company": "회사 규칙",
+        "deal": "{deals} 규칙"
+      },
+      "create": "규칙 만들기",
+      "loading": "규칙을 불러오는 중…",
+      "loadFailed": "규칙을 불러오지 못했습니다.",
+      "retry": "다시 시도",
+      "readOnly": "이 규칙을 볼 수는 있지만 변경할 수는 없습니다. 변경하려면 레코드 배정을 관리할 권한이 필요합니다.",
+      "empty": {
+        "title": "아직 규칙이 없습니다",
+        "contact": "새 {contacts}은(는) 생성될 때 지정된 담당자를 그대로 유지합니다.",
+        "company": "새 회사는 생성될 때 지정된 담당자를 그대로 유지합니다.",
+        "deal": "새 {deals}은(는) 생성될 때 지정된 담당자를 그대로 유지합니다.",
+        "create": "첫 규칙 만들기"
+      },
+      "col": {
+        "priority": "우선순위",
+        "rule": "규칙",
+        "assignTo": "배정 대상",
+        "method": "방식",
+        "active": "활성",
+        "used": "사용 횟수",
+        "modified": "최종 수정"
+      },
+      "fallback": "대체",
+      "fallbackHint": "조건이 없는 규칙은 모든 레코드와 일치하며 다른 모든 규칙 뒤에 실행됩니다.",
+      "notPrioritised": "일시중지됨",
+      "noConditions": "조건 없음: 모든 레코드와 일치",
+      "brokenConditions": "{count, plural, other {손상된 조건 #개}}",
+      "brokenHint": "삭제된 항목을 가리키는 조건이 있습니다. 수정하기 전에는 아무것과도 일치하지 않습니다.",
+      "usedCount": "{count, plural, =0 {사용된 적 없음} other {#회 사용됨}}",
+      "lastUsed": "마지막 사용: {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "없음",
+      "unknownPerson": "이전 구성원",
+      "unknownTeam": "삭제된 팀",
+      "teamName": "팀: {name}",
+      "skipsOffline": "오프라인인 사람은 건너뜀",
+      "reassigns": "업데이트 시 재배정",
+      "activeFor": "{name} 규칙이 활성 상태입니다",
+      "dragHandle": "{name}을(를) 드래그하여 우선순위 변경",
+      "moveUp": "{name} 위로 이동",
+      "moveDown": "{name} 아래로 이동",
+      "moved": "{name}이(가) {place}번째로 이동했습니다.",
+      "actions": "{name}에 대한 작업",
+      "edit": "편집",
+      "clone": "복제",
+      "delete": "삭제"
+    },
+    "strategy": {
+      "round_robin": "라운드 로빈(순번 배정)",
+      "least_busy": "진행 중 업무가 가장 적은 사람",
+      "fixed": "특정 사용자",
+      "hint": {
+        "round_robin": "일정한 순서로 사람들에게 돌아가며 배정합니다.",
+        "least_busy": {
+          "contact": "현재 {contacts}을(를) 가장 적게 담당하는 사람에게 배정합니다.",
+          "company": "현재 회사를 가장 적게 담당하는 사람에게 배정합니다.",
+          "deal": "현재 진행 중인 {deals}을(를) 가장 적게 담당하는 사람에게 배정합니다."
+        },
+        "fixed": "항상 같은 사람입니다. 휴가 중에는 대리인이 대신합니다."
+      }
+    },
+    "editor": {
+      "titleNew": "새 규칙",
+      "titleEdit": "규칙 편집",
+      "name": "규칙 이름",
+      "description": "설명(선택 사항)",
+      "module": "모듈",
+      "moduleLocked": "규칙의 모듈은 변경할 수 없습니다. 다른 모듈에는 새 규칙을 만드세요.",
+      "conditions": {
+        "title": "조건",
+        "hint": "레코드의 필드가 조건을 충족하면 일치합니다. 필드를 고른 다음 비교 방식과 값을 선택하세요.",
+        "emptyTitle": "조건 없음: 모든 레코드와 일치하며 마지막에 실행됨(대체)",
+        "emptyBody": "이 규칙은 다른 규칙이 가져가지 않은 모든 레코드를 가져갑니다. 범위를 좁히려면 조건을 추가하세요.",
+        "add": "조건 추가",
+        "counts": "조건 {conditions}/{max}개",
+        "loading": "필드를 불러오는 중…",
+        "partial": "일부 필드를 불러오지 못했습니다. 불러온 필드로 계속 규칙을 만들 수 있습니다."
+      },
+      "group": {
+        "company": "회사 필드",
+        "deal": "{Deal} 필드"
+      },
+      "assign": {
+        "title": "배정 대상",
+        "method": "방식",
+        "people": "사람",
+        "person": "사람",
+        "peoplePlaceholder": "사람 선택",
+        "personPlaceholder": "사람 선택",
+        "teams": "팀",
+        "teamsPlaceholder": "팀 선택",
+        "teamsNote": "여기서 팀은 선택 대상이 되는 사람들의 풀입니다. 레코드는 팀에 속하지 않으며, 담당자는 팀 구성원 중 한 명입니다.",
+        "noPeople": "일치하는 사람이 없습니다.",
+        "removePerson": "{name} 제거",
+        "onLeave": "휴가 중",
+        "skipOffline": "오프라인인 사람 건너뛰기",
+        "skipOfflineHint": "휴가 중인 사람은 항상 건너뜁니다.",
+        "reassign": "업데이트로 이 규칙에 일치하기 시작하면 재배정",
+        "reassignHint": "이 엔진이 직접 배정한 레코드에만, 그리고 그 이후 아무도 담당자를 바꾸지 않은 경우에만 적용됩니다. 기본값은 꺼짐이며, 레코드는 한 번만 배정됩니다."
+      },
+      "problems": {
+        "name": "규칙 이름을 입력하세요.",
+        "people": "사람 또는 팀을 하나 이상 선택하세요.",
+        "fixedOne": "특정 사용자 규칙에는 정확히 한 명이 필요하며 팀은 지정할 수 없습니다.",
+        "conditions": "저장하기 전에 강조 표시된 조건을 수정하세요.",
+        "server": "서버가 규칙을 거부했습니다."
+      },
+      "saveActivate": "저장하고 활성화",
+      "savePaused": "일시중지 상태로 저장",
+      "save": "변경 사항 저장",
+      "cancel": "취소",
+      "unsavedTitle": "저장하지 않고 나가시겠습니까?",
+      "unsavedMessage": "이 규칙의 변경 사항이 저장되지 않았습니다.",
+      "stay": "계속 편집",
+      "leave": "나가기"
+    },
+    "fields": {
+      "origin": "유입 경로",
+      "company": {
+        "name": "이름",
+        "email": "이메일",
+        "phone": "전화번호",
+        "domain": "웹사이트 도메인",
+        "industry": "업종",
+        "sizeRange": "규모",
+        "address": "주소",
+        "status": "상태",
+        "createdAt": "생성일",
+        "updatedAt": "최종 업데이트"
+      },
+      "deal": {
+        "title": "제목",
+        "value": "금액",
+        "currency": "통화",
+        "pipeline": "파이프라인",
+        "stage": "단계",
+        "status": "상태",
+        "source": "출처",
+        "expectedCloseDate": "예상 마감일",
+        "createdAt": "생성일",
+        "hasContact": "{contact} 있음",
+        "hasCompany": "회사 있음"
+      },
+      "dealStatus": {
+        "open": "진행 중",
+        "won": "성사",
+        "lost": "실패"
+      }
+    },
+    "origin": {
+      "manual": "사람이 추가함",
+      "import": "가져오기",
+      "inbound": "첫 메시지",
+      "form": "양식",
+      "lead": "리드 출처",
+      "api": "API"
+    },
+    "test": {
+      "title": "레코드로 테스트",
+      "hint": "실제 레코드를 선택하면 어떤 규칙이 적용되고 누구에게 배정될지 확인할 수 있습니다. 아무것도 변경되지 않으며, 스위치가 꺼져 있어도 작동합니다.",
+      "search": {
+        "contact": "이름, 이메일 또는 전화번호로 {contacts} 검색",
+        "company": "이름으로 회사 검색",
+        "deal": "제목으로 {deals} 검색"
+      },
+      "searchLabel": "테스트할 레코드",
+      "searching": "검색 중…",
+      "noMatches": "레코드를 찾을 수 없습니다.",
+      "searchFailed": "검색이 작동하지 않았습니다. 이 레코드를 볼 권한이 없을 수 있습니다.",
+      "clear": "다른 레코드 선택",
+      "run": "테스트",
+      "running": "테스트 중…",
+      "failed": "테스트가 실행되지 않았습니다. 다시 시도하세요.",
+      "off": "레코드 배정이 꺼져 있으므로, 켜져 있다면 어떻게 될지를 보여줍니다.",
+      "outcome": {
+        "would_assign": "{record}은(는) {rule} 규칙에 따라 {owner}에게 배정됩니다.",
+        "disabled": "이 워크스페이스에서는 레코드 배정이 꺼져 있으므로 아무 일도 일어나지 않습니다.",
+        "has_owner": "{record}에는 이미 담당자가 있으므로 어떤 규칙도 실행되지 않습니다. 사람이 지정한 담당자는 절대 바뀌지 않습니다.",
+        "no_rule": "{record}와(과) 일치하는 활성 규칙이 없습니다.",
+        "nobody_available": "규칙이 {record}와(과) 일치하지만, 지정된 사람이 모두 휴가 중이거나 오프라인이거나 더 이상 없습니다.",
+        "plan": "현재 요금제에는 레코드 배정 규칙이 포함되어 있지 않습니다.",
+        "not_found": "레코드를 찾을 수 없습니다. 삭제되었거나 볼 수 있는 범위 밖일 수 있습니다."
+      },
+      "traceTitle": "시도된 규칙(순서대로)",
+      "traceEmpty": "시도된 활성 규칙이 없습니다.",
+      "trace": {
+        "winner": "일치하여 레코드를 가져감",
+        "matched": "일치",
+        "not_matched": "일치하지 않음",
+        "nobody": "일치했지만 배정 가능한 사람이 없음",
+        "broken": "손상된 조건이 있음"
+      },
+      "skipped": "배정 가능한 사람이 없어 건너뜀: {names}"
+    },
+    "log": {
+      "title": "실행 로그",
+      "intro": "엔진이 각 레코드를 어떻게 처리했는지 최신순으로 보여줍니다. 항목은 {days}일 동안 보관되며 ID만 포함하고 레코드 내용은 포함하지 않습니다.",
+      "filterOutcome": "결과",
+      "filterRule": "규칙",
+      "allOutcomes": "모든 결과",
+      "allRules": "모든 규칙",
+      "loading": "실행 로그를 불러오는 중…",
+      "loadFailed": "실행 로그를 불러오지 못했습니다.",
+      "empty": "아직 배정된 항목이 없습니다.",
+      "emptyFiltered": "이 필터에 맞는 항목이 없습니다.",
+      "loadMore": "더 보기",
+      "col": {
+        "when": "시각",
+        "record": "레코드",
+        "outcome": "결과",
+        "reason": "이유",
+        "rule": "규칙",
+        "assignedTo": "배정 대상",
+        "method": "방식",
+        "arrived": "유입 경로"
+      },
+      "deletedRecord": "삭제됨",
+      "noRule": "규칙 없음",
+      "outcome": {
+        "assigned": "배정됨",
+        "reassigned": "재배정됨",
+        "skipped": "변경 없음"
+      },
+      "reason": {
+        "matched": "규칙이 일치함",
+        "has_owner": "이미 담당자가 있었음",
+        "no_rule": "일치하는 규칙 없음",
+        "nobody_available": "배정 가능한 사람이 없었음",
+        "raced": "배정하는 동안 담당자가 변경됨",
+        "unchanged": "이미 올바른 규칙에 속해 있음"
+      },
+      "trigger": {
+        "created": "새 레코드",
+        "updated": "업데이트된 레코드"
+      },
+      "showTrace": "결정 과정 보기",
+      "hideTrace": "결정 과정 숨기기",
+      "traceFor": "{record}의 결정 과정"
+    },
+    "toast": {
+      "created": "규칙을 만들었습니다.",
+      "saved": "규칙을 저장했습니다.",
+      "deleted": "규칙을 삭제했습니다.",
+      "cloned": "규칙을 복사했습니다. 복사본은 일시중지 상태입니다.",
+      "activated": "규칙을 활성화했습니다.",
+      "paused": "규칙을 일시중지했습니다.",
+      "reordered": "순서를 저장했습니다.",
+      "conflict": "다른 사람이 이 규칙을 변경했습니다. 최신 버전을 불러왔습니다. 확인한 후 변경 사항을 다시 적용하세요.",
+      "failed": "문제가 발생했습니다. 다시 시도하세요."
+    },
+    "delete": {
+      "title": "이 규칙을 삭제할까요?",
+      "message": "{name} 규칙은 더 이상 배정하지 않습니다. 이미 배정된 레코드는 담당자를 유지합니다.",
+      "confirm": "삭제",
+      "cancel": "취소"
+    }
+  }
+}

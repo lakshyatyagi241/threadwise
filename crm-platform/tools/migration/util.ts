@@ -29,7 +29,13 @@ export function uuidv5(name: string): string {
   return `${x.slice(0, 8)}-${x.slice(8, 12)}-${x.slice(12, 16)}-${x.slice(16, 20)}-${x.slice(20)}`;
 }
 
-/** A Mongo value as a Date: Date, ISO string, or epoch number (ms, or seconds when small). Null when unreadable. */
+/** "2026-10-08 14:30:00" / "2026-10-08T14:30": a date-time with no zone. new Date() reads it in the MACHINE's zone, so the run's host would move it. */
+const ZONELESS = /^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(:\d\d(\.\d+)?)?$/;
+
+/** The text as new Date() should read it: a string with no zone is UTC, never the machine's zone (as broadcast/rules.ts utcDate). */
+export const zonedText = (t: string): string => (ZONELESS.test(t) ? `${t.replace(' ', 'T')}Z` : t);
+
+/** A Mongo value as a Date: Date, ISO string, or epoch number (ms, or seconds when small). A string with no zone is UTC. Null when unreadable. */
 export function toDate(v: unknown): Date | null {
   if (v instanceof Date) return Number.isNaN(v.getTime()) ? null : v;
   if (v instanceof Oid) return v.date;
@@ -39,7 +45,7 @@ export function toDate(v: unknown): Date | null {
   }
   if (typeof v === 'string' && v.trim() !== '') {
     const t = v.trim();
-    const d = /^\d{9,13}$/.test(t) ? toDate(Number(t)) : new Date(t);
+    const d = /^\d{9,13}$/.test(t) ? toDate(Number(t)) : new Date(zonedText(t));
     return d && !Number.isNaN(d.getTime()) ? d : null;
   }
   return null;
@@ -476,4 +482,14 @@ export function plain(v: unknown): unknown {
     return out;
   }
   return v;
+}
+
+/**
+ * The first n UTF-16 units of s, never ending in half of an emoji. A text cut by character count can leave a lone high surrogate,
+ * which Postgres refuses inside JSON (SQLSTATE 22P02) and which no chat can show. Use this for every cut of text that came from a client.
+ */
+export function cutText(s: string, n: number): string {
+  if (s.length <= n) return s;
+  const c = s.charCodeAt(n - 1);
+  return s.slice(0, c >= 0xd800 && c <= 0xdbff ? n - 1 : n);
 }

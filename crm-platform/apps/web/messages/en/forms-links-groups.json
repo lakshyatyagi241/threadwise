@@ -1,0 +1,233 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp Forms",
+      "links": "WhatsApp Links"
+    },
+    "errors": {
+      "generic": "Something went wrong. Please try again.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Connect a WhatsApp Cloud API number to use Forms.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "No connected WhatsApp Cloud API number has usable credentials.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta rejected the form definition.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Your WhatsApp Business Account needs to pass Meta's verification before you can publish forms.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta could not publish this form.",
+      "WFL_LINK_NOT_LIVE": "This link is paused or expired.",
+      "ROW_VERSION_CONFLICT": "This was changed elsewhere. Reload and try again.",
+      "VALIDATION_FAILED": "Check the highlighted fields and try again.",
+      "PLAN_FEATURE_LOCKED": "Upgrade your plan to use this feature."
+    },
+    "forms": {
+      "heading": "WhatsApp Forms",
+      "intro": "Build forms customers fill in right inside WhatsApp, then send them from a flow and review the answers here.",
+      "loading": "Loading forms…",
+      "retry": "Try again",
+      "create": {
+        "cta": "New form",
+        "creating": "Creating…",
+        "defaultTitle": "Untitled form",
+        "defaultField": "Full name"
+      },
+      "stats": {
+        "all": "All forms",
+        "published": "Published",
+        "draft": "Drafts",
+        "submissions": "Submissions"
+      },
+      "empty": {
+        "title": "No forms yet",
+        "description": "Create a form, then send it from a WhatsApp Form step in a flow."
+      },
+      "table": {
+        "form": "Form",
+        "type": "Type",
+        "fields": "Fields",
+        "submissions": "Submissions"
+      },
+      "status": {
+        "draft": "Draft",
+        "published": "Published",
+        "paused": "Paused"
+      },
+      "audience": {
+        "lead_capture": "Lead capture",
+        "survey": "Survey",
+        "appointment_booking": "Appointment booking",
+        "customer_support": "Customer support",
+        "sign_up": "Sign up",
+        "other": "Other"
+      },
+      "row": {
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "delete": "Delete"
+      },
+      "confirm": {
+        "deleteTitle": "Delete this form?",
+        "deleteMessage": "Active flow nodes that reference it will break.",
+        "deleteConfirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notice": {
+        "saved": "Saved.",
+        "published": "Published to WhatsApp."
+      },
+      "builder": {
+        "back": "Back to forms",
+        "untitled": "Untitled form",
+        "saving": "Saving…",
+        "saveDraft": "Save draft",
+        "savePublish": "Save & publish",
+        "publishing": "Publishing…",
+        "basics": "Form basics",
+        "title": "Title",
+        "audienceType": "Type",
+        "purpose": "Purpose",
+        "sendButtonLabel": "Send button label",
+        "thankYouNote": "Thank-you note",
+        "screens": "Screens",
+        "addScreen": "Add a screen",
+        "removeScreen": "Remove screen",
+        "screenN": "Screen {n}",
+        "defaultField": "Full name",
+        "newFieldLabel": "New field",
+        "fieldKind": "Field type",
+        "fieldLabel": "Label",
+        "required": "Required",
+        "removeField": "Remove",
+        "options": "Options (comma separated)",
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Maps to",
+        "mapsToHint": "Save this answer onto a contact property when the form is submitted.",
+        "mapsToNone": "Don't save to a contact property",
+        "mapsToSystemGroup": "Contact fields",
+        "mapsToCustomGroup": "Custom properties",
+        "mapsToSystem": {
+          "name": "Full name",
+          "first_name": "First name",
+          "last_name": "Last name",
+          "email": "Email",
+          "title": "Job title",
+          "language": "Language",
+          "address": "Address"
+        },
+        "mapsToPrivacyGroup": "Privacy & consent",
+        "mapsToPrivacy": {
+          "age": "Age (minor check)",
+          "date_of_birth": "Date of birth (minor check)",
+          "consent_marketing": "Marketing consent (WhatsApp)",
+          "consent_service": "Service agreement (not marketing)"
+        }
+      },
+      "fieldKind": {
+        "heading": "Heading",
+        "short_text": "Short text",
+        "paragraph": "Paragraph",
+        "email": "Email",
+        "phone_number": "Phone number",
+        "number": "Number",
+        "date": "Date",
+        "dropdown": "Dropdown",
+        "radio_buttons": "Radio buttons",
+        "checkbox": "Checkboxes"
+      },
+      "submissions": {
+        "heading": "Submissions",
+        "metaFlowId": "Meta Flow ID: {id}",
+        "export": "Export CSV",
+        "empty": {
+          "title": "No submissions yet",
+          "description": "Submissions appear here once this form is sent from a flow and someone fills it in."
+        },
+        "table": {
+          "submitted": "Submitted",
+          "contact": "Contact",
+          "phone": "Phone"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp Links",
+      "intro": "Mint a trackable link that opens WhatsApp with a pre-filled message — for ads, bios and QR codes.",
+      "loading": "Loading links…",
+      "retry": "Try again",
+      "searchPlaceholder": "Search by name or link",
+      "create": { "cta": "New link" },
+      "stats": {
+        "all": "All links",
+        "live": "Live",
+        "totalClicks": "Total clicks",
+        "avgClicks": "Avg. clicks / link"
+      },
+      "tabs": { "all": "All", "live": "Live", "paused": "Paused" },
+      "status": { "live": "Live", "paused": "Paused" },
+      "empty": {
+        "title": "No links yet",
+        "description": "Mint a link to share in ads, bios or a QR code."
+      },
+      "table": {
+        "link": "Link",
+        "destination": "Destination",
+        "clicks": "Clicks",
+        "lastClicked": "Last clicked"
+      },
+      "row": {
+        "open": "Open",
+        "copy": "Copy",
+        "copied": "Copied!",
+        "edit": "Edit",
+        "duplicate": "Duplicate",
+        "delete": "Delete"
+      },
+      "confirm": {
+        "deleteTitle": "Delete this link?",
+        "deleteMessage": "The short link stops working immediately.",
+        "deleteConfirm": "Delete",
+        "cancel": "Cancel"
+      },
+      "notice": {
+        "saved": "Saved.",
+        "copyFailed": "Could not copy the link."
+      },
+      "builder": {
+        "back": "Back to links",
+        "newHeading": "New link",
+        "step": {
+          "destination": "Destination",
+          "message": "Starter message",
+          "tracking": "Tracking"
+        },
+        "name": "Name",
+        "status": "Status",
+        "countryCode": "Country code",
+        "phoneNumber": "Phone number",
+        "welcomeMessage": "Starter message",
+        "welcomeMessageHint": "Pre-filled into the chat when someone taps the link.",
+        "slug": "Short link",
+        "slugHint": "Letters, numbers and hyphens only. Leave blank to generate one.",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "Expires",
+        "utmSource": "UTM source",
+        "utmMedium": "UTM medium",
+        "utmCampaign": "UTM campaign",
+        "previous": "Previous",
+        "next": "Next",
+        "mint": "Mint link",
+        "save": "Save",
+        "saving": "Saving…",
+        "fixErrors": "Check the destination and short link fields.",
+        "mintedHeading": "Your link",
+        "shortUrl": "Short link",
+        "waUrl": "WhatsApp link",
+        "qrAlt": "QR code for this link"
+      },
+      "public": {
+        "missingTitle": "Link not found",
+        "missingBody": "This link doesn't exist, or has been deleted.",
+        "goneTitle": "Link no longer active",
+        "goneBody": "This link is paused or has expired.",
+        "errorTitle": "Something went wrong",
+        "errorBody": "We couldn't open this link. Please try again."
+      }
+    }
+  }
+}

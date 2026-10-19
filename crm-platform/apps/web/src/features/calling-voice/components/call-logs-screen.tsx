@@ -9,21 +9,27 @@ import {
   CALL_LOG_RANGES,
   CALL_LOG_STATUSES,
   type CallLogRow,
+  type CallLogSource,
 } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState, Input, Select, Spinner, StatTile, cn } from '@crm/ui';
-import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { AGENT_IGNORE, AGENT_PII } from '@/lib/agent-marks';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useCallLogFilters, useCallLogs, useCallLogsLive } from '../api/call-logs';
 import {
   STATUS_TONE,
   durationText,
+  forPlan,
   logSearch,
   pageCount,
   parseLogParams,
   phoneText,
+  sourcesFor,
   toListQuery,
+  WHATSAPP_CALLING,
   type LogParams,
 } from '../lib/call-logs';
+import { LogCallDialog } from './log-call-dialog';
 import { useErrorText } from './use-error-text';
 
 const RANGE_KEY = { '24h': 'last24h', '7d': 'last7d', '30d': 'last30d' } as const;
@@ -33,7 +39,8 @@ export function CallLogsTabs({ active }: { active: 'log' | 'analytics' }) {
   const t = useTranslations('calling-voice.logs.tabs');
   const sp = useSearchParams();
   // The range, the custom days and the number carry across; the log's other filters do not mean anything to the analytics.
-  const p = parseLogParams(sp);
+  const whatsapp = usePlanFeature(WHATSAPP_CALLING);
+  const p = forPlan(parseLogParams(sp), whatsapp);
   const carry = logSearch({ range: p.range, from: p.from, to: p.to, numberId: p.numberId });
   const link = (on: boolean) =>
     cn(
@@ -64,6 +71,10 @@ export function CallLogsTabs({ active }: { active: 'log' | 'analytics' }) {
  * `/call-logs` (TW-CALL-022): the calls of the workspace, newest first. Reference's page, kept: the time range and status on the side,
  * four totals, a search and a table with a page of 25. Added to it: a custom range, direction, number and teammate filters, totals for
  * what the filters select, and a refresh when a call ends. The filters live in the address, so a view can be shared and survives a reload.
+ *
+ * Without the plan feature `waba_calling` (BL-257) it is the same screen for the calls a workspace writes down or has reported (Log a call,
+ * the mobile app, a telephony provider, a click to call): the WhatsApp number filter and the WhatsApp source are left out, and the
+ * words do not promise WhatsApp calls. With the feature nothing changes.
  */
 export function CallLogsScreen() {
   const t = useTranslations('calling-voice.logs');
@@ -72,10 +83,13 @@ export function CallLogsScreen() {
   const router = useRouter();
   const pathname = usePathname();
   const sp = useSearchParams();
-  const params = useMemo(() => parseLogParams(sp), [sp]);
+  const whatsapp = usePlanFeature(WHATSAPP_CALLING);
+  const params = useMemo(() => forPlan(parseLogParams(sp), whatsapp), [sp, whatsapp]);
   const tz = useSession().effectiveTimezone || 'UTC';
   const logs = useCallLogs(toListQuery(params, tz));
   const filters = useCallLogFilters();
+  const canLog = useCan('call.logs.create');
+  const [logging, setLogging] = useState(false);
 
   const go = (patch: Partial<LogParams>, keepPage = false) =>
     router.replace(
@@ -88,7 +102,12 @@ export function CallLogsScreen() {
   const data = logs.data;
   const pages = data ? pageCount(data.total, data.pageSize) : 1;
   const hasFilters = Boolean(
-    params.status || params.direction || params.numberId || params.agentId || params.q,
+    params.status ||
+    params.direction ||
+    params.numberId ||
+    params.agentId ||
+    params.source ||
+    params.q,
   );
 
   return (
@@ -96,7 +115,7 @@ export function CallLogsScreen() {
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[240px_1fr]">
         <aside className="space-y-3 self-start lg:sticky lg:top-6">
           <p className="rounded-xl border border-border bg-muted/40 p-3 text-xs text-muted-foreground">
-            {t('sideTip')}
+            {whatsapp ? t('sideTip') : t('sideTipLogged')}
           </p>
           <RangeCard params={params} go={go} />
           <StatusCard params={params} go={go} />
@@ -111,10 +130,20 @@ export function CallLogsScreen() {
               <h1 className="mt-1 text-3xl font-normal leading-none tracking-tight sm:text-4xl">
                 {t('title')}
               </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+                {whatsapp ? t('subtitle') : t('subtitleLogged')}
+              </p>
             </div>
-            <CallLogsTabs active="log" />
+            <div className="flex flex-wrap items-center gap-3">
+              {canLog && (
+                <Button variant="brand" onClick={() => setLogging(true)}>
+                  {t('logCall.button')}
+                </Button>
+              )}
+              <CallLogsTabs active="log" />
+            </div>
           </div>
+          {canLog && <LogCallDialog open={logging} onClose={() => setLogging(false)} />}
 
           {logs.isPending && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground" role="status">
@@ -172,7 +201,8 @@ export function CallLogsScreen() {
                 <FilterBar
                   key={sp.toString()}
                   params={params}
-                  numbers={filters.data?.numbers ?? []}
+                  numbers={whatsapp ? (filters.data?.numbers ?? []) : []}
+                  sources={sourcesFor(whatsapp)}
                   agents={filters.data?.agents ?? []}
                   onApply={(patch) => go(patch)}
                   onClear={() =>
@@ -181,6 +211,7 @@ export function CallLogsScreen() {
                       direction: undefined,
                       numberId: undefined,
                       agentId: undefined,
+                      source: undefined,
                       q: undefined,
                     })
                   }
@@ -201,6 +232,7 @@ export function CallLogsScreen() {
                                 direction: undefined,
                                 numberId: undefined,
                                 agentId: undefined,
+                                source: undefined,
                                 q: undefined,
                               })
                             }
@@ -210,7 +242,10 @@ export function CallLogsScreen() {
                         }
                       />
                     ) : (
-                      <EmptyState title={t('emptyTitle')} message={t('emptyMessage')} />
+                      <EmptyState
+                        title={t('emptyTitle')}
+                        message={whatsapp ? t('emptyMessage') : t('emptyMessageLogged')}
+                      />
                     )}
                   </div>
                 ) : (
@@ -362,6 +397,7 @@ function StatusCard({
 function FilterBar({
   params,
   numbers,
+  sources,
   agents,
   onApply,
   onClear,
@@ -369,6 +405,7 @@ function FilterBar({
 }: {
   params: LogParams;
   numbers: Array<{ id: string; label: string; phoneNumber: string | null }>;
+  sources: readonly CallLogSource[];
   agents: Array<{ id: string; name: string }>;
   onApply: (patch: Partial<LogParams>) => void;
   onClear: () => void;
@@ -379,10 +416,13 @@ function FilterBar({
   const [direction, setDirection] = useState(params.direction ?? '');
   const [numberId, setNumberId] = useState(params.numberId ?? '');
   const [agentId, setAgentId] = useState(params.agentId ?? '');
+  const [source, setSource] = useState(params.source ?? '');
+  const ts = useTranslations('calling-voice.logs.source');
   const submit = (e: FormEvent) => {
     e.preventDefault();
     onApply({
       q: q.trim() || undefined,
+      source: (source || undefined) as LogParams['source'],
       direction: (direction || undefined) as LogParams['direction'],
       numberId: numberId || undefined,
       agentId: agentId || undefined,
@@ -412,6 +452,17 @@ function FilterBar({
           {CALL_LOG_DIRECTIONS.map((d) => (
             <option key={d} value={d}>
               {t(d)}
+            </option>
+          ))}
+        </Select>
+      </label>
+      <label className="text-xs">
+        <span className="sr-only">{t('source')}</span>
+        <Select value={source} onChange={(e) => setSource(e.target.value)} className="w-auto">
+          <option value="">{t('allSources')}</option>
+          {sources.map((x) => (
+            <option key={x} value={x}>
+              {ts(x)}
             </option>
           ))}
         </Select>
@@ -461,6 +512,8 @@ export function StatusBadge({ status }: { status: CallLogRow['status'] }) {
 
 function LogTable({ rows }: { rows: CallLogRow[] }) {
   const t = useTranslations('calling-voice.logs.table');
+  const ts = useTranslations('calling-voice.logs.source');
+  const to = useTranslations('calling-voice.logs.logCall.outcomes');
   const format = useFormatter();
   const now = useNow({ updateInterval: 60_000 });
   return (
@@ -499,6 +552,11 @@ function LogTable({ rows }: { rows: CallLogRow[] }) {
                 >
                   {t(r.direction)} · {phoneText(r.customerPhone)}
                 </div>
+                {r.source && r.source !== 'whatsapp' && (
+                  <div className="mt-1">
+                    <Badge tone="neutral">{ts(r.source)}</Badge>
+                  </div>
+                )}
               </td>
               <td className="max-w-[10rem] truncate px-4 py-3 text-xs">
                 {r.numberLabel || t('none')}
@@ -526,6 +584,9 @@ function LogTable({ rows }: { rows: CallLogRow[] }) {
               </td>
               <td className="px-4 py-3">
                 <StatusBadge status={r.status} />
+                {r.outcome && (
+                  <div className="mt-1 text-[11px] text-muted-foreground">{to(r.outcome)}</div>
+                )}
               </td>
               <td className="px-4 py-3 text-end">
                 <Link

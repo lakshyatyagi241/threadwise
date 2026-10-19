@@ -26,6 +26,7 @@ import {
 import { ApiExcludeController } from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 import { Public } from '../../common/decorators';
+import { isGpcSignal } from '../contact-consent';
 import { pickChatLocale } from './chat-page-text';
 import {
   NOT_FOUND_SCRIPT,
@@ -43,6 +44,45 @@ export class WidgetPublicErrorFilter implements ExceptionFilter {
     const res = host.switchToHttp().getResponse<Response>();
     for (const [k, v] of Object.entries(err.headers)) res.setHeader(k, v);
     res.status(err.getStatus()).json(err.payload);
+  }
+}
+
+/**
+ * The old product's embed address (`output.js` with the bot id), kept alive for migrated customers so their pages need no edit. The
+ * bot id comes in the path (`/widget-legacy/<id>/output.js`) or as `?id=` / `?botId=` on `/widget-legacy/output.js`; either way it is
+ * resolved to the widget's own token and answered with the normal loader, so the allow-list, the paused state and every other rule
+ * of the new embed apply unchanged. A wrong, unknown or paused id answers the same 404 script as the new embed.
+ */
+@ApiExcludeController()
+@Controller({ path: 'widget-legacy', version: VERSION_NEUTRAL })
+export class WidgetLegacyEmbedController {
+  constructor(
+    private readonly widgets: WidgetPublicService,
+    private readonly config: ConfigService,
+  ) {}
+
+  private async serve(id: unknown, req: Request, res: Response): Promise<void> {
+    const configured = this.config.get<string>('WIDGET_PUBLIC_BASE_URL');
+    const base = configured
+      ? configured.replace(/\/+$/, '')
+      : `${req.protocol}://${req.get('host')}`;
+    const js = typeof id === 'string' ? await this.widgets.legacyEmbedScript(id, base) : null;
+    res.type('application/javascript');
+    if (js === null) {
+      res.status(404).send(NOT_FOUND_SCRIPT);
+      return;
+    }
+    res.set('Cache-Control', 'no-cache, must-revalidate').status(200).send(js);
+  }
+
+  @Get(':id/output.js')
+  byPath(@Param('id') id: string, @Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.serve(id, req, res);
+  }
+
+  @Get('output.js')
+  byQuery(@Req() req: Request, @Res() res: Response): Promise<void> {
+    return this.serve(req.query.id ?? req.query.botId, req, res);
   }
 }
 
@@ -78,6 +118,7 @@ export class WidgetPublicController {
       inputUuid: typeof inputUuid === 'string' ? inputUuid.trim() : '',
       headerUuid: (Array.isArray(header) ? header[0] : header)?.trim() ?? '',
       secure: req.secure,
+      gpc: isGpcSignal(req.headers['sec-gpc']),
     };
   }
 
@@ -214,6 +255,26 @@ export class WidgetPublicController {
     res
       .status(200)
       .json(await this.widgets.feedback(token, this.publicRequest(req, inputUuid), body));
+  }
+
+  /** The visitor chose "Restart this chat" or "Close this chat": a fresh visitor, so the next load is a new conversation. */
+  @Post('api/restart')
+  async restart(
+    @Param('token') token: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    await this.cors(token, req, res);
+    await this.widgets.enforceThrottle('message', req.ip ?? '');
+    const out = await this.widgets.restart(token, this.publicRequest(req, undefined));
+    res.cookie(`wgt_vid_${out.widgetUuid}`, out.visitorUuid, {
+      maxAge: YEAR_MS,
+      httpOnly: true,
+      path: '/',
+      secure: req.secure,
+      sameSite: req.secure ? 'none' : 'lax',
+    });
+    res.status(200).json({ ok: true, visitor_uuid: out.visitorUuid });
   }
 
   @Get('api/history')

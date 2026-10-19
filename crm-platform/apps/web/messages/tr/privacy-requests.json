@@ -23,7 +23,11 @@
       "exportNotReady": "Dosya hazır değil veya süresi doldu. Yeni bir dışa aktarım hazırlayın.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip tekrar deneyin.",
       "validation": "Bazı değerler geçerli değil. Formu kontrol edip tekrar deneyin.",
-      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin."
+      "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
+      "holdActive": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "holdExists": "Bu kişi için zaten etkin bir yasal saklama var. Başka bir konu eklemek için uzatın.",
+      "holdNotFound": "Bu yasal saklama artık mevcut değil.",
+      "holdNotActive": "Bu yasal saklama zaten sona erdi."
     },
     "type": {
       "access": "Erişim",
@@ -182,7 +186,12 @@
           "erase_previewed": "Silme önizlendi",
           "erased": "Veriler silindi",
           "completed": "Talep tamamlandı",
-          "other": "Güncelle"
+          "other": "Güncelle",
+          "restricted": "Kısıtlı: yasal saklama",
+          "erasure_queued": "Silme onaylandı, saklamanın bitmesi bekleniyor",
+          "restriction_lifted": "Kısıtlama kaldırıldı",
+          "resume_skipped": "Otomatik silme atlandı",
+          "resume_failed": "Otomatik silme başarısız oldu, elle çalıştırın"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Bu kişiyi sil",
       "created": "{reference} talebi oluşturuldu.",
       "failed": "Talep oluşturulamadı."
+    },
+    "legalHold": {
+      "close": "Kapat",
+      "tab": {
+        "label": "Gizlilik",
+        "requests": "Veri talepleri",
+        "holds": "Yasal saklamalar"
+      },
+      "requesterResponse": "Talebinizi aldık. Bir yasal yükümlülüğü yerine getirmek için verilerinizin bir kısmını saklamak zorundayız, bu nedenle şu anda silemiyoruz. Verilerin kullanımını kısıtladık ve yükümlülük sona erdiğinde sileceğiz. Veri koruma otoritesine şikâyette bulunabilirsiniz.",
+      "contactBanner": "Yasal saklama: silme ve kaldırma duraklatıldı",
+      "workspaceBanner": "Tüm çalışma alanında yasal saklama: silme ve kaldırma duraklatıldı",
+      "caseStatus": "Kısıtlı: yasal saklama",
+      "blockedMessage": "Bu kayıt korunmaktadır ve şu anda silinemez.",
+      "listFilter": "Yasal saklama bekleniyor",
+      "banner": {
+        "caseRef": "Dosya {caseRef}",
+        "reviewBy": "{date} tarihine kadar gözden geçirin",
+        "reviewOverdue": "Gözden geçirme gecikti ({date} tarihinden beri)",
+        "effects": "Pazarlama, yapay zekâ işleme ve dışa aktarma kısıtlanır; her erişim kaydedilir.",
+        "open": "Kaydı aç"
+      },
+      "category": {
+        "legal_obligation": "Yasal yükümlülük",
+        "legal_claim": "Hukuki talep veya uyuşmazlık",
+        "regulator_request": "Düzenleyici kurum veya kolluk talebi",
+        "internal_investigation": "İç soruşturma"
+      },
+      "scope": {
+        "contact": "Kişi",
+        "lead": "Potansiyel müşteri",
+        "workspace": "Tüm çalışma alanı"
+      },
+      "status": {
+        "active": "Etkin",
+        "released": "Kaldırıldı",
+        "expired": "Süresi doldu"
+      },
+      "menu": {
+        "place": "Yasal saklama uygula...",
+        "release": "Yasal saklamayı kaldır..."
+      },
+      "place": {
+        "title": "Bu kişiye yasal saklama uygula",
+        "workspaceTitle": "Tüm çalışma alanına yasal saklama uygula",
+        "intro": "Saklama sürdüğü sürece bu kişinin verilerinin silinmesi, kaldırılması ve saklama süresi temizliği reddedilir; verilerinin pazarlama, yapay zekâ işleme ve dışa aktarma kullanımı kısıtlanır. Müşteri hizmetleri her zamanki gibi sürer.",
+        "workspaceIntro": "Çalışma alanındaki herkes saklama altındadır: silme, kaldırma, saklama süresi temizliği ve süresi dolmuş çalışma alanının kaldırılması reddedilir; pazarlama, yapay zekâ işleme ve dışa aktarma kısıtlanır. Tüm kayıtları kapsayan bir karar için kullanın.",
+        "category": "Veriler neden saklanıyor?",
+        "categoryPick": "Bir neden seçin",
+        "caseRef": "Dosya referansı",
+        "caseRefHint": "Kendi referansınız: mahkeme dosya numarası, bir talep kaydı, düzenleyici kurum yazısındaki numara.",
+        "note": "Not (isteğe bağlı)",
+        "noteHint": "Buraya adları, telefon numaralarını veya konunun ayrıntılarını yazmayın.",
+        "reviewAt": "Gözden geçirme tarihi (isteğe bağlı)",
+        "reviewHint": "Bu tarih geçtiğinde kayıt defteri saklamayı işaretler.",
+        "expiresAt": "Bitiş tarihi (isteğe bağlı)",
+        "expiresHint": "Bu tarihten sonra saklama kendiliğinden sona erer.",
+        "submit": "Saklama uygula",
+        "submitting": "Uygulanıyor...",
+        "done": "Yasal saklama uygulandı.",
+        "target": "Uygulanacağı kapsam",
+        "targetPerson": "Tek kişi",
+        "targetWorkspace": "Tüm çalışma alanı",
+        "change": "Değiştir",
+        "search": "Kişiyi bul",
+        "searchHint": "Bir ad, telefon numarası veya e-posta adresi yazın (en az iki karakter).",
+        "noResults": "Kimse bulunamadı."
+      },
+      "release": {
+        "title": "Bu yasal saklamayı kaldır",
+        "message": "Ardından bu kişi için silme, saklama süresi temizliği ve pazarlama yeniden başlayabilir. Bu saklamayı bekleyen silme talepleri kısıtlı durumdan çıkar; birinin zaten onayladığı silme bir dakika içinde kendiliğinden çalışır.",
+        "cases": "{count, plural, one {# veri talebi bu saklamayı bekliyor.} other {# veri talebi bu saklamayı bekliyor.}}",
+        "reason": "Neden kaldırılıyor? (isteğe bağlı)",
+        "reasonHint": "Adları veya konunun ayrıntılarını yazmayın.",
+        "submit": "Saklamayı kaldır",
+        "submitting": "Kaldırılıyor...",
+        "done": "Yasal saklama kaldırıldı.",
+        "doneResuming": "{count, plural, one {Yasal saklama kaldırıldı. Onaylanmış # silme şimdi çalışacak.} other {Yasal saklama kaldırıldı. Onaylanmış # silme şimdi çalışacak.}}"
+      },
+      "extend": {
+        "title": "Bu yasal saklamayı uzat",
+        "caseRefNow": "Şu anki dosya referansı: {caseRef}",
+        "addCaseRef": "Ek dosya referansı ekle",
+        "addCaseRefHint": "Aynı kişiyle ilgili ikinci bir konu aynı saklamaya eklenir.",
+        "clearHint": "Kaldırmak için tarihi boşaltın.",
+        "submit": "Değişiklikleri kaydet",
+        "submitting": "Kaydediliyor...",
+        "done": "Yasal saklama güncellendi."
+      },
+      "review": {
+        "title": "Gözden geçirmeyi kaydet",
+        "message": "Bu saklamaya yeniden baktığınızı ve hâlâ geçerli olduğunu kaydeder.",
+        "next": "Sonraki gözden geçirme tarihi (isteğe bağlı)",
+        "nextHint": "Mevcut gözden geçirme tarihini korumak için boş bırakın.",
+        "submit": "Gözden geçirmeyi kaydet",
+        "submitting": "Kaydediliyor...",
+        "done": "Gözden geçirme kaydedildi."
+      },
+      "actions": {
+        "review": "Gözden geçir",
+        "extend": "Uzat",
+        "release": "Kaldır"
+      },
+      "register": {
+        "title": "Yasal saklamalar",
+        "subtitle": "Verilerin saklanması gerektiği için silinmesi ve kaldırılması duraklatılan kişiler ve kayıtlar. Tek bir kişiye yönelik saklama, o kişinin sayfasından uygulanır.",
+        "export": "CSV olarak dışa aktar",
+        "empty": "Yasal saklama yok.",
+        "emptyFiltered": "Bu filtrelerle eşleşen yasal saklama yok.",
+        "loadMore": "Daha fazla yükle",
+        "loadingMore": "Yükleniyor...",
+        "none": "-",
+        "overdue": "Gözden geçirme gecikti",
+        "cases": "{count, plural, one {# talep bekliyor} other {# talep bekliyor}}",
+        "open": "Dosya referansı {caseRef} olan saklamayı aç",
+        "filters": {
+          "label": "Filtreler",
+          "status": "Durum",
+          "category": "Neden",
+          "scope": "Uygulandığı yer",
+          "caseRef": "Dosya referansı",
+          "reviewDue": "Gözden geçirme gecikti",
+          "any": "Hepsi"
+        },
+        "columns": {
+          "subject": "Veri sahibi",
+          "category": "Neden",
+          "caseRef": "Dosya referansı",
+          "placed": "Uygulanma",
+          "review": "Gözden geçirme",
+          "expires": "Bitiş",
+          "status": "Durum",
+          "actions": "İşlemler"
+        },
+        "place": "Yasal saklama uygula..."
+      },
+      "detail": {
+        "title": "Yasal saklama",
+        "history": "Geçmiş",
+        "releasedAt": "Sona erdi",
+        "by": "{actor} tarafından",
+        "system": "sistem",
+        "action": {
+          "insert": "Saklama uygulandı",
+          "update": "Saklama değiştirildi",
+          "delete": "Saklama sona erdi",
+          "other": "Güncelle"
+        }
+      },
+      "case": {
+        "body": "Yasal saklama geçerli olduğu sürece bu kişinin verileri saklanır ve kilitlenir. Silme yürütülmez, pazarlama, yapay zekâ işleme ve dışa aktarma kısıtlanır ve süre işlemeye devam eder.",
+        "requesterTitle": "Kişiye yanıt",
+        "requesterHint": "Verilerin yasal bir yükümlülük kapsamında saklandığını belirtir. Nedenini söylemez. Hukuk danışmanı bu ifadeyi gizlilik ayarlarında değiştirebilir.",
+        "copy": "Metni kopyala",
+        "copied": "Kopyalandı",
+        "queueHint": "Silmeyi şimdi yine de onaylayabilirsiniz: kaydedilir, hiçbir şey silinmez ve saklama sona erdiğinde kendiliğinden çalışır.",
+        "queue": "Saklama bittiğinde çalışacak silmeyi onayla",
+        "queued": "Kaydedildi. Hiçbir şey silinmedi; silme, saklama sona erdiğinde kendiliğinden çalışacak."
+      },
+      "settings": {
+        "noticeLabel": "Silinmesi bekletilen kişiye yanıt",
+        "noticeHint": "Hukuk danışmanınızın ifadesi. Varsayılan metni kullanmak için boş bırakın. Konuyu veya nedeni belirtmeyin."
+      }
     }
   }
 }

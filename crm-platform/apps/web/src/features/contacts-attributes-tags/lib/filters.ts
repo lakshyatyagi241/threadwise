@@ -1,4 +1,4 @@
-import { CONTACT_SORT_FIELDS } from '@crm/contracts';
+import { CONTACT_SORT_FIELDS, FOLLOW_UP_FILTERS, type FollowUpFilter } from '@crm/contracts';
 import {
   DEFAULT_FILTERS,
   ownerTokens,
@@ -35,6 +35,22 @@ function cleanRules(v: string | null): string {
   }
 }
 
+/** A status value: the lower-case key the workspace's options use. */
+function cleanKey(v: string | null): string {
+  const t = (v ?? '').trim();
+  return /^[a-z][a-z0-9_]{0,63}$/.test(t) ? t : '';
+}
+
+/** A free-text filter value (a source): trimmed and cut to the API's 128 characters. */
+/** A follow-up state of the list filter, or empty for anything else a hand-edited link may carry. */
+function cleanFollowUp(v: string | null): '' | FollowUpFilter {
+  return (FOLLOW_UP_FILTERS as readonly string[]).includes(v ?? '') ? (v as FollowUpFilter) : '';
+}
+
+function cleanText(v: string | null): string {
+  return (v ?? '').trim().slice(0, 128);
+}
+
 const SORTS: ReadonlySet<string> = new Set(CONTACT_SORT_FIELDS);
 
 /** A `sort=` the API accepts: one of its columns or `attr:<key>`; anything else is the default order. */
@@ -66,6 +82,13 @@ export function parseFilters(
       ? consent
       : '') as ConsentFilter,
     imported: params.get('imported') === '1',
+    status: cleanKey(params.get('status')),
+    minor:
+      params.get('minor') === 'yes' || params.get('minor') === 'no'
+        ? (params.get('minor') as 'yes' | 'no')
+        : '',
+    followUp: cleanFollowUp(params.get('followUp')),
+    source: cleanText(params.get('source')),
     segment: cleanId(params.get('segment'), false),
     owner: ownerTokens(params.get('owner') ?? '').join(','),
     rules: cleanRules(params.get('rules')),
@@ -88,6 +111,10 @@ export function filtersToSearch(
   if (f.lifecycleStage) p.set('stage', f.lifecycleStage);
   if (f.consent) p.set('consent', f.consent);
   if (f.imported) p.set('imported', '1');
+  if (f.status) p.set('status', f.status);
+  if (f.minor) p.set('minor', f.minor);
+  if (f.followUp) p.set('followUp', f.followUp);
+  if (f.source.trim()) p.set('source', f.source.trim());
   if (f.segment) p.set('segment', f.segment);
   if (f.owner) p.set('owner', f.owner);
   if (f.rules) p.set('rules', f.rules);
@@ -108,6 +135,10 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.lifecycleStage ||
     f.consent ||
     f.imported ||
+    f.status ||
+    f.minor ||
+    f.followUp ||
+    f.source.trim() ||
     f.segment ||
     f.owner ||
     f.rules,

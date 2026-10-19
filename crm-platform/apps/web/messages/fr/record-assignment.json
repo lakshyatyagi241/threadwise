@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Automatisation",
+    "title": "Règles d'attribution des enregistrements",
+    "intro": "Attribuez automatiquement les nouveaux enregistrements ({contacts}, entreprises et {deals}) au bon responsable commercial.",
+    "crossNote": "Cette page attribue les {contacts}, entreprises et {deals}. Pour attribuer les conversations aux agents, consultez <link>Attribution automatique</link>.",
+    "master": {
+      "title": "Activer l'attribution des enregistrements",
+      "hint": "Désactivée tant que vous ne l'activez pas. Une fois activée, les règles ci-dessous attribuent à un membre de votre équipe tout nouvel enregistrement ({contact}, entreprise ou {deal}) sans responsable.",
+      "on": "L'attribution des enregistrements est activée.",
+      "off": "L'attribution des enregistrements est désactivée."
+    },
+    "imports": {
+      "title": "Attribuer aussi les enregistrements importés",
+      "hint": "Désactivé par défaut pour qu'un import volumineux ne modifie pas les responsables."
+    },
+    "ownerRule": {
+      "title": "Seuls les enregistrements sans responsable sont attribués",
+      "body": "Un responsable défini par une personne n'est jamais remplacé, ni un responsable retiré volontairement. Le moteur remplit uniquement un responsable vide sur un nouvel enregistrement. Si vous activez « Réattribuer à la mise à jour » pour une règle, elle peut aussi déplacer un enregistrement que le moteur avait lui-même attribué, tant que personne n'a modifié le responsable depuis."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Module"
+    },
+    "views": {
+      "rules": "Règles",
+      "log": "Journal d'exécution"
+    },
+    "how": {
+      "title": "Fonctionnement des priorités",
+      "p1": "Les règles sont testées à partir de la priorité 1. La première règle qui correspond et trouve une personne disponible reçoit l'enregistrement.",
+      "p2": "Seules les règles actives sont priorisées. Une règle en pause garde sa place dans la liste mais ne s'exécute jamais.",
+      "p3": "Une règle sans condition correspond à tous les enregistrements et s'exécute après toutes les autres règles, quelle que soit sa position dans la liste. C'est la règle de repli (fallback).",
+      "p4": "Un enregistrement qui correspond à plusieurs règles va à celle qui a la priorité la plus haute.",
+      "p5": "Faites glisser une ligne ou utilisez ses boutons fléchés pour changer l'ordre. Les règles de repli et les règles en pause restent dans leur propre groupe en bas."
+    },
+    "list": {
+      "title": {
+        "contact": "Règles pour {contacts}",
+        "company": "Règles pour les entreprises",
+        "deal": "Règles pour {deals}"
+      },
+      "create": "Créer une règle",
+      "loading": "Chargement des règles…",
+      "loadFailed": "Les règles n'ont pas pu être chargées.",
+      "retry": "Réessayer",
+      "readOnly": "Vous pouvez consulter ces règles mais pas les modifier. Leur modification nécessite l'autorisation de gérer l'attribution des enregistrements.",
+      "empty": {
+        "title": "Aucune règle pour le moment",
+        "contact": "Les nouveaux {contacts} gardent le responsable avec lequel ils sont créés.",
+        "company": "Les nouvelles entreprises gardent le responsable avec lequel elles sont créées.",
+        "deal": "Les nouveaux {deals} gardent le responsable avec lequel ils sont créés.",
+        "create": "Créer la première règle"
+      },
+      "col": {
+        "priority": "Priorité",
+        "rule": "Règle",
+        "assignTo": "Attribuer à",
+        "method": "Méthode",
+        "active": "Active",
+        "used": "Utilisations",
+        "modified": "Dernière modification"
+      },
+      "fallback": "Repli",
+      "fallbackHint": "Une règle sans condition correspond à tous les enregistrements et s'exécute après toutes les autres règles.",
+      "notPrioritised": "En pause",
+      "noConditions": "Aucune condition : correspond à tous les enregistrements",
+      "brokenConditions": "{count, plural, one {# condition cassée} many {# conditions cassées} other {# conditions cassées}}",
+      "brokenHint": "Une condition renvoie à un élément supprimé. Elle ne correspond à rien tant que vous ne la corrigez pas.",
+      "usedCount": "{count, plural, =0 {Jamais utilisée} one {Utilisée # fois} many {Utilisée # fois} other {Utilisée # fois}}",
+      "lastUsed": "Dernière utilisation : {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Personne",
+      "unknownPerson": "Ancien membre",
+      "unknownTeam": "Équipe supprimée",
+      "teamName": "Équipe : {name}",
+      "skipsOffline": "Ignore les personnes hors ligne",
+      "reassigns": "Réattribue à la mise à jour",
+      "activeFor": "La règle {name} est active",
+      "dragHandle": "Faites glisser {name} pour changer sa priorité",
+      "moveUp": "Monter {name}",
+      "moveDown": "Descendre {name}",
+      "moved": "{name} déplacée à la position {place}.",
+      "actions": "Actions pour {name}",
+      "edit": "Modifier",
+      "clone": "Dupliquer",
+      "delete": "Supprimer"
+    },
+    "strategy": {
+      "round_robin": "Tourniquet (round robin)",
+      "least_busy": "Charge ouverte la plus faible",
+      "fixed": "Utilisateur précis",
+      "hint": {
+        "round_robin": "Attribue à tour de rôle entre les personnes, dans un ordre constant.",
+        "least_busy": {
+          "contact": "Attribue à la personne qui a actuellement le moins de {contacts}.",
+          "company": "Attribue à la personne qui a actuellement le moins d'entreprises.",
+          "deal": "Attribue à la personne qui a actuellement le moins de {deals} ouverts."
+        },
+        "fixed": "Toujours la même personne. Pendant son absence, son suppléant prend le relais."
+      }
+    },
+    "editor": {
+      "titleNew": "Nouvelle règle",
+      "titleEdit": "Modifier la règle",
+      "name": "Nom de la règle",
+      "description": "Description (facultatif)",
+      "module": "Module",
+      "moduleLocked": "Le module d'une règle ne peut pas être modifié. Créez une nouvelle règle pour un autre module.",
+      "conditions": {
+        "title": "Conditions",
+        "hint": "Un enregistrement correspond quand ses champs remplissent les conditions. Choisissez un champ, puis la comparaison, puis une valeur.",
+        "emptyTitle": "Aucune condition : correspond à tous les enregistrements, s'exécute en dernier (repli)",
+        "emptyBody": "Cette règle prend tous les enregistrements qu'aucune autre règle n'a pris. Ajoutez une condition pour la restreindre.",
+        "add": "Ajouter une condition",
+        "counts": "{conditions} conditions sur {max}",
+        "loading": "Chargement des champs…",
+        "partial": "Certains champs n'ont pas pu être chargés. Vous pouvez quand même créer des règles avec ceux qui l'ont été."
+      },
+      "group": {
+        "company": "Champs de l'entreprise",
+        "deal": "Champs : {Deal}"
+      },
+      "assign": {
+        "title": "Attribuer à",
+        "method": "Méthode",
+        "people": "Personnes",
+        "person": "Personne",
+        "peoplePlaceholder": "Choisir des personnes",
+        "personPlaceholder": "Choisir une personne",
+        "teams": "Équipes",
+        "teamsPlaceholder": "Choisir des équipes",
+        "teamsNote": "Une équipe est ici un groupe de personnes parmi lesquelles choisir. Un enregistrement n'appartient pas à une équipe : son responsable est l'un des membres de l'équipe.",
+        "noPeople": "Aucune personne trouvée.",
+        "removePerson": "Retirer {name}",
+        "onLeave": "en congé",
+        "skipOffline": "Ignorer les personnes hors ligne",
+        "skipOfflineHint": "Les personnes en congé sont toujours ignorées.",
+        "reassign": "Réattribuer quand une mise à jour fait correspondre l'enregistrement à cette règle",
+        "reassignHint": "S'applique uniquement aux enregistrements que le moteur a lui-même attribués, et seulement tant que personne n'a modifié le responsable depuis. Désactivé par défaut : un enregistrement n'est attribué qu'une fois."
+      },
+      "problems": {
+        "name": "Donnez un nom à la règle.",
+        "people": "Choisissez au moins une personne ou une équipe.",
+        "fixedOne": "Une règle pour un utilisateur précis nécessite exactement une personne et aucune équipe.",
+        "conditions": "Corrigez les conditions en surbrillance avant d'enregistrer.",
+        "server": "Le serveur a refusé les règles."
+      },
+      "saveActivate": "Enregistrer et activer",
+      "savePaused": "Enregistrer en pause",
+      "save": "Enregistrer les modifications",
+      "cancel": "Annuler",
+      "unsavedTitle": "Quitter sans enregistrer ?",
+      "unsavedMessage": "Vos modifications de cette règle n'ont pas été enregistrées.",
+      "stay": "Continuer la modification",
+      "leave": "Quitter"
+    },
+    "fields": {
+      "origin": "Arrivé via",
+      "company": {
+        "name": "Nom",
+        "email": "E-mail",
+        "phone": "Téléphone",
+        "domain": "Domaine du site web",
+        "industry": "Secteur",
+        "sizeRange": "Taille",
+        "address": "Adresse",
+        "status": "Statut",
+        "createdAt": "Créé le",
+        "updatedAt": "Dernière mise à jour"
+      },
+      "deal": {
+        "title": "Titre",
+        "value": "Valeur",
+        "currency": "Devise",
+        "pipeline": "Pipeline",
+        "stage": "Étape",
+        "status": "Statut",
+        "source": "Source",
+        "expectedCloseDate": "Date de clôture prévue",
+        "createdAt": "Créé le",
+        "hasContact": "A un élément : {contact}",
+        "hasCompany": "A une entreprise"
+      },
+      "dealStatus": {
+        "open": "Ouverte",
+        "won": "Gagnée",
+        "lost": "Perdue"
+      }
+    },
+    "origin": {
+      "manual": "Ajouté par une personne",
+      "import": "Import",
+      "inbound": "Premier message",
+      "form": "Formulaire",
+      "lead": "Source du lead",
+      "api": "API"
+    },
+    "test": {
+      "title": "Tester avec un enregistrement",
+      "hint": "Choisissez un vrai enregistrement et voyez quelle règle le prendrait et qui le recevrait. Rien n'est modifié, et cela fonctionne même quand l'interrupteur est désactivé.",
+      "search": {
+        "contact": "Rechercher des {contacts} par nom, e-mail ou téléphone",
+        "company": "Rechercher des entreprises par nom",
+        "deal": "Rechercher des {deals} par titre"
+      },
+      "searchLabel": "Enregistrement à tester",
+      "searching": "Recherche…",
+      "noMatches": "Aucun enregistrement trouvé.",
+      "searchFailed": "La recherche n'a pas fonctionné. Vous n'êtes peut-être pas autorisé à voir ces enregistrements.",
+      "clear": "Choisir un autre enregistrement",
+      "run": "Tester",
+      "running": "Test en cours…",
+      "failed": "Le test n'a pas été exécuté. Réessayez.",
+      "off": "L'attribution des enregistrements est désactivée : voici ce qui se passerait si elle était activée.",
+      "outcome": {
+        "would_assign": "{record} irait à {owner} via la règle {rule}.",
+        "disabled": "L'attribution des enregistrements est désactivée pour cet espace de travail, donc rien ne se passerait.",
+        "has_owner": "{record} a déjà un responsable, donc aucune règle ne s'exécuterait. Un responsable défini par une personne n'est jamais remplacé.",
+        "no_rule": "Aucune règle active ne correspond à {record}.",
+        "nobody_available": "Une règle correspond à {record}, mais toutes les personnes qu'elle désigne sont en congé, hors ligne ou ne sont plus là.",
+        "plan": "Votre offre n'inclut pas les règles d'attribution des enregistrements.",
+        "not_found": "Cet enregistrement est introuvable. Il a peut-être été supprimé ou se trouve hors de ce que vous pouvez voir."
+      },
+      "traceTitle": "Règles testées, dans l'ordre",
+      "traceEmpty": "Aucune règle active n'a été testée.",
+      "trace": {
+        "winner": "Correspond et prend l'enregistrement",
+        "matched": "Correspond",
+        "not_matched": "Ne correspond pas",
+        "nobody": "Correspond, mais personne n'était disponible",
+        "broken": "A une condition cassée"
+      },
+      "skipped": "Ignorée car personne n'était disponible : {names}"
+    },
+    "log": {
+      "title": "Journal d'exécution",
+      "intro": "Ce que le moteur a fait de chaque enregistrement, du plus récent au plus ancien. Les entrées sont conservées {days} jours et ne contiennent que des identifiants, jamais le contenu d'un enregistrement.",
+      "filterOutcome": "Résultat",
+      "filterRule": "Règle",
+      "allOutcomes": "Tous les résultats",
+      "allRules": "Toutes les règles",
+      "loading": "Chargement du journal d'exécution…",
+      "loadFailed": "Le journal d'exécution n'a pas pu être chargé.",
+      "empty": "Rien n'a encore été attribué.",
+      "emptyFiltered": "Aucune entrée ne correspond à ces filtres.",
+      "loadMore": "Charger plus",
+      "col": {
+        "when": "Quand",
+        "record": "Enregistrement",
+        "outcome": "Résultat",
+        "reason": "Raison",
+        "rule": "Règle",
+        "assignedTo": "Attribué à",
+        "method": "Méthode",
+        "arrived": "Arrivé via"
+      },
+      "deletedRecord": "Supprimé",
+      "noRule": "Aucune règle",
+      "outcome": {
+        "assigned": "Attribué",
+        "reassigned": "Réattribué",
+        "skipped": "Laissé tel quel"
+      },
+      "reason": {
+        "matched": "Une règle correspondait",
+        "has_owner": "Il avait déjà un responsable",
+        "no_rule": "Aucune règle ne correspondait",
+        "nobody_available": "Personne n'était disponible",
+        "raced": "Le responsable a changé pendant l'attribution",
+        "unchanged": "Il est déjà avec la bonne règle"
+      },
+      "trigger": {
+        "created": "Nouvel enregistrement",
+        "updated": "Enregistrement mis à jour"
+      },
+      "showTrace": "Afficher comment la décision a été prise",
+      "hideTrace": "Masquer comment la décision a été prise",
+      "traceFor": "Comment la décision a été prise pour {record}"
+    },
+    "toast": {
+      "created": "Règle créée.",
+      "saved": "Règle enregistrée.",
+      "deleted": "Règle supprimée.",
+      "cloned": "Règle copiée. La copie est en pause.",
+      "activated": "Règle activée.",
+      "paused": "Règle mise en pause.",
+      "reordered": "Ordre enregistré.",
+      "conflict": "Quelqu'un d'autre a modifié cette règle. La dernière version est chargée. Vérifiez-la et appliquez de nouveau votre modification.",
+      "failed": "Une erreur s'est produite. Réessayez."
+    },
+    "delete": {
+      "title": "Supprimer cette règle ?",
+      "message": "La règle {name} cessera d'attribuer. Les enregistrements qu'elle a déjà attribués gardent leur responsable.",
+      "confirm": "Supprimer",
+      "cancel": "Annuler"
+    }
+  }
+}

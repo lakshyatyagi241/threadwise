@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Kişi bölümleri",
+          "section": {
+            "overview": "Genel bakış",
+            "activities": "Etkinlik",
+            "conversations": "Görüşmeler",
+            "notes": "Notlar",
+            "tasks": "Görevler",
+            "meetings": "Toplantılar",
+            "files": "Dosyalar",
+            "deals": "Fırsatlar",
+            "appointments": "Randevular",
+            "sales": "Faturalar",
+            "company": "Şirket",
+            "details": "Ayrıntılar",
+            "stats": "İstatistikler",
+            "lead-source": "Kaynak",
+            "consent": "Onay",
+            "history": "Geçmiş"
+          },
+          "more": "Daha fazla",
+          "moreLabel": "Diğer bölümler"
+        },
+        "actions": {
+          "label": "Bu kişiyle yapabilecekleriniz",
+          "call": "Ara",
+          "callWhatsapp": "WhatsApp'tan ara",
+          "callPhone": "Telefonunuzdan ara",
+          "logCall": "Arama kaydet",
+          "callMore": "Aramanın diğer yolları",
+          "message": "Mesaj",
+          "messageChat": "WhatsApp sohbetini aç",
+          "messageTemplate": "WhatsApp şablonu gönder",
+          "messageEmail": "E-posta gönder",
+          "messageMore": "Yazmanın diğer yolları",
+          "fieldHistory": "Alan geçmişi",
+          "more": "Daha fazla"
+        },
+        "stageStrip": {
+          "noStatus": "Durum yok"
+        },
+        "keyDetails": {
+          "editAll": "Tümünü düzenle",
+          "edit": "{field} düzenle",
+          "add": "{field} ekle",
+          "conflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
+          "invalid": "Bu, geçerli bir {field} gibi görünmüyor.",
+          "forbidden": "Bu kişiyi değiştirme izniniz yok.",
+          "failed": "Kaydedilemedi. Tekrar deneyin.",
+          "owner": "Sahip",
+          "city": "Şehir",
+          "showAll": "Tüm ayrıntıları göster",
+          "showLess": "Daha az göster",
+          "social": "Sosyal medya",
+          "leadSource": "Bu kişi nereden geldi",
+          "aboutTitle": "Bu kişi hakkında"
+        },
+        "cards": {
+          "company": "Şirket",
+          "companyNone": "Henüz yok",
+          "timezone": "Saat dilimi ve konum",
+          "timezoneNone": "Henüz bilinmiyor",
+          "privacy": "Gizlilik",
+          "privacyMinor": "Reşit değil",
+          "score": "Potansiyel puanı",
+          "scoreNone": "Henüz puanlanmadı",
+          "label": "Bu kişiyle ilgili",
+          "tasks": "Açık görevler",
+          "tasksNone": "Bekleyen bir şey yok.",
+          "deals": "Fırsatlar",
+          "dealsNone": "Henüz fırsat yok.",
+          "add": "+ Ekle",
+          "viewAll": "Tümünü gör"
+        },
+        "compose": {
+          "label": "Etkinliğe ekle",
+          "tabs": "Ne eklenecek",
+          "tab": {
+            "note": "Not",
+            "task": "Görev",
+            "call": "Arama",
+            "meeting": "Toplantı"
+          }
+        },
+        "logCall": {
+          "label": "Arama kaydet",
+          "direction": "Kim aradı",
+          "directionOption": {
+            "outbound": "Ben aradım",
+            "inbound": "Beni aradılar"
+          },
+          "minutesPlaceholder": "İsteğe bağlı",
+          "notesPlaceholder": "Neler konuşuldu? (isteğe bağlı)",
+          "duePreset": {
+            "1": "Yarın",
+            "3": "3 gün sonra",
+            "7": "1 hafta sonra"
+          },
+          "saved": "Arama kaydedildi.",
+          "forbidden": "Arama kaydetme izniniz yok.",
+          "unavailable": "Arama kaydetme burada henüz kullanılamıyor.",
+          "failed": "Arama kaydedilemedi. Hiçbir şey kaybolmadı: tekrar deneyin."
+        },
+        "callNudge": {
+          "question": "{name} ile görüşme nasıl geçti?",
+          "log": "Kaydet",
+          "dismiss": "Şimdi değil"
+        },
+        "profile": {
+          "label": "Kişi profili"
+        },
+        "stagePicker": {
+          "menu": "Aşama seçin",
+          "search": "Aşama bul",
+          "none": "Eşleşen aşama yok.",
+          "moveTo": "{stage} aşamasına taşı",
+          "statusIn": "{stage} aşamasındaki durum",
+          "default": "varsayılan",
+          "progress": "{current} / {total}",
+          "undo": "Geri al",
+          "undone": "{stage} aşamasına geri alındı.",
+          "statusSet": "Durum {status} olarak ayarlandı.",
+          "prefix": "Aşama"
+        },
+        "summary": {
+          "label": "Özet",
+          "tasks": "Açık görevler",
+          "overdue": "{count} gecikmiş",
+          "nextDue": "Sonraki son tarih {when}",
+          "noDue": "Son tarih yok",
+          "meeting": "Sonraki toplantı",
+          "noMeeting": "Planlanan yok",
+          "lastActivity": "Son etkinlik",
+          "noActivity": "Henüz etkinlik yok",
+          "deals": "Açık fırsatlar",
+          "wonDeals": "{count, plural, =0 {kazanılan yok} one {1 kazanıldı} other {# kazanıldı}}"
+        },
+        "scoreChip": {
+          "title": "Potansiyel müşteri puanı {score} · {band}",
+          "aria": "Potansiyel müşteri puanı {score}, {band}. Puan ayrıntılarını göster."
+        }
+      },
+      "timeline": {
+        "title": "Etkinlik",
+        "viewAll": "Tüm etkinlikleri gör",
+        "filterLabel": "Göster",
+        "filters": {
+          "all": "Tümü",
+          "messages": "Mesajlar",
+          "calls": "Aramalar",
+          "notes": "Notlar",
+          "tasks": "Görevler",
+          "meetings": "Toplantılar",
+          "changes": "Değişiklikler"
+        },
+        "searchLabel": "Bu kişinin etkinliklerinde ara",
+        "searchPlaceholder": "Etkinliklerde ara",
+        "clearSearch": "Aramayı temizle",
+        "searchHint": "Yalnızca şimdiye kadar yüklenenlerde aranıyor. Daha eskiye bakmak için daha fazla yükleyin.",
+        "groups": {
+          "upNext": "Sıradaki",
+          "today": "Bugün",
+          "yesterday": "Dün",
+          "thisWeek": "Bu hafta",
+          "earlier": "Daha önce"
+        },
+        "loading": "Etkinlikler yükleniyor...",
+        "loadMore": "Daha fazla yükle",
+        "noMatch": "Eşleşen yok.",
+        "emptyShort": "Burada henüz bir şey yok.",
+        "showAll": "Tüm etkinlikleri göster",
+        "noneYet": "Daha yeni bir şey yok. Daha eskiye bakmak için daha fazla yükleyin.",
+        "partial": "Etkinliklerin bir kısmı yüklenemedi.",
+        "retry": "Tekrar dene",
+        "empty": {
+          "title": "Henüz etkinlik yok",
+          "message": "{name} ile yaptığınız her şey burada görünür: notlar, aramalar, mesajlar, görevler ve toplantılar.",
+          "messageNoName": "Bu kişiyle yaptığınız her şey burada görünür: notlar, aramalar, mesajlar, görevler ve toplantılar.",
+          "note": "Not ekle",
+          "call": "Arama kaydet",
+          "task": "Görev ekle",
+          "meeting": "Toplantı planla"
+        },
+        "entry": {
+          "note": "Not: {text}",
+          "edited": "Düzenlendi",
+          "task": {
+            "done": "Görev tamamlandı: {title}",
+            "overdue": "Gecikti, son tarih {when}",
+            "due": "Son tarih {when}",
+            "noDue": "Son tarih yok"
+          },
+          "meeting": {
+            "upcoming": "Toplantı: {title}",
+            "past": "Görüşüldü: {title}",
+            "notHeld": "Yapılmadı: {title}",
+            "noShow": "Gelmedi: {title}"
+          },
+          "call": {
+            "inbound": "Gelen arama",
+            "outbound": "Giden arama",
+            "call": "Arama",
+            "seconds": "{seconds} sn",
+            "minutes": "{minutes} dk",
+            "outcome": {
+              "connected": "Bağlandı",
+              "noAnswer": "Cevap yok",
+              "busy": "Meşgul",
+              "voicemail": "Sesli mesaj bırakıldı",
+              "wrongNumber": "Yanlış numara",
+              "declined": "Reddedildi",
+              "failed": "Başarısız",
+              "inProgress": "Devam ediyor"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Kaydedildi",
+              "telephony": "Telefon sistemi",
+              "mobile_app": "Mobil uygulama",
+              "web_click_to_call": "Telefon"
+            }
+          },
+          "message": {
+            "summary": "{channel} üzerinde görüşme",
+            "unread": "{count} okunmamış"
+          },
+          "email": {
+            "sent": "E-posta gönderildi: {title}",
+            "received": "E-posta alındı: {title}"
+          },
+          "change": {
+            "stage": "Aşama {from} aşamasından {to} aşamasına değişti",
+            "field": "{field}, {from} değerinden {to} değerine değişti",
+            "stageAndMore": "Aşama {from} aşamasından {to} aşamasına değişti ve {count, plural, one {1 ayrıntı daha} other {# ayrıntı daha}}",
+            "several": "{count, plural, one {1 ayrıntı} other {# ayrıntı}} güncellendi"
+          },
+          "consent": {
+            "granted": "{channel} onayı verildi",
+            "withdrawn": "{channel} onayı geri alındı",
+            "service": "Hizmet mesajları",
+            "marketing": "Pazarlama mesajları"
+          },
+          "by": "{name} tarafından",
+          "system": "Sistem"
+        }
+      }
+    }
+  }
+}

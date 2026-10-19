@@ -37,9 +37,4 @@ describe("a push portal's secret never reaches a log line", () => {
     expect(masked.method).toBe('GET');
     expect(JSON.stringify(masked)).not.toContain('mkt_SeCrEt');
   });
-
-  it('hides the key in a Google Sheets add-on Webhook URL', () => {
-    const url = '/api/v1/sheets-addon/webhook/wsn_live_0123456789abcdef0123456789abcdef';
-    expect(maskSecretUrl(url)).toBe('/api/v1/sheets-addon/webhook/[secret]');
-  });
 });

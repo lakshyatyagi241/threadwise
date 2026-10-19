@@ -19,6 +19,11 @@ export const CALL_ERROR_CODES = {
   CALL_META_REFUSED: 'CALL_META_REFUSED',
   /** The customer has not allowed calls yet: a permission request was sent instead, and no call was placed. */
   CALL_PERMISSION_REQUESTED: 'CALL_PERMISSION_REQUESTED',
+  /**
+   * The workspace's calling window is closed for this contact (BL-177). A live call cannot wait, so it is refused, with the instant the window
+   * opens in the problem's details (`opensAt`, ISO 8601) and the clock it was read on (`zone`). Nothing was placed and nothing was sent. 422.
+   */
+  CALL_OUTSIDE_WINDOW: 'CALL_OUTSIDE_WINDOW',
   /** The call was already taken (another teammate accepted it) or has moved on: nothing was changed. */
   CALL_STATE_CONFLICT: 'CALL_STATE_CONFLICT',
   /** The recording could not be stored. */
@@ -37,4 +42,24 @@ export const CALL_ERROR_CODES = {
   CALL_PLAYBACK_LINK_INVALID: 'CALL_PLAYBACK_LINK_INVALID',
   /** The range or time zone of a call log or analytics request does not make sense (backwards, too wide, an unknown zone). */
   CALL_RANGE_INVALID: 'CALL_RANGE_INVALID',
+  /** The logged call is not in this workspace, or is not one the person may see. 404. */
+  CALL_LOG_ENTRY_NOT_FOUND: 'CALL_LOG_ENTRY_NOT_FOUND',
+  /** A call needs a contact or a phone number that can be read as one; `errors[].path` says which is wrong. 422. */
+  CALL_LOG_CONTACT_REQUIRED: 'CALL_LOG_CONTACT_REQUIRED',
+  /** The call's start time is in the future or older than the limit. 422. */
+  CALL_LOG_TIME_INVALID: 'CALL_LOG_TIME_INVALID',
+  /** The entry is another person's, or did not come from "Log a call": only call.logging.manage may change it. 403. */
+  CALL_LOG_NOT_EDITABLE: 'CALL_LOG_NOT_EDITABLE',
+  /** The workspace's edit window for a logged call has passed. 403. */
+  CALL_LOG_EDIT_WINDOW_CLOSED: 'CALL_LOG_EDIT_WINDOW_CLOSED',
+  /** A follow-up task needs a contact to attach to; the call has none. 422. */
+  CALL_LOG_FOLLOW_UP_NEEDS_CONTACT: 'CALL_LOG_FOLLOW_UP_NEEDS_CONTACT',
+  /** The telephony connection is not in this workspace. 404. */
+  TELEPHONY_CONNECTION_NOT_FOUND: 'TELEPHONY_CONNECTION_NOT_FOUND',
+  /** No telephony provider is registered under that key. 422. */
+  TELEPHONY_PROVIDER_UNKNOWN: 'TELEPHONY_PROVIDER_UNKNOWN',
+  /** The connection's provider cannot bridge a call, or the connection is disabled. 422. */
+  TELEPHONY_CLICK_UNSUPPORTED: 'TELEPHONY_CLICK_UNSUPPORTED',
+  /** The provider refused to place the call; `message` is its reason. 422. */
+  TELEPHONY_CALL_FAILED: 'TELEPHONY_CALL_FAILED',
 } as const;

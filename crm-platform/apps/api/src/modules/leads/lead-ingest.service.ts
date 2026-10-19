@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type { LeadSourceDefaults } from '@crm/contracts';
+import type { DuplicateSettingsValues, LeadSourceDefaults } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { ownersAvailable } from '../../common/leave-owner-pool';
@@ -8,7 +8,14 @@ import { ConsentIntakeService, planIntakeGrants } from '../contact-consent';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { ContactsRepository, ContactsService, DealsService, TagsRepository } from '../crm';
+import {
+  ContactActivitiesRepository,
+  ContactsRepository,
+  ContactsService,
+  DealsService,
+  LeadHandlingSettingsService,
+  TagsRepository,
+} from '../crm';
 import { actingUserId, runInOrg } from './lead-context';
 import type { LeadIngestPort, LeadIngestResult, NormalisedLead } from './lead-ingest.port';
 import { pickOwner } from './lead-assignment';
@@ -44,7 +51,14 @@ export interface ProcessOutcome {
 }
 
 type ContactOutcome =
-  | { kind: 'ok'; contactId: number; uuid: string; created: boolean }
+  | {
+      kind: 'ok';
+      contactId: number;
+      uuid: string;
+      created: boolean;
+      /** A separate contact made for a lead that matched another one (`create_new`): the internal id of the one it matched. */
+      duplicateOf?: number;
+    }
   | { kind: 'review'; reason: 'plan_limit_reached' | 'invalid_phone' | 'no_contact_point' };
 
 /**
@@ -83,11 +97,22 @@ export class LeadIngestService implements LeadIngestPort {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly consentIntake: ConsentIntakeService,
+    private readonly leadHandling: LeadHandlingSettingsService,
+    private readonly activities: ContactActivitiesRepository,
   ) {}
 
   /** The port: a connector's lead for a source it holds the id of. */
   async ingest(orgId: number, sourceId: number, lead: NormalisedLead): Promise<LeadIngestResult> {
     return (await this.process(orgId, sourceId, lead, {})).result;
+  }
+
+  /** The port's `settled`: a poller's way of not re-delivering what the source already holds. */
+  settled(orgId: number, sourceId: number, externalIds: readonly string[]): Promise<string[]> {
+    return runInOrg(orgId, () =>
+      this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.events.settled(tx, orgId, sourceId, externalIds),
+      ),
+    );
   }
 
   async process(
@@ -208,7 +233,9 @@ export class LeadIngestService implements LeadIngestPort {
       return this.review(tx, orgId, source, event, reason, defaults, resolved);
     }
 
+    const duplicates = await this.leadHandling.duplicatesIn(tx, orgId);
     const found = await this.resolveContact(tx, orgId, {
+      duplicates,
       phone,
       email,
       name: resolved.name,
@@ -235,7 +262,9 @@ export class LeadIngestService implements LeadIngestPort {
       owner: owner?.id ?? null,
       customTypes: await this.sources.contactFieldTypes(tx, orgId, Object.keys(resolved.custom)),
       created: found.created,
+      separate: found.duplicateOf !== undefined,
     });
+    await this.leaveTimelineNote(tx, orgId, found, source, duplicates, isTest);
 
     await this.applyTag(tx, orgId, found.contactId, defaults);
     if (!isTest) {
@@ -446,6 +475,8 @@ export class LeadIngestService implements LeadIngestPort {
     tx: Tx,
     orgId: number,
     q: {
+      /** What the workspace chose for a lead that matches a contact (BL-292). */
+      duplicates: DuplicateSettingsValues;
       phone: LeadPhone | null;
       email: string | null;
       name: string | null;
@@ -471,7 +502,14 @@ export class LeadIngestService implements LeadIngestPort {
     }
     if (id !== undefined) {
       const uuid = await this.contactUuid(tx, orgId, id);
-      if (uuid) return { kind: 'ok', contactId: id, uuid, created: false };
+      if (uuid) {
+        // The workspace asked for a separate contact (a test lead never makes one: it is quiet and leaves the CRM as it was).
+        if (q.duplicates.mode === 'create_new' && !q.isTest) {
+          const separate = await this.createSeparate(tx, orgId, q, id);
+          if (separate) return separate;
+        }
+        return { kind: 'ok', contactId: id, uuid, created: false };
+      }
     }
 
     const resolved = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
@@ -506,6 +544,99 @@ export class LeadIngestService implements LeadIngestPort {
   }
 
   /**
+   * `create_new` (BL-292): a separate contact for a lead whose phone or e-mail already belongs to another one. The contact cap and the
+   * `contact.created` event are the ordinary ones; the matched identity stays with the original (see `ResolveContactInput.duplicateOf`).
+   * Returns undefined only when nothing could be created for a reason the merge path handles better.
+   */
+  private async createSeparate(
+    tx: Tx,
+    orgId: number,
+    q: {
+      phone: LeadPhone | null;
+      email: string | null;
+      name: string | null;
+      label: string;
+      stage: string | undefined;
+      lead: { source: string; sourceId: string; campaign: string | null };
+    },
+    matchedId: number,
+  ): Promise<ContactOutcome | undefined> {
+    const resolved = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
+      kind: q.phone ? 'phone' : 'email',
+      value: q.phone ? q.phone.e164 : q.email!,
+      name: q.name,
+      source: q.label,
+      lifecycleStage: q.stage,
+      duplicateOf: matchedId,
+      eventPayload: {
+        ...(q.email ? { email: q.email } : {}),
+        leadSource: q.lead.source,
+        leadSourceId: q.lead.sourceId,
+        ...(q.lead.campaign ? { campaign: q.lead.campaign } : {}),
+        origin: 'lead',
+      },
+    });
+    switch (resolved.outcome) {
+      case 'created':
+        return {
+          kind: 'ok',
+          contactId: resolved.contactId,
+          uuid: resolved.uuid,
+          created: true,
+          duplicateOf: matchedId,
+        };
+      case 'quota_reached':
+        return { kind: 'review', reason: 'plan_limit_reached' };
+      default:
+        return undefined;
+    }
+  }
+
+  /**
+   * The line a duplicate leaves on a contact's timeline (BL-292). A separate contact always says it may be a duplicate (and of which
+   * contact, by its reference, never by the lead's phone or e-mail); a merge says so only when the workspace asked (the line also moves
+   * the contact's last activity, which would change what an existing workspace sees). A test lead leaves nothing.
+   */
+  private async leaveTimelineNote(
+    tx: Tx,
+    orgId: number,
+    found: Extract<ContactOutcome, { kind: 'ok' }>,
+    source: LeadSourceRow,
+    duplicates: DuplicateSettingsValues,
+    isTest: boolean,
+  ): Promise<void> {
+    if (isTest) return;
+    let line: { type: string; title: string; body: string | null } | null = null;
+    if (found.duplicateOf !== undefined) {
+      const res = await tx.execute(
+        sql`SELECT display_id FROM contacts WHERE org_id = ${orgId} AND id = ${found.duplicateOf}`,
+      );
+      const ref = (res.rows[0] as { display_id: string | null } | undefined)?.display_id ?? null;
+      line = {
+        type: 'lead_duplicate',
+        title: `Possible duplicate: a lead from ${source.name} matched an existing contact and was added as a new one`,
+        body: ref ? `Matches contact ${ref}` : null,
+      };
+    } else if (!found.created && duplicates.noteOnMerge) {
+      line = {
+        type: 'lead_merged',
+        title: `Lead from ${source.name} merged into this contact`,
+        body: null,
+      };
+    }
+    if (!line) return;
+    await this.activities.insert(tx, orgId, {
+      contactId: found.contactId,
+      activityType: line.type,
+      title: line.title.slice(0, 255),
+      body: line.body,
+      source: 'system',
+      actorId: null,
+    });
+    await this.contactRepo.bumpLastActivity(tx, orgId, found.contactId);
+  }
+
+  /**
    * What a lead adds to its contact. A contact the lead just created takes every value; one that already existed keeps everything a
    * person may have curated (a name, an email, a custom value, an owner) and only has its blanks filled, so a form that arrives with
    * less than the CRM already knows never makes the contact worse. Returns true when the phone or email belongs to ANOTHER contact (the
@@ -523,6 +654,8 @@ export class LeadIngestService implements LeadIngestPort {
       owner: number | null;
       customTypes: Map<string, string>;
       created: boolean;
+      /** A separate contact made for a lead that matched another: its phone or e-mail belongs to the original, which is not a conflict. */
+      separate: boolean;
     },
   ): Promise<boolean> {
     const patch: Record<string, unknown> = {};
@@ -541,14 +674,14 @@ export class LeadIngestService implements LeadIngestPort {
       if (holder === undefined || holder === row.id) {
         await this.contactRepo.addIdentity(tx, orgId, row.id, 'email', v.email);
         if (blank(row.email)) patch.email = v.email;
-      } else conflict = true;
+      } else if (!v.separate) conflict = true;
     }
     if (v.phone) {
       const holder = await this.contactRepo.findByIdentity(tx, orgId, 'phone', v.phone.e164);
       if (holder === undefined || holder === row.id) {
         await this.contactRepo.addIdentity(tx, orgId, row.id, 'phone', v.phone.e164);
         if (blank(row.phone)) patch.phone = v.phone.e164;
-      } else conflict = true;
+      } else if (!v.separate) conflict = true;
     }
 
     const custom: Record<string, unknown> = {};

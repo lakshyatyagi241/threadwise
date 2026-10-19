@@ -115,6 +115,17 @@ describe('email hub', () => {
     expect(html).toContain('Last problem: Quota exceeded');
   });
 
+  it('offers Reconnect but not Remove once a mailbox is already disconnected', () => {
+    search = '';
+    manage = true;
+    // Disconnect keeps the row (so its history stays attached on reconnect); Remove would just call the same
+    // no-op disconnect again, so the button is hidden rather than offered and silently doing nothing.
+    const html = page({ data: [box({ status: 'disconnected' })] });
+    expect(html).toContain('>Disconnected<');
+    expect(html).toContain('>Reconnect<');
+    expect(html).not.toContain('>Remove<');
+  });
+
   it('says to ask the platform administrator while Google is not set up, and offers no working button', () => {
     search = '';
     manage = true;
@@ -285,6 +296,32 @@ describe('email hub', () => {
     manage = true;
     const html = page({ data: [box({ provider: 'imap', status: 'needs_reauth' })] });
     expect(html).toContain('>Reconnect<');
+  });
+
+  it('offers Test connection on an IMAP mailbox (also one that needs reconnecting), not on Gmail, a disconnected one or to a reader', () => {
+    search = '';
+    manage = true;
+    const imap = (o: Partial<MailboxResponse>) => page({ data: [box({ provider: 'imap', ...o })] });
+    expect(imap({})).toContain('data-testid="email-test-connection"');
+    expect(imap({ status: 'needs_reauth' })).toContain('>Test connection<');
+    expect(imap({ status: 'disconnected' })).not.toContain('email-test-connection');
+    expect(page({ data: [box()] })).not.toContain('email-test-connection');
+    manage = false;
+    expect(imap({})).not.toContain('email-test-connection');
+    manage = true;
+  });
+
+  it('shows how far behind a connected mailbox is, in minutes or hours, and warns when it is far behind', () => {
+    search = '';
+    manage = true;
+    const lag = (seconds: number | null) => page({ data: [box({ syncLagSeconds: seconds })] });
+    expect(lag(20)).toContain('Under a minute');
+    expect(lag(300)).toContain('5 minutes');
+    expect(lag(300)).not.toContain('text-warning"');
+    expect(lag(7_300)).toContain('2 hours');
+    expect(lag(7_300)).toContain('data-testid="email-lag"');
+    expect(lag(900)).toMatch(/text-warning[^>]*data-testid="email-lag"/);
+    expect(lag(null)).not.toContain('email-lag');
   });
 
   it('hides the manage actions from someone who can only read', () => {

@@ -4,7 +4,9 @@
       "companies": "Entreprises"
     },
     "common": {
-      "dismiss": "Ignorer"
+      "dismiss": "Ignorer",
+      "yes": "Oui",
+      "no": "Non"
     },
     "errors": {
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
@@ -18,7 +20,10 @@
       "planDisabled": "Votre forfait n’inclut pas les entreprises. Passez à un forfait supérieur pour les débloquer.",
       "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail.",
       "unexpected": "Un problème est survenu. Réessayez dans un instant.",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "filterInvalid": "L'une des conditions de propriété est inutilisable. Vérifiez la propriété et sa valeur.",
+      "exportTooLarge": "Il y a trop d'entreprises pour un seul fichier. Réduisez la liste avec un filtre et exportez à nouveau.",
+      "importInvalid": "Ce fichier ne peut pas être importé. Il doit avoir une première ligne nommant les colonnes, dont une colonne name ou website, et au plus 1 000 entreprises."
     },
     "list": {
       "eyebrow": "CRM · Organisations",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "Supprimer les entreprises",
       "deleteManyMessage": "{count, plural, one {Supprimer cette entreprise ? Ses contacts et opportunités sont conservés et simplement dissociés.} other {Supprimer ces # entreprises ? Leurs contacts et opportunités sont conservés et simplement dissociés.}}",
       "delete": "Supprimer",
-      "keep": "Conserver"
+      "keep": "Conserver",
+      "export": "Exporter",
+      "import": "Importer"
     },
     "toolbar": {
       "label": "Filtrer les entreprises",
@@ -69,7 +76,14 @@
         "name": "Nom de A à Z"
       },
       "clear": "Effacer",
-      "refresh": "Actualiser"
+      "refresh": "Actualiser",
+      "sortByProperty": "Par {name}",
+      "direction": "Sens",
+      "directions": {
+        "default": "Sens habituel",
+        "asc": "Croissant",
+        "desc": "Décroissant"
+      }
     },
     "table": {
       "label": "Entreprises",
@@ -82,7 +96,13 @@
       "wonValue": "Valeur gagnée",
       "actions": "Actions",
       "delete": "Supprimer l’entreprise",
-      "deleteNamed": "Supprimer l’entreprise {name}"
+      "deleteNamed": "Supprimer l’entreprise {name}",
+      "website": "Site web",
+      "email": "E-mail",
+      "phone": "Téléphone",
+      "size": "Taille",
+      "owner": "Propriétaire",
+      "created": "Création"
     },
     "form": {
       "eyebrow": "Entreprise",
@@ -112,6 +132,17 @@
         "email": "Saisissez une adresse e-mail valide.",
         "invalid": "Certaines des informations saisies ne sont pas valides.",
         "ownerInvalid": "Le propriétaire doit être un membre actif de cet espace de travail."
+      },
+      "propertiesTitle": "Propriétés",
+      "propertiesHint": "à configurer dans Paramètres, Propriétés d’entreprise",
+      "propertyProblems": {
+        "invalid": "Cette valeur ne convient pas à la propriété.",
+        "notEditable": "Cette propriété ne peut plus être modifiée. Fermez le formulaire et rouvrez-le.",
+        "required": "Cette propriété est obligatoire.",
+        "number": "Saisissez un nombre.",
+        "integer": "Saisissez un nombre entier.",
+        "email": "Saisissez une adresse e-mail valide.",
+        "url": "Saisissez un lien complet commençant par http:// ou https://."
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "Impossible de retirer le contact. Réessayez.",
       "contactsLinked": "{count, plural, one {# contact ajouté à l’entreprise.} other {# contacts ajoutés à l’entreprise.}}",
       "contactsLinkedSome": "{count, plural, one {# contact ajouté} other {# contacts ajoutés}}, {failed, plural, one {# n’a pas pu être ajouté.} other {# n’ont pas pu être ajoutés.}}",
-      "contactsLinkFailed": "Impossible d’ajouter les contacts. Réessayez."
+      "contactsLinkFailed": "Impossible d’ajouter les contacts. Réessayez.",
+      "exportFailed": "L'export n'a pas pu être généré. Réessayez dans un instant."
     },
     "detail": {
       "back": "Toutes les entreprises",
@@ -149,7 +181,11 @@
       "address": "Adresse",
       "createdBy": "Créée par",
       "created": "Créée",
-      "updated": "Dernière modification"
+      "updated": "Dernière modification",
+      "properties": "Propriétés",
+      "yes": "Oui",
+      "no": "Non",
+      "generateBrief": "Générer le résumé"
     },
     "contacts": {
       "title": "Contacts",
@@ -211,6 +247,130 @@
         "address": "Adresse",
         "notes": "Notes",
         "owner": "Propriétaire"
+      },
+      "propertiesChanged": "Propriétés modifiées :"
+    },
+    "picker": {
+      "search": "Rechercher des entreprises",
+      "results": "Entreprises",
+      "searching": "Recherche en cours",
+      "none": "Aucune entreprise ne correspond.",
+      "unavailable": "Impossible de rechercher des entreprises pour le moment.",
+      "create": "Créer « {name} »",
+      "creating": "Création de l’entreprise",
+      "clear": "Retirer l’entreprise",
+      "loading": "Chargement de l’entreprise",
+      "unknown": "Entreprise indisponible",
+      "createFailed": "Impossible de créer l’entreprise. Réessayez.",
+      "createForbidden": "Vous n’avez pas l’autorisation de créer des entreprises."
+    },
+    "properties": {
+      "title": "Propriétés d’entreprise",
+      "subtitle": "Tout ce qu’une entreprise peut contenir, au même endroit : vos propres propriétés, regroupées en sections.",
+      "section": {
+        "hint": "Les sections regroupent les propriétés dans le formulaire d’entreprise et sur sa page."
+      },
+      "row": {
+        "contacts": "{count, plural, one {# entreprise} other {# entreprises}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, one {# entreprise a} other {# entreprises ont}} une valeur pour cette propriété. Les valeurs sont conservées, mais la propriété disparaît du formulaire d’entreprise et de sa page.",
+        "unused": "Aucune entreprise n’a encore de valeur pour cette propriété."
+      },
+      "modal": {
+        "newTitle": "Ajouter une propriété d’entreprise",
+        "descriptionHint": "Affiché sous le champ dans le formulaire d’entreprise.",
+        "optionsNote": "Retirer une option ne modifie pas les entreprises qui l’ont déjà ; elles gardent la valeur enregistrée.",
+        "requiredHint": "Le formulaire d’entreprise ne s’enregistre pas sans valeur.",
+        "visibleHint": "L’afficher dans le formulaire d’entreprise et sur sa page.",
+        "conditionsHint": "Masquer cette propriété dans le formulaire d’entreprise tant qu’une autre propriété n’a pas de valeur.",
+        "deactivateNote": "L’enregistrement masquera cette propriété du formulaire et de la page d’entreprise. Les valeurs détenues par les entreprises sont conservées."
+      }
+    },
+    "columns": {
+      "button": "Colonnes",
+      "label": "Choisir les colonnes",
+      "hint": "Le tableau mémorise votre choix dans ce navigateur.",
+      "reset": "Revenir aux colonnes habituelles"
+    },
+    "propertyFilters": {
+      "button": "Propriétés",
+      "label": "Filtrer par propriétés d'entreprise",
+      "hint": "Afficher les entreprises qui remplissent toutes ces conditions.",
+      "none": "Aucune condition pour l'instant.",
+      "noProperties": "Aucune propriété d'entreprise ne peut encore servir de filtre. Ajoutez-en une dans Paramètres, Propriétés d'entreprise.",
+      "property": "Propriété de la condition {n}",
+      "operator": "Opérateur de la condition {n}",
+      "value": "Valeur de la condition {n}",
+      "remove": "Supprimer la condition {n}",
+      "add": "Ajouter une condition",
+      "clear": "Tout effacer",
+      "apply": "Appliquer"
+    },
+    "import": {
+      "eyebrow": "Entreprises",
+      "title": "Importer des entreprises",
+      "close": "Fermer",
+      "cancel": "Annuler",
+      "done": "Terminé",
+      "start": "Importer",
+      "file": "Fichier CSV",
+      "choose": "Choisir un fichier CSV",
+      "change": "Choisir un autre fichier",
+      "tooBig": "Ce fichier est trop volumineux. Découpez-le et importez les parties.",
+      "intro": "La première ligne nomme les colonnes : name (ou website), email, phone, industry, size, address, notes, owner (l'e-mail ou le nom d'un membre) et toute propriété d'entreprise par son libellé. Jusqu'à {max} entreprises par fichier.",
+      "match": "Compléter les entreprises déjà existantes",
+      "matchHint": "Une entreprise ayant le même site web (ou, à défaut, le même nom) voit ses champs vides remplis. Rien de ce qu'elle contient déjà n'est modifié.",
+      "summary": "{total, plural, one {# ligne lue} other {# lignes lues}} : {created} créées, {updated} complétées, {unchanged} inchangées, {failed} non importées.",
+      "ignored": "Ces colonnes n'ont pas été reconnues et ont été ignorées : {columns}.",
+      "failedTitle": "{count, plural, one {# ligne n'a pas été importée} other {# lignes n'ont pas été importées}}",
+      "line": "Ligne {line}",
+      "moreFailed": "{count, plural, one {Et # de plus.} other {Et # de plus.}}"
+    },
+    "brief": {
+      "title": "Résumé du compte",
+      "subtitle": "Rédigé par AI à partir des données CRM que vous pouvez voir. Vérifiez-le avant de vous y fier.",
+      "loading": "Chargement du résumé",
+      "unavailableTitle": "AI n'est pas configurée pour cet espace de travail",
+      "unavailable": "Un résumé est rédigé par un modèle d'AI, et cet espace de travail n'a pas de clé AI, donc rien n'a été envoyé nulle part.",
+      "addKey": "Ajouter une clé AI",
+      "askAdmin": "Demandez à un administrateur d'ajouter une clé AI.",
+      "empty": "Obtenez un bref résumé de cette entreprise : qui elle est, ses affaires et tâches, l'activité des échanges, les risques et la suite à donner.",
+      "generate": "Générer le résumé",
+      "regenerate": "Réécrire",
+      "copy": "Copier",
+      "copied": "Résumé copié.",
+      "copyFailed": "Le résumé n'a pas pu être copié. Sélectionnez le texte et copiez-le à la main.",
+      "copyTitle": "{name} : résumé du compte",
+      "stale": "Le CRM a changé depuis la rédaction de ce résumé. Réécrivez-le pour en obtenir un à jour.",
+      "writtenBy": "Rédigé le {date} par {model}. AI peut se tromper.",
+      "notice": "Le modèle reçoit des nombres, des dates, des montants et des titres courts. Il ne reçoit jamais de noms de contacts, d'adresses e-mail, de numéros de téléphone, de notes d'entreprise ni de texte de message, et les nombres et adresses e-mail présents dans les titres sont d'abord supprimés.",
+      "basedOn": "Basé sur : {kinds}. Seul ce que votre rôle vous permet de voir est comptabilisé.",
+      "basedOnNone": "Basé uniquement sur les informations de l'entreprise : votre rôle n'affiche ni contacts, ni affaires, ni tâches, ni conversations.",
+      "errors": {
+        "tooSoon": "Un résumé a été rédigé il y a un instant. Patientez un peu avant de redemander.",
+        "providerFailed": "Le service AI n'a pas pu rédiger le résumé. Réessayez dans un instant.",
+        "limit": "Le quota AI est épuisé pour le moment. Réessayez plus tard ou demandez à un administrateur.",
+        "forbidden": "Vous n'avez pas l'autorisation de faire cela.",
+        "notFound": "Cette entreprise n'existe plus.",
+        "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+        "unexpected": "Une erreur s'est produite. Réessayez dans un instant."
+      },
+      "sections": {
+        "activity": "Activité récente",
+        "deals": "Affaires",
+        "tasks": "Tâches",
+        "conversations": "Conversations",
+        "properties": "Propriétés clés",
+        "risks": "Risques",
+        "nextSteps": "Étapes suivantes"
+      },
+      "source": {
+        "properties": "propriétés d'entreprise",
+        "contacts": "contacts",
+        "deals": "affaires",
+        "tasks": "tâches",
+        "conversations": "conversations"
       }
     }
   }

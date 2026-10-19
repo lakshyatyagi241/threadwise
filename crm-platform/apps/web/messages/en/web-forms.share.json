@@ -145,16 +145,61 @@
         "privacyUrl": "Privacy policy link",
         "privacyUrlHint": "Optional. Shown next to the consent text. Must start with https://.",
         "privacyUrlHttps": "Use an address that starts with https://.",
+        "termsUrl": "Terms link",
+        "termsUrlHint": "Optional. Shown next to the consent text and the privacy link. Must start with https://.",
+        "useWorkspacePrivacy": "Use my workspace privacy link",
+        "useWorkspaceTerms": "Use my workspace terms link",
         "required": "Must be ticked to submit",
         "requiredHint": "Turn this off if consent is optional.",
         "marketing": "Marketing opt-in",
         "marketingHint": "Ticking the box records marketing consent on the contact. An unticked box never subscribes anyone.",
-        "whatsappHint": "Will you message these contacts on WhatsApp? Use wording that says so and how to stop. The ticked box is kept as proof, with this exact text and its version.",
-        "whatsappInsert": "Use the WhatsApp opt-in wording",
-        "whatsappWording": "I agree to receive updates and offers on WhatsApp. I can reply STOP at any time to unsubscribe.",
-        "coversSms": "The wording covers SMS",
-        "coversSmsHint": "Turn this on only if the text above tells people they may be contacted by SMS. When a phone number is collected, SMS is then recorded together with WhatsApp and email.",
-        "serviceHint": "This line is not marketing. A ticked box is kept as proof that the person agreed to be contacted about their request (service messages only), with this exact wording and its version. It never subscribes anyone to marketing."
+        "serviceHint": "This line is not marketing. A ticked box is kept as proof that the person agreed to be contacted about their request (service messages only), with this exact wording and its version. It never subscribes anyone to marketing.",
+        "statement": "I agree to receive updates and offers on {channels}. I can reply STOP at any time to unsubscribe.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "email"
+        },
+        "channelsLabel": "Channels this consent covers",
+        "channelsHint": "The visitor is subscribed only on the channels ticked here, and the consent text below names them. A channel is used only when the form collects the matching phone number or email.",
+        "channelsUse": "Update the wording with these channels",
+        "channelNeedsPhone": "This form has no phone number field, so nobody is subscribed on this channel from it.",
+        "channelNeedsEmail": "This form has no email field, so nobody is subscribed on this channel from it."
+      },
+      "age": {
+        "title": "Age check",
+        "description": "Ask for an age only where you need it. Leave this off for most forms.",
+        "enable": "Check the visitor's age",
+        "enableHint": "Off by default. Turn it on if your workspace's rules ask for it, or your business serves minors. The form never tells the visitor which answer passes.",
+        "mode": "How to ask",
+        "modes": {
+          "declaration": "A box: \"I confirm I am at least N years old\"",
+          "age": "Ask for their age",
+          "dob": "Ask for their date of birth"
+        },
+        "modeHints": {
+          "declaration": "Nothing about their age is kept. The least data.",
+          "age": "A whole number. It is used for the check; only the result is kept.",
+          "dob": "Saved on the contact as the date of birth. Use it only if you need the date."
+        },
+        "minAge": "Minimum age",
+        "minAgeHint": "Leave empty to use your workspace's age ({age}). Between 1 and 21.",
+        "minAgeInvalid": "Enter a whole number from {min} to {max}.",
+        "whenUnder": "If the visitor is under that age",
+        "actions": {
+          "block": "Do not accept the submission",
+          "flag": "Accept it, flag the contact as a minor, record no marketing consent",
+          "guardian": "As above, and ask for a parent or guardian"
+        },
+        "actionHints": {
+          "block": "Nothing is stored and the visitor sees a neutral message. With the box, the visitor only has to tick it.",
+          "flag": "The contact is flagged as a minor. The consent line of this submission is stored as shown, but no marketing agreement is recorded.",
+          "guardian": "The parent or guardian's name and contact are kept with the submission and on the contact's timeline. Their consent is not recorded until a person records it on the Consent card."
+        },
+        "declarationBlockNote": "With the box and this setting nobody is turned away: the box has to be ticked to send the form.",
+        "childrenUnanswered": "Your Compliance center has not answered the question about children, so a flagged minor's marketing is recorded but not held back.",
+        "childrenLink": "Open the Compliance center",
+        "neutralNote": "Do not write the minimum age in a field's help text or in the description: the page should not say which answer passes."
       },
       "crm": {
         "title": "In the CRM",

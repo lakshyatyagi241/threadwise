@@ -205,6 +205,7 @@ export class DashService {
         contacts: await this.panelsRepo.contacts(tx, orgId, w.from, w.to),
         team: await this.panelsRepo.team(tx, orgId, w.from, w.to),
         geo: await this.panelsRepo.geo(tx, orgId, w.from, w.to),
+        loginDevices: await this.panelsRepo.loginDevices(tx, orgId, w.from, w.to),
         events: await this.panelsRepo.events(tx, orgId, w.from, w.to),
       };
     });

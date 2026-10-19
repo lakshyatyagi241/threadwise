@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Nicht kontaktiert",
+        "followUpToday": "Wiedervorlage heute",
+        "followUpOverdue": "Wiedervorlage überfällig",
+        "followUpSomeday": "Wiedervorlagen „Irgendwann“"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Nicht kontaktiert",
+        "chipTitle": "Noch niemand im Team hat Kontakt aufgenommen",
+        "waitingSince": "Wartet seit {date}",
+        "markContacted": "Als kontaktiert markieren",
+        "markUncontacted": "Als nicht kontaktiert markieren",
+        "markedContacted": "Als kontaktiert markiert",
+        "markedUncontacted": "Als nicht kontaktiert markiert",
+        "markFailed": "Die Markierung konnte nicht geändert werden. Versuchen Sie es erneut.",
+        "bulkMarkedContacted": "{count, plural, one {# Kontakt als kontaktiert markiert} other {# Kontakte als kontaktiert markiert}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# Kontakt als nicht kontaktiert markiert} other {# Kontakte als nicht kontaktiert markiert}}"
+      },
+      "settings": {
+        "save": "Speichern",
+        "discard": "Änderungen verwerfen",
+        "saved": "Einstellungen gespeichert",
+        "retry": "Erneut versuchen",
+        "loading": "Einstellungen werden geladen",
+        "conflict": "Jemand anderes hat diese Einstellungen gespeichert, während Sie sie bearbeitet haben. Sie werden unten erneut angezeigt; nehmen Sie Ihre Änderung noch einmal vor.",
+        "conflictOk": "Verstanden",
+        "errors": {
+          "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+          "forbidden": "Nur Personen, die die Workspace-Einstellungen verwalten, können diese Seite ändern.",
+          "conflict": "Jemand anderes hat diese Einstellungen zuerst geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+          "validation": "Einige dieser Einstellungen sind ungültig. Prüfen Sie sie und versuchen Sie es erneut.",
+          "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+        },
+        "uncontacted": {
+          "title": "Nicht kontaktierte Leads",
+          "subtitle": "Markieren Sie Leads, die noch niemand erreicht hat, damit sie auffallen, bis sich jemand meldet. Es ändert sich nichts, solange Sie keine Option aktivieren.",
+          "clear": {
+            "title": "Als kontaktiert markieren",
+            "intro": "Die Markierung „Nicht kontaktiert“ automatisch entfernen, wenn ein Teammitglied eines der Folgenden tut:",
+            "contactButton": "Drückt eine Kontakt-Schaltfläche (Anruf, SMS, E-Mail oder WhatsApp) oder startet einen Anruf",
+            "message": "Sendet eine Nachricht, Vorlage, gespeicherte Antwort oder Datei aus dem gemeinsamen Posteingang",
+            "automation": "Eine Kampagne, ein Broadcast oder ein automatisierter Ablauf sendet an den Lead",
+            "activity": "Fügt der Zeitleiste eine Notiz, einen Termin oder eine andere Aktivität hinzu",
+            "manualHint": "Sie können die Markierung auch manuell ändern: Öffnen Sie bei einem Kontakt das Menü „Mehr“ oder wählen Sie mehrere Kontakte aus und nutzen Sie „Mehr“ in der Leiste über der Liste."
+          },
+          "new": {
+            "title": "Neue Leads als nicht kontaktiert markieren",
+            "intro": "Wenn ein Lead auf eine dieser Arten erstellt wird, als nicht kontaktiert markieren:",
+            "manual": "Manuell in der App erstellt",
+            "import": "Aus einer Datei oder Google Sheets importiert",
+            "leadSource": "Lead-Quellen, Formulare und Integrationen"
+          },
+          "reassign": {
+            "title": "Neu zugewiesene Leads",
+            "intro": "Wenn ein Lead einem neuen Besitzer zugewiesen oder neu zugewiesen wird:",
+            "keep": "Markierung „Nicht kontaktiert“ nicht ändern",
+            "mark": "Bei Neuzuweisung als nicht kontaktiert markieren"
+          }
+        },
+        "followUps": {
+          "title": "Wiedervorlagen",
+          "subtitle": "Behalten Sie jeden Lead im Fluss: Wenn ein Teammitglied eine Person kontaktiert, kann deren nächste Wiedervorlage automatisch gesetzt oder verschoben werden. Es ändert sich nichts, bis Sie eine Option aktivieren.",
+          "when": {
+            "title": "Wiedervorlagen automatisch setzen",
+            "intro": "Wenn ein Teammitglied eine Person kontaktiert oder ihr Inhalte sendet, die Wiedervorlage aktualisieren, falls:",
+            "none": "Der Kontakt keine Wiedervorlage hat",
+            "overdue": "Die Wiedervorlage überfällig ist",
+            "today": "Die Wiedervorlage heute fällig ist",
+            "future": "Die Wiedervorlage später fällig ist"
+          },
+          "date": {
+            "title": "Standarddatum der Wiedervorlage",
+            "intro": "Wenn eine Wiedervorlage automatisch aktualisiert wird, setzen auf:",
+            "day": "In 1 Tag",
+            "three_days": "In 3 Tagen",
+            "week": "In 1 Woche",
+            "month": "In 1 Monat",
+            "custom": "Benutzerdefiniert",
+            "someday": "Irgendwann",
+            "none": "Keine Wiedervorlage",
+            "somedayHint": "Die Wiedervorlage hat kein Datum und wartet in der Liste „Irgendwann“. Es gibt keine Erinnerung.",
+            "noneHint": "Die offene Wiedervorlage wird als erledigt markiert, eine neue wird nicht angelegt.",
+            "customDays": "Anzahl der Tage",
+            "daysLater": "Tage später"
+          },
+          "time": {
+            "title": "Standardzeit der Wiedervorlage",
+            "intro": "Wenn eine neue Wiedervorlage angelegt wird, die Erinnerungszeit setzen auf:",
+            "hint": "Bezieht sich auf die Zeitzone Ihres Workspace."
+          }
+        },
+        "duplicates": {
+          "title": "Doppelte Leads",
+          "subtitle": "Legen Sie fest, was passiert, wenn ein neuer Lead aus einer Lead-Quelle dieselbe Telefonnummer oder E-Mail-Adresse hat wie ein vorhandener Kontakt.",
+          "mode": {
+            "title": "Wenn ein neuer Lead zu einem Kontakt passt",
+            "intro": "Ein Lead passt, wenn seine Telefonnummer oder E-Mail-Adresse bereits zu einem Kontakt gehört.",
+            "merge": "In den vorhandenen Kontakt zusammenführen",
+            "mergeHint": "Füllt die leeren Felder des Kontakts und fügt den Lead seinem Verlauf hinzu. Bereits ausgefüllte Angaben werden nie überschrieben.",
+            "createNew": "Neuen Kontakt anlegen",
+            "createNewHint": "Legt für den Lead einen eigenen Kontakt an. Er zählt zum Kontaktlimit Ihres Tarifs und kann später zusammengeführt werden."
+          },
+          "note": {
+            "title": "Zeitachse",
+            "merge": "Notiz in der Zeitachse hinzufügen, wenn ein Lead zusammengeführt wird",
+            "hint": "Standardmäßig aus, da eine Notiz auch die letzte Aktivität des Kontakts verschiebt."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Nächste Wiedervorlage",
+        "somedayLabel": "Irgendwann",
+        "overdue": "Überfällig",
+        "done": "Erledigt",
+        "snooze": "Zurückstellen",
+        "snoozeDay": "1 Tag",
+        "snoozeThreeDays": "3 Tage",
+        "snoozeWeek": "Nächste Woche",
+        "change": "Datum ändern",
+        "set": "Wiedervorlage setzen",
+        "edit": "Wiedervorlage ändern",
+        "remove": "Wiedervorlage entfernen",
+        "dialogTitle": "Wiedervorlage",
+        "someday": "Irgendwann (kein Datum)",
+        "dateTime": "Datum und Uhrzeit",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "savedFor": "Wiedervorlage gespeichert",
+        "savedSomeday": "Wiedervorlage auf „Irgendwann“ gesetzt",
+        "snoozed": "Wiedervorlage verschoben",
+        "doneMessage": "Wiedervorlage als erledigt markiert",
+        "clearedMessage": "Wiedervorlage entfernt",
+        "failed": "Die Wiedervorlage konnte nicht geändert werden. Bitte versuchen Sie es erneut.",
+        "filterLabel": "Wiedervorlage",
+        "filter": {
+          "any": "Alle",
+          "overdue": "Überfällig",
+          "today": "Heute fällig",
+          "upcoming": "Anstehend",
+          "someday": "Irgendwann",
+          "none": "Keine Wiedervorlage"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Nächste Wiedervorlage"
+    }
+  }
+}

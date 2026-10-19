@@ -1,152 +1,103 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useState, type ReactNode } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useFormatter, useTranslations } from 'next-intl';
-import { contactActivityResponseSchema } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { AGENT_IGNORE } from '@/lib/agent-marks';
-import { LinkedAppointments } from '@/features/appointments';
-import { ContactAttributionCard } from '@/features/lead-sources';
-import { CompanyLink } from '@/features/companies';
-import { ConsentCard } from '@/features/contact-consent';
-import { ContactPrivacyMenu } from '@/features/privacy-requests';
-import { ContactGrowthCard } from '@/features/growth';
-import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
-import { LinkedSalesDocs } from '@/features/sales-docs';
-import { LinkedInvoices } from '@/features/invoicing';
-import { LinkedTasks } from '@/features/tasks';
-import { useCursorList } from '@/lib/api/use-cursor-list';
-import {
-  deleteContact,
-  invalidateContacts,
-  KEYS,
-  updateContact,
-  useContact,
-} from '../api/contacts';
-import { useStatusOptions } from '../api/attributes';
-import { useContactFields, useFieldSections } from '../api/properties';
-import {
-  displayName,
-  EXTRA_KEYS,
-  formatPhone,
-  isOptedOut,
-  RESERVED_CUSTOM_KEYS,
-  titleCaseKey,
-} from '../lib/contact-model';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useMemo, useState } from 'react';
+import { useNow, useTranslations } from 'next-intl';
+import { EmptyState, Menu, MenuItem, Spinner, cn } from '@crm/ui';
+import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { usePersonaVisibility } from '@/features/persona';
+import { useTasksList } from '@/features/tasks';
+import { useContactDeals } from '../api/deals';
+import { useContactFiles } from '../api/files';
+import { useContactMeetings } from '../api/meetings';
+import { useContact } from '../api/contacts';
+import { useContactLegalHold } from '@/features/privacy-requests';
+import { displayName } from '../lib/contact-model';
 import { errorKind } from '../lib/errors';
-import { detailGroups } from '../lib/property-model';
-import { stageChoices, statusChoices } from '../lib/option-sets';
-import { ContactAvatar, GroupChip } from './chips';
-import { ContactQuickTags } from './contact-quick-tags';
-import { StageMenu } from './stage-menu';
-import { ContactFormModal } from './contact-form-modal';
+import { isClosedBooking } from '../lib/meeting-booking';
+import {
+  ACTION_SECTION,
+  pageTabs,
+  parseAddTarget,
+  sectionAllowed,
+  sectionHref,
+  type AddTarget,
+  type FocusRequest,
+  type SectionId,
+} from '../lib/sections';
+import { AssociationCards } from './contact/association-cards';
+import { CallNudge } from './contact/call-nudge';
+import { ProfileColumn } from './contact/profile-card';
+import { ContactSection } from './contact/sections';
 import { ErrorLine } from './error-line';
-import { OwnerControl } from './owner-control';
-import { LostReasonDialog, type LostPrompt } from './lost-reason';
-import { isLostStage } from '../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../lib/status-scope';
-import { DeleteHistoryOption } from './delete-history-option';
-import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
+import { ChevronDownIcon, ChevronLeftIcon } from './icons';
+
+/** The tabs that hold the compose box: an action of the profile card stays on them instead of moving. */
+const COMPOSE_TABS: readonly SectionId[] = ['overview', 'activities'];
 
 /**
- * `/contacts/[id]` (TW-CON-018): the profile Reference could not render (its back link pointed at a route that did
- * not exist, so every contact answered 500). Header, KPIs, the activity timeline and every field of the contact.
+ * `/contacts/[id]` and `/contacts/[id]/[section]` (TW-CON-018): the contact's page, HubSpot's three columns. On the start side the
+ * profile card (name, stage, one row of round actions) and "About this contact"; in the middle a tab bar (Overview, Activity,
+ * Conversations, Deals, Files, More) and the tab the URL names, the timeline being the main thing on Overview and Activity; on the
+ * end side small association cards. From 1280 px the three columns fill the window and scroll on their own, so no band of the page is
+ * ever empty; below that the cards move under the middle column, and below 768 px everything is one column. The same section
+ * components fill the quick view's drawer.
  */
-export function ContactDetail({ id }: { id: string }) {
+export function ContactDetail({ id, section }: { id: string; section: SectionId }) {
   const t = useTranslations('contacts-attributes-tags.detail');
-  const router = useRouter();
-  const qc = useQueryClient();
-  const { toast } = useToast();
-  const canUpdate = useCan('record.contacts.update');
-  const canDelete = useCan('record.contacts.delete');
+  const tn = useTranslations('contacts-attributes-tags.contact.nav');
+  const tr = useTranslations('contacts-attributes-tags.contact.record');
   const contact = useContact(id);
-  const registry = useContactFields();
-  const sections = useFieldSections();
-  const statusOptions = useStatusOptions();
-  const [editing, setEditing] = useState(false);
-  const [deleting, setDeleting] = useState(false);
-  const [keepHistory, setKeepHistory] = useState(false);
-  const ts = useTranslations('contacts-attributes-tags.stageMenu');
-  const tForm = useTranslations('contacts-attributes-tags.form');
-  /** A status value as the workspace names it (its configured label, else the platform's). */
-  const statusLabelOf = (v: string) =>
-    statusChoices(statusOptions.data, (x) => tForm(`statuses.${x}`)).find((c) => c.value === v)
-      ?.label ?? titleCaseKey(v);
+  // The legal-hold banner (people who may read the register only; nothing is asked of the server for anyone else).
+  const legalHold = useContactLegalHold(id);
+  const session = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
+  const search = useSearchParams();
+  const persona = usePersonaVisibility();
+  // What the person's permissions allow: it decides which section opens, so a link to a section the persona hides still works.
+  const permitted = useMemo(
+    () => pageTabs((permission) => permission in session.permissions),
+    [session.permissions],
+  );
 
-  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
-
-  const changeStage = useMutation({
-    mutationFn: (v: {
-      stage: string;
-      rowVersion: number;
-      /** The status the contact holds now, to tell what the stage move did to it. */
-      statusBefore: string | null;
-      reason?: { lostReason?: string | null; otherLostReason?: string | null };
-    }) => updateContact(id, { lifecycleStage: v.stage, ...v.reason, rowVersion: v.rowVersion }),
-    onSuccess: async (saved, v) => {
-      setLostPrompt(null);
-      await Promise.all([
-        invalidateContacts(qc),
-        qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-      ]);
-      const stageName =
-        stageChoices(statusOptions.data).find((s) => s.value === saved.lifecycleStage)?.label ??
-        saved.lifecycleStage ??
-        '';
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const notice = statusNotice(v.statusBefore, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statusLabelOf(notice.status),
-              }),
-        'success',
-      );
-    },
-    onError: async (e) => {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await qc.invalidateQueries({ queryKey: KEYS.contact(id) });
-    },
-  });
-
-  const remove = useMutation({
-    mutationFn: () => deleteContact(id, { eraseHistory: !keepHistory }),
-    onSuccess: async () => {
-      await invalidateContacts(qc);
-      toast(t('deleted'), 'success');
-      router.replace('/contacts');
-    },
-    onError: () => {
-      setDeleting(false);
-      toast(t('deleteFailed'), 'danger');
-    },
-  });
+  /** A request to put the cursor in an inline composer of the section on screen (the profile card's actions, `?add=` from a link). */
+  const [focus, setFocus] = useState<FocusRequest | null>(null);
+  // `?add=task` (or note, meeting, call, company) opens that composer; the parameter is dropped so a reload does not repeat it.
+  const addParam = parseAddTarget(search.get('add'));
+  // A call asked for by the "How did the call go?" line carries the time of the click (`&at=`).
+  const atParam = Number(search.get('at'));
+  const [seenAdd, setSeenAdd] = useState<AddTarget | null>(null);
+  if (addParam !== seenAdd) {
+    setSeenAdd(addParam);
+    if (addParam) {
+      setFocus((f) => ({
+        target: addParam,
+        n: (f?.n ?? 0) + 1,
+        ...(addParam === 'call' && atParam > 0 ? { clickedAt: atParam } : {}),
+      }));
+    }
+  }
+  useEffect(() => {
+    if (addParam) window.history.replaceState(null, '', pathname);
+  }, [addParam, pathname]);
+  const counts = useTabCounts(id);
 
   const back = (
     <Link
       href="/contacts"
-      className="mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+      className="inline-flex items-center gap-1.5 text-sm font-medium text-muted-foreground hover:text-foreground"
     >
-      <ChevronLeftIcon className="size-3.5 rtl:rotate-180" /> {t('back')}
+      <ChevronLeftIcon className="size-3.5 rtl:rotate-180" /> {tn('back')}
     </Link>
   );
 
   if (contact.isPending) {
     return (
       <section>
-        {back}
+        <div className="mb-4">{back}</div>
         <div role="status" className="flex items-center gap-2 py-10 text-muted-foreground">
           <Spinner /> {t('loading')}
         </div>
@@ -156,7 +107,7 @@ export function ContactDetail({ id }: { id: string }) {
   if (contact.isError) {
     return (
       <section>
-        {back}
+        <div className="mb-4">{back}</div>
         {errorKind(contact.error) === 'unavailable' ? (
           <EmptyState title={t('notFoundTitle')} message={t('notFound')} />
         ) : (
@@ -167,327 +118,203 @@ export function ContactDetail({ id }: { id: string }) {
   }
 
   const c = contact.data;
-  const name = displayName(c) || t('unnamed');
-  const phone = formatPhone(c.phone);
-  const cf = c.customFields;
-  const text = (key: string): string => (typeof cf[key] === 'string' ? cf[key] : '');
-  const customGroups = detailGroups(
-    registry.data ?? [],
-    sections.data ?? [],
-    cf,
-    RESERVED_CUSTOM_KEYS,
-    { yes: t('yes'), no: t('no') },
-    titleCaseKey,
+  // A section this person cannot open (no permission) falls back to the overview.
+  const allowed = [...permitted.primary, ...permitted.more];
+  const current: SectionId = allowed.includes(section) ? section : 'overview';
+  // The strip leaves out what the workspace's persona hides (spared while it is the section on screen); nothing is closed.
+  const tabs = pageTabs(
+    (permission) => permission in session.permissions,
+    (s) => s !== current && persona.isSectionHidden(s),
   );
-  const memberGroups = c.groups ?? [];
+  const open = (s: SectionId) => router.push(sectionHref(id, s));
+  // Note, Task, Call and Meeting open the compose box where it is (Overview, Activity), else on the Activity tab; the company opens its card.
+  const onAdd = (target: AddTarget, opts?: { clickedAt?: number }) => {
+    const request = (f: FocusRequest | null): FocusRequest => ({
+      target,
+      n: (f?.n ?? 0) + 1,
+      ...(opts?.clickedAt ? { clickedAt: opts.clickedAt } : {}),
+    });
+    if (target === 'company' || target === 'score' || COMPOSE_TABS.includes(current))
+      setFocus(request);
+    else {
+      router.push(
+        `${sectionHref(id, ACTION_SECTION[target])}?add=${target}${opts?.clickedAt ? `&at=${opts.clickedAt}` : ''}`,
+      );
+    }
+  };
 
   return (
-    <section>
-      {back}
-      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-        <div className="flex items-center gap-4">
-          <ContactAvatar id={c.id} name={name} size="lg" />
-          <div className="min-w-0">
-            <h1 className="truncate text-2xl font-semibold leading-tight" dir="auto">
-              {name}
-            </h1>
-            <div className="mt-1 flex flex-wrap gap-x-4 gap-y-1 text-sm text-muted-foreground">
-              {phone && (
-                <span dir="ltr" className="font-mono">
-                  {phone}
-                </span>
-              )}
-              {c.email && <span dir="ltr">{c.email}</span>}
-              {c.companyId && <CompanyLink id={c.companyId} />}
-            </div>
-            <div className="mt-2 flex flex-wrap items-center gap-1.5">
-              {c.lifecycleStage && (
-                <StageMenu
-                  value={c.lifecycleStage}
-                  choices={stageChoices(statusOptions.data, c.lifecycleStage)}
-                  name={name}
-                  busy={changeStage.isPending}
-                  statusHint={(stage) => {
-                    const move = statusAfterMove(statusOptions.data, c.status, stage);
-                    if (!move.changed) return null;
-                    return move.status === null
-                      ? ts('willClear')
-                      : ts('willReset', { status: statusLabelOf(move.status) });
-                  }}
-                  onChange={
-                    canUpdate
-                      ? (stage) => {
-                          const choices = stageChoices(
-                            statusOptions.data,
-                            c.lifecycleStage ?? undefined,
-                          );
-                          // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-                          if (isLostStage(choices, stage)) {
-                            setLostPrompt({
-                              contactId: c.id,
-                              contactName: name,
-                              stageValue: stage,
-                              stageLabel: choices.find((x) => x.value === stage)?.label ?? stage,
-                            });
-                          } else
-                            changeStage.mutate({
-                              stage,
-                              rowVersion: c.rowVersion,
-                              statusBefore: c.status,
-                            });
-                        }
-                      : undefined
-                  }
-                />
-              )}
-              {c.status && <Badge tone="success">{statusLabelOf(c.status)}</Badge>}
-              {isOptedOut(c) && <Badge tone="warning">{t('optedOut')}</Badge>}
-              <ContactQuickTags contactId={id} />
-            </div>
+    <CallingProvider>
+      <div
+        className={cn(
+          'grid gap-4 md:grid-cols-[20rem_minmax(0,1fr)] xl:grid-cols-[20rem_minmax(0,1fr)_18rem]',
+          // From 1280 px the columns fill the window height and scroll on their own.
+          'xl:h-[calc(100dvh-7rem)] xl:min-h-[34rem] xl:overflow-hidden',
+        )}
+      >
+        <aside
+          aria-label={tr('profile.label')}
+          data-testid="contact-left"
+          className="thin-scrollbar min-w-0 md:col-start-1 md:row-span-2 md:row-start-1 xl:row-span-1 xl:min-h-0 xl:overflow-y-auto"
+        >
+          <ProfileColumn
+            contact={c}
+            onAdd={onAdd}
+            onDeleted={() => router.replace('/contacts')}
+            onOpenSection={open}
+          />
+        </aside>
+
+        <div
+          data-testid="contact-center"
+          className="thin-scrollbar flex min-w-0 flex-col md:col-start-2 md:row-start-1 xl:min-h-0 xl:overflow-y-auto"
+        >
+          {legalHold.banner && <div className="pb-3">{legalHold.banner}</div>}
+          <ContactTabs contactId={id} current={current} tabs={tabs} counts={counts} />
+          <div className="flex min-h-0 flex-1 flex-col gap-3 pt-3">
+            <CallNudge
+              contactId={c.id}
+              name={displayName(c)}
+              onLog={(clickedAt) => onAdd('call', { clickedAt })}
+            />
+            <ContactSection
+              section={current}
+              contact={c}
+              variant="page"
+              focus={focus}
+              onAdd={onAdd}
+              onOpenSection={open}
+            />
           </div>
         </div>
-        <div className="flex shrink-0 gap-2">
-          <ContactPrivacyMenu contactId={id} />
-          {canUpdate && (
-            <Button variant="secondary" onClick={() => setEditing(true)}>
-              <PencilIcon /> {t('edit')}
-            </Button>
-          )}
-          {canDelete && (
-            <Button
-              variant="secondary"
-              className="border-danger text-danger hover:bg-danger/10"
-              onClick={() => setDeleting(true)}
-            >
-              <TrashIcon /> {t('delete')}
-            </Button>
-          )}
-        </div>
-      </div>
 
-      <div className="mb-6 grid grid-cols-2 gap-3">
-        <ScoreCard
-          contactId={id}
-          contact={c}
-          className="col-span-2"
-          onScored={() =>
-            Promise.all([
-              invalidateContacts(qc),
-              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-            ])
-          }
-        />
-        {/* Only present in a workspace that has the chat reading on; every other workspace sees the page as before. */}
-        <ChatInsightCard
-          contactId={id}
-          className="col-span-2"
-          onChanged={() =>
-            Promise.all([
-              invalidateContacts(qc),
-              qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-            ])
-          }
-        />
-        {/* Only present in a workspace that is in the growth pilot with the conversion model or enrichment on. */}
-        <ContactGrowthCard contactId={id} className="col-span-2" />
-        <StatTile label={t('lastActivity')} value={<DateText value={c.lastActivityAt} />} />
-        <StatTile label={t('created')} value={<DateText value={c.createdAt} />} />
-      </div>
-
-      <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
-        <div className="min-w-0 space-y-6">
-          <LinkedTasks kind="contact" id={id} label={name} />
-          <LinkedInvoices kind="contact" id={id} />
-          <LinkedSalesDocs kind="contact" id={id} />
-          <LinkedAppointments contactId={id} />
-          <ContactAttributionCard contactId={id} />
-          <ConsentCard
-            contactId={id}
-            onChanged={() =>
-              Promise.all([
-                invalidateContacts(qc),
-                qc.invalidateQueries({ queryKey: KEYS.contact(id) }),
-              ])
-            }
+        <aside
+          aria-label={tr('cards.label')}
+          data-testid="contact-right"
+          className="thin-scrollbar min-w-0 md:col-start-2 md:row-start-2 xl:col-start-3 xl:row-span-1 xl:row-start-1 xl:min-h-0 xl:overflow-y-auto"
+        >
+          <AssociationCards
+            contact={c}
+            onOpenSection={open}
+            onAdd={onAdd}
+            companyFocusSignal={focus?.target === 'company' ? focus.n : undefined}
+            scoreFocusSignal={focus?.target === 'score' ? focus.n : undefined}
           />
-          <Timeline id={id} />
-        </div>
-        <aside className="h-max space-y-4 rounded-md border border-border bg-background p-4">
-          <h2 className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
-            {t('details')}
-          </h2>
-          <dl className="space-y-3 text-sm">
-            <Detail label={t('owner')}>
-              <OwnerControl
-                contactId={id}
-                ownerId={c.ownerId}
-                rowVersion={c.rowVersion}
-                canEdit={canUpdate}
-              />
-            </Detail>
-            <Detail label={t('language')}>{text(EXTRA_KEYS.language)}</Detail>
-            <Detail label={t('source')}>{c.source ?? text(EXTRA_KEYS.source)}</Detail>
-            <Detail label={t('address')}>{text(EXTRA_KEYS.address)}</Detail>
-            <Detail label={t('memo')}>{text(EXTRA_KEYS.memo)}</Detail>
-            <Detail label={t('groups')}>
-              {memberGroups.length > 0 && (
-                <span className="flex flex-wrap gap-1">
-                  {memberGroups.map((g) => (
-                    <GroupChip key={g.id} name={g.name} color={g.color} />
-                  ))}
-                </span>
-              )}
-            </Detail>
-            <Detail label={t('consent')}>{isOptedOut(c) ? t('optedOutFull') : t('optedIn')}</Detail>
-          </dl>
-          {customGroups.map((g) => (
-            <div key={g.title ?? 'other'} className="space-y-3 border-t border-border pt-3">
-              {g.title && (
-                <h3
-                  className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
-                  dir="auto"
-                >
-                  {g.title}
-                </h3>
-              )}
-              <dl className="space-y-3 text-sm">
-                {g.rows.map((r) => (
-                  <Detail key={r.key} label={r.label}>
-                    {r.value}
-                  </Detail>
-                ))}
-              </dl>
-            </div>
-          ))}
         </aside>
       </div>
-
-      <ContactFormModal open={editing} contact={c} onClose={() => setEditing(false)} />
-      <LostReasonDialog
-        prompt={lostPrompt}
-        busy={changeStage.isPending}
-        onConfirm={(p, reason) =>
-          changeStage.mutate({
-            stage: p.stageValue,
-            rowVersion: c.rowVersion,
-            reason,
-            statusBefore: c.status,
-          })
-        }
-        onClose={() => setLostPrompt(null)}
-      />
-      <ConfirmDialog
-        open={deleting}
-        tone="danger"
-        busy={remove.isPending}
-        title={t('deleteTitle')}
-        message={
-          <>
-            <p>{t('deleteMessage', { name })}</p>
-            <DeleteHistoryOption keepHistory={keepHistory} onChange={setKeepHistory} />
-          </>
-        }
-        confirmLabel={t('delete')}
-        cancelLabel={t('keep')}
-        onClose={() => {
-          setDeleting(false);
-          setKeepHistory(false);
-        }}
-        onConfirm={() => remove.mutate()}
-      />
-    </section>
+      <OnCallPanel />
+    </CallingProvider>
   );
 }
 
-function Detail({ label, children }: { label: string; children: ReactNode }) {
-  const empty = children === '' || children === false || children == null;
-  return (
-    <div>
-      <dt className="text-xs text-muted-foreground">{label}</dt>
-      <dd className="mt-0.5 break-words" dir="auto">
-        {empty ? <span className="text-muted-foreground">&mdash;</span> : children}
-      </dd>
-    </div>
+/** How many things a tab holds, for the small badge beside its name; only Activity, Deals and Files have one. */
+export type TabCounts = Partial<Record<SectionId, number>>;
+
+/**
+ * The counts of the tab bar. Activity counts what is waiting (open tasks and meetings still to come), Deals the contact's deals and
+ * Files the files on record. They are the lists the sections read, so a count costs no request the page would not make anyway; what
+ * a person may not open is not asked for.
+ */
+export function useTabCounts(contactId: string): TabCounts {
+  const { permissions } = useSession();
+  const has = (p: string) => p in permissions;
+  const meetings = useContactMeetings(contactId, sectionAllowed('meetings', has));
+  const files = useContactFiles(contactId, sectionAllowed('files', has));
+  const deals = useContactDeals(contactId, sectionAllowed('deals', has));
+  const tasks = useTasksList(
+    { kind: 'contact', id: contactId },
+    { status: 'open' },
+    { limit: 50, enabled: sectionAllowed('tasks', has) },
   );
+  const now = useNow().getTime();
+  const waiting =
+    tasks.items.length +
+    meetings.items.filter((m) => m.startsAt && Date.parse(m.startsAt) > now && !isClosedBooking(m))
+      .length;
+  return {
+    activities: waiting,
+    files: files.items.length,
+    ...(deals.isSuccess ? { deals: deals.data.deals.length } : {}),
+  };
 }
 
-function DateText({ value }: { value: string | null }) {
-  const format = useFormatter();
-  if (!value) return <>&mdash;</>;
-  return (
-    <span className="text-xl">{format.dateTime(new Date(value), { dateStyle: 'medium' })}</span>
+const tabClass = (on: boolean) =>
+  cn(
+    'relative inline-flex h-11 shrink-0 items-center gap-1.5 whitespace-nowrap px-3.5 text-sm font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+    on
+      ? 'text-foreground after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-brand'
+      : 'text-muted-foreground hover:text-foreground',
   );
-}
 
-function Timeline({ id }: { id: string }) {
-  const t = useTranslations('contacts-attributes-tags.detail');
-  const format = useFormatter();
-  const list = useCursorList(
-    ['cat', 'activities', id],
-    `/contacts/${id}/activities`,
-    contactActivityResponseSchema,
-  );
+/**
+ * The page's tab bar: Overview, Activity, Conversations, Deals, Files and a "More" menu with the rest; every section keeps its own
+ * URL. It scrolls sideways (without a scroll bar) on a phone and stays at the top of the middle column.
+ */
+export function ContactTabs({
+  contactId,
+  current,
+  tabs,
+  counts,
+}: {
+  contactId: string;
+  current: SectionId;
+  tabs: { primary: readonly SectionId[]; more: readonly SectionId[] };
+  counts?: TabCounts;
+}) {
+  const t = useTranslations('contacts-attributes-tags.contact.record.nav');
+  const router = useRouter();
+  const inMore = tabs.more.includes(current);
   return (
-    <section
-      className="rounded-md border border-border bg-background p-4 sm:p-5"
-      aria-labelledby={`tl-${id}`}
-    >
-      <h2
-        id={`tl-${id}`}
-        className="mb-4 text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
+    <div className="sticky top-0 z-10 flex shrink-0 items-center border-b border-border bg-background">
+      <nav
+        aria-label={t('label')}
+        className="flex min-w-0 flex-1 items-center overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {t('timeline')}
-      </h2>
-      {list.isPending ? (
-        <div role="status" className="flex items-center gap-2 py-6 text-muted-foreground">
-          <Spinner /> {t('loading')}
-        </div>
-      ) : list.isError ? (
-        <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
-      ) : list.items.length === 0 ? (
-        <p className="py-6 text-center text-sm text-muted-foreground">{t('noActivity')}</p>
-      ) : (
-        <ol
-          {...AGENT_IGNORE}
-          className="relative space-y-5 ps-6 before:absolute before:inset-y-1 before:start-[9px] before:w-px before:bg-border"
-        >
-          {list.items.map((a) => (
-            <li key={a.id} className="relative">
-              <span className="absolute -start-6 top-1 size-[18px] rounded-full border border-border bg-background" />
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-sm font-semibold" dir="auto">
-                  {a.title}
+        {tabs.primary.map((s) => {
+          const n = counts?.[s];
+          return (
+            <Link
+              key={s}
+              href={sectionHref(contactId, s)}
+              aria-current={current === s ? 'page' : undefined}
+              className={tabClass(current === s)}
+            >
+              {t(`section.${s}`)}
+              {n !== undefined && n > 0 && (
+                <span className="rounded-full bg-muted px-1.5 py-px text-[10px] font-semibold tabular-nums text-muted-foreground">
+                  {n}
                 </span>
-                <time
-                  dateTime={a.occurredAt}
-                  className="shrink-0 font-mono text-[11px] text-muted-foreground"
-                >
-                  {format.dateTime(new Date(a.occurredAt), {
-                    dateStyle: 'medium',
-                    timeStyle: 'short',
-                  })}
-                </time>
-              </div>
-              {a.body && (
-                <p className="mt-0.5 text-sm leading-snug text-muted-foreground" dir="auto">
-                  {a.body}
-                </p>
               )}
-            </li>
-          ))}
-        </ol>
+            </Link>
+          );
+        })}
+      </nav>
+      {tabs.more.length > 0 && (
+        <div className="shrink-0">
+          <Menu
+            label={t('moreLabel')}
+            align="end"
+            placement="fixed"
+            triggerClassName={cn(
+              'h-11 gap-1 rounded-none border-0 bg-transparent px-3 text-sm font-medium shadow-none hover:bg-transparent',
+              inMore ? 'text-foreground' : 'text-muted-foreground hover:text-foreground',
+            )}
+            triggerProps={{ 'aria-label': t('moreLabel') }}
+            trigger={
+              <>
+                {inMore ? t(`section.${current}`) : t('more')}
+                <ChevronDownIcon className="size-3.5" />
+              </>
+            }
+          >
+            {tabs.more.map((s) => (
+              <MenuItem key={s} onSelect={() => router.push(sectionHref(contactId, s))}>
+                <span aria-current={current === s ? 'page' : undefined}>{t(`section.${s}`)}</span>
+              </MenuItem>
+            ))}
+          </Menu>
+        </div>
       )}
-      {list.hasNextPage && (
-        <Button
-          variant="secondary"
-          size="sm"
-          className="mt-4"
-          onClick={() => void list.fetchNextPage()}
-          disabled={list.isFetchingNextPage}
-        >
-          {t('loadMore')}
-        </Button>
-      )}
-    </section>
+    </div>
   );
 }

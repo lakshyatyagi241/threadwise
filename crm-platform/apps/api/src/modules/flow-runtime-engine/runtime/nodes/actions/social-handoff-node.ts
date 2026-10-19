@@ -3,6 +3,7 @@ import { DatabaseService } from '../../../../../infra/db/database.service';
 import { OutboxService } from '../../../../../kernel/outbox/outbox.service';
 import type { NodeContext, NodeExecutor, NodeResult } from '../../types';
 import { handoffPlan } from './social-handoff-rules';
+import { haltOf } from '../../halt';
 
 export const WHATSAPP_HANDOFF_EVENT = 'flow.whatsapp_handoff_requested';
 
@@ -38,7 +39,7 @@ export class SocialHandoffNode implements NodeExecutor {
     if (text !== '') {
       const out = await ctx.send({ kind: 'text', body: text });
       if (!out.ok) {
-        if (out.halt) return { kind: 'halt', reason: out.error };
+        if (out.halt) return haltOf(out);
         ctx.note(`send failed: ${out.error}`);
       }
     }

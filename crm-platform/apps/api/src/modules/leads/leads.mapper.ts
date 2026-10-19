@@ -57,11 +57,32 @@ export function toLeadEventResponse(row: LeadEventRow): LeadEventResponse {
     duplicateCount: row.duplicateCount,
     receivedAt: row.receivedAt.toISOString(),
     processedAt: row.processedAt?.toISOString() ?? null,
+    firstReply: row.firstReply
+      ? {
+          channel: row.firstReply.channel,
+          status: row.firstReply.status,
+          reason: row.firstReply.reason,
+          dueAt: row.firstReply.dueAt.toISOString(),
+          sentAt: row.firstReply.sentAt?.toISOString() ?? null,
+          attempts: row.firstReply.attempts,
+        }
+      : null,
   };
 }
 
+/** The first touch a migrated Waboo document recorded (`evidence.legacy.waboo.firstTouch`): where channel and module type live. */
+function waboFirstTouch(evidence: Record<string, unknown>): Record<string, unknown> {
+  const legacy = evidence.legacy as { waboo?: { firstTouch?: unknown } } | undefined;
+  const ft = legacy?.waboo?.firstTouch;
+  return ft && typeof ft === 'object' ? (ft as Record<string, unknown>) : {};
+}
+const text = (v: unknown): string | null => (typeof v === 'string' && v !== '' ? v : null);
+
 export function toAttributionTouch(row: AttributionRow): AttributionTouch {
+  const ft = waboFirstTouch(row.evidence);
   return {
+    channel: text(ft.channel),
+    moduleType: text(ft.module_type),
     id: row.uuid,
     platform: row.platform,
     sourceLabel: row.sourceLabel,

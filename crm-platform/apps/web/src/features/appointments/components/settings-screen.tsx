@@ -21,7 +21,9 @@ import {
 import { isUnavailable } from '../lib/errors';
 import { ErrorLine, LinkButton, useAppointmentsCan } from './parts';
 import { CalendarCard } from './settings-calendar';
+import { CalendarsSection } from './settings-calendars';
 import { DefaultsCard, TemplatesCard, TimeZoneCard, type FormCtx } from './settings-fields';
+import { ReminderRulesSection } from './settings-reminders';
 import { SettingsCard, SettingsHeader } from './settings-parts';
 import { useLeaveGuard } from './use-leave-guard';
 import { WeeklyHoursEditor } from './weekly-hours-editor';
@@ -58,6 +60,7 @@ export function SettingsScreen() {
               </Alert>
               {/* The workspace has no booking defaults to edit, but its Google Calendar link is real and lives here. */}
               <CalendarCard />
+              <CalendarsSection />
             </>
           ) : (
             <ErrorLine error={query.error} onRetry={() => void query.refetch()} />
@@ -247,6 +250,7 @@ function SettingsEditor({
       )}
 
       <CalendarCard />
+      <CalendarsSection />
       <TimeZoneCard {...ctx} />
       <SettingsCard id="hours" title={t('hours.title')} description={t('hours.description')}>
         <WeeklyHoursEditor
@@ -263,6 +267,7 @@ function SettingsEditor({
         )}
       </SettingsCard>
       <DefaultsCard {...ctx} />
+      <ReminderRulesSection />
       <TemplatesCard {...ctx} />
 
       {!readOnly && (

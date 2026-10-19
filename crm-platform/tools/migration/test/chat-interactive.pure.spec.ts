@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { describe, expect, it } from 'vitest';
-import { parseTurn } from '../inbox/parse';
+import { parseTurn, replyTitle, sentInteractiveFrom } from '../inbox/parse';
 import { previewOf } from '../inbox/peer';
 import { elementShapes, repairOf } from '../load/chatreparse';
 import { oracleChat } from '../reconcile/oracle-chat';
@@ -176,5 +176,58 @@ describe('chat-reparse: repairOf on a saved row', () => {
   it('preview rule: the preview the loader derived from the empty body, and the one after', () => {
     expect(previewOf({ kind: 'interactive', body: null })).toBe('📎 Interactive');
     expect(previewOf({ kind: 'interactive', body: 'Pick one\nTap below' })).toBe('Pick one Tap below');
+  });
+});
+
+describe('buttons under a message with a header file (F-001)', () => {
+  const replyButtons = {
+    type: 'whatsapp_interactive',
+    interactive: {
+      type: 'button',
+      header: { type: 'image', link: IMG },
+      body: 'This is test bot',
+      action: {
+        buttons: ['Welcome', 'Feedback', 'No more'].map((t, i) => ({ id: `r${i}`, type: 'reply', reply: { id: `r${i}`, title: t } })),
+      },
+    },
+  };
+  it('an image-header button message is kind image and still yields its buttons, in order', () => {
+    const t = parseTurn(turn(replyButtons));
+    expect(t.kind).toBe('image');
+    expect(sentInteractiveFrom(t.legacy.interactive, t.body)).toEqual({
+      type: 'buttons',
+      body: 'This is test bot',
+      buttons: [{ title: 'Welcome' }, { title: 'Feedback' }, { title: 'No more' }],
+    });
+  });
+});
+
+describe('a customer tapping a button or list row is not an empty message', () => {
+  it('reads the title from the reply shapes', () => {
+    expect(replyTitle({ button_reply: { id: 'r1', title: 'Welcome' } })).toBe('Welcome');
+    expect(replyTitle({ interactive: { list_reply: { id: 'x', title: 'Small' } } })).toBe('Small');
+    expect(replyTitle({ type: 'button_reply', title: 'No more' })).toBe('No more');
+    expect(replyTitle({ foo: 1 })).toBeNull();
+  });
+  it('user_query_object with an object value / a user_query object', () => {
+    const a = parseTurn({ user_query_object: { type: 'interactive', value: { button_reply: { id: 'r1', title: 'Feedback' } } } });
+    expect(a.empty).toBe(false);
+    expect(a.body).toBe('Feedback');
+    const b = parseTurn({ user_query: { interactive: { button_reply: { title: 'Welcome' } } } });
+    expect(b.empty).toBe(false);
+    expect(b.body).toBe('Welcome');
+    expect(b.kind).toBe('interactive');
+  });
+});
+
+describe('a customer turn with no content', () => {
+  it('is kept as a placeholder, flagged, with a soft issue; a bare empty user_query stays empty', () => {
+    const t = parseTurn({ user_query_object: { type: 'text', value: '' } });
+    expect(t.empty).toBe(false);
+    expect(t.direction).toBe('in');
+    expect(t.body).toBe('(message content not available)');
+    expect(t.legacy.contentUnavailable).toBe(true);
+    expect(t.soft.map((x) => x.code)).toContain('CONTENT_UNAVAILABLE');
+    expect(parseTurn({ user_query: '' }).empty).toBe(true);
   });
 });

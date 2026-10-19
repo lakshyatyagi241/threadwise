@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Editor de flujos"
+      "flowBuilder": "Editor de flujos",
+      "microsoftCalendar": "Calendario de Microsoft"
     },
     "hub": {
       "kicker": "Admin - Ajustes del proyecto",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Obligatorio para Spaces, R2 y MinIO. Se elimina una / final de /bucket.",
-            "placeholder": "https://… (obligatorio para Spaces / R2 / MinIO; automático para Wasabi y Bunny)"
+            "hint": "Obligatorio para Spaces y R2. Se elimina una / final de /bucket.",
+            "placeholder": "https://… (obligatorio para Spaces / R2; automático para Wasabi y Bunny)"
           },
           "cdnUrl": {
             "label": "URL pública / de CDN (opcional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Usar endpoint con ruta (MinIO / algunos almacenes compatibles con S3)"
+            "label": "Usar endpoint con ruta (algunos almacenes compatibles con S3)"
           },
           "storageZone": {
             "label": "Zona de almacenamiento",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / compatible con S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privado (URL firmadas)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "El cliente OAuth de Google que usa cada espacio de trabajo para conectar su calendario.",
+        "description": "El cliente OAuth de Google mediante el cual cada espacio de trabajo conecta su cuenta de Google, para el calendario, Sheets, Docs y Forms.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth de Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Permitir a los espacios de trabajo conectar Google Calendar",
-            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se escribe ni se lee nada en un calendario."
+            "label": "Permitir a los espacios de trabajo conectar Google",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se lee ni se escribe nada en Google (calendario, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID de cliente",
@@ -1024,6 +1024,37 @@
             "advanced": "Solo avanzado"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "description": "La aplicación de Microsoft a través de la cual cada espacio de trabajo conecta su calendario de Outlook o Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que los espacios de trabajo conecten Outlook",
+            "hint": "Desactivado: ningún espacio de trabajo puede conectarse y no se lee ni se escribe nada en ningún calendario de Outlook. Los calendarios conectados se conservan."
+          },
+          "clientId": {
+            "label": "ID de aplicación (cliente)",
+            "hint": "Disponible en el centro de administración de Microsoft Entra, Registros de aplicaciones, Información general. Si se deja vacío, se usa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Secreto de cliente",
+            "hint": "Se guarda cifrado y no se vuelve a mostrar. Si se deja vacío, se conserva el guardado; MICROSOFT_CALENDAR_CLIENT_SECRET es el valor alternativo."
+          },
+          "tenant": {
+            "label": "Inquilino",
+            "hint": "common permite cuentas de trabajo, de centros educativos y personales; usa un ID de directorio (inquilino) para una aplicación de un solo inquilino. Si se deja vacío, se usa MICROSOFT_CALENDAR_TENANT y, si no existe, common."
+          },
+          "redirectUri": {
+            "label": "URI de redirección personalizada",
+            "hint": "Déjala vacía para usar la dirección indicada arriba. Debe coincidir exactamente con una URI de redirección de la aplicación."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "Almacenamiento en la nube",
-        "description": "Envía los medios de los clientes a tu propio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 o MinIO.",
+        "description": "Envía los medios de los clientes a tu propio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su calendario y gestionar citas y horas ocupadas.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "El cliente OAuth de Google que usan los espacios de trabajo para conectar su cuenta de Google para reservas, Sheets, Docs y Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Correo Gmail",
@@ -1151,6 +1182,11 @@
         "title": "Editor de flujos",
         "description": "El editor de flujos predeterminado para todos los espacios de trabajo: Simple paso a paso o Avanzado en lienzo. Un espacio de trabajo puede cambiarlo.",
         "tags": "Simple / Avanzado / Automatización"
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "description": "La aplicación de Microsoft que usan los espacios de trabajo para conectar sus calendarios de Outlook y Microsoft 365 para las reservas.",
+        "tags": "Microsoft / OAuth / Outlook / Calendario"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Usa los campos de Bunny: zona de almacenamiento y contraseña. La región es la de la zona (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Rellena los campos de S3 y pega la URL del endpoint. Marca la ruta con estilo path para MinIO."
+              "title": "Spaces / R2",
+              "body": "Rellena los campos de S3 y pega la URL del endpoint."
             },
             "test": {
               "title": "Prueba siempre primero",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Citas",
-        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma. Después, cada espacio de trabajo conecta su propia cuenta de Google desde Citas, Ajustes; un espacio de trabajo nunca ve el ID ni el secreto del cliente.",
+        "description": "Un único cliente OAuth de Google Cloud para toda la plataforma. Después, cada espacio de trabajo conecta su propia cuenta de Google desde Cuenta de Google en Ajustes y elige qué permisos conceder; un espacio de trabajo nunca ve el ID ni el secreto del cliente.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth de Google",
-            "description": "Sin ID ni secreto de cliente, los espacios de trabajo ven Google Calendar como no disponible y las citas siguen sin calendario."
+            "description": "Sin ID ni secreto de cliente, los espacios de trabajo ven Google como no disponible, las reservas siguen sin calendario y los pasos de Google de los flujos se omiten."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. Proyecto y API",
-              "body": "En Google Cloud Console crea un proyecto y activa la API de Google Calendar."
+              "body": "En Google Cloud Console crea un proyecto y activa las API de Google Calendar, Google Sheets, Google Docs, Google Drive y Google Forms. Un permiso solo funciona si su API está activada."
             },
             "redirect": {
               "title": "2. Cliente OAuth",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. Pantalla de consentimiento",
-              "body": "Añade los ámbitos calendar.events, calendar.freebusy y calendar.calendarlist.readonly, y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse."
+              "body": "Añade los ámbitos que pide el producto (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) y después publica la app: en modo de prueba, Google cancela cada concesión a los 7 días y los espacios de trabajo tendrán que volver a conectarse. Los ámbitos de drive son restringidos y requieren la revisión de Google."
             },
             "workspaces": {
               "title": "4. Los espacios de trabajo se conectan",
-              "body": "Pega aquí el ID y el secreto del cliente y guarda. Después, los administradores se conectan desde Citas, Ajustes, Google Calendar."
+              "body": "Pega aquí el ID y el secreto del cliente y guarda. Después, los administradores se conectan desde Ajustes, Integraciones, Cuenta de Google, o desde Citas, Ajustes, Google Calendar."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "Flujos que ya existen",
               "body": "Cambiar este ajuste nunca cambia ni borra un flujo. Un flujo sigue funcionando; solo se abre en el editor que esté activo. Un espacio de trabajo que eligió su propio editor lo conserva hasta que elija de nuevo el predeterminado de la plataforma."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Calendario de Microsoft",
+        "eyebrow": "Admin - Citas",
+        "description": "Una sola aplicación de Microsoft Entra para toda la plataforma. Cada espacio de trabajo conecta después su propio calendario de Outlook o Microsoft 365 desde Citas, Ajustes, y nunca ve el ID de cliente ni el secreto.",
+        "sections": {
+          "oauth": {
+            "title": "Aplicación de Microsoft Entra",
+            "description": "Sin un ID de cliente y un secreto, los espacios de trabajo ven Outlook como no disponible y las reservas continúan sin él. Google Calendar no se ve afectado."
+          }
+        },
+        "guide": {
+          "title": "Configúralo en Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registro de la aplicación",
+              "body": "En el centro de administración de Microsoft Entra, crea un registro de aplicación para cuentas de cualquier directorio organizativo y cuentas personales de Microsoft, y copia aquí el ID de aplicación (cliente). Deja el inquilino como common, salvo que hayas elegido una opción más restringida."
+            },
+            "redirect": {
+              "title": "2. URI de redirección y secreto",
+              "body": "Añade la URI de redirección que aparece en esta página como redirección de tipo Web; después crea un secreto de cliente en Certificados y secretos y pega aquí su valor. Anota cuándo caduca: a partir de esa fecha el calendario de todos los espacios de trabajo deja de funcionar hasta que se guarde un secreto nuevo."
+            },
+            "permissions": {
+              "title": "3. Permisos de API",
+              "body": "Añade los permisos delegados de Microsoft Graph Calendars.ReadWrite, User.Read y offline_access, y ninguno más. Para un uso general, completa la verificación del editor; es posible que el inquilino de un cliente también requiera que un administrador apruebe la aplicación."
+            },
+            "workspaces": {
+              "title": "4. Los espacios de trabajo se conectan",
+              "body": "Pega aquí el ID de cliente y el secreto y guarda. Después, los administradores se conectan desde Citas, Ajustes."
             }
           }
         }

@@ -1,4 +1,4 @@
-import type { MailAuthKind, MailProvider } from '@crm/contracts';
+import type { MailAuthKind, MailConnectionTestResponse, MailProvider } from '@crm/contracts';
 import type {
   MailAccountProfile,
   NormalisedMail,
@@ -172,6 +172,12 @@ export interface PasswordMailDriver extends MailDriverBase {
    * `imap` or `smtp` for a refused password, `unreachable` for a server that does not answer or fails TLS.
    */
   verify(connection: PasswordConnection): Promise<MailAccountProfile>;
+  /**
+   * "Test credentials": the same two connections as {@link verify}, but BOTH sides are always tried and each answers on its own, so one run
+   * tells the person everything that is wrong. Connects, signs in, opens the INBOX (IMAP) and greets and signs in (SMTP); sends and stores
+   * nothing. Never throws for a server that refuses or cannot be reached: that is the answer.
+   */
+  test(connection: PasswordConnection): Promise<MailConnectionTestResponse>;
 }
 
 export type MailDriver = OAuthMailDriver | PasswordMailDriver;
@@ -218,6 +224,8 @@ export class MailDriverError extends Error {
       needsReauth?: boolean;
       /** How long the provider asked us to wait (`Retry-After`), in seconds. */
       retryAfterSeconds?: number | null;
+      /** A send that timed out or was cut off: the provider may have sent the mail. Never resent by itself. */
+      outcomeMayHaveCommitted?: boolean;
     } = {},
   ) {
     super(message);
@@ -231,6 +239,9 @@ export class MailDriverError extends Error {
       (this.kind === 'rate_limit' || this.kind === 'transient' || this.kind === 'token_rejected')
     );
   }
+  get outcomeMayHaveCommitted(): boolean {
+    return this.opts.outcomeMayHaveCommitted ?? false;
+  }
   get providerCode(): string {
     return this.opts.providerCode ?? '';
   }
@@ -243,4 +254,27 @@ export class MailDriverError extends Error {
   get needsReauth(): boolean {
     return this.opts.needsReauth ?? (this.kind === 'reauth' || this.kind === 'auth_failed');
   }
+}
+
+/** Connection errors raised before a single byte of the mail was sent. Anything else that goes wrong during a send may have been accepted. */
+const NEVER_SENT = new Set([
+  'ECONNREFUSED',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'ENETUNREACH',
+  'EHOSTUNREACH',
+]);
+
+/** True when a failed send (a timeout, a reset, a cut-off) may still have reached the recipient. `code` is the connection error code, when known. */
+export function sendMayHaveCommitted(code: string | null | undefined): boolean {
+  return !NEVER_SENT.has((code ?? '').toUpperCase());
+}
+
+/** The error of a send whose outcome is unknown: not retryable, and says so. */
+export function sendOutcomeUnknown(what: string, providerCode: string | null): MailDriverError {
+  return new MailDriverError(
+    'transient',
+    `${what} The mail may already have been sent: check the thread before sending it again.`,
+    { retryable: false, providerCode, outcomeMayHaveCommitted: true },
+  );
 }

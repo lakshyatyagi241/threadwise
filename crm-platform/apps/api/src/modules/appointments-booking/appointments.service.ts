@@ -28,6 +28,8 @@ import {
   isFinal,
   type QuestionFacts,
 } from './appointment-rules';
+import { remindersOf } from './appointment-reminder.rules';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { buildIcs } from './ics';
 import {
   appointmentScopeCondition,
@@ -35,6 +37,7 @@ import {
   type AppointmentRow,
   AppointmentsRepository,
 } from './appointments.repository';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingService } from './booking.service';
 import { BookingTypesRepository } from './booking-types.repository';
@@ -79,6 +82,8 @@ export class AppointmentsService {
     private readonly slots: SlotsService,
     private readonly contactLink: ContactLinkService,
     private readonly rbac: RbacService,
+    private readonly mirror: AppointmentMeetingMirror,
+    private readonly reminders: AppointmentRemindersRepository,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -149,8 +154,35 @@ export class AppointmentsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Appointment', uuid);
       await this.assertScope(tx, scope, row);
-      return this.support.toResponse(row);
+      const res = this.support.toResponse(row);
+      // Only the single read carries the reminders and follow-ups and what became of each (a list would cost a query per row).
+      return { ...res, reminders: await this.reminderRowsOf(tx, ctx.orgId, row) };
     });
+  }
+
+  private async reminderRowsOf(
+    tx: Tx,
+    orgId: number,
+    row: AppointmentRow,
+  ): Promise<NonNullable<AppointmentResponse['reminders']>> {
+    const [runs, children] = await Promise.all([
+      this.reminders.forAppointment(tx, orgId, row.id),
+      row.bookingTypeId === null
+        ? Promise.resolve(null)
+        : this.types.children(tx, orgId, [row.bookingTypeId]),
+    ]);
+    const rules =
+      row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
+    return remindersOf(row, rules, runs, Date.now()).map((r) => ({
+      kind: r.kind,
+      offsetMinutes: r.offsetMinutes,
+      label: r.label,
+      dueAt: r.dueAt.toISOString(),
+      status: r.status,
+      reason: r.reason,
+      channel: r.channel,
+      sentAt: r.sentAt ? r.sentAt.toISOString() : null,
+    }));
   }
 
   /** The appointment as an iCalendar file (EXT-APPT-06). */
@@ -334,6 +366,8 @@ export class AppointmentsService {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
         if (!ok) throw AppError.rowVersionConflict('Appointment');
         const after = (await this.repo.findById(tx, ctx.orgId, row.id))!;
+        // A contact linked later, moved or removed, and a new title or place, reach the contact's Meetings row in this transaction.
+        await this.mirror.sync(tx, ctx.orgId, after);
         await this.support.record(tx, after, { audit: { action: 'update', delta } });
         return this.support.toResponse(after);
       }
@@ -354,6 +388,35 @@ export class AppointmentsService {
       const after = await this.booking.reschedule(tx, ctx.orgId, row, {
         startsAt: new Date(input.startsAt),
         ignoreAvailability: input.ignoreAvailability,
+        notify: input.notify,
+        by: 'staff',
+        nowMs,
+        busy,
+        rowVersion: input.rowVersion,
+      });
+      return this.support.toResponse(after);
+    });
+  }
+
+  /**
+   * "Accept Google's change": moves the booking to the start AND end its Google event shows, through the same rules as a staff move (the
+   * reminders are armed again, the customer is told when `notify`, `appointment.rescheduled` is emitted). Availability is not re-checked: a
+   * person is accepting a time somebody chose on purpose. Only the end differing is a move too.
+   */
+  async rescheduleToGoogle(
+    uuid: string,
+    input: { startsAt: Date; endsAt: Date; notify: boolean; rowVersion?: number },
+    scope: RecordScope,
+  ): Promise<AppointmentResponse> {
+    const ctx = RequestContextStore.require();
+    const nowMs = Date.now();
+    const busy = await this.busyAround(uuid, scope, input.startsAt.getTime());
+    return this.db.tx(async (tx) => {
+      const row = await this.lock(tx, uuid, scope);
+      const after = await this.booking.reschedule(tx, ctx.orgId, row, {
+        startsAt: input.startsAt,
+        endsAt: input.endsAt,
+        ignoreAvailability: true,
         notify: input.notify,
         by: 'staff',
         nowMs,
@@ -468,6 +531,7 @@ export class AppointmentsService {
           HttpStatus.CONFLICT,
         );
       }
+      await this.mirror.forget(tx, ctx.orgId, row);
       await this.repo.delete(tx, ctx.orgId, row.id);
       await this.support.record(tx, row, {
         audit: { action: 'delete', delta: { title: { old: row.title, new: null } } },

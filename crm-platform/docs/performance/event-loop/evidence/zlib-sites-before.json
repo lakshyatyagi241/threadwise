@@ -1,0 +1,1228 @@
+{
+ "generatedAt": "2026-10-18T05:32:12.900Z",
+ "node": "v22.17.0",
+ "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+ "quick": false,
+ "thresholdMs": 50,
+ "note": "Synthetic payloads (vocabulary plus random tokens), sizes from the constants in the code and assumed row sizes. Hold = worst lateness of a 1 ms timer during the call. This machine only.",
+ "rows": [
+  {
+   "site": "audit-log/audit-log-export.runner.ts:146 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 rows per gzip member; row size assumed 250 B (short delta) to 1 KB (large delta JSON)",
+   "case": "5,000 x 250 B",
+   "mix": "typical",
+   "rawMb": 1.2,
+   "compressedMb": 0.33,
+   "ratio": 3.6,
+   "sync": {
+    "wallMs": 78.4,
+    "holdMs": 80.8,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 73.9,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "audit-log/audit-log-export.runner.ts:146 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 rows per gzip member; row size assumed 250 B (short delta) to 1 KB (large delta JSON)",
+   "case": "5,000 x 250 B",
+   "mix": "hard",
+   "rawMb": 1.2,
+   "compressedMb": 0.45,
+   "ratio": 2.7,
+   "sync": {
+    "wallMs": 60.2,
+    "holdMs": 61.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 65.3,
+    "holdMs": 15.2,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "audit-log/audit-log-export.runner.ts:146 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 rows per gzip member; row size assumed 250 B (short delta) to 1 KB (large delta JSON)",
+   "case": "5,000 x 1 KB",
+   "mix": "typical",
+   "rawMb": 4.89,
+   "compressedMb": 1.24,
+   "ratio": 4,
+   "sync": {
+    "wallMs": 384.5,
+    "holdMs": 449.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 364.8,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "audit-log/audit-log-export.runner.ts:146 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 rows per gzip member; row size assumed 250 B (short delta) to 1 KB (large delta JSON)",
+   "case": "5,000 x 1 KB",
+   "mix": "hard",
+   "rawMb": 4.89,
+   "compressedMb": 1.88,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 311.3,
+    "holdMs": 318.6,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 398.7,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:131 buildMessages() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 history rows per member; row 300 B to 1.2 KB (message text)",
+   "case": "5,000 x 300 B",
+   "mix": "typical",
+   "rawMb": 1.44,
+   "compressedMb": 0.39,
+   "ratio": 3.7,
+   "sync": {
+    "wallMs": 112.5,
+    "holdMs": 133.6,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 118.3,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:131 buildMessages() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 history rows per member; row 300 B to 1.2 KB (message text)",
+   "case": "5,000 x 300 B",
+   "mix": "hard",
+   "rawMb": 1.44,
+   "compressedMb": 0.54,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 78.8,
+    "holdMs": 94.3,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 83.2,
+    "holdMs": 15.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:131 buildMessages() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 history rows per member; row 300 B to 1.2 KB (message text)",
+   "case": "5,000 x 1.2 KB",
+   "mix": "typical",
+   "rawMb": 5.73,
+   "compressedMb": 1.43,
+   "ratio": 4,
+   "sync": {
+    "wallMs": 590.7,
+    "holdMs": 601.3,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 471.7,
+    "holdMs": 15,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:131 buildMessages() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 history rows per member; row 300 B to 1.2 KB (message text)",
+   "case": "5,000 x 1.2 KB",
+   "mix": "hard",
+   "rawMb": 5.73,
+   "compressedMb": 2.21,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 440.9,
+    "holdMs": 457,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 380.7,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:152 build() gzipSync per slice",
+   "who": "worker",
+   "bound": "BATCH = 5,000 event lines per member; 250 B to 800 B",
+   "case": "5,000 x 250 B",
+   "mix": "typical",
+   "rawMb": 1.2,
+   "compressedMb": 0.33,
+   "ratio": 3.6,
+   "sync": {
+    "wallMs": 86.3,
+    "holdMs": 112.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 88.7,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:152 build() gzipSync per slice",
+   "who": "worker",
+   "bound": "BATCH = 5,000 event lines per member; 250 B to 800 B",
+   "case": "5,000 x 250 B",
+   "mix": "hard",
+   "rawMb": 1.2,
+   "compressedMb": 0.45,
+   "ratio": 2.7,
+   "sync": {
+    "wallMs": 72.3,
+    "holdMs": 74.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 75.6,
+    "holdMs": 14.9,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:152 build() gzipSync per slice",
+   "who": "worker",
+   "bound": "BATCH = 5,000 event lines per member; 250 B to 800 B",
+   "case": "5,000 x 800 B",
+   "mix": "typical",
+   "rawMb": 3.82,
+   "compressedMb": 0.96,
+   "ratio": 4,
+   "sync": {
+    "wallMs": 344,
+    "holdMs": 401.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 411.2,
+    "holdMs": 15.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:152 build() gzipSync per slice",
+   "who": "worker",
+   "bound": "BATCH = 5,000 event lines per member; 250 B to 800 B",
+   "case": "5,000 x 800 B",
+   "mix": "hard",
+   "rawMb": 3.82,
+   "compressedMb": 1.46,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 334.2,
+    "holdMs": 385.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 308.9,
+    "holdMs": 15.2,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "contact-consent/consent-export.runner.ts:99 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 proof rows; 300 B to 700 B",
+   "case": "5,000 x 300 B",
+   "mix": "typical",
+   "rawMb": 1.44,
+   "compressedMb": 0.39,
+   "ratio": 3.7,
+   "sync": {
+    "wallMs": 102.5,
+    "holdMs": 108.8,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 88.2,
+    "holdMs": 14.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "contact-consent/consent-export.runner.ts:99 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 proof rows; 300 B to 700 B",
+   "case": "5,000 x 300 B",
+   "mix": "hard",
+   "rawMb": 1.44,
+   "compressedMb": 0.54,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 101.2,
+    "holdMs": 117.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 97.1,
+    "holdMs": 14.9,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "contact-consent/consent-export.runner.ts:99 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 proof rows; 300 B to 700 B",
+   "case": "5,000 x 700 B",
+   "mix": "typical",
+   "rawMb": 3.35,
+   "compressedMb": 0.85,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 243.1,
+    "holdMs": 251.8,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 250.3,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "contact-consent/consent-export.runner.ts:99 build() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 proof rows; 300 B to 700 B",
+   "case": "5,000 x 700 B",
+   "mix": "hard",
+   "rawMb": 3.35,
+   "compressedMb": 1.28,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 240.4,
+    "holdMs": 279.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 290.8,
+    "holdMs": 14.9,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:168 ledger() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 ledger rows; 200 B to 500 B",
+   "case": "5,000 x 200 B",
+   "mix": "typical",
+   "rawMb": 0.96,
+   "compressedMb": 0.28,
+   "ratio": 3.4,
+   "sync": {
+    "wallMs": 93.8,
+    "holdMs": 95.4,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 79.7,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:168 ledger() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 ledger rows; 200 B to 500 B",
+   "case": "5,000 x 200 B",
+   "mix": "hard",
+   "rawMb": 0.96,
+   "compressedMb": 0.36,
+   "ratio": 2.7,
+   "sync": {
+    "wallMs": 48.2,
+    "holdMs": 60.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 52.5,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:168 ledger() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 ledger rows; 200 B to 500 B",
+   "case": "5,000 x 500 B",
+   "mix": "typical",
+   "rawMb": 2.39,
+   "compressedMb": 0.62,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 156,
+    "holdMs": 169,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 160.8,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:168 ledger() gzipSync per page",
+   "who": "worker",
+   "bound": "BATCH = 5,000 ledger rows; 200 B to 500 B",
+   "case": "5,000 x 500 B",
+   "mix": "hard",
+   "rawMb": 2.39,
+   "compressedMb": 0.91,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 149.9,
+    "holdMs": 150.3,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 193.6,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:140,155,188 summary CSV, PDF, header",
+   "who": "worker",
+   "bound": "one small report: a summary CSV (tens of KB) or a generated PDF (a few hundred KB)",
+   "case": "PDF 400 KB",
+   "mix": "typical",
+   "rawMb": 0.39,
+   "compressedMb": 0.09,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 33.9,
+    "holdMs": 39.1,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 27.1,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:140,155,188 summary CSV, PDF, header",
+   "who": "worker",
+   "bound": "one small report: a summary CSV (tens of KB) or a generated PDF (a few hundred KB)",
+   "case": "PDF 400 KB",
+   "mix": "hard",
+   "rawMb": 0.39,
+   "compressedMb": 0.15,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 23.6,
+    "holdMs": 22.9,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 22.9,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:140,155,188 summary CSV, PDF, header",
+   "who": "worker",
+   "bound": "one small report: a summary CSV (tens of KB) or a generated PDF (a few hundred KB)",
+   "case": "summary CSV 60 KB",
+   "mix": "typical",
+   "rawMb": 0.06,
+   "compressedMb": 0.02,
+   "ratio": 3.3,
+   "sync": {
+    "wallMs": 3.5,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 3.4,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "crm/revenue-report/revenue-export.runner.ts:140,155,188 summary CSV, PDF, header",
+   "who": "worker",
+   "bound": "one small report: a summary CSV (tens of KB) or a generated PDF (a few hundred KB)",
+   "case": "summary CSV 60 KB",
+   "mix": "hard",
+   "rawMb": 0.06,
+   "compressedMb": 0.02,
+   "ratio": 2.7,
+   "sync": {
+    "wallMs": 3.3,
+    "holdMs": 15.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 4.7,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "chat-conversations/message-log-archive.service.ts:109 archiveDay() gzipSync per batch",
+   "who": "worker (daily sweep)",
+   "bound": "BATCH = 20,000 events per gzip member; event line 250 B to 800 B",
+   "case": "20,000 x 250 B",
+   "mix": "typical",
+   "rawMb": 4.79,
+   "compressedMb": 0.81,
+   "ratio": 5.9,
+   "sync": {
+    "wallMs": 169.2,
+    "holdMs": 193.9,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 161.6,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-archive.service.ts:109 archiveDay() gzipSync per batch",
+   "who": "worker (daily sweep)",
+   "bound": "BATCH = 20,000 events per gzip member; event line 250 B to 800 B",
+   "case": "20,000 x 250 B",
+   "mix": "hard",
+   "rawMb": 4.79,
+   "compressedMb": 1.09,
+   "ratio": 4.4,
+   "sync": {
+    "wallMs": 146.4,
+    "holdMs": 145.6,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 171.7,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-archive.service.ts:109 archiveDay() gzipSync per batch",
+   "who": "worker (daily sweep)",
+   "bound": "BATCH = 20,000 events per gzip member; event line 250 B to 800 B",
+   "case": "20,000 x 800 B",
+   "mix": "typical",
+   "rawMb": 15.28,
+   "compressedMb": 3.33,
+   "ratio": 4.6,
+   "sync": {
+    "wallMs": 1015.3,
+    "holdMs": 1017.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 967.4,
+    "holdMs": 23.2,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-archive.service.ts:109 archiveDay() gzipSync per batch",
+   "who": "worker (daily sweep)",
+   "bound": "BATCH = 20,000 events per gzip member; event line 250 B to 800 B",
+   "case": "20,000 x 800 B",
+   "mix": "hard",
+   "rawMb": 15.28,
+   "compressedMb": 5.15,
+   "ratio": 3,
+   "sync": {
+    "wallMs": 817.4,
+    "holdMs": 883.6,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 857.2,
+    "holdMs": 15.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "20,000 events (6 MB)",
+   "mix": "typical",
+   "rawMb": 5.74,
+   "compressedMb": 1.05,
+   "ratio": 5.5,
+   "sync": {
+    "wallMs": 59.4,
+    "holdMs": 60.9,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 84.8,
+    "holdMs": 41,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "20,000 events (6 MB)",
+   "mix": "hard",
+   "rawMb": 5.74,
+   "compressedMb": 1.47,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 54.3,
+    "holdMs": 57.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 83.2,
+    "holdMs": 44.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "100,000 events (30 MB)",
+   "mix": "typical",
+   "rawMb": 28.71,
+   "compressedMb": 5.21,
+   "ratio": 5.5,
+   "sync": {
+    "wallMs": 287.4,
+    "holdMs": 303.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 386.6,
+    "holdMs": 216.4,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "100,000 events (30 MB)",
+   "mix": "hard",
+   "rawMb": 28.71,
+   "compressedMb": 7.33,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 327.2,
+    "holdMs": 376.9,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 473.3,
+    "holdMs": 252,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "400,000 events (120 MB)",
+   "mix": "typical",
+   "rawMb": 114.82,
+   "compressedMb": 20.75,
+   "ratio": 5.5,
+   "sync": {
+    "wallMs": 1555.3,
+    "holdMs": 1895.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 1743,
+    "holdMs": 959.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log.service.ts:47 archivedEventsOf() gunzipSync + split + JSON.parse of EVERY line",
+   "who": "API (request: one message's history)",
+   "bound": "one UTC day of one workspace's archive: events per day x line size, no cap in the code. 20k, 100k, 400k events x 300 B",
+   "case": "400,000 events (120 MB)",
+   "mix": "hard",
+   "rawMb": 114.82,
+   "compressedMb": 29.17,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 1328.8,
+    "holdMs": 1527.3,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 1567.1,
+    "holdMs": 818.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:166 build() gunzipSync + split + JSON.parse of every line of a day",
+   "who": "worker",
+   "bound": "one archived day object, as above",
+   "case": "20,000 events (6 MB)",
+   "mix": "typical",
+   "rawMb": 5.74,
+   "compressedMb": 1.05,
+   "ratio": 5.5,
+   "sync": {
+    "wallMs": 55.3,
+    "holdMs": 58.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 83.8,
+    "holdMs": 44.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:166 build() gunzipSync + split + JSON.parse of every line of a day",
+   "who": "worker",
+   "bound": "one archived day object, as above",
+   "case": "20,000 events (6 MB)",
+   "mix": "hard",
+   "rawMb": 5.74,
+   "compressedMb": 1.47,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 75.1,
+    "holdMs": 86.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 99.6,
+    "holdMs": 53,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:166 build() gunzipSync + split + JSON.parse of every line of a day",
+   "who": "worker",
+   "bound": "one archived day object, as above",
+   "case": "100,000 events (30 MB)",
+   "mix": "typical",
+   "rawMb": 28.71,
+   "compressedMb": 5.21,
+   "ratio": 5.5,
+   "sync": {
+    "wallMs": 267.8,
+    "holdMs": 276,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 383.4,
+    "holdMs": 173.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "chat-conversations/message-log-export.runner.ts:166 build() gunzipSync + split + JSON.parse of every line of a day",
+   "who": "worker",
+   "bound": "one archived day object, as above",
+   "case": "100,000 events (30 MB)",
+   "mix": "hard",
+   "rawMb": 28.71,
+   "compressedMb": 7.33,
+   "ratio": 3.9,
+   "sync": {
+    "wallMs": 285.9,
+    "holdMs": 287.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 444.6,
+    "holdMs": 215.3,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "1 MB entry",
+   "mix": "typical",
+   "rawMb": 1,
+   "compressedMb": 0.24,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 85.2,
+    "holdMs": 116.5,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 74.2,
+    "holdMs": 15.3,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "1 MB entry",
+   "mix": "hard",
+   "rawMb": 1,
+   "compressedMb": 0.38,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 62.1,
+    "holdMs": 80.9,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 68.6,
+    "holdMs": 14.6,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "10 MB entry",
+   "mix": "typical",
+   "rawMb": 10,
+   "compressedMb": 2.38,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 695.3,
+    "holdMs": 704.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 752.6,
+    "holdMs": 15.2,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "10 MB entry",
+   "mix": "hard",
+   "rawMb": 10,
+   "compressedMb": 3.83,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 671.5,
+    "holdMs": 670.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 684.7,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "50 MB entry",
+   "mix": "typical",
+   "rawMb": 50,
+   "compressedMb": 11.88,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 4055.4,
+    "holdMs": 4110.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 3779.2,
+    "holdMs": 15.4,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "privacy/engine/zip.ts:48 buildZip() deflateRawSync per entry (data-subject export)",
+   "who": "worker",
+   "bound": "one entry per exported section; a contact's message history or a workspace export: 1 MB to 50 MB each",
+   "case": "50 MB entry",
+   "mix": "hard",
+   "rawMb": 50,
+   "compressedMb": 19.15,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 3300.9,
+    "holdMs": 3680,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 3732.9,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "shopify-woocommerce/plugin/zip-writer.ts:26 buildZip() deflateRawSync level 9",
+   "who": "API (plugin download)",
+   "bound": "a handful of small text files (the doc comment says so): up to ~200 KB",
+   "case": "200 KB file, level 9",
+   "mix": "typical",
+   "rawMb": 0.2,
+   "compressedMb": 0.05,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 22.2,
+    "holdMs": 23.1,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 21.5,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "shopify-woocommerce/plugin/zip-writer.ts:26 buildZip() deflateRawSync level 9",
+   "who": "API (plugin download)",
+   "bound": "a handful of small text files (the doc comment says so): up to ~200 KB",
+   "case": "200 KB file, level 9",
+   "mix": "hard",
+   "rawMb": 0.2,
+   "compressedMb": 0.07,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 20.4,
+    "holdMs": 20,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 15.9,
+    "holdMs": 15.2,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "wallet-message-billing/xlsx-lite.ts:67 partText() inflateRawSync",
+   "who": "API (rate-card upload)",
+   "bound": "MAX_PART_BYTES = 8 MiB inflated per part",
+   "case": "1 MB part",
+   "mix": "typical",
+   "rawMb": 1,
+   "compressedMb": 0.24,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 4.7,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 10.1,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "wallet-message-billing/xlsx-lite.ts:67 partText() inflateRawSync",
+   "who": "API (rate-card upload)",
+   "bound": "MAX_PART_BYTES = 8 MiB inflated per part",
+   "case": "1 MB part",
+   "mix": "hard",
+   "rawMb": 1,
+   "compressedMb": 0.38,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 5.7,
+    "holdMs": 15,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 9.6,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "wallet-message-billing/xlsx-lite.ts:67 partText() inflateRawSync",
+   "who": "API (rate-card upload)",
+   "bound": "MAX_PART_BYTES = 8 MiB inflated per part",
+   "case": "8 MiB part (the cap)",
+   "mix": "typical",
+   "rawMb": 8,
+   "compressedMb": 1.9,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 33.1,
+    "holdMs": 33.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 76.7,
+    "holdMs": 15.4,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "wallet-message-billing/xlsx-lite.ts:67 partText() inflateRawSync",
+   "who": "API (rate-card upload)",
+   "bound": "MAX_PART_BYTES = 8 MiB inflated per part",
+   "case": "8 MiB part (the cap)",
+   "mix": "hard",
+   "rawMb": 8,
+   "compressedMb": 3.06,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 43.2,
+    "holdMs": 51,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 90.9,
+    "holdMs": 14.4,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "addons-extension-registry/zip-reader.ts:90 readEntry() inflateRawSync",
+   "who": "API (extension install)",
+   "bound": "entry.size of an uploaded package; no cap in the reader, assume up to 20 MB per entry",
+   "case": "1 MB entry",
+   "mix": "typical",
+   "rawMb": 1,
+   "compressedMb": 0.24,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 4.3,
+    "holdMs": 15.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 15.4,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "addons-extension-registry/zip-reader.ts:90 readEntry() inflateRawSync",
+   "who": "API (extension install)",
+   "bound": "entry.size of an uploaded package; no cap in the reader, assume up to 20 MB per entry",
+   "case": "1 MB entry",
+   "mix": "hard",
+   "rawMb": 1,
+   "compressedMb": 0.38,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 7.1,
+    "holdMs": 15.4,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 12.4,
+    "holdMs": 14.9,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "addons-extension-registry/zip-reader.ts:90 readEntry() inflateRawSync",
+   "who": "API (extension install)",
+   "bound": "entry.size of an uploaded package; no cap in the reader, assume up to 20 MB per entry",
+   "case": "20 MB entry",
+   "mix": "typical",
+   "rawMb": 20,
+   "compressedMb": 4.75,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 67.5,
+    "holdMs": 90.2,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 160.9,
+    "holdMs": 14.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "addons-extension-registry/zip-reader.ts:90 readEntry() inflateRawSync",
+   "who": "API (extension install)",
+   "bound": "entry.size of an uploaded package; no cap in the reader, assume up to 20 MB per entry",
+   "case": "20 MB entry",
+   "mix": "hard",
+   "rawMb": 20,
+   "compressedMb": 7.66,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 94.8,
+    "holdMs": 102.1,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 176.9,
+    "holdMs": 15.1,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "ai-agents-training/file-extract.ts:58 readZipEntry() inflateRawSync",
+   "who": "API (training-source upload)",
+   "bound": "MAX_INFLATED = 64 MiB for word/document.xml",
+   "case": "2 MB document.xml",
+   "mix": "typical",
+   "rawMb": 2,
+   "compressedMb": 0.48,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 7.6,
+    "holdMs": 14.7,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 16.5,
+    "holdMs": 15,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "ai-agents-training/file-extract.ts:58 readZipEntry() inflateRawSync",
+   "who": "API (training-source upload)",
+   "bound": "MAX_INFLATED = 64 MiB for word/document.xml",
+   "case": "2 MB document.xml",
+   "mix": "hard",
+   "rawMb": 2,
+   "compressedMb": 0.77,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 10.1,
+    "holdMs": 15.3,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 22,
+    "holdMs": 14.9,
+    "reps": 3
+   },
+   "overThreshold": false
+  },
+  {
+   "site": "ai-agents-training/file-extract.ts:58 readZipEntry() inflateRawSync",
+   "who": "API (training-source upload)",
+   "bound": "MAX_INFLATED = 64 MiB for word/document.xml",
+   "case": "64 MiB (the cap)",
+   "mix": "typical",
+   "rawMb": 64,
+   "compressedMb": 15.2,
+   "ratio": 4.2,
+   "sync": {
+    "wallMs": 228.7,
+    "holdMs": 244.8,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 492.6,
+    "holdMs": 40.5,
+    "reps": 3
+   },
+   "overThreshold": true
+  },
+  {
+   "site": "ai-agents-training/file-extract.ts:58 readZipEntry() inflateRawSync",
+   "who": "API (training-source upload)",
+   "bound": "MAX_INFLATED = 64 MiB for word/document.xml",
+   "case": "64 MiB (the cap)",
+   "mix": "hard",
+   "rawMb": 64,
+   "compressedMb": 24.51,
+   "ratio": 2.6,
+   "sync": {
+    "wallMs": 329.1,
+    "holdMs": 340.6,
+    "reps": 3
+   },
+   "async": {
+    "wallMs": 763.8,
+    "holdMs": 46.8,
+    "reps": 3
+   },
+   "overThreshold": true
+  }
+ ]
+}

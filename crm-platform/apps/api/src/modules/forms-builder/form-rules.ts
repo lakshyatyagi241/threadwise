@@ -4,8 +4,14 @@ import {
   FORM_ADDRESS_PARTS,
   canonicalizeLocalPhone,
   composeAddress,
+  formAgeField,
   formFields,
+  isPlausibleBirthDate,
+  judgeAgeAnswer,
+  parseAgeAnswer,
   parseDateValue,
+  type AgeAnswer,
+  type AgeVerdict,
   type FormAddressPart,
   type FormDefinition,
   type FormFieldBlock,
@@ -78,6 +84,7 @@ function checkField(
   f: FormFieldBlock,
   raw: unknown,
   phoneCountryCode: string | undefined,
+  now: Date,
 ): { value?: StoredAnswer; issue?: string } {
   const required = f.required;
   const v = f.validation;
@@ -137,6 +144,19 @@ function checkField(
       if (!d || d.kind !== 'day') return { issue: 'invalid_date' };
       return { value: d.iso };
     }
+    case 'date_of_birth': {
+      // A real day that can be a birth date (BL-217). The same code as a bad date, so the page cannot tell a typo from a refusal.
+      if (typeof raw !== 'string') return { issue: 'invalid_date' };
+      const d = parseDateValue(raw.trim());
+      if (!d || d.kind !== 'day' || !isPlausibleBirthDate(d.iso, now)) {
+        return { issue: 'invalid_date' };
+      }
+      return { value: d.iso };
+    }
+    case 'age': {
+      const n = parseAgeAnswer(typeof raw === 'string' || typeof raw === 'number' ? raw : null);
+      return n === null ? { issue: 'invalid_number' } : { value: n };
+    }
     case 'dropdown':
     case 'radio': {
       if (typeof raw !== 'string') return { issue: 'invalid_option' };
@@ -189,6 +209,7 @@ export function validateSubmission(
   def: FormDefinition,
   answers: Record<string, unknown>,
   hidden: HiddenInput,
+  now: Date = new Date(),
 ): ValidatedAnswers {
   const values: Record<string, StoredAnswer> = {};
   const issues: FieldIssue[] = [];
@@ -205,7 +226,7 @@ export function validateSubmission(
       if (text !== '') values[f.id] = text;
       continue;
     }
-    const out = checkField(f, answers[f.id], phoneCountryCode);
+    const out = checkField(f, answers[f.id], phoneCountryCode, now);
     if (out.issue) issues.push({ fieldId: f.id, code: out.issue });
     else if (out.value !== undefined) values[f.id] = out.value;
   }
@@ -266,12 +287,18 @@ export function mapAnswers(
   };
   for (const f of formFields(def)) {
     const value = values[f.id];
-    if (!f.bind || value === undefined) continue;
-    const target = out[f.bind.object];
+    if (value === undefined) continue;
+    // A date of birth field always writes the contact's date of birth, bound or not (BL-217): there is nowhere else it could go.
+    const bind =
+      f.kind === 'date_of_birth'
+        ? ({ object: 'contact', property: 'date_of_birth' } as const)
+        : f.bind;
+    if (!bind) continue;
+    const target = out[bind.object];
     const text = asText(value);
     if (text === '') continue;
-    if (isBuiltinProperty(f.bind.object, f.bind.property)) target.builtin[f.bind.property] = text;
-    else target.custom[f.bind.property] = text;
+    if (isBuiltinProperty(bind.object, bind.property)) target.builtin[bind.property] = text;
+    else target.custom[bind.property] = text;
   }
   // Address parts become the one address line the CRM keeps; a field bound to the whole address wins over the parts.
   for (const target of [out.contact, out.company]) {
@@ -368,3 +395,96 @@ export function companyHostFromEmail(email: string | null | undefined): string |
 }
 
 export const isFreeMailDomain = (host: string): boolean => FREE_MAIL.has(host.toLowerCase());
+
+// --- the age gate (BL-217, spec 11.10) -------------------------------------------------------------------------------------------------
+
+/**
+ * Answers the server adds beside the visitor's own, under keys no field can have (a block id starts with a letter). They travel with the
+ * stored answers, so a staff re-run of the submission sees the same age outcome and the retention sweep removes the guardian's details
+ * together with everything else the visitor typed.
+ */
+export const AGE_KEYS = {
+  /** `under` when the gate found the visitor under the minimum age and the form let them through. */
+  outcome: '_age_gate',
+  /** The minimum age the gate used, so a re-run judges against the same number. */
+  minAge: '_age_min',
+  /** The declaration box was ticked. */
+  confirmed: '_age_confirmed',
+  guardianName: '_guardian_name',
+  guardianEmail: '_guardian_email',
+  guardianPhone: '_guardian_phone',
+} as const;
+
+/** What the gate saw: the minimum used and the verdict. */
+export interface FormAgeJudgement {
+  minAge: number;
+  verdict: AgeVerdict;
+}
+
+/** The answer the gate judges, read from the validated values (and the declaration box); null when the gate is off. */
+export function ageAnswerOf(
+  def: FormDefinition,
+  values: Record<string, StoredAnswer>,
+  confirmed: boolean,
+): AgeAnswer | null {
+  const gate = def.ageGate;
+  if (!gate.enabled) return null;
+  const field = formAgeField(def);
+  switch (gate.mode) {
+    case 'dob':
+      return { mode: 'dob', dob: field?.kind === 'date_of_birth' ? values[field.id] : undefined };
+    case 'age':
+      return { mode: 'age', age: field?.kind === 'age' ? values[field.id] : undefined };
+    case 'declaration':
+      return { mode: 'declaration', confirmed };
+  }
+}
+
+/** Judges a submission against the form's gate; null when the gate is off. `workspaceAge` is the fallback for a gate with no age of its own. */
+export function judgeFormAge(
+  def: FormDefinition,
+  values: Record<string, StoredAnswer>,
+  confirmed: boolean,
+  workspaceAge: number,
+  now: Date,
+): FormAgeJudgement | null {
+  const answer = ageAnswerOf(def, values, confirmed);
+  if (!answer) return null;
+  const minAge = def.ageGate.minAge ?? workspaceAge;
+  return { minAge, verdict: judgeAgeAnswer(answer, minAge, now) };
+}
+
+export interface GuardianDetails {
+  name: string;
+  email: string | null;
+  phone: string | null;
+}
+
+/** The guardian the visitor named: a name and an email address or a phone number, cleaned like any other answer. Null when not usable. */
+export function cleanGuardian(
+  raw: { name: string; email?: string | undefined; phone?: string | undefined } | undefined,
+  phoneCountryCode: string | undefined,
+): GuardianDetails | null {
+  if (!raw) return null;
+  const name = cleanText(raw.name, false).slice(0, 120);
+  const emailText = raw.email ? cleanText(raw.email, false).toLowerCase() : '';
+  const email =
+    emailText !== '' && emailText.length <= 191 && EMAIL.test(emailText) ? emailText : null;
+  const phone = raw.phone
+    ? (canonicalizeLocalPhone(cleanText(raw.phone, false), phoneCountryCode)?.e164 ?? null)
+    : null;
+  if (name === '' || (email === null && phone === null)) return null;
+  return { name, email, phone };
+}
+
+/** The guardian details back out of the stored answers (a staff re-run, the submission screen). */
+export function guardianOf(values: Record<string, unknown>): GuardianDetails | null {
+  const text = (k: string): string | null => {
+    const v = values[k];
+    return typeof v === 'string' && v !== '' ? v : null;
+  };
+  const name = text(AGE_KEYS.guardianName);
+  return name
+    ? { name, email: text(AGE_KEYS.guardianEmail), phone: text(AGE_KEYS.guardianPhone) }
+    : null;
+}

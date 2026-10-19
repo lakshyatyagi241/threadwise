@@ -17,7 +17,8 @@
       "unexpected": "Er is iets misgegaan. Probeer het opnieuw.",
       "exportInProgress": "Er wordt al een bewijsbestand voorbereid. Wacht tot het klaar is en probeer het dan opnieuw.",
       "exportNotReady": "Dat bestand is niet klaar of verlopen. Bereid een nieuw bestand voor.",
-      "noticeTargetMissing": "Die widget, boekingspagina of winkel bestaat niet meer."
+      "noticeTargetMissing": "Die widget, boekingspagina of winkel bestaat niet meer.",
+      "notMinor": "Toestemming van een voogd kan alleen worden vastgelegd voor een contact dat als minderjarig is gemarkeerd."
     },
     "settings": {
       "title": "Toestemming en STOP-antwoorden",
@@ -112,7 +113,10 @@
         "instagram": "Instagram",
         "webchat": "Webchat",
         "voice": "Spraakoproep",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "aangemeld",
@@ -139,7 +143,11 @@
         "widget": "Websitechat",
         "booking": "Boekingspagina",
         "commerce": "Winkelkassa",
-        "lead": "Leadregistratie"
+        "lead": "Leadregistratie",
+        "wa_form": "WhatsApp-formulier",
+        "gpc": "Global Privacy Control",
+        "dob": "Geboortedatum of leeftijd",
+        "declaration": "Leeftijd niet bevestigd"
       },
       "by": "door {name}",
       "evidence": {
@@ -162,7 +170,8 @@
         "storeFlag": "Winkelinstelling",
         "leadSourceId": "Leadbron",
         "leadFormId": "Leadformulier",
-        "adId": "Advertentie"
+        "adId": "Advertentie",
+        "guardianConsentRef": "Referentie van toestemming voogd"
       },
       "dialog": {
         "titleGranted": "Markeren als aangemeld",
@@ -178,6 +187,52 @@
         "close": "Sluiten",
         "savedGranted": "Gemarkeerd als aangemeld.",
         "savedWithdrawn": "Gemarkeerd als afgemeld."
+      },
+      "privacy": {
+        "title": "Privacymarkeringen",
+        "saved": "Opgeslagen.",
+        "minorLabel": "Minderjarig",
+        "minorOn": "Sinds {date} als minderjarig gemarkeerd.",
+        "minorOff": "Niet als minderjarig gemarkeerd.",
+        "rule": {
+          "off": "Je werkruimte heeft de vraag over kinderen in het Compliancecentrum niet beantwoord, dus marketing naar dit contact wordt niet tegengehouden.",
+          "guardian": "Marketing naar dit contact wordt tegengehouden tot de toestemming van een ouder of voogd is vastgelegd.",
+          "block": "Marketing naar dit contact wordt tegengehouden, omdat je werkruimte aangeeft geen gegevens van minderjarigen te verwerken."
+        },
+        "guardianBadge": "Toestemming van voogd vastgelegd",
+        "guardianLabel": "Toestemming van ouder of voogd",
+        "guardianOn": "Vastgelegd sinds {date}. Het is alleen bewijs en schrijft het contact niet in.",
+        "guardianOff": "Niet vastgelegd.",
+        "recordGuardian": "Toestemming van voogd vastleggen",
+        "clearGuardian": "Verwijderen",
+        "dnsLabel": "Niet verkopen of delen",
+        "dnsOn": "Afgemeld sinds {date} ({source}).",
+        "dnsOff": "Niet afgemeld.",
+        "history": "Privacygeschiedenis",
+        "event": {
+          "minor": {
+            "on": "Als minderjarig gemarkeerd",
+            "off": "Markering als minderjarig verwijderd"
+          },
+          "guardian_consent": {
+            "on": "Toestemming van voogd vastgelegd",
+            "off": "Toestemming van voogd verwijderd"
+          },
+          "sale_share_opt_out": {
+            "on": "Afgemeld voor verkoop en delen",
+            "off": "Afmelding verwijderd"
+          }
+        },
+        "dialog": {
+          "title": "Toestemming van voogd vastleggen",
+          "intro": "Leg vast dat een ouder of voogd heeft ingestemd. Dit is alleen bewijs: het contact wordt er niet mee ingeschreven voor marketing.",
+          "note": "Hoe is er ingestemd? (verplicht)",
+          "noteHint": "Bijvoorbeeld: het papieren formulier aan de balie ondertekend. Schrijf geen naam of contactgegevens van de voogd op.",
+          "ref": "Referentie (optioneel)",
+          "refHint": "Een formuliernummer of document-id die je later kunt opzoeken."
+        },
+        "minorFrom": "Ingesteld op basis van de opgegeven geboortedatum of leeftijd. Het vervalt vanzelf op {date}, tenzij een persoon het behoudt.",
+        "minorFromDeclaration": "Ingesteld omdat de leeftijd niet is bevestigd in een formulier. Het blijft staan tot een persoon het wist."
       }
     },
     "composer": {
@@ -299,19 +354,25 @@
         "consent_evidence_recorded": "Toegestaan: de melding is gegeven en de persoon ging akkoord.",
         "purpose_not_enabled": "Niet toegestaan: de werkruimte heeft dit niet aangezet.",
         "consent_declined": "Niet toegestaan: de persoon weigerde.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Niet toegestaan: dit contact is als minderjarig gemarkeerd en je werkruimte houdt marketing tegen.",
+        "sale_share_opted_out": "Niet toegestaan: het contact heeft zich afgemeld voor verkoop of delen van zijn gegevens.",
+        "on_dnc_list": "Op je Niet-bellen-lijst: geen marketingoproepen of SMS-berichten naar dit nummer",
+        "legal_hold": "Niet toegestaan: de verwerking van dit contact is beperkt."
       }
     },
     "notice": {
       "title": {
         "widget": "Toestemmingsregel in het chatformulier",
         "booking": "Toestemmingsregel op de boekingspagina",
-        "commerce": "Wat het marketingvakje van de winkel betekent"
+        "commerce": "Wat het marketingvakje van de winkel betekent",
+        "workspace": "Standaard toestemmingsmededeling"
       },
       "intro": {
         "widget": "Getoond als vakje onder de gegevens van de bezoeker. Alleen een bezoeker die het aanvinkt wordt als akkoord vastgelegd, en alleen met een telefoonnummer of e-mailadres.",
         "booking": "Getoond als vakje in het boekingsformulier. Alleen wie het aanvinkt wordt als akkoord vastgelegd; boeken heeft het nooit nodig.",
-        "commerce": "Een klant die marketing accepteert in uw winkel wordt als akkoord vastgelegd. Schrijf wat dat vakje de klant vertelt, zodat het bewijs het noemt."
+        "commerce": "Een klant die marketing accepteert in uw winkel wordt als akkoord vastgelegd. Schrijf wat dat vakje de klant vertelt, zodat het bewijs het noemt.",
+        "workspace": "De tekst die je werkruimte naast een toestemmingsvakje toont wanneer een formulier, widget of boekingspagina er geen eigen heeft. Elke wijziging is een nieuwe genummerde versie."
       },
       "enabled": "Toestemmingsregel aan",
       "text": "Tekst waarmee de persoon akkoord gaat",
@@ -324,7 +385,21 @@
       "version": "Huidige versie: {version}",
       "noVersion": "Nog niet opgeslagen.",
       "saveFirst": "Sla dit eerst op, daarna kunt u de toestemmingsregel instellen.",
-      "whatsappToo": "Ook als WhatsApp-toestemming laten gelden (alleen als de tekst dat zegt)"
+      "whatsappToo": "Ook als WhatsApp-toestemming laten gelden (alleen als de tekst dat zegt)",
+      "termsUrl": "Link naar je voorwaarden (optioneel)",
+      "termsUrlHint": "Moet beginnen met https://",
+      "useWorkspacePrivacy": "Privacylink van mijn werkruimte gebruiken",
+      "useWorkspaceTerms": "Voorwaardenlink van mijn werkruimte gebruiken",
+      "useWorkspaceText": "Standaardtekst van mijn werkruimte gebruiken",
+      "statement": "Ik ga akkoord met het ontvangen van updates en aanbiedingen via {channels}. Ik kan me altijd afmelden door STOP te antwoorden.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Kanalen die deze toestemming dekt",
+      "channelsHint": "De persoon wordt alleen aangemeld op de hier aangevinkte kanalen, en de toestemmingstekst noemt ze. Een kanaal wordt alleen gebruikt als de persoon het bijbehorende telefoonnummer of e-mailadres opgeeft.",
+      "channelsUse": "Tekst bijwerken met deze kanalen"
     }
   }
 }

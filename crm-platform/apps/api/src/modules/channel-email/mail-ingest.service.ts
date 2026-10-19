@@ -12,6 +12,7 @@ import type { NormalisedInbound } from '../../infra/providers/chat-conversations
 import { ExternalChannelIngest } from '../chat-conversations';
 import { MailBounceHandler } from './mail-bounce.handler';
 import { MailLimits } from './mail-limits';
+import { MailTimeline } from './mail-timeline.service';
 import { channelAccountOf } from './mail-channel.sync';
 import type { MailboxRow } from './mailboxes.repository';
 
@@ -37,7 +38,7 @@ export const keyOfAttachmentId = (id: string): string =>
  *
  * Files are stored BEFORE the message (their keys go into the message's `meta.email`), so a message the inbox then refuses as a duplicate
  * or drops has its files removed again. Redelivery is harmless: the caller skips a Gmail id already in the ledger before downloading, and
- * the inbox's own ledger is the authority.
+ * the inbox's own ledger is the authority. A stored mail also gets its line on the contact's timeline (`MailTimeline`, E-19).
  */
 @Injectable()
 export class MailIngestService {
@@ -48,6 +49,7 @@ export class MailIngestService {
     private readonly ingest: ExternalChannelIngest,
     private readonly bounces: MailBounceHandler,
     private readonly limits: MailLimits,
+    private readonly timeline: MailTimeline,
   ) {}
 
   async store(
@@ -76,6 +78,16 @@ export class MailIngestService {
       if (outcome.outcome === 'duplicate' || outcome.outcome === 'dropped') {
         await this.removeAll(orgId, stored);
         return outcome.outcome === 'dropped' ? 'dropped' : 'duplicate';
+      }
+      // The contact's timeline (E-19): never throws, the mail is stored either way.
+      if (outcome.outcome === 'stored') {
+        await this.timeline.recordInbound(
+          orgId,
+          mailbox,
+          { conversationUuid: outcome.conversationUuid },
+          mail,
+          message.body ?? '',
+        );
       }
       return 'stored';
     } catch (err) {
@@ -136,6 +148,7 @@ export class MailIngestService {
           buffer: bytes,
           declaredMime: file.mime,
           filename: file.name,
+          category: 'email_attachment_inbound',
         });
         storedKeys.push(saved.key);
         const id = attachmentIdOfKey(saved.key);

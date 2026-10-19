@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "کھلا",
-        "pending": "زیرِ التوا",
         "resolved": "حل شدہ",
         "closed": "بند",
         "snoozed": "مؤخر"

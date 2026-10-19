@@ -145,11 +145,6 @@
         "description": "编辑交易销售管道、阶段和丢失原因。",
         "keywords": "交易, 销售阶段, 看板, 丢失原因, 漏斗"
       },
-      "tags": {
-        "label": "标签",
-        "description": "创建和整理用于联系人与聊天的标签。",
-        "keywords": "标记, 颜色, color"
-      },
       "saved-replies": {
         "label": "快捷回复",
         "description": "撰写可重复使用的回复，团队成员一键即可发送。",
@@ -360,15 +355,40 @@
         "description": "查看每位客服今天、本周或本月回复和解决的速度。",
         "keywords": "报表, 分析, 客服, 响应时间, 首次回复, 已解决, 工作量, 绩效"
       },
-      "contact-assignment": {
-        "label": "联系人分配",
-        "description": "自动把新联系人和商机分配给合适的人，并跳过休假的人。",
-        "keywords": "分配, 负责人, 轮流分配, 新联系人, 新商机, 休假, 线索路由"
-      },
       "privacy-requests": {
         "label": "数据请求",
         "description": "答复询问您持有其哪些数据的人：身份核验、导出、带预览的删除，以及可留存的证明。",
         "keywords": "隐私, gdpr, 数据请求, dsar, 数据主体访问, 导出数据, 删除, 被遗忘权, 删除个人数据, 法律保留"
+      },
+      "compliance-center": {
+        "label": "合规中心",
+        "description": "帮助您履行隐私保护义务的工具:您适用的法律、隐私联系人、告知声明和链接、子处理者、免打扰时段,以及已落实事项的清单。",
+        "keywords": "合规, 隐私, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, 投诉处理官, 子处理者, dpa, 条款, 隐私政策, 免打扰时段, 禁止来电, 清单, 儿童"
+      },
+      "company-properties": {
+        "label": "公司属性",
+        "description": "添加您希望为每家公司保存的字段。",
+        "keywords": "自定义字段, 字段, 必填, 下拉, 组织, 账户"
+      },
+      "uncontacted-leads": {
+        "label": "未联系的潜在客户",
+        "description": "选择哪些操作算作已联系潜在客户，以及哪些新联系人初始为未联系。",
+        "keywords": "未联系, 已联系, 潜在客户, 新潜在客户, 首次联系, 跟进, 重新分配, 标记"
+      },
+      "record-assignment": {
+        "label": "记录分配规则",
+        "description": "按优先级规则，自动将新的联系人、公司和商机分配给您的销售负责人。",
+        "keywords": "分配, 负责人, 轮流分配, 新联系人, 新商机, 公司, 休假, 线索路由, 工作量, 区域"
+      },
+      "follow-ups": {
+        "label": "跟进",
+        "description": "团队联系联系人后自动设置其下次跟进，并选择日期和提醒时间。",
+        "keywords": "跟进, 提醒, 下一步, 任务, 日程, 延后, 待定"
+      },
+      "duplicate-leads": {
+        "label": "重复线索",
+        "description": "选择与联系人匹配的新线索是合并到该联系人，还是成为新联系人。",
+        "keywords": "重复, 合并, 线索, 相同电话, 相同邮箱, 新联系人, 线索来源"
       }
     },
     "backToMarketplace": "返回应用市场"

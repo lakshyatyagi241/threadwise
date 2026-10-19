@@ -1,0 +1,480 @@
+{
+  "generatedAt": "2026-10-15T04:07:11.439Z",
+  "source": "tools/event-loop-audit/scan.mjs",
+  "note": "Static suspects only. A finding becomes CONFIRMED only with a profile or reproduction. One was confirmed and fixed: contact export whole-file gzip/gunzip.",
+  "totals": {
+    "all": 49,
+    "runtime": 31
+  },
+  "byRule": {
+    "sync-fs": {
+      "runtime": 12,
+      "startup": 2,
+      "offline": 4,
+      "test": 12
+    },
+    "sync-zlib": {
+      "runtime": 16,
+      "startup": 0,
+      "offline": 0,
+      "test": 0
+    },
+    "sync-crypto": {
+      "runtime": 2,
+      "startup": 0,
+      "offline": 0,
+      "test": 0
+    },
+    "json-deep-clone": {
+      "runtime": 1,
+      "startup": 0,
+      "offline": 0,
+      "test": 0
+    }
+  },
+  "fixed": [
+    {
+      "id": "EL-001",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.service.ts",
+      "rule": "sync-zlib",
+      "module": "Contacts bulk export",
+      "path": "POST export (stream, then save) and GET download",
+      "reproduction": "node tools/event-loop-audit/measure-zlib.mjs",
+      "workload": "synthetic NDJSON 1/5/20/50 MB; export cap is EXPORT_MAX_ROWS=200000 rows",
+      "before": {
+        "gzipSyncLoopHoldMs": {
+          "1MB": 15.1,
+          "5MB": 63.9,
+          "20MB": 274.1,
+          "50MB": 763.3
+        },
+        "gunzipSyncLoopHoldMs": {
+          "20MB": 71.9,
+          "50MB": 169
+        }
+      },
+      "after": {
+        "gzipAsyncLoopHoldMs": {
+          "1MB": 5.4,
+          "5MB": 14.1,
+          "20MB": 4.8,
+          "50MB": 5.3
+        },
+        "gunzipAsyncLoopHoldMs": {
+          "20MB": 12.4,
+          "50MB": 29.3
+        }
+      },
+      "behaviorCheck": "async gzip output byte-identical to gzipSync and round-trips, for empty to 23 MB inputs; bulk-and-filter.spec.ts 22/22 pass",
+      "severity": "medium",
+      "userImpact": "Every request in the API process stalls while a large export is saved or downloaded.",
+      "caveat": "Synthetic data and a single machine; actual export byte sizes per row are not measured. The end-to-end API effect is NOT VERIFIED (needs the app with a database).",
+      "regressionTest": "tools/event-loop-audit/scan.mjs --check (the gate fails if a sync zlib call returns to a runtime path in this file)"
+    }
+  ],
+  "runtimeFindings": [
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/addons-extension-registry/zip-reader.ts",
+      "line": 90,
+      "scope": "runtime",
+      "detail": "inflateRawSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/ai-agents-training/file-extract.ts",
+      "line": 58,
+      "scope": "runtime",
+      "detail": "inflateRawSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-crypto",
+      "file": "apps/api/src/modules/appointments-booking/google-calendar-state.ts",
+      "line": 32,
+      "scope": "runtime",
+      "detail": "hkdfSync",
+      "id": "ELM-014",
+      "priority": "P1",
+      "why": "CPU-heavy synchronous crypto runs on the main thread.",
+      "fix": "Use the async variant (runs on the libuv pool).",
+      "status": "low",
+      "evidence": "hkdfSync derives a key from a short secret: microseconds. NOT a measured problem."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/audit-log/audit-log-export.runner.ts",
+      "line": 101,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/audit-log/audit-log-export.runner.ts",
+      "line": 146,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-crypto",
+      "file": "apps/api/src/modules/channel-email/mail-state.ts",
+      "line": 39,
+      "scope": "runtime",
+      "detail": "hkdfSync",
+      "id": "ELM-014",
+      "priority": "P1",
+      "why": "CPU-heavy synchronous crypto runs on the main thread.",
+      "fix": "Use the async variant (runs on the libuv pool).",
+      "status": "low",
+      "evidence": "hkdfSync derives a key from a short secret: microseconds. NOT a measured problem."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-archive.service.ts",
+      "line": 109,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-export.runner.ts",
+      "line": 121,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-export.runner.ts",
+      "line": 131,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-export.runner.ts",
+      "line": 141,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-export.runner.ts",
+      "line": 152,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log-export.runner.ts",
+      "line": 166,
+      "scope": "runtime",
+      "detail": "gunzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/chat-conversations/message-log.service.ts",
+      "line": 47,
+      "scope": "runtime",
+      "detail": "gunzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/contact-consent/consent-export.runner.ts",
+      "line": 88,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/contact-consent/consent-export.runner.ts",
+      "line": 99,
+      "scope": "runtime",
+      "detail": "gzipSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/api/src/modules/install-update-licensing/migration-report.ts",
+      "line": 30,
+      "scope": "runtime",
+      "detail": "readdirSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/api/src/modules/install-update-licensing/migration-report.ts",
+      "line": 34,
+      "scope": "runtime",
+      "detail": "readFileSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/api/src/modules/install-update-licensing/migration-state.service.ts",
+      "line": 36,
+      "scope": "runtime",
+      "detail": "existsSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/api/src/modules/install-update-licensing/release-info.ts",
+      "line": 11,
+      "scope": "runtime",
+      "detail": "existsSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/api/src/modules/install-update-licensing/release-info.ts",
+      "line": 13,
+      "scope": "runtime",
+      "detail": "readFileSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/privacy/engine/zip.ts",
+      "line": 48,
+      "scope": "runtime",
+      "detail": "deflateRawSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/shopify-woocommerce/plugin/zip-writer.ts",
+      "line": 26,
+      "scope": "runtime",
+      "detail": "deflateRawSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-zlib",
+      "file": "apps/api/src/modules/wallet-message-billing/xlsx-lite.ts",
+      "line": 67,
+      "scope": "runtime",
+      "detail": "inflateRawSync",
+      "id": "ELM-015",
+      "priority": "P1",
+      "why": "Synchronous compression blocks in proportion to payload size.",
+      "fix": "Use the async/stream zlib API.",
+      "status": "suspect",
+      "evidence": "gzipSync/gunzipSync hold the loop ~14ms/MB and ~3.3ms/MB (docs/performance/event-loop/evidence/zlib-hold.json). Call site compresses a bounded batch (2k-20k rows), so real impact depends on row size: NOT CONFIRMED on production-shaped data."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/web/src/features/auth-registration-security/guest/auth-locales.ts",
+      "line": 14,
+      "scope": "runtime",
+      "detail": "existsSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/web/src/features/auth-registration-security/guest/auth-locales.ts",
+      "line": 16,
+      "scope": "runtime",
+      "detail": "readFileSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/web/src/i18n/messages.ts",
+      "line": 22,
+      "scope": "runtime",
+      "detail": "existsSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/web/src/i18n/messages.ts",
+      "line": 24,
+      "scope": "runtime",
+      "detail": "readdirSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "apps/web/src/i18n/messages.ts",
+      "line": 27,
+      "scope": "runtime",
+      "detail": "readFileSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "packages/db/src/migrator.ts",
+      "line": 40,
+      "scope": "runtime",
+      "detail": "readdirSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "sync-fs",
+      "file": "packages/db/src/migrator.ts",
+      "line": 45,
+      "scope": "runtime",
+      "detail": "readFileSync",
+      "id": "ELM-012",
+      "priority": "P1",
+      "why": "Synchronous filesystem call blocks every other request while the disk answers.",
+      "fix": "Use fs/promises, or hoist to startup.",
+      "status": "suspect",
+      "evidence": "Runs at install/migration/locale-load time, not per request, or is cached: lower risk. NOT PROFILED."
+    },
+    {
+      "rule": "json-deep-clone",
+      "file": "packages/contracts/src/chatbot-widget/launcher.ts",
+      "line": 670,
+      "scope": "runtime",
+      "detail": "JSON.parse(JSON.stringify(...))",
+      "id": "ELM-013",
+      "priority": "P1",
+      "why": "JSON.parse(JSON.stringify(x)) serialises and parses the whole value synchronously, twice the allocation of structuredClone.",
+      "fix": "structuredClone, or avoid the copy.",
+      "status": "suspect",
+      "evidence": "NOT PROFILED."
+    }
+  ]
+}

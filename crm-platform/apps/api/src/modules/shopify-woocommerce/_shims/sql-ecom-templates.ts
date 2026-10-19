@@ -8,7 +8,8 @@ import type { EcomTemplate, EcomTemplates } from './tokens';
 export class SqlEcomTemplates implements EcomTemplates {
   async sendable(tx: Tx, orgId: number, id: number): Promise<EcomTemplate | undefined> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, template_name, language, template_body, header, footer FROM wa_templates
+      SELECT id, uuid, template_name, language, template_body, header, footer,
+             lower(coalesce(meta_category, category)) AS category FROM wa_templates
       WHERE org_id = ${orgId} AND id = ${id}
         AND (meta_template_id IS NULL OR upper(coalesce(meta_status, '')) = 'APPROVED')`);
     const r = res.rows[0] as
@@ -20,6 +21,7 @@ export class SqlEcomTemplates implements EcomTemplates {
           template_body: string | null;
           header: string | null;
           footer: string | null;
+          category: string | null;
         }
       | undefined;
     return r
@@ -31,6 +33,7 @@ export class SqlEcomTemplates implements EcomTemplates {
           body: r.template_body ?? '',
           header: r.header,
           footer: r.footer,
+          category: r.category,
         }
       : undefined;
   }

@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "Thử nghiệm",
         "unanswered": "Chưa trả lời",
-        "insights": "Thống kê",
-        "settings": "Cài đặt"
+        "insights": "Thống kê"
       },
       "unansweredCount": "{count, plural, other {# tin nhắn chưa trả lời}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Luồng này đã đạt giới hạn FAQ. Hãy xóa các FAQ hoặc biến thể không dùng, hoặc nhờ quản trị viên nền tảng nâng giới hạn."
     },
     "banner": {
-      "enabledToast": "Trả lời FAQ đang bật.",
-      "engineOff": "Nền tảng đã tắt tính năng trả lời FAQ. Khách hàng sẽ không nhận được câu trả lời FAQ cho đến khi bật lại.",
-      "modelChanged": "Nền tảng đã đổi mô hình AI sau khi bạn điều chỉnh ngưỡng này. Điểm số đã thay đổi, nên hãy xem lại độ nhạy.",
-      "reviewSensitivity": "Xem lại độ nhạy",
-      "offNoRight": "Hãy nhờ người có quyền faq.settings.manage (thường là quản trị viên workspace) bật tính năng này.",
-      "enable": "Bật trả lời FAQ",
-      "offTitle": "Trả lời bằng FAQ đang TẮT cho luồng này",
-      "offBody": "Bạn có thể viết và thử FAQ của luồng này, nhưng khách hàng sẽ không nhận được câu trả lời cho đến khi bạn bật tính năng."
+      "engineOff": "Nền tảng đã tắt tính năng trả lời FAQ. Khách hàng sẽ không nhận được câu trả lời FAQ cho đến khi bật lại."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "Đang bật",
         "paused": "Tạm dừng",
-        "variations": "Cách diễn đạt",
-        "pending": "Đang lập chỉ mục",
-        "pendingHint": "Có hiệu lực trong vài giây",
-        "failed": "Lập chỉ mục thất bại",
-        "failedHint": "Cần chú ý"
+        "variations": "Cách diễn đạt"
       },
-      "failedBanner": "{count, plural, other {# cách diễn đạt}} không lập được chỉ mục nên chưa thể khớp với tin nhắn của khách hàng.",
-      "showFailed": "Hiện các FAQ bị lỗi",
       "search": "Tìm FAQ",
       "searchPlaceholder": "Tìm câu hỏi và cách diễn đạt",
       "filter": {
         "status": "Trạng thái",
         "anyStatus": "Mọi trạng thái",
         "category": "Danh mục",
-        "anyCategory": "Mọi danh mục",
-        "indexing": "Lập chỉ mục",
-        "anyIndexing": "Tất cả",
-        "pending": "Vẫn đang lập chỉ mục",
-        "failed": "Thất bại"
+        "anyCategory": "Mọi danh mục"
       },
       "status": {
         "active": "Đang bật",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Câu hỏi",
         "answer": "Câu trả lời",
-        "indexing": "Cách diễn đạt đang hoạt động",
         "answered": "Đã trả lời (90 ngày)",
         "status": "Trạng thái",
         "actions": "Thao tác"
@@ -130,12 +111,6 @@
         "rowBody": "“{question}” và tất cả cách diễn đạt của nó sẽ bị xóa vĩnh viễn. Không thể hoàn tác.",
         "delete": "Xóa",
         "cancel": "Hủy"
-      },
-      "indexing": {
-        "summary": "{ready} hoạt động, {pending} đang lập chỉ mục, {failed} lỗi",
-        "ready": "{count} hoạt động",
-        "pending": "{count} đang lập chỉ mục",
-        "failed": "{count} lỗi"
       },
       "stepMissing": "Thiếu bước",
       "subtitle": "Những câu hỏi khách hàng đặt trong {flow} và câu trả lời của bot. Các FAQ này chỉ trả lời bên trong luồng này.",
@@ -202,14 +177,6 @@
           "other": "Một bước của luồng khác",
           "otherHint": "Chuyển cuộc trò chuyện sang một luồng khác."
         }
-      },
-      "advanced": {
-        "title": "Nâng cao: độ nhạy riêng cho FAQ này",
-        "custom": "Dùng độ nhạy riêng cho FAQ này",
-        "sliderLabel": "Khớp từ mức",
-        "body": "Theo mặc định, mọi FAQ dùng độ nhạy của luồng này. Dùng giá trị tùy chỉnh khi FAQ khớp quá dễ (tăng lên) hoặc quá hiếm (giảm xuống).",
-        "workspace": "Độ nhạy của luồng này là {value}%.",
-        "following": "Theo độ nhạy của luồng này ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Thêm",
       "pasteMany": "Dán nhiều dòng",
       "full": "FAQ này đã đạt giới hạn {max} cách diễn đạt.",
-      "failedNotice": "{count, plural, other {# cách diễn đạt}} không lập được chỉ mục. Hãy sửa và lưu cách diễn đạt để thử lại.",
       "suggest": "Gợi ý bằng AI",
       "suggestSaveFirst": "Hãy lưu FAQ trước, sau đó AI có thể gợi ý cách diễn đạt.",
       "suggesting": "Đang nhờ AI gợi ý",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, other {# dòng}} vượt quá giới hạn cách diễn đạt và đã bị bỏ qua.",
         "more": "và {count} mục nữa",
         "add": "Thêm {count, plural, other {# cách diễn đạt}}"
-      },
-      "state": {
-        "ready": "Hoạt động",
-        "pending": "Đang lập chỉ mục",
-        "pendingHint": "Đã lưu. Sẽ bắt đầu khớp sau vài giây.",
-        "failed": "Thất bại",
-        "failedHint": "Hãy sửa và lưu cách diễn đạt để thử lại.",
-        "noReason": "Không có lý do được cung cấp"
       },
       "confirm": {
         "title": "Xóa cách diễn đạt này?",
@@ -451,7 +409,14 @@
       "learned": "Đã thêm vào “{question}”. Từ giờ tin nhắn này sẽ được trả lời.",
       "pickTitle": "Thêm tin nhắn này vào FAQ nào?",
       "loadMore": "Tải thêm",
-      "loadingMore": "Đang tải"
+      "loadingMore": "Đang tải",
+      "fallback": {
+        "title": "Khi không có FAQ nào trả lời",
+        "hint": "Câu trả lời này được gửi tới khách có tin nhắn mà không FAQ nào trả lời. Tin nhắn vẫn hiện bên dưới để bạn bổ sung cho FAQ.",
+        "placeholder": "Xin lỗi, tôi chưa hiểu. Một thành viên trong nhóm sẽ liên hệ lại với bạn.",
+        "save": "Lưu câu trả lời dự phòng",
+        "saved": "Đã lưu câu trả lời dự phòng"
+      }
     },
     "picker": {
       "close": "Đóng",
@@ -539,9 +504,7 @@
       },
       "hist": {
         "title": "Điểm của các tin nhắn",
-        "hint": "Mỗi cột là một khoảng điểm. Đường nét đứt là độ nhạy hiện tại của bạn.",
-        "advice": "Hãy tăng ngưỡng nếu có câu trả lời sai lọt qua, giảm nếu quá nhiều tin nhắn không được trả lời.",
-        "tune": "Đổi độ nhạy"
+        "hint": "Mỗi cột là một khoảng điểm. Đường nét đứt là độ nhạy hiện tại của bạn."
       },
       "top": {
         "title": "FAQ hàng đầu",
@@ -568,98 +531,6 @@
         "bucketTooltip": "{from}-{to}%: {answered} đã trả lời, {unanswered} chưa trả lời",
         "thresholdMarker": "Ngưỡng {value}%"
       }
-    },
-    "settings": {
-      "title": "Cài đặt FAQ",
-      "unsaved": "Thay đổi chưa lưu",
-      "discard": "Bỏ qua",
-      "save": "Lưu cài đặt",
-      "saved": "Đã lưu cài đặt.",
-      "readOnly": "Bạn có thể xem các cài đặt này. Thay đổi cần quyền faq.settings.manage, thường thuộc về quản trị viên workspace.",
-      "engineOff": "Nền tảng đang tắt trả lời FAQ. Những gì bạn đặt ở đây sẽ có hiệu lực khi được bật lại.",
-      "conflict": "Có người khác đã lưu các cài đặt này. Hãy tải lại để xem phiên bản của họ, rồi thực hiện lại thay đổi của bạn.",
-      "reload": "Tải lại cài đặt",
-      "modelChanged": {
-        "title": "Xem lại độ nhạy của bạn",
-        "body": "Nền tảng đã đổi mô hình AI sau khi bạn điều chỉnh ngưỡng này. Điểm số đã thay đổi, nên hãy xem lại độ nhạy. Lưu nghĩa là xác nhận."
-      },
-      "enable": {
-        "title": "Trả lời FAQ",
-        "on": "Bật",
-        "off": "Tắt",
-        "label": "Trả lời khách hàng bằng FAQ của luồng này",
-        "onBody": "Khi luồng này đang hoạt động, tin nhắn của khách hàng mà không trình kích hoạt từ khóa hay luồng đang chạy nào xử lý sẽ được so sánh với FAQ của luồng này. Bot trả lời bằng câu trả lời tốt nhất, hoặc chuyển khách hàng đến bước mà FAQ chỉ định.",
-        "offBody": "FAQ của luồng này không trả lời khách hàng. Bạn vẫn có thể viết và thử chúng."
-      },
-      "sens": {
-        "title": "Độ nhạy",
-        "hint": "Tin nhắn cần khớp đến mức nào. Điểm số thuộc về mô hình {model}.",
-        "label": "Trả lời khi mức khớp ít nhất là",
-        "presets": "Mức độ nhạy có sẵn",
-        "preset": {
-          "strict": "Nghiêm ngặt",
-          "balanced": "Cân bằng",
-          "forgiving": "Linh hoạt"
-        },
-        "looser": "Trả lời nhiều hơn",
-        "stricter": "Trả lời ít hơn",
-        "recommendedMark": "khuyến nghị {value}%",
-        "explain": "Ở mức {value}%, tin nhắn chỉ được trả lời khi kết quả khớp tốt nhất đạt {value}% trở lên. Cao hơn nghĩa là ít câu trả lời hơn nhưng an toàn hơn; thấp hơn nghĩa là nhiều câu trả lời hơn và khả năng sai cao hơn.",
-        "useRecommended": "Dùng giá trị khuyến nghị ({value}%)",
-        "modelScale": "Điểm số chỉ so sánh được trong cùng một mô hình. Nếu nền tảng đổi mô hình ({model}), hãy xem lại con số này."
-      },
-      "margin": {
-        "title": "Chống nhập nhằng",
-        "hint": "Ngăn bot đoán giữa hai FAQ có điểm gần như nhau.",
-        "label": "Mức chênh tối thiểu so với hạng hai",
-        "off": "Tắt",
-        "explain": "Khi FAQ tốt nhất hơn hạng hai ít hơn mức này, bot sẽ im lặng và ghi tin nhắn là chưa trả lời. Hãy để tắt nếu các FAQ của bạn ít trùng nhau."
-      },
-      "log": {
-        "title": "Tin nhắn khách hàng trong nhật ký",
-        "label": "Giữ tin nhắn khách hàng trong nhật ký khớp",
-        "onBody": "Nội dung mỗi tin nhắn được giữ 90 ngày để bạn biết vì sao tin nhắn được hoặc không được trả lời và rút kinh nghiệm. Sau đó nội dung sẽ bị xóa.",
-        "offBody": "Chỉ giữ điểm số và kết quả, không bao giờ giữ nội dung. Bạn vẫn xem được bot trả lời thường xuyên đến đâu, nhưng không thể học từ các tin nhắn chưa trả lời."
-      },
-      "facts": {
-        "title": "Mô hình và giới hạn",
-        "model": "Mô hình embedding",
-        "faqs": "FAQ",
-        "variations": "Cách diễn đạt đang dùng",
-        "perFaq": "Số cách diễn đạt tối đa mỗi FAQ",
-        "of": "{used} / {max}"
-      },
-      "how": {
-        "title": "Cách khớp hoạt động",
-        "exact": "Chính xác: tin nhắn giống một cách diễn đạt đã lưu, không phân biệt hoa thường và khoảng trắng.",
-        "semantic": "Ý nghĩa: tin nhắn được so sánh theo ý nghĩa với mọi cách diễn đạt đang hoạt động, nên từ ngữ khác nhau vẫn có thể khớp.",
-        "trigram": "Dự phòng theo chính tả: nếu nhà cung cấp AI không khả dụng, các chữ cái sẽ được so sánh, chỉ bắt được lỗi gõ.",
-        "threshold": "Điểm tốt nhất được so với độ nhạy. Cao hơn thì FAQ trả lời; thấp hơn thì tin nhắn được liệt kê trong mục Chưa trả lời.",
-        "verify": "Kiểm tra lại (tùy chọn): kết quả khớp chỉ vừa đạt độ nhạy có thể được một mô hình chat nhỏ kiểm tra lại, và mô hình này chỉ có thể giữ lại câu trả lời."
-      },
-      "who": "Thay đổi các cài đặt này cần quyền faq.settings.manage.",
-      "leave": {
-        "title": "Rời đi mà không lưu?",
-        "body": "Các thay đổi với cài đặt này chưa được lưu.",
-        "leave": "Rời đi",
-        "stay": "Ở lại"
-      },
-      "verify": {
-        "title": "Kiểm tra lại các kết quả sát ngưỡng",
-        "hint": "Một mô hình chat nhỏ kiểm tra lại các kết quả khớp chỉ vừa đạt mức cần đạt.",
-        "unavailable": "Nền tảng đã tắt tính năng kiểm tra lại, nên dù bạn bật ở đây thì nó vẫn không chạy. Hãy liên hệ quản trị viên nền tảng.",
-        "label": "Kiểm tra lại các kết quả sát ngưỡng",
-        "on": "Bật",
-        "off": "Tắt",
-        "onBody": "Khi một kết quả khớp chỉ vừa vượt mức cần đạt, một mô hình chat nhỏ sẽ đọc tin nhắn của khách hàng và FAQ rồi cho biết câu trả lời có phù hợp không. Mô hình chỉ có thể trả lời \"không\": nó không bao giờ khiến một câu trả lời được gửi đi.",
-        "offBody": "Mọi kết quả khớp đạt mức cần đạt đều được trả lời mà không kiểm tra lại.",
-        "bandLabel": "Thế nào là sát ngưỡng",
-        "bandValue": "+{value}%",
-        "explainOn": "Các kết quả khớp có điểm từ {from}% đến {to}% sẽ được {model} kiểm tra. Nếu kết quả là \"không\", sẽ không gửi câu trả lời và tin nhắn sẽ xuất hiện trong mục Chưa trả lời.",
-        "explainOff": "Mọi kết quả khớp có điểm từ {threshold}% trở lên đều được trả lời. Hãy bật tính năng kiểm tra lại để các kết quả sát ngưỡng nhất được kiểm tra thêm.",
-        "cost": "Mỗi lần kiểm tra sẽ gửi tin nhắn của khách hàng và câu hỏi của FAQ tới mô hình: vài trăm token, và làm chậm một câu trả lời sát ngưỡng khoảng một giây. Các kết quả nằm ngoài khoảng này không bao giờ bị kiểm tra. Nếu việc kiểm tra thất bại, không khả dụng hoặc đã đạt giới hạn theo giờ, kết quả khớp vẫn được giữ như khi không có kiểm tra."
-      },
-      "subtitle": "Bật trả lời bằng FAQ cho {flow} và điều chỉnh mức độ khớp cần có của một tin nhắn."
     },
     "flowNode": {
       "start": "Điểm khởi đầu của luồng",

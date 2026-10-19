@@ -12,6 +12,7 @@ import {
 } from './_shims/tokens';
 import { accountSummary, applyVarMap, conciergeIntent, isPositiveRating } from './event-rules';
 import { CheckoutLinkService } from './checkout-link.service';
+import { CommerceConsentService } from './commerce-consent.service';
 import { EventMessageService } from './event-message.service';
 import { EventsRepository } from './events.repository';
 import { MirrorRepository } from './mirror.repository';
@@ -45,6 +46,7 @@ export class ConciergeService {
     private readonly mirror: MirrorRepository,
     private readonly checkout: CheckoutLinkService,
     private readonly message: EventMessageService,
+    private readonly consent: CommerceConsentService,
     @Inject(ECOM_TEMPLATES) private readonly templates: EcomTemplates,
     @Inject(COMMERCE_SENDER) private readonly sender: CommerceSender,
     @Inject(WOOCOMMERCE) private readonly woo: WooFactory,
@@ -265,11 +267,27 @@ export class ConciergeService {
       { vars: { name: 'there', store_name: storeName }, positional: ['there', storeName, ''] },
       cfg.varMap,
     );
+    // The reward is a promotion: a MARKETING template is cleared by the ConsentGate first, and a refusal is logged `skipped` with the
+    // gate's reason, never sent (BL-141). The customer wrote to us, but a reward offer is not a reply to what they asked.
+    const verdict = await this.consent.clearCustomer(orgId, template.category, phone);
+    if (!verdict.ok) {
+      await this.db.txAs({ orgId }, (tx) =>
+        this.events.log(tx, orgId, 'woocommerce', store.id, {
+          eventType: 'review/reward',
+          status: 'skipped',
+          recipient: phone,
+          payload: { rating: text },
+          error: verdict.note,
+        }),
+      );
+      return true;
+    }
     try {
       const out = await this.sender.send(orgId, {
         to: phone,
         template,
         ctx,
+        consent: verdict.clearance,
         reference: `ecom-reward-${store.id}-${phone}`,
         senderKey:
           typeof (store.metadata as { senderKey?: unknown } | null)?.senderKey === 'string'

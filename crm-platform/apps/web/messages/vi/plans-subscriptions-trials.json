@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Lượt gửi biểu mẫu mỗi tháng",
       "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI mỗi tháng",
       "sms_monthly": "SMS mỗi tháng",
-      "email_mailboxes": "Hộp thư email"
+      "email_mailboxes": "Hộp thư email",
+      "email_monthly": "Email mỗi tháng",
+      "storage_gb": "Dung lượng lưu trữ (GB)"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -74,13 +76,16 @@
       "storefront_builder": "Trình tạo cửa hàng",
       "invoicing": "Lập hóa đơn",
       "forms_and_links": "Biểu mẫu và liên kết",
-      "extra_channels": "Telegram, Facebook và Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber và WeChat",
       "form_builder": "Biểu mẫu",
       "waba_groups": "Nhóm WhatsApp",
       "sms": "Kênh SMS",
       "help_agent": "Trợ lý trợ giúp",
       "email_channel": "Kênh email (Gmail)",
-      "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)"
+      "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
+      "record_assignment": "Quy tắc phân công bản ghi"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Lượt gửi biểu mẫu được chấp nhận trong tháng dương lịch, không tính thư rác. Khi vượt hạn mức, lượt gửi vẫn được lưu để xem xét, không bao giờ bị bỏ. 0 = không giới hạn.",
       "ai_form_generations_monthly": "Lượt tạo bằng trình dựng biểu mẫu AI trong tháng dương lịch, kể cả lần thử sửa lại. 0 = không giới hạn.",
       "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
-      "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn."
+      "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
+      "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
+      "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",
@@ -561,7 +568,9 @@
       "continueFree": "Tiếp tục miễn phí",
       "choose": "Chọn {name}",
       "back": "Quay lại",
-      "compare": "So sánh tất cả gói"
+      "compare": "So sánh tất cả gói",
+      "appHint": "{feature} cũng được bán dưới dạng ứng dụng trong Chợ ứng dụng.",
+      "appLink": "Xem ứng dụng"
     }
   }
 }

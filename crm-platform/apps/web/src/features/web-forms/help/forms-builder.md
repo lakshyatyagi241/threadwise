@@ -64,15 +64,26 @@ Changing a form needs permission to update forms. Without it every control is re
 - **Someone else changed this form.** A save is refused when the form was changed elsewhere after you opened it. Reload and make your change again.
 - **The CRM property list is empty.** It could not be loaded. You can still add plain fields.
 
-## WhatsApp opt-in wording
+## Consent wording and channels
 
-If the form will lead to WhatsApp messages, switch on **Marketing opt-in** in the consent settings and press **Use the WhatsApp opt-in wording**. It fills the consent text with a ready sentence that says the visitor agrees to updates and offers on WhatsApp and can reply STOP at any time. You can edit it. The wording and its version are stored with every submission as proof, and replying STOP later opts the contact out.
+The consent box can link to your privacy policy and to your terms. If you stored them once under [Compliance center](help:compliance-center), a button under each field fills them in.
+
+Under **Channels this consent covers** tick the channels you will use: WhatsApp, SMS, email. The consent text is written for you from your choice (for example "I agree to receive updates and offers on WhatsApp and email. I can reply STOP at any time to unsubscribe."). You can edit it; once you do, ticking a channel no longer rewrites it, and a button offers the generated sentence again. The wording, its version and the channels are stored with every submission as proof. Changing the channels of a published form starts a new wording version. A channel the form has no field for (no phone number or no email) is flagged: nobody can be subscribed on it from that form.
 
 ## What the consent line records
 
-- **Marketing opt-in on**: a ticked box records marketing consent on WhatsApp for a phone number and on email for an address.
-- **Marketing opt-in off**: the line is not marketing. A ticked box is recorded as the person's agreement to be contacted about their request (service messages only), with this exact wording and its version. It never subscribes anyone to marketing.
-- **The wording covers SMS**: turn this on only if your text tells people they may be contacted by SMS. When the form collects a phone number, SMS is then recorded together with the other channels.
+- **Marketing opt-in on**: a ticked box records marketing consent only on the channels you ticked, and only where the visitor gave a phone number (WhatsApp, SMS) or an email address (email).
+- **Marketing opt-in off**: the line is not marketing. A ticked box is recorded as the person's agreement to be contacted about their request (service messages only) on the ticked channels, with this exact wording and its version. It never subscribes anyone to marketing.
 - **Unticked**: if the box is optional and the visitor leaves it empty, nothing is recorded about consent. The submission still keeps the wording that was shown.
 
 Someone who already stopped a channel is not turned back on by a new submission.
+
+## Age check
+
+Two field kinds, **Date of birth** and **Age**, save the answer on the contact (a date of birth as its date of birth). Add one only where you need it. Under **Settings**, **Age check** judges the answer before anything is saved. It is off by default.
+
+1. Choose how to ask: a box "I confirm I am at least N years old" (nothing about the age is kept) or a date of birth field.
+2. Leave the minimum age empty to use your workspace's age from the [Compliance center](help:compliance-center) (13, 16 or 18 by the laws you switched on), or set your own between 1 and 21.
+3. Choose what happens when the answer is under the age: **Do not accept the submission**, with a neutral message, **Accept it, flag the contact as a minor, record no marketing consent**, or the same and **ask for a parent or guardian**, whose name and contact are kept with the submission.
+
+The form never tells the visitor which answer passes, so do not write the age in a field's help text. The question the check judges must be required. When the answer is under the age and the action is to accept, the consent line of that submission is stored as shown but no marketing agreement is recorded. Nothing is pre-ticked.

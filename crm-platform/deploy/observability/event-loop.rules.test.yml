@@ -1,0 +1,497 @@
+# Unit tests for event-loop.rules.yml. Run with promtool (the image the repo already uses elsewhere has it):
+#
+#   docker run --rm -v "<repo>/crm-platform/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 \
+#     test rules /rules/event-loop.rules.test.yml
+#
+# Each critical alert has a case where it must fire and a near-miss where it must not: the standard says a busy loop is not a
+# blocked loop, and that paging needs user impact as well as delay. Synthetic series only; nothing here says how a real process
+# behaves.
+rule_files:
+  - event-loop.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  # ---- API: sustained delay AND slow requests pages --------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="1"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="2.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: [] # degraded for under the 5 m window: pending, not firing
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'API event loop blocked and requests are waiting on a:1'
+              description: 'Sustained loop delay with either the loop delay p95 over 250 ms (requests queue behind it) or request p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- API: a real loop stall pages even though the request histogram looks healthy ------------------------------------
+  # Measured against a real API process (scrape-demo.mjs --stall): loop delay p95 0.6 s while the request histogram read 5 ms,
+  # because a request that queued behind the blocked loop is only timed from when its handler runs.
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.6x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'API event loop blocked and requests are waiting on a:1'
+              description: 'Sustained loop delay with either the loop delay p95 over 250 ms (requests queue behind it) or request p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- API: moderate delay (p95 200 ms) with fast requests: a warning, not a page ---------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.2x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: []
+
+  # ---- API: delay without impact warns but does not page ---------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: EventLoopDelayP95Warning
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Event-loop p95 above 20 ms for 5 min on api a:1'
+              description: 'Scheduling delay p95 80ms. Check the blocked-loop log lines for the slowest routes of the window.'
+
+  # ---- a busy but responsive loop warns on utilization only ------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_utilization_ratio{service="api",instance="a:1"}'
+        values: '0.95x15'
+      - series: 'crm_event_loop_delay_p95_seconds{service="api",instance="a:1"}'
+        values: '0.012x15'
+      - series: 'crm_event_loop_delay_p99_seconds{service="api",instance="a:1"}'
+        values: '0.02x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopUtilizationHigh
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Event-loop utilization above 85% for 5 min on api a:1'
+              description: 'High utilization with low delay is a busy but responsive loop: capacity headroom, not a defect. It pages only together with delay (EventLoopBlockingWithImpact).'
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: EventLoopDelayP95Warning
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: EventLoopDelayP99Warning
+        exp_alerts: []
+
+  # ---- worker: delay AND queue wait pages ------------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p99_seconds{service="worker",instance="w:1"}'
+        values: '0.2x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="15"}'
+        values: '0x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="60"}'
+        values: '0x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="300"}'
+        values: '0+10x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="+Inf"}'
+        values: '0+10x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WorkerEventLoopBlockingWithQueueImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: worker
+              instance: 'w:1'
+            exp_annotations:
+              summary: 'Worker event loop blocked and job wait p95 over 30 s'
+
+  # ---- worker: delay with a fast queue does not page -------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p99_seconds{service="worker",instance="w:1"}'
+        values: '0.2x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="0.05"}'
+        values: '0+10x15'
+      - series: 'crm_queue_job_wait_seconds_bucket{service="worker",instance="w:1",queue="waba-ingest",le="+Inf"}'
+        values: '0+10x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WorkerEventLoopBlockingWithQueueImpact
+        exp_alerts: []
+
+  # ---- heap: warning at 75 %, critical at 90 %, nothing when comfortable ----------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_process_heap_used_bytes{service="api",instance="a:1"}'
+        values: '950000000x20'
+      - series: 'crm_process_heap_limit_bytes{service="api",instance="a:1"}'
+        values: '1000000000x20'
+      - series: 'crm_process_heap_used_bytes{service="worker",instance="w:1"}'
+        values: '500000000x20'
+      - series: 'crm_process_heap_limit_bytes{service="worker",instance="w:1"}'
+        values: '1000000000x20'
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: HeapNearOom
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Heap above 90% of the limit on api a:1: OOM risk'
+      - eval_time: 15m
+        alertname: ProcessHeapNearLimit
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Heap above 75% of the limit on api a:1'
+
+  # ---- GC pauses and cgroup throttling -----------------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_gc_pause_max_seconds{service="api",instance="a:1"}'
+        values: '0.2x15'
+      - series: 'crm_container_cpu_throttled_seconds_total{service="api",instance="a:1"}'
+        values: '0+12x15' # 12 s of throttling per minute = 0.2 s per second
+      - series: 'crm_container_cpu_throttled_seconds_total{service="worker",instance="w:1"}'
+        values: '0+0.3x15' # 5 ms per second: below the threshold
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: GcPauseHigh
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'GC pauses above 100 ms in the last 5 min on api a:1'
+      - eval_time: 12m
+        alertname: ContainerCpuThrottled
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'cgroup is throttling api a:1 (over 100 ms of throttle per second)'
+
+  # ---- the monitor itself: a frozen heartbeat pages, a live one does not ------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_runtime_last_report_timestamp_seconds{service="worker",instance="w:1"}'
+        values: '0+60x5 300x20' # the window stops completing after 5 minutes but the process is still scraped
+      - series: 'crm_runtime_last_report_timestamp_seconds{service="api",instance="a:1"}'
+        values: '0+60x25'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: RuntimeMetricsStale
+        exp_alerts: [] # stale for under the 2 m hold
+      - eval_time: 12m
+        alertname: RuntimeMetricsStale
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: worker
+              instance: 'w:1'
+            exp_annotations:
+              summary: 'worker w:1 stopped reporting runtime metrics'
+              description: 'The monitor window stopped completing while the process is still being scraped. A process that is gone does not look like this (its series vanish and RuntimeMetricsTargetDown fires), and a loop blocked long enough to fail the scrape shows as a failed scrape; check the process itself.'
+
+  # ---- scrape failing -----------------------------------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'up{job="crm-api",instance="a:1"}'
+        values: '1x5 0x15'
+      - series: 'up{job="crm-worker",instance="w:1"}'
+        values: '1x20'
+      - series: 'up{job="node-exporter",instance="host:9100"}'
+        values: '0x20' # not ours: must not page
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: RuntimeMetricsTargetDown
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              job: crm-api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Metrics scrape of crm-api a:1 failing'
+
+  # ---- web: sustained loop delay AND slow pages pages (EL-B20) ---------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="2.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: [] # degraded for under the 5 m window
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: web
+              instance: 'w:1'
+            exp_annotations:
+              summary: 'Web server event loop blocked and pages are waiting on w:1'
+              description: 'Sustained loop delay in the Next.js server with either the loop delay p95 over 250 ms or page p95 over 500 ms. Capture a CPU profile (runbook, section Capture evidence) before restarting.'
+
+  # ---- web: a busy loop with fast pages does not page ------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="0.05"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="web",instance="w:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: []
+
+  # ---- web: the API's request histogram does not trigger the web rule, and the reverse -----------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_p95_seconds{service="web",instance="w:1"}'
+        values: '0.08x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="2.5"}'
+        values: '0+100x15'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",instance="a:1",le="+Inf"}'
+        values: '0+100x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WebEventLoopBlockingWithImpact
+        exp_alerts: [] # slow API requests are not slow pages
+      - eval_time: 12m
+        alertname: EventLoopBlockingWithImpact
+        exp_alerts: [] # the web loop is not the API's
+
+  # ---- the web server's metrics target is watched the same way (EL-B07) ------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'up{job="crm-web",instance="w:9464"}'
+        values: '1x5 0x15'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: RuntimeMetricsTargetDown
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              job: crm-web
+              instance: 'w:9464'
+            exp_annotations:
+              summary: 'Metrics scrape of crm-web w:9464 failing'
+
+  # ---- a long stall in the web server pages like one in the API: the rule is not tied to a service (EL-B07) -------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_max_seconds{service="web",instance="web:1"}'
+        values: '0.02 0.02 12 0.02 0.02 0.02 0.02 0.02'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: EventLoopLongStallCritical
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: web
+              instance: 'web:1'
+            exp_annotations:
+              summary: 'Event loop stalled for 12s on web web:1'
+              description: 'A single stall over 10 s: webhook acknowledgements and ingress timeouts were missed. Capture a CPU profile if it recurs (runbook, section Capture evidence).'
+
+  # ---- the probe's own metrics target is watched the same way -------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'up{job="crm-probe",instance="p:9464"}'
+        values: '1x5 0x15'
+    alert_rule_test:
+      - eval_time: 10m
+        alertname: RuntimeMetricsTargetDown
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              job: crm-probe
+              instance: 'p:9464'
+            exp_annotations:
+              summary: 'Metrics scrape of crm-probe p:9464 failing'
+
+  # ---- a single long stall pages without a hold (EL-B13): 3 s is a warning, 12 s is critical ------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_max_seconds{service="api",instance="a:1"}'
+        values: '0.02x5 3 0.02x10'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: EventLoopLongStallWarning
+        exp_alerts:
+          - exp_labels:
+              severity: warning
+              service: api
+              instance: 'a:1'
+            exp_annotations:
+              summary: 'Event loop stalled for 3s on api a:1'
+              description: 'One reporting window saw a single stall over 2 s: every request or job in that process waited at least that long. The blocked-loop log line of that window names the slowest routes.'
+      - eval_time: 7m
+        alertname: EventLoopLongStallCritical
+        exp_alerts: [] # 3 s is under the 10 s line
+      - eval_time: 12m
+        alertname: EventLoopLongStallWarning
+        exp_alerts: [] # the stall has left the 5 m window: resolved
+
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_max_seconds{service="worker",instance="w:1"}'
+        values: '0.02x5 12 0.02x10'
+    alert_rule_test:
+      - eval_time: 7m
+        alertname: EventLoopLongStallCritical
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: worker
+              instance: 'w:1'
+            exp_annotations:
+              summary: 'Event loop stalled for 12s on worker w:1'
+              description: 'A single stall over 10 s: webhook acknowledgements and ingress timeouts were missed. Capture a CPU profile if it recurs (runbook, section Capture evidence).'
+
+  - interval: 1m
+    input_series:
+      - series: 'crm_event_loop_delay_max_seconds{service="api",instance="a:1"}'
+        values: '0.1x15' # busy-ish but never stalled
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: EventLoopLongStallWarning
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: EventLoopLongStallCritical
+        exp_alerts: []
+
+  # ---- caller-side latency from the probe (EL-B12) ---------------------------------------------------------------------------
+  - interval: 1m
+    input_series:
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="0.5"}'
+        values: '0x15'
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="1"}'
+        values: '0x15'
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="2.5"}'
+        values: '0+10x15'
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="+Inf"}'
+        values: '0+10x15'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ApiCallerLatencyHigh
+        exp_alerts: [] # slow for under the 5 m hold
+      - eval_time: 12m
+        alertname: ApiCallerLatencyHigh
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              target: health
+            exp_annotations:
+              summary: 'Callers wait over 1 s at p95 for the health probe'
+              description: 'Measured from outside the API process. With loop delay also high this is a blocked loop; with loop delay low it is a slow dependency or the network.'
+
+  - interval: 1m
+    input_series:
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="0.05"}'
+        values: '0+10x15'
+      - series: 'crm_probe_http_duration_seconds_bucket{service="probe",instance="p:1",target="health",result="ok",le="+Inf"}'
+        values: '0+10x15'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: ApiCallerLatencyHigh
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'crm_probe_up{service="probe",instance="p:1",target="ready"}'
+        values: '1x3 0x15'
+      - series: 'crm_probe_up{service="probe",instance="p:1",target="health"}'
+        values: '1x18'
+    alert_rule_test:
+      - eval_time: 4m
+        alertname: ApiProbeFailing
+        exp_alerts: [] # failing for under the 3 m hold
+      - eval_time: 10m
+        alertname: ApiProbeFailing
+        exp_alerts:
+          - exp_labels:
+              severity: critical
+              service: probe
+              instance: 'p:1'
+              target: ready
+            exp_annotations:
+              summary: 'The ready probe has failed for 3 minutes: callers get no answer'
+              description: 'The probe could not get a 2xx/3xx answer. If the metrics scrape of the API also fails the process is down or blocked; if only /ready fails a dependency is down.'

@@ -85,6 +85,7 @@ const LOOK: Record<NotificationPrefType, Look> = {
   new_message: look('chat', 'info', 'conversation'),
   chat_waiting: look('waiting', 'info', 'conversation'),
   conversation_assigned: look('assign', 'info', 'conversation'),
+  snooze_wake: look('waiting', 'info', 'conversation'),
   mention: look('mention', 'info', 'conversation'),
   task_assigned: look('task', 'info'),
   task_due: look('task', 'info'),
@@ -114,11 +115,15 @@ const LOOK: Record<NotificationPrefType, Look> = {
   sla_breached: look('waiting', 'danger', 'conversation'),
   member_leave_started: look('assign', 'info'),
   assignment_blocked_by_leave: look('waiting', 'danger', 'conversation'),
+  appointment_calendar_drift: look('waiting', 'danger'),
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),
   device_group_join_request: look('group', 'info', 'device_group'),
   device_group_removed: look('group', 'danger', 'device_group'),
+  marketplace_renewal_due: look('wallet', 'info'),
+  marketplace_payment_failed: look('wallet', 'danger'),
+  marketplace_subscription_ended: look('wallet', 'danger'),
   test: look('generic', 'info'),
 };
 

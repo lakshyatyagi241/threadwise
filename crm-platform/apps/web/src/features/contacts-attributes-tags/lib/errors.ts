@@ -27,6 +27,7 @@ export type ErrorKind =
   | 'unavailable'
   | 'rateLimited'
   | 'planLimit'
+  | 'legalHold'
   | 'unexpected';
 
 export function errorKind(error: unknown): ErrorKind {
@@ -79,6 +80,9 @@ export function errorKind(error: unknown): ErrorKind {
       return 'rateLimited';
     case ERROR_CODES.PLAN_LIMIT_REACHED:
       return 'planLimit';
+    // The record is under a legal hold (BL-295): the text is neutral and never says why.
+    case ERROR_CODES.LEGAL_HOLD_ACTIVE:
+      return 'legalHold';
   }
   // A route that is not there yet answers 404/501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';
@@ -89,8 +93,9 @@ export function errorKind(error: unknown): ErrorKind {
  * What a failed single-record delete means. A 404 on `DELETE /contacts/:id` is a record that is already gone (deleted in
  * another tab or by someone else), which is not "this action is not available yet": the list is stale, nothing else.
  */
-export function deleteFailure(error: unknown): 'gone' | 'forbidden' | 'failed' {
+export function deleteFailure(error: unknown): 'gone' | 'forbidden' | 'held' | 'failed' {
   if (error instanceof ApiError && error.status === 404) return 'gone';
+  if (errorKind(error) === 'legalHold') return 'held';
   return errorKind(error) === 'forbidden' ? 'forbidden' : 'failed';
 }
 

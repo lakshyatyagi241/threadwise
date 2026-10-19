@@ -209,7 +209,16 @@
         "customMessage": "Mensaje personalizado",
         "flowTitle": "Flujo",
         "variants": "Variante mostrada",
-        "variant": "Variante {v}"
+        "variant": "Variante {v}",
+        "typeEmail": "Correo electrónico",
+        "emailTitle": "Vista previa del correo",
+        "emailFrom": "De",
+        "emailSubject": "Asunto",
+        "emailNoSender": "Elige un remitente",
+        "emailNoSubject": "(sin asunto)",
+        "emailEmpty": "Escribe el cuerpo del mensaje y aparecerá aquí.",
+        "emailUnsubscribe": "Se añade un enlace para darse de baja al final de cada correo.",
+        "emailNote": "Así verá cada destinatario tu campaña en su bandeja de entrada."
       },
       "previewEmpty": "Vista previa de tu mensaje…",
       "previewTemplate": "Plantilla",
@@ -228,7 +237,8 @@
         "throttle": "El intervalo más largo debe ser al menos igual al más corto.",
         "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
         "media": "Introduce una dirección completa que empiece por http:// o https://.",
-        "sender": "Elige un remitente."
+        "sender": "Elige un remitente.",
+        "subject": "Acorta el asunto a 150 caracteres o menos."
       },
       "submit": {
         "save": "Guardar cambios",
@@ -293,7 +303,14 @@
         },
         "csvRows": "{count} números en el archivo",
         "numbersPlaceholder": "Un número por línea: incluye el código de país, sin el signo +",
-        "numbersCount": "{count} números"
+        "numbersCount": "{count} números",
+        "emailNote": "Los correos van a la dirección de cada contacto. Se omiten los contactos sin dirección de correo, las direcciones duplicadas y los contactos que se dieron de baja.",
+        "emailSkipped": "{count, plural, one {# destinatario elegido no tiene dirección de correo y se omitirá.} other {# destinatarios elegidos no tienen dirección de correo y se omitirán.}}",
+        "emailNoAddress": "Los números escritos y las filas del CSV no tienen dirección de correo, así que se omiten. Elige contactos, grupos, etiquetas o segmentos.",
+        "previousTitle": "Envíos anteriores",
+        "previousHint": "Añade a las personas a las que llegaron difusiones y campañas anteriores, opcionalmente solo quienes lo leyeron, respondieron o hicieron clic.",
+        "previousEstimate": "{count, plural, one {Hasta # persona de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).} many {Hasta # de personas de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).} other {Hasta # personas de los envíos anteriores (es una estimación: quien esté en dos envíos se cuenta dos veces).}}",
+        "previousEditHint": "Tu elección anterior de envíos previos no se muestra al editar: esta campaña ya guarda sus destinatarios como contactos. Vuelve a elegir para añadir más personas."
       },
       "message": {
         "title": "Mensaje",
@@ -526,7 +543,13 @@
           "baileys": "Aún no hay plantillas de la API no oficial. Crea una en la página de plantillas."
         },
         "templateIntroApproved": "Elige una plantilla de Meta aprobada. Los valores de las variables de cada contacto se completan al enviar con sus atributos.",
-        "templateApproved": "Plantilla aprobada"
+        "templateApproved": "Plantilla aprobada",
+        "subject": "Asunto",
+        "subjectNote": "Asunto, máximo 150",
+        "subjectPlaceholder": "p. ej. Tu oferta de mayo ya está aquí",
+        "subjectHint": "Se usa como asunto del correo. Déjalo en blanco para usar el nombre de la campaña.",
+        "emailNote": "Esta campaña se envía como correo electrónico desde el buzón que elegiste. Se añade un enlace para darse de baja al final de cada correo.",
+        "emailBodyHint": "Texto sin formato. Usa '{{name}}' o '{{first_name}}' para personalizar. Se omiten los contactos sin dirección de correo."
       },
       "review": {
         "title": "Revisar",
@@ -568,8 +591,15 @@
           "throttle": "La pausa más larga debe ser igual o mayor que la más corta.",
           "expiry": "La fecha de fin debe ser posterior a la de envío; de lo contrario, la campaña caducaría antes de enviarse.",
           "media": "Introduce una dirección completa que empiece por http:// o https://.",
-          "sender": "Elige un remitente."
-        }
+          "sender": "Elige un remitente.",
+          "subject": "Acorta el asunto a 150 caracteres o menos."
+        },
+        "from": "De",
+        "subject": "Asunto",
+        "subjectFallback": "El nombre de la campaña",
+        "skippedNoEmail": "Omitidos (sin dirección de correo)",
+        "estimateEmail": "Es una estimación: un contacto en dos grupos se cuenta dos veces. Los contactos sin dirección de correo que estén en grupos, etiquetas y segmentos se omiten al ejecutar la campaña.",
+        "previousSends": "Envíos anteriores (hasta)"
       },
       "ai": {
         "open": "Crear con IA",
@@ -622,8 +652,43 @@
         "notes": "Notas adicionales",
         "notesNote": "opcional / máx. 2000",
         "notesPlaceholder": "Cualquier detalle: frases imprescindibles, lo que hay que evitar, pautas de la voz de la marca…",
-        "failed": "No se pudo generar la campaña. Inténtalo de nuevo.",
-        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar."
+        "applied": "Se completó el texto de la campaña. Revísalo antes de continuar.",
+        "pictureApplied": "La imagen se adjuntó a la campaña. Compruébala en la tarjeta Adjunto.",
+        "errors": {
+          "noKey": "No hay ningún proveedor de IA activado en este espacio de trabajo. Pide a un administrador que añada una clave.",
+          "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+          "providerFailed": "El proveedor de IA no respondió. Inténtalo de nuevo en un momento.",
+          "badJson": "No se pudo leer la respuesta del modelo. Inténtalo de nuevo o cambia el resumen.",
+          "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+          "forbidden": "No tienes permiso para crear campañas.",
+          "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+          "failed": "No se pudo generar la campaña. Inténtalo de nuevo."
+        },
+        "picture": {
+          "label": "Crear también una imagen",
+          "hint": "Genera una imagen a partir del mismo resumen y la adjunta a la campaña. Usa tu cuota de OpenAI.",
+          "needsOpenAi": "Las imágenes requieren una clave de OpenAI. Elige un modelo de OpenAI para activarlo.",
+          "noAttachment": "El número elegido envía solo texto, así que no hay dónde adjuntar una imagen.",
+          "size": "Formato de la imagen",
+          "sizes": {
+            "square": "Cuadrada",
+            "landscape": "Horizontal",
+            "portrait": "Vertical"
+          },
+          "textKept": "Se completó el texto de la campaña. Solo falta la imagen.",
+          "retry": "Reintentar la imagen",
+          "errors": {
+            "noKey": "Las imágenes requieren una clave de OpenAI y no hay ninguna activada en este espacio de trabajo.",
+            "limitReached": "Este espacio de trabajo ha agotado su cuota de IA del mes.",
+            "providerFailed": "El servicio de imágenes no respondió. Inténtalo de nuevo en un momento.",
+            "badJson": "El servicio de imágenes devolvió una respuesta inesperada. Inténtalo de nuevo.",
+            "imageRefused": "OpenAI se negó a generar esta imagen. Cambia el producto, la oferta o las notas e inténtalo de nuevo.",
+            "invalid": "Revisa el resumen: el nombre del negocio es obligatorio y algunos campos son demasiado largos.",
+            "forbidden": "No tienes permiso para crear campañas.",
+            "network": "No se pudo conectar con el servidor. Comprueba tu conexión e inténtalo de nuevo.",
+            "failed": "No se pudo crear la imagen. Inténtalo de nuevo."
+          }
+        }
       },
       "switch": {
         "title": "¿Usar el flujo guiado?",
@@ -804,7 +869,8 @@
         "clicked": "hizo clic",
         "showing": "Mostrando {shown} de {total}",
         "prev": "Página anterior",
-        "next": "Página siguiente"
+        "next": "Página siguiente",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "engagement": {
         "opened": "Abiertos",
@@ -972,7 +1038,8 @@
         "badge": "En vivo",
         "updated": "actualizado {time}",
         "queued": "{count} en espera de envío",
-        "processing": "{count} enviándose ahora"
+        "processing": "{count} enviándose ahora",
+        "held": "{count} en espera por las horas de silencio"
       },
       "statistics": {
         "loadFailed": "No se pudieron cargar las estadísticas.",
@@ -1101,7 +1168,13 @@
         "auto_end_in_past": "La fecha de finalización automática ya pasó.",
         "auto_end_before_send": "La fecha de finalización automática debe ser posterior a la hora de envío.",
         "auto_end_recurring": "Una campaña recurrente termina según su propia regla: borra la fecha de finalización automática.",
-        "pacing_range": "Revisa Smart Delivery: el retraso máximo es menor que el mínimo, o solo se ha definido una de las dos horas de envío."
+        "pacing_range": "Revisa Smart Delivery: el retraso máximo es menor que el mínimo, o solo se ha definido una de las dos horas de envío.",
+        "follow_up_template_required": "Elige la plantilla que envía cada seguimiento.",
+        "follow_up_flow_required": "Elige el flujo que inicia cada seguimiento.",
+        "follow_up_cloud_api_only": "Los seguimientos solo funcionan con un número de WhatsApp Cloud API. Elige uno en el paso 1 o quita los seguimientos.",
+        "sequence_not_recurring": "Las plantillas por turnos solo funcionan con una campaña recurrente. Elige una programación recurrente o quita las plantillas adicionales.",
+        "sequence_with_ab": "Las plantillas por turnos no se pueden combinar con una prueba A/B. Desactiva la prueba A/B o quita las plantillas adicionales.",
+        "sequence_template_required": "Elige una plantilla para cada paso del orden o quita los vacíos."
       },
       "template": {
         "previewOnline": "en línea",
@@ -1135,7 +1208,14 @@
         "senderLabel": "Enviar desde",
         "senderHint": "El número de WhatsApp desde el que se envía esta difusión.",
         "pickSender": "Elige un número",
-        "classicOption": "editor clásico"
+        "classicOption": "editor clásico",
+        "buildWithAi": "Crear con IA",
+        "aiNote": "Redacta una plantilla nueva con IA. La revisas en la página de la plantilla; después Meta la revisa antes de poder enviarla, así que vuelve y selecciónala cuando esté aprobada.",
+        "shareToggle": "Repartir este envío entre varios números",
+        "shareHint": "Marca los números desde los que enviar y asigna una parte a cada uno. La audiencia se reparte según esas partes y cada contacto recibe el mensaje desde un solo número. Una parte vacía o 0 cuenta como 1.",
+        "shareWeight": "Parte",
+        "shareWeightLabel": "Parte de {name}",
+        "shareKeepOne": "Al menos un número debe quedar marcado."
       },
       "audience": {
         "selectionTitle": "Elegidos en el Centro de contactos",
@@ -1184,7 +1264,8 @@
           "contacts": "Contactos",
           "groups": "Grupos",
           "segments": "Segmentos",
-          "csv": "Archivo CSV"
+          "csv": "Archivo CSV",
+          "previous": "Envíos anteriores"
         },
         "groupsHint": "Los grupos son tus listas de marketing. Se incluye a todos los de los grupos que marques.",
         "segmentsHint": "Los segmentos se llenan solos a partir de reglas. Se incluye a todos los de los segmentos que marques.",
@@ -1280,7 +1361,10 @@
         },
         "csvIssuesMore": "Hay {count} más en la descarga.",
         "csvConsentOn": "Confirmaste el consentimiento de estos números. Se registran como aceptados cuando se lanza la difusión.",
-        "csvConsentVersion": "Versión del aviso: {version}."
+        "csvConsentVersion": "Versión del aviso: {version}.",
+        "modePrevious": "Enviar a envíos anteriores",
+        "previousHint": "Vuelve a dirigirte a las personas a las que llegaron difusiones y campañas anteriores, opcionalmente solo quienes lo leyeron, no lo leyeron, respondieron o hicieron clic.",
+        "chipPrevious": "{count, plural, one {# envío anterior} many {# de envíos anteriores} other {# envíos anteriores}} ({outcome})"
       },
       "review": {
         "intro": "Revisa el coste, indica con qué se rellena cada variable de la plantilla y comprueba la difusión.",
@@ -1357,7 +1441,13 @@
         "sumCsv": "Archivo CSV {name}: {count, plural, one {# número válido} other {# números válidos}}",
         "estimatedCostFull": "Coste estimado (total)",
         "chargedPlan": "Se cobra ahora de tu monedero: {amount} (tu plan cubre {covered} de estos mensajes)",
-        "chargedWallet": "Se cobra de tu monedero: {amount}"
+        "chargedWallet": "Se cobra de tu monedero: {amount}",
+        "sumFollowUps": "Seguimientos",
+        "sumSequence": "Se envía por turnos",
+        "sumPrevious": "Envíos anteriores: {names} ({outcome})",
+        "sumSplit": "Reparto entre números",
+        "sumSplitCount": "{count, plural, one {# destinatario} other {# destinatarios}} ({percent}%)",
+        "sumSplitPercent": "{percent}% de la audiencia"
       },
       "test": {
         "title": "Enviar un mensaje de prueba de WhatsApp",
@@ -1393,9 +1483,11 @@
           "sent": "Enviado",
           "delivered": "Entregado",
           "read": "Leído",
-          "failed": "Fallido"
+          "failed": "Fallido",
+          "held": "En espera"
         },
-        "charged": "Cobrado {amount}"
+        "charged": "Cobrado {amount}",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "send": {
         "whenTitle": "Cuándo enviar",
@@ -1520,7 +1612,8 @@
           "sent": "Enviados",
           "delivered": "Entregados",
           "failed": "Fallidos",
-          "retries": "Reintentos"
+          "retries": "Reintentos",
+          "template": "Plantilla"
         },
         "retrySummary": "{pending} en espera, {recovered} recuperados, {exhausted} descartados",
         "openRun": "Abrir ejecución",
@@ -1562,7 +1655,27 @@
         "exportFailed": "No se pudo descargar la exportación.",
         "deleteTitle": "¿Eliminar esta difusión?",
         "deleteOne": "Elimina esta difusión y sus destinatarios. No se puede deshacer.",
-        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer."
+        "deleteSeries": "Elimina esta difusión recurrente y las ejecuciones que tenía planificadas. No se ha enviado nada, así que no se pierde historial. No se puede deshacer.",
+        "followUps": {
+          "title": "Seguimientos",
+          "step": "Seguimiento {step}",
+          "count": {
+            "waiting": "{count} en espera",
+            "sent": "{count} enviados",
+            "delivered": "{count} entregados",
+            "read": "{count} leídos",
+            "flowsStarted": "{count} flujos iniciados",
+            "skipped": "{count} omitidos",
+            "lapsed": "{count} caducados",
+            "failed": "{count} fallidos"
+          },
+          "hint": {
+            "skipped": "La condición no se cumplía cuando se comprobó, así que la secuencia terminó ahí.",
+            "lapsed": "El tiempo de vigilancia se agotó antes de que el contacto respondiera o leyera, así que la secuencia terminó ahí."
+          }
+        },
+        "templatesTitle": "Plantillas",
+        "templatesInTurn": "{count, plural, one {# plantilla por turnos} other {# plantillas por turnos}}"
       },
       "panel": {
         "title": "Creadas con Crear difusión",
@@ -1573,7 +1686,8 @@
           "recurring": "Recurrente"
         },
         "recipients": "{count, plural, one {# destinatario} other {# destinatarios}}",
-        "next": "Próxima ejecución {when}"
+        "next": "Próxima ejecución {when}",
+        "moreTemplates": "+{count} más"
       },
       "pickers": {
         "selectDate": "Seleccionar fecha",
@@ -1593,6 +1707,95 @@
         "body": "{number} ({engine}) se envía desde el editor clásico, que empieza de cero. Esta campaña se guarda como borrador y permanece en tu lista de Campañas, para que puedas retomarla.",
         "confirm": "Abrir el editor clásico",
         "cancel": "Quedarme aquí"
+      },
+      "followUps": {
+        "title": "Seguimientos",
+        "intro": "Envía otro mensaje o inicia un flujo según lo que haga el contacto después del mensaje de la campaña. Hasta 3 pasos seguidos.",
+        "cloudOnly": "Los seguimientos necesitan un número de WhatsApp Cloud API, porque dependen de los informes de lectura y respuesta de Meta. Elige uno en el paso 1.",
+        "add": "Añadir un seguimiento",
+        "count": "{used} de {max} seguimientos",
+        "limitReached": "Límite alcanzado: {max} seguimientos.",
+        "stepTitle": "Seguimiento {step}",
+        "measuredFromCampaign": "Se cuenta desde el mensaje de la campaña.",
+        "measuredFromStep": "Se cuenta desde el mensaje del seguimiento {step}.",
+        "remove": "Quitar el seguimiento {step}",
+        "removeShort": "Quitar",
+        "triggerLabel": "Cuando el contacto",
+        "trigger": {
+          "replied": "Responde",
+          "read": "Lee el mensaje",
+          "not_replied": "No ha respondido",
+          "not_read": "No ha leído el mensaje"
+        },
+        "triggerHelp": {
+          "replied": "Se activa en el momento en que responde, si ocurre dentro del tiempo que definas. Si no, la secuencia termina.",
+          "read": "Se activa en el momento en que lo lee, si ocurre dentro del tiempo que definas. Si no, la secuencia termina.",
+          "not_replied": "Espera el tiempo que definas y se activa si no ha respondido. Si respondió, la secuencia termina.",
+          "not_read": "Espera el tiempo que definas y se activa si no lo ha leído. Si lo leyó, la secuencia termina."
+        },
+        "watchLabel": "Vigilar hasta",
+        "waitLabel": "Esperar",
+        "unitLabel": "Unidad de tiempo",
+        "duration": {
+          "minutes": "{count, plural, one {# minuto} many {# minutos} other {# minutos}}",
+          "hours": "{count, plural, one {# hora} many {# horas} other {# horas}}",
+          "days": "{count, plural, one {# día} many {# días} other {# días}}"
+        },
+        "actionLabel": "Entonces",
+        "action": {
+          "template": "Enviar una plantilla",
+          "flow": "Iniciar un flujo"
+        },
+        "templateLabel": "Plantilla que se envía",
+        "flowLabel": "Flujo que se inicia",
+        "pickTemplate": "Elegir una plantilla",
+        "pickFlow": "Elegir un flujo",
+        "loading": "Cargando...",
+        "unavailable": "Ya no está disponible",
+        "noTemplates": "Aún no hay plantillas aprobadas.",
+        "createTemplate": "Crear una plantilla",
+        "noFlows": "Aún no hay flujos.",
+        "createFlow": "Crear un flujo",
+        "flowsError": "No se pudieron cargar los flujos. Inténtalo de nuevo más tarde.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Si responde en {wait}",
+          "read": "Si lo lee en {wait}",
+          "not_replied": "Si no ha respondido tras {wait}",
+          "not_read": "Si no lo ha leído tras {wait}"
+        },
+        "does": {
+          "template": "enviar {name}",
+          "flow": "iniciar el flujo {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minuto} many {minutos} other {minutos}}",
+          "hours": "{count, plural, one {hora} many {horas} other {horas}}",
+          "days": "{count, plural, one {día} many {días} other {días}}"
+        }
+      },
+      "sequence": {
+        "title": "Plantillas en orden",
+        "intro": "Cada ejecución envía la siguiente plantilla de esta lista. La ejecución 1 envía la primera, la 2 la segunda y, tras la última, la lista vuelve a empezar desde la primera.",
+        "notRecurring": "Solo una difusión recurrente envía plantillas por turnos. Elige una programación recurrente o quita estas plantillas.",
+        "withAb": "Las plantillas por turnos no se pueden usar con una prueba A/B, que ya envía dos plantillas. Desactiva la prueba A/B para usarlas.",
+        "templateLabel": "Plantilla {position}",
+        "firstMissing": "Aún sin elegir",
+        "firstHint": "La plantilla elegida para la campaña. Cámbiala en el paso de plantilla.",
+        "pick": "Elige una plantilla",
+        "loading": "Cargando...",
+        "unavailable": "Ya no está disponible",
+        "up": "Subir",
+        "down": "Bajar",
+        "moveUp": "Subir la plantilla {position}",
+        "moveDown": "Bajar la plantilla {position}",
+        "remove": "Quitar la plantilla {position}",
+        "removeShort": "Quitar",
+        "removeAll": "Quitar todas",
+        "add": "Añadir una plantilla",
+        "count": "{used} de {max} plantillas",
+        "limitReached": "Límite alcanzado: {max} plantillas.",
+        "variablesTitle": "Variables de la plantilla {position}: {name}"
       }
     },
     "history": {
@@ -1706,12 +1909,93 @@
         "title": "Los números personales están desactivados en este espacio de trabajo",
         "body": "{count, plural, one {Tu número personal (QR) no puede} other {Tus # números personales (QR) no pueden}} enviar campañas mientras esto esté desactivado. Un administrador de la plataforma puede activarlo para este espacio de trabajo, o puedes conectar un número oficial de WhatsApp Business.",
         "action": "Conectar un número oficial"
+      },
+      "email": {
+        "none": {
+          "title": "No hay ningún buzón conectado",
+          "body": "Conecta un buzón en la página de Correo para elegir desde dónde se envía esta campaña.",
+          "action": "Conectar un buzón"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# buzón está desconectado} other {# buzones están desconectados}}",
+          "body": "Vuelve a conectarlo en la página de Correo para enviar campañas desde él.",
+          "action": "Abrir la página de Correo"
+        },
+        "error": {
+          "title": "{count, plural, one {# buzón necesita reconectarse} other {# buzones necesitan reconectarse}}",
+          "body": "Falló su último inicio de sesión. Vuelve a conectarlo en la página de Correo y aparecerá aquí.",
+          "action": "Abrir la página de Correo"
+        }
       }
     },
     "create": {
       "loading": "Cargando tus números",
       "noAccessTitle": "No puedes crear campañas",
       "noAccess": "Pide permiso a un administrador del espacio de trabajo para crear campañas."
+    },
+    "previousSends": {
+      "title": "Envíos anteriores",
+      "empty": "Aún no hay difusiones ni campañas anteriores",
+      "outcomeLabel": "Quiénes de esos envíos",
+      "outcomes": {
+        "all": "Todos los destinatarios",
+        "delivered": "Entregado",
+        "read": "Leído",
+        "not_read": "No lo leyeron",
+        "replied": "Respondieron",
+        "not_replied": "No respondieron",
+        "clicked": "Hicieron clic en un enlace",
+        "failed": "Fallido"
+      },
+      "outcomeOff": "{name} (no disponible para difusiones)",
+      "outcomeHint": {
+        "all": "Todos los destinatarios: todas las personas a las que iba dirigido el mensaje. Se excluyen los contactos que se dieron de baja y las filas omitidas.",
+        "delivered": "Entregado: las personas a las que llegó.",
+        "read": "Leído: las personas que lo leyeron.",
+        "not_read": "No lo leyeron: las personas a las que se envió y que no lo han leído.",
+        "replied": "Respondieron: las personas que respondieron.",
+        "not_replied": "No respondieron: las personas a las que se envió y que no han respondido.",
+        "clicked": "Hicieron clic en un enlace: las personas que hicieron clic en un enlace con seguimiento.",
+        "failed": "Fallido: las personas a las que no se pudo entregar."
+      },
+      "broadcastNote": "Una difusión solo registra la entrega y la lectura, por lo que las respuestas y los clics no están disponibles mientras haya una seleccionada.",
+      "broadcastOff": "Una difusión no tiene respuestas ni clics. Elige otro resultado para marcarla.",
+      "search": "Buscar envíos anteriores",
+      "searchPlaceholder": "Buscar",
+      "listLabel": "Difusiones y campañas anteriores",
+      "noMatch": "Nada coincide con tu búsqueda.",
+      "chosen": "{count} de {max} elegidos",
+      "limit": "Puedes elegir hasta {max} envíos. Desmarca uno para elegir otro.",
+      "kind": {
+        "broadcast": "Difusión",
+        "campaign": "Campaña"
+      },
+      "wentOut": "Enviado el {date}",
+      "wentOutUnknown": "Fecha desconocida",
+      "recipients": "{count, plural, one {# destinatario} many {# de destinatarios} other {# destinatarios}}",
+      "notRecorded": "No se registra en una difusión",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# persona} many {# de personas} other {# personas}}",
+        "delivered": "{count, plural, one {# persona lo recibió} many {# de personas lo recibieron} other {# personas lo recibieron}}",
+        "read": "{count, plural, one {# persona lo leyó} many {# de personas lo leyeron} other {# personas lo leyeron}}",
+        "not_read": "{count, plural, one {# persona no lo leyó} many {# de personas no lo leyeron} other {# personas no lo leyeron}}",
+        "replied": "{count, plural, one {# persona respondió} many {# de personas respondieron} other {# personas respondieron}}",
+        "not_replied": "{count, plural, one {# persona no respondió} many {# de personas no respondieron} other {# personas no respondieron}}",
+        "clicked": "{count, plural, one {# persona hizo clic en un enlace} many {# de personas hicieron clic en un enlace} other {# personas hicieron clic en un enlace}}",
+        "failed": "{count, plural, one {# persona para la que falló} many {# de personas para las que falló} other {# personas para las que falló}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Enviado desde cada número",
+      "hint": "Este envío se repartió entre varios números. Cada fila es un número y los destinatarios que recibió.",
+      "cols": {
+        "number": "Número",
+        "recipients": "Destinatarios",
+        "sent": "Enviados",
+        "delivered": "Entregados",
+        "failed": "Fallidos"
+      },
+      "removed": "(un número que se eliminó)"
     }
   }
 }

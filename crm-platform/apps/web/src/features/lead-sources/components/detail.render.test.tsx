@@ -29,7 +29,6 @@ const LOCALES = ['en', 'ar'] as const;
 const READ = { 'leads.sources.read': 'all' } as const;
 const MANAGE = { ...READ, 'leads.sources.manage': 'all' } as const;
 const as = (permissions: Record<string, 'all'>) => ({ session: makeSession({ permissions }) });
-const env = { apiPublicUrl: 'https://api.acme.test' };
 
 const page = (data: ReturnType<typeof event>[]) => ({
   pages: [{ data, page: { nextCursor: null, hasMore: false, limit: 25 } }],
@@ -93,7 +92,7 @@ const withSource = (s = source({ needsAttention: 3 })) =>
 const detail = (opts: Parameters<typeof renderAccount>[1], id = ID(1)) =>
   renderAccount(
     <ToastProvider>
-      <SourceDetailPage id={id} hookEnv={env} />
+      <SourceDetailPage id={id} />
     </ToastProvider>,
     opts,
   );

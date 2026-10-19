@@ -552,13 +552,16 @@
             "storefront_builder": "Mağaza vitrini oluşturucu",
             "invoicing": "Faturalama",
             "forms_and_links": "Formlar ve bağlantılar",
-            "extra_channels": "Telegram, Facebook ve Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat",
             "form_builder": "Formlar",
             "waba_groups": "WhatsApp grupları",
             "sms": "SMS",
             "help_agent": "Yardım asistanı",
             "email_channel": "E-posta (Gmail) kanalı",
-            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)"
+            "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
+            "record_assignment": "Kayıt atama kuralları"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

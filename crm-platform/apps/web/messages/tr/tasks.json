@@ -100,7 +100,8 @@
       "views": {
         "list": "Liste",
         "board": "Son tarihe göre pano"
-      }
+      },
+      "linkCompany": "Bir şirket"
     },
     "table": {
       "scrollArea": "Görev tablosu",
@@ -126,7 +127,8 @@
       "open": "Aç",
       "edit": "Düzenle",
       "delete": "Sil",
-      "unassigned": "Atanmamış"
+      "unassigned": "Atanmamış",
+      "followUpBadge": "Takip"
     },
     "bulk": {
       "label": "Seçili görevler için işlemler",
@@ -204,7 +206,8 @@
         "notesTooLong": "Notlar çok uzun (en fazla 5000 karakter).",
         "dueInvalid": "Bu tarih geçerli değil.",
         "assigneeInvalid": "Bu kişi bu çalışma alanının etkin bir üyesi değil."
-      }
+      },
+      "company": "Şirket"
     },
     "drawer": {
       "loading": "Görev yükleniyor",
@@ -268,7 +271,8 @@
       "searching": "Aranıyor",
       "unavailable": "Arama şu anda kullanılamıyor.",
       "none": "Eşleşme yok.",
-      "unlink": "Bağlantıyı kaldır"
+      "unlink": "Bağlantıyı kaldır",
+      "searchCompany": "Şirket ara"
     },
     "errors": {
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip yeniden deneyin.",
@@ -323,7 +327,21 @@
       "loadMore": "Daha fazla yükle",
       "loadMoreDone": "Tamamlananları daha fazla yükle",
       "showDone": "Tamamlananları göster",
-      "hideDone": "Tamamlananları gizle"
+      "hideDone": "Tamamlananları gizle",
+      "gone": "Bu görevlerin ait olduğu kayıt artık kullanılamıyor."
+    },
+    "inline": {
+      "addTask": "Görev ekle",
+      "rowLabel": "Bir görev ekle",
+      "titleLabel": "Görev başlığı",
+      "titlePlaceholder": "Görev başlığı, ardından kaydetmek için Enter'a basın",
+      "due": "Son tarih ve saat",
+      "assignee": "Şuna ata",
+      "priority": "Öncelik (isteğe bağlı)",
+      "hint": "Enter kaydeder, Escape kapatır.",
+      "save": "Görev ekle",
+      "cancel": "İptal",
+      "failed": "Görev kaydedilemedi. Metniniz kutuda duruyor."
     }
   }
 }

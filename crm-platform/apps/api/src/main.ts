@@ -15,18 +15,23 @@ import {
 } from './modules/developer-rest-api-v1';
 import {
   corsIsClosedInProduction,
-  corsOriginFor,
+  httpMetricsMiddleware,
+  staffCorsOptions,
   initSentry,
   installBodyLimits,
   installProcessHandlers,
+  startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
+import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
 
 async function bootstrap(): Promise<void> {
   // First, so a failure while the application is still being built is reported too (TW-INFRA-018).
   installProcessHandlers('api');
   initSentry('api');
+  // Event-loop delay, utilization, GC and request latency for this process (docs/performance/event-loop). Before Nest builds, so boot is measured too.
+  const runtimeMonitor = startRuntimeMonitor('api');
 
   const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     bufferLogs: true,
@@ -49,6 +54,12 @@ async function bootstrap(): Promise<void> {
         ? trust.split(',').map((s) => s.trim())
         : trust,
   );
+
+  // Times every response by route template, so a loop stall can be matched to the requests that were running.
+  if (runtimeMonitor) app.use(httpMetricsMiddleware(runtimeMonitor));
+
+  // Smaller responses on the wire (QA 63): before the routes, after the metrics middleware so the timing still covers the handler.
+  if (config.get('RESPONSE_COMPRESSION', { infer: true })) app.use(responseCompression());
 
   // Body-size limits per route class (TW-INFRA-020): before anything reads a body.
   installBodyLimits(app);
@@ -75,18 +86,7 @@ async function bootstrap(): Promise<void> {
   app.use((req: Request, res: Response, next: NextFunction) => {
     void app.get(FormsPreflightMiddleware).use(req, res, next);
   });
-  const staffCors = {
-    origin: corsOriginFor(origins, nodeEnv),
-    credentials: true,
-    // The throttle's headers (TW-INFRA-010): a browser client reads them only if they are exposed.
-    exposedHeaders: [
-      'x-request-id',
-      'retry-after',
-      'x-ratelimit-limit',
-      'x-ratelimit-remaining',
-      'x-ratelimit-reset',
-    ],
-  };
+  const staffCors = staffCorsOptions(origins, nodeEnv);
   // The customer API (`/api/v1`, `/docs/api.json`) answers every origin without credentials; everything else keeps the staff policy.
   app.enableCors((req: { url?: string }, callback) =>
     callback(null, isCustomerApiPath(req.url) ? CUSTOMER_API_CORS : staffCors),

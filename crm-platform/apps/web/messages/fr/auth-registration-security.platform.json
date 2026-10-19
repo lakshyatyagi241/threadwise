@@ -1433,13 +1433,16 @@
             "storefront_builder": "Le créateur de boutique en ligne.",
             "invoicing": "Factures, avoirs, paiements, commandes de vente et taux de taxe.",
             "forms_and_links": "Formulaires de capture de leads et liens partageables.",
-            "extra_channels": "Les canaux Telegram, Facebook et Instagram.",
+            "extra_channels": "Les canaux Telegram, Facebook, Instagram, LINE, Viber et WeChat.",
             "form_builder": "Formulaires web hébergés et intégrés qui créent des contacts dans le CRM. L’application payante Formulaires gère cet interrupteur.",
             "waba_groups": "Créer et gérer des groupes WhatsApp depuis un numéro de l’API Cloud : lien d’invitation, demandes d’adhésion, membres. Le numéro doit être un compte d’entreprise officiel.",
             "sms": "SMS en envoi uniquement via Twilio ou MSG91 : connectez des expéditeurs, envoyez des diffusions et campagnes SMS.",
             "help_agent": "L’assistant d’aide intégré à l’app : les utilisateurs demandent une tâche avec leurs mots et il les guide ou la réalise dans leur propre session, en demandant avant toute action sensible. Consomme des jetons d’IA.",
             "email_channel": "Connectez des boîtes Gmail et Google Workspace à la boîte de réception d'équipe. L'application payante E-mail contrôle cet interrupteur.",
-            "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels."
+            "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels.",
+            "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts.",
+            "lead_scoring": "Note les contacts avec l’IA et alimente le pilote de croissance. L’application Scoring des leads par IA gère ce commutateur.",
+            "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité."
           },
           "units": {
             "days": "Jours",
@@ -1582,7 +1585,9 @@
             "form_submissions_monthly": "Soumissions de formulaires par mois",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA par mois",
             "sms_monthly": "SMS par mois",
-            "email_mailboxes": "Boîtes e-mail"
+            "email_mailboxes": "Boîtes e-mail",
+            "email_monthly": "E-mails par mois",
+            "storage_gb": "Stockage (Go)"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1617,13 +1622,16 @@
             "storefront_builder": "Créateur de boutique et de site web",
             "invoicing": "Facturation (factures, avoirs, factures récurrentes)",
             "forms_and_links": "Formulaires, liens click-to-chat et groupes",
-            "extra_channels": "Canaux Telegram, Facebook et Instagram",
+            "extra_channels": "Canaux Telegram, Facebook, Instagram, LINE, Viber et WeChat",
             "form_builder": "Formulaires (créateur de formulaires web)",
             "waba_groups": "Groupes WhatsApp (API Cloud)",
             "sms": "Canal SMS",
             "help_agent": "Assistant d’aide (IA, consomme des jetons)",
             "email_channel": "Canal e-mail (Gmail)",
-            "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)"
+            "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Scoring des leads par IA",
+            "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1677,7 +1685,9 @@
             "form_submissions_monthly": "Soumissions de formulaires acceptées dans le mois calendaire, spam exclu. Au-delà du plafond, une soumission est tout de même enregistrée pour examen, jamais perdue. 0 = illimité.",
             "ai_form_generations_monthly": "Générations du créateur de formulaires IA dans le mois calendaire, nouvelle tentative de réparation comprise. 0 = illimité.",
             "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
-            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité."
+            "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
+            "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
+            "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué."
           }
         }
       },
@@ -1725,6 +1735,10 @@
           "aurora": {
             "name": "Aurore",
             "description": "Une couleur douce et lumineuse derrière une carte givrée."
+          },
+          "geta": {
+            "name": "Scission Geta",
+            "description": "Formulaire d'un côté, panneau de marque animé avec des chiffres de l'autre."
           }
         },
         "fields": {

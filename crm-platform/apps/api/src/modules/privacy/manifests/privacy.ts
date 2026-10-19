@@ -32,6 +32,22 @@ export const privacyRequestsHolder = defineHolder({
         'Kept as the record of the request (accountability), without a link to the person.',
     },
     {
+      table: 'legal_holds',
+      link: [
+        { by: 'contact', column: 'contact_id' },
+        { by: 'lead', column: 'lead_id' },
+      ],
+      disposition: 'fk_null',
+      parent: 'contacts',
+      reason:
+        "The register of legal holds (BL-295) outlives the person: a hold is released before the erasure it delayed can run, and the released row stays as the auditors' record. It holds a masked label, a category, a case reference and dates, and a note that is PII-light by rule; an ACTIVE hold blocks the delete of its subject (database trigger), so an active row never loses its subject.",
+      tier: 'core',
+      categories: ['identifier'],
+      pii: ['subject_label', 'note'],
+      retention:
+        'Kept as the record of the hold (accountability), without a link to the person once the person is gone.',
+    },
+    {
       table: 'audit_log',
       link: {
         by: 'custom',

@@ -4,7 +4,7 @@ title: AI lead scoring
 summary: Give every contact a score from 0 to 100 with AI, see why, and keep track of what it costs.
 area: automation
 order: 8
-documents: [tile:lead-scoring]
+documents: [tile:lead-scoring, nav:lead-scoring]
 keywords:
   [
     lead score,
@@ -27,6 +27,16 @@ keywords:
 AI lead scoring gives each contact a number from 0 to 100 that says how promising the contact looks. The number is written to the contact's **Lead score**, so it shows in the contact list, on the board and on the contact's page. Scores are grouped by colour and name: **Cold** below 34, **Warm** from 34 to 66 and **Hot** from 67. The number is always printed too, and a small sparkle marks a score the AI wrote.
 
 Scoring is **off** until you switch it on, because it sends facts about your contacts to an AI provider.
+
+## Get the app
+
+AI lead scoring is an app. A workspace that already used scoring keeps it exactly as it was, with nothing to buy or install. Any other workspace adds it from the **Marketplace**: open **AI lead scoring** under **Mini apps**, **Subscribe** if the app has a price, then select **Install** and confirm its permissions. Paying for the app is not enough on its own; it has to be installed.
+
+Until then the **AI lead scoring** tile is not in Settings, the page `/lead-scoring` says it isn't part of your workspace and links to the app, and the lead score is not shown anywhere. Pausing or uninstalling the app switches scoring off again; the scores already written stay stored on the contacts, and they show again when scoring is back on.
+
+## When scoring is off, no score is shown
+
+The lead score is shown only while scoring is **on** for your workspace: the app is there and you switched it on under **Settings** > **AI lead scoring**. While it is off, nothing about the score is drawn, a score a person typed included: no score chip beside a contact's name, no **Lead score** card on the contact page, the quick view or the Inbox, no **Lead score** tile in the communication figures, no **Lead score** column in the Contacts list (it is also left out of **Columns** and the **+** at the end of the headings), no **Hot leads** chip or view, no lead score condition in the filters and segments, no lead score box in the contact form, and no lead score changes in the field history. Nothing is deleted: the scores stay on the contacts, and everything above comes back, with the numbers, when you switch scoring on again.
 
 ## What is sent
 
@@ -56,13 +66,13 @@ A few workspaces can also let the AI **read a contact's chat**. It is a pilot: y
 
 - **When.** About 12 minutes after a contact stops writing, the AI reads the last two weeks of that chat. **Read chat** on the contact's page reads it right away.
 - **What is hidden first.** Phone numbers keep only their first and last two digits, emails keep the first letter and the domain, card and ID numbers keep only their ends, and the contact's name keeps only its first and last letter. Bots, deleted messages, group chats and other businesses' automatic replies are left out.
-- **What you get.** On the contact's page, a **Conversation reading** card shows what the contact is after (for example *Ready to buy* or *Asking about price*), a few signals, and a short summary. The score is updated from the same reading, unless a person typed it.
-- **Button taps.** A contact that only tapped menu buttons or keywords the system knows (such as *view warranty slip*) is understood without calling the AI at all.
+- **What you get.** On the contact's page, a **Conversation reading** card shows what the contact is after (for example _Ready to buy_ or _Asking about price_), a few signals, and a short summary. The score is updated from the same reading, unless a person typed it.
+- **Button taps.** A contact that only tapped menu buttons or keywords the system knows (such as _view warranty slip_) is understood without calling the AI at all.
 - **Suggested stages.** When the chat clearly shows a contact has moved on, the card suggests the next lifecycle stage with how sure the AI is. Under **Read conversations** you choose how a stage change is made. **Automatic** (the default) moves the contact straight away and adds a line to the chat ("AI read the chat and moved this contact from X to Y") with an **Undo**; undoing adds a second line and puts the contact back, as long as nobody moved it since. **Manual** leaves each suggestion for you to choose **Accept** or **Dismiss**, and nothing moves by itself. Won and Lost stages are never suggested, and an automatic change only ever moves a contact forward. All waiting suggestions are listed under **Stage suggestions** on the settings screen, where you can accept every confident one at once. Accepting needs the permission **lsc.stage.review** and the right to edit the contact, and it changes the stage like any other edit.
 
 ## A score you typed is yours
 
-You can type a score yourself in the contact's edit form. A typed score is **Manual**: the AI never overwrites it, and the Score with AI button is disabled with an explanation. To hand the contact back to the AI, edit the contact and clear the lead score. Saving the form without touching the score leaves an AI score as it is.
+You can type a score yourself in the contact's edit form (while scoring is on; with scoring off the form has no lead score box). A typed score is **Manual**: the AI never overwrites it, and the Score with AI button is disabled with an explanation. To hand the contact back to the AI, edit the contact and clear the lead score. Saving the form without touching the score leaves an AI score as it is.
 
 ## Score the contacts you already have
 

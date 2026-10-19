@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  contactTimezoneSchema,
   listContactsQuerySchema,
   type ConsentProof,
   type ContactGroupRef,
@@ -10,6 +11,7 @@ import {
   type V1UpdateContact,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../../../../common/context/request-context';
+import { ContactPrivacyService } from '../../../../contact-consent';
 import { AppError } from '../../../../../common/errors/app-error';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import { AuditService } from '../../../../../kernel/audit/audit.service';
@@ -25,6 +27,14 @@ import { toV1Contact } from './contacts.mapper';
 import { composeV1Phone } from './phone';
 
 /** One retry on a lost optimistic-lock race: the API has no `rowVersion`, so a concurrent edit must not surface as a 409 to the client. */
+/** A time zone from the request, held to a real IANA zone (422 on the field otherwise) and spelled the way the runtime does. */
+function zoneOf(value: string): string {
+  const parsed = contactTimezoneSchema.safeParse(value);
+  if (!parsed.success)
+    throw invalid('timezone', 'The timezone must be an IANA time zone such as Asia/Kolkata.');
+  return parsed.data;
+}
+
 const UPDATE_ATTEMPTS = 2;
 
 const invalid = (path: string, message: string) =>
@@ -73,6 +83,7 @@ export class V1ContactsService {
     private readonly groups: ContactGroupsService,
     private readonly extras: ContactExtrasRepository,
     private readonly audit: AuditService,
+    private readonly privacy: ContactPrivacyService,
   ) {}
 
   async list(query: { limit: number; cursor?: string; search?: string }) {
@@ -84,8 +95,18 @@ export class V1ContactsService {
     });
     if (!parsed.success) throw invalid('search', 'The search is not valid.');
     // 'all': a key sees the whole workspace (TW-API-022), not just the records of the member who minted it.
-    const res = await this.contacts.list(parsed.data, 'all');
-    return { data: res.data.map(toV1Contact), page: res.page };
+    // canRevealPhone: true for the same reason read() below passes it — this surface is out of
+    // scope for the contacts.phone.reveal gate added to the staff Contacts screen.
+    const res = await this.contacts.list(parsed.data, 'all', { canRevealPhone: true });
+    const ctx = RequestContextStore.require();
+    const minors = await this.db.tx((tx) =>
+      this.privacy.minorUuids(
+        tx,
+        ctx.orgId,
+        res.data.map((c) => c.id),
+      ),
+    );
+    return { data: res.data.map((c) => toV1Contact(c, minors.has(c.id))), page: res.page };
   }
 
   async show(id: string): Promise<V1Contact> {
@@ -141,8 +162,10 @@ export class V1ContactsService {
         email: body.email ?? undefined,
         phone,
         source: 'api',
+        ...(body.timezone ? { timezone: zoneOf(body.timezone) } : {}),
         isUnsubscribed: body.is_unsubscribed === true,
         consent: toProof(body.consent),
+        ...(body.date_of_birth ? { dateOfBirth: body.date_of_birth } : {}),
         customFields: body.attributes ?? {},
       },
       { source: 'api', evidence: { apiKeyId: apiKeyRef(ctx) } },
@@ -181,7 +204,9 @@ export class V1ContactsService {
       if (has(raw, 'first_name')) input.firstName = body.first_name ?? null;
       if (has(raw, 'last_name')) input.lastName = body.last_name ?? null;
       if (has(raw, 'is_unsubscribed')) input.isUnsubscribed = body.is_unsubscribed === true;
+      if (has(raw, 'date_of_birth')) input.dateOfBirth = body.date_of_birth ?? null;
       if (has(raw, 'consent')) input.consent = toProof(body.consent);
+      if (has(raw, 'timezone')) input.timezone = body.timezone ? zoneOf(body.timezone) : null;
 
       if (has(raw, 'name') || has(raw, 'first_name')) {
         const name = displayName({
@@ -272,7 +297,14 @@ export class V1ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact');
       const chips = await this.repo.groupChips(tx, ctx.orgId, [row.id]);
-      return toV1Contact(toContactResponse(row, { groups: chips }));
+      const minors = await this.privacy.minorUuids(tx, ctx.orgId, [row.uuid]);
+      // Developer REST API v1 is a separate surface from the staff Contacts screen and out of
+      // scope for the contacts.phone.reveal gate added there (docs/threadwise-port/README.md
+      // follow-up) — unmasked, as before, pending its own pass.
+      return toV1Contact(
+        toContactResponse(row, { groups: chips, canRevealPhone: true }),
+        minors.has(row.uuid),
+      );
     });
   }
 

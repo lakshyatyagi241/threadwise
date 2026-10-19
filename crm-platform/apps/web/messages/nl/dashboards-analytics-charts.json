@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Verbonden",
           "shopify": "Verbonden",
-          "google_sheets": "API-sleutel uitgegeven",
-          "meta_catalog": "Catalogus gekoppeld"
+          "meta_catalog": "Catalogus gekoppeld",
+          "google_sheets": "Google-account gekoppeld"
         },
         "notConnected": "niet verbonden",
         "connect": "Verbinden",
@@ -405,6 +405,43 @@
           "sent": "Verzonden → {peer}",
           "received": "Ontvangen van {peer}",
           "empty": "Geen recente activiteit in dit tijdvak."
+        },
+        "loginDevices": {
+          "title": "Inlogapparaten",
+          "subtitle": "Aanmeldingen bij de werkruimte in deze periode, per browser, systeem en type",
+          "active": "{n} nu actief",
+          "total": "{n, plural, one {# aanmelding} other {# aanmeldingen}}",
+          "empty": "Geen aanmeldingen in deze periode.",
+          "activeLegend": "Nu actief",
+          "endedLegend": "Afgemeld of verlopen",
+          "row": "{count} aanmeldingen, {active} nu actief",
+          "group": {
+            "browser": "Browser",
+            "os": "Systeem",
+            "kind": "Type"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Andere browser"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Ander systeem"
+          },
+          "kind": {
+            "desktop": "Desktop",
+            "mobile": "Mobiel",
+            "unknown": "Onbekend"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "Wachtrijen",
         "name": "Wachtrij",
         "pending": "In behandeling",
-        "failed": "Mislukt"
+        "failed": "Mislukt",
+        "lastFailure": "Reden van de laatste mislukking"
       },
       "clear": {
         "button": "Openstaande taken wissen",

@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Pausada: o limite diário de envios foi atingido. Ela é retomada automaticamente após {when}.",
         "halt": "Pausada: os envios estão suspensos para este espaço de trabalho. Ela é retomada quando a suspensão for removida.",
-        "manual": "Pausada."
+        "manual": "Pausada.",
+        "quiet_hours": "Em pausa: alguns destinatários estão no horário de silêncio. Retoma sozinho depois de {when}."
       },
       "delete": "Excluir",
       "deleteTitle": "Excluir transmissão?",
@@ -145,7 +146,8 @@
         "queued": "Na fila",
         "queuedHint": "aguardando envio",
         "failed": "Com falha",
-        "failedPct": "{pct}% de taxa de falha"
+        "failedPct": "{pct}% de taxa de falha",
+        "queuedHeld": "{count} retidas pelo horário de silêncio"
       },
       "tab": {
         "overview": "Visão geral",
@@ -193,7 +195,8 @@
         "lastClick": "Último clique: {when}",
         "empty": "Nenhum destinatário anexado.",
         "more": "Carregar mais",
-        "loading": "Carregando"
+        "loading": "Carregando",
+        "heldUntil": "Retido até {when} (horário de silêncio)"
       },
       "failures": {
         "kicker": "Motivos das falhas",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Não oficial (desativado)"
     },
     "compose": {
-      "back": "Voltar para Transmissões",
-      "crumb": "Transmissões / Nova",
-      "title": "Criar nova",
-      "titleAccent": "transmissão",
-      "draft": "Rascunho / não salvo",
-      "submit": "Adicionar transmissão",
-      "submitting": "Adicionando…",
-      "created": "Transmissão adicionada.",
-      "createdMany": "{count} transmissões adicionadas, uma por remetente.",
-      "failed": "Não foi possível adicionar a transmissão.",
-      "fixName": "Informe um nome para a transmissão.",
-      "fixTemplate": "Escolha um modelo aprovado.",
-      "fixSchedule": "Escolha uma data e hora de envio.",
-      "loading": "Carregando",
-      "loadError": "Não foi possível carregar os dados de composição.",
-      "retry": "Tentar novamente",
-      "setup": "Configuração da transmissão",
-      "templateMessage": "mensagem de modelo",
-      "name": "Nome da transmissão",
-      "namePlaceholder": "ex.: Envio do modelo de oferta de maio",
-      "nameHint": "Rótulo interno usado nos relatórios de transmissão.",
-      "template": "Selecionar mensagem de modelo",
-      "pickTemplate": "— Escolha um modelo aprovado —",
-      "noTemplates": "Ainda não há modelos aprovados.",
       "createOne": "Criar um",
-      "templateHint": "As transmissões enviam somente modelos aprovados.",
-      "twilioHint": "Envios em conformidade com a Twilio exigem um Content SID por modelo — marque um modelo como \"Twilio ready\" em /templates/{id}/edit. Modelos sem ContentSid serão enviados como texto simples (perdendo a aprovação de modelo da Meta).",
-      "device": "Enviar do dispositivo",
-      "devices": "Enviar dos dispositivos",
-      "multiDevice": "Vários dispositivos — marque todos os que se aplicam",
-      "noDevices": "Nenhum dispositivo conectado.",
-      "connectOne": "Conectar um →",
-      "share": "participação",
-      "shareHint": "Marque os dispositivos e defina os pesos de participação — por exemplo, 7 / 3 envia 70% dos contatos pelo primeiro dispositivo e 30% pelo segundo. Pesos iguais dividem igualmente.",
       "audience": "Para quem você quer enviar?",
       "audienceHint": "Escolha segmentos, tags, grupos ou contatos. Todos os escolhidos são combinados uma única vez.",
       "selected": "{count} selecionados",
@@ -276,27 +246,10 @@
       "noContacts": "Ainda não há contatos.",
       "addSome": "Adicionar alguns →",
       "noMatch": "Nenhum contato corresponde à pesquisa.",
-      "when": "Quando você quer enviar sua transmissão?",
-      "whenHint": "Envie imediatamente ou escolha uma data / hora futura.",
-      "sendNow": "Enviar agora",
-      "sendNowHint": "Enviar após a validação final.",
-      "sendLater": "Agendar para depois",
-      "sendLaterHint": "Escolha um dia e horário específicos.",
-      "sendDate": "Data de envio",
-      "sendTime": "Hora de envio",
-      "timezone": "Fuso horário",
-      "preview": "Pré-visualização do modelo",
-      "previewTitle": "Pré-visualização da transmissão",
-      "previewSub": "Mensagem de modelo",
-      "pickToPreview": "Escolha um modelo para pré-visualizar…",
-      "previewSelected": "Selecionados",
-      "previewSchedule": "Agendamento",
-      "now": "Agora",
-      "later": "Depois",
-      "media": "Pré-visualização de {kind}",
       "contactsDenied": "Você não tem acesso à lista de contatos. Escolha contatos por meio de grupos ou tags.",
       "unofficialDisabled": "O envio por números pessoais do WhatsApp (a API não oficial) não está ativado para o seu espaço de trabalho. Escolha um número oficial da API do WhatsApp Business.",
-      "previewLabel": "Prévia do modelo"
+      "colEmail": "E-mail",
+      "noEmail": "Sem endereço de e-mail"
     },
     "overrides": {
       "title": "Preencher este envio",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Envie mensagens para pessoas que já estão nas suas DMs do Instagram — sem aprovação de modelo.",
         "cta": "Criar transmissão do Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envie uma mensagem do Messenger para quem escreveu para a sua Página nas últimas 24 horas.",
+        "cta": "Criar transmissão no Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Envie uma mensagem como e-mail a partir de uma caixa de correio conectada, com um link para cancelar a inscrição.",
+        "cta": "Criar campanha de e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envie uma mensagem às pessoas que já conversam com sua conta do LINE.",
+        "cta": "Criar transmissão do LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envie uma mensagem para as pessoas que já conversam com a sua conta do Viber.",
+        "cta": "Criar transmissão do Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envie uma mensagem em massa para todos os seguidores, uma tag ou usuários selecionados da sua Conta Oficial.",
+        "cta": "Criar transmissão do WeChat"
       }
     }
   }

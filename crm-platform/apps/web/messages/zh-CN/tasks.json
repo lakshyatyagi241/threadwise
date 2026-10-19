@@ -100,7 +100,8 @@
       "views": {
         "list": "列表",
         "board": "按截止日期看板"
-      }
+      },
+      "linkCompany": "某个公司"
     },
     "table": {
       "scrollArea": "任务表格",
@@ -126,7 +127,8 @@
       "open": "打开",
       "edit": "编辑",
       "delete": "删除",
-      "unassigned": "未分配"
+      "unassigned": "未分配",
+      "followUpBadge": "跟进"
     },
     "bulk": {
       "label": "所选任务的操作",
@@ -204,7 +206,8 @@
         "notesTooLong": "备注过长（最多 5000 个字符）。",
         "dueInvalid": "该日期无效。",
         "assigneeInvalid": "该成员不是此工作区的有效成员。"
-      }
+      },
+      "company": "公司"
     },
     "drawer": {
       "loading": "正在加载任务",
@@ -268,7 +271,8 @@
       "searching": "搜索中",
       "unavailable": "目前无法搜索。",
       "none": "没有匹配项。",
-      "unlink": "移除链接"
+      "unlink": "移除链接",
+      "searchCompany": "搜索公司"
     },
     "errors": {
       "network": "无法连接服务器。请检查网络连接后重试。",
@@ -323,7 +327,21 @@
       "loadMore": "加载更多",
       "loadMoreDone": "加载更多已完成任务",
       "showDone": "显示已完成",
-      "hideDone": "隐藏已完成"
+      "hideDone": "隐藏已完成",
+      "gone": "这些任务所属的记录已不可用。"
+    },
+    "inline": {
+      "addTask": "添加任务",
+      "rowLabel": "添加一项任务",
+      "titleLabel": "任务标题",
+      "titlePlaceholder": "输入任务标题，然后按 Enter 保存",
+      "due": "截止日期和时间",
+      "assignee": "分配给",
+      "priority": "优先级（可选）",
+      "hint": "按 Enter 保存，按 Escape 关闭。",
+      "save": "添加任务",
+      "cancel": "取消",
+      "failed": "无法保存任务。您输入的内容已放回输入框。"
     }
   }
 }

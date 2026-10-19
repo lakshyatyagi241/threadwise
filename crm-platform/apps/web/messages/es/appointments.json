@@ -41,7 +41,10 @@
       "notStarted": "Esto solo se puede hacer después de que la reserva haya comenzado.",
       "alreadyStarted": "Esta reserva ya comenzó, por lo que ya no se puede modificar.",
       "bookingOff": "La reserva no está disponible para este servicio en este momento.",
-      "notDeletable": "No se puede eliminar mientras tenga reservas próximas."
+      "notDeletable": "No se puede eliminar mientras tenga reservas próximas.",
+      "notDrifted": "Esta reserva ya coincide con su evento de Google. Se ha vuelto a cargar.",
+      "calendarNotConnected": "Google Calendar no está conectado. Vuelva a conectarlo en la página de la cuenta de Google e inténtelo de nuevo.",
+      "calendarFailed": "Google no respondió o rechazó el cambio. Inténtelo de nuevo en un momento."
     },
     "picker": {
       "timeZone": "Zona horaria",
@@ -156,7 +159,8 @@
       "yesterday": "Ayer",
       "rowLabel": "Abrir reserva: {title}",
       "noName": "Sin nombre",
-      "needsReview": "Requiere revisión"
+      "needsReview": "Requiere revisión",
+      "outOfSync": "Calendario desincronizado"
     },
     "row": {
       "moreFor": "Más acciones para {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "¿Rechazar esta solicitud?",
       "declineMessage": "Se avisa al cliente de que se rechazó la solicitud y el horario vuelve a quedar libre.",
       "declineConfirm": "Rechazar solicitud",
-      "remindersNote": "Los recordatorios siguen el tipo de reserva. La entrega no se registra por recordatorio."
+      "remindersNote": "Los recordatorios dependen del tipo de reserva. Se configuran en los ajustes de citas o en el propio tipo de reserva."
     },
     "source": {
       "chat": "Un flujo de chat",
@@ -269,7 +273,13 @@
       "rescheduled": "Reserva movida al nuevo horario.",
       "linkCopied": "Enlace de gestión copiado.",
       "copyFailed": "No se pudo copiar el enlace.",
-      "declined": "Solicitud rechazada."
+      "declined": "Solicitud rechazada.",
+      "calendarPushed": "Enviado a Google: el evento ahora coincide con esta reserva.",
+      "calendarAccepted": {
+        "cancelled": "Cambio de Google aceptado: la reserva se canceló.",
+        "rescheduled": "Cambio de Google aceptado: la reserva pasó al nuevo horario.",
+        "acknowledged": "Cambio de Google aceptado. La reserva se mantiene como está."
+      }
     },
     "typesList": {
       "breadcrumb": "Ruta de navegación",
@@ -397,9 +407,6 @@
         "depositTooHigh": "El depósito no puede ser mayor que el total (tarifa más impuesto).",
         "cancelFeeInvalid": "Introduce un importe como 25.00.",
         "cancelWindowInvalid": "Introduce un número entero de minutos de 0 a {cancelWindowMax}.",
-        "reminderInvalid": "Introduce minutos enteros antes del inicio, de 1 a {reminderMax}.",
-        "remindersDuplicate": "Cada recordatorio necesita una hora distinta.",
-        "remindersTooMany": "Un tipo de reserva puede tener como máximo {reminders} recordatorios.",
         "questionLabelRequired": "Dale una etiqueta a la pregunta (hasta {questionLabelMax} caracteres).",
         "questionsTooMany": "Un tipo de reserva puede tener como máximo {questions} preguntas.",
         "questionOptionsRequired": "Añade al menos una opción, una por línea.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Corrige las fechas marcadas en la lista de excepciones de fechas.",
         "descriptionTooLong": "La descripción puede tener como máximo {descriptionMax} caracteres.",
         "locationTooLong": "La ubicación puede tener como máximo {locationMax} caracteres.",
-        "server": "El servidor no aceptó este valor. Revísalo e inténtalo de nuevo."
+        "server": "El servidor no aceptó este valor. Revísalo e inténtalo de nuevo.",
+        "reminderInvalid": "Introduce un número entero para el tiempo, de hasta 30 días.",
+        "remindersDuplicate": "Cada recordatorio o seguimiento necesita un momento distinto.",
+        "remindersTooMany": "Un tipo de reserva puede tener como máximo {reminders} recordatorios y seguimientos.",
+        "reminderChannelsNone": "Elige al menos un canal.",
+        "reminderBodyTooLong": "El mensaje, el asunto o la etiqueta es demasiado largo."
       },
       "service": {
         "title": "Detalles del servicio",
@@ -556,11 +568,12 @@
         "hint": "Las reservas funcionan sin esto. Conecta Google Calendar en Citas, Ajustes para sincronizar los horarios libres y ocupados y añadir enlaces de Meet.",
         "unavailable": "Google Calendar aún no está configurado en esta plataforma. Estos ajustes se guardan con el tipo de reserva para cuando lo esté.",
         "calendarId": "Calendario",
-        "calendarPlaceholder": "principal",
         "spreadsheetId": "Añadir a hoja de cálculo (opcional)",
-        "spreadsheetPlaceholder": "ID de la hoja de cálculo",
         "createMeet": "Crear un enlace de Google Meet para cada reserva",
-        "calendarDefault": "El calendario del espacio de trabajo"
+        "calendarDefault": "El calendario del espacio de trabajo",
+        "connectFirst": "Conecta tu <link>cuenta de Google</link> para elegir de su lista.",
+        "spreadsheetNone": "Sin hoja",
+        "spreadsheetNoListing": "No se pueden listar tus hojas porque no se concedió el permiso de lista de archivos de Drive. Añádelo en la página de la cuenta de Google."
       },
       "messages": {
         "title": "Mensajes del ciclo de vida",
@@ -586,25 +599,6 @@
           "reschedule": "Hola {name}, tu {type} se movió a {slot}. Detalles: {manage_link}"
         },
         "templatesNote": "Aún no se pueden elegir plantillas de WhatsApp aprobadas. Los mensajes se envían como el texto sin formato de arriba."
-      },
-      "reminders": {
-        "title": "Recordatorios",
-        "hint": "Las horas deben ser distintas (1440 = 24 h antes, 180 = 3 h antes). Hasta {max}.",
-        "add": "Añadir recordatorio",
-        "quickAdd": "Añadir rápido",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "Sin recordatorios. Los clientes solo reciben la confirmación.",
-        "offsetOf": "Recordatorio {n}, minutos antes del inicio",
-        "minBefore": "min antes",
-        "labelPlaceholder": "24h",
-        "labelOf": "Recordatorio {n}, etiqueta",
-        "remove": "Quitar recordatorio {n}",
-        "count": "{count} de {max} recordatorios"
       },
       "questions": {
         "title": "Cuestionario",
@@ -962,7 +956,7 @@
         "calendarSaved": "Calendario guardado.",
         "confirmOff": {
           "title": "¿Desconectar Google Calendar?",
-          "message": "Las nuevas reservas dejan de ir a tu calendario y ya no se leen sus horas ocupadas. Los eventos que ya están en tu calendario se quedan, y se le indica a Google que retire este acceso.",
+          "message": "Las nuevas reservas dejan de ir a tu calendario y ya no se leen sus horas ocupadas. Los pasos de Google de tus flujos también se detienen, porque comparten esta conexión. Los eventos que ya están en tu calendario se quedan, y se le indica a Google que retire este acceso.",
           "confirm": "Desconectar",
           "cancel": "Conservarlo"
         },
@@ -972,7 +966,8 @@
           "failed": "La conexión no se completó. Inténtalo de nuevo; si sigue fallando, pide a tu administrador de la plataforma que revise la configuración de Google.",
           "expired": "Ese intento tardó demasiado. Pulsa Conectar para empezar de nuevo.",
           "not_configured": "Google Calendar no está configurado en esta plataforma. Pide a tu administrador de la plataforma que añada el cliente OAuth de Google.",
-          "missing_scope": "Google no concedió todos los permisos de calendario necesarios. Conecta de nuevo y deja todas las casillas marcadas."
+          "missing_scope": "Google no concedió todos los permisos de calendario necesarios. Conecta de nuevo y deja todas las casillas marcadas.",
+          "cancelled": "Canceló la operación. No se conectó nada."
         },
         "whatTitle": "Qué hace esto",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Corrige las horas resaltadas en el horario comercial."
       },
       "notAvailable": "Los ajustes de reservas para todo el espacio de trabajo no están disponibles en este servidor. En su lugar, cada tipo de reserva tiene sus propios horarios, zona horaria, recordatorios y mensajes.",
-      "openTypes": "Abrir tipos de reserva"
+      "openTypes": "Abrir tipos de reserva",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Conecta un calendario de Microsoft para que las reservas confirmadas se escriban en él y sus horas ocupadas cierren franjas.",
+        "provider": "Calendario de Outlook",
+        "providerSub": "Microsoft 365 y Outlook.com",
+        "status": {
+          "unavailable": "No disponible",
+          "disconnected": "No conectado",
+          "connected": "Conectado",
+          "needs_reconnect": "Requiere reconexión"
+        },
+        "loading": "Comprobando la conexión",
+        "unavailableTitle": "Outlook aún no está configurado en esta plataforma",
+        "unavailableBody": "El administrador de tu plataforma debe registrar la aplicación de Microsoft (Admin, Ajustes, Calendario de Microsoft) antes de que un espacio de trabajo pueda conectarse. Tus reservas no se ven afectadas.",
+        "disconnectedBody": "No conectado. Al conectar se abre Microsoft, donde eliges la cuenta y aceptas compartir el acceso al calendario.",
+        "disconnectedReadOnly": "No conectado. Pide a un administrador del espacio de trabajo que lo conecte.",
+        "reconnectTitle": "Microsoft dejó de aceptar la conexión",
+        "reconnectBody": "El acceso fue retirado o ha caducado, por lo que las reservas no se escriben en tu calendario y no se leen sus horas ocupadas. Vuelve a conectar para reanudar.",
+        "reconnectBodyAccount": "El acceso de {account} fue retirado o ha caducado, por lo que las reservas no se escriben en tu calendario y no se leen sus horas ocupadas. Vuelve a conectar para reanudar.",
+        "account": "Cuenta de Microsoft",
+        "calendar": "Calendario",
+        "primaryCalendar": "Tu calendario principal",
+        "connectedAgo": "Conectado {when}",
+        "writesHere": "Las reservas confirmadas se escriben en este calendario.",
+        "readsOnly": "Solo se leen sus horas ocupadas. Las reservas se escriben en tu otro calendario.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft está limitando las solicitudes. Las reservas se reintentan automáticamente.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft rechazó el acceso a este calendario. Comprueba que la cuenta tenga un buzón y pueda compartir su calendario.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft no respondió. Se vuelve a intentar automáticamente."
+        },
+        "errors": {
+          "notConfigured": "Outlook no está configurado en esta plataforma. Pide al administrador de tu plataforma que registre la aplicación de Microsoft.",
+          "notConnected": "No hay ningún calendario de Outlook conectado. Recarga la página y vuelve a conectar.",
+          "providerFailed": "Microsoft no respondió. Inténtalo de nuevo en un momento.",
+          "notYours": "Esta conexión la inició otra persona, así que no se conectó nada. Pídele que conecte, o pulsa Conectar tú mismo.",
+          "invalidTicket": "Esta conexión ya no se puede confirmar. Pulsa Conectar para empezar de nuevo."
+        },
+        "loadingCalendars": "Cargando tus calendarios",
+        "chooseLabel": "Escribir las reservas en",
+        "chooseHint": "Solo se muestran los calendarios que esta cuenta puede editar. Los eventos ya escritos se quedan donde están.",
+        "choosePlaceholder": "Elige un calendario",
+        "chooseOptionPrimary": "{name} (calendario principal)",
+        "chooseSave": "Usar este calendario",
+        "chooseCancel": "Cancelar",
+        "saving": "Guardando",
+        "connect": "Conectar Outlook",
+        "reconnect": "Reconectar Outlook",
+        "redirecting": "Abriendo Microsoft",
+        "choose": "Elegir calendario",
+        "disconnect": "Desconectar",
+        "disconnected": "Outlook desconectado.",
+        "calendarSaved": "Calendario guardado.",
+        "confirm": {
+          "title": "¿Conectar esta cuenta de Microsoft?",
+          "body": "Microsoft te ha devuelto aquí para terminar de conectar una cuenta a {workspace}. Continúa solo si lo iniciaste tú hace un momento.",
+          "confirm": "Conectar",
+          "working": "Conectando",
+          "cancel": "Cancelar"
+        },
+        "confirmOff": {
+          "title": "¿Desconectar Outlook?",
+          "message": "Las nuevas reservas dejarán de ir a tu calendario de Outlook y ya no se leerán sus horas ocupadas. Los eventos que ya están en tu calendario se quedan ahí. Para retirar el permiso en Microsoft, elimina la aplicación en tu cuenta de Microsoft.",
+          "confirm": "Desconectar",
+          "cancel": "Mantener"
+        },
+        "outcome": {
+          "connected": "Outlook conectado. Las reservas confirmadas ahora van a tu calendario.",
+          "denied": "No se concedió el acceso en Microsoft, así que no se conectó nada.",
+          "failed": "La conexión no se completó. Inténtalo de nuevo; si sigue fallando, pide al administrador de tu plataforma que revise la aplicación de Microsoft.",
+          "expired": "Ese intento tardó demasiado. Pulsa Conectar para empezar de nuevo.",
+          "not_configured": "Outlook no está configurado en esta plataforma. Pide al administrador de tu plataforma que registre la aplicación de Microsoft.",
+          "missing_scope": "Microsoft no concedió el permiso de calendario necesario. Vuelve a conectar y deja marcadas todas las casillas.",
+          "cancelled": "Cancelaste el proceso. No se conectó nada."
+        },
+        "whatTitle": "Qué hace esto",
+        "what": {
+          "freeBusy": "Lee las horas ocupadas de tu calendario para que no se ofrezcan horarios reservados o bloqueados.",
+          "writeBack": "Escribe las reservas confirmadas en tu calendario como eventos e invita al cliente.",
+          "teams": "Añade un enlace de reunión de Teams a los servicios en línea (cuentas de trabajo y de centros educativos)."
+        },
+        "hint": "Las reservas funcionan sin esto. Si también tienes Google conectado, las horas ocupadas se leen de ambos y cada reserva se escribe en uno."
+      },
+      "writeTarget": {
+        "title": "Dónde se escriben las reservas",
+        "description": "Las horas ocupadas se leen de todos los calendarios conectados. Cada reserva se escribe en uno de ellos.",
+        "label": "Escribir las reservas en",
+        "hint": "Automático usa Google Calendar cuando funciona y, si no, Outlook. Al cambiarlo, los eventos de las próximas reservas se mueven al calendario que elijas.",
+        "auto": "Automático",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "no conectado",
+        "saved": "Guardado.",
+        "backfill": {
+          "body": "{count, plural, one {# reserva confirmada de los próximos 90 días aún no está} many {# de reservas confirmadas de los próximos 90 días aún no están} other {# reservas confirmadas de los próximos 90 días aún no están}} en el calendario al que van. Se escriben automáticamente después de conectar o cambiar de calendario.",
+          "action": "Escribirlas ahora",
+          "working": "En cola",
+          "queued": "Escribiéndolas en tu calendario en segundo plano.",
+          "notConnected": "No hay ningún calendario conectado, así que no hay dónde escribirlas."
+        }
+      },
+      "feeds": {
+        "title": "Otros calendarios (iCal)",
+        "description": "Suscríbete a un calendario mediante su dirección iCal para que sus horas ocupadas cierren franjas. Solo se usa cuándo estás ocupado: no se muestra ni se guarda nada más.",
+        "loading": "Cargando tus calendarios",
+        "empty": "Aún no hay calendarios suscritos.",
+        "status": {
+          "pending": "Aún sin leer",
+          "ok": "Funcionando",
+          "error": "Problema"
+        },
+        "paused": "En pausa",
+        "neverRead": "Aún sin leer.",
+        "lastRead": "Leído {when}.",
+        "busyCount": "{count, plural, one {# bloque ocupado} many {# de bloques ocupados} other {# bloques ocupados}} en los próximos 180 días",
+        "allDayLabel": "Los eventos de todo el día bloquean el día",
+        "pause": "Pausar",
+        "resume": "Reanudar",
+        "refresh": "Leer ahora",
+        "reading": "Leyendo",
+        "remove": "Cancelar suscripción",
+        "removed": "Suscripción al calendario cancelada.",
+        "added": "Calendario suscrito.",
+        "addTitle": "Suscribirse a un calendario",
+        "nameLabel": "Nombre",
+        "namePlaceholder": "Horario del equipo",
+        "urlLabel": "Dirección del calendario",
+        "urlHint": "Una dirección que empiece por https:// o webcal:// y termine en .ics. Se comprueba ahora, luego se guarda cifrada y no se vuelve a mostrar.",
+        "add": "Suscribirse",
+        "adding": "Leyendo el calendario",
+        "hint": "No te suscribas al calendario en el que se escriben tus reservas: un servicio con varias plazas vería sus propios eventos como ocupados. Una suscripción se lee aproximadamente cada 15 minutos, así que un cambio puede tardar ese tiempo en reflejarse.",
+        "confirmRemove": {
+          "title": "¿Cancelar la suscripción a este calendario?",
+          "message": "Las horas bloqueadas por {name} quedarán libres de inmediato. El calendario en sí no se modifica.",
+          "confirm": "Cancelar suscripción",
+          "cancel": "Mantener"
+        },
+        "errors": {
+          "invalid": "Introduce una dirección que empiece por https://, http:// o webcal://, sin nombre de usuario ni contraseña.",
+          "duplicate": "Este espacio de trabajo ya está suscrito a ese calendario.",
+          "limit": "Un espacio de trabajo puede suscribirse a 10 calendarios. Cancela primero la suscripción a uno."
+        },
+        "reason": {
+          "unreachable": "No se pudo acceder a la dirección. Comprueba que sea correcta y pública.",
+          "timeout": "El calendario tardó demasiado en responder.",
+          "not_found": "No se encontró nada en esa dirección. Puede que se haya dejado de publicar.",
+          "forbidden": "El calendario rechazó el acceso. Asegúrate de que esté publicado para cualquier persona que tenga el enlace.",
+          "server_error": "El servidor del calendario tuvo un problema. Se vuelve a intentar automáticamente.",
+          "redirect_loop": "La dirección nos redirige en círculos.",
+          "not_a_calendar": "Esa dirección no es un calendario iCal. Debería terminar en .ics.",
+          "too_large": "Ese calendario es demasiado grande para leerlo.",
+          "blocked_address": "Esa dirección apunta a una red privada, lo cual no está permitido.",
+          "unknown": "No se pudo leer esa dirección como un calendario."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa una zona horaria que no conocemos y se leyó en la zona horaria de tu espacio de trabajo.} many {# de eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.} other {# eventos usan una zona horaria que no conocemos y se leyeron en la zona horaria de tu espacio de trabajo.}}",
+          "unsupportedRule": "{count, plural, one {# evento recurrente usa} many {# de eventos recurrentes usan} other {# eventos recurrentes usan}} una regla que no admitimos: solo la primera repetición bloquea tiempo.",
+          "truncated": "Este calendario tiene más bloques ocupados de los que guardamos, por lo que faltan algunos."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mis reservas en mi aplicación de calendario",
+        "description": "Suscribe Apple Calendar, Outlook o Google Calendar a tus reservas.",
+        "loading": "Cargando tu enlace",
+        "none": "Aún no tienes ningún enlace.",
+        "make": "Crear mi enlace",
+        "making": "Creando",
+        "made": "Tu enlace está listo.",
+        "linkLabel": "Tu enlace",
+        "copy": "Copiar enlace",
+        "copied": "Enlace copiado.",
+        "copyFailed": "No se pudo copiar automáticamente. Selecciona el enlace y cópialo.",
+        "open": "Abrir en mi aplicación de calendario",
+        "rotate": "Crear un enlace nuevo",
+        "stop": "Dejar de compartir",
+        "stopped": "Tu enlace ya no funciona.",
+        "lastUsed": "Una aplicación de calendario lo leyó por última vez {when}.",
+        "neverUsed": "Ninguna aplicación de calendario lo ha leído todavía.",
+        "warning": "Cualquier persona que tenga este enlace verá los títulos, las horas y los lugares de tus reservas. Mantenlo en privado. Nunca muestra números de teléfono, direcciones de correo electrónico ni notas.",
+        "hint": "Ves lo mismo que puedes ver en la lista de reservas. Tu aplicación de calendario actualiza la suscripción según su propio ritmo, a menudo cada pocas horas.",
+        "confirmRotate": {
+          "title": "¿Crear un enlace nuevo?",
+          "message": "El enlace anterior deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan necesitarán el nuevo.",
+          "confirm": "Crear un enlace nuevo"
+        },
+        "confirmStop": {
+          "title": "¿Dejar de compartir tus reservas?",
+          "message": "Tu enlace deja de funcionar de inmediato. Las aplicaciones de calendario que lo usan no mostrarán nada nuevo.",
+          "confirm": "Dejar de compartir"
+        },
+        "confirmCancel": "Mantener"
+      }
     },
     "linked": {
       "title": "Citas",
@@ -1060,6 +1248,181 @@
       "loadMore": "Cargar más",
       "loadMorePast": "Cargar más pasadas",
       "noType": "Cita"
+    },
+    "sync": {
+      "title": "Calendario desincronizado",
+      "reason": {
+        "event_deleted": "El evento se eliminó o se canceló en Google Calendar.",
+        "event_missing": "Ya no se encuentra el evento en Google Calendar.",
+        "time_changed": "El evento se movió a otro horario en Google Calendar.",
+        "attendees_changed": "Los invitados del evento se modificaron en Google Calendar."
+      },
+      "googleShows": "Google muestra: {time}",
+      "notChanged": "Esta reserva no se ha modificado. Elija cuál es la correcta.",
+      "found": "Encontrado: {when}",
+      "push": "Enviar nuestro horario a Google",
+      "accept": "Aceptar el cambio de Google",
+      "keep": "Ahora no",
+      "acceptTitle": {
+        "cancel": "¿Cancelar esta reserva?",
+        "reschedule": "¿Mover esta reserva al horario de Google?",
+        "acknowledge": "¿Aceptar los invitados que muestra Google?"
+      },
+      "acceptMessage": {
+        "cancel": "El evento ya no existe en Google, por lo que esta reserva se cancela y su horario vuelve a quedar libre. Se avisa al cliente, como en cualquier cancelación.",
+        "reschedule": "Esta reserva se mueve a {time}. Se avisa al cliente del nuevo horario, como en cualquier cambio de fecha.",
+        "acknowledge": "La reserva en sí no cambia. Se guarda la lista de invitados de Google y este aviso desaparece."
+      },
+      "acceptConfirm": {
+        "cancel": "Cancelar reserva",
+        "reschedule": "Mover reserva",
+        "acknowledge": "Aceptar"
+      }
+    },
+    "reminders": {
+      "title": "Recordatorios y seguimientos",
+      "hint": "Envía un mensaje al contacto antes de que empiece una cita o después de que termine. Cada uno está desactivado hasta que lo actives. Hasta {max} por tipo de reserva.",
+      "quickAdd": "Añadir rápido",
+      "quick": {
+        "h24": "24 horas antes",
+        "h3": "3 horas antes",
+        "h1": "1 hora antes",
+        "m15": "15 minutos antes",
+        "after2h": "2 horas después",
+        "afterDay": "1 día después"
+      },
+      "add": "Añadir recordatorio",
+      "empty": "Sin recordatorios ni seguimientos. El contacto solo recibe la confirmación.",
+      "enabledOf": "Enviar recordatorio {n}",
+      "on": "Activado",
+      "off": "Desactivado",
+      "offsetOf": "Recordatorio {n}, cantidad de tiempo",
+      "unitOf": "Recordatorio {n}, unidad de tiempo",
+      "kindOf": "Recordatorio {n}, antes o después",
+      "units": {
+        "minutes": "minutos",
+        "hours": "horas",
+        "days": "días"
+      },
+      "kind": {
+        "before": "antes de que empiece la cita",
+        "after": "después de que termine la cita"
+      },
+      "editMessage": "Mensaje y canales",
+      "hideMessage": "Ocultar",
+      "remove": "Quitar recordatorio {n}",
+      "withTemplate": "Plantilla de WhatsApp",
+      "channelsTitle": "Enviar por",
+      "channelsHint": "Se usa el primer canal que pueda entregar el mensaje y los siguientes son alternativas. Nadie recibe el mismo recordatorio dos veces.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Correo electrónico"
+      },
+      "moveUp": "Probar {channel} antes",
+      "moveDown": "Probar {channel} después",
+      "removeChannel": "No usar {channel}",
+      "messageTitle": "Mensaje",
+      "placeholderMeaning": {
+        "name": "El nombre del contacto",
+        "type": "El nombre del tipo de reserva",
+        "slot": "Fecha y hora juntas",
+        "date": "La fecha",
+        "time": "La hora",
+        "location": "El lugar, o el enlace para unirse si es en línea",
+        "join_link": "El enlace para unirse si es en línea",
+        "manage_link": "El enlace para cambiar o cancelar la cita"
+      },
+      "bodyHintBefore": "Déjalo vacío para usar el mensaje de recordatorio del tipo de reserva o el texto estándar.",
+      "bodyHintAfter": "Déjalo vacío para usar el texto de seguimiento estándar.",
+      "subjectTitle": "Asunto del correo",
+      "subjectPlaceholder": "Déjalo vacío para un asunto estándar",
+      "templateTitle": "Plantilla de WhatsApp",
+      "templateNone": "Ninguna: texto libre, solo dentro de la ventana de 24 horas",
+      "templateUnknown": "Una plantilla que ya no está disponible",
+      "templateHint": "Pasadas 24 horas desde el último mensaje del contacto, WhatsApp solo entrega una plantilla aprobada. Sus variables se rellenan en este orden: 1 nombre, 2 servicio, 3 fecha, 4 hora, 5 lugar, 6 enlace para unirse, 7 enlace de gestión.",
+      "labelTitle": "Etiqueta (opcional)",
+      "labelPlaceholder": "p. ej. Un día antes",
+      "previewTitle": "Vista previa",
+      "previewNote": "Un ejemplo con valores de muestra. El mensaje real usa los datos de la propia cita.",
+      "count": "{count} de {max} recordatorios y seguimientos",
+      "note": "Nunca se envía un recordatorio una vez empezada la cita. Si la cita se cancela o se cambia, lo que estaba en espera se detiene y se programa de nuevo para la nueva hora. El horario de silencio retiene el mensaje hasta que termina, y se omite a los contactos que se dieron de baja o están en la lista de no llamar.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consulta",
+        "location": "Calle Mayor 12"
+      },
+      "settingsTitle": "Recordatorios y seguimientos",
+      "settingsDescription": "Para cada tipo de reserva, envía un mensaje al contacto antes de la cita y haz un seguimiento después. Todo está desactivado hasta que lo actives.",
+      "loading": "Cargando tipos de reserva",
+      "noTypes": "Aún no hay tipos de reserva. Crea uno para configurar sus recordatorios.",
+      "paused": "En pausa",
+      "summaryNone": "Sin configurar",
+      "summary": "{on} de {total} activados",
+      "unsaved": "Cambios sin guardar",
+      "conflict": "Este tipo de reserva se cambió en otro lugar. Recarga para ver la última versión antes de guardar.",
+      "reload": "Recargar",
+      "discard": "Descartar cambios",
+      "saving": "Guardando",
+      "save": "Guardar recordatorios",
+      "saved": "Recordatorios guardados para {name}.",
+      "readOnly": "Puedes ver estos recordatorios, pero no cambiarlos.",
+      "fixFirst": "Corrige primero los recordatorios resaltados.",
+      "problems": {
+        "offsetInvalid": "Introduce un número entero para el tiempo, de hasta 30 días.",
+        "duplicate": "Cada recordatorio o seguimiento necesita un momento distinto.",
+        "channelsNone": "Elige al menos un canal.",
+        "bodyTooLong": "El mensaje es demasiado largo.",
+        "subjectTooLong": "El asunto es demasiado largo.",
+        "labelTooLong": "La etiqueta es demasiado larga.",
+        "tooMany": "Como máximo 8 recordatorios y seguimientos por tipo de reserva."
+      },
+      "noneOn": "No hay recordatorios ni seguimientos activados para este tipo de reserva.",
+      "when": {
+        "before": "{count, plural, one {# minuto antes} other {# minutos antes}}",
+        "after": "{count, plural, one {# minuto después} other {# minutos después}}"
+      },
+      "sentOn": "Enviado por {channel}",
+      "status": {
+        "scheduled": "Programado",
+        "pending": "Pendiente",
+        "sending": "Enviando",
+        "held": "En espera",
+        "sent": "Enviado",
+        "skipped": "No enviado",
+        "failed": "Fallido",
+        "cancelled": "Cancelado"
+      },
+      "reasons": {
+        "rule_removed": "El recordatorio se quitó antes de su hora.",
+        "rule_off": "El recordatorio se desactivó antes de enviarse.",
+        "rescheduled": "La cita se cambió, así que este se sustituyó.",
+        "booking_cancelled": "La cita se canceló.",
+        "booking_declined": "La solicitud fue rechazada.",
+        "booking_no_show": "Marcada como inasistencia.",
+        "booking_not_confirmed": "La cita no está confirmada.",
+        "started": "La cita ya había empezado.",
+        "expired": "Era demasiado tarde para enviarlo.",
+        "no_contact_point": "El contacto no tiene número ni dirección para este canal.",
+        "no_channel": "Ningún canal pudo entregarlo.",
+        "no_sender": "No hay un remitente conectado para este canal.",
+        "template_required": "WhatsApp necesita una plantilla aprobada fuera de la ventana de 24 horas.",
+        "template_unavailable": "No se puede enviar la plantilla de WhatsApp elegida.",
+        "quiet_hours_too_late": "El horario de silencio superó la hora de inicio.",
+        "no_consent": "Sin consentimiento registrado.",
+        "opted_out": "El contacto se dio de baja.",
+        "do_not_call": "El número está en la lista de no llamar.",
+        "minor": "El contacto está marcado como menor de edad.",
+        "processing_restricted": "Escribir a este contacto está restringido.",
+        "plan_limit": "Se alcanzó el límite del plan.",
+        "quiet_hours": "Esperando a que termine el horario de silencio.",
+        "channel_unavailable": "El canal no está conectado ahora mismo.",
+        "wallet_empty": "El monedero está vacío.",
+        "send_halted": "El envío está detenido.",
+        "provider_error": "El proveedor lo rechazó.",
+        "interrupted": "Se interrumpió y no se reintentó.",
+        "internal_error": "Algo salió mal."
+      }
     }
   }
 }

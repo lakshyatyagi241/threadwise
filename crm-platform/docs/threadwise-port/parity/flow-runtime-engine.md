@@ -71,7 +71,8 @@ exists to host it. Differences in a screen are listed in the web agent's report 
 - Deviations: conversation mode with extraction answers in plain language each turn and extracts once on exit (Reference forced JSON every turn, which sent raw JSON to the
   customer); Sub-flow refuses an unpublished, paused or other-workspace flow (Reference served any id from any tenant) and does not return to the parent; with no AI agent engine,
   Chatbot passes the node instead of ending the run; Webhook adds an `Idempotency-Key`, refuses private hosts and redirects, and its `_threadwise` envelope has empty device fields
-  because the run does not carry channel details; MySQL requires a public host; Google nodes use UTC; Google Form waits on a run, not on a `google_form_sessions` table, with a
+  because the run does not carry channel details; MySQL requires a public host; Google nodes use UTC; Google Form waits on a run, not on a `google_form_sessions` table (intended, TW-FLR-046: the waiting flow run is the session; the
+  empty table was dropped by migration `20261216090000_drop_dormant_tables.sql`), with a
   per-org token; Tag acts on the contact, not the conversation, and removing a missing tag no longer creates it; Assign agent with a team and no member keeps the thread on the
   team (only the manual strategy exists); Deal moves across pipelines with the deal and fires `deal.stage_changed`; Copy-to-number reads the 24-hour window from the target's own
   thread; ordering takes the workspace from the API key, reads an English reply as typed and translates only when unclear; analytics counts launches that failed before a run

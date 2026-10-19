@@ -62,7 +62,8 @@
       "field_match": "Kecocokan kolom",
       "date_field_match": "Kecocokan tanggal",
       "schedule": "Jadwal",
-      "ecom_event": "Event toko"
+      "ecom_event": "Event toko",
+      "segment_leave": "Keluar dari segmen"
     },
     "endReason": {
       "end_node": "Mencapai akhir alur",

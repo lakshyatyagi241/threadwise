@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import type { WorkspaceSettingsResponse } from '@crm/contracts';
 import { Alert, Button, Card, Field, Input, Select, Spinner, Switch } from '@crm/ui';
+import { WorkingHoursCard } from './working-hours-card';
 import {
   usePreferences,
   useSavePreferences,
@@ -98,41 +99,9 @@ function GeneralForm({ data }: { data: WorkspaceSettingsResponse }) {
           </div>
         </form>
       </Card>
-      <WorkingHours />
+      <WorkingHoursCard />
       <PreferencesCard />
     </div>
-  );
-}
-
-/**
- * TW-ASHELL-034: Reference's working-hours card is static markup that saves nothing. It is shown as Reference shows it (same rows and
- * defaults) but its controls are disabled and say so, rather than pretending to save.
- */
-function WorkingHours() {
-  const t = useTranslations(`${NS}.hours`);
-  const rows = [
-    { key: 'weekdays', on: true, from: '09:00', to: '18:00' },
-    { key: 'saturday', on: true, from: '10:00', to: '14:00' },
-    { key: 'sunday', on: false, from: '00:00', to: '00:00' },
-  ] as const;
-  return (
-    <Card className="space-y-3 p-6">
-      <h2 className="font-serif text-xl">{t('title')}</h2>
-      <p className="text-xs text-muted-foreground">{t('note')}</p>
-      <div className="space-y-2">
-        {rows.map((r) => (
-          <div
-            key={r.key}
-            className="grid grid-cols-2 items-center gap-3 text-sm sm:grid-cols-[100px_1fr_120px_120px]"
-          >
-            <span className="font-medium">{t(r.key)}</span>
-            <Switch checked={r.on} onCheckedChange={() => undefined} disabled label={t(r.key)} />
-            <Input type="time" value={r.from} disabled readOnly aria-label={t('from')} />
-            <Input type="time" value={r.to} disabled readOnly aria-label={t('to')} />
-          </div>
-        ))}
-      </div>
-    </Card>
   );
 }
 

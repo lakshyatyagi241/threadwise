@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { dateOrInstantSchema } from '../common/dates';
 import { uuidSchema } from '../common/ids';
+import { followUpFilterSchema } from '../lead-handling/follow-up';
 import { queryBoolean, queryList } from './query-helpers';
 
 /**
@@ -40,8 +41,18 @@ export const contactFilterShape = {
   imported: queryBoolean().optional(),
   /** true: opted out. false: subscribed. */
   unsubscribed: queryBoolean().optional(),
+  /** true: flagged as a minor. false: not flagged (BL-190). */
+  minor: queryBoolean().optional(),
+  /** true: uncontacted (BL-290). false: contacted. */
+  uncontacted: queryBoolean().optional(),
+  /** Where the contact's next follow-up stands now, in the workspace's time zone (BL-291): overdue, today, upcoming, someday or none. */
+  followUp: followUpFilterSchema.optional(),
   source: z.string().max(128).optional(),
   status: z.string().max(64).optional(),
+  /** Contacts whose stored time zone is this one (BL-193), e.g. `Asia/Kolkata`. */
+  timezone: z.string().trim().max(64).optional(),
+  /** Contacts with no stored time zone (read on their number's country, then the workspace). */
+  noTimezone: queryBoolean().optional(),
   /**
    * Date windows, both ends inclusive; a bare day (`2026-10-03`) covers that whole day in UTC. They
    * are the same conditions a segment rule's date operators build (one SQL builder for both).

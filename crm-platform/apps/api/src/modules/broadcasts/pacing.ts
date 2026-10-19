@@ -68,9 +68,9 @@ export const capRemaining = (cap: number, sentToday: number) => Math.max(0, cap 
 
 /** Why a run stopped before it finished, kept on the broadcast so a screen can say and the resumer knows when to try again. */
 export interface PauseNote {
-  reason: 'daily_cap' | 'halt' | 'manual';
+  reason: 'daily_cap' | 'halt' | 'quiet_hours' | 'manual';
   at: string;
-  /** For a daily cap: the instant it can resume. */
+  /** For a daily cap or the quiet hours: the instant it can resume. */
   resumeAfter?: string;
 }
 export const DAILY_CAP_MESSAGE =

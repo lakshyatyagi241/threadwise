@@ -832,7 +832,10 @@
         "placeholder": "örn. Mağazam",
         "button": "Katalog oluştur",
         "needName": "Bir katalog adı girin.",
-        "done": "Katalog oluşturuldu ve bağlandı."
+        "done": "Katalog oluşturuldu ve bağlandı.",
+        "loginCancelled": "Meta girişi tamamlanmadan kapatıldı. Tekrar deneyin ve katalog erişimini onaylayın.",
+        "sdkFailed": "Meta girişi yüklenemedi. Bağlantınızı veya reklam engelleyicinizi kontrol edip sayfayı yenileyin.",
+        "sdkLoading": "Meta girişi hâlâ yükleniyor. Biraz sonra tekrar deneyin."
       },
       "rename": {
         "label": "Katalog adı",

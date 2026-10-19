@@ -100,7 +100,31 @@ export class WizardLaunchService {
             buttons: templateB.buttons,
           }).map((s) => s.slot)
         : [];
-      const issues = wizardLaunchIssues(draft, { slots, slotsB, now });
+      // Each template after the first of a recurring broadcast's sequence: it must exist, and its placeholders are mapped like the first's.
+      const sequence = await Promise.all(
+        draft.templateSequence.map((e) =>
+          e.templateId ? this.repo.templateByUuid(tx, orgId, e.templateId) : undefined,
+        ),
+      );
+      const slotsSequence = sequence.map((t) =>
+        t
+          ? templateSlots({
+              templateBody: t.body,
+              header: t.header,
+              variableMap: t.variableMap,
+              buttons: t.buttons,
+            }).map((x) => x.slot)
+          : [],
+      );
+      const issues = wizardLaunchIssues(draft, { slots, slotsB, slotsSequence, now });
+      sequence.forEach((t, i) => {
+        if (t === undefined && draft.templateSequence[i]?.templateId) {
+          issues.push({
+            path: `templateSequence.${i}.templateId`,
+            code: 'sequence_template_required',
+          });
+        }
+      });
       if (
         template === undefined &&
         draft.templateId &&
@@ -118,8 +142,11 @@ export class WizardLaunchService {
       }
 
       // The classic gates: an approved, sendable template, and groups and segments that exist in this workspace.
-      const via = await this.runs.sender(tx, orgId, template, draft.senderKey);
+      // One number as ever; several (the share picker) are each resolved, and every template must be sendable from every one of them.
+      const senders = await this.runs.senderList(tx, orgId, template, draft);
+      const via = senders[0]!;
       await this.campaigns.assertTemplateUsable(tx, orgId, template.uuid, via.provider);
+      await this.runs.assertUsableOnEvery(tx, orgId, template, senders);
       if (draft.abTesting) {
         if (!templateB) {
           throw new AppError(
@@ -130,6 +157,39 @@ export class WizardLaunchService {
           );
         }
         await this.campaigns.assertTemplateUsable(tx, orgId, templateB.uuid, via.provider);
+        await this.runs.assertUsableOnEvery(tx, orgId, templateB, senders);
+      }
+      for (const t of sequence) {
+        if (t) {
+          await this.campaigns.assertTemplateUsable(tx, orgId, t.uuid, via.provider);
+          await this.runs.assertUsableOnEvery(tx, orgId, t, senders);
+        }
+      }
+      // Follow-up steps: each template must be approved and sendable from this number, each flow must exist in this workspace.
+      for (const [i, f] of draft.followUps.entries()) {
+        const path = `followUps.${i}.action`;
+        if (f.action.kind === 'template') {
+          const t = f.action.templateId
+            ? await this.repo.templateByUuid(tx, orgId, f.action.templateId)
+            : undefined;
+          if (!t) {
+            throw new AppError(
+              ERROR_CODES.CAMP_WIZARD_INCOMPLETE,
+              'The broadcast is not complete.',
+              HttpStatus.UNPROCESSABLE_ENTITY,
+              [{ path, message: 'follow_up_template_required' }],
+            );
+          }
+          await this.campaigns.assertTemplateUsable(tx, orgId, t.uuid, via.provider);
+          await this.runs.assertUsableOnEvery(tx, orgId, t, senders);
+        } else if (!f.action.flowId || !(await this.repo.flowExists(tx, orgId, f.action.flowId))) {
+          throw new AppError(
+            ERROR_CODES.CAMP_WIZARD_INCOMPLETE,
+            'The broadcast is not complete.',
+            HttpStatus.UNPROCESSABLE_ENTITY,
+            [{ path, message: 'follow_up_flow_required' }],
+          );
+        }
       }
       await this.drafts.assertSources(tx, orgId, draft.audience);
       await this.drafts.assertCsv(tx, orgId, draft.audience);
@@ -156,6 +216,11 @@ export class WizardLaunchService {
           );
         }
         const { sender, count } = await this.runs.preflight(tx, orgId, draft, template);
+        // The wallet is checked for every template of the sequence, at its own category's rate: a later, dearer one must not pass here
+        // and stop a run on an empty wallet.
+        for (const t of sequence) {
+          if (t) await this.runs.preflight(tx, orgId, draft, t);
+        }
         const seriesId = await this.repo.insertSeries(tx, orgId, {
           name: draft.name.trim(),
           rule,

@@ -1,0 +1,262 @@
+{
+ "ranOn": "2026-10-17, Windows 11 laptop, repo on OneDrive, Docker Desktop",
+ "what": "Three baseline recordings, then the gate on a clean run, on a run with a 300 ms block injected every 5 s, and on a run taken while the host was starved. Profile normal, 90 s, 300 contacts (run-load.mjs --profiles=normal --seconds=90 --contacts=300 --settle-seconds=20).",
+ "baseline": {
+  "schema": 1,
+  "recordedAt": "2026-10-17T12:02:56.456Z",
+  "profile": "normal",
+  "fingerprint": {
+   "os": "win32",
+   "nodeMajor": "22",
+   "cores": 22,
+   "cpu": "Intel(R) Core(TM) Ultra 7 155H, 22 logical cores, 31.4 GB"
+  },
+  "commits": [
+   "f2262111fa07ac9a21fc00dade55361cce67dea8",
+   "f2262111fa07ac9a21fc00dade55361cce67dea8",
+   "f2262111fa07ac9a21fc00dade55361cce67dea8"
+  ],
+  "runs": 3,
+  "metrics": {
+   "apiLoopP99Ms": {
+    "values": [
+     44.83,
+     27.1,
+     33.59
+    ]
+   },
+   "apiLoopMaxMs": {
+    "values": [
+     83.3,
+     35.91,
+     52.95
+    ]
+   },
+   "apiWindowsOver250Share": {
+    "values": [
+     0.034,
+     0,
+     0.048
+    ]
+   },
+   "callerP95Ms": {
+    "values": [
+     6142.91,
+     831.26,
+     1184.2
+    ]
+   }
+  },
+  "calibration": [
+   {
+    "pgP50": 8.4,
+    "pgP99": 413.58,
+    "redisP50": 12.93,
+    "redisP99": 331.97
+   },
+   {
+    "pgP50": 33.98,
+    "pgP99": 470.84,
+    "redisP50": 14.01,
+    "redisP99": 344.47
+   },
+   {
+    "pgP50": 16.67,
+    "pgP99": 245.34,
+    "redisP50": 4.32,
+    "redisP99": 62.19
+   }
+  ],
+  "rule": "allowed = median + max(2 x (max - min), relative floor x median, absolute floor); floors in tools/event-loop-audit/regression-check.mjs",
+  "note": "Valid only for runs on the same kind of machine (os, node major, logical cores). Separate boots, so the spread includes start-up differences but not days of drift."
+ },
+ "runs": [
+  {
+   "run": "base1",
+   "what": "recorded into the baseline",
+   "values": {
+    "apiLoopP99Ms": 44.83,
+    "apiLoopMaxMs": 83.3,
+    "apiWindowsOver250Share": 0.034,
+    "callerP95Ms": 6142.91
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 8.4,
+    "redis": 12.93
+   },
+   "windows": 29,
+   "blockedWindows": {
+    "warn": 25,
+    "critical": 5
+   },
+   "verdict": {
+    "exit": 0,
+    "text": "NO REGRESSION FOUND",
+    "lines": [
+     "PASS          apiLoopP99Ms 44.83 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "PASS          apiLoopMaxMs 83.3 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "PASS          apiWindowsOver250Share 0.034 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 6142.91 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "NO REGRESSION FOUND (not judged: callerP95Ms)"
+    ]
+   }
+  },
+  {
+   "run": "base2b",
+   "what": "recorded into the baseline",
+   "values": {
+    "apiLoopP99Ms": 27.1,
+    "apiLoopMaxMs": 35.91,
+    "apiWindowsOver250Share": 0,
+    "callerP95Ms": 831.26
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 33.98,
+    "redis": 14.01
+   },
+   "windows": 22,
+   "blockedWindows": {
+    "warn": 21,
+    "critical": 0
+   },
+   "verdict": {
+    "exit": 0,
+    "text": "NO REGRESSION FOUND",
+    "lines": [
+     "PASS          apiLoopP99Ms 27.1 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "PASS          apiLoopMaxMs 35.91 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "PASS          apiWindowsOver250Share 0 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 831.26 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "NO REGRESSION FOUND (not judged: callerP95Ms)"
+    ]
+   }
+  },
+  {
+   "run": "base3",
+   "what": "recorded into the baseline",
+   "values": {
+    "apiLoopP99Ms": 33.59,
+    "apiLoopMaxMs": 52.95,
+    "apiWindowsOver250Share": 0.048,
+    "callerP95Ms": 1184.2
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 16.67,
+    "redis": 4.32
+   },
+   "windows": 21,
+   "blockedWindows": {
+    "warn": 22,
+    "critical": 0
+   },
+   "verdict": {
+    "exit": 0,
+    "text": "NO REGRESSION FOUND",
+    "lines": [
+     "PASS          apiLoopP99Ms 33.59 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "PASS          apiLoopMaxMs 52.95 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "PASS          apiWindowsOver250Share 0.048 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 1184.2 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "NO REGRESSION FOUND (not judged: callerP95Ms)"
+    ]
+   }
+  },
+  {
+   "run": "check",
+   "what": "clean run, not in the baseline",
+   "values": {
+    "apiLoopP99Ms": 33.98,
+    "apiLoopMaxMs": 64.39,
+    "apiWindowsOver250Share": 0,
+    "callerP95Ms": 4195.47
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 16.25,
+    "redis": 9.29
+   },
+   "windows": 23,
+   "blockedWindows": {
+    "warn": 22,
+    "critical": 1
+   },
+   "verdict": {
+    "exit": 0,
+    "text": "NO REGRESSION FOUND",
+    "lines": [
+     "PASS          apiLoopP99Ms 33.98 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "PASS          apiLoopMaxMs 64.39 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "PASS          apiWindowsOver250Share 0 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 4195.47 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "NO REGRESSION FOUND (not judged: callerP95Ms)"
+    ]
+   }
+  },
+  {
+   "run": "inject",
+   "what": "a 300 ms block every 5 s injected into the API (inject-block.cjs)",
+   "values": {
+    "apiLoopP99Ms": 36.7,
+    "apiLoopMaxMs": 315.62,
+    "apiWindowsOver250Share": 0.955,
+    "callerP95Ms": 2339.76
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 41.77,
+    "redis": 10.38
+   },
+   "windows": 22,
+   "blockedWindows": {
+    "warn": 1,
+    "critical": 22
+   },
+   "verdict": {
+    "exit": 1,
+    "text": "REGRESSION",
+    "lines": [
+     "PASS          apiLoopP99Ms 36.7 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "FAIL          apiLoopMaxMs 315.62 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "FAIL          apiWindowsOver250Share 0.955 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 2339.76 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "REGRESSION: at least one metric is above what the baseline allows"
+    ]
+   }
+  },
+  {
+   "run": "loaded/base2",
+   "what": "taken while 46 leaked test containers were using the CPU; Postgres round trip p50 131 ms",
+   "values": {
+    "apiLoopP99Ms": 62.36,
+    "apiLoopMaxMs": 155.32,
+    "apiWindowsOver250Share": 0.133,
+    "callerP95Ms": 38262.48
+   },
+   "hostRoundTripsP50Ms": {
+    "postgres": 131.29,
+    "redis": 94.77
+   },
+   "windows": 45,
+   "blockedWindows": {
+    "warn": 37,
+    "critical": 16
+   },
+   "verdict": {
+    "exit": 2,
+    "text": "CANNOT DECIDE",
+    "lines": [
+     "PASS          apiLoopP99Ms 62.36 ms (baseline median 33.59 ms, spread 17.73 ms, allowed up to 69.05 ms)",
+     "FAIL          apiLoopMaxMs 155.32 ms (baseline median 52.95 ms, spread 47.39 ms, allowed up to 147.73 ms)",
+     "PASS          apiWindowsOver250Share 0.133 (baseline median 0.034, spread 0.048, allowed up to 0.184)",
+     "INCONCLUSIVE  callerP95Ms 38262.48 ms: not judged, the recorded runs disagree by more than their median (baseline median 1184.2 ms, spread 5311.65 ms, allowed up to 11807.5 ms)",
+     "CANNOT DECIDE: a metric is above its allowance, but this host's round trips differ from the baseline's (Postgres SELECT 1 p50 131.29 ms against 8.4 to 33.98 ms when recorded; Redis PING p50 94.77 ms against 4.32 to 14.01 ms when recorded), so it may be the host; run it again on a quiet machine"
+    ]
+   }
+  }
+ ],
+ "caveats": [
+  "One laptop that was noisy all day (host round trips 8 to 34 ms p50, p99 over 400 ms; the caller p95 of the three baseline runs was 0.8 s, 1.2 s and 6.1 s). The numbers say nothing about CI runners or production.",
+  "Only two clean runs were checked against the baseline that did not help record them (the second through ci-regression.sh: p99 30 ms, worst delay 51 ms, no window over 250 ms, exit 0), so the false-alarm rate is NOT measured. The three recorded runs passing their own baseline is not evidence.",
+  "The detection proof is one injected shape (300 ms every 5 s, nearly every window). A rarer or shorter block is not shown to be caught; apiLoopP99Ms does not move for a single block per window.",
+  "The caller p95 was not judged in any run: the recorded runs disagree by more than their median, so the gate declines to use it.",
+  "Two earlier attempts at this series ran while 46 test containers used the CPU; one run aborted because the API took over 10 minutes to become ready. Those are not in the baseline."
+ ]
+}

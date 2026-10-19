@@ -29,7 +29,8 @@
       "priorityChanged": "Đã cập nhật mức ưu tiên",
       "snoozed": "Đã tạm ẩn cuộc trò chuyện",
       "tagAdded": "Đã thêm thẻ",
-      "tagRemoved": "Đã bỏ thẻ"
+      "tagRemoved": "Đã bỏ thẻ",
+      "spammed": "Đã đánh dấu cuộc trò chuyện là spam."
     },
     "list": {
       "title": "Hộp thư",
@@ -44,12 +45,8 @@
         "unassigned": "Chưa giao",
         "unread": "Chưa đọc"
       },
-      "statusFilter": "Trạng thái",
-      "statusOpen": "Đang mở",
-      "statusAll": "Mọi trạng thái",
       "status": {
         "open": "Đang mở",
-        "pending": "Đang chờ",
         "snoozed": "Tạm hoãn",
         "resolved": "Đã giải quyết",
         "closed": "Đã giải quyết",
@@ -61,7 +58,6 @@
         "high": "Cao",
         "urgent": "Khẩn cấp"
       },
-      "channelFilter": "Kênh",
       "allChannels": "Mọi kênh",
       "archived": "Đã lưu trữ",
       "backToInbox": "Quay lại hộp thư",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Chọn",
-      "selectDone": "Xong"
+      "selectDone": "Xong",
+      "filters": {
+        "open": "Bộ lọc",
+        "openActive": "Bộ lọc (đang bật {count})",
+        "title": "Bộ lọc",
+        "close": "Đóng",
+        "reset": "Đặt lại",
+        "cancel": "Hủy",
+        "apply": "Áp dụng",
+        "status": "Trạng thái chat",
+        "statusHint": "Không chọn gì thì hiển thị các cuộc trò chuyện đang mở.",
+        "conversation": "Cuộc trò chuyện",
+        "any": "Bất kỳ",
+        "assigned": "Đã giao",
+        "unassigned": "Chưa giao",
+        "unattended": "Chưa xử lý",
+        "labels": "Thẻ",
+        "channels": "Kênh",
+        "agents": "Nhân viên",
+        "sortBy": "Sắp xếp theo",
+        "recent": "Mới nhất",
+        "old": "Cũ nhất",
+        "dateRange": "Khoảng ngày (hoạt động cuối)",
+        "from": "Từ",
+        "to": "Đến",
+        "select": "Chọn một mục",
+        "search": "Tìm kiếm",
+        "noMatch": "Không có kết quả",
+        "today": "Hôm nay",
+        "last7": "7 ngày qua",
+        "last30": "30 ngày qua",
+        "thisMonth": "Tháng này",
+        "clearDates": "Xóa ngày",
+        "previousMonth": "Tháng trước",
+        "nextMonth": "Tháng sau"
+      },
+      "rowMenu": "Thêm thao tác cho {name}",
+      "priorityMenu": "Mức ưu tiên",
+      "statusFilter": "Trạng thái",
+      "statusOpen": "Đang mở",
+      "statusAll": "Mọi trạng thái",
+      "channelFilter": "Kênh",
+      "selectRow": "Chọn {name}",
+      "snoozedFor": "Đã hoãn · {left}",
+      "snoozeLeft": {
+        "due": "đến hạn",
+        "minutes": "{count} phút",
+        "hours": "{count} giờ",
+        "days": "{count} ngày"
+      },
+      "unsnoozesAt": "Mở lại lúc {time}"
     },
     "status": {
       "received": "Đã nhận",
@@ -128,6 +174,7 @@
       "mediaNotFound": "Tệp đính kèm đã hết hạn hoặc bị xóa. Hãy đính kèm lại.",
       "statusInvalid": "Không cho phép thay đổi này khi cuộc trò chuyện đang ở trạng thái hiện tại.",
       "assigneeInvalid": "Không thể giao cuộc trò chuyện này cho người đó.",
+      "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "forbidden": "Bạn không có quyền thực hiện thao tác này.",
       "rateLimited": "Quá nhiều yêu cầu. Chờ một lát rồi thử lại.",
       "simulatorDisabled": "Trình mô phỏng kênh đã tắt trên máy chủ này.",
@@ -232,7 +279,11 @@
         "undone": "Đã hoàn tác thay đổi giai đoạn: quay lại {stage}.",
         "undoneToast": "Đã đưa giai đoạn về {stage}.",
         "couldNotUndo": "Không thể hoàn tác thay đổi này nữa: liên hệ đã chuyển tiếp hoặc đã được hoàn tác."
-      }
+      },
+      "heldUntil": "Tạm giữ đến {when}",
+      "heldWhy": "Tin nhắn tiếp thị này đang chờ giờ yên tĩnh của bạn kết thúc. Tin sẽ được gửi khi đó, nếu trong lúc chờ liên hệ chưa hủy đăng ký.",
+      "templateSent": "Mẫu “{name}” đã gửi qua {channel}",
+      "templateSentPlain": "Mẫu “{name}” đã gửi"
     },
     "media": {
       "openImage": "Mở hình ảnh {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "Gửi mẫu tin nhắn"
       },
       "readOnly": "Bạn có thể đọc cuộc trò chuyện này nhưng không có quyền trả lời.",
+      "resolvedBanner": "Cuộc trò chuyện này đã được giải quyết. Hãy mở lại để trả lời.",
+      "assignedToOther": "Cuộc trò chuyện này đã được giao cho nhân viên khác. Hãy giao cho chính bạn trước để trả lời.",
       "typing": "{count, plural, other {# đồng nghiệp đang nhập}}",
       "messagesLabel": "Tin nhắn",
       "loadOlder": "Tải tin nhắn trước đó",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Tin nhắn mới: {text}",
       "attachment": "một tệp đính kèm",
       "jumpLatest": "Đến tin nhắn mới nhất",
-      "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}"
+      "jumpLatestNew": "{count, plural, other {# tin nhắn mới}}",
+      "searchOpen": "Tìm trong cuộc trò chuyện này",
+      "searchPlaceholder": "Tìm trong cuộc trò chuyện này",
+      "searchCount": "{current} trên {total}",
+      "searchNone": "Không có kết quả",
+      "searchPrev": "Kết quả trước",
+      "searchNext": "Kết quả sau",
+      "searchClose": "Đóng tìm kiếm"
     },
     "groupThread": {
       "openGroup": "Mở nhóm",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Trả lời nhanh",
-      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi."
+      "savedReplyIssues": "Chưa điền và giữ nguyên như đã viết ({count}): {list}. Hãy sửa trước khi gửi.",
+      "toolbar": {
+        "label": "Định dạng tin nhắn",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "underline": "Gạch chân",
+        "strike": "Gạch ngang",
+        "bullets": "Danh sách gạch đầu dòng",
+        "numbers": "Danh sách đánh số",
+        "ai": {
+          "open": "Trợ lý AI thông minh",
+          "noModel": "Không gian làm việc này chưa bật mô hình AI nào",
+          "title": "Trợ lý AI thông minh",
+          "condense": "Rút gọn",
+          "condenseHint": "Làm văn bản ngắn gọn, súc tích hơn",
+          "fix": "Sửa ngữ pháp",
+          "fixHint": "Sửa lỗi ngữ pháp và chính tả",
+          "positive": "Giọng tích cực",
+          "positiveHint": "Làm văn bản tích cực và vui vẻ hơn",
+          "translate": "Dịch",
+          "translateHint": "Dịch sang các ngôn ngữ khác",
+          "selectLanguage": "Chọn ngôn ngữ",
+          "searchLanguages": "Tìm ngôn ngữ…",
+          "noLanguage": "Không có ngôn ngữ phù hợp",
+          "working": "Đang xử lý…",
+          "empty": "Hãy viết tin nhắn trước.",
+          "failed": "AI không thể thay đổi văn bản. Hãy thử lại."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Ghi chú và dòng thời gian",
@@ -452,7 +540,13 @@
         "pickTeam": "Chọn nhóm cho cuộc trò chuyện này",
         "noTeam": "Không có nhóm",
         "onLeave": "Đang nghỉ phép",
-        "onLeaveUntil": "Nghỉ phép đến {date}"
+        "onLeaveUntil": "Nghỉ phép đến {date}",
+        "availability": {
+          "online": "Trực tuyến",
+          "away": "Vắng mặt",
+          "busy": "Bận",
+          "offline": "Ngoại tuyến"
+        }
       },
       "presence": {
         "online": "Trực tuyến",
@@ -461,16 +555,8 @@
         "offline": "Ngoại tuyến"
       },
       "notes": {
-        "tab": "Ghi chú",
-        "label": "Ghi chú nội bộ mới",
-        "placeholder": "Viết ghi chú chỉ nhóm của bạn mới thấy",
-        "hint": "Ctrl+Enter để thêm ghi chú.",
-        "add": "Thêm ghi chú",
-        "addFailed": "Không thể lưu ghi chú.",
-        "loading": "Đang tải ghi chú",
-        "empty": "Chưa có ghi chú nào.",
-        "unknownAuthor": "Một đồng nghiệp",
-        "delete": "Xóa ghi chú này"
+        "tab": "Ghi chú liên hệ",
+        "noContact": "Cuộc trò chuyện này không có liên hệ để thêm ghi chú."
       },
       "timeline": {
         "tab": "Dòng thời gian",
@@ -496,6 +582,8 @@
           "tag_removed": "Thẻ được bỏ bởi {actor}",
           "first_response": "Đã gửi phản hồi đầu tiên",
           "sla_breach": "Đã quá hạn phản hồi",
+          "spam_flagged": "Đã đánh dấu spam bởi {actor}",
+          "escalated": "Đã leo thang",
           "unknown": "{what} bởi {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Không có tin nhắn",
         "status": {
           "open": "Đang mở",
-          "pending": "Đang chờ",
           "snoozed": "Tạm hoãn",
           "resolved": "Đã giải quyết",
           "closed": "Đã đóng",
@@ -620,6 +707,8 @@
         "format": "{label} không được chứa ký tự xuống dòng, tab hoặc bốn dấu cách liên tiếp."
       },
       "reason": {
+        "other_number": "Thuộc số WhatsApp khác, nên không gửi được từ cuộc trò chuyện này.",
+        "not_linked": "Kênh của cuộc trò chuyện này chưa được liên kết với số WhatsApp nào, nên không gửi được mẫu tin nào từ đây.",
         "paused": "WhatsApp đã tạm dừng. Có thể gửi lại sau khi hết thời gian tạm dừng.",
         "media_header": "Có tiêu đề là hình ảnh, video hoặc tài liệu, hiện chưa thể gửi từ hộp thư.",
         "header_variable": "Có biến trong tiêu đề, hiện chưa thể điền từ hộp thư.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "Email"
+        "email": "Email",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Liên hệ",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Ưu tiên",
       "snooze": "Tạm ẩn",
-      "wake": "Hiện lại ngay"
+      "wake": "Hiện lại ngay",
+      "markSpam": "Đánh dấu là spam",
+      "notSpam": "Không phải spam"
     },
     "bulk": {
       "barLabel": "Thao tác hàng loạt",
@@ -959,7 +1053,8 @@
       "tagAdd": "Thêm thẻ",
       "tagRemove": "Bỏ thẻ",
       "onLeave": "đang nghỉ phép",
-      "onLeaveUntil": "nghỉ phép đến {date}"
+      "onLeaveUntil": "nghỉ phép đến {date}",
+      "spam": "Đánh dấu là spam"
     },
     "tags": {
       "tag": "Thẻ",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: đã lỡ (hạn là {time})",
       "titleOpen": "{kind}: hạn {time}"
+    },
+    "channelType": {
+      "official": "Chính thức",
+      "unofficial": "Không chính thức",
+      "officialFull": "Chính thức (WhatsApp Cloud API)",
+      "unofficialFull": "Không chính thức (QR / Baileys)"
     }
   }
 }

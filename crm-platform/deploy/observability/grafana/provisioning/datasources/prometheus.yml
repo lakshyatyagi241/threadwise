@@ -1,0 +1,14 @@
+# Grafana reads Prometheus through this one data source. The uid is the one every dashboard JSON refers to
+# (tools/event-loop-audit/dashboards/build.mjs): change both together or not at all.
+apiVersion: 1
+datasources:
+  - name: Prometheus
+    uid: crm-prometheus
+    type: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+    jsonData:
+      httpMethod: POST
+      timeInterval: 15s # the scrape interval in ../prometheus.yml, so $__rate_interval is never shorter than two samples

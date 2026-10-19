@@ -11,11 +11,18 @@ export const SEND_PRIMITIVES = [
   'ChannelDispatcher',
   'SMS_GATEWAY',
   'TELEGRAM_API',
+  'LINE_API',
+  'VIBER_API',
+  'WECHAT_API',
   'CALLING_GRAPH',
+  // Asks a telephony vendor to ring a customer (click-to-call): only the click-to-call service may, after its gate check.
+  'clickToCall',
   'APPOINTMENT_MESSENGER',
   'MailDriverRegistry',
   'EngineSenderRegistry',
   'OutboundRegistry',
+  // The commerce (Shopify / WooCommerce) sender: a template send to a customer needs the clearance CommerceConsentService issues.
+  'COMMERCE_SENDER',
 ] as const;
 
 /** Text that marks a file as gate-aware. */
@@ -27,7 +34,11 @@ export interface AllowlistEntry {
   reason: string;
 }
 
-const GAP = 'KNOWN GAP (BL-141 follow-up):';
+/**
+ * What an entry's reason starts with while its file still sends without asking the gate. There is none today (the commerce senders were the
+ * last, closed in BL-278); the guard test fails if one is added, so a gap is never left in silently.
+ */
+export const KNOWN_GAP_PREFIX = 'KNOWN GAP (BL-141 follow-up):';
 
 export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   // --- the dispatcher itself and the layers beneath it -------------------------------------------------------------------------
@@ -68,6 +79,54 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
     path: 'modules/channel-telegram/bots.service.ts',
     reason: 'Bot setup (webhook registration); sends nothing to a customer.',
   },
+  {
+    path: 'modules/channel-line/line-channel.adapter.ts',
+    reason: 'Adapter behind the dispatcher (the gate runs in ChannelDispatcher.send).',
+  },
+  {
+    path: 'modules/channel-line/line-sender.service.ts',
+    reason: 'Reply sender used by the LINE adapter, behind the dispatcher.',
+  },
+  {
+    path: 'modules/channel-line/inbound.service.ts',
+    reason: 'Inbound handling; reads the sender profile and sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-line/channels.service.ts',
+    reason: 'Channel setup (bot info, webhook registration); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-line/line-token.service.ts',
+    reason:
+      'Issues the rotated channel access token (LINE token endpoint); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-viber/viber-sender.service.ts',
+    reason: 'Reply sender used by the Viber adapter, behind the dispatcher.',
+  },
+  {
+    path: 'modules/channel-viber/channels.service.ts',
+    reason: 'Channel setup (account check, webhook registration); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-wechat/wechat-channel.adapter.ts',
+    reason: 'Adapter behind the dispatcher (the gate runs in ChannelDispatcher.send).',
+  },
+  {
+    path: 'modules/channel-wechat/wechat-token.service.ts',
+    reason:
+      'The Official Account access token and the request wrapper that refreshes it; used by the adapter (behind the dispatcher) and the broadcast sender. Sends nothing itself.',
+  },
+  {
+    path: 'modules/channel-wechat/channels.service.ts',
+    reason:
+      'Account setup (fetches an access token to prove the credentials); sends nothing to a customer.',
+  },
+  {
+    path: 'modules/channel-wechat/inbound.service.ts',
+    reason:
+      'Inbound handling; reads a follower profile for the thread title, sends nothing to a customer.',
+  },
   // --- staff-side, setup and test sends -------------------------------------------------------------------------------------------
   {
     path: 'modules/channel-sms/sms-senders.service.ts',
@@ -77,6 +136,11 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
   {
     path: 'modules/calling-voice/calling-numbers.service.ts',
     reason: 'Calling setup on the number (Meta settings); places no call.',
+  },
+  {
+    path: 'modules/calling-voice/calling-readiness.service.ts',
+    reason:
+      'Reads the number calling settings and, after a connect for an opted-in workspace, switches calling on at Meta; places no call and sends no message to a contact.',
   },
   {
     path: 'modules/calling-voice/call-permission.service.ts',
@@ -118,16 +182,17 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Registry of broadcast engines; the audience is gated in BroadcastsService.resolveAudience.',
   },
   {
-    path: 'modules/broadcasts/broadcast-dispatch.service.ts',
-    reason: `${GAP} the audience is gated when the broadcast is created; a send-time re-check of the recipients is still to do.`,
-  },
-  {
     path: 'modules/channel-email/drivers/driver-providers.ts',
     reason: 'Provider wiring of the mail drivers; reached only through the email adapter.',
   },
   {
     path: 'modules/channel-email/drivers/google-mail.driver.ts',
     reason: 'Provider driver; reached only through the email adapter.',
+  },
+  {
+    path: 'modules/channel-email/mail-connection-test.service.ts',
+    reason:
+      'Test credentials for an IMAP/SMTP mailbox (E-08): tries the two logins and reports the result; stores and sends nothing to a contact.',
   },
   {
     path: 'modules/channel-email/mail-push.service.ts',
@@ -160,12 +225,8 @@ export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
       'Twilio transport; reached from broadcasts, campaigns and schedules, whose audiences are gated.',
   },
   {
-    path: 'modules/shopify-woocommerce/_shims/engine-commerce-sender.ts',
-    reason: `${GAP} commerce broadcasts (abandoned cart, order updates) send through the engine registry; they honour the contact flag only.`,
-  },
-  // --- open gaps ----------------------------------------------------------------------------------------------------------------
-  {
-    path: 'modules/channel-telegram/tg-broadcast-sender.service.ts',
-    reason: `${GAP} Telegram broadcasts go to bot subscribers by chat id with no contact link; needs the chat to contact mapping first.`,
+    path: 'modules/shopify-woocommerce/cart.service.ts',
+    reason:
+      'Asks the commerce sender only whether a number is connected (canSend) before it schedules a follow-up; it sends nothing. The reminder itself goes out through EventMessageService, which clears the customer with CommerceConsentService.',
   },
 ];

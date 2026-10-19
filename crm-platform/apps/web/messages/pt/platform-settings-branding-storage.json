@@ -19,7 +19,8 @@
       "googleCalendar": "Google Agenda",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Construtor de fluxos"
+      "flowBuilder": "Construtor de fluxos",
+      "microsoftCalendar": "Calendário Microsoft"
     },
     "hub": {
       "kicker": "Admin - Configurações do projeto",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Obrigatório para Spaces, R2 e MinIO. Um /bucket no final é removido.",
-            "placeholder": "https://… (obrigatório para Spaces / R2 / MinIO; automático para Wasabi e Bunny)"
+            "hint": "Obrigatório para Spaces e R2. Um /bucket no final é removido.",
+            "placeholder": "https://… (obrigatório para Spaces / R2; automático para Wasabi e Bunny)"
           },
           "cdnUrl": {
             "label": "URL pública / CDN (opcional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Usar endpoint em estilo de caminho (MinIO / alguns armazenamentos compatíveis com S3)"
+            "label": "Usar endpoint em estilo de caminho (alguns armazenamentos compatíveis com S3)"
           },
           "storageZone": {
             "label": "Zona de armazenamento",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / compatível com S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Privado (URLs assinadas)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "O cliente OAuth do Google pelo qual cada espaço de trabalho conecta sua agenda.",
+        "description": "O cliente OAuth do Google pelo qual cada espaço de trabalho conecta sua conta do Google, para a agenda, Sheets, Docs e Forms.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth do Google"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Permitir que os espaços de trabalho conectem o Google Agenda",
-            "hint": "Desativado: nenhum espaço de trabalho pode conectar, e nada é gravado nem lido de uma agenda."
+            "label": "Permitir que os espaços de trabalho conectem o Google",
+            "hint": "Desativado: nenhum espaço de trabalho pode conectar, e nada é lido nem gravado no Google (agenda, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "ID do cliente",
@@ -1024,6 +1024,37 @@
             "advanced": "Somente avançado"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "description": "O app da Microsoft pelo qual todos os espaços de trabalho conectam seu calendário do Outlook ou do Microsoft 365.",
+        "sections": {
+          "oauth": {
+            "title": "App do Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Permitir que os espaços de trabalho conectem o Outlook",
+            "hint": "Desativado: nenhum espaço de trabalho pode se conectar e nada é lido nem gravado em nenhum calendário do Outlook. Os calendários conectados são mantidos."
+          },
+          "clientId": {
+            "label": "ID do aplicativo (cliente)",
+            "hint": "No centro de administração do Microsoft Entra, Registros de aplicativos, Visão geral. Se ficar vazio, usa MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Segredo do cliente",
+            "hint": "Armazenado criptografado e nunca mais exibido. Se ficar vazio, mantém o segredo salvo; MICROSOFT_CALENDAR_CLIENT_SECRET é a alternativa."
+          },
+          "tenant": {
+            "label": "Locatário",
+            "hint": "common permite contas de trabalho, escola e pessoais; use o ID de um diretório (locatário) para um app de locatário único. Se ficar vazio, usa MICROSOFT_CALENDAR_TENANT e, na falta dele, common."
+          },
+          "redirectUri": {
+            "label": "Substituição do URI de redirecionamento",
+            "hint": "Deixe vazio para usar o endereço acima. Ele deve corresponder exatamente a um URI de redirecionamento do app."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "Armazenamento em nuvem",
-        "description": "Envie a mídia dos clientes para o seu próprio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 ou MinIO.",
+        "description": "Envie a mídia dos clientes para o seu próprio bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Agenda",
-        "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar sua agenda para reservas e horários ocupados.",
-        "tags": "Google / OAuth / Agenda"
+        "description": "O cliente OAuth do Google que os espaços de trabalho usam para conectar sua conta do Google para reservas, Sheets, Docs e Forms.",
+        "tags": "Google / OAuth / Agenda / Sheets"
       },
       "googleMail": {
         "title": "E-mail Gmail",
@@ -1151,6 +1182,11 @@
         "title": "Construtor de fluxos",
         "description": "O construtor de fluxos padrão de todos os espaços de trabalho: Simples, passo a passo, ou Avançado, em canvas. Um espaço de trabalho pode substituí-lo.",
         "tags": "Simples / Avançado / Automação"
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "description": "O app da Microsoft que os espaços de trabalho usam para conectar seus calendários do Outlook e do Microsoft 365 para as reservas.",
+        "tags": "Microsoft / OAuth / Outlook / Calendário"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Use os campos do Bunny: zona de armazenamento e senha. A região é a região da zona (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Preencha os campos S3 e cole a URL do endpoint. Marque o estilo de caminho para MinIO."
+              "title": "Spaces / R2",
+              "body": "Preencha os campos S3 e cole a URL do endpoint."
             },
             "test": {
               "title": "Sempre teste primeiro",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Agenda",
         "eyebrow": "Admin - Agendamentos",
-        "description": "Um único cliente OAuth do Google Cloud para toda a plataforma. Cada espaço de trabalho então conecta a própria conta do Google em Agendamentos, Configurações; um espaço de trabalho nunca vê o ID ou o segredo do cliente.",
+        "description": "Um único cliente OAuth do Google Cloud para toda a plataforma. Cada espaço de trabalho então conecta a própria conta do Google em Conta do Google, nas Configurações, e escolhe quais permissões conceder; um espaço de trabalho nunca vê o ID ou o segredo do cliente.",
         "sections": {
           "oauth": {
             "title": "Cliente OAuth do Google",
-            "description": "Sem ID e segredo do cliente, os espaços de trabalho veem o Google Agenda como indisponível e os agendamentos continuam sem agenda."
+            "description": "Sem ID e segredo do cliente, os espaços de trabalho veem o Google como indisponível, as reservas continuam sem agenda e as etapas do Google nos fluxos são ignoradas."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. Projeto e API",
-              "body": "No Console do Google Cloud, crie um projeto e ative a API do Google Agenda."
+              "body": "No Console do Google Cloud, crie um projeto e ative as APIs Google Agenda, Google Sheets, Google Docs, Google Drive e Google Forms. Uma permissão só funciona quando a API dela está ativada."
             },
             "redirect": {
               "title": "2. Cliente OAuth",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. Tela de consentimento",
-              "body": "Adicione os escopos calendar.events, calendar.freebusy e calendar.calendarlist.readonly e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar."
+              "body": "Adicione os escopos que o produto pede (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly) e depois publique o app: em modo de teste, o Google encerra cada autorização após 7 dias e os espaços de trabalho precisarão reconectar. Os escopos do drive são restritos e precisam da análise do Google."
             },
             "workspaces": {
               "title": "4. Espaços de trabalho conectam",
-              "body": "Cole o ID e o segredo do cliente aqui e salve. Os admins então conectam em Agendamentos, Configurações, Google Agenda."
+              "body": "Cole o ID e o segredo do cliente aqui e salve. Os admins então conectam em Configurações, Integrações, Conta do Google, ou em Agendamentos, Configurações, Google Agenda."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "Fluxos que já existem",
               "body": "Alterar esta configuração nunca altera ou apaga um fluxo. Um fluxo continua funcionando; ele só é aberto no construtor que estiver ativo. Um espaço de trabalho que escolheu o próprio construtor o mantém até escolher novamente o padrão da plataforma."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Calendário Microsoft",
+        "eyebrow": "Admin - Agendamentos",
+        "description": "Um único app do Microsoft Entra para toda a plataforma. Cada espaço de trabalho conecta então seu próprio calendário do Outlook ou do Microsoft 365 em Agendamentos, Configurações, e nunca vê o ID do cliente nem o segredo.",
+        "sections": {
+          "oauth": {
+            "title": "App do Microsoft Entra",
+            "description": "Sem um ID de cliente e um segredo, os espaços de trabalho veem o Outlook como indisponível e as reservas continuam sem ele. O Google Calendar não é afetado."
+          }
+        },
+        "guide": {
+          "title": "Configure no Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. Registro do aplicativo",
+              "body": "No centro de administração do Microsoft Entra, crie um registro de aplicativo para contas em qualquer diretório organizacional e contas pessoais da Microsoft, e copie aqui o ID do aplicativo (cliente). Mantenha o locatário como common, a menos que você tenha escolhido uma opção mais restrita."
+            },
+            "redirect": {
+              "title": "2. URI de redirecionamento e segredo",
+              "body": "Adicione o URI de redirecionamento mostrado nesta página como um redirecionamento Web, depois crie um segredo do cliente em Certificados e segredos e cole o valor dele aqui. Anote quando ele expira: depois dessa data, o calendário de todos os espaços de trabalho para de funcionar até que um novo segredo seja salvo."
+            },
+            "permissions": {
+              "title": "3. Permissões de API",
+              "body": "Adicione as permissões delegadas do Microsoft Graph Calendars.ReadWrite, User.Read e offline_access, e nada além disso. Para uso geral, conclua a verificação do editor; o locatário de um cliente também pode exigir que um administrador aprove o app."
+            },
+            "workspaces": {
+              "title": "4. Os espaços de trabalho se conectam",
+              "body": "Cole aqui o ID do cliente e o segredo e salve. Os administradores então conectam em Agendamentos, Configurações."
             }
           }
         }

@@ -83,6 +83,8 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   form_submissions_monthly: 'perMonth',
   ai_form_generations_monthly: 'perMonth',
   email_mailboxes: 'total',
+  email_monthly: 'perMonth',
+  storage_gb: 'total',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */

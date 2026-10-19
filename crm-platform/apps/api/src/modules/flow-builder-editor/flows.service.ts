@@ -4,12 +4,14 @@ import {
   ERROR_CODES,
   FLOW_EXPORT_MARKER,
   flbExtractTrigger,
+  flbFlowLinkProblems,
   flbIsFlowType,
   flbNormalizeGraph,
   flbTriggerKeywordsTooLong,
   type FlowDetail,
   type FlowExport,
   type FlowGraph,
+  flbWhatsappLimitProblems,
   type FlowSummary,
   type FlowTemplateCard,
   type FlowType,
@@ -222,6 +224,8 @@ export class FlowsService {
     return this.db.tx(async (tx) => {
       await this.assertRoom(tx, ctx.orgId);
       const graph = flbNormalizeGraph(input.graph);
+      await this.assertFlowLinks(tx, ctx.orgId, graph, input.flowType ?? 'chat', null, false);
+      this.assertWhatsappLimits(input.flowType ?? 'chat', graph);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
         name: input.name,
         graph,
@@ -240,6 +244,8 @@ export class FlowsService {
       if (input.rowVersion !== row.rowVersion) throw AppError.rowVersionConflict('Flow');
       const graph = flbNormalizeGraph(input.graph);
       const flowType = input.flowType ?? (row.flowType as FlowType) ?? 'chat';
+      await this.assertFlowLinks(tx, ctx.orgId, graph, flowType, row.uuid, false);
+      this.assertWhatsappLimits(flowType, graph);
       const update: FlowUpdate = {
         name: input.name,
         graph,
@@ -373,6 +379,7 @@ export class FlowsService {
     });
     return this.db.tx(async (tx) => {
       await this.assertRoom(tx, ctx.orgId);
+      await this.assertFlowLinks(tx, ctx.orgId, parsed.graph, parsed.flowType, null, false);
       const id = await this.insertFlow(tx, ctx.orgId, ctx.userId, {
         name: parsed.name,
         graph: parsed.graph,
@@ -440,6 +447,16 @@ export class FlowsService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lock(tx, ctx.orgId, uuid);
+      // Going live also needs every bot a step starts to exist: a draft may still point at one that was deleted since.
+      if (published)
+        await this.assertFlowLinks(
+          tx,
+          ctx.orgId,
+          row.graph ?? { flowNodes: [], flowEdges: [], vars: [] },
+          row.flowType,
+          row.uuid,
+          true,
+        );
       // A website chat bot goes live with the look its owner chose, never with the untouched default.
       if (
         published &&
@@ -473,6 +490,21 @@ export class FlowsService {
     });
   }
 
+  /**
+   * A WhatsApp flow (`chat`) may not store text WhatsApp would refuse: button titles, list rows, link buttons and the rest are held to
+   * Meta's limits (`flbWhatsappLimitProblems`). The builder stops typing at the same limits; this keeps API clients, imports and
+   * pasted JSON inside them. Website chat bots and the other channels are not checked.
+   */
+  private assertWhatsappLimits(flowType: FlowType, graph: FlowGraph): void {
+    if (flowType !== 'chat') return;
+    const problems = flbWhatsappLimitProblems(graph.flowNodes);
+    if (problems.length === 0) return;
+    throw AppError.validation(
+      'Some text is longer than WhatsApp allows. Shorten it and save again.',
+      problems.map((p) => ({ path: `graph.flowNodes.${p.nodeId}`, message: p.message })),
+    );
+  }
+
   private async require(tx: Tx, orgId: number, uuid: string): Promise<FlowRow> {
     const row = await this.repo.findByUuid(tx, orgId, uuid);
     if (!row) throw AppError.notFound('Flow', uuid);
@@ -488,6 +520,42 @@ export class FlowsService {
   /** 422 PLAN_LIMIT_REACHED when one more flow would pass the plan's cap (0 = unlimited). A live count, so a delete frees a slot. */
   private async assertRoom(tx: Tx, orgId: number): Promise<void> {
     await this.plans.assertWithinLimit(orgId, 'flows', await this.repo.countAll(tx, orgId));
+  }
+
+  /**
+   * A step may only start a bot of the same channel, never the bot itself (422 FLB_FLOW_LINK_INVALID, one detail per step).
+   * Save checks this on what it is about to store; publish checks the stored graph again, so a flow saved before this rule existed
+   * is named when it goes live, and also refuses a link to a bot that was deleted since (`missing`).
+   */
+  private async assertFlowLinks(
+    tx: Tx,
+    orgId: number,
+    graph: FlowGraph,
+    flowType: string,
+    selfUuid: string | null,
+    missing: boolean,
+  ): Promise<void> {
+    const nodes = graph.flowNodes as Array<{
+      id: string;
+      type: string;
+      data?: Record<string, unknown>;
+    }>;
+    // Nothing to look up for a graph with no links: the common save stays one query lighter.
+    if (!nodes.some((n) => n.type === 'subflow' || n.data?.optionActions)) return;
+    const flows = await this.repo.linkTargets(tx, orgId);
+    const problems = flbFlowLinkProblems(
+      nodes,
+      { channel: flowType, selfId: selfUuid, flows },
+      { missing },
+    );
+    if (problems.length === 0) return;
+    const first = problems[0]!.message;
+    throw new AppError(
+      ERROR_CODES.FLB_FLOW_LINK_INVALID,
+      problems.length === 1 ? first : `${first} (${problems.length} steps need fixing)`,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      problems.map((p) => ({ path: `graph.flowNodes.${p.nodeId}`, message: p.message })),
+    );
   }
 
   private async insertFlow(

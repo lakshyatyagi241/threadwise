@@ -3,6 +3,8 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { SubscriptionEvent } from '../../infra/providers/platform-payment-gateways';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
+import { AddonFulfilmentHooks } from '../addons-extension-registry';
+import { announceAddonTerm } from './addon-term';
 import type { BillingUnit } from './fulfilment-rules';
 import { FulfilmentService } from './fulfilment.service';
 import { OrdersRepository, type OrderRow } from './orders.repository';
@@ -40,6 +42,7 @@ export class SubscriptionLifecycleService {
     private readonly orders: OrdersRepository,
     private readonly fulfilment: FulfilmentService,
     private readonly outbox: OutboxService,
+    private readonly hooks: AddonFulfilmentHooks,
   ) {}
 
   // ---- creating ------------------------------------------------------------------------------------------------------
@@ -215,6 +218,7 @@ export class SubscriptionLifecycleService {
       if (was === 'active') return 'duplicate' as const;
       await this.syncWindow(tx, sub, end, false);
       await this.record(tx, sub, 'activated', {});
+      await announceAddonTerm(tx, this.hooks, sub, 'activated');
       return 'activated' as const;
     });
   }
@@ -236,6 +240,7 @@ export class SubscriptionLifecycleService {
       if (res.rows.length === 0) return 'ignored' as const;
       await this.syncWindow(tx, sub, end, true);
       await this.record(tx, sub, 'renewed', { payment: evt.paymentId ?? null });
+      await announceAddonTerm(tx, this.hooks, sub, 'renewed', { paymentId: evt.paymentId ?? null });
       return 'renewed' as const;
     });
   }
@@ -263,6 +268,15 @@ export class SubscriptionLifecycleService {
           canceled_at = CASE WHEN ${status} = 'canceled' THEN COALESCE(canceled_at, now()) ELSE canceled_at END
         WHERE org_id = ${sub.orgId} AND id = ${sub.id}`);
       await this.record(tx, sub, event, { payment: evt.paymentId ?? null });
+      // The provider's own notice (a payment that did not go through, the subscription ended on its side): the ledger of a Marketplace
+      // add-on follows. A cancel WE made returned `duplicate` above and was announced by the cancel service.
+      await announceAddonTerm(
+        tx,
+        this.hooks,
+        sub,
+        status === 'past_due' ? 'payment_failed' : 'ended',
+        { paymentId: evt.paymentId ?? null, reason: 'provider' },
+      );
       return status;
     });
   }
@@ -277,6 +291,9 @@ export class SubscriptionLifecycleService {
         WHERE org_id = ${sub.orgId} AND id = ${sub.id}`);
       await this.record(tx, sub, status === 'canceled' ? 'canceled' : 'expired', {
         via: 'reconciler',
+      });
+      await announceAddonTerm(tx, this.hooks, sub, 'ended', {
+        reason: status === 'canceled' ? 'provider' : 'expired',
       });
     });
   }
@@ -356,10 +373,16 @@ export class SubscriptionLifecycleService {
     const plan = planRes.rows[0] as
       { billing_unit: BillingUnit; billing_duration: number } | undefined;
     if (!plan) return;
-    const next = windowAfterEvent(new Date(), cur, end, extend, {
-      unit: plan.billing_unit,
-      duration: plan.billing_duration,
-    });
+    // A yearly subscription renews by the year, whatever the monthly cadence of the pack says.
+    const next = windowAfterEvent(
+      new Date(),
+      cur,
+      end,
+      extend,
+      sub.billingCycle === 'yearly'
+        ? { unit: 'years', duration: 1 }
+        : { unit: plan.billing_unit, duration: plan.billing_duration },
+    );
     if (!next) return;
     await tx.execute(sql`
       UPDATE workspace_addons SET ends_at = ${next.toISOString()}::timestamptz, status = 'active'

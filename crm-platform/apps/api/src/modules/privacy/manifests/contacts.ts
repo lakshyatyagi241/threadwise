@@ -33,6 +33,7 @@ export const contactsCard = defineHolder({
         'fax_number',
         'title',
         'address',
+        'date_of_birth',
         'image_url',
         'channel_uid',
         'subject',
@@ -111,7 +112,8 @@ export const contactsNotesFiles = defineHolder({
       parent: 'contacts',
       tier: 'core',
       categories: ['content'],
-      pii: ['title', 'location'],
+      // join_url is the link that opens the call, copied from the booking's calendar event: whoever holds it can join.
+      pii: ['title', 'location', 'join_url'],
       retention: 'With the contact.',
     },
   ],
@@ -159,7 +161,8 @@ export const contactsGroupsTags = defineHolder({
 export const consentLedger = defineHolder({
   key: 'consent.ledger',
   module: 'contact-consent',
-  description: 'Consent events (append-only proof) and the derived state per channel and purpose.',
+  description:
+    'Consent events (append-only proof) and the derived state per channel and purpose, the contact privacy flags (minor, guardian consent, Do Not Sell or Share) with their events, and the workspace Do-Not-Call list.',
   subjects: ['contact'],
   tables: [
     {
@@ -183,6 +186,40 @@ export const consentLedger = defineHolder({
       categories: ['behaviour'],
       pii: [],
       retention: 'With the contact.',
+    },
+    {
+      table: 'contact_privacy_events',
+      link: CONTACT,
+      disposition: 'fk_null',
+      parent: 'contacts',
+      reason:
+        'Append-only proof of a privacy flag change (minor, guardian consent, Do Not Sell or Share). The foreign key unlinks it from the contact when the contact is deleted; evidence holds ids and references, never an address, IP or message text.',
+      tier: 'core',
+      categories: ['behaviour', 'special_risk'],
+      pii: ['note'],
+      retention:
+        'Kept as proof of the opt-out or the guardian consent, without a link to a person.',
+    },
+    {
+      table: 'contact_privacy_flags',
+      link: CONTACT,
+      disposition: 'cascade',
+      parent: 'contacts',
+      tier: 'core',
+      categories: ['special_risk'],
+      pii: [],
+      retention: 'With the contact.',
+    },
+    {
+      table: 'dnc_entries',
+      link: { by: 'phone', column: 'phone_digits' },
+      disposition: 'retain',
+      reason:
+        'The Do-Not-Call list of the workspace is the suppression record that stops marketing calls and texts to a number. Erasing the person must not make the number callable again, so the entry stays (a number and a source, no name); a data request can still remove it on purpose.',
+      tier: 'records',
+      categories: ['identifier'],
+      pii: ['phone', 'note'],
+      retention: 'Until the workspace removes the number from its list.',
     },
   ],
 });

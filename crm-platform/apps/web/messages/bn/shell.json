@@ -33,7 +33,8 @@
       "browse": "মার্কেটপ্লেস ব্রাউজ করুন",
       "back": "ড্যাশবোর্ডে ফিরে যান",
       "unofficialTitle": "{app} উপলব্ধ নয়",
-      "unofficialBody": "{app} শুধু QR কোড দিয়ে যুক্ত করা ব্যক্তিগত WhatsApp নম্বরের সঙ্গে ব্যবহৃত হয়, যা আপনার ওয়ার্কস্পেসে চালু নেই। WhatsApp অফিশিয়াল WhatsApp Business API-এর মাধ্যমে সংযুক্ত হয়।"
+      "unofficialBody": "{app} শুধু QR কোড দিয়ে যুক্ত করা ব্যক্তিগত WhatsApp নম্বরের সঙ্গে ব্যবহৃত হয়, যা আপনার ওয়ার্কস্পেসে চালু নেই। WhatsApp অফিশিয়াল WhatsApp Business API-এর মাধ্যমে সংযুক্ত হয়।",
+      "viewApp": "মার্কেটপ্লেসে {app} দেখুন"
     },
     "closeMenu": "মেনু বন্ধ করুন",
     "mainMenu": "মূল মেনু",

@@ -7,13 +7,17 @@ import {
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
-import { CHAT_DIGEST_PILOT_SLUGS, isChatDigestPilot } from '../lead-scoring';
+import { CHAT_DIGEST_PILOT_SLUGS, LEAD_SCORING_FEATURE, isChatDigestPilot } from '../lead-scoring';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { GrowthRepository } from './growth.repository';
 import { mergeConfig, mergeFeatures, noFeatures } from './growth.rules';
 
 export interface GrowthContext {
   orgId: number;
-  /** In the pilot list AND has a settings row: the only workspaces any part of the growth pilot touches. */
+  /**
+   * In the pilot list AND has a settings row AND has the AI lead scoring app (plan feature `lead_scoring`, the growth pilot is built on
+   * scoring): the only workspaces any part of the growth pilot touches.
+   */
   available: boolean;
   features: GrowthFeatures;
   config: GrowthConfig;
@@ -32,6 +36,7 @@ export class GrowthGateService {
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: GrowthRepository,
+    private readonly plans: PlanEntitlementService,
   ) {}
 
   async load(orgId: number): Promise<GrowthContext> {
@@ -39,17 +44,22 @@ export class GrowthGateService {
       slug: await this.repo.orgSlug(tx, orgId),
       stored: await this.repo.getSettings(tx, orgId),
     }));
-    const inPilot = isChatDigestPilot(slug);
-    const available = inPilot && stored !== null;
+    // The plan side is read last, so only a workspace that is already in the pilot pays for the entitlement read.
+    const row =
+      isChatDigestPilot(slug) &&
+      stored !== null &&
+      (await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))
+        ? stored
+        : null;
     return {
       orgId,
-      available,
-      features: available ? mergeFeatures(stored.features) : noFeatures(),
-      config: available ? mergeConfig(stored.config) : mergeConfig({}),
-      rowVersion: available ? stored.rowVersion : null,
+      available: row !== null,
+      features: row ? mergeFeatures(row.features) : noFeatures(),
+      config: row ? mergeConfig(row.config) : mergeConfig({}),
+      rowVersion: row ? row.rowVersion : null,
       storedConfig:
-        available && stored.config && typeof stored.config === 'object'
-          ? (stored.config as Partial<GrowthConfig>)
+        row && row.config && typeof row.config === 'object'
+          ? (row.config as Partial<GrowthConfig>)
           : {},
     };
   }

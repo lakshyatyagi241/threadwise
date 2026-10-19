@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Paused: the daily sending cap was reached. It resumes by itself after {when}.",
         "halt": "Paused: sending is halted for this workspace. It resumes when the halt is lifted.",
-        "manual": "Paused."
+        "manual": "Paused.",
+        "quiet_hours": "Paused: some recipients are in their quiet hours. It resumes by itself after {when}."
       },
       "delete": "Delete",
       "deleteTitle": "Delete broadcast?",
@@ -145,7 +146,8 @@
         "queued": "Queued",
         "queuedHint": "awaiting send",
         "failed": "Failed",
-        "failedPct": "{pct}% failure rate"
+        "failedPct": "{pct}% failure rate",
+        "queuedHeld": "{count} held for the quiet hours"
       },
       "tab": {
         "overview": "Overview",
@@ -193,7 +195,8 @@
         "lastClick": "Last click: {when}",
         "empty": "No recipients attached.",
         "more": "Load more",
-        "loading": "Loading"
+        "loading": "Loading",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "failures": {
         "kicker": "Failure reasons",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Unofficial (disabled)"
     },
     "compose": {
-      "back": "Back to Broadcasts",
-      "crumb": "Broadcasts / New",
-      "title": "Create new",
-      "titleAccent": "broadcast",
-      "draft": "Draft / unsaved",
-      "submit": "Add Broadcast",
-      "submitting": "Adding…",
-      "created": "Broadcast added.",
-      "createdMany": "{count} broadcasts added, one per sender.",
-      "failed": "The broadcast could not be added.",
-      "fixName": "Enter a broadcast name.",
-      "fixTemplate": "Pick an approved template.",
-      "fixSchedule": "Pick a send date and time.",
-      "loading": "Loading",
-      "loadError": "Could not load the compose data.",
-      "retry": "Try again",
-      "setup": "Broadcast setup",
-      "templateMessage": "template message",
-      "name": "Broadcast name",
-      "namePlaceholder": "e.g. May offer template send",
-      "nameHint": "Internal label used in broadcast reports.",
-      "template": "Select template message",
-      "pickTemplate": "— Pick an approved template —",
-      "noTemplates": "No approved templates yet.",
       "createOne": "Create one",
-      "templateHint": "Broadcasts send approved templates only.",
-      "twilioHint": "Twilio compliant sends require a Content SID per template — flag a template as \"Twilio ready\" via /templates/{id}/edit. Templates without a ContentSid will send as plain text (loses Meta template approval).",
-      "device": "Send from device",
-      "devices": "Send from devices",
-      "multiDevice": "Multi-device — tick all that apply",
-      "noDevices": "No connected devices.",
-      "connectOne": "Connect one →",
-      "share": "share",
-      "shareHint": "Tick devices and set share weights — e.g. 7 / 3 sends 70% of contacts via the first device and 30% via the second. Equal weights split evenly.",
       "audience": "Who do you want to send it to?",
       "audienceHint": "Pick segments, tags, groups or contacts. Everyone picked is merged once.",
       "selected": "{count} selected",
@@ -276,27 +246,10 @@
       "noContacts": "No contacts yet.",
       "addSome": "Add some →",
       "noMatch": "No contacts match the search.",
-      "when": "When do you want to send your broadcast?",
-      "whenHint": "Send immediately or pick a future date / time.",
-      "sendNow": "Send now",
-      "sendNowHint": "Send after final validation.",
-      "sendLater": "Schedule for later",
-      "sendLaterHint": "Choose a specific day and time.",
-      "sendDate": "Send date",
-      "sendTime": "Send time",
-      "timezone": "Timezone",
-      "preview": "Template preview",
-      "previewTitle": "Broadcast preview",
-      "previewSub": "Template message",
-      "pickToPreview": "Pick a template to preview…",
-      "previewSelected": "Selected",
-      "previewSchedule": "Schedule",
-      "now": "Now",
-      "later": "Later",
-      "media": "{kind} preview",
       "contactsDenied": "You do not have access to the contact list. Pick contacts through groups or tags.",
       "unofficialDisabled": "Sending through personal WhatsApp numbers (the unofficial API) is not enabled for your workspace. Choose an official WhatsApp Business API number.",
-      "previewLabel": "Template preview"
+      "colEmail": "Email",
+      "noEmail": "No email address"
     },
     "overrides": {
       "title": "Fill in this send",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Message people already in your Instagram DMs — no template approval.",
         "cta": "Create Instagram broadcast"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Send a Messenger message to people who messaged your Page in the last 24 hours.",
+        "cta": "Create Facebook broadcast"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Send a message as an email from a connected mailbox, with an unsubscribe link.",
+        "cta": "Create email campaign"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Send a message to the people who already chat with your LINE account.",
+        "cta": "Create LINE broadcast"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Send a message to the people who already chat with your Viber account.",
+        "cta": "Create Viber broadcast"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Mass-send a message to all followers, a tag or picked users of your Official Account.",
+        "cta": "Create WeChat broadcast"
       }
     }
   }

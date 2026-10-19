@@ -1,10 +1,12 @@
 import { z } from 'zod';
 import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { birthDateSchema } from '../contact-consent/age';
 import { lifecycleStageSchema, recordLifecycleSchema } from '../common/enums';
 import { paginationQuerySchema } from '../common/pagination';
 import { contactFilterShape } from '../contacts-attributes-tags/contact-filter';
 import { consentProofSchema } from '../contact-consent/intake';
 import { contactGroupRefSchema } from '../contacts-attributes-tags/contact-group';
+import { contactTimezoneSchema, contactTimezoneSourceSchema } from './contact-timezone';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
 import type { InvalidCondition } from '../segments/rules';
 
@@ -55,11 +57,29 @@ export const contactResponseSchema = z.object({
   emailSubscriptionStatus: z.string().nullable(),
   emailConfirmed: z.boolean(),
   faxNumber: z.string().nullable(),
+  /** Built-in personal property (BL-217): `YYYY-MM-DD`, or null. A date that makes the contact a minor sets the minor flag (source `dob`). */
+  dateOfBirth: z.string().nullable(),
+  /** The contact is flagged as a minor (BL-190). Server-derived from the privacy flags; set through the Consent card or `POST /v1/contacts/:id/privacy`. */
+  isMinor: z.boolean(),
   /** Bumped by note/activity/meeting writes — server-maintained. */
   lastActivityAt: z.string().datetime().nullable(),
+  /** BL-290: null = contacted; a timestamp = uncontacted since then (marker set by the workspace's lead handling settings or by hand). */
+  uncontactedSince: z.string().datetime().nullable(),
+  /** BL-291: the contact's one open follow-up (a task of kind `follow_up`); `dueAt` null is "someday". Null when there is none. */
+  nextFollowUp: z
+    .object({
+      id: uuidSchema,
+      dueAt: z.string().datetime().nullable(),
+      assigneeId: uuidSchema.nullable(),
+    })
+    .nullable(),
   customFields: z.record(z.unknown()),
   /** Where the contact came from: the import's source knob, "import", an API client... */
   source: z.string().nullable(),
+  /** The contact's own IANA time zone (BL-193): the quiet hours are read on it. Null: read from the number's country, then the workspace. */
+  timezone: z.string().nullable(),
+  /** Who set `timezone`: a person in the app (`staff`), a CSV `import` or the REST `api`. Null when no zone is stored. */
+  timezoneSource: contactTimezoneSourceSchema.nullable(),
   /** Marketing opt-out (TW-CON-017). */
   isUnsubscribed: z.boolean(),
   isArchived: z.boolean(),
@@ -94,8 +114,12 @@ export const createContactSchema = z
     emailSubscriptionStatus: z.string().max(64).optional(),
     emailConfirmed: z.boolean().optional(),
     faxNumber: z.string().max(32).optional(),
+    /** `YYYY-MM-DD`; a real date of birth, not in the future. */
+    dateOfBirth: birthDateSchema.optional(),
     /** Where the contact came from (TW-CON-015): a form, a campaign, "api". Free text. */
     source: z.string().trim().max(128).optional(),
+    /** The contact's own IANA time zone (BL-193), e.g. `Asia/Kolkata`; recorded as set by whoever makes the contact. */
+    timezone: contactTimezoneSchema.optional(),
     /** Marketing opt-out (TW-CON-017): broadcasts and campaigns skip an opted-out contact. */
     isUnsubscribed: z.boolean().optional(),
     /**
@@ -132,7 +156,11 @@ export const updateContactSchema = z.object({
   emailSubscriptionStatus: z.string().max(64).nullish(),
   emailConfirmed: z.boolean().optional(),
   faxNumber: z.string().max(32).nullish(),
+  /** `null` clears the date; a minor flag set from it stays until a person clears it or the sweep reads the date again. */
+  dateOfBirth: birthDateSchema.nullish(),
   source: z.string().trim().max(128).nullish(),
+  /** The contact's own IANA time zone (BL-193). `null` clears it (the contact is then read on its number's country, then the workspace). */
+  timezone: contactTimezoneSchema.nullish(),
   /** Marketing opt-out. Turning it on stamps `unsubscribedAt`; turning it off clears it. */
   isUnsubscribed: z.boolean().optional(),
   /** The proof that the person agreed to marketing; see `createContactSchema`. Needed when a status changes to `subscribed`. */
@@ -211,6 +239,17 @@ export const contactSelectQuerySchema = z.object({
 export type ContactSelectQuery = z.infer<typeof contactSelectQuerySchema>;
 
 /**
+ * The stage and status values contacts of the caller's scope actually hold, for the filter dropdowns. A workspace can
+ * configure stages and statuses (status_options) and still have contacts on a value it does not list (the platform's
+ * default stage `new`, a status that predates the configuration); a filter must be able to pick those too.
+ */
+export const contactFilterValuesSchema = z.object({
+  lifecycleStages: z.array(z.string()),
+  statuses: z.array(z.string()),
+});
+export type ContactFilterValues = z.infer<typeof contactFilterValuesSchema>;
+
+/**
  * Bulk operations — Phase 11 exit criteria requires these be transactional
  * per row with partial-failure reporting, never all-or-nothing across the
  * whole batch (one bad id in a 200-row bulk-edit must not sink the other 199).
@@ -230,6 +269,8 @@ export const bulkUpdateContactsSchema = z.object({
     lostReason: z.string().max(255).nullish(),
     otherLostReason: z.string().max(500).nullish(),
     status: z.string().max(64).nullish(),
+    /** The IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
+    timezone: contactTimezoneSchema.nullish(),
     /**
      * Custom properties to set on every contact, by property key. Each key must be an active, editable custom
      * property of the workspace (422 CON_PROPERTY_NOT_EDITABLE otherwise) and each value must fit the property's type

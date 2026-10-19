@@ -164,6 +164,32 @@
         "title": "Notificación de prueba",
         "titleNoName": "Notificación de prueba",
         "bodyNoActor": "Si puedes leer esto, las notificaciones en vivo funcionan."
+      },
+      "snooze_wake": {
+        "title": "{name} vuelve a tu lista",
+        "titleNoName": "Un chat pospuesto vuelve a tu lista",
+        "titleTeam": "{name} vuelve para tu equipo",
+        "titleTeamNoName": "Un chat pospuesto vuelve para tu equipo"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} se renueva el {date, date, medium}",
+        "bodyAuto": "Tu tarjeta se cobrará automáticamente en esa fecha para renovar {name}. Cancela antes para evitarlo.",
+        "titleManual": "{name} está pagada hasta el {date, date, medium}",
+        "bodyManual": "{name} no se renueva automáticamente. Vuelve a pagar antes de esa fecha para mantenerla en funcionamiento sin pausas.",
+        "titleEnding": "{name} termina el {date, date, medium}",
+        "bodyEnding": "Cancelaste {name}, así que dejará de funcionar en esa fecha. Suscríbete de nuevo antes para conservarla.",
+        "title": "{name}: se acerca la renovación",
+        "titleNoName": "Se acerca la renovación de una app de pago"
+      },
+      "marketplace_payment_failed": {
+        "title": "Falló el pago de {name}",
+        "body": "El pago con tarjeta no se completó. La app sigue funcionando unos días mientras el proveedor de pagos lo reintenta. Paga ahora, o corrige tu método de pago, para evitar una pausa.",
+        "titleNoName": "Falló el pago de una app de pago"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Suscripción a {name} finalizada",
+        "body": "La app está en pausa y se conservan sus datos y ajustes. Suscríbete de nuevo para volver a activarla.",
+        "titleNoName": "Terminó la suscripción a una app de pago"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "Grupo de WhatsApp activo de nuevo",
         "device_group_join_request": "Solicitud para unirse a un grupo",
         "device_group_removed": "Eliminado de un grupo de WhatsApp",
-        "test": "Notificación de prueba"
+        "test": "Notificación de prueba",
+        "snooze_wake": "El chat pospuesto ha vuelto",
+        "marketplace_renewal_due": "Se acerca la renovación de una app de pago",
+        "marketplace_payment_failed": "Falló el pago de una app de pago",
+        "marketplace_subscription_ended": "Finalizó la suscripción de una app de pago"
       },
       "generic": "Tienes una notificación nueva",
       "paused": "Las actualizaciones en vivo están en pausa, así que las alertas nuevas pueden tardar hasta un minuto. Recarga la página para reconectar."
@@ -379,6 +409,26 @@
         "test": {
           "label": "Notificación de prueba",
           "hint": "La prueba que envías desde Notificaciones del navegador, para comprobar que funcionan la campana, la ventana emergente y el título de la pestaña."
+        },
+        "appointment_calendar_drift": {
+          "label": "Cita desincronizada con Google Calendar",
+          "hint": "El evento de Google Calendar de una próxima cita se eliminó, se movió o se modificaron sus invitados. La cita no se modifica; usted decide qué hacer."
+        },
+        "snooze_wake": {
+          "label": "El chat pospuesto vuelve",
+          "hint": "Un chat pospuesto se reabre a su hora y se asigna a ti o a tu equipo."
+        },
+        "marketplace_renewal_due": {
+          "label": "Recordatorio de renovación de app de pago",
+          "hint": "El periodo de una app de pago termina en unos días: se renueva con tarjeta, está pagada hasta una fecha o se canceló y termina."
+        },
+        "marketplace_payment_failed": {
+          "label": "Falló el pago de una app de pago",
+          "hint": "La renovación con tarjeta de una app de pago no se completó y requiere tu atención."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Finalizó la suscripción de una app de pago",
+          "hint": "La suscripción de una app de pago finalizó y la app se pausó."
         }
       },
       "loading": "Cargando tus preferencias",

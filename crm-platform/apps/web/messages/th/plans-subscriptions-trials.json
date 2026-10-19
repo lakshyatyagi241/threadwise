@@ -45,7 +45,9 @@
       "form_submissions_monthly": "การส่งแบบฟอร์มต่อเดือน",
       "ai_form_generations_monthly": "จำนวนการสร้างด้วยตัวสร้างฟอร์ม AI ต่อเดือน",
       "sms_monthly": "SMS ต่อเดือน",
-      "email_mailboxes": "กล่องจดหมายอีเมล"
+      "email_mailboxes": "กล่องจดหมายอีเมล",
+      "email_monthly": "อีเมลต่อเดือน",
+      "storage_gb": "พื้นที่จัดเก็บ (GB)"
     },
     "features": {
       "automation": "ระบบอัตโนมัติ",
@@ -74,13 +76,16 @@
       "storefront_builder": "ตัวสร้างหน้าร้าน",
       "invoicing": "การออกใบแจ้งหนี้",
       "forms_and_links": "แบบฟอร์มและลิงก์",
-      "extra_channels": "Telegram, Facebook และ Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber และ WeChat",
       "form_builder": "แบบฟอร์ม",
       "waba_groups": "กลุ่ม WhatsApp",
       "sms": "ช่องทาง SMS",
       "help_agent": "ผู้ช่วยด้านความช่วยเหลือ",
       "email_channel": "ช่องทางอีเมล (Gmail)",
-      "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)"
+      "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "การให้คะแนนลีดด้วย AI",
+      "record_assignment": "กฎการมอบหมายระเบียน"
     },
     "limitGroups": {
       "messaging": "การส่งข้อความ",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "การส่งแบบฟอร์มที่รับในเดือนปฏิทิน ไม่รวมสแปม เมื่อเกินโควตา การส่งยังถูกบันทึกเพื่อตรวจสอบ ไม่ถูกทิ้ง 0 = ไม่จำกัด",
       "ai_form_generations_monthly": "จำนวนการสร้างด้วยตัวสร้างฟอร์ม AI ในเดือนปฏิทิน รวมการลองซ่อมใหม่ 0 = ไม่จำกัด",
       "sms_monthly": "ข้อความ SMS ขาออกที่ส่งในเดือนตามปฏิทิน 0 = ไม่จำกัด",
-      "email_mailboxes": "กล่องจดหมาย Gmail ที่เชื่อมต่ออยู่ (กล่องที่ตัดการเชื่อมต่อจะคืนโควตา) 0 = ไม่จำกัด"
+      "email_mailboxes": "กล่องจดหมาย Gmail ที่เชื่อมต่ออยู่ (กล่องที่ตัดการเชื่อมต่อจะคืนโควตา) 0 = ไม่จำกัด",
+      "email_monthly": "อีเมลที่ส่งในเดือนตามปฏิทิน รวมทั้งอีเมลตอบกลับและอีเมลแคมเปญ 0 = ไม่จำกัด",
+      "storage_gb": "พื้นที่จัดเก็บที่เวิร์กสเปซเก็บได้ หน่วย GB (การบันทึกสายโทรศัพท์ สื่อในแชท ไฟล์แนบอีเมล และไฟล์) 0 = ไม่จำกัด ตอนนี้วัดผลเท่านั้น ยังไม่มีการบล็อกใด ๆ"
     },
     "planAddons": {
       "title": "แอดออนที่มีในแพ็กเกจของคุณ",
@@ -561,7 +568,9 @@
       "continueFree": "ใช้ฟรีต่อ",
       "choose": "เลือก {name}",
       "back": "กลับ",
-      "compare": "เปรียบเทียบแพ็กเกจทั้งหมด"
+      "compare": "เปรียบเทียบแพ็กเกจทั้งหมด",
+      "appHint": "{feature} ยังขายเป็นแอปใน Marketplace ด้วย",
+      "appLink": "ดูแอป"
     }
   }
 }

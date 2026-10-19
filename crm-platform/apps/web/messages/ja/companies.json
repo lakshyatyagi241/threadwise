@@ -4,7 +4,9 @@
       "companies": "会社"
     },
     "common": {
-      "dismiss": "閉じる"
+      "dismiss": "閉じる",
+      "yes": "はい",
+      "no": "いいえ"
     },
     "errors": {
       "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
@@ -18,7 +20,10 @@
       "planDisabled": "お使いのプランには会社機能が含まれていません。利用するにはアップグレードしてください。",
       "ownerInvalid": "担当者は、このワークスペースの有効なメンバーである必要があります。",
       "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。",
-      "retry": "再試行"
+      "retry": "再試行",
+      "filterInvalid": "プロパティの条件のうち1つは使用できません。プロパティとその値を確認してください。",
+      "exportTooLarge": "1つのファイルに含める企業の数が多すぎます。フィルターで絞り込んでから、もう一度エクスポートしてください。",
+      "importInvalid": "このファイルはインポートできません。1行目に列名が必要で、name 列または website 列を含め、企業は最大1,000社までです。"
     },
     "list": {
       "eyebrow": "CRM · 組織",
@@ -52,7 +57,9 @@
       "deleteManyTitle": "会社を削除",
       "deleteManyMessage": "{count, plural, other {これらの#社を削除しますか?連絡先と取引は保持され、紐付けのみ解除されます。}}",
       "delete": "削除",
-      "keep": "残す"
+      "keep": "残す",
+      "export": "エクスポート",
+      "import": "インポート"
     },
     "toolbar": {
       "label": "会社を絞り込み",
@@ -69,7 +76,14 @@
         "name": "名前順(A〜Z)"
       },
       "clear": "クリア",
-      "refresh": "更新"
+      "refresh": "更新",
+      "sortByProperty": "作成者: {name}",
+      "direction": "並び順",
+      "directions": {
+        "default": "通常の並び順",
+        "asc": "昇順",
+        "desc": "降順"
+      }
     },
     "table": {
       "label": "会社",
@@ -82,7 +96,13 @@
       "wonValue": "獲得金額",
       "actions": "操作",
       "delete": "会社を削除",
-      "deleteNamed": "会社{name}を削除"
+      "deleteNamed": "会社{name}を削除",
+      "website": "ウェブサイト",
+      "email": "メール",
+      "phone": "電話",
+      "size": "規模",
+      "owner": "担当者",
+      "created": "作成日"
     },
     "form": {
       "eyebrow": "会社",
@@ -112,6 +132,17 @@
         "email": "有効なメールアドレスを入力してください。",
         "invalid": "入力内容の一部が無効です。",
         "ownerInvalid": "担当者は、このワークスペースの有効なメンバーである必要があります。"
+      },
+      "propertiesTitle": "プロパティ",
+      "propertiesHint": "「設定」→「会社のプロパティ」で設定します",
+      "propertyProblems": {
+        "invalid": "この値はプロパティに合っていません。",
+        "notEditable": "このプロパティはもう編集できません。フォームを閉じて、開き直してください。",
+        "required": "このプロパティは必須です。",
+        "number": "数値を入力してください。",
+        "integer": "整数を入力してください。",
+        "email": "有効なメールアドレスを入力してください。",
+        "url": "http:// または https:// で始まる完全なリンクを入力してください。"
       }
     },
     "toast": {
@@ -125,7 +156,8 @@
       "contactUnlinkFailed": "連絡先を削除できませんでした。もう一度お試しください。",
       "contactsLinked": "{count, plural, other {#件の連絡先を会社に追加しました。}}",
       "contactsLinkedSome": "{count, plural, other {#件の連絡先を追加しました}}。{failed, plural, other {#件は追加できませんでした。}}",
-      "contactsLinkFailed": "連絡先を追加できませんでした。もう一度お試しください。"
+      "contactsLinkFailed": "連絡先を追加できませんでした。もう一度お試しください。",
+      "exportFailed": "エクスポートを作成できませんでした。しばらくしてからもう一度お試しください。"
     },
     "detail": {
       "back": "すべての会社",
@@ -149,7 +181,11 @@
       "address": "住所",
       "createdBy": "作成者",
       "created": "作成日",
-      "updated": "最終変更"
+      "updated": "最終変更",
+      "properties": "プロパティ",
+      "yes": "はい",
+      "no": "いいえ",
+      "generateBrief": "サマリーを作成"
     },
     "contacts": {
       "title": "連絡先",
@@ -211,6 +247,130 @@
         "address": "住所",
         "notes": "メモ",
         "owner": "担当者"
+      },
+      "propertiesChanged": "変更されたプロパティ："
+    },
+    "picker": {
+      "search": "会社を検索",
+      "results": "会社",
+      "searching": "検索中",
+      "none": "一致する会社がありません。",
+      "unavailable": "現在、会社を検索できません。",
+      "create": "「{name}」を作成",
+      "creating": "会社を作成中",
+      "clear": "会社を外す",
+      "loading": "会社を読み込み中",
+      "unknown": "会社を利用できません",
+      "createFailed": "会社を作成できませんでした。もう一度お試しください。",
+      "createForbidden": "会社を作成する権限がありません。"
+    },
+    "properties": {
+      "title": "会社のプロパティ",
+      "subtitle": "会社が保存できるすべての項目を一か所に集約：独自プロパティを、セクション別にまとめています。",
+      "section": {
+        "hint": "セクションは、会社フォームと会社ページでプロパティをまとめます。"
+      },
+      "row": {
+        "contacts": "{count, plural, other {#社}}"
+      },
+      "deactivate": {
+        "inUse": "{count, plural, other {#社が}}このプロパティの値を持っています。値は保持されますが、プロパティは会社フォームと会社ページに表示されなくなります。",
+        "unused": "このプロパティの値を持つ会社はまだありません。"
+      },
+      "modal": {
+        "newTitle": "会社プロパティを追加",
+        "descriptionHint": "会社フォームのフィールドの下に表示されます。",
+        "optionsNote": "オプションを削除しても、すでにそのオプションを持つ会社は変わらず、保存された値が保持されます。",
+        "requiredHint": "値がないと会社フォームを保存できません。",
+        "visibleHint": "会社フォームと会社ページに表示します。",
+        "conditionsHint": "別のプロパティに値が入るまで、会社フォームでこのプロパティを非表示にします。",
+        "deactivateNote": "保存すると、このプロパティはフォームと会社ページから非表示になります。会社が持つ値は保持されます。"
+      }
+    },
+    "columns": {
+      "button": "列",
+      "label": "列を選択",
+      "hint": "テーブルはこのブラウザーで選択内容を記憶します。",
+      "reset": "通常の列に戻す"
+    },
+    "propertyFilters": {
+      "button": "プロパティ",
+      "label": "企業プロパティで絞り込む",
+      "hint": "これらの条件をすべて満たす企業を表示します。",
+      "none": "条件はまだありません。",
+      "noProperties": "絞り込みに使える企業プロパティがまだありません。設定の「企業プロパティ」で追加してください。",
+      "property": "条件 {n} のプロパティ",
+      "operator": "条件 {n} の演算子",
+      "value": "条件 {n} の値",
+      "remove": "条件 {n} を削除",
+      "add": "条件を追加",
+      "clear": "すべてクリア",
+      "apply": "適用"
+    },
+    "import": {
+      "eyebrow": "企業",
+      "title": "企業をインポート",
+      "close": "閉じる",
+      "cancel": "キャンセル",
+      "done": "完了",
+      "start": "インポート",
+      "file": "CSV ファイル",
+      "choose": "CSV ファイルを選択",
+      "change": "別のファイルを選択",
+      "tooBig": "ファイルが大きすぎます。分割して、パートごとにインポートしてください。",
+      "intro": "1行目は列名です: name (または website)、email、phone、industry、size、address、notes、owner (メンバーのメールまたは名前)、そして企業プロパティはそのラベルで指定します。1ファイルにつき最大 {max} 社まで。",
+      "match": "既存の企業の空欄を補完する",
+      "matchHint": "ウェブサイトが同じ企業 (ウェブサイトがない場合は名前が同じ企業) は、空の項目が補完されます。すでに入力されている内容は変更されません。",
+      "summary": "{total, plural, one {# 行を読み込み} other {# 行を読み込み}}: {created} 件作成、{updated} 件補完、{unchanged} 件変更なし、{failed} 件インポートできませんでした。",
+      "ignored": "次の列は認識できなかったためスキップしました: {columns}。",
+      "failedTitle": "{count, plural, one {# 行をインポートできませんでした} other {# 行をインポートできませんでした}}",
+      "line": "{line} 行目",
+      "moreFailed": "{count, plural, one {ほか # 件。} other {ほか # 件。}}"
+    },
+    "brief": {
+      "title": "アカウントサマリー",
+      "subtitle": "表示できる CRM データをもとに AI が作成しました。ご利用の前にご確認ください。",
+      "loading": "サマリーを読み込み中",
+      "unavailableTitle": "このワークスペースでは AI が設定されていません",
+      "unavailable": "サマリーは AI モデルが作成しますが、このワークスペースには AI キーがないため、何も送信されていません。",
+      "addKey": "AI キーを追加",
+      "askAdmin": "管理者に AI キーの追加を依頼してください。",
+      "empty": "この企業の短いサマリーを取得します。企業の概要、商談とタスク、やり取りの活発さ、リスク、次にやることがわかります。",
+      "generate": "サマリーを作成",
+      "regenerate": "書き直す",
+      "copy": "コピー",
+      "copied": "サマリーをコピーしました。",
+      "copyFailed": "サマリーをコピーできませんでした。テキストを選択して手動でコピーしてください。",
+      "copyTitle": "{name}: アカウントサマリー",
+      "stale": "このサマリーの作成後に CRM が変更されました。最新の内容にするには書き直してください。",
+      "writtenBy": "{date} に {model} が作成しました。AI は間違えることがあります。",
+      "notice": "モデルに渡されるのは件数、日付、金額、短いタイトルだけです。連絡先の名前、メールアドレス、電話番号、会社のメモ、メッセージ本文は一切渡されず、タイトル内の数字とメールアドレスは事前に削除されます。",
+      "basedOn": "対象: {kinds}。ロールで閲覧できるものだけが集計されます。",
+      "basedOnNone": "企業の詳細のみに基づいています。お使いのロールでは、連絡先、商談、タスク、会話は表示されません。",
+      "errors": {
+        "tooSoon": "サマリーはついさっき作成されました。もう一度依頼するまで、少しお待ちください。",
+        "providerFailed": "AI サービスがサマリーを作成できませんでした。しばらくしてからもう一度お試しください。",
+        "limit": "AI の利用枠を現在使い切っています。後でもう一度お試しいただくか、管理者にお問い合わせください。",
+        "forbidden": "この操作を行う権限がありません。",
+        "notFound": "その企業はすでに存在しません。",
+        "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
+        "unexpected": "問題が発生しました。しばらくしてからもう一度お試しください。"
+      },
+      "sections": {
+        "activity": "最近のアクティビティ",
+        "deals": "商談",
+        "tasks": "タスク",
+        "conversations": "会話",
+        "properties": "主要プロパティ",
+        "risks": "リスク",
+        "nextSteps": "次のステップ"
+      },
+      "source": {
+        "properties": "企業プロパティ",
+        "contacts": "連絡先",
+        "deals": "商談",
+        "tasks": "タスク",
+        "conversations": "会話"
       }
     }
   }

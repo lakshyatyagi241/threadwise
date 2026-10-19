@@ -3,7 +3,9 @@
 import {
   FLB_COND_MAX_DEPTH,
   FLB_COND_MAX_RULES,
+  flbAiSetup,
   flbCondProblems,
+  flbLinkableFlows,
   flbIsCondGroup,
   type FlbCondGroup,
   type FlbCondRule,
@@ -12,7 +14,7 @@ import { cn } from '@crm/ui';
 import { useTranslations } from 'next-intl';
 import { condSummary } from '../../../lib/contract-text';
 import { useFlb } from '../../../lib/msg';
-import type { ReactNode } from 'react';
+import { useId, useState, type ReactNode } from 'react';
 import {
   Check,
   controlClass,
@@ -157,7 +159,7 @@ function GroupEditor({
   return (
     <div
       data-cond-group={depth}
-      className={cn(!isRoot && 'mb-2 ml-1 border-l-2 border-border pl-2')}
+      className={cn(!isRoot && 'mb-2 ms-1 border-s-2 border-border ps-2')}
     >
       <div className="mb-1.5 flex items-center gap-2">
         <div className="inline-flex overflow-hidden rounded-full border border-border bg-muted text-[11px] font-semibold">
@@ -601,111 +603,251 @@ export function MysqlForm({ data: d, set }: FormProps) {
 
 export function AiForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.logic');
+  const id = useId();
   const { aiModels, assistants } = env.ctx;
-  const modelOpts = withCurrent(
-    aiModels.length
-      ? [{ v: '', l: t('aiModelPick') }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
-      : [{ v: '', l: t('aiModelNone') }],
-    d.model,
-    (v) => t('aiModelNotEnabled', { value: v }),
+  const setup = flbAiSetup(d);
+  const isAgent = setup === 'agent';
+  const picked = assistants.find((a) => a.id === str(d.assistant));
+  const aiSave = str(d.save) || 'reply';
+  // Advanced options open on their own when the step already uses one, so a saved step never hides what it does.
+  const usesAdvanced = !!(d.extract || d.silent || d.conversational);
+  const [advancedOpen, setAdvancedOpen] = useState(usesAdvanced);
+  // A missing value is only called out once the person has been in the field, not on a step they have just added.
+  const [touched, setTouched] = useState({ agent: false, prompt: false });
+  const trainingLink = (chunks: ReactNode) => (
+    <Link href="/ai-training" newTab>
+      {chunks}
+    </Link>
   );
-  const assistantOpts = withCurrent(
+  const createLink = (chunks: ReactNode) => (
+    <Link href="/ai-training/create" newTab>
+      {chunks}
+    </Link>
+  );
+  const v = (chunks: ReactNode) => <V>{chunks}</V>;
+
+  const agentOpts = withCurrent(
     [
-      { v: '', l: t('aiAssistantNone') },
+      { v: '', l: t('aiAgentPick') },
       ...assistants.map((a) => ({
         v: a.id,
         l: t('aiAssistantOption', { name: a.name, count: a.sources }),
       })),
     ],
     d.assistant,
-    (v) => t('aiAssistantMissing', { id: v.slice(0, 8) }),
+    (x) => t('aiAssistantMissing', { id: x.slice(0, 8) }),
   );
-  const picked = assistants.find((a) => a.id === str(d.assistant));
-  const aiSave = str(d.save) || 'reply';
-  const trainingLink = (chunks: ReactNode) => (
-    <Link href="/ai-training" newTab>
-      {chunks}
-    </Link>
+  const modelOpts = withCurrent(
+    aiModels.length
+      ? [{ v: '', l: t('aiModelPick') }, ...aiModels.map((m) => ({ v: m.value, l: m.label }))]
+      : [{ v: '', l: t('aiModelNone') }],
+    d.model,
+    (x) => t('aiModelNotEnabled', { value: x }),
   );
-  const v = (chunks: ReactNode) => <V>{chunks}</V>;
+  const knowledgeOpts = withCurrent(
+    [
+      { v: '', l: t('aiKnowledgeNone') },
+      ...assistants.map((a) => ({
+        v: a.id,
+        l: t('aiAssistantOption', { name: a.name, count: a.sources }),
+      })),
+    ],
+    d.assistant,
+    (x) => t('aiAssistantMissing', { id: x.slice(0, 8) }),
+  );
 
-  const assistantHint = !assistants.length
-    ? t.rich('aiAssistantHintNone', { link: trainingLink })
+  const agentMissing = isAgent && str(d.assistant) === '' && touched.agent;
+  const noPrompt =
+    !isAgent && str(d.prompt).trim() === '' && str(d.assistant) === '' && touched.prompt;
+  const agentHint = !assistants.length
+    ? t.rich('aiAgentNone', { link: createLink })
     : picked && picked.sources === 0
-      ? t.rich('aiAssistantHintEmpty', { link: trainingLink })
-      : t.rich('aiAssistantHint', { link: trainingLink });
+      ? t.rich('aiAgentNoSources', { link: trainingLink })
+      : t.rich('aiAgentHint', { link: trainingLink });
+
+  const choices: Array<{ value: 'agent' | 'custom'; label: string; desc: string }> = [
+    { value: 'agent', label: t('aiSetupAgent'), desc: t('aiSetupAgentDesc') },
+    { value: 'custom', label: t('aiSetupCustom'), desc: t('aiSetupCustomDesc') },
+  ];
 
   return (
     <>
-      <Field
-        label={t('aiModelLabel')}
-        hint={
-          aiModels.length
-            ? t('aiModelHint')
-            : t.rich('aiModelHintNone', {
-                link: (chunks) => <Link href="/settings">{chunks}</Link>,
-              })
-        }
+      <fieldset className="mb-4 min-w-0 border-0 p-0">
+        <legend className="mb-1.5 text-[11.5px] font-semibold text-foreground/80">
+          {t('aiSetupLegend')}
+        </legend>
+        <div className="grid gap-2">
+          {choices.map((c) => (
+            <label
+              key={c.value}
+              className={cn(
+                'flex cursor-pointer items-start gap-2 rounded-lg border px-3 py-2 text-[12px]',
+                setup === c.value ? 'border-brand bg-brand/5' : 'border-border',
+              )}
+            >
+              <input
+                type="radio"
+                name={`${id}-setup`}
+                value={c.value}
+                checked={setup === c.value}
+                onChange={() => set('agentMode', c.value)}
+                className="mt-0.5 border-border text-brand focus:ring-brand/30"
+              />
+              <span>
+                <span className="block font-semibold">{c.label}</span>
+                <span className="block text-[10.5px] leading-snug text-muted-foreground">
+                  {c.desc}
+                </span>
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+
+      {isAgent ? (
+        <div className="mb-4">
+          <label
+            htmlFor={`${id}-agent`}
+            className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80"
+          >
+            {t('aiAgentLabel')} <span aria-hidden="true">*</span>
+          </label>
+          <select
+            id={`${id}-agent`}
+            value={str(d.assistant)}
+            required
+            aria-invalid={agentMissing}
+            aria-describedby={`${id}-agent-hint`}
+            onChange={(e) => set('assistant', e.target.value)}
+            onBlur={() => setTouched((x) => ({ ...x, agent: true }))}
+            className={cn(controlClass, agentMissing && 'border-red-400')}
+          >
+            {agentOpts.map((o) => (
+              <option key={o.v} value={o.v}>
+                {o.l}
+              </option>
+            ))}
+          </select>
+          {agentMissing ? (
+            <div role="alert" className="mt-1 text-[10.5px] font-medium text-red-600">
+              {t('aiAgentRequired')}
+            </div>
+          ) : picked ? (
+            <div className="mt-1.5 text-[10.5px] text-muted-foreground">
+              {t('aiAgentSummary', { model: picked.model || '—', count: picked.sources })}
+            </div>
+          ) : null}
+          <div
+            id={`${id}-agent-hint`}
+            className="mt-1.5 text-[10.5px] leading-snug text-muted-foreground"
+          >
+            {agentHint}
+          </div>
+          <KnowledgeBaseActions refresh={() => env.refresh()} createLabel={t('aiCreateAgent')} />
+        </div>
+      ) : (
+        <>
+          <Field
+            label={t('aiModelLabel')}
+            hint={
+              aiModels.length
+                ? t('aiModelHint')
+                : t.rich('aiModelHintNone', {
+                    link: (chunks) => <Link href="/settings">{chunks}</Link>,
+                  })
+            }
+          >
+            <SelectInput value={d.model} options={modelOpts} onChange={(x) => set('model', x)} />
+          </Field>
+          <div className="mb-4">
+            <label
+              htmlFor={`${id}-prompt`}
+              className="mb-1.5 block text-[11.5px] font-semibold text-foreground/80"
+            >
+              {t('aiPrompt')} <span aria-hidden="true">*</span>
+            </label>
+            <TextArea
+              id={`${id}-prompt`}
+              value={d.prompt}
+              rows={5}
+              onChange={(x) => set('prompt', x)}
+              onBlur={() => setTouched((y) => ({ ...y, prompt: true }))}
+            />
+            {noPrompt ? (
+              <div role="alert" className="mt-1 text-[10.5px] font-medium text-red-600">
+                {t('aiPromptRequired')}
+              </div>
+            ) : null}
+          </div>
+          <Field
+            label={t('aiKnowledgeLabel')}
+            hint={t.rich('aiKnowledgeHint', { link: trainingLink })}
+          >
+            <SelectInput
+              value={d.assistant}
+              options={knowledgeOpts}
+              onChange={(x) => set('assistant', x)}
+            />
+            <KnowledgeBaseActions refresh={() => env.refresh()} createLabel={t('aiCreateAgent')} />
+          </Field>
+        </>
+      )}
+
+      <details
+        open={advancedOpen}
+        onToggle={(e) => setAdvancedOpen(e.currentTarget.open)}
+        className="mt-1 rounded-lg border border-border px-3 py-2"
       >
-        <SelectInput value={d.model} options={modelOpts} onChange={(x) => set('model', x)} />
-      </Field>
-      <Field label={t('aiPrompt')}>
-        <TextArea value={d.prompt} rows={5} onChange={(x) => set('prompt', x)} />
-      </Field>
-      <Field
-        label={t('aiSave')}
-        hint={t.rich('aiSaveHint', { v, save: aiSave, path: `${aiSave}.FIELD` })}
-      >
-        <TextInput value={d.save} placeholder="reply" onChange={(x) => set('save', x)} />
-      </Field>
-      <Field label={t('aiAssistantLabel')} hint={assistantHint}>
-        <SelectInput
-          value={d.assistant}
-          options={assistantOpts}
-          onChange={(x) => set('assistant', x)}
-        />
-        <KnowledgeBaseActions refresh={() => env.refresh()} />
-      </Field>
-      <div className="mb-1 mt-1">
-        <Check checked={!!d.extract} onChange={(x) => set('extract', x)}>
-          {t.rich('aiExtract', { strong: (chunks) => <strong>{chunks}</strong> })}
-        </Check>
-      </div>
-      {d.extract ? (
-        <Field
-          label={t('aiFields')}
-          hint={t.rich('aiFieldsHint', {
-            v,
-            key: `${aiSave}.KEY`,
-            rows: `${aiSave}.__rows`,
-          })}
-        >
-          <TextInput
-            value={d.fields}
-            placeholder="FARM, DATE, NAME, FIELD, RATE, VOLUME, EARNINGS"
-            onChange={(x) => set('fields', x)}
-          />
-        </Field>
-      ) : null}
-      <div className="mt-1">
-        <Check checked={!!d.silent} onChange={(x) => set('silent', x)}>
-          {t.rich('aiSilent', { strong: (chunks) => <strong>{chunks}</strong> })}
-        </Check>
-      </div>
-      <div className="mt-2">
-        <Check checked={!!d.conversational} onChange={(x) => set('conversational', x)}>
-          {t.rich('aiConversation', { strong: (chunks) => <strong>{chunks}</strong> })}
-        </Check>
-      </div>
-      {d.conversational ? (
-        <Field label={t('aiExit')} className="mt-4" hint={t('aiExitHint')}>
-          <TextInput
-            value={d.exit_keyword}
-            placeholder="menu"
-            onChange={(x) => set('exit_keyword', x)}
-          />
-        </Field>
-      ) : null}
+        <summary className="cursor-pointer text-[12px] font-semibold">{t('aiAdvanced')}</summary>
+        <div className="mt-3">
+          <Field
+            label={t('aiSave')}
+            hint={t.rich('aiSaveHint', { v, save: aiSave, path: `${aiSave}.FIELD` })}
+          >
+            <TextInput value={d.save} placeholder="reply" onChange={(x) => set('save', x)} />
+          </Field>
+          <div className="mb-1 mt-1">
+            <Check checked={!!d.extract} onChange={(x) => set('extract', x)}>
+              {t.rich('aiExtract', { strong: (chunks) => <strong>{chunks}</strong> })}
+            </Check>
+          </div>
+          {d.extract ? (
+            <Field
+              label={t('aiFields')}
+              hint={t.rich('aiFieldsHint', {
+                v,
+                key: `${aiSave}.KEY`,
+                rows: `${aiSave}.__rows`,
+              })}
+            >
+              <TextInput
+                value={d.fields}
+                placeholder="FARM, DATE, NAME, FIELD, RATE, VOLUME, EARNINGS"
+                onChange={(x) => set('fields', x)}
+              />
+            </Field>
+          ) : null}
+          <div className="mt-1">
+            <Check checked={!!d.silent} onChange={(x) => set('silent', x)}>
+              {t.rich('aiSilent', { strong: (chunks) => <strong>{chunks}</strong> })}
+            </Check>
+          </div>
+          <div className="mt-2">
+            <Check checked={!!d.conversational} onChange={(x) => set('conversational', x)}>
+              {t.rich('aiConversation', { strong: (chunks) => <strong>{chunks}</strong> })}
+            </Check>
+          </div>
+          {d.conversational ? (
+            <Field label={t('aiExit')} className="mt-4" hint={t('aiExitHint')}>
+              <TextInput
+                value={d.exit_keyword}
+                placeholder="menu"
+                onChange={(x) => set('exit_keyword', x)}
+              />
+            </Field>
+          ) : null}
+        </div>
+      </details>
     </>
   );
 }
@@ -717,9 +859,11 @@ export function SubflowForm({ data: d, set, env }: FormProps) {
     [
       { v: '', l: env.loading ? t('subflowLoading') : t('subflowPick') },
       // A flow cannot run itself: the flow being edited is not offered.
-      ...env.ctx.flows
-        .filter((f) => f.id !== env.flowId)
-        .map((f) => ({ v: f.id, l: subflowLabel(th, f.name, f.isPublished) })),
+      // Only bots of this channel: a conversation cannot move to a bot of another channel.
+      ...flbLinkableFlows(env.ctx.flows, env.mode, env.flowId).map((f) => ({
+        v: f.id,
+        l: subflowLabel(th, f.name, f.isPublished),
+      })),
     ],
     d.flow,
     (v) => t('subflowMissing', { id: v.slice(0, 8) }),

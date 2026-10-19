@@ -23,7 +23,11 @@
       "exportNotReady": "Ese archivo no está listo o ha caducado. Prepara una nueva exportación.",
       "rateLimited": "Demasiadas solicitudes. Espera un momento e inténtalo de nuevo.",
       "validation": "Algunos valores no son válidos. Revisa el formulario e inténtalo de nuevo.",
-      "unexpected": "Algo salió mal. Inténtalo de nuevo."
+      "unexpected": "Algo salió mal. Inténtalo de nuevo.",
+      "holdActive": "Este registro está protegido y no se puede borrar por ahora.",
+      "holdExists": "Esta persona ya tiene una retención legal activa. Amplíala para añadir otro asunto.",
+      "holdNotFound": "Esta retención legal ya no existe.",
+      "holdNotActive": "Esta retención legal ya ha terminado."
     },
     "type": {
       "access": "Acceso",
@@ -182,7 +186,12 @@
           "erase_previewed": "Supresión previsualizada",
           "erased": "Datos borrados",
           "completed": "Solicitud completada",
-          "other": "Actualizar"
+          "other": "Actualizar",
+          "restricted": "Limitado: retención legal",
+          "erasure_queued": "Supresión confirmada, a la espera de que termine la retención",
+          "restriction_lifted": "Limitación levantada",
+          "resume_skipped": "Supresión automática omitida",
+          "resume_failed": "La supresión automática falló, ejecútala a mano"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Borrar a esta persona",
       "created": "Solicitud {reference} creada.",
       "failed": "No se pudo crear la solicitud."
+    },
+    "legalHold": {
+      "close": "Cerrar",
+      "tab": {
+        "label": "Privacidad",
+        "requests": "Solicitudes de datos",
+        "holds": "Retenciones legales"
+      },
+      "requesterResponse": "Hemos recibido su solicitud. Estamos obligados a conservar parte de sus datos para cumplir una obligación legal, por lo que no podemos suprimirlos ahora. Hemos limitado su uso y los suprimiremos cuando termine la obligación. Puede presentar una reclamación ante su autoridad de protección de datos.",
+      "contactBanner": "Retención legal: supresión y borrado en pausa",
+      "workspaceBanner": "Retención legal en todo el espacio de trabajo: supresión y borrado en pausa",
+      "caseStatus": "Limitado: retención legal",
+      "blockedMessage": "Este registro está protegido y no se puede borrar por ahora.",
+      "listFilter": "A la espera de una retención legal",
+      "banner": {
+        "caseRef": "Caso {caseRef}",
+        "reviewBy": "revisión antes del {date}",
+        "reviewOverdue": "revisión vencida desde el {date}",
+        "effects": "El marketing, el tratamiento con IA y las exportaciones están limitados, y cada acceso queda registrado.",
+        "open": "Abrir el registro"
+      },
+      "category": {
+        "legal_obligation": "Obligación legal",
+        "legal_claim": "Reclamación judicial o litigio",
+        "regulator_request": "Requerimiento de un regulador o de las fuerzas de seguridad",
+        "internal_investigation": "Investigación interna"
+      },
+      "scope": {
+        "contact": "Contacto",
+        "lead": "Lead",
+        "workspace": "Todo el espacio de trabajo"
+      },
+      "status": {
+        "active": "Activa",
+        "released": "Levantada",
+        "expired": "Caducada"
+      },
+      "menu": {
+        "place": "Aplicar retención legal...",
+        "release": "Levantar retención legal..."
+      },
+      "place": {
+        "title": "Aplicar una retención legal a este contacto",
+        "workspaceTitle": "Aplicar una retención legal a todo el espacio de trabajo",
+        "intro": "Mientras dure la retención, se rechazan la supresión, el borrado y la depuración por plazo de conservación de esta persona, y se limitan el marketing, el tratamiento con IA y las exportaciones de sus datos. La atención al cliente continúa con normalidad.",
+        "workspaceIntro": "Todas las personas del espacio de trabajo quedan retenidas: se rechazan la supresión, el borrado, la depuración por plazo de conservación y la eliminación de un espacio de trabajo vencido, y se limitan el marketing, el tratamiento con IA y las exportaciones. Úsala para una orden que abarque todos los registros.",
+        "category": "¿Por qué se conservan los datos?",
+        "categoryPick": "Elige un motivo",
+        "caseRef": "Referencia del caso",
+        "caseRefHint": "Tu propia referencia: un expediente judicial, un ticket, el número de una carta de un regulador.",
+        "note": "Nota (opcional)",
+        "noteHint": "No escribas aquí nombres, números de teléfono ni detalles del asunto.",
+        "reviewAt": "Revisar antes del (opcional)",
+        "reviewHint": "El registro señala la retención cuando pasa esta fecha.",
+        "expiresAt": "Termina el (opcional)",
+        "expiresHint": "Pasada esta fecha, la retención termina por sí sola.",
+        "submit": "Aplicar retención",
+        "submitting": "Aplicando...",
+        "done": "Retención legal aplicada.",
+        "target": "Se aplica a",
+        "targetPerson": "Una persona",
+        "targetWorkspace": "Todo el espacio de trabajo",
+        "change": "Cambiar",
+        "search": "Buscar a la persona",
+        "searchHint": "Escribe un nombre, un número de teléfono o un correo electrónico (mínimo dos caracteres).",
+        "noResults": "No se encontró a nadie."
+      },
+      "release": {
+        "title": "Levantar esta retención legal",
+        "message": "Después podrán reanudarse el borrado, la depuración por plazo de conservación y el marketing para esta persona. Las solicitudes de supresión a la espera de esta retención salen del estado limitado, y una supresión ya confirmada se ejecuta sola en un minuto.",
+        "cases": "{count, plural, one {# solicitud de datos está a la espera de esta retención.} other {# solicitudes de datos están a la espera de esta retención.}}",
+        "reason": "¿Por qué se levanta? (opcional)",
+        "reasonHint": "No escribas aquí nombres ni detalles del asunto.",
+        "submit": "Levantar retención",
+        "submitting": "Levantando...",
+        "done": "Retención legal levantada.",
+        "doneResuming": "{count, plural, one {Retención legal levantada. # supresión confirmada se ejecutará ahora.} other {Retención legal levantada. # supresiones confirmadas se ejecutarán ahora.}}"
+      },
+      "extend": {
+        "title": "Ampliar esta retención legal",
+        "caseRefNow": "Referencia del caso actual: {caseRef}",
+        "addCaseRef": "Añadir otra referencia de caso",
+        "addCaseRefHint": "Se añade un segundo asunto sobre la misma persona a la misma retención.",
+        "clearHint": "Vacía la fecha para quitarla.",
+        "submit": "Guardar cambios",
+        "submitting": "Guardando...",
+        "done": "Retención legal actualizada."
+      },
+      "review": {
+        "title": "Registrar una revisión",
+        "message": "Deja constancia de que has vuelto a examinar esta retención y de que sigue vigente.",
+        "next": "Próxima revisión antes del (opcional)",
+        "nextHint": "Déjalo vacío para mantener la fecha de revisión actual.",
+        "submit": "Registrar revisión",
+        "submitting": "Guardando...",
+        "done": "Revisión registrada."
+      },
+      "actions": {
+        "review": "Revisar",
+        "extend": "Ampliar",
+        "release": "Levantar"
+      },
+      "register": {
+        "title": "Retenciones legales",
+        "subtitle": "Personas y registros cuya supresión y borrado están en pausa porque los datos deben conservarse. Una retención sobre una sola persona se aplica desde la página de ese contacto.",
+        "export": "Exportar CSV",
+        "empty": "No hay retenciones legales.",
+        "emptyFiltered": "Ninguna retención legal coincide con estos filtros.",
+        "loadMore": "Cargar más",
+        "loadingMore": "Cargando...",
+        "none": "-",
+        "overdue": "Revisión vencida",
+        "cases": "{count, plural, one {# solicitud en espera} other {# solicitudes en espera}}",
+        "open": "Abrir la retención con referencia de caso {caseRef}",
+        "filters": {
+          "label": "Filtros",
+          "status": "Estado",
+          "category": "Motivo",
+          "scope": "Se aplica a",
+          "caseRef": "Referencia del caso",
+          "reviewDue": "Revisión vencida",
+          "any": "Cualquiera"
+        },
+        "columns": {
+          "subject": "Interesado",
+          "category": "Motivo",
+          "caseRef": "Referencia del caso",
+          "placed": "Aplicada",
+          "review": "Revisar antes del",
+          "expires": "Termina",
+          "status": "Estado",
+          "actions": "Acciones"
+        },
+        "place": "Aplicar retención legal..."
+      },
+      "detail": {
+        "title": "Retención legal",
+        "history": "Historial",
+        "releasedAt": "Terminada",
+        "by": "por {actor}",
+        "system": "el sistema",
+        "action": {
+          "insert": "Retención aplicada",
+          "update": "Retención modificada",
+          "delete": "Retención terminada",
+          "other": "Actualización"
+        }
+      },
+      "case": {
+        "body": "Los datos de esta persona se conservan y quedan bloqueados mientras se aplique una retención legal. La supresión no se ejecuta, el marketing, el tratamiento con IA y las exportaciones están limitados, y el plazo sigue corriendo.",
+        "requesterTitle": "Respuesta a la persona",
+        "requesterHint": "Indica que los datos se conservan por una obligación legal, sin decir por qué. El asesor jurídico puede sustituir este texto en los ajustes de privacidad.",
+        "copy": "Copiar texto",
+        "copied": "Copiado",
+        "queueHint": "Aún puedes confirmar la supresión ahora: queda registrada, no se suprime nada y se ejecuta sola cuando termine la retención.",
+        "queue": "Confirmar la supresión para cuando termine la retención",
+        "queued": "Registrado. No se suprimió nada; la supresión se ejecutará sola cuando termine la retención."
+      },
+      "settings": {
+        "noticeLabel": "Respuesta a una persona cuya supresión está retenida",
+        "noticeHint": "El texto de tu asesor jurídico. Déjalo vacío para usar el texto predeterminado. No menciones el asunto ni el motivo."
+      }
     }
   }
 }

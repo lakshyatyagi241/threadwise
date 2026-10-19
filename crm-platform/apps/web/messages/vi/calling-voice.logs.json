@@ -4,12 +4,15 @@
       "eyebrow": "Không gian làm việc",
       "title": "Nhật ký cuộc gọi",
       "subtitle": "Mọi cuộc gọi WhatsApp mà nhóm của bạn đã gọi hoặc trả lời, kèm thời lượng, người xử lý và bản ghi âm.",
+      "subtitleLogged": "Mọi cuộc gọi nhóm của bạn đã ghi lại hoặc đến từ ứng dụng di động hay đường dây điện thoại, kèm thời lượng, người xử lý và kết quả.",
       "sideTip": "Mọi cuộc gọi WhatsApp đến hoặc đi từ số của bạn. Lọc theo ngày, trạng thái, số hoặc đồng đội để tìm một cuộc gọi cụ thể.",
+      "sideTipLogged": "Các cuộc gọi được ghi bằng “Ghi cuộc gọi”, do ứng dụng di động gửi hoặc do đường dây điện thoại báo cáo. Lọc theo ngày, trạng thái, nguồn hoặc đồng đội để tìm một cuộc gọi cụ thể.",
       "loading": "Đang tải cuộc gọi",
       "loadFailed": "Không thể tải nhật ký cuộc gọi.",
       "retry": "Thử lại",
       "emptyTitle": "Chưa có cuộc gọi nào",
       "emptyMessage": "Khi khách hàng gọi đến một trong các số WhatsApp của bạn, hoặc nhóm của bạn gọi từ hộp thư đến, cuộc gọi sẽ hiện ở đây kèm thời lượng, người xử lý và bản ghi âm.",
+      "emptyMessageLogged": "Dùng “Ghi cuộc gọi” để ghi lại cuộc gọi bạn vừa thực hiện. Cuộc gọi từ ứng dụng di động hoặc đường dây điện thoại đã kết nối cũng sẽ hiện ở đây, kèm thời lượng và người xử lý.",
       "emptyFilteredTitle": "Không có cuộc gọi nào khớp với các bộ lọc này",
       "emptyFilteredMessage": "Hãy thử khoảng thời gian rộng hơn hoặc xóa bộ lọc.",
       "clearFilters": "Xóa bộ lọc",
@@ -63,7 +66,9 @@
         "agent": "Người xử lý",
         "allAgents": "Mọi người",
         "apply": "Lọc",
-        "clear": "Xóa"
+        "clear": "Xóa",
+        "source": "Nguồn",
+        "allSources": "Tất cả nguồn"
       },
       "table": {
         "caption": "Cuộc gọi, mới nhất trước",
@@ -136,12 +141,14 @@
           "reject_sent": "Cuộc gọi bị từ chối",
           "terminate_sent": "Đã gửi lệnh cúp máy",
           "terminate": "Cuộc gọi đã kết thúc",
-          "recording_stored": "Đã lưu bản ghi âm"
+          "recording_stored": "Đã lưu bản ghi âm",
+          "logged": "Đã ghi cuộc gọi"
         },
         "noRecording": {
           "title": "Bản ghi âm",
           "message": "Cuộc gọi này không có bản ghi âm."
-        }
+        },
+        "notes": "Ghi chú"
       },
       "recording": {
         "title": "Bản ghi âm",
@@ -154,6 +161,53 @@
         "linkUntil": "Liên kết này có hiệu lực đến {time}. Sau đó hãy nhấn phát lại.",
         "playFailed": "Không thể phát bản ghi âm.",
         "retry": "Thử lại"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Ghi thủ công",
+        "telephony": "Đường dây điện thoại",
+        "mobile_app": "Ứng dụng di động",
+        "web_click_to_call": "Nhấp để gọi"
+      },
+      "logCall": {
+        "button": "Ghi cuộc gọi",
+        "title": "Ghi cuộc gọi",
+        "close": "Đóng",
+        "with": "Cuộc gọi với",
+        "phone": "Số điện thoại",
+        "phoneHint": "Cuộc gọi được liên kết với liên hệ có số này.",
+        "phoneHintContact": "Tùy chọn. Cuộc gọi được liên kết với liên hệ này.",
+        "direction": "Hướng",
+        "outcome": "Kết quả",
+        "outcomes": {
+          "connected": "Đã kết nối",
+          "no_answer": "Không trả lời",
+          "busy": "Máy bận",
+          "left_voicemail": "Đã để lại thư thoại",
+          "wrong_number": "Sai số",
+          "declined": "Bị từ chối",
+          "failed": "Thất bại"
+        },
+        "when": "Bắt đầu lúc",
+        "minutes": "Thời lượng (phút)",
+        "notes": "Ghi chú",
+        "notesHint": "Hiển thị với mọi người xem được cuộc gọi này. Tối đa 2.000 ký tự.",
+        "followUp": "Tạo thêm công việc theo dõi",
+        "followUpDue": "Theo dõi vào",
+        "followUpHint": "Công việc được giao cho bạn và liên kết với liên hệ.",
+        "cancel": "Hủy",
+        "save": "Lưu cuộc gọi",
+        "saving": "Đang lưu...",
+        "saved": "Đã ghi cuộc gọi.",
+        "savedNoContact": "Đã ghi cuộc gọi. Chưa có liên hệ nào có số này.",
+        "problems": {
+          "noWho": "Hãy nhập số điện thoại.",
+          "badWhen": "Hãy chọn thời điểm cuộc gọi bắt đầu.",
+          "futureWhen": "Cuộc gọi không thể bắt đầu trong tương lai.",
+          "badMinutes": "Hãy nhập thời lượng theo phút, tối đa 1.440.",
+          "noDue": "Hãy chọn ngày theo dõi.",
+          "badDue": "Hãy chọn ngày theo dõi hợp lệ."
+        }
       }
     },
     "analytics": {

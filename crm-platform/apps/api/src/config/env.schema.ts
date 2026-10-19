@@ -15,6 +15,15 @@ const booleanish = z
   .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
   .transform((v) => v === true || v === 'true' || v === '1');
 
+/**
+ * An optional URL. A compose file hands an unset variable over as an empty string (`${X:-}`), and that is "not set", not a malformed
+ * URL: without this, an unset optional endpoint stopped the API at startup with "Invalid url".
+ */
+const optionalUrl = z.preprocess(
+  (v) => (typeof v === 'string' && v.trim() === '' ? undefined : v),
+  z.string().url().optional(),
+);
+
 export const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   PORT: z.coerce.number().int().min(1).max(65535).default(3000),
@@ -26,6 +35,10 @@ export const envSchema = z.object({
    */
   TRUST_PROXY: z.string().default('loopback'),
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
+  /** gzip/brotli on API responses over 1 KB (QA 63). Set false when the proxy in front of the API already compresses. */
+  RESPONSE_COMPRESSION: booleanish.default(true),
+  /** A request that takes at least this long (ms) is logged at warn with its route, organisation and duration. 0 turns it off (QA 51). */
+  SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).default(500),
   CORS_ORIGINS: z
     .string()
     .default('')
@@ -100,7 +113,9 @@ export const envSchema = z.object({
   // --- object storage ------------------------------------------------------
   /** Where chat media lives when the platform storage settings name no bucket: `local` (this container's disk) or `s3` (the S3_* bucket). */
   MEDIA_STORAGE_DRIVER: z.enum(['local', 's3']).default('local'),
-  S3_ENDPOINT: z.string().url().optional(),
+  S3_ENDPOINT: optionalUrl,
+  /** The address outsiders (a browser, a WhatsApp provider) use to reach the bucket when `S3_ENDPOINT` is a private address; links are signed against it. */
+  S3_PUBLIC_ENDPOINT: optionalUrl,
   S3_REGION: z.string().default('us-east-1'),
   S3_BUCKET_MEDIA: z.string().default('crm-media'),
   S3_BUCKET_DOCUMENTS: z.string().default('crm-documents'),
@@ -116,6 +131,10 @@ export const envSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_SECURE: booleanish.default(false),
+  /** Which MailPort adapter auth-providers.module.ts binds: 'smtp' (Mailpit locally, any SMTP relay in prod) or 'resend' (Resend's HTTP API). */
+  MAIL_PROVIDER: z.enum(['smtp', 'resend']).default('smtp'),
+  /** Required when MAIL_PROVIDER=resend; unused otherwise. Never has a default. */
+  RESEND_API_KEY: z.string().optional(),
 
   // --- web app / branding (links in transactional mail, OAuth redirects) ----
   WEB_APP_URL: z.string().url().default('http://localhost:3001'),
@@ -165,16 +184,38 @@ export const envSchema = z.object({
    * the period; 8 years covers India's GST rules. Confirm with legal before changing.
    */
   FINANCIAL_RECORD_RETENTION_YEARS: z.coerce.number().int().min(1).max(15).default(8),
+  // Event-based analytics (docs/superpowers/specs/2026-10-16-event-based-analytics-design.md).
+  /** Master switch for writing analytics events. Off = `AnalyticsEvents.record` does nothing. */
+  ANALYTICS_EVENTS_ENABLED: booleanish.default(true),
+  /**
+   * Each event insert runs in a savepoint so a failure cannot abort the caller's transaction. Turn off only if the Phase 0 benchmark
+   * shows the savepoint costs too much; the writer then validates in code and a database error fails the caller's transaction.
+   */
+  ANALYTICS_EVENT_SAVEPOINT: booleanish.default(true),
+  /** The rollup worker (every 30 seconds) and its nightly reconcile. */
+  ANALYTICS_ROLLUP_ENABLED: booleanish.default(true),
+  /** JSON map of metric key to `legacy` | `shadow` | `rollup`. Anything missing or invalid is `legacy`. */
+  ANALYTICS_SOURCES: z.string().default('{}'),
+  // --- data retention (docs/runbooks/data-retention.md) --------------------
+  /** The nightly job that exports closed partitions to the archive and drops them. Off until an operator has run it as a dry run. */
+  RETENTION_ENABLED: booleanish.default(false),
+  /** With the job on: log which months it would archive and change nothing. Set false to archive and drop for real. */
+  RETENTION_DRY_RUN: booleanish.default(true),
+  /** Where closed partitions are archived: `local` (a directory on this host, development only) or `s3` (the S3_* bucket below). */
+  ARCHIVE_DRIVER: z.enum(['local', 's3']).default('local'),
+  /** The directory for `ARCHIVE_DRIVER=local`. Empty means `.archive` under the working directory. */
+  ARCHIVE_LOCAL_DIR: z.string().optional(),
+  S3_BUCKET_ARCHIVE: z.string().default('crm-archive'),
   FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
-  FAQ_OPENROUTER_BASE_URL: z.string().url().optional(),
+  FAQ_OPENROUTER_BASE_URL: optionalUrl,
   /**
    * AI lead scoring's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline stand-in for
    * tests and demos that needs no key or network. A production process that sets `fixture` does not boot.
    */
   LEAD_SCORING_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
   /** Overrides OpenRouter's base URL for lead scoring (a gateway, a local stub). */
-  LEAD_SCORING_OPENROUTER_BASE_URL: z.string().url().optional(),
+  LEAD_SCORING_OPENROUTER_BASE_URL: optionalUrl,
   EASEBUZZ_ENV: z.enum(['test', 'prod']).default('test'),
   EASEBUZZ_KEY: z.string().optional(),
   EASEBUZZ_SALT: z.string().optional(),

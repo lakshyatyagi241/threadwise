@@ -3,6 +3,8 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
+import { AnalyticsWorkerModule } from '../modules/analytics';
+import { DataRetentionWorkerModule } from '../modules/data-retention';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CallingVoiceWorkerModule } from '../modules/calling-voice';
@@ -19,6 +21,11 @@ import { ShopifyWoocommerceWorkerModule } from '../modules/shopify-woocommerce';
 import { ChannelEmailWorkerModule } from '../modules/channel-email';
 import { ChannelSmsWorkerModule } from '../modules/channel-sms';
 import { ChannelTelegramWorkerModule } from '../modules/channel-telegram';
+import { WebhookRetryWorkerModule } from '../modules/webhook-retry';
+import { FailedOperationsWorkerModule } from '../modules/failed-operations';
+import { ChannelLineWorkerModule } from '../modules/channel-line';
+import { ChannelViberWorkerModule } from '../modules/channel-viber';
+import { ChannelWechatWorkerModule } from '../modules/channel-wechat';
 import {
   ContactImportWorkerModule,
   InvoicingWorkerModule,
@@ -48,16 +55,19 @@ import { LeadScoringWorkerModule } from '../modules/lead-scoring/lead-scoring-wo
 import { ContactConsentWorkerModule } from '../modules/contact-consent/contact-consent-worker.module';
 import { PrivacyWorkerModule } from '../modules/privacy/privacy-worker.module';
 import { AuditLogWorkerModule } from '../modules/audit-log/audit-log-worker.module';
+import { RevenueReportWorkerModule } from '../modules/crm/revenue-report/revenue-report-worker.module';
 import { WabaWorkerModule } from '../modules/whatsapp-cloud-api-waba';
 import { WhatsappDevicesBaileysWorkerModule } from '../modules/whatsapp-devices-baileys';
 import { AiAgentsTrainingWorkerModule } from '../modules/ai-agents-training';
 import { FlowBuilderEditorWorkerModule } from '../modules/flow-builder-editor';
 import { FlowRuntimeEngineWorkerModule } from '../modules/flow-runtime-engine';
 import { LeadsWorkerModule } from '../modules/leads';
+import { MetaLeadAdsWorkerModule } from '../modules/meta-lead-ads';
 import { FormsBuilderWorkerModule } from '../modules/forms-builder';
 import { ScheduledQueueWarmerWorkerModule } from '../modules/scheduled-queue-warmer';
 import { MarketplaceWorkerModule } from '../modules/marketplace';
 import { WorkspacesTeamsTenancyWorkerModule } from '../modules/workspaces-teams-tenancy';
+import { StorageMeterModule, StorageQuotaWorkerModule } from '../modules/storage-quota';
 import { OutboxDrainService } from './outbox-drain.service';
 import { PartitionMaintenanceService } from './partition-maintenance.service';
 
@@ -77,6 +87,8 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
   imports: [
     ScheduleModule.forRoot(),
     AuthModule,
+    AnalyticsWorkerModule,
+    DataRetentionWorkerModule,
     ContactImportWorkerModule,
     TasksWorkerModule,
     BspBillingEngineWorkerModule,
@@ -103,6 +115,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactConsentWorkerModule,
     PrivacyWorkerModule,
     AuditLogWorkerModule,
+    RevenueReportWorkerModule,
     CallingVoiceWorkerModule,
     CatalogProductsWorkerModule,
     StorefrontBuilderWorkerModule,
@@ -113,6 +126,11 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     TeamInboxRoutingSlaWorkerModule,
     CampaignsWorkerModule,
     ChannelTelegramWorkerModule,
+    WebhookRetryWorkerModule,
+    FailedOperationsWorkerModule,
+    ChannelLineWorkerModule,
+    ChannelViberWorkerModule,
+    ChannelWechatWorkerModule,
     ChannelSmsWorkerModule,
     ChannelEmailWorkerModule,
     ChannelFacebookWorkerModule,
@@ -126,10 +144,14 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     WhatsappDevicesBaileysWorkerModule,
     NodeCatalogBridgeModule,
     LeadsWorkerModule,
+    MetaLeadAdsWorkerModule,
     FormsBuilderWorkerModule,
     MarketplaceWorkerModule,
     PlatformSupportDeskWorkerModule,
     WorkspacesTeamsTenancyWorkerModule,
+    // The storage meter for every file the worker writes (inbound media, recordings), and its backfill, counter check and reaper.
+    StorageMeterModule,
+    StorageQuotaWorkerModule,
   ],
   providers: [
     OutboxDrainService,

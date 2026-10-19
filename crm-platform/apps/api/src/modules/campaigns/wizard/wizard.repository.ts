@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import type { WizardFollowUpStepSummary } from '@crm/contracts';
 import type { CampaignOptionColumns } from './wizard-blank';
 
 /** The SQL of the broadcast wizard: templates, audience sources, the wizard columns of a campaign, series, retries and test sends. */
@@ -132,8 +133,22 @@ export interface TestSendRow {
   providerMessageId: string | null;
   errorCode: string | null;
   errorMessage: string | null;
+  /** BL-191: when a test held for the quiet hours goes out; null otherwise. */
+  heldUntil: Date | null;
   createdAt: Date;
 }
+
+const toTestSend = (r: Raw): TestSendRow => ({
+  id: Number(r.id),
+  uuid: String(r.uuid),
+  to: String(r.to_phone),
+  status: String(r.status),
+  providerMessageId: str(r.provider_message_id),
+  errorCode: str(r.error_code),
+  errorMessage: str(r.error_message),
+  heldUntil: r.held_until ? new Date(r.held_until as string) : null,
+  createdAt: new Date(r.created_at as string),
+});
 
 const toCampaign = (r: Raw): WizardCampaignRow => ({
   id: Number(r.id),
@@ -200,30 +215,73 @@ export class WizardRepository {
   // ------------------------------------------------------------------------------------------ templates
 
   /**
-   * Templates the wizard may offer: approved the way the broadcast composer reads it (Meta's approval on the Cloud engine, the local
-   * approval on any other), not an OTP template, and tied to a number that is still connected.
+   * The FROM and WHERE of the templates the wizard may offer: approved the way the broadcast composer reads it, for the workspace's
+   * default engine as the sender directory resolves it (Meta's approval on the Cloud engine, the local approval on any other), not an
+   * OTP template, not an SMS one, and tied to a number that is still connected.
    */
-  async approvedTemplates(tx: Tx, orgId: number): Promise<TemplateListRow[]> {
-    const eng = await tx.execute(
-      sql`SELECT default_engine FROM workspace_settings WHERE org_id = ${orgId} LIMIT 1`,
-    );
-    const def = (eng.rows[0] as { default_engine: string | null } | undefined)?.default_engine;
+  private approvedFrom(orgId: number, defaultEngine: string) {
     const approved =
-      def === 'waba'
+      defaultEngine === 'waba'
         ? sql`t.meta_template_id IS NOT NULL AND t.meta_status = 'APPROVED' AND (t.paused_until IS NULL OR t.paused_until <= now())`
         : sql`t.status IN ('approved', 'public')`;
+    return sql`
+      FROM wa_templates t
+      LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
+      WHERE t.org_id = ${orgId} AND ${approved} AND t.template_type <> 'auth'
+        AND (t.provider_config_id IS NULL OR c.status = 'connected')
+        AND coalesce(t.channel, 'waba') <> 'sms'`;
+  }
+
+  async approvedTemplates(
+    tx: Tx,
+    orgId: number,
+    defaultEngine: string,
+  ): Promise<TemplateListRow[]> {
     const res = await tx.execute(sql`
       SELECT t.id, t.uuid, t.template_name, t.language, t.header, t.template_body, t.footer, t.category, t.meta_category,
              t.template_type, t.buttons, t.variable_map, t.parameter_format, t.attachment_type, t.attachment_file,
              t.meta_template_id, t.meta_status, t.paused_until, t.quality_score, t.channel, t.twilio_content_sid,
              t.provider_config_id, c.uuid AS config_uuid, c.provider AS config_provider,
              coalesce(nullif(c.display_label, ''), c.phone_number) AS sender_label
-      FROM wa_templates t
-      LEFT JOIN wa_provider_configs c ON c.org_id = t.org_id AND c.id = t.provider_config_id
-      WHERE t.org_id = ${orgId} AND ${approved} AND t.template_type <> 'auth'
-        AND (t.provider_config_id IS NULL OR c.status = 'connected')
+      ${this.approvedFrom(orgId, defaultEngine)}
       ORDER BY t.id DESC`);
     return (res.rows as Raw[]).map((r) => this.template(r));
+  }
+
+  /** The same templates as `approvedTemplates`, but only what the campaign gate looks at (no bodies, buttons or numbers). */
+  async approvedTemplateFacts(
+    tx: Tx,
+    orgId: number,
+    defaultEngine: string,
+  ): Promise<
+    Array<
+      Pick<
+        TemplateListRow,
+        | 'uuid'
+        | 'templateType'
+        | 'attachmentType'
+        | 'attachmentFile'
+        | 'metaTemplateId'
+        | 'metaStatus'
+        | 'pausedUntil'
+        | 'qualityScore'
+      >
+    >
+  > {
+    const res = await tx.execute(sql`
+      SELECT t.uuid, t.template_type, t.attachment_type, t.attachment_file, t.meta_template_id, t.meta_status, t.paused_until,
+             t.quality_score
+      ${this.approvedFrom(orgId, defaultEngine)}`);
+    return (res.rows as Raw[]).map((r) => ({
+      uuid: String(r.uuid),
+      templateType: String(r.template_type),
+      attachmentType: r.attachment_type === null ? null : String(r.attachment_type),
+      attachmentFile: r.attachment_file === null ? null : String(r.attachment_file),
+      metaTemplateId: r.meta_template_id === null ? null : String(r.meta_template_id),
+      metaStatus: r.meta_status === null ? null : String(r.meta_status),
+      pausedUntil: when(r.paused_until),
+      qualityScore: r.quality_score === null ? null : String(r.quality_score),
+    }));
   }
 
   /** One template by uuid with its sender, whether or not it is approved (the caller gates it). */
@@ -430,7 +488,7 @@ export class WizardRepository {
         tracking_enabled = ${o.trackingEnabled}, retry_failed = ${o.retryFailed}, expires_at = ${o.expiresAt ? o.expiresAt.toISOString() : null}::timestamptz,
         throttle_min_sec = ${o.throttleMinSec}, throttle_max_sec = ${o.throttleMaxSec}, batch_size = ${o.batchSize},
         batch_pause_min = ${o.batchPauseMin}, daily_limit = ${o.dailyLimit}, window_start = ${o.windowStart},
-        window_end = ${o.windowEnd},
+        window_end = ${o.windowEnd}, follow_up_count = ${o.followUpCount},
         series_id = ${v.seriesId}::bigint, occurrence_no = ${v.occurrenceNo}::int,
         schedule_type = ${v.scheduleType}, send_date = ${v.sendDate}::date, send_time = ${v.sendTime}::time,
         timezone = ${v.timezone}, status = ${v.status}, total_recipients = ${v.total},
@@ -732,6 +790,53 @@ export class WizardRepository {
     };
   }
 
+  async flowExists(tx: Tx, orgId: number, uuid: string): Promise<boolean> {
+    const res = await tx.execute(
+      sql`SELECT 1 FROM flows WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    return res.rows.length > 0;
+  }
+
+  /** What each follow-up step did for a run: still ahead, sent, delivered, read, flows started, skipped, lapsed, failed. */
+  async followUpTotals(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    steps: number,
+  ): Promise<WizardFollowUpStepSummary[]> {
+    if (steps <= 0) return [];
+    const waiting = await tx.execute(sql`
+      SELECT follow_up_next AS step, count(*)::int AS n FROM wp_campaign_contacts
+      WHERE org_id = ${orgId} AND campaign_id = ${campaignId} AND follow_up_state = 'active' GROUP BY follow_up_next`);
+    const done = await tx.execute(sql`
+      SELECT step_no AS step,
+        count(*) FILTER (WHERE outcome = 'sent')::int AS sent,
+        count(*) FILTER (WHERE outcome = 'sent' AND delivery_status IN ('delivered', 'read'))::int AS delivered,
+        count(*) FILTER (WHERE outcome = 'sent' AND delivery_status = 'read')::int AS read,
+        count(*) FILTER (WHERE outcome = 'flow_started')::int AS flows,
+        count(*) FILTER (WHERE outcome = 'skipped')::int AS skipped,
+        count(*) FILTER (WHERE outcome = 'lapsed')::int AS lapsed,
+        count(*) FILTER (WHERE outcome = 'failed' OR (outcome = 'sent' AND delivery_status = 'failed'))::int AS failed
+      FROM camp_follow_up_attempts WHERE org_id = ${orgId} AND campaign_id = ${campaignId} GROUP BY step_no`);
+    const w = new Map((waiting.rows as Raw[]).map((r) => [Number(r.step), Number(r.n)]));
+    const d = new Map((done.rows as Raw[]).map((r) => [Number(r.step), r]));
+    return Array.from({ length: steps }, (_, i) => {
+      const step = i + 1;
+      const r = d.get(step);
+      return {
+        step,
+        waiting: w.get(step) ?? 0,
+        sent: Number(r?.sent ?? 0),
+        delivered: Number(r?.delivered ?? 0),
+        read: Number(r?.read ?? 0),
+        flowsStarted: Number(r?.flows ?? 0),
+        skipped: Number(r?.skipped ?? 0),
+        lapsed: Number(r?.lapsed ?? 0),
+        failed: Number(r?.failed ?? 0),
+      };
+    });
+  }
+
   async runCounts(tx: Tx, orgId: number, campaignId: number) {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS recipients,
@@ -770,13 +875,16 @@ export class WizardRepository {
       errorMessage: string | null;
       renderedBody: string | null;
       createdBy: number | null;
+      /** Held for the quiet hours (BL-191): the instant it may go and why. */
+      held?: { until: string; reason: string };
     },
   ): Promise<{ id: number; uuid: string; createdAt: Date }> {
     const res = await tx.execute(sql`
       INSERT INTO camp_test_sends (org_id, campaign_id, template_id, provider, to_phone, status, provider_message_id, error_code,
-                                   error_message, rendered_body, created_by)
+                                   error_message, rendered_body, created_by, held_until, held_reason)
       VALUES (${orgId}, ${v.campaignId}, ${v.templateId}, ${v.provider}, ${v.to}, ${v.status}, ${v.providerMessageId}, ${v.errorCode},
-              ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, ${v.renderedBody}, ${v.createdBy})
+              ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, ${v.renderedBody}, ${v.createdBy},
+              ${v.held?.until ?? null}::timestamptz, ${v.held?.reason ?? null})
       RETURNING id, uuid, created_at`);
     const r = res.rows[0] as Raw;
     return { id: Number(r.id), uuid: String(r.uuid), createdAt: new Date(r.created_at as string) };
@@ -789,19 +897,10 @@ export class WizardRepository {
     limit: number,
   ): Promise<TestSendRow[]> {
     const res = await tx.execute(sql`
-      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, created_at
+      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, held_until, created_at
       FROM camp_test_sends WHERE org_id = ${orgId} AND campaign_id = ${campaignId}
       ORDER BY id DESC LIMIT ${limit}`);
-    return (res.rows as Raw[]).map((r) => ({
-      id: Number(r.id),
-      uuid: String(r.uuid),
-      to: String(r.to_phone),
-      status: String(r.status),
-      providerMessageId: str(r.provider_message_id),
-      errorCode: str(r.error_code),
-      errorMessage: str(r.error_message),
-      createdAt: new Date(r.created_at as string),
-    }));
+    return (res.rows as Raw[]).map(toTestSend);
   }
 
   async testSendsByIds(tx: Tx, orgId: number, ids: readonly number[]): Promise<TestSendRow[]> {
@@ -811,18 +910,55 @@ export class WizardRepository {
       sql`, `,
     );
     const res = await tx.execute(sql`
-      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, created_at
+      SELECT id, uuid, to_phone, status, provider_message_id, error_code, error_message, held_until, created_at
       FROM camp_test_sends WHERE org_id = ${orgId} AND id IN (${list}) ORDER BY id`);
-    return (res.rows as Raw[]).map((r) => ({
-      id: Number(r.id),
-      uuid: String(r.uuid),
-      to: String(r.to_phone),
-      status: String(r.status),
-      providerMessageId: str(r.provider_message_id),
-      errorCode: str(r.error_code),
-      errorMessage: str(r.error_message),
-      createdAt: new Date(r.created_at as string),
-    }));
+    return (res.rows as Raw[]).map(toTestSend);
+  }
+
+  /** A test the quiet hours held back, with the draft it belongs to (BL-191). */
+  async heldTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ status: string; to: string; campaignUuid: string } | undefined> {
+    const res = await tx.execute(sql`
+      SELECT t.status, t.to_phone, c.uuid AS campaign_uuid
+      FROM camp_test_sends t JOIN wpcampaigns c ON c.org_id = t.org_id AND c.id = t.campaign_id
+      WHERE t.org_id = ${orgId} AND t.id = ${id}`);
+    const r = res.rows[0] as Raw | undefined;
+    return r
+      ? { status: String(r.status), to: String(r.to_phone), campaignUuid: String(r.campaign_uuid) }
+      : undefined;
+  }
+
+  /** The recipient is still inside their own hours: the test waits for the next opening. */
+  async holdTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    hold: { until: string; reason: string },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE camp_test_sends SET held_until = ${hold.until}::timestamptz, held_reason = ${hold.reason}
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'held'`);
+  }
+
+  /** The held test went out (or was refused): the row takes the real status and is no longer held. */
+  async finishHeldTestSend(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    v: {
+      status: 'sent' | 'failed';
+      providerMessageId: string | null;
+      errorCode: string | null;
+      errorMessage: string | null;
+    },
+  ): Promise<void> {
+    await tx.execute(sql`
+      UPDATE camp_test_sends SET status = ${v.status}, provider_message_id = ${v.providerMessageId}, error_code = ${v.errorCode},
+             error_message = ${v.errorMessage ? v.errorMessage.slice(0, 1024) : null}, held_until = NULL, held_reason = NULL
+      WHERE org_id = ${orgId} AND id = ${id} AND status = 'held'`);
   }
 
   /** What the wallet charged for each of these provider messages (hundredths); absent when nothing was charged. */

@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flow builder"
+      "flowBuilder": "Flow builder",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "Admin - Project settings",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "Endpoint",
-            "hint": "Required for Spaces, R2 and MinIO. A trailing /bucket is removed.",
-            "placeholder": "https://… (required for Spaces / R2 / MinIO; auto for Wasabi & Bunny)"
+            "hint": "Required for Spaces and R2. A trailing /bucket is removed.",
+            "placeholder": "https://… (required for Spaces / R2; auto for Wasabi & Bunny)"
           },
           "cdnUrl": {
             "label": "Public / CDN URL (optional)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Use path-style endpoint (MinIO / some S3-compatible stores)"
+            "label": "Use path-style endpoint (some S3-compatible stores)"
           },
           "storageZone": {
             "label": "Storage zone",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Private (signed URLs)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "The Google OAuth client every workspace connects its calendar through.",
+        "description": "The Google OAuth client every workspace connects its Google account through, for the calendar, Sheets, Docs and Forms.",
         "sections": {
           "oauth": {
             "title": "Google OAuth client"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Allow workspaces to connect Google Calendar",
-            "hint": "Off: no workspace can connect, and nothing is written to or read from a calendar."
+            "label": "Allow workspaces to connect Google",
+            "hint": "Off: no workspace can connect, and nothing is read from or written to Google (calendar, Sheets, Docs, Forms)."
           },
           "clientId": {
             "label": "Client ID",
@@ -1024,6 +1024,37 @@
             "advanced": "Advanced only"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "The Microsoft app every workspace connects its Outlook or Microsoft 365 calendar through.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Allow workspaces to connect Outlook",
+            "hint": "Off: no workspace can connect, and nothing is read from or written to any Outlook calendar. Connected calendars are kept."
+          },
+          "clientId": {
+            "label": "Application (client) ID",
+            "hint": "From the Microsoft Entra admin center, App registrations, Overview. Empty uses MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "Client secret",
+            "hint": "Stored encrypted and never shown again. Empty keeps the saved one; MICROSOFT_CALENDAR_CLIENT_SECRET is the fallback."
+          },
+          "tenant": {
+            "label": "Tenant",
+            "hint": "common allows work, school and personal accounts; use a directory (tenant) ID for a single-tenant app. Empty uses MICROSOFT_CALENDAR_TENANT, else common."
+          },
+          "redirectUri": {
+            "label": "Redirect URI override",
+            "hint": "Leave empty to use the address above. It must match a redirect URI on the app exactly."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "Cloud storage",
-        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 or MinIO.",
+        "description": "Send client media to your own bucket: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "The Google OAuth client workspaces use to connect their calendar for bookings and busy times.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "The Google OAuth client workspaces use to connect their Google account for bookings, Sheets, Docs and Forms.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail email",
@@ -1151,6 +1182,11 @@
         "title": "Flow builder",
         "description": "The default flow builder for every workspace: Simple step-by-step or Advanced canvas. A workspace can override it.",
         "tags": "Simple / Advanced / Automation"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "The Microsoft app workspaces use to connect their Outlook and Microsoft 365 calendars for bookings.",
+        "tags": "Microsoft / OAuth / Outlook / Calendar"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Use the Bunny fields: storage zone and password. Region is the zone region (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "Fill the S3 fields and paste the Endpoint URL. Tick path-style for MinIO."
+              "title": "Spaces / R2",
+              "body": "Fill the S3 fields and paste the Endpoint URL."
             },
             "test": {
               "title": "Always test first",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "Admin - Appointments",
-        "description": "One Google Cloud OAuth client for the whole platform. Each workspace then connects its own Google account from Appointments, Settings; a workspace never sees the client id or secret.",
+        "description": "One Google Cloud OAuth client for the whole platform. Each workspace then connects its own Google account from Google account in Settings, and chooses which permissions to give; a workspace never sees the client id or secret.",
         "sections": {
           "oauth": {
             "title": "Google OAuth client",
-            "description": "Without a client id and secret, workspaces see Google Calendar as not available and bookings carry on without a calendar."
+            "description": "Without a client id and secret, workspaces see Google as not available, bookings carry on without a calendar and the Google steps in flows are skipped."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. Project and API",
-              "body": "In Google Cloud Console create a project and enable the Google Calendar API."
+              "body": "In Google Cloud Console create a project and enable the Google Calendar, Google Sheets, Google Docs, Google Drive and Google Forms APIs. A permission only works when its API is enabled."
             },
             "redirect": {
               "title": "2. OAuth client",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. Consent screen",
-              "body": "Add the calendar.events, calendar.freebusy and calendar.calendarlist.readonly scopes, then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect."
+              "body": "Add the scopes the product asks for (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), then publish the app: in Testing, Google ends every grant after 7 days and workspaces will need to reconnect. The drive scopes are restricted and need Google's review."
             },
             "workspaces": {
               "title": "4. Workspaces connect",
-              "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings, Google Calendar."
+              "body": "Paste the client id and secret here and save. Admins then connect from Settings, Integrations, Google account, or from Appointments, Settings, Google Calendar."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "Flows that already exist",
               "body": "Changing this setting never changes or deletes a flow. A flow keeps working; it is only opened in the builder that is on. A workspace that picked its own builder keeps it until it chooses the platform default again."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - Appointments",
+        "description": "One Microsoft Entra app for the whole platform. Each workspace then connects its own Outlook or Microsoft 365 calendar from Appointments, Settings, and never sees the client id or secret.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra app",
+            "description": "Without a client id and secret, workspaces see Outlook as not available and bookings carry on without it. Google Calendar is not affected."
+          }
+        },
+        "guide": {
+          "title": "Set it up in Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. App registration",
+              "body": "In the Microsoft Entra admin center create an app registration for accounts in any organizational directory and personal Microsoft accounts, and copy the Application (client) ID here. Keep the tenant as common unless you chose a narrower option."
+            },
+            "redirect": {
+              "title": "2. Redirect URI and secret",
+              "body": "Add the redirect URI shown on this page as a Web redirect, then create a client secret under Certificates and secrets and paste its value here. Note when it expires: after that date every workspace's calendar stops until a new secret is saved."
+            },
+            "permissions": {
+              "title": "3. API permissions",
+              "body": "Add the delegated Microsoft Graph permissions Calendars.ReadWrite, User.Read and offline_access, and nothing else. For general use, complete publisher verification; a customer's tenant may also require an administrator to approve the app."
+            },
+            "workspaces": {
+              "title": "4. Workspaces connect",
+              "body": "Paste the client id and secret here and save. Admins then connect from Appointments, Settings."
             }
           }
         }

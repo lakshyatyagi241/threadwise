@@ -90,7 +90,8 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'website',
     icon: 'globe',
-    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements'],
+    // The customer menu's order is part of how the site looks, and it makes room in Settings, which is at the page limit.
+    tabs: ['cms-frontend', 'cms-blog', 'cms-legal', 'cms-announcements', 'menu-order'],
   },
   {
     id: 'whatsapp',
@@ -98,6 +99,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
     tabs: [
       'wap-providers',
       'wap-switch',
+      'wa-throughput',
       'node-bridge',
       'sms-channel',
       'webhook-forwarding',
@@ -127,6 +129,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'staff-roles',
       'security',
       'security-events',
+      'dpdp-register',
       'registration',
       'social-login',
       'auth-pages',
@@ -144,10 +147,10 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
       'settings-footer',
       'settings-seo',
       'settings-pwa',
-      'menu-order',
       'settings-mail',
       'settings-campaigns',
       'settings-google-calendar',
+      'settings-microsoft-calendar',
       'settings-google-mail',
       'settings-microsoft-mail',
       'settings-flow-builder',
@@ -168,7 +171,14 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
   {
     id: 'system',
     icon: 'gear',
-    tabs: ['system', 'i18n-languages', 'currencies', 'i18n-providers', 'i18n-usage'],
+    tabs: [
+      'system',
+      'data-retention',
+      'i18n-languages',
+      'currencies',
+      'i18n-providers',
+      'i18n-usage',
+    ],
   },
 ];
 
@@ -183,6 +193,7 @@ export const NOT_IN_MENU: Readonly<Record<string, string>> = {
   'support/customers': 'legacy address, redirects to the Workspaces tab',
   'wallet/workspaces': 'legacy address, redirects to the Workspaces tab',
   'whatsapp-providers/assignments': 'legacy address, redirects to the Workspaces tab',
+  'whatsapp-throughput/[id]': 'a number, opened from Send limits',
   'workspaces/[id]': 'a workspace, opened from the Workspaces tab',
   'workspaces/retention': 'the inactivity lifecycle (ADR-0028), opened from the Workspaces tab',
   'account/security': 'opened from "Your account" and the account menu',

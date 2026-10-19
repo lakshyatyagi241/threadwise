@@ -32,6 +32,8 @@ export interface ExportRow {
   createdAt: Date;
   /** The owner's login email, or null for an unassigned contact. */
   ownerEmail: string | null;
+  /** BL-193: the contact's stored IANA time zone, or null. */
+  timezone: string | null;
   data: Record<string, unknown>;
 }
 
@@ -123,6 +125,8 @@ export class ContactBulkRepository {
     where: SQL,
     owner: { id: number | null; uuid: string | null },
     meta: ActorMeta,
+    /** The workspace marks a reassigned contact uncontacted (BL-290): only a contact that is not marked yet is stamped. */
+    markUncontacted = false,
   ): Promise<number> {
     const res = await tx.execute(sql`
       WITH picked AS (
@@ -131,7 +135,9 @@ export class ContactBulkRepository {
         LEFT JOIN users prev ON prev.org_id = contacts.org_id AND prev.id = contacts.owner_id
         WHERE ${where} AND contacts.owner_id IS DISTINCT FROM ${owner.id}::bigint
       ), upd AS (
-        UPDATE contacts SET owner_id = ${owner.id}::bigint, updated_by = ${meta.actorId}::bigint
+        UPDATE contacts SET owner_id = ${owner.id}::bigint, updated_by = ${meta.actorId}::bigint,
+          uncontacted_since = CASE WHEN ${markUncontacted && owner.id !== null}::boolean
+                                   THEN coalesce(contacts.uncontacted_since, now()) ELSE contacts.uncontacted_since END
         FROM picked
         WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
         RETURNING contacts.id, picked.uuid, picked.prev_owner
@@ -146,6 +152,49 @@ export class ContactBulkRepository {
         SELECT ${orgId}::bigint, 'contacts', upd.id, 'contact.updated',
                jsonb_build_object('uuid', upd.uuid, 'ownerId', ${owner.uuid}::text,
                                   'previousOwnerId', upd.prev_owner, '_meta', ${metaJson(meta)}::jsonb)
+        FROM upd
+      )
+      SELECT count(*)::int AS n FROM upd
+    `);
+    return Number((res.rows[0] as { n: number }).n);
+  }
+
+  /**
+   * Marks every contact the filter matches as uncontacted (`true`, since now) or as contacted (`false`), skipping the ones already in
+   * that state. One audit row and one `contact.uncontacted_changed` event per contact changed, cause `manual`; `row_version` does not move
+   * (contacts_touch).
+   */
+  async setUncontacted(
+    tx: Tx,
+    orgId: number,
+    where: SQL,
+    uncontacted: boolean,
+    meta: ActorMeta,
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      WITH picked AS (
+        SELECT contacts.id, contacts.uuid, contacts.uncontacted_since AS was
+        FROM contacts
+        WHERE ${where} AND (contacts.uncontacted_since IS NULL) = ${uncontacted}::boolean
+      ), upd AS (
+        UPDATE contacts
+        SET uncontacted_since = CASE WHEN ${uncontacted}::boolean THEN now() ELSE NULL END
+        FROM picked
+        WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
+        RETURNING contacts.id, picked.uuid, picked.was, contacts.uncontacted_since AS now_since
+      ), au AS (
+        INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, delta, request_id)
+        SELECT ${orgId}::bigint, ${meta.actorId}::bigint, ${meta.actorType}, 'contacts', upd.id, 'update',
+               jsonb_build_object(
+                 'uncontactedSince', jsonb_build_object('old', to_jsonb(upd.was), 'new', to_jsonb(upd.now_since)),
+                 'cause', jsonb_build_object('old', NULL, 'new', 'manual')),
+               ${meta.requestId}
+        FROM upd
+      ), ev AS (
+        INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload)
+        SELECT ${orgId}::bigint, 'contacts', upd.id, 'contact.uncontacted_changed',
+               jsonb_build_object('uuid', upd.uuid, 'uncontacted', ${uncontacted}::boolean, 'cause', 'manual',
+                                  '_meta', ${metaJson(meta)}::jsonb)
         FROM upd
       )
       SELECT count(*)::int AS n FROM upd
@@ -206,32 +255,26 @@ export class ContactBulkRepository {
     return Number((res.rows[0] as { changed: number }).changed);
   }
 
-  /** The ids the next `deleteBatch` call with the same arguments will delete (same order, same limit). */
+  /**
+   * The next batch of ids matching the selection, locked for the rest of the transaction. The caller erases these contacts and then
+   * deletes exactly these ids (`deleteIds`), so a contact that starts matching in between cannot be deleted without its history.
+   */
   async nextIds(tx: Tx, where: SQL, batch: number): Promise<number[]> {
     const res = await tx.execute(
-      sql`SELECT contacts.id FROM contacts WHERE ${where} ORDER BY contacts.id LIMIT ${batch}`,
+      sql`SELECT contacts.id FROM contacts WHERE ${where} ORDER BY contacts.id LIMIT ${batch} FOR UPDATE`,
     );
     return (res.rows as Array<{ id: number | string }>).map((r) => Number(r.id));
   }
 
   /**
-   * Deletes up to `batch` matching contacts with one audit row and one event each (the trail
-   * must survive the rows). Call until it returns 0. Cascades and SET NULL foreign keys take
-   * care of everything that pointed at them.
+   * Deletes exactly these contacts with one audit row and one event each (the trail must survive the rows). Cascades and SET NULL
+   * foreign keys take care of everything that pointed at them.
    */
-  async deleteBatch(
-    tx: Tx,
-    orgId: number,
-    where: SQL,
-    batch: number,
-    meta: ActorMeta,
-  ): Promise<number> {
+  async deleteIds(tx: Tx, orgId: number, ids: number[], meta: ActorMeta): Promise<number> {
     const res = await tx.execute(sql`
-      WITH picked AS (
-        SELECT contacts.id FROM contacts WHERE ${where} ORDER BY contacts.id LIMIT ${batch}
-      ), del AS (
-        DELETE FROM contacts USING picked
-        WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = picked.id
+      WITH del AS (
+        DELETE FROM contacts
+        WHERE contacts.org_id = ${orgId}::bigint AND contacts.id = ANY(${`{${ids.join(',')}}`}::bigint[])
         RETURNING contacts.id, contacts.uuid, contacts.display_id
       ), au AS (
         INSERT INTO audit_log (org_id, actor_id, actor_type, module, record_id, action, request_id)
@@ -283,6 +326,7 @@ export class ContactBulkRepository {
         ownerEmail: sql<
           string | null
         >`(SELECT u.email FROM users u WHERE u.org_id = ${contacts.orgId} AND u.id = ${contacts.ownerId})`,
+        timezone: contacts.timezone,
         data: contacts.data,
       })
       .from(contacts)

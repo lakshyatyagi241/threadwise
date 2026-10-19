@@ -100,7 +100,8 @@
       "views": {
         "list": "List",
         "board": "Board by due date"
-      }
+      },
+      "linkCompany": "A company"
     },
     "table": {
       "scrollArea": "Tasks table",
@@ -126,7 +127,8 @@
       "open": "Open",
       "edit": "Edit",
       "delete": "Delete",
-      "unassigned": "Unassigned"
+      "unassigned": "Unassigned",
+      "followUpBadge": "Follow-up"
     },
     "bulk": {
       "label": "Actions for the selected tasks",
@@ -204,7 +206,8 @@
         "notesTooLong": "The notes are too long (5000 characters at most).",
         "dueInvalid": "That date is not valid.",
         "assigneeInvalid": "That person is not an active member of this workspace."
-      }
+      },
+      "company": "Company"
     },
     "drawer": {
       "loading": "Loading task",
@@ -268,7 +271,8 @@
       "searching": "Searching",
       "unavailable": "Search is not available right now.",
       "none": "No matches.",
-      "unlink": "Remove the link"
+      "unlink": "Remove the link",
+      "searchCompany": "Search companies"
     },
     "errors": {
       "network": "We could not reach the server. Check your connection and try again.",
@@ -323,7 +327,21 @@
       "loadMore": "Load more",
       "loadMoreDone": "Load more completed",
       "showDone": "Show completed",
-      "hideDone": "Hide completed"
+      "hideDone": "Hide completed",
+      "gone": "The record these tasks belong to is no longer available."
+    },
+    "inline": {
+      "addTask": "Add task",
+      "rowLabel": "Add a task",
+      "titleLabel": "Task title",
+      "titlePlaceholder": "Task title, then press Enter to save",
+      "due": "Due date and time",
+      "assignee": "Assign to",
+      "priority": "Priority (optional)",
+      "hint": "Enter saves, Escape closes.",
+      "save": "Add task",
+      "cancel": "Cancel",
+      "failed": "The task could not be saved. Your text is back in the box."
     }
   }
 }

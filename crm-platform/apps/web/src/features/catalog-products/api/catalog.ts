@@ -3,6 +3,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
   catalogActivityResponseSchema,
+  catalogLoginConfigSchema,
   catalogOverviewSchema,
   catalogSendOptionsSchema,
   importFromMetaResponseSchema,
@@ -45,6 +46,17 @@ export function useOverview() {
       apiFetch('/catalog/overview', { schema: catalogOverviewSchema, signal }),
     retry: false,
     select: (o) => ({ ...o, senders: offerSenders(o.senders, unofficial) }),
+  });
+}
+
+/** The Meta app and configuration of the catalog login popup; `ready` is false until the operator has set them. */
+export function useCatalogLoginConfig() {
+  return useQuery({
+    queryKey: ['cat', 'login-config'] as const,
+    queryFn: ({ signal }) =>
+      apiFetch('/catalog/login-config', { schema: catalogLoginConfigSchema, signal }),
+    retry: false,
+    staleTime: 5 * 60_000,
   });
 }
 

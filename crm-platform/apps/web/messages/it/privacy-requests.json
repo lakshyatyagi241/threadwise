@@ -23,7 +23,11 @@
       "exportNotReady": "Il file non è pronto o è scaduto. Prepara una nuova esportazione.",
       "rateLimited": "Troppe richieste. Attendi un momento e riprova.",
       "validation": "Alcuni valori non sono validi. Controlla il modulo e riprova.",
-      "unexpected": "Qualcosa è andato storto. Riprova."
+      "unexpected": "Qualcosa è andato storto. Riprova.",
+      "holdActive": "Questo record è protetto e al momento non può essere eliminato.",
+      "holdExists": "Questa persona ha già un blocco legale attivo. Estendilo per aggiungere un'altra pratica.",
+      "holdNotFound": "Questo blocco legale non esiste più.",
+      "holdNotActive": "Questo blocco legale è già terminato."
     },
     "type": {
       "access": "Accesso",
@@ -182,7 +186,12 @@
           "erase_previewed": "Anteprima della cancellazione",
           "erased": "Dati cancellati",
           "completed": "Richiesta completata",
-          "other": "Aggiorna"
+          "other": "Aggiorna",
+          "restricted": "Limitato: blocco legale",
+          "erasure_queued": "Cancellazione confermata, in attesa della fine del blocco",
+          "restriction_lifted": "Limitazione revocata",
+          "resume_skipped": "Cancellazione automatica saltata",
+          "resume_failed": "Cancellazione automatica non riuscita, eseguila a mano"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Cancella questa persona",
       "created": "Richiesta {reference} creata.",
       "failed": "Impossibile creare la richiesta."
+    },
+    "legalHold": {
+      "close": "Chiudi",
+      "tab": {
+        "label": "Privacy",
+        "requests": "Richieste sui dati",
+        "holds": "Blocchi legali"
+      },
+      "requesterResponse": "Abbiamo ricevuto la Sua richiesta. Siamo tenuti a conservare una parte dei Suoi dati per adempiere a un obbligo di legge, quindi non possiamo cancellarli ora. Ne abbiamo limitato l'uso e li cancelleremo quando l'obbligo terminerà. Può proporre reclamo all'autorità di protezione dei dati.",
+      "contactBanner": "Blocco legale: cancellazione ed eliminazione sospese",
+      "workspaceBanner": "Blocco legale sull'intero workspace: cancellazione ed eliminazione sospese",
+      "caseStatus": "Limitato: blocco legale",
+      "blockedMessage": "Questo record è protetto e al momento non può essere eliminato.",
+      "listFilter": "In attesa di un blocco legale",
+      "banner": {
+        "caseRef": "Pratica {caseRef}",
+        "reviewBy": "revisione entro il {date}",
+        "reviewOverdue": "revisione scaduta dal {date}",
+        "effects": "Marketing, elaborazione con IA ed esportazioni sono limitati e ogni accesso viene registrato.",
+        "open": "Apri il registro"
+      },
+      "category": {
+        "legal_obligation": "Obbligo di legge",
+        "legal_claim": "Azione legale o controversia",
+        "regulator_request": "Richiesta di un'autorità di controllo o delle forze dell'ordine",
+        "internal_investigation": "Indagine interna"
+      },
+      "scope": {
+        "contact": "Contatto",
+        "lead": "Lead",
+        "workspace": "Intero workspace"
+      },
+      "status": {
+        "active": "Attivo",
+        "released": "Revocato",
+        "expired": "Scaduto"
+      },
+      "menu": {
+        "place": "Applica blocco legale...",
+        "release": "Revoca blocco legale..."
+      },
+      "place": {
+        "title": "Applica un blocco legale a questo contatto",
+        "workspaceTitle": "Applica un blocco legale all'intero workspace",
+        "intro": "Finché il blocco dura, cancellazione, eliminazione e pulizia per scadenza della conservazione di questa persona sono rifiutate, e marketing, elaborazione con IA ed esportazioni dei suoi dati sono limitati. L'assistenza clienti prosegue come di consueto.",
+        "workspaceIntro": "Tutte le persone del workspace sono bloccate: cancellazione, eliminazione, pulizia per scadenza della conservazione e rimozione di un workspace scaduto sono rifiutate, e marketing, elaborazione con IA ed esportazioni sono limitati. Usalo per un provvedimento che riguarda tutti i record.",
+        "category": "Perché i dati vengono conservati?",
+        "categoryPick": "Scegli un motivo",
+        "caseRef": "Riferimento della pratica",
+        "caseRefHint": "Il tuo riferimento interno: un fascicolo giudiziario, un ticket, il numero di una lettera di un'autorità.",
+        "note": "Nota (facoltativa)",
+        "noteHint": "Non scrivere qui nomi, numeri di telefono o dettagli della vicenda.",
+        "reviewAt": "Revisione entro (facoltativa)",
+        "reviewHint": "Il registro segnala il blocco quando questa data è trascorsa.",
+        "expiresAt": "Termina il (facoltativa)",
+        "expiresHint": "Dopo questa data il blocco termina da solo.",
+        "submit": "Applica blocco",
+        "submitting": "Applicazione...",
+        "done": "Blocco legale applicato.",
+        "target": "Si applica a",
+        "targetPerson": "Una persona",
+        "targetWorkspace": "Intero spazio di lavoro",
+        "change": "Cambia",
+        "search": "Trova la persona",
+        "searchHint": "Digita un nome, un numero di telefono o un indirizzo e-mail (almeno due caratteri).",
+        "noResults": "Nessuno trovato."
+      },
+      "release": {
+        "title": "Revoca questo blocco legale",
+        "message": "Eliminazione, pulizia per scadenza della conservazione e marketing potranno quindi riprendere per questa persona. Le richieste di cancellazione in attesa di questo blocco escono dallo stato limitato, e una cancellazione già confermata viene eseguita da sola entro un minuto.",
+        "cases": "{count, plural, one {# richiesta sui dati è in attesa di questo blocco.} other {# richieste sui dati sono in attesa di questo blocco.}}",
+        "reason": "Perché viene revocato? (facoltativo)",
+        "reasonHint": "Non scrivere qui nomi o dettagli della vicenda.",
+        "submit": "Revoca blocco",
+        "submitting": "Revoca in corso...",
+        "done": "Blocco legale revocato.",
+        "doneResuming": "{count, plural, one {Blocco legale revocato. # cancellazione confermata verrà eseguita ora.} other {Blocco legale revocato. # cancellazioni confermate verranno eseguite ora.}}"
+      },
+      "extend": {
+        "title": "Estendi questo blocco legale",
+        "caseRefNow": "Riferimento attuale della pratica: {caseRef}",
+        "addCaseRef": "Aggiungi un altro riferimento di pratica",
+        "addCaseRefHint": "Una seconda vicenda riguardante la stessa persona viene aggiunta allo stesso blocco.",
+        "clearHint": "Svuota la data per rimuoverla.",
+        "submit": "Salva modifiche",
+        "submitting": "Salvataggio...",
+        "done": "Blocco legale aggiornato."
+      },
+      "review": {
+        "title": "Registra una revisione",
+        "message": "Registra che hai riesaminato questo blocco e che si applica ancora.",
+        "next": "Prossima revisione entro (facoltativa)",
+        "nextHint": "Lascia vuoto per mantenere l'attuale data di revisione.",
+        "submit": "Registra revisione",
+        "submitting": "Salvataggio...",
+        "done": "Revisione registrata."
+      },
+      "actions": {
+        "review": "Rivedi",
+        "extend": "Estendi",
+        "release": "Revoca"
+      },
+      "register": {
+        "title": "Blocchi legali",
+        "subtitle": "Persone e record la cui cancellazione ed eliminazione sono sospese perché i dati devono essere conservati. Un blocco su una singola persona si applica dalla pagina di quel contatto.",
+        "export": "Esporta CSV",
+        "empty": "Nessun blocco legale.",
+        "emptyFiltered": "Nessun blocco legale corrisponde a questi filtri.",
+        "loadMore": "Carica altri",
+        "loadingMore": "Caricamento...",
+        "none": "-",
+        "overdue": "Revisione scaduta",
+        "cases": "{count, plural, one {# richiesta in attesa} other {# richieste in attesa}}",
+        "open": "Apri il blocco con riferimento di pratica {caseRef}",
+        "filters": {
+          "label": "Filtri",
+          "status": "Stato",
+          "category": "Motivo",
+          "scope": "Si applica a",
+          "caseRef": "Riferimento della pratica",
+          "reviewDue": "Revisione scaduta",
+          "any": "Qualsiasi"
+        },
+        "columns": {
+          "subject": "Interessato",
+          "category": "Motivo",
+          "caseRef": "Riferimento della pratica",
+          "placed": "Applicato il",
+          "review": "Revisione entro",
+          "expires": "Termina",
+          "status": "Stato",
+          "actions": "Azioni"
+        },
+        "place": "Applica blocco legale..."
+      },
+      "detail": {
+        "title": "Blocco legale",
+        "history": "Cronologia",
+        "releasedAt": "Terminato",
+        "by": "da {actor}",
+        "system": "il sistema",
+        "action": {
+          "insert": "Blocco applicato",
+          "update": "Blocco modificato",
+          "delete": "Blocco terminato",
+          "other": "Aggiornamento"
+        }
+      },
+      "case": {
+        "body": "I dati di questa persona vengono conservati e bloccati finché si applica un blocco legale. La cancellazione non viene eseguita, marketing, elaborazione con IA ed esportazioni sono limitati e la scadenza continua a decorrere.",
+        "requesterTitle": "Risposta alla persona",
+        "requesterHint": "Indica che i dati sono conservati per un obbligo di legge, senza dire perché. Il consulente legale può sostituire questo testo nelle impostazioni della privacy.",
+        "copy": "Copia testo",
+        "copied": "Copiato",
+        "queueHint": "Puoi comunque confermare la cancellazione adesso: viene registrata, non viene cancellato nulla e viene eseguita da sola quando il blocco termina.",
+        "queue": "Conferma la cancellazione per la fine del blocco",
+        "queued": "Registrato. Non è stato cancellato nulla; la cancellazione verrà eseguita da sola quando il blocco termina."
+      },
+      "settings": {
+        "noticeLabel": "Risposta a una persona la cui cancellazione è sospesa",
+        "noticeHint": "Il testo del tuo consulente legale. Lascia vuoto per usare il testo predefinito. Non indicare né la vicenda né il motivo."
+      }
     }
   }
 }

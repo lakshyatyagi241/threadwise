@@ -150,11 +150,6 @@
         "description": "Edit your deal pipelines, stages and lost reasons.",
         "keywords": "deals, sales stages, board, lost reason, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Create and organise the tags used across contacts and chats.",
-        "keywords": "labels, colour, color"
-      },
       "saved-replies": {
         "label": "Saved replies",
         "description": "Write reusable answers your team can send in one click.",
@@ -345,6 +340,11 @@
         "description": "Choose the STOP and START words, the confirmation replies, the opt-out line and whether marketing needs recorded consent.",
         "keywords": "consent, opt out, opt in, unsubscribe, stop, start, gdpr, compliance, privacy, marketing"
       },
+      "compliance-center": {
+        "label": "Compliance center",
+        "description": "Tools to help you meet your privacy duties: the laws you work under, privacy contacts, notices and links, sub-processors, quiet hours and a checklist of what is in place.",
+        "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, grievance officer, sub-processor, dpa, terms, privacy policy, quiet hours, do not call, checklist, children"
+      },
       "privacy-requests": {
         "label": "Data requests",
         "description": "Answer people who ask what you hold on them: identity check, export, erasure with a preview, and a proof you can keep.",
@@ -365,10 +365,30 @@
         "description": "See how fast each agent replied and resolved today, this week or this month.",
         "keywords": "reports, analytics, agents, response time, first reply, resolved, workload, performance"
       },
-      "contact-assignment": {
-        "label": "Contact assignment",
-        "description": "Give new contacts and deals to the right person automatically, skipping people on leave.",
-        "keywords": "assign, owner, round robin, new contact, new deal, leave, lead routing"
+      "record-assignment": {
+        "label": "Record assignment rules",
+        "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",
+        "keywords": "assign, owner, round robin, new contact, new deal, company, leave, lead routing, workload, territory"
+      },
+      "company-properties": {
+        "label": "Company properties",
+        "description": "Add the fields you want to keep on every company.",
+        "keywords": "custom fields, fields, required, dropdown, organization, account"
+      },
+      "uncontacted-leads": {
+        "label": "Uncontacted leads",
+        "description": "Choose which actions count as reaching a lead, and which new contacts start as uncontacted.",
+        "keywords": "uncontacted, contacted, lead, new lead, first contact, follow up, reassign, marker"
+      },
+      "follow-ups": {
+        "label": "Follow-ups",
+        "description": "Set a contact's next follow-up automatically when your team gets in touch, and choose the date and alert time.",
+        "keywords": "follow up, follow-up, reminder, next action, task, schedule, snooze, someday"
+      },
+      "duplicate-leads": {
+        "label": "Duplicate leads",
+        "description": "Choose whether a new lead that matches a contact is merged into it or becomes a new contact.",
+        "keywords": "duplicate, merge, lead, same phone, same email, new contact, lead source"
       }
     },
     "backToMarketplace": "Back to Marketplace"

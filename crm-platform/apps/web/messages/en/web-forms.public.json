@@ -12,6 +12,14 @@
       "continue": "Continue",
       "previewNotice": "Preview: nothing is sent from here.",
       "honeypot": "Leave this field empty",
+      "ageDeclaration": "I confirm I am at least {age} years old",
+      "ageBlockedTitle": "We cannot continue",
+      "ageBlockedBody": "Thank you for your interest. We are not able to accept this submission.",
+      "guardianTitle": "A parent or guardian",
+      "guardianIntro": "Please add the details of a parent or guardian.",
+      "guardianName": "Name",
+      "guardianEmail": "Email",
+      "guardianPhone": "Phone",
       "privacyPolicy": "Privacy policy",
       "poweredBy": "Powered by {brand}",
       "brandName": "Forms",
@@ -24,6 +32,7 @@
       "errors": {
         "required": "This field is required.",
         "consent_required": "Please tick this box to continue.",
+        "guardian_required": "Add the name and an email address or phone number of a parent or guardian.",
         "invalid_email": "Enter a valid email address.",
         "invalid_phone": "Enter a valid phone number, with the country code if you can.",
         "invalid_number": "Enter a valid number.",
@@ -58,7 +67,8 @@
         "tryAgain": "Try paying again",
         "missingTitle": "We could not find this payment",
         "missingBody": "The link may be wrong or too old."
-      }
+      },
+      "termsOfService": "Terms"
     }
   }
 }

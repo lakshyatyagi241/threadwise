@@ -145,16 +145,26 @@
         "privacyUrl": "Tautan kebijakan privasi",
         "privacyUrlHint": "Opsional. Ditampilkan di samping teks persetujuan. Harus diawali dengan https://.",
         "privacyUrlHttps": "Gunakan alamat yang diawali dengan https://.",
+        "termsUrl": "Tautan ketentuan",
+        "termsUrlHint": "Opsional. Ditampilkan di samping teks persetujuan dan tautan privasi. Harus diawali dengan https://.",
+        "useWorkspacePrivacy": "Gunakan tautan privasi ruang kerja saya",
+        "useWorkspaceTerms": "Gunakan tautan ketentuan ruang kerja saya",
         "required": "Harus dicentang untuk mengirim",
         "requiredHint": "Nonaktifkan jika persetujuan bersifat opsional.",
         "marketing": "Persetujuan pemasaran",
         "marketingHint": "Mencentang kotak ini mencatat persetujuan pemasaran pada kontak. Kotak yang tidak dicentang tidak pernah berlangganan siapa pun.",
-        "whatsappHint": "Apakah Anda akan mengirim pesan ke kontak ini lewat WhatsApp? Gunakan kalimat yang menyatakannya dan cara berhenti. Kotak yang dicentang disimpan sebagai bukti, dengan teks persis ini dan versinya.",
-        "whatsappInsert": "Gunakan kalimat persetujuan WhatsApp",
-        "whatsappWording": "Saya setuju menerima pembaruan dan penawaran di WhatsApp. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
-        "coversSms": "Teks mencakup SMS",
-        "coversSmsHint": "Aktifkan hanya jika teks di atas menyatakan orang dapat dihubungi lewat SMS. Saat nomor telepon dikumpulkan, SMS dicatat bersama WhatsApp dan email.",
-        "serviceHint": "Baris ini bukan pemasaran. Kotak yang dicentang disimpan sebagai bukti bahwa orang tersebut setuju dihubungi terkait permintaannya (hanya pesan layanan), dengan teks persis ini dan versinya. Tidak pernah membuat siapa pun berlangganan pemasaran."
+        "serviceHint": "Baris ini bukan pemasaran. Kotak yang dicentang disimpan sebagai bukti bahwa orang tersebut setuju dihubungi terkait permintaannya (hanya pesan layanan), dengan teks persis ini dan versinya. Tidak pernah membuat siapa pun berlangganan pemasaran.",
+        "statement": "Saya setuju menerima pembaruan dan penawaran di {channels}. Saya bisa membalas STOP kapan saja untuk berhenti berlangganan.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "email"
+        },
+        "channelsLabel": "Saluran yang dicakup persetujuan ini",
+        "channelsHint": "Pengunjung hanya berlangganan pada saluran yang dicentang di sini, dan teks persetujuan menyebutkannya. Saluran dipakai hanya jika formulir mengumpulkan nomor telepon atau email yang sesuai.",
+        "channelsUse": "Perbarui teks dengan saluran ini",
+        "channelNeedsPhone": "Formulir ini tidak punya kolom telepon, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini.",
+        "channelNeedsEmail": "Formulir ini tidak punya kolom email, jadi tidak ada yang berlangganan di saluran ini lewat formulir ini."
       },
       "crm": {
         "title": "Di CRM",
@@ -289,6 +299,41 @@
           "held": "{count, plural, other {# kiriman ditahan sebagai spam.}}",
           "review": "Tinjau"
         }
+      },
+      "age": {
+        "title": "Pemeriksaan usia",
+        "description": "Tanyakan usia hanya jika Anda memerlukannya. Biarkan nonaktif untuk sebagian besar formulir.",
+        "enable": "Periksa usia pengunjung",
+        "enableHint": "Nonaktif secara default. Aktifkan jika aturan ruang kerja Anda mengharuskannya, atau bisnis Anda melayani anak di bawah umur. Formulir tidak pernah memberi tahu pengunjung jawaban mana yang lolos.",
+        "mode": "Cara bertanya",
+        "modes": {
+          "declaration": "Sebuah kotak centang: “Saya menyatakan bahwa usia saya minimal N tahun”",
+          "age": "Tanyakan usianya",
+          "dob": "Tanyakan tanggal lahirnya"
+        },
+        "modeHints": {
+          "declaration": "Tidak ada data usia yang disimpan. Data paling sedikit.",
+          "age": "Bilangan bulat. Digunakan untuk pemeriksaan; hanya hasilnya yang disimpan.",
+          "dob": "Disimpan pada kontak sebagai tanggal lahir. Gunakan hanya jika Anda memerlukan tanggalnya."
+        },
+        "minAge": "Usia minimum",
+        "minAgeHint": "Kosongkan untuk memakai usia ruang kerja Anda ({age}). Antara 1 dan 21.",
+        "minAgeInvalid": "Masukkan bilangan bulat dari {min} sampai {max}.",
+        "whenUnder": "Jika pengunjung berusia di bawah itu",
+        "actions": {
+          "block": "Jangan terima pengiriman",
+          "flag": "Terima, tandai kontak sebagai di bawah umur, jangan catat persetujuan pemasaran",
+          "guardian": "Seperti di atas, dan minta data orang tua atau wali"
+        },
+        "actionHints": {
+          "block": "Tidak ada yang disimpan dan pengunjung melihat pesan netral. Dengan kotak centang, pengunjung cukup mencentangnya.",
+          "flag": "Kontak ditandai sebagai di bawah umur. Baris persetujuan pada pengiriman ini disimpan apa adanya, tetapi tidak ada persetujuan pemasaran yang dicatat.",
+          "guardian": "Nama dan kontak orang tua atau wali disimpan bersama pengiriman dan pada lini masa kontak. Persetujuan mereka tidak dicatat sampai seseorang mencatatnya di kartu Persetujuan."
+        },
+        "declarationBlockNote": "Dengan kotak centang dan pengaturan ini tidak ada yang ditolak: kotak harus dicentang agar formulir dapat dikirim.",
+        "childrenUnanswered": "Pusat kepatuhan Anda belum menjawab pertanyaan tentang anak-anak, sehingga pemasaran untuk anak di bawah umur yang ditandai dicatat tetapi tidak ditahan.",
+        "childrenLink": "Buka Pusat kepatuhan",
+        "neutralNote": "Jangan tulis usia minimum di teks bantuan kolom atau di deskripsi: halaman tidak boleh menyebutkan jawaban mana yang lolos."
       }
     }
   }

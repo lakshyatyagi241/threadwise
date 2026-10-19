@@ -24,9 +24,13 @@ export { SecurityPolicyService } from './platform/security-policy.service';
 export { PlatformSettingsService } from './platform/platform-settings.service';
 export { PlatformStore } from './platform/platform-store';
 export { TenantDirectory } from './platform/tenant-directory';
+export { parseUserAgent, type ParsedAgent } from './support/user-agent';
 export { SessionService } from './sessions/session.service';
 export { TokenService, type TokenClaims } from './token.service';
-export { AuthMaintenanceService } from './maintenance/auth-maintenance.service';
+export {
+  AuthMaintenanceService,
+  ENDED_SESSION_RETENTION_DAYS,
+} from './maintenance/auth-maintenance.service';
 export { OtpTemplateRefreshService } from './maintenance/otp-template-refresh.service';
 export { AccountGateService } from './security/account-gate.service';
 export {

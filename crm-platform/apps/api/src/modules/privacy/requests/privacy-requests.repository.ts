@@ -25,6 +25,12 @@ export interface RequestRow {
   verifiedAt: Date | null;
   legalHold: boolean;
   legalHoldReason: string | null;
+  /** Waiting on a legal hold on the person (BL-295). */
+  restrictedAt: Date | null;
+  restrictedHoldId: number | null;
+  /** Who confirmed the erasure while the hold was active; the worker executes it after the hold ends. */
+  erasureConfirmedBy: number | null;
+  erasureConfirmedAt: Date | null;
   historyMode: string;
   rejectionReason: string | null;
   dryRunAt: Date | null;
@@ -66,6 +72,7 @@ export interface ExportRow {
 const REQUEST_COLS = sql`r.id, r.uuid, r.request_type, r.status, r.subject_kind, r.contact_id, c.uuid AS contact_uuid, r.lead_id,
   l.uuid AS lead_uuid, r.subject_identifier_kind, r.subject_identifier_cipher, r.subject_label, r.requester_channel, r.internal_note,
   r.received_at, r.due_at, r.verification_method, r.verification_evidence_ref, r.verified_at, r.legal_hold, r.legal_hold_reason,
+  r.restricted_at, r.restricted_hold_id, r.erasure_confirmed_by, r.erasure_confirmed_at,
   r.history_mode, r.rejection_reason, r.dry_run_at, r.dry_run_summary, r.result_summary, r.proof, r.proof_sha256, r.completed_at,
   r.created_at, r.row_version`;
 
@@ -95,6 +102,10 @@ const toRequest = (r: Record<string, unknown>): RequestRow => ({
   verifiedAt: r.verified_at ? new Date(r.verified_at as string) : null,
   legalHold: r.legal_hold as boolean,
   legalHoldReason: (r.legal_hold_reason as string | null) ?? null,
+  restrictedAt: r.restricted_at ? new Date(r.restricted_at as string) : null,
+  restrictedHoldId: r.restricted_hold_id === null ? null : Number(r.restricted_hold_id),
+  erasureConfirmedBy: r.erasure_confirmed_by === null ? null : Number(r.erasure_confirmed_by),
+  erasureConfirmedAt: r.erasure_confirmed_at ? new Date(r.erasure_confirmed_at as string) : null,
   historyMode: r.history_mode as string,
   rejectionReason: (r.rejection_reason as string | null) ?? null,
   dryRunAt: r.dry_run_at ? new Date(r.dry_run_at as string) : null,
@@ -193,6 +204,7 @@ export class PrivacyRequestsRepository {
       status?: string;
       requestType?: string;
       overdue?: boolean;
+      restricted?: boolean;
       limit: number;
       after?: { receivedAt: Date; id: number };
     },
@@ -202,6 +214,7 @@ export class PrivacyRequestsRepository {
     if (f.requestType) where.push(sql`r.request_type = ${f.requestType}`);
     if (f.overdue)
       where.push(sql`r.status IN ('received', 'verifying', 'in_progress') AND r.due_at < now()`);
+    if (f.restricted) where.push(sql`r.restricted_at IS NOT NULL`);
     if (f.after) {
       where.push(
         sql`(r.received_at, r.id) < (${f.after.receivedAt.toISOString()}::timestamptz, ${f.after.id}::bigint)`,
@@ -247,6 +260,30 @@ export class PrivacyRequestsRepository {
       UPDATE privacy_requests SET legal_hold = ${held}, legal_hold_reason = ${held ? reason : null},
         legal_hold_set_by = ${held ? by : null}::bigint, legal_hold_set_at = ${held ? sql`now()` : sql`NULL`}
       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * The case waits on a legal hold (BL-295). `confirmedBy` is the person who typed the confirmation phrase while the hold was active; it is
+   * kept only when given, so a restriction placed by the hold itself never invents a confirmation.
+   */
+  async restrict(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    v: { holdId: number | null; confirmedBy?: number | null },
+  ): Promise<void> {
+    const confirmed = v.confirmedBy !== undefined;
+    await tx.execute(sql`
+      UPDATE privacy_requests SET restricted_at = COALESCE(restricted_at, now()), restricted_hold_id = ${v.holdId}::bigint,
+        erasure_confirmed_by = CASE WHEN ${confirmed} THEN ${v.confirmedBy ?? null}::bigint ELSE erasure_confirmed_by END,
+        erasure_confirmed_at = CASE WHEN ${confirmed} THEN now() ELSE erasure_confirmed_at END
+      WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /** The hold no longer covers the person: the case leaves "restricted". The recorded confirmation stays (the worker uses it). */
+  async liftRestriction(tx: Tx, orgId: number, id: number): Promise<void> {
+    await tx.execute(sql`
+      UPDATE privacy_requests SET restricted_at = NULL, restricted_hold_id = NULL WHERE org_id = ${orgId} AND id = ${id}`);
   }
 
   async saveDryRun(tx: Tx, orgId: number, id: number, report: PrivacyErasureReport): Promise<void> {
@@ -399,7 +436,9 @@ export class PrivacyRequestsRepository {
   async expireExports(tx: Tx): Promise<number> {
     const res = await tx.execute(sql`
       UPDATE privacy_request_exports SET status = 'expired', file_zip = NULL
-       WHERE status = 'ready' AND expires_at <= now() RETURNING id`);
+       WHERE status = 'ready' AND expires_at <= now()
+         AND NOT is_subject_held(org_id, 'contact', NULL)
+       RETURNING id`);
     return res.rows.length;
   }
 
@@ -423,6 +462,25 @@ export class PrivacyRequestsRepository {
     await tx.execute(sql`
       INSERT INTO privacy_settings (org_id, sla_days, updated_by) VALUES (${orgId}, ${days}, ${userId})
       ON CONFLICT (org_id) DO UPDATE SET sla_days = EXCLUDED.sla_days, updated_by = EXCLUDED.updated_by`);
+  }
+
+  /** The workspace's own wording of the answer to a person whose erasure a legal hold holds back, or null (the default text applies). */
+  async holdNotice(tx: Tx, orgId: number): Promise<string | null> {
+    const res = await tx.execute(
+      sql`SELECT legal_hold_requester_notice AS notice FROM privacy_settings WHERE org_id = ${orgId}`,
+    );
+    return res.rows[0] ? ((res.rows[0] as { notice: string | null }).notice ?? null) : null;
+  }
+
+  async saveHoldNotice(
+    tx: Tx,
+    orgId: number,
+    notice: string | null,
+    userId: number | null,
+  ): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO privacy_settings (org_id, legal_hold_requester_notice, updated_by) VALUES (${orgId}, ${notice}, ${userId})
+      ON CONFLICT (org_id) DO UPDATE SET legal_hold_requester_notice = EXCLUDED.legal_hold_requester_notice, updated_by = EXCLUDED.updated_by`);
   }
 
   // ---- subjects ---------------------------------------------------------------------------------------------------------------

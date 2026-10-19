@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Formulierinzendingen per maand",
       "ai_form_generations_monthly": "AI-formulierbouwer-generaties per maand",
       "sms_monthly": "SMS per maand",
-      "email_mailboxes": "E-mailpostvakken"
+      "email_mailboxes": "E-mailpostvakken",
+      "email_monthly": "E-mails per maand",
+      "storage_gb": "Opslag (GB)"
     },
     "features": {
       "automation": "Automatisering",
@@ -74,13 +76,16 @@
       "storefront_builder": "Storefrontbouwer",
       "invoicing": "Facturatie",
       "forms_and_links": "Formulieren en links",
-      "extra_channels": "Telegram, Facebook en Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber en WeChat",
       "form_builder": "Formulieren",
       "waba_groups": "WhatsApp-groepen",
       "sms": "SMS-kanaal",
       "help_agent": "Hulpassistent",
       "email_channel": "E-mailkanaal (Gmail)",
-      "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)"
+      "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI-leadscoring",
+      "record_assignment": "Regels voor recordtoewijzing"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Geaccepteerde formulierinzendingen in de kalendermaand, spam uitgesloten. Boven de limiet wordt een inzending nog steeds opgeslagen ter beoordeling, nooit weggegooid. 0 = onbeperkt.",
       "ai_form_generations_monthly": "AI-formulierbouwer-generaties in de kalendermaand, inclusief een herstelpoging. 0 = onbeperkt.",
       "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
-      "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt."
+      "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
+      "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
+      "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
     },
     "planAddons": {
       "title": "Add-ons beschikbaar in je abonnement",
@@ -561,7 +568,9 @@
       "continueFree": "Doorgaan gratis",
       "choose": "Kies {name}",
       "back": "Terug",
-      "compare": "Alle abonnementen vergelijken"
+      "compare": "Alle abonnementen vergelijken",
+      "appHint": "{feature} wordt ook als app verkocht in de Marktplaats.",
+      "appLink": "Bekijk de app"
     }
   }
 }

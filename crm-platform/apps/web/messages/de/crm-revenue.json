@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Berichte",
+    "title": "Umsatzbericht",
+    "subtitle": "Was Sie in Rechnung gestellt haben, wie viel davon bezahlt ist und was noch aussteht, sowie das eingegangene Geld im gewählten Zeitraum.",
+    "back": "CRM-Dashboard",
+    "period": "{from} bis {to} ({zone})",
+    "comparedWith": "Verglichen mit {mode}: {from} bis {to}",
+    "loading": "Umsatzbericht wird geladen",
+    "retry": "Erneut versuchen",
+    "stale": "Die Zahlen konnten nicht aktualisiert werden. Angezeigt werden die zuletzt geladenen.",
+    "empty": {
+      "title": "Nichts in diesem Zeitraum",
+      "message": "Zwischen diesen Daten wurde keine Rechnung gestellt und keine Zahlung ist eingegangen. Wählen Sie einen anderen Zeitraum oder öffnen Sie die Rechnungen.",
+      "invoices": "Rechnungen öffnen"
+    },
+    "mode": {
+      "previous": "dem vorherigen Zeitraum",
+      "lastYear": "dem gleichen Zeitraum im Vorjahr"
+    },
+    "filters": {
+      "label": "Berichtsfilter",
+      "period": "Zeitraum",
+      "range": {
+        "month": "Dieser Monat",
+        "lastMonth": "Letzter Monat",
+        "quarter": "Dieses Quartal",
+        "year": "Dieses Jahr",
+        "30d": "30 Tage",
+        "90d": "90 Tage",
+        "custom": "Benutzerdefiniert"
+      },
+      "from": "Von",
+      "to": "Bis",
+      "compare": "Vergleichen mit",
+      "compareOption": {
+        "previous": "Vorheriger Zeitraum",
+        "lastYear": "Gleicher Zeitraum im Vorjahr",
+        "none": "Kein Vergleich"
+      },
+      "groupBy": "Aufteilen nach",
+      "groupOption": {
+        "source": "Lead-Quelle",
+        "origin": "Rechnungsherkunft",
+        "product": "Produkt",
+        "owner": "Betreuer",
+        "team": "Team"
+      },
+      "owner": "Betreuer",
+      "everyone": "Alle",
+      "team": "Team",
+      "allTeams": "Alle Teams",
+      "currency": "Währung",
+      "allCurrencies": "Alle, angezeigt in {currency}",
+      "reset": "Filter zurücksetzen"
+    },
+    "note": {
+      "converted": "Es sind mehrere Währungen im Einsatz. Die Zahlen werden in {currency} umgerechnet; wählen Sie eine Währung, um die genauen Beträge zu sehen.",
+      "missingRate": "Kein Wechselkurs für {currencies}: Diese Beträge fehlen in den umgerechneten Zahlen.",
+      "invoiced": "Fakturiert, bezahlt und offen zählen die im Zeitraum ausgestellten Rechnungen (Entwürfe, stornierte Rechnungen und Proforma-Rechnungen sind ausgenommen). Eingenommen und erstattet zählen das im Zeitraum eingegangene Geld, unabhängig davon, welche Rechnung damit beglichen wurde."
+    },
+    "kpi": {
+      "title": "Kennzahlen",
+      "vsPrevious": "Gegenüber dem Vergleichszeitraum",
+      "collected": "Eingenommen",
+      "collectedHint": "Im Zeitraum erhaltene Zahlungen",
+      "collectedAll": "Eingenommen, gesamt",
+      "collectedAllHint": "Alle Zahlungen, die Sie sehen können",
+      "outstanding": "Offen",
+      "outstandingHint": "{count, plural, one {# offene Rechnung} other {# offene Rechnungen}} Stand heute",
+      "tax": "Eingenommene Steuer",
+      "taxHint": "Auf im Zeitraum vollständig bezahlte Rechnungen",
+      "invoiced": "Fakturiert",
+      "invoicedHint": "{count, plural, one {# Rechnung ausgestellt} other {# Rechnungen ausgestellt}}",
+      "paid": "Bisher bezahlt",
+      "paidHint": "Von den im Zeitraum ausgestellten Rechnungen",
+      "overdue": "Überfällig",
+      "overdueHint": "Fälligkeitsdatum überschritten",
+      "refunded": "Erstattet",
+      "refundedHint": "Im Zeitraum zurückgezahlt",
+      "paidInFull": "Vollständig bezahlt",
+      "paidInFullHint": "Rechnungen, die vollständig bezahlt wurden",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Fakturiert, bezahlt und offen",
+      "subtitle": "Die im Zeitraum ausgestellten Rechnungen und ihr heutiger Stand",
+      "paid": "Bezahlt",
+      "owed": "Offen, noch nicht fällig",
+      "overdue": "Überfällig",
+      "credited": "Gutschriften",
+      "invoiced": "fakturiert",
+      "empty": "In diesem Zeitraum wurde nichts in Rechnung gestellt.",
+      "several": "Diese Rechnungen sind in mehreren Währungen. Wählen Sie oben eine Währung, um sie als einen Balken zu sehen."
+    },
+    "trend": {
+      "title": "Fakturiert und eingenommen",
+      "subtitle": {
+        "day": "Pro Tag",
+        "week": "Pro Woche",
+        "month": "Pro Monat"
+      },
+      "chartLabel": "Fakturiert und eingenommen im Zeitraum",
+      "invoiced": "Fakturiert",
+      "collected": "Eingenommen"
+    },
+    "split": {
+      "title": "Nach {group}",
+      "subtitle": "Die größten zuerst. Beträge werden in {currency} angezeigt.",
+      "subtitlePerCurrency": "Die größten zuerst. Beträge werden je Währung aufgeführt.",
+      "group": {
+        "source": "Lead-Quelle",
+        "origin": "Rechnungsherkunft",
+        "product": "Produkt",
+        "owner": "Betreuer",
+        "team": "Team"
+      },
+      "empty": {
+        "source": "Keine Lead-Quelle",
+        "origin": "Unbekannte Herkunft",
+        "product": "Keine Positionen",
+        "owner": "Nicht zugewiesen",
+        "team": "Kein Team"
+      },
+      "origin": {
+        "manual": "Manuell erstellt",
+        "quote": "Aus einem Angebot",
+        "order": "Aus einer Bestellung",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Eigener Shop",
+        "api": "API",
+        "ai": "KI-Assistent"
+      },
+      "col": {
+        "invoices": "Rechnungen",
+        "invoiced": "Fakturiert",
+        "paid": "Bezahlt",
+        "outstanding": "Offen",
+        "overdue": "Überfällig",
+        "collected": "Eingenommen",
+        "refunded": "Erstattet"
+      },
+      "total": "Gesamt",
+      "truncated": "Es werden nur die {count} größten Zeilen aufgeführt. Die CSV-Zusammenfassung enthält dieselben Zeilen.",
+      "teamNote": "Eine Person in zwei Teams zählt in beiden, daher können die Teamzeilen zusammen mehr als die Gesamtsumme ergeben.",
+      "productNote": "Rabatte auf die gesamte Rechnung, Versand und Rundung werden im Verhältnis zu ihrem Wert auf die Positionen verteilt."
+    },
+    "aging": {
+      "title": "Fälligkeitsstruktur der Forderungen",
+      "open": "Zahlungen",
+      "empty": "Nichts ist offen.",
+      "bucket": {
+        "current": "Noch nicht fällig",
+        "d1_30": "1-30 Tage überfällig",
+        "d31_60": "31-60 Tage überfällig",
+        "d61_90": "61-90 Tage überfällig",
+        "d90_plus": "Über 90 Tage überfällig"
+      }
+    },
+    "export": {
+      "title": "Diesen Bericht herunterladen",
+      "note": "Wird im Hintergrund mit den obigen Filtern erstellt, {days} Tage aufbewahrt und per E-Mail angekündigt. Sie erhalten nicht mehr, als der Bericht Ihnen zeigt.",
+      "csvPayments": "CSV: Zahlungen",
+      "csvPaymentsHint": "Eine Zeile pro Zahlung und Erstattung des Zeitraums",
+      "csvSummary": "CSV: diese Tabelle",
+      "csvSummaryHint": "Die Aufteilung oben, mit den Summen",
+      "pdf": "PDF",
+      "pdfHint": "Der Bericht als Dokument",
+      "preparing": "Wird erstellt...",
+      "requested": "Ihre Datei wird erstellt. Sie erhalten eine E-Mail, sobald sie bereit ist, und sie erscheint in der Liste unten.",
+      "recent": "Ihre letzten Dateien",
+      "none": "Sie haben noch keine Datei erstellt.",
+      "kind": {
+        "pdf": "PDF-Bericht",
+        "csv-payments": "CSV der Zahlungen",
+        "csv-summary": "CSV-Zusammenfassung"
+      },
+      "status": {
+        "queued": "Wartet",
+        "running": "Wird erstellt",
+        "ready": "Bereit",
+        "failed": "Fehlgeschlagen",
+        "expired": "Abgelaufen"
+      },
+      "range": "{from} bis {to}",
+      "rows": "{count, plural, one {# Zeile} other {# Zeilen}}",
+      "expires": "Aufbewahrt bis {date}",
+      "failed": "Diese Datei konnte nicht erstellt werden. Fordern Sie sie erneut an.",
+      "download": "Herunterladen"
+    },
+    "errors": {
+      "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut.",
+      "forbidden": "Sie haben keinen Zugriff darauf.",
+      "notFound": "Diese Datei existiert nicht.",
+      "exportInProgress": "Für Sie wird bereits eine Datei erstellt. Warten Sie auf die E-Mail und fordern Sie dann eine weitere an.",
+      "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Fordern Sie sie erneut an.",
+      "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
+      "validation": "Diese Filter sind ungültig.",
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+    }
+  }
+}

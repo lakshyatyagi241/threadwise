@@ -37,7 +37,7 @@ export const STEP_DEPS: Record<string, string[]> = {
   faq_replies: ['flow_bots'],
   faq_knowledge: ['flow_bots'],
   widget_assistants: [],
-  widgets: ['widget_assistants'],
+  widgets: ['widget_assistants', 'flow_bots'], // flow_bots: the widget row carries the id of the flow its bot became (flow_id)
   flow_chatbots: ['flow_bots', 'widgets'],
   widget_config: ['widgets'],
   widget_theme: ['widgets'],

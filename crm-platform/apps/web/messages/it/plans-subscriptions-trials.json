@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Invii dei moduli al mese",
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI al mese",
       "sms_monthly": "SMS al mese",
-      "email_mailboxes": "Caselle e-mail"
+      "email_mailboxes": "Caselle e-mail",
+      "email_monthly": "E-mail al mese",
+      "storage_gb": "Archiviazione (GB)"
     },
     "features": {
       "automation": "Automazione",
@@ -74,13 +76,16 @@
       "storefront_builder": "Costruttore di vetrina",
       "invoicing": "Fatturazione",
       "forms_and_links": "Moduli e link",
-      "extra_channels": "Telegram, Facebook e Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber e WeChat",
       "form_builder": "Moduli",
       "waba_groups": "Gruppi WhatsApp",
       "sms": "Canale SMS",
       "help_agent": "Assistente di aiuto",
       "email_channel": "Canale e-mail (Gmail)",
-      "personal_history_full": "Importazione cronologia completa (WhatsApp personale)"
+      "personal_history_full": "Importazione cronologia completa (WhatsApp personale)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Lead scoring con IA",
+      "record_assignment": "Regole di assegnazione dei record"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Invii dei moduli accettati nel mese di calendario, esclusi gli spam. Oltre il limite un invio viene comunque salvato per la revisione, senza mai essere scartato. 0 = illimitato.",
       "ai_form_generations_monthly": "Generazioni del costruttore moduli AI nel mese di calendario, compresi i tentativi di correzione. 0 = illimitato.",
       "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
-      "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato."
+      "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
+      "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
+      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",
@@ -561,7 +568,9 @@
       "continueFree": "Continua gratis",
       "choose": "Scegli {name}",
       "back": "Torna indietro",
-      "compare": "Confronta tutti i piani"
+      "compare": "Confronta tutti i piani",
+      "appHint": "{feature} è venduto anche come app nel Marketplace.",
+      "appLink": "Vedi l’app"
     }
   }
 }

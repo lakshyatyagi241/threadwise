@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Formularios de WhatsApp",
+      "links": "Enlaces de WhatsApp"
+    },
+    "errors": {
+      "generic": "Algo salió mal. Inténtalo de nuevo.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Conecta un número de WhatsApp Cloud API para usar formularios.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Ningún número de WhatsApp Cloud API conectado tiene credenciales válidas.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta rechazó la definición del formulario.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Tu cuenta de WhatsApp Business debe pasar la verificación de Meta antes de poder publicar formularios.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta no pudo publicar este formulario.",
+      "WFL_LINK_NOT_LIVE": "Este enlace está pausado o ha caducado.",
+      "ROW_VERSION_CONFLICT": "Esto se modificó en otro lugar. Vuelve a cargar e inténtalo de nuevo.",
+      "VALIDATION_FAILED": "Revisa los campos resaltados e inténtalo de nuevo.",
+      "PLAN_FEATURE_LOCKED": "Mejora tu plan para usar esta función."
+    },
+    "forms": {
+      "heading": "Formularios de WhatsApp",
+      "intro": "Crea formularios que los clientes completan dentro de WhatsApp, luego envíalos desde un flujo y revisa las respuestas aquí.",
+      "loading": "Cargando formularios…",
+      "retry": "Reintentar",
+      "create": {
+        "cta": "Nuevo formulario",
+        "creating": "Creando…",
+        "defaultTitle": "Formulario sin título",
+        "defaultField": "Nombre completo"
+      },
+      "stats": {
+        "all": "Todos los formularios",
+        "published": "Publicados",
+        "draft": "Borradores",
+        "submissions": "Respuestas"
+      },
+      "empty": {
+        "title": "Aún no hay formularios",
+        "description": "Crea un formulario y luego envíalo desde un paso de formulario de WhatsApp en un flujo."
+      },
+      "table": {
+        "form": "Formulario",
+        "type": "Tipo",
+        "fields": "Campos",
+        "submissions": "Respuestas"
+      },
+      "status": {
+        "draft": "Borrador",
+        "published": "Publicado",
+        "paused": "Pausado"
+      },
+      "audience": {
+        "lead_capture": "Captación de leads",
+        "survey": "Encuesta",
+        "appointment_booking": "Reserva de citas",
+        "customer_support": "Atención al cliente",
+        "sign_up": "Registro",
+        "other": "Otro"
+      },
+      "row": {
+        "edit": "Editar",
+        "duplicate": "Duplicar",
+        "delete": "Eliminar"
+      },
+      "confirm": {
+        "deleteTitle": "¿Eliminar este formulario?",
+        "deleteMessage": "Los nodos de flujo activos que lo referencian dejarán de funcionar.",
+        "deleteConfirm": "Eliminar",
+        "cancel": "Cancelar"
+      },
+      "notice": {
+        "saved": "Guardado.",
+        "published": "Publicado en WhatsApp."
+      },
+      "builder": {
+        "back": "Volver a formularios",
+        "untitled": "Formulario sin título",
+        "saving": "Guardando…",
+        "saveDraft": "Guardar borrador",
+        "savePublish": "Guardar y publicar",
+        "publishing": "Publicando…",
+        "basics": "Datos básicos del formulario",
+        "title": "Título",
+        "audienceType": "Tipo",
+        "purpose": "Propósito",
+        "sendButtonLabel": "Texto del botón de envío",
+        "thankYouNote": "Mensaje de agradecimiento",
+        "screens": "Pantallas",
+        "addScreen": "Añadir pantalla",
+        "removeScreen": "Quitar pantalla",
+        "screenN": "Pantalla {n}",
+        "defaultField": "Nombre completo",
+        "newFieldLabel": "Nuevo campo",
+        "fieldKind": "Tipo de campo",
+        "fieldLabel": "Etiqueta",
+        "required": "Obligatorio",
+        "removeField": "Quitar",
+        "options": "Opciones (separadas por comas)",
+        "optionsPlaceholder": "Opción 1, Opción 2, Opción 3",
+        "mapsTo": "Se asigna a",
+        "mapsToHint": "Guarda esta respuesta en una propiedad del contacto al enviar el formulario.",
+        "mapsToNone": "No guardar en una propiedad del contacto",
+        "mapsToSystemGroup": "Campos del contacto",
+        "mapsToCustomGroup": "Propiedades personalizadas",
+        "mapsToSystem": {
+          "name": "Nombre completo",
+          "first_name": "Nombre",
+          "last_name": "Apellido",
+          "email": "Correo electrónico",
+          "title": "Cargo",
+          "language": "Idioma",
+          "address": "Dirección"
+        },
+        "mapsToPrivacyGroup": "Privacidad y consentimiento",
+        "mapsToPrivacy": {
+          "age": "Edad (verificación de menores)",
+          "date_of_birth": "Fecha de nacimiento (verificación de menores)",
+          "consent_marketing": "Consentimiento de marketing (WhatsApp)",
+          "consent_service": "Acuerdo de servicio (no marketing)"
+        }
+      },
+      "fieldKind": {
+        "heading": "Encabezado",
+        "short_text": "Texto corto",
+        "paragraph": "Párrafo",
+        "email": "Correo electrónico",
+        "phone_number": "Número de teléfono",
+        "number": "Número",
+        "date": "Fecha",
+        "dropdown": "Lista desplegable",
+        "radio_buttons": "Botones de opción",
+        "checkbox": "Casillas de verificación"
+      },
+      "submissions": {
+        "heading": "Respuestas",
+        "metaFlowId": "ID de Meta Flow: {id}",
+        "export": "Exportar CSV",
+        "empty": {
+          "title": "Aún no hay respuestas",
+          "description": "Las respuestas aparecerán aquí una vez que este formulario se envíe desde un flujo y alguien lo complete."
+        },
+        "table": {
+          "submitted": "Enviado",
+          "contact": "Contacto",
+          "phone": "Teléfono"
+        }
+      }
+    },
+    "links": {
+      "heading": "Enlaces de WhatsApp",
+      "intro": "Genera un enlace rastreable que abre WhatsApp con un mensaje predefinido, ideal para anuncios, biografías y códigos QR.",
+      "loading": "Cargando enlaces…",
+      "retry": "Reintentar",
+      "searchPlaceholder": "Buscar por nombre o enlace",
+      "create": {
+        "cta": "Nuevo enlace"
+      },
+      "stats": {
+        "all": "Todos los enlaces",
+        "live": "Activos",
+        "totalClicks": "Clics totales",
+        "avgClicks": "Clics prom. / enlace"
+      },
+      "tabs": {
+        "all": "Todos",
+        "live": "Activos",
+        "paused": "Pausados"
+      },
+      "status": {
+        "live": "Activo",
+        "paused": "Pausado"
+      },
+      "empty": {
+        "title": "Aún no hay enlaces",
+        "description": "Genera un enlace para compartir en anuncios, biografías o un código QR."
+      },
+      "table": {
+        "link": "Enlace",
+        "destination": "Destino",
+        "clicks": "Clics",
+        "lastClicked": "Último clic"
+      },
+      "row": {
+        "open": "Abrir",
+        "copy": "Copiar",
+        "copied": "¡Copiado!",
+        "edit": "Editar",
+        "duplicate": "Duplicar",
+        "delete": "Eliminar"
+      },
+      "confirm": {
+        "deleteTitle": "¿Eliminar este enlace?",
+        "deleteMessage": "El enlace corto deja de funcionar de inmediato.",
+        "deleteConfirm": "Eliminar",
+        "cancel": "Cancelar"
+      },
+      "notice": {
+        "saved": "Guardado.",
+        "copyFailed": "No se pudo copiar el enlace."
+      },
+      "builder": {
+        "back": "Volver a enlaces",
+        "newHeading": "Nuevo enlace",
+        "step": {
+          "destination": "Destino",
+          "message": "Mensaje inicial",
+          "tracking": "Seguimiento"
+        },
+        "name": "Nombre",
+        "status": "Estado",
+        "countryCode": "Código de país",
+        "phoneNumber": "Número de teléfono",
+        "welcomeMessage": "Mensaje inicial",
+        "welcomeMessageHint": "Se precarga en el chat cuando alguien pulsa el enlace.",
+        "slug": "Enlace corto",
+        "slugHint": "Solo letras, números y guiones. Déjalo en blanco para generar uno automáticamente.",
+        "slugPlaceholder": "oferta-verano",
+        "expiresAt": "Caduca",
+        "utmSource": "Fuente UTM",
+        "utmMedium": "Medio UTM",
+        "utmCampaign": "Campaña UTM",
+        "previous": "Anterior",
+        "next": "Siguiente",
+        "mint": "Generar enlace",
+        "save": "Guardar",
+        "saving": "Guardando…",
+        "fixErrors": "Revisa los campos de destino y enlace corto.",
+        "mintedHeading": "Tu enlace",
+        "shortUrl": "Enlace corto",
+        "waUrl": "Enlace de WhatsApp",
+        "qrAlt": "Código QR para este enlace"
+      },
+      "public": {
+        "missingTitle": "Enlace no encontrado",
+        "missingBody": "Este enlace no existe o ha sido eliminado.",
+        "goneTitle": "Enlace ya no activo",
+        "goneBody": "Este enlace está pausado o ha caducado.",
+        "errorTitle": "Algo salió mal",
+        "errorBody": "No pudimos abrir este enlace. Inténtalo de nuevo."
+      }
+    }
+  }
+}

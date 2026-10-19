@@ -54,6 +54,11 @@ export const wabaEnvSchema = z.object({
   META_APP_SECRET: optionalString(128),
   /** Embedded Signup configuration id (Facebook Login for Business). Empty: workspaces paste a token manually. */
   META_EMBEDDED_CONFIG_ID: optionalString(64),
+  /**
+   * A second Login-for-Business configuration, used only to create a catalog: its token carries `catalog_management`, which the
+   * WhatsApp Embedded Signup token does not. Unset keeps the old behaviour (the number's own token is tried).
+   */
+  META_CATALOGUE_CONFIG_ID: optionalString(64),
   /** Interakt's Embedded Signup solution id (`extras.setup.solutionID`) and the same id sent in `tp-signup`. */
   INTERAKT_SOLUTION_ID: optionalString(64),
   /** Shared tech-partner key: `x-access-token` on every Interakt call, `Authorization` on `tp-signup`. */
@@ -100,6 +105,23 @@ export const wabaEnvSchema = z.object({
       .union([z.boolean(), z.enum(['true', 'false', '1', '0'])])
       .transform((v) => v === true || v === 'true' || v === '1')
       .default(false),
+  ),
+  /**
+   * Comma-separated source addresses whose unsigned, key-less POSTs to the WhatsApp callback are accepted: a relay (Geta's
+   * callback forwarder) that re-posts the raw body and drops Meta's signature header. Matched against the client IP that
+   * `TRUST_PROXY` resolves, so keep that setting exact. Empty (default) trusts nobody; `WABA_REQUIRE_INTERAKT_SIGNATURE` still wins.
+   */
+  WABA_TRUSTED_FORWARDER_IPS: z.preprocess(
+    blankToUndefined,
+    z
+      .string()
+      .transform((v) =>
+        v
+          .split(',')
+          .map((x) => x.trim())
+          .filter(Boolean),
+      )
+      .default(''),
   ),
   /**
    * Development only: let a provider of the WhatsApp provider registry live on a loopback or private address over plain http (a stand-in

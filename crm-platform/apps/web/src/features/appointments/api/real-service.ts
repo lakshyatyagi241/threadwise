@@ -5,7 +5,9 @@ import {
   bookingTypeListResponseSchema,
   bookingTypeResponseSchema,
   calendarConnectStartResponseSchema,
+  calendarDriftActionSchema,
   calendarListResponseSchema,
+  spreadsheetListResponseSchema,
   calendarStatusResponseSchema,
   previewSlotsResponseSchema,
   publicBookResponseSchema,
@@ -19,12 +21,15 @@ import { call, callPublic } from './http';
 import type {
   Appointment,
   AppointmentCounts,
+  CalendarDriftResult,
   BookingSettings,
   BookingSettingsInput,
   BookingType,
   BookingTypeInput,
   CalendarConnection,
   CalendarOption,
+  WaTemplateOption,
+  SpreadsheetOption,
   PreviewDraft,
   PublicBookInput,
   PublicDirectory,
@@ -48,6 +53,7 @@ import {
   toPublicManage,
   toPublicTypePage,
   toSlotList,
+  toReminderBody,
   toTypeBody,
 } from './wire';
 
@@ -75,6 +81,12 @@ const appointmentPage = appointmentPageResponseSchema.transform((p) => ({
   nextCursor: p.page.nextCursor,
   hasMore: p.page.hasMore,
 }));
+const driftAction = z
+  .object({ appointment: appointmentResponseSchema, result: calendarDriftActionSchema })
+  .transform((r): { appointment: Appointment; result: CalendarDriftResult } => ({
+    appointment: toAppointment(r.appointment),
+    result: r.result,
+  }));
 const counts = appointmentCountsResponseSchema.transform((c): AppointmentCounts => ({
   upcoming: c.upcoming,
   past: c.past,
@@ -83,6 +95,14 @@ const counts = appointmentCountsResponseSchema.transform((c): AppointmentCounts 
 const calendarOne = calendarStatusResponseSchema.transform(toCalendar);
 const calendarOptions = calendarListResponseSchema.transform(toCalendarOptions);
 const typeOne = bookingTypeResponseSchema.transform(toBookingType);
+/** Only what a rule's template picker needs; the rest of a template summary is not this screen's business. */
+const waTemplateList = z
+  .object({
+    data: z.array(
+      z.object({ id: z.string(), name: z.string(), language: z.string() }).passthrough(),
+    ),
+  })
+  .transform((r) => r.data.map((x) => ({ id: x.id, name: x.name, language: x.language })));
 const typeList = bookingTypeListResponseSchema.transform((l) => l.data.map(toBookingType));
 
 /** The staff calls of the real API (`/v2/appointments`, `/v2/booking-types`), converted by `./wire`. */
@@ -115,6 +135,16 @@ export const realAppointmentsApi = {
     call(`/appointments/${id}/decline`, { method: 'POST', body: {}, schema: appointmentOne }),
   cancel: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/cancel`, { method: 'POST', body: {}, schema: appointmentOne }),
+  /** "Push our time back to Google": the event is written again from the appointment. The appointment is not changed. */
+  pushCalendar: (id: string) =>
+    call(`/appointments/${id}/calendar/push`, { method: 'POST', body: {}, schema: driftAction }),
+  /** "Accept Google's change": applied through the usual appointment rules; `notify` tells the customer of a move or a cancel. */
+  acceptCalendar: (id: string, notify: boolean) =>
+    call(`/appointments/${id}/calendar/accept`, {
+      method: 'POST',
+      body: { notify },
+      schema: driftAction,
+    }),
   complete: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/complete`, { method: 'POST', body: {}, schema: appointmentOne }),
   noShow: (id: string): Promise<Appointment> =>
@@ -146,6 +176,28 @@ export const realAppointmentsApi = {
       method: 'PATCH',
       body: toTypeBody(input, type.rowVersion ?? 1),
       schema: typeOne,
+    });
+  },
+  /** Only the reminder rules change: the other child lists stay as they are (a PATCH names just what it changes). */
+  updateTypeReminders(
+    type: Pick<BookingType, 'id' | 'rowVersion'>,
+    reminders: BookingTypeInput['reminders'],
+  ): Promise<BookingType> {
+    return call(`/booking-types/${type.id}`, {
+      method: 'PATCH',
+      body: {
+        rowVersion: type.rowVersion ?? 1,
+        reminders: toReminderBody(reminders),
+      },
+      schema: typeOne,
+    });
+  },
+  /** The approved WhatsApp templates a reminder can use. */
+  waTemplates(signal?: AbortSignal): Promise<WaTemplateOption[]> {
+    return call('/templates', {
+      query: { status: 'approved', limit: 100 },
+      schema: waTemplateList,
+      signal,
     });
   },
   /** Pausing and activating are an update of `isActive` alone: the child lists stay as they are. */
@@ -204,6 +256,12 @@ export const realAppointmentsApi = {
   },
   calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
     return call('/appointments/calendar/google/calendars', { schema: calendarOptions, signal });
+  },
+  spreadsheets(signal?: AbortSignal): Promise<SpreadsheetOption[]> {
+    return call('/appointments/calendar/google/spreadsheets', {
+      schema: spreadsheetListResponseSchema.transform((r) => r.data),
+      signal,
+    });
   },
   selectCalendar(calendarId: string): Promise<CalendarConnection> {
     return call('/appointments/calendar/google/calendar', {

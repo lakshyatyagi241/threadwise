@@ -1,0 +1,180 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "連絡先のクイックビュー",
+        "loading": "連絡先を読み込み中...",
+        "notFoundTitle": "連絡先が見つかりません",
+        "notFound": "削除されたか、アクセス権がない可能性があります。",
+        "close": "閉じる",
+        "seeAll": "すべての詳細を見る",
+        "previous": "前の連絡先",
+        "next": "次の連絡先",
+        "position": "{index} / {total}",
+        "rail": "連絡先のセクション",
+        "moreTabs": "その他のセクション",
+        "more": "+{count} 件",
+        "tab_overview": "概要",
+        "tab_activities": "アクティビティ",
+        "tab_notes": "ノート",
+        "tab_tasks": "タスク",
+        "tab_meetings": "ミーティング",
+        "tab_files": "ファイル",
+        "tab_conversations": "会話",
+        "tab_stats": "コミュニケーション統計",
+        "tab_details": "プロパティ",
+        "openFull": "詳細ページで開く"
+      },
+      "actions": {
+        "note": "ノート",
+        "task": "タスク",
+        "meeting": "ミーティング",
+        "addCompany": "会社を追加",
+        "changeCompany": "会社を変更",
+        "channels": "この連絡先にメッセージまたは通話",
+        "more": "その他の操作",
+        "edit": "連絡先を編集",
+        "delete": "連絡先を削除",
+        "conflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
+        "deleteFailed": "連絡先を削除できませんでした。"
+      },
+      "header": {
+        "jobTitle": "役職",
+        "jobTitlePlaceholder": "役職を追加...",
+        "editJobTitle": "役職を編集",
+        "jobTitleConflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
+        "jobTitleFailed": "役職を保存できませんでした。もう一度お試しください。",
+        "owner": "担当者"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "ウェブサイト",
+        "open": "{network}のプロフィールを開く"
+      },
+      "subscription": {
+        "title": "登録ステータス",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "メール",
+          "sms": "SMS"
+        },
+        "yes": "はい",
+        "no": "いいえ",
+        "optedOut": "マーケティングメッセージを配信停止",
+        "optedOutNote": "この連絡先はマーケティングメッセージを配信停止しているため、すべてのチャネルが「いいえ」になります。",
+        "proof": "各オプトインの証拠は同意記録にあります。",
+        "openConsent": "同意カードを開く"
+      },
+      "score": {
+        "title": "リードスコア",
+        "details": "スコアの詳細",
+        "hideDetails": "詳細を隠す",
+        "none": "未スコア",
+        "aria": "リードスコア{score}、{band}"
+      },
+      "owner": {
+        "title": "担当者と割り当て",
+        "owner": "担当者",
+        "tags": "タグ",
+        "groups": "グループ"
+      },
+      "location": {
+        "title": "所在地",
+        "address": "住所",
+        "country": "国",
+        "timeZone": "タイムゾーン",
+        "language": "言語"
+      },
+      "compliance": {
+        "title": "プライバシー",
+        "optedOut": "マーケティングを配信停止",
+        "allowed": "マーケティング許可",
+        "noFlags": "プライバシーフラグなし"
+      },
+      "overview": {},
+      "tabs": {
+        "info": "連絡先情報",
+        "social": "ソーシャルメディア",
+        "source": "リードソース",
+        "custom": "カスタムフィールド"
+      },
+      "info": {
+        "firstName": "名",
+        "lastName": "姓",
+        "email": "メール",
+        "phone": "電話",
+        "fax": "FAX",
+        "company": "会社",
+        "jobTitle": "役職",
+        "language": "言語",
+        "address": "住所",
+        "memo": "メモ",
+        "contactId": "連絡先ID",
+        "createdAt": "作成日時",
+        "lastActivity": "最終アクティビティ",
+        "source": "ソース",
+        "noCustomFields": "この連絡先にはまだカスタムフィールドの値がありません。",
+        "noLeadSource": "この連絡先のリードソースは記録されていません。",
+        "dateOfBirth": "生年月日"
+      },
+      "details": {
+        "title": "連絡先の詳細",
+        "stage": "ライフサイクルステージ",
+        "otherProperties": "その他のプロパティ",
+        "stageSince": "このステージになった日時",
+        "previousStage": "前のステージ",
+        "previousStageSince": "前のステージだった日時",
+        "lostReason": "失注理由",
+        "updatedAt": "最終更新"
+      },
+      "company": {
+        "title": "会社",
+        "none": "この連絡先は会社にリンクされていません。",
+        "hint": "会社を検索するか、新しい名前を入力して作成します。",
+        "saved": "会社を保存しました。",
+        "removed": "この連絡先から会社を削除しました。",
+        "failed": "会社を保存できませんでした。もう一度お試しください。",
+        "conflict": "先に他のユーザーがこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。"
+      },
+      "sections": {
+        "lead-source": "リードソース"
+      },
+      "nav": {
+        "back": "一覧に戻る",
+        "label": "連絡先のセクション",
+        "related": "関連",
+        "section": {
+          "overview": "概要",
+          "activities": "アクティビティ",
+          "conversations": "会話",
+          "details": "連絡先の詳細",
+          "stats": "コミュニケーション統計",
+          "notes": "ノート",
+          "meetings": "ミーティング",
+          "files": "ファイル",
+          "tasks": "タスク",
+          "deals": "取引",
+          "appointments": "アポイントメント",
+          "sales": "請求書とドキュメント",
+          "lead-source": "リードソース",
+          "company": "会社",
+          "consent": "同意",
+          "history": "フィールド履歴"
+        }
+      },
+      "stages": {
+        "title": "ライフサイクル",
+        "stages": "ライフサイクルステージ",
+        "status": "ステータス",
+        "conflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
+        "forbidden": "この連絡先を変更する権限がありません。"
+      }
+    }
+  }
+}

@@ -9,7 +9,7 @@ switching a number needs `call.calling.manage` (Owner, Admin and Manager by defa
 | `POST /numbers/:id/toggle`         | `{ enable }` switch calling on Meta, then locally                                                      | 422 `CALL_COEXISTENCE_UNSUPPORTED` (no Meta call), `CALL_META_REFUSED` (Meta's reason in words)                                                     |
 | `GET /eligibility?conversationId=` | whether the Call button shows, the number to use, the customer's permission and whether it is `usable` |                                                                                                                                                     |
 | `POST /permission-request`         | `{ numberId, to, body? }` ask the customer for permission                                              | `{ alreadyPermitted: true }` when Meta says the business may already call                                                                           |
-| `POST /calls/dial`                 | `{ numberId, to, sdpOffer, contactId?, conversationId? }` place a call                                 | 422 `CALL_PERMISSION_REQUESTED` (a request was sent, no call), `CALL_NOT_ENABLED`, `CALL_META_REFUSED`                                              |
+| `POST /calls/dial`                 | `{ numberId, to, sdpOffer, contactId?, conversationId? }` place a call                                 | 422 `CALL_PERMISSION_REQUESTED` (a request was sent, no call), `CALL_NOT_ENABLED`, `CALL_META_REFUSED`, `CALL_OUTSIDE_WINDOW` (BL-177)              |
 | `GET /calls/:id/progress`          | `{ status, sdpAnswer, ended, endReason }`                                                              | the answer only once the call is active and the SDP is an answer                                                                                    |
 | `GET /calls/pending`               | calls ringing now (inbound, last two minutes, five at most)                                            | `sdpOffer` for the browser to answer; `aiHandled`                                                                                                   |
 | `POST /calls/:id/accept`           | `{ sdpAnswer }`                                                                                        | 204; 409 `CALL_STATE_CONFLICT` when a teammate took it                                                                                              |
@@ -17,6 +17,38 @@ switching a number needs `call.calling.manage` (Owner, Admin and Manager by defa
 | `POST /calls/:id/terminate`        | hang up or cancel                                                                                      | 204; the row closes on Meta's terminate event                                                                                                       |
 | `POST /calls/:id/recording`        | multipart `recording`, up to 50 MB                                                                     | `{ url }`; 422 `CALL_RECORDING_FAILED`, `CALL_RECORDING_DISABLED`, `CALL_RECORDING_CONSENT_REQUIRED` (nothing stored); 409 `CALL_RECORDING_ON_HOLD` |
 | `GET /calls/:id/recording`         | the file (range requests work)                                                                         | workspace only; 404 when there is none                                                                                                              |
+
+## Calling readiness (EXT-CALL-007 to 011)
+
+Same base and session auth. Reading needs `call.calls.use`; checking and the setting's write need `call.calling.manage`. Unlike the routes above,
+these do **not** answer 422 `PLAN_FEATURE_LOCKED` to a workspace without `waba_calling` on the read routes: the checklist then says
+`plan_missing` and Meta is not asked (a write of the setting still needs the plan feature). Types: `@crm/contracts` (`calling-voice/readiness`).
+
+| Method and path                     | What                                                                                 | Notes                                                                                                                                                                                         |
+| ----------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /readiness`                    | every WhatsApp number with its checklist as of its last check                        | `{ rows: [{ numberId, status, callingEnabled, metaCallingStatus, checks[], checkedAt, source, ... }] }`; no call to Meta                                                                      |
+| `GET /numbers/:id/readiness`        | one number's checklist                                                               | 404 `CALL_NUMBER_NOT_FOUND` for a number of another workspace                                                                                                                                 |
+| `POST /numbers/:id/readiness/check` | `{ source?: manual \| health \| enable }` look at the number now and keep the result | reads Meta (phone, token, subscribed apps, calling settings) and only reads the platform app's webhook fields; never switches calling on; brings the local switch in line with Meta (audited) |
+| `GET /settings`                     | `{ autoEnableOnConnect, rowVersion, updatedAt }`                                     | off until saved                                                                                                                                                                               |
+| `PUT /settings`                     | `{ autoEnableOnConnect, rowVersion? }`                                               | needs the plan feature; `rowVersion` required after the first save (409 otherwise); audited (`wa_calling_settings`)                                                                           |
+
+A check is `{ key, state: ok \| warn \| fail, code, params? }` per prerequisite, in this order: `plan_feature`, `connection`, `not_coexistence`,
+`number_registered`, `messaging_limit`, `token_scopes`, `webhook_subscribed`, `calls_field`, `calling_enabled`, `turn`, `dialler_permissions`,
+`recording_consent`. The server sends the **code** and the web writes the sentence (every code has its words in the 21 languages): nothing is
+parsed out of a message. `status` is `blocked` when any row but "calling is off" is a fail, `ready_to_enable` when only that is, `attention` when
+calling is on and a row warns, `ready` otherwise, `never_checked` before the first check.
+
+**Meta's refusals** (`toggle`, `permission-request`, `calls/dial`) are `422 CALL_META_REFUSED` with `errors: [{ path: 'reason', message }]`, the
+reason being one of `prerequisites`, `coexistence`, `permission_scope`, `token_expired`, `calling_not_enabled`,
+`no_call_permission`, `permission_request_limit`, `receiver_uncallable`, `meta_unreachable`, `unknown`; `message` keeps Meta's
+own sentence for logs and for `unknown`. Mapping is by Meta's error code first (141000, 138000, 138001, 138006, 138009, 190, 10, 200 to 299) and only
+for the prerequisite and missing-permission refusals by wording together with code 100, in `calling-meta-errors.ts`.
+
+Background: the outbox event `whatsapp.connection.connected` (the WABA domain's own) queues a check about 20 seconds after a connect, in the
+`calling-readiness` queue, for workspaces whose plan has calling (the worker's check is also the only one that may add the `calls` field to the platform's Meta app, under a Redis lock); a worker timer takes the numbers that are due every minute, claiming each for 30 minutes in the same statement and giving the claim back if queueing fails (jobs
+`calling-readiness-sched-<number>-<window>`). A check after a connect marks the number's automatic switch-on **pending** (`wa_calling_readiness.auto_enable_pending`); every later check, the
+schedule's and a person's, keeps trying while it is pending, and a check that cannot read Meta looks again after 1, 5 and 15 minutes. It ends when calling
+is on, when the plan or `autoEnableOnConnect` no longer allow it, or when a person turns calling off. Nothing else switches calling on.
 
 Public: `GET/POST /v2/public/webhooks/wa-calling`, the same callback as `/v2/public/webhooks/whatsapp` (Meta allows one per app).
 
@@ -26,8 +58,9 @@ accept_failed); it has no endpoint.
 
 ## Call logs and call analytics (TW-CALL-022, 036)
 
-Base `/v2/calling/call-logs`, session auth, every route needs the plan feature `waba_calling` (the same gate as the dial routes) and the key
-`call.logs.read`. Its **record scope** says whose calls a person sees, by who handled the call: `all`, `team` (their own and their teammates') or
+Base `/v2/calling/call-logs`, session auth, the key `call.logs.read`. Since BL-257 the plan feature `waba_calling` no longer gates the list, `/filters`,
+`/analytics` and `/:id` (the log holds calls that are not WhatsApp calls, see [call-logging.md](call-logging.md)); it still gates playing a recording and the
+`numberId` filter, and `/filters` offers no numbers without it. Its **record scope** says whose calls a person sees, by who handled the call: `all`, `team` (their own and their teammates') or
 `own`. A call outside the scope, or in another workspace, is a 404 (never 403), and the totals, the filter choices and the analytics follow the same
 scope. Owner and Admin hold the key at `all`; the Manager preset holds it at `own`. Playing a recording also needs `call.recordings.play`.
 

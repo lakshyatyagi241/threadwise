@@ -25,6 +25,19 @@ export function PerMonth({ price }: { price: string }) {
   );
 }
 
+/** A yearly price with its "per year" words (a subscription bought for a year). */
+export function PerYear({ price }: { price: string }) {
+  const t = useTranslations(NS);
+  return (
+    <>
+      <bdi dir="ltr" className="tabular-nums">
+        {price}
+      </bdi>{' '}
+      <span>{t('perYear')}</span>
+    </>
+  );
+}
+
 /**
  * A listing's price in the catalogue: "Free", or the monthly price with the length of the trial and a marker when the app is not on
  * sale (no new subscriptions, existing subscribers may renew).

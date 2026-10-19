@@ -1,9 +1,9 @@
 'use client';
 
-import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import type { CampaignListResponse, CampaignTypeFilter } from '@crm/contracts';
+import { NewBroadcast } from '@/features/broadcasts/components/new-broadcast';
 import { STATUS_VIEWS, type StatusView } from '../lib/list-model';
 
 const DOT: Record<StatusView, string> = {
@@ -127,14 +127,7 @@ export function CampaignsRail({
         })}
       </div>
 
-      {canCreate && (
-        <Link
-          href="/campaigns/create"
-          className="block rounded-xl px-3 py-2 text-center text-xs font-semibold text-brand hover:bg-muted"
-        >
-          {listT('createBroadcast')} →
-        </Link>
-      )}
+      {canCreate && <NewBroadcast label={listT('createBroadcast')} variant="link" />}
     </aside>
   );
 }

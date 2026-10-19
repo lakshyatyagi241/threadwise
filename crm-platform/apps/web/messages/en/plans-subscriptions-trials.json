@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Form submissions per month",
       "ai_form_generations_monthly": "AI form builder generations per month",
       "sms_monthly": "SMS per month",
-      "email_mailboxes": "Email mailboxes"
+      "email_mailboxes": "Email mailboxes",
+      "email_monthly": "Emails per month",
+      "storage_gb": "Storage (GB)"
     },
     "features": {
       "automation": "Automation",
@@ -74,13 +76,16 @@
       "storefront_builder": "Storefront builder",
       "invoicing": "Invoicing",
       "forms_and_links": "Forms and links",
-      "extra_channels": "Telegram, Facebook and Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat",
       "form_builder": "Forms",
       "waba_groups": "WhatsApp groups",
       "sms": "SMS channel",
       "help_agent": "Help assistant",
       "email_channel": "Email (Gmail) channel",
-      "personal_history_full": "Full history import (personal WhatsApp)"
+      "personal_history_full": "Full history import (personal WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI lead scoring",
+      "record_assignment": "Record assignment rules"
     },
     "limitGroups": {
       "messaging": "Messaging",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
       "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
       "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
-      "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited."
+      "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
+      "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
+      "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",
@@ -560,6 +567,8 @@
       "talk": "Talk to sales",
       "continueFree": "Continue free",
       "choose": "Choose {name}",
+      "appHint": "{feature} is also sold as an app in the Marketplace.",
+      "appLink": "See the app",
       "back": "Go back",
       "compare": "Compare all plans"
     }

@@ -54,6 +54,10 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
 
   'wap-providers': 'whatsapp providers bsp meta cloud interakt gupshup registry credentials',
   'wap-switch': 'switch provider number migrate whatsapp number change',
+  'data-retention':
+    'retention archive archival delete deletion storage logs audit log events cold glacier r2 s3 days keep purge ttl expire',
+  'wa-throughput':
+    'whatsapp throughput limits rate mps tps messages per second messaging tier quota pause throttle performance live 130429',
   'node-bridge': 'node bridge baileys qr unofficial whatsapp server token address sender pacing',
   'sms-channel': 'sms text message twilio msg91 channel switch enable disable platform',
   'webhook-forwarding':
@@ -73,6 +77,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'staff-roles': 'staff roles operators assign support auditor super admin',
   security: 'security center mfa two factor 2fa ip allowlist sessions password policy',
   'security-events': 'security events audit log activity logins failed login suspicious',
+  'dpdp-register':
+    'dpdp data protection act privacy compliance india rules consent breach grievance checklist register',
   registration: 'registration signup sign up policy invite approval email verification trial',
   'social-login': 'social login google facebook captcha recaptcha turnstile oauth sso',
   'auth-pages': 'auth pages login page signup page branding forgot password',
@@ -90,6 +96,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-whatsapp': 'whatsapp waba meta app embedded signup credentials business cloud api',
   'settings-campaigns': 'campaigns broadcast sending limits rate',
   'settings-google-calendar': 'google calendar oauth appointments sync',
+  'settings-microsoft-calendar':
+    'microsoft outlook office 365 microsoft 365 calendar teams entra azure appointments oauth sync',
   'settings-microsoft-mail':
     'microsoft outlook office 365 microsoft 365 exchange graph entra azure email mailbox oauth inbox add-on credentials',
   'settings-google-mail': 'google gmail email mailbox oauth inbox add-on credentials push pubsub',
@@ -103,7 +111,7 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-privacy': 'privacy gdpr ada cookies consent accessibility data protection',
   'settings-analytics': 'analytics google analytics tag manager pixel tracking facebook',
   'settings-custom': 'custom code css javascript scripts head body snippet',
-  'settings-storage': 'cloud storage s3 bucket files uploads minio r2 spaces',
+  'settings-storage': 'cloud storage s3 bucket files uploads r2 spaces',
 
   system: 'system status version update updater license install server php',
   'i18n-languages': 'languages translations locales rtl arabic default language',

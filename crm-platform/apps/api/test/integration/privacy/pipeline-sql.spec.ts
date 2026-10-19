@@ -7,8 +7,12 @@ import {
   ALL_TIERS,
 } from '../../../src/modules/privacy/engine/erasure.service';
 import { SubjectResolver } from '../../../src/modules/privacy/engine/subject-resolver';
+import { LegalHoldGuard } from '../../../src/modules/privacy/legal-holds/legal-hold.guard';
 import { PERSONAL_DATA_REGISTRY } from '../../../src/modules/privacy/registry';
 import type { PrivacyCtx, ResolvedSubject } from '../../../src/modules/privacy/registry/types';
+
+/** These tests hold nobody: the guard only reads through the transaction it is given, so it needs no database service of its own. */
+const noHold = new LegalHoldGuard(null as never);
 
 /**
  * Every statement the registry can generate (count, export read, delete, anonymise) is run once against the real migrated schema,
@@ -30,6 +34,8 @@ describe.skipIf(!URL)('registry statements run on the real schema', () => {
     orgId: 1,
     contactIds: [1],
     contactUuids: ['00000000-0000-4000-8000-000000000001'],
+    userIds: [1],
+    userEmails: ['staff@example.test'],
     leadIds: [1],
     conversationIds: [1],
     conversationUuids: ['00000000-0000-4000-8000-000000000002'],
@@ -52,7 +58,7 @@ describe.skipIf(!URL)('registry statements run on the real schema', () => {
   }
 
   it('dry run, execute (both history modes) and export run without a database error', async () => {
-    const eraser = new PersonalDataErasureService(new SubjectResolver());
+    const eraser = new PersonalDataErasureService(new SubjectResolver(), noHold);
     for (const mode of ['delete', 'anonymise'] as const) {
       await inRolledBackTx(async (tx) => {
         const dry = await eraser.run(tx, {

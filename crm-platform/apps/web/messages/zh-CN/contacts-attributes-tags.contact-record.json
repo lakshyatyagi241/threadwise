@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "联系人分区",
+          "section": {
+            "overview": "概览",
+            "activities": "活动",
+            "conversations": "会话",
+            "notes": "笔记",
+            "tasks": "任务",
+            "meetings": "会议",
+            "files": "文件",
+            "deals": "交易",
+            "appointments": "预约",
+            "sales": "发票",
+            "company": "公司",
+            "details": "详情",
+            "stats": "统计",
+            "lead-source": "来源",
+            "consent": "同意",
+            "history": "历史"
+          },
+          "more": "更多",
+          "moreLabel": "更多部分"
+        },
+        "actions": {
+          "label": "可对此联系人执行的操作",
+          "call": "通话",
+          "callWhatsapp": "通过 WhatsApp 通话",
+          "callPhone": "用手机通话",
+          "logCall": "记录通话",
+          "callMore": "其他通话方式",
+          "message": "消息",
+          "messageChat": "打开 WhatsApp 聊天",
+          "messageTemplate": "发送 WhatsApp 模板",
+          "messageEmail": "发送电子邮件",
+          "messageMore": "其他联系方式",
+          "fieldHistory": "字段历史",
+          "more": "更多"
+        },
+        "stageStrip": {
+          "noStatus": "无状态"
+        },
+        "keyDetails": {
+          "editAll": "全部编辑",
+          "edit": "编辑{field}",
+          "add": "添加{field}",
+          "conflict": "其他人已先更改了此联系人。已重新加载，请重试。",
+          "invalid": "这看起来不是有效的{field}。",
+          "forbidden": "您没有更改此联系人的权限。",
+          "failed": "无法保存。请重试。",
+          "owner": "负责人",
+          "city": "城市",
+          "showAll": "显示全部详情",
+          "showLess": "收起",
+          "social": "社交媒体",
+          "leadSource": "此联系人的来源",
+          "aboutTitle": "关于此联系人"
+        },
+        "cards": {
+          "company": "公司",
+          "companyNone": "暂无",
+          "timezone": "时区和位置",
+          "timezoneNone": "暂不清楚",
+          "privacy": "隐私",
+          "privacyMinor": "未成年人",
+          "score": "线索评分",
+          "scoreNone": "尚未评分",
+          "label": "与此联系人相关",
+          "tasks": "未完成任务",
+          "tasksNone": "暂无待办。",
+          "deals": "交易",
+          "dealsNone": "暂无交易。",
+          "add": "+ 添加",
+          "viewAll": "查看全部"
+        },
+        "compose": {
+          "label": "添加到活动",
+          "tabs": "添加什么",
+          "tab": {
+            "note": "笔记",
+            "task": "任务",
+            "call": "通话",
+            "meeting": "会议"
+          }
+        },
+        "logCall": {
+          "label": "记录通话",
+          "direction": "谁打的电话",
+          "directionOption": {
+            "outbound": "我打给对方",
+            "inbound": "对方打给我"
+          },
+          "minutesPlaceholder": "可选",
+          "notesPlaceholder": "聊了什么？（可选）",
+          "duePreset": {
+            "1": "明天",
+            "3": "3 天后",
+            "7": "1 周后"
+          },
+          "saved": "通话已记录。",
+          "forbidden": "您没有记录通话的权限。",
+          "unavailable": "此处暂不支持记录通话。",
+          "failed": "无法记录通话。内容没有丢失，请重试。"
+        },
+        "callNudge": {
+          "question": "与{name}的通话怎么样？",
+          "log": "记录",
+          "dismiss": "稍后再说"
+        },
+        "profile": {
+          "label": "联系人资料"
+        },
+        "stagePicker": {
+          "menu": "选择阶段",
+          "search": "查找阶段",
+          "none": "没有匹配的阶段。",
+          "moveTo": "移至{stage}",
+          "statusIn": "{stage}中的状态",
+          "default": "默认",
+          "progress": "{current} / {total}",
+          "undo": "撤销",
+          "undone": "已移回{stage}。",
+          "statusSet": "状态已设为{status}。",
+          "prefix": "阶段"
+        },
+        "summary": {
+          "label": "摘要",
+          "tasks": "未完成任务",
+          "overdue": "{count} 项已逾期",
+          "nextDue": "下次截止 {when}",
+          "noDue": "无截止日期",
+          "meeting": "下次会议",
+          "noMeeting": "暂无安排",
+          "lastActivity": "最近活动",
+          "noActivity": "暂无活动",
+          "deals": "进行中的交易",
+          "wonDeals": "{count, plural, =0 {暂无成交} other {成交 # 笔}}"
+        },
+        "scoreChip": {
+          "title": "潜在客户评分 {score} · {band}",
+          "aria": "潜在客户评分 {score}，{band}。显示评分详情。"
+        }
+      },
+      "timeline": {
+        "title": "活动",
+        "viewAll": "查看全部活动",
+        "filterLabel": "显示",
+        "filters": {
+          "all": "全部",
+          "messages": "消息",
+          "calls": "通话",
+          "notes": "笔记",
+          "tasks": "任务",
+          "meetings": "会议",
+          "changes": "更改"
+        },
+        "searchLabel": "搜索此联系人的活动",
+        "searchPlaceholder": "搜索活动",
+        "clearSearch": "清除搜索",
+        "searchHint": "仅搜索已加载的内容。加载更多可查看更早的记录。",
+        "groups": {
+          "upNext": "接下来",
+          "today": "今天",
+          "yesterday": "昨天",
+          "thisWeek": "本周",
+          "earlier": "更早"
+        },
+        "loading": "正在加载活动...",
+        "loadMore": "加载更多",
+        "noMatch": "没有匹配项。",
+        "emptyShort": "这里还没有内容。",
+        "showAll": "显示全部活动",
+        "noneYet": "暂无更新的内容。加载更多可查看更早的记录。",
+        "partial": "部分活动无法加载。",
+        "retry": "重试",
+        "empty": {
+          "title": "暂无活动",
+          "message": "您对{name}所做的一切都会显示在这里：笔记、通话、消息、任务和会议。",
+          "messageNoName": "您对此联系人所做的一切都会显示在这里：笔记、通话、消息、任务和会议。",
+          "note": "添加笔记",
+          "call": "记录通话",
+          "task": "添加任务",
+          "meeting": "安排会议"
+        },
+        "entry": {
+          "note": "笔记：{text}",
+          "edited": "已编辑",
+          "task": {
+            "done": "任务已完成：{title}",
+            "overdue": "已逾期，截止时间为{when}",
+            "due": "截止：{when}",
+            "noDue": "无截止日期"
+          },
+          "meeting": {
+            "upcoming": "会议：{title}",
+            "past": "已会面：{title}",
+            "notHeld": "未举行：{title}",
+            "noShow": "未到场：{title}"
+          },
+          "call": {
+            "inbound": "来电",
+            "outbound": "去电",
+            "call": "通话",
+            "seconds": "{seconds} 秒",
+            "minutes": "{minutes} 分钟",
+            "outcome": {
+              "connected": "已接通",
+              "noAnswer": "无人接听",
+              "busy": "忙线",
+              "voicemail": "已留语音信箱",
+              "wrongNumber": "号码错误",
+              "declined": "已拒接",
+              "failed": "失败",
+              "inProgress": "进行中"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "手动记录",
+              "telephony": "电话系统",
+              "mobile_app": "移动应用",
+              "web_click_to_call": "电话"
+            }
+          },
+          "message": {
+            "summary": "{channel}上的会话",
+            "unread": "{count} 条未读"
+          },
+          "email": {
+            "sent": "已发送电子邮件：{title}",
+            "received": "已收到电子邮件：{title}"
+          },
+          "change": {
+            "stage": "阶段从{from}更改为{to}",
+            "field": "{field}从{from}更改为{to}",
+            "stageAndMore": "阶段从{from}更改为{to}，另有{count, plural, other {# 项详情}}",
+            "several": "已更新{count, plural, other {# 项详情}}"
+          },
+          "consent": {
+            "granted": "已授予{channel}同意",
+            "withdrawn": "已撤回{channel}同意",
+            "service": "服务消息",
+            "marketing": "营销消息"
+          },
+          "by": "由{name}",
+          "system": "系统"
+        }
+      }
+    }
+  }
+}

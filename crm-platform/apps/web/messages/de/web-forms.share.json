@@ -145,16 +145,26 @@
         "privacyUrl": "Link zur Datenschutzerklärung",
         "privacyUrlHint": "Optional. Wird neben dem Einwilligungstext angezeigt. Muss mit https:// beginnen.",
         "privacyUrlHttps": "Verwenden Sie eine Adresse, die mit https:// beginnt.",
+        "termsUrl": "Link zu den Nutzungsbedingungen",
+        "termsUrlHint": "Optional. Wird neben dem Einwilligungstext und dem Datenschutzlink angezeigt. Muss mit https:// beginnen.",
+        "useWorkspacePrivacy": "Link zur Datenschutzerklärung meines Arbeitsbereichs verwenden",
+        "useWorkspaceTerms": "Link zu den Nutzungsbedingungen meines Arbeitsbereichs verwenden",
         "required": "Zum Absenden muss das Kästchen angehakt sein",
         "requiredHint": "Deaktivieren Sie dies, wenn die Einwilligung optional ist.",
         "marketing": "Marketing-Opt-in",
         "marketingHint": "Wenn das Kästchen angehakt wird, wird die Marketing-Einwilligung im Kontakt gespeichert. Ein nicht angehaktes Kästchen meldet niemanden an.",
-        "whatsappHint": "Wirst du diese Kontakte per WhatsApp anschreiben? Verwende einen Hinweis, der das sagt, und erkläre, wie man sich abmeldet. Das angekreuzte Kästchen wird mit genau diesem Text und seiner Version als Nachweis gespeichert.",
-        "whatsappInsert": "WhatsApp-Einwilligungstext verwenden",
-        "whatsappWording": "Ich stimme zu, Updates und Angebote über WhatsApp zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
-        "coversSms": "Der Wortlaut umfasst SMS",
-        "coversSmsHint": "Nur aktivieren, wenn der Text oben mitteilt, dass per SMS Kontakt aufgenommen werden darf. Wird eine Telefonnummer erfasst, wird SMS zusammen mit WhatsApp und E-Mail erfasst.",
-        "serviceHint": "Diese Zeile ist kein Marketing. Ein angehaktes Kästchen wird als Nachweis gespeichert, dass die Person der Kontaktaufnahme zu ihrer Anfrage zugestimmt hat (nur Servicenachrichten), mit genau diesem Wortlaut und seiner Version. Es meldet niemanden für Marketing an."
+        "serviceHint": "Diese Zeile ist kein Marketing. Ein angehaktes Kästchen wird als Nachweis gespeichert, dass die Person der Kontaktaufnahme zu ihrer Anfrage zugestimmt hat (nur Servicenachrichten), mit genau diesem Wortlaut und seiner Version. Es meldet niemanden für Marketing an.",
+        "statement": "Ich stimme zu, Updates und Angebote über {channels} zu erhalten. Ich kann jederzeit mit STOP antworten, um mich abzumelden.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "E-Mail"
+        },
+        "channelsLabel": "Kanäle dieser Einwilligung",
+        "channelsHint": "Besucher werden nur auf den hier angehakten Kanälen angemeldet, und der Einwilligungstext nennt sie. Ein Kanal wird nur genutzt, wenn das Formular die passende Telefonnummer oder E-Mail erfasst.",
+        "channelsUse": "Text mit diesen Kanälen aktualisieren",
+        "channelNeedsPhone": "Dieses Formular hat kein Telefonfeld, daher wird darüber niemand auf diesem Kanal angemeldet.",
+        "channelNeedsEmail": "Dieses Formular hat kein E-Mail-Feld, daher wird darüber niemand auf diesem Kanal angemeldet."
       },
       "crm": {
         "title": "Im CRM",
@@ -289,6 +299,41 @@
           "held": "{count, plural, one {1 Einsendung wird als Spam zurückgehalten.} other {# Einsendungen werden als Spam zurückgehalten.}}",
           "review": "Prüfen"
         }
+      },
+      "age": {
+        "title": "Altersprüfung",
+        "description": "Fragen Sie nur dort nach dem Alter, wo Sie es brauchen. Lassen Sie dies bei den meisten Formularen aus.",
+        "enable": "Alter des Besuchers prüfen",
+        "enableHint": "Standardmäßig aus. Aktivieren Sie dies, wenn die Regeln Ihres Arbeitsbereichs es verlangen oder Ihr Unternehmen Minderjährige bedient. Das Formular verrät dem Besucher nie, welche Antwort durchgeht.",
+        "mode": "Art der Abfrage",
+        "modes": {
+          "declaration": "Ein Kästchen: „Ich bestätige, dass ich mindestens N Jahre alt bin“",
+          "age": "Nach dem Alter fragen",
+          "dob": "Nach dem Geburtsdatum fragen"
+        },
+        "modeHints": {
+          "declaration": "Es wird nichts zum Alter gespeichert. Die geringste Datenmenge.",
+          "age": "Eine ganze Zahl. Sie wird für die Prüfung verwendet; nur das Ergebnis wird gespeichert.",
+          "dob": "Wird am Kontakt als Geburtsdatum gespeichert. Nutzen Sie dies nur, wenn Sie das Datum benötigen."
+        },
+        "minAge": "Mindestalter",
+        "minAgeHint": "Leer lassen, um das Alter Ihres Arbeitsbereichs ({age}) zu verwenden. Zwischen 1 und 21.",
+        "minAgeInvalid": "Geben Sie eine ganze Zahl von {min} bis {max} ein.",
+        "whenUnder": "Wenn der Besucher jünger ist",
+        "actions": {
+          "block": "Die Übermittlung nicht annehmen",
+          "flag": "Annehmen, den Kontakt als minderjährig markieren, keine Marketing-Einwilligung erfassen",
+          "guardian": "Wie oben und zusätzlich nach einem Elternteil oder Vormund fragen"
+        },
+        "actionHints": {
+          "block": "Es wird nichts gespeichert, und der Besucher sieht eine neutrale Meldung. Beim Kästchen muss der Besucher es nur anhaken.",
+          "flag": "Der Kontakt wird als minderjährig markiert. Die Einwilligungszeile dieser Übermittlung wird wie angezeigt gespeichert, aber es wird keine Marketing-Zustimmung erfasst.",
+          "guardian": "Name und Kontaktdaten des Elternteils oder Vormunds werden mit der Übermittlung und in der Zeitleiste des Kontakts gespeichert. Die Einwilligung wird erst erfasst, wenn eine Person sie in der Einwilligungskarte erfasst."
+        },
+        "declarationBlockNote": "Mit dem Kästchen und dieser Einstellung wird niemand abgewiesen: Das Kästchen muss angehakt sein, um das Formular zu senden.",
+        "childrenUnanswered": "Ihr Compliance-Center hat die Frage zu Kindern noch nicht beantwortet, daher wird das Marketing an einen markierten Minderjährigen erfasst, aber nicht zurückgehalten.",
+        "childrenLink": "Compliance-Center öffnen",
+        "neutralNote": "Schreiben Sie das Mindestalter nicht in den Hilfetext eines Felds oder in die Beschreibung: Die Seite soll nicht verraten, welche Antwort durchgeht."
       }
     }
   }

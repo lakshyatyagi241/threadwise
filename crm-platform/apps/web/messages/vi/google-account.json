@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Tài khoản Google",
+        "description": "Kết nối một tài khoản Google cho Calendar, Sheets, Docs, Forms và Meet trong các luồng của bạn.",
+        "keywords": "google, tài khoản google, lịch, sheets, docs, forms, meet, drive, oauth, kết nối google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Thêm hàng, tra cứu hàng và lưu liên hệ từ một trang tính trong luồng của bạn. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google sheets, bảng tính, hàng, ô, oauth, kết nối google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Sao chép tài liệu mẫu, điền thông tin và chia sẻ từ luồng của bạn. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google docs, tài liệu, mẫu, chia sẻ, oauth, kết nối google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Gửi biểu mẫu cho khách hàng và tiếp tục khi họ điền xong. Sử dụng kết nối tài khoản Google của bạn.",
+        "keywords": "google forms, biểu mẫu, khảo sát, phản hồi, oauth, kết nối google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Bỏ qua"
+    },
+    "page": {
+      "eyebrow": "Không gian làm việc",
+      "title": "Tài khoản Google",
+      "subtitle": "Kết nối một lần. Cùng một tài khoản Google vận hành lịch đặt hẹn, liên kết Meet và các bước Sheets, Docs, Forms trong luồng của bạn.",
+      "loading": "Đang tải tài khoản Google của bạn...",
+      "forbidden": {
+        "title": "Bạn không thể mở trang này",
+        "body": "Vai trò của bạn không bao gồm quyền xem tài khoản Google. Hãy nhờ quản trị viên không gian làm việc."
+      },
+      "status": {
+        "unavailable": "Chưa thiết lập",
+        "disconnected": "Chưa kết nối",
+        "connected": "Đã kết nối",
+        "needs_reconnect": "Cần kết nối lại"
+      },
+      "outcome": {
+        "connected": "Đã kết nối tài khoản Google.",
+        "denied": "Google chưa được kết nối: màn hình cấp quyền đã bị hủy.",
+        "failed": "Việc kết nối Google chưa hoàn tất. Hãy thử lại.",
+        "expired": "Lần kết nối đó đã hết hạn. Nhấn nút để bắt đầu lại.",
+        "not_configured": "Google chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng của bạn.",
+        "missing_scope": "Google không cấp đủ mọi quyền bạn yêu cầu. Những quyền đã cấp vẫn hoạt động; hãy thêm lại các quyền còn thiếu và giữ tất cả ô được chọn.",
+        "cancelled": "Bạn đã hủy. Chưa có gì được kết nối."
+      },
+      "actions": {
+        "connect": "Kết nối tài khoản Google",
+        "reconnect": "Kết nối lại Google",
+        "addPermissions": "Thêm quyền",
+        "disconnect": "Ngắt kết nối",
+        "working": "Đang mở Google...",
+        "retry": "Thử lại"
+      },
+      "unavailable": {
+        "title": "Google chưa được thiết lập cho nền tảng này",
+        "body": "Quản trị viên nền tảng cần thêm ứng dụng khách OAuth của Google trước khi mọi người có thể kết nối. Cho đến lúc đó, các bước Google trong luồng của bạn sẽ thất bại kèm thông báo giải thích, và các lịch hẹn vẫn hoạt động mà không có lịch."
+      },
+      "reconnect": {
+        "title": "Google đã ngừng chấp nhận kết nối này",
+        "body": "Quyền đã bị thu hồi, mật khẩu đã đổi hoặc việc cấp quyền đã hết hạn. Hãy kết nối lại để khôi phục; các lựa chọn của bạn được giữ nguyên.",
+        "bodyAccount": "Google đã ngừng chấp nhận {account}. Hãy kết nối lại để khôi phục; các lựa chọn của bạn được giữ nguyên."
+      },
+      "stats": {
+        "status": "Trạng thái",
+        "calendars": "Lịch",
+        "calendarsValue": "{count} khả dụng",
+        "calendarsNone": "không có",
+        "permissions": "Quyền",
+        "permissionsValue": "{granted} trên {total}",
+        "lastUsed": "Dùng lần cuối",
+        "never": "chưa bao giờ",
+        "live": "đang hoạt động",
+        "idle": "nhàn rỗi"
+      },
+      "account": {
+        "title": "Tài khoản đã kết nối",
+        "email": "Tài khoản",
+        "calendar": "Lịch dùng cho đặt hẹn và Meet",
+        "primaryCalendar": "Lịch chính của bạn",
+        "changeCalendar": "Đổi lịch",
+        "connectedAgo": "Đã kết nối {when}",
+        "none": "Chưa liên kết tài khoản Google nào.",
+        "noneBody": "Cho đến khi bạn kết nối, các bước Google trong luồng của bạn sẽ thất bại kèm thông báo yêu cầu kết nối Google, và các lịch hẹn sẽ không được thêm vào lịch."
+      },
+      "permissions": {
+        "title": "Google được dùng cho việc gì",
+        "intro": "Hãy chọn những gì bạn muốn cho phép. Google hiển thị đúng các quyền này trên màn hình của nó, và bạn có thể thêm quyền sau mà không mất những quyền đã cấp.",
+        "allowed": "Được phép",
+        "notAllowed": "Không được phép",
+        "allow": "Cho phép",
+        "restricted": "Bị Google hạn chế",
+        "restrictedNote": "Google coi quyền này là quyền bị hạn chế: nền tảng cần Google xét duyệt thì mới hoạt động với nhiều không gian làm việc. Hãy để tắt trừ khi bạn cần.",
+        "nothingTicked": "Hãy chọn ít nhất một quyền.",
+        "calendar": {
+          "name": "Lịch",
+          "body": "Thêm lịch đặt và liên kết Meet vào lịch của bạn và ẩn thời gian bận khỏi trang đặt lịch.",
+          "usedBy": "Lịch đặt hẹn, các bước Đặt lịch hẹn và Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Kiểm tra trường Google Sheet, Lưu liên hệ từ Google Sheet",
+          "body": "Thêm một hàng vào trang tính, tra cứu một hàng, kiểm tra một ô hoặc sao chép một hàng vào liên hệ."
+        },
+        "docs": {
+          "name": "Docs và Drive",
+          "body": "Sao chép một tài liệu mẫu, điền nội dung và chia sẻ bản sao bằng liên kết.",
+          "usedBy": "Bước Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Bước Google Form",
+          "body": "Đọc liên kết công khai của biểu mẫu để luồng gửi cho khách hàng, và đọc câu trả lời của biểu mẫu để luồng tiếp tục khi khách hàng điền xong."
+        },
+        "drive_listing": {
+          "name": "Danh sách tệp Drive",
+          "body": "Liệt kê trang tính, tài liệu và biểu mẫu của bạn theo tên để bạn chọn từ tài khoản trong trình tạo luồng và cài đặt đặt lịch. Cần cho mọi bộ chọn tệp.",
+          "usedBy": "Bộ chọn tệp trong trình tạo luồng và cài đặt đặt lịch"
+        }
+      },
+      "lastError": {
+        "title": "Sự cố gần nhất Google báo cáo",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google không còn chấp nhận tài khoản đã kết nối. Hãy kết nối lại.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Client Google của nền tảng bị thiếu hoặc đã tắt.",
+        "GOOGLE_API_NOT_ENABLED": "Dự án Google Cloud của nền tảng chưa bật một API mà tính năng này cần. Quản trị viên nền tảng phải bật nó.",
+        "GOOGLE_SCOPE_MISSING": "Một bước cần quyền mà tài khoản này chưa được cấp. Hãy thêm ở trên.",
+        "GOOGLE_RATE_LIMITED": "Google đang giới hạn yêu cầu. Các bước sẽ được thử lại sau ít phút.",
+        "GOOGLE_UNAVAILABLE": "Google không phản hồi. Hệ thống sẽ thử lại ở lần dùng tiếp theo.",
+        "other": "Google đã báo cáo một sự cố."
+      },
+      "usedBy": {
+        "title": "Được dùng bởi",
+        "book": "Bước Đặt lịch hẹn",
+        "meet": "Bước Google Meet",
+        "sheets": "Các bước Google Sheets",
+        "docs": "Bước Google Docs",
+        "forms": "Bước Google Form",
+        "flow": "luồng"
+      },
+      "disconnectConfirm": {
+        "title": "Ngắt kết nối Google?",
+        "body": "Đồng bộ lịch cho các lịch đặt và mọi bước Google trong luồng của bạn sẽ dừng cho đến khi bạn kết nối lại. Các sự kiện và tệp đã tạo vẫn nằm trong Google.",
+        "confirm": "Ngắt kết nối",
+        "cancel": "Giữ kết nối"
+      },
+      "disconnected": "Đã ngắt kết nối tài khoản Google.",
+      "failure": {
+        "notConfigured": "Google chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng của bạn.",
+        "generic": "Đã xảy ra lỗi. Hãy thử lại."
+      },
+      "privacy": {
+        "title": "Quyền riêng tư",
+        "body": "Chỉ các quyền bạn chọn mới được yêu cầu. Kết nối được lưu dưới dạng mã hóa, thuộc về không gian làm việc và chỉ được dùng bởi các tính năng liệt kê ở đây. Ngắt kết nối sẽ thu hồi nó tại Google."
+      }
+    },
+    "consent": {
+      "title": "Xác nhận kết nối Google",
+      "loading": "Đang tải kết nối Google của bạn...",
+      "question": "Kết nối {email} với {workspace} cho {permissions}?",
+      "permissions": "Quyền",
+      "notGiven": "chưa được cấp",
+      "missing": "Google không cấp: {permissions}. Nếu bạn xác nhận, chỉ những quyền đã được cấp mới được kết nối.",
+      "replaces": "Thao tác này sẽ thay thế tài khoản Google {email} đang được kết nối. Quyền truy cập của tài khoản cũ sẽ bị thu hồi.",
+      "onlyYou": "Chỉ người đã nhấn Kết nối mới có thể hoàn tất việc này, từ không gian làm việc này. Nếu ai đó gửi liên kết này cho bạn, đừng xác nhận: hãy đóng trang.",
+      "unknownAccount": "tài khoản Google này",
+      "confirm": "Xác nhận",
+      "cancel": "Hủy",
+      "working": "Đang xử lý...",
+      "failure": {
+        "notYours": "Kết nối Google này do người khác bắt đầu nên chưa được kết nối. Hãy nhờ họ tự kết nối.",
+        "expired": "Kết nối Google này đã quá hạn xác nhận. Hãy quay lại và nhấn Kết nối lần nữa.",
+        "used": "Kết nối Google này đã được xác nhận, hủy hoặc từ chối. Hãy quay lại và nhấn Kết nối lần nữa nếu bạn vẫn cần.",
+        "notFound": "Kết nối Google này không đang chờ xác nhận, hoặc thuộc về không gian làm việc khác.",
+        "generic": "Đã xảy ra lỗi và không có gì bị thay đổi. Vui lòng thử lại.",
+        "nothingConnected": "Chưa có gì được kết nối."
+      }
+    }
+  }
+}

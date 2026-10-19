@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Gizlilik",
+      "register": "DPDP kayıt defteri"
+    },
+    "page": {
+      "eyebrow": "Yönetici · Ekip · DPDP kayıt defteri",
+      "title": "DPDP kayıt defteri",
+      "disclaimer": "Platformun bugün DPDP Act ve DPDP Rules karşısında ne yaptığını izler. Bir uygunluk sertifikası değildir.",
+      "checkedAt": "Kontrol edildi: {time}",
+      "refresh": "Yenile"
+    },
+    "summary": {
+      "label": "Kayıt defteri özeti",
+      "counts": {
+        "title": "Duruma göre yükümlülükler",
+        "counted": "{total, plural, one {# yükümlülük sayıldı} other {# yükümlülük sayıldı}}",
+        "notCounted": "“Uygulanamaz” satırları listelenir ama sayılmaz."
+      },
+      "milestones": {
+        "title": "Yaklaşan tarihler",
+        "names": {
+          "consent_managers": "Rıza Yöneticisi kaydı (rule 4)",
+          "main_duties": "DPDP Rules’ın temel görevleri"
+        },
+        "left": "Yaklaşık {days, plural, =0 {0 gün} one {# gün} other {# gün}} kaldı",
+        "passed": "Bu tarih geçti"
+      },
+      "tiers": {
+        "title": "Ceza kademeleri",
+        "tier": "Ceza kademesi",
+        "hint": "Uygulanmayan, kısmen uygulanan veya doğrulanmamış yükümlülükler, geçerli ceza üst sınırına göre."
+      }
+    },
+    "status": {
+      "following": "Uygulanıyor",
+      "partial": "Kısmen",
+      "not_following": "Uygulanmıyor",
+      "unverified": "Doğrulanmadı",
+      "not_applicable": "Uygulanamaz"
+    },
+    "result": {
+      "pass": "Başarılı",
+      "fail": "Başarısız",
+      "unknown": "Bilinmiyor"
+    },
+    "source": {
+      "live": "Canlı okundu",
+      "attested": "Teyit edildi",
+      "code": "Kodda beyan edildi"
+    },
+    "filters": {
+      "label": "Duruma göre filtrele",
+      "all": "Tümü",
+      "shown": "{count, plural, one {# yükümlülük gösteriliyor} other {# yükümlülük gösteriliyor}}",
+      "empty": {
+        "title": "Hiçbir yükümlülük bu filtreyle eşleşmiyor",
+        "message": "Şu anda hiçbir yükümlülüğün bu durumu yok.",
+        "reset": "Tümünü göster"
+      }
+    },
+    "groups": {
+      "A": "Dayanaklar, bilgilendirme, rıza (ss4 to 7, rule 3)",
+      "B": "Haklar ve şikâyet (ss11 to 15, rule 14)",
+      "C": "Saklama ve silme (s8(7), (8), rule 8)",
+      "D": "Güvenlik (s8(4), (5), rule 6)",
+      "E": "Veri ihlali (s8(6), rule 7)",
+      "F": "Çocuklar (s9, rules 10 to 12, Dördüncü Çizelge)",
+      "G": "Aktarımlar ve veri işleyenler (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Önemli Veri Mütevellisi (s10, rule 13)",
+      "I": "Yönetişim ve yaptırım (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Çalışma alanı",
+      "platform": "Platform",
+      "both": "Çalışma alanı ve platform"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Ceza kademesi yok"
+    },
+    "item": {
+      "citation": "Yasal atıf",
+      "owner": "Sahip",
+      "penalty": "Ceza kademesi",
+      "plan": "Plan maddeleri",
+      "conditional": "Yalnızca duyurulmuşsa",
+      "checks": "Kontroller",
+      "noChecks": "Beyan edilen durum. Henüz hiçbir kontrol bunu okumuyor."
+    },
+    "check": {
+      "lapsed": "Süresi doldu",
+      "note": "Not:",
+      "evidence": "Kanıt bağlantısı"
+    },
+    "items": {
+      "r01": {
+        "title": "Kişisel verileri yalnızca rıza ile veya izin verilen bir kullanım için işlemek"
+      },
+      "r02": {
+        "title": "Rıza istemeden önce ayrı ve ayrıntılı bir bilgilendirme yapmak"
+      },
+      "r03": {
+        "title": "Kanun yürürlüğe girmeden önce rıza vermiş kişileri bilgilendirmek"
+      },
+      "r04": {
+        "title": "Bilgilendirmeyi ve rıza metnini İngilizce veya listedeki bir dilde sunmak"
+      },
+      "r05": {
+        "title": "Özgür, belirli, bilgilendirilmiş ve açık bir rıza almak"
+      },
+      "r06": {
+        "title": "Her rıza talebinde bir iletişim kişisi göstermek"
+      },
+      "r07": {
+        "title": "Rızanın geri alınmasını, verilmesi kadar kolay kılmak"
+      },
+      "r08": {
+        "title": "Rıza geri alındığında işlemeyi durdurmak ve veri işleyenleri de durdurmak"
+      },
+      "r09": {
+        "title": "Bilgilendirmeyi ve rızayı kanıtlayabilmek"
+      },
+      "r10": {
+        "title": "Gönüllü verilen verileri yalnızca belirtilen amaç için kullanmak"
+      },
+      "r11": {
+        "title": "Rıza Yöneticisi aracılığıyla verilen veya geri alınan rızayı kabul etmek"
+      },
+      "r12": {
+        "title": "Her giden gönderimi, gönderim anındaki rızaya bağlamak"
+      },
+      "r13": {
+        "title": "Tutulan verileri, işlemeyi ve kimlerin aldığını özetlemek"
+      },
+      "r14": {
+        "title": "Kişisel verileri talep üzerine düzeltmek, tamamlamak ve güncellemek"
+      },
+      "r15": {
+        "title": "Amaç veya kanun için gerekmedikçe talep üzerine silmek"
+      },
+      "r16": {
+        "title": "Yayımlanmış bir şikâyet mekanizması işletmek ve 90 gün içinde yanıtlamak"
+      },
+      "r17": {
+        "title": "Kişilerin ölüm veya ehliyetsizlik halinde adına hareket edecek birini atamasına izin vermek"
+      },
+      "r18": {
+        "title": "Talebin nasıl yapılacağını ve hangi tanımlayıcının gerektiğini yayımlamak"
+      },
+      "r19": {
+        "title": "Bir iletişim noktası yayımlamak ve her yanıta eklemek"
+      },
+      "r20": {
+        "title": "Kimliği doğrulamak, hız sınırı uygulamak ve hak taleplerini denetlemek"
+      },
+      "r21": {
+        "title": "Kararları yönlendiren verileri doğru ve eksiksiz tutmak"
+      },
+      "r22": {
+        "title": "Platformun kendi personelinin, faturalama kişilerinin ve ziyaretçilerin haklarına uymak"
+      },
+      "r23": {
+        "title": "Rıza geri alındığında veya amaç bittiğinde verileri silmek"
+      },
+      "r24": {
+        "title": "Etkin olmayan verileri üç yıl sonra, 48 saat önceden bildirerek silmek"
+      },
+      "r25": {
+        "title": "Kişisel verileri ve günlükleri en az bir yıl saklamak"
+      },
+      "r26": {
+        "title": "Çalışma alanlarının etkinsizlik yaşam döngüsünü yürütmek"
+      },
+      "r27": {
+        "title": "Verileri şifreleme, maskeleme veya jetonlarla korumak"
+      },
+      "r28": {
+        "title": "Bilgisayar kaynaklarına erişimi denetlemek"
+      },
+      "r29": {
+        "title": "Kişisel verilere erişimi günlüğe kaydedip izlemek"
+      },
+      "r30": {
+        "title": "Bir kayıptan sonra işleme sürebilsin diye verileri yedeklemek"
+      },
+      "r31": {
+        "title": "Olayları tespit edip araştırmak için günlükleri bir yıl saklamak"
+      },
+      "r32": {
+        "title": "Her veri işleyen sözleşmesinde bir güvenlik maddesi bulundurmak"
+      },
+      "r33": {
+        "title": "Mevcut güvenlik önlemlerini gösterebilmek"
+      },
+      "r34": {
+        "title": "Genel olarak makul güvenlik önlemlerini sürdürmek"
+      },
+      "r35": {
+        "title": "Kişi metnini üçüncü taraflara gönderen yapay zekâ yollarını denetlemek"
+      },
+      "r36": {
+        "title": "Bir ihlalden etkilenen her kişiyi gecikmeden bilgilendirmek"
+      },
+      "r37": {
+        "title": "Bir ihlali Veri Koruma Kurulu’na bildirmek, ardından 72 saat içinde rapor vermek"
+      },
+      "r38": {
+        "title": "Veri işleyen olarak, bir ihlali çalışma alanına yeterince hızlı bildirmek"
+      },
+      "r39": {
+        "title": "Bir çocuğun verilerini işlemeden önce doğrulanabilir ebeveyn rızası almak"
+      },
+      "r40": {
+        "title": "Çocuklar için izleme, davranışsal takip veya hedefli reklam yapmamak"
+      },
+      "r41": {
+        "title": "Çocuk verisi yükümlülükleri için Dördüncü Çizelge muafiyetlerini uygulamak"
+      },
+      "r42": {
+        "title": "Hükümetin verilerin yurt dışına aktarımına getirdiği sınırlara uymak"
+      },
+      "r43": {
+        "title": "Veri işleyenlerin yaptıklarından sorumlu kalmak"
+      },
+      "r44": {
+        "title": "Önemli Veri Mütevellisi yükümlülüklerini yerine getirmek, yalnızca duyurulmuşsa"
+      },
+      "r45": {
+        "title": "Bir Veri Koruma Kurulu soruşturması için altı ay içinde kanıt sunmak"
+      },
+      "r46": {
+        "title": "Platformun kendi bildirimlerini, koşulların kabulünü ve çerez tercihini sürdürmek"
+      },
+      "r47": {
+        "title": "Bir platform iletişim noktası ve şikâyet yolu belirlemek"
+      }
+    },
+    "details": {
+      "probe_error": "Bu şu anda okunamadı, bu yüzden sonuç bilinmiyor.",
+      "probe_missing": "Bu kontrol için hiçbir okuma gelmedi.",
+      "env_missing": "{key} ayarlanmamış, bu yüzden okunamadı.",
+      "attestation_missing": "Henüz kimse bunu kaydetmedi.",
+      "attestation_expired": "{name} tarafından {date} tarihinde kaydedilen beyanın süresi {expires} tarihinde doldu. Artık sayılmıyor.",
+      "attested_pass": "{name} tarafından {date} tarihinde yürürlükte olarak kaydedildi. {expires} tarihine kadar geçerli.",
+      "attested_fail": "{name} tarafından {date} tarihinde yürürlükte değil olarak kaydedildi. {expires} tarihine kadar geçerli.",
+      "code_declared": "Kodda beyan edilmiş, çalışma zamanında ölçülmemiş. Açığı kapatan değişiklik bunu günceller.",
+      "unrecognised": "Bu konsolun bu sonuç için henüz bir açıklaması yok ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Süper yöneticiler iki faktörlü kimlik doğrulamayla giriş yapmalı",
+        "details": {
+          "mfa_on": "Süper yöneticiler için iki faktörlü giriş zorunlu.",
+          "mfa_off": "Zorunlu değil: süper yöneticiler ikinci faktör olmadan giriş yapabilir."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Çalışma alanı yöneticileri iki faktörlü kimlik doğrulamayla giriş yapmalı",
+        "details": {
+          "mfa_on": "Çalışma alanı yöneticileri için iki faktörlü giriş zorunlu.",
+          "mfa_off": "Zorunlu değil: çalışma alanı yöneticileri ikinci faktör olmadan giriş yapabilir."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Denetim günlüğü en az bir yıl saklanır",
+        "details": {
+          "retention_ok": "{days, plural, one {# gün} other {# gün}} saklanıyor.",
+          "retention_unlimited": "Hiç temizlenmiyor (0 gün), bu yüzden en az bir yıl saklanıyor.",
+          "retention_below_floor": "Yalnızca {days, plural, one {# gün} other {# gün}} saklanıyor; DPDP Rules en az 365 ister."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Sona eren oturumlar en az bir yıl saklanır",
+        "details": {
+          "retention_ok": "Sona eren oturumlar {days, plural, one {# gün} other {# gün}} sonra temizlenir.",
+          "retention_below_floor": "Sona eren oturumlar {days, plural, one {# gün} other {# gün}} sonra temizleniyor; bu, DPDP Rules’ın istediği 365’in altında."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis parola ister veya TLS kullanır",
+        "details": {
+          "redis_auth_on": "Yapılandırılan Redis adresi parola içeriyor veya TLS kullanıyor.",
+          "redis_auth_off": "Yapılandırılan Redis adresinde parola yok ve TLS kullanılmıyor."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "Anahtar halkasında önceki şifreleme anahtarı kalmadı",
+        "details": {
+          "rotation_complete": "Önceki anahtar yapılandırılmamış.",
+          "previous_keys_present": "Önceki anahtarlar hâlâ yapılandırılmış, bu yüzden anahtar döndürme bitmedi."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Çalışma alanı etkinsizlik yaşam döngüsü çalışıyor",
+        "details": {
+          "lifecycle_on": "Etkin, deneme çalıştırması değil ve silme açık.",
+          "lifecycle_off": "{enabled, select, true {Etkin} other {Devre dışı}}, {dryRun, select, true {deneme çalıştırması açık} other {deneme çalıştırması kapalı}}, {deleteEnabled, select, true {silme açık} other {silme kapalı}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Hata raporları Hindistan’da kalır veya kapalıdır",
+        "details": {
+          "sentry_off": "API sunucusunda hata raporlama kapalı.",
+          "region_india": "Hata raporları sağlayıcının bir Hindistan bölgesine gidiyor.",
+          "region_outside_india": "Hata raporları sağlayıcının Hindistan dışındaki {region} bölgesine gidiyor.",
+          "region_unrecognised": "Hata raporlama adresi bilinen bir bölgesel adres değil, bu yüzden ülkesi belirlenemiyor.",
+          "region_unrecognised_host": "Hata raporları {host} adresine gidiyor; bu bilinen bir bölgesel adres değil, bu yüzden ülkesi belirlenemiyor."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Platform yapay zekâ anahtarı yapılandırılmamış",
+        "details": {
+          "no_platform_key": "Hiçbir yapay zekâ sağlayıcısı için platform anahtarı yapılandırılmamış.",
+          "platform_key_set": "Şunlar için platform anahtarı yapılandırılmış: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Yeni çalışma alanları pazarlama rızası zorunlu olarak başlar",
+        "details": {
+          "default_opt_in": "Yeni çalışma alanları pazarlama için kayıtlı rıza zorunlu olarak başlar.",
+          "default_opt_out": "Yeni çalışma alanları pazarlama için kayıtlı rıza zorunlu olmadan başlar.",
+          "default_opt_in_counts": "Yeni çalışma alanları pazarlama için kayıtlı rıza zorunlu olarak başlar. Şu anda {total, number} çalışma alanından {on, number} tanesi bunu zorunlu tutuyor.",
+          "default_opt_out_counts": "Yeni çalışma alanları pazarlama için kayıtlı rıza zorunlu olmadan başlar. Şu anda {total, number} çalışma alanından {on, number} tanesi bunu zorunlu tutuyor."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Barındırma sağlayıcısı, bölge ve veri konumları yazılı olarak belgelenmiş"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Disk birimi ve nesne depolama şifrelemesinin kanıtı dosyada"
+      },
+      "backup_offsite_configured": {
+        "title": "Nesne depolamayı da kapsayan mühürlü bir harici yedekleme çalışıyor"
+      },
+      "backup_restore_drill": {
+        "title": "Son altı ayda bir geri yükleme tatbikatı yapıldı"
+      },
+      "security_pentest_report": {
+        "title": "Açık kritik bulgusu olmayan bir harici sızma testi raporu dosyada"
+      },
+      "legal_counsel_engaged": {
+        "title": "Hindistan veri koruma hukuku danışmanı görevlendirilmiş"
+      },
+      "legal_vendor_dpas": {
+        "title": "Kişisel veri tutan alt veri işleyenlerle imzalanmış DPA’lar dosyada"
+      },
+      "governance_contacts_named": {
+        "title": "Gizlilik iletişim kişisi, olay sorumlusu ve şikâyet sorumlusu belirlenmiş ve yayımlanmış"
+      },
+      "pii_column_encryption": {
+        "title": "Kişinin telefonu, e-postası ve mesaj gövdesi sütun bazında şifreli"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Ayrıcalıklı veritabanı ayarı bir oturumdan değiştirilemez"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Silme, geçmişi ve günlükleri silmeden önce bir yıl saklar"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Güvenlik kontrolleri CI’da zamanlanmış olarak çalışır"
+      },
+      "ai_workspace_switch": {
+        "title": "Çalışma alanları, kişi metnini bir sağlayıcıya gönderen yapay zekâ yollarını kapatabilir"
+      },
+      "transfer_country_killswitch": {
+        "title": "Her sağlayıcının bir ülke etiketi vardır ve bir ülke devre dışı bırakılabilir"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "Bir çalışma alanının DPA kabulü sürüm ve zamanla kaydedilir"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Amaç kayıt defteri, Act’in rıza ve section 7 kullanımlarını esas alır"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Çalışma alanından ayrılırken dışa aktarma ve dosya temizliği hayata geçirilmiş"
+      },
+      "evidence_board_pack": {
+        "title": "Veri Koruma Kurulu soruşturmasına hazır kanıt paketi hayata geçirilmiş"
+      },
+      "grievance_intake_built": {
+        "title": "Şikâyet alımı hayata geçirilmiş"
+      }
+    },
+    "attest": {
+      "action": "Teyit et",
+      "actionFor": "Teyit et: {check}",
+      "title": "Bir beyan kaydet",
+      "intro": "Bunun bugün doğru olup olmadığını kaydedin. Süresi dolana kadar sayılır, sonra kontrol bilinmiyor durumuna döner. Her beyan geçmişte kalır.",
+      "result": {
+        "label": "Sonuç",
+        "pass": "Yürürlükte (başarılı)",
+        "fail": "Yürürlükte değil (başarısız)"
+      },
+      "note": {
+        "label": "Not",
+        "hint": "Neyi kontrol ettiğiniz ve kanıtın nerede olduğu. En az {min} karakter."
+      },
+      "evidence": {
+        "label": "Kanıt bağlantısı (isteğe bağlı)",
+        "hint": "Belgeye veya talebe giden bir https bağlantısı.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Geçerlilik süresi (gün)",
+        "hint": "{min} ile {max} gün arası. Sonrasında kontrol bilinmiyor durumuna döner."
+      },
+      "problems": {
+        "noteShort": "En az {min} karakter yazın.",
+        "noteLong": "Notu {max, number} karakterin altında tutun.",
+        "link": "Tam bir https bağlantısı kullanın veya boş bırakın.",
+        "range": "{min} ile {max} arasında tam sayı olarak gün girin."
+      },
+      "submit": "Beyanı kaydet",
+      "saving": "Kaydediliyor",
+      "cancel": "İptal",
+      "saved": "Beyan kaydedildi."
+    },
+    "history": {
+      "action": "Geçmiş",
+      "actionFor": "Geçmiş: {check}",
+      "title": "Geçmiş",
+      "empty": "Bu kontrol için henüz bir şey kaydedilmedi.",
+      "validUntil": "{date} tarihine kadar geçerli",
+      "close": "Kapat"
+    },
+    "errors": {
+      "forbidden": "Bunu yapmaya yetkiniz yok.",
+      "request": "Bu istek tamamlanamadı.",
+      "unexpected": "Bizim tarafımızda bir şeyler ters gitti. Birazdan tekrar deneyin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin.",
+      "validation": "Bazı değerler geçersiz. Vurgulanan alanları kontrol edin.",
+      "notFound": "Bu öğe artık yok."
+    }
+  }
+}

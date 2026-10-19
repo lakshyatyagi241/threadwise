@@ -233,6 +233,10 @@ for (const k of [
   'landing_page_enabled',
   'landing_page_title',
   'landing_page_description',
+  'landing_page_heading',
+  'landing_page_sub_heading',
+  'landing_page_button_text',
+  'landing_page_button_link',
 ])
   CONFIG_FIELDS[k] = `drop:${NOT_PRESENT} (the key name is listed in CONFIG_NOT_PRESENT)`;
 CONFIG_FIELDS.ai_configuration =
@@ -560,9 +564,12 @@ export const widgets: HandlerSpec = {
     chatbot_widgets: {
       columns: [
         c('assistant_id', 'bigint'),
+        c('flow_id', 'bigint'),
+        c('customized_at', 'timestamptz'),
         c('name', 'text'),
         c('slug', 'text'),
         c('embed_token', 'text'),
+        c('legacy_embed_id', 'text'),
         c('mode', 'text'),
         c('target_whatsapp_cc', 'text'),
         c('target_whatsapp_number', 'text'),
@@ -597,6 +604,8 @@ export const widgets: HandlerSpec = {
       constants: WIDGET_CONSTANTS,
       liveColumns: [
         'assistant_id',
+        'flow_id',
+        'customized_at',
         'name',
         'slug',
         'embed_token',
@@ -639,6 +648,7 @@ export const widgets: HandlerSpec = {
       return w.verdict.kind === 'load'
         ? NOT_PLANNED
         : { kind: w.verdict.kind, code: w.verdict.code, reason: w.verdict.reason };
+    const flow = ctx.ref('flow_bots', w.botId);
     let assistantId: number | null = null;
     if (w.assistant) {
       const ref = ctx.ref('widget_assistants', w.botId);
@@ -652,7 +662,24 @@ export const widgets: HandlerSpec = {
     }
     return {
       kind: 'rows',
-      rows: [{ table: 'chatbot_widgets', sub: '', row: { ...w.row, assistant_id: assistantId } }],
+      rows: [
+        {
+          table: 'chatbot_widgets',
+          sub: '',
+          // the widget belongs to the flow the bot became: the Customize tab of the bot reads its button by flow_id, so a widget
+          // without it is invisible there and the tab opens on the defaults of a new bot. A person configured this look at the
+          // source, so it counts as customized (no "not set up yet" reminder, Deploy and Publish are not locked behind a first save).
+          // A bot with no flow (a website chat bot) keeps flow_id NULL: it is a stand-alone widget.
+          row: {
+            ...w.row,
+            // the old embed snippet carries the bot id: wgt_legacy_lookup resolves it to this widget
+            legacy_embed_id: /^[A-Za-z0-9_-]{1,64}$/.test(w.botId) ? w.botId : null,
+            assistant_id: assistantId,
+            flow_id: flow && flow.table === 'flows' ? flow.id : null,
+            customized_at: flow && flow.table === 'flows' ? w.row.updated_at : null,
+          },
+        },
+      ],
       soft: w.soft,
     };
   },

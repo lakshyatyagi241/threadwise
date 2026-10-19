@@ -53,7 +53,9 @@
           "crm_required_unbound": "Une propriété requise par votre espace de travail n’est pas dans le formulaire.",
           "no_contact_point": "Ajoutez un champ e-mail ou téléphone lié au contact, afin que chaque réponse puisse être associée à une personne.",
           "payment_no_gateway": "Connectez une passerelle de paiement capable de créer des liens de paiement, ou désactivez le paiement.",
-          "captcha_not_configured": "Le CAPTCHA est réglé sur « toujours actif », mais la plateforme n'a pas de CAPTCHA. Choisissez un autre réglage ou demandez à l'administrateur de votre plateforme d'en ajouter un."
+          "captcha_not_configured": "Le CAPTCHA est réglé sur « toujours actif », mais la plateforme n'a pas de CAPTCHA. Choisissez un autre réglage ou demandez à l'administrateur de votre plateforme d'en ajouter un.",
+          "age_gate_field_missing": "La vérification de l'âge a besoin de sa question : ajoutez un champ de date de naissance ou d'âge, ou choisissez plutôt la case.",
+          "age_gate_field_not_required": "La question sur laquelle se base la vérification de l'âge doit être obligatoire."
         },
         "code": {
           "no_fields": "Ajoutez au moins un champ.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "Votre espace de travail exige la propriété CRM « {property} » : ajoutez-la au formulaire et marquez-la comme obligatoire.",
           "crm_required_optional": "Un champ lié à une propriété CRM obligatoire doit être obligatoire.",
           "redirect_not_https": "L’adresse de redirection doit commencer par https://.",
-          "too_large": "Le formulaire est trop volumineux. Supprimez certains champs."
+          "too_large": "Le formulaire est trop volumineux. Supprimez certains champs.",
+          "age_gate_field_missing": "La vérification de l'âge a besoin de sa question : ajoutez un champ de date de naissance ou d'âge, ou choisissez plutôt la case.",
+          "age_gate_field_optional": "La question sur laquelle se base la vérification de l'âge doit être obligatoire."
         }
       },
       "versionsTitle": "Versions",

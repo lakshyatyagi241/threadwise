@@ -19,7 +19,8 @@
       "googleCalendar": "Google 캘린더",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "플로우 빌더"
+      "flowBuilder": "플로우 빌더",
+      "microsoftCalendar": "Microsoft 캘린더"
     },
     "hub": {
       "kicker": "관리자 - 프로젝트 설정",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "엔드포인트",
-            "hint": "Spaces, R2, MinIO에 필요합니다. 끝에 붙은 /bucket은 제거됩니다.",
-            "placeholder": "https://… (Spaces / R2 / MinIO에 필요, Wasabi 및 Bunny는 자동)"
+            "hint": "Spaces, R2에 필요합니다. 끝에 붙은 /bucket은 제거됩니다.",
+            "placeholder": "https://… (Spaces / R2에 필요, Wasabi 및 Bunny는 자동)"
           },
           "cdnUrl": {
             "label": "공개 / CDN URL (선택)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "경로 스타일 엔드포인트 사용 (MinIO / 일부 S3 호환 스토어)"
+            "label": "경로 스타일 엔드포인트 사용 (일부 S3 호환 스토어)"
           },
           "storageZone": {
             "label": "스토리지 존",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 호환"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "비공개 (서명된 URL)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google 캘린더",
-        "description": "모든 워크스페이스가 캘린더를 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
+        "description": "모든 워크스페이스가 캘린더, Sheets, Docs, Forms를 위해 Google 계정을 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
         "sections": {
           "oauth": {
             "title": "Google OAuth 클라이언트"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "워크스페이스의 Google 캘린더 연결 허용",
-            "hint": "끄면 어떤 워크스페이스도 연결할 수 없으며, 캘린더에 쓰거나 읽지 않습니다."
+            "label": "워크스페이스의 Google 연결 허용",
+            "hint": "끄면 어떤 워크스페이스도 연결할 수 없으며, Google(캘린더, Sheets, Docs, Forms)에서 읽거나 쓰지 않습니다."
           },
           "clientId": {
             "label": "클라이언트 ID",
@@ -1024,6 +1024,37 @@
             "advanced": "고급만"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 캘린더",
+        "description": "모든 워크스페이스가 Outlook 또는 Microsoft 365 캘린더를 연결할 때 사용하는 Microsoft 앱입니다.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 앱"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "워크스페이스의 Outlook 연결 허용",
+            "hint": "끄면 어떤 워크스페이스도 연결할 수 없고, 어떤 Outlook 캘린더에서도 읽거나 기록하지 않습니다. 이미 연결된 캘린더는 유지됩니다."
+          },
+          "clientId": {
+            "label": "애플리케이션(클라이언트) ID",
+            "hint": "Microsoft Entra 관리 센터의 앱 등록, 개요에서 확인할 수 있습니다. 비워 두면 MICROSOFT_CALENDAR_CLIENT_ID를 사용합니다."
+          },
+          "clientSecret": {
+            "label": "클라이언트 시크릿",
+            "hint": "암호화되어 저장되며 다시 표시되지 않습니다. 비워 두면 저장된 값을 유지하고, MICROSOFT_CALENDAR_CLIENT_SECRET이 대체값으로 사용됩니다."
+          },
+          "tenant": {
+            "label": "테넌트",
+            "hint": "common은 회사, 학교, 개인 계정을 모두 허용합니다. 단일 테넌트 앱이라면 디렉터리(테넌트) ID를 사용하세요. 비워 두면 MICROSOFT_CALENDAR_TENANT를 사용하고, 그것도 없으면 common을 사용합니다."
+          },
+          "redirectUri": {
+            "label": "리디렉션 URI 재정의",
+            "hint": "위에 표시된 주소를 사용하려면 비워 두세요. 앱에 등록된 리디렉션 URI와 정확히 일치해야 합니다."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "클라우드 스토리지",
-        "description": "고객 미디어를 Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 또는 MinIO의 자체 버킷으로 보냅니다.",
+        "description": "고객 미디어를 Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2의 자체 버킷으로 보냅니다.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google 캘린더",
-        "description": "워크스페이스가 예약 및 바쁜 시간 확인을 위해 캘린더를 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
-        "tags": "Google / OAuth / 캘린더"
+        "description": "워크스페이스가 예약, Sheets, Docs, Forms를 위해 Google 계정을 연결할 때 사용하는 Google OAuth 클라이언트입니다.",
+        "tags": "Google / OAuth / 캘린더 / Sheets"
       },
       "googleMail": {
         "title": "Gmail 이메일",
@@ -1151,6 +1182,11 @@
         "title": "플로우 빌더",
         "description": "모든 워크스페이스의 기본 플로우 빌더입니다: 단계별 간편 빌더 또는 고급 캔버스. 워크스페이스에서 재정의할 수 있습니다.",
         "tags": "간편 / 고급 / 자동화"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 캘린더",
+        "description": "워크스페이스가 예약을 위해 Outlook 및 Microsoft 365 캘린더를 연결할 때 사용하는 Microsoft 앱입니다.",
+        "tags": "Microsoft / OAuth / Outlook / 캘린더"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Bunny 필드(스토리지 존과 비밀번호)를 사용하세요. 리전은 존 리전(de, ny, la 등)입니다."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 필드를 입력하고 엔드포인트 URL을 붙여 넣으세요. MinIO는 경로 스타일을 체크하세요."
+              "title": "Spaces / R2",
+              "body": "S3 필드를 입력하고 엔드포인트 URL을 붙여 넣으세요."
             },
             "test": {
               "title": "항상 먼저 테스트하세요",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google 캘린더",
         "eyebrow": "관리자 - 예약",
-        "description": "플랫폼 전체에서 사용하는 Google Cloud OAuth 클라이언트 하나입니다. 이후 각 워크스페이스는 예약 > 설정에서 자체 Google 계정을 연결하며, 워크스페이스에는 클라이언트 ID나 시크릿이 표시되지 않습니다.",
+        "description": "플랫폼 전체에서 사용하는 Google Cloud OAuth 클라이언트 하나입니다. 이후 각 워크스페이스는 설정의 Google 계정에서 자체 Google 계정을 연결하고 부여할 권한을 선택하며, 워크스페이스에는 클라이언트 ID나 시크릿이 표시되지 않습니다.",
         "sections": {
           "oauth": {
             "title": "Google OAuth 클라이언트",
-            "description": "클라이언트 ID와 시크릿이 없으면 워크스페이스에서 Google 캘린더를 사용할 수 없으며, 예약은 캘린더 없이 계속 진행됩니다."
+            "description": "클라이언트 ID와 시크릿이 없으면 워크스페이스에서 Google을 사용할 수 없고, 예약은 캘린더 없이 계속 진행되며 플로우의 Google 단계는 건너뜁니다."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. 프로젝트 및 API",
-              "body": "Google Cloud 콘솔에서 프로젝트를 만들고 Google Calendar API를 사용 설정하세요."
+              "body": "Google Cloud 콘솔에서 프로젝트를 만들고 Google Calendar, Google Sheets, Google Docs, Google Drive, Google Forms API를 사용 설정하세요. 권한은 해당 API가 사용 설정되어 있어야만 작동합니다."
             },
             "redirect": {
               "title": "2. OAuth 클라이언트",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. 동의 화면",
-              "body": "calendar.events, calendar.freebusy, calendar.calendarlist.readonly 범위를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다."
+              "body": "제품이 요청하는 범위(calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly)를 추가한 뒤 앱을 게시하세요. 테스트 상태에서는 Google이 7일 후 모든 권한 부여를 종료하므로 워크스페이스를 다시 연결해야 합니다. Drive 범위는 제한 범위이며 Google의 검토가 필요합니다."
             },
             "workspaces": {
               "title": "4. 워크스페이스 연결",
-              "body": "여기에 클라이언트 ID와 시크릿을 붙여 넣고 저장하세요. 그런 다음 관리자는 예약 > 설정 > Google 캘린더에서 연결합니다."
+              "body": "여기에 클라이언트 ID와 시크릿을 붙여 넣고 저장하세요. 그런 다음 관리자는 설정 > 통합 > Google 계정 또는 예약 > 설정 > Google 캘린더에서 연결합니다."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "이미 있는 플로우",
               "body": "이 설정을 변경해도 플로우가 변경되거나 삭제되지는 않습니다. 플로우는 계속 작동하며, 현재 켜진 빌더에서 열릴 뿐입니다. 직접 빌더를 선택한 워크스페이스는 플랫폼 기본값을 다시 선택할 때까지 그 빌더를 유지합니다."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 캘린더",
+        "eyebrow": "Admin - 예약",
+        "description": "플랫폼 전체에서 하나의 Microsoft Entra 앱을 사용합니다. 각 워크스페이스는 예약, 설정에서 자신의 Outlook 또는 Microsoft 365 캘린더를 연결하며, 클라이언트 ID나 시크릿은 볼 수 없습니다.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 앱",
+            "description": "클라이언트 ID와 시크릿이 없으면 워크스페이스에서 Outlook은 사용할 수 없음으로 표시되고, 예약은 Outlook 없이 계속 진행됩니다. Google Calendar에는 영향이 없습니다."
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra에서 설정하기",
+          "items": {
+            "registration": {
+              "title": "1. 앱 등록",
+              "body": "Microsoft Entra 관리 센터에서 모든 조직 디렉터리의 계정과 개인 Microsoft 계정을 지원하는 앱 등록을 만들고, 애플리케이션(클라이언트) ID를 복사하여 여기에 입력하세요. 더 좁은 옵션을 선택한 경우가 아니라면 테넌트는 common으로 두세요."
+            },
+            "redirect": {
+              "title": "2. 리디렉션 URI와 시크릿",
+              "body": "이 페이지에 표시된 리디렉션 URI를 웹 리디렉션으로 추가한 다음, 인증서 및 비밀에서 클라이언트 시크릿을 만들고 그 값을 여기에 붙여 넣으세요. 만료일을 기록해 두세요. 만료일이 지나면 새 시크릿을 저장할 때까지 모든 워크스페이스의 캘린더가 작동하지 않습니다."
+            },
+            "permissions": {
+              "title": "3. API 권한",
+              "body": "위임된 Microsoft Graph 권한 Calendars.ReadWrite, User.Read, offline_access만 추가하고 다른 권한은 추가하지 마세요. 일반 사용을 위해서는 게시자 확인을 완료하세요. 고객 테넌트에서는 관리자의 앱 승인이 필요할 수도 있습니다."
+            },
+            "workspaces": {
+              "title": "4. 워크스페이스 연결",
+              "body": "클라이언트 ID와 시크릿을 여기에 붙여 넣고 저장하세요. 그러면 관리자가 예약, 설정에서 연결할 수 있습니다."
             }
           }
         }

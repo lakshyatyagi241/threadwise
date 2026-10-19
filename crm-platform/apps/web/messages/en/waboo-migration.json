@@ -27,7 +27,7 @@
       "eyebrow": "Admin / System / Migration",
       "title": "Waboo migration",
       "description": "Move Waboo organizations into WaDesk with the existing migration pipeline, now or at a chosen time, and follow each one from here.",
-      "banner": "This panel never connects WhatsApp and never writes to Waboo. Run a dry run first: a migration is only allowed after a green dry run for the same organization from the last 24 hours. Organizations run one after another.",
+      "banner": "This panel never connects WhatsApp and never writes to Waboo. A migration always starts with its own full rehearsal that writes nothing, and stops before loading anything if the rehearsal is not clean. Organizations run one after another.",
       "superOnly": "Only a super admin can run migrations.",
       "tabSingle": "One organization",
       "tabBulk": "Bulk"
@@ -35,8 +35,8 @@
     "form": {
       "title": "Start a run",
       "org": "Organization ID",
-      "orgHint": "The Waboo organization (workspace) id, which is the Waboo database name. Letters, digits and underscore.",
-      "orgInvalid": "Use letters, digits or underscore (up to 128).",
+      "orgHint": "The Waboo organization (workspace) id, which is the Waboo database name. Letters, digits, underscore and plus sign.",
+      "orgInvalid": "Use letters, digits, underscore or plus sign (up to 128).",
       "derived": "Client key: {client} (derived from the id).",
       "dryRun": "Dry run",
       "dryRunning": "Starting",
@@ -44,13 +44,13 @@
       "migrate": "Migrate",
       "scheduleMigrate": "Schedule migration",
       "catchUp": "Catch up",
-      "migrateHint": "Enabled only when the latest dry run for this organization is green and under 24 hours old.",
+      "migrateHint": "Migrate starts with a full rehearsal and loads nothing if it is not clean. A separate dry run is optional.",
       "queued": "Run queued.",
       "scheduled": "Run scheduled."
     },
     "confirm": {
       "title": "Migrate {org}",
-      "body": "This loads organization {org} into WaDesk. It cannot be stopped once it starts, and it is checked again against the latest dry run right before it begins. Type the organization id to confirm.",
+      "body": "This loads organization {org} into WaDesk. It starts with a full rehearsal and loads nothing if that is not clean; once the load itself starts it cannot be stopped. Type the organization id to confirm.",
       "label": "Type {org} to confirm",
       "cancel": "Cancel",
       "submit": "Migrate",
@@ -74,13 +74,13 @@
       "dryAll": "Dry-run all",
       "dryRunning": "Starting",
       "migrateAll": "Migrate all",
-      "migrateHint": "Enabled only when every organization has a green dry run from the last 24 hours.",
+      "migrateHint": "Each organization starts with its own full rehearsal and loads nothing if it is not clean. A separate dry run is optional.",
       "queued": "Batch queued.",
       "scheduled": "Batch scheduled."
     },
     "bulkConfirm": {
       "title": "Migrate {count} organizations",
-      "body": "This loads {count} organizations into WaDesk, one after another. Each one is checked again against its latest dry run right before it starts, and is skipped if that is no longer green. Type the number of organizations to confirm.",
+      "body": "This loads {count} organizations into WaDesk, one after another. Each one starts with its own full rehearsal and loads nothing if that is not clean; once a load starts it cannot be stopped. Type the number of organizations to confirm.",
       "label": "Type {count} to confirm",
       "cancel": "Cancel",
       "submit": "Migrate all"

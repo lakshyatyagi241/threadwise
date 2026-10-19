@@ -34,7 +34,8 @@
         "too_long": "最多输入 {max} 个字符。",
         "pattern": "格式不符合要求。",
         "invalid_option": "请选择列出的选项之一。",
-        "invalid_amount": "请输入允许范围内的金额。"
+        "invalid_amount": "请输入允许范围内的金额。",
+        "guardian_required": "请填写父母或监护人的姓名,以及电子邮件地址或电话号码。"
       },
       "closedTitle": "此表单已关闭",
       "payTitle": "还差一步",
@@ -58,7 +59,16 @@
         "tryAgain": "重新支付",
         "missingTitle": "找不到此笔付款",
         "missingBody": "链接可能有误或已过旧。"
-      }
+      },
+      "termsOfService": "条款",
+      "ageDeclaration": "我确认我至少 {age} 岁",
+      "ageBlockedTitle": "我们无法继续",
+      "ageBlockedBody": "感谢您的关注。我们无法接受此次提交。",
+      "guardianTitle": "父母或监护人",
+      "guardianIntro": "请填写父母或监护人的信息。",
+      "guardianName": "姓名",
+      "guardianEmail": "电子邮件",
+      "guardianPhone": "电话"
     }
   }
 }

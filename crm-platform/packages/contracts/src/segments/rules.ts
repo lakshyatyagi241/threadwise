@@ -40,7 +40,10 @@ export const SEGMENT_FIELD_KINDS = [
 ] as const;
 export type SegmentFieldKind = (typeof SEGMENT_FIELD_KINDS)[number];
 
-/** The contact's own fields a rule can use. Anything else must be `custom.<key>`. */
+/**
+ * The contact's own fields a rule can use. Anything else must be `custom.<key>` (a contact property) or `company.<key>` (a property
+ * of the company the contact belongs to).
+ */
 export const SEGMENT_BUILTIN_FIELDS = {
   name: 'text',
   email: 'text',
@@ -48,6 +51,8 @@ export const SEGMENT_BUILTIN_FIELDS = {
   /** The dial code stored on the contact (`+91`): what "country" means for a WhatsApp number. */
   countryCode: 'text',
   source: 'text',
+  /** The contact's own IANA time zone (BL-193), e.g. `Asia/Kolkata`. */
+  timezone: 'text',
   leadScore: 'number',
   lifecycleStage: 'option',
   status: 'option',
@@ -56,6 +61,14 @@ export const SEGMENT_BUILTIN_FIELDS = {
   groups: 'groups',
   unsubscribed: 'boolean',
   imported: 'boolean',
+  /** Flagged as a minor (BL-190). */
+  minor: 'boolean',
+  /** Marked uncontacted: nobody on the team has reached the contact yet (BL-290). */
+  uncontacted: 'boolean',
+  /** The built-in date of birth (BL-217). */
+  dateOfBirth: 'date',
+  /** Whole years, worked out from the date of birth on the earliest calendar date on Earth; empty when there is no date (BL-190). */
+  age: 'number',
   search: 'search',
   createdAt: 'date',
   updatedAt: 'date',
@@ -65,18 +78,28 @@ export type SegmentBuiltinField = keyof typeof SEGMENT_BUILTIN_FIELDS;
 
 export const SEGMENT_CUSTOM_PREFIX = 'custom.';
 const CUSTOM_FIELD = /^custom\.[a-z][a-z0-9_]{0,99}$/;
+/** A property of the contact's company (Settings, Company properties): `company.tier` is "the tier of the contact's company". */
+export const SEGMENT_COMPANY_PREFIX = 'company.';
+const COMPANY_FIELD = /^company\.[a-z][a-z0-9_]{0,99}$/;
 
 export const segmentFieldSchema = z
   .string()
   .max(110)
   .refine(
-    (f) => Object.prototype.hasOwnProperty.call(SEGMENT_BUILTIN_FIELDS, f) || CUSTOM_FIELD.test(f),
-    'unknown field: use a contact field or custom.<property key>',
+    (f) =>
+      Object.prototype.hasOwnProperty.call(SEGMENT_BUILTIN_FIELDS, f) ||
+      CUSTOM_FIELD.test(f) ||
+      COMPANY_FIELD.test(f),
+    'unknown field: use a contact field, custom.<property key> or company.<property key>',
   );
 
 export const isCustomSegmentField = (field: string): boolean =>
   field.startsWith(SEGMENT_CUSTOM_PREFIX);
 export const customFieldKey = (field: string): string => field.slice(SEGMENT_CUSTOM_PREFIX.length);
+export const isCompanySegmentField = (field: string): boolean =>
+  field.startsWith(SEGMENT_COMPANY_PREFIX);
+export const companyFieldKey = (field: string): string =>
+  field.slice(SEGMENT_COMPANY_PREFIX.length);
 
 /** The kind of a built-in field; undefined for custom fields (the registry decides those). */
 export function builtinFieldKind(field: string): SegmentFieldKind | undefined {
@@ -423,7 +446,7 @@ export const segmentRulesSchema = groupLevel1.superRefine((rules, ctx) => {
 });
 export type SegmentRules = z.infer<typeof segmentRulesSchema>;
 
-/** Custom fields: any operator that exists, with a value of the right shape; the kind-specific check is the API's. */
+/** Custom and company fields: any operator that exists, with a value of the right shape; the kind-specific check is the API's. */
 function checkCustomShape(operator: SegmentOperator, value: unknown): string | null {
   const shape = SEGMENT_VALUE_SHAPE[operator];
   if (shape === 'none') return value === undefined ? null : `"${operator}" takes no value`;

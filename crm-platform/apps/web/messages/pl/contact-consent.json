@@ -17,7 +17,8 @@
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
       "exportInProgress": "Plik dowodowy jest już przygotowywany. Poczekaj, aż zostanie gotowy, a następnie spróbuj ponownie.",
       "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy.",
-      "noticeTargetMissing": "Ten widżet, strona rezerwacji lub sklep już nie istnieje."
+      "noticeTargetMissing": "Ten widżet, strona rezerwacji lub sklep już nie istnieje.",
+      "notMinor": "Zgodę opiekuna można zapisać tylko dla kontaktu oznaczonego jako małoletni."
     },
     "settings": {
       "title": "Zgody i odpowiedzi STOP",
@@ -112,7 +113,10 @@
         "instagram": "Instagram",
         "webchat": "Czat WWW",
         "voice": "Połączenie głosowe",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "zapisany",
@@ -139,7 +143,11 @@
         "widget": "Czat na stronie",
         "booking": "Strona rezerwacji",
         "commerce": "Kasa sklepu",
-        "lead": "Pozyskanie leada"
+        "lead": "Pozyskanie leada",
+        "wa_form": "Formularz WhatsApp",
+        "gpc": "Global Privacy Control",
+        "dob": "Data urodzenia lub wiek",
+        "declaration": "Wiek niepotwierdzony"
       },
       "by": "przez {name}",
       "evidence": {
@@ -162,7 +170,8 @@
         "storeFlag": "Ustawienie sklepu",
         "leadSourceId": "Źródło leada",
         "leadFormId": "Formularz leada",
-        "adId": "Reklama"
+        "adId": "Reklama",
+        "guardianConsentRef": "Odniesienie do zgody opiekuna"
       },
       "dialog": {
         "titleGranted": "Oznacz jako zapisanego",
@@ -178,6 +187,52 @@
         "close": "Zamknij",
         "savedGranted": "Oznaczono jako zapisanego.",
         "savedWithdrawn": "Oznaczono jako wypisanego."
+      },
+      "privacy": {
+        "title": "Znaczniki prywatności",
+        "saved": "Zapisano.",
+        "minorLabel": "Małoletni",
+        "minorOn": "Oznaczony jako małoletni od {date}.",
+        "minorOff": "Nie jest oznaczony jako małoletni.",
+        "rule": {
+          "off": "Twoja przestrzeń robocza nie odpowiedziała na pytanie o dzieci w Centrum zgodności, więc marketing do tego kontaktu nie jest wstrzymywany.",
+          "guardian": "Marketing do tego kontaktu jest wstrzymany do czasu zapisania zgody rodzica lub opiekuna.",
+          "block": "Marketing do tego kontaktu jest wstrzymany, ponieważ Twoja przestrzeń robocza deklaruje, że nie przetwarza danych małoletnich."
+        },
+        "guardianBadge": "Zgoda opiekuna zapisana",
+        "guardianLabel": "Zgoda rodzica lub opiekuna",
+        "guardianOn": "Zapisana od {date}. To tylko dowód i nie zapisuje kontaktu na subskrypcję.",
+        "guardianOff": "Nie zapisana.",
+        "recordGuardian": "Zapisz zgodę opiekuna",
+        "clearGuardian": "Usuń",
+        "dnsLabel": "Nie sprzedawaj ani nie udostępniaj",
+        "dnsOn": "Sprzeciw od {date} ({source}).",
+        "dnsOff": "Brak sprzeciwu.",
+        "history": "Historia prywatności",
+        "event": {
+          "minor": {
+            "on": "Oznaczono jako małoletniego",
+            "off": "Usunięto oznaczenie małoletniego"
+          },
+          "guardian_consent": {
+            "on": "Zapisano zgodę opiekuna",
+            "off": "Usunięto zgodę opiekuna"
+          },
+          "sale_share_opt_out": {
+            "on": "Sprzeciw wobec sprzedaży i udostępniania",
+            "off": "Sprzeciw usunięty"
+          }
+        },
+        "dialog": {
+          "title": "Zapisz zgodę opiekuna",
+          "intro": "Zapisz, że rodzic lub opiekun wyraził zgodę. To tylko dowód: nie zapisuje kontaktu na marketing.",
+          "note": "W jaki sposób zgodzili się? (wymagane)",
+          "noteHint": "Na przykład: podpisali papierowy formularz przy okienku. Nie wpisuj imienia ani danych kontaktowych opiekuna.",
+          "ref": "Odniesienie (opcjonalnie)",
+          "refHint": "Numer formularza lub identyfikator dokumentu, który da się później odszukać."
+        },
+        "minorFrom": "Ustawione na podstawie podanej daty urodzenia lub wieku. Zniknie samo dnia {date}, chyba że osoba je zachowa.",
+        "minorFromDeclaration": "Ustawione, ponieważ wiek nie został potwierdzony w formularzu. Pozostaje, dopóki osoba go nie wyczyści."
       }
     },
     "composer": {
@@ -299,19 +354,25 @@
         "consent_evidence_recorded": "Dozwolone: komunikat został podany i osoba wyraziła zgodę.",
         "purpose_not_enabled": "Niedozwolone: przestrzeń robocza tego nie włączyła.",
         "consent_declined": "Niedozwolone: osoba odmówiła.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Niedozwolone: ten kontakt jest oznaczony jako małoletni, a Twoja przestrzeń robocza wstrzymuje marketing.",
+        "sale_share_opted_out": "Niedozwolone: kontakt sprzeciwił się sprzedaży lub udostępnianiu swoich danych.",
+        "on_dnc_list": "Na Twojej liście Nie dzwonić: bez marketingowych połączeń i SMS-ów na ten numer",
+        "legal_hold": "Niedozwolone: przetwarzanie tego kontaktu jest ograniczone."
       }
     },
     "notice": {
       "title": {
         "widget": "Wiersz zgody w formularzu czatu",
         "booking": "Wiersz zgody na stronie rezerwacji",
-        "commerce": "Co oznacza pole marketingowe sklepu"
+        "commerce": "Co oznacza pole marketingowe sklepu",
+        "workspace": "Domyślna informacja o zgodzie"
       },
       "intro": {
         "widget": "Wyświetlany jako pole wyboru pod danymi odwiedzającego. Tylko odwiedzający, który je zaznaczy, jest zapisany jako zgadzający się, i tylko gdy podał telefon lub e-mail.",
         "booking": "Wyświetlany jako pole wyboru w formularzu rezerwacji. Tylko osoba, która je zaznaczy, jest zapisana jako zgadzająca się; rezerwacja nigdy go nie wymaga.",
-        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał."
+        "commerce": "Klient, który w Twoim sklepie akceptuje marketing, jest zapisany jako zgadzający się. Napisz, co mówi mu to pole, aby dowód to wskazywał.",
+        "workspace": "Brzmienie, które Twoja przestrzeń robocza wyświetla obok pola zgody, gdy formularz, widżet lub strona rezerwacji nie ma własnego. Każda zmiana to nowa numerowana wersja."
       },
       "enabled": "Wiersz zgody włączony",
       "text": "Treść, na którą osoba wyraża zgodę",
@@ -324,7 +385,21 @@
       "version": "Bieżąca wersja: {version}",
       "noVersion": "Jeszcze nie zapisano.",
       "saveFirst": "Najpierw to zapisz, potem ustawisz jego wiersz zgody.",
-      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)"
+      "whatsappToo": "Licz także jako zgodę na WhatsApp (tylko jeśli treść tak mówi)",
+      "termsUrl": "Link do regulaminu (opcjonalnie)",
+      "termsUrlHint": "Musi zaczynać się od https://",
+      "useWorkspacePrivacy": "Użyj linku do polityki prywatności przestrzeni roboczej",
+      "useWorkspaceTerms": "Użyj linku do regulaminu przestrzeni roboczej",
+      "useWorkspaceText": "Użyj domyślnego brzmienia przestrzeni roboczej",
+      "statement": "Zgadzam się na otrzymywanie aktualności i ofert przez {channels}. Mogę w każdej chwili odpowiedzieć STOP, aby zrezygnować.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-mail"
+      },
+      "channelsLabel": "Kanały objęte tą zgodą",
+      "channelsHint": "Osoba jest zapisywana tylko na zaznaczone tutaj kanały, a tekst zgody je wymienia. Kanał jest używany tylko wtedy, gdy osoba poda pasujący numer telefonu lub e-mail.",
+      "channelsUse": "Zaktualizuj treść o te kanały"
     }
   }
 }

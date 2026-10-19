@@ -1,13 +1,25 @@
 'use client';
 
 import { ButtonIcon } from '../button-icon';
-import type { ReactNode } from 'react';
+import { MessageField } from '../message-field';
+import { ctaLinkProblem } from '../../lib/cta-link';
+import { flowVariables } from '../../lib/flow-variables';
+import { ButtonActionPicker } from '../button-action-picker';
+import {
+  buttonActionContinues,
+  buttonActionOf,
+  buttonActionPatch,
+  buttonActionsWithout,
+} from '../../lib/button-actions';
+import { useContext, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  FLB_AGE_END_TEXT,
   FLB_CAROUSEL_LIMITS,
   FLB_CAROUSEL_MAX_BUTTONS,
   FLB_CAROUSEL_MAX_CARDS,
   FLB_ASK_FILE_GROUPS,
+  FLB_WA_LIMITS,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
   flbCleanAskFileExtensions,
@@ -34,11 +46,21 @@ import { useFaqSummary } from '../../api/hooks';
 import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
-import { ConditionGroupEditor } from '../inspector/forms-core/logic';
+import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
-import { Field, Input, Select, Textarea } from '@crm/ui';
+import { Field, Input, Select, Textarea, useToast } from '@crm/ui';
+import { NewPropertyInline } from '../new-property';
+import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
+import { TemplatePreview } from '../inspector/forms-core/previews';
+import type { FormComponent, FormEnv } from '../inspector/types';
+import { MediaUpload } from './media-upload';
+import { LocationPicker } from '../location-picker';
+import { FlowEditorContext } from '../../lib/flow-editor-context';
 import {
   BRANCHING,
+  LINK_END,
+  LINK_NEXT,
+  OPTION_STEPS,
   LIMITS,
   stageIn,
   groupsOf,
@@ -61,12 +83,15 @@ export function LinkSelect({
   doc,
   stepId,
   value,
+  decide = false,
   onChange,
 }: {
   doc: SimpleDoc;
   /** The step the button is on: a button can lead back to its own step. */
   stepId: string;
   value: string | null;
+  /** A button or row the customer sees: it has to lead somewhere, so "ends here" is a choice and "not chosen yet" is shown as such. */
+  decide?: boolean;
   onChange: (target: string | null | typeof NEW_JOURNEY) => void;
 }) {
   const t = useTranslations('flb.builder.simple.editors');
@@ -78,7 +103,24 @@ export function LinkSelect({
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value === '' ? null : e.target.value)}
     >
-      <option value="">{t('linkEnds')}</option>
+      {decide ? (
+        <>
+          <option value="" disabled>
+            {t('linkChoose')}
+          </option>
+          <option value={LINK_END}>{t('linkEnds')}</option>
+        </>
+      ) : (
+        <option value="">{t('linkEnds')}</option>
+      )}
+      {/* A buttons / list step with a step after it can carry on with that step. */}
+      {(() => {
+        const own = doc.journeys.find((j) => j.steps.some((x) => x.id === stepId));
+        const at = own?.steps.findIndex((x) => x.id === stepId) ?? -1;
+        return own && OPTION_STEPS.has(own.steps[at]!.type) && own.steps[at + 1] ? (
+          <option value={LINK_NEXT}>{t('linkNext')}</option>
+        ) : null;
+      })()}
       {groupsOf(doc).map((g) => (
         <optgroup key={g.key} label={groupText(g, tf)}>
           {g.chains.flatMap((ci) =>
@@ -107,8 +149,8 @@ interface EditorProps {
   ctx: FlbBuilderContext;
   /** The saved flow (null before the first save): the FAQ step answers from this flow's FAQs. */
   flowId: string | null;
-  /** Merge keys into the step's data. */
-  set: (patch: Record<string, unknown>) => void;
+  /** Merge keys into the step's data; `links` (one per button / row) replaces the step's links in the same change. */
+  set: (patch: Record<string, unknown>, links?: (string | null)[]) => void;
   /** Point button / row `i` at a step (or `null` to end, or NEW_JOURNEY). */
   link: (i: number, target: string | null) => void;
 }
@@ -163,19 +205,61 @@ export function StepEditor(p: EditorProps) {
       return <CtaEditor {...p} />;
     case 'assign':
       return <AssignEditor {...p} />;
+    case 'api_library':
+      return <NodeFormEditor {...p} Form={ApiLibraryForm} />;
+    case 'webhook':
+      return <NodeFormEditor {...p} Form={WebhookForm} />;
+    case 'code':
+      return <NodeFormEditor {...p} Form={CodeForm} />;
+    case 'ai':
+      return <NodeFormEditor {...p} Form={AiForm} />;
     case 'faq':
       return <FaqEditor {...p} />;
   }
 }
 
-function MessageEditor({ step, set }: EditorProps) {
+/**
+ * A step whose settings are the Advanced builder's own form for the same node (API call, JS function): the form is given the step's data
+ * as a node, so the two builders edit one thing in one way.
+ */
+function NodeFormEditor({ step, ctx, flowId, set, Form }: EditorProps & { Form: FormComponent }) {
+  const { toast } = useToast();
+  const env: FormEnv = {
+    ctx,
+    loading: false,
+    mode: 'chat',
+    openedAs: 'chat',
+    channels: ['chat'],
+    refresh: () => undefined,
+    toast,
+    uploadMedia: () => Promise.reject(new Error('unsupported')),
+    nodes: [],
+    flowId,
+  };
+  return (
+    <Form
+      node={{ id: step.id, type: step.type, x: 0, y: 0, data: step.data }}
+      data={step.data}
+      set={(key, value) => set({ [key]: value })}
+      setMany={set}
+      env={env}
+      addOption={() => undefined}
+      removeOption={() => undefined}
+    />
+  );
+}
+
+function MessageEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   return (
-    <Field label={t('message.label')} hint={t('message.hint', { token: '{{name}}' })}>
-      <Textarea
+    <Field label={t('message.label')}>
+      <MessageField
         rows={5}
+        label={t('message.label')}
         value={str(step.data.text)}
-        onChange={(e) => set({ text: e.target.value })}
+        max={LIMITS.message}
+        variables={flowVariables(doc)}
+        onChange={(text) => set({ text })}
       />
     </Field>
   );
@@ -197,6 +281,12 @@ function MediaEditor({ step, set }: EditorProps) {
           ))}
         </Select>
       </Field>
+      <MediaUpload
+        kind={kind as 'image'}
+        url={str(step.data.url)}
+        filename={str(step.data.filename)}
+        onDone={(res) => set({ url: res.url, filename: res.filename })}
+      />
       <Field label={t('media.fileLink')} hint={t('media.fileLinkHint')}>
         <Input
           value={str(step.data.url)}
@@ -329,6 +419,15 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
           </div>
           <div className="space-y-2">
             <Field label={t('carousel.image')}>
+              <div className="mb-2">
+                <MediaUpload
+                  compact
+                  kind="image"
+                  url={str(c.image)}
+                  filename=""
+                  onDone={(res) => patchCard(ci, { image: res.url })}
+                />
+              </div>
               <Input
                 value={str(c.image)}
                 placeholder="https://"
@@ -410,6 +509,7 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                         doc={doc}
                         stepId={step.id}
                         value={step.links[ri] ?? null}
+                        decide
                         onChange={(target) => link(ri, target)}
                       />
                     </div>
@@ -455,36 +555,25 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
   );
 }
 
-function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
+function ButtonsEditor({ step, doc, ctx, flowId, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  // A WhatsApp button name stops at 20 characters (typing and pasting); a website bot only warns.
+  const { whatsapp } = useContext(FlowEditorContext);
   const opts = arr(step.data.options).map(str);
   // The small picture of each button (website chat bots only), by position.
   const icons = opts.map((_, j) => str(arr(step.data.optionIcons)[j]));
   const prompt = str(step.data.prompt);
-  // A button can hand the visitor to a person instead of leading to another step: `handoffs` is keyed by the button's position.
-  const handoffs = rec(step.data.handoffs);
-  const setHandoff = (i: number, h: { team: string; message: string } | null) => {
-    const next = { ...handoffs };
-    if (h) next[String(i)] = h;
-    else delete next[String(i)];
-    set({ handoffs: next });
-  };
-  const withoutOption = (i: number) =>
-    Object.fromEntries(
-      Object.entries(handoffs)
-        .filter(([k]) => Number(k) !== i)
-        .map(([k, v]) => [String(Number(k) > i ? Number(k) - 1 : Number(k)), v]),
-    );
   return (
     <div className="space-y-3">
-      <Field
-        label={
-          <span className="flex items-center justify-between">
-            {t('buttons.above')} <Counter value={prompt} max={LIMITS.body} />
-          </span>
-        }
-      >
-        <Textarea rows={4} value={prompt} onChange={(e) => set({ prompt: e.target.value })} />
+      <Field label={t('buttons.above')}>
+        <MessageField
+          rows={4}
+          label={t('buttons.above')}
+          value={prompt}
+          max={LIMITS.body}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
+        />
       </Field>
       <div className="space-y-2">
         <div className="text-[12px] font-medium">
@@ -498,7 +587,7 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
             <div className="mb-2 flex items-center gap-2">
               <Input
                 value={o}
-                maxLength={LIMITS.buttonLabel + 20}
+                maxLength={whatsapp ? LIMITS.buttonLabel : LIMITS.buttonLabel + 20}
                 placeholder={t('buttons.placeholder', { n: i + 1 })}
                 invalid={o.length > LIMITS.buttonLabel}
                 onChange={(e) =>
@@ -510,11 +599,14 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
                 label={t('buttons.remove')}
                 disabled={opts.length <= 1}
                 onClick={() =>
-                  set({
-                    options: opts.filter((_, j) => j !== i),
-                    optionIcons: icons.filter((_, j) => j !== i),
-                    handoffs: withoutOption(i),
-                  })
+                  set(
+                    {
+                      options: opts.filter((_, j) => j !== i),
+                      optionIcons: icons.filter((_, j) => j !== i),
+                      ...buttonActionsWithout(step.data, i),
+                    },
+                    step.links.filter((_, j) => j !== i),
+                  )
                 }
               />
             </div>
@@ -524,39 +616,32 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
                 onChange={(v) => set({ optionIcons: icons.map((x, j) => (j === i ? v : x)) })}
               />
             </div>
-            <label className="mb-2 flex items-center gap-2 text-[12px]">
-              <input
-                type="checkbox"
-                checked={handoffs[String(i)] !== undefined}
-                onChange={(e) => {
-                  if (e.target.checked) {
-                    link(i, null);
-                    setHandoff(i, { team: '', message: '' });
-                  } else setHandoff(i, null);
-                }}
-              />
-              {t('buttons.handoff')}
-            </label>
-            {handoffs[String(i)] !== undefined ? (
-              <HandoffFields
+            <div className="mb-2">
+              <ButtonActionPicker
+                value={buttonActionOf(step.data, i)}
                 ctx={ctx}
-                team={str(rec(handoffs[String(i)]).team)}
-                note={str(rec(handoffs[String(i)]).message)}
-                onTeam={(v) =>
-                  setHandoff(i, { team: v, message: str(rec(handoffs[String(i)]).message) })
-                }
-                onNote={(v) =>
-                  setHandoff(i, { team: str(rec(handoffs[String(i)]).team), message: v })
+                flowId={flowId}
+                onChange={(next) =>
+                  // A hand-over, or a connected flow, takes the conversation away: nothing is connected after such a button. The link
+                  // goes in the same change as the action (two separate changes would overwrite each other).
+                  set(
+                    buttonActionPatch(step.data, i, next),
+                    buttonActionContinues(next)
+                      ? undefined
+                      : step.links.map((l, j) => (j === i ? null : l)),
+                  )
                 }
               />
-            ) : (
+            </div>
+            {buttonActionContinues(buttonActionOf(step.data, i)) ? (
               <LinkSelect
                 doc={doc}
                 stepId={step.id}
                 value={step.links[i] ?? null}
+                decide
                 onChange={(target) => link(i, target)}
               />
-            )}
+            ) : null}
           </Row>
         ))}
         {opts.length < LIMITS.buttons ? (
@@ -577,6 +662,7 @@ function ButtonsEditor({ step, doc, ctx, set, link }: EditorProps) {
 
 function ListEditor({ step, doc, set, link }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const { whatsapp } = useContext(FlowEditorContext);
   const rows = arr(step.data.options).map(rec);
   const prompt = str(step.data.prompt);
   const button = str(step.data.button);
@@ -584,14 +670,15 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
     set({ options: rows.map((r, j) => (j === i ? { ...r, ...patch } : r)) });
   return (
     <div className="space-y-3">
-      <Field
-        label={
-          <span className="flex items-center justify-between">
-            {t('list.above')} <Counter value={prompt} max={LIMITS.body} />
-          </span>
-        }
-      >
-        <Textarea rows={4} value={prompt} onChange={(e) => set({ prompt: e.target.value })} />
+      <Field label={t('list.above')}>
+        <MessageField
+          rows={4}
+          label={t('list.above')}
+          value={prompt}
+          max={FLB_WA_LIMITS.listBody}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
+        />
       </Field>
       <Field
         label={
@@ -602,6 +689,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
       >
         <Input
           value={button}
+          maxLength={whatsapp ? LIMITS.listButton : undefined}
           invalid={button.length > LIMITS.listButton}
           onChange={(e) => set({ button: e.target.value })}
         />
@@ -618,6 +706,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
             <div className="mb-2 flex items-center gap-2">
               <Input
                 value={str(r.title)}
+                maxLength={whatsapp ? LIMITS.rowTitle : undefined}
                 placeholder={t('list.rowPlaceholder', { n: i + 1 })}
                 invalid={str(r.title).length > LIMITS.rowTitle}
                 onChange={(e) => setRow(i, { title: e.target.value })}
@@ -632,6 +721,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
             <Input
               className="mb-2 h-9 text-[12.5px]"
               value={str(r.description)}
+              maxLength={whatsapp ? LIMITS.rowDescription : undefined}
               placeholder={t('list.description')}
               invalid={str(r.description).length > LIMITS.rowDescription}
               onChange={(e) => setRow(i, { description: e.target.value })}
@@ -640,6 +730,7 @@ function ListEditor({ step, doc, set, link }: EditorProps) {
               doc={doc}
               stepId={step.id}
               value={step.links[i] ?? null}
+              decide
               onChange={(target) => link(i, target)}
             />
           </Row>
@@ -745,36 +836,43 @@ function SavePropertyField({
         {t('copy', { what: noun })}
       </label>
       {on ? (
-        <Select
-          aria-label={t('label')}
-          className="mt-2"
-          value={str(step.data.propertyKey)}
-          onChange={(e) => set({ propertyKey: e.target.value })}
-        >
-          <option value="">{t('choose')}</option>
-          {(feed.data?.custom ?? []).map((pr) => (
-            <option key={pr.key} value={pr.key}>
-              {pr.name}
-            </option>
-          ))}
-        </Select>
+        <>
+          <Select
+            aria-label={t('label')}
+            className="mt-2"
+            value={str(step.data.propertyKey)}
+            onChange={(e) => set({ propertyKey: e.target.value })}
+          >
+            <option value="">{t('choose')}</option>
+            {(feed.data?.custom ?? []).map((pr) => (
+              <option key={pr.key} value={pr.key}>
+                {pr.name}
+              </option>
+            ))}
+          </Select>
+          <NewPropertyInline onCreated={(key) => set({ propertyKey: key })} />
+        </>
       ) : null}
     </Field>
   );
 }
 
-function AskEditor({ step, set }: EditorProps) {
+function AskEditor({ step, doc, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const tf = useFlb();
+  const ta = useTranslations('flb.builder.askAge');
   const type = flbCleanAskInputType(step.data.validate);
   const checked = type !== 'text';
   return (
     <div className="space-y-3">
       <Field label={t('question')}>
-        <Textarea
+        <MessageField
           rows={3}
+          label={t('question')}
           value={str(step.data.prompt)}
-          onChange={(e) => set({ prompt: e.target.value })}
+          max={LIMITS.body}
+          variables={flowVariables(doc)}
+          onChange={(v) => set({ prompt: v })}
         />
       </Field>
       <Field label={t('ask.accept')} hint={checked ? t('ask.checkedHint') : t('ask.anyTextHint')}>
@@ -786,7 +884,7 @@ function AskEditor({ step, set }: EditorProps) {
           ))}
         </Select>
       </Field>
-      {type === 'date' ? (
+      {type === 'date' || type === 'date_of_birth' ? (
         <Field label={t('ask.dateFormat')} hint={t('ask.dateFormatHint')}>
           <Select
             value={flbCleanDateFormat(step.data.dateFormat)}
@@ -799,6 +897,49 @@ function AskEditor({ step, set }: EditorProps) {
             ))}
           </Select>
         </Field>
+      ) : null}
+      {type === 'age' || type === 'date_of_birth' ? (
+        <>
+          <Field label={ta('minAge')} hint={ta('minAgeHint')}>
+            <Input
+              type="number"
+              min={1}
+              max={21}
+              value={step.data.ageMinAge === undefined ? '' : String(step.data.ageMinAge)}
+              onChange={(e) => {
+                const n = Math.trunc(Number(e.target.value));
+                set({
+                  ageMinAge:
+                    e.target.value === '' || !Number.isFinite(n)
+                      ? ''
+                      : Math.min(21, Math.max(1, n)),
+                });
+              }}
+            />
+          </Field>
+          <Field label={ta('whenUnder')} hint={ta('whenUnderHint')}>
+            <Select
+              value={step.data.ageWhenUnder === 'continue' ? 'continue' : 'end'}
+              onChange={(e) => set({ ageWhenUnder: e.target.value })}
+            >
+              <option value="end">{ta('end')}</option>
+              <option value="continue">{ta('continue')}</option>
+            </Select>
+          </Field>
+          {step.data.ageWhenUnder === 'continue' ? (
+            <p className="text-xs text-muted-foreground">{ta('continueNote')}</p>
+          ) : (
+            <Field label={ta('endText')} hint={ta('endTextHint')}>
+              <Textarea
+                rows={2}
+                value={str(step.data.ageEndText)}
+                placeholder={FLB_AGE_END_TEXT}
+                onChange={(e) => set({ ageEndText: e.target.value })}
+              />
+            </Field>
+          )}
+          <p className="text-xs text-muted-foreground">{ta('note')}</p>
+        </>
       ) : null}
       {type === 'phone' ? (
         <label className="flex items-start gap-2 text-[12.5px]">
@@ -1153,31 +1294,18 @@ function DelayEditor({ step, set }: EditorProps) {
 }
 
 function LocationEditor({ step, set }: EditorProps) {
-  const t = useTranslations('flb.builder.simple.editors');
-  const f = (key: string, label: string, props: { placeholder?: string } = {}) => (
-    <Field label={label}>
-      <Input
-        value={str(step.data[key])}
-        placeholder={props.placeholder}
-        onChange={(e) => set({ [key]: e.target.value })}
-      />
-    </Field>
-  );
-  return (
-    <div className="space-y-3">
-      {f('title', t('location.placeName'), { placeholder: t('location.placePlaceholder') })}
-      {f('address', t('location.address'))}
-      <div className="grid grid-cols-2 gap-3">
-        {f('lat', t('location.latitude'), { placeholder: '18.5204' })}
-        {f('lng', t('location.longitude'), { placeholder: '73.8567' })}
-      </div>
-    </div>
-  );
+  return <LocationPicker data={step.data} patch={set} idPrefix={`loc-${step.id}`} />;
 }
+
+/** What a template button opens, for the list under the preview: the phone number, the link or the copied code. */
+const buttonTarget = (b: Record<string, unknown>): string =>
+  str(b.value ?? b.phone_number ?? b.phone ?? b.url ?? b.example);
 
 function TemplateEditor({ step, ctx, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const chosen = ctx.templates.find((x) => x.name === str(step.data.tpl));
+  const buttons = (chosen?.buttons ?? []) as Array<Record<string, unknown>>;
+  const variables = chosen?.variables ?? [];
   return (
     <div className="space-y-3">
       <Field label={t('template.label')} hint={t('template.hint')}>
@@ -1196,9 +1324,42 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
           ))}
         </Select>
       </Field>
-      {chosen?.body ? (
-        <div className="whitespace-pre-wrap rounded-xl bg-[var(--flb-bubble)] p-3 text-[12.5px]">
-          {chosen.body}
+      {chosen ? <TemplatePreview d={step.data} templates={ctx.templates} /> : null}
+      {buttons.length > 0 ? (
+        <div className="space-y-1">
+          <div className="text-[12px] font-medium text-muted-foreground">
+            {t('template.buttons')}
+          </div>
+          {buttons.map((b, i) => (
+            <div
+              key={i}
+              className="flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-[12.5px]"
+            >
+              <span className="font-semibold">{str(b.text ?? b.title ?? b.label)}</span>
+              <span className="truncate font-mono text-[11px] text-muted-foreground">
+                {buttonTarget(b)}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : null}
+      {variables.length > 0 ? (
+        <div className="space-y-1">
+          <div className="text-[12px] font-medium text-muted-foreground">
+            {t('template.variables')}
+          </div>
+          {variables.map((v) => (
+            <div
+              key={`${v.section}-${v.slot}`}
+              className="flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-[12.5px]"
+            >
+              <span className="font-mono">{`{{${v.slot}}}`}</span>
+              <span className="truncate font-mono text-[11px] text-muted-foreground">
+                {v.field}
+              </span>
+            </div>
+          ))}
+          <p className="text-[11.5px] text-muted-foreground">{t('template.variablesHint')}</p>
         </div>
       ) : null}
     </div>
@@ -1207,6 +1368,12 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
 
 const CTA_KINDS = ['url', 'phone', 'email'] as const;
 const CTA_MAX = 3;
+/** The name a new button of each kind starts with. */
+const CTA_DEFAULT_LABEL: Record<string, string> = {
+  url: 'Visit website',
+  phone: 'Call us',
+  email: 'Email us',
+};
 
 /**
  * The buttons of a Link button step: up to three, each opening a web page, a phone call or an email. The website chat window draws
@@ -1214,6 +1381,7 @@ const CTA_MAX = 3;
  */
 function CtaEditor({ step, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const { whatsapp } = useContext(FlowEditorContext);
   const raw = arr(step.data.actions).map(rec);
   const actions = raw.length ? raw : [{ type: 'url', label: '', value: '' }];
   const setAll = (next: Array<Record<string, unknown>>) => set({ actions: next });
@@ -1223,33 +1391,61 @@ function CtaEditor({ step, set }: EditorProps) {
     );
   const holder = (kind: string) =>
     kind === 'phone' ? '+91 98765 43210' : kind === 'email' ? 'name@example.com' : 'https://';
+  // Switching what a button opens swaps its stock name too (an untouched "Visit website" becomes "Call us"). The old address is
+  // kept only when it is already valid for the new kind (or turns into it: "mailto:a@b.co" / "tel:+91..." lose the scheme);
+  // otherwise it is cleared, so no web address is left in a phone or email field. A name the author wrote is kept.
+  const carryValue = (value: string, to: string) => {
+    const v = value.trim().replace(/^(mailto|tel):/i, '');
+    return ctaLinkProblem(to, v) === null ? v : '';
+  };
+  const switchKind = (i: number, from: string, to: string) =>
+    patch(i, {
+      type: to,
+      value: carryValue(str(actions[i]?.value), to),
+      ...(!str(actions[i]?.label).trim() || str(actions[i]?.label) === CTA_DEFAULT_LABEL[from]
+        ? { label: CTA_DEFAULT_LABEL[to] }
+        : {}),
+    });
   return (
     <div className="space-y-3">
       <Field label={t('message.label')}>
         <Textarea
           rows={3}
           value={str(step.data.bodyText)}
+          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
           onChange={(e) => set({ bodyText: e.target.value })}
         />
       </Field>
       {actions.map((a, i) => {
         const kind = (CTA_KINDS as readonly string[]).includes(str(a.type)) ? str(a.type) : 'url';
+        const problem = ctaLinkProblem(kind, a.value);
         return (
           <Row key={i}>
-            <div className="grid gap-3 sm:grid-cols-[9rem_1fr_1fr_auto]">
-              <Field label={t('cta.type')}>
-                <Select value={kind} onChange={(e) => patch(i, { type: e.target.value })}>
-                  {CTA_KINDS.map((k) => (
-                    <option key={k} value={k}>
-                      {t(`cta.kinds.${k}`)}
-                    </option>
-                  ))}
-                </Select>
-              </Field>
+            <div className="space-y-3">
+              <div className="flex items-end gap-2">
+                <div className="min-w-0 flex-1">
+                  <Field label={t('cta.type')}>
+                    <Select value={kind} onChange={(e) => switchKind(i, kind, e.target.value)}>
+                      {CTA_KINDS.map((k) => (
+                        <option key={k} value={k}>
+                          {t(`cta.kinds.${k}`)}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                </div>
+                <div className="pb-1">
+                  <RemoveBtn
+                    label={t('cta.remove')}
+                    disabled={actions.length <= 1}
+                    onClick={() => setAll(actions.filter((_, j) => j !== i))}
+                  />
+                </div>
+              </div>
               <Field label={t('cta.buttonText')}>
                 <Input
                   value={str(a.label)}
-                  maxLength={20}
+                  maxLength={whatsapp ? FLB_WA_LIMITS.ctaText : 20}
                   onChange={(e) => patch(i, { label: e.target.value })}
                 />
               </Field>
@@ -1261,20 +1457,18 @@ function CtaEditor({ step, set }: EditorProps) {
                       ? 'cta.opensEmail'
                       : 'cta.opens',
                 )}
+                error={problem ? t(`cta.errors.${problem}`) : undefined}
               >
                 <Input
                   value={str(a.value)}
+                  maxLength={whatsapp && kind === 'url' ? FLB_WA_LIMITS.ctaUrl : undefined}
                   placeholder={holder(kind)}
+                  type={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}
+                  inputMode={kind === 'email' ? 'email' : kind === 'phone' ? 'tel' : 'url'}
+                  invalid={!!problem}
                   onChange={(e) => patch(i, { value: e.target.value })}
                 />
               </Field>
-              <div className="flex items-end pb-1">
-                <RemoveBtn
-                  label={t('cta.remove')}
-                  disabled={actions.length <= 1}
-                  onClick={() => setAll(actions.filter((_, j) => j !== i))}
-                />
-              </div>
             </div>
             <div className="mt-2">
               <ButtonIcon value={str(a.icon)} onChange={(v) => patch(i, { icon: v })} />

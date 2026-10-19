@@ -4,12 +4,15 @@
       "eyebrow": "Arbeitsbereich",
       "title": "Anrufprotokoll",
       "subtitle": "Jeder WhatsApp-Anruf, den dein Team getätigt oder angenommen hat, mit Dauer, Bearbeiter und Aufnahme.",
+      "subtitleLogged": "Jeder Anruf, den Ihr Team erfasst hat oder der über die mobile App oder eine Telefonleitung kam, mit Dauer, Bearbeiter und Ergebnis.",
       "sideTip": "Jeder WhatsApp-Anruf von oder zu deinen Nummern. Filtere nach Datum, Status, Nummer oder Teamkollege, um einen bestimmten Anruf zu finden.",
+      "sideTipLogged": "Anrufe, die mit „Anruf erfassen“ erfasst, von der mobilen App gesendet oder von einer Telefonleitung gemeldet wurden. Filtern Sie nach Datum, Status, Quelle oder Teammitglied, um einen bestimmten Anruf zu finden.",
       "loading": "Anrufe werden geladen",
       "loadFailed": "Das Anrufprotokoll konnte nicht geladen werden.",
       "retry": "Erneut versuchen",
       "emptyTitle": "Noch keine Anrufe",
       "emptyMessage": "Sobald ein Kunde eine deiner WhatsApp-Nummern anruft oder dein Team einen Anruf aus dem Posteingang startet, erscheint er hier mit Dauer, Bearbeiter und Aufnahme.",
+      "emptyMessageLogged": "Mit „Anruf erfassen“ halten Sie einen Anruf fest, den Sie gerade geführt haben. Anrufe der mobilen App oder einer verbundenen Telefonleitung erscheinen ebenfalls hier, mit Dauer und Bearbeiter.",
       "emptyFilteredTitle": "Keine Anrufe passen zu diesen Filtern",
       "emptyFilteredMessage": "Wähle einen größeren Zeitraum oder lösche die Filter.",
       "clearFilters": "Filter löschen",
@@ -63,7 +66,9 @@
         "agent": "Bearbeitet von",
         "allAgents": "Alle",
         "apply": "Filtern",
-        "clear": "Zurücksetzen"
+        "clear": "Zurücksetzen",
+        "source": "Quelle",
+        "allSources": "Alle Quellen"
       },
       "table": {
         "caption": "Anrufe, neueste zuerst",
@@ -136,12 +141,14 @@
           "reject_sent": "Anruf abgelehnt",
           "terminate_sent": "Auflegen gesendet",
           "terminate": "Anruf beendet",
-          "recording_stored": "Aufnahme gespeichert"
+          "recording_stored": "Aufnahme gespeichert",
+          "logged": "Anruf erfasst"
         },
         "noRecording": {
           "title": "Aufnahme",
           "message": "Dieser Anruf hat keine Aufnahme."
-        }
+        },
+        "notes": "Notizen"
       },
       "recording": {
         "title": "Aufnahme",
@@ -154,6 +161,53 @@
         "linkUntil": "Dieser Link gilt bis {time}. Drücke danach erneut auf Wiedergabe.",
         "playFailed": "Die Aufnahme konnte nicht abgespielt werden.",
         "retry": "Erneut versuchen"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Von Hand erfasst",
+        "telephony": "Telefonleitung",
+        "mobile_app": "Mobile App",
+        "web_click_to_call": "Klick zum Anrufen"
+      },
+      "logCall": {
+        "button": "Anruf erfassen",
+        "title": "Anruf erfassen",
+        "close": "Schließen",
+        "with": "Anruf mit",
+        "phone": "Telefonnummer",
+        "phoneHint": "Der Anruf wird dem Kontakt mit dieser Nummer zugeordnet.",
+        "phoneHintContact": "Optional. Der Anruf wird diesem Kontakt zugeordnet.",
+        "direction": "Richtung",
+        "outcome": "Wie es lief",
+        "outcomes": {
+          "connected": "Verbunden",
+          "no_answer": "Keine Antwort",
+          "busy": "Besetzt",
+          "left_voicemail": "Mailbox-Nachricht hinterlassen",
+          "wrong_number": "Falsche Nummer",
+          "declined": "Abgelehnt",
+          "failed": "Fehlgeschlagen"
+        },
+        "when": "Beginn",
+        "minutes": "Dauer in Minuten",
+        "notes": "Notizen",
+        "notesHint": "Für alle sichtbar, die diesen Anruf sehen können. Bis zu 2.000 Zeichen.",
+        "followUp": "Zusätzlich eine Folgeaufgabe anlegen",
+        "followUpDue": "Nachfassen am",
+        "followUpHint": "Die Aufgabe wird dir zugewiesen und mit dem Kontakt verknüpft.",
+        "cancel": "Abbrechen",
+        "save": "Anruf speichern",
+        "saving": "Wird gespeichert...",
+        "saved": "Anruf erfasst.",
+        "savedNoContact": "Anruf erfasst. Noch kein Kontakt hat diese Nummer.",
+        "problems": {
+          "noWho": "Gib eine Telefonnummer an.",
+          "badWhen": "Wähle, wann der Anruf begonnen hat.",
+          "futureWhen": "Der Anruf kann nicht in der Zukunft beginnen.",
+          "badMinutes": "Gib die Dauer in Minuten an, höchstens 1.440.",
+          "noDue": "Wähle ein Datum für die Nachverfolgung.",
+          "badDue": "Wähle ein gültiges Datum für die Nachverfolgung."
+        }
       }
     },
     "analytics": {

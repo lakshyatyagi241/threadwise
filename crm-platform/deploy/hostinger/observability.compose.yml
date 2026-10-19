@@ -1,0 +1,99 @@
+# Event-loop metrics, alerting and a caller-side probe, next to the app. Optional and additive: nothing here runs unless this file is
+# named, and the release flow (ci-entry.sh, which uses docker-compose.yml alone) never starts or stops it.
+#
+#   ./observability-up.sh        # first time: makes the token, asks where alerts go, starts prometheus, alertmanager and the probe
+#   docker compose -f docker-compose.yml -f observability.compose.yml --env-file .env up -d prometheus alertmanager probe   # afterwards
+#
+# What it adds
+#   prometheus    scrapes api, worker, web and the probe, evaluates ../observability/event-loop.rules.yml, keeps 15 days (or 2 GB)
+#   alertmanager  sends firing and resolved alerts to the destination in secrets/alert_webhook_url (webhook, Slack/Discord or PagerDuty)
+#   probe         a separate process that GETs the API and the web server from outside their event loops and reports the latency a caller sees
+#
+# What it does NOT touch: the app containers. With blue-green releases the API, web and worker serve /metrics on 9464 (token required,
+# published nowhere) when OBS_METRICS_PORT and OBS_METRICS_TOKEN are in .env, which the base docker-compose.yml passes to every slot and
+# to the worker; observability-up.sh writes them. A running container only picks them up when it is created: the next release does that
+# for the slot it starts and for the worker, so metrics appear after one release (see observability-up.sh for the one-line alternative).
+# Prometheus finds the API and the web server by the network alias `api` / `web` that both slots carry, which resolves to running slots
+# only, so the idle slot is never a down target.
+#
+# Nothing is published and nothing is routed through Traefik: reach Prometheus and Alertmanager with
+#   docker compose -f docker-compose.yml -f observability.compose.yml exec prometheus wget -qO- http://localhost:9090/api/v1/targets
+# or an SSH tunnel. Memory budget on the shared host: prometheus 384m, alertmanager 128m, probe 128m.
+#
+# The Prometheus and Alertmanager images are public images pulled from Docker Hub (the app images are loaded, not pulled): the host
+# needs one `docker compose pull prometheus alertmanager` with internet access.
+
+# Anchors do not cross compose files, so the base file's log rotation is repeated here (a shared host, logs must not grow forever).
+x-obs-logging: &obs-logging
+  driver: json-file
+  options:
+    max-size: 20m
+    max-file: '5'
+
+services:
+  probe:
+    image: desk-api:${IMAGE_TAG:-local}
+    pull_policy: never
+    command: ['node', 'dist/src/tools/event-loop-probe.js']
+    restart: unless-stopped
+    mem_limit: 128m
+    logging: *obs-logging
+    environment:
+      NODE_ENV: production
+      TZ: UTC
+      # `api` and `web` are the slots' shared network aliases (docker-compose.yml): whichever slot is running answers.
+      # PROBE_EXTRA_TARGETS (EL-B15) adds callers' own path: observability-up.sh sets it to the public domain's /health and /login, so the
+      # probe also times a request that goes out of the stack and back through Traefik. ApiCallerLatencyHigh covers every target. From the
+      # host itself this includes the ingress but not the internet; to see the internet, run this probe on a second host with only the
+      # public URLs in PROBE_TARGETS and scrape it from here.
+      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
+      PROBE_INTERVAL_SECONDS: '10'
+      PROBE_TIMEOUT_SECONDS: '10'
+      OBS_METRICS_PORT: '9464'
+      OBS_METRICS_HOST: 0.0.0.0
+      OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:?run ./observability-up.sh, it generates OBS_METRICS_TOKEN}
+
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    restart: unless-stopped
+    mem_limit: 384m
+    logging: *obs-logging
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=15d
+      - --storage.tsdb.retention.size=2GB
+    volumes:
+      - ../observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ../observability/event-loop.rules.yml:/etc/prometheus/event-loop.rules.yml:ro
+      - ../observability/queue-capacity.rules.yml:/etc/prometheus/queue-capacity.rules.yml:ro
+      - ../observability/resource-limits.rules.yml:/etc/prometheus/resource-limits.rules.yml:ro
+      - promdata:/prometheus
+    secrets: [obs_metrics_token]
+    depends_on:
+      - alertmanager
+
+  alertmanager:
+    image: prom/alertmanager:v0.27.0
+    restart: unless-stopped
+    mem_limit: 128m
+    logging: *obs-logging
+    command:
+      - --config.file=/etc/alertmanager/alertmanager.yml
+      - --storage.path=/alertmanager
+    volumes:
+      # alertmanager.yml (a webhook that takes Alertmanager's JSON), alertmanager.slack.yml (Slack, and Discord via /slack) or
+      # alertmanager.pagerduty.yml: observability-up.sh asks which and writes ALERTMANAGER_FILE to .env.
+      - ../observability/${ALERTMANAGER_FILE:-alertmanager.yml}:/etc/alertmanager/alertmanager.yml:ro
+      - amdata:/alertmanager
+    secrets: [alert_webhook_url]
+
+secrets:
+  obs_metrics_token:
+    file: ./secrets/obs_metrics_token
+  alert_webhook_url:
+    file: ./secrets/alert_webhook_url
+
+volumes:
+  promdata:
+  amdata:

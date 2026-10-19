@@ -7,6 +7,7 @@ import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CaptchaService, HtmlSanitizerService } from '../auth';
+import { ContactPrivacyService } from '../contact-consent';
 import { frameAncestorsFor } from './form-origin';
 import { notFound, type FormRoute } from './form-lookup.service';
 import { HONEYPOT_FIELD } from './form-spam';
@@ -27,6 +28,7 @@ export class FormPublicService {
     private readonly forms: FormsRepository,
     private readonly captcha: CaptchaService,
     private readonly sanitizer: HtmlSanitizerService,
+    private readonly privacy: ContactPrivacyService,
     config: ConfigService<Env, true>,
   ) {
     this.brand = config.get('APP_NAME', { infer: true });
@@ -47,6 +49,14 @@ export class FormPublicService {
     const closed = route.status === 'paused';
     const captcha = await this.captcha.publicConfig();
     const s = def.settings;
+    // The declaration must name the age it asks about; a date of birth or an age question never says which answer passes (BL-217).
+    const declarationAge =
+      def.ageGate.enabled && def.ageGate.mode === 'declaration'
+        ? (def.ageGate.minAge ??
+          (await this.db.txAs({ orgId: route.orgId, userId: null }, (tx) =>
+            this.privacy.minorAge(tx, route.orgId),
+          )))
+        : null;
 
     const body: PublicForm = {
       key: form.publicKey,
@@ -71,10 +81,12 @@ export class FormPublicService {
         enabled: def.consent.enabled,
         text: def.consent.text,
         privacyUrl: def.consent.privacyUrl,
+        termsUrl: def.consent.termsUrl,
         required: def.consent.required,
         version: def.consent.version,
       },
       theme: def.theme,
+      ageGate: def.ageGate.enabled ? { mode: def.ageGate.mode, declarationAge } : null,
       payment: def.payment.enabled
         ? {
             amountType: def.payment.amountType,

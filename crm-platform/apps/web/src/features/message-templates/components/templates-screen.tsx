@@ -48,6 +48,9 @@ export function TemplatesScreen() {
   const errorText = useErrorText();
   const mayCreate = useCan('tpl.templates.create');
   const mayDelete = useCan('tpl.templates.delete');
+  const mayCurlPerm = useCan('tpl.templates.api_curl');
+  const mayKeys = useCan('api.keys.read');
+  const mayCurl = mayCurlPerm && mayKeys;
   const maySync = useCan('tpl.templates.sync');
   const router = useRouter();
   const pathname = usePathname();
@@ -447,6 +450,7 @@ export function TemplatesScreen() {
                         }
                         mayEdit={mayCreate}
                         mayDelete={mayDelete}
+                        mayCurl={mayCurl}
                         onDelete={setToDelete}
                       />
                     </li>

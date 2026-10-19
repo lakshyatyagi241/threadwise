@@ -28,15 +28,15 @@ keywords:
 
 ## What it is for
 
-FAQs belong to a flow. Each flow has its own FAQs, its own settings, its own tests, unanswered messages and insights, and its FAQs only answer inside that flow. There is no workspace-wide FAQ list.
+FAQs belong to a flow. Each flow has its own FAQs, its own tests, unanswered messages and insights, and its FAQs only answer inside that flow. There is no workspace-wide FAQ list.
 
-An FAQ is a question, the answer to give, and a list of **phrasings**: other ways a customer might ask the same thing. When a customer writes to a flow, the bot compares the message with every phrasing **by meaning**, so "where is my parcel" can reach the FAQ "Track my order". If the best match is good enough, the customer gets the answer, or is sent to the step the FAQ points at. Answering is **off** for a flow until you switch it on in that flow's FAQ settings.
+An FAQ is a question, the answer to give, and a list of **phrasings**: other ways a customer might ask the same thing. When a customer writes to a flow, the bot compares the message with every phrasing **by meaning**, so "where is my parcel" can reach the FAQ "Track my order". If the best match is good enough, the customer gets the answer, or is sent to the step the FAQ points at. Answering is **on** for each flow by default.
 
 ## Where to find it
 
 1. Open **Flows** and open a flow in the **Simple** builder. Save it once if it is new: the **FAQs** tab needs a saved flow.
 2. Select the **FAQs** tab, beside **Build**. A website chat bot also has **Customize** and **Install**.
-3. Inside the tab, the strip shows **FAQs**, **Test**, **Unanswered**, **Insights** and **Settings**. Each one has its own address (`?tab=faqs&view=...`), so you can reload, share a link or use the browser's back button. Switching between Build and FAQs does not lose changes to the flow.
+3. Inside the tab, the strip shows **FAQs**, **Test**, **Unanswered** and **Insights**. Each one has its own address (`?tab=faqs&view=...`), so you can reload, share a link or use the browser's back button. Switching between Build and FAQs does not lose changes to the flow.
 
 The Advanced builder has no FAQs tab. A flow built there still has FAQs: open it in the Simple builder to edit them. The FAQ step in the Advanced builder links there.
 
@@ -51,7 +51,7 @@ The Advanced builder has no FAQs tab. A flow built there still has FAQs: open it
 
 ## Is it live yet
 
-Every phrasing shows **Indexing**, **Live** or **Failed**. A new phrasing starts matching within seconds. A failed one cannot match: edit and save it to try again, and check your AI keys if many fail.
+A new phrasing starts matching within seconds. Phrasings that are not ready yet are indexed in the background, and any that fail are retried automatically, so there is nothing to do for them.
 
 ## Try before customers do
 
@@ -61,34 +61,29 @@ Use **Try it** inside an FAQ, or the **Test** tab. You see what would happen, th
 
 The **Unanswered** tab lists customer messages this flow's FAQs did not answer, and why. For each one you can **Add to an FAQ** as a new phrasing, **Create FAQ from this**, or **Dismiss**. This is the fastest way to improve coverage. If your workspace does not keep customer messages, the text shows as not kept and cannot be learned from.
 
+**Fallback message.** Below the list, the **Fallback message** card sets what the flow replies when no FAQ matches (below the bar, too close to call, or no FAQs yet). It is sent exactly as you type it, spelling and punctuation included, and the unanswered message still appears in the list so you can teach the FAQ afterwards. Leave it empty to send no reply. A message an FAQ already answered, or a flow handled, never gets the fallback.
+
 ## Insights
 
-**Insights** shows, for this flow, the answer rate, messages per day, how well messages scored compared with your sensitivity, your top FAQs, FAQs that never matched, and the full match log. Raise the threshold if wrong answers slip in, lower it if too many messages go unanswered.
+**Insights** shows, for this flow, the answer rate, messages per day, how well messages scored compared with your sensitivity, your top FAQs, FAQs that never matched, and the full match log.
 
 ## How a flow's FAQs answer
 
-While a flow is live and its FAQ answering is on, its FAQs answer a customer message that no keyword trigger or running flow took. The flow's FAQs answer in that flow only. Flows that have no FAQ settings on, or no active FAQs, never answer from FAQs.
+While a flow is live, its FAQs answer a customer message that no keyword trigger or running flow took. The flow's FAQs answer in that flow only. Flows with no active FAQs never answer from FAQs, and nothing is answered while the platform has the FAQ engine switched off.
 
 ## The FAQ step
 
-The flow builder has a step called **Answer from FAQ** (AI group). It matches the message you give it, by default the customer's last message, against **the FAQs of the flow it is in**, in the same way. If an FAQ answers, the flow leaves by **Answered**: a text answer is sent, unless you switch off sending on the step so a later step can word the reply itself, and an FAQ that goes to a step continues there. Otherwise the flow leaves by **No match**. The step can be limited to one category of this flow's FAQs and can use its own minimum score. It works even when FAQ answering is switched off in the flow's FAQ settings, and the platform switch is the only thing that stops it. Its form links to the flow's FAQs tab; a flow that has not been saved has no FAQs yet.
+The flow builder has a step called **Answer from FAQ** (AI group). It matches the message you give it, by default the customer's last message, against **the FAQs of the flow it is in**, in the same way. If an FAQ answers, the flow leaves by **Answered**: a text answer is sent, unless you switch off sending on the step so a later step can word the reply itself, and an FAQ that goes to a step continues there. Otherwise the flow leaves by **No match**. The step can be limited to one category of this flow's FAQs and can use its own minimum score. It works even when the platform has FAQ answering switched off for the flow's customers, and the platform switch is the only thing that stops it. Its form links to the flow's FAQs tab; a flow that has not been saved has no FAQs yet.
 
 ## Second check for close calls
 
-A match that only just reaches the bar is the likeliest to be wrong. In the flow's FAQ settings, **Second check for close calls** lets a small chat model read the customer's message and the FAQ and say whether the answer fits. It only runs for scores from the bar up to the bar plus the band you choose (1 to 30 points), and the card shows the numbers, for example "from 50% up to 60%", and the model that checks. It can only say no. A no means nothing is sent and the message appears under **Unanswered**, marked **Answer withheld**. If the check cannot finish, or is skipped because the platform switched it off, no key is available or the hourly limit was reached, the match stands as it would without a check.
+A match that only just reaches the bar is the likeliest to be wrong. The **second check for close calls** can let a small chat model read the customer's message and the FAQ and say whether the answer fits. It only runs for scores from the bar up to the bar plus the band you choose (1 to 30 points), and the card shows the numbers, for example "from 50% up to 60%", and the model that checks. It can only say no. A no means nothing is sent and the message appears under **Unanswered**, marked **Answer withheld**. If the check cannot finish, or is skipped because the platform switched it off, no key is available or the hourly limit was reached, the match stands as it would without a check.
 
-The check costs a few hundred tokens and adds about a second to a borderline reply. Test, Unanswered and the match log show each check as a chip (**Second check: yes**, **no**, **failed** or **skipped**) with the model and its reason. If the platform has switched the second check off, the switch is disabled and says so. Turning it on or off needs **faq.settings.manage**.
+The check costs a few hundred tokens and adds about a second to a borderline reply. Test, Unanswered and the match log show each check as a chip (**Second check: yes**, **no**, **failed** or **skipped**) with the model and its reason. If the platform has switched the second check off, the switch is disabled and says so.
 
-## Settings
+## Limits
 
-Each flow has its own settings, under **Settings** in its FAQs tab:
-
-- **Answer customers with this flow's FAQs** is the flow's switch.
-- **Sensitivity** is how closely a message must match. Strict, Balanced and Forgiving are relative to the value recommended for the AI model. Scores belong to that model, so review the number if the platform changes it.
-- **Ambiguity guard** keeps the bot quiet when two FAQs score almost the same.
-- **Keep customer messages in the log** keeps message text for 90 days. Switch it off and only scores and outcomes are kept.
-
-The platform's limits on FAQs and phrasings apply to each flow. Changing settings needs the permission **faq.settings.manage**. You can set a different sensitivity on one FAQ under **Advanced** in its editor.
+The platform's limits on FAQs and phrasings apply to each flow.
 
 ## If something looks wrong
 

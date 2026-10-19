@@ -32,6 +32,7 @@ const GROUP_LABEL: Record<string, string> = {
   contact: 'Contact',
   custom_field: 'Custom field',
   workspace: 'Workspace',
+  company: 'Company',
   system: 'System',
 };
 

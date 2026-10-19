@@ -33,6 +33,19 @@ export interface AppointmentRow {
   meetUrl: string | null;
   calendarEventId: string | null;
   calendarId: string | null;
+  /** Which provider holds the event; null with an event id means Google (every event written before Outlook existed). */
+  calendarProvider: 'google' | 'microsoft' | null;
+  googleSyncState: 'in_sync' | 'drifted' | 'unreadable' | null;
+  googleSyncReason: string | null;
+  googleDriftDetectedAt: Date | null;
+  googleDriftStartsAt: Date | null;
+  googleDriftEndsAt: Date | null;
+  googleEventEtag: string | null;
+  googlePushedAt: Date | null;
+  googlePushedStartsAt: Date | null;
+  googlePushedEndsAt: Date | null;
+  googlePushedAttendee: string | null;
+  googleCheckedAt: Date | null;
   seat: number;
   source: AppointmentSource;
   answers: AnswerSnapshot[];
@@ -91,6 +104,18 @@ const toRow = (r: Raw): AppointmentRow => ({
   meetUrl: s(r.meet_url),
   calendarEventId: s(r.calendar_event_id),
   calendarId: s(r.calendar_id),
+  calendarProvider: (r.calendar_provider as AppointmentRow['calendarProvider']) ?? null,
+  googleSyncState: (r.google_sync_state as AppointmentRow['googleSyncState']) ?? null,
+  googleSyncReason: s(r.google_sync_reason),
+  googleDriftDetectedAt: d(r.google_drift_detected_at),
+  googleDriftStartsAt: d(r.google_drift_starts_at),
+  googleDriftEndsAt: d(r.google_drift_ends_at),
+  googleEventEtag: s(r.google_event_etag),
+  googlePushedAt: d(r.google_pushed_at),
+  googlePushedStartsAt: d(r.google_pushed_starts_at),
+  googlePushedEndsAt: d(r.google_pushed_ends_at),
+  googlePushedAttendee: s(r.google_pushed_attendee),
+  googleCheckedAt: d(r.google_checked_at),
   seat: Number(r.seat),
   source: r.source as AppointmentSource,
   answers: Array.isArray(r.answers) ? (r.answers as AnswerSnapshot[]) : [],
@@ -265,6 +290,105 @@ export class AppointmentsRepository {
     return r ? toRow(r) : undefined;
   }
 
+  /**
+   * The confirmed bookings that start in [from, to) and have a Google event, least recently looked at first (never looked at first of all):
+   * the reconcile's batch. `limit` bounds one pass; the rest is taken by the next.
+   */
+  async reconcileCandidates(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+    limit: number,
+    checkedBefore: Date,
+  ): Promise<AppointmentRow[]> {
+    // Only what has not been looked at since `checkedBefore`: a pass that finds fewer than `limit` has caught up, so a busy workspace is read
+    // once an hour per appointment (not continuously), and a backlog is worked off oldest-checked first.
+    const res = await tx.execute(sql`${SELECT}
+      WHERE a.org_id = ${orgId} AND a.status = 'confirmed' AND a.calendar_event_id IS NOT NULL
+        AND COALESCE(a.calendar_provider, 'google') = 'google'
+        AND a.starts_at >= ${from.toISOString()}::timestamptz AND a.starts_at < ${to.toISOString()}::timestamptz
+        AND (a.google_checked_at IS NULL OR a.google_checked_at < ${checkedBefore.toISOString()}::timestamptz)
+      ORDER BY a.google_checked_at ASC NULLS FIRST, a.starts_at ASC
+      LIMIT ${limit}`);
+    return (res.rows as Raw[]).map(toRow);
+  }
+
+  /**
+   * The confirmed bookings that have not ended and start before `to` whose event is NOT in `provider`'s calendar: they have none (made while
+   * nothing was connected, or lost with an account that was replaced) or it sits in the other provider. In start order, `limit` at a time,
+   * after the `after` cursor so a booking that cannot be written (the pass moves on) is not asked for again within the pass.
+   */
+  async backfillCandidates(
+    tx: Tx,
+    orgId: number,
+    now: Date,
+    to: Date,
+    provider: 'google' | 'microsoft',
+    limit: number,
+    after: { startsAt: Date; id: number } | null,
+  ): Promise<Array<{ id: number; uuid: string; startsAt: Date }>> {
+    const res = await tx.execute(sql`
+      SELECT a.id, a.uuid, a.starts_at FROM appointments a
+       WHERE a.org_id = ${orgId} AND a.status = 'confirmed'
+         AND a.ends_at > ${now.toISOString()}::timestamptz AND a.starts_at < ${to.toISOString()}::timestamptz
+         AND (a.calendar_event_id IS NULL OR COALESCE(a.calendar_provider, 'google') <> ${provider})
+         ${after ? sql`AND (a.starts_at, a.id) > (${after.startsAt.toISOString()}::timestamptz, ${after.id})` : sql``}
+       ORDER BY a.starts_at ASC, a.id ASC
+       LIMIT ${limit}`);
+    return (res.rows as Raw[]).map((r) => ({
+      id: Number(r.id),
+      uuid: r.uuid as string,
+      startsAt: new Date(r.starts_at as string),
+    }));
+  }
+
+  /** How many bookings `backfillCandidates` would offer (the same conditions, no cursor). */
+  async backfillCount(
+    tx: Tx,
+    orgId: number,
+    now: Date,
+    to: Date,
+    provider: 'google' | 'microsoft',
+  ): Promise<number> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS n FROM appointments a
+       WHERE a.org_id = ${orgId} AND a.status = 'confirmed'
+         AND a.ends_at > ${now.toISOString()}::timestamptz AND a.starts_at < ${to.toISOString()}::timestamptz
+         AND (a.calendar_event_id IS NULL OR COALESCE(a.calendar_provider, 'google') <> ${provider})`);
+    return Number((res.rows as Raw[])[0]?.n ?? 0);
+  }
+
+  /** The reconcile's "looked, nothing new": one statement for the whole pass. The monitoring columns do not bump `row_version`. */
+  async markChecked(tx: Tx, orgId: number, ids: number[], at: Date): Promise<void> {
+    if (ids.length === 0) return;
+    await tx.execute(sql`
+      UPDATE appointments SET google_checked_at = ${at.toISOString()}::timestamptz
+       WHERE org_id = ${orgId} AND id = ANY(${sql`ARRAY[${sql.join(
+         ids.map((i) => sql`${i}`),
+         sql`, `,
+       )}]::bigint[]`})`);
+  }
+
+  /**
+   * The workspace moved to another account of a calendar provider: every upcoming booking's event of that provider is in the OLD account.
+   * Forgets the event and everything learned about it (the snapshot of what we wrote, the etag, drift) so nothing is compared with, or
+   * reported about, an event that cannot be read any more. The meeting link stays on the booking. Events of the other provider are
+   * untouched (an event with no provider recorded is Google's).
+   */
+  async detachEvents(tx: Tx, orgId: number, provider: 'google' | 'microsoft'): Promise<number> {
+    const res = await tx.execute(sql`
+      UPDATE appointments SET calendar_event_id = NULL, calendar_id = NULL, calendar_provider = NULL,
+             google_sync_state = NULL, google_sync_reason = NULL, google_drift_detected_at = NULL,
+             google_drift_starts_at = NULL, google_drift_ends_at = NULL, google_event_etag = NULL,
+             google_pushed_at = NULL, google_pushed_starts_at = NULL, google_pushed_ends_at = NULL,
+             google_pushed_attendee = NULL, google_checked_at = NULL
+       WHERE org_id = ${orgId} AND calendar_event_id IS NOT NULL AND ends_at >= now()
+         AND COALESCE(calendar_provider, 'google') = ${provider}
+       RETURNING id`);
+    return res.rows.length;
+  }
+
   /** The manage token's lookup: by hash, across every organization (the organization is not known before it). */
   async locateByTokenHash(
     tx: Tx,
@@ -385,13 +509,6 @@ export class AppointmentsRepository {
 
   async delete(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(sql`DELETE FROM appointments WHERE org_id = ${orgId} AND id = ${id}`);
-  }
-
-  /** Reminder claims of one booking are forgotten when it moves, so every offset is armed again. */
-  async clearReminderRuns(tx: Tx, orgId: number, appointmentId: number): Promise<void> {
-    await tx.execute(
-      sql`DELETE FROM appointment_reminder_runs WHERE org_id = ${orgId} AND appointment_id = ${appointmentId}`,
-    );
   }
 
   // --- the facts the slot engine and the commit read ---------------------------------------------------------------------

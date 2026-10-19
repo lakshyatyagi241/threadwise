@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "一時停止中: 1日の送信上限に達しました。{when}以降に自動的に再開されます。",
         "halt": "一時停止中: このワークスペースの送信は停止されています。停止が解除されると再開されます。",
-        "manual": "一時停止中。"
+        "manual": "一時停止中。",
+        "quiet_hours": "一時停止中: 一部の受信者が通知を控える時間帯です。{when} 以降に自動で再開します。"
       },
       "delete": "削除",
       "deleteTitle": "一斉配信を削除しますか?",
@@ -145,7 +146,8 @@
         "queued": "待機中",
         "queuedHint": "送信待ち",
         "failed": "失敗",
-        "failedPct": "失敗率{pct}%"
+        "failedPct": "失敗率{pct}%",
+        "queuedHeld": "{count} 件が通知を控える時間帯のため保留中"
       },
       "tab": {
         "overview": "概要",
@@ -193,7 +195,8 @@
         "lastClick": "最後のクリック: {when}",
         "empty": "受信者が添付されていません。",
         "more": "さらに読み込む",
-        "loading": "読み込み中"
+        "loading": "読み込み中",
+        "heldUntil": "{when} まで保留中(通知を控える時間帯)"
       },
       "failures": {
         "kicker": "失敗の理由",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "非公式(無効)"
     },
     "compose": {
-      "back": "一斉配信に戻る",
-      "crumb": "一斉配信 / 新規",
-      "title": "新規作成",
-      "titleAccent": "一斉配信",
-      "draft": "下書き / 未保存",
-      "submit": "一斉配信を追加",
-      "submitting": "追加中…",
-      "created": "一斉配信を追加しました。",
-      "createdMany": "送信者ごとに1件ずつ、{count}件の一斉配信を追加しました。",
-      "failed": "一斉配信を追加できませんでした。",
-      "fixName": "一斉配信の名前を入力してください。",
-      "fixTemplate": "承認済みテンプレートを選択してください。",
-      "fixSchedule": "送信日時を選択してください。",
-      "loading": "読み込み中",
-      "loadError": "作成データを読み込めませんでした。",
-      "retry": "再試行",
-      "setup": "一斉配信の設定",
-      "templateMessage": "テンプレートメッセージ",
-      "name": "一斉配信名",
-      "namePlaceholder": "例: 5月のオファーのテンプレート送信",
-      "nameHint": "一斉配信レポートで使用する内部用ラベルです。",
-      "template": "テンプレートメッセージを選択",
-      "pickTemplate": "— 承認済みテンプレートを選択 —",
-      "noTemplates": "承認済みのテンプレートがまだありません。",
       "createOne": "作成する",
-      "templateHint": "一斉配信では承認済みテンプレートのみ送信されます。",
-      "twilioHint": "Twilio準拠の送信にはテンプレートごとにContent SIDが必要です。/templates/{id}/edit でテンプレートに「Twilio ready」のフラグを設定してください。ContentSidのないテンプレートはプレーンテキストとして送信されます(Metaのテンプレート承認が失われます)。",
-      "device": "送信元デバイス",
-      "devices": "送信元デバイス",
-      "multiDevice": "複数デバイス — 該当するものをすべて選択",
-      "noDevices": "接続されているデバイスがありません。",
-      "connectOne": "接続する →",
-      "share": "配分",
-      "shareHint": "デバイスを選択し、配分の比重を設定します。例えば 7 / 3 なら、連絡先の70%を1台目、30%を2台目から送信します。比重が同じなら均等に分割されます。",
       "audience": "誰に送信しますか?",
       "audienceHint": "セグメント、タグ、グループ、または連絡先を選択します。選択された全員は重複なく統合されます。",
       "selected": "{count}件選択中",
@@ -276,27 +246,10 @@
       "noContacts": "連絡先がまだありません。",
       "addSome": "追加する →",
       "noMatch": "検索に一致する連絡先がありません。",
-      "when": "一斉配信はいつ送信しますか?",
-      "whenHint": "すぐに送信するか、将来の日時を選択します。",
-      "sendNow": "今すぐ送信",
-      "sendNowHint": "最終確認後に送信します。",
-      "sendLater": "後で送信するよう予約",
-      "sendLaterHint": "特定の日時を選択します。",
-      "sendDate": "送信日",
-      "sendTime": "送信時刻",
-      "timezone": "タイムゾーン",
-      "preview": "テンプレートのプレビュー",
-      "previewTitle": "一斉配信のプレビュー",
-      "previewSub": "テンプレートメッセージ",
-      "pickToPreview": "プレビューするテンプレートを選択…",
-      "previewSelected": "選択済み",
-      "previewSchedule": "スケジュール",
-      "now": "今すぐ",
-      "later": "後で",
-      "media": "{kind}のプレビュー",
       "contactsDenied": "連絡先リストへのアクセス権がありません。グループまたはタグから連絡先を選択してください。",
       "unofficialDisabled": "個人のWhatsApp番号(非公式API)での送信は、お使いのワークスペースでは有効になっていません。公式のWhatsApp Business API番号を選択してください。",
-      "previewLabel": "テンプレートのプレビュー"
+      "colEmail": "メール",
+      "noEmail": "メールアドレスなし"
     },
     "overrides": {
       "title": "この送信の内容を入力",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "InstagramのDMにすでにいるユーザーにメッセージを送ります。テンプレートの承認は不要です。",
         "cta": "Instagram一斉配信を作成"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "過去24時間にページへメッセージを送ってくれた人に Messenger でメッセージを送ります。",
+        "cta": "Facebook 配信を作成"
+      },
+      "email": {
+        "name": "メール",
+        "hint": "接続済みのメールボックスからメッセージをメールとして送信します。配信停止リンク付きです。",
+        "cta": "メールキャンペーンを作成"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "すでにLINEアカウントでやり取りしている人にメッセージを送ります。",
+        "cta": "LINE配信を作成"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "すでに Viber アカウントとチャットしている人にメッセージを送信します。",
+        "cta": "Viber 一斉配信を作成"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "公式アカウントのすべてのフォロワー、タグ、または選択したユーザーにメッセージを一斉送信します。",
+        "cta": "WeChat一斉配信を作成"
       }
     }
   }

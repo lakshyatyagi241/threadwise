@@ -241,7 +241,7 @@ export const REGISTRY: RegistryEntry[] = [
   m(
     'contact_attribution',
     ['contact_attributions'],
-    'first-touch attribution, one document per contact (real ISKM 4,542 / Rhythm 2,253): first_touch.platform / .source / .raw_utm_campaign / .module_name / .captured_at -> contact_attributions (platform, source_label, campaign, form, captured_at). lead_event_id and source_id stay NULL (the touch did not come through a lead source). The current top-level touch, when it differs, is recorded as the soft issue LATEST_TOUCH_DIFFERS and not imported (first touch only). Append-only table: rows are never updated',
+    'first-touch attribution, one document per contact (real ISKM 4,542 / Rhythm 2,253): first_touch.platform / .source / .raw_utm_campaign / .module_name / .captured_at -> contact_attributions (platform, source_label, campaign, form, captured_at). lead_event_id and source_id stay NULL (the touch did not come through a lead source). The whole Waboo document is kept in contact_attributions.evidence.legacy.waboo (current top-level touch: source, channel, platform, module_name, module_type, dates; and every non-null first_touch key such as channel and module_type), so nothing is lost; when the current touch differs it is also recorded as the soft issue LATEST_TOUCH_DIFFERS. Append-only table: rows are never updated',
     'attributions',
   ),
 

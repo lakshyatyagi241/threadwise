@@ -23,7 +23,7 @@ export const META_FAILURE = {
   SPAM_RATE_LIMITED: 'SPAM_RATE_LIMITED',
   /** Meta 131056: too many messages to the same customer in a short time. */
   PAIR_RATE_LIMITED: 'PAIR_RATE_LIMITED',
-  /** Meta 130429 / 80007 / 4 / 17 / 32 / 613: throughput or API rate limits. */
+  /** Meta 130429 / 131057 / 80007 / 4 / 17 / 32 / 613: throughput or API rate limits (131057: a throughput upgrade is in progress). */
   RATE_LIMITED: 'RATE_LIMITED',
   /** Meta 131049: Meta chose not to deliver this message to protect the customer experience (mostly marketing). */
   ENGAGEMENT_BLOCKED: 'ECOSYSTEM_ENGAGEMENT_BLOCKED',
@@ -44,10 +44,12 @@ export const META_FAILURE = {
   MEDIA_REJECTED: 'MEDIA_REJECTED',
   /** The request itself was refused as malformed (Meta 100, 131008, 131009, 131051, 135000). */
   REQUEST_INVALID: 'PROVIDER_REQUEST_INVALID',
-  /** HTTP 5xx and Meta's own transient codes (1, 2, 131000, 131016, 131057). */
+  /** HTTP 5xx and Meta's own transient codes (1, 2, 131000, 131016). */
   PROVIDER_ERROR: 'PROVIDER_ERROR',
-  /** The connection failed, or nothing answered in time. */
+  /** The connection failed before anything was sent: safe to try again. */
   PROVIDER_UNREACHABLE: 'PROVIDER_UNREACHABLE',
+  /** The request may have been accepted although no answer came back (timeout, reset, unreadable 200): never resent by itself. */
+  OUTCOME_UNKNOWN: 'PROVIDER_OUTCOME_UNKNOWN',
   /** Any other 4xx the table has no row for. */
   PROVIDER_REJECTED: 'PROVIDER_REJECTED',
   /** Meta accepted the call but the answer had no message id: it may or may not have sent, so it is not retried. */
@@ -251,9 +253,18 @@ export const META_ERROR_RULES: readonly Rule[] = [
     retryable: false,
     reason: 'Meta refused the request as malformed.',
   },
+  {
+    // Meta is raising the number's throughput and the number is unusable for up to a minute (a THROUGHPUT_UPGRADE webhook follows).
+    codes: [131057],
+    code: META_FAILURE.RATE_LIMITED,
+    retryable: true,
+    retryAfterMs: 65_000,
+    reason:
+      'The number is being upgraded to higher throughput and cannot send for up to a minute. Retrying.',
+  },
   // --- Meta's own transient failures -------------------------------------------------------------------------------------------
   {
-    codes: [1, 2, 131000, 131016, 131057],
+    codes: [1, 2, 131000, 131016],
     code: META_FAILURE.PROVIDER_ERROR,
     retryable: true,
     retryAfterMs: 30_000,
@@ -361,12 +372,20 @@ export function classifyMetaCode(
  * Order of decisions: (1) Meta's own code through the table; (2) Meta saying the failure is transient; (3) the HTTP status
  * (401 and 403 are about the token, 429 and 5xx are worth another try, other 4xx are not). The reason carries Meta's words
  * (`describeMetaError`) because they are usually more specific than ours; the access token is scrubbed out of it. A connection that
- * failed before any answer (status 0) is retryable: the message may not have left.
+ * failed before any answer (status 0) is retryable only when it provably never left (refused, unresolved name); a timeout or reset is `OUTCOME_UNKNOWN`.
  */
 export function metaFailure(
   err: WabaApiError,
   secrets: readonly (string | undefined)[] = [],
 ): ChannelError {
+  if (err.status === 0 && err.outcomeMayHaveCommitted) {
+    return new ChannelError(
+      META_FAILURE.OUTCOME_UNKNOWN,
+      `${scrub(err.message, secrets)}. The message may still have been delivered: check the conversation before sending it again.`,
+      false,
+      { outcomeMayHaveCommitted: true },
+    );
+  }
   if (err.status === 0) {
     return new ChannelError(META_FAILURE.PROVIDER_UNREACHABLE, scrub(err.message, secrets), true, {
       retryAfterMs: 10_000,
@@ -381,7 +400,8 @@ export function metaFailure(
   if (row) {
     return new ChannelError(row.code, `${meta}`, row.retryable, {
       needsReauth: row.needsReauth,
-      retryAfterMs: row.retryAfterMs,
+      // The platform's own limiter knows exactly how long a turn takes; Meta's table value is the fallback.
+      retryAfterMs: err.retryAfterMs ?? row.retryAfterMs,
       providerCode: row.providerCode,
     });
   }

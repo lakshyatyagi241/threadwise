@@ -5,6 +5,7 @@ import { RoutingEngine } from '../../../src/modules/team-inbox-routing-sla';
 import type { Tenant } from '../contacts-attributes-tags/support';
 import {
   conversationOf,
+  messagesOf,
   simChannel,
   simInbound,
   startPipeline,
@@ -609,5 +610,361 @@ describe('the engine: a new conversation is given to an agent', () => {
     const ch2 = await simChannel(p, t2);
     const out = await customer(t2, ch2, 'refund');
     expect(out.assignee).toBeNull();
+  });
+});
+
+describe('the engine: a rule can mark the conversation as spam (Reference mark_spam)', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  let a1: { token: string; userId: number };
+  let u1: string;
+  let spamOnly: Rule;
+  let spamAndAssign: Rule;
+  const eventsOf = async (conv: Record<string, unknown>) =>
+    (
+      await p.h.owner.query(
+        `SELECT type, actor_type, payload FROM conversation_events WHERE conversation_id = $1 ORDER BY id`,
+        [conv.id],
+      )
+    ).rows as Array<{ type: string; actor_type: string; payload: Record<string, unknown> }>;
+
+  beforeAll(async () => {
+    t = await p.api.signup('rrs');
+    ch = await simChannel(p, t);
+    a1 = await p.api.member(t, 'spam1', AGENT);
+    u1 = await uuidOf(a1.userId);
+    const api = rulesApi(t.admin);
+    const live = async (r: Rule) =>
+      (await api.update(r.id, { rowVersion: r.rowVersion, isActive: true })).body as Rule;
+    spamOnly = await live(
+      (
+        await api.create({
+          name: 'Casino spam',
+          conditions: { keywords: { words: ['casino'] } },
+          markSpam: true,
+        })
+      ).body,
+    );
+    spamAndAssign = await live(
+      (
+        await api.create({
+          name: 'Scam to agent',
+          conditions: { keywords: { words: ['scam'] } },
+          assign: { strategy: 'specific', userIds: [u1] },
+          markSpam: true,
+        })
+      ).body,
+    );
+  });
+
+  it('a matching message marks the conversation as spam: no agent, out of the open list, and the timeline names the rule', async () => {
+    const { conv, assignee } = await customer(t, ch, 'win a free casino trip');
+    expect(conv.status).toBe('spam');
+    expect(assignee).toBeNull();
+    const ev = (await eventsOf(conv)).find((e) => e.type === 'spam_flagged')!;
+    expect(ev).toMatchObject({
+      actor_type: 'system',
+      payload: { by: 'routing', ruleId: spamOnly.id, from: 'open' },
+    });
+    expect(Number((await ruleRow(spamOnly.id)).fired_count)).toBe(1);
+  });
+
+  it('a rule that both assigns and marks spam does both: the spam thread still goes to the agent', async () => {
+    const { conv, assignee } = await customer(t, ch, 'this scam offer');
+    expect(conv.status).toBe('spam');
+    expect(assignee).toBe(a1.userId);
+    expect(Number((await ruleRow(spamAndAssign.id)).fired_count)).toBe(1);
+  });
+
+  it('a message no rule matches stays open; a rule with no action cannot be created (422)', async () => {
+    const { conv } = await customer(t, ch, 'hello there');
+    expect(conv.status).toBe('open');
+    const none = await rulesApi(t.admin).create({
+      name: 'Does nothing',
+      conditions: { keywords: { words: ['zzz'] } },
+    });
+    expect(none.status).toBe(422);
+  });
+
+  it('the rule shows its action; removing the spam action leaves no action and is refused, while keeping an assignment is fine', async () => {
+    const api = rulesApi(t.admin);
+    const shown = (await api.list(`?q=Casino`)).body.data[0] as Rule & {
+      markSpam: boolean;
+      assign: unknown;
+    };
+    expect(shown).toMatchObject({ markSpam: true, assign: null });
+    const bare = await api.update(spamOnly.id, { rowVersion: shown.rowVersion, markSpam: false });
+    expect(bare.status).toBe(422);
+    const kept = await api.update(spamOnly.id, {
+      rowVersion: shown.rowVersion,
+      markSpam: false,
+      assign: { strategy: 'specific', userIds: [u1] },
+    });
+    expect(kept.status, JSON.stringify(kept.body)).toBe(200);
+    expect(kept.body).toMatchObject({ markSpam: false, assign: { strategy: 'specific' } });
+  });
+});
+
+describe('the engine: a rule can set the priority and add tags (Reference set_priority, add_tag)', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  let urgent: Rule;
+  const tagNames = async (conversationId: unknown) =>
+    (
+      await p.h.owner.query(
+        `SELECT t.name::text AS name FROM conversation_tag ct JOIN tags t ON t.id = ct.tag_id AND t.org_id = ct.org_id
+         WHERE ct.conversation_id = $1 ORDER BY t.name`,
+        [conversationId],
+      )
+    ).rows.map((r: { name: string }) => r.name);
+  const eventsOf = async (conv: Record<string, unknown>) =>
+    (
+      await p.h.owner.query(
+        `SELECT type, actor_type, payload FROM conversation_events WHERE conversation_id = $1 ORDER BY id`,
+        [conv.id],
+      )
+    ).rows as Array<{ type: string; actor_type: string; payload: Record<string, unknown> }>;
+
+  beforeAll(async () => {
+    t = await p.api.signup('rrp');
+    ch = await simChannel(p, t);
+    const api = rulesApi(t.admin);
+    urgent = (
+      await api.create({
+        name: 'Urgent VIP',
+        conditions: { keywords: { words: ['urgentword'] } },
+        priority: 'urgent',
+        addTags: [{ name: 'VIP', color: null }],
+        isActive: true,
+      })
+    ).body as Rule;
+  });
+
+  it('a matching message gets the priority and the tag; the timeline names the rule and the tag is created once', async () => {
+    const { conv } = await customer(t, ch, 'this is urgentword');
+    expect(conv.priority).toBe('urgent');
+    expect(await tagNames(conv.id)).toEqual(['VIP']);
+    const events = await eventsOf(conv);
+    expect(events.find((e) => e.type === 'priority_changed')).toMatchObject({
+      actor_type: 'system',
+      payload: { from: 'normal', to: 'urgent', by: 'routing', ruleId: urgent.id },
+    });
+    expect(events.find((e) => e.type === 'tag_added')).toMatchObject({
+      payload: { tag: 'VIP', by: 'routing', ruleId: urgent.id },
+    });
+  });
+
+  it('a second thread reuses the tag (case-insensitive name) and the tag library has one VIP', async () => {
+    const { conv } = await customer(t, ch, 'another urgentword here');
+    expect(await tagNames(conv.id)).toEqual(['VIP']);
+    const count = await p.h.owner.query(
+      `SELECT count(*)::int AS n FROM tags WHERE org_id = $1 AND name = 'vip'`,
+      [t.orgId],
+    );
+    expect(Number(count.rows[0].n)).toBe(1);
+  });
+
+  it('the rule shows its priority and tags; removing both leaves no action and is refused (422)', async () => {
+    const api = rulesApi(t.admin);
+    const shown = (await api.list(`?q=Urgent`)).body.data[0] as Rule & {
+      priority: string | null;
+      addTags: Array<{ name: string }>;
+    };
+    expect(shown).toMatchObject({ priority: 'urgent', addTags: [{ name: 'VIP' }] });
+    const bare = await api.update(urgent.id, {
+      rowVersion: shown.rowVersion,
+      priority: null,
+      addTags: [],
+    });
+    expect(bare.status).toBe(422);
+  });
+});
+
+describe('the engine: a rule can escalate an unanswered conversation (Reference set_escalation)', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  let a1: { token: string; userId: number };
+  let a2: { token: string; userId: number };
+  let u1: string;
+  let u2: string;
+  let rule: Rule;
+  const applyDue = async (uuid: string) => {
+    await p.h.owner.query(
+      `UPDATE conversations SET escalation_due_at = now() - interval '1 minute' WHERE uuid = $1`,
+      [uuid],
+    );
+    const { RoutingEscalationSweep } =
+      await import('../../../src/modules/team-inbox-routing-sla/routing-escalation-sweep.service');
+    await p.h.app.get(RoutingEscalationSweep).run();
+  };
+  const row = async (uuid: string) =>
+    (await p.h.owner.query(`SELECT * FROM conversations WHERE uuid = $1`, [uuid]))
+      .rows[0] as Record<string, unknown>;
+  const eventsOf = async (id: unknown) =>
+    (
+      await p.h.owner.query(
+        `SELECT type, actor_type, payload FROM conversation_events WHERE conversation_id = $1 ORDER BY id`,
+        [id],
+      )
+    ).rows as Array<{ type: string; actor_type: string; payload: Record<string, unknown> }>;
+
+  beforeAll(async () => {
+    t = await p.api.signup('rre');
+    ch = await simChannel(p, t);
+    a1 = await p.api.member(t, 'esc1', AGENT);
+    a2 = await p.api.member(t, 'esc2', AGENT);
+    [u1, u2] = await Promise.all([a1, a2].map((a) => uuidOf(a.userId)));
+    rule = (
+      await rulesApi(t.admin).create({
+        name: 'Wait then escalate',
+        conditions: { keywords: { words: ['waitword'] } },
+        assign: { strategy: 'specific', userIds: [u1] },
+        escalation: { minutes: 30, reassign: true, priority: 'high' },
+        isActive: true,
+      })
+    ).body as Rule;
+  });
+
+  it('a matching message schedules the escalation; nothing happens before its time', async () => {
+    const { conv } = await customer(t, ch, 'this is waitword');
+    expect(conv.escalation_due_at).not.toBeNull();
+    expect(conv.escalation_action).toMatchObject({ ruleId: rule.id, priority: 'high' });
+    expect(await eventsOf(conv.id)).not.toContainEqual(
+      expect.objectContaining({ type: 'escalated' }),
+    );
+  });
+
+  it('when the time comes with no reply, the conversation is reassigned by the rule and given the priority, and the timeline says so', async () => {
+    const { conv } = await customer(t, ch, 'waitword again');
+    // a person moved it to someone else meanwhile
+    await p.api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${conv.uuid}/assign`)
+      .send({ rowVersion: Number(conv.row_version), userId: u2 });
+    expect((await row(conv.uuid as string)).assignee_user_id).toBe(a2.userId);
+    await applyDue(conv.uuid as string);
+    const after = await row(conv.uuid as string);
+    expect(after.assignee_user_id).toBe(a1.userId);
+    expect(after.priority).toBe('high');
+    expect(after.escalation_due_at).toBeNull();
+    expect(await eventsOf(conv.id)).toContainEqual(
+      expect.objectContaining({
+        type: 'escalated',
+        actor_type: 'system',
+        payload: expect.objectContaining({ ruleId: rule.id, priority: 'high', reassigned: true }),
+      }),
+    );
+  });
+
+  it('a reply from us before the time cancels it: the due action does nothing', async () => {
+    const { conv } = await customer(t, ch, 'waitword, will you answer?');
+    await p.h.owner.query(`UPDATE conversations SET first_response_at = now() WHERE uuid = $1`, [
+      conv.uuid,
+    ]);
+    await applyDue(conv.uuid as string);
+    expect((await row(conv.uuid as string)).priority).toBe('normal');
+    expect(await eventsOf(conv.id)).not.toContainEqual(
+      expect.objectContaining({ type: 'escalated' }),
+    );
+  });
+
+  it('a reassignment without any agent to reassign to is refused (422), and the minutes are bounded', async () => {
+    const api = rulesApi(t.admin);
+    const noAgents = await api.create({
+      name: 'Escalate only',
+      conditions: { keywords: { words: ['nothing'] } },
+      escalation: { minutes: 10, reassign: true, priority: null },
+    });
+    expect(noAgents.status).toBe(422);
+    const tooLong = await api.create({
+      name: 'Too long',
+      conditions: { keywords: { words: ['nothing'] } },
+      assign: { strategy: 'specific', userIds: [u1] },
+      escalation: { minutes: 5000, reassign: true, priority: null },
+    });
+    expect(tooLong.status).toBe(422);
+  });
+});
+
+describe('the engine: an automatic reply, and per-message actions on a later message (Reference auto_reply, add_tag)', () => {
+  let t: Tenant;
+  let ch: SimChannel;
+  let replyRule: Rule;
+  let tagRule: Rule;
+  const settle = () => new Promise((resolve) => setTimeout(resolve, 1500));
+  const outbound = async (conversationId: unknown) =>
+    (await messagesOf(p, conversationId as number)).filter((m) => m.direction === 'out');
+
+  beforeAll(async () => {
+    t = await p.api.signup('rra');
+    ch = await simChannel(p, t);
+    const api = rulesApi(t.admin);
+    replyRule = (
+      await api.create({
+        name: 'Opening hours',
+        stopOnMatch: false,
+        conditions: { keywords: { words: ['hours'] } },
+        autoReply: { body: 'We are open 9 to 6, Monday to Friday.' },
+        isActive: true,
+      })
+    ).body as Rule;
+    tagRule = (
+      await api.create({
+        name: 'Asked about hours',
+        stopOnMatch: false,
+        conditions: { keywords: { words: ['hours'] } },
+        addTags: [{ name: 'Hours question', color: null }],
+        isActive: true,
+      })
+    ).body as Rule;
+  });
+
+  it('a matching new conversation gets the automatic reply, sent as the business (a bot message)', async () => {
+    const { conv } = await customer(t, ch, 'what are your hours?');
+    const sent = await until('auto reply stored', async () => {
+      const out = await outbound(conv.id);
+      return out.length > 0 ? out : null;
+    });
+    expect(sent[0]).toMatchObject({
+      body: 'We are open 9 to 6, Monday to Friday.',
+      sender_kind: 'bot',
+    });
+    expect(Number((await ruleRow(replyRule.id)).fired_count)).toBeGreaterThanOrEqual(1);
+  });
+
+  it('a later message of the same live conversation runs the per-message actions again: the reply is sent and the tag added', async () => {
+    const from = phone();
+    const { conv } = await customer(t, ch, 'hours please', from);
+    await until('first reply', async () => (await outbound(conv.id)).length >= 1);
+    await simInbound(p, t, ch, { from, text: 'and the hours on Saturday?' });
+    const replies = await until('second reply', async () => {
+      const out = await outbound(conv.id);
+      return out.length >= 2 ? out : null;
+    });
+    expect(replies).toHaveLength(2);
+    const tags = (
+      await p.h.owner.query(
+        `SELECT t.name::text AS name FROM conversation_tag ct JOIN tags t ON t.id = ct.tag_id AND t.org_id = ct.org_id
+         WHERE ct.conversation_id = $1`,
+        [conv.id],
+      )
+    ).rows.map((r: { name: string }) => r.name);
+    expect(tags).toContain('Hours question');
+    expect(Number((await ruleRow(tagRule.id)).fired_count)).toBeGreaterThanOrEqual(2);
+  });
+
+  it('a message that matches no rule gets no reply', async () => {
+    const { conv } = await customer(t, ch, 'hello there');
+    await settle();
+    expect(await outbound(conv.id)).toHaveLength(0);
+  });
+
+  it('an empty automatic reply is refused (422)', async () => {
+    const res = await rulesApi(t.admin).create({
+      name: 'Empty reply',
+      conditions: { keywords: { words: ['x'] } },
+      autoReply: { body: '   ' },
+    });
+    expect(res.status).toBe(422);
   });
 });

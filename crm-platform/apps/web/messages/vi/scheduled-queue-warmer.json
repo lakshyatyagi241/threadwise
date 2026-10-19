@@ -139,7 +139,8 @@
         "cancel": "Hủy",
         "retry": "Thử lại với thời gian mới",
         "delete": "Xóa",
-        "deleteHistory": "Xóa khỏi lịch sử"
+        "deleteHistory": "Xóa khỏi lịch sử",
+        "edit": "Chỉnh sửa"
       },
       "empty": {
         "title": "Chưa có lịch nào",
@@ -207,7 +208,8 @@
         "noSenders": "Chưa có người gửi nào được kết nối. Hãy kết nối một số trước.",
         "warming": "Đang khởi động",
         "splitHint": "Mỗi người gửi được chọn sẽ chạy lịch riêng với phần người nhận được chia đều.",
-        "messageType": "Loại tin nhắn"
+        "messageType": "Loại tin nhắn",
+        "editSenderHint": "Mỗi lịch gửi chỉ có một số. Chọn số khác sẽ chuyển lịch sang số đó và giữ lại hạn mức khởi động của số mới."
       },
       "audience": {
         "title": "Người nhận",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Hàng đợi đối tượng",
-            "hint": "Nhắm lại người nhận của một chiến dịch Gửi hàng loạt trước đây."
+            "hint": "Nhắm lại người nhận của các broadcast và chiến dịch trước đó."
           },
           "number": {
             "title": "Số điện thoại",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Chọn nhóm",
         "chooseTags": "Chọn một hoặc nhiều thẻ",
-        "chooseQueues": "Chọn một hoặc nhiều chiến dịch Gửi hàng loạt trước đây",
+        "chooseQueues": "Chọn một hoặc nhiều broadcast hoặc chiến dịch trước đó",
         "tickAny": "(chọn bao nhiêu tùy ý)",
         "noGroups": "Chưa có nhóm nào",
         "noTags": "Chưa có thẻ nào",
-        "noQueues": "Chưa có chiến dịch Gửi hàng loạt nào hoàn tất",
+        "noQueues": "Chưa có broadcast hoặc chiến dịch nào trước đó",
         "contacts": "Đến Liên hệ",
         "broadcast": "Đến Gửi hàng loạt",
         "tagsHint": "Người nhận được tính lại khi lịch chạy, nên các liên hệ mới được gắn thẻ cũng sẽ được đưa vào.",
-        "queuesHint": "Chọn bao nhiêu chiến dịch tùy ý. Người nhận sẽ được loại trùng tự động trước khi gửi.",
+        "queuesHint": "Chọn bao nhiêu broadcast hoặc chiến dịch tùy ý. Người nhận trùng lặp được tự động loại bỏ trước khi gửi.",
         "paste": "Dán số điện thoại",
         "pasteHint": "Nhập mã quốc gia trước, không có dấu +. Các mục cách nhau bằng xuống dòng hoặc dấu phẩy.",
         "pastePlaceholder": "Mỗi dòng một số, kèm mã quốc gia, không có dấu +",
         "total": "Tổng số người nhận:",
-        "optedOut": "{n} bị loại: đã từ chối nhận tin hoặc đã lưu trữ"
+        "optedOut": "{n} bị loại: đã từ chối nhận tin hoặc đã lưu trữ",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Chiến dịch"
+        }
       },
       "message": {
         "title": "Soạn tin nhắn",
@@ -275,7 +281,34 @@
         "pickerSearch": "Tìm theo tên hoặc ngôn ngữ…",
         "pickerEmpty": "Không có mẫu nào khớp.",
         "manageTemplates": "Quản lý mẫu →",
-        "cancel": "Hủy"
+        "cancel": "Hủy",
+        "pickToPreview": "Chọn một mẫu để xem.",
+        "headerMedia": "Tiêu đề {kind}",
+        "windowNote": "Số Cloud API gửi được mẫu đã duyệt ngay cả khi khách hàng không nhắn tin trong 24 giờ qua.",
+        "previewSamples": "Xem trước với giá trị mẫu",
+        "pickerCategories": "Danh mục mẫu",
+        "categories": {
+          "all": "Tất cả",
+          "marketing": "Tiếp thị",
+          "utility": "Tiện ích"
+        },
+        "pickerHidden": "{n, plural, other {Còn # mẫu bị ẩn vì số đã chọn không thể gửi mẫu này.}}",
+        "file": "Tệp",
+        "chooseFile": "Chọn tệp để gửi",
+        "fileHint": "Hình ảnh, video, âm thanh hoặc tài liệu. Tệp được lưu riêng tư trong không gian làm việc của bạn.",
+        "limits": "Với các số bạn đã chọn: tối đa {image} MB cho hình ảnh, {video} MB cho video, {audio} MB cho âm thanh và {document} MB cho tài liệu.",
+        "tooBigUpload": "Tệp lớn hơn {mb} MB.",
+        "uploadFailed": "Không thể tải tệp lên. Hãy thử lại.",
+        "uploading": "Đang tải lên…",
+        "replace": "Thay thế",
+        "remove": "Xóa",
+        "kinds": {
+          "image": "Hình ảnh",
+          "video": "Video",
+          "audio": "Âm thanh",
+          "document": "Tài liệu"
+        },
+        "orLink": "Hoặc dán liên kết đến tệp"
       },
       "when": {
         "title": "Thời điểm gửi",
@@ -356,7 +389,18 @@
         "daysRequired": "Chọn các ngày trong tuần.",
         "endDateRequired": "Chọn ngày cuối.",
         "endBeforeStart": "Ngày kết thúc trước lần gửi đầu tiên.",
-        "testNumber": "Nhập số điện thoại kèm mã quốc gia."
+        "testNumber": "Nhập số điện thoại kèm mã quốc gia.",
+        "mediaTooLarge": "Tệp này lớn hơn mức một số đã chọn chấp nhận. Hãy chọn tệp nhỏ hơn.",
+        "mediaType": "Một số đã chọn không chấp nhận loại tệp này cho loại phương tiện này.",
+        "templateNotForSender": "Một số đã chọn không thể gửi mẫu này: số WhatsApp Cloud API chỉ gửi các mẫu đã được Meta duyệt. Hãy chọn mẫu hoặc số khác."
+      },
+      "edit": {
+        "title": "Chỉnh sửa tin nhắn đã lên lịch",
+        "saved": "Đã cập nhật lịch gửi.",
+        "submit": "Lưu thay đổi",
+        "stale": "Có người đã thay đổi lịch này trong khi bạn chỉnh sửa. Hãy tải lại để xem thay đổi của họ; nội dung bạn đã nhập ở đây sẽ bị mất.",
+        "reload": "Tải lại lịch gửi",
+        "backToSchedule": "Quay lại lịch gửi"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Chạy ngay",
         "cancel": "Hủy",
         "retry": "Thử lại với thời gian mới",
-        "delete": "Xóa"
+        "delete": "Xóa",
+        "edit": "Chỉnh sửa"
       },
       "kpi": {
         "recipients": "Người nhận",
@@ -434,7 +479,11 @@
           "delivered": "Đã giao",
           "read": "Đã đọc",
           "failed": "Thất bại"
-        }
+        },
+        "search": "Tìm theo tên hoặc số",
+        "range": "{from}–{to} trên {total}",
+        "prev": "Trước",
+        "next": "Sau"
       },
       "config": {
         "eyebrow": "Chi tiết lịch",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Xem trước tin nhắn",
         "title": "Người nhận sẽ thấy gì",
-        "empty": "(nội dung trống)"
+        "empty": "(nội dung trống)",
+        "template": "Mẫu {name} ({language})",
+        "file": "Tệp: {name}"
       },
-      "another": "Lên lịch thêm"
+      "another": "Lên lịch thêm",
+      "engagement": {
+        "eyebrow": "Mức tương tác",
+        "title": "Gửi theo thời gian",
+        "legend": "Chú giải",
+        "steps": {
+          "queued": "Đang chờ",
+          "sent": "Đã gửi",
+          "delivered": "Đã nhận",
+          "read": "Đã đọc",
+          "failed": "Thất bại"
+        },
+        "empty": "Chưa có gì được gửi nên chưa có gì để vẽ biểu đồ.",
+        "perHour": "Tổng lũy kế vào đầu mỗi giờ, theo múi giờ {zone}.",
+        "perDay": "Tổng lũy kế vào đầu mỗi ngày, theo múi giờ {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} đang làm nóng",

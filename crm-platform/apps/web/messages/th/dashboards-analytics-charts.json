@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "เชื่อมต่อแล้ว",
           "shopify": "เชื่อมต่อแล้ว",
-          "google_sheets": "ออกคีย์ API แล้ว",
-          "meta_catalog": "เชื่อมแค็ตตาล็อกแล้ว"
+          "meta_catalog": "เชื่อมแค็ตตาล็อกแล้ว",
+          "google_sheets": "เชื่อมต่อบัญชี Google แล้ว"
         },
         "notConnected": "ยังไม่ได้เชื่อมต่อ",
         "connect": "เชื่อมต่อ",
@@ -405,6 +405,43 @@
           "sent": "ส่งถึง {peer}",
           "received": "ได้รับจาก {peer}",
           "empty": "ไม่มีกิจกรรมล่าสุดในช่วงเวลานี้"
+        },
+        "loginDevices": {
+          "title": "อุปกรณ์ที่ล็อกอิน",
+          "subtitle": "การเข้าสู่ระบบของเวิร์กสเปซในช่วงนี้ แยกตามเบราว์เซอร์ ระบบ และประเภท",
+          "active": "ใช้งานอยู่ตอนนี้ {n}",
+          "total": "{n, plural, other {เข้าสู่ระบบ # ครั้ง}}",
+          "empty": "ไม่มีการเข้าสู่ระบบในช่วงนี้",
+          "activeLegend": "ใช้งานอยู่ตอนนี้",
+          "endedLegend": "ออกจากระบบหรือหมดอายุ",
+          "row": "เข้าสู่ระบบ {count} ครั้ง ใช้งานอยู่ตอนนี้ {active}",
+          "group": {
+            "browser": "เบราว์เซอร์",
+            "os": "ระบบ",
+            "kind": "ประเภท"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "เบราว์เซอร์อื่น"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "ระบบอื่น"
+          },
+          "kind": {
+            "desktop": "เดสก์ท็อป",
+            "mobile": "มือถือ",
+            "unknown": "ไม่ทราบ"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "คิว",
         "name": "คิว",
         "pending": "รอดำเนินการ",
-        "failed": "ล้มเหลว"
+        "failed": "ล้มเหลว",
+        "lastFailure": "สาเหตุของความล้มเหลวล่าสุด"
       },
       "clear": {
         "button": "ล้างงานที่รอดำเนินการ",

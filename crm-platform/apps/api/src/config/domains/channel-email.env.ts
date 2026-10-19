@@ -51,6 +51,13 @@ const schema = z.object({
   MICROSOFT_MAIL_REDIRECT_URI: z.preprocess(blank, z.string().url().optional()),
   /** Ceiling for one call to Microsoft, in ms. */
   MICROSOFT_MAIL_HTTP_TIMEOUT_MS: int(1_000, 120_000, 20_000),
+  /**
+   * Microsoft Graph change notifications (E-17). OFF by default: switch it on once the platform's public HTTPS address is reachable from
+   * Microsoft (runbook microsoft-mail-setup.md). The address Microsoft calls is `<origin of the redirect URI>/v2/public/email/microsoft/push`
+   * unless `MICROSOFT_MAIL_NOTIFICATION_URL` names another one (a reverse proxy, a tunnel in staging). Without push the Inbox is polled.
+   */
+  MAIL_GRAPH_PUSH_ENABLED: flag(false),
+  MICROSOFT_MAIL_NOTIFICATION_URL: z.preprocess(blank, z.string().url().optional()),
 
   /**
    * Gmail push (TW-MAIL-033). Fallbacks for the console's pubsubTopic / pushAudience / pushServiceAccount: the Pub/Sub topic the Gmail

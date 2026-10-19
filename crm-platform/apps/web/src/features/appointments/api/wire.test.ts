@@ -86,8 +86,28 @@ const typeWire = bookingTypeResponseSchema.parse({
     },
   ],
   reminders: [
-    { id: U(4), offsetMinutes: 1440, label: '24h', isActive: true },
-    { id: U(5), offsetMinutes: 60, label: null, isActive: false },
+    {
+      id: U(4),
+      offsetMinutes: 1440,
+      label: '24h',
+      isActive: true,
+      kind: 'before' as const,
+      channels: ['whatsapp' as const, 'email' as const],
+      subject: null,
+      body: 'Hi {{name}}',
+      waTemplateId: null,
+    },
+    {
+      id: U(5),
+      offsetMinutes: 60,
+      label: null,
+      isActive: false,
+      kind: 'after' as const,
+      channels: ['sms' as const],
+      subject: null,
+      body: null,
+      waTemplateId: null,
+    },
   ],
   templates: [
     {
@@ -142,8 +162,31 @@ describe('booking type from the API', () => {
     expect(t.overrides).toEqual([
       { date: '2026-12-25', closed: true, from: null, to: null, reason: 'Christmas' },
     ]);
-    // Only active reminders; Reference's "mobile" is the API's phone.
-    expect(t.reminders).toEqual([{ offsetMinutes: 1440, label: '24h' }]);
+    // Every rule, switched on or off, with its channels and text (the editor shows both); Reference's "mobile" is the API's phone.
+    expect(t.reminders).toEqual([
+      {
+        id: U(4),
+        offsetMinutes: 1440,
+        label: '24h',
+        isActive: true,
+        kind: 'before',
+        channels: ['whatsapp', 'email'],
+        subject: null,
+        body: 'Hi {{name}}',
+        waTemplateId: null,
+      },
+      {
+        id: U(5),
+        offsetMinutes: 60,
+        label: null,
+        isActive: false,
+        kind: 'after',
+        channels: ['sms'],
+        subject: null,
+        body: null,
+        waTemplateId: null,
+      },
+    ]);
     expect(t.questions.map((q) => [q.id, q.mapToContactField, q.options])).toEqual([
       [U(2), 'mobile', []],
       [U(3), null, ['S', 'L']],

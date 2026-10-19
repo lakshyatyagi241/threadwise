@@ -160,5 +160,7 @@ export type IceServer = z.infer<typeof iceServerSchema>;
 export const iceServersResponseSchema = z.object({ servers: z.array(iceServerSchema) });
 export type IceServersResponse = z.infer<typeof iceServersResponseSchema>;
 
+export * from './call-logging';
 export * from './logs';
 export * from './recording';
+export * from './readiness';

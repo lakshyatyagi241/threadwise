@@ -1,0 +1,100 @@
+{
+  "planningTarget": 280,
+  "implemented": {
+    "unitIntegration": 55,
+    "e2e": 1,
+    "staticGate": 1,
+    "benchmarks": 3,
+    "scrapeDemoChecks": 41,
+    "alertRuleCases": 18,
+    "loadProfiles": 5,
+    "total": 124
+  },
+  "coverageAgainstTarget": "124 of 280 (about 44%). The 280-check target is NOT MET. The categories below show what exists and what is missing. The demo checks are one scripted run of 41 checks, counted once; the 18 alert rule cases are promtool case groups.",
+  "categories": [
+    {
+      "name": "Instrumentation unit/integration",
+      "target": 40,
+      "implemented": 56,
+      "file": "apps/api/test/unit/platform-infrastructure/event-loop-monitor.spec.ts (27), job-metrics.spec.ts (17: wait/duration math, delay and retry handling, retries counter, labels, discovery of WorkerHost processors, Nest wiring), probe.spec.ts (11: listener guard, target parser, probeOnce/Prober against real local servers, a stalled child-process server seen from outside) and test/e2e/platform-infrastructure/worker-job-metrics.e2e.spec.ts (1: booted worker module, real processor, real database)",
+      "covers": [
+        "histogram ns to ms conversion",
+        "empty/NaN histogram is a missing measurement, not zeros",
+        "interval ELU delta, baseline moves per window",
+        "real synchronous block detected, then recovery",
+        "threshold classification (ok / warn / critical), high ELU alone is not blocking",
+        "Prometheus text: identity labels, escaping, NaN dropped, histogram cumulative, cardinality cap with overflow",
+        "RuntimeMonitor: series present, blocked-window log carries route templates only, HTTP and job series, unmeasurable window, start/stop idempotent, cgroup throttling read",
+        "HTTP middleware: route template and 'unmatched', raw URL never a label, abandoned request recorded once as 499",
+        "metrics server: GET /metrics only, bearer token required when set, other paths and methods 404/401",
+        "environment: defaults, master switch, single monitor per process, malformed values stop boot"
+      ],
+      "missing": [
+        "stale-metric detection end to end",
+        "restart continuity",
+        "sampling accuracy vs an independent timer across resolutions",
+        "metrics server under concurrent scrape"
+      ]
+    },
+    {
+      "name": "Blocking-operation and input-boundary",
+      "target": 50,
+      "implemented": 1,
+      "kind": "static gate",
+      "file": "tools/event-loop-audit/scan.mjs --check",
+      "covers": [
+        "new sync fs / child process / crypto / zlib / JSON deep clone / Atomics.wait / unbounded loop / ReDoS-shaped regex on a runtime path fails the gate; verified to fail on an injected probe file"
+      ],
+      "missing": ["scanner unit tests per rule", "oversized-payload boundary tests per endpoint"]
+    },
+    {
+      "name": "API/module performance scenarios",
+      "target": 70,
+      "implemented": 5,
+      "kind": "load profiles (idle, normal, peak, spike, 10 minute soak), one mixed workload",
+      "file": "tools/event-loop-audit/load/run-load.mjs + workload.k6.js",
+      "covers": [
+        "contact list/search/get/create/update, inbox list and counts (empty inbox), a /health control, at chosen rates, on a laptop"
+      ],
+      "missing": [
+        "webhooks, broadcasts, automations, reporting at size, a populated inbox",
+        "a stable dedicated host, production-shaped rates, 12 h and 24 h soaks"
+      ]
+    },
+    {
+      "name": "Worker/concurrency scenarios",
+      "target": 40,
+      "implemented": 0,
+      "blockedBy": "Queue processors do not report job metrics yet; no worker saturation harness"
+    },
+    {
+      "name": "CPU/GC/memory correlation",
+      "target": 30,
+      "implemented": 3,
+      "kind": "benchmark",
+      "files": [
+        "tools/event-loop-audit/bench.mjs (monitor overhead, fault detection, recovery)",
+        "tools/event-loop-audit/measure-zlib.mjs (sync vs async zlib loop hold)",
+        "tools/event-loop-audit/verify-job-metrics.ts (real BullMQ worker against throwaway Redis, 7 checks, needs Docker)"
+      ],
+      "missing": [
+        "heap growth under sustained load",
+        "GC pause vs loop spike correlation",
+        "container throttling effect"
+      ]
+    },
+    {
+      "name": "Load/spike/soak profiles",
+      "target": 20,
+      "implemented": 0,
+      "blockedBy": "Same as API scenarios; soak needs 12 h and 24 h runs"
+    },
+    {
+      "name": "Alerting, telemetry and operational",
+      "target": 30,
+      "implemented": 36,
+      "file": "deploy/observability/event-loop.rules.test.yml (promtool test rules, 11 case groups over all 11 rules, mutation-checked) and tools/event-loop-audit/scrape-demo.mjs (25 checks against a real Prometheus, real API and worker processes, with a real injected stall; manual, needs Docker and the built API, about 25 minutes)",
+      "note": "Rules pass promtool and fire correctly in a real Prometheus for the API stall and for a killed worker. Missing: the worker critical alert from a real worker stall, delivery to a receiver, restart continuity, and stalls of 10 s to 2 min."
+    }
+  ]
+}

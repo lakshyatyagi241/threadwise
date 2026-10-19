@@ -145,11 +145,6 @@
         "description": "Modifica le pipeline delle trattative, le fasi e i motivi di perdita.",
         "keywords": "trattative, fasi di vendita, board, motivo di perdita, funnel"
       },
-      "tags": {
-        "label": "Tag",
-        "description": "Crea e organizza i tag usati su contatti e chat.",
-        "keywords": "etichette, colore"
-      },
       "saved-replies": {
         "label": "Risposte salvate",
         "description": "Scrivi risposte riutilizzabili che il team può inviare con un clic.",
@@ -360,15 +355,40 @@
         "description": "Scopri quanto è stato veloce ogni agente a rispondere e risolvere oggi, questa settimana o questo mese.",
         "keywords": "report, analisi, agenti, tempo di risposta, prima risposta, risolte, carico, prestazioni"
       },
-      "contact-assignment": {
-        "label": "Assegnazione dei contatti",
-        "description": "Assegna automaticamente i nuovi contatti e le nuove trattative alla persona giusta, saltando chi è in ferie.",
-        "keywords": "assegnare, proprietario, round robin, nuovo contatto, nuova trattativa, ferie, assenza, routing dei lead"
-      },
       "privacy-requests": {
         "label": "Richieste sui dati",
         "description": "Rispondi a chi chiede cosa conservi su di loro: verifica dell'identità, esportazione, cancellazione con anteprima e una prova da conservare.",
         "keywords": "privacy, gdpr, richiesta sui dati, dsar, accesso ai dati, esportare dati, cancellare, diritto all'oblio, eliminare dati personali, blocco legale"
+      },
+      "compliance-center": {
+        "label": "Centro di conformità",
+        "description": "Strumenti che ti aiutano a rispettare i tuoi obblighi in materia di privacy: le leggi a cui sei soggetto, contatti privacy, informative e link, sub-responsabili, orari di silenzio e una checklist di ciò che è già attivo.",
+        "keywords": "conformità, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, responsabile dei reclami, sub-responsabile, dpa, termini, informativa sulla privacy, orari di silenzio, do not call, checklist, minori"
+      },
+      "company-properties": {
+        "label": "Proprietà delle aziende",
+        "description": "Aggiungi i campi che vuoi mantenere su ogni azienda.",
+        "keywords": "campi personalizzati, campi, obbligatorio, menu a discesa, organizzazione, account"
+      },
+      "uncontacted-leads": {
+        "label": "Lead non contattati",
+        "description": "Scegli quali azioni contano come contatto con un lead e quali nuovi contatti partono come non contattati.",
+        "keywords": "non contattato, contattato, lead, nuovo lead, primo contatto, follow-up, riassegnazione, contrassegno"
+      },
+      "record-assignment": {
+        "label": "Regole di assegnazione dei record",
+        "description": "Assegna automaticamente i nuovi contatti, le aziende e le trattative ai tuoi responsabili vendite, tramite regole di priorità.",
+        "keywords": "assegnare, responsabile, round robin, nuovo contatto, nuova trattativa, azienda, congedo, instradamento lead, carico di lavoro, territorio"
+      },
+      "follow-ups": {
+        "label": "Ricontatti",
+        "description": "Imposta automaticamente il prossimo ricontatto di un contatto quando il tuo team lo contatta, e scegli data e orario di avviso.",
+        "keywords": "ricontatto, ricontatti, promemoria, prossima azione, attività, pianificazione, posticipa, prima o poi"
+      },
+      "duplicate-leads": {
+        "label": "Lead duplicati",
+        "description": "Scegli se un nuovo lead che corrisponde a un contatto viene unito a esso o diventa un nuovo contatto.",
+        "keywords": "duplicato, unire, lead, stesso telefono, stessa e-mail, nuovo contatto, fonte di lead"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

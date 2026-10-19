@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Bez kontaktu",
+        "followUpToday": "Ponowny kontakt dzisiaj",
+        "followUpOverdue": "Zaległy ponowny kontakt",
+        "followUpSomeday": "Ponowne kontakty na kiedyś"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Bez kontaktu",
+        "chipTitle": "Nikt z zespołu jeszcze się nie skontaktował",
+        "waitingSince": "Oczekuje od {date}",
+        "markContacted": "Oznacz jako skontaktowany",
+        "markUncontacted": "Oznacz jako nieskontaktowany",
+        "markedContacted": "Oznaczono jako skontaktowany",
+        "markedUncontacted": "Oznaczono jako nieskontaktowany",
+        "markFailed": "Nie udało się zmienić oznaczenia. Spróbuj ponownie.",
+        "bulkMarkedContacted": "{count, plural, one {Oznaczono # kontakt jako skontaktowany} few {Oznaczono # kontakty jako skontaktowane} many {Oznaczono # kontaktów jako skontaktowane} other {Oznaczono # kontaktu jako skontaktowane}}",
+        "bulkMarkedUncontacted": "{count, plural, one {Oznaczono # kontakt jako nieskontaktowany} few {Oznaczono # kontakty jako nieskontaktowane} many {Oznaczono # kontaktów jako nieskontaktowane} other {Oznaczono # kontaktu jako nieskontaktowane}}"
+      },
+      "settings": {
+        "save": "Zapisz",
+        "discard": "Odrzuć zmiany",
+        "saved": "Zapisano ustawienia",
+        "retry": "Spróbuj ponownie",
+        "loading": "Wczytywanie ustawień",
+        "conflict": "Ktoś inny zapisał te ustawienia podczas Twojej edycji. Poniżej widać je ponownie; wprowadź zmianę jeszcze raz.",
+        "conflictOk": "Rozumiem",
+        "errors": {
+          "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+          "forbidden": "Tę stronę mogą zmieniać tylko osoby zarządzające ustawieniami obszaru roboczego.",
+          "conflict": "Ktoś inny zmienił te ustawienia wcześniej. Odśwież stronę i spróbuj ponownie.",
+          "validation": "Niektóre ustawienia są nieprawidłowe. Sprawdź je i spróbuj ponownie.",
+          "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+        },
+        "uncontacted": {
+          "title": "Potencjalni klienci bez kontaktu",
+          "subtitle": "Oznaczaj potencjalnych klientów, z którymi nikt jeszcze się nie skontaktował, aby wyróżniali się, dopóki ktoś się z nimi nie skontaktuje. Nic się nie zmieni, dopóki nie włączysz opcji.",
+          "clear": {
+            "title": "Oznacz jako skontaktowany",
+            "intro": "Automatycznie usuwaj oznaczenie Bez kontaktu, gdy członek zespołu wykona dowolną z tych czynności:",
+            "contactButton": "Naciśnie przycisk kontaktu (połączenie, SMS, e-mail lub WhatsApp) albo wykona połączenie",
+            "message": "Wyśle wiadomość, szablon, zapisaną odpowiedź lub plik ze wspólnej skrzynki zespołu",
+            "automation": "Kampania, wysyłka masowa lub automatyczny przepływ wysyła wiadomość do potencjalnego klienta",
+            "activity": "Doda notatkę, spotkanie lub inną aktywność do osi czasu",
+            "manualHint": "Oznaczenie możesz też zmienić ręcznie: otwórz menu Więcej przy kontakcie albo zaznacz kilka kontaktów i użyj Więcej na pasku nad listą."
+          },
+          "new": {
+            "title": "Oznaczaj nowych potencjalnych klientów jako nieskontaktowanych",
+            "intro": "Gdy potencjalny klient zostanie utworzony w jeden z tych sposobów, oznacz go jako nieskontaktowanego:",
+            "manual": "Utworzony ręcznie w aplikacji",
+            "import": "Zaimportowany z pliku lub Google Sheets",
+            "leadSource": "Źródła potencjalnych klientów, formularze i integracje"
+          },
+          "reassign": {
+            "title": "Ponownie przypisani potencjalni klienci",
+            "intro": "Gdy potencjalny klient zostanie przypisany lub ponownie przypisany nowemu właścicielowi:",
+            "keep": "Nie zmieniaj oznaczenia Bez kontaktu",
+            "mark": "Oznacz jako nieskontaktowanego po ponownym przypisaniu"
+          }
+        },
+        "followUps": {
+          "title": "Ponowne kontakty",
+          "subtitle": "Utrzymuj ruch przy każdym potencjalnym kliencie: gdy członek zespołu skontaktuje się z osobą, jej następny ponowny kontakt może zostać ustawiony lub przesunięty automatycznie. Nic się nie zmieni, dopóki nie włączysz opcji.",
+          "when": {
+            "title": "Automatycznie ustawiaj ponowne kontakty",
+            "intro": "Gdy członek zespołu skontaktuje się z osobą lub wyśle jej treści, zaktualizuj jej ponowny kontakt, jeśli:",
+            "none": "Kontakt nie ma zaplanowanego ponownego kontaktu",
+            "overdue": "Ponowny kontakt jest zaległy",
+            "today": "Ponowny kontakt przypada dzisiaj",
+            "future": "Ponowny kontakt przypada później"
+          },
+          "date": {
+            "title": "Domyślna data ponownego kontaktu",
+            "intro": "Gdy ponowny kontakt jest aktualizowany automatycznie, ustaw go na:",
+            "day": "Za 1 dzień",
+            "three_days": "Za 3 dni",
+            "week": "Za 1 tydzień",
+            "month": "Za 1 miesiąc",
+            "custom": "Własna",
+            "someday": "Kiedyś",
+            "none": "Brak ponownego kontaktu",
+            "somedayHint": "Ponowny kontakt nie ma daty i czeka na liście Kiedyś. Nigdy nie wyśle przypomnienia.",
+            "noneHint": "Otwarty ponowny kontakt zostaje oznaczony jako wykonany i nie powstaje nowy.",
+            "customDays": "Liczba dni",
+            "daysLater": "dni później"
+          },
+          "time": {
+            "title": "Domyślna godzina ponownego kontaktu",
+            "intro": "Przy tworzeniu nowego ponownego kontaktu ustaw godzinę przypomnienia na:",
+            "hint": "Według strefy czasowej Twojego obszaru roboczego."
+          }
+        },
+        "duplicates": {
+          "title": "Zduplikowane leady",
+          "subtitle": "Określ, co się dzieje, gdy nowy lead ze źródła leadów ma ten sam numer telefonu lub e-mail co istniejący kontakt.",
+          "mode": {
+            "title": "Gdy nowy lead pasuje do kontaktu",
+            "intro": "Lead pasuje, gdy jego numer telefonu lub e-mail należy już do kontaktu.",
+            "merge": "Scal z istniejącym kontaktem",
+            "mergeHint": "Uzupełnia puste pola kontaktu i dodaje lead do jego historii. Nic, co już wpisano, nie jest nadpisywane.",
+            "createNew": "Utwórz nowy kontakt",
+            "createNewHint": "Tworzy osobny kontakt dla leada. Wlicza się do limitu kontaktów w Twoim planie i można go później scalić."
+          },
+          "note": {
+            "title": "Oś czasu",
+            "merge": "Dodaj notatkę do osi czasu po scaleniu leada",
+            "hint": "Domyślnie wyłączone, ponieważ notatka przesuwa też ostatnią aktywność kontaktu."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Następny ponowny kontakt",
+        "somedayLabel": "Kiedyś",
+        "overdue": "Zaległe",
+        "done": "Gotowe",
+        "snooze": "Odłóż",
+        "snoozeDay": "1 dzień",
+        "snoozeThreeDays": "3 dni",
+        "snoozeWeek": "Za tydzień",
+        "change": "Zmień datę",
+        "set": "Ustaw ponowny kontakt",
+        "edit": "Zmień ponowny kontakt",
+        "remove": "Usuń ponowny kontakt",
+        "dialogTitle": "Ponowny kontakt",
+        "someday": "Kiedyś (bez daty)",
+        "dateTime": "Data i godzina",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "savedFor": "Zapisano ponowny kontakt",
+        "savedSomeday": "Ustawiono ponowny kontakt na kiedyś",
+        "snoozed": "Przesunięto ponowny kontakt",
+        "doneMessage": "Oznaczono ponowny kontakt jako wykonany",
+        "clearedMessage": "Usunięto ponowny kontakt",
+        "failed": "Nie udało się zmienić ponownego kontaktu. Spróbuj ponownie.",
+        "filterLabel": "Ponowny kontakt",
+        "filter": {
+          "any": "Dowolny",
+          "overdue": "Zaległe",
+          "today": "Na dziś",
+          "upcoming": "Nadchodzące",
+          "someday": "Kiedyś",
+          "none": "Brak ponownego kontaktu"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Następny ponowny kontakt"
+    }
+  }
+}

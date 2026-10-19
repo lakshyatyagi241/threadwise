@@ -40,6 +40,18 @@ Errors are `application/problem+json` with a stable `code` and a `requestId`; th
    shared `ai_token_usage` ledger, so the plan's monthly AI allowance counts them when the platform key pays. The log is kept for
    `retentionDays` (default 90) and deleted by a daily sweep.
 
+## Plan: AI lead scoring is a Marketplace app
+
+Every workspace route needs the plan feature `lead_scoring` (default **off**), which the first-party Marketplace app `lead-scoring` grants while it is installed
+and running (`422 PLAN_FEATURE_LOCKED`, reads included; `reason: app_not_installed` with `installUrl` when the workspace has paid but not installed). A workspace
+that already used scoring when it became an app keeps it: migration `20261228090000` gave each of them an override `features.lead_scoring = true` (see
+[marketplace.md](marketplace.md), "Optional tools as apps"). Background work checks the same feature after the cheap per-workspace checks: automatic scoring and the
+backfill (`LeadScoringService`), the chat reading (`LeadChatDigestService`) and the growth pilot (`GrowthGateService`) do nothing, and send nothing to the AI vendor,
+for a workspace that does not have it. The platform (operator) routes are not plan-gated. The `lsc.%` permission keys carry `plan_feature` and `app_slug`, so the Roles editor
+marks them "install the app" for such a workspace. The score fields of a contact, a typed one included, are stored whatever the plan or the switch says (nothing is deleted;
+switching scoring on again brings the values back), but the web app draws them only while scoring is on for the workspace (the plan feature **and** the workspace switch,
+`GET /lead-scoring/status`): off, no chip, card, list column, Hot leads chip or score filter shows.
+
 ## Capabilities (workspace)
 
 | Key                   | Grants                                          | Presets               |
@@ -55,13 +67,14 @@ card (the summary is null for a caller who may not read contacts, so there is no
 
 ## Workspace routes
 
-| Method and path                           | Key                   | What                                                                                                                        |
-| ----------------------------------------- | --------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| `GET /lead-scoring/settings`              | `lsc.runs.read`       | `{enabled, autoScore, platformEnabled, model, keySource, eligibleContacts, scoredContacts, last30d, rowVersion, updatedAt}` |
-| `PATCH /lead-scoring/settings`            | `lsc.settings.manage` | `{enabled, autoScore?, rowVersion?}`. First save has no `rowVersion` (the GET says `null`); later saves need it, else 409.  |
-| `GET /lead-scoring/runs`                  | `lsc.runs.read`       | cursor pages, newest first; `?contactId=` (uuid), `?status=ok\|kept\|failed\|skipped`, `?limit=` (25, max 100)              |
-| `POST /lead-scoring/contacts/:uuid/score` | `lsc.contacts.score`  | scores now (waits for the vendor): `{contactId, score, reasons, model, costUsd, promptTokens, completionTokens}`            |
-| `POST /lead-scoring/backfill`             | `lsc.contacts.score`  | `{limit}` (default 500, max 5000): queues contacts with no score; `{queued}`                                                |
+| Method and path                           | Key                    | What                                                                                                                           |
+| ----------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /lead-scoring/status`                | `record.contacts.read` | `{enabled}`: the workspace switch alone, for every member who reads contacts (the web app hides the score while it is `false`) |
+| `GET /lead-scoring/settings`              | `lsc.runs.read`        | `{enabled, autoScore, platformEnabled, model, keySource, eligibleContacts, scoredContacts, last30d, rowVersion, updatedAt}`    |
+| `PATCH /lead-scoring/settings`            | `lsc.settings.manage`  | `{enabled, autoScore?, rowVersion?}`. First save has no `rowVersion` (the GET says `null`); later saves need it, else 409.     |
+| `GET /lead-scoring/runs`                  | `lsc.runs.read`        | cursor pages, newest first; `?contactId=` (uuid), `?status=ok\|kept\|failed\|skipped`, `?limit=` (25, max 100)                 |
+| `POST /lead-scoring/contacts/:uuid/score` | `lsc.contacts.score`   | scores now (waits for the vendor): `{contactId, score, reasons, model, costUsd, promptTokens, completionTokens}`               |
+| `POST /lead-scoring/backfill`             | `lsc.contacts.score`   | `{limit}` (default 500, max 5000): queues contacts with no score; `{queued}`                                                   |
 
 Errors of the Score button and the backfill: `422 LSC_PLATFORM_DISABLED`, `422 LSC_NOT_ENABLED`, `422 LSC_NO_KEY`, `422 PLAN_LIMIT_REACHED`
 (monthly token allowance on the platform key, or the operator's per-hour limit), `409 LSC_MANUAL_SCORE`, `422 LSC_PROVIDER_FAILED` (key

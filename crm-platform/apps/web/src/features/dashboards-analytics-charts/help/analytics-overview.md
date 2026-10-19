@@ -5,7 +5,7 @@ summary: A detailed message report for any window: delivery, failures, reply rat
 area: overview
 order: 20
 documents: [nav:analytics]
-keywords: [analytics, report, delivery, failed, queued, reply rate, heatmap, best hours, export, csv, message types]
+keywords: [analytics, login devices, sign-ins, browsers, sessions, report, delivery, failed, queued, reply rate, heatmap, best hours, export, csv, message types]
 ---
 
 ## What it is for
@@ -30,6 +30,7 @@ Analytics gives you a full report on the messages your workspace has sent and re
 - **Engagement funnel**: contacts messaged, delivered, replied and goal completed (contacts whose flow finished), with conversation activity and the reply-rate change against the previous period.
 - **Message types**: outbound messages split into text, template, media, interactive and location.
 - **Best hours**: a grid of weekday against hour. Darker cells mean more messages.
+- **Login devices**: how people sign in to this workspace. It counts the sign-ins started in the window and groups them three ways: by **Browser**, by **System** and by **Type** (desktop, mobile or unknown). Each bar has a solid part for sessions that are still active and a lighter part for sessions that were signed out or have expired. The badge in the corner shows how many sessions are active right now, whatever the window. The card only counts: it never shows names, addresses or session details. To see and sign out your own devices, open **Account security**. The **By device** card is separate and lists your connected WhatsApp numbers.
 
 ## Plan and access
 
@@ -38,6 +39,7 @@ Analytics needs a plan that includes the analytics feature, and the permission t
 ## If something looks wrong
 
 - **The page says there are no outgoing messages.** Nothing was sent in that window. Try a longer one.
+- **Login devices says there are no sign-ins.** Nobody signed in during that window. Try a longer one.
 - **The charts are empty.** The window holds no messages. **Best hours** says so when it has no volume.
 - **A custom window fails to load.** It may be longer than 366 days. Shorten it and apply again.
 - **A message says you do not have access.** Your role does not include analytics. Ask a workspace admin.

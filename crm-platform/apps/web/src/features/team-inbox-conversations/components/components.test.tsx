@@ -474,25 +474,18 @@ describe('ConversationList states', () => {
   });
   const render = (p: ReturnType<typeof props>) => html(<ConversationList {...p} />);
 
-  it('the status filter offers Open first, one Resolved (no separate Closed), Pending, Snoozed, Spam and every status', () => {
+  it('the status filter offers Open first, one Resolved (no separate Closed), Snoozed, Spam and every status', () => {
     const out = render(props());
     const options = [...out.matchAll(/<option value="([^"]*)"[^>]*>([^<]*)<\/option>/g)].map(
       (m) => [m[1], m[2]],
     );
     const status = options.filter(([v]) =>
-      ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
+      ['open', 'snoozed', 'resolved', 'closed', 'spam', 'all'].includes(v!),
     );
-    expect(status.map(([v]) => v)).toEqual([
-      'open',
-      'pending',
-      'snoozed',
-      'resolved',
-      'spam',
-      'all',
-    ]);
+    expect(status.map(([v]) => v)).toEqual(['open', 'snoozed', 'resolved', 'spam', 'all']);
     expect(status[0]).toEqual(['open', 'Open']);
-    expect(out).not.toContain('Open and pending');
     expect(out).not.toContain('>Closed<');
+    expect(out).toContain('data-testid="inbox-filters-open"');
   });
 
   it('tells a workspace with no channel to connect one, with a link', () => {
@@ -564,6 +557,28 @@ describe('MessageBubble: a template message', () => {
         <MessageBubble message={m} quoted={null} onRetry={asyncNoop} />
       </ul>,
     );
+
+  it('links a fixed URL button in a new tab and a call button to its number', () => {
+    const out = draw(
+      template({
+        header: null,
+        footer: null,
+        buttons: [
+          { type: 'url', text: 'Track order', url: 'https://example.com/track' },
+          { type: 'url', text: 'Dynamic', url: 'https://example.com/{{1}}' },
+          { type: 'phone', text: 'Call us', phone: '+919560644394' },
+          { type: 'url', text: 'Evil', url: 'javascript:alert(1)' },
+        ],
+      }),
+    );
+    expect(out).toContain('href="https://example.com/track"');
+    expect(out).toContain('target="_blank"');
+    expect(out).toContain('rel="noopener noreferrer"');
+    expect(out).toContain('href="tel:+919560644394"');
+    // Only the two real links are anchors: the dynamic and the javascript: buttons are drawn without one.
+    expect(out.match(/data-testid="inbox-template-button-link"/g)).toHaveLength(2);
+    expect(out).not.toContain('javascript:');
+  });
 
   it('draws the header, the filled body, the footer and each button kind as a row', () => {
     const out = draw(

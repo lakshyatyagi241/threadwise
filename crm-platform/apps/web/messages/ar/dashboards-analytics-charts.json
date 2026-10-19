@@ -234,8 +234,8 @@
         "connected": {
           "woocommerce": "متصل",
           "shopify": "متصل",
-          "google_sheets": "تم إصدار مفتاح API",
-          "meta_catalog": "تم ربط الكتالوج"
+          "meta_catalog": "تم ربط الكتالوج",
+          "google_sheets": "تم ربط حساب Google"
         },
         "notConnected": "غير متصل",
         "connect": "اتصال",
@@ -405,6 +405,43 @@
           "sent": "مرسلة إلى {peer}",
           "received": "مستلمة من {peer}",
           "empty": "لا يوجد نشاط حديث في هذه الفترة."
+        },
+        "loginDevices": {
+          "title": "أجهزة تسجيل الدخول",
+          "subtitle": "عمليات تسجيل الدخول لمساحة العمل في هذه الفترة، حسب المتصفح والنظام والنوع",
+          "active": "{n} نشطة الآن",
+          "total": "{n, plural, zero {لا عمليات تسجيل دخول} one {تسجيل دخول واحد} two {تسجيلا دخول} few {# عمليات تسجيل دخول} many {# عملية تسجيل دخول} other {# عملية تسجيل دخول}}",
+          "empty": "لا توجد عمليات تسجيل دخول في هذه الفترة.",
+          "activeLegend": "نشطة الآن",
+          "endedLegend": "تم تسجيل الخروج أو انتهت",
+          "row": "{count} عملية تسجيل دخول، {active} نشطة الآن",
+          "group": {
+            "browser": "المتصفح",
+            "os": "النظام",
+            "kind": "النوع"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "متصفح آخر"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "نظام آخر"
+          },
+          "kind": {
+            "desktop": "سطح المكتب",
+            "mobile": "جوال",
+            "unknown": "غير معروف"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "قوائم الانتظار",
         "name": "قائمة الانتظار",
         "pending": "قيد الانتظار",
-        "failed": "فاشلة"
+        "failed": "فاشلة",
+        "lastFailure": "سبب آخر فشل"
       },
       "clear": {
         "button": "مسح المهام المعلقة",

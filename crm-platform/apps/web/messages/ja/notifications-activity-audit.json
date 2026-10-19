@@ -164,6 +164,32 @@
         "title": "テスト通知",
         "titleNoName": "テスト通知",
         "bodyNoActor": "これが読めていれば、ライブ通知は動作しています。"
+      },
+      "snooze_wake": {
+        "title": "{name} がリストに戻りました",
+        "titleNoName": "スヌーズしたチャットがリストに戻りました",
+        "titleTeam": "{name} がチームに戻りました",
+        "titleTeamNoName": "スヌーズしたチャットがチームに戻りました"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} は {date, date, medium} に更新されます",
+        "bodyAuto": "{name} を更新するため、その日にカードへ自動で請求されます。停止するには、それまでに解約してください。",
+        "titleManual": "{name} は {date, date, medium} まで支払い済みです",
+        "bodyManual": "{name} は自動では更新されません。中断なく使い続けるには、その日までに再度お支払いください。",
+        "titleEnding": "{name} は {date, date, medium} に終了します",
+        "bodyEnding": "{name} を解約したため、その日に利用できなくなります。引き続き使うには、それまでに再度購読してください。",
+        "title": "{name}: 更新が近づいています",
+        "titleNoName": "有料アプリの更新が近づいています"
+      },
+      "marketplace_payment_failed": {
+        "title": "{name} のお支払いに失敗しました",
+        "body": "カードでの支払いが完了しませんでした。決済プロバイダーが再試行している間、アプリは数日間動作し続けます。一時停止を避けるため、今すぐお支払いいただくか、支払い方法を修正してください。",
+        "titleNoName": "有料アプリの支払いに失敗しました"
+      },
+      "marketplace_subscription_ended": {
+        "title": "{name} のサブスクリプションが終了しました",
+        "body": "アプリは一時停止されていますが、データと設定は保持されます。再び有効にするには、もう一度購読してください。",
+        "titleNoName": "有料アプリのサブスクリプションが終了しました"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "WhatsAppグループ再開",
         "device_group_join_request": "グループへの参加リクエスト",
         "device_group_removed": "WhatsAppグループから削除されました",
-        "test": "テスト通知"
+        "test": "テスト通知",
+        "snooze_wake": "スヌーズしたチャットが戻りました",
+        "marketplace_renewal_due": "有料アプリの更新が近づいています",
+        "marketplace_payment_failed": "有料アプリの支払いに失敗しました",
+        "marketplace_subscription_ended": "有料アプリのサブスクリプションが終了しました"
       },
       "generic": "新しい通知があります",
       "paused": "ライブ更新が一時停止しているため、新しいアラートが最大1分遅れて届くことがあります。ページを再読み込みして再接続してください。"
@@ -379,6 +409,26 @@
         "test": {
           "label": "テスト通知",
           "hint": "ブラウザ通知から送るテストです。ベル、ポップアップ、タブのタイトルが動作するか確認できます。"
+        },
+        "appointment_calendar_drift": {
+          "label": "予約がGoogle Calendarと同期されていません",
+          "hint": "今後の予約のGoogle Calendarイベントが削除、移動、またはゲスト変更されました。予約自体は変更されません。対応はお客様が選択できます。"
+        },
+        "snooze_wake": {
+          "label": "スヌーズしたチャットが戻る",
+          "hint": "スヌーズしたチャットは指定時刻に再開され、あなたまたはチームに届きます。"
+        },
+        "marketplace_renewal_due": {
+          "label": "有料アプリの更新リマインダー",
+          "hint": "有料アプリの期間があと数日で終わります。カードで更新される、期日まで支払い済み、または解約済みで終了のいずれかです。"
+        },
+        "marketplace_payment_failed": {
+          "label": "有料アプリの支払い失敗",
+          "hint": "有料アプリのカードでの更新が完了せず、ご確認が必要です。"
+        },
+        "marketplace_subscription_ended": {
+          "label": "有料アプリのサブスクリプション終了",
+          "hint": "有料アプリのサブスクリプションが終了し、アプリが一時停止されました。"
         }
       },
       "loading": "設定を読み込み中",

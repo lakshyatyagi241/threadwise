@@ -1,5 +1,6 @@
 import {
   consentChannelOfKind,
+  type MinorRule,
   modalityOfChannel,
   purposeAppliesTo,
   purposeOf,
@@ -21,7 +22,31 @@ export interface ConsentFacts {
   unsubscribedFlag: boolean;
   /** The ledger state for (channel, the purpose's ledger purpose). `unknown` = no event yet or no such contact. */
   ledgerState: 'granted' | 'withdrawn' | 'unknown';
+  /** The contact is flagged as a minor (`contact_privacy_flags`, BL-180). Absent = false. */
+  minor?: boolean;
+  /** A parent's or guardian's consent is on record for the flagged minor. Evidence only: it is never a marketing grant. */
+  guardianConsent?: boolean;
+  /** The contact opted out of the sale or sharing of their personal information. Absent = false. */
+  saleShareOptOut?: boolean;
+  /** The contact's number is on the workspace's Do-Not-Call list (BL-181). Read only for voice and SMS marketing. Absent = false. */
+  onDncList?: boolean;
+  /** The contact's data is under a legal hold (BL-295): kept and locked, so marketing, AI processing, profiling and sharing are refused. Absent = false. */
+  restricted?: boolean;
 }
+
+/**
+ * The purposes a legal hold refuses (docs/specs/legal-hold.md section 3.2): every use of a held person's data that is not the service the
+ * workspace owes them. Service messaging, call recording notices and push are not in the list: a hold freezes destruction and new kinds of
+ * use, not the relationship.
+ */
+export const RESTRICTED_PURPOSES: ReadonlySet<string> = new Set([
+  'marketing_messaging',
+  'third_party_sharing',
+  'analytics_profiling',
+  'ai_content_processing',
+  'staff_ai_assist',
+  'voice_ai_conversation',
+]);
 
 export const NO_FACTS: ConsentFacts = { unsubscribedFlag: false, ledgerState: 'unknown' };
 
@@ -38,6 +63,8 @@ export interface DecideInput {
   purposeEnabled?: boolean;
   /** What the caller holds for a notice-first purpose: the delivered notice and the person's answer. */
   noticeEvidence?: ConsentNoticeEvidence;
+  /** What the workspace's children setting does with marketing to a flagged minor. Omitted = `off` (the flag changes nothing). */
+  minorRule?: MinorRule;
   facts: ConsentFacts;
 }
 
@@ -48,15 +75,20 @@ const deny = (reason: ConsentGateReason): ConsentGateResult => ({ decision: 'den
  * The ConsentGate's rule. In order:
  *
  *  1. The purpose must apply to the channel and modality, and the workspace must not have switched it off (`purpose_not_enabled`).
+ *     Then a contact under a legal hold is refused every purpose in RESTRICTED_PURPOSES (`legal_hold`), whatever consent says.
  *  2. A purpose with a notice to deliver first (a recording announcement, an AI disclosure) answers `needs_notice` until the caller
  *     presents the evidence that the versioned notice was delivered; a consent-based one (a call recording) then needs the person's
  *     answer too: `granted` allows, `declined` denies, no answer is still `needs_notice`. No evidence is the old behaviour, unchanged.
  *  3. Service (`utility`): a reply inside the customer-service window is allowed (`inbound_reply_window`); otherwise only an
  *     explicit withdrawal of the service purpose on that channel blocks it. STOP withdraws MARKETING only, so a contact who sent
  *     STOP still gets order, appointment and support messages.
- *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. With the switch on, a recorded
- *     grant on the channel is also needed. With it off (the default) everyone else is allowed: today's behaviour, exactly.
- *  5. Any other purpose with no ledger: allowed when no opt-in is mandatory, denied (`no_consent_recorded`) when it is, until the
+ *  4. Marketing: a withdrawal (the roll-up flag or the ledger) ALWAYS denies, whatever the switch says. Then, for voice and SMS, a number
+ *     on the workspace's Do-Not-Call list is denied (`on_dnc_list`, BL-181). Then a contact flagged as a
+ *     minor is held (`subject_minor`) when the workspace's children setting says so: always under `block`, and under `guardian` until
+ *     a parent's or guardian's consent is on record (BL-180). With the switch on, a recorded grant on the channel is also needed. With
+ *     it off (the default) everyone else is allowed: today's behaviour, exactly. Service messages are never held back by the flag.
+ *  5. Third-party sharing: a contact who opted out of the sale or sharing of their data is denied (`sale_share_opted_out`).
+ *  6. Any other purpose with no ledger: allowed when no opt-in is mandatory, denied (`no_consent_recorded`) when it is, until the
  *     generalised ledger records those purposes.
  */
 export function decideConsent(input: DecideInput): ConsentGateResult {
@@ -66,6 +98,8 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
 
   if (channel && !purposeAppliesTo(def, channel, modality)) return deny('purpose_not_applicable');
   if (input.purposeEnabled === false) return deny('purpose_not_enabled');
+  // A held person's data is restricted (BL-295). The text shown for this reason is neutral: it never says that a hold or a matter exists.
+  if (input.facts.restricted && RESTRICTED_PURPOSES.has(def.id)) return deny('legal_hold');
   if (def.noticeRequired && def.noticeKey) {
     const ev = input.noticeEvidence;
     const pending: ConsentGateResult = {
@@ -90,12 +124,35 @@ export function decideConsent(input: DecideInput): ConsentGateResult {
     if (input.facts.unsubscribedFlag || (channel && input.facts.ledgerState === 'withdrawn')) {
       return deny('withdrawn');
     }
+    if (input.facts.onDncList && isDncChannel(input.channel, modality)) return deny('on_dnc_list');
+    if (isHeldAsMinor(input.minorRule, input.facts)) return deny('subject_minor');
     if (!input.requireConsent) return allow('policy_off');
     if (!channel) return deny('channel_unmapped');
     return input.facts.ledgerState === 'granted' ? allow('granted') : deny('no_consent_recorded');
   }
 
+  if (def.id === 'third_party_sharing' && input.facts.saleShareOptOut) {
+    return deny('sale_share_opted_out');
+  }
   return def.consentMandatory ? deny('no_consent_recorded') : allow('no_grant_required_by_policy');
+}
+
+/**
+ * A flagged minor's marketing is held when the workspace says so. `block`: always. `guardian`: until guardian consent is on record. A
+ * contact who is not flagged, or a workspace whose children setting is not answered (`off`), is never held by this.
+ */
+export function isHeldAsMinor(rule: MinorRule | undefined, facts: ConsentFacts): boolean {
+  if (!facts.minor || !rule || rule === 'off') return false;
+  return rule === 'block' || !facts.guardianConsent;
+}
+
+/**
+ * Does the workspace's Do-Not-Call list apply to marketing on this channel (BL-181)? Voice and SMS do; WhatsApp, email and the rest follow
+ * the consent ledger. Exported so the service reads the list only when it can matter.
+ */
+export function isDncChannel(channel: string, modality?: ConsentModality): boolean {
+  const ch = consentChannelOfKind(channel);
+  return ch === 'sms' || ch === 'voice' || modality === 'voice';
 }
 
 /** The answer when the gate itself failed: consent-based purposes fail closed, everything else (service replies) fails open. */

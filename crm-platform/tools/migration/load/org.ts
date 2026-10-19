@@ -17,10 +17,30 @@ export interface OrgInputs {
   trialDays?: number | null;
   /** Mark the owner's email as verified (the app's orgsForVerifiedEmail only lists verified owners). Default: not verified. */
   ownerVerified?: boolean;
+  /**
+   * IANA zone written to organizations.settings.timezone, as signup does. Business hours, SLA clocks and quiet hours read it, so a
+   * workspace without one evaluates them in the server zone. Validated; null leaves it unset.
+   */
+  timezone?: string | null;
 }
 
 /** The login schema is 2..40 characters of [A-Za-z0-9_-] starting alphanumeric. */
 export const SLUG_MAX = 40;
+
+/** The zone an organization gets when the run names none: Waboo clients are India-based. The owner can change it in Settings. */
+export const DEFAULT_TIMEZONE = 'Asia/Kolkata';
+
+/** The zone to write to organizations.settings.timezone: the given IANA zone, or IST when none is given. Throws on an invalid zone. */
+export function resolveTimezone(input: string | null | undefined): { timezone: string; defaulted: boolean } {
+  const tz = input?.trim();
+  if (!tz) return { timezone: DEFAULT_TIMEZONE, defaulted: true };
+  try {
+    new Intl.DateTimeFormat('en', { timeZone: tz });
+  } catch {
+    throw new Error(`--timezone "${tz}" is not an IANA time zone (e.g. Asia/Kolkata)`);
+  }
+  return { timezone: tz, defaulted: false };
+}
 
 export function normalizeSlug(input: string): string {
   const s = input
@@ -92,7 +112,11 @@ export async function ensureOrg(env: OrgEnv): Promise<{ orgId: number; warnings:
         slugUsed = slugWithSuffix(slugWanted, `${orgUuid.slice(0, 6)}${n > 1 ? n : ''}`);
         env.log(`  org                slug "${slugWanted}" is taken, using "${slugUsed}"`);
       }
-      const settings = { legacy: { waboo: { client: env.client } } };
+      const tzPick = resolveTimezone(o.timezone);
+      const tz = tzPick.timezone;
+      if (tzPick.defaulted)
+        env.log(`  org                no --timezone given: defaulting to ${DEFAULT_TIMEZONE} (the owner can change it in Settings)`);
+      const settings = { legacy: { waboo: { client: env.client } }, timezone: tz };
       // the app's 4-step default (pickDefaultPlan): the requested plan, else the first active plan flagged default, else the first
       // active free plan, else the literal 'starter'. A trial only starts on a free plan with --trial-days > 0 (trialFor).
       const plans = (

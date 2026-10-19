@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { ageGateSchema } from '../contact-consent/age';
 
 /**
  * The form definition (docs/specs/forms-builder-app.md section 5): ONE JSON document that the builder edits, the public renderer draws,
@@ -36,6 +37,13 @@ export const FORM_FIELD_KINDS = [
   'number',
   'currency',
   'date',
+  /**
+   * A date of birth (BL-217). Written to the contact's `date_of_birth` property; with the form's age gate on and mode `dob` it is also the
+   * question the gate judges. Never required unless the gate needs it, never asked unless a person adds it to the form.
+   */
+  'date_of_birth',
+  /** An age in whole years (BL-217). Judged by the age gate (mode `age`) and then forgotten: it has no contact property. */
+  'age',
   'dropdown',
   'radio',
   'checkbox_group',
@@ -86,7 +94,9 @@ export const FORM_ADDRESS_PARTS = [
 export type FormAddressPart = (typeof FORM_ADDRESS_PARTS)[number];
 
 /** "Street, City, State Postal, Country": empty parts drop out with their separators. Null when nothing was given. */
-export function composeAddress(parts: Partial<Record<FormAddressPart, string | undefined>>): string | null {
+export function composeAddress(
+  parts: Partial<Record<FormAddressPart, string | undefined>>,
+): string | null {
   const t = (k: FormAddressPart): string => (parts[k] ?? '').trim();
   const region = [t('address_state'), t('address_postal_code')].filter(Boolean).join(' ');
   const out = [t('address_line'), t('address_city'), region, t('address_country')]
@@ -107,6 +117,7 @@ export const CONTACT_BUILTIN_PROPERTIES = [
   'address',
   ...FORM_ADDRESS_PARTS,
   'message',
+  'date_of_birth',
 ] as const;
 export type ContactBuiltinProperty = (typeof CONTACT_BUILTIN_PROPERTIES)[number];
 
@@ -327,11 +338,16 @@ export type FormSettings = z.infer<typeof formSettingsSchema>;
  * The consent line (spec 9.5). The exact text shown, its version and the time are stored on every submission. `marketing` ties the box
  * to the contact's subscription: a ticked box subscribes, an unticked one never flips anything.
  */
+export const FORM_CONSENT_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+export type FormConsentChannel = (typeof FORM_CONSENT_CHANNELS)[number];
+
 export const formConsentSchema = z
   .object({
     enabled: z.boolean().default(false),
     text: z.string().trim().min(1).max(500).default('I agree to be contacted about my request.'),
     privacyUrl: httpsUrlSchema.optional(),
+    /** The terms the line points to, next to the privacy link (BL-175). */
+    termsUrl: httpsUrlSchema.optional(),
     /** The box must be ticked to submit. */
     required: z.boolean().default(true),
     /** Ticking it records marketing opt-in on the contact. */
@@ -341,11 +357,45 @@ export const formConsentSchema = z
      * text: it adds an SMS record beside WhatsApp and email when the form collects a phone number.
      */
     coversSms: z.boolean().default(false),
+    /**
+     * The channels the wording asks for (WhatsApp, SMS, email). A ticked box subscribes only these, and only when the form collected the
+     * matching phone or email. Absent on forms saved before this existed: those keep the old behaviour (WhatsApp and email, SMS when
+     * `coversSms`), see `consentChannels`.
+     */
+    channels: z.array(z.enum(FORM_CONSENT_CHANNELS)).max(3).optional(),
     /** Bump when the text changes: submissions keep the version they saw. */
     version: z.number().int().min(1).max(10_000).default(1),
   })
   .strict();
 export type FormConsent = z.infer<typeof formConsentSchema>;
+
+/** The channels a form's consent line covers: the chosen ones, else what forms did before the choice existed. */
+export function consentChannels(
+  c: Pick<FormConsent, 'channels' | 'coversSms'>,
+): FormConsentChannel[] {
+  if (c.channels) return FORM_CONSENT_CHANNELS.filter((ch) => c.channels!.includes(ch));
+  return c.coversSms ? ['whatsapp', 'sms', 'email'] : ['whatsapp', 'email'];
+}
+
+/**
+ * Whether the form collects a phone number and an email address for the contact (a field bound to the contact's `phone` or `email`).
+ * A consent channel is only ever recorded when its data was collected, so the consent settings use this to say which channels the
+ * form can actually cover.
+ */
+export function formCollects(def: Pick<FormDefinition, 'steps'>): {
+  phone: boolean;
+  email: boolean;
+} {
+  const out = { phone: false, email: false };
+  for (const step of def.steps) {
+    for (const b of step.blocks) {
+      if (b.type !== 'field' || !b.bind || b.bind.object !== 'contact') continue;
+      if (b.bind.property === 'phone') out.phone = true;
+      if (b.bind.property === 'email') out.email = true;
+    }
+  }
+  return out;
+}
 
 /** How a company is found for a submission that carries company properties (spec 9.3). */
 export const FORM_COMPANY_MATCH = ['none', 'email_domain', 'name_or_domain'] as const;
@@ -418,12 +468,15 @@ export const formDefinitionSchema = z
     mapping: formMappingSchema.default({}),
     after: formAfterSchema.default({}),
     payment: formPaymentSchema.default({}),
+    /** The age gate (BL-217, spec 11.10): off unless a person turns it on. */
+    ageGate: ageGateSchema.default({}),
   })
   .strict()
   .superRefine((def, ctx) => {
     const seen = new Set<string>();
     const binds = new Set<string>();
     let blocks = 0;
+    let ageFields = 0;
     def.steps.forEach((step, si) => {
       if (seen.has(step.id))
         ctx.addIssue({ code: 'custom', path: ['steps', si, 'id'], message: 'duplicate_id' });
@@ -457,6 +510,15 @@ export const formDefinitionSchema = z
             }
             values.add(o.value);
           });
+        }
+        if (b.kind === 'age' && b.bind) {
+          ctx.addIssue({ code: 'custom', path: [...at, 'bind'], message: 'bind_not_allowed' });
+        }
+        if (b.kind === 'date_of_birth' || b.kind === 'age') {
+          if (ageFields > 0) {
+            ctx.addIssue({ code: 'custom', path: at, message: 'age_field_duplicate' });
+          }
+          ageFields += 1;
         }
         if (b.kind === 'hidden') {
           if (!b.hiddenSource)
@@ -570,4 +632,14 @@ export function formBlocks(def: FormDefinition): FormBlock[] {
 /** Every input block (`type: 'field'`) of a definition, in order. */
 export function formFields(def: FormDefinition): FormFieldBlock[] {
   return formBlocks(def).filter((b): b is FormFieldBlock => b.type === 'field');
+}
+
+/** The one question the age gate judges: a date of birth or an age field of the form, or undefined (a declaration needs none). */
+export function formAgeField(def: Pick<FormDefinition, 'steps'>): FormFieldBlock | undefined {
+  return def.steps
+    .flatMap((s) => s.blocks)
+    .find(
+      (b): b is FormFieldBlock =>
+        b.type === 'field' && (b.kind === 'date_of_birth' || b.kind === 'age'),
+    );
 }

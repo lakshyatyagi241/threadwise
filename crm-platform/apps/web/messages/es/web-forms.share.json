@@ -145,16 +145,26 @@
         "privacyUrl": "Enlace a la política de privacidad",
         "privacyUrlHint": "Opcional. Se muestra junto al texto de consentimiento. Debe empezar por https://.",
         "privacyUrlHttps": "Usa una dirección que empiece por https://.",
+        "termsUrl": "Enlace de los términos",
+        "termsUrlHint": "Opcional. Se muestra junto al texto de consentimiento y al enlace de privacidad. Debe empezar por https://.",
+        "useWorkspacePrivacy": "Usar el enlace de privacidad de mi espacio de trabajo",
+        "useWorkspaceTerms": "Usar el enlace de términos de mi espacio de trabajo",
         "required": "Debe marcarse para enviar",
         "requiredHint": "Desactívalo si el consentimiento es opcional.",
         "marketing": "Consentimiento para marketing",
         "marketingHint": "Marcar la casilla registra el consentimiento de marketing en el contacto. Una casilla sin marcar nunca suscribe a nadie.",
-        "whatsappHint": "¿Vas a enviar mensajes a estos contactos por WhatsApp? Usa un texto que lo indique y explique cómo darse de baja. La casilla marcada se guarda como prueba, con este texto exacto y su versión.",
-        "whatsappInsert": "Usar el texto de consentimiento de WhatsApp",
-        "whatsappWording": "Acepto recibir novedades y ofertas por WhatsApp. Puedo responder STOP en cualquier momento para darme de baja.",
-        "coversSms": "El texto cubre SMS",
-        "coversSmsHint": "Actívalo solo si el texto de arriba dice que pueden contactarles por SMS. Cuando se recoge un teléfono, el SMS se registra junto con WhatsApp y el correo.",
-        "serviceHint": "Esta línea no es marketing. Una casilla marcada se guarda como prueba de que la persona aceptó que la contacten por su solicitud (solo mensajes de servicio), con este texto exacto y su versión. Nunca suscribe a nadie a marketing."
+        "serviceHint": "Esta línea no es marketing. Una casilla marcada se guarda como prueba de que la persona aceptó que la contacten por su solicitud (solo mensajes de servicio), con este texto exacto y su versión. Nunca suscribe a nadie a marketing.",
+        "statement": "Acepto recibir novedades y ofertas por {channels}. Puedo responder STOP en cualquier momento para darme de baja.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "correo electrónico"
+        },
+        "channelsLabel": "Canales que cubre este consentimiento",
+        "channelsHint": "El visitante solo se suscribe en los canales marcados aquí, y el texto del consentimiento los nombra. Un canal se usa solo si el formulario recoge el teléfono o el correo correspondiente.",
+        "channelsUse": "Actualizar el texto con estos canales",
+        "channelNeedsPhone": "Este formulario no tiene campo de teléfono, así que nadie se suscribe en este canal desde él.",
+        "channelNeedsEmail": "Este formulario no tiene campo de correo electrónico, así que nadie se suscribe en este canal desde él."
       },
       "crm": {
         "title": "En el CRM",
@@ -289,6 +299,41 @@
           "held": "{count, plural, one {1 envío está retenido como spam.} other {# envíos están retenidos como spam.}}",
           "review": "Revisarlos"
         }
+      },
+      "age": {
+        "title": "Comprobación de edad",
+        "description": "Pide la edad solo donde la necesites. Déjalo desactivado en la mayoría de los formularios.",
+        "enable": "Comprobar la edad del visitante",
+        "enableHint": "Desactivado por defecto. Actívalo si las reglas de tu espacio de trabajo lo piden o tu negocio atiende a menores. El formulario nunca indica al visitante qué respuesta es válida.",
+        "mode": "Cómo preguntar",
+        "modes": {
+          "declaration": "Una casilla: \"Confirmo que tengo al menos N años\"",
+          "age": "Pedir su edad",
+          "dob": "Pedir su fecha de nacimiento"
+        },
+        "modeHints": {
+          "declaration": "No se guarda nada sobre su edad. Es lo mínimo de datos.",
+          "age": "Un número entero. Se usa para la comprobación; solo se guarda el resultado.",
+          "dob": "Se guarda en el contacto como fecha de nacimiento. Úsalo solo si necesitas la fecha."
+        },
+        "minAge": "Edad mínima",
+        "minAgeHint": "Déjalo vacío para usar la edad de tu espacio de trabajo ({age}). Entre 1 y 21.",
+        "minAgeInvalid": "Introduce un número entero de {min} a {max}.",
+        "whenUnder": "Si el visitante es menor de esa edad",
+        "actions": {
+          "block": "No aceptar el envío",
+          "flag": "Aceptarlo, marcar el contacto como menor y no registrar consentimiento de marketing",
+          "guardian": "Como arriba, y pedir un padre, madre o tutor"
+        },
+        "actionHints": {
+          "block": "No se guarda nada del visitante y ve un mensaje neutro. Con la casilla, el visitante solo tiene que marcarla.",
+          "flag": "El contacto se marca como menor. La línea de consentimiento de este envío se guarda tal como se mostró, pero no se registra ningún acuerdo de marketing.",
+          "guardian": "El nombre y los datos de contacto del padre, madre o tutor se guardan con el envío y en la cronología del contacto. Su consentimiento no se registra hasta que una persona lo registre en la tarjeta de Consentimiento."
+        },
+        "declarationBlockNote": "Con la casilla y este ajuste nadie es rechazado: hay que marcar la casilla para enviar el formulario.",
+        "childrenUnanswered": "Tu Centro de cumplimiento normativo no ha respondido a la pregunta sobre menores, así que el marketing de un menor marcado se registra pero no se frena.",
+        "childrenLink": "Abrir el Centro de cumplimiento normativo",
+        "neutralNote": "No escribas la edad mínima en el texto de ayuda de un campo ni en la descripción: la página no debe indicar qué respuesta es válida."
       }
     }
   }

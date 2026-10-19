@@ -8,8 +8,10 @@ import {
   read,
   sh,
   skip,
+  unreviewed,
   warn,
 } from '../lib/core.mjs';
+import { neverValidated } from '../lib/not-valid.mjs';
 import { buildSchema, isTenant } from '../lib/schema.mjs';
 
 export default {
@@ -55,28 +57,18 @@ export default {
       expectNone(
         'int-uuid-partitioned',
         'Partitioned/stream tables whose uuid cannot be unique-constrained',
-        partUuid,
+        unreviewed(48, partUuid),
         { level: 'warn' },
       ),
     );
-    const notValid = migrations().flatMap((f) =>
-      [...read(f).matchAll(/ADD\s+CONSTRAINT\s+(\w+)[^;]*NOT\s+VALID/gi)].map(
-        (m) => `${f.split('/').pop()}: ${m[1]} is NOT VALID; is there a later VALIDATE CONSTRAINT?`,
-      ),
+    const notValid = neverValidated(migrations().map((f) => ({ file: f, sql: read(f) }))).map(
+      (x) =>
+        `${x.file.split('/').pop()}: ${x.name} is NOT VALID and no later migration validates it`,
     );
-    const validated = migrations().map(read).join('\n');
     checks.push(
-      expectNone(
-        'int-notvalid',
-        'Constraints added NOT VALID are later validated',
-        notValid.filter(
-          (x) =>
-            !new RegExp(`VALIDATE\\s+CONSTRAINT\\s+${x.split(': ')[1].split(' ')[0]}`, 'i').test(
-              validated,
-            ),
-        ),
-        { level: 'warn' },
-      ),
+      expectNone('int-notvalid', 'Constraints added NOT VALID are later validated', notValid, {
+        level: 'warn',
+      }),
     );
 
     const { client, error } = await pgClient();

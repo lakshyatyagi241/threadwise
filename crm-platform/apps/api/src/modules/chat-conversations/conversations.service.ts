@@ -25,6 +25,7 @@ import { ConversationsRepository, type ConversationRow } from './conversations.r
 import { defaultTitle, isPhoneChannel, normalizePeerKey } from './peer-key';
 import { MediaFetchService } from './media-fetch.service';
 import { previewOf } from './message-rules';
+import { ContactTouchService } from '../crm';
 import { MessageViewService } from './message-view.service';
 import { MessagesRepository } from './messages.repository';
 import { OutboundService, conversationNotFound } from './outbound.service';
@@ -56,6 +57,7 @@ export class ConversationsService implements ConversationsFacade {
     private readonly view: MessageViewService,
     private readonly mediaFetch: MediaFetchService,
     private readonly translation: ConversationTranslationService,
+    private readonly leadHandling: ContactTouchService,
   ) {}
 
   // --- threads -------------------------------------------------------------------------------------------------------------------
@@ -227,6 +229,18 @@ export class ConversationsService implements ConversationsFacade {
         },
       );
       if (found.created) await this.lifecycle.created(tx, orgId, channel, after, 'system');
+      // A message another domain sent to the contact (a person's, or a campaign, broadcast or flow): lead handling (BL-290). Never throws.
+      if (input.kind !== 'system' && input.direction !== 'in' && conv.contactId !== null) {
+        const person = input.senderUserId != null;
+        if (person || ['broadcast', 'campaign', 'flow'].includes(input.source)) {
+          await this.leadHandling.touch(
+            tx,
+            orgId,
+            conv.contactId,
+            person ? 'message' : 'automation',
+          );
+        }
+      }
       const row = (await this.messages.byId(tx, orgId, alloc.id, alloc.createdAt))!;
       return {
         row,

@@ -62,7 +62,8 @@
       "field_match": "Совпадение поля",
       "date_field_match": "Совпадение даты",
       "schedule": "Расписание",
-      "ecom_event": "Событие магазина"
+      "ecom_event": "Событие магазина",
+      "segment_leave": "Выход из сегмента"
     },
     "endReason": {
       "end_node": "Достигнут конец сценария",

@@ -31,7 +31,7 @@ export function PageSelect({
   return (
     <div className={cn('relative', className)}>
       <span
-        className="pointer-events-none absolute left-2.5 top-1/2 grid size-5 -translate-y-1/2 place-items-center rounded-full text-white"
+        className="pointer-events-none absolute start-2.5 top-1/2 grid size-5 -translate-y-1/2 place-items-center rounded-full text-white"
         style={{ background: FB_BLUE }}
         aria-hidden
       >
@@ -41,7 +41,7 @@ export function PageSelect({
         value={value}
         aria-label={label}
         onChange={(e) => onChange(e.target.value)}
-        className="h-10 rounded-full pl-9 text-[13px] font-semibold"
+        className="h-10 rounded-full ps-9 text-[13px] font-semibold"
       >
         {allLabel !== undefined && <option value="">{allLabel}</option>}
         {pages.map((p) => (

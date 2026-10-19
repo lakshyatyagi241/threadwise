@@ -1433,13 +1433,16 @@
             "storefront_builder": "Der Builder für den Online-Shop.",
             "invoicing": "Rechnungen, Gutschriften, Zahlungen, Verkaufsaufträge und Steuersätze.",
             "forms_and_links": "Formulare zur Lead-Erfassung und teilbare Links.",
-            "extra_channels": "Die Kanäle Telegram, Facebook und Instagram.",
+            "extra_channels": "Die Kanäle Telegram, Facebook, Instagram, LINE, Viber und WeChat.",
             "form_builder": "Gehostete und eingebettete Webformulare, die Kontakte im CRM erstellen. Die kostenpflichtige App Formulare steuert diesen Schalter.",
             "waba_groups": "WhatsApp-Gruppen von einer Cloud-API-Nummer aus erstellen und verwalten: Einladungslink, Beitrittsanfragen, Mitglieder. Die Nummer muss ein Official Business Account sein.",
             "sms": "Reiner SMS-Versand über Twilio oder MSG91: Absender verbinden, SMS-Broadcasts und -Kampagnen senden.",
             "help_agent": "Der Hilfe-Assistent in der App: Nutzer beschreiben eine Aufgabe in einfachen Worten, und er führt sie an oder erledigt sie in der eigenen Sitzung – bei Risiken fragt er vorher nach. Verbraucht KI-Tokens.",
             "email_channel": "Gmail- und Google-Workspace-Postfächer mit dem Team-Posteingang verbinden. Die kostenpflichtige E-Mail-App steuert diesen Schalter.",
-            "personal_history_full": "Ermöglicht es einer privaten WhatsApp-Nummer, beim ersten Verknüpfen den gesamten Chatverlauf zu importieren. Der Import der letzten Chats ist in allen Tarifen mit privaten Nummern enthalten."
+            "personal_history_full": "Ermöglicht es einer privaten WhatsApp-Nummer, beim ersten Verknüpfen den gesamten Chatverlauf zu importieren. Der Import der letzten Chats ist in allen Tarifen mit privaten Nummern enthalten.",
+            "ai_crm_copilot": "Findet und bewertet Leads mit KI aus Ihren Kontakten.",
+            "lead_scoring": "Bewertet Kontakte mit KI und steuert den Growth-Piloten. Die App KI-Lead-Scoring besitzt diesen Schalter.",
+            "record_assignment": "Weist neue Kontakte, Firmen und Deals nach Prioritätsregeln dem richtigen Vertriebsverantwortlichen zu."
           },
           "units": {
             "days": "Tage",
@@ -1582,7 +1585,9 @@
             "form_submissions_monthly": "Formulareinsendungen pro Monat",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen pro Monat",
             "sms_monthly": "SMS pro Monat",
-            "email_mailboxes": "E-Mail-Postfächer"
+            "email_mailboxes": "E-Mail-Postfächer",
+            "email_monthly": "E-Mails pro Monat",
+            "storage_gb": "Speicher (GB)"
           },
           "featureGroups": {
             "messaging": "Nachrichten",
@@ -1617,13 +1622,16 @@
             "storefront_builder": "Storefront- und Website-Builder",
             "invoicing": "Rechnungsstellung (Rechnungen, Gutschriften, wiederkehrende Rechnungen)",
             "forms_and_links": "Formulare, Click-to-Chat-Links und Gruppen",
-            "extra_channels": "Telegram-, Facebook- und Instagram-Kanäle",
+            "extra_channels": "Telegram-, Facebook-, Instagram-, LINE-, Viber- und WeChat-Kanäle",
             "form_builder": "Formulare (Webformular-Builder)",
             "waba_groups": "WhatsApp-Gruppen (Cloud API)",
             "sms": "SMS-Kanal",
             "help_agent": "Hilfe-Assistent (KI, verbraucht Tokens)",
             "email_channel": "E-Mail-Kanal (Gmail)",
-            "personal_history_full": "Vollständiger Chatverlauf-Import (privates WhatsApp)"
+            "personal_history_full": "Vollständiger Chatverlauf-Import (privates WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "KI-Lead-Scoring",
+            "record_assignment": "Regeln zur Datensatzzuweisung (Kontakte, Firmen und Deals automatisch zuweisen)"
           },
           "problems": {
             "required": "Dieses Feld ist erforderlich.",
@@ -1677,7 +1685,9 @@
             "form_submissions_monthly": "Im Kalendermonat angenommene Formulareinsendungen, ohne Spam. Über dem Limit wird eine Einsendung weiterhin zur Prüfung gespeichert und nie verworfen. 0 = unbegrenzt.",
             "ai_form_generations_monthly": "KI-Formular-Builder-Generierungen im Kalendermonat, einschließlich eines Reparaturversuchs. 0 = unbegrenzt.",
             "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
-            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt."
+            "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
+            "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
+            "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert."
           }
         }
       },
@@ -1725,6 +1735,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Sanft leuchtende Farbe hinter einer Milchglaskarte."
+          },
+          "geta": {
+            "name": "Geta-Teilung",
+            "description": "Formular auf einer Seite, auf der anderen ein animiertes Markenfeld mit Kennzahlen."
           }
         },
         "fields": {

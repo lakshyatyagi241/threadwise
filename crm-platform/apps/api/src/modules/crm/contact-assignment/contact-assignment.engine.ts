@@ -1,8 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import {
+  COMPANY_AUTO_ASSIGNED,
   CONTACT_AUTO_ASSIGNED,
   DEAL_AUTO_ASSIGNED,
+  RECORD_ASSIGNMENT_FEATURE,
+  type AssignmentReason,
   type AssignmentSubject,
+  type AssignmentTraceEntry,
   type TestAssignmentResponse,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
@@ -12,17 +16,22 @@ import { loadWorkspaceCalendar, onLeaveMap } from '../../../common/workspace-cal
 import { DatabaseService } from '../../../infra/db/database.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
-import { candidateOrder, matchesAssignment, type AssignmentFacts } from './assignment-matcher';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
+import { compileAssignment, loadAssignmentContext } from './assignment-compiler';
+import { candidateOrder, orderRules, sameInstant } from './assignment-matcher';
 import {
   ContactAssignmentRepository,
   type Candidate,
-  type RecordFacts,
+  type RecordHead,
   type RuleRow,
+  type RunRow,
 } from './contact-assignment.repository';
+
+export type AssignTrigger = 'created' | 'updated';
 
 export type AssignOutcome =
   | {
-      outcome: 'assigned';
+      outcome: 'assigned' | 'reassigned';
       ruleId: string;
       ruleName: string;
       ownerId: number;
@@ -31,7 +40,14 @@ export type AssignOutcome =
     }
   | {
       outcome:
-        'disabled' | 'plan' | 'not_found' | 'has_owner' | 'no_rule' | 'nobody_available' | 'raced';
+        | 'disabled'
+        | 'plan'
+        | 'not_found'
+        | 'has_owner'
+        | 'no_rule'
+        | 'nobody_available'
+        | 'unchanged'
+        | 'raced';
     };
 
 interface Pick {
@@ -39,23 +55,47 @@ interface Pick {
   person: Candidate;
 }
 
+interface Decision {
+  pick: Pick | null;
+  /** The rule that matched first and is the one the engine already used (reassign mode), or one that may not take over. */
+  holdsRecord: boolean;
+  matched: boolean;
+  skipped: RuleRow[];
+  trace: AssignmentTraceEntry[];
+}
+
+const MODULE = { contact: 'contacts', company: 'companies', deal: 'deals' } as const;
+const AUTO_EVENT = {
+  contact: CONTACT_AUTO_ASSIGNED,
+  company: COMPANY_AUTO_ASSIGNED,
+  deal: DEAL_AUTO_ASSIGNED,
+} as const;
+/** The event that tells the rest of the product the owner changed (the engine's own is flagged `autoAssigned`, which it ignores). */
+const OWNER_EVENT = {
+  contact: 'contact.updated',
+  company: 'company.updated',
+  deal: 'deal.owner_changed',
+} as const;
+
 /**
- * The engine of contact and deal auto-assignment (BL-013, BL-112 phase 3). Runs in the worker when `contact.created` / `deal.created`
- * is delivered (`ContactAssignmentConsumer`), never in a request; the test box of the settings screen runs the same code with
- * `dry = true`.
+ * The engine of record auto-assignment for contacts, companies and deals (BL-013, BL-340..345). It runs in the worker when a record's
+ * creation (or, for updates, change) event is delivered (`ContactAssignmentConsumer`): every write path (screen, API, import, form, lead
+ * source, flow, mobile) already announces its record through the outbox, so this is the one shared place, outside the write's own
+ * transaction, idempotent and unable to fail a write. The test box of the settings screen runs the same code with `fire = false`.
  *
  * One transaction holding the record's row lock:
- *  1. the workspace switch is on (default OFF) and the plan has routing (`inbox_routing`, the feature routing rules already use);
- *  2. the record still has no owner AND nobody ever set one (`owner_changed_at IS NULL`: an explicit owner, even an explicit
- *     "nobody", is authoritative, and a redelivered event finds an owner and does nothing: idempotent);
- *  3. active rules of the subject in priority order; the first whose conditions hold AND that finds somebody fires. Candidates are the
- *     rule's people and its teams' members who are active, NOT ON LEAVE today (the workspace calendar) and, by default, not offline. A
- *     fixed rule whose person is away uses their delegate. A rule that matches but finds nobody does not fire; the next one is tried;
- *  4. the owner is written (only where it is still empty), with an audit row, `contact.updated` (flagged `autoAssigned`, so the flows
- *     and the engine itself can tell it from a person's edit: this engine listens to `*.created` only, so assignment cannot trigger
- *     assignment), and `contact.auto_assigned` / `deal.auto_assigned` carrying the rule id.
- * Rotation: round robin continues after the last person who took a turn (an id, so people coming and going never repeat or jump it);
- * least busy takes the person holding the fewest records of the subject now, ties broken by the rotation.
+ *  1. the workspace switch is on (default OFF) and the plan has `record_assignment` (higher plans only);
+ *  2. the record still has no owner AND nobody ever set one (`owner_changed_at IS NULL`: an explicit owner, even an explicit "nobody", is
+ *     authoritative; a redelivered event finds an owner and does nothing). The one exception is a rule with "reassign on update": a record
+ *     whose owner is still the engine's own last pick (nobody changed it since) may move to a rule that now matches;
+ *  3. the active rules in priority order, the rules WITHOUT conditions last (they match everything: the fallback). The first whose
+ *     conditions hold AND that finds somebody fires. Candidates are the rule's people and its teams' members who are active, NOT ON LEAVE
+ *     today (the workspace calendar) and, by default, not offline. A specific-user rule whose person is away uses their delegate. A rule
+ *     that matches but finds nobody does not fire; the next one is tried;
+ *  4. the owner is written (only where the record still looks as it did), with an audit row, the owner-changed event (flagged
+ *     `autoAssigned`), `<module>.auto_assigned`, and a row in the run log with the trace of every rule tried.
+ * Rotation: round robin continues after the last person who took a turn (an id, so people coming and going never repeat or jump it); the
+ * least busy method takes the person holding the fewest records of the module now (open deals for deals), ties broken by the rotation.
  */
 @Injectable()
 export class ContactAssignmentEngine {
@@ -66,6 +106,7 @@ export class ContactAssignmentEngine {
     private readonly repo: ContactAssignmentRepository,
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   async assign(
@@ -73,40 +114,117 @@ export class ContactAssignmentEngine {
     subject: AssignmentSubject,
     recordUuid: string,
     origin: string,
+    trigger: AssignTrigger = 'created',
     now: Date = new Date(),
   ): Promise<AssignOutcome> {
     return this.db.txAs({ orgId }, async (tx) => {
       const settings = await this.repo.settings(tx, orgId);
       if (!settings.enabled) return { outcome: 'disabled' };
       if (origin === 'import' && !settings.applyToImports) return { outcome: 'disabled' };
-      if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing')))
+      if (!(await this.entitlements.featureEnabled(orgId, RECORD_ASSIGNMENT_FEATURE)))
         return { outcome: 'plan' };
 
-      const rec = await this.load(tx, orgId, subject, recordUuid, origin, true);
+      const rec = await this.repo.recordHead(tx, orgId, subject, recordUuid, true);
       if (!rec) return { outcome: 'not_found' };
-      if (rec.ownerId !== null || rec.ownerChangedAt !== null) return { outcome: 'has_owner' };
+      const rules = orderRules(await this.repo.rules(tx, orgId, subject, true).then(withFlags));
+      if (rules.length === 0) return { outcome: 'no_rule' };
+
+      const log = (v: {
+        outcome: RunRow['outcome'];
+        reason: AssignmentReason;
+        rule?: RuleRow | null;
+        ownerId?: number | null;
+        trace?: AssignmentTraceEntry[];
+        stamp?: Date | null;
+      }) =>
+        this.repo.insertRun(tx, orgId, {
+          subject,
+          recordId: rec.id,
+          ruleId: v.rule?.id ?? null,
+          ruleName: v.rule?.name ?? null,
+          outcome: v.outcome,
+          reason: v.reason,
+          ownerId: v.ownerId ?? null,
+          method: v.rule?.strategy ?? null,
+          origin,
+          trigger,
+          trace: v.trace ?? [],
+          ownerStamp: v.stamp ?? null,
+        });
+
+      // Who decided the owner. A person did unless the record still carries the engine's own last pick.
+      let engineOwned: RunRow | null = null;
+      if (rec.ownerId !== null || rec.ownerChangedAt !== null) {
+        if (trigger === 'created') {
+          await log({ outcome: 'skipped', reason: 'has_owner' });
+          return { outcome: 'has_owner' };
+        }
+        if (rec.ownerId === null || !rules.some((r) => r.reassignOnUpdate)) {
+          return { outcome: 'has_owner' };
+        }
+        const last = await this.repo.lastPick(tx, orgId, subject, rec.id);
+        if (
+          !last ||
+          last.ownerId !== rec.ownerId ||
+          !sameInstant(last.ownerStamp, rec.ownerChangedAt)
+        ) {
+          return { outcome: 'has_owner' };
+        }
+        engineOwned = last;
+      }
 
       const cal = await loadWorkspaceCalendar(tx, orgId, now);
-      const decided = await this.decide(tx, orgId, subject, rec.facts, cal.today, true);
-      if (!decided.pick) return { outcome: decided.matched ? 'nobody_available' : 'no_rule' };
+      const decided = await this.decide(
+        tx,
+        orgId,
+        subject,
+        rec,
+        rules,
+        origin,
+        cal.today,
+        true,
+        engineOwned,
+      );
+      if (!decided.pick) {
+        if (decided.holdsRecord) return { outcome: 'unchanged' };
+        const reason: AssignmentReason = decided.matched ? 'nobody_available' : 'no_rule';
+        // An edit that finds no rule is not news: only a new record's miss is logged.
+        if (trigger === 'created') await log({ outcome: 'skipped', reason, trace: decided.trace });
+        return { outcome: decided.matched ? 'nobody_available' : 'no_rule' };
+      }
 
       const { rule, person } = decided.pick;
-      if (!(await this.repo.setOwner(tx, orgId, subject, rec.id, person.id)))
-        return { outcome: 'raced' };
+      if (engineOwned && person.id === rec.ownerId) return { outcome: 'unchanged' };
+      const stamp = await this.repo.setOwner(
+        tx,
+        orgId,
+        subject,
+        rec.id,
+        person.id,
+        engineOwned
+          ? { kind: 'engine', ownerId: engineOwned.ownerId!, stamp: engineOwned.ownerStamp }
+          : { kind: 'unowned' },
+      );
+      if (!stamp) return { outcome: 'raced' };
       await this.repo.markFired(tx, orgId, rule.id, person.id);
-      const module = subject === 'contact' ? 'contacts' : 'deals';
+      // The contact has an owner now: back to uncontacted when the workspace says an assignment does that (BL-290).
+      if (subject === 'contact') await this.touch.afterReassign(tx, orgId, [rec.id]);
+      const previous = engineOwned?.ownerId ?? null;
       await this.repo.audit(tx, {
         orgId,
-        module,
+        module: MODULE[subject],
         recordId: rec.id,
-        action: subject === 'contact' ? CONTACT_AUTO_ASSIGNED : DEAL_AUTO_ASSIGNED,
-        delta: { ownerId: { old: null, new: person.uuid }, ruleId: { old: null, new: rule.uuid } },
+        action: AUTO_EVENT[subject],
+        delta: {
+          ownerId: { old: previous === null ? null : String(previous), new: person.uuid },
+          ruleId: { old: null, new: rule.uuid },
+        },
       });
       await this.outbox.emit(tx, {
         orgId,
-        aggregateModule: module,
+        aggregateModule: MODULE[subject],
         aggregateId: rec.id,
-        eventType: subject === 'contact' ? 'contact.updated' : 'deal.owner_changed',
+        eventType: OWNER_EVENT[subject],
         payload: {
           uuid: rec.uuid,
           ownerId: person.uuid,
@@ -117,9 +235,9 @@ export class ContactAssignmentEngine {
       });
       await this.outbox.emit(tx, {
         orgId,
-        aggregateModule: module,
+        aggregateModule: MODULE[subject],
         aggregateId: rec.id,
-        eventType: subject === 'contact' ? CONTACT_AUTO_ASSIGNED : DEAL_AUTO_ASSIGNED,
+        eventType: AUTO_EVENT[subject],
         payload: {
           uuid: rec.uuid,
           ownerId: person.uuid,
@@ -128,8 +246,17 @@ export class ContactAssignmentEngine {
           autoAssigned: true,
         },
       });
+      const outcome = engineOwned ? 'reassigned' : 'assigned';
+      await log({
+        outcome,
+        reason: 'matched',
+        rule,
+        ownerId: person.id,
+        trace: decided.trace,
+        stamp,
+      });
       return {
-        outcome: 'assigned',
+        outcome,
         ruleId: rule.uuid,
         ruleName: rule.name,
         ownerId: person.id,
@@ -139,11 +266,11 @@ export class ContactAssignmentEngine {
     });
   }
 
-  /** The test box: what WOULD happen for a record or a described record. Changes nothing (no owner, no counter, no cursor). */
+  /** The test box: what WOULD happen for a record. Changes nothing (no owner, no counter, no cursor, no log). */
   async dryRun(
     orgId: number,
     subject: AssignmentSubject,
-    input: { recordUuid?: string; facts?: Partial<AssignmentFacts> },
+    recordUuid: string,
     now: Date = new Date(),
   ): Promise<TestAssignmentResponse> {
     return this.db.tx(async (tx) => {
@@ -151,92 +278,122 @@ export class ContactAssignmentEngine {
       const base: TestAssignmentResponse = {
         enabled: settings.enabled,
         outcome: 'disabled',
+        record: null,
         rule: null,
         owner: null,
+        trace: [],
         skipped: [],
       };
-      let facts: AssignmentFacts = {
-        source: null,
-        countryCode: null,
-        phoneDigits: null,
-        lifecycleStage: null,
-        tagIds: [],
-        origin: 'manual',
-        properties: {},
-        pipelineId: null,
-        value: null,
-        ...(input.facts ?? {}),
-      };
-      if (input.recordUuid) {
-        const rec = await this.load(
-          tx,
-          orgId,
-          subject,
-          input.recordUuid,
-          input.facts?.origin ?? 'manual',
-          false,
-        );
-        if (!rec) return { ...base, outcome: 'no_rule' };
-        facts = rec.facts;
-        if (rec.ownerId !== null || rec.ownerChangedAt !== null) {
-          return { ...base, outcome: 'has_owner' };
-        }
-      }
-      if (!(await this.entitlements.featureEnabled(orgId, 'inbox_routing')))
-        return { ...base, outcome: 'plan' };
+      const rec = await this.repo.recordHead(tx, orgId, subject, recordUuid, false);
+      if (!rec) return { ...base, outcome: 'not_found' };
+      const record = { id: rec.uuid, label: rec.label };
+      if (!(await this.entitlements.featureEnabled(orgId, RECORD_ASSIGNMENT_FEATURE)))
+        return { ...base, record, outcome: 'plan' };
+      const rules = orderRules(await this.repo.rules(tx, orgId, subject, true).then(withFlags));
       const cal = await loadWorkspaceCalendar(tx, orgId, now);
-      const decided = await this.decide(tx, orgId, subject, facts, cal.today, false);
+      const decided = await this.decide(
+        tx,
+        orgId,
+        subject,
+        rec,
+        rules,
+        'manual',
+        cal.today,
+        false,
+        null,
+      );
       const skipped = decided.skipped.map((r) => ({ id: r.uuid, name: r.name }));
+      const shared = { ...base, record, trace: decided.trace, skipped };
+      // The trace is shown either way, so a person sees which rule WOULD have taken a record that already has an owner.
+      if (rec.ownerId !== null || rec.ownerChangedAt !== null)
+        return { ...shared, outcome: 'has_owner' };
       if (!decided.pick) {
-        return { ...base, outcome: decided.matched ? 'nobody_available' : 'no_rule', skipped };
+        return { ...shared, outcome: decided.matched ? 'nobody_available' : 'no_rule' };
       }
       return {
-        enabled: settings.enabled,
+        ...shared,
         // The switch being off does not stop the test: it says what would happen once it is on.
         outcome: 'would_assign',
         rule: { id: decided.pick.rule.uuid, name: decided.pick.rule.name },
         owner: { id: decided.pick.person.uuid, name: decided.pick.person.name },
-        skipped,
       };
     });
   }
 
-  private load(
-    tx: Tx,
-    orgId: number,
-    subject: AssignmentSubject,
-    uuid: string,
-    origin: string,
-    lock: boolean,
-  ): Promise<RecordFacts | null> {
-    return subject === 'contact'
-      ? this.repo.contactFacts(tx, orgId, uuid, origin, lock)
-      : this.repo.dealFacts(tx, orgId, uuid, origin, lock);
-  }
-
-  /** Walks the rules in order; `fire` locks the rule row (a fresh cursor) so two records arriving together take two turns. */
+  /**
+   * Walks the rules in order; `fire` locks the rule row (a fresh cursor) so two records arriving together take two turns. In reassign
+   * mode (`engineOwned`) the first rule that matches decides: it takes the record only when it is a different rule that allows
+   * reassigning, otherwise the record stays (`holdsRecord`), and rules after it are not consulted.
+   */
   private async decide(
     tx: Tx,
     orgId: number,
     subject: AssignmentSubject,
-    facts: AssignmentFacts,
+    rec: RecordHead,
+    rules: RuleRow[],
+    origin: string,
     today: string,
     fire: boolean,
-  ): Promise<{ pick: Pick | null; matched: boolean; skipped: RuleRow[] }> {
-    const rules = await this.repo.rules(tx, orgId, subject, true);
-    const skipped: RuleRow[] = [];
-    let matched = false;
-    for (const listed of rules) {
-      if (!matchesAssignment(listed.conditions, facts)) continue;
-      matched = true;
+    engineOwned: RunRow | null,
+  ): Promise<Decision> {
+    const ctx = await loadAssignmentContext(
+      tx,
+      orgId,
+      subject,
+      rules.map((r) => r.tree),
+    );
+    const compiled = rules.map((r) =>
+      r.tree && r.tree.children.length > 0
+        ? compileAssignment(subject, orgId, r.tree, ctx, origin)
+        : null,
+    );
+    const live = compiled.flatMap((c, i) => (c ? [{ i, where: c.where }] : []));
+    const results = await this.repo.evaluate(
+      tx,
+      orgId,
+      subject,
+      rec.id,
+      live.map((l) => l.where),
+    );
+    const holds = new Map(live.map((l, k) => [l.i, results[k]!]));
+
+    const decision: Decision = {
+      pick: null,
+      holdsRecord: false,
+      matched: false,
+      skipped: [],
+      trace: [],
+    };
+    for (let i = 0; i < rules.length; i++) {
+      const listed = rules[i]!;
+      const c = compiled[i];
+      const matched = c === null ? true : holds.get(i) === true;
+      const entry: AssignmentTraceEntry = {
+        ruleId: listed.uuid,
+        name: listed.name,
+        matched,
+        nobody: false,
+        broken: (c?.invalid.length ?? 0) > 0,
+      };
+      decision.trace.push(entry);
+      if (!matched) continue;
+      decision.matched = true;
+      if (engineOwned && (listed.id === engineOwned.ruleId || !listed.reassignOnUpdate)) {
+        decision.holdsRecord = true;
+        return decision;
+      }
       const rule = fire
         ? ((await this.repo.ruleById(tx, orgId, listed.id, true)) ?? listed)
         : listed;
       const person = await this.choose(tx, orgId, subject, rule, today);
-      if (person) return { pick: { rule, person }, matched, skipped };
-      skipped.push(rule);
+      if (person) {
+        decision.pick = { rule, person };
+        return decision;
+      }
+      entry.nobody = true;
+      decision.skipped.push(rule);
     }
-    return { pick: null, matched, skipped };
+    return decision;
   }
 
   private async choose(
@@ -253,7 +410,7 @@ export class ContactAssignmentEngine {
 
     let ids = candidateOrder(named, teamMembers);
     if (rule.strategy === 'fixed' && named.length === 1) {
-      // A fixed person who is away is replaced by their delegate (one hop, present and active); with none the rule finds nobody.
+      // A specific person who is away is replaced by their delegate (one hop, present and active); with none the rule finds nobody.
       const away = await onLeaveMap(tx, orgId, named, today);
       if (away.size > 0) {
         const delegates = await this.repo.delegatesOf(tx, orgId, named);
@@ -284,3 +441,7 @@ export class ContactAssignmentEngine {
     return pool.find((p) => p.id === chosen) ?? null;
   }
 }
+
+/** Adds the `isFallback` flag `orderRules` reads: a rule without a single condition matches everything. */
+export const withFlags = (rows: RuleRow[]): Array<RuleRow & { isFallback: boolean }> =>
+  rows.map((r) => ({ ...r, isFallback: !r.tree || r.tree.children.length === 0 }));

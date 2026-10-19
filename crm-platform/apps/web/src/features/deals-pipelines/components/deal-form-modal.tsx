@@ -4,6 +4,7 @@ import { createDealSchema } from '@crm/contracts';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Field, Input, Modal, Select, Spinner } from '@crm/ui';
+import { CompanyPicker, useCanPickCompany, type CompanyRef } from '@/features/companies';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { useMembers } from '../api/hooks';
 import { dealsApi } from '../api/service';
@@ -21,11 +22,12 @@ export interface DealFormModalProps {
   onCreated: (deal: Deal) => void;
 }
 
-type FormField = 'title' | 'value' | 'currency' | 'stage' | 'owner' | 'close' | 'form';
+type FormField = 'title' | 'value' | 'currency' | 'stage' | 'owner' | 'company' | 'close' | 'form';
 
 /** "New deal" (TW-DEAL-009). Mount it only while it is open: it starts empty every time. */
 export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFormModalProps) {
   const t = useTranslations('deals-pipelines.form');
+  const canPickCompany = useCanPickCompany();
   const session = useSession();
   const members = useMembers();
   const errorText = useErrorText();
@@ -35,6 +37,7 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
   const [stage, setStage] = useState(stageId ?? pipeline.stages[0]?.id ?? '');
   const [owner, setOwner] = useState(session.user.id);
   const [contact, setContact] = useState<ContactRef | null>(null);
+  const [company, setCompany] = useState<CompanyRef | null>(null);
   const [close, setClose] = useState('');
   const [errors, setErrors] = useState<Partial<Record<FormField, string>>>({});
   const [busy, setBusy] = useState(false);
@@ -53,6 +56,8 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
       currency,
       ownerId: owner || null,
       contactId: contact?.id ?? null,
+      // Left out when none is chosen: the deal then takes its contact's company.
+      companyId: company?.id,
       expectedCloseDate: close || null,
     });
     if (Object.keys(next).length > 0 || !parsed.success) {
@@ -69,6 +74,7 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
         title: server.title ? t('errors.titleRequired') : undefined,
         value: server.value ? t('errors.valueInvalid') : undefined,
         stage: server.stageId ? t('errors.stageInvalid') : undefined,
+        company: server.companyId ? t('companyRefused') : undefined,
         form: Object.keys(server).length === 0 ? errorText(e) : undefined,
       });
     } finally {
@@ -173,6 +179,25 @@ export function DealFormModal({ pipeline, stageId, onClose, onCreated }: DealFor
         >
           <ContactPicker id="deal-contact" value={contact} onChange={setContact} />
         </Field>
+        {canPickCompany && (
+          <Field
+            label={t('company')}
+            htmlFor="deal-company"
+            hint={t('companyHint')}
+            error={errors.company}
+            className="sm:col-span-2"
+          >
+            <CompanyPicker
+              id="deal-company"
+              value={company}
+              invalid={!!errors.company}
+              onChange={(c) => {
+                setCompany(c);
+                setErrors((cur) => ({ ...cur, company: undefined }));
+              }}
+            />
+          </Field>
+        )}
         <Field label={t('expectedClose')} htmlFor="deal-close" className="sm:col-span-2">
           <Input
             id="deal-close"

@@ -1,5 +1,5 @@
 /**
- * Where a flow's uploaded media (Media and Sequence nodes) lives (TW-FLB-027). A port: object storage (S3 / R2 / MinIO) is
+ * Where a flow's uploaded media (Media and Sequence nodes) lives (TW-FLB-027). A port: object storage (S3 / R2) is
  * a platform decision that has not landed (workstream F5), so the flows module only knows this interface. The default
  * adapter writes to local disk; swapping it for object storage is one provider binding.
  */

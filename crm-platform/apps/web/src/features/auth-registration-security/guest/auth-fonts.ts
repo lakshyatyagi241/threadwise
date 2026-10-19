@@ -1,10 +1,10 @@
-import { Fraunces, JetBrains_Mono, Plus_Jakarta_Sans } from 'next/font/google';
+import { Fraunces, Geist, Geist_Mono } from 'next/font/google';
 
 /**
  * The type of the guest pages (sign-in, sign-up, recovery, onboarding): a display serif whose italic carries the
- * accent word of every heading, a rounded sans for text and a mono for eyebrows and codes. All three are open-licence
- * (SIL OFL) families served through `next/font`, which self-hosts the files with the build. They load for the guest
- * route groups only; the signed-in app keeps its own type.
+ * accent word of every heading in designs 1-5, Geist for text (the same base family as the rest of the app) and
+ * Geist Mono for eyebrows and codes. All are open-licence (SIL OFL) families served through `next/font`, which
+ * self-hosts the files with the build. They load for the guest route groups only.
  */
 const serif = Fraunces({
   subsets: ['latin', 'latin-ext'],
@@ -14,16 +14,14 @@ const serif = Fraunces({
   variable: '--font-auth-serif',
 });
 
-const sans = Plus_Jakarta_Sans({
+const sans = Geist({
   subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500', '600', '700', '800'],
   display: 'swap',
   variable: '--font-auth-sans',
 });
 
-const mono = JetBrains_Mono({
+const mono = Geist_Mono({
   subsets: ['latin', 'latin-ext'],
-  weight: ['400', '500'],
   display: 'swap',
   variable: '--font-auth-mono',
 });

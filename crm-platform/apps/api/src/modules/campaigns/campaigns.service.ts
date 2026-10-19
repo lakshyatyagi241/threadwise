@@ -5,6 +5,7 @@ import {
   type Campaign,
   type CreateCampaignInput,
   type UpdateCampaignInput,
+  wizardSenderPicks,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import {
@@ -33,6 +34,7 @@ import {
 import { CAMPAIGN_PLAN_GATE, type CampaignPlanGate } from './_shims/tokens';
 import { CampaignAudienceService, hasAudience } from './audience.service';
 import { CampaignJobs } from './campaign-jobs';
+import { SenderSharesService, type RunSender } from './sender-shares.service';
 import {
   assignVariants,
   expiresBeforeSend,
@@ -40,6 +42,12 @@ import {
   mediaColumnFor,
   normalizeCustomMessage,
 } from './campaign-rules';
+import {
+  emailCampaignProblems,
+  emailCleared,
+  isEmailProvider,
+  isWalletFree,
+} from './email-campaign-rules';
 import { toCampaign } from './campaigns.mapper';
 import { CampaignsRepository, type NewCampaign } from './campaigns.repository';
 import { MODULE_KEY } from './campaign-events';
@@ -90,6 +98,7 @@ export class CampaignsService {
     @Inject(CAMPAIGN_PLAN_GATE) private readonly plan: CampaignPlanGate,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
     private readonly entitlements: PlanEntitlementService,
+    private readonly shares: SenderSharesService,
   ) {}
 
   async create(input: CreateCampaignInput): Promise<{ campaign: Campaign; message: string }> {
@@ -110,17 +119,20 @@ export class CampaignsService {
           'Pick at least one contact, group, tag or number to send to.',
         );
       }
-      const resolved = await this.resolve(tx, orgId, input);
+      const { shares, ...resolved } = await this.resolve(tx, orgId, input);
       // SMS is a paid channel of its own (TW-SMS-018): Reference only checked `campaign` here, and the owner wants `sms` enforced.
       if (resolved.provider === 'sms') await this.entitlements.assertFeature(orgId, 'sms');
+      const email = await this.forEmail(orgId, resolved.provider, input);
       // A launch needs a funded wallet (TW-WALLET-013), checked before the campaign or any recipient row exists. A draft launches
-      // nothing, so it is not checked until it is started. SMS is never charged to the wallet (TW-SMS-027), so it is not checked either.
-      if (status !== 'draft' && resolved.provider !== 'sms') {
+      // nothing, so it is not checked until it is started. SMS and email are never charged to the wallet (TW-SMS-027), so they are not
+      // checked either.
+      if (status !== 'draft' && !isWalletFree(resolved.provider)) {
         await this.wallet.precheck(orgId, contactIds.length, { source: 'campaign' });
       }
       const id = await this.repo.insert(tx, orgId, {
         ...form,
         ...resolved,
+        ...email,
         status,
         totalRecipients: contactIds.length,
         createdBy: ctx.userId,
@@ -129,11 +141,17 @@ export class CampaignsService {
       const variants = input.abTesting
         ? assignVariants(contactIds, input.abSplit, Math.random)
         : new Map<number, 'A' | 'B'>();
+      // Several numbers: the audience is cut across them by weight and each recipient stores its own number.
+      const senderOf = this.shares.assign(contactIds, shares);
       await this.repo.insertRecipients(
         tx,
         orgId,
         id,
-        contactIds.map((contactId) => ({ contactId, variant: variants.get(contactId) ?? null })),
+        contactIds.map((contactId) => ({
+          contactId,
+          variant: variants.get(contactId) ?? null,
+          sender: senderOf.get(contactId) ?? null,
+        })),
       );
 
       const row = await this.repo.findById(tx, orgId, id);
@@ -183,11 +201,13 @@ export class CampaignsService {
       if (!(EDITABLE_STATUSES as readonly string[]).includes(locked.status)) {
         throw refuse('CAMP_NOT_EDITABLE', 'This campaign can no longer be edited.');
       }
-      const resolved = await this.resolve(tx, orgId, input);
+      const { shares, ...resolved } = await this.resolve(tx, orgId, input);
+      const email = await this.forEmail(orgId, resolved.provider, input);
       const media = this.media(input);
       await this.repo.update(tx, orgId, locked.id, {
         ...form,
         ...resolved,
+        ...email,
         status: input.status ?? null,
         media: input.mediaUrl === undefined ? null : media,
         overrides: input.templateOverrides !== undefined,
@@ -195,6 +215,7 @@ export class CampaignsService {
       });
 
       // Recipients are rebuilt only when the form carried an audience and it is not empty (Reference).
+      let rebuilt = false;
       if (hasAudience(input)) {
         const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, input);
         if (contactIds.length > 0) {
@@ -202,6 +223,7 @@ export class CampaignsService {
           const variants = input.abTesting
             ? assignVariants(contactIds, input.abSplit, Math.random)
             : new Map<number, 'A' | 'B'>();
+          const senderOf = this.shares.assign(contactIds, shares);
           await this.repo.insertRecipients(
             tx,
             orgId,
@@ -209,10 +231,17 @@ export class CampaignsService {
             contactIds.map((contactId) => ({
               contactId,
               variant: variants.get(contactId) ?? null,
+              sender: senderOf.get(contactId) ?? null,
             })),
           );
           await this.repo.setTotal(tx, orgId, locked.id, contactIds.length);
+          rebuilt = true;
         }
+      }
+      // The numbers changed but the audience did not: the recipients already on the campaign are cut again across the new numbers.
+      if (!rebuilt && (input.senderKeys !== undefined || input.senderKey !== undefined)) {
+        const ids = await this.repo.recipientContactRowIds(tx, orgId, locked.id);
+        await this.repo.setRecipientSenders(tx, orgId, locked.id, this.shares.assign(ids, shares));
       }
       await this.audit.record(tx, { module: MODULE_KEY, recordId: locked.id, action: 'update' });
       const fresh = await this.repo.findById(tx, orgId, locked.id);
@@ -233,6 +262,24 @@ export class CampaignsService {
   }
 
   // ------------------------------------------------------------------ shared
+
+  /**
+   * An email campaign (its sender is a mailbox): the plan must have the Email add-on, the form may hold only what a mail can carry, and
+   * what a mail does not use (footer, buttons, pacing, tracking) is cleared. Null for any other campaign.
+   */
+  private async forEmail(
+    orgId: number,
+    provider: string | null,
+    input: Form,
+  ): Promise<ReturnType<typeof emailCleared> | null> {
+    if (!isEmailProvider(provider)) return null;
+    await this.entitlements.assertFeature(orgId, 'email_channel');
+    const problems = emailCampaignProblems(input);
+    if (problems.length > 0) {
+      throw AppError.validation('Request payload failed validation', problems);
+    }
+    return emailCleared();
+  }
 
   /** Everything that can be decided without a database: time zone, end date, body, guardrails. */
   private async prepare(
@@ -356,16 +403,22 @@ export class CampaignsService {
       | 'customDocument'
       | 'customButtons'
       | 'customQuickReplies'
-    >
+    > & { shares: RunSender[] }
   > {
+    // The numbers picked: one (the usual) or several sharing the send, the first being the campaign's own.
+    const picks = wizardSenderPicks({
+      senderKey: input.senderKey ?? null,
+      senderKeys: input.senderKeys ?? [],
+    });
+    const primary = picks[0] ?? null;
     // The sender picked (engine and id together), else the workspace's default engine with no number.
     let provider: string;
     let deviceId: number | null = null;
-    if (input.senderKey) {
+    if (primary) {
       // A pick that names the unofficial engine is refused with its own code while the platform switch is off (owner decision 2026-10-05).
-      if (input.senderKey.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
+      if (primary.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
         await this.unofficial.assertEnabledFor(orgId);
-      const [picked] = await this.senders.resolve(tx, orgId, [input.senderKey]);
+      const [picked] = await this.senders.resolve(tx, orgId, [primary]);
       if (!picked) throw field('senderKey', 'That number is not connected.');
       provider = picked.engine;
       deviceId = picked.id;
@@ -373,7 +426,30 @@ export class CampaignsService {
       provider = await this.senders.defaultEngine(tx, orgId);
     }
 
+    let shares: RunSender[] = [];
+    if (picks.length > 1) {
+      if (input.type === 'flow') {
+        throw field('senderKeys', 'A flow campaign has no number to share.');
+      }
+      for (const key of picks.slice(1)) {
+        if (key.trim().startsWith(`${UNOFFICIAL_ENGINE}:`))
+          await this.unofficial.assertEnabledFor(orgId);
+      }
+      shares = await this.shares.resolvePicks(tx, orgId, picks, input.senderShare ?? {});
+    }
+
     const templateId = await this.template(tx, orgId, input.type, input.templateId, provider);
+    // The template must be sendable from every number that shares the send, not only from the first.
+    if (shares.length > 1 && input.type === 'template') {
+      for (const engine of new Set(shares.map((x) => x.provider))) {
+        if (engine !== provider)
+          await this.template(tx, orgId, input.type, input.templateId, engine);
+      }
+      for (const uuid of [input.templateId, input.templateIdA, input.templateIdB]) {
+        const tie = uuid ? await this.shares.templateTie(tx, orgId, uuid) : null;
+        if (tie) await this.shares.assertTemplateOnEvery(tx, orgId, tie, shares);
+      }
+    }
     const templateIdA = await this.owned(tx, orgId, input.templateIdA, 'templateIdA');
     const templateIdB = await this.owned(tx, orgId, input.templateIdB, 'templateIdB');
     const flowId = input.flowId ? await this.repo.flowId(tx, orgId, input.flowId) : null;
@@ -387,6 +463,7 @@ export class CampaignsService {
     // Cloud API and Twilio cannot carry inline buttons on a custom send, so they are dropped rather than stored and shipped.
     const noButtons = provider === 'twilio' || provider === 'waba' || provider === 'sms';
     return {
+      shares,
       provider,
       deviceId,
       templateId,

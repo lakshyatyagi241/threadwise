@@ -243,6 +243,10 @@ export const flowTemplateOptionSchema = z.object({
   attachmentFile: z.string().nullable(),
   buttons: z.array(z.record(z.unknown())),
   carousel: z.array(z.record(z.unknown())),
+  /** What fills each placeholder of the header and body when the template goes out: the contact detail (or flow variable) it reads. */
+  variables: z
+    .array(z.object({ section: z.enum(['header', 'body']), slot: z.string(), field: z.string() }))
+    .optional(),
 });
 
 /** A connected store a commerce node can sell from. `currency` is null for a WhatsApp catalog (mixed currencies). */
@@ -304,6 +308,8 @@ export const flbBuilderContextSchema = z.object({
       id: uuidSchema,
       name: z.string(),
       status: z.string().nullable(),
+      /** The agent's own model: an agent setup of the AI step answers with it. */
+      model: z.string().nullable().optional(),
       sources: z.number().int(),
     }),
   ),
@@ -366,6 +372,7 @@ export const FLB_GOOGLE_PICKER_KINDS = ['sheets', 'docs', 'forms'] as const;
 export const flbGoogleFilesResponseSchema = z.object({
   data: z.array(z.object({ id: z.string(), name: z.string() })),
 });
+export type FlbGoogleFilesResponse = z.infer<typeof flbGoogleFilesResponseSchema>;
 
 export const FLOW_ENGINE_LABELS: Record<string, string> = {
   baileys: 'Unofficial API',

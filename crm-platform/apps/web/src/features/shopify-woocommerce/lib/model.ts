@@ -1,9 +1,11 @@
-import type {
-  AutomationInput,
-  DashboardLog,
-  DashboardSender,
-  DashboardTemplate,
-  StoreDashboard,
+import {
+  CONSENT_GATE_REASONS,
+  type AutomationInput,
+  type ConsentGateReason,
+  type DashboardLog,
+  type DashboardSender,
+  type DashboardTemplate,
+  type StoreDashboard,
 } from '@crm/contracts';
 
 /** Small pure rules of the store screens (TW-ECOM-004, 009, 023): tabs, labels, automation catalogue, template narrowing. */
@@ -62,6 +64,15 @@ export function statusTone(status: string): Tone {
     default:
       return 'warn';
   }
+}
+
+/**
+ * The ConsentGate's reason out of a log row's note, or null for any other text (BL-141). A customer the consent check refused is logged
+ * `skipped` with `Not messaged: consent (<reason>)`, the reason being one of the gate's closed set, whose wording the consent screens own.
+ */
+export function consentSkipReason(error: string | null): ConsentGateReason | null {
+  const code = /^Not messaged: consent \(([a-z_]+)\)$/.exec(error ?? '')?.[1];
+  return CONSENT_GATE_REASONS.find((r) => r === code) ?? null;
 }
 
 const DAY_MS = 86_400_000;

@@ -1,0 +1,180 @@
+{
+  "status": "PARTIAL: idle, normal, peak, spike and a 10-minute soak of the real API and worker exist for ONE laptop. They are indicative, not a release gate. A 12 h / 24 h soak, production-shaped traffic and per-module baselines beyond contacts and the (empty) inbox are NOT VERIFIED.",
+  "environment": {
+    "commit": "18f84c6358676d8b929213fb9419541985d40d43 (the runner and workload as committed, before this branch was rebased onto main, so the SHA no longer exists on the branch; the only uncommitted change during the run was a docs file)",
+    "node": "v22.17.0",
+    "os": "win32 10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 155H, 22 logical cores, 31.4 GB",
+    "infrastructureProfile": "developer laptop; the built API, the built worker, the k6 container, Postgres (pgvector/pgvector:pg16) and Redis (redis:7-alpine) containers all on one machine; Docker Desktop, repo on OneDrive",
+    "dataset": "one workspace ('growth' plan), 5,000 contacts created through POST /v2/contacts, no conversations (the inbox routes measure framework, auth and a database round trip, not a real conversation list)",
+    "loadGenerator": "grafana/k6:0.49.0, open model (constant / ramping arrival rate)",
+    "workload": "tools/event-loop-audit/load/workload.k6.js: contact list 52%, search 12%, get 15%, inbox list 8%, inbox counts 4%, create 4%, update 2%, /health 3% (control, no tenant work)",
+    "rates": "normal 5 req/s, peak 20 req/s, spike 5 to 60 req/s (3x peak), soak 5 req/s. CHOSEN, not taken from production traffic",
+    "duration": "idle 60 s, normal 120 s, peak 120 s, spike 120 s, soak 10 min; 20 s cooldown between profiles; 60 s settle after seeding",
+    "monitoring": "the processes' own /metrics every 2 s (5 s windows), pg_stat_activity every 2 s, host-to-container round trips before and after each profile",
+    "rawData": "evidence/load-baseline.json"
+  },
+  "comparabilityWarning": "Valid only against runs from this same machine and Node version, and only between runs whose round-trip calibration is similar. The same stack gave very different latencies on different occasions (see stability).",
+  "stability": {
+    "reading": "Not a stable measurement. Latency of the authenticated routes varied several-fold between runs of the same workload on the same machine, while event-loop numbers stayed close.",
+    "evidence": [
+      "Trial at 20 req/s with 300 contacts (30 s): caller p50 39 ms, p95 87 ms.",
+      "Same stack, 10 req/s, 300 contacts (60 s): caller p50 226 ms, p95 1.8 s.",
+      "10 req/s, 5,000 contacts (60 s): caller p50 235 ms, p95 6.1 s.",
+      "First full run, 10 / 40 / 120 req/s, 5,000 contacts (evidence/load-run1-collapse-10-40-120.json): normal p50 819 ms, p95 2.8 s; peak (40 req/s) collapsed with caller p50 18.9 s, 16 % failed, 2,425 dropped iterations; spike 57 % failed. Loop delay p99 (median per profile) stayed at 40 to 55 ms in that run.",
+      "Seeding 5,000 contacts took 2.3, 9 and 7.6 minutes in three runs with identical code.",
+      "Host-to-Postgres `SELECT 1` round trips (100 sequential): p99 110.8 ms before the first profile and 43.9 ms after the spike, 2.5 to 4.3 ms in the other four calibrations (p50 1.2 to 3 ms throughout)."
+    ],
+    "likelyCause": "Partly attributed (EL-011). Latency of an authenticated request tracks the host-to-container round-trip time times the roughly 12 sequential round trips each request makes: the same 20 req/s gave caller p95 66 ms when round trips were 2 to 3 ms and p95 11.8 s when they were 38 to 48 ms (evidence/auth-path-trace-after.json and auth-path-trace-before.json). Why the round trips were slow in some runs is NOT VERIFIED: a control with no application held 3 to 4 ms for five minutes (evidence/rtt-drift.json). A dedicated Linux host would answer it."
+  },
+  "results": {
+    "idle": {
+      "seconds": 60,
+      "api": {
+        "loopDelayP99Ms": { "median": 28.87, "max": 73.14 },
+        "eventLoopUtilization": 0.006,
+        "cpuCores": 0.006,
+        "heapUsedMb": 219.5,
+        "rssMb": 318.3
+      },
+      "worker": {
+        "loopDelayP99Ms": { "median": 33.46, "max": 65.37 },
+        "eventLoopUtilization": 0.025
+      },
+      "reading": "The resolution floor on Windows is about 15.5 ms (p50), so p99 under about 30 ms is quiet. The warn/critical windows counted here (5 / 1) come from the process settling after seeding."
+    },
+    "normal": {
+      "rate": "5 req/s",
+      "seconds": 128,
+      "api": {
+        "loopDelayP99Ms": { "median": 25.48, "max": 292.81 },
+        "loopDelayMaxMs": 544.21,
+        "eventLoopUtilization": { "median": 0.083, "max": 0.391 },
+        "cpuCores": { "median": 0.094, "max": 0.222 },
+        "heapUsedMb": { "median": 236.5, "max": 254.2 },
+        "rssMb": { "median": 352.9, "max": 354.1 }
+      },
+      "worker": {
+        "loopDelayP99Ms": { "median": 28.07, "max": 94.57 },
+        "eventLoopUtilization": 0.029
+      },
+      "blockedWindows": { "warn": 18, "critical": 1 },
+      "serverRequestMs": { "p50": 66.23, "p95": 469.84, "p99": 1793.85 },
+      "clientLatencyMs": { "p50": 82.32, "p95": 496.51, "p99": 1569.69, "max": 2419.28 },
+      "healthControlMs": { "p50": 12.54, "p95": 148.55, "p99": 432.98 },
+      "requests": 612,
+      "failedRate": 0,
+      "droppedIterations": 0
+    },
+    "peak": {
+      "rate": "20 req/s (achieved 16.7 req/s)",
+      "seconds": 146,
+      "api": {
+        "loopDelayP99Ms": { "median": 32.65, "max": 77.2 },
+        "loopDelayMaxMs": 143.92,
+        "eventLoopUtilization": { "median": 0.29, "max": 0.643 },
+        "cpuCores": { "median": 0.26, "max": 0.527 },
+        "heapUsedMb": { "median": 272.7, "max": 387.4 },
+        "rssMb": { "median": 429.8, "max": 509 }
+      },
+      "worker": {
+        "loopDelayP99Ms": { "median": 32.41, "max": 90.83 },
+        "eventLoopUtilization": 0.045
+      },
+      "blockedWindows": { "warn": 25, "critical": 0 },
+      "serverRequestMs": { "p50": 604.62, "p95": 4770.04, "p99": 8770.53 },
+      "clientLatencyMs": { "p50": 668.82, "p95": 6285.71, "p99": 8437.35, "max": 30100.17 },
+      "healthControlMs": { "p50": 54.02, "p95": 442.29, "p99": 804.14 },
+      "requests": 2359,
+      "failedRate": 0.0097,
+      "droppedIterations": 93,
+      "postgres": "about 1.4 to 1.6 sessions on average 'idle in transaction' waiting on the client (the API) between statements; none long-running"
+    },
+    "spike": {
+      "rate": "5 req/s, then 60 req/s for 40 s, then 5 req/s (achieved 19.2 req/s overall)",
+      "seconds": 133,
+      "api": {
+        "loopDelayP99Ms": { "median": 32.01, "max": 93 },
+        "loopDelayMaxMs": 222.82,
+        "eventLoopUtilization": { "median": 0.199, "max": 0.797 },
+        "cpuCores": { "median": 0.228, "max": 0.816 },
+        "heapUsedMb": { "median": 308.6, "max": 464.5 },
+        "rssMb": { "median": 428.2, "max": 570.8 },
+        "gcPauseMaxMs": 53
+      },
+      "worker": {
+        "loopDelayP99Ms": { "median": 32.51, "max": 58.46 },
+        "eventLoopUtilization": 0.045
+      },
+      "blockedWindows": { "warn": 25, "critical": 0 },
+      "serverRequestMs": { "p50": 13537.27, "p95": 28379.04, "p99": 29698.31 },
+      "clientLatencyMs": { "p50": 12669.84, "p95": 25685.91, "p99": 28714.7, "max": 32091.9 },
+      "healthControlMs": { "p50": 75.88, "p95": 385.64, "p99": 1724.64 },
+      "requests": 2346,
+      "failedRate": 0.1232,
+      "droppedIterations": 1048,
+      "maxVUs": 800
+    },
+    "soak": {
+      "rate": "5 req/s",
+      "seconds": 606,
+      "api": {
+        "loopDelayP99Ms": { "median": 23.71, "max": 129.83 },
+        "loopDelayMaxMs": 169.35,
+        "eventLoopUtilization": { "median": 0.096, "max": 0.254 },
+        "cpuCores": { "median": 0.103, "max": 0.272 },
+        "heapUsedMb": { "median": 239.3, "max": 269.8 },
+        "rssMb": { "median": 389.3, "max": 391.1 },
+        "heapSlopeMbPerMin": 0.14,
+        "rssSlopeMbPerMin": 2.73
+      },
+      "worker": {
+        "loopDelayP99Ms": { "median": 21.04, "max": 65.4 },
+        "eventLoopUtilization": 0.027
+      },
+      "blockedWindows": { "warn": 14, "critical": 1 },
+      "serverRequestMs": { "p50": 40.99, "p95": 450.46, "p99": 1864.2 },
+      "clientLatencyMs": { "p50": 41.06, "p95": 551.32, "p99": 1900.73, "max": 4532.66 },
+      "healthControlMs": { "p50": 7.26, "p95": 102.6, "p99": 279.24 },
+      "requests": 3065,
+      "failedRate": 0,
+      "droppedIterations": 0,
+      "reading": "Ten minutes cannot show a leak that takes hours: heap +0.14 MB/min and RSS +2.7 MB/min over ten minutes are the shape of a stable process, not proof."
+    }
+  },
+  "findings": [
+    "The event loop was not what callers waited on. At 16.7 req/s callers saw p95 6.3 s while the API's loop delay p99 stayed near 33 ms (ELU median 0.29) and the unauthenticated /health control answered with p95 0.44 s. In the spike the loop delay p99 max was 93 ms while callers waited 12.7 s (median). The loop-delay alerts would not have paged in either profile; ApiCallerLatencyHigh (the probe) would have.",
+    "The wait is in the authenticated path's sequential round trips to Postgres and Redis (about 12 per request: 5 SQL statements and 7 Redis commands), not in the process; Postgres showed no long-running statements and its sessions showed 'idle in transaction' only for the round trip back to the API between a transaction's statements (EL-011). One redundant Redis lookup per request was removed; more are listed as EL-B17.",
+    "Client-side capacity on this machine: about 5 req/s is comfortable (p95 0.5 s), 17 req/s is degraded (p95 6.3 s, 1 % failed), 60 req/s collapses (12 % failed, 1,048 iterations dropped). These are properties of this laptop and this Docker setup, not of the product.",
+    "Soak at 5 req/s for ten minutes: no failures, memory flat."
+  ],
+  "monitorMicroBenchmark": {
+    "environment": {
+      "commit": "604c1db95bac5efb2245506552f95f4801b63461 (base; the working tree already contained this change when measured)",
+      "loadGenerator": "tools/event-loop-audit/bench.mjs, in-process node:http keep-alive, closed loop, 32 concurrent",
+      "service": "bench server with the real RuntimeMonitor (1 s window to speed the run)",
+      "duration": "3 rounds x 10 s per condition, plus 10 s fault run and 4 s recovery run",
+      "rawData": "evidence/bench-monitor.json"
+    },
+    "monitorOverhead": {
+      "medianRps": { "monitorOff": 2474.8, "monitorOn": 2432.3 },
+      "rpsDeltaPercent": -1.72,
+      "medianP99Ms": { "monitorOff": 21.52, "monitorOn": 21.25 },
+      "reading": "The -1.7% is inside the round-to-round spread of the monitor-off runs themselves (2307 to 2970 rps). Overhead is not distinguishable from noise at this sample size. This is NOT proof that overhead is zero."
+    },
+    "detectionUnderFault": {
+      "injected": "4 synchronous 300 ms blocks, 2 s apart, under 32-way load",
+      "blockedWindowsReported": { "critical": 4, "warn": 2 },
+      "reading": "Each block was visible as a critical window and as request max near the block length."
+    }
+  },
+  "notVerified": [
+    "12 h soak",
+    "24 h pre-release soak",
+    "traffic shaped like production (the rates are chosen)",
+    "a run on a dedicated Linux host, without Docker Desktop and OneDrive in the path",
+    "per-module baselines for webhooks, broadcasts, automations, reporting and a populated inbox",
+    "worker saturation baseline (the worker only idled and processed outbox events during these runs)",
+    "why the host's round trips were slow in some runs (EL-011 shows the effect, not the cause)"
+  ]
+}

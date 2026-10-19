@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Gotowe na połączenia?",
+      "status": {
+        "never_checked": "Jeszcze nie sprawdzono",
+        "blocked": "Nie jest gotowe",
+        "ready_to_enable": "Gotowe do włączenia",
+        "attention": "Działa, wymaga uwagi",
+        "ready": "Gotowe"
+      },
+      "statusHint": {
+        "never_checked": "Ten numer nie został jeszcze sprawdzony.",
+        "blocked": "Połączenia nie będą działać, dopóki nie zostaną naprawione elementy oznaczone jako Wymaga naprawy.",
+        "ready_to_enable": "Wszystko, czego wymaga WhatsApp, jest na miejscu. Włącz połączenia, aby wyświetlić przycisk Zadzwoń.",
+        "attention": "Połączenia działają, ale coś poniżej wymaga uwagi.",
+        "ready": "Połączenia są włączone i wszystkie testy przechodzą."
+      },
+      "checkedAt": "Sprawdzono {date}",
+      "checking": "Sprawdzanie w WhatsApp...",
+      "checkAgain": "Sprawdź ponownie",
+      "checkFailed": "Nie udało się sprawdzić tego numeru.",
+      "checkedDone": "Sprawdzono ponownie.",
+      "blockedHint": "Najpierw napraw elementy oznaczone jako Wymaga naprawy. WhatsApp najprawdopodobniej odmówi włączenia połączeń.",
+      "details": "Co sprawdzono",
+      "fixLabel": "Co zrobić:",
+      "state": {
+        "ok": "OK",
+        "warn": "Wymaga uwagi",
+        "fail": "Wymaga naprawy"
+      },
+      "checks": {
+        "plan_feature": "Plan obejmuje połączenia WhatsApp",
+        "connection": "Numer jest połączony",
+        "not_coexistence": "Numer działa tylko w Cloud API",
+        "number_registered": "Numer zarejestrowany w WhatsApp",
+        "messaging_limit": "Limit wiadomości i jakość",
+        "token_scopes": "Uprawnienia tokenu dostępu",
+        "webhook_subscribed": "Aplikacja subskrybuje to konto",
+        "calls_field": "Webhook połączeń dostarczany",
+        "calling_enabled": "Połączenia włączone w WhatsApp",
+        "turn": "Przekaźnik połączeń (TURN) skonfigurowany",
+        "dialler_permissions": "Członkowie zespołu mogą dzwonić",
+        "recording_consent": "Zasady nagrywania i zgody"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "Połączenia WhatsApp są częścią Twojego planu."
+        },
+        "plan_missing": {
+          "detail": "Twój plan nie obejmuje połączeń WhatsApp.",
+          "fix": "Zmień plan na wyższy, a potem sprawdź ponownie."
+        },
+        "connected": {
+          "detail": "Numer jest połączony i ma token dostępu."
+        },
+        "not_connected": {
+          "detail": "Ten numer nie jest teraz połączony.",
+          "fix": "Połącz go ponownie w sekcji Kanały, a potem sprawdź ponownie."
+        },
+        "no_credentials": {
+          "detail": "Dla tego numeru nie zapisano tokenu dostępu ani identyfikatora numeru telefonu.",
+          "fix": "Połącz numer ponownie, aby jego dane dostępowe zostały zapisane na nowo."
+        },
+        "cloud_api_only": {
+          "detail": "Numer działa wyłącznie w WhatsApp Cloud API."
+        },
+        "coexistence": {
+          "detail": "Ten numer jest używany także w aplikacji WhatsApp Business (współistnienie), a WhatsApp nie pozwala na połączenia na takim numerze.",
+          "fix": "Zarejestruj go tylko w Cloud API albo użyj do połączeń innego numeru."
+        },
+        "on_premise": {
+          "detail": "Ten numer działa w starym API On-Premises, które Meta wyłączyła.",
+          "fix": "Zarejestruj go w Cloud API albo użyj innego numeru."
+        },
+        "number_ok": {
+          "detail": "WhatsApp zgłasza, że numer jest aktywny i zweryfikowany."
+        },
+        "number_not_verified": {
+          "detail": "Kod własności numeru nie został zweryfikowany.",
+          "fix": "Zweryfikuj numer na stronie jego połączenia z WhatsApp, a potem sprawdź ponownie."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp zgłasza dla tego numeru status {status}, a nie „połączony”.",
+          "fix": "Napraw numer w Meta Business Suite (może być oczekujący, oznaczony lub ograniczony), a potem sprawdź ponownie."
+        },
+        "limit_ok": {
+          "detail": "Dzienny limit wiadomości i ocena jakości wystarczają do połączeń."
+        },
+        "limit_test_number": {
+          "detail": "To numer testowy, który nie wymaga limitu wiadomości."
+        },
+        "limit_low": {
+          "detail": "Limit wiadomości to {tier}. WhatsApp wymaga co najmniej {needed} klientów dziennie, aby można było włączyć połączenia.",
+          "fix": "Wysyłaj więcej wiadomości dobrej jakości lub zweryfikuj firmę w Meta Business Suite, aby limit wzrósł. Potem sprawdź ponownie."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp nie zgłosił limitu wiadomości, który ta aplikacja rozpoznaje.",
+          "fix": "Otwórz numer w Meta Business Suite, aby zobaczyć jego limit. Połączenia wymagają co najmniej 2000 klientów dziennie."
+        },
+        "quality_low": {
+          "detail": "Ocena jakości numeru jest niska (czerwona) i WhatsApp może go ograniczyć.",
+          "fix": "Ogranicz liczbę zablokowanych i zgłoszonych wiadomości i poczekaj, aż ocena się poprawi, zanim zaczniesz polegać na połączeniach."
+        },
+        "scopes_ok": {
+          "detail": "Token dostępu ma uprawnienia potrzebne do połączeń."
+        },
+        "scope_missing": {
+          "detail": "Tokenowi dostępu brakuje: {missing}.",
+          "fix": "Wygeneruj nowy token użytkownika systemowego z uprawnieniami whatsapp_business_management i whatsapp_business_messaging, a potem połącz numer ponownie."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp nie akceptuje zapisanego tokenu dostępu.",
+          "fix": "Połącz numer ponownie lub zapisz nowy token stały."
+        },
+        "token_expiring": {
+          "detail": "Token dostępu wygaśnie za {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}.",
+          "fix": "Połącz numer ponownie lub zapisz stały token użytkownika systemowego, zanim wygaśnie."
+        },
+        "scopes_unverifiable": {
+          "detail": "Nie udało się odczytać uprawnień tokenu. Numer może być obsługiwany przez dostawcę albo ta platforma nie ma danych aplikacji, aby je sprawdzić.",
+          "fix": "Jeśli połączenia zostaną odrzucone, potwierdź u swojego dostawcy, że numer może korzystać z połączeń."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp dostarcza zdarzenia tego konta do platformy."
+        },
+        "waba_not_subscribed": {
+          "detail": "Żadna aplikacja nie subskrybuje tego konta WhatsApp Business, więc połączenia nigdy by do Ciebie nie dotarły.",
+          "fix": "Użyj przycisku Napraw odbiór na stronie stanu numeru, a potem sprawdź ponownie."
+        },
+        "calls_field_ok": {
+          "detail": "Aplikacja Meta dostarcza pole webhooka połączeń."
+        },
+        "calls_field_added": {
+          "detail": "Brakowało pola webhooka połączeń i właśnie dodano je do aplikacji Meta platformy."
+        },
+        "calls_field_missing": {
+          "detail": "Aplikacja Meta nie dostarcza pola webhooka połączeń, więc połączenia przychodzące i odpowiedzi nigdy nie docierają.",
+          "fix": "Poproś operatora platformy o zaznaczenie pola połączeń w ustawieniach webhooka aplikacji Meta (WhatsApp, Konfiguracja), a potem sprawdź ponownie."
+        },
+        "calls_field_unverifiable": {
+          "detail": "Ten numer działa w aplikacji Meta, której platforma nie może odczytać, więc nie udało się sprawdzić pola webhooka połączeń.",
+          "fix": "Otwórz ustawienia webhooka tej aplikacji i upewnij się, że pole połączeń jest zaznaczone."
+        },
+        "calling_on": {
+          "detail": "Połączenia są włączone, a ikona połączenia jest widoczna dla klientów."
+        },
+        "calling_off": {
+          "detail": "Połączenia są wyłączone dla tego numeru.",
+          "fix": "Wybierz Włącz połączenia, gdy pozostałe elementy będą w porządku."
+        },
+        "icon_hidden": {
+          "detail": "Połączenia są włączone, ale ikona połączenia jest ukryta przed klientami, więc nie mogą rozpoczynać połączeń.",
+          "fix": "Przywróć domyślną widoczność ikony połączenia w ustawieniach połączeń numeru w Meta."
+        },
+        "turn_ok": {
+          "detail": "Przekaźnik TURN jest skonfigurowany, więc połączenia działają za restrykcyjnymi zaporami sieciowymi."
+        },
+        "turn_missing": {
+          "detail": "Nie skonfigurowano przekaźnika TURN, więc osobom za restrykcyjnymi zaporami sieciowymi połączenia mogą się nawiązywać bez dźwięku.",
+          "fix": "Poproś operatora platformy o dodanie serwera TURN do CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "Serwer TURN jest na liście bez nazwy użytkownika lub poświadczenia.",
+          "fix": "Dodaj nazwę użytkownika i poświadczenie do tego wpisu w CALLING_ICE_SERVERS."
+        },
+        "ice_invalid": {
+          "detail": "Wartość CALLING_ICE_SERVERS jest ustawiona, ale nie jest prawidłową listą, więc używane są tylko publiczne serwery STUN.",
+          "fix": "Popraw JSON w CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# członek zespołu może} few {# członków zespołu może} many {# członków zespołu może} other {# członka zespołu może}} wykonywać i odbierać połączenia."
+        },
+        "dialler_none": {
+          "detail": "Nikt w tej przestrzeni roboczej nie ma uprawnienia do wykonywania i odbierania połączeń.",
+          "fix": "Nadaj roli uprawnienie do korzystania z połączeń w sekcji Ustawienia, Role."
+        },
+        "recording_off": {
+          "detail": "Nagrywanie połączeń jest wyłączone, więc zgoda nie jest potrzebna."
+        },
+        "recording_configured": {
+          "detail": "Nagrywanie połączeń jest włączone, z komunikatem i zasadą zgody."
+        },
+        "recording_notice_missing": {
+          "detail": "Nagrywanie połączeń jest włączone, ale brak komunikatu do odczytania.",
+          "fix": "Wpisz komunikat o nagrywaniu poniżej w sekcji Nagrywanie."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp nie odpowiedział na to sprawdzenie.",
+          "fix": "Sprawdź ponownie za chwilę."
+        },
+        "not_checked": {
+          "detail": "Czeka na element powyżej.",
+          "fix": "Najpierw napraw element powyżej."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp jeszcze nie włączy połączeń. Numer musi mieć dzienny limit wiadomości wynoszący co najmniej 2000 klientów, a aplikacja musi subskrybować konto WhatsApp Business oraz pole webhooka połączeń z uprawnieniem whatsapp_business_messaging. Numer testowy nie wymaga limitu.",
+        "coexistence": "Połączenia WhatsApp wymagają numeru działającego w pełni w Cloud API. Ten numer dzieli linię z aplikacją WhatsApp Business (współistnienie), na której WhatsApp nie pozwala na połączenia. Zarejestruj go tylko w Cloud API albo użyj innego numeru.",
+        "permission_scope": "Tokenowi dostępu brakuje uprawnienia potrzebnego do połączeń (whatsapp_business_management i whatsapp_business_messaging). Wygeneruj nowy token z oboma i połącz numer ponownie.",
+        "token_expired": "WhatsApp już nie akceptuje zapisanego tokenu dostępu. Połącz numer ponownie i spróbuj jeszcze raz.",
+        "calling_not_enabled": "Połączenia nie są włączone w WhatsApp dla tego numeru. Włącz je i spróbuj jeszcze raz.",
+        "no_call_permission": "Ten klient nie zezwolił jeszcze na połączenia. Wysyłana jest prośba o zgodę do zaakceptowania.",
+        "permission_request_limit": "WhatsApp ogranicza, jak często można prosić tego klienta o zgodę na połączenia. Spróbuj ponownie później.",
+        "receiver_uncallable": "WhatsApp tego klienta nie może odbierać połączeń (stara wersja aplikacji lub wyłączone połączenia). Poproś go o aktualizację WhatsApp.",
+        "meta_unreachable": "WhatsApp nie odpowiedział na czas. Spróbuj ponownie za chwilę."
+      },
+      "refusedBecause": "WhatsApp odmówił po zapytaniu: {reason}",
+      "autoEnable": {
+        "title": "Włączaj połączenia automatycznie",
+        "hint": "Gdy numer WhatsApp zostanie połączony lub połączony ponownie i spełnia wszystkie wymagania, włącz dla niego połączenia bez pytania. Domyślnie wyłączone; bez tego ustawienia połączenia nigdy nie są włączane automatycznie.",
+        "label": "Włączaj połączenia automatycznie po połączeniu numeru",
+        "saved": "Zapisano.",
+        "loadFailed": "Nie udało się załadować tego ustawienia."
+      },
+      "testCall": {
+        "title": "Wykonaj połączenie testowe",
+        "intro": "Zadzwoń na własny numer WhatsApp, aby usłyszeć całe połączenie od początku do końca. WhatsApp pozwala firmie dzwonić tylko do osoby, która na to zezwoliła: jeśli jeszcze tego nie zrobisz, na Twój telefon zostanie wysłana prośba o zgodę i połączenie nie zostanie nawiązane. Stuknij Zezwól w WhatsApp, a potem ponownie naciśnij Zadzwoń do mnie.",
+        "phoneLabel": "Twój numer WhatsApp",
+        "phoneHint": "Z kodem kraju i bez plusa, na przykład 919812345678.",
+        "call": "Zadzwoń do mnie",
+        "invalid": "Wpisz swój numer z kodem kraju (od 6 do 15 cyfr).",
+        "show": "Wykonaj połączenie testowe"
+      }
+    }
+  }
+}

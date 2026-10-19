@@ -5,7 +5,24 @@ summary: See everyone in your workspace, invite teammates, change roles, reset p
 area: settings
 order: 70
 documents: [tile:workspace-team]
-keywords: [team members, invite, teammate, staff, agents, seats, reset password, remove, roles, leave, holiday, time off, on leave, delegate, reassign]
+keywords:
+  [
+    team members,
+    invite,
+    teammate,
+    staff,
+    agents,
+    seats,
+    reset password,
+    remove,
+    roles,
+    leave,
+    holiday,
+    time off,
+    on leave,
+    delegate,
+    reassign,
+  ]
 ---
 
 ## What it is for

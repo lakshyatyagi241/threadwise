@@ -1,0 +1,546 @@
+{
+  "compliance-center": {
+    "title": "Pusat kepatuhan",
+    "subtitle": "Alat untuk membantu Anda memenuhi kewajiban privasi: hukum yang berlaku bagi Anda, siapa yang dapat dihubungi, pemberitahuan dan sub-pemroses Anda, serta daftar periksa tentang apa yang sudah tersedia. Alat ini tidak membuat ruang kerja patuh dengan sendirinya, dan ini bukan nasihat hukum.",
+    "readOnly": "Anda dapat membaca halaman ini tetapi tidak dapat mengubahnya.",
+    "saved": "Pengaturan kepatuhan disimpan.",
+    "conflict": "Orang lain menyimpan pengaturan ini saat Anda mengedit. Versi terbaru sudah dimuat; periksa lalu ulangi perubahan Anda.",
+    "conflictOk": "Mengerti",
+    "common": {
+      "dismiss": "Tutup",
+      "retry": "Coba lagi",
+      "loading": "Memuat..."
+    },
+    "tabs": {
+      "checklist": "Daftar periksa",
+      "profiles": "Hukum dan wilayah",
+      "contacts": "Kontak dan anak-anak",
+      "notices": "Pemberitahuan",
+      "links": "Tautan privasi dan ketentuan",
+      "subprocessors": "Sub-pemroses",
+      "windows": "Jam tenang dan panggilan",
+      "dnc": "Jangan hubungi"
+    },
+    "saveBar": {
+      "unsaved": "Anda memiliki perubahan yang belum disimpan.",
+      "problems": "Perbaiki kolom yang ditandai sebelum menyimpan.",
+      "discard": "Buang perubahan",
+      "save": "Simpan perubahan"
+    },
+    "errors": {
+      "network": "Server tidak dapat dijangkau. Periksa koneksi Anda lalu coba lagi.",
+      "forbidden": "Anda tidak memiliki izin untuk melakukan ini.",
+      "notFound": "Item ini sudah tidak ada.",
+      "conflict": "Orang lain telah mengubah ini. Muat ulang lalu coba lagi.",
+      "settingsInvalid": "Beberapa pengaturan tidak valid. Periksa jam tenang, jendela panggilan, zona waktu, dan bahasa.",
+      "duplicate": "Anda sudah mencantumkan sub-pemroses dengan nama itu.",
+      "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
+      "validation": "Beberapa nilai tidak valid. Periksa formulir lalu coba lagi.",
+      "unexpected": "Terjadi kesalahan. Coba lagi.",
+      "dncInvalid": "Berkas tidak dapat dibaca: tidak berisi nomor telepon, atau terlalu banyak nomor sekaligus."
+    },
+    "problems": {
+      "httpsOnly": "Gunakan alamat yang diawali dengan https://.",
+      "email": "Masukkan alamat email yang valid.",
+      "quietEmpty": "Jam berakhir jam tenang harus berbeda dari jam mulainya.",
+      "windowOrder": "Jendela panggilan harus berakhir setelah dimulai, pada hari yang sama.",
+      "daysEmpty": "Pilih minimal satu hari.",
+      "englishFirst": "Bahasa Inggris selalu menjadi pemberitahuan pertama. Pilih bahasa lain."
+    },
+    "phi": {
+      "title": "Jangan simpan informasi kesehatan yang dilindungi.",
+      "body": "Produk ini tidak dibuat untuk rekam medis. Kami tidak mengklaim kepatuhan terhadap HIPAA dan kami tidak menandatangani perjanjian rekanan bisnis, jadi jangan memasukkan diagnosis, rincian pengobatan, nomor asuransi, atau informasi kesehatan serupa ke dalam kontak, catatan, pesan, berkas, formulir, atau rekaman."
+    },
+    "checklist": {
+      "intro": "Apa yang sudah tersedia di ruang kerja Anda saat ini, dihitung dari pengaturan dan data Anda sendiri. «Tersedia» berarti alatnya sudah disiapkan. Ini tidak berarti suatu hukum telah dipenuhi.",
+      "summaryLabel": "Total",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Tersedia",
+        "partial": "Sebagian",
+        "open": "Terbuka"
+      },
+      "baselineTitle": "Untuk setiap ruang kerja",
+      "baselineHint": "Seperangkat poin ketat yang kami tawarkan kepada semua ruang kerja, di negara mana pun.",
+      "profileTitle": "Diminta oleh hukum yang Anda aktifkan",
+      "profileHint": "Setiap baris menyebutkan profil yang memintanya. Aturan yang paling ketat dipakai bila beberapa berlaku.",
+      "noProfiles": "Belum ada hukum atau wilayah yang diaktifkan, jadi hanya poin untuk setiap ruang kerja yang ditampilkan. Pilih di bagian Hukum dan wilayah.",
+      "disclaimer": "Daftar ini membantu Anda melacak pengaturan Anda sendiri. Ini bukan nasihat hukum dan tidak menyatakan bahwa ruang kerja Anda mematuhi hukum apa pun. Tanyakan kepada penasihat hukum Anda apa yang berlaku bagi Anda.",
+      "open": "Terbuka",
+      "items": {
+        "lawful_basis": {
+          "title": "Tujuan dan dasar tercatat",
+          "detail": {
+            "built": "Setiap persetujuan dicatat terhadap suatu tujuan, beserta siapa atau apa yang mencatatnya, kata-kata yang ditampilkan, versinya, dan waktunya. Tidak ada yang perlu Anda siapkan."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Persetujuan dan penarikan yang mudah",
+          "detail": {
+            "detectionOff": "Deteksi STOP nonaktif, sehingga kontak yang membalas STOP tidak dikeluarkan dari daftar. Aktifkan di pengaturan persetujuan.",
+            "optInOff": "STOP berfungsi, tetapi pemasaran belum memerlukan persetujuan tercatat. Aktifkan «wajibkan persetujuan tercatat» di pengaturan persetujuan.",
+            "built": "STOP terdeteksi dan pemasaran memerlukan persetujuan tercatat."
+          }
+        },
+        "notices": {
+          "title": "Pemberitahuan berversi",
+          "detail": {
+            "built": "{lines, plural, other {# pemberitahuan persetujuan}} aktif, termasuk pemberitahuan default Anda dalam {languages, plural, other {# bahasa}}.",
+            "noDefault": "{lines, plural, other {# pemberitahuan persetujuan}} aktif, tetapi ruang kerja belum memiliki pemberitahuan default.",
+            "none": "Tidak ada pemberitahuan persetujuan yang aktif. Tulis pemberitahuan default agar catatan dapat menyebutkan kata-kata yang dilihat seseorang."
+          }
+        },
+        "rights": {
+          "title": "Permintaan dari orang (akses, ekspor, penghapusan)",
+          "detail": {
+            "overdue": "{overdue, plural, other {# permintaan}} melewati tenggat, dari {open} yang terbuka. Jawab di Permintaan data.",
+            "noContact": "Permintaan memiliki tenggat {days} hari, tetapi belum ada kontak privasi yang ditunjuk. Tambahkan satu.",
+            "built": "Permintaan memiliki tenggat {days} hari dan {open} masih terbuka. Kontak privasi sudah ditunjuk."
+          }
+        },
+        "retention": {
+          "title": "Retensi dan penghapusan",
+          "detail": {
+            "recordingsOn": "Rekaman panggilan disimpan selama {days} hari dan dapat ditahan. Retensi untuk data lain belum tersedia.",
+            "recordingsOff": "Perekaman panggilan nonaktif. Pengaturan retensi untuk data Anda yang lain belum tersedia."
+          }
+        },
+        "security": {
+          "title": "Keamanan dan rencana insiden pelanggaran data",
+          "detail": {
+            "runbook": "Isolasi ruang kerja, kredensial terenkripsi, dan log audit sudah tersedia. Rencana respons pelanggaran data adalah draf yang dilengkapi oleh operator platform. Anda tidak dapat mengaktifkannya di sini."
+          }
+        },
+        "subprocessors": {
+          "title": "Daftar sub-pemroses",
+          "detail": {
+            "built": "{count, plural, other {# sub-pemroses}} tercantum. Templat DPA siap diunduh.",
+            "none": "Belum ada sub-pemroses yang tercantum. Cantumkan vendor yang memproses data pribadi atas nama Anda."
+          }
+        },
+        "children": {
+          "title": "Data anak-anak",
+          "detail": {
+            "unset": "Belum dijawab. Tentukan apakah anak di bawah umur mungkin termasuk dalam kontak Anda.",
+            "minorsNoParental": "Anak di bawah umur mungkin termasuk, tetapi persetujuan orang tua belum diaktifkan.",
+            "no_minors": "Anda tidak dengan sengaja memproses data anak di bawah umur.",
+            "may_include_minors": "Anak di bawah umur mungkin termasuk dan persetujuan orang tua diaktifkan."
+          }
+        },
+        "contact_links": {
+          "title": "Kontak privasi dan tautan",
+          "detail": {
+            "built": "Tautan privasi dan ketentuan serta kontak yang dapat dihubungi sudah diatur.",
+            "none": "Belum ada tautan privasi, tautan ketentuan, atau kontak.",
+            "some": "Sebagian tautan dan detail kontak sudah diatur. Lengkapi sisanya."
+          }
+        },
+        "dpo_contact": {
+          "title": "Petugas pelindungan data atau kontak privasi",
+          "detail": {
+            "built": "Nama dan email sudah diatur.",
+            "one": "Tambahkan nama dan email.",
+            "none": "Belum ada petugas atau kontak privasi yang ditunjuk."
+          }
+        },
+        "grievance_officer": {
+          "title": "Petugas pengaduan",
+          "detail": {
+            "built": "Nama dan email sudah diatur.",
+            "one": "Tambahkan nama dan email.",
+            "none": "Belum ada petugas pengaduan yang ditunjuk."
+          }
+        },
+        "notice_languages": {
+          "title": "Pemberitahuan dalam bahasa Inggris dan bahasa kedua",
+          "detail": {
+            "built": "Pemberitahuan default Anda aktif dalam bahasa Inggris dan {locale}.",
+            "noSecond": "Pilih bahasa kedua, lalu tulis pemberitahuan dalam bahasa itu.",
+            "secondMissing": "Bahasa Inggris aktif. Tulis pemberitahuan dalam bahasa kedua.",
+            "englishMissing": "Bahasa kedua aktif. Tulis pemberitahuan dalam bahasa Inggris.",
+            "none": "Belum ada pemberitahuan yang aktif."
+          }
+        },
+        "parental_flag": {
+          "title": "Anak di bawah umur dan persetujuan orang tua",
+          "detail": {
+            "unset": "Jawab pertanyaan tentang anak-anak di bagian Kontak dan anak-anak.",
+            "minorsNoParental": "Anak di bawah umur mungkin termasuk, tetapi persetujuan orang tua nonaktif. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
+            "no_minors": "Anda tidak dengan sengaja memproses data anak di bawah umur. Profil ini menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
+            "may_include_minors": "Persetujuan orang tua aktif untuk orang di bawah {age} tahun. Tandai kontak sebagai di bawah umur di kartu persetujuannya dan catat persetujuan wali di sana."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Opsi Jangan Jual atau Bagikan",
+          "detail": {
+            "built": "Opsi penolakan dan tautan ke pemberitahuannya sudah diatur.",
+            "noUrl": "Opsi aktif, tetapi tautan ke pemberitahuan penolakan belum diatur.",
+            "off": "Aktifkan opsi ini jika Anda menjual atau membagikan informasi pribadi, dan tambahkan tautan ke pemberitahuan penolakan Anda."
+          }
+        },
+        "quiet_hours": {
+          "title": "Jam tenang",
+          "detail": {
+            "built": "Jam tenang {start} sampai {end} sudah disimpan.",
+            "off": "Jam tenang belum diatur."
+          }
+        },
+        "calling_window": {
+          "title": "Jendela panggilan",
+          "detail": {
+            "built": "Jendela panggilan {start} sampai {end} sudah disimpan.",
+            "off": "Jendela panggilan belum diatur."
+          }
+        },
+        "dnd_registry": {
+          "title": "Daftar Jangan Hubungi / DND",
+          "detail": {
+            "off": "Belum ada daftar yang dipilih.",
+            "hookOnly": "Daftar dicatat ({registry}). Belum ada yang diperiksa terhadapnya."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Lokasi sub-pemroses Anda",
+          "detail": {
+            "built": "Semua {count, plural, other {# sub-pemroses}} memiliki lokasi.",
+            "some": "{missing, plural, other {# sub-pemroses}} belum memiliki lokasi.",
+            "none": "Tidak ada sub-pemroses yang tercantum, atau tidak ada yang memiliki lokasi."
+          }
+        },
+        "request_days": {
+          "title": "Waktu untuk menjawab permintaan",
+          "detail": {
+            "built": "Tenggat permintaan Anda adalah {sla} hari, dalam batas {days} hari yang diminta profil paling ketat.",
+            "tooLong": "Tenggat Anda adalah {sla} hari. Profil paling ketat yang Anda aktifkan meminta {days}. Ubah di Permintaan data."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Persetujuan tercatat sebelum pemasaran",
+          "detail": {
+            "built": "Pemasaran memerlukan persetujuan tercatat.",
+            "off": "Pemasaran belum memerlukan persetujuan tercatat. Aktifkan di pengaturan persetujuan."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Jam tenang dan jendela panggilan diberlakukan",
+          "detail": {
+            "enforced": "Pesan pemasaran dalam jam tenang Anda ditahan sampai jam itu berakhir, dan panggilan di luar jendela panggilan ditolak disertai waktu pembukaannya. Balasan dalam jendela 24 jam dan pemberitahuan layanan tidak pernah ditahan. Registri DND hanya catatan: belum ada yang diperiksa terhadapnya."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Aktifkan hukum dan wilayah yang berlaku bagi orang yang Anda hubungi. Anda dapat mengaktifkan beberapa; bila berbeda, aturan yang paling ketat dipakai. Negara hanya memberi saran; Anda yang memutuskan.",
+      "suggested": "Negara {source} Anda adalah {country}, yang menyarankan:",
+      "source": {
+        "billing": "penagihan",
+        "onboarding": "ruang kerja"
+      },
+      "useSuggestion": "Gunakan saran ini",
+      "suggestedNote": "Ruang kerja yang menghubungi orang di negara lain sebaiknya mengaktifkan hukum tersebut juga.",
+      "notConfirmed": "Belum ada yang diaktifkan. Standar dasar untuk setiap ruang kerja berlaku sampai Anda menyimpan pilihan.",
+      "listTitle": "Hukum dan wilayah",
+      "switchesOn": "Mengaktifkan:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (UE dan EEA)",
+          "summary": "Untuk orang di Uni Eropa, Islandia, Liechtenstein, dan Norwegia.",
+          "extras": "Petugas pelindungan data atau kontak privasi, lokasi sub-pemroses, jawaban atas permintaan dalam 30 hari, persetujuan tercatat untuk pemasaran."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR dan PECR (Inggris Raya)",
+          "summary": "Untuk orang di Inggris Raya.",
+          "extras": "Petugas pelindungan data atau kontak privasi, lokasi sub-pemroses, jawaban dalam 30 hari, persetujuan tercatat untuk pemasaran elektronik."
+        },
+        "dpdp_in": {
+          "name": "UU DPDP (India)",
+          "summary": "Untuk orang di India.",
+          "extras": "Petugas pengaduan, pemberitahuan dalam bahasa Inggris dan satu bahasa India, penanda persetujuan orang tua untuk anak di bawah 18 tahun, tempat penampung pengelola persetujuan, persetujuan tercatat."
+        },
+        "ccpa_us": {
+          "name": "CCPA dan CPRA (Amerika Serikat)",
+          "summary": "Untuk penduduk California, dan awal yang masuk akal untuk Amerika Serikat.",
+          "extras": "Opsi Jangan Jual atau Bagikan Informasi Pribadi Saya dengan tautan pemberitahuan penolakan, jawaban dalam 45 hari."
+        },
+        "tcpa_us": {
+          "name": "TCPA (panggilan dan pesan teks ke Amerika Serikat)",
+          "summary": "Untuk panggilan dan pesan teks pemasaran ke orang di Amerika Serikat.",
+          "extras": "Jam tenang 21:00 sampai 08:00, jendela panggilan 08:00 sampai 21:00, catatan daftar Jangan Hubungi, persetujuan tercatat."
+        },
+        "trai_in": {
+          "name": "Aturan TRAI (panggilan dan pesan teks ke India)",
+          "summary": "Untuk panggilan dan pesan teks promosi ke orang di India.",
+          "extras": "Jam tenang 21:00 sampai 09:00, jendela panggilan 09:00 sampai 21:00, catatan daftar DND, persetujuan tercatat."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brasil)",
+          "summary": "Untuk orang di Brasil.",
+          "extras": "Kontak petugas pelindungan data (encarregado), lokasi sub-pemroses, jawaban dalam 15 hari, persetujuan tercatat."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapura)",
+          "summary": "Untuk orang di Singapura.",
+          "extras": "Kontak petugas pelindungan data, catatan daftar Jangan Hubungi, jawaban dalam 30 hari, persetujuan tercatat."
+        },
+        "generic": {
+          "name": "Negara lain (hanya standar dasar)",
+          "summary": "Untuk semua tempat lain, atau bila Anda belum memutuskan.",
+          "extras": "Tidak ada yang melebihi standar dasar yang sudah diterima setiap ruang kerja."
+        }
+      },
+      "effective": {
+        "title": "Yang diminta aturan paling ketat",
+        "hint": "Dihitung dari hukum yang Anda aktifkan. Ini adalah titik awal untuk diperiksa bersama penasihat hukum Anda.",
+        "baselineOnly": "Belum ada hukum yang diaktifkan. Hanya standar dasar untuk setiap ruang kerja yang berlaku.",
+        "optIn": "Persetujuan tercatat sebelum pemasaran",
+        "optInYes": "Disarankan.",
+        "optInNo": "Tidak diwajibkan oleh profil ini.",
+        "consentLink": "Buka pengaturan persetujuan",
+        "requestDays": "Waktu untuk menjawab permintaan seseorang",
+        "days": "{count, plural, other {# hari}}",
+        "minorAge": "Anggap seseorang sebagai anak di bawah umur jika usianya di bawah",
+        "years": "{count, plural, other {# tahun}}",
+        "callingWindow": "Jendela panggilan",
+        "dnd": "Daftar Jangan Hubungi / DND",
+        "none": "Tidak ada",
+        "registry": {
+          "none": "Tidak ada",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call Amerika Serikat",
+          "sg_dnc": "Do Not Call Singapura",
+          "custom": "Daftar Anda sendiri"
+        },
+        "strictest": "Bila beberapa profil aktif, aturan yang paling ketat dipakai: waktu jawab tersingkat, usia tertinggi, jendela panggilan tersempit."
+      },
+      "ccpa": {
+        "title": "Jangan Jual atau Bagikan",
+        "hint": "Jika Anda menjual atau membagikan informasi pribadi (termasuk untuk iklan lintas situs lain), orang dapat meminta Anda berhenti.",
+        "offer": "Tawarkan opsi Jangan Jual atau Bagikan Informasi Pribadi Saya",
+        "url": "Tautan ke pemberitahuan penolakan Anda",
+        "urlHint": "Halaman tempat orang dapat menolak. Harus diawali dengan https://."
+      },
+      "dpdp": {
+        "title": "Pengelola persetujuan",
+        "hint": "UU DPDP memungkinkan orang mengelola persetujuan melalui pengelola persetujuan terdaftar. Sebutkan milik Anda di sini jika Anda menggunakannya.",
+        "managerName": "Pengelola persetujuan",
+        "managerUrl": "Tautan pengelola persetujuan",
+        "placeholderNote": "Ini hanya catatan. Belum ada yang terhubung ke pengelola persetujuan.",
+        "managerRegistration": "Nomor registrasi Consent Manager",
+        "managerRegistrationHint": "Nomor yang diberikan Dewan Perlindungan Data saat mendaftarkan Consent Manager Anda. Hanya sebagai catatan."
+      }
+    },
+    "contacts": {
+      "intro": "Siapa yang dapat dihubungi seseorang atau regulator tentang data mereka, dan apakah anak-anak mungkin termasuk dalam kontak Anda.",
+      "requiredByProfile": "Diminta oleh profil yang Anda aktifkan",
+      "officer": {
+        "name": "Nama",
+        "email": "Email",
+        "phone": "Telepon",
+        "address": "Alamat pos"
+      },
+      "dpo": {
+        "title": "Petugas pelindungan data atau kontak privasi",
+        "hint": "Orang atau tim yang menjawab pertanyaan privasi. Ditampilkan di halaman publik Anda jika Anda mengaktifkannya."
+      },
+      "grievance": {
+        "title": "Petugas pengaduan",
+        "hint": "UU DPDP meminta petugas yang ditunjuk secara nama untuk menangani pengaduan tentang cara data pribadi diproses."
+      },
+      "children": {
+        "title": "Data anak-anak",
+        "hint": "Produk ini untuk bisnis. Katakan apakah Anda boleh menyimpan data anak di bawah umur agar aturan yang tepat ditampilkan. Setelah Anda menjawab, pemasaran ke kontak yang ditandai di bawah umur ditahan: selalu jika Anda tidak dengan sengaja memproses data anak di bawah umur, dan sampai persetujuan wali tercatat jika anak di bawah umur mungkin termasuk.",
+        "policy": "Anak di bawah umur di antara kontak Anda",
+        "policies": {
+          "unset": "Belum dijawab",
+          "no_minors": "Kami tidak dengan sengaja memproses data anak di bawah umur",
+          "may_include_minors": "Anak di bawah umur mungkin ada di antara kontak kami"
+        },
+        "parental": "Persetujuan orang tua diperlukan untuk anak di bawah umur",
+        "parentalHint": "Mencatat kebijakan Anda, dan menahan pemasaran ke kontak yang ditandai di bawah umur sampai persetujuan wali tercatat. Anda menandai kontak sebagai di bawah umur dan mencatat persetujuan itu di kartu persetujuannya.",
+        "age": "Profil yang Anda aktifkan menganggap siapa pun di bawah {age} tahun sebagai anak di bawah umur.",
+        "dpdpNeedsAnswer": "Profil DPDP meminta Anda menjawab pertanyaan ini."
+      }
+    },
+    "links": {
+      "intro": "Simpan tautan privasi dan ketentuan Anda sekali saja. Tautan ini ditawarkan dengan satu klik di baris persetujuan pembuat formulir dan di setiap editor pemberitahuan persetujuan.",
+      "privacy": "Tautan kebijakan privasi",
+      "privacyHint": "Harus diawali dengan https://",
+      "terms": "Tautan ketentuan",
+      "termsHint": "Harus diawali dengan https://",
+      "offered": "Tidak ada yang terisi otomatis: setiap formulir atau pemberitahuan menampilkan tombol untuk memakai tautan ini."
+    },
+    "notices": {
+      "intro": "Kata-kata default yang ditampilkan ruang kerja Anda di samping kotak persetujuan. Setiap perubahan disimpan sebagai versi bernomor baru, sehingga catatan dapat menyebutkan teks persis yang disetujui seseorang.",
+      "english": "Pemberitahuan persetujuan default ({language})",
+      "secondEditor": "Pemberitahuan persetujuan default ({language})",
+      "second": {
+        "title": "Bahasa kedua",
+        "requiredByProfile": "Diminta oleh profil DPDP",
+        "hint": "UU DPDP meminta pemberitahuan dalam bahasa Inggris dan dalam salah satu bahasa India. Pilih bahasa kedua dan simpan, lalu tulis pemberitahuan dalam bahasa itu.",
+        "language": "Bahasa pemberitahuan kedua",
+        "none": "Tanpa bahasa kedua",
+        "saveFirst": "Simpan perubahan Anda terlebih dahulu, lalu editor pemberitahuan untuk bahasa ini akan muncul."
+      }
+    },
+    "windows": {
+      "intro": "Beberapa aturan membatasi kapan pesan pemasaran dan panggilan boleh sampai ke orang. Atur jam Anda di sini: pesan pemasaran yang dikirim saat jam tenang menunggu dan terkirim setelah jam itu berakhir, dan panggilan di luar jendela panggilan tidak dilakukan.",
+      "quiet": {
+        "title": "Jam tenang untuk pesan",
+        "hint": "Jam ketika pesan pemasaran tidak dikirim. Pesan menunggu, lalu dikirim saat jam itu berakhir. Rentang waktu boleh melewati tengah malam.",
+        "enabled": "Jam tenang aktif",
+        "start": "Tenang dari",
+        "end": "Tenang sampai"
+      },
+      "calling": {
+        "title": "Jendela panggilan",
+        "hint": "Satu-satunya jam panggilan pemasaran dilakukan, pada hari yang Anda pilih. Panggilan di luarnya ditolak dan menyebutkan kapan jendela dibuka.",
+        "enabled": "Jendela panggilan aktif",
+        "start": "Panggilan dari",
+        "end": "Panggilan sampai",
+        "days": "Hari"
+      },
+      "day": {
+        "1": "Senin",
+        "2": "Selasa",
+        "3": "Rabu",
+        "4": "Kamis",
+        "5": "Jumat",
+        "6": "Sabtu",
+        "7": "Minggu"
+      },
+      "suggested": "Hukum yang Anda aktifkan menyarankan {start} sampai {end}.",
+      "zone": {
+        "label": "Zona waktu cadangan",
+        "hint": "Jam dibaca menurut jam masing-masing kontak: properti zona waktunya, atau jika tidak ada, kode negara nomornya. Zona ini dipakai bila keduanya tidak diketahui. Zona ruang kerja Anda adalah {zone}.",
+        "workspace": "Zona waktu ruang kerja ({zone})"
+      },
+      "dnd": {
+        "label": "Daftar Jangan Hubungi / DND",
+        "hint": "Daftar yang Anda gunakan untuk memeriksa daftar kontak Anda.",
+        "registry": {
+          "none": "Tidak ada",
+          "trai_ndnc": "NDNC India (TRAI)",
+          "us_dnc": "Do Not Call Amerika Serikat",
+          "sg_dnc": "Do Not Call Singapura",
+          "custom": "Daftar Anda sendiri"
+        },
+        "note": "Ini hanya catatan. Belum ada yang diperiksa terhadap suatu daftar.",
+        "listNote": "Nomor pada daftar Jangan hubungi Anda (tab terakhir) sudah dikecualikan dari panggilan dan pesan teks pemasaran."
+      },
+      "enforcedNote": "Jam tenang menahan pesan pemasaran sampai selesai, dan jendela panggilan menolak panggilan di luarnya. Jam masing-masing kontak yang dipakai. Balasan dalam jendela 24 jam dan pemberitahuan layanan tidak pernah ditahan."
+    },
+    "subprocessors": {
+      "intro": "Vendor yang memproses data pribadi untuk ruang kerja Anda: apa yang mereka lakukan, data apa yang mereka terima, dan di mana. Anda dapat menerbitkan daftar ini di halaman publik.",
+      "listTitle": "Sub-pemroses Anda",
+      "add": "Tambah sub-pemroses",
+      "saved": "Sub-pemroses disimpan.",
+      "removed": "Sub-pemroses dihapus.",
+      "empty": {
+        "title": "Belum ada sub-pemroses",
+        "body": "Tambahkan setiap vendor yang menangani data pribadi atas nama Anda, misalnya penyedia email atau SMS Anda."
+      },
+      "status": {
+        "active": "Digunakan",
+        "planned": "Direncanakan",
+        "removed": "Tidak digunakan lagi"
+      },
+      "edit": "Ubah",
+      "remove": "Hapus",
+      "public": {
+        "title": "Halaman publik",
+        "hint": "Terbitkan vendor yang digunakan, tautan privasi dan ketentuan Anda, serta kontak privasi Anda di halaman yang dapat dibuka siapa saja. Nonaktif secara default.",
+        "switch": "Halaman publik aktif",
+        "saveToApply": "Simpan perubahan Anda untuk menerapkan ini."
+      },
+      "dpa": {
+        "title": "Templat perjanjian pemrosesan data",
+        "hint": "Templat yang diisi dengan detail dan daftar Anda. Ini bukan nasihat hukum dan bukan perjanjian: minta penasihat hukum Anda memeriksanya sebelum digunakan.",
+        "download": "Unduh templat"
+      },
+      "form": {
+        "addTitle": "Tambah sub-pemroses",
+        "editTitle": "Ubah sub-pemroses",
+        "close": "Tutup",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "name": "Nama",
+        "required": "Nama wajib diisi.",
+        "purpose": "Apa yang mereka lakukan untuk Anda",
+        "data": "Data yang mereka terima",
+        "location": "Lokasi",
+        "locationHint": "Negara atau wilayah tempat mereka memproses data.",
+        "status": "Status",
+        "website": "Situs web",
+        "dpa": "Tautan perjanjian",
+        "httpsOnly": "Gunakan alamat yang diawali dengan https://.",
+        "addedOn": "Ditambahkan pada",
+        "noticeSentOn": "Pelanggan diberi tahu pada",
+        "noticeHint": "Hari saat Anda memberi tahu pelanggan tentang vendor ini."
+      },
+      "confirmRemove": {
+        "title": "Hapus sub-pemroses ini?",
+        "body": "{name} akan dihapus dari daftar Anda. Tandai sebagai tidak digunakan lagi jika Anda ingin menyimpan riwayatnya.",
+        "confirm": "Hapus"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: sub-pemroses dan privasi",
+      "intro": "Vendor yang digunakan bisnis ini untuk memproses data pribadi, dan cara menghubungi kontak privasinya.",
+      "subprocessors": "Sub-pemroses",
+      "none": "Tidak ada sub-pemroses yang tercantum.",
+      "contact": "Kontak privasi dan kebijakan",
+      "privacy": "Kebijakan privasi",
+      "terms": "Ketentuan",
+      "notFound": "Halaman tidak ditemukan"
+    },
+    "hold": {
+      "heldUntil": "Ditahan sampai {when} (jam tenang)",
+      "heldCount": "{count} ditahan karena jam tenang"
+    },
+    "dnc": {
+      "intro": "Nomor pada daftar ini tidak mendapat pemasaran lewat suara atau SMS, apa pun riwayat persetujuannya. WhatsApp, email, dan pesan layanan tidak ditahan olehnya. Tidak ada pemeriksaan ke registri nasional dari sini: tambahkan ekstrak yang berhak Anda unduh.",
+      "addTitle": "Tambah nomor",
+      "numbers": "Nomor telepon",
+      "numbersHint": "Satu per baris, atau dipisahkan koma. Maksimal {max} sekaligus; gunakan berkas untuk lebih banyak.",
+      "country": "Kode negara untuk nomor lokal",
+      "countryHint": "Nomor yang ditulis tanpa kode negara dibaca dengan kode ini.",
+      "note": "Catatan",
+      "noteHint": "Opsional. Alasan nomor-nomor ini dicantumkan.",
+      "add": "Tambahkan ke daftar",
+      "adding": "Menambahkan...",
+      "or": "atau",
+      "import": "Tambahkan dari berkas CSV",
+      "importing": "Membaca berkas...",
+      "importHint": "Kolom bernama phone, mobile, atau number, jika tidak ada maka kolom pertama. Berkas besar dibaca bertahap.",
+      "fromRegistry": "Berkas ini adalah ekstrak dari registri yang berhak saya gunakan",
+      "progress": "Mengirim bagian {done} dari {of}...",
+      "added": "{count, plural, =0 {Tidak ada nomor baru untuk ditambahkan} one {# nomor ditambahkan} other {# nomor ditambahkan}}",
+      "result": "{added} ditambahkan, {already} sudah ada di daftar, {invalid} bukan nomor telepon.",
+      "invalidSamples": "Contoh: {samples}",
+      "listTitle": "Nomor dalam daftar",
+      "total": "{count, plural, =0 {Tidak ada nomor dalam daftar} one {# nomor dalam daftar} other {# nomor dalam daftar}}",
+      "search": "Cari nomor",
+      "loading": "Memuat daftar...",
+      "empty": "Belum ada nomor",
+      "emptyHint": "Tambahkan nomor yang meminta untuk tidak dihubungi lewat telepon atau pesan teks, atau ekstrak dari registri yang boleh Anda gunakan.",
+      "noMatch": "Tidak ada nomor yang cocok",
+      "source": {
+        "manual": "Ditambahkan manual",
+        "import": "Dari berkas",
+        "contact_request": "Diminta oleh orangnya",
+        "registry_export": "Ekstrak registri"
+      },
+      "remove": "Hapus",
+      "removeLabel": "Hapus {phone} dari daftar",
+      "removed": "Nomor dihapus dari daftar",
+      "newer": "Terbaru",
+      "older": "Terlama",
+      "confirm": {
+        "title": "Hapus nomor ini?",
+        "message": "{phone} dapat kembali menerima panggilan dan pesan teks pemasaran, kecuali kontak telah menarik persetujuannya. Hapus hanya jika orangnya memintanya atau nomor ini ditambahkan karena kesalahan.",
+        "confirm": "Hapus nomor",
+        "cancel": "Pertahankan"
+      }
+    }
+  }
+}

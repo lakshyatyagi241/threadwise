@@ -1,0 +1,117 @@
+{
+  "data-retention": {
+    "nav": {
+      "group": "Veri",
+      "item": "Veri saklama"
+    },
+    "page": {
+      "title": "Veri saklama",
+      "eyebrow": "platform · veri saklama",
+      "description": "Her veri türü için verinin veritabanında kaç gün kalacağını ve kalıcı olarak silinmeden önce soğuk arşivin onu kaç gün daha tutacağını seçin. Bir öğe için değerleri kaydedene kadar o öğede hiçbir şey değişmez.",
+      "superOnly": "Saklama ayarlarını yalnızca süper yönetici değiştirebilir. Kaydedilen değerleri ve son çalışmanın ne yaptığını görebilirsiniz.",
+      "loading": "Saklama ilkeleri yükleniyor…",
+      "retry": "Tekrar dene"
+    },
+    "engine": {
+      "offTitle": "Arşiv işi kapalı",
+      "offBody": "Analitik olayları ve denetim günlüğü için kaydedilen değerler saklanır, ancak iş etkinleştirilene kadar (RETENTION_ENABLED) hiçbir şey arşivlenmez veya silinmez. O zamana kadar ikisi de mevcut davranışını korur.",
+      "dryRunTitle": "Arşiv işi yalnızca yapacaklarını günlüğe yazıyor",
+      "dryRunBody": "İş açık ancak dry-run modunda (RETENTION_DRY_RUN). Analitik olayları ve denetim günlüğü için kaydedilen değerler henüz uygulanmıyor.",
+      "notDurableTitle": "Arşiv kalıcı değil",
+      "notDurableBody": "Arşiv, sunucunun kendi diskindeki bir klasördür ve yeniden dağıtımda silinir. İş, S3 veya R2'ye (ARCHIVE_DRIVER=s3) yönlendirilene kadar hiçbir veriyi silmez.",
+      "liveTitle": "Arşiv işi çalışıyor",
+      "liveBody": "Kaydedilen değerler gece çalışmasıyla uygulanır. Arşivlenen veriler {driver} içinde tutulur."
+    },
+    "items": {
+      "an_events": {
+        "title": "Analitik olayları",
+        "description": "Raporların arkasındaki olay akışı. Aylar, canlı günlerden eski olduğunda tamamen arşive taşınır."
+      },
+      "audit_log": {
+        "title": "Denetim günlüğü",
+        "description": "Her çalışma alanında kimin ne yaptığı; bir kullanıcı adına yapılan işlemler dahil. Değer kaydedene kadar platform güvenlik ilkesindeki gün sayısından sonra silinir ve hiç arşivlenmez. Kaydedilen değerler önce arşivler, sonra siler; dışa aktarmalar arşivlenmiş ayları yine okuyabilir."
+      },
+      "security_events": {
+        "title": "Güvenlik günlüğü",
+        "description": "Oturum açmalar, güvenlik değişiklikleri ve burada yapılan her saklama değişikliği. Canlı günler sonunda silinir ve arşivi yoktur."
+      },
+      "audit_log_exports": {
+        "title": "Denetim dışa aktarma dosyaları",
+        "description": "Bir çalışma alanının denetim günlüğünden talep ettiği CSV. Talep eden, oturum açıp indirmesi için bağlantı içeren bir e-posta alır; dosya canlı günler sonunda silinir."
+      }
+    },
+    "fields": {
+      "liveDays": "Canlı gün",
+      "liveDaysHint": "Verinin veritabanında kaldığı gün sayısı. İzin verilen: {min} - {max}.",
+      "keepForever": "Arşivi süresiz tut",
+      "archiveDays": "Arşiv günü",
+      "archiveDaysHint": "Arşivin veriyi tuttuğu ek gün sayısı; sonra silinir. İzin verilen: {min} - {max}."
+    },
+    "summary": {
+      "noArchive": "Yazıldıktan {live, plural, one {# gün} other {# gün}} sonra kalıcı olarak silinir.",
+      "archiveForever": "{live, plural, one {# gün} other {# gün}} canlı tutulur, sonra arşivlenir ve süresiz saklanır.",
+      "archiveThenDelete": "{live, plural, one {# gün} other {# gün}} canlı tutulur, {archive, plural, one {# gün} other {# gün}} arşivlenir, ardından yazıldıktan {total, plural, one {# gün} other {# gün}} sonra kalıcı olarak silinir.",
+      "defaultForever": "Şu anda süresiz saklanıyor (güvenlik ilkesinde sınır yok).",
+      "defaultNote": "Mevcut davranış, hiçbir şey kaydedilmedi."
+    },
+    "status": {
+      "default": "Mevcut davranış",
+      "custom": "Sizin kaydettiğiniz",
+      "notApplied": "Henüz uygulanmadı",
+      "updated": "{when} kaydedildi"
+    },
+    "stats": {
+      "live": "Veritabanında",
+      "liveValue": "{size}, yaklaşık {rows} satır",
+      "liveValueNoRows": "{size}",
+      "months": "{count, plural, one {# aylık bölüm} other {# aylık bölüm}}, en eskisi {oldest}",
+      "archive": "Arşivde",
+      "archiveValue": "{size}, {count, plural, one {# nesne} other {# nesne}} içinde",
+      "archiveNone": "Henüz ölçülmedi",
+      "archiveMeasured": "{when} ölçüldü",
+      "lastRun": "Son çalışma",
+      "neverRun": "Henüz çalışmadı",
+      "runLive": "{when}: {months, plural, one {# ay} other {# ay}} arşivlendi ({rows} satır, {size}), arşivden {expired} silindi, {deleted} satır veya dosya silindi",
+      "runDry": "{when}: dry-run, hiçbir şey değiştirilmedi",
+      "runFailed": "Son çalışmada bir sorun oluştu: {error}"
+    },
+    "actions": {
+      "save": "Kaydet",
+      "checking": "Kontrol ediliyor…",
+      "saving": "Kaydediliyor…",
+      "reset": "Mevcut davranışa dön",
+      "resetting": "Sıfırlanıyor…",
+      "cancel": "İptal",
+      "confirmSave": "Kaydet ve uygula",
+      "resetTitle": "{item} mevcut davranışına döndürülsün mü?",
+      "resetBody": "Kaydedilen değerler kaldırılır. Gece işleri bu öğe için yerleşik kurallara geri döner. Zaten arşivlenmiş veriler arşivde kalır.",
+      "confirmReset": "Mevcut davranışa dön"
+    },
+    "preview": {
+      "title": "{item} için saklama kaydedilsin mi?",
+      "intro": "Sonraki gece çalışmasında:",
+      "toArchive": "{count, plural, one {# ay} other {# ay}} ({rows} satır, {size}) arşive taşınacak ve veritabanından çıkacak.",
+      "toDeleteFromArchive": "{count, plural, one {# arşivlenmiş ay} other {# arşivlenmiş ay}} arşivden kalıcı olarak silinecek.",
+      "rowsToDelete": "{count, plural, one {# satır veya dosya} other {# satır veya dosya}} kalıcı olarak silinecek.",
+      "notApplied": "Arşiv işi kaydedilen değerleri henüz uygulamıyor, bu yüzden etkinleştirilene kadar bunların hiçbiri gerçekleşmez.",
+      "permanent": "Silme kalıcıdır ve geri alınamaz."
+    },
+    "saved": "Saklama kaydedildi.",
+    "resetDone": "Mevcut davranışa dönüldü.",
+    "validation": {
+      "live_out_of_range": "Canlı gün, {min} ile {max} arasında bir tam sayı olmalıdır.",
+      "archive_out_of_range": "Arşiv günü, {min} ile {max} arasında bir tam sayı olmalıdır.",
+      "archive_not_supported": "Bu öğe arşivlenemez.",
+      "delete_before_archive": "Veri, arşivlenmeden önce silinemez.",
+      "not_a_number": "Tam sayı olarak gün sayısı girin."
+    },
+    "errors": {
+      "forbidden": "Bunu yapma izniniz yok.",
+      "conflict": "Bu öğeyi başka biri değiştirdi. En son değerler yüklendi; kontrol edip tekrar kaydedin.",
+      "validation": "Bu değerlere izin verilmiyor.",
+      "request": "İstek reddedildi.",
+      "unexpected": "Sunucuda bir sorun oluştu. Tekrar deneyin.",
+      "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+    }
+  }
+}

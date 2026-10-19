@@ -4,6 +4,7 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { cn } from '@crm/ui';
 import type { Appointment } from '../api/schemas';
+import { isOutOfSync } from '../lib/calendar-sync';
 import { customerLabel, formatDay, formatTimeRange, zoneName } from '../lib/format';
 import { dayKeyOf, diffDays } from '../lib/zone';
 import { AppointmentRowMenu, type AppointmentAction } from './appointment-menu';
@@ -185,6 +186,9 @@ export function AppointmentsTable(p: AppointmentsTableProps) {
                   <StatusChip status={a.status} />
                   {a.needsReview && (
                     <div className="mt-1 text-xs font-medium text-warning">{t('needsReview')}</div>
+                  )}
+                  {isOutOfSync(a) && (
+                    <div className="mt-1 text-xs font-medium text-warning">{t('outOfSync')}</div>
                   )}
                 </td>
                 <td

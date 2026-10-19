@@ -153,6 +153,21 @@ export const appointments = pgTable(
     orderId: idColumn('order_id'),
     calendarEventId: text('calendar_event_id'),
     calendarId: text('calendar_id'),
+    /** Which provider holds the event (`google` | `microsoft`). Null with an event id means Google: every event written before Outlook existed. */
+    calendarProvider: text('calendar_provider'),
+    /** The bounded reconcile against the Google event (null until the first look): `in_sync` or `drifted`, and why. */
+    googleSyncState: text('google_sync_state'),
+    googleSyncReason: text('google_sync_reason'),
+    googleDriftDetectedAt: timestamp('google_drift_detected_at', { withTimezone: true }),
+    googleDriftStartsAt: timestamp('google_drift_starts_at', { withTimezone: true }),
+    googleDriftEndsAt: timestamp('google_drift_ends_at', { withTimezone: true }),
+    /** What we last wrote to the event (the echo guard): Google's etag, the time and the guest. */
+    googleEventEtag: text('google_event_etag'),
+    googlePushedAt: timestamp('google_pushed_at', { withTimezone: true }),
+    googlePushedStartsAt: timestamp('google_pushed_starts_at', { withTimezone: true }),
+    googlePushedEndsAt: timestamp('google_pushed_ends_at', { withTimezone: true }),
+    googlePushedAttendee: text('google_pushed_attendee'),
+    googleCheckedAt: timestamp('google_checked_at', { withTimezone: true }),
     meetUrl: text('meet_url'),
     inviteeName: text('invitee_name'),
     inviteeEmail: text('invitee_email'),
@@ -233,6 +248,21 @@ export const appointments = pgTable(
     index('idx_appointments_contact_id').on(t.orgId, t.contactId),
     index('idx_appointments_conversation_id').on(t.orgId, t.conversationId),
     index('idx_appointments_calendar_event_id').on(t.orgId, t.calendarEventId),
+    check(
+      'chk_appointments_calendar_provider',
+      sql`${t.calendarProvider} is null or ${t.calendarProvider} in ('google', 'microsoft')`,
+    ),
+    check(
+      'chk_appointments_google_sync_state',
+      sql`${t.googleSyncState} is null or ${t.googleSyncState} in ('in_sync', 'drifted', 'unreadable')`,
+    ),
+    check(
+      'chk_appointments_google_sync_reason',
+      sql`(${t.googleSyncState} in ('drifted', 'unreadable')) = (${t.googleSyncReason} is not null) and (${t.googleSyncReason} is null or ${t.googleSyncReason} in ('event_deleted', 'event_missing', 'time_changed', 'attendees_changed', 'event_forbidden', 'event_unreadable'))`,
+    ),
+    index('idx_appointments_google_reconcile')
+      .on(t.orgId, t.startsAt)
+      .where(sql`${t.calendarEventId} is not null and ${t.status} in ('pending', 'confirmed')`),
     index('idx_appointments_order_id').on(t.orgId, t.orderId),
     index('idx_appointments_user_id').on(t.orgId, t.userId),
     index('idx_appointments_created_by').on(t.orgId, t.createdBy),
@@ -242,8 +272,6 @@ export const appointments = pgTable(
     index('idx_appointments_hold_expiry').on(t.holdExpiresAt),
     index('idx_appointments_pending_ends').on(t.endsAt),
     index('idx_appointments_booking_type_id_starts_at').on(t.orgId, t.bookingTypeId, t.startsAt),
-    index('idx_appointments_starts_at').on(t.orgId, t.startsAt),
-    index('idx_appointments_status').on(t.orgId, t.status),
     index('idx_appointments_provider').on(t.orgId, t.provider),
   ],
 );
@@ -461,7 +489,18 @@ export const bookingReminders = pgTable(
     offsetMinutes: integer('offset_minutes').notNull(),
     templateEvent: text('template_event').notNull().default('reminder'),
     label: text('label'),
-    isActive: boolean('is_active').notNull().default(true),
+    /** Created OFF: a rule sends nothing until someone switches it on. */
+    isActive: boolean('is_active').notNull().default(false),
+    /** `before`: offset_minutes before the start; `after`: offset_minutes after the end (the follow-up). */
+    kind: text('kind').notNull().default('before'),
+    /** Ordered preference over whatsapp / sms / email; the first channel that can deliver wins. */
+    channels: text('channels')
+      .array()
+      .notNull()
+      .default(sql`ARRAY['whatsapp', 'sms', 'email']::text[]`),
+    subject: text('subject'),
+    body: text('body'),
+    waTemplateId: idColumn('wa_template_id'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -469,6 +508,13 @@ export const bookingReminders = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_booking_reminders_org_id_uuid').on(t.orgId, t.uuid),
+    check('chk_booking_reminders_kind', sql`${t.kind} in ('before', 'after')`),
+    foreignKey({
+      name: 'fk_booking_reminders_wa_template_id',
+      columns: [t.orgId, t.waTemplateId],
+      foreignColumns: [waTemplates.orgId, waTemplates.id],
+    }).onDelete('set null'),
+    index('idx_booking_reminders_wa_template_id').on(t.orgId, t.waTemplateId),
     foreignKey({
       name: 'fk_booking_reminders_org',
       columns: [t.orgId],
@@ -479,9 +525,10 @@ export const bookingReminders = pgTable(
       t.bookingTypeId,
       t.offsetIndex,
     ),
-    unique('uq_booking_reminders_booking_type_id_offset_minutes').on(
+    unique('uq_booking_reminders_booking_type_id_kind_offset').on(
       t.orgId,
       t.bookingTypeId,
+      t.kind,
       t.offsetMinutes,
     ),
     foreignKey({
@@ -573,6 +620,18 @@ export const appointmentReminderRuns = pgTable(
     offsetMinutes: integer('offset_minutes').notNull(),
     dueAt: timestamp('due_at', { withTimezone: true }).notNull(),
     claimedAt: timestamp('claimed_at', { withTimezone: true }).notNull().defaultNow(),
+    kind: text('kind').notNull().default('before'),
+    /** The booking's `armed_at` when claimed: a reschedule moves it, so the rule is claimed again for the new time. */
+    armedAt: timestamp('armed_at', { withTimezone: true }).notNull(),
+    status: text('status').notNull().default('pending'),
+    /** A stable code, never a message, a number or an address. */
+    reason: text('reason'),
+    channel: text('channel'),
+    attempts: integer('attempts').notNull().default(0),
+    nextAttemptAt: timestamp('next_attempt_at', { withTimezone: true }).notNull().defaultNow(),
+    lockedAt: timestamp('locked_at', { withTimezone: true }),
+    sentAt: timestamp('sent_at', { withTimezone: true }),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
@@ -581,7 +640,21 @@ export const appointmentReminderRuns = pgTable(
       columns: [t.orgId],
       foreignColumns: [organizations.id],
     }).onDelete('cascade'),
-    unique('uq_appointment_reminder_runs').on(t.orgId, t.appointmentId, t.offsetMinutes),
+    unique('uq_appointment_reminder_runs').on(
+      t.orgId,
+      t.appointmentId,
+      t.kind,
+      t.offsetMinutes,
+      t.armedAt,
+    ),
+    check('chk_appointment_reminder_runs_kind', sql`${t.kind} in ('before', 'after')`),
+    check(
+      'chk_appointment_reminder_runs_status',
+      sql`${t.status} in ('pending', 'sending', 'held', 'sent', 'skipped', 'failed', 'cancelled')`,
+    ),
+    index('idx_appointment_reminder_runs_waiting')
+      .on(t.nextAttemptAt)
+      .where(sql`${t.status} in ('pending', 'held', 'sending')`),
     foreignKey({
       name: 'fk_appointment_reminder_runs_appointment',
       columns: [t.orgId, t.appointmentId],
@@ -625,12 +698,30 @@ export const appointmentCalendarConnections = pgTable(
     statusReason: text('status_reason'),
     statusAt: timestamp('status_at', { withTimezone: true }).notNull().defaultNow(),
     connectedAt: timestamp('connected_at', { withTimezone: true }).notNull().defaultNow(),
+    /** The last failure a feature met using the account (a GOOGLE_* code), cleared by the next success. */
+    lastErrorCode: text('last_error_code'),
+    lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+    /** The capability whose call failed: only a success of the same capability clears the error. */
+    lastErrorCapability: text('last_error_capability'),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    /** The reconcile job's schedule: when it is next due, when it last ran, and consecutive failures (the back-off). */
+    nextReconcileAt: timestamp('next_reconcile_at', { withTimezone: true }),
+    lastReconcileAt: timestamp('last_reconcile_at', { withTimezone: true }),
+    reconcileFailures: integer('reconcile_failures').notNull().default(0),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
+    check(
+      'chk_appointment_calendar_connections_last_error',
+      sql`(${t.lastErrorCode} is null) = (${t.lastErrorAt} is null)`,
+    ),
+    check(
+      'chk_appointment_calendar_connections_last_error_capability',
+      sql`${t.lastErrorCapability} is null or ${t.lastErrorCapability} in ('calendar', 'sheets', 'docs', 'forms', 'drive_listing')`,
+    ),
     unique('uq_appointment_calendar_connections_org_id_uuid').on(t.orgId, t.uuid),
     foreignKey({
       name: 'fk_appointment_calendar_connections_org',
@@ -655,3 +746,265 @@ export const appointmentCalendarConnections = pgTable(
 export type AppointmentCalendarConnectionsRow = typeof appointmentCalendarConnections.$inferSelect;
 export type NewAppointmentCalendarConnectionsRow =
   typeof appointmentCalendarConnections.$inferInsert;
+
+/**
+ * The workspace's connected Outlook / Microsoft 365 calendar (BL-035). Mirrors migrations/20261217090000_appt_microsoft_calendar.sql: one row
+ * per workspace, tokens sealed with the credentials key; Microsoft rotates the refresh token, so it is replaced on every refresh.
+ */
+export const appointmentMicrosoftConnections = pgTable(
+  'appointment_microsoft_connections',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    connectedBy: idColumn('connected_by'),
+    accountEmail: text('account_email'),
+    accountSub: text('account_sub'),
+    refreshTokenEnc: text('refresh_token_enc').notNull(),
+    accessTokenEnc: text('access_token_enc'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    scopes: text('scopes'),
+    calendarId: text('calendar_id').notNull().default('primary'),
+    calendarName: text('calendar_name'),
+    status: text('status').notNull().default('active'),
+    statusReason: text('status_reason'),
+    statusAt: timestamp('status_at', { withTimezone: true }).notNull().defaultNow(),
+    connectedAt: timestamp('connected_at', { withTimezone: true }).notNull().defaultNow(),
+    lastErrorCode: text('last_error_code'),
+    lastErrorAt: timestamp('last_error_at', { withTimezone: true }),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_microsoft_connections_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_microsoft_connections_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_microsoft_connections_org').on(t.orgId),
+    check(
+      'chk_appointment_microsoft_connections_status',
+      sql`${t.status} in ('active', 'needs_reconnect')`,
+    ),
+    check(
+      'chk_appointment_microsoft_connections_last_error',
+      sql`(${t.lastErrorCode} is null) = (${t.lastErrorAt} is null)`,
+    ),
+    foreignKey({
+      name: 'fk_appointment_microsoft_connections_connected_by',
+      columns: [t.orgId, t.connectedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_appointment_microsoft_connections_connected_by').on(t.orgId, t.connectedBy),
+  ],
+);
+
+export type AppointmentMicrosoftConnectionsRow =
+  typeof appointmentMicrosoftConnections.$inferSelect;
+
+/** Which connected calendar bookings are written to (an admin's choice; no row = automatic). Mirrors the same migration. */
+export const appointmentCalendarPreferences = pgTable(
+  'appointment_calendar_preferences',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    provider: text('provider').notNull(),
+    updatedBy: idColumn('updated_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_calendar_preferences_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_calendar_preferences_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_calendar_preferences_org').on(t.orgId),
+    check(
+      'chk_appointment_calendar_preferences_provider',
+      sql`${t.provider} in ('google', 'microsoft')`,
+    ),
+    foreignKey({
+      name: 'fk_appointment_calendar_preferences_updated_by',
+      columns: [t.orgId, t.updatedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_appointment_calendar_preferences_updated_by').on(t.orgId, t.updatedBy),
+  ],
+);
+
+/**
+ * A workspace's read-only iCal subscription (BL-035). Mirrors migrations/20261218090000_appt_ics_feeds.sql: the address is sealed, only its host is
+ * kept for display, and the busy intervals it contributes are in `calendarIcsBusy`.
+ */
+export const calendarIcsFeeds = pgTable(
+  'calendar_ics_feeds',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    urlEnc: text('url_enc').notNull(),
+    urlHost: text('url_host').notNull(),
+    urlHash: text('url_hash').notNull(),
+    blockAllDay: boolean('block_all_day').notNull().default(true),
+    isActive: boolean('is_active').notNull().default(true),
+    status: text('status').notNull().default('pending'),
+    lastErrorCode: text('last_error_code'),
+    lastFetchedAt: timestamp('last_fetched_at', { withTimezone: true }),
+    lastSuccessAt: timestamp('last_success_at', { withTimezone: true }),
+    nextFetchAt: timestamp('next_fetch_at', { withTimezone: true }).notNull().defaultNow(),
+    consecutiveFailures: integer('consecutive_failures').notNull().default(0),
+    etag: text('etag'),
+    lastModified: text('last_modified'),
+    calendarName: text('calendar_name'),
+    eventCount: integer('event_count').notNull().default(0),
+    busyCount: integer('busy_count').notNull().default(0),
+    warnings: jsonb('warnings')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    createdBy: idColumn('created_by'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('calendar_ics_feeds_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'calendar_ics_feeds_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_calendar_ics_feeds_url').on(t.orgId, t.urlHash),
+    check('chk_calendar_ics_feeds_status', sql`${t.status} in ('pending', 'ok', 'error')`),
+    check('chk_calendar_ics_feeds_name', sql`char_length(${t.name}) between 1 and 80`),
+    check(
+      'chk_calendar_ics_feeds_error',
+      sql`(${t.status} = 'error') = (${t.lastErrorCode} is not null)`,
+    ),
+    foreignKey({
+      name: 'fk_calendar_ics_feeds_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_calendar_ics_feeds_created_by').on(t.orgId, t.createdBy),
+    index('idx_calendar_ics_feeds_due')
+      .on(t.nextFetchAt)
+      .where(sql`${t.isActive}`),
+  ],
+);
+
+/** The busy intervals of a feed, replaced as a whole by each good read. */
+export const calendarIcsBusy = pgTable(
+  'calendar_ics_busy',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    feedId: idColumn('feed_id').notNull(),
+    startsAt: timestamp('starts_at', { withTimezone: true }).notNull(),
+    endsAt: timestamp('ends_at', { withTimezone: true }).notNull(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    foreignKey({
+      name: 'calendar_ics_busy_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    check('chk_calendar_ics_busy_range', sql`${t.endsAt} > ${t.startsAt}`),
+    foreignKey({
+      name: 'fk_calendar_ics_busy_feed',
+      columns: [t.orgId, t.feedId],
+      foreignColumns: [calendarIcsFeeds.orgId, calendarIcsFeeds.id],
+    }).onDelete('cascade'),
+    index('idx_calendar_ics_busy_feed').on(t.orgId, t.feedId),
+    index('idx_calendar_ics_busy_window').on(t.orgId, t.startsAt, t.endsAt),
+  ],
+);
+
+/** One token per person for their own bookings feed (BL-035). Same migration. */
+export const appointmentFeedTokens = pgTable(
+  'appointment_feed_tokens',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    userId: idColumn('user_id').notNull(),
+    tokenHash: text('token_hash').notNull(),
+    tokenEnc: text('token_enc').notNull(),
+    lastUsedAt: timestamp('last_used_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('appointment_feed_tokens_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'appointment_feed_tokens_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    unique('uq_appointment_feed_tokens_user').on(t.orgId, t.userId),
+    unique('uq_appointment_feed_tokens_hash').on(t.tokenHash),
+    foreignKey({
+      name: 'fk_appointment_feed_tokens_user',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+  ],
+);
+
+/**
+ * One Google consent in flight (TW-GACC-010): created when an admin presses Connect, filled by the public callback with what Google returned
+ * (sealed), consumed once by the same admin's confirmation. See migration 20261208090000_gacc_drift_and_consent.sql.
+ */
+export const googleConsentRequests = pgTable(
+  'google_consent_requests',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    nonceHash: text('nonce_hash').notNull(),
+    userId: idColumn('user_id').notNull(),
+    capabilities: text('capabilities').array().notNull(),
+    returnTo: text('return_to').notNull(),
+    status: text('status').notNull().default('pending'),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    accountEmail: text('account_email'),
+    accountSub: text('account_sub'),
+    scopes: text('scopes'),
+    missingScopes: text('missing_scopes').array(),
+    refreshTokenEnc: text('refresh_token_enc'),
+    accessTokenEnc: text('access_token_enc'),
+    accessTokenExpiresAt: timestamp('access_token_expires_at', { withTimezone: true }),
+    decidedAt: timestamp('decided_at', { withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('google_consent_requests_org_id_uuid_key').on(t.orgId, t.uuid),
+    unique('uq_google_consent_requests_nonce').on(t.nonceHash),
+    foreignKey({
+      name: 'fk_google_consent_requests_user',
+      columns: [t.orgId, t.userId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('cascade'),
+    check(
+      'chk_google_consent_requests_status',
+      sql`${t.status} in ('pending', 'awaiting_confirm', 'confirmed', 'cancelled', 'rejected', 'expired')`,
+    ),
+    index('idx_google_consent_requests_user').on(t.orgId, t.userId),
+  ],
+);

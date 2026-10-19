@@ -3,3 +3,4 @@ export * from './purposes';
 export * from './gate';
 export * from './errors';
 export * from './requests';
+export * from './legal-holds';

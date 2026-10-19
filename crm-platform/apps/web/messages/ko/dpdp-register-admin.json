@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "개인정보",
+      "register": "DPDP 등록부"
+    },
+    "page": {
+      "eyebrow": "관리자 · 팀 · DPDP 등록부",
+      "title": "DPDP 등록부",
+      "disclaimer": "플랫폼이 오늘 DPDP Act와 DPDP Rules에 대해 하고 있는 일을 추적합니다. 컴플라이언스 인증서가 아닙니다.",
+      "checkedAt": "확인 시각: {time}",
+      "refresh": "새로 고침"
+    },
+    "summary": {
+      "label": "등록부 요약",
+      "counts": {
+        "title": "상태별 의무",
+        "counted": "{total, plural, other {의무 #건 집계됨}}",
+        "notCounted": "‘해당 없음’ 행은 목록에 표시되지만 집계되지 않습니다."
+      },
+      "milestones": {
+        "title": "다가오는 날짜",
+        "names": {
+          "consent_managers": "동의 관리자 등록 (rule 4)",
+          "main_duties": "DPDP Rules의 주요 의무"
+        },
+        "left": "약 {days, plural, =0 {0일} other {#일}} 남음",
+        "passed": "이 날짜는 지났습니다"
+      },
+      "tiers": {
+        "title": "제재 단계",
+        "tier": "제재 단계",
+        "hint": "이행하지 않거나 일부만 이행했거나 검증되지 않은 의무를 적용되는 제재 상한별로 보여줍니다."
+      }
+    },
+    "status": {
+      "following": "이행 중",
+      "partial": "일부 이행",
+      "not_following": "미이행",
+      "unverified": "미검증",
+      "not_applicable": "해당 없음"
+    },
+    "result": {
+      "pass": "통과",
+      "fail": "실패",
+      "unknown": "알 수 없음"
+    },
+    "source": {
+      "live": "실시간 읽기",
+      "attested": "수동 확인",
+      "code": "코드에 선언됨"
+    },
+    "filters": {
+      "label": "상태로 필터",
+      "all": "전체",
+      "shown": "{count, plural, other {의무 #건 표시}}",
+      "empty": {
+        "title": "이 필터와 일치하는 의무가 없습니다",
+        "message": "현재 이 상태인 의무가 없습니다.",
+        "reset": "모두 표시"
+      }
+    },
+    "groups": {
+      "A": "근거, 고지, 동의 (ss4 to 7, rule 3)",
+      "B": "권리와 고충 (ss11 to 15, rule 14)",
+      "C": "보존과 삭제 (s8(7), (8), rule 8)",
+      "D": "보안 (s8(4), (5), rule 6)",
+      "E": "데이터 침해 (s8(6), rule 7)",
+      "F": "아동 (s9, rules 10 to 12, 제4별표)",
+      "G": "이전과 처리자 (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "중요 데이터 수탁자 (s10, rule 13)",
+      "I": "거버넌스와 집행 (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "워크스페이스",
+      "platform": "플랫폼",
+      "both": "워크스페이스와 플랫폼"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "제재 단계 없음"
+    },
+    "item": {
+      "citation": "근거 조항",
+      "owner": "담당자",
+      "penalty": "제재 단계",
+      "plan": "계획 항목",
+      "conditional": "지정된 경우에만",
+      "checks": "점검",
+      "noChecks": "선언된 상태입니다. 아직 이를 읽는 점검이 없습니다."
+    },
+    "check": {
+      "lapsed": "만료됨",
+      "note": "메모:",
+      "evidence": "증빙 링크"
+    },
+    "items": {
+      "r01": {
+        "title": "동의가 있거나 허용된 용도일 때만 개인 데이터를 처리하기"
+      },
+      "r02": {
+        "title": "동의를 요청하기 전에 독립적이고 항목별로 구분된 고지를 제공하기"
+      },
+      "r03": {
+        "title": "법 시행 전에 동의한 사람에게 알리기"
+      },
+      "r04": {
+        "title": "고지와 동의를 영어 또는 지정 언어로 제공하기"
+      },
+      "r05": {
+        "title": "자유롭고 구체적이며 충분한 정보에 기반한 명확한 동의 받기"
+      },
+      "r06": {
+        "title": "모든 동의 요청에 연락 담당자 표시하기"
+      },
+      "r07": {
+        "title": "동의 철회를 동의할 때만큼 쉽게 하기"
+      },
+      "r08": {
+        "title": "철회 시 처리를 중단하고 처리자도 중단하게 하기"
+      },
+      "r09": {
+        "title": "고지와 동의를 증명할 수 있게 하기"
+      },
+      "r10": {
+        "title": "자발적으로 제공된 데이터는 밝힌 목적에만 사용하기"
+      },
+      "r11": {
+        "title": "동의 관리자를 통해 부여되거나 철회된 동의 수용하기"
+      },
+      "r12": {
+        "title": "모든 발신 전송을 전송 시점의 동의에 따라 통제하기"
+      },
+      "r13": {
+        "title": "보유 데이터, 처리 내용, 수령자 요약하기"
+      },
+      "r14": {
+        "title": "요청 시 개인 데이터를 정정, 보완, 갱신하기"
+      },
+      "r15": {
+        "title": "요청 시 삭제하되, 목적이나 법률상 필요한 경우는 제외하기"
+      },
+      "r16": {
+        "title": "공개된 고충 처리 절차를 운영하고 90일 이내에 답변하기"
+      },
+      "r17": {
+        "title": "사망이나 행위능력 상실 시 대신 행동할 사람을 지정할 수 있게 하기"
+      },
+      "r18": {
+        "title": "요청 방법과 필요한 식별 정보 공개하기"
+      },
+      "r19": {
+        "title": "연락처를 공개하고 모든 답변에 포함하기"
+      },
+      "r20": {
+        "title": "본인 확인, 속도 제한, 권리 요청 감사 수행하기"
+      },
+      "r21": {
+        "title": "의사결정에 쓰이는 데이터를 정확하고 완전하게 유지하기"
+      },
+      "r22": {
+        "title": "플랫폼 자체 직원, 청구 담당자, 방문자의 권리 존중하기"
+      },
+      "r23": {
+        "title": "동의가 철회되거나 목적이 끝나면 데이터 삭제하기"
+      },
+      "r24": {
+        "title": "3년간 사용하지 않은 데이터를 48시간 사전 고지 후 삭제하기"
+      },
+      "r25": {
+        "title": "개인 데이터와 로그를 최소 1년간 보존하기"
+      },
+      "r26": {
+        "title": "워크스페이스 비활성 수명 주기 실행하기"
+      },
+      "r27": {
+        "title": "암호화, 마스킹 또는 토큰으로 데이터 보호하기"
+      },
+      "r28": {
+        "title": "컴퓨터 자원에 대한 접근 통제하기"
+      },
+      "r29": {
+        "title": "개인 데이터 접근을 기록하고 모니터링하기"
+      },
+      "r30": {
+        "title": "손실 후에도 처리를 이어갈 수 있도록 데이터 백업하기"
+      },
+      "r31": {
+        "title": "사고를 탐지하고 조사하기 위해 로그를 1년간 보존하기"
+      },
+      "r32": {
+        "title": "모든 처리자 계약에 보안 조항 넣기"
+      },
+      "r33": {
+        "title": "시행 중인 보안 조치를 보여줄 수 있게 하기"
+      },
+      "r34": {
+        "title": "합리적인 보안 보호 조치를 전반적으로 유지하기"
+      },
+      "r35": {
+        "title": "연락처 텍스트를 제3자에게 보내는 AI 경로 통제하기"
+      },
+      "r36": {
+        "title": "침해의 영향을 받은 모든 사람에게 지체 없이 알리기"
+      },
+      "r37": {
+        "title": "침해를 데이터 보호 위원회에 알리고 72시간 이내에 보고하기"
+      },
+      "r38": {
+        "title": "처리자로서 침해를 워크스페이스에 충분히 빠르게 알리기"
+      },
+      "r39": {
+        "title": "아동 데이터를 처리하기 전에 검증 가능한 부모 동의 받기"
+      },
+      "r40": {
+        "title": "아동에 대한 추적, 행동 모니터링, 타겟 광고 금지"
+      },
+      "r41": {
+        "title": "아동 데이터 의무에 제4별표 면제 적용하기"
+      },
+      "r42": {
+        "title": "정부의 데이터 국외 이전 제한 지키기"
+      },
+      "r43": {
+        "title": "처리자가 하는 일에 대한 책임 유지하기"
+      },
+      "r44": {
+        "title": "중요 데이터 수탁자의 의무 이행하기 (지정된 경우에만)"
+      },
+      "r45": {
+        "title": "6개월 이내에 데이터 보호 위원회 조사를 위한 증거 제출하기"
+      },
+      "r46": {
+        "title": "플랫폼 자체 고지, 약관 동의, 쿠키 선택 유지하기"
+      },
+      "r47": {
+        "title": "플랫폼 연락처와 고충 접수 경로 지정하기"
+      }
+    },
+    "details": {
+      "probe_error": "지금은 읽을 수 없어 결과를 알 수 없습니다.",
+      "probe_missing": "이 점검에 대한 읽기 결과가 돌아오지 않았습니다.",
+      "env_missing": "{key}이(가) 설정되지 않아 읽을 수 없었습니다.",
+      "attestation_missing": "아직 아무도 기록하지 않았습니다.",
+      "attestation_expired": "{name}이(가) {date}에 기록한 진술이 {expires}에 만료되었습니다. 더 이상 반영되지 않습니다.",
+      "attested_pass": "{name}이(가) {date}에 갖춰짐으로 기록했습니다. {expires}까지 유효합니다.",
+      "attested_fail": "{name}이(가) {date}에 갖춰지지 않음으로 기록했습니다. {expires}까지 유효합니다.",
+      "code_declared": "코드에 선언된 값으로, 실행 중에는 측정하지 않습니다. 격차를 메우는 변경이 이 값을 갱신합니다.",
+      "unrecognised": "이 콘솔에는 아직 이 결과에 대한 설명이 없습니다 ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "슈퍼 관리자는 2단계 인증으로 로그인해야 함",
+        "details": {
+          "mfa_on": "슈퍼 관리자에게 2단계 로그인이 필수입니다.",
+          "mfa_off": "필수 아님: 슈퍼 관리자는 두 번째 요소 없이 로그인할 수 있습니다."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "워크스페이스 관리자는 2단계 인증으로 로그인해야 함",
+        "details": {
+          "mfa_on": "워크스페이스 관리자에게 2단계 로그인이 필수입니다.",
+          "mfa_off": "필수 아님: 워크스페이스 관리자는 두 번째 요소 없이 로그인할 수 있습니다."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "감사 로그를 최소 1년간 보존함",
+        "details": {
+          "retention_ok": "{days, plural, other {#일}} 동안 보존됩니다.",
+          "retention_unlimited": "삭제되지 않으므로 (0일) 최소 1년간 보존됩니다.",
+          "retention_below_floor": "{days, plural, other {#일}}만 보존됩니다. DPDP Rules는 최소 365일을 요구합니다."
+        }
+      },
+      "logs_session_retention": {
+        "title": "종료된 세션을 최소 1년간 보존함",
+        "details": {
+          "retention_ok": "종료된 세션은 {days, plural, other {#일}} 후에 삭제됩니다.",
+          "retention_below_floor": "종료된 세션은 {days, plural, other {#일}} 후에 삭제되어, DPDP Rules가 요구하는 365일에 못 미칩니다."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis에 비밀번호가 필요하거나 TLS를 사용함",
+        "details": {
+          "redis_auth_on": "설정된 Redis 주소에 비밀번호가 있거나 TLS를 사용합니다.",
+          "redis_auth_off": "설정된 Redis 주소에 비밀번호가 없고 TLS도 사용하지 않습니다."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "키링에 이전 암호화 키가 남아 있지 않음",
+        "details": {
+          "rotation_complete": "이전 키가 설정되어 있지 않습니다.",
+          "previous_keys_present": "이전 키가 아직 설정되어 있어 키 교체가 끝나지 않았습니다."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "워크스페이스 비활성 수명 주기가 가동 중임",
+        "details": {
+          "lifecycle_on": "활성화되어 있고 드라이 런이 아니며 삭제도 켜져 있습니다.",
+          "lifecycle_off": "{enabled, select, true {활성화} other {비활성화}}, {dryRun, select, true {드라이 런 켜짐} other {드라이 런 꺼짐}}, {deleteEnabled, select, true {삭제 켜짐} other {삭제 꺼짐}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "오류 리포트가 인도 내에 머물거나 꺼져 있음",
+        "details": {
+          "sentry_off": "API 서버에서 오류 리포트가 꺼져 있습니다.",
+          "region_india": "오류 리포트가 공급업체의 인도 리전으로 전송됩니다.",
+          "region_outside_india": "오류 리포트가 공급업체의 {region} 리전으로 전송됩니다. 인도 밖입니다.",
+          "region_unrecognised": "오류 리포트 주소가 알려진 리전 주소가 아니어서 국가를 알 수 없습니다.",
+          "region_unrecognised_host": "오류 리포트가 {host}(으)로 전송되며, 알려진 리전 주소가 아니어서 국가를 알 수 없습니다."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "플랫폼 AI 키가 설정되어 있지 않음",
+        "details": {
+          "no_platform_key": "어떤 AI 공급자에도 플랫폼 키가 설정되어 있지 않습니다.",
+          "platform_key_set": "다음에 플랫폼 키가 설정되어 있습니다: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "새 워크스페이스는 마케팅 동의를 필수로 시작함",
+        "details": {
+          "default_opt_in": "새 워크스페이스는 마케팅에 기록된 동의를 필수로 하여 시작합니다.",
+          "default_opt_out": "새 워크스페이스는 마케팅에 기록된 동의를 필수로 하지 않고 시작합니다.",
+          "default_opt_in_counts": "새 워크스페이스는 마케팅에 기록된 동의를 필수로 하여 시작합니다. 현재 워크스페이스 {total, number}개 중 {on, number}개가 필수로 요구합니다.",
+          "default_opt_out_counts": "새 워크스페이스는 마케팅에 기록된 동의를 필수로 하지 않고 시작합니다. 현재 워크스페이스 {total, number}개 중 {on, number}개가 필수로 요구합니다."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "호스팅 공급자, 리전, 데이터 위치가 문서화되어 있음"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "볼륨 및 오브젝트 스토리지 암호화 증빙이 보관되어 있음"
+      },
+      "backup_offsite_configured": {
+        "title": "봉인된 오프사이트 백업이 실행되며 오브젝트 스토리지도 포함함"
+      },
+      "backup_restore_drill": {
+        "title": "최근 6개월 내에 복원 훈련을 실시함"
+      },
+      "security_pentest_report": {
+        "title": "미해결 치명적 발견 사항이 없는 외부 침투 테스트 보고서가 보관되어 있음"
+      },
+      "legal_counsel_engaged": {
+        "title": "인도 데이터 보호 법률 자문을 선임함"
+      },
+      "legal_vendor_dpas": {
+        "title": "개인 데이터를 보유한 하위 처리자와 체결한 DPA가 보관되어 있음"
+      },
+      "governance_contacts_named": {
+        "title": "개인정보 담당자, 사고 지휘자, 고충 담당자가 지정되고 공개되어 있음"
+      },
+      "pii_column_encryption": {
+        "title": "연락처의 전화번호, 이메일, 메시지 본문이 열 단위로 암호화됨"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "권한이 높은 데이터베이스 설정을 세션에서 바꿀 수 없음"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "삭제 시 기록과 로그를 1년간 보관한 뒤 삭제함"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "보안 점검이 CI에서 일정에 따라 실행됨"
+      },
+      "ai_workspace_switch": {
+        "title": "워크스페이스가 연락처 텍스트를 공급자에게 보내는 AI 경로를 끌 수 있음"
+      },
+      "transfer_country_killswitch": {
+        "title": "각 공급자에게 국가 태그가 있고 특정 국가를 차단할 수 있음"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "워크스페이스의 DPA 수락이 버전과 시간과 함께 기록됨"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "목적 레지스트리가 Act의 동의 및 section 7 용도를 사용함"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "워크스페이스를 떠날 때의 내보내기와 파일 정리가 구현되어 있음"
+      },
+      "evidence_board_pack": {
+        "title": "데이터 보호 위원회 조사에 대비한 증거 패키지가 구현되어 있음"
+      },
+      "grievance_intake_built": {
+        "title": "고충 접수가 구현되어 있음"
+      }
+    },
+    "attest": {
+      "action": "확인 기록",
+      "actionFor": "확인 기록: {check}",
+      "title": "진술 기록",
+      "intro": "오늘 기준으로 사실인지 기록합니다. 만료될 때까지 반영되며, 이후 점검은 알 수 없음으로 돌아갑니다. 모든 진술은 이력에 남습니다.",
+      "result": {
+        "label": "결과",
+        "pass": "갖춰짐 (통과)",
+        "fail": "갖춰지지 않음 (실패)"
+      },
+      "note": {
+        "label": "메모",
+        "hint": "무엇을 확인했고 증빙이 어디에 있는지. 최소 {min}자."
+      },
+      "evidence": {
+        "label": "증빙 링크 (선택)",
+        "hint": "문서나 티켓의 https 링크.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "유효 기간 (일)",
+        "hint": "{min}일에서 {max}일까지. 이후 점검은 알 수 없음으로 돌아갑니다."
+      },
+      "problems": {
+        "noteShort": "최소 {min}자를 입력해 주세요.",
+        "noteLong": "메모를 {max, number}자 미만으로 줄여 주세요.",
+        "link": "전체 https 링크를 입력하거나 비워 두세요.",
+        "range": "{min}에서 {max} 사이의 정수로 일수를 입력해 주세요."
+      },
+      "submit": "진술 기록",
+      "saving": "저장 중",
+      "cancel": "취소",
+      "saved": "진술을 기록했습니다."
+    },
+    "history": {
+      "action": "이력",
+      "actionFor": "이력: {check}",
+      "title": "이력",
+      "empty": "이 점검에는 아직 기록된 내용이 없습니다.",
+      "validUntil": "{date}까지 유효",
+      "close": "닫기"
+    },
+    "errors": {
+      "forbidden": "이 작업을 수행할 권한이 없습니다.",
+      "request": "해당 요청을 완료하지 못했습니다.",
+      "unexpected": "저희 쪽에서 문제가 발생했습니다. 잠시 후 다시 시도해 주세요.",
+      "network": "서버에 연결할 수 없습니다. 연결을 확인하고 다시 시도해 주세요.",
+      "validation": "일부 값이 올바르지 않습니다. 강조 표시된 필드를 확인해 주세요.",
+      "notFound": "해당 항목이 더 이상 존재하지 않습니다."
+    }
+  }
+}

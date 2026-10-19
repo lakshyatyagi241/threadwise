@@ -132,11 +132,14 @@ export function OptionRow({
   value,
   onChange,
   onRemove,
+  maxLength,
 }: {
   index: number;
   value: unknown;
   onChange: (v: string) => void;
   onRemove: () => void;
+  /** A hard stop for typing and pasting, with a live count (WhatsApp button titles). */
+  maxLength?: number;
 }) {
   const t = useTranslations('flb.builder.formsCore.parts');
   return (
@@ -145,9 +148,15 @@ export function OptionRow({
       <input
         type="text"
         value={typeof value === 'string' ? value : String(value ?? '')}
+        maxLength={maxLength}
         onChange={(e) => onChange(e.target.value)}
         className={cn(controlClass, 'flex-1 !w-auto')}
       />
+      {maxLength !== undefined ? (
+        <span className="shrink-0 font-mono text-[9.5px] tabular-nums text-muted-foreground">
+          {(typeof value === 'string' ? value : String(value ?? '')).length}/{maxLength}
+        </span>
+      ) : null}
       <button
         type="button"
         onClick={onRemove}
@@ -269,6 +278,18 @@ export function UploadedFile({
     <div className="mt-2 flex items-start gap-2">
       {kind === 'image' ? (
         <img src={url} alt="" className={cn(box, 'rounded-md border border-border object-cover')} />
+      ) : kind === 'video' ? (
+        <video
+          src={url}
+          controls
+          preload="metadata"
+          className={cn(
+            size === 'md' ? 'h-24 w-40' : 'h-20 w-32',
+            'rounded-md border border-border bg-black',
+          )}
+        />
+      ) : kind === 'audio' ? (
+        <audio src={url} controls preload="metadata" className="h-9 w-48 max-w-full" />
       ) : (
         <span
           className={cn(

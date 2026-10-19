@@ -1,0 +1,56 @@
+# Prometheus for the API, the worker, the web server and the probe (deploy/hostinger/observability.compose.yml mounts this file).
+# The API and web jobs find their targets by the network alias both blue-green slots carry (deploy/hostinger/docker-compose.yml): the
+# alias resolves to the running slot(s) only, so the idle slot is not a failed scrape and during a release both are scraped.
+# Job names are the ones event-loop.rules.yml expects: RuntimeMetricsTargetDown matches up{job=~"crm-(api|worker|web|probe)"}.
+# The token is read from a file (a compose secret), never written here. tools/event-loop-audit/scrape-demo.mjs runs this exact file,
+# rewriting only the addresses and the intervals, so what ships is what is tested.
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/event-loop.rules.yml
+  - /etc/prometheus/queue-capacity.rules.yml
+  - /etc/prometheus/resource-limits.rules.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
+
+scrape_configs:
+  - job_name: crm-api
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    dns_sd_configs:
+      - names: ['api']
+        type: A
+        port: 9464
+
+  - job_name: crm-worker
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    static_configs:
+      - targets: ['worker:9464']
+
+  - job_name: crm-web
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    dns_sd_configs:
+      - names: ['web']
+        type: A
+        port: 9464
+
+  - job_name: crm-probe
+    metrics_path: /metrics
+    authorization:
+      type: Bearer
+      credentials_file: /run/secrets/obs_metrics_token
+    static_configs:
+      - targets: ['probe:9464']

@@ -34,7 +34,8 @@
         "too_long": "{max}자 이하로 입력하세요.",
         "pattern": "예상된 형식과 일치하지 않습니다.",
         "invalid_option": "나열된 옵션 중 하나를 선택하세요.",
-        "invalid_amount": "허용 범위 내의 금액을 입력하세요."
+        "invalid_amount": "허용 범위 내의 금액을 입력하세요.",
+        "guardian_required": "부모 또는 보호자의 이름과 이메일 주소 또는 전화번호를 추가해 주세요."
       },
       "closedTitle": "이 폼은 마감되었습니다",
       "payTitle": "마지막 단계",
@@ -58,7 +59,16 @@
         "tryAgain": "다시 결제하기",
         "missingTitle": "결제 내역을 찾을 수 없습니다",
         "missingBody": "링크가 잘못되었거나 너무 오래되었을 수 있습니다."
-      }
+      },
+      "termsOfService": "이용약관",
+      "ageDeclaration": "나는 만 {age}세 이상임을 확인합니다",
+      "ageBlockedTitle": "계속 진행할 수 없습니다",
+      "ageBlockedBody": "관심을 가져 주셔서 감사합니다. 이 제출은 접수할 수 없습니다.",
+      "guardianTitle": "부모 또는 보호자",
+      "guardianIntro": "부모 또는 보호자의 정보를 추가해 주세요.",
+      "guardianName": "이름",
+      "guardianEmail": "이메일",
+      "guardianPhone": "전화번호"
     }
   }
 }

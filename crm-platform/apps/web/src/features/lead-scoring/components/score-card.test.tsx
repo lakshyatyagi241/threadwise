@@ -2,6 +2,7 @@
 import { ERROR_CODES, type LscRun } from '@crm/contracts';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { ApiError } from '@/lib/api/errors';
+import { PlanFeaturesProvider } from '@/lib/plan-features';
 import { click, mount, text, type Mounted } from '../testing';
 import type { ScoreFields } from '../lib/score';
 
@@ -10,6 +11,9 @@ const state = vi.hoisted(() => ({
   score: {} as Record<string, unknown>,
   runs: {} as Record<string, unknown>,
   mutate: vi.fn(),
+  /** The workspace switch (`GET /lead-scoring/status`): on by default; the asked-for `enabled` is kept to see what is requested. */
+  status: { data: { enabled: true } } as { data?: { enabled: boolean }; isError?: boolean },
+  statusAsked: [] as boolean[],
 }));
 vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
   useCan: (p: string) => state.perms.has(p),
@@ -17,6 +21,10 @@ vi.mock('@/features/auth-registration-security/shared/session-context', () => ({
 vi.mock('../api/hooks', () => ({
   useScoreContact: () => state.score,
   useLscRuns: () => state.runs,
+  useLscStatus: (enabled: boolean) => {
+    state.statusAsked.push(enabled);
+    return state.status;
+  },
 }));
 
 import { ScoreCard } from './score-card';
@@ -42,6 +50,8 @@ let m: Mounted | null = null;
 beforeEach(() => {
   state.perms = new Set(['lsc.contacts.score', 'lsc.runs.read']);
   state.mutate = vi.fn();
+  state.status = { data: { enabled: true } };
+  state.statusAsked = [];
   state.score = { mutate: state.mutate, isPending: false, isError: false, isSuccess: false };
   state.runs = {
     isPending: false,
@@ -237,5 +247,54 @@ describe('ScoreCard', () => {
       );
       expect(host.textContent).toContain(text('card.historyEmpty'));
     });
+  });
+});
+
+describe('ScoreCard while lead scoring is off for the workspace', () => {
+  /** Nothing of the card is drawn (the toast region the harness adds around it is not the card). */
+  const drawsNothing = (host: HTMLElement) => {
+    expect(host.querySelector('section')).toBeNull();
+    expect(host.querySelector('[data-testid="lsc-score"]')).toBeNull();
+    expect(host.querySelector('button')).toBeNull();
+    expect(host.textContent).toBe('');
+  };
+
+  const showWith = async (contact: ScoreFields, features: string[] | null = ['lead_scoring']) => {
+    m = await mount(
+      <PlanFeaturesProvider features={features}>
+        <ScoreCard contactId={ID} contact={contact} />
+      </PlanFeaturesProvider>,
+    );
+    return m.host;
+  };
+
+  it('draws nothing when the workspace switch is off: no card, no number, a typed score included', async () => {
+    state.status = { data: { enabled: false } };
+    for (const contact of [MANUAL, AI, NEVER]) {
+      drawsNothing(await showWith(contact));
+      await m?.unmount();
+    }
+  });
+
+  it('draws nothing in a workspace without the AI lead scoring app, and does not ask for the switch', async () => {
+    drawsNothing(await showWith(MANUAL, ['marketplace']));
+    expect(state.statusAsked.every((asked) => asked === false)).toBe(true);
+  });
+
+  it('draws nothing until the switch is known, and when it cannot be read', async () => {
+    state.status = {};
+    drawsNothing(await showWith(AI));
+    await m?.unmount();
+    state.status = { isError: true };
+    drawsNothing(await showWith(AI));
+  });
+
+  it('shows the card and the button once the app is there and the switch is on, and brings a typed score back', async () => {
+    const host = await showWith(MANUAL);
+    expect(host.querySelector('[data-testid="lsc-score"]')?.textContent).toBe('40');
+    await m?.unmount();
+    const fresh = await showWith(NEVER, ['marketplace', 'lead_scoring']);
+    expect(scoreButton(fresh)).toBeDefined();
+    expect(state.statusAsked).toContain(true);
   });
 });

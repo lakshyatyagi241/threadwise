@@ -145,16 +145,26 @@
         "privacyUrl": "Gizlilik politikası bağlantısı",
         "privacyUrlHint": "İsteğe bağlı. Onay metninin yanında gösterilir. https:// ile başlamalıdır.",
         "privacyUrlHttps": "https:// ile başlayan bir adres kullanın.",
+        "termsUrl": "Şartlar bağlantısı",
+        "termsUrlHint": "İsteğe bağlı. Onay metninin ve gizlilik bağlantısının yanında gösterilir. https:// ile başlamalıdır.",
+        "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+        "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
         "required": "Gönderebilmek için işaretlenmelidir",
         "requiredHint": "Onay isteğe bağlıysa bunu kapatın.",
         "marketing": "Pazarlama onayı",
         "marketingHint": "Kutuyu işaretlemek kişiye pazarlama onayı kaydeder. İşaretlenmemiş kutu hiç kimseyi abone yapmaz.",
-        "whatsappHint": "Bu kişilere WhatsApp üzerinden mesaj gönderecek misiniz? Bunu belirten ve nasıl abonelikten çıkılacağını açıklayan bir metin kullanın. İşaretlenen kutu, bu tam metin ve sürümüyle birlikte kanıt olarak saklanır.",
-        "whatsappInsert": "WhatsApp onay metnini kullan",
-        "whatsappWording": "WhatsApp üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
-        "coversSms": "Metin SMS'i kapsıyor",
-        "coversSmsHint": "Yalnızca yukarıdaki metin kişilere SMS ile ulaşılabileceğini söylüyorsa açın. Telefon numarası toplandığında SMS, WhatsApp ve e-posta ile birlikte kaydedilir.",
-        "serviceHint": "Bu satır pazarlama değildir. İşaretli kutu, kişinin talebi hakkında iletişime geçilmesini kabul ettiğinin (yalnızca hizmet mesajları) kanıtı olarak, bu tam metin ve sürümüyle saklanır. Kimseyi pazarlamaya abone etmez."
+        "serviceHint": "Bu satır pazarlama değildir. İşaretli kutu, kişinin talebi hakkında iletişime geçilmesini kabul ettiğinin (yalnızca hizmet mesajları) kanıtı olarak, bu tam metin ve sürümüyle saklanır. Kimseyi pazarlamaya abone etmez.",
+        "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-posta"
+        },
+        "channelsLabel": "Bu onayın kapsadığı kanallar",
+        "channelsHint": "Ziyaretçi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca form ilgili telefon numarasını veya e-postayı topluyorsa kullanılır.",
+        "channelsUse": "Metni bu kanallarla güncelle",
+        "channelNeedsPhone": "Bu formda telefon alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez.",
+        "channelNeedsEmail": "Bu formda e-posta alanı yok, bu yüzden bu kanala bu formdan kimse abone edilmez."
       },
       "crm": {
         "title": "CRM'de",
@@ -289,6 +299,41 @@
           "held": "{count, plural, one {1 gönderim spam olarak bekletiliyor.} other {# gönderim spam olarak bekletiliyor.}}",
           "review": "İncele"
         }
+      },
+      "age": {
+        "title": "Yaş kontrolü",
+        "description": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Çoğu form için bunu kapalı bırakın.",
+        "enable": "Ziyaretçinin yaşını kontrol et",
+        "enableHint": "Varsayılan olarak kapalıdır. Çalışma alanınızın kuralları gerektiriyorsa veya işletmeniz reşit olmayanlara hizmet veriyorsa açın. Form ziyaretçiye hangi yanıtın geçtiğini asla söylemez.",
+        "mode": "Nasıl sorulsun",
+        "modes": {
+          "declaration": "Bir kutu: “En az N yaşında olduğumu onaylıyorum”",
+          "age": "Yaşını sor",
+          "dob": "Doğum tarihini sor"
+        },
+        "modeHints": {
+          "declaration": "Yaşla ilgili hiçbir şey saklanmaz. En az veri.",
+          "age": "Bir tam sayı. Kontrol için kullanılır; yalnızca sonuç saklanır.",
+          "dob": "Kişide doğum tarihi olarak kaydedilir. Yalnızca tarihe ihtiyacınız varsa kullanın."
+        },
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız çalışma alanınızın yaşı kullanılır ({age}). 1 ile 21 arasında olmalıdır.",
+        "minAgeInvalid": "{min} ile {max} arasında bir tam sayı girin.",
+        "whenUnder": "Ziyaretçi bu yaşın altındaysa",
+        "actions": {
+          "block": "Gönderimi kabul etme",
+          "flag": "Kabul et, kişiyi reşit olmayan olarak işaretle, pazarlama onayı kaydetme",
+          "guardian": "Yukarıdaki gibi, ayrıca ebeveyn veya vasi bilgisi iste"
+        },
+        "actionHints": {
+          "block": "Hiçbir şey saklanmaz ve ziyaretçi tarafsız bir mesaj görür. Kutuyla ziyaretçinin yalnızca kutuyu işaretlemesi yeterlidir.",
+          "flag": "Kişi reşit olmayan olarak işaretlenir. Bu gönderimin onay satırı gösterildiği gibi saklanır, ancak pazarlama onayı kaydedilmez.",
+          "guardian": "Ebeveyn veya vasinin adı ve iletişim bilgisi gönderimle birlikte ve kişinin zaman çizelgesinde saklanır. Onayları, biri Onay kartında kaydedene kadar kaydedilmez."
+        },
+        "declarationBlockNote": "Kutu ve bu ayarla kimse geri çevrilmez: formu göndermek için kutunun işaretlenmesi gerekir.",
+        "childrenUnanswered": "Uyumluluk merkeziniz çocuklarla ilgili soruyu henüz yanıtlamadı; bu yüzden işaretli bir reşit olmayanın pazarlaması kaydedilir ancak engellenmez.",
+        "childrenLink": "Uyumluluk merkezini aç",
+        "neutralNote": "En düşük yaşı bir alanın yardım metnine veya açıklamaya yazmayın: sayfa hangi yanıtın geçtiğini söylememelidir."
       }
     }
   }

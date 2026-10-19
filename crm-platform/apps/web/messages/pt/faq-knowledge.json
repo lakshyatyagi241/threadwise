@@ -6,8 +6,7 @@
         "faqs": "FAQs",
         "test": "Testar",
         "unanswered": "Sem resposta",
-        "insights": "Análises",
-        "settings": "Configurações"
+        "insights": "Análises"
       },
       "unansweredCount": "{count, plural, one {# mensagem sem resposta} other {# mensagens sem resposta}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Este fluxo atingiu o limite de FAQs. Exclua FAQs ou variações não usadas, ou peça ao administrador da plataforma para aumentá-lo."
     },
     "banner": {
-      "enabledToast": "As respostas por FAQ estão ativadas.",
-      "engineOff": "As respostas por FAQ foram desativadas pela plataforma. Os clientes não recebem respostas de FAQ até que sejam reativadas.",
-      "modelChanged": "A plataforma mudou o modelo de IA depois que você ajustou este limite. As pontuações mudaram, então revise sua sensibilidade.",
-      "reviewSensitivity": "Revisar sensibilidade",
-      "offNoRight": "Peça a quem tem a permissão faq.settings.manage (geralmente um administrador do workspace) para ativar.",
-      "enable": "Ativar respostas por FAQ",
-      "offTitle": "A resposta por FAQ está DESATIVADA neste fluxo",
-      "offBody": "Você pode escrever e testar as FAQs deste fluxo, mas os clientes não recebem respostas até você ativá-la."
+      "engineOff": "As respostas por FAQ foram desativadas pela plataforma. Os clientes não recebem respostas de FAQ até que sejam reativadas."
     },
     "list": {
       "title": "FAQs",
@@ -51,25 +43,15 @@
         "total": "FAQs",
         "active": "Ativas",
         "paused": "Pausadas",
-        "variations": "Formulações",
-        "pending": "Indexando",
-        "pendingHint": "Ativas em poucos segundos",
-        "failed": "Falha na indexação",
-        "failedHint": "Requer atenção"
+        "variations": "Formulações"
       },
-      "failedBanner": "{count, plural, one {# formulação não foi indexada} other {# formulações não foram indexadas}} e ainda não podem corresponder às mensagens dos clientes.",
-      "showFailed": "Mostrar FAQs com falhas",
       "search": "Pesquisar FAQs",
       "searchPlaceholder": "Pesquisar perguntas e formulações",
       "filter": {
         "status": "Status",
         "anyStatus": "Qualquer status",
         "category": "Categoria",
-        "anyCategory": "Qualquer categoria",
-        "indexing": "Indexação",
-        "anyIndexing": "Qualquer",
-        "pending": "Ainda indexando",
-        "failed": "Com falha"
+        "anyCategory": "Qualquer categoria"
       },
       "status": {
         "active": "Ativas",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Pergunta",
         "answer": "Resposta",
-        "indexing": "Formulações ativas",
         "answered": "Respondidas (90 dias)",
         "status": "Status",
         "actions": "Ações"
@@ -130,12 +111,6 @@
         "rowBody": "\"{question}\" e todas as suas formulações serão excluídas permanentemente. Esta ação não pode ser desfeita.",
         "delete": "Excluir",
         "cancel": "Cancelar"
-      },
-      "indexing": {
-        "summary": "{ready} ativas, {pending} indexando, {failed} com falha",
-        "ready": "{count} ativas",
-        "pending": "{count} indexando",
-        "failed": "{count} com falha"
       },
       "stepMissing": "Etapa ausente",
       "subtitle": "Perguntas que os clientes fazem em {flow} e o que o bot responde. Estas FAQs só respondem dentro deste fluxo.",
@@ -202,14 +177,6 @@
           "other": "Uma etapa de outro fluxo",
           "otherHint": "Passe a conversa para outro fluxo."
         }
-      },
-      "advanced": {
-        "title": "Avançado: sensibilidade só para esta FAQ",
-        "custom": "Usar uma sensibilidade personalizada para esta FAQ",
-        "sliderLabel": "Corresponder a partir de",
-        "body": "Por padrão, toda FAQ usa a sensibilidade deste fluxo. Use um valor personalizado quando ela corresponder demais (aumente) ou de menos (diminua).",
-        "workspace": "A sensibilidade deste fluxo é {value}%.",
-        "following": "Seguindo a sensibilidade deste fluxo ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Adicionar",
       "pasteMany": "Colar várias",
       "full": "Esta FAQ atingiu o limite de {max} formulações.",
-      "failedNotice": "{count, plural, one {# formulação não foi indexada} other {# formulações não foram indexadas}}. Edite e salve a formulação para tentar novamente.",
       "suggest": "Sugerir com IA",
       "suggestSaveFirst": "Salve a FAQ primeiro para que a IA possa sugerir formulações.",
       "suggesting": "Pedindo sugestões à IA",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# linha não cabe} other {# linhas não cabem}} no limite de formulações e ficou de fora.",
         "more": "e mais {count}",
         "add": "Adicionar {count, plural, one {# formulação} other {# formulações}}"
-      },
-      "state": {
-        "ready": "Ativa",
-        "pending": "Indexando",
-        "pendingHint": "Salvo. Começa a corresponder em alguns segundos.",
-        "failed": "Com falha",
-        "failedHint": "Edite e salve a formulação para tentar novamente.",
-        "noReason": "Nenhum motivo informado"
       },
       "confirm": {
         "title": "Remover esta formulação?",
@@ -451,7 +409,14 @@
       "learned": "Adicionada a \"{question}\". A partir de agora ela será respondida.",
       "pickTitle": "Adicionar esta mensagem a qual FAQ?",
       "loadMore": "Carregar mais",
-      "loadingMore": "Carregando"
+      "loadingMore": "Carregando",
+      "fallback": {
+        "title": "Quando nenhuma FAQ responde",
+        "hint": "Esta resposta vai para o cliente cuja mensagem nenhuma FAQ responde. A mensagem continua aparecendo abaixo, para você ensinar a FAQ.",
+        "placeholder": "Desculpe, não entendi. Um membro da equipe vai retornar.",
+        "save": "Salvar resposta padrão",
+        "saved": "Resposta padrão salva"
+      }
     },
     "picker": {
       "close": "Fechar",
@@ -539,9 +504,7 @@
       },
       "hist": {
         "title": "Como as mensagens pontuaram",
-        "hint": "Cada barra é uma faixa de pontuação. A linha tracejada é a sua sensibilidade atual.",
-        "advice": "Aumente o limite se respostas erradas passarem, diminua se muitas mensagens ficarem sem resposta.",
-        "tune": "Alterar sensibilidade"
+        "hint": "Cada barra é uma faixa de pontuação. A linha tracejada é a sua sensibilidade atual."
       },
       "top": {
         "title": "Principais FAQs",
@@ -568,98 +531,6 @@
         "bucketTooltip": "{from}-{to}%: {answered} respondidas, {unanswered} sem resposta",
         "thresholdMarker": "Limite {value}%"
       }
-    },
-    "settings": {
-      "title": "Configurações de FAQ",
-      "unsaved": "Alterações não salvas",
-      "discard": "Descartar",
-      "save": "Salvar configurações",
-      "saved": "Configurações salvas.",
-      "readOnly": "Você pode ver estas configurações. Alterá-las exige a permissão faq.settings.manage, geralmente dos administradores do workspace.",
-      "engineOff": "As respostas por FAQ estão desativadas pela plataforma. O que você definir aqui vale quando forem reativadas.",
-      "conflict": "Outra pessoa salvou estas configurações. Recarregue para ver a versão dela e depois refaça sua alteração.",
-      "reload": "Recarregar configurações",
-      "modelChanged": {
-        "title": "Revise sua sensibilidade",
-        "body": "A plataforma mudou o modelo de IA depois que você ajustou este limite. As pontuações mudaram, então revise sua sensibilidade. Salvar confirma."
-      },
-      "enable": {
-        "title": "Respostas por FAQ",
-        "on": "Ativado",
-        "off": "Desativado",
-        "label": "Responder aos clientes com as FAQs deste fluxo",
-        "onBody": "Enquanto este fluxo estiver ativo, uma mensagem de cliente que nenhum gatilho de palavra-chave nem fluxo em execução tratou é comparada com as FAQs deste fluxo. O bot responde com a melhor resposta ou envia o cliente à etapa indicada pela FAQ.",
-        "offBody": "As FAQs deste fluxo não respondem aos clientes. Você ainda pode escrevê-las e testá-las."
-      },
-      "sens": {
-        "title": "Sensibilidade",
-        "hint": "O quanto uma mensagem precisa corresponder. As pontuações pertencem ao modelo {model}.",
-        "label": "Responder quando a correspondência for de pelo menos",
-        "presets": "Predefinições de sensibilidade",
-        "preset": {
-          "strict": "Rígida",
-          "balanced": "Equilibrada",
-          "forgiving": "Flexível"
-        },
-        "looser": "Responde mais",
-        "stricter": "Responde menos",
-        "recommendedMark": "recomendado {value}%",
-        "explain": "Com {value}%, uma mensagem só é respondida quando sua melhor correspondência tem {value}% ou mais. Mais alto significa menos respostas, porém mais seguras; mais baixo significa mais respostas e maior chance de errar.",
-        "useRecommended": "Usar o valor recomendado ({value}%)",
-        "modelScale": "As pontuações só são comparáveis dentro de um mesmo modelo. Se a plataforma mudar o modelo ({model}), revise este número."
-      },
-      "margin": {
-        "title": "Proteção contra ambiguidade",
-        "hint": "Impede o bot de arriscar entre duas FAQs com pontuações quase iguais.",
-        "label": "Vantagem mínima sobre a segunda melhor",
-        "off": "Desativada",
-        "explain": "Quando a melhor FAQ fica à frente da segunda por menos que isso, o bot não responde e registra a mensagem como sem resposta. Deixe desativada se suas FAQs raramente se sobrepõem."
-      },
-      "log": {
-        "title": "Mensagens de clientes no registro",
-        "label": "Guardar mensagens de clientes no registro de correspondências",
-        "onBody": "O texto de cada mensagem é guardado por 90 dias para você ver por que foi ou não respondida e aprender com ela. Depois disso, é excluído.",
-        "offBody": "Só pontuações e resultados são guardados, nunca o texto. Você ainda vê com que frequência o bot responde, mas não pode aprender com as mensagens sem resposta."
-      },
-      "facts": {
-        "title": "Modelo e limites",
-        "model": "Modelo de IA para correspondência",
-        "faqs": "FAQs",
-        "variations": "Formulações em uso",
-        "perFaq": "Formulações permitidas por FAQ",
-        "of": "{used} de {max}"
-      },
-      "how": {
-        "title": "Como a correspondência funciona",
-        "exact": "Exata: a mensagem é igual a uma formulação salva, ignorando maiúsculas e espaços.",
-        "semantic": "Significado: a mensagem é comparada pelo significado com cada formulação ativa, então palavras diferentes podem corresponder.",
-        "trigram": "Alternativa por grafia: se o provedor de IA estiver indisponível, as letras são comparadas, o que pega apenas erros de digitação.",
-        "threshold": "A melhor pontuação é comparada com a sensibilidade. Acima dela, a FAQ responde; abaixo, a mensagem aparece em Sem resposta.",
-        "verify": "Segunda verificação (opcional): uma correspondência que mal atingiu a sensibilidade pode ser conferida por um modelo de chat pequeno, que só pode reter uma resposta."
-      },
-      "who": "Alterar estas configurações exige a permissão faq.settings.manage.",
-      "leave": {
-        "title": "Sair sem salvar?",
-        "body": "Suas alterações nestas configurações não foram salvas.",
-        "leave": "Sair",
-        "stay": "Ficar"
-      },
-      "verify": {
-        "title": "Segunda verificação para casos duvidosos",
-        "hint": "Um modelo de chat pequeno confere as correspondências que mal atingiram o limite.",
-        "unavailable": "A plataforma desativou a segunda verificação, então ela não é executada mesmo que você a ative aqui. Fale com o administrador da plataforma.",
-        "label": "Conferir casos duvidosos com uma segunda opinião",
-        "on": "Ativada",
-        "off": "Desativada",
-        "onBody": "Quando uma correspondência mal passa do limite, um modelo de chat pequeno lê a mensagem do cliente e a FAQ e diz se a resposta serve. Ele só pode dizer não: nunca faz uma resposta ser enviada.",
-        "offBody": "Toda correspondência que atinge o limite é respondida sem uma segunda conferência.",
-        "bandLabel": "Quão próximo conta como caso duvidoso",
-        "bandValue": "+{value}%",
-        "explainOn": "As correspondências com pontuação de {from}% até {to}% são conferidas por {model}. Um \"não\" significa que nenhuma resposta é enviada e a mensagem aparece em Sem resposta.",
-        "explainOff": "Toda correspondência com pontuação de {threshold}% ou mais é respondida. Ative a segunda verificação para que os casos mais duvidosos sejam conferidos.",
-        "cost": "Cada verificação envia ao modelo a mensagem do cliente e a pergunta da FAQ: algumas centenas de tokens, e acrescenta cerca de um segundo a uma resposta no limite. Correspondências fora da faixa nunca são conferidas. Se a verificação falhar, não estiver disponível ou o limite por hora for atingido, a correspondência vale como se não houvesse verificação."
-      },
-      "subtitle": "Ative a resposta por FAQ em {flow} e ajuste o quanto uma mensagem precisa corresponder."
     },
     "flowNode": {
       "start": "O início do fluxo",

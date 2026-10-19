@@ -1,0 +1,180 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "quick": {
+        "title": "Xem nhanh liên hệ",
+        "loading": "Đang tải liên hệ...",
+        "notFoundTitle": "Không tìm thấy liên hệ",
+        "notFound": "Liên hệ có thể đã bị xóa, hoặc bạn không có quyền truy cập.",
+        "close": "Đóng",
+        "seeAll": "Xem toàn bộ chi tiết",
+        "previous": "Liên hệ trước",
+        "next": "Liên hệ tiếp theo",
+        "position": "{index} / {total}",
+        "rail": "Các phần của liên hệ",
+        "moreTabs": "Các mục khác",
+        "more": "+{count} khác",
+        "tab_overview": "Tổng quan",
+        "tab_activities": "Hoạt động",
+        "tab_notes": "Ghi chú",
+        "tab_tasks": "Tác vụ",
+        "tab_meetings": "Cuộc họp",
+        "tab_files": "Tệp",
+        "tab_conversations": "Hội thoại",
+        "tab_stats": "Thống kê giao tiếp",
+        "tab_details": "Thuộc tính",
+        "openFull": "Mở ở trang chi tiết"
+      },
+      "actions": {
+        "note": "Ghi chú",
+        "task": "Tác vụ",
+        "meeting": "Cuộc họp",
+        "addCompany": "Thêm công ty",
+        "changeCompany": "Đổi công ty",
+        "channels": "Nhắn tin hoặc gọi cho liên hệ này",
+        "more": "Thao tác khác",
+        "edit": "Sửa liên hệ",
+        "delete": "Xóa liên hệ",
+        "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
+        "deleteFailed": "Không thể xóa liên hệ."
+      },
+      "header": {
+        "jobTitle": "Chức danh",
+        "jobTitlePlaceholder": "Thêm chức danh...",
+        "editJobTitle": "Sửa chức danh",
+        "jobTitleConflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
+        "jobTitleFailed": "Không thể lưu chức danh. Hãy thử lại.",
+        "owner": "Người phụ trách"
+      },
+      "social": {
+        "facebook": "Facebook",
+        "instagram": "Instagram",
+        "linkedin": "LinkedIn",
+        "twitter": "X",
+        "youtube": "YouTube",
+        "telegram": "Telegram",
+        "tiktok": "TikTok",
+        "website": "Trang web",
+        "open": "Mở hồ sơ {network}"
+      },
+      "subscription": {
+        "title": "Trạng thái đăng ký nhận tin",
+        "channel": {
+          "whatsapp": "WhatsApp",
+          "email": "Email",
+          "sms": "SMS"
+        },
+        "yes": "Có",
+        "no": "Không",
+        "optedOut": "Đã từ chối tin nhắn tiếp thị",
+        "optedOutNote": "Liên hệ này đã từ chối tin nhắn tiếp thị, nên mọi kênh đều là Không.",
+        "proof": "Bằng chứng của từng lần đồng ý nằm trong hồ sơ đồng ý.",
+        "openConsent": "Mở thẻ đồng ý"
+      },
+      "score": {
+        "title": "Điểm khách hàng tiềm năng",
+        "details": "Chi tiết điểm",
+        "hideDetails": "Ẩn chi tiết",
+        "none": "Chưa chấm điểm",
+        "aria": "Điểm khách hàng tiềm năng {score}, {band}"
+      },
+      "owner": {
+        "title": "Người phụ trách và phân công",
+        "owner": "Người phụ trách",
+        "tags": "Thẻ",
+        "groups": "Nhóm"
+      },
+      "location": {
+        "title": "Vị trí",
+        "address": "Địa chỉ",
+        "country": "Quốc gia",
+        "timeZone": "Múi giờ",
+        "language": "Ngôn ngữ"
+      },
+      "compliance": {
+        "title": "Quyền riêng tư",
+        "optedOut": "Đã từ chối tiếp thị",
+        "allowed": "Cho phép tiếp thị",
+        "noFlags": "Không có cờ riêng tư"
+      },
+      "overview": {},
+      "tabs": {
+        "info": "Thông tin liên hệ",
+        "social": "Mạng xã hội",
+        "source": "Nguồn khách hàng tiềm năng",
+        "custom": "Trường tùy chỉnh"
+      },
+      "info": {
+        "firstName": "Tên",
+        "lastName": "Họ",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "fax": "Số fax",
+        "company": "Công ty",
+        "jobTitle": "Chức danh",
+        "language": "Ngôn ngữ",
+        "address": "Địa chỉ",
+        "memo": "Ghi chú nhanh",
+        "contactId": "Mã liên hệ",
+        "createdAt": "Ngày tạo",
+        "lastActivity": "Hoạt động gần nhất",
+        "source": "Nguồn",
+        "noCustomFields": "Liên hệ này chưa có giá trị trường tùy chỉnh.",
+        "noLeadSource": "Chưa ghi nhận nguồn khách hàng tiềm năng cho liên hệ này.",
+        "dateOfBirth": "Ngày sinh"
+      },
+      "details": {
+        "title": "Chi tiết liên hệ",
+        "stage": "Giai đoạn vòng đời",
+        "otherProperties": "Thuộc tính khác",
+        "stageSince": "Ở giai đoạn này từ",
+        "previousStage": "Giai đoạn trước",
+        "previousStageSince": "Giai đoạn trước từ",
+        "lostReason": "Lý do thất bại",
+        "updatedAt": "Cập nhật lần cuối"
+      },
+      "company": {
+        "title": "Công ty",
+        "none": "Liên hệ này chưa liên kết với công ty nào.",
+        "hint": "Tìm công ty, hoặc nhập tên mới để tạo.",
+        "saved": "Đã lưu công ty.",
+        "removed": "Đã gỡ công ty khỏi liên hệ này.",
+        "failed": "Không thể lưu công ty. Hãy thử lại.",
+        "conflict": "Có người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại."
+      },
+      "sections": {
+        "lead-source": "Nguồn khách hàng tiềm năng"
+      },
+      "nav": {
+        "back": "Quay lại danh sách",
+        "label": "Các phần của liên hệ",
+        "related": "Liên quan",
+        "section": {
+          "overview": "Tổng quan",
+          "activities": "Hoạt động",
+          "conversations": "Hội thoại",
+          "details": "Chi tiết liên hệ",
+          "stats": "Thống kê giao tiếp",
+          "notes": "Ghi chú",
+          "meetings": "Cuộc họp",
+          "files": "Tệp",
+          "tasks": "Tác vụ",
+          "deals": "Giao dịch",
+          "appointments": "Lịch hẹn",
+          "sales": "Hóa đơn và tài liệu",
+          "lead-source": "Nguồn khách hàng tiềm năng",
+          "company": "Công ty",
+          "consent": "Sự đồng ý",
+          "history": "Lịch sử trường"
+        }
+      },
+      "stages": {
+        "title": "Vòng đời",
+        "stages": "Giai đoạn vòng đời",
+        "status": "Trạng thái",
+        "conflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
+        "forbidden": "Bạn không có quyền thay đổi liên hệ này."
+      }
+    }
+  }
+}

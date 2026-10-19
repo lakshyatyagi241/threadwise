@@ -7,6 +7,7 @@
     "subtitle": "Deals, invoices, payments and tasks — the whole business in one view.",
     "period": "{from} to {to} · time zone {zone}",
     "openBoard": "Open the deals board",
+    "revenueReport": "Revenue report",
     "loading": "Loading the dashboard",
     "retry": "Try again",
     "stale": "The refresh failed. These are the last numbers we had.",

@@ -1,5 +1,7 @@
 import { z } from 'zod';
+import { ApiError } from '@/lib/api/errors';
 import type { ApiRequest } from './http';
+import type { WaTemplateOption } from './schemas';
 import {
   appointmentCountsSchema,
   appointmentPageSchema,
@@ -8,6 +10,7 @@ import {
   bookingTypeListSchema,
   bookingTypeSchema,
   calendarOptionSchema,
+  spreadsheetOptionSchema,
   calendarStartSchema,
   calendarStatusSchema,
   publicBookedSchema,
@@ -23,6 +26,7 @@ import {
   type BookingTypeInput,
   type CalendarConnection,
   type CalendarOption,
+  type SpreadsheetOption,
   type PreviewDraft,
   type PublicBookInput,
   type PublicDirectory,
@@ -40,6 +44,9 @@ async function call<T = void>(path: string, req: ApiRequest<T> = {}): Promise<T>
 }
 const callPublic = <T>(path: string, req: ApiRequest<T> = {}): Promise<T> =>
   call(`/public${path}`, req);
+
+const notDrifted = () =>
+  new ApiError(409, 'GOOGLE_SYNC_NOT_DRIFTED', 'This appointment is not out of sync with Google');
 
 export interface AppointmentPageResult {
   appointments: Appointment[];
@@ -85,6 +92,9 @@ export const mockAppointmentsApi = {
     call(`/appointments/${id}/decline`, { method: 'POST', body: {}, schema: appointmentSchema }),
   cancel: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/cancel`, { method: 'POST', body: {}, schema: appointmentSchema }),
+  /** The stand-in has no Google: nothing is ever out of sync, which is what the real API answers for an event that matches. */
+  pushCalendar: (_id: string): Promise<never> => Promise.reject(notDrifted()),
+  acceptCalendar: (_id: string, _notify: boolean): Promise<never> => Promise.reject(notDrifted()),
   complete: (id: string): Promise<Appointment> =>
     call(`/appointments/${id}/complete`, { method: 'POST', body: {}, schema: appointmentSchema }),
   noShow: (id: string): Promise<Appointment> =>
@@ -117,6 +127,21 @@ export const mockAppointmentsApi = {
       body: { ...input, rowVersion: type.rowVersion },
       schema: bookingTypeSchema,
     });
+  },
+  /** Only the reminder rules of a type change; every other list stays as it is. */
+  updateTypeReminders(
+    type: Pick<BookingType, 'id' | 'rowVersion'>,
+    reminders: BookingTypeInput['reminders'],
+  ): Promise<BookingType> {
+    return call(`/booking-types/${type.id}`, {
+      method: 'PATCH',
+      body: { reminders, rowVersion: type.rowVersion },
+      schema: bookingTypeSchema,
+    });
+  },
+  /** The stand-in has no WhatsApp templates. */
+  async waTemplates(): Promise<WaTemplateOption[]> {
+    return [];
   },
   setTypeActive(
     type: Pick<BookingType, 'id' | 'rowVersion'>,
@@ -170,6 +195,12 @@ export const mockAppointmentsApi = {
   calendars(signal?: AbortSignal): Promise<CalendarOption[]> {
     return call('/appointments/calendar/google/calendars', {
       schema: z.array(calendarOptionSchema),
+      signal,
+    });
+  },
+  spreadsheets(signal?: AbortSignal): Promise<SpreadsheetOption[]> {
+    return call('/appointments/calendar/google/spreadsheets', {
+      schema: z.array(spreadsheetOptionSchema),
       signal,
     });
   },

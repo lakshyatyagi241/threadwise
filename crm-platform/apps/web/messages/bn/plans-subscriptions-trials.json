@@ -45,7 +45,9 @@
       "form_submissions_monthly": "মাসে ফর্ম জমা",
       "ai_form_generations_monthly": "মাসে AI ফর্ম বিল্ডার জেনারেশন",
       "sms_monthly": "মাসে SMS",
-      "email_mailboxes": "ইমেল মেলবক্স"
+      "email_mailboxes": "ইমেল মেলবক্স",
+      "email_monthly": "মাসে ইমেল",
+      "storage_gb": "স্টোরেজ (GB)"
     },
     "features": {
       "automation": "অটোমেশন",
@@ -74,13 +76,16 @@
       "storefront_builder": "স্টোরফ্রন্ট বিল্ডার",
       "invoicing": "ইনভয়েসিং",
       "forms_and_links": "ফর্ম ও লিংক",
-      "extra_channels": "Telegram, Facebook ও Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ও WeChat",
       "form_builder": "ফর্ম",
       "waba_groups": "WhatsApp গ্রুপ",
       "sms": "SMS চ্যানেল",
       "help_agent": "হেল্প অ্যাসিস্ট্যান্ট",
       "email_channel": "ইমেল (Gmail) চ্যানেল",
-      "personal_history_full": "সম্পূর্ণ ইতিহাস ইমপোর্ট (ব্যক্তিগত WhatsApp)"
+      "personal_history_full": "সম্পূর্ণ ইতিহাস ইমপোর্ট (ব্যক্তিগত WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI লিড স্কোরিং",
+      "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম"
     },
     "limitGroups": {
       "messaging": "মেসেজিং",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "ক্যালেন্ডার মাসে গৃহীত ফর্ম জমা, স্প্যাম বাদে। সীমা ছাড়ালেও জমা পর্যালোচনার জন্য সংরক্ষিত হয়, কখনো বাদ যায় না। 0 = সীমাহীন।",
       "ai_form_generations_monthly": "ক্যালেন্ডার মাসে AI ফর্ম বিল্ডারের জেনারেশন, মেরামতের পুনরায় চেষ্টাসহ। 0 = সীমাহীন।",
       "sms_monthly": "ক্যালেন্ডার মাসে পাঠানো আউটবাউন্ড SMS বার্তা। 0 = সীমাহীন।",
-      "email_mailboxes": "সংযুক্ত Gmail মেলবক্স (সংযোগ বিচ্ছিন্ন মেলবক্স তার জায়গা খালি করে)। 0 = সীমাহীন।"
+      "email_mailboxes": "সংযুক্ত Gmail মেলবক্স (সংযোগ বিচ্ছিন্ন মেলবক্স তার জায়গা খালি করে)। 0 = সীমাহীন।",
+      "email_monthly": "ক্যালেন্ডার মাসে পাঠানো ইমেল, উত্তর ও ক্যাম্পেইন ইমেল মিলিয়ে। 0 = সীমাহীন।",
+      "storage_gb": "ওয়ার্কস্পেস কত স্টোরেজ রাখতে পারবে, GB-তে (কল রেকর্ডিং, চ্যাট মিডিয়া, ইমেল অ্যাটাচমেন্ট এবং ফাইল)। 0 = সীমাহীন। এখন শুধু মাপা হয়: এখনো কিছু আটকানো হয় না।"
     },
     "planAddons": {
       "title": "আপনার প্ল্যানে উপলব্ধ অ্যাড-অন",
@@ -561,7 +568,9 @@
       "continueFree": "বিনামূল্যে চালিয়ে যান",
       "choose": "{name} বেছে নিন",
       "back": "ফিরে যান",
-      "compare": "সব প্ল্যান তুলনা করুন"
+      "compare": "সব প্ল্যান তুলনা করুন",
+      "appHint": "{feature} মার্কেটপ্লেসে অ্যাপ হিসেবেও বিক্রি হয়।",
+      "appLink": "অ্যাপটি দেখুন"
     }
   }
 }

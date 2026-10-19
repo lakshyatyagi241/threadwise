@@ -10,6 +10,7 @@ are `GRW_NOT_AVAILABLE` (403), `GRW_FEATURE_OFF` (422), `GRW_ACTION_GONE` (409),
 **Only the pilot workspace** (slug in `CHAT_DIGEST_PILOT_SLUGS`, today `demo-interakt`) **that also has a `growth_settings` row.** The gate is
 `GrowthGateService` and it is the first line of every route, listener and sweeper:
 
+- the workspace must also have the plan feature `lead_scoring` (the growth pilot is built on [AI lead scoring](lead-scoring.md), a Marketplace app): without it `GrowthGateService.load` treats the workspace as outside the pilot;
 - a route answers `403 GRW_NOT_AVAILABLE` to any other workspace (`GET /growth/settings` answers `available: false` with every switch off);
 - a listener ignores the event before reading anything; a sweeper loops only over `pilotOrgs(feature)` (slug in the list, feature on);
 - the migration `20261122090000_growth_pilot.sql` seeds the settings row, the `ai_intent` contact property and a `last_activity_at` backfill

@@ -1,7 +1,13 @@
-import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
-import { ERROR_CODES, purposeOf, type ConsentSubject, type PurposeInput } from '@crm/contracts';
+import {
+  ERROR_CODES,
+  holdOf,
+  purposeOf,
+  type ConsentSubject,
+  type PurposeInput,
+} from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import {
@@ -25,11 +31,13 @@ import {
   OUTBOUND_SEND_GUARD,
   type OutboundSendGuard,
 } from '../../infra/providers/whatsapp/send-guard.port';
+import { SendWindowService, holdsPurpose } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
+import { SendHeldError } from './send-held.error';
 
 /**
  * What the send IS, for the ConsentGate (BL-141). Required on every request, so a new caller cannot forget it: free-form replies and
@@ -111,6 +119,8 @@ export class ChannelDispatcher {
     @Inject(OUTBOUND_SEND_GUARD) private readonly guard: OutboundSendGuard,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly consentGate: ConsentGate,
+    // Quiet hours (BL-177). Optional so a caller that builds the dispatcher without it keeps the old behaviour: nothing is held.
+    @Optional() private readonly sendWindow?: SendWindowService,
   ) {}
 
   /**
@@ -153,7 +163,8 @@ export class ChannelDispatcher {
   }
 
   /** Worker side: guard, then one adapter call per client reference. Throws `ChannelError` (retryable or not) or an AppError. */
-  async send(req: DispatchRequest, now: Date = new Date()): Promise<DispatchResult> {
+  async send(req: DispatchRequest, at?: Date): Promise<DispatchResult> {
+    const now = at ?? new Date();
     const envelope = this.parse(req.envelope);
     const adapter = this.adapters.for(req.channel.kind);
     const window = this.assertChannelCan(adapter, req.channel, envelope, req.lastInboundAt, now);
@@ -177,6 +188,9 @@ export class ChannelDispatcher {
     if (stored) return { ...stored, replayed: true };
     // At send time, not only at queue time: a STOP that arrived while the message waited in the queue still stops it.
     await this.assertConsent(req, envelope, window);
+    // After the consent answer (a denied contact is never merely held) and at send time too: a message released from a hold passes
+    // through here again, so the hours are checked once more on the clock of the moment it actually goes.
+    await this.assertSendWindow(req, envelope, at);
 
     const owner = randomUUID();
     const locked = await this.redisCall(() =>
@@ -199,14 +213,26 @@ export class ChannelDispatcher {
         plannedReceipts: sent.plannedReceipts ?? [],
         ...(sent.meta ? { meta: sent.meta } : {}),
       };
-      await this.redisCall(() =>
-        this.redis.set(
+      // The provider has accepted the message. Failing to remember that must not fail the send: a retryable error here makes the queue
+      // send it again with no stored answer to find. The caller's own database write is the durable record, and a retry that still
+      // finds the message queued is the narrow window this store exists to shrink, not one to widen.
+      await this.redis
+        .set(
           key,
           JSON.stringify({ ...result, acceptedAt: result.acceptedAt.toISOString() }),
           'EX',
           RESULT_TTL_SECONDS,
-        ),
-      );
+        )
+        .catch((err: Error) =>
+          this.logger.error(
+            {
+              orgId: req.channel.orgId,
+              clientReference: envelope.clientReference,
+              err: err.message,
+            },
+            'provider accepted the message but its result could not be stored',
+          ),
+        );
       return { ...result, replayed: false };
     } finally {
       await this.redis.eval(RELEASE_IF_OWNER, 1, `${key}:lock`, owner).catch(() => undefined);
@@ -279,6 +305,34 @@ export class ChannelDispatcher {
       'The message was not sent: this workspace requires a recorded consent for marketing messages and this contact has none.',
       HttpStatus.UNPROCESSABLE_ENTITY,
     );
+  }
+
+  /**
+   * Quiet hours (BL-177): a MARKETING send inside them is HELD, never denied. Service replies and utility notices are never asked about.
+   * Throws `SendHeldError`; the caller keeps the message and tries again at `hold.until`.
+   */
+  private async assertSendWindow(
+    req: DispatchRequest,
+    envelope: OutboundEnvelope,
+    at: Date | undefined,
+  ): Promise<void> {
+    if (!this.sendWindow) return;
+    const { purpose, contactId } = req.consent;
+    if (!holdsPurpose(purposeOf(purpose).ledgerPurpose)) return;
+    const mail = req.channel.kind === 'email';
+    const decision = await this.sendWindow.check(
+      req.channel.orgId,
+      'message',
+      {
+        contactId: contactId ?? null,
+        phone: mail ? null : envelope.to,
+        email: mail ? envelope.to : null,
+      },
+      // A caller that names the instant (a test) is obeyed; otherwise the window service's own clock decides.
+      at ? { now: at } : {},
+    );
+    const hold = holdOf(decision);
+    if (hold) throw new SendHeldError(hold);
   }
 
   // --- internals ---------------------------------------------------------------------------------------------------------------

@@ -29,7 +29,8 @@
       "priorityChanged": "Priorität aktualisiert",
       "snoozed": "Unterhaltung zurückgestellt",
       "tagAdded": "Tag hinzugefügt",
-      "tagRemoved": "Tag entfernt"
+      "tagRemoved": "Tag entfernt",
+      "spammed": "Unterhaltung als Spam markiert."
     },
     "list": {
       "title": "Posteingang",
@@ -44,12 +45,8 @@
         "unassigned": "Nicht zugewiesen",
         "unread": "Ungelesen"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Offen",
-      "statusAll": "Alle Status",
       "status": {
         "open": "Offen",
-        "pending": "Ausstehend",
         "snoozed": "Zurückgestellt",
         "resolved": "Gelöst",
         "closed": "Gelöst",
@@ -61,7 +58,6 @@
         "high": "Hoch",
         "urgent": "Dringend"
       },
-      "channelFilter": "Kanal",
       "allChannels": "Alle Kanäle",
       "archived": "Archiviert",
       "backToInbox": "Zurück zum Posteingang",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Auswählen",
-      "selectDone": "Fertig"
+      "selectDone": "Fertig",
+      "filters": {
+        "open": "Filter",
+        "openActive": "Filter ({count} aktiv)",
+        "title": "Filter",
+        "close": "Schließen",
+        "reset": "Zurücksetzen",
+        "cancel": "Abbrechen",
+        "apply": "Anwenden",
+        "status": "Chat-Status",
+        "statusHint": "Ohne Auswahl werden offene Chats angezeigt.",
+        "conversation": "Konversation",
+        "any": "Beliebig",
+        "assigned": "Zugewiesen",
+        "unassigned": "Nicht zugewiesen",
+        "unattended": "Unbeachtet",
+        "labels": "Tags",
+        "channels": "Kanäle",
+        "agents": "Agenten",
+        "sortBy": "Sortieren nach",
+        "recent": "Neueste",
+        "old": "Älteste",
+        "dateRange": "Zeitraum (letzte Aktivität)",
+        "from": "Von",
+        "to": "Bis",
+        "select": "Option auswählen",
+        "search": "Suchen",
+        "noMatch": "Keine Treffer",
+        "today": "Heute",
+        "last7": "Letzte 7 Tage",
+        "last30": "Letzte 30 Tage",
+        "thisMonth": "Dieser Monat",
+        "clearDates": "Datum löschen",
+        "previousMonth": "Vorheriger Monat",
+        "nextMonth": "Nächster Monat"
+      },
+      "rowMenu": "Weitere Aktionen für {name}",
+      "priorityMenu": "Priorität",
+      "statusFilter": "Status",
+      "statusOpen": "Offen",
+      "statusAll": "Alle Status",
+      "channelFilter": "Kanal",
+      "selectRow": "{name} auswählen",
+      "snoozedFor": "Zurückgestellt · {left}",
+      "snoozeLeft": {
+        "due": "jetzt fällig",
+        "minutes": "{count, plural, one {# Minute} other {# Minuten}}",
+        "hours": "{count, plural, one {# Stunde} other {# Stunden}}",
+        "days": "{count, plural, one {# Tag} other {# Tage}}"
+      },
+      "unsnoozesAt": "Wird um {time} wieder geöffnet"
     },
     "status": {
       "received": "Empfangen",
@@ -128,6 +174,7 @@
       "mediaNotFound": "Der Anhang ist abgelaufen oder wurde entfernt. Hängen Sie ihn erneut an.",
       "statusInvalid": "Diese Änderung ist im aktuellen Status der Unterhaltung nicht zulässig.",
       "assigneeInvalid": "Dieser Person kann die Unterhaltung nicht zugewiesen werden.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "forbidden": "Sie sind nicht berechtigt, diese Aktion auszuführen.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
       "simulatorDisabled": "Der Kanal-Simulator ist auf diesem Server deaktiviert.",
@@ -232,7 +279,11 @@
         "undone": "Phasenwechsel rückgängig gemacht: zurück bei {stage}.",
         "undoneToast": "Phase auf {stage} zurückgesetzt.",
         "couldNotUndo": "Diese Änderung lässt sich nicht mehr rückgängig machen: Der Kontakt ist weitergerückt oder sie wurde schon rückgängig gemacht."
-      }
+      },
+      "heldUntil": "Zurückgehalten bis {when}",
+      "heldWhy": "Diese Marketing-Nachricht wartet, bis Ihre Ruhezeiten enden. Sie wird dann gesendet, sofern sich der Kontakt in der Zwischenzeit nicht abgemeldet hat.",
+      "templateSent": "Vorlage „{name}“ gesendet über {channel}",
+      "templateSentPlain": "Vorlage „{name}“ gesendet"
     },
     "media": {
       "openImage": "Bild {name} öffnen",
@@ -276,6 +327,8 @@
         "sendTemplate": "Vorlage senden"
       },
       "readOnly": "Sie können diese Unterhaltung lesen, aber Sie sind nicht berechtigt zu antworten.",
+      "resolvedBanner": "Diese Unterhaltung ist gelöst. Öffnen Sie sie erneut, um zu antworten.",
+      "assignedToOther": "Dieser Chat ist einem anderen Agenten zugewiesen. Weisen Sie ihn zuerst sich selbst zu, um zu antworten.",
       "typing": "{count, plural, one {Ein Teammitglied schreibt} other {# Teammitglieder schreiben}}",
       "messagesLabel": "Nachrichten",
       "loadOlder": "Frühere Nachrichten laden",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Neue Nachricht: {text}",
       "attachment": "ein Anhang",
       "jumpLatest": "Zur neuesten Nachricht springen",
-      "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}"
+      "jumpLatestNew": "{count, plural, one {# neue Nachricht} other {# neue Nachrichten}}",
+      "searchOpen": "In diesem Chat suchen",
+      "searchPlaceholder": "In diesem Chat suchen",
+      "searchCount": "{current} von {total}",
+      "searchNone": "Keine Treffer",
+      "searchPrev": "Vorheriger Treffer",
+      "searchNext": "Nächster Treffer",
+      "searchClose": "Suche schließen"
     },
     "groupThread": {
       "openGroup": "Gruppe öffnen",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Gespeicherte Antworten",
-      "savedReplyIssues": "Nicht ausgefüllt und unverändert belassen ({count}): {list}. Vor dem Senden korrigieren."
+      "savedReplyIssues": "Nicht ausgefüllt und unverändert belassen ({count}): {list}. Vor dem Senden korrigieren.",
+      "toolbar": {
+        "label": "Nachrichtenformatierung",
+        "bold": "Fett",
+        "italic": "Kursiv",
+        "underline": "Unterstreichen",
+        "strike": "Durchgestrichen",
+        "bullets": "Aufzählung",
+        "numbers": "Nummerierte Liste",
+        "ai": {
+          "open": "Intelligenter KI-Assistent",
+          "noModel": "Für diesen Arbeitsbereich ist kein KI-Modell aktiviert",
+          "title": "Intelligenter KI-Assistent",
+          "condense": "Kürzen",
+          "condenseHint": "Text kürzer und prägnanter machen",
+          "fix": "Grammatik korrigieren",
+          "fixHint": "Grammatik- und Rechtschreibfehler korrigieren",
+          "positive": "Positiver Ton",
+          "positiveHint": "Text positiver und freundlicher machen",
+          "translate": "Übersetzen",
+          "translateHint": "In andere Sprachen übersetzen",
+          "selectLanguage": "Sprache auswählen",
+          "searchLanguages": "Sprachen suchen…",
+          "noLanguage": "Keine Sprache gefunden",
+          "working": "Wird bearbeitet…",
+          "empty": "Schreiben Sie zuerst eine Nachricht.",
+          "failed": "Die KI konnte den Text nicht ändern. Bitte erneut versuchen."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notizen und Verlauf",
@@ -452,7 +540,13 @@
         "pickTeam": "Wählen Sie ein Team für diese Unterhaltung",
         "noTeam": "Kein Team",
         "onLeave": "Abwesend",
-        "onLeaveUntil": "Abwesend bis {date}"
+        "onLeaveUntil": "Abwesend bis {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Abwesend",
+          "busy": "Beschäftigt",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",
@@ -461,16 +555,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notizen",
-        "label": "Neue interne Notiz",
-        "placeholder": "Notiz schreiben, die nur Ihr Team sehen kann",
-        "hint": "Strg+Enter fügt die Notiz hinzu.",
-        "add": "Notiz hinzufügen",
-        "addFailed": "Die Notiz konnte nicht gespeichert werden.",
-        "loading": "Notizen werden geladen",
-        "empty": "Noch keine Notizen.",
-        "unknownAuthor": "Ein Teammitglied",
-        "delete": "Diese Notiz löschen"
+        "tab": "Kontaktnotizen",
+        "noContact": "Diese Unterhaltung hat keinen Kontakt, dem Notizen zugeordnet werden könnten."
       },
       "timeline": {
         "tab": "Verlauf",
@@ -496,6 +582,8 @@
           "tag_removed": "Tag entfernt von {actor}",
           "first_response": "Erste Antwort gesendet",
           "sla_breach": "Antwortfrist verpasst",
+          "spam_flagged": "Von {actor} als Spam markiert",
+          "escalated": "Eskaliert",
           "unknown": "{what} von {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Keine Nachrichten",
         "status": {
           "open": "Offen",
-          "pending": "Ausstehend",
           "snoozed": "Zurückgestellt",
           "resolved": "Gelöst",
           "closed": "Geschlossen",
@@ -620,6 +707,8 @@
         "format": "{label} darf keinen Zeilenumbruch, keinen Tabulator und keine vier Leerzeichen hintereinander enthalten."
       },
       "reason": {
+        "other_number": "Gehört zu einer anderen WhatsApp-Nummer und kann deshalb aus diesem Gespräch nicht gesendet werden.",
+        "not_linked": "Der Kanal dieses Gesprächs ist mit keiner WhatsApp-Nummer verbunden, daher kann keine Vorlage gesendet werden.",
         "paused": "Von WhatsApp pausiert. Sie kann erneut gesendet werden, sobald die Pause endet.",
         "media_header": "Hat einen Bild-, Video- oder Dokumentkopf, der im Posteingang noch nicht gesendet werden kann.",
         "header_variable": "Hat eine Variable im Kopf, die im Posteingang noch nicht ausgefüllt werden kann.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-Mail"
+        "email": "E-Mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kontakt",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Priorität",
       "snooze": "Zurückstellen",
-      "wake": "Jetzt reaktivieren"
+      "wake": "Jetzt reaktivieren",
+      "markSpam": "Als Spam markieren",
+      "notSpam": "Kein Spam"
     },
     "bulk": {
       "barLabel": "Massenaktionen",
@@ -959,7 +1053,8 @@
       "tagAdd": "Tag hinzufügen",
       "tagRemove": "Tag entfernen",
       "onLeave": "abwesend",
-      "onLeaveUntil": "abwesend bis {date}"
+      "onLeaveUntil": "abwesend bis {date}",
+      "spam": "Als Spam markieren"
     },
     "tags": {
       "tag": "Tag",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: verfehlt (fällig war {time})",
       "titleOpen": "{kind}: fällig {time}"
+    },
+    "channelType": {
+      "official": "Offiziell",
+      "unofficial": "Inoffiziell",
+      "officialFull": "Offiziell (WhatsApp Cloud API)",
+      "unofficialFull": "Inoffiziell (QR / Baileys)"
     }
   }
 }

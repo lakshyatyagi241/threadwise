@@ -84,6 +84,13 @@ export class ContactsController {
     return this.contacts.selectData(query, scope);
   }
 
+  @Get('filter-values')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({ summary: 'Stages and statuses contacts hold, for the filter dropdowns' })
+  async filterValues(@GrantedScope('record.contacts.read') scope: RecordScope) {
+    return this.contacts.filterValues(scope);
+  }
+
   @Get('assignees')
   @RequirePermission('record.contacts.read')
   @ApiOperation({ summary: 'Active staff users a contact can be assigned to' })
@@ -107,6 +114,18 @@ export class ContactsController {
   @ApiOperation({ summary: 'Set (or clear, with ownerId: null) the owner on multiple contacts' })
   async setAssignee(@Body(zodPipe(setContactAssigneeSchema)) body: SetContactAssigneeInput) {
     return this.contacts.setAssignee(body);
+  }
+
+  @Get(':id/send-window')
+  @RequirePermission('record.contacts.read')
+  @ApiOperation({
+    summary:
+      'The clock marketing messages to this contact are read on, and what the quiet hours say now',
+    description:
+      "The stored time zone and who set it, the zone a send would really use (the stored one, the number's country, the workspace fallback), the next allowed send time when it would be held, and how many messages already wait.",
+  })
+  async sendWindow(@Param('id', ParseUUIDPipe) id: string) {
+    return this.contacts.sendWindowOf(id);
   }
 
   @Get(':id')

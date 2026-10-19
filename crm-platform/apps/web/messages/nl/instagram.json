@@ -85,7 +85,8 @@
       "outsideWindow": "Buiten 24u",
       "selected": "{count, plural, one {# geselecteerd} other {# geselecteerd}}",
       "sent": "Instagram-broadcast verzonden — {sent} afgeleverd{failed, plural, =0 {} other {, # mislukt}}.",
-      "sentNone": "Kon niet naar een ontvanger verzenden. Controleer de Instagram-verbinding."
+      "sentNone": "Kon niet naar een ontvanger verzenden. Controleer de Instagram-verbinding.",
+      "skipped": "Niet benaderd vanwege toestemming: {count}"
     }
   }
 }

@@ -157,6 +157,14 @@ function WizardBody({
   const fields = useContactFields();
   const template = templates.data?.data.find((x) => x.id === draft.templateId) ?? null;
   const slots = useMemo(() => template?.slots.map((s) => s.slot) ?? [], [template]);
+  const slotsSequence = useMemo(
+    () =>
+      draft.templateSequence.map(
+        (e) =>
+          templates.data?.data.find((x) => x.id === e.templateId)?.slots.map((s) => s.slot) ?? [],
+      ),
+    [draft.templateSequence, templates.data],
+  );
   const properties = useMemo(
     () => (fields.data ?? []).filter(isUsableProperty).map((f) => ({ key: f.key, label: f.label })),
     [fields.data],
@@ -224,6 +232,7 @@ function WizardBody({
   const now = new Date();
   const ctx = {
     slots,
+    slotsSequence,
     now,
     count: countKnown ? count.data : null,
     credit: credit.data,
@@ -356,6 +365,8 @@ function WizardBody({
             name={draft.name}
             templateId={draft.templateId}
             senderKey={draft.senderKey}
+            senderKeys={draft.senderKeys}
+            senderShare={draft.senderShare}
             senders={sendersList}
             hidden={hidden}
             templates={templates}
@@ -363,6 +374,7 @@ function WizardBody({
             onName={(name) => w.dispatch({ type: 'name', name })}
             onTemplate={(tpl) => w.dispatch({ type: 'template', template: tpl })}
             onSender={pickSender}
+            onSenders={(keys, share) => w.dispatch({ type: 'senders', keys, share })}
           />
         )}
         {view === 2 && (
@@ -383,14 +395,17 @@ function WizardBody({
             draft={draft}
             template={template}
             sender={sendersList?.find((x) => x.key === draft.senderKey) ?? null}
+            senders={sendersList}
             sources={sources.data}
             count={count.data}
             credit={credit}
+            templates={templates.data?.data}
             properties={properties}
             issues={issues}
             showIssues={Boolean(attempted[3])}
             onVariable={(slot, source) => w.dispatch({ type: 'variable', slot, source })}
             onVariables={(variables) => w.dispatch({ type: 'variables', variables })}
+            dispatch={w.dispatch}
             onEdit={(s) => void openStep(s)}
           />
         )}
@@ -400,6 +415,7 @@ function WizardBody({
             draftId={w.id}
             zone={zone}
             canTest={canTest}
+            templates={templates}
             issues={visible}
             currency={credit.data?.currency ?? null}
             ensureSaved={w.flush}
@@ -473,5 +489,8 @@ const KNOWN_ISSUES: ReadonlySet<string> = new Set([
   'insufficient_balance',
   'checking_balance',
   'balance_unavailable',
+  'sequence_not_recurring',
+  'sequence_with_ab',
+  'sequence_template_required',
 ]);
 const knownIssue = (code: string) => KNOWN_ISSUES.has(code);

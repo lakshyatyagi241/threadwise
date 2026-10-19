@@ -30,6 +30,12 @@ export class MarketingMediaService {
     private readonly uploads: UploadPolicyService,
   ) {}
 
+  /** Whether a stored file can be reached by a provider (cloud object storage is on); a caller that pays for a file asks first. */
+  async canStore(): Promise<boolean> {
+    const d = await this.storage.destination();
+    return d.disk === 'cloud' && d.target !== null;
+  }
+
   async upload(
     file: { originalname: string; buffer: Buffer } | undefined,
   ): Promise<MarketingMedia> {

@@ -69,6 +69,7 @@ export function PublicForm({ form, embed }: { form: PublicFormData; embed: boole
         mode="live"
         embed={embed}
         honeypotField={form.honeypotField}
+        ageLockKey={form.key}
         captcha={captcha}
         poweredBy={form.poweredBy.show ? form.poweredBy.label : null}
         onSubmit={(payload) => submitForm(form.key, payload)}

@@ -11,6 +11,10 @@
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
   },
+  "an_events_pkey": {
+    "category": "partitioned-primary-key",
+    "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
+  },
   "audit_log_pkey": {
     "category": "partitioned-primary-key",
     "reason": "primary key of a partitioned table must contain the partition column, not org_id; ids come from a global identity and are never client-chosen"
@@ -91,10 +95,6 @@
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },
-  "uq_google_form_sessions_webhook_token": {
-    "category": "secret-or-token",
-    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
-  },
   "uq_incoming_webhooks_token": {
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
@@ -152,10 +152,6 @@
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },
   "uq_user_device_tokens_token_hash": {
-    "category": "secret-or-token",
-    "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
-  },
-  "uq_user_settings_sheets_key_hash": {
     "category": "secret-or-token",
     "reason": "high-entropy secret, token hash or public key that resolves a record before a tenant context exists; global uniqueness is the point"
   },

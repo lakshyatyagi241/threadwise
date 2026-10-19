@@ -20,6 +20,7 @@ import {
   type PublishSpec,
   type TokenDebug,
 } from './facebook.port';
+import { subscribedFieldsOf } from '../meta-lead-ads/meta-lead-ads.parse';
 
 const HOST = 'https://graph.facebook.com';
 const TIMEOUT_MS = 20_000;
@@ -36,6 +37,10 @@ const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
 const MAX_PAGES = 10;
 
 type Json = Record<string, unknown>;
+
+/** A full address Meta's own answer names (`paging.next`, a reel's `upload_url`) is only followed when it stays on Meta over https. */
+export const isMetaUrl = (u: URL): boolean =>
+  u.protocol === 'https:' && !u.username && !u.password && /(^|\.)facebook\.com$/i.test(u.hostname);
 
 const obj = (x: unknown): Json => (typeof x === 'object' && x !== null ? (x as Json) : {});
 const str = (x: unknown): string | undefined =>
@@ -54,6 +59,8 @@ async function call(
   } = {},
 ): Promise<GraphResult<Json>> {
   const url = new URL(path.startsWith('http') ? path : `${HOST}/${version}/${path}`);
+  if (!isMetaUrl(url))
+    return { ok: false, error: 'Refused: the address is not a Facebook address.' };
   for (const [k, v] of Object.entries(o.query ?? {})) url.searchParams.set(k, v);
   const headers: Record<string, string> = { Accept: 'application/json' };
   if (o.token) headers.Authorization = `Bearer ${o.token}`;
@@ -70,6 +77,7 @@ async function call(
       method,
       headers,
       body,
+      redirect: 'manual',
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     const parsed = obj(await res.json().catch(() => ({})));
@@ -84,6 +92,9 @@ async function call(
     return { ok: false, error: e instanceof Error ? e.message : 'Facebook could not be reached' };
   }
 }
+
+/** The one place the Graph is called from: the lead ads adapter reuses it, so a token always travels in a header and never in an address. */
+export { call as graphCall };
 
 const clip = (s: string, n: number) => s.slice(0, n);
 
@@ -168,6 +179,7 @@ class PageApi implements FacebookPageApi {
     private readonly version: string,
     private readonly token: string,
     private readonly pageId: string,
+    private readonly appId: string | null = null,
   ) {}
 
   private get(path: string, query: Record<string, string> = {}) {
@@ -183,10 +195,18 @@ class PageApi implements FacebookPageApi {
       : { ok: false, error: r.error, code: r.code };
   }
 
-  subscribeWebhooks(): Promise<GraphResult> {
+  /**
+   * Meta replaces the whole field list on a subscribe, so a Page that also has lead ads switched on (`leadgen`, added by the Meta lead
+   * ads door) would lose it every time this ran (a reconnect, "Fix inbound"). The field is read first and kept.
+   */
+  async subscribeWebhooks(): Promise<GraphResult> {
+    const held = await this.get(`${this.pageId}/subscribed_apps`);
+    const keepLeadgen = held.ok && subscribedFieldsOf(held.data, this.appId).includes('leadgen');
     return call(this.version, 'POST', `${this.pageId}/subscribed_apps`, {
       token: this.token,
-      form: { subscribed_fields: FB_SUBSCRIBED_FIELDS },
+      form: {
+        subscribed_fields: keepLeadgen ? `${FB_SUBSCRIBED_FIELDS},leadgen` : FB_SUBSCRIBED_FIELDS,
+      },
     });
   }
 
@@ -361,10 +381,20 @@ class PageApi implements FacebookPageApi {
     if (!uploadUrl) return { ok: false, error: 'reel start returned no upload_url' };
 
     // 2. Upload: a hosted transfer, so Meta is told where to pull the file from.
+    let uploadTarget: URL;
     try {
-      const up = await fetch(uploadUrl, {
+      uploadTarget = new URL(uploadUrl);
+    } catch {
+      return { ok: false, error: 'reel start returned an invalid upload_url' };
+    }
+    if (!isMetaUrl(uploadTarget)) {
+      return { ok: false, error: 'Refused: the upload address is not a Facebook address.' };
+    }
+    try {
+      const up = await fetch(uploadTarget, {
         method: 'POST',
         headers: { Authorization: `OAuth ${this.token}`, file_url: fileUrl },
+        redirect: 'manual',
         signal: AbortSignal.timeout(180_000),
       });
       if (!up.ok) {
@@ -497,6 +527,6 @@ export class FacebookGraphClients implements FacebookGraphFactory {
   }
 
   forPage(token: string, pageId: string): FacebookPageApi {
-    return new PageApi(this.settings.graphVersion, token, pageId);
+    return new PageApi(this.settings.graphVersion, token, pageId, this.settings.appId);
   }
 }

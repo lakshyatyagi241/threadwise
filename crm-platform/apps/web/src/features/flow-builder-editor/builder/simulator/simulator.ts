@@ -2,6 +2,7 @@ import {
   flbAskFileAccepts,
   flbCleanAskFileExtensions,
   flbIsCondGroup,
+  flbReadLocation,
   flbSanitizeConditionGroup,
   type FlbCondGroup,
   type FlowEdge,
@@ -442,18 +443,17 @@ export function createSimulator(opts: SimulatorOptions): Simulator {
         bot(tx('cta', { lines }));
         return advance('out');
       }
-      case 'location':
-        bot(
-          d.lat && d.lng
-            ? tx('locationCoords', {
-                name: str(d.name),
-                address: str(d.address),
-                lat: str(d.lat),
-                lng: str(d.lng),
-              })
-            : tx('location', { name: str(d.name), address: str(d.address) }),
-        );
+      case 'location': {
+        // The runtime sends nothing for a step with no real coordinates; the test chat says so too.
+        const where = flbReadLocation(d);
+        if (!where.ok) {
+          bot(tx('locationSkipped'));
+          return advance('out');
+        }
+        const place = { name: str(d.title) || str(d.name), address: str(d.address) };
+        bot(tx('locationCoords', { ...place, lat: String(where.lat), lng: String(where.lng) }));
         return advance('out');
+      }
       case 'chatbot':
         bot(tx('chatbot', { bot: str(d.bot) || '?' }));
         return advance('out');

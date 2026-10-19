@@ -191,7 +191,7 @@ actor of the workspace the key proved:
 5. **Tags** (`after.tags`, skipped past the plan's tag cap, never an error), **owner** (`unassigned`, `fixed`, `round_robin` with a cursor on the form that
    does not bump its `row_version`; a contact that already has an owner keeps them and costs no turn), a **`contact_attributions`** row (platform
    `form`, campaign from `utm_campaign`, the form's name), the **consent** line, the **timeline** entry `Submitted <form>` (`form_submission`).
-6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). A ticked marketing box sets
+6. **Consent**: the text shown, its version and the time are stored on the submission (`consent`). The consent line has an optional `termsUrl` (https) next to `privacyUrl`, returned by the public form and offered from the workspace links of the [Compliance center](compliance.md) (BL-175). A ticked marketing box sets
    `email_subscription_status` / `whatsapp_subscription_status` to `subscribed` where they have none, never for a contact flagged `is_unsubscribed`,
    and emits `contact.opt_in` once, on a real change. An unticked box never changes anything. (Decision D10; the value `subscribed` is the first the
    product defines, flagged for the Contacts owner.)
@@ -315,8 +315,21 @@ joined (`composeAddress`: `street, city, state postal, country`, empty parts ski
 
 ## Consent line and the ledger (BL-171)
 
-`definition.consent.coversSms` (default false): the form's owner declares that the wording also covers SMS. A ticked **marketing** line grants
-marketing on WhatsApp and email, and on SMS when the form collects a phone and `coversSms` is on. A ticked line that is **not marketing** is
+`definition.consent.channels` (`whatsapp`, `sms`, `email`): the channels the wording covers, chosen by the form's owner (`consentChannels()` in
+contracts; a form saved before it keeps the old rule: WhatsApp and email, SMS when `coversSms`). A ticked **marketing** line grants marketing only
+on those channels, and only when the form collected the matching phone (WhatsApp, SMS) or email. A changed channel set on a published form is a
+new consent version in the editor. Re-running a submission uses the channels of the version the visitor saw. A ticked line that is **not marketing** is
 recorded as agreement to service messages (ledger purpose `utility`, source `form`, with the wording, version, form and submission), never as
 marketing, and changes no subscription label. An unticked line records nothing in the ledger (the submission keeps the wording shown and
 `given: false`). A person who stopped a channel is not turned back on.
+
+## Age check (BL-217)
+
+Spec section 11.10. `definition.ageGate` (off by default): `{ enabled, mode: dob | age | declaration, minAge: 1..21 | null, whenUnder: block | flag | guardian }`. `minAge: null` means the workspace's minor age (highest of the Compliance profiles, else 18).
+
+- **Field kinds.** `date_of_birth` always writes the contact's `date_of_birth` (bound or not; the younger date wins on a returning contact); `age` is judged and forgotten. One question per form; an `age` field cannot be bound. Publish wants the question for `dob` / `age` and wants it required (`age_gate_field_missing`, `age_gate_field_not_required`).
+- **Public door.** `GET /v2/public/forms/:key` carries `ageGate: { mode, declarationAge }` (the age only for the box); never the action. `POST .../submit` accepts `ageConfirmed` (the box) and `guardian { name, email?, phone? }`.
+  - `block`: an under-age answer is refused before anything is stored: 403 `FORMS_AGE_BLOCKED`, a neutral message. With the box, an unticked box is an unanswered question (422 `FORMS_VALIDATION`, path `age_confirmed`).
+  - `flag`: accepted; the contact is flagged (source `dob`, or `declaration` for an unticked box); the consent line is stored as shown but no marketing agreement is recorded.
+  - `guardian`: as `flag`, and 422 `FORMS_GUARDIAN_REQUIRED` until a name and an email or phone arrive; the details are kept as stored answers (`_guardian_*`, removed by the retention sweep with the rest), on the submission detail (`guardian`, `ageGate`) and as a contact timeline entry. Guardian consent is not recorded until a person records it.
+- **Builder meta.** `GET /v2/forms/meta/protection` returns `age: { workspaceMinorAge, childrenAnswered }` for the settings screen.

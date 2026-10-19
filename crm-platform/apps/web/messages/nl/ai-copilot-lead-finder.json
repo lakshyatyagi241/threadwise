@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "AI CRM-copiloot"
+    },
+    "errors": {
+      "generic": "Er is iets misgegaan. Probeer het opnieuw.",
+      "AICRM_NO_AI_PROVIDER": "Er is geen AI-provider geconfigureerd. Vraag je beheerder om een AI-sleutel toe te voegen.",
+      "AICRM_PROVIDER_FAILED": "De AI-service gaf een foutmelding terug. Probeer het opnieuw.",
+      "VALIDATION_FAILED": "Controleer de gemarkeerde velden en probeer het opnieuw.",
+      "PLAN_FEATURE_LOCKED": "Upgrade je abonnement om deze functie te gebruiken."
+    },
+    "chat": {
+      "title": "AI CRM-copiloot",
+      "subtitle": "Vraag de copiloot om contacten en deals te zoeken of aan te maken, pipelinefasen te verplaatsen, of een rapport uit te voeren.",
+      "loading": "Laden…",
+      "thinking": "Aan het nadenken…",
+      "emptyState": "Zeg hallo, of vraag iets zoals \"welke deals staan open?\"",
+      "inputPlaceholder": "Vraag het de copiloot…",
+      "send": "Versturen",
+      "resetConversation": "Gesprek resetten",
+      "recentActions": "Recente acties",
+      "noRecentActions": "Nog geen acties.",
+      "notice": {
+        "settingsSaved": "Instelling opgeslagen."
+      },
+      "settings": {
+        "title": "WhatsApp-medewerkerskanaal",
+        "waCopilotToggle": "Sta medewerkers toe om via WhatsApp met de copiloot te chatten (nog niet beschikbaar)"
+      }
+    }
+  }
+}

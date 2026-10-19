@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Kopilot AI CRM"
+    },
+    "errors": {
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "AICRM_NO_AI_PROVIDER": "Nie skonfigurowano żadnego dostawcy AI. Poproś administratora o dodanie klucza AI.",
+      "AICRM_PROVIDER_FAILED": "Usługa AI zwróciła błąd. Spróbuj ponownie.",
+      "VALIDATION_FAILED": "Sprawdź podświetlone pola i spróbuj ponownie.",
+      "PLAN_FEATURE_LOCKED": "Zaktualizuj swój plan, aby korzystać z tej funkcji."
+    },
+    "chat": {
+      "title": "Kopilot AI CRM",
+      "subtitle": "Poproś go o znalezienie lub utworzenie kontaktów i transakcji, przeniesienie etapów lejka sprzedaży lub wygenerowanie raportu.",
+      "loading": "Wczytywanie…",
+      "thinking": "Myślę…",
+      "emptyState": "Przywitaj się lub zadaj pytanie, np. \"jakie transakcje są otwarte?\"",
+      "inputPlaceholder": "Zapytaj Kopilota…",
+      "send": "Wyślij",
+      "resetConversation": "Zresetuj rozmowę",
+      "recentActions": "Ostatnie działania",
+      "noRecentActions": "Jeszcze brak działań.",
+      "notice": {
+        "settingsSaved": "Ustawienie zapisane."
+      },
+      "settings": {
+        "title": "Kanał pracowników WhatsApp",
+        "waCopilotToggle": "Zezwól pracownikom na czat z Kopilotem przez WhatsApp (jeszcze niedostępne)"
+      }
+    }
+  }
+}

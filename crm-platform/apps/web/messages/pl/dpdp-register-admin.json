@@ -1,0 +1,440 @@
+{
+  "dpdp-register-admin": {
+    "nav": {
+      "group": "Prywatność",
+      "register": "Rejestr DPDP"
+    },
+    "page": {
+      "eyebrow": "Administracja · Zespół · Rejestr DPDP",
+      "title": "Rejestr DPDP",
+      "disclaimer": "Śledzi, co platforma robi dziś w odniesieniu do DPDP Act i DPDP Rules. To nie jest certyfikat zgodności.",
+      "checkedAt": "Sprawdzono: {time}",
+      "refresh": "Odśwież"
+    },
+    "summary": {
+      "label": "Podsumowanie rejestru",
+      "counts": {
+        "title": "Obowiązki według statusu",
+        "counted": "{total, plural, one {# obowiązek policzony} few {# obowiązki policzone} many {# obowiązków policzonych} other {# obowiązku policzonego}}",
+        "notCounted": "Wiersze „Nie dotyczy” są wyświetlane, ale nie są liczone."
+      },
+      "milestones": {
+        "title": "Nadchodzące terminy",
+        "names": {
+          "consent_managers": "Rejestracja Menedżerów zgód (rule 4)",
+          "main_duties": "Główne obowiązki DPDP Rules"
+        },
+        "left": "Zostało około {days, plural, =0 {0 dni} one {# dnia} few {# dni} many {# dni} other {# dnia}}",
+        "passed": "Ta data już minęła"
+      },
+      "tiers": {
+        "title": "Poziomy kar",
+        "tier": "Poziom kary",
+        "hint": "Obowiązki niespełniane, spełniane częściowo lub niezweryfikowane, według obowiązującego limitu kary."
+      }
+    },
+    "status": {
+      "following": "Przestrzegany",
+      "partial": "Częściowo",
+      "not_following": "Nieprzestrzegany",
+      "unverified": "Niezweryfikowany",
+      "not_applicable": "Nie dotyczy"
+    },
+    "result": {
+      "pass": "Zaliczone",
+      "fail": "Niezaliczone",
+      "unknown": "Nieznane"
+    },
+    "source": {
+      "live": "Odczyt na żywo",
+      "attested": "Potwierdzone",
+      "code": "Zadeklarowane w kodzie"
+    },
+    "filters": {
+      "label": "Filtruj według statusu",
+      "all": "Wszystkie",
+      "shown": "{count, plural, one {Wyświetlono # obowiązek} few {Wyświetlono # obowiązki} many {Wyświetlono # obowiązków} other {Wyświetlono # obowiązku}}",
+      "empty": {
+        "title": "Żaden obowiązek nie pasuje do tego filtru",
+        "message": "Obecnie żaden obowiązek nie ma tego statusu.",
+        "reset": "Pokaż wszystkie"
+      }
+    },
+    "groups": {
+      "A": "Podstawy, informacja, zgoda (ss4 to 7, rule 3)",
+      "B": "Prawa i skargi (ss11 to 15, rule 14)",
+      "C": "Przechowywanie i usuwanie (s8(7), (8), rule 8)",
+      "D": "Bezpieczeństwo (s8(4), (5), rule 6)",
+      "E": "Naruszenie ochrony danych (s8(6), rule 7)",
+      "F": "Dzieci (s9, rules 10 to 12, Czwarty Załącznik)",
+      "G": "Transfery i podmioty przetwarzające (ss8(1), 8(2), 16, rules 13(4), 15)",
+      "H": "Znaczący powiernik danych (s10, rule 13)",
+      "I": "Nadzór i egzekwowanie (ss27 to 33, rule 19)"
+    },
+    "owners": {
+      "tenant": "Przestrzeń robocza",
+      "platform": "Platforma",
+      "both": "Przestrzeń robocza i platforma"
+    },
+    "tiers": {
+      "50": "Rs 50 crore",
+      "150": "Rs 150 crore",
+      "200": "Rs 200 crore",
+      "250": "Rs 250 crore",
+      "none": "Brak poziomu kary"
+    },
+    "item": {
+      "citation": "Przepis",
+      "owner": "Właściciel",
+      "penalty": "Poziom kary",
+      "plan": "Pozycje planu",
+      "conditional": "Tylko po wskazaniu",
+      "checks": "Kontrole",
+      "noChecks": "Status zadeklarowany. Żadna kontrola jeszcze go nie odczytuje."
+    },
+    "check": {
+      "lapsed": "Wygasło",
+      "note": "Notatka:",
+      "evidence": "Link do dowodu"
+    },
+    "items": {
+      "r01": {
+        "title": "Przetwarzać dane osobowe tylko za zgodą lub w dozwolonym celu"
+      },
+      "r02": {
+        "title": "Przekazać odrębną, szczegółową informację przed poproszeniem o zgodę"
+      },
+      "r03": {
+        "title": "Poinformować osoby, które wyraziły zgodę przed wejściem ustawy w życie"
+      },
+      "r04": {
+        "title": "Oferować informację i zgodę po angielsku lub w języku z oficjalnej listy"
+      },
+      "r05": {
+        "title": "Uzyskiwać zgodę dobrowolną, konkretną, świadomą i jednoznaczną"
+      },
+      "r06": {
+        "title": "Podawać osobę kontaktową w każdej prośbie o zgodę"
+      },
+      "r07": {
+        "title": "Pozwalać wycofać zgodę równie łatwo, jak ją wyrażono"
+      },
+      "r08": {
+        "title": "Po wycofaniu przerwać przetwarzanie i zadbać, by przerwały je podmioty przetwarzające"
+      },
+      "r09": {
+        "title": "Umieć wykazać informację i zgodę"
+      },
+      "r10": {
+        "title": "Używać dobrowolnie podanych danych tylko do wskazanego celu"
+      },
+      "r11": {
+        "title": "Przyjmować zgodę wyrażoną lub wycofaną przez Menedżera zgód"
+      },
+      "r12": {
+        "title": "Uzależniać każdą wysyłkę wychodzącą od zgody w chwili wysyłki"
+      },
+      "r13": {
+        "title": "Podsumować przechowywane dane, przetwarzanie i odbiorców"
+      },
+      "r14": {
+        "title": "Poprawiać, uzupełniać i aktualizować dane osobowe na żądanie"
+      },
+      "r15": {
+        "title": "Usuwać na żądanie, chyba że dane są potrzebne do celu lub z mocy prawa"
+      },
+      "r16": {
+        "title": "Prowadzić opublikowany mechanizm skarg i odpowiadać w ciągu 90 dni"
+      },
+      "r17": {
+        "title": "Pozwolić wskazać osobę, która zadziała w razie śmierci lub niezdolności"
+      },
+      "r18": {
+        "title": "Opublikować, jak złożyć wniosek i jaki identyfikator jest potrzebny"
+      },
+      "r19": {
+        "title": "Opublikować kontakt i podawać go w każdej odpowiedzi"
+      },
+      "r20": {
+        "title": "Weryfikować tożsamość, ograniczać liczbę żądań i audytować wnioski o prawa"
+      },
+      "r21": {
+        "title": "Utrzymywać dane dokładne i kompletne, gdy wpływają na decyzje"
+      },
+      "r22": {
+        "title": "Respektować prawa własnych pracowników platformy, kontaktów rozliczeniowych i odwiedzających"
+      },
+      "r23": {
+        "title": "Usuwać dane po wycofaniu zgody lub zakończeniu celu"
+      },
+      "r24": {
+        "title": "Usuwać nieaktywne dane po trzech latach, z 48-godzinnym uprzedzeniem"
+      },
+      "r25": {
+        "title": "Przechowywać dane osobowe i logi co najmniej rok"
+      },
+      "r26": {
+        "title": "Uruchamiać cykl życia nieaktywności przestrzeni roboczych"
+      },
+      "r27": {
+        "title": "Chronić dane szyfrowaniem, maskowaniem lub tokenami"
+      },
+      "r28": {
+        "title": "Kontrolować dostęp do zasobów komputerowych"
+      },
+      "r29": {
+        "title": "Rejestrować i monitorować dostęp do danych osobowych"
+      },
+      "r30": {
+        "title": "Tworzyć kopie zapasowe, by po utracie dalej przetwarzać dane"
+      },
+      "r31": {
+        "title": "Przechowywać logi rok, by wykrywać incydenty i je badać"
+      },
+      "r32": {
+        "title": "Mieć klauzulę bezpieczeństwa w każdej umowie z podmiotem przetwarzającym"
+      },
+      "r33": {
+        "title": "Umieć wykazać wdrożone środki bezpieczeństwa"
+      },
+      "r34": {
+        "title": "Utrzymywać ogólnie rozsądne zabezpieczenia"
+      },
+      "r35": {
+        "title": "Kontrolować ścieżki AI wysyłające tekst kontaktów stronom trzecim"
+      },
+      "r36": {
+        "title": "Bez zwłoki powiadomić każdą osobę, której dotyczy naruszenie"
+      },
+      "r37": {
+        "title": "Powiadomić Radę Ochrony Danych o naruszeniu, a potem zgłosić je w ciągu 72 godzin"
+      },
+      "r38": {
+        "title": "Jako podmiot przetwarzający wystarczająco szybko powiadomić przestrzeń roboczą o naruszeniu"
+      },
+      "r39": {
+        "title": "Uzyskać weryfikowalną zgodę rodziców przed przetwarzaniem danych dziecka"
+      },
+      "r40": {
+        "title": "Bez śledzenia, monitorowania zachowań i reklam ukierunkowanych na dzieci"
+      },
+      "r41": {
+        "title": "Stosować wyłączenia z Czwartego Załącznika do obowiązków dotyczących danych dzieci"
+      },
+      "r42": {
+        "title": "Przestrzegać limitów rządu dotyczących transferu danych za granicę"
+      },
+      "r43": {
+        "title": "Pozostać odpowiedzialnym za działania podmiotów przetwarzających"
+      },
+      "r44": {
+        "title": "Wywiązywać się z obowiązków Znaczącego powiernika danych, tylko po oficjalnym wskazaniu"
+      },
+      "r45": {
+        "title": "Przedstawić dowody na potrzeby postępowania Rady Ochrony Danych w ciągu sześciu miesięcy"
+      },
+      "r46": {
+        "title": "Utrzymywać własne informacje platformy, akceptację warunków i wybór dotyczący cookies"
+      },
+      "r47": {
+        "title": "Wskazać kontakt platformy i ścieżkę składania skarg"
+      }
+    },
+    "details": {
+      "probe_error": "Teraz nie udało się tego odczytać, więc wynik jest nieznany.",
+      "probe_missing": "Dla tej kontroli nie wrócił żaden odczyt.",
+      "env_missing": "Zmienna {key} nie jest ustawiona, więc nie udało się tego odczytać.",
+      "attestation_missing": "Nikt jeszcze tego nie zapisał.",
+      "attestation_expired": "Oświadczenie zapisane przez {name} dnia {date} wygasło {expires}. Nie jest już liczone.",
+      "attested_pass": "Zapisane jako wdrożone przez {name} dnia {date}. Liczy się do {expires}.",
+      "attested_fail": "Zapisane jako niewdrożone przez {name} dnia {date}. Liczy się do {expires}.",
+      "code_declared": "Zadeklarowane w kodzie, niemierzone w czasie działania. Zmiana zamykająca lukę to aktualizuje.",
+      "unrecognised": "Ta konsola nie ma jeszcze opisu dla tego wyniku ({detail})."
+    },
+    "checks": {
+      "mfa_operators": {
+        "title": "Superadministratorzy muszą logować się z uwierzytelnianiem dwuskładnikowym",
+        "details": {
+          "mfa_on": "Logowanie dwuskładnikowe jest wymagane od superadministratorów.",
+          "mfa_off": "Niewymagane: superadministratorzy mogą logować się bez drugiego składnika."
+        }
+      },
+      "mfa_workspace_admins": {
+        "title": "Administratorzy przestrzeni roboczych muszą logować się z uwierzytelnianiem dwuskładnikowym",
+        "details": {
+          "mfa_on": "Logowanie dwuskładnikowe jest wymagane od administratorów przestrzeni roboczych.",
+          "mfa_off": "Niewymagane: administratorzy przestrzeni roboczych mogą logować się bez drugiego składnika."
+        }
+      },
+      "logs_audit_retention": {
+        "title": "Dziennik audytu jest przechowywany co najmniej rok",
+        "details": {
+          "retention_ok": "Przechowywany przez {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}.",
+          "retention_unlimited": "Nigdy nie jest czyszczony (0 dni), więc jest przechowywany co najmniej rok.",
+          "retention_below_floor": "Przechowywany tylko przez {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}; DPDP Rules wymagają co najmniej 365."
+        }
+      },
+      "logs_session_retention": {
+        "title": "Zakończone sesje są przechowywane co najmniej rok",
+        "details": {
+          "retention_ok": "Zakończone sesje są czyszczone po {days, plural, one {# dniu} few {# dniach} many {# dniach} other {# dnia}}.",
+          "retention_below_floor": "Zakończone sesje są czyszczone po {days, plural, one {# dniu} few {# dniach} many {# dniach} other {# dnia}}, poniżej 365 wymaganych przez DPDP Rules."
+        }
+      },
+      "redis_auth": {
+        "title": "Redis wymaga hasła lub używa TLS",
+        "details": {
+          "redis_auth_on": "Skonfigurowany adres Redis zawiera hasło lub używa TLS.",
+          "redis_auth_off": "Skonfigurowany adres Redis nie ma hasła i nie używa TLS."
+        }
+      },
+      "crypto_rotation_complete": {
+        "title": "W pęku kluczy nie zostały żadne poprzednie klucze szyfrowania",
+        "details": {
+          "rotation_complete": "Nie skonfigurowano poprzednich kluczy.",
+          "previous_keys_present": "Poprzednie klucze są nadal skonfigurowane, więc rotacja kluczy nie jest zakończona."
+        }
+      },
+      "lifecycle_enabled": {
+        "title": "Cykl życia nieaktywności przestrzeni roboczych jest włączony",
+        "details": {
+          "lifecycle_on": "Włączony, nie jest to próba, a usuwanie jest włączone.",
+          "lifecycle_off": "{enabled, select, true {Włączony} other {Wyłączony}}, {dryRun, select, true {próba włączona} other {próba wyłączona}}, {deleteEnabled, select, true {usuwanie włączone} other {usuwanie wyłączone}}."
+        }
+      },
+      "errors_vendor_region": {
+        "title": "Raporty o błędach zostają w Indiach lub są wyłączone",
+        "details": {
+          "sentry_off": "Raportowanie błędów jest wyłączone na serwerze API.",
+          "region_india": "Raporty o błędach trafiają do indyjskiego regionu dostawcy.",
+          "region_outside_india": "Raporty o błędach trafiają do regionu {region} dostawcy, poza Indiami.",
+          "region_unrecognised": "Adres raportowania błędów nie jest znanym adresem regionalnym, więc nie da się ustalić jego kraju.",
+          "region_unrecognised_host": "Raporty o błędach trafiają do {host}, co nie jest znanym adresem regionalnym, więc nie da się ustalić kraju."
+        }
+      },
+      "ai_platform_key_off": {
+        "title": "Nie skonfigurowano klucza AI platformy",
+        "details": {
+          "no_platform_key": "Nie skonfigurowano klucza platformy dla żadnego dostawcy AI.",
+          "platform_key_set": "Klucz platformy skonfigurowano dla: {providers}."
+        }
+      },
+      "consent_default_opt_in": {
+        "title": "Nowe przestrzenie robocze zaczynają z wymaganą zgodą marketingową",
+        "details": {
+          "default_opt_in": "Nowe przestrzenie robocze zaczynają z wymaganą zapisaną zgodą na marketing.",
+          "default_opt_out": "Nowe przestrzenie robocze zaczynają bez wymaganej zapisanej zgody na marketing.",
+          "default_opt_in_counts": "Nowe przestrzenie robocze zaczynają z wymaganą zapisaną zgodą na marketing. Obecnie wymaga jej {on, number} z {total, number} przestrzeni roboczych.",
+          "default_opt_out_counts": "Nowe przestrzenie robocze zaczynają bez wymaganej zapisanej zgody na marketing. Obecnie wymaga jej {on, number} z {total, number} przestrzeni roboczych."
+        }
+      },
+      "hosting_region_documented": {
+        "title": "Dostawca hostingu, region i lokalizacje danych są udokumentowane"
+      },
+      "storage_encrypted_at_rest": {
+        "title": "Jest dowód szyfrowania woluminów i magazynu obiektów"
+      },
+      "backup_offsite_configured": {
+        "title": "Działa zapieczętowana zewnętrzna kopia zapasowa obejmująca magazyn obiektów"
+      },
+      "backup_restore_drill": {
+        "title": "W ostatnich sześciu miesiącach odbyła się próba odtworzenia"
+      },
+      "security_pentest_report": {
+        "title": "Jest zewnętrzny raport z testu penetracyjnego bez otwartych ustaleń krytycznych"
+      },
+      "legal_counsel_engaged": {
+        "title": "Zaangażowano indyjskich doradców prawnych ds. ochrony danych"
+      },
+      "legal_vendor_dpas": {
+        "title": "Podpisane DPA są w aktach dla podmiotów podprzetwarzających, które przechowują dane osobowe"
+      },
+      "governance_contacts_named": {
+        "title": "Kontakt ds. prywatności, dowódca incydentu i osoba odpowiedzialna za skargi są wskazani i opublikowani"
+      },
+      "pii_column_encryption": {
+        "title": "Telefon, e-mail i treść wiadomości kontaktu są szyfrowane kolumnowo"
+      },
+      "rls_privileged_guc_fixed": {
+        "title": "Uprzywilejowanego ustawienia bazy danych nie można ustawić z poziomu sesji"
+      },
+      "logs_erasure_keeps_year": {
+        "title": "Usunięcie zachowuje historię i logi przez rok, zanim je skasuje"
+      },
+      "ci_security_jobs_scheduled": {
+        "title": "Kontrole bezpieczeństwa działają według harmonogramu w CI"
+      },
+      "ai_workspace_switch": {
+        "title": "Przestrzenie robocze mogą wyłączyć ścieżki AI wysyłające tekst kontaktów dostawcy"
+      },
+      "transfer_country_killswitch": {
+        "title": "Każdy dostawca ma znacznik kraju, a kraj można odciąć"
+      },
+      "dpa_acceptance_persisted": {
+        "title": "Akceptacja DPA przez przestrzeń roboczą jest zapisywana z wersją i czasem"
+      },
+      "consent_lawful_basis_dpdp": {
+        "title": "Rejestr celów używa zastosowań zgody i section 7 z Act"
+      },
+      "lifecycle_exit_and_orphans_fixed": {
+        "title": "Eksport przy opuszczaniu przestrzeni roboczej i czyszczenie plików są wdrożone"
+      },
+      "evidence_board_pack": {
+        "title": "Pakiet dowodów gotowy dla Rady Ochrony Danych jest wdrożony"
+      },
+      "grievance_intake_built": {
+        "title": "Przyjmowanie skarg jest wdrożone"
+      }
+    },
+    "attest": {
+      "action": "Potwierdź",
+      "actionFor": "Potwierdź: {check}",
+      "title": "Zapisz oświadczenie",
+      "intro": "Zapisz, czy dziś jest to prawda. Liczy się do wygaśnięcia, potem kontrola wraca do stanu nieznanego. Każde oświadczenie zostaje w historii.",
+      "result": {
+        "label": "Wynik",
+        "pass": "Wdrożone (zaliczone)",
+        "fail": "Niewdrożone (niezaliczone)"
+      },
+      "note": {
+        "label": "Notatka",
+        "hint": "Co sprawdzono i gdzie jest dowód. Co najmniej {min} znaków."
+      },
+      "evidence": {
+        "label": "Link do dowodu (opcjonalnie)",
+        "hint": "Link https do dokumentu lub zgłoszenia.",
+        "placeholder": "https://"
+      },
+      "expiry": {
+        "label": "Liczy się przez (dni)",
+        "hint": "Od {min} do {max} dni. Potem kontrola wraca do stanu nieznanego."
+      },
+      "problems": {
+        "noteShort": "Wpisz co najmniej {min} znaków.",
+        "noteLong": "Skróć notatkę poniżej {max, number} znaków.",
+        "link": "Podaj pełny link https lub zostaw pole puste.",
+        "range": "Wpisz całkowitą liczbę dni od {min} do {max}."
+      },
+      "submit": "Zapisz oświadczenie",
+      "saving": "Zapisywanie",
+      "cancel": "Anuluj",
+      "saved": "Oświadczenie zapisane."
+    },
+    "history": {
+      "action": "Historia",
+      "actionFor": "Historia: {check}",
+      "title": "Historia",
+      "empty": "Dla tej kontroli nic jeszcze nie zapisano.",
+      "validUntil": "Ważne do {date}",
+      "close": "Zamknij"
+    },
+    "errors": {
+      "forbidden": "Nie masz uprawnień do tej czynności.",
+      "request": "Nie udało się zrealizować tego żądania.",
+      "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "validation": "Niektóre wartości są nieprawidłowe. Sprawdź wyróżnione pola.",
+      "notFound": "Ten element już nie istnieje."
+    }
+  }
+}

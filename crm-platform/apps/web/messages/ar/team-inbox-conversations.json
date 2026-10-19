@@ -29,7 +29,8 @@
       "priorityChanged": "تم تحديث الأولوية",
       "snoozed": "تم تأجيل المحادثة",
       "tagAdded": "تمت إضافة الوسم",
-      "tagRemoved": "تمت إزالة الوسم"
+      "tagRemoved": "تمت إزالة الوسم",
+      "spammed": "تم تمييز المحادثة كرسالة مزعجة."
     },
     "list": {
       "title": "صندوق الوارد",
@@ -44,12 +45,8 @@
         "unassigned": "غير معيّنة",
         "unread": "غير مقروءة"
       },
-      "statusFilter": "الحالة",
-      "statusOpen": "مفتوحة",
-      "statusAll": "كل الحالات",
       "status": {
         "open": "مفتوحة",
-        "pending": "معلّقة",
         "snoozed": "مؤجلة",
         "resolved": "تم حلها",
         "closed": "تم حلها",
@@ -61,7 +58,6 @@
         "high": "عالية",
         "urgent": "عاجلة"
       },
-      "channelFilter": "القناة",
       "allChannels": "كل القنوات",
       "archived": "المؤرشفة",
       "backToInbox": "العودة إلى صندوق الوارد",
@@ -107,7 +103,57 @@
         }
       },
       "select": "تحديد",
-      "selectDone": "تم"
+      "selectDone": "تم",
+      "filters": {
+        "open": "عوامل التصفية",
+        "openActive": "عوامل التصفية ({count} مفعّلة)",
+        "title": "عوامل التصفية",
+        "close": "إغلاق",
+        "reset": "إعادة ضبط",
+        "cancel": "إلغاء",
+        "apply": "تطبيق",
+        "status": "حالة الدردشة",
+        "statusHint": "عند عدم اختيار شيء تظهر المحادثات المفتوحة.",
+        "conversation": "المحادثة",
+        "any": "أي",
+        "assigned": "معيّنة",
+        "unassigned": "غير معيّنة",
+        "unattended": "بلا رد",
+        "labels": "الوسوم",
+        "channels": "القنوات",
+        "agents": "الوكلاء",
+        "sortBy": "ترتيب حسب",
+        "recent": "الأحدث",
+        "old": "الأقدم",
+        "dateRange": "النطاق الزمني (آخر نشاط)",
+        "from": "من",
+        "to": "إلى",
+        "select": "اختر خيارًا",
+        "search": "بحث",
+        "noMatch": "لا توجد نتائج",
+        "today": "اليوم",
+        "last7": "آخر 7 أيام",
+        "last30": "آخر 30 يومًا",
+        "thisMonth": "هذا الشهر",
+        "clearDates": "مسح التواريخ",
+        "previousMonth": "الشهر السابق",
+        "nextMonth": "الشهر التالي"
+      },
+      "rowMenu": "المزيد من الإجراءات لـ {name}",
+      "priorityMenu": "الأولوية",
+      "statusFilter": "الحالة",
+      "statusOpen": "مفتوحة",
+      "statusAll": "كل الحالات",
+      "channelFilter": "القناة",
+      "selectRow": "تحديد {name}",
+      "snoozedFor": "مؤجّلة · {left}",
+      "snoozeLeft": {
+        "due": "الآن",
+        "minutes": "{count, plural, one {دقيقة واحدة} two {دقيقتان} few {# دقائق} many {# دقيقة} other {# دقيقة}}",
+        "hours": "{count, plural, one {ساعة واحدة} two {ساعتان} few {# ساعات} many {# ساعة} other {# ساعة}}",
+        "days": "{count, plural, one {يوم واحد} two {يومان} few {# أيام} many {# يومًا} other {# يوم}}"
+      },
+      "unsnoozesAt": "تعود في {time}"
     },
     "status": {
       "received": "مستلمة",
@@ -128,6 +174,7 @@
       "mediaNotFound": "انتهت صلاحية المرفق أو أُزيل. أرفقه مرة أخرى.",
       "statusInvalid": "هذا التغيير غير مسموح من الحالة الحالية للمحادثة.",
       "assigneeInvalid": "لا يمكن تعيين هذه المحادثة لهذا الشخص.",
+      "assignedToOther": "هذه المحادثة مُسندة إلى وكيل آخر. أسندها إلى نفسك أولاً للرد.",
       "forbidden": "ليست لديك صلاحية للقيام بذلك.",
       "rateLimited": "طلبات كثيرة. انتظر قليلًا ثم حاول مرة أخرى.",
       "simulatorDisabled": "محاكي القنوات متوقف على هذا الخادم.",
@@ -232,7 +279,11 @@
         "undone": "تم التراجع عن تغيير المرحلة: عادت إلى {stage}.",
         "undoneToast": "أُعيدت المرحلة إلى {stage}.",
         "couldNotUndo": "لم يعد بالإمكان التراجع عن هذا التغيير: انتقلت جهة الاتصال أو تم التراجع عنه بالفعل."
-      }
+      },
+      "heldUntil": "مؤجّل حتى {when}",
+      "heldWhy": "رسالة التسويق هذه تنتظر انتهاء ساعات الهدوء لديك. سيتم إرسالها حينها إذا لم تُلغِ جهة الاتصال اشتراكها في الأثناء.",
+      "templateSent": "تم إرسال القالب «{name}» عبر {channel}",
+      "templateSentPlain": "تم إرسال القالب «{name}»"
     },
     "media": {
       "openImage": "فتح الصورة {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "إرسال قالب"
       },
       "readOnly": "يمكنك قراءة هذه المحادثة لكن ليست لديك صلاحية الرد.",
+      "resolvedBanner": "تم حل هذه المحادثة. أعد فتحها للرد.",
+      "assignedToOther": "هذه المحادثة مُسندة إلى وكيل آخر. أسندها إلى نفسك أولاً للرد.",
       "typing": "{count, plural, zero {لا أحد يكتب} one {أحد الزملاء يكتب} two {زميلان يكتبان} few {# زملاء يكتبون} many {# زميلًا يكتبون} other {# زميل يكتبون}}",
       "messagesLabel": "الرسائل",
       "loadOlder": "تحميل رسائل أقدم",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "رسالة جديدة: {text}",
       "attachment": "مرفق",
       "jumpLatest": "الانتقال إلى الأحدث",
-      "jumpLatestNew": "{count, plural, zero {لا رسائل جديدة} one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}"
+      "jumpLatestNew": "{count, plural, zero {لا رسائل جديدة} one {رسالة جديدة} two {رسالتان جديدتان} few {# رسائل جديدة} many {# رسالة جديدة} other {# رسالة جديدة}}",
+      "searchOpen": "البحث في هذه الدردشة",
+      "searchPlaceholder": "البحث في هذه الدردشة",
+      "searchCount": "{current} من {total}",
+      "searchNone": "لا توجد نتائج",
+      "searchPrev": "النتيجة السابقة",
+      "searchNext": "النتيجة التالية",
+      "searchClose": "إغلاق البحث"
     },
     "groupThread": {
       "openGroup": "فتح المجموعة",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "الردود المحفوظة",
-      "savedReplyIssues": "لم تُملأ ({count}) وبقيت كما كُتبت: {list}. صحّحها قبل الإرسال."
+      "savedReplyIssues": "لم تُملأ ({count}) وبقيت كما كُتبت: {list}. صحّحها قبل الإرسال.",
+      "toolbar": {
+        "label": "تنسيق الرسالة",
+        "bold": "غامق",
+        "italic": "مائل",
+        "underline": "تسطير",
+        "strike": "يتوسطه خط",
+        "bullets": "قائمة نقطية",
+        "numbers": "قائمة مرقمة",
+        "ai": {
+          "open": "مساعد الذكاء الاصطناعي",
+          "noModel": "لا يوجد نموذج ذكاء اصطناعي مفعّل لهذه المساحة",
+          "title": "مساعد الذكاء الاصطناعي",
+          "condense": "اختصار",
+          "condenseHint": "اجعل النص أقصر وأكثر إيجازًا",
+          "fix": "تصحيح القواعد",
+          "fixHint": "صحّح الأخطاء النحوية والإملائية",
+          "positive": "نبرة إيجابية",
+          "positiveHint": "اجعل النص أكثر إيجابية وحيوية",
+          "translate": "ترجمة",
+          "translateHint": "الترجمة إلى لغات مختلفة",
+          "selectLanguage": "اختر اللغة",
+          "searchLanguages": "ابحث عن لغة…",
+          "noLanguage": "لا توجد لغة مطابقة",
+          "working": "جارٍ العمل…",
+          "empty": "اكتب رسالة أولًا.",
+          "failed": "تعذّر على الذكاء الاصطناعي تغيير النص. حاول مرة أخرى."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "الملاحظات والسجل الزمني",
@@ -452,7 +540,13 @@
         "pickTeam": "اختر فريقًا لهذه المحادثة",
         "noTeam": "بلا فريق",
         "onLeave": "في إجازة",
-        "onLeaveUntil": "في إجازة حتى {date}"
+        "onLeaveUntil": "في إجازة حتى {date}",
+        "availability": {
+          "online": "متصل",
+          "away": "بعيد",
+          "busy": "مشغول",
+          "offline": "غير متصل"
+        }
       },
       "presence": {
         "online": "متصل",
@@ -461,16 +555,8 @@
         "offline": "غير متصل"
       },
       "notes": {
-        "tab": "الملاحظات",
-        "label": "ملاحظة داخلية جديدة",
-        "placeholder": "اكتب ملاحظة يراها فريقك فقط",
-        "hint": "Ctrl+Enter لإضافة الملاحظة.",
-        "add": "إضافة ملاحظة",
-        "addFailed": "تعذّر حفظ الملاحظة.",
-        "loading": "جارٍ تحميل الملاحظات",
-        "empty": "لا توجد ملاحظات بعد.",
-        "unknownAuthor": "أحد الزملاء",
-        "delete": "حذف هذه الملاحظة"
+        "tab": "ملاحظات جهة الاتصال",
+        "noContact": "لا توجد جهة اتصال في هذه المحادثة لإضافة ملاحظات إليها."
       },
       "timeline": {
         "tab": "السجل الزمني",
@@ -496,6 +582,8 @@
           "tag_removed": "أزال {actor} وسمًا",
           "first_response": "أُرسل أول رد",
           "sla_breach": "فات موعد الرد",
+          "spam_flagged": "علّمها {actor} كرسالة مزعجة",
+          "escalated": "تم التصعيد",
           "unknown": "{what} ({actor})"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "لا توجد رسائل",
         "status": {
           "open": "مفتوحة",
-          "pending": "معلّقة",
           "snoozed": "مؤجلة",
           "resolved": "تم حلها",
           "closed": "مغلقة",
@@ -620,6 +707,8 @@
         "format": "لا يمكن أن يحتوي {label} على سطر جديد أو علامة جدولة أو أربع مسافات متتالية."
       },
       "reason": {
+        "other_number": "يتبع رقم واتساب آخر، لذلك لا يمكن إرساله من هذه المحادثة.",
+        "not_linked": "قناة هذه المحادثة غير مرتبطة برقم واتساب، لذلك لا يمكن إرسال أي قالب منها.",
         "paused": "أوقفه واتساب مؤقتًا. يمكن إرساله مجددًا بعد انتهاء الإيقاف.",
         "media_header": "يحتوي على رأس بصورة أو فيديو أو مستند، ولا يمكن إرساله من صندوق الوارد حاليًا.",
         "header_variable": "يحتوي على متغير في الرأس، ولا يمكن ملؤه من صندوق الوارد حاليًا.",
@@ -736,7 +825,10 @@
         "telegram": "تيليجرام",
         "facebook": "فيسبوك ماسنجر",
         "instagram": "إنستجرام",
-        "email": "البريد الإلكتروني"
+        "email": "البريد الإلكتروني",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "جهة الاتصال",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "الأولوية",
       "snooze": "تأجيل",
-      "wake": "إيقاظ الآن"
+      "wake": "إيقاظ الآن",
+      "markSpam": "تمييز كرسالة مزعجة",
+      "notSpam": "ليست رسالة مزعجة"
     },
     "bulk": {
       "barLabel": "إجراءات جماعية",
@@ -959,7 +1053,8 @@
       "tagAdd": "إضافة وسم",
       "tagRemove": "إزالة وسم",
       "onLeave": "في إجازة",
-      "onLeaveUntil": "في إجازة حتى {date}"
+      "onLeaveUntil": "في إجازة حتى {date}",
+      "spam": "تمييز كرسالة مزعجة"
     },
     "tags": {
       "tag": "وسم",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: فات الموعد (كان مستحقًا {time})",
       "titleOpen": "{kind}: مستحق {time}"
+    },
+    "channelType": {
+      "official": "رسمي",
+      "unofficial": "غير رسمي",
+      "officialFull": "رسمي (واجهة WhatsApp Cloud API)",
+      "unofficialFull": "غير رسمي (QR / Baileys)"
     }
   }
 }

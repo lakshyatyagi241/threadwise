@@ -1,0 +1,24 @@
+{
+  "note": "Accepted runtime-path suspects. A count may go down freely; going up needs a reason in review.",
+  "counts": {
+    "apps/api/src/modules/addons-extension-registry/zip-reader.ts::sync-zlib::inflateRawSync::readEntry": 1,
+    "apps/api/src/modules/appointments-booking/google-calendar-state.ts::sync-crypto::hkdfSync::deriveStateKey": 1,
+    "apps/api/src/modules/appointments-booking/microsoft-calendar-state.ts::sync-crypto::hkdfSync::deriveMicrosoftKey": 1,
+    "apps/api/src/modules/channel-email/mail-state.ts::sync-crypto::hkdfSync::deriveStateKey": 1,
+    "apps/api/src/modules/install-update-licensing/migration-report.ts::sync-fs::readdirSync::readMigrationFiles": 1,
+    "apps/api/src/modules/install-update-licensing/migration-report.ts::sync-fs::readFileSync::readMigrationFiles": 1,
+    "apps/api/src/modules/install-update-licensing/migration-state.service.ts::sync-fs::existsSync::loadFiles": 1,
+    "apps/api/src/modules/install-update-licensing/release-info.ts::sync-fs::existsSync::readPackageVersion": 1,
+    "apps/api/src/modules/install-update-licensing/release-info.ts::sync-fs::readFileSync::readPackageVersion": 1,
+    "apps/api/src/modules/shopify-woocommerce/plugin/zip-writer.ts::sync-zlib::deflateRawSync::buildZip": 1,
+    "apps/api/src/modules/wallet-message-billing/xlsx-lite.ts::sync-zlib::inflateRawSync::partText": 1,
+    "apps/web/src/features/auth-registration-security/guest/auth-locales.ts::sync-fs::existsSync::keysFor": 1,
+    "apps/web/src/features/auth-registration-security/guest/auth-locales.ts::sync-fs::readFileSync::keysFor": 1,
+    "apps/web/src/i18n/messages.ts::sync-fs::existsSync::readLocale": 1,
+    "apps/web/src/i18n/messages.ts::sync-fs::readdirSync::readLocale": 1,
+    "apps/web/src/i18n/messages.ts::sync-fs::readFileSync::readLocale": 1,
+    "packages/db/src/migrator.ts::sync-fs::readdirSync::loadMigrations": 1,
+    "packages/db/src/migrator.ts::sync-fs::readFileSync::loadMigrations": 1,
+    "packages/contracts/src/chatbot-widget/launcher.ts::json-deep-clone::JSON.parse(JSON.stringify(...))::toPublicLauncher": 1
+  }
+}

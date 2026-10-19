@@ -232,12 +232,49 @@
         "loadFailed": "The settings could not be loaded.",
         "hours": {
           "title": "Working hours",
-          "note": "Shown for reference. Working hours are not enforced yet, so these controls are read-only.",
-          "weekdays": "Mon - Fri",
-          "saturday": "Saturday",
-          "sunday": "Sunday",
+          "note": "Your team's opening hours, in {timezone}. Inbox routing rules, SLA timers, flows and lead replies that depend on business hours use this schedule.",
+          "ownerOnly": "Only the workspace owner can edit these.",
+          "loadFailed": "The working hours could not be loaded.",
+          "day": {
+            "mon": "Monday",
+            "tue": "Tuesday",
+            "wed": "Wednesday",
+            "thu": "Thursday",
+            "fri": "Friday",
+            "sat": "Saturday",
+            "sun": "Sunday"
+          },
           "from": "From",
-          "to": "To"
+          "to": "To",
+          "closed": "Closed",
+          "openAllDay": "Open all day",
+          "allDay": "Open all day",
+          "overnight": "Closes the next morning",
+          "addWindow": "Add hours",
+          "remove": "Remove",
+          "removeWindow": "Remove these hours for {day}",
+          "copyMonday": "Copy Monday to Tuesday-Friday",
+          "problem": {
+            "required": "Enter both times.",
+            "same": "The opening and closing times must differ.",
+            "overlap": "Hours on the same day must not overlap."
+          },
+          "holidays": {
+            "title": "Holidays",
+            "note": "The workspace counts as closed all day on these dates, whatever the weekly hours say.",
+            "none": "No holidays added.",
+            "date": "Date",
+            "label": "Name (optional)",
+            "add": "Add holiday",
+            "removeFor": "Remove the holiday on {date}",
+            "problem": {
+              "date": "Not a real date.",
+              "duplicate": "This date is already listed."
+            }
+          },
+          "save": "Save working hours",
+          "saved": "Working hours saved.",
+          "saveFailed": "The working hours could not be saved."
         },
         "preferences": {
           "title": "Auto AI summarize",
@@ -351,14 +388,6 @@
         "webhooksTitle": "Webhooks",
         "webhooksBody": "Push delivery, read, and reply events to any HTTPS endpoint.",
         "manage": "Manage webhooks",
-        "sheetsTitle": "Google Sheets API key",
-        "sheetsBody": "Used by the Sheets add-on to push contacts and message rows into a sheet. The only personal token exposed today.",
-        "manageInAccount": "Manage in account",
-        "active": "Active",
-        "keyTimes": "generated {created} · last used {used}",
-        "never": "never",
-        "noKey": "No Sheets API key generated. Create one in",
-        "noKeyLink": "your account → Sheets add-on",
         "outboundTitle": "Outbound endpoints",
         "outboundBody": "Your workspace → your server (CRM hooks, send / reply events).",
         "inboundTitle": "Inbound webhooks",

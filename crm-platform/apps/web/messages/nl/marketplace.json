@@ -61,7 +61,8 @@
       "notForSale": "Deze app wordt nu niet aan nieuwe abonnees verkocht.",
       "trialUnavailable": "De gratis proefperiode is niet beschikbaar voor deze app in je workspace.",
       "subscriptionNotFound": "Je workspace heeft geen abonnement op deze app.",
-      "subscriptionState": "Dat past niet bij de huidige status van het abonnement. Laad opnieuw om de nieuwste status te zien."
+      "subscriptionState": "Dat past niet bij de huidige status van het abonnement. Laad opnieuw om de nieuwste status te zien.",
+      "renewalNotStopped": "We konden de automatische verlenging bij de betaalprovider niet stoppen, dus er is niets gewijzigd en je kaart kan nog steeds worden belast. Probeer het over een moment opnieuw."
     },
     "chips": {
       "installed": "Geïnstalleerd",
@@ -77,7 +78,8 @@
       "trialing": "Gratis proefperiode",
       "comped": "Gratis toegekend",
       "canceling": "Wordt niet verlengd",
-      "subscriptionEnded": "Abonnement beëindigd"
+      "subscriptionEnded": "Abonnement beëindigd",
+      "pastDue": "Betaling mislukt"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Niet te koop",
         "paid": "Betaalde app",
         "addOn": "Add-on",
-        "trial": "Gratis proefperiode van {days} dagen"
+        "trial": "Gratis proefperiode van {days} dagen",
+        "monthlyOrYearly": "{price} / maand of {annual} / jaar"
       },
       "installs": "{count, plural, one {# installatie} other {# installaties}}",
       "version": "Versie {version}",
@@ -302,7 +305,8 @@
         "terms": "Voorwaarden",
         "status": "Statuspagina",
         "email": "E-mailondersteuning"
-      }
+      },
+      "open": "Openen"
     },
     "install": {
       "backToMarketplace": "Terug naar de Marketplace",
@@ -799,14 +803,15 @@
         "minPlan": "Je abonnement, of een hoger abonnement, omvat deze app, dus je hoeft niets te betalen.",
         "plan": "Je abonnement omvat deze app, dus je hoeft niets te betalen."
       },
-      "needsPurchase": "Inbegrepen in de catalogus van je abonnement, koop hem om hem te gebruiken.",
+      "needsPurchase": "Abonneer je eerst. Installeren kan zodra de betaling is voltooid.",
       "subscribedNote": "Je workspace heeft een abonnement op deze app.",
       "trialOffer": "Probeer hem gratis {days, plural, one {# dag} other {# dagen}}. Er wordt niets in rekening gebracht totdat je kiest om je te abonneren.",
       "prepaidNote": "Maandelijks gefactureerd via de facturatie van je workspace. Elke betaling dekt één maand en wordt niet automatisch afgeschreven: betaal opnieuw vóór de getoonde datum om de app te laten doorlopen.",
       "notForSale": {
         "title": "Niet te koop",
         "message": "Deze app wordt op dit moment niet verkocht aan nieuwe abonnees."
-      }
+      },
+      "autoRenewNote": "Maandelijks gefactureerd via de facturatie van je workspace. Je kaart wordt elke maand automatisch belast op de verlengdatum, totdat je opzegt."
     },
     "subscribe": {
       "subscribe": "Abonneren",
@@ -820,7 +825,16 @@
         "included": "{name} is inbegrepen in je abonnement.",
         "already_entitled": "Je workspace heeft al toegang tot {name}.",
         "free": "{name} is gratis."
-      }
+      },
+      "hintPriceAuto": "{price} per maand, elke maand automatisch van je kaart afgeschreven totdat je opzegt.",
+      "hintAuto": "Je kaart wordt elke maand automatisch belast totdat je opzegt.",
+      "period": {
+        "legend": "Factureringsperiode",
+        "monthly": "Maandelijks, {price}",
+        "yearly": "Jaarlijks, {price}"
+      },
+      "hintYear": "{price} per jaar, betaald bij het afrekenen. Elke betaling dekt één jaar.",
+      "hintYearAuto": "{price} per jaar, elk jaar automatisch van je kaart afgeschreven totdat je opzegt."
     },
     "subscription": {
       "title": "Abonnement",
@@ -829,7 +843,8 @@
         "trialing": "Gratis proefperiode",
         "comped": "Gratis toegekend",
         "canceling": "Wordt niet verlengd",
-        "ended": "Beëindigd"
+        "ended": "Beëindigd",
+        "past_due": "Betaling mislukt"
       },
       "date": {
         "paidUntil": "Betaald tot {date}",
@@ -838,7 +853,9 @@
         "compOpen": "Gratis toegang, zonder einddatum",
         "cancelingUntil": "Wordt niet verlengd. Actief tot {date}",
         "endedOn": "Abonnement beëindigd op {date}",
-        "endedNoDate": "Abonnement beëindigd"
+        "endedNoDate": "Abonnement beëindigd",
+        "renewsOn": "Wordt verlengd op {date}",
+        "graceUntil": "Betaling mislukt. Werkt tot {date}"
       },
       "lastPayment": "Laatste betaling: {price} per maand",
       "nextPayment": "De prijs van deze app is veranderd. Je volgende betaling wordt {price} per maand.",
@@ -849,7 +866,8 @@
         "resubscribe": "Opnieuw abonneren",
         "subscribe": "Nu abonneren",
         "resume": "Abonnement hervatten",
-        "cancel": "Abonnement opzeggen"
+        "cancel": "Abonnement opzeggen",
+        "payNow": "Nu betalen"
       },
       "cancelConfirm": {
         "title": "Het abonnement op {name} opzeggen?",
@@ -857,7 +875,9 @@
         "messageNoDate": "{name} blijft actief tot de periode die je hebt betaald eindigt, daarna wordt hij gepauzeerd. Je gegevens en instellingen blijven bewaard.",
         "afterwards": "Er wordt niets meer in rekening gebracht, en je kunt je altijd weer abonneren.",
         "confirm": "Abonnement opzeggen",
-        "keep": "Abonnement behouden"
+        "keep": "Abonnement behouden",
+        "messageAuto": "Je kaart wordt niet opnieuw belast. {name} blijft actief tot {date}, daarna wordt hij gepauzeerd. Je gegevens en instellingen blijven bewaard.",
+        "messageAutoNoDate": "Je kaart wordt niet opnieuw belast. {name} blijft actief tot de periode die je hebt betaald eindigt, daarna wordt hij gepauzeerd. Je gegevens en instellingen blijven bewaard."
       },
       "toast": {
         "canceled": "Abonnement opgezegd. Het blijft actief tot {date}.",
@@ -865,7 +885,14 @@
         "resumed": "Abonnement hervat."
       },
       "working": "Bezig",
-      "noCheckout": "Betalen is voor deze app nu niet beschikbaar. Probeer het zo meteen opnieuw."
+      "noCheckout": "Betalen is voor deze app nu niet beschikbaar. Probeer het zo meteen opnieuw.",
+      "paymentFailed": "De laatste kaartbetaling voor deze app is niet gelukt. De app blijft werken tot {date} terwijl de betaalprovider het opnieuw probeert. Betaal nu of herstel je betaalmethode om een pauze te voorkomen.",
+      "paymentFailedNoDate": "De laatste kaartbetaling voor deze app is niet gelukt. De app blijft werken terwijl de betaalprovider het opnieuw probeert. Betaal nu of herstel je betaalmethode om een pauze te voorkomen.",
+      "autoRenewHint": "Je kaart wordt op de verlengdatum automatisch belast. Zeg vóór die datum op om dat te stoppen.",
+      "lastPaymentYear": "Laatste betaling: {price} per jaar",
+      "nextPaymentYear": "De prijs van deze app is veranderd. Je volgende betaling wordt {price} per jaar.",
+      "priceLocked": "Je prijs staat vast op {price} per maand. Hij blijft hetzelfde zolang je geabonneerd blijft, ook als de prijs van de app verandert.",
+      "priceLockedYear": "Je prijs staat vast op {price} per jaar. Hij blijft hetzelfde zolang je geabonneerd blijft, ook als de prijs van de app verandert."
     },
     "tools": {
       "open": "Openen",
@@ -875,6 +902,24 @@
       },
       "soon": "Binnenkort",
       "upgrade": "Upgraden"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Betaling ontvangen",
+        "message": "Bedankt. Je abonnement is actief en de app is klaar voor gebruik."
+      },
+      "pending": {
+        "title": "Je betaling wordt bevestigd",
+        "message": "De betalingsprovider heeft de betaling nog niet bevestigd. Deze pagina wordt bijgewerkt zodra dat gebeurt; je hoeft niet opnieuw te betalen."
+      },
+      "failed": {
+        "title": "De betaling is niet gelukt",
+        "message": "Er is niets in rekening gebracht. Abonneer je opnieuw om op een andere manier te betalen."
+      },
+      "cancelled": {
+        "title": "Betaling geannuleerd",
+        "message": "Er is niets in rekening gebracht. Abonneer je opnieuw wanneer je er klaar voor bent."
+      }
     }
   }
 }

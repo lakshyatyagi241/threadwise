@@ -4,12 +4,15 @@
       "eyebrow": "Przestrzeń robocza",
       "title": "Rejestr połączeń",
       "subtitle": "Każde połączenie WhatsApp wykonane lub odebrane przez zespół, z czasem trwania, osobą, która je obsłużyła, i nagraniem.",
+      "subtitleLogged": "Każda rozmowa zapisana przez zespół albo przychodząca z aplikacji mobilnej lub linii telefonicznej, z czasem trwania, osobą, która ją obsłużyła, i wynikiem.",
       "sideTip": "Każde połączenie WhatsApp z Twoich numerów lub na nie. Filtruj według daty, statusu, numeru lub współpracownika, aby znaleźć konkretne połączenie.",
+      "sideTipLogged": "Rozmowy zapisane przez „Zapisz połączenie”, wysłane przez aplikację mobilną lub zgłoszone przez linię telefoniczną. Filtruj według daty, statusu, źródła lub członka zespołu, aby znaleźć konkretną rozmowę.",
       "loading": "Ładowanie połączeń",
       "loadFailed": "Nie udało się wczytać rejestru połączeń.",
       "retry": "Spróbuj ponownie",
       "emptyTitle": "Brak połączeń",
       "emptyMessage": "Gdy klient zadzwoni na jeden z Twoich numerów WhatsApp lub zespół wykona połączenie ze skrzynki odbiorczej, pojawi się tutaj z czasem trwania, osobą, która je obsłużyła, i nagraniem.",
+      "emptyMessageLogged": "Użyj „Zapisz połączenie”, aby zapisać świeżo zakończoną rozmowę. Rozmowy z aplikacji mobilnej lub podłączonej linii telefonicznej też pojawią się tutaj, z czasem trwania i osobą, która je obsłużyła.",
       "emptyFilteredTitle": "Żadne połączenia nie pasują do filtrów",
       "emptyFilteredMessage": "Wybierz szerszy zakres czasu lub wyczyść filtry.",
       "clearFilters": "Wyczyść filtry",
@@ -63,7 +66,9 @@
         "agent": "Obsłużył(a)",
         "allAgents": "Wszyscy",
         "apply": "Filtruj",
-        "clear": "Wyczyść"
+        "clear": "Wyczyść",
+        "source": "Źródło",
+        "allSources": "Wszystkie źródła"
       },
       "table": {
         "caption": "Połączenia, od najnowszych",
@@ -136,12 +141,14 @@
           "reject_sent": "Połączenie odrzucone",
           "terminate_sent": "Wysłano rozłączenie",
           "terminate": "Połączenie zakończone",
-          "recording_stored": "Nagranie zapisane"
+          "recording_stored": "Nagranie zapisane",
+          "logged": "Połączenie zapisane"
         },
         "noRecording": {
           "title": "Nagranie",
           "message": "To połączenie nie ma nagrania."
-        }
+        },
+        "notes": "Notatki"
       },
       "recording": {
         "title": "Nagranie",
@@ -154,6 +161,53 @@
         "linkUntil": "Ten link działa do {time}. Po tym czasie naciśnij odtwarzanie ponownie.",
         "playFailed": "Nie udało się odtworzyć nagrania.",
         "retry": "Spróbuj ponownie"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Zapisane ręcznie",
+        "telephony": "Linia telefoniczna",
+        "mobile_app": "Aplikacja mobilna",
+        "web_click_to_call": "Kliknij, aby zadzwonić"
+      },
+      "logCall": {
+        "button": "Zapisz połączenie",
+        "title": "Zapisz połączenie",
+        "close": "Zamknij",
+        "with": "Rozmowa z",
+        "phone": "Numer telefonu",
+        "phoneHint": "Połączenie zostanie powiązane z kontaktem, który ma ten numer.",
+        "phoneHintContact": "Opcjonalnie. Połączenie zostanie powiązane z tym kontaktem.",
+        "direction": "Kierunek",
+        "outcome": "Jak poszło",
+        "outcomes": {
+          "connected": "Połączono",
+          "no_answer": "Brak odpowiedzi",
+          "busy": "Zajęte",
+          "left_voicemail": "Zostawiono wiadomość głosową",
+          "wrong_number": "Zły numer",
+          "declined": "Odrzucone",
+          "failed": "Nieudane"
+        },
+        "when": "Kiedy się zaczęło",
+        "minutes": "Długość w minutach",
+        "notes": "Notatki",
+        "notesHint": "Widoczne dla wszystkich, którzy widzą to połączenie. Do 2000 znaków.",
+        "followUp": "Utwórz też zadanie kontrolne",
+        "followUpDue": "Wróć do sprawy",
+        "followUpHint": "Zadanie zostanie przypisane do Ciebie i powiązane z kontaktem.",
+        "cancel": "Anuluj",
+        "save": "Zapisz połączenie",
+        "saving": "Zapisywanie...",
+        "saved": "Połączenie zapisane.",
+        "savedNoContact": "Połączenie zapisane. Żaden kontakt nie ma jeszcze tego numeru.",
+        "problems": {
+          "noWho": "Podaj numer telefonu.",
+          "badWhen": "Wybierz, kiedy zaczęło się połączenie.",
+          "futureWhen": "Połączenie nie może zaczynać się w przyszłości.",
+          "badMinutes": "Podaj długość w minutach, najwyżej 1440.",
+          "noDue": "Wybierz datę kontroli.",
+          "badDue": "Wybierz prawidłową datę kontroli."
+        }
       }
     },
     "analytics": {

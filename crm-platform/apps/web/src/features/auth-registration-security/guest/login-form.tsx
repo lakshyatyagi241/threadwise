@@ -299,7 +299,7 @@ export function LoginForm({
           label={t('password')}
           error={fieldErrors.password}
           labelEnd={
-            <Link href={forgotHref} className={cn(LINK, 'text-[11px]')}>
+            <Link href={forgotHref} className={cn(LINK, 'text-[13px]')}>
               {t('forgot')}
             </Link>
           }

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { BroadcastsModule } from '../broadcasts';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
@@ -30,6 +31,7 @@ import { BroadcastService } from './broadcast.service';
 import { CartRepository } from './cart.repository';
 import { CartService } from './cart.service';
 import { CodRepository } from './cod.repository';
+import { CommerceConsentService } from './commerce-consent.service';
 import { CodService } from './cod.service';
 import { CheckoutLinkService } from './checkout-link.service';
 import { EcomFlowShop } from './ecom-flow-shop';
@@ -73,6 +75,7 @@ import { WoocommerceService } from './woocommerce.service';
     NodeBridgeRuntimeModule,
     PlansCoreModule,
     ContactConsentModule,
+    SendWindowModule,
     CrmModule,
     PlatformSettingsModule,
   ],
@@ -115,6 +118,7 @@ import { WoocommerceService } from './woocommerce.service';
     StockRepository,
     StockService,
     MirrorRepository,
+    CommerceConsentService,
     EventMessageService,
     WebhookService,
     WebhookPipelineService,

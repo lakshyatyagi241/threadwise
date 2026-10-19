@@ -5,7 +5,8 @@ summary: Update your photo, name, email, phone, language, timezone and theme, an
 area: account
 order: 10
 documents: [tile:account]
-keywords: [account, profile, avatar, photo, name, email, phone, language, theme, timezone, delete account]
+keywords:
+  [account, profile, avatar, photo, name, email, phone, language, theme, timezone, delete account]
 ---
 
 ## What it is for

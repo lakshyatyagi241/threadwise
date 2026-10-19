@@ -30,7 +30,13 @@ export {
   installBodyLimits,
   type BodyLimitClass,
 } from './body-limits/body-limits';
-export { corsIsClosedInProduction, corsOriginFor, type CorsOrigin } from './cors/cors-policy';
+export {
+  corsIsClosedInProduction,
+  corsOriginFor,
+  staffCorsOptions,
+  STAFF_EXPOSED_HEADERS,
+  type CorsOrigin,
+} from './cors/cors-policy';
 export {
   isDone,
   listColumns,
@@ -47,6 +53,7 @@ export {
 } from './observability/worker-status.service';
 export {
   initSentry,
+  sentryEnabled,
   NO_EXTRA_DATA,
   reportServerError,
   flushSentry,
@@ -55,3 +62,30 @@ export {
 } from './observability/sentry';
 export { createFatalHandler, installProcessHandlers } from './observability/process-handlers';
 export { LOG_REDACT_PATHS, SECRET_HEADERS, redactHeaders } from './observability/log-redaction';
+export {
+  EventLoopSampler,
+  JobMetricsModule,
+  QueueDepthModule,
+  sampleQueueDepth,
+  Prober,
+  RuntimeMonitor,
+  attachJobMetrics,
+  classifySnapshot,
+  getRuntimeMonitor,
+  httpMetricsMiddleware,
+  jobTimings,
+  metricsListenerDecision,
+  parseProbeTargets,
+  probeOnce,
+  startMetricsServer,
+  startRuntimeMonitor,
+  stopRuntimeMonitor,
+  type EventLoopSnapshot,
+  type ListenerDecision,
+  type LoopLevel,
+  type ProbeOutcome,
+  type ProbeResult,
+  type ProbeTarget,
+  type RuntimeMonitorOptions,
+  type RuntimeService,
+} from './observability/event-loop';

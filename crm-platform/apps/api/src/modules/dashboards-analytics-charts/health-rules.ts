@@ -24,3 +24,13 @@ export function shortError(err: unknown): string {
 export function diskTone(usedPct: number): 'danger' | 'warning' | 'success' {
   return usedPct > 90 ? 'danger' : usedPct > 75 ? 'warning' : 'success';
 }
+
+const FAILURE_MAX = 160;
+
+/** A failed job's reason as one short line for the console: the first line only (a query's parameters follow it and can hold phone numbers or ids). */
+export function failureLine(reason: unknown): string | null {
+  if (typeof reason !== 'string') return null;
+  const line = reason.split('\n')[0]?.trim() ?? '';
+  if (!line) return null;
+  return line.length > FAILURE_MAX ? `${line.slice(0, FAILURE_MAX)}...` : line;
+}

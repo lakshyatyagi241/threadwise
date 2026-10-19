@@ -164,6 +164,32 @@
         "title": "测试通知",
         "titleNoName": "测试通知",
         "bodyNoActor": "如果你能看到这条消息，说明实时通知正常工作。"
+      },
+      "snooze_wake": {
+        "title": "{name} 已回到你的列表",
+        "titleNoName": "已暂停的会话回到了你的列表",
+        "titleTeam": "{name} 已回到你的团队",
+        "titleTeamNoName": "已暂停的会话回到了你的团队"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} 将于 {date, date, medium} 续订",
+        "bodyAuto": "届时将自动从您的银行卡扣款以续订 {name}。如需停止，请在此之前取消。",
+        "titleManual": "{name} 已付费至 {date, date, medium}",
+        "bodyManual": "{name} 不会自动续订。请在该日期前再次付款，以保持应用持续运行、不被暂停。",
+        "titleEnding": "{name} 将于 {date, date, medium} 结束",
+        "bodyEnding": "您已取消 {name}，因此它将在该日期停止运行。如需保留，请在此之前重新订阅。",
+        "title": "{name}：即将续订",
+        "titleNoName": "付费应用即将续订"
+      },
+      "marketplace_payment_failed": {
+        "title": "{name} 的付款失败",
+        "body": "银行卡付款未成功。支付服务商重试期间，应用可继续使用几天。请立即付款或更新付款方式，以免被暂停。",
+        "titleNoName": "付费应用付款失败"
+      },
+      "marketplace_subscription_ended": {
+        "title": "{name} 订阅已结束",
+        "body": "应用已暂停，其数据和设置将被保留。重新订阅即可再次启用。",
+        "titleNoName": "付费应用订阅已结束"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "WhatsApp 群组已恢复正常",
         "device_group_join_request": "入群申请",
         "device_group_removed": "已被移出 WhatsApp 群组",
-        "test": "测试通知"
+        "test": "测试通知",
+        "snooze_wake": "已暂停的会话已恢复",
+        "marketplace_renewal_due": "付费应用即将续订",
+        "marketplace_payment_failed": "付费应用付款失败",
+        "marketplace_subscription_ended": "付费应用订阅已结束"
       },
       "generic": "你有一条新通知",
       "paused": "实时更新已暂停，新提醒可能延迟最多一分钟。请刷新页面以重新连接。"
@@ -379,6 +409,26 @@
         "test": {
           "label": "测试通知",
           "hint": "你在“浏览器通知”中发送的测试，用来查看铃铛、弹窗和标签页标题是否正常。"
+        },
+        "appointment_calendar_drift": {
+          "label": "预约与 Google Calendar 不同步",
+          "hint": "即将到来的预约在 Google Calendar 中的日程被删除、改期或参与者被更改。预约本身不会改变，由您决定如何处理。"
+        },
+        "snooze_wake": {
+          "label": "已暂停的会话恢复",
+          "hint": "已暂停的会话会在设定时间重新打开，并分配给你或你的团队。"
+        },
+        "marketplace_renewal_due": {
+          "label": "付费应用续订提醒",
+          "hint": "付费应用的付费期限将在几天后结束：通过银行卡续订、已付费至某一日期，或已取消并将结束。"
+        },
+        "marketplace_payment_failed": {
+          "label": "付费应用付款失败",
+          "hint": "付费应用的银行卡续订扣款未成功，需要您处理。"
+        },
+        "marketplace_subscription_ended": {
+          "label": "付费应用订阅已结束",
+          "hint": "付费应用的订阅已结束，应用已被暂停。"
         }
       },
       "loading": "正在加载你的偏好设置",

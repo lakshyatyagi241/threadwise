@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-10-15T04:05:09.019Z",
+  "node": "v22.17.0",
+  "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+  "note": "Synthetic NDJSON, not production data. loopHoldMs = worst setTimeout(1) lateness while the call ran. Valid for this machine only.",
+  "rows": [
+    {
+      "payloadMb": 1,
+      "compressedMb": 0.15,
+      "gzipSync": {
+        "wallMs": 14.7,
+        "loopHoldMs": 15.1
+      },
+      "gzipAsync": {
+        "wallMs": 24.3,
+        "loopHoldMs": 5.4
+      },
+      "gunzipSync": {
+        "wallMs": 4.9,
+        "loopHoldMs": 12.2
+      },
+      "gunzipAsync": {
+        "wallMs": 18.3,
+        "loopHoldMs": 11.6
+      }
+    },
+    {
+      "payloadMb": 5,
+      "compressedMb": 0.73,
+      "gzipSync": {
+        "wallMs": 64.7,
+        "loopHoldMs": 63.9
+      },
+      "gzipAsync": {
+        "wallMs": 78.2,
+        "loopHoldMs": 14.1
+      },
+      "gunzipSync": {
+        "wallMs": 16.6,
+        "loopHoldMs": 15.8
+      },
+      "gunzipAsync": {
+        "wallMs": 41.9,
+        "loopHoldMs": 3.4
+      }
+    },
+    {
+      "payloadMb": 20,
+      "compressedMb": 2.95,
+      "gzipSync": {
+        "wallMs": 275,
+        "loopHoldMs": 274.1
+      },
+      "gzipAsync": {
+        "wallMs": 303.6,
+        "loopHoldMs": 4.8
+      },
+      "gunzipSync": {
+        "wallMs": 72.7,
+        "loopHoldMs": 71.9
+      },
+      "gunzipAsync": {
+        "wallMs": 166.3,
+        "loopHoldMs": 12.4
+      }
+    },
+    {
+      "payloadMb": 50,
+      "compressedMb": 7.37,
+      "gzipSync": {
+        "wallMs": 764.1,
+        "loopHoldMs": 763.3
+      },
+      "gzipAsync": {
+        "wallMs": 785.4,
+        "loopHoldMs": 5.3
+      },
+      "gunzipSync": {
+        "wallMs": 166.4,
+        "loopHoldMs": 169
+      },
+      "gunzipAsync": {
+        "wallMs": 408.6,
+        "loopHoldMs": 29.3
+      }
+    }
+  ]
+}

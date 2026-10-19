@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "Migracja",
+      "panel": "Migracja Waboo"
+    },
+    "common": {
+      "loading": "Ładowanie",
+      "retry": "Spróbuj ponownie",
+      "dash": "-",
+      "errors": {
+        "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+        "request": "Nie udało się zrealizować tego żądania.",
+        "unexpected": "Coś poszło nie tak po naszej stronie. Spróbuj ponownie za chwilę.",
+        "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+        "validation": "Niektóre wartości są nieprawidłowe. Sprawdź zaznaczone pola.",
+        "notFound": "To uruchomienie lub partia już nie istnieje.",
+        "active": "Uruchomienie dla jednej z tych organizacji jest już w kolejce lub trwa. Poczekaj na jego zakończenie.",
+        "dryRequired": "Migracja wymaga pomyślnego próbnego przebiegu z ostatnich 24 godzin dla każdej organizacji. Najpierw uruchom próbny przebieg.",
+        "confirm": "Wpisana wartość się nie zgadza.",
+        "notCancellable": "Anulować można tylko uruchomienie w kolejce lub zaplanowane. Trwającej migracji nie można zatrzymać.",
+        "collision": "Ten identyfikator organizacji daje klucz klienta, który jest już używany przez inną organizację lub występuje na liście dwukrotnie.",
+        "schedule": "Wybierz czas w przyszłości, nie dalej niż 90 dni."
+      }
+    },
+    "page": {
+      "eyebrow": "Administracja / System / Migracja",
+      "title": "Migracja Waboo",
+      "description": "Przenoś organizacje Waboo do WaDesk istniejącym potokiem migracji, teraz lub o wybranej porze, i śledź każdą z nich stąd.",
+      "banner": "Ten panel nigdy nie łączy WhatsApp i nigdy nic nie zapisuje w Waboo. Migracja zawsze zaczyna się od własnej pełnej próby, która niczego nie zapisuje, i zatrzymuje się przed załadowaniem czegokolwiek, jeśli próba nie jest czysta. Organizacje są przetwarzane jedna po drugiej.",
+      "superOnly": "Migracje może uruchamiać tylko superadministrator.",
+      "tabSingle": "Jedna organizacja",
+      "tabBulk": "Zbiorczo"
+    },
+    "form": {
+      "title": "Rozpocznij uruchomienie",
+      "org": "ID organizacji",
+      "orgHint": "Identyfikator organizacji (przestrzeni roboczej) Waboo, czyli nazwa bazy danych Waboo. Litery, cyfry, podkreślenie i znak plus.",
+      "orgInvalid": "Użyj liter, cyfr, podkreślenia lub znaku plus (do 128).",
+      "derived": "Klucz klienta: {client} (wyprowadzony z identyfikatora).",
+      "dryRun": "Próbny przebieg",
+      "dryRunning": "Uruchamianie",
+      "scheduleDry": "Zaplanuj próbny przebieg",
+      "migrate": "Migruj",
+      "scheduleMigrate": "Zaplanuj migrację",
+      "catchUp": "Dogoń zmiany",
+      "migrateHint": "Migracja zaczyna się od pełnej próby i niczego nie ładuje, jeśli nie jest czysta. Osobny próbny przebieg jest opcjonalny.",
+      "queued": "Uruchomienie dodane do kolejki.",
+      "scheduled": "Uruchomienie zaplanowane."
+    },
+    "confirm": {
+      "title": "Migruj {org}",
+      "body": "To załaduje organizację {org} do WaDesk. Zaczyna się od pełnej próby i niczego nie ładuje, jeśli nie jest czysta; po rozpoczęciu właściwego ładowania nie można go zatrzymać. Wpisz identyfikator organizacji, aby potwierdzić.",
+      "label": "Wpisz {org}, aby potwierdzić",
+      "cancel": "Anuluj",
+      "submit": "Migruj",
+      "catchupTitle": "Dogoń zmiany: {org}",
+      "catchupBody": "To aktualizuje już załadowaną organizację {org}: ponownie eksportuje dane z Waboo, ładuje tylko nowe wiersze, synchronizuje portfel i weryfikuje wynik. Zatrzymuje się, jeśli jego własny próbny przebieg nie jest czysty, a po rozpoczęciu nie można go zatrzymać. Wpisz identyfikator organizacji, aby potwierdzić.",
+      "catchupSubmit": "Dogoń zmiany"
+    },
+    "bulk": {
+      "title": "Migracja zbiorcza",
+      "ids": "ID organizacji",
+      "idsHint": "Jeden identyfikator organizacji w wierszu, maksymalnie {max}.",
+      "invalid": "Nieprawidłowy identyfikator: {ids}.",
+      "duplicates": "Podane dwukrotnie: {ids}.",
+      "collisions": "Taki sam klucz klienta jak inny identyfikator: {ids}.",
+      "tooMany": "Maksymalnie {max} organizacji naraz.",
+      "count": "{count} z {max} organizacji",
+      "stopOnFailure": "Zatrzymaj przy pierwszym błędzie",
+      "stopHint": "Domyślnie wyłączone: organizacja z błędem nie zatrzymuje pozostałych.",
+      "sequential": "Organizacje są przetwarzane jedna po drugiej, nigdy dwie naraz, ponieważ serwer pośredni nie może uruchomić dwóch migracji jednocześnie.",
+      "notReady": "{count, plural, one {# organizacja nie ma} few {# organizacje nie mają} many {# organizacji nie ma} other {# organizacji nie ma}} pomyślnego próbnego przebiegu z ostatnich 24 godzin, więc opcja Migruj wszystkie jest wyłączona.",
+      "dryAll": "Próbny przebieg wszystkich",
+      "dryRunning": "Uruchamianie",
+      "migrateAll": "Migruj wszystkie",
+      "migrateHint": "Każda organizacja zaczyna się od własnej pełnej próby i niczego nie ładuje, jeśli nie jest czysta. Osobny próbny przebieg jest opcjonalny.",
+      "queued": "Partia dodana do kolejki.",
+      "scheduled": "Partia zaplanowana."
+    },
+    "bulkConfirm": {
+      "title": "Migruj organizacje: {count}",
+      "body": "To załaduje do WaDesk organizacje w liczbie {count}, jedna po drugiej. Każda zaczyna się od własnej pełnej próby i niczego nie ładuje, jeśli nie jest czysta; po rozpoczęciu ładowania nie można go zatrzymać. Wpisz liczbę organizacji, aby potwierdzić.",
+      "label": "Wpisz {count}, aby potwierdzić",
+      "cancel": "Anuluj",
+      "submit": "Migruj wszystkie"
+    },
+    "readiness": {
+      "ok": "Ostatni próbny przebieg jest pomyślny i świeży. Możesz migrować.",
+      "okReview": "Ostatni próbny przebieg jest pomyślny, ale zgłosił alarmy do przejrzenia. Możesz migrować po ich przejrzeniu.",
+      "no_dry": "Brak próbnego przebiegu. Najpierw uruchom próbny przebieg.",
+      "not_green": "Ostatni próbny przebieg nie jest pomyślny. Napraw problem i uruchom próbny przebieg ponownie.",
+      "stale": "Ostatni pomyślny próbny przebieg jest starszy niż 24 godziny. Uruchom nowy próbny przebieg."
+    },
+    "schedule": {
+      "label": "Uruchom o (opcjonalnie)",
+      "hint": "Twoja strefa czasowa: {tz}. Zostaw puste, aby zacząć teraz.",
+      "utc": "Twoja strefa czasowa: {tz}. To jest {utc} UTC.",
+      "error": {
+        "invalid": "Wpisz prawidłową datę i godzinę.",
+        "past": "Wybierz czas w przyszłości.",
+        "tooFar": "Nie dalej niż 90 dni."
+      }
+    },
+    "runs": {
+      "title": "Uruchomienia",
+      "empty": "Brak uruchomień.",
+      "emptyHint": "Rozpocznij próbny przebieg powyżej.",
+      "open": "Otwórz",
+      "client": "Klient",
+      "database": "Baza danych",
+      "mode": "Tryb",
+      "status": "Status",
+      "created": "Utworzono"
+    },
+    "batches": {
+      "title": "Partie zbiorcze",
+      "empty": "Brak partii.",
+      "emptyHint": "Użyj karty Zbiorczo powyżej.",
+      "open": "Otwórz",
+      "orgs": "{count, plural, one {# organizacja} few {# organizacje} many {# organizacji} other {# organizacji}}"
+    },
+    "batch": {
+      "title": "Partia: {count, plural, one {# organizacja} few {# organizacje} many {# organizacji} other {# organizacji}}",
+      "back": "Zamknij",
+      "cancel": "Anuluj partię",
+      "cancelling": "Anulowanie",
+      "cancelled": "Partia anulowana.",
+      "progress": "Zakończono",
+      "runAt": "Zaplanowano na",
+      "started": "Rozpoczęto",
+      "finished": "Zakończono o",
+      "stopOn": "Zatrzymuje się przy pierwszym błędzie.",
+      "stopOff": "Organizacja z błędem nie zatrzymuje pozostałych.",
+      "polling": "Odświeżanie, dopóki partia jest aktywna."
+    },
+    "batchStatus": {
+      "queued": "W kolejce",
+      "running": "W toku",
+      "completed": "Zakończona",
+      "failed": "Zakończona z problemami",
+      "cancelled": "Anulowana"
+    },
+    "detail": {
+      "title": "Uruchomienie {org}",
+      "back": "Zamknij",
+      "cancel": "Anuluj uruchomienie",
+      "cancelling": "Anulowanie",
+      "cancelled": "Uruchomienie anulowane.",
+      "clientKey": "Klucz klienta",
+      "runAt": "Zaplanowano na",
+      "started": "Rozpoczęto",
+      "finished": "Zakończono",
+      "steps": "Kroki",
+      "noSteps": "Nie zgłoszono jeszcze żadnych kroków.",
+      "report": "Wynik weryfikatora",
+      "error": "Błąd",
+      "polling": "Odświeżanie, dopóki uruchomienie jest aktywne.",
+      "counts": "Liczniki"
+    },
+    "verdict": {
+      "green": "Zielony: nic nie brakuje, brak błędów integralności",
+      "amber": "Przejrzyj alarmy: żadne dane nie brakują, ale weryfikator zgłosił alarmy do sprawdzenia",
+      "red": "Czerwony: wymaga uwagi. Nie traktuj tego uruchomienia jako zakończonego",
+      "unaccounted": "Nierozliczone",
+      "integrityErrors": "Błędy integralności",
+      "alarms": "Alarmy",
+      "short": {
+        "green": "Zielony",
+        "amber": "Przejrzyj alarmy",
+        "red": "Czerwony"
+      }
+    },
+    "mode": {
+      "dry": "Próbny przebieg",
+      "load": "Migracja",
+      "catchup": "Dogonienie zmian"
+    },
+    "status": {
+      "queued": "W kolejce",
+      "scheduled": "Zaplanowane",
+      "running": "W toku",
+      "completed": "Zakończone",
+      "completedReview": "Zakończone, przejrzyj alarmy",
+      "completedRed": "Zakończone z błędami",
+      "failed": "Niepowodzenie",
+      "cancelled": "Anulowane",
+      "blocked": "Zablokowane, nie załadowano"
+    },
+    "step": {
+      "export": "Eksport",
+      "preflight": "Kontrole wstępne",
+      "backup": "Kopia zapasowa",
+      "dry": "Próbne ładowanie",
+      "load": "Ładowanie",
+      "core-load": "Ładowanie rdzenia",
+      "flow-state": "Stan przepływów",
+      "reconcile": "Uzgodnienie",
+      "report": "Raport"
+    },
+    "stepStatus": {
+      "running": "W toku",
+      "done": "Gotowe",
+      "failed": "Niepowodzenie",
+      "skipped": "Pominięte"
+    }
+  }
+}

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { sendHoldSchema } from '../compliance/send-window';
 import { uuidSchema } from '../common/ids';
 import { emailMetaSchema, emailReplyExtrasSchema } from '../channel-email/email-meta';
 import {
@@ -86,6 +87,10 @@ export type MessageTemplateHeader = z.infer<typeof messageTemplateHeaderSchema>;
 export const messageTemplateButtonSchema = z.object({
   type: z.enum(['quick_reply', 'url', 'phone', 'copy_code', 'other']),
   text: z.string(),
+  /** A URL button's link when the template fixes it (no `{{n}}` in it): the bubble opens it. Absent otherwise. */
+  url: z.string().nullable().optional(),
+  /** A call button's number as the template holds it: the bubble dials it. Absent otherwise. */
+  phone: z.string().nullable().optional(),
 });
 export type MessageTemplateButton = z.infer<typeof messageTemplateButtonSchema>;
 
@@ -265,6 +270,11 @@ export const messageResponseSchema = z.object({
   /** Present while `mediaState` is `failed`: a stable code (`MEDIA_EXPIRED`, `MEDIA_TOO_LARGE`, ...) and a reason an agent can read. */
   mediaFailure: messageFailureSchema.nullable().optional(),
   status: messageStatusSchema,
+  /**
+   * Present while a marketing message is `queued` on purpose, waiting for the end of the workspace's quiet hours (BL-177): why, until
+   * when, and which clock. The message is not failed and not lost; it goes at `hold.until`.
+   */
+  hold: sendHoldSchema.nullable().optional(),
   /** Present only while `status` is `failed`. */
   failure: messageFailureSchema.nullable(),
   /** The sender's own id; the client swaps its optimistic bubble for the stored row by this. Null for inbound. */

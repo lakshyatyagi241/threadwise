@@ -4,12 +4,15 @@
       "eyebrow": "Workspace",
       "title": "Call logs",
       "subtitle": "Every WhatsApp call your team placed or answered, with its length, who handled it and its recording.",
+      "subtitleLogged": "Every call your team logged, or that came in from the mobile app or a phone line, with its length, who handled it and how it went.",
       "sideTip": "Every WhatsApp call to or from your numbers. Filter by date, status, number or teammate to find a specific call.",
+      "sideTipLogged": "Calls written down with Log a call, sent by the mobile app or reported by a phone line. Filter by date, status, source or teammate to find a specific call.",
       "loading": "Loading calls",
       "loadFailed": "Could not load the call log.",
       "retry": "Try again",
       "emptyTitle": "No calls yet",
       "emptyMessage": "Once a customer calls one of your WhatsApp numbers, or your team places a call from the inbox, it will show here with its length, who handled it and its recording.",
+      "emptyMessageLogged": "Use Log a call to write down a call you just had. Calls from the mobile app or a connected phone line will show here too, with their length and who handled them.",
       "emptyFilteredTitle": "No calls match these filters",
       "emptyFilteredMessage": "Try a wider time range or clear the filters.",
       "clearFilters": "Clear filters",
@@ -63,7 +66,9 @@
         "agent": "Handled by",
         "allAgents": "Everyone",
         "apply": "Filter",
-        "clear": "Clear"
+        "clear": "Clear",
+        "source": "Source",
+        "allSources": "All sources"
       },
       "table": {
         "caption": "Calls, newest first",
@@ -136,12 +141,14 @@
           "reject_sent": "Call declined",
           "terminate_sent": "Hang up sent",
           "terminate": "Call ended",
-          "recording_stored": "Recording saved"
+          "recording_stored": "Recording saved",
+          "logged": "Call logged"
         },
         "noRecording": {
           "title": "Recording",
           "message": "This call has no recording."
-        }
+        },
+        "notes": "Notes"
       },
       "recording": {
         "title": "Recording",
@@ -154,6 +161,53 @@
         "linkUntil": "This link works until {time}. Press play again after that.",
         "playFailed": "The recording could not be played.",
         "retry": "Try again"
+      },
+      "source": {
+        "whatsapp": "WhatsApp",
+        "manual": "Logged by hand",
+        "telephony": "Phone line",
+        "mobile_app": "Mobile app",
+        "web_click_to_call": "Click to call"
+      },
+      "logCall": {
+        "button": "Log a call",
+        "title": "Log a call",
+        "close": "Close",
+        "with": "Call with",
+        "phone": "Phone number",
+        "phoneHint": "The call is linked to the contact who has this number.",
+        "phoneHintContact": "Optional. The call is linked to this contact.",
+        "direction": "Direction",
+        "outcome": "How it went",
+        "outcomes": {
+          "connected": "Connected",
+          "no_answer": "No answer",
+          "busy": "Busy",
+          "left_voicemail": "Left a voicemail",
+          "wrong_number": "Wrong number",
+          "declined": "Declined",
+          "failed": "Failed"
+        },
+        "when": "When it started",
+        "minutes": "Length in minutes",
+        "notes": "Notes",
+        "notesHint": "Visible to everyone who can see this call. Up to 2,000 characters.",
+        "followUp": "Also make a follow-up task",
+        "followUpDue": "Follow up on",
+        "followUpHint": "The task is assigned to you and linked to the contact.",
+        "cancel": "Cancel",
+        "save": "Save call",
+        "saving": "Saving...",
+        "saved": "Call logged.",
+        "savedNoContact": "Call logged. No contact has this number yet.",
+        "problems": {
+          "noWho": "Give a phone number.",
+          "badWhen": "Choose when the call started.",
+          "futureWhen": "The call cannot start in the future.",
+          "badMinutes": "Give the length as a number of minutes, up to 1,440.",
+          "noDue": "Choose a date for the follow-up.",
+          "badDue": "Choose a valid date for the follow-up."
+        }
       }
     },
     "analytics": {

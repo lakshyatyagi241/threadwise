@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "טפסי WhatsApp",
+      "links": "קישורי WhatsApp"
+    },
+    "errors": {
+      "generic": "משהו השתבש. נסו שוב.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "חברו מספר WhatsApp Cloud API כדי להשתמש בטפסים.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "לאף מספר WhatsApp Cloud API מחובר אין פרטי הרשאה תקפים.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta דחתה את הגדרת הטופס.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "חשבון ה-WhatsApp Business שלכם צריך לעבור אימות מול Meta לפני שתוכלו לפרסם טפסים.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta לא הצליחה לפרסם את הטופס הזה.",
+      "WFL_LINK_NOT_LIVE": "הקישור הזה מושהה או שתוקפו פג.",
+      "ROW_VERSION_CONFLICT": "פריט זה שונה במקום אחר. רעננו את הדף ונסו שוב.",
+      "VALIDATION_FAILED": "בדקו את השדות המסומנים ונסו שוב.",
+      "PLAN_FEATURE_LOCKED": "שדרגו את התוכנית שלכם כדי להשתמש בתכונה זו."
+    },
+    "forms": {
+      "heading": "טפסי WhatsApp",
+      "intro": "בנו טפסים שהלקוחות ממלאים ישירות בתוך WhatsApp, שלחו אותם מתוך תהליך אוטומטי ובדקו את התשובות כאן.",
+      "loading": "טוען טפסים…",
+      "retry": "ניסיון חוזר",
+      "create": {
+        "cta": "טופס חדש",
+        "creating": "יוצר…",
+        "defaultTitle": "טופס ללא שם",
+        "defaultField": "שם מלא"
+      },
+      "stats": {
+        "all": "כל הטפסים",
+        "published": "פורסמו",
+        "draft": "טיוטות",
+        "submissions": "מילויים"
+      },
+      "empty": {
+        "title": "אין עדיין טפסים",
+        "description": "צרו טופס, ואז שלחו אותו משלב טופס WhatsApp בתוך תהליך אוטומטי."
+      },
+      "table": {
+        "form": "טופס",
+        "type": "סוג",
+        "fields": "שדות",
+        "submissions": "מילויים"
+      },
+      "status": {
+        "draft": "טיוטה",
+        "published": "פורסם",
+        "paused": "מושהה"
+      },
+      "audience": {
+        "lead_capture": "איסוף לידים",
+        "survey": "סקר",
+        "appointment_booking": "קביעת תור",
+        "customer_support": "תמיכת לקוחות",
+        "sign_up": "הרשמה",
+        "other": "אחר"
+      },
+      "row": {
+        "edit": "עריכה",
+        "duplicate": "שכפול",
+        "delete": "מחיקה"
+      },
+      "confirm": {
+        "deleteTitle": "למחוק את הטופס הזה?",
+        "deleteMessage": "צמתי תהליך פעילים שמפנים אליו יפסיקו לעבוד.",
+        "deleteConfirm": "מחיקה",
+        "cancel": "ביטול"
+      },
+      "notice": {
+        "saved": "נשמר.",
+        "published": "פורסם ל-WhatsApp."
+      },
+      "builder": {
+        "back": "חזרה לטפסים",
+        "untitled": "טופס ללא שם",
+        "saving": "שומר…",
+        "saveDraft": "שמירת טיוטה",
+        "savePublish": "שמירה ופרסום",
+        "publishing": "מפרסם…",
+        "basics": "פרטי בסיס של הטופס",
+        "title": "כותרת",
+        "audienceType": "סוג",
+        "purpose": "מטרה",
+        "sendButtonLabel": "טקסט כפתור השליחה",
+        "thankYouNote": "הודעת תודה",
+        "screens": "מסכים",
+        "addScreen": "הוספת מסך",
+        "removeScreen": "הסרת מסך",
+        "screenN": "מסך {n}",
+        "defaultField": "שם מלא",
+        "newFieldLabel": "שדה חדש",
+        "fieldKind": "סוג השדה",
+        "fieldLabel": "תווית",
+        "required": "שדה חובה",
+        "removeField": "הסרה",
+        "options": "אפשרויות (מופרדות בפסיקים)",
+        "optionsPlaceholder": "אפשרות 1, אפשרות 2, אפשרות 3",
+        "mapsTo": "ממופה ל׾",
+        "mapsToHint": "שומר תשובה זו במאפיין איש הקשר בעת שליחת הטופס.",
+        "mapsToNone": "אל תשמור במאפיין איש הקשר",
+        "mapsToSystemGroup": "שדות איש הקשר",
+        "mapsToCustomGroup": "מאפיינים מותאמים אישית",
+        "mapsToSystem": {
+          "name": "שם מלא",
+          "first_name": "שם פרטי",
+          "last_name": "שם משפחה",
+          "email": "אימייל",
+          "title": "תפקיד",
+          "language": "שפה",
+          "address": "כתובת"
+        },
+        "mapsToPrivacyGroup": "פרטיות והסכמה",
+        "mapsToPrivacy": {
+          "age": "גיל (בדיקת קטינים)",
+          "date_of_birth": "תאריך לידה (בדיקת קטינים)",
+          "consent_marketing": "הסכמה שיווקית (WhatsApp)",
+          "consent_service": "הסכמת שירות (לא שיווק)"
+        }
+      },
+      "fieldKind": {
+        "heading": "כותרת",
+        "short_text": "טקסט קצר",
+        "paragraph": "פסקה",
+        "email": "דוא\"ל",
+        "phone_number": "מספר טלפון",
+        "number": "מספר",
+        "date": "תאריך",
+        "dropdown": "רשימה נפתחת",
+        "radio_buttons": "כפתורי בחירה",
+        "checkbox": "תיבות סימון"
+      },
+      "submissions": {
+        "heading": "מילויים",
+        "metaFlowId": "מזהה Meta Flow: {id}",
+        "export": "ייצוא CSV",
+        "empty": {
+          "title": "אין עדיין מילויים",
+          "description": "מילויים יוצגו כאן לאחר שהטופס הזה יישלח מתוך תהליך אוטומטי ומישהו ימלא אותו."
+        },
+        "table": {
+          "submitted": "נשלח",
+          "contact": "איש קשר",
+          "phone": "טלפון"
+        }
+      }
+    },
+    "links": {
+      "heading": "קישורי WhatsApp",
+      "intro": "צרו קישור עם מעקב שפותח את WhatsApp עם הודעה ממולאת מראש — לפרסומות, לביוגרפיות ברשתות ולקודי QR.",
+      "loading": "טוען קישורים…",
+      "retry": "ניסיון חוזר",
+      "searchPlaceholder": "חיפוש לפי שם או קישור",
+      "create": {
+        "cta": "קישור חדש"
+      },
+      "stats": {
+        "all": "כל הקישורים",
+        "live": "פעילים",
+        "totalClicks": "סך הקליקים",
+        "avgClicks": "קליקים בממוצע / קישור"
+      },
+      "tabs": {
+        "all": "הכול",
+        "live": "פעילים",
+        "paused": "מושהים"
+      },
+      "status": {
+        "live": "פעיל",
+        "paused": "מושהה"
+      },
+      "empty": {
+        "title": "אין עדיין קישורים",
+        "description": "צרו קישור לשיתוף בפרסומות, בביוגרפיה או בקוד QR."
+      },
+      "table": {
+        "link": "קישור",
+        "destination": "יעד",
+        "clicks": "קליקים",
+        "lastClicked": "קליק אחרון"
+      },
+      "row": {
+        "open": "פתיחה",
+        "copy": "העתקה",
+        "copied": "הועתק!",
+        "edit": "עריכה",
+        "duplicate": "שכפול",
+        "delete": "מחיקה"
+      },
+      "confirm": {
+        "deleteTitle": "למחוק את הקישור הזה?",
+        "deleteMessage": "הקישור המקוצר יפסיק לעבוד באופן מיידי.",
+        "deleteConfirm": "מחיקה",
+        "cancel": "ביטול"
+      },
+      "notice": {
+        "saved": "נשמר.",
+        "copyFailed": "לא ניתן היה להעתיק את הקישור."
+      },
+      "builder": {
+        "back": "חזרה לקישורים",
+        "newHeading": "קישור חדש",
+        "step": {
+          "destination": "יעד",
+          "message": "הודעת פתיחה",
+          "tracking": "מעקב"
+        },
+        "name": "שם",
+        "status": "סטטוס",
+        "countryCode": "קוד מדינה",
+        "phoneNumber": "מספר טלפון",
+        "welcomeMessage": "הודעת פתיחה",
+        "welcomeMessageHint": "מתמלאת מראש בצ'אט כשמישהו מקיש על הקישור.",
+        "slug": "קישור מקוצר",
+        "slugHint": "אותיות, מספרים ומקפים בלבד. השאירו ריק כדי ליצור אחד באופן אוטומטי.",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "תפוגה",
+        "utmSource": "מקור UTM",
+        "utmMedium": "ערוץ UTM",
+        "utmCampaign": "קמפיין UTM",
+        "previous": "הקודם",
+        "next": "הבא",
+        "mint": "יצירת קישור",
+        "save": "שמירה",
+        "saving": "שומר…",
+        "fixErrors": "בדקו את שדות היעד והקישור המקוצר.",
+        "mintedHeading": "הקישור שלכם",
+        "shortUrl": "קישור מקוצר",
+        "waUrl": "קישור WhatsApp",
+        "qrAlt": "קוד QR לקישור זה"
+      },
+      "public": {
+        "missingTitle": "הקישור לא נמצא",
+        "missingBody": "הקישור הזה אינו קיים או שנמחק.",
+        "goneTitle": "הקישור אינו פעיל עוד",
+        "goneBody": "הקישור הזה מושהה או פג תוקף.",
+        "errorTitle": "משהו השתבש",
+        "errorBody": "לא הצלחנו לפתוח את הקישור הזה. אנא נסה שוב."
+      }
+    }
+  }
+}

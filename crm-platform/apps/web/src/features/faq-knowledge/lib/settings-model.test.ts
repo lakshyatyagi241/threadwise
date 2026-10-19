@@ -4,6 +4,7 @@ import {
   activePreset,
   clampBand,
   clampThreshold,
+  fallbackInput,
   formFromSettings,
   presetsFor,
   settingsDirty,
@@ -18,6 +19,7 @@ const base: FaqSettings = {
   logQueries: true,
   verifyMode: 'off',
   verifyBand: 0.1,
+  fallbackMessage: null,
   verifyAvailable: true,
   verifyModel: 'openai/gpt-4o-mini',
   isDefault: true,
@@ -42,6 +44,7 @@ describe('toSettingsInput', () => {
       logQueries: true,
       verifyMode: 'off',
       verifyBand: 0.1,
+      fallbackMessage: null,
     });
     expect('rowVersion' in input).toBe(false);
   });
@@ -114,5 +117,17 @@ describe('the second check', () => {
     expect(verifyRange(0.99, 0.3)).toEqual({ from: 99, to: 100 });
     // A band outside the offered range is read as the nearest edge.
     expect(verifyRange(0.5, 0)).toEqual({ from: 50, to: 51 });
+  });
+});
+
+describe('fallbackInput', () => {
+  it('changes only the fallback text and sends it exactly as typed', () => {
+    const current = { ...base, rowVersion: 3, threshold: 0.6 };
+    const input = fallbackInput(current, ' Sorry,  we did nt get that!! ');
+    expect(input.fallbackMessage).toBe(' Sorry,  we did nt get that!! ');
+    expect(input).toMatchObject({ threshold: 0.6, rowVersion: 3, enabled: false });
+  });
+  it('an emptied box removes the fallback', () => {
+    expect(fallbackInput({ ...base, fallbackMessage: 'x' }, '').fallbackMessage).toBeNull();
   });
 });

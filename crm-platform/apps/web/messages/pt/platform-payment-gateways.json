@@ -107,6 +107,7 @@
       "noGateway": "Nenhum gateway de pagamento está configurado para {currency} ainda. Peça ao administrador para ativar um.",
       "noGatewayButton": "Nenhum gateway configurado",
       "sandbox": "sandbox",
+      "sandboxNote": "Modo de teste: nenhum dinheiro real é cobrado. Pague com o cartão de teste da documentação do seu gateway. A página da senha de uso único (OTP) é exibida pelo gateway, não por este aplicativo.",
       "pay": "Pagar {amount}",
       "processing": "Iniciando pagamento",
       "summary": "Resumo do pedido",

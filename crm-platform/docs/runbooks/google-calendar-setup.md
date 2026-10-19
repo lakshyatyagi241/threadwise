@@ -3,6 +3,10 @@
 For the platform operator. Once per platform (not per workspace): every workspace connects its own Google account through this one
 client. Without it, workspaces see Google Calendar as "not set up for this platform" and bookings carry on without a calendar.
 
+> The same OAuth client now also serves the Sheets, Docs, Forms and Drive permissions of the workspace's Google account (Settings, Integrations, Google account). For a
+> platform that offers more than the calendar, follow [google-workspace-setup.md](google-workspace-setup.md): it adds the other APIs and scopes and the verification plan. This
+> page stays correct for a platform that offers the calendar only.
+
 What the product does with the connection is in [docs/api/appointments-booking.md](../api/appointments-booking.md#google-calendar-tw-appt-012-028-029-d-08).
 
 ## 1. Google Cloud project and API
@@ -17,7 +21,7 @@ _APIs and Services, OAuth consent screen_ (in newer consoles: _Google Auth Platf
 
 1. User type **External** (workspaces use their own Google accounts, Gmail or Workspace).
 2. App name, support email, the app's home page, privacy policy and terms links, and the authorised domain (the platform's own domain).
-3. Scopes to add. These are exactly what the product asks for; add nothing else:
+3. Scopes to add. These are exactly what the product asks for a calendar-only consent; add nothing else (the other permissions are in the table of [google-workspace-setup.md](google-workspace-setup.md)):
 
    | Scope                                                            | Why                                            |
    | ---------------------------------------------------------------- | ---------------------------------------------- |

@@ -85,7 +85,8 @@
       "outsideWindow": "24시간 초과",
       "selected": "{count, plural, other {#개 선택됨}}",
       "sent": "Instagram 브로드캐스트 전송 완료 — {sent}건 전달{failed, plural, =0 {} other {, #건 실패}}.",
-      "sentNone": "수신자에게 보내지 못했습니다. Instagram 연결을 확인하세요."
+      "sentNone": "수신자에게 보내지 못했습니다. Instagram 연결을 확인하세요.",
+      "skipped": "동의 상태 때문에 메시지를 보내지 않음: {count}"
     }
   }
 }

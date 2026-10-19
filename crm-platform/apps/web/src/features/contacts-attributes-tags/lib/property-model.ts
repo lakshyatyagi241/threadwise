@@ -6,6 +6,7 @@ import {
   type FieldResponse,
   type FieldSectionResponse,
   type FieldType,
+  type ModuleKey,
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { ATTRIBUTE_KEY, ATTRIBUTE_KEY_MAX } from './attribute-model';
@@ -63,6 +64,7 @@ export const BUILT_IN_PROPERTIES: readonly BuiltInProperty[] = [
   { key: 'lifecycle_stage', type: 'select', required: false, manage: '/contact-stages' },
   { key: 'status', type: 'select', required: false, manage: '/contact-stages' },
   { key: 'groups', type: 'multiselect', required: false, manage: '/contact-groups' },
+  { key: 'owner', type: 'select', required: false },
   { key: 'opt_out', type: 'checkbox', required: false },
 ];
 
@@ -244,9 +246,12 @@ export function configFromDraft(
   return text ? { ...rest, description: text } : rest;
 }
 
-export function toCreateBody(d: PropertyDraft): CreateFieldInput {
+export function toCreateBody(
+  d: PropertyDraft,
+  moduleKey: ModuleKey = 'contacts',
+): CreateFieldInput {
   return {
-    moduleKey: 'contacts',
+    moduleKey,
     sectionId: d.sectionId,
     key: d.key.trim(),
     label: d.label.trim(),

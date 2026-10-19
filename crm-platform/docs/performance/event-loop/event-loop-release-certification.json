@@ -1,0 +1,76 @@
+{
+  "certification": "NOT CERTIFIED",
+  "reason": "3 of 10 criteria verified. Dashboards, alert firing, application baselines, benchmarks of real modules and the CI regression gate do not exist or were not verified. Do not use this file as a release gate.",
+  "date": "2026-10-15",
+  "criteria": [
+    {
+      "id": 1,
+      "criterion": "All applicable Node.js processes instrumented",
+      "status": "PARTIAL",
+      "evidence": "API and worker call startRuntimeMonitor (main.ts, worker.ts). apps/web (Next.js server) is not instrumented. The worker module has been booted with lifecycle hooks in an e2e and records a real job through a real processor; the API process has not been booted with the monitor, only a bare-server benchmark and unit tests exercise its side (main.ts middleware wiring is not covered)."
+    },
+    {
+      "id": 2,
+      "criterion": "Event-loop delay p50/p95/p99/max captured",
+      "status": "VERIFIED (monitor level)",
+      "evidence": "event-loop-monitor.spec.ts (27 pass); bench-monitor.json shows a 300 ms block reported as critical windows. Known blind spot after histogram.reset() documented (about 0.1-0.2 % of each window)."
+    },
+    {
+      "id": 3,
+      "criterion": "Interval-based event-loop utilization collected",
+      "status": "VERIFIED (unit)",
+      "evidence": "The unit test with a fake ELU caught that the default wrapper dropped its second argument (a real bug, fixed). Utilization against real load not asserted."
+    },
+    {
+      "id": 4,
+      "criterion": "CPU, memory and GC correlation available",
+      "status": "PARTIAL",
+      "evidence": "Series exist and are unit-tested (CPU, heap, RSS, GC by kind, cgroup file read). No correlation was run against a degraded real workload."
+    },
+    {
+      "id": 5,
+      "criterion": "Central dashboards configured",
+      "status": "NOT VERIFIED",
+      "evidence": "No Prometheus or Grafana in any compose file; no dashboard exists."
+    },
+    {
+      "id": 6,
+      "criterion": "Actionable warning and critical alert rules active",
+      "status": "PARTIAL",
+      "evidence": "deploy/observability/event-loop.rules.yml passes promtool check (15 rules) and promtool test (synthetic series, mutation-checked, including the near-misses that must not page). Loaded in a REAL Prometheus with a real Alertmanager scraping a real API, worker and probe (scrape-demo.mjs --stall, 40/41 with the one miss a demo timing bug fixed and rerun 26/26): all 15 evaluate, nothing fires when idle, and these fired from real stalls injected into live processes and were delivered to a receiver as firing (and, for the API stall, resolved): EventLoopBlockingWithImpact, ApiCallerLatencyHigh, WorkerEventLoopBlockingWithQueueImpact (20,000 queued jobs), EventLoopLongStallCritical (one 12 s block), RuntimeMetricsTargetDown (killed worker). Still not 'active': nothing runs on a real server (the opt-in overlay deploy/hostinger/observability.compose.yml is validated, not deployed), the receiver was a local HTTP server not a real chat or pager, and the 2 s / 10 s long-stall thresholds are judgement calls awaiting an owner decision."
+    },
+    {
+      "id": 7,
+      "criterion": "Representative module benchmarks automated",
+      "status": "PARTIAL",
+      "evidence": "k6 workload and runner exist (tools/event-loop-audit/load): contacts (list, search, get, create, update), inbox list and counts on an empty inbox, and a /health control, run as idle, normal, peak, spike and a 10 minute soak. Webhook, broadcast, automation and reporting scenarios are not built, the run is one laptop with unstable latency, and it is not automated in CI."
+    },
+    {
+      "id": 8,
+      "criterion": "Blocking hotspots reviewed and prioritized",
+      "status": "VERIFIED (static, one confirmed)",
+      "evidence": "31 runtime-path suspects triaged in event-loop-blocking-hotspots.json and the backlog. One confirmed by measurement and fixed (EL-001, contact export zlib). The rest are unprofiled suspects."
+    },
+    {
+      "id": 9,
+      "criterion": "CI performance regression gate functioning",
+      "status": "PARTIAL",
+      "evidence": "The static gate works locally and is wired into quality.yml, pnpm audit:event-loop and the pre-pr gate; the workflow is manual-only and has never run on GitHub. The p99-vs-baseline regression gate is NOT IMPLEMENTED."
+    },
+    {
+      "id": 10,
+      "criterion": "Baseline, test results and release evidence generated",
+      "status": "PARTIAL",
+      "evidence": "Test results and the monitor/zlib evidence are real and in this folder. Application baselines (idle, normal, peak, spike, 10 minute soak) exist for one laptop but are unstable and use invented rates (event-loop-performance-baseline.json); the 12 h and 24 h soaks were not run; the 280-check target is at 124."
+    }
+  ],
+  "verifiedCount": 3,
+  "openSevereRegressions": "none known; no comparison possible without a baseline",
+  "nextActions": [
+    "EL-B02 run deploy/hostinger/observability-up.sh on the server and supply the alert destination; EL-B14 send one real test alert through that destination",
+    "EL-B15 move the probe to the public ingress; confirm or change the 2 s / 10 s long-stall thresholds (owner decision)",
+    "EL-B05 load tool and baselines (separate change)",
+    "EL-B06 add the p99 regression comparison to CI",
+    "EL-B04 dashboards"
+  ]
+}

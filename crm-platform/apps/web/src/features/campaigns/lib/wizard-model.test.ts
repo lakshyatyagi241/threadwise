@@ -4,6 +4,7 @@ import {
   applyAiCopy,
   countCsvRows,
   countNumbers,
+  emailSkipped,
   firstBrokenStep,
   initialRecipientMode,
   recipientTotals,
@@ -56,9 +57,18 @@ describe('recipient modes', () => {
       groupIds: [],
       tagIds: [],
       segmentIds: [],
+      previousSends: { sends: [], outcome: 'all' },
       manualNumbers: '',
     });
     expect(withRecipientMode(f, 'audience')).toEqual({ csvText: '', manualNumbers: '' });
+  });
+
+  it('switching away from the audience mode also drops the picked previous sends', () => {
+    const f = form({ previousSends: { sends: [{ kind: 'campaign', id: 'x' }], outcome: 'read' } });
+    expect(withRecipientMode(f, 'manual')).toMatchObject({
+      previousSends: { sends: [], outcome: 'all' },
+    });
+    expect(withRecipientMode(f, 'audience')).not.toHaveProperty('previousSends');
   });
 
   it('counts numbers and CSV rows', () => {
@@ -78,8 +88,37 @@ describe('recipient modes', () => {
       groups: 15,
       contacts: 2,
       numbers: 2,
+      previous: 0,
       total: 19,
     });
+  });
+
+  it('adds up to what the picked previous sends held for the chosen outcome, as an estimate', () => {
+    const opt = (id: string, recipients: number, read: number) => ({
+      kind: 'campaign' as const,
+      id,
+      name: id,
+      at: null,
+      recipients,
+      delivered: recipients,
+      read,
+      replied: 0,
+      clicked: 0,
+      failed: 0,
+    });
+    const f = form({
+      contactIds: ['c1'],
+      previousSends: {
+        sends: [
+          { kind: 'campaign', id: 'a' },
+          { kind: 'campaign', id: 'b' },
+        ],
+        outcome: 'read',
+      },
+    });
+    expect(
+      recipientTotals(f, { groups: {}, tags: {}, previous: [opt('a', 100, 40), opt('b', 50, 5)] }),
+    ).toMatchObject({ previous: 45, total: 46 });
   });
 });
 
@@ -109,5 +148,31 @@ describe('Build with AI', () => {
   it('adds no link button without both a label and an address', () => {
     const f = applyAiCopy(form(), { ...copy, buttonUrl: '', quickReplies: ['Yes'] });
     expect(f.buttons).toEqual([{ type: 'quick_reply', text: 'Yes', value: 'Yes' }]);
+  });
+});
+
+describe('emailSkipped: who an email campaign cannot reach, as far as the screen knows', () => {
+  const contacts = [
+    { id: 'a', email: 'a@x.test' },
+    { id: 'b', email: null },
+    { id: 'c', email: '  ' },
+  ];
+
+  it('counts picked contacts with no address, and every typed or uploaded number', () => {
+    const f = {
+      ...EMPTY_FORM,
+      contactIds: ['a', 'b', 'c'],
+    };
+    expect(emailSkipped(f, contacts)).toEqual({ contacts: 2, numbers: 0, total: 2 });
+    expect(
+      emailSkipped(
+        { ...EMPTY_FORM, manualNumbers: '9198\n9199', csvText: 'name,phone\nA,1' },
+        contacts,
+      ),
+    ).toEqual({ contacts: 0, numbers: 3, total: 3 });
+  });
+
+  it('a picked contact the loaded list does not carry is not guessed', () => {
+    expect(emailSkipped({ ...EMPTY_FORM, contactIds: ['zzz'] }, contacts).total).toBe(0);
   });
 });

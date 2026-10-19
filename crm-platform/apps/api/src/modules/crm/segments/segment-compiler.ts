@@ -4,7 +4,9 @@ import {
   builtinFieldKind,
   checkConditionValue,
   collectConditions,
+  companyFieldKey,
   customFieldKey,
+  isCompanySegmentField,
   segmentKindForFieldType,
   type FieldType,
   type InvalidCondition,
@@ -15,13 +17,17 @@ import {
   type SegmentNode,
   type SegmentOperator,
 } from '@crm/contracts';
-import { tokenCondition, searchTokens } from '../contacts/contact-conditions';
 import {
-  booleanTextPredicate,
+  contactPhoneDigits,
+  minorCondition,
+  searchCondition,
+} from '../contacts/contact-conditions';
+import {
+  countryCodePredicate,
   datePredicate,
   groupsPredicate,
-  multiPredicate,
   numberPredicate,
+  phonePredicate,
   tagsPredicate,
   textPredicate,
   type DateOperator,
@@ -29,6 +35,7 @@ import {
   type SetOperator,
   type TextOperator,
 } from '../contacts/contact-predicates';
+import { operandStrings, propertyPredicate } from '../property-predicates';
 
 const { contacts } = schema;
 
@@ -45,6 +52,8 @@ export interface RuleContext {
   statuses: Set<string>;
   /** Active contact properties by key. */
   fields: Map<string, { type: FieldType }>;
+  /** Active company properties by key (a `company.<key>` rule reads the contact's company). */
+  companyFields: Map<string, { type: FieldType }>;
 }
 
 export const emptyRuleContext = (): RuleContext => ({
@@ -54,6 +63,7 @@ export const emptyRuleContext = (): RuleContext => ({
   stages: new Set(),
   statuses: new Set(),
   fields: new Map(),
+  companyFields: new Map(),
 });
 
 export interface CompiledRules {
@@ -70,6 +80,7 @@ export interface RuleRefs {
   stageValues: Set<string>;
   statusValues: Set<string>;
   fieldKeys: Set<string>;
+  companyFieldKeys: Set<string>;
 }
 
 export const emptyRuleRefs = (): RuleRefs => ({
@@ -79,6 +90,7 @@ export const emptyRuleRefs = (): RuleRefs => ({
   stageValues: new Set(),
   statusValues: new Set(),
   fieldKeys: new Set(),
+  companyFieldKeys: new Set(),
 });
 
 /** Adds what `rules` points at to `into` (or to a new set). */
@@ -103,18 +115,15 @@ export function collectRuleRefs(rules: SegmentGroup, into?: RuleRefs): RuleRefs 
         values.forEach((v) => refs.statusValues.add(v));
         break;
       default:
-        if (builtinFieldKind(c.field) === undefined) refs.fieldKeys.add(customFieldKey(c.field));
+        if (isCompanySegmentField(c.field)) refs.companyFieldKeys.add(companyFieldKey(c.field));
+        else if (builtinFieldKind(c.field) === undefined)
+          refs.fieldKeys.add(customFieldKey(c.field));
     }
   }
   return refs;
 }
 
-/** The scalar or list operand as strings (empty for operators without one). */
-function valuesOf(c: SegmentCondition): string[] {
-  const v = c.value;
-  if (v === undefined || (typeof v === 'object' && !Array.isArray(v))) return [];
-  return (Array.isArray(v) ? v : [v]).map(String);
-}
+const valuesOf = (c: SegmentCondition): string[] => operandStrings(c.value);
 
 type Verdict = { sql: SQL } | { invalid: SegmentInvalidReason; message: string; refs: string[] };
 
@@ -123,9 +132,6 @@ const invalid = (reason: SegmentInvalidReason, message: string, refs: string[] =
   message,
   refs,
 });
-
-/** `contacts.data ->> key`, the key bound as a parameter. */
-const dataText = (key: string): SQL => sql`(${contacts.data} ->> ${key}::text)`;
 
 /**
  * Turns a rule tree into one SQL condition over `contacts`, through the same predicates the contacts
@@ -168,18 +174,19 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
   const op: SegmentOperator = c.operator;
   const builtin = builtinFieldKind(c.field);
 
+  const onCompany = isCompanySegmentField(c.field);
   let kind: SegmentFieldKind;
   let key = '';
   if (builtin !== undefined) {
     kind = builtin;
   } else {
-    key = customFieldKey(c.field);
-    const def = rc.fields.get(key);
+    key = onCompany ? companyFieldKey(c.field) : customFieldKey(c.field);
+    const def = (onCompany ? rc.companyFields : rc.fields).get(key);
     if (!def)
       return invalid(
         'field_deleted',
-        `The property "${key}" does not exist (it may have been deleted).`,
-        [key],
+        `The ${onCompany ? 'company property' : 'property'} "${key}" does not exist (it may have been deleted).`,
+        [onCompany ? c.field : key],
       );
     const k = segmentKindForFieldType(def.type);
     if (!k) {
@@ -201,36 +208,15 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
   });
 
   if (builtin === undefined) {
-    switch (kind) {
-      case 'text':
-        return text(dataText(key));
-      case 'option':
-        return text(dataText(key), true);
-      case 'number':
-        return {
-          sql: numberPredicate(
-            sql`segment_safe_numeric(${dataText(key)})`,
-            op as NumberOperator,
-            c.value,
-          ),
-        };
-      case 'date':
-        return {
-          sql: datePredicate(
-            sql`segment_safe_timestamptz(${dataText(key)})`,
-            op as DateOperator,
-            c.value,
-          ),
-        };
-      case 'boolean':
-        return { sql: booleanTextPredicate(dataText(key), op === 'is_true') };
-      case 'multi':
-        return {
-          sql: multiPredicate(sql`(${contacts.data} -> ${key}::text)`, op as SetOperator, values),
-        };
-      default:
-        return invalid('operator_unsupported', `A ${kind} value cannot be used on a property.`);
-    }
+    // A company property is read off the contact's company: a contact with no company has no value (so "is empty" and the "not"
+    // operators hold for it, as for a contact that has the property blank).
+    const data = onCompany
+      ? sql`(SELECT co.data FROM companies co WHERE co.org_id = ${contacts.orgId} AND co.id = ${contacts.companyId})`
+      : sql`${contacts.data}`;
+    const predicate = propertyPredicate(data, key, kind, op, c.value);
+    return predicate
+      ? { sql: predicate }
+      : invalid('operator_unsupported', `A ${kind} value cannot be used on a property.`);
   }
 
   switch (c.field) {
@@ -239,11 +225,24 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     case 'email':
       return text(sql`${contacts.email}`);
     case 'phone':
-      return text(sql`${contacts.phone}`);
+      // Typed the way the screen shows it ("+91 88751 37569"): compared on digits, not on the stored text.
+      return {
+        sql: phonePredicate(
+          contactPhoneDigits,
+          sql`${contacts.phone}`,
+          op as TextOperator,
+          c.value,
+        ),
+      };
     case 'countryCode':
-      return text(sql`${contacts.countryCode}`);
+      // "+91", "91" and "0091" are one code.
+      return {
+        sql: countryCodePredicate(sql`${contacts.countryCode}`, op as TextOperator, c.value),
+      };
     case 'source':
       return text(sql`${contacts.source}`);
+    case 'timezone':
+      return text(sql`${contacts.timezone}`);
     case 'leadScore':
       return { sql: numberPredicate(sql`${contacts.leadScore}`, op as NumberOperator, c.value) };
     case 'lifecycleStage': {
@@ -307,10 +306,30 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
             ? sql`${contacts.importJobId} IS NOT NULL`
             : sql`${contacts.importJobId} IS NULL`,
       };
-    case 'search': {
-      const tokens = searchTokens(String(c.value));
-      return { sql: sql`(${sql.join(tokens.map(tokenCondition), sql` AND `)})` };
-    }
+    case 'minor':
+      return { sql: minorCondition(op === 'is_true') };
+    case 'uncontacted':
+      return {
+        sql:
+          op === 'is_true'
+            ? sql`${contacts.uncontactedSince} IS NOT NULL`
+            : sql`${contacts.uncontactedSince} IS NULL`,
+      };
+    case 'dateOfBirth':
+      return {
+        sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value),
+      };
+    case 'age':
+      // Whole years on the earliest calendar date on Earth (UTC minus 12 hours), like the minor flag; no date, no age.
+      return {
+        sql: numberPredicate(
+          sql`(CASE WHEN ${contacts.dateOfBirth} IS NULL THEN NULL ELSE EXTRACT(YEAR FROM age((timezone('UTC', now()) - interval '12 hours')::date, ${contacts.dateOfBirth}))::int END)`,
+          op as NumberOperator,
+          c.value,
+        ),
+      };
+    case 'search':
+      return { sql: searchCondition(String(c.value)) };
     case 'createdAt':
       return { sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value) };
     case 'updatedAt':

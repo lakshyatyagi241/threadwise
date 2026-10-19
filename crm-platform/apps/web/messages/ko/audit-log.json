@@ -92,7 +92,8 @@
       "api_keys": "API 키",
       "audit-log": "감사 로그",
       "audit-log-exports": "감사 로그 내보내기",
-      "contact_consent_exports": "동의 증빙 내보내기"
+      "contact_consent_exports": "동의 증빙 내보내기",
+      "revenue-report-exports": "매출 보고서 파일"
     },
     "table": {
       "caption": "감사 항목이에요(최신순). 시간은 내 시간대({zone}) 기준으로 표시돼요.",

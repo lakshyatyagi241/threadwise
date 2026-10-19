@@ -92,11 +92,53 @@ function usedKeys(source: string): string[] {
 const DYNAMIC = [
   ...ERROR_KINDS.map((s) => `errors.${s}`),
   ...SORTS.map((s) => `toolbar.sorts.${s}`),
+  // the brief card's failures and sections are chosen by kind / key (lib/brief.ts, BRIEF_SECTION_KEYS)
+  ...(
+    [
+      'tooSoon',
+      'providerFailed',
+      'limit',
+      'forbidden',
+      'notFound',
+      'network',
+      'unexpected',
+    ] as const
+  ).map((s) => `brief.errors.${s}`),
+  ...(
+    ['activity', 'deals', 'tasks', 'conversations', 'properties', 'risks', 'nextSteps'] as const
+  ).map((s) => `brief.sections.${s}`),
+  ...(['properties', 'contacts', 'deals', 'tasks', 'conversations'] as const).map(
+    (s) => `brief.source.${s}`,
+  ),
+  ...(['default', 'asc', 'desc'] as const).map((s) => `toolbar.directions.${s}`),
+  // the table's optional columns are chosen as `t(column.label.key)` (lib/columns.ts)
+  ...(['website', 'email', 'phone', 'size', 'owner', 'created'] as const).map((s) => `table.${s}`),
   ...Object.keys(FIELD_LABELS).map((s) => `activity.fields.${s}`),
   ...(['required', 'tooLong', 'email', 'invalid', 'ownerInvalid'] as const).map(
     (s) => `form.problems.${s}`,
   ),
   ...(['open', 'won', 'lost'] as const).map((s) => `deals.status.${s}`),
+  // the property value messages are chosen by kind (`tProp(kind)`)
+  ...(['required', 'number', 'integer', 'email', 'url', 'invalid', 'notEditable'] as const).map(
+    (s) => `form.propertyProblems.${s}`,
+  ),
+  // the Company properties screen is the Contact properties screen with these words for the module's own records, chosen as
+  // `copy('<key>')` in apps/web/src/features/contacts-attributes-tags (see lib/module-copy.ts)
+  ...[
+    'title',
+    'subtitle',
+    'section.hint',
+    'row.contacts',
+    'deactivate.inUse',
+    'deactivate.unused',
+    'modal.newTitle',
+    'modal.descriptionHint',
+    'modal.optionsNote',
+    'modal.requiredHint',
+    'modal.visibleHint',
+    'modal.conditionsHint',
+    'modal.deactivateNote',
+  ].map((s) => `properties.${s}`),
   ...(['insert', 'update', 'delete'] as const).map((s) => `activity.actions.${s}`),
   'nav.companies',
 ];

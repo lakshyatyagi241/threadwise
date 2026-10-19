@@ -92,7 +92,8 @@
       "api_keys": "APIキー",
       "audit-log": "監査ログ",
       "audit-log-exports": "監査ログのエクスポート",
-      "contact_consent_exports": "同意証跡のエクスポート"
+      "contact_consent_exports": "同意証跡のエクスポート",
+      "revenue-report-exports": "売上レポートのファイル"
     },
     "table": {
       "caption": "監査エントリ(新しい順)。時刻はお使いのタイムゾーン({zone})で表示されます。",

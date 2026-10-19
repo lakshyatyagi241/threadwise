@@ -57,6 +57,8 @@ body { display: flex; flex-direction: column; background: #fff; }
 .pop[hidden] { display: none; }
 .pop.at-start { inset-inline-end: auto; inset-inline-start: 10px; }
 .pop .mi { display: flex; align-items: center; gap: 10px; border: 0; background: transparent; text-align: start; font: inherit; font-size: 13.5px; font-weight: 600; padding: 8px 10px; border-radius: 10px; cursor: pointer; color: inherit; text-decoration: none; }
+#endpop { width: auto; min-width: 210px; gap: 2px; }
+#endpop .mi svg { flex: none; opacity: .75; }
 .pop .mi:hover { background: var(--accent-soft); color: var(--accent); }
 .pop .mi img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; flex: none; }
 .pop.blocks { display: grid; grid-template-columns: 1fr 1fr; }
@@ -133,6 +135,7 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .act:hover { background: rgba(0,0,0,.06); color: var(--accent); }
 .act[aria-pressed="true"] { color: var(--accent); }
 .act.down svg { transform: rotate(180deg); }
+.fbmsg { font-size: 11.5px; color: #8b8fa8; align-self: center; margin-inline-start: 6px; }
 .input-row .mic, .mic { flex: none; width: 36px; height: 36px; padding: 0; gap: 0; border: 0; border-radius: 12px; background: transparent; color: #8b8fa8; display: grid; place-items: center; cursor: pointer; padding: 0; }
 .mic:hover { color: var(--accent); background: var(--accent-soft); }
 .mic[hidden] { display: none; }
@@ -169,6 +172,7 @@ body[data-fill="solid"] .chip .ico { background: rgba(255,255,255,.22); color: v
 .intake label.consent { display: flex; gap: 8px; align-items: flex-start; font-size: 11.5px; color: #374151; margin: 2px 0 10px; line-height: 1.4; }
 .intake label.consent input { width: auto; margin: 2px 0 0; padding: 0; flex: none; }
 .intake label.consent a { color: var(--accent); }
+.intake .age-err { color: #b91c1c; font-size: 12px; margin: -2px 0 8px; }
 .intake button { width: 100%; padding: 10px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px; font: inherit; font-weight: 700; font-size: 13.5px; cursor: pointer; }
 .footer { padding: 12px 14px 10px; border-top: 1px solid #f0f1f7; background: #fff; flex: none; }
 .input-row { display: flex; align-items: center; gap: 8px; background: #f4f4fb; border: 1px solid #eceef6; border-radius: 18px; padding: 5px 5px 5px 15px; transition: border-color .15s, box-shadow .15s; }
@@ -249,7 +253,7 @@ const SCRIPT = `
 
   // How the window looks and behaves beyond its colours (the author's settings): reply button fill and shape, typeface, suggestions,
   // the copy / like icons, the expand button and the voice conversation.
-  var CHAT = { fill: 'outline', shape: 'pill', font: 'system', size: 'standard', header: 'diagonal', direction: 'auto', icons: true, suggestions: [], suggestionNodes: [], suggestionsOn: true, actions: true, expand: true, voice: false, logo: '', avatar: '', background: '', corner: 'rounded', autoOpen: 0, sound: false, notice: { enabled: false, icon: 1, items: [] }, quickMenu: { enabled: false, view: 'list', items: [] }, banners: { enabled: false, items: [] }, fontSize: 14, hoverBg: '', soundVolume: 70, speak: false, pip: false };
+  var CHAT = { fill: 'outline', shape: 'pill', font: 'system', size: 'standard', header: 'diagonal', direction: 'auto', icons: true, suggestions: [], suggestionNodes: [], suggestionsOn: true, actions: true, expand: true, voice: false, logo: '', avatar: '', background: '', corner: 'rounded', autoOpen: 0, sound: false, notice: { enabled: false, icon: 1, items: [] }, quickMenu: { enabled: false, view: 'list', items: [] }, banners: { enabled: false, items: [] }, fontSize: 14, hoverBg: '', soundVolume: 70, speak: false, pip: false, feedback: { enabled: true, message: '' } };
   var FONTS = {
     system: 'system-ui,-apple-system,"Segoe UI",Roboto,sans-serif',
     serif: 'Georgia,"Times New Roman",serif',
@@ -418,7 +422,22 @@ const SCRIPT = `
   }
 
   var popsBound = false;
-  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; }
+  function closePops() { $('menupop').hidden = true; $('noticepop').hidden = true; $('endpop').hidden = true; }
+  // Close this chat / Restart this chat: the server makes a fresh visitor (a fresh conversation), the window keeps its id and
+  // loads again. Close also asks the site to hide the panel. The Customize preview has no conversation, so it only hides.
+  function startOver(hide) {
+    closePops();
+    function done() {
+      if (hide) { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} }
+      if (!PREVIEW) location.reload();
+    }
+    if (PREVIEW) { done(); return; }
+    fetch(BASE + 'restart', { method: 'POST', credentials: 'include' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (j && j.visitor_uuid) storeUuid(j.visitor_uuid); })
+      .catch(function () {})
+      .then(done);
+  }
   // The header's bell (notification cards) and menu (rows or blocks).
   function paintHeaderPops(hdr) {
     var np = $('noticepop'), mp = $('menupop');
@@ -549,8 +568,22 @@ const SCRIPT = `
     up.setAttribute('aria-pressed', 'false');
     down.setAttribute('aria-pressed', 'false');
     box.appendChild(cp);
-    box.appendChild(up);
-    box.appendChild(down);
+    // Feedback off hides the thumbs; its message is kept in the settings for when it is switched back on.
+    if (!CHAT.feedback || CHAT.feedback.enabled !== false) {
+      box.appendChild(up);
+      box.appendChild(down);
+      var thanks = CHAT.feedback && CHAT.feedback.message;
+      if (thanks) {
+        var note = document.createElement('span');
+        note.className = 'fbmsg';
+        note.setAttribute('role', 'status');
+        note.hidden = true;
+        note.textContent = thanks;
+        box.appendChild(note);
+        var shown = vote;
+        vote = function (v) { shown(v); note.hidden = up.getAttribute('aria-pressed') !== 'true' && down.getAttribute('aria-pressed') !== 'true'; };
+      }
+    }
     return box;
   }
 
@@ -896,15 +929,27 @@ const SCRIPT = `
       };
       hdr.appendChild(ex);
     }
-    // Inside the site's panel (a flow bot's), the window has its own close button: it asks the page to hide the panel.
-    if (FLOW && window.parent !== window) {
+    // Inside the site's panel (any website bot) the window has its own cross. It opens two choices: close this chat (the panel hides
+    // and the next visit starts fresh) or restart this chat (a fresh conversation right now).
+    if (window.parent !== window) {
       var x = document.createElement('button');
       x.type = 'button';
       x.className = 'hx';
       x.dataset.end = '1';
       x.setAttribute('aria-label', tx('closeChat', 'Close chat'));
+      x.setAttribute('aria-haspopup', 'true');
       x.appendChild(svg(20, ['M6 6l12 12', 'M18 6L6 18']));
-      x.onclick = function () { try { window.parent.postMessage({ wgt: 'close' }, '*'); } catch (e) {} };
+      var ep = $('endpop');
+      ep.textContent = '';
+      [['closeThis', 'Close this chat', true, ['M6 6l12 12', 'M18 6L6 18']], ['restartThis', 'Restart this chat', false, ['M3 12a9 9 0 1 0 3-6.7', 'M3 4v5h5']]].forEach(function (o) {
+        var mi = document.createElement('button');
+        mi.type = 'button'; mi.className = 'mi'; mi.setAttribute('role', 'menuitem');
+        mi.appendChild(svg(16, o[3]));
+        var sp = document.createElement('span'); sp.textContent = tx(o[0], o[1]); mi.appendChild(sp);
+        mi.onclick = function () { startOver(o[2]); };
+        ep.appendChild(mi);
+      });
+      x.onclick = function (e) { e.stopPropagation(); var on = ep.hidden; closePops(); ep.hidden = !on; };
       hdr.appendChild(x);
     }
     var acc = cfg.button_bg || '#5B4DDB';
@@ -942,6 +987,36 @@ const SCRIPT = `
     $('msgs').appendChild(a);
   }
 
+  // The optional age question of the intake form (BL-218). It is never pre-filled and never says which answer passes. A refusal is
+  // remembered for this tab only (the server keeps nothing about a refused visitor).
+  var AGELOCK = 'wsnap_age_' + TOKEN;
+  function ageLocked() {
+    try { return window.sessionStorage.getItem(AGELOCK) === '1'; } catch (e) { return false; }
+  }
+  function ageError(text) {
+    var el = $('i-age-err');
+    if (!el) return;
+    el.textContent = text;
+    el.style.display = 'block';
+  }
+  function blockChat(remember) {
+    if (remember) { try { window.sessionStorage.setItem(AGELOCK, '1'); } catch (e) { /* a courtesy only */ } }
+    hideTyping();
+    intakeDone = true;
+    $('intake').style.display = 'none';
+    $('msgs').textContent = '';
+    addBubble('in', tx('ageBlocked', 'We are not able to continue this chat.'));
+    $('send').disabled = true;
+    $('txt').disabled = true;
+  }
+  function reopenIntake() {
+    hideTyping();
+    intakeDone = false;
+    $('send').disabled = true;
+    $('intake').style.display = 'block';
+    ageError(tx('ageRequired', 'Please answer this question to continue.'));
+  }
+
   function field(box, labelText, id, type) {
     var l = document.createElement('label');
     l.textContent = labelText;
@@ -962,6 +1037,36 @@ const SCRIPT = `
     if (cfg.collect_name) field(box, tx('name', 'Name'), 'i-name', 'text');
     if (cfg.collect_email) field(box, tx('email', 'Email'), 'i-email', 'email');
     if (cfg.collect_phone) field(box, tx('phone', 'Phone'), 'i-phone', 'tel');
+    if (cfg.age_gate && cfg.age_gate.pending) {
+      if (cfg.age_gate.mode === 'dob') {
+        field(box, tx('ageDobLabel', 'Date of birth'), 'i-dob', 'date');
+        $('i-dob').setAttribute('autocomplete', 'off');
+      } else if (cfg.age_gate.mode === 'age') {
+        field(box, tx('ageAgeLabel', 'Your age'), 'i-age', 'text');
+        var ageIn = $('i-age');
+        ageIn.setAttribute('inputmode', 'numeric');
+        ageIn.setAttribute('maxlength', '3');
+        ageIn.setAttribute('autocomplete', 'off');
+      } else {
+        var arow = document.createElement('label');
+        arow.className = 'consent';
+        var abox = document.createElement('input');
+        abox.type = 'checkbox';
+        abox.id = 'i-age-ok';
+        arow.appendChild(abox);
+        var atext = document.createElement('span');
+        atext.textContent = tx('ageDeclaration', 'I confirm I am at least {n} years old').replace('{n}', String(cfg.age_gate.declaration_age || 0));
+        atext.setAttribute('dir', 'auto');
+        arow.appendChild(atext);
+        box.appendChild(arow);
+      }
+      var aerr = document.createElement('div');
+      aerr.id = 'i-age-err';
+      aerr.className = 'age-err';
+      aerr.style.display = 'none';
+      aerr.setAttribute('role', 'alert');
+      box.appendChild(aerr);
+    }
     // The optional consent line: unticked by default. Only the wording the workspace wrote is shown, as plain text.
     if (cfg.consent && cfg.consent.text && (cfg.collect_email || cfg.collect_phone)) {
       var crow = document.createElement('label');
@@ -990,6 +1095,10 @@ const SCRIPT = `
     go.type = 'button';
     go.textContent = tx('continue', 'Continue');
     go.onclick = function () {
+      if (cfg.age_gate && cfg.age_gate.pending) {
+        var missing = (cfg.age_gate.mode === 'dob' && !$('i-dob').value) || (cfg.age_gate.mode === 'age' && !$('i-age').value.trim());
+        if (missing) { ageError(tx('ageRequired', 'Please answer this question to continue.')); return; }
+      }
       intakeDone = true;
       box.style.display = 'none';
       $('send').disabled = false;
@@ -1023,12 +1132,14 @@ const SCRIPT = `
         renderSuggestions();
         settled = true;
         if (cfg.whatsapp_url && cfg.mode !== 'ai') addWaCta();
-        if ((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) {
+        var ageAsk = !!(cfg.age_gate && cfg.age_gate.pending);
+        if (((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) || ageAsk) {
           renderIntake();
         } else {
           intakeDone = true;
           $('send').disabled = false;
         }
+        if (ageAsk && ageLocked()) blockChat(false);
       });
     // QUIRK: reproduced deliberately (TW-WGT-009 rule 4). A failed config (403, 404) is not handled: the page stays empty
     // with a disabled Send button.
@@ -1054,6 +1165,9 @@ const SCRIPT = `
       var p = $('i-phone'); if (p && p.value) payload.phone = p.value;
       var c = $('i-consent');
       if (c && c.checked && cfg.consent) { payload.consent = true; payload.consent_version = cfg.consent.version; }
+      var dobIn = $('i-dob'); if (dobIn && dobIn.value) payload.date_of_birth = dobIn.value;
+      var ageIn2 = $('i-age'); if (ageIn2 && ageIn2.value.trim()) payload.age = ageIn2.value.trim();
+      var ageOk = $('i-age-ok'); if (ageOk) payload.age_confirmed = !!ageOk.checked;
     }
     showTyping();
     fetch(API_MSG, {
@@ -1069,6 +1183,8 @@ const SCRIPT = `
         // QUIRK: reproduced deliberately (TW-WGT-009 rule 2). A refused message (403, 422, 429) shows nothing: the visitor's
         // bubble stays and the message was never stored.
         var json = r.json;
+        if (!r.ok && json && json.code === 'age_blocked') { blockChat(true); return; }
+        if (!r.ok && json && json.errors && json.errors.age) { reopenIntake(); return; }
         if (json.reply && json.reply.body) {
           addBubble('in', json.reply.body, { id: json.reply.id, at: json.reply.at });
           lastSeenMsgId = Math.max(lastSeenMsgId, json.reply.id || 0);
@@ -1202,6 +1318,7 @@ export function renderChatPage(w: ChatPageWidget): string {
 <body>
 <header class="header" id="hdr"></header>
 <div class="pop" id="menupop" hidden role="menu"></div>
+<div class="pop" id="endpop" hidden role="menu"></div>
 <div class="pop" id="noticepop" hidden></div>
 <div class="banner" id="banner" hidden></div>
 <div class="stage">

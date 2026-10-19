@@ -23,7 +23,11 @@
       "exportNotReady": "Diese Datei ist nicht bereit oder abgelaufen. Bereiten Sie einen neuen Export vor.",
       "rateLimited": "Zu viele Anfragen. Warten Sie einen Moment und versuchen Sie es erneut.",
       "validation": "Einige Werte sind ungültig. Prüfen Sie das Formular und versuchen Sie es erneut.",
-      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es erneut.",
+      "holdActive": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden.",
+      "holdExists": "Diese Person unterliegt bereits einer aktiven Rechtssperre. Erweitern Sie sie, um einen weiteren Vorgang hinzuzufügen.",
+      "holdNotFound": "Diese Rechtssperre existiert nicht mehr.",
+      "holdNotActive": "Diese Rechtssperre ist bereits beendet."
     },
     "type": {
       "access": "Auskunft",
@@ -182,7 +186,12 @@
           "erase_previewed": "Löschung in der Vorschau angezeigt",
           "erased": "Daten gelöscht",
           "completed": "Anfrage abgeschlossen",
-          "other": "Aktualisieren"
+          "other": "Aktualisieren",
+          "restricted": "Eingeschränkt: Rechtssperre",
+          "erasure_queued": "Löschung bestätigt, wartet auf das Ende der Sperre",
+          "restriction_lifted": "Einschränkung aufgehoben",
+          "resume_skipped": "Automatische Löschung übersprungen",
+          "resume_failed": "Automatische Löschung fehlgeschlagen, bitte manuell ausführen"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Diese Person löschen",
       "created": "Anfrage {reference} erstellt.",
       "failed": "Die Anfrage konnte nicht erstellt werden."
+    },
+    "legalHold": {
+      "close": "Schließen",
+      "tab": {
+        "label": "Datenschutz",
+        "requests": "Datenschutzanfragen",
+        "holds": "Rechtssperren"
+      },
+      "requesterResponse": "Wir haben Ihre Anfrage erhalten. Wir sind verpflichtet, einen Teil Ihrer Daten aufgrund einer rechtlichen Verpflichtung aufzubewahren, und können sie daher derzeit nicht löschen. Wir haben die Verarbeitung eingeschränkt und löschen die Daten, sobald die Verpflichtung endet. Sie können bei Ihrer Datenschutzaufsichtsbehörde Beschwerde einlegen.",
+      "contactBanner": "Rechtssperre: Löschung und Entfernung ausgesetzt",
+      "workspaceBanner": "Rechtssperre für den gesamten Arbeitsbereich: Löschung und Entfernung ausgesetzt",
+      "caseStatus": "Eingeschränkt: Rechtssperre",
+      "blockedMessage": "Dieser Datensatz ist geschützt und kann derzeit nicht gelöscht werden.",
+      "listFilter": "Wartet auf eine Rechtssperre",
+      "banner": {
+        "caseRef": "Vorgang {caseRef}",
+        "reviewBy": "Prüfung bis {date}",
+        "reviewOverdue": "Prüfung überfällig seit {date}",
+        "effects": "Marketing, KI-Verarbeitung und Exporte sind eingeschränkt, und jeder Zugriff wird protokolliert.",
+        "open": "Register öffnen"
+      },
+      "category": {
+        "legal_obligation": "Rechtliche Verpflichtung",
+        "legal_claim": "Rechtsanspruch oder Rechtsstreit",
+        "regulator_request": "Anfrage einer Behörde oder von Strafverfolgungsbehörden",
+        "internal_investigation": "Interne Untersuchung"
+      },
+      "scope": {
+        "contact": "Kontakt",
+        "lead": "Lead",
+        "workspace": "Gesamter Arbeitsbereich"
+      },
+      "status": {
+        "active": "Aktiv",
+        "released": "Aufgehoben",
+        "expired": "Abgelaufen"
+      },
+      "menu": {
+        "place": "Rechtssperre verhängen...",
+        "release": "Rechtssperre aufheben..."
+      },
+      "place": {
+        "title": "Rechtssperre für diesen Kontakt verhängen",
+        "workspaceTitle": "Rechtssperre für den gesamten Arbeitsbereich verhängen",
+        "intro": "Solange die Sperre besteht, werden Löschung, Entfernung und Bereinigung nach Aufbewahrungsfrist für diese Person verweigert, und Marketing, KI-Verarbeitung und Exporte ihrer Daten sind eingeschränkt. Der Kundenservice läuft wie gewohnt weiter.",
+        "workspaceIntro": "Alle Personen im Arbeitsbereich sind gesperrt: Löschung, Entfernung, Bereinigung nach Aufbewahrungsfrist und das Entfernen eines abgelaufenen Arbeitsbereichs werden verweigert, und Marketing, KI-Verarbeitung und Exporte sind eingeschränkt. Nutzen Sie dies bei einer Anordnung, die alle Datensätze betrifft.",
+        "category": "Warum werden die Daten aufbewahrt?",
+        "categoryPick": "Grund auswählen",
+        "caseRef": "Aktenzeichen",
+        "caseRefHint": "Ihr eigenes Aktenzeichen: eine Gerichtsakte, ein Ticket, die Nummer auf dem Schreiben einer Behörde.",
+        "note": "Notiz (optional)",
+        "noteHint": "Schreiben Sie hier keine Namen, Telefonnummern oder Einzelheiten zum Vorgang.",
+        "reviewAt": "Prüfung bis (optional)",
+        "reviewHint": "Das Register markiert die Sperre, wenn dieses Datum verstrichen ist.",
+        "expiresAt": "Endet am (optional)",
+        "expiresHint": "Nach diesem Datum endet die Sperre automatisch.",
+        "submit": "Sperre verhängen",
+        "submitting": "Wird verhängt...",
+        "done": "Rechtssperre verhängt.",
+        "target": "Gilt für",
+        "targetPerson": "Eine Person",
+        "targetWorkspace": "Der gesamte Arbeitsbereich",
+        "change": "Ändern",
+        "search": "Person suchen",
+        "searchHint": "Gib einen Namen, eine Telefonnummer oder eine E-Mail-Adresse ein (mindestens zwei Zeichen).",
+        "noResults": "Niemand gefunden."
+      },
+      "release": {
+        "title": "Diese Rechtssperre aufheben",
+        "message": "Danach können Entfernung, Bereinigung nach Aufbewahrungsfrist und Marketing für diese Person wieder erfolgen. Löschanfragen, die auf diese Sperre warten, verlassen den eingeschränkten Status, und eine bereits bestätigte Löschung wird innerhalb einer Minute automatisch ausgeführt.",
+        "cases": "{count, plural, one {# Datenschutzanfrage wartet auf diese Sperre.} other {# Datenschutzanfragen warten auf diese Sperre.}}",
+        "reason": "Warum wird sie aufgehoben? (optional)",
+        "reasonHint": "Schreiben Sie hier keine Namen oder Einzelheiten zum Vorgang.",
+        "submit": "Sperre aufheben",
+        "submitting": "Wird aufgehoben...",
+        "done": "Rechtssperre aufgehoben.",
+        "doneResuming": "{count, plural, one {Rechtssperre aufgehoben. # bestätigte Löschung wird jetzt ausgeführt.} other {Rechtssperre aufgehoben. # bestätigte Löschungen werden jetzt ausgeführt.}}"
+      },
+      "extend": {
+        "title": "Diese Rechtssperre erweitern",
+        "caseRefNow": "Aktuelles Aktenzeichen: {caseRef}",
+        "addCaseRef": "Weiteres Aktenzeichen hinzufügen",
+        "addCaseRefHint": "Ein zweiter Vorgang zur selben Person wird derselben Sperre hinzugefügt.",
+        "clearHint": "Leeren Sie das Datum, um es zu entfernen.",
+        "submit": "Änderungen speichern",
+        "submitting": "Wird gespeichert...",
+        "done": "Rechtssperre aktualisiert."
+      },
+      "review": {
+        "title": "Prüfung erfassen",
+        "message": "Hält fest, dass Sie diese Sperre erneut geprüft haben und dass sie weiterhin gilt.",
+        "next": "Nächste Prüfung bis (optional)",
+        "nextHint": "Leer lassen, um das aktuelle Prüfdatum beizubehalten.",
+        "submit": "Prüfung erfassen",
+        "submitting": "Wird gespeichert...",
+        "done": "Prüfung erfasst."
+      },
+      "actions": {
+        "review": "Prüfen",
+        "extend": "Erweitern",
+        "release": "Aufheben"
+      },
+      "register": {
+        "title": "Rechtssperren",
+        "subtitle": "Personen und Datensätze, deren Löschung und Entfernung ausgesetzt sind, weil die Daten aufbewahrt werden müssen. Eine Sperre für eine einzelne Person wird auf der Seite dieses Kontakts verhängt.",
+        "export": "CSV exportieren",
+        "empty": "Keine Rechtssperren.",
+        "emptyFiltered": "Keine Rechtssperren entsprechen diesen Filtern.",
+        "loadMore": "Mehr laden",
+        "loadingMore": "Wird geladen...",
+        "none": "-",
+        "overdue": "Prüfung überfällig",
+        "cases": "{count, plural, one {# Anfrage wartet} other {# Anfragen warten}}",
+        "open": "Sperre mit Aktenzeichen {caseRef} öffnen",
+        "filters": {
+          "label": "Filter",
+          "status": "Status",
+          "category": "Grund",
+          "scope": "Gilt für",
+          "caseRef": "Aktenzeichen",
+          "reviewDue": "Prüfung überfällig",
+          "any": "Beliebig"
+        },
+        "columns": {
+          "subject": "Betroffene Person",
+          "category": "Grund",
+          "caseRef": "Aktenzeichen",
+          "placed": "Verhängt",
+          "review": "Prüfung bis",
+          "expires": "Endet",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "place": "Rechtliche Sperre verhängen..."
+      },
+      "detail": {
+        "title": "Rechtssperre",
+        "history": "Verlauf",
+        "releasedAt": "Beendet",
+        "by": "von {actor}",
+        "system": "dem System",
+        "action": {
+          "insert": "Sperre verhängt",
+          "update": "Sperre geändert",
+          "delete": "Sperre beendet",
+          "other": "Aktualisierung"
+        }
+      },
+      "case": {
+        "body": "Die Daten dieser Person werden aufbewahrt und gesperrt, solange eine Rechtssperre gilt. Die Löschung wird nicht ausgeführt, Marketing, KI-Verarbeitung und Exporte sind eingeschränkt, und die Frist läuft weiter.",
+        "requesterTitle": "Antwort an die Person",
+        "requesterHint": "Teilt mit, dass die Daten aufgrund einer rechtlichen Verpflichtung aufbewahrt werden. Der Grund wird nicht genannt. Die Rechtsberatung kann diesen Wortlaut in den Datenschutzeinstellungen ersetzen.",
+        "copy": "Text kopieren",
+        "copied": "Kopiert",
+        "queueHint": "Sie können die Löschung trotzdem jetzt bestätigen: Sie wird festgehalten, es wird nichts gelöscht, und sie wird automatisch ausgeführt, sobald die Sperre endet.",
+        "queue": "Löschung für das Ende der Sperre bestätigen",
+        "queued": "Festgehalten. Es wurde nichts gelöscht; die Löschung wird automatisch ausgeführt, sobald die Sperre endet."
+      },
+      "settings": {
+        "noticeLabel": "Antwort an eine Person, deren Löschung zurückgestellt ist",
+        "noticeHint": "Der Wortlaut Ihrer Rechtsberatung. Leer lassen, um den Standardtext zu verwenden. Nennen Sie weder den Vorgang noch den Grund."
+      }
     }
   }
 }

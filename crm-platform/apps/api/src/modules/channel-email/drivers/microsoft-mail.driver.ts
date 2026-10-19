@@ -17,6 +17,11 @@ import {
   type NormalisedMail,
   type OutgoingMail,
 } from '../../../infra/providers/channel-email';
+import {
+  GRAPH_SUBSCRIPTION_KIND,
+  GRAPH_SUBSCRIPTION_MINUTES,
+  GRAPH_SUBSCRIPTION_RESOURCE,
+} from '../graph-push-rules';
 import { MicrosoftMailConfig } from '../microsoft-mail-config.service';
 import {
   MailDriverError,
@@ -25,11 +30,15 @@ import {
   type MailHealthResult,
   type MailOAuthGrant,
   type MailOAuthRefreshed,
+  type MailPushState,
+  type MailPushSupport,
   type MailSendResult,
   type MailSyncBatch,
   type MailSyncMode,
   type MailSyncOptions,
   type OAuthMailDriver,
+  sendMayHaveCommitted,
+  sendOutcomeUnknown,
 } from './mail-driver';
 import { MailDriverRegistry } from './mail-driver.registry';
 
@@ -164,6 +173,77 @@ export class MicrosoftMailDriver implements OAuthMailDriver, OnModuleInit {
     } catch (err) {
       throw this.fail(err, 'auth');
     }
+  }
+
+  // --- push (E-17) ---------------------------------------------------------------------------------------------------------------
+
+  private pushSupport: MailPushSupport | null = null;
+
+  /**
+   * Graph change notifications: a subscription on new Inbox mail, renewed before it ends (Graph keeps one for under three days).
+   * A notification only says "something arrived": the sync then reads the Inbox through the delta cursor. The notification's own message
+   * id is NOT used to fetch the message: Graph sends mutable ids, while the ledger key is the immutable id, and reading around the
+   * cursor could store a message twice or out of order.
+   */
+  get push(): MailPushSupport {
+    this.pushSupport ??= {
+      available: async () => (await this.config.push()) !== null,
+      start: async (ctx): Promise<MailPushState | null> => {
+        const cfg = await this.config.push();
+        if (!cfg) return null;
+        const accessToken = token(ctx);
+        const expirationDateTime = new Date(
+          Date.now() + GRAPH_SUBSCRIPTION_MINUTES * 60_000,
+        ).toISOString();
+        const stateOf = (id: string, expiresAt: string): MailPushState => ({
+          kind: GRAPH_SUBSCRIPTION_KIND,
+          id,
+          expiresAt: new Date(expiresAt).toISOString(),
+        });
+        try {
+          const existing = ctx.mailbox.pushState;
+          const knownId =
+            existing?.kind === GRAPH_SUBSCRIPTION_KIND && typeof existing.id === 'string'
+              ? existing.id
+              : null;
+          if (knownId) {
+            // Renew in place. A subscription Graph no longer has (it lapsed, or was removed) is replaced by a new one.
+            try {
+              const renewed = await this.graph.renewSubscription(
+                accessToken,
+                knownId,
+                expirationDateTime,
+              );
+              return stateOf(renewed.id, renewed.expirationDateTime);
+            } catch (err) {
+              if (!(err instanceof MicrosoftMailError && err.kind === 'not_found')) throw err;
+            }
+          }
+          const created = await this.graph.createSubscription(accessToken, {
+            notificationUrl: cfg.notificationUrl,
+            lifecycleNotificationUrl: cfg.notificationUrl,
+            resource: GRAPH_SUBSCRIPTION_RESOURCE,
+            expirationDateTime,
+            clientState: cfg.clientStateFor(ctx.orgId, ctx.mailbox.uuid),
+          });
+          return stateOf(created.id, created.expirationDateTime);
+        } catch (err) {
+          throw this.fail(err, 'sync');
+        }
+      },
+      stop: async (ctx) => {
+        const id = ctx.mailbox.pushState?.id;
+        if (typeof id !== 'string' || !id) return;
+        try {
+          await this.graph.deleteSubscription(token(ctx), id);
+        } catch (err) {
+          // A grant that is already dead has nothing left to withdraw.
+          if (err instanceof MicrosoftMailError && err.kind === 'invalid_grant') return;
+          throw this.fail(err, 'sync');
+        }
+      },
+    };
+    return this.pushSupport;
   }
 
   // --- sync ----------------------------------------------------------------------------------------------------------------------
@@ -460,6 +540,9 @@ export class MicrosoftMailDriver implements OAuthMailDriver, OnModuleInit {
       case 'server':
       case 'network':
       case 'timeout':
+        if (op === 'send' && err.kind !== 'server' && sendMayHaveCommitted(meta.providerCode)) {
+          return sendOutcomeUnknown('Microsoft did not answer in time.', meta.providerCode);
+        }
         return new MailDriverError(
           'transient',
           op === 'send'

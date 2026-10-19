@@ -1,4 +1,5 @@
 import { sql, type SQL } from 'drizzle-orm';
+import { identifier } from './sql/identifier';
 import type { Tx } from '@crm/db';
 
 /**
@@ -72,8 +73,8 @@ export async function loadWorkspaceCalendar(
  * `loadWorkspaceCalendar`). Status is part of the test, the sweep is not: it is correct between two sweeps.
  */
 export function onLeaveOnSql(alias: string, today: string): SQL {
-  const orgCol = sql.raw(`${alias}.org_id`);
-  const userCol = sql.raw(`${alias}.id`);
+  const orgCol = sql.raw(`${identifier(alias)}.org_id`);
+  const userCol = sql.raw(`${identifier(alias)}.id`);
   return sql`EXISTS (
     SELECT 1 FROM member_leaves ml
     WHERE ml.org_id = ${orgCol} AND ml.user_id = ${userCol} AND ml.status IN ('scheduled', 'active')

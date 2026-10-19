@@ -237,3 +237,53 @@ export const uploadTemplateMediaResultSchema = z.object({
   mimeType: z.string(),
 });
 export type UploadTemplateMediaResult = z.infer<typeof uploadTemplateMediaResultSchema>;
+
+/**
+ * "Build with AI" on the template form (TW-TPL-016, Reference `POST /templates/api/ai-generate`): a business brief in, a template draft
+ * out (name, header text, body with `{{n}}` placeholders, footer, buttons). Nothing is stored: the form fills its own fields and the
+ * person reviews before it is submitted to Meta. The model picker is `GET /v2/ai/models`; errors are the campaign builder's `CAMP_AI_*`.
+ */
+export const TPL_AI_PROVIDERS = ['openai', 'anthropic', 'gemini'] as const;
+const aiBrief = (max: number) => z.string().trim().max(max).optional();
+export const tplAiGenerateSchema = z.object({
+  provider: z.enum(TPL_AI_PROVIDERS),
+  model: z.string().trim().min(1).max(120),
+  metaCategory: z.enum(['MARKETING', 'UTILITY']).default('MARKETING'),
+  /** A Meta language code such as `en_US`; the copy is written in it. */
+  language: z
+    .string()
+    .trim()
+    .regex(/^[a-z]{2,3}(_[A-Z]{2})?$/, 'a Meta language code such as en_US')
+    .default('en_US'),
+  businessName: z.string().trim().min(1).max(191),
+  industry: aiBrief(120),
+  occasion: aiBrief(120),
+  purpose: aiBrief(120),
+  action: aiBrief(120),
+  tone: aiBrief(60),
+  customPrompt: aiBrief(2000),
+});
+export type TplAiGenerateInput = z.infer<typeof tplAiGenerateSchema>;
+
+/** The draft, already cut to what the form and Meta accept (name a lower-case slug, header 60, body 1,024, footer 60, buttons 25 each). */
+export const tplAiDraftSchema = z.object({
+  name: z.string(),
+  header: z.string().nullable(),
+  body: z.string(),
+  footer: z.string().nullable(),
+  buttons: z
+    .array(
+      z.discriminatedUnion('type', [
+        z.object({ type: z.literal('QUICK_REPLY'), text: z.string() }),
+        z.object({ type: z.literal('URL'), text: z.string(), url: z.string() }),
+        z.object({ type: z.literal('PHONE_NUMBER'), text: z.string(), phoneNumber: z.string() }),
+      ]),
+    )
+    .max(3),
+});
+export type TplAiDraft = z.infer<typeof tplAiDraftSchema>;
+export const tplAiGenerateResponseSchema = z.object({
+  template: tplAiDraftSchema,
+  model: z.string(),
+});
+export type TplAiGenerateResponse = z.infer<typeof tplAiGenerateResponseSchema>;

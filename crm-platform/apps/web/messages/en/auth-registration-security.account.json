@@ -591,13 +591,16 @@
             "storefront_builder": "Storefront builder",
             "invoicing": "Invoicing",
             "forms_and_links": "Forms and links",
-            "extra_channels": "Telegram, Facebook and Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat",
             "form_builder": "Forms",
             "waba_groups": "WhatsApp groups",
             "sms": "SMS",
             "help_agent": "Help assistant",
             "email_channel": "Email (Gmail) channel",
-            "personal_history_full": "Full history import (personal WhatsApp)"
+            "personal_history_full": "Full history import (personal WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI lead scoring",
+            "record_assignment": "Record assignment rules"
           },
           "cta": {
             "continueFree": "Continue free",

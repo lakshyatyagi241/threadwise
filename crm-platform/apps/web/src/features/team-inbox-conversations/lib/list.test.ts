@@ -13,6 +13,7 @@ import {
   matchesFilters,
   placeRow,
   tabCount,
+  windowFilterCount,
   type ListFilters,
   type ListState,
 } from './list';
@@ -26,9 +27,9 @@ const assignedTo = (userId: string) => ({
 });
 
 describe('matchesFilters', () => {
-  it('the default view is open and pending, not resolved', () => {
+  it('the default view is the open threads, not resolved, snoozed or spam', () => {
     expect(matchesFilters(summary({ status: 'open' }), f(), ME)).toBe(true);
-    expect(matchesFilters(summary({ status: 'pending' }), f(), ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'snoozed' }), f(), ME)).toBe(false);
     expect(matchesFilters(summary({ status: 'resolved' }), f(), ME)).toBe(false);
     expect(matchesFilters(summary({ status: 'resolved' }), f({ status: 'resolved' }), ME)).toBe(
       true,
@@ -222,5 +223,63 @@ describe('tab counts', () => {
   it('caps the row badge', () => {
     expect(badgeText(5)).toBe('5');
     expect(badgeText(100)).toBe('99+');
+  });
+});
+
+describe("the Filters window's filters", () => {
+  it('statuses replace the single status; resolved also takes closed', () => {
+    const both = f({ statuses: ['snoozed', 'resolved'] });
+    expect(matchesFilters(summary({ status: 'snoozed' }), both, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'closed' }), both, ME)).toBe(true);
+    expect(matchesFilters(summary({ status: 'open' }), both, ME)).toBe(false);
+  });
+
+  it('Conversation, agents and the date range narrow a row', () => {
+    const mine = summary({ assignment: assignedTo(ME), unreadCount: 0 });
+    expect(matchesFilters(mine, f({ assignment: 'assigned' }), ME)).toBe(true);
+    expect(matchesFilters(mine, f({ assignment: 'unassigned' }), ME)).toBe(false);
+    expect(matchesFilters(mine, f({ assignment: 'unattended' }), ME)).toBe(false);
+    expect(matchesFilters(summary({ unreadCount: 2 }), f({ assignment: 'unattended' }), ME)).toBe(
+      true,
+    );
+    expect(matchesFilters(mine, f({ agentIds: [ME] }), ME)).toBe(true);
+    expect(matchesFilters(mine, f({ agentIds: [id(9)] }), ME)).toBe(false);
+    const day = summary({ lastMessageAt: '2026-10-10T09:00:00.000Z' });
+    expect(matchesFilters(day, f({ from: '2026-10-10', to: '2026-10-10' }), ME)).toBe(true);
+    expect(matchesFilters(day, f({ from: '2026-10-11' }), ME)).toBe(false);
+    expect(matchesFilters(day, f({ to: '2026-10-09' }), ME)).toBe(false);
+  });
+
+  it('sends only what is set, counts what is on, and orders oldest first without pins', () => {
+    expect(listQuery(f())).toMatchObject({
+      statuses: undefined,
+      assignment: undefined,
+      sort: undefined,
+    });
+    expect(
+      listQuery(
+        f({
+          statuses: ['snoozed', 'spam'],
+          assignment: 'assigned',
+          sort: 'old',
+          from: '2026-10-01',
+        }),
+      ),
+    ).toMatchObject({
+      statuses: 'snoozed,spam',
+      assignment: 'assigned',
+      sort: 'old',
+      from: '2026-10-01',
+    });
+    expect(windowFilterCount(f())).toBe(0);
+    expect(
+      windowFilterCount(f({ status: 'snoozed', sort: 'old', from: '2026-10-01', agentIds: [ME] })),
+    ).toBe(4);
+    expect(filtersKey(f({ sort: 'old' }))).not.toBe(filtersKey(f()));
+    expect(isFiltered(f({ sort: 'old' }))).toBe(true);
+    const older = summary({ id: id(1), lastMessageAt: '2026-10-01T00:00:00.000Z', pinned: false });
+    const newer = summary({ id: id(2), lastMessageAt: '2026-10-02T00:00:00.000Z', pinned: true });
+    expect(compareRows(older, newer, true)).toBeLessThan(0);
+    expect(compareRows(older, newer)).toBeGreaterThan(0);
   });
 });

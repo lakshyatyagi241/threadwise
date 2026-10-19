@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Reports",
+    "title": "Revenue report",
+    "subtitle": "What you invoiced, how much of it is paid and what is still owed, and the money that came in, for the period you choose.",
+    "back": "CRM dashboard",
+    "period": "{from} to {to} ({zone})",
+    "comparedWith": "Compared with {mode}: {from} to {to}",
+    "loading": "Loading the revenue report",
+    "retry": "Try again",
+    "stale": "The figures could not be refreshed. These are the last ones loaded.",
+    "empty": {
+      "title": "Nothing in this period",
+      "message": "No invoice was issued and no payment came in between these dates. Pick another period, or open the invoices.",
+      "invoices": "Open invoices"
+    },
+    "mode": {
+      "previous": "the previous period",
+      "lastYear": "the same period last year"
+    },
+    "filters": {
+      "label": "Report filters",
+      "period": "Period",
+      "range": {
+        "month": "This month",
+        "lastMonth": "Last month",
+        "quarter": "This quarter",
+        "year": "This year",
+        "30d": "30 days",
+        "90d": "90 days",
+        "custom": "Custom"
+      },
+      "from": "From",
+      "to": "To",
+      "compare": "Compare with",
+      "compareOption": {
+        "previous": "Previous period",
+        "lastYear": "Same period last year",
+        "none": "No comparison"
+      },
+      "groupBy": "Split by",
+      "groupOption": {
+        "source": "Lead source",
+        "origin": "Invoice origin",
+        "product": "Product",
+        "owner": "Owner",
+        "team": "Team"
+      },
+      "owner": "Owner",
+      "everyone": "Everyone",
+      "team": "Team",
+      "allTeams": "All teams",
+      "currency": "Currency",
+      "allCurrencies": "All, shown in {currency}",
+      "reset": "Reset filters"
+    },
+    "note": {
+      "converted": "Several currencies are in use. The figures are converted into {currency}; choose one currency to see its exact amounts.",
+      "missingRate": "No exchange rate for {currencies}: those amounts are left out of the converted figures.",
+      "invoiced": "Invoiced, paid and owed count the invoices issued in the period (drafts, voided invoices and proformas are left out). Collected and refunded count the money that came in during the period, whichever invoice it settled."
+    },
+    "kpi": {
+      "title": "Key figures",
+      "vsPrevious": "Against the comparison period",
+      "collected": "Collected",
+      "collectedHint": "Payments received in the period",
+      "collectedAll": "Collected, all time",
+      "collectedAllHint": "Every payment you can see",
+      "outstanding": "Outstanding",
+      "outstandingHint": "{count, plural, one {# open invoice} other {# open invoices}} as of today",
+      "tax": "Tax collected",
+      "taxHint": "On invoices fully paid in the period",
+      "invoiced": "Invoiced",
+      "invoicedHint": "{count, plural, one {# invoice issued} other {# invoices issued}}",
+      "paid": "Paid so far",
+      "paidHint": "Of the invoices issued in the period",
+      "overdue": "Overdue",
+      "overdueHint": "Past the due date",
+      "refunded": "Refunded",
+      "refundedHint": "Paid back in the period",
+      "paidInFull": "Paid in full",
+      "paidInFullHint": "Invoices that became fully paid",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Invoiced, paid and owed",
+      "subtitle": "The invoices issued in the period, and where they stand today",
+      "paid": "Paid",
+      "owed": "Owed, not yet due",
+      "overdue": "Overdue",
+      "credited": "Credit notes",
+      "invoiced": "invoiced",
+      "empty": "Nothing was invoiced in this period.",
+      "several": "These invoices are in several currencies. Choose a currency above to see them as one bar."
+    },
+    "trend": {
+      "title": "Invoiced and collected",
+      "subtitle": {
+        "day": "Per day",
+        "week": "Per week",
+        "month": "Per month"
+      },
+      "chartLabel": "Invoiced and collected over the period",
+      "invoiced": "Invoiced",
+      "collected": "Collected"
+    },
+    "split": {
+      "title": "By {group}",
+      "subtitle": "The biggest first. Money is shown in {currency}.",
+      "subtitlePerCurrency": "The biggest first. Money is listed per currency.",
+      "group": {
+        "source": "lead source",
+        "origin": "invoice origin",
+        "product": "product",
+        "owner": "owner",
+        "team": "team"
+      },
+      "empty": {
+        "source": "No lead source",
+        "origin": "Unknown origin",
+        "product": "No line items",
+        "owner": "Unassigned",
+        "team": "No team"
+      },
+      "origin": {
+        "manual": "Created by hand",
+        "quote": "From a quote",
+        "order": "From an order",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Own store",
+        "api": "API",
+        "ai": "AI assistant"
+      },
+      "col": {
+        "invoices": "Invoices",
+        "invoiced": "Invoiced",
+        "paid": "Paid",
+        "outstanding": "Owed",
+        "overdue": "Overdue",
+        "collected": "Collected",
+        "refunded": "Refunded"
+      },
+      "total": "Total",
+      "truncated": "Only the {count} biggest rows are listed. The CSV summary has the same rows.",
+      "teamNote": "A person on two teams counts in both, so team rows can add up to more than the total.",
+      "productNote": "Discounts on the whole invoice, shipping and rounding are spread over the lines in proportion to their value."
+    },
+    "aging": {
+      "title": "Receivables aging",
+      "open": "Payments",
+      "empty": "Nothing is owed.",
+      "bucket": {
+        "current": "Not yet due",
+        "d1_30": "1-30 days past due",
+        "d31_60": "31-60 days past due",
+        "d61_90": "61-90 days past due",
+        "d90_plus": "90+ days past due"
+      }
+    },
+    "export": {
+      "title": "Download this report",
+      "note": "Prepared in the background with the filters above, kept for {days} days and announced by email. You get no more than the report shows you.",
+      "csvPayments": "CSV: payments",
+      "csvPaymentsHint": "One line per payment and refund of the period",
+      "csvSummary": "CSV: this table",
+      "csvSummaryHint": "The split above, with the totals",
+      "pdf": "PDF",
+      "pdfHint": "The report as a document",
+      "preparing": "Preparing...",
+      "requested": "Your file is being prepared. You will get an email when it is ready, and it will appear in the list below.",
+      "recent": "Your recent files",
+      "none": "You have not prepared a file yet.",
+      "kind": {
+        "pdf": "PDF report",
+        "csv-payments": "CSV of payments",
+        "csv-summary": "CSV summary"
+      },
+      "status": {
+        "queued": "Waiting",
+        "running": "Preparing",
+        "ready": "Ready",
+        "failed": "Failed",
+        "expired": "Expired"
+      },
+      "range": "{from} to {to}",
+      "rows": "{count, plural, one {# row} other {# rows}}",
+      "expires": "Kept until {date}",
+      "failed": "This file could not be prepared. Ask for it again.",
+      "download": "Download"
+    },
+    "errors": {
+      "network": "The server could not be reached. Check your connection and try again.",
+      "forbidden": "You do not have access to this.",
+      "notFound": "That file does not exist.",
+      "exportInProgress": "A file is already being prepared for you. Wait for its email, then ask for another.",
+      "exportNotReady": "This file is not ready or has expired. Ask for it again.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "Those filters are not valid.",
+      "unexpected": "Something went wrong. Try again."
+    }
+  }
+}

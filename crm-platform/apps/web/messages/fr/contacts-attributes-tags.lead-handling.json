@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Non contacté",
+        "followUpToday": "Relance aujourd'hui",
+        "followUpOverdue": "Relance en retard",
+        "followUpSomeday": "Relances « un jour »"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Non contacté",
+        "chipTitle": "Personne dans l'équipe n'a encore pris contact",
+        "waitingSince": "En attente depuis le {date}",
+        "markContacted": "Marquer comme contacté",
+        "markUncontacted": "Marquer comme non contacté",
+        "markedContacted": "Marqué comme contacté",
+        "markedUncontacted": "Marqué comme non contacté",
+        "markFailed": "Impossible de modifier le marquage. Réessayez.",
+        "bulkMarkedContacted": "{count, plural, one {# contact marqué comme contacté} other {# contacts marqués comme contactés}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contact marqué comme non contacté} other {# contacts marqués comme non contactés}}"
+      },
+      "settings": {
+        "save": "Enregistrer",
+        "discard": "Annuler les modifications",
+        "saved": "Paramètres enregistrés",
+        "retry": "Réessayer",
+        "loading": "Chargement des paramètres",
+        "conflict": "Quelqu'un d'autre a enregistré ces paramètres pendant que vous les modifiiez. Ils sont affichés à nouveau ci-dessous ; refaites votre modification.",
+        "conflictOk": "Compris",
+        "errors": {
+          "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez.",
+          "forbidden": "Seules les personnes qui gèrent les paramètres de l'espace de travail peuvent modifier cette page.",
+          "conflict": "Quelqu'un d'autre a modifié ces paramètres avant vous. Rechargez la page et réessayez.",
+          "validation": "Certains paramètres ne sont pas valides. Vérifiez-les et réessayez.",
+          "unexpected": "Une erreur s'est produite. Réessayez."
+        },
+        "uncontacted": {
+          "title": "Prospects non contactés",
+          "subtitle": "Repérez les prospects que personne n'a encore joints : ils restent bien visibles jusqu'à ce que quelqu'un les contacte. Rien ne change tant que vous n'activez pas une option.",
+          "clear": {
+            "title": "Marquer comme contacté",
+            "intro": "Retirer automatiquement le marquage Non contacté lorsqu'un membre de l'équipe effectue l'une de ces actions :",
+            "contactButton": "Clique sur un bouton de contact (appel, SMS, e-mail ou WhatsApp) ou passe un appel",
+            "message": "Envoie un message, un modèle, une réponse enregistrée ou un fichier depuis la boîte de réception partagée",
+            "automation": "Une campagne, une diffusion ou un flux automatisé envoie un message au prospect",
+            "activity": "Ajoute une note, une réunion ou une autre activité à la chronologie",
+            "manualHint": "Vous pouvez aussi modifier le marquage manuellement : ouvrez le menu Plus d'un contact, ou sélectionnez plusieurs contacts et utilisez Plus dans la barre au-dessus de la liste."
+          },
+          "new": {
+            "title": "Marquer les nouveaux prospects comme non contactés",
+            "intro": "Lorsqu'un prospect est créé de l'une de ces façons, le marquer comme non contacté :",
+            "manual": "Créé manuellement dans l'application",
+            "import": "Importé depuis un fichier ou Google Sheets",
+            "leadSource": "Sources de prospects, formulaires et intégrations"
+          },
+          "reassign": {
+            "title": "Prospects réattribués",
+            "intro": "Lorsqu'un prospect est attribué ou réattribué à un nouveau responsable :",
+            "keep": "Ne pas modifier le marquage Non contacté",
+            "mark": "Marquer comme non contacté lors de la réattribution"
+          }
+        },
+        "followUps": {
+          "title": "Relances",
+          "subtitle": "Ne laissez aucun prospect de côté : quand un membre de l'équipe contacte une personne, sa prochaine relance peut être définie ou déplacée automatiquement. Rien ne change tant que vous n'activez pas une option.",
+          "when": {
+            "title": "Définir les relances automatiquement",
+            "intro": "Quand un membre de l'équipe contacte une personne ou lui envoie du contenu, mettre à jour sa relance si :",
+            "none": "Le contact n'a pas de relance",
+            "overdue": "La relance est en retard",
+            "today": "La relance est prévue aujourd'hui",
+            "future": "La relance est prévue plus tard"
+          },
+          "date": {
+            "title": "Date de relance par défaut",
+            "intro": "Quand une relance est mise à jour automatiquement, la fixer à :",
+            "day": "Dans 1 jour",
+            "three_days": "Dans 3 jours",
+            "week": "Dans 1 semaine",
+            "month": "Dans 1 mois",
+            "custom": "Personnalisé",
+            "someday": "Un jour",
+            "none": "Aucune relance",
+            "somedayHint": "La relance n'a pas de date et reste dans la liste « Un jour ». Aucun rappel n'est envoyé.",
+            "noneHint": "La relance ouverte est marquée comme terminée et aucune nouvelle n'est créée.",
+            "customDays": "Nombre de jours",
+            "daysLater": "jours plus tard"
+          },
+          "time": {
+            "title": "Heure de relance par défaut",
+            "intro": "Quand une nouvelle relance est créée, définir l'heure de l'alerte à :",
+            "hint": "Basée sur le fuseau horaire de votre espace de travail."
+          }
+        },
+        "duplicates": {
+          "title": "Leads en double",
+          "subtitle": "Choisissez ce qui se passe lorsqu'un nouveau lead issu d'une source de leads a le même numéro de téléphone ou la même adresse e-mail qu'un contact existant.",
+          "mode": {
+            "title": "Quand un nouveau lead correspond à un contact",
+            "intro": "Un lead correspond lorsque son numéro de téléphone ou son adresse e-mail appartient déjà à un contact.",
+            "merge": "Fusionner avec le contact existant",
+            "mergeHint": "Complète les champs vides du contact et ajoute le lead à son historique. Rien de ce qui est déjà renseigné n'est écrasé.",
+            "createNew": "Créer un nouveau contact",
+            "createNewHint": "Crée un contact distinct pour le lead. Il compte dans la limite de contacts de votre offre et pourra être fusionné plus tard."
+          },
+          "note": {
+            "title": "Chronologie",
+            "merge": "Ajouter une note à la chronologie lorsqu'un lead est fusionné",
+            "hint": "Désactivé par défaut, car une note déplace aussi la dernière activité du contact."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Prochaine relance",
+        "somedayLabel": "Un jour",
+        "overdue": "En retard",
+        "done": "Terminé",
+        "snooze": "Reporter",
+        "snoozeDay": "1 jour",
+        "snoozeThreeDays": "3 jours",
+        "snoozeWeek": "Semaine prochaine",
+        "change": "Modifier la date",
+        "set": "Définir une relance",
+        "edit": "Modifier la relance",
+        "remove": "Supprimer la relance",
+        "dialogTitle": "Relance",
+        "someday": "Un jour (sans date)",
+        "dateTime": "Date et heure",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "savedFor": "Relance enregistrée",
+        "savedSomeday": "Relance définie sur « Un jour »",
+        "snoozed": "Relance reportée",
+        "doneMessage": "Relance marquée comme terminée",
+        "clearedMessage": "Relance supprimée",
+        "failed": "Impossible de modifier la relance. Réessayez.",
+        "filterLabel": "Relance",
+        "filter": {
+          "any": "Toutes",
+          "overdue": "En retard",
+          "today": "À faire aujourd'hui",
+          "upcoming": "À venir",
+          "someday": "Un jour",
+          "none": "Aucune relance"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Prochaine relance"
+    }
+  }
+}

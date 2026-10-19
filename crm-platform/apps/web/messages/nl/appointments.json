@@ -41,7 +41,10 @@
       "notStarted": "Dit kan pas nadat de boeking is begonnen.",
       "alreadyStarted": "Deze boeking is al begonnen en kan dus niet meer worden gewijzigd.",
       "bookingOff": "Boeken is voor deze dienst momenteel niet beschikbaar.",
-      "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn."
+      "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn.",
+      "notDrifted": "Deze boeking komt al overeen met het Google-event. De gegevens zijn opnieuw geladen.",
+      "calendarNotConnected": "Google Calendar is niet gekoppeld. Koppel het opnieuw op de pagina Google-account en probeer het nog eens.",
+      "calendarFailed": "Google reageerde niet of heeft de wijziging geweigerd. Probeer het zo meteen opnieuw."
     },
     "picker": {
       "timeZone": "Tijdzone",
@@ -156,7 +159,8 @@
       "yesterday": "Gisteren",
       "rowLabel": "Boeking openen: {title}",
       "noName": "Geen naam",
-      "needsReview": "Beoordeling nodig"
+      "needsReview": "Beoordeling nodig",
+      "outOfSync": "Agenda niet gesynchroniseerd"
     },
     "row": {
       "moreFor": "Meer acties voor {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "Dit verzoek afwijzen?",
       "declineMessage": "De klant krijgt te horen dat het verzoek is afgewezen en het tijdstip komt weer vrij.",
       "declineConfirm": "Verzoek afwijzen",
-      "remindersNote": "Herinneringen volgen het boekingstype. De bezorging wordt niet per herinnering bijgehouden."
+      "remindersNote": "Herinneringen volgen het boekingstype. Ze stel je in onder Afspraakinstellingen of in het boekingstype."
     },
     "source": {
       "chat": "Een chatflow",
@@ -269,7 +273,13 @@
       "rescheduled": "Boeking verplaatst naar het nieuwe tijdstip.",
       "linkCopied": "Beheerlink gekopieerd.",
       "copyFailed": "De link kon niet worden gekopieerd.",
-      "declined": "Verzoek afgewezen."
+      "declined": "Verzoek afgewezen.",
+      "calendarPushed": "Naar Google gestuurd: het event komt nu overeen met deze boeking.",
+      "calendarAccepted": {
+        "cancelled": "Wijziging van Google geaccepteerd: de boeking is geannuleerd.",
+        "rescheduled": "Wijziging van Google geaccepteerd: de boeking is verplaatst naar de nieuwe tijd.",
+        "acknowledged": "Wijziging van Google geaccepteerd. De boeking blijft zoals ze is."
+      }
     },
     "typesList": {
       "breadcrumb": "Kruimelpad",
@@ -397,9 +407,6 @@
         "depositTooHigh": "De aanbetaling mag niet hoger zijn dan het totaal (tarief plus btw).",
         "cancelFeeInvalid": "Voer een bedrag in zoals 25,00.",
         "cancelWindowInvalid": "Voer een geheel aantal minuten van 0 tot {cancelWindowMax} in.",
-        "reminderInvalid": "Voer hele minuten vóór het begin in, van 1 tot {reminderMax}.",
-        "remindersDuplicate": "Elke herinnering heeft een ander tijdstip nodig.",
-        "remindersTooMany": "Een boekingstype kan maximaal {reminders} herinneringen hebben.",
         "questionLabelRequired": "Geef de vraag een label (maximaal {questionLabelMax} tekens).",
         "questionsTooMany": "Een boekingstype kan maximaal {questions} vragen hebben.",
         "questionOptionsRequired": "Voeg minstens één keuze toe, één per regel.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Corrigeer de gemarkeerde datums in de lijst met datumuitzonderingen.",
         "descriptionTooLong": "De beschrijving mag maximaal {descriptionMax} tekens bevatten.",
         "locationTooLong": "De locatie mag maximaal {locationMax} tekens bevatten.",
-        "server": "De server heeft deze waarde niet geaccepteerd. Controleer hem en probeer het opnieuw."
+        "server": "De server heeft deze waarde niet geaccepteerd. Controleer hem en probeer het opnieuw.",
+        "reminderInvalid": "Voer een geheel getal in voor de tijd, maximaal 30 dagen.",
+        "remindersDuplicate": "Elke herinnering of opvolging heeft een andere tijd nodig.",
+        "remindersTooMany": "Een boekingstype kan maximaal {reminders} herinneringen en opvolgingen hebben.",
+        "reminderChannelsNone": "Kies minstens één kanaal.",
+        "reminderBodyTooLong": "Het bericht, het onderwerp of het label is te lang."
       },
       "service": {
         "title": "Dienstdetails",
@@ -556,11 +568,12 @@
         "hint": "Boekingen werken ook zonder dit. Verbind Google Agenda in Afspraken, Instellingen om vrij/bezet-tijden te synchroniseren en Meet-links toe te voegen.",
         "unavailable": "Google Agenda is nog niet ingesteld voor dit platform. Deze instellingen worden bij het boekingstype bewaard voor wanneer het zover is.",
         "calendarId": "Agenda",
-        "calendarPlaceholder": "primair",
         "spreadsheetId": "Toevoegen aan spreadsheet (optioneel)",
-        "spreadsheetPlaceholder": "Spreadsheet-ID",
         "createMeet": "Maak voor elke boeking een Google Meet-link",
-        "calendarDefault": "De workspaceagenda"
+        "calendarDefault": "De workspaceagenda",
+        "connectFirst": "Koppel je <link>Google-account</link> om uit de lijst te kiezen.",
+        "spreadsheetNone": "Geen sheet",
+        "spreadsheetNoListing": "Je sheets kunnen niet worden weergegeven omdat de machtiging Drive-bestandslijst niet is verleend. Voeg deze toe op de pagina Google-account."
       },
       "messages": {
         "title": "Levenscyclusberichten",
@@ -586,25 +599,6 @@
           "reschedule": "Hoi {name}, je {type} is verplaatst naar {slot}. Details: {manage_link}"
         },
         "templatesNote": "Goedgekeurde WhatsApp-sjablonen kunnen nog niet worden gekozen. Berichten worden verzonden als de platte tekst hierboven."
-      },
-      "reminders": {
-        "title": "Herinneringen",
-        "hint": "Tijden moeten verschillend zijn (1440 = 24 u ervoor, 180 = 3 u ervoor). Maximaal {max}.",
-        "add": "Herinnering toevoegen",
-        "quickAdd": "Snel toevoegen",
-        "quick": {
-          "h24": "24 u",
-          "h3": "3 u",
-          "h1": "1 u",
-          "m15": "15 min"
-        },
-        "empty": "Geen herinneringen. Klanten krijgen alleen de bevestiging.",
-        "offsetOf": "Herinnering {n}, minuten voor het begin",
-        "minBefore": "min ervoor",
-        "labelPlaceholder": "24u",
-        "labelOf": "Herinnering {n}, label",
-        "remove": "Herinnering {n} verwijderen",
-        "count": "{count} van {max} herinneringen"
       },
       "questions": {
         "title": "Vragenlijst",
@@ -962,7 +956,7 @@
         "calendarSaved": "Agenda opgeslagen.",
         "confirmOff": {
           "title": "Google Agenda loskoppelen?",
-          "message": "Nieuwe boekingen gaan niet meer naar je agenda en de bezette tijden ervan worden niet meer gelezen. Afspraken die al in je agenda staan, blijven daar en Google krijgt de melding om deze toegang in te trekken.",
+          "message": "Nieuwe boekingen gaan niet meer naar je agenda en de bezette tijden ervan worden niet meer gelezen. De Google-stappen in je flows stoppen ook, omdat ze deze verbinding delen. Afspraken die al in je agenda staan, blijven daar en Google krijgt de melding om deze toegang in te trekken.",
           "confirm": "Loskoppelen",
           "cancel": "Behouden"
         },
@@ -972,7 +966,8 @@
           "failed": "Het verbinden is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag je platformbeheerder om de Google-configuratie te controleren.",
           "expired": "Die poging duurde te lang. Druk op Verbinden om opnieuw te beginnen.",
           "not_configured": "Google Agenda is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Google OAuth-client toe te voegen.",
-          "missing_scope": "Google heeft niet alle benodigde agendarechten verleend. Verbind opnieuw en laat alle vakjes aangevinkt."
+          "missing_scope": "Google heeft niet alle benodigde agendarechten verleend. Verbind opnieuw en laat alle vakjes aangevinkt.",
+          "cancelled": "U hebt geannuleerd. Er is niets gekoppeld."
         },
         "whatTitle": "Wat dit doet",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Corrigeer de gemarkeerde tijden in de kantooruren."
       },
       "notAvailable": "Workspacebrede boekingsinstellingen zijn niet beschikbaar op deze server. Elk boekingstype heeft in plaats daarvan zijn eigen uren, tijdzone, herinneringen en berichten.",
-      "openTypes": "Boekingstypen openen"
+      "openTypes": "Boekingstypen openen",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Koppel een Microsoft-agenda zodat bevestigde boekingen erin worden geschreven en de bezette tijden ervan tijdsloten sluiten.",
+        "provider": "Outlook-agenda",
+        "providerSub": "Microsoft 365 en Outlook.com",
+        "status": {
+          "unavailable": "Niet beschikbaar",
+          "disconnected": "Niet gekoppeld",
+          "connected": "Gekoppeld",
+          "needs_reconnect": "Opnieuw koppelen vereist"
+        },
+        "loading": "Verbinding controleren",
+        "unavailableTitle": "Outlook is nog niet ingesteld voor dit platform",
+        "unavailableBody": "Je platformbeheerder moet eerst de Microsoft-app registreren (Admin, Instellingen, Microsoft Calendar) voordat een werkruimte kan koppelen. Je boekingen worden hierdoor niet beïnvloed.",
+        "disconnectedBody": "Niet gekoppeld. Bij het koppelen open je Microsoft, waar je het account kiest en toestemming geeft om de agenda te delen.",
+        "disconnectedReadOnly": "Niet gekoppeld. Vraag een beheerder van de werkruimte om te koppelen.",
+        "reconnectTitle": "Microsoft accepteert de koppeling niet meer",
+        "reconnectBody": "De toegang is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "reconnectBodyAccount": "De toegang voor {account} is ingetrokken of verlopen, dus boekingen worden niet naar je agenda geschreven en de bezette tijden ervan worden niet gelezen. Koppel opnieuw om verder te gaan.",
+        "account": "Microsoft-account",
+        "calendar": "Agenda",
+        "primaryCalendar": "Je hoofdagenda",
+        "connectedAgo": "Gekoppeld {when}",
+        "writesHere": "Bevestigde boekingen worden naar deze agenda geschreven.",
+        "readsOnly": "Alleen de bezette tijden worden gelezen. Boekingen worden naar je andere agenda geschreven.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft beperkt het aantal verzoeken. Boekingen worden automatisch opnieuw geprobeerd.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft weigerde toegang tot deze agenda. Controleer of het account een mailbox heeft en de agenda mag delen.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft reageerde niet. Het wordt automatisch opnieuw geprobeerd."
+        },
+        "errors": {
+          "notConfigured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "notConnected": "Er is geen Outlook-agenda gekoppeld. Laad de pagina opnieuw en koppel opnieuw.",
+          "providerFailed": "Microsoft reageerde niet. Probeer het zo meteen opnieuw.",
+          "notYours": "Deze koppeling is door iemand anders gestart, dus er is niets gekoppeld. Vraag diegene om te koppelen, of druk zelf op Koppelen.",
+          "invalidTicket": "Deze koppeling kan niet meer worden bevestigd. Druk op Koppelen om opnieuw te beginnen."
+        },
+        "loadingCalendars": "Je agenda's laden",
+        "chooseLabel": "Boekingen schrijven naar",
+        "chooseHint": "Alleen agenda's die dit account kan bewerken worden getoond. Gebeurtenissen die al zijn geschreven, blijven waar ze zijn.",
+        "choosePlaceholder": "Kies een agenda",
+        "chooseOptionPrimary": "{name} (hoofdagenda)",
+        "chooseSave": "Deze agenda gebruiken",
+        "chooseCancel": "Annuleren",
+        "saving": "Opslaan",
+        "connect": "Outlook koppelen",
+        "reconnect": "Outlook opnieuw koppelen",
+        "redirecting": "Microsoft openen",
+        "choose": "Agenda kiezen",
+        "disconnect": "Ontkoppelen",
+        "disconnected": "Outlook ontkoppeld.",
+        "calendarSaved": "Agenda opgeslagen.",
+        "confirm": {
+          "title": "Dit Microsoft-account koppelen?",
+          "body": "Microsoft heeft je teruggestuurd om het koppelen van een account aan {workspace} af te ronden. Ga alleen verder als je dit zelf zojuist hebt gestart.",
+          "confirm": "Koppelen",
+          "working": "Koppelen",
+          "cancel": "Annuleren"
+        },
+        "confirmOff": {
+          "title": "Outlook ontkoppelen?",
+          "message": "Nieuwe boekingen gaan niet meer naar je Outlook-agenda en de bezette tijden ervan worden niet meer gelezen. Gebeurtenissen die al in je agenda staan, blijven daar. Om de toestemming ook aan de kant van Microsoft in te trekken, verwijder je de app in je Microsoft-account.",
+          "confirm": "Ontkoppelen",
+          "cancel": "Behouden"
+        },
+        "outcome": {
+          "connected": "Outlook gekoppeld. Bevestigde boekingen gaan nu naar je agenda.",
+          "denied": "Er is geen toegang verleend bij Microsoft, dus er is niets gekoppeld.",
+          "failed": "Het koppelen is niet voltooid. Probeer het opnieuw; als het blijft mislukken, vraag dan je platformbeheerder om de Microsoft-app te controleren.",
+          "expired": "Die poging duurde te lang. Druk op Koppelen om opnieuw te beginnen.",
+          "not_configured": "Outlook is niet ingesteld voor dit platform. Vraag je platformbeheerder om de Microsoft-app te registreren.",
+          "missing_scope": "Microsoft heeft de benodigde agendatoestemming niet gegeven. Koppel opnieuw en laat alle vakjes aangevinkt.",
+          "cancelled": "Je hebt geannuleerd. Er is niets gekoppeld."
+        },
+        "whatTitle": "Wat dit doet",
+        "what": {
+          "freeBusy": "Leest bezette tijden uit je agenda zodat geboekte of geblokkeerde tijden niet worden aangeboden.",
+          "writeBack": "Schrijft bevestigde boekingen als afspraken naar je agenda en nodigt de klant uit.",
+          "teams": "Voegt een Teams-vergaderlink toe aan online diensten (werk- en schoolaccounts)."
+        },
+        "hint": "Boekingen werken ook zonder. Als ook Google is gekoppeld, worden bezette tijden uit beide gelezen en wordt elke boeking naar één ervan geschreven."
+      },
+      "writeTarget": {
+        "title": "Waar boekingen naartoe worden geschreven",
+        "description": "Bezette tijden worden uit elke gekoppelde agenda gelezen. Elke boeking wordt naar één ervan geschreven.",
+        "label": "Boekingen schrijven naar",
+        "hint": "Automatisch gebruikt Google Calendar als dat werkt, anders Outlook. Bij een wijziging worden de gebeurtenissen van aankomende boekingen verplaatst naar de agenda die je kiest.",
+        "auto": "Automatisch",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "niet gekoppeld",
+        "saved": "Opgeslagen.",
+        "backfill": {
+          "body": "{count, plural, one {# bevestigde boeking in de komende 90 dagen staat} other {# bevestigde boekingen in de komende 90 dagen staan}} nog niet in de agenda waar ze naartoe gaan. Ze worden automatisch geschreven nadat je agenda's koppelt of wijzigt.",
+          "action": "Nu schrijven",
+          "working": "In de wachtrij plaatsen",
+          "queued": "Ze worden op de achtergrond naar je agenda geschreven.",
+          "notConnected": "Er is geen agenda gekoppeld, dus er is geen plek om ze naartoe te schrijven."
+        }
+      },
+      "feeds": {
+        "title": "Andere agenda's (iCal)",
+        "description": "Abonneer je met het iCal-adres op een agenda zodat de bezette tijden ervan tijdsloten sluiten. Alleen wanneer je bezet bent wordt gebruikt: verder wordt er niets van getoond of bewaard.",
+        "loading": "Je agenda's laden",
+        "empty": "Nog geen agenda's geabonneerd.",
+        "status": {
+          "pending": "Nog niet gelezen",
+          "ok": "Werkt",
+          "error": "Probleem"
+        },
+        "paused": "Gepauzeerd",
+        "neverRead": "Nog niet gelezen.",
+        "lastRead": "Gelezen {when}.",
+        "busyCount": "{count, plural, one {# bezet blok} other {# bezette blokken}} in de komende 180 dagen",
+        "allDayLabel": "Evenementen van een hele dag blokkeren de dag",
+        "pause": "Pauzeren",
+        "resume": "Hervatten",
+        "refresh": "Nu lezen",
+        "reading": "Lezen",
+        "remove": "Abonnement opzeggen",
+        "removed": "Abonnement op agenda opgezegd.",
+        "added": "Geabonneerd op agenda.",
+        "addTitle": "Abonneren op een agenda",
+        "nameLabel": "Naam",
+        "namePlaceholder": "Teamrooster",
+        "urlLabel": "Agenda-adres",
+        "urlHint": "Een adres dat begint met https:// of webcal:// en eindigt op .ics. Het wordt nu gecontroleerd, daarna versleuteld opgeslagen en nooit meer getoond.",
+        "add": "Abonneren",
+        "adding": "Agenda lezen",
+        "hint": "Abonneer je niet op de agenda waarnaar je boekingen worden geschreven: een dienst met meerdere plaatsen zou zijn eigen gebeurtenissen als bezet zien. Een feed wordt ongeveer elke 15 minuten gelezen, dus een wijziging daar kan zo lang duren voordat die zichtbaar is.",
+        "confirmRemove": {
+          "title": "Abonnement op deze agenda opzeggen?",
+          "message": "Tijden die door {name} werden geblokkeerd, zijn meteen weer vrij. De agenda zelf wordt niet aangepast.",
+          "confirm": "Abonnement opzeggen",
+          "cancel": "Behouden"
+        },
+        "errors": {
+          "invalid": "Voer een adres in dat begint met https://, http:// of webcal://, zonder gebruikersnaam of wachtwoord erin.",
+          "duplicate": "Deze werkruimte is al geabonneerd op die agenda.",
+          "limit": "Een werkruimte kan zich op 10 agenda's abonneren. Zeg eerst een abonnement op."
+        },
+        "reason": {
+          "unreachable": "Het adres kon niet worden bereikt. Controleer of het klopt en openbaar is.",
+          "timeout": "De agenda deed er te lang over om te antwoorden.",
+          "not_found": "Op dat adres is niets gevonden. Mogelijk is het niet meer gepubliceerd.",
+          "forbidden": "De agenda weigerde toegang. Controleer of hij is gepubliceerd voor iedereen met de link.",
+          "server_error": "De server van de agenda had een probleem. Het wordt automatisch opnieuw geprobeerd.",
+          "redirect_loop": "Het adres stuurt ons in cirkels rond.",
+          "not_a_calendar": "Dat adres is geen iCal-agenda. Het moet eindigen op .ics.",
+          "too_large": "Die agenda is te groot om te lezen.",
+          "blocked_address": "Dat adres verwijst naar een privénetwerk, wat niet is toegestaan.",
+          "unknown": "Dat adres kon niet als agenda worden gelezen."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# afspraak gebruikt een tijdzone die we niet kennen en is gelezen in de tijdzone van je werkruimte.} other {# afspraken gebruiken een tijdzone die we niet kennen en zijn gelezen in de tijdzone van je werkruimte.}}",
+          "unsupportedRule": "{count, plural, one {# terugkerende gebeurtenis gebruikt} other {# terugkerende gebeurtenissen gebruiken}} een regel die we niet ondersteunen: alleen de eerste keer blokkeert tijd.",
+          "truncated": "Deze agenda heeft meer bezette blokken dan we bewaren, dus sommige ontbreken."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Mijn boekingen in mijn agenda-app",
+        "description": "Abonneer Apple Calendar, Outlook of Google Calendar op je boekingen.",
+        "loading": "Je link laden",
+        "none": "Je hebt nog geen link.",
+        "make": "Mijn link aanmaken",
+        "making": "Aanmaken",
+        "made": "Je link is klaar.",
+        "linkLabel": "Je link",
+        "copy": "Link kopiëren",
+        "copied": "Link gekopieerd.",
+        "copyFailed": "Automatisch kopiëren is niet gelukt. Selecteer de link en kopieer hem zelf.",
+        "open": "Openen in mijn agenda-app",
+        "rotate": "Nieuwe link maken",
+        "stop": "Delen stoppen",
+        "stopped": "Je link werkt niet meer.",
+        "lastUsed": "Een agenda-app heeft hem voor het laatst gelezen {when}.",
+        "neverUsed": "Geen enkele agenda-app heeft hem al gelezen.",
+        "warning": "Iedereen met deze link ziet de titels, tijden en plaatsen van je boekingen. Houd hem privé. Telefoonnummers, e-mailadressen en notities worden nooit getoond.",
+        "hint": "Je ziet wat je ook in de boekingenlijst kunt zien. Je agenda-app vernieuwt de feed volgens een eigen schema, vaak om de paar uur.",
+        "confirmRotate": {
+          "title": "Nieuwe link maken?",
+          "message": "De oude link werkt meteen niet meer. Agenda-apps die hem gebruiken, hebben de nieuwe nodig.",
+          "confirm": "Nieuwe link maken"
+        },
+        "confirmStop": {
+          "title": "Delen van je boekingen stoppen?",
+          "message": "Je link werkt meteen niet meer. Agenda-apps die hem gebruiken, tonen niets nieuws meer.",
+          "confirm": "Delen stoppen"
+        },
+        "confirmCancel": "Behouden"
+      }
     },
     "linked": {
       "title": "Afspraken",
@@ -1060,6 +1248,181 @@
       "loadMore": "Meer laden",
       "loadMorePast": "Meer eerdere laden",
       "noType": "Afspraak"
+    },
+    "sync": {
+      "title": "Agenda niet gesynchroniseerd",
+      "reason": {
+        "event_deleted": "Het event is verwijderd of geannuleerd in Google Calendar.",
+        "event_missing": "Het event is niet meer te vinden in Google Calendar.",
+        "time_changed": "Het event is in Google Calendar naar een andere tijd verplaatst.",
+        "attendees_changed": "De gasten van het event zijn gewijzigd in Google Calendar."
+      },
+      "googleShows": "Google toont: {time}",
+      "notChanged": "Deze boeking is niet gewijzigd. Kies welke versie juist is.",
+      "found": "Gevonden: {when}",
+      "push": "Onze tijd terugzetten naar Google",
+      "accept": "Wijziging van Google accepteren",
+      "keep": "Niet nu",
+      "acceptTitle": {
+        "cancel": "Deze boeking annuleren?",
+        "reschedule": "Deze boeking naar de tijd van Google verplaatsen?",
+        "acknowledge": "De gasten die Google toont accepteren?"
+      },
+      "acceptMessage": {
+        "cancel": "Het event is verdwenen uit Google, dus deze boeking wordt geannuleerd en de tijd komt weer vrij. De klant wordt hiervan op de hoogte gebracht, zoals bij elke annulering.",
+        "reschedule": "Deze boeking wordt verplaatst naar {time}. De klant krijgt de nieuwe tijd te horen, zoals bij elke verplaatsing.",
+        "acknowledge": "De boeking zelf verandert niet. De gastenlijst van Google wordt onthouden en deze melding verdwijnt."
+      },
+      "acceptConfirm": {
+        "cancel": "Boeking annuleren",
+        "reschedule": "Boeking verplaatsen",
+        "acknowledge": "Accepteren"
+      }
+    },
+    "reminders": {
+      "title": "Herinneringen en opvolging",
+      "hint": "Stuur de contactpersoon een bericht voordat een afspraak begint of nadat die eindigt. Elk bericht staat uit tot je het aanzet. Maximaal {max} per boekingstype.",
+      "quickAdd": "Snel toevoegen",
+      "quick": {
+        "h24": "24 uur ervoor",
+        "h3": "3 uur ervoor",
+        "h1": "1 uur ervoor",
+        "m15": "15 minuten ervoor",
+        "after2h": "2 uur erna",
+        "afterDay": "1 dag erna"
+      },
+      "add": "Herinnering toevoegen",
+      "empty": "Geen herinneringen of opvolgingen. De contactpersoon krijgt alleen de bevestiging.",
+      "enabledOf": "Herinnering {n} versturen",
+      "on": "Aan",
+      "off": "Uit",
+      "offsetOf": "Herinnering {n}, hoeveelheid tijd",
+      "unitOf": "Herinnering {n}, tijdseenheid",
+      "kindOf": "Herinnering {n}, voor of na",
+      "units": {
+        "minutes": "minuten",
+        "hours": "uur",
+        "days": "dagen"
+      },
+      "kind": {
+        "before": "voordat de afspraak begint",
+        "after": "nadat de afspraak eindigt"
+      },
+      "editMessage": "Bericht en kanalen",
+      "hideMessage": "Verbergen",
+      "remove": "Herinnering {n} verwijderen",
+      "withTemplate": "WhatsApp-sjabloon",
+      "channelsTitle": "Versturen via",
+      "channelsHint": "Het eerste kanaal dat kan bezorgen wordt gebruikt, de volgende zijn reserve. Niemand krijgt dezelfde herinnering twee keer.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-mail"
+      },
+      "moveUp": "{channel} eerder proberen",
+      "moveDown": "{channel} later proberen",
+      "removeChannel": "{channel} niet gebruiken",
+      "messageTitle": "Bericht",
+      "placeholderMeaning": {
+        "name": "De naam van de contactpersoon",
+        "type": "De naam van het boekingstype",
+        "slot": "Datum en tijd samen",
+        "date": "De datum",
+        "time": "De tijd",
+        "location": "De plaats, of de deelnamelink als het online is",
+        "join_link": "De link om deel te nemen als het online is",
+        "manage_link": "De link om de afspraak te verplaatsen of te annuleren"
+      },
+      "bodyHintBefore": "Laat leeg om het herinneringsbericht van het boekingstype of de standaardtekst te gebruiken.",
+      "bodyHintAfter": "Laat leeg om de standaardtekst voor opvolging te gebruiken.",
+      "subjectTitle": "E-mailonderwerp",
+      "subjectPlaceholder": "Laat leeg voor een standaardonderwerp",
+      "templateTitle": "WhatsApp-sjabloon",
+      "templateNone": "Geen: vrije tekst, alleen binnen het venster van 24 uur",
+      "templateUnknown": "Een sjabloon dat niet meer beschikbaar is",
+      "templateHint": "Meer dan 24 uur nadat de contactpersoon voor het laatst schreef, bezorgt WhatsApp alleen een goedgekeurd sjabloon. De variabelen worden in deze volgorde ingevuld: 1 naam, 2 dienst, 3 datum, 4 tijd, 5 plaats, 6 deelnamelink, 7 beheerlink.",
+      "labelTitle": "Label (optioneel)",
+      "labelPlaceholder": "bijv. Dag ervoor",
+      "previewTitle": "Voorbeeld",
+      "previewNote": "Een voorbeeld met testwaarden. Het echte bericht gebruikt de gegevens van de afspraak zelf.",
+      "count": "{count} van {max} herinneringen en opvolgingen",
+      "note": "Een herinnering wordt nooit verstuurd nadat de afspraak is begonnen. Als de afspraak wordt geannuleerd of verplaatst, stopt wat in de wacht stond en wordt het opnieuw gepland voor de nieuwe tijd. Stille uren houden een bericht vast tot ze voorbij zijn, en een contactpersoon die zich heeft afgemeld of op de niet-bellenlijst staat, wordt overgeslagen.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consult",
+        "location": "Hoofdstraat 12"
+      },
+      "settingsTitle": "Herinneringen en opvolging",
+      "settingsDescription": "Stuur de contactpersoon per boekingstype een bericht vóór een afspraak en volg erna op. Alles staat uit tot je het aanzet.",
+      "loading": "Boekingstypes laden",
+      "noTypes": "Er zijn nog geen boekingstypes. Maak er een aan om de herinneringen in te stellen.",
+      "paused": "Gepauzeerd",
+      "summaryNone": "Niets ingesteld",
+      "summary": "{on} van {total} aan",
+      "unsaved": "Niet-opgeslagen wijzigingen",
+      "conflict": "Dit boekingstype is elders gewijzigd. Laad opnieuw om de nieuwste versie te zien voordat je opslaat.",
+      "reload": "Opnieuw laden",
+      "discard": "Wijzigingen negeren",
+      "saving": "Opslaan",
+      "save": "Herinneringen opslaan",
+      "saved": "Herinneringen opgeslagen voor {name}.",
+      "readOnly": "Je kunt deze herinneringen bekijken, maar niet wijzigen.",
+      "fixFirst": "Los eerst de gemarkeerde herinneringen op.",
+      "problems": {
+        "offsetInvalid": "Voer een geheel getal in voor de tijd, maximaal 30 dagen.",
+        "duplicate": "Elke herinnering of opvolging heeft een andere tijd nodig.",
+        "channelsNone": "Kies minstens één kanaal.",
+        "bodyTooLong": "Het bericht is te lang.",
+        "subjectTooLong": "Het onderwerp is te lang.",
+        "labelTooLong": "Het label is te lang.",
+        "tooMany": "Maximaal 8 herinneringen en opvolgingen voor één boekingstype."
+      },
+      "noneOn": "Er staan geen herinneringen of opvolgingen aan voor dit boekingstype.",
+      "when": {
+        "before": "{count, plural, one {# minuut ervoor} other {# minuten ervoor}}",
+        "after": "{count, plural, one {# minuut erna} other {# minuten erna}}"
+      },
+      "sentOn": "Verstuurd via {channel}",
+      "status": {
+        "scheduled": "Gepland",
+        "pending": "Verschuldigd",
+        "sending": "Versturen",
+        "held": "Wachten",
+        "sent": "Verstuurd",
+        "skipped": "Niet verstuurd",
+        "failed": "Mislukt",
+        "cancelled": "Geannuleerd"
+      },
+      "reasons": {
+        "rule_removed": "De herinnering is verwijderd voordat die aan de beurt was.",
+        "rule_off": "De herinnering is uitgezet voordat die werd verstuurd.",
+        "rescheduled": "De afspraak is verplaatst, dus deze is vervangen.",
+        "booking_cancelled": "De afspraak is geannuleerd.",
+        "booking_declined": "Het verzoek is afgewezen.",
+        "booking_no_show": "Gemarkeerd als niet verschenen.",
+        "booking_not_confirmed": "De afspraak is niet bevestigd.",
+        "started": "De afspraak was al begonnen.",
+        "expired": "Het was te laat om te versturen.",
+        "no_contact_point": "De contactpersoon heeft geen nummer of adres voor dit kanaal.",
+        "no_channel": "Geen enkel kanaal kon het bezorgen.",
+        "no_sender": "Geen gekoppelde afzender voor dit kanaal.",
+        "template_required": "WhatsApp heeft buiten het venster van 24 uur een goedgekeurd sjabloon nodig.",
+        "template_unavailable": "Het gekozen WhatsApp-sjabloon kan niet worden verstuurd.",
+        "quiet_hours_too_late": "De stille uren liepen door na de start.",
+        "no_consent": "Geen vastgelegde toestemming.",
+        "opted_out": "De contactpersoon heeft zich afgemeld.",
+        "do_not_call": "Het nummer staat op de niet-bellenlijst.",
+        "minor": "De contactpersoon is gemarkeerd als minderjarig.",
+        "processing_restricted": "Berichten naar deze contactpersoon zijn beperkt.",
+        "plan_limit": "De limiet van het abonnement is bereikt.",
+        "quiet_hours": "Wachten tot de stille uren voorbij zijn.",
+        "channel_unavailable": "Het kanaal is op dit moment niet gekoppeld.",
+        "wallet_empty": "Het tegoed is op.",
+        "send_halted": "Versturen is stopgezet.",
+        "provider_error": "De provider heeft het geweigerd.",
+        "interrupted": "Het is onderbroken en niet opnieuw geprobeerd.",
+        "internal_error": "Er is iets misgegaan."
+      }
     }
   }
 }

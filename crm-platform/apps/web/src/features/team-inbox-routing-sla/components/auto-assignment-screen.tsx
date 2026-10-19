@@ -19,6 +19,7 @@ import {
 } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useVocab } from '@/features/persona-vocabulary';
 import { PlanPaywall } from '@/features/plans-subscriptions-trials/components/plan-paywall';
 import {
   refresh,
@@ -29,6 +30,7 @@ import {
   KEYS,
 } from '../api/routing';
 import { namesSummary, whenChips } from '../lib/summary';
+import { BusinessHoursDialog } from './business-hours-dialog';
 
 const isCode = (e: unknown, code: string) => e instanceof ApiError && e.code === code;
 const reason = (e: unknown, fallback: string) =>
@@ -41,6 +43,8 @@ const reason = (e: unknown, fallback: string) =>
  */
 export function AutoAssignmentScreen() {
   const t = useTranslations('team-inbox-routing-sla.page');
+  const contactNoun = useVocab('contact');
+  const dealNoun = useVocab('deal');
   const canRead = useCan('inbox.settings.read');
   const canManage = useCan('inbox.routing.manage');
   const qc = useQueryClient();
@@ -53,6 +57,7 @@ export function AutoAssignmentScreen() {
   const assignees = useAssignees(canRead);
   const [busy, setBusy] = useState<string | null>(null);
   const [deleting, setDeleting] = useState<RoutingRule | null>(null);
+  const [hoursOpen, setHoursOpen] = useState(false);
 
   const rows = useMemo(() => rules.data?.pages.flatMap((p) => p.data) ?? [], [rules.data]);
   const first = rules.data?.pages[0];
@@ -139,26 +144,50 @@ export function AutoAssignmentScreen() {
           </Link>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight">{t('title')}</h1>
           <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+          <p className="mt-1 max-w-2xl text-sm text-muted-foreground" data-testid="record-note">
+            {t.rich('recordNote', {
+              contacts: contactNoun.pluralLower,
+              deals: dealNoun.pluralLower,
+              link: (chunks) => (
+                <Link href="/record-assignment" className="underline underline-offset-2">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </p>
         </div>
-        {canManage && !locked && (
-          <div className="text-end">
-            {atLimit ? (
-              <Button disabled>{t('create')}</Button>
-            ) : (
-              <Link href="/auto-assignment/new">
-                <Button>{t('create')}</Button>
-              </Link>
-            )}
-            {first?.limit != null && (
-              <p className="mt-1 text-xs text-muted-foreground">
-                {atLimit
-                  ? t('limitReached', { limit: first.limit })
-                  : t('limitUsed', { used: first.total, limit: first.limit })}
-              </p>
-            )}
-          </div>
-        )}
+        <div className="flex flex-wrap items-start justify-end gap-2">
+          {canRead && !locked && (
+            <Button variant="secondary" onClick={() => setHoursOpen(true)}>
+              {t('businessHours')}
+            </Button>
+          )}
+          {canManage && !locked && (
+            <div className="text-end">
+              {atLimit ? (
+                <Button disabled>{t('create')}</Button>
+              ) : (
+                <Link href="/auto-assignment/new">
+                  <Button>{t('create')}</Button>
+                </Link>
+              )}
+              {first?.limit != null && (
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {atLimit
+                    ? t('limitReached', { limit: first.limit })
+                    : t('limitUsed', { used: first.total, limit: first.limit })}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
       </header>
+
+      <BusinessHoursDialog
+        open={hoursOpen}
+        canManage={canManage}
+        onClose={() => setHoursOpen(false)}
+      />
 
       {!locked && (
         <div className="flex flex-wrap items-start justify-between gap-4 rounded-xl border border-border bg-background p-4">
@@ -318,10 +347,11 @@ export function RuleRow({
 }) {
   const t = useTranslations('team-inbox-routing-sla.rules');
   const tc = useTranslations('team-inbox-routing-sla.channels');
+  const tp = useTranslations('team-inbox-conversations.list');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const chips = whenChips(rule, (k) => tc(k));
-  const people = [...rule.assign.userIds, ...rule.assign.teamIds].map(
+  const people = [...(rule.assign?.userIds ?? []), ...(rule.assign?.teamIds ?? [])].map(
     (id) => names.get(id) ?? t('someone'),
   );
   const { shown, more } = namesSummary(people);
@@ -393,10 +423,47 @@ export function RuleRow({
         </dd>
         <dt className="font-medium text-muted-foreground">{t('thenLabel')}</dt>
         <dd>
-          {t(`strategy.${rule.assign.strategy}`)}
-          {': '}
-          {shown.join(', ')}
-          {more > 0 && ` ${t('andMore', { count: more })}`}
+          {rule.assign && (
+            <>
+              {t(`strategy.${rule.assign.strategy}`)}
+              {': '}
+              {shown.join(', ')}
+              {more > 0 && ` ${t('andMore', { count: more })}`}
+            </>
+          )}
+          {rule.markSpam && (
+            <span className={rule.assign ? 'mt-1 block' : undefined}>{t('markSpamSummary')}</span>
+          )}
+          {rule.priority && (
+            <span className="mt-1 block">
+              {t('prioritySummary', { priority: tp(`priority.${rule.priority}`) })}
+            </span>
+          )}
+          {rule.autoReply && (
+            <span className="mt-1 block">
+              {t('autoReplySummary', { body: rule.autoReply.body })}
+            </span>
+          )}
+          {rule.escalation && (
+            <span className="mt-1 block">
+              {t('escalationSummary', { minutes: rule.escalation.minutes })}{' '}
+              {[
+                rule.escalation.reassign ? t('escalationReassign') : null,
+                rule.escalation.priority
+                  ? t('escalationPriority', {
+                      priority: tp(`priority.${rule.escalation.priority}`),
+                    })
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(', ')}
+            </span>
+          )}
+          {rule.addTags.length > 0 && (
+            <span className="mt-1 block">
+              {t('tagsSummary', { tags: rule.addTags.map((x) => x.name).join(', ') })}
+            </span>
+          )}
           {rule.triggerFlow && (
             <span className="mt-1 flex flex-wrap items-center gap-2">
               {rule.triggerFlow.name === null

@@ -45,7 +45,9 @@
       "form_submissions_monthly": "每月表单提交数",
       "ai_form_generations_monthly": "每月 AI 表单生成次数",
       "sms_monthly": "每月短信数",
-      "email_mailboxes": "邮箱数量"
+      "email_mailboxes": "邮箱数量",
+      "email_monthly": "每月邮件数",
+      "storage_gb": "存储空间 (GB)"
     },
     "features": {
       "automation": "自动化",
@@ -74,13 +76,16 @@
       "storefront_builder": "店铺搭建器",
       "invoicing": "开票",
       "forms_and_links": "表单和链接",
-      "extra_channels": "Telegram、Facebook 和 Instagram",
+      "extra_channels": "Telegram、Facebook、Instagram、LINE、Viber 和 WeChat",
       "form_builder": "表单",
       "waba_groups": "WhatsApp 群组",
       "sms": "SMS 渠道",
       "help_agent": "帮助助手",
       "email_channel": "电子邮件(Gmail)渠道",
-      "personal_history_full": "完整历史记录导入（个人 WhatsApp）"
+      "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI 线索评分",
+      "record_assignment": "记录分配规则"
     },
     "limitGroups": {
       "messaging": "消息",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "本日历月接收的表单提交数（不含垃圾信息）。超出上限时仍会保存供审核，不会丢弃。0 表示不限。",
       "ai_form_generations_monthly": "本日历月 AI 表单生成次数，包括修复重试。0 表示不限。",
       "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
-      "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。"
+      "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
+      "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
+      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。"
     },
     "planAddons": {
       "title": "您的套餐可用的附加包",
@@ -561,7 +568,9 @@
       "continueFree": "继续免费使用",
       "choose": "选择 {name}",
       "back": "返回",
-      "compare": "比较全部套餐"
+      "compare": "比较全部套餐",
+      "appHint": "{feature}也在应用市场以应用形式出售。",
+      "appLink": "查看应用"
     }
   }
 }

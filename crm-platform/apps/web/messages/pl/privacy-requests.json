@@ -23,7 +23,11 @@
       "exportNotReady": "Ten plik nie jest gotowy lub wygasł. Przygotuj nowy eksport.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
-      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "holdActive": "Ten rekord jest chroniony i obecnie nie można go usunąć.",
+      "holdExists": "Ta osoba ma już aktywną blokadę prawną. Przedłuż ją, aby dodać kolejną sprawę.",
+      "holdNotFound": "Ta blokada prawna już nie istnieje.",
+      "holdNotActive": "Ta blokada prawna została już zakończona."
     },
     "type": {
       "access": "Dostęp",
@@ -182,7 +186,12 @@
           "erase_previewed": "Obejrzano podgląd usunięcia",
           "erased": "Dane usunięte",
           "completed": "Wniosek zakończony",
-          "other": "Aktualizacja"
+          "other": "Aktualizacja",
+          "restricted": "Ograniczone: blokada prawna",
+          "erasure_queued": "Usunięcie potwierdzone, oczekuje na zakończenie blokady",
+          "restriction_lifted": "Ograniczenie zniesione",
+          "resume_skipped": "Pominięto automatyczne usunięcie",
+          "resume_failed": "Automatyczne usunięcie nie powiodło się, wykonaj je ręcznie"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Usuń tę osobę",
       "created": "Utworzono wniosek {reference}.",
       "failed": "Nie udało się utworzyć wniosku."
+    },
+    "legalHold": {
+      "close": "Zamknij",
+      "tab": {
+        "label": "Prywatność",
+        "requests": "Wnioski o dane",
+        "holds": "Blokady prawne"
+      },
+      "requesterResponse": "Otrzymaliśmy Twój wniosek. Jesteśmy zobowiązani przechowywać część Twoich danych w celu wypełnienia obowiązku prawnego, dlatego nie możemy ich teraz usunąć. Ograniczyliśmy ich wykorzystywanie i usuniemy je, gdy obowiązek wygaśnie. Możesz złożyć skargę do organu ochrony danych.",
+      "contactBanner": "Blokada prawna: usuwanie wstrzymane",
+      "workspaceBanner": "Blokada prawna obejmująca całą przestrzeń roboczą: usuwanie wstrzymane",
+      "caseStatus": "Ograniczone: blokada prawna",
+      "blockedMessage": "Ten rekord jest chroniony i obecnie nie można go usunąć.",
+      "listFilter": "Oczekuje na blokadę prawną",
+      "banner": {
+        "caseRef": "Sprawa {caseRef}",
+        "reviewBy": "przegląd do {date}",
+        "reviewOverdue": "przegląd zaległy od {date}",
+        "effects": "Marketing, przetwarzanie przez AI i eksporty są ograniczone, a każdy dostęp jest rejestrowany.",
+        "open": "Otwórz rejestr"
+      },
+      "category": {
+        "legal_obligation": "Obowiązek prawny",
+        "legal_claim": "Roszczenie lub spór prawny",
+        "regulator_request": "Żądanie organu nadzorczego lub organów ścigania",
+        "internal_investigation": "Dochodzenie wewnętrzne"
+      },
+      "scope": {
+        "contact": "Kontakt",
+        "lead": "Lead",
+        "workspace": "Cała przestrzeń robocza"
+      },
+      "status": {
+        "active": "Aktywna",
+        "released": "Zwolniona",
+        "expired": "Wygasła"
+      },
+      "menu": {
+        "place": "Nałóż blokadę prawną...",
+        "release": "Zwolnij blokadę prawną..."
+      },
+      "place": {
+        "title": "Nałóż blokadę prawną na ten kontakt",
+        "workspaceTitle": "Nałóż blokadę prawną na całą przestrzeń roboczą",
+        "intro": "Dopóki blokada trwa, usunięcie danych tej osoby, ich skasowanie i czyszczenie po upływie okresu przechowywania są odrzucane, a marketing, przetwarzanie przez AI i eksporty jej danych są ograniczone. Obsługa klienta toczy się jak zwykle.",
+        "workspaceIntro": "Blokadą objęta jest każda osoba w przestrzeni roboczej: usunięcie, skasowanie, czyszczenie po upływie okresu przechowywania i usunięcie nieaktywnej przestrzeni roboczej są odrzucane, a marketing, przetwarzanie przez AI i eksporty są ograniczone. Użyj jej w przypadku nakazu obejmującego wszystkie rekordy.",
+        "category": "Dlaczego dane są przechowywane?",
+        "categoryPick": "Wybierz powód",
+        "caseRef": "Sygnatura sprawy",
+        "caseRefHint": "Własny numer referencyjny: sygnatura akt sądowych, zgłoszenie, numer z pisma organu nadzorczego.",
+        "note": "Notatka (opcjonalnie)",
+        "noteHint": "Nie wpisuj tu imion i nazwisk, numerów telefonów ani szczegółów sprawy.",
+        "reviewAt": "Przegląd do (opcjonalnie)",
+        "reviewHint": "Rejestr oznaczy blokadę po upływie tej daty.",
+        "expiresAt": "Kończy się dnia (opcjonalnie)",
+        "expiresHint": "Po tej dacie blokada zakończy się automatycznie.",
+        "submit": "Nałóż blokadę",
+        "submitting": "Nakładanie...",
+        "done": "Blokada prawna nałożona.",
+        "target": "Dotyczy",
+        "targetPerson": "Jedna osoba",
+        "targetWorkspace": "Cała przestrzeń robocza",
+        "change": "Zmień",
+        "search": "Znajdź osobę",
+        "searchHint": "Wpisz imię i nazwisko, numer telefonu lub adres e-mail (co najmniej dwa znaki).",
+        "noResults": "Nie znaleziono nikogo."
+      },
+      "release": {
+        "title": "Zwolnij tę blokadę prawną",
+        "message": "Skasowanie, czyszczenie po upływie okresu przechowywania i marketing będą wtedy mogły zostać wznowione dla tej osoby. Wnioski o usunięcie oczekujące na tę blokadę przestają być ograniczone, a usunięcie potwierdzone już przez kogoś zostanie wykonane automatycznie w ciągu minuty.",
+        "cases": "{count, plural, one {# wniosek o dane oczekuje na tę blokadę.} few {# wnioski o dane oczekują na tę blokadę.} many {# wniosków o dane oczekuje na tę blokadę.} other {# wniosku o dane oczekuje na tę blokadę.}}",
+        "reason": "Dlaczego jest zwalniana? (opcjonalnie)",
+        "reasonHint": "Nie wpisuj imion i nazwisk ani szczegółów sprawy.",
+        "submit": "Zwolnij blokadę",
+        "submitting": "Zwalnianie...",
+        "done": "Blokada prawna zwolniona.",
+        "doneResuming": "{count, plural, one {Blokada prawna zwolniona. # potwierdzone usunięcie zostanie teraz wykonane.} few {Blokada prawna zwolniona. # potwierdzone usunięcia zostaną teraz wykonane.} many {Blokada prawna zwolniona. # potwierdzonych usunięć zostanie teraz wykonanych.} other {Blokada prawna zwolniona. # potwierdzonego usunięcia zostanie teraz wykonane.}}"
+      },
+      "extend": {
+        "title": "Przedłuż tę blokadę prawną",
+        "caseRefNow": "Obecna sygnatura sprawy: {caseRef}",
+        "addCaseRef": "Dodaj kolejną sygnaturę sprawy",
+        "addCaseRefHint": "Druga sprawa dotycząca tej samej osoby zostaje dodana do tej samej blokady.",
+        "clearHint": "Wyczyść datę, aby ją usunąć.",
+        "submit": "Zapisz zmiany",
+        "submitting": "Zapisywanie...",
+        "done": "Blokada prawna zaktualizowana."
+      },
+      "review": {
+        "title": "Zapisz przegląd",
+        "message": "Zapisuje, że ponownie sprawdzono tę blokadę i że nadal obowiązuje.",
+        "next": "Następny przegląd do (opcjonalnie)",
+        "nextHint": "Zostaw puste, aby zachować obecną datę przeglądu.",
+        "submit": "Zapisz przegląd",
+        "submitting": "Zapisywanie...",
+        "done": "Przegląd zapisany."
+      },
+      "actions": {
+        "review": "Przegląd",
+        "extend": "Przedłuż",
+        "release": "Zwolnij"
+      },
+      "register": {
+        "title": "Blokady prawne",
+        "subtitle": "Osoby i rekordy, których usunięcie i skasowanie są wstrzymane, ponieważ dane muszą być przechowywane. Blokadę na jedną osobę nakłada się ze strony tego kontaktu.",
+        "export": "Eksportuj CSV",
+        "empty": "Brak blokad prawnych.",
+        "emptyFiltered": "Żadna blokada prawna nie pasuje do tych filtrów.",
+        "loadMore": "Wczytaj więcej",
+        "loadingMore": "Wczytywanie...",
+        "none": "-",
+        "overdue": "Przegląd zaległy",
+        "cases": "{count, plural, one {# wniosek oczekuje} few {# wnioski oczekują} many {# wniosków oczekuje} other {# wniosku oczekuje}}",
+        "open": "Otwórz blokadę o sygnaturze sprawy {caseRef}",
+        "filters": {
+          "label": "Filtry",
+          "status": "Status",
+          "category": "Powód",
+          "scope": "Dotyczy",
+          "caseRef": "Sygnatura sprawy",
+          "reviewDue": "Przegląd zaległy",
+          "any": "Dowolny"
+        },
+        "columns": {
+          "subject": "Podmiot",
+          "category": "Powód",
+          "caseRef": "Sygnatura sprawy",
+          "placed": "Nałożona",
+          "review": "Przegląd do",
+          "expires": "Kończy się",
+          "status": "Status",
+          "actions": "Akcje"
+        },
+        "place": "Nałóż blokadę prawną..."
+      },
+      "detail": {
+        "title": "Blokada prawna",
+        "history": "Historia",
+        "releasedAt": "Zakończona",
+        "by": "przez: {actor}",
+        "system": "system",
+        "action": {
+          "insert": "Blokada nałożona",
+          "update": "Blokada zmieniona",
+          "delete": "Blokada zakończona",
+          "other": "Aktualizacja"
+        }
+      },
+      "case": {
+        "body": "Dane tej osoby są przechowywane i zablokowane, dopóki obowiązuje blokada prawna. Usunięcie nie jest wykonywane, marketing, przetwarzanie przez AI i eksporty są ograniczone, a termin nadal biegnie.",
+        "requesterTitle": "Odpowiedź dla osoby",
+        "requesterHint": "Informuje, że dane są przechowywane z mocy obowiązku prawnego, nie podając powodu. Radca prawny może zmienić to sformułowanie w ustawieniach prywatności.",
+        "copy": "Kopiuj tekst",
+        "copied": "Skopiowano",
+        "queueHint": "Nadal możesz teraz potwierdzić usunięcie: zostanie zapisane, nic nie zostanie usunięte, a usunięcie wykona się samo po zakończeniu blokady.",
+        "queue": "Potwierdź usunięcie na czas zakończenia blokady",
+        "queued": "Zapisano. Nic nie zostało usunięte; usunięcie wykona się samo po zakończeniu blokady."
+      },
+      "settings": {
+        "noticeLabel": "Odpowiedź dla osoby, której usunięcie danych jest wstrzymane",
+        "noticeHint": "Sformułowanie Twojego radcy prawnego. Zostaw puste, aby użyć tekstu domyślnego. Nie podawaj sprawy ani powodu."
+      }
     }
   }
 }

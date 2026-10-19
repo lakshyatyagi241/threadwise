@@ -357,6 +357,7 @@ describe('formatting and errors', () => {
     expect(
       hubError(new ApiError(400, ERROR_CODES.WSP_IMPERSONATION_REASON_REQUIRED, 'x')).key,
     ).toBe('reasonRequired');
+    expect(hubError(new ApiError(409, ERROR_CODES.WSP_IMPERSONATION_NO_OWNER, 'x')).key).toBe('noOwner');
     expect(hubError(new ApiError(500, 'SOMETHING', 'Forbidden')).key).toBe('unexpected');
     expect(hubError(new Error('x')).key).toBe('unexpected');
   });

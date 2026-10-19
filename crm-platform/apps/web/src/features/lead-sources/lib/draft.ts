@@ -1,6 +1,10 @@
 import {
   LEAD_RAW_RETENTION_DEFAULT_DAYS,
   LEAD_RAW_RETENTION_MAX_DAYS,
+  SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
+  SPEED_TO_LEAD_MAX_DELAY_MINUTES,
+  SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES,
+  SPEED_TO_LEAD_OFF,
   createLeadSourceSchema,
   leadFieldMappingSchema,
   leadSourceDefaultsSchema,
@@ -11,6 +15,7 @@ import {
   type LeadSourceDefaults,
   type LeadSourceResponse,
   type PreviewLeadMappingInput,
+  type SpeedToLeadChannel,
   type UpdateLeadSourceInput,
 } from '@crm/contracts';
 
@@ -89,6 +94,40 @@ export interface MappingDraft {
   attribution: Record<AttributionField, string>;
 }
 
+/** The first-message setting as the person edits it (BL-014). The delay is text while typed; empty ids mean "none chosen". */
+export interface SpeedDraft {
+  enabled: boolean;
+  channel: SpeedToLeadChannel;
+  templateId: string;
+  /** SMS and email only; empty = the workspace's first connected sender. */
+  senderId: string;
+  delay: string;
+  businessHoursOnly: boolean;
+  /** Minutes, as text: the oldest a lead may be and still get the first message (the select's value). */
+  maxLeadAge: string;
+}
+
+/** The ages the form offers (minutes). A value set some other way is shown as it is and kept. */
+export const SPEED_MAX_AGE_CHOICES: readonly number[] = [
+  SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
+  6 * 60,
+  24 * 60,
+  3 * 24 * 60,
+  7 * 24 * 60,
+  30 * 24 * 60,
+  SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES,
+];
+
+export const emptySpeed = (): SpeedDraft => ({
+  enabled: false,
+  channel: 'whatsapp',
+  templateId: '',
+  senderId: '',
+  delay: '0',
+  businessHoursOnly: false,
+  maxLeadAge: String(SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES),
+});
+
 export interface SourceDraft {
   name: string;
   /** `defaults.platform`: what `contacts.source` and the attribution say. */
@@ -111,6 +150,7 @@ export interface SourceDraft {
   dealTitle: string;
   notifyOwner: boolean;
   notifyUserIds: string[];
+  speed: SpeedDraft;
   mapping: MappingDraft;
 }
 
@@ -152,7 +192,20 @@ export function emptyDraft(): SourceDraft {
     dealTitle: DEFAULT_DEAL_TITLE,
     notifyOwner: true,
     notifyUserIds: [],
+    speed: emptySpeed(),
     mapping: { fields: blankFields(), customFields: [], attribution: blankAttribution() },
+  };
+}
+
+function speedFromDefaults(v: NonNullable<LeadSourceDefaults['speedToLead']>): SpeedDraft {
+  return {
+    enabled: v.enabled,
+    channel: v.channel,
+    templateId: v.templateId ?? '',
+    senderId: v.senderId ?? '',
+    delay: String(v.delayMinutes),
+    businessHoursOnly: v.businessHoursOnly,
+    maxLeadAge: String(v.maxLeadAgeMinutes),
   };
 }
 
@@ -177,6 +230,7 @@ export function draftFromSource(s: LeadSourceResponse): SourceDraft {
     dealTitle: d.deal.title,
     notifyOwner: d.notify.owner,
     notifyUserIds: [...d.notify.userIds],
+    speed: speedFromDefaults(d.speedToLead ?? SPEED_TO_LEAD_OFF),
     mapping: {
       fields: {
         name: m.name ?? '',
@@ -251,6 +305,37 @@ export function buildDefaults(d: SourceDraft): LeadSourceDefaults {
       title: blank(d.dealTitle) ? DEFAULT_DEAL_TITLE : d.dealTitle.trim(),
     },
     notify: { owner: d.notifyOwner, userIds: [...d.notifyUserIds] },
+    speedToLead: buildSpeed(d.speed),
+  };
+}
+
+/** The delay as a whole number of minutes, or null when it is not one (the form says so before anything is sent). */
+export function speedDelay(raw: string): number | null {
+  const text = raw.trim();
+  // Digits only: Number() would also read "1e1" as ten and " 0x10 " as sixteen.
+  if (!/^\d{1,3}$/.test(text)) return null;
+  const n = Number(text);
+  return n <= SPEED_TO_LEAD_MAX_DELAY_MINUTES ? n : null;
+}
+
+/** The oldest-lead limit as whole minutes within the contract's range, or null when it is not one. */
+export function speedMaxLeadAge(raw: string): number | null {
+  const text = raw.trim();
+  if (!/^\d{1,6}$/.test(text)) return null;
+  const n = Number(text);
+  return n >= 1 && n <= SPEED_TO_LEAD_MAX_LEAD_AGE_LIMIT_MINUTES ? n : null;
+}
+
+export function buildSpeed(v: SpeedDraft): NonNullable<LeadSourceDefaults['speedToLead']> {
+  return {
+    enabled: v.enabled,
+    channel: v.channel,
+    templateId: orNull(v.templateId),
+    // WhatsApp is sent by the template's own number; a sender chosen for another channel is not carried along.
+    senderId: v.channel === 'whatsapp' ? null : orNull(v.senderId),
+    delayMinutes: speedDelay(v.delay) ?? 0,
+    businessHoursOnly: v.businessHoursOnly,
+    maxLeadAgeMinutes: speedMaxLeadAge(v.maxLeadAge) ?? SPEED_TO_LEAD_DEFAULT_MAX_LEAD_AGE_MINUTES,
   };
 }
 
@@ -365,6 +450,17 @@ export function validateDraft(d: SourceDraft): Problems {
 
   if (d.dealTitle.trim().length > DEAL_TITLE_MAX)
     p['defaults.deal.title'] = { key: 'dealTitleLength', values: { max: DEAL_TITLE_MAX } };
+
+  if (d.speed.enabled && blank(d.speed.templateId))
+    p['defaults.speedToLead.templateId'] = { key: 'speedTemplateRequired' };
+  if (speedDelay(d.speed.delay) === null)
+    p['defaults.speedToLead.delayMinutes'] = {
+      key: 'speedDelayRange',
+      values: { max: SPEED_TO_LEAD_MAX_DELAY_MINUTES },
+    };
+
+  if (speedMaxLeadAge(d.speed.maxLeadAge) === null)
+    p['defaults.speedToLead.maxLeadAgeMinutes'] = { key: 'speedMaxAgeRange' };
 
   for (const f of MAPPING_FIELDS) pathProblems(d.mapping.fields[f], p, `mapping.${f}`);
   for (const f of ATTRIBUTION_FIELDS)

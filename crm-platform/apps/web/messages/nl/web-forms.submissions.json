@@ -115,7 +115,14 @@
         "consentAt": "Gegeven op",
         "noConsent": "Dit formulier vroeg niet om toestemming.",
         "links": "Registraties",
-        "actions": "Acties"
+        "actions": "Acties",
+        "ageCheck": "Leeftijdscontrole",
+        "ageOutcome": "Resultaat",
+        "ageUnder": "Onder de minimumleeftijd. De inzending is geaccepteerd en het contact is als minderjarig gemarkeerd; marketingtoestemming is niet vastgelegd.",
+        "guardianName": "Ouder of voogd",
+        "guardianEmail": "E-mailadres voogd",
+        "guardianPhone": "Telefoonnummer voogd",
+        "guardianNote": "Door de bezoeker opgegeven, niet gecontroleerd. De toestemming van de voogd staat niet vast tot een persoon die vastlegt op de Toestemmingskaart van het contact."
       },
       "actions": {
         "retry": "Opnieuw proberen",

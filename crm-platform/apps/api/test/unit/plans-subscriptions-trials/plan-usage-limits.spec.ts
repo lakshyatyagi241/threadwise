@@ -66,9 +66,12 @@ const OTHER_ENFORCEMENT: PlanLimitKey[] = [
   'ai_token_limit_monthly',
   // SMS sent this month: reserved atomically per message by the SMS sender (plan_usage, metric `sms_sent`).
   'sms_monthly',
+  // Mails sent this month: the email campaign sender counts the month's outbound email messages before each run.
+  'email_monthly',
 ];
 // The request-rate cap is read by the API-key guard, it counts nothing in the database.
-const NO_METER: PlanLimitKey[] = ['api_rate_limit_per_minute'];
+// `storage_gb` is bytes held, counted by the storage meter (modules/storage-quota). Its usage-panel entry arrives with enforcement (storage quota S2).
+const NO_METER: PlanLimitKey[] = ['api_rate_limit_per_minute', 'storage_gb'];
 const ROW_CAPPED = PLAN_LIMIT_KEYS.filter(
   (k) => !OTHER_ENFORCEMENT.includes(k) && !NO_METER.includes(k),
 );

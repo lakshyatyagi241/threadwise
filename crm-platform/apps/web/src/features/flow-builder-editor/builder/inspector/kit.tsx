@@ -185,7 +185,7 @@ function useAttrPicker<T extends AttrEl>(
                 <path d="M3 8h10" />
               </svg>
               {t('insertAttribute')}
-              <span className="ml-auto text-foreground/80">/{slash!.query}</span>
+              <span className="ms-auto text-foreground/80">/{slash!.query}</span>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: 232 }}>
               {matches.length === 0 ? (
@@ -211,7 +211,7 @@ function useAttrPicker<T extends AttrEl>(
                     }}
                     onMouseEnter={() => setActive(i)}
                     className={cn(
-                      'flex w-full items-start gap-2 px-3 py-2 text-left hover:bg-muted',
+                      'flex w-full items-start gap-2 px-3 py-2 text-start hover:bg-muted',
                       i === current && 'bg-brand/10',
                     )}
                   >
@@ -377,11 +377,20 @@ export function TextArea({
   dark,
   noAttr,
   compact,
+  maxLength,
+  id,
+  onBlur,
 }: {
   value: unknown;
   onChange: (v: string) => void;
   placeholder?: string;
+  /** Lets a `<label htmlFor>` name the field. */
+  id?: string;
+  /** Fires when the field loses focus (a form shows a missing-value error only after that). */
+  onBlur?: () => void;
   rows?: number;
+  /** A hard stop: typing and pasting both end here. */
+  maxLength?: number;
   mono?: boolean;
   dark?: boolean;
   noAttr?: boolean;
@@ -394,9 +403,11 @@ export function TextArea({
   return (
     <>
       <textarea
+        id={id}
         rows={rows}
         value={text}
         placeholder={placeholder}
+        maxLength={maxLength}
         {...(noAttr ? {} : { 'data-attr-input': 'true' })}
         className={cn(
           controlClass,
@@ -410,7 +421,10 @@ export function TextArea({
         onChange={handlers.onChange}
         onSelect={handlers.onSelect}
         onKeyDown={handlers.onKeyDown}
-        onBlur={handlers.onBlur}
+        onBlur={() => {
+          handlers.onBlur();
+          onBlur?.();
+        }}
         /* eslint-enable react-hooks/refs */
       />
       {picker.popover}
@@ -452,7 +466,14 @@ export function SelectInput({
  * brings it into the list. AI Training opens in a NEW tab so the flow being built (with its unsaved changes) stays open;
  * Refresh list re-reads the workspace's assistants, so the new one is there when the person comes back.
  */
-export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
+export function KnowledgeBaseActions({
+  refresh,
+  createLabel,
+}: {
+  refresh: () => void;
+  /** The create link's text when the picker lists AI agents, not knowledge bases. */
+  createLabel?: string;
+}) {
   const t = useTranslations('flb.builder.shell.kit');
   return (
     <div className="mt-1.5 flex items-center justify-between text-[10.5px]">
@@ -462,7 +483,7 @@ export function KnowledgeBaseActions({ refresh }: { refresh: () => void }) {
         rel="noopener noreferrer"
         className="font-semibold text-brand underline"
       >
-        {t('createKnowledgeBase')}
+        {createLabel ?? t('createKnowledgeBase')}
       </a>
       <button type="button" onClick={refresh} className="text-brand underline">
         {t('refreshList')}
@@ -652,7 +673,7 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
   const t = useTranslations('flb.builder.shell.kit');
   return (
     <div
-      className="relative mb-1 ml-auto max-w-[88%] rounded-lg px-2.5 py-1.5 shadow-sm"
+      className="relative mb-1 ms-auto max-w-[88%] rounded-lg px-2.5 py-1.5 shadow-sm"
       style={{ background: '#D9FDD3', color: '#111B21' }}
     >
       {html !== undefined ? (
@@ -665,7 +686,7 @@ export function WaBubble({ html, children }: { html?: string; children?: ReactNo
           {children}
         </div>
       )}
-      <div className="mt-0.5 text-right text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
+      <div className="mt-0.5 text-end text-[9.5px]" style={{ color: 'rgba(0,0,0,0.45)' }}>
         {time(t('am'), t('pm'))} ✓✓
       </div>
     </div>

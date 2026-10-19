@@ -1,0 +1,124 @@
+{
+  "generatedAt": "2026-10-15T03:52:39.877Z",
+  "environment": {
+    "commit": "604c1db95bac5efb2245506552f95f4801b63461",
+    "node": "v22.17.0",
+    "os": "win32 10.0.26200",
+    "cpu": "Intel(R) Core(TM) Ultra 7 155H",
+    "cores": 22,
+    "memGb": 31.4,
+    "loadGenerator": "in-process node:http keep-alive, closed loop",
+    "concurrency": 32,
+    "secondsPerRound": 10,
+    "rounds": 3,
+    "caveat": "Bare http server on the same machine as the load generator; shares CPU with it. Compare only runs from this same environment."
+  },
+  "overhead": {
+    "rounds": {
+      "off": [
+        {
+          "requests": 23074,
+          "errors": 0,
+          "rps": 2307.4,
+          "p50": 15.38,
+          "p95": 18.52,
+          "p99": 21.02,
+          "max": 24.18
+        },
+        {
+          "requests": 24748,
+          "errors": 0,
+          "rps": 2474.8,
+          "p50": 14.95,
+          "p95": 18.66,
+          "p99": 21.52,
+          "max": 24.43
+        },
+        {
+          "requests": 29698,
+          "errors": 0,
+          "rps": 2969.8,
+          "p50": 9.73,
+          "p95": 17.72,
+          "p99": 23.7,
+          "max": 38.49
+        }
+      ],
+      "on": [
+        {
+          "requests": 23106,
+          "errors": 0,
+          "rps": 2310.6,
+          "p50": 15.34,
+          "p95": 18.13,
+          "p99": 20.37,
+          "max": 22.94
+        },
+        {
+          "requests": 24323,
+          "errors": 0,
+          "rps": 2432.3,
+          "p50": 15.08,
+          "p95": 17.9,
+          "p99": 21.25,
+          "max": 26.11
+        },
+        {
+          "requests": 25614,
+          "errors": 0,
+          "rps": 2561.4,
+          "p50": 14.67,
+          "p95": 18.56,
+          "p99": 21.63,
+          "max": 27.53
+        }
+      ]
+    },
+    "medianRps": {
+      "off": 2474.8,
+      "on": 2432.3
+    },
+    "medianP99Ms": {
+      "off": 21.52,
+      "on": 21.25
+    },
+    "rpsDeltaPercent": -1.72,
+    "note": "Negative = slower with the monitor. Differences inside the run-to-run spread of the rounds are noise."
+  },
+  "detection": {
+    "injectedBlockMs": 300,
+    "injectedCount": 4,
+    "underLoad": {
+      "requests": 19490,
+      "errors": 0,
+      "rps": 1949,
+      "p50": 14.53,
+      "p95": 27.61,
+      "p99": 52.11,
+      "max": 328.74
+    },
+    "blockedWindowsReported": [
+      {
+        "level": "warn",
+        "windows": 2
+      },
+      {
+        "level": "critical",
+        "windows": 4
+      }
+    ],
+    "afterBlocksStop": {
+      "load": {
+        "requests": 12800,
+        "errors": 0,
+        "rps": 3200,
+        "p50": 9.17,
+        "p95": 16.51,
+        "p99": 20.75,
+        "max": 25.1
+      },
+      "loopDelayMaxSeconds": 0.016769023
+    },
+    "reading": "Under load the blocked-window counters should be non-zero and request p99/max near the block length; after the blocks stop, request latency and the loop max delay should fall back (recovery)."
+  }
+}

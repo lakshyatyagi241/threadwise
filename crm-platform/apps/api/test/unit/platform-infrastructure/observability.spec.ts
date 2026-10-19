@@ -74,6 +74,9 @@ describe('log redaction', () => {
 describe('secret path segments', () => {
   it.each([
     ['/v2/telegram/inbound/123456:ABC-def_ghi', '/v2/telegram/inbound/[secret]'],
+    ['/v2/line/inbound/lw_tok-123', '/v2/line/inbound/[secret]'],
+    ['/v2/viber/inbound/vb_tok-123?x=1', '/v2/viber/inbound/[secret]?x=1'],
+    ['/v2/wechat/inbound/wc_tok-123', '/v2/wechat/inbound/[secret]'],
     ['/v2/shopify/webhook/s3cr3t', '/v2/shopify/webhook/[secret]'],
     ['/v2/woocommerce/webhook/s3cr3t?x=1', '/v2/woocommerce/webhook/[secret]?x=1'],
     ['/v2/public/lead-hooks/tok_abc123', '/v2/public/lead-hooks/[secret]'],

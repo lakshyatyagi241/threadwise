@@ -129,7 +129,7 @@ function PickerBody({
                 disabled={blocked}
                 onClick={() => toggle(item)}
                 className={cn(
-                  'rounded-lg border p-2 text-left transition',
+                  'rounded-lg border p-2 text-start transition',
                   isPicked
                     ? 'border-brand bg-brand/10'
                     : 'border-border bg-background hover:bg-muted',

@@ -11,7 +11,7 @@ import { WabaHttp } from '../../whatsapp-cloud-api-waba/waba-http';
 import { GraphMediaClient } from './graph-media.client';
 import type { InboundMediaFetcher, InboundMediaRequest } from './inbound-media-fetcher.port';
 import { MEDIA_FAILURE, MediaFetchError, redact, safeUrlForLog } from './media-fetch-error';
-import { authContextOf, profileOf, secretsIn } from './media-provider';
+import { authContextOf, profileOf, secretsIn, type MediaAuthContext } from './media-provider';
 import { inboundByteCap, sha256HexFrom } from './whatsapp-media-rules';
 import { whatsappMediaConfig } from './whatsapp-media.config';
 
@@ -42,16 +42,31 @@ export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
     const cfg = whatsappMediaConfig();
     const client = new GraphMediaClient(cfg, this.http);
     const ctx = authContextOf(req.channel);
-    const profile = profileOf(this.http, ctx.route, ctx.registry);
+    // An Interakt number with its business token looks the file up on Meta, not on Interakt: Interakt's download address is refused
+    // by Meta's file host even with that token (401), while Meta's own address for the same media is accepted with it (200). Meta's
+    // lookup also has the phone-number check. Other routes are unchanged.
+    const viaMeta = ctx.route === 'interakt' && !ctx.registry && !!ctx.channelToken;
+    const lookupCtx: MediaAuthContext = viaMeta
+      ? {
+          route: 'meta',
+          wabaId: ctx.wabaId,
+          phoneNumberId: ctx.phoneNumberId,
+          channelToken: ctx.channelToken,
+        }
+      : ctx;
+    const profile = profileOf(this.http, lookupCtx.route, lookupCtx.registry);
     // Every header value the provider asked for: removed from any text that leaves this function.
-    const secrets = secretsIn(profile.buildHeaders(ctx));
+    const secrets = [
+      ...secretsIn(profileOf(this.http, ctx.route, ctx.registry).buildHeaders(ctx)),
+      ...secretsIn(profile.buildHeaders(lookupCtx)),
+    ];
 
     const total = AbortSignal.timeout(cfg.totalTimeoutMs);
     const signal = req.signal ? AbortSignal.any([req.signal, total]) : total;
     const cap = inboundByteCap(req.mediaKind);
 
     try {
-      const found = await client.lookup(profile, ctx, req.mediaId);
+      const found = await client.lookup(profile, lookupCtx, req.mediaId);
       if (found.fileSize !== null && found.fileSize > cap) {
         throw new MediaFetchError(
           MEDIA_FAILURE.TOO_LARGE,
@@ -70,7 +85,7 @@ export class WhatsappInboundMediaFetcher implements InboundMediaFetcher {
         );
       }
 
-      const download = await client.download(profile, ctx, found.url, signal);
+      const download = await client.download(profile, lookupCtx, found.url, signal);
       if (download.contentLength !== null && download.contentLength > cap) {
         download.stream.destroy();
         throw new MediaFetchError(

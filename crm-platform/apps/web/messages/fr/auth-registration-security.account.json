@@ -552,13 +552,16 @@
             "storefront_builder": "Créateur de boutique",
             "invoicing": "Facturation",
             "forms_and_links": "Formulaires et liens",
-            "extra_channels": "Telegram, Facebook et Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber et WeChat",
             "form_builder": "Formulaires",
             "waba_groups": "Groupes WhatsApp",
             "sms": "SMS",
             "help_agent": "Assistant d’aide",
             "email_channel": "Canal e-mail (Gmail)",
-            "personal_history_full": "Import complet de l'historique (WhatsApp personnel)"
+            "personal_history_full": "Import complet de l'historique (WhatsApp personnel)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Scoring des leads par IA",
+            "record_assignment": "Règles d'attribution des enregistrements"
           },
           "cta": {
             "continueFree": "Continuer gratuitement",

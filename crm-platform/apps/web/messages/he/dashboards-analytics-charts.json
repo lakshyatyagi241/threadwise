@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "מחובר",
           "shopify": "מחובר",
-          "google_sheets": "מפתח API הונפק",
-          "meta_catalog": "הקטלוג קושר"
+          "meta_catalog": "הקטלוג קושר",
+          "google_sheets": "חשבון Google מחובר"
         },
         "notConnected": "לא מחובר",
         "connect": "חבר",
@@ -405,6 +405,43 @@
           "sent": "נשלחה ל-{peer}",
           "received": "התקבלה מ-{peer}",
           "empty": "אין פעילות אחרונה בטווח הזה."
+        },
+        "loginDevices": {
+          "title": "מכשירי התחברות",
+          "subtitle": "התחברויות למרחב העבודה בטווח זה, לפי דפדפן, מערכת וסוג",
+          "active": "{n} פעילות כעת",
+          "total": "{n, plural, one {התחברות #} two {# התחברויות} other {# התחברויות}}",
+          "empty": "אין התחברויות בטווח זה.",
+          "activeLegend": "פעילות כעת",
+          "endedLegend": "נותקו או שפג תוקפן",
+          "row": "{count} התחברויות, {active} פעילות כעת",
+          "group": {
+            "browser": "דפדפן",
+            "os": "מערכת",
+            "kind": "סוג"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "דפדפן אחר"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "מערכת אחרת"
+          },
+          "kind": {
+            "desktop": "מחשב",
+            "mobile": "נייד",
+            "unknown": "לא ידוע"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "תורים",
         "name": "תור",
         "pending": "ממתין",
-        "failed": "נכשל"
+        "failed": "נכשל",
+        "lastFailure": "סיבת הכשל האחרון"
       },
       "clear": {
         "button": "נקה משימות ממתינות",

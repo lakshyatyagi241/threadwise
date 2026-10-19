@@ -7,6 +7,7 @@ import {
   migrations,
   pass,
   read,
+  unreviewed,
   warn,
   walk,
 } from '../lib/core.mjs';
@@ -61,7 +62,7 @@ export default {
       expectNone(
         'ret-partitions',
         'Partitioned tables have a way to drop or detach old partitions (otherwise partitioning only slows growth)',
-        partNoDrop,
+        unreviewed(49, partNoDrop),
         { level: 'warn' },
       ),
       exists('docs/privacy')

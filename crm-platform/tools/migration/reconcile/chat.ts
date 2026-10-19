@@ -4,6 +4,8 @@ import type { ChatPlan } from '../inbox/plan';
 import { reparsedConversations } from '../load/chatreparse';
 import { appendedConversations } from '../load/inbox';
 import { relinkedConversations } from '../load/chatrelink';
+import { deliveryChangedMessages } from '../load/chatdelivery';
+import { statusChangedConversations } from '../load/chatstatus';
 import { sql, withTenant, type Database, type TenantTx } from '../load/db';
 import { isSecretName, uuidv5 } from '../util';
 import { hexKey, oracleDeleted, text } from './oracle';
@@ -177,8 +179,22 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       yield d;
     }
   }
+  // visitor_logs: the current status of each chat session (README "Chat"), read here independently of the planner
+  const sessionStatus = new Map<string, { status: string; ms: number }>();
+  if (a.source.collections(client).includes('visitor_logs'))
+    for await (const d of a.source.read(client, 'visitor_logs')) {
+      const sid = String(d.session_id ?? '').trim();
+      const st = String(d.conversation_status ?? '').trim().toLowerCase();
+      if (sid === '' || (st !== 'open' && st !== 'closed')) continue;
+      const raw = d.last_message_time ?? d.updatedAt;
+      const t = raw instanceof Date ? raw.getTime() : Date.parse(String(raw ?? ''));
+      const ms = Number.isNaN(t) ? 0 : t;
+      const prev = sessionStatus.get(sid);
+      if (!prev || ms >= prev.ms) sessionStatus.set(sid, { status: st, ms });
+    }
   const oracle: OracleResult = await oracleChat(observed(), {
     client,
+    sessionStatus,
     botToExt,
     keepDeletedContactChats: s.keepDeletedContactChats,
     threadStatus: s.threadStatus,
@@ -305,6 +321,8 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
 
   // ---- 2. every loaded message ------------------------------------------------------------------------------------------------------
   const loaded = [...oracle.messages.values()].filter((m) => m.verdict === 'load');
+  // chat-delivery moved these outbound messages on from `sent` (run_log _chat/chat_delivery)
+  const deliveryMoved = await deliveryChangedMessages(db, client);
   const uuidOf = (key: string): string => uuidv5(`${client}|chathistory|${key}`);
   const convOfThread = new Map<string, Set<number>>();
   const threadOfConv = new Map<number, Set<string>>();
@@ -322,7 +340,7 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
         LEFT JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
         LEFT JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
         WHERE m.org_id = ${orgId}
-          AND m.uuid IN (SELECT jsonb_array_elements_text('${JSON.stringify(part.map((m) => uuidOf(m.key))).replace(/'/g, "''")}'::jsonb)::uuid)`),
+          AND m.uuid = ANY (ARRAY(SELECT jsonb_array_elements_text('${JSON.stringify(part.map((m) => uuidOf(m.key))).replace(/'/g, "''")}'::jsonb)::uuid))`),
       ),
     );
     const byUuid = new Map(
@@ -360,6 +378,9 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
       // after cutover a late receipt may move a migrated outbound message on (sent -> delivered / read / failed); never back to queued
       const statusOk =
         r.status === status ||
+        (deliveryMoved.has(String(r.uuid)) &&
+          m.direction === 'out' &&
+          ['delivered', 'read', 'failed'].includes(r.status)) ||
         (a.allowExtraRows &&
           m.direction === 'out' &&
           ['delivered', 'read', 'failed'].includes(r.status));
@@ -450,8 +471,13 @@ export async function verifyChat(a: ChatVerifyArgs): Promise<void> {
   const appended = await appendedConversations(db, client);
   // chat-relink set contact_id on conversations that had none (same trigger; run_log _chat/chat_relink)
   const relinked = await relinkedConversations(db, client);
+  // chat-status closed conversations Waboo has closed (same trigger; run_log _chat/chat_status)
+  const statusChanged = await statusChangedConversations(db, client);
   const touched = (uuid: unknown): boolean =>
-    reparsed.has(String(uuid)) || appended.has(String(uuid)) || relinked.has(String(uuid));
+    reparsed.has(String(uuid)) ||
+    appended.has(String(uuid)) ||
+    relinked.has(String(uuid)) ||
+    statusChanged.has(String(uuid));
   for (const th of threads) {
     const set = convOfThread.get(th.key);
     if (!set || set.size !== 1) continue;

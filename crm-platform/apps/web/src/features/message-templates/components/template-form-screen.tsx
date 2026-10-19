@@ -3,10 +3,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
-import { useId, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
 import type {
   TemplateDetail,
   TemplateSubmitResult,
+  TplAiDraft,
   TplLintIssue,
   TplMetaCategory,
   WabaConnection,
@@ -31,9 +32,12 @@ import {
   useDebounced,
   useLint,
   useTemplate,
+  useTemplateGallery,
   useUpdateTemplate,
 } from '../api/hooks';
+import { applyAiDraft, canDraftCategory, takeAiDraft } from '../lib/ai-draft';
 import { buttonIssues } from '../lib/buttons';
+import { galleryToState } from '../lib/gallery-state';
 import { counter, wrapSelection } from '../lib/format';
 import {
   BODY_MAX,
@@ -64,6 +68,8 @@ import { ErrorAlert } from './error-line';
 import { HeaderSection } from './header-section';
 import { IssueList, LintPanel } from './lint-panel';
 import { PhonePreview } from './message-bubble';
+import { SparkIcon } from './icons';
+import { TemplateAiModal } from './template-ai-modal';
 import { useErrorText, type ErrorText } from './use-error-text';
 import { VariablesPanel } from './variables-panel';
 
@@ -92,12 +98,28 @@ function Section({ title, hint, children }: { title: string; hint?: string; chil
 }
 
 /** TW-TPL-005/006: `/templates/new` and `/templates/[id]/edit`. Edit loads the saved template first. */
-export function TemplateFormScreen({ id, copyFrom }: { id?: string; copyFrom?: string }) {
+export function TemplateFormScreen({
+  id,
+  copyFrom,
+  connectionId,
+  galleryId,
+}: {
+  id?: string;
+  copyFrom?: string;
+  /** A new template starts on this number (the guided campaign wizard passes the number it sends from). */
+  connectionId?: string;
+  /** A default template to start from (`/templates/new?gallery=<id>`). */
+  galleryId?: string;
+}) {
   const t = useTranslations('message-templates.form');
   const errorText = useErrorText();
   // A copy opens the form of a new template filled in from this one ("Duplicate template" in the inbox's template list).
   const detail = useTemplate(id ?? copyFrom ?? '', { poll: false });
   const mayCreate = useCan('tpl.templates.create');
+  const gallery = useTemplateGallery({}, { enabled: galleryId !== undefined });
+  const fromGallery = galleryId
+    ? gallery.data?.templateList.find((g) => g.id === galleryId)
+    : undefined;
 
   if (!mayCreate) {
     return (
@@ -106,8 +128,42 @@ export function TemplateFormScreen({ id, copyFrom }: { id?: string; copyFrom?: s
       </main>
     );
   }
+  if (id === undefined && copyFrom === undefined && galleryId !== undefined) {
+    if (gallery.isPending)
+      return (
+        <div className="flex justify-center p-12">
+          <Spinner label={t('loading')} />
+        </div>
+      );
+    if (gallery.isError)
+      return (
+        <main className="mx-auto max-w-3xl space-y-3 px-4 py-7">
+          <ErrorAlert error={errorText(gallery.error)} />
+          <div className="flex gap-2">
+            <Button variant="secondary" onClick={() => void gallery.refetch()}>
+              {t('retry')}
+            </Button>
+            <Link
+              href="/templates"
+              className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium"
+            >
+              {t('backToLibrary')}
+            </Link>
+          </div>
+        </main>
+      );
+    // A default template that is not in the answer (an old link) opens the empty form.
+    return fromGallery ? (
+      <TemplateForm
+        key={`gallery:${galleryId}`}
+        initial={galleryToState(fromGallery, connectionId)}
+      />
+    ) : (
+      <TemplateForm key="new" initial={initialState()} />
+    );
+  }
   if (id === undefined && copyFrom === undefined)
-    return <TemplateForm key="new" initial={initialState()} />;
+    return <TemplateForm key="new" initial={initialState(connectionId)} acceptAiDraft />;
   if (detail.isPending)
     return (
       <div className="flex justify-center p-12">
@@ -170,7 +226,16 @@ interface Saved {
   rowVersion: number;
 }
 
-function TemplateForm({ initial, detail }: { initial: FormState; detail?: TemplateDetail }) {
+function TemplateForm({
+  initial,
+  detail,
+  acceptAiDraft = false,
+}: {
+  initial: FormState;
+  detail?: TemplateDetail;
+  /** A new template: a draft the campaign wizard left in this tab (TW-TPL-016) is picked up once on mount. */
+  acceptAiDraft?: boolean;
+}) {
   const t = useTranslations('message-templates.form');
   const locale = useLocale();
   const router = useRouter();
@@ -202,6 +267,27 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
     connectionId: (stale ? '' : state.connectionId) || fallbackConnection,
   };
   const set = (p: Partial<FormState>) => setState((s) => ({ ...s, ...p }));
+
+  // "Build with AI" (TW-TPL-016): fills this form's own fields for review; nothing is submitted.
+  const [aiOpen, setAiOpen] = useState(false);
+  const fillFromAi = (draft: TplAiDraft) => {
+    setState((s) => applyAiDraft(s, draft));
+    setFailure(null);
+    setResult(null);
+    toast(t('ai.applied'), 'success');
+  };
+  useEffect(() => {
+    if (!acceptAiDraft) return;
+    const stashed = takeAiDraft();
+    if (!stashed) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- read after mount so the server and first paint agree
+    setState((s) => ({
+      ...applyAiDraft(s, stashed.draft),
+      language: stashed.language,
+      metaCategory: stashed.metaCategory,
+    }));
+    toast(t('ai.applied'), 'success');
+  }, [acceptAiDraft, toast, t]);
 
   const create = useCreateTemplate();
   const update = useUpdateTemplate(saved?.id ?? '');
@@ -297,6 +383,20 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
         <h1 className="min-w-0 flex-1 truncate text-lg font-semibold">
           {detail ? t('titleEdit', { name: detail.name }) : t('titleNew')}
         </h1>
+        {!detail && (
+          <Button
+            variant="secondary"
+            className="border-brand/40 text-brand"
+            disabled={!canDraftCategory(current.metaCategory) || busy}
+            aria-describedby={
+              !canDraftCategory(current.metaCategory) ? `${base}-ai-why` : undefined
+            }
+            onClick={() => setAiOpen(true)}
+          >
+            <SparkIcon className="size-3.5" />
+            {t('ai.open')}
+          </Button>
+        )}
         <Button variant="secondary" disabled={!canDraft} onClick={() => save(false)}>
           {busy && !create.variables?.submit && !update.variables?.submit && <Spinner />}
           {t('saveDraft')}
@@ -325,6 +425,11 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
         )}
       </div>
 
+      {!detail && !canDraftCategory(current.metaCategory) && (
+        <p id={`${base}-ai-why`} className="mb-3 text-xs text-muted-foreground">
+          {t('ai.authHint')}
+        </p>
+      )}
       {result && <ResultPanel result={result.value} submitted={result.submitted} />}
       {failure && (
         <div className="mb-4 space-y-2">
@@ -579,6 +684,15 @@ function TemplateForm({ initial, detail }: { initial: FormState; detail?: Templa
           />
         </aside>
       </div>
+      {!detail && canDraftCategory(current.metaCategory) && (
+        <TemplateAiModal
+          open={aiOpen}
+          onClose={() => setAiOpen(false)}
+          language={current.language}
+          metaCategory={current.metaCategory}
+          onDraft={fillFromAi}
+        />
+      )}
     </main>
   );
 }

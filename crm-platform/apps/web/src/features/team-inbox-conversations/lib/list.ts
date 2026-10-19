@@ -1,8 +1,10 @@
-import type {
-  ConversationStatus,
-  ConversationSummary,
-  InboxCounts,
-  InboxTab,
+import {
+  INBOX_ASSIGNMENT_FILTERS,
+  INBOX_SORTS,
+  type ConversationStatus,
+  type ConversationSummary,
+  type InboxCounts,
+  type InboxTab,
 } from '@crm/contracts';
 
 /**
@@ -13,9 +15,11 @@ import type {
 
 export interface ListFilters {
   tab: InboxTab;
-  /** `open` is the server's default view (open and pending). */
+  /** `open` is the server's default view (the open threads). */
   status: 'open' | ConversationStatus | 'all';
   channelId: string | null;
+  /** The Filters window's channels: threads on any of them. */
+  channelIds: string[];
   /** The trimmed search text. */
   q: string;
   archived: boolean;
@@ -23,7 +27,20 @@ export interface ListFilters {
   tags: string[];
   /** Whether `tags` is matched on the conversation's own tags or on the tags of its contact (`?tagScope=`). */
   tagScope: TagScope;
+  /** The Filters window's multi-select of statuses; when it has any, it replaces `status`. */
+  statuses: ConversationStatus[];
+  /** The Filters window's Conversation choice; null is any. */
+  assignment: AssignmentFilter | null;
+  /** Agent (user) ids: threads assigned to any of them. */
+  agentIds: string[];
+  sort: InboxSort;
+  /** `YYYY-MM-DD` or ''. */
+  from: string;
+  to: string;
 }
+
+export type AssignmentFilter = (typeof INBOX_ASSIGNMENT_FILTERS)[number];
+export type InboxSort = (typeof INBOX_SORTS)[number];
 
 export type TagScope = 'conversation' | 'contact';
 
@@ -31,11 +48,31 @@ export const DEFAULT_FILTERS: ListFilters = {
   tab: 'all',
   status: 'open',
   channelId: null,
+  channelIds: [],
   q: '',
   archived: false,
   tags: [],
   tagScope: 'conversation',
+  statuses: [],
+  assignment: null,
+  agentIds: [],
+  sort: 'recent',
+  from: '',
+  to: '',
 };
+
+/** How many of the Filters window's choices are on (the number on its button). The status counts as on when it is not the default. */
+export function windowFilterCount(f: ListFilters): number {
+  return (
+    (f.statuses.length > 0 || f.status !== 'open' ? 1 : 0) +
+    (f.assignment ? 1 : 0) +
+    (f.tags.length > 0 ? 1 : 0) +
+    (f.channelId || f.channelIds.length > 0 ? 1 : 0) +
+    (f.agentIds.length > 0 ? 1 : 0) +
+    (f.sort !== 'recent' ? 1 : 0) +
+    (f.from || f.to ? 1 : 0)
+  );
+}
 
 export const EMPTY_COUNTS: InboxCounts = { all: 0, mine: 0, unassigned: 0, unread: 0, archived: 0 };
 
@@ -43,13 +80,20 @@ export const EMPTY_COUNTS: InboxCounts = { all: 0, mine: 0, unassigned: 0, unrea
 export function listQuery(f: ListFilters): Record<string, string | boolean | undefined> {
   return {
     tab: f.tab,
-    // The server's own default (open and pending) when the status is the default one.
+    // The server's own default (the open threads) when the status is the default one.
     status: f.status === 'open' ? undefined : f.status,
     channelId: f.channelId ?? undefined,
+    channelIds: f.channelIds.length > 0 ? f.channelIds.join(',') : undefined,
     q: f.q || undefined,
     archived: f.archived || undefined,
     tags: f.tags.length > 0 ? f.tags.join(',') : undefined,
     tagScope: f.tags.length > 0 && f.tagScope === 'contact' ? 'contact' : undefined,
+    statuses: f.statuses.length > 0 ? f.statuses.join(',') : undefined,
+    assignment: f.assignment ?? undefined,
+    agentIds: f.agentIds.length > 0 ? f.agentIds.join(',') : undefined,
+    sort: f.sort === 'old' ? 'old' : undefined,
+    from: f.from || undefined,
+    to: f.to || undefined,
   };
 }
 
@@ -70,14 +114,32 @@ export function tagsFromParam(raw: string | null): string[] {
 
 /** A stable identity for the filters, to restart the list when they change. */
 export const filtersKey = (f: ListFilters) =>
-  [f.tab, f.status, f.channelId ?? '', f.q, f.archived ? 1 : 0, f.tags.join(','), f.tagScope].join(
-    '|',
-  );
+  [
+    f.tab,
+    f.status,
+    f.channelId ?? '',
+    f.channelIds.join(','),
+    f.q,
+    f.archived ? 1 : 0,
+    f.tags.join(','),
+    f.tagScope,
+    f.statuses.join(','),
+    f.assignment ?? '',
+    f.agentIds.join(','),
+    f.sort,
+    f.from,
+    f.to,
+  ].join('|');
 
 /** Whether any filter other than the tab is on (the empty state then says "nothing matches", not "nothing here yet"). */
 export function isFiltered(f: ListFilters): boolean {
   return (
-    f.status !== 'open' || f.channelId !== null || f.q !== '' || f.archived || f.tags.length > 0
+    f.status !== 'open' ||
+    f.channelId !== null ||
+    f.q !== '' ||
+    f.archived ||
+    f.tags.length > 0 ||
+    windowFilterCount(f) > 0
   );
 }
 
@@ -94,10 +156,14 @@ export function matchesFilters(
   meId: string | null,
 ): boolean {
   if (row.archived !== f.archived) return false;
-  if (f.status === 'open') {
-    if (row.status !== 'open' && row.status !== 'pending') return false;
+  if (f.statuses.length > 0) {
+    const ok = f.statuses.flatMap((s) => (s === 'resolved' ? ['resolved', 'closed'] : [s]));
+    if (!ok.includes(row.status)) return false;
+  } else if (f.status === 'open') {
+    if (row.status !== 'open') return false;
   } else if (f.status !== 'all' && row.status !== f.status) return false;
   if (f.channelId && row.channel.id !== f.channelId) return false;
+  if (f.channelIds.length > 0 && !f.channelIds.includes(row.channel.id)) return false;
   // A row does not carry its contact's tags, so under the contact scope the server's answer stands (see the `upsert` case).
   if (
     f.tags.length > 0 &&
@@ -105,6 +171,18 @@ export function matchesFilters(
     !row.labels.some((l) => f.tags.includes(l.id))
   )
     return false;
+  if (f.assignment === 'assigned' && !row.assignment.user) return false;
+  if (f.assignment === 'unassigned' && row.assignment.user) return false;
+  if (f.assignment === 'unattended' && row.unreadCount <= 0) return false;
+  if (
+    f.agentIds.length > 0 &&
+    !(row.assignment.user && f.agentIds.includes(row.assignment.user.id))
+  )
+    return false;
+  if (f.from || f.to) {
+    const at = row.lastMessageAt ? row.lastMessageAt.slice(0, 10) : '';
+    if ((f.from && at < f.from) || (f.to && at > f.to)) return false;
+  }
   switch (f.tab) {
     case 'mine':
       if (!meId || row.assignment.user?.id !== meId) return false;
@@ -127,10 +205,19 @@ export function matchesFilters(
 }
 
 /** The server's order: pinned first, then the latest message, then the id (a stable tie-break). */
-export function compareRows(a: ConversationSummary, b: ConversationSummary): number {
-  if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
+export function compareRows(
+  a: ConversationSummary,
+  b: ConversationSummary,
+  oldest = false,
+): number {
   const ta = a.lastMessageAt ? Date.parse(a.lastMessageAt) : 0;
   const tb = b.lastMessageAt ? Date.parse(b.lastMessageAt) : 0;
+  // Oldest first (the Filters window's Sort By): no pins, the earliest activity on top.
+  if (oldest) {
+    if (ta !== tb) return ta - tb;
+    return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
+  }
+  if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
   if (ta !== tb) return tb - ta;
   return a.id < b.id ? 1 : a.id > b.id ? -1 : 0;
 }
@@ -182,7 +269,11 @@ export type ListAction =
   | { type: 'counts'; counts: InboxCounts };
 
 /** Adds or replaces `row`, keeping the order. A row older than every loaded one is left for "load more" while more exist. */
-export function placeRow(state: ListState, row: ConversationSummary): ConversationSummary[] {
+export function placeRow(
+  state: ListState,
+  row: ConversationSummary,
+  oldest = false,
+): ConversationSummary[] {
   const at = state.rows.findIndex((r) => r.id === row.id);
   if (at >= 0) {
     const current = state.rows[at]!;
@@ -190,11 +281,11 @@ export function placeRow(state: ListState, row: ConversationSummary): Conversati
     if (row.rowVersion < current.rowVersion) return state.rows;
     const next = state.rows.slice();
     next[at] = row;
-    return next.sort(compareRows);
+    return next.sort((a, b) => compareRows(a, b, oldest));
   }
   const last = state.rows[state.rows.length - 1];
-  if (state.hasMore && last && compareRows(row, last) > 0) return state.rows;
-  return [...state.rows, row].sort(compareRows);
+  if (state.hasMore && last && compareRows(row, last, oldest) > 0) return state.rows;
+  return [...state.rows, row].sort((a, b) => compareRows(a, b, oldest));
 }
 
 export function listReducer(state: ListState, action: ListAction): ListState {
@@ -239,7 +330,7 @@ export function listReducer(state: ListState, action: ListAction): ListState {
           ? { ...state, rows: state.rows.filter((r) => r.id !== action.row.id) }
           : state;
       }
-      const rows = placeRow(state, action.row);
+      const rows = placeRow(state, action.row, action.filters.sort === 'old');
       return rows === state.rows ? state : { ...state, rows };
     }
     case 'remove':

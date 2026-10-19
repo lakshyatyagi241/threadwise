@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { authOf, type WabaConnection } from '../whatsapp-cloud-api-waba/waba-admin.port';
 import { WabaHttp } from '../whatsapp-cloud-api-waba/waba-http';
-import type { CallAction, CallActionParams, CallingGraph } from './calling-graph.port';
+import type {
+  CallAction,
+  CallActionParams,
+  CallingGraph,
+  CallingSettingsRead,
+} from './calling-graph.port';
 
 const TIMEOUT_MS = 15_000;
 
@@ -9,6 +14,22 @@ const TIMEOUT_MS = 15_000;
 @Injectable()
 export class CallingGraphClient implements CallingGraph {
   constructor(private readonly http: WabaHttp) {}
+
+  async getSettings(conn: WabaConnection): Promise<CallingSettingsRead> {
+    const body = await this.http.call<{
+      calling?: { status?: unknown; call_icon_visibility?: unknown };
+    }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}/settings`,
+      timeoutMs: TIMEOUT_MS,
+    });
+    const status = String(body.calling?.status ?? '').toUpperCase();
+    const icon = body.calling?.call_icon_visibility;
+    return {
+      status: status === 'ENABLED' || status === 'DISABLED' ? status : null,
+      callIconVisibility: typeof icon === 'string' && icon !== '' ? icon : null,
+    };
+  }
 
   setCalling(conn: WabaConnection, enabled: boolean): Promise<Record<string, unknown>> {
     return this.http.call(authOf(conn), {

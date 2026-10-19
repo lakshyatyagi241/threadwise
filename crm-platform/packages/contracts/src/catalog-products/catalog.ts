@@ -126,10 +126,21 @@ export type ConnectCatalogInput = z.infer<typeof connectCatalogSchema>;
 /** Create a new catalog on Meta from here and link it to the connected WABA (needs the WABA's business id). */
 export const createCatalogSchema = z.object({
   name: z.string().trim().min(1).max(191),
+  /** The code of Meta's catalog login popup; exchanged for the token that is allowed to create the catalog. */
+  loginCode: z.string().trim().min(1).max(2048).optional(),
 });
 export type CreateCatalogInput = z.infer<typeof createCatalogSchema>;
 
-export const renameCatalogSchema = createCatalogSchema;
+/** What the browser needs to open the catalog login popup. The app secret is never here. */
+export const catalogLoginConfigSchema = z.object({
+  ready: z.boolean(),
+  appId: z.string().nullable(),
+  configId: z.string().nullable(),
+  graphVersion: z.string(),
+});
+export type CatalogLoginConfig = z.infer<typeof catalogLoginConfigSchema>;
+
+export const renameCatalogSchema = createCatalogSchema.pick({ name: true });
 export type RenameCatalogInput = z.infer<typeof renameCatalogSchema>;
 
 /** Deletes the catalog on Meta; `confirmCatalogId` must equal the connected catalog id. */

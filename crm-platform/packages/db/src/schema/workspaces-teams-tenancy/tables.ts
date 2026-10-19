@@ -602,6 +602,11 @@ export const assignmentRules = pgTable(
     name: text('name').notNull(),
     subject: text('subject').notNull(),
     conditions: jsonb('conditions').notNull().default({}),
+    /** Record assignment rules: the condition tree (null = no condition, the fallback). 20270115090000_record_assignment_rules.sql */
+    description: text('description').notNull().default(''),
+    rules: jsonb('rules'),
+    reassignOnUpdate: boolean('reassign_on_update').notNull().default(false),
+    updatedBy: idColumn('updated_by'),
     strategy: text('strategy').notNull(),
     userIds: jsonb('user_ids').notNull().default([]),
     teamIds: jsonb('team_ids').notNull().default([]),
@@ -629,6 +634,55 @@ export const assignmentRules = pgTable(
       columns: [t.orgId, t.createdBy],
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_assignment_rules_updated_by',
+      columns: [t.orgId, t.updatedBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
     index('idx_assignment_rules_order').on(t.orgId, t.subject, t.sort, t.id),
+  ],
+);
+
+/** One decision of the assignment engine, ids only (no personal data). Mirrors migrations/20270115090000_record_assignment_rules.sql. */
+export const assignmentRuns = pgTable(
+  'assignment_runs',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    subject: text('subject').notNull(),
+    recordId: idColumn('record_id').notNull(),
+    ruleId: idColumn('rule_id'),
+    ruleName: text('rule_name'),
+    outcome: text('outcome').notNull(),
+    reason: text('reason').notNull(),
+    ownerId: idColumn('owner_id'),
+    method: text('method'),
+    origin: text('origin').notNull().default('manual'),
+    trigger: text('trigger').notNull().default('created'),
+    trace: jsonb('trace').notNull().default([]),
+    ownerStamp: timestamp('owner_stamp', { withTimezone: true }),
+    createdAt: createdAt(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('assignment_runs_org_id_uuid_key').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'assignment_runs_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'assignment_runs_org_id_rule_id_fkey',
+      columns: [t.orgId, t.ruleId],
+      foreignColumns: [assignmentRules.orgId, assignmentRules.id],
+    }).onDelete('set null'),
+    foreignKey({
+      name: 'assignment_runs_org_id_owner_id_fkey',
+      columns: [t.orgId, t.ownerId],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
+    index('idx_assignment_runs_recent').on(t.orgId, t.createdAt.desc(), t.id.desc()),
+    index('idx_assignment_runs_record').on(t.orgId, t.subject, t.recordId, t.id.desc()),
   ],
 );

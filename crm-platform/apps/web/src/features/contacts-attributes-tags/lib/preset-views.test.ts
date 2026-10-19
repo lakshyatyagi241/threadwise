@@ -3,9 +3,11 @@ import { segmentRulesSchema } from '@crm/contracts';
 import { DEFAULT_FILTERS } from '../api/contacts';
 import {
   activePreset,
+  availablePresets,
   parsePresetFavorites,
   presetFilters,
   PRESET_VIEWS,
+  QUICK_PRESETS,
   togglePresetFavorite,
 } from './preset-views';
 
@@ -38,6 +40,27 @@ describe('built-in contact views', () => {
     });
   });
 
+  it('Unassigned and Hot leads are plain filters: the owner filter, and a lead score in the hot band', () => {
+    expect(presetFilters('unassigned', ME).owner).toBe('none');
+    expect(JSON.parse(presetFilters('hotLeads', ME).rules!).children[0]).toMatchObject({
+      field: 'leadScore',
+      operator: 'gte',
+      value: 67,
+    });
+  });
+
+  it('the quick chips are six built-in views, in the order a small business reaches for them', () => {
+    expect([...QUICK_PRESETS]).toEqual([
+      'myContacts',
+      'unassigned',
+      'uncontacted',
+      'newThisWeek',
+      'needsFollowUp',
+      'hotLeads',
+    ]);
+    for (const p of QUICK_PRESETS) expect(PRESET_VIEWS).toContain(p);
+  });
+
   it('favourites are added, removed and read back, ignoring unknown names', () => {
     const one = togglePresetFavorite(null, 'active');
     expect(parsePresetFavorites(one)).toEqual(['active']);
@@ -46,5 +69,57 @@ describe('built-in contact views', () => {
     expect(parsePresetFavorites(togglePresetFavorite(two, 'active'))).toEqual(['inactive']);
     expect(parsePresetFavorites('active,bogus,active')).toEqual(['active']);
     expect(parsePresetFavorites(null)).toEqual([]);
+  });
+});
+
+describe('built-in views while lead scoring is off', () => {
+  it('drops Hot leads from the quick chips and from the picker, and nothing else', () => {
+    expect(availablePresets(QUICK_PRESETS, false)).toEqual([
+      'myContacts',
+      'unassigned',
+      'uncontacted',
+      'newThisWeek',
+      'needsFollowUp',
+    ]);
+    expect(availablePresets(PRESET_VIEWS, false)).not.toContain('hotLeads');
+    expect(availablePresets(PRESET_VIEWS, false)).toHaveLength(PRESET_VIEWS.length - 1);
+  });
+
+  it('keeps them all while it is on', () => {
+    expect(availablePresets(QUICK_PRESETS, true)).toEqual([...QUICK_PRESETS]);
+    expect(availablePresets(PRESET_VIEWS, true)).toEqual([...PRESET_VIEWS]);
+  });
+});
+
+describe('the Uncontacted view (BL-290)', () => {
+  it('filters on the uncontacted marker with the rule the condition builder writes', () => {
+    expect(JSON.parse(presetFilters('uncontacted', ME).rules!).children[0]).toMatchObject({
+      field: 'uncontacted',
+      operator: 'is_true',
+    });
+  });
+
+  it('is offered only while some contact carries the marker, so an unused feature adds no chip', () => {
+    expect(availablePresets(QUICK_PRESETS, true, false)).not.toContain('uncontacted');
+    expect(availablePresets(PRESET_VIEWS, true, false)).not.toContain('uncontacted');
+    expect(availablePresets(PRESET_VIEWS, true, false)).toHaveLength(PRESET_VIEWS.length - 1);
+    expect(availablePresets(PRESET_VIEWS, true, true)).toContain('uncontacted');
+  });
+});
+
+describe('the follow-up views (BL-291)', () => {
+  it('filter on where the next follow-up stands', () => {
+    expect(presetFilters('followUpToday', ME).followUp).toBe('today');
+    expect(presetFilters('followUpOverdue', ME).followUp).toBe('overdue');
+    expect(presetFilters('followUpSomeday', ME).followUp).toBe('someday');
+  });
+
+  it('are offered only once some contact has a follow-up, and never as quick chips', () => {
+    const follow = ['followUpToday', 'followUpOverdue', 'followUpSomeday'];
+    for (const p of follow) expect(QUICK_PRESETS).not.toContain(p);
+    for (const p of follow)
+      expect(availablePresets(PRESET_VIEWS, true, true, false)).not.toContain(p);
+    for (const p of follow) expect(availablePresets(PRESET_VIEWS, true, true, true)).toContain(p);
+    expect(availablePresets(PRESET_VIEWS, true, true, false)).toHaveLength(PRESET_VIEWS.length - 3);
   });
 });

@@ -65,6 +65,11 @@ const EVENT_TYPES = [
   'erase_previewed',
   'erased',
   'completed',
+  'restricted',
+  'erasure_queued',
+  'restriction_lifted',
+  'resume_skipped',
+  'resume_failed',
 ] as const;
 
 /** The history of the request, oldest first as the server sends it. */

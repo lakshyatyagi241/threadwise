@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Akun Google",
+        "description": "Hubungkan satu akun Google untuk Calendar, Sheets, Docs, Forms, dan Meet di alur Anda.",
+        "keywords": "google, akun google, kalender, sheets, docs, forms, meet, drive, oauth, hubungkan google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Tambahkan baris, cari baris, dan simpan kontak dari sheet di alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google sheets, spreadsheet, baris, sel, oauth, hubungkan google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Salin dokumen templat, isi, dan bagikan dari alur Anda. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google docs, dokumen, templat, bagikan, oauth, hubungkan google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Kirim formulir ke pelanggan dan lanjutkan setelah mereka mengisinya. Menggunakan koneksi akun Google Anda.",
+        "keywords": "google forms, formulir, survei, tanggapan, oauth, hubungkan google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Tutup"
+    },
+    "page": {
+      "eyebrow": "Workspace",
+      "title": "Akun Google",
+      "subtitle": "Hubungkan sekali. Akun Google yang sama menjalankan kalender pemesanan, tautan Meet, serta langkah Sheets, Docs, dan Forms di alur Anda.",
+      "loading": "Memuat akun Google Anda...",
+      "forbidden": {
+        "title": "Anda tidak dapat membuka halaman ini",
+        "body": "Peran Anda tidak mencakup melihat akun Google. Hubungi admin workspace."
+      },
+      "status": {
+        "unavailable": "Belum disiapkan",
+        "disconnected": "Belum terhubung",
+        "connected": "Terhubung",
+        "needs_reconnect": "Perlu dihubungkan ulang"
+      },
+      "outcome": {
+        "connected": "Akun Google terhubung.",
+        "denied": "Google tidak terhubung: layar izin dibatalkan.",
+        "failed": "Proses menghubungkan Google belum selesai. Coba lagi.",
+        "expired": "Upaya koneksi itu telah kedaluwarsa. Tekan tombol untuk memulai lagi.",
+        "not_configured": "Google belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+        "missing_scope": "Google tidak memberikan semua izin yang Anda minta. Yang sudah diizinkan tetap berfungsi; tambahkan lagi izin yang kurang dan biarkan semua kotak tetap tercentang.",
+        "cancelled": "Anda membatalkan. Tidak ada yang terhubung."
+      },
+      "actions": {
+        "connect": "Hubungkan akun Google",
+        "reconnect": "Hubungkan ulang Google",
+        "addPermissions": "Tambah izin",
+        "disconnect": "Putuskan",
+        "working": "Membuka Google...",
+        "retry": "Coba lagi"
+      },
+      "unavailable": {
+        "title": "Google belum disiapkan untuk platform ini",
+        "body": "Administrator platform harus menambahkan klien OAuth Google sebelum ada yang bisa terhubung. Sampai saat itu, langkah Google di alur Anda akan gagal dengan pesan yang menjelaskannya, dan pemesanan tetap berjalan tanpa kalender."
+      },
+      "reconnect": {
+        "title": "Google berhenti menerima koneksi ini",
+        "body": "Izin dicabut, kata sandi diubah, atau pemberian izin kedaluwarsa. Hubungkan lagi untuk memulihkannya; pilihan Anda tetap tersimpan.",
+        "bodyAccount": "Google berhenti menerima {account}. Hubungkan lagi untuk memulihkannya; pilihan Anda tetap tersimpan."
+      },
+      "stats": {
+        "status": "Status",
+        "calendars": "Kalender",
+        "calendarsValue": "{count} tersedia",
+        "calendarsNone": "tidak ada",
+        "permissions": "Izin",
+        "permissionsValue": "{granted} dari {total}",
+        "lastUsed": "Terakhir digunakan",
+        "never": "tidak pernah",
+        "live": "aktif",
+        "idle": "menganggur"
+      },
+      "account": {
+        "title": "Akun terhubung",
+        "email": "Akun",
+        "calendar": "Kalender untuk pemesanan dan Meet",
+        "primaryCalendar": "Kalender utama Anda",
+        "changeCalendar": "Ubah kalender",
+        "connectedAgo": "Terhubung {when}",
+        "none": "Tidak ada akun Google yang tertaut.",
+        "noneBody": "Sebelum Anda terhubung, langkah Google di alur Anda akan gagal dengan pesan agar menghubungkan Google, dan pemesanan tidak ditambahkan ke kalender."
+      },
+      "permissions": {
+        "title": "Untuk apa Google boleh digunakan",
+        "intro": "Centang yang ingin Anda izinkan. Google menampilkan persis izin-izin ini di layarnya, dan Anda dapat menambah izin lain nanti tanpa kehilangan yang sudah diizinkan.",
+        "allowed": "Diizinkan",
+        "notAllowed": "Tidak diizinkan",
+        "allow": "Izinkan",
+        "restricted": "Dibatasi oleh Google",
+        "restrictedNote": "Google memperlakukan izin ini sebagai terbatas: platform memerlukan peninjauan Google sebelum berfungsi untuk banyak workspace. Biarkan nonaktif kecuali Anda membutuhkannya.",
+        "nothingTicked": "Centang setidaknya satu izin.",
+        "calendar": {
+          "name": "Kalender",
+          "body": "Tambahkan pemesanan dan tautan Meet ke kalender Anda dan sembunyikan waktu sibuk dari halaman pemesanan.",
+          "usedBy": "Kalender pemesanan, langkah Buat janji temu dan Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Periksa kolom Google Sheet, Simpan kontak dari Google Sheet",
+          "body": "Tambah baris ke sheet, cari baris, periksa sel, atau salin baris ke kontak."
+        },
+        "docs": {
+          "name": "Docs dan Drive",
+          "body": "Salin dokumen templat, isi, lalu bagikan salinannya lewat tautan.",
+          "usedBy": "Langkah Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Langkah Google Form",
+          "body": "Baca tautan publik formulir agar alur dapat mengirimnya ke pelanggan, dan baca jawaban formulir agar alur berlanjut saat pelanggan mengisinya."
+        },
+        "drive_listing": {
+          "name": "Daftar file Drive",
+          "body": "Tampilkan sheet, dokumen, dan formulir Anda berdasarkan nama, sehingga Anda dapat memilihnya dari akun Anda di pembuat alur dan pengaturan pemesanan. Diperlukan untuk setiap pemilih file.",
+          "usedBy": "Pemilih file di pembuat alur dan pengaturan pemesanan"
+        }
+      },
+      "lastError": {
+        "title": "Masalah terakhir yang dilaporkan Google",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google tidak lagi menerima akun yang terhubung. Hubungkan lagi.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Klien Google platform tidak ada atau dinonaktifkan.",
+        "GOOGLE_API_NOT_ENABLED": "Proyek Google Cloud platform belum mengaktifkan API yang dibutuhkan fitur ini. Administrator platform harus mengaktifkannya.",
+        "GOOGLE_SCOPE_MISSING": "Sebuah langkah membutuhkan izin yang tidak diberikan ke akun ini. Tambahkan di atas.",
+        "GOOGLE_RATE_LIMITED": "Google sedang membatasi permintaan. Langkah akan dicoba lagi sebentar lagi.",
+        "GOOGLE_UNAVAILABLE": "Google tidak menjawab. Akan dicoba lagi pada penggunaan berikutnya.",
+        "other": "Google melaporkan sebuah masalah."
+      },
+      "usedBy": {
+        "title": "Digunakan oleh",
+        "book": "Langkah Buat janji temu",
+        "meet": "Langkah Google Meet",
+        "sheets": "Langkah Google Sheets",
+        "docs": "Langkah Google Docs",
+        "forms": "Langkah Google Form",
+        "flow": "alur"
+      },
+      "disconnectConfirm": {
+        "title": "Putuskan Google?",
+        "body": "Sinkronisasi kalender untuk pemesanan dan semua langkah Google di alur Anda berhenti sampai Anda terhubung lagi. Acara dan file yang sudah dibuat tetap ada di Google.",
+        "confirm": "Putuskan",
+        "cancel": "Tetap terhubung"
+      },
+      "disconnected": "Akun Google diputuskan.",
+      "failure": {
+        "notConfigured": "Google belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+        "generic": "Terjadi kesalahan. Coba lagi."
+      },
+      "privacy": {
+        "title": "Privasi",
+        "body": "Hanya izin yang Anda centang yang diminta. Koneksi disimpan terenkripsi, milik workspace, dan hanya digunakan oleh fitur yang tercantum di sini. Memutuskan koneksi akan mencabutnya di Google."
+      }
+    },
+    "consent": {
+      "title": "Konfirmasi koneksi Google",
+      "loading": "Memuat koneksi Google Anda...",
+      "question": "Hubungkan {email} ke {workspace} untuk {permissions}?",
+      "permissions": "Izin",
+      "notGiven": "tidak diberikan",
+      "missing": "Google tidak memberikan: {permissions}. Jika Anda mengonfirmasi, hanya izin yang diberikan yang akan terhubung.",
+      "replaces": "Ini akan menggantikan akun Google {email} yang saat ini terhubung. Akses akun lama akan dicabut.",
+      "onlyYou": "Hanya orang yang menekan Hubungkan yang dapat menyelesaikan ini, dari ruang kerja ini. Jika seseorang mengirimkan tautan ini kepada Anda, jangan konfirmasi: tutup halaman ini.",
+      "unknownAccount": "akun Google ini",
+      "confirm": "Konfirmasi",
+      "cancel": "Batal",
+      "working": "Memproses...",
+      "failure": {
+        "notYours": "Koneksi Google ini dimulai oleh orang lain, sehingga tidak dihubungkan. Minta mereka untuk menghubungkannya sendiri.",
+        "expired": "Koneksi Google ini terlalu lama dikonfirmasi. Kembali dan tekan Hubungkan lagi.",
+        "used": "Koneksi Google ini sudah dikonfirmasi, dibatalkan, atau ditolak. Kembali dan tekan Hubungkan lagi jika Anda masih membutuhkannya.",
+        "notFound": "Koneksi Google ini tidak sedang menunggu konfirmasi, atau milik ruang kerja lain.",
+        "generic": "Terjadi kesalahan dan tidak ada yang diubah. Coba lagi.",
+        "nothingConnected": "Tidak ada yang terhubung."
+      }
+    }
+  }
+}

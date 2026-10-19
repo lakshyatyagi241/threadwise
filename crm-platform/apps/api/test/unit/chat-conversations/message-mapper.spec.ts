@@ -118,6 +118,34 @@ describe('toMessageResponse: the wire shape, ids and keys never leak', () => {
     ).toBeNull();
   });
 
+  it('hold (quiet hours, BL-177) shows only while a sent-by-us message is still queued', () => {
+    const hold = {
+      reason: 'quiet_hours',
+      until: '2026-10-16T03:30:00.000Z',
+      zone: 'Asia/Kolkata',
+      zoneSource: 'contact_field',
+    };
+    const queued = toMessageResponse(
+      row({ direction: 'out', status: 'queued', meta: { hold } }),
+      () => null,
+    );
+    expect(queued.hold).toEqual(hold);
+    // Sent: the hold is history (the event log keeps it).
+    expect(
+      toMessageResponse(row({ direction: 'out', status: 'sent', meta: { hold } }), () => null).hold,
+    ).toBeUndefined();
+    // Damaged data never breaks the response.
+    expect(
+      toMessageResponse(
+        row({ direction: 'out', status: 'queued', meta: { hold: { reason: 'x' } } }),
+        () => null,
+      ).hold,
+    ).toBeUndefined();
+    expect(
+      toMessageResponse(row({ direction: 'out', status: 'queued' }), () => null).hold,
+    ).toBeUndefined();
+  });
+
   it('a location and a template are rebuilt from their columns and meta', () => {
     const loc = toMessageResponse(
       row({

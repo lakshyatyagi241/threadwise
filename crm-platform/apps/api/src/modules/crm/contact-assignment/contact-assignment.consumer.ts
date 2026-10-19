@@ -20,9 +20,12 @@ export function originOf(via: unknown): string {
 }
 
 /**
- * Hands new contacts and deals to the engine (BL-013). Listens to the CREATION events only, and ignores any event flagged
- * `autoAssigned`: the engine's own writes (`contact.updated` with the new owner) can therefore never start another assignment. The engine
- * is idempotent (it acts only on a record that never had an owner), so a redelivery does nothing. Worker only.
+ * Hands new and changed contacts, companies and deals to the engine (BL-013, BL-340..345): the ONE place record assignment runs, for every
+ * write path (screen, API, import, form, lead source, flow, mobile), because each of them announces its record through the outbox. The
+ * creation events assign a record that has no owner; the update events do the same for a record that still has none, and move a record
+ * the engine itself assigned when a rule with "reassign on update" now matches. Events flagged `autoAssigned` (the engine's own writes)
+ * are ignored, so an assignment can never start another. The engine is idempotent and runs after the write has committed, so it cannot
+ * fail the write; a failure here is retried by the outbox. Worker only.
  */
 @Injectable()
 export class ContactAssignmentConsumer implements OutboxSubscriber, OnModuleInit {
@@ -30,8 +33,12 @@ export class ContactAssignmentConsumer implements OutboxSubscriber, OnModuleInit
   readonly eventTypes = [
     'contact.created',
     'deal.created',
+    'company.created',
     'form.submitted',
     'lead.created',
+    'contact.updated',
+    'company.updated',
+    'deal.updated',
   ] as const;
   private readonly logger = new Logger(ContactAssignmentConsumer.name);
 
@@ -54,18 +61,23 @@ export class ContactAssignmentConsumer implements OutboxSubscriber, OnModuleInit
         ? str(event.payload.contactId)
         : str(event.payload.uuid);
     if (!uuid) return;
-    const subject = event.eventType === 'deal.created' ? 'deal' : 'contact';
+    const subject = subjectOf(event.eventType);
+    const trigger = event.eventType.endsWith('.updated') ? 'updated' : 'created';
     const origin =
       event.eventType === 'form.submitted'
         ? 'form'
         : event.eventType === 'lead.created'
           ? 'lead'
-          : subject === 'deal'
-            ? 'manual'
-            : originOf(event.payload.via);
-    const r = await this.engine.assign(event.orgId, subject, uuid, origin);
-    if (r.outcome === 'assigned') {
-      this.logger.debug({ orgId: event.orgId, subject, rule: r.ruleId }, 'auto-assigned');
+          : originOf(event.payload.via);
+    const r = await this.engine.assign(event.orgId, subject, uuid, origin, trigger);
+    if (r.outcome === 'assigned' || r.outcome === 'reassigned') {
+      this.logger.debug(
+        { orgId: event.orgId, subject, rule: r.ruleId, outcome: r.outcome },
+        'auto-assigned',
+      );
     }
   }
 }
+
+const subjectOf = (eventType: string): 'contact' | 'company' | 'deal' =>
+  eventType.startsWith('deal.') ? 'deal' : eventType.startsWith('company.') ? 'company' : 'contact';

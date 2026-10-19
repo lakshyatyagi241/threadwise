@@ -129,11 +129,6 @@
         "description": "Bewerk je dealpijplijnen, fases en redenen voor verlies.",
         "keywords": "deals, verkoopfases, bord, reden verloren, funnel"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Maak en orden de tags die bij contacten en chats worden gebruikt.",
-        "keywords": "labels, kleur, color"
-      },
       "saved-replies": {
         "label": "Opgeslagen antwoorden",
         "description": "Schrijf herbruikbare antwoorden die je team met één klik kan versturen.",
@@ -344,15 +339,40 @@
         "description": "Zie hoe snel elke agent vandaag, deze week of deze maand reageerde en oploste.",
         "keywords": "rapporten, analyses, agenten, reactietijd, eerste antwoord, opgelost, werkdruk, prestaties"
       },
-      "contact-assignment": {
-        "label": "Contacttoewijzing",
-        "description": "Geef nieuwe contacten en deals automatisch aan de juiste persoon, en sla mensen met verlof over.",
-        "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, verlof, leadroutering"
-      },
       "privacy-requests": {
         "label": "Gegevensverzoeken",
         "description": "Beantwoord mensen die vragen wat je van hen bewaart: identiteitscontrole, export, wissen met voorvertoning en een bewijs dat je kunt bewaren.",
         "keywords": "privacy, gdpr, gegevensverzoek, dsar, inzage, gegevens exporteren, wissen, recht op vergetelheid, persoonsgegevens verwijderen, legal hold"
+      },
+      "compliance-center": {
+        "label": "Compliancecentrum",
+        "description": "Hulpmiddelen om je te helpen je privacyverplichtingen na te komen: de wetten waaronder je werkt, privacycontacten, mededelingen en links, subverwerkers, stille uren en een checklist van wat er is ingericht.",
+        "keywords": "compliance, privacy, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, functionaris gegevensbescherming, klachtenfunctionaris, subverwerker, dpa, verwerkersovereenkomst, voorwaarden, privacybeleid, stille uren, niet bellen, checklist, kinderen"
+      },
+      "company-properties": {
+        "label": "Bedrijfseigenschappen",
+        "description": "Voeg de velden toe die je bij elk bedrijf wilt bewaren.",
+        "keywords": "aangepaste velden, velden, verplicht, keuzelijst, organisatie, account"
+      },
+      "uncontacted-leads": {
+        "label": "Niet-benaderde leads",
+        "description": "Kies welke acties tellen als het benaderen van een lead en welke nieuwe contacten als niet benaderd beginnen.",
+        "keywords": "niet benaderd, benaderd, lead, nieuwe lead, eerste contact, opvolgen, opnieuw toewijzen, markering"
+      },
+      "record-assignment": {
+        "label": "Regels voor recordtoewijzing",
+        "description": "Wijs nieuwe contacten, bedrijven en deals automatisch toe aan uw verkoopeigenaren, via prioriteitsregels.",
+        "keywords": "toewijzen, eigenaar, round robin, nieuw contact, nieuwe deal, bedrijf, verlof, leadroutering, werkdruk, territorium"
+      },
+      "follow-ups": {
+        "label": "Opvolgingen",
+        "description": "Stel de volgende opvolging van een contact automatisch in wanneer je team contact opneemt, en kies de datum en meldingstijd.",
+        "keywords": "opvolging, follow-up, herinnering, volgende actie, taak, plannen, uitstellen, ooit"
+      },
+      "duplicate-leads": {
+        "label": "Dubbele leads",
+        "description": "Kies of een nieuwe lead die bij een contact past daarmee wordt samengevoegd of een nieuw contact wordt.",
+        "keywords": "dubbel, samenvoegen, lead, zelfde telefoon, zelfde e-mail, nieuw contact, leadbron"
       }
     },
     "title": "Instellingen",

@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import type { AccountFlags } from '@crm/contracts';
+import { takeAuthPrefetch } from '../../../common/context/auth-prefetch';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
@@ -49,8 +50,18 @@ export class AccountGateService {
     private readonly orgs: OrgSuspensionService,
   ) {}
 
-  async stateFor(orgId: number, userId: number): Promise<AccountGateState> {
+  /**
+   * `includeOrgSuspension: false` skips the workspace-suspension lookup (a Redis round trip) for a caller that has already made it:
+   * AccountGateGuard checks the workspace first and never reads `orgSuspended` from this state, so asking again cost every
+   * authenticated request one extra sequential Redis call. The result then has no `orgSuspended` field.
+   */
+  async stateFor(
+    orgId: number,
+    userId: number,
+    opts: { includeOrgSuspension?: boolean } = {},
+  ): Promise<AccountGateState> {
     const own = await this.userState(orgId, userId);
+    if (opts.includeOrgSuspension === false) return own;
     const orgSuspended = isOperatorImpersonation(RequestContextStore.peek())
       ? false
       : await this.orgs.isSuspended(orgId);
@@ -59,7 +70,12 @@ export class AccountGateService {
 
   private async userState(orgId: number, userId: number): Promise<AccountGateState> {
     const key = AuthKeys.gate(orgId, userId);
-    const cached = await this.redis.get(key).catch(() => null);
+    // JwtAuthGuard may have sent this read together with its own (auth-prefetch.ts); a failed one is simply read again here.
+    const early = await takeAuthPrefetch('gate', orgId, userId);
+    const cached =
+      early === undefined || typeof early === 'symbol'
+        ? await this.redis.get(key).catch(() => null)
+        : early;
     if (cached) return JSON.parse(cached) as AccountGateState;
 
     const state = await this.compute(orgId, userId);

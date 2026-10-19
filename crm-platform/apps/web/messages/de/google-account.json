@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google-Konto",
+        "description": "Verbinden Sie ein Google-Konto für Calendar, Sheets, Docs, Forms und Meet in Ihren Flows.",
+        "keywords": "google, google-konto, kalender, calendar, tabellen, sheets, dokumente, docs, formulare, forms, meet, drive, oauth, google verbinden"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Fügen Sie in Ihren Flows Zeilen hinzu, suchen Sie Zeilen und speichern Sie Kontakte aus einer Tabelle. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google sheets, Tabelle, Zeilen, Zellen, oauth, Google verbinden"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Kopieren Sie ein Vorlagendokument, füllen Sie es aus und teilen Sie es aus Ihren Flows. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google docs, Dokument, Vorlage, teilen, oauth, Google verbinden"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Senden Sie einem Kunden ein Formular und machen Sie weiter, sobald es ausgefüllt wurde. Nutzt Ihre Google-Konto-Verbindung.",
+        "keywords": "google forms, Formular, Umfrage, Antworten, oauth, Google verbinden"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "page": {
+      "eyebrow": "Workspace",
+      "title": "Google-Konto",
+      "subtitle": "Einmal verbinden. Dasselbe Google-Konto versorgt Ihren Buchungskalender, Meet-Links und die Sheets-, Docs- und Forms-Schritte in Ihren Flows.",
+      "loading": "Ihr Google-Konto wird geladen...",
+      "forbidden": {
+        "title": "Sie können diese Seite nicht öffnen",
+        "body": "Ihre Rolle umfasst nicht das Anzeigen des Google-Kontos. Wenden Sie sich an einen Workspace-Admin."
+      },
+      "status": {
+        "unavailable": "Nicht eingerichtet",
+        "disconnected": "Nicht verbunden",
+        "connected": "Verbunden",
+        "needs_reconnect": "Erneut verbinden erforderlich"
+      },
+      "outcome": {
+        "connected": "Google-Konto verbunden.",
+        "denied": "Google wurde nicht verbunden: Der Berechtigungsbildschirm wurde abgebrochen.",
+        "failed": "Die Verbindung mit Google wurde nicht abgeschlossen. Versuchen Sie es erneut.",
+        "expired": "Dieser Verbindungsversuch ist abgelaufen. Klicken Sie auf die Schaltfläche, um neu zu starten.",
+        "not_configured": "Google ist für diese Plattform noch nicht eingerichtet. Wenden Sie sich an Ihren Plattformadministrator.",
+        "missing_scope": "Google hat nicht alle angeforderten Berechtigungen erteilt. Bereits erlaubte funktionieren weiter; fügen Sie die fehlenden erneut hinzu und lassen Sie alle Kästchen angehakt.",
+        "cancelled": "Sie haben abgebrochen. Es wurde nichts verbunden."
+      },
+      "actions": {
+        "connect": "Google-Konto verbinden",
+        "reconnect": "Google erneut verbinden",
+        "addPermissions": "Berechtigungen hinzufügen",
+        "disconnect": "Trennen",
+        "working": "Google wird geöffnet...",
+        "retry": "Erneut versuchen"
+      },
+      "unavailable": {
+        "title": "Google ist für diese Plattform nicht eingerichtet",
+        "body": "Der Plattformadministrator muss zuerst den Google-OAuth-Client hinzufügen, bevor sich jemand verbinden kann. Bis dahin schlagen Google-Schritte in Ihren Flows mit einer entsprechenden Meldung fehl, und Buchungen laufen ohne Kalender weiter."
+      },
+      "reconnect": {
+        "title": "Google akzeptiert diese Verbindung nicht mehr",
+        "body": "Die Berechtigung wurde widerrufen, das Passwort geändert oder die Freigabe ist abgelaufen. Verbinden Sie erneut, um sie wiederherzustellen; Ihre Auswahl bleibt erhalten.",
+        "bodyAccount": "Google akzeptiert {account} nicht mehr. Verbinden Sie es erneut, um es wiederherzustellen; Ihre Auswahl bleibt erhalten."
+      },
+      "stats": {
+        "status": "Status",
+        "calendars": "Kalender",
+        "calendarsValue": "{count} verfügbar",
+        "calendarsNone": "keine",
+        "permissions": "Berechtigungen",
+        "permissionsValue": "{granted} von {total}",
+        "lastUsed": "Zuletzt verwendet",
+        "never": "nie",
+        "live": "aktiv",
+        "idle": "inaktiv"
+      },
+      "account": {
+        "title": "Verbundenes Konto",
+        "email": "Konto",
+        "calendar": "Kalender für Buchungen und Meet",
+        "primaryCalendar": "Ihr Hauptkalender",
+        "changeCalendar": "Kalender ändern",
+        "connectedAgo": "Verbunden {when}",
+        "none": "Es ist kein Google-Konto verknüpft.",
+        "noneBody": "Solange Sie nicht verbunden sind, schlagen Google-Schritte in Ihren Flows mit der Meldung fehl, Google zu verbinden, und Buchungen werden keinem Kalender hinzugefügt."
+      },
+      "permissions": {
+        "title": "Wofür Google verwendet werden darf",
+        "intro": "Haken Sie an, was Sie erlauben möchten. Google zeigt auf seinem Bildschirm genau diese Berechtigungen an, und Sie können später weitere hinzufügen, ohne zu verlieren, was bereits erlaubt ist.",
+        "allowed": "Erlaubt",
+        "notAllowed": "Nicht erlaubt",
+        "allow": "Zulassen",
+        "restricted": "Von Google eingeschränkt",
+        "restrictedNote": "Google stuft diese Berechtigung als eingeschränkt ein: Die Plattform braucht die Prüfung durch Google, damit sie für viele Workspaces funktioniert. Lassen Sie sie aus, sofern Sie sie nicht benötigen.",
+        "nothingTicked": "Haken Sie mindestens eine Berechtigung an.",
+        "calendar": {
+          "name": "Kalender",
+          "body": "Fügen Sie Buchungen und Meet-Links Ihrem Kalender hinzu und blenden Sie belegte Zeiten auf der Buchungsseite aus.",
+          "usedBy": "Buchungskalender, Termin buchen und Google-Meet-Schritte"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Google-Sheet-Feld prüfen, Kontakt aus Google Sheet speichern",
+          "body": "Füge einer Tabelle eine Zeile hinzu, suche eine Zeile, prüfe eine Zelle oder kopiere eine Zeile in einen Kontakt."
+        },
+        "docs": {
+          "name": "Docs und Drive",
+          "body": "Ein Vorlagendokument kopieren, ausfüllen und die Kopie per Link teilen.",
+          "usedBy": "Google-Docs-Schritt"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Google-Form-Schritt",
+          "body": "Lies den öffentlichen Link eines Formulars, damit der Flow ihn an den Kunden senden kann, und lies die Antworten des Formulars, damit der Flow weiterläuft, sobald es ausgefüllt wird."
+        },
+        "drive_listing": {
+          "name": "Drive-Dateiliste",
+          "body": "Liste deine Tabellen, Dokumente und Formulare nach Namen auf, damit du sie im Flow-Builder und in den Buchungseinstellungen aus deinem Konto auswählen kannst. Für jede Dateiauswahl erforderlich.",
+          "usedBy": "Dateiauswahl im Flow-Builder und in den Buchungseinstellungen"
+        }
+      },
+      "lastError": {
+        "title": "Das zuletzt von Google gemeldete Problem",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google akzeptiert das verbundene Konto nicht mehr. Verbinden Sie es erneut.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Der Google-Client der Plattform fehlt oder ist ausgeschaltet.",
+        "GOOGLE_API_NOT_ENABLED": "Im Google-Cloud-Projekt der Plattform ist eine für diese Funktion nötige API nicht aktiviert. Der Plattformadministrator muss sie aktivieren.",
+        "GOOGLE_SCOPE_MISSING": "Ein Schritt benötigte eine Berechtigung, die diesem Konto nicht erteilt wurde. Fügen Sie sie oben hinzu.",
+        "GOOGLE_RATE_LIMITED": "Google begrenzt gerade die Anfragen. Schritte werden etwas später erneut versucht.",
+        "GOOGLE_UNAVAILABLE": "Google hat nicht geantwortet. Bei der nächsten Verwendung wird es erneut versucht.",
+        "other": "Google hat ein Problem gemeldet."
+      },
+      "usedBy": {
+        "title": "Verwendet von",
+        "book": "Schritt „Termin buchen“",
+        "meet": "Google-Meet-Schritt",
+        "sheets": "Google-Sheets-Schritte",
+        "docs": "Google-Docs-Schritt",
+        "forms": "Google-Form-Schritt",
+        "flow": "Flow"
+      },
+      "disconnectConfirm": {
+        "title": "Google trennen?",
+        "body": "Die Kalendersynchronisierung für Buchungen und jeder Google-Schritt in Ihren Flows stoppen, bis Sie erneut verbinden. Bereits erstellte Termine und Dateien bleiben in Google.",
+        "confirm": "Trennen",
+        "cancel": "Verbunden lassen"
+      },
+      "disconnected": "Google-Konto getrennt.",
+      "failure": {
+        "notConfigured": "Google ist für diese Plattform nicht eingerichtet. Wenden Sie sich an Ihren Plattformadministrator.",
+        "generic": "Etwas ist schiefgelaufen. Versuchen Sie es erneut."
+      },
+      "privacy": {
+        "title": "Datenschutz",
+        "body": "Es werden nur die Berechtigungen angefordert, die Sie anhaken. Die Verbindung wird verschlüsselt gespeichert, gehört dem Workspace und wird nur von den hier aufgeführten Funktionen genutzt. Beim Trennen wird sie bei Google widerrufen."
+      }
+    },
+    "consent": {
+      "title": "Google-Verbindung bestätigen",
+      "loading": "Ihre Google-Verbindung wird geladen ...",
+      "question": "{email} mit {workspace} verbinden für {permissions}?",
+      "permissions": "Berechtigungen",
+      "notGiven": "nicht erteilt",
+      "missing": "Google hat nicht erteilt: {permissions}. Wenn Sie bestätigen, wird nur das Erteilte verbunden.",
+      "replaces": "Dadurch wird das aktuell verbundene Google-Konto {email} ersetzt. Der Zugriff des alten Kontos wird widerrufen.",
+      "onlyYou": "Nur die Person, die auf „Verbinden“ geklickt hat, kann dies von diesem Workspace aus abschließen. Wenn Ihnen jemand diesen Link geschickt hat, bestätigen Sie ihn nicht: Schließen Sie die Seite.",
+      "unknownAccount": "dieses Google-Konto",
+      "confirm": "Bestätigen",
+      "cancel": "Abbrechen",
+      "working": "Wird verarbeitet ...",
+      "failure": {
+        "notYours": "Diese Google-Verbindung wurde von jemand anderem gestartet und daher nicht verbunden. Bitten Sie diese Person, die Verbindung selbst herzustellen.",
+        "expired": "Die Bestätigung dieser Google-Verbindung hat zu lange gedauert. Gehen Sie zurück und klicken Sie erneut auf „Verbinden“.",
+        "used": "Diese Google-Verbindung wurde bereits bestätigt, abgebrochen oder abgelehnt. Gehen Sie zurück und klicken Sie erneut auf „Verbinden“, falls Sie sie noch benötigen.",
+        "notFound": "Diese Google-Verbindung wartet nicht auf eine Bestätigung oder gehört zu einem anderen Workspace.",
+        "generic": "Etwas ist schiefgelaufen und es wurde nichts geändert. Versuchen Sie es erneut.",
+        "nothingConnected": "Es wurde nichts verbunden."
+      }
+    }
+  }
+}

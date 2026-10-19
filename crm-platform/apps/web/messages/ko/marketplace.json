@@ -61,7 +61,8 @@
       "notForSale": "이 앱은 현재 새 구독자에게 판매되지 않습니다.",
       "trialUnavailable": "이 앱의 무료 체험은 워크스페이스에서 사용할 수 없습니다.",
       "subscriptionNotFound": "워크스페이스에 이 앱의 구독이 없습니다.",
-      "subscriptionState": "구독의 현재 상태와 맞지 않는 요청입니다. 새로고침하여 최신 상태를 확인하세요."
+      "subscriptionState": "구독의 현재 상태와 맞지 않는 요청입니다. 새로고침하여 최신 상태를 확인하세요.",
+      "renewalNotStopped": "결제 서비스 업체에서 자동 갱신을 중지하지 못했습니다. 아무것도 변경되지 않았으며 카드에 계속 청구될 수 있습니다. 잠시 후 다시 시도하세요."
     },
     "chips": {
       "installed": "설치됨",
@@ -77,7 +78,8 @@
       "trialing": "무료 체험",
       "comped": "무상 제공",
       "canceling": "갱신하지 않음",
-      "subscriptionEnded": "구독 종료"
+      "subscriptionEnded": "구독 종료",
+      "pastDue": "결제 실패"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "판매하지 않음",
         "paid": "유료 앱",
         "addOn": "부가 기능",
-        "trial": "{days}일 무료 체험"
+        "trial": "{days}일 무료 체험",
+        "monthlyOrYearly": "월 {price} 또는 연 {annual}"
       },
       "installs": "{count, plural, other {설치 #회}}",
       "version": "버전 {version}",
@@ -302,7 +305,8 @@
         "terms": "이용약관",
         "status": "상태 페이지",
         "email": "이메일 지원"
-      }
+      },
+      "open": "열기"
     },
     "install": {
       "backToMarketplace": "마켓플레이스로 돌아가기",
@@ -799,14 +803,15 @@
         "minPlan": "현재 요금제 또는 상위 요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다.",
         "plan": "요금제에 이 앱이 포함되어 있어 결제할 금액이 없습니다."
       },
-      "needsPurchase": "요금제 카탈로그에 포함되어 있습니다. 사용하려면 구매하세요.",
+      "needsPurchase": "먼저 구독하세요. 결제가 완료되면 설치할 수 있습니다.",
       "subscribedNote": "워크스페이스가 이 앱을 구독 중입니다.",
       "trialOffer": "{days, plural, other {#일}} 동안 무료로 체험해 보세요. 구독을 선택하기 전까지는 요금이 청구되지 않습니다.",
       "prepaidNote": "워크스페이스 결제를 통해 매월 청구됩니다. 각 결제는 한 달 이용권이며 자동으로 청구되지 않습니다. 앱을 계속 사용하려면 표시된 날짜 전에 다시 결제하세요.",
       "notForSale": {
         "title": "판매하지 않음",
         "message": "현재 이 앱은 신규 구독자에게 판매하지 않습니다."
-      }
+      },
+      "autoRenewNote": "워크스페이스 결제를 통해 매월 청구됩니다. 취소할 때까지 갱신일마다 카드에 매월 자동으로 청구됩니다."
     },
     "subscribe": {
       "subscribe": "구독하기",
@@ -820,7 +825,16 @@
         "included": "{name} 앱은 요금제에 포함되어 있습니다.",
         "already_entitled": "워크스페이스는 이미 {name}에 접근할 수 있습니다.",
         "free": "{name} 앱은 무료입니다."
-      }
+      },
+      "hintPriceAuto": "월 {price}, 취소할 때까지 카드에 매월 자동으로 청구됩니다.",
+      "hintAuto": "취소할 때까지 카드에 매월 자동으로 청구됩니다.",
+      "period": {
+        "legend": "결제 주기",
+        "monthly": "월간, {price}",
+        "yearly": "연간, {price}"
+      },
+      "hintYear": "연 {price}, 결제 시 지불됩니다. 각 결제는 1년 이용권입니다.",
+      "hintYearAuto": "연 {price}, 취소할 때까지 카드에 매년 자동으로 청구됩니다."
     },
     "subscription": {
       "title": "구독",
@@ -829,7 +843,8 @@
         "trialing": "무료 체험",
         "comped": "무상 제공",
         "canceling": "갱신하지 않음",
-        "ended": "종료됨"
+        "ended": "종료됨",
+        "past_due": "결제 실패"
       },
       "date": {
         "paidUntil": "{date}까지 결제됨",
@@ -838,7 +853,9 @@
         "compOpen": "무상 이용, 종료일 없음",
         "cancelingUntil": "갱신하지 않음. {date}까지 사용 가능",
         "endedOn": "{date}에 구독 종료",
-        "endedNoDate": "구독 종료"
+        "endedNoDate": "구독 종료",
+        "renewsOn": "{date}에 갱신",
+        "graceUntil": "결제 실패. {date}까지 사용 가능"
       },
       "lastPayment": "마지막 결제: 월 {price}",
       "nextPayment": "이 앱의 가격이 변경되었습니다. 다음 결제 금액은 월 {price}입니다.",
@@ -849,7 +866,8 @@
         "resubscribe": "다시 구독하기",
         "subscribe": "지금 구독하기",
         "resume": "구독 재개",
-        "cancel": "구독 취소"
+        "cancel": "구독 취소",
+        "payNow": "지금 결제"
       },
       "cancelConfirm": {
         "title": "{name} 구독을 취소하시겠습니까?",
@@ -857,7 +875,9 @@
         "messageNoDate": "{name} 앱은 결제한 기간이 끝날 때까지 사용 가능하며 이후 일시 중지됩니다. 데이터와 설정은 유지됩니다.",
         "afterwards": "더 이상 요금이 청구되지 않으며, 언제든 다시 구독할 수 있습니다.",
         "confirm": "구독 취소",
-        "keep": "구독 유지"
+        "keep": "구독 유지",
+        "messageAuto": "카드에 더 이상 청구되지 않습니다. {name} 앱은 {date}까지 사용 가능하며 이후 일시 중지됩니다. 데이터와 설정은 유지됩니다.",
+        "messageAutoNoDate": "카드에 더 이상 청구되지 않습니다. {name} 앱은 결제한 기간이 끝날 때까지 사용 가능하며 이후 일시 중지됩니다. 데이터와 설정은 유지됩니다."
       },
       "toast": {
         "canceled": "구독이 취소되었습니다. {date}까지 사용할 수 있습니다.",
@@ -865,7 +885,14 @@
         "resumed": "구독이 재개되었습니다."
       },
       "working": "처리 중",
-      "noCheckout": "지금은 이 앱의 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요."
+      "noCheckout": "지금은 이 앱의 결제를 진행할 수 없습니다. 잠시 후 다시 시도하세요.",
+      "paymentFailed": "이 앱의 최근 카드 결제가 완료되지 않았습니다. 결제 서비스 업체가 재시도하는 동안 {date}까지 앱을 계속 사용할 수 있습니다. 일시 중지를 피하려면 지금 결제하거나 결제 수단을 수정하세요.",
+      "paymentFailedNoDate": "이 앱의 최근 카드 결제가 완료되지 않았습니다. 결제 서비스 업체가 재시도하는 동안 앱을 계속 사용할 수 있습니다. 일시 중지를 피하려면 지금 결제하거나 결제 수단을 수정하세요.",
+      "autoRenewHint": "갱신일에 카드에 자동으로 청구됩니다. 중단하려면 그 전에 취소하세요.",
+      "lastPaymentYear": "마지막 결제: 연 {price}",
+      "nextPaymentYear": "이 앱의 가격이 변경되었습니다. 다음 결제 금액은 연 {price}입니다.",
+      "priceLocked": "가격이 월 {price} 기준으로 고정되어 있습니다. 구독을 유지하는 동안에는 앱 가격이 바뀌어도 그대로 유지됩니다.",
+      "priceLockedYear": "가격이 연 {price} 기준으로 고정되어 있습니다. 구독을 유지하는 동안에는 앱 가격이 바뀌어도 그대로 유지됩니다."
     },
     "tools": {
       "open": "열기",
@@ -875,6 +902,24 @@
       },
       "soon": "출시 예정",
       "upgrade": "업그레이드"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "결제가 완료되었습니다",
+        "message": "감사합니다. 구독이 활성화되었으며 앱을 바로 사용할 수 있습니다."
+      },
+      "pending": {
+        "title": "결제 확인 중",
+        "message": "결제 서비스 업체가 아직 결제를 확인하지 않았습니다. 확인되면 이 페이지가 업데이트되며, 다시 결제하지 않으셔도 됩니다."
+      },
+      "failed": {
+        "title": "결제가 완료되지 않았습니다",
+        "message": "요금이 청구되지 않았습니다. 다른 결제 방법을 사용하려면 다시 구독하세요."
+      },
+      "cancelled": {
+        "title": "결제가 취소되었습니다",
+        "message": "요금이 청구되지 않았습니다. 준비되면 언제든 다시 구독하세요."
+      }
     }
   }
 }

@@ -7,7 +7,8 @@ order: 30
 documents: [tile:chat-widget]
 gates:
   planFeature: chatbot_widgets
-keywords: [web chat, website chat, live chat, widget, embed, snippet, bubble, launcher, whatsapp button]
+keywords:
+  [web chat, website chat, live chat, widget, embed, snippet, bubble, launcher, whatsapp button]
 ---
 
 ## What it is for
@@ -38,3 +39,7 @@ The screen needs the **Chatbot widgets** plan feature. Without it you see an upg
 - **You cannot move to the next step or save.** A message names the missing item, such as a name, a linked smart agent, a full WhatsApp number or a valid colour.
 - **The bubble does not appear on your site.** Check that the snippet is on the page and is the current one. After a token rotation or a delete, the old snippet stops working.
 - **The totals on the cards look out of date after you rotate or delete a widget.** Reload the page to refresh them.
+
+## Get it as an app
+
+The chat widget is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

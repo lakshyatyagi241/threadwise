@@ -75,4 +75,11 @@ export interface LeadIngestResult {
 
 export interface LeadIngestPort {
   ingest(orgId: number, sourceId: number, lead: NormalisedLead): Promise<LeadIngestResult>;
+  /**
+   * For a connector that reads a provider's recent leads on a schedule (a reconciliation sweep): of these external ids, the ones the
+   * source already holds and does not need again (anything but a `failed` event or a `received` one that stalled). Asking first keeps
+   * a sweep from counting every lead it re-reads as a duplicate delivery. Optional: a caller without it just ingests, which is
+   * correct, only noisier.
+   */
+  settled?(orgId: number, sourceId: number, externalIds: readonly string[]): Promise<string[]>;
 }

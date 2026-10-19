@@ -90,6 +90,36 @@ describe('option sets', () => {
     });
   });
 
+  it('a filter also offers the stages contacts hold that the workspace never listed (the default `new`)', () => {
+    const configured = [opt({ value: 'contacted', label: 'Contacted' })];
+    expect(stageChoices(configured, undefined, ['contacted', 'new']).map((s) => s.value)).toEqual([
+      'contacted',
+      'new',
+    ]);
+    expect(stageChoices(configured, undefined, ['new']).at(-1)).toEqual({
+      value: 'new',
+      label: 'New',
+    });
+    // nothing added twice, nothing blank, and no list means no change
+    expect(stageChoices(configured, undefined, ['contacted', ' ', '']).map((s) => s.value)).toEqual(
+      ['contacted'],
+    );
+    expect(stageChoices(configured).map((s) => s.value)).toEqual(['contacted']);
+  });
+
+  it('a filter also offers the statuses contacts hold that the configured list lacks', () => {
+    const configured = [opt({ optionGroup: 'status', value: 'test', label: 'Test' })];
+    const label = (v: string) => `T:${v}`;
+    const out = statusChoices(configured, label, undefined, undefined, [
+      'active',
+      'test',
+      'on_hold',
+    ]);
+    expect(out.map((s) => s.value)).toEqual(['test', 'active', 'on_hold']);
+    // the platform's four keep their translated name, any other value is its key in words
+    expect(out.map((s) => s.label)).toEqual(['Test', 'T:active', 'On Hold']);
+  });
+
   it('falls back to the four Reference statuses', () => {
     expect(statusChoices(undefined, (v) => v.toUpperCase()).map((s) => s.value)).toEqual([
       'active',
@@ -220,5 +250,16 @@ describe('plan limit (TW-CON-026)', () => {
     expect(planLimitOf(full)).toBe(500);
     expect(planLimitOf(new ApiError(422, ERROR_CODES.PLAN_LIMIT_REACHED, 'x'))).toBeUndefined();
     expect(planLimitOf(new TypeError('x'))).toBeUndefined();
+  });
+});
+
+describe('formatDate', () => {
+  it("is the day only, in the fixed English form, and the language's own medium date otherwise", async () => {
+    const { formatDate } = await import('./format');
+    expect(formatDate('2026-10-17T04:08:00.000Z', 'en', 'UTC')).toBe('17 Oct 2026');
+    expect(formatDate('2026-10-17T23:30:00.000Z', 'en-GB', 'Asia/Kolkata')).toBe('18 Oct 2026');
+    expect(formatDate('', 'en')).toBe('');
+    expect(formatDate('nope', 'en')).toBe('');
+    expect(formatDate('2026-10-17T04:08:00.000Z', 'de', 'UTC')).toMatch(/17\.\s?(Okt|10)/);
   });
 });

@@ -13,5 +13,5 @@ export {
   isChatDigestPilot,
   SUGGESTION_TTL_DAYS,
 } from './lead-chat-digest.rules';
-export { AI_PROVIDER, extractJsonObject } from './lead-scoring.rules';
+export { AI_PROVIDER, LEAD_SCORING_FEATURE, extractJsonObject } from './lead-scoring.rules';
 export { maskPii } from './lead-chat-digest.rules';

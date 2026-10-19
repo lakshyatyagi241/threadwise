@@ -1,15 +1,26 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { OUTCOME_UNKNOWN_PREFIX, isOutcomeUnknown } from './retry-policy';
+import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import { FailureRecorder } from '../failed-operations';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ERROR_CODES } from '@crm/contracts';
 import { sql } from 'drizzle-orm';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { buildSend, type TemplateShape } from '../../infra/providers/whatsapp/meta-send-payload';
+import { SendWindowService } from '../compliance-center';
+import { ConsentGate, purposeOfCategory } from '../contact-consent';
 import {
   UNOFFICIAL_ENGINE,
   UNOFFICIAL_WHATSAPP_GATE,
   type UnofficialWhatsappGate,
 } from '../auth/unofficial-whatsapp.port';
-import { MergeTagService, renderMergeTags, resolveToken, type MergeContext } from '../crm';
+import {
+  ContactTouchService,
+  MergeTagService,
+  renderMergeTags,
+  resolveToken,
+  type MergeContext,
+} from '../crm';
 import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, renderPlainBody, type OutgoingText } from './engine-senders';
@@ -53,6 +64,9 @@ const BATCH = 200;
 const COUNTER_EVERY = 25;
 /** A recipient claimed for sending but not settled this long ago belongs to a worker that died. */
 const STALE_MINUTES = 10;
+/** Tries to write the outcome of an accepted send, and the wait before the next (times the try number). */
+const RECORD_ATTEMPTS = 3;
+const RECORD_RETRY_MS = 250;
 /** While resting, the sender lease is renewed this often. */
 const HEARTBEAT_MS = 20_000;
 
@@ -68,6 +82,8 @@ interface BroadcastRow {
 }
 
 interface RecipientRow {
+  /** Set when the recipient was held for the quiet hours and is being released now. */
+  held_until: string | Date | null;
   bc_id: number | string;
   contact_id: number | string;
   phone: string | null;
@@ -101,9 +117,14 @@ export class BroadcastDispatchService {
     @Inject(WARMER_GATE) private readonly warmer: WarmerGate,
     @Inject(PACING_SETTINGS) private readonly pacingSettings: PacingSettingsSource,
     private readonly runtime: PacingRuntime,
+    private readonly leadHandling: ContactTouchService,
     private readonly cap: CapTally,
     private readonly lease: SenderLease,
     @Inject(WALLET_GATE) private readonly wallet: WalletGate,
+    private readonly sendWindow: SendWindowService,
+    private readonly consentGate: ConsentGate,
+    // Optional so the dispatcher still builds where the record is not wired; the recipient is marked failed either way.
+    @Optional() private readonly failures?: FailureRecorder,
   ) {}
 
   /** Must run inside a request context for `orgId` (the processor sets it from the job). */
@@ -170,6 +191,13 @@ export class BroadcastDispatchService {
         headerLocation: template.headerLocation,
       };
       const overrides = sanitizeOverrides(b.template_overrides);
+      // A MARKETING template is held for the quiet hours; a utility or authentication one is a notice the person needs (BL-177).
+      const cat = await tx.execute(sql`
+        SELECT lower(coalesce(meta_category, category)) AS category FROM wa_templates
+        WHERE org_id = ${orgId} AND id = ${Number(b.template_id)}`);
+      const marketing =
+        purposeOfCategory((cat.rows[0] as { category?: string } | undefined)?.category) ===
+        'marketing_messaging';
       const mergeBase = await this.merge.baseContext(tx, orgId);
       const pacing = await this.pacingSettings.get(tx, orgId);
       const warm = await this.warmer.gap(tx, sender);
@@ -190,13 +218,24 @@ export class BroadcastDispatchService {
         pacing,
         warm,
         pendingTotal,
+        marketing,
       };
     });
 
     if (prep.skip) return 'skipped';
     if (prep.failed) return 'failed';
-    const { template, sender, adapter, shape, overrides, mergeBase, pacing, warm, pendingTotal } =
-      prep;
+    const {
+      template,
+      sender,
+      adapter,
+      shape,
+      overrides,
+      mergeBase,
+      pacing,
+      warm,
+      pendingTotal,
+      marketing,
+    } = prep;
     if (mergeBase && sender.engine === 'waba')
       this.logger.log(
         { orgId, broadcastId, engine: sender.engine },
@@ -225,10 +264,13 @@ export class BroadcastDispatchService {
       let sinceBatch = 0;
       let lastId = 0;
       let sinceCounters = 0;
+      // Quiet hours (BL-177): recipients left `pending` because the hours are closed for them, and the earliest instant one of them opens.
+      let held = 0;
+      let heldEarliest: Date | null = null;
       for (;;) {
         const batch = await this.db.tx(async (tx) => {
           const res = await tx.execute(sql`
-          SELECT bc.id AS bc_id, bc.contact_id, c.phone, c.country_code
+          SELECT bc.id AS bc_id, bc.contact_id, bc.held_until, c.phone, c.country_code
           FROM broadcast_contacts bc
           JOIN contacts c ON c.org_id = bc.org_id AND c.id = bc.contact_id
           WHERE bc.org_id = ${orgId} AND bc.broadcast_id = ${broadcastId} AND bc.status = 'pending' AND bc.id > ${lastId}
@@ -237,10 +279,74 @@ export class BroadcastDispatchService {
         });
         if (batch.length === 0) break;
 
+        // One statement for the whole slice; a utility broadcast is never asked.
+        const windows = marketing
+          ? await this.sendWindow.checkMany(
+              orgId,
+              'message',
+              batch.map((r) => Number(r.contact_id)),
+            )
+          : null;
+
+        // A recipient released from a hold may have unsubscribed while it waited: the ConsentGate is asked again, as it is for every
+        // message that leaves a queue (BL-141). Recipients that were never held keep the audience check made when the broadcast was made.
+        const released = batch.filter((r) => r.held_until !== null);
+        const recheck =
+          released.length > 0
+            ? await this.consentGate.checkMany(
+                orgId,
+                released.map((r) => Number(r.contact_id)),
+                consentChannelOfEngine(sender.engine),
+                'marketing_messaging',
+              )
+            : null;
+
         for (const r of batch) {
           lastId = Number(r.bc_id);
           const contactId = Number(r.contact_id);
           const to = assemblePhone(r.phone, r.country_code);
+
+          const verdict = recheck?.decisions.get(contactId);
+          if (verdict && verdict.decision === 'deny') {
+            const why =
+              verdict.reason === 'withdrawn'
+                ? 'Not sent: the contact unsubscribed while the message waited for the quiet hours to end'
+                : 'Not sent: no recorded consent';
+            await this.db.tx(async (tx) => {
+              const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+                status: 'failed',
+                error: why,
+              });
+              if (from !== null)
+                await this.progress.emitMessage(
+                  tx,
+                  orgId,
+                  broadcastId,
+                  contactId,
+                  'failed',
+                  'send',
+                  {
+                    errorReason: why,
+                  },
+                );
+            });
+            processed++;
+            continue;
+          }
+
+          // Held, not denied: the recipient stays `pending` with the instant it may go, the rest of the audience carries on.
+          const hold = windows?.held.get(contactId);
+          if (hold) {
+            await this.db.tx((tx) =>
+              tx.execute(sql`
+                UPDATE broadcast_contacts SET held_until = ${hold.until}::timestamptz, held_reason = ${hold.reason}
+                WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId} AND status = 'pending'`),
+            );
+            held++;
+            const at = new Date(hold.until);
+            if (heldEarliest === null || at.getTime() < heldEarliest.getTime()) heldEarliest = at;
+            continue;
+          }
 
           // The unofficial engine has a daily cap per number (Reference's default 4000). At the cap the run stops, nobody is lost,
           // and it resumes after midnight UTC.
@@ -297,7 +403,7 @@ export class BroadcastDispatchService {
               return false;
             }
             const res = await tx.execute(sql`
-            UPDATE broadcast_contacts SET status = 'processing'
+            UPDATE broadcast_contacts SET status = 'processing', held_until = NULL, held_reason = NULL
             WHERE org_id = ${orgId} AND broadcast_id = ${broadcastId} AND contact_id = ${contactId} AND status = 'pending'
             RETURNING id`);
             return res.rows.length > 0;
@@ -346,26 +452,15 @@ export class BroadcastDispatchService {
                 ...(built ? { components: built.components } : {}),
               });
             }
-            await this.db.tx(async (tx) => {
-              const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
-                status: 'sent',
-                providerMessageId: sent.providerMessageId,
-              });
-              await this.mirror.mirror(
-                orgId,
-                broadcastId,
-                contactId,
-                'sent',
-                sent.providerMessageId,
-              );
-              if (from !== null)
-                await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
-                  providerMessageId: sent.providerMessageId,
-                });
-            });
+            // The provider has accepted the message. Nothing below may turn that into a failed recipient: a failed one is sent again.
+            await this.recordSent(orgId, broadcastId, contactId, sent.providerMessageId);
             if (sender.engine === 'baileys') await this.cap.bump(orgId, sender.engine, sender.id);
           } catch (err) {
-            if (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) {
+            // A send held back by the per-number limiter (queue too deep) is put back the same way, so it is sent later, never failed.
+            if (
+              (err instanceof AppError && err.code === ERROR_CODES.AUTH_SEND_HALTED) ||
+              (err instanceof WabaApiError && err.heldLocally)
+            ) {
               // The emergency halt is on: put this recipient back and stop. Nothing is lost; the run resumes when it is lifted.
               await this.db.tx(async (tx) => {
                 await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
@@ -380,7 +475,19 @@ export class BroadcastDispatchService {
               this.logger.warn({ orgId, broadcastId }, '[BCAST] paused by the emergency halt');
               return 'paused';
             }
-            const reason = err instanceof Error ? err.message : String(err);
+            const message = err instanceof Error ? err.message : String(err);
+            // A timeout or reset may have been accepted by the provider: say so, and the automatic retry leaves it alone.
+            const unknown = isOutcomeUnknown(err);
+            const reason = unknown ? `${OUTCOME_UNKNOWN_PREFIX}${message}` : message;
+            // Shown as failed and never resent by itself; the record lets a person check the provider's receipt first (DLQ audit DF-08).
+            if (unknown)
+              await this.failures?.recordUnknownOutcome({
+                source: 'broadcast-send',
+                orgId,
+                ref: `${broadcastId}:${contactId}`,
+                jobName: 'broadcast-recipient',
+                reason: message,
+              });
             await this.db.tx(async (tx) => {
               const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
                 status: 'failed',
@@ -404,7 +511,7 @@ export class BroadcastDispatchService {
           // A human-paced gap between messages, and a longer rest between batches. Not after the last recipient.
           processed++;
           // SMS is sent one message at a time with no pacing: the provider and the carrier set the rate, not a human-like gap.
-          if (processed < pendingTotal && sender.engine !== 'sms') {
+          if (processed < pendingTotal - held && sender.engine !== 'sms') {
             if (batching && ++sinceBatch >= pacing.batchSize) {
               sinceBatch = 0;
               await this.rest(batchCooldownMs(pacing, this.runtime.random), leaseKey, leaseToken);
@@ -420,11 +527,78 @@ export class BroadcastDispatchService {
         }
       }
 
+      // Everyone who could go has gone. Those held for the quiet hours wait: the broadcast pauses until the first of them opens and the
+      // resume sweep then takes it up again (the consent and the hours are asked once more for each).
+      if (held > 0 && heldEarliest) {
+        const resumeAfter = heldEarliest;
+        await this.db.tx(async (tx) => {
+          await this.progress.recompute(tx, orgId, broadcastId);
+          await this.progress.pause(tx, orgId, broadcastId, {
+            reason: 'quiet_hours',
+            at: this.runtime.now().toISOString(),
+            resumeAfter: resumeAfter.toISOString(),
+          });
+        });
+        this.logger.log(
+          { orgId, broadcastId, held, resumeAfter },
+          '[BCAST] paused: recipients held for the quiet hours',
+        );
+        return 'paused';
+      }
       const final = await this.db.tx((tx) => this.progress.finish(tx, orgId, broadcastId));
       this.logger.log({ orgId, broadcastId, final }, '[BCAST] dispatch finished');
       return 'finished';
     } finally {
       await this.lease.release(leaseKey, leaseToken);
+    }
+  }
+
+  /**
+   * Writes the outcome of a send the provider accepted. Never throws: a database error here must not mark the recipient failed (the
+   * automatic retry would send it a second time). It is tried again a few times; if the database stays down the recipient keeps its
+   * claim, and the stale-claim pass later marks it as interrupted, which the automatic retry skips.
+   */
+  private async recordSent(
+    orgId: number,
+    broadcastId: number,
+    contactId: number,
+    providerMessageId: string | null,
+  ): Promise<void> {
+    for (let attempt = 1; attempt <= RECORD_ATTEMPTS; attempt++) {
+      try {
+        await this.db.tx(async (tx) => {
+          const from = await this.progress.applyRecipient(tx, orgId, broadcastId, contactId, {
+            status: 'sent',
+            providerMessageId,
+          });
+          if (from !== null) {
+            await this.progress.emitMessage(tx, orgId, broadcastId, contactId, 'sent', 'send', {
+              providerMessageId,
+            });
+            // The broadcast reached the contact: lead handling (the uncontacted marker, BL-290). Never throws.
+            await this.leadHandling.touch(tx, orgId, contactId, 'automation');
+          }
+        });
+        // The inbox bubble is best effort and has its own transaction: it never undoes the recorded send.
+        await this.mirror
+          .mirror(orgId, broadcastId, contactId, 'sent', providerMessageId)
+          .catch((err: Error) =>
+            this.logger.warn(
+              { orgId, broadcastId, err: err.message },
+              '[BCAST] inbox mirror failed',
+            ),
+          );
+        return;
+      } catch (err) {
+        if (attempt === RECORD_ATTEMPTS) {
+          this.logger.error(
+            { orgId, broadcastId, contactId, providerMessageId, err: (err as Error).message },
+            '[BCAST] provider accepted the message but its result could not be recorded',
+          );
+          return;
+        }
+        await this.runtime.sleep(RECORD_RETRY_MS * attempt);
+      }
     }
   }
 
@@ -517,4 +691,9 @@ export class BroadcastDispatchService {
     const send = buildSend(shape, tracked);
     return { name: send.name, components: send.components };
   }
+}
+
+/** The consent channel a broadcast engine sends on: the ledger keeps one grant per channel. */
+function consentChannelOfEngine(engine: string): string {
+  return engine === 'sms' ? 'sms' : engine === 'email' ? 'email' : 'whatsapp';
 }

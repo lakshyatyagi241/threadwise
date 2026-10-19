@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Zgłoszenia formularzy miesięcznie",
       "ai_form_generations_monthly": "Generacje kreatora formularzy AI miesięcznie",
       "sms_monthly": "SMS miesięcznie",
-      "email_mailboxes": "Skrzynki e-mail"
+      "email_mailboxes": "Skrzynki e-mail",
+      "email_monthly": "E-maile miesięcznie",
+      "storage_gb": "Miejsce na dane (GB)"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -74,13 +76,16 @@
       "storefront_builder": "Kreator sklepu",
       "invoicing": "Fakturowanie",
       "forms_and_links": "Formularze i linki",
-      "extra_channels": "Telegram, Facebook i Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber i WeChat",
       "form_builder": "Formularze",
       "waba_groups": "Grupy WhatsApp",
       "sms": "Kanał SMS",
       "help_agent": "Asystent pomocy",
       "email_channel": "Kanał e-mail (Gmail)",
-      "personal_history_full": "Import pełnej historii (osobisty WhatsApp)"
+      "personal_history_full": "Import pełnej historii (osobisty WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Ocenianie leadów przez AI",
+      "record_assignment": "Reguły przypisywania rekordów"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Zgłoszenia formularzy przyjęte w miesiącu kalendarzowym, bez spamu. Po przekroczeniu limitu zgłoszenie nadal jest zapisywane do przeglądu, nigdy nie jest odrzucane. 0 = bez limitu.",
       "ai_form_generations_monthly": "Generacje kreatora formularzy AI w miesiącu kalendarzowym, łącznie z ponowieniem naprawy. 0 = bez limitu.",
       "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
-      "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu."
+      "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
+      "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
+      "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",
@@ -561,7 +568,9 @@
       "continueFree": "Kontynuuj za darmo",
       "choose": "Wybierz {name}",
       "back": "Wróć",
-      "compare": "Porównaj wszystkie plany"
+      "compare": "Porównaj wszystkie plany",
+      "appHint": "{feature} jest też sprzedawane jako aplikacja w Marketplace.",
+      "appLink": "Zobacz aplikację"
     }
   }
 }

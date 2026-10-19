@@ -72,6 +72,7 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 | TW-CAMP-033 | ADDITION. Wizard schedule: now, scheduled, recurring series with runs       | implemented | P1       | L      |
 | TW-CAMP-034 | ADDITION. Frequency-cap (131049) retries every 24 h until an end date       | implemented | P1       | L      |
 | TW-CAMP-035 | ADDITION. Wizard broadcasts: list, status, pause, resume, cancel            | implemented | P2       | M      |
+| TW-CAMP-042 | ADDITION. Share a wizard send across several numbers (TW-BCAST-006/014)     | implemented | P1       | L      |
 
 ## Features
 
@@ -221,7 +222,7 @@ whatsapp-devices-baileys and whatsapp-cloud-api-waba (senders), wallet-message-b
 - **025 Flow campaigns:** each recipient gets a new flow session started by the Node bridge (`flow_id`, `flow_id_b` for B). Blocked on flow-runtime-engine.
 - **026 Build with AI:** `GET wa-campaigns/api/ai-models` lists the active admin text models (not ElevenLabs), `POST wa-campaigns/api/ai-generate` writes a message. Depends on ai-keys-usage-admin.
 - **027 Meta click sync:** at most every 15 minutes per campaign on the detail refresh, the template's button clicks from Meta template analytics fill `meta_clicked_count`. Depends on whatsapp-cloud-api-waba.
-- **028 SMS and email runners:** campaigns with provider `sms` or `email` run through their own transports. Skipped on the owner's word (SMS and email are not ported).
+- **028 SMS and email runners:** campaigns with provider `sms` or `email` run through their own transports. SMS: ported with the SMS channel (TW-SMS). Email: ported (`?channel=email`, `EmailCampaignRunner`; API in [docs/api/campaigns.md](../../api/campaigns.md#email-campaigns)). The sender is a connected mailbox (`email:<uuid>`); the builder hides the template picker, flow, A/B, attachment and pacing, and the Header becomes the Subject (max 150, falls back to the campaign name); recipients are contacts with an address (opted-out dropped, a repeated address mailed once, subject CR/LF stripped); the body is HTML-escaped plain text with a text part; plan flag `email_channel` (Reference `access_email`) and the monthly cap `email_monthly` (Reference `email_monthly_limit`); each send is mirrored into an email inbox thread; one lock per campaign; auto-end date, Pause and Cancel respected.
 
 ## Additions beyond Reference: the Create broadcast wizard
 
@@ -266,6 +267,72 @@ send custom text, media, flows and A/B tests; the wizard is a second front end o
 ### TW-CAMP-035: wizard broadcasts (ADDITION)
 
 - List, detail (runs, retry summary), pause, resume, cancel of a one-off or a series (`/campaigns/wizard/broadcasts/:id`). Cancel of a series also stops the runs it started.
+
+### TW-CAMP-036: follow-up steps after a campaign message (ADDITION)
+
+- **Source:** the meeting's "Add a follow-up" (react to a reply or a read, start a flow, send several messages in sequence on conditions). Reference's campaign screens and code have no follow-up step, so there is nothing to compare; the behaviour below is the decision recorded here.
+- **Builds on:** TW-CAMP-025 (a flow campaign starts a flow per recipient through `CampaignFlowStarter`), TW-CAMP-021 (delivery and read reports), TW-CAMP-034 (the worker pattern of claim, log before the provider, record).
+- **Rules:** 0 to 3 steps on the guided draft, Cloud API numbers only. Each: trigger (replied, read, not replied, not read), wait (1 minute to 7 days), action (an approved template, or start a published flow). Step 1 is measured from the campaign message, later steps from the previous step's message. A watching trigger (replied, read) fires the moment the event happens and ends the chain when the time runs out; a waiting trigger (not replied, not read) fires after the wait if the event did not happen and ends the chain if it did. A step happens at most once per recipient; an opt-out, a lost consent, a failed message or an empty wallet ends the chain. A resend restarts it. A recurring series copies the steps to every run.
+- **Acceptance:** Given a campaign with a "not read after 1 hour" step, when a recipient has not read the message after an hour, then the follow-up template is sent once and the log says `sent`; when they read it first, nothing is sent and the log says `skipped`. Given a "replied" step, when the contact writes in the inbox inside the watch time, then the step fires within a minute and the recipient's response is recorded; when no reply comes, the step lapses. A second step looks at whether the first step's message was read. A flow step starts the flow and sends no message. A follow-up message is charged by the wallet once delivered.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-follow-ups.e2e.spec.ts`, `apps/api/test/unit/campaigns/wizard-follow-up-rules.spec.ts`, and the web `follow-ups*` tests.
+- **Not verified:** nothing was run against the real WhatsApp Cloud API; read reports come from Meta's webhook and are reported as the sandbox does not make them by itself.
+
+### TW-CAMP-037: A/B auto-winner (ADDITION, pending)
+
+- **Source:** the meeting's "ship A/B now, rebuild the auto-winner later". Reference has the A/B split (TW-CAMP-007) and per-variant results but no auto-winner either, so this is new behaviour, not built yet.
+- **State today:** the split slider (`abSplit`, default 50) and per-variant results exist on the guided campaign and the classic builder. The campaign never picks a winner: both variants keep their fixed share for the whole send.
+- **To decide before building:** the winning measure (read rate, reply rate, click rate), the test share and how long it runs before the rest is sent, what a tie does, whether the person confirms the winner, and whether it applies to a recurring series' every run.
+- **Status:** pending (tracker `todo`).
+
+### TW-CAMP-038: Build with AI in the guided wizard, and the picture (ADDITION)
+
+- **Source:** the meeting's "Build with AI ... campaign AI message generation, with images and content, creating templates. Needs mapping." The classic builder had text generation (TW-CAMP-002/026) but a verified Meta number always opens the guided wizard, which had no AI button, so the feature looked unwired.
+- **Mapping:** the wizard sends an approved **template**, never free text, so its "Build with AI" drafts a **template** (TW-TPL-016, `POST /v2/templates/ai-generate`), hands it to the template form for review, and the person picks it in the wizard once Meta approves it. The classic builder keeps the text generation and gains an optional **picture** (`POST /v2/campaigns/ai-image`, OpenAI image model, stored as a marketing upload and attached as the campaign's image).
+- **Not built:** carousel drafts (TW-TPL-016's carousel mode), a picture as a template header example (Meta needs the file uploaded through the template media endpoint), image models of other vendors.
+- **Tests:** `apps/api/test/e2e/campaigns/campaigns-ai-build.e2e.spec.ts`, `test/unit/campaigns/http-campaign-ai-image.adapter.spec.ts`, `test/unit/message-templates/template-ai-rules.spec.ts`, and the web tests of the modal, the wizard button and the picture option.
+- **Not verified:** nothing was run against a real OpenAI, Anthropic or Gemini key, or Meta's review of an AI-written template.
+
+### TW-CAMP-039: step icons, and one list of templates in both builders (ADDITION)
+
+- **Source:** the meeting's "Step icons and the stepper disappeared, and templates do not show in some views." Reference's stepper is numbered dots; the icons are an addition.
+- **Stepper:** both steppers (the classic builder's five steps, the guided wizard's four) show an icon for each step in the dot, a check once the step is done; the number stays for screen readers. The wizard's phone view shows the current step's icon too.
+- **Templates:** the classic builder's pickers and the wizard's list now hold the same templates (approved, sendable now, not OTP, not SMS). The classic builder still narrows its list to the chosen number in the browser, and the wizard still lets the picked number send a template of another number of the same business (both are deliberate and tested: numbers of one Meta business share its templates). The empty state links to the new-template form on the chosen number (the classic builder's link to `/templates/create` went nowhere).
+- **Tests:** `broadcast-wizard-templates.e2e.spec.ts`, the stepper tests of both builders, the step-1 tests.
+
+### TW-CAMP-040: recurring broadcast with several templates in sequence (ADDITION)
+
+- **Source:** the meeting's "recurring broadcast with multiple templates in sequence". Reference's recurring campaign repeats one template (one `template_id`), so this is new behaviour recorded here.
+- **Rules:** the draft's own template is the first, up to 9 more follow, each with its own variable mapping; the runs of the series take them in turn and start again after the last (counted by the runs made, so a stepped-over occurrence does not use one up). Only a recurring schedule, and not with an A/B test. Each run's draft carries its own template and mapping. The status page shows how many templates a series sends and which one each run sent.
+- **Acceptance:** Given a daily series with two extra templates, run 1 sends the first, run 2 the second, run 3 the third and run 4 the first again, each with its own mapping; a sequence on a non-recurring schedule, with an A/B test, with an empty entry or an unmapped placeholder is refused at launch.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-sequence.e2e.spec.ts` and the web sequence tests.
+- **Not verified:** nothing was run against the real WhatsApp Cloud API.
+
+### TW-CAMP-041: target previous sends in every audience (ADDITION)
+
+- **Source:** the meeting's "target previous broadcast" audience option. Reference has it only in the Scheduled composer (recipients "queue": broadcasts, whole), reading the broadcasts table; the classic campaign builder and the guided wizard could not target it.
+- **Rules:** a source "Previous sends" in the wizard's audience step, in the classic builder's recipients step and in the Scheduled composer; a send is a broadcast or a campaign (every run of a recurring broadcast is a campaign); up to 20; narrowed by an outcome (all, delivered, read, not read, replied, not replied, clicked, failed; a broadcast has no replies or clicks). It is a source of the union like a group, so opted-out and unusable numbers are left out and a contact counts once. The count the wizard shows and the recipients a launch writes come from the same function.
+- **Acceptance:** Given a campaign sent to five people of whom one read it, one replied and one clicked, a new broadcast aimed at its "not read" outcome messages exactly the people who neither read nor replied; a send of another workspace reaches nobody; a broadcast cannot be narrowed by replies.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-previous-sends.e2e.spec.ts` and the web tests of the picker, the wizard step, the classic step and the composer.
+- **Not done:** the Scheduled composer has no outcome filter (Reference parity); the classic edit form does not re-show the choice (its recipients are the resolved contacts).
+
+### TW-CAMP-042: share one send across several numbers (ADDITION; carries TW-BCAST-006 and TW-BCAST-014 into the Campaign wizard and the classic builder)
+
+- **Source:** Reference's broadcast composer let an admin tick several numbers and give each a share weight (TW-BCAST-006); the audience was split across them and every contact was messaged from one (TW-BCAST-014). `/broadcasts/create` now redirects to `/campaigns/create`, so that composer became unreachable and the guided wizard sent from one number only. This restores the behaviour inside the wizard; the old compose screen was deleted.
+- **Rules:**
+  1. Step 1 keeps the **Send from** select. With two or more connected numbers (Meta, Twilio or personal device numbers), a **Share this send across several numbers** option swaps it for a tick list: a share weight beside each ticked number and its live percentage. At least one number stays ticked; one tick is the ordinary single number.
+  2. A missing, empty, 0 or negative weight counts as 1 (the server's rule, `senderWeight`); weights go up to 1000. Documented deviation: Reference's badge showed 0% for a ticked 0 while the server sent with weight 1; the wizard shows the share that will really be sent.
+  3. The draft holds `senderKey` (the first number, the campaign's own) plus `senderKeys` (the whole list once more than one is ticked) and `senderShare`. A draft saved before this has neither and behaves as a single number.
+  4. At launch the recipients (contact order) are cut into sequential slices by `splitSizes` (floor of each share, the leftover to the largest fractions, ties to the number picked first), so every contact is in exactly one slice and the sizes add up. Each recipient row stores its number (`wp_campaign_contacts.sender_provider`, `sender_device_id`); a single-number send writes null in both and behaves as before. Fewer contacts than numbers leaves some numbers with nobody.
+  5. The Review step shows the same split (recipients and percent per number) before launch; the launch result stores it in `wizard.launch.split`.
+  6. Every picked number must be connected (422 on the draft otherwise, path `senderKeys.<n>`); any engine the sender directory resolves can share a send except a mailbox, and a personal number needs the platform switch on. The template (and variant B, the sequence templates, the follow-up templates) must be sendable from every picked number: a template tied to one WhatsApp connection goes out only from Cloud API numbers of the same Meta account (`meta_json.waba_id`; personal and other engines are never held to an account), else 422 `CAMP_TEMPLATE_NOT_ALLOWED` with `errors[].path = senderKeys.<n>`, `message = template_not_on_sender`, nothing written, the draft stays editable.
+  7. The run sends each number's recipients as its own lane, side by side: own sender, own sender lock, own pacing and warm-up; the campaign lock, the daily limit and the final state (completed, paused for the wallet, scheduled again) are the campaign's, decided once after all lanes. A number that cannot be opened fails only its own recipients (`Sender unavailable: ...`); if none can be opened the campaign fails like an ordinary one. A number another run is using is skipped for now and the campaign is scheduled again shortly.
+  8. The wallet check is one check for the whole audience (the template's category is the same for every number). The 131049 retry and the follow-up steps send from the number the recipient was first sent from (falling back to the campaign's number when the row has none). The test send goes from the first number.
+  9. A recurring broadcast splits every run the same way; a run whose numbers are gone or no longer fit the template is recorded as a refused run, like any other refusal.
+- **Acceptance:** Given three connected numbers of one Meta account with shares 2/1/1 and eight contacts, the launch writes 4/2/2 recipients, each contact once, and the run sends each from the number on its row. Given one of the numbers belongs to another Meta account, the launch is refused with 422 and writes nothing. Given one number, nothing differs from before.
+- **Tests:** `apps/api/test/e2e/campaigns/broadcast-wizard-shares.e2e.spec.ts`, `apps/api/test/unit/campaigns/sender-split.spec.ts`, the web `sender-share-picker.dom.test.tsx`, `builder/step-setup-share.dom.test.tsx` and the reducer tests in `wizard/lib/state.test.ts`.
+- **Classic builder:** the same picker sits in Setup next to the **Send from** select (a mail or a flow campaign has none). `POST/PUT /campaigns` take `senderKeys` and `senderShare`; the create splits the recipients with the same rule and stores each recipient's number, an edit that changes the numbers cuts the recipients already on the campaign again, and `GET /campaigns/:id/config` returns the numbers (the campaign's own first) with weights equal to the recipients each was given. The run, resend and retry paths are the shared ones, so each recipient goes out from its own number.
+- **Per-number breakdown:** `GET /v2/campaigns/:id` (`senders`) and `GET /v2/broadcast-wizard/broadcasts/:id` (`senders`, all runs of a series together) list recipients, sent, delivered and failed per number; empty for a send from one number, where the page shows nothing.
+- **Not done:** the test send goes from the first number only. Not verified against the real WhatsApp Cloud API or a real personal-number session (the sandbox sender stands in for both engines).
 
 ### Reference comparison (live Reference, read-only)
 

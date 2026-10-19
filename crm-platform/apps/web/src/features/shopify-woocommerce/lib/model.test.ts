@@ -4,6 +4,7 @@ import {
   AUTOMATION_GROUPS,
   autoKey,
   barHeight,
+  consentSkipReason,
   isHealthy,
   missingTemplate,
   money,
@@ -40,6 +41,17 @@ describe('the store screens model (TW-ECOM-004, 009, 023)', () => {
     expect(statusTone('failed')).toBe('bad');
     expect(statusTone('skipped')).toBe('muted');
     expect(statusTone('received')).toBe('warn');
+  });
+
+  it('reads the ConsentGate reason out of a skipped row, and nothing out of any other text', () => {
+    expect(consentSkipReason('Not messaged: consent (withdrawn)')).toBe('withdrawn');
+    expect(consentSkipReason('Not messaged: consent (no_consent_recorded)')).toBe(
+      'no_consent_recorded',
+    );
+    // A code outside the closed set is not taken for a reason.
+    expect(consentSkipReason('Not messaged: consent (made_up)')).toBeNull();
+    expect(consentSkipReason('no route')).toBeNull();
+    expect(consentSkipReason(null)).toBeNull();
   });
 
   it('calls the webhooks healthy for a delivery under a day old', () => {

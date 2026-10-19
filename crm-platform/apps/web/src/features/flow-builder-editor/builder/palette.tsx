@@ -10,7 +10,7 @@ import { Icon } from './node-card';
 
 function ModeBadge({ mode }: { mode: FlowType }) {
   const t = useTranslations('flb.builder.shell.palette');
-  const base = 'ml-1.5 rounded px-1.5 py-0.5 font-sans text-[10px] normal-case tracking-normal';
+  const base = 'ms-1.5 rounded px-1.5 py-0.5 font-sans text-[10px] normal-case tracking-normal';
   const tf = useFlb();
   if (mode === 'instagram')
     return (
@@ -33,6 +33,12 @@ function ModeBadge({ mode }: { mode: FlowType }) {
     );
   if (mode === 'email')
     return <span className={`${base} bg-[#E8F0FE] text-[#1A73E8]`}>{t('modeEmail')}</span>;
+  if (mode === 'web')
+    return (
+      <span className={`${base} bg-[var(--flb-rule)] text-[var(--flb-ink-700)]`}>
+        {flowTypeLabel(tf, 'web')}
+      </span>
+    );
   return (
     <span className={`${base} bg-[var(--flb-mint)] text-brand`}>{flowTypeLabel(tf, 'chat')}</span>
   );
@@ -79,7 +85,7 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
 
   return (
     <aside
-      className="flow-palette relative z-20 flex w-[260px] shrink-0 flex-col border-r border-border bg-background"
+      className="flow-palette relative z-20 flex w-[260px] shrink-0 flex-col border-e border-border bg-background"
       aria-label={t('ariaLabel')}
     >
       <div className="border-b border-border px-4 pt-4 pb-3">
@@ -93,7 +99,7 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
         <div className="relative">
           <svg
             viewBox="0 0 16 16"
-            className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+            className="absolute start-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
             fill="none"
             stroke="currentColor"
             strokeWidth="1.6"
@@ -106,7 +112,7 @@ export function Palette({ mode, query, onSearch, onAddCenter }: Props) {
             onChange={(e) => onSearch(e.target.value)}
             placeholder={t('searchPlaceholder')}
             aria-label={t('searchLabel')}
-            className="w-full rounded-full border border-border bg-background py-2 pr-3 pl-9 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
+            className="w-full rounded-full border border-border bg-background py-2 pe-3 ps-9 text-[12.5px] outline-none focus:border-brand focus:ring-4 focus:ring-brand/10"
           />
         </div>
       </div>

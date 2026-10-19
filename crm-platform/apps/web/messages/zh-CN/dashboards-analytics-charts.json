@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "已连接",
           "shopify": "已连接",
-          "google_sheets": "已签发 API 密钥",
-          "meta_catalog": "商品目录已关联"
+          "meta_catalog": "商品目录已关联",
+          "google_sheets": "Google 账号已连接"
         },
         "notConnected": "未连接",
         "connect": "连接",
@@ -405,6 +405,43 @@
           "sent": "发送至 {peer}",
           "received": "收到来自 {peer} 的消息",
           "empty": "此时间段内没有近期活动。"
+        },
+        "loginDevices": {
+          "title": "登录设备",
+          "subtitle": "此时间段内工作区的登录情况，按浏览器、系统和类型统计",
+          "active": "当前活跃 {n} 个",
+          "total": "{n, plural, other {# 次登录}}",
+          "empty": "此时间段内没有登录。",
+          "activeLegend": "当前活跃",
+          "endedLegend": "已退出或已过期",
+          "row": "{count} 次登录，当前活跃 {active} 个",
+          "group": {
+            "browser": "浏览器",
+            "os": "系统",
+            "kind": "类型"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "其他浏览器"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "其他系统"
+          },
+          "kind": {
+            "desktop": "桌面",
+            "mobile": "移动",
+            "unknown": "未知"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "队列",
         "name": "队列",
         "pending": "待处理",
-        "failed": "失败"
+        "failed": "失败",
+        "lastFailure": "最近一次失败原因"
       },
       "clear": {
         "button": "清除待处理任务",

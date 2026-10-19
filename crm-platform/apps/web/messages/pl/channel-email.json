@@ -120,7 +120,13 @@
       "limitDefault": "Domyślny platformy",
       "limitPerHour": "{count, plural, one {# e-mail na godzinę} few {# e-maile na godzinę} many {# e-maili na godzinę} other {# e-maila na godzinę}}",
       "limitSaved": "Limit wysyłki zapisany.",
-      "needsReauthImap": "Serwer poczty odrzucił zapisane hasło. Połącz ponownie i wpisz hasło jeszcze raz."
+      "needsReauthImap": "Serwer poczty odrzucił zapisane hasło. Połącz ponownie i wpisz hasło jeszcze raz.",
+      "test": "Przetestuj połączenie",
+      "testing": "Testowanie",
+      "lag": "Opóźnienie",
+      "lagUnderMinute": "Mniej niż minuta",
+      "lagMinutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+      "lagHours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}"
     },
     "outcome": {
       "connected": "Skrzynka połączona. Poczta z ostatnich 7 dni jest pobierana do skrzynki odbiorczej.",
@@ -325,6 +331,26 @@
         "smtpAuth": "Serwer poczty wychodzącej (SMTP) odrzucił nazwę użytkownika lub hasło. Sprawdź je i spróbuj ponownie.",
         "unreachable": "Nie można połączyć się z serwerem poczty lub jego certyfikat jest nieprawidłowy. Sprawdź serwer, port i zabezpieczenia.",
         "generic": "Nie udało się połączyć skrzynki. Spróbuj ponownie."
+      },
+      "test": {
+        "button": "Przetestuj dane logowania",
+        "testing": "Testowanie",
+        "imap": "Poczta przychodząca (IMAP)",
+        "smtp": "Poczta wychodząca (SMTP)",
+        "ok": "Zalogowano.",
+        "inbox": "Zalogowano. Skrzynka odbiorcza zawiera: {count, plural, one {# wiadomość} few {# wiadomości} many {# wiadomości} other {# wiadomości}}.",
+        "smtpOk": "Zalogowano. Nic nie wysłano.",
+        "note": "Nic nie zapisano i nie wysłano żadnego e-maila.",
+        "tooMany": "Zbyt wiele testów w krótkim czasie. Poczekaj minutę i spróbuj ponownie.",
+        "failed": "Nie udało się uruchomić testu. Spróbuj ponownie.",
+        "reasons": {
+          "auth_failed": "Serwer odrzucił nazwę użytkownika lub hasło.",
+          "tls": "Nie udało się zweryfikować bezpiecznego połączenia. Sprawdź nazwę serwera i ustawienie zabezpieczeń.",
+          "unreachable": "Nie udało się połączyć z serwerem. Sprawdź serwer, port i ustawienie zabezpieczeń.",
+          "blocked_address": "Ten adres serwera jest niedozwolony.",
+          "rejected": "Serwer odrzucił żądanie.",
+          "unknown": "Serwer nie odpowiedział zgodnie z oczekiwaniami."
+        }
       }
     },
     "sharing": {

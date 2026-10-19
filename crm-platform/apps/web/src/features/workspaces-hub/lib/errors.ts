@@ -9,6 +9,7 @@ export type HubErrorKey =
   | 'notFound'
   | 'reasonRequired'
   | 'orgSuspended'
+  | 'noOwner'
   | 'validation';
 
 export interface HubError {
@@ -32,6 +33,8 @@ export function hubError(err: unknown): HubError {
       return { key: 'reasonRequired', requestId };
     case ERROR_CODES.WSP_ORG_SUSPENDED:
       return { key: 'orgSuspended', requestId };
+    case ERROR_CODES.WSP_IMPERSONATION_NO_OWNER:
+      return { key: 'noOwner', requestId };
     case ERROR_CODES.VALIDATION_FAILED:
       return { key: 'validation', requestId };
     default:

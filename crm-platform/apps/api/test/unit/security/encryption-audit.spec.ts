@@ -1,6 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { readdirSync, readFileSync, statSync } from 'node:fs';
-import { join, relative, resolve } from 'node:path';
+import { join, relative, resolve, sep } from 'node:path';
 import { hash, verify } from '@node-rs/argon2';
 import type { ConfigService } from '@nestjs/config';
 import { describe, expect, it } from 'vitest';
@@ -146,7 +146,10 @@ function files(dir: string, out: string[] = []): string[] {
   }
   return out;
 }
-const ALL = files(SRC).map((p) => ({ p: relative(SRC, p), s: readFileSync(p, 'utf8') }));
+const ALL = files(SRC).map((p) => ({
+  p: relative(SRC, p).split(sep).join('/'),
+  s: readFileSync(p, 'utf8'),
+}));
 
 describe('source guards', () => {
   it('no secret, token, key or code is made with Math.random', () => {
@@ -182,6 +185,7 @@ describe('source guards', () => {
       'infra/providers/channel-email/graph-normalise.ts', // synthetic message id
       'infra/providers/channel-email/mime-parse.ts', // synthetic message id
       'infra/providers/auth-registration-security/avatar-download.ts', // ETag of an avatar
+      'modules/channel-wechat/wechat-rules.ts', // WeChat's request signature is SHA-1 over token, timestamp and nonce, fixed by its protocol
       'infra/providers/channel-sms/twilio-signature.ts', // Twilio's request signature is HMAC-SHA1 by their specification
       'infra/providers/chat-conversations/simulator.adapter.ts', // synthetic message id of the simulator
       'infra/providers/platform-payment-gateways/europe.drivers.ts', // the gateway's own request hash, fixed by its API
@@ -221,6 +225,7 @@ describe('source guards', () => {
           'common/crypto/crypto.service.ts',
           'modules/platform-infrastructure/offsite-backup/seal.ts',
           'infra/providers/platform-payment-gateways/india.drivers.ts', // a gateway's own payload encryption, required by its API
+          'modules/channel-wechat/wechat-rules.ts', // decrypts WeChat's AES-256-CBC inbound messages, the cipher its protocol fixes (never used for stored data)
         ].includes(p),
     ).map((f) => f.p);
     expect(bad).toEqual([]);

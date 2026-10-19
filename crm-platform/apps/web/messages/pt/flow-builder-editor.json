@@ -685,6 +685,7 @@
         "anotherPart": "Outra parte deste fluxo. Ela é executada quando um botão ou linha de lista leva até aqui{lost, select, true {: nada leva aqui ainda, então ela nunca seria executada.} other {.}}",
         "addFirstStep": "Adicionar a primeira etapa",
         "branchingEnds": "{kind, select, list {Esta lista encerra} other {Este conjunto de botões encerra}} esta parte: o que é enviado a seguir depende do que o cliente escolher.",
+        "optionsCarryOn": "Cada {kind, select, list {linha} other {botão}} pode iniciar o seu próprio fluxo ou continuar com o próximo passo abaixo.",
         "thenGoTo": "Depois ir para",
         "confirmImport": {
           "title": "Substituir este fluxo pelo arquivo?",
@@ -717,9 +718,10 @@
             "ask": "Perguntar ao cliente",
             "handoff": "Transferir",
             "logic": "Decidir",
-            "answer": "Responder"
+            "answer": "Responder",
+            "action": "Ações"
           },
-          "blockedTitle": "Botões e listas encerram um fluxo, então só podem ficar por último.",
+          "blockedTitle": "Este passo termina esta parte, por isso só pode ficar no fim.",
           "blockedTitleFaq": "Responder com FAQ tem duas saídas, por isso só pode ficar por último."
         },
         "card": {
@@ -733,11 +735,27 @@
           "faqExits": {
             "matched": "Respondida",
             "no_match": "Sem correspondência"
-          }
+          },
+          "close": "Fechar",
+          "clickToEdit": "Clique para editar",
+          "outsideToSave": "Clique em qualquer lugar fora do passo para salvar as alterações",
+          "addCondition": "Adicionar uma condição depois deste passo",
+          "conditionLast": "Uma condição encerra esta parte, então só pode ficar no final.",
+          "duplicateTitle": "Duplicar este passo?",
+          "duplicateBody": "Uma cópia é adicionada logo depois.",
+          "deleteTitle": "Excluir este passo?",
+          "deleteBody": "O passo é removido do fluxo.",
+          "stage": "Etapa {stage}",
+          "storedIn": "Os valores serão salvos na propriedade <b>{property}</b> do contato",
+          "actions": "Ações",
+          "actionsHint": "Adicione um passo que roda logo depois deste.",
+          "actionsBlocked": "Um passo que encerra sua parte não pode ter outro depois."
         },
         "editors": {
           "linkLabel": "Para onde isto leva",
+          "linkChoose": "Escolha para onde leva…",
           "linkEnds": "Termina aqui (nada mais é enviado)",
+          "linkNext": "Continua com o próximo passo",
           "linkOption": "{stage} · {label}{self, select, true { (esta etapa)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Levar a um novo fluxo…",
           "question": "Pergunta",
@@ -837,17 +855,13 @@
             "hour": "horas",
             "day": "dias"
           },
-          "location": {
-            "placeName": "Nome do local",
-            "placePlaceholder": "Nosso escritório",
-            "address": "Endereço",
-            "latitude": "Latitude",
-            "longitude": "Longitude"
-          },
           "template": {
             "label": "Template aprovado",
             "hint": "Somente templates aprovados para o seu número de WhatsApp são listados.",
-            "choose": "Escolha um template…"
+            "choose": "Escolha um template…",
+            "buttons": "Botões",
+            "variables": "Preenchido com dados do contato",
+            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo."
           },
           "cta": {
             "buttonText": "Texto do botão",
@@ -861,7 +875,12 @@
             "add": "Adicionar outro botão",
             "remove": "Remover botão",
             "opensPhone": "Número de telefone",
-            "opensEmail": "Endereço de e-mail"
+            "opensEmail": "Endereço de e-mail",
+            "errors": {
+              "url": "Insira um endereço web válido que comece com https://",
+              "phone": "Insira um número de telefone válido, por exemplo +91 98765 43210",
+              "email": "Insira um e-mail válido, por exemplo name@example.com"
+            }
           },
           "carousel": {
             "intro": "Mensagem acima dos cartões",
@@ -1044,13 +1063,7 @@
           "info": "Adicione até {max} botões de CTA em uma mensagem — combine Visitar site, Ligar e Copiar código como quiser. É o mesmo limite dos botões de template do WhatsApp.",
           "buttonLabel": "Rótulo do botão",
           "addButton": "Adicionar botão",
-          "maxReached": "Máx. de {max} botões atingido.",
-          "locationTitle": "Título",
-          "locationTitlePlaceholder": "Nosso escritório",
-          "locationAddress": "Endereço",
-          "locationAddressPlaceholder": "Rua, cidade, país",
-          "locationLatitude": "Latitude",
-          "locationLongitude": "Longitude"
+          "maxReached": "Máx. de {max} botões atingido."
         },
         "logic": {
           "operator": {
@@ -1118,19 +1131,14 @@
           "aiModelPick": "— escolha o modelo —",
           "aiModelNone": "Nenhum modelo de IA ativado — peça ao admin para ativar um",
           "aiModelNotEnabled": "{value} (não ativado)",
-          "aiAssistantNone": "— nenhuma (usar só o prompt acima) —",
           "aiAssistantOption": "{name} · {count, plural, one {# fonte} other {# fontes}}",
           "aiAssistantMissing": "(assistente {id})",
-          "aiAssistantHintNone": "Nenhuma base de conhecimento ainda. Crie uma em <link>Treinamento de IA</link> e clique em Atualizar lista para escolhê-la aqui.",
-          "aiAssistantHintEmpty": "Observação: este assistente tem 0 fontes treinadas. Adicione algumas em <link>Treinamento de IA</link> ou a resposta usará só o prompt.",
-          "aiAssistantHint": "Traz o conteúdo treinado do assistente escolhido para esta resposta. <link>Gerenciar conhecimento →</link>",
           "aiModelLabel": "Modelo",
           "aiModelHint": "Modelos que o admin ativou — mais qualquer provedor para o qual você adicionou sua própria chave (Configurações → Chaves de IA, em planos BYOK).",
           "aiModelHintNone": "Nenhum provedor disponível ainda. Adicione sua própria chave em <link>Configurações → Chaves de IA</link> (planos BYOK) ou peça ao admin para ativar um.",
           "aiPrompt": "Prompt de sistema",
           "aiSave": "Salvar resposta em",
           "aiSaveHint": "Os nós seguintes a leem como <v>{save}</v> — ou <v>{path}</v> ao extrair.",
-          "aiAssistantLabel": "Base de conhecimento (opcional)",
           "aiExtract": "<strong>Extrair dados estruturados (JSON)</strong> — transforma a mensagem em campos",
           "aiFields": "Campos a extrair",
           "aiFieldsHint": "Chaves separadas por vírgula. A IA retorna UM objeto JSON; cada chave vira <v>{key}</v> (e <v>{rows}</v> quando vários registros são detectados — ex.: para um nó do Google Sheets).",
@@ -1143,7 +1151,25 @@
           "subflowMissing": "Fluxo {id} (não está no espaço de trabalho)",
           "subflowLabel": "Fluxo a executar",
           "subflowHint": "Escolha outro fluxo salvo. Quando este nó dispara, esse fluxo roda do início ao fim antes de o controle voltar ao próximo nó daqui.",
-          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado."
+          "endInfo": "Este nó encerra o fluxo. Nada conectado depois dele será executado.",
+          "aiSetupLegend": "Como esta etapa deve responder?",
+          "aiSetupAgent": "Agente de IA",
+          "aiSetupAgentDesc": "Usa as instruções, o modelo e o conhecimento de um agente do Treinamento de IA.",
+          "aiSetupCustom": "Configuração personalizada",
+          "aiSetupCustomDesc": "Escolha um modelo e escreva as instruções aqui.",
+          "aiAgentLabel": "Agente de IA",
+          "aiAgentPick": "— escolha um agente de IA —",
+          "aiAgentHint": "O agente traz suas próprias instruções, modelo e conhecimento. Altere-os no <link>Treinamento de IA</link>.",
+          "aiAgentNone": "Você ainda não tem agentes de IA. <link>Crie seu primeiro agente de IA</link> e clique em Atualizar lista.",
+          "aiAgentRequired": "Escolha um agente de IA ou mude para uma configuração personalizada.",
+          "aiAgentSummary": "Modelo {model} · {count, plural, one {# fonte de conhecimento} other {# fontes de conhecimento}}",
+          "aiAgentNoSources": "Este agente ainda não tem conhecimento, então responde só com as instruções dele. Adicione fontes no <link>Treinamento de IA</link>.",
+          "aiPromptRequired": "Escreva as instruções para a IA.",
+          "aiKnowledgeLabel": "Conhecimento de um agente de IA (opcional)",
+          "aiKnowledgeNone": "— nenhum —",
+          "aiKnowledgeHint": "Adiciona à resposta as fontes treinadas desse agente. As instruções e o modelo dele não são usados em uma configuração personalizada. <link>Gerenciar no Treinamento de IA →</link>",
+          "aiAdvanced": "Opções avançadas",
+          "aiCreateAgent": "+ Criar agente de IA"
         },
         "options": {
           "prompt": "Prompt",
@@ -1317,7 +1343,8 @@
             "date_field_match": "Agendamento: em relação a uma data do contato (aniversário…)",
             "schedule": "Agendamento: em uma data e hora",
             "shopify_event": "Comércio: um evento da loja Shopify",
-            "woocommerce_event": "Comércio: um evento da loja WooCommerce"
+            "woocommerce_event": "Comércio: um evento da loja WooCommerce",
+            "segment_leave": "Público: quando um contato sai de um segmento"
           },
           "tagsLoading": "Carregando tags…",
           "tagPick": "— escolha a tag —",
@@ -1411,7 +1438,8 @@
             "productId": "ID do produto (opcional)",
             "productIdHint": "Em branco = qualquer produto do pedido.",
             "storeNote": "O cliente é associado a um contato salvo pelo número de telefone; ninguém é criado por causa de um pedido. “Adicionado ao carrinho” e “produto visualizado” não são oferecidos: a loja não informa esses eventos.",
-            "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia."
+            "updatedNote": "Dispara sempre que uma pessoa ou importação altera um contato. Uma alteração feita por outro fluxo não o inicia.",
+            "segmentLeaveHint": "Executa uma vez cada vez que um contato que estava dentro deste segmento é encontrado fora dele após ser atualizado, marcado ou listado. Só se percebe que um contato saiu se o fluxo o tiver visto dentro antes."
           }
         }
       },
@@ -1631,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— escolha uma planilha —",
-              "empty": "Nenhuma planilha encontrada — cole uma URL ou ID abaixo",
               "loading": "Carregando planilhas…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então suas planilhas não podem ser listadas. Cole o id ou o link da planilha.",
-              "idPlaceholder": "Id da planilha",
-              "saved": "Planilha {id}… (não carregada)"
+              "saved": "Planilha {id}… (não carregada)",
+              "empty": "Nenhuma planilha encontrada na conta Google conectada",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar suas planilhas. Conecte o Google para escolher uma."
             },
             "docs": {
               "pick": "— escolha um documento modelo —",
               "empty": "Nenhum documento encontrado",
               "loading": "Carregando documentos…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus documentos não podem ser listados. Cole o id ou o link do documento.",
-              "idPlaceholder": "Id do documento",
-              "saved": "Documento {id}… (não carregado)"
+              "saved": "Documento {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus documentos. Conecte o Google para escolher um."
             },
             "forms": {
               "pick": "— escolha um formulário —",
               "empty": "Nenhum formulário encontrado",
               "loading": "Carregando formulários…",
-              "notConnected": "O Google não está conectado a este espaço de trabalho, então seus formulários não podem ser listados. Cole o id ou o link do formulário.",
-              "idPlaceholder": "Id do formulário",
-              "saved": "Formulário {id}… (não carregado)"
+              "saved": "Formulário {id}… (não carregado)",
+              "notConnected": "O Google não está conectado a este workspace, então não é possível listar seus formulários. Conecte o Google para escolher um."
             }
           },
           "sheetsIntro": "Adiciona uma linha a uma Planilha Google (modo escrita) ou busca uma linha por uma coluna-chave (modo leitura). Usa a conta Google conectada do espaço de trabalho em <link>/google-account</link>.",
@@ -1673,8 +1698,6 @@
           "addColumn": "Adicionar coluna",
           "matchByHeader": "Corresponder colunas pelo nome do cabeçalho",
           "matchByHeaderHint": "Grava cada valor na coluna da planilha com esse cabeçalho, em qualquer ordem. Deixe desativado para adicionar da esquerda para a direita, pela posição — o padrão.",
-          "pasteLabel": "…ou cole uma URL ou ID de planilha",
-          "pasteHint": "Funciona mesmo se o seletor estiver vazio — cole o link da planilha e extraímos o ID.",
           "docsIntro": "Copie um documento modelo, preencha os <mono>{placeholders}</mono>, compartilhe com qualquer pessoa com o link e envie a URL ao cliente. Coloque <mono>{key}</mono> no seu modelo onde o valor deve ir.",
           "templateDocument": "Documento modelo",
           "newCopyTitle": "Título da nova cópia",
@@ -1689,7 +1712,6 @@
           "messageTemplateHint": "O balão do bot enviado ao cliente. <mono>{token}</mono> recebe o link de compartilhamento.",
           "messageTemplatePlaceholder": "Aqui está o seu documento:\n'{{'doc_url'}}'",
           "saveUrl": "Salvar URL em variável",
-          "formIntro": "Envia a URL do formulário pelo WhatsApp, pausa o fluxo e retoma pela saída <b>enviado</b> quando o cliente o preencher. As respostas viram variáveis do fluxo.",
           "googleForm": "Formulário Google",
           "bodyBubble": "Balão do corpo (enviado acima do link)",
           "bodyBubblePlaceholder": "Preencha este formulário curto:",
@@ -1697,11 +1719,21 @@
           "saveResponsesHint": "As respostas individuais também são salvas como <mono>{token}</mono>.",
           "expireAfter": "Expirar após (segundos)",
           "expireAfterHint": "Quanto tempo esperar por um envio antes do tempo esgotar. 86400 = 24 h.",
-          "setupTitle": "Configuração única — cole isto no editor de Script do seu formulário",
-          "setupOpen": "Abra seu formulário → <mono>menu ⋮</mono> → <mono>Editor de script</mono>",
-          "setupDownload": "<link>Baixe o script (.gs)</link> e cole-o",
-          "setupTrigger": "Adicione um gatilho: <mono>onFormSubmit</mono> · A partir do formulário · Ao enviar o formulário",
-          "setupWarning": "Sem este script, o formulário continuará registrando as respostas no Formulários Google, mas o fluxo não será retomado."
+          "connection": {
+            "open": "Abrir conta do Google",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs e Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "O Google não está configurado para esta plataforma, então esta etapa falha quando o fluxo é executado.",
+            "disconnected": "Nenhuma conta Google está conectada, então esta etapa falha quando o fluxo é executado. Conecte o Google primeiro.",
+            "needsReconnect": "O Google não aceita mais a conta conectada, então esta etapa falha quando o fluxo é executado. Reconecte o Google primeiro.",
+            "missing": "A conta Google conectada não recebeu a permissão {permission}, então esta etapa falha quando o fluxo é executado."
+          },
+          "formIntro": "Envia o URL do formulário por WhatsApp, pausa o fluxo e o retoma pela porta <b>submitted</b> quando o cliente preenche o formulário. As respostas são lidas do formulário pela sua conta Google conectada, então não é preciso colar nada no formulário. As respostas viram variáveis do fluxo.",
+          "noListing": "Não foi possível listar seus arquivos porque a permissão de lista de arquivos do Drive não foi concedida na página da conta Google. Adicione-a lá para escolher arquivos."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1984,89 @@
         "label": "Ícone (opcional)",
         "add": "Adicionar ícone",
         "saveFirst": "Salve o bot uma vez para adicionar um ícone."
+      },
+      "buttonAction": {
+        "label": "Ação ao tocar no botão",
+        "kind": {
+          "none": "Ir para o próximo passo",
+          "flow": "Conectar fluxo",
+          "live_agent": "Agente ao vivo",
+          "opt_in": "Aceitar (opt-in)",
+          "opt_out": "Cancelar (opt-out)"
+        },
+        "pickFlow": "Escolha um fluxo",
+        "loadingFlows": "Carregando fluxos…",
+        "flowMissing": "Fluxo {id} (não encontrado)",
+        "hint": {
+          "flow": "Inicia o fluxo escolhido para este contato e a conversa continua lá. Nada é conectado após este botão.",
+          "live_agent": "Passa a conversa para a equipe que você escolher. Nada é conectado após este botão.",
+          "opt_in": "Marca o contato como inscrito nas mensagens de marketing e depois segue para o passo conectado.",
+          "opt_out": "Marca o contato como descadastrado das mensagens de marketing e depois segue para o passo conectado."
+        }
+      },
+      "messageTools": {
+        "format": "Formatação do texto",
+        "bold": "Negrito",
+        "italic": "Itálico",
+        "strike": "Tachado",
+        "mono": "Monoespaçado",
+        "bullet": "Lista com marcadores",
+        "numbered": "Lista numerada",
+        "emoji": "Emoji",
+        "emojiSearch": "Buscar emoji",
+        "emojiNone": "Nenhum emoji encontrado",
+        "variable": "Inserir uma variável",
+        "variableSearch": "Buscar variáveis",
+        "groupContact": "Propriedades do contato",
+        "groupFlow": "Salvas neste fluxo",
+        "variableNone": "Nenhuma variável encontrada"
+      },
+      "askAge": {
+        "minAge": "Idade mínima",
+        "minAgeHint": "Deixe vazio para usar a idade do seu espaço de trabalho na Central de conformidade (18 se nenhuma estiver definida). Entre 1 e 21.",
+        "whenUnder": "Se a resposta for menor que essa idade",
+        "whenUnderHint": "O contato é marcado como menor de qualquer forma. O cliente nunca é informado de qual resposta é aceita.",
+        "end": "Encerrar o fluxo com uma linha curta e neutra",
+        "continue": "Continuar e deixar eu ramificar conforme a resposta",
+        "endText": "Linha de encerramento",
+        "endTextHint": "Enviada antes de o fluxo terminar. Não mencione a idade. Se estiver vazio, usa \"Não podemos continuar.\"",
+        "continueNote": "As próximas etapas podem ler a variável da resposta seguida de _age_gate (por exemplo answer_age_gate), que vale under ou adult. Adicione uma Condição para ramificar, por exemplo para pedir um dos pais ou responsável.",
+        "note": "Peça a idade somente onde precisar. A resposta é gravada no contato: uma data de nascimento como data de nascimento, e uma resposta de menor de idade marca o contato como menor."
+      },
+      "location": {
+        "modeLabel": "Como definir a localização",
+        "modeLink": "Link do Google Maps",
+        "modeCoords": "Latitude e longitude",
+        "linkLabel": "Link do Google Maps",
+        "linkPlaceholder": "Cole um link, por exemplo https://maps.app.goo.gl/…",
+        "linkHint": "No Google Maps, abra o local, toque em Compartilhar e depois em Copiar link. Links curtos e longos funcionam.",
+        "finding": "Consultando o link…",
+        "retry": "Tentar de novo",
+        "latitude": "Latitude",
+        "longitude": "Longitude",
+        "coordsHint": "A latitude vai de -90 a 90 e a longitude de -180 a 180. Você pode colar “lat, lng” em qualquer um dos campos.",
+        "found": "Localização encontrada",
+        "openInMaps": "Abrir no Google Maps",
+        "optionalHint": "Opcional: aparece no cartão de mapa que o cliente recebe. Você pode deixar os dois vazios.",
+        "optional": "(opcional)",
+        "placeName": "Nome do local",
+        "placePlaceholder": "Nosso escritório",
+        "address": "Endereço",
+        "problem": {
+          "empty": "Informe um link do Google Maps ou coordenadas.",
+          "lat_missing": "Informe uma latitude.",
+          "lng_missing": "Informe uma longitude.",
+          "lat_nan": "A latitude deve ser um número, por exemplo 18.5204.",
+          "lng_nan": "A longitude deve ser um número, por exemplo 73.8567.",
+          "lat_range": "A latitude deve estar entre -90 e 90.",
+          "lng_range": "A longitude deve estar entre -180 e 180.",
+          "zero": "0, 0 não é um lugar real. Informe as coordenadas reais.",
+          "not_url": "Isto não parece um link. Cole o link completo do Google Maps.",
+          "not_maps": "Este não é um link do Google Maps.",
+          "no_coords": "Este link não aponta para um ponto exato. Abra o local no Google Maps, toque em Compartilhar e copie esse link, ou informe as coordenadas.",
+          "unresolved": "Este link curto ainda não foi consultado. Saia do campo ou tente de novo.",
+          "resolve_failed": "Não foi possível ler este link. Verifique se ele abre no Google Maps ou informe as coordenadas."
+        }
       }
     },
     "contracts": {
@@ -2262,7 +2377,9 @@
         "phone": "Número de telefone",
         "number": "Número",
         "alphanumeric": "Letras e números",
-        "date": "Data"
+        "date": "Data",
+        "age": "Idade",
+        "date_of_birth": "Data de nascimento"
       },
       "askInputWrong": {
         "text": "Tente novamente",
@@ -2271,7 +2388,9 @@
         "phone": "Digite um número de telefone válido",
         "number": "Digite um número válido",
         "alphanumeric": "Use somente letras e números",
-        "date": "Digite uma data válida ({format})"
+        "date": "Digite uma data válida ({format})",
+        "age": "Informe sua idade como um número inteiro",
+        "date_of_birth": "Informe uma data válida ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2316,7 +2435,8 @@
         "date_field_match": "ao coincidir a data",
         "schedule": "no agendamento",
         "shopify_event": "no evento do Shopify",
-        "woocommerce_event": "no evento do WooCommerce"
+        "woocommerce_event": "no evento do WooCommerce",
+        "segment_leave": "ao sair do segmento"
       },
       "ports": {
         "manual": "manual",
@@ -2379,7 +2499,9 @@
         "noSenderInstagram": "O nó Gatilho não tem conta do Instagram selecionada — escolha uma na etapa Gatilho.",
         "noSenderFacebook": "O nó Gatilho não tem Página do Facebook selecionada — escolha uma na etapa Gatilho.",
         "noSenderNumber": "O nó Gatilho não tem número selecionado — escolha um na etapa Gatilho.",
-        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo."
+        "faqMinScore": "“{node}” tem uma pontuação mínima fora do intervalo de 0.05 a 0.99. Corrija-a ou deixe em branco para usar a configuração do fluxo.",
+        "locationInvalid": "“{node}” não tem uma localização válida: cole um link do Google Maps ou informe latitude (-90 a 90) e longitude (-180 a 180).",
+        "aiNoAgent": "“{node}” não tem agente de IA nem instruções — escolha um agente de IA ou selecione Configuração personalizada e escreva as instruções."
       }
     },
     "simpleModel": {
@@ -2470,6 +2592,14 @@
         "faq": {
           "label": "Responder com FAQ",
           "help": "Compara a mensagem do cliente com suas FAQs. Encerra este fluxo: uma saída se uma FAQ respondeu, outra se não"
+        },
+        "apiLibrary": {
+          "label": "Chamada de API",
+          "help": "Chame uma API da sua biblioteca de APIs"
+        },
+        "code": {
+          "label": "Função JS",
+          "help": "Execute um pequeno trecho de JavaScript"
         }
       },
       "typeLabel": {
@@ -2487,7 +2617,9 @@
         "assign": "Atribuir a um atendente",
         "carousel": "Carrossel",
         "condition": "Condição",
-        "faq": "Responder com FAQ"
+        "faq": "Responder com FAQ",
+        "api_library": "Chamada de API",
+        "code": "Função JS"
       },
       "stepLabel": {
         "questionOf": "Pergunta · {kind}"
@@ -2510,10 +2642,11 @@
         "writeQuestion": "Etapa {stage}: escreva a pergunta.",
         "nameVariable": "Etapa {stage}: dê um nome à variável em que a resposta é salva.",
         "chooseAnswerProperty": "Etapa {stage}: escolha a propriedade do contato para onde a resposta é copiada.",
-        "setCoordinates": "Etapa {stage}: defina a latitude e a longitude.",
+        "setCoordinates": "Etapa {stage}: cole um link do Google Maps ou informe latitude e longitude válidas.",
         "chooseTemplate": "Etapa {stage}: escolha um modelo.",
         "chooseTeam": "Etapa {stage}: escolha a equipe para onde a conversa vai.",
         "ctaLabelLink": "Etapa {stage}: dê um nome e um link ao botão.",
+        "ctaLinkInvalid": "Etapa {stage}: o destino do botão não é válido para o seu tipo.",
         "choosePickedProperty": "Etapa {stage}: escolha a propriedade do contato para onde a opção escolhida é copiada.",
         "buttonsPrompt": "Etapa {stage}: escreva a mensagem acima dos botões.",
         "addButton": "Etapa {stage}: adicione pelo menos um botão.",
@@ -2528,7 +2661,15 @@
         "carouselCards": "Passo {stage}: adicione pelo menos um cartão e dê um título a cada cartão.",
         "carouselButtons": "Passo {stage}: dê um nome a cada botão, e um link, número ou endereço onde ele abre algo.",
         "conditionIncomplete": "Passo {stage}: complete as regras da condição (uma variável e um valor em cada).",
-        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo."
+        "faqMinScore": "Etapa {stage}: a pontuação mínima deve estar entre 0.05 e 0.99, ou use a configuração do fluxo.",
+        "optionNotConnected": "Etapa {stage}: {kind, select, row {a linha} other {o botão}} \"{label}\" não leva a lugar nenhum. Adicione uma etapa para ele ou dê-lhe uma ação.",
+        "tooManyOptions": "Etapa {stage}: {kind, select, row {uma lista pode ter no máximo {max} linhas} other {um conjunto de botões pode ter no máximo {max} botões}}.",
+        "chooseFlow": "Passo {stage}: escolha o fluxo que o botão inicia.",
+        "chooseApi": "Passo {stage}: escolha a API a chamar.",
+        "writeCode": "Passo {stage}: escreva o código a executar.",
+        "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
+        "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
       },
       "faqSummary": "{hasCategory, select, true {Das suas FAQs · {category}} other {Das suas FAQs}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "Compra simulada: {name} → saída \"comprado\"",
       "simAbandon": "Abandono simulado → saída \"abandonado\"",
       "faqAnswered": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs, então nada é enviado e {ref} fica vazio. Seguindo pela saída “respondida”.",
-      "faqNoMatch": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs e a saída “respondida” não está conectada, então seguindo por “sem correspondência”. {ref} fica vazio."
+      "faqNoMatch": "(simulado) Responder com FAQ para “{query}”: o chat de teste não consulta suas FAQs e a saída “respondida” não está conectada, então seguindo por “sem correspondência”. {ref} fica vazio.",
+      "locationSkipped": "(localização) ignorada: sem coordenadas válidas"
     }
   }
 }

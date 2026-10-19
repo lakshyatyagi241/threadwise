@@ -4,41 +4,37 @@ import Link from 'next/link';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
-import { Badge, Button, Select, Spinner, Tabs, Textarea, cn } from '@crm/ui';
-import {
-  NOTE_BODY_MAX,
-  type ConversationEvent,
-  type ConversationNote,
-  type InboxConversationDetail,
-} from '@crm/contracts';
+import { Badge, Button, Select, Spinner, cn } from '@crm/ui';
+import { type ConversationEvent, type InboxConversationDetail } from '@crm/contracts';
 import { LinkedAppointments } from '@/features/appointments';
+import { ContactNotesSection } from '@/features/contacts-attributes-tags';
 import { ChatInsightCard, ScoreCard } from '@/features/lead-scoring';
 import { LinkedTasks } from '@/features/tasks';
 import { KEYS, useAssignees, useTimeline } from '../api/hooks';
 import { leaveDayText } from '../lib/leave-mark';
 import { eventLabel } from '../lib/timeline';
 import { fullStamp, listTime } from '../lib/time';
-import { CheckCircleIcon, ExternalIcon, NoteIcon, TrashIcon, UserPlusIcon } from './icons';
-import { Avatar, ChannelTag, useErrorText } from './parts';
+import {
+  CheckCircleIcon,
+  ChatIcon,
+  ClockIcon,
+  ExternalIcon,
+  NoteIcon,
+  UserPlusIcon,
+} from './icons';
+import { Avatar, ChannelTag } from './parts';
 import { TagGroups, type TagGroupsProps } from './tag-groups';
 
 export interface ContactPanelProps {
   detail: InboxConversationDetail;
   meId: string;
-  can: { assign: boolean; assignSelf: boolean; resolve: boolean; note: boolean };
+  can: { assign: boolean; assignSelf: boolean; resolve: boolean };
   presence: ReadonlyMap<string, string>;
-  /** Oldest first. */
-  notes: ConversationNote[];
-  notesLoading: boolean;
-  notesError: boolean;
   nowMs: number;
   assigning: boolean;
   resolving: boolean;
   onAssign: (change: { userId?: string | null; teamId?: string | null }) => void;
   onToggleResolved: () => void;
-  onAddNote: (body: string) => Promise<boolean>;
-  onDeleteNote: (id: string) => void;
-  canDeleteNote: (note: ConversationNote) => boolean;
   onOpenConversation: (id: string) => void;
   /** May the person edit the contact (`record.contacts.update`): the contact tags then link to it. */
   canEditContact?: boolean;
@@ -56,59 +52,85 @@ export function ContactPanel(props: ContactPanelProps) {
   const { detail } = props;
   const contactId = detail.contactSummary?.id ?? detail.contact?.id ?? null;
 
+  const tp = useTranslations('team-inbox-conversations.panel.past');
+  type SectionId = 'notes' | 'timeline' | 'past';
+  const [open, setOpen] = useState<SectionId | null>('notes');
+  const sections: Array<{
+    id: SectionId;
+    title: string;
+    icon: React.ReactNode;
+    content: React.ReactNode;
+  }> = [
+    {
+      id: 'notes',
+      title: t('notes.tab'),
+      icon: <NoteIcon className="size-4" />,
+      content: <ContactNotesTab contactId={contactId} />,
+    },
+    {
+      id: 'timeline',
+      title: t('timeline.tab'),
+      icon: <ClockIcon className="size-4" />,
+      content: <TimelineTab conversationId={detail.id} />,
+    },
+    ...(detail.pastConversations.length > 0
+      ? [
+          {
+            id: 'past' as const,
+            title: tp('title'),
+            icon: <ChatIcon className="size-4" />,
+            content: (
+              <PastConversations
+                items={detail.pastConversations}
+                nowMs={props.nowMs}
+                onOpen={props.onOpenConversation}
+              />
+            ),
+          },
+        ]
+      : []),
+  ];
   return (
-    <div className="space-y-4 p-4" data-testid="inbox-contact-panel">
-      <ContactSummary detail={detail} contactId={contactId} />
+    <div className="flex min-h-full" data-testid="inbox-contact-panel">
+      <div className="min-w-0 flex-1 space-y-4 p-4">
+        <ContactSummary detail={detail} contactId={contactId} />
 
-      <TagGroups
-        detail={detail}
-        contactId={contactId}
-        canEditContact={props.canEditContact ?? false}
-        tags={props.tags}
-      />
-
-      <LeadScoreSection detail={detail} contactId={contactId} />
-
-      <AssigneeSection {...props} />
-
-      <section aria-label={t('tabsLabel')}>
-        <Tabs
-          defaultValue="notes"
-          items={[
-            {
-              id: 'notes',
-              label:
-                props.notes.length > 0
-                  ? `${t('notes.tab')} (${props.notes.length})`
-                  : t('notes.tab'),
-              content: <NotesTab {...props} />,
-            },
-            {
-              id: 'timeline',
-              label: t('timeline.tab'),
-              content: <TimelineTab conversationId={detail.id} />,
-            },
-          ]}
+        <TagGroups
+          detail={detail}
+          contactId={contactId}
+          canEditContact={props.canEditContact ?? false}
+          tags={props.tags}
         />
-      </section>
 
-      <PastConversations
-        items={detail.pastConversations}
-        nowMs={props.nowMs}
-        onOpen={props.onOpenConversation}
-      />
+        <LeadScoreSection detail={detail} contactId={contactId} />
 
-      {contactId && (
-        <div className="space-y-3" data-testid="inbox-contact-links">
-          <LinkedTasks
-            kind="contact"
-            id={contactId}
-            label={detail.contactSummary?.name ?? detail.contact?.name ?? undefined}
-            compact
-          />
-          <LinkedAppointments contactId={contactId} />
-        </div>
-      )}
+        <AssigneeSection {...props} />
+
+        {sections.map((sec) => (
+          <PanelSection
+            key={sec.id}
+            id={sec.id}
+            title={sec.title}
+            icon={sec.icon}
+            open={open === sec.id}
+            onToggle={() => setOpen(open === sec.id ? null : sec.id)}
+          >
+            {sec.content}
+          </PanelSection>
+        ))}
+
+        {contactId && (
+          <div className="space-y-3" data-testid="inbox-contact-links">
+            <LinkedTasks
+              kind="contact"
+              id={contactId}
+              label={detail.contactSummary?.name ?? detail.contact?.name ?? undefined}
+              compact
+            />
+            <LinkedAppointments contactId={contactId} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -386,117 +408,14 @@ function AssigneeSection(props: ContactPanelProps) {
   );
 }
 
-function NotesTab(props: ContactPanelProps) {
+/**
+ * The contact's own notes: the same list the contact page has, shared by every conversation with this person. They are not the
+ * conversation's internal notes, which are written in the composer and sit in the thread.
+ */
+function ContactNotesTab({ contactId }: { contactId: string | null }) {
   const t = useTranslations('team-inbox-conversations.panel.notes');
-  const errorText = useErrorText();
-  const locale = useLocale();
-  const timeZone = useTimeZone();
-  const [text, setText] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [failed, setFailed] = useState(false);
-  const trimmed = text.trim();
-
-  async function add() {
-    if (!trimmed || busy) return;
-    setBusy(true);
-    setFailed(false);
-    const ok = await props.onAddNote(trimmed);
-    setBusy(false);
-    if (ok) setText('');
-    else setFailed(true);
-  }
-
-  return (
-    <div className="space-y-3">
-      {props.can.note && (
-        <div className="space-y-2">
-          <label htmlFor="inbox-note-input" className="sr-only">
-            {t('label')}
-          </label>
-          <Textarea
-            id="inbox-note-input"
-            data-testid="inbox-note-input"
-            rows={3}
-            value={text}
-            maxLength={NOTE_BODY_MAX}
-            placeholder={t('placeholder')}
-            onChange={(e) => setText(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-                e.preventDefault();
-                void add();
-              }
-            }}
-          />
-          <div className="flex items-center justify-between gap-2">
-            <p className="text-[11px] text-muted-foreground">{t('hint')}</p>
-            <Button
-              size="sm"
-              data-testid="inbox-note-add"
-              disabled={!trimmed || busy}
-              onClick={() => void add()}
-            >
-              {busy && <Spinner />}
-              {t('add')}
-            </Button>
-          </div>
-          {failed && (
-            <p role="alert" className="text-xs text-danger">
-              {t('addFailed')}
-            </p>
-          )}
-        </div>
-      )}
-
-      {props.notesLoading && (
-        <p role="status" className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Spinner /> {t('loading')}
-        </p>
-      )}
-      {props.notesError && (
-        <p role="alert" className="text-xs text-danger">
-          {errorText('NETWORK')}
-        </p>
-      )}
-      {!props.notesLoading && !props.notesError && props.notes.length === 0 && (
-        <p className="text-sm text-muted-foreground">{t('empty')}</p>
-      )}
-      <ul className="space-y-2">
-        {props.notes
-          .slice()
-          .reverse()
-          .map((n) => (
-            <li
-              key={n.id}
-              data-testid="inbox-panel-note"
-              className="rounded-md border border-warning/30 bg-warning/10 p-2.5 text-sm"
-            >
-              <div className="mb-1 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-                <NoteIcon width={11} height={11} className="text-warning" />
-                <span className="font-medium text-foreground">
-                  {n.author.name ?? t('unknownAuthor')}
-                </span>
-                <span>· {fullStamp(n.createdAt, locale, timeZone)}</span>
-                {props.canDeleteNote(n) && (
-                  <button
-                    type="button"
-                    aria-label={t('delete')}
-                    title={t('delete')}
-                    onClick={() => props.onDeleteNote(n.id)}
-                    className="ms-auto rounded p-0.5 hover:text-danger focus-visible:ring-2 focus-visible:ring-primary"
-                  >
-                    <TrashIcon width={12} height={12} />
-                  </button>
-                )}
-              </div>
-              <p dir="auto" className="whitespace-pre-wrap break-words">
-                {n.body}
-              </p>
-            </li>
-          ))}
-      </ul>
-    </div>
-  );
+  if (!contactId) return <p className="text-sm text-muted-foreground">{t('noContact')}</p>;
+  return <ContactNotesSection contact={{ id: contactId }} variant="drawer" bare />;
 }
 
 function TimelineTab({ conversationId }: { conversationId: string }) {
@@ -573,10 +492,7 @@ function PastConversations({
   const timeZone = useTimeZone();
   if (items.length === 0) return null;
   return (
-    <section aria-label={t('title')} className="space-y-2" data-testid="inbox-past">
-      <h3 className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
-        {t('title')}
-      </h3>
+    <div data-testid="inbox-past">
       <ul className="space-y-1">
         {items.map((p) => (
           <li key={p.id}>
@@ -596,6 +512,61 @@ function PastConversations({
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+/** One collapsible block of the right pane: a header (icon, title, chevron) that opens and closes it. */
+function PanelSection({
+  id,
+  title,
+  icon,
+  open,
+  onToggle,
+  children,
+}: {
+  id: string;
+  title: string;
+  icon: React.ReactNode;
+  open: boolean;
+  onToggle: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <section
+      id={`inbox-panel-section-${id}`}
+      className="rounded-lg border border-border bg-background shadow-sm"
+    >
+      <h3>
+        <button
+          type="button"
+          aria-expanded={open}
+          aria-controls={`inbox-panel-body-${id}`}
+          data-testid={`inbox-panel-section-${id}`}
+          onClick={onToggle}
+          className="flex w-full items-center gap-2 px-3 py-2.5 text-start text-sm font-semibold hover:bg-muted/60 focus-visible:ring-2 focus-visible:ring-primary"
+        >
+          <span className="text-primary">{icon}</span>
+          <span className="flex-1">{title}</span>
+          <svg
+            viewBox="0 0 16 16"
+            className={cn('size-3.5 text-muted-foreground transition', open && 'rotate-180')}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 6.5 8 10l4-3.5" />
+          </svg>
+        </button>
+      </h3>
+      {open && (
+        <div id={`inbox-panel-body-${id}`} className="border-t border-border p-3">
+          {children}
+        </div>
+      )}
     </section>
   );
 }

@@ -37,7 +37,9 @@ import { runWebhook } from './webhook-node';
 /**
  * Node group `integrations` (TW-FLR-032 to 034, 044 to 048): Webhook, Code, MySQL, the four Google nodes and the AI voice call. Each
  * node reaches its provider through a port (guarded HTTP, the sandbox, a MySQL driver, Google, the calling domain), so a provider
- * that is down or not connected is a note in the run log and the flow moves on, as in Reference.
+ * that is down is a note in the run log and the flow moves on, as in Reference. The exception is the Google nodes (owner decision): a Google step
+ * that cannot use Google (no account, a missing permission, a disabled API, a revoked grant, a Google error) FAILS the run at that step with its
+ * `GOOGLE_*` code and the fix text; only a step left half empty is skipped, as before.
  */
 @Injectable()
 export class IntegrationNodes implements NodeExecutor {

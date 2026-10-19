@@ -1,0 +1,546 @@
+{
+  "compliance-center": {
+    "title": "Centrum zgodności",
+    "subtitle": "Narzędzia, które pomagają wywiązywać się z obowiązków dotyczących prywatności: przepisy, według których działasz, osoby kontaktowe, Twoje informacje i podprocesorzy oraz lista kontrolna tego, co jest już wdrożone. Same w sobie nie sprawiają, że przestrzeń robocza jest zgodna z przepisami, a to nie jest porada prawna.",
+    "readOnly": "Możesz przeglądać tę stronę, ale nie możesz jej zmieniać.",
+    "saved": "Ustawienia zgodności zostały zapisane.",
+    "conflict": "Ktoś inny zapisał te ustawienia, gdy je edytowałeś. Wczytano najnowszą wersję; sprawdź ją i wprowadź zmianę ponownie.",
+    "conflictOk": "Rozumiem",
+    "common": {
+      "dismiss": "Zamknij",
+      "retry": "Spróbuj ponownie",
+      "loading": "Wczytywanie..."
+    },
+    "tabs": {
+      "checklist": "Lista kontrolna",
+      "profiles": "Przepisy i regiony",
+      "contacts": "Kontakty i dzieci",
+      "notices": "Informacje",
+      "links": "Linki do polityki prywatności i regulaminu",
+      "subprocessors": "Podprocesorzy",
+      "windows": "Godziny ciszy i połączenia",
+      "dnc": "Nie dzwonić"
+    },
+    "saveBar": {
+      "unsaved": "Masz niezapisane zmiany.",
+      "problems": "Popraw zaznaczone pola przed zapisaniem.",
+      "discard": "Odrzuć zmiany",
+      "save": "Zapisz zmiany"
+    },
+    "errors": {
+      "network": "Nie udało się połączyć z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
+      "notFound": "Ten element już nie istnieje.",
+      "conflict": "Ktoś inny to zmienił. Odśwież stronę i spróbuj ponownie.",
+      "settingsInvalid": "Niektóre ustawienia są nieprawidłowe. Sprawdź godziny ciszy, okno połączeń, strefę czasową i język.",
+      "duplicate": "Podprocesor o tej nazwie jest już na liście.",
+      "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
+      "validation": "Niektóre wartości są nieprawidłowe. Sprawdź formularz i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie.",
+      "dncInvalid": "Nie udało się odczytać pliku: nie ma w nim numerów telefonów albo jest ich za dużo naraz."
+    },
+    "problems": {
+      "httpsOnly": "Podaj adres zaczynający się od https://.",
+      "email": "Podaj prawidłowy adres e-mail.",
+      "quietEmpty": "Koniec godzin ciszy musi być inny niż ich początek.",
+      "windowOrder": "Okno połączeń musi kończyć się po jego rozpoczęciu, tego samego dnia.",
+      "daysEmpty": "Wybierz co najmniej jeden dzień.",
+      "englishFirst": "Angielski jest zawsze pierwszą wersją informacji. Wybierz inny język."
+    },
+    "phi": {
+      "title": "Nie przechowuj chronionych informacji o zdrowiu.",
+      "body": "Ten produkt nie jest przeznaczony do dokumentacji medycznej. Nie deklarujemy zgodności z HIPAA i nie podpisujemy umów powierzenia z podmiotami powiązanymi (business associate agreements), dlatego nie wpisuj diagnoz, szczegółów leczenia, numerów ubezpieczenia ani podobnych informacji o zdrowiu w kontaktach, notatkach, wiadomościach, plikach, formularzach ani nagraniach."
+    },
+    "checklist": {
+      "intro": "Co jest wdrożone w Twojej przestrzeni roboczej na dziś, ustalone na podstawie Twoich ustawień i danych. „Wdrożone” oznacza, że narzędzie jest skonfigurowane. Nie oznacza, że przepis jest spełniony.",
+      "summaryLabel": "Podsumowanie",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Wdrożone",
+        "partial": "Częściowo",
+        "open": "Do zrobienia"
+      },
+      "baselineTitle": "Dla każdej przestrzeni roboczej",
+      "baselineHint": "Rygorystyczny zestaw punktów, który oferujemy wszystkim przestrzeniom roboczym w każdym kraju.",
+      "profileTitle": "Wymagane przez włączone przepisy",
+      "profileHint": "Każdy wiersz wskazuje profile, które tego wymagają. Gdy obowiązuje kilka, stosowana jest najsurowsza reguła.",
+      "noProfiles": "Żaden przepis ani region nie jest jeszcze włączony, więc widać tylko punkty dla każdej przestrzeni roboczej. Wybierz je w sekcji Przepisy i regiony.",
+      "disclaimer": "Ta lista pomaga śledzić Twoją własną konfigurację. To nie jest porada prawna i nie stwierdza, że Twoja przestrzeń robocza jest zgodna z jakimkolwiek przepisem. Zapytaj swojego prawnika, co ma zastosowanie do Ciebie.",
+      "open": "Otwórz",
+      "items": {
+        "lawful_basis": {
+          "title": "Cel i podstawa zapisane",
+          "detail": {
+            "built": "Każda zgoda jest zapisywana wraz z celem, informacją o tym, kto lub co ją zarejestrowało, wyświetlonym brzmieniem, jego wersją i czasem. Nie musisz niczego konfigurować."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Zgoda i łatwe wycofanie",
+          "detail": {
+            "detectionOff": "Wykrywanie STOP jest wyłączone, więc kontakt, który odpowie STOP, nie zostanie wypisany. Włącz je w ustawieniach zgód.",
+            "optInOff": "STOP działa, ale marketing nie wymaga jeszcze zarejestrowanej zgody. Włącz „wymagaj zarejestrowanej zgody” w ustawieniach zgód.",
+            "built": "STOP jest wykrywane, a marketing wymaga zarejestrowanej zgody."
+          }
+        },
+        "notices": {
+          "title": "Wersjonowane informacje",
+          "detail": {
+            "built": "{lines, plural, one {Włączona jest # informacja o zgodzie} few {Włączone są # informacje o zgodzie} many {Włączonych jest # informacji o zgodzie} other {Włączonej jest # informacji o zgodzie}}, w tym Twoja informacja domyślna w {languages, plural, one {# języku} few {# językach} many {# językach} other {# języka}}.",
+            "noDefault": "{lines, plural, one {Włączona jest # informacja o zgodzie} few {Włączone są # informacje o zgodzie} many {Włączonych jest # informacji o zgodzie} other {Włączonej jest # informacji o zgodzie}}, ale przestrzeń robocza nie ma jeszcze informacji domyślnej.",
+            "none": "Żadna informacja o zgodzie nie jest włączona. Napisz informację domyślną, aby zapis mógł wskazywać brzmienie, które zobaczyła dana osoba."
+          }
+        },
+        "rights": {
+          "title": "Żądania osób (dostęp, eksport, usunięcie)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# żądanie jest po terminie} few {# żądania są po terminie} many {# żądań jest po terminie} other {# żądania jest po terminie}}, z {open} otwartych. Odpowiedz na nie w sekcji Żądania dotyczące danych.",
+            "noContact": "Termin odpowiedzi na żądania wynosi {days} dni, ale nie wskazano jeszcze osoby kontaktowej ds. prywatności. Dodaj ją.",
+            "built": "Termin odpowiedzi na żądania wynosi {days} dni, a otwartych jest {open}. Osoba kontaktowa ds. prywatności jest wskazana."
+          }
+        },
+        "retention": {
+          "title": "Przechowywanie i usuwanie",
+          "detail": {
+            "recordingsOn": "Nagrania połączeń są przechowywane przez {days} dni i można je zablokować przed usunięciem. Okres przechowywania pozostałych danych nie jest jeszcze zbudowany.",
+            "recordingsOff": "Nagrywanie połączeń jest wyłączone. Ustawienie okresu przechowywania pozostałych danych nie jest jeszcze zbudowane."
+          }
+        },
+        "security": {
+          "title": "Bezpieczeństwo i plan na wypadek naruszenia",
+          "detail": {
+            "runbook": "Izolacja przestrzeni roboczej, szyfrowane dane uwierzytelniające i dziennik audytu są wdrożone. Plan reagowania na naruszenia jest wersją roboczą, którą uzupełnia operator platformy. Nie możesz tego włączyć tutaj."
+          }
+        },
+        "subprocessors": {
+          "title": "Lista podprocesorów",
+          "detail": {
+            "built": "{count, plural, one {Wymieniono # podprocesora} few {Wymieniono # podprocesorów} many {Wymieniono # podprocesorów} other {Wymieniono # podprocesora}}. Wzór umowy DPA jest gotowy do pobrania.",
+            "none": "Nie wymieniono jeszcze żadnego podprocesora. Dodaj dostawców, którzy przetwarzają dla Ciebie dane osobowe."
+          }
+        },
+        "children": {
+          "title": "Dane dzieci",
+          "detail": {
+            "unset": "Brak odpowiedzi. Wskaż, czy wśród Twoich kontaktów mogą być osoby niepełnoletnie.",
+            "minorsNoParental": "Mogą być uwzględnione osoby niepełnoletnie, ale zgoda rodzica nie jest włączona.",
+            "no_minors": "Świadomie nie przetwarzasz danych osób niepełnoletnich.",
+            "may_include_minors": "Mogą być uwzględnione osoby niepełnoletnie, a zgoda rodzica jest włączona."
+          }
+        },
+        "contact_links": {
+          "title": "Osoba kontaktowa ds. prywatności i linki",
+          "detail": {
+            "built": "Linki do polityki prywatności i regulaminu oraz osoba kontaktowa są ustawione.",
+            "none": "Brak linku do polityki prywatności, linku do regulaminu i osoby kontaktowej.",
+            "some": "Część linków i danych kontaktowych jest ustawiona. Uzupełnij resztę."
+          }
+        },
+        "dpo_contact": {
+          "title": "Inspektor ochrony danych lub osoba kontaktowa ds. prywatności",
+          "detail": {
+            "built": "Imię i nazwisko oraz e-mail są ustawione.",
+            "one": "Dodaj zarówno imię i nazwisko, jak i e-mail.",
+            "none": "Nie wskazano jeszcze inspektora ani osoby kontaktowej ds. prywatności."
+          }
+        },
+        "grievance_officer": {
+          "title": "Osoba odpowiedzialna za skargi",
+          "detail": {
+            "built": "Imię i nazwisko oraz e-mail są ustawione.",
+            "one": "Dodaj zarówno imię i nazwisko, jak i e-mail.",
+            "none": "Nie wskazano jeszcze osoby odpowiedzialnej za skargi."
+          }
+        },
+        "notice_languages": {
+          "title": "Informacja po angielsku i w drugim języku",
+          "detail": {
+            "built": "Twoja informacja domyślna jest włączona po angielsku i w języku: {locale}.",
+            "noSecond": "Wybierz drugi język, a potem napisz w nim informację.",
+            "secondMissing": "Angielski jest włączony. Napisz informację w drugim języku.",
+            "englishMissing": "Drugi język jest włączony. Napisz informację po angielsku.",
+            "none": "Żadna z informacji nie jest jeszcze włączona."
+          }
+        },
+        "parental_flag": {
+          "title": "Osoby niepełnoletnie i zgoda rodzica",
+          "detail": {
+            "unset": "Odpowiedz na pytanie o dzieci w sekcji Kontakty i dzieci.",
+            "minorsNoParental": "Mogą być uwzględnione osoby niepełnoletnie, ale zgoda rodzica jest wyłączona. Ten profil traktuje każdego poniżej {age} lat jako osobę niepełnoletnią.",
+            "no_minors": "Świadomie nie przetwarzasz danych osób niepełnoletnich. Ten profil traktuje każdego poniżej {age} lat jako osobę niepełnoletnią.",
+            "may_include_minors": "Zgoda rodzica jest włączona dla osób poniżej {age} lat. Oznacz kontakt jako małoletni na jego karcie zgody i zapisz tam zgodę opiekuna."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Opcja Nie sprzedawaj i nie udostępniaj",
+          "detail": {
+            "built": "Opcja rezygnacji i link do jej informacji są ustawione.",
+            "noUrl": "Opcja jest włączona, ale nie ustawiono linku do informacji o rezygnacji.",
+            "off": "Włącz opcję, jeśli sprzedajesz lub udostępniasz dane osobowe, i dodaj link do informacji o rezygnacji."
+          }
+        },
+        "quiet_hours": {
+          "title": "Godziny ciszy",
+          "detail": {
+            "built": "Godziny ciszy od {start} do {end} są zapisane.",
+            "off": "Godziny ciszy nie są ustawione."
+          }
+        },
+        "calling_window": {
+          "title": "Okno połączeń",
+          "detail": {
+            "built": "Okno połączeń od {start} do {end} jest zapisane.",
+            "off": "Okno połączeń nie jest ustawione."
+          }
+        },
+        "dnd_registry": {
+          "title": "Rejestr Do Not Call / DND",
+          "detail": {
+            "off": "Nie wybrano rejestru.",
+            "hookOnly": "Rejestr odnotowany ({registry}). Nic nie jest jeszcze z nim porównywane."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Lokalizacje Twoich podprocesorów",
+          "detail": {
+            "built": "{count, plural, one {Wszystkie # podprocesor ma} few {Wszyscy # podprocesorzy mają} many {Wszystkich # podprocesorów ma} other {Wszystkich # podprocesora ma}} lokalizację.",
+            "some": "{missing, plural, one {# podprocesor nie ma} few {# podprocesorzy nie mają} many {# podprocesorów nie ma} other {# podprocesora nie ma}} jeszcze lokalizacji.",
+            "none": "Nie wymieniono żadnego podprocesora albo żaden nie ma lokalizacji."
+          }
+        },
+        "request_days": {
+          "title": "Czas na odpowiedź na żądania",
+          "detail": {
+            "built": "Twój termin odpowiedzi na żądania to {sla} dni, w ramach {days} dni wymaganych przez najsurowszy profil.",
+            "tooLong": "Twój termin to {sla} dni. Najsurowszy włączony profil wymaga {days}. Zmień go w sekcji Żądania dotyczące danych."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Zarejestrowana zgoda przed marketingiem",
+          "detail": {
+            "built": "Marketing wymaga zarejestrowanej zgody.",
+            "off": "Marketing nie wymaga jeszcze zarejestrowanej zgody. Włącz to w ustawieniach zgód."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Godziny ciszy i okna dzwonienia są egzekwowane",
+          "detail": {
+            "enforced": "Wiadomości marketingowe w godzinach ciszy są wstrzymywane do ich końca, a połączenie poza oknem dzwonienia jest odrzucane z informacją, kiedy okno się otwiera. Odpowiedzi w oknie 24 godzin i powiadomienia usługowe nigdy nie są wstrzymywane. Rejestr DND to tylko notatka: na razie nic się z nim nie sprawdza."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Włącz przepisy i regiony, które dotyczą osób, z którymi się kontaktujesz. Możesz włączyć kilka; tam, gdzie się różnią, stosowana jest najsurowsza reguła. Kraj tylko sugeruje, decydujesz Ty.",
+      "suggested": "Twój kraj to {country} (źródło: {source}), co sugeruje:",
+      "source": {
+        "billing": "płatności",
+        "onboarding": "przestrzeń robocza"
+      },
+      "useSuggestion": "Użyj tej sugestii",
+      "suggestedNote": "Przestrzeń robocza, która kontaktuje się z osobami w innych krajach, powinna włączyć także te przepisy.",
+      "notConfirmed": "Nic nie jest jeszcze włączone. Do zapisania wyboru obowiązuje poziom podstawowy dla każdej przestrzeni roboczej.",
+      "listTitle": "Przepisy i regiony",
+      "switchesOn": "Włącza:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (UE i EOG)",
+          "summary": "Dla osób w Unii Europejskiej, Islandii, Liechtensteinie i Norwegii.",
+          "extras": "Inspektor ochrony danych lub osoba kontaktowa ds. prywatności, lokalizacje podprocesorów, odpowiedzi na żądania w ciągu 30 dni, zarejestrowana zgoda na marketing."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR i PECR (Wielka Brytania)",
+          "summary": "Dla osób w Wielkiej Brytanii.",
+          "extras": "Inspektor ochrony danych lub osoba kontaktowa ds. prywatności, lokalizacje podprocesorów, odpowiedzi w ciągu 30 dni, zarejestrowana zgoda na marketing elektroniczny."
+        },
+        "dpdp_in": {
+          "name": "Ustawa DPDP (Indie)",
+          "summary": "Dla osób w Indiach.",
+          "extras": "Osoba odpowiedzialna za skargi, informacje po angielsku i w jednym z języków indyjskich, flaga zgody rodzica dla osób poniżej 18 lat, miejsce na menedżera zgód, zarejestrowana zgoda."
+        },
+        "ccpa_us": {
+          "name": "CCPA i CPRA (Stany Zjednoczone)",
+          "summary": "Dla mieszkańców Kalifornii oraz rozsądny punkt wyjścia dla Stanów Zjednoczonych.",
+          "extras": "Opcja Nie sprzedawaj i nie udostępniaj moich danych osobowych z linkiem do informacji o rezygnacji, odpowiedzi w ciągu 45 dni."
+        },
+        "tcpa_us": {
+          "name": "TCPA (połączenia i SMS-y do USA)",
+          "summary": "Dla marketingowych połączeń i SMS-ów do osób w Stanach Zjednoczonych.",
+          "extras": "Godziny ciszy od 21:00 do 08:00, okno połączeń od 08:00 do 21:00, adnotacja o rejestrze Do Not Call, zarejestrowana zgoda."
+        },
+        "trai_in": {
+          "name": "Przepisy TRAI (połączenia i SMS-y do Indii)",
+          "summary": "Dla promocyjnych połączeń i SMS-ów do osób w Indiach.",
+          "extras": "Godziny ciszy od 21:00 do 09:00, okno połączeń od 09:00 do 21:00, adnotacja o rejestrze DND, zarejestrowana zgoda."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brazylia)",
+          "summary": "Dla osób w Brazylii.",
+          "extras": "Kontakt do inspektora ochrony danych (encarregado), lokalizacje podprocesorów, odpowiedzi w ciągu 15 dni, zarejestrowana zgoda."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapur)",
+          "summary": "Dla osób w Singapurze.",
+          "extras": "Kontakt do inspektora ochrony danych, adnotacja o rejestrze Do Not Call, odpowiedzi w ciągu 30 dni, zarejestrowana zgoda."
+        },
+        "generic": {
+          "name": "Inne kraje (tylko poziom podstawowy)",
+          "summary": "Dla wszystkich pozostałych miejsc lub gdy jeszcze nie zdecydowałeś.",
+          "extras": "Nic ponad poziom podstawowy, który już otrzymuje każda przestrzeń robocza."
+        }
+      },
+      "effective": {
+        "title": "Czego wymaga najsurowsza reguła",
+        "hint": "Ustalone na podstawie włączonych przepisów. To punkty wyjścia do sprawdzenia z Twoim prawnikiem.",
+        "baselineOnly": "Żaden przepis nie jest włączony. Obowiązuje tylko poziom podstawowy dla każdej przestrzeni roboczej.",
+        "optIn": "Zarejestrowana zgoda przed marketingiem",
+        "optInYes": "Zalecane.",
+        "optInNo": "Niewymagane przez te profile.",
+        "consentLink": "Otwórz ustawienia zgód",
+        "requestDays": "Czas na odpowiedź na żądanie osoby",
+        "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}",
+        "minorAge": "Traktuj osobę jako niepełnoletnią poniżej",
+        "years": "{count, plural, one {# rok} few {# lata} many {# lat} other {# roku}}",
+        "callingWindow": "Okno połączeń",
+        "dnd": "Rejestr Do Not Call / DND",
+        "none": "Brak",
+        "registry": {
+          "none": "Brak",
+          "trai_ndnc": "Indyjski NDNC (TRAI)",
+          "us_dnc": "Amerykański rejestr Do Not Call",
+          "sg_dnc": "Singapurski rejestr Do Not Call",
+          "custom": "Twoja własna lista"
+        },
+        "strictest": "Gdy włączonych jest kilka profili, stosowana jest najsurowsza reguła: najkrótszy czas odpowiedzi, najwyższy wiek, najwęższe okno połączeń."
+      },
+      "ccpa": {
+        "title": "Nie sprzedawaj i nie udostępniaj",
+        "hint": "Jeśli sprzedajesz lub udostępniasz dane osobowe (także na potrzeby reklamy w innych witrynach), osoby mogą poprosić Cię o zaprzestanie.",
+        "offer": "Oferuj opcję Nie sprzedawaj i nie udostępniaj moich danych osobowych",
+        "url": "Link do informacji o rezygnacji",
+        "urlHint": "Strona, na której osoby mogą zrezygnować. Musi zaczynać się od https://."
+      },
+      "dpdp": {
+        "title": "Menedżer zgód",
+        "hint": "Ustawa DPDP pozwala osobom zarządzać zgodą za pośrednictwem zarejestrowanego menedżera zgód. Podaj tutaj swojego, jeśli z niego korzystasz.",
+        "managerName": "Menedżer zgód",
+        "managerUrl": "Link do menedżera zgód",
+        "placeholderNote": "To tylko adnotacja. Nic nie jest jeszcze połączone z menedżerem zgód.",
+        "managerRegistration": "Numer rejestracyjny Menedżera zgód",
+        "managerRegistrationHint": "Numer, pod którym Rada Ochrony Danych zarejestrowała Twojego Menedżera zgód. Tylko adnotacja."
+      }
+    },
+    "contacts": {
+      "intro": "Z kim może skontaktować się osoba lub organ nadzorczy w sprawie swoich danych oraz czy wśród Twoich kontaktów mogą być dzieci.",
+      "requiredByProfile": "Wymagane przez włączony profil",
+      "officer": {
+        "name": "Imię i nazwisko",
+        "email": "E-mail",
+        "phone": "Telefon",
+        "address": "Adres pocztowy"
+      },
+      "dpo": {
+        "title": "Inspektor ochrony danych lub osoba kontaktowa ds. prywatności",
+        "hint": "Osoba lub zespół odpowiadający na pytania o prywatność. Wyświetlane na Twojej stronie publicznej, jeśli ją włączysz."
+      },
+      "grievance": {
+        "title": "Osoba odpowiedzialna za skargi",
+        "hint": "Ustawa DPDP wymaga wskazania osoby, która zajmuje się skargami dotyczącymi przetwarzania danych osobowych."
+      },
+      "children": {
+        "title": "Dane dzieci",
+        "hint": "Ten produkt jest dla firm. Powiedz, czy możesz przechowywać dane małoletnich, aby pokazać właściwe zasady. Po odpowiedzi marketing do kontaktu oznaczonego jako małoletni jest wstrzymywany: zawsze, gdy świadomie nie przetwarzasz danych małoletnich, i do czasu zapisania zgody opiekuna, gdy małoletni mogą być wśród kontaktów.",
+        "policy": "Osoby niepełnoletnie wśród Twoich kontaktów",
+        "policies": {
+          "unset": "Brak odpowiedzi",
+          "no_minors": "Świadomie nie przetwarzamy danych osób niepełnoletnich",
+          "may_include_minors": "Wśród naszych kontaktów mogą być osoby niepełnoletnie"
+        },
+        "parental": "Dla osób niepełnoletnich wymagana jest zgoda rodzica",
+        "parentalHint": "Zapisuje Twoją politykę i wstrzymuje marketing do kontaktów oznaczonych jako małoletni do czasu zapisania zgody opiekuna. Kontakt oznaczasz jako małoletni i zapisujesz tę zgodę na jego karcie zgody.",
+        "age": "Włączone profile traktują każdego poniżej {age} lat jako osobę niepełnoletnią.",
+        "dpdpNeedsAnswer": "Profil DPDP wymaga odpowiedzi na to pytanie."
+      }
+    },
+    "links": {
+      "intro": "Zapisz raz linki do polityki prywatności i regulaminu. Są dostępne jednym kliknięciem w linii zgody kreatora formularzy i w każdym edytorze informacji o zgodzie.",
+      "privacy": "Link do polityki prywatności",
+      "privacyHint": "Musi zaczynać się od https://",
+      "terms": "Link do regulaminu",
+      "termsHint": "Musi zaczynać się od https://",
+      "offered": "Nic nie jest wypełniane automatycznie: każdy formularz lub informacja pokazuje przycisk do użycia tych linków."
+    },
+    "notices": {
+      "intro": "Domyślne brzmienie, które Twoja przestrzeń robocza wyświetla obok pola zgody. Każda zmiana jest zapisywana jako nowa numerowana wersja, dzięki czemu zapis może wskazywać dokładny tekst, na który zgodziła się osoba.",
+      "english": "Domyślna informacja o zgodzie ({language})",
+      "secondEditor": "Domyślna informacja o zgodzie ({language})",
+      "second": {
+        "title": "Drugi język",
+        "requiredByProfile": "Wymagane przez profil DPDP",
+        "hint": "Ustawa DPDP wymaga informacji po angielsku i w jednym z języków Indii. Wybierz drugi język i zapisz, a potem napisz w nim informację.",
+        "language": "Język drugiej informacji",
+        "none": "Bez drugiego języka",
+        "saveFirst": "Najpierw zapisz zmiany, a wtedy pojawi się edytor informacji dla tego języka."
+      }
+    },
+    "windows": {
+      "intro": "Niektóre przepisy ograniczają, kiedy wiadomości marketingowe i połączenia mogą docierać do ludzi. Ustaw tu swoje godziny: wiadomość marketingowa wysłana w godzinach ciszy czeka i wychodzi po ich zakończeniu, a poza oknem dzwonienia połączenie nie jest wykonywane.",
+      "quiet": {
+        "title": "Godziny ciszy dla wiadomości",
+        "hint": "Godziny, w których wiadomości marketingowe nie wychodzą. Czekają i są wysyłane po ich zakończeniu. Okres może obejmować północ.",
+        "enabled": "Godziny ciszy włączone",
+        "start": "Cisza od",
+        "end": "Cisza do"
+      },
+      "calling": {
+        "title": "Okno połączeń",
+        "hint": "Jedyne godziny, w których wykonuje się połączenia marketingowe, w wybrane dni. Połączenie poza nimi jest odrzucane z informacją, kiedy okno się otwiera.",
+        "enabled": "Okno połączeń włączone",
+        "start": "Połączenia od",
+        "end": "Połączenia do",
+        "days": "Dni"
+      },
+      "day": {
+        "1": "Poniedziałek",
+        "2": "Wtorek",
+        "3": "Środa",
+        "4": "Czwartek",
+        "5": "Piątek",
+        "6": "Sobota",
+        "7": "Niedziela"
+      },
+      "suggested": "Włączone przepisy sugerują godziny od {start} do {end}.",
+      "zone": {
+        "label": "Zapasowa strefa czasowa",
+        "hint": "Godziny są odczytywane według zegara danego kontaktu: jego właściwości strefy czasowej, a gdy jej brak, kierunkowego kraju numeru. Ta strefa jest używana, gdy nie wiadomo żadnego z nich. Strefa Twojego obszaru roboczego to {zone}.",
+        "workspace": "Strefa czasowa przestrzeni roboczej ({zone})"
+      },
+      "dnd": {
+        "label": "Rejestr Do Not Call / DND",
+        "hint": "Rejestr, z którym porównujesz swoje listy.",
+        "registry": {
+          "none": "Brak",
+          "trai_ndnc": "Indyjski NDNC (TRAI)",
+          "us_dnc": "Amerykański rejestr Do Not Call",
+          "sg_dnc": "Singapurski rejestr Do Not Call",
+          "custom": "Twoja własna lista"
+        },
+        "note": "To tylko adnotacja. Nic nie jest jeszcze porównywane z rejestrem.",
+        "listNote": "Numery z Twojej listy Nie dzwonić (ostatnia karta) są już wstrzymywane przed połączeniami i SMS-ami marketingowymi."
+      },
+      "enforcedNote": "Godziny ciszy wstrzymują wiadomość marketingową do ich końca, a okno dzwonienia odrzuca połączenie poza nim. Używany jest zegar każdego kontaktu. Odpowiedzi w oknie 24 godzin i powiadomienia usługowe nigdy nie są wstrzymywane."
+    },
+    "subprocessors": {
+      "intro": "Dostawcy, którzy przetwarzają dane osobowe dla Twojej przestrzeni roboczej: co robią, jakie dane otrzymują i gdzie. Listę możesz opublikować na stronie publicznej.",
+      "listTitle": "Twoi podprocesorzy",
+      "add": "Dodaj podprocesora",
+      "saved": "Podprocesor zapisany.",
+      "removed": "Podprocesor usunięty.",
+      "empty": {
+        "title": "Brak podprocesorów",
+        "body": "Dodaj każdego dostawcę, który przetwarza dla Ciebie dane osobowe, na przykład dostawcę poczty e-mail lub SMS-ów."
+      },
+      "status": {
+        "active": "W użyciu",
+        "planned": "Planowany",
+        "removed": "Już nieużywany"
+      },
+      "edit": "Edytuj",
+      "remove": "Usuń",
+      "public": {
+        "title": "Strona publiczna",
+        "hint": "Opublikuj używanych dostawców, linki do polityki prywatności i regulaminu oraz osobę kontaktową ds. prywatności na stronie, którą może otworzyć każdy. Domyślnie wyłączone.",
+        "switch": "Strona publiczna włączona",
+        "saveToApply": "Zapisz zmiany, aby to zastosować."
+      },
+      "dpa": {
+        "title": "Wzór umowy powierzenia przetwarzania danych",
+        "hint": "Wzór wypełniony Twoimi danymi i Twoją listą. To nie jest porada prawna ani umowa: przed użyciem poproś swojego prawnika o jego przejrzenie.",
+        "download": "Pobierz wzór"
+      },
+      "form": {
+        "addTitle": "Dodaj podprocesora",
+        "editTitle": "Edytuj podprocesora",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "save": "Zapisz",
+        "name": "Nazwa",
+        "required": "Nazwa jest wymagana.",
+        "purpose": "Co robią dla Ciebie",
+        "data": "Otrzymywane dane",
+        "location": "Lokalizacja",
+        "locationHint": "Kraj lub region, w którym przetwarzają dane.",
+        "status": "Status",
+        "website": "Strona internetowa",
+        "dpa": "Link do umowy",
+        "httpsOnly": "Podaj adres zaczynający się od https://.",
+        "addedOn": "Data dodania",
+        "noticeSentOn": "Klienci poinformowani dnia",
+        "noticeHint": "Dzień, w którym poinformowałeś klientów o tym dostawcy."
+      },
+      "confirmRemove": {
+        "title": "Usunąć tego podprocesora?",
+        "body": "{name} zostanie usunięty z Twojej listy. Jeśli chcesz zachować historię, oznacz go zamiast tego jako już nieużywanego.",
+        "confirm": "Usuń"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: podprocesorzy i prywatność",
+      "intro": "Dostawcy, z których ta firma korzysta do przetwarzania danych osobowych, oraz jak skontaktować się z jej osobą ds. prywatności.",
+      "subprocessors": "Podprocesorzy",
+      "none": "Nie wymieniono żadnych podprocesorów.",
+      "contact": "Osoba kontaktowa ds. prywatności i polityki",
+      "privacy": "Polityka prywatności",
+      "terms": "Regulamin",
+      "notFound": "Nie znaleziono strony"
+    },
+    "hold": {
+      "heldUntil": "Wstrzymano do {when} (godziny ciszy)",
+      "heldCount": "{count} wstrzymano z powodu godzin ciszy"
+    },
+    "dnc": {
+      "intro": "Numery z tej listy nie otrzymują marketingu głosowego ani SMS, bez względu na historię zgód. Nie dotyczy to WhatsApp, e-maili ani wiadomości serwisowych. Stąd nic nie jest sprawdzane w krajowym rejestrze: dodaj wyciąg, który masz prawo pobrać.",
+      "addTitle": "Dodaj numery",
+      "numbers": "Numery telefonów",
+      "numbersHint": "Jeden w wierszu lub oddzielone przecinkami. Do {max} naraz; więcej dodasz z pliku.",
+      "country": "Kod kraju dla numerów lokalnych",
+      "countryHint": "Numer zapisany bez kodu kraju jest odczytywany z tym kodem.",
+      "note": "Notatka",
+      "noteHint": "Opcjonalnie. Dlaczego te numery są na liście.",
+      "add": "Dodaj do listy",
+      "adding": "Dodawanie...",
+      "or": "lub",
+      "import": "Dodaj z pliku CSV",
+      "importing": "Odczytywanie pliku...",
+      "importHint": "Kolumna o nazwie phone, mobile lub number, a w razie jej braku pierwsza kolumna. Duży plik jest odczytywany po częściach.",
+      "fromRegistry": "Plik jest wyciągiem z rejestru, z którego mam prawo korzystać",
+      "progress": "Wysyłanie części {done} z {of}...",
+      "added": "{count, plural, =0 {Nie ma nic nowego do dodania} one {Dodano # numer} few {Dodano # numery} many {Dodano # numerów} other {Dodano # numeru}}",
+      "result": "Dodano: {added}, już na liście: {already}, nie jest numerem telefonu: {invalid}.",
+      "invalidSamples": "Na przykład: {samples}",
+      "listTitle": "Numery na liście",
+      "total": "{count, plural, =0 {Brak numerów na liście} one {# numer na liście} few {# numery na liście} many {# numerów na liście} other {# numeru na liście}}",
+      "search": "Znajdź numer",
+      "loading": "Wczytywanie listy...",
+      "empty": "Brak numerów",
+      "emptyHint": "Dodaj numery osób, które prosiły, aby do nich nie dzwonić ani nie wysyłać SMS-ów, lub wyciąg z rejestru, z którego możesz korzystać.",
+      "noMatch": "Żaden numer nie pasuje",
+      "source": {
+        "manual": "Dodane ręcznie",
+        "import": "Z pliku",
+        "contact_request": "Na prośbę osoby",
+        "registry_export": "Wyciąg z rejestru"
+      },
+      "remove": "Usuń",
+      "removeLabel": "Usuń {phone} z listy",
+      "removed": "Numer usunięty z listy",
+      "newer": "Nowsze",
+      "older": "Starsze",
+      "confirm": {
+        "title": "Usunąć ten numer?",
+        "message": "{phone} znów może otrzymywać marketingowe połączenia i SMS-y, chyba że kontakt wycofał zgodę. Usuń go tylko wtedy, gdy osoba o to poprosiła lub numer dodano przez pomyłkę.",
+        "confirm": "Usuń numer",
+        "cancel": "Zachowaj"
+      }
+    }
+  }
+}

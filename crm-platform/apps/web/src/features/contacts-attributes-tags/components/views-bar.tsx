@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation';
 import { useMemo, useState, type FormEvent } from 'react';
 import { useTranslations } from 'next-intl';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useStoredValue } from '@/lib/use-stored-value';
 import type { ContactViewResponse } from '@crm/contracts';
 import { Button, ConfirmDialog, Drawer, Input, Popover, cn, useToast } from '@crm/ui';
@@ -14,9 +15,11 @@ import { RowMenu, RowMenuItem, RowMenuSeparator } from './row-menu';
 
 import {
   activePreset,
+  availablePresets,
   parsePresetFavorites,
   PRESET_FAVORITES_KEY,
   PRESET_VIEWS,
+  QUICK_PRESETS,
   togglePresetFavorite,
   type PresetView,
 } from '../lib/preset-views';
@@ -39,7 +42,10 @@ export function ViewsBar({
   onSelect,
   onPreset,
   meId,
+  count,
   can,
+  hasUncontacted = false,
+  hasFollowUp = false,
 }: {
   /** The filters on screen now (what "Create view" and "Save current filters" keep). */
   filters: ContactFilters;
@@ -56,7 +62,13 @@ export function ViewsBar({
   onPreset: (preset: PresetView) => void;
   /** The signed-in person (what "My contacts" means). */
   meId: string;
+  /** How many contacts the open view holds, shown in a pill beside its name; absent while that is not known. */
+  count?: number;
   can: { create: boolean; update: boolean; delete: boolean };
+  /** Some contact is marked uncontacted: only then is the "Uncontacted" view offered (it stays while it is the open view). */
+  hasUncontacted?: boolean;
+  /** Some contact has an open follow-up: only then are the follow-up views offered (the open one stays). */
+  hasFollowUp?: boolean;
 }) {
   const t = useTranslations(NS);
   const router = useRouter();
@@ -66,11 +78,19 @@ export function ViewsBar({
   const [pickerOpen, setPickerOpen] = useState(false);
   const [drawing, setDrawing] = useState<Drawing>(null);
   const [deleting, setDeleting] = useState<ContactViewResponse | null>(null);
+  // Without lead scoring there is no "Hot leads" to choose: it filters by the score.
+  const scoringOn = useLeadScoringEnabled();
 
   const all = useMemo(() => views.data ?? [], [views.data]);
   const preset = useMemo(
     () => (activeId === '' ? activePreset(filters, meId) : null),
     [activeId, filters, meId],
+  );
+  const showUncontacted = hasUncontacted || preset === 'uncontacted';
+  const showFollowUps = hasFollowUp || (preset !== null && preset.startsWith('followUp'));
+  const quick = useMemo(
+    () => availablePresets(QUICK_PRESETS, scoringOn, showUncontacted, showFollowUps),
+    [scoringOn, showUncontacted, showFollowUps],
   );
   const [favRaw, setFavRaw] = useStoredValue(PRESET_FAVORITES_KEY);
   const favPresets = useMemo(() => parsePresetFavorites(favRaw), [favRaw]);
@@ -79,7 +99,7 @@ export function ViewsBar({
     toast(t('toast.failed', { message: e instanceof Error ? e.message : String(e) }), 'danger');
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <div className="relative shrink-0">
         <button
           type="button"
@@ -87,7 +107,7 @@ export function ViewsBar({
           aria-expanded={pickerOpen}
           aria-label={t('picker.title')}
           onClick={() => setPickerOpen((o) => !o)}
-          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-primary bg-background px-4 text-sm font-medium text-primary outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
+          className="inline-flex h-9 min-w-[10rem] items-center justify-between gap-2 rounded-md border border-border bg-background px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
         >
           <span className="truncate">
             {activeId === ''
@@ -96,6 +116,11 @@ export function ViewsBar({
                 : t('all')
               : (all.find((v) => v.id === activeId)?.name ?? t('all'))}
           </span>
+          {count !== undefined && (
+            <span className="rounded-full bg-primary/10 px-2 text-[11px] font-semibold leading-5 tabular-nums">
+              {count.toLocaleString()}
+            </span>
+          )}
           <ChevronDownIcon className="size-3.5" />
         </button>
         <Popover
@@ -108,6 +133,8 @@ export function ViewsBar({
             views={all}
             activeId={activeId}
             preset={preset}
+            showUncontacted={showUncontacted}
+            showFollowUps={showFollowUps}
             favPresets={favPresets}
             onToggleFavPreset={(p) => setFavRaw(togglePresetFavorite(favRaw, p))}
             canCreate={can.create}
@@ -132,6 +159,32 @@ export function ViewsBar({
             }}
           />
         </Popover>
+      </div>
+      <div
+        role="group"
+        aria-label={t('quick.label')}
+        className="flex flex-wrap items-center gap-1.5"
+      >
+        {quick.map((p) => {
+          const on = activeId === '' && preset === p;
+          return (
+            <button
+              key={p}
+              type="button"
+              aria-pressed={on}
+              // Choosing the chip that is on again goes back to all contacts.
+              onClick={() => (on ? onSelect(null) : onPreset(p))}
+              className={cn(
+                'inline-flex h-8 items-center rounded-full border px-3 text-[13px] font-medium outline-none transition focus-visible:ring-2 focus-visible:ring-primary',
+                on
+                  ? 'border-brand bg-brand/10 text-brand dark:text-primary'
+                  : 'border-border text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+            >
+              {t(`presets.${p}`)}
+            </button>
+          );
+        })}
       </div>
       {tabs
         .filter((v) => v.id === activeId)
@@ -274,6 +327,8 @@ function Picker({
   views,
   activeId,
   preset,
+  showUncontacted,
+  showFollowUps,
   favPresets,
   onToggleFavPreset,
   canCreate,
@@ -286,6 +341,8 @@ function Picker({
   views: readonly ContactViewResponse[];
   activeId: string;
   preset: PresetView | null;
+  showUncontacted: boolean;
+  showFollowUps: boolean;
   favPresets: readonly PresetView[];
   onToggleFavPreset: (p: PresetView) => void;
   canCreate: boolean;
@@ -299,7 +356,8 @@ function Picker({
   const [q, setQ] = useState('');
   const shown = pickerViews(views, q, 'all');
   const favorites = shown.filter((v) => v.isFavorite);
-  const presets = PRESET_VIEWS.filter(
+  const scoringOn = useLeadScoringEnabled();
+  const presets = availablePresets(PRESET_VIEWS, scoringOn, showUncontacted, showFollowUps).filter(
     (p) => q.trim() === '' || t(`presets.${p}`).toLowerCase().includes(q.trim().toLowerCase()),
   );
   const favPresetsShown = presets.filter((p) => favPresets.includes(p));

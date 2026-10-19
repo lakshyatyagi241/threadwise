@@ -2,16 +2,20 @@
 
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, EmptyState, StatTile, cn, useToast } from '@crm/ui';
 import type { ContactViewResponse } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { PageFill } from '@/components/shell/page-fill';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
-import { invalidateSegments, useSegments } from '@/features/segments';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
+import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
-import { useAttributes, useStatusOptions } from '../api/attributes';
+import type { ContactTouchChannel } from '@crm/contracts';
+import { bulkSetUncontacted, reportContactTouch } from '../api/lead-handling';
+import { useAttributes, useContactFilterValues, useStatusOptions } from '../api/attributes';
 import {
   bulkDelete,
   bulkGroupMembership,
@@ -31,24 +35,30 @@ import {
   KEYS,
   useContactsPage,
   useContactStats,
-  updateContact,
   type ContactFilters,
 } from '../api/contacts';
 import { useGroups } from '../api/groups';
 import { useOwnerNames } from '../api/owners';
+import { openConversation, useChannels } from '../api/single-send';
 import { useTags } from '../api/tags';
 import type { ContactRow } from '../api/schemas';
 import {
+  addableColumns,
   allColumns,
+  hideColumn,
   parseStoredColumns,
   serializeColumns,
+  showColumn,
   STORAGE_KEY as COLUMNS_KEY,
   ORDER_STORAGE_KEY as COLUMN_ORDER_KEY,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   visibleColumns,
   type ColumnId,
 } from '../lib/columns';
+import { appliedFilterChips, clearAllPatch, type FilterChip } from '../lib/applied-filters';
 import { displayName } from '../lib/contact-model';
 import { downloadBlob } from '../lib/download';
 import { deleteFailure, errorKind } from '../lib/errors';
@@ -59,8 +69,15 @@ import { useContactViews } from '../api/views';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import { clampPage, totalPages } from '../lib/pagination';
 import { defaultPageSize, PAGE_SIZE_KEY } from '../lib/page-size';
+import { neighboursOf, quickViewIdOf, quickViewPanelOf, withQuickView } from '../lib/quick-view';
 import { rowView, type RowView } from '../lib/row-view';
-import type { SendChannel } from '../lib/single-send';
+import {
+  SECTION_OF_TARGET,
+  type AddTarget,
+  type FocusRequest,
+  type SectionId,
+} from '../lib/sections';
+import { emailChannels, whatsappChannels, type SendChannel } from '../lib/single-send';
 import {
   bulkTarget,
   EMPTY_SELECTION,
@@ -69,26 +86,30 @@ import {
   type BulkTarget,
 } from '../lib/selection';
 import { useStoredChoice } from '../lib/use-stored-choice';
-import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
+import { type BulkPicker, type TagChoice } from './bulk-bar';
 import { BulkUpdateDialog } from './bulk-update-dialog';
 import { ContactFormModal } from './contact-form-modal';
+import { ContactQuickView } from './contact-quick-view';
 import { ContactsKanban } from './contacts-kanban';
 import { ContactsTable } from './contacts-list';
 import { ContactsPagination } from './contacts-pagination';
-import { ContactsToolbar, filtersOfSegment, segmentOf } from './contacts-toolbar';
+import { ContactsToolbar } from './contacts-toolbar';
+import { AppliedFilters } from './applied-filters';
+import type { FilterSection } from './filter-panel';
 import { SaveSegmentModal } from './save-segment-modal';
 import type { SegmentOption, SegmentsState } from './segment-picker';
+import { SelectionBar } from './selection-bar';
 import { DedupeDialog } from './dedupe-dialog';
 import { ErrorLine } from './error-line';
-import { LostReasonDialog, type LostPrompt } from './lost-reason';
-import { isLostStage } from '../lib/stage-flow';
-import { statusAfterMove, statusNotice } from '../lib/status-scope';
+import { useStageMove } from './use-stage-move';
+import { statusAfterMove } from '../lib/status-scope';
 import { GroupModal } from './group-modal';
 import { SingleSendDrawer, type SingleSendTarget } from './single-send-drawer';
 import { ViewsBar } from './views-bar';
+import { FirstRun } from './first-run';
 import { ImportModal } from './import-modal';
 import { DeleteHistoryOption } from './delete-history-option';
-import { BookUserIcon, ChevronDownIcon, ChevronRightIcon, PlusIcon } from './icons';
+import { BulkPickers } from './bulk-bar';
 
 type View = 'list' | 'kanban';
 const VIEWS = ['list', 'kanban'] as const;
@@ -96,14 +117,33 @@ const STATS_KEY = 'cat:contacts:stats';
 
 const num = (n: number | undefined) => (n === undefined ? '—' : n.toLocaleString());
 
+/** Which part of the Filter panel a column header's "Filter" opens; the name, phone and email columns use the search box instead. */
+const COLUMN_FILTER: Partial<Record<ColumnId, FilterSection>> = {
+  stage: 'stage',
+  status: 'status',
+  minor: 'minor',
+  owner: 'owner',
+  tags: 'tag',
+  groups: 'segment',
+  whatsapp: 'consent',
+  sms: 'consent',
+  emailOptIn: 'consent',
+  source: 'source',
+};
+const SEARCH_COLUMNS: readonly ColumnId[] = ['name', 'phone', 'email'];
+
 /**
- * `/contacts`, the Contact Hub (TW-CON-001..008, 019). Filters and the page number live in the URL; the visible
- * columns, the layout and the stats strip are per-browser preferences; everything else is local state over the page
- * query.
+ * `/contacts`, the Contact Hub (TW-CON-001..008, 019): one slim toolbar (search, Filter, Columns, Create View, layout, Add Contact,
+ * the "..." menu, refresh), the applied-filter chips, the saved-view row (or the selection bar while rows are ticked), the table
+ * with its fixed footer, and the quick view that opens over it. Filters, the page number and the open contact live in the URL; the
+ * visible columns, the layout and the stats strip are per-browser preferences (a saved view can keep its own columns); everything
+ * else is local state over the page query.
  */
 export function ContactsScreen() {
   const t = useTranslations('contacts-attributes-tags.list');
   const tb = useTranslations('contacts-attributes-tags.bulk');
+  const tu = useTranslations('contacts-attributes-tags.leadHandling.uncontacted');
+  const tfu = useTranslations('contacts-attributes-tags.leadHandling.followUp');
   const tf = useTranslations('contacts-attributes-tags.form');
   const ts = useTranslations('contacts-attributes-tags.stageMenu');
   const router = useRouter();
@@ -126,6 +166,11 @@ export function ContactsScreen() {
   const canCreateViews = useCan('record.contact-views.create');
   const canUpdateViews = useCan('record.contact-views.update');
   const canDeleteViews = useCan('record.contact-views.delete');
+  const canReadCompanies = useCan('record.companies.read');
+  const canSend = useCan('inbox.conversation.reply');
+  const canCall = useCan('call.calls.use');
+  const canTask = useCan('record.tasks.create');
+  const canConnectWhatsapp = useCan('waba.numbers.read');
 
   // The rows-per-page choice is remembered per browser; a `per=` in the URL (a shared link) still wins.
   const [storedSize, setStoredSize] = useStoredValue(PAGE_SIZE_KEY);
@@ -133,7 +178,17 @@ export function ContactsScreen() {
   const filters = useMemo(() => parseFilters(search, sizeDefault), [search, sizeDefault]);
   /** The open saved view (`?view=`), kept in the URL beside the filters it applied. */
   const viewId = viewIdOf(search);
-  /** Changing any filter, the sort or the page size starts again from page 1; only `page` itself keeps the position. */
+  /** The contact the quick view shows (`?contact=`) and its section (`&panel=`). */
+  const quickId = quickViewIdOf(search);
+  const quickPanel = quickViewPanelOf(search);
+  /** A request to put the cursor in an inline composer of the quick view (the row's quick add, the action bar's buttons). */
+  const [focus, setFocus] = useState<FocusRequest | null>(null);
+  const askFocus = useCallback(
+    (target: AddTarget | null, clickedAt?: number) =>
+      setFocus(target ? { target, n: Date.now(), ...(clickedAt ? { clickedAt } : {}) } : null),
+    [],
+  );
+  /** Changing any filter, the sort or the page size starts again from page 1 and closes the quick view; only `page` keeps the position. */
   const setFilters = (patch: Partial<ContactFilters>) => {
     if (patch.limit !== undefined) setStoredSize(String(patch.limit));
     router.replace(
@@ -223,6 +278,8 @@ export function ContactsScreen() {
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
   const { owners, nameOf: ownerName, loading: ownersLoading } = useOwnerNames();
+  const channels = useChannels(canSend);
+  const numbers = useMemo(() => whatsappChannels(channels.data?.data ?? []), [channels.data]);
 
   const rows = list.items;
   const total = list.total;
@@ -231,10 +288,22 @@ export function ContactsScreen() {
     () => new Map((attributes.data ?? []).map((a) => [a.key, a.name])),
     [attributes.data],
   );
-  const stages = useMemo(() => stageChoices(statusOptions.data), [statusOptions.data]);
+  // The filters also offer the stages and statuses contacts hold that the workspace never listed (e.g. the default stage `new`).
+  const filterValues = useContactFilterValues();
+  const stages = useMemo(
+    () => stageChoices(statusOptions.data, undefined, filterValues.data?.lifecycleStages),
+    [statusOptions.data, filterValues.data],
+  );
   const statuses = useMemo(
-    () => statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)),
-    [statusOptions.data, tf],
+    () =>
+      statusChoices(
+        statusOptions.data,
+        (v) => tf(`statuses.${v}`),
+        undefined,
+        undefined,
+        filterValues.data?.statuses,
+      ),
+    [statusOptions.data, filterValues.data, tf],
   );
   const views = useMemo(() => rows.map((r) => rowView(r, attrLabels)), [rows, attrLabels]);
 
@@ -267,6 +336,12 @@ export function ContactsScreen() {
     () =>
       (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
+  );
+  // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
+  const scoringOn = useLeadScoringEnabled();
+  const omitted = useMemo(
+    () => omittedColumns({ canCompany: canReadCompanies, scoringOn }),
+    [canReadCompanies, scoringOn],
   );
   const stored = useMemo(() => parseStoredColumns(storedColumns), [storedColumns]);
   // A saved view can keep its own columns: while it is open they replace the person's, and edits to them stay on this
@@ -305,9 +380,15 @@ export function ContactsScreen() {
   const columns = useMemo(
     () =>
       viewCols
-        ? visibleColumns(viewCols, attributeColumns, viewCols)
-        : visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder)),
-    [viewCols, stored, attributeColumns, storedOrder],
+        ? visibleColumns(viewCols, attributeColumns, viewCols, omitted)
+        : visibleColumns(stored, attributeColumns, parseStoredColumns(storedOrder), omitted),
+    [viewCols, stored, attributeColumns, storedOrder, omitted],
+  );
+  const columnIds = useMemo(() => columns.map((c) => c.id), [columns]);
+  /** What the views bar compares with and saves into the open view: the view's own columns left out only for now are kept in it. */
+  const viewColumnIds = useMemo(
+    () => (savedViewCols ? restoreOmitted(columnIds, savedViewCols, omitted) : columnIds),
+    [columnIds, savedViewCols, omitted],
   );
   /** Where a column change goes: the open view's draft, or the person's own stored columns. */
   const chooseColumns = (ids: ColumnId[], order: boolean) => {
@@ -315,7 +396,25 @@ export function ContactsScreen() {
     else if (order) setStoredOrder(serializeColumns(ids));
     else setStoredColumns(serializeColumns(ids));
   };
-  const allCols = useMemo(() => allColumns(attributeColumns), [attributeColumns]);
+  /** Both the set and its order: a view's draft holds one list that is also the order. */
+  const applyColumns = (ids: ColumnId[]) => {
+    chooseColumns(ids, false);
+    if (!viewCols) chooseColumns(ids, true);
+  };
+  const allCols = useMemo(() => allColumns(attributeColumns, omitted), [attributeColumns, omitted]);
+  const addable = useMemo(() => addableColumns(allCols, columnIds), [allCols, columnIds]);
+
+  // Which part of the Filter panel to open from a column header, and a nudge that puts the cursor in the search box.
+  const [filterRequest, setFilterRequest] = useState<{
+    section: FilterSection;
+    nonce: number;
+  } | null>(null);
+  const [focusSearch, setFocusSearch] = useState(0);
+  const filterColumn = (id: ColumnId) => {
+    const section = COLUMN_FILTER[id];
+    if (section) setFilterRequest({ section, nonce: (filterRequest?.nonce ?? 0) + 1 });
+    else setFocusSearch((n) => n + 1);
+  };
 
   // selection
   const [sel, dispatch] = useReducer(selectionReducer, EMPTY_SELECTION);
@@ -329,6 +428,9 @@ export function ContactsScreen() {
     tag: filters.tag,
     consent: filters.consent,
     imported: filters.imported,
+    status: filters.status,
+    minor: filters.minor,
+    source: filters.source,
     segment: filters.segment,
     owner: filters.owner,
     rules: filters.rules,
@@ -346,7 +448,7 @@ export function ContactsScreen() {
   const [groupOpen, setGroupOpen] = useState(false);
   const [saveSegmentOpen, setSaveSegmentOpen] = useState(false);
   const [picker, setPicker] = useState<BulkPicker>(null);
-  const [updateOpen, setUpdateOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState<null | 'all' | 'owner' | 'stage'>(null);
   /** The contact a group/tag picker opened from a row's menu acts on; null when it acts on the selection. */
   const [pickerRow, setPickerRow] = useState<string | null>(null);
   const [sendTarget, setSendTarget] = useState<SingleSendTarget | null>(null);
@@ -355,8 +457,9 @@ export function ContactsScreen() {
     setPickerRow(null);
   };
   const [busy, setBusy] = useState(false);
-  const [stageBusy, setStageBusy] = useState<string | null>(null);
-  const [lostPrompt, setLostPrompt] = useState<LostPrompt | null>(null);
+  // Every stage move of the list and the board (the cell's picker, a dragged card) is the shared one: optimistic, with undo.
+  const stageMove = useStageMove();
+  const stageBusy = stageMove.busyId;
   const [exporting, setExporting] = useState(false);
   const deleteTarget = rows.find((r) => r.id === deleteId);
 
@@ -428,6 +531,18 @@ export function ContactsScreen() {
     report(tb('deleted', { count: out.changed }), out);
   }
 
+  /** Marks the selection as uncontacted (`true`) or as contacted (`false`) by hand. */
+  async function onBulkMark(uncontacted: boolean) {
+    const out = await guarded(() => bulkSetUncontacted(target(), uncontacted));
+    if (!out) return;
+    dispatch({ type: 'clear' });
+    await refresh();
+    report(
+      tu(uncontacted ? 'bulkMarkedUncontacted' : 'bulkMarkedContacted', { count: out.changed }),
+      out,
+    );
+  }
+
   async function onBulkGroup(action: 'add' | 'remove', groupId: string): Promise<boolean> {
     const out = await guarded(() => bulkGroupMembership(target(), groupId, action));
     if (!out) return false;
@@ -452,69 +567,39 @@ export function ContactsScreen() {
     return true;
   }
 
-  async function onBulkTag(action: 'add' | 'remove', choice: TagChoice): Promise<boolean> {
-    const out = await guarded(() => bulkTag(target(), action, choice));
+  async function onBulkTag(action: 'add' | 'remove', choices: TagChoice[]): Promise<boolean> {
+    let out: Awaited<ReturnType<typeof bulkTag>> | null | undefined = null;
+    for (const choice of choices) {
+      out = await guarded(() => bulkTag(target(), action, choice));
+      if (!out) return false;
+    }
     if (!out) return false;
     if (!pickerRow) dispatch({ type: 'clear' });
     await refresh();
-    const name = choice.tagId
-      ? ((tags.data ?? []).find((x) => x.id === choice.tagId)?.name ?? '')
-      : (choice.name ?? '');
+    const name = choices
+      .map((c) =>
+        c.tagId ? ((tags.data ?? []).find((x) => x.id === c.tagId)?.name ?? '') : (c.name ?? ''),
+      )
+      .filter(Boolean)
+      .join(', ');
     report(tb(action === 'add' ? 'tagged' : 'untagged', { count: out.changed, name }), out);
     return true;
   }
 
-  /** The stage cell's menu: saves the new stage of one contact, with the row version the table last read. */
-  async function changeStage(
-    id: string,
-    stage: string,
-    reason?: { lostReason?: string | null; otherLostReason?: string | null },
-  ) {
+  /** The stage cell's picker and the board: moves one contact, with the row version the table last read. */
+  function changeStage(id: string, stage: string, status?: string | null) {
     const row = rows.find((r) => r.id === id);
     if (!row) return;
-    // A lost stage asks why first; nothing is saved until the dialog gives a reason.
-    if (!reason && isLostStage(stages, stage)) {
-      setLostPrompt({
-        contactId: id,
-        contactName: row.name ?? '',
-        stageValue: stage,
-        stageLabel: stages.find((x) => x.value === stage)?.label ?? stage,
-      });
-      return;
-    }
-    setStageBusy(id);
-    try {
-      const saved = await updateContact(id, {
-        lifecycleStage: stage,
-        ...reason,
+    void stageMove.move(
+      {
+        id,
+        name: row.name ?? '',
         rowVersion: row.rowVersion,
-      });
-      setLostPrompt(null);
-      await refresh();
-      // The API keeps the status valid for the stage: say what happened to it, from its answer.
-      const stageName = stages.find((x) => x.value === stage)?.label ?? stage;
-      const notice = statusNotice(row.status, saved.status);
-      toast(
-        notice.kind === 'none'
-          ? ts('changed', { stage: stageName })
-          : notice.kind === 'cleared'
-            ? ts('changedStatusCleared', { stage: stageName })
-            : ts(notice.kind === 'reset' ? 'changedStatusReset' : 'changedStatusSet', {
-                stage: stageName,
-                status: statuses.find((x) => x.value === notice.status)?.label ?? notice.status,
-              }),
-        'success',
-      );
-    } catch (e) {
-      const kind = errorKind(e);
-      toast(
-        ts(kind === 'conflict' ? 'conflict' : kind === 'forbidden' ? 'forbidden' : 'failed'),
-        'danger',
-      );
-      if (kind === 'conflict') await refresh();
-    } finally {
-      setStageBusy(null);
-    }
+        stage: row.lifecycleStage || null,
+        status: row.status || null,
+      },
+      { stage, status },
+    );
   }
 
   async function onDeleteOne() {
@@ -541,21 +626,105 @@ export function ContactsScreen() {
     }
   }
 
+  /** A contact button was pressed: the workspace's lead handling settings decide whether that marks the contact as contacted. */
+  const pressed = (row: RowView, channel: ContactTouchChannel) => {
+    if (!canUpdate) return;
+    reportContactTouch(row.id, channel, row.uncontactedSince ? () => void refresh() : undefined);
+  };
+
+  /** The chat icon: open the conversation with the contact on the one connected number and go to it; several numbers: pick in the drawer. */
+  async function onChat(row: RowView) {
+    if (numbers.length !== 1) return setSendTarget({ row, channel: 'whatsapp' });
+    try {
+      const opened = await openConversation(row.id, numbers[0]!.id);
+      router.push(`/inbox?c=${opened.id}`);
+    } catch {
+      toast(tb('failed'), 'danger');
+    }
+  }
+
+  // --- the quick view ---
+  const neighbours = neighboursOf(rowIds, quickId);
+  /** Opens or moves the quick view; opening pushes a history entry (Back closes it), moving between contacts replaces it. */
+  const goQuick = useCallback(
+    (id: string, panel: SectionId = 'overview', how: 'push' | 'replace' = 'push') => {
+      const next = `${pathname}${withQuickView(search.toString(), id, panel)}`;
+      if (how === 'push') router.push(next, { scroll: false });
+      else router.replace(next, { scroll: false });
+    },
+    [pathname, router, search],
+  );
+
   const filtered = hasActiveFilter(filters);
   const count = sel.allMatching ? (total ?? null) : sel.ids.size;
   const selectedAny = sel.ids.size > 0 || sel.allMatching;
   const s = stats.data;
 
+  const conditions = appliedConditionCount(filters.rules);
+  const [aiSummary, setAiSummary] = useState<{ rules: string; summary: string } | null>(null);
+  const chips = appliedFilterChips(filters, {
+    words: {
+      segment: t('segmentLabel'),
+      group: t('groupLabel'),
+      tag: t('tagLabel'),
+      owner: t('ownerLabel'),
+      stage: t('stageLabel'),
+      status: t('statusLabel'),
+      minor: t('minorLabel'),
+      minorYes: t('minorYes'),
+      minorNo: t('minorNo'),
+      followUp: tfu('filterLabel'),
+      followUpStates: {
+        overdue: tfu('filter.overdue'),
+        today: tfu('filter.today'),
+        upcoming: tfu('filter.upcoming'),
+        someday: tfu('filter.someday'),
+        none: tfu('filter.none'),
+      },
+      consent: t('consentLabel'),
+      source: t('sourceLabel'),
+      conditions: t('conditionsLabel'),
+      imported: t('imported'),
+      noGroup: t('noGroup'),
+      unassigned: t('unassigned'),
+      myContacts: t('myContacts'),
+      formerMember: t('ownerFormer'),
+      subscribed: t('subscribedOnly'),
+      unsubscribed: t('unsubscribedOnly'),
+      conditionsValue: (n) => t('conditionsChip', { count: n }),
+    },
+    group: (id) => (groups.data ?? []).find((g) => g.id === id)?.name,
+    segment: (id) => segmentOptions.find((x) => x.id === id)?.name,
+    tag: (id) => (tags.data ?? []).find((x) => x.id === id)?.name,
+    owner: (id) => ownerName(id),
+    stage: (v) => stages.find((x) => x.value === v)?.label,
+    status: (v) => statuses.find((x) => x.value === v)?.label,
+    conditionCount: appliedConditionCount,
+    aiSummary:
+      aiSummary && aiSummary.rules === filters.rules && aiSummary.summary !== ''
+        ? aiSummary.summary
+        : null,
+    meId: session.user.id,
+  });
+  const removeChip = (chip: FilterChip) => setFilters(chip.clear);
+
   const handlers = {
     selected: sel.ids,
     canEdit: canUpdate,
     canDelete,
+    can: { note: canUpdate, task: canTask, call: canCall, send: canSend, chat: canSend },
+    // Unknown while the channel list loads: the Message button then assumes the number or mailbox is there.
+    connected: channels.isSuccess
+      ? { whatsapp: numbers.length > 0, email: emailChannels(channels.data.data).length > 0 }
+      : undefined,
     stageLabel: (v: string) => stages.find((x) => x.value === v)?.label ?? v,
     stageChoices: stages,
     onStageChange: canUpdate
-      ? (id: string, stage: string) => void changeStage(id, stage)
+      ? (id: string, stage: string, status?: string | null) => changeStage(id, stage, status)
       : undefined,
     stageBusyId: stageBusy,
+    stageStatusesOf: stageMove.statusesOf,
+    stageDefaultStatusOf: stageMove.defaultStatusOf,
     // Under each stage of the menu: what moving there would do to the contact's status.
     stageStatusHint: (status: string, stage: string) => {
       const move = statusAfterMove(statusOptions.data, status || null, stage);
@@ -584,183 +753,215 @@ export function ContactsScreen() {
       if (row) setFormFor(row);
     },
     onDelete: (id: string) => setDeleteId(id),
-    onSend: (row: RowView, channel: SendChannel) => setSendTarget({ row, channel }),
+    onSend:
+      canSend || canCall
+        ? (row: RowView, channel: SendChannel) => {
+            pressed(row, channel);
+            setSendTarget({ row, channel });
+          }
+        : undefined,
     onFilterTag: (tagId: string) => setFilters({ tag: tagId }),
+    onOpenQuick: (id: string, target?: AddTarget) => {
+      askFocus(target ?? null);
+      goQuick(id, target ? SECTION_OF_TARGET[target] : 'overview');
+    },
+    onChat: canSend
+      ? (row: RowView) => {
+          pressed(row, 'whatsapp');
+          void onChat(row);
+        }
+      : undefined,
+    onCopy: (value: string) => {
+      void navigator.clipboard?.writeText(value).then(
+        () => toast(t('copied'), 'success'),
+        () => toast(t('copyFailed'), 'danger'),
+      );
+    },
   };
 
   return (
     <CallingProvider>
-      <div className="space-y-3">
-        {/* Sticky under the 56px top bar: the title card and the search / filter row stay in view while the list scrolls. */}
-        <div className="sticky top-14 z-[35] -mx-4 -mt-4 space-y-3 bg-background px-4 pb-3 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
-          <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
-            <div className="flex min-w-0 items-center gap-4">
-              <span
-                aria-hidden="true"
-                className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand text-brand-foreground"
-              >
-                <BookUserIcon className="size-5" />
-              </span>
-              <div className="min-w-0">
-                <h1 className="text-xl font-bold tracking-tight">{t('title')}</h1>
-                <p className="mt-0.5 hidden text-sm text-muted-foreground sm:block">
-                  {t('subtitle')}
-                </p>
-              </div>
-            </div>
-            {canCreate && (
-              <Button variant="brand" className="h-10 px-5" onClick={() => setFormFor('new')}>
-                <PlusIcon /> {t('addContact')}
-              </Button>
-            )}
-          </header>
+      {/* The content area fills the window under the top bar and any notice bars (the shell subtracts them): the rows scroll inside the card and its footer stays put. */}
+      <PageFill minHeight="26rem" className="gap-3">
+        <div className="shrink-0 space-y-3">
+          <nav aria-label={t('breadcrumb')} className="text-sm text-muted-foreground">
+            <ol className="flex items-center gap-1.5">
+              <li>{t('breadcrumbContacts')}</li>
+              <li aria-hidden="true">/</li>
+              <li aria-current="page" className="font-semibold text-foreground">
+                {t('breadcrumbList')}
+              </li>
+            </ol>
+          </nav>
+          <h1 className="sr-only">{t('title')}</h1>
 
           <ContactsToolbar
             q={q}
             onQ={setQ}
-            segment={segmentOf(filters)}
-            onSegment={(v) => setFilters(filtersOfSegment(v))}
-            stats={s}
-            groups={groups.data ?? []}
-            segments={segmentOptions}
-            segmentsState={segmentsState}
-            onRetrySegments={() => void segmentList.refetch()}
-            canCreateSegment={canCreateSegments}
+            focusSearch={focusSearch}
+            filter={{
+              filters,
+              onChange: (patch) => setFilters(patch),
+              stats: s,
+              groups: groups.data ?? [],
+              segments: segmentOptions,
+              segmentsState,
+              onRetrySegments: () => void segmentList.refetch(),
+              canCreateSegment: canCreateSegments,
+              tags: tags.data ?? [],
+              owners,
+              meId: session.user.id,
+              // The shortcut on a one-person filter: select everything the view matches and open the owner change.
+              onReassignView:
+                canUpdate && total !== 0
+                  ? () => {
+                      dispatch({ type: 'selectAllMatching' });
+                      setUpdateOpen('owner');
+                    }
+                  : undefined,
+              stages,
+              statuses,
+              onAiSummary: (rules, summary) => setAiSummary({ rules, summary }),
+              conditionCount: conditions,
+              request: filterRequest,
+            }}
+            allColumns={allCols}
+            columnIds={columnIds}
+            onApplyColumns={applyColumns}
+            onResetColumns={() => {
+              if (viewCols) return setColDraft(null);
+              setStoredColumns(null);
+              setStoredOrder(null);
+            }}
+            onAddColumnField={() => router.push('/contact-properties')}
+            onCreateView={canCreateViews ? () => router.push('/contacts/views/new') : undefined}
+            view={view}
+            onView={chooseView}
+            onAdd={canCreate ? () => setFormFor('new') : undefined}
+            can={{
+              export: canExport,
+              import: canImport,
+              merge: canMerge,
+              createGroups: canCreateGroups,
+            }}
+            exporting={exporting}
+            onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
+            onImport={() => setImportOpen(true)}
+            onDedupe={() => setDedupeOpen(true)}
+            onNewGroup={() => setGroupOpen(true)}
+            showStats={showStats}
+            onToggleStats={() => setStatsRaw(showStats ? '0' : '1')}
             // A segment is saved from plain filters; with a segment already chosen there is nothing new to describe.
             onSaveAsSegment={
               canCreateSegments && filtered && !filters.segment && !filters.rules
                 ? () => setSaveSegmentOpen(true)
                 : undefined
             }
-            rules={filters.rules}
-            onRules={(rules) => setFilters({ rules })}
-            tag={filters.tag}
-            onTag={(id) => setFilters({ tag: id })}
-            tags={tags.data ?? []}
-            owner={filters.owner}
-            onOwner={(v) => setFilters({ owner: v })}
-            owners={owners}
-            meId={session.user.id}
-            // The shortcut on a one-person filter: select everything the view matches and open the owner change.
-            onReassignView={
-              canUpdate && total !== 0
-                ? () => {
-                    dispatch({ type: 'selectAllMatching' });
-                    setUpdateOpen(true);
-                  }
-                : undefined
-            }
-            stage={filters.lifecycleStage}
-            onStage={(v) => setFilters({ lifecycleStage: v })}
-            stages={stages}
-            consent={filters.consent}
-            onConsent={(v) => setFilters({ consent: v })}
-            order={filters.sort === 'createdAt' ? filters.order : null}
-            onOrder={(v) => setFilters({ order: v, sort: 'createdAt' })}
-            selectedCount={count}
-            anySelected={selectedAny}
-            busy={busy}
-            onClearSelection={() => dispatch({ type: 'clear' })}
-            onSendCampaign={() => void onSendCampaign()}
-            can={{
-              update: canUpdate,
-              delete: canDelete,
-              export: canExport,
-              import: canImport,
-              merge: canMerge,
-              createGroups: canCreateGroups,
-              createTags: canCreateTags,
-            }}
-            exporting={exporting}
-            onExportAll={() => void runExport({ kind: 'filter', filter: snapshot }, setExporting)}
-            onExportSelected={() => void runExport(target(), setBusy)}
-            onImport={() => setImportOpen(true)}
-            onAddColumnField={() => router.push('/contact-properties')}
-            onUpdateSelected={() => setUpdateOpen(true)}
-            onDedupe={() => setDedupeOpen(true)}
-            onNewGroup={() => setGroupOpen(true)}
-            onDeleteSelected={() => setConfirmBulkDelete(true)}
-            picker={pickerRow ? null : picker}
-            onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
-            onGroup={onBulkGroup}
-            onTagApply={onBulkTag}
-            allColumns={allCols}
-            columnIds={columns.map((c) => c.id)}
-            onApplyColumns={(ids) => {
-              // Both the set and its order: a view's draft holds one list that is also the order.
-              chooseColumns(ids, false);
-              if (!viewCols) chooseColumns(ids, true);
-            }}
-            onResetColumns={() => {
-              if (viewCols) return setColDraft(null);
-              setStoredColumns(null);
-              setStoredOrder(null);
-            }}
-            view={view}
-            onView={chooseView}
             onRefresh={() => void Promise.all([refresh(), list.refetch()])}
             refreshing={list.isFetching}
           />
 
-          {canReadViews && (
-            <ViewsBar
-              filters={filters}
-              defaultLimit={sizeDefault}
-              activeId={viewId}
-              columnIds={columns.map((c) => c.id)}
-              keepsColumns={savedViewCols !== null}
-              onSelect={selectView}
-              onPreset={selectPreset}
-              meId={session.user.id}
-              can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+          <AppliedFilters
+            chips={chips}
+            onRemove={removeChip}
+            onClearAll={() => setFilters(clearAllPatch())}
+            onSaveAsSegment={
+              canCreateSegments && filtered && !filters.segment && !filters.rules
+                ? () => setSaveSegmentOpen(true)
+                : undefined
+            }
+          />
+
+          {selectedAny ? (
+            <SelectionBar
+              count={count}
+              busy={busy}
+              can={{
+                update: canUpdate,
+                delete: canDelete,
+                export: canExport,
+                createTags: canCreateTags,
+              }}
+              onClear={() => dispatch({ type: 'clear' })}
+              onSendCampaign={() => void onSendCampaign()}
+              onExport={() => void runExport(target(), setBusy)}
+              onDelete={() => setConfirmBulkDelete(true)}
+              onAssignOwner={() => setUpdateOpen('owner')}
+              onChangeStage={() => setUpdateOpen('stage')}
+              onUpdate={() => setUpdateOpen('all')}
+              onMarkUncontacted={(v) => void onBulkMark(v)}
+              picker={pickerRow ? null : picker}
+              onPicker={(p) => (p === null ? closePicker() : setPicker(p))}
+              onGroup={onBulkGroup}
+              onTagApply={onBulkTag}
             />
+          ) : (
+            canReadViews && (
+              <div className="flex min-h-[3.25rem] flex-wrap items-center gap-x-4 gap-y-2">
+                <ViewsBar
+                  filters={filters}
+                  defaultLimit={sizeDefault}
+                  activeId={viewId}
+                  columnIds={viewColumnIds}
+                  keepsColumns={savedViewCols !== null}
+                  onSelect={selectView}
+                  onPreset={selectPreset}
+                  meId={session.user.id}
+                  count={viewId || !filtered ? (viewId ? total : s?.total) : undefined}
+                  can={{ create: canCreateViews, update: canUpdateViews, delete: canDeleteViews }}
+                  hasUncontacted={(s?.uncontacted ?? 0) > 0}
+                  hasFollowUp={(s?.withFollowUp ?? 0) > 0}
+                />
+                {/* One count only: the pill on the view picker says it, except while a filter is on (the pill would be the workspace's). */}
+                {filtered && !viewId && (
+                  <p className="text-sm text-muted-foreground">
+                    {t('totalLabel')}{' '}
+                    <strong className="font-semibold tabular-nums text-foreground">
+                      {total === undefined
+                        ? '—'
+                        : list.totalApproximate
+                          ? t('approxTotal', { total })
+                          : total.toLocaleString()}
+                    </strong>
+                  </p>
+                )}
+              </div>
+            )
           )}
         </div>
 
-        <div>
-          <button
-            type="button"
-            aria-expanded={showStats}
-            onClick={() => setStatsRaw(showStats ? '0' : '1')}
-            className="inline-flex items-center gap-1.5 rounded-md text-sm text-muted-foreground outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            {showStats ? (
-              <ChevronDownIcon className="size-3.5" />
-            ) : (
-              <ChevronRightIcon className="size-3.5 rtl:rotate-180" />
-            )}
-            {showStats ? t('hideStats') : t('showStats')}
-          </button>
-          {showStats && (
-            <div className="mt-2 grid grid-cols-2 gap-3 lg:grid-cols-4">
-              <StatTile
-                label={t('stats.total')}
-                value={num(s?.total)}
-                hint={t('stats.inWorkspace')}
-              />
-              <StatTile
-                tone="accent"
-                label={t('stats.groups')}
-                value={num(s?.groups ?? groups.data?.length)}
-                hint={t('stats.segments')}
-              />
-              <StatTile
-                label={t('stats.subscribed')}
-                value={num(s?.subscribed)}
-                hint={t('stats.optedIn')}
-              />
-              <StatTile
-                tone="warning"
-                label={t('stats.unsubscribed')}
-                value={num(s?.unsubscribed)}
-                hint={t('stats.optedOut')}
-              />
-            </div>
-          )}
-        </div>
+        {showStats && (
+          <div className="grid shrink-0 grid-cols-2 gap-3 lg:grid-cols-4">
+            <StatTile
+              label={t('stats.total')}
+              value={num(s?.total)}
+              hint={t('stats.inWorkspace')}
+            />
+            <StatTile
+              tone="accent"
+              label={t('stats.groups')}
+              value={num(s?.groups ?? groups.data?.length)}
+              hint={t('stats.segments')}
+            />
+            <StatTile
+              label={t('stats.subscribed')}
+              value={num(s?.subscribed)}
+              hint={t('stats.optedIn')}
+            />
+            <StatTile
+              tone="warning"
+              label={t('stats.unsubscribed')}
+              value={num(s?.unsubscribed)}
+              hint={t('stats.optedOut')}
+            />
+          </div>
+        )}
 
         {list.segmentInvalid > 0 && (
-          <Alert tone="warning" className="flex flex-wrap items-center justify-between gap-2">
+          <Alert
+            tone="warning"
+            className="flex shrink-0 flex-wrap items-center justify-between gap-2"
+          >
             <span>{t('segmentInvalid', { count: list.segmentInvalid })}</span>
             <Link
               href={`/segments/${filters.segment}/edit`}
@@ -774,7 +975,7 @@ export function ContactsScreen() {
         {header === 'all' && total !== undefined && total > rows.length && (
           <div
             role="status"
-            className="flex flex-wrap items-center justify-center gap-2 rounded-md border border-border bg-brand/5 px-3 py-2 text-sm"
+            className="flex shrink-0 flex-wrap items-center justify-center gap-2 rounded-md border border-border bg-brand/5 px-3 py-2 text-sm"
           >
             {sel.allMatching ? (
               <>
@@ -805,8 +1006,8 @@ export function ContactsScreen() {
         <section
           aria-label={t('tableLabel')}
           aria-busy={list.isFetching}
-          // The card is as tall as the window allows: the rows scroll inside it and the footer stays pinned.
-          className="flex max-h-[max(26rem,calc(100dvh-17rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+          // The card takes what is left of the content area: the rows scroll inside it and the footer stays pinned to its bottom edge.
+          className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-background"
         >
           <div
             className={cn(
@@ -820,6 +1021,12 @@ export function ContactsScreen() {
               <div className="p-4">
                 <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
               </div>
+            ) : rows.length === 0 && !filtered ? (
+              <FirstRun
+                onAdd={canCreate ? () => setFormFor('new') : undefined}
+                onImport={canImport ? () => setImportOpen(true) : undefined}
+                connectHref={canConnectWhatsapp ? '/channels/whatsapp' : undefined}
+              />
             ) : rows.length === 0 ? (
               <div className="p-4">
                 <EmptyState
@@ -849,6 +1056,7 @@ export function ContactsScreen() {
                 onToggleAll={(checked) => dispatch({ type: 'setMany', ids: rowIds, checked })}
                 sort={{ key: filters.sort, order: filters.order }}
                 onSort={onSortColumn}
+                onSortTo={(key, order) => setFilters({ sort: key, order })}
                 onMoveColumn={(id, target) =>
                   chooseColumns(
                     moveColumn(
@@ -869,6 +1077,14 @@ export function ContactsScreen() {
                     true,
                   )
                 }
+                columnTools={{
+                  addable,
+                  onAdd: (id) => applyColumns(showColumn(columnIds, id)),
+                  onHide: (id) => applyColumns(hideColumn(columnIds, id)),
+                  hasFilter: (id) => id in COLUMN_FILTER || SEARCH_COLUMNS.includes(id),
+                  onFilter: filterColumn,
+                  onAddField: () => router.push('/contact-properties'),
+                }}
                 {...handlers}
               />
             ) : (
@@ -886,10 +1102,10 @@ export function ContactsScreen() {
               page={list.page}
               total={total}
               limit={filters.limit}
+              rowsOnPage={rows.length}
               loading={list.isFetching}
               onPage={(p) => setFilters({ page: p })}
               onLimit={(n) => setFilters({ limit: n })}
-              onRecount={() => void invalidateContacts(qc)}
               approximate={list.totalApproximate}
             />
           )}
@@ -909,24 +1125,48 @@ export function ContactsScreen() {
           </div>
         )}
 
+        <ContactQuickView
+          contactId={quickId}
+          panel={quickPanel}
+          focus={focus}
+          previousId={neighbours.previous}
+          nextId={neighbours.next}
+          position={
+            neighbours.index >= 0
+              ? {
+                  index: neighbours.index + (list.page - 1) * filters.limit,
+                  total: total ?? rows.length,
+                }
+              : null
+          }
+          onNavigate={(id) => {
+            askFocus(null);
+            goQuick(id, quickPanel, 'replace');
+          }}
+          onPanel={(section, opts) => {
+            askFocus(opts?.focus ?? null, opts?.clickedAt);
+            goQuick(quickId, section, 'replace');
+          }}
+          onClose={() => {
+            askFocus(null);
+            router.replace(`${pathname}${withQuickView(search.toString(), '')}`, { scroll: false });
+          }}
+        />
+
         <ContactFormModal
           open={formFor !== null}
           contact={formFor === 'new' || formFor === null ? undefined : formFor}
           onClose={() => setFormFor(null)}
         />
-        <LostReasonDialog
-          prompt={lostPrompt}
-          busy={stageBusy !== null}
-          onConfirm={(p, fields) => void changeStage(p.contactId, p.stageValue, fields)}
-          onClose={() => setLostPrompt(null)}
-        />
+        <>{stageMove.dialog}</>
         <BulkUpdateDialog
-          open={updateOpen}
+          open={updateOpen !== null}
           count={sel.allMatching ? (total ?? null) : sel.ids.size}
           ownerOnly={sel.allMatching}
+          focus={updateOpen === 'owner' || updateOpen === 'stage' ? updateOpen : undefined}
           busy={busy}
           onApply={onBulkUpdate}
-          onClose={() => setUpdateOpen(false)}
+          onClose={() => setUpdateOpen(null)}
         />
         <ImportModal open={importOpen} onClose={() => setImportOpen(false)} />
         <GroupModal open={groupOpen} onClose={() => setGroupOpen(false)} />
@@ -976,7 +1216,7 @@ export function ContactsScreen() {
           }}
           onConfirm={() => void onBulkDelete()}
         />
-      </div>
+      </PageFill>
     </CallingProvider>
   );
 }
@@ -985,8 +1225,8 @@ function ListSkeleton() {
   const t = useTranslations('contacts-attributes-tags.list');
   return (
     <div role="status" aria-label={t('loading')} className="divide-y divide-border">
-      {Array.from({ length: 8 }, (_, i) => (
-        <div key={i} className="flex h-16 animate-pulse items-center gap-4 px-4">
+      {Array.from({ length: 10 }, (_, i) => (
+        <div key={i} className="flex h-12 animate-pulse items-center gap-4 px-4">
           <span className="size-4 rounded bg-muted" />
           <span className="size-8 rounded-full bg-muted" />
           <span className="h-3 w-40 rounded bg-muted" />

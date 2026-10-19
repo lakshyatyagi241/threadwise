@@ -4,6 +4,7 @@ import {
   FREQUENCY_CAP_ERROR_CODE,
   RECURRENCE_FREQUENCIES,
   WIZARD_CONTACT_FIELDS,
+  WIZARD_FOLLOW_UP_TRIGGERS,
   WIZARD_SCHEDULE_MODES,
   WIZARD_STEPS,
   WIZARD_TEMPLATE_CATEGORIES,
@@ -158,6 +159,9 @@ const DYNAMIC = [
     'auto_end_before_send',
     'auto_end_recurring',
     'pacing_range',
+    'follow_up_template_required',
+    'follow_up_flow_required',
+    'follow_up_cloud_api_only',
   ].map((c) => `campaigns.wizard.issues.${c}`),
   ...['header', 'body', 'button'].map((s) => `campaigns.wizard.review.slotSection.${s}`),
   ...['multiple', 'tracking', 'credits', 'format'].map((n) => `campaigns.wizard.test.notes.${n}`),
@@ -172,13 +176,36 @@ const DYNAMIC = [
   ...['searchGroups', 'searchSegments', 'groups', 'segments', 'noGroups', 'noSegments'].map(
     (k) => `campaigns.wizard.audience.${k}`,
   ),
-  ...['contacts', 'groups', 'segments', 'csv'].map((k) => `campaigns.wizard.audience.mode.${k}`),
+  ...['contacts', 'groups', 'segments', 'csv', 'previous'].map(
+    (k) => `campaigns.wizard.audience.mode.${k}`,
+  ),
   ...['new', 'existing', 'optedOut'].map((k) => `campaigns.wizard.audience.csvRow.${k}`),
   ...['missing_phone', 'invalid_phone', 'duplicate'].map(
     (k) => `campaigns.wizard.audience.csvReason.${k}`,
   ),
   ...['pending', 'recovered', 'exhausted'].map((k) => `campaigns.wizard.status.retry.${k}`),
   ...KNOWN_STATES.map((s) => `campaigns.wizard.status.state.${s}`),
+  ...WIZARD_FOLLOW_UP_TRIGGERS.flatMap((x) => [
+    `campaigns.wizard.followUps.trigger.${x}`,
+    `campaigns.wizard.followUps.triggerHelp.${x}`,
+    `campaigns.wizard.followUps.when.${x}`,
+  ]),
+  ...['minutes', 'hours', 'days'].flatMap((u) => [
+    `campaigns.wizard.followUps.duration.${u}`,
+    `campaigns.wizard.followUps.unit.${u}`,
+  ]),
+  ...['template', 'flow'].flatMap((k) => [
+    `campaigns.wizard.followUps.action.${k}`,
+    `campaigns.wizard.followUps.does.${k}`,
+  ]),
+  ...['waiting', 'sent', 'delivered', 'read', 'flowsStarted', 'skipped', 'lapsed', 'failed'].map(
+    (k) => `campaigns.wizard.status.followUps.count.${k}`,
+  ),
+  ...['skipped', 'lapsed'].map((k) => `campaigns.wizard.status.followUps.hint.${k}`),
+  ...['sequence_not_recurring', 'sequence_with_ab', 'sequence_template_required'].map(
+    (k) => `campaigns.wizard.issues.${k}`,
+  ),
+  'campaigns.wizard.status.col.template',
 ];
 
 describe('message keys used in code', () => {

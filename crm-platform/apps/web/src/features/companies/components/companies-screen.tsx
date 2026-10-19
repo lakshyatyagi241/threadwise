@@ -6,6 +6,8 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { downloadBlob } from '@/features/contacts-attributes-tags/lib/download';
+import { useStoredValue } from '@/lib/use-stored-value';
 import {
   companiesApi,
   invalidateCompanies,
@@ -14,7 +16,16 @@ import {
   useIndustries,
   useMembers,
 } from '../api/companies';
+import { useCompanyProperties } from '../api/properties';
 import type { CompanyResponse } from '../api/schemas';
+import {
+  STORAGE_KEY as COLUMNS_KEY,
+  allColumns,
+  exportColumnIds,
+  parseStoredColumns,
+  serializeColumns,
+  visibleColumns,
+} from '../lib/columns';
 import { errorKind } from '../lib/errors';
 import {
   filtersToSearch,
@@ -25,13 +36,18 @@ import {
   type CompanyFilters,
 } from '../lib/filters';
 import { formatTotals } from '../lib/money';
+import { filterableFields, isSortableKind } from '../lib/property-filters';
+import { isShownProperty } from '../lib/properties';
 import { headerState, retain, setAll, toggle } from '../lib/selection';
 import { useDebounced } from '../lib/use-debounced';
+import { ColumnsMenu } from './columns-menu';
 import { CompaniesTable } from './companies-table';
 import { CompaniesToolbar } from './companies-toolbar';
 import { CompanyFormModal } from './company-form-modal';
 import { ErrorLine } from './error-line';
-import { PlusIcon } from './icons';
+import { DownloadIcon, PlusIcon, UploadIcon } from './icons';
+import { ImportModal } from './import-modal';
+import { PropertyFilters } from './property-filters';
 
 /**
  * `/companies` (TW-CTP-002): Reference's Companies page. The header with "New company", the three tiles (companies, with open deals,
@@ -49,6 +65,8 @@ export function CompaniesScreen() {
   const { toast } = useToast();
   const canCreate = useCan('record.companies.create');
   const canDelete = useCan('record.companies.delete');
+  const canExport = useCan('record.companies.export');
+  const canImport = useCan('record.companies.import') && canCreate;
 
   const filters = useMemo(() => parseFilters(search), [search]);
   // The box keeps what is typed; the address (and so the requests) follow after a pause. It starts from the address and is not
@@ -71,6 +89,36 @@ export function CompaniesScreen() {
   const industries = useIndustries();
   const rows = list.items;
   const ids = useMemo(() => rows.map((r) => r.id), [rows]);
+
+  // Company properties (BL-196): columns, conditions and orders. Nothing is offered to someone who cannot read the definitions.
+  const properties = useCompanyProperties();
+  const filterable = useMemo(() => filterableFields(properties.fields), [properties.fields]);
+  const sortProperties = useMemo(
+    () =>
+      filterable
+        .filter((f) => isSortableKind(f.kind))
+        .map((f) => ({ key: f.id, label: 'text' in f.label ? f.label.text : f.id })),
+    [filterable],
+  );
+  const propertyColumns = useMemo(
+    () =>
+      properties.fields
+        .filter(isShownProperty)
+        .filter((f) => f.fieldType !== 'formula')
+        .map((f) => ({ key: f.key, label: f.label })),
+    [properties.fields],
+  );
+  const [storedColumns, setStoredColumns] = useStoredValue(COLUMNS_KEY);
+  const columns = useMemo(
+    () => visibleColumns(parseStoredColumns(storedColumns), propertyColumns),
+    [storedColumns, propertyColumns],
+  );
+  const [importing, setImporting] = useState(false);
+  const exportCsv = useMutation({
+    mutationFn: () => companiesApi.exportCsv(listQuery(filters), exportColumnIds(columns)),
+    onSuccess: (blob) => downloadBlob('companies-export.csv', blob),
+    onError: () => toast(tToast('exportFailed'), 'danger'),
+  });
 
   // Ticks of rows that are gone (deleted, or filtered out) are dropped when read, so a bulk action never names a row nobody sees.
   const [ticked, setSelected] = useState<ReadonlySet<string>>(new Set());
@@ -118,11 +166,27 @@ export function CompaniesScreen() {
           <h1 className="text-2xl font-semibold leading-tight">{t('title')}</h1>
           <p className="mt-1.5 max-w-xl text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>
-        {canCreate && (
-          <Button variant="brand" className="self-start" onClick={() => setCreating(true)}>
-            <PlusIcon /> {t('newCompany')}
-          </Button>
-        )}
+        <div className="flex flex-wrap items-center gap-2 self-start">
+          {canExport && (
+            <Button
+              variant="secondary"
+              disabled={exportCsv.isPending}
+              onClick={() => exportCsv.mutate()}
+            >
+              {exportCsv.isPending ? <Spinner /> : <DownloadIcon />} {t('export')}
+            </Button>
+          )}
+          {canImport && (
+            <Button variant="secondary" onClick={() => setImporting(true)}>
+              <UploadIcon /> {t('import')}
+            </Button>
+          )}
+          {canCreate && (
+            <Button variant="brand" onClick={() => setCreating(true)}>
+              <PlusIcon /> {t('newCompany')}
+            </Button>
+          )}
+        </div>
       </div>
 
       <div className="mb-6 grid grid-cols-3 gap-3 sm:gap-4">
@@ -159,6 +223,24 @@ export function CompaniesScreen() {
           }}
           members={members.data ?? []}
           industries={industries.data ?? []}
+          sortProperties={sortProperties}
+          extra={
+            <>
+              {filterable.length > 0 && (
+                <PropertyFilters
+                  fields={filterable}
+                  value={filters.props}
+                  onApply={(props) => apply({ props })}
+                />
+              )}
+              <ColumnsMenu
+                allColumns={allColumns(propertyColumns)}
+                current={columns.map((c) => c.id)}
+                onChange={(ids) => setStoredColumns(serializeColumns(ids))}
+                onReset={() => setStoredColumns(null)}
+              />
+            </>
+          }
           onRefresh={() => void invalidateCompanies(qc)}
           refreshing={list.isFetching && !list.isPending}
         />
@@ -199,10 +281,10 @@ export function CompaniesScreen() {
           </div>
         ) : list.isError ? (
           <div className="p-4">
-            {errorKind(list.error) === 'unavailable' ? (
+            {errorKind(list.error, 'list') === 'unavailable' ? (
               <EmptyState title={t('unavailableTitle')} message={t('unavailable')} />
             ) : (
-              <ErrorLine error={list.error} onRetry={() => void list.refetch()} />
+              <ErrorLine error={list.error} context="list" onRetry={() => void list.refetch()} />
             )}
           </div>
         ) : rows.length === 0 ? (
@@ -216,7 +298,7 @@ export function CompaniesScreen() {
                     variant="secondary"
                     onClick={() => {
                       setQ('');
-                      apply({ q: '', owner: '', industry: '', openDeals: false });
+                      apply({ q: '', owner: '', industry: '', openDeals: false, props: [] });
                     }}
                   >
                     {t('clearFilters')}
@@ -240,6 +322,8 @@ export function CompaniesScreen() {
         ) : (
           <CompaniesTable
             rows={rows}
+            columns={columns}
+            fields={properties.fields}
             selected={selected}
             headerState={headerState(ids, selected)}
             canDelete={canDelete}
@@ -270,6 +354,7 @@ export function CompaniesScreen() {
         </div>
       )}
 
+      {importing && <ImportModal onClose={() => setImporting(false)} />}
       {creating && (
         <CompanyFormModal
           onClose={() => setCreating(false)}

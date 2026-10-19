@@ -1433,13 +1433,16 @@
             "storefront_builder": "Pembuat etalase online.",
             "invoicing": "Faktur, nota kredit, pembayaran, pesanan penjualan, dan tarif pajak.",
             "forms_and_links": "Formulir penangkap lead dan tautan yang dapat dibagikan.",
-            "extra_channels": "Kanal Telegram, Facebook, dan Instagram.",
+            "extra_channels": "Kanal Telegram, Facebook, Instagram, LINE, Viber dan WeChat.",
             "form_builder": "Formulir web yang di-host dan disematkan yang membuat kontak di CRM. Aplikasi Formulir berbayar memegang sakelar ini.",
             "waba_groups": "Buat dan kelola grup WhatsApp dari nomor Cloud API: tautan undangan, permintaan bergabung, anggota. Nomor harus berupa Official Business Account.",
             "sms": "SMS khusus kirim lewat Twilio atau MSG91: hubungkan pengirim, kirim siaran dan kampanye SMS.",
             "help_agent": "Asisten Bantuan dalam aplikasi: pengguna meminta tugas dengan kata-kata biasa, lalu asisten memandu atau mengerjakannya di sesi mereka sendiri dan bertanya dulu sebelum hal berisiko. Memakai token AI.",
             "email_channel": "Hubungkan kotak surat Gmail dan Google Workspace ke kotak masuk tim. Aplikasi Email berbayar mengendalikan sakelar ini.",
-            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi."
+            "personal_history_full": "Memungkinkan nomor WhatsApp pribadi mengimpor seluruh riwayat chat saat pertama kali ditautkan. Impor chat terbaru tersedia untuk semua paket yang memiliki nomor pribadi.",
+            "ai_crm_copilot": "Mencari dan menilai prospek dengan AI dari kontak Anda.",
+            "lead_scoring": "Menilai kontak dengan AI dan menjalankan pilot pertumbuhan. Aplikasi Penilaian prospek dengan AI mengatur sakelar ini.",
+            "record_assignment": "Menugaskan kontak, perusahaan, dan transaksi baru ke pemilik penjualan yang tepat berdasarkan aturan prioritas."
           },
           "units": {
             "days": "Hari",
@@ -1582,7 +1585,9 @@
             "form_submissions_monthly": "Pengiriman formulir per bulan",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI per bulan",
             "sms_monthly": "SMS per bulan",
-            "email_mailboxes": "Kotak surat email"
+            "email_mailboxes": "Kotak surat email",
+            "email_monthly": "Email per bulan",
+            "storage_gb": "Penyimpanan (GB)"
           },
           "featureGroups": {
             "messaging": "Pesan",
@@ -1617,13 +1622,16 @@
             "storefront_builder": "Pembuat etalase dan situs web",
             "invoicing": "Faktur (faktur, nota kredit, faktur berulang)",
             "forms_and_links": "Formulir, tautan klik-untuk-obrolan, dan grup",
-            "extra_channels": "Kanal Telegram, Facebook, dan Instagram",
+            "extra_channels": "Kanal Telegram, Facebook, Instagram, LINE, Viber dan WeChat",
             "form_builder": "Formulir (pembuat formulir web)",
             "waba_groups": "Grup WhatsApp (Cloud API)",
             "sms": "Kanal SMS",
             "help_agent": "Asisten Bantuan (AI, memakai token)",
             "email_channel": "Kanal email (Gmail)",
-            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)"
+            "personal_history_full": "Impor riwayat chat lengkap (WhatsApp pribadi)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Penilaian prospek dengan AI",
+            "record_assignment": "Aturan penugasan data (tugaskan otomatis kontak, perusahaan, dan transaksi)"
           },
           "problems": {
             "required": "Kolom ini wajib diisi.",
@@ -1677,7 +1685,9 @@
             "form_submissions_monthly": "Pengiriman formulir yang diterima dalam bulan kalender, tidak termasuk spam. Melebihi batas, pengiriman tetap disimpan untuk ditinjau, tidak pernah dibuang. 0 = tanpa batas.",
             "ai_form_generations_monthly": "Pembuatan oleh pembuat formulir AI dalam bulan kalender, termasuk percobaan ulang perbaikan. 0 = tanpa batas.",
             "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
-            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas."
+            "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
+            "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
+            "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir."
           }
         }
       },
@@ -1725,6 +1735,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Warna berpendar lembut di belakang kartu buram."
+          },
+          "geta": {
+            "name": "Geta terbagi",
+            "description": "Formulir di satu sisi, panel merek animasi dengan statistik di sisi lain."
           }
         },
         "fields": {

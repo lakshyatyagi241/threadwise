@@ -23,13 +23,19 @@
       "imported": "فائل سے درآمد شدہ",
       "createdAt": "بنایا گیا",
       "updatedAt": "آخری بار اپ ڈیٹ",
-      "lastActivityAt": "آخری سرگرمی"
+      "lastActivityAt": "آخری سرگرمی",
+      "minor": "نابالغ کے طور پر نشان زد",
+      "dateOfBirth": "تاریخِ پیدائش",
+      "age": "عمر (سال)",
+      "timezone": "ٹائم زون",
+      "uncontacted": "رابطہ نہیں کیا گیا"
     },
     "fieldGroups": {
       "journey": "سفر",
       "who": "کون",
       "activity": "سرگرمی",
-      "properties": "خصوصیات"
+      "properties": "خصوصیات",
+      "company": "کمپنی پراپرٹی"
     },
     "operators": {
       "equals": "ہے",

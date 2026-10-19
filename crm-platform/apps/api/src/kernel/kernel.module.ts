@@ -1,5 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ActivityService } from './activity/activity.service';
+import { AnalyticsEvents } from './analytics/analytics-events.service';
 import { AuditService } from './audit/audit.service';
 import { DisplayIdService } from './identifiers/display-id.service';
 import { OutboxSubscriberRegistry } from './outbox/outbox-subscribers';
@@ -25,6 +26,7 @@ import { RbacService } from './rbac/rbac.service';
 @Module({
   providers: [
     ActivityService,
+    AnalyticsEvents,
     OutboxService,
     OutboxSubscriberRegistry,
     AuditService,
@@ -33,6 +35,7 @@ import { RbacService } from './rbac/rbac.service';
   ],
   exports: [
     ActivityService,
+    AnalyticsEvents,
     OutboxService,
     OutboxSubscriberRegistry,
     AuditService,

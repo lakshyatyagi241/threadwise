@@ -73,6 +73,8 @@ const detail = (): FormSubmissionDetail =>
     answersRemoved: false,
     createdAt: '2026-10-11T10:00:00.000Z',
     answers: [],
+    ageGate: null,
+    guardian: null,
     attribution: { utm: {}, referrer: null, pageUrl: null, userAgent: null },
     consent: null,
     error: null,

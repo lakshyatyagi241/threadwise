@@ -1,0 +1,546 @@
+{
+  "compliance-center": {
+    "title": "Compliance center",
+    "subtitle": "Tools to help you meet your privacy duties: the laws you work under, who people can reach, your notices and sub-processors, and a checklist of what is in place. They do not make a workspace compliant by themselves, and this is not legal advice.",
+    "readOnly": "You can read this page but not change it.",
+    "saved": "Compliance settings saved.",
+    "conflict": "Someone else saved these settings while you were editing. The latest version is loaded; check it and make your change again.",
+    "conflictOk": "Got it",
+    "common": {
+      "dismiss": "Dismiss",
+      "retry": "Try again",
+      "loading": "Loading..."
+    },
+    "tabs": {
+      "checklist": "Checklist",
+      "profiles": "Laws and regions",
+      "contacts": "Contacts and children",
+      "notices": "Notices",
+      "links": "Privacy and terms links",
+      "subprocessors": "Sub-processors",
+      "windows": "Quiet hours and calls",
+      "dnc": "Do not call"
+    },
+    "saveBar": {
+      "unsaved": "You have unsaved changes.",
+      "problems": "Fix the highlighted fields before saving.",
+      "discard": "Discard changes",
+      "save": "Save changes"
+    },
+    "errors": {
+      "network": "We could not reach the server. Check your connection and try again.",
+      "forbidden": "You do not have permission to do this.",
+      "notFound": "That no longer exists.",
+      "conflict": "Someone else changed this. Reload and try again.",
+      "settingsInvalid": "Some of the settings are not valid. Check the quiet hours, the calling window, the time zone and the language.",
+      "duplicate": "You already list a sub-processor with that name.",
+      "dncInvalid": "The file could not be read: it has no phone numbers, or too many in one go.",
+      "rateLimited": "Too many requests. Wait a moment and try again.",
+      "validation": "Some of the values are not valid. Check the form and try again.",
+      "unexpected": "Something went wrong. Try again."
+    },
+    "problems": {
+      "httpsOnly": "Use an address that starts with https://.",
+      "email": "Enter a valid email address.",
+      "quietEmpty": "The quiet hours need an end that is different from the start.",
+      "windowOrder": "The calling window must end after it starts, on the same day.",
+      "daysEmpty": "Pick at least one day.",
+      "englishFirst": "English is always the first notice. Pick another language."
+    },
+    "phi": {
+      "title": "Do not store protected health information.",
+      "body": "This product is not built for health records. We do not claim HIPAA compliance and we do not sign business associate agreements, so do not put diagnoses, treatment details, insurance numbers or similar health information in contacts, notes, messages, files, forms or recordings."
+    },
+    "checklist": {
+      "intro": "What is in place in your workspace today, worked out from your own settings and data. \"Built\" means the tool is set up. It does not mean a law is satisfied.",
+      "summaryLabel": "Totals",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Built",
+        "partial": "Partly",
+        "open": "Open"
+      },
+      "baselineTitle": "For every workspace",
+      "baselineHint": "A strict set of points we offer to all workspaces, in any country.",
+      "profileTitle": "Asked for by the laws you switched on",
+      "profileHint": "Each row names the profiles that ask for it. The strictest rule is used when several apply.",
+      "noProfiles": "No law or region is switched on yet, so only the points for every workspace are shown. Choose them under Laws and regions.",
+      "disclaimer": "This list helps you track your own setup. It is not legal advice and it does not say your workspace complies with any law. Ask your counsel what applies to you.",
+      "open": "Open",
+      "items": {
+        "lawful_basis": {
+          "title": "Purpose and basis recorded",
+          "detail": {
+            "built": "Every consent is recorded against a purpose, with who or what recorded it, the wording shown, its version and the time. Nothing for you to set up."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Consent and easy withdrawal",
+          "detail": {
+            "detectionOff": "STOP detection is off, so a contact who replies STOP is not opted out. Switch it on in the consent settings.",
+            "optInOff": "STOP works, but marketing does not need a recorded consent yet. Switch on \"require recorded consent\" in the consent settings.",
+            "built": "STOP is detected and marketing needs a recorded consent."
+          }
+        },
+        "notices": {
+          "title": "Versioned notices",
+          "detail": {
+            "built": "{lines, plural, one {# consent notice is} other {# consent notices are}} switched on, including your default notice in {languages, plural, one {# language} other {# languages}}.",
+            "noDefault": "{lines, plural, one {# consent notice is} other {# consent notices are}} switched on, but the workspace has no default notice yet.",
+            "none": "No consent notice is switched on. Write a default notice so a record can name the wording a person saw."
+          }
+        },
+        "rights": {
+          "title": "People's requests (access, export, erase)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# request is} other {# requests are}} past the deadline, out of {open} open. Answer them in Data requests.",
+            "noContact": "Requests have a deadline of {days} days, but no privacy contact is named yet. Add one.",
+            "built": "Requests have a deadline of {days} days and {open} are open. A privacy contact is named."
+          }
+        },
+        "retention": {
+          "title": "Retention and deletion",
+          "detail": {
+            "recordingsOn": "Call recordings are kept for {days} days and can be put on hold. Retention for other data is not built yet.",
+            "recordingsOff": "Call recording is off. A retention setting for the rest of your data is not built yet."
+          }
+        },
+        "security": {
+          "title": "Security and a breach plan",
+          "detail": {
+            "runbook": "Workspace isolation, encrypted credentials and an audit log are in place. The breach response plan is a draft that the platform operator completes. You cannot switch this on here."
+          }
+        },
+        "subprocessors": {
+          "title": "Sub-processor list",
+          "detail": {
+            "built": "{count, plural, one {# sub-processor is} other {# sub-processors are}} listed. The DPA template is ready to download.",
+            "none": "No sub-processor is listed yet. List the vendors that handle personal data for you."
+          }
+        },
+        "children": {
+          "title": "Children's data",
+          "detail": {
+            "unset": "Not answered yet. Say whether minors may be among your contacts.",
+            "minorsNoParental": "Minors may be included, but parental consent is not switched on.",
+            "no_minors": "You do not knowingly process the data of minors.",
+            "may_include_minors": "Minors may be included and parental consent is switched on."
+          }
+        },
+        "contact_links": {
+          "title": "Privacy contact and links",
+          "detail": {
+            "built": "The privacy and terms links and a reachable contact are set.",
+            "none": "No privacy link, no terms link and no contact yet.",
+            "some": "Some of the links and contact details are set. Complete the rest."
+          }
+        },
+        "dpo_contact": {
+          "title": "Data protection officer or privacy contact",
+          "detail": {
+            "built": "A name and an email are set.",
+            "one": "Add both a name and an email.",
+            "none": "No officer or privacy contact is named yet."
+          }
+        },
+        "grievance_officer": {
+          "title": "Grievance officer",
+          "detail": {
+            "built": "A name and an email are set.",
+            "one": "Add both a name and an email.",
+            "none": "No grievance officer is named yet."
+          }
+        },
+        "notice_languages": {
+          "title": "Notice in English and a second language",
+          "detail": {
+            "built": "Your default notice is on in English and in {locale}.",
+            "noSecond": "Choose the second language, then write the notice in it.",
+            "secondMissing": "English is on. Write the notice in the second language.",
+            "englishMissing": "The second language is on. Write the English notice.",
+            "none": "Neither notice is on yet."
+          }
+        },
+        "parental_flag": {
+          "title": "Minors and parental consent",
+          "detail": {
+            "unset": "Answer the children question under Contacts and children.",
+            "minorsNoParental": "Minors may be included, but parental consent is off. This profile treats anyone under {age} as a minor.",
+            "no_minors": "You do not knowingly process the data of minors. This profile treats anyone under {age} as a minor.",
+            "may_include_minors": "Parental consent is switched on for people under {age}. Mark a contact as a minor on its Consent card and record the guardian's consent there."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Do Not Sell or Share option",
+          "detail": {
+            "built": "The opt-out option and the link to its notice are set.",
+            "noUrl": "The option is on, but no link to the opt-out notice is set.",
+            "off": "Switch the option on if you sell or share personal information, and add the link to your opt-out notice."
+          }
+        },
+        "quiet_hours": {
+          "title": "Quiet hours",
+          "detail": {
+            "built": "Quiet hours {start} to {end} are saved.",
+            "off": "Quiet hours are not set."
+          }
+        },
+        "calling_window": {
+          "title": "Calling window",
+          "detail": {
+            "built": "A calling window of {start} to {end} is saved.",
+            "off": "No calling window is set."
+          }
+        },
+        "dnd_registry": {
+          "title": "Do Not Call / DND registry",
+          "detail": {
+            "off": "No registry is chosen.",
+            "hookOnly": "Registry noted ({registry}). Nothing is checked against it yet."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Locations of your sub-processors",
+          "detail": {
+            "built": "All {count, plural, one {# sub-processor has} other {# sub-processors have}} a location.",
+            "some": "{missing, plural, one {# sub-processor has} other {# sub-processors have}} no location yet.",
+            "none": "No sub-processor is listed, or none has a location."
+          }
+        },
+        "request_days": {
+          "title": "Time to answer requests",
+          "detail": {
+            "built": "Your deadline for requests is {sla} days, within the {days} days the strictest profile asks for.",
+            "tooLong": "Your deadline is {sla} days. The strictest profile you switched on asks for {days}. Change it in Data requests."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Recorded opt-in before marketing",
+          "detail": {
+            "built": "Marketing needs a recorded consent.",
+            "off": "Marketing does not need a recorded consent yet. Switch it on in the consent settings."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Quiet hours and calling windows are enforced",
+          "detail": {
+            "enforced": "Marketing messages inside your quiet hours are held until they end, and a call outside your calling window is refused with the time it opens. Replies inside the 24-hour window and utility notices are never held. The DND registry is a note: nothing is checked against it yet."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Switch on the laws and regions that apply to the people you contact. You can switch on several; where they differ, the strictest rule is used. A country only suggests; you decide.",
+      "suggested": "Your {source} country is {country}, which suggests:",
+      "source": {
+        "billing": "billing",
+        "onboarding": "workspace"
+      },
+      "useSuggestion": "Use this suggestion",
+      "suggestedNote": "A workspace that contacts people in other countries should switch on those laws too.",
+      "notConfirmed": "Nothing is switched on yet. The baseline for every workspace applies until you save a choice.",
+      "listTitle": "Laws and regions",
+      "switchesOn": "Switches on:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (EU and EEA)",
+          "summary": "For people in the European Union, Iceland, Liechtenstein and Norway.",
+          "extras": "A data protection officer or privacy contact, sub-processor locations, answers to requests within 30 days, recorded opt-in for marketing."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR and PECR (United Kingdom)",
+          "summary": "For people in the United Kingdom.",
+          "extras": "A data protection officer or privacy contact, sub-processor locations, answers within 30 days, recorded opt-in for electronic marketing."
+        },
+        "dpdp_in": {
+          "name": "DPDP Act (India)",
+          "summary": "For people in India.",
+          "extras": "A grievance officer, notices in English and one Indian language, a parental consent flag for minors under 18, a consent manager placeholder, recorded opt-in."
+        },
+        "ccpa_us": {
+          "name": "CCPA and CPRA (United States)",
+          "summary": "For California residents, and a sensible start for the United States.",
+          "extras": "A Do Not Sell or Share My Personal Information option with an opt-out notice link, answers within 45 days."
+        },
+        "tcpa_us": {
+          "name": "TCPA (calls and texts to the United States)",
+          "summary": "For marketing calls and texts to people in the United States.",
+          "extras": "Quiet hours 21:00 to 08:00, a calling window 08:00 to 21:00, a Do Not Call registry note, recorded opt-in."
+        },
+        "trai_in": {
+          "name": "TRAI rules (calls and texts to India)",
+          "summary": "For promotional calls and texts to people in India.",
+          "extras": "Quiet hours 21:00 to 09:00, a calling window 09:00 to 21:00, a DND registry note, recorded opt-in."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brazil)",
+          "summary": "For people in Brazil.",
+          "extras": "A data protection officer (encarregado) contact, sub-processor locations, answers within 15 days, recorded opt-in."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapore)",
+          "summary": "For people in Singapore.",
+          "extras": "A data protection officer contact, a Do Not Call registry note, answers within 30 days, recorded opt-in."
+        },
+        "generic": {
+          "name": "Other countries (baseline only)",
+          "summary": "For everywhere else, or when you have not decided.",
+          "extras": "Nothing beyond the baseline that every workspace already gets."
+        }
+      },
+      "effective": {
+        "title": "What the strictest rule asks for",
+        "hint": "Worked out from the laws you switched on. These are starting points to check with your counsel.",
+        "baselineOnly": "No law is switched on. Only the baseline for every workspace applies.",
+        "optIn": "Recorded opt-in before marketing",
+        "optInYes": "Recommended.",
+        "optInNo": "Not required by these profiles.",
+        "consentLink": "Open the consent settings",
+        "requestDays": "Time to answer a person's request",
+        "days": "{count, plural, one {# day} other {# days}}",
+        "minorAge": "Treat a person as a minor under",
+        "years": "{count, plural, one {# year} other {# years}}",
+        "callingWindow": "Calling window",
+        "dnd": "Do Not Call / DND registry",
+        "none": "None",
+        "registry": {
+          "none": "None",
+          "trai_ndnc": "India NDNC (TRAI)",
+          "us_dnc": "United States Do Not Call",
+          "sg_dnc": "Singapore Do Not Call",
+          "custom": "Your own list"
+        },
+        "strictest": "When several profiles are on, the strictest rule is used: the shortest answer time, the highest age, the narrowest calling window."
+      },
+      "ccpa": {
+        "title": "Do Not Sell or Share",
+        "hint": "If you sell or share personal information (including for advertising across other sites), people can ask you to stop.",
+        "offer": "Offer a Do Not Sell or Share My Personal Information option",
+        "url": "Link to your opt-out notice",
+        "urlHint": "The page where people can opt out. Must start with https://."
+      },
+      "dpdp": {
+        "title": "Consent manager",
+        "hint": "The DPDP Act lets people manage consent through a registered consent manager. Name yours here if you use one.",
+        "managerName": "Consent manager",
+        "managerRegistration": "Consent Manager registration number",
+        "managerRegistrationHint": "The number the Data Protection Board registered your Consent Manager under. A note only.",
+        "managerUrl": "Consent manager link",
+        "placeholderNote": "This is a note only. Nothing is connected to a consent manager yet."
+      }
+    },
+    "contacts": {
+      "intro": "Who a person or a regulator can reach about their data, and whether children may be among your contacts.",
+      "requiredByProfile": "Asked for by a profile you switched on",
+      "officer": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Postal address"
+      },
+      "dpo": {
+        "title": "Data protection officer or privacy contact",
+        "hint": "The person or team that answers privacy questions. Shown on your public page if you switch it on."
+      },
+      "grievance": {
+        "title": "Grievance officer",
+        "hint": "The DPDP Act asks for a named officer who handles complaints about how personal data is processed."
+      },
+      "children": {
+        "title": "Children's data",
+        "hint": "This product is for businesses. Say whether you may hold the data of minors, so the right rules are shown. Once you answer, marketing to a contact marked as a minor is held back: always when you do not knowingly process minors, and until the guardian's consent is on record when minors may be included.",
+        "policy": "Minors among your contacts",
+        "policies": {
+          "unset": "Not answered yet",
+          "no_minors": "We do not knowingly process the data of minors",
+          "may_include_minors": "Minors may be among our contacts"
+        },
+        "parental": "Parental consent is required for minors",
+        "parentalHint": "Records your policy, and holds marketing to contacts marked as minors until the guardian's consent is on record. You mark a contact as a minor, and record that consent, on its Consent card.",
+        "age": "The profiles you switched on treat anyone under {age} as a minor.",
+        "dpdpNeedsAnswer": "The DPDP profile asks you to answer this question."
+      }
+    },
+    "links": {
+      "intro": "Store your privacy and terms links once. They are offered with one click in the form builder's consent line and in every consent notice editor.",
+      "privacy": "Privacy policy link",
+      "privacyHint": "Must start with https://",
+      "terms": "Terms link",
+      "termsHint": "Must start with https://",
+      "offered": "Nothing is filled in by itself: each form or notice shows a button to use these links."
+    },
+    "notices": {
+      "intro": "The default wording your workspace shows next to a consent box. Every change is saved as a new numbered version, so a record can name the exact text a person agreed to.",
+      "english": "Default consent notice ({language})",
+      "secondEditor": "Default consent notice ({language})",
+      "second": {
+        "title": "Second language",
+        "requiredByProfile": "Asked for by the DPDP profile",
+        "hint": "The DPDP Act asks for the notice in English and in one of India's languages. Choose the second language and save, then write the notice in it.",
+        "language": "Language of the second notice",
+        "none": "No second language",
+        "saveFirst": "Save your changes first, then the notice editor for this language appears."
+      }
+    },
+    "windows": {
+      "enforcedNote": "Quiet hours hold a marketing message until they end, and the calling window refuses a call outside it. Each contact's own clock is used. Replies inside the 24-hour window and utility notices are never held.",
+      "intro": "Some rules limit when marketing messages and calls may reach people. Set your hours here: a marketing message sent in the quiet hours waits and goes when they end, and a call outside the calling window is not placed.",
+      "quiet": {
+        "title": "Quiet hours for messages",
+        "hint": "Hours in which marketing messages do not go out. They wait, and are sent when the hours end. The period may cross midnight.",
+        "enabled": "Quiet hours on",
+        "start": "Quiet from",
+        "end": "Quiet until"
+      },
+      "calling": {
+        "title": "Calling window",
+        "hint": "The only hours marketing calls are placed, on the days you pick. A call outside them is refused, and says when the window opens.",
+        "enabled": "Calling window on",
+        "start": "Calls from",
+        "end": "Calls until",
+        "days": "Days"
+      },
+      "day": {
+        "1": "Monday",
+        "2": "Tuesday",
+        "3": "Wednesday",
+        "4": "Thursday",
+        "5": "Friday",
+        "6": "Saturday",
+        "7": "Sunday"
+      },
+      "suggested": "The laws you switched on suggest {start} to {end}.",
+      "zone": {
+        "label": "Fallback time zone",
+        "hint": "The hours are read on the contact's own clock: their time zone property, else the country code of their number. This zone is used when neither is known. Your workspace zone is {zone}.",
+        "workspace": "Workspace time zone ({zone})"
+      },
+      "dnd": {
+        "label": "Do Not Call / DND registry",
+        "hint": "The registry you check your lists against.",
+        "registry": {
+          "none": "None",
+          "trai_ndnc": "India NDNC (TRAI)",
+          "us_dnc": "United States Do Not Call",
+          "sg_dnc": "Singapore Do Not Call",
+          "custom": "Your own list"
+        },
+        "note": "This is a note only. Nothing is checked against a registry yet.",
+        "listNote": "Numbers on your Do not call list (the last tab) are already held back from marketing calls and texts."
+      }
+    },
+    "dnc": {
+      "intro": "Numbers on this list get no marketing by voice or SMS, whatever the consent history says. WhatsApp, email and service messages are not held back by it. Nothing is checked against a national registry from here: add the extract you are entitled to download.",
+      "addTitle": "Add numbers",
+      "numbers": "Phone numbers",
+      "numbersHint": "One per line, or separated by commas. Up to {max} at a time; use the file for more.",
+      "country": "Country code for local numbers",
+      "countryHint": "A number written without its country code is read with this one.",
+      "note": "Note",
+      "noteHint": "Optional. Why these numbers are listed.",
+      "add": "Add to the list",
+      "adding": "Adding...",
+      "or": "or",
+      "import": "Add from a CSV file",
+      "importing": "Reading the file...",
+      "importHint": "The column named phone, mobile or number, else the first column. A big file is read in parts.",
+      "fromRegistry": "The file is an extract from a registry I am entitled to use",
+      "progress": "Sending part {done} of {of}...",
+      "added": "{count, plural, =0 {Nothing new to add} one {# number added} other {# numbers added}}",
+      "result": "{added} added, {already} already on the list, {invalid} not a phone number.",
+      "invalidSamples": "For example: {samples}",
+      "listTitle": "Numbers on the list",
+      "total": "{count, plural, =0 {No numbers listed} one {# number listed} other {# numbers listed}}",
+      "search": "Find a number",
+      "loading": "Loading the list...",
+      "empty": "No numbers yet",
+      "emptyHint": "Add the numbers that asked not to be called or texted, or an extract from a registry you may use.",
+      "noMatch": "No number matches",
+      "source": {
+        "manual": "Added by hand",
+        "import": "From a file",
+        "contact_request": "The person asked",
+        "registry_export": "Registry extract"
+      },
+      "remove": "Remove",
+      "removeLabel": "Remove {phone} from the list",
+      "removed": "Number removed from the list",
+      "newer": "Newer",
+      "older": "Older",
+      "confirm": {
+        "title": "Remove this number?",
+        "message": "{phone} can get marketing calls and texts again, unless the contact withdrew consent. Remove it only if the person asked you to, or it was added by mistake.",
+        "confirm": "Remove the number",
+        "cancel": "Keep it"
+      }
+    },
+    "hold": {
+      "heldUntil": "Held until {when} (quiet hours)",
+      "heldCount": "{count} held for the quiet hours"
+    },
+    "subprocessors": {
+      "intro": "The vendors that process personal data for your workspace: what they do, what data they get and where. You can publish the list on a public page.",
+      "listTitle": "Your sub-processors",
+      "add": "Add a sub-processor",
+      "saved": "Sub-processor saved.",
+      "removed": "Sub-processor removed.",
+      "empty": {
+        "title": "No sub-processors yet",
+        "body": "Add each vendor that handles personal data for you, for example your email or SMS provider."
+      },
+      "status": {
+        "active": "In use",
+        "planned": "Planned",
+        "removed": "No longer used"
+      },
+      "edit": "Edit",
+      "remove": "Remove",
+      "public": {
+        "title": "Public page",
+        "hint": "Publish the vendors in use, your privacy and terms links and your privacy contact on a page anyone can open. Off by default.",
+        "switch": "Public page on",
+        "saveToApply": "Save your changes to apply this."
+      },
+      "dpa": {
+        "title": "Data processing agreement template",
+        "hint": "A template filled in with your details and your list. It is not legal advice and not an agreement: have your counsel review it before use.",
+        "download": "Download the template"
+      },
+      "form": {
+        "addTitle": "Add a sub-processor",
+        "editTitle": "Edit sub-processor",
+        "close": "Close",
+        "cancel": "Cancel",
+        "save": "Save",
+        "name": "Name",
+        "required": "A name is required.",
+        "purpose": "What they do for you",
+        "data": "Data they receive",
+        "location": "Location",
+        "locationHint": "Country or region where they process the data.",
+        "status": "Status",
+        "website": "Website",
+        "dpa": "Agreement link",
+        "httpsOnly": "Use an address that starts with https://.",
+        "addedOn": "Added on",
+        "noticeSentOn": "Customers told on",
+        "noticeHint": "The day you told your customers about this vendor."
+      },
+      "confirmRemove": {
+        "title": "Remove this sub-processor?",
+        "body": "{name} will be taken off your list. Mark it as no longer used instead if you want to keep the history.",
+        "confirm": "Remove"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: sub-processors and privacy",
+      "intro": "The vendors this business uses to process personal data, and how to reach its privacy contact.",
+      "subprocessors": "Sub-processors",
+      "none": "No sub-processors are listed.",
+      "contact": "Privacy contact and policies",
+      "privacy": "Privacy policy",
+      "terms": "Terms",
+      "notFound": "Page not found"
+    }
+  }
+}

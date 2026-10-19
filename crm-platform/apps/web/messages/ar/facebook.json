@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "مفتوحة",
-        "pending": "قيد الانتظار",
         "resolved": "محلولة",
         "closed": "مغلقة",
         "snoozed": "مؤجلة"

@@ -1,8 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
+  docxToText,
   extractFileText,
   readZipEntry,
 } from '../../../src/modules/ai-agents-training/file-extract';
+import { decodeEntities } from '../../../src/modules/ai-agents-training/training-rules';
 import { makeDocx, makePdf, makeZip } from './fixtures';
 
 const code = async (p: Promise<unknown>) =>
@@ -38,11 +40,56 @@ describe('file extraction (TW-AIAG-008)', () => {
     expect(text).toBe('First & foremost\nSecond <line>');
   });
 
-  it('DOCX stored (not deflated) entries are read too', () => {
+  it('DOCX stored (not deflated) entries are read too', async () => {
     const zip = makeZip([
       { name: 'word/document.xml', data: Buffer.from('<w:p>x</w:p>'), store: true },
     ]);
-    expect(readZipEntry(zip, 'word/document.xml')?.toString()).toBe('<w:p>x</w:p>');
+    expect((await readZipEntry(zip, 'word/document.xml'))?.toString()).toBe('<w:p>x</w:p>');
+  });
+
+  it('cleaning the XML in slices gives exactly what cleaning it whole gives (EL-B21)', async () => {
+    // The original chain, whole-string, as the reference.
+    const whole = (xml: string) =>
+      decodeEntities(
+        xml
+          .replace(/<\/w:p>/g, '\n')
+          .replace(/<w:tab\b[^>]*\/?>/g, '\t')
+          .replace(/<w:br\b[^>]*\/?>/g, '\n')
+          .replace(/<[^>]*>/g, ''),
+      )
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+    let seed = 7;
+    const rnd = () => (seed = (seed * 1103515245 + 12345) & 0x7fffffff) / 0x7fffffff;
+    const pieces = [
+      '<w:p><w:r><w:t>word</w:t></w:r></w:p>',
+      '<w:p></w:p>',
+      '<w:p><w:r><w:br/></w:r><w:r><w:br w:type="page"/></w:r></w:p>',
+      '<w:p><w:r><w:tab/><w:t>a &amp; b &lt;c&gt; &#233; &#x1F600; &bogus;</w:t></w:r></w:p>',
+      '<w:r><w:t>no paragraph end</w:t></w:r>',
+      '<w:p><w:pPr><w:pStyle w:val="x"/></w:pPr><w:r><w:t xml:space="preserve">  spaced  </w:t></w:r></w:p>',
+      '<w:p><w:r><w:t>&#10;&#10;&#10;newline entities</w:t></w:r></w:p>',
+    ];
+    for (let trial = 0; trial < 40; trial++) {
+      const xml = `<w:document><w:body>${Array.from({ length: 30 + Math.floor(rnd() * 200) }, () => pieces[Math.floor(rnd() * pieces.length)]).join('')}</w:body></w:document>`;
+      const zip = makeZip([{ name: 'word/document.xml', data: Buffer.from(xml) }]);
+      for (const slice of [1, 17, 64, 400, 5_000, 10 ** 9]) {
+        expect(await docxToText(zip, slice), `trial ${trial}, slice ${slice}`).toBe(whole(xml));
+      }
+    }
+  });
+
+  it('lets the event loop run while it cleans a large document', async () => {
+    const xml = `<w:document>${'<w:p><w:r><w:t>some text here</w:t></w:r></w:p>'.repeat(60_000)}</w:document>`;
+    const zip = makeZip([{ name: 'word/document.xml', data: Buffer.from(xml) }]);
+    let ticks = 0;
+    const timer = setInterval(() => {
+      ticks += 1;
+    }, 1);
+    const text = await docxToText(zip, 32 * 1024);
+    clearInterval(timer);
+    expect(text.split('\n')).toHaveLength(60_000);
+    expect(ticks).toBeGreaterThan(0);
   });
 
   it('a .docx that is not a zip, or has no body, is unreadable or empty', async () => {

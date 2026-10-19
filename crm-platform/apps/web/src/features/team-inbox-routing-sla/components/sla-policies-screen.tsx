@@ -162,12 +162,6 @@ export function SlaPoliciesScreen() {
           </div>
           <div className="space-y-2">
             <Toggle
-              label={t('pause')}
-              hint={t('pauseHint')}
-              checked={form.pause}
-              onChange={(v) => set({ pause: v })}
-            />
-            <Toggle
               label={t('businessHours')}
               hint={t('businessHoursHint')}
               checked={form.businessHours}

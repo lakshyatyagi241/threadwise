@@ -121,6 +121,8 @@ export function marketError(err: unknown): MarketError {
       return { kind: 'general', key: 'subscriptionState', ...base };
     case ERROR_CODES.MKT_SUBSCRIPTION_NOT_FOUND:
       return { kind: 'general', key: 'subscriptionNotFound', ...base };
+    case ERROR_CODES.MKT_RENEWAL_NOT_STOPPED:
+      return { kind: 'general', key: 'renewalNotStopped', ...base };
     case ERROR_CODES.NOT_FOUND:
       return { kind: 'general', key: 'notFound', ...base };
     case ERROR_CODES.RATE_LIMITED: {

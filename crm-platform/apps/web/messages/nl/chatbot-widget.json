@@ -254,7 +254,34 @@
         "off": "Uit",
         "none": "Geen"
       },
-      "colorSwatch": "{label} (kleurstaal)"
+      "colorSwatch": "{label} (kleurstaal)",
+      "age": {
+        "enable": "Vraag naar de leeftijd voordat de chat begint",
+        "enableHint": "Standaard uit. Gebruik dit alleen als de regels van je werkruimte erom vragen of je bezoekers minderjarig kunnen zijn. De chat zegt nooit welk antwoord doorgaat.",
+        "mode": "Hoe te vragen",
+        "modes": {
+          "declaration": "Een selectievakje: “Ik bevestig dat ik minstens N jaar oud ben”",
+          "age": "Vraag naar hun leeftijd",
+          "dob": "Vraag naar hun geboortedatum"
+        },
+        "modeHints": {
+          "declaration": "Er wordt niets over hun leeftijd bewaard. Zo min mogelijk gegevens.",
+          "age": "Een geheel getal. Het wordt gebruikt voor de controle; alleen de uitkomst wordt bewaard.",
+          "dob": "Bij het contact opgeslagen als geboortedatum. Gebruik dit alleen als je de datum nodig hebt."
+        },
+        "minAge": "Minimumleeftijd",
+        "minAgeHint": "Laat leeg om de leeftijd van je werkruimte uit het Compliancecentrum te gebruiken (18 als er geen is ingesteld). Tussen 1 en 21.",
+        "whenUnder": "Als de bezoeker jonger is dan die leeftijd",
+        "actions": {
+          "block": "Start de chat niet",
+          "flag": "Start de chat en markeer het contact als minderjarig"
+        },
+        "actionHints": {
+          "block": "Er wordt niets over de bezoeker opgeslagen en die ziet een neutraal bericht. Bij het selectievakje hoeft de bezoeker het alleen aan te vinken.",
+          "flag": "De chat gaat door en zodra de bezoeker een telefoonnummer of e-mailadres heeft opgegeven, wordt het contact als minderjarig gemarkeerd."
+        },
+        "contactNote": "De leeftijd wordt pas bij een contact vastgelegd als de bezoeker een telefoonnummer of e-mailadres heeft opgegeven."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp-widget",
@@ -298,7 +325,8 @@
           "url": "Of gebruik je eigen afbeeldingsadres",
           "urlHint": "Plak het adres van een vierkante afbeelding (https://...). Een bestand uploaden is nog niet beschikbaar.",
           "botName": "Botnaam",
-          "botNameHint": "Wordt getoond in de header van het chatvenster. Laat leeg om de naam van je bot te gebruiken."
+          "botNameHint": "Wordt getoond in de header van het chatvenster. Laat leeg om de naam van je bot te gebruiken.",
+          "urlHintUpload": "Plak het adres van een vierkante afbeelding (https://...) of upload hieronder een bestand."
         },
         "3": {
           "title": "Stel je welkomstbericht in",
@@ -558,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Website toevoegen",
             "remove": "Website verwijderen"
+          },
+          "feedback": {
+            "label": "Bezoekers antwoorden laten beoordelen",
+            "hint": "Duim omhoog en omlaag onder elk antwoord van de bot.",
+            "message": "Bericht na een beoordeling",
+            "keptWhenOff": "Feedback staat uit. Dit bericht blijft bewaard en verschijnt weer als je het opnieuw inschakelt."
+          },
+          "languages": {
+            "primary": "Hoofdtaal",
+            "follow": "De browser van de bezoeker volgen",
+            "primaryHint": "De taal van de eigen teksten van het chatvenster.",
+            "additional": "Andere talen",
+            "additionalHint": "Een bezoeker wiens browser een van deze talen gebruikt, ziet het venster in die taal. Alle anderen zien de hoofdtaal."
           }
         },
         "rail": {
@@ -672,7 +713,9 @@
         "statusLive": "Live",
         "statusDraft": "Niet gepubliceerd",
         "codeLabel": "HTML",
-        "localNote": "Deze code verwijst naar een adres op deze computer (localhost) en werkt dus alleen op pagina's die hier zijn geopend. Gebruik op een live website je gepubliceerde adres."
+        "localNote": "Deze code verwijst naar een adres op deze computer (localhost) en werkt dus alleen op pagina's die hier zijn geopend. Gebruik op een live website je gepubliceerde adres.",
+        "statusNoNumber": "Gepubliceerd, geen nummer",
+        "noNumber": "Deze bot is gepubliceerd, maar heeft nog geen WhatsApp-nummer, dus de knop, de QR-code en de directe link blijven verborgen. Kies een nummer bij de Trigger op het tabblad Bouwen."
       },
       "whatsapp": {
         "loading": "Knop laden…",
@@ -681,7 +724,8 @@
         "saved": "WhatsApp-knop opgeslagen",
         "saveFailed": "De knop kon niet worden opgeslagen. Probeer het opnieuw.",
         "fromBot": "De knop opent WhatsApp op {number}, het nummer waarop deze bot draait. Wijzig het nummer bij de trigger op het tabblad Bouwen.",
-        "noNumber": "Deze bot heeft nog geen WhatsApp-nummer. Kies er een bij de trigger op het tabblad Bouwen en kom terug om de knop op te slaan."
+        "noNumber": "Deze bot heeft nog geen WhatsApp-nummer. Kies er een bij de trigger op het tabblad Bouwen en kom terug om de knop op te slaan.",
+        "keywordMissing": "Het bericht hierboven bevat het startwoord van je bot \"{keyword}\" niet. Als de bot alleen met dat woord start, bereiken bezoekers die op de knop tikken de bot niet."
       }
     },
     "webBots": {

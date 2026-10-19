@@ -16,6 +16,7 @@ import {
   sender,
   sources,
   template,
+  templates,
   uuid,
 } from '../testing';
 import { CreditCard } from './credit-card';
@@ -200,6 +201,7 @@ describe('step 3 as a whole', () => {
         showIssues={false}
         onVariable={none}
         onVariables={none}
+        dispatch={none}
         onEdit={none}
         {...over}
       />,
@@ -219,6 +221,28 @@ describe('step 3 as a whole', () => {
     expect(out).toContain('$95.00');
     expect(out).toContain('is filled from First name, or &quot;friend&quot; when empty');
     expect(out).toContain('is the fixed text &quot;A-1&quot;');
+  });
+
+  it('lists the follow-ups in words, naming the template and the flow', () => {
+    const followUps = [
+      {
+        trigger: 'not_read' as const,
+        waitMinutes: 120,
+        action: { kind: 'template' as const, templateId: uuid(2) },
+      },
+      {
+        trigger: 'replied' as const,
+        waitMinutes: 2880,
+        action: { kind: 'flow' as const, flowId: uuid(81) },
+      },
+    ];
+    const d = draft({ name: 'October offer', templateId: uuid(1), followUps });
+    const out = review({ draft: d, templates: templates() });
+    expect(out).toContain('Follow-ups');
+    expect(out).toContain('If not read after 2 hours: send summer_sale');
+    // The flows are still loading here: a dash instead of a name.
+    expect(out).toContain('If they reply within 2 days: start flow -');
+    expect(review()).not.toContain('Follow-ups');
   });
 
   it('has an Edit link per owned value that names what it edits', () => {
@@ -533,6 +557,13 @@ describe('step 4 and the launch dialog', () => {
         draftId={uuid(100)}
         zone="Asia/Kolkata"
         canTest
+        templates={{
+          data: { data: templates() },
+          isPending: false,
+          isError: false,
+          error: null,
+          refetch: none,
+        }}
         issues={[]}
         currency="USD"
         ensureSaved={async () => true}
@@ -548,6 +579,13 @@ describe('step 4 and the launch dialog', () => {
     expect(test).toBeGreaterThan(-1);
     expect(when).toBeGreaterThan(test);
     expect(retries).toBeGreaterThan(when);
+  });
+
+  it('ends with the follow-ups card, after the retries', () => {
+    const out = step(draft());
+    expect(out.indexOf('Follow-ups')).toBeGreaterThan(out.indexOf('Activate Retries'));
+    expect(out).toContain('Add a follow-up');
+    expect(out).toContain('0 of 3 follow-ups');
   });
 
   it('shows the recurring panel only for the recurring mode', () => {
@@ -609,5 +647,88 @@ describe('step 4 and the launch dialog', () => {
     expect(out).toContain('On, until Oct 20, 2026');
     expect(out).toContain('The campaign could not be started.');
     expect(dialog(draft())).toContain('>Off<');
+  });
+});
+
+describe('step 3 with templates in turn', () => {
+  const seqDraft = draft({
+    name: 'October offer',
+    templateId: uuid(1),
+    audience: audience({ groupIds: [uuid(11)] }),
+    templateSequence: [
+      { templateId: uuid(3), variables: {} },
+      { templateId: uuid(2), variables: {} },
+      { templateId: null, variables: {} },
+    ],
+  });
+  const review = (over: Partial<Parameters<typeof StepReview>[0]> = {}) =>
+    html(
+      <StepReview
+        draft={seqDraft}
+        template={template()}
+        sender={sender()}
+        sources={sources()}
+        count={count()}
+        credit={ready(credit())}
+        templates={templates()}
+        properties={[]}
+        issues={[]}
+        showIssues={false}
+        onVariable={none}
+        onVariables={none}
+        dispatch={none}
+        onEdit={none}
+        {...over}
+      />,
+      { qc: new QueryClient() },
+    );
+
+  it('has a mapping card per sequence template with placeholders, titled with its position and name', () => {
+    const out = review();
+    expect(out).toContain('Variables of template 2: otp_code');
+    expect(out).not.toContain('Variables of template 3');
+    expect(out).not.toContain('Variables of template 4');
+    expect(out).toContain('id="sequence-variables-2"');
+  });
+
+  it('flags the unmapped placeholder of that card only once the step was tried', () => {
+    const issues = [
+      { path: 'templateSequence.0.variables.body.1', code: 'variable_unmapped' as const },
+    ];
+    expect(review({ issues, showIssues: true })).toContain('1 variable is not mapped yet:');
+    expect(review({ issues, showIssues: false })).not.toContain('is not mapped yet');
+  });
+
+  it('lists the templates in the summary under Sends in turn', () => {
+    const out = review();
+    expect(out).toContain('Sends in turn');
+    expect(out).toContain('order_update, otp_code, summer_sale, Not set');
+  });
+
+  it('says nothing about turns without a sequence', () => {
+    expect(review({ draft: draft({ templateId: uuid(1) }) })).not.toContain('Sends in turn');
+  });
+});
+
+describe('step 4 with templates in turn', () => {
+  const send = (d: ReturnType<typeof draft>) =>
+    html(
+      <StepSend
+        draft={d}
+        draftId={null}
+        zone="Asia/Kolkata"
+        canTest
+        templates={ready({ data: templates() }) as never}
+        issues={[]}
+        currency="USD"
+        ensureSaved={() => Promise.resolve(true)}
+        dispatch={none}
+      />,
+    );
+  const rec = { mode: 'recurring' as const, rule: defaultRule('Asia/Kolkata', NOW) };
+
+  it('shows the Templates in order card only for a recurring schedule', () => {
+    expect(send(draft({ templateId: uuid(1), schedule: rec }))).toContain('Templates in order');
+    expect(send(draft({ templateId: uuid(1) }))).not.toContain('Templates in order');
   });
 });

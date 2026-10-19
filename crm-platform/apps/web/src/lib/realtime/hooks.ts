@@ -11,6 +11,7 @@ import {
 } from '@crm/contracts';
 import { useRealtimeClient } from './realtime-provider';
 import type { RealtimeStatus, ResyncRequest, RoomState } from './realtime-client';
+import { startDeliveryReport } from './delivery-report';
 import { startVisibilityReport } from './visibility-report';
 
 const noopSubscribe = () => () => undefined;
@@ -97,6 +98,18 @@ export function useResync(
       if (filter.current && !filter.current.includes(request.room)) return;
       latest.current(request);
     });
+  }, [client]);
+}
+
+/**
+ * Reports to the server, about once a minute, how late events have been reaching this tab (two numbers, no content), for as long as the
+ * component is mounted. Mount it once for the whole session, next to the live notifications.
+ */
+export function useDeliveryReport(): void {
+  const client = useRealtimeClient();
+  useEffect(() => {
+    if (!client) return;
+    return startDeliveryReport(client);
   }, [client]);
 }
 

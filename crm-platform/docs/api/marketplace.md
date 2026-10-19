@@ -249,10 +249,11 @@ order, coupon and tax machinery that already exists (`docs/threadwise-port/inven
 
 ### The operator's pricing (`platform.market.pricing`)
 
-`PUT /apps/:ref/pricing` `{ rowVersion, model, amount?, currency?, annualAmount?, trialDays, purchasable, includedPlanFeature?, includedMinPlan? }`
+`PUT /apps/:ref/pricing` `{ rowVersion, model, amount?, currency?, annualAmount?, billingMode, trialDays, purchasable, includedPlanFeature?, includedMinPlan? }`
 answers the operator app (its `pricing` view). `free` carries none of the paid fields. `paid_monthly` needs a price above zero (a decimal with at most
 two places) and a currency that is **enabled on the platform**; trial 0 to 90 days; `purchasable: false` stops NEW subscriptions while workspaces
-that already subscribe may keep renewing; `includedPlanFeature` names a core or module plan feature and `includedMinPlan` a plan in the catalogue:
+that already subscribe may keep renewing; `billingMode` is `one_time` (a prepaid month, renewed by paying again: the default) or `recurring` (the card renews it,
+see "Card renewal" below; a free app cannot be recurring); `includedPlanFeature` names a core or module plan feature and `includedMinPlan` a plan in the catalogue:
 a workspace whose plan (counting its add-ons) has the feature, or is at or above that plan in catalogue order (`sort_order`, price), gets the app
 free (`access: included`) and cannot buy it. `grantsPlanFeatures` and `grandfatherExisting` are explained in the next subsection. A refused change names the field (`422 VALIDATION_FAILED`, `errors`); a stale `rowVersion` is `409`.
 Every change writes the security event `platform.market.pricing_set` (before and after) in the same transaction. **Visibility** is the existing
@@ -293,7 +294,7 @@ workspace pays; a pause the admin made by hand is never undone by a payment or b
 | Step         | What happens                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Subscribe    | pay at the existing checkout. Paid order -> `workspace_addons` row (a month) + subscription `started` (or `resubscribed` after a lapse, or `started` converting a trial or a comp), audit row, outbox event, all in the order's transaction. A replay of the payment changes nothing.                                                                                                                                                                                                                                                                                           |
-| Renew        | **a monthly prepaid term, renewed by paying again** (see decisions). The payment extends the term already paid for (one month counted from its end, so no day is lost) -> `renewed`, `renewals` + 1, a cancellation made earlier is taken back. Checkout refuses a payment while more than 45 days are already paid for, and one for an app the workspace's plan includes.                                                                                                                                                                                                      |
+| Renew        | **a prepaid listing (`billingMode: one_time`) is a monthly term, renewed by paying again** (see decisions; a `recurring` listing is renewed by the card, see "Card renewal"). The payment extends the term already paid for (one month counted from its end, so no day is lost) -> `renewed`, `renewals` + 1, a cancellation made earlier is taken back. Checkout refuses a payment while more than 45 days are already paid for, and one for an app the workspace's plan includes.                                                                                             |
 | Cancel       | `cancel_at_period_end`; access continues to the end of the period; event `canceled`. **Uninstalling** cancels the renewal too (the uninstall dialog warns); reinstalling inside the paid period costs nothing.                                                                                                                                                                                                                                                                                                                                                                  |
 | Lapse        | the worker's sweep (**every minute**, idempotent, safe in several workers) lapses an active subscription that has no entitlement row in force: status `lapsed`, event `lapsed`, and the installation is **paused** (`paused_by_subscription`, its connection stops answering, data and settings kept, event `marketplace.app.disabled` with reason `subscription_ended`). It does not pause when the app is free now, the plan includes it, or an override gives the workspace the feature. Access never waits for the sweep: it is read from the purchase rows at every check. |
 | Resubscribe  | a new payment: `resubscribed`, and the installation the subscription paused is switched back on (`marketplace.app.enabled`, reason `subscription_paid`).                                                                                                                                                                                                                                                                                                                                                                                                                        |
@@ -301,6 +302,81 @@ workspace pays; a pause the admin made by hand is never undone by a payment or b
 | Price change | the listing's price is read at every order, so a change applies to **new subscriptions and the next payment of an existing one**, as editing an ordinary add-on does. A period already paid for is never touched, refunded or re-priced. The subscription keeps what the last payment was (`amount`), and the workspace's page says `nextAmount` when it differs.                                                                                                                                                                                                               |
 | Free trial   | `trialDays` > 0 and the workspace has never had a subscription to the app: Subscribe with `startTrial` grants a time-limited add-on purchase row (no order) through a SECURITY DEFINER function and records a `trial` subscription. One trial per workspace and app. Paying during a trial starts the paid month at once; the trial's remainder is not added.                                                                                                                                                                                                                   |
 | Comp         | the operator gives a workspace the app free for 1 to 36 months or until revoked: a purchase row with no order and a `comp` subscription. Refused for a free app, an unknown workspace, and a workspace that pays and whose period still runs. A workspace cannot cancel a comp.                                                                                                                                                                                                                                                                                                 |
+
+### Card renewal (BL-070)
+
+A listing the operator marks `recurring` is sold as an **autopay add-on** (`plans.billing_mode = 'recurring'`, the payments domain's recurring add-ons): checkout needs a
+gateway that supports subscriptions (Razorpay today), the buyer has no "buy one cycle" tick, and the provider charges the card every month until the subscription ends.
+Nothing about money is new: the provider subscription is the payments domain's `subscriptions` row (`kind = 'addon'`), the renewal extends the add-on's own
+`workspace_addons.ends_at`, and a failed charge keeps the add-on working for `billing.grace_days`. What the Marketplace adds is a ledger that follows it.
+
+| Provider event (applied by the payments domain)          | What the ledger (`marketplace_subscriptions`) does, in the same transaction                                                                                                                                                                                                     |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| first charge (`activated`)                               | `autorenew = true`, period end = the add-on's end; the order's fulfilment already wrote the subscription (`started`).                                                                                                                                                           |
+| renewal (`renewed`)                                      | period end = the add-on's new end, `renewals` + 1, `last_renewed_at`, a failed-renewal state cleared; event `renewed` (`source: provider`). One provider payment counts once. A late recovery of a lapsed subscription is `resubscribed` and switches the installation back on. |
+| failed renewal (`payment_failed`)                        | `payment_failed_at`, `grace_ends_at` = period end + the grace days; the derived status is `past_due` (the app keeps working); event `payment_failed` once per run of failures; the sweep lapses it only when the grace days are over.                                           |
+| provider ends it / mandate expires (`ended`)             | `autorenew = false`, `autorenew_stopped_at`; the subscription becomes "not renewing" (`cancel_at_period_end`, event `canceled`, reason `provider` or `expired`).                                                                                                                |
+| a newer subscription replaces it (`ended`, `superseded`) | nothing: subscribing again (to restart after a failure or to pay early) ends the OLD provider subscription now, so a workspace is never charged by two; the new one owns the ledger.                                                                                            |
+
+**Cancel ends the provider subscription first.** Cancelling (the workspace, the operator, uninstalling, the kill switch) asks the payment provider to stop the
+subscription (at the end of the period already paid for; the operator may stop it now) with no transaction open, and only when the provider confirms does the ledger say
+it will not renew. When the provider cannot confirm the call is `502 MKT_RENEWAL_NOT_STOPPED` and nothing changes (the card would still be charged). The kill switch answers
+`renewalsStopped` and `renewalsNotStopped`; the latter are listed as failed cancellations on the operator's Subscriptions screen to finish at the provider. A stopped
+provider subscription cannot be revived, so a cancellation of a card-renewed app cannot be taken back (`409 MKT_SUBSCRIPTION_STATE`): the page offers paying again instead.
+
+The page says **"Renews on"** only where `autoRenew` is true (a live provider subscription that nobody asked to stop), "Paid until" otherwise, and "Payment failed" with the
+date the app stops working while a renewal is being retried. Starting autopay while time remains pays the new month at once and stacks it on the remaining time.
+
+### Renewal reminders and the way back from checkout (BL-076)
+
+The worker's hourly sweep (`MarketSubscriptionLifecycle.remindDue`) writes the outbox event `marketplace.subscription.renewal_due` (and an audit row) **once per
+paid period**, `marketplace.renewal_reminder_days` days before it ends (platform setting, default 7, `0` turns it off; migration `20261225090100`). It skips a
+subscription whose last card renewal failed (that has its own notice). The worker's `MarketSubscriptionNotificationsConsumer` turns three events into an in-app
+notification and one email for every workspace admin, deduplicated on the outbox event id (the email also by a Redis claim): `renewal_due` ->
+`marketplace_renewal_due` (the sentence says what will really happen: the card renews it, it is paid until a date, or it was cancelled and ends), `payment_failed` ->
+`marketplace_payment_failed` (also a push by default), the clock's `lapsed` -> `marketplace_subscription_ended` (an operator's own cancel is not announced again).
+The three types are in `NOTIFICATION_TYPES` and the preferences catalogue (group `billing`); the web translates the row from its data. Email text is English only
+(BL-241).
+
+The buyer lands back on the app: `Subscribe` answers `/billing/checkout/<pack>?return=/marketplace/app/<slug>[&period=yearly]`, checkout sends an instant payment there, and
+the payment return (`PaymentsService.handleReturn`) redirects an add-on order of a Marketplace app to `/marketplace/app/<slug>?payment=<outcome>&order=<number>`
+instead of the order history. The app page shows the outcome (paid, being confirmed, not paid, cancelled).
+
+### Annual billing (BL-072)
+
+The listing's `annualAmount` is now sold. The operator's pricing call copies it to `plans.annual_amount` (migration `20261225090200`); checkout offers `periods:
+['monthly','yearly']` for that add-on whatever the plans' yearly switch says, prices the year at **that figure** (not twelve months less a discount), the purchase runs one
+year (`AddonFulfilmentService` takes the order's period), and a card renewal asks the provider for a yearly cadence (`recurring` listings; a prepaid year is paid again
+after a year). `Subscribe` takes `{ period: 'monthly' | 'yearly' }` (`422` when the app has no yearly price); the ledger keeps `billing_period` and the yearly `amount`;
+the operator's monthly revenue counts a yearly payment as one twelfth, rounded to the cent. Coupons and tax apply on top as for any order.
+
+### Keeping the price a subscriber first paid (BL-071)
+
+`marketplace_apps.price_lock` (the operator's checkbox): a new subscriber is locked at their first payment (`marketplace_subscriptions.price_locked`; the ledger's `amount`,
+`currency` and `billing_period` are the locked price). Checkout reads the buyer's own lock and prices the next order at it (same period; another period is the listing price and
+locks again). Turning the lock **on** also locks today's subscribers at their last payment; turning it **off** unlocks nobody. A lock ends with the subscription (the lapse) or
+when the operator releases it: `POST /subscriptions/:id/unlock-price { reason }` (`platform.market.pricing`, audited). A subscriber whose card renews the app keeps the old price
+at the provider, so releasing them ends the card renewal at the end of the paid period (strictly: `MKT_RENEWAL_NOT_STOPPED` if the provider cannot confirm) and the page offers
+subscribing again at the listing price. A locked subscriber is never told "the price changed".
+
+### Per-app coupons (BL-078)
+
+A coupon already names the add-on that sells an app: `applicablePlans` takes plan **and add-on** slugs, the coupons form's picker lists every add-on by its name ("Quote Pro
+(Marketplace)") and checkout resolves the coupon against the add-on's slug. Verified end to end (`marketplace-recurring.e2e.spec.ts`: a coupon for one app discounts that app's
+quote and is refused on another's). No new restriction field was needed. Not built: a **tax category per app** (BL-239): checkout charges one platform-wide rate
+(`pricing.tax_rate`) and `@crm/tax` is the invoicing engine, not checkout's, so a per-app category would be new tax logic that needs the finance owner's rule first.
+
+### Returning the unused time (BL-077)
+
+Two operator doors, both super admins with `platform.market.pricing`, both through the **existing refund service** (`order_refunds`, the provider's own refund call, audit and outbox
+in the refund service's own transaction); the Marketplace only works out the amount (`proration-rules.ts`, integer minor units, rounded down) and records `marketplace.subscription.refunded`.
+
+- `POST /subscriptions/:id/prorate { reason, dryRun (default true), endNow }`: the share of the **last payment** (the newest paid charge of the provider subscription, else the newest
+  paid order) that is still ahead, counted over that payment's cycle (a month or a year back from the period end). `endNow` also cancels the subscription now once the refund went through.
+- `POST /apps/:ref/refund-unused { reason, dryRun (default true), after }`: only for a **killed** app; every paid subscriber is owed the share from the moment the app was withdrawn
+  (`killed_at`), 200 subscriptions per call (`next` continues).
+  What is owed is the unused share **minus what was already returned on that payment**, never more than is left of it, so running either again returns nothing more. A dry run changes
+  nothing. The kill switch also stops every card renewal first. A credit **note** document is not generated (the refund record is the paper trail; BL-240).
 
 ### Apps that own existing plan features (first-party)
 
@@ -344,6 +420,44 @@ every workspace that has booking types or appointments (a usage probe, because t
 plan or override grants it; (4) publish. Between deploy and step 3 a workspace on a catalogue plan has no booking, so do steps 2 and 3 in the same
 window as the deploy. Workspaces on a plan the catalogue does not know stay open (nothing is locked for them) and are not comped.
 
+### Optional tools as apps, information listings and planned drafts (the listings audit)
+
+An audit of what the product has against what the catalogue lists (survey: [wiring/marketplace.md](../threadwise-port/wiring/marketplace.md), "Listings audit") added
+19 listings in three migrations. **Every one is a draft**, so nothing is visible to a workspace until the operator publishes it, and every paid one has **no price**
+(`409 MKT_VERSION_STATE` / `price_not_set` until it is set). Re-seeding never overwrites an operator's edit.
+
+| Kind of listing                                      | Slugs                                                                                                                                               | Pricing and grant                                                                                                                                                                 | Migration                                      |
+| ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Gated by install, grandfathered in the migration** | `lead-scoring` (mini app, Sales tools)                                                                                                              | `paid_monthly`, price unset, grants the **new** plan feature `lead_scoring` (default off), comp existing users                                                                    | `20261228090000_mkt_lead_scoring_app`          |
+| **Gated by install, zero loss**                      | `ai-crm-copilot`, `chatbot-widget`, `help-assistant`, `whatsapp-catalog`, `whatsapp-groups` (mini apps) and `sms` (integration, connector `client`) | `paid_monthly`, price unset, grants the plan feature each already had (`ai_crm_copilot`, `chatbot_widgets`, `help_agent`, `wa_storefront`, `waba_groups`, `sms`; all default off) | `20261228090100_mkt_optional_tool_listings`    |
+| **Information** (core, not gated)                    | `whatsapp-devices`, `meta-lead-forms` (integrations, connector `client`)                                                                            | free, grants nothing, no plan feature, no permission key tied to them                                                                                                             | `20261228090200_mkt_info_and_planned_listings` |
+| **Planned, unbuilt, cannot be published**            | `lead-finder`, `ai-call-assistant`, `openai-ads`, `meta-ads`, `tiktok`, `hubspot`, `slack`, `trello`, `linkedin-lead-gen`, `google-ads-leads`       | free, grants nothing, connector `oauth` (framework only), version `0.1.0`, no recipe                                                                                              | same                                           |
+
+**Why nothing is lost.** (1) For the six zero-loss tools the feature was already off by default, so a workspace has it only through its plan or an override, and an
+app adds a way to get it without touching either (`app-grants.ts`); no plan row, permission key or gate changes. A workspace whose plan already has the feature
+keeps it with no purchase or install; set `includedPlanFeature` to the same key on the listing so the app shows as included for it. (2) `lead_scoring` is a new key
+and off, but scoring was open to every workspace that opted in, so the migration writes `overrides.features.lead_scoring = true` into the plan state of every
+workspace that **uses** it (the switch is on, a run is in the log, or the growth pilot has a row; `USAGE_PROBES.lead_scoring`), in the same transaction, so
+there is no window between the deploy and the operator's comp. An override an operator already set is never touched, other overrides are kept, and running the file
+again touches no row. **Comp existing users** (dry run first, then for real) then records a subscription for the same workspaces; they keep working on the override
+until the operator removes it. (3) The information listings do not touch any gate.
+
+**What a workspace without the feature gets.** Every `lead-scoring` route answers `422 PLAN_FEATURE_LOCKED` (reads included; `reason: feature_disabled`, or
+`app_not_installed` with `app` and `installUrl` once it has paid but not installed). The growth pilot (`/v2/growth/*`) is built on scoring, so `GrowthGateService` treats a
+workspace without the feature as outside the pilot: `settings` answers `available: false` and every other route `403 GRW_NOT_AVAILABLE`. Background work does nothing for it: automatic
+scoring and the backfill (`LeadScoringService.enqueueIfAuto`, `.score`), the chat reading (`LeadChatDigestService.digest`) and every growth sweeper and listener. The entitlement
+is read **after** the cheap per-workspace checks, so only a workspace that switched scoring on pays for the read. The `lsc.%` permission keys carry `plan_feature = 'lead_scoring'` and
+`app_slug = 'lead-scoring'`, so the Roles editor says "install the app" for a workspace without it.
+
+**Operator rollout.** For each gated listing: (1) `PUT /apps/:ref/pricing` (price and currency; send the listing's `grantsPlanFeatures` and `grandfatherExisting` again, the call replaces the pricing), (2) show the add-on on the plans that
+should offer it (a paid app is visible only to workspaces on a plan that lists its add-on), (3) `includedPlanFeature` where a plan already has the feature, (4)
+`POST /apps/lead-scoring/subscriptions/grandfather` with `dryRun: true`, then `false`, (5) approve version `1.0.0` and publish. `pnpm --filter @crm/api seed:lead-scoring` does 1 to 5 on a developer database
+([../runbooks/dev-seed-marketplace-apps.md](../runbooks/dev-seed-marketplace-apps.md)). Publish `whatsapp-devices` only when the unofficial engine is on for the platform.
+
+**Planned drafts are unpublishable on purpose.** `POST /apps/:ref/publish` answers `409 MKT_VERSION_STATE` (nothing approved), and once a version is approved
+`MKT_RECIPE_INVALID` (an integration needs a recipe); a complete OAuth recipe still ends in `409 MKT_CONNECTOR_NOT_AVAILABLE` until the first OAuth integration is verified and `implemented` is flipped on
+the connector. "Coming soon, not built" and the backlog id appear only in the version's changelog (operator-facing). The ids are recorded as `blocked`: BL-259 to BL-268.
+
 ### Operator API additions
 
 | Method and path                             | Permission                | What                                                                                                                                                                                                      |
@@ -353,16 +467,18 @@ window as the deploy. Workspaces on a plan the catalogue does not know stay open
 | `GET /subscriptions/summary`                | manage, review or pricing | per app: counts by state and the **MRR** per currency (list price of the active paid subscriptions, no tax, no coupons, no trials, no comps, not converted between currencies), plus totals               |
 | `POST /apps/:ref/subscriptions/comp`        | **pricing**               | `{ workspaceId (organization uuid), months (1..36 or null), note }`; security event `platform.market.subscription_comped`, an audit row and an outbox event in the workspace                              |
 | `POST /apps/:ref/subscriptions/grandfather` | **pricing**               | `{ months (1..36 or null), note, dryRun (default true) }` -> `{ dryRun, matched, comped, sample }`: comp the workspaces that already have the granted plan features (above)                               |
+| `POST /subscriptions/:id/unlock-price`      | **pricing**               | `{ reason }`: release one subscriber from their locked price (a card renewal is ended at the period end); `platform.market.subscription_price_unlocked`                                                   |
+| `POST /subscriptions/:id/prorate`           | **pricing**, super admin  | `{ reason, dryRun, endNow }`: return the unused share of the last payment (above); `platform.market.subscription_refunded`                                                                                |
+| `POST /apps/:ref/refund-unused`             | **pricing**, super admin  | `{ reason, dryRun, after }`: return every subscriber of a killed app the share from the moment it was withdrawn; `platform.market.withdrawn_app_refunded`                                                 |
 | `POST /subscriptions/:id/cancel`            | **pricing**               | `{ immediate, reason }`: at the end of the period paid for, or now (the entitlement is withdrawn and the installation paused; repeating "now" repeats the pause); `platform.market.subscription_canceled` |
 
 ### Decisions and deviations (recorded; see also `docs/threadwise-port/parity/product-extensions.md`, item 21)
 
 1. **No second billing system.** Reused: `plans` (kind `addon`), checkout and the gateway drivers (test mode of the gateway in development), orders, coupons, tax,
    `workspace_addons`, `AddonFulfilmentService`, `AddonEntitlementService` and the entitlement merge (unchanged).
-2. **Monthly prepaid term; automatic card renewal is not built.** Reference add-ons are terms, not subscriptions: a purchase row ends and is bought
-   again. The gateways' recurring machinery (`subscriptions`, the reconciler) moves a workspace's _plan window_ (`org_plan_state`, `organizations.plan`),
-   so it cannot renew an add-on without changes in the payments domain. A renewal is paying again (Renew now on the manage page, nudged in the last
-   7 days); the UI says "paid until", never "renews automatically". Backlog BL-070.
+2. **Prepaid term by default; card renewal is the operator's choice per listing (BL-070).** Reference add-ons are terms, not subscriptions: a purchase row ends
+   and is bought again. A `one_time` listing keeps that (Renew now on the manage page, nudged in the last 7 days; the UI says "paid until"). A `recurring` listing
+   rides the payments domain's recurring add-ons (see "Card renewal"); only then does the UI say "renews on". Only tested against a faked Razorpay, never a real one.
 3. **Price changes** follow the add-on rule above (next order, no lock, no refund); a per-subscriber price lock is a backlog item (BL-071).
 4. **The wallet does not pay.** The wallet is the message-credit ledger (top-ups in, message charges out) and checkout has no wallet-pays path for plans
    or add-ons; apps follow the plans. Backlog BL-073.
@@ -370,11 +486,23 @@ window as the deploy. Workspaces on a plan the catalogue does not know stay open
    app is a subscription of its own and is gated by the plan feature `marketplace` and the listing's `planFeature`.
 6. **The entitlement lives in `workspace_addons`**; the subscription row is a ledger that follows it. The two writes happen in one transaction (the
    listener hook) so a workspace that just paid never shows as having nothing.
-7. **Annual price** is stored and shown to the operator; annual billing is not built (BL-072). **Revenue share and payouts to third-party developers**
+7. **Annual billing is built (BL-072)**, see above. **Revenue share and payouts to third-party developers**
    are not built; all revenue is the platform's (BL-074).
 8. **Visibility** is the existing hide, unhide and kill; the pricing form shows the status beside it.
-9. Nothing here ran against a real payment gateway: tests fake the far end of Stripe (sandbox mode) and keep the order, paid transition, entitlement,
+9. Nothing here ran against a real payment gateway: tests fake the far end of Stripe and Razorpay and keep the order, paid transition, entitlement,
    ledger, audit and outbox real.
+
+### Decisions waiting for the owner (not built on purpose)
+
+- **BL-073, paying from the wallet.** The wallet is the message-credit ledger: top-ups come in and message charges go out. Paying a subscription from it makes wallet credit
+  revenue before it is used, which is a finance and accounting question (deferred revenue, refunds back to the wallet or to the card, tax on a top-up that is later spent on an app).
+  Decide first: may an app be paid from the wallet at all, may a refund go back to it, and is the VAT/GST point the top-up or the spend. Until then checkout has no wallet-pays path.
+- **BL-074, revenue share and payouts to third-party developers.** All revenue is the platform's today. A payout ledger needs the legal and finance rules first: the split and who
+  carries refunds and chargebacks, tax forms and withholding per country, payout currency and thresholds, statements, and what happens to a developer's share when an app is
+  withdrawn. This is the largest open item and nothing in the ledger is shaped for it yet.
+- **BL-075, usage-based and per-seat pricing.** Needs a meter the app can report to (the app actor and its authentication, phase 3 of the spec), a billing rule (included
+  units, overage, caps), and an invoice line per period. The provider subscription model used for card renewal is a fixed price, so metered billing would be invoiced
+  separately. Decide the unit (seat, record, message) and whether overage is prepaid or billed in arrears before any design.
 
 ## Manifest v1
 
@@ -541,7 +669,7 @@ composite key, one row per `(org, app)`; a workspace **reads** its rows, only th
 Written in the transaction of the change (outbox): `marketplace.app.installed`, `.scopes_changed`, `.upgraded`, `.configured`, `.enabled`,
 `.disabled`, `.secret_rotated`, `.uninstalled` (carries `dataChoice` and `renewalStopped`), `.killed`. `marketplace.app.enabled` and `.disabled` also carry a
 `reason` when a subscription caused them. Subscriptions (aggregate `marketplace_subscriptions`): `marketplace.subscription.started`, `.renewed`,
-`.resubscribed`, `.comped`, `.canceled`, `.resumed`, `.lapsed`, each with the subscription uuid, the app, who did it (`by`: `system`, `user:<id>`,
+`.resubscribed`, `.comped`, `.canceled`, `.resumed`, `.lapsed`, `.payment_failed`, `.renewal_due`, `.price_unlocked`, `.refunded`, each with the subscription uuid, the app, who did it (`by`: `system`, `user:<id>`,
 `operator:<id>`) and the source. Audit rows have `module` `marketplace` (installations) or `marketplace_subscriptions`; their deltas name what
 changed and never a value or a payment detail.
 
@@ -552,13 +680,14 @@ changed and never a value or a payment detail.
 `MKT_WEBHOOK_UNAUTHORIZED`, `MKT_WEBHOOK_BAD_PAYLOAD`, `MKT_LEAD_PIPELINE_UNAVAILABLE`, and for the operator `MKT_MANIFEST_INVALID`,
 `MKT_RECIPE_INVALID`, `MKT_URL_REFUSED`, `MKT_CONNECTOR_NOT_AVAILABLE`, `MKT_SLUG_TAKEN`, `MKT_CATEGORY_NOT_FOUND`, `MKT_CATEGORY_IN_USE`,
 `MKT_VERSION_STATE`, `MKT_VERSION_EXISTS`; for paid apps `MKT_SUBSCRIPTION_REQUIRED`, `MKT_NOT_FOR_SALE`, `MKT_TRIAL_UNAVAILABLE`, `MKT_SUBSCRIPTION_NOT_FOUND`,
-`MKT_SUBSCRIPTION_STATE`; checkout answers a refused sale as `PAYGW_PLAN_NOT_PURCHASABLE` with `errors: [{ path: 'marketplace', message: unavailable | not_for_sale | included | paid_ahead }]`. Plus the platform's `PLAN_FEATURE_LOCKED`, `PLAN_LIMIT_REACHED`, `ROW_VERSION_CONFLICT`,
+`MKT_SUBSCRIPTION_STATE`, `MKT_RENEWAL_NOT_STOPPED`; checkout answers a refused sale as `PAYGW_PLAN_NOT_PURCHASABLE` with `errors: [{ path: 'marketplace', message: unavailable | not_for_sale | included | paid_ahead }]`. Plus the platform's `PLAN_FEATURE_LOCKED`, `PLAN_LIMIT_REACHED`, `ROW_VERSION_CONFLICT`,
 `RATE_LIMITED`.
 
 ## Not built yet
 
-Third-party (out-of-process) mini apps, app tokens and OAuth for apps, iframe surfaces, the developer portal, revenue share and payouts for paid
-third-party apps, annual billing, automatic card renewal of an app subscription, a wallet payment, usage-based pricing, and ratings (spec phases 3
+Listed as planned drafts that cannot be published (BL-259 to BL-268): the lead finder, the AI call assistant, OpenAI Ads (no definition exists), Meta Ads (Click-to-WhatsApp), TikTok, HubSpot, Slack,
+Trello, LinkedIn lead gen and Google Ads leads. Third-party (out-of-process) mini apps, app tokens and OAuth for apps, iframe surfaces, the developer portal, revenue share and payouts for paid
+third-party apps, a wallet payment, usage-based pricing, and ratings (spec phases 3
 and 4; backlog BL-070 to BL-075); the OAuth and email-parse connectors; first-party mini app screens. Lead portals: Collegedunia, NoBroker, Quikr, CarDekho and
 Naukri (no mechanism found, or not leads), email-alert parsing, a replay tool for stored deliveries, and every portal's verification against a real account
 (backlog BL-080 onward).

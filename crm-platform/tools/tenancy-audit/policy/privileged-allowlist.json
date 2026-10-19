@@ -9,6 +9,16 @@
     "reason": "org-keyed roles_version read/bump; callers pass the authenticated org; returns an integer for a cache key",
     "reviewedOn": "2026-10-11"
   },
+  "modules/analytics/rollup/rollup.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (AnalyticsWorkerModule is imported by WorkersModule alone; no controller reaches it); the rollup pass, nightly reconcile and hour trim read and write the analytics event stream and rollups across tenants by design. Every statement is fixed in code from the rollup rules, org_id is taken from the events themselves, and the only caller input is the reconcile day, validated against YYYY-MM-DD",
+    "reviewedOn": "2026-10-16"
+  },
+  "modules/data-retention/partition-archiver.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (DataRetentionWorkerModule is imported by WorkersModule alone; no controller reaches it); it exports a whole closed monthly partition of a registered stream, across tenants by design, to one object per workspace and drops the partition through drop_closed_partition. Stream and column names come from the code registry (checked against ^[a-z][a-z0-9_]*$ and passed as identifiers, never interpolated), the month is validated as YYYY-MM, workspace ids from the data are checked to be plain integers before they become object names, and the drop function itself refuses any stream not in archivable_streams()",
+    "reviewedOn": "2026-10-17"
+  },
   "modules/api-library/api-library-retention.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
@@ -24,9 +34,49 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/appointments-booking/appointment-reminder.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (the reminder sweep calls it; no controller reaches it); the two privileged steps take the waiting runs across tenants (FOR UPDATE SKIP LOCKED) and close the ones a dead worker left, every per-run read, delivery and write then runs under that run's own txAs and request context",
+    "reviewedOn": "2026-10-18"
+  },
+  "modules/appointments-booking/bookings-feed.service.ts": {
+    "status": "reviewed",
+    "reason": "public calendar feed (no login): the privileged step only maps the hashed feed token to an org and user, then the request runs in that tenant context with a per-IP and per-token throttle and an RBAC check on appointments read before anything is returned.",
+    "reviewedOn": "2026-10-16"
+  },
+  "modules/appointments-booking/calendar-reconcile.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker scheduler only (no controller reaches it); the privileged step claims due workspaces from appointment_calendar_connections across tenants and returns only org ids, the pass for each runs under that workspace's own txAs with a per-workspace Redis lock",
+    "reviewedOn": "2026-10-15"
+  },
+  "modules/appointments-booking/google-consent.service.ts": {
+    "status": "reviewed",
+    "reason": "the expired-confirmation sweep only (called by the worker, no controller reaches it); the privileged step lists expired google_consent_requests across tenants, each is then ended and its parked grant withdrawn under that row's own txAs. Every request path of the service runs under the caller's tenant transaction",
+    "reviewedOn": "2026-10-15"
+  },
+  "modules/appointments-booking/ics-feeds.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker only (queue processor and interval); the privileged step claims due feed refreshes across tenants with a bounded batch and lease, and each refresh runs under its own org context.",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/appointments-booking/public-booking.service.ts": {
     "status": "reviewed",
     "reason": "pre-tenant public lookup by slug / token hash, then pins ctx.orgId to the hit"
+  },
+  "modules/audit-log/audit-log-export-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants, no caller-controlled values",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/audit-log/audit-log-export.runner.ts": {
+    "status": "reviewed",
+    "reason": "worker only (orgId from a zod-validated job enqueued from ctx.orgId); reads and writes run under txAs({orgId}); the one privileged step is the impersonation_sessions lookup bound to target_workspace_id = that org",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/audit-log/audit-log.service.ts": {
+    "status": "reviewed",
+    "reason": "settings() reads one platform-wide retention integer; sessions() passes ctx.orgId and filters impersonation_sessions by target_workspace_id = orgId AND uuid IN (the page's own RLS-scoped uuids)",
+    "reviewedOn": "2026-10-14"
   },
   "modules/auth/maintenance/auth-maintenance.service.ts": {
     "status": "reviewed",
@@ -58,6 +108,16 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; explicit org_id predicates inside the privileged tx",
     "reviewedOn": "2026-10-11"
   },
+  "modules/calling-voice/call-recording-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); privileged step selects/stamps across tenants, per-recording work runs under that row's txAs with org_id and id; the delete goes through ChatMediaStore.remove(orgId, key) which checks the chat/<orgId>/ prefix",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/calling-voice/calling-readiness.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the one privileged step (CallingReadinessScheduler via CallingReadinessRepository.due) selects only (org_id, uuid) of numbers whose check is due and queues a job carrying those two ids; each check then runs as a system actor inside that org's own tenant context (RequestContextStore + txAs), and the connect consumer takes its org from the outbox event",
+    "reviewedOn": "2026-10-15"
+  },
   "modules/campaigns/campaign-sweeper.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; hardening: resumeStalled/reconcileMetaBlocks rely on explicit org_id predicates rather than a tenant context",
@@ -66,6 +126,11 @@
   "modules/campaigns/wizard/wizard-csv.service.ts": {
     "status": "reviewed",
     "reason": "worker retention purge across tenants"
+  },
+  "modules/campaigns/wizard/wizard-follow-up.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step arms and claims follow-up rows across tenants with a bounded batch and a lease, and every send, write and state change runs under that row's own txAs({ orgId }).",
+    "reviewedOn": "2026-10-16"
   },
   "modules/campaigns/wizard/wizard-retry.service.ts": {
     "status": "reviewed",
@@ -90,6 +155,21 @@
     "status": "reviewed",
     "reason": "worker sweep of expired reservations; each release then runs in the row's own tenant"
   },
+  "modules/channel-email/mail-outbound-attachments.service.ts": {
+    "status": "reviewed",
+    "reason": "only privileged step is sweepExpired() (worker); per-row delete under txAs({orgId}) with org_id and id, object removed through ChatMediaStore.remove(orgId, key); request paths use txAs with the authenticated ctx",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/channel-email/mail-push.service.ts": {
+    "status": "reviewed",
+    "reason": "notify() is reached from the public Pub/Sub endpoint that verifies a Google OIDC token (issuer, audience, service account from platform config) before reading the body; it only enqueues a sync keyed by each mailbox's own org_id and uuid after a per-org plan check; sweep is worker-only",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/channel-email/mail-sync.sweep.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); lists connected mailboxes and enqueues one job per (orgId, mailboxUuid) from the row after a per-org plan check; reads no tenant data",
+    "reviewedOn": "2026-10-14"
+  },
   "modules/channel-facebook/page-health-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
@@ -110,15 +190,30 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/chat-conversations/message-log-archive.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); per-org archive+delete runs privileged with explicit org_id on every statement (txAs would add RLS as a second layer; no bug); purge/expire are fixed-predicate retention",
+    "reviewedOn": "2026-10-14"
+  },
   "modules/chat-conversations/queued-message-recovery.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
-  "modules/chrome-extension-sheets-addon/sheets-key.guard.ts": {
+  "modules/compliance-center/public-trust.service.ts": {
     "status": "reviewed",
-    "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies (128-bit key, sha256, unique partial index, per-IP failure throttle)",
-    "reviewedOn": "2026-10-11"
+    "reason": "public, unauthenticated /trust/:slug page (BL-173). privileged() is used only to resolve slug -> org id/name (the only legitimate way to find an org pre-tenant-context, same pattern as tenant-directory.ts). Input is regex-validated before the query; every subsequent read runs under txAs({orgId}), properly tenant-scoped. The response is hand-built from an explicit allowlist of fields the workspace chose to publish (name, privacy/terms URLs, DPO contact, active subprocessors only) and is gated by a subprocessorsPublic opt-in toggle; a missing, inactive or opted-out workspace all answer the same 404, so the endpoint cannot be used to enumerate slugs.",
+    "reviewedOn": "2026-10-15"
+  },
+  "modules/contact-consent/consent-export-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/contact-consent/minor-detection.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (MinorSweepService @Cron, contact-consent-worker module; no controller reaches it); the sweep reads only (org_id, contact_id) pairs by fixed predicates, then evaluates each contact in its own workspace transaction",
+    "reviewedOn": "2026-10-16"
   },
   "modules/crm/invoicing/invoice-overdue-sweep.service.ts": {
     "status": "reviewed",
@@ -129,6 +224,16 @@
     "status": "reviewed",
     "reason": "dueAcrossTenants returns {orgId,id}; each schedule runs under RequestContextStore.run + db.tx; tenant controller methods use db.tx",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/crm/owner-reassign/owner-restore-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); org_id on every restore/save/audit statement, orgId passed explicitly to outbox.emit. Note: up to 20 batches of different workspaces restore in one privileged tx, so one failing batch blocks the others (availability only)",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/crm/revenue-report/revenue-export-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only; the privileged step expires finished exports and fails stuck ones across tenants, changing status and clearing the file bytes only (no tenant data is read or returned).",
+    "reviewedOn": "2026-10-16"
   },
   "modules/crm/sales-docs/sales-doc-expiry-sweep.service.ts": {
     "status": "reviewed",
@@ -190,6 +295,11 @@
     "status": "reviewed",
     "reason": "platform flow_templates clone counter after the tenant clone committed"
   },
+  "modules/flow-runtime-engine/runtime/flow-run-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); time-based retention DELETE across tenants keyed on (org_id, id), no per-row side effects",
+    "reviewedOn": "2026-10-14"
+  },
   "modules/flow-runtime-engine/runtime/flow-sweeper.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
@@ -200,15 +310,55 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs. The claim UPDATE had no org_id predicate (TI-010); fixed to WHERE org_id = $1 AND id = $2",
     "reviewedOn": "2026-10-11"
   },
+  "modules/forms-builder/form-payment-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); one UPDATE on (org_id, id) with SKIP LOCKED expires lapsed payment attempts, no caller input",
+    "reviewedOn": "2026-10-14"
+  },
   "modules/forms-builder/form-retention-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
+  "modules/growth-pilot/growth-gate.service.ts": {
+    "status": "reviewed",
+    "reason": "only privileged call is pilotOrgs(), reached from the worker-only GrowthSweeper; request-path methods use txAs with the authenticated org",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/growth-pilot/growth-sweeper.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only; lists pilot org ids then runs each org's work in a RequestContextStore pinned to that org; housekeeping is time-based retention with no input",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/lead-scoring/lead-chat-digest.service.ts": {
+    "status": "reviewed",
+    "reason": "queueIdle and sweepOld are privileged and reached only from worker classes; every per-contact read, write and AI call runs under txAs/tx for one org and the AI key is resolved with that org id",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/lead-scoring/lead-scoring-platform.service.ts": {
+    "status": "reviewed",
+    "reason": "platform-operator path only (ActorKinds platform_operator + OperatorGuard + super_admin); cross-tenant counts are the operator's intended view; inputs are bound parameters",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/lead-scoring/lead-scoring-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); deletes scoring runs older than the operator-set retention across tenants, no per-row side effects",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/leads/lead-first-reply.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (called from the lead first-reply sweep); the privileged steps free abandoned claims and take due rows, and each reply is written under txAs({ orgId }) for that row.",
+    "reviewedOn": "2026-10-16"
+  },
   "modules/leads/lead-retention-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/leads/lead-sync.worker.ts": {
+    "status": "reviewed",
+    "reason": "worker only (interval); the privileged step requeues stale queued sync runs and fails abandoned ones, changing status only; each requeue carries its own org id.",
+    "reviewedOn": "2026-10-16"
   },
   "modules/marketing-site-cms/cms-store.ts": {
     "status": "reviewed-partial",
@@ -234,6 +384,11 @@
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/meta-lead-ads/lead-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (cron); the privileged step lists the Meta pages due for a sweep, and each page is then processed in its own org context.",
+    "reviewedOn": "2026-10-16"
   },
   "modules/node-bridge-runtime/outbound/catalog-bridge.adapter.ts": {
     "status": "reviewed-fixed",
@@ -280,10 +435,20 @@
     "reason": "blanket wrapper with ~60 call sites; operator routes and signed/tokened public receivers read, not every site. The webhook subscription match fell back to the newest subscription on a shared plan id (TI-009); fixed in subscription-lifecycle.service.ts",
     "reviewedOn": "2026-10-11"
   },
+  "modules/platform-async-ops/async-ops.store.ts": {
+    "status": "reviewed",
+    "reason": "operator-only (OperatorGuard, platform_operator) list and replay of dead event_outbox rows across tenants by design; the caller names an event type and a count, never a payload or an org, replay is a single UPDATE on rows already dead, skips workspaces that are not active, and is audited with the operator",
+    "reviewedOn": "2026-10-17"
+  },
   "modules/platform-support-desk/support-store.ts": {
     "status": "reviewed",
     "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/privacy/requests/privacy-maintenance.service.ts": {
+    "status": "reviewed-partial",
+    "reason": "worker/cron only (no controller reaches it); export expiry, stuck-export failure and overdue-request expiry take no caller input and the purge-queue hand-off copies each row's own org_id. Not traced: the writers of the six manifest key columns; the delete side is now bound to the org (TI-022)",
+    "reviewedOn": "2026-10-14"
   },
   "modules/public-api/api-key.guard.ts": {
     "status": "reviewed",
@@ -315,120 +480,6 @@
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
     "reviewedOn": "2026-10-11"
   },
-  "modules/whatsapp-cloud-api-waba/waba-click-sync.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
-    "reviewedOn": "2026-10-11"
-  },
-  "modules/whatsapp-devices-baileys/history-import-sweep.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); the privileged step only selects the ids of idle or never-answered history-import runs across tenants, and each run is ended by HistoryImportService.finishAs under that run's own org (txAs with a system context, filtered by org_id and id)",
-    "reviewedOn": "2026-10-14"
-  },
-  "realtime/realtime.gateway.ts": {
-    "status": "reviewed",
-    "reason": "reads roles_version of the socket's own, server-derived org"
-  },
-  "workers/outbox-drain.service.ts": {
-    "status": "reviewed-partial",
-    "reason": "claims event_outbox rows, updates keyed by id + created_at, hands subscribers the row's orgId; each subscriber's own tenant context was not audited here",
-    "reviewedOn": "2026-10-11"
-  },
-  "workers/partition-maintenance.service.ts": {
-    "status": "reviewed",
-    "reason": "catalog/schema objects only; no tenant rows",
-    "reviewedOn": "2026-10-11"
-  },
-  "modules/audit-log/audit-log-export-sweep.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants, no caller-controlled values",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/audit-log/audit-log-export.runner.ts": {
-    "status": "reviewed",
-    "reason": "worker only (orgId from a zod-validated job enqueued from ctx.orgId); reads and writes run under txAs({orgId}); the one privileged step is the impersonation_sessions lookup bound to target_workspace_id = that org",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/audit-log/audit-log.service.ts": {
-    "status": "reviewed",
-    "reason": "settings() reads one platform-wide retention integer; sessions() passes ctx.orgId and filters impersonation_sessions by target_workspace_id = orgId AND uuid IN (the page's own RLS-scoped uuids)",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/calling-voice/call-recording-retention.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); privileged step selects/stamps across tenants, per-recording work runs under that row's txAs with org_id and id; the delete goes through ChatMediaStore.remove(orgId, key) which checks the chat/<orgId>/ prefix",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/channel-email/mail-outbound-attachments.service.ts": {
-    "status": "reviewed",
-    "reason": "only privileged step is sweepExpired() (worker); per-row delete under txAs({orgId}) with org_id and id, object removed through ChatMediaStore.remove(orgId, key); request paths use txAs with the authenticated ctx",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/channel-email/mail-push.service.ts": {
-    "status": "reviewed",
-    "reason": "notify() is reached from the public Pub/Sub endpoint that verifies a Google OIDC token (issuer, audience, service account from platform config) before reading the body; it only enqueues a sync keyed by each mailbox's own org_id and uuid after a per-org plan check; sweep is worker-only",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/channel-email/mail-sync.sweep.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); lists connected mailboxes and enqueues one job per (orgId, mailboxUuid) from the row after a per-org plan check; reads no tenant data",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/chat-conversations/message-log-archive.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); per-org archive+delete runs privileged with explicit org_id on every statement (txAs would add RLS as a second layer; no bug); purge/expire are fixed-predicate retention",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/contact-consent/consent-export-sweep.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); two fixed-predicate UPDATEs retire expired/stuck export rows across tenants",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/crm/owner-reassign/owner-restore-sweep.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); org_id on every restore/save/audit statement, orgId passed explicitly to outbox.emit. Note: up to 20 batches of different workspaces restore in one privileged tx, so one failing batch blocks the others (availability only)",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/flow-runtime-engine/runtime/flow-run-retention.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); time-based retention DELETE across tenants keyed on (org_id, id), no per-row side effects",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/forms-builder/form-payment-sweep.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); one UPDATE on (org_id, id) with SKIP LOCKED expires lapsed payment attempts, no caller input",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/growth-pilot/growth-gate.service.ts": {
-    "status": "reviewed",
-    "reason": "only privileged call is pilotOrgs(), reached from the worker-only GrowthSweeper; request-path methods use txAs with the authenticated org",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/growth-pilot/growth-sweeper.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only; lists pilot org ids then runs each org's work in a RequestContextStore pinned to that org; housekeeping is time-based retention with no input",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/lead-scoring/lead-chat-digest.service.ts": {
-    "status": "reviewed",
-    "reason": "queueIdle and sweepOld are privileged and reached only from worker classes; every per-contact read, write and AI call runs under txAs/tx for one org and the AI key is resolved with that org id",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/lead-scoring/lead-scoring-platform.service.ts": {
-    "status": "reviewed",
-    "reason": "platform-operator path only (ActorKinds platform_operator + OperatorGuard + super_admin); cross-tenant counts are the operator's intended view; inputs are bound parameters",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/lead-scoring/lead-scoring-retention.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); deletes scoring runs older than the operator-set retention across tenants, no per-row side effects",
-    "reviewedOn": "2026-10-14"
-  },
-  "modules/privacy/requests/privacy-maintenance.service.ts": {
-    "status": "reviewed-partial",
-    "reason": "worker/cron only (no controller reaches it); export expiry, stuck-export failure and overdue-request expiry take no caller input and the purge-queue hand-off copies each row's own org_id. Not traced: the writers of the six manifest key columns; the delete side is now bound to the org (TI-022)",
-    "reviewedOn": "2026-10-14"
-  },
   "modules/team-inbox-conversations/inbox-triage.service.ts": {
     "status": "reviewed",
     "reason": "privileged step is wakeDue only (worker); per-row wake, event, outbox and realtime use that row's org_id and id; request paths use db.tx with ctx.orgId",
@@ -439,9 +490,19 @@
     "reason": "worker/cron only (no controller reaches it); every UPDATE/SELECT carries org_id and id, events and outbox use the row's org",
     "reviewedOn": "2026-10-14"
   },
+  "modules/whatsapp-cloud-api-waba/waba-click-sync.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
+    "reviewedOn": "2026-10-11"
+  },
   "modules/whatsapp-devices-baileys/device-groups-sweep.service.ts": {
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); privileged step lists (org_id, device id) only, per-row work runs under that row's txAs and the Redis claim key carries org and device",
+    "reviewedOn": "2026-10-14"
+  },
+  "modules/whatsapp-devices-baileys/history-import-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step only selects the ids of idle or never-answered history-import runs across tenants, and each run is ended by HistoryImportService.finishAs under that run's own org (txAs with a system context, filtered by org_id and id)",
     "reviewedOn": "2026-10-14"
   },
   "modules/workspaces-teams-tenancy/leave/leave-sweep.service.ts": {
@@ -458,5 +519,34 @@
     "status": "reviewed-fixed",
     "reason": "worker/cron only (no controller reaches it); TI-022: the queued key is tenant-written, so the delete is now bound to the row's workspace prefix (storageKeyIsOwnedBy) before either storage door is called",
     "reviewedOn": "2026-10-14"
+  },
+  "realtime/realtime.gateway.ts": {
+    "status": "reviewed",
+    "reason": "reads roles_version of the socket's own, server-derived org"
+  },
+  "workers/outbox-drain.service.ts": {
+    "status": "reviewed-partial",
+    "reason": "claims event_outbox rows, updates keyed by id + created_at, hands subscribers the row's orgId; each subscriber's own tenant context was not audited here",
+    "reviewedOn": "2026-10-11"
+  },
+  "workers/partition-maintenance.service.ts": {
+    "status": "reviewed",
+    "reason": "catalog/schema objects only; no tenant rows",
+    "reviewedOn": "2026-10-11"
+  },
+  "modules/failed-operations/failed-operations.repository.ts": {
+    "status": "reviewed",
+    "reason": "operator-only (OperatorGuard, platform_operator; redrive and close need super_admin) and worker-only records of background work that failed for good; failed_operations and failed_operation_events are platform tables whose every policy is app_is_privileged() (no workspace can read one), so privileged is the only way to reach them. A redrive takes nothing from the caller but the record id: payload, workspace and eligibility come from the stored record, a suspended or deleted workspace is refused, and every action is audited with the operator",
+    "reviewedOn": "2026-12-29"
+  },
+  "modules/privacy/legal-holds/legal-holds.service.ts": {
+    "status": "reviewed",
+    "reason": "the only privileged() call is expireDue(), reached from the worker alone (LegalHoldMaintenanceService, PrivacyWorkerModule is imported by WorkersModule only; no controller calls it). It lists (org_id, id) of active legal holds past their end date with a fixed statement and a constant limit, no caller input; every hold is then ended in its own tenant transaction (txAs with that org) under the exclusive hold lock, so nothing is read or written across tenants beyond the id list",
+    "reviewedOn": "2026-10-18"
+  },
+  "modules/privacy/legal-holds/legal-hold-maintenance.service.ts": {
+    "status": "reviewed",
+    "reason": "worker only (PrivacyWorkerModule is imported by WorkersModule alone). privileged() lists (org_id, uuid) of confirmed erasure requests that no hold covers any more, with a fixed statement and a constant limit, no caller input; each request is then re-read under a row lock and executed inside a tenant transaction for its own org (txAs), which re-checks the legal hold before anything is erased",
+    "reviewedOn": "2026-10-18"
   }
 }

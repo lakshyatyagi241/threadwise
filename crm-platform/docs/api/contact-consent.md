@@ -13,6 +13,7 @@ Product extension (spec [contact-consent-ledger.md](../specs/contact-consent-led
 | `GET /events?limit&cursor&channel&action&source` | `contacts.consent.read`   | Newest recorded first                                                                                                                                                                                                                      |
 | `GET /contacts/:uuid`                            | `contacts.consent.read`   | `{ contactId, optedOut, states[], events[] }`                                                                                                                                                                                              |
 | `POST /contacts/:uuid/events`                    | `contacts.consent.manage` | `{ action: granted or withdrawn, channel, purpose, note, evidence }`. A grant needs `note` (422 `CONSENT_NOTE_REQUIRED`). `Idempotency-Key` makes a repeat record nothing (409 `CONSENT_IDEMPOTENCY_MISMATCH` if reused for another event) |
+| `POST /contacts/:uuid/privacy-events`            | `contacts.consent.manage` | Turn a privacy flag on or off: `{ kind: minor, guardian_consent or sale_share_opt_out, value, note, evidence, source }` (BL-180, below). Answers the contact consent view                                                                  |
 | `GET /contacts/:uuid/export`, `GET /export`      | read / manage             | CSV with formula-safe cells; the workspace export is capped at 50,000 rows (`X-Export-Truncated: true`)                                                                                                                                    |
 | `POST /exports`                                  | `contacts.consent.manage` | Prepares the whole ledger in the background (202, `Idempotency-Key`). One at a time: 409 `CONSENT_EXPORT_IN_PROGRESS`. The requester is emailed when it is ready                                                                           |
 | `GET /exports`                                   | `contacts.consent.manage` | `{ data[], ledgerRows, needsAsync }`: the latest 20 (status `queued`, `running`, `ready`, `failed`, `expired`) and whether the ledger is larger than the direct download                                                                   |
@@ -48,8 +49,10 @@ Sheets rows use the cells `consent` (yes) and `consent_note`; a yes without a no
 
 ### Consent notices (`/v2/contact-consent/notices/:scope/:ref`, BL-167)
 
+Scope `workspace` (BL-179, [compliance.md](compliance.md)) is the workspace's default wording: `ref` is a language code (`en`, `hi`), one notice per language, same versioning.
+
 `GET` and `PUT` (permission `settings.consent.manage`). `scope` is `widget` (ref: the widget id), `booking` (the booking type id) or `commerce`
-(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, channels }`; every change to any of them
+(`shopify:<integration id>` or `woocommerce:<integration id>`). A notice is `{ enabled, text, url, termsUrl, channels }` (`termsUrl` is the optional terms link next to the privacy link `url`, BL-175; additive, an older client that does not send it stores null); every change to any of them
 appends the next numbered **version** (a repeat writes nothing, rows are append-only). An enabled notice needs its wording (422), the link must be
 https (422), an unknown widget, booking type or store is 404 `CONSENT_NOTICE_TARGET_NOT_FOUND`, and another workspace's id is the same 404.
 `channels: ["whatsapp"]` is for stores only: it makes the store's marketing checkbox count for WhatsApp too.
@@ -71,7 +74,7 @@ Where the notice is used:
 ## Events
 
 `contact.consent.granted`, `contact.consent.withdrawn` (payload: contactId, channel, purpose, source, eventId),
-`contact.consent.settings_changed`.
+`contact.consent.settings_changed`, and `contact.privacy.changed` (payload: contactId, kind, value, source, eventId; BL-180).
 
 ## Contact import
 
@@ -125,6 +128,7 @@ there is no recorded grant). There is no override.
 | SMS `channel-sms/sms-engine.sender.ts`                                                        | marketing                                                                           | flag + Twilio 21610    | gate on the contact (flag, sms ledger, switch); 21610 kept            |
 | Broadcasts `broadcasts.service.ts`                                                            | marketing                                                                           | private predicate      | `checkMany` (whatsapp)                                                |
 | Campaigns `campaign-dispatch.service.ts`                                                      | marketing                                                                           | private predicate      | `checkMany` (whatsapp) after the flag and duplicate screen            |
+| Shopify / WooCommerce sends `shopify-woocommerce/commerce-consent.service.ts` (BL-278)        | template category: MARKETING is marketing, otherwise service (never asked)          | contact flag only      | `gateRecipients` (whatsapp), before the quiet hours; refusals logged  |
 | Outbound dial `calling-voice/call-actions.service.ts`                                         | service, voice modality                                                             | none                   | refused only if the contact withdrew service; no campaign calls exist |
 | Email reply `channel-email/email-channel.adapter.ts`                                          | service; marketing when `email.marketing`                                           | none                   | link and RFC 8058 headers on marketing mail                           |
 | Growth pilot digests `growth-pilot`                                                           | none (creates tasks and notes, sends nothing)                                       | n/a                    | the flows it starts are gated by the flow sender                      |
@@ -135,9 +139,9 @@ evidence: a consent-based purpose (`call_recording`) is `allow` (`consent_eviden
 notice-only purpose is `allow` (`notice_delivered`). `options.purposeEnabled = false` answers `deny` / `purpose_not_enabled` first (the workspace switch; call recording is off by
 default). The adopter is `calling-voice/call-recording-consent.service.ts` (BL-144).
 
-Not yet on the gate (allow-list entries marked KNOWN GAP): Telegram, Facebook and Instagram broadcasts, commerce (Shopify / WooCommerce)
-broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign wizard preview counts, `ai_content_processing` and
-`third_party_sharing` as workspace switches, quiet hours and calling windows.
+No allow-list entry is marked KNOWN GAP any more: the Messenger, Telegram, Viber, LINE, WeChat and Instagram broadcasts (BL-141 follow-up) and the
+Shopify / WooCommerce sends (BL-278) ask the gate for every recipient. Still outside it: the send-time re-check inside the broadcast dispatcher,
+the campaign wizard preview counts, `ai_content_processing` and `third_party_sharing` as workspace switches.
 
 ## Intake, round 2 (BL-168 to BL-171)
 
@@ -159,6 +163,56 @@ broadcasts, the send-time re-check inside the broadcast dispatcher, the campaign
   `consentNoticeVersion`) stored on the upload (`camp_wizard_csv`); the report returns `consentConfirmed` and `consentNoticeVersion`. At launch
   every contact the file's numbers belong to gets one WhatsApp grant (source `import`, `reference: wizard_csv:<upload>`), never over an opt-out;
   with the workspace switch ON those numbers count as consented before launch.
-- **Web forms (BL-171).** `consent.coversSms` on the form definition. A ticked marketing line grants WhatsApp, email and (covers SMS + phone) SMS.
+- **Web forms (BL-171).** `consent.channels` on the form definition (absent: WhatsApp, email, and SMS with `coversSms`). A ticked marketing line grants only the chosen channels the form collected data for.
   A ticked line that is not marketing records purpose `utility` events (source `form`, same evidence), no subscription label, no `contact.opt_in`.
   Unticked: nothing in the ledger.
+
+## Contact privacy flags: minor, guardian consent, Do Not Sell or Share (BL-180)
+
+Spec [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 11.9. `GET /v2/contact-consent/contacts/:uuid` (and
+`GET /api/v1/contacts/{id}/consent`) now carry a `privacy` object next to `states` and `events`:
+
+| Field                                                           | Meaning                                                                                                           |
+| --------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| `isMinor`, `minorSince`, `minorSource`                          | the contact is flagged as a minor, since when, from where (`manual`, `api`, `contact_request`, `gpc`)             |
+| `guardianConsent`, `guardianSince`                              | a parent or guardian's consent is on record (evidence only, never a marketing grant)                              |
+| `doNotSellShare`, `doNotSellShareSince`, `doNotSellShareSource` | the contact opted out of the sale or sharing of their personal information                                        |
+| `ccpaUs`                                                        | the workspace has the `ccpa_us` profile on: the Consent card offers the Do Not Sell or Share switch               |
+| `minorRule`                                                     | what the workspace's children setting does with a flagged minor's marketing: `off`, `guardian`, `block`           |
+| `events`                                                        | the newest 20 changes: `{ id, kind, value, source, evidence, actor, note, occurredAt, recordedAt }`, newest first |
+
+`POST /contacts/:uuid/privacy-events` body `{ kind, value, source?, note?, evidence?, occurredAt? }` (`source` is `manual` by default, or
+`api` or `contact_request`; `evidence` takes the same short keys as the ledger, including `guardianConsentRef`). It appends one event and
+updates the flag in the same transaction, with an audit row and the outbox event `contact.privacy.changed` (payload: contactId, kind, value,
+source, eventId). Rules: guardian consent needs a note (422 `CONSENT_NOTE_REQUIRED`) and a contact flagged as a minor (422
+`CONSENT_PRIVACY_NOT_MINOR`); clearing `minor` also clears guardian consent (two history lines); an `Idempotency-Key` makes a repeat record
+nothing (409 `CONSENT_IDEMPOTENCY_MISMATCH` for another change); the history cannot be edited or deleted. The Do Not Sell or Share flag is
+accepted for any workspace; the card offers it when `ccpaUs` is true.
+
+### ConsentGate
+
+- `subject_minor` (deny, marketing only): the contact is flagged as a minor and `minorRule` is `block`, or is `guardian` and no guardian
+  consent is on record. A withdrawal is still reported as `withdrawn`. Service messages are never held. Nothing is held when the workspace's
+  children question is not answered and parental consent is not required (`off`).
+- `sale_share_opted_out` (deny): the purpose `third_party_sharing` for a contact who opted out.
+- A held marketing send is refused like any other gate denial (422 `CONSENT_SEND_DENIED` on the inbox and REST paths; skipped and counted by
+  reason in broadcasts, campaigns, flows and schedules).
+
+### Global Privacy Control
+
+The header `Sec-GPC: 1` (any other value is ignored) on `POST /v2/public/forms/:key/submit` and `POST /widget/:token/api/message` records
+the Do Not Sell or Share opt-out of the contact that the submission or thread resolved to, source `gpc`, but only when the workspace has
+`ccpa_us` on. The web relay `/api/public/forms/*` forwards the header. Evidence: `formId` and `submissionId` (form) or `widgetId` (widget),
+nothing else about the request. Already opted out: nothing more is written. It never changes marketing consent. A widget visitor has a
+contact once they give a phone number or an email address.
+
+## How a minor is detected (BL-217, BL-218, BL-190)
+
+Spec: [privacy-and-data-governance.md](../specs/privacy-and-data-governance.md) section 11.10.
+
+- **Date of birth.** `dateOfBirth` (`YYYY-MM-DD`, not in the future) on `POST /v2/contacts` and `PATCH /v2/contacts/:id` (`null` clears it); `GET` returns `dateOfBirth` and `isMinor`. A date under the workspace's minor age flags the contact in the same request: source `dob`, an expiry in `privacy.minorUntil`. The workspace's age is the highest `minorAge` of the Compliance profiles switched on, else 18.
+- **Flag sources.** `privacy.minorSource` can now also be `dob`, `import`, `flow` or `declaration`. Only `dob` lapses by itself (the nightly sweep at 03:35); a flag set by a person, the API, an import or a flow stays until a person clears it. A person who clears a `dob` flag while the date still says minor is not overruled until the date changes.
+- **Filter and segments.** `GET /v2/contacts?minor=true|false`; segment rule fields `minor` (is_true / is_false), `dateOfBirth` (date operators) and `age` (number operators, whole years, empty without a date). Also in "select all matching" bulk actions.
+- **Import.** CSV columns `dateOfBirth` (year first, `2010-05-04`; a day-first date rejects the row as `invalid_date_of_birth`) and `minor` (yes flags the contact with source `import`; no and blank change nothing).
+- **Customer API.** `date_of_birth` and `is_minor` on every contact; `GET /v1/contacts/:id/privacy` and `POST /v1/contacts/:id/privacy` (`contacts:read` / `contacts:write`, body as `privacy-events`, source stored as `api`).
+- **Gate.** New closed-set reason `on_dnc_list` (see the Compliance API).

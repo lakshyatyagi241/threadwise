@@ -105,7 +105,10 @@ export class EventsRepository {
     return (res.rows as Array<Record<string, unknown>>).map(toConfig);
   }
 
-  /** Is there a log row of this event for this recipient within the last `days` days? */
+  /**
+   * Is there a log row of this event for this recipient within the last `days` days? A `skipped` row (the consent check refused the
+   * message) is not one: nothing was sent, so it must not use up a cooldown.
+   */
   async recentFor(
     tx: Tx,
     orgId: number,
@@ -119,7 +122,7 @@ export class EventsRepository {
     const res = await tx.execute(sql`
       SELECT 1 FROM ${t.logs}
       WHERE org_id = ${orgId} AND integration_id = ${storeId} AND event_type = ${eventType} AND recipient = ${recipient}
-        AND created_at >= now() - make_interval(days => ${days}) LIMIT 1`);
+        AND status <> 'skipped' AND created_at >= now() - make_interval(days => ${days}) LIMIT 1`);
     return res.rows.length > 0;
   }
 

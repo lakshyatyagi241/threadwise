@@ -41,6 +41,14 @@ export interface LscSettings {
   updatedAt: string | null;
 }
 
+/**
+ * `GET /lead-scoring/status`: whether the workspace has switched AI lead scoring on, for every member who can read contacts. The full
+ * settings need `lsc.runs.read`; the screens that draw a contact's score (and hide it while scoring is off) ask only this.
+ */
+export interface LscStatus {
+  enabled: boolean;
+}
+
 export const lscBackfillSchema = z.object({
   /** Cap on how many contacts one backfill queues; the rest wait for the next one. */
   limit: z.number().int().min(1).max(5000).default(500),

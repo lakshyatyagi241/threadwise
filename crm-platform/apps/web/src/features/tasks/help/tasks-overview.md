@@ -10,7 +10,7 @@ keywords: [to-do, follow-up, reminder, due date, priority, assign, overdue, chec
 
 ## What it is for
 
-**Tasks** is your list of follow-ups and to-dos. Each task has a title, a priority (High, Medium or Low), an optional due date and time, an optional assignee, notes and an optional link to a contact or a deal. The assignee gets a reminder when the task becomes due.
+**Tasks** is your list of follow-ups and to-dos. Each task has a title, a priority (High, Medium or Low), an optional due date and time, an optional assignee, notes and an optional link to a contact, a deal or a company. The assignee gets a reminder when the task becomes due.
 
 ## How to use it
 
@@ -20,7 +20,7 @@ keywords: [to-do, follow-up, reminder, due date, priority, assign, overdue, chec
 4. Tick the circle at the start of a row to complete a task. On a completed task the same control reopens it.
 5. Select a task to open its panel, where you can edit, add notes, complete, reopen or delete it.
 6. Tick several rows to complete, assign or delete them together.
-7. Narrow the list with the search box, **Priority**, **Assignee** and **Linked to**.
+7. Narrow the list with the search box, **Priority**, **Assignee** and **Linked to**. **Linked to** can point at a contact, a deal or a company (the company choice needs permission to read companies). A company's page has its own **Tasks** card; **View all** there opens this screen filtered to that company.
 
 ## Options and settings
 

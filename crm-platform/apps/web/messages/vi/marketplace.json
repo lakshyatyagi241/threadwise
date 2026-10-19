@@ -61,7 +61,8 @@
       "notForSale": "Ứng dụng này hiện không được bán cho người đăng ký mới.",
       "trialUnavailable": "Bản dùng thử miễn phí không khả dụng cho ứng dụng này trong không gian làm việc của bạn.",
       "subscriptionNotFound": "Không gian làm việc của bạn không có đăng ký cho ứng dụng này.",
-      "subscriptionState": "Điều đó không khớp với trạng thái hiện tại của đăng ký. Tải lại để xem trạng thái mới nhất."
+      "subscriptionState": "Điều đó không khớp với trạng thái hiện tại của đăng ký. Tải lại để xem trạng thái mới nhất.",
+      "renewalNotStopped": "Không thể dừng gia hạn tự động tại nhà cung cấp thanh toán, nên không có gì thay đổi và thẻ của bạn vẫn có thể bị trừ tiền. Hãy thử lại sau ít phút."
     },
     "chips": {
       "installed": "Đã cài đặt",
@@ -77,7 +78,8 @@
       "trialing": "Dùng thử miễn phí",
       "comped": "Được tặng",
       "canceling": "Không gia hạn",
-      "subscriptionEnded": "Gói đăng ký đã kết thúc"
+      "subscriptionEnded": "Gói đăng ký đã kết thúc",
+      "pastDue": "Thanh toán thất bại"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Không bán",
         "paid": "Ứng dụng trả phí",
         "addOn": "Tiện ích bổ sung",
-        "trial": "Dùng thử miễn phí {days} ngày"
+        "trial": "Dùng thử miễn phí {days} ngày",
+        "monthlyOrYearly": "{price} / tháng hoặc {annual} / năm"
       },
       "installs": "{count, plural, other {# lượt cài đặt}}",
       "version": "Phiên bản {version}",
@@ -302,7 +305,8 @@
         "terms": "Điều khoản",
         "status": "Trang trạng thái",
         "email": "Hỗ trợ qua email"
-      }
+      },
+      "open": "Mở"
     },
     "install": {
       "backToMarketplace": "Quay lại Chợ ứng dụng",
@@ -799,14 +803,15 @@
         "minPlan": "Gói của bạn, hoặc gói cao hơn, bao gồm ứng dụng này, nên không cần trả gì.",
         "plan": "Gói của bạn bao gồm ứng dụng này, nên không cần trả gì."
       },
-      "needsPurchase": "Có trong danh mục gói của bạn, mua để sử dụng.",
+      "needsPurchase": "Hãy đăng ký trước. Có thể cài đặt sau khi thanh toán hoàn tất.",
       "subscribedNote": "Không gian làm việc của bạn đã đăng ký ứng dụng này.",
       "trialOffer": "Dùng thử miễn phí {days, plural, other {# ngày}}. Không thu phí cho đến khi bạn chọn đăng ký.",
       "prepaidNote": "Thanh toán hàng tháng qua hệ thống thanh toán của không gian làm việc. Mỗi lần thanh toán bao gồm một tháng và không tự động trừ tiền: hãy thanh toán lại trước ngày hiển thị để ứng dụng tiếp tục hoạt động.",
       "notForSale": {
         "title": "Không bán",
         "message": "Ứng dụng này hiện không được bán cho người đăng ký mới."
-      }
+      },
+      "autoRenewNote": "Thanh toán hằng tháng qua hệ thống thanh toán của không gian làm việc. Thẻ của bạn tự động bị trừ tiền mỗi tháng vào ngày gia hạn cho đến khi bạn hủy."
     },
     "subscribe": {
       "subscribe": "Đăng ký",
@@ -820,7 +825,16 @@
         "included": "{name} được bao gồm trong gói của bạn.",
         "already_entitled": "Không gian làm việc của bạn đã có quyền truy cập {name}.",
         "free": "{name} miễn phí."
-      }
+      },
+      "hintPriceAuto": "{price} mỗi tháng, tự động trừ vào thẻ của bạn mỗi tháng cho đến khi bạn hủy.",
+      "hintAuto": "Thẻ của bạn tự động bị trừ tiền mỗi tháng cho đến khi bạn hủy.",
+      "period": {
+        "legend": "Kỳ thanh toán",
+        "monthly": "Hằng tháng, {price}",
+        "yearly": "Hằng năm, {price}"
+      },
+      "hintYear": "{price} mỗi năm, thanh toán khi đến trang thanh toán. Mỗi lần thanh toán bao gồm một năm.",
+      "hintYearAuto": "{price} mỗi năm, tự động trừ vào thẻ của bạn mỗi năm cho đến khi bạn hủy."
     },
     "subscription": {
       "title": "Đăng ký",
@@ -829,7 +843,8 @@
         "trialing": "Dùng thử miễn phí",
         "comped": "Được tặng",
         "canceling": "Không gia hạn",
-        "ended": "Đã kết thúc"
+        "ended": "Đã kết thúc",
+        "past_due": "Thanh toán thất bại"
       },
       "date": {
         "paidUntil": "Đã trả đến {date}",
@@ -838,7 +853,9 @@
         "compOpen": "Quyền truy cập miễn phí, không có ngày kết thúc",
         "cancelingUntil": "Không gia hạn. Hoạt động đến {date}",
         "endedOn": "Gói đăng ký đã kết thúc {date}",
-        "endedNoDate": "Gói đăng ký đã kết thúc"
+        "endedNoDate": "Gói đăng ký đã kết thúc",
+        "renewsOn": "Gia hạn {date}",
+        "graceUntil": "Thanh toán thất bại. Hoạt động đến {date}"
       },
       "lastPayment": "Thanh toán gần nhất: {price} mỗi tháng",
       "nextPayment": "Giá của ứng dụng này đã thay đổi. Lần thanh toán tiếp theo của bạn sẽ là {price} mỗi tháng.",
@@ -849,7 +866,8 @@
         "resubscribe": "Đăng ký lại",
         "subscribe": "Đăng ký ngay",
         "resume": "Tiếp tục đăng ký",
-        "cancel": "Hủy đăng ký"
+        "cancel": "Hủy đăng ký",
+        "payNow": "Thanh toán ngay"
       },
       "cancelConfirm": {
         "title": "Hủy đăng ký {name}?",
@@ -857,7 +875,9 @@
         "messageNoDate": "{name} hoạt động đến khi kỳ bạn đã trả kết thúc, sau đó sẽ bị tạm dừng. Dữ liệu và cài đặt của bạn vẫn được giữ.",
         "afterwards": "Sẽ không thu thêm phí nào, và bạn có thể đăng ký lại bất cứ lúc nào.",
         "confirm": "Hủy đăng ký",
-        "keep": "Giữ đăng ký"
+        "keep": "Giữ đăng ký",
+        "messageAuto": "Thẻ của bạn sẽ không bị trừ tiền nữa. {name} hoạt động đến {date}, sau đó sẽ bị tạm dừng. Dữ liệu và cài đặt của bạn vẫn được giữ.",
+        "messageAutoNoDate": "Thẻ của bạn sẽ không bị trừ tiền nữa. {name} hoạt động đến khi kỳ bạn đã trả kết thúc, sau đó sẽ bị tạm dừng. Dữ liệu và cài đặt của bạn vẫn được giữ."
       },
       "toast": {
         "canceled": "Đã hủy đăng ký. Vẫn hoạt động đến {date}.",
@@ -865,7 +885,14 @@
         "resumed": "Đã tiếp tục đăng ký."
       },
       "working": "Đang xử lý",
-      "noCheckout": "Hiện không thể thanh toán cho ứng dụng này. Thử lại sau ít phút."
+      "noCheckout": "Hiện không thể thanh toán cho ứng dụng này. Thử lại sau ít phút.",
+      "paymentFailed": "Lần thanh toán gần nhất bằng thẻ cho ứng dụng này không thành công. Ứng dụng vẫn hoạt động đến {date} trong khi nhà cung cấp thanh toán thử lại. Hãy thanh toán ngay, hoặc sửa phương thức thanh toán, để tránh bị tạm dừng.",
+      "paymentFailedNoDate": "Lần thanh toán gần nhất bằng thẻ cho ứng dụng này không thành công. Ứng dụng vẫn hoạt động trong khi nhà cung cấp thanh toán thử lại. Hãy thanh toán ngay, hoặc sửa phương thức thanh toán, để tránh bị tạm dừng.",
+      "autoRenewHint": "Thẻ của bạn tự động bị trừ tiền vào ngày gia hạn. Hãy hủy trước ngày đó để dừng lại.",
+      "lastPaymentYear": "Thanh toán gần nhất: {price} mỗi năm",
+      "nextPaymentYear": "Giá của ứng dụng này đã thay đổi. Lần thanh toán tiếp theo của bạn sẽ là {price} mỗi năm.",
+      "priceLocked": "Giá của bạn được khóa ở mức {price} mỗi tháng. Giá này giữ nguyên trong suốt thời gian bạn còn đăng ký, kể cả khi giá ứng dụng thay đổi.",
+      "priceLockedYear": "Giá của bạn được khóa ở mức {price} mỗi năm. Giá này giữ nguyên trong suốt thời gian bạn còn đăng ký, kể cả khi giá ứng dụng thay đổi."
     },
     "tools": {
       "open": "Mở",
@@ -875,6 +902,24 @@
       },
       "soon": "Sắp ra mắt",
       "upgrade": "Nâng cấp"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Đã nhận thanh toán",
+        "message": "Cảm ơn bạn. Gói đăng ký của bạn đã hoạt động và ứng dụng sẵn sàng để sử dụng."
+      },
+      "pending": {
+        "title": "Đang xác nhận thanh toán của bạn",
+        "message": "Nhà cung cấp thanh toán chưa xác nhận khoản thanh toán. Trang này sẽ tự cập nhật khi có xác nhận; bạn không cần thanh toán lại."
+      },
+      "failed": {
+        "title": "Thanh toán không thành công",
+        "message": "Không có khoản nào bị tính phí. Hãy đăng ký lại để thử một cách thanh toán khác."
+      },
+      "cancelled": {
+        "title": "Đã hủy thanh toán",
+        "message": "Không có khoản nào bị tính phí. Hãy đăng ký lại bất cứ khi nào bạn sẵn sàng."
+      }
     }
   }
 }

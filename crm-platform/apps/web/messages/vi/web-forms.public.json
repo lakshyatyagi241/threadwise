@@ -34,7 +34,8 @@
         "too_long": "Nhập tối đa {max} ký tự.",
         "pattern": "Không khớp với định dạng yêu cầu.",
         "invalid_option": "Chọn một trong các tùy chọn đã liệt kê.",
-        "invalid_amount": "Nhập số tiền trong phạm vi cho phép."
+        "invalid_amount": "Nhập số tiền trong phạm vi cho phép.",
+        "guardian_required": "Hãy thêm tên và địa chỉ email hoặc số điện thoại của cha mẹ hoặc người giám hộ."
       },
       "closedTitle": "Biểu mẫu đã đóng",
       "payTitle": "Còn một bước nữa",
@@ -58,7 +59,16 @@
         "tryAgain": "Thử thanh toán lại",
         "missingTitle": "Không tìm thấy khoản thanh toán này",
         "missingBody": "Liên kết có thể sai hoặc đã quá cũ."
-      }
+      },
+      "termsOfService": "Điều khoản",
+      "ageDeclaration": "Tôi xác nhận mình ít nhất {age} tuổi",
+      "ageBlockedTitle": "Chúng tôi không thể tiếp tục",
+      "ageBlockedBody": "Cảm ơn bạn đã quan tâm. Chúng tôi không thể chấp nhận lượt gửi này.",
+      "guardianTitle": "Cha mẹ hoặc người giám hộ",
+      "guardianIntro": "Vui lòng thêm thông tin của cha mẹ hoặc người giám hộ.",
+      "guardianName": "Tên",
+      "guardianEmail": "Email",
+      "guardianPhone": "Điện thoại"
     }
   }
 }

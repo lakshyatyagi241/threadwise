@@ -59,6 +59,9 @@ export const JOURNEY_FIELDS: FieldMap = {
   nodeObjectData:
     'flows.flow_data: read from the definition (automation_metadata); this row is its runtime copy',
   parent_nodeId: 'cross-check only: marks the runtime event triggers (DERIVED_EVENT_NODE)',
+  version:
+    'drop:version stamp of the runtime copy (the flow keeps the latest version only: see flows.flow_data.waboo.version)',
+  versionedAt: 'drop:history is not kept (latest version only)',
   child_node: 'drop:runtime bookkeeping of the expanded graph',
   pedges: 'drop:runtime bookkeeping of the expanded graph',
   events: 'drop:runtime bookkeeping of the expanded graph',

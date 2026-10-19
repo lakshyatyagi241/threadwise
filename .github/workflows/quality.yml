@@ -17,6 +17,14 @@ on:
         description: "With database_suites: the e2e folder to run (for example contacts-attributes-tags, contract, journeys, negative)"
         type: string
         default: contract
+      event_loop_regression:
+        description: "Also run the event-loop regression gate: builds the API, starts Postgres and Redis, one load run against the baseline for this runner type (about 15 minutes; with no baseline file it records one and fails)"
+        type: boolean
+        default: false
+      event_loop_regression_prove:
+        description: "With event_loop_regression: run once more with a 300 ms block injected and require the gate to fail it"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -59,6 +67,111 @@ jobs:
             crm-platform/docs/quality/acceptance/REPORT.md
             crm-platform/reports/qa-suite/latest/
 
+  event-loop:
+    name: Event-loop static gate (no new blocking suspect on a runtime path)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - name: Scan (fails on a runtime-path suspect that is not in tools/event-loop-audit/baseline.json)
+        run: node tools/event-loop-audit/scan.mjs --check
+      # The same image the repo's monitoring stack uses; promtool is in it. Syntax first, then the behaviour cases.
+      - name: Alert rules, syntax (promtool check rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 check rules /rules/event-loop.rules.yml
+      - name: Alert rules, behaviour (promtool test rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/event-loop.rules.test.yml
+      # The two config files with their secrets present as empty-looking stand-ins: the checks read the files, not the secrets.
+      - name: Alertmanager configs (amtool check-config, all three receivers)
+        run: |
+          mkdir -p "$RUNNER_TEMP/secrets"
+          printf 'http://example.invalid/hook' > "$RUNNER_TEMP/secrets/alert_webhook_url"
+          for f in alertmanager.yml alertmanager.slack.yml alertmanager.pagerduty.yml; do
+            docker run --rm -v "$PWD/deploy/observability:/etc/alertmanager:ro" -v "$RUNNER_TEMP/secrets/alert_webhook_url:/run/secrets/alert_webhook_url:ro" \
+              --entrypoint amtool prom/alertmanager:v0.27.0 check-config "/etc/alertmanager/$f"
+          done
+      - name: Prometheus scrape config (promtool check config)
+        run: |
+          mkdir -p "$RUNNER_TEMP/secrets"
+          printf 'a-token-for-the-check-only' > "$RUNNER_TEMP/secrets/obs_metrics_token"
+          docker run --rm -v "$PWD/deploy/observability/prometheus.yml:/etc/prometheus/prometheus.yml:ro" \
+            -v "$PWD/deploy/observability/event-loop.rules.yml:/etc/prometheus/event-loop.rules.yml:ro" \
+            -v "$RUNNER_TEMP/secrets/obs_metrics_token:/run/secrets/obs_metrics_token:ro" \
+            --entrypoint promtool prom/prometheus:v2.55.0 check config /etc/prometheus/prometheus.yml
+      - name: Grafana dashboards are the ones the generator writes
+        run: node tools/event-loop-audit/dashboards/build.mjs --check
+      - name: Regression gate, its decision rules (no Docker)
+        run: node tools/event-loop-audit/regression-check.mjs --self-test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-loop-hotspots
+          path: crm-platform/reports/event-loop/blocking-hotspots.json
+
+  resource-limits:
+    name: Resource limits (budget check against the deploy files, cgroup alert rules)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      # Pure Node, no install. Fails on a limit that regresses or a listed gap that no longer exists (docs/performance/resource-limits).
+      - name: Budget check and its rules
+        run: node tools/resource-limits/check.mjs --check && node --test tools/resource-limits/lib.test.mjs
+      - name: Redis at maxmemory with noeviction (real redis-server)
+        run: sudo apt-get install -y --no-install-recommends redis-server >/dev/null && bash tools/resource-limits/redis-pressure.sh
+      - name: Alert rules, syntax (promtool check rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 check rules /rules/resource-limits.rules.yml
+      - name: Alert rules, behaviour (promtool test rules)
+        run: docker run --rm -v "$PWD/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/resource-limits.rules.test.yml
+
+  # A real load run of the built API against a baseline recorded on this kind of runner (EL-B06). Not part of the default run: it takes
+  # a quarter of an hour, and its answer is only as good as the baseline, which has to be recorded on the runner first (see below).
+  event-loop-regression:
+    name: Event-loop regression gate (one load run against the recorded baseline)
+    if: ${{ inputs.event_loop_regression }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    defaults:
+      run:
+        working-directory: crm-platform
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+      - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
+      - run: pnpm install --frozen-lockfile
+      - name: Build the shared packages and the API
+        run: |
+          pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
+          pnpm --filter @crm/api build
+      # Exit 0 no regression, 1 regression, 2 cannot decide. With no docs/performance/event-loop/ci-baseline.json it records three runs,
+      # uploads them, and fails on purpose: download the artifact, commit the file, run again.
+      - name: Gate
+        run: bash tools/event-loop-audit/ci-regression.sh
+        env:
+          PROVE: ${{ inputs.event_loop_regression_prove && '1' || '' }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: event-loop-regression
+          path: |
+            crm-platform/reports/event-loop/gate-runs/
+            crm-platform/reports/event-loop/ci-baseline.json
+
   unit:
     name: Unit tests with coverage (API, web)
     runs-on: ubuntu-latest
@@ -74,7 +187,7 @@ jobs:
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
       - name: Build the shared packages
-        run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+        run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
       - name: API unit tests with coverage
         run: pnpm --filter @crm/api exec vitest run --dir test/unit --coverage --coverage.reporter=json-summary --coverage.reporter=text-summary --reporter=json --outputFile=api-unit.json
       - name: Web unit tests
@@ -107,7 +220,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
       - run: corepack enable && corepack prepare pnpm@9.15.4 --activate
       - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db build
+      - run: pnpm --filter @crm/config --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability build
       - name: Integration tests
         run: pnpm --filter @crm/api test:integration
       - name: One e2e folder, with the contract assertions counted

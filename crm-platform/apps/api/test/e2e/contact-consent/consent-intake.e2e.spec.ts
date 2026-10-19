@@ -1,13 +1,10 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   Api,
-  addon,
-  generateKey,
-  installSheets,
   startHarness,
   type Harness,
   type Tenant,
-} from '../chrome-extension-sheets-addon/support';
+} from '../contacts-attributes-tags/support';
 import { tenantWithKey } from '../developer-rest-api-v1/support';
 
 /**
@@ -114,7 +111,11 @@ describe('manual CRM create and update', () => {
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     const ev = await events(t, res.body.id);
     expect(ev.map((e) => e.channel).sort()).toEqual(['email', 'whatsapp']);
-    expect(await statusOf(t, res.body.id)).toEqual({ wa: 'subscribed', em: 'subscribed', sms: null });
+    expect(await statusOf(t, res.body.id)).toEqual({
+      wa: 'subscribed',
+      em: 'subscribed',
+      sms: null,
+    });
   });
 
   it('a contact with no status and no consent block has NO ledger event (nothing is invented)', async () => {
@@ -168,10 +169,11 @@ describe('manual CRM create and update', () => {
     expect(ev[0]).toMatchObject({ channel: 'whatsapp', action: 'granted', source: 'manual' });
 
     // The same status sent again is not a new agreement.
-    const again = await api
-      .as(t.admin)
-      .patch(`/v2/contacts/${made.body.id}`)
-      .send({ whatsappSubscriptionStatus: 'subscribed', name: 'Upd 2', rowVersion: ok.body.rowVersion });
+    const again = await api.as(t.admin).patch(`/v2/contacts/${made.body.id}`).send({
+      whatsappSubscriptionStatus: 'subscribed',
+      name: 'Upd 2',
+      rowVersion: ok.body.rowVersion,
+    });
     expect(again.status, JSON.stringify(again.body)).toBe(200);
     expect(await events(t, made.body.id)).toHaveLength(1);
   });
@@ -195,7 +197,11 @@ describe('manual CRM create and update', () => {
     const res = await api
       .as(t.admin)
       .post('/v2/contacts')
-      .send({ name: 'Stopper', phone: '+919811000007', consent: { note: 'Filled the form again' } });
+      .send({
+        name: 'Stopper',
+        phone: '+919811000007',
+        consent: { note: 'Filled the form again' },
+      });
     expect(res.status).toBe(201);
     const ev = await events(t, uuid!);
     expect(ev.filter((e) => e.action === 'granted')).toHaveLength(0);
@@ -275,52 +281,5 @@ describe('customer REST API v1', () => {
     });
     expect(upd.status, JSON.stringify(upd.body)).toBe(200);
     expect((await events(tenant, made.body.data.id)).map((e) => e.source)).toEqual(['api']);
-  });
-});
-
-describe('Google Sheets add-on', () => {
-  it('a row that says yes needs a note; with the note it grants once, however often the sheet is re-sent', async () => {
-    const t = await api.signup('ci-sheets');
-    await installSheets(h, t);
-    const call = addon(h, await generateKey(api, t.admin));
-
-    const refused = await call.post('/contacts/sync', {
-      rows: [{ email: 'sheet1@example.com', consent: 'yes' }],
-    });
-    expect(refused.body.results[0]).toMatchObject({ status: 'failed' });
-    expect(refused.body.results[0].error.field).toBe('consent_note');
-
-    const row = {
-      email: 'sheet2@example.com',
-      phone: '+919833000001',
-      consent: 'yes',
-      consent_note: 'Event sign-up sheet, 14 Oct',
-    };
-    const first = await call.post('/contacts/sync', { rows: [row] });
-    expect(first.body.results[0].status, JSON.stringify(first.body)).toBe('created');
-    const id = first.body.results[0].id as string;
-    const ev = await events(t, id);
-    expect(ev.map((e) => e.channel).sort()).toEqual(['email', 'whatsapp']);
-    expect(ev[0]).toMatchObject({ source: 'api', action: 'granted' });
-    expect(ev[0]!.evidence.reference).toBe('google_sheets');
-
-    await call.post('/contacts/sync', { rows: [row] });
-    await call.post('/contacts/sync', { rows: [row] });
-    expect(await events(t, id)).toHaveLength(2);
-  });
-
-  it('a no or a blank consent cell changes nothing and never withdraws', async () => {
-    const t = await api.signup('ci-sheets2');
-    await installSheets(h, t);
-    const call = addon(h, await generateKey(api, t.admin));
-    const res = await call.post('/contacts/sync', {
-      rows: [{ email: 'sheet3@example.com', consent: 'no' }, { email: 'sheet4@example.com' }],
-    });
-    expect(res.body.results.map((r: { status: string }) => r.status)).toEqual(['created', 'created']);
-    const n = await h.owner.query(
-      `SELECT count(*)::int AS n FROM contact_consent_events WHERE org_id = $1`,
-      [t.orgId],
-    );
-    expect(n.rows[0].n).toBe(0);
   });
 });

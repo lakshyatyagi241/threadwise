@@ -12,6 +12,7 @@ import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
 import { reportServerError } from '../../modules/platform-infrastructure';
+import { LEGAL_HOLD_BLOCKED_MESSAGE, isLegalHoldDbError } from '../errors/legal-hold.error';
 
 /**
  * A surface whose clients expect their own error body (Reference's `/api/v1` answers `{ error: { code, message } }`) registers a renderer for
@@ -24,7 +25,7 @@ const problemRenderers: Array<{ prefix: string; render: ProblemRenderer }> = [];
 export function registerProblemRenderer(prefix: string, render: ProblemRenderer): void {
   if (problemRenderers.some((r) => r.prefix === prefix)) return;
   problemRenderers.push({ prefix, render });
-  // The longest prefix answers first, so a client with its own envelope under another's path (`/api/v1/sheets-addon` inside `/api/v1`)
+  // The longest prefix answers first, so a client with its own envelope under another's path (a longer path inside `/api/v1`)
   // is not decided by which module happened to start first.
   problemRenderers.sort((a, b) => b.prefix.length - a.prefix.length);
 }
@@ -51,7 +52,9 @@ export class ProblemExceptionFilter implements ExceptionFilter {
 
     // 5xx means we broke something — log the stack. 4xx is the caller's
     // problem and logging stacks for those just buries the real incidents.
-    if (problem.status >= 500) {
+    // An AppError flagged `expected` is a 5xx that is a handled state (an integration that is switched off): quiet, like a 4xx.
+    const expected = exception instanceof AppError && exception.expected;
+    if (problem.status >= 500 && !expected) {
       this.logger.error(
         { err: exception, path: maskSecretUrl(request.url), requestId },
         `Unhandled error: ${problem.detail}`,
@@ -101,6 +104,20 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         detail: Array.isArray(detail) ? detail.join('; ') : detail,
         instance: path,
         code: this.codeForStatus(status),
+        requestId,
+      };
+    }
+
+    // The delete trigger of a held contact or lead (BL-295, migration 20261231090200) is the net under the application guard: code that
+    // reached the database anyway is answered like the guard answers, 409 with the same neutral text, never as a 500.
+    if (isLegalHoldDbError(exception)) {
+      return {
+        type: `https://errors.crm.platform/${ERROR_CODES.LEGAL_HOLD_ACTIVE.toLowerCase()}`,
+        title: this.titleFor(HttpStatus.CONFLICT),
+        status: HttpStatus.CONFLICT,
+        detail: LEGAL_HOLD_BLOCKED_MESSAGE,
+        instance: path,
+        code: ERROR_CODES.LEGAL_HOLD_ACTIVE,
         requestId,
       };
     }

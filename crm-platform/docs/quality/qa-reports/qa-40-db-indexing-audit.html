@@ -1,0 +1,33 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>QA 40 DB indexing audit: report</title><style>
+:root{--bg:#f6f7f9;--card:#fff;--tx:#1b1f24;--mut:#5b6573;--bd:#dde1e6;--red:#b42318;--amb:#b7791f;--grn:#2f855a;--blu:#2b6cb0}
+@media (prefers-color-scheme:dark){:root{--bg:#0f1318;--card:#171c23;--tx:#e6e9ee;--mut:#94a0b0;--bd:#2a323d}}
+@media print{:root{--bg:#fff}body{font-size:12px}.card{break-inside:avoid}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.55 -apple-system,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 56px}
+h1{font-size:25px;margin:0 0 4px}h2{font-size:18px;margin:32px 0 10px;border-bottom:1px solid var(--bd);padding-bottom:6px}h3{font-size:15px;margin:0 0 6px}
+.sub{color:var(--mut);margin:0 0 16px;font-size:13px}
+.banner{border-radius:10px;padding:14px 16px;margin:14px 0;border:1px solid var(--bd);border-left:6px solid var(--amb);background:var(--card)}
+.banner.red{border-left-color:var(--red)}.banner.grn{border-left-color:var(--grn)}.banner b{font-size:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:12px 0}
+.stat{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:10px 12px}.stat b{display:block;font-size:22px}.stat span{color:var(--mut);font-size:12px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;margin:10px 0;border-left:5px solid var(--bd)}
+.card.high{border-left-color:var(--red)}.card.med{border-left-color:var(--amb)}.card.low{border-left-color:var(--blu)}.card.ok{border-left-color:var(--grn)}
+.tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:2px 8px;border-radius:999px;color:#fff;margin-right:8px;vertical-align:middle}
+.t-pass,.t-ok{background:var(--grn)}.t-fail,.t-high{background:var(--red)}.t-warn,.t-med{background:var(--amb)}.t-skip,.t-low{background:var(--blu)}
+code{background:rgba(127,127,127,.15);padding:1px 5px;border-radius:4px;font-size:12.5px;word-break:break-word}
+table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--bd);border-radius:10px;overflow:hidden;font-size:13.5px}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--bd);vertical-align:top}th{background:rgba(127,127,127,.1)}
+.wrap{overflow-x:auto}p{margin:6px 0}ul{margin:6px 0 6px 20px;padding:0}.k{color:var(--mut)}
+details{margin:8px 0}summary{cursor:pointer;font-weight:600}
+</style></head><body><main>
+<h1>QA task 40: DB indexing audit</h1>
+<p class="sub">Priority P1 · owner Punya · crm-platform at commit <code>9282c54f5</code> · run 2026-10-18 · live checks run: none</p>
+<p><b>Target:</b> 100% critical query patterns reviewed; no redundant/unjustified critical indexes</p>
+<div class="banner "><b>Critical queries are covered and no index is redundant.</b><br>0 foreign keys lack a covering index; most are low risk but need review. Unused-index results need a live database.</div>
+<div class="grid"><div class="stat"><b>407</b><span>tables</span></div><div class="stat"><b>975</b><span>indexes</span></div><div class="stat"><b>939</b><span>foreign keys</span></div><div class="stat"><b>19</b><span>critical patterns reviewed</span></div><div class="stat"><b>0</b><span>redundant indexes</span></div><div class="stat"><b>0</b><span>uncovered FKs</span></div>
+<div class="stat"><b>4 / 0 / 0 / 1</b><span>pass / warn / fail / skipped</span></div></div>
+<h2>Checks run</h2><div class="wrap"><table><tr><th>Status</th><th>Check</th><th>What it verifies</th><th>Result</th></tr><tr><td><span class="tag t-pass">pass</span></td><td><code>idx-fk</code></td><td>Every foreign key has a covering index (so deletes/joins do not scan)</td><td></td></tr><tr><td><span class="tag t-pass">pass</span></td><td><code>idx-redundant</code></td><td>No index is a strict prefix of another (redundant)</td><td></td></tr><tr><td><span class="tag t-pass">pass</span></td><td><code>idx-tenant-lead</code></td><td>Btree indexes on tenant tables lead with org_id</td><td></td></tr><tr><td><span class="tag t-pass">pass</span></td><td><code>idx-critical</code></td><td>Critical query patterns have a serving index (19 reviewed)</td><td></td></tr><tr><td><span class="tag t-skip">skip</span></td><td><code>idx-live-unused</code></td><td>Indexes never used since stats reset (pg_stat_user_indexes)</td><td>DATABASE_URL not set</td></tr></table></div>
+<p class="k">Skipped means the check needs a running stack that was not configured. It is never counted as a pass.</p>
+<h2>What was found</h2><div class="card ok"><h3><span class="tag t-ok">Pass</span>Every critical query pattern is served by an index</h3><p>Critical query patterns have a serving index (19 reviewed). The register is <code>tools/qa-suite/data/critical-queries.json</code>. Btree indexes on tenant tables lead with <code>org_id</code>, so row-level security and tenant filters use them.</p></div><div class="card ok"><h3><span class="tag t-ok">Pass</span>No redundant indexes</h3><p>No index is a strict prefix of another. Seven were dropped by migration <code>20261211110000_drop_redundant_indexes</code>; <code>apps/api/test/integration/db-guards.spec.ts</code> proves they stay gone and their replacements stay in place.</p></div><div class="card ok"><h3><span class="tag t-ok">Pass</span>0 of 939 foreign keys have no covering index (0 tables)</h3><p>Every foreign key has a covering index.</p></div><h2>Weak points</h2><div class="card med"><h3><span class="tag t-med">Medium</span>Unused-index and plan checks need a live database</h3><p>The check that lists indexes never used since stats reset (<code>pg_stat_user_indexes</code>) was skipped because <code>DATABASE_URL</code> was not set. Without it, "unjustified" indexes cannot be identified, only "redundant" ones.</p></div><div class="card low"><h3><span class="tag t-low">Low</span>Static model of the schema</h3><p>Indexes come from reading the SQL migrations (including drops and renames), not from a real database. A hand-made index in production would be invisible, and so would an index that exists in a migration but failed to build.</p></div><h2>How to finish this task</h2><ul><li>Keep the redundant-index check in PR checks: <code>pnpm qa 40 -- --fail</code>.</li><li>Add covering indexes for the foreign keys on tables that grow or are deleted from in bulk; baseline the small lookup tables with a reason.</li><li>Run with a seeded database: <code>DATABASE_URL=… pnpm qa 40</code> for unused-index results; pair with task 42 (EXPLAIN plans).</li></ul>
+</main></body></html>

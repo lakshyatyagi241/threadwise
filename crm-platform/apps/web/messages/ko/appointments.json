@@ -41,7 +41,10 @@
       "notStarted": "예약이 시작된 후에만 수행할 수 있습니다.",
       "alreadyStarted": "이 예약은 이미 시작되어 더 이상 변경할 수 없습니다.",
       "bookingOff": "지금은 이 서비스를 예약할 수 없습니다.",
-      "notDeletable": "예정된 예약이 있는 동안에는 삭제할 수 없습니다."
+      "notDeletable": "예정된 예약이 있는 동안에는 삭제할 수 없습니다.",
+      "notDrifted": "이 예약은 이미 Google 일정과 일치합니다. 새로 불러왔습니다.",
+      "calendarNotConnected": "Google Calendar가 연결되어 있지 않습니다. Google 계정 페이지에서 다시 연결한 후 다시 시도해 주세요.",
+      "calendarFailed": "Google이 응답하지 않았거나 변경을 거부했습니다. 잠시 후 다시 시도해 주세요."
     },
     "picker": {
       "timeZone": "시간대",
@@ -156,7 +159,8 @@
       "yesterday": "어제",
       "rowLabel": "예약 열기: {title}",
       "noName": "이름 없음",
-      "needsReview": "검토 필요"
+      "needsReview": "검토 필요",
+      "outOfSync": "캘린더 동기화 안 됨"
     },
     "row": {
       "moreFor": "{title}에 대한 추가 작업",
@@ -232,7 +236,7 @@
       "declineTitle": "이 요청을 거절할까요?",
       "declineMessage": "고객에게 요청이 거절되었음이 안내되고 해당 시간은 다시 비워집니다.",
       "declineConfirm": "요청 거절",
-      "remindersNote": "알림은 예약 유형을 따릅니다. 알림별 전달 여부는 추적되지 않습니다."
+      "remindersNote": "리마인더는 예약 유형을 따릅니다. 예약 설정 또는 예약 유형에서 설정합니다."
     },
     "source": {
       "chat": "채팅 플로우",
@@ -269,7 +273,13 @@
       "rescheduled": "예약을 새 시간으로 옮겼습니다.",
       "linkCopied": "관리 링크를 복사했습니다.",
       "copyFailed": "링크를 복사할 수 없습니다.",
-      "declined": "요청을 거절했습니다."
+      "declined": "요청을 거절했습니다.",
+      "calendarPushed": "Google에 반영했습니다. 이제 일정이 이 예약과 일치합니다.",
+      "calendarAccepted": {
+        "cancelled": "Google의 변경을 수락했습니다. 예약이 취소되었습니다.",
+        "rescheduled": "Google의 변경을 수락했습니다. 예약이 새 시간으로 변경되었습니다.",
+        "acknowledged": "Google의 변경을 수락했습니다. 예약은 그대로 유지됩니다."
+      }
     },
     "typesList": {
       "breadcrumb": "이동 경로",
@@ -397,9 +407,6 @@
         "depositTooHigh": "보증금은 총액(요금 + 세금)을 초과할 수 없습니다.",
         "cancelFeeInvalid": "25.00과 같은 금액을 입력하세요.",
         "cancelWindowInvalid": "0에서 {cancelWindowMax} 사이의 정수(분)를 입력하세요.",
-        "reminderInvalid": "시작 전 1에서 {reminderMax} 사이의 정수(분)를 입력하세요.",
-        "remindersDuplicate": "각 알림은 서로 다른 시간이어야 합니다.",
-        "remindersTooMany": "예약 유형에는 알림을 최대 {reminders}개까지 설정할 수 있습니다.",
         "questionLabelRequired": "질문에 라벨을 지정하세요 (최대 {questionLabelMax}자).",
         "questionsTooMany": "예약 유형에는 질문을 최대 {questions}개까지 설정할 수 있습니다.",
         "questionOptionsRequired": "선택지를 한 줄에 하나씩 하나 이상 추가하세요.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "날짜 예외 목록에 표시된 날짜를 수정하세요.",
         "descriptionTooLong": "설명은 최대 {descriptionMax}자까지 가능합니다.",
         "locationTooLong": "장소는 최대 {locationMax}자까지 가능합니다.",
-        "server": "서버가 이 값을 받아들이지 않았습니다. 확인한 후 다시 시도하세요."
+        "server": "서버가 이 값을 받아들이지 않았습니다. 확인한 후 다시 시도하세요.",
+        "reminderInvalid": "시간은 30일 이내의 정수로 입력하세요.",
+        "remindersDuplicate": "리마인더나 후속 메시지마다 서로 다른 시간이 필요합니다.",
+        "remindersTooMany": "예약 유형 하나에는 리마인더와 후속 메시지를 최대 {reminders}개까지 설정할 수 있습니다.",
+        "reminderChannelsNone": "채널을 하나 이상 선택하세요.",
+        "reminderBodyTooLong": "메시지, 제목 또는 라벨이 너무 깁니다."
       },
       "service": {
         "title": "서비스 상세",
@@ -556,11 +568,12 @@
         "hint": "이 기능 없이도 예약은 작동합니다. 예약의 설정에서 Google 캘린더를 연결하면 바쁜 시간과 빈 시간을 동기화하고 Meet 링크를 추가할 수 있습니다.",
         "unavailable": "이 플랫폼에는 아직 Google 캘린더가 설정되지 않았습니다. 설정되면 사용할 수 있도록 이 설정은 예약 유형과 함께 보관됩니다.",
         "calendarId": "캘린더",
-        "calendarPlaceholder": "기본",
         "spreadsheetId": "시트에 추가 (선택)",
-        "spreadsheetPlaceholder": "스프레드시트 ID",
         "createMeet": "예약마다 Google Meet 링크 만들기",
-        "calendarDefault": "워크스페이스 캘린더"
+        "calendarDefault": "워크스페이스 캘린더",
+        "connectFirst": "목록에서 선택하려면 <link>Google 계정</link>을 연결하세요.",
+        "spreadsheetNone": "시트 없음",
+        "spreadsheetNoListing": "Drive 파일 목록 권한이 부여되지 않아 시트를 불러올 수 없습니다. Google 계정 페이지에서 권한을 추가하세요."
       },
       "messages": {
         "title": "수명 주기 메시지",
@@ -586,25 +599,6 @@
           "reschedule": "안녕하세요 {name}님, {type} 일정이 {slot}(으)로 변경되었습니다. 상세 정보: {manage_link}"
         },
         "templatesNote": "승인된 WhatsApp 템플릿은 아직 선택할 수 없습니다. 메시지는 위의 일반 텍스트로 발송됩니다."
-      },
-      "reminders": {
-        "title": "알림",
-        "hint": "시간은 서로 달라야 합니다 (1440 = 24시간 전, 180 = 3시간 전). 최대 {max}개.",
-        "add": "알림 추가",
-        "quickAdd": "빠른 추가",
-        "quick": {
-          "h24": "24시간",
-          "h3": "3시간",
-          "h1": "1시간",
-          "m15": "15분"
-        },
-        "empty": "알림이 없습니다. 고객은 확정 메시지만 받습니다.",
-        "offsetOf": "알림 {n}, 시작 몇 분 전",
-        "minBefore": "분 전",
-        "labelPlaceholder": "24시간",
-        "labelOf": "알림 {n}, 라벨",
-        "remove": "알림 {n} 제거",
-        "count": "알림 {count}/{max}개"
       },
       "questions": {
         "title": "설문",
@@ -962,7 +956,7 @@
         "calendarSaved": "캘린더를 저장했습니다.",
         "confirmOff": {
           "title": "Google 캘린더 연결을 해제할까요?",
-          "message": "새 예약이 캘린더에 기록되지 않으며 바쁜 시간도 더 이상 읽지 않습니다. 이미 캘린더에 있는 이벤트는 그대로 유지되며 Google에 이 접근 권한을 철회하도록 요청합니다.",
+          "message": "새 예약이 캘린더에 기록되지 않으며 바쁜 시간도 더 이상 읽지 않습니다. 플로우의 Google 단계도 이 연결을 함께 사용하므로 중지됩니다. 이미 캘린더에 있는 이벤트는 그대로 유지되며 Google에 이 접근 권한을 철회하도록 요청합니다.",
           "confirm": "연결 해제",
           "cancel": "유지"
         },
@@ -972,7 +966,8 @@
           "failed": "연결이 완료되지 않았습니다. 다시 시도하고, 계속 실패하면 플랫폼 관리자에게 Google 설정 확인을 요청하세요.",
           "expired": "시도 시간이 너무 오래 걸렸습니다. 연결을 눌러 다시 시작하세요.",
           "not_configured": "이 플랫폼에는 Google 캘린더가 설정되지 않았습니다. 플랫폼 관리자에게 Google OAuth 클라이언트 추가를 요청하세요.",
-          "missing_scope": "Google이 필요한 모든 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 체크박스를 선택한 상태로 유지하세요."
+          "missing_scope": "Google이 필요한 모든 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 체크박스를 선택한 상태로 유지하세요.",
+          "cancelled": "취소하셨습니다. 연결된 항목이 없습니다."
         },
         "whatTitle": "이 기능이 하는 일",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "영업시간에서 강조 표시된 시간을 수정하세요."
       },
       "notAvailable": "이 서버에서는 워크스페이스 전체 예약 설정을 사용할 수 없습니다. 대신 각 예약 유형이 고유한 시간, 시간대, 알림, 메시지를 가집니다.",
-      "openTypes": "예약 유형 열기"
+      "openTypes": "예약 유형 열기",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Microsoft 캘린더를 연결하면 확정된 예약이 해당 캘린더에 기록되고, 그 캘린더의 바쁜 시간대에는 예약 슬롯이 닫힙니다.",
+        "provider": "Outlook 캘린더",
+        "providerSub": "Microsoft 365 및 Outlook.com",
+        "status": {
+          "unavailable": "사용할 수 없음",
+          "disconnected": "연결되지 않음",
+          "connected": "연결됨",
+          "needs_reconnect": "다시 연결 필요"
+        },
+        "loading": "연결 상태를 확인하는 중",
+        "unavailableTitle": "이 플랫폼에는 아직 Outlook이 설정되어 있지 않습니다",
+        "unavailableBody": "워크스페이스에서 연결하려면 먼저 플랫폼 관리자가 Microsoft 앱을 등록해야 합니다(Admin, 설정, Microsoft 캘린더). 예약에는 영향이 없습니다.",
+        "disconnectedBody": "연결되지 않았습니다. 연결을 시작하면 Microsoft 페이지가 열리며, 계정을 선택하고 캘린더 접근 공유에 동의할 수 있습니다.",
+        "disconnectedReadOnly": "연결되지 않았습니다. 워크스페이스 관리자에게 연결을 요청하세요.",
+        "reconnectTitle": "Microsoft에서 연결을 더 이상 허용하지 않습니다",
+        "reconnectBody": "접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간대도 읽지 못하고 있습니다. 다시 연결하면 재개됩니다.",
+        "reconnectBodyAccount": "{account}의 접근 권한이 철회되었거나 만료되어 예약이 캘린더에 기록되지 않고 바쁜 시간대도 읽지 못하고 있습니다. 다시 연결하면 재개됩니다.",
+        "account": "Microsoft 계정",
+        "calendar": "캘린더",
+        "primaryCalendar": "기본 캘린더",
+        "connectedAgo": "{when} 연결됨",
+        "writesHere": "확정된 예약이 이 캘린더에 기록됩니다.",
+        "readsOnly": "바쁜 시간대만 읽습니다. 예약은 다른 캘린더에 기록됩니다.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft에서 요청을 제한하고 있습니다. 예약은 자동으로 다시 시도됩니다.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft에서 이 캘린더에 대한 접근을 거부했습니다. 계정에 메일함이 있고 캘린더 공유가 허용되어 있는지 확인하세요.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft에서 응답하지 않았습니다. 자동으로 다시 시도됩니다."
+        },
+        "errors": {
+          "notConfigured": "이 플랫폼에는 Outlook이 설정되어 있지 않습니다. 플랫폼 관리자에게 Microsoft 앱 등록을 요청하세요.",
+          "notConnected": "연결된 Outlook 캘린더가 없습니다. 페이지를 새로고침한 후 다시 연결하세요.",
+          "providerFailed": "Microsoft에서 응답하지 않았습니다. 잠시 후 다시 시도하세요.",
+          "notYours": "이 연결은 다른 사람이 시작했으므로 아무것도 연결되지 않았습니다. 해당 사용자에게 연결을 요청하거나 직접 연결을 누르세요.",
+          "invalidTicket": "이 연결은 더 이상 확인할 수 없습니다. 연결을 눌러 처음부터 다시 시작하세요."
+        },
+        "loadingCalendars": "캘린더를 불러오는 중",
+        "chooseLabel": "예약을 기록할 캘린더",
+        "chooseHint": "이 계정에서 편집할 수 있는 캘린더만 표시됩니다. 이미 기록된 일정은 그대로 유지됩니다.",
+        "choosePlaceholder": "캘린더 선택",
+        "chooseOptionPrimary": "{name}(기본 캘린더)",
+        "chooseSave": "이 캘린더 사용",
+        "chooseCancel": "취소",
+        "saving": "저장하는 중",
+        "connect": "Outlook 연결",
+        "reconnect": "Outlook 다시 연결",
+        "redirecting": "Microsoft를 여는 중",
+        "choose": "캘린더 선택",
+        "disconnect": "연결 해제",
+        "disconnected": "Outlook 연결이 해제되었습니다.",
+        "calendarSaved": "캘린더가 저장되었습니다.",
+        "confirm": {
+          "title": "이 Microsoft 계정을 연결할까요?",
+          "body": "Microsoft에서 {workspace}에 계정을 연결하는 마지막 단계로 돌아왔습니다. 방금 직접 시작한 경우에만 계속하세요.",
+          "confirm": "연결",
+          "working": "연결하는 중",
+          "cancel": "취소"
+        },
+        "confirmOff": {
+          "title": "Outlook 연결을 해제할까요?",
+          "message": "새 예약이 더 이상 Outlook 캘린더에 기록되지 않고 바쁜 시간대도 읽지 않습니다. 이미 캘린더에 있는 일정은 그대로 남습니다. Microsoft 쪽에서 권한을 철회하려면 Microsoft 계정에서 앱을 제거하세요.",
+          "confirm": "연결 해제",
+          "cancel": "유지"
+        },
+        "outcome": {
+          "connected": "Outlook이 연결되었습니다. 이제 확정된 예약이 캘린더에 기록됩니다.",
+          "denied": "Microsoft에서 접근 권한이 허용되지 않아 아무것도 연결되지 않았습니다.",
+          "failed": "연결이 완료되지 않았습니다. 다시 시도하세요. 계속 실패하면 플랫폼 관리자에게 Microsoft 앱 확인을 요청하세요.",
+          "expired": "시간이 너무 오래 걸렸습니다. 연결을 눌러 처음부터 다시 시작하세요.",
+          "not_configured": "이 플랫폼에는 Outlook이 설정되어 있지 않습니다. 플랫폼 관리자에게 Microsoft 앱 등록을 요청하세요.",
+          "missing_scope": "Microsoft에서 필요한 캘린더 권한을 부여하지 않았습니다. 다시 연결하고 모든 항목을 선택한 상태로 유지하세요.",
+          "cancelled": "취소했습니다. 아무것도 연결되지 않았습니다."
+        },
+        "whatTitle": "기능 설명",
+        "what": {
+          "freeBusy": "캘린더의 바쁜 시간대를 읽어 이미 예약되었거나 차단된 시간은 제공하지 않습니다.",
+          "writeBack": "확정된 예약을 일정으로 캘린더에 기록하고 고객을 초대합니다.",
+          "teams": "온라인 서비스에 Teams 미팅 링크를 추가합니다(회사 및 학교 계정)."
+        },
+        "hint": "연결하지 않아도 예약은 작동합니다. Google도 함께 연결하면 두 곳에서 바쁜 시간대를 읽고, 각 예약은 한 곳에 기록됩니다."
+      },
+      "writeTarget": {
+        "title": "예약이 기록되는 위치",
+        "description": "연결된 모든 캘린더에서 바쁜 시간대를 읽습니다. 각 예약은 그중 한 곳에 기록됩니다.",
+        "label": "예약을 기록할 캘린더",
+        "hint": "자동은 Google Calendar가 정상일 때 이를 사용하고, 그렇지 않으면 Outlook을 사용합니다. 변경하면 예정된 예약의 일정이 선택한 캘린더로 이동합니다.",
+        "auto": "자동",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "연결되지 않음",
+        "saved": "저장되었습니다.",
+        "backfill": {
+          "body": "앞으로 90일 이내에 확정된 예약 {count, plural, other {#건이}} 아직 기록될 캘린더에 없습니다. 캘린더를 연결하거나 변경하면 자동으로 기록됩니다.",
+          "action": "지금 기록",
+          "working": "대기열에 추가하는 중",
+          "queued": "백그라운드에서 캘린더에 기록하고 있습니다.",
+          "notConnected": "연결된 캘린더가 없어 기록할 곳이 없습니다."
+        }
+      },
+      "feeds": {
+        "title": "다른 캘린더(iCal)",
+        "description": "iCal 주소로 캘린더를 구독하면 해당 캘린더의 바쁜 시간대에 예약 슬롯이 닫힙니다. 바쁜 시간 정보만 사용되며, 그 외의 내용은 표시되거나 저장되지 않습니다.",
+        "loading": "캘린더를 불러오는 중",
+        "empty": "구독 중인 캘린더가 아직 없습니다.",
+        "status": {
+          "pending": "아직 읽지 않음",
+          "ok": "정상 작동",
+          "error": "문제 있음"
+        },
+        "paused": "일시중지됨",
+        "neverRead": "아직 읽지 않았습니다.",
+        "lastRead": "{when} 읽음",
+        "busyCount": "앞으로 180일 동안 바쁜 시간 {count, plural, other {#개}}",
+        "allDayLabel": "종일 일정은 해당 날짜를 차단",
+        "pause": "일시중지",
+        "resume": "재개",
+        "refresh": "지금 읽기",
+        "reading": "읽는 중",
+        "remove": "구독 취소",
+        "removed": "캘린더 구독이 취소되었습니다.",
+        "added": "캘린더를 구독했습니다.",
+        "addTitle": "캘린더 구독",
+        "nameLabel": "이름",
+        "namePlaceholder": "팀 시간표",
+        "urlLabel": "캘린더 주소",
+        "urlHint": "https:// 또는 webcal://로 시작하고 .ics로 끝나는 주소입니다. 지금 확인한 뒤 암호화하여 저장하며 다시 표시되지 않습니다.",
+        "add": "구독",
+        "adding": "캘린더를 읽는 중",
+        "hint": "예약이 기록되는 캘린더는 구독하지 마세요. 여러 좌석이 있는 서비스에서는 자체 일정을 바쁜 시간으로 인식하게 됩니다. 피드는 약 15분마다 읽으므로 변경 사항이 반영되기까지 그만큼 걸릴 수 있습니다.",
+        "confirmRemove": {
+          "title": "이 캘린더 구독을 취소할까요?",
+          "message": "{name}으로 차단되었던 시간이 즉시 다시 예약 가능해집니다. 캘린더 자체에는 아무런 변경이 없습니다.",
+          "confirm": "구독 취소",
+          "cancel": "유지"
+        },
+        "errors": {
+          "invalid": "https://, http:// 또는 webcal://로 시작하는 주소를 입력하세요. 사용자 이름이나 비밀번호는 포함하지 마세요.",
+          "duplicate": "이 워크스페이스는 이미 해당 캘린더를 구독하고 있습니다.",
+          "limit": "워크스페이스당 캘린더를 10개까지 구독할 수 있습니다. 먼저 하나의 구독을 취소하세요."
+        },
+        "reason": {
+          "unreachable": "주소에 접속할 수 없습니다. 주소가 올바르고 공개되어 있는지 확인하세요.",
+          "timeout": "캘린더의 응답이 너무 오래 걸렸습니다.",
+          "not_found": "해당 주소에서 아무것도 찾을 수 없습니다. 게시가 취소되었을 수 있습니다.",
+          "forbidden": "캘린더에서 접근을 거부했습니다. 링크가 있는 모든 사용자에게 게시되어 있는지 확인하세요.",
+          "server_error": "캘린더 서버에 문제가 발생했습니다. 자동으로 다시 시도됩니다.",
+          "redirect_loop": "주소가 계속 순환하며 연결됩니다.",
+          "not_a_calendar": "해당 주소는 iCal 캘린더가 아닙니다. 주소는 .ics로 끝나야 합니다.",
+          "too_large": "캘린더가 너무 커서 읽을 수 없습니다.",
+          "blocked_address": "해당 주소는 사설 네트워크를 가리키고 있어 허용되지 않습니다.",
+          "unknown": "해당 주소를 캘린더로 읽을 수 없습니다."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, other {이벤트 #개가 알 수 없는 시간대를 사용하고 있어 워크스페이스의 시간대로 읽었습니다.}}",
+          "unsupportedRule": "반복 일정 {count, plural, other {#개가}} 지원하지 않는 규칙을 사용하고 있어 첫 번째 일정만 시간을 차단합니다.",
+          "truncated": "이 캘린더에는 저장 가능한 수보다 많은 바쁜 시간이 있어 일부가 누락되었습니다."
+        }
+      },
+      "bookingsFeed": {
+        "title": "내 캘린더 앱에서 보는 내 예약",
+        "description": "Apple Calendar, Outlook 또는 Google Calendar에서 내 예약을 구독하세요.",
+        "loading": "링크를 불러오는 중",
+        "none": "아직 링크가 없습니다.",
+        "make": "내 링크 만들기",
+        "making": "만드는 중",
+        "made": "링크가 준비되었습니다.",
+        "linkLabel": "내 링크",
+        "copy": "링크 복사",
+        "copied": "링크가 복사되었습니다.",
+        "copyFailed": "자동으로 복사하지 못했습니다. 링크를 선택하여 직접 복사하세요.",
+        "open": "내 캘린더 앱에서 열기",
+        "rotate": "새 링크 만들기",
+        "stop": "공유 중지",
+        "stopped": "링크가 더 이상 작동하지 않습니다.",
+        "lastUsed": "캘린더 앱이 {when} 마지막으로 읽었습니다.",
+        "neverUsed": "아직 이 링크를 읽은 캘린더 앱이 없습니다.",
+        "warning": "이 링크를 가진 사람은 누구나 내 예약의 제목, 시간, 장소를 볼 수 있습니다. 비공개로 유지하세요. 전화번호, 이메일 주소, 메모는 표시되지 않습니다.",
+        "hint": "예약 목록에서 볼 수 있는 내용과 동일하게 표시됩니다. 캘린더 앱은 자체 일정에 따라 피드를 새로 고치며, 보통 몇 시간마다 갱신됩니다.",
+        "confirmRotate": {
+          "title": "새 링크를 만들까요?",
+          "message": "기존 링크는 즉시 작동하지 않게 됩니다. 이 링크를 사용하는 캘린더 앱에는 새 링크가 필요합니다.",
+          "confirm": "새 링크 만들기"
+        },
+        "confirmStop": {
+          "title": "내 예약 공유를 중지할까요?",
+          "message": "링크가 즉시 작동하지 않게 됩니다. 이 링크를 사용하는 캘린더 앱에는 더 이상 새 내용이 표시되지 않습니다.",
+          "confirm": "공유 중지"
+        },
+        "confirmCancel": "유지"
+      }
     },
     "linked": {
       "title": "예약",
@@ -1060,6 +1248,181 @@
       "loadMore": "더 보기",
       "loadMorePast": "지난 예약 더 보기",
       "noType": "예약"
+    },
+    "sync": {
+      "title": "캘린더 동기화 안 됨",
+      "reason": {
+        "event_deleted": "Google Calendar에서 일정이 삭제되었거나 취소되었습니다.",
+        "event_missing": "Google Calendar에서 일정을 더 이상 찾을 수 없습니다.",
+        "time_changed": "Google Calendar에서 일정이 다른 시간으로 이동되었습니다.",
+        "attendees_changed": "Google Calendar에서 일정의 참석자가 변경되었습니다."
+      },
+      "googleShows": "Google 표시: {time}",
+      "notChanged": "이 예약은 변경되지 않았습니다. 어느 쪽이 맞는지 선택해 주세요.",
+      "found": "{when} 확인됨",
+      "push": "우리 시간으로 Google 덮어쓰기",
+      "accept": "Google의 변경 수락",
+      "keep": "나중에",
+      "acceptTitle": {
+        "cancel": "이 예약을 취소하시겠습니까?",
+        "reschedule": "이 예약을 Google의 시간으로 변경하시겠습니까?",
+        "acknowledge": "Google에 표시된 참석자를 수락하시겠습니까?"
+      },
+      "acceptMessage": {
+        "cancel": "Google에서 일정이 사라졌으므로 이 예약이 취소되며 해당 시간은 다시 비워집니다. 일반적인 취소와 마찬가지로 고객에게 안내됩니다.",
+        "reschedule": "이 예약이 {time}(으)로 변경됩니다. 일반적인 일정 변경과 마찬가지로 고객에게 새 시간이 안내됩니다.",
+        "acknowledge": "예약 자체는 변경되지 않습니다. Google의 참석자 목록이 저장되고 이 알림은 사라집니다."
+      },
+      "acceptConfirm": {
+        "cancel": "예약 취소",
+        "reschedule": "예약 변경",
+        "acknowledge": "수락"
+      }
+    },
+    "reminders": {
+      "title": "리마인더 및 후속 메시지",
+      "hint": "예약 시작 전이나 종료 후에 연락처에 메시지를 보냅니다. 켜기 전까지는 모두 꺼져 있습니다. 예약 유형당 최대 {max}개.",
+      "quickAdd": "빠른 추가",
+      "quick": {
+        "h24": "24시간 전",
+        "h3": "3시간 전",
+        "h1": "1시간 전",
+        "m15": "15분 전",
+        "after2h": "2시간 후",
+        "afterDay": "1일 후"
+      },
+      "add": "리마인더 추가",
+      "empty": "리마인더나 후속 메시지가 없습니다. 연락처에는 확인 메시지만 전달됩니다.",
+      "enabledOf": "리마인더 {n} 보내기",
+      "on": "켜짐",
+      "off": "꺼짐",
+      "offsetOf": "리마인더 {n}, 시간 길이",
+      "unitOf": "리마인더 {n}, 시간 단위",
+      "kindOf": "리마인더 {n}, 이전 또는 이후",
+      "units": {
+        "minutes": "분",
+        "hours": "시간",
+        "days": "일"
+      },
+      "kind": {
+        "before": "예약 시작 전",
+        "after": "예약 종료 후"
+      },
+      "editMessage": "메시지 및 채널",
+      "hideMessage": "숨기기",
+      "remove": "리마인더 {n} 삭제",
+      "withTemplate": "WhatsApp 템플릿",
+      "channelsTitle": "전송 채널",
+      "channelsHint": "전달 가능한 첫 번째 채널을 사용하고, 나머지는 대체 채널입니다. 같은 리마인더가 두 번 전달되지 않습니다.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "이메일"
+      },
+      "moveUp": "{channel}을(를) 먼저 시도",
+      "moveDown": "{channel}을(를) 나중에 시도",
+      "removeChannel": "{channel} 사용 안 함",
+      "messageTitle": "메시지",
+      "placeholderMeaning": {
+        "name": "연락처 이름",
+        "type": "예약 유형 이름",
+        "slot": "날짜와 시간",
+        "date": "날짜",
+        "time": "시간",
+        "location": "장소 또는 온라인인 경우 참여 링크",
+        "join_link": "온라인인 경우 참여 링크",
+        "manage_link": "예약을 변경하거나 취소하는 링크"
+      },
+      "bodyHintBefore": "비워 두면 예약 유형의 리마인더 메시지 또는 기본 문구를 사용합니다.",
+      "bodyHintAfter": "비워 두면 기본 후속 메시지 문구를 사용합니다.",
+      "subjectTitle": "이메일 제목",
+      "subjectPlaceholder": "비워 두면 기본 제목이 사용됩니다",
+      "templateTitle": "WhatsApp 템플릿",
+      "templateNone": "없음: 자유 입력, 24시간 이내에만 가능",
+      "templateUnknown": "더 이상 사용할 수 없는 템플릿",
+      "templateHint": "연락처가 마지막으로 메시지를 보낸 지 24시간이 지나면 WhatsApp은 승인된 템플릿만 전달합니다. 변수는 다음 순서로 채워집니다: 1 이름, 2 서비스, 3 날짜, 4 시간, 5 장소, 6 참여 링크, 7 관리 링크.",
+      "labelTitle": "라벨(선택)",
+      "labelPlaceholder": "예: 하루 전",
+      "previewTitle": "미리보기",
+      "previewNote": "샘플 값을 사용한 예시입니다. 실제 메시지에는 예약의 상세 정보가 사용됩니다.",
+      "count": "리마인더 및 후속 메시지 {count}/{max}개",
+      "note": "리마인더는 예약이 시작된 후에는 전송되지 않습니다. 예약이 취소되거나 변경되면 대기 중이던 메시지는 중단되고 새 시간에 맞춰 다시 예약됩니다. 방해 금지 시간에는 종료될 때까지 메시지가 보류되며, 수신 거부한 연락처나 전화 금지 목록에 있는 연락처는 건너뜁니다.",
+      "sample": {
+        "name": "Alex",
+        "type": "상담",
+        "location": "중앙로 12"
+      },
+      "settingsTitle": "리마인더 및 후속 메시지",
+      "settingsDescription": "예약 유형별로 예약 전에 연락처에 메시지를 보내고 예약 후에 후속 메시지를 보냅니다. 켜기 전까지는 모두 꺼져 있습니다.",
+      "loading": "예약 유형 불러오는 중",
+      "noTypes": "아직 예약 유형이 없습니다. 하나를 만들어 리마인더를 설정하세요.",
+      "paused": "일시 중지됨",
+      "summaryNone": "설정 없음",
+      "summary": "{total}개 중 {on}개 켜짐",
+      "unsaved": "저장하지 않은 변경 사항",
+      "conflict": "이 예약 유형이 다른 곳에서 변경되었습니다. 저장하기 전에 새로고침하여 최신 버전을 확인하세요.",
+      "reload": "새로고침",
+      "discard": "변경 사항 취소",
+      "saving": "저장 중",
+      "save": "리마인더 저장",
+      "saved": "{name}의 리마인더를 저장했습니다.",
+      "readOnly": "이 리마인더는 볼 수만 있고 변경할 수 없습니다.",
+      "fixFirst": "강조 표시된 리마인더를 먼저 수정하세요.",
+      "problems": {
+        "offsetInvalid": "시간은 30일 이내의 정수로 입력하세요.",
+        "duplicate": "리마인더나 후속 메시지마다 서로 다른 시간이 필요합니다.",
+        "channelsNone": "채널을 하나 이상 선택하세요.",
+        "bodyTooLong": "메시지가 너무 깁니다.",
+        "subjectTooLong": "제목이 너무 깁니다.",
+        "labelTooLong": "라벨이 너무 깁니다.",
+        "tooMany": "예약 유형 하나에는 리마인더와 후속 메시지를 최대 8개까지 설정할 수 있습니다."
+      },
+      "noneOn": "이 예약 유형에는 켜져 있는 리마인더나 후속 메시지가 없습니다.",
+      "when": {
+        "before": "{count, plural, other {#분 전}}",
+        "after": "{count, plural, other {#분 후}}"
+      },
+      "sentOn": "{channel}(으)로 전송됨",
+      "status": {
+        "scheduled": "예약됨",
+        "pending": "전송 시간 도래",
+        "sending": "전송 중",
+        "held": "대기 중",
+        "sent": "전송됨",
+        "skipped": "전송되지 않음",
+        "failed": "실패",
+        "cancelled": "취소됨"
+      },
+      "reasons": {
+        "rule_removed": "전송 시간 전에 리마인더가 삭제되었습니다.",
+        "rule_off": "전송 전에 리마인더가 꺼졌습니다.",
+        "rescheduled": "예약이 변경되어 이 항목은 대체되었습니다.",
+        "booking_cancelled": "예약이 취소되었습니다.",
+        "booking_declined": "요청이 거부되었습니다.",
+        "booking_no_show": "노쇼로 표시되었습니다.",
+        "booking_not_confirmed": "예약이 확정되지 않았습니다.",
+        "started": "예약이 이미 시작되었습니다.",
+        "expired": "전송하기에는 너무 늦었습니다.",
+        "no_contact_point": "연락처에 이 채널의 번호 또는 주소가 없습니다.",
+        "no_channel": "전달할 수 있는 채널이 없었습니다.",
+        "no_sender": "이 채널에 연결된 발신자가 없습니다.",
+        "template_required": "24시간이 지나면 WhatsApp은 승인된 템플릿이 필요합니다.",
+        "template_unavailable": "선택한 WhatsApp 템플릿은 전송할 수 없습니다.",
+        "quiet_hours_too_late": "방해 금지 시간이 시작 시간을 넘어갔습니다.",
+        "no_consent": "기록된 동의가 없습니다.",
+        "opted_out": "연락처가 수신을 거부했습니다.",
+        "do_not_call": "이 번호는 전화 금지 목록에 있습니다.",
+        "minor": "연락처가 미성년자로 표시되어 있습니다.",
+        "processing_restricted": "이 연락처에 대한 메시지 전송이 제한되어 있습니다.",
+        "plan_limit": "요금제 한도에 도달했습니다.",
+        "quiet_hours": "방해 금지 시간이 끝나기를 기다리는 중입니다.",
+        "channel_unavailable": "현재 채널이 연결되어 있지 않습니다.",
+        "wallet_empty": "잔액이 없습니다.",
+        "send_halted": "전송이 중단되었습니다.",
+        "provider_error": "제공업체에서 거부했습니다.",
+        "interrupted": "중단되었으며 재시도되지 않았습니다.",
+        "internal_error": "문제가 발생했습니다."
+      }
     }
   }
 }

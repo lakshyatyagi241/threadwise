@@ -23,13 +23,19 @@
       "imported": "Zaimportowano z pliku",
       "createdAt": "Utworzono",
       "updatedAt": "Ostatnia zmiana",
-      "lastActivityAt": "Ostatnia aktywność"
+      "lastActivityAt": "Ostatnia aktywność",
+      "minor": "Oznaczony jako niepełnoletni",
+      "dateOfBirth": "Data urodzenia",
+      "age": "Wiek (lata)",
+      "timezone": "Strefa czasowa",
+      "uncontacted": "Bez kontaktu"
     },
     "fieldGroups": {
       "journey": "Ścieżka",
       "who": "Kto",
       "activity": "Aktywność",
-      "properties": "Właściwości"
+      "properties": "Właściwości",
+      "company": "Właściwość firmy"
     },
     "operators": {
       "equals": "jest",

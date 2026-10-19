@@ -24,7 +24,9 @@ cross tenants through `SupportStore`, exactly as `PlanStore` and `PlatformStore`
 ## Tables
 
 Existing (migration `20261001102800_supp_threadwise_schema.sql`): `support_tickets`, `support_messages`, plus `support_agents`,
-`support_assignments`, `playbooks`, `platform_notes` (not used yet). New migrations:
+`support_assignments`, `playbooks`, `platform_notes` (not used yet). `support_agents`, `support_assignments` and `playbooks` were later
+dropped by `20261216090000_drop_dormant_tables.sql` (nothing wrote them): the roster is `support_agent_roster` (keyed by platform operator), the
+playbooks are `support_playbooks`, and assignment history would need an operator-keyed table. New migrations:
 
 - `20261003090000_supp_core.sql`: `assigned_agent_id` now references `platform_operators` (a ticket is worked by an operator, which a tenant
   `users` row can never be); CHECKs for status, priority, reason and message author role; `support_messages.email_status`; index

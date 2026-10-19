@@ -3,6 +3,7 @@
 import type { AuthPageContent, AuthPageName, AuthPageTextField } from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { useLocale, useTranslations } from 'next-intl';
+import { useLayoutEffect, useRef, useState } from 'react';
 import type { CSSProperties, MouseEvent, ReactNode } from 'react';
 import { accentOnDark, normalizeAccent } from './accent';
 import './auth.css';
@@ -11,6 +12,10 @@ import {
   Blobs,
   BrandMark,
   Eyebrow,
+  GetaMark,
+  GetaShapes,
+  GetaSky,
+  GetaStats,
   HeroCard,
   MediaBackdrop,
   ShowcasePanel,
@@ -18,7 +23,7 @@ import {
 import { defaultFooter } from './footer-line';
 import { withLocalisedDefaults } from './localised-content';
 
-export type AuthVariant = 1 | 2 | 3 | 4 | 5;
+export type AuthVariant = 1 | 2 | 3 | 4 | 5 | 6;
 
 /** Copy above the form: a mono line, the title with an accent word, and one line of help. */
 export interface ShellHeader {
@@ -42,7 +47,7 @@ export interface FixedPanel {
 }
 
 export interface AuthShellProps {
-  /** 1 Split showcase, 2 Cinematic, 3 Minimal, 4 Brand spotlight, 5 Aurora. Anything else renders as 1. */
+  /** 1 Split showcase, 2 Cinematic, 3 Minimal, 4 Brand spotlight, 5 Aurora, 6 Geta split. Anything else renders as 1. */
   variant: AuthVariant | number;
   page: AuthPageName;
   /** Admin-editable copy, accent colour and optional media (`registration-config` `authPages.<page>`). */
@@ -74,13 +79,14 @@ export interface AuthShellProps {
 }
 
 function clampVariant(value: number): AuthVariant {
-  return value >= 1 && value <= 5 ? (Math.trunc(value) as AuthVariant) : 1;
+  return value >= 1 && value <= 6 ? (Math.trunc(value) as AuthVariant) : 1;
 }
 
 /**
- * The five guest-page designs (TW-AUTH-021). Props in, markup out: no session, no router, no
- * server-only imports, so the same component serves /login, /signup, /forgot-password and the
- * admin editor's live preview. The form is the same in every design; only the chrome around it changes.
+ * The six guest-page designs (TW-AUTH-021, plus our own design 6). Props in, markup out: no
+ * session, no router, no server-only imports, so the same component serves /login, /signup,
+ * /forgot-password and the admin editor's live preview. The form is the same in every design;
+ * only the chrome around it changes.
  */
 export function AuthShell({
   variant,
@@ -153,6 +159,7 @@ export function AuthShell({
           {v === 3 && <Minimal {...common} />}
           {v === 4 && <Spotlight {...common} />}
           {v === 5 && <Aurora {...common} />}
+          {v === 6 && <GetaSplit extra={extra} {...common} />}
         </>
       )}
     </div>
@@ -247,7 +254,7 @@ function SplitShowcase({
   );
 }
 
-/** The right-hand column of the split designs: brand (small screens), title block, form. */
+/** The end-hand column of the split designs: brand (small screens), title block, form. */
 function FormColumn({
   page,
   name,
@@ -443,6 +450,174 @@ function Spotlight({ content, name, toolbar, formHeader, page, children, preview
       <FormColumn page={page} name={name} toolbar={toolbar} header={formHeader} surface wide>
         {children}
       </FormColumn>
+    </div>
+  );
+}
+
+/**
+ * On wide screens the form must never scroll: when its natural height is taller than the column (browser zoomed in,
+ * short window) it is scaled down to fit, and it returns to full size as room appears. Narrow screens scroll as usual.
+ */
+function FitHeight({ children, className }: { children: ReactNode; className?: string }) {
+  const outer = useRef<HTMLDivElement>(null);
+  const inner = useRef<HTMLDivElement>(null);
+  const [fit, setFit] = useState<{ scale: number; height?: number }>({ scale: 1 });
+
+  useLayoutEffect(() => {
+    const box = outer.current;
+    const content = inner.current;
+    const column = box?.parentElement;
+    if (!box || !content || !column) return;
+    const measure = () => {
+      if (!window.matchMedia('(min-width: 1024px)').matches) {
+        setFit((f) => (f.scale === 1 && f.height === undefined ? f : { scale: 1 }));
+        return;
+      }
+      const cs = getComputedStyle(column);
+      // The card is capped at the window height minus the page's 1.5rem of padding; measure against that cap, not the column, so shrinking the form never shrinks the room.
+      const room =
+        window.innerHeight - 24 - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+      const natural = content.offsetHeight;
+      if (natural <= 0 || room <= 0) return;
+      const wide = column.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      const growth = Math.min(1.08, wide / Math.max(box.offsetWidth, 1));
+      const scale = Math.max(0.4, Math.min(growth, room / natural));
+      setFit((f) =>
+        Math.abs(f.scale - scale) < 0.005
+          ? f
+          : { scale, height: scale !== 1 ? natural * scale : undefined },
+      );
+    };
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(column);
+    ro.observe(content);
+    window.addEventListener('resize', measure);
+    return () => {
+      ro.disconnect();
+      window.removeEventListener('resize', measure);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={outer}
+      className={className}
+      style={
+        fit.height === undefined
+          ? undefined
+          : { height: fit.height, overflow: fit.scale < 1 ? 'hidden' : 'visible' }
+      }
+    >
+      <div
+        ref={inner}
+        style={
+          fit.scale !== 1
+            ? { transform: `scale(${fit.scale})`, transformOrigin: 'top center' }
+            : undefined
+        }
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Design 6: Geta's own look, not the shared brand palette the other five designs use — a centered
+ * white/indigo split card floating on a soft lavender canvas, with Geta's wordmark, colours, dotted
+ * panel texture and drifting amber shapes.
+ */
+function GetaSplit({
+  page,
+  extra,
+  content,
+  name,
+  toolbar,
+  formHeader,
+  footer,
+  children,
+  preview,
+}: VariantProps & { extra?: Record<string, string> }) {
+  return (
+    <div
+      className={cn(
+        'auth-geta-page relative flex items-center justify-center overflow-hidden px-4 py-3',
+        preview ? 'min-h-full' : 'min-h-dvh lg:h-dvh',
+      )}
+    >
+      <span
+        aria-hidden="true"
+        className="auth-geta-blob auth-geta-blob--slow -start-40 -top-40 size-[500px] bg-violet-300/30 blur-[120px]"
+      />
+      <span
+        aria-hidden="true"
+        className="auth-geta-blob -bottom-40 -end-40 size-[500px] bg-indigo-300/30 blur-[120px]"
+      />
+      <div className="auth-geta-card relative flex w-full max-w-7xl overflow-hidden rounded-3xl shadow-2xl lg:max-h-[calc(100dvh-1.5rem)] lg:min-h-[min(770px,calc(100dvh-1.5rem))]">
+        <main
+          className={cn(
+            'relative flex w-full flex-col bg-background px-6 py-4 sm:w-1/2 sm:px-10 lg:overflow-hidden lg:px-12 lg:py-5',
+          )}
+        >
+          {/* `my-auto` centres the form when there is room and lets the column scroll from the top when there is not (zoomed in). */}
+          <FitHeight
+            className={cn(
+              '@container mx-auto my-auto w-full',
+              // Sign-up has the most fields: wide enough for two columns. The other pages stay narrow so the form can grow to fill the card.
+              page === 'register' ? 'max-w-[380px] xl:max-w-[560px]' : 'max-w-[420px]',
+            )}
+          >
+            <div className="relative z-30 mb-4 flex items-center justify-between gap-3">
+              <GetaMark name={name} />
+              {toolbar}
+            </div>
+            <FormHeader header={formHeader} page={page} />
+            {children}
+          </FitHeight>
+        </main>
+        <aside className="relative hidden flex-col justify-between overflow-hidden bg-(--auth-geta-ink) p-12 text-white sm:flex sm:w-1/2">
+          <span aria-hidden="true" className="auth-geta-dots" />
+          <span
+            aria-hidden="true"
+            className="auth-geta-blob start-1/2 top-1/3 size-80 bg-(--auth-geta-primary)/15 blur-[80px]"
+          />
+          <span
+            aria-hidden="true"
+            className="auth-geta-blob auth-geta-blob--rev -end-24 top-1/4 size-80 bg-(--auth-geta-primary)/30 blur-[80px]"
+          />
+          <span aria-hidden="true" className="auth-geta-sheen" />
+          <span
+            aria-hidden="true"
+            className="auth-geta-orb auth-geta-orb--pulse -bottom-16 -end-16 size-72"
+          />
+          <GetaSky />
+          <GetaShapes />
+          <div className="relative z-10 my-auto max-w-[420px]">
+            {content.eyebrow && (
+              <Eyebrow on="dark" className="auth-geta-rise mb-4">
+                {content.eyebrow}
+              </Eyebrow>
+            )}
+            <h1
+              className="auth-geta-rise text-[clamp(28px,4vw,42px)] font-extrabold leading-[1.1] tracking-[-0.01em]"
+              style={{ ['--d' as string]: '0.15s' }}
+            >
+              {content.heading} {content.headingAccent}
+            </h1>
+            {content.subheading && (
+              <p
+                className="auth-geta-rise mt-4 text-[14px] leading-relaxed text-white/75"
+                style={{ ['--d' as string]: '0.3s' }}
+              >
+                {content.subheading}
+              </p>
+            )}
+            <GetaStats page={page} extra={extra} />
+          </div>
+          <p className="relative z-10 mt-6 text-[11px] text-white/50">{footer}</p>
+        </aside>
+      </div>
     </div>
   );
 }

@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "In pausa: è stato raggiunto il limite giornaliero di invio. Riprende automaticamente dopo {when}.",
         "halt": "In pausa: l'invio è sospeso per questo Workspace. Riprende quando la sospensione viene rimossa.",
-        "manual": "In pausa."
+        "manual": "In pausa.",
+        "quiet_hours": "In pausa: alcuni destinatari sono nelle loro ore di silenzio. Riprende da solo dopo {when}."
       },
       "delete": "Elimina",
       "deleteTitle": "Eliminare il broadcast?",
@@ -145,7 +146,8 @@
         "queued": "In coda",
         "queuedHint": "in attesa di invio",
         "failed": "Non riusciti",
-        "failedPct": "{pct}% di tasso di errore"
+        "failedPct": "{pct}% di tasso di errore",
+        "queuedHeld": "{count} trattenuti per le ore di silenzio"
       },
       "tab": {
         "overview": "Panoramica",
@@ -193,7 +195,8 @@
         "lastClick": "Ultimo clic: {when}",
         "empty": "Nessun destinatario associato.",
         "more": "Carica altri",
-        "loading": "Caricamento"
+        "loading": "Caricamento",
+        "heldUntil": "Trattenuto fino a {when} (ore di silenzio)"
       },
       "failures": {
         "kicker": "Motivi degli errori",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Non ufficiale (disattivato)"
     },
     "compose": {
-      "back": "Torna ai Broadcast",
-      "crumb": "Broadcast / Nuovo",
-      "title": "Crea nuovo",
-      "titleAccent": "broadcast",
-      "draft": "Bozza / non salvato",
-      "submit": "Aggiungi broadcast",
-      "submitting": "Aggiunta in corso…",
-      "created": "Broadcast aggiunto.",
-      "createdMany": "{count} broadcast aggiunti, uno per mittente.",
-      "failed": "Impossibile aggiungere il broadcast.",
-      "fixName": "Inserisci un nome per il broadcast.",
-      "fixTemplate": "Scegli un template approvato.",
-      "fixSchedule": "Scegli data e ora di invio.",
-      "loading": "Caricamento",
-      "loadError": "Impossibile caricare i dati di composizione.",
-      "retry": "Riprova",
-      "setup": "Configurazione del broadcast",
-      "templateMessage": "messaggio template",
-      "name": "Nome del broadcast",
-      "namePlaceholder": "es. Invio template offerta di maggio",
-      "nameHint": "Etichetta interna usata nei report dei broadcast.",
-      "template": "Seleziona il messaggio template",
-      "pickTemplate": "— Scegli un template approvato —",
-      "noTemplates": "Ancora nessun template approvato.",
       "createOne": "Creane uno",
-      "templateHint": "I broadcast inviano solo template approvati.",
-      "twilioHint": "Gli invii conformi a Twilio richiedono un Content SID per ogni template: contrassegna un template come \"Twilio ready\" tramite /templates/{id}/edit. I template senza ContentSid verranno inviati come testo semplice (perdendo l'approvazione del template Meta).",
-      "device": "Invia dal dispositivo",
-      "devices": "Invia dai dispositivi",
-      "multiDevice": "Multi-dispositivo: seleziona tutti quelli che servono",
-      "noDevices": "Nessun dispositivo connesso.",
-      "connectOne": "Collegane uno →",
-      "share": "quota",
-      "shareHint": "Seleziona i dispositivi e imposta le quote, ad esempio 7 / 3 invia il 70% dei contatti dal primo dispositivo e il 30% dal secondo. Quote uguali dividono in parti uguali.",
       "audience": "A chi vuoi inviarlo?",
       "audienceHint": "Scegli segmenti, tag, gruppi o contatti. Chi viene scelto più volte viene unito una sola volta.",
       "selected": "{count} selezionati",
@@ -276,27 +246,10 @@
       "noContacts": "Ancora nessun contatto.",
       "addSome": "Aggiungine →",
       "noMatch": "Nessun contatto corrisponde alla ricerca.",
-      "when": "Quando vuoi inviare il broadcast?",
-      "whenHint": "Invia subito oppure scegli una data / ora futura.",
-      "sendNow": "Invia ora",
-      "sendNowHint": "Invia dopo la validazione finale.",
-      "sendLater": "Programma per dopo",
-      "sendLaterHint": "Scegli un giorno e un'ora specifici.",
-      "sendDate": "Data di invio",
-      "sendTime": "Ora di invio",
-      "timezone": "Fuso orario",
-      "preview": "Anteprima del template",
-      "previewTitle": "Anteprima del broadcast",
-      "previewSub": "Messaggio template",
-      "pickToPreview": "Scegli un template per vedere l'anteprima…",
-      "previewSelected": "Selezionato",
-      "previewSchedule": "Programmazione",
-      "now": "Ora",
-      "later": "Più tardi",
-      "media": "Anteprima {kind}",
       "contactsDenied": "Non hai accesso all'elenco contatti. Scegli i contatti tramite gruppi o tag.",
       "unofficialDisabled": "L'invio tramite numeri WhatsApp personali (l'API non ufficiale) non è abilitato per il tuo Workspace. Scegli un numero ufficiale dell'API WhatsApp Business.",
-      "previewLabel": "Anteprima template"
+      "colEmail": "E-mail",
+      "noEmail": "Nessun indirizzo e-mail"
     },
     "overrides": {
       "title": "Compila questo invio",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Scrivi alle persone già presenti nei tuoi DM di Instagram: nessuna approvazione del template.",
         "cta": "Crea broadcast Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Invia un messaggio Messenger a chi ha scritto alla tua Pagina nelle ultime 24 ore.",
+        "cta": "Crea una trasmissione Facebook"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Invia un messaggio come e-mail da una casella connessa, con un link per annullare l'iscrizione.",
+        "cta": "Crea campagna e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Invia un messaggio alle persone che già chattano con il tuo account LINE.",
+        "cta": "Crea broadcast LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Invia un messaggio alle persone che già chattano con il tuo account Viber.",
+        "cta": "Crea broadcast Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Invia un messaggio di massa a tutti i follower, a un tag o a utenti selezionati del tuo Account ufficiale.",
+        "cta": "Crea broadcast WeChat"
       }
     }
   }

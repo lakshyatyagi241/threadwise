@@ -35,7 +35,7 @@ Catalog lets you push products into WhatsApp chats. It has four tabs: **Setup** 
 - **Commerce settings:** show the catalog in your business profile, and enable the cart.
 - **Automation:** auto-reply when a customer sends a cart, with an optional payment link base, and a catalog concierge that answers product questions with matching products. The concierge is off by default.
 - **Catalog health** lists products with no image, no price or a sync error.
-- **Create a catalog:** with a connected Meta number that has a Business ID, **Create a new catalog on Meta** on Setup makes an empty catalog, links it to your WhatsApp account and connects it. Only one catalog can be connected at a time.
+- **Create a catalog:** with a connected Meta number that has a Business ID, **Create a new catalog on Meta** on Setup makes an empty catalog, links it to your WhatsApp account and connects it. When your workspace's Meta app has catalog login set up, a Meta popup opens first: approve catalog access there. Only one catalog can be connected at a time.
 - **Manage on Meta:** with a catalog connected, **Rename on Meta** changes its name. **Delete on Meta** permanently removes the catalog and its products on Meta after you type its catalog ID; it then disconnects here.
 - **Collections on Meta:** on a collection card, **Push to Meta** creates a product set from its active products, **Update on Meta** refreshes it after edits, and **Remove from Meta** deletes the set. The card shows whether it is on Meta.
 - **Disconnect** stops syncing. Your products stay on Meta.
@@ -50,3 +50,7 @@ Catalog needs the **WhatsApp catalog** plan feature and permission to view the c
 - **Nothing was sent:** the screen lists the reasons. Common ones are no connected number, no recipients, a wallet balance too low to send, or more than 500 recipients.
 - **A product shows failed:** read the message under its Meta status, fix the product (often the image or price) in [Products](help:store-products-overview) and sync again.
 - **A product is missing from Send:** only active products are listed.
+
+## Get it as an app
+
+The WhatsApp catalog and its store orders is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

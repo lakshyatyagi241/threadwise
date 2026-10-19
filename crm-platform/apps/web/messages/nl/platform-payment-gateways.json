@@ -107,6 +107,7 @@
       "noGateway": "Er is nog geen betaalprovider ingesteld voor {currency}. Vraag je beheerder er een te activeren.",
       "noGatewayButton": "Geen betaalprovider ingesteld",
       "sandbox": "sandbox",
+      "sandboxNote": "Testmodus: er wordt geen echt geld afgeschreven. Betaal met de testkaart uit de documentatie van je betalingsprovider. De pagina voor het eenmalige wachtwoord (OTP) wordt door de provider getoond, niet door deze app.",
       "pay": "Betaal {amount}",
       "processing": "Betaling starten",
       "summary": "Besteloverzicht",

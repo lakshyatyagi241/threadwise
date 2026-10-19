@@ -11,7 +11,7 @@ export function useCursorList<T>(
   path: string,
   item: z.ZodType<T>,
   query: Record<string, string | number | boolean | undefined> = {},
-  retry?: { retry: number; retryDelay: number },
+  opts?: { retry?: number; retryDelay?: number; enabled?: boolean },
 ) {
   const schema = pageResponseSchema(item);
   const q = useInfiniteQuery({
@@ -19,7 +19,7 @@ export function useCursorList<T>(
     initialPageParam: undefined as string | undefined,
     queryFn: ({ pageParam, signal }) =>
       apiFetch(path, { query: { limit: 50, ...query, cursor: pageParam }, schema, signal }),
-    ...retry,
+    ...opts,
     getNextPageParam: (last) =>
       last.page.hasMore ? (last.page.nextCursor ?? undefined) : undefined,
   });

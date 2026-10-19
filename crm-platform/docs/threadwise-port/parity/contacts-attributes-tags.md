@@ -343,3 +343,306 @@ Reported 2026-10-13: "I cannot find the contact owner when editing a contact, no
 Tests run on this change: unit (columns, filters, form payloads, render in English and Arabic of the form field, the table cell, the toolbar menu, the profile control and the Owner-only dialog; contracts and SQL of the owner filter and of the segment rules), API end to end on real Postgres (create and edit with an owner, scope refusals for `own` and `team`, the assignable flag, the filter with several people and nobody, an `own` member never widening what they see, tenant isolation, `POST /contacts/bulk/owner` by ids and by filter with its audit and outbox trail, the export column).
 
 **Not verified**: the screens in a real browser against the running Reference (no Playwright twin was run for this change; nothing was started against a browser), the keyboard and focus behaviour of the new menus, the layout at 390 px and in right-to-left beyond the markup checks, large books (the 50,000 cap is covered by the existing selection code, not by a 50,000-row run), and the Arabic wording by a native reader.
+
+## Contacts list, quick view and details redesign (owner request 2026-10-16): patterns of the owner's own platform, not Reference
+
+The owner asked for the Contact Hub's busy toolbar (Select Segment, Select Tag, Owner, Sort, Send Campaign, More Actions) to be replaced by the patterns of
+their company platform (geta-platform: one slim toolbar, a Filter popover, a Columns button with a count, a "+" add-column header, a pinned footer
+with page numbers, a right-hand quick view and a contact page with a section sub-nav and a lifecycle stepper). Only the layout was read from the
+owner's browser; nothing was copied. This replaces Extension 2's toolbar and footer for the list and adds a quick view and a details page that Reference
+does not have (Reference's detail page never rendered). Plan, control-by-control mapping and the data each section reads:
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md). No migration, endpoint or contract was added; the notes, meetings, files, activities,
+deals and field-history endpoints that already existed now have a screen.
+
+### Intended differences from the reference platform
+
+| #   | Where                  | Reference platform (screenshots)                                                      | Ours, and why                                                                                                                                                                                                               |
+| --- | ---------------------- | ------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R01 | Footer page numbers    | 1 2 3 4 5 ... 609, any number jumps                                                   | 1 2 3 4 5 and ten pages beyond the current one, then "Page N of M". The API is cursor-only (OFFSET is banned), so a far page is reached by loading the ones before it (BL-232)                                              |
+| R02 | Sort arrows            | on Phone, Email, Lifecycle, WhatsApp, Owner, Created                                  | only where `CONTACT_SORT_FIELDS` allows (name, phone, email, stage, status, language, memo, created, custom attributes); opt-in, owner, company, source and last activity have none (BL-231)                                |
+| R03 | Default order          | name A to Z                                                                           | newest first, as before; the Created at header carries the arrow                                                                                                                                                            |
+| R04 | WhatsApp opt-in column | Yes / No                                                                              | Yes (subscribed label, not opted out), grey No (nothing recorded), red No (opted out of marketing). The label is the contact's; the consent ledger is the proof behind it                                                   |
+| R05 | Column choice          | per user                                                                              | per browser, and per saved view on the server (a view keeps its own columns); no per-user server store exists (BL-230)                                                                                                      |
+| R06 | Row hover actions      | "..." only in the screenshot                                                          | details, edit, note, call, email, WhatsApp, chat and "...", each by permission; the old round SMS icon is the "Send SMS" item of the menu; on a touch screen only the "..." menu shows                                      |
+| R07 | Page size              | 25 / 50 / 100                                                                         | 10 / 25 / 50 / 100 / 200 (the sizes the screen already had), default 50                                                                                                                                                     |
+| R08 | Name click             | opens the quick view                                                                  | same; a modified click (new tab) opens the details page                                                                                                                                                                     |
+| R09 | Quick view tabs        | Contact information, Social media, Web analytics, Facebook form fields, Custom fields | Contact information, Social media (only when the contact has a profile link), Lead source (our first and latest lead touch instead of Facebook form fields), Custom fields. No Web analytics: no visit data exists (BL-233) |
+| R10 | Job title              | inline editable                                                                       | inline editable when the workspace has a `job_title` property; otherwise the line is not shown (a custom value needs a registered property)                                                                                 |
+| R11 | Files                  | upload                                                                                | read-only list; the API stores a name and a storage key only (BL-229)                                                                                                                                                       |
+| R12 | Communication stats    | not seen                                                                              | tiles built from existing data only (chats found for the contact, calls, open tasks); no sent / delivered / read counts per contact exist                                                                                   |
+| R13 | Conversations          | not seen                                                                              | the inbox list searched by phone, email or name and filtered to the contact id; archived chats and chats with no contact link are not found                                                                                 |
+| R14 | Details page sections  | Overview ... Files                                                                    | the same seven plus Tasks, Deals, Appointments, Invoices and documents, Lead source, Company, Consent and Field history, so nothing the old page had is lost                                                                |
+| R15 | Lifecycle              | stages and a status bar                                                               | our stages (won and lost flags, lost reason dialog) and the statuses valid in the stage (the API's linking rule); the toast says what happened to the status                                                                |
+| R16 | Mobile                 | not seen                                                                              | the table scrolls sideways under a frozen name column; the quick view takes the whole width; the details sub-nav is a scrolling strip                                                                                       |
+
+### Checks run (2026-10-16, our own app on a local dev server against the isolated API, signed in as the seeded workspace admin)
+
+- Unit and render tests: columns, filters (status, source, minor), applied chips, pagination reach, sections, quick-view URL and arrow keys, subscription,
+  overview helpers, the toolbar, table, footer, selection bar, the cards, the sub-nav and the closed quick view (English and Arabic), plus the notes,
+  meetings, files, conversations, stats, deals and field-history sections. Type check and ESLint of `apps/web` clean; all 21 locales validated with
+  `i18n-tool check`.
+- Browser (Playwright, installed Chromium 1228), desktop 1440 px and 390 px, light, dark and right-to-left (Arabic): list, filter popover, columns panel,
+  add-column picker, hover actions, quick view (open, previous/next with the arrow keys, Esc, the URL), details page and its sections, selection bar.
+  Screenshots: `C:\project\wadesk-port\_work\parity\contacts-ui-refresh\` (named `NN-what-device-scheme-locale.png`; `flows/` holds the functional run).
+- Functional run: page 2 range, a filter chip added and removed, the minor filter, "Clear all", a column added from "+" and kept after a reload and hidden
+  again, sorting from the header menu, the selection bar's Assign owner opening the update dialog on the owner, a note written from the quick view
+  (composer focused) and listed on the page, a stage moved on the stepper and a status set, a meeting logged from the action bar and listed under
+  Activities, the task modal opened linked to the contact, the company dialog.
+- Accessibility (scripted audit in the browser): every control has an accessible name, dialogs are named, no duplicate ids, no focusable control inside an
+  aria-hidden subtree, the tab order runs search, Filter, Columns, Create View, the layout buttons and Add Contact, focus lands in the quick view when it opens
+  and returns to the name link when it closes.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                                                         | Fix                                                                                  |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------ |
+| The hover icons covered the name, so a click on the name hit "Edit"                                                            | the name truncates while the actions are shown                                       |
+| The "+" picker closed itself when the table scrolled sideways to reach it                                                      | the "+" header cell is frozen at the end                                             |
+| The arrow keys did nothing once the contact had loaded (focus fell to the page)                                                | the listener is on the document and the drawer takes focus when the contact is shown |
+| Saving a meeting (or closing any dialog opened from the drawer) closed the quick view: React passes a nested dialog's close up | the drawer closes only on its own close event                                        |
+| Two delete confirmations shared one checkbox id                                                                                | an id per instance                                                                   |
+| The details header squeezed the name to nothing on a phone                                                                     | the name block wraps under the buttons                                               |
+| `relativeTime` used the clock without a `now`                                                                                  | `useNow`                                                                             |
+| The selection bar was taller than the view row, so the table jumped when rows were ticked                                      | both rows have the same minimum height                                               |
+
+### Not verified, and why
+
+- A workspace with 30,000 contacts: the isolated stack holds 86 contacts. The footer, the ten-page reach and the add-column picker with many properties
+  were read from code and tests only (BL-234).
+- The isolated API is an older main build than the merged contracts: a small local proxy added `dateOfBirth` and `isMinor` to contact answers so our web
+  build could be viewed. The minor filter and column were not run against a server that implements them.
+- Conversations, communication stats, deals and field history were opened, but the stack had no chats, calls or deals for the test contacts, so only their
+  empty and loading states were seen.
+- Sending a WhatsApp, SMS or email message and placing a call from the new icons (no connected channel here); the chat icon's open-conversation path.
+- Translations of the new strings are machine-drafted: no native review (BL-234). Screen-reader use of the drawer was not tried.
+- Firefox and Safari; the footer's page buttons in right-to-left with a long page list.
+
+## Contacts polish (owner feedback 2026-10-17): few hover actions, no popups in the quick view, a calmer list
+
+The owner reviewed the redesign above and asked for fewer actions beside the name, for note, task, meeting and company to be written in the drawer itself
+(the side panel of the owner's other CRM lists tasks and adds them with a "+" and no pop-up), and, from the coordinator's UX review, for a list that
+does not shout. Still the owner's own patterns, not Reference. No migration, endpoint or contract. Control-by-control mapping (every old control and its
+new place): [wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) section 7.
+
+### Intended differences from the redesign above and from Reference
+
+| #   | Where                            | Before (redesign of 2026-10-16)                                                                                         | Now, and why                                                                                                                                                                                                                       |
+| --- | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| P01 | Row hover actions                | open, edit, note, call, email, WhatsApp, chat and "..." beside the name; the name was truncated while they showed (R06) | Message, Call, "+" (note, task, meeting) and "...", laid over the end of the cell with a fade: no row or column moves. Everything else is in "..." (new: open in a new tab, copy phone, copy email). Supersedes R06                |
+| P02 | Message                          | a WhatsApp icon (template drawer) and a chat icon                                                                       | One Message icon: the WhatsApp chat, or an email when there is no number or no connected number; disabled with the reason as its tip otherwise. The WhatsApp template drawer is "Send WhatsApp message" in "..."                   |
+| P03 | Narrow and touch                 | only "..." on touch                                                                                                     | "..." always visible below 640 px and on touch, holding Message, Call, Add note, Add task, Schedule meeting and the rest                                                                                                           |
+| P04 | Quick view sections              | a vertical icon rail of seven                                                                                           | A tab strip (Overview, Activity, Notes, Tasks, Meetings, Files, "+3 more" with Conversations, Communication stats, Properties) with counts, like the owner's reference panel; scrolls sideways at 390 px, the menu stays in view   |
+| P05 | Task, Meeting, Add company, Note | dialogs (and the Notes tab)                                                                                             | Shortcuts that open the section with the inline row focused. Tasks and meetings are added and edited in the list; the company is searched, created and cleared in a card. Only the delete confirmations are still dialogs (BL-246) |
+| P06 | Task row                         | a title box that opened the New task form                                                                               | Title, due date (tomorrow 17:00 to begin with: a task with no date never comes due), assignee (me), optional priority; Enter saves, Esc closes; optimistic with rollback; the checkbox completes at once with rollback             |
+| P07 | Meetings                         | inside Activity, with Log meeting and Edit dialogs                                                                      | Their own tab and section; Schedule meeting and Edit as rows: title, start (next full hour), duration, link or place; upcoming, past and undated groups; a web address is a link that opens in a new tab                           |
+| P08 | Table headings                   | "PHONE NU...", "LIFECYC...", "WHATS..."; the date clipped                                                               | Short headings with the full label as the tooltip; Created shows the day, the time is the tooltip                                                                                                                                  |
+| P09 | Row noise                        | a caret on every stage chip; "x No" on most rows; bright owner avatar                                                   | Caret on hover or focus (always on touch); opt-in as a tick, a faint dot or a red cross with a tooltip; muted owner avatar                                                                                                         |
+| P10 | Saved views                      | picker only                                                                                                             | Five quick chips (My contacts, Unassigned, New this week, Needs follow-up, Hot leads), built-in views, not stored, not deletable                                                                                                   |
+| P11 | Counts                           | "All contacts 20" and "Total: 20"                                                                                       | One: the pill; "Total" only while a filter is on and no view is open                                                                                                                                                               |
+| P12 | Empty workspace                  | "No contacts yet" and one button                                                                                        | First-run panel: Create Contacts, Import a CSV file, Connect WhatsApp (each by permission)                                                                                                                                         |
+
+### Checks run (2026-10-17, our own app on a scratch stack: web 3301, API 3300, Postgres 55850, Redis 56390; signed in as a seeded workspace admin, no MFA)
+
+- Unit, DOM and render tests: the hover strip (permissions, overlay classes, no hover truncation, disabled reasons, masked phone), `messageRoute`, the tab
+  strip (permissions, counts, Arabic), sections and add targets, the inline task row (jsdom: opens in place, saves on Enter with the row in the list before the
+  answer, restores the title and the list when refused, requires a due date, Escape closes only the row), the optimistic add and complete helpers with exact
+  rollback, the meeting row helpers (duration, groups, links), meetings render, short headings, quiet opt-in, quiet caret, first run, quick presets.
+  Exit codes (2026-10-17): `tsc --noEmit` of apps/web 0; ESLint of the changed web files 0; Prettier check of the 131 changed files 0; the repo's
+  21-locale check (`i18n-translate-sync/scripts/check.sh`) 0; vitest of the contacts, tasks, companies, lead-scoring, help-center and i18n folders 0
+  (97 files, 1,012 tests). The whole web suite: 10,782 passed and one failure that is not this branch's (`contact-consent` messages test: the key
+  `contact-consent.card.source.wa_form` is missing on origin/main; handed off as its own task).
+- Browser (Playwright, installed Chromium 1228), desktop 1440 px and 390 px, light, dark and right-to-left (Arabic). Screenshots and the scripts:
+  `C:\project\wadesk-port\_work\parity\contacts-ui-polish\` (`list-check.mjs`, `drawer-check.mjs`, `extras-check.mjs`, `visual-check.mjs`; PNG names
+  `NN-what-device-scheme[-locale].png`).
+  - List: hover strip measured before and after hover (row, name cell, name link, table, every column heading: identical boxes), four controls, keyboard focus
+    shows the strip and Tab enters it, tooltips, the "+" and "..." menus, 390 px menu with nothing moving, no heading cut off, quick chips (filter, pressed
+    state, press again to clear), one count, last activity in the picker, the first-run panel (the list answered empty), stage caret on hover only.
+  - Quick view: tab strip, counts, "+3 more", Task, Note, Meeting and Add company shortcuts each focus their inline form and open no dialog (`dialog[open]`
+    count stays one: the drawer), task added (in the list before the server answered, POST sent), completed by the checkbox (instant, POST sent), refused save
+    (the API answered 500 through a route override: the row left the list and the title came back with the message), Escape closes the row and not the drawer,
+    note saved with Ctrl+Enter, meeting added with a link and edited in place, company picked and removed.
+  - Details page: sub-nav with Meetings, the four shortcuts land on their section with the form focused, `?add=` removed after use.
+- Not verified: a workspace with a connected WhatsApp number (the stack has none: Message showed its disabled reason; the chat path is covered by tests of
+  the route only), the Message picker with several numbers, native review of the 73 new or changed strings per language (machine drafted, BL-247), a screen-reader pass.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                                                | Fix                                                                           |
+| --------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| The Task button opened the Tasks tab but not the row (a request already there when the row mounted was taken as seen) | the row starts "unseen"; same for the meeting row                             |
+| The company chip drew a giant building icon (the picker's icon lost its size class)                                   | `size-4` in `CompanyPicker`                                                   |
+| At 390 px the "+3 more" menu scrolled out of sight with the tabs and the open tab could hide                          | the menu sits outside the scrolling strip; the open tab scrolls into view     |
+| A disabled Message item in the touch menu drew its reason over its label                                              | the reason is a second line under the label                                   |
+| A tooltip stayed on screen after a tap or a click (it showed on any focus)                                            | it shows on keyboard focus only                                               |
+| The date was cut by the frozen "+" column                                                                             | the column shows the day; widths re-set                                       |
+| Lint: state set inside effects (`?add=`, the task row)                                                                | derived while rendering; the effects only touch the address bar and the focus |
+
+## Contact record redesign (owner feedback 2026-10-17): Activity first, one action row, calls logged in place
+
+Not a "same UI as Reference" screen: an owner-requested extension on top of the redesign above, to make the contact page easy for small businesses. Reference's
+contact page is not the model here (the competitor patterns are: HubSpot, Freshsales, Bigin, Zoho, read in the owner's browser, layout only). Control mapping:
+[wiring/contacts-ui-refresh.md](../wiring/contacts-ui-refresh.md) section 8. Intended differences from the page of the previous round (all owner-requested):
+
+| Row | Before                                                                                  | Now (intended)                                                                                                    |
+| --- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------- |
+| 1   | Two rows of buttons (Note, Task, Meeting, Add company, four round channel icons, "...") | One row: Note, Task, Call, Meeting, Message, "..." (Call and Message are split buttons)                           |
+| 2   | Big lifecycle block and big status block                                                | One thin stage line with a small Status menu                                                                      |
+| 3   | Activities: Meetings card, Time zone card, then a timeline of the activity feed only    | Compose box, then one timeline of nine sources: Up next, day groups, filter pills, search, Load more              |
+| 4   | Overview: tabs of fields and seven cards                                                | Key details (edit in place, Show all) and folded one-line cards; Recent activity                                  |
+| 5   | Sub-nav of two groups with long labels                                                  | Three groups, short labels, counts                                                                                |
+| 6   | Calls could only be logged on the Call logs screen                                      | Log a call inline on the contact (compose Call tab, Call button menu), "How did the call go?" after a phone click |
+| 7   | "Contact Field History" button in the header                                            | "..." menu and the History section (same drawer and panel)                                                        |
+
+- Verified here: `tsc --noEmit` of apps/web exit 0; ESLint of the 43 changed web files exit 0; Prettier check of the 71 changed files exit 0; the repo's 21-locale check
+  (`i18n-translate-sync/scripts/check.sh`) exit 0; vitest of the contacts, tasks, calling-voice, help-center, contact-consent and i18n folders: 98 files passed and the
+  one dead-strings failure that run showed was fixed (nine unused strings removed in 21 locales), then `messages.test.ts` 6 of 6. New tests: the timeline model
+  (merge horizon, up next, day groups on a zone, filters, search, one task counted once), the call prompt rules and storage, the timeline row, feed, compose box, action
+  row, key details, side cards and collapse card (English and Arabic, from the real messages), the prompt's behaviour in jsdom with fake timers, the section groups.
+  The calling-voice domain's own tests (log-call rules) stay green: the form reuses them.
+- Browser (Playwright, installed Chromium 1228) on a private stack (API :3410 from `origin/main` plus the call logging branch, web :3411, scratch Postgres :55921,
+  seeded through the real API: a showcase contact with 4 notes, 5 tasks, 2 meetings, 3 logged calls, a chat and 35 field changes, and a contact with no history).
+  Screenshots and scripts: `C:\project\wadesk-port\_work\parity\contact-record-redesign\` (`shots\NN-before|after-what-device.png`, `check.mjs`, `stack\`). 34 checks, all pass:
+  - Before and after of the Activities page (01 and 02): the first timeline entry now starts at 607 px of a 900 px window (before, at about 1,000 px: below the fold, after the header, two button rows, the lifecycle and status blocks, the Meetings card and the Time zone card).
+  - Overview, Key details expanded, a folded card opened, compose tabs (note, task, call, meeting), filter pill, search, empty state, quick view (Activity and Overview),
+    390 px (Activity, Overview, empty, quick view), dark, right-to-left (Arabic), each captured and looked at.
+  - Working, with the request seen on the wire: a note (Ctrl+Enter), a task added and then completed in place, a call logged with a follow-up task (`POST /v2/calls/log`)
+    and its line on the timeline, a meeting scheduled; the timeline grew each time.
+  - "How did the call go?": the click on **Call on your phone** is remembered, the line shows after 30 seconds, **Log it** opens the Call tab inline at the time of the click.
+  - Keyboard: arrow keys and End move between compose tabs and keep the focus on the strip, Space toggles a filter pill, Tab order of the action row, the Call menu opens with
+    Enter and closes with Escape, a folded card opens with Enter. No sideways page scroll at 390 px. No page errors.
+- Not verified (BL-272): a screen-reader pass; a workspace with a connected WhatsApp number (the stack has only the dev simulator channel, so Message showed its reason and
+  the chat path is covered by the route tests only); a real telephony provider (the framework's own parity note covers its side); native review of the 154 machine-drafted
+  strings per language. Headless Chromium leaves client-side navigation stuck after a `tel:` link (there is no phone app to hand it to), so the prompt check carries the
+  remembered click to a fresh tab, as a real person's tab would still hold it.
+
+### Defects found by those checks and fixed
+
+| Defect                                                                                      | Fix                                                                                          |
+| ------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| The sub-nav's group headings touched the item above them                                    | a gap before each group                                                                      |
+| A logged call said "by Demo Admin" twice (the server's line already names the person)       | the person is left out of those lines                                                        |
+| A task just completed was in the open and the done list for a moment: two rows with one key | the timeline counts a task once, as done                                                     |
+| A busy edit made dozens of "N details updated" lines                                        | edits by the same person within five minutes are one line                                    |
+| The call form offered "They called me" before "I called them"                               | outgoing first                                                                               |
+| In dark mode the Message button and the open sub-nav item were unreadable                   | the primary colour in dark                                                                   |
+| "Save note" wrapped to two lines at 390 px                                                  | no wrap                                                                                      |
+| Arrow keys on the compose tabs moved the cursor into the form, so the next arrow was lost   | the focus is given back to the tab strip; clicking a tab is what puts the cursor in its form |
+| The active stage could be out of sight on a phone                                           | the stage line scrolls to it                                                                 |
+
+### Round 2 (owner review 2026-10-17): closer to HubSpot, Freshsales and Bigin, and one stage control everywhere
+
+The owner said round 1 was not close enough: too many items on the left (16 sections in three groups), a tall stack of cards on the right, a half-width "Recent activity" box with an
+empty page under it, and a stage row with a horizontal scrollbar; then asked for the stage control to be good everywhere. Control mapping: wiring section 8.5 (the page), 8.6 (the stage
+picker, every replaced control), 8.7 (gaps). Still no migration, endpoint or contract change. Browser run, scripts and screenshots: `C:\project\wadesk-port\_work\parity\contact-record-redesign\`
+(`shots\r2-*.png` and the renumbered 20 to 27; `shots\round1\` is round 1 for the before and after; `check.mjs`, `r2.mjs`).
+
+Side by side with the references (HubSpot's contact record and Freshsales' contact page, saved screenshots, and Bigin's):
+
+| What               | Reference                                                                                                                          | Ours now                                                                                                                    | Same / difference                                                                                                           |
+| ------------------ | ---------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
+| Layout             | HubSpot: profile and About at the start, tabs in the middle, cards at the end                                                      | Same three columns (320 / flexible / 288 px), each scrolling on its own from 1280 px                                        | Same. HubSpot's left column is about 40 px narrower and its centre wider                                                    |
+| Tabs               | HubSpot: Overview, Activities, Intelligence + Customize; Bigin: a strip + Rearrange                                                | Overview, Activity, Conversations, Deals, Files, More (the other 11 sections)                                               | Same idea. No Customize / Rearrange (BL-271: needs a per-user server store)                                                 |
+| Profile card       | HubSpot: name, one row of round icons (Note, Email, Call, Task, Meeting, More)                                                     | Same row: Note, Message, Call, Task, Meeting, More, a label under each                                                      | Same. Ours adds the lead score and the Stage control in the card                                                            |
+| About this contact | HubSpot: a long property list with Actions; Freshsales: key fields + Show all                                                      | Eight rows, tags, groups, Show all details, Edit all, edit in place                                                         | Same idea. HubSpot lists more properties by default; ours keeps eight on purpose                                            |
+| Stage              | Freshsales: a segmented lifecycle and status bar; Bigin: a pipeline bar                                                            | "Stage Qualified" dropdown, Status menu, a thin segmented line                                                              | Different on purpose: no row of stages, so no scroll bar at any width                                                       |
+| Cards at the end   | HubSpot: Record summary (AI), Companies, Deals, Tickets ... each a card with a count and a +; Freshsales: deals                    | Open tasks, Deals, Company, Subscription, Lead score, Time zone, Privacy: one row each with count and + Add                 | Same pattern. No AI summary card (ours has none)                                                                            |
+| Middle             | HubSpot: filter tabs (All activities, Notes, Emails, Calls, Tasks, Meetings), search, date groups; Freshsales: an "Add a note" box | Summary strip, compose box (Note, Task, Call, Meeting), filter pills, search, Up next, Today, Yesterday, This week, Earlier | Same plus an inline compose box and a summary strip. HubSpot opens a note, call or meeting form as a pop-up; ours is inline |
+| Empty page area    | None: the timeline fills the middle                                                                                                | The timeline card stretches to the bottom; the empty state is centered in it                                                | Same                                                                                                                        |
+| Other differences  | HubSpot has a collapse-all, an activity-type filter menu and "all time" date filter; Freshsales has sub-tabs and a date filter     | Ours has none of these: the pills are the filter, the search is over what is loaded                                         | Not built: a date filter and "collapse all" (BL-273 covers the server feed they would need)                                 |
+
+- Verified here: `tsc --noEmit` of apps/web exit 0; ESLint of the 58 changed web files exit 0; Prettier check exit 0; the repo's 21-locale check and `apps/web/scripts/i18n-tool.mjs check`
+  exit 0 (34 new strings machine-translated into 20 locales after the round, two Arabic guides rewritten); vitest of the contacts, tasks, calling-voice, help-center, contact-consent,
+  privacy-requests and i18n folders: all passing. New tests: the stage picker (open, checked stage, dots, search only above 8 stages, statuses and "Move", keyboard, outside press,
+  read-only, "Keep", prefix and "n of m", bottom sheet, Arabic), the move (optimistic, linking rule previews, status in the same save, rollback of the record and of cached list rows,
+  conflict, Undo with the new row version, eight-second toast, no-op), the tab bar and its model, the association cards, About groups and fold, and the field-history bookkeeping filter.
+- Browser (Playwright, installed Chromium 1228, private stack): 82 checks, all passing.
+  - Layout at 1440, 1280, 1024 and 390 px, on a contact with a rich history, on the same contact's Activity tab and on an empty contact (Overview and Activity): no horizontal scroll
+    bar on the page at any width; at 1440 and 1280 px no empty band under the middle column (a rich history overflows and scrolls; the empty state's card reaches the bottom: band 0 px).
+  - Stage picker: opens as a vertical list with a search box (10 stages) and no horizontal scroll bar (270 of 270 px), the current stage checked, Enter opens a stage's statuses,
+    Escape closes and returns the focus, the search narrows, "Move to ..." saves (PATCH), the field changes, Undo moves it back (second PATCH), a refused save (the API answered 500)
+    puts the stage back and says why, the 390 px picker is a bottom sheet with no horizontal scroll bar. The same popover in the list (with Undo), in the quick view's drawer and in the
+    bulk "Change stage" form (the list opens inside the modal, picking sets the field).
+  - Everything from round 1 still works on the new layout: note, task add and complete, call log with a follow-up task, meeting, the "How did the call go?" prompt, keyboard order of the
+    round actions, the Call menu with Enter and Escape, arrow keys on the compose tabs; dark, right-to-left (Arabic) and 390 px screenshots of the Overview and Activity looked at.
+- Not verified (BL-272 still stands): a screen-reader pass of the picker, the tab bar and the cards; a workspace with a connected WhatsApp number; a real telephony provider; native review of
+  the machine-drafted strings (the 34 new ones too); the picker's bottom sheet on a real phone (only 390 px emulation); the stage board's drag and drop (unchanged code, only its card select
+  became the picker); the contact form's own stage select (unchanged, BL-277).
+- Remaining differences from the references, honestly: at 1280 px the middle column is about 500 px, so the filter pills wrap to two lines; the right column cards are fixed at 288 px;
+  a phone shows the profile card, the folded About list, the tab bar and the cards under the timeline (HubSpot's phone view is a separate app); no Customize / Rearrange tabs; no date filter
+  or "collapse all" on the timeline; no AI summary card; the Deals "+ Add" opens the Deals board (BL-276).
+
+### Defects found by the round 2 checks and fixed
+
+| Defect                                                                                                                                           | Fix                                                                                          |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------- |
+| The six round actions wrapped to two rows in a 320 px column; "Message" was cut                                                                  | 44 px slots, 10 px labels                                                                    |
+| "Stage: Qualified" was cut in the field                                                                                                          | "Stage" as a small prefix and the progress as a thin line and a tooltip                      |
+| The stage list opened behind the quick view's drawer and the bulk form (a modal makes the rest inert)                                            | The list is drawn inside the dialog it was opened from                                       |
+| A toast raised in the quick view (and its Undo) was behind the drawer and could not be pressed                                                   | The drawer hosts its own toast region                                                        |
+| The timeline showed "... and 17 more details" for every stage move (the audit trail records `updatedAt`, `rowVersion`, `lifecycleStageDate` ...) | The row bookkeeping is left out of the timeline (the History section still shows everything) |
+| The groups of a contact lost their place when "Tags and groups" went away                                                                        | Groups are a line under the tags in About this contact                                       |
+| Lint: setState in an effect (picker position), `Date.now()` in render, a hook referring to itself                                                | Measured by hand on the element; `useNow`; the undo reaches the move through a ref           |
+
+### Lead score chip in the quick view and record headers (owner request 2026-10-17)
+
+The quick view header had empty space right of the name; the record page had a score chip that the quick view lacked. Now ONE shared chip (star and number, coloured cold, warm or hot by the lead-scoring thresholds, tooltip "Lead score 78 · Hot lead", a button that opens the Lead score card) sits on the name line of both. Control mapping: wiring section 8.8 (WIRE-CUI-198 to 202). Screenshots: `C:\project\wadesk-port\_work\parity\contact-record-redesign\shots\score-*.png` (record and quick view in light, dark, Arabic RTL and 390 px; the click opening the card on both; the contact without a score).
+
+- Hidden (no empty chip): no score yet, no `record.contacts.read`, or lead scoring off for the workspace. **Superseded 2026-10-17 (owner decision, `fix/lead-score-hidden-when-off`):** this section first kept a score a person typed visible with the app off; that is replaced by ONE rule, below.
+- Checks: tsc exit 0; ESLint on the changed files exit 0; vitest for the contacts, lead-scoring and help-center folders (see the report); 21 locales checked by `check.sh` and `i18n-tool.mjs check`; `gen-registry.mjs` exit 0 (guides updated, EN and AR); browser 31 checks on the scratch stack.
+- Not verified: the chip against a workspace that really lacks the `lead_scoring` plan feature (only unit-tested with the provider); native review of the two new strings in 20 languages; a screen-reader pass.
+- At 390 px the quick view's chip may drop under the name when the name is long (the header buttons take the width); it is never cut off and the drawer has no horizontal scrollbar.
+
+### The lead score is hidden everywhere while lead scoring is off (owner decision 2026-10-17)
+
+**Intended difference from Reference.** Reference stores a hand-typed `lead_score` and always shows it. Here, when lead scoring is OFF for the workspace the score is hidden everywhere, **a score a person typed included**; nothing is deleted (the columns keep their values, the API still returns them) and the values come back when scoring is switched on again. This replaces the earlier decision that kept a typed score visible with the app off (the chip section above).
+
+- **The one rule:** `useLeadScoringEnabled()` in `features/lead-scoring/lib/use-enabled.ts`. On = the plan feature `lead_scoring` (the Marketplace app; `useLeadScoringOn`, unknown counts as on) AND the workspace's own switch (`lead_scoring_settings.enabled`, the one the Settings > AI lead scoring screen saves), read from the new `GET /v2/lead-scoring/status` (`{enabled}`, permission `record.contacts.read`: the full settings need `lsc.runs.read`, which Agent and Viewer do not hold, and they must follow the rule too). The status is requested only when the workspace has the app. While it is loading or cannot be read the score stays hidden (never shown on a guess). The platform kill switch and the AI key are NOT part of the rule (they are operator and key matters, not the workspace's choice).
+- **Drawn nothing (no empty chip, card, tile or column) when off:** the chip in the record header and the quick view header (`useShowLeadScore`); the Lead score card in the record's right column and the Overview (`AssociationCards`) and the Inbox side panel's score card (`ScoreCard` draws nothing itself); the Lead score tile of the communication stats; the kanban card badge; the Lead score box of the contact form (an unchanged score is never sent, so saving leaves it alone); the lead score entries of the field history.
+- **List:** the Lead score column is left out of the table and the Columns/"+" picker (`omittedColumns`, with the company column's existing omission); a stored column choice or a saved view that lists it keeps the id and the column returns with the score (`restoreOmitted` keeps it in the view when the view is saved or compared). It was never one of the seven default columns.
+- **Filters:** the "Hot leads" quick chip and its row in the view picker are left out (`availablePresets`); the Lead score field is not offered for a new condition in the rules builder of the Contacts filter, segments and the view editor (`FieldDef.hidden`), but a rule that already uses it still reads as "Lead score" (it is not flagged as a deleted field) and keeps working.
+- **Not changed:** the contact API still returns `leadScore*` (asking for less would need a field projection in `GET /contacts`; not cheap); the "AI lead scoring" admin screens, the Growth propensity figure (its own AI figure, not the contact's lead score) and the lead-scoring settings stay as they were; the import of a `lead_score` column and the API are unchanged.
+- **Tests:** `lead-score-chip.dom.test.tsx`, `score-card.test.tsx`, `record.render.test.tsx` (AssociationCards), `data-sections.test.tsx` (stats tile, field history), `views-bar.render.test.tsx` (quick chips), `columns.test.ts`, `preset-views.test.ts`, `segments/lib/fields.test.ts`.
+- Not verified in a browser against a workspace with the switch off and a typed score; see the PR.
+
+## Lead handling: uncontacted leads, automatic follow-ups, duplicate leads (BL-290 to BL-292, owner request 2026-10-18)
+
+**A product extension, not a Reference feature.** Spec: [specs/lead-followup-settings.md](../../specs/lead-followup-settings.md); wiring: [wiring/lead-handling.md](../wiring/lead-handling.md); API: [api/lead-handling.md](../../api/lead-handling.md). The owner's reference screenshots (a lead-management app's Settings pages) gave the idea only; the design is ours (contacts, tasks, lead sources, owners, record scopes, 21 locales, audit, RLS). **Nothing changes for a workspace until it switches a setting on**: every option that writes data is off by default, existing contacts are never touched, and no screen of Reference moves.
+
+### Step 1: uncontacted leads (BL-290)
+
+### Intended differences from the reference platform
+
+| #   | Where                       | Reference platform       | Ours, and why                                                                                                                                                                                                                                                                                                                |
+| --- | --------------------------- | ------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| L01 | Contacts                    | No "uncontacted" concept | `contacts.uncontacted_since` marker (null for every existing contact), a quiet dot in the list, a chip in the record header and quick view, an "Uncontacted" view and quick chip (offered only while a contact carries the marker, so a workspace that never uses it sees no new chip), a More-menu action and a bulk action |
+| L02 | Settings                    | Nothing                  | Settings > Automation and AI > Uncontacted leads (`admin.settings.manage`, Owner and Admin): four "mark as contacted" options (on by default: they only act on contacts already marked), three "mark new leads" options and a reassign choice (off, keep)                                                                    |
+| L03 | What counts as reaching out | n/a                      | Our own actions: the contact buttons and logged calls, a person's inbox message (typed text, saved reply, template, file: the server cannot tell a saved reply from typing), a campaign, broadcast or flow send, a timeline note, meeting or activity. First-reply, FAQ and consent-keyword bots do not count                |
+| L04 | Row version                 | n/a                      | The marker moves without bumping `row_version` (like `last_activity_at`), so a colleague's reply never 409s an open edit form                                                                                                                                                                                                |
+
+### Checks run
+
+See the pull request body (tsc, ESLint, unit, real-Postgres e2e, web tests, `db:verify-schema`, registry spec, 21 locales).
+
+### Not verified, and why
+
+A live WhatsApp or e-mail send through a real provider (the dispatch hook is covered by its transaction path and a service-level test, not a provider); campaign and broadcast sends end to end (the hooks sit on the per-recipient `sent` write); native review of the machine-drafted strings in 20 languages.
+
+### Step 2: automatic follow-ups (BL-291)
+
+### Intended differences from the reference platform
+
+| #   | Where    | Reference platform   | Ours, and why                                                                                                                                                                                                                                                                                                                               |
+| --- | -------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| L05 | Contacts | No follow-up concept | A contact's next follow-up is an open task of kind `follow_up` (one per contact), so the task list, the due reminder sweep, notifications, scopes and audit already work. Shown as "Next follow-up" in the record header and quick view (only when one exists), as a list column, a filter and three views (offered once a contact has one) |
+| L06 | Settings | Nothing              | Settings > Automation and AI > Follow-ups: four situations (none, overdue, today, later; a someday follow-up counts as none), default date (1 day, 3 days, 1 week, 1 month, custom days, someday, none = complete the open one) and alert time, all read on the workspace's time zone. Everything off by default                            |
+| L07 | Who      | n/a                  | The contact's owner, else the person who got in touch; an existing follow-up keeps its person. A per-user default is not built (BL-293)                                                                                                                                                                                                     |
+| L08 | By hand  | n/a                  | More menu: Set / Change / Remove follow-up; Done, Snooze (1 day, 3 days, next week at the default time) and Change date on the header row                                                                                                                                                                                                   |
+
+### Step 3: duplicate leads (BL-292)
+
+### Intended differences from the reference platform
+
+| #   | Where    | Reference platform | Ours, and why                                                                                                                                                                                                                  |
+| --- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| L09 | Settings | Nothing            | Settings > Automation and AI > Duplicate leads: a lead whose phone or e-mail matches a contact is merged (default, today's behaviour) or becomes a separate contact; optional timeline note on merge (off by default).         |
+| L10 | Identity | n/a                | A separate contact never takes the shared identity: it stays with the first contact so messages keep routing there; the new contact says on its timeline that it may be a duplicate of which contact, and can be merged later. |

@@ -62,7 +62,8 @@
       "field_match": "Corrispondenza campo",
       "date_field_match": "Corrispondenza data",
       "schedule": "Programmazione",
-      "ecom_event": "Evento dello store"
+      "ecom_event": "Evento dello store",
+      "segment_leave": "Esci dal segmento"
     },
     "endReason": {
       "end_node": "Raggiunta la fine del Flow",

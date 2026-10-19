@@ -5,12 +5,12 @@ import { createHash, createHmac, randomBytes } from 'node:crypto';
  * Connection check for an S3-compatible bucket (TW-SET-039): write a small probe object, then delete it.
  *
  * No SDK: requests are signed here (AWS Signature V4), which every provider the settings page offers
- * (S3, Wasabi, Bunny, Spaces, R2, MinIO) accepts. Only the probe lives here; serving real uploads is the
+ * (S3, Wasabi, Bunny, Spaces, R2) accepts. Only the probe lives here; serving real uploads is the
  * file module's job and will reuse `resolveStorageTarget`.
  */
 
 export interface StorageSettingsInput {
-  provider: 's3' | 'wasabi' | 'bunny' | 'spaces' | 'r2' | 'minio';
+  provider: 's3' | 'wasabi' | 'bunny' | 'spaces' | 'r2';
   basePath: string;
   accessKeyId: string;
   region: string;
@@ -59,7 +59,7 @@ export function resolveStorageTarget(s: StorageSettingsInput): StorageTarget | n
   if (!endpoint) {
     if (s.provider === 'wasabi') endpoint = `https://s3.${region}.wasabisys.com`;
     else if (s.provider === 's3') endpoint = `https://s3.${region}.amazonaws.com`;
-    else return null; // spaces, r2 and minio have no default host
+    else return null; // spaces and r2 have no default host
   }
   return {
     endpoint: stripBucket(endpoint, s.bucket),
@@ -90,7 +90,7 @@ const encodeSegment = (s: string) =>
 /** Builds the URL and the signed headers for one request (exported for the unit test). */
 export function signS3Request(
   t: StorageTarget,
-  method: 'PUT' | 'DELETE',
+  method: 'PUT' | 'DELETE' | 'HEAD',
   key: string,
   body: Buffer,
   now: Date = new Date(),
@@ -186,6 +186,7 @@ export class ObjectStorageProbe {
         method: 'PUT',
         headers: put.headers,
         body,
+        redirect: 'manual',
         signal: AbortSignal.timeout(10_000),
       });
       if (!putRes.ok) return { ok: false, message: `Connection failed: ${await describe(putRes)}` };
@@ -193,6 +194,7 @@ export class ObjectStorageProbe {
       const delRes = await fetch(del.url, {
         method: 'DELETE',
         headers: del.headers,
+        redirect: 'manual',
         signal: AbortSignal.timeout(10_000),
       });
       if (!delRes.ok) {

@@ -1,0 +1,301 @@
+{
+  "record-assignment": {
+    "back": "Automação",
+    "title": "Regras de atribuição de registros",
+    "intro": "Atribua automaticamente novos {contacts}, empresas e {deals} ao responsável de vendas certo.",
+    "crossNote": "Isto atribui {contacts}, empresas e {deals}. Para atribuir conversas a atendentes, veja <link>Atribuição automática</link>.",
+    "master": {
+      "title": "Ativar a atribuição de registros",
+      "hint": "Desativada até você ativá-la. Quando ativada, as regras abaixo atribuem a alguém da sua equipe cada novo {contact}, empresa ou {deal} que não tenha responsável.",
+      "on": "A atribuição de registros está ativada.",
+      "off": "A atribuição de registros está desativada."
+    },
+    "imports": {
+      "title": "Atribuir também os registros importados",
+      "hint": "Desativado por padrão para que uma importação grande não mude quem é responsável por quê."
+    },
+    "ownerRule": {
+      "title": "Apenas registros sem responsável são atribuídos",
+      "body": "Um responsável definido por uma pessoa nunca é substituído, nem um responsável removido de propósito. O mecanismo preenche um responsável vazio em um registro novo. Se você ativar Reatribuir ao atualizar em uma regra, ele também pode mover um registro que o próprio mecanismo atribuiu antes, desde que ninguém tenha alterado o responsável desde então."
+    },
+    "tabs": {
+      "contact": "{Contacts}",
+      "company": "{Companies}",
+      "deal": "{Deals}",
+      "label": "Módulo"
+    },
+    "views": {
+      "rules": "Regras",
+      "log": "Log de execução"
+    },
+    "how": {
+      "title": "Como funciona a prioridade",
+      "p1": "As regras são testadas da prioridade 1 para baixo. A primeira regra que corresponde e encontra alguém disponível fica com o registro.",
+      "p2": "Apenas as regras ativas entram na priorização. Uma regra pausada mantém seu lugar na lista, mas nunca é executada.",
+      "p3": "Uma regra sem condições corresponde a todos os registros e é executada depois de todas as outras, esteja onde estiver na lista. Esta é a regra de contingência.",
+      "p4": "Um registro que corresponde a várias regras vai para a de maior prioridade.",
+      "p5": "Arraste uma linha, ou use os botões de seta, para mudar a ordem. As regras de contingência e as pausadas ficam em seu próprio grupo no final."
+    },
+    "list": {
+      "title": {
+        "contact": "Regras para {contacts}",
+        "company": "Regras para empresas",
+        "deal": "Regras para {deals}"
+      },
+      "create": "Criar regra",
+      "loading": "Carregando as regras…",
+      "loadFailed": "Não foi possível carregar as regras.",
+      "retry": "Tentar novamente",
+      "readOnly": "Você pode ver estas regras, mas não alterá-las. Para alterá-las é preciso ter a permissão de gerenciar a atribuição de registros.",
+      "empty": {
+        "title": "Ainda não há regras",
+        "contact": "Novos {contacts} mantêm o responsável com que são criados.",
+        "company": "Novas empresas mantêm o responsável com que são criadas.",
+        "deal": "Novos {deals} mantêm o responsável com que são criados.",
+        "create": "Criar a primeira regra"
+      },
+      "col": {
+        "priority": "Prioridade",
+        "rule": "Regra",
+        "assignTo": "Atribuir a",
+        "method": "Método",
+        "active": "Ativa",
+        "used": "Usos",
+        "modified": "Última modificação"
+      },
+      "fallback": "Contingência",
+      "fallbackHint": "Uma regra sem condições corresponde a todos os registros e é executada depois de todas as outras.",
+      "notPrioritised": "Pausada",
+      "noConditions": "Sem condições: corresponde a todos os registros",
+      "brokenConditions": "{count, plural, one {# condição quebrada} other {# condições quebradas}}",
+      "brokenHint": "Uma condição aponta para algo que foi excluído. Ela não corresponde a nada até você corrigi-la.",
+      "usedCount": "{count, plural, =0 {Nunca usada} one {Usada # vez} other {Usada # vezes}}",
+      "lastUsed": "Último uso {when}",
+      "modifiedBy": "{name}, {when}",
+      "nobody": "Ninguém",
+      "unknownPerson": "Ex-membro",
+      "unknownTeam": "Equipe removida",
+      "teamName": "Equipe: {name}",
+      "skipsOffline": "Ignora pessoas que estão offline",
+      "reassigns": "Reatribui ao atualizar",
+      "activeFor": "A regra {name} está ativa",
+      "dragHandle": "Arraste {name} para mudar sua prioridade",
+      "moveUp": "Mover {name} para cima",
+      "moveDown": "Mover {name} para baixo",
+      "moved": "{name} foi movida para a posição {place}.",
+      "actions": "Ações de {name}",
+      "edit": "Editar",
+      "clone": "Duplicar",
+      "delete": "Excluir"
+    },
+    "strategy": {
+      "round_robin": "Rodízio (round robin)",
+      "least_busy": "Menor carga de trabalho em aberto",
+      "fixed": "Usuário específico",
+      "hint": {
+        "round_robin": "Alterna entre as pessoas, em uma ordem constante.",
+        "least_busy": {
+          "contact": "Atribui à pessoa que tem menos {contacts} no momento.",
+          "company": "Atribui à pessoa que tem menos empresas no momento.",
+          "deal": "Atribui à pessoa que tem menos {deals} em aberto no momento."
+        },
+        "fixed": "Sempre a mesma pessoa. Enquanto ela estiver de licença, o substituto assume."
+      }
+    },
+    "editor": {
+      "titleNew": "Nova regra",
+      "titleEdit": "Editar regra",
+      "name": "Nome da regra",
+      "description": "Descrição (opcional)",
+      "module": "Módulo",
+      "moduleLocked": "O módulo de uma regra não pode ser alterado. Crie uma nova regra para outro módulo.",
+      "conditions": {
+        "title": "Condições",
+        "hint": "Um registro corresponde quando seus campos atendem às condições. Escolha um campo, depois como compará-lo e então um valor.",
+        "emptyTitle": "Sem condições: corresponde a todos os registros, é executada por último (contingência)",
+        "emptyBody": "Esta regra pega todos os registros que nenhuma outra regra pegou. Adicione uma condição para restringi-la.",
+        "add": "Adicionar condição",
+        "counts": "{conditions} de {max} condições",
+        "loading": "Carregando os campos…",
+        "partial": "Alguns campos não puderam ser carregados. Você ainda pode criar regras com os que foram carregados."
+      },
+      "group": {
+        "company": "Campos da empresa",
+        "deal": "Campos de {Deal}"
+      },
+      "assign": {
+        "title": "Atribuir a",
+        "method": "Método",
+        "people": "Pessoas",
+        "person": "Pessoa",
+        "peoplePlaceholder": "Escolher pessoas",
+        "personPlaceholder": "Escolher uma pessoa",
+        "teams": "Equipes",
+        "teamsPlaceholder": "Escolher equipes",
+        "teamsNote": "Aqui, uma equipe é um grupo de pessoas para escolher. Um registro não pertence a uma equipe: o responsável dele é um dos membros da equipe.",
+        "noPeople": "Nenhuma pessoa encontrada.",
+        "removePerson": "Remover {name}",
+        "onLeave": "de licença",
+        "skipOffline": "Ignorar pessoas que estão offline",
+        "skipOfflineHint": "Pessoas de licença são sempre ignoradas.",
+        "reassign": "Reatribuir quando uma atualização fizer o registro passar a corresponder a esta regra",
+        "reassignHint": "Vale apenas para registros que este mecanismo atribuiu por conta própria, e só enquanto ninguém tiver alterado o responsável desde então. Desativado por padrão: um registro é atribuído uma única vez."
+      },
+      "problems": {
+        "name": "Dê um nome à regra.",
+        "people": "Escolha pelo menos uma pessoa ou equipe.",
+        "fixedOne": "Uma regra de usuário específico precisa de exatamente uma pessoa e nenhuma equipe.",
+        "conditions": "Corrija as condições destacadas antes de salvar.",
+        "server": "O servidor recusou as regras."
+      },
+      "saveActivate": "Salvar e ativar",
+      "savePaused": "Salvar como pausada",
+      "save": "Salvar alterações",
+      "cancel": "Cancelar",
+      "unsavedTitle": "Sair sem salvar?",
+      "unsavedMessage": "As alterações nesta regra não foram salvas.",
+      "stay": "Continuar editando",
+      "leave": "Sair"
+    },
+    "fields": {
+      "origin": "Chegou por",
+      "company": {
+        "name": "Nome",
+        "email": "E-mail",
+        "phone": "Telefone",
+        "domain": "Domínio do site",
+        "industry": "Setor",
+        "sizeRange": "Tamanho",
+        "address": "Endereço",
+        "status": "Status",
+        "createdAt": "Criado",
+        "updatedAt": "Última atualização"
+      },
+      "deal": {
+        "title": "Título",
+        "value": "Valor",
+        "currency": "Moeda",
+        "pipeline": "Pipeline (funil)",
+        "stage": "Etapa",
+        "status": "Status",
+        "source": "Origem",
+        "expectedCloseDate": "Data de fechamento prevista",
+        "createdAt": "Criado",
+        "hasContact": "Tem um {contact}",
+        "hasCompany": "Tem uma empresa"
+      },
+      "dealStatus": {
+        "open": "Aberto",
+        "won": "Ganho",
+        "lost": "Perdido"
+      }
+    },
+    "origin": {
+      "manual": "Adicionado por uma pessoa",
+      "import": "Importação",
+      "inbound": "Primeira mensagem",
+      "form": "Formulário",
+      "lead": "Origem do lead",
+      "api": "API"
+    },
+    "test": {
+      "title": "Testar com um registro",
+      "hint": "Escolha um registro real e veja qual regra o pegaria e quem o receberia. Nada é alterado, e funciona mesmo com a chave desligada.",
+      "search": {
+        "contact": "Buscar {contacts} por nome, e-mail ou telefone",
+        "company": "Buscar empresas por nome",
+        "deal": "Buscar {deals} por título"
+      },
+      "searchLabel": "Registro a testar",
+      "searching": "Buscando…",
+      "noMatches": "Nenhum registro encontrado.",
+      "searchFailed": "A busca não funcionou. Talvez você não tenha permissão para ver estes registros.",
+      "clear": "Escolher outro registro",
+      "run": "Testar",
+      "running": "Testando…",
+      "failed": "O teste não foi executado. Tente novamente.",
+      "off": "A atribuição de registros está desativada, então isto mostra o que aconteceria se estivesse ativada.",
+      "outcome": {
+        "would_assign": "{record} iria para {owner} pela regra {rule}.",
+        "disabled": "A atribuição de registros está desativada neste espaço de trabalho, então nada aconteceria.",
+        "has_owner": "{record} já tem um responsável, então nenhuma regra seria executada. Um responsável definido por alguém nunca é substituído.",
+        "no_rule": "Nenhuma regra ativa corresponde a {record}.",
+        "nobody_available": "Uma regra corresponde a {record}, mas todos os nomeados estão de licença, offline ou não estão mais aqui.",
+        "plan": "Seu plano não inclui regras de atribuição de registros.",
+        "not_found": "Esse registro não foi encontrado. Ele pode ter sido excluído ou estar fora do que você pode ver."
+      },
+      "traceTitle": "Regras testadas, em ordem",
+      "traceEmpty": "Nenhuma regra ativa foi testada.",
+      "trace": {
+        "winner": "Correspondeu e fica com o registro",
+        "matched": "Correspondeu",
+        "not_matched": "Não correspondeu",
+        "nobody": "Correspondeu, mas ninguém estava disponível",
+        "broken": "Tem uma condição quebrada"
+      },
+      "skipped": "Ignorada porque ninguém estava disponível: {names}"
+    },
+    "log": {
+      "title": "Log de execução",
+      "intro": "O que o mecanismo fez com cada registro, do mais recente ao mais antigo. As entradas são mantidas por {days} dias e contêm apenas IDs, nunca o conteúdo de um registro.",
+      "filterOutcome": "Resultado",
+      "filterRule": "Regra",
+      "allOutcomes": "Todos os resultados",
+      "allRules": "Todas as regras",
+      "loading": "Carregando o log de execução…",
+      "loadFailed": "Não foi possível carregar o log de execução.",
+      "empty": "Nada foi atribuído ainda.",
+      "emptyFiltered": "Nenhuma entrada corresponde a estes filtros.",
+      "loadMore": "Carregar mais",
+      "col": {
+        "when": "Quando",
+        "record": "Registro",
+        "outcome": "Resultado",
+        "reason": "Motivo",
+        "rule": "Regra",
+        "assignedTo": "Atribuído a",
+        "method": "Método",
+        "arrived": "Chegou por"
+      },
+      "deletedRecord": "Excluída",
+      "noRule": "Sem regra",
+      "outcome": {
+        "assigned": "Atribuído",
+        "reassigned": "Reatribuído",
+        "skipped": "Deixado como está"
+      },
+      "reason": {
+        "matched": "Uma regra correspondeu",
+        "has_owner": "Já tinha um responsável",
+        "no_rule": "Nenhuma regra correspondeu",
+        "nobody_available": "Ninguém estava disponível",
+        "raced": "O responsável mudou durante a atribuição",
+        "unchanged": "Já está com a regra certa"
+      },
+      "trigger": {
+        "created": "Novo registro",
+        "updated": "Registro atualizado"
+      },
+      "showTrace": "Mostrar como foi decidido",
+      "hideTrace": "Ocultar como foi decidido",
+      "traceFor": "Como foi decidido para {record}"
+    },
+    "toast": {
+      "created": "Regra criada.",
+      "saved": "Regra salva.",
+      "deleted": "Regra excluída.",
+      "cloned": "Regra copiada. A cópia está pausada.",
+      "activated": "Regra ativada.",
+      "paused": "Regra pausada.",
+      "reordered": "Ordem salva.",
+      "conflict": "Outra pessoa alterou esta regra. A versão mais recente foi carregada. Confira e aplique sua alteração novamente.",
+      "failed": "Algo deu errado. Tente novamente."
+    },
+    "delete": {
+      "title": "Excluir esta regra?",
+      "message": "A regra {name} deixará de atribuir. Os registros que ela já atribuiu mantêm o responsável.",
+      "confirm": "Excluir",
+      "cancel": "Cancelar"
+    }
+  }
+}

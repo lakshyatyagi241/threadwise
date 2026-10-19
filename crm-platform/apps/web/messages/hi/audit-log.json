@@ -92,7 +92,8 @@
       "api_keys": "API कुंजियाँ",
       "audit-log": "ऑडिट लॉग",
       "audit-log-exports": "ऑडिट लॉग एक्सपोर्ट",
-      "contact_consent_exports": "सहमति प्रमाण एक्सपोर्ट"
+      "contact_consent_exports": "सहमति प्रमाण एक्सपोर्ट",
+      "revenue-report-exports": "राजस्व रिपोर्ट फ़ाइलें"
     },
     "table": {
       "caption": "ऑडिट एंट्री, सबसे नई पहले। समय आपके टाइम ज़ोन ({zone}) में दिखाया गया है।",

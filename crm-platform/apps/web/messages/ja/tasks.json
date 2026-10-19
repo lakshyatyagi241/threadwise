@@ -100,7 +100,8 @@
       "views": {
         "list": "リスト",
         "board": "期限日別のボード"
-      }
+      },
+      "linkCompany": "会社"
     },
     "table": {
       "scrollArea": "タスクの表",
@@ -126,7 +127,8 @@
       "open": "開く",
       "edit": "編集",
       "delete": "削除",
-      "unassigned": "未割り当て"
+      "unassigned": "未割り当て",
+      "followUpBadge": "フォローアップ"
     },
     "bulk": {
       "label": "選択したタスクの操作",
@@ -204,7 +206,8 @@
         "notesTooLong": "メモが長すぎます（5000 文字以内）。",
         "dueInvalid": "その日付は無効です。",
         "assigneeInvalid": "その担当者は、このワークスペースの有効なメンバーではありません。"
-      }
+      },
+      "company": "会社"
     },
     "drawer": {
       "loading": "タスクを読み込んでいます",
@@ -268,7 +271,8 @@
       "searching": "検索中",
       "unavailable": "現在、検索は利用できません。",
       "none": "一致する項目はありません。",
-      "unlink": "リンクを解除"
+      "unlink": "リンクを解除",
+      "searchCompany": "会社を検索"
     },
     "errors": {
       "network": "サーバーに接続できませんでした。接続を確認して、もう一度お試しください。",
@@ -323,7 +327,21 @@
       "loadMore": "さらに読み込む",
       "loadMoreDone": "完了済みをさらに読み込む",
       "showDone": "完了済みを表示",
-      "hideDone": "完了済みを非表示"
+      "hideDone": "完了済みを非表示",
+      "gone": "これらのタスクが属するレコードは利用できなくなりました。"
+    },
+    "inline": {
+      "addTask": "タスクを追加",
+      "rowLabel": "タスクを追加",
+      "titleLabel": "タスク名",
+      "titlePlaceholder": "タスク名を入力し、Enter を押して保存します",
+      "due": "期限の日時",
+      "assignee": "担当者",
+      "priority": "優先度（任意）",
+      "hint": "Enter で保存、Escape で閉じます。",
+      "save": "タスクを追加",
+      "cancel": "キャンセル",
+      "failed": "タスクを保存できませんでした。入力した内容は入力欄に戻してあります。"
     }
   }
 }

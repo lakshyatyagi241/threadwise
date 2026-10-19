@@ -7,6 +7,7 @@ import {
 import { AppError } from '../../../src/common/errors/app-error';
 import { AccountGateGuard } from '../../../src/modules/auth/guards/account-gate.guard';
 import { suspendedPathAllowed } from '../../../src/modules/auth/guards/suspended-paths';
+import { AccountGateService } from '../../../src/modules/auth/security/account-gate.service';
 import { OrgSuspensionService } from '../../../src/modules/auth/security/org-suspension.service';
 
 const ctx = (over: Partial<RequestContext> & Record<string, unknown> = {}) =>
@@ -48,7 +49,7 @@ function guardFor(opts: { suspended: boolean; routeOpts?: { suspended?: boolean 
         switchToHttp: () => ({ getRequest: () => ({ originalUrl: url, url, method }) }),
       } as never),
     );
-  return { run, orgs };
+  return { run, orgs, gates };
 }
 
 describe('suspended workspace gate', () => {
@@ -91,6 +92,49 @@ describe('suspended workspace gate', () => {
   it('passes an active workspace', async () => {
     const { run } = guardFor({ suspended: false });
     await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);
+  });
+
+  it('starts the user-gate read together with the workspace read, and still throws the workspace error first', async () => {
+    const orgs = { isSuspended: vi.fn() };
+    let release!: (v: boolean) => void;
+    orgs.isSuspended.mockReturnValue(
+      new Promise<boolean>((r) => {
+        release = r;
+      }),
+    );
+    // The user-gate read fails: with a suspended workspace that failure must neither win nor surface as an unhandled rejection.
+    const gates = { stateFor: vi.fn().mockRejectedValue(new Error('redis down')) };
+    const reflector = { getAllAndOverride: vi.fn(() => false) };
+    const guard = new AccountGateGuard(reflector as never, gates as never, orgs as never);
+    const pending = RequestContextStore.run(ctx(), () =>
+      guard.canActivate({
+        getType: () => 'http',
+        getHandler: () => undefined,
+        getClass: () => undefined,
+        switchToHttp: () => ({
+          getRequest: () => ({ originalUrl: '/v2/contacts', url: '/v2/contacts', method: 'GET' }),
+        }),
+      } as never),
+    );
+    // Both reads are out before the workspace verdict has arrived.
+    expect(gates.stateFor).toHaveBeenCalledTimes(1);
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+    release(true);
+    const err = await pending.catch((e: unknown) => e);
+    expect((err as AppError).code).toBe(ERROR_CODES.WSP_ORG_SUSPENDED);
+  });
+
+  it('does not read the user gates for an operator impersonation or a non-user actor', async () => {
+    const { run, gates } = guardFor({ suspended: false });
+    await run('/v2/contacts', 'GET', ctx({ actorType: 'api_key', userId: null }));
+    expect(gates.stateFor).not.toHaveBeenCalled();
+  });
+
+  it('asks Redis about the workspace once per request, not again inside the gate state', async () => {
+    const { run, orgs, gates } = guardFor({ suspended: false });
+    await expect(run('/v2/contacts', 'GET', ctx())).resolves.toBe(true);
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+    expect(gates.stateFor).toHaveBeenCalledWith(7, 1, { includeOrgSuspension: false });
   });
 
   it('never gates a platform operator', async () => {
@@ -136,6 +180,30 @@ describe('suspended path allow-list', () => {
     ['/', 'GET', false],
   ])('%s %s -> %s', (url, method, allowed) => {
     expect(suspendedPathAllowed(url, method)).toBe(allowed);
+  });
+});
+
+describe('AccountGateService.stateFor and the workspace lookup', () => {
+  function build() {
+    const own = JSON.stringify({ ...activeUser });
+    const redis = { get: vi.fn(async () => own), setex: vi.fn() };
+    const orgs = { isSuspended: vi.fn().mockResolvedValue(true) };
+    const svc = new AccountGateService({} as never, {} as never, redis as never, orgs as never);
+    return { svc, orgs };
+  }
+
+  it('includes the workspace verdict by default (the flags a login returns need it)', async () => {
+    const { svc, orgs } = build();
+    expect(await svc.stateFor(7, 1)).toMatchObject({ orgSuspended: true });
+    expect(orgs.isSuspended).toHaveBeenCalledTimes(1);
+  });
+
+  it('skips the workspace lookup when the caller says it has made it', async () => {
+    const { svc, orgs } = build();
+    const state = await svc.stateFor(7, 1, { includeOrgSuspension: false });
+    expect(orgs.isSuspended).not.toHaveBeenCalled();
+    expect(state).toEqual(activeUser);
+    expect('orgSuspended' in state).toBe(false);
   });
 });
 

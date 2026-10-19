@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "أقسام جهة الاتصال",
+          "section": {
+            "overview": "نظرة عامة",
+            "activities": "النشاط",
+            "conversations": "المحادثات",
+            "notes": "الملاحظات",
+            "tasks": "المهام",
+            "meetings": "الاجتماعات",
+            "files": "الملفات",
+            "deals": "الصفقات",
+            "appointments": "المواعيد",
+            "sales": "الفواتير",
+            "company": "الشركة",
+            "details": "التفاصيل",
+            "stats": "الإحصاءات",
+            "lead-source": "المصدر",
+            "consent": "الموافقة",
+            "history": "السجل"
+          },
+          "more": "المزيد",
+          "moreLabel": "أقسام أخرى"
+        },
+        "actions": {
+          "label": "ما يمكنك فعله مع جهة الاتصال هذه",
+          "call": "اتصال",
+          "callWhatsapp": "الاتصال عبر WhatsApp",
+          "callPhone": "الاتصال من هاتفك",
+          "logCall": "تسجيل مكالمة",
+          "callMore": "طرق أخرى للاتصال",
+          "message": "رسالة",
+          "messageChat": "فتح محادثة WhatsApp",
+          "messageTemplate": "إرسال قالب WhatsApp",
+          "messageEmail": "إرسال بريد إلكتروني",
+          "messageMore": "طرق أخرى للمراسلة",
+          "fieldHistory": "سجل الحقول",
+          "more": "المزيد"
+        },
+        "stageStrip": {
+          "noStatus": "بلا حالة"
+        },
+        "keyDetails": {
+          "editAll": "تعديل الكل",
+          "edit": "تعديل {field}",
+          "add": "إضافة {field}",
+          "conflict": "غيّر شخص آخر جهة الاتصال هذه أولًا. أُعيد تحميلها؛ حاول مرة أخرى.",
+          "invalid": "لا يبدو أن هذه قيمة صالحة لـ {field}.",
+          "forbidden": "ليست لديك صلاحية تغيير جهة الاتصال هذه.",
+          "failed": "تعذّر الحفظ. حاول مرة أخرى.",
+          "owner": "المالك",
+          "city": "المدينة",
+          "showAll": "عرض كل التفاصيل",
+          "showLess": "عرض أقل",
+          "social": "وسائل التواصل الاجتماعي",
+          "leadSource": "من أين جاءت جهة الاتصال هذه",
+          "aboutTitle": "عن جهة الاتصال هذه"
+        },
+        "cards": {
+          "company": "الشركة",
+          "companyNone": "لا يوجد بعد",
+          "timezone": "المنطقة الزمنية والموقع",
+          "timezoneNone": "غير معروف بعد",
+          "privacy": "الخصوصية",
+          "privacyMinor": "قاصر",
+          "score": "تقييم العميل المحتمل",
+          "scoreNone": "لم يتم التقييم بعد",
+          "label": "ما يتعلق بجهة الاتصال هذه",
+          "tasks": "المهام المفتوحة",
+          "tasksNone": "لا شيء في الانتظار.",
+          "deals": "الصفقات",
+          "dealsNone": "لا توجد صفقات بعد.",
+          "add": "+ إضافة",
+          "viewAll": "عرض الكل"
+        },
+        "compose": {
+          "label": "إضافة إلى النشاط",
+          "tabs": "ماذا تريد أن تضيف",
+          "tab": {
+            "note": "ملاحظة",
+            "task": "مهمة",
+            "call": "مكالمة",
+            "meeting": "اجتماع"
+          }
+        },
+        "logCall": {
+          "label": "تسجيل مكالمة",
+          "direction": "من اتصل",
+          "directionOption": {
+            "outbound": "أنا اتصلت بهم",
+            "inbound": "هم اتصلوا بي"
+          },
+          "minutesPlaceholder": "اختياري",
+          "notesPlaceholder": "ماذا قيل؟ (اختياري)",
+          "duePreset": {
+            "1": "غدًا",
+            "3": "بعد 3 أيام",
+            "7": "بعد أسبوع"
+          },
+          "saved": "تم تسجيل المكالمة.",
+          "forbidden": "ليست لديك صلاحية تسجيل المكالمات.",
+          "unavailable": "تسجيل المكالمات غير متاح هنا بعد.",
+          "failed": "تعذّر تسجيل المكالمة. لم يضع شيء: حاول مرة أخرى."
+        },
+        "callNudge": {
+          "question": "كيف كانت المكالمة مع {name}؟",
+          "log": "تسجيلها",
+          "dismiss": "ليس الآن"
+        },
+        "profile": {
+          "label": "ملف جهة الاتصال"
+        },
+        "stagePicker": {
+          "menu": "اختر مرحلة",
+          "search": "ابحث عن مرحلة",
+          "none": "لا توجد مرحلة مطابقة.",
+          "moveTo": "النقل إلى {stage}",
+          "statusIn": "الحالة في {stage}",
+          "default": "الافتراضية",
+          "progress": "{current} من {total}",
+          "undo": "تراجع",
+          "undone": "تمت العودة إلى {stage}.",
+          "statusSet": "تم تعيين الحالة إلى {status}.",
+          "prefix": "المرحلة"
+        },
+        "summary": {
+          "label": "الملخص",
+          "tasks": "المهام المفتوحة",
+          "overdue": "{count} متأخرة",
+          "nextDue": "الموعد التالي {when}",
+          "noDue": "لا توجد مواعيد نهائية",
+          "meeting": "الاجتماع التالي",
+          "noMeeting": "لا شيء مخطط",
+          "lastActivity": "آخر نشاط",
+          "noActivity": "لا يوجد نشاط بعد",
+          "deals": "الصفقات المفتوحة",
+          "wonDeals": "{count, plural, =0 {لا صفقات رابحة} one {صفقة رابحة واحدة} two {صفقتان رابحتان} few {# صفقات رابحة} many {# صفقة رابحة} other {# صفقة رابحة}}"
+        },
+        "scoreChip": {
+          "title": "درجة العميل المحتمل {score} · {band}",
+          "aria": "درجة العميل المحتمل {score}، {band}. عرض تفاصيل الدرجة."
+        }
+      },
+      "timeline": {
+        "title": "النشاط",
+        "viewAll": "عرض كل النشاط",
+        "filterLabel": "عرض",
+        "filters": {
+          "all": "الكل",
+          "messages": "الرسائل",
+          "calls": "المكالمات",
+          "notes": "الملاحظات",
+          "tasks": "المهام",
+          "meetings": "الاجتماعات",
+          "changes": "التغييرات"
+        },
+        "searchLabel": "البحث في نشاط جهة الاتصال هذه",
+        "searchPlaceholder": "البحث في النشاط",
+        "clearSearch": "مسح البحث",
+        "searchHint": "يتم البحث فيما تم تحميله حتى الآن فقط. حمّل المزيد لتنظر إلى ما هو أقدم.",
+        "groups": {
+          "upNext": "التالي",
+          "today": "اليوم",
+          "yesterday": "أمس",
+          "thisWeek": "هذا الأسبوع",
+          "earlier": "سابقًا"
+        },
+        "loading": "جارٍ تحميل النشاط...",
+        "loadMore": "تحميل المزيد",
+        "noMatch": "لا توجد نتائج مطابقة.",
+        "emptyShort": "لا يوجد شيء هنا بعد.",
+        "showAll": "عرض كل النشاط",
+        "noneYet": "لا يوجد ما هو أحدث بعد. حمّل المزيد لتنظر إلى ما هو أقدم.",
+        "partial": "تعذّر تحميل جزء من النشاط.",
+        "retry": "حاول مرة أخرى",
+        "empty": {
+          "title": "لا يوجد نشاط بعد",
+          "message": "كل ما تفعله مع {name} سيظهر هنا: الملاحظات والمكالمات والرسائل والمهام والاجتماعات.",
+          "messageNoName": "كل ما تفعله مع جهة الاتصال هذه سيظهر هنا: الملاحظات والمكالمات والرسائل والمهام والاجتماعات.",
+          "note": "إضافة ملاحظة",
+          "call": "تسجيل مكالمة",
+          "task": "إضافة مهمة",
+          "meeting": "جدولة اجتماع"
+        },
+        "entry": {
+          "note": "ملاحظة: {text}",
+          "edited": "تم التعديل",
+          "task": {
+            "done": "اكتملت المهمة: {title}",
+            "overdue": "متأخرة، كان موعدها {when}",
+            "due": "الموعد {when}",
+            "noDue": "بلا موعد نهائي"
+          },
+          "meeting": {
+            "upcoming": "اجتماع: {title}",
+            "past": "تم اللقاء: {title}",
+            "notHeld": "لم يُعقد: {title}",
+            "noShow": "لم يحضر: {title}"
+          },
+          "call": {
+            "inbound": "مكالمة واردة",
+            "outbound": "مكالمة صادرة",
+            "call": "مكالمة",
+            "seconds": "{seconds} ث",
+            "minutes": "{minutes} د",
+            "outcome": {
+              "connected": "تم الاتصال",
+              "noAnswer": "لم يُجب",
+              "busy": "مشغول",
+              "voicemail": "ترك رسالة صوتية",
+              "wrongNumber": "رقم خاطئ",
+              "declined": "مرفوضة",
+              "failed": "فشلت",
+              "inProgress": "قيد التنفيذ"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "مسجّلة يدويًا",
+              "telephony": "نظام الهاتف",
+              "mobile_app": "تطبيق الجوال",
+              "web_click_to_call": "الهاتف"
+            }
+          },
+          "message": {
+            "summary": "محادثة على {channel}",
+            "unread": "{count} غير مقروءة"
+          },
+          "email": {
+            "sent": "تم إرسال بريد إلكتروني: {title}",
+            "received": "تم استلام بريد إلكتروني: {title}"
+          },
+          "change": {
+            "stage": "تغيّرت المرحلة من {from} إلى {to}",
+            "field": "تغيّر {field} من {from} إلى {to}",
+            "stageAndMore": "تغيّرت المرحلة من {from} إلى {to}، و{count, plural, one {تفصيل واحد آخر} two {تفصيلان آخران} few {# تفاصيل أخرى} many {# تفصيلًا آخر} other {# تفصيل آخر}}",
+            "several": "تم تحديث {count, plural, one {تفصيل واحد} two {تفصيلين} few {# تفاصيل} many {# تفصيلًا} other {# تفصيل}}"
+          },
+          "consent": {
+            "granted": "تم منح موافقة {channel}",
+            "withdrawn": "تم سحب موافقة {channel}",
+            "service": "رسائل الخدمة",
+            "marketing": "الرسائل التسويقية"
+          },
+          "by": "بواسطة {name}",
+          "system": "النظام"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,203 @@
+{
+  "crm-revenue": {
+    "kicker": "CRM / Rapports",
+    "title": "Rapport de revenus",
+    "subtitle": "Ce que vous avez facturé, la part déjà payée, ce qui reste dû et l'argent encaissé, pour la période de votre choix.",
+    "back": "Tableau de bord CRM",
+    "period": "du {from} au {to} ({zone})",
+    "comparedWith": "Comparaison avec {mode} : du {from} au {to}",
+    "loading": "Chargement du rapport de revenus",
+    "retry": "Réessayer",
+    "stale": "Les chiffres n'ont pas pu être actualisés. Ce sont les derniers chargés.",
+    "empty": {
+      "title": "Rien sur cette période",
+      "message": "Aucune facture n'a été émise et aucun paiement n'a été reçu entre ces dates. Choisissez une autre période ou ouvrez les factures.",
+      "invoices": "Ouvrir les factures"
+    },
+    "mode": {
+      "previous": "la période précédente",
+      "lastYear": "la même période de l'année dernière"
+    },
+    "filters": {
+      "label": "Filtres du rapport",
+      "period": "Période",
+      "range": {
+        "month": "Ce mois-ci",
+        "lastMonth": "Le mois dernier",
+        "quarter": "Ce trimestre",
+        "year": "Cette année",
+        "30d": "30 jours",
+        "90d": "90 jours",
+        "custom": "Personnalisée"
+      },
+      "from": "Du",
+      "to": "Au",
+      "compare": "Comparer avec",
+      "compareOption": {
+        "previous": "Période précédente",
+        "lastYear": "Même période l'année dernière",
+        "none": "Aucune comparaison"
+      },
+      "groupBy": "Répartir par",
+      "groupOption": {
+        "source": "Source du lead",
+        "origin": "Origine de la facture",
+        "product": "Produit",
+        "owner": "Responsable",
+        "team": "Équipe"
+      },
+      "owner": "Responsable",
+      "everyone": "Tout le monde",
+      "team": "Équipe",
+      "allTeams": "Toutes les équipes",
+      "currency": "Devise",
+      "allCurrencies": "Toutes, affichées en {currency}",
+      "reset": "Réinitialiser les filtres"
+    },
+    "note": {
+      "converted": "Plusieurs devises sont utilisées. Les chiffres sont convertis en {currency} ; choisissez une seule devise pour voir ses montants exacts.",
+      "missingRate": "Aucun taux de change pour {currencies} : ces montants sont exclus des chiffres convertis.",
+      "invoiced": "Facturé, payé et dû comptent les factures émises sur la période (les brouillons, les factures annulées et les proformas sont exclus). Encaissé et remboursé comptent l'argent reçu pendant la période, quelle que soit la facture réglée."
+    },
+    "kpi": {
+      "title": "Chiffres clés",
+      "vsPrevious": "Par rapport à la période de comparaison",
+      "collected": "Encaissé",
+      "collectedHint": "Paiements reçus sur la période",
+      "collectedAll": "Encaissé, depuis toujours",
+      "collectedAllHint": "Tous les paiements que vous pouvez voir",
+      "outstanding": "Restant dû",
+      "outstandingHint": "{count, plural, one {# facture ouverte} many {# de factures ouvertes} other {# factures ouvertes}} à ce jour",
+      "tax": "Taxes collectées",
+      "taxHint": "Sur les factures entièrement payées sur la période",
+      "invoiced": "Facturé",
+      "invoicedHint": "{count, plural, one {# facture émise} many {# de factures émises} other {# factures émises}}",
+      "paid": "Payé à ce jour",
+      "paidHint": "Sur les factures émises dans la période",
+      "overdue": "En retard",
+      "overdueHint": "Échéance dépassée",
+      "refunded": "Remboursé",
+      "refundedHint": "Rendu sur la période",
+      "paidInFull": "Payées en totalité",
+      "paidInFullHint": "Factures devenues entièrement payées",
+      "perCurrency": "{parts}"
+    },
+    "flow": {
+      "title": "Facturé, payé et dû",
+      "subtitle": "Les factures émises sur la période et leur situation aujourd'hui",
+      "paid": "Payé",
+      "owed": "Dû, non échu",
+      "overdue": "En retard",
+      "credited": "Avoirs",
+      "invoiced": "facturé",
+      "empty": "Rien n'a été facturé sur cette période.",
+      "several": "Ces factures sont en plusieurs devises. Choisissez une devise ci-dessus pour les voir sous forme d'une seule barre."
+    },
+    "trend": {
+      "title": "Facturé et encaissé",
+      "subtitle": {
+        "day": "Par jour",
+        "week": "Par semaine",
+        "month": "Par mois"
+      },
+      "chartLabel": "Facturé et encaissé sur la période",
+      "invoiced": "Facturé",
+      "collected": "Encaissé"
+    },
+    "split": {
+      "title": "Par {group}",
+      "subtitle": "Les plus élevés d'abord. Les montants sont affichés en {currency}.",
+      "subtitlePerCurrency": "Les plus élevés d'abord. Les montants sont listés par devise.",
+      "group": {
+        "source": "source de lead",
+        "origin": "origine de facture",
+        "product": "produit",
+        "owner": "responsable",
+        "team": "équipe"
+      },
+      "empty": {
+        "source": "Aucune source de lead",
+        "origin": "Origine inconnue",
+        "product": "Aucune ligne",
+        "owner": "Non attribué",
+        "team": "Aucune équipe"
+      },
+      "origin": {
+        "manual": "Créée à la main",
+        "quote": "Issue d'un devis",
+        "order": "Issue d'une commande",
+        "woocommerce": "WooCommerce",
+        "shopify": "Shopify",
+        "own": "Boutique propre",
+        "api": "API",
+        "ai": "Assistant IA"
+      },
+      "col": {
+        "invoices": "Factures",
+        "invoiced": "Facturé",
+        "paid": "Payé",
+        "outstanding": "Dû",
+        "overdue": "En retard",
+        "collected": "Encaissé",
+        "refunded": "Remboursé"
+      },
+      "total": "Total",
+      "truncated": "Seules les {count} lignes les plus élevées sont listées. Le récapitulatif CSV contient les mêmes lignes.",
+      "teamNote": "Une personne appartenant à deux équipes est comptée dans les deux, donc les lignes d'équipe peuvent dépasser le total.",
+      "productNote": "Les remises sur l'ensemble de la facture, les frais de port et les arrondis sont répartis sur les lignes au prorata de leur valeur."
+    },
+    "aging": {
+      "title": "Balance âgée des créances",
+      "open": "Paiements",
+      "empty": "Rien n'est dû.",
+      "bucket": {
+        "current": "Non échu",
+        "d1_30": "Échu depuis 1 à 30 jours",
+        "d31_60": "Échu depuis 31 à 60 jours",
+        "d61_90": "Échu depuis 61 à 90 jours",
+        "d90_plus": "Échu depuis plus de 90 jours"
+      }
+    },
+    "export": {
+      "title": "Télécharger ce rapport",
+      "note": "Préparé en arrière-plan avec les filtres ci-dessus, conservé {days} jours et annoncé par e-mail. Vous n'obtenez pas plus que ce que le rapport vous montre.",
+      "csvPayments": "CSV : paiements",
+      "csvPaymentsHint": "Une ligne par paiement et remboursement de la période",
+      "csvSummary": "CSV : ce tableau",
+      "csvSummaryHint": "La répartition ci-dessus, avec les totaux",
+      "pdf": "PDF",
+      "pdfHint": "Le rapport sous forme de document",
+      "preparing": "Préparation...",
+      "requested": "Votre fichier est en cours de préparation. Vous recevrez un e-mail quand il sera prêt, et il apparaîtra dans la liste ci-dessous.",
+      "recent": "Vos fichiers récents",
+      "none": "Vous n'avez pas encore préparé de fichier.",
+      "kind": {
+        "pdf": "Rapport PDF",
+        "csv-payments": "CSV des paiements",
+        "csv-summary": "Récapitulatif CSV"
+      },
+      "status": {
+        "queued": "En attente",
+        "running": "En préparation",
+        "ready": "Prêt",
+        "failed": "Échec",
+        "expired": "Expiré"
+      },
+      "range": "du {from} au {to}",
+      "rows": "{count, plural, one {# ligne} many {# de lignes} other {# lignes}}",
+      "expires": "Conservé jusqu'au {date}",
+      "failed": "Ce fichier n'a pas pu être préparé. Demandez-le à nouveau.",
+      "download": "Télécharger"
+    },
+    "errors": {
+      "network": "Le serveur est injoignable. Vérifiez votre connexion et réessayez.",
+      "forbidden": "Vous n'y avez pas accès.",
+      "notFound": "Ce fichier n'existe pas.",
+      "exportInProgress": "Un fichier est déjà en cours de préparation pour vous. Attendez son e-mail, puis demandez-en un autre.",
+      "exportNotReady": "Ce fichier n'est pas prêt ou a expiré. Demandez-le à nouveau.",
+      "rateLimited": "Trop de requêtes. Patientez un instant et réessayez.",
+      "validation": "Ces filtres ne sont pas valides.",
+      "unexpected": "Une erreur s'est produite. Réessayez."
+    }
+  }
+}

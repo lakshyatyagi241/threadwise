@@ -29,6 +29,10 @@ Telegram bots connects a Telegram bot to this workspace, so the chats it receive
 - **Disconnect** removes the bot after you confirm. Its inbox conversations stay.
 - **Remove token** clears a saved payment token.
 
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), a broadcast does not message someone while it is night for them. Their message waits, the rest of the list is sent, and the row shows how many are held and until when. The broadcast stays **Sending** while anyone waits and finishes by itself when the hours end, so you do not need to press anything. Consent is checked again at that moment, so a person who unsubscribed meanwhile is not messaged. The hours are read on the person's own clock: their contact's time zone, else the country of their number, else your fallback time zone. Pausing a broadcast also stops the held messages.
+
 ## Plan and access
 
 You need the permission to view Telegram bots to see the screen, and the manage permission to connect, pause, fix, add a payment token or disconnect. The Telegram connection under a personal account is not available yet, so its card is greyed out. Telegram broadcasts need their own permission and are opened from the Telegram screen.

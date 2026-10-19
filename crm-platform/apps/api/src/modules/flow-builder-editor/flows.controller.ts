@@ -19,7 +19,6 @@ import { ApiConsumes, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { z } from 'zod';
 import {
   FLB_AI_PROVIDERS,
-  ERROR_CODES,
   FLB_GOOGLE_PICKER_KINDS,
   flbAiGenerateRequestSchema,
   flbCommerceProductsQuerySchema,
@@ -28,6 +27,7 @@ import {
   renameFlowRequestSchema,
   saveFlowRequestSchema,
   setBuilderModeRequestSchema,
+  flbResolveMapsRequestSchema,
   flbTestWebhookRequestSchema,
   updateFlowRequestSchema,
   uuidSchema,
@@ -39,21 +39,23 @@ import {
   type RenameFlowRequest,
   type SaveFlowRequest,
   type SetBuilderModeRequest,
+  type FlbResolveMapsRequest,
   type FlbTestWebhookRequest,
   type UpdateFlowRequest,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { AppError } from '../../common/errors/app-error';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
+import { GoogleFilesService } from '../google-account';
 import { RequirePlanFeature } from '../plans-subscriptions-trials';
 import { BuilderContextService } from './builder-context.service';
 import { FlowAiService } from './flow-ai.service';
 import { FlowMediaTooLargeInterceptor } from './flow-media-too-large.interceptor';
 import { FLOW_MEDIA_MAX_BYTES, FLOW_MEDIA_TYPES, FlowMediaService } from './flow-media.service';
 import { flowExportFileName } from './flow-rules';
-import { GOOGLE_FORM_ID_RE } from './google-apps-script';
 import { FlowsService } from './flows.service';
 import { TestWebhookService } from './test-webhook.service';
+import { MapsLinkService } from './maps-link.service';
 
 /**
  * The plan flag behind the soft paywall (TW-FLB-028; Reference `autoflow`, the registry's `automation`). The page and every read
@@ -66,7 +68,6 @@ export const FLB_PLAN_FEATURE = 'automation' satisfies PlanFeatureKey;
 
 const uploadTypeSchema = z.enum(FLOW_MEDIA_TYPES);
 const googleKindSchema = z.enum(FLB_GOOGLE_PICKER_KINDS);
-const googleFormIdSchema = z.string().regex(GOOGLE_FORM_ID_RE, 'Not a Google form id');
 const upload = FileInterceptor('file', {
   limits: { fileSize: FLOW_MEDIA_MAX_BYTES, files: 1 },
 });
@@ -84,7 +85,9 @@ export class FlowsController {
     private readonly context: BuilderContextService,
     private readonly ai: FlowAiService,
     private readonly webhook: TestWebhookService,
+    private readonly mapsLink: MapsLinkService,
     private readonly media: FlowMediaService,
+    private readonly googleFiles: GoogleFilesService,
   ) {}
 
   @Get()
@@ -160,36 +163,26 @@ export class FlowsController {
     return this.context.commerceProducts(query);
   }
 
+  @Get('builder-context/google/status')
+  @RequirePermission('flb.flows.read')
+  @ApiOperation({
+    summary: "Whether the workspace's Google account is usable, and for which nodes",
+    description:
+      'State and the capabilities the grant covers (no account email), so a Sheets, Docs, Forms or Meet node can warn before the flow runs.',
+  })
+  async googleStatus() {
+    return this.googleFiles.summary();
+  }
+
   @Get('builder-context/google/:kind')
   @RequirePermission('flb.flows.read')
   @ApiOperation({
     summary: 'Google Sheets / Docs / Forms files for the node pickers',
     description:
-      '503 FLB_INTEGRATION_DISABLED while the Google integration is not connected on this deployment.',
+      "The connected account's files of that kind, newest first. Needs the Drive file list permission on the Google account page. 409 GOOGLE_ACCOUNT_NOT_CONNECTED, GOOGLE_ACCOUNT_NEEDS_RECONNECT or GOOGLE_SCOPE_MISSING when the account cannot list; 503 GOOGLE_ACCOUNT_NOT_CONFIGURED or GOOGLE_API_NOT_ENABLED when the platform's Google setup is incomplete; the builder shows the way out (connect, reconnect, add the permission) for any of them.",
   })
-  async google(@Param('kind', zodPipe(googleKindSchema)) _kind: z.infer<typeof googleKindSchema>) {
-    throw new AppError(
-      ERROR_CODES.FLB_INTEGRATION_DISABLED,
-      'Google integration is not connected.',
-      HttpStatus.SERVICE_UNAVAILABLE,
-    );
-  }
-
-  @Get('builder-context/google/forms/:formId/apps-script')
-  @RequirePermission('flb.flows.read')
-  @ApiOperation({
-    summary: 'The Apps Script that reports a Google Form submission back to the flow',
-    description:
-      "Plain-text `.gs` download for the Google Form node's one-time setup. It carries this workspace's webhook token. 422 when the form id is not a Google form id.",
-  })
-  googleFormScript(
-    @Param('formId', zodPipe(googleFormIdSchema)) formId: string,
-    @Res() res: { setHeader(name: string, value: string): unknown; send(body: string): unknown },
-  ) {
-    const { fileName, source } = this.context.googleFormScript(formId);
-    res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-    res.setHeader('Content-Disposition', `attachment; filename="${fileName}"`);
-    res.send(source);
+  async google(@Param('kind', zodPipe(googleKindSchema)) kind: z.infer<typeof googleKindSchema>) {
+    return this.googleFiles.list(kind);
   }
 
   @Post('import')
@@ -217,6 +210,20 @@ export class FlowsController {
   })
   async testWebhook(@Body(zodPipe(flbTestWebhookRequestSchema)) body: FlbTestWebhookRequest) {
     return this.webhook.run(body);
+  }
+
+  @Post('location/resolve')
+  @HttpCode(HttpStatus.OK)
+  @RequirePermission('flb.flows.update')
+  @RequirePlanFeature(FLB_PLAN_FEATURE)
+  @ApiOperation({
+    summary:
+      'Read the coordinates out of a pasted Google Maps link (short links are followed, SSRF guarded)',
+    description:
+      'Only Google Maps hosts are requested, at most 5 redirects. Refusals are 200 `{ok:false,problem}` (not_url, not_maps, no_coords, lat_range, lng_range, zero, resolve_failed) so the form can show them inline.',
+  })
+  async resolveMapsLink(@Body(zodPipe(flbResolveMapsRequestSchema)) body: FlbResolveMapsRequest) {
+    return this.mapsLink.resolve(body.url);
   }
 
   @Post('ai-generate')

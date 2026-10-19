@@ -1,11 +1,17 @@
 import { describe, expect, it } from 'vitest';
 import {
+  addableColumns,
   allColumns,
+  columnGroup,
+  hideColumn,
+  showColumn,
   defaultColumns,
   parseStoredColumns,
   serializeColumns,
   moveColumn,
   nudgeColumn,
+  omittedColumns,
+  restoreOmitted,
   sortKeyOf,
   toggleColumn,
   visibleColumns,
@@ -33,37 +39,67 @@ describe('columns', () => {
       'groups',
       'stage',
       'status',
+      'whatsapp',
+      'sms',
+      'emailOptIn',
       'owner',
       'leadScore',
+      'company',
       'language',
       'memo',
+      'source',
+      'dateOfBirth',
+      'minor',
+      'lastActivity',
+      'nextFollowUp',
       'createdOn',
     ]);
   });
 
-  it('shows the Contact Hub columns and the first two attributes on a first visit', () => {
-    expect(ids(visibleColumns(null, attrs))).toEqual([
-      'name',
-      'phone',
-      'attr:order_count',
-      'attr:total_spent',
-      'email',
-      'tags',
-      'stage',
-      'status',
-      'leadScore',
-      'createdOn',
+  it('shows the seven columns of the slim Contact Hub on a first visit', () => {
+    const seven = ['name', 'phone', 'email', 'stage', 'whatsapp', 'owner', 'createdOn'];
+    expect(ids(visibleColumns(null, attrs))).toEqual(seven);
+    expect(defaultColumns([])).toEqual(seven);
+    expect(defaultColumns(attrs)).toHaveLength(7);
+  });
+
+  it('leaves out a column the person cannot have', () => {
+    const omit = new Set<ColumnId>(['company']);
+    expect(ids(allColumns(attrs, omit))).not.toContain('company');
+    expect(ids(visibleColumns(['phone', 'company'], attrs, null, omit))).toEqual(['name', 'phone']);
+    expect(ids(visibleColumns(['phone', 'company'], attrs))).toEqual(['name', 'phone', 'company']);
+  });
+
+  it('groups the columns for the add-column picker and offers only the ones not shown', () => {
+    expect(columnGroup('phone')).toBe('contact');
+    expect(columnGroup('stage')).toBe('lifecycle');
+    expect(columnGroup('company')).toBe('related');
+    expect(columnGroup('whatsapp')).toBe('consent');
+    expect(columnGroup('createdOn')).toBe('activity');
+    expect(columnGroup('attr:city')).toBe('custom');
+    const groups = addableColumns(allColumns(attrs), defaultColumns(attrs));
+    expect(groups.map((g) => g.group)).toEqual([
+      'contact',
+      'lifecycle',
+      'related',
+      'consent',
+      'activity',
+      'custom',
     ]);
-    expect(defaultColumns([])).toEqual([
-      'name',
-      'phone',
-      'email',
-      'tags',
-      'stage',
-      'status',
-      'leadScore',
-      'createdOn',
-    ]);
+    const flat = groups.flatMap((g) => g.columns.map((c) => c.id));
+    expect(flat).not.toContain('name');
+    expect(flat).not.toContain('phone');
+    expect(flat).toContain('tags');
+    expect(flat).toContain('attr:city');
+    // everything shown: nothing to offer
+    expect(addableColumns(allColumns(attrs), ids(allColumns(attrs)) as ColumnId[])).toEqual([]);
+  });
+
+  it('adds a column at the end and hides one, never the name', () => {
+    expect(showColumn(['name', 'phone'], 'email')).toEqual(['name', 'phone', 'email']);
+    expect(showColumn(['name', 'phone'], 'phone')).toEqual(['name', 'phone']);
+    expect(hideColumn(['name', 'phone', 'email'], 'phone')).toEqual(['name', 'email']);
+    expect(hideColumn(['name', 'phone'], 'name')).toEqual(['name', 'phone']);
   });
 
   it('honours a stored choice, in canonical order, and always keeps the name', () => {
@@ -181,21 +217,82 @@ describe('sortKeyOf', () => {
     expect(sortKeyOf('groups')).toBeNull();
     expect(sortKeyOf('leadScore')).toBeNull();
     expect(sortKeyOf('owner')).toBeNull();
+    // the API has no sort for the opt-in, company, source or last-activity columns
+    for (const id of [
+      'whatsapp',
+      'sms',
+      'emailOptIn',
+      'company',
+      'source',
+      'lastActivity',
+      'nextFollowUp',
+    ] as const) {
+      expect(sortKeyOf(id), id).toBeNull();
+    }
     expect(sortKeyOf('attr:Has Space' as ColumnId)).toBeNull();
   });
 });
 
 describe('owner column', () => {
-  it('is offered in the column chooser but hidden until someone turns it on (Reference lists no owner)', () => {
+  it('is one of the seven default columns and can be turned off again', () => {
     expect(ids(allColumns(attrs))).toContain('owner');
-    expect(defaultColumns(attrs)).not.toContain('owner');
-    expect(ids(visibleColumns(null, attrs))).not.toContain('owner');
-    const on = toggleColumn(defaultColumns(attrs), 'owner', true);
-    expect(ids(visibleColumns(on, attrs))).toContain('owner');
+    expect(defaultColumns(attrs)).toContain('owner');
+    expect(ids(visibleColumns(null, attrs))).toContain('owner');
+    const off = toggleColumn(defaultColumns(attrs), 'owner', false);
+    expect(ids(visibleColumns(off, attrs))).not.toContain('owner');
   });
 
   it('sits after the status column when shown', () => {
     const shown = ids(visibleColumns(['owner', 'status', 'email'], attrs));
     expect(shown).toEqual(['name', 'email', 'status', 'owner']);
+  });
+});
+
+describe('columns while lead scoring is off', () => {
+  const off = omittedColumns({ canCompany: true, scoringOn: false });
+
+  it('omits the Lead score column, and the company column only without access to companies', () => {
+    expect([...off]).toEqual(['leadScore']);
+    expect([...omittedColumns({ canCompany: false, scoringOn: false })].sort()).toEqual([
+      'company',
+      'leadScore',
+    ]);
+    expect([...omittedColumns({ canCompany: false, scoringOn: true })]).toEqual(['company']);
+    expect(omittedColumns({ canCompany: true, scoringOn: true }).size).toBe(0);
+  });
+
+  it('takes Lead score out of the picker and out of the table, even when a person had chosen it', () => {
+    expect(ids(allColumns(attrs, off))).not.toContain('leadScore');
+    const chosen: ColumnId[] = ['name', 'leadScore', 'email'];
+    expect(ids(visibleColumns(chosen, attrs, null, off))).toEqual(['name', 'email']);
+    const shown = ids(visibleColumns(chosen, attrs, null, off)) as ColumnId[];
+    const offered = addableColumns(allColumns(attrs, off), shown).flatMap((g) =>
+      g.columns.map((c) => c.id),
+    );
+    expect(offered).not.toContain('leadScore');
+    // the first-visit columns never had it
+    expect(defaultColumns(attrs)).not.toContain('leadScore');
+  });
+
+  it('gives the column back, in the place the person had put it, when scoring is on again', () => {
+    const chosen: ColumnId[] = ['name', 'leadScore', 'email'];
+    const on = omittedColumns({ canCompany: true, scoringOn: true });
+    expect(ids(visibleColumns(chosen, attrs, null, on))).toEqual(['name', 'email', 'leadScore']);
+  });
+
+  it('writes a saved view back whole: the omitted column keeps its place', () => {
+    const saved = ['name', 'phone', 'leadScore', 'email'];
+    const shown: ColumnId[] = ['name', 'phone', 'email'];
+    expect(restoreOmitted(shown, saved, off)).toEqual(saved);
+    // other edits survive, only the omitted id is put back
+    expect(restoreOmitted(['name', 'email'], saved, off)).toEqual(['name', 'email', 'leadScore']);
+    // nothing omitted, or nothing saved: as shown
+    expect(restoreOmitted(shown, saved, new Set())).toEqual(shown);
+    expect(restoreOmitted(shown, null, off)).toEqual(shown);
+    // already there: not doubled
+    expect(restoreOmitted(['name', 'leadScore'], ['name', 'leadScore'], off)).toEqual([
+      'name',
+      'leadScore',
+    ]);
   });
 });

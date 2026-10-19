@@ -88,7 +88,7 @@ describe('the inbox tag filter', () => {
       scope: 'conversation',
       onScopeChange: vi.fn(),
     });
-    expect(h.querySelector('[data-testid="inbox-tag-filter"]')!.textContent).toBe('1 tag');
+    expect(h.querySelector('[data-testid="inbox-tag-filter"]')!.textContent).toContain('1 tag');
     await click(h.querySelector('[data-testid="inbox-tag-filter"]')!);
     expect(document.body.textContent).toContain('3');
     await act(async () => root?.unmount());

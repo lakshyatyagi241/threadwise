@@ -45,8 +45,25 @@
         "stage_not_in_pipeline": "Bu aşama farklı bir satış hattına ait.",
         "pipeline_required": "Bu aşamanın ait olduğu satış hattını seçin.",
         "unknown_or_lost_stage": "Bu yaşam döngüsü aşaması yok veya kayıp aşaması.",
-        "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil."
-      }
+        "unknown_or_inactive_user": "Seçilen kişilerden biri bu çalışma alanının aktif bir üyesi değil.",
+        "template_required": "Gönderilecek şablonu seçin.",
+        "template_not_found": "Bu şablon, bu çalışma alanında bu kanal için mevcut değil.",
+        "template_not_sendable": "Bu şablon gönderilemez: onaylı değil, duraklatılmış veya dosya ya da bağlantı değişkeni gerektiriyor.",
+        "sender_not_found": "Bu gönderenin bağlantısı yok."
+      },
+      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız. Planınızı yükseltin veya artık kullanmadığınız bir kaynağı silin.",
+      "syncNotSupported": "Bu kaynak potansiyel müşterilerini kendisi gönderir, çekilecek bir şey yok.",
+      "syncInProgress": "Bu kaynak şu anda çekiliyor. Bitmesini bekleyin.",
+      "syncTooSoon": "Bu kaynağa az önce istek gönderildi. {seconds} saniye sonra tekrar deneyin.",
+      "syncTooSoonNoWait": "Bu kaynağa az önce istek gönderildi. Biraz sonra tekrar deneyin.",
+      "backfillRange": "Bu aralık çekilemiyor: kaynağın potansiyel müşterileri sakladığı süreden daha eskiye gidiyor veya gelecekteki tarihleri kapsıyor.",
+      "mlaNotConfigured": "Meta bu kurulumda ayarlanmamış. Önce bir yöneticinin Meta uygulamasını eklemesi gerekir.",
+      "mlaLeadAccessMissing": "Bu Sayfa, Meta'nın potansiyel müşterileri okumak için gerektirdiği izinlere sahip değil. Potansiyel müşteri erişimi verin, ardından tekrar deneyin.",
+      "mlaPageReconnect": "Meta artık bu Sayfa'nın bağlantısını kabul etmiyor. Sayfayı yeniden bağlayın, ardından tekrar deneyin.",
+      "mlaSubscribeFailed": "Meta bu Sayfa için potansiyel müşteri iletimini açmadı. Meta uygulamasında potansiyel müşteri izninin bulunduğunu ve Sayfa webhook'unun kurulduğunu kontrol edin, ardından tekrar deneyin.",
+      "mlaFormsUnavailable": "Meta potansiyel müşteri formlarını döndürmedi. Birazdan tekrar deneyin.",
+      "mlaFormNotFound": "Bu form artık bu Sayfa'nın potansiyel müşteri formlarından biri değil. Listeyi yenileyin ve tekrar deneyin.",
+      "mlaSyncOff": "Form seçmeden önce bu Sayfa için potansiyel müşteri eşitlemesini açın."
     },
     "problems": {
       "nameRequired": "Kaynağa bir ad verin.",
@@ -68,7 +85,10 @@
       "propertyDuplicate": "Bu özellik iki kez eşleştirilmiş.",
       "pathRequired": "Değerin veri içinde nerede olduğunu belirtin.",
       "customFieldsTooMany": "En fazla {max} özel özelliği eşleştirin.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Gönderilecek şablonu seçin.",
+      "speedDelayRange": "0 ile {max} arasında tam dakika girin.",
+      "speedMaxAgeRange": "Bir lead en fazla ne kadar eski olabilir seçin: 1 dakikadan 90 güne kadar."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -131,7 +151,8 @@
       "tabs": {
         "ads": "Reklamlar",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# potansiyel müşteri dikkat gerektiriyor}}"
+        "attention": "{count, plural, other {# potansiyel müşteri dikkat gerektiriyor}}",
+        "inbox": "Potansiyel müşteri kutusu"
       }
     },
     "ads": {
@@ -149,7 +170,7 @@
         },
         "meta": {
           "name": "Meta potansiyel müşteri formları",
-          "body": "Facebook ve Instagram potansiyel müşteri reklamları, doğrudan Sayfanızdan."
+          "body": "Facebook ve Instagram potansiyel müşteri reklamları, Sayfanızdan doğrudan kişilerinize."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +184,8 @@
           "name": "Google Ads",
           "body": "Google Ads potansiyel müşteri formu uzantıları."
         }
-      }
+      },
+      "dismissNotice": "Kapat"
     },
     "sources": {
       "emptyTitle": "Henüz kaynak yok",
@@ -182,7 +204,8 @@
       "connector": "Pazar yeri üzerinden",
       "endsIn": "{hint} sonra sona erer",
       "noEvents": "Henüz potansiyel müşteri yok",
-      "needsAttention": "{count, plural, other {# potansiyel müşteri}}"
+      "needsAttention": "{count, plural, other {# potansiyel müşteri}}",
+      "metaDelivery": "Meta'dan"
     },
     "wizard": {
       "title": "Yeni potansiyel müşteri kaynağı",
@@ -219,7 +242,8 @@
       "skipMapping": "Şimdilik atla",
       "finish": "Kaydet ve bitir",
       "revealGone": "URL ve belirteç artık gösterilmiyor. Bunları kaydetmediyseniz kaynağı açın ve belirteci yenileyerek yeni bir URL alın.",
-      "toMapping": "Eşlemeye devam et"
+      "toMapping": "Eşlemeye devam et",
+      "planLimitUsed": "{limit} lead kaynağından {used} tanesini kullandınız, bu nedenle yeni kaynak oluşturulamaz."
     },
     "form": {
       "name": "Kaynak adı",
@@ -250,7 +274,8 @@
         "contact": "Kişi",
         "owner": "Sahip",
         "deal": "Fırsat",
-        "notify": "Bildirimler"
+        "notify": "Bildirimler",
+        "speed": "Yeni potansiyel müşteriye ilk mesaj"
       },
       "membersFailed": "Ekibiniz yüklenemedi, bu yüzden şu anda kişi seçilemiyor. Tekrar denemek için sayfayı yenileyin.",
       "countryCode": "Varsayılan ülke kodu",
@@ -288,7 +313,41 @@
       "notifyOwner": "Kişinin sahibine haber ver",
       "notifyOwnerHint": "Yeni bir potansiyel müşteri geldiğinde uygulama içi bildirim. Test potansiyel müşterileri bildirim göndermez.",
       "notifyUsers": "Ayrıca bilgilendir",
-      "notifyUsersHint": "Örneğin satış müdürünüz. En fazla 20 kişi."
+      "notifyUsersHint": "Örneğin satış müdürünüz. En fazla 20 kişi.",
+      "speed": {
+        "enabled": "İlk mesajı otomatik gönder",
+        "enabledHint": "Varsayılan olarak kapalıdır. Yeni bir potansiyel müşteri kişiye dönüştüğünde; rıza, sessiz saatler, planınız ve cüzdanınız izin veriyorsa bir mesaj kendiliğinden gönderilir.",
+        "consentNote": "Rıza hiçbir zaman varsayılmaz. WhatsApp utility şablonu bir hizmet mesajıdır. Pazarlama şablonu, SMS veya e-posta ise pazarlama mesajıdır: çalışma alanınızın gerektirdiği durumlarda kayıtlı rıza ister, sessiz saatlerin bitmesini bekler ve mesaj almayı reddetmiş kişiye gönderilmez. Rıza kanıtıyla gelen bir potansiyel müşterinin rızası kaydedilir.",
+        "channel": "Kanal",
+        "channels": {
+          "whatsapp": "WhatsApp şablonu",
+          "sms": "SMS",
+          "email": "E-posta"
+        },
+        "template": "Şablon",
+        "templateChoose": "Şablon seçin",
+        "templateNone": "Bu kanal için kullanılabilir şablon yok",
+        "templateUnavailable": "Kayıtlı şablon artık kullanılamıyor",
+        "templateHint": {
+          "whatsapp": "Yalnızca kişi bilgisine (örneğin ad) ihtiyaç duyan onaylı şablonlar. Dosya veya bağlantı değişkeni gerektiren şablonlar listelenmez.",
+          "sms": "Onaylı SMS şablonları.",
+          "email": "Paylaşılan e-posta şablonları. Kişisel şablon kullanılamaz."
+        },
+        "sender": "Gönderen",
+        "senderDefault": "Bağlı olan ilk gönderen",
+        "senderUnavailable": "Kayıtlı gönderenin bağlantısı artık yok",
+        "senderHint": {
+          "sms": "Mesajın gönderildiği SMS numarası.",
+          "email": "Mesajın gönderildiği paylaşılan posta kutusu."
+        },
+        "delay": "Göndermeden önce bekleme süresi (dakika)",
+        "delayHint": "0 ile {max} arasında tam dakika. 0 hemen gönderir.",
+        "maxAge": "Şundan eski lead’lere mesaj gönderme",
+        "maxAgeHint": "Geç gelen bir lead (geriye dönük aktarım, yeniden deneme, kaçırılan eşitleme) yine de kaydedilir, atanır ve bildirilir; ancak bu süreden eskiyse ilk mesajı almaz. Eski lead’lere mesaj gitmesini istiyorsanız daha uzun bir süre seçin. Onay kuralları her zaman geçerlidir.",
+        "businessHours": "Yalnızca çalışma saatlerinde",
+        "businessHoursHint": "Çalışma alanınızda belirlenen çalışma saatlerinin dışında mesaj, bu saatlerin başlamasını bekler.",
+        "optionsFailed": "Şablonlar ve gönderenler yüklenemedi. Biraz sonra yeniden deneyin."
+      }
     },
     "mapping": {
       "contact": "Kişi alanları",
@@ -394,7 +453,7 @@
       "bodyRotated": "Eski URL hemen çalışmayı durdurdu. Bu yeni olan yalnızca bu sefer gösterilir.",
       "url": "Webhook URL'si",
       "copyUrl": "URL'yi kopyala",
-      "noOrigin": "Tam URL için API adresinizi bu yolun önüne ekleyin.",
+      "noOrigin": "Platformun herkese açık API adresi ayarlanmadığı için tam URL oluşturulamadı. Bu platformu yöneten kişiden adresi ayarlamasını isteyin. O zamana kadar bu yolun önüne kendi API adresinizi ekleyin.",
       "token": "Belirteç",
       "copyToken": "Belirteci kopyala",
       "secretHint": "Bu kaynak ayrıca bir paylaşılan gizli anahtar gerektirir: gönderen bunu {header} üstbilgisinde göndermelidir.",
@@ -402,7 +461,8 @@
       "sampleHelp": "Zapier veya Make'te, URL'ye JSON gönderen bir Webhooks eylemi kullanın. Bu komut bir örnek potansiyel müşteri gönderir.",
       "copied": "URL'yi ve belirteci güvenli bir yere kopyaladım",
       "done": "Kopyaladım, devam et",
-      "doneHint": "Önce kutuyu işaretleyin. Bundan sonra belirteç bir daha gösterilemez."
+      "doneHint": "Önce kutuyu işaretleyin. Bundan sonra belirteç bir daha gösterilemez.",
+      "notPublic": "Platformun herkese açık API adresi, reklam platformlarının erişemeyeceği özel veya yerel bir adresi gösteriyor, bu nedenle tam URL gösterilmiyor. Bu platformu yöneten kişiden herkese açık bir adres ayarlamasını isteyin, ardından tam URL'yi almak için belirteci yenileyin."
     },
     "test": {
       "title": "Test potansiyel müşterisi gönder",
@@ -480,7 +540,9 @@
           "body": "URL'si çalışmayı durdurur ve onunla birlikte sakladığı potansiyel müşteriler silinir. Daha önce oluşturduğu kişiler kalır. Bu geri alınamaz.",
           "action": "Kaynağı sil"
         }
-      }
+      },
+      "metaForm": "Potansiyel müşteriler Meta'dan gelir. Bu kaynağın URL'si veya belirteci yoktur; formu (soruları eşleme, atama ve fırsat ya da durdurma) Reklamlar sekmesinden yönetin.",
+      "metaFormLink": "Meta potansiyel müşteri formlarını aç"
     },
     "events": {
       "title": "Alınan potansiyel müşteriler",
@@ -536,7 +598,8 @@
       "retried": "Yeniden denendi. Potansiyel müşteri artık",
       "payload": "Saklanan yük",
       "loadingPayload": "Ham yük açılıyor",
-      "purged": "Ham yük {days} gün sonra temizlendi. Potansiyel müşteri ve kişisi kalır."
+      "purged": "Ham yük {days} gün sonra temizlendi. Potansiyel müşteri ve kişisi kalır.",
+      "firstReply": "İlk mesaj"
     },
     "attribution": {
       "title": "Potansiyel müşteri atfı",
@@ -550,10 +613,437 @@
         "campaign": "Kampanya",
         "adset": "Reklam seti",
         "ad": "Reklam",
-        "form": "Form"
+        "form": "Form",
+        "channel": "Kanal",
+        "moduleType": "Modül türü"
       },
       "capturedAt": "Yakalandı",
       "openSource": "Potansiyel müşteri kaynağını aç"
+    },
+    "hookAddress": {
+      "title": "Yeni webhook URL'leri eksik olacak",
+      "notConfigured": "Platformun herkese açık API adresi ayarlanmamış. Bu platformu yöneten kişiden adresi ayarlamasını isteyin; o zamana kadar yeni bir kaynak URL'sinin yalnızca yolunu gösterebilir.",
+      "notPublic": "Platformun herkese açık API adresi, reklam platformlarının erişemeyeceği özel veya yerel bir adresi gösteriyor. Bu platformu yöneten kişiden herkese açık bir adres ayarlamasını isteyin."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Zamanlandı",
+        "sending": "Gönderiliyor",
+        "held": "Bekletildi",
+        "sent": "Gönderildi",
+        "blocked": "Engellendi",
+        "skipped": "Atlandı",
+        "failed": "Başarısız"
+      },
+      "reasons": {
+        "quiet_hours": "Sessiz saatlerin bitmesi bekleniyor",
+        "outside_business_hours": "Çalışma saatleri bekleniyor",
+        "channel_unavailable": "Kanal bağlı değil",
+        "wallet_empty": "Cüzdan boş",
+        "send_halted": "Gönderim durduruldu",
+        "opted_out": "Kişi mesaj almayı reddetti",
+        "no_consent": "Kayıtlı rıza yok",
+        "minor": "Kişi reşit olmayan olarak işaretli",
+        "plan_limit": "Planın sınırına ulaşıldı",
+        "disabled": "Ayar kapatıldı",
+        "source_paused": "Potansiyel müşteri kaynağı duraklatıldı",
+        "no_contact_point": "Bu kanal için numara veya adres yok",
+        "no_sender": "Bağlı gönderen yok",
+        "template_unavailable": "Şablon gönderilemiyor",
+        "missing_value": "Bu kişi için bir şablon değeri eksik",
+        "lead_too_old": "Lead, ayarın izin verdiğinden daha eskiydi",
+        "provider_error": "Sağlayıcı reddetti",
+        "interrupted": "Yarıda kesildi",
+        "expired": "Çok uzun süre bekledi",
+        "internal_error": "Dahili hata"
+      },
+      "nextTry": "Sonraki deneme",
+      "sentAt": "Gönderildi"
+    },
+    "inbox": {
+      "intro": "Kaynaklarınızın aldığı tüm potansiyel müşteriler, kişiye dönüşemeyenler dahil. Nedenini görmek için bir potansiyel müşteriyi açın ve bekleyenleri yeniden deneyin.",
+      "chipsLabel": "Duruma göre filtrele",
+      "loading": "Potansiyel müşteriler yükleniyor",
+      "more": "Daha fazla yükle",
+      "chips": {
+        "all": "Tümü",
+        "attention": "İlgi bekleyenler",
+        "needs_review": "İnceleme gerekli",
+        "failed": "Başarısız",
+        "created": "Oluşturuldu",
+        "updated": "Güncellendi",
+        "duplicate": "Yinelenenler"
+      },
+      "filters": {
+        "source": "Kaynak",
+        "allSources": "Tüm kaynaklar",
+        "reason": "Neden",
+        "anyReason": "Herhangi bir neden",
+        "range": "Alınma zamanı",
+        "ranges": {
+          "all": "Her zaman",
+          "day": "Son 24 saat",
+          "week": "Son 7 gün",
+          "month": "Son 30 gün",
+          "custom": "Tarih seç"
+        },
+        "from": "Başlangıç",
+        "to": "Bitiş (dahil)",
+        "rangeOrder": "Bitiş tarihi başlangıç tarihinden önce.",
+        "tests": "Test kayıtları",
+        "testChoices": {
+          "all": "Göster",
+          "only": "Yalnızca test kayıtları",
+          "hide": "Gizle"
+        },
+        "search": "Kayıt kimliği şununla başlıyor",
+        "searchHint": "Yalnızca gönderenin kayıt için verdiği kimlik aranır; ad, numara veya adresler asla aranmaz.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Ara",
+        "reset": "Bekleyenlere dön",
+        "showAll": "Tümünü göster"
+      },
+      "table": {
+        "caption": "Tüm kaynakların aldığı potansiyel müşteriler",
+        "received": "Alındı",
+        "source": "Kaynak",
+        "lead": "Potansiyel müşteri",
+        "status": "Durum",
+        "reason": "Neden",
+        "firstMessage": "İlk mesaj",
+        "actions": "İşlemler",
+        "select": "{id} kimlikli kaydı seç",
+        "test": "Test",
+        "view": "Aç",
+        "retry": "Yeniden dene"
+      },
+      "empty": {
+        "attentionTitle": "Bekleyen bir şey yok",
+        "attention": "Gelen tüm potansiyel müşteriler kişiye dönüştü. İnceleme gerektiren veya başarısız olanlar burada görünecek.",
+        "filteredTitle": "Eşleşen kayıt yok",
+        "filtered": "Bu filtrelere uyan bir şey yok."
+      },
+      "bulk": {
+        "selectPage": "Bu sayfada yeniden denenebilecek kayıtları seç",
+        "selected": "{count, plural, other {# potansiyel müşteri seçildi}}",
+        "retry": "Seçilenleri yeniden dene",
+        "limit": "Tek seferde en fazla {max}."
+      },
+      "result": {
+        "retried": "{count, plural, other {# potansiyel müşteri yeniden denendi.}}",
+        "fixed": "{count, plural, other {# tanesi kişiye dönüştü.}}",
+        "stillWaiting": "{count, plural, other {# tanesi hâlâ inceleme bekliyor.}}",
+        "skipped": {
+          "not_found": "{count, plural, other {# potansiyel müşteri bulunamadı.}}",
+          "not_retryable": "{count, plural, other {# potansiyel müşteri artık beklemiyor.}}",
+          "payload_purged": "{count, plural, other {# potansiyel müşterinin yeniden denemek için saklanan verisi kalmamış.}}",
+          "source_paused": "{count, plural, other {# potansiyel müşteri duraklatılmış bir kaynağa ait.}}",
+          "error": "{count, plural, other {# potansiyel müşteri yeniden denenemedi.}}"
+        }
+      },
+      "drawer": {
+        "title": "Potansiyel müşteri",
+        "close": "Kapat",
+        "retry": "Yeniden dene",
+        "auditNote": "Bir kaydın açılması denetim günlüğüne işlenir. İçindeki kişisel veriler gizlidir.",
+        "source": "Kaynak",
+        "lead": "Kayıt kimliği",
+        "received": "Alındı",
+        "processed": "İşlendi",
+        "notProcessed": "İşlenmedi",
+        "attempts": "Deneme sayısı",
+        "duplicates": "Tekrar iletildi",
+        "deliveredAgain": "{count, plural, other {# kez}}",
+        "reason": "Neden",
+        "firstReply": "İlk mesaj",
+        "contact": "Kişi",
+        "openContact": "Kişiyi aç",
+        "error": "Hata",
+        "payload": "Gönderenin ilettiği veri",
+        "showOriginal": "Orijinali göster",
+        "maskedNote": "Telefon numaraları, e-posta adresleri, adlar, adresler ve serbest metin gizlenmiştir. Gizli anahtarlar kaldırılmıştır.",
+        "nothingToMask": "Bu kayıtta gizlenecek kişisel bir veri yok.",
+        "originalNote": "Orijinal veri, potansiyel müşteri kaynaklarını yönettiğiniz için gösteriliyor. Gösterilmesi denetim günlüğüne işlendi.",
+        "loadingPayload": "Veri yükleniyor",
+        "purged": "Veri saklama süresi dolduktan sonra silindi, bu yüzden gösterilecek veya yeniden denenecek bir şey yok."
+      },
+      "pull": {
+        "title": "Senkronizasyon ve geriye dönük çekme",
+        "intro": "Bu kaynaklardan potansiyel müşterileri isteyebilirsiniz. Şimdi senkronize et yenileri getirir; Geriye dönük çek geçmiş bir tarih aralığını yeniden çeker. Zaten sahip olduğunuz kayıtlar tanınır ve ikinci kez eklenmez.",
+        "backfill": "Geriye dönük çek...",
+        "history": "Son senkronizasyonlar ve geriye dönük çekmeler",
+        "syncNow": "Şimdi senkronize et",
+        "syncStarted": "{name} senkronize ediliyor",
+        "paused": "Bu kaynak duraklatıldı. Potansiyel müşterilerini çekmek için devam ettirin.",
+        "nextSync": "Yeniden senkronize edilebilir",
+        "syncReady": "Şimdi senkronize edilebilir. İstekler arasında en az {seconds} saniye olmalı.",
+        "reach": "Geriye dönük çekme {days, plural, other {# gün}} öncesine kadar gider.",
+        "never": "Henüz çekilmedi.",
+        "progress": "%{percent}",
+        "counts": "{fetched} alındı, {accepted} yeni, {duplicates} zaten kayıtlı, {failed} aktarılamadı",
+        "kinds": {
+          "sync": "Senkronizasyon",
+          "backfill": "Geriye dönük çekme"
+        },
+        "statuses": {
+          "queued": "Sırada",
+          "running": "Çalışıyor",
+          "done": "Tamamlandı",
+          "partial": "Kısmen tamamlandı",
+          "failed": "Başarısız"
+        },
+        "errors": {
+          "too_soon": "Kaynak beklememizi istedi.",
+          "not_now": "Kaynak hazır değildi: istek çok erken geldi veya bağlantısı duraklatılmış.",
+          "provider_error": "Kaynak isteği reddetti veya başarısız oldu.",
+          "credentials_refused": "Kaynak kimlik bilgilerini reddetti. Bağlantıyı yeniden kurun.",
+          "permission_missing": "Meta bu Sayfanın lead’leri okumasına izin vermedi. Meta lead formları altında lead erişimi verin ve yeniden çalıştırın.",
+          "interrupted": "Yarıda kesildi. Yeniden çalıştırın.",
+          "internal_error": "Dahili bir hata oluştu. Yeniden çalıştırın.",
+          "incomplete": "Bazı potansiyel müşteriler aktarılamadı. Tamamlamak için yeniden çalıştırın.",
+          "not_supported": "Bu kaynak bunu yapamaz.",
+          "not_active": "Bağlantı etkin değil.",
+          "range_too_old": "Kaynak bu kadar eski potansiyel müşterileri saklamıyor.",
+          "range_invalid": "Aralık geçerli değil."
+        }
+      },
+      "backfill": {
+        "title": "Tarih aralığını geriye dönük çek",
+        "intro": "Geçmiş günlerin potansiyel müşterilerini, bunları saklayan kaynaklardan yeniden çekin; tek seferde en fazla {days} gün. Daha önce alınan kayıtlar tanınır ve hiçbir şey yazılmaz.",
+        "from": "Başlangıç",
+        "to": "Bitiş (dahil)",
+        "sources": "Kaynaklar",
+        "noSources": "Geriye dönük çekilebilecek kaynak yok.",
+        "submit": "Çekmeyi başlat",
+        "cancel": "İptal",
+        "close": "Kapat",
+        "done": "Bitti",
+        "started": "{count, plural, other {# geriye dönük çekme başlatıldı}}",
+        "skippedTitle": "Bazı kaynaklar çekilmedi:",
+        "skipped": {
+          "not_supported": "geriye dönük çekilemiyor",
+          "paused": "duraklatılmış",
+          "in_progress": "zaten çekiliyor",
+          "too_soon": "az önce çekildi",
+          "range_too_old": "bu kadar eski potansiyel müşterileri saklamıyor",
+          "not_found": "bulunamadı"
+        },
+        "problems": {
+          "fromRequired": "İlk günü seçin.",
+          "toRequired": "Son günü seçin.",
+          "order": "Son gün ilk günden önce.",
+          "future": "İlk gün gelecekte.",
+          "tooWide": "Tek seferde en fazla {days} gün.",
+          "noSource": "En az bir kaynak seçin."
+        },
+        "safe": "Yeniden çalıştırırsanız hiçbir şey kaybolmaz veya çoğalmaz; yalnızca eksik potansiyel müşteriler eklenir.",
+        "speedNote": "Geriye dönük aktarılan lead’ler yeni lead’ler gibi kişi olur, bir sahibe atanır ve ekibinize bildirilir. Kaynağın sınırından eskilerse otomatik ilk mesaj gönderilmez (kaynağın ilk mesaj ayarında değiştirmediyseniz bir saat)."
+      }
+    },
+    "meta": {
+      "heading": "Meta potansiyel müşteri formları",
+      "intro": "Facebook ve Instagram potansiyel müşteri reklamlarınızdan gelen kişileri doğrudan kişilerinize aktarın. Bir Facebook Sayfası bağlayın, eşitlemeyi açın, ardından aktarılacak formları seçin.",
+      "loading": "Meta potansiyel müşteri formları yükleniyor",
+      "pagesLabel": "Bağlı Facebook Sayfaları",
+      "planLocked": "Meta potansiyel müşteri formları, hem Sosyal potansiyel müşteriler hem de ek kanallar özelliğini (Facebook) içeren bir plan gerektirir. Kullanmak için planınızı yükseltin.",
+      "metaSaid": "Meta şunu söyledi:",
+      "requestId": "İstek kimliği:",
+      "connectPage": "Facebook Sayfası bağla",
+      "connectAnother": "Başka bir Sayfa bağla",
+      "connectNeedsPermission": "Sayfa bağlamak için {permission} izni de gerekir.",
+      "card": {
+        "checking": "Bağlantı kontrol ediliyor",
+        "unavailable": "Bağlantı durumu yüklenemedi. Tekrar denemek için paneli açın.",
+        "notConfigured": "Bu kurulumda henüz ayarlanmadı",
+        "noPages": "Henüz bağlı Facebook Sayfası yok",
+        "summary": "{pages, plural, one {# Sayfa} other {# Sayfa}} bağlı, {forms, plural, one {# form} other {# form}} seçili",
+        "attention": "{count, plural, one {# Sayfa ilgi bekliyor} other {# Sayfa ilgi bekliyor}}",
+        "open": "Meta potansiyel müşteri formlarını aç",
+        "close": "Meta potansiyel müşteri formlarını gizle"
+      },
+      "notConfigured": {
+        "title": "Meta henüz ayarlanmadı",
+        "body": "Meta potansiyel müşteri formları, bu kurulumda bir Meta uygulaması gerektirir. Çalışma alanı yöneticisinden eklemesini isteyin, ardından Sayfa bağlamak için buraya dönün.",
+        "bodyManage": "Bu kurulumda henüz Meta uygulaması yok, bu nedenle potansiyel müşteri reklamları için Sayfa bağlanamaz. Önce bir yöneticinin Meta uygulamasını (uygulama kimliği ve gizli anahtar) eklemesi gerekir. Bu yapılınca webhook'u aşağıda anlatıldığı gibi kaydedin."
+      },
+      "noPages": {
+        "title": "Bağlı Facebook Sayfası yok",
+        "body": "Potansiyel müşteri reklamlarınızı yöneten Facebook Sayfasını bağlayın. Meta'nın potansiyel müşterileri okumak için gerektirdiği izinler istenecek.",
+        "bodyNoManage": "Henüz bağlı Facebook Sayfası yok. Kaynakları yönetebilen birinden bir Sayfa bağlamasını isteyin."
+      },
+      "setup": {
+        "title": "Meta uygulaması için Webhook ayarları",
+        "summary": "Meta uygulaması için Webhook ayarları",
+        "intro": "Meta yeni potansiyel müşterileri bir geri çağırma adresine iletir. Bir yönetici bunu Meta uygulaması panosunda yalnızca bir kez kaydeder.",
+        "callbackUrl": "Geri çağırma URL'si",
+        "copyUrl": "URL'yi kopyala",
+        "verifyToken": "Doğrulama belirteci",
+        "verifyTokenSet": "Bu kurulumda ayarlı",
+        "verifyTokenMissing": "Ayarlanmadı",
+        "verifyTokenHelp": "Bu kurulumda bir doğrulama belirteci olmadan Meta geri çağırma adresini doğrulayamaz. Bunu bu kurulumun Facebook ayarlarından belirleyin.",
+        "steps": {
+          "callback": "Meta uygulaması panosunda Webhooks bölümünü açın, Page nesnesini seçin ve yukarıdaki geri çağırma URL'sini yapıştırın.",
+          "verify": "Meta bir doğrulama belirteci istediğinde, bu kurulumun Facebook ayarlarındaki belirteci girin, ardından doğrulayıp kaydedin.",
+          "subscribe": "Page nesnesini {field} alanına abone edin."
+        },
+        "scopes": "Girişte istenen izinler: {scopes}.",
+        "scopesFromConfiguration": "Girişte istenen izinler Meta giriş yapılandırmanızdan gelir."
+      },
+      "pageStatus": {
+        "connected": "Sayfa bağlandı",
+        "disconnected": "Sayfa bağlantısı kesildi",
+        "expired": "Bağlantının süresi doldu",
+        "error": "Sayfa hatası"
+      },
+      "leadAccess": {
+        "granted": "Potansiyel müşteri erişimi verildi",
+        "missing": "Potansiyel müşteri erişimi eksik"
+      },
+      "syncState": {
+        "off": "Potansiyel müşteri eşitlemesi kapalı",
+        "subscribed": "Potansiyel müşteri alınıyor",
+        "needs_lead_access": "Potansiyel müşteri erişimi gerekli",
+        "needs_reconnect": "Yeniden bağlanmalı",
+        "error": "Hata"
+      },
+      "page": {
+        "pageId": "Sayfa kimliği",
+        "missingScopes": "Eksik izinler:",
+        "lastLead": "Son potansiyel müşteri",
+        "lastSweep": "Son kontrol",
+        "subscribedAt": "Potansiyel müşteri eşitlemesi açılma tarihi",
+        "never": "Hiç",
+        "formsConnected": "Seçili formlar",
+        "lastError": "Son hata:",
+        "grant": "Potansiyel müşteri erişimi ver",
+        "reconnect": "Yeniden bağlan",
+        "enable": "Potansiyel müşteri eşitlemesini aç",
+        "disable": "Potansiyel müşteri eşitlemesini kapat",
+        "chooseForms": "Potansiyel müşteri formlarını seç",
+        "hideForms": "Potansiyel müşteri formlarını gizle",
+        "enabledToast": "{name} için potansiyel müşteri eşitlemesi açık",
+        "disabledToast": "{name} için potansiyel müşteri eşitlemesi kapalı",
+        "stateHelp": {
+          "off": "Potansiyel müşteri eşitlemesi kapalı. Bu Sayfa'nın potansiyel müşterilerini almaya başlamak için açın.",
+          "subscribed": "Potansiyel müşteri eşitlemesi açık. Seçtiğiniz formlardan gelen yeni potansiyel müşteriler kısa sürede ulaşır, düzenli bir kontrol de kaçırılanları yakalar.",
+          "needs_lead_access": "Potansiyel müşteri eşitlemesi açık, ancak bu Sayfa Meta'nın potansiyel müşterileri okumak için gerektirdiği izinler olmadan bağlandı. Devam etmek için potansiyel müşteri erişimi verin.",
+          "needs_reconnect": "Meta artık bu Sayfa'nın bağlantısını kabul etmiyor. Potansiyel müşterileri yeniden almak için Sayfayı yeniden bağlayın.",
+          "error": "Meta son denemede bir isteği reddetti. Aşağıdaki mesaj nedenini söyler; bir sonraki başarılı işlemden sonra kaybolur."
+        },
+        "hints": {
+          "needManage": "Potansiyel müşteri eşitlemesini değiştirmek için {permission} izni gerekir.",
+          "needFacebook": "Erişim vermek veya yeniden bağlanmak için de {permission} izni gerekir, çünkü Sayfa'nın bağlantısı kaydedilir.",
+          "enableNeedsAccess": "Önce potansiyel müşteri erişimi verin; Meta, bu erişimi olmayan bir Sayfa için eşitlemeyi reddeder.",
+          "enableNeedsReconnect": "Önce Sayfayı yeniden bağlayın; bağlantısı artık çalışmıyor.",
+          "pickNeedsSync": "Form seçmek için potansiyel müşteri eşitlemesini açın.",
+          "pickNeedsAccess": "Form seçmek için potansiyel müşteri erişimi verin.",
+          "pickNeedsReconnect": "Form seçmek için Sayfayı yeniden bağlayın."
+        },
+        "confirmOff": {
+          "title": "{name} için potansiyel müşteri eşitlemesi kapatılsın mı?",
+          "body": "Bu Sayfa, Meta'dan yeni potansiyel müşteri almayı bırakır. Seçtiğiniz formlar ve zaten kaydedilmiş potansiyel müşteriler korunur; eşitlemeyi istediğiniz zaman yeniden açabilirsiniz.",
+          "action": "Potansiyel müşteri eşitlemesini kapat",
+          "cancel": "İptal"
+        }
+      },
+      "forms": {
+        "title": "{name} Sayfası'nın potansiyel müşteri formları",
+        "intro": "Meta'nın bu Sayfa için listelediği potansiyel müşteri formları bunlar. Potansiyel müşterilerini almak için bir form seçin; seçilen her form, Webhook sekmesinde bir kaynak olur.",
+        "refresh": "Listeyi yenile",
+        "loading": "Potansiyel müşteri formları Meta'dan yükleniyor",
+        "emptyTitle": "Potansiyel müşteri formu yok",
+        "empty": "Bu Sayfa'nın henüz potansiyel müşteri formu yok. Meta Reklam Yöneticisi'nde veya Sayfa üzerinde bir tane oluşturun, ardından bu listeyi yenileyin.",
+        "caption": "Sayfa'nın potansiyel müşteri formları",
+        "col": {
+          "form": "Form",
+          "status": "Meta durumu",
+          "leads": "Potansiyel müşteriler",
+          "questions": "Sorular",
+          "consent": "Onay kutusu",
+          "connected": "Bağlı",
+          "lastLead": "Son potansiyel müşteri",
+          "lastError": "Son hata",
+          "actions": "İşlemler"
+        },
+        "formId": "Form kimliği",
+        "formStatus": {
+          "ACTIVE": "Etkin",
+          "ARCHIVED": "Arşivlendi",
+          "DELETED": "Silindi",
+          "DRAFT": "Taslak",
+          "unknown": "Bilinmiyor"
+        },
+        "leadsUnknown": "Meta bildirmedi",
+        "consentYes": "Onay kutusu var",
+        "consentNo": "Yok",
+        "connected": "Bağlı",
+        "notConnected": "Seçilmedi",
+        "noLeads": "Henüz potansiyel müşteri yok",
+        "pick": "Seç",
+        "pickFor": "{name} formunu seç",
+        "stop": "Durdur",
+        "stopFor": "{name} formunu durdur",
+        "mapFields": "Alanları eşle",
+        "mapFieldsFor": "{name} alanlarını eşle",
+        "rules": "Atama ve fırsat",
+        "rulesFor": "{name} için atama ve fırsat",
+        "openSource": "Kaynağı aç",
+        "openSourceFor": "{name} kaynağını aç",
+        "pickedToast": "{name} seçildi",
+        "stoppedToast": "{name} durduruldu",
+        "confirmStop": {
+          "title": "{name} için aktarım durdurulsun mu?",
+          "body": "Bu formun potansiyel müşteri kaynağı ve altında kayıtlı potansiyel müşteriler silinir. Bunlardan zaten oluşturulmuş kişiler kalır. Formu daha sonra yeniden seçebilirsiniz.",
+          "action": "Aktarımı durdur",
+          "cancel": "İptal"
+        }
+      },
+      "mapping": {
+        "title": "Alanları eşle: {name}",
+        "close": "Kapat",
+        "noSource": "Bu formun potansiyel müşteri kaynağı bulunamadı. Listeyi yenileyin ve tekrar deneyin.",
+        "loading": "Kaynak yükleniyor",
+        "intro": "Bu formdaki her yanıtın kişide nereye gideceğini seçin. Otomatik bırakılan bir soru, email veya phone_number gibi olağan adlarla aranır.",
+        "suggested": "Bunları her sorunun türüne göre doldurduk. Kontrol edin, ardından kaydedin.",
+        "multiUse": "Kayıtlı eşleme aynı soruyu birden fazla alan için kullanıyordu ({keys}). Kaydettiğinizde yalnızca ilki korunur.",
+        "noQuestions": "Meta bu form için soru listelemedi, bu yüzden eşlenecek bir şey yok. Olağan adlar yine de aranır.",
+        "ignore": "Otomatik (burada eşlenmedi)",
+        "contactFields": "Kişi alanları",
+        "contactProperties": "Kişi özellikleri",
+        "problems": {
+          "duplicateTarget": "Başka bir soru zaten bu alana gidiyor. Farklı bir alan seçin.",
+          "propertyKey": "Bu özellik anahtarı geçerli değil."
+        },
+        "conflict": "Başka biri bu kaynağı değiştirdi. Onun sürümünü görmek için yeniden yükleyin; kaydedilmemiş seçimleriniz kaybolur.",
+        "cancel": "İptal",
+        "save": "Eşlemeyi kaydet",
+        "saved": "{name} için alan eşlemesi kaydedildi"
+      },
+      "rules": {
+        "title": "Atama ve fırsat: {name}",
+        "close": "Kapat",
+        "noSource": "Bu formun potansiyel müşteri kaynağı bulunamadı. Listeyi yenileyin ve tekrar deneyin.",
+        "loading": "Kaynak yükleniyor",
+        "intro": "Bu formun oluşturduğu kişilerin kime ait olacağını, her potansiyel müşteri için fırsat açılıp açılmayacağını ve kimin bilgilendirileceğini belirleyin. Değişiklikler, kaydettikten sonra gelen potansiyel müşteriler için geçerlidir.",
+        "conflict": "Başka biri bu kaynağı değiştirdi. Onun sürümünü görmek için yeniden yükleyin; kaydedilmemiş değişiklikleriniz kaybolur.",
+        "cancel": "İptal",
+        "save": "Kaydet",
+        "saved": "{name} için atama ve fırsat kaydedildi"
+      },
+      "health": {
+        "title": "Meta potansiyel müşteri formu durumu",
+        "loading": "Form kontrol ediliyor",
+        "notConnected": "Bu kaynak artık bir Meta potansiyel müşteri formuna bağlı değil, bu yüzden kontrol edilecek bir şey yok. Formu Reklamlar sekmesinden yeniden seçin.",
+        "page": "Sayfa",
+        "form": "Form",
+        "state": "Potansiyel müşteri eşitlemesi",
+        "leadAccess": "Potansiyel müşteri erişimi",
+        "lastLead": "Son potansiyel müşteri",
+        "never": "Henüz potansiyel müşteri yok",
+        "lastError": "Son hata:",
+        "fixHint": "Düzeltmek için Reklamlar sekmesini açın: potansiyel müşteri erişimi verin, Sayfayı yeniden bağlayın veya eşitlemeyi yeniden açın.",
+        "openAds": "Reklamlar sekmesini aç"
+      }
     }
   }
 }

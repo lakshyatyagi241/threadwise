@@ -430,7 +430,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-PLAN-025 | done |  | GET /v2/platform/plan-analytics/export CSV of the same numbers |
 | TW-PLAN-026 | done |  | GET /v2/platform/financial: revenue, MRR, ARR, refunds, outstanding, charts, latest orders; unknown window = 30d |
 | TW-PLAN-027 | done |  | GET /v2/platform/premium: paid vs free, ARPU, conversion, plan mix, revenue by plan |
-| TW-PLAN-028 | wontfix |  | dead feature (package_features table has no UI and nothing reads it); bullets come from the catalogue per the port note |
+| TW-PLAN-028 | wontfix |  | dead feature (package_features table has no UI and nothing reads it; the table was dropped by 20261216090000_drop_dormant_tables.sql); bullets come from the catalogue per the port note |
 
 ## wallet-message-billing (wallet)
 
@@ -954,3 +954,24 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-AIADM-008 | todo |  |  |
 | TW-AIADM-009 | todo |  |  |
 | TW-AIADM-010 | todo |  |  |
+
+## google-account (gacc)
+
+Added by the "Calendar and Sheets" work (walkthrough item 30); plan: [google-workspace-build.md](../plan/google-workspace-build.md). Nothing here was run against a live Google account.
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-GACC-001 | frontend-done |  | `/google-account` page: status, account, capabilities, Connect, Add permissions, Reconnect, Disconnect, last problem; Settings tile, help guide, 21 locales; static render tests; Playwright not run |
+| TW-GACC-002 | backend-done |  | connect with chosen capabilities, incremental consent (`include_granted_scopes`, `login_hint`), signed state carries the capabilities, a short grant on a connected account is kept; e2e against a stand-in |
+| TW-GACC-003 | backend-done |  | needs-reconnect once (audit, outbox), last error and last used on the connection, disconnect with revoke; permissions `google.account.read` and `.manage` |
+| TW-GACC-004 | backend-done |  | real `GOOGLE_WORKSPACE` over the grant for Sheets, Check sheet field, Save contact, Docs, Form, Meet (TW-FLR-044 to 047, 080); every success and failure path through the real flow engine against a stand-in |
+| TW-GACC-005 | backend-done |  | file pickers `GET /flows/builder-context/google/:kind` and `/status` (TW-FLB-055 to 059) |
+| TW-GACC-006 | frontend-done |  | flow inspector notice above each Google step; picker says when the file list permission is missing |
+| TW-GACC-007 | backend-done |  | shared Google transport: timeout, no redirects, jittered retries, `Retry-After`, scope and API-not-enabled classification, stable `GOOGLE_*` codes (calendar included) |
+| TW-GACC-008 | blocked |  | inbox composer "Send Meet link" (TW-TIB1-022): no endpoint or button exists; `createMeet` is ready |
+| TW-GACC-009 | backend-done |  | calendar read-back answered by the owner: bounded hourly reconcile, drift stored, never auto-applied (see TW-GACC-011); watch channels not built |
+| TW-GACC-010 | backend-done |  | consent confirmation bound to user and workspace: single-use record, `/google-account/confirm` page (Confirm/Cancel), forwarded, expired, replayed, wrong workspace, cancelled tested; web done, 21 locales |
+| TW-GACC-011 | backend-done |  | calendar drift: queue `calendar-reconcile`, drift columns, "Calendar out of sync" badge, push and accept actions, one owner notification; fake-Google e2e (deleted, moved, guests, echo, revoked mid-run, 404, 410); web done, 21 locales |
+| TW-GACC-012 | backend-done |  | a Google node that cannot use Google fails with `GOOGLE_*` and fix text (unit and e2e), inspector notice says so; a half-empty step is skipped as in Reference; a Sheets step appends all its rows in one call |
+| TW-GACC-013 | backend-done |  | `ContactsService.create` advisory lock on org + normalised email/phone; Redis lock removed from the Sheets webhook; concurrency e2e on real Postgres (CRM owners' zone: review) |
+

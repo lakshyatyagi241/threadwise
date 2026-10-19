@@ -17,6 +17,8 @@ import {
   XIcon,
 } from '../kit';
 import type { FormProps } from '../types';
+import { acceptFor } from './helpers';
+import { UploadBox, UploadedFile, uploadFile } from './parts';
 import { ChoiceVariableField } from './save-to-attribute';
 
 const KINDS = ['reply', 'agent', 'url', 'phone', 'email'] as const;
@@ -56,6 +58,8 @@ const cardsOf = (raw: unknown): Card[] =>
  */
 export function CarouselForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.simple.editors.carousel');
+  const tu = useTranslations('flb.builder.formsCore.send');
+  const tp = useTranslations('flb.builder.formsCore.parts');
   const cards = cardsOf(d.cards);
   const save = (next: Card[]) => set('cards', next);
   const patch = (i: number, p: Partial<Card>) =>
@@ -79,11 +83,22 @@ export function CarouselForm({ data: d, set, env }: FormProps) {
             </IconButton>
           </div>
           <Field label={t('image')}>
-            <TextInput
-              value={c.image}
-              placeholder="https://"
-              onChange={(v) => patch(i, { image: v })}
+            <UploadBox
+              compact
+              accept={acceptFor('image')}
+              label={c.image ? tu('replaceFile') : tu('chooseKind.image')}
+              onFile={(file) =>
+                uploadFile(tp, env, file, 'image', (res) => patch(i, { image: res.url }))
+              }
             />
+            <div className="mt-2">
+              <TextInput
+                value={c.image}
+                placeholder="https://"
+                onChange={(v) => patch(i, { image: v })}
+              />
+            </div>
+            {c.image ? <UploadedFile kind="image" url={c.image} filename="" size="sm" /> : null}
           </Field>
           <Field label={`${t('title')} (${c.title.length}/${FLB_CAROUSEL_LIMITS.title})`}>
             <TextInput value={c.title} onChange={(v) => patch(i, { title: v })} />

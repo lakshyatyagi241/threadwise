@@ -24,6 +24,8 @@ export interface CreatedSource {
   name: string;
   token: string;
   hookPath: string;
+  hookUrl: string | null;
+  hookUrlProblem: string | null;
   tokenHint: string;
   rowVersion: number;
   hasSecret: boolean;

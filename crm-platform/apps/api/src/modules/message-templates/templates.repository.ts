@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
+import { rawMappedColumn } from '../../common/sql/identifier';
 import type { Tx } from '@crm/db';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
@@ -112,6 +113,8 @@ export interface ListFilter {
   connectionUuid?: string;
   /** Internal id of the WhatsApp connection: for a caller that already holds it (the team inbox), instead of its uuid. */
   providerConfigId?: number;
+  /** This connection's templates first, then the rest, each group newest first. For a caller whose page is shared with other numbers. */
+  preferProviderConfigId?: number;
   q?: string;
 }
 
@@ -235,6 +238,9 @@ export class TemplatesRepository {
     if (sort === 'oldest') order = sql`t.created_at ASC, t.id ASC`;
     else if (sort === 'name-asc') order = sql`lower(t.template_name) ASC, t.id ASC`;
     else if (sort === 'name-desc') order = sql`lower(t.template_name) DESC, t.id DESC`;
+    if (f.preferProviderConfigId !== undefined && !f.cursor && sort === 'newest') {
+      order = sql`(t.provider_config_id = ${f.preferProviderConfigId}) DESC, t.created_at DESC, t.id DESC`;
+    }
     const res = await tx.execute(sql`
       SELECT ${SELECT} FROM ${FROM}
       WHERE ${sql.join(where, sql` AND `)}
@@ -387,7 +393,7 @@ export class TemplatesRepository {
     const sets: SQL[] = [];
     for (const [key, value] of Object.entries(patch) as Array<[keyof TemplatePatch, unknown]>) {
       if (value === undefined) continue;
-      const column = sql.raw(COLUMN[key]);
+      const column = rawMappedColumn(COLUMN, key);
       sets.push(
         JSON_COLUMNS.has(key)
           ? sql`${column} = ${JSON.stringify(value ?? null)}::jsonb`

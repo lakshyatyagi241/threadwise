@@ -363,27 +363,24 @@
           "kinds": {
             "sheets": {
               "pick": "— kies een blad —",
-              "empty": "Geen spreadsheets gevonden — plak hieronder een URL/ID",
               "loading": "Bladen laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je bladen kunnen niet worden getoond. Plak in plaats daarvan het blad-id of de link.",
-              "idPlaceholder": "Blad-id",
-              "saved": "Blad {id}… (niet geladen)"
+              "saved": "Blad {id}… (niet geladen)",
+              "empty": "Geen spreadsheets gevonden in het gekoppelde Google-account",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je sheets kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             },
             "docs": {
               "pick": "— kies een sjabloondocument —",
               "empty": "Geen documenten gevonden",
               "loading": "Documenten laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je documenten kunnen niet worden getoond. Plak in plaats daarvan het document-id of de link.",
-              "idPlaceholder": "Document-id",
-              "saved": "Document {id}… (niet geladen)"
+              "saved": "Document {id}… (niet geladen)",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je documenten kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             },
             "forms": {
               "pick": "— kies een formulier —",
               "empty": "Geen formulieren gevonden",
               "loading": "Formulieren laden…",
-              "notConnected": "Google is niet verbonden voor deze workspace, dus je formulieren kunnen niet worden getoond. Plak in plaats daarvan het formulier-id of de link.",
-              "idPlaceholder": "Formulier-id",
-              "saved": "Formulier {id}… (niet geladen)"
+              "saved": "Formulier {id}… (niet geladen)",
+              "notConnected": "Google is niet gekoppeld voor deze werkruimte, dus je formulieren kunnen niet worden weergegeven. Koppel Google om er een te kiezen."
             }
           },
           "sheetsIntro": "Voegt een rij toe aan een Google Spreadsheet (schrijfmodus) of zoekt een rij op via een sleutelkolom (leesmodus). Gebruikt het verbonden Google-account van de workspace via <link>/google-account</link>.",
@@ -405,8 +402,6 @@
           "addColumn": "Kolom toevoegen",
           "matchByHeader": "Kolommen koppelen op kopnaam",
           "matchByHeaderHint": "Schrijf elke waarde in de bladkolom met die kop (willekeurige volgorde). Uitzetten om van links naar rechts op positie toe te voegen — de standaard.",
-          "pasteLabel": "…of plak een Spreadsheet-URL / -ID",
-          "pasteHint": "Werkt ook als de kiezer leeg is — plak de bladlink en we halen het ID eruit.",
           "docsIntro": "Kopieer een sjabloondocument, vul <mono>{placeholders}</mono> in, deel het via iedereen-met-link en stuur de URL naar de klant. Plaats <mono>{key}</mono> in je sjabloon waar de waarde moet komen.",
           "templateDocument": "Sjabloondocument",
           "newCopyTitle": "Titel van nieuwe kopie",
@@ -421,7 +416,6 @@
           "messageTemplateHint": "De botbubbel die naar de klant wordt gestuurd. <mono>{token}</mono> krijgt de deellink.",
           "messageTemplatePlaceholder": "Hier is je document:\n'{{'doc_url'}}'",
           "saveUrl": "URL opslaan onder variabele",
-          "formIntro": "Stuurt de formulier-URL via WhatsApp, pauzeert de flow en gaat verder via de uitgang <b>ingediend</b> zodra de klant het invult. Antwoorden worden flowvariabelen.",
           "googleForm": "Google-formulier",
           "bodyBubble": "Tekstbubbel (boven de link verzonden)",
           "bodyBubblePlaceholder": "Vul dit korte formulier in:",
@@ -429,11 +423,21 @@
           "saveResponsesHint": "Individuele antwoorden komen ook terecht als <mono>{token}</mono>.",
           "expireAfter": "Verlopen na (seconden)",
           "expireAfterHint": "Hoe lang er op een inzending wordt gewacht voordat er een time-out optreedt. 86400 = 24 uur.",
-          "setupTitle": "Eenmalige installatie — plak dit in de scripteditor van je formulier",
-          "setupOpen": "Open je formulier → <mono>⋮-menu</mono> → <mono>Scripteditor</mono>",
-          "setupDownload": "<link>Download het script (.gs)</link> en plak het",
-          "setupTrigger": "Voeg een trigger toe: <mono>onFormSubmit</mono> · Vanuit formulier · Bij verzenden van formulier",
-          "setupWarning": "Zonder dit script slaat het formulier de antwoorden wel op in Google Formulieren, maar gaat de flow niet verder."
+          "connection": {
+            "open": "Google-account openen",
+            "permission": {
+              "calendar": "Agenda",
+              "sheets": "Sheets",
+              "docs": "Docs en Drive",
+              "forms": "Formulieren"
+            },
+            "unavailable": "Google is niet ingesteld voor dit platform, dus deze stap mislukt wanneer de flow draait.",
+            "disconnected": "Er is geen Google-account gekoppeld, dus deze stap mislukt wanneer de flow draait. Koppel eerst Google.",
+            "needsReconnect": "Google accepteert het gekoppelde account niet meer, dus deze stap mislukt wanneer de flow draait. Koppel Google eerst opnieuw.",
+            "missing": "Het gekoppelde Google-account heeft de toestemming {permission} niet gegeven, dus deze stap mislukt wanneer de flow draait."
+          },
+          "formIntro": "Verstuurt de formulier-URL via WhatsApp, pauzeert de flow en gaat verder via de poort <b>submitted</b> wanneer de klant het formulier invult. De antwoorden worden via je gekoppelde Google-account uit het formulier gelezen, dus er hoeft niets in het formulier te worden geplakt. Antwoorden worden flowvariabelen.",
+          "noListing": "Je bestanden kunnen niet worden weergegeven omdat de machtiging Drive-bestandslijst niet is verleend op de pagina Google-account. Voeg deze daar toe om bestanden te kiezen."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1064,6 +1068,7 @@
         "anotherPart": "Een ander onderdeel van deze flow. Het draait wanneer een knop of lijstrij hier naartoe leidt{lost, select, true {: er leidt nog niets hierheen, dus het zou nooit draaien.} other {.}}",
         "addFirstStep": "Voeg de eerste stap toe",
         "branchingEnds": "Deze {kind, select, list {lijst} other {set knoppen}} beëindigt dit onderdeel: wat daarna wordt verzonden, hangt af van wat de klant kiest.",
+        "optionsCarryOn": "Elke {kind, select, list {rij} other {knop}} kan een eigen flow starten of doorgaan met de volgende stap hieronder.",
         "thenGoTo": "Ga daarna naar",
         "confirmImport": {
           "title": "Deze flow vervangen door het bestand?",
@@ -1096,9 +1101,10 @@
             "ask": "Vraag de klant",
             "handoff": "Doorgeven",
             "logic": "Beslissen",
-            "answer": "Antwoord"
+            "answer": "Antwoord",
+            "action": "Acties"
           },
-          "blockedTitle": "Knoppen en lijsten beëindigen een flow, dus ze kunnen alleen als laatste komen.",
+          "blockedTitle": "Deze stap sluit dit deel af, dus hij kan alleen als laatste staan.",
           "blockedTitleFaq": "Antwoord uit FAQ heeft twee uitgangen en kan daarom alleen als laatste staan."
         },
         "card": {
@@ -1112,11 +1118,27 @@
           "faqExits": {
             "matched": "Beantwoord",
             "no_match": "Geen match"
-          }
+          },
+          "close": "Sluiten",
+          "clickToEdit": "Klik om te bewerken",
+          "outsideToSave": "Klik ergens buiten de stap om de wijzigingen op te slaan",
+          "addCondition": "Een voorwaarde toevoegen na deze stap",
+          "conditionLast": "Een voorwaarde sluit dit deel af, dus hij kan alleen als laatste.",
+          "duplicateTitle": "Deze stap dupliceren?",
+          "duplicateBody": "Direct erna wordt een kopie toegevoegd.",
+          "deleteTitle": "Deze stap verwijderen?",
+          "deleteBody": "De stap wordt uit de flow verwijderd.",
+          "stage": "Fase {stage}",
+          "storedIn": "Waarden worden opgeslagen in de eigenschap <b>{property}</b> van het contact",
+          "actions": "Acties",
+          "actionsHint": "Een stap toevoegen die direct na deze draait.",
+          "actionsBlocked": "Na een stap die zijn deel afsluit kan geen stap volgen."
         },
         "editors": {
           "linkLabel": "Waarheen dit leidt",
+          "linkChoose": "Kies waar dit naartoe leidt…",
           "linkEnds": "Eindigt hier (er wordt niets meer verzonden)",
+          "linkNext": "Gaat verder met de volgende stap",
           "linkOption": "{stage} · {label}{self, select, true { (deze stap)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Leiden naar een nieuwe flow…",
           "question": "Vraag",
@@ -1216,17 +1238,13 @@
             "hour": "uren",
             "day": "dagen"
           },
-          "location": {
-            "placeName": "Plaatsnaam",
-            "placePlaceholder": "Ons kantoor",
-            "address": "Adres",
-            "latitude": "Breedtegraad",
-            "longitude": "Lengtegraad"
-          },
           "template": {
             "label": "Goedgekeurd sjabloon",
             "hint": "Alleen sjablonen die je WhatsApp-nummer heeft goedgekeurd, worden getoond.",
-            "choose": "Kies een sjabloon…"
+            "choose": "Kies een sjabloon…",
+            "buttons": "Knoppen",
+            "variables": "Ingevuld vanuit het contact",
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -1240,7 +1258,12 @@
             "add": "Nog een knop toevoegen",
             "remove": "Knop verwijderen",
             "opensPhone": "Telefoonnummer",
-            "opensEmail": "E-mailadres"
+            "opensEmail": "E-mailadres",
+            "errors": {
+              "url": "Voer een geldig webadres in dat begint met https://",
+              "phone": "Voer een geldig telefoonnummer in, bijvoorbeeld +91 98765 43210",
+              "email": "Voer een geldig e-mailadres in, bijvoorbeeld name@example.com"
+            }
           },
           "carousel": {
             "intro": "Bericht boven de kaarten",
@@ -1423,13 +1446,7 @@
           "info": "Voeg maximaal {max} CTA-knoppen toe aan één bericht — combineer Website bezoeken, Bellen en Code kopiëren in elke volgorde. Dezelfde limiet als WhatsApp-sjabloonknoppen.",
           "buttonLabel": "Knoptekst",
           "addButton": "Knop toevoegen",
-          "maxReached": "Maximaal {max} knoppen bereikt.",
-          "locationTitle": "Titel",
-          "locationTitlePlaceholder": "Ons kantoor",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Straat, plaats, land",
-          "locationLatitude": "Breedtegraad",
-          "locationLongitude": "Lengtegraad"
+          "maxReached": "Maximaal {max} knoppen bereikt."
         },
         "logic": {
           "operator": {
@@ -1497,19 +1514,14 @@
           "aiModelPick": "— kies model —",
           "aiModelNone": "Geen AI-modellen ingeschakeld — vraag de admin er een in te schakelen",
           "aiModelNotEnabled": "{value} (niet ingeschakeld)",
-          "aiAssistantNone": "— geen (gebruik alleen de prompt hierboven) —",
           "aiAssistantOption": "{name} · {count, plural, one {# bron} other {# bronnen}}",
           "aiAssistantMissing": "(assistent {id})",
-          "aiAssistantHintNone": "Nog geen kennisbanken. Maak er een aan bij <link>AI-training</link> en klik daarna op Lijst vernieuwen om hem hier te kiezen.",
-          "aiAssistantHintEmpty": "Let op: deze assistent heeft 0 getrainde bronnen. Voeg er een paar toe bij <link>AI-training</link>, anders gebruikt het antwoord alleen de prompt.",
-          "aiAssistantHint": "Haalt de getrainde inhoud van de gekozen assistent in dit antwoord. <link>Kennis beheren →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Modellen die de admin heeft ingeschakeld — plus elke provider waarvoor je zelf een sleutel hebt toegevoegd (Instellingen → AI-sleutels, bij BYOK-abonnementen).",
           "aiModelHintNone": "Nog geen provider beschikbaar. Voeg je eigen sleutel toe bij <link>Instellingen → AI-sleutels</link> (BYOK-abonnementen), of vraag je admin er een in te schakelen.",
           "aiPrompt": "Systeemprompt",
           "aiSave": "Antwoord opslaan in",
           "aiSaveHint": "Latere nodes lezen het als <v>{save}</v> — of <v>{path}</v> bij extraheren.",
-          "aiAssistantLabel": "Kennisbank (optioneel)",
           "aiExtract": "<strong>Gestructureerde gegevens extraheren (JSON)</strong> — zet het bericht om in velden",
           "aiFields": "Te extraheren velden",
           "aiFieldsHint": "Komma-gescheiden sleutels. De AI geeft ÉÉN JSON-object terug; elke sleutel wordt <v>{key}</v> (en <v>{rows}</v> wanneer meerdere records worden gevonden — bijv. voor een Google Sheets-node).",
@@ -1522,7 +1534,25 @@
           "subflowMissing": "Flow {id} (niet in workspace)",
           "subflowLabel": "Uit te voeren flow",
           "subflowHint": "Kies een andere opgeslagen flow. Wanneer deze node wordt geactiveerd, draait die flow volledig voordat de besturing terugkeert naar de volgende node hier.",
-          "endInfo": "Deze node beëindigt de flow. Alles wat erna is verbonden, draait niet."
+          "endInfo": "Deze node beëindigt de flow. Alles wat erna is verbonden, draait niet.",
+          "aiSetupLegend": "Hoe moet deze stap antwoorden?",
+          "aiSetupAgent": "AI-agent",
+          "aiSetupAgentDesc": "Gebruikt de instructies, het model en de kennis van een agent uit AI-training.",
+          "aiSetupCustom": "Eigen instelling",
+          "aiSetupCustomDesc": "Kies hier een model en schrijf de instructies.",
+          "aiAgentLabel": "AI-agent",
+          "aiAgentPick": "— kies een AI-agent —",
+          "aiAgentHint": "De agent brengt eigen instructies, model en kennis mee. Wijzig ze in <link>AI-training</link>.",
+          "aiAgentNone": "Je hebt nog geen AI-agents. <link>Maak je eerste AI-agent</link> en klik dan op Lijst vernieuwen.",
+          "aiAgentRequired": "Kies een AI-agent of schakel over naar een eigen instelling.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# kennisbron} other {# kennisbronnen}}",
+          "aiAgentNoSources": "Deze agent heeft nog geen kennis en antwoordt alleen op basis van zijn instructies. Voeg bronnen toe in <link>AI-training</link>.",
+          "aiPromptRequired": "Schrijf de instructies voor de AI.",
+          "aiKnowledgeLabel": "Kennis van een AI-agent (optioneel)",
+          "aiKnowledgeNone": "— geen —",
+          "aiKnowledgeHint": "Voegt de getrainde bronnen van die agent toe aan het antwoord. Zijn eigen instructies en model worden bij een eigen instelling niet gebruikt. <link>Beheren in AI-training →</link>",
+          "aiAdvanced": "Geavanceerde opties",
+          "aiCreateAgent": "+ AI-agent maken"
         },
         "options": {
           "prompt": "Prompt",
@@ -1696,7 +1726,8 @@
             "date_field_match": "Planning: ten opzichte van een datum bij het contact (verjaardag…)",
             "schedule": "Planning: op een datum en tijd",
             "shopify_event": "Commerce: een Shopify-winkelevent",
-            "woocommerce_event": "Commerce: een WooCommerce-winkelevent"
+            "woocommerce_event": "Commerce: een WooCommerce-winkelevent",
+            "segment_leave": "Doelgroep: wanneer een contact een segment verlaat"
           },
           "tagsLoading": "Tags laden…",
           "tagPick": "— kies tag —",
@@ -1790,7 +1821,8 @@
             "productId": "Product-ID (optioneel)",
             "productIdHint": "Leeg = elk product in de bestelling.",
             "storeNote": "De klant wordt via het telefoonnummer gekoppeld aan een opgeslagen contact; voor een bestelling wordt niemand aangemaakt. „Toegevoegd aan winkelwagen” en „product bekeken” worden niet aangeboden: de winkel meldt deze niet.",
-            "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet."
+            "updatedNote": "Wordt elke keer geactiveerd wanneer een persoon of import een contact wijzigt. Een wijziging door een andere flow start deze niet.",
+            "segmentLeaveHint": "Wordt één keer uitgevoerd telkens wanneer een contact dat in dit segment zat buiten het segment wordt aangetroffen na een update, een tag of een lijstweergave. Een vertrekkend contact wordt alleen opgemerkt als de flow het eerder in het segment heeft gezien."
           }
         }
       },
@@ -1810,6 +1842,89 @@
         "label": "Pictogram (optioneel)",
         "add": "Pictogram toevoegen",
         "saveFirst": "Sla de bot één keer op om een pictogram toe te voegen."
+      },
+      "buttonAction": {
+        "label": "Actie bij indrukken van de knop",
+        "kind": {
+          "none": "Ga naar de volgende stap",
+          "flow": "Flow koppelen",
+          "live_agent": "Live agent",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Kies een flow",
+        "loadingFlows": "Flows laden…",
+        "flowMissing": "Flow {id} (niet gevonden)",
+        "hint": {
+          "flow": "Start de gekozen flow voor dit contact en het gesprek gaat daar verder. Na deze knop wordt niets gekoppeld.",
+          "live_agent": "Draagt het gesprek over aan het team dat je kiest. Na deze knop wordt niets gekoppeld.",
+          "opt_in": "Markeert het contact als geabonneerd op marketingberichten en gaat daarna door naar de gekoppelde stap.",
+          "opt_out": "Markeert het contact als afgemeld voor marketingberichten en gaat daarna door naar de gekoppelde stap."
+        }
+      },
+      "messageTools": {
+        "format": "Tekstopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "strike": "Doorgehaald",
+        "mono": "Monospace",
+        "bullet": "Opsommingslijst",
+        "numbered": "Genummerde lijst",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji zoeken",
+        "emojiNone": "Geen emoji gevonden",
+        "variable": "Variabele invoegen",
+        "variableSearch": "Variabelen zoeken",
+        "groupContact": "Contacteigenschappen",
+        "groupFlow": "Opgeslagen in deze flow",
+        "variableNone": "Geen variabelen gevonden"
+      },
+      "askAge": {
+        "minAge": "Minimumleeftijd",
+        "minAgeHint": "Laat leeg om de leeftijd van je werkruimte uit het Compliancecentrum te gebruiken (18 als er geen is ingesteld). Tussen 1 en 21.",
+        "whenUnder": "Als het antwoord onder die leeftijd ligt",
+        "whenUnderHint": "Het contact wordt in beide gevallen als minderjarig gemarkeerd. De klant krijgt nooit te horen welk antwoord doorgaat.",
+        "end": "Beëindig de flow met een korte, neutrale regel",
+        "continue": "Ga door en laat me vertakken op het antwoord",
+        "endText": "Slotregel",
+        "endTextHint": "Verzonden voordat de flow eindigt. Noem de leeftijd niet. Leeg gebruikt “We kunnen niet verder.”",
+        "continueNote": "De volgende stappen kunnen de variabele van het antwoord gevolgd door _age_gate lezen (bijvoorbeeld answer_age_gate), die under of adult is. Voeg een Voorwaarde toe om te vertakken, bijvoorbeeld om een ouder of voogd te vragen.",
+        "note": "Vraag alleen naar de leeftijd waar je die nodig hebt. Het antwoord wordt naar het contact geschreven: een geboortedatum als geboortedatum, en een antwoord onder de leeftijd markeert het contact als minderjarig."
+      },
+      "location": {
+        "modeLabel": "Hoe stel je de locatie in",
+        "modeLink": "Google Maps-link",
+        "modeCoords": "Breedte- en lengtegraad",
+        "linkLabel": "Google Maps-link",
+        "linkPlaceholder": "Plak een link, bijv. https://maps.app.goo.gl/…",
+        "linkHint": "Open de plek in Google Maps, tik op Delen en daarna op Link kopiëren. Korte en lange links werken allebei.",
+        "finding": "Link opzoeken…",
+        "retry": "Opnieuw proberen",
+        "latitude": "Breedtegraad",
+        "longitude": "Lengtegraad",
+        "coordsHint": "De breedtegraad loopt van -90 tot 90 en de lengtegraad van -180 tot 180. Je kunt „breedte, lengte” in een van beide velden plakken.",
+        "found": "Locatie gevonden",
+        "openInMaps": "Openen in Google Maps",
+        "optionalHint": "Optioneel: wordt getoond op de kaartkaart die de klant ontvangt. Je kunt beide leeg laten.",
+        "optional": "(optioneel)",
+        "placeName": "Naam van de plek",
+        "placePlaceholder": "Ons kantoor",
+        "address": "Adres",
+        "problem": {
+          "empty": "Voer een Google Maps-link of coördinaten in.",
+          "lat_missing": "Voer een breedtegraad in.",
+          "lng_missing": "Voer een lengtegraad in.",
+          "lat_nan": "De breedtegraad moet een getal zijn, bijvoorbeeld 18.5204.",
+          "lng_nan": "De lengtegraad moet een getal zijn, bijvoorbeeld 73.8567.",
+          "lat_range": "De breedtegraad moet tussen -90 en 90 liggen.",
+          "lng_range": "De lengtegraad moet tussen -180 en 180 liggen.",
+          "zero": "0, 0 is geen echte plek. Voer de werkelijke coördinaten in.",
+          "not_url": "Dit lijkt geen link. Plak de volledige Google Maps-link.",
+          "not_maps": "Dit is geen Google Maps-link.",
+          "no_coords": "Deze link wijst niet naar een exacte plek. Open de plek in Google Maps, tik op Delen en kopieer die link, of voer de coördinaten in.",
+          "unresolved": "Deze korte link is nog niet opgezocht. Verlaat het veld of probeer opnieuw.",
+          "resolve_failed": "Deze link kon niet worden gelezen. Controleer of hij opent in Google Maps, of voer de coördinaten in."
+        }
       }
     },
     "contracts": {
@@ -2120,7 +2235,9 @@
         "phone": "Telefoonnummer",
         "number": "Getal",
         "alphanumeric": "Letters en cijfers",
-        "date": "Datum"
+        "date": "Datum",
+        "age": "Leeftijd",
+        "date_of_birth": "Geboortedatum"
       },
       "askInputWrong": {
         "text": "Probeer het opnieuw",
@@ -2129,7 +2246,9 @@
         "phone": "Voer een geldig telefoonnummer in",
         "number": "Voer een geldig getal in",
         "alphanumeric": "Gebruik alleen letters en cijfers",
-        "date": "Voer een geldige datum in ({format})"
+        "date": "Voer een geldige datum in ({format})",
+        "age": "Voer je leeftijd in als geheel getal",
+        "date_of_birth": "Voer een geldige datum in ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2174,7 +2293,8 @@
         "date_field_match": "bij datumovereenkomst",
         "schedule": "op schema",
         "shopify_event": "bij Shopify-gebeurtenis",
-        "woocommerce_event": "bij WooCommerce-gebeurtenis"
+        "woocommerce_event": "bij WooCommerce-gebeurtenis",
+        "segment_leave": "bij verlaten segment"
       },
       "ports": {
         "manual": "handmatig",
@@ -2237,7 +2357,9 @@
         "noSenderInstagram": "De Trigger-node heeft geen Instagram-account geselecteerd — kies er een in de triggerstap.",
         "noSenderFacebook": "De Trigger-node heeft geen Facebook-pagina geselecteerd — kies er een in de triggerstap.",
         "noSenderNumber": "De Trigger-node heeft geen nummer geselecteerd — kies er een in de triggerstap.",
-        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken."
+        "faqMinScore": "\"{node}\" heeft een minimumscore buiten 0.05 tot 0.99 — corrigeer dit of laat het leeg om de instelling van de flow te gebruiken.",
+        "locationInvalid": "„{node}” heeft geen geldige locatie: plak een Google Maps-link of voer een breedtegraad (-90 tot 90) en lengtegraad (-180 tot 180) in.",
+        "aiNoAgent": "\"{node}\" heeft geen AI-agent en geen prompt — kies een AI-agent of kies Eigen instelling en schrijf de instructies."
       }
     },
     "simpleModel": {
@@ -2328,6 +2450,14 @@
         "faq": {
           "label": "Antwoord uit FAQ",
           "help": "Koppel het bericht van de klant aan je FAQ's. Beëindigt deze flow: één uitgang als een FAQ heeft geantwoord, een andere zo niet"
+        },
+        "apiLibrary": {
+          "label": "API-aanroep",
+          "help": "Een API uit je API-bibliotheek aanroepen"
+        },
+        "code": {
+          "label": "JS-functie",
+          "help": "Een klein stukje JavaScript uitvoeren"
         }
       },
       "typeLabel": {
@@ -2345,7 +2475,9 @@
         "assign": "Toewijzen aan een medewerker",
         "carousel": "Carrousel",
         "condition": "Voorwaarde",
-        "faq": "Antwoord uit FAQ"
+        "faq": "Antwoord uit FAQ",
+        "api_library": "API-aanroep",
+        "code": "JS-functie"
       },
       "stepLabel": {
         "questionOf": "Vraag · {kind}"
@@ -2368,10 +2500,11 @@
         "writeQuestion": "Stap {stage}: schrijf de vraag.",
         "nameVariable": "Stap {stage}: geef de variabele een naam waarin het antwoord wordt opgeslagen.",
         "chooseAnswerProperty": "Stap {stage}: kies de contacteigenschap waarnaar het antwoord wordt gekopieerd.",
-        "setCoordinates": "Stap {stage}: stel de breedte- en lengtegraad in.",
+        "setCoordinates": "Stap {stage}: plak een Google Maps-link of voer een geldige breedte- en lengtegraad in.",
         "chooseTemplate": "Stap {stage}: kies een sjabloon.",
         "chooseTeam": "Stap {stage}: kies het team waar het gesprek naartoe gaat.",
         "ctaLabelLink": "Stap {stage}: geef de knop een naam en een link.",
+        "ctaLinkInvalid": "Stap {stage}: het doel van de knop is ongeldig voor het type.",
         "choosePickedProperty": "Stap {stage}: kies de contacteigenschap waarnaar de gekozen optie wordt gekopieerd.",
         "buttonsPrompt": "Stap {stage}: schrijf het bericht boven de knoppen.",
         "addButton": "Stap {stage}: voeg minstens één knop toe.",
@@ -2386,7 +2519,15 @@
         "carouselCards": "Stap {stage}: voeg minstens één kaart toe en geef elke kaart een titel.",
         "carouselButtons": "Stap {stage}: geef elke knop een naam, en een link, nummer of adres waar hij iets opent.",
         "conditionIncomplete": "Stap {stage}: maak de regels van de voorwaarde af (in elk een variabele en een waarde).",
-        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow."
+        "faqMinScore": "Stap {stage}: de minimumscore moet tussen 0.05 en 0.99 liggen, of gebruik de instelling van de flow.",
+        "optionNotConnected": "Stap {stage}: {kind, select, row {de rij} other {de knop}} \"{label}\" leidt nergens heen. Voeg er een stap voor toe of geef er een actie aan.",
+        "tooManyOptions": "Stap {stage}: {kind, select, row {een lijst kan maximaal {max} rijen hebben} other {een set knoppen kan maximaal {max} knoppen hebben}}.",
+        "chooseFlow": "Stap {stage}: kies de flow die de knop start.",
+        "chooseApi": "Stap {stage}: kies de API die wordt aangeroepen.",
+        "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
+        "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
+        "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
+        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent."
       },
       "faqSummary": "{hasCategory, select, true {Uit je FAQ's · {category}} other {Uit je FAQ's}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "Gesimuleerde aankoop: {name} → uitgang “gekocht”",
       "simAbandon": "Gesimuleerd verlaten → uitgang “verlaten”",
       "faqAnswered": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op, dus er wordt niets verzonden en {ref} blijft leeg. Uitgang \"beantwoord\" wordt genomen.",
-      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg."
+      "faqNoMatch": "(gesimuleerd) Antwoord uit FAQ voor \"{query}\": de testchat zoekt je FAQ's niet op en de uitgang \"beantwoord\" is niet verbonden, dus \"geen match\" wordt genomen. {ref} blijft leeg.",
+      "locationSkipped": "(locatie) overgeslagen: geen geldige coördinaten"
     }
   }
 }

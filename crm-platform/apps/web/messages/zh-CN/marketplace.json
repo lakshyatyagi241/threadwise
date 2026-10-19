@@ -61,7 +61,8 @@
       "notForSale": "目前不向新订阅者出售此应用。",
       "trialUnavailable": "此应用在您的工作区中不提供免费试用。",
       "subscriptionNotFound": "您的工作区没有订阅此应用。",
-      "subscriptionState": "这与订阅的当前状态不符。请重新加载以查看最新状态。"
+      "subscriptionState": "这与订阅的当前状态不符。请重新加载以查看最新状态。",
+      "renewalNotStopped": "无法在支付服务商处停止自动续订，因此未做任何更改，您的银行卡仍可能被扣款。请稍后重试。"
     },
     "chips": {
       "installed": "已安装",
@@ -77,7 +78,8 @@
       "trialing": "免费试用",
       "comped": "赠予",
       "canceling": "不续订",
-      "subscriptionEnded": "订阅已结束"
+      "subscriptionEnded": "订阅已结束",
+      "pastDue": "付款失败"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "不出售",
         "paid": "付费应用",
         "addOn": "附加包",
-        "trial": "{days} 天免费试用"
+        "trial": "{days} 天免费试用",
+        "monthlyOrYearly": "{price} / 月，或 {annual} / 年"
       },
       "installs": "{count, plural, other {# 次安装}}",
       "version": "版本 {version}",
@@ -302,7 +305,8 @@
         "terms": "条款",
         "status": "状态页",
         "email": "邮件支持"
-      }
+      },
+      "open": "打开"
     },
     "install": {
       "backToMarketplace": "返回应用市场",
@@ -799,14 +803,15 @@
         "minPlan": "您的套餐或更高套餐包含此应用，因此无需付费。",
         "plan": "您的套餐包含此应用，因此无需付费。"
       },
-      "needsPurchase": "已包含在套餐目录中，购买后即可使用。",
+      "needsPurchase": "请先订阅。付款完成后即可安装。",
       "subscribedNote": "您的工作区已订阅此应用。",
       "trialOffer": "免费试用 {days, plural, other {# 天}}。在您选择订阅之前不会收费。",
       "prepaidNote": "通过工作区账单按月计费。每次付款涵盖一个月，不会自动扣款：请在所示日期前再次付款，以保持应用运行。",
       "notForSale": {
         "title": "不出售",
         "message": "此应用目前不向新订阅者出售。"
-      }
+      },
+      "autoRenewNote": "通过工作区账单按月计费。在您取消之前，银行卡会在每月续订日自动扣款。"
     },
     "subscribe": {
       "subscribe": "订阅",
@@ -820,7 +825,16 @@
         "included": "{name} 已包含在您的套餐中。",
         "already_entitled": "您的工作区已可访问 {name}。",
         "free": "{name} 免费。"
-      }
+      },
+      "hintPriceAuto": "每月 {price}，在您取消之前每月自动从银行卡扣款。",
+      "hintAuto": "在您取消之前，每月自动从银行卡扣款。",
+      "period": {
+        "legend": "计费周期",
+        "monthly": "按月，{price}",
+        "yearly": "按年，{price}"
+      },
+      "hintYear": "每年 {price}，在结账时支付。每次付款涵盖一年。",
+      "hintYearAuto": "每年 {price}，在您取消之前每年自动从银行卡扣款。"
     },
     "subscription": {
       "title": "订阅",
@@ -829,7 +843,8 @@
         "trialing": "免费试用",
         "comped": "赠予",
         "canceling": "不续订",
-        "ended": "已结束"
+        "ended": "已结束",
+        "past_due": "付款失败"
       },
       "date": {
         "paidUntil": "付费至 {date}",
@@ -838,7 +853,9 @@
         "compOpen": "赠予访问权限，无结束日期",
         "cancelingUntil": "不续订。有效期至 {date}",
         "endedOn": "订阅已于 {date} 结束",
-        "endedNoDate": "订阅已结束"
+        "endedNoDate": "订阅已结束",
+        "renewsOn": "{date} 续订",
+        "graceUntil": "付款失败。可使用至 {date}"
       },
       "lastPayment": "上次付款：每月 {price}",
       "nextPayment": "此应用的价格已变更。您的下次付款将为每月 {price}。",
@@ -849,7 +866,8 @@
         "resubscribe": "重新订阅",
         "subscribe": "立即订阅",
         "resume": "恢复订阅",
-        "cancel": "取消订阅"
+        "cancel": "取消订阅",
+        "payNow": "立即付款"
       },
       "cancelConfirm": {
         "title": "取消对 {name} 的订阅？",
@@ -857,7 +875,9 @@
         "messageNoDate": "{name} 将保持有效直至您已付费的期限结束，之后将暂停。您的数据和设置将被保留。",
         "afterwards": "之后将不再收费，您可随时重新订阅。",
         "confirm": "取消订阅",
-        "keep": "保留订阅"
+        "keep": "保留订阅",
+        "messageAuto": "您的银行卡将不会再被扣款。{name} 将保持有效至 {date}，之后将暂停。您的数据和设置将被保留。",
+        "messageAutoNoDate": "您的银行卡将不会再被扣款。{name} 将保持有效直至您已付费的期限结束，之后将暂停。您的数据和设置将被保留。"
       },
       "toast": {
         "canceled": "订阅已取消。将保持有效至 {date}。",
@@ -865,7 +885,14 @@
         "resumed": "订阅已恢复。"
       },
       "working": "处理中",
-      "noCheckout": "此应用目前无法结账。请稍后再试。"
+      "noCheckout": "此应用目前无法结账。请稍后再试。",
+      "paymentFailed": "此应用最近一次银行卡付款未成功。支付服务商重试期间，应用可继续使用至 {date}。请立即付款或更新付款方式，以免被暂停。",
+      "paymentFailedNoDate": "此应用最近一次银行卡付款未成功。支付服务商重试期间，应用可继续使用。请立即付款或更新付款方式，以免被暂停。",
+      "autoRenewHint": "银行卡将在续订日自动扣款。如需停止，请在此之前取消订阅。",
+      "lastPaymentYear": "上次付款：每年 {price}",
+      "nextPaymentYear": "此应用的价格已变更。您的下次付款将为每年 {price}。",
+      "priceLocked": "您的价格已锁定为每月 {price}。只要您保持订阅，即使应用价格变动，该价格也保持不变。",
+      "priceLockedYear": "您的价格已锁定为每年 {price}。只要您保持订阅，即使应用价格变动，该价格也保持不变。"
     },
     "tools": {
       "open": "打开",
@@ -875,6 +902,24 @@
       },
       "soon": "即将推出",
       "upgrade": "升级"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "已收到付款",
+        "message": "谢谢。您的订阅已生效，应用已可使用。"
+      },
+      "pending": {
+        "title": "正在确认您的付款",
+        "message": "支付服务商尚未确认该笔付款。确认后此页面会自动更新，您无需再次付款。"
+      },
+      "failed": {
+        "title": "付款未成功",
+        "message": "未产生任何扣款。请重新订阅，以尝试其他付款方式。"
+      },
+      "cancelled": {
+        "title": "付款已取消",
+        "message": "未产生任何扣款。准备好后可随时重新订阅。"
+      }
     }
   }
 }

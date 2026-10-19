@@ -42,6 +42,11 @@ export const AuthKeys = {
   mfaSetup: (orgId: number, subject: string) => `auth:mfa-setup:${orgId}:${subject}`,
   /** Staged sign-up awaiting its WhatsApp code. */
   signup: (challengeId: string) => `auth:signup:${challengeId}`,
+  /** The pre-account stage (name/email/phone + email-code hash) before password is set. Keyed by an opaque token, not the email — the email itself never appears in the key. */
+  signupEmailStage: (token: string) => `auth:signup-email-stage:${token}`,
+  /** Per-address sign-up code mail counter (start + resends), the email twin of `otpPhone`. Hashed: no address in the key. */
+  signupEmailSends: (email: string) =>
+    `auth:signup-email-sends:${sha256Hex(email.trim().toLowerCase()).slice(0, 24)}`,
   /** Per-number OTP send counter (cost-abuse guard). */
   otpPhone: (e164: string) => `auth:otp-phone:${sha256Hex(e164).slice(0, 24)}`,
   /** Operator "send a test code" counter (5 per hour per operator). */

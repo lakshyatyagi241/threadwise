@@ -9,6 +9,58 @@
     "common": {
       "dismiss": "Dismiss"
     },
+    "previousSends": {
+      "title": "Previous sends",
+      "empty": "No earlier broadcasts or campaigns yet",
+      "outcomeLabel": "Who from those sends",
+      "outcomes": {
+        "all": "Everyone it went to",
+        "delivered": "Delivered",
+        "read": "Read",
+        "not_read": "Did not read",
+        "replied": "Replied",
+        "not_replied": "Did not reply",
+        "clicked": "Clicked a link",
+        "failed": "Failed"
+      },
+      "outcomeOff": "{name} (not for broadcasts)",
+      "outcomeHint": {
+        "all": "Everyone it went to: all the people the message was meant for. Opted-out contacts and skipped rows are left out.",
+        "delivered": "Delivered: the people it reached.",
+        "read": "Read: the people who read it.",
+        "not_read": "Did not read: the people it was sent to who have not read it.",
+        "replied": "Replied: the people who replied to it.",
+        "not_replied": "Did not reply: the people it was sent to who have not replied.",
+        "clicked": "Clicked a link: the people who clicked a tracked link in it.",
+        "failed": "Failed: the people it could not be delivered to."
+      },
+      "broadcastNote": "A broadcast records delivery and reading only, so replies and clicks are not available while one is ticked.",
+      "broadcastOff": "A broadcast has no replies or clicks. Choose another outcome to tick it.",
+      "search": "Search previous sends",
+      "searchPlaceholder": "Search",
+      "listLabel": "Earlier broadcasts and campaigns",
+      "noMatch": "Nothing matches your search.",
+      "chosen": "{count} of {max} chosen",
+      "limit": "You can pick up to {max} sends. Untick one to pick another.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Campaign"
+      },
+      "wentOut": "Sent {date}",
+      "wentOutUnknown": "Date unknown",
+      "recipients": "{count, plural, one {# recipient} other {# recipients}}",
+      "notRecorded": "Not recorded for a broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, one {# person} other {# people}}",
+        "delivered": "{count, plural, one {# person received it} other {# people received it}}",
+        "read": "{count, plural, one {# person read it} other {# people read it}}",
+        "not_read": "{count, plural, one {# person did not read it} other {# people did not read it}}",
+        "replied": "{count, plural, one {# person replied} other {# people replied}}",
+        "not_replied": "{count, plural, one {# person did not reply} other {# people did not reply}}",
+        "clicked": "{count, plural, one {# person clicked a link} other {# people clicked a link}}",
+        "failed": "{count, plural, one {# person it failed for} other {# people it failed for}}"
+      }
+    },
     "list": {
       "workspace": "Workspace",
       "title": "WhatsApp",
@@ -200,7 +252,16 @@
         "customMessage": "Custom message",
         "flowTitle": "Flow",
         "variants": "Variant shown",
-        "variant": "Variant {v}"
+        "variant": "Variant {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Email preview",
+        "emailFrom": "From",
+        "emailSubject": "Subject",
+        "emailNoSender": "Pick a sender",
+        "emailNoSubject": "(no subject)",
+        "emailEmpty": "Write your message body and it appears here.",
+        "emailUnsubscribe": "An unsubscribe link is added at the bottom of every email.",
+        "emailNote": "This is how your campaign will look in each recipient's inbox."
       },
       "previewEmpty": "Your message preview…",
       "previewTemplate": "Template",
@@ -219,7 +280,8 @@
         "throttle": "The longest gap must be at least the shortest.",
         "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
         "media": "Enter a full address starting with http:// or https://.",
-        "sender": "Pick a sender."
+        "sender": "Pick a sender.",
+        "subject": "Shorten the subject to 150 characters or fewer."
       },
       "submit": {
         "save": "Save changes",
@@ -284,7 +346,14 @@
         },
         "csvRows": "{count} numbers in the file",
         "numbersPlaceholder": "One number per line — include the country code, no plus sign",
-        "numbersCount": "{count} numbers"
+        "numbersCount": "{count} numbers",
+        "emailNote": "Emails go to the address on each contact. Contacts without an email address, duplicate addresses and opted-out contacts are skipped.",
+        "emailSkipped": "{count, plural, one {# chosen recipient has no email address and will be skipped.} other {# chosen recipients have no email address and will be skipped.}}",
+        "emailNoAddress": "Typed numbers and CSV rows have no email address, so they are skipped. Pick contacts, groups, tags or segments instead.",
+        "previousTitle": "Previous sends",
+        "previousHint": "Add the people earlier broadcasts and campaigns went to, optionally only those who read it, replied or clicked.",
+        "previousEstimate": "{count, plural, one {Up to # person from the previous sends (an estimate: someone in two sends is counted twice).} other {Up to # people from the previous sends (an estimate: someone in two sends is counted twice).}}",
+        "previousEditHint": "Your earlier choice of previous sends is not shown when you edit: this campaign already holds its recipients as contacts. Pick again to add more people."
       },
       "message": {
         "title": "Message",
@@ -517,7 +586,13 @@
           "baileys": "No Unofficial API templates yet. Create one on the Templates page."
         },
         "templateIntroApproved": "Pick an approved Meta template. Per-contact variable values are filled at send time from contact attributes.",
-        "templateApproved": "Approved template"
+        "templateApproved": "Approved template",
+        "subject": "Subject",
+        "subjectNote": "Subject line max 150",
+        "subjectPlaceholder": "e.g. Your May offer is live",
+        "subjectHint": "Used as the email subject. Leave it blank to fall back to the campaign name.",
+        "emailNote": "This campaign is sent as an email from the mailbox you picked. An unsubscribe link is added at the bottom of every email.",
+        "emailBodyHint": "Plain text. Use '{{name}}' or '{{first_name}}' to personalise. Contacts without an email address are skipped."
       },
       "review": {
         "title": "Review",
@@ -559,8 +634,15 @@
           "throttle": "The longest gap must be at least the shortest.",
           "expiry": "The end date must be after the send date, otherwise the campaign would expire before it ever sends.",
           "media": "Enter a full address starting with http:// or https://.",
-          "sender": "Pick a sender."
-        }
+          "sender": "Pick a sender.",
+          "subject": "Shorten the subject to 150 characters or fewer."
+        },
+        "from": "From",
+        "subject": "Subject",
+        "subjectFallback": "The campaign name",
+        "skippedNoEmail": "Skipped (no email address)",
+        "estimateEmail": "An estimate: a contact in two groups is counted twice. Contacts without an email address in groups, tags and segments are skipped when the campaign runs.",
+        "previousSends": "Previous sends (up to)"
       },
       "ai": {
         "open": "Build with AI",
@@ -613,8 +695,43 @@
         "notes": "Additional notes",
         "notesNote": "optional / max 2000",
         "notesPlaceholder": "Anything specific — must-have phrases, what to avoid, brand voice cues…",
-        "failed": "Could not generate the campaign. Try again.",
-        "applied": "The campaign copy was filled in. Review it before you go on."
+        "applied": "The campaign copy was filled in. Review it before you go on.",
+        "pictureApplied": "The picture was attached to the campaign. Check it in the Attachment card.",
+        "errors": {
+          "noKey": "No AI provider is enabled for this workspace. Ask an admin to add a key.",
+          "limitReached": "This workspace has used its AI allowance for the month.",
+          "providerFailed": "The AI provider did not answer. Try again in a moment.",
+          "badJson": "The model's answer could not be read. Try again or change the brief.",
+          "invalid": "Check the brief: the business name is required and some fields are too long.",
+          "forbidden": "You do not have permission to create campaigns.",
+          "network": "Could not reach the server. Check your connection and try again.",
+          "failed": "Could not generate the campaign. Try again."
+        },
+        "picture": {
+          "label": "Also create a picture",
+          "hint": "Draws one image from the same brief and attaches it to the campaign. Uses your OpenAI allowance.",
+          "needsOpenAi": "Pictures need an OpenAI key. Choose an OpenAI model to turn this on.",
+          "noAttachment": "The number you picked sends text only, so there is nothing to attach a picture to.",
+          "size": "Picture shape",
+          "sizes": {
+            "square": "Square",
+            "landscape": "Landscape",
+            "portrait": "Portrait"
+          },
+          "textKept": "The campaign text was filled in. Only the picture is missing.",
+          "retry": "Try the picture again",
+          "errors": {
+            "noKey": "Pictures need an OpenAI key, and none is enabled for this workspace.",
+            "limitReached": "This workspace has used its AI allowance for the month.",
+            "providerFailed": "The picture service did not answer. Try again in a moment.",
+            "badJson": "The picture service sent something unexpected. Try again.",
+            "imageRefused": "OpenAI refused to draw this picture. Change the product, offer or notes and try again.",
+            "invalid": "Check the brief: the business name is required and some fields are too long.",
+            "forbidden": "You do not have permission to create campaigns.",
+            "network": "Could not reach the server. Check your connection and try again.",
+            "failed": "Could not create the picture. Try again."
+          }
+        }
       },
       "switch": {
         "title": "Use the guided flow?",
@@ -795,7 +912,8 @@
         "clicked": "clicked",
         "showing": "Showing {shown} of {total}",
         "prev": "Previous page",
-        "next": "Next page"
+        "next": "Next page",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "engagement": {
         "opened": "Opened",
@@ -963,7 +1081,8 @@
         "badge": "Live",
         "updated": "updated {time}",
         "queued": "{count} waiting to send",
-        "processing": "{count} sending now"
+        "processing": "{count} sending now",
+        "held": "{count} held for the quiet hours"
       },
       "statistics": {
         "loadFailed": "The statistics could not be loaded.",
@@ -1092,7 +1211,13 @@
         "auto_end_in_past": "The auto-end date has already passed.",
         "auto_end_before_send": "The auto-end date must be after the send time.",
         "auto_end_recurring": "A recurring campaign ends by its own rule: clear the auto-end date.",
-        "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set."
+        "pacing_range": "Check Smart Delivery: the longest delay is shorter than the shortest, or only one of the two sending hours is set.",
+        "follow_up_template_required": "Choose the template each follow-up sends.",
+        "follow_up_flow_required": "Choose the flow each follow-up starts.",
+        "follow_up_cloud_api_only": "Follow-ups work only with a WhatsApp Cloud API number. Pick one in step 1 or remove the follow-ups.",
+        "sequence_not_recurring": "Templates in turn only work with a recurring campaign. Choose a recurring schedule or remove the extra templates.",
+        "sequence_with_ab": "Templates in turn cannot be combined with an A/B test. Turn the A/B test off or remove the extra templates.",
+        "sequence_template_required": "Choose a template for every step of the order, or remove the empty ones."
       },
       "template": {
         "previewOnline": "online",
@@ -1125,8 +1250,15 @@
         "previewEmpty": "Choose a template to see how the message looks.",
         "senderLabel": "Send from",
         "senderHint": "The WhatsApp number this campaign is sent from.",
+        "shareToggle": "Share this send across several numbers",
+        "shareHint": "Tick the numbers to send from and give each a share. The audience is split by those shares and every contact is messaged from one number only. A share that is empty or 0 counts as 1.",
+        "shareWeight": "Share",
+        "shareWeightLabel": "Share of {name}",
+        "shareKeepOne": "At least one number stays ticked.",
         "pickSender": "Choose a number",
-        "classicOption": "classic builder"
+        "classicOption": "classic builder",
+        "buildWithAi": "Build with AI",
+        "aiNote": "Draft a new template with AI. You review it on the template page; Meta then reviews it before it can be sent, so come back and pick it once it is approved."
       },
       "audience": {
         "selectionTitle": "Chosen in the Contact Hub",
@@ -1171,20 +1303,24 @@
         "modeGroups": "Send to groups",
         "modeSegments": "Send to segments",
         "modeCsv": "Send via CSV",
+        "modePrevious": "Send to previous sends",
         "mode": {
           "contacts": "Contacts",
           "groups": "Groups",
           "segments": "Segments",
-          "csv": "CSV file"
+          "csv": "CSV file",
+          "previous": "Previous sends"
         },
         "groupsHint": "Groups are your marketing lists. Everyone in the groups you tick is included.",
         "segmentsHint": "Segments fill themselves from rules. Everyone in the segments you tick is included.",
+        "previousHint": "Re-target the people earlier broadcasts and campaigns went to, optionally only those who read, did not read, replied or clicked.",
         "chipContacts": "{count, plural, one {# contact} other {# contacts}}",
         "chipAllMatching": "All matching contacts",
         "chipAllMatchingN": "{count, plural, one {All # matching contact} other {All # matching contacts}}",
         "chipGroups": "{count, plural, one {# group} other {# groups}}",
         "chipSegments": "{count, plural, one {# segment} other {# segments}}",
         "chipCsv": "{count} from CSV",
+        "chipPrevious": "{count, plural, one {# earlier send} other {# earlier sends}} ({outcome})",
         "chipHub": "Contact Hub view",
         "nothingSelected": "Nothing selected yet.",
         "unionRule": "Everyone selected in any option is messaged once. Opted-out and invalid numbers are skipped.",
@@ -1341,13 +1477,19 @@
         "sumField": "is filled from {field}",
         "sumFieldFallback": "is filled from {field}, or \"{fallback}\" when empty",
         "sumSender": "Send from",
+        "sumSplit": "Split across numbers",
+        "sumSplitCount": "{count, plural, one {# recipient} other {# recipients}} ({percent}%)",
+        "sumSplitPercent": "{percent}% of the audience",
         "sumContacts": "{count, plural, one {# contact picked in the table} other {# contacts picked in the table}}",
         "sumAllMatching": "All contacts matching {what}",
         "sumAllContacts": "All contacts",
         "sumCsv": "CSV file {name}: {count, plural, one {# valid number} other {# valid numbers}}",
+        "sumPrevious": "Previous sends: {names} ({outcome})",
         "estimatedCostFull": "Estimated cost (full)",
         "chargedPlan": "Charged to your wallet now: {amount} (your plan covers {covered} of these messages)",
-        "chargedWallet": "Charged to your wallet: {amount}"
+        "chargedWallet": "Charged to your wallet: {amount}",
+        "sumFollowUps": "Follow-ups",
+        "sumSequence": "Sends in turn"
       },
       "test": {
         "title": "Send a test WhatsApp message",
@@ -1383,9 +1525,11 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "read": "Read",
-          "failed": "Failed"
+          "failed": "Failed",
+          "held": "Held"
         },
-        "charged": "Charged {amount}"
+        "charged": "Charged {amount}",
+        "heldUntil": "Held until {when} (quiet hours)"
       },
       "send": {
         "whenTitle": "When to send",
@@ -1510,7 +1654,8 @@
           "sent": "Sent",
           "delivered": "Delivered",
           "failed": "Failed",
-          "retries": "Retries"
+          "retries": "Retries",
+          "template": "Template"
         },
         "retrySummary": "{pending} waiting, {recovered} recovered, {exhausted} gave up",
         "openRun": "Open run",
@@ -1552,7 +1697,27 @@
         "exportFailed": "The export could not be downloaded.",
         "deleteTitle": "Delete this broadcast?",
         "deleteOne": "Deletes this broadcast and its recipients. This cannot be undone.",
-        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone."
+        "deleteSeries": "Deletes this recurring broadcast and the runs it has planned. Nothing has been sent from it, so no history is lost. This cannot be undone.",
+        "followUps": {
+          "title": "Follow-ups",
+          "step": "Follow-up {step}",
+          "count": {
+            "waiting": "{count} waiting",
+            "sent": "{count} sent",
+            "delivered": "{count} delivered",
+            "read": "{count} read",
+            "flowsStarted": "{count} flows started",
+            "skipped": "{count} skipped",
+            "lapsed": "{count} lapsed",
+            "failed": "{count} failed"
+          },
+          "hint": {
+            "skipped": "The condition was not met when it was checked, so the sequence ended there.",
+            "lapsed": "The watch time ran out before the contact replied or read, so the sequence ended there."
+          }
+        },
+        "templatesTitle": "Templates",
+        "templatesInTurn": "{count, plural, one {# template in turn} other {# templates in turn}}"
       },
       "panel": {
         "title": "Created with the guided flow",
@@ -1563,7 +1728,8 @@
           "recurring": "Recurring"
         },
         "recipients": "{count, plural, one {# recipient} other {# recipients}}",
-        "next": "Next run {when}"
+        "next": "Next run {when}",
+        "moreTemplates": "+{count} more"
       },
       "pickers": {
         "selectDate": "Select date",
@@ -1583,6 +1749,95 @@
         "body": "{number} ({engine}) is sent from the classic builder, which starts fresh. This campaign is saved as a draft and stays in your Campaigns list, so you can come back to it.",
         "confirm": "Open the classic builder",
         "cancel": "Stay here"
+      },
+      "followUps": {
+        "title": "Follow-ups",
+        "intro": "Send another message, or start a flow, depending on what the contact does after the campaign message. Up to 3 steps in a row.",
+        "cloudOnly": "Follow-ups need a WhatsApp Cloud API number, because they rely on Meta's read and reply reports. Pick one in step 1.",
+        "add": "Add a follow-up",
+        "count": "{used} of {max} follow-ups",
+        "limitReached": "Limit reached: {max} follow-ups.",
+        "stepTitle": "Follow-up {step}",
+        "measuredFromCampaign": "Counted from the campaign message.",
+        "measuredFromStep": "Counted from the message of follow-up {step}.",
+        "remove": "Remove follow-up {step}",
+        "removeShort": "Remove",
+        "triggerLabel": "When the contact",
+        "trigger": {
+          "replied": "Replies",
+          "read": "Reads the message",
+          "not_replied": "Has not replied",
+          "not_read": "Has not read the message"
+        },
+        "triggerHelp": {
+          "replied": "Fires the moment they reply, if that happens within the time you set. Otherwise the sequence ends.",
+          "read": "Fires the moment they read it, if that happens within the time you set. Otherwise the sequence ends.",
+          "not_replied": "Waits the time you set, then fires if they have not replied. If they did, the sequence ends.",
+          "not_read": "Waits the time you set, then fires if they have not read it. If they did, the sequence ends."
+        },
+        "watchLabel": "Watch for up to",
+        "waitLabel": "Wait",
+        "unitLabel": "Time unit",
+        "duration": {
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
+        },
+        "actionLabel": "Then",
+        "action": {
+          "template": "Send a template",
+          "flow": "Start a flow"
+        },
+        "templateLabel": "Template to send",
+        "flowLabel": "Flow to start",
+        "pickTemplate": "Choose a template",
+        "pickFlow": "Choose a flow",
+        "loading": "Loading...",
+        "unavailable": "No longer available",
+        "noTemplates": "No approved templates yet.",
+        "createTemplate": "Create a template",
+        "noFlows": "No flows yet.",
+        "createFlow": "Create a flow",
+        "flowsError": "The flows could not be loaded. Try again later.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "If they reply within {wait}",
+          "read": "If they read it within {wait}",
+          "not_replied": "If not replied after {wait}",
+          "not_read": "If not read after {wait}"
+        },
+        "does": {
+          "template": "send {name}",
+          "flow": "start flow {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, one {minute} other {minutes}}",
+          "hours": "{count, plural, one {hour} other {hours}}",
+          "days": "{count, plural, one {day} other {days}}"
+        }
+      },
+      "sequence": {
+        "title": "Templates in order",
+        "intro": "Each run sends the next template in this list. Run 1 sends the first, run 2 the second, and after the last the list starts again from the first.",
+        "notRecurring": "Only a recurring broadcast sends templates in turn. Choose a recurring schedule, or remove these templates.",
+        "withAb": "Templates in turn cannot be used together with an A/B test, which already sends two templates. Turn the A/B test off to use them.",
+        "templateLabel": "Template {position}",
+        "firstMissing": "Not chosen yet",
+        "firstHint": "The template chosen for the campaign. Change it in the template step.",
+        "pick": "Choose a template",
+        "loading": "Loading...",
+        "unavailable": "No longer available",
+        "up": "Up",
+        "down": "Down",
+        "moveUp": "Move template {position} up",
+        "moveDown": "Move template {position} down",
+        "remove": "Remove template {position}",
+        "removeShort": "Remove",
+        "removeAll": "Remove all",
+        "add": "Add a template",
+        "count": "{used} of {max} templates",
+        "limitReached": "Limit reached: {max} templates.",
+        "variablesTitle": "Variables of template {position}: {name}"
       }
     },
     "history": {
@@ -1701,7 +1956,36 @@
         "title": "Personal numbers are turned off for this workspace",
         "body": "{count, plural, one {Your personal (QR) number can't} other {Your # personal (QR) numbers can't}} send campaigns while this is off. A platform administrator can turn it on for this workspace, or you can connect an official WhatsApp Business number.",
         "action": "Connect an official number"
+      },
+      "email": {
+        "none": {
+          "title": "No mailbox is connected",
+          "body": "Connect a mailbox on the Email page to choose who this campaign is sent from.",
+          "action": "Connect a mailbox"
+        },
+        "disconnected": {
+          "title": "{count, plural, one {# mailbox is disconnected} other {# mailboxes are disconnected}}",
+          "body": "Reconnect it on the Email page to send campaigns from it.",
+          "action": "Open the Email page"
+        },
+        "error": {
+          "title": "{count, plural, one {# mailbox needs reconnecting} other {# mailboxes need reconnecting}}",
+          "body": "Its last sign-in failed. Reconnect it on the Email page and it will appear here.",
+          "action": "Open the Email page"
+        }
       }
+    },
+    "senderBreakdown": {
+      "title": "Sent from each number",
+      "hint": "This send was shared across several numbers. Each row is one number and the recipients it was given.",
+      "cols": {
+        "number": "Number",
+        "recipients": "Recipients",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "failed": "Failed"
+      },
+      "removed": "(a number that was removed)"
     }
   }
 }

@@ -213,8 +213,9 @@ export class InboxThreadService {
   }
 
   /**
-   * The approved templates this conversation's WhatsApp number can send, for the picker. A template of another number, one that is
-   * not approved and one with nothing to send are left out; one the inbox cannot fill in is listed with the reason.
+   * The approved templates of the workspace, for the picker, as Reference lists them. A template that cannot be sent from this
+   * conversation (another WhatsApp number, or the channel is not linked to one) is listed with that reason, disabled; one the inbox
+   * cannot fill in is listed with its reason too. A template that is not approved is left out.
    */
   async listTemplates(
     uuid: string,
@@ -225,35 +226,39 @@ export class InboxThreadService {
     return this.db.tx(async (tx) => {
       await this.assertCanReply(tx, ctx, uuid);
       const wabaConfigId = await this.wabaConfigOf(tx, ctx.orgId, uuid);
-      if (wabaConfigId === null) return { data: [], hasMore: false };
-      // Narrowed to this number in SQL, so another number's templates never use up the page. `list` returns one row beyond the limit
-      // when there are more: that row is how `hasMore` is known, and it is not sent.
+      // The page is shared with other numbers' templates, so this conversation's own come first: they are never pushed off the page.
+      // `list` returns one row beyond the limit when there are more: that row is how `hasMore` is known, and it is not sent.
       const rows = await this.templates.list(tx, ctx.orgId, {
         limit: INBOX_TEMPLATE_LIST_MAX,
         status: 'approved',
-        providerConfigId: wabaConfigId,
+        ...(wabaConfigId === null ? {} : { preferProviderConfigId: wabaConfigId }),
         ...(query.q ? { q: query.q } : {}),
       });
-      const hasMore = rows.length > INBOX_TEMPLATE_LIST_MAX;
-      const data = rows
-        .slice(0, INBOX_TEMPLATE_LIST_MAX)
-        .filter((t) => isApproved(t))
-        .map((t): InboxTemplateOption => {
-          const reason = blockReason(t, now);
-          return {
-            id: t.uuid,
-            name: t.templateName,
-            language: t.language,
-            category: (t.metaCategory ?? t.category).toUpperCase(),
-            header: t.header,
-            body: t.templateBody,
-            footer: t.footer,
-            buttons: buttonsOf(t.buttons).map((b) => b.text),
-            slots: bodySlots(t.templateBody, t.variableMap),
-            sendable: reason === null,
-            reason,
-          };
-        });
+      // Filtered before the page is cut, so a row dropped by `isApproved` never leaves a short page that says there is more.
+      const approved = rows.filter((t) => isApproved(t));
+      const hasMore = approved.length > INBOX_TEMPLATE_LIST_MAX;
+      const data = approved.slice(0, INBOX_TEMPLATE_LIST_MAX).map((t): InboxTemplateOption => {
+        // The same refusals as the send (`templateContent`), checked first so the picker names the real reason.
+        const reason =
+          wabaConfigId === null
+            ? 'not_linked'
+            : t.providerConfigId !== wabaConfigId
+              ? 'other_number'
+              : blockReason(t, now);
+        return {
+          id: t.uuid,
+          name: t.templateName,
+          language: t.language,
+          category: (t.metaCategory ?? t.category).toUpperCase(),
+          header: t.header,
+          body: t.templateBody,
+          footer: t.footer,
+          buttons: buttonsOf(t.buttons).map((b) => b.text),
+          slots: bodySlots(t.templateBody, t.variableMap),
+          sendable: reason === null,
+          reason,
+        };
+      });
       return { data, hasMore };
     });
   }
@@ -347,6 +352,8 @@ export class InboxThreadService {
         );
       }
       await this.access.assertCan(tx, ctx, PERM.reply, record);
+      this.assertNotResolved(record);
+      this.access.assertNotAssignedToOther(ctx, record);
     });
     return (
       await this.withTemplatePreviews([await this.conversations.retryOutbound(messageUuid)])
@@ -363,5 +370,18 @@ export class InboxThreadService {
     if (!record) throw conversationNotFound();
     this.access.assertVisible(viewer, record);
     await this.access.assertCan(tx, ctx, PERM.reply, record);
+    this.assertNotResolved(record);
+    this.access.assertNotAssignedToOther(ctx, record);
+  }
+
+  /** A resolved or closed thread takes no agent message (text, media, template, share, reaction, retry): reopen it first. */
+  private assertNotResolved(record: { status: string }): void {
+    if (record.status === 'resolved' || record.status === 'closed') {
+      throw new AppError(
+        ERROR_CODES.CONVERSATION_RESOLVED,
+        'This conversation is resolved. Reopen it to reply.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
   }
 }

@@ -41,7 +41,10 @@
       "notStarted": "Dies ist erst möglich, nachdem die Buchung begonnen hat.",
       "alreadyStarted": "Diese Buchung hat bereits begonnen und kann daher nicht mehr geändert werden.",
       "bookingOff": "Eine Buchung ist für diesen Service derzeit nicht verfügbar.",
-      "notDeletable": "Dies kann nicht gelöscht werden, solange noch Buchungen anstehen."
+      "notDeletable": "Dies kann nicht gelöscht werden, solange noch Buchungen anstehen.",
+      "notDrifted": "Diese Buchung stimmt bereits mit ihrem Google-Termin überein. Sie wurde neu geladen.",
+      "calendarNotConnected": "Google Calendar ist nicht verbunden. Verbinden Sie es auf der Seite „Google-Konto“ erneut und versuchen Sie es noch einmal.",
+      "calendarFailed": "Google hat nicht geantwortet oder die Änderung abgelehnt. Versuchen Sie es gleich noch einmal."
     },
     "picker": {
       "timeZone": "Zeitzone",
@@ -156,7 +159,8 @@
       "yesterday": "Gestern",
       "rowLabel": "Buchung öffnen: {title}",
       "noName": "Kein Name",
-      "needsReview": "Prüfung erforderlich"
+      "needsReview": "Prüfung erforderlich",
+      "outOfSync": "Kalender nicht synchron"
     },
     "row": {
       "moreFor": "Weitere Aktionen für {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "Diese Anfrage ablehnen?",
       "declineMessage": "Der Kunde erfährt, dass die Anfrage abgelehnt wurde, und der Zeitpunkt wird wieder frei.",
       "declineConfirm": "Anfrage ablehnen",
-      "remindersNote": "Erinnerungen richten sich nach dem Buchungstyp. Die Zustellung wird nicht pro Erinnerung verfolgt."
+      "remindersNote": "Erinnerungen gehören zur Buchungsart. Sie werden in den Terminvereinbarungs-Einstellungen oder in der Buchungsart festgelegt."
     },
     "source": {
       "chat": "Ein Chat-Flow",
@@ -269,7 +273,13 @@
       "rescheduled": "Buchung auf die neue Zeit verschoben.",
       "linkCopied": "Verwaltungslink kopiert.",
       "copyFailed": "Der Link konnte nicht kopiert werden.",
-      "declined": "Anfrage abgelehnt."
+      "declined": "Anfrage abgelehnt.",
+      "calendarPushed": "An Google übertragen: Der Termin stimmt jetzt mit dieser Buchung überein.",
+      "calendarAccepted": {
+        "cancelled": "Änderung von Google übernommen: Die Buchung wurde storniert.",
+        "rescheduled": "Änderung von Google übernommen: Die Buchung wurde auf die neue Zeit verschoben.",
+        "acknowledged": "Änderung von Google übernommen. Die Buchung bleibt unverändert."
+      }
     },
     "typesList": {
       "breadcrumb": "Brotkrümelnavigation",
@@ -397,9 +407,6 @@
         "depositTooHigh": "Die Anzahlung darf nicht höher sein als die Gesamtsumme (Gebühr plus Steuer).",
         "cancelFeeInvalid": "Geben Sie einen Betrag wie 25.00 ein.",
         "cancelWindowInvalid": "Geben Sie eine ganze Zahl von Minuten von 0 bis {cancelWindowMax} ein.",
-        "reminderInvalid": "Geben Sie ganze Minuten vor Beginn ein, von 1 bis {reminderMax}.",
-        "remindersDuplicate": "Jede Erinnerung benötigt eine andere Zeit.",
-        "remindersTooMany": "Ein Buchungstyp kann höchstens {reminders} Erinnerungen haben.",
         "questionLabelRequired": "Geben Sie der Frage eine Bezeichnung (bis zu {questionLabelMax} Zeichen).",
         "questionsTooMany": "Ein Buchungstyp kann höchstens {questions} Fragen haben.",
         "questionOptionsRequired": "Fügen Sie mindestens eine Auswahlmöglichkeit hinzu, eine pro Zeile.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Korrigieren Sie die in der Liste der Datumsausnahmen markierten Daten.",
         "descriptionTooLong": "Die Beschreibung darf höchstens {descriptionMax} Zeichen lang sein.",
         "locationTooLong": "Der Ort darf höchstens {locationMax} Zeichen lang sein.",
-        "server": "Der Server hat diesen Wert nicht akzeptiert. Prüfen Sie ihn und versuchen Sie es erneut."
+        "server": "Der Server hat diesen Wert nicht akzeptiert. Prüfen Sie ihn und versuchen Sie es erneut.",
+        "reminderInvalid": "Gib eine ganze Zahl für die Zeit ein, höchstens 30 Tage.",
+        "remindersDuplicate": "Jede Erinnerung oder Nachfassaktion braucht eine andere Zeit.",
+        "remindersTooMany": "Eine Buchungsart kann höchstens {reminders} Erinnerungen und Nachfassaktionen haben.",
+        "reminderChannelsNone": "Wähle mindestens einen Kanal.",
+        "reminderBodyTooLong": "Die Nachricht, der Betreff oder die Bezeichnung ist zu lang."
       },
       "service": {
         "title": "Servicedetails",
@@ -556,11 +568,12 @@
         "hint": "Buchungen funktionieren auch ohne dies. Verbinden Sie Google Kalender unter Termine, Einstellungen, um Frei-/Belegt-Zeiten zu synchronisieren und Meet-Links hinzuzufügen.",
         "unavailable": "Google Kalender ist für diese Plattform noch nicht eingerichtet. Diese Einstellungen werden beim Buchungstyp gespeichert, bis es so weit ist.",
         "calendarId": "Kalender",
-        "calendarPlaceholder": "primär",
         "spreadsheetId": "An Tabelle anhängen (optional)",
-        "spreadsheetPlaceholder": "Tabellen-ID",
         "createMeet": "Für jede Buchung einen Google-Meet-Link erstellen",
-        "calendarDefault": "Der Workspace-Kalender"
+        "calendarDefault": "Der Workspace-Kalender",
+        "connectFirst": "Verbinde dein <link>Google-Konto</link>, um aus dessen Liste auszuwählen.",
+        "spreadsheetNone": "Keine Tabelle",
+        "spreadsheetNoListing": "Deine Tabellen können nicht aufgelistet werden, weil die Berechtigung „Drive-Dateiliste“ nicht erteilt wurde. Füge sie auf der Seite „Google-Konto“ hinzu."
       },
       "messages": {
         "title": "Nachrichten im Buchungsverlauf",
@@ -586,25 +599,6 @@
           "reschedule": "Hallo {name}, Ihr Termin „{type}“ wurde auf {slot} verschoben. Details: {manage_link}"
         },
         "templatesNote": "Genehmigte WhatsApp-Vorlagen können noch nicht ausgewählt werden. Nachrichten werden als einfacher Text von oben gesendet."
-      },
-      "reminders": {
-        "title": "Erinnerungen",
-        "hint": "Die Zeiten müssen unterschiedlich sein (1440 = 24 Std. vorher, 180 = 3 Std. vorher). Bis zu {max}.",
-        "add": "Erinnerung hinzufügen",
-        "quickAdd": "Schnell hinzufügen",
-        "quick": {
-          "h24": "24 Std.",
-          "h3": "3 Std.",
-          "h1": "1 Std.",
-          "m15": "15 Min."
-        },
-        "empty": "Keine Erinnerungen. Kunden erhalten nur die Bestätigung.",
-        "offsetOf": "Erinnerung {n}, Minuten vor dem Start",
-        "minBefore": "Min. vorher",
-        "labelPlaceholder": "24 Std.",
-        "labelOf": "Erinnerung {n}, Bezeichnung",
-        "remove": "Erinnerung {n} entfernen",
-        "count": "{count} von {max} Erinnerungen"
       },
       "questions": {
         "title": "Fragebogen",
@@ -962,7 +956,7 @@
         "calendarSaved": "Kalender gespeichert.",
         "confirmOff": {
           "title": "Google Kalender trennen?",
-          "message": "Neue Buchungen gelangen nicht mehr in Ihren Kalender, und dessen Belegtzeiten werden nicht mehr gelesen. Termine, die bereits in Ihrem Kalender stehen, bleiben dort, und Google wird angewiesen, diesen Zugriff zu widerrufen.",
+          "message": "Neue Buchungen gelangen nicht mehr in Ihren Kalender, und dessen Belegtzeiten werden nicht mehr gelesen. Die Google-Schritte in Ihren Flows stoppen ebenfalls, da sie diese Verbindung mitnutzen. Termine, die bereits in Ihrem Kalender stehen, bleiben dort, und Google wird angewiesen, diesen Zugriff zu widerrufen.",
           "confirm": "Trennen",
           "cancel": "Beibehalten"
         },
@@ -972,7 +966,8 @@
           "failed": "Das Verbinden wurde nicht abgeschlossen. Versuchen Sie es erneut; wenn es weiter fehlschlägt, bitten Sie Ihren Plattformadministrator, die Google-Einrichtung zu prüfen.",
           "expired": "Dieser Versuch hat zu lange gedauert. Klicken Sie auf „Verbinden“, um neu zu beginnen.",
           "not_configured": "Google Kalender ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, den Google-OAuth-Client hinzuzufügen.",
-          "missing_scope": "Google hat nicht alle erforderlichen Kalenderberechtigungen erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt."
+          "missing_scope": "Google hat nicht alle erforderlichen Kalenderberechtigungen erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt.",
+          "cancelled": "Sie haben abgebrochen. Es wurde nichts verbunden."
         },
         "whatTitle": "Was dies bewirkt",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Korrigieren Sie die markierten Zeiten in den Geschäftszeiten."
       },
       "notAvailable": "Workspace-weite Buchungseinstellungen sind auf diesem Server nicht verfügbar. Stattdessen hat jeder Buchungstyp eigene Zeiten, Zeitzone, Erinnerungen und Nachrichten.",
-      "openTypes": "Buchungstypen öffnen"
+      "openTypes": "Buchungstypen öffnen",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Verbinden Sie einen Microsoft-Kalender, damit bestätigte Buchungen dort eingetragen werden und seine Belegtzeiten Termine sperren.",
+        "provider": "Outlook-Kalender",
+        "providerSub": "Microsoft 365 und Outlook.com",
+        "status": {
+          "unavailable": "Nicht verfügbar",
+          "disconnected": "Nicht verbunden",
+          "connected": "Verbunden",
+          "needs_reconnect": "Erneut verbinden erforderlich"
+        },
+        "loading": "Verbindung wird geprüft",
+        "unavailableTitle": "Outlook ist für diese Plattform noch nicht eingerichtet",
+        "unavailableBody": "Ihr Plattformadministrator muss die Microsoft-App registrieren (Admin, Einstellungen, Microsoft Calendar), bevor ein Arbeitsbereich sich verbinden kann. Ihre Buchungen sind davon nicht betroffen.",
+        "disconnectedBody": "Nicht verbunden. Beim Verbinden öffnet sich Microsoft, wo Sie das Konto auswählen und der Freigabe des Kalenderzugriffs zustimmen.",
+        "disconnectedReadOnly": "Nicht verbunden. Bitten Sie einen Administrator des Arbeitsbereichs, die Verbindung herzustellen.",
+        "reconnectTitle": "Microsoft akzeptiert die Verbindung nicht mehr",
+        "reconnectBody": "Der Zugriff wurde widerrufen oder ist abgelaufen. Deshalb werden Buchungen nicht in Ihren Kalender eingetragen und seine Belegtzeiten nicht gelesen. Verbinden Sie erneut, um fortzufahren.",
+        "reconnectBodyAccount": "Der Zugriff für {account} wurde widerrufen oder ist abgelaufen. Deshalb werden Buchungen nicht in Ihren Kalender eingetragen und seine Belegtzeiten nicht gelesen. Verbinden Sie erneut, um fortzufahren.",
+        "account": "Microsoft-Konto",
+        "calendar": "Kalender",
+        "primaryCalendar": "Ihr Hauptkalender",
+        "connectedAgo": "Verbunden {when}",
+        "writesHere": "Bestätigte Buchungen werden in diesen Kalender eingetragen.",
+        "readsOnly": "Es werden nur seine Belegtzeiten gelesen. Buchungen werden in Ihren anderen Kalender eingetragen.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft begrenzt die Anfragen. Buchungen werden automatisch erneut versucht.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft hat den Zugriff auf diesen Kalender verweigert. Prüfen Sie, ob das Konto ein Postfach hat und seinen Kalender freigeben darf.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft hat nicht geantwortet. Es wird automatisch erneut versucht."
+        },
+        "errors": {
+          "notConfigured": "Outlook ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, die Microsoft-App zu registrieren.",
+          "notConnected": "Es ist kein Outlook-Kalender verbunden. Laden Sie die Seite neu und verbinden Sie erneut.",
+          "providerFailed": "Microsoft hat nicht geantwortet. Versuchen Sie es in einem Moment erneut.",
+          "notYours": "Diese Verbindung wurde von jemand anderem gestartet, daher wurde nichts verbunden. Bitten Sie die Person, die Verbindung herzustellen, oder klicken Sie selbst auf Verbinden.",
+          "invalidTicket": "Diese Verbindung kann nicht mehr bestätigt werden. Klicken Sie auf Verbinden, um neu zu beginnen."
+        },
+        "loadingCalendars": "Ihre Kalender werden geladen",
+        "chooseLabel": "Buchungen eintragen in",
+        "chooseHint": "Es werden nur Kalender aufgelistet, die dieses Konto bearbeiten kann. Bereits eingetragene Termine bleiben, wo sie sind.",
+        "choosePlaceholder": "Kalender auswählen",
+        "chooseOptionPrimary": "{name} (Hauptkalender)",
+        "chooseSave": "Diesen Kalender verwenden",
+        "chooseCancel": "Abbrechen",
+        "saving": "Wird gespeichert",
+        "connect": "Outlook verbinden",
+        "reconnect": "Outlook erneut verbinden",
+        "redirecting": "Microsoft wird geöffnet",
+        "choose": "Kalender auswählen",
+        "disconnect": "Trennen",
+        "disconnected": "Outlook wurde getrennt.",
+        "calendarSaved": "Kalender gespeichert.",
+        "confirm": {
+          "title": "Dieses Microsoft-Konto verbinden?",
+          "body": "Microsoft hat Sie zurückgeleitet, um die Verbindung eines Kontos mit {workspace} abzuschließen. Fahren Sie nur fort, wenn Sie dies soeben selbst gestartet haben.",
+          "confirm": "Verbinden",
+          "working": "Verbindung wird hergestellt",
+          "cancel": "Abbrechen"
+        },
+        "confirmOff": {
+          "title": "Outlook trennen?",
+          "message": "Neue Buchungen werden nicht mehr in Ihren Outlook-Kalender eingetragen und seine Belegtzeiten werden nicht mehr gelesen. Termine, die bereits in Ihrem Kalender stehen, bleiben erhalten. Um die Berechtigung auf Seiten von Microsoft zu widerrufen, entfernen Sie die App in Ihrem Microsoft-Konto.",
+          "confirm": "Trennen",
+          "cancel": "Beibehalten"
+        },
+        "outcome": {
+          "connected": "Outlook ist verbunden. Bestätigte Buchungen werden jetzt in Ihren Kalender eingetragen.",
+          "denied": "Der Zugriff wurde bei Microsoft nicht gewährt, daher wurde nichts verbunden.",
+          "failed": "Das Verbinden wurde nicht abgeschlossen. Versuchen Sie es erneut. Wenn es weiterhin fehlschlägt, bitten Sie Ihren Plattformadministrator, die Microsoft-App zu prüfen.",
+          "expired": "Dieser Versuch hat zu lange gedauert. Klicken Sie auf Verbinden, um neu zu beginnen.",
+          "not_configured": "Outlook ist für diese Plattform nicht eingerichtet. Bitten Sie Ihren Plattformadministrator, die Microsoft-App zu registrieren.",
+          "missing_scope": "Microsoft hat die erforderliche Kalenderberechtigung nicht erteilt. Verbinden Sie erneut und lassen Sie alle Kästchen angehakt.",
+          "cancelled": "Sie haben abgebrochen. Es wurde nichts verbunden."
+        },
+        "whatTitle": "Was das bewirkt",
+        "what": {
+          "freeBusy": "Liest die Belegtzeiten aus Ihrem Kalender, damit gebuchte oder gesperrte Zeiten nicht angeboten werden.",
+          "writeBack": "Trägt bestätigte Buchungen als Termine in Ihren Kalender ein und lädt den Kunden ein.",
+          "teams": "Fügt Online-Services einen Teams-Meeting-Link hinzu (Geschäfts-, Schul- oder Unikonten)."
+        },
+        "hint": "Buchungen funktionieren auch ohne diese Verbindung. Ist zusätzlich Google verbunden, werden die Belegtzeiten aus beiden gelesen und jede Buchung wird in einen der beiden Kalender eingetragen."
+      },
+      "writeTarget": {
+        "title": "Wohin Buchungen eingetragen werden",
+        "description": "Belegtzeiten werden aus allen verbundenen Kalendern gelesen. Jede Buchung wird in einen davon eingetragen.",
+        "label": "Buchungen eintragen in",
+        "hint": "Automatisch verwendet Google Calendar, solange er funktioniert, andernfalls Outlook. Bei einer Änderung werden die Termine der anstehenden Buchungen in den gewählten Kalender verschoben.",
+        "auto": "Automatisch",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "nicht verbunden",
+        "saved": "Gespeichert.",
+        "backfill": {
+          "body": "{count, plural, one {# bestätigte Buchung der nächsten 90 Tage ist} other {# bestätigte Buchungen der nächsten 90 Tage sind}} noch nicht in dem Kalender, in den sie gehören. Sie werden automatisch eingetragen, nachdem Sie Kalender verbinden oder wechseln.",
+          "action": "Jetzt eintragen",
+          "working": "Wird eingereiht",
+          "queued": "Die Buchungen werden im Hintergrund in Ihren Kalender eingetragen.",
+          "notConnected": "Es ist kein Kalender verbunden, daher gibt es keinen Ort zum Eintragen."
+        }
+      },
+      "feeds": {
+        "title": "Weitere Kalender (iCal)",
+        "description": "Abonnieren Sie einen Kalender über seine iCal-Adresse, damit seine Belegtzeiten Termine sperren. Verwendet wird nur, wann Sie beschäftigt sind: Nichts sonst daraus wird angezeigt oder gespeichert.",
+        "loading": "Ihre Kalender werden geladen",
+        "empty": "Noch keine Kalender abonniert.",
+        "status": {
+          "pending": "Noch nicht gelesen",
+          "ok": "Funktioniert",
+          "error": "Problem"
+        },
+        "paused": "Pausiert",
+        "neverRead": "Noch nicht gelesen.",
+        "lastRead": "Gelesen {when}.",
+        "busyCount": "{count, plural, one {# Belegtblock} other {# Belegtblöcke}} in den nächsten 180 Tagen",
+        "allDayLabel": "Ganztägige Termine sperren den Tag",
+        "pause": "Pausieren",
+        "resume": "Fortsetzen",
+        "refresh": "Jetzt lesen",
+        "reading": "Wird gelesen",
+        "remove": "Abo beenden",
+        "removed": "Kalenderabo beendet.",
+        "added": "Kalender abonniert.",
+        "addTitle": "Kalender abonnieren",
+        "nameLabel": "Name",
+        "namePlaceholder": "Dienstplan des Teams",
+        "urlLabel": "Kalenderadresse",
+        "urlHint": "Eine Adresse, die mit https:// oder webcal:// beginnt und auf .ics endet. Sie wird jetzt geprüft, dann verschlüsselt gespeichert und nie wieder angezeigt.",
+        "add": "Abonnieren",
+        "adding": "Kalender wird gelesen",
+        "hint": "Abonnieren Sie nicht den Kalender, in den Ihre Buchungen eingetragen werden: Ein Service mit mehreren Plätzen würde seine eigenen Termine als belegt ansehen. Ein Feed wird etwa alle 15 Minuten gelesen, daher kann eine Änderung dort so lange dauern, bis sie sichtbar wird.",
+        "confirmRemove": {
+          "title": "Dieses Kalenderabo beenden?",
+          "message": "Von {name} gesperrte Zeiten sind sofort wieder frei. Der Kalender selbst wird nicht verändert.",
+          "confirm": "Abo beenden",
+          "cancel": "Beibehalten"
+        },
+        "errors": {
+          "invalid": "Geben Sie eine Adresse ein, die mit https://, http:// oder webcal:// beginnt und keinen Benutzernamen und kein Passwort enthält.",
+          "duplicate": "Dieser Arbeitsbereich hat diesen Kalender bereits abonniert.",
+          "limit": "Ein Arbeitsbereich kann 10 Kalender abonnieren. Beenden Sie zuerst ein Abo."
+        },
+        "reason": {
+          "unreachable": "Die Adresse war nicht erreichbar. Prüfen Sie, ob sie stimmt und öffentlich ist.",
+          "timeout": "Der Kalender hat zu lange für die Antwort gebraucht.",
+          "not_found": "Unter dieser Adresse wurde nichts gefunden. Möglicherweise wurde die Veröffentlichung aufgehoben.",
+          "forbidden": "Der Kalender hat den Zugriff verweigert. Stellen Sie sicher, dass er für alle mit dem Link veröffentlicht ist.",
+          "server_error": "Der Server des Kalenders hatte ein Problem. Es wird automatisch erneut versucht.",
+          "redirect_loop": "Die Adresse leitet uns im Kreis herum.",
+          "not_a_calendar": "Diese Adresse ist kein iCal-Kalender. Sie sollte auf .ics enden.",
+          "too_large": "Dieser Kalender ist zu groß zum Lesen.",
+          "blocked_address": "Diese Adresse verweist auf ein privates Netzwerk, was nicht erlaubt ist.",
+          "unknown": "Diese Adresse konnte nicht als Kalender gelesen werden."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# Termin verwendet eine uns unbekannte Zeitzone und wurde in der Zeitzone Ihres Arbeitsbereichs gelesen.} other {# Termine verwenden eine uns unbekannte Zeitzone und wurden in der Zeitzone Ihres Arbeitsbereichs gelesen.}}",
+          "unsupportedRule": "{count, plural, one {# wiederkehrender Termin verwendet} other {# wiederkehrende Termine verwenden}} eine nicht unterstützte Regel: Nur das erste Vorkommen sperrt Zeit.",
+          "truncated": "Dieser Kalender hat mehr Belegtblöcke, als wir speichern, daher fehlen einige."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Meine Buchungen in meiner Kalender-App",
+        "description": "Abonnieren Sie Ihre Buchungen in Apple Calendar, Outlook oder Google Calendar.",
+        "loading": "Ihr Link wird geladen",
+        "none": "Sie haben noch keinen Link.",
+        "make": "Meinen Link erstellen",
+        "making": "Wird erstellt",
+        "made": "Ihr Link ist bereit.",
+        "linkLabel": "Ihr Link",
+        "copy": "Link kopieren",
+        "copied": "Link kopiert.",
+        "copyFailed": "Automatisches Kopieren war nicht möglich. Markieren Sie den Link und kopieren Sie ihn.",
+        "open": "In meiner Kalender-App öffnen",
+        "rotate": "Neuen Link erstellen",
+        "stop": "Freigabe beenden",
+        "stopped": "Ihr Link funktioniert nicht mehr.",
+        "lastUsed": "Eine Kalender-App hat ihn zuletzt {when} gelesen.",
+        "neverUsed": "Bisher hat keine Kalender-App ihn gelesen.",
+        "warning": "Jeder, der diesen Link hat, sieht die Titel, Zeiten und Orte Ihrer Buchungen. Halten Sie ihn privat. Telefonnummern, E-Mail-Adressen und Notizen werden nie angezeigt.",
+        "hint": "Sie sehen das, was Sie auch in der Buchungsliste sehen. Ihre Kalender-App aktualisiert den Feed nach ihrem eigenen Zeitplan, oft alle paar Stunden.",
+        "confirmRotate": {
+          "title": "Neuen Link erstellen?",
+          "message": "Der alte Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, benötigen den neuen.",
+          "confirm": "Neuen Link erstellen"
+        },
+        "confirmStop": {
+          "title": "Freigabe Ihrer Buchungen beenden?",
+          "message": "Ihr Link funktioniert sofort nicht mehr. Kalender-Apps, die ihn verwenden, zeigen nichts Neues mehr an.",
+          "confirm": "Freigabe beenden"
+        },
+        "confirmCancel": "Beibehalten"
+      }
     },
     "linked": {
       "title": "Termine",
@@ -1060,6 +1248,181 @@
       "loadMore": "Mehr laden",
       "loadMorePast": "Mehr Vergangene laden",
       "noType": "Termin"
+    },
+    "sync": {
+      "title": "Kalender nicht synchron",
+      "reason": {
+        "event_deleted": "Der Termin wurde in Google Calendar gelöscht oder abgesagt.",
+        "event_missing": "Der Termin ist in Google Calendar nicht mehr zu finden.",
+        "time_changed": "Der Termin wurde in Google Calendar auf eine andere Zeit verschoben.",
+        "attendees_changed": "Die Gäste des Termins wurden in Google Calendar geändert."
+      },
+      "googleShows": "Google zeigt: {time}",
+      "notChanged": "Diese Buchung wurde nicht geändert. Wählen Sie, welche Version richtig ist.",
+      "found": "Gefunden: {when}",
+      "push": "Unsere Zeit an Google zurückschreiben",
+      "accept": "Änderung von Google übernehmen",
+      "keep": "Nicht jetzt",
+      "acceptTitle": {
+        "cancel": "Diese Buchung stornieren?",
+        "reschedule": "Diese Buchung auf die Zeit von Google verschieben?",
+        "acknowledge": "Die von Google angezeigten Gäste übernehmen?"
+      },
+      "acceptMessage": {
+        "cancel": "Der Termin existiert bei Google nicht mehr. Daher wird diese Buchung storniert und ihr Zeitfenster wird wieder frei. Der Kunde wird wie bei jeder Stornierung benachrichtigt.",
+        "reschedule": "Diese Buchung wird auf {time} verschoben. Der Kunde wird wie bei jeder Verschiebung über die neue Zeit informiert.",
+        "acknowledge": "Die Buchung selbst ändert sich nicht. Die Gästeliste von Google wird gemerkt und dieser Hinweis verschwindet."
+      },
+      "acceptConfirm": {
+        "cancel": "Buchung stornieren",
+        "reschedule": "Buchung verschieben",
+        "acknowledge": "Übernehmen"
+      }
+    },
+    "reminders": {
+      "title": "Erinnerungen und Nachfassaktionen",
+      "hint": "Schreibe dem Kontakt vor Beginn oder nach Ende eines Termins. Jede Nachricht ist aus, bis du sie einschaltest. Bis zu {max} pro Buchungsart.",
+      "quickAdd": "Schnell hinzufügen",
+      "quick": {
+        "h24": "24 Stunden vorher",
+        "h3": "3 Stunden vorher",
+        "h1": "1 Stunde vorher",
+        "m15": "15 Minuten vorher",
+        "after2h": "2 Stunden danach",
+        "afterDay": "1 Tag danach"
+      },
+      "add": "Erinnerung hinzufügen",
+      "empty": "Keine Erinnerungen oder Nachfassaktionen. Der Kontakt erhält nur die Bestätigung.",
+      "enabledOf": "Erinnerung {n} senden",
+      "on": "An",
+      "off": "Aus",
+      "offsetOf": "Erinnerung {n}, Zeitspanne",
+      "unitOf": "Erinnerung {n}, Zeiteinheit",
+      "kindOf": "Erinnerung {n}, vor oder nach",
+      "units": {
+        "minutes": "Minuten",
+        "hours": "Stunden",
+        "days": "Tage"
+      },
+      "kind": {
+        "before": "vor Beginn des Termins",
+        "after": "nach Ende des Termins"
+      },
+      "editMessage": "Nachricht und Kanäle",
+      "hideMessage": "Ausblenden",
+      "remove": "Erinnerung {n} entfernen",
+      "withTemplate": "WhatsApp-Vorlage",
+      "channelsTitle": "Senden über",
+      "channelsHint": "Es wird der erste Kanal verwendet, über den zugestellt werden kann; die weiteren sind Ersatz. Niemand erhält dieselbe Erinnerung zweimal.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-Mail"
+      },
+      "moveUp": "{channel} früher versuchen",
+      "moveDown": "{channel} später versuchen",
+      "removeChannel": "{channel} nicht verwenden",
+      "messageTitle": "Nachricht",
+      "placeholderMeaning": {
+        "name": "Der Name des Kontakts",
+        "type": "Der Name der Buchungsart",
+        "slot": "Datum und Uhrzeit zusammen",
+        "date": "Das Datum",
+        "time": "Die Uhrzeit",
+        "location": "Der Ort oder bei Online-Terminen der Beitrittslink",
+        "join_link": "Der Beitrittslink bei Online-Terminen",
+        "manage_link": "Der Link zum Verschieben oder Absagen des Termins"
+      },
+      "bodyHintBefore": "Leer lassen, um die Erinnerungsnachricht der Buchungsart oder den Standardtext zu verwenden.",
+      "bodyHintAfter": "Leer lassen, um den Standardtext für Nachfassaktionen zu verwenden.",
+      "subjectTitle": "E-Mail-Betreff",
+      "subjectPlaceholder": "Leer lassen für einen Standardbetreff",
+      "templateTitle": "WhatsApp-Vorlage",
+      "templateNone": "Keine: Freitext, nur innerhalb des 24-Stunden-Fensters",
+      "templateUnknown": "Eine nicht mehr verfügbare Vorlage",
+      "templateHint": "Mehr als 24 Stunden nach der letzten Nachricht des Kontakts stellt WhatsApp nur eine genehmigte Vorlage zu. Die Variablen werden in dieser Reihenfolge gefüllt: 1 Name, 2 Leistung, 3 Datum, 4 Uhrzeit, 5 Ort, 6 Beitrittslink, 7 Verwaltungslink.",
+      "labelTitle": "Bezeichnung (optional)",
+      "labelPlaceholder": "z. B. Tag vorher",
+      "previewTitle": "Vorschau",
+      "previewNote": "Ein Beispiel mit Musterwerten. Die echte Nachricht verwendet die Angaben des jeweiligen Termins.",
+      "count": "{count} von {max} Erinnerungen und Nachfassaktionen",
+      "note": "Eine Erinnerung wird nie nach Beginn des Termins gesendet. Wird der Termin abgesagt oder verschoben, wird Wartendes gestoppt und für die neue Zeit neu geplant. Ruhezeiten halten eine Nachricht zurück, bis sie enden, und Kontakte, die sich abgemeldet haben oder auf der Do-not-call-Liste stehen, werden übersprungen.",
+      "sample": {
+        "name": "Alex",
+        "type": "Beratung",
+        "location": "Hauptstraße 12"
+      },
+      "settingsTitle": "Erinnerungen und Nachfassaktionen",
+      "settingsDescription": "Schreibe dem Kontakt für jede Buchungsart vor einem Termin und hake danach nach. Alles ist aus, bis du es einschaltest.",
+      "loading": "Buchungsarten werden geladen",
+      "noTypes": "Es gibt noch keine Buchungsarten. Lege eine an, um ihre Erinnerungen festzulegen.",
+      "paused": "Pausiert",
+      "summaryNone": "Nichts festgelegt",
+      "summary": "{on} von {total} an",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "conflict": "Diese Buchungsart wurde anderswo geändert. Lade neu, um vor dem Speichern die aktuelle Version zu sehen.",
+      "reload": "Neu laden",
+      "discard": "Änderungen verwerfen",
+      "saving": "Wird gespeichert",
+      "save": "Erinnerungen speichern",
+      "saved": "Erinnerungen für {name} gespeichert.",
+      "readOnly": "Du kannst diese Erinnerungen ansehen, aber nicht ändern.",
+      "fixFirst": "Korrigiere zuerst die markierten Erinnerungen.",
+      "problems": {
+        "offsetInvalid": "Gib eine ganze Zahl für die Zeit ein, höchstens 30 Tage.",
+        "duplicate": "Jede Erinnerung oder Nachfassaktion braucht eine andere Zeit.",
+        "channelsNone": "Wähle mindestens einen Kanal.",
+        "bodyTooLong": "Die Nachricht ist zu lang.",
+        "subjectTooLong": "Der Betreff ist zu lang.",
+        "labelTooLong": "Die Bezeichnung ist zu lang.",
+        "tooMany": "Höchstens 8 Erinnerungen und Nachfassaktionen pro Buchungsart."
+      },
+      "noneOn": "Für diese Buchungsart sind keine Erinnerungen oder Nachfassaktionen eingeschaltet.",
+      "when": {
+        "before": "{count, plural, one {# Minute vorher} other {# Minuten vorher}}",
+        "after": "{count, plural, one {# Minute danach} other {# Minuten danach}}"
+      },
+      "sentOn": "Gesendet über {channel}",
+      "status": {
+        "scheduled": "Geplant",
+        "pending": "Fällig",
+        "sending": "Wird gesendet",
+        "held": "Wartet",
+        "sent": "Gesendet",
+        "skipped": "Nicht gesendet",
+        "failed": "Fehlgeschlagen",
+        "cancelled": "Abgebrochen"
+      },
+      "reasons": {
+        "rule_removed": "Die Erinnerung wurde entfernt, bevor sie fällig war.",
+        "rule_off": "Die Erinnerung wurde ausgeschaltet, bevor sie gesendet wurde.",
+        "rescheduled": "Der Termin wurde verschoben, daher wurde diese Erinnerung ersetzt.",
+        "booking_cancelled": "Der Termin wurde abgesagt.",
+        "booking_declined": "Die Anfrage wurde abgelehnt.",
+        "booking_no_show": "Als nicht erschienen markiert.",
+        "booking_not_confirmed": "Der Termin ist nicht bestätigt.",
+        "started": "Der Termin hatte bereits begonnen.",
+        "expired": "Es war zu spät zum Senden.",
+        "no_contact_point": "Der Kontakt hat für diesen Kanal keine Nummer oder Adresse.",
+        "no_channel": "Kein Kanal konnte zustellen.",
+        "no_sender": "Kein verbundener Absender für diesen Kanal.",
+        "template_required": "WhatsApp braucht außerhalb des 24-Stunden-Fensters eine genehmigte Vorlage.",
+        "template_unavailable": "Die gewählte WhatsApp-Vorlage kann nicht gesendet werden.",
+        "quiet_hours_too_late": "Die Ruhezeit reichte über den Terminbeginn hinaus.",
+        "no_consent": "Keine erfasste Einwilligung.",
+        "opted_out": "Der Kontakt hat sich abgemeldet.",
+        "do_not_call": "Die Nummer steht auf der Do-not-call-Liste.",
+        "minor": "Der Kontakt ist als minderjährig markiert.",
+        "processing_restricted": "Nachrichten an diesen Kontakt sind eingeschränkt.",
+        "plan_limit": "Das Limit des Tarifs ist erreicht.",
+        "quiet_hours": "Wartet auf das Ende der Ruhezeit.",
+        "channel_unavailable": "Der Kanal ist derzeit nicht verbunden.",
+        "wallet_empty": "Das Guthaben ist leer.",
+        "send_halted": "Das Senden ist gestoppt.",
+        "provider_error": "Der Anbieter hat es abgelehnt.",
+        "interrupted": "Es wurde unterbrochen und nicht erneut versucht.",
+        "internal_error": "Etwas ist schiefgelaufen."
+      }
     }
   }
 }

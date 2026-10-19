@@ -5,7 +5,20 @@ summary: Change your password, turn on two-factor sign-in with an authenticator 
 area: account
 order: 40
 documents: [tile:account-security]
-keywords: [password, two-factor, 2fa, mfa, authenticator, recovery codes, passkey, sessions, devices, sign out, security]
+keywords:
+  [
+    password,
+    two-factor,
+    2fa,
+    mfa,
+    authenticator,
+    recovery codes,
+    passkey,
+    sessions,
+    devices,
+    sign out,
+    security,
+  ]
 ---
 
 ## What it is for

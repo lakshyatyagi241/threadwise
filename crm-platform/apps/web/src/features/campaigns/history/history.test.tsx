@@ -140,6 +140,7 @@ describe('the three history screens', () => {
       mode: 'recurring',
       templateId: uuid(1),
       templateName: 'weekly_digest',
+      templateCount: 1,
       nextRunAt: '2026-10-12T04:30:00.000Z',
       lastRunAt: '2026-10-05T04:30:00.000Z',
       runs: 2,

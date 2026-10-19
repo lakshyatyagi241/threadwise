@@ -324,6 +324,21 @@ export class FlowsRepository {
       WHERE org_id = ${orgId} AND id = ${flowId}`);
   }
 
+  /** Every bot of the workspace, slim: what a step that starts another bot is checked against (id is the uuid the graph stores). */
+  async linkTargets(
+    tx: Tx,
+    orgId: number,
+  ): Promise<Array<{ id: string; flowType: string; isPublished: boolean }>> {
+    const res = await tx.execute(
+      sql`SELECT uuid, flow_type, is_published FROM flows WHERE org_id = ${orgId}`,
+    );
+    return (res.rows as Raw[]).map((r) => ({
+      id: String(r.uuid),
+      flowType: String(r.flow_type),
+      isPublished: r.is_published === true,
+    }));
+  }
+
   /** Whether a website chat bot's owner has saved Customize (its widget exists with a customization time). */
   async hasCustomizedWidget(tx: Tx, orgId: number, flowId: number): Promise<boolean> {
     const res = await tx.execute(

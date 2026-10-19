@@ -1,4 +1,5 @@
-import { DEFAULT_FILTERS, type ContactFilters } from '../api/contacts';
+import { HOT_FROM } from '@/features/lead-scoring';
+import { DEFAULT_FILTERS, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
 import { sameFilters } from './views';
 
 /**
@@ -8,6 +9,12 @@ import { sameFilters } from './views';
  */
 export const PRESET_VIEWS = [
   'myContacts',
+  'unassigned',
+  'uncontacted',
+  'followUpToday',
+  'followUpOverdue',
+  'followUpSomeday',
+  'hotLeads',
   'newThisWeek',
   'newLastWeek',
   'recentlyCreated',
@@ -18,8 +25,50 @@ export const PRESET_VIEWS = [
   'active',
   'inactive',
   'unsubscribed',
+  'minors',
 ] as const;
 export type PresetView = (typeof PRESET_VIEWS)[number];
+
+/** The built-in views drawn as quick chips beside the view picker: what a small business reaches for first. */
+export const QUICK_PRESETS = [
+  'myContacts',
+  'unassigned',
+  'uncontacted',
+  'newThisWeek',
+  'needsFollowUp',
+  'hotLeads',
+] as const satisfies readonly PresetView[];
+
+/** The built-in views that filter by the lead score: they are offered only while lead scoring is on for the workspace. */
+const SCORE_PRESETS: readonly PresetView[] = ['hotLeads'];
+
+/** The built-in views of the contact's next follow-up (BL-291): offered once some contact has an open follow-up. */
+const FOLLOW_UP_PRESETS: readonly PresetView[] = [
+  'followUpToday',
+  'followUpOverdue',
+  'followUpSomeday',
+];
+
+/**
+ * `presets` without the ones that do not apply: "Hot leads" needs lead scoring (off: it filters by a score nobody sees), and
+ * "Uncontacted" is offered only once some contact carries the marker (BL-290), so a workspace that never uses the feature sees no new
+
+ * chip, and the follow-up views are offered only once a contact has a follow-up. `uncontacted` and `followUps` default to true for
+ * callers that do not know.
+ */
+export function availablePresets<T extends PresetView>(
+  presets: readonly T[],
+  scoringOn: boolean,
+  uncontacted = true,
+  followUps = true,
+): T[] {
+  return presets.filter(
+    (p) =>
+      (scoringOn || !SCORE_PRESETS.includes(p)) &&
+      (uncontacted || p !== 'uncontacted') &&
+      (followUps || !FOLLOW_UP_PRESETS.includes(p)),
+  );
+}
 
 type Cond = { field: string; operator: string; value?: number | string };
 
@@ -57,6 +106,19 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
   switch (preset) {
     case 'myContacts':
       return { owner: meId };
+    case 'unassigned':
+      return { owner: UNASSIGNED_OWNER };
+    case 'uncontacted':
+      return { rules: rulesOf({ field: 'uncontacted', operator: 'is_true' }) };
+    case 'followUpToday':
+      return { followUp: 'today' };
+    case 'followUpOverdue':
+      return { followUp: 'overdue' };
+    case 'followUpSomeday':
+      return { followUp: 'someday' };
+    case 'hotLeads':
+      // A lead score in the "hot" band of the score badge (67 and up).
+      return { rules: rulesOf({ field: 'leadScore', operator: 'gte', value: HOT_FROM }) };
     case 'newThisWeek':
       return { rules: rulesOf(days('createdAt', 'in_last_days', 7)) };
     case 'newLastWeek':
@@ -84,6 +146,9 @@ export function presetFilters(preset: PresetView, meId: string): Partial<Contact
       return { rules: rulesOf(quietFor(30)) };
     case 'unsubscribed':
       return { consent: 'unsubscribed' };
+    case 'minors':
+      // Flagged as a minor (BL-190): the same condition the "Add condition" builder writes for the field "Minor".
+      return { rules: rulesOf({ field: 'minor', operator: 'is_true' }) };
   }
 }
 

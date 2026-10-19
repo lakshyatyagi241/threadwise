@@ -20,6 +20,8 @@ export function loginUrl(o: {
   state: string;
   scopes: readonly string[];
   configId: string | null;
+  /** Ask again for permissions the person declined or never saw (Meta skips a permission it already holds a decision for otherwise). */
+  rerequest?: boolean;
 }): string {
   const params = new URLSearchParams({
     client_id: o.appId,
@@ -28,6 +30,7 @@ export function loginUrl(o: {
     scope: o.scopes.join(','),
     state: o.state,
   });
+  if (o.rerequest) params.set('auth_type', 'rerequest');
   if (o.configId) {
     params.set('config_id', o.configId);
     params.set('override_default_response_type', 'true');
@@ -38,9 +41,15 @@ export function loginUrl(o: {
 /** What the login round trip carries and for how long it is good. A callback older than this is refused. */
 export const STATE_TTL_MS = 15 * 60_000;
 
+/** Where the browser is sent after the login: the Facebook hub by default, or the screen that started it. */
+export const LOGIN_RETURNS = ['lead-sources'] as const;
+export type LoginReturn = (typeof LOGIN_RETURNS)[number];
+
 export interface LoginState {
   orgId: number;
   userId: number | null;
+  /** The screen that started the login (the Meta lead ads re-consent); absent for the Facebook hub's own connect. */
+  returnTo?: LoginReturn;
   /** When the dialog was started, in epoch milliseconds. */
   at: number;
   /** A random value, so two logins in the same millisecond are different states. */
@@ -62,7 +71,14 @@ export function readState(json: string, now: number): LoginState | null {
   }
   if (v.userId !== null && typeof v.userId !== 'number') return null;
   if (v.at > now + 60_000 || now - v.at > STATE_TTL_MS) return null;
-  return { orgId: v.orgId, userId: v.userId ?? null, at: v.at, nonce: v.nonce };
+  const returnTo = LOGIN_RETURNS.find((r) => r === v.returnTo);
+  return {
+    orgId: v.orgId,
+    userId: v.userId ?? null,
+    at: v.at,
+    nonce: v.nonce,
+    ...(returnTo ? { returnTo } : {}),
+  };
 }
 
 /** "Facebook Page “X” connected." for one, "3 Facebook Pages connected: A, B, C…" for several (first five named). */

@@ -43,6 +43,15 @@ export const dealHitSchema = z.object({ id: z.string(), title: z.string() });
 export type DealHit = z.infer<typeof dealHitSchema>;
 export const dealHitPageSchema = z.object({ data: z.array(dealHitSchema) });
 
+export const companyHitSchema = z.object({
+  id: z.string(),
+  name: z.string(),
+  industry: z.string().nullable().optional(),
+});
+export type CompanyHit = z.infer<typeof companyHitSchema>;
+/** `GET /companies/select-data` answers with a bare array. */
+export const companyHitListSchema = z.array(companyHitSchema);
+
 /** A record a task can link to, as the pickers hold it. */
 export interface RecordRef {
   id: string;

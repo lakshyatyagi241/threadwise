@@ -45,7 +45,9 @@
       "form_submissions_monthly": "Envíos de formularios al mes",
       "ai_form_generations_monthly": "Generaciones del creador de formularios con IA al mes",
       "sms_monthly": "SMS al mes",
-      "email_mailboxes": "Buzones de correo"
+      "email_mailboxes": "Buzones de correo",
+      "email_monthly": "Correos al mes",
+      "storage_gb": "Almacenamiento (GB)"
     },
     "features": {
       "automation": "Automatización",
@@ -74,13 +76,16 @@
       "storefront_builder": "Creador de tienda online",
       "invoicing": "Facturación",
       "forms_and_links": "Formularios y enlaces",
-      "extra_channels": "Telegram, Facebook e Instagram",
+      "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber e WeChat",
       "form_builder": "Formularios",
       "waba_groups": "Grupos de WhatsApp",
       "sms": "Canal SMS",
       "help_agent": "Asistente de ayuda",
       "email_channel": "Canal de correo (Gmail)",
-      "personal_history_full": "Importación del historial completo (WhatsApp personal)"
+      "personal_history_full": "Importación del historial completo (WhatsApp personal)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "Puntuación de leads con IA",
+      "record_assignment": "Reglas de asignación de registros"
     },
     "limitGroups": {
       "messaging": "Mensajería",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "Envíos de formularios aceptados en el mes natural, sin contar el spam. Si se supera el límite, el envío se guarda para revisión y nunca se descarta. 0 = ilimitado.",
       "ai_form_generations_monthly": "Generaciones del creador de formularios con IA en el mes natural, incluidos los reintentos de reparación. 0 = ilimitado.",
       "sms_monthly": "Mensajes SMS salientes enviados en el mes natural. 0 = ilimitado.",
-      "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado."
+      "email_mailboxes": "Buzones de Gmail conectados (uno desconectado libera su lugar). 0 = ilimitado.",
+      "email_monthly": "Correos enviados en el mes natural, respuestas y correos de campañas juntos. 0 = ilimitado.",
+      "storage_gb": "Almacenamiento que puede usar el espacio de trabajo, en GB (grabaciones de llamadas, archivos del chat, adjuntos de correo y archivos). 0 = ilimitado. Por ahora solo se mide: todavía no se bloquea nada."
     },
     "planAddons": {
       "title": "Complementos disponibles en tu plan",
@@ -561,7 +568,9 @@
       "continueFree": "Continuar gratis",
       "choose": "Elegir {name}",
       "back": "Volver",
-      "compare": "Comparar todos los planes"
+      "compare": "Comparar todos los planes",
+      "appHint": "{feature} también se vende como app en el Marketplace.",
+      "appLink": "Ver la app"
     }
   }
 }

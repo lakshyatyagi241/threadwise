@@ -1,12 +1,19 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Optional } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import { createWriteStream } from 'node:fs';
 import { open as openFile, readFile } from 'node:fs/promises';
 import { Readable, Transform } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import type { ReadableStream as WebReadableStream } from 'node:stream/web';
-import { ERROR_CODES } from '@crm/contracts';
+import { ERROR_CODES, type StorageCategory } from '@crm/contracts';
 import { AppError } from '../../../../common/errors/app-error';
+import { storageKeyIsOwnedBy } from '../../../../common/storage-key-owner';
+import {
+  STORAGE_METER,
+  meteredWrite,
+  recordRemovedOn,
+  type StorageMeter,
+} from '../../../../common/storage-meter/storage-meter.port';
 import { LocalDiskMediaStore, isSafeMediaKey } from './local-disk-media.store';
 import { MediaTokenService } from './media-token.service';
 import { kindOfMime, sniffMediaType, type MediaKind } from './media-types';
@@ -100,6 +107,8 @@ export class ChatMediaStore {
     @Inject(MEDIA_UPLOAD_VALIDATOR) private readonly validator: ChatMediaUploadValidator,
     @Inject(LOCAL_DISK_MEDIA_STORE) private readonly local: LocalDiskMediaStore,
     private readonly tokens: MediaTokenService,
+    /** The storage quota guard (observe mode: measures, never refuses). Optional: a process without the quota module stores exactly as before. */
+    @Optional() @Inject(STORAGE_METER) private readonly meter?: StorageMeter,
   ) {}
 
   /** Validates and stores a file an agent uploaded (or any file whose name and bytes are the client's claim). */
@@ -110,6 +119,8 @@ export class ChatMediaStore {
     allow?: MediaKind[];
     /** The name to keep for display when it should differ from `filename`. */
     displayName?: string;
+    /** What the file is for, for the storage meter (default: a file put into a conversation by an agent). */
+    category?: StorageCategory;
   }): Promise<StoredMedia> {
     const limits = chatMediaConfig().maxBytes;
     const validated = this.validator.validate({
@@ -135,15 +146,23 @@ export class ChatMediaStore {
       validated.storedName,
     ].join('/');
 
-    const remote = await this.gateway.put(key, input.buffer, validated.mime);
-    if (remote === null) await this.local.put(key, input.buffer);
+    const sha256 = createHash('sha256').update(input.buffer).digest('hex');
+    await meteredWrite(
+      this.meter,
+      { orgId: input.orgId, bytes: input.buffer.length, category: input.category ?? 'inbox_media' },
+      async () => {
+        const remote = await this.gateway.put(key, input.buffer, validated.mime);
+        if (remote === null) await this.local.put(key, input.buffer);
+      },
+      () => ({ key, sha256 }),
+    );
 
     return {
       key,
       mime: validated.mime,
       size: input.buffer.length,
       name: displayName(input.displayName ?? input.filename),
-      sha256: createHash('sha256').update(input.buffer).digest('hex'),
+      sha256,
       kind,
     };
   }
@@ -157,6 +176,8 @@ export class ChatMediaStore {
     buffer: Buffer;
     declaredMime?: string;
     filename?: string;
+    /** Default: a file a customer sent. An email attachment names its own kind. */
+    category?: StorageCategory;
   }): Promise<StoredMedia> {
     const sniffed = sniffMediaType(input.buffer, input.declaredMime);
     if (!sniffed) throw reject('This file content is not allowed.');
@@ -164,6 +185,7 @@ export class ChatMediaStore {
       orgId: input.orgId,
       filename: `inbound.${sniffed.ext}`,
       buffer: input.buffer,
+      category: input.category ?? 'inbox_media_inbound',
       displayName: input.filename
         ? displayName(input.filename, `file.${sniffed.ext}`)
         : `file.${sniffed.ext}`,
@@ -191,6 +213,8 @@ export class ChatMediaStore {
     maxBytes: number;
     /** Lower-case hex sha256 the sender announced; a different content is refused. */
     verifySha256Hex?: string;
+    /** Default: a file a customer sent. */
+    category?: StorageCategory;
   }): Promise<StoredMedia> {
     const spool = await this.local.createSpool();
     try {
@@ -245,12 +269,19 @@ export class ChatMediaStore {
       ].join('/');
 
       const destination = await this.gateway.destination();
-      if (destination.disk === 'cloud') {
-        const remote = await this.gateway.put(key, await readFile(spool.path), validated.mime);
-        if (remote === null) await this.local.adopt(key, spool.path);
-      } else {
-        await this.local.adopt(key, spool.path);
-      }
+      await meteredWrite(
+        this.meter,
+        { orgId: input.orgId, bytes: size, category: input.category ?? 'inbox_media_inbound' },
+        async () => {
+          if (destination.disk === 'cloud') {
+            const remote = await this.gateway.put(key, await readFile(spool.path), validated.mime);
+            if (remote === null) await this.local.adopt(key, spool.path);
+          } else {
+            await this.local.adopt(key, spool.path);
+          }
+        },
+        () => ({ key, sha256: digest }),
+      );
 
       return {
         key,
@@ -320,6 +351,20 @@ export class ChatMediaStore {
     if (!this.ownsKey(orgId, key)) return;
     await this.local.remove(key);
     if ((await this.gateway.destination()).disk === 'cloud') await this.gateway.remove(key);
+    await recordRemovedOn(this.meter, orgId, key);
+  }
+
+  /**
+   * The size in bytes of a stored object of this workspace (local disk first, then a HEAD on the bucket), or null when it is not there,
+   * the key is not this workspace's, or the bucket cannot say. Used by the storage backfill for the kinds that keep no size column
+   * (call recordings, contact files, knowledge files); never on a request path.
+   */
+  async sizeOf(orgId: number, key: string): Promise<number | null> {
+    if (!storageKeyIsOwnedBy(orgId, key) || !isSafeMediaKey(key)) return null;
+    const stat = await this.local.stat(key);
+    if (stat) return stat.size;
+    if ((await this.gateway.destination()).disk !== 'cloud' || !this.gateway.size) return null;
+    return this.gateway.size(key);
   }
 
   /**
@@ -348,6 +393,7 @@ export class ChatMediaStore {
     const url = await this.gateway.url(key, 60);
     const res = await fetch(url, {
       headers: range ? { range: `bytes=${range.start}-${range.end ?? ''}` } : {},
+      redirect: 'manual',
       signal: AbortSignal.timeout(30_000),
     });
     if (res.status === 404 || res.status === 403) return null;

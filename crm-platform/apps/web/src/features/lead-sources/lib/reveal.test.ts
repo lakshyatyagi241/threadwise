@@ -8,7 +8,12 @@ import {
   sampleCurl,
 } from './reveal';
 
-const secrets = { token: 'tkn_abc', hookPath: '/v2/public/lead-hooks/tkn_abc' };
+const secrets = {
+  token: 'tkn_abc',
+  hookPath: '/v2/public/lead-hooks/tkn_abc',
+  hookUrl: 'https://api.acme.test/v2/public/lead-hooks/tkn_abc',
+  hookUrlProblem: null,
+};
 
 describe('reveal state machine', () => {
   it('starts shown and unconfirmed', () => {

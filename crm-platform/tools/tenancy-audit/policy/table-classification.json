@@ -9,6 +9,11 @@
     "reason": "operator_write / privileged_only policy, no tenant policy",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "an_rollup_state": {
+    "class": "GLOBAL",
+    "reason": "rollup watermark: read by every tenant for the live tail of a query, written by the rollup worker only (privileged)",
+    "reviewed": "2026-10-16 (policy text read in the migration and in the analytics schema spec)"
+  },
   "announcements": {
     "class": "GLOBAL",
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
@@ -44,6 +49,11 @@
     "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
+  "dpdp_register_attestations": {
+    "class": "PLATFORM_ONLY",
+    "reason": "privileged-only policy, append-only compliance attestations, no tenant data",
+    "reviewed": "2026-10-17"
+  },
   "extensions": {
     "class": "PLATFORM_ONLY",
     "reason": "operator_write / privileged_only policy, no tenant policy",
@@ -67,11 +77,6 @@
   "impersonation_sessions": {
     "class": "PLATFORM_ONLY",
     "reason": "operator act-as sessions, target_workspace_id, operator_write only",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
-  "invoice_webhook_events": {
-    "class": "PLATFORM_ONLY",
-    "reason": "operator_write / privileged_only policy, no tenant policy",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
   "languages": {
@@ -119,16 +124,6 @@
     "reason": "keyed on id = current_org_id(); the tenant row itself",
     "reviewed": "2026-10-11 (policy text read in catalog)"
   },
-  "package_features": {
-    "class": "GLOBAL",
-    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
-  "packages": {
-    "class": "GLOBAL",
-    "reason": "platform catalogue, read_all/catalogue_read, write operator-only",
-    "reviewed": "2026-10-11 (policy text read in catalog)"
-  },
   "payment_gateways": {
     "class": "PLATFORM_ONLY",
     "reason": "operator_write / privileged_only policy, no tenant policy",
@@ -138,6 +133,16 @@
     "class": "GLOBAL",
     "reason": "permission catalogue; no RLS, no tenant data",
     "reviewed": "2026-10-11 (policy text read in catalog)"
+  },
+  "persona_versions": {
+    "class": "GLOBAL",
+    "reason": "persona catalogue; tenants read published versions only (read_published), write operator-only",
+    "reviewed": "2026-10-18 (policy text read in catalog)"
+  },
+  "personas": {
+    "class": "GLOBAL",
+    "reason": "persona catalogue, read_all, write operator-only",
+    "reviewed": "2026-10-18 (policy text read in catalog)"
   },
   "plan_message_margins": {
     "class": "GLOBAL",

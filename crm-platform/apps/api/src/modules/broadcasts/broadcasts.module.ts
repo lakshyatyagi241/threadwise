@@ -1,5 +1,7 @@
+import { FailedOperationsModule } from '../failed-operations';
 import { forwardRef, Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { SendWindowModule } from '../compliance-center';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
 import { NodeBridgeRuntimeModule } from '../node-bridge-runtime';
@@ -11,6 +13,7 @@ import { BroadcastInboxMirrorService } from './broadcast-inbox-mirror.service';
 import { BroadcastProgressService } from './broadcast-progress.service';
 import { EngineSenderRegistry, TransportEngineSender, WabaEngineSender } from './engine-senders';
 import { BroadcastsController } from './broadcasts.controller';
+import { PreviousSendsService } from './previous-sends';
 import { MarketingMediaController } from './marketing-media.controller';
 import { MarketingMediaService } from './marketing-media.service';
 import { LinkRedirectController } from './tracking/link-redirect.controller';
@@ -54,9 +57,11 @@ import {
     PlansCoreModule,
     CrmModule,
     ContactConsentModule,
+    SendWindowModule,
     forwardRef(() => NodeBridgeRuntimeModule),
     WalletMessageBillingModule,
     PlatformSettingsModule,
+    FailedOperationsModule,
   ],
   controllers: [
     BroadcastsController,
@@ -66,6 +71,8 @@ import {
     MarketingMediaController,
   ],
   exports: [
+    PreviousSendsService,
+    MarketingMediaService,
     BroadcastsService,
     BroadcastsReadService,
     BroadcastReceiptsService,
@@ -87,6 +94,7 @@ import {
   ],
   providers: [
     MarketingMediaService,
+    PreviousSendsService,
     CryptoService,
     BroadcastsService,
     BroadcastsRepository,

@@ -1,6 +1,6 @@
 import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { gunzipSync, gzipSync } from 'node:zlib';
+import { forEachGzipLine, gzipAsync } from '../../common/async-zlib';
 import {
   MESSAGE_LOG_EXPORT_MAX_ROWS,
   MESSAGE_LOG_EXPORT_TTL_DAYS,
@@ -118,7 +118,7 @@ export class MessageLogExportRunner {
   ): Promise<{ file: Buffer; rows: number }> {
     const sel = selectionOfStored(row.filters);
     const ctx = exportContext(orgId);
-    const members: Buffer[] = [gzipSync(`${CSV_BOM}${HISTORY_CSV_HEAD}`)];
+    const members: Buffer[] = [await gzipAsync(`${CSV_BOM}${HISTORY_CSV_HEAD}`)];
     let rows = 0;
     let cursor: HistoryCursor | null = null;
     for (;;) {
@@ -128,7 +128,7 @@ export class MessageLogExportRunner {
       if (page.rows.length === 0) break;
       rows += page.rows.length;
       if (rows > MESSAGE_LOG_EXPORT_MAX_ROWS) throw new ExportTooLarge();
-      members.push(gzipSync(`${page.rows.map(historyCsvLine).join('\r\n')}\r\n`));
+      members.push(await gzipAsync(`${page.rows.map(historyCsvLine).join('\r\n')}\r\n`));
       if (page.next === null) break;
       cursor = decodeCursor(page.next);
       if (cursor === null) break;
@@ -138,7 +138,7 @@ export class MessageLogExportRunner {
 
   private async build(orgId: number, row: ExportRow): Promise<{ file: Buffer; rows: number }> {
     const members: Buffer[] = [
-      gzipSync(`${CSV_BOM}${CSV_HEADER.map((h) => csvCell(h)).join(',')}\r\n`),
+      await gzipAsync(`${CSV_BOM}${CSV_HEADER.map((h) => csvCell(h)).join(',')}\r\n`),
     ];
     let rows = 0;
 
@@ -149,7 +149,7 @@ export class MessageLogExportRunner {
         if (lines.length === 0) continue;
         rows += lines.length;
         if (rows > MESSAGE_LOG_EXPORT_MAX_ROWS) throw new ExportTooLarge();
-        members.push(gzipSync(`${lines.join('\r\n')}\r\n`));
+        members.push(await gzipAsync(`${lines.join('\r\n')}\r\n`));
       }
     };
 
@@ -163,8 +163,8 @@ export class MessageLogExportRunner {
       );
       for (const a of archives) {
         const events: Pending[] = [];
-        for (const line of gunzipSync(a.payload).toString('utf8').split('\n')) {
-          if (line === '') continue;
+        // Streamed through gunzip a chunk at a time: a day's object can be tens of MB.
+        await forEachGzipLine(a.payload, (line) => {
           const e = JSON.parse(line) as {
             messageId: number;
             messageCreatedAt: string;
@@ -179,7 +179,7 @@ export class MessageLogExportRunner {
             messageId: e.messageId,
             messageCreatedAt: e.messageCreatedAt,
           });
-        }
+        });
         await emit(events);
       }
 

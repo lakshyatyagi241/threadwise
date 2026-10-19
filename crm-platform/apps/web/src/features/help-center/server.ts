@@ -2,6 +2,7 @@ import 'server-only';
 import { cache } from 'react';
 import { getLocale } from 'next-intl/server';
 import { CAPABILITIES_UNKNOWN } from '@/features/_registry/resolve';
+import { personaHiddenIds } from '@/features/persona/server';
 import { fetchEnabledFeatures } from '@/features/plans-subscriptions-trials/server';
 import { getSession } from '@/lib/auth/server';
 import type { VisibleHelp } from './resolve';
@@ -18,6 +19,8 @@ export const getVisibleHelp = cache(async (): Promise<VisibleHelp | null> => {
     ...CAPABILITIES_UNKNOWN,
     permissions: new Set(Object.keys(session.permissions)),
     planFeatures: await fetchEnabledFeatures(),
+    // Guides of screens the workspace's persona hides leave Help with them (the same ids the menu uses).
+    hidden: personaHiddenIds(session.org.persona),
   };
   return helpFor(caps, await getLocale());
 });

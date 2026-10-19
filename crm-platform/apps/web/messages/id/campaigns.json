@@ -209,7 +209,16 @@
         "customMessage": "Pesan kustom",
         "flowTitle": "Alur",
         "variants": "Varian yang ditampilkan",
-        "variant": "Varian {v}"
+        "variant": "Varian {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Pratinjau email",
+        "emailFrom": "Dari",
+        "emailSubject": "Subjek",
+        "emailNoSender": "Pilih pengirim",
+        "emailNoSubject": "(tanpa subjek)",
+        "emailEmpty": "Tulis isi pesan dan akan muncul di sini.",
+        "emailUnsubscribe": "Tautan berhenti berlangganan ditambahkan di bagian bawah setiap email.",
+        "emailNote": "Begini tampilan kampanye Anda di kotak masuk setiap penerima."
       },
       "previewEmpty": "Pratinjau pesan Anda…",
       "previewTemplate": "Template",
@@ -228,7 +237,8 @@
         "throttle": "Jeda terpanjang harus setidaknya sama dengan jeda terpendek.",
         "expiry": "Tanggal akhir harus setelah tanggal kirim, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
         "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
-        "sender": "Pilih pengirim."
+        "sender": "Pilih pengirim.",
+        "subject": "Persingkat subjek hingga maksimal 150 karakter."
       },
       "submit": {
         "save": "Simpan perubahan",
@@ -293,7 +303,14 @@
         },
         "csvRows": "{count} nomor dalam berkas",
         "numbersPlaceholder": "Satu nomor per baris — sertakan kode negara, tanpa tanda plus",
-        "numbersCount": "{count} nomor"
+        "numbersCount": "{count} nomor",
+        "emailNote": "Email dikirim ke alamat setiap kontak. Kontak tanpa alamat email, alamat ganda, dan kontak yang berhenti berlangganan dilewati.",
+        "emailSkipped": "Penerima terpilih tanpa alamat email (akan dilewati): {count}",
+        "emailNoAddress": "Nomor yang diketik dan baris CSV tidak memiliki alamat email, sehingga dilewati. Pilih kontak, grup, tag, atau segmen.",
+        "previousTitle": "Pengiriman sebelumnya",
+        "previousHint": "Tambahkan orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, membalas, atau mengklik.",
+        "previousEstimate": "{count, plural, other {Hingga # orang dari pengiriman sebelumnya (perkiraan: orang yang ada di dua pengiriman dihitung dua kali).}}",
+        "previousEditHint": "Pilihan pengiriman sebelumnya tidak ditampilkan saat Anda mengedit: kampanye ini sudah menyimpan penerimanya sebagai kontak. Pilih lagi untuk menambah orang."
       },
       "message": {
         "title": "Pesan",
@@ -526,7 +543,13 @@
           "baileys": "Belum ada templat API Tidak Resmi. Buat di halaman Templat."
         },
         "templateIntroApproved": "Pilih templat Meta yang disetujui. Nilai variabel per kontak diisi saat pengiriman dari atribut kontak.",
-        "templateApproved": "Templat yang disetujui"
+        "templateApproved": "Templat yang disetujui",
+        "subject": "Subjek",
+        "subjectNote": "Subjek, maks. 150",
+        "subjectPlaceholder": "mis. Penawaran Mei Anda sudah tayang",
+        "subjectHint": "Digunakan sebagai subjek email. Kosongkan untuk memakai nama kampanye.",
+        "emailNote": "Kampanye ini dikirim sebagai email dari kotak surat yang Anda pilih. Tautan berhenti berlangganan ditambahkan di bagian bawah setiap email.",
+        "emailBodyHint": "Teks biasa. Gunakan '{{name}}' atau '{{first_name}}' untuk personalisasi. Kontak tanpa alamat email dilewati."
       },
       "review": {
         "title": "Tinjau",
@@ -568,8 +591,15 @@
           "throttle": "Jeda terpanjang harus sama dengan atau lebih dari jeda terpendek.",
           "expiry": "Tanggal akhir harus setelah tanggal pengiriman, jika tidak kampanye akan kedaluwarsa sebelum terkirim.",
           "media": "Masukkan alamat lengkap yang diawali http:// atau https://.",
-          "sender": "Pilih pengirim."
-        }
+          "sender": "Pilih pengirim.",
+          "subject": "Persingkat subjek hingga maksimal 150 karakter."
+        },
+        "from": "Dari",
+        "subject": "Subjek",
+        "subjectFallback": "Nama kampanye",
+        "skippedNoEmail": "Dilewati (tanpa alamat email)",
+        "estimateEmail": "Ini perkiraan: kontak yang ada di dua grup dihitung dua kali. Kontak tanpa alamat email di grup, tag, dan segmen dilewati saat kampanye berjalan.",
+        "previousSends": "Pengiriman sebelumnya (hingga)"
       },
       "ai": {
         "open": "Buat dengan AI",
@@ -622,8 +652,43 @@
         "notes": "Catatan tambahan",
         "notesNote": "opsional / maks 2000",
         "notesPlaceholder": "Hal khusus — frasa wajib, hal yang harus dihindari, ciri suara brand…",
-        "failed": "Kampanye tidak dapat dibuat. Coba lagi.",
-        "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan."
+        "applied": "Teks kampanye sudah diisi. Tinjau sebelum melanjutkan.",
+        "pictureApplied": "Gambar telah dilampirkan ke kampanye. Periksa di kartu Lampiran.",
+        "errors": {
+          "noKey": "Tidak ada penyedia AI yang diaktifkan untuk ruang kerja ini. Minta admin untuk menambahkan kunci.",
+          "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+          "providerFailed": "Penyedia AI tidak merespons. Coba lagi sebentar lagi.",
+          "badJson": "Jawaban model tidak dapat dibaca. Coba lagi atau ubah brief.",
+          "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+          "forbidden": "Anda tidak memiliki izin untuk membuat kampanye.",
+          "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+          "failed": "Tidak dapat membuat kampanye. Coba lagi."
+        },
+        "picture": {
+          "label": "Buat juga gambar",
+          "hint": "Membuat satu gambar dari brief yang sama dan melampirkannya ke kampanye. Menggunakan kuota OpenAI Anda.",
+          "needsOpenAi": "Gambar memerlukan kunci OpenAI. Pilih model OpenAI untuk mengaktifkan ini.",
+          "noAttachment": "Nomor yang Anda pilih hanya mengirim teks, jadi tidak ada tempat untuk melampirkan gambar.",
+          "size": "Bentuk gambar",
+          "sizes": {
+            "square": "Persegi",
+            "landscape": "Lanskap",
+            "portrait": "Potret"
+          },
+          "textKept": "Teks kampanye telah diisi. Hanya gambar yang belum ada.",
+          "retry": "Coba buat gambar lagi",
+          "errors": {
+            "noKey": "Gambar memerlukan kunci OpenAI, dan tidak ada yang diaktifkan untuk ruang kerja ini.",
+            "limitReached": "Ruang kerja ini telah menggunakan seluruh kuota AI bulan ini.",
+            "providerFailed": "Layanan gambar tidak merespons. Coba lagi sebentar lagi.",
+            "badJson": "Layanan gambar mengirim respons yang tidak terduga. Coba lagi.",
+            "imageRefused": "OpenAI menolak membuat gambar ini. Ubah produk, penawaran, atau catatan lalu coba lagi.",
+            "invalid": "Periksa brief: nama bisnis wajib diisi dan beberapa kolom terlalu panjang.",
+            "forbidden": "Anda tidak memiliki izin untuk membuat kampanye.",
+            "network": "Tidak dapat terhubung ke server. Periksa koneksi Anda dan coba lagi.",
+            "failed": "Tidak dapat membuat gambar. Coba lagi."
+          }
+        }
       },
       "switch": {
         "title": "Gunakan alur terpandu?",
@@ -804,7 +869,8 @@
         "clicked": "diklik",
         "showing": "Menampilkan {shown} dari {total}",
         "prev": "Halaman sebelumnya",
-        "next": "Halaman berikutnya"
+        "next": "Halaman berikutnya",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "engagement": {
         "opened": "Dibuka",
@@ -972,7 +1038,8 @@
         "badge": "Langsung",
         "updated": "diperbarui {time}",
         "queued": "{count} menunggu dikirim",
-        "processing": "{count} sedang dikirim sekarang"
+        "processing": "{count} sedang dikirim sekarang",
+        "held": "{count} ditahan karena jam tenang"
       },
       "statistics": {
         "loadFailed": "Statistik tidak dapat dimuat.",
@@ -1101,7 +1168,13 @@
         "auto_end_in_past": "Tanggal akhir otomatis sudah lewat.",
         "auto_end_before_send": "Tanggal akhir otomatis harus setelah waktu kirim.",
         "auto_end_recurring": "Kampanye berulang berakhir sesuai aturannya sendiri: hapus tanggal akhir otomatis.",
-        "pacing_range": "Periksa Smart Delivery: jeda terlama lebih pendek dari yang tersingkat, atau hanya satu dari dua jam pengiriman yang diatur."
+        "pacing_range": "Periksa Smart Delivery: jeda terlama lebih pendek dari yang tersingkat, atau hanya satu dari dua jam pengiriman yang diatur.",
+        "follow_up_template_required": "Pilih templat yang dikirim oleh setiap tindak lanjut.",
+        "follow_up_flow_required": "Pilih alur yang dimulai oleh setiap tindak lanjut.",
+        "follow_up_cloud_api_only": "Tindak lanjut hanya berfungsi dengan nomor WhatsApp Cloud API. Pilih satu di langkah 1 atau hapus tindak lanjut.",
+        "sequence_not_recurring": "Templat bergiliran hanya berfungsi dengan kampanye berulang. Pilih jadwal berulang atau hapus templat tambahan.",
+        "sequence_with_ab": "Templat bergiliran tidak dapat digabungkan dengan uji A/B. Matikan uji A/B atau hapus templat tambahan.",
+        "sequence_template_required": "Pilih templat untuk setiap langkah urutan atau hapus yang kosong."
       },
       "template": {
         "previewOnline": "online",
@@ -1135,7 +1208,14 @@
         "senderLabel": "Kirim dari",
         "senderHint": "Nomor WhatsApp pengirim broadcast ini.",
         "pickSender": "Pilih nomor",
-        "classicOption": "pembuat klasik"
+        "classicOption": "pembuat klasik",
+        "buildWithAi": "Buat dengan AI",
+        "aiNote": "Buat draf templat baru dengan AI. Anda meninjaunya di halaman templat; setelah itu Meta meninjaunya sebelum dapat dikirim, jadi kembali dan pilih templat ini setelah disetujui.",
+        "shareToggle": "Bagi pengiriman ini ke beberapa nomor",
+        "shareHint": "Centang nomor pengirim dan beri masing-masing bagian. Audiens dibagi menurut bagian tersebut dan setiap kontak menerima pesan dari satu nomor saja. Bagian yang kosong atau 0 dihitung 1.",
+        "shareWeight": "Bagian",
+        "shareWeightLabel": "Bagian {name}",
+        "shareKeepOne": "Setidaknya satu nomor harus tetap dicentang."
       },
       "audience": {
         "selectionTitle": "Dipilih di Contact Hub",
@@ -1184,7 +1264,8 @@
           "contacts": "Kontak",
           "groups": "Grup",
           "segments": "Segmen",
-          "csv": "File CSV"
+          "csv": "File CSV",
+          "previous": "Pengiriman sebelumnya"
         },
         "groupsHint": "Grup adalah daftar pemasaran Anda. Semua orang di grup yang Anda centang disertakan.",
         "segmentsHint": "Segmen terisi sendiri berdasarkan aturan. Semua orang di segmen yang Anda centang disertakan.",
@@ -1280,7 +1361,10 @@
         },
         "csvIssuesMore": "{count} lainnya ada di unduhan.",
         "csvConsentOn": "Anda mengonfirmasi persetujuan untuk nomor-nomor ini. Nomor ini dicatat sebagai setuju saat siaran diluncurkan.",
-        "csvConsentVersion": "Versi pemberitahuan: {version}."
+        "csvConsentVersion": "Versi pemberitahuan: {version}.",
+        "modePrevious": "Kirim ke pengiriman sebelumnya",
+        "previousHint": "Targetkan ulang orang-orang yang dituju broadcast dan kampanye sebelumnya, atau hanya yang membaca, tidak membaca, membalas, atau mengklik.",
+        "chipPrevious": "{count, plural, other {# pengiriman sebelumnya}} ({outcome})"
       },
       "review": {
         "intro": "Periksa biaya, beri tahu kami isi setiap variabel template, dan tinjau broadcast.",
@@ -1357,7 +1441,13 @@
         "sumCsv": "File CSV {name}: {count, plural, other {# nomor valid}}",
         "estimatedCostFull": "Perkiraan biaya (penuh)",
         "chargedPlan": "Dibebankan ke dompet Anda sekarang: {amount} (paket Anda menanggung {covered} dari pesan ini)",
-        "chargedWallet": "Dibebankan ke dompet Anda: {amount}"
+        "chargedWallet": "Dibebankan ke dompet Anda: {amount}",
+        "sumFollowUps": "Tindak lanjut",
+        "sumSequence": "Dikirim bergiliran",
+        "sumPrevious": "Pengiriman sebelumnya: {names} ({outcome})",
+        "sumSplit": "Pembagian antar nomor",
+        "sumSplitCount": "{count, plural, other {# penerima}} ({percent}%)",
+        "sumSplitPercent": "{percent}% dari audiens"
       },
       "test": {
         "title": "Kirim pesan WhatsApp uji coba",
@@ -1393,9 +1483,11 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "read": "Terbaca",
-          "failed": "Gagal"
+          "failed": "Gagal",
+          "held": "Ditahan"
         },
-        "charged": "Dikenakan {amount}"
+        "charged": "Dikenakan {amount}",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "send": {
         "whenTitle": "Kapan dikirim",
@@ -1520,7 +1612,8 @@
           "sent": "Terkirim",
           "delivered": "Tersampaikan",
           "failed": "Gagal",
-          "retries": "Percobaan ulang"
+          "retries": "Percobaan ulang",
+          "template": "Templat"
         },
         "retrySummary": "{pending} menunggu, {recovered} pulih, {exhausted} menyerah",
         "openRun": "Buka putaran",
@@ -1562,7 +1655,27 @@
         "exportFailed": "Ekspor tidak dapat diunduh.",
         "deleteTitle": "Hapus siaran ini?",
         "deleteOne": "Menghapus siaran ini beserta penerimanya. Tindakan ini tidak dapat dibatalkan.",
-        "deleteSeries": "Menghapus siaran berulang ini beserta eksekusi yang telah direncanakan. Belum ada yang terkirim, jadi tidak ada riwayat yang hilang. Tindakan ini tidak dapat dibatalkan."
+        "deleteSeries": "Menghapus siaran berulang ini beserta eksekusi yang telah direncanakan. Belum ada yang terkirim, jadi tidak ada riwayat yang hilang. Tindakan ini tidak dapat dibatalkan.",
+        "followUps": {
+          "title": "Tindak lanjut",
+          "step": "Tindak lanjut {step}",
+          "count": {
+            "waiting": "{count} menunggu",
+            "sent": "{count} terkirim",
+            "delivered": "{count} diterima",
+            "read": "{count} dibaca",
+            "flowsStarted": "{count} alur dimulai",
+            "skipped": "{count} dilewati",
+            "lapsed": "{count} kedaluwarsa",
+            "failed": "{count} gagal"
+          },
+          "hint": {
+            "skipped": "Kondisi tidak terpenuhi saat diperiksa, sehingga urutan berakhir di sana.",
+            "lapsed": "Waktu pemantauan habis sebelum kontak membalas atau membaca, sehingga urutan berakhir di sana."
+          }
+        },
+        "templatesTitle": "Templat",
+        "templatesInTurn": "{count, plural, other {# templat bergiliran}}"
       },
       "panel": {
         "title": "Dibuat dengan Buat broadcast",
@@ -1573,7 +1686,8 @@
           "recurring": "Berulang"
         },
         "recipients": "{count, plural, other {# penerima}}",
-        "next": "Putaran berikutnya {when}"
+        "next": "Putaran berikutnya {when}",
+        "moreTemplates": "+{count} lagi"
       },
       "pickers": {
         "selectDate": "Pilih tanggal",
@@ -1593,6 +1707,95 @@
         "body": "{number} ({engine}) dikirim dari pembuat klasik, yang dimulai dari awal. Kampanye ini disimpan sebagai draf dan tetap ada di daftar Kampanye Anda, sehingga Anda bisa kembali ke sana.",
         "confirm": "Buka pembuat klasik",
         "cancel": "Tetap di sini"
+      },
+      "followUps": {
+        "title": "Tindak lanjut",
+        "intro": "Kirim pesan lain, atau mulai alur, tergantung pada apa yang dilakukan kontak setelah pesan kampanye. Hingga 3 langkah berturut-turut.",
+        "cloudOnly": "Tindak lanjut memerlukan nomor WhatsApp Cloud API, karena bergantung pada laporan baca dan balasan dari Meta. Pilih satu di langkah 1.",
+        "add": "Tambah tindak lanjut",
+        "count": "{used} dari {max} tindak lanjut",
+        "limitReached": "Batas tercapai: {max} tindak lanjut.",
+        "stepTitle": "Tindak lanjut {step}",
+        "measuredFromCampaign": "Dihitung dari pesan kampanye.",
+        "measuredFromStep": "Dihitung dari pesan tindak lanjut {step}.",
+        "remove": "Hapus tindak lanjut {step}",
+        "removeShort": "Hapus",
+        "triggerLabel": "Saat kontak",
+        "trigger": {
+          "replied": "Membalas",
+          "read": "Membaca pesan",
+          "not_replied": "Belum membalas",
+          "not_read": "Belum membaca pesan"
+        },
+        "triggerHelp": {
+          "replied": "Berjalan begitu kontak membalas, jika terjadi dalam waktu yang Anda tetapkan. Jika tidak, urutan berakhir.",
+          "read": "Berjalan begitu kontak membacanya, jika terjadi dalam waktu yang Anda tetapkan. Jika tidak, urutan berakhir.",
+          "not_replied": "Menunggu selama waktu yang Anda tetapkan, lalu berjalan jika kontak belum membalas. Jika sudah, urutan berakhir.",
+          "not_read": "Menunggu selama waktu yang Anda tetapkan, lalu berjalan jika kontak belum membacanya. Jika sudah, urutan berakhir."
+        },
+        "watchLabel": "Pantau hingga",
+        "waitLabel": "Tunggu",
+        "unitLabel": "Satuan waktu",
+        "duration": {
+          "minutes": "{count, plural, other {# menit}}",
+          "hours": "{count, plural, other {# jam}}",
+          "days": "{count, plural, other {# hari}}"
+        },
+        "actionLabel": "Lalu",
+        "action": {
+          "template": "Kirim templat",
+          "flow": "Mulai alur"
+        },
+        "templateLabel": "Templat yang dikirim",
+        "flowLabel": "Alur yang dimulai",
+        "pickTemplate": "Pilih templat",
+        "pickFlow": "Pilih alur",
+        "loading": "Memuat...",
+        "unavailable": "Tidak tersedia lagi",
+        "noTemplates": "Belum ada templat yang disetujui.",
+        "createTemplate": "Buat templat",
+        "noFlows": "Belum ada alur.",
+        "createFlow": "Buat alur",
+        "flowsError": "Alur tidak dapat dimuat. Coba lagi nanti.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Jika membalas dalam {wait}",
+          "read": "Jika membaca dalam {wait}",
+          "not_replied": "Jika belum membalas setelah {wait}",
+          "not_read": "Jika belum membaca setelah {wait}"
+        },
+        "does": {
+          "template": "kirim {name}",
+          "flow": "mulai alur {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {menit}}",
+          "hours": "{count, plural, other {jam}}",
+          "days": "{count, plural, other {hari}}"
+        }
+      },
+      "sequence": {
+        "title": "Templat berurutan",
+        "intro": "Setiap putaran mengirim templat berikutnya dalam daftar ini. Putaran 1 mengirim yang pertama, putaran 2 yang kedua, dan setelah yang terakhir daftar dimulai lagi dari yang pertama.",
+        "notRecurring": "Hanya siaran berulang yang mengirim templat bergiliran. Pilih jadwal berulang atau hapus templat ini.",
+        "withAb": "Templat bergiliran tidak dapat digunakan bersama uji A/B, yang sudah mengirim dua templat. Matikan uji A/B untuk menggunakannya.",
+        "templateLabel": "Templat {position}",
+        "firstMissing": "Belum dipilih",
+        "firstHint": "Templat yang dipilih untuk kampanye. Ubah di langkah templat.",
+        "pick": "Pilih templat",
+        "loading": "Memuat...",
+        "unavailable": "Tidak tersedia lagi",
+        "up": "Naik",
+        "down": "Turun",
+        "moveUp": "Naikkan templat {position}",
+        "moveDown": "Turunkan templat {position}",
+        "remove": "Hapus templat {position}",
+        "removeShort": "Hapus",
+        "removeAll": "Hapus semua",
+        "add": "Tambah templat",
+        "count": "{used} dari {max} templat",
+        "limitReached": "Batas tercapai: {max} templat.",
+        "variablesTitle": "Variabel templat {position}: {name}"
       }
     },
     "history": {
@@ -1706,12 +1909,93 @@
         "title": "Nomor pribadi dinonaktifkan untuk workspace ini",
         "body": "{count} nomor pribadi (QR) tidak dapat mengirim kampanye selama ini dinonaktifkan. Administrator platform dapat mengaktifkannya untuk workspace ini, atau Anda dapat menghubungkan nomor resmi WhatsApp Business.",
         "action": "Hubungkan nomor resmi"
+      },
+      "email": {
+        "none": {
+          "title": "Tidak ada kotak surat yang terhubung",
+          "body": "Hubungkan kotak surat di halaman Email untuk memilih pengirim kampanye ini.",
+          "action": "Hubungkan kotak surat"
+        },
+        "disconnected": {
+          "title": "Kotak surat yang terputus: {count}",
+          "body": "Hubungkan kembali di halaman Email untuk mengirim kampanye darinya.",
+          "action": "Buka halaman Email"
+        },
+        "error": {
+          "title": "Kotak surat yang perlu dihubungkan kembali: {count}",
+          "body": "Login terakhirnya gagal. Hubungkan kembali di halaman Email dan kotak surat akan muncul di sini.",
+          "action": "Buka halaman Email"
+        }
       }
     },
     "create": {
       "loading": "Memuat nomor Anda",
       "noAccessTitle": "Anda tidak dapat membuat kampanye",
       "noAccess": "Minta izin membuat kampanye kepada admin ruang kerja."
+    },
+    "previousSends": {
+      "title": "Pengiriman sebelumnya",
+      "empty": "Belum ada broadcast atau kampanye sebelumnya",
+      "outcomeLabel": "Siapa dari pengiriman tersebut",
+      "outcomes": {
+        "all": "Semua penerima",
+        "delivered": "Terkirim",
+        "read": "Dibaca",
+        "not_read": "Tidak dibaca",
+        "replied": "Membalas",
+        "not_replied": "Tidak membalas",
+        "clicked": "Mengklik tautan",
+        "failed": "Gagal"
+      },
+      "outcomeOff": "{name} (tidak untuk broadcast)",
+      "outcomeHint": {
+        "all": "Semua penerima: semua orang yang dituju pesan ini. Kontak yang berhenti berlangganan dan baris yang dilewati tidak disertakan.",
+        "delivered": "Terkirim: orang yang menerima pesan.",
+        "read": "Dibaca: orang yang membacanya.",
+        "not_read": "Tidak dibaca: orang yang dikirimi pesan tetapi belum membacanya.",
+        "replied": "Membalas: orang yang membalas pesan.",
+        "not_replied": "Tidak membalas: orang yang dikirimi pesan tetapi belum membalas.",
+        "clicked": "Mengklik tautan: orang yang mengklik tautan terlacak di dalamnya.",
+        "failed": "Gagal: orang yang pesannya tidak dapat dikirim."
+      },
+      "broadcastNote": "Broadcast hanya mencatat pengiriman dan pembacaan, sehingga balasan dan klik tidak tersedia selama broadcast dicentang.",
+      "broadcastOff": "Broadcast tidak memiliki balasan atau klik. Pilih hasil lain untuk mencentangnya.",
+      "search": "Cari pengiriman sebelumnya",
+      "searchPlaceholder": "Cari",
+      "listLabel": "Broadcast dan kampanye sebelumnya",
+      "noMatch": "Tidak ada yang cocok dengan pencarian Anda.",
+      "chosen": "{count} dari {max} dipilih",
+      "limit": "Anda dapat memilih hingga {max} pengiriman. Hapus centang satu untuk memilih yang lain.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Kampanye"
+      },
+      "wentOut": "Dikirim {date}",
+      "wentOutUnknown": "Tanggal tidak diketahui",
+      "recipients": "{count, plural, other {# penerima}}",
+      "notRecorded": "Tidak dicatat untuk broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, other {# orang}}",
+        "delivered": "{count, plural, other {# orang menerimanya}}",
+        "read": "{count, plural, other {# orang membacanya}}",
+        "not_read": "{count, plural, other {# orang tidak membacanya}}",
+        "replied": "{count, plural, other {# orang membalas}}",
+        "not_replied": "{count, plural, other {# orang tidak membalas}}",
+        "clicked": "{count, plural, other {# orang mengklik tautan}}",
+        "failed": "{count, plural, other {# orang yang pengirimannya gagal}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Terkirim dari tiap nomor",
+      "hint": "Pengiriman ini dibagi ke beberapa nomor. Setiap baris adalah satu nomor dan penerima yang diberikan kepadanya.",
+      "cols": {
+        "number": "Nomor",
+        "recipients": "Penerima",
+        "sent": "Terkirim",
+        "delivered": "Tersampaikan",
+        "failed": "Gagal"
+      },
+      "removed": "(nomor yang telah dihapus)"
     }
   }
 }

@@ -17,26 +17,26 @@ export function HeroFeatures({ ctx, def }: P) {
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="absolute inset-0 grid-bg opacity-30 pointer-events-none"></div>
-        <div className="absolute -top-32 -right-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
-        <div className="absolute -bottom-40 -left-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
+        <div className="absolute -top-32 -end-32 w-[520px] h-[520px] rounded-full bg-wa-mint/50 blur-bub"></div>
+        <div className="absolute -bottom-40 -start-32 w-[460px] h-[460px] rounded-full bg-accent-amber/15 blur-bub"></div>
 
         <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[18%] left-[3%] opacity-30 rotate-[-8deg]">
-            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-tr-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[18%] start-[3%] opacity-30 rotate-[-8deg]">
+            <div className="bg-wa-bubble hairline border-wa-green/30 rounded-2xl rounded-se-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-wa-deep">🌷 Order shipped</div>
-              <div className="text-[9px] text-wa-deep/60 mono text-right">14:08 ✓✓</div>
+              <div className="text-[9px] text-wa-deep/60 mono text-end">14:08 ✓✓</div>
             </div>
           </div>
-          <div className="absolute top-[72%] left-[5%] opacity-25 rotate-[5deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[72%] start-[5%] opacity-25 rotate-[5deg]">
+            <div className="bg-white hairline rounded-2xl rounded-ss-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">Track order →</div>
-              <div className="text-[9px] text-ink-500 mono text-right">14:10</div>
+              <div className="text-[9px] text-ink-500 mono text-end">14:10</div>
             </div>
           </div>
-          <div className="absolute top-[20%] right-[4%] opacity-30 rotate-[7deg]">
-            <div className="bg-white hairline rounded-2xl rounded-tl-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
+          <div className="absolute top-[20%] end-[4%] opacity-30 rotate-[7deg]">
+            <div className="bg-white hairline rounded-2xl rounded-ss-sm px-4 py-2.5 shadow-[0_8px_24px_-8px_rgba(50,20,219,0.3)]">
               <div className="text-[12px] font-medium text-ink-900">+10% off coupon 🎁</div>
-              <div className="text-[9px] text-ink-500 mono text-right">14:11</div>
+              <div className="text-[9px] text-ink-500 mono text-end">14:11</div>
             </div>
           </div>
         </div>
@@ -105,11 +105,11 @@ export function HeroFeatures({ ctx, def }: P) {
                 ctx={ctx}
                 k={k('subtitle')}
                 as="p"
-                className="text-[15.5px] text-ink-700 leading-relaxed border-l-2 border-wa-deep pl-4"
+                className="text-[15.5px] text-ink-700 leading-relaxed border-s-2 border-wa-deep ps-4"
               />
 
               <div className="grid grid-cols-3 gap-0 hairline-t hairline-b py-4">
-                <div className="hairline-r pr-4">
+                <div className="hairline-r pe-4">
                   <div className="serif text-[32px] leading-none tabular text-wa-deep">
                     530<span className="text-[18px] text-ink-500">+</span>
                   </div>
@@ -123,7 +123,7 @@ export function HeroFeatures({ ctx, def }: P) {
                     engines
                   </div>
                 </div>
-                <div className="pl-4">
+                <div className="ps-4">
                   <div className="serif text-[32px] leading-none tabular text-wa-deep">1</div>
                   <div className="mono text-[9px] uppercase tracking-widest text-ink-500 mt-1.5">
                     bill
@@ -251,12 +251,12 @@ export function FeatureBento({ ctx, def }: P) {
                 </div>
                 <div className="col-span-5 chat-grid p-2 space-y-1">
                   <div className="flex">
-                    <div className="bg-white rounded-md rounded-tl-sm px-2 py-1 max-w-[80%] shadow-sm">
+                    <div className="bg-white rounded-md rounded-ss-sm px-2 py-1 max-w-[80%] shadow-sm">
                       <div className="text-[9.5px]">order #4218 says delivered 😕</div>
                     </div>
                   </div>
                   <div className="flex justify-end">
-                    <div className="bg-wa-bubble rounded-md rounded-tr-sm px-2 py-1 max-w-[80%] shadow-sm">
+                    <div className="bg-wa-bubble rounded-md rounded-se-sm px-2 py-1 max-w-[80%] shadow-sm">
                       <div className="text-[8px] text-wa-deep font-semibold mb-0.5">
                         ⟳ FLOW · order_lookup
                       </div>
@@ -436,14 +436,14 @@ export function FeatureBento({ ctx, def }: P) {
               />
 
               <div className="feat-mock mt-5 hairline rounded-2xl bg-paper-50 grid-bg p-4 relative h-[170px] overflow-hidden">
-                <div className="absolute top-3 left-3 hairline rounded-lg bg-white shadow-md p-2 w-[100px] float-y">
+                <div className="absolute top-3 start-3 hairline rounded-lg bg-white shadow-md p-2 w-[100px] float-y">
                   <div className="flex items-center gap-1 mono text-[7px] uppercase tracking-widest text-accent-coral">
                     <span className="w-1 h-1 rounded-full bg-accent-coral"></span>trigger
                   </div>
                   <div className="text-[10px] font-semibold mt-0.5">Cart abandon</div>
                 </div>
                 <svg
-                  className="absolute top-[30px] left-[110px] w-[55px] h-[35px] text-wa-green"
+                  className="absolute top-[30px] start-[110px] w-[55px] h-[35px] text-wa-green"
                   viewBox="0 0 55 35"
                   fill="none"
                 >
@@ -454,14 +454,14 @@ export function FeatureBento({ ctx, def }: P) {
                     strokeWidth="1.4"
                   />
                 </svg>
-                <div className="absolute top-[50px] left-[155px] hairline rounded-lg bg-white shadow-md p-2 w-[90px] float-y-2">
+                <div className="absolute top-[50px] start-[155px] hairline rounded-lg bg-white shadow-md p-2 w-[90px] float-y-2">
                   <div className="flex items-center gap-1 mono text-[7px] uppercase tracking-widest text-accent-amber">
                     <span className="w-1 h-1 rounded-full bg-accent-amber"></span>delay
                   </div>
                   <div className="text-[10px] font-semibold mt-0.5">Wait 1h</div>
                 </div>
                 <svg
-                  className="absolute top-[80px] left-[240px] w-[40px] h-[30px] text-wa-green"
+                  className="absolute top-[80px] start-[240px] w-[40px] h-[30px] text-wa-green"
                   viewBox="0 0 40 30"
                   fill="none"
                 >
@@ -472,13 +472,13 @@ export function FeatureBento({ ctx, def }: P) {
                     strokeWidth="1.4"
                   />
                 </svg>
-                <div className="absolute top-[100px] right-3 hairline border-wa-green/40 rounded-lg bg-wa-bubble shadow-md p-2 w-[110px] float-y-3">
+                <div className="absolute top-[100px] end-3 hairline border-wa-green/40 rounded-lg bg-wa-bubble shadow-md p-2 w-[110px] float-y-3">
                   <div className="flex items-center gap-1 mono text-[7px] uppercase tracking-widest text-wa-deep">
                     <span className="w-1 h-1 rounded-full bg-wa-green pulse-dot"></span>ai responder
                   </div>
                   <div className="text-[10px] font-semibold mt-0.5">cart_back · 5%</div>
                 </div>
-                <div className="absolute bottom-2 left-2 mono text-[8px] text-ink-500 flex items-center gap-1.5">
+                <div className="absolute bottom-2 start-2 mono text-[8px] text-ink-500 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-wa-green pulse-dot"></span>
                   <span className="text-shimmer font-semibold">14 nodes · AI generated</span>
                 </div>
@@ -1049,15 +1049,15 @@ export function FeatureBento({ ctx, def }: P) {
               />
 
               <div className="feat-mock mt-5 hairline rounded-xl bg-paper-50 p-3 relative h-[100px]">
-                <div className="absolute bottom-3 right-3 w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg">
+                <div className="absolute bottom-3 end-3 w-12 h-12 rounded-full bg-wa-green text-ink-900 flex items-center justify-center shadow-lg">
                   <svg viewBox="0 0 16 16" className="w-5 h-5" fill="currentColor">
                     <path d="M8 1C4.5 1 2 3.5 2 7c0 1.2.4 2.3 1 3.2L2 13l2.8-1C5.6 12.6 6.8 13 8 13c3.5 0 6-2.5 6-6S11.5 1 8 1z" />
                   </svg>
                 </div>
-                <div className="absolute bottom-16 right-3 bg-white hairline rounded-lg rounded-br-sm shadow-sm px-2 py-1 text-[10px]">
+                <div className="absolute bottom-16 end-3 bg-white hairline rounded-lg rounded-ee-sm shadow-sm px-2 py-1 text-[10px]">
                   Hi 👋 how can I help?
                 </div>
-                <div className="absolute top-3 left-3 mono text-[9px] text-ink-500">
+                <div className="absolute top-3 start-3 mono text-[9px] text-ink-500">
                   browser · your-site.com
                 </div>
               </div>
@@ -1213,7 +1213,7 @@ export function FeatureBento({ ctx, def }: P) {
 
               <div className="feat-mock mt-5 grid grid-cols-3 gap-2">
                 <div className="hairline rounded-xl bg-paper-50 p-2.5 text-center relative">
-                  <div className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full blink-green"></div>
+                  <div className="absolute top-1.5 end-1.5 w-1.5 h-1.5 rounded-full blink-green"></div>
                   <span className="brand-tile w-9 h-9 rounded-lg bg-[#7c3aed] text-white flex items-center justify-center mx-auto float-y">
                     <svg viewBox="0 0 24 24" className="w-5 h-5" fill="currentColor">
                       <path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24z" />
@@ -1461,7 +1461,10 @@ export function FeatureBento({ ctx, def }: P) {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="w-9 h-9 rounded-full bg-paper-100 flex items-center justify-center">
+                    <div
+                      aria-hidden="true"
+                      className="w-9 h-9 rounded-full bg-paper-100 flex items-center justify-center"
+                    >
                       <svg
                         viewBox="0 0 16 16"
                         className="w-4 h-4 text-ink-700"
@@ -1472,15 +1475,18 @@ export function FeatureBento({ ctx, def }: P) {
                         <rect x="6" y="2" width="4" height="8" rx="2" />
                         <path d="M3 8a5 5 0 0010 0M8 13v2" />
                       </svg>
-                    </button>
-                    <button className="w-9 h-9 rounded-full bg-accent-coral flex items-center justify-center text-paper-0">
+                    </div>
+                    <div
+                      aria-hidden="true"
+                      className="w-9 h-9 rounded-full bg-accent-coral flex items-center justify-center text-paper-0"
+                    >
                       <svg viewBox="0 0 16 16" className="w-4 h-4" fill="currentColor">
                         <path
                           d="M3 5C5 3.5 11 3.5 13 5c1 .8 1 2 0 3l-2 .5c-.6 0-1-.5-1-1V6c-1.3-.4-2.7-.4-4 0v1.5c0 .5-.4 1-1 1L3 8c-1-1-1-2.2 0-3z"
                           transform="rotate(135 8 8)"
                         />
                       </svg>
-                    </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1512,7 +1518,7 @@ export function FeatureBento({ ctx, def }: P) {
               className="col-span-12 lg:col-span-5 feat-card rounded-3xl bg-ink-950 text-paper-0 p-8 block relative overflow-hidden"
             >
               <div className="absolute inset-0 dot-pattern opacity-15"></div>
-              <div className="absolute -bottom-32 -right-32 w-[300px] h-[300px] rounded-full bg-wa-green/15 blur-bub"></div>
+              <div className="absolute -bottom-32 -end-32 w-[300px] h-[300px] rounded-full bg-wa-green/15 blur-bub"></div>
               <div className="relative">
                 <div className="flex items-start justify-between mb-4">
                   <div>
@@ -1734,7 +1740,7 @@ export function PullQuote({ ctx, def }: P) {
                   <T ctx={ctx} k={k('author_role')} as="div" className="text-[12px] text-ink-500" />
                 </div>
                 {[1, 2].map((i) => (
-                  <div key={i} className="text-right">
+                  <div key={i} className="text-end">
                     <T
                       ctx={ctx}
                       k={k(`stat${i}_label`)}

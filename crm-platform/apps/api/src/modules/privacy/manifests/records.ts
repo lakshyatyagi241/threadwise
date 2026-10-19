@@ -51,6 +51,18 @@ export const leadsRecords = defineHolder({
       retention: 'The raw payload is purged on its own schedule (payload_expires_at).',
     },
     {
+      table: 'lead_first_replies',
+      link: CONTACT,
+      disposition: 'fk_null',
+      parent: 'contacts',
+      reason:
+        'The record of the automatic first message to a new lead (speed to lead): channel, status, timing and a reason code. It holds no message text and no address (the message is rendered at send time), so the foreign key unlinks it from the contact when the contact is deleted and the row stays as the record of what was decided.',
+      tier: 'core',
+      categories: ['communications'],
+      pii: [],
+      retention: 'Forever; one row per lead event. Final rows are not touched again.',
+    },
+    {
       table: 'incoming_webhook_events',
       link: { by: 'contact', column: 'lead_contact_id' },
       disposition: 'anonymise',
@@ -226,15 +238,6 @@ export const formsSubmissions = defineHolder({
       pii: ['caller_phone', 'answers_json', 'meta_payload', 'flow_token'],
       retention: 'Forever today.',
     },
-    {
-      table: 'google_form_sessions',
-      link: { by: 'phone', column: 'contact_phone' },
-      disposition: 'delete',
-      tier: 'history',
-      categories: ['identifier', 'content'],
-      pii: ['contact_phone', 'answers_json'],
-      retention: 'Expires with the session (expires_at).',
-    },
   ],
 });
 
@@ -254,26 +257,41 @@ export const appointmentsHolder = defineHolder({
       ],
       disposition: 'anonymise',
       set: {
+        // NOT NULL, and built at booking time as "<booking type> — <invitee name>" (BookingService.book): a placeholder, not NULL.
+        title: 'tombstone',
         invitee_name: 'null',
         invitee_email: 'null',
         invitee_phone: 'null',
         notes: 'null',
         description: 'null',
+        // Staff can overwrite the booking type's address with the person's own (a home visit).
+        location: 'null',
         answers: 'null',
+        // Legacy Reference `meta` carried customer_name / customer_email / customer_phone (migration 20261012090000 copied them out).
+        meta: 'null',
         meet_url: 'null',
         manage_token_hash: 'null',
         manage_token_cipher: 'null',
+        // What the person typed on the cancel page, or staff typed about them.
+        cancel_reason: 'null',
+        // The invitee's e-mail address as last pushed to the calendar event (the echo guard of the drift check).
+        google_pushed_attendee: 'null',
       },
       tier: 'records',
       categories: ['identifier', 'contact', 'content', 'special_risk'],
       pii: [
+        'title',
         'invitee_name',
         'invitee_email',
         'invitee_phone',
         'notes',
         'description',
+        'location',
         'answers',
+        'meta',
         'meet_url',
+        'cancel_reason',
+        'google_pushed_attendee',
       ],
       retention: 'Forever; time, status and price stay for reporting.',
     },

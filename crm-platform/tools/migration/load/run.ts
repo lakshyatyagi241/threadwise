@@ -282,6 +282,9 @@ export async function runClient(opts: RunOptions): Promise<RunSummary> {
       plan: opts.org?.plan ?? null,
       ownerEmail: opts.org?.ownerEmail ?? null,
       ownerName: opts.org?.ownerName ?? null,
+      trialDays: opts.org?.trialDays ?? null,
+      ownerVerified: opts.org?.ownerVerified ?? false,
+      timezone: opts.org?.timezone ?? null,
     };
 
     const body = async (db: Database, ownerDb: Database): Promise<RunSummary> => {

@@ -1,3 +1,5 @@
+import type { JobsOptions } from 'bullmq';
+
 /**
  * Every queue in the system, in one place.
  *
@@ -38,8 +40,16 @@ export const QUEUES = {
   WEBHOOK_DELIVER: 'webhook-deliver',
   /** One job per Telegram broadcast run: sends its pending chats at a pace under Telegram's limits (TW-TG-013). */
   TG_BROADCAST: 'tg-broadcast',
+  /** One job per LINE broadcast run: pushes to its pending people in batches of 40, paced under LINE's rate limits. */
+  LINE_BROADCAST: 'line-broadcast',
+  /** One job per Viber broadcast run: sends its pending users in calls of up to 300 (TW-VIB-013). */
+  VIBER_BROADCAST: 'viber-broadcast',
   /** One job per connected Facebook Page: imports its existing Messenger threads, storing only (TW-FB-010). */
   FB_BACKFILL: 'fb-backfill',
+  /** One job per `leadgen` webhook event of a Facebook Page (BL-011): fetches the lead from Meta and hands it to the lead pipeline. Own queue: a slow Meta must not hold a Messenger message. */
+  META_LEADGEN: 'meta-leadgen',
+  /** One job per Page with Meta lead ads on: re-reads its forms' recent leads so a missed webhook never loses one (BL-011). Own queue: a long read must not hold a live lead. */
+  META_LEAD_SWEEP: 'meta-lead-sweep',
   /** One job per Messenger broadcast run: sends its pending recipients at a pace under Meta's limits (TW-FB-013). */
   FB_BROADCAST: 'fb-broadcast',
   /** One job per organization with a linked Instagram account: pulls its new conversations and messages from the engine (TW-IG-009). */
@@ -62,6 +72,8 @@ export const QUEUES = {
   MKT_PULL: 'mkt-pull',
   /** One job per delivery a portal pushed to a Marketplace connection that answers at once: maps it and hands the leads to the pipeline, retrying from the stored copy. Own queue: a slow pipeline must not hold a poll. */
   MKT_INBOUND: 'mkt-inbound',
+  /** One job per "Sync now" or backfill of a pull-capable lead source (lead inbox, L-18): pulls the source's leads and hands them to the pipeline. Own queue: a portal's rate limit makes a backfill take minutes, and it must not hold a lead from another door. */
+  LEAD_SYNC: 'lead-sync',
   /** One job per bell row that may deserve a browser (Web Push) notification (BL-097). Own queue: a slow push service must not hold the outbox consumers or any other job. */
   WEB_PUSH: 'web-push',
   /** One job per connected Gmail mailbox (TW-MAIL-021): reads what arrived since the last sync and stores it in the inbox. Own queue: a slow Google must not hold any other job. */
@@ -74,10 +86,30 @@ export const QUEUES = {
   CONSENT_EXPORT: 'consent-export',
   /** One job per requested export of the tenant audit log: reads the filtered window into a masked CSV and mails the requester. Own queue: a year of audit rows must not hold a send or a receipt. */
   AUDIT_LOG_EXPORT: 'audit-log-export',
+  /** One job per requested file of the revenue report (CSV or PDF): reads the payments of the window or renders the report and mails the requester. Own queue: a year of payments must not hold a send or a receipt. */
+  REVENUE_EXPORT: 'revenue-report-export',
   /** One job per Waboo -> WaDesk migration run started from the operator panel. Own queue: a run lasts up to an hour and must hold nothing else. */
   /** One job per requested export of a data-subject request: reads everything the workspace holds about one person into a ZIP kept 7 days. Own queue: a heavy subject must not hold a send or a receipt. */
   PRIVACY_EXPORT: 'privacy-export',
   WAB_MIGRATE: 'wab-migrate',
+  /** One job per WhatsApp number to check for calling readiness (EXT-CALL-007): after a connect and on a schedule. Own queue: a slow Meta must not hold WhatsApp ingest. */
+  CALLING_READINESS: 'calling-readiness',
+  /** One job per workspace whose upcoming appointments are compared with their Google events (TW-GACC-011). Own queue: a slow Google must not hold a booking message. */
+  CALENDAR_RECONCILE: 'calendar-reconcile',
+  /** One job per workspace that just (re)connected a calendar or changed where bookings go: writes the events its upcoming bookings are missing (BL-035). Own queue: a slow calendar must not hold a booking message. */
+  CALENDAR_BACKFILL: 'calendar-backfill',
+  /** Writes the Meetings row of every existing booking that has a contact and none yet (BL-281). Runs once per worker start; a repeat finds nothing to do. */
+  MEETING_MIRROR_BACKFILL: 'meeting-mirror-backfill',
+  /** One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message. */
+  CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
+  /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
+  WECHAT_BROADCAST: 'wechat-broadcast',
+  /** One job per finished call a telephony provider reported (call logging): finds the contact and writes the call log entry. Own queue: a slow database write must not make a provider retry its callback, and a call burst must not hold WhatsApp ingest. */
+  TELEPHONY_INGEST: 'telephony-ingest',
+  /** A channel webhook event (Telegram, Viber, LINE, Facebook) that could not be stored when it arrived: kept here and retried with backoff so the provider keeps its 200 (ASYNC-011/017). */
+  WEBHOOK_RETRY: 'webhook-retry',
+  /** One job per workspace to backfill or reconcile its storage meter (storage quota, BL-300): reads the owner tables, probes sizes on the bucket, recomputes counters. Own queue: a slow bucket or a huge workspace must not hold a send, a receipt or an export. */
+  STORAGE_QUOTA: 'storage-quota',
 } as const;
 
 export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
@@ -85,13 +117,52 @@ export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
 /**
  * Default job options.
  *
- * `removeOnComplete` is bounded rather than `true`: keeping the last few
- * thousand completions is what makes "did that campaign actually send?"
- * answerable at 2am, without letting Redis grow without limit.
+ * `removeOnComplete` is bounded rather than `true`: keeping the last thousand
+ * completions for an hour is what makes "did that campaign actually send?"
+ * answerable at 2am, without letting Redis grow without limit. Redis here is
+ * a small `noeviction` instance and every queue keeps its own history, so the
+ * numbers are per queue and small: a failed job keeps its data for three days,
+ * enough to debug over a weekend.
  */
 export const DEFAULT_JOB_OPTIONS = {
   attempts: 5,
-  backoff: { type: 'exponential' as const, delay: 2_000 },
-  removeOnComplete: { count: 5_000, age: 24 * 3600 },
-  removeOnFail: { count: 20_000, age: 7 * 24 * 3600 },
+  // `jitter` spreads each retry over the upper half of its delay, so jobs that failed together do not retry together.
+  backoff: { type: 'exponential' as const, delay: 2_000, jitter: 0.5 },
+  removeOnComplete: { count: 1_000, age: 3_600 },
+  removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
 };
+
+/**
+ * The retry window of work that exists nowhere else once the provider has our 200: 10 attempts from 5 s, about 40 minutes. A quarter
+ * of jitter keeps the shortest possible window above 30 minutes (32 to 43 minutes). Every queue in the failed-operation policy
+ * (`modules/failed-operations/failure-policy.ts`) uses it, wherever its producer sets its own options.
+ */
+export const INBOUND_RETRY = {
+  attempts: 10,
+  backoff: { type: 'exponential' as const, delay: 5_000, jitter: 0.25 },
+} satisfies JobsOptions;
+
+/** Queues that carry an inbound event the provider has already been told we have: retried for about 40 minutes, personal data dropped on success. */
+const INBOUND_RETRY_OPTIONS: JobsOptions = { removeOnComplete: true, ...INBOUND_RETRY };
+
+/**
+ * Queues whose job data is personal (message text, phone numbers, the raw webhook body) drop a job the moment it completes. A failed
+ * job still keeps its data for `removeOnFail`, which is the point of keeping failures.
+ */
+const QUEUE_JOB_OPTIONS: Partial<Record<QueueName, JobsOptions>> = {
+  // Inbound WhatsApp is the one place a message exists only here once Meta has our 200. The default (5 attempts from 2 s, about 30 s in
+  // all) gave up inside a short database or Redis blip; 10 attempts from 5 s keep a job alive for about 42 minutes (ASYNC-032/036).
+  // Ingest is idempotent (the message ledger's unique key), so a retry never stores a message twice.
+  [QUEUES.WABA_INGEST]: INBOUND_RETRY_OPTIONS,
+  // Carries the raw channel event (message text, usernames), like the WhatsApp payload: dropped once it completes, kept when it failed.
+  [QUEUES.WEBHOOK_RETRY]: INBOUND_RETRY_OPTIONS,
+  [QUEUES.WEBHOOK_FORWARD]: { removeOnComplete: true },
+  // Inbound channel messages and receipts: the provider has our 200 and this job is the only copy (it kept the default 5 attempts, about 30 s,
+  // so a database blip longer than that lost a customer's message). Completed jobs keep the default bounded history; ingest is idempotent.
+  [QUEUES.WEBHOOK_INGEST]: INBOUND_RETRY,
+};
+
+/** The default job options of one queue. A queue-level setting replaces the module-level one whole, so this spreads the defaults. */
+export function jobOptionsFor(queue: QueueName): JobsOptions {
+  return { ...DEFAULT_JOB_OPTIONS, ...QUEUE_JOB_OPTIONS[queue] };
+}

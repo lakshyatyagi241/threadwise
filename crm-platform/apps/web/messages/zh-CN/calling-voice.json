@@ -89,7 +89,18 @@
       "NETWORK": "网络错误，请重试。",
       "UNEXPECTED": "出了点问题，请重试。",
       "CALL_PLAYBACK_LINK_INVALID": "此录音链接已过期。请再次点击播放以获取新链接。",
-      "CALL_RANGE_INVALID": "这些日期无效：开始时间不能晚于结束时间，范围最长一年，且时区必须有效。"
+      "CALL_RANGE_INVALID": "这些日期无效：开始时间不能晚于结束时间，范围最长一年，且时区必须有效。",
+      "CALL_OUTSIDE_WINDOW": "该联系人不在您的通话时段内，因此未拨出电话。通话时段将于 {when} 开始。",
+      "CALL_LOG_ENTRY_NOT_FOUND": "找不到这通电话。",
+      "CALL_LOG_CONTACT_REQUIRED": "请提供联系人，或可识别的电话号码。",
+      "CALL_LOG_TIME_INVALID": "通话不能在未来开始，也不能早于 400 天前。",
+      "CALL_LOG_NOT_EDITABLE": "这通电话由手机或电话服务商上报，因此无法修改。",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "修改这通电话的允许时间已过。",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "跟进任务需要联系人。请提供属于你某位联系人的号码。",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "找不到此电话连接。",
+      "TELEPHONY_PROVIDER_UNKNOWN": "此电话服务商不可用。",
+      "TELEPHONY_CLICK_UNSUPPORTED": "此电话连接无法拨出电话。",
+      "TELEPHONY_CALL_FAILED": "电话服务商无法拨出这通电话。"
     },
     "settings": {
       "title": "通话",

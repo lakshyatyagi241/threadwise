@@ -1433,13 +1433,16 @@
             "storefront_builder": "The online storefront builder.",
             "invoicing": "Invoices, credit notes, payments, sales orders and tax rates.",
             "forms_and_links": "Lead capture forms and shareable links.",
-            "extra_channels": "The Telegram, Facebook and Instagram channels.",
+            "extra_channels": "The Telegram, Facebook, Instagram, LINE, Viber and WeChat channels.",
             "form_builder": "Hosted and embedded web forms that create contacts in the CRM. The paid Forms app owns this switch.",
             "waba_groups": "Create and manage WhatsApp groups from a Cloud API number: invite link, join requests, members. The number must be an Official Business Account.",
             "sms": "Send-only SMS through Twilio or MSG91: connect senders, send SMS broadcasts and campaigns.",
             "help_agent": "The in-app Help assistant: people ask for a task in plain words and it guides or does it on their own session, asking before anything risky. Spends AI tokens.",
             "email_channel": "Connect Gmail and Google Workspace mailboxes to the team inbox. The paid Email app owns this switch.",
-            "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers."
+            "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers.",
+            "ai_crm_copilot": "Finds and scores leads with AI, from the contacts in your workspace.",
+            "lead_scoring": "Scores contacts with AI and powers the growth pilot. The Lead scoring app owns this switch.",
+            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules."
           },
           "units": {
             "days": "Days",
@@ -1582,7 +1585,9 @@
             "form_submissions_monthly": "Form submissions per month",
             "ai_form_generations_monthly": "AI form builder generations per month",
             "sms_monthly": "SMS per month",
-            "email_mailboxes": "Email mailboxes"
+            "email_mailboxes": "Email mailboxes",
+            "email_monthly": "Emails per month",
+            "storage_gb": "Storage (GB)"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1617,13 +1622,16 @@
             "storefront_builder": "Storefront and website builder",
             "invoicing": "Invoicing (invoices, credit notes, recurring invoices)",
             "forms_and_links": "Forms, click-to-chat links and groups",
-            "extra_channels": "Telegram, Facebook and Instagram channels",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber and WeChat channels",
             "form_builder": "Forms (web form builder)",
             "waba_groups": "WhatsApp groups (Cloud API)",
             "sms": "SMS channel",
             "help_agent": "Help assistant (AI, spends tokens)",
             "email_channel": "Email (Gmail) channel",
-            "personal_history_full": "Full chat-history import (personal WhatsApp)"
+            "personal_history_full": "Full chat-history import (personal WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI lead scoring",
+            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)"
           },
           "problems": {
             "required": "This field is required.",
@@ -1677,7 +1685,9 @@
             "form_submissions_monthly": "Form submissions accepted in the calendar month, spam excluded. Over the cap a submission is still saved for review, never dropped. 0 = unlimited.",
             "ai_form_generations_monthly": "AI form builder generations in the calendar month, a repair retry included. 0 = unlimited.",
             "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
-            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited."
+            "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
+            "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
+            "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet."
           }
         }
       },
@@ -1725,6 +1735,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Soft glowing colour behind a frosted card."
+          },
+          "geta": {
+            "name": "Geta split",
+            "description": "Form on one side, an animated brand panel with stats on the other."
           }
         },
         "fields": {

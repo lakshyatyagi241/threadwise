@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Формы WhatsApp",
+      "links": "Ссылки WhatsApp"
+    },
+    "errors": {
+      "generic": "Что-то пошло не так. Попробуйте снова.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Подключите номер WhatsApp Cloud API, чтобы использовать формы.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Ни один подключённый номер WhatsApp Cloud API не имеет действующих учётных данных.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta отклонила определение формы.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Ваш аккаунт WhatsApp Business должен пройти проверку Meta, прежде чем вы сможете публиковать формы.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta не удалось опубликовать эту форму.",
+      "WFL_LINK_NOT_LIVE": "Эта ссылка приостановлена или просрочена.",
+      "ROW_VERSION_CONFLICT": "Это было изменено в другом месте. Обновите страницу и попробуйте снова.",
+      "VALIDATION_FAILED": "Проверьте выделенные поля и попробуйте снова.",
+      "PLAN_FEATURE_LOCKED": "Перейдите на более высокий тарифный план, чтобы использовать эту функцию."
+    },
+    "forms": {
+      "heading": "Формы WhatsApp",
+      "intro": "Создавайте формы, которые клиенты заполняют прямо в WhatsApp, отправляйте их из автоматизации и просматривайте ответы здесь.",
+      "loading": "Загрузка форм…",
+      "retry": "Повторить",
+      "create": {
+        "cta": "Новая форма",
+        "creating": "Создание…",
+        "defaultTitle": "Форма без названия",
+        "defaultField": "Полное имя"
+      },
+      "stats": {
+        "all": "Все формы",
+        "published": "Опубликованные",
+        "draft": "Черновики",
+        "submissions": "Ответы"
+      },
+      "empty": {
+        "title": "Форм пока нет",
+        "description": "Создайте форму, затем отправьте её из шага «Форма WhatsApp» в автоматизации."
+      },
+      "table": {
+        "form": "Форма",
+        "type": "Тип",
+        "fields": "Поля",
+        "submissions": "Ответы"
+      },
+      "status": {
+        "draft": "Черновик",
+        "published": "Опубликована",
+        "paused": "Приостановлена"
+      },
+      "audience": {
+        "lead_capture": "Сбор заявок",
+        "survey": "Опрос",
+        "appointment_booking": "Запись на приём",
+        "customer_support": "Поддержка клиентов",
+        "sign_up": "Регистрация",
+        "other": "Другое"
+      },
+      "row": {
+        "edit": "Изменить",
+        "duplicate": "Дублировать",
+        "delete": "Удалить"
+      },
+      "confirm": {
+        "deleteTitle": "Удалить эту форму?",
+        "deleteMessage": "Активные узлы автоматизации, ссылающиеся на неё, перестанут работать.",
+        "deleteConfirm": "Удалить",
+        "cancel": "Отмена"
+      },
+      "notice": {
+        "saved": "Сохранено.",
+        "published": "Опубликовано в WhatsApp."
+      },
+      "builder": {
+        "back": "Назад к формам",
+        "untitled": "Форма без названия",
+        "saving": "Сохранение…",
+        "saveDraft": "Сохранить черновик",
+        "savePublish": "Сохранить и опубликовать",
+        "publishing": "Публикация…",
+        "basics": "Основные данные формы",
+        "title": "Название",
+        "audienceType": "Тип",
+        "purpose": "Назначение",
+        "sendButtonLabel": "Текст кнопки отправки",
+        "thankYouNote": "Сообщение благодарности",
+        "screens": "Экраны",
+        "addScreen": "Добавить экран",
+        "removeScreen": "Удалить экран",
+        "screenN": "Экран {n}",
+        "defaultField": "Полное имя",
+        "newFieldLabel": "Новое поле",
+        "fieldKind": "Тип поля",
+        "fieldLabel": "Подпись",
+        "required": "Обязательное",
+        "removeField": "Удалить",
+        "options": "Варианты (через запятую)",
+        "optionsPlaceholder": "Вариант 1, Вариант 2, Вариант 3",
+        "mapsTo": "Сопоставляется с",
+        "mapsToHint": "Сохраняет этот ответ в свойстве контакта при отправке формы.",
+        "mapsToNone": "Не сохранять в свойстве контакта",
+        "mapsToSystemGroup": "Поля контакта",
+        "mapsToCustomGroup": "Пользовательские свойства",
+        "mapsToSystem": {
+          "name": "Полное имя",
+          "first_name": "Имя",
+          "last_name": "Фамилия",
+          "email": "Email",
+          "title": "Должность",
+          "language": "Язык",
+          "address": "Адрес"
+        },
+        "mapsToPrivacyGroup": "Конфиденциальность и согласие",
+        "mapsToPrivacy": {
+          "age": "Возраст (проверка несовершеннолетия)",
+          "date_of_birth": "Дата рождения (проверка несовершеннолетия)",
+          "consent_marketing": "Согласие на маркетинг (WhatsApp)",
+          "consent_service": "Соглашение на обслуживание (не маркетинг)"
+        }
+      },
+      "fieldKind": {
+        "heading": "Заголовок",
+        "short_text": "Короткий текст",
+        "paragraph": "Абзац",
+        "email": "Электронная почта",
+        "phone_number": "Номер телефона",
+        "number": "Число",
+        "date": "Дата",
+        "dropdown": "Раскрывающийся список",
+        "radio_buttons": "Переключатели",
+        "checkbox": "Флажки"
+      },
+      "submissions": {
+        "heading": "Ответы",
+        "metaFlowId": "ID Meta Flow: {id}",
+        "export": "Экспорт в CSV",
+        "empty": {
+          "title": "Ответов пока нет",
+          "description": "Ответы появятся здесь, как только эта форма будет отправлена из автоматизации и кто-то её заполнит."
+        },
+        "table": {
+          "submitted": "Отправлено",
+          "contact": "Контакт",
+          "phone": "Телефон"
+        }
+      }
+    },
+    "links": {
+      "heading": "Ссылки WhatsApp",
+      "intro": "Создайте отслеживаемую ссылку, которая открывает WhatsApp с заранее заполненным сообщением — для рекламы, профилей и QR-кодов.",
+      "loading": "Загрузка ссылок…",
+      "retry": "Повторить",
+      "searchPlaceholder": "Поиск по названию или ссылке",
+      "create": {
+        "cta": "Новая ссылка"
+      },
+      "stats": {
+        "all": "Все ссылки",
+        "live": "Активные",
+        "totalClicks": "Всего кликов",
+        "avgClicks": "Среднее кликов / ссылка"
+      },
+      "tabs": {
+        "all": "Все",
+        "live": "Активные",
+        "paused": "Приостановленные"
+      },
+      "status": {
+        "live": "Активна",
+        "paused": "Приостановлена"
+      },
+      "empty": {
+        "title": "Ссылок пока нет",
+        "description": "Создайте ссылку, чтобы делиться ею в рекламе, профилях или QR-коде."
+      },
+      "table": {
+        "link": "Ссылка",
+        "destination": "Назначение",
+        "clicks": "Клики",
+        "lastClicked": "Последний клик"
+      },
+      "row": {
+        "open": "Открыть",
+        "copy": "Копировать",
+        "copied": "Скопировано!",
+        "edit": "Изменить",
+        "duplicate": "Дублировать",
+        "delete": "Удалить"
+      },
+      "confirm": {
+        "deleteTitle": "Удалить эту ссылку?",
+        "deleteMessage": "Короткая ссылка сразу перестанет работать.",
+        "deleteConfirm": "Удалить",
+        "cancel": "Отмена"
+      },
+      "notice": {
+        "saved": "Сохранено.",
+        "copyFailed": "Не удалось скопировать ссылку."
+      },
+      "builder": {
+        "back": "Назад к ссылкам",
+        "newHeading": "Новая ссылка",
+        "step": {
+          "destination": "Назначение",
+          "message": "Начальное сообщение",
+          "tracking": "Отслеживание"
+        },
+        "name": "Название",
+        "status": "Статус",
+        "countryCode": "Код страны",
+        "phoneNumber": "Номер телефона",
+        "welcomeMessage": "Начальное сообщение",
+        "welcomeMessageHint": "Автоматически вставляется в чат, когда кто-то нажимает на ссылку.",
+        "slug": "Короткая ссылка",
+        "slugHint": "Только буквы, цифры и дефисы. Оставьте пустым, чтобы сгенерировать автоматически.",
+        "slugPlaceholder": "letnyaya-rasprodazha",
+        "expiresAt": "Истекает",
+        "utmSource": "Источник UTM",
+        "utmMedium": "Канал UTM",
+        "utmCampaign": "Кампания UTM",
+        "previous": "Назад",
+        "next": "Далее",
+        "mint": "Создать ссылку",
+        "save": "Сохранить",
+        "saving": "Сохранение…",
+        "fixErrors": "Проверьте поля назначения и короткой ссылки.",
+        "mintedHeading": "Ваша ссылка",
+        "shortUrl": "Короткая ссылка",
+        "waUrl": "Ссылка WhatsApp",
+        "qrAlt": "QR-код для этой ссылки"
+      },
+      "public": {
+        "missingTitle": "Ссылка не найдена",
+        "missingBody": "Эта ссылка не существует или была удалена.",
+        "goneTitle": "Ссылка больше не активна",
+        "goneBody": "Эта ссылка приостановлена или срок её действия истёк.",
+        "errorTitle": "Что-то пошло не так",
+        "errorBody": "Не удалось открыть эту ссылку. Попробуйте ещё раз."
+      }
+    }
+  }
+}

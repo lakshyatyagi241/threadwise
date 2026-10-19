@@ -54,18 +54,6 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WADEV-045 | todo |  |  |
 | TW-WADEV-046 | todo |  |  |
 
-## campaigns (camp) additions: Create broadcast wizard
-
-| Feature | Status | PR | Notes |
-|---|---|---|---|
-| TW-CAMP-029 | done |  | ADDITION (not in Reference): Create-broadcast wizard shell, draft, resume. api+web+e2e on akshay/campaigns/broadcast-wizard; not parity-checked against a Reference twin (none exists) |
-| TW-CAMP-030 | done |  | ADDITION: audience groups+segments+rules, count, exclusions |
-| TW-CAMP-031 | done |  | ADDITION: credit check, variable mapping, sample messages |
-| TW-CAMP-032 | done |  | ADDITION: test send, logged, charged on delivery; Cloud API delivery reports now reach campaigns (WabaReceiptRegistry) |
-| TW-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
-| TW-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
-| TW-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
-
 ## whatsapp-cloud-api-waba (waba)
 
 | Feature | Status | PR | Notes |
@@ -177,7 +165,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-NODE-043 | backend-done |  | flow definition, attributes, template data and media store are module-internal calls of the flow runtime (compile-graph, TemplateService, ChatMediaStore); vishal/FLR |
 | TW-NODE-044 | in-progress |  | tag, assign, deal, AI, Meet and WhatsApp form are node executors (TW-FLR-030, 035 to 037, 043, 047); the MySQL node waits for a driver (TW-FLR-034); web search is not built |
 | TW-NODE-045 | backend-done |  | the ordering endpoints are TW-FLR-042 (parse, shipping, confirm, cancel, reply under /public/v1/flows/ordering); vishal/FLR |
-| TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes are built against GoogleWorkspacePort (TW-FLR-044 to 047); no Google account store exists yet, so they report no account |
+| TW-NODE-046 | in-progress |  | Google Sheets, Docs, Form and Meet nodes run against the workspace's Google account (TW-GACC); not tried against a live Google account |
 | TW-NODE-047 | in-progress |  | the Commerce shop node's WhatsApp Shop stock and native list are served by the catalog (CatalogShopAdapter, TW-FLR-041); the checkout link for WooCommerce and Shopify waits for the store domains |
 | TW-NODE-048 | backend-done |  | booking for flows is the Book appointment node over the appointments domain (TW-FLR-040); vishal/FLR |
 | TW-NODE-049 | blocked |  | collapses into module-internal calls of the owning domain (FLR flows, CALL calling, INTG Google, CHK/APPT commerce, channel domains); built with that domain, not as a bridge endpoint |
@@ -356,7 +344,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-TPL-013 | todo |  |  |
 | TW-TPL-014 | todo |  |  |
 | TW-TPL-015 | todo |  |  |
-| TW-TPL-016 | todo |  |  |
+| TW-TPL-016 | done |  | Build with AI on the template form: standard drafts only (no carousel, no copy-code button); real LLM vendors unverified |
 | TW-TPL-017 | todo |  |  |
 | TW-TPL-018 | todo |  |  |
 | TW-TPL-019 | todo |  |  |
@@ -396,49 +384,95 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 
 | Feature | Status | PR | Notes |
 |---|---|---|---|
-| TW-BCAST-001 | todo |  |  |
-| TW-BCAST-002 | todo |  |  |
-| TW-BCAST-003 | todo |  |  |
-| TW-BCAST-004 | todo |  |  |
-| TW-BCAST-005 | todo |  |  |
-| TW-BCAST-006 | todo |  |  |
-| TW-BCAST-007 | todo |  |  |
-| TW-BCAST-008 | todo |  |  |
-| TW-BCAST-009 | todo |  |  |
-| TW-BCAST-010 | todo |  |  |
-| TW-BCAST-011 | todo |  |  |
-| TW-BCAST-012 | todo |  |  |
-| TW-BCAST-013 | todo |  |  |
-| TW-BCAST-014 | todo |  |  |
-| TW-BCAST-015 | todo |  |  |
-| TW-BCAST-016 | todo |  |  |
-| TW-BCAST-017 | todo |  |  |
-| TW-BCAST-018 | todo |  |  |
-| TW-BCAST-019 | todo |  |  |
-| TW-BCAST-020 | todo |  |  |
-| TW-BCAST-021 | todo |  |  |
-| TW-BCAST-022 | todo |  |  |
-| TW-BCAST-023 | todo |  |  |
-| TW-BCAST-024 | todo |  |  |
-| TW-BCAST-025 | todo |  |  |
-| TW-BCAST-026 | todo |  |  |
-| TW-BCAST-027 | todo |  |  |
-| TW-BCAST-028 | todo |  |  |
-| TW-BCAST-029 | todo |  |  |
-| TW-BCAST-030 | todo |  |  |
-| TW-BCAST-031 | todo |  |  |
-| TW-BCAST-032 | todo |  |  |
-| TW-BCAST-033 | todo |  |  |
-| TW-BCAST-034 | todo |  |  |
-| TW-BCAST-035 | todo |  |  |
-| TW-BCAST-036 | todo |  |  |
-| TW-BCAST-037 | todo |  |  |
-| TW-BCAST-038 | todo |  |  |
-| TW-BCAST-039 | todo |  |  |
-| TW-BCAST-040 | todo |  |  |
-| TW-BCAST-041 | todo |  |  |
-| TW-BCAST-042 | todo |  |  |
-| TW-BCAST-043 | todo |  |  |
+| TW-BCAST-001 | done |  | built; not parity-verified |
+| TW-BCAST-002 | done |  | built; not parity-verified |
+| TW-BCAST-003 | done |  | built; not parity-verified |
+| TW-BCAST-004 | done |  | built; not parity-verified |
+| TW-BCAST-005 | done |  | built; not parity-verified |
+| TW-BCAST-006 | done |  | built; not parity-verified |
+| TW-BCAST-007 | done |  | built; not parity-verified |
+| TW-BCAST-008 | done |  | built; not parity-verified |
+| TW-BCAST-009 | done |  | built; not parity-verified |
+| TW-BCAST-010 | done |  | built; not parity-verified |
+| TW-BCAST-011 | done |  | built; not parity-verified |
+| TW-BCAST-012 | done |  | built; not parity-verified |
+| TW-BCAST-013 | done |  | built; not parity-verified |
+| TW-BCAST-014 | done |  | built; not parity-verified |
+| TW-BCAST-015 | done |  | built; not parity-verified |
+| TW-BCAST-016 | done |  | built; not parity-verified |
+| TW-BCAST-017 | done |  | built; not parity-verified |
+| TW-BCAST-018 | done |  | built; not parity-verified |
+| TW-BCAST-019 | done |  | built; not parity-verified |
+| TW-BCAST-020 | done |  | built; not parity-verified |
+| TW-BCAST-021 | done |  | built; not parity-verified |
+| TW-BCAST-022 | done |  | built; not parity-verified |
+| TW-BCAST-023 | done |  | built; not parity-verified |
+| TW-BCAST-024 | done |  | built; not parity-verified |
+| TW-BCAST-025 | done |  | built; not parity-verified |
+| TW-BCAST-026 | done |  | built; not parity-verified |
+| TW-BCAST-027 | done |  | built; not parity-verified |
+| TW-BCAST-028 | done |  | built; not parity-verified |
+| TW-BCAST-029 | done |  | built; not parity-verified |
+| TW-BCAST-030 | done |  | built; not parity-verified |
+| TW-BCAST-031 | done |  | built; not parity-verified |
+| TW-BCAST-032 | done |  | built; not parity-verified |
+| TW-BCAST-033 | done |  | built; not parity-verified |
+| TW-BCAST-034 | done |  | built; not parity-verified |
+| TW-BCAST-035 | done |  | built; not parity-verified |
+| TW-BCAST-036 | done |  | built; not parity-verified |
+| TW-BCAST-037 | done |  | built; not parity-verified |
+| TW-BCAST-038 | done |  | built; not parity-verified |
+| TW-BCAST-039 | done |  | built; not parity-verified |
+| TW-BCAST-040 | done |  | built; not parity-verified |
+| TW-BCAST-041 | done |  | built; not parity-verified |
+| TW-BCAST-042 | done |  | built; not parity-verified |
+| TW-BCAST-043 | done |  | built; not parity-verified |
+
+## campaigns (camp)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-CAMP-001 | done |  | built; not parity-verified |
+| TW-CAMP-002 | done |  | built; not parity-verified |
+| TW-CAMP-003 | done |  | built; not parity-verified |
+| TW-CAMP-004 | done |  | built; not parity-verified |
+| TW-CAMP-005 | done |  | built; not parity-verified |
+| TW-CAMP-006 | done |  | built; not parity-verified |
+| TW-CAMP-007 | done |  | built; not parity-verified |
+| TW-CAMP-008 | done |  | built; not parity-verified |
+| TW-CAMP-009 | done |  | built; not parity-verified |
+| TW-CAMP-010 | done |  | built; not parity-verified |
+| TW-CAMP-011 | done |  | built; not parity-verified |
+| TW-CAMP-012 | done |  | built; not parity-verified |
+| TW-CAMP-013 | done |  | built; not parity-verified |
+| TW-CAMP-014 | done |  | built; not parity-verified |
+| TW-CAMP-015 | done |  | built; not parity-verified |
+| TW-CAMP-016 | done |  | built; not parity-verified |
+| TW-CAMP-017 | done |  | built; not parity-verified |
+| TW-CAMP-018 | done |  | built; not parity-verified |
+| TW-CAMP-019 | done |  | built; not parity-verified |
+| TW-CAMP-020 | done |  | built; not parity-verified |
+| TW-CAMP-021 | done |  | built; not parity-verified |
+| TW-CAMP-022 | done |  | built; not parity-verified |
+| TW-CAMP-023 | done |  | built; not parity-verified |
+| TW-CAMP-024 | done |  | built; not parity-verified |
+| TW-CAMP-025 | done |  | built; not parity-verified |
+| TW-CAMP-026 | done |  | built; not parity-verified |
+| TW-CAMP-027 | done |  | built; not parity-verified |
+| TW-CAMP-028 | done |  | built; not parity-verified |
+| TW-CAMP-029 | done |  | ADDITION (not in Reference): Create-broadcast wizard shell, draft, resume. api+web+e2e on akshay/campaigns/broadcast-wizard; not parity-checked against a Reference twin (none exists) |
+| TW-CAMP-030 | done |  | ADDITION: audience groups+segments+rules, count, exclusions |
+| TW-CAMP-031 | done |  | ADDITION: credit check, variable mapping, sample messages |
+| TW-CAMP-032 | done |  | ADDITION: test send, logged, charged on delivery; Cloud API delivery reports now reach campaigns (WabaReceiptRegistry) |
+| TW-CAMP-033 | done |  | ADDITION: now / scheduled / recurring series with child runs |
+| TW-CAMP-034 | done |  | ADDITION: 131049 retries every 24h to an end date; real Meta behaviour unverified (sandbox only) |
+| TW-CAMP-035 | done |  | ADDITION: wizard broadcasts list, status, pause, resume, cancel |
+| TW-CAMP-036 | done |  | ADDITION: follow-up steps after a campaign message (replied, read, not replied, not read; template or flow; up to 3); not in Reference, built from the meeting; sandbox only, real Meta read reports unverified |
+| TW-CAMP-037 | todo |  | ADDITION, pending: A/B auto-winner (pick the better variant and send it to the rest). Not in Reference; meeting said "ship A/B now, rebuild auto-winner later". Needs decisions on measure, test share, duration, ties |
+| TW-CAMP-038 | done |  | ADDITION: Build with AI in the guided wizard (template draft handed to the template form) and a generated picture in the classic builder; real vendors unverified |
+| TW-CAMP-039 | done |  | ADDITION: step icons on both steppers; one template list in the wizard and the classic builder, per number |
+| TW-CAMP-040 | done |  | ADDITION: recurring broadcast sends several templates in turn, each with its own mapping; not in Reference; sandbox only |
+| TW-CAMP-041 | done |  | ADDITION: previous broadcasts and campaigns as an audience source (with an outcome filter) in the wizard, the classic builder and the Scheduled composer; Reference has it in the Scheduled composer only |
 
 ## scheduled-queue-warmer (sched)
 
@@ -582,11 +616,11 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-052 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-053 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-054 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
-| TW-FLB-055 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| TW-FLB-055 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
 | TW-FLB-056 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
-| TW-FLB-057 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
-| TW-FLB-058 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
-| TW-FLB-059 | done |  | builder side done; Google file pickers answer 503 until a Google account store exists (INTG) |
+| TW-FLB-057 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
+| TW-FLB-058 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
+| TW-FLB-059 | done |  | builder side done; Google file pickers list the workspace account's files (TW-GACC-005; needs the Drive file list permission) |
 | TW-FLB-060 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-061 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
 | TW-FLB-062 | done |  | builder form, ports, defaults and card summary; twin run; see parity doc |
@@ -605,7 +639,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLB-075 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-076 | done |  | owned by FLR, built there (TW-FLR-052..058) |
 | TW-FLB-077 | done |  | owned by FLR, built there (TW-FLR-052..058) |
-| TW-FLB-078 | wontfix |  | dead code in Reference: table kept, no screen or writer |
+| TW-FLB-078 | wontfix |  | dead code in Reference: no screen or writer; the table flow_connected_devices was dropped by 20261216090000_drop_dormant_tables.sql |
 | TW-FLB-079 | blocked |  | needs the Instaflow remote service (IG domain) |
 | TW-FLB-080 | wontfix |  | dev fixture; superseded by compile-seam and runtime-shape-compile specs |
 | TW-FLB-081 | done |  | addition beyond Reference (owner request): Ask for file / image. Contracts, FLR executor, editor card/panel/form, test runner, en+ar; unit + API e2e (simulator channel, no real WhatsApp) |
@@ -659,7 +693,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-041 | backend-done |  | Commerce shop node over FlowShopPort; CatalogShopAdapter binds the catalog behind it: WhatsApp Shop stock by retailer id and the native product list through CatalogSendService (card for one product, multi-product list for more); the single-use checkout link and WooCommerce and Shopify stock still answer cannot, because the store domains expose neither; commerce-shop-form spec, catalog-shop-adapter spec |
 | TW-FLR-042 | backend-done |  | Natural-language ordering endpoints (parse, shipping, confirm, cancel, reply) for text orders; voice, photo and group notification sit behind ports; ai-nodes e2e; a saved customer profile (written by the store at checkout, no company) no longer hides the company the flow's last order kept |
 | TW-FLR-043 | backend-done |  | WhatsApp Form node and the form-submission resume; commerce-shop-form spec |
-| TW-FLR-044 | backend-done |  | Google Sheets node against a workspace port; no Google account store exists yet, so the nodes report no account and move on; integrations-nodes e2e |
+| TW-FLR-044 | backend-done |  | Google Sheets node over the workspace's Google account (TW-GACC-004); a node that cannot use Google FAILS the step with `[GOOGLE_*]` and what to do (run log, run view); google-account e2e against a stand-in |
 | TW-FLR-045 | backend-done |  | Google Docs node against the same port; integrations-nodes spec |
 | TW-FLR-046 | backend-done |  | Google Form node: sends the link, parks the run on a custom wait, the response webhook (per-org token) resumes it or the timeout port leaves; integrations-nodes e2e |
 | TW-FLR-047 | backend-done |  | Google Meet node against the Google port; integrations-nodes spec |
@@ -695,7 +729,7 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-FLR-077 | backend-done |  | Contact-change triggers: group_leave (contact.group_removed), segment_join, contact_updated, field_match (each value once per contact). A list or field change made by a flow does not start list or update flows (loop guard). Needs migration 20261111100000 (trigger_config, the new kinds). Beyond Reference; flow-workflow-gaps e2e. Trigger form built |
 | TW-FLR-078 | backend-done |  | Clock triggers: schedule (once, daily, weekly, monthly, for everyone, a list or a segment, at most 5,000 people per run) and date_field_match (days before, on or after a date field, yearly or full date), swept each minute with a compare-and-set on flows.trigger_last_occurrence so two workers fire once. Date fields are custom contact fields only. Beyond Reference; schedule-rules unit spec and e2e. Trigger form built |
 | TW-FLR-079 | backend-done |  | Store event triggers shopify_event and woocommerce_event: checkout started, ordered product, fulfilled, cancelled, refunded (from the webhook pipeline, store.flow_event through the outbox) and abandoned cart (announced when a recovery's first follow-up comes due, so a store with no cart follow-ups configured never reports abandonment). Added to cart and product viewed are not offered: the stores send no such events. Beyond Reference; unit and e2e. Trigger form built |
-| TW-FLR-080 | backend-done |  | Check Google Sheet cell condition (sheet_check) and Save contact from Sheet (sheet_contact: copies the matching row's cells into the run's contact), over GoogleWorkspacePort. No Google account store exists, so both report no account until one is bound (the check answers no). Beyond Reference; unit spec. Web forms built |
+| TW-FLR-080 | backend-done |  | Check Google Sheet cell condition (sheet_check) and Save contact from Sheet (sheet_contact: copies the matching row's cells into the run's contact), over the workspace's Google account (TW-GACC-004); without one the step fails with GOOGLE_ACCOUNT_NOT_CONNECTED. Beyond Reference; unit spec, google-account e2e. Web forms built |
 | TW-FLR-081 | blocked |  | Google Sheet events trigger (a row added or changed): needs a Google account store and a polling or push feed; not built |
 | TW-FLR-082 | done |  | Inbound webhook as a trigger, verified: an external system starts a flow with POST /public/v1/flows/:id/enroll (contact by id or phone), and a lead webhook that creates or updates a contact emits contact.created or contact.updated, which start contact_created and contact_updated flows. A webhook that creates the contact AND picks a flow in one call is not built (Reference's lead_config.flow_id) |
 
@@ -733,6 +767,29 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-WGT-028 | partial |  | sidebar item done; More tile, quick access and command palette belong to the shell. Also the user-requested Interakt WhatsApp builder page and launcher (accordion of five cards, live preview, panel with Start Conversation to wa.me), `chatbot_widgets.launcher` jsonb |
 | TW-WGT-029 | done |  |  |
 | TW-WGT-030 | wontfix |  | greenfield port: no legacy widget messages to backfill |
+
+## forms-links-groups (wfl)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|
+| TW-WFL-001 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-002 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-003 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-004 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-005 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-006 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-007 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-008 | blocked |  | Needs the nfm_reply webhook handoff in whatsapp-cloud-api-waba's webhook controller and a resume hook in flow-runtime-engine's session store — cross-domain, deferred to its own change. |
+| TW-WFL-009 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-010 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-011 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-012 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-013 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-014 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-015 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-016 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-017 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
+| TW-WFL-018 | done |  | Built full-stack (contracts/api/rbac/frontend/render-tests), typecheck+lint+arch:check clean. Live Reference Playwright parity skipped (no PHP runtime on this machine) per owner decision 2026-10-14. |
 
 ## team-chat (tchat)
 
@@ -796,3 +853,13 @@ Update with: `python3 .claude/skills/threadwise-parity-tracker/scripts/tracker.p
 | TW-CALL-019 | backend-done |  | recording upload and playback in private storage, workspace only, replaced file removed; browser recorder in the web feature |
 | TW-CALL-020 | wontfix |  | dead code in Reference; AI calls arm recording from the assistant (not built) |
 | TW-CALL-021 | backend-done |  | wa_call_events written at every step (connect, dial_sent, accept_sent, terminate, ...) |
+| EXT-CALL-007 | backend-done |  | calling readiness checklist per number (wa_calling_readiness), GET /v2/calling/readiness and POST .../readiness/check; unit and e2e against a fake Meta; no real number tried |
+| EXT-CALL-008 | backend-done |  | calls webhook field read by a check, added to the platform Meta app by the worker (under a lock) when the app has a callback (WabaDiagnosticsService.ensureFields); a customer's own app or a provider is a warning |
+| EXT-CALL-009 | backend-done |  | Meta refusals carry a stable reason (CALL_META_REFUSED details); web translates; codes mapped are in the runbook |
+| EXT-CALL-010 | frontend-done |  | test call button on the readiness card through the same dial path; not tried with a real microphone or number |
+| EXT-CALL-011 | backend-done |  | connect consumer, calling-readiness queue, 10-minute schedule, autoEnableOnConnect setting (off by default); never without waba_calling |
+
+## orphaned (no longer in inventory or domain reassigned)
+
+| Feature | Status | PR | Notes |
+|---|---|---|---|

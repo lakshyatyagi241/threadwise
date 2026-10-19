@@ -83,7 +83,7 @@ Twelve rail entries. Each is a hub: a landing page plus a tab bar of related pag
 | 7   | Website            | cms-frontend, cms-blog, cms-legal, cms-announcements                                                                                     |
 | 8   | WhatsApp           | wap-providers, wap-switch, node-bridge, webhook-forwarding, settings-whatsapp (WABA), settings-catalog                                   |
 | 9   | Apps               | market-catalogue, market-categories, market-requests, market-usage, extensions, flow-templates (new), then active module pages in "More" |
-| 10  | Team & security    | roles, permissions, staff-roles, security, security-events, registration, social-login, auth-pages                                       |
+| 10  | Team & security    | roles, permissions, staff-roles, security, security-events, dpdp-register, registration, social-login, auth-pages                        |
 | 11  | Settings           | index hub: one rail entry, the existing hub tiles (4.4)                                                                                  |
 | 12  | System             | system (Updater), i18n-languages, currencies, i18n-providers, i18n-usage                                                                 |
 
@@ -255,6 +255,6 @@ No feature flag: the change is presentation only and `git revert` of step 1 rest
 - Settings pages get a back link, not a breadcrumb.
 - Label clashes are fixed by overrides in the shell's own nav file, so no other domain's message file changed.
 - Rail entries are 11 hubs plus Home (12), as designed. Tab counts: Reports 6, Plans & pricing 6, Billing 5, Messaging billing 8,
-  Support 9, Website 5, WhatsApp 7, Apps 6, Team & security 8, System 5; Settings lists 17 pages as tiles.
+  Support 9, Website 5, WhatsApp 7, Apps 6, Team & security 8 (9 since 17 Oct 2026, when `dpdp-register` joined after Security events), System 5; Settings lists 17 pages as tiles.
 - Not verified in a browser: the session that built this could not start the web app, so neither the tab bar's look nor the
   rewritten e2e spec has been run. See the parity doc.

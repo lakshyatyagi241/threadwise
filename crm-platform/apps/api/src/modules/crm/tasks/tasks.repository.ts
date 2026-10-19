@@ -4,6 +4,7 @@ import type {
   RecordScope,
   TaskBucket,
   TaskDueFilter,
+  TaskKind,
   TaskPriority,
   TaskSort,
   TaskSource,
@@ -28,6 +29,7 @@ export interface TaskRow {
   priority: TaskPriority;
   status: TaskStatus;
   source: TaskSource;
+  kind: TaskKind;
   dueAt: Date | null;
   doneAt: Date | null;
   remindedAt: Date | null;
@@ -69,6 +71,7 @@ const toRow = (r: Raw): TaskRow => ({
   priority: r.priority as TaskPriority,
   status: r.status as TaskStatus,
   source: r.source as TaskSource,
+  kind: r.kind as TaskKind,
   dueAt: d(r.due_at),
   doneAt: d(r.done_at),
   remindedAt: d(r.reminded_at),
@@ -110,7 +113,7 @@ const selectSql = (tz: string) => sql`
          to_char(t.created_at at time zone 'UTC', ${sql.raw(ISO)}) AS created_at_iso,
          to_char(coalesce(t.due_at, 'infinity'::timestamptz) at time zone 'UTC', ${sql.raw(ISO)}) AS due_key,
          to_char(coalesce(t.done_at, '-infinity'::timestamptz) at time zone 'UTC', ${sql.raw(ISO)}) AS done_key,
-         t.created_at, t.updated_at, t.title, t.notes, t.priority, t.status, t.source,
+         t.created_at, t.updated_at, t.title, t.notes, t.priority, t.status, t.source, t.kind,
          t.due_at, t.done_at, t.reminded_at, t.row_version, ${bucketSql(tz)} AS bucket,
          t.assignee_id, au.uuid AS assignee_uuid, au.full_name AS assignee_name,
          t.created_by, cu.uuid AS created_by_uuid, cu.full_name AS created_by_name,
@@ -326,15 +329,34 @@ export class TasksRepository {
       dealId: number | null;
       companyId: number | null;
       source: TaskSource;
+      kind?: TaskKind;
     },
   ): Promise<number> {
     const res = await tx.execute(sql`
-      INSERT INTO tasks (org_id, title, notes, priority, due_at, assignee_id, created_by, contact_id, deal_id, company_id, source)
+      INSERT INTO tasks (org_id, title, notes, priority, due_at, assignee_id, created_by, contact_id, deal_id, company_id, source, kind)
       VALUES (${orgId}, ${v.title}, ${v.notesCipher}, ${v.priority}, ${v.dueAt}, ${v.assigneeId}, ${v.createdBy},
-              ${v.contactId}, ${v.dealId}, ${v.companyId}, ${v.source})
+              ${v.contactId}, ${v.dealId}, ${v.companyId}, ${v.source}, ${v.kind ?? 'task'})
       RETURNING id
     `);
     return Number((res.rows[0] as { id: number | string }).id);
+  }
+
+  /** The contact's one open follow-up (BL-291), or undefined. */
+  async openFollowUpId(tx: Tx, orgId: number, contactId: number): Promise<number | undefined> {
+    const res = await tx.execute(sql`
+      SELECT id FROM tasks
+      WHERE org_id = ${orgId} AND contact_id = ${contactId} AND kind = 'follow_up' AND status = 'open'
+      LIMIT 1
+    `);
+    const r = res.rows[0] as { id: number | string } | undefined;
+    return r ? Number(r.id) : undefined;
+  }
+
+  /** Serialises writers of one contact's follow-up (the unique index is the last line; this keeps the loser from erroring). */
+  async lockFollowUp(tx: Tx, orgId: number, contactId: number): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`follow-up:${orgId}:${contactId}`}, 0))`,
+    );
   }
 
   /** The optimistic lock is the `row_version` in the WHERE: zero rows back means somebody else wrote first. */

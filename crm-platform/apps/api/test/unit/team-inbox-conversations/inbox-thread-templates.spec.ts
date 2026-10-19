@@ -58,6 +58,7 @@ function setup(
       viewer: async () => ({}),
       assertVisible: () => undefined,
       assertCan: async () => undefined,
+      assertNotAssignedToOther: () => undefined,
     } as never,
     {} as never,
     {
@@ -149,7 +150,7 @@ describe('InboxThreadService: sending a template', () => {
 });
 
 describe('InboxThreadService: listing templates', () => {
-  it('offers the approved templates of this number, with the slots and the reason when blocked', async () => {
+  it('offers the approved templates of the workspace, with the slots and the reason when blocked', async () => {
     const { list } = setup({
       rows: [
         template(),
@@ -177,12 +178,60 @@ describe('InboxThreadService: listing templates', () => {
     expect(data[1]).toMatchObject({ sendable: false, reason: 'media_header' });
   });
 
-  it('narrows to the conversation’s number in the query, so other numbers never fill the page', async () => {
+  it('lists the workspace, as Reference does: no number filter in the query', async () => {
     const { list, listCalls } = setup();
     await list({ q: 'ship' });
     expect(listCalls).toEqual([
-      { limit: INBOX_TEMPLATE_LIST_MAX, status: 'approved', providerConfigId: WABA, q: 'ship' },
+      {
+        limit: INBOX_TEMPLATE_LIST_MAX,
+        status: 'approved',
+        preferProviderConfigId: WABA,
+        q: 'ship',
+      },
     ]);
+  });
+
+  it('puts this number’s templates first in the shared page', async () => {
+    const { list, listCalls } = setup({ channelWaba: null });
+    await list();
+    expect(listCalls[0]).not.toHaveProperty('preferProviderConfigId');
+  });
+
+  it('cuts the page after the approval filter, so a dropped row never leaves a short page with more', async () => {
+    const rows = Array.from({ length: INBOX_TEMPLATE_LIST_MAX + 1 }, (_, i) =>
+      template({
+        uuid: `t${i}`,
+        templateName: `t_${i}`,
+        metaStatus: i === 0 ? 'PAUSED' : 'APPROVED',
+      }),
+    );
+    const { list } = setup({ rows });
+    const { data, hasMore } = await list();
+    expect(data).toHaveLength(INBOX_TEMPLATE_LIST_MAX);
+    expect(data[0]?.name).toBe('t_1');
+    expect(hasMore).toBe(false);
+  });
+
+  it('lists a template of another number disabled, with the reason, so it is never a mystery', async () => {
+    const { list } = setup({
+      rows: [
+        template(),
+        template({ uuid: 'a4', templateName: 'other_line', providerConfigId: 99 }),
+      ],
+    });
+    const { data } = await list();
+    expect(data.map((t) => [t.name, t.sendable, t.reason])).toEqual([
+      ['order_shipped', true, null],
+      ['other_line', false, 'other_number'],
+    ]);
+  });
+
+  it('lists the templates disabled as not linked when the channel has no WhatsApp number', async () => {
+    const { list } = setup({ channelWaba: null });
+    const { data, hasMore } = await list();
+    expect(hasMore).toBe(false);
+    expect(data).toHaveLength(1);
+    expect(data[0]).toMatchObject({ sendable: false, reason: 'not_linked' });
   });
 
   it('returns a full page and says there are more when the query found one row beyond it', async () => {
@@ -204,10 +253,5 @@ describe('InboxThreadService: listing templates', () => {
     const { data, hasMore } = await list();
     expect(data).toHaveLength(INBOX_TEMPLATE_LIST_MAX);
     expect(hasMore).toBe(false);
-  });
-
-  it('offers nothing on a conversation that is not on a WhatsApp number', async () => {
-    const { list } = setup({ channelWaba: null });
-    expect(await list()).toEqual({ data: [], hasMore: false });
   });
 });

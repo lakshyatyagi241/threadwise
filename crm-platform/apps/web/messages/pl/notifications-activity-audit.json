@@ -164,6 +164,32 @@
         "title": "Powiadomienie testowe",
         "titleNoName": "Powiadomienie testowe",
         "bodyNoActor": "Jeśli możesz to przeczytać, powiadomienia na żywo działają."
+      },
+      "snooze_wake": {
+        "title": "{name} wrócił na twoją listę",
+        "titleNoName": "Odłożony czat wrócił na twoją listę",
+        "titleTeam": "{name} wrócił dla twojego zespołu",
+        "titleTeamNoName": "Odłożony czat wrócił dla twojego zespołu"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name}: odnowienie {date, date, medium}",
+        "bodyAuto": "W tym dniu Twoja karta zostanie automatycznie obciążona, aby odnowić {name}. Anuluj subskrypcję wcześniej, aby tego uniknąć.",
+        "titleManual": "{name} – okres opłacony do {date, date, medium}",
+        "bodyManual": "Subskrypcja {name} nie odnawia się sama. Zapłać ponownie przed tą datą, aby aplikacja działała bez przerwy.",
+        "titleEnding": "Subskrypcja {name} kończy się {date, date, medium}",
+        "bodyEnding": "Subskrypcja {name} została anulowana, więc w tym dniu aplikacja przestanie działać. Zasubskrybuj ponownie przed tą datą, aby ją zachować.",
+        "title": "{name}: zbliża się odnowienie",
+        "titleNoName": "Zbliża się odnowienie płatnej aplikacji"
+      },
+      "marketplace_payment_failed": {
+        "title": "Płatność za {name} nie powiodła się",
+        "body": "Płatność kartą nie przeszła. Aplikacja działa jeszcze kilka dni, gdy operator płatności ponawia próbę. Zapłać teraz lub popraw metodę płatności, aby uniknąć wstrzymania.",
+        "titleNoName": "Płatność za płatną aplikację nie powiodła się"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Subskrypcja {name} zakończona",
+        "body": "Aplikacja jest wstrzymana, a jej dane i ustawienia są zachowane. Zasubskrybuj ponownie, aby ją włączyć.",
+        "titleNoName": "Subskrypcja płatnej aplikacji zakończona"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "Grupa WhatsApp znów aktywna",
         "device_group_join_request": "Prośba o dołączenie do grupy",
         "device_group_removed": "Usunięto z grupy WhatsApp",
-        "test": "Powiadomienie testowe"
+        "test": "Powiadomienie testowe",
+        "snooze_wake": "Odłożony czat wrócił",
+        "marketplace_renewal_due": "Zbliża się odnowienie płatnej aplikacji",
+        "marketplace_payment_failed": "Płatność za płatną aplikację nie powiodła się",
+        "marketplace_subscription_ended": "Subskrypcja płatnej aplikacji zakończona"
       },
       "generic": "Masz nowe powiadomienie",
       "paused": "Aktualizacje na żywo są wstrzymane, więc nowe alerty mogą docierać z opóźnieniem do minuty. Odśwież stronę, aby połączyć się ponownie."
@@ -379,6 +409,26 @@
         "test": {
           "label": "Powiadomienie testowe",
           "hint": "Test wysyłany z sekcji Powiadomienia przeglądarki, dzięki któremu zobaczysz, jak działają dzwonek, wyskakujące okno i tytuł karty."
+        },
+        "appointment_calendar_drift": {
+          "label": "Wizyta niezsynchronizowana z Google Calendar",
+          "hint": "Wydarzenie w Google Calendar dotyczące nadchodzącej wizyty zostało usunięte, przeniesione lub zmieniono jego gości. Wizyta nie została zmieniona; to Ty decydujesz, co zrobić."
+        },
+        "snooze_wake": {
+          "label": "Odłożony czat wraca",
+          "hint": "Odłożony czat otwiera się ponownie o wyznaczonej porze i trafia do ciebie lub do zespołu."
+        },
+        "marketplace_renewal_due": {
+          "label": "Przypomnienie o odnowieniu płatnej aplikacji",
+          "hint": "Okres płatnej aplikacji kończy się za kilka dni: zostanie odnowiona kartą, jest opłacona do określonej daty albo została anulowana i się kończy."
+        },
+        "marketplace_payment_failed": {
+          "label": "Płatność za płatną aplikację nie powiodła się",
+          "hint": "Odnowienie płatnej aplikacji kartą nie powiodło się i wymaga Twojej uwagi."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Subskrypcja płatnej aplikacji zakończona",
+          "hint": "Subskrypcja płatnej aplikacji zakończyła się, a aplikacja została wstrzymana."
         }
       },
       "loading": "Wczytywanie Twoich preferencji",

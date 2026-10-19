@@ -1,7 +1,13 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
+import { InjectQueue } from '@nestjs/bullmq';
 import { sql } from 'drizzle-orm';
+import type { Queue } from 'bullmq';
+import { ERROR_CODES, META_LEADGEN_JOB, type MetaLeadgenJob } from '@crm/contracts';
 import { CryptoService } from '../../common/crypto/crypto.service';
+import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { QUEUES } from '../../infra/queue/queues';
+import { WebhookRetryService } from '../webhook-retry';
 import {
   FACEBOOK_GRAPH,
   type FacebookGraphFactory,
@@ -18,6 +24,7 @@ import { PLACEHOLDER_NAME } from './_shims/chat-inbox-ingest';
 import {
   readComment,
   readEntries,
+  readLeadgen,
   readMessaging,
   type DmInput,
   type PageEntry,
@@ -33,13 +40,23 @@ import { PagesRepository, type PageRow } from './pages.repository';
 
 export type ReceiveResult = 'ok' | 'forbidden';
 
+type ItemKind = 'messaging' | 'feed' | 'leadgen';
+
+/** What the webhook retry queue carries for a Facebook item that could not be stored: one event, or a whole entry. */
+type DeferredItem =
+  | { kind: ItemKind; orgId: number; pageRowId: number; item: Record<string, unknown> }
+  | { kind: 'entry'; entry: PageEntry };
+
+/** Decides what happens to an item that failed: the webhook defers it, the retry queue throws it so the queue retries it. */
+type FailureSink = (item: DeferredItem, err: unknown) => Promise<void>;
+
 /**
  * The public Facebook webhook (TW-FB-006 to 009). Meta delivers at least once, in any order and in batches, so every entry and every
- * event is read, each is stored once by its Meta id, and a failure in one never stops the rest. The tenant is found through a
- * narrow SECURITY DEFINER lookup; from there on everything runs under that organization's context.
+ * event is read, each is stored once by its Meta id, and a failure in one never stops the rest from being tried: a store that fails is kept in the webhook retry queue and Meta keeps its 200, so one
+ * workspace's failure cannot make Meta throttle the webhook every workspace shares. The tenant is found through a narrow SECURITY DEFINER lookup; from there on everything runs under that organization's context.
  */
 @Injectable()
-export class InboundService {
+export class InboundService implements OnModuleInit {
   private readonly logger = new Logger(InboundService.name);
 
   constructor(
@@ -49,7 +66,13 @@ export class InboundService {
     @Inject(FACEBOOK_GRAPH) private readonly graph: FacebookGraphFactory,
     @Inject(INBOX_INGEST) private readonly inbox: InboxIngest,
     @Inject(INBOUND_HOOKS) private readonly hooks: InboundHooks,
+    @InjectQueue(QUEUES.META_LEADGEN) private readonly leadgen: Queue<MetaLeadgenJob>,
+    private readonly retry: WebhookRetryService,
   ) {}
+
+  onModuleInit(): void {
+    this.retry.register<DeferredItem>('facebook', (p) => this.reprocess(p));
+  }
 
   verify(mode: string, token: string): boolean {
     return verifyHandshake(mode, token, this.graph.settings.verifyToken);
@@ -65,18 +88,39 @@ export class InboundService {
       this.logger.warn('facebook webhook signature verification failed');
       return 'forbidden';
     }
+    // Every entry and event is tried even if an earlier one failed. A store that fails is kept in the webhook retry queue and Meta keeps
+    // its 200; only when something could not even be kept does the delivery answer 503 (after the loop) so Meta redelivers it.
+    const sink: FailureSink = async (item, err) => {
+      this.logger.warn({ err, kind: item.kind }, 'facebook ingest failed');
+      // A rule the data broke (an AppError) fails the same way on every retry, so it is logged and not retried.
+      if (err instanceof AppError) return;
+      await this.retry.defer('facebook', item);
+    };
+    let lost = 0;
     for (const entry of readEntries(payload)) {
       try {
-        await this.fanOut(entry);
+        await this.fanOut(entry, sink);
       } catch (err) {
-        this.logger.error({ err, page: entry.pageId }, 'facebook entry failed');
+        // The entry could not be walked (the page lookup failed) or a deferral failed: keep the whole entry; every write is idempotent.
+        try {
+          await sink({ kind: 'entry', entry }, err);
+        } catch {
+          lost += 1;
+        }
       }
+    }
+    if (lost > 0) {
+      throw new AppError(
+        ERROR_CODES.INTERNAL,
+        'Could not keep the delivery, please retry',
+        HttpStatus.SERVICE_UNAVAILABLE,
+      );
     }
     return 'ok';
   }
 
   /** One webhook per Page, delivered to every organization that connected it. */
-  private async fanOut(entry: PageEntry): Promise<void> {
+  private async fanOut(entry: PageEntry, sink: FailureSink): Promise<void> {
     const found = await this.db.primary.execute(sql`SELECT * FROM fb_page_lookup(${entry.pageId})`);
     const hits = found.rows as Array<{
       page_org_id: number | string;
@@ -88,26 +132,73 @@ export class InboundService {
         this.pages.findById(tx, orgId, Number(hit.page_row_id)),
       );
       if (!page || page.status !== 'connected') continue;
-      for (const ev of entry.messaging) {
-        await this.guard(orgId, page, 'messaging', () => this.messaging(orgId, page, ev));
-      }
-      for (const value of entry.feed) {
-        await this.guard(orgId, page, 'feed', () => this.comment(orgId, page, value));
-      }
+      for (const item of entry.messaging) await this.guard(sink, orgId, page, 'messaging', item);
+      for (const item of entry.feed) await this.guard(sink, orgId, page, 'feed', item);
+      for (const item of entry.leadgen) await this.guard(sink, orgId, page, 'leadgen', item);
     }
   }
 
   private async guard(
+    sink: FailureSink,
     orgId: number,
     page: PageRow,
-    what: string,
-    fn: () => Promise<void>,
+    kind: ItemKind,
+    item: Record<string, unknown>,
   ): Promise<void> {
     try {
-      await fn();
+      await this.run(orgId, page, kind, item);
     } catch (err) {
-      this.logger.warn({ err, orgId, page: page.id }, `facebook ${what} ingest failed`);
+      await sink({ kind, orgId, pageRowId: page.id, item }, err);
     }
+  }
+
+  private run(
+    orgId: number,
+    page: PageRow,
+    kind: ItemKind,
+    item: Record<string, unknown>,
+  ): Promise<void> {
+    if (kind === 'messaging') return this.messaging(orgId, page, item);
+    if (kind === 'feed') return this.comment(orgId, page, item);
+    return this.queueLead(orgId, page, item);
+  }
+
+  /** The retry queue's second go at a deferred item. A failure is thrown so the queue retries it with backoff. */
+  private async reprocess(p: DeferredItem): Promise<void> {
+    if (p.kind === 'entry') {
+      // A rule the data broke is dropped; anything else is thrown so the queue retries the whole entry (every write is idempotent).
+      await this.fanOut(p.entry, async (_item, err) => {
+        if (!(err instanceof AppError)) throw err;
+      });
+      return;
+    }
+    const page = await this.db.txAs({ orgId: p.orgId }, (tx) =>
+      this.pages.findById(tx, p.orgId, p.pageRowId),
+    );
+    if (!page || page.status !== 'connected') return;
+    await this.run(p.orgId, page, p.kind, p.item);
+  }
+
+  /**
+   * A new lead on a lead form. The webhook carries ids only, so nothing is fetched here: the event is queued (one job per workspace and
+   * lead, so Meta's redelivery of the same event is one job) and the lead ads worker reads the lead from Meta and hands it to the lead
+   * pipeline. Whether this Page has lead sync on, and the form was picked, is the worker's to decide.
+   */
+  private async queueLead(
+    orgId: number,
+    page: PageRow,
+    value: Record<string, unknown>,
+  ): Promise<void> {
+    const lead = readLeadgen(value);
+    if (!lead) return;
+    const job: MetaLeadgenJob = {
+      orgId,
+      pageId: page.pageId,
+      leadgenId: lead.leadgenId,
+      formId: lead.formId,
+      adId: lead.adId,
+    };
+    await this.leadgen.add(META_LEADGEN_JOB, job, { jobId: `leadgen-${orgId}-${lead.leadgenId}` });
   }
 
   private async messaging(

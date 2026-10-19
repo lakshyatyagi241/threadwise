@@ -27,7 +27,7 @@ import { companies, contacts } from '../crm';
 import { deals } from '../deals-pipelines/tables';
 import { organizations, users } from '../foundation';
 import { invoices } from '../invoicing/tables';
-import { packages, subscriptions } from '../plans-subscriptions-trials/tables';
+import { subscriptions } from '../plans-subscriptions-trials/tables';
 
 const bytea = customType<{ data: Buffer; driverData: Buffer }>({ dataType: () => 'bytea' });
 
@@ -102,7 +102,6 @@ export const payments = pgTable(
     index('idx_payments_contact_id').on(t.orgId, t.contactId),
     index('idx_payments_deal_id').on(t.orgId, t.dealId),
     index('idx_payments_invoice_id').on(t.orgId, t.invoiceId),
-    index('idx_payments_paid_at').on(t.orgId, t.paidAt),
     index('idx_payments_wa_order_id').on(t.orgId, t.waOrderId),
   ],
 );
@@ -172,7 +171,6 @@ export const orders = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     orderNumber: text('order_number').notNull(),
     userId: idColumn('user_id'),
-    packageId: idColumn('package_id'),
     billingPeriod: text('billing_period').notNull().default('monthly'),
     autoRenew: boolean('auto_renew').notNull().default(true),
     creditPackageId: idColumn('credit_package_id'),
@@ -242,11 +240,6 @@ export const orders = pgTable(
       foreignColumns: [users.orgId, users.id],
     }).onDelete('set null'),
     foreignKey({
-      name: 'fk_orders_package_id',
-      columns: [t.packageId],
-      foreignColumns: [packages.id],
-    }).onDelete('set null'),
-    foreignKey({
       name: 'fk_orders_credit_package_id',
       columns: [t.creditPackageId],
       foreignColumns: [creditPackages.id],
@@ -269,7 +262,6 @@ export const orders = pgTable(
     index('idx_orders_coupon_id').on(t.orgId, t.couponId),
     index('idx_orders_credit_package_id').on(t.orgId, t.creditPackageId),
     index('idx_orders_gateway_order_id').on(t.orgId, t.gatewayOrderId),
-    index('idx_orders_package_id').on(t.orgId, t.packageId),
     index('idx_orders_status').on(t.orgId, t.status),
     // 20261017090000_paygw_admin_billing.sql
     index('idx_orders_created_all').on(t.createdAt.desc(), t.id.desc()),

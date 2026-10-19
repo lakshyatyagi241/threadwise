@@ -1,3 +1,4 @@
+import { CryptoService } from '../../common/crypto/crypto.service';
 import { Injectable, Logger, Module } from '@nestjs/common';
 import { Interval } from '@nestjs/schedule';
 import { CatalogProductsModule } from '../catalog-products';
@@ -8,6 +9,7 @@ import { WabaGroupRealtimeConsumer } from './waba-group-realtime.consumer';
 import { WabaOrderAckConsumer } from './waba-order-ack.consumer';
 import { WabaIngestProcessor } from './waba-ingest.processor';
 import { WabaModule } from './waba.module';
+import { WabaThroughputSyncScheduler } from './waba-throughput-sync.scheduler';
 
 const CLICK_SYNC_MS = 24 * 3_600_000;
 
@@ -33,8 +35,10 @@ export class WabaClickSyncScheduler {
 @Module({
   imports: [WabaModule, PlansCoreModule, CatalogProductsModule],
   providers: [
+    CryptoService,
     WabaIngestProcessor,
     WabaClickSyncScheduler,
+    WabaThroughputSyncScheduler,
     PinnacleCreditLineProcessor,
     WabaGroupRealtimeConsumer,
     WabaOrderAckConsumer,

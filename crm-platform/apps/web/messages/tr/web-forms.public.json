@@ -34,7 +34,8 @@
         "too_long": "En fazla {max} karakter girin.",
         "pattern": "Beklenen biçimle eşleşmiyor.",
         "invalid_option": "Listelenen seçeneklerden birini seçin.",
-        "invalid_amount": "İzin verilen aralıkta bir tutar girin."
+        "invalid_amount": "İzin verilen aralıkta bir tutar girin.",
+        "guardian_required": "Bir ebeveyn veya vasinin adını ve e-posta adresini ya da telefon numarasını ekleyin."
       },
       "closedTitle": "Bu form kapalı",
       "payTitle": "Bir adım daha",
@@ -58,7 +59,16 @@
         "tryAgain": "Tekrar ödemeyi dene",
         "missingTitle": "Bu ödemeyi bulamadık",
         "missingBody": "Bağlantı yanlış veya çok eski olabilir."
-      }
+      },
+      "termsOfService": "Şartlar",
+      "ageDeclaration": "En az {age} yaşında olduğumu onaylıyorum",
+      "ageBlockedTitle": "Devam edemiyoruz",
+      "ageBlockedBody": "İlginiz için teşekkürler. Bu gönderimi kabul edemiyoruz.",
+      "guardianTitle": "Ebeveyn veya vasi",
+      "guardianIntro": "Lütfen bir ebeveyn veya vasinin bilgilerini ekleyin.",
+      "guardianName": "Ad",
+      "guardianEmail": "E-posta",
+      "guardianPhone": "Telefon"
     }
   }
 }

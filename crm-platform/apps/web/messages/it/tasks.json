@@ -100,7 +100,8 @@
       "views": {
         "list": "Elenco",
         "board": "Board per scadenza"
-      }
+      },
+      "linkCompany": "Un’azienda"
     },
     "table": {
       "scrollArea": "Tabella dei task",
@@ -126,7 +127,8 @@
       "open": "Apri",
       "edit": "Modifica",
       "delete": "Elimina",
-      "unassigned": "Non assegnato"
+      "unassigned": "Non assegnato",
+      "followUpBadge": "Ricontatto"
     },
     "bulk": {
       "label": "Azioni per i task selezionati",
@@ -204,7 +206,8 @@
         "notesTooLong": "Le note sono troppo lunghe (massimo 5000 caratteri).",
         "dueInvalid": "Questa data non è valida.",
         "assigneeInvalid": "Questa persona non è un membro attivo del Workspace."
-      }
+      },
+      "company": "Azienda"
     },
     "drawer": {
       "loading": "Caricamento del task",
@@ -268,7 +271,8 @@
       "searching": "Ricerca in corso",
       "unavailable": "La ricerca non è disponibile al momento.",
       "none": "Nessun risultato.",
-      "unlink": "Rimuovi il collegamento"
+      "unlink": "Rimuovi il collegamento",
+      "searchCompany": "Cerca aziende"
     },
     "errors": {
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
@@ -323,7 +327,21 @@
       "loadMore": "Carica altre",
       "loadMoreDone": "Carica altre completate",
       "showDone": "Mostra completate",
-      "hideDone": "Nascondi completate"
+      "hideDone": "Nascondi completate",
+      "gone": "Il record a cui appartengono queste attività non è più disponibile."
+    },
+    "inline": {
+      "addTask": "Aggiungi task",
+      "rowLabel": "Aggiungi un task",
+      "titleLabel": "Titolo del task",
+      "titlePlaceholder": "Titolo del task, poi premi Enter per salvare",
+      "due": "Data e ora di scadenza",
+      "assignee": "Assegna a",
+      "priority": "Priorità (facoltativa)",
+      "hint": "Enter salva, Escape chiude.",
+      "save": "Aggiungi task",
+      "cancel": "Annulla",
+      "failed": "Impossibile salvare il task. Il tuo testo è tornato nella casella."
     }
   }
 }

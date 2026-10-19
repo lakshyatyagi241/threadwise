@@ -7,6 +7,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { REALTIME_EVENT, realtimeEventSchemas } from '@crm/contracts';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
+import { InboxTriageService } from '../../../src/modules/team-inbox-conversations/inbox-triage.service';
 import { NotificationPrefsResolver } from '../../../src/modules/notifications/notification-prefs.resolver';
 import { TaskNotificationConsumer } from '../../../src/modules/notifications/task-notification.consumer';
 import { OutboxDrainService } from '../../../src/workers/outbox-drain.service';
@@ -403,6 +404,40 @@ describe('conversation notifications over sockets', () => {
     expect(
       (await feed(ana.token)).data.filter((r) => r.type === 'conversation_assigned'),
     ).toHaveLength(2);
+  });
+
+  it('a snoozed chat that comes back by its time tells its assignee, and nobody else', async () => {
+    await customerSays(t, ch, '919800000011', 'wake me', 'Wren');
+    await deliver();
+    const conv = await conversationUuid(t, ch, '919800000011');
+    const assigned = await api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${conv}/assign`)
+      .send({ rowVersion: await inbox.version(conv), userId: await uuidOf(ana.userId) });
+    expect(assigned.status, JSON.stringify(assigned.body)).toBe(200);
+    const snoozed = await api
+      .as(t.admin)
+      .post(`/v2/inbox/conversations/${conv}/snooze`)
+      .send({
+        rowVersion: await inbox.version(conv),
+        until: new Date(Date.now() + 3_600_000).toISOString(),
+      });
+    expect(snoozed.status, JSON.stringify(snoozed.body)).toBe(200);
+    await deliver();
+    await p.h.owner.query(
+      `UPDATE conversations SET snoozed_until = now() - interval '1 minute' WHERE uuid = $1`,
+      [conv],
+    );
+    expect(await p.h.app.get(InboxTriageService).wakeDue()).toBeGreaterThanOrEqual(1);
+    await deliver();
+    await settle();
+
+    const wakes = (await feed(ana.token)).data.filter((r) => r.type === 'snooze_wake');
+    expect(wakes).toHaveLength(1);
+    expect(wakes[0]).toMatchObject({ subject: { kind: 'conversation', id: conv } });
+    expect(wakes[0]!.data).toMatchObject({ contactName: 'Wren', teamAssigned: false });
+    expect((await feed(bo.token)).data.some((r) => r.type === 'snooze_wake')).toBe(false);
+    expect((await feed(t.admin)).data.some((r) => r.type === 'snooze_wake')).toBe(false);
   });
 
   it('a mention tells each mentioned person who may see the conversation, not the author, not someone who cannot', async () => {

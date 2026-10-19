@@ -164,6 +164,32 @@
         "title": "Notifikasi uji",
         "titleNoName": "Notifikasi uji",
         "bodyNoActor": "Jika Anda bisa membaca ini, notifikasi langsung berfungsi."
+      },
+      "snooze_wake": {
+        "title": "{name} kembali ke daftar Anda",
+        "titleNoName": "Chat yang ditunda kembali ke daftar Anda",
+        "titleTeam": "{name} kembali untuk tim Anda",
+        "titleTeamNoName": "Chat yang ditunda kembali untuk tim Anda"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} diperpanjang pada {date, date, medium}",
+        "bodyAuto": "Kartu Anda akan ditagih otomatis pada tanggal itu untuk memperpanjang {name}. Batalkan sebelum tanggal itu untuk menghentikannya.",
+        "titleManual": "{name} dibayar hingga {date, date, medium}",
+        "bodyManual": "{name} tidak diperpanjang otomatis. Bayar lagi sebelum tanggal itu agar tetap berjalan tanpa jeda.",
+        "titleEnding": "{name} berakhir pada {date, date, medium}",
+        "bodyEnding": "Anda telah membatalkan {name}, sehingga aplikasi berhenti berfungsi pada tanggal itu. Berlangganan lagi sebelum tanggal itu agar tetap aktif.",
+        "title": "{name}: perpanjangan segera tiba",
+        "titleNoName": "Perpanjangan aplikasi berbayar segera tiba"
+      },
+      "marketplace_payment_failed": {
+        "title": "Pembayaran {name} gagal",
+        "body": "Pembayaran kartu tidak berhasil. Aplikasi tetap berjalan beberapa hari selagi penyedia pembayaran mencoba lagi. Bayar sekarang, atau perbaiki metode pembayaran Anda, agar tidak dijeda.",
+        "titleNoName": "Pembayaran aplikasi berbayar gagal"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Langganan {name} berakhir",
+        "body": "Aplikasi dijeda, sementara data dan pengaturannya tetap disimpan. Berlangganan lagi untuk mengaktifkannya kembali.",
+        "titleNoName": "Langganan aplikasi berbayar berakhir"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "Grup WhatsApp aktif kembali",
         "device_group_join_request": "Permintaan bergabung ke grup",
         "device_group_removed": "Dikeluarkan dari grup WhatsApp",
-        "test": "Notifikasi uji"
+        "test": "Notifikasi uji",
+        "snooze_wake": "Chat yang ditunda kembali",
+        "marketplace_renewal_due": "Perpanjangan aplikasi berbayar segera tiba",
+        "marketplace_payment_failed": "Pembayaran aplikasi berbayar gagal",
+        "marketplace_subscription_ended": "Langganan aplikasi berbayar berakhir"
       },
       "generic": "Anda punya notifikasi baru",
       "paused": "Pembaruan langsung dijeda, sehingga peringatan baru bisa terlambat hingga satu menit. Muat ulang halaman untuk menyambung kembali."
@@ -379,6 +409,26 @@
         "test": {
           "label": "Notifikasi uji",
           "hint": "Uji yang Anda kirim dari Notifikasi browser, agar Anda bisa melihat lonceng, pop-up, dan judul tab berfungsi."
+        },
+        "appointment_calendar_drift": {
+          "label": "Janji temu tidak sinkron dengan Google Calendar",
+          "hint": "Acara Google Calendar dari janji temu mendatang dihapus, dipindahkan, atau tamunya diubah. Janji temu tidak diubah; Anda yang memilih tindakan selanjutnya."
+        },
+        "snooze_wake": {
+          "label": "Chat yang ditunda kembali",
+          "hint": "Chat yang ditunda dibuka lagi pada waktunya dan diberikan kepada Anda atau tim Anda."
+        },
+        "marketplace_renewal_due": {
+          "label": "Pengingat perpanjangan aplikasi berbayar",
+          "hint": "Periode aplikasi berbayar berakhir dalam beberapa hari: diperpanjang dengan kartu, dibayar hingga tanggal tertentu, atau sudah dibatalkan dan akan berakhir."
+        },
+        "marketplace_payment_failed": {
+          "label": "Pembayaran aplikasi berbayar gagal",
+          "hint": "Perpanjangan aplikasi berbayar lewat kartu tidak berhasil dan perlu Anda tangani."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Langganan aplikasi berbayar berakhir",
+          "hint": "Langganan aplikasi berbayar berakhir dan aplikasi dijeda."
         }
       },
       "loading": "Memuat preferensi Anda",

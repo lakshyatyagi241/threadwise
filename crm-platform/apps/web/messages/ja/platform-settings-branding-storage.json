@@ -19,7 +19,8 @@
       "googleCalendar": "Google カレンダー",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "フロービルダー"
+      "flowBuilder": "フロービルダー",
+      "microsoftCalendar": "Microsoft カレンダー"
     },
     "hub": {
       "kicker": "管理者 - プロジェクト設定",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "エンドポイント",
-            "hint": "Spaces、R2、MinIO では必須です。末尾の /bucket は削除されます。",
-            "placeholder": "https://… (Spaces / R2 / MinIO では必須。Wasabi と Bunny は自動)"
+            "hint": "Spaces、R2 では必須です。末尾の /bucket は削除されます。",
+            "placeholder": "https://… (Spaces / R2 では必須。Wasabi と Bunny は自動)"
           },
           "cdnUrl": {
             "label": "公開 / CDN URL(任意)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "パススタイルのエンドポイントを使用(MinIO / 一部の S3 互換ストア)"
+            "label": "パススタイルのエンドポイントを使用(一部の S3 互換ストア)"
           },
           "storageZone": {
             "label": "ストレージゾーン",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "非公開(署名付き URL)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google カレンダー",
-        "description": "各ワークスペースがカレンダーを接続する際に使用する Google OAuth クライアント。",
+        "description": "各ワークスペースがカレンダー、Sheets、Docs、Forms のために Google アカウントを接続する際に使用する Google OAuth クライアント。",
         "sections": {
           "oauth": {
             "title": "Google OAuth クライアント"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "ワークスペースによる Google カレンダーの接続を許可",
-            "hint": "オフ: どのワークスペースも接続できず、カレンダーへの読み書きは行われません。"
+            "label": "ワークスペースによる Google の接続を許可",
+            "hint": "オフ: どのワークスペースも接続できず、Google(カレンダー、Sheets、Docs、Forms)への読み書きは行われません。"
           },
           "clientId": {
             "label": "Client ID",
@@ -1024,6 +1024,37 @@
             "advanced": "詳細のみ"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft カレンダー",
+        "description": "各ワークスペースが Outlook または Microsoft 365 のカレンダーを連携する際に使用する Microsoft アプリです。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra アプリ"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ワークスペースによる Outlook の連携を許可",
+            "hint": "オフの場合、どのワークスペースも連携できず、Outlook カレンダーの読み取りも書き込みも行われません。連携済みのカレンダーは保持されます。"
+          },
+          "clientId": {
+            "label": "アプリケーション（クライアント）ID",
+            "hint": "Microsoft Entra 管理センターの「アプリの登録」の「概要」で確認できます。空欄の場合は MICROSOFT_CALENDAR_CLIENT_ID を使用します。"
+          },
+          "clientSecret": {
+            "label": "クライアントシークレット",
+            "hint": "暗号化して保存され、再表示されません。空欄の場合は保存済みの値を保持します。代替として MICROSOFT_CALENDAR_CLIENT_SECRET が使用されます。"
+          },
+          "tenant": {
+            "label": "テナント",
+            "hint": "common は職場、学校、個人のアカウントを許可します。単一テナントのアプリではディレクトリ（テナント）ID を指定してください。空欄の場合は MICROSOFT_CALENDAR_TENANT、それもなければ common を使用します。"
+          },
+          "redirectUri": {
+            "label": "リダイレクト URI の上書き",
+            "hint": "空欄の場合は上記のアドレスを使用します。アプリに登録されたリダイレクト URI と完全に一致する必要があります。"
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "クラウドストレージ",
-        "description": "顧客のメディアを独自のバケットに保存します: Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2、MinIO。",
+        "description": "顧客のメディアを独自のバケットに保存します: Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2。",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google カレンダー",
-        "description": "予約と予定の空き状況のためにワークスペースがカレンダーを接続する Google OAuth クライアント。",
-        "tags": "Google / OAuth / Calendar"
+        "description": "予約、Sheets、Docs、Forms のためにワークスペースが Google アカウントを接続する Google OAuth クライアント。",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmailメール",
@@ -1151,6 +1182,11 @@
         "title": "フロービルダー",
         "description": "すべてのワークスペースの既定のフロービルダー: ステップ形式のシンプル、またはキャンバス型の詳細。ワークスペースは上書きできます。",
         "tags": "シンプル / 詳細 / 自動化"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft カレンダー",
+        "description": "ワークスペースが予約用に Outlook と Microsoft 365 のカレンダーを連携する際に使用する Microsoft アプリです。",
+        "tags": "Microsoft / OAuth / Outlook / カレンダー"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Bunny の項目(ストレージゾーンとパスワード)を使用してください。リージョンはゾーンのリージョン(de、ny、la など)です。"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 の項目を入力し、エンドポイント URL を貼り付けてください。MinIO の場合はパススタイルにチェックを入れてください。"
+              "title": "Spaces / R2",
+              "body": "S3 の項目を入力し、エンドポイント URL を貼り付けてください。"
             },
             "test": {
               "title": "必ず先にテストする",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google カレンダー",
         "eyebrow": "管理者 - 予約",
-        "description": "プラットフォーム全体で使用する Google Cloud OAuth クライアントは 1 つです。各ワークスペースは、予約の設定から自身の Google アカウントを接続します。ワークスペースがクライアント ID やシークレットを見ることはありません。",
+        "description": "プラットフォーム全体で使用する Google Cloud OAuth クライアントは 1 つです。各ワークスペースは、設定の Google アカウントから自身の Google アカウントを接続し、付与する権限を選びます。ワークスペースがクライアント ID やシークレットを見ることはありません。",
         "sections": {
           "oauth": {
             "title": "Google OAuth クライアント",
-            "description": "クライアント ID とシークレットがない場合、ワークスペースには Google カレンダーが利用できないと表示され、予約はカレンダーなしで続行されます。"
+            "description": "クライアント ID とシークレットがない場合、ワークスペースには Google が利用できないと表示され、予約はカレンダーなしで続行され、フローの Google ステップはスキップされます。"
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. プロジェクトと API",
-              "body": "Google Cloud Console でプロジェクトを作成し、Google Calendar API を有効にします。"
+              "body": "Google Cloud Console でプロジェクトを作成し、Google Calendar、Google Sheets、Google Docs、Google Drive、Google Forms の各 API を有効にします。権限は、その API が有効な場合にのみ機能します。"
             },
             "redirect": {
               "title": "2. OAuth クライアント",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. 同意画面",
-              "body": "calendar.events、calendar.freebusy、calendar.calendarlist.readonly のスコープを追加してから、アプリを公開してください。テスト中の場合、Google はすべての許可を 7 日後に失効させ、ワークスペースは再接続が必要になります。"
+              "body": "製品が要求するスコープ(calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、forms.responses.readonly、drive.metadata.readonly)を追加してから、アプリを公開してください。テスト中の場合、Google はすべての許可を 7 日後に失効させ、ワークスペースは再接続が必要になります。drive のスコープは制限付きで、Google の審査が必要です。"
             },
             "workspaces": {
               "title": "4. ワークスペースの接続",
-              "body": "ここにクライアント ID とシークレットを貼り付けて保存してください。その後、管理者は予約の設定から Google カレンダーを接続します。"
+              "body": "ここにクライアント ID とシークレットを貼り付けて保存してください。その後、管理者は設定の連携にある Google アカウント、または予約の設定にある Google カレンダーから接続します。"
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "既存のフロー",
               "body": "この設定を変更しても、フローが変更または削除されることはありません。フローは引き続き動作し、有効になっているビルダーで開かれるだけです。独自のビルダーを選んだワークスペースは、プラットフォームの既定値を再び選ぶまでその設定を維持します。"
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft カレンダー",
+        "eyebrow": "Admin - 予約",
+        "description": "プラットフォーム全体で1つの Microsoft Entra アプリを使用します。各ワークスペースは「予約」の「設定」から自分の Outlook または Microsoft 365 カレンダーを連携し、クライアント ID やシークレットは表示されません。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra アプリ",
+            "description": "クライアント ID とシークレットがない場合、ワークスペースでは Outlook が利用不可と表示され、予約は Outlook なしで続行されます。Google Calendar には影響しません。"
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra で設定する",
+          "items": {
+            "registration": {
+              "title": "1. アプリの登録",
+              "body": "Microsoft Entra 管理センターで、任意の組織ディレクトリ内のアカウントと個人の Microsoft アカウントを対象にしたアプリの登録を作成し、アプリケーション（クライアント）ID をここにコピーします。より限定的な選択肢を選んだ場合を除き、テナントは common のままにしてください。"
+            },
+            "redirect": {
+              "title": "2. リダイレクト URI とシークレット",
+              "body": "このページに表示されているリダイレクト URI を Web のリダイレクトとして追加し、「証明書とシークレット」でクライアントシークレットを作成して、その値をここに貼り付けます。有効期限を控えておいてください。期限が過ぎると、新しいシークレットを保存するまで、すべてのワークスペースのカレンダーが停止します。"
+            },
+            "permissions": {
+              "title": "3. API のアクセス許可",
+              "body": "委任された Microsoft Graph のアクセス許可として Calendars.ReadWrite、User.Read、offline_access のみを追加し、それ以外は追加しないでください。一般向けに利用する場合は、発行元の確認を完了してください。お客様のテナントによっては、管理者によるアプリの承認も必要になることがあります。"
+            },
+            "workspaces": {
+              "title": "4. ワークスペースが連携する",
+              "body": "クライアント ID とシークレットをここに貼り付けて保存します。その後、管理者は「予約」の「設定」から連携できます。"
             }
           }
         }

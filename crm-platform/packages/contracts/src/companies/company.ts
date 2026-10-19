@@ -3,6 +3,7 @@ import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean } from '../contacts-attributes-tags/query-helpers';
 import { moneyTotalSchema } from '../deals-pipelines/money';
+import { segmentOperatorSchema, segmentValueSchema } from '../segments/rules';
 
 /**
  * Companies (TW-CTP-001..). The B2B layer over contacts and deals: a company groups the contacts that work there and the deals
@@ -16,12 +17,23 @@ export const COMPANY_INDUSTRY_MAX = 100;
 export const COMPANY_SIZE_RANGE_MAX = 40;
 export const COMPANY_ADDRESS_MAX = 500;
 export const COMPANY_NOTES_MAX = 2000;
+export const COMPANY_CUSTOM_TEXT_MAX = 4000;
+export const COMPANY_CUSTOM_LIST_MAX = 100;
 export const COMPANY_BULK_MAX = 100;
 export const COMPANY_LINK_MAX = 100;
 
-export const COMPANY_SORTS = ['created', 'name'] as const;
+/** `property` orders by one company property (`sortKey`); the rest are the company's own columns. */
+export const COMPANY_SORTS = ['created', 'name', 'property'] as const;
 export const companySortSchema = z.enum(COMPANY_SORTS);
 export type CompanySort = z.infer<typeof companySortSchema>;
+
+export const COMPANY_SORT_DIRS = ['asc', 'desc'] as const;
+export const companySortDirSchema = z.enum(COMPANY_SORT_DIRS);
+export type CompanySortDir = z.infer<typeof companySortDirSchema>;
+
+/** The key of a company property, as the registry stores it. */
+export const COMPANY_PROPERTY_KEY = /^[a-z][a-z0-9_]{0,99}$/;
+export const COMPANY_PROPERTY_FILTER_MAX = 10;
 
 export const companyUserRefSchema = z.object({ id: uuidSchema, name: z.string() });
 export type CompanyUserRef = z.infer<typeof companyUserRefSchema>;
@@ -47,6 +59,24 @@ export const companyRollupSchema = z.object({
 });
 export type CompanyRollup = z.infer<typeof companyRollupSchema>;
 
+/**
+ * A value of one of the workspace's company properties (Settings, Company properties), as stored in the company's `data`: text for
+ * the text-like types and dates, a number, a boolean (checkbox), or a list of option values (multi-select). `null` clears a key.
+ */
+export const companyCustomValueSchema = z.union([
+  z.string().max(COMPANY_CUSTOM_TEXT_MAX),
+  z.number().finite(),
+  z.boolean(),
+  z.array(z.string().max(COMPANY_CUSTOM_TEXT_MAX)).max(COMPANY_CUSTOM_LIST_MAX),
+  z.null(),
+]);
+export type CompanyCustomValue = z.infer<typeof companyCustomValueSchema>;
+export const companyCustomFieldsSchema = z.record(
+  z.string().min(1).max(100),
+  companyCustomValueSchema,
+);
+export type CompanyCustomFields = z.infer<typeof companyCustomFieldsSchema>;
+
 export const companyResponseSchema = z.object({
   id: uuidSchema,
   displayId: z.string().nullable(),
@@ -58,6 +88,8 @@ export const companyResponseSchema = z.object({
   sizeRange: z.string().nullable(),
   address: z.string().nullable(),
   notes: z.string().nullable(),
+  /** The values of the workspace's company properties, by property key; a key with no value is absent. */
+  customFields: z.record(z.unknown()),
   owner: companyUserRefSchema.nullable(),
   createdBy: companyUserRefSchema.nullable(),
   rollup: companyRollupSchema,
@@ -103,6 +135,8 @@ export const createCompanySchema = z.object({
   sizeRange: text(COMPANY_SIZE_RANGE_MAX),
   address: text(COMPANY_ADDRESS_MAX),
   notes: text(COMPANY_NOTES_MAX),
+  /** Values of the workspace's company properties, by key. Only editable properties; a blank or `null` value stores nothing. */
+  customFields: companyCustomFieldsSchema.optional(),
   /** An active member of this workspace. Omit for the caller; `null` for nobody. */
   ownerId: uuidSchema.nullish(),
 });
@@ -118,11 +152,38 @@ export const updateCompanySchema = z.object({
   sizeRange: text(COMPANY_SIZE_RANGE_MAX),
   address: text(COMPANY_ADDRESS_MAX),
   notes: text(COMPANY_NOTES_MAX),
+  /** Merged into the stored values: a key sent changes, `null` or a blank clears it, a key left out keeps its value. */
+  customFields: companyCustomFieldsSchema.optional(),
   ownerId: uuidSchema.nullish(),
   /** Optimistic lock. Send the value you read; a mismatch returns 409 ROW_VERSION_CONFLICT. */
   rowVersion: z.number().int().positive(),
 });
 export type UpdateCompanyInput = z.infer<typeof updateCompanySchema>;
+
+/**
+ * One condition on a company property, in the vocabulary of segment rules (the same operators for the same kinds of property:
+ * text, number, date, option, multi, checkbox). Conditions are combined with AND.
+ */
+export const companyPropertyFilterSchema = z
+  .object({
+    key: z.string().regex(COMPANY_PROPERTY_KEY),
+    operator: segmentOperatorSchema,
+    value: segmentValueSchema.optional(),
+  })
+  .strict();
+export type CompanyPropertyFilter = z.infer<typeof companyPropertyFilterSchema>;
+
+/** Property conditions arrive in a query string as JSON (`props=[{"key":"tier","operator":"equals","value":"gold"}]`). */
+const propertyFilters = z
+  .preprocess((v) => {
+    if (typeof v !== 'string') return v;
+    try {
+      return JSON.parse(v);
+    } catch {
+      return v;
+    }
+  }, z.array(companyPropertyFilterSchema).max(COMPANY_PROPERTY_FILTER_MAX))
+  .optional();
 
 /** The filters a list and the stats share. */
 const companyFilterShape = {
@@ -135,6 +196,8 @@ const companyFilterShape = {
   industry: z.string().trim().min(1).max(COMPANY_INDUSTRY_MAX).optional(),
   /** Only companies with at least one open deal (Reference's "With open deals" tile). */
   hasOpenDeals: queryBoolean().optional(),
+  /** Conditions on company properties, all of which must hold (JSON in a query string). */
+  props: propertyFilters,
 };
 
 const refineOwner = <T extends { ownerId?: string; unassigned?: boolean }>(q: T) =>
@@ -145,11 +208,21 @@ export const listCompaniesQuerySchema = z
   .object({
     limit: z.coerce.number().int().min(1).max(200).default(50),
     cursor: z.string().min(1).max(512).optional(),
-    /** `created` (newest first, Reference's order; default) or `name` (A to Z). */
+    /**
+     * `created` (newest first, Reference's order; default), `name` (A to Z) or `property` (by the property `sortKey`; text and
+     * options A to Z, numbers, dates and checkboxes by value; a company with no value comes first when ascending).
+     */
     sort: companySortSchema.default('created'),
+    sortKey: z.string().regex(COMPANY_PROPERTY_KEY).optional(),
+    /** Defaults to newest first for `created`, ascending for the others. */
+    sortDir: companySortDirSchema.optional(),
     ...companyFilterShape,
   })
-  .refine(refineOwner, ownerMessage);
+  .refine(refineOwner, ownerMessage)
+  .refine((q) => q.sort !== 'property' || q.sortKey !== undefined, {
+    message: 'sortKey is required when sort is property',
+    path: ['sortKey'],
+  });
 export type ListCompaniesQuery = z.infer<typeof listCompaniesQuerySchema>;
 
 export const companyStatsQuerySchema = z
@@ -253,3 +326,83 @@ export const listCompanyActivityQuerySchema = z.object({
   cursor: z.string().min(1).max(512).optional(),
 });
 export type ListCompanyActivityQuery = z.infer<typeof listCompanyActivityQuerySchema>;
+
+// --- CSV export and import (BL-196) -----------------------------------------------------------------------------------------
+
+/** The built-in columns of an export, in the order a file has them; a company property is `property:<key>` after these. */
+export const COMPANY_EXPORT_COLUMNS = [
+  'name',
+  'website',
+  'email',
+  'phone',
+  'industry',
+  'sizeRange',
+  'address',
+  'notes',
+  'owner',
+  'createdAt',
+] as const;
+export type CompanyExportColumn = (typeof COMPANY_EXPORT_COLUMNS)[number];
+export const COMPANY_EXPORT_PROPERTY_PREFIX = 'property:';
+/** Companies one export holds; a larger set is narrowed with the filters. */
+export const COMPANY_EXPORT_MAX = 5000;
+
+/**
+ * `GET /companies/export`: the list's filters (what the screen shows is what the file holds), and `columns` (comma separated: the
+ * built-in names above and `property:<key>`; omitted = every built-in column and every property).
+ */
+export const exportCompaniesQuerySchema = z
+  .object({
+    ...companyFilterShape,
+    sort: companySortSchema.default('created'),
+    sortKey: z.string().regex(COMPANY_PROPERTY_KEY).optional(),
+    sortDir: companySortDirSchema.optional(),
+    columns: z
+      .string()
+      .max(2000)
+      .transform((v) =>
+        v
+          .split(',')
+          .map((c) => c.trim())
+          .filter(Boolean),
+      )
+      .optional(),
+  })
+  .refine(refineOwner, ownerMessage)
+  .refine((q) => q.sort !== 'property' || q.sortKey !== undefined, {
+    message: 'sortKey is required when sort is property',
+    path: ['sortKey'],
+  });
+export type ExportCompaniesQuery = z.infer<typeof exportCompaniesQuerySchema>;
+
+export const COMPANY_IMPORT_ROWS_MAX = 1000;
+export const COMPANY_IMPORT_CSV_MAX = 1_000_000;
+
+/**
+ * `POST /companies/import`: the text of a CSV file. The first line names the columns (case and spacing do not matter): `name` (the
+ * only required one), `website`, `email`, `phone`, `industry`, `size`, `address`, `notes`, `owner` (the email of an active member)
+ * and a company property by its label or key. `matchExisting` fills the blanks of a company with the same website (or, without a
+ * website, the same name) and never overwrites what is there; `false` always creates.
+ */
+export const importCompaniesSchema = z.object({
+  csv: z.string().min(1).max(COMPANY_IMPORT_CSV_MAX),
+  matchExisting: z.boolean().default(true),
+});
+export type ImportCompaniesInput = z.infer<typeof importCompaniesSchema>;
+
+export const companyImportResultSchema = z.object({
+  /** Data rows read (the header is not one). */
+  total: z.number().int(),
+  created: z.number().int(),
+  /** An existing company that had blanks filled in. */
+  updated: z.number().int(),
+  /** An existing company with nothing to fill. */
+  unchanged: z.number().int(),
+  /** Rows that were not imported, with the line of the file and why. */
+  failed: z.array(
+    z.object({ line: z.number().int(), field: z.string().nullable(), message: z.string() }),
+  ),
+  /** Header names that matched no column or property (their cells were ignored). */
+  ignoredColumns: z.array(z.string()),
+});
+export type CompanyImportResult = z.infer<typeof companyImportResultSchema>;

@@ -37,21 +37,24 @@ scoping, members), `roles-permissions` (record scope), `plans-subscriptions-tria
 
 ## Feature index
 
-| Id         | Feature                                            | Status           | Priority | Effort | Depends on  |
-| ---------- | -------------------------------------------------- | ---------------- | -------- | ------ | ----------- |
-| TW-CTP-001 | Plan gate (no role gate)                           | implemented      | P0       | S      |             |
-| TW-CTP-002 | Companies list: search, tiles, rollups             | implemented      | P0       | M      | 001         |
-| TW-CTP-003 | Create company                                     | implemented      | P0       | S      | 001         |
-| TW-CTP-004 | Update company                                     | partial          | P1       | S      | 003         |
-| TW-CTP-005 | Company page (360): contacts, deals, rollup, notes | implemented      | P0       | M      | 002         |
-| TW-CTP-006 | Contacts of a company: link and unlink             | partial          | P1       | M      | 005         |
-| TW-CTP-007 | Company activity trail                             | not in Reference | P2       | S      | 003         |
-| TW-CTP-008 | Delete company (contacts and deals are unlinked)   | implemented      | P0       | S      | 003         |
-| TW-CTP-009 | Picker search endpoint (`GET companies/search`)    | implemented      | P1       | S      | 001         |
-| TW-CTP-010 | Deals of a company (`deals.company_id`)            | partial          | P1       | S      | TW-DEAL-038 |
-| TW-CTP-011 | AI copilot company tools                           | implemented      | P2       | S      | 003, 006    |
-| TW-CTP-012 | Client brief for a company ("Generate brief")      | implemented      | P2       | M      | 005         |
-| TW-CTP-013 | Other records that point at a company              | partial          | P1       | S      | 008         |
+| Id         | Feature                                             | Status           | Priority | Effort | Depends on  |
+| ---------- | --------------------------------------------------- | ---------------- | -------- | ------ | ----------- |
+| TW-CTP-001 | Plan gate (no role gate)                            | implemented      | P0       | S      |             |
+| TW-CTP-002 | Companies list: search, tiles, rollups              | implemented      | P0       | M      | 001         |
+| TW-CTP-003 | Create company                                      | implemented      | P0       | S      | 001         |
+| TW-CTP-004 | Update company                                      | partial          | P1       | S      | 003         |
+| TW-CTP-005 | Company page (360): contacts, deals, rollup, notes  | implemented      | P0       | M      | 002         |
+| TW-CTP-006 | Contacts of a company: link and unlink              | partial          | P1       | M      | 005         |
+| TW-CTP-007 | Company activity trail                              | not in Reference | P2       | S      | 003         |
+| TW-CTP-008 | Delete company (contacts and deals are unlinked)    | implemented      | P0       | S      | 003         |
+| TW-CTP-009 | Picker search endpoint (`GET companies/search`)     | implemented      | P1       | S      | 001         |
+| TW-CTP-010 | Deals of a company (`deals.company_id`)             | partial          | P1       | S      | TW-DEAL-038 |
+| TW-CTP-011 | AI copilot company tools                            | implemented      | P2       | S      | 003, 006    |
+| TW-CTP-012 | Client brief for a company ("Generate brief")       | implemented      | P2       | M      | 005         |
+| TW-CTP-013 | Other records that point at a company               | partial          | P1       | S      | 008         |
+| TW-CTP-014 | Company picker on the contact and deal forms        | not in Reference | P1       | M      | 009         |
+| TW-CTP-015 | A company's tasks card; Tasks screen company filter | not in Reference | P1       | S      | 005         |
+| TW-CTP-016 | Company properties (screen and values)              | not in Reference | P1       | L      | 003, 004    |
 
 ## Features
 
@@ -247,7 +250,7 @@ scoping, members), `roles-permissions` (record scope), `plans-subscriptions-tria
 - **Rules & edge cases:** `find_company` (a substring of the name over the newest 300, at most 10 with contact and open-deal counts), `create_company`
   (name required, optional industry, website, email, phone; creator = the caller), `link_contact_company` (TW-CTP-006). The tools run as the staff member.
 - **Source refs:** app/Services/AiCrm/CrmToolkit.php:108, 614-682.
-- **Port notes:** owned by the AI domain; it calls `CompaniesService`.
+- **Port notes:** built in the AI CRM Copilot (PR 466: `find_company`, `create_company`, `link_contact_company` in `ai-copilot-lead-finder/ai-crm-toolkit.service.ts`), calling `CompaniesService` as the signed-in member with their record scope. BL-034 added nothing.
 
 ### TW-CTP-012 — Client brief for a company ("Generate brief")
 
@@ -272,6 +275,33 @@ scoping, members), `roles-permissions` (record scope), `plans-subscriptions-tria
   leaves them dangling (TW-CTP-008 #2). The mobile API's contact has a free-text `company` string that is not this entity. The contact CSV import and the
   contact forms have no company field.
 - **Source refs:** Task.php:62-79, ProjectsController.php:45-73, migrations 2026_08_22_000100 / 000400 / 000500.
+
+### TW-CTP-014 — Company picker on the contact and deal forms
+
+- **Status:** not in Reference (an owner extension, BL-034; D-19)
+- **Priority:** P1
+- **Effort:** M
+- **Depends on:** TW-CTP-009
+- **Rules & edge cases:** the contact form, New deal and the deal drawer have a **Company** field: a searchable combobox over `GET /companies/select-data` (250 ms after typing stops, arrow keys and Enter), the chosen company as a chip with a remove button; for someone who may create companies, **Create "name"** (last row, only when no hit has exactly that name) makes it with `POST /companies` and picks it. The field is shown to those who hold `record.companies.read`. The server holds every new link to the same rule (read + record scope; 404 outside the scope, 403 without the capability, both naming `companyId`); a company the record already has never blocks an unrelated edit; a new deal with no company takes its contact's company. Reference's forms have no company field; it linked contacts from the company page only.
+- **Source refs:** none (port addition). `CompanyPicker` in `features/companies/components/company-picker.tsx`; `assertCompanyReadable` in `modules/crm/companies/company-link.ts`.
+
+### TW-CTP-015 — A company's tasks card; Tasks screen company filter
+
+- **Status:** not in Reference (BL-034; D-20)
+- **Priority:** P1
+- **Effort:** S
+- **Depends on:** TW-CTP-005
+- **Rules & edge cases:** the company page has the **Tasks** card the contact page and the deal drawer have (`LinkedTasks`): open tasks first, a quick add that opens the New task form already linked to the company, complete and reopen, **Show completed**, **Load more**, and **View all** to the Tasks screen. `GET /companies/:id/tasks` needs `record.tasks.read` and `record.companies.read` on the company (its scope applies). The Tasks screen's "Linked to" filter gained **A company** (`?company=<id>`, `GET /tasks?companyId=`).
+- **Source refs:** none (port addition). Reference's task has `related_type = company` and shows no company anywhere.
+
+### TW-CTP-016 — Company properties (screen and values)
+
+- **Status:** not in Reference (BL-034; D-21)
+- **Priority:** P1
+- **Effort:** L
+- **Depends on:** TW-CTP-003, TW-CTP-004
+- **Rules & edge cases:** Settings, Data and customization, **Company properties** (`/company-properties`) is the Contact properties screen on the companies module of the field registry: sections, properties of 11 types, required, visible, read-only, active, "show only when", reorder, deactivate (values kept), an "In use" count of companies. The values are `customFields` on the company (create, edit, response, list), drawn on the company form and shown on the page under **Properties**. Server rules: only editable properties, a value must fit the type, required ones must be answered (honouring their conditions), the trail names changed keys not values (see the API doc). The Agent and Manager presets read the definitions; Owner and Admin define them.
+- **Source refs:** none (port addition). Reference never wrote or read `custom_attributes`; the platform registry already accepted `moduleKey = companies` and the form builder already writes company values.
 
 ## Data model
 
@@ -334,7 +364,13 @@ keys, no uniqueness, no soft delete. The same migration adds `contacts.company_i
 | D-15 | Contacts listed from every record, whatever the viewer may see                       | The contact list of a company applies the caller's contact scope; link and unlink need `record.contacts.update` on each contact                                         |
 | D-16 | Deals link to `/deals`, values with no currency                                      | Each deal links to its own page; the value carries its currency; open deals first, then newest (cursor paging)                                                          |
 | D-17 | Duplicate names allowed                                                              | Kept: companies are not unique by name (two branches can share one)                                                                                                     |
-| D-18 | No company properties screen, `custom_attributes` unused                             | Not exposed: the platform's property registry already supports `moduleKey = companies`, but Reference has nothing to port; a company properties screen is a follow-up   |
+| D-18 | No company properties screen, `custom_attributes` unused                             | Superseded by D-21 (BL-034): the registry's `moduleKey = companies` now has a screen and the `data` column holds the values                                             |
+| D-19 | No company field on the contact or deal forms                                        | A **Company** picker on the contact form, New deal and the deal drawer, with create-inline; the link needs read access to the company (owner extension, BL-034)         |
+| D-20 | A company shows no tasks                                                             | A tasks card on the company page and a company filter on the Tasks screen (owner extension, BL-034)                                                                     |
+| D-21 | Nothing for company custom data                                                      | Company properties: screen, values on the company, typed and required (owner extension, BL-034)                                                                         |
+| D-22 | (bug) a failed list could read "That company no longer exists"                       | Fixed: a 404 for a list is "not available"; the sentence is for one company's own 404 (documented bug fix, BL-034)                                                      |
+| D-23 | Nothing for company properties on lists, segments, messages, files or the API | Company properties reach the list, segments, merge tags, CSV, the customer API and plain English search (owner extension, BL-196) |
+| D-24 | "Generate brief": a deterministic deck under a public token link, plus a PDF | An AI brief for the person who asks, from what their record scopes show, on the company page with copy and regenerate; no public link (owner extension, BL-194) |
 
 ## Coverage
 
@@ -400,7 +436,13 @@ is listed here with the "Differences to decide" row it settles. Code: `apps/api/
 | D-15   | `GET /companies/:id/contacts` applies the caller's contact scope (and needs `record.contacts.read`).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              | TW-CTP-005      |
 | D-16   | The company page lists deals through the deals API (`GET /deals?companyId=`), open first within the loaded page, each linking to its own page, with its currency.                                                                                                                                                                                                                                                                                                                                                                                                                                                 | TW-CTP-005, 010 |
 | D-17   | Duplicate names stay allowed.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     | TW-CTP-003      |
-| D-18   | `custom_attributes` (`data`) is not exposed: Reference never wrote or read it and has no company properties screen.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               | TW-CTP-013      |
+| D-18   | Superseded by D-21: `custom_attributes` (`data`) is now exposed as `customFields` (Reference never wrote or read it).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | TW-CTP-013      |
+| D-19   | The company picker (contact form, New deal, deal drawer): search over `select-data`, create-inline for those who may create companies, shown to those who hold `record.companies.read`; the server holds every new link to `record.companies.read` and the record scope (404 outside it, 403 without the capability, field `companyId` named).                                                                                                                                                                                                                                                                    | TW-CTP-014      |
+| D-20   | The tasks card (`GET /companies/:id/tasks`) and the Tasks screen's company filter.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | TW-CTP-015      |
+| D-21   | Company properties: the Contact properties screen parameterised by module; values in `companies.data` as `customFields` with typed validation, required rules and an activity entry by key; `record.company-properties.read` for the Agent and Manager presets (migration `20261217090000`).                                                                                                                                                                                                                                                                                                                      | TW-CTP-016      |
+| D-22   | A 404 for a list, a tile or a search reads "not available"; "That company no longer exists" is only for one company's own call. An uncoded 404 or 501 on the company page reads "not available" too.                                                                                                                                                                                                                                                                                                                                                                                                              | TW-CTP-002, 005 |
+| D-23   | Company properties reach the companies list (a column, a condition with the segment operators, an order by a property), contact segments (`company.<key>`), merge tags (`{{company.industry}}`, `{{company.<key>}}`, `{{company}}`), CSV export and import (`record.companies.export` / `.import`), the `/api/v1/companies` resource (`companies:read` / `companies:write`) and plain English contact search. | TW-CTP-016 |
+| D-24   | The brief is written by an AI model through the workspace AI key setup, from facts read as the caller (counts, dates, amounts, masked short titles; never contact names, emails, phones or message text), stored per company and person (`company_briefs`), cached a day, 30 second cooldown, audited without the facts. Reference built a deck of counted numbers with no AI under a public link and a PDF; the public link is not built because it would publish CRM data to anyone holding the URL. | TW-CTP-012 |
 
 ### Other decisions
 
@@ -414,15 +456,13 @@ is listed here with the "Differences to decide" row it settles. Code: `apps/api/
 
 ### Not built here (follow-ups)
 
-| What                                                                                          | Why / where it goes                                                                                            |
-| --------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| "Generate brief" (TW-CTP-012)                                                                 | The client brief feature is not built (CRM dashboard domain).                                                  |
-| AI copilot company tools (TW-CTP-011)                                                         | Owned by the AI domain; it calls `CompaniesService`.                                                           |
-| A company's tasks card on its page                                                            | `GET /tasks?companyId=` exists; the Tasks hub needs a company filter and the linked-tasks card a company kind. |
-| A company picker on the contact and deal forms                                                | The APIs take `companyId`; Reference's forms have no company field, so it is an extension left for later.      |
-| A company properties screen (the platform's registry already accepts `moduleKey = companies`) | Reference has none (D-18).                                                                                     |
-| Companies in the contacts CSV import                                                          | Reference's import has no company column.                                                                      |
-| Company export, merge and duplicate detection                                                 | Not in Reference.                                                                                              |
+| What                                                                                                | Why / where it goes                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| "Generate brief" (TW-CTP-012): the public `/b/{token}` deck and PDF, and briefs of a contact or a deal | Built as an AI brief for the person who asks, on the company page (BL-194, D-24). The public link, the PDF and contact or deal briefs: BL-224. |
+| Company properties: the "Built-in properties" card, a company saved view, the copilot field, the saved-reply and email-template variable catalogues | BL-223 (the list, segments, merge tags, CSV, REST v1 and plain English search are built: BL-196, D-23). |
+| The Playwright twin run and a browser pass for the picker, the tasks card and the properties screen | BL-195 (needs the running Reference and a running stack).                                                                                                    |
+| Companies in the contacts CSV import                                                                | Reference's import has no company column.                                                                                                                    |
+| Company export, merge and duplicate detection                                                       | Not in Reference.                                                                                                                                            |
 
 ### Build status (tracker vocabulary)
 
@@ -440,8 +480,11 @@ rows either, and `tracker.py validate` already reports 258 problems), so the sta
 | TW-CTP-006 | frontend-done | add and remove contacts from the company page                                                    |
 | TW-CTP-007 | frontend-done | activity card from the audit trail (port addition)                                               |
 | TW-CTP-008 | frontend-done | delete, bulk delete, every referencing table unlinks                                             |
-| TW-CTP-009 | backend-done  | `GET /companies/select-data`; no screen uses it yet                                              |
+| TW-CTP-009 | frontend-done | `GET /companies/select-data`; the company picker and the Tasks screen filter use it              |
 | TW-CTP-010 | frontend-done | deals card through `GET /deals?companyId=`; deal creation and inheritance are the deals domain's |
-| TW-CTP-011 | blocked       | AI domain; waits for its copilot to call `CompaniesService`                                      |
-| TW-CTP-012 | blocked       | the client brief feature is not built; the button is not shown                                   |
+| TW-CTP-011 | frontend-done | built in the AI CRM Copilot (PR 466), calling `CompaniesService`                                 |
+| TW-CTP-012 | backend-done  | AI brief on the company page (D-24); `company_briefs`; copilot `generate_brief`; not seen in a browser, not run against a real model |
 | TW-CTP-013 | backend-done  | foreign keys unlink on delete; the other domains' company pickers are theirs                     |
+| TW-CTP-014 | frontend-done | company picker on the contact form, New deal and the deal drawer; server rule on every new link  |
+| TW-CTP-015 | frontend-done | tasks card on the company page, `GET /companies/:id/tasks`, company filter on the Tasks screen   |
+| TW-CTP-016 | frontend-done | Company properties screen, tile, values on the company form, page and API                        |

@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google-account",
+        "description": "Verbind één Google-account voor Agenda, Sheets, Docs, Formulieren en Meet in je flows.",
+        "keywords": "google, google-account, agenda, calendar, sheets, docs, formulieren, forms, meet, drive, oauth, google verbinden"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Voeg rijen toe, zoek rijen op en sla contacten uit een sheet op in je flows. Gebruikt je Google-accountkoppeling.",
+        "keywords": "google sheets, spreadsheet, rijen, cellen, oauth, google verbinden"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Kopieer een sjabloondocument, vul het in en deel het vanuit je flows. Gebruikt je Google-accountkoppeling.",
+        "keywords": "google docs, document, sjabloon, delen, oauth, google verbinden"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Stuur een formulier naar een klant en ga verder zodra het is ingevuld. Gebruikt je Google-accountkoppeling.",
+        "keywords": "google forms, formulier, enquête, reacties, oauth, google verbinden"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Sluiten"
+    },
+    "page": {
+      "eyebrow": "Workspace",
+      "title": "Google-account",
+      "subtitle": "Verbind één keer. Hetzelfde Google-account zorgt voor je boekingsagenda, je Meet-links en de Sheets-, Docs- en Formulieren-stappen in je flows.",
+      "loading": "Je Google-account laden...",
+      "forbidden": {
+        "title": "Je kunt deze pagina niet openen",
+        "body": "Je rol mag het Google-account niet bekijken. Vraag het aan een workspacebeheerder."
+      },
+      "status": {
+        "unavailable": "Niet ingesteld",
+        "disconnected": "Niet verbonden",
+        "connected": "Verbonden",
+        "needs_reconnect": "Opnieuw verbinden nodig"
+      },
+      "outcome": {
+        "connected": "Google-account verbonden.",
+        "denied": "Google is niet verbonden: het toestemmingsscherm is geannuleerd.",
+        "failed": "Het verbinden met Google is niet voltooid. Probeer het opnieuw.",
+        "expired": "Die verbindingspoging is verlopen. Druk op de knop om opnieuw te beginnen.",
+        "not_configured": "Google is nog niet ingesteld voor dit platform. Vraag het aan je platformbeheerder.",
+        "missing_scope": "Google heeft niet alle gevraagde toestemmingen gegeven. Wat al was toegestaan werkt nog; voeg de ontbrekende opnieuw toe en laat alle vakjes aangevinkt.",
+        "cancelled": "U hebt geannuleerd. Er is niets gekoppeld."
+      },
+      "actions": {
+        "connect": "Google-account verbinden",
+        "reconnect": "Google opnieuw verbinden",
+        "addPermissions": "Toestemmingen toevoegen",
+        "disconnect": "Verbinding verbreken",
+        "working": "Google openen...",
+        "retry": "Probeer opnieuw"
+      },
+      "unavailable": {
+        "title": "Google is niet ingesteld voor dit platform",
+        "body": "De platformbeheerder moet eerst de Google OAuth-client toevoegen voordat iemand kan koppelen. Tot die tijd mislukken Google-stappen in uw flows met een melding daarover en gaan boekingen door zonder agenda."
+      },
+      "reconnect": {
+        "title": "Google accepteert deze verbinding niet meer",
+        "body": "De toestemming is ingetrokken, het wachtwoord is gewijzigd of de toestemming is verlopen. Verbind opnieuw om het te herstellen; je keuzes blijven bewaard.",
+        "bodyAccount": "Google accepteert {account} niet meer. Verbind het opnieuw om het te herstellen; je keuzes blijven bewaard."
+      },
+      "stats": {
+        "status": "Status",
+        "calendars": "Agenda's",
+        "calendarsValue": "{count} beschikbaar",
+        "calendarsNone": "geen",
+        "permissions": "Toestemmingen",
+        "permissionsValue": "{granted} van {total}",
+        "lastUsed": "Laatst gebruikt",
+        "never": "nooit",
+        "live": "live",
+        "idle": "inactief"
+      },
+      "account": {
+        "title": "Verbonden account",
+        "email": "Account",
+        "calendar": "Agenda voor boekingen en Meet",
+        "primaryCalendar": "Je hoofdagenda",
+        "changeCalendar": "Agenda wijzigen",
+        "connectedAgo": "Verbonden {when}",
+        "none": "Er is geen Google-account gekoppeld.",
+        "noneBody": "Zolang u niet koppelt, mislukken Google-stappen in uw flows met een melding dat u Google moet koppelen, en worden boekingen niet aan een agenda toegevoegd."
+      },
+      "permissions": {
+        "title": "Waarvoor Google mag worden gebruikt",
+        "intro": "Vink aan wat je wilt toestaan. Google toont precies deze toestemmingen op zijn scherm en je kunt later meer toevoegen zonder te verliezen wat al is toegestaan.",
+        "allowed": "Toegestaan",
+        "notAllowed": "Niet toegestaan",
+        "allow": "Toestaan",
+        "restricted": "Beperkt door Google",
+        "restrictedNote": "Google behandelt deze toestemming als beperkt: het platform heeft de beoordeling van Google nodig voordat het voor veel workspaces werkt. Laat uit staan tenzij je het nodig hebt.",
+        "nothingTicked": "Vink minstens één toestemming aan.",
+        "calendar": {
+          "name": "Agenda",
+          "body": "Voeg boekingen en Meet-links toe aan je agenda en verberg bezette tijden op de boekingspagina.",
+          "usedBy": "Boekingsagenda, de stappen Afspraak boeken en Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Google Sheets-veld controleren, Contact opslaan uit Google Sheet",
+          "body": "Voeg een rij toe aan een sheet, zoek een rij op, controleer een cel of kopieer een rij naar een contact."
+        },
+        "docs": {
+          "name": "Docs en Drive",
+          "body": "Kopieer een sjabloondocument, vul het in en deel de kopie via een link.",
+          "usedBy": "Stap Google Docs"
+        },
+        "forms": {
+          "name": "Formulieren",
+          "usedBy": "Stap Google Formulier",
+          "body": "Lees de openbare link van een formulier zodat de flow deze naar de klant kan sturen, en lees de antwoorden van het formulier zodat de flow verdergaat wanneer het is ingevuld."
+        },
+        "drive_listing": {
+          "name": "Drive-bestandslijst",
+          "body": "Toon je sheets, documenten en formulieren op naam, zodat je ze in de flowbuilder en de boekingsinstellingen uit je account kunt kiezen. Nodig voor elke bestandskiezer.",
+          "usedBy": "Bestandskiezers in de flowbuilder en de boekingsinstellingen"
+        }
+      },
+      "lastError": {
+        "title": "Het laatste probleem dat Google meldde",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google accepteert het verbonden account niet meer. Verbind opnieuw.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "De Google-client van het platform ontbreekt of is uitgeschakeld.",
+        "GOOGLE_API_NOT_ENABLED": "Het Google Cloud-project van het platform heeft een API die deze functie nodig heeft niet ingeschakeld. De platformbeheerder moet die inschakelen.",
+        "GOOGLE_SCOPE_MISSING": "Een stap had een toestemming nodig die dit account niet kreeg. Voeg die hierboven toe.",
+        "GOOGLE_RATE_LIMITED": "Google beperkt nu het aantal verzoeken. Stappen worden even later opnieuw geprobeerd.",
+        "GOOGLE_UNAVAILABLE": "Google antwoordde niet. Bij het volgende gebruik wordt het opnieuw geprobeerd.",
+        "other": "Google meldde een probleem."
+      },
+      "usedBy": {
+        "title": "Gebruikt door",
+        "book": "Stap Afspraak boeken",
+        "meet": "Stap Google Meet",
+        "sheets": "Google Sheets-stappen",
+        "docs": "Stap Google Docs",
+        "forms": "Stap Google Formulier",
+        "flow": "flow"
+      },
+      "disconnectConfirm": {
+        "title": "Verbinding met Google verbreken?",
+        "body": "Agendasynchronisatie voor boekingen en elke Google-stap in je flows stoppen totdat je opnieuw verbindt. Gebeurtenissen en bestanden die al zijn gemaakt, blijven in Google.",
+        "confirm": "Verbinding verbreken",
+        "cancel": "Verbonden houden"
+      },
+      "disconnected": "Verbinding met Google-account verbroken.",
+      "failure": {
+        "notConfigured": "Google is niet ingesteld voor dit platform. Vraag het aan je platformbeheerder.",
+        "generic": "Er ging iets mis. Probeer het opnieuw."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "Alleen de toestemmingen die je aanvinkt worden gevraagd. De verbinding wordt versleuteld opgeslagen, hoort bij de workspace en wordt alleen gebruikt door de hier genoemde functies. Door te verbreken wordt ze bij Google ingetrokken."
+      }
+    },
+    "consent": {
+      "title": "Google-koppeling bevestigen",
+      "loading": "Uw Google-koppeling wordt geladen...",
+      "question": "{email} koppelen aan {workspace} voor {permissions}?",
+      "permissions": "Toestemmingen",
+      "notGiven": "niet gegeven",
+      "missing": "Google heeft niet gegeven: {permissions}. Als u bevestigt, wordt alleen gekoppeld wat wel is gegeven.",
+      "replaces": "Dit vervangt het Google-account {email} dat nu gekoppeld is. De toegang van het oude account wordt ingetrokken.",
+      "onlyYou": "Alleen de persoon die op Koppelen heeft gedrukt, kan dit afronden, vanuit deze workspace. Als iemand u deze link heeft gestuurd, bevestig dan niet en sluit de pagina.",
+      "unknownAccount": "dit Google-account",
+      "confirm": "Bevestigen",
+      "cancel": "Annuleren",
+      "working": "Bezig...",
+      "failure": {
+        "notYours": "Deze Google-koppeling is door iemand anders gestart en is daarom niet gekoppeld. Vraag hen om zelf te koppelen.",
+        "expired": "Het bevestigen van deze Google-koppeling duurde te lang. Ga terug en druk opnieuw op Koppelen.",
+        "used": "Deze Google-koppeling is al bevestigd, geannuleerd of geweigerd. Ga terug en druk opnieuw op Koppelen als u dit nog nodig hebt.",
+        "notFound": "Deze Google-koppeling wacht niet op bevestiging of hoort bij een andere workspace.",
+        "generic": "Er ging iets mis en er is niets gewijzigd. Probeer het opnieuw.",
+        "nothingConnected": "Er is niets gekoppeld."
+      }
+    }
+  }
+}

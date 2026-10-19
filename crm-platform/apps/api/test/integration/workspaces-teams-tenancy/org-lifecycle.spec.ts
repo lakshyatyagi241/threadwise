@@ -133,6 +133,19 @@ describe('workspace lifecycle', () => {
        VALUES ($1,'user','contacts',1,'update','{"phone":{"old":"+911","new":"+912"}}')`,
       [org.id],
     );
+    // Analytics streams have no foreign key to organizations: the erase must delete them itself.
+    await owner.query(
+      `INSERT INTO an_events (org_id, type, occurred_at, contact_id) VALUES ($1, 3, now(), $2)`,
+      [org.id, c.rows[0].id],
+    );
+    await owner.query(
+      `INSERT INTO an_rollup_hour (org_id, metric, bucket, n) VALUES ($1, 1, now(), 1)`,
+      [org.id],
+    );
+    await owner.query(
+      `INSERT INTO an_rollup_day (org_id, metric, bucket, n) VALUES ($1, 1, current_date, 1)`,
+      [org.id],
+    );
 
     await svc.sweep();
     expect(await status(org.id)).toBe('active');
@@ -185,11 +198,16 @@ describe('workspace lifecycle', () => {
     ).toBe(0);
     expect(
       (
-        await owner.query(`SELECT storage_key FROM storage_purge_queue WHERE org_uuid = $1`, [
-          org.uuid,
-        ])
+        await owner.query(
+          `SELECT storage_key FROM storage_purge_queue WHERE org_uuid = $1 ORDER BY id`,
+          [org.uuid],
+        )
       ).rows,
-    ).toEqual([{ storage_key: 'orgs/ladder/a.pdf' }]);
+    ).toEqual([
+      { storage_key: 'orgs/ladder/a.pdf' },
+      // The cold event archive is keyed by workspace; this marker has the purge worker delete its objects.
+      { storage_key: `archive-erase/${org.id}/all` },
+    ]);
     // Completeness: no table that carries org_id (FK-cascaded or not) may still hold a row of the erased workspace. A table added
     // later without an FK to organizations fails here instead of silently surviving an erasure.
     const tables = await owner.query(
@@ -347,7 +365,7 @@ describe('workspace lifecycle', () => {
 
     const u = '00000000-0000-4000-8000-0000000000aa';
     await owner.query(
-      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key) VALUES (1, $1, 'k/ok.pdf'), (1, $1, 'k/retry.pdf')`,
+      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key) VALUES (1, $1, 'contact-files/1/ok.pdf'), (1, $1, 'contact-files/1/retry.pdf')`,
       [u],
     );
     fail = true;
@@ -369,9 +387,75 @@ describe('workspace lifecycle', () => {
       u,
     ]);
     expect(done.rows.every((r) => r.purged_at !== null)).toBe(true);
-    expect(removed).toEqual(expect.arrayContaining(['k/ok.pdf', 'chat:k/ok.pdf', 'k/retry.pdf']));
+    expect(removed).toEqual(
+      expect.arrayContaining([
+        'contact-files/1/ok.pdf',
+        'chat:contact-files/1/ok.pdf',
+        'contact-files/1/retry.pdf',
+      ]),
+    );
     await purge.pass();
-    expect(removed.filter((k) => k === 'k/ok.pdf')).toHaveLength(1); // a purged row is not touched again
+    expect(removed.filter((k) => k === 'contact-files/1/ok.pdf')).toHaveLength(1); // a purged row is not touched again
+  });
+
+  it("has the purge worker delete a workspace's archive objects through the erase marker, for that workspace only", async () => {
+    const erased: number[] = [];
+    const archive = {
+      eraseOrg: async (orgId: number) => {
+        erased.push(orgId);
+        return 2;
+      },
+    };
+    const removed: string[] = [];
+    const media = { remove: async (k: string) => void removed.push(k) };
+    const db = {
+      privileged: (fn: Parameters<typeof withPrivileged>[1]) => withPrivileged(worker.db, fn),
+    } as unknown as DatabaseService;
+    const u = '00000000-0000-4000-8000-0000000000bb';
+    await owner.query(
+      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key)
+       VALUES (31, $1, 'archive-erase/31/all'), (31, $1, 'archive-erase/32/all')`,
+      [u],
+    );
+
+    await new StoragePurgeService(db, media as never, undefined, archive as never).pass();
+
+    expect(erased).toContain(31);
+    expect(erased).not.toContain(32);
+    expect(removed.some((k) => k.startsWith('archive-erase/'))).toBe(false); // not a media key
+    const rows = (
+      await owner.query(
+        `SELECT storage_key, attempts, last_error, purged_at FROM storage_purge_queue WHERE org_uuid=$1 ORDER BY id`,
+        [u],
+      )
+    ).rows;
+    expect(rows[0]).toMatchObject({
+      storage_key: 'archive-erase/31/all',
+      purged_at: expect.anything(),
+    });
+    // A marker naming another workspace than its row fails the queue's ownership check: parked with the reason, never run.
+    expect(rows[1]).toMatchObject({ attempts: 8, purged_at: null });
+    expect(rows[1].last_error).toMatch(/not under this workspace/);
+  });
+
+  it('keeps an archive erase marker pending, with the reason, when the process has no archive store', async () => {
+    const db = {
+      privileged: (fn: Parameters<typeof withPrivileged>[1]) => withPrivileged(worker.db, fn),
+    } as unknown as DatabaseService;
+    const u = '00000000-0000-4000-8000-0000000000cc';
+    await owner.query(
+      `INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key) VALUES (41, $1, 'archive-erase/41/all')`,
+      [u],
+    );
+    await new StoragePurgeService(db, { remove: async () => undefined } as never).pass();
+    const row = (
+      await owner.query(
+        `SELECT attempts, last_error, purged_at FROM storage_purge_queue WHERE org_uuid=$1`,
+        [u],
+      )
+    ).rows[0];
+    expect(row).toMatchObject({ attempts: 1, purged_at: null });
+    expect(row.last_error).toMatch(/archive store is not available/);
   });
 
   it('dry run changes nothing', async () => {

@@ -68,6 +68,9 @@ importers:
       '@crm/db':
         specifier: workspace:*
         version: link:../../packages/db
+      '@crm/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       '@crm/tax':
         specifier: workspace:*
         version: link:../../packages/tax
@@ -122,6 +125,9 @@ importers:
       bullmq:
         specifier: ^6.3.12
         version: 6.3.12(ioredis@6.0.0)(pg@8.23.1)
+      compression:
+        specifier: 1.8.2
+        version: 1.8.2
       dotenv:
         specifier: ^18.0.7
         version: 18.0.7
@@ -198,6 +204,9 @@ importers:
       '@testcontainers/postgresql':
         specifier: ^12.2.0
         version: 12.2.0
+      '@types/compression':
+        specifier: ^1.8.1
+        version: 1.8.1
       '@types/express':
         specifier: ^5.0.0
         version: 5.0.6
@@ -412,6 +421,9 @@ importers:
       '@crm/contracts':
         specifier: workspace:*
         version: link:../../packages/contracts
+      '@crm/observability':
+        specifier: workspace:*
+        version: link:../../packages/observability
       '@crm/tax':
         specifier: workspace:*
         version: link:../../packages/tax
@@ -521,6 +533,9 @@ importers:
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@26.6.5)(jsdom@30.1.2(@noble/hashes@1.8.0))(lightningcss@1.32.0)(terser@5.51.2)
 
   packages/db:
     dependencies:
@@ -549,6 +564,18 @@ importers:
       typescript:
         specifier: ^6.0.3
         version: 6.0.3
+
+  packages/observability:
+    devDependencies:
+      '@types/node':
+        specifier: ^26.6.4
+        version: 26.6.5
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+      vitest:
+        specifier: ^2.1.8
+        version: 2.1.9(@types/node@26.6.5)(jsdom@30.1.2(@noble/hashes@1.8.0))(lightningcss@1.32.0)(terser@5.51.2)
 
   packages/tax:
     devDependencies:
@@ -4371,6 +4398,9 @@ packages:
 
   '@types/body-parser@1.19.6':
     resolution: {integrity: sha512-HLFeCYgz89uk22N5Qg3dvGvsv46B8GLvKKo1zKG4NybA8U2DiEO3w9lqGg29t/tfLRJpJ6iQxnVw4OnB7MoM9g==}
+
+  '@types/compression@1.8.1':
+    resolution: {integrity: sha512-kCFuWS0ebDbmxs0AXYn6e2r2nrGAb5KwQhknjSPSPgJcGd8+HVSILlUyFhGqML2gk39HcG7D1ydW9/qpYkN00Q==}
 
   '@types/connect@3.4.36':
     resolution: {integrity: sha512-P63Zd/JUGq+PdrM1lv0Wv5SBYeA2+CORvbrXbngriYY0jzLUWfQMQQxOhjONEz/wlHOAxOdY7CY65rgQdTjq2w==}
@@ -14647,6 +14677,11 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.36
+      '@types/node': 26.6.5
+
+  '@types/compression@1.8.1':
+    dependencies:
+      '@types/express': 5.0.6
       '@types/node': 26.6.5
 
   '@types/connect@3.4.36':

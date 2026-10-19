@@ -29,7 +29,8 @@
       "priorityChanged": "प्राथमिकता अपडेट हो गई",
       "snoozed": "बातचीत स्नूज़ की गई",
       "tagAdded": "टैग जोड़ा गया",
-      "tagRemoved": "टैग हटाया गया"
+      "tagRemoved": "टैग हटाया गया",
+      "spammed": "बातचीत को स्पैम के रूप में चिह्नित किया गया।"
     },
     "list": {
       "title": "इनबॉक्स",
@@ -44,12 +45,8 @@
         "unassigned": "असौंपी गई",
         "unread": "अपठित"
       },
-      "statusFilter": "स्थिति",
-      "statusOpen": "खुली",
-      "statusAll": "हर स्थिति",
       "status": {
         "open": "खुली",
-        "pending": "लंबित",
         "snoozed": "स्नूज़ की गई",
         "resolved": "हल की गई",
         "closed": "हल की गई",
@@ -61,7 +58,6 @@
         "high": "उच्च",
         "urgent": "तत्काल"
       },
-      "channelFilter": "चैनल",
       "allChannels": "सभी चैनल",
       "archived": "संग्रहीत",
       "backToInbox": "इनबॉक्स पर वापस जाएं",
@@ -107,7 +103,57 @@
         }
       },
       "select": "चुनें",
-      "selectDone": "पूरा हुआ"
+      "selectDone": "पूरा हुआ",
+      "filters": {
+        "open": "फ़िल्टर",
+        "openActive": "फ़िल्टर ({count} चालू)",
+        "title": "फ़िल्टर",
+        "close": "बंद करें",
+        "reset": "रीसेट",
+        "cancel": "रद्द करें",
+        "apply": "लागू करें",
+        "status": "चैट की स्थिति",
+        "statusHint": "कुछ न चुनने पर खुली बातचीत दिखती हैं।",
+        "conversation": "बातचीत",
+        "any": "कोई भी",
+        "assigned": "असाइन की गई",
+        "unassigned": "असाइन नहीं",
+        "unattended": "अनदेखी",
+        "labels": "टैग",
+        "channels": "चैनल",
+        "agents": "एजेंट",
+        "sortBy": "क्रम",
+        "recent": "नवीनतम",
+        "old": "पुरानी",
+        "dateRange": "तारीख़ सीमा (आख़िरी गतिविधि)",
+        "from": "से",
+        "to": "तक",
+        "select": "एक विकल्प चुनें",
+        "search": "खोजें",
+        "noMatch": "कोई मेल नहीं",
+        "today": "आज",
+        "last7": "पिछले 7 दिन",
+        "last30": "पिछले 30 दिन",
+        "thisMonth": "इस महीने",
+        "clearDates": "तारीख़ें हटाएँ",
+        "previousMonth": "पिछला महीना",
+        "nextMonth": "अगला महीना"
+      },
+      "rowMenu": "{name} के लिए और विकल्प",
+      "priorityMenu": "प्राथमिकता",
+      "statusFilter": "स्थिति",
+      "statusOpen": "खुली",
+      "statusAll": "हर स्थिति",
+      "channelFilter": "चैनल",
+      "selectRow": "{name} चुनें",
+      "snoozedFor": "स्थगित · {left}",
+      "snoozeLeft": {
+        "due": "अभी",
+        "minutes": "{count, plural, one {# मिनट} other {# मिनट}}",
+        "hours": "{count, plural, one {# घंटा} other {# घंटे}}",
+        "days": "{count, plural, one {# दिन} other {# दिन}}"
+      },
+      "unsnoozesAt": "{time} पर फिर खुलेगी"
     },
     "status": {
       "received": "प्राप्त",
@@ -128,6 +174,7 @@
       "mediaNotFound": "संलग्नक की अवधि समाप्त हो गई या हटा दिया गया। फिर से संलग्न करें।",
       "statusInvalid": "बातचीत की वर्तमान स्थिति से यह बदलाव अनुमत नहीं है।",
       "assigneeInvalid": "यह बातचीत उस व्यक्ति को नहीं सौंपी जा सकती।",
+      "assignedToOther": "यह चैट किसी दूसरे एजेंट को असाइन है। जवाब देने के लिए पहले इसे अपने नाम पर असाइन करें।",
       "forbidden": "आपके पास ऐसा करने की अनुमति नहीं है।",
       "rateLimited": "बहुत अधिक अनुरोध। थोड़ी देर रुकें और फिर से कोशिश करें।",
       "simulatorDisabled": "इस सर्वर पर चैनल सिम्युलेटर बंद है।",
@@ -232,7 +279,11 @@
         "undone": "चरण बदलाव पूर्ववत: वापस {stage} पर।",
         "undoneToast": "चरण वापस {stage} पर कर दिया गया।",
         "couldNotUndo": "यह बदलाव अब पूर्ववत नहीं हो सकता: संपर्क आगे बढ़ चुका है या पहले ही पूर्ववत हो चुका है।"
-      }
+      },
+      "heldUntil": "{when} तक रोका गया",
+      "heldWhy": "यह मार्केटिंग संदेश आपके शांत घंटों के खत्म होने का इंतज़ार कर रहा है। तब तक संपर्क ने सदस्यता नहीं छोड़ी हो, तो यह उसी समय भेज दिया जाएगा।",
+      "templateSent": "टेम्पलेट “{name}” {channel} से भेजा गया",
+      "templateSentPlain": "टेम्पलेट “{name}” भेजा गया"
     },
     "media": {
       "openImage": "इमेज {name} खोलें",
@@ -276,6 +327,8 @@
         "sendTemplate": "टेम्पलेट भेजें"
       },
       "readOnly": "आप यह बातचीत पढ़ सकते हैं, लेकिन जवाब देने की अनुमति नहीं है।",
+      "resolvedBanner": "यह बातचीत हल हो चुकी है। जवाब देने के लिए इसे फिर से खोलें।",
+      "assignedToOther": "यह चैट किसी दूसरे एजेंट को असाइन है। जवाब देने के लिए पहले इसे अपने नाम पर असाइन करें।",
       "typing": "{count, plural, one {एक साथी लिख रहा है} other {# साथी लिख रहे हैं}}",
       "messagesLabel": "संदेश",
       "loadOlder": "पहले के संदेश लोड करें",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "नया संदेश: {text}",
       "attachment": "एक संलग्नक",
       "jumpLatest": "नवीनतम पर जाएं",
-      "jumpLatestNew": "{count, plural, one {# नया संदेश} other {# नए संदेश}}"
+      "jumpLatestNew": "{count, plural, one {# नया संदेश} other {# नए संदेश}}",
+      "searchOpen": "इस चैट में खोजें",
+      "searchPlaceholder": "इस चैट में खोजें",
+      "searchCount": "{total} में से {current}",
+      "searchNone": "कोई मेल नहीं",
+      "searchPrev": "पिछला परिणाम",
+      "searchNext": "अगला परिणाम",
+      "searchClose": "खोज बंद करें"
     },
     "groupThread": {
       "openGroup": "ग्रुप खोलें",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "सहेजे गए उत्तर",
-      "savedReplyIssues": "भरे नहीं गए और जैसे लिखे थे वैसे ही छोड़े गए ({count}): {list}। भेजने से पहले ठीक करें।"
+      "savedReplyIssues": "भरे नहीं गए और जैसे लिखे थे वैसे ही छोड़े गए ({count}): {list}। भेजने से पहले ठीक करें।",
+      "toolbar": {
+        "label": "संदेश फ़ॉर्मैटिंग",
+        "bold": "बोल्ड",
+        "italic": "इटैलिक",
+        "underline": "रेखांकित",
+        "strike": "स्ट्राइकथ्रू",
+        "bullets": "बुलेट सूची",
+        "numbers": "क्रमांकित सूची",
+        "ai": {
+          "open": "स्मार्ट एआई सहायक",
+          "noModel": "इस वर्कस्पेस के लिए कोई एआई मॉडल चालू नहीं है",
+          "title": "स्मार्ट एआई सहायक",
+          "condense": "संक्षिप्त करें",
+          "condenseHint": "टेक्स्ट को छोटा और सटीक बनाएँ",
+          "fix": "व्याकरण सुधारें",
+          "fixHint": "व्याकरण और वर्तनी की गलतियाँ ठीक करें",
+          "positive": "सकारात्मक लहजा",
+          "positiveHint": "टेक्स्ट को अधिक सकारात्मक और उत्साहपूर्ण बनाएँ",
+          "translate": "अनुवाद करें",
+          "translateHint": "अलग-अलग भाषाओं में अनुवाद करें",
+          "selectLanguage": "भाषा चुनें",
+          "searchLanguages": "भाषाएँ खोजें…",
+          "noLanguage": "कोई भाषा नहीं मिली",
+          "working": "काम चल रहा है…",
+          "empty": "पहले संदेश लिखें।",
+          "failed": "एआई टेक्स्ट नहीं बदल सका। फिर कोशिश करें।"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "नोट्स और टाइमलाइन",
@@ -452,7 +540,13 @@
         "pickTeam": "इस बातचीत के लिए टीम चुनें",
         "noTeam": "कोई टीम नहीं",
         "onLeave": "छुट्टी पर",
-        "onLeaveUntil": "{date} तक छुट्टी पर"
+        "onLeaveUntil": "{date} तक छुट्टी पर",
+        "availability": {
+          "online": "ऑनलाइन",
+          "away": "दूर",
+          "busy": "व्यस्त",
+          "offline": "ऑफ़लाइन"
+        }
       },
       "presence": {
         "online": "ऑनलाइन",
@@ -461,16 +555,8 @@
         "offline": "ऑफ़लाइन"
       },
       "notes": {
-        "tab": "नोट्स",
-        "label": "नया आंतरिक नोट",
-        "placeholder": "केवल आपकी टीम देख सके ऐसा नोट लिखें",
-        "hint": "Ctrl+Enter नोट जोड़ता है।",
-        "add": "नोट जोड़ें",
-        "addFailed": "नोट सहेजा नहीं जा सका।",
-        "loading": "नोट्स लोड हो रहे हैं",
-        "empty": "अभी कोई नोट नहीं है।",
-        "unknownAuthor": "एक साथी",
-        "delete": "यह नोट हटाएं"
+        "tab": "संपर्क के नोट्स",
+        "noContact": "इस बातचीत में नोट जोड़ने के लिए कोई संपर्क नहीं है।"
       },
       "timeline": {
         "tab": "टाइमलाइन",
@@ -496,6 +582,8 @@
           "tag_removed": "{actor} द्वारा टैग हटाया गया",
           "first_response": "पहला उत्तर भेजा गया",
           "sla_breach": "उत्तर की समय सीमा चूक गई",
+          "spam_flagged": "{actor} ने स्पैम के रूप में चिह्नित किया",
+          "escalated": "बढ़ाया गया",
           "unknown": "{actor} द्वारा {what}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "कोई संदेश नहीं",
         "status": {
           "open": "खुली",
-          "pending": "लंबित",
           "snoozed": "स्नूज़ की गई",
           "resolved": "हल की गई",
           "closed": "बंद",
@@ -620,6 +707,8 @@
         "format": "{label} में लाइन ब्रेक, टैब या लगातार चार स्पेस नहीं हो सकते।"
       },
       "reason": {
+        "other_number": "यह एक अलग WhatsApp नंबर का है, इसलिए इस बातचीत से भेजा नहीं जा सकता।",
+        "not_linked": "इस बातचीत का चैनल किसी WhatsApp नंबर से जुड़ा नहीं है, इसलिए इससे कोई टेम्पलेट नहीं भेजा जा सकता।",
         "paused": "WhatsApp द्वारा रोका गया। रोक हटने के बाद फिर से भेजा जा सकता है।",
         "media_header": "इसमें इमेज, वीडियो या दस्तावेज़ हेडर है, जिसे अभी इनबॉक्स से नहीं भेजा जा सकता।",
         "header_variable": "इसके हेडर में एक वेरिएबल है, जिसे अभी इनबॉक्स से नहीं भरा जा सकता।",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "ईमेल"
+        "email": "ईमेल",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "संपर्क",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "प्राथमिकता",
       "snooze": "स्नूज़ करें",
-      "wake": "अभी जगाएँ"
+      "wake": "अभी जगाएँ",
+      "markSpam": "स्पैम के रूप में चिह्नित करें",
+      "notSpam": "स्पैम नहीं है"
     },
     "bulk": {
       "barLabel": "सामूहिक कार्रवाइयाँ",
@@ -959,7 +1053,8 @@
       "tagAdd": "टैग जोड़ें",
       "tagRemove": "टैग हटाएँ",
       "onLeave": "छुट्टी पर",
-      "onLeaveUntil": "{date} तक छुट्टी पर"
+      "onLeaveUntil": "{date} तक छुट्टी पर",
+      "spam": "स्पैम के रूप में चिह्नित करें"
     },
     "tags": {
       "tag": "टैग",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: चूक गया (समय-सीमा {time} थी)",
       "titleOpen": "{kind}: समय-सीमा {time}"
+    },
+    "channelType": {
+      "official": "आधिकारिक",
+      "unofficial": "अनधिकृत",
+      "officialFull": "आधिकारिक (WhatsApp Cloud API)",
+      "unofficialFull": "अनधिकृत (QR / Baileys)"
     }
   }
 }

@@ -232,6 +232,10 @@ export class FixtureCatalogProvider implements CatalogProvider {
     this.guard('listWabaCatalogs', a);
     return this.state.wabaCatalogs.get(wabaId) ?? [];
   }
+  async exchangeLoginCode(code: string): Promise<string> {
+    this.state.takeFailure('exchangeLoginCode');
+    return `fixture-catalog-token-${code}`;
+  }
   async createCatalog(a: GraphAuth, businessId: string, name: string): Promise<string | null> {
     this.guard('createCatalog', a);
     const id = this.state.nextId('cat');

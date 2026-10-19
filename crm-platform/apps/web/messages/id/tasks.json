@@ -100,7 +100,8 @@
       "views": {
         "list": "Daftar",
         "board": "Board menurut tenggat"
-      }
+      },
+      "linkCompany": "Sebuah perusahaan"
     },
     "table": {
       "scrollArea": "Tabel tugas",
@@ -126,7 +127,8 @@
       "open": "Buka",
       "edit": "Edit",
       "delete": "Hapus",
-      "unassigned": "Belum ditetapkan"
+      "unassigned": "Belum ditetapkan",
+      "followUpBadge": "Tindak lanjut"
     },
     "bulk": {
       "label": "Tindakan untuk tugas yang dipilih",
@@ -204,7 +206,8 @@
         "notesTooLong": "Catatan terlalu panjang (maksimal 5000 karakter).",
         "dueInvalid": "Tanggal tersebut tidak valid.",
         "assigneeInvalid": "Orang tersebut bukan anggota aktif workspace ini."
-      }
+      },
+      "company": "Perusahaan"
     },
     "drawer": {
       "loading": "Memuat tugas",
@@ -268,7 +271,8 @@
       "searching": "Mencari",
       "unavailable": "Pencarian tidak tersedia saat ini.",
       "none": "Tidak ada yang cocok.",
-      "unlink": "Hapus tautan"
+      "unlink": "Hapus tautan",
+      "searchCompany": "Cari perusahaan"
     },
     "errors": {
       "network": "Kami tidak dapat terhubung ke server. Periksa koneksi Anda lalu coba lagi.",
@@ -323,7 +327,21 @@
       "loadMore": "Muat lainnya",
       "loadMoreDone": "Muat lebih banyak yang selesai",
       "showDone": "Tampilkan yang selesai",
-      "hideDone": "Sembunyikan yang selesai"
+      "hideDone": "Sembunyikan yang selesai",
+      "gone": "Rekaman tempat tugas-tugas ini berada sudah tidak tersedia."
+    },
+    "inline": {
+      "addTask": "Tambah tugas",
+      "rowLabel": "Tambah tugas",
+      "titleLabel": "Judul tugas",
+      "titlePlaceholder": "Judul tugas, lalu tekan Enter untuk menyimpan",
+      "due": "Tanggal dan waktu tenggat",
+      "assignee": "Tetapkan ke",
+      "priority": "Prioritas (opsional)",
+      "hint": "Enter menyimpan, Escape menutup.",
+      "save": "Tambah tugas",
+      "cancel": "Batal",
+      "failed": "Tugas tidak dapat disimpan. Teks Anda dikembalikan ke kotak input."
     }
   }
 }

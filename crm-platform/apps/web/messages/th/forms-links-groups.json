@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "ฟอร์ม WhatsApp",
+      "links": "ลิงก์ WhatsApp"
+    },
+    "errors": {
+      "generic": "เกิดข้อผิดพลาด โปรดลองใหม่อีกครั้ง",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "เชื่อมต่อหมายเลข WhatsApp Cloud API เพื่อใช้งานฟอร์ม",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "ไม่มีหมายเลข WhatsApp Cloud API ที่เชื่อมต่อแล้วมีข้อมูลรับรองที่ใช้งานได้",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta ปฏิเสธนิยามของฟอร์มนี้",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "บัญชี WhatsApp Business ของคุณต้องผ่านการยืนยันของ Meta ก่อนจึงจะเผยแพร่ฟอร์มได้",
+      "WFL_FORM_PUBLISH_FAILED": "Meta ไม่สามารถเผยแพร่ฟอร์มนี้ได้",
+      "WFL_LINK_NOT_LIVE": "ลิงก์นี้หยุดชั่วคราวหรือหมดอายุแล้ว",
+      "ROW_VERSION_CONFLICT": "มีการเปลี่ยนแปลงรายการนี้ที่อื่น โปรดโหลดใหม่และลองอีกครั้ง",
+      "VALIDATION_FAILED": "ตรวจสอบช่องที่เน้นไว้แล้วลองใหม่อีกครั้ง",
+      "PLAN_FEATURE_LOCKED": "อัปเกรดแพ็กเกจของคุณเพื่อใช้ฟีเจอร์นี้"
+    },
+    "forms": {
+      "heading": "ฟอร์ม WhatsApp",
+      "intro": "สร้างฟอร์มที่ลูกค้ากรอกได้ภายใน WhatsApp โดยตรง จากนั้นส่งจากโฟลว์และตรวจสอบคำตอบได้ที่นี่",
+      "loading": "กำลังโหลดฟอร์ม…",
+      "retry": "ลองใหม่",
+      "create": {
+        "cta": "สร้างฟอร์มใหม่",
+        "creating": "กำลังสร้าง…",
+        "defaultTitle": "ฟอร์มไม่มีชื่อ",
+        "defaultField": "ชื่อ-นามสกุล"
+      },
+      "stats": {
+        "all": "ฟอร์มทั้งหมด",
+        "published": "เผยแพร่แล้ว",
+        "draft": "ฉบับร่าง",
+        "submissions": "คำตอบ"
+      },
+      "empty": {
+        "title": "ยังไม่มีฟอร์ม",
+        "description": "สร้างฟอร์ม แล้วส่งจากขั้นตอนฟอร์ม WhatsApp ในโฟลว์"
+      },
+      "table": {
+        "form": "ฟอร์ม",
+        "type": "ประเภท",
+        "fields": "ฟิลด์",
+        "submissions": "คำตอบ"
+      },
+      "status": {
+        "draft": "ฉบับร่าง",
+        "published": "เผยแพร่แล้ว",
+        "paused": "หยุดชั่วคราว"
+      },
+      "audience": {
+        "lead_capture": "เก็บข้อมูลลูกค้าเป้าหมาย",
+        "survey": "แบบสำรวจ",
+        "appointment_booking": "จองนัดหมาย",
+        "customer_support": "ฝ่ายสนับสนุนลูกค้า",
+        "sign_up": "สมัครสมาชิก",
+        "other": "อื่น ๆ"
+      },
+      "row": {
+        "edit": "แก้ไข",
+        "duplicate": "ทำสำเนา",
+        "delete": "ลบ"
+      },
+      "confirm": {
+        "deleteTitle": "ลบฟอร์มนี้ใช่หรือไม่?",
+        "deleteMessage": "โหนดโฟลว์ที่ใช้งานอยู่ซึ่งอ้างอิงถึงฟอร์มนี้จะใช้งานไม่ได้",
+        "deleteConfirm": "ลบ",
+        "cancel": "ยกเลิก"
+      },
+      "notice": {
+        "saved": "บันทึกแล้ว",
+        "published": "เผยแพร่ไปยัง WhatsApp แล้ว"
+      },
+      "builder": {
+        "back": "กลับไปที่ฟอร์ม",
+        "untitled": "ฟอร์มไม่มีชื่อ",
+        "saving": "กำลังบันทึก…",
+        "saveDraft": "บันทึกฉบับร่าง",
+        "savePublish": "บันทึกและเผยแพร่",
+        "publishing": "กำลังเผยแพร่…",
+        "basics": "ข้อมูลพื้นฐานของฟอร์ม",
+        "title": "ชื่อฟอร์ม",
+        "audienceType": "ประเภท",
+        "purpose": "วัตถุประสงค์",
+        "sendButtonLabel": "ป้ายข้อความปุ่มส่ง",
+        "thankYouNote": "ข้อความขอบคุณ",
+        "screens": "หน้าจอ",
+        "addScreen": "เพิ่มหน้าจอ",
+        "removeScreen": "ลบหน้าจอ",
+        "screenN": "หน้าจอ {n}",
+        "defaultField": "ชื่อ-นามสกุล",
+        "newFieldLabel": "ฟิลด์ใหม่",
+        "fieldKind": "ประเภทฟิลด์",
+        "fieldLabel": "ป้ายชื่อ",
+        "required": "จำเป็นต้องกรอก",
+        "removeField": "ลบ",
+        "options": "ตัวเลือก (คั่นด้วยจุลภาค)",
+        "optionsPlaceholder": "ตัวเลือก 1, ตัวเลือก 2, ตัวเลือก 3",
+        "mapsTo": "แมปไปยัง",
+        "mapsToHint": "บันทึกคำตอบนี้ลงในคุณสมบัติของผู้ติดต่อเมื่อส่งแบบฟอร์ม",
+        "mapsToNone": "ไม่บันทึกลงคุณสมบัติของผู้ติดต่อ",
+        "mapsToSystemGroup": "ฟิลด์ผู้ติดต่อ",
+        "mapsToCustomGroup": "คุณสมบัติแบบกำหนดเอง",
+        "mapsToSystem": {
+          "name": "ชื่อเต็ม",
+          "first_name": "ชื่อ",
+          "last_name": "นามสกุล",
+          "email": "อีเมล",
+          "title": "ตำแหน่ง",
+          "language": "ภาษา",
+          "address": "ที่อยู่"
+        },
+        "mapsToPrivacyGroup": "ความเป็นส่วนตัวและการยินยอม",
+        "mapsToPrivacy": {
+          "age": "อายุ (ตรวจสอบผู้เยาว์)",
+          "date_of_birth": "วันเกิด (ตรวจสอบผู้เยาว์)",
+          "consent_marketing": "การยินยอมการตลาด (WhatsApp)",
+          "consent_service": "ข้อตกลงบริการ (ไม่ใช่การตลาด)"
+        }
+      },
+      "fieldKind": {
+        "heading": "หัวข้อ",
+        "short_text": "ข้อความสั้น",
+        "paragraph": "ข้อความยาว",
+        "email": "อีเมล",
+        "phone_number": "หมายเลขโทรศัพท์",
+        "number": "ตัวเลข",
+        "date": "วันที่",
+        "dropdown": "เมนูแบบเลื่อนลง",
+        "radio_buttons": "ปุ่มตัวเลือกเดียว",
+        "checkbox": "ช่องทำเครื่องหมาย"
+      },
+      "submissions": {
+        "heading": "คำตอบ",
+        "metaFlowId": "Meta Flow ID: {id}",
+        "export": "ส่งออกเป็น CSV",
+        "empty": {
+          "title": "ยังไม่มีคำตอบ",
+          "description": "คำตอบจะแสดงที่นี่เมื่อฟอร์มนี้ถูกส่งจากโฟลว์และมีผู้กรอกข้อมูล"
+        },
+        "table": {
+          "submitted": "วันที่ส่ง",
+          "contact": "ผู้ติดต่อ",
+          "phone": "โทรศัพท์"
+        }
+      }
+    },
+    "links": {
+      "heading": "ลิงก์ WhatsApp",
+      "intro": "สร้างลิงก์ที่ติดตามได้ซึ่งเปิด WhatsApp พร้อมข้อความที่กรอกไว้ล่วงหน้า — เหมาะสำหรับโฆษณา ประวัติโปรไฟล์ และ QR โค้ด",
+      "loading": "กำลังโหลดลิงก์…",
+      "retry": "ลองใหม่",
+      "searchPlaceholder": "ค้นหาด้วยชื่อหรือลิงก์",
+      "create": {
+        "cta": "สร้างลิงก์ใหม่"
+      },
+      "stats": {
+        "all": "ลิงก์ทั้งหมด",
+        "live": "ใช้งานอยู่",
+        "totalClicks": "คลิกทั้งหมด",
+        "avgClicks": "คลิกเฉลี่ย / ลิงก์"
+      },
+      "tabs": {
+        "all": "ทั้งหมด",
+        "live": "ใช้งานอยู่",
+        "paused": "หยุดชั่วคราว"
+      },
+      "status": {
+        "live": "ใช้งานอยู่",
+        "paused": "หยุดชั่วคราว"
+      },
+      "empty": {
+        "title": "ยังไม่มีลิงก์",
+        "description": "สร้างลิงก์เพื่อแชร์ในโฆษณา ประวัติโปรไฟล์ หรือ QR โค้ด"
+      },
+      "table": {
+        "link": "ลิงก์",
+        "destination": "ปลายทาง",
+        "clicks": "คลิก",
+        "lastClicked": "คลิกล่าสุด"
+      },
+      "row": {
+        "open": "เปิด",
+        "copy": "คัดลอก",
+        "copied": "คัดลอกแล้ว!",
+        "edit": "แก้ไข",
+        "duplicate": "ทำสำเนา",
+        "delete": "ลบ"
+      },
+      "confirm": {
+        "deleteTitle": "ลบลิงก์นี้ใช่หรือไม่?",
+        "deleteMessage": "ลิงก์แบบสั้นจะใช้งานไม่ได้ทันที",
+        "deleteConfirm": "ลบ",
+        "cancel": "ยกเลิก"
+      },
+      "notice": {
+        "saved": "บันทึกแล้ว",
+        "copyFailed": "ไม่สามารถคัดลอกลิงก์ได้"
+      },
+      "builder": {
+        "back": "กลับไปที่ลิงก์",
+        "newHeading": "ลิงก์ใหม่",
+        "step": {
+          "destination": "ปลายทาง",
+          "message": "ข้อความเริ่มต้น",
+          "tracking": "การติดตาม"
+        },
+        "name": "ชื่อ",
+        "status": "สถานะ",
+        "countryCode": "รหัสประเทศ",
+        "phoneNumber": "หมายเลขโทรศัพท์",
+        "welcomeMessage": "ข้อความเริ่มต้น",
+        "welcomeMessageHint": "กรอกไว้ล่วงหน้าในแชทเมื่อมีผู้แตะลิงก์",
+        "slug": "ลิงก์แบบสั้น",
+        "slugHint": "ใช้ได้เฉพาะตัวอักษร ตัวเลข และยัติภังค์ เว้นว่างไว้เพื่อสร้างอัตโนมัติ",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "วันหมดอายุ",
+        "utmSource": "UTM Source",
+        "utmMedium": "UTM Medium",
+        "utmCampaign": "UTM Campaign",
+        "previous": "ก่อนหน้า",
+        "next": "ถัดไป",
+        "mint": "สร้างลิงก์",
+        "save": "บันทึก",
+        "saving": "กำลังบันทึก…",
+        "fixErrors": "ตรวจสอบช่องปลายทางและลิงก์แบบสั้น",
+        "mintedHeading": "ลิงก์ของคุณ",
+        "shortUrl": "ลิงก์แบบสั้น",
+        "waUrl": "ลิงก์ WhatsApp",
+        "qrAlt": "QR โค้ดสำหรับลิงก์นี้"
+      },
+      "public": {
+        "missingTitle": "ไม่พบลิงก์นี้",
+        "missingBody": "ลิงก์นี้ไม่มีอยู่หรือถูกลบไปแล้ว",
+        "goneTitle": "ลิงก์ไม่ใช้งานแล้ว",
+        "goneBody": "ลิงก์นี้ถูกหยุดชั่วคราวหรือหมดอายุแล้ว",
+        "errorTitle": "เกิดข้อผิดพลาด",
+        "errorBody": "เราไม่สามารถเปิดลิงก์นี้ได้ โปรดลองอีกครั้ง"
+      }
+    }
+  }
+}

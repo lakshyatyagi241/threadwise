@@ -1,0 +1,63 @@
+{
+  "commit": "b9dd0f8db302db03d79a2d9c0eb3a7334182f793",
+  "bullmq": "6.3.12",
+  "redis": "7.0.15",
+  "ioredis": "6.0.0",
+  "node": "v22.22.2",
+  "host": {
+    "platform": "linux",
+    "release": "7.0.0-38-generic",
+    "cpus": 22,
+    "cpuModel": "Intel(R) Core(TM) Ultra 7 155H",
+    "memGB": 30.8
+  },
+  "redisConfig": {
+    "appendonly": "no (main scenarios)",
+    "maxmemoryPolicy": "noeviction",
+    "singleInstance": true
+  },
+  "generatedAt": "2026-10-18T14:05:16.654Z",
+  "durationMultiplier": 1,
+  "caveat": "Synthetic handlers on one machine that also hosts producer, workers and Redis. Numbers are relative, queue-layer ceilings, not production capacity.",
+  "reproduce": "node tools/queue-capacity/bench.mjs --scenarios sweep,drain,profiles,isolation,fairness,provider,crash,redis,soak --duration 1 --soak-seconds 150",
+  "crash": [
+    {
+      "kills": 1,
+      "jobs": 200,
+      "recoverySeconds": 2.1,
+      "completed": 200,
+      "failed": 0,
+      "failedByStallLimit": 0,
+      "lost": 0,
+      "stalledEventsInRecoveryWorker": 10,
+      "drained": true
+    },
+    {
+      "kills": 2,
+      "jobs": 200,
+      "recoverySeconds": 2.1,
+      "completed": 200,
+      "failed": 0,
+      "failedByStallLimit": 0,
+      "lost": 0,
+      "stalledEventsInRecoveryWorker": 20,
+      "drained": true
+    }
+  ],
+  "redisRestart": [
+    {
+      "persistence": "no persistence",
+      "accepted": 5000,
+      "survivedRestart": 0,
+      "lost": 5000,
+      "drainedAfterRestart": true
+    },
+    {
+      "persistence": "appendonly yes, everysec",
+      "accepted": 5000,
+      "survivedRestart": 5000,
+      "lost": 0,
+      "drainedAfterRestart": true
+    }
+  ]
+}

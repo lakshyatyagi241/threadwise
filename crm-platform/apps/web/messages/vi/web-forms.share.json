@@ -145,16 +145,26 @@
         "privacyUrl": "Liên kết chính sách quyền riêng tư",
         "privacyUrlHint": "Không bắt buộc. Hiển thị cạnh nội dung đồng ý. Phải bắt đầu bằng https://.",
         "privacyUrlHttps": "Dùng địa chỉ bắt đầu bằng https://.",
+        "termsUrl": "Liên kết điều khoản",
+        "termsUrlHint": "Tùy chọn. Hiển thị bên cạnh nội dung đồng ý và liên kết quyền riêng tư. Phải bắt đầu bằng https://.",
+        "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+        "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
         "required": "Phải đánh dấu để gửi",
         "requiredHint": "Tắt tùy chọn này nếu việc đồng ý là không bắt buộc.",
         "marketing": "Đăng ký nhận tiếp thị",
         "marketingHint": "Đánh dấu ô sẽ ghi nhận sự đồng ý nhận tiếp thị cho liên hệ. Ô không đánh dấu sẽ không đăng ký ai cả.",
-        "whatsappHint": "Bạn có định nhắn tin cho các liên hệ này qua WhatsApp không? Hãy dùng nội dung nói rõ điều đó và cách hủy đăng ký. Ô đã chọn được lưu làm bằng chứng, kèm đúng nội dung này và phiên bản của nó.",
-        "whatsappInsert": "Dùng nội dung đồng ý nhận tin WhatsApp",
-        "whatsappWording": "Tôi đồng ý nhận cập nhật và ưu đãi qua WhatsApp. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
-        "coversSms": "Nội dung bao gồm SMS",
-        "coversSmsHint": "Chỉ bật khi nội dung phía trên cho biết có thể liên hệ qua SMS. Khi thu thập số điện thoại, SMS được ghi nhận cùng với WhatsApp và email.",
-        "serviceHint": "Dòng này không phải tiếp thị. Ô được chọn được lưu làm bằng chứng người đó đồng ý được liên hệ về yêu cầu của họ (chỉ tin nhắn dịch vụ), với đúng nội dung này và phiên bản của nó. Không bao giờ đăng ký ai vào tiếp thị."
+        "serviceHint": "Dòng này không phải tiếp thị. Ô được chọn được lưu làm bằng chứng người đó đồng ý được liên hệ về yêu cầu của họ (chỉ tin nhắn dịch vụ), với đúng nội dung này và phiên bản của nó. Không bao giờ đăng ký ai vào tiếp thị.",
+        "statement": "Tôi đồng ý nhận cập nhật và ưu đãi qua {channels}. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "email"
+        },
+        "channelsLabel": "Kênh mà sự đồng ý này bao gồm",
+        "channelsHint": "Khách chỉ được đăng ký trên các kênh được chọn tại đây và nội dung đồng ý sẽ nêu tên các kênh đó. Một kênh chỉ được dùng khi biểu mẫu thu thập số điện thoại hoặc email tương ứng.",
+        "channelsUse": "Cập nhật nội dung theo các kênh này",
+        "channelNeedsPhone": "Biểu mẫu này không có trường số điện thoại nên sẽ không ai được đăng ký kênh này qua nó.",
+        "channelNeedsEmail": "Biểu mẫu này không có trường email nên sẽ không ai được đăng ký kênh này qua nó."
       },
       "crm": {
         "title": "Trong CRM",
@@ -289,6 +299,41 @@
           "held": "{count, plural, other {# lượt gửi đang bị giữ lại vì là spam.}}",
           "review": "Xem lại"
         }
+      },
+      "age": {
+        "title": "Kiểm tra tuổi",
+        "description": "Chỉ hỏi tuổi ở nơi bạn cần. Với hầu hết biểu mẫu, hãy để tắt.",
+        "enable": "Kiểm tra tuổi của khách truy cập",
+        "enableHint": "Mặc định tắt. Hãy bật nếu quy định của không gian làm việc yêu cầu, hoặc doanh nghiệp của bạn phục vụ người chưa thành niên. Biểu mẫu không bao giờ cho khách biết câu trả lời nào là hợp lệ.",
+        "mode": "Cách hỏi",
+        "modes": {
+          "declaration": "Một ô đánh dấu: “Tôi xác nhận mình ít nhất N tuổi”",
+          "age": "Hỏi tuổi của họ",
+          "dob": "Hỏi ngày sinh của họ"
+        },
+        "modeHints": {
+          "declaration": "Không lưu bất kỳ thông tin nào về tuổi. Ít dữ liệu nhất.",
+          "age": "Một số nguyên. Dùng để kiểm tra; chỉ lưu kết quả.",
+          "dob": "Được lưu vào liên hệ dưới dạng ngày sinh. Chỉ dùng khi bạn cần ngày sinh."
+        },
+        "minAge": "Tuổi tối thiểu",
+        "minAgeHint": "Để trống để dùng độ tuổi của không gian làm việc ({age}). Từ 1 đến 21.",
+        "minAgeInvalid": "Nhập một số nguyên từ {min} đến {max}.",
+        "whenUnder": "Nếu khách truy cập dưới độ tuổi đó",
+        "actions": {
+          "block": "Không chấp nhận lượt gửi",
+          "flag": "Chấp nhận, đánh dấu liên hệ là chưa thành niên, không ghi nhận đồng ý nhận tiếp thị",
+          "guardian": "Như trên, và yêu cầu thông tin cha mẹ hoặc người giám hộ"
+        },
+        "actionHints": {
+          "block": "Không lưu gì và khách truy cập thấy một thông báo trung lập. Với ô đánh dấu, khách chỉ cần đánh dấu vào ô.",
+          "flag": "Liên hệ được đánh dấu là chưa thành niên. Dòng đồng ý của lượt gửi này được lưu như hiển thị, nhưng không ghi nhận sự đồng ý nhận tiếp thị.",
+          "guardian": "Tên và thông tin liên hệ của cha mẹ hoặc người giám hộ được lưu cùng lượt gửi và trên dòng thời gian của liên hệ. Sự đồng ý của họ không được ghi nhận cho đến khi có người ghi nhận trên thẻ Đồng ý nhận tin."
+        },
+        "declarationBlockNote": "Với ô đánh dấu và cài đặt này, không ai bị từ chối: phải đánh dấu ô thì mới gửi được biểu mẫu.",
+        "childrenUnanswered": "Trung tâm tuân thủ của bạn chưa trả lời câu hỏi về trẻ em, nên hoạt động tiếp thị tới người chưa thành niên đã được đánh dấu vẫn được ghi nhận nhưng không bị giữ lại.",
+        "childrenLink": "Mở Trung tâm tuân thủ",
+        "neutralNote": "Đừng ghi tuổi tối thiểu trong văn bản trợ giúp của trường hoặc trong phần mô tả: trang không nên cho biết câu trả lời nào là hợp lệ."
       }
     }
   }

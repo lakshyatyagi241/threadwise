@@ -832,7 +832,10 @@
         "placeholder": "例如：我的店铺",
         "button": "创建目录",
         "needName": "请输入目录名称。",
-        "done": "目录已创建并连接。"
+        "done": "目录已创建并连接。",
+        "loginCancelled": "Meta 登录在完成前被关闭。请重试并批准目录访问权限。",
+        "sdkFailed": "无法加载 Meta 登录。请检查网络连接或广告拦截器，然后刷新页面。",
+        "sdkLoading": "Meta 登录仍在加载。请稍后重试。"
       },
       "rename": {
         "label": "目录名称",

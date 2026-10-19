@@ -29,7 +29,8 @@
       "priorityChanged": "Prioriteit bijgewerkt",
       "snoozed": "Gesprek uitgesteld",
       "tagAdded": "Tag toegevoegd",
-      "tagRemoved": "Tag verwijderd"
+      "tagRemoved": "Tag verwijderd",
+      "spammed": "Gesprek als spam gemarkeerd."
     },
     "list": {
       "title": "Inbox",
@@ -44,12 +45,8 @@
         "unassigned": "Niet toegewezen",
         "unread": "Ongelezen"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Open",
-      "statusAll": "Alle statussen",
       "status": {
         "open": "Open",
-        "pending": "In behandeling",
         "snoozed": "Gesnoozed",
         "resolved": "Opgelost",
         "closed": "Opgelost",
@@ -61,7 +58,6 @@
         "high": "Hoog",
         "urgent": "Urgent"
       },
-      "channelFilter": "Kanaal",
       "allChannels": "Alle kanalen",
       "archived": "Gearchiveerd",
       "backToInbox": "Terug naar de inbox",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Selecteren",
-      "selectDone": "Klaar"
+      "selectDone": "Klaar",
+      "filters": {
+        "open": "Filters",
+        "openActive": "Filters ({count} aan)",
+        "title": "Filters",
+        "close": "Sluiten",
+        "reset": "Herstellen",
+        "cancel": "Annuleren",
+        "apply": "Toepassen",
+        "status": "Chatstatus",
+        "statusHint": "Zonder keuze worden open chats getoond.",
+        "conversation": "Gesprek",
+        "any": "Alle",
+        "assigned": "Toegewezen",
+        "unassigned": "Niet toegewezen",
+        "unattended": "Onbeantwoord",
+        "labels": "Tags",
+        "channels": "Kanalen",
+        "agents": "Medewerkers",
+        "sortBy": "Sorteren op",
+        "recent": "Recent",
+        "old": "Oud",
+        "dateRange": "Periode (laatste activiteit)",
+        "from": "Van",
+        "to": "Tot",
+        "select": "Kies een optie",
+        "search": "Zoeken",
+        "noMatch": "Geen resultaten",
+        "today": "Vandaag",
+        "last7": "Laatste 7 dagen",
+        "last30": "Laatste 30 dagen",
+        "thisMonth": "Deze maand",
+        "clearDates": "Datums wissen",
+        "previousMonth": "Vorige maand",
+        "nextMonth": "Volgende maand"
+      },
+      "rowMenu": "Meer acties voor {name}",
+      "priorityMenu": "Prioriteit",
+      "statusFilter": "Status",
+      "statusOpen": "Open",
+      "statusAll": "Alle statussen",
+      "channelFilter": "Kanaal",
+      "selectRow": "{name} selecteren",
+      "snoozedFor": "Gesnoozed · {left}",
+      "snoozeLeft": {
+        "due": "nu",
+        "minutes": "{count, plural, one {# minuut} other {# minuten}}",
+        "hours": "{count, plural, one {# uur} other {# uur}}",
+        "days": "{count, plural, one {# dag} other {# dagen}}"
+      },
+      "unsnoozesAt": "Wordt weer open {time}"
     },
     "status": {
       "received": "Ontvangen",
@@ -128,6 +174,7 @@
       "mediaNotFound": "De bijlage is verlopen of verwijderd. Voeg hem opnieuw toe.",
       "statusInvalid": "Die wijziging is niet toegestaan vanuit de huidige status van het gesprek.",
       "assigneeInvalid": "Dit gesprek kan niet aan die persoon worden toegewezen.",
+      "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "forbidden": "Je hebt geen toestemming om dit te doen.",
       "rateLimited": "Te veel verzoeken. Wacht even en probeer het opnieuw.",
       "simulatorDisabled": "De kanaalsimulator is op deze server uitgeschakeld.",
@@ -232,7 +279,11 @@
         "undone": "Fasewijziging ongedaan gemaakt: terug naar {stage}.",
         "undoneToast": "Fase teruggezet naar {stage}.",
         "couldNotUndo": "Deze wijziging kan niet meer ongedaan worden gemaakt: het contact is doorgegaan of het is al ongedaan gemaakt."
-      }
+      },
+      "heldUntil": "Vastgehouden tot {when}",
+      "heldWhy": "Dit marketingbericht wacht tot uw stille uren voorbij zijn. Het wordt dan verstuurd, tenzij het contact zich ondertussen heeft afgemeld.",
+      "templateSent": "Sjabloon “{name}” verzonden via {channel}",
+      "templateSentPlain": "Sjabloon “{name}” verzonden"
     },
     "media": {
       "openImage": "Afbeelding {name} openen",
@@ -276,6 +327,8 @@
         "sendTemplate": "Een sjabloon verzenden"
       },
       "readOnly": "Je kunt dit gesprek lezen, maar je hebt geen toestemming om te antwoorden.",
+      "resolvedBanner": "Dit gesprek is opgelost. Heropen het om te antwoorden.",
+      "assignedToOther": "Deze chat is toegewezen aan een andere medewerker. Wijs hem eerst aan jezelf toe om te antwoorden.",
       "typing": "{count, plural, one {Een teamgenoot is aan het typen} other {# teamgenoten zijn aan het typen}}",
       "messagesLabel": "Berichten",
       "loadOlder": "Eerdere berichten laden",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Nieuw bericht: {text}",
       "attachment": "een bijlage",
       "jumpLatest": "Naar het laatste bericht",
-      "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}"
+      "jumpLatestNew": "{count, plural, one {# nieuw bericht} other {# nieuwe berichten}}",
+      "searchOpen": "Zoeken in deze chat",
+      "searchPlaceholder": "Zoeken in deze chat",
+      "searchCount": "{current} van {total}",
+      "searchNone": "Geen resultaten",
+      "searchPrev": "Vorige treffer",
+      "searchNext": "Volgende treffer",
+      "searchClose": "Zoeken sluiten"
     },
     "groupThread": {
       "openGroup": "Groep openen",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Opgeslagen antwoorden",
-      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt."
+      "savedReplyIssues": "Niet ingevuld en gelaten zoals geschreven ({count}): {list}. Los dit op voordat u verzendt.",
+      "toolbar": {
+        "label": "Berichtopmaak",
+        "bold": "Vet",
+        "italic": "Cursief",
+        "underline": "Onderstrepen",
+        "strike": "Doorgestreept",
+        "bullets": "Lijst met opsommingstekens",
+        "numbers": "Genummerde lijst",
+        "ai": {
+          "open": "Slimme AI-assistent",
+          "noModel": "Voor deze werkruimte is geen AI-model ingeschakeld",
+          "title": "Slimme AI-assistent",
+          "condense": "Inkorten",
+          "condenseHint": "Maak de tekst korter en bondiger",
+          "fix": "Grammatica corrigeren",
+          "fixHint": "Grammatica- en spelfouten verbeteren",
+          "positive": "Positieve toon",
+          "positiveHint": "Maak de tekst positiever en opgewekter",
+          "translate": "Vertalen",
+          "translateHint": "Vertalen naar andere talen",
+          "selectLanguage": "Taal kiezen",
+          "searchLanguages": "Talen zoeken…",
+          "noLanguage": "Geen taal gevonden",
+          "working": "Bezig…",
+          "empty": "Schrijf eerst een bericht.",
+          "failed": "De AI kon de tekst niet aanpassen. Probeer het opnieuw."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notities en tijdlijn",
@@ -452,7 +540,13 @@
         "pickTeam": "Kies een team voor dit gesprek",
         "noTeam": "Geen team",
         "onLeave": "Met verlof",
-        "onLeaveUntil": "Met verlof tot {date}"
+        "onLeaveUntil": "Met verlof tot {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Afwezig",
+          "busy": "Bezet",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",
@@ -461,16 +555,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notities",
-        "label": "Nieuwe interne notitie",
-        "placeholder": "Schrijf een notitie die alleen je team kan zien",
-        "hint": "Ctrl+Enter voegt de notitie toe.",
-        "add": "Notitie toevoegen",
-        "addFailed": "De notitie kon niet worden opgeslagen.",
-        "loading": "Notities laden",
-        "empty": "Nog geen notities.",
-        "unknownAuthor": "Een teamgenoot",
-        "delete": "Deze notitie verwijderen"
+        "tab": "Contactnotities",
+        "noContact": "Dit gesprek heeft geen contact waaraan notities gekoppeld kunnen worden."
       },
       "timeline": {
         "tab": "Tijdlijn",
@@ -496,6 +582,8 @@
           "tag_removed": "Tag verwijderd door {actor}",
           "first_response": "Eerste antwoord verzonden",
           "sla_breach": "Reactietermijn verlopen",
+          "spam_flagged": "Als spam gemarkeerd door {actor}",
+          "escalated": "Geëscaleerd",
           "unknown": "{what} door {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Geen berichten",
         "status": {
           "open": "Open",
-          "pending": "In behandeling",
           "snoozed": "Gesnoozed",
           "resolved": "Opgelost",
           "closed": "Gesloten",
@@ -620,6 +707,8 @@
         "format": "{label} mag geen regeleinde, tab of vier spaties op rij bevatten."
       },
       "reason": {
+        "other_number": "Hoort bij een ander WhatsApp-nummer en kan daarom niet vanuit dit gesprek worden verzonden.",
+        "not_linked": "Het kanaal van dit gesprek is niet gekoppeld aan een WhatsApp-nummer, dus er kan geen sjabloon vanuit worden verzonden.",
         "paused": "Gepauzeerd door WhatsApp. Het kan opnieuw worden verzonden zodra de pauze voorbij is.",
         "media_header": "Heeft een koptekst met afbeelding, video of document, die nog niet vanuit de inbox kan worden verzonden.",
         "header_variable": "Heeft een variabele in de koptekst, die nog niet vanuit de inbox kan worden ingevuld.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-mail"
+        "email": "E-mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Contact",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Prioriteit",
       "snooze": "Uitstellen",
-      "wake": "Nu terugzetten"
+      "wake": "Nu terugzetten",
+      "markSpam": "Markeer als spam",
+      "notSpam": "Geen spam"
     },
     "bulk": {
       "barLabel": "Bulkacties",
@@ -959,7 +1053,8 @@
       "tagAdd": "Tag toevoegen",
       "tagRemove": "Tag verwijderen",
       "onLeave": "met verlof",
-      "onLeaveUntil": "met verlof tot {date}"
+      "onLeaveUntil": "met verlof tot {date}",
+      "spam": "Markeer als spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: gemist (was uiterlijk {time})",
       "titleOpen": "{kind}: uiterlijk {time}"
+    },
+    "channelType": {
+      "official": "Officieel",
+      "unofficial": "Onofficieel",
+      "officialFull": "Officieel (WhatsApp Cloud API)",
+      "unofficialFull": "Onofficieel (QR / Baileys)"
     }
   }
 }

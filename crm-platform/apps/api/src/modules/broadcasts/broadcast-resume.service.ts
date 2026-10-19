@@ -18,6 +18,7 @@ interface Paused {
 /**
  * Resumes the broadcasts that can resume on their own (TW-BCAST-022). Reference had no resume at all.
  *  - a daily cap: after its `resumeAfter` instant (midnight UTC);
+ *  - the quiet hours (BL-177): after the `resumeAfter` instant, when the first held recipient may be messaged;
  *  - the emergency halt: once the halt is lifted.
  * A broadcast paused any other way waits for a person (`POST /v2/broadcasts/:id/resume`).
  *
@@ -63,7 +64,7 @@ export class BroadcastResumeService {
       let resumed = 0;
       for (const p of res.rows as unknown as Paused[]) {
         const ready =
-          (p.reason === 'daily_cap' &&
+          ((p.reason === 'daily_cap' || p.reason === 'quiet_hours') &&
             p.resume_after !== null &&
             new Date(p.resume_after).getTime() <= now.getTime()) ||
           (p.reason === 'halt' && !halted);

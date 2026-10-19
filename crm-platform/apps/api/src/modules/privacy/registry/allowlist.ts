@@ -47,6 +47,9 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
     "A staff member's acknowledgement of the personal-WhatsApp risk (user agent as evidence).",
   ),
   social_identities: staff("A staff member's social login identity (email)."),
+  google_consent_requests: staff(
+    "A staff member's Google account consent in flight: one row per press of Connect, holding the Google email and the sealed tokens of the staff member who pressed it (privacy spec D11).",
+  ),
   team_chat_invitations: staff(
     'Invitations of staff to team chat (invitee name and email); not a contact.',
   ),
@@ -59,11 +62,11 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
   appointment_calendar_connections: staff(
     'The calendar account a staff member connected (account email), not a booking invitee.',
   ),
+  appointment_microsoft_connections: staff(
+    'The Microsoft calendar account an admin connected for the workspace (account email), not a booking invitee. Same as appointment_calendar_connections.',
+  ),
   orders: staff(
     "The workspace's own billing orders to the platform (the billing contact's name and email); financial record kept by the platform (ADR-0028).",
-  ),
-  packages: notPersonal(
-    'Plan catalogue row; `access_email` is a plan access setting, not a person.',
   ),
 
   // ---- workspace: the workspace's own settings, accounts and business numbers -----------------------------------------------------
@@ -85,6 +88,9 @@ export const PRIVACY_ALLOWLIST: Readonly<Record<string, AllowEntry>> = {
     'The connected HubSpot portal account (email of the portal owner).',
   ),
   shopify_integrations: workspace('The connected Shopify shop (shop owner email).'),
+  compliance_settings: workspace(
+    "The workspace's own privacy officer and grievance officer contacts (name, email, phone, address) as set in the Compliance center: business contacts the workspace chose to publish, not a contact's data (privacy spec section 11).",
+  ),
   workspace_email_accounts: workspace(
     "The workspace's own sending mailboxes (addresses of the business).",
   ),

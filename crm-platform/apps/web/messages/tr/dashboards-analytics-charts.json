@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Bağlı",
           "shopify": "Bağlı",
-          "google_sheets": "API anahtarı verildi",
-          "meta_catalog": "Katalog bağlandı"
+          "meta_catalog": "Katalog bağlandı",
+          "google_sheets": "Google hesabı bağlandı"
         },
         "notConnected": "bağlı değil",
         "connect": "Bağlan",
@@ -405,6 +405,43 @@
           "sent": "Gönderildi → {peer}",
           "received": "{peer} kişisinden alındı",
           "empty": "Bu aralıkta yakın zamanlı etkinlik yok."
+        },
+        "loginDevices": {
+          "title": "Giriş cihazları",
+          "subtitle": "Bu dönemde çalışma alanına yapılan girişler; tarayıcı, sistem ve türe göre",
+          "active": "{n} şu an etkin",
+          "total": "{n, plural, one {# giriş} other {# giriş}}",
+          "empty": "Bu dönemde giriş yok.",
+          "activeLegend": "Şu an etkin",
+          "endedLegend": "Çıkış yapıldı veya süresi doldu",
+          "row": "{count} giriş, {active} şu an etkin",
+          "group": {
+            "browser": "Tarayıcı",
+            "os": "Sistem",
+            "kind": "Tür"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Diğer tarayıcı"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Diğer sistem"
+          },
+          "kind": {
+            "desktop": "Masaüstü",
+            "mobile": "Mobil",
+            "unknown": "Bilinmiyor"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "Kuyruklar",
         "name": "Kuyruk",
         "pending": "Bekleyen",
-        "failed": "Başarısız"
+        "failed": "Başarısız",
+        "lastFailure": "Son hatanın nedeni"
       },
       "clear": {
         "button": "Bekleyen işleri temizle",

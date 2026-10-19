@@ -200,14 +200,21 @@ describe('flbToRuntimeData: the field renames Reference delivered', () => {
     expect(shape('poll', {}).question).toBe('Pick one');
   });
 
-  it('location: lat / lng to latitude / longitude as numbers (a blank or bad value is 0)', () => {
+  it('location: lat / lng to latitude / longitude as numbers (a blank or bad value is null: never a pin at 0,0)', () => {
     expect(shape('location', { lat: '12.97', lng: '77.59' })).toMatchObject({
       latitude: 12.97,
       longitude: 77.59,
     });
-    expect(shape('location', { lat: '', lng: 'abc' })).toMatchObject({ latitude: 0, longitude: 0 });
+    expect(shape('location', { lat: '', lng: 'abc' })).toMatchObject({
+      latitude: null,
+      longitude: null,
+    });
+    expect(shape('location', { lat: '18,5204', lng: '73,8567' })).toMatchObject({
+      latitude: 18.5204,
+      longitude: 73.8567,
+    });
     expect(shape('location', { lat: '12.5abc', lng: -3 })).toMatchObject({
-      latitude: 12.5,
+      latitude: null,
       longitude: -3,
     });
   });

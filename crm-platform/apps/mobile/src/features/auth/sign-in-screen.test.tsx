@@ -82,13 +82,19 @@ beforeEach(() => {
 });
 
 describe('SignInScreen', () => {
-  it('hints at what to type in both fields', async () => {
-    await renderScreen();
-    expect(screen.getByPlaceholderText('you@company.com')).toBeTruthy();
-    expect(screen.getByPlaceholderText('Enter your password')).toBeTruthy();
-    // Let the platform settings arrive, so the screen is not still updating when the test ends.
-    expect(await screen.findByText('Create an account')).toBeTruthy();
-  });
+  it(
+    'hints at what to type in both fields',
+    async () => {
+      await renderScreen();
+      expect(screen.getByPlaceholderText('you@company.com')).toBeTruthy();
+      expect(screen.getByPlaceholderText('Enter your password')).toBeTruthy();
+      // Let the platform settings arrive, so the screen is not still updating when the test ends.
+      expect(await screen.findByText('Create an account')).toBeTruthy();
+    },
+    // First test in the file: pays the suite's one-time render setup cost, which can push it past
+    // the 20s floor under a loaded coverage run even though nothing here is slow on its own.
+    40000,
+  );
 
   it('validates the fields before calling the API', async () => {
     await renderScreen();

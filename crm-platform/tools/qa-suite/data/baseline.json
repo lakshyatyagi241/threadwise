@@ -15,6 +15,1180 @@
     {
       "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `DECLARE rot NO SCROLL CURSOR FOR SELECT tableoid::regclass::text AS tbl, ctid::te",
       "reason": "identifiers go through quote(); batch is a number; maintenance CLI, not reachable from a request; reviewed 2026-10-14"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query(`FETCH ${batch} FROM rot`",
+      "reason": "batch comes from rotationBatchSize(), which accepts only an integer from 1 to 10000 and throws on anything else (a cursor FETCH cannot take a bound parameter); proven by test/unit/platform-infrastructure/rotation-batch.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3 WHERE ctid = $1::tid AND ${col} = $2 RETURNING 1`",
+      "reason": "table and col are the identifiers built by quote() from the pg_class / pg_attribute catalog names (double quotes doubled), never request data; row values are bound as $1..$3; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/platform-infrastructure/crypto-rotation/rotate-keys.ts .query( `UPDATE ${table} SET ${col} = $3::jsonb WHERE ctid = $1::tid AND ${col} = $2::json",
+      "reason": "same quoted catalog identifiers as the text-column update above; row values are bound; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} DISABLE TRIGGER ${trg}`",
+      "reason": "table and trigger names come from a hard-coded list in a dev-only demo seeder CLI, never request data; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query(`ALTER TABLE ${table} ENABLE TRIGGER ${trg}`",
+      "reason": "same hard-coded list as DISABLE TRIGGER, in a dev-only demo seeder CLI; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/storefront-builder/cli/demo-seeder.ts .query( `SELECT ${col} AS k, count(*)::int AS n FROM wa_orders WHERE org_id = $1 AND meta_",
+      "reason": "col is only ever the literals 'status' and 'source' passed by countDemo in the same dev-only demo seeder CLI; org id and marker are bound; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/common/sql/identifier.ts sql.raw(identifier(name))",
+      "reason": "the name is validated by identifier() (only [A-Za-z_][A-Za-z0-9_]{0,62} passes); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/common/workspace-calendar.ts sql.raw(`${identifier(alias)}.org_id`)",
+      "reason": "the alias is validated by identifier(); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/common/workspace-calendar.ts sql.raw(`${identifier(alias)}.id`)",
+      "reason": "the alias is validated by identifier(); pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/addons-extension-registry/addon-entitlement.service.ts sql.raw(addonLiveSql(await this.plans.graceDays()))",
+      "reason": "built by addonLiveSql(graceDays) from a constant template; graceDays is clamped to an integer from 0 to 30; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/addons-extension-registry/workspace-addons.service.ts sql.raw(addonLiveSql(await this.plans.graceDays()))",
+      "reason": "built by addonLiveSql(graceDays) from a constant template; graceDays is clamped to an integer from 0 to 30; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/ai-keys-usage-admin/platform-keys.service.ts sql.raw('id, uuid, provider, name, api_key, key_last4, default_model, extra_co)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/ai-keys-usage-admin/workspace-keys.service.ts sql.raw('id, uuid, provider, api_key, key_last4, is_active, row_version, updat)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/query/analytics-query.service.ts sql.raw(q.grain === 'hour' ? 'an_rollup_hour' : 'an_rollup_day')",
+      "reason": "chooses between two table-name literals by the grain, a typed union; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/query/analytics-query.service.ts sql.raw(groupBy.map((_, i) => String(i + 1)).join(', '))",
+      "reason": "joins the integers 1..n (GROUP BY ordinals) built from the length of an array, no text from a caller; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(String(n))",
+      "reason": "int() throws unless the value is an integer, so only digits reach the SQL; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(grain === 'hour' ? 'an_rollup_hour' : 'an_rollup_day')",
+      "reason": "chooses between two table-name literals by the grain, a typed union; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts sql.raw(`nullif(regexp_replace(coalesce(${source === 'campaign' ? 'r.phone_num)",
+      "reason": "a template whose one choice is a literal r.phone_number prefix by a typed source; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/summary/campaign-summary.repository.ts sql.raw(`(extract(epoch FROM date_trunc('second', ${col}))::bigint * 1000000 +)",
+      "reason": "col is r.updated_at or x.at: every caller passes a literal expression (cursorAfter has one caller, with literals); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-csv-sql.ts sql.raw(`regexp_replace(coalesce(${a}.normalized_phone, ${a}.phone, ''), '\\\\D')",
+      "reason": "the alias is validated by identifier() in digitsOf; pinned by test/unit/common/sql-identifier.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/message-history.query.ts sql.raw(`'${unit}'`)",
+      "reason": "unit is the typed union hour | day | week; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies.repository.ts sql.raw(dir === 'asc' ? '>' : '<')",
+      "reason": "chooses a literal operator or direction by the typed union asc | desc; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies.repository.ts sql.raw(dir === 'asc' ? 'ASC' : 'DESC')",
+      "reason": "chooses a literal operator or direction by the typed union asc | desc; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contact-predicates.ts sql.raw(table)",
+      "reason": "table and key are typed unions (contact_tags | contact_group_members, tag_id | group_id) set by the two callers in this file; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contact-predicates.ts sql.raw(key)",
+      "reason": "table and key are typed unions (contact_tags | contact_group_members, tag_id | group_id) set by the two callers in this file; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoice-settings.repository.ts sql.raw(ECOM_COLUMNS[source].auto)",
+      "reason": "looked up in a fixed map by the typed union source; every column it holds is a plain identifier (checked); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoice-settings.repository.ts sql.raw(ECOM_COLUMNS[source].trigger)",
+      "reason": "looked up in a fixed map by the typed union source; every column it holds is a plain identifier (checked); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/flow-builder-editor/flows.repository.ts sql.raw(`(${p})`)",
+      "reason": "p is statusPredicate(status), a switch that returns one of three literal predicates or null; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketing-site-cms/legal.service.ts sql.raw('uuid, slug, title, subtitle, updated_label, effective_label, sections)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(x.expr)",
+      "reason": "from the fixed SORTS map keyed by the sort enum, which the API validates with z.enum(MARKET_APP_SORTS) (catalogue.ts); closes the earlier note to confirm it; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(def.keys.map((x, n) => `(${x.expr})::text AS k${n}`).join(', '))",
+      "reason": "from the fixed SORTS map keyed by the sort enum, which the API validates with z.enum(MARKET_APP_SORTS) (catalogue.ts); closes the earlier note to confirm it; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/gateway.service.ts sql.raw('id, uuid, slug, name, description, is_active, credentials, mode, supp)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/roles-permissions/pg-array.ts sql.raw(`ARRAY[]::${type}[]`)",
+      "reason": "type is the typed union bigint | text | uuid; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/schedule-engagement.service.ts sql.raw(`'${bucket}'`)",
+      "reason": "bucket is computed here as the literal hour or day; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts sql.raw(PRODUCT_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts sql.raw(ORDER_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/cart.repository.ts sql.raw(kind === 'shopify' ? 'shopify_cart_recoveries' : 'woocommerce_cart_rec)",
+      "reason": "chooses between two table-name literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/mirror.repository.ts sql.raw(PRODUCT_ID[kind])",
+      "reason": "looked up in a const map of two literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/shop-products.repository.ts sql.raw(kind === 'shopify' ? 'shopify_product_id' : 'woo_product_id')",
+      "reason": "chooses between two column-name literals by the typed union shopify | woocommerce; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-conversations/conversations.repository.ts sql.raw(` c.id, c.uuid, c.channel_id, ch.uuid AS channel_uuid, ch.kind AS chan)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: the one US() call wraps a literal column); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-conversations/notes.repository.ts sql.raw(` n.id, n.uuid, n.body, n.mentions, n.is_pinned, n.edited_at, ${US('n.)",
+      "reason": "a column list whose only interpolation is US(), applied to the literal column n.created_at; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/pg-array.ts sql.raw(`ARRAY[]::${type}[]`)",
+      "reason": "type is the typed union bigint | text | uuid; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-targets.repository.ts sql.raw('id, uuid, name, url, auth_header_name, auth_header_value, auth_header)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-targets.service.ts sql.raw('t.id, t.uuid, t.name, t.url, t.auth_header_name, t.auth_header_value,)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-connections.repository.ts sql.raw('id, uuid, status, is_primary, phone_number, display_label, credential)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-template-events.service.ts sql.raw('id, template_name, language, status, meta_status, quality_score, cate)",
+      "reason": "a column list: a fixed string of column names with no interpolation (verified: no ${} in the argument); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts sql.raw(COLUMN_LIST.map((c) => `p.${c}`).join(', '))",
+      "reason": "built from the module constant COLUMN_LIST, an array of column-name literals; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-provider-registry/provider-store.ts sql.raw(COLUMN_LIST.join(', '))",
+      "reason": "built from the module constant COLUMN_LIST, an array of column-name literals; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup-sql.ts sql.raw(`(CASE WHEN e.${col} IS NULL THEN 0 ${whens} ELSE ${LATENCY_EDGES_MS.l)",
+      "reason": "histCase: col is the typed literal duration_ms and the edges are the constant LATENCY_EDGES_MS numbers; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/browse.repository.ts sql.raw(` a.id, a.uuid, a.slug, a.kind, a.name, a.tagline, a.first_party, a.fe)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/installations.repository.ts sql.raw(` i.id, i.uuid, i.org_id, i.app_id, i.installed_version_id, i.pending_)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/operator-catalogue.store.ts sql.raw(` a.id, a.uuid, a.slug, a.kind, a.category_id, c.slug AS category_slug)",
+      "reason": "a column list that interpolates only the module constants APP_PRICING_COLUMNS_TEXT / SUBSCRIPTION_COLUMNS_TEXT, exported fixed text with no interpolation (marketplace/pricing-model.ts); reviewed 2026-10-18"
+    }
+  ],
+  "43": [
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.getMessage(",
+      "reason": "one Gmail API call per new message (external HTTP, no DB query), bounded by opts.maxMessages; Gmail offers no cheaper per-id read here; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listHistory(",
+      "reason": "pagination: each page needs the previous page token, so it cannot be parallel or batched (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/drivers/google-mail.driver.ts await this.gmail.listMessages(",
+      "reason": "pagination: each page needs the previous page token (external API, no DB query); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/keys/api-keys.service.ts await this.repo.countActive(",
+      "reason": "retry loop on a key-hash collision: one count per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.service.ts await this.repo.findByUuid(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.service.ts await this.deals.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.remote.list(",
+      "reason": "pagination: the next cursor comes from the previous page, bounded by MAX_PAGES (external API); reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await this.queue.getJob(",
+      "reason": "one Redis job lookup per stale running row, bounded by BATCH, background sweep; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/waboo-migration/remote-runner.ts await this.jobs.read(",
+      "reason": "a poll loop with a sleep between reads, not a per-item lookup; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/appointment-lifecycle-sweep.service.ts await this.appts.findById(",
+      "reason": "one row per due candidate, each in its own transaction and locked FOR UPDATE with a re-check under the lock; the per-row read is the lock, so it cannot be batched; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/cli/demo-calls.ts await db.query",
+      "reason": "developer demo-data CLI, not a request or worker path; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.repo.findById(",
+      "reason": "one campaign per distinct (workspace, campaign) pair, bounded by LIMIT 25 in the sweep query; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/recurring-invoices.service.ts await this.repo.findById(",
+      "reason": "catch-up loop must re-read the profile each step for the advanced next run date; bounded by RECURRING_CATCH_UP_MAX; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segment-actions.service.ts await this.repo.findByUuid(",
+      "reason": "chunked copy job: the segment is re-read in each chunk transaction so a deletion mid-job is noticed; one read per chunk, not per contact; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segment-count-sweep.service.ts await this.repo.findById(",
+      "reason": "one due segment per transaction, each count timed and bounded; the read is the segment being counted; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.service.ts await this.repo.list(",
+      "reason": "pagination loop bounded by MAX_SCAN_BATCHES; the cursor comes from the previous page; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.service.ts await this.groups.list(",
+      "reason": "pagination loop bounded by MAX_PAGES; the cursor comes from the previous page; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth.service.ts await this.enrichment.lookup(",
+      "reason": "one external enrichment HTTP call per candidate, bounded by the batch limit; not a database query; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/platform-support-desk/playbooks.service.ts await this.actions.resolveAgent(",
+      "reason": "one small agent lookup per playbook step that assigns; playbooks have a handful of steps; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await this.settings.get(",
+      "reason": "read once per workspace and memoised for the rest of the sweep (attemptsByOrg), so the call count is the number of workspaces, not campaigns; fixed and reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/modules/catalog-products/catalog-sync.service.ts await this.repo.findByRetailerIds(",
+      "reason": "the only per-item lookup left in the import: it runs only when the same retailer id appears twice in one Meta listing and the first copy was created in this run (a few rows at most), so the second can update it; every other product is read once for the whole listing (findByRetailerIds + one variants read); proven by test/unit/catalog-products/catalog-import-lookup.spec.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/calendar-reconcile.service.ts await this.calendar.readEvent(",
+      "reason": "one Google Calendar API call per appointment checked, an external call with no batch form here, bounded by RECONCILE_BATCH = 100 per run; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.segmentsRepo.findByUuid(",
+      "reason": "one read per segment the user picked in the broadcast wizard, capped at WIZARD_SOURCES_MAX = 100 by the contract; a one-off step, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-audience.service.ts await this.resolver.findOrCreateByPhone(",
+      "reason": "csv.newNumbers returns only numbers that are NOT contacts yet, so every row is a create (plan cap, audit, outbox); there is nothing already known to prefetch; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/company-briefs/company-briefs.service.ts await this.keys.resolve(",
+      "reason": "at most one read per AI vendor (6), memoised so the second priority pass reuses the first; proven by test/unit/ai-copilot-lead-finder/provider-resolution.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.tags.findOrCreateByName(",
+      "reason": "only tags that do not exist yet reach this call: existing ones are prefetched once (findManyByNames); a create carries the plan tag cap, audit and outbox per tag; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/crm/pipelines/pipelines.service.ts await this.dealsRepo.findById(",
+      "reason": "sequential by design: each deal moves to the top of the target stage, so the next iteration reads minOrder that the previous one changed; a batch read would be stale; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.service.ts await this.companies.get(",
+      "reason": "optimistic-lock retry loop: one read per attempt, not per item; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/forms-builder/form-submit.service.ts await this.tags.countAll(",
+      "reason": "counted at most once per submission and only when a tag has to be made (total is kept locally after that); proven by test/unit/forms-builder/form-submit-tags.spec.ts; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/leads/lead-sync.service.ts await this.registry.resolve(",
+      "reason": "one small read per lead source of the workspace (a handful), only in the provider whose source kind matches (meta-lead-pull.provider, marketplace lead-pull.provider); the Sources settings page, not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/device-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/waba-group-notification.consumer.ts await this.publisher.read(",
+      "reason": "one unread count and one realtime emit per user whose notification rows were cleared; the count is personal to each user; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
+      "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
+    }
+  ],
+  "36": [
+    {
+      "key": "google-account: 4 mutating route(s), 0 audit calls (apps/api/src/modules/google-account/google-account.controller.ts)",
+      "reason": "the controller only delegates to GoogleCalendarConnectService / GoogleConsentService in appointments-booking, which write the audit rows: disconnect (google-calendar-connect.service.ts, audit.record action delete), confirm (google-consent.service.ts, audit.record), calendar select; connect/begin only returns a consent URL and changes no state; reviewed 2026-10-16"
+    }
+  ],
+  "31": [
+    {
+      "key": "apps/web/src/app/(site)/blog/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\\\u003c') }}",
+      "reason": "JSON-LD built from server data and passed through .replace(/</g, '\\\\u003c'), so no </script> can end the tag; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/app/(site)/blog/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: post.body }}",
+      "reason": "post.body is sanitised by HtmlSanitizerService on create, update and read (blog.service.ts); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/app/(site)/legal/[slug]/page.tsx dangerouslySetInnerHTML={{ __html: s.body }}",
+      "reason": "legal sections are sanitised on save (legal.service.ts normaliseSections with the sanitiser); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/admin-console-shell/branding/workspace-brand.tsx return css ? <style data-workspace-brand dangerouslySetInnerHTML={{ __html: css }} /> : null;",
+      "reason": "css is built by brandCss(), which writes only #RRGGBB values (brand-css.test.ts), so nothing else can reach the style rule; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/channel-email/components/signature-picker.tsx dangerouslySetInnerHTML={{ __html: signaturePreviewHtml(signature, variablesOf(user)) }}",
+      "reason": "rebuilt by the allow-list sanitiser (no scripts, handlers, styles or unknown tags; links web, mail and phone only), per the code comment; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/email-templates/components/template-preview.tsx dangerouslySetInnerHTML={{ __html: sanitizeHtml(q.data.html) }}",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/email-templates/components/template-row.tsx dangerouslySetInnerHTML={{ __html: sanitizeHtml(template.bodyHtml) }}",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-core/previews.tsx dangerouslySetInnerHTML={{ __html: renderWaText(t.header) }}",
+      "reason": "renderWaText HTML-escapes the text first and adds only b, i, s, code and br; pinned by kit-wa-text.test.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/forms-core/previews.tsx {t.body ? <div dangerouslySetInnerHTML={{ __html: renderWaText(t.body) }} /> : null}",
+      "reason": "renderWaText, same as the header; pinned by kit-wa-text.test.ts; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/flow-builder-editor/builder/inspector/kit.tsx dangerouslySetInnerHTML={{ __html: html }}",
+      "reason": "traced: every WaBubble html argument is renderWaText(...) output (escaped, pinned by kit-wa-text.test.ts) or a constant translated <i> placeholder (previews.tsx); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/site-frame.tsx dangerouslySetInnerHTML={{ __html: SOCIAL_ICONS[name.toLowerCase()] ?? '' }}",
+      "reason": "a lookup in a constant table of SVG icons; the key never reaches the HTML; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/site-ui.tsx <Tag className={className} {...attrs} dangerouslySetInnerHTML={{ __html: value }} />",
+      "reason": "CMS rich text is sanitised on write and on read (content.service.ts); safe while that stays in every write path; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx <style id=\"set-theme\" dangerouslySetInnerHTML={{ __html: cfg.themeCss }} />",
+      "reason": "traced: themeCss() writes only colours validated as #[0-9A-Fa-f]{3,8} at save (contracts.spec.ts breakout test) and clamped numbers, so nothing can leave the style rule; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx <style id=\"set-font\" dangerouslySetInnerHTML={{ __html: font.css }} />",
+      "reason": "traced: font.css comes from the constant FONT_CATALOGUE keyed by an allow-listed font key; no setting text reaches it; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx {css !== '' && <style id=\"tw-custom-css\" dangerouslySetInnerHTML={{ __html: css }} />}",
+      "reason": "ACCEPTED RISK: public custom CSS is raw by design and only a super admin can save it (code comment); a compromised super-admin account is site-wide injection, so keep MFA and audit on that setting; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/platform-settings-branding-storage/site/site-head.tsx {js !== '' && <script id=\"tw-custom-js\" dangerouslySetInnerHTML={{ __html: js }} />}",
+      "reason": "ACCEPTED RISK: public custom JavaScript is raw by design and only a super admin can save it; a compromised super-admin account is site-wide script execution, so keep MFA and audit on that setting; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/footer.tsx <p className=\"sf-foot-blurb\" dangerouslySetInnerHTML={{ __html: custom }} />",
+      "reason": "footerParts() runs sanitizeHtml(text, 'inline'); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/footer.tsx <span dangerouslySetInnerHTML={{ __html: bottom }} />",
+      "reason": "footerParts() runs sanitizeHtml(text, 'inline'); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/hero.tsx <h1 id=\"sf-hero-title\" dangerouslySetInnerHTML={{ __html: heading }} />",
+      "reason": "traced: heading = sanitizeHtml(shop.heroText, 'inline'); the API also sanitises it (the file's own comment); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/order-tracking.tsx <p className=\"sf-ot-muted sf-ot-foot\" dangerouslySetInnerHTML={{ __html: footer }} />",
+      "reason": "footer comes from footerParts(), sanitised; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/components/product-detail.tsx <div className=\"sf-richtext\" dangerouslySetInnerHTML={{ __html: body }} />",
+      "reason": "traced: body = sanitizeHtml(product.bodyHtml, 'rich') at the top of the component; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/storefront-builder/public/pages/product.tsx dangerouslySetInnerHTML={{ __html: jsonLdString(productJsonLd(page, url)) }}",
+      "reason": "jsonLdString escapes < (seo.ts; pinned by misc.test.ts); reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/web-forms/components/form-renderer.tsx return <div className={className} dangerouslySetInnerHTML={{ __html: safeHtml(html) }} />;",
+      "reason": "wrapped in safeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/web-forms/public/pay-return.tsx <div dangerouslySetInnerHTML={{ __html: safeHtml(view.next.message) }} />",
+      "reason": "wrapped in safeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/auth-registration-security/guest/captcha.tsx if (mount) mount.innerHTML = '';",
+      "reason": "innerHTML = '' only clears the node; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/channel-email/components/rich-editor.tsx if (box.current) box.current.innerHTML = sanitizeHtml(initialHtml);",
+      "reason": "wrapped in sanitizeHtml; reviewed 2026-10-17"
+    },
+    {
+      "key": "apps/web/src/features/marketing-site-cms/site/preview-bridge.tsx if (type === 'richtext') el.innerHTML = before;",
+      "reason": "restores the element's own earlier content; reviewed 2026-10-17"
+    }
+  ],
+  "40": [
+    {
+      "key": "agent_statuses(preferences) -> jsonb [packages/db/migrations/20261001102700_tib2_threadwise_schema.sql]",
+      "reason": "detector artifact: preferences is a jsonb column with a trailing REFERENCES-looking comment, not a foreign key; no FK exists on it; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_notes(org_id,admin_user_id) -> users [packages/db/migrations/20261001102800_supp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "support_tickets(assigned_agent_id) -> platform_operators [packages/db/migrations/20261001102800_supp_threadwise_schema.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversations(org_id,resolved_by) -> users [packages/db/migrations/20261001103600_chat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_notes(org_id,user_id) -> users [packages/db/migrations/20261001103600_chat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_calls(org_id,recording_consent_by) -> users [packages/db/migrations/20261001103700_call_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "deal_activities(org_id,user_id) -> users [packages/db/migrations/20261001103800_deal_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "projects(org_id,owner_id) -> users [packages/db/migrations/20261001103900_ctp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "projects(org_id,created_by) -> users [packages/db/migrations/20261001103900_ctp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_pages(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_posts(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "facebook_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104000_fb_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_accounts(org_id,connected_by) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_bots(org_id,connected_by) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telegram_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104100_tg_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_rich_menus(org_id,created_by) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "line_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104200_line_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wechat_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104300_wech_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wechat_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104300_wech_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "viber_channels(org_id,connected_by) -> users [packages/db/migrations/20261001104400_vib_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "viber_broadcasts(org_id,user_id) -> users [packages/db/migrations/20261001104400_vib_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_docs(org_id,created_by) -> users [packages/db/migrations/20261001104500_sales_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_docs(org_id,duplicated_from_id) -> sales_docs [packages/db/migrations/20261001104500_sales_threadwise_schema.sql]",
+      "reason": "self-reference to the document a copy was made from; sales_docs are soft-removed and a hard delete of one document scans once; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoices(org_id,user_id) -> users [packages/db/migrations/20261001104600_inv_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoices(org_id,voided_by) -> users [packages/db/migrations/20261001104600_inv_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "payments(org_id,recorded_by) -> users [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(credit_package_id) -> credit_packages [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(coupon_id) -> coupons [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(gateway_id) -> payment_gateways [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "orders(org_id,reviewed_by) -> users [packages/db/migrations/20261001104700_paygw_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "booking_types(org_id,user_id) -> users [packages/db/migrations/20261001104800_appt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "booking_templates(coupon_id) -> coupons [packages/db/migrations/20261001104800_appt_threadwise_schema.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_product_sets(org_id,user_id) -> users [packages/db/migrations/20261001105000_cat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_import_jobs(org_id,created_by) -> users [packages/db/migrations/20261002100100_con_import_jobs.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_setup(first_operator_id) -> platform_operators [packages/db/migrations/20261003090000_inst_platform_setup.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "platform_setup(first_org_id) -> organizations [packages/db/migrations/20261003090000_inst_platform_setup.sql]",
+      "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_revisions(org_id,created_by) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_events(org_id,actor_user_id) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_doc_templates(org_id,created_by) -> users [packages/db/migrations/20261006100000_sales_docs_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tax_rates(org_id,created_by) -> users [packages/db/migrations/20261007100000_inv_model_reshape.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoice_gateway_connections(org_id,created_by) -> users [packages/db/migrations/20261007100100_inv_payment_ledger.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "credit_notes(org_id,created_by) -> users [packages/db/migrations/20261008100200_inv_credit_notes.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "recurring_invoices(org_id,owner_id) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "recurring_invoices(org_id,created_by) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_orders(org_id,owner_id) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "sales_orders(org_id,created_by) -> users [packages/db/migrations/20261008100300_inv_recurring_and_orders.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_preset_baseline(permission_key) -> permission_defs [packages/db/migrations/20261014090000_rbac_baseline_member_keys.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_media_uploads(org_id,user_id) -> users [packages/db/migrations/20261015090100_tib1_notes_search_media_uploads.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wallet_platform_log(operator_id) -> platform_operators [packages/db/migrations/20261016090000_wallet_core.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "cat_catalog_sends(org_id,user_id) -> users [packages/db/migrations/20261017090100_cat_catalog_sends.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "whatsapp_providers(created_by_operator_id) -> platform_operators [packages/db/migrations/20261018090000_whatsapp_providers.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_whatsapp_provider_assignment(assigned_by_operator_id) -> platform_operators [packages/db/migrations/20261018090000_whatsapp_providers.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(category_id) -> marketplace_categories [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(created_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_apps(current_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_app_versions(reviewed_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_app_versions(created_by_operator_id) -> platform_operators [packages/db/migrations/20261021090000_mkt_catalogue.sql]",
+      "reason": "platform_operators is the handful of platform staff accounts, never deleted at runtime (operators are deactivated); the FK is an audit column on a low-volume platform table; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_app_installations(installed_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_app_installations(pending_version_id) -> marketplace_app_versions [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "marketplace_consents(app_id) -> marketplace_apps [packages/db/migrations/20261021090100_mkt_installations.sql]",
+      "reason": "the parent is a catalogue/config row (plans, coupons, gateways, categories, credit packages, marketplace apps/versions, permission_defs) that only a platform operator deletes, and the child table is small or platform-owned; a scan on that rare delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_series(org_id,created_by) -> users [packages/db/migrations/20261031090000_camp_broadcast_wizard.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_test_sends(org_id,created_by) -> users [packages/db/migrations/20261031090000_camp_broadcast_wizard.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_wizard_csv(org_id,created_by) -> users [packages/db/migrations/20261104090000_camp_wizard_csv_uploads.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs(org_id) -> organizations [packages/db/migrations/20261113100000_wmig_waboo_migration_runs.sql]",
+      "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
+    },
+    {
+      "key": "faqs(org_id,created_by) -> users [packages/db/migrations/20261114090000_faq_core.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "message_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261116100000_message_log_archive.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "help_agent_settings(org_id,updated_by) -> users [packages/db/migrations/20261119090000_help_agent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "mail_workspace_settings(org_id,updated_by) -> users [packages/db/migrations/20261119090000_mail_phase2_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "mail_signatures(org_id,created_by) -> users [packages/db/migrations/20261119090000_mail_phase2_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_device_groups(org_id,created_by_user_id) -> users [packages/db/migrations/20261120090000_wa_device_groups.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_consent_events(org_id,actor_user_id) -> users [packages/db/migrations/20261121090000_consent_ledger.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "lifecycle_stage_suggestions(org_id,decided_by) -> users [packages/db/migrations/20261121090100_lsc_chat_digest.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_exports(org_id,created_by) -> users [packages/db/migrations/20261121090300_con_saved_exports.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_consent_exports(org_id,requested_by) -> users [packages/db/migrations/20261122090000_consent_exports.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "growth_actions(org_id,decided_by) -> users [packages/db/migrations/20261122090000_growth_pilot.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "audit_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261126090000_audit_log_tenant_view.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "member_leaves(org_id,created_by) -> users [packages/db/migrations/20261129090000_member_leave.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "member_delegates(org_id,created_by) -> users [packages/db/migrations/20261129090000_member_leave.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,verified_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,legal_hold_set_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_requests(org_id,created_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_request_events(org_id,actor_user_id) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_request_exports(org_id,requested_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "privacy_settings(org_id,updated_by) -> users [packages/db/migrations/20261129090000_privacy_requests.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,to_user_id) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,created_by) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "owner_reassign_batches(org_id,restored_by) -> users [packages/db/migrations/20261130090000_owner_reassign.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "assignment_rules(org_id,created_by) -> users [packages/db/migrations/20261130090100_contact_assignment.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_recording_settings(org_id,updated_by) -> users [packages/db/migrations/20261202090000_call_recording_consent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_recording_notice_versions(org_id,created_by) -> users [packages/db/migrations/20261202090000_call_recording_consent.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "email_templates(org_id,created_by) -> users [packages/db/migrations/20261202090000_mail_email_templates.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "consent_notices(org_id,created_by) -> users [packages/db/migrations/20261203090000_consent_intake_notices.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_device_history_imports(org_id,requested_by_user_id) -> users [packages/db/migrations/20261204090000_wa_device_history_import.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_calling_settings(org_id,updated_by) -> users [packages/db/migrations/20261206090000_calling_readiness.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_privacy_events(org_id,actor_user_id) -> users [packages/db/migrations/20261216090000_contact_privacy_flags.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "dnc_entries(org_id,added_by) -> users [packages/db/migrations/20261224090000_dnc_list.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telephony_connections(org_id,created_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_log_entries(org_id,created_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "telephony_click_calls(org_id,user_id) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "call_logging_settings(org_id,updated_by) -> users [packages/db/migrations/20261227090000_call_log_entries.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "teams(org_id,default_assignee_id) -> users [packages/db/migrations/0003_foundation.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "role_grants(permission_key) -> permission_defs [packages/db/migrations/0003_foundation.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_keys(org_id,user_id) -> users [packages/db/migrations/0005_partner_agents.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "fields(org_id,replaces_field_id) -> fields [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "fields(org_id,replaces_field_id) -> fields [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "field_dependencies(org_id,depends_on_option_id) -> field_options [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "field_option_dependencies(org_id,child_option_id) -> field_options [packages/db/migrations/0010_add_contact_properties.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_tags(org_id,created_by) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_tags(org_id,created_by) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_view_favorites(org_id,user_id) -> users [packages/db/migrations/0014_add_contact_tags_and_views.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,updated_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_notes(org_id,updated_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_files(org_id,uploaded_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_files(org_id,uploaded_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_activities(org_id,actor_id) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_activities(org_id,actor_id) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_meetings(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "contact_meetings(org_id,created_by) -> users [packages/db/migrations/0017_add_contact_detail_tables.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "subscriptions(org_id,workspace_addon_id) -> workspace_addons [packages/db/migrations/20261001100200_plan_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "devices(org_id,consent_id) -> device_risk_acknowledgements [packages/db/migrations/20261001101000_wadev_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "waba_groups(org_id,created_by_user_id) -> users [packages/db/migrations/20261001101100_waba_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "flows(org_id,trigger_channel_id) -> channels [packages/db/migrations/20261001101400_flb_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "flow_retry_logs(org_id,retried_by_user_id) -> users [packages/db/migrations/20261001101500_flr_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "team_chat_messages(org_id,pinned_by_user_id) -> users [packages/db/migrations/20261001101600_tchat_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "team_chat_channel_members(org_id,last_read_message_id) -> team_chat_messages [packages/db/migrations/20261001101600_tchat_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "crm_briefs(org_id,created_by) -> users [packages/db/migrations/20261001102100_aicrm_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "leads(org_id,user_id) -> users [packages/db/migrations/20261001102100_aicrm_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_accounts(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_posts(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "tiktok_shops(org_id,user_id) -> users [packages/db/migrations/20261001102200_tt_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "impersonation_sessions(target_workspace_id,target_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_addons(package_id) -> packages [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_addons(package_id) -> plans [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "small per-workspace config or fixed catalogue table (roles, fields, field options, permission_defs, packages, plans, add-ons, device acknowledgements, channels, chat messages): parent rows are deleted rarely by an admin or never at runtime, and the child table is small; a scan on that delete is cheap; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_flags(org_id,flagged_by_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "workspace_flags(org_id,cleared_by_user_id) -> users [packages/db/migrations/20261001102500_wsp_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_tag(org_id,added_by) -> users [packages/db/migrations/20261001102600_tib1_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    },
+    {
+      "key": "saved_replies(org_id,created_by) -> users [packages/db/migrations/20261001102600_tib1_threadwise_schema.sql]",
+      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
+    }
+  ],
+  "47": [
+    {
+      "key": "team_members",
+      "reason": "organizations is reached transitively: the composite FKs (org_id,team_id)->teams and (org_id,user_id)->users are ON DELETE CASCADE, and teams/users reference organizations, so no row can name a workspace that does not exist; reviewed 2026-10-18"
+    },
+    {
+      "key": "user_roles",
+      "reason": "organizations is reached transitively: composite FKs to users and roles (both reference organizations) make a row impossible for a workspace that does not exist; reviewed 2026-10-18"
+    },
+    {
+      "key": "role_grants",
+      "reason": "organizations is reached transitively: the composite FK (org_id,role_id)->roles, and roles reference organizations; reviewed 2026-10-18"
+    },
+    {
+      "key": "camp_wizard_csv_rows",
+      "reason": "child of camp_wizard_csv, which carries org_id REFERENCES organizations ON DELETE CASCADE, and the composite FK keeps the row in the same workspace; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_rollup_hour",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_rollup_day",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "an_events",
+      "reason": "the analytics set deliberately has no foreign keys so it can move to another Postgres (20261217090000_analytics_events.sql header); org_id 0 holds platform-wide rows; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_lifecycle_log",
+      "reason": "the workspace lifecycle ledger has no FK so that it outlives the workspace it records the deletion of, and the application roles cannot update or delete it (20261116090000_org_lifecycle.sql header); reviewed 2026-10-18"
+    },
+    {
+      "key": "storage_purge_queue",
+      "reason": "the purge queue must keep its rows after the workspace row is gone, because the files are deleted afterwards; no FK on purpose (20261116090000_org_lifecycle.sql); reviewed 2026-10-18"
+    },
+    {
+      "key": "event_outbox",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "audit_log",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "translation_usage",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "usage_charges",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "ai_token_usage",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "shopify_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "woocommerce_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "ai_crm_actions",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "hubspot_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "slack_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "trello_integration_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "webhook_deliveries",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "auto_reply_lookups",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "keyword_reply_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "conversation_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_call_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "invoice_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "message_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "web_form_events",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_library_logs",
+      "reason": "append-only partitioned stream with no foreign key on purpose, the convention the migrations document for event_outbox/audit_log (0006_outbox_audit.sql), message_events and api_library_logs: an FK from every insert into a monthly-partitioned stream costs a lookup per row and would stop retention from dropping old partitions or keeping the row after the workspace is gone; org_id is still NOT NULL and RLS forces the tenant filter; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs pk(id)",
+      "reason": "operator-run migration table, not a tenant table (20261113100000_wmig_waboo_migration_runs.sql header: 'no tenant column of its own'); the surrogate id is the identity; reviewed 2026-10-18"
+    },
+    {
+      "key": "org_lifecycle_log pk(id)",
+      "reason": "platform ledger that must outlive the workspace and is read by uuid across workspaces; it is not partitioned and org_id is a plain column, not a tenant key; reviewed 2026-10-18"
+    },
+    {
+      "key": "storage_purge_queue pk(id)",
+      "reason": "platform work queue drained by one worker across all workspaces; org_id is a plain column on a row that outlives the workspace; reviewed 2026-10-18"
+    },
+    {
+      "key": "waboo_migration_runs",
+      "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
+    }
+  ],
+  "48": [
+    {
+      "key": "conversation_events: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
+      "reason": "verified: the only readers (team-inbox-conversations/conversation-events.repository.ts list, inbox-system-notes.service.ts, platform-inbox.service.ts) filter by org_id + conversation_id (+ type) and keyset on (created_at, id); the uuid is only returned to the client as the event id and never used as a lookup key. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    },
+    {
+      "key": "api_library_logs: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
+      "reason": "verified: api-library-logs.repository.ts builds every query from this.where(orgId, filters) and api-library-retention.service.ts deletes by (id, created_at); no query looks a row up by uuid. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    }
+  ],
+  "49": [
+    {
+      "key": "api_library_logs",
+      "reason": "old rows are removed by apps/api/src/modules/api-library/api-library-retention.service.ts (daily cron, DELETE in batches of 1000 older than API_LIBRARY_LOG_RETENTION_DAYS, up to 50 batches a night); it deletes rows rather than dropping partitions, which is fine at this volume (a stream of API-call runs) and needs no archivable_streams() approval; reviewed 2026-10-18"
     }
   ]
 }

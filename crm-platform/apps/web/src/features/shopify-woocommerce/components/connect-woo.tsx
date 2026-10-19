@@ -206,7 +206,7 @@ export function ConnectWoo({ overview }: { overview: StoreOverview }) {
                   <button
                     type="submit"
                     disabled={busy !== null || !filled}
-                    className={`${primaryButton} ml-auto`}
+                    className={`${primaryButton} ms-auto`}
                   >
                     <SendIcon className="size-3.5" />
                     {t('connect')}

@@ -10,6 +10,7 @@ import type {
   LscRunsResponse,
   LscScoreResult,
   LscSettings,
+  LscStatus,
   UpdateLscSettingsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -28,6 +29,7 @@ const shape = <T>(...required: string[]): z.ZodType<T, z.ZodTypeDef, unknown> =>
   );
 
 const settings = shape<LscSettings>('enabled', 'platformEnabled', 'keySource', 'last30d');
+const status = shape<LscStatus>('enabled');
 const runs = shape<LscRunsResponse>('data', 'page');
 const scored = shape<LscScoreResult>('contactId', 'score', 'costUsd');
 const backfilled = shape<LscBackfillResult>('queued');
@@ -40,6 +42,8 @@ const enc = encodeURIComponent;
 
 /** Every call of the lead scoring screens. Mutations get an Idempotency-Key from the client. */
 export const lscApi = {
+  /** The workspace switch alone; open to everyone who reads contacts (the settings need `lsc.runs.read`). */
+  status: (signal?: AbortSignal) => apiFetch(`${BASE}/status`, { schema: status, signal }),
   settings: (signal?: AbortSignal) => apiFetch(`${BASE}/settings`, { schema: settings, signal }),
   saveSettings: (input: UpdateLscSettingsInput) =>
     apiFetch(`${BASE}/settings`, { method: 'PATCH', body: input, schema: settings }),

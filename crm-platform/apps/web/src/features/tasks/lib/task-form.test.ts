@@ -22,6 +22,7 @@ const task: TaskResponse = {
   deal: null,
   company: null,
   source: 'manual',
+  kind: 'task',
   rowVersion: 3,
   createdAt: '2026-10-01T10:00:00.000Z',
   updatedAt: '2026-10-01T10:00:00.000Z',
@@ -75,6 +76,13 @@ describe('createBody', () => {
       contactId: null,
       dealId: null,
     });
+  });
+  it('carries the company a task was started from, and leaves the key out when there is none', () => {
+    const co = '5f1c1e0e-2f4b-4a58-9c1e-1d7a0f0f0001';
+    const body = createBody({ ...emptyDraft(ME), title: 'a', companyId: co });
+    expect(body.companyId).toBe(co);
+    expect(createTaskSchema.safeParse(body).success).toBe(true);
+    expect(createBody({ ...emptyDraft(ME), title: 'a' })).not.toHaveProperty('companyId');
   });
   it('defaults the assignee to the person given', () => {
     expect(createBody({ ...emptyDraft(ME), title: 'a' }).assigneeId).toBe(ME);

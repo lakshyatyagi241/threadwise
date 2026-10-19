@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Wczytywanie Twoich określeń...",
+      "retry": "Spróbuj ponownie",
+      "dismiss": "Zamknij"
+    },
+    "tile": {
+      "label": "Używane przez nas określenia",
+      "description": "Zmień nazwy Kontaktu, Spotkania, Transakcji tak, aby pasowały do Twojej firmy.",
+      "keywords": "zmiana nazwy, pacjent, klient, lead, członek, wizyta, terminologia, słownictwo, etykiety"
+    },
+    "title": "Używane przez nas określenia",
+    "subtitle": "Nazywaj rzeczy tak, jak robi to Twoja firma: Pacjent, Klient, Członek, Wizyta. Zmieniają się tylko etykiety, które czytają ludzie.",
+    "discard": "Odrzuć zmiany",
+    "save": "Zapisz",
+    "saved": "Zapisano. Menu i ekrany używają teraz Twoich określeń.",
+    "resetDone": "Przywrócono standardowe określenia.",
+    "reset": "Użyj standardowych określeń",
+    "conflict": "Ktoś inny zmienił te określenia podczas Twojej edycji. Widoczna jest najnowsza wersja; wprowadź zmianę ponownie.",
+    "conflictOk": "OK",
+    "language": "Edytujesz określenia, które widzą osoby, gdy aplikacja działa w języku: {language}. Zmień język aplikacji, aby edytować inny.",
+    "labelsOnly": "Zmieniają się tylko etykiety. Twoje dane, eksporty, integracje, API i wiadomości wysyłane klientom zachowują zwykłe nazwy.",
+    "applyAll": "Użyj tych określeń we wszystkich językach",
+    "applyAllHint": "Zapisuje te same określenia dla wszystkich 21 języków aplikacji. Zostaw wyłączone, aby zmienić tylko język widoczny powyżej.",
+    "grammar": "Określenia trafiają do aplikacji dokładnie tak, jak je wpiszesz. Aplikacja nie dopasowuje gramatyki (rodzaju, przypadków, rodzajników) w innych językach, a niektóre ekrany nadal pokazują określenie standardowe.",
+    "sharedWord": "W tym języku jedno słowo oznacza i spotkania, i wizyty, dlatego nowa nazwa tej pozycji nie jest tu pokazywana. W innych językach nadal obowiązuje.",
+    "nouns": {
+      "contact": {
+        "hint": "Osoby, z którymi rozmawiasz. Widoczne w menu, na liście, na stronie rekordu i jej przyciskach."
+      },
+      "appointment": {
+        "hint": "Zarezerwowany termin z klientem. Widoczny na ekranie spotkań i w rekordzie kontaktu."
+      },
+      "deal": {
+        "hint": "Szansa sprzedaży. Widoczna na tablicy transakcji i w rekordzie kontaktu."
+      },
+      "meeting": {
+        "hint": "Rozmowa lub spotkanie zapisane przy kontakcie."
+      }
+    },
+    "fields": {
+      "name": "Nazwa",
+      "singular": "Liczba pojedyncza",
+      "plural": "Liczba mnoga",
+      "placeholderHint": "Określenie standardowe: {word}"
+    },
+    "source": {
+      "workspace": "Twoje określenia",
+      "operator": "Ustawione przez Twój zespół obsługi konta",
+      "persona": "Z Twojego typu działalności",
+      "default": "Określenia standardowe"
+    },
+    "problems": {
+      "incomplete": "Wypełnij liczbę pojedynczą i mnogą albo wyczyść obie.",
+      "invalid": "Używaj tylko liter, cyfr, spacji oraz - . & / ( ), maksymalnie 40 znaków."
+    },
+    "errors": {
+      "network": "Nie można połączyć się z serwerem. Sprawdź połączenie i spróbuj ponownie.",
+      "forbidden": "Aby zmienić te określenia, potrzebujesz uprawnienia do zarządzania ustawieniami przestrzeni roboczej.",
+      "conflict": "Te określenia zmieniły się podczas Twojej edycji. Odśwież stronę i spróbuj ponownie.",
+      "validation": "Jedno z określeń jest niedozwolone. Sprawdź wyróżnione pole.",
+      "rateLimited": "Zbyt wiele zmian pod rząd. Poczekaj chwilę i spróbuj ponownie.",
+      "unexpected": "Coś poszło nie tak. Spróbuj ponownie."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Kontakt",
+        "other": "Kontakty"
+      },
+      "appointment": {
+        "one": "Spotkanie",
+        "other": "Spotkania"
+      },
+      "deal": {
+        "one": "Transakcja",
+        "other": "Transakcje"
+      },
+      "meeting": {
+        "one": "Spotkanie",
+        "other": "Spotkania"
+      }
+    }
+  }
+}

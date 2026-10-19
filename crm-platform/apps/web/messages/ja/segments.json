@@ -23,13 +23,19 @@
       "imported": "ファイルからインポート",
       "createdAt": "作成日",
       "updatedAt": "最終更新",
-      "lastActivityAt": "最終アクティビティ"
+      "lastActivityAt": "最終アクティビティ",
+      "minor": "未成年として設定",
+      "dateOfBirth": "生年月日",
+      "age": "年齢(歳)",
+      "timezone": "タイムゾーン",
+      "uncontacted": "未連絡"
     },
     "fieldGroups": {
       "journey": "ジャーニー",
       "who": "対象者",
       "activity": "アクティビティ",
-      "properties": "プロパティ"
+      "properties": "プロパティ",
+      "company": "企業プロパティ"
     },
     "operators": {
       "equals": "は",

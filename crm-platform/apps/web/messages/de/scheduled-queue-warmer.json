@@ -139,7 +139,8 @@
         "cancel": "Abbrechen",
         "retry": "Mit neuer Zeit wiederholen",
         "delete": "Löschen",
-        "deleteHistory": "Aus dem Verlauf löschen"
+        "deleteHistory": "Aus dem Verlauf löschen",
+        "edit": "Bearbeiten"
       },
       "empty": {
         "title": "Keine Zeitpläne",
@@ -207,7 +208,8 @@
         "noSenders": "Kein verbundener Absender. Verbinden Sie zuerst eine Nummer.",
         "warming": "Warm-up",
         "splitHint": "Jeder aktivierte Absender führt seinen eigenen Zeitplan mit einem fairen Anteil der Zielgruppe aus.",
-        "messageType": "Nachrichtentyp"
+        "messageType": "Nachrichtentyp",
+        "editSenderHint": "Ein Zeitplan hat eine Nummer. Wenn Sie eine andere wählen, wird der Zeitplan dorthin verschoben und das Warm-up-Budget erneut reserviert."
       },
       "audience": {
         "title": "Empfänger",
@@ -223,7 +225,7 @@
           },
           "queue": {
             "title": "Empfängerwarteschlange",
-            "hint": "Empfänger eines früheren Broadcasts erneut ansprechen."
+            "hint": "Sprechen Sie die Empfänger früherer Broadcasts und Kampagnen erneut an."
           },
           "number": {
             "title": "Nummern",
@@ -232,20 +234,24 @@
         },
         "chooseGroups": "Gruppe(n) auswählen",
         "chooseTags": "Wählen Sie einen oder mehrere Tags",
-        "chooseQueues": "Wählen Sie einen oder mehrere frühere Broadcasts",
+        "chooseQueues": "Wählen Sie einen oder mehrere frühere Broadcasts oder Kampagnen",
         "tickAny": "(beliebig viele aktivieren)",
         "noGroups": "Noch keine Gruppen",
         "noTags": "Noch keine Tags",
-        "noQueues": "Noch keine abgeschlossenen Broadcasts",
+        "noQueues": "Noch keine früheren Broadcasts oder Kampagnen",
         "contacts": "Zu den Kontakten",
         "broadcast": "Zu den Broadcasts",
         "tagsHint": "Die Empfänger werden beim Start des Zeitplans neu berechnet, sodass neu getaggte Kontakte einbezogen werden.",
-        "queuesHint": "Aktivieren Sie beliebig viele Broadcasts. Doppelte Empfänger werden vor dem Versand automatisch entfernt.",
+        "queuesHint": "Wählen Sie beliebig viele Broadcasts oder Kampagnen aus. Doppelte Empfänger werden vor dem Versand automatisch entfernt.",
         "paste": "Nummern einfügen",
         "pasteHint": "Zuerst die Ländervorwahl, ohne führendes +. Zeilenumbrüche oder Kommas trennen die Einträge.",
         "pastePlaceholder": "Eine Nummer pro Zeile mit Ländervorwahl, ohne Pluszeichen",
         "total": "Empfänger gesamt:",
-        "optedOut": "{n} ausgeschlossen: abgemeldet oder archiviert"
+        "optedOut": "{n} ausgeschlossen: abgemeldet oder archiviert",
+        "kind": {
+          "broadcast": "Broadcast",
+          "campaign": "Kampagne"
+        }
       },
       "message": {
         "title": "Nachricht verfassen",
@@ -275,7 +281,34 @@
         "pickerSearch": "Nach Name oder Sprache suchen…",
         "pickerEmpty": "Keine passenden Vorlagen.",
         "manageTemplates": "Vorlagen verwalten →",
-        "cancel": "Abbrechen"
+        "cancel": "Abbrechen",
+        "pickToPreview": "Wählen Sie eine Vorlage für die Vorschau.",
+        "headerMedia": "{kind}-Header",
+        "windowNote": "Eine Cloud-API-Nummer liefert eine genehmigte Vorlage auch dann aus, wenn der Kunde in den letzten 24 Stunden nicht geschrieben hat.",
+        "previewSamples": "Vorschau mit Beispielwerten",
+        "pickerCategories": "Vorlagenkategorie",
+        "categories": {
+          "all": "Alle",
+          "marketing": "Marketing",
+          "utility": "Utility"
+        },
+        "pickerHidden": "{n, plural, one {# weitere Vorlage ist ausgeblendet, weil eine angehakte Nummer sie nicht senden kann.} other {# weitere Vorlagen sind ausgeblendet, weil eine angehakte Nummer sie nicht senden kann.}}",
+        "file": "Datei",
+        "chooseFile": "Datei zum Senden auswählen",
+        "fileHint": "Bild, Video, Audio oder Dokument. Die Datei wird privat in Ihrem Workspace gespeichert.",
+        "limits": "Bei den gewählten Nummern: bis zu {image} MB für Bilder, {video} MB für Videos, {audio} MB für Audio und {document} MB für Dokumente.",
+        "tooBigUpload": "Die Datei ist größer als {mb} MB.",
+        "uploadFailed": "Die Datei konnte nicht hochgeladen werden. Versuchen Sie es erneut.",
+        "uploading": "Wird hochgeladen…",
+        "replace": "Ersetzen",
+        "remove": "Entfernen",
+        "kinds": {
+          "image": "Bild",
+          "video": "Video",
+          "audio": "Audio",
+          "document": "Dokument"
+        },
+        "orLink": "Oder Link zur Datei einfügen"
       },
       "when": {
         "title": "Wann senden",
@@ -356,7 +389,18 @@
         "daysRequired": "Wählen Sie die Wochentage.",
         "endDateRequired": "Wählen Sie den letzten Tag.",
         "endBeforeStart": "Das Enddatum liegt vor dem ersten Versand.",
-        "testNumber": "Geben Sie die Nummer mit Ländervorwahl ein."
+        "testNumber": "Geben Sie die Nummer mit Ländervorwahl ein.",
+        "mediaTooLarge": "Diese Datei ist größer, als eine angehakte Nummer akzeptiert. Wählen Sie eine kleinere Datei.",
+        "mediaType": "Eine angehakte Nummer akzeptiert diesen Dateityp für diese Medienart nicht.",
+        "templateNotForSender": "Eine angehakte Nummer kann diese Vorlage nicht senden: Eine WhatsApp-Cloud-API-Nummer sendet nur Vorlagen, die Meta genehmigt hat. Wählen Sie eine andere Vorlage oder Nummer."
+      },
+      "edit": {
+        "title": "Geplante Nachricht bearbeiten",
+        "saved": "Zeitplan aktualisiert.",
+        "submit": "Änderungen speichern",
+        "stale": "Jemand hat diesen Zeitplan geändert, während Sie ihn bearbeitet haben. Laden Sie ihn neu, um die Änderungen zu sehen; Ihre Eingaben hier gehen verloren.",
+        "reload": "Zeitplan neu laden",
+        "backToSchedule": "Zurück zum Zeitplan"
       }
     },
     "detail": {
@@ -373,7 +417,8 @@
         "runNow": "Jetzt ausführen",
         "cancel": "Abbrechen",
         "retry": "Mit neuer Zeit wiederholen",
-        "delete": "Löschen"
+        "delete": "Löschen",
+        "edit": "Bearbeiten"
       },
       "kpi": {
         "recipients": "Empfänger",
@@ -434,7 +479,11 @@
           "delivered": "Zugestellt",
           "read": "Gelesen",
           "failed": "Fehlgeschlagen"
-        }
+        },
+        "search": "Name oder Nummer suchen",
+        "range": "{from}–{to} von {total}",
+        "prev": "Zurück",
+        "next": "Weiter"
       },
       "config": {
         "eyebrow": "Details des Zeitplans",
@@ -453,9 +502,26 @@
       "preview": {
         "eyebrow": "Nachrichtenvorschau",
         "title": "Was Empfänger sehen",
-        "empty": "(leerer Inhalt)"
+        "empty": "(leerer Inhalt)",
+        "template": "Vorlage {name} ({language})",
+        "file": "Datei: {name}"
       },
-      "another": "Weiteren planen"
+      "another": "Weiteren planen",
+      "engagement": {
+        "eyebrow": "Interaktion",
+        "title": "Zustellung im Zeitverlauf",
+        "legend": "Legende",
+        "steps": {
+          "queued": "In Warteschlange",
+          "sent": "Gesendet",
+          "delivered": "Zugestellt",
+          "read": "Gelesen",
+          "failed": "Fehlgeschlagen"
+        },
+        "empty": "Es wurde noch nichts gesendet, daher gibt es nichts darzustellen.",
+        "perHour": "Laufende Summen zu Beginn jeder Stunde, in {zone}.",
+        "perDay": "Laufende Summen zu Beginn jedes Tages, in {zone}."
+      }
     },
     "warmer": {
       "warming": "{n} im Warm-up",

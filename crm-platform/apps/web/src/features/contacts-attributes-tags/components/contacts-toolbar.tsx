@@ -2,41 +2,23 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from 'react';
 import { useTranslations } from 'next-intl';
-import ViewWeekOutlinedIcon from '@mui/icons-material/ViewWeekOutlined';
-import {
-  Button,
-  Input,
-  Menu,
-  MenuCheckboxItem,
-  MenuItem,
-  MenuLabel,
-  MenuRadioItem,
-  MenuSeparator,
-  cn,
-} from '@crm/ui';
+import { Button, Input, Menu, MenuItem, MenuSeparator, cn } from '@crm/ui';
 import { filtersOfPicker, pickerValue } from '../lib/segment-entries';
-import { SegmentPicker, type SegmentOption, type SegmentsState } from './segment-picker';
-import { ownerTokens, UNASSIGNED_OWNER, type ContactFilters } from '../api/contacts';
-import type { Owner } from '../api/owners';
-import type { ContactGroup, ContactStats } from '../api/schemas';
+import type { ContactFilters } from '../api/contacts';
 import type { ColumnDef, ColumnId } from '../lib/columns';
-import type { Choice } from '../lib/option-sets';
-import { appliedConditionCount } from '@/features/segments';
 import { ColumnsModal } from './columns-modal';
-import { FilterPanel } from './filter-panel';
-import { BulkPickers, type BulkPicker, type TagChoice } from './bulk-bar';
+import { FilterPanel, type FilterPanelProps } from './filter-panel';
 import {
-  ChevronDownIcon,
+  ColumnsIcon,
   DownloadIcon,
-  SortIcon,
-  FilterIcon,
+  EyeIcon,
   KanbanIcon,
   ListIcon,
   MergeIcon,
+  MoreIcon,
+  PlusIcon,
   RefreshIcon,
   SearchIcon,
-  SendIcon,
-  SparkIcon,
   UploadIcon,
   UsersPlusIcon,
 } from './icons';
@@ -48,7 +30,7 @@ export const segmentOf = (
   f: Pick<ContactFilters, 'group' | 'imported' | 'segment'>,
 ): SegmentValue => pickerValue(f);
 
-/** The filters a dropdown value stands for: picking a group, a segment or a quick list replaces the previous pick. */
+/** The filters a picker value stands for: picking a group, a segment or a quick list replaces the previous pick. */
 export const filtersOfSegment = (
   value: SegmentValue,
 ): Pick<ContactFilters, 'group' | 'imported' | 'segment'> => filtersOfPicker(value);
@@ -56,75 +38,11 @@ export const filtersOfSegment = (
 export interface ContactsToolbarProps {
   q: string;
   onQ: (q: string) => void;
+  /** Each new number moves the cursor into the search box (a column header's "Filter" on name, phone or email). */
+  focusSearch: number;
 
-  segment: SegmentValue;
-  onSegment: (value: SegmentValue) => void;
-  stats: ContactStats | undefined;
-  groups: readonly ContactGroup[];
-  /** The workspace's segments for the dropdown's Segments section (empty while `segmentsState` is not `ready`). */
-  segments: readonly SegmentOption[];
-  segmentsState: SegmentsState;
-  onRetrySegments: () => void;
-  /** Present when the person may save the active filters as a segment: the button then shows. */
-  onSaveAsSegment?: () => void;
-  canCreateSegment: boolean;
-
-  /** Ad-hoc conditions applied now (JSON text of a rule tree), or empty. */
-  rules: string;
-  onRules: (rulesJson: string) => void;
-
-  tag: string;
-  onTag: (id: string) => void;
-  tags: ReadonlyArray<{ id: string; name: string }>;
-
-  /** Owner filter tokens: people's ids and/or `none` (contacts nobody owns), comma-separated; empty = everyone. */
-  owner: string;
-  onOwner: (value: string) => void;
-  owners: readonly Owner[];
-  /** The signed-in person, for "My contacts". */
-  meId: string;
-  /**
-   * Present when the filter names exactly one person and the caller may change owners: selects everything the view matches and
-   * opens the owner change (the shortcut for "move all of this person's contacts").
-   */
-  onReassignView?: () => void;
-
-  stage: string;
-  onStage: (v: string) => void;
-  stages: readonly Choice[];
-  consent: ContactFilters['consent'];
-  onConsent: (v: ContactFilters['consent']) => void;
-  /** `null` while a column's sort is in force (neither "newest" nor "oldest" is then the order). */
-  order: ContactFilters['order'] | null;
-  onOrder: (v: ContactFilters['order']) => void;
-
-  /** Selected rows, or `null` when the selection stands for everything matching the filter. */
-  selectedCount: number | null;
-  anySelected: boolean;
-  busy: boolean;
-  onClearSelection: () => void;
-  onSendCampaign: () => void;
-
-  can: {
-    update: boolean;
-    delete: boolean;
-    export: boolean;
-    import: boolean;
-    merge: boolean;
-    createGroups: boolean;
-    createTags: boolean;
-  };
-  exporting: boolean;
-  onExportAll: () => void;
-  onExportSelected: () => void;
-  onImport: () => void;
-  onDedupe: () => void;
-  onNewGroup: () => void;
-  onDeleteSelected: () => void;
-  picker: BulkPicker;
-  onPicker: (p: BulkPicker) => void;
-  onGroup: (action: 'add' | 'remove', groupId: string) => Promise<boolean>;
-  onTagApply: (action: 'add' | 'remove', choice: TagChoice) => Promise<boolean>;
+  /** The Filter button and its panel. */
+  filter: FilterPanelProps;
 
   allColumns: readonly ColumnDef[];
   /** The columns drawn now, in order. */
@@ -132,20 +50,36 @@ export interface ContactsToolbarProps {
   /** Save from the columns dialog: the chosen columns in their chosen order. */
   onApplyColumns: (ids: ColumnId[]) => void;
   onResetColumns: () => void;
-  /** Opens the bulk Update dialog for the selected contacts. */
-  onUpdateSelected: () => void;
   /** Opens where a custom field is made (it then shows up as a column); absent when the caller may not manage fields. */
   onAddColumnField?: () => void;
 
+  /** Present when the person may create a saved view: the "Create View" button opens the view editor. */
+  onCreateView?: () => void;
+
   view: 'list' | 'kanban';
   onView: (v: 'list' | 'kanban') => void;
+
+  /** Present when the person may create contacts. */
+  onAdd?: () => void;
+
+  can: { export: boolean; import: boolean; merge: boolean; createGroups: boolean };
+  exporting: boolean;
+  onExportAll: () => void;
+  onImport: () => void;
+  onDedupe: () => void;
+  onNewGroup: () => void;
+  showStats: boolean;
+  onToggleStats: () => void;
+  /** Present when the person may save the active filters as a segment. */
+  onSaveAsSegment?: () => void;
 
   onRefresh: () => void;
   /** The list is being fetched (the refresh icon spins). */
   refreshing: boolean;
 }
 
-const trigger = 'h-9 gap-2 whitespace-nowrap';
+const tool =
+  'inline-flex h-9 items-center gap-2 whitespace-nowrap rounded-md border border-border bg-background px-3 text-sm outline-none transition hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary';
 const iconBtn =
   'inline-flex size-9 items-center justify-center rounded-md border border-border bg-background text-muted-foreground outline-none transition hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary';
 
@@ -159,44 +93,19 @@ function useShortcutLabel() {
 }
 
 /**
- * The single toolbar row of the Contact Hub: search, segment, tag, filters, Send campaign, More actions, and Modify
- * columns at the far end. It owns no state; the screen passes everything in.
+ * The one slim row of the Contact Hub: search, Filter, Columns (with how many are shown), Create View, the list/board toggle, the
+ * primary "Add Contact", the "..." menu (import, export, merge duplicates, new group, stats) and refresh. Segment, tag and owner live in
+ * the Filter panel; sorting is on the column headers; the bulk actions are in the selection bar. It owns no state of its own beyond
+ * which panel is open; the screen passes everything in.
  */
 export function ContactsToolbar(p: ContactsToolbarProps) {
   const t = useTranslations('contacts-attributes-tags.list');
   const [columnsOpen, setColumnsOpen] = useState(false);
   // The panel closes on a press outside it, the button included; this stops that press from reopening it.
   const wasOpen = useRef(false);
-  const tb = useTranslations('contacts-attributes-tags.bulk');
-  // A viewer can do none of these: an empty dropdown would only be a button that opens nothing.
-  const hasMoreActions = Object.values(p.can).some(Boolean);
-
-  const tagLabel = p.tags.find((x) => x.id === p.tag)?.name ?? t('selectTag');
-  // What the AI understood, kept only while the rules it produced are still the ones applied.
-  const [ai, setAi] = useState<{ rules: string; summary: string } | null>(null);
-  const aiChip =
-    ai && ai.rules === p.rules && p.rules !== '' && ai.summary !== '' ? ai.summary : null;
-  const conditions = appliedConditionCount(p.rules);
-  const pickedOwners = ownerTokens(p.owner);
-  const ownerLabel =
-    pickedOwners.length === 0
-      ? t('selectOwner')
-      : pickedOwners.length > 1
-        ? t('ownersCount', { count: pickedOwners.length })
-        : pickedOwners[0] === UNASSIGNED_OWNER
-          ? t('unassigned')
-          : pickedOwners[0] === p.meId
-            ? t('myContacts')
-            : (p.owners.find((o) => o.id === pickedOwners[0])?.fullName ?? t('ownerFormer'));
-  const toggleOwner = (token: string, on: boolean) => {
-    const next = pickedOwners.filter((x) => x !== token);
-    p.onOwner((on ? [...next, token] : next).join(','));
-  };
-  const onlyPerson =
-    pickedOwners.length === 1 && pickedOwners[0] !== UNASSIGNED_OWNER ? pickedOwners[0] : undefined;
-  const none = !p.anySelected;
   const search = useRef<HTMLInputElement>(null);
   const shortcut = useShortcutLabel();
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'k') {
@@ -209,343 +118,156 @@ export function ContactsToolbar(p: ContactsToolbarProps) {
     return () => document.removeEventListener('keydown', onKey);
   }, []);
 
+  useEffect(() => {
+    if (p.focusSearch > 0) search.current?.focus();
+  }, [p.focusSearch]);
+
   return (
-    <div className="space-y-2">
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative min-w-[12rem] flex-1 sm:max-w-xs">
-          <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-          <Input
-            ref={search}
-            type="search"
-            value={p.q}
-            onChange={(e) => p.onQ(e.target.value)}
-            placeholder={t('searchPlaceholder')}
-            aria-label={t('search')}
-            aria-keyshortcuts="Control+K Meta+K"
-            className="h-9 ps-9 pe-16 [&::-webkit-search-cancel-button]:hidden"
-          />
-          {p.q === '' && (
-            <kbd
-              aria-hidden="true"
-              dir="ltr"
-              className="pointer-events-none absolute end-2 top-1/2 -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-sans text-[10px] font-medium text-muted-foreground"
+    <div className="relative flex flex-wrap items-center gap-2">
+      <div className="relative min-w-[12rem] flex-1 sm:max-w-xs">
+        <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+        <Input
+          ref={search}
+          type="search"
+          value={p.q}
+          onChange={(e) => p.onQ(e.target.value)}
+          placeholder={t('searchContacts')}
+          aria-label={t('search')}
+          aria-keyshortcuts="Control+K Meta+K"
+          className="h-9 ps-9 pe-16 [&::-webkit-search-cancel-button]:hidden"
+        />
+        {p.q === '' && (
+          <kbd
+            aria-hidden="true"
+            dir="ltr"
+            className="pointer-events-none absolute end-2 top-1/2 hidden -translate-y-1/2 rounded border border-border bg-muted px-1.5 py-0.5 font-sans text-[10px] font-medium text-muted-foreground sm:block"
+          >
+            {shortcut}
+          </kbd>
+        )}
+      </div>
+
+      <FilterPanel {...p.filter} />
+
+      <div className="sm:relative">
+        <button
+          type="button"
+          aria-haspopup="dialog"
+          aria-expanded={columnsOpen}
+          onPointerDown={() => (wasOpen.current = columnsOpen)}
+          onClick={() => setColumnsOpen(!wasOpen.current)}
+          className={tool}
+        >
+          <ColumnsIcon className="size-4 text-muted-foreground" />
+          {t('columns')}
+          <span
+            aria-label={t('columnsCount', { count: p.columnIds.length })}
+            className="rounded-full bg-muted px-1.5 text-[11px] leading-5 text-muted-foreground"
+          >
+            {p.columnIds.length}
+          </span>
+        </button>
+        <ColumnsModal
+          open={columnsOpen}
+          allColumns={p.allColumns}
+          current={p.columnIds}
+          onSave={p.onApplyColumns}
+          onReset={p.onResetColumns}
+          onAddField={p.onAddColumnField}
+          onClose={() => setColumnsOpen(false)}
+        />
+      </div>
+
+      {p.onCreateView && (
+        <button type="button" onClick={p.onCreateView} className={cn(tool, 'max-sm:hidden')}>
+          <EyeIcon className="size-4 text-muted-foreground" />
+          {t('createView')}
+        </button>
+      )}
+
+      <div className="ms-auto flex items-center gap-2">
+        <div
+          role="group"
+          aria-label={t('viewToggle')}
+          className="inline-flex overflow-hidden rounded-md border border-border"
+        >
+          {(['list', 'kanban'] as const).map((v) => (
+            <button
+              key={v}
+              type="button"
+              aria-pressed={p.view === v}
+              title={t(v === 'list' ? 'listView' : 'kanbanView')}
+              aria-label={t(v === 'list' ? 'listView' : 'kanbanView')}
+              onClick={() => p.onView(v)}
+              className={cn(
+                'inline-flex size-9 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
+                p.view === v ? 'bg-brand text-brand-foreground' : 'hover:bg-muted',
+              )}
             >
-              {shortcut}
-            </kbd>
-          )}
+              {v === 'list' ? <ListIcon /> : <KanbanIcon />}
+            </button>
+          ))}
         </div>
 
-        <SegmentPicker
-          value={p.segment}
-          onChange={p.onSegment}
-          counts={{ total: p.stats?.total, imported: p.stats?.imported, noGroup: p.stats?.noGroup }}
-          groups={p.groups}
-          segments={p.segments}
-          segmentsState={p.segmentsState}
-          canCreateSegment={p.canCreateSegment}
-          onRetrySegments={p.onRetrySegments}
-        />
-
-        <Menu
-          label={t('tagFilter')}
-          trigger={
-            <>
-              <span
-                className={cn('max-w-[11rem] truncate', p.tag === '' && 'text-muted-foreground')}
-              >
-                {tagLabel}
-              </span>
-              <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-            </>
-          }
-          triggerClassName={trigger}
-        >
-          <MenuRadioItem checked={p.tag === ''} onSelect={() => p.onTag('')}>
-            {t('allTags')}
-          </MenuRadioItem>
-          {p.tags.map((x) => (
-            <MenuRadioItem key={x.id} checked={p.tag === x.id} onSelect={() => p.onTag(x.id)}>
-              {x.name}
-            </MenuRadioItem>
-          ))}
-        </Menu>
-
-        <Menu
-          label={t('ownerFilter')}
-          trigger={
-            <>
-              <span
-                className={cn(
-                  'max-w-[11rem] truncate',
-                  pickedOwners.length === 0 && 'text-muted-foreground',
-                )}
-              >
-                {ownerLabel}
-              </span>
-              <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-            </>
-          }
-          triggerClassName={trigger}
-        >
-          <MenuRadioItem checked={pickedOwners.length === 0} onSelect={() => p.onOwner('')}>
-            {t('allOwners')}
-          </MenuRadioItem>
-          <MenuRadioItem
-            checked={pickedOwners.length === 1 && pickedOwners[0] === p.meId}
-            onSelect={() => p.onOwner(p.meId)}
-          >
-            {t('myContacts')}
-          </MenuRadioItem>
-          <MenuSeparator />
-          <MenuCheckboxItem
-            checked={pickedOwners.includes(UNASSIGNED_OWNER)}
-            onCheckedChange={(on) => toggleOwner(UNASSIGNED_OWNER, on)}
-          >
-            {t('unassigned')}
-          </MenuCheckboxItem>
-          {p.owners.map((o) => (
-            <MenuCheckboxItem
-              key={o.id}
-              checked={pickedOwners.includes(o.id)}
-              onCheckedChange={(on) => toggleOwner(o.id, on)}
-            >
-              {o.id === p.meId ? t('ownerMe', { name: o.fullName }) : o.fullName}
-            </MenuCheckboxItem>
-          ))}
-          {p.onReassignView && onlyPerson && (
-            <>
-              <MenuSeparator />
-              <MenuItem onSelect={p.onReassignView}>
-                {t('reassignView', {
-                  name: p.owners.find((o) => o.id === onlyPerson)?.fullName ?? t('ownerFormer'),
-                })}
-              </MenuItem>
-            </>
-          )}
-        </Menu>
-
-        <Menu
-          label={t('sort')}
-          trigger={
-            <>
-              <SortIcon className="size-4 text-muted-foreground" />
-              {t('sortButton')}
-            </>
-          }
-          triggerClassName={trigger}
-        >
-          <MenuRadioItem checked={p.order === 'desc'} onSelect={() => p.onOrder('desc')}>
-            {t('newestFirst')}
-          </MenuRadioItem>
-          <MenuRadioItem checked={p.order === 'asc'} onSelect={() => p.onOrder('asc')}>
-            {t('oldestFirst')}
-          </MenuRadioItem>
-        </Menu>
-
-        <FilterPanel
-          stage={p.stage}
-          stages={p.stages}
-          tags={p.tags}
-          onStage={p.onStage}
-          consent={p.consent}
-          onConsent={p.onConsent}
-          rules={p.rules}
-          onRules={p.onRules}
-          onAiSummary={(rules, summary) => setAi({ rules, summary })}
-          conditionCount={appliedConditionCount(p.rules)}
-        />
-
-        {p.onSaveAsSegment && (
-          <Button
-            variant="secondary"
-            className={trigger}
-            onClick={p.onSaveAsSegment}
-            title={t('saveAsSegmentHint')}
-          >
-            <FilterIcon className="size-4 text-muted-foreground" />
-            {t('saveAsSegment')}
+        {p.onAdd && (
+          <Button variant="brand" className="h-9 px-4" onClick={p.onAdd}>
+            <PlusIcon />
+            <span className="max-sm:sr-only">{t('addContactShort')}</span>
           </Button>
         )}
 
-        <Button
-          variant="secondary"
-          className={trigger}
-          disabled={none || p.busy}
-          onClick={p.onSendCampaign}
-          title={none ? t('sendCampaignHint') : undefined}
+        <Menu
+          label={t('moreActions')}
+          align="end"
+          triggerClassName="size-9 px-0 text-muted-foreground"
+          triggerProps={{ 'aria-label': t('moreActions'), title: t('moreActions') }}
+          trigger={<MoreIcon />}
         >
-          <SendIcon />
-          {t('sendCampaign')}
-        </Button>
+          {p.can.import && (
+            <MenuItem onSelect={p.onImport}>
+              <UploadIcon /> {t('bulkUpload')}
+            </MenuItem>
+          )}
+          {p.can.export && (
+            <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
+              <DownloadIcon /> {t('exportAll')}
+            </MenuItem>
+          )}
+          {p.can.merge && (
+            <MenuItem onSelect={p.onDedupe}>
+              <MergeIcon /> {t('dedupe')}
+            </MenuItem>
+          )}
+          {p.can.createGroups && (
+            <MenuItem onSelect={p.onNewGroup}>
+              <UsersPlusIcon /> {t('newGroup')}
+            </MenuItem>
+          )}
+          {p.onSaveAsSegment && (
+            <MenuItem onSelect={p.onSaveAsSegment}>
+              <EyeIcon /> {t('saveAsSegment')}
+            </MenuItem>
+          )}
+          {(p.can.import ||
+            p.can.export ||
+            p.can.merge ||
+            p.can.createGroups ||
+            p.onSaveAsSegment) && <MenuSeparator />}
+          <MenuItem onSelect={p.onToggleStats}>
+            {p.showStats ? t('hideStats') : t('showStats')}
+          </MenuItem>
+        </Menu>
 
-        {hasMoreActions && (
-          <div className="relative">
-            <Menu
-              label={t('moreActions')}
-              triggerClassName={trigger}
-              trigger={
-                <>
-                  {t('moreActions')}
-                  <ChevronDownIcon className="size-3.5 text-muted-foreground" />
-                </>
-              }
-            >
-              {p.can.export && (
-                <MenuItem onSelect={p.onExportAll} disabled={p.exporting}>
-                  <DownloadIcon /> {t('exportAll')}
-                </MenuItem>
-              )}
-              {p.can.import && (
-                <MenuItem onSelect={p.onImport}>
-                  <UploadIcon /> {t('bulkUpload')}
-                </MenuItem>
-              )}
-              {p.can.merge && (
-                <MenuItem onSelect={p.onDedupe}>
-                  <MergeIcon /> {t('dedupe')}
-                </MenuItem>
-              )}
-              {p.can.createGroups && (
-                <MenuItem onSelect={p.onNewGroup}>
-                  <UsersPlusIcon /> {t('newGroup')}
-                </MenuItem>
-              )}
-              {(p.can.export || p.can.update || p.can.delete) && (
-                <>
-                  <MenuSeparator />
-                  <MenuLabel>{none ? t('selectedActionsNone') : t('selectedActions')}</MenuLabel>
-                </>
-              )}
-              {p.can.export && (
-                <MenuItem onSelect={p.onExportSelected} disabled={none || p.busy}>
-                  {tb('export')}
-                </MenuItem>
-              )}
-              {p.can.update && (
-                <>
-                  <MenuItem onSelect={p.onUpdateSelected} disabled={none || p.busy}>
-                    {tb('update')}
-                  </MenuItem>
-                  <MenuItem onSelect={() => p.onPicker('groupAdd')} disabled={none || p.busy}>
-                    {tb('addToGroup')}
-                  </MenuItem>
-                  <MenuItem onSelect={() => p.onPicker('groupRemove')} disabled={none || p.busy}>
-                    {tb('removeFromGroup')}
-                  </MenuItem>
-                  <MenuItem onSelect={() => p.onPicker('tagAdd')} disabled={none || p.busy}>
-                    {tb('tag')}
-                  </MenuItem>
-                  <MenuItem onSelect={() => p.onPicker('tagRemove')} disabled={none || p.busy}>
-                    {tb('untag')}
-                  </MenuItem>
-                </>
-              )}
-              {p.can.delete && (
-                <MenuItem danger onSelect={p.onDeleteSelected} disabled={none || p.busy}>
-                  {tb('delete')}
-                </MenuItem>
-              )}
-            </Menu>
-            <BulkPickers
-              picker={p.picker}
-              canCreateTags={p.can.createTags}
-              onClose={() => p.onPicker(null)}
-              onGroup={p.onGroup}
-              onTag={p.onTagApply}
-            />
-          </div>
-        )}
-
-        <div className="ms-auto flex items-center gap-2">
-          <div className="relative">
-            <button
-              type="button"
-              onPointerDown={() => (wasOpen.current = columnsOpen)}
-              onClick={() => setColumnsOpen(!wasOpen.current)}
-              title={t('columns')}
-              aria-label={t('columns')}
-              className={iconBtn}
-            >
-              <ViewWeekOutlinedIcon fontSize="small" />
-            </button>
-            <ColumnsModal
-              open={columnsOpen}
-              allColumns={p.allColumns}
-              current={p.columnIds}
-              onSave={p.onApplyColumns}
-              onReset={p.onResetColumns}
-              onAddField={p.onAddColumnField}
-              onClose={() => setColumnsOpen(false)}
-            />
-          </div>
-          <button
-            type="button"
-            onClick={p.onRefresh}
-            title={t('refresh')}
-            aria-label={t('refresh')}
-            className={iconBtn}
-          >
-            <RefreshIcon className={cn('size-4', p.refreshing && 'animate-spin')} />
-          </button>
-          <div
-            role="group"
-            aria-label={t('viewToggle')}
-            className="inline-flex overflow-hidden rounded-md border border-border"
-          >
-            {(['list', 'kanban'] as const).map((v) => (
-              <button
-                key={v}
-                type="button"
-                aria-pressed={p.view === v}
-                title={t(v === 'list' ? 'listView' : 'kanbanView')}
-                aria-label={t(v === 'list' ? 'listView' : 'kanbanView')}
-                onClick={() => p.onView(v)}
-                className={cn(
-                  'inline-flex size-9 items-center justify-center outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-primary',
-                  p.view === v ? 'bg-brand text-brand-foreground' : 'hover:bg-muted',
-                )}
-              >
-                {v === 'list' ? <ListIcon /> : <KanbanIcon />}
-              </button>
-            ))}
-          </div>
-        </div>
+        <button
+          type="button"
+          onClick={p.onRefresh}
+          title={t('refresh')}
+          aria-label={t('refresh')}
+          className={iconBtn}
+        >
+          <RefreshIcon className={cn('size-4', p.refreshing && 'animate-spin')} />
+        </button>
       </div>
-
-      {p.rules !== '' && (
-        <div className="flex flex-wrap items-center gap-2 text-sm">
-          <span className="inline-flex max-w-full items-center gap-1.5 rounded-full border border-brand/40 bg-brand/10 py-1 ps-2.5 pe-1 text-brand">
-            {aiChip && <SparkIcon />}
-            <span className="truncate">{aiChip ?? t('conditionsChip', { count: conditions })}</span>
-            <button
-              type="button"
-              onClick={() => p.onRules('')}
-              aria-label={t('clearFilter')}
-              title={t('clearFilter')}
-              className="inline-flex size-5 items-center justify-center rounded-full outline-none hover:bg-brand/20 focus-visible:ring-2 focus-visible:ring-primary"
-            >
-              ×
-            </button>
-          </span>
-        </div>
-      )}
-
-      {p.anySelected && (
-        <div className="flex flex-wrap items-center gap-2 text-sm" role="status">
-          <span className="font-medium" aria-live="polite">
-            {p.selectedCount === null
-              ? tb('allMatching')
-              : tb('selected', { count: p.selectedCount })}
-          </span>
-          <button
-            type="button"
-            onClick={p.onClearSelection}
-            className="text-brand underline underline-offset-2 outline-none focus-visible:ring-2 focus-visible:ring-primary"
-          >
-            {tb('clear')}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

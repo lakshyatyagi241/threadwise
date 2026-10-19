@@ -29,10 +29,9 @@ const TYPE_COLOR: Record<(typeof TYPE_ORDER)[number], string> = {
   video: '#26A69A',
   reel: '#EC407A',
 };
-const CONVO_ORDER = ['open', 'pending', 'resolved', 'closed', 'snoozed'] as const;
+const CONVO_ORDER = ['open', 'resolved', 'closed', 'snoozed'] as const;
 const CONVO_COLOR: Record<(typeof CONVO_ORDER)[number], string> = {
   open: 'bg-success',
-  pending: 'bg-warning',
   resolved: 'bg-brand',
   closed: 'bg-muted-foreground',
   snoozed: 'bg-danger',
@@ -408,7 +407,7 @@ export function InsightsScreen() {
                         )}
                       </div>
                     </div>
-                    <div className="flex shrink-0 items-center gap-5 text-right">
+                    <div className="flex shrink-0 items-center gap-5 text-end">
                       <div>
                         <div className="text-lg leading-none">
                           {formatCount(p.stats.impressions, locale)}

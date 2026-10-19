@@ -9,7 +9,11 @@ import {
   removeFiles,
 } from '../../../src/modules/addons-extension-registry/extension-installer';
 import { inspectPackage } from '../../../src/modules/addons-extension-registry/package-inspector';
-import { readEntry, readZip } from '../../../src/modules/addons-extension-registry/zip-reader';
+import {
+  readEntry,
+  readEntryAsync,
+  readZip,
+} from '../../../src/modules/addons-extension-registry/zip-reader';
 import { makeZip, manifestJson } from './zip-fixture';
 
 const OPTS = { coreVersion: '1.0.0', maxEntries: 100, maxUnpackedBytes: 10_000_000 };
@@ -51,6 +55,29 @@ describe('zip reader', () => {
     ]);
     expect(readEntry(buf, entries[0]!).toString()).toBe('hello');
     expect(readEntry(buf, entries[2]!).toString()).toBe('world '.repeat(500));
+  });
+
+  it('the async reader returns the same bytes and refuses the same entries as the sync one (EL-B08)', async () => {
+    const buf = makeZip([
+      { name: 'a.txt', data: 'hello', method: 0 },
+      { name: 'dir/b.txt', data: 'world '.repeat(500) },
+    ]);
+    const entries = readZip(buf, { maxEntries: 10 });
+    for (const e of entries) {
+      expect((await readEntryAsync(buf, e)).equals(readEntry(buf, e))).toBe(true);
+    }
+    const tampered = Buffer.from(buf);
+    tampered[30 + 'a.txt'.length] = 0x58;
+    await expect(readEntryAsync(tampered, entries[0]!)).rejects.toThrow(/corrupt/);
+    await expect(readEntryAsync(buf, { ...entries[0]!, size: 99 })).rejects.toThrow(
+      /declared size/,
+    );
+    await expect(readEntryAsync(buf, { ...entries[1]!, size: 3 })).rejects.toThrow(
+      /could not be decompressed|declared size/,
+    );
+    await expect(readEntryAsync(buf, { ...entries[0]!, method: 99 })).rejects.toThrow(
+      /unsupported compression/,
+    );
   });
 
   it('rejects a corrupt entry (checksum mismatch) and a lying size', () => {

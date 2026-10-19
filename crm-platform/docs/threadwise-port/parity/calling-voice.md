@@ -62,6 +62,51 @@ the same numbers are the first two cards of the log.
 - The query plan was read on 9 000 generated calls of two workspaces on a local Postgres, not on production data.
 - Rows still `ringing` for hours (Meta never sent `terminate`) show as "Live now"; Reference had the same.
 
+## Number readiness and onboarding (EXT-CALL-007 to 011)
+
+Not in Reference: this is a product extension, requested so a freshly connected number can go from "connected" to "can place and receive
+calls" without a developer touching Meta. Everything Reference did on the toggle is unchanged (same card, same button labels, same coexistence
+refusal before Meta is asked, same local flags after Meta accepts); what is added or changed:
+
+| Id           | Reference                                                                            | Here                                                                                                                                                                                    | Why                                                                                              |
+| ------------ | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| 004 (words)  | Meta's refusal shown as the server's English sentence in a browser alert             | `CALL_META_REFUSED` carries a stable `reason`; the card shows it in the person's language (the long prerequisite text is kept, translated); an unnamed refusal still shows Meta's words | a sentence in English is no help to a workspace in another language, and parsing text is brittle |
+| 004 (switch) | the local flag only changed by the toggle; it could drift from Meta forever          | a check reads Meta's calling status and brings the local flag in line (audited)                                                                                                         | the Call button must never show on a number Meta refuses, nor hide on one switched on there      |
+| 008 (words)  | a dial refused for permission was recognised by the word "permission" in Meta's text | also by Meta's code 138006                                                                                                                                                              | text matching alone breaks when Meta rewords                                                     |
+| ext          | nothing                                                                              | the readiness checklist, the automatic switch after a connect (off by default), the scheduled re-check, the `calls` field repair on the platform app (worker only), the test call       | the point of this work                                                                           |
+
+Not verified (simulated): every Meta answer in the tests is a fake that returns what Meta's documentation describes (the calling settings
+read, the app subscription read and write, the phone node, the token inspection). The Meta error codes mapped (141000, 138000, 138001, 138006,
+138009, 190, 10, 200 to 299) are the ones this code has seen or that Meta documents; none was captured from a live refusal in this work. The
+Playwright spec (`apps/web/e2e/calling-voice/readiness.spec.ts`) skips without a local account and was not run. The first real number is the check
+that remains: [the manual checklist](../plan/calling-number-readiness-build.md#manual-test-with-a-real-number).
+
+Decisions for the owner: whether `autoEnableOnConnect` should stay off by default (it is: nothing is switched on at Meta without an admin saying so);
+whether a platform operator should be able to turn it on for every workspace; whether the scheduled check should stop for numbers nobody has
+used for calling in 30 days; whether TURN should move to short-lived credentials (today's are a shared static secret served to everyone who may call).
+
+## Call logging framework (calls that are not WhatsApp calls)
+
+Not a Reference feature: asked for by the owner. Spec: [call-logging.md](../../specs/call-logging.md); wiring: [call-logging.md](../wiring/call-logging.md).
+
+| Area                                          | Status    | Difference from the WhatsApp log, and why                                                                                                                                                                                                                                                                                                                                             |
+| --------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| The log and analytics read both sources       | intended  | The list, the four cards, the selection cards and the analytics now include logged calls, with `source`, `outcome` and `notesPreview` on a row (absent on an older server) and a `source` filter. A workspace with no logged call reads exactly as before; the existing integration spec runs unchanged. The WhatsApp-only paths (ledger, recording, playback) still read `wa_calls`. |
+| A logged call's "answered"                    | intended  | A connected call is answered even when its length is unknown (0 seconds), because a person logging a call may not know it. The average handle time counts only calls with a length.                                                                                                                                                                                                   |
+| A logged call's detail                        | intended  | One step (`logged`), no recording to play. A recording reference on a provider is never returned, so `call.recordings.play` is not bypassed.                                                                                                                                                                                                                                          |
+| Logging is never refused by consent           | intended  | The Do-Not-Call list and a withdrawal govern placing a marketing call (click-to-call and `/calls/check`), not recording a fact.                                                                                                                                                                                                                                                       |
+| Mobile reports of unknown numbers are dropped | intended  | A work phone is also a personal phone. Off by default; the workspace may switch on "create contacts from unknown callers". A telephony line is the business's own, so its calls are kept either way.                                                                                                                                                                                  |
+| Reported calls cannot be edited               | intended  | A call from a phone or a provider is a record of what happened; only `call.logging.manage` changes one.                                                                                                                                                                                                                                                                               |
+| Phone numbers are unmasked                    | known gap | The call log never masked numbers and still does not (BL-254).                                                                                                                                                                                                                                                                                                                        |
+| Call logs screen without `waba_calling`       | intended  | BL-257, done: the screen, its list, cards, filters, detail and analytics need only `call.logs.read` (Reference had no non-WhatsApp calls, so no such case). The number filter, the recording column and the WhatsApp wording appear only with the plan feature; playing a recording and `numberId` stay `422 PLAN_FEATURE_LOCKED`. With the feature nothing changes.                  |
+
+### Not verified
+
+- **No real telephony vendor.** The generic and fake adapters are tested end to end (signed callback, worker, click-to-call, Do-Not-Call); a vendor's own callback shape, signature and click-to-call API are not (BL-252).
+- **The mobile app does not sync yet.** The batch route is tested with the contract the app will use; Android's call log and the iOS prompt are not built (BL-251).
+- **The Log a call dialog and the Source filter** were exercised by hand in a browser against a local API on a scratch database (a call saved by number, matched to a contact, a follow-up task made, the row shown with its "Logged by hand" chip, the dialog at desktop and 375 px width). Right-to-left, dark mode, keyboard-only and screen-reader passes are open (BL-250).
+- **The 20 non-English translations are machine-drafted** and need a native read (same practice as BL-234).
+
 ## Not done, and what it costs
 
 - **TURN is configuration, not a window global.** `CALLING_ICE_SERVERS` (a JSON list in the environment) is served to people who may call by `GET /v2/calling/ice-servers`; the provider uses it and falls back to the four public STUN servers when it is empty.

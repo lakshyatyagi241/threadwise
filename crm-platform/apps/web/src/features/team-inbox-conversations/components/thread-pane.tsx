@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState, type Ref } from 'react';
 import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
@@ -33,6 +33,7 @@ import {
 } from '../lib/group-thread';
 import type { MentionMember } from '../lib/mentions';
 import type { SnoozePreset } from '../lib/selection';
+import { fullStamp, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { computeWindow, formatWindowLeft, type WindowView } from '../lib/window';
 import { Composer, type ComposerHandle, type ComposerMode } from './composer';
 import { GroupCostLine } from './group-cost-line';
@@ -41,10 +42,23 @@ import { TagChip } from './tag-chip';
 import { SlaBadge } from './sla-badge';
 import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
+import { AssignMenu } from './assign-menu';
 import { TriageMenu } from './triage-menu';
-import { AlertIcon, BackIcon, CheckCircleIcon, ClockIcon, PanelIcon } from './icons';
+import {
+  AlertIcon,
+  BackIcon,
+  CheckCircleIcon,
+  ClockIcon,
+  PanelIcon,
+  RefreshIcon,
+  SearchIcon,
+} from './icons';
 import { MessageStream } from './message-stream';
+import { ThreadSearch } from './thread-search';
+import type { AiModelChoice } from './composer-toolbar';
 import { Avatar, ChannelTag } from './parts';
+
+const UUID_KEY = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 export interface ThreadPaneProps {
   conversationId: string;
@@ -67,6 +81,8 @@ export interface ThreadPaneProps {
   mode: ComposerMode;
   onMode: (mode: ComposerMode) => void;
   composerRef: Ref<ComposerHandle>;
+  /** The model of the composer's Smart AI Assistant (null: none is enabled). */
+  aiModel?: AiModelChoice | null;
   panelOpen: boolean;
   onTogglePanel: () => void;
   onBack: () => void;
@@ -89,12 +105,20 @@ export interface ThreadPaneProps {
   onRetryMessage: (messageId: string) => Promise<void>;
   resolving: boolean;
   onAssignSelf: () => void;
+  /** The assign pill in the header; without it the header keeps its single "Assign to me" button. */
+  assignMenu?: {
+    meId: string;
+    canAssign: boolean;
+    busy: boolean;
+    onAssign: (change: { userId: string | null }) => void;
+  };
   /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
   triage?: {
     busy: boolean;
     onPriority: (priority: ConversationPriority) => void;
     onSnooze: (preset: SnoozePreset) => void;
     onWake: () => void;
+    onSpam: () => void;
   };
   /** Tags of the open conversation: present when the caller may put tags on threads. */
   tags?: {
@@ -114,10 +138,23 @@ export interface ThreadPaneProps {
 export function ThreadPane(props: ThreadPaneProps) {
   const t = useTranslations('team-inbox-conversations.thread');
   const tg = useTranslations('team-inbox-conversations.groupThread');
+  const tl = useTranslations('team-inbox-conversations.list');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const canManageChannels = useCan('inbox.channel.manage');
   const canExportLogs = useCan('inbox.logs.export');
   const canOpenGroups = useCan('wa.groups.read');
   const { detail, thread } = props;
+  // A chat assigned to another agent is theirs to answer: replying is locked until it is assigned to the viewer (notes stay open).
+  // Unknown viewer (no `assignMenu`) or no assignee: not locked. The API refuses the send as well (CONVERSATION_ASSIGNED_TO_OTHER).
+  const meId = props.assignMenu?.meId;
+  const lockedToOther =
+    props.can.reply &&
+    meId !== undefined &&
+    detail?.assignment.user != null &&
+    detail.assignment.user.id !== meId;
+  const canReply = props.can.reply && !lockedToOther;
+  const [searching, setSearching] = useState(false);
   const [templatesOpen, setTemplatesOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   // The message the next send answers. It belongs to one thread: another conversation starts without it.
@@ -129,7 +166,7 @@ export function ThreadPane(props: ThreadPaneProps) {
   // A group of a personal (linked) number reads its members from the group directory for the @mention picker.
   const personalGroup = isPersonalGroupThread(detail?.peerKey, detail?.channel.kind);
   const groupBlock = personalGroup ? personalGroupBlock(detail?.personalGroup) : null;
-  const mentionsOn = personalGroup && props.can.reply && groupBlock === null;
+  const mentionsOn = personalGroup && canReply && groupBlock === null;
   const conversationId = props.conversationId;
   const searchMembers = useCallback(
     async (q: string): Promise<MentionMember[]> =>
@@ -168,25 +205,34 @@ export function ThreadPane(props: ThreadPaneProps) {
   const cloudBlock = cloudGroupBlock(detail?.cloudGroup);
   const groupSendBlocked =
     isGroupSendBlocked(detail?.peerKey, detail?.channel.kind) || cloudBlock !== null;
-  const replyDisabled = windowClosed || channelDown || groupBlock !== null;
+  // A resolved or closed thread takes no message from any agent: the input is gone until someone reopens it (the API refuses too).
+  const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  const replyDisabled = windowClosed || channelDown || groupBlock !== null || resolved;
   // A template needs no open window, only a working channel that sends templates and the right to reply.
   const canTemplate =
     Boolean(detail?.capabilities.templates) &&
-    props.can.reply &&
+    !resolved &&
+    canReply &&
     !channelDown &&
     !groupSendBlocked &&
     detail?.channel.kind !== 'email' &&
     props.mode === 'reply';
   // A place, contact cards and buttons are free-form messages: they need the window like text does (the composer disables the button).
   const shareKinds: ShareKind[] =
-    detail && props.can.reply && !channelDown && !groupLimited && props.mode === 'reply'
+    detail && !resolved && canReply && !channelDown && !groupLimited && props.mode === 'reply'
       ? [
           ...(detail.capabilities.media.includes('location') ? (['location'] as const) : []),
           ...(detail.capabilities.media.includes('contact') ? (['contacts'] as const) : []),
           ...(detail.capabilities.interactive ? (['buttons'] as const) : []),
         ]
       : [];
-  const resolved = detail?.status === 'resolved' || detail?.status === 'closed';
+  const snoozeLabel =
+    detail?.status === 'snoozed' && detail.snoozedUntil
+      ? (() => {
+          const m = snoozeLeftMessage(snoozeLeft(detail.snoozedUntil, props.nowMs));
+          return tl('snoozedFor', { left: tl(m.key, m.values) });
+        })()
+      : null;
   // Email: the reply box adds Cc, Bcc and a subject; templates, shares and files are not part of an email reply (yet).
   const isEmail = detail?.channel.kind === 'email';
   const emailSubject = isEmail ? latestEmailSubject(thread.state.messages, detail?.title) : '';
@@ -206,22 +252,38 @@ export function ThreadPane(props: ThreadPaneProps) {
         {detail ? (
           <>
             <Avatar id={detail.id} name={detail.title} />
-            <div className="min-w-0 flex-1">
+            <div className={cn('min-w-0 flex-1', searching && 'hidden')}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <h2 className="truncate text-base font-semibold" data-testid="inbox-thread-title">
                   {detail.title}
                 </h2>
                 {resolved && <Badge tone="success">{t(`status.${detail.status}`)}</Badge>}
+                {detail.status === 'snoozed' && (
+                  <Badge
+                    tone="warning"
+                    title={
+                      detail.snoozedUntil
+                        ? tl('unsnoozesAt', {
+                            time: fullStamp(detail.snoozedUntil, locale, timeZone),
+                          })
+                        : undefined
+                    }
+                  >
+                    {snoozeLabel ?? t('status.snoozed')}
+                  </Badge>
+                )}
                 {detail.status === 'spam' && <Badge tone="danger">{t('status.spam')}</Badge>}
-                {detail.status === 'snoozed' && <Badge tone="warning">{t('status.snoozed')}</Badge>}
                 {win && <WindowBadge view={win} />}
                 <SlaBadge status={detail.slaStatus} nowMs={props.nowMs} />
               </div>
               <p className="flex flex-wrap items-center gap-x-2 text-xs text-muted-foreground">
-                <span dir="ltr" className="font-mono">
-                  {detail.peerKey}
-                </span>
-                <ChannelTag decorative kind={detail.channel.kind} name={detail.channel.name} />
+                {/* A website visitor's key is a generated id: it tells an agent nothing, so it is not shown. */}
+                {!UUID_KEY.test(detail.peerKey) && (
+                  <span dir="ltr" className="font-mono">
+                    {detail.peerKey}
+                  </span>
+                )}
+                <ChannelTag full decorative kind={detail.channel.kind} name={detail.channel.name} />
                 <span className="truncate">{detail.channel.name}</span>
                 {personalGroup && canOpenGroups && (
                   <Link
@@ -256,81 +318,124 @@ export function ThreadPane(props: ThreadPaneProps) {
             )}
           </div>
         )}
-        <div className="flex shrink-0 items-center gap-1">
-          {detail && (
-            <CallButton
-              conversationId={detail.id}
-              displayName={detail.title}
-              contactId={detail.contact?.id}
-            />
-          )}
-          {detail && !props.panelOpen && !detail.assignment.user && props.can.assignSelf && (
-            <Button
-              variant="secondary"
-              size="sm"
-              data-testid="inbox-assign-self"
-              onClick={props.onAssignSelf}
-              className="hidden sm:inline-flex"
-            >
-              {t('assignToMe')}
-            </Button>
-          )}
-          {detail && props.tags && (
-            <TagMenu
-              applied={detail.labels}
-              busy={props.tags.busy}
-              canCreate={props.tags.canCreate}
-              onApply={props.tags.onApply}
-              onWithdraw={props.tags.onWithdraw}
-            />
-          )}
-          {detail && props.triage && (
-            <TriageMenu
-              priority={detail.priority}
-              snoozed={detail.status === 'snoozed'}
-              canPriority={props.can.priority ?? false}
-              canSnooze={props.can.snooze ?? false}
-              canWake={props.can.resolve}
-              busy={props.triage.busy}
-              onPriority={props.triage.onPriority}
-              onSnooze={props.triage.onSnooze}
-              onWake={props.triage.onWake}
-            />
-          )}
-          {detail && props.can.resolve && (
-            <Button
-              variant="secondary"
-              size="sm"
-              data-testid="inbox-resolve"
-              disabled={props.resolving}
-              onClick={props.onToggleResolved}
-              title={t('resolveShortcut')}
-            >
-              {props.resolving ? <Spinner /> : <CheckCircleIcon width={14} height={14} />}
-              <span className={props.panelOpen ? 'hidden 2xl:inline' : 'hidden sm:inline'}>
-                {resolved ? t('reopen') : t('resolve')}
-              </span>
-            </Button>
-          )}
-          <button
-            type="button"
-            data-testid="inbox-panel-toggle"
-            aria-pressed={props.panelOpen}
-            aria-label={props.panelOpen ? t('hidePanel') : t('showPanel')}
-            title={props.panelOpen ? t('hidePanel') : t('showPanel')}
-            onClick={props.onTogglePanel}
-            className={cn(
-              'flex size-9 items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
-              props.panelOpen ? 'bg-muted text-foreground' : 'text-muted-foreground',
+        {searching && detail ? (
+          <ThreadSearch
+            key={detail.id}
+            messages={thread.state.messages}
+            onClose={() => setSearching(false)}
+            className="flex-1"
+          />
+        ) : (
+          <div className="flex shrink-0 items-center gap-1">
+            {detail && (
+              <CallButton
+                conversationId={detail.id}
+                displayName={detail.title}
+                contactId={detail.contact?.id}
+              />
             )}
-          >
-            <PanelIcon />
-          </button>
-        </div>
+            {detail && props.tags && (
+              <TagMenu
+                applied={detail.labels}
+                busy={props.tags.busy}
+                canCreate={props.tags.canCreate}
+                onApply={props.tags.onApply}
+                onWithdraw={props.tags.onWithdraw}
+              />
+            )}
+            {detail && props.triage && (
+              <TriageMenu
+                priority={detail.priority}
+                snoozed={detail.status === 'snoozed'}
+                spam={detail.status === 'spam'}
+                canPriority={props.can.priority ?? false}
+                canSnooze={props.can.snooze ?? false}
+                canWake={props.can.resolve}
+                canSpam={props.can.resolve}
+                busy={props.triage.busy}
+                onPriority={props.triage.onPriority}
+                onSnooze={props.triage.onSnooze}
+                onWake={props.triage.onWake}
+                onSpam={props.triage.onSpam}
+              />
+            )}
+            {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
+              <AssignMenu
+                current={detail.assignment.user}
+                meId={props.assignMenu.meId}
+                canAssign={props.assignMenu.canAssign}
+                busy={props.assignMenu.busy}
+                onAssign={props.assignMenu.onAssign}
+              />
+            )}
+            {detail &&
+              !props.assignMenu &&
+              !props.panelOpen &&
+              !detail.assignment.user &&
+              props.can.assignSelf && (
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  data-testid="inbox-assign-self"
+                  onClick={props.onAssignSelf}
+                  className="hidden sm:inline-flex"
+                >
+                  {t('assignToMe')}
+                </Button>
+              )}
+            {detail && props.can.resolve && (
+              <Button
+                variant="secondary"
+                size="sm"
+                data-testid="inbox-resolve"
+                className="h-9 gap-1.5 rounded-full px-3"
+                disabled={props.resolving}
+                onClick={props.onToggleResolved}
+                title={t('resolveShortcut')}
+              >
+                {props.resolving ? (
+                  <Spinner />
+                ) : resolved ? (
+                  <RefreshIcon width={14} height={14} />
+                ) : (
+                  <CheckCircleIcon width={14} height={14} />
+                )}
+                <span>{resolved ? t('reopen') : t('resolve')}</span>
+              </Button>
+            )}
+            {detail && (
+              <button
+                type="button"
+                data-testid="inbox-thread-search-open"
+                aria-label={t('searchOpen')}
+                title={t('searchOpen')}
+                onClick={() => setSearching(true)}
+                className="flex size-9 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <SearchIcon />
+              </button>
+            )}
+            <button
+              type="button"
+              data-testid="inbox-panel-toggle"
+              aria-pressed={props.panelOpen}
+              aria-label={props.panelOpen ? t('hidePanel') : t('showPanel')}
+              title={props.panelOpen ? t('hidePanel') : t('showPanel')}
+              onClick={props.onTogglePanel}
+              className={cn(
+                'flex size-9 items-center justify-center rounded-md hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary',
+                props.panelOpen ? 'bg-muted text-foreground' : 'text-muted-foreground',
+              )}
+            >
+              <PanelIcon />
+            </button>
+          </div>
+        )}
       </header>
 
       <MessageStream
         conversationId={props.conversationId}
+        channelKind={detail?.channel.kind}
         state={thread.state}
         notes={props.notes}
         progress={thread.progress}
@@ -342,7 +447,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         onLoadOlder={() => void thread.loadOlder()}
         onRetryMessage={props.onRetryMessage}
         onReply={
-          props.can.reply && !replyDisabled && !groupLimited
+          canReply && !replyDisabled && !groupLimited
             ? (message) => {
                 setReply({ conversationId: props.conversationId, message });
                 props.onMode('reply');
@@ -350,7 +455,7 @@ export function ThreadPane(props: ThreadPaneProps) {
             : undefined
         }
         onReact={
-          props.can.reply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
+          canReply && !replyDisabled && !groupLimited && detail?.capabilities.reactions
             ? props.onReact
             : undefined
         }
@@ -362,123 +467,172 @@ export function ThreadPane(props: ThreadPaneProps) {
         onReload={() => void thread.sync()}
       />
 
-      {channelDown && props.channel && props.can.reply && props.mode === 'reply' && (
-        <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
-      )}
-      {win &&
-        windowClosed &&
-        !channelDown &&
-        !groupLimited &&
-        props.can.reply &&
-        props.mode === 'reply' && (
-          <div
-            role="status"
-            data-testid="inbox-window-banner"
-            className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
-          >
-            <AlertIcon className="mt-0.5 shrink-0" />
-            <div>
-              <p className="font-medium">{t('windowBanner.title')}</p>
-              <p className="text-xs">{t('windowBanner.message')}</p>
-              {canTemplate && (
+      {resolved ? (
+        <div
+          role="status"
+          data-testid="inbox-resolved-bar"
+          className="flex flex-wrap items-center justify-between gap-2 border-t border-border bg-muted/50 px-4 py-3 text-sm text-muted-foreground"
+        >
+          <span>{t('resolvedBanner')}</span>
+          {props.can.resolve && (
+            <Button
+              type="button"
+              variant="secondary"
+              size="sm"
+              data-testid="inbox-resolved-reopen"
+              disabled={props.resolving}
+              onClick={props.onToggleResolved}
+            >
+              {t('reopen')}
+            </Button>
+          )}
+        </div>
+      ) : (
+        <>
+          {channelDown && props.channel && canReply && props.mode === 'reply' && (
+            <ReconnectBanner channel={props.channel} canManage={canManageChannels} />
+          )}
+          {win &&
+            windowClosed &&
+            !channelDown &&
+            !groupLimited &&
+            canReply &&
+            props.mode === 'reply' && (
+              <div
+                role="status"
+                data-testid="inbox-window-banner"
+                className="flex items-start gap-2 border-t border-danger/30 bg-danger/10 px-4 py-2.5 text-sm text-danger"
+              >
+                <AlertIcon className="mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-medium">{t('windowBanner.title')}</p>
+                  <p className="text-xs">{t('windowBanner.message')}</p>
+                  {canTemplate && (
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      data-testid="inbox-window-template"
+                      className="mt-2"
+                      onClick={() => setTemplatesOpen(true)}
+                    >
+                      {t('windowBanner.sendTemplate')}
+                    </Button>
+                  )}
+                </div>
+              </div>
+            )}
+          {groupBlock !== null && canReply && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-group-readonly"
+              data-reason={groupBlock}
+              className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+              <div>
+                <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {tg(`readOnly.${groupBlock}.message`)}
+                </p>
+              </div>
+            </div>
+          )}
+          {cloudBlock !== null && canReply && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-group-cloud-block"
+              data-reason={cloudBlock}
+              className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
+              <div>
+                <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
+                <p className="text-xs text-muted-foreground">
+                  {tg(`cloudBlock.${cloudBlock}.message`)}
+                </p>
+              </div>
+            </div>
+          )}
+          {detail?.cloudGroup &&
+            cloudBlock === null &&
+            canReply &&
+            props.mode === 'reply' &&
+            !channelDown && <GroupCostLine group={detail.cloudGroup} />}
+          {lockedToOther && props.mode === 'reply' && (
+            <div
+              role="status"
+              data-testid="inbox-assigned-lock"
+              className="flex items-center gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
+            >
+              <AlertIcon className="shrink-0 text-muted-foreground" />
+              <p className="min-w-0 flex-1">{t('assignedToOther')}</p>
+              {props.can.assignSelf && (
                 <Button
-                  type="button"
                   variant="secondary"
-                  data-testid="inbox-window-template"
-                  className="mt-2"
-                  onClick={() => setTemplatesOpen(true)}
+                  size="sm"
+                  data-testid="inbox-assigned-lock-assign"
+                  disabled={props.assignMenu?.busy}
+                  onClick={props.onAssignSelf}
                 >
-                  {t('windowBanner.sendTemplate')}
+                  {t('assignToMe')}
                 </Button>
               )}
             </div>
-          </div>
-        )}
-      {groupBlock !== null && props.can.reply && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-group-readonly"
-          data-reason={groupBlock}
-          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
-        >
-          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
-          <div>
-            <p className="font-medium">{tg(`readOnly.${groupBlock}.title`)}</p>
-            <p className="text-xs text-muted-foreground">{tg(`readOnly.${groupBlock}.message`)}</p>
-          </div>
-        </div>
-      )}
-      {cloudBlock !== null && props.can.reply && props.mode === 'reply' && (
-        <div
-          role="status"
-          data-testid="inbox-group-cloud-block"
-          data-reason={cloudBlock}
-          className="flex items-start gap-2 border-t border-border bg-muted/50 px-4 py-2.5 text-sm"
-        >
-          <AlertIcon className="mt-0.5 shrink-0 text-muted-foreground" />
-          <div>
-            <p className="font-medium">{tg(`cloudBlock.${cloudBlock}.title`)}</p>
-            <p className="text-xs text-muted-foreground">
-              {tg(`cloudBlock.${cloudBlock}.message`)}
+          )}
+          {!props.can.reply && props.mode === 'reply' && (
+            <p
+              role="status"
+              className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground"
+            >
+              {t('readOnly')}
             </p>
-          </div>
-        </div>
-      )}
-      {detail?.cloudGroup &&
-        cloudBlock === null &&
-        props.can.reply &&
-        props.mode === 'reply' &&
-        !channelDown && <GroupCostLine group={detail.cloudGroup} />}
-      {!props.can.reply && props.mode === 'reply' && (
-        <p
-          role="status"
-          className="border-t border-border bg-muted/40 px-4 py-2 text-xs text-muted-foreground"
-        >
-          {t('readOnly')}
-        </p>
-      )}
+          )}
 
-      <Composer
-        conversationId={props.conversationId}
-        mode={props.mode}
-        onMode={props.onMode}
-        replyDisabled={replyDisabled}
-        canReply={props.can.reply}
-        canNote={props.can.note}
-        canAttach={isEmail ? props.can.reply : (detail?.capabilities.media.length ?? 0) > 0}
-        email={
-          isEmail
-            ? {
-                defaultSubject: defaultReplySubject(emailSubject),
-                channelId: detail?.channel.id,
-                sendProblem: emailSendProblem(thread.state.pending),
-              }
-            : undefined
-        }
-        groupSendBlocked={groupSendBlocked}
-        groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
-        groupMentions={mentionsOn ? { search: searchMembers } : undefined}
-        attachments={
-          detail
-            ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
-            : undefined
-        }
-        savedReplies={props.can.reply ? { channelKind: detail?.channel.kind } : undefined}
-        canTemplate={canTemplate}
-        onTemplate={() => setTemplatesOpen(true)}
-        canShare={shareKinds.length > 0}
-        onShare={() => setShareOpen(true)}
-        onSend={(draft) => {
-          props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
-          setReply(null);
-        }}
-        replyTo={replyTo}
-        onCancelReply={() => setReply(null)}
-        onNote={props.onNote}
-        handleRef={props.composerRef}
-      />
+          <Composer
+            aiModel={props.aiModel}
+            conversationId={props.conversationId}
+            mode={props.mode}
+            onMode={props.onMode}
+            replyDisabled={replyDisabled}
+            lockedHint={lockedToOther ? t('assignedToOther') : undefined}
+            canReply={canReply}
+            canNote={props.can.note}
+            canAttach={isEmail ? canReply : (detail?.capabilities.media.length ?? 0) > 0}
+            email={
+              isEmail
+                ? {
+                    defaultSubject: defaultReplySubject(emailSubject),
+                    channelId: detail?.channel.id,
+                    sendProblem: emailSendProblem(thread.state.pending),
+                  }
+                : undefined
+            }
+            groupSendBlocked={groupSendBlocked}
+            groupBlockedHint={cloudBlock ? tg(`cloudBlock.${cloudBlock}.title`) : undefined}
+            groupMentions={mentionsOn ? { search: searchMembers } : undefined}
+            attachments={
+              detail
+                ? { channelKind: detail.channel.kind, allowed: detail.capabilities.media }
+                : undefined
+            }
+            savedReplies={canReply ? { channelKind: detail?.channel.kind } : undefined}
+            canTemplate={canTemplate}
+            onTemplate={() => setTemplatesOpen(true)}
+            canShare={shareKinds.length > 0}
+            onShare={() => setShareOpen(true)}
+            onSend={(draft) => {
+              props.onSend({ ...draft, replyToMessageId: replyTo?.id ?? null });
+              setReply(null);
+            }}
+            replyTo={replyTo}
+            onCancelReply={() => setReply(null)}
+            onNote={props.onNote}
+            handleRef={props.composerRef}
+          />
+        </>
+      )}
       <ShareDialog
-        open={shareOpen}
+        open={shareOpen && !resolved}
         onClose={() => setShareOpen(false)}
         kinds={shareKinds}
         onSend={thread.sendShare}
@@ -487,7 +641,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         conversationId={props.conversationId}
         contactName={detail?.title}
         contactFields={contactFieldsOf(detail?.contactSummary)}
-        open={templatesOpen}
+        open={templatesOpen && !resolved}
         onClose={() => setTemplatesOpen(false)}
         onSend={thread.sendTemplate}
       />

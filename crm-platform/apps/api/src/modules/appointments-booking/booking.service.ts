@@ -18,6 +18,8 @@ import {
   money,
   type AnswerSnapshot,
 } from './appointment-rules';
+import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentPlan, unavailable } from './booking-plan';
@@ -75,6 +77,8 @@ export interface MoveParams {
   nowMs: number;
   busy: EngineBusy[];
   rowVersion?: number;
+  /** Only when a move must keep a length other than the booking type's (accepting a time Google shows): the new end. */
+  endsAt?: Date;
 }
 
 export interface TransitionParams {
@@ -140,6 +144,8 @@ export class BookingService {
     private readonly support: AppointmentsSupport,
     private readonly slots: SlotsService,
     private readonly plan: AppointmentPlan,
+    private readonly mirror: AppointmentMeetingMirror,
+    private readonly reminders: AppointmentRemindersRepository,
   ) {}
 
   // --- book -----------------------------------------------------------------------------------------------------------------
@@ -256,6 +262,8 @@ export class BookingService {
     if (p.reservationUuid) await this.appts.deleteReservation(tx, p.orgId, p.reservationUuid);
 
     const row = (await this.appts.findById(tx, p.orgId, id))!;
+    // The contact's Meetings row, in this transaction: a booking from any source appears there or not at all.
+    await this.mirror.sync(tx, p.orgId, row);
     await this.support.record(tx, row, {
       orgId: p.orgId,
       audit: { action: 'insert' },
@@ -299,13 +307,14 @@ export class BookingService {
     if (row.startsAt.getTime() <= p.nowMs) throw alreadyStarted();
     if (row.bookingTypeId === null) throw typeGone();
     const startMs = p.startsAt.getTime();
-    if (startMs === row.startsAt.getTime()) return row;
+    const sameEnd = p.endsAt === undefined || p.endsAt.getTime() === row.endsAt.getTime();
+    if (startMs === row.startsAt.getTime() && sameEnd) return row;
 
     await this.appts.lockType(tx, orgId, row.bookingTypeId);
     const type = await this.types.findById(tx, orgId, row.bookingTypeId);
     if (!type) throw typeGone();
     const lt = await this.slots.load(tx, orgId, type);
-    const endMs = startMs + type.durationMinutes * MINUTE;
+    const endMs = p.endsAt ? p.endsAt.getTime() : startMs + type.durationMinutes * MINUTE;
     // The booking being moved does not block its own new slot.
     const facts = await this.slots.facts(
       tx,
@@ -344,14 +353,20 @@ export class BookingService {
       if (isSlotConflict(err)) throw slotTaken();
       throw err;
     }
-    // Every reminder offset is armed again for the new time.
-    await this.appts.clearReminderRuns(tx, orgId, row.id);
+    // Every rule is armed again for the new time (the booking's `armed_at` moved); what was waiting for the old time stops.
+    await this.reminders.cancelWaiting(tx, orgId, row.id, 'rescheduled');
     const after = (await this.appts.findById(tx, orgId, row.id))!;
+    await this.mirror.sync(tx, orgId, after);
     await this.support.record(tx, after, {
       orgId,
       audit: {
         action: 'update',
-        delta: { startsAt: { old: row.startsAt.toISOString(), new: after.startsAt.toISOString() } },
+        delta: {
+          startsAt: { old: row.startsAt.toISOString(), new: after.startsAt.toISOString() },
+          ...(row.endsAt.getTime() !== after.endsAt.getTime()
+            ? { endsAt: { old: row.endsAt.toISOString(), new: after.endsAt.toISOString() } }
+            : {}),
+        },
       },
       event: {
         type: 'appointment.rescheduled',
@@ -413,6 +428,22 @@ export class BookingService {
     const ok = await this.appts.update(tx, orgId, row.id, p.rowVersion, patch);
     if (!ok) throw AppError.rowVersionConflict('Appointment');
     const after = (await this.appts.findById(tx, orgId, row.id))!;
+    // A booking that will not take place has no reminders or follow-ups left to send (a completed one still gets its follow-up).
+    if (to === 'cancelled' || to === 'declined' || to === 'no_show') {
+      await this.reminders.cancelWaiting(
+        tx,
+        orgId,
+        row.id,
+        to === 'cancelled'
+          ? 'booking_cancelled'
+          : to === 'declined'
+            ? 'booking_declined'
+            : 'booking_no_show',
+      );
+    }
+    // The row keeps its place when the booking closes; the list reads the new status from the appointment. This only heals a
+    // booking that has no row yet (it predates the mirror and the back-fill has not reached it).
+    await this.mirror.sync(tx, orgId, after);
     const eventType: Record<string, string> = {
       confirmed: 'appointment.confirmed',
       declined: 'appointment.declined',

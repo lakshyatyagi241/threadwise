@@ -1,7 +1,13 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
+import { abortableFetch } from './abortable-fetch';
 import { assertPublicUrl } from './provider-url-guard';
 import { WabaApiError } from './waba-errors';
+import {
+  WABA_SEND_GOVERNOR,
+  type SendGovernor,
+  type SendTarget,
+} from './throughput/send-governor.port';
 
 /** Which API a number is reached through. Same Cloud API paths either way; only host, version and auth headers differ. */
 export type WabaProviderKind = 'interakt' | 'meta';
@@ -70,9 +76,13 @@ export type FetchLike = (input: string, init?: RequestInit) => Promise<Response>
 @Injectable()
 export class WabaHttp {
   /** Resolved per call so a test (or a runtime patch) that replaces global fetch is honoured. */
-  fetchImpl: FetchLike = (input, init) => fetch(input, init);
+  fetchImpl: FetchLike = abortableFetch;
 
-  constructor(@Inject(WABA_ENV) private readonly env: WabaEnv) {}
+  constructor(
+    @Inject(WABA_ENV) private readonly env: WabaEnv,
+    // Optional: a unit test or a script builds WabaHttp without one and sends go out unpaced, as before.
+    @Optional() @Inject(WABA_SEND_GOVERNOR) private readonly governor?: SendGovernor,
+  ) {}
 
   /** `https://graph.facebook.com/v25.0` or `https://amped-express.interakt.ai/api/v25.0`. */
   baseUrl(provider: WabaProviderKind, apiVersion?: string): string {
@@ -107,7 +117,19 @@ export class WabaHttp {
     // moment of connection, every time (a built-in route's address is configuration, not data).
     if (auth.provider === 'registry')
       await this.assertProviderUrl(this.rootOf(auth, req.apiVersion));
-    return this.send<T>(url, req, this.headers(auth, req.headers));
+    const target = this.governor ? sendTargetOf(req) : null;
+    if (!target || !this.governor) return this.send<T>(url, req, this.headers(auth, req.headers));
+
+    // Every message to a number passes the one limiter that knows that number's rate, whoever sends (inbox, bot, campaign, API).
+    await this.governor.admit(target);
+    try {
+      const out = await this.send<T>(url, req, this.headers(auth, req.headers));
+      void this.governor.recordSent(target);
+      return out;
+    } catch (err) {
+      if (err instanceof WabaApiError) void this.governor.recordRefused(target, err.code);
+      throw err;
+    }
   }
 
   /** Refuses an address that is not https on a public host. Replaced in tests; the real check resolves the name. */
@@ -166,7 +188,15 @@ export class WabaHttp {
       throw WabaApiError.network(cause);
     }
 
-    const text = await res.text().catch(() => '');
+    // A 200 whose body never arrived (a timeout, a reset, a cut-off) is not "sent": the caller reads the message id out of the body.
+    // An error status keeps its status error, so only a read failure on a success is raised here.
+    let readFailure: unknown;
+    const text = await res.text().catch((cause: unknown) => {
+      readFailure = cause;
+      return '';
+    });
+    if (readFailure !== undefined && res.ok)
+      throw WabaApiError.network(readFailure, { bodyUnreadable: true });
     let body: unknown = {};
     if (text) {
       try {
@@ -181,3 +211,28 @@ export class WabaHttp {
 }
 
 const trimSlash = (s: string) => s.replace(/\/+$/, '');
+
+/** `/messages`, and `/marketing_messages` for Marketing Messages Lite: both spend the number's throughput. */
+const MESSAGES_PATH = /^\/(\d{5,32})\/(?:marketing_)?messages$/;
+
+/**
+ * The send target of a request, or null when the request is not a message to a customer: only `POST /<phone-number-id>/messages` (or `/marketing_messages`) with
+ * a recipient is paced. A read receipt or typing indicator (`status: "read"`, no recipient) and every management call pass untouched.
+ */
+export function sendTargetOf(
+  req: Pick<WabaRequest, 'method' | 'path' | 'json'>,
+): SendTarget | null {
+  if (req.method !== 'POST') return null;
+  const m = MESSAGES_PATH.exec(req.path);
+  if (!m || !req.json || typeof req.json !== 'object') return null;
+  const body = req.json as { to?: unknown; recipient?: unknown; type?: unknown; status?: unknown };
+  if (body.status !== undefined) return null;
+  const to =
+    typeof body.to === 'string'
+      ? body.to
+      : typeof body.recipient === 'string'
+        ? body.recipient
+        : null;
+  if (!to) return null;
+  return { phoneNumberId: m[1]!, recipient: to, businessInitiated: body.type === 'template' };
+}

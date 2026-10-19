@@ -24,7 +24,7 @@ You can also select **Save as segment** on the Contacts screen after setting fil
 
 ## Options and settings
 
-- Conditions can use stage, status, lead score, people fields, activity dates and your own [contact properties](help:contact-properties). A segment holds up to 50 conditions.
+- Conditions can use stage, status, lead score (only while lead scoring is on for your workspace), people fields, activity dates and your own [contact properties](help:contact-properties). A segment holds up to 50 conditions.
 - The "..." menu on a row offers **Edit rules**, **Duplicate**, **Export members (CSV)**, **Tag members**, **Add members to a group** and **Delete**. Tagging and grouping apply to the people who match right now.
 - **Recount members** refreshes a member count.
 

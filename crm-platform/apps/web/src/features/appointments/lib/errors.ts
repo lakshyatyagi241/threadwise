@@ -19,6 +19,12 @@ export const ERROR_KINDS = [
   'alreadyStarted',
   'bookingOff',
   'notDeletable',
+  /** The Google event already matches (or somebody else settled it): the badge is out of date. */
+  'notDrifted',
+  /** Google Calendar is not connected (or its grant died): reconnect it on the Google account page. */
+  'calendarNotConnected',
+  /** Google could not be reached or refused the write. */
+  'calendarFailed',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -47,6 +53,12 @@ export function errorKind(error: unknown): ErrorKind {
       return 'bookingOff';
     case ERROR_CODES.APPT_NOT_DELETABLE:
       return 'notDeletable';
+    case ERROR_CODES.GOOGLE_SYNC_NOT_DRIFTED:
+      return 'notDrifted';
+    case ERROR_CODES.APPT_CALENDAR_NOT_CONNECTED:
+      return 'calendarNotConnected';
+    case ERROR_CODES.APPT_CALENDAR_PROVIDER_FAILED:
+      return 'calendarFailed';
     case ERROR_CODES.APPT_ANSWERS_INVALID:
     case ERROR_CODES.APPT_HOST_INVALID:
     case ERROR_CODES.APPT_AMOUNT_INVALID:

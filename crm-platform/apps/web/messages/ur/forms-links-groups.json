@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp فارمز",
+      "links": "WhatsApp لنکس"
+    },
+    "errors": {
+      "generic": "کچھ غلط ہو گیا۔ براہِ کرم دوبارہ کوشش کریں۔",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "فارمز استعمال کرنے کے لیے ایک WhatsApp Cloud API نمبر منسلک کریں۔",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "کسی بھی منسلک WhatsApp Cloud API نمبر کے پاس درست کریڈینشلز موجود نہیں ہیں۔",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta نے اس فارم کی تعریف مسترد کر دی۔",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "فارمز شائع کرنے سے پہلے آپ کے WhatsApp Business اکاؤنٹ کو Meta کی تصدیق سے گزرنا ضروری ہے۔",
+      "WFL_FORM_PUBLISH_FAILED": "Meta اس فارم کو شائع نہیں کر سکا۔",
+      "WFL_LINK_NOT_LIVE": "یہ لنک روکا ہوا ہے یا اس کی مدت ختم ہو چکی ہے۔",
+      "ROW_VERSION_CONFLICT": "اسے کسی اور جگہ تبدیل کیا گیا ہے۔ صفحہ دوبارہ لوڈ کریں اور دوبارہ کوشش کریں۔",
+      "VALIDATION_FAILED": "نشان زدہ خانوں کو چیک کریں اور دوبارہ کوشش کریں۔",
+      "PLAN_FEATURE_LOCKED": "اس خصوصیت کو استعمال کرنے کے لیے اپنا پلان اپ گریڈ کریں۔"
+    },
+    "forms": {
+      "heading": "WhatsApp فارمز",
+      "intro": "ایسے فارمز بنائیں جو کسٹمرز براہِ راست WhatsApp کے اندر پُر کریں، پھر انہیں کسی فلو سے بھیجیں اور جوابات یہاں دیکھیں۔",
+      "loading": "فارمز لوڈ ہو رہے ہیں…",
+      "retry": "دوبارہ کوشش کریں",
+      "create": {
+        "cta": "نیا فارم",
+        "creating": "تیار کیا جا رہا ہے…",
+        "defaultTitle": "بلا عنوان فارم",
+        "defaultField": "مکمل نام"
+      },
+      "stats": {
+        "all": "تمام فارمز",
+        "published": "شائع شدہ",
+        "draft": "ڈرافٹس",
+        "submissions": "جوابات"
+      },
+      "empty": {
+        "title": "ابھی تک کوئی فارم نہیں",
+        "description": "ایک فارم بنائیں، پھر اسے کسی فلو میں WhatsApp فارم کے مرحلے سے بھیجیں۔"
+      },
+      "table": {
+        "form": "فارم",
+        "type": "قسم",
+        "fields": "خانے",
+        "submissions": "جوابات"
+      },
+      "status": {
+        "draft": "ڈرافٹ",
+        "published": "شائع شدہ",
+        "paused": "روکا ہوا"
+      },
+      "audience": {
+        "lead_capture": "لیڈ کیپچر",
+        "survey": "سروے",
+        "appointment_booking": "اپائنٹمنٹ بکنگ",
+        "customer_support": "کسٹمر سپورٹ",
+        "sign_up": "سائن اپ",
+        "other": "دیگر"
+      },
+      "row": {
+        "edit": "ترمیم کریں",
+        "duplicate": "نقل بنائیں",
+        "delete": "حذف کریں"
+      },
+      "confirm": {
+        "deleteTitle": "اس فارم کو حذف کریں؟",
+        "deleteMessage": "اس کا حوالہ دینے والے فعال فلو نوڈز کام کرنا بند کر دیں گے۔",
+        "deleteConfirm": "حذف کریں",
+        "cancel": "منسوخ کریں"
+      },
+      "notice": {
+        "saved": "محفوظ ہو گیا۔",
+        "published": "WhatsApp پر شائع ہو گیا۔"
+      },
+      "builder": {
+        "back": "فارمز پر واپس جائیں",
+        "untitled": "بلا عنوان فارم",
+        "saving": "محفوظ کیا جا رہا ہے…",
+        "saveDraft": "ڈرافٹ محفوظ کریں",
+        "savePublish": "محفوظ کریں اور شائع کریں",
+        "publishing": "شائع کیا جا رہا ہے…",
+        "basics": "فارم کی بنیادی معلومات",
+        "title": "عنوان",
+        "audienceType": "قسم",
+        "purpose": "مقصد",
+        "sendButtonLabel": "سینڈ بٹن کا لیبل",
+        "thankYouNote": "شکریے کا پیغام",
+        "screens": "اسکرینز",
+        "addScreen": "اسکرین شامل کریں",
+        "removeScreen": "اسکرین ہٹائیں",
+        "screenN": "اسکرین {n}",
+        "defaultField": "مکمل نام",
+        "newFieldLabel": "نیا خانہ",
+        "fieldKind": "خانے کی قسم",
+        "fieldLabel": "لیبل",
+        "required": "لازمی",
+        "removeField": "ہٹائیں",
+        "options": "اختیارات (کوما سے الگ)",
+        "optionsPlaceholder": "اختیار 1، اختیار 2، اختیار 3",
+        "mapsTo": "یہاں میپ ہوتا ہے",
+        "mapsToHint": "فارم جمع کرنے پر یہ جواب رابطہ کی خاصیت میں محفوظ کرتا ہے۔",
+        "mapsToNone": "رابطہ کی خاصیت میں محفوظ نہ کریں",
+        "mapsToSystemGroup": "رابطہ فیلڈز",
+        "mapsToCustomGroup": "مخصوص خصائص",
+        "mapsToSystem": {
+          "name": "پورا نام",
+          "first_name": "پہلا نام",
+          "last_name": "آخری نام",
+          "email": "ای میل",
+          "title": "عہدہ",
+          "language": "زبان",
+          "address": "پتہ"
+        },
+        "mapsToPrivacyGroup": "رازداری اور رضامندی",
+        "mapsToPrivacy": {
+          "age": "عمر (نابالغ تصدیق)",
+          "date_of_birth": "تاریخ پیدائش (نابالغ تصدیق)",
+          "consent_marketing": "مارکیٹنگ رضامندی (واٹس ایپ)",
+          "consent_service": "سروس معاہدہ (مارکیٹنگ نہیں)"
+        }
+      },
+      "fieldKind": {
+        "heading": "عنوان",
+        "short_text": "مختصر متن",
+        "paragraph": "پیراگراف",
+        "email": "ای میل",
+        "phone_number": "فون نمبر",
+        "number": "نمبر",
+        "date": "تاریخ",
+        "dropdown": "ڈراپ ڈاؤن",
+        "radio_buttons": "ریڈیو بٹنز",
+        "checkbox": "چیک باکسز"
+      },
+      "submissions": {
+        "heading": "جوابات",
+        "metaFlowId": "Meta Flow ID: {id}",
+        "export": "CSV ایکسپورٹ کریں",
+        "empty": {
+          "title": "ابھی تک کوئی جواب نہیں",
+          "description": "جوابات یہاں ظاہر ہوں گے جب یہ فارم کسی فلو سے بھیجا جائے گا اور کوئی اسے پُر کرے گا۔"
+        },
+        "table": {
+          "submitted": "جمع کرایا گیا",
+          "contact": "رابطہ",
+          "phone": "فون"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp لنکس",
+      "intro": "ایک قابلِ ٹریک لنک بنائیں جو پہلے سے لکھے گئے پیغام کے ساتھ WhatsApp کھولے — اشتہارات، بائیوز اور QR کوڈز کے لیے۔",
+      "loading": "لنکس لوڈ ہو رہے ہیں…",
+      "retry": "دوبارہ کوشش کریں",
+      "searchPlaceholder": "نام یا لنک سے تلاش کریں",
+      "create": {
+        "cta": "نیا لنک"
+      },
+      "stats": {
+        "all": "تمام لنکس",
+        "live": "فعال",
+        "totalClicks": "کُل کلکس",
+        "avgClicks": "اوسط کلکس / لنک"
+      },
+      "tabs": {
+        "all": "تمام",
+        "live": "فعال",
+        "paused": "رکا ہوا"
+      },
+      "status": {
+        "live": "فعال",
+        "paused": "رکا ہوا"
+      },
+      "empty": {
+        "title": "ابھی تک کوئی لنک نہیں",
+        "description": "اشتہارات، بائیوز یا QR کوڈ میں شیئر کرنے کے لیے ایک لنک بنائیں۔"
+      },
+      "table": {
+        "link": "لنک",
+        "destination": "منزل",
+        "clicks": "کلکس",
+        "lastClicked": "آخری کلک"
+      },
+      "row": {
+        "open": "کھولیں",
+        "copy": "کاپی کریں",
+        "copied": "کاپی ہو گیا!",
+        "edit": "ترمیم کریں",
+        "duplicate": "نقل بنائیں",
+        "delete": "حذف کریں"
+      },
+      "confirm": {
+        "deleteTitle": "اس لنک کو حذف کریں؟",
+        "deleteMessage": "مختصر لنک فوری طور پر کام کرنا بند کر دے گا۔",
+        "deleteConfirm": "حذف کریں",
+        "cancel": "منسوخ کریں"
+      },
+      "notice": {
+        "saved": "محفوظ ہو گیا۔",
+        "copyFailed": "لنک کاپی نہیں ہو سکا۔"
+      },
+      "builder": {
+        "back": "لنکس پر واپس جائیں",
+        "newHeading": "نیا لنک",
+        "step": {
+          "destination": "منزل",
+          "message": "ابتدائی پیغام",
+          "tracking": "ٹریکنگ"
+        },
+        "name": "نام",
+        "status": "حیثیت",
+        "countryCode": "کنٹری کوڈ",
+        "phoneNumber": "فون نمبر",
+        "welcomeMessage": "ابتدائی پیغام",
+        "welcomeMessageHint": "جب کوئی لنک پر ٹیپ کرتا ہے تو یہ چیٹ میں پہلے سے لکھا آ جاتا ہے۔",
+        "slug": "مختصر لنک",
+        "slugHint": "صرف حروف، ہندسے اور ہائفن۔ خودکار طور پر بنانے کے لیے خالی چھوڑیں۔",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "میعاد ختم ہونے کی تاریخ",
+        "utmSource": "UTM سورس",
+        "utmMedium": "UTM میڈیم",
+        "utmCampaign": "UTM مہم",
+        "previous": "پچھلا",
+        "next": "اگلا",
+        "mint": "لنک بنائیں",
+        "save": "محفوظ کریں",
+        "saving": "محفوظ کیا جا رہا ہے…",
+        "fixErrors": "منزل اور مختصر لنک کے خانے چیک کریں۔",
+        "mintedHeading": "آپ کا لنک",
+        "shortUrl": "مختصر لنک",
+        "waUrl": "WhatsApp لنک",
+        "qrAlt": "اس لنک کا QR کوڈ"
+      },
+      "public": {
+        "missingTitle": "لنک نہیں ملا",
+        "missingBody": "یہ لنک موجود نہیں ہے، یا حذف کر دیا گیا ہے۔",
+        "goneTitle": "لنک اب فعال نہیں",
+        "goneBody": "یہ لنک معطل ہے یا میعاد ختم ہو چکی ہے۔",
+        "errorTitle": "کچھ غلط ہو گیا",
+        "errorBody": "ہم یہ لنک نہیں کھول سکے۔ براہ مہربانی کوشش کریں۔"
+      }
+    }
+  }
+}

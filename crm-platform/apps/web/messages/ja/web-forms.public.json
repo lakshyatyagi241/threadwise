@@ -34,7 +34,8 @@
         "too_long": "{max} 文字以内で入力してください。",
         "pattern": "想定されている形式と一致しません。",
         "invalid_option": "一覧から選択肢を 1 つ選んでください。",
-        "invalid_amount": "許容範囲内の金額を入力してください。"
+        "invalid_amount": "許容範囲内の金額を入力してください。",
+        "guardian_required": "親または保護者の名前と、メールアドレスまたは電話番号を入力してください。"
       },
       "closedTitle": "このフォームは受付終了です",
       "payTitle": "あと一歩です",
@@ -58,7 +59,16 @@
         "tryAgain": "もう一度支払う",
         "missingTitle": "この支払いが見つかりません",
         "missingBody": "リンクが間違っているか、古すぎる可能性があります。"
-      }
+      },
+      "termsOfService": "利用規約",
+      "ageDeclaration": "私は {age} 歳以上であることを確認します",
+      "ageBlockedTitle": "続行できません",
+      "ageBlockedBody": "ご関心をお寄せいただきありがとうございます。この送信は受け付けることができません。",
+      "guardianTitle": "親または保護者",
+      "guardianIntro": "親または保護者の情報を入力してください。",
+      "guardianName": "名前",
+      "guardianEmail": "メールアドレス",
+      "guardianPhone": "電話番号"
     }
   }
 }

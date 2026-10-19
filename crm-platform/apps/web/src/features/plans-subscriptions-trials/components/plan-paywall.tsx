@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
 import { isPlanFeatureKey, type BillingPlan, type PlanFeatureKey } from '@crm/contracts';
+import { listingPathFor } from '@/features/_registry/app-listings';
 import { fetchBillingPlans } from '../api';
 import { PLANS_PATH, SALES_PATH, formatMoney } from '../lib/format';
 
@@ -34,9 +35,12 @@ export function gateFor(pathname: string, gates: readonly PaywallGate[]): Paywal
 export function PlanPaywall({
   gates,
   enabled,
+  canBrowseApps = false,
 }: {
   gates: readonly PaywallGate[];
   enabled: readonly string[] | null;
+  /** The person may open the Marketplace on this plan: a feature that is also sold as an app then links to the app's page. */
+  canBrowseApps?: boolean;
 }) {
   const pathname = usePathname();
   const gate = gateFor(pathname, gates);
@@ -46,10 +50,10 @@ export function PlanPaywall({
     !enabled.includes(gate.feature) &&
     isPlanFeatureKey(gate.feature);
   if (!locked || !gate) return null;
-  return <Sheet feature={gate.feature as PlanFeatureKey} />;
+  return <Sheet feature={gate.feature as PlanFeatureKey} canBrowseApps={canBrowseApps} />;
 }
 
-function Sheet({ feature }: { feature: PlanFeatureKey }) {
+function Sheet({ feature, canBrowseApps }: { feature: PlanFeatureKey; canBrowseApps: boolean }) {
   const t = useTranslations('plans-subscriptions-trials.paywall');
   const tf = useTranslations('plans-subscriptions-trials.features');
   const locale = useLocale();
@@ -61,6 +65,7 @@ function Sheet({ feature }: { feature: PlanFeatureKey }) {
   });
   useEffect(() => ref.current?.focus(), []);
   const plans: BillingPlan[] = q.data?.data ?? [];
+  const listing = canBrowseApps ? listingPathFor(feature) : null;
 
   return (
     <div
@@ -129,6 +134,14 @@ function Sheet({ feature }: { feature: PlanFeatureKey }) {
               </div>
             ))}
           </div>
+        )}
+        {listing && (
+          <p className="text-sm text-muted-foreground" data-testid="paywall-app">
+            {t('appHint', { feature: tf(feature) })}{' '}
+            <Link href={listing} className="font-medium text-primary hover:underline">
+              {t('appLink')}
+            </Link>
+          </p>
         )}
         <div className="flex flex-wrap gap-4 text-sm">
           <Link href="/dashboard" className="font-medium text-primary hover:underline">

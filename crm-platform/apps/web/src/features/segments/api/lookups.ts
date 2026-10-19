@@ -8,11 +8,20 @@ import {
   stageChoices,
   statusChoices,
   useContactFields,
+  useContactFilterValues,
   useGroups,
+  useModuleFields,
   useStatusOptions,
   useTags,
 } from '@/features/contacts-attributes-tags';
-import { buildCatalog, type Choice, type FieldDef, type Lookups } from '../lib/fields';
+import { useLeadScoringEnabled } from '@/features/lead-scoring';
+import {
+  buildCatalog,
+  type Choice,
+  type FieldDef,
+  type Lookups,
+  type PropertyLookup,
+} from '../lib/fields';
 import { fetchAll } from './http';
 import { personSchema, teamOptionSchema } from './schemas';
 
@@ -38,6 +47,26 @@ export function useTeams(enabled = true) {
   });
 }
 
+/** A module's property definitions as the catalog reads them (usable ones only, options in their order, hidden options left out). */
+export function propertyLookups(
+  fields: ReadonlyArray<{
+    key: string;
+    label: string;
+    fieldType: PropertyLookup['fieldType'];
+    options?: ReadonlyArray<{ value: string; label: string; position: number; isHidden?: boolean }>;
+  }>,
+): PropertyLookup[] {
+  return fields.map((f) => ({
+    key: f.key,
+    label: f.label,
+    fieldType: f.fieldType,
+    options: (f.options ?? [])
+      .filter((o) => !o.isHidden)
+      .sort((a, b) => a.position - b.position)
+      .map((o) => ({ value: o.value, label: o.label })),
+  }));
+}
+
 export interface SegmentCatalog {
   /** Every field a condition can test, grouped by the picker. */
   catalog: FieldDef[];
@@ -59,19 +88,36 @@ const toChoice = (c: { value: string; label: string; color?: string }): Choice =
 export function useSegmentCatalog(): SegmentCatalog {
   const tf = useTranslations('contacts-attributes-tags.form');
   const statusOptions = useStatusOptions();
+  // Stages and statuses contacts hold but the workspace never listed (e.g. `new`) are offered too; their lookup is optional.
+  const filterValues = useContactFilterValues();
   const tags = useTags();
   const groups = useGroups();
   const fields = useContactFields();
   const people = usePeople();
+  // Company properties are offered to someone who may read their definitions; a refusal just leaves the group out (it is not a failure
+  // of the builder, so it is not counted in `ready` or `failed`).
+  const companyFields = useModuleFields('companies', false);
+  // Lead scoring off: the Lead score field is not offered for a new condition.
+  const scoringOn = useLeadScoringEnabled();
 
   const all = [statusOptions, tags, groups, fields, people];
-  const ready = all.every((q) => q.isSuccess || q.isError);
+  // A rule on a company property is judged deleted only once the company properties have answered (or been refused); likewise a rule on
+  // a stage or status only once the values in use are known (a refusal just leaves the configured options).
+  const ready = [...all, companyFields, filterValues].every((q) => q.isSuccess || q.isError);
   const failed = all.some((q) => q.isError);
 
   const lookups = useMemo<Lookups>(
     () => ({
-      stages: stageChoices(statusOptions.data).map(toChoice),
-      statuses: statusChoices(statusOptions.data, (v) => tf(`statuses.${v}`)).map(toChoice),
+      stages: stageChoices(statusOptions.data, undefined, filterValues.data?.lifecycleStages).map(
+        toChoice,
+      ),
+      statuses: statusChoices(
+        statusOptions.data,
+        (v) => tf(`statuses.${v}`),
+        undefined,
+        undefined,
+        filterValues.data?.statuses,
+      ).map(toChoice),
       tags: (tags.data ?? []).map((t) => ({
         value: t.id,
         label: t.name,
@@ -92,8 +138,28 @@ export function useSegmentCatalog(): SegmentCatalog {
           .sort((a, b) => a.position - b.position)
           .map((o) => ({ value: o.value, label: o.label })),
       })),
+      leadScoring: scoringOn,
+      companyProperties: (companyFields.data ?? []).filter(isUsableProperty).map((f) => ({
+        key: f.key,
+        label: f.label,
+        fieldType: f.fieldType,
+        options: (f.options ?? [])
+          .filter((o) => !o.isHidden)
+          .sort((a, b) => a.position - b.position)
+          .map((o) => ({ value: o.value, label: o.label })),
+      })),
     }),
-    [statusOptions.data, tags.data, groups.data, fields.data, people.data, tf],
+    [
+      statusOptions.data,
+      filterValues.data,
+      tags.data,
+      groups.data,
+      fields.data,
+      people.data,
+      companyFields.data,
+      scoringOn,
+      tf,
+    ],
   );
   const catalog = useMemo(() => buildCatalog(lookups), [lookups]);
   const names = useMemo(

@@ -41,7 +41,10 @@
       "notStarted": "This can be done only after the booking has started.",
       "alreadyStarted": "This booking has already started, so it can no longer be changed.",
       "bookingOff": "Booking is not available for this service right now.",
-      "notDeletable": "This cannot be deleted while it has bookings to come."
+      "notDeletable": "This cannot be deleted while it has bookings to come.",
+      "notDrifted": "This booking already matches its Google event. It has been reloaded.",
+      "calendarNotConnected": "Google Calendar is not connected. Reconnect it on the Google account page and try again.",
+      "calendarFailed": "Google did not answer or refused the change. Try again in a moment."
     },
     "picker": {
       "timeZone": "Time zone",
@@ -156,7 +159,8 @@
       "yesterday": "Yesterday",
       "rowLabel": "Open booking: {title}",
       "noName": "No name",
-      "needsReview": "Needs review"
+      "needsReview": "Needs review",
+      "outOfSync": "Calendar out of sync"
     },
     "row": {
       "moreFor": "More actions for {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "Decline this request?",
       "declineMessage": "The customer is told the request was declined and the time becomes free again.",
       "declineConfirm": "Decline request",
-      "remindersNote": "Reminders follow the booking type. Delivery is not tracked per reminder."
+      "remindersNote": "Reminders follow the booking type. They are set under Appointment settings or in the booking type."
     },
     "source": {
       "chat": "A chat flow",
@@ -269,7 +273,13 @@
       "rescheduled": "Booking moved to the new time.",
       "linkCopied": "Manage link copied.",
       "copyFailed": "The link could not be copied.",
-      "declined": "Request declined."
+      "declined": "Request declined.",
+      "calendarPushed": "Pushed to Google: the event now matches this booking.",
+      "calendarAccepted": {
+        "cancelled": "Google's change accepted: the booking was cancelled.",
+        "rescheduled": "Google's change accepted: the booking moved to the new time.",
+        "acknowledged": "Google's change accepted. The booking stays as it is."
+      }
     },
     "typesList": {
       "breadcrumb": "Breadcrumb",
@@ -397,9 +407,9 @@
         "depositTooHigh": "The deposit cannot be more than the total (fee plus tax).",
         "cancelFeeInvalid": "Enter an amount such as 25.00.",
         "cancelWindowInvalid": "Enter a whole number of minutes from 0 to {cancelWindowMax}.",
-        "reminderInvalid": "Enter whole minutes before the start, from 1 to {reminderMax}.",
-        "remindersDuplicate": "Each reminder needs a different time.",
-        "remindersTooMany": "A booking type can have at most {reminders} reminders.",
+        "reminderInvalid": "Enter a whole number for the time, up to 30 days.",
+        "remindersDuplicate": "Each reminder or follow-up needs a different time.",
+        "remindersTooMany": "A booking type can have at most {reminders} reminders and follow-ups.",
         "questionLabelRequired": "Give the question a label (up to {questionLabelMax} characters).",
         "questionsTooMany": "A booking type can have at most {questions} questions.",
         "questionOptionsRequired": "Add at least one choice, one per line.",
@@ -407,7 +417,9 @@
         "overridesInvalid": "Fix the dates marked in the list of date overrides.",
         "descriptionTooLong": "The description can be at most {descriptionMax} characters.",
         "locationTooLong": "The location can be at most {locationMax} characters.",
-        "server": "The server did not accept this value. Check it and try again."
+        "server": "The server did not accept this value. Check it and try again.",
+        "reminderChannelsNone": "Choose at least one channel.",
+        "reminderBodyTooLong": "The message, subject or label is too long."
       },
       "service": {
         "title": "Service details",
@@ -556,11 +568,12 @@
         "hint": "Bookings work without this. Connect Google Calendar in Appointments, Settings to sync free/busy times and add Meet links.",
         "unavailable": "Google Calendar is not set up for this platform yet. These settings are kept with the booking type for when it is.",
         "calendarId": "Calendar",
-        "calendarPlaceholder": "primary",
         "spreadsheetId": "Sheet append (optional)",
-        "spreadsheetPlaceholder": "Spreadsheet ID",
         "createMeet": "Create a Google Meet link for each booking",
-        "calendarDefault": "The workspace calendar"
+        "calendarDefault": "The workspace calendar",
+        "connectFirst": "Connect your <link>Google account</link> to choose from its list.",
+        "spreadsheetNone": "No sheet",
+        "spreadsheetNoListing": "Your sheets cannot be listed because the Drive file list permission was not given. Add it on the Google account page."
       },
       "messages": {
         "title": "Lifecycle messages",
@@ -586,25 +599,6 @@
           "reschedule": "Hi {name}, your {type} moved to {slot}. Details: {manage_link}"
         },
         "templatesNote": "Approved WhatsApp templates cannot be chosen yet. Messages go out as the plain text above."
-      },
-      "reminders": {
-        "title": "Reminders",
-        "hint": "Times must be distinct (1440 = 24 h before, 180 = 3 h before). Up to {max}.",
-        "add": "Add reminder",
-        "quickAdd": "Quick add",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "No reminders. Customers only get the confirmation.",
-        "offsetOf": "Reminder {n}, minutes before the start",
-        "minBefore": "min before",
-        "labelPlaceholder": "24h",
-        "labelOf": "Reminder {n}, label",
-        "remove": "Remove reminder {n}",
-        "count": "{count} of {max} reminders"
       },
       "questions": {
         "title": "Questionnaire",
@@ -962,7 +956,7 @@
         "calendarSaved": "Calendar saved.",
         "confirmOff": {
           "title": "Disconnect Google Calendar?",
-          "message": "New bookings stop going to your calendar and its busy times are no longer read. Events already in your calendar stay there, and Google is told to withdraw this access.",
+          "message": "New bookings stop going to your calendar and its busy times are no longer read. The Google steps in your flows stop too, because they share this connection. Events already in your calendar stay there, and Google is told to withdraw this access.",
           "confirm": "Disconnect",
           "cancel": "Keep it"
         },
@@ -972,7 +966,8 @@
           "failed": "Connecting did not finish. Try again; if it keeps failing, ask your platform administrator to check the Google setup.",
           "expired": "That attempt took too long. Press Connect to start again.",
           "not_configured": "Google Calendar is not set up for this platform. Ask your platform administrator to add the Google OAuth client.",
-          "missing_scope": "Google did not give every calendar permission that is needed. Connect again and keep all the boxes ticked."
+          "missing_scope": "Google did not give every calendar permission that is needed. Connect again and keep all the boxes ticked.",
+          "cancelled": "You cancelled. Nothing was connected."
         },
         "whatTitle": "What this does",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Fix the highlighted times in the business hours."
       },
       "notAvailable": "Workspace-wide booking settings are not available on this server. Each booking type carries its own hours, time zone, reminders and messages instead.",
-      "openTypes": "Open booking types"
+      "openTypes": "Open booking types",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Connect a Microsoft calendar so confirmed bookings are written to it and its busy times close slots.",
+        "provider": "Outlook calendar",
+        "providerSub": "Microsoft 365 and Outlook.com",
+        "status": {
+          "unavailable": "Not available",
+          "disconnected": "Not connected",
+          "connected": "Connected",
+          "needs_reconnect": "Needs reconnecting"
+        },
+        "loading": "Checking the connection",
+        "unavailableTitle": "Outlook is not set up for this platform yet",
+        "unavailableBody": "Your platform administrator has to register the Microsoft app (Admin, Settings, Microsoft Calendar) before a workspace can connect. Your bookings are not affected.",
+        "disconnectedBody": "Not connected. Connecting opens Microsoft, where you choose the account and agree to share calendar access.",
+        "disconnectedReadOnly": "Not connected. Ask a workspace admin to connect it.",
+        "reconnectTitle": "Microsoft stopped accepting the connection",
+        "reconnectBody": "The access was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "reconnectBodyAccount": "The access for {account} was withdrawn or has expired, so bookings are not being written to your calendar and its busy times are not read. Connect again to resume.",
+        "account": "Microsoft account",
+        "calendar": "Calendar",
+        "primaryCalendar": "Your main calendar",
+        "connectedAgo": "Connected {when}",
+        "writesHere": "Confirmed bookings are written to this calendar.",
+        "readsOnly": "Only its busy times are read. Bookings are written to your other calendar.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft is limiting requests. Bookings are retried automatically.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft refused access to this calendar. Check that the account has a mailbox and may share its calendar.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft did not answer. It is tried again automatically."
+        },
+        "errors": {
+          "notConfigured": "Outlook is not set up for this platform. Ask your platform administrator to register the Microsoft app.",
+          "notConnected": "No Outlook calendar is connected. Reload the page and connect again.",
+          "providerFailed": "Microsoft did not answer. Try again in a moment.",
+          "notYours": "This connection was started by someone else, so nothing was connected. Ask them to connect, or press Connect yourself.",
+          "invalidTicket": "This connection can no longer be confirmed. Press Connect to start again."
+        },
+        "loadingCalendars": "Loading your calendars",
+        "chooseLabel": "Write bookings to",
+        "chooseHint": "Only calendars this account can edit are listed. Events already written stay where they are.",
+        "choosePlaceholder": "Choose a calendar",
+        "chooseOptionPrimary": "{name} (main calendar)",
+        "chooseSave": "Use this calendar",
+        "chooseCancel": "Cancel",
+        "saving": "Saving",
+        "connect": "Connect Outlook",
+        "reconnect": "Reconnect Outlook",
+        "redirecting": "Opening Microsoft",
+        "choose": "Choose calendar",
+        "disconnect": "Disconnect",
+        "disconnected": "Outlook disconnected.",
+        "calendarSaved": "Calendar saved.",
+        "confirm": {
+          "title": "Connect this Microsoft account?",
+          "body": "Microsoft sent you back to finish connecting an account to {workspace}. Only continue if you started this yourself a moment ago.",
+          "confirm": "Connect",
+          "working": "Connecting",
+          "cancel": "Cancel"
+        },
+        "confirmOff": {
+          "title": "Disconnect Outlook?",
+          "message": "New bookings stop going to your Outlook calendar and its busy times are no longer read. Events already in your calendar stay there. To withdraw the permission on Microsoft's side, remove the app in your Microsoft account.",
+          "confirm": "Disconnect",
+          "cancel": "Keep it"
+        },
+        "outcome": {
+          "connected": "Outlook connected. Confirmed bookings now go to your calendar.",
+          "denied": "Access was not granted on Microsoft, so nothing was connected.",
+          "failed": "Connecting did not finish. Try again; if it keeps failing, ask your platform administrator to check the Microsoft app.",
+          "expired": "That attempt took too long. Press Connect to start again.",
+          "not_configured": "Outlook is not set up for this platform. Ask your platform administrator to register the Microsoft app.",
+          "missing_scope": "Microsoft did not give the calendar permission that is needed. Connect again and keep every box ticked.",
+          "cancelled": "You cancelled. Nothing was connected."
+        },
+        "whatTitle": "What this does",
+        "what": {
+          "freeBusy": "Reads busy times from your calendar so booked or blocked times are not offered.",
+          "writeBack": "Writes confirmed bookings to your calendar as events and invites the customer.",
+          "teams": "Adds a Teams meeting link to online services (work and school accounts)."
+        },
+        "hint": "Bookings work without it. With Google connected as well, busy times are read from both and each booking is written to one."
+      },
+      "writeTarget": {
+        "title": "Where bookings are written",
+        "description": "Busy times are read from every connected calendar. Each booking is written to one of them.",
+        "label": "Write bookings to",
+        "hint": "Automatic uses Google Calendar when it works, otherwise Outlook. Changing it moves the upcoming bookings' events to the calendar you pick.",
+        "auto": "Automatic",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "not connected",
+        "saved": "Saved.",
+        "backfill": {
+          "body": "{count, plural, one {# confirmed booking in the next 90 days is} other {# confirmed bookings in the next 90 days are}} not in the calendar they go to yet. They are written automatically after you connect or change calendars.",
+          "action": "Write them now",
+          "working": "Queuing",
+          "queued": "Writing them to your calendar in the background.",
+          "notConnected": "No calendar is connected, so there is nowhere to write them."
+        }
+      },
+      "feeds": {
+        "title": "Other calendars (iCal)",
+        "description": "Subscribe to a calendar by its iCal address so its busy times close slots. Only when you are busy is used: nothing else from it is shown or kept.",
+        "loading": "Loading your calendars",
+        "empty": "No calendars subscribed yet.",
+        "status": {
+          "pending": "Not read yet",
+          "ok": "Working",
+          "error": "Problem"
+        },
+        "paused": "Paused",
+        "neverRead": "Not read yet.",
+        "lastRead": "Read {when}.",
+        "busyCount": "{count, plural, one {# busy block} other {# busy blocks}} in the next 180 days",
+        "allDayLabel": "All-day events block the day",
+        "pause": "Pause",
+        "resume": "Resume",
+        "refresh": "Read now",
+        "reading": "Reading",
+        "remove": "Unsubscribe",
+        "removed": "Calendar unsubscribed.",
+        "added": "Calendar subscribed.",
+        "addTitle": "Subscribe to a calendar",
+        "nameLabel": "Name",
+        "namePlaceholder": "Team timetable",
+        "urlLabel": "Calendar address",
+        "urlHint": "An address that starts with https:// or webcal:// and ends in .ics. It is checked now, then stored encrypted and never shown again.",
+        "add": "Subscribe",
+        "adding": "Reading the calendar",
+        "hint": "Do not subscribe to the calendar your bookings are written to: a multi-seat service would see its own events as busy. A feed is read about every 15 minutes, so a change there can take that long to show.",
+        "confirmRemove": {
+          "title": "Unsubscribe from this calendar?",
+          "message": "Times blocked by {name} are free again straight away. The calendar itself is not touched.",
+          "confirm": "Unsubscribe",
+          "cancel": "Keep it"
+        },
+        "errors": {
+          "invalid": "Enter an address that starts with https://, http:// or webcal://, without a user name or password in it.",
+          "duplicate": "This workspace already subscribes to that calendar.",
+          "limit": "A workspace can subscribe to 10 calendars. Unsubscribe from one first."
+        },
+        "reason": {
+          "unreachable": "The address could not be reached. Check that it is right and public.",
+          "timeout": "The calendar took too long to answer.",
+          "not_found": "Nothing was found at that address. It may have been unpublished.",
+          "forbidden": "The calendar refused access. Make sure it is published to anyone with the link.",
+          "server_error": "The calendar's server had a problem. It is tried again automatically.",
+          "redirect_loop": "The address sends us round in circles.",
+          "not_a_calendar": "That address is not an iCal calendar. It should end in .ics.",
+          "too_large": "That calendar is too large to read.",
+          "blocked_address": "That address points at a private network, which is not allowed.",
+          "unknown": "That address could not be read as a calendar."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# event uses a time zone we do not know and was read in your workspace's time zone.} other {# events use a time zone we do not know and were read in your workspace's time zone.}}",
+          "unsupportedRule": "{count, plural, one {# repeating event uses} other {# repeating events use}} a rule we do not support: only the first occurrence blocks time.",
+          "truncated": "This calendar has more busy blocks than we keep, so some are missing."
+        }
+      },
+      "bookingsFeed": {
+        "title": "My bookings in my calendar app",
+        "description": "Subscribe Apple Calendar, Outlook or Google Calendar to your bookings.",
+        "loading": "Loading your link",
+        "none": "You have no link yet.",
+        "make": "Create my link",
+        "making": "Creating",
+        "made": "Your link is ready.",
+        "linkLabel": "Your link",
+        "copy": "Copy link",
+        "copied": "Link copied.",
+        "copyFailed": "Could not copy automatically. Select the link and copy it.",
+        "open": "Open in my calendar app",
+        "rotate": "Make a new link",
+        "stop": "Stop sharing",
+        "stopped": "Your link no longer works.",
+        "lastUsed": "A calendar app last read it {when}.",
+        "neverUsed": "No calendar app has read it yet.",
+        "warning": "Anyone who has this link sees the titles, times and places of your bookings. Keep it private. It never shows phone numbers, e-mail addresses or notes.",
+        "hint": "You see what you can see in the bookings list. Your calendar app refreshes the feed on its own schedule, often every few hours.",
+        "confirmRotate": {
+          "title": "Make a new link?",
+          "message": "The old link stops working at once. Calendar apps that use it need the new one.",
+          "confirm": "Make a new link"
+        },
+        "confirmStop": {
+          "title": "Stop sharing your bookings?",
+          "message": "Your link stops working at once. Calendar apps that use it will show nothing new.",
+          "confirm": "Stop sharing"
+        },
+        "confirmCancel": "Keep it"
+      }
     },
     "linked": {
       "title": "Appointments",
@@ -1060,6 +1248,181 @@
       "loadMore": "Load more",
       "loadMorePast": "Load more past",
       "noType": "Appointment"
+    },
+    "sync": {
+      "title": "Calendar out of sync",
+      "reason": {
+        "event_deleted": "The event was deleted or cancelled in Google Calendar.",
+        "event_missing": "The event can no longer be found in Google Calendar.",
+        "time_changed": "The event was moved to another time in Google Calendar.",
+        "attendees_changed": "The guests of the event were changed in Google Calendar."
+      },
+      "googleShows": "Google shows: {time}",
+      "notChanged": "This booking has not been changed. Choose which one is right.",
+      "found": "Found {when}",
+      "push": "Push our time back to Google",
+      "accept": "Accept Google's change",
+      "keep": "Not now",
+      "acceptTitle": {
+        "cancel": "Cancel this booking?",
+        "reschedule": "Move this booking to Google's time?",
+        "acknowledge": "Accept the guests Google shows?"
+      },
+      "acceptMessage": {
+        "cancel": "The event is gone from Google, so this booking is cancelled and its time becomes free again. The customer is told, as with any cancellation.",
+        "reschedule": "This booking moves to {time}. The customer is told the new time, as with any reschedule.",
+        "acknowledge": "The booking itself does not change. Google's guest list is remembered, and this notice goes away."
+      },
+      "acceptConfirm": {
+        "cancel": "Cancel booking",
+        "reschedule": "Move booking",
+        "acknowledge": "Accept"
+      }
+    },
+    "reminders": {
+      "title": "Reminders and follow-ups",
+      "hint": "Message the contact before an appointment starts or after it ends. Each one is off until you switch it on. Up to {max} per booking type.",
+      "quickAdd": "Quick add",
+      "quick": {
+        "h24": "24 hours before",
+        "h3": "3 hours before",
+        "h1": "1 hour before",
+        "m15": "15 minutes before",
+        "after2h": "2 hours after",
+        "afterDay": "1 day after"
+      },
+      "add": "Add reminder",
+      "empty": "No reminders or follow-ups. The contact only gets the confirmation.",
+      "enabledOf": "Send reminder {n}",
+      "on": "On",
+      "off": "Off",
+      "offsetOf": "Reminder {n}, amount of time",
+      "unitOf": "Reminder {n}, unit of time",
+      "kindOf": "Reminder {n}, before or after",
+      "units": {
+        "minutes": "minutes",
+        "hours": "hours",
+        "days": "days"
+      },
+      "kind": {
+        "before": "before the appointment starts",
+        "after": "after the appointment ends"
+      },
+      "editMessage": "Message and channels",
+      "hideMessage": "Hide",
+      "remove": "Remove reminder {n}",
+      "withTemplate": "WhatsApp template",
+      "channelsTitle": "Send on",
+      "channelsHint": "The first channel that can deliver is used, the next ones are fallbacks. Nobody gets the same reminder twice.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Try {channel} earlier",
+      "moveDown": "Try {channel} later",
+      "removeChannel": "Do not use {channel}",
+      "messageTitle": "Message",
+      "placeholderMeaning": {
+        "name": "The contact's name",
+        "type": "The booking type's name",
+        "slot": "Date and time together",
+        "date": "The date",
+        "time": "The time",
+        "location": "The place, or the join link when it is online",
+        "join_link": "The link to join when it is online",
+        "manage_link": "The link to move or cancel the appointment"
+      },
+      "bodyHintBefore": "Leave it empty to use the booking type's reminder message, or the standard text.",
+      "bodyHintAfter": "Leave it empty to use the standard follow-up text.",
+      "subjectTitle": "Email subject",
+      "subjectPlaceholder": "Leave empty for a standard subject",
+      "templateTitle": "WhatsApp template",
+      "templateNone": "None: free text, only inside the 24 hour window",
+      "templateUnknown": "A template that is no longer available",
+      "templateHint": "Outside 24 hours after the contact last wrote, WhatsApp only delivers an approved template. Its variables are filled in this order: 1 name, 2 service, 3 date, 4 time, 5 place, 6 join link, 7 manage link.",
+      "labelTitle": "Label (optional)",
+      "labelPlaceholder": "e.g. Day before",
+      "previewTitle": "Preview",
+      "previewNote": "An example with sample values. The real message uses the appointment's own details.",
+      "count": "{count} of {max} reminders and follow-ups",
+      "note": "A reminder is never sent after the appointment starts. If the appointment is cancelled or moved, what was waiting stops and is planned again for the new time. Quiet hours hold a message until they end, and a contact who opted out or sits on the do-not-call list is skipped.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consultation",
+        "location": "12 Main Street"
+      },
+      "settingsTitle": "Reminders and follow-ups",
+      "settingsDescription": "For each booking type, message the contact before an appointment and follow up after it. Everything is off until you switch it on.",
+      "loading": "Loading booking types",
+      "noTypes": "There are no booking types yet. Create one to set its reminders.",
+      "paused": "Paused",
+      "summaryNone": "None set",
+      "summary": "{on} of {total} on",
+      "unsaved": "Unsaved changes",
+      "conflict": "This booking type was changed somewhere else. Reload to see the latest version before you save.",
+      "reload": "Reload",
+      "discard": "Discard changes",
+      "saving": "Saving",
+      "save": "Save reminders",
+      "saved": "Reminders saved for {name}.",
+      "readOnly": "You can see these reminders but not change them.",
+      "fixFirst": "Fix the highlighted reminders first.",
+      "problems": {
+        "offsetInvalid": "Enter a whole number for the time, up to 30 days.",
+        "duplicate": "Each reminder or follow-up needs a different time.",
+        "channelsNone": "Choose at least one channel.",
+        "bodyTooLong": "The message is too long.",
+        "subjectTooLong": "The subject is too long.",
+        "labelTooLong": "The label is too long.",
+        "tooMany": "At most 8 reminders and follow-ups for one booking type."
+      },
+      "noneOn": "No reminders or follow-ups are switched on for this booking type.",
+      "when": {
+        "before": "{count, plural, one {# minute before} other {# minutes before}}",
+        "after": "{count, plural, one {# minute after} other {# minutes after}}"
+      },
+      "sentOn": "Sent on {channel}",
+      "status": {
+        "scheduled": "Scheduled",
+        "pending": "Due",
+        "sending": "Sending",
+        "held": "Waiting",
+        "sent": "Sent",
+        "skipped": "Not sent",
+        "failed": "Failed",
+        "cancelled": "Cancelled"
+      },
+      "reasons": {
+        "rule_removed": "The reminder was removed before it was due.",
+        "rule_off": "The reminder was switched off before it was sent.",
+        "rescheduled": "The appointment was moved, so this was replaced.",
+        "booking_cancelled": "The appointment was cancelled.",
+        "booking_declined": "The request was declined.",
+        "booking_no_show": "Marked as a no-show.",
+        "booking_not_confirmed": "The appointment is not confirmed.",
+        "started": "The appointment had already started.",
+        "expired": "It was too late to send.",
+        "no_contact_point": "The contact has no number or address for this channel.",
+        "no_channel": "No channel could deliver it.",
+        "no_sender": "No connected sender for this channel.",
+        "template_required": "WhatsApp needs an approved template outside the 24 hour window.",
+        "template_unavailable": "The chosen WhatsApp template cannot be sent.",
+        "quiet_hours_too_late": "Quiet hours ran past the start.",
+        "no_consent": "No recorded consent.",
+        "opted_out": "The contact opted out.",
+        "do_not_call": "The number is on the do-not-call list.",
+        "minor": "The contact is flagged as a minor.",
+        "processing_restricted": "Messaging this contact is restricted.",
+        "plan_limit": "The plan's limit is reached.",
+        "quiet_hours": "Waiting for quiet hours to end.",
+        "channel_unavailable": "The channel is not connected right now.",
+        "wallet_empty": "The wallet is empty.",
+        "send_halted": "Sending is halted.",
+        "provider_error": "The provider refused it.",
+        "interrupted": "It was interrupted and not retried.",
+        "internal_error": "Something went wrong."
+      }
     }
   }
 }

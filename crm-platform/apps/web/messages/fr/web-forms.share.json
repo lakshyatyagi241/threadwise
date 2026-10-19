@@ -145,16 +145,26 @@
         "privacyUrl": "Lien vers la politique de confidentialité",
         "privacyUrlHint": "Facultatif. Affiché à côté du texte de consentement. Doit commencer par https://.",
         "privacyUrlHttps": "Utilisez une adresse qui commence par https://.",
+        "termsUrl": "Lien vers les conditions",
+        "termsUrlHint": "Facultatif. Affiché à côté du texte de consentement et du lien de confidentialité. Doit commencer par https://.",
+        "useWorkspacePrivacy": "Utiliser le lien de confidentialité de mon espace de travail",
+        "useWorkspaceTerms": "Utiliser le lien des conditions de mon espace de travail",
         "required": "À cocher pour envoyer",
         "requiredHint": "Désactivez cette option si le consentement est facultatif.",
         "marketing": "Consentement marketing",
         "marketingHint": "Cocher la case enregistre le consentement marketing sur le contact. Une case non cochée n’inscrit jamais personne.",
-        "whatsappHint": "Allez-vous envoyer des messages à ces contacts sur WhatsApp ? Utilisez une formulation qui le précise et indique comment se désabonner. La case cochée est conservée comme preuve, avec ce texte exact et sa version.",
-        "whatsappInsert": "Utiliser la formulation d'acceptation WhatsApp",
-        "whatsappWording": "J'accepte de recevoir des actualités et des offres sur WhatsApp. Je peux répondre STOP à tout moment pour me désabonner.",
-        "coversSms": "Le texte couvre les SMS",
-        "coversSmsHint": "À activer uniquement si le texte ci-dessus indique qu'on peut contacter par SMS. Quand un téléphone est collecté, le SMS est enregistré avec WhatsApp et l'e-mail.",
-        "serviceHint": "Cette ligne n'est pas du marketing. Une case cochée est conservée comme preuve que la personne a accepté d'être contactée au sujet de sa demande (messages de service uniquement), avec ce texte exact et sa version. Elle n'abonne jamais personne au marketing."
+        "serviceHint": "Cette ligne n'est pas du marketing. Une case cochée est conservée comme preuve que la personne a accepté d'être contactée au sujet de sa demande (messages de service uniquement), avec ce texte exact et sa version. Elle n'abonne jamais personne au marketing.",
+        "statement": "J'accepte de recevoir des actualités et des offres sur {channels}. Je peux répondre STOP à tout moment pour me désabonner.",
+        "channelNames": {
+          "whatsapp": "WhatsApp",
+          "sms": "SMS",
+          "email": "e-mail"
+        },
+        "channelsLabel": "Canaux couverts par ce consentement",
+        "channelsHint": "Le visiteur n’est abonné que sur les canaux cochés ici, et le texte du consentement les nomme. Un canal n’est utilisé que si le formulaire recueille le téléphone ou l’e-mail correspondant.",
+        "channelsUse": "Mettre à jour le texte avec ces canaux",
+        "channelNeedsPhone": "Ce formulaire n’a pas de champ téléphone : personne ne sera abonné à ce canal par ce biais.",
+        "channelNeedsEmail": "Ce formulaire n’a pas de champ e-mail : personne ne sera abonné à ce canal par ce biais."
       },
       "crm": {
         "title": "Dans le CRM",
@@ -289,6 +299,41 @@
           "held": "{count, plural, one {1 envoi est retenu comme spam.} many {# d'envois sont retenus comme spam.} other {# envois sont retenus comme spam.}}",
           "review": "Les examiner"
         }
+      },
+      "age": {
+        "title": "Vérification de l'âge",
+        "description": "Ne demandez l'âge que là où vous en avez besoin. Laissez cette option désactivée pour la plupart des formulaires.",
+        "enable": "Vérifier l'âge du visiteur",
+        "enableHint": "Désactivé par défaut. Activez-le si les règles de votre espace de travail l'exigent ou si votre activité s'adresse à des mineurs. Le formulaire ne dit jamais au visiteur quelle réponse est acceptée.",
+        "mode": "Comment demander",
+        "modes": {
+          "declaration": "Une case : « Je confirme avoir au moins N ans »",
+          "age": "Demander son âge",
+          "dob": "Demander sa date de naissance"
+        },
+        "modeHints": {
+          "declaration": "Aucune information sur son âge n'est conservée. Un minimum de données.",
+          "age": "Un nombre entier. Il sert à la vérification ; seul le résultat est conservé.",
+          "dob": "Enregistrée sur le contact comme date de naissance. Utilisez-la uniquement si vous avez besoin de la date."
+        },
+        "minAge": "Âge minimum",
+        "minAgeHint": "Laissez vide pour utiliser l'âge de votre espace de travail ({age}). Entre 1 et 21.",
+        "minAgeInvalid": "Saisissez un nombre entier de {min} à {max}.",
+        "whenUnder": "Si le visiteur a moins que cet âge",
+        "actions": {
+          "block": "Ne pas accepter l'envoi",
+          "flag": "L'accepter, marquer le contact comme mineur, ne pas enregistrer de consentement marketing",
+          "guardian": "Comme ci-dessus, et demander un parent ou un tuteur"
+        },
+        "actionHints": {
+          "block": "Rien n'est enregistré et le visiteur voit un message neutre. Avec la case, le visiteur n'a qu'à la cocher.",
+          "flag": "Le contact est marqué comme mineur. La ligne de consentement de cet envoi est enregistrée telle qu'affichée, mais aucun accord marketing n'est enregistré.",
+          "guardian": "Le nom et les coordonnées du parent ou du tuteur sont conservés avec l'envoi et dans la chronologie du contact. Son consentement n'est pas enregistré tant qu'une personne ne l'enregistre pas dans la carte Consentement."
+        },
+        "declarationBlockNote": "Avec la case et ce réglage, personne n'est refusé : la case doit être cochée pour envoyer le formulaire.",
+        "childrenUnanswered": "Votre Centre de conformité n'a pas répondu à la question sur les enfants, donc le marketing envers un mineur marqué est enregistré mais pas retenu.",
+        "childrenLink": "Ouvrir le Centre de conformité",
+        "neutralNote": "N'écrivez pas l'âge minimum dans le texte d'aide d'un champ ni dans la description : la page ne doit pas indiquer quelle réponse est acceptée."
       }
     }
   }

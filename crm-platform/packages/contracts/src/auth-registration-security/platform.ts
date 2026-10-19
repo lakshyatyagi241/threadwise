@@ -243,7 +243,7 @@ export const authPagesResponseSchema = z.object({
     register: authPageContentSchema,
     forgot: authPageContentSchema,
   }),
-  variant: z.number().int().min(1).max(5),
+  variant: z.number().int().min(1).max(6),
   login: authPageContentSchema,
   register: authPageContentSchema,
   forgot: authPageContentSchema,
@@ -277,7 +277,7 @@ export const authPageContentPatchSchema = z.object({
 });
 
 export const authPagesPatchSchema = z.object({
-  variant: z.number().int().min(1).max(5).optional(),
+  variant: z.number().int().min(1).max(6).optional(),
   login: authPageContentPatchSchema.optional(),
   register: authPageContentPatchSchema.optional(),
   forgot: authPageContentPatchSchema.optional(),

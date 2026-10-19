@@ -10,6 +10,7 @@ import {
   CONVERSATIONS_FACADE,
   ChannelDispatcher,
   ChannelRegistryService,
+  SendHeldError,
   type ConversationsFacade,
 } from '../../chat-conversations';
 import { WalletGateService } from '../../wallet-message-billing';
@@ -23,7 +24,7 @@ import type { OutboundMessage, RunState, SendOutcome } from './types';
 export const CHAT_MEDIA_PREFIX = 'chatmedia:';
 
 /** How long a channel that is down or capped is left alone before the run tries again. */
-export const HALT_RETRY_MS = 5 * 60_000;
+export { HALT_RETRY_MS } from './halt';
 
 const HALT_CODES: ReadonlySet<string> = new Set([
   ERROR_CODES.CHANNEL_DISCONNECTED,
@@ -169,6 +170,18 @@ export class FlowSender {
   }
 
   private outcomeOf(err: unknown): SendOutcome {
+    // Quiet hours (BL-177): a marketing message of a flow the business started waits for the hours to open. The run halts (it asks again
+    // every `HALT_RETRY_MS`, well inside its seven day limit) and the same step runs again; the message is neither skipped nor failed.
+    if (err instanceof SendHeldError) {
+      return {
+        ok: false,
+        code: 'SEND_HELD',
+        error: `Held for the quiet hours until ${err.hold.until}`,
+        halt: true,
+        // The run wakes at the opening itself (BL-192), not on the usual five minute retry.
+        retryAt: err.hold.until,
+      };
+    }
     if (err instanceof AppError) {
       return { ok: false, code: err.code, error: err.message, halt: HALT_CODES.has(err.code) };
     }

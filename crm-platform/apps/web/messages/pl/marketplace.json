@@ -61,7 +61,8 @@
       "notForSale": "Ta aplikacja nie jest obecnie sprzedawana nowym subskrybentom.",
       "trialUnavailable": "Bezpłatny okres próbny nie jest dostępny dla tej aplikacji w Twojej przestrzeni roboczej.",
       "subscriptionNotFound": "Twoja przestrzeń robocza nie ma subskrypcji tej aplikacji.",
-      "subscriptionState": "To nie pasuje do obecnego stanu subskrypcji. Odśwież, aby zobaczyć najnowszy stan."
+      "subscriptionState": "To nie pasuje do obecnego stanu subskrypcji. Odśwież, aby zobaczyć najnowszy stan.",
+      "renewalNotStopped": "Nie udało się zatrzymać automatycznego odnawiania u operatora płatności, więc nic nie zmieniono i z Twojej karty nadal mogą być pobierane opłaty. Spróbuj ponownie za chwilę."
     },
     "chips": {
       "installed": "Zainstalowano",
@@ -77,7 +78,8 @@
       "trialing": "Bezpłatny okres próbny",
       "comped": "Dostęp bezpłatny",
       "canceling": "Nie zostanie odnowiona",
-      "subscriptionEnded": "Subskrypcja zakończona"
+      "subscriptionEnded": "Subskrypcja zakończona",
+      "pastDue": "Płatność nieudana"
     },
     "lock": {
       "planFeature": {
@@ -142,7 +144,8 @@
         "notForSale": "Nie na sprzedaż",
         "paid": "Aplikacja płatna",
         "addOn": "Dodatek",
-        "trial": "{days}-dniowy bezpłatny okres próbny"
+        "trial": "{days}-dniowy bezpłatny okres próbny",
+        "monthlyOrYearly": "{price} / miesiąc lub {annual} / rok"
       },
       "installs": "{count, plural, one {# instalacja} few {# instalacje} many {# instalacji} other {# instalacji}}",
       "version": "Wersja {version}",
@@ -302,7 +305,8 @@
         "terms": "Regulamin",
         "status": "Strona statusu",
         "email": "Pomoc e-mailem"
-      }
+      },
+      "open": "Otwórz"
     },
     "install": {
       "backToMarketplace": "Wróć do Marketplace",
@@ -799,14 +803,15 @@
         "minPlan": "Twój plan lub wyższy plan zawiera tę aplikację, więc nic nie trzeba płacić.",
         "plan": "Twój plan zawiera tę aplikację, więc nic nie trzeba płacić."
       },
-      "needsPurchase": "Zawarta w katalogu Twojego planu, kup ją, aby z niej korzystać.",
+      "needsPurchase": "Najpierw wykup subskrypcję. Instalacja odblokuje się po zakończeniu płatności.",
       "subscribedNote": "Twoja przestrzeń robocza ma subskrypcję tej aplikacji.",
       "trialOffer": "Wypróbuj bezpłatnie przez {days, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}. Nic nie zostanie naliczone, dopóki nie zdecydujesz się zasubskrybować.",
       "prepaidNote": "Rozliczane miesięcznie przez rozliczenia Twojej przestrzeni roboczej. Każda płatność obejmuje jeden miesiąc i nie jest pobierana automatycznie: zapłać ponownie przed podaną datą, aby aplikacja nadal działała.",
       "notForSale": {
         "title": "Nie na sprzedaż",
         "message": "Ta aplikacja nie jest obecnie sprzedawana nowym subskrybentom."
-      }
+      },
+      "autoRenewNote": "Rozliczane miesięcznie przez rozliczenia Twojej przestrzeni roboczej. Opłata jest pobierana z Twojej karty automatycznie co miesiąc w dniu odnowienia, dopóki nie anulujesz subskrypcji."
     },
     "subscribe": {
       "subscribe": "Subskrybuj",
@@ -820,7 +825,16 @@
         "included": "{name} jest w Twoim planie.",
         "already_entitled": "Twoja przestrzeń robocza ma już dostęp do {name}.",
         "free": "{name} jest bezpłatna."
-      }
+      },
+      "hintPriceAuto": "{price} miesięcznie, pobierane z Twojej karty automatycznie co miesiąc, dopóki nie anulujesz subskrypcji.",
+      "hintAuto": "Opłata jest pobierana z Twojej karty automatycznie co miesiąc, dopóki nie anulujesz subskrypcji.",
+      "period": {
+        "legend": "Okres rozliczeniowy",
+        "monthly": "Miesięcznie, {price}",
+        "yearly": "Rocznie, {price}"
+      },
+      "hintYear": "{price} rocznie, płatne przy kasie. Każda płatność obejmuje jeden rok.",
+      "hintYearAuto": "{price} rocznie, pobierane z Twojej karty automatycznie co rok, dopóki nie anulujesz subskrypcji."
     },
     "subscription": {
       "title": "Subskrypcja",
@@ -829,7 +843,8 @@
         "trialing": "Bezpłatny okres próbny",
         "comped": "Dostęp bezpłatny",
         "canceling": "Nie zostanie odnowiona",
-        "ended": "Zakończona"
+        "ended": "Zakończona",
+        "past_due": "Płatność nieudana"
       },
       "date": {
         "paidUntil": "Opłacona do {date}",
@@ -838,7 +853,9 @@
         "compOpen": "Dostęp bezpłatny, bez daty końcowej",
         "cancelingUntil": "Nie zostanie odnowiona. Aktywna do {date}",
         "endedOn": "Subskrypcja zakończona {date}",
-        "endedNoDate": "Subskrypcja zakończona"
+        "endedNoDate": "Subskrypcja zakończona",
+        "renewsOn": "Odnowienie: {date}",
+        "graceUntil": "Płatność nieudana. Działa do {date}"
       },
       "lastPayment": "Ostatnia płatność: {price} miesięcznie",
       "nextPayment": "Cena tej aplikacji się zmieniła. Twoja następna płatność wyniesie {price} miesięcznie.",
@@ -849,7 +866,8 @@
         "resubscribe": "Zasubskrybuj ponownie",
         "subscribe": "Zasubskrybuj teraz",
         "resume": "Wznów subskrypcję",
-        "cancel": "Anuluj subskrypcję"
+        "cancel": "Anuluj subskrypcję",
+        "payNow": "Zapłać teraz"
       },
       "cancelConfirm": {
         "title": "Anulować subskrypcję {name}?",
@@ -857,7 +875,9 @@
         "messageNoDate": "{name} pozostaje aktywna do końca opłaconego okresu, a potem zostanie wstrzymana. Twoje dane i ustawienia są zachowane.",
         "afterwards": "Nic więcej nie zostanie naliczone, a subskrypcję możesz wznowić w dowolnym momencie.",
         "confirm": "Anuluj subskrypcję",
-        "keep": "Zachowaj subskrypcję"
+        "keep": "Zachowaj subskrypcję",
+        "messageAuto": "Twoja karta nie zostanie już obciążona. {name} pozostaje aktywna do {date}, a potem zostanie wstrzymana. Twoje dane i ustawienia są zachowane.",
+        "messageAutoNoDate": "Twoja karta nie zostanie już obciążona. {name} pozostaje aktywna do końca opłaconego okresu, a potem zostanie wstrzymana. Twoje dane i ustawienia są zachowane."
       },
       "toast": {
         "canceled": "Subskrypcja anulowana. Pozostaje aktywna do {date}.",
@@ -865,7 +885,14 @@
         "resumed": "Subskrypcja wznowiona."
       },
       "working": "Przetwarzanie",
-      "noCheckout": "Kasa dla tej aplikacji jest teraz niedostępna. Spróbuj ponownie za chwilę."
+      "noCheckout": "Kasa dla tej aplikacji jest teraz niedostępna. Spróbuj ponownie za chwilę.",
+      "paymentFailed": "Ostatnia płatność kartą za tę aplikację nie powiodła się. Aplikacja działa do {date}, gdy operator płatności ponawia próbę. Zapłać teraz lub popraw metodę płatności, aby uniknąć wstrzymania.",
+      "paymentFailedNoDate": "Ostatnia płatność kartą za tę aplikację nie powiodła się. Aplikacja nadal działa, gdy operator płatności ponawia próbę. Zapłać teraz lub popraw metodę płatności, aby uniknąć wstrzymania.",
+      "autoRenewHint": "Opłata jest pobierana z Twojej karty automatycznie w dniu odnowienia. Anuluj przed tą datą, aby to zatrzymać.",
+      "lastPaymentYear": "Ostatnia płatność: {price} rocznie",
+      "nextPaymentYear": "Cena tej aplikacji się zmieniła. Twoja następna płatność wyniesie {price} rocznie.",
+      "priceLocked": "Twoja cena jest zablokowana na poziomie {price} miesięcznie. Pozostaje taka sama, dopóki masz subskrypcję, nawet jeśli cena aplikacji się zmieni.",
+      "priceLockedYear": "Twoja cena jest zablokowana na poziomie {price} rocznie. Pozostaje taka sama, dopóki masz subskrypcję, nawet jeśli cena aplikacji się zmieni."
     },
     "tools": {
       "open": "Otwórz",
@@ -875,6 +902,24 @@
       },
       "soon": "Wkrótce",
       "upgrade": "Ulepsz"
+    },
+    "paymentReturn": {
+      "success": {
+        "title": "Płatność otrzymana",
+        "message": "Dziękujemy. Twoja subskrypcja jest aktywna, a aplikacja gotowa do użycia."
+      },
+      "pending": {
+        "title": "Potwierdzamy Twoją płatność",
+        "message": "Operator płatności jeszcze nie potwierdził płatności. Ta strona zaktualizuje się, gdy to nastąpi; nie musisz płacić ponownie."
+      },
+      "failed": {
+        "title": "Płatność nie powiodła się",
+        "message": "Nic nie zostało pobrane. Zasubskrybuj ponownie, aby spróbować innego sposobu płatności."
+      },
+      "cancelled": {
+        "title": "Płatność anulowana",
+        "message": "Nic nie zostało pobrane. Zasubskrybuj ponownie w dowolnej chwili."
+      }
     }
   }
 }

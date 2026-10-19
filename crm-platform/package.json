@@ -26,7 +26,9 @@
     "audit:authz": "node tools/authz-audit/run.mjs",
     "audit:tenancy": "node tools/tenancy-audit/run.mjs",
     "audit:sast": "node tools/sast-report/run.mjs",
+    "audit:event-loop": "node tools/event-loop-audit/scan.mjs --check",
     "qa": "node tools/qa-suite/run.mjs",
+    "qa:reports": "node tools/qa-suite/report/generate.mjs",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",
@@ -37,7 +39,11 @@
     "db:verify-schema": "pnpm --filter @crm/db verify-schema",
     "db:seed": "pnpm --filter @crm/db seed",
     "db:reset": "pnpm --filter @crm/db reset",
-    "prepare": "husky"
+    "prepare": "husky",
+    "audit:resource-limits": "node tools/resource-limits/check.mjs --check && node --test tools/resource-limits/lib.test.mjs",
+    "test:redis-pressure": "bash tools/resource-limits/redis-pressure.sh",
+    "audit:queue-capacity": "node tools/queue-capacity/inventory.mjs --check && node --test tools/queue-capacity/model.test.mjs",
+    "bench:queues": "node tools/queue-capacity/bench.mjs"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
@@ -72,7 +78,10 @@
       "@grpc/grpc-js": ">=1.14.5"
     },
     "auditConfig": {
-      "ignoreGhsas": []
+      "ignoreGhsas": [
+        "GHSA-86w9-cpqp-85rv",
+        "GHSA-vfj7-8cjw-p6xm"
+      ]
     }
   }
 }

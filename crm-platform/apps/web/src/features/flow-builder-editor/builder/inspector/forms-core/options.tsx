@@ -1,12 +1,21 @@
 'use client';
 
 import { ButtonIcon } from '../../button-icon';
+import { ButtonActionPicker } from '../../button-action-picker';
+import { buttonActionOf, buttonActionPatch } from '../../../lib/button-actions';
 import {
+  FLB_AGE_END_TEXT,
   FLB_ASK_INPUT_TYPES,
   FLB_DATE_FORMATS,
+  flbCleanAgeWhenUnder,
   flbCleanAskInputType,
   flbCleanDateFormat,
+  flbIsAgeInput,
+  FLB_WA_LIMITS,
+  flbAskOptionMax,
 } from '@crm/contracts';
+import { FlowEditorContext } from '../../../lib/flow-editor-context';
+import { useContext } from 'react';
 import { useTranslations } from 'next-intl';
 import { askInputLabel, askInputWrongText, dateFormatLabel } from '../../../lib/contract-text';
 import { useFlb } from '../../../lib/msg';
@@ -43,13 +52,27 @@ function setStringOption(options: unknown, i: number, value: string): string[] {
   return asArray(options).map((v, j) => (j === i ? value : String(v ?? '')));
 }
 
-export function ButtonsForm({ node, data: d, set, addOption, removeOption }: FormProps) {
+export function ButtonsForm({
+  node,
+  data: d,
+  set,
+  setMany,
+  env,
+  addOption,
+  removeOption,
+}: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
+  const { whatsapp } = useContext(FlowEditorContext);
   return (
     <>
       <ButtonsPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={whatsapp ? FLB_WA_LIMITS.body : undefined}
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field label={t('buttonsOptions')} hint={t('buttonsOptionsHint', { max: 3 })}>
         {asArray(d.options).map((o, i) => (
@@ -57,14 +80,9 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
             <OptionRow
               index={i}
               value={o}
+              maxLength={whatsapp ? FLB_WA_LIMITS.buttonTitle : undefined}
               onChange={(v) => set('options', setStringOption(d.options, i, v))}
-              onRemove={() => {
-                set(
-                  'optionIcons',
-                  asArray(d.optionIcons).filter((_, j) => j !== i),
-                );
-                removeOption(i);
-              }}
+              onRemove={() => removeOption(i)}
             />
             <div className="-mt-1 mb-2 ps-6">
               <ButtonIcon
@@ -77,6 +95,15 @@ export function ButtonsForm({ node, data: d, set, addOption, removeOption }: For
                     ),
                   )
                 }
+              />
+            </div>
+            <div className="mb-3 ps-6">
+              <ButtonActionPicker
+                value={buttonActionOf(d, i)}
+                ctx={env.ctx}
+                loading={env.loading}
+                flowId={env.flowId}
+                onChange={(next) => setMany(buttonActionPatch(d, i, next))}
               />
             </div>
           </div>
@@ -107,6 +134,7 @@ const subInput = `${controlClass} !w-auto min-w-0 flex-1 !py-1.5 !text-[11.5px]`
 export function ListForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const unofficial = useUnofficialWhatsapp();
+  const { whatsapp } = useContext(FlowEditorContext);
   const items = listItems(d.options);
   const setItem = (i: number, patch: Partial<ListItem>) =>
     set('options', patchItem(items, i, patch));
@@ -117,11 +145,17 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
     <>
       <ListPreview d={d} />
       <Field label={t('prompt')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={whatsapp ? FLB_WA_LIMITS.listBody : undefined}
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field label={t('listButtonLabel')} hint={t('listButtonHint', { max: 20 })}>
         <TextInput
           value={d.button}
+          maxLength={whatsapp ? FLB_WA_LIMITS.listButton : undefined}
           placeholder={t('listButtonPlaceholder')}
           onChange={(v) => set('button', v)}
         />
@@ -155,7 +189,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
                 <XIcon />
               </IconButton>
             </div>
-            <div className="mt-1.5 flex items-center gap-2 pl-7 pr-8">
+            <div className="mt-1.5 flex items-center gap-2 ps-7 pe-8">
               <input
                 type="text"
                 value={o.description}
@@ -166,7 +200,7 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
               />
               <Counter len={o.description.length} max={LIST_DESC_MAX} />
             </div>
-            <div className="mt-1.5 flex items-center gap-2 pl-7 pr-8">
+            <div className="mt-1.5 flex items-center gap-2 ps-7 pe-8">
               <input
                 type="text"
                 value={o.section}
@@ -204,8 +238,10 @@ export function ListForm({ node, data: d, set, addOption, removeOption }: FormPr
 export function AskForm({ node, data: d, set, addOption, removeOption }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.options');
   const ts = useTranslations('flb.builder.simple.editors');
+  const ta = useTranslations('flb.builder.askAge');
   const tf = useFlb();
   const unofficial = useUnofficialWhatsapp();
+  const { whatsapp } = useContext(FlowEditorContext);
   const options = asArray(d.options);
   // A checked answer applies to a free reply: with fixed answers or a file upload the plain Ask runs.
   const checked =
@@ -213,7 +249,14 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
   return (
     <>
       <Field label={t('askQuestion')}>
-        <TextArea value={d.prompt} rows={3} onChange={(v) => set('prompt', v)} />
+        <TextArea
+          value={d.prompt}
+          rows={3}
+          maxLength={
+            whatsapp ? (options.length ? FLB_WA_LIMITS.body : FLB_WA_LIMITS.text) : undefined
+          }
+          onChange={(v) => set('prompt', v)}
+        />
       </Field>
       <Field
         label={t('askValidate')}
@@ -227,7 +270,8 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
       </Field>
       {checked ? (
         <>
-          {flbCleanAskInputType(d.validate) === 'date' ? (
+          {flbCleanAskInputType(d.validate) === 'date' ||
+          flbCleanAskInputType(d.validate) === 'date_of_birth' ? (
             <Field label={t('askDateFormat')} hint={t('askDateFormatHint')}>
               <SelectInput
                 value={flbCleanDateFormat(d.dateFormat)}
@@ -235,6 +279,46 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
                 onChange={(v) => set('dateFormat', v)}
               />
             </Field>
+          ) : null}
+          {flbIsAgeInput(flbCleanAskInputType(d.validate)) ? (
+            <>
+              <Field label={ta('minAge')} hint={ta('minAgeHint')}>
+                <NumberInput
+                  value={d.ageMinAge}
+                  min={1}
+                  max={21}
+                  onChange={(v) =>
+                    set(
+                      'ageMinAge',
+                      Number.isNaN(v) ? '' : Math.min(21, Math.max(1, Math.trunc(v))),
+                    )
+                  }
+                />
+              </Field>
+              <Field label={ta('whenUnder')} hint={ta('whenUnderHint')}>
+                <SelectInput
+                  value={flbCleanAgeWhenUnder(d.ageWhenUnder)}
+                  options={[
+                    { v: 'end', l: ta('end') },
+                    { v: 'continue', l: ta('continue') },
+                  ]}
+                  onChange={(v) => set('ageWhenUnder', v)}
+                />
+              </Field>
+              {flbCleanAgeWhenUnder(d.ageWhenUnder) === 'end' ? (
+                <Field label={ta('endText')} hint={ta('endTextHint')}>
+                  <TextArea
+                    value={d.ageEndText}
+                    rows={2}
+                    placeholder={FLB_AGE_END_TEXT}
+                    onChange={(v) => set('ageEndText', v)}
+                  />
+                </Field>
+              ) : (
+                <p className="text-xs text-muted-foreground">{ta('continueNote')}</p>
+              )}
+              <p className="text-xs text-muted-foreground">{ta('note')}</p>
+            </>
           ) : null}
           {flbCleanAskInputType(d.validate) === 'phone' ? (
             <Field hint={ts('ask.verifyOtpHint')}>
@@ -302,6 +386,7 @@ export function AskForm({ node, data: d, set, addOption, removeOption }: FormPro
             key={`${node.id}-ans-${i}`}
             index={i}
             value={o}
+            maxLength={whatsapp ? flbAskOptionMax(options.length) : undefined}
             onChange={(v) => set('options', setStringOption(d.options, i, v))}
             onRemove={() => removeOption(i)}
           />

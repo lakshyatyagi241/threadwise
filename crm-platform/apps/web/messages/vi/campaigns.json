@@ -209,7 +209,16 @@
         "customMessage": "Tin nhắn tùy chỉnh",
         "flowTitle": "Luồng",
         "variants": "Biến thể đang hiển thị",
-        "variant": "Biến thể {v}"
+        "variant": "Biến thể {v}",
+        "typeEmail": "Email",
+        "emailTitle": "Xem trước email",
+        "emailFrom": "Từ",
+        "emailSubject": "Tiêu đề",
+        "emailNoSender": "Chọn người gửi",
+        "emailNoSubject": "(không có tiêu đề)",
+        "emailEmpty": "Hãy viết nội dung tin nhắn, nội dung sẽ hiện ở đây.",
+        "emailUnsubscribe": "Liên kết hủy đăng ký được thêm vào cuối mỗi email.",
+        "emailNote": "Đây là cách chiến dịch của bạn hiển thị trong hộp thư đến của từng người nhận."
       },
       "previewEmpty": "Xem trước tin nhắn của bạn…",
       "previewTemplate": "Mẫu",
@@ -228,7 +237,8 @@
         "throttle": "Khoảng cách dài nhất phải bằng hoặc lớn hơn khoảng cách ngắn nhất.",
         "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi được gửi.",
         "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
-        "sender": "Chọn người gửi."
+        "sender": "Chọn người gửi.",
+        "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
       },
       "submit": {
         "save": "Lưu thay đổi",
@@ -293,7 +303,14 @@
         },
         "csvRows": "{count} số trong tệp",
         "numbersPlaceholder": "Mỗi số một dòng — gồm mã quốc gia, không có dấu cộng",
-        "numbersCount": "{count} số"
+        "numbersCount": "{count} số",
+        "emailNote": "Email được gửi đến địa chỉ của từng liên hệ. Liên hệ không có địa chỉ email, địa chỉ trùng lặp và liên hệ đã hủy đăng ký sẽ bị bỏ qua.",
+        "emailSkipped": "Người nhận đã chọn không có địa chỉ email (sẽ bị bỏ qua): {count}",
+        "emailNoAddress": "Số điện thoại nhập tay và các dòng CSV không có địa chỉ email nên sẽ bị bỏ qua. Hãy chọn liên hệ, nhóm, thẻ hoặc phân khúc.",
+        "previousTitle": "Lần gửi trước",
+        "previousHint": "Thêm những người mà các broadcast và chiến dịch trước đó đã gửi đến, có thể chỉ gồm người đã đọc, trả lời hoặc nhấp vào liên kết.",
+        "previousEstimate": "{count, plural, other {Tối đa # người từ các lần gửi trước (ước tính: người nằm trong hai lần gửi được tính hai lần).}}",
+        "previousEditHint": "Lựa chọn lần gửi trước của bạn không hiển thị khi chỉnh sửa: chiến dịch này đã lưu người nhận dưới dạng liên hệ. Hãy chọn lại để thêm người."
       },
       "message": {
         "title": "Tin nhắn",
@@ -526,7 +543,13 @@
           "baileys": "Chưa có mẫu API không chính thức nào. Tạo một mẫu tại trang Mẫu."
         },
         "templateIntroApproved": "Chọn một mẫu Meta đã duyệt. Giá trị biến theo từng liên hệ được điền khi gửi từ thuộc tính liên hệ.",
-        "templateApproved": "Mẫu đã duyệt"
+        "templateApproved": "Mẫu đã duyệt",
+        "subject": "Tiêu đề",
+        "subjectNote": "Tiêu đề, tối đa 150",
+        "subjectPlaceholder": "vd: Ưu đãi tháng Năm của bạn đã có",
+        "subjectHint": "Dùng làm tiêu đề email. Để trống để dùng tên chiến dịch.",
+        "emailNote": "Chiến dịch này được gửi dưới dạng email từ hộp thư bạn đã chọn. Liên kết hủy đăng ký được thêm vào cuối mỗi email.",
+        "emailBodyHint": "Văn bản thuần. Dùng '{{name}}' hoặc '{{first_name}}' để cá nhân hóa. Liên hệ không có địa chỉ email sẽ bị bỏ qua."
       },
       "review": {
         "title": "Xem lại",
@@ -568,8 +591,15 @@
           "throttle": "Khoảng nghỉ dài nhất phải lớn hơn hoặc bằng khoảng nghỉ ngắn nhất.",
           "expiry": "Ngày kết thúc phải sau ngày gửi, nếu không chiến dịch sẽ hết hạn trước khi gửi.",
           "media": "Nhập địa chỉ đầy đủ bắt đầu bằng http:// hoặc https://.",
-          "sender": "Chọn người gửi."
-        }
+          "sender": "Chọn người gửi.",
+          "subject": "Hãy rút ngắn tiêu đề xuống tối đa 150 ký tự."
+        },
+        "from": "Từ",
+        "subject": "Tiêu đề",
+        "subjectFallback": "Tên chiến dịch",
+        "skippedNoEmail": "Bỏ qua (không có địa chỉ email)",
+        "estimateEmail": "Đây là số ước tính: liên hệ thuộc hai nhóm được tính hai lần. Liên hệ không có địa chỉ email trong nhóm, thẻ và phân khúc sẽ bị bỏ qua khi chiến dịch chạy.",
+        "previousSends": "Lần gửi trước (tối đa)"
       },
       "ai": {
         "open": "Tạo bằng AI",
@@ -622,8 +652,43 @@
         "notes": "Ghi chú thêm",
         "notesNote": "không bắt buộc / tối đa 2000",
         "notesPlaceholder": "Bất kỳ điều gì cụ thể — cụm từ bắt buộc, điều cần tránh, giọng thương hiệu…",
-        "failed": "Không thể tạo chiến dịch. Vui lòng thử lại.",
-        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục."
+        "applied": "Nội dung chiến dịch đã được điền. Hãy xem lại trước khi tiếp tục.",
+        "pictureApplied": "Đã đính kèm ảnh vào chiến dịch. Hãy kiểm tra trong thẻ Tệp đính kèm.",
+        "errors": {
+          "noKey": "Không gian làm việc này chưa bật nhà cung cấp AI nào. Hãy nhờ quản trị viên thêm khóa.",
+          "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+          "providerFailed": "Nhà cung cấp AI không phản hồi. Vui lòng thử lại sau giây lát.",
+          "badJson": "Không đọc được câu trả lời của mô hình. Hãy thử lại hoặc thay đổi bản tóm tắt.",
+          "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+          "forbidden": "Bạn không có quyền tạo chiến dịch.",
+          "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+          "failed": "Không thể tạo chiến dịch. Vui lòng thử lại."
+        },
+        "picture": {
+          "label": "Tạo cả ảnh",
+          "hint": "Vẽ một ảnh từ cùng bản tóm tắt và đính kèm vào chiến dịch. Sử dụng hạn mức OpenAI của bạn.",
+          "needsOpenAi": "Tạo ảnh cần khóa OpenAI. Hãy chọn một mô hình OpenAI để bật tính năng này.",
+          "noAttachment": "Số bạn đã chọn chỉ gửi văn bản nên không có chỗ để đính kèm ảnh.",
+          "size": "Hình dạng ảnh",
+          "sizes": {
+            "square": "Vuông",
+            "landscape": "Ngang",
+            "portrait": "Dọc"
+          },
+          "textKept": "Đã điền nội dung chiến dịch. Chỉ còn thiếu ảnh.",
+          "retry": "Thử tạo lại ảnh",
+          "errors": {
+            "noKey": "Tạo ảnh cần khóa OpenAI, nhưng không gian làm việc này chưa bật khóa nào.",
+            "limitReached": "Không gian làm việc này đã dùng hết hạn mức AI của tháng.",
+            "providerFailed": "Dịch vụ tạo ảnh không phản hồi. Vui lòng thử lại sau giây lát.",
+            "badJson": "Dịch vụ tạo ảnh trả về dữ liệu không mong đợi. Vui lòng thử lại.",
+            "imageRefused": "OpenAI từ chối vẽ ảnh này. Hãy thay đổi sản phẩm, ưu đãi hoặc ghi chú rồi thử lại.",
+            "invalid": "Hãy kiểm tra bản tóm tắt: tên doanh nghiệp là bắt buộc và một số trường quá dài.",
+            "forbidden": "Bạn không có quyền tạo chiến dịch.",
+            "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối mạng và thử lại.",
+            "failed": "Không thể tạo ảnh. Vui lòng thử lại."
+          }
+        }
       },
       "switch": {
         "title": "Dùng luồng hướng dẫn?",
@@ -804,7 +869,8 @@
         "clicked": "đã nhấp",
         "showing": "Hiển thị {shown} trong tổng số {total}",
         "prev": "Trang trước",
-        "next": "Trang sau"
+        "next": "Trang sau",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "engagement": {
         "opened": "Đã mở",
@@ -972,7 +1038,8 @@
         "badge": "Trực tiếp",
         "updated": "cập nhật {time}",
         "queued": "{count} đang chờ gửi",
-        "processing": "{count} đang được gửi"
+        "processing": "{count} đang được gửi",
+        "held": "{count} đang tạm giữ vì giờ yên tĩnh"
       },
       "statistics": {
         "loadFailed": "Không tải được thống kê.",
@@ -1101,7 +1168,13 @@
         "auto_end_in_past": "Ngày tự động kết thúc đã qua.",
         "auto_end_before_send": "Ngày tự động kết thúc phải sau thời điểm gửi.",
         "auto_end_recurring": "Chiến dịch lặp lại kết thúc theo quy tắc riêng: hãy xóa ngày tự động kết thúc.",
-        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi."
+        "pacing_range": "Kiểm tra Smart Delivery: độ trễ dài nhất ngắn hơn độ trễ ngắn nhất, hoặc chỉ đặt một trong hai khung giờ gửi.",
+        "follow_up_template_required": "Chọn mẫu mà mỗi tin theo dõi sẽ gửi.",
+        "follow_up_flow_required": "Chọn luồng mà mỗi tin theo dõi sẽ bắt đầu.",
+        "follow_up_cloud_api_only": "Tin theo dõi chỉ hoạt động với số WhatsApp Cloud API. Hãy chọn một số ở bước 1 hoặc xóa các tin theo dõi.",
+        "sequence_not_recurring": "Mẫu gửi luân phiên chỉ hoạt động với chiến dịch lặp lại. Hãy chọn lịch lặp lại hoặc xóa các mẫu bổ sung.",
+        "sequence_with_ab": "Mẫu gửi luân phiên không thể kết hợp với thử nghiệm A/B. Hãy tắt thử nghiệm A/B hoặc xóa các mẫu bổ sung.",
+        "sequence_template_required": "Chọn một mẫu cho mỗi bước trong thứ tự hoặc xóa các bước trống."
       },
       "template": {
         "previewOnline": "trực tuyến",
@@ -1135,7 +1208,14 @@
         "senderLabel": "Gửi từ",
         "senderHint": "Số WhatsApp dùng để gửi đợt gửi hàng loạt này.",
         "pickSender": "Chọn một số",
-        "classicOption": "trình tạo cổ điển"
+        "classicOption": "trình tạo cổ điển",
+        "buildWithAi": "Tạo bằng AI",
+        "aiNote": "Soạn mẫu mới bằng AI. Bạn xem lại trên trang mẫu; sau đó Meta sẽ xét duyệt trước khi mẫu được gửi đi, vì vậy hãy quay lại chọn mẫu khi đã được phê duyệt.",
+        "shareToggle": "Chia lượt gửi này cho nhiều số",
+        "shareHint": "Chọn các số dùng để gửi và đặt tỷ lệ cho từng số. Đối tượng được chia theo các tỷ lệ này và mỗi liên hệ chỉ nhận tin từ một số. Tỷ lệ để trống hoặc bằng 0 được tính là 1.",
+        "shareWeight": "Tỷ lệ",
+        "shareWeightLabel": "Tỷ lệ của {name}",
+        "shareKeepOne": "Phải giữ ít nhất một số được chọn."
       },
       "audience": {
         "selectionTitle": "Đã chọn trong Trung tâm liên hệ",
@@ -1184,7 +1264,8 @@
           "contacts": "Liên hệ",
           "groups": "Nhóm",
           "segments": "Phân khúc",
-          "csv": "Tệp CSV"
+          "csv": "Tệp CSV",
+          "previous": "Lần gửi trước"
         },
         "groupsHint": "Nhóm là danh sách tiếp thị của bạn. Mọi người trong các nhóm bạn đánh dấu đều được bao gồm.",
         "segmentsHint": "Phân khúc tự động điền theo quy tắc. Mọi người trong các phân khúc bạn đánh dấu đều được bao gồm.",
@@ -1280,7 +1361,10 @@
         },
         "csvIssuesMore": "Còn {count} mục nữa trong tệp tải xuống.",
         "csvConsentOn": "Bạn đã xác nhận sự đồng ý cho các số này. Chúng được ghi nhận là đã đồng ý khi chiến dịch khởi chạy.",
-        "csvConsentVersion": "Phiên bản thông báo: {version}."
+        "csvConsentVersion": "Phiên bản thông báo: {version}.",
+        "modePrevious": "Gửi đến các lần gửi trước",
+        "previousHint": "Nhắm lại những người mà các broadcast và chiến dịch trước đó đã gửi đến, có thể chỉ gồm người đã đọc, chưa đọc, đã trả lời hoặc đã nhấp vào liên kết.",
+        "chipPrevious": "{count, plural, other {# lần gửi trước}} ({outcome})"
       },
       "review": {
         "intro": "Kiểm tra chi phí, cho chúng tôi biết mỗi biến của mẫu được điền bằng gì, và xem lại đợt gửi hàng loạt.",
@@ -1357,7 +1441,13 @@
         "sumCsv": "Tệp CSV {name}: {count, plural, other {# số hợp lệ}}",
         "estimatedCostFull": "Chi phí ước tính (đầy đủ)",
         "chargedPlan": "Trừ vào ví của bạn ngay bây giờ: {amount} (gói của bạn chi trả {covered} trong số các tin nhắn này)",
-        "chargedWallet": "Trừ vào ví của bạn: {amount}"
+        "chargedWallet": "Trừ vào ví của bạn: {amount}",
+        "sumFollowUps": "Tin theo dõi",
+        "sumSequence": "Gửi luân phiên",
+        "sumPrevious": "Lần gửi trước: {names} ({outcome})",
+        "sumSplit": "Phân chia theo số",
+        "sumSplitCount": "{count, plural, other {# người nhận}} ({percent}%)",
+        "sumSplitPercent": "{percent}% đối tượng"
       },
       "test": {
         "title": "Gửi thử tin nhắn WhatsApp",
@@ -1393,9 +1483,11 @@
           "sent": "Đã gửi",
           "delivered": "Đã nhận",
           "read": "Đã đọc",
-          "failed": "Thất bại"
+          "failed": "Thất bại",
+          "held": "Tạm giữ"
         },
-        "charged": "Đã tính phí {amount}"
+        "charged": "Đã tính phí {amount}",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "send": {
         "whenTitle": "Thời điểm gửi",
@@ -1520,7 +1612,8 @@
           "sent": "Đã gửi",
           "delivered": "Đã nhận",
           "failed": "Thất bại",
-          "retries": "Thử lại"
+          "retries": "Thử lại",
+          "template": "Mẫu"
         },
         "retrySummary": "{pending} đang chờ, {recovered} đã khôi phục, {exhausted} đã bỏ cuộc",
         "openRun": "Mở lần chạy",
@@ -1562,7 +1655,27 @@
         "exportFailed": "Không tải được tệp xuất.",
         "deleteTitle": "Xóa chiến dịch gửi này?",
         "deleteOne": "Xóa chiến dịch gửi này và người nhận của nó. Không thể hoàn tác.",
-        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác."
+        "deleteSeries": "Xóa chiến dịch gửi lặp lại này và các lượt chạy đã lên kế hoạch. Chưa có gì được gửi nên không mất lịch sử. Không thể hoàn tác.",
+        "followUps": {
+          "title": "Tin theo dõi",
+          "step": "Theo dõi {step}",
+          "count": {
+            "waiting": "{count} đang chờ",
+            "sent": "{count} đã gửi",
+            "delivered": "{count} đã nhận",
+            "read": "{count} đã đọc",
+            "flowsStarted": "{count} luồng đã bắt đầu",
+            "skipped": "{count} đã bỏ qua",
+            "lapsed": "{count} đã hết hạn",
+            "failed": "{count} thất bại"
+          },
+          "hint": {
+            "skipped": "Điều kiện không được đáp ứng khi kiểm tra nên chuỗi kết thúc tại đó.",
+            "lapsed": "Thời gian theo dõi đã hết trước khi liên hệ trả lời hoặc đọc nên chuỗi kết thúc tại đó."
+          }
+        },
+        "templatesTitle": "Mẫu",
+        "templatesInTurn": "{count, plural, other {# mẫu luân phiên}}"
       },
       "panel": {
         "title": "Được tạo bằng Tạo gửi hàng loạt",
@@ -1573,7 +1686,8 @@
           "recurring": "Định kỳ"
         },
         "recipients": "{count, plural, other {# người nhận}}",
-        "next": "Lần chạy tiếp theo {when}"
+        "next": "Lần chạy tiếp theo {when}",
+        "moreTemplates": "+{count} nữa"
       },
       "pickers": {
         "selectDate": "Chọn ngày",
@@ -1593,6 +1707,95 @@
         "body": "{number} ({engine}) được gửi từ trình tạo cổ điển, bắt đầu lại từ đầu. Chiến dịch này được lưu thành bản nháp và vẫn nằm trong danh sách Chiến dịch của bạn, nên bạn có thể quay lại sau.",
         "confirm": "Mở trình tạo cổ điển",
         "cancel": "Ở lại đây"
+      },
+      "followUps": {
+        "title": "Tin theo dõi",
+        "intro": "Gửi thêm một tin nhắn hoặc bắt đầu một luồng, tùy theo hành động của liên hệ sau tin nhắn chiến dịch. Tối đa 3 bước liên tiếp.",
+        "cloudOnly": "Tin theo dõi cần số WhatsApp Cloud API vì dựa trên báo cáo đã đọc và trả lời của Meta. Hãy chọn một số ở bước 1.",
+        "add": "Thêm tin theo dõi",
+        "count": "{used}/{max} tin theo dõi",
+        "limitReached": "Đã đạt giới hạn: {max} tin theo dõi.",
+        "stepTitle": "Theo dõi {step}",
+        "measuredFromCampaign": "Tính từ tin nhắn chiến dịch.",
+        "measuredFromStep": "Tính từ tin nhắn của tin theo dõi {step}.",
+        "remove": "Xóa tin theo dõi {step}",
+        "removeShort": "Xóa",
+        "triggerLabel": "Khi liên hệ",
+        "trigger": {
+          "replied": "Trả lời",
+          "read": "Đọc tin nhắn",
+          "not_replied": "Chưa trả lời",
+          "not_read": "Chưa đọc tin nhắn"
+        },
+        "triggerHelp": {
+          "replied": "Kích hoạt ngay khi họ trả lời, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "read": "Kích hoạt ngay khi họ đọc, nếu việc đó xảy ra trong thời gian bạn đặt. Nếu không, chuỗi kết thúc.",
+          "not_replied": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa trả lời. Nếu họ đã trả lời, chuỗi kết thúc.",
+          "not_read": "Chờ trong thời gian bạn đặt, rồi kích hoạt nếu họ chưa đọc. Nếu họ đã đọc, chuỗi kết thúc."
+        },
+        "watchLabel": "Theo dõi tối đa",
+        "waitLabel": "Chờ",
+        "unitLabel": "Đơn vị thời gian",
+        "duration": {
+          "minutes": "{count, plural, other {# phút}}",
+          "hours": "{count, plural, other {# giờ}}",
+          "days": "{count, plural, other {# ngày}}"
+        },
+        "actionLabel": "Sau đó",
+        "action": {
+          "template": "Gửi một mẫu",
+          "flow": "Bắt đầu một luồng"
+        },
+        "templateLabel": "Mẫu cần gửi",
+        "flowLabel": "Luồng cần bắt đầu",
+        "pickTemplate": "Chọn một mẫu",
+        "pickFlow": "Chọn một luồng",
+        "loading": "Đang tải...",
+        "unavailable": "Không còn khả dụng",
+        "noTemplates": "Chưa có mẫu nào được duyệt.",
+        "createTemplate": "Tạo mẫu",
+        "noFlows": "Chưa có luồng nào.",
+        "createFlow": "Tạo luồng",
+        "flowsError": "Không thể tải các luồng. Vui lòng thử lại sau.",
+        "line": "{when}: {what}",
+        "when": {
+          "replied": "Nếu họ trả lời trong {wait}",
+          "read": "Nếu họ đọc trong {wait}",
+          "not_replied": "Nếu chưa trả lời sau {wait}",
+          "not_read": "Nếu chưa đọc sau {wait}"
+        },
+        "does": {
+          "template": "gửi {name}",
+          "flow": "bắt đầu luồng {name}"
+        },
+        "unit": {
+          "minutes": "{count, plural, other {phút}}",
+          "hours": "{count, plural, other {giờ}}",
+          "days": "{count, plural, other {ngày}}"
+        }
+      },
+      "sequence": {
+        "title": "Các mẫu theo thứ tự",
+        "intro": "Mỗi lần chạy gửi mẫu kế tiếp trong danh sách này. Lần chạy 1 gửi mẫu đầu tiên, lần 2 gửi mẫu thứ hai, và sau mẫu cuối danh sách bắt đầu lại từ mẫu đầu.",
+        "notRecurring": "Chỉ chiến dịch lặp lại mới gửi mẫu luân phiên. Hãy chọn lịch lặp lại hoặc xóa các mẫu này.",
+        "withAb": "Mẫu luân phiên không thể dùng cùng thử nghiệm A/B, vốn đã gửi hai mẫu. Hãy tắt thử nghiệm A/B để dùng.",
+        "templateLabel": "Mẫu {position}",
+        "firstMissing": "Chưa chọn",
+        "firstHint": "Mẫu đã chọn cho chiến dịch. Đổi ở bước chọn mẫu.",
+        "pick": "Chọn một mẫu",
+        "loading": "Đang tải...",
+        "unavailable": "Không còn khả dụng",
+        "up": "Lên",
+        "down": "Xuống",
+        "moveUp": "Di chuyển mẫu {position} lên",
+        "moveDown": "Di chuyển mẫu {position} xuống",
+        "remove": "Xóa mẫu {position}",
+        "removeShort": "Xóa",
+        "removeAll": "Xóa tất cả",
+        "add": "Thêm một mẫu",
+        "count": "{used}/{max} mẫu",
+        "limitReached": "Đã đạt giới hạn: {max} mẫu.",
+        "variablesTitle": "Biến của mẫu {position}: {name}"
       }
     },
     "history": {
@@ -1706,12 +1909,93 @@
         "title": "Số cá nhân đang tắt cho không gian làm việc này",
         "body": "Khi tính năng này tắt, {count} số cá nhân (QR) không thể gửi chiến dịch. Quản trị viên nền tảng có thể bật cho không gian làm việc này, hoặc bạn có thể kết nối số WhatsApp Business chính thức.",
         "action": "Kết nối số chính thức"
+      },
+      "email": {
+        "none": {
+          "title": "Chưa kết nối hộp thư nào",
+          "body": "Hãy kết nối hộp thư ở trang Email để chọn nơi gửi chiến dịch này.",
+          "action": "Kết nối hộp thư"
+        },
+        "disconnected": {
+          "title": "Hộp thư bị ngắt kết nối: {count}",
+          "body": "Hãy kết nối lại ở trang Email để gửi chiến dịch từ hộp thư này.",
+          "action": "Mở trang Email"
+        },
+        "error": {
+          "title": "Hộp thư cần kết nối lại: {count}",
+          "body": "Lần đăng nhập gần nhất không thành công. Hãy kết nối lại ở trang Email, hộp thư sẽ hiện ở đây.",
+          "action": "Mở trang Email"
+        }
       }
     },
     "create": {
       "loading": "Đang tải các số của bạn",
       "noAccessTitle": "Bạn không thể tạo chiến dịch",
       "noAccess": "Hãy nhờ quản trị viên không gian làm việc cấp quyền tạo chiến dịch."
+    },
+    "previousSends": {
+      "title": "Lần gửi trước",
+      "empty": "Chưa có broadcast hoặc chiến dịch nào trước đó",
+      "outcomeLabel": "Những ai trong các lần gửi đó",
+      "outcomes": {
+        "all": "Tất cả người nhận",
+        "delivered": "Đã gửi đến",
+        "read": "Đã đọc",
+        "not_read": "Chưa đọc",
+        "replied": "Đã trả lời",
+        "not_replied": "Chưa trả lời",
+        "clicked": "Đã nhấp vào liên kết",
+        "failed": "Thất bại"
+      },
+      "outcomeOff": "{name} (không dùng cho broadcast)",
+      "outcomeHint": {
+        "all": "Tất cả người nhận: mọi người mà tin nhắn hướng đến. Liên hệ đã hủy nhận tin và các dòng bị bỏ qua không được tính.",
+        "delivered": "Đã gửi đến: những người đã nhận được tin nhắn.",
+        "read": "Đã đọc: những người đã đọc tin nhắn.",
+        "not_read": "Chưa đọc: những người được gửi tin nhưng chưa đọc.",
+        "replied": "Đã trả lời: những người đã trả lời tin nhắn.",
+        "not_replied": "Chưa trả lời: những người được gửi tin nhưng chưa trả lời.",
+        "clicked": "Đã nhấp vào liên kết: những người đã nhấp vào liên kết được theo dõi trong tin nhắn.",
+        "failed": "Thất bại: những người không thể gửi tin nhắn đến."
+      },
+      "broadcastNote": "Broadcast chỉ ghi nhận việc gửi đến và đã đọc, nên không có phản hồi và lượt nhấp khi đang chọn broadcast.",
+      "broadcastOff": "Broadcast không có phản hồi hay lượt nhấp. Hãy chọn kết quả khác để chọn mục này.",
+      "search": "Tìm các lần gửi trước",
+      "searchPlaceholder": "Tìm kiếm",
+      "listLabel": "Các broadcast và chiến dịch trước đó",
+      "noMatch": "Không có kết quả phù hợp với tìm kiếm của bạn.",
+      "chosen": "Đã chọn {count}/{max}",
+      "limit": "Bạn có thể chọn tối đa {max} lần gửi. Bỏ chọn một mục để chọn mục khác.",
+      "kind": {
+        "broadcast": "Broadcast",
+        "campaign": "Chiến dịch"
+      },
+      "wentOut": "Đã gửi {date}",
+      "wentOutUnknown": "Không rõ ngày",
+      "recipients": "{count, plural, other {# người nhận}}",
+      "notRecorded": "Không được ghi nhận cho broadcast",
+      "outcomeCounts": {
+        "all": "{count, plural, other {# người}}",
+        "delivered": "{count, plural, other {# người đã nhận được}}",
+        "read": "{count, plural, other {# người đã đọc}}",
+        "not_read": "{count, plural, other {# người chưa đọc}}",
+        "replied": "{count, plural, other {# người đã trả lời}}",
+        "not_replied": "{count, plural, other {# người chưa trả lời}}",
+        "clicked": "{count, plural, other {# người đã nhấp vào liên kết}}",
+        "failed": "{count, plural, other {# người gửi thất bại}}"
+      }
+    },
+    "senderBreakdown": {
+      "title": "Đã gửi từ từng số",
+      "hint": "Lượt gửi này được chia cho nhiều số. Mỗi hàng là một số và những người nhận được giao cho số đó.",
+      "cols": {
+        "number": "Số",
+        "recipients": "Người nhận",
+        "sent": "Đã gửi",
+        "delivered": "Đã chuyển đến",
+        "failed": "Thất bại"
+      },
+      "removed": "(số đã bị xóa)"
     }
   }
 }

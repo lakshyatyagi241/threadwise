@@ -1,0 +1,99 @@
+# Behaviour cases for resource-limits.rules.yml. Run: promtool test rules resource-limits.rules.test.yml
+rule_files:
+  - resource-limits.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      # api: 85% of the limit all the time -> warning only. worker: 95% -> critical (and warning). web: 50% -> nothing.
+      - series: 'crm_container_memory_bytes{service="api",instance="a:1"}'
+        values: '850x20'
+      - series: 'crm_container_memory_limit_bytes{service="api",instance="a:1"}'
+        values: '1000x20'
+      - series: 'crm_container_memory_bytes{service="worker",instance="w:1"}'
+        values: '950x20'
+      - series: 'crm_container_memory_limit_bytes{service="worker",instance="w:1"}'
+        values: '1000x20'
+      - series: 'crm_container_memory_bytes{service="web",instance="x:1"}'
+        values: '500x20'
+      - series: 'crm_container_memory_limit_bytes{service="web",instance="x:1"}'
+        values: '1000x20'
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: ContainerMemoryNearLimit
+        exp_alerts: [] # high for under the 10 m hold
+      - eval_time: 15m
+        alertname: ContainerMemoryNearLimit
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api, instance: 'a:1' }
+            exp_annotations:
+              summary: 'Container memory above 80% of its limit for 10 min on api a:1'
+              description: 'Includes page cache. Compare crm_process_heap_used_bytes and crm_process_rss_bytes: heap growth is a leak or an unbounded batch; RSS above heap is buffers and native memory.'
+          - exp_labels: { severity: warning, service: worker, instance: 'w:1' }
+            exp_annotations:
+              summary: 'Container memory above 80% of its limit for 10 min on worker w:1'
+              description: 'Includes page cache. Compare crm_process_heap_used_bytes and crm_process_rss_bytes: heap growth is a leak or an unbounded batch; RSS above heap is buffers and native memory.'
+      - eval_time: 15m
+        alertname: ContainerMemoryCritical
+        exp_alerts:
+          - exp_labels: { severity: critical, service: worker, instance: 'w:1' }
+            exp_annotations:
+              summary: 'Container memory above 90% of its limit for 5 min on worker w:1: OOM kill is near'
+
+  # A container with no memory limit exports no limit series, so the ratio has no value and nothing fires (not a divide by zero).
+  - interval: 1m
+    input_series:
+      - series: 'crm_container_memory_bytes{service="api",instance="a:1"}'
+        values: '999999x20'
+    alert_rule_test:
+      - eval_time: 15m
+        alertname: ContainerMemoryNearLimit
+        exp_alerts: []
+
+  - interval: 1m
+    input_series:
+      - series: 'crm_container_oom_kills_total{service="worker",instance="w:1"}'
+        values: '0x5 1x15'
+      - series: 'crm_container_oom_kills_total{service="api",instance="a:1"}'
+        values: '0x20'
+      - series: 'crm_container_pids{service="api",instance="a:1"}'
+        values: '90x20'
+      - series: 'crm_container_pids_limit{service="api",instance="a:1"}'
+        values: '100x20'
+    alert_rule_test:
+      - eval_time: 4m
+        alertname: ContainerOomKilled
+        exp_alerts: []
+      - eval_time: 8m
+        alertname: ContainerOomKilled
+        exp_alerts:
+          - exp_labels: { severity: critical, service: worker, instance: 'w:1' }
+            exp_annotations:
+              summary: 'The kernel killed a process for memory in the container of worker w:1'
+      - eval_time: 12m
+        alertname: ContainerPidsNearLimit
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api, instance: 'a:1' }
+            exp_annotations:
+              summary: 'Container PIDs above 80% of the limit on api a:1'
+
+  # A restart loop: the start time changes at 3 restarts; one restart alone does not page.
+  - interval: 1m
+    input_series:
+      - series: 'crm_process_start_time_seconds{service="worker",instance="w:1"}'
+        values: '100x4 200x4 300x4 400x20'
+      - series: 'crm_process_start_time_seconds{service="api",instance="a:1"}'
+        values: '100x10 200x30'
+    alert_rule_test:
+      - eval_time: 6m
+        alertname: ProcessRestartLoop
+        exp_alerts: []
+      - eval_time: 17m
+        alertname: ProcessRestartLoop
+        exp_alerts:
+          - exp_labels: { severity: critical, service: worker, instance: 'w:1' }
+            exp_annotations:
+              summary: 'worker restarted 3 or more times in 30 min (w:1 series changed)'
+              description: 'A crash loop. If the container limit is the cause, docker inspect shows OOMKilled=true. Queue work claimed by the dead process is recovered by the stalled-job check (docs/runbooks/failed-background-work.md).'

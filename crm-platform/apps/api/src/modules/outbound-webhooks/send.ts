@@ -1,5 +1,6 @@
 import { WEBHOOK_HEADERS, type WebhookEnvelope } from '@crm/contracts';
 import { guardedRequest } from '../../infra/net/guarded-http';
+import { retryAfterMs } from '../../infra/queue/backoff';
 import { assertPublicTarget } from '../webhook-fanout';
 import { sign } from './signing';
 
@@ -10,6 +11,8 @@ export interface SendOutcome {
   latencyMs: number;
   /** A 4xx other than 408/429 will not get better by retrying. */
   permanent: boolean;
+  /** How long the endpoint asked us to wait (`Retry-After` on a 429 or 503), when it did. */
+  retryAfterMs: number | null;
   /** The first bytes of the answer, for the delivery log (never trusted, never rendered as HTML). */
   responseSnippet: string | null;
 }
@@ -19,8 +22,9 @@ const SNIPPET_BYTES = 1024;
 
 /**
  * One signed POST of an envelope to a customer's endpoint. The address is checked again here (a name can be repointed at an internal
- * host after it was saved), redirects are not followed (a redirect is a way around that check), and only the first kilobyte of the
- * answer is read.
+ * host after it was saved), the address is checked again inside the socket's own DNS lookup (`guardedRequest`, so a name repointed
+ * between the check and the connect is still refused), redirects are not followed (a redirect is a way around that check), and only
+ * the first kilobyte of the answer is kept.
  */
 export async function send(
   url: string,
@@ -39,6 +43,7 @@ export async function send(
     error,
     latencyMs: elapsed(),
     permanent,
+    retryAfterMs: null,
     responseSnippet: null,
   });
 
@@ -81,6 +86,8 @@ export async function send(
           : `HTTP ${res.status}`,
       latencyMs: elapsed(),
       permanent: res.status >= 300 && res.status < 500 && res.status !== 408 && res.status !== 429,
+      retryAfterMs:
+        res.status === 429 || res.status === 503 ? retryAfterMs(res.headers['retry-after']) : null,
       responseSnippet: snippet,
     };
   } catch (err) {

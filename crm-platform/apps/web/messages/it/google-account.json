@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Account Google",
+        "description": "Collega un account Google per Calendar, Sheets, Docs, Forms e Meet nei tuoi flow.",
+        "keywords": "google, account google, calendario, calendar, fogli, sheets, documenti, docs, moduli, forms, meet, drive, oauth, collega google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Aggiungi righe, cerca righe e salva contatti da un foglio nei tuoi flussi. Usa la connessione al tuo account Google.",
+        "keywords": "google sheets, foglio di calcolo, righe, celle, oauth, collega google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Copia un documento modello, compilalo e condividilo dai tuoi flussi. Usa la connessione al tuo account Google.",
+        "keywords": "google docs, documento, modello, condividi, oauth, collega google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Invia un modulo a un cliente e prosegui quando lo compila. Usa la connessione al tuo account Google.",
+        "keywords": "google forms, modulo, sondaggio, risposte, oauth, collega google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "page": {
+      "eyebrow": "Workspace",
+      "title": "Account Google",
+      "subtitle": "Collegalo una volta sola. Lo stesso account Google gestisce il calendario delle prenotazioni, i link Meet e i passaggi Sheets, Docs e Forms nei tuoi flow.",
+      "loading": "Caricamento dell’account Google...",
+      "forbidden": {
+        "title": "Non puoi aprire questa pagina",
+        "body": "Il tuo ruolo non include la visualizzazione dell’account Google. Chiedi a un admin del workspace."
+      },
+      "status": {
+        "unavailable": "Non configurato",
+        "disconnected": "Non collegato",
+        "connected": "Collegato",
+        "needs_reconnect": "Da ricollegare"
+      },
+      "outcome": {
+        "connected": "Account Google collegato.",
+        "denied": "Google non è stato collegato: la schermata dei permessi è stata annullata.",
+        "failed": "Il collegamento di Google non è stato completato. Riprova.",
+        "expired": "Il tentativo di collegamento è scaduto. Premi il pulsante per ricominciare.",
+        "not_configured": "Google non è ancora configurato per questa piattaforma. Chiedi all’amministratore della piattaforma.",
+        "missing_scope": "Google non ha concesso tutti i permessi richiesti. Quelli già consentiti continuano a funzionare; aggiungi di nuovo quelli mancanti e lascia selezionate tutte le caselle.",
+        "cancelled": "Hai annullato l'operazione. Non è stato collegato nulla."
+      },
+      "actions": {
+        "connect": "Collega account Google",
+        "reconnect": "Riconnetti Google",
+        "addPermissions": "Aggiungi permessi",
+        "disconnect": "Disconnetti",
+        "working": "Apertura di Google...",
+        "retry": "Riprova"
+      },
+      "unavailable": {
+        "title": "Google non è configurato per questa piattaforma",
+        "body": "L'amministratore della piattaforma deve aggiungere il client OAuth di Google prima che qualcuno possa collegarsi. Fino ad allora i passaggi Google nei tuoi flussi non riescono, con un messaggio che lo indica, e le prenotazioni proseguono senza un calendario."
+      },
+      "reconnect": {
+        "title": "Google non accetta più questo collegamento",
+        "body": "Il permesso è stato revocato, la password è cambiata o l’autorizzazione è scaduta. Collega di nuovo per ripristinarlo; le tue scelte vengono mantenute.",
+        "bodyAccount": "Google non accetta più {account}. Collegalo di nuovo per ripristinarlo; le tue scelte vengono mantenute."
+      },
+      "stats": {
+        "status": "Stato",
+        "calendars": "Calendari",
+        "calendarsValue": "{count} disponibili",
+        "calendarsNone": "nessuno",
+        "permissions": "Permessi",
+        "permissionsValue": "{granted} su {total}",
+        "lastUsed": "Ultimo utilizzo",
+        "never": "mai",
+        "live": "attivo",
+        "idle": "inattivo"
+      },
+      "account": {
+        "title": "Account collegato",
+        "email": "Account",
+        "calendar": "Calendario per prenotazioni e Meet",
+        "primaryCalendar": "Il tuo calendario principale",
+        "changeCalendar": "Cambia calendario",
+        "connectedAgo": "Collegato {when}",
+        "none": "Nessun account Google collegato.",
+        "noneBody": "Finché non colleghi un account, i passaggi Google nei tuoi flussi non riescono, con un messaggio che chiede di collegare Google, e le prenotazioni non vengono aggiunte a un calendario."
+      },
+      "permissions": {
+        "title": "Per cosa può essere usato Google",
+        "intro": "Seleziona ciò che vuoi consentire. Google mostra esattamente questi permessi nella sua schermata e puoi aggiungerne altri in seguito senza perdere quelli già consentiti.",
+        "allowed": "Consentito",
+        "notAllowed": "Non consentito",
+        "allow": "Consenti",
+        "restricted": "Limitato da Google",
+        "restrictedNote": "Google considera questo permesso limitato: la piattaforma ha bisogno della revisione di Google perché funzioni per molti workspace. Lascialo disattivato se non ti serve.",
+        "nothingTicked": "Seleziona almeno un permesso.",
+        "calendar": {
+          "name": "Calendar",
+          "body": "Aggiungi prenotazioni e link Meet al tuo calendario e nascondi gli orari occupati nella pagina di prenotazione.",
+          "usedBy": "Calendario delle prenotazioni, passaggi Prenota appuntamento e Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Controlla campo Google Sheet, Salva contatto da Google Sheet",
+          "body": "Aggiungi una riga a un foglio, cerca una riga, controlla una cella o copia una riga in un contatto."
+        },
+        "docs": {
+          "name": "Docs e Drive",
+          "body": "Copia un documento modello, compilalo e condividi la copia tramite link.",
+          "usedBy": "Passaggio Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Passaggio Google Form",
+          "body": "Leggi il link pubblico di un modulo per permettere al flusso di inviarlo al cliente, e leggi le risposte del modulo così il flusso prosegue quando il cliente lo compila."
+        },
+        "drive_listing": {
+          "name": "Elenco file di Drive",
+          "body": "Elenca i tuoi fogli, documenti e moduli per nome, così puoi sceglierli dal tuo account nel flow builder e nelle impostazioni di prenotazione. Necessario per ogni selettore di file.",
+          "usedBy": "Selettori di file nel flow builder e nelle impostazioni di prenotazione"
+        }
+      },
+      "lastError": {
+        "title": "L’ultimo problema segnalato da Google",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google non accetta più l’account collegato. Collega di nuovo.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Il client Google della piattaforma manca o è disattivato.",
+        "GOOGLE_API_NOT_ENABLED": "Il progetto Google Cloud della piattaforma non ha abilitato un’API necessaria a questa funzione. L’amministratore della piattaforma deve abilitarla.",
+        "GOOGLE_SCOPE_MISSING": "Un passaggio richiedeva un permesso che questo account non ha concesso. Aggiungilo qui sopra.",
+        "GOOGLE_RATE_LIMITED": "Google sta limitando le richieste in questo momento. I passaggi vengono ritentati poco dopo.",
+        "GOOGLE_UNAVAILABLE": "Google non ha risposto. Verrà ritentato al prossimo utilizzo.",
+        "other": "Google ha segnalato un problema."
+      },
+      "usedBy": {
+        "title": "Usato da",
+        "book": "Passaggio Prenota appuntamento",
+        "meet": "Passaggio Google Meet",
+        "sheets": "Passaggi Google Sheets",
+        "docs": "Passaggio Google Docs",
+        "forms": "Passaggio Google Form",
+        "flow": "flow"
+      },
+      "disconnectConfirm": {
+        "title": "Disconnettere Google?",
+        "body": "La sincronizzazione del calendario per le prenotazioni e tutti i passaggi Google nei tuoi flow si fermano finché non ricolleghi. Gli eventi e i file già creati restano in Google.",
+        "confirm": "Disconnetti",
+        "cancel": "Mantieni collegato"
+      },
+      "disconnected": "Account Google disconnesso.",
+      "failure": {
+        "notConfigured": "Google non è configurato per questa piattaforma. Chiedi all’amministratore della piattaforma.",
+        "generic": "Qualcosa è andato storto. Riprova."
+      },
+      "privacy": {
+        "title": "Privacy",
+        "body": "Vengono richiesti solo i permessi che selezioni. Il collegamento è archiviato cifrato, appartiene al workspace ed è usato solo dalle funzioni elencate qui. Disconnettendo, l’accesso viene revocato presso Google."
+      }
+    },
+    "consent": {
+      "title": "Conferma il collegamento a Google",
+      "loading": "Caricamento del collegamento a Google...",
+      "question": "Collegare {email} a {workspace} per {permissions}?",
+      "permissions": "Autorizzazioni",
+      "notGiven": "non concessa",
+      "missing": "Google non ha concesso: {permissions}. Se confermi, verrà collegato solo ciò che è stato concesso.",
+      "replaces": "Questo sostituisce l'account Google {email} attualmente collegato. L'accesso del vecchio account viene revocato.",
+      "onlyYou": "Solo la persona che ha premuto Collega può completare l'operazione, da questo workspace. Se qualcuno ti ha inviato questo link, non confermare: chiudi la pagina.",
+      "unknownAccount": "questo account Google",
+      "confirm": "Conferma",
+      "cancel": "Annulla",
+      "working": "Operazione in corso...",
+      "failure": {
+        "notYours": "Questo collegamento a Google è stato avviato da un'altra persona, quindi non è stato effettuato. Chiedi a quella persona di collegarlo di persona.",
+        "expired": "La conferma di questo collegamento a Google ha richiesto troppo tempo. Torna indietro e premi di nuovo Collega.",
+        "used": "Questo collegamento a Google è già stato confermato, annullato o rifiutato. Se ti serve ancora, torna indietro e premi di nuovo Collega.",
+        "notFound": "Questo collegamento a Google non è in attesa di conferma oppure appartiene a un altro workspace.",
+        "generic": "Qualcosa è andato storto e non è stato modificato nulla. Riprova.",
+        "nothingConnected": "Non è stato collegato nulla."
+      }
+    }
+  }
+}

@@ -552,13 +552,16 @@
             "storefront_builder": "Trình tạo cửa hàng",
             "invoicing": "Lập hóa đơn",
             "forms_and_links": "Biểu mẫu và liên kết",
-            "extra_channels": "Telegram, Facebook và Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber và WeChat",
             "form_builder": "Biểu mẫu",
             "waba_groups": "Nhóm WhatsApp",
             "sms": "SMS",
             "help_agent": "Trợ lý trợ giúp",
             "email_channel": "Kênh email (Gmail)",
-            "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)"
+            "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
+            "record_assignment": "Quy tắc phân công bản ghi"
           },
           "cta": {
             "continueFree": "Tiếp tục miễn phí",

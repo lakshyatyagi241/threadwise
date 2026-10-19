@@ -1,4 +1,8 @@
-import { flbSanitizeConditionGroup } from '@crm/contracts';
+import {
+  flbCoordinateProblem,
+  flbParseCoordinate,
+  flbSanitizeConditionGroup,
+} from '@crm/contracts';
 import { evaluateConditions, evaluateConditionTree } from './condition';
 import { askItems, buttonItems, listRows, REPLY_BUTTONS_MAX } from './menus';
 import type {
@@ -9,6 +13,7 @@ import type {
   OutboundMessage,
   SendOutcome,
 } from './types';
+import { haltOf } from './halt';
 
 const obj = (v: unknown): Record<string, unknown> =>
   v !== null && typeof v === 'object' ? (v as Record<string, unknown>) : {};
@@ -21,7 +26,7 @@ function failed(
   mode: 'skip' | 'end',
   ctx: NodeContext,
 ): NodeResult | null {
-  if (out.halt) return { kind: 'halt', reason: out.error };
+  if (out.halt) return haltOf(out);
   ctx.note(`send failed: ${out.error}`);
   return mode === 'end' ? { kind: 'fail', code: out.code, reason: out.error } : null;
 }
@@ -465,8 +470,15 @@ const location: NodeExecutor = {
   types: ['Location'],
   async execute(ctx) {
     const p = ctx.node.props;
-    const latitude = Number(p.latitude) || 0;
-    const longitude = Number(p.longitude) || 0;
+    // WhatsApp refuses a location without real coordinates, and a pin at 0,0 is what an empty field turns into: send nothing and
+    // say why in the run log instead of failing the send (a flow saved before the builder checked this can still hold one).
+    const problem = flbCoordinateProblem(p.latitude, p.longitude);
+    if (problem) {
+      ctx.note(`location has no valid coordinates (${problem}): skipped`);
+      return advance;
+    }
+    const latitude = flbParseCoordinate(p.latitude)!;
+    const longitude = flbParseCoordinate(p.longitude)!;
     const name = ctx.render(p.title);
     const address = ctx.render(p.address);
     let out = await ctx.send({

@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "חשבון Google",
+        "description": "חברו חשבון Google אחד ל-Calendar, Sheets, Docs, Forms ו-Meet בתהליכים שלכם.",
+        "keywords": "google, חשבון google, לוח שנה, calendar, sheets, docs, forms, טפסים, meet, drive, oauth, חיבור google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "הוסיפו שורות, חפשו שורות ושמרו אנשי קשר מגיליון בתוך הזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google sheets, גיליון אלקטרוני, שורות, תאים, oauth, חיבור google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "העתיקו מסמך תבנית, מלאו אותו ושתפו אותו מהזרימות שלכם. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google docs, מסמך, תבנית, שיתוף, oauth, חיבור google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "שלחו טופס ללקוח והמשיכו כשהוא ימלא אותו. משתמש בחיבור לחשבון Google שלכם.",
+        "keywords": "google forms, טופס, סקר, תגובות, oauth, חיבור google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "סגירה"
+    },
+    "page": {
+      "eyebrow": "סביבת עבודה",
+      "title": "חשבון Google",
+      "subtitle": "מתחברים פעם אחת. אותו חשבון Google מפעיל את לוח השנה להזמנות, את קישורי Meet ואת שלבי Sheets, Docs ו-Forms בתהליכים שלכם.",
+      "loading": "טוען את חשבון Google שלכם...",
+      "forbidden": {
+        "title": "אין אפשרות לפתוח את העמוד הזה",
+        "body": "התפקיד שלכם אינו כולל צפייה בחשבון Google. פנו למנהל סביבת העבודה."
+      },
+      "status": {
+        "unavailable": "לא הוגדר",
+        "disconnected": "לא מחובר",
+        "connected": "מחובר",
+        "needs_reconnect": "נדרש חיבור מחדש"
+      },
+      "outcome": {
+        "connected": "חשבון Google חובר.",
+        "denied": "Google לא חובר: מסך ההרשאות בוטל.",
+        "failed": "החיבור ל-Google לא הושלם. נסו שוב.",
+        "expired": "ניסיון החיבור הזה פג תוקף. לחצו על הכפתור כדי להתחיל מחדש.",
+        "not_configured": "Google עדיין לא הוגדר בפלטפורמה הזו. פנו למנהל הפלטפורמה.",
+        "missing_scope": "Google לא העניק את כל ההרשאות שביקשתם. מה שכבר אושר ממשיך לפעול; הוסיפו שוב את ההרשאות החסרות והשאירו את כל התיבות מסומנות.",
+        "cancelled": "ביטלתם. שום דבר לא חובר."
+      },
+      "actions": {
+        "connect": "חיבור חשבון Google",
+        "reconnect": "חיבור מחדש ל-Google",
+        "addPermissions": "הוספת הרשאות",
+        "disconnect": "ניתוק",
+        "working": "פותח את Google...",
+        "retry": "ניסיון נוסף"
+      },
+      "unavailable": {
+        "title": "Google לא הוגדר בפלטפורמה הזו",
+        "body": "מנהל הפלטפורמה צריך להוסיף את לקוח ה-OAuth של Google לפני שאפשר יהיה להתחבר. עד אז שלבי Google בתהליכים שלכם ייכשלו עם הודעה שמסבירה זאת, וההזמנות ימשיכו לפעול ללא יומן."
+      },
+      "reconnect": {
+        "title": "Google הפסיק לקבל את החיבור הזה",
+        "body": "ההרשאה בוטלה, הסיסמה שונתה או שתוקף ההענקה פג. התחברו שוב כדי לשחזר אותו; הבחירות שלכם נשמרות.",
+        "bodyAccount": "Google הפסיק לקבל את {account}. התחברו שוב כדי לשחזר אותו; הבחירות שלכם נשמרות."
+      },
+      "stats": {
+        "status": "סטטוס",
+        "calendars": "לוחות שנה",
+        "calendarsValue": "{count} זמינים",
+        "calendarsNone": "אין",
+        "permissions": "הרשאות",
+        "permissionsValue": "{granted} מתוך {total}",
+        "lastUsed": "שימוש אחרון",
+        "never": "אף פעם",
+        "live": "פעיל",
+        "idle": "במנוחה"
+      },
+      "account": {
+        "title": "חשבון מחובר",
+        "email": "חשבון",
+        "calendar": "לוח שנה להזמנות ול-Meet",
+        "primaryCalendar": "לוח השנה הראשי שלכם",
+        "changeCalendar": "שינוי לוח שנה",
+        "connectedAgo": "חובר {when}",
+        "none": "אין חשבון Google מקושר.",
+        "noneBody": "עד שתתחברו, שלבי Google בתהליכים שלכם ייכשלו עם הודעה שמבקשת לחבר את Google, וההזמנות לא יתווספו ליומן."
+      },
+      "permissions": {
+        "title": "למה מותר להשתמש ב-Google",
+        "intro": "סמנו מה לאפשר. Google מציג במסך שלו בדיוק את ההרשאות האלה, ואפשר להוסיף עוד בהמשך בלי לאבד את מה שכבר אושר.",
+        "allowed": "מאושר",
+        "notAllowed": "לא מאושר",
+        "allow": "אפשר",
+        "restricted": "מוגבל על ידי Google",
+        "restrictedNote": "Google מתייחס להרשאה הזו כמוגבלת: הפלטפורמה זקוקה לבדיקה של Google לפני שהיא תעבוד עבור סביבות עבודה רבות. השאירו אותה כבויה אלא אם היא נחוצה.",
+        "nothingTicked": "סמנו לפחות הרשאה אחת.",
+        "calendar": {
+          "name": "לוח שנה",
+          "body": "הוספת הזמנות וקישורי Meet ללוח השנה והסתרת זמנים תפוסים מעמוד ההזמנות.",
+          "usedBy": "לוח שנה להזמנות, שלבי קביעת פגישה ו-Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, בדיקת שדה ב-Google Sheet, שמירת איש קשר מ-Google Sheet",
+          "body": "הוספת שורה לגיליון, חיפוש שורה, בדיקת תא או העתקת שורה לאיש קשר."
+        },
+        "docs": {
+          "name": "Docs ו-Drive",
+          "body": "העתקת מסמך תבנית, מילויו ושיתוף העותק בקישור.",
+          "usedBy": "שלב Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "שלב Google Form",
+          "body": "קריאת הקישור הציבורי של טופס כדי שהתהליך יוכל לשלוח אותו ללקוח, וקריאת תשובות הטופס כדי שהתהליך ימשיך כשהלקוח ממלא אותו."
+        },
+        "drive_listing": {
+          "name": "רשימת קבצי Drive",
+          "body": "הצגת הגיליונות, המסמכים והטפסים שלכם לפי שם, כדי שתוכלו לבחור אותם מהחשבון שלכם בבונה התהליכים ובהגדרות ההזמנות. נדרש לכל בורר קבצים.",
+          "usedBy": "בוררי קבצים בבונה התהליכים ובהגדרות ההזמנות"
+        }
+      },
+      "lastError": {
+        "title": "הבעיה האחרונה ש-Google דיווח עליה",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google כבר לא מקבל את החשבון המחובר. התחברו שוב.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "הלקוח של Google בפלטפורמה חסר או כבוי.",
+        "GOOGLE_API_NOT_ENABLED": "בפרויקט Google Cloud של הפלטפורמה לא הופעל API שהתכונה הזו צריכה. מנהל הפלטפורמה צריך להפעיל אותו.",
+        "GOOGLE_SCOPE_MISSING": "שלב נזקק להרשאה שלא ניתנה לחשבון הזה. הוסיפו אותה למעלה.",
+        "GOOGLE_RATE_LIMITED": "Google מגביל כרגע בקשות. שלבים יינסו שוב כעבור רגע.",
+        "GOOGLE_UNAVAILABLE": "Google לא ענה. ננסה שוב בשימוש הבא.",
+        "other": "Google דיווח על בעיה."
+      },
+      "usedBy": {
+        "title": "בשימוש של",
+        "book": "שלב קביעת פגישה",
+        "meet": "שלב Google Meet",
+        "sheets": "שלבי Google Sheets",
+        "docs": "שלב Google Docs",
+        "forms": "שלב Google Form",
+        "flow": "תהליך"
+      },
+      "disconnectConfirm": {
+        "title": "לנתק את Google?",
+        "body": "סנכרון לוח השנה להזמנות וכל שלבי Google בתהליכים שלכם יפסיקו לפעול עד שתתחברו שוב. אירועים וקבצים שכבר נוצרו נשארים ב-Google.",
+        "confirm": "ניתוק",
+        "cancel": "להישאר מחוברים"
+      },
+      "disconnected": "חשבון Google נותק.",
+      "failure": {
+        "notConfigured": "Google לא הוגדר בפלטפורמה הזו. פנו למנהל הפלטפורמה.",
+        "generic": "משהו השתבש. נסו שוב."
+      },
+      "privacy": {
+        "title": "פרטיות",
+        "body": "מתבקשות רק ההרשאות שסימנתם. החיבור נשמר מוצפן, שייך לסביבת העבודה ומשמש רק את התכונות המפורטות כאן. ניתוק מבטל אותו אצל Google."
+      }
+    },
+    "consent": {
+      "title": "אישור חיבור Google",
+      "loading": "טוען את חיבור Google שלכם...",
+      "question": "לחבר את {email} אל {workspace} עבור {permissions}?",
+      "permissions": "הרשאות",
+      "notGiven": "לא ניתנה",
+      "missing": "Google לא העניק: {permissions}. אם תאשרו, יחובר רק מה שניתן.",
+      "replaces": "פעולה זו מחליפה את חשבון Google {email} שמחובר כעת. הגישה של החשבון הקודם תבוטל.",
+      "onlyYou": "רק מי שלחץ על \"חיבור\" יכול להשלים את התהליך, ורק מסביבת העבודה הזו. אם מישהו שלח לכם את הקישור הזה, אל תאשרו אותו: סגרו את העמוד.",
+      "unknownAccount": "חשבון Google זה",
+      "confirm": "אשר",
+      "cancel": "בטל",
+      "working": "מעבד...",
+      "failure": {
+        "notYours": "חיבור Google זה הותחל על ידי מישהו אחר, ולכן לא חובר. בקשו ממנו לבצע את החיבור בעצמו.",
+        "expired": "אישור חיבור Google זה ארך זמן רב מדי. חזרו אחורה ולחצו שוב על \"חיבור\".",
+        "used": "חיבור Google זה כבר אושר, בוטל או נדחה. אם עדיין צריך אותו, חזרו אחורה ולחצו שוב על \"חיבור\".",
+        "notFound": "חיבור Google זה אינו ממתין לאישור, או שהוא שייך לסביבת עבודה אחרת.",
+        "generic": "משהו השתבש ושום דבר לא שונה. נסו שוב.",
+        "nothingConnected": "שום דבר לא חובר."
+      }
+    }
+  }
+}

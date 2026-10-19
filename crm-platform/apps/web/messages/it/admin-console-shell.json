@@ -232,12 +232,49 @@
         "loadFailed": "Impossibile caricare le impostazioni.",
         "hours": {
           "title": "Orario di lavoro",
-          "note": "Mostrato come riferimento. L'orario di lavoro non è ancora applicato, quindi questi controlli sono di sola lettura.",
-          "weekdays": "Lun - Ven",
-          "saturday": "Sabato",
-          "sunday": "Domenica",
           "from": "Da",
-          "to": "A"
+          "to": "A",
+          "note": "Gli orari di apertura del tuo team, in {timezone}. Le regole di smistamento della posta in arrivo, i timer SLA, i flussi e le risposte ai lead che dipendono dall'orario di lavoro usano questo programma.",
+          "ownerOnly": "Solo il proprietario dello spazio di lavoro può modificarli.",
+          "loadFailed": "Impossibile caricare gli orari di lavoro.",
+          "day": {
+            "mon": "Lunedì",
+            "tue": "Martedì",
+            "wed": "Mercoledì",
+            "thu": "Giovedì",
+            "fri": "Venerdì",
+            "sat": "Sabato",
+            "sun": "Domenica"
+          },
+          "closed": "Chiuso",
+          "openAllDay": "Aperto tutto il giorno",
+          "allDay": "Aperto tutto il giorno",
+          "overnight": "Chiude la mattina seguente",
+          "addWindow": "Aggiungi orari",
+          "remove": "Rimuovi",
+          "removeWindow": "Rimuovi questi orari per {day}",
+          "copyMonday": "Copia lunedì su martedì-venerdì",
+          "problem": {
+            "required": "Inserisci entrambi gli orari.",
+            "same": "L'orario di apertura e di chiusura devono essere diversi.",
+            "overlap": "Gli orari dello stesso giorno non devono sovrapporsi."
+          },
+          "holidays": {
+            "title": "Festività",
+            "note": "In queste date lo spazio di lavoro risulta chiuso tutto il giorno, qualunque sia l'orario settimanale.",
+            "none": "Nessuna festività aggiunta.",
+            "date": "Data",
+            "label": "Nome (facoltativo)",
+            "add": "Aggiungi festività",
+            "removeFor": "Rimuovi la festività del {date}",
+            "problem": {
+              "date": "Data non valida.",
+              "duplicate": "Questa data è già presente nell'elenco."
+            }
+          },
+          "save": "Salva orari di lavoro",
+          "saved": "Orari di lavoro salvati.",
+          "saveFailed": "Impossibile salvare gli orari di lavoro."
         },
         "preferences": {
           "title": "Riepilogo AI automatico",
@@ -351,14 +388,6 @@
         "webhooksTitle": "Webhook",
         "webhooksBody": "Invia eventi ai tuoi endpoint e ricevi eventi da altri strumenti.",
         "manage": "Gestisci integrazioni",
-        "sheetsTitle": "Chiave API di Google Sheets",
-        "sheetsBody": "Usata dal componente aggiuntivo per Fogli Google per inviare contatti e righe dei messaggi a un foglio. Al momento è l'unico token personale esposto.",
-        "manageInAccount": "Gestisci nell'account",
-        "active": "Attiva",
-        "keyTimes": "generata {created} · ultimo utilizzo {used}",
-        "never": "mai",
-        "noKey": "Nessuna chiave API di Sheets generata. Creane una in",
-        "noKeyLink": "il tuo account → componente aggiuntivo Sheets",
         "outboundTitle": "Endpoint in uscita",
         "outboundBody": "Il tuo workspace → il tuo server (hook CRM, eventi di invio / risposta).",
         "inboundTitle": "Webhook in entrata",

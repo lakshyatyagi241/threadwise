@@ -6,8 +6,7 @@
         "faqs": "FAQs",
         "test": "Testen",
         "unanswered": "Unbeantwortet",
-        "insights": "Auswertung",
-        "settings": "Einstellungen"
+        "insights": "Auswertung"
       },
       "unansweredCount": "{count, plural, one {# unbeantwortete Nachricht} other {# unbeantwortete Nachrichten}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Dieser Flow hat sein FAQ-Limit erreicht. Löschen Sie ungenutzte FAQs oder Varianten oder bitten Sie Ihren Plattform-Admin, das Limit zu erhöhen."
     },
     "banner": {
-      "enabledToast": "Die FAQ-Beantwortung ist eingeschaltet.",
-      "engineOff": "Die FAQ-Beantwortung wurde von der Plattform ausgeschaltet. Kunden erhalten keine FAQ-Antworten, bis sie wieder eingeschaltet wird.",
-      "modelChanged": "Die Plattform hat das KI-Modell geändert, nachdem Sie diesen Schwellenwert eingestellt haben. Die Werte haben sich verschoben, prüfen Sie daher Ihre Empfindlichkeit.",
-      "reviewSensitivity": "Empfindlichkeit prüfen",
-      "offNoRight": "Bitten Sie jemanden mit der Berechtigung faq.settings.manage (meist ein Workspace-Admin), sie einzuschalten.",
-      "enable": "FAQ-Beantwortung einschalten",
-      "offTitle": "FAQ-Antworten sind für diesen Flow AUS",
-      "offBody": "Sie können die FAQs dieses Flows schreiben und testen, aber Kunden erhalten erst Antworten, wenn Sie die Funktion einschalten."
+      "engineOff": "Die FAQ-Beantwortung wurde von der Plattform ausgeschaltet. Kunden erhalten keine FAQ-Antworten, bis sie wieder eingeschaltet wird."
     },
     "list": {
       "title": "FAQs",
@@ -51,25 +43,15 @@
         "total": "FAQs",
         "active": "Aktiv",
         "paused": "Pausiert",
-        "variations": "Formulierungen",
-        "pending": "Wird indexiert",
-        "pendingHint": "In wenigen Sekunden aktiv",
-        "failed": "Indexierung fehlgeschlagen",
-        "failedHint": "Erfordert Aufmerksamkeit"
+        "variations": "Formulierungen"
       },
-      "failedBanner": "{count, plural, one {# Formulierung konnte} other {# Formulierungen konnten}} nicht indexiert werden und {count, plural, one {kann} other {können}} daher noch nicht zu Kundennachrichten passen.",
-      "showFailed": "FAQs mit Fehlern anzeigen",
       "search": "FAQs durchsuchen",
       "searchPlaceholder": "Fragen und Formulierungen durchsuchen",
       "filter": {
         "status": "Status",
         "anyStatus": "Beliebiger Status",
         "category": "Kategorie",
-        "anyCategory": "Beliebige Kategorie",
-        "indexing": "Indexierung",
-        "anyIndexing": "Beliebig",
-        "pending": "Wird noch indexiert",
-        "failed": "Fehlgeschlagen"
+        "anyCategory": "Beliebige Kategorie"
       },
       "status": {
         "active": "Aktiv",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Frage",
         "answer": "Antwort",
-        "indexing": "Aktive Formulierungen",
         "answered": "Beantwortet (90 Tage)",
         "status": "Status",
         "actions": "Aktionen"
@@ -130,12 +111,6 @@
         "rowBody": "„{question}“ und alle Formulierungen werden endgültig gelöscht. Das lässt sich nicht rückgängig machen.",
         "delete": "Löschen",
         "cancel": "Abbrechen"
-      },
-      "indexing": {
-        "summary": "{ready} aktiv, {pending} in Indexierung, {failed} fehlgeschlagen",
-        "ready": "{count} aktiv",
-        "pending": "{count} in Indexierung",
-        "failed": "{count} fehlgeschlagen"
       },
       "stepMissing": "Schritt fehlt",
       "subtitle": "Fragen, die Kunden in {flow} stellen, und was der Bot antwortet. Diese FAQs antworten nur innerhalb dieses Flows.",
@@ -202,14 +177,6 @@
           "other": "Ein Schritt eines anderen Flows",
           "otherHint": "Die Unterhaltung an einen anderen Flow übergeben."
         }
-      },
-      "advanced": {
-        "title": "Erweitert: Empfindlichkeit nur für diese FAQ",
-        "custom": "Eigene Empfindlichkeit für diese FAQ verwenden",
-        "sliderLabel": "Zutreffend ab",
-        "body": "Standardmäßig verwendet jede FAQ die Empfindlichkeit dieses Flows. Nutzen Sie einen eigenen Wert, wenn diese FAQ zu schnell (erhöhen) oder zu selten (senken) passt.",
-        "workspace": "Die Empfindlichkeit dieses Flows beträgt {value}%.",
-        "following": "Folgt der Empfindlichkeit dieses Flows ({value}%)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Hinzufügen",
       "pasteMany": "Mehrere einfügen",
       "full": "Diese FAQ hat ihr Limit von {max} Formulierungen erreicht.",
-      "failedNotice": "{count, plural, one {# Formulierung konnte} other {# Formulierungen konnten}} nicht indexiert werden. Bearbeiten und speichern Sie die Formulierung, um es erneut zu versuchen.",
       "suggest": "Mit KI vorschlagen",
       "suggestSaveFirst": "Speichern Sie zuerst die FAQ, dann kann die KI Formulierungen vorschlagen.",
       "suggesting": "Die KI wird nach Vorschlägen gefragt",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# Zeile passt} other {# Zeilen passen}} nicht mehr unter das Formulierungslimit und {count, plural, one {wurde} other {wurden}} ausgelassen.",
         "more": "und {count} weitere",
         "add": "{count, plural, one {# Formulierung} other {# Formulierungen}} hinzufügen"
-      },
-      "state": {
-        "ready": "Aktiv",
-        "pending": "Wird indexiert",
-        "pendingHint": "Gespeichert. Sie wird in wenigen Sekunden berücksichtigt.",
-        "failed": "Fehlgeschlagen",
-        "failedHint": "Bearbeiten und speichern Sie die Formulierung, um es erneut zu versuchen.",
-        "noReason": "Es wurde kein Grund angegeben"
       },
       "confirm": {
         "title": "Diese Formulierung entfernen?",
@@ -451,7 +409,14 @@
       "learned": "Zu „{question}“ hinzugefügt. Sie wird ab jetzt beantwortet.",
       "pickTitle": "Zu welcher FAQ soll diese Nachricht hinzugefügt werden?",
       "loadMore": "Mehr laden",
-      "loadingMore": "Wird geladen"
+      "loadingMore": "Wird geladen",
+      "fallback": {
+        "title": "Wenn keine FAQ antwortet",
+        "hint": "Diese Antwort erhält ein Kunde, auf dessen Nachricht keine FAQ antwortet. Die Nachricht erscheint weiterhin unten, damit Sie die FAQ ergänzen können.",
+        "placeholder": "Entschuldigung, das habe ich nicht verstanden. Ein Teammitglied meldet sich bei Ihnen.",
+        "save": "Ersatzantwort speichern",
+        "saved": "Ersatzantwort gespeichert"
+      }
     },
     "picker": {
       "close": "Schließen",
@@ -539,9 +504,7 @@
       },
       "hist": {
         "title": "Wie gut Nachrichten abgeschnitten haben",
-        "hint": "Jeder Balken steht für einen Punktebereich. Die gestrichelte Linie ist Ihre aktuelle Empfindlichkeit.",
-        "advice": "Erhöhen Sie den Schwellenwert, wenn falsche Antworten durchrutschen, und senken Sie ihn, wenn zu viele Nachrichten unbeantwortet bleiben.",
-        "tune": "Empfindlichkeit ändern"
+        "hint": "Jeder Balken steht für einen Punktebereich. Die gestrichelte Linie ist Ihre aktuelle Empfindlichkeit."
       },
       "top": {
         "title": "Top-FAQs",
@@ -568,98 +531,6 @@
         "bucketTooltip": "{from}–{to} %: {answered} beantwortet, {unanswered} unbeantwortet",
         "thresholdMarker": "Schwellenwert {value} %"
       }
-    },
-    "settings": {
-      "title": "FAQ-Einstellungen",
-      "unsaved": "Nicht gespeicherte Änderungen",
-      "discard": "Verwerfen",
-      "save": "Einstellungen speichern",
-      "saved": "Einstellungen gespeichert.",
-      "readOnly": "Sie können diese Einstellungen ansehen. Zum Ändern ist die Berechtigung faq.settings.manage nötig, die meist Workspace-Admins haben.",
-      "engineOff": "Die FAQ-Beantwortung ist von der Plattform ausgeschaltet. Ihre Einstellungen hier gelten, sobald sie wieder eingeschaltet ist.",
-      "conflict": "Jemand anderes hat diese Einstellungen gespeichert. Laden Sie neu, um deren Version zu sehen, und nehmen Sie Ihre Änderung dann erneut vor.",
-      "reload": "Einstellungen neu laden",
-      "modelChanged": {
-        "title": "Empfindlichkeit prüfen",
-        "body": "Die Plattform hat das KI-Modell geändert, nachdem Sie diesen Schwellenwert eingestellt haben. Die Werte haben sich verschoben, prüfen Sie daher Ihre Empfindlichkeit. Mit dem Speichern bestätigen Sie sie."
-      },
-      "enable": {
-        "title": "FAQ-Beantwortung",
-        "on": "Ein",
-        "off": "Aus",
-        "label": "Kunden mit den FAQs dieses Flows antworten",
-        "onBody": "Solange dieser Flow aktiv ist, wird eine Kundennachricht, die kein Stichwort-Trigger und kein laufender Flow aufgegriffen hat, mit den FAQs dieses Flows verglichen. Der Bot antwortet mit der besten Antwort oder leitet den Kunden zu dem Schritt, auf den die FAQ verweist.",
-        "offBody": "Die FAQs dieses Flows antworten Kunden nicht. Sie können sie weiterhin schreiben und testen."
-      },
-      "sens": {
-        "title": "Empfindlichkeit",
-        "hint": "Wie genau eine Nachricht passen muss. Die Werte gehören zum Modell {model}.",
-        "label": "Antworten, wenn der Treffer mindestens",
-        "presets": "Voreinstellungen für die Empfindlichkeit",
-        "preset": {
-          "strict": "Streng",
-          "balanced": "Ausgewogen",
-          "forgiving": "Nachsichtig"
-        },
-        "looser": "Antwortet öfter",
-        "stricter": "Antwortet seltener",
-        "recommendedMark": "empfohlen {value} %",
-        "explain": "Bei {value} % wird eine Nachricht nur beantwortet, wenn ihr bester Treffer {value} % oder mehr erreicht. Höher bedeutet weniger, aber sicherere Antworten; niedriger bedeutet mehr Antworten und ein höheres Risiko für falsche.",
-        "useRecommended": "Empfohlenen Wert verwenden ({value} %)",
-        "modelScale": "Werte sind nur innerhalb eines Modells vergleichbar. Wenn die Plattform das Modell ({model}) ändert, prüfen Sie diesen Wert."
-      },
-      "margin": {
-        "title": "Schutz vor Mehrdeutigkeit",
-        "hint": "Verhindert, dass der Bot zwischen zwei FAQs mit fast gleicher Punktzahl rät.",
-        "label": "Mindestvorsprung vor dem Zweitbesten",
-        "off": "Aus",
-        "explain": "Liegt die beste FAQ weniger weit vor der zweitbesten, bleibt der Bot still und protokolliert die Nachricht als unbeantwortet. Lassen Sie es aus, wenn sich Ihre FAQs selten überschneiden."
-      },
-      "log": {
-        "title": "Kundennachrichten im Protokoll",
-        "label": "Kundennachrichten im Abgleichsprotokoll speichern",
-        "onBody": "Der Text jeder Nachricht wird 90 Tage lang gespeichert, damit Sie sehen, warum sie beantwortet wurde oder nicht, und daraus lernen können. Danach wird er gelöscht.",
-        "offBody": "Es werden nur Punktzahlen und Ergebnisse gespeichert, nie der Text. Sie sehen weiterhin, wie oft der Bot antwortet, können aber nicht aus unbeantworteten Nachrichten lernen."
-      },
-      "facts": {
-        "title": "Modell und Limits",
-        "model": "KI-Modell für den Abgleich",
-        "faqs": "FAQs",
-        "variations": "Verwendete Formulierungen",
-        "perFaq": "Erlaubte Formulierungen pro FAQ",
-        "of": "{used} von {max}"
-      },
-      "how": {
-        "title": "So funktioniert der Abgleich",
-        "exact": "Exakt: Die Nachricht entspricht einer gespeicherten Formulierung, unabhängig von Groß-/Kleinschreibung und Leerzeichen.",
-        "semantic": "Bedeutung: Die Nachricht wird inhaltlich mit jeder aktiven Formulierung verglichen, sodass auch andere Wörter passen können.",
-        "trigram": "Schreibweise als Ersatz: Ist der KI-Anbieter nicht verfügbar, werden Buchstaben verglichen. Das erkennt nur Tippfehler.",
-        "threshold": "Die beste Punktzahl wird mit der Empfindlichkeit verglichen. Darüber antwortet die FAQ; darunter erscheint die Nachricht unter Unbeantwortet.",
-        "verify": "Zweitprüfung (optional): Ein Treffer, der die Empfindlichkeit nur knapp erreicht hat, kann von einem kleinen Chat-Modell gegengeprüft werden. Dieses kann eine Antwort nur zurückhalten."
-      },
-      "who": "Zum Ändern dieser Einstellungen ist die Berechtigung faq.settings.manage nötig.",
-      "leave": {
-        "title": "Ohne Speichern verlassen?",
-        "body": "Ihre Änderungen an diesen Einstellungen sind nicht gespeichert.",
-        "leave": "Verlassen",
-        "stay": "Bleiben"
-      },
-      "verify": {
-        "title": "Zweitprüfung bei knappen Treffern",
-        "hint": "Ein kleines Chat-Modell prüft Treffer gegen, die die Schwelle nur knapp erreicht haben.",
-        "unavailable": "Die Plattform hat die Zweitprüfung ausgeschaltet, daher läuft sie auch dann nicht, wenn Sie sie hier einschalten. Wenden Sie sich an Ihren Plattform-Admin.",
-        "label": "Knappe Treffer per Zweitprüfung kontrollieren",
-        "on": "Ein",
-        "off": "Aus",
-        "onBody": "Erreicht ein Treffer die Schwelle nur knapp, liest ein kleines Chat-Modell die Nachricht des Kunden und die FAQ und beurteilt, ob die Antwort passt. Es kann nur Nein sagen: Es löst nie eine Antwort aus.",
-        "offBody": "Jeder Treffer, der die Schwelle erreicht, wird ohne zweite Prüfung beantwortet.",
-        "bandLabel": "Ab wann ein Treffer als knapp gilt",
-        "bandValue": "+{value}%",
-        "explainOn": "Treffer mit {from} % bis {to} % werden von {model} geprüft. Ein \"Nein\" bedeutet: Es wird keine Antwort gesendet und die Nachricht erscheint unter Unbeantwortet.",
-        "explainOff": "Jeder Treffer mit {threshold} % oder mehr wird beantwortet. Schalten Sie die Zweitprüfung ein, um die knappsten Treffer gegenprüfen zu lassen.",
-        "cost": "Jede Prüfung sendet die Nachricht des Kunden und die Frage der FAQ an das Modell: einige hundert Tokens, und bei einer knappen Antwort dauert es etwa eine Sekunde länger. Treffer außerhalb des Bereichs werden nie geprüft. Schlägt die Prüfung fehl, ist sie nicht verfügbar oder ist das Stundenlimit erreicht, gilt der Treffer, als gäbe es keine Prüfung."
-      },
-      "subtitle": "Schalten Sie FAQ-Antworten für {flow} ein und legen Sie fest, wie genau eine Nachricht passen muss."
     },
     "flowNode": {
       "start": "Start des Flows",

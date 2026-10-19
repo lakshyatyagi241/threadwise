@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Verbunden",
           "shopify": "Verbunden",
-          "google_sheets": "API-Schlüssel ausgestellt",
-          "meta_catalog": "Katalog verknüpft"
+          "meta_catalog": "Katalog verknüpft",
+          "google_sheets": "Google-Konto verbunden"
         },
         "notConnected": "nicht verbunden",
         "connect": "Verbinden",
@@ -405,6 +405,43 @@
           "sent": "Gesendet → {peer}",
           "received": "Empfangen von {peer}",
           "empty": "Keine aktuelle Aktivität in diesem Zeitraum."
+        },
+        "loginDevices": {
+          "title": "Anmeldegeräte",
+          "subtitle": "Anmeldungen im Arbeitsbereich in diesem Zeitraum, nach Browser, System und Typ",
+          "active": "{n} jetzt aktiv",
+          "total": "{n, plural, one {# Anmeldung} other {# Anmeldungen}}",
+          "empty": "Keine Anmeldungen in diesem Zeitraum.",
+          "activeLegend": "Jetzt aktiv",
+          "endedLegend": "Abgemeldet oder abgelaufen",
+          "row": "{count} Anmeldungen, {active} jetzt aktiv",
+          "group": {
+            "browser": "Browser",
+            "os": "System",
+            "kind": "Typ"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Anderer Browser"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Anderes System"
+          },
+          "kind": {
+            "desktop": "Desktop",
+            "mobile": "Mobil",
+            "unknown": "Unbekannt"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "Warteschlangen",
         "name": "Warteschlange",
         "pending": "Ausstehend",
-        "failed": "Fehlgeschlagen"
+        "failed": "Fehlgeschlagen",
+        "lastFailure": "Grund des letzten Fehlers"
       },
       "clear": {
         "button": "Ausstehende Jobs löschen",

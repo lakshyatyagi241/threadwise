@@ -4,6 +4,7 @@ import { ERROR_CODES } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { provisionWorkspacePersona } from '../../persona';
 import { PlanEntitlementService, type InitialPlan } from '../../plans-subscriptions-trials';
 
 export interface OrgRef {
@@ -160,8 +161,34 @@ export class TenantDirectory {
   }
 
   /**
+   * True when a `users` row already exists anywhere (any org, any status) for this email OR this
+   * phone (the phone lives on `user_profiles`, not `users`). Used only at signup time to block
+   * creating a second account for an identity that already has one — never used for login, which
+   * goes through `activeOrgsForEmail` instead.
+   */
+  async identityExists(email: string, phoneE164: string | null): Promise<boolean> {
+    return this.db.privileged(async (tx) => {
+      // Two independent EXISTS probes, each on its own indexed column (idx_users_email,
+      // idx_user_profiles_phone_e164), instead of one LEFT JOIN with OR: a join across two tables
+      // can't use either index for the OR, so it fell back to a full scan on this public,
+      // unauthenticated, privileged() query.
+      const res = await tx.execute(
+        phoneE164
+          ? sql`
+              SELECT
+                EXISTS(SELECT 1 FROM users WHERE email = ${email})
+                OR EXISTS(SELECT 1 FROM user_profiles WHERE phone_e164 = ${phoneE164})
+                AS found
+            `
+          : sql`SELECT EXISTS(SELECT 1 FROM users WHERE email = ${email}) AS found`,
+      );
+      return (res.rows[0] as { found: boolean } | undefined)?.found === true;
+    });
+  }
+
+  /**
    * Creates the organization, its five workspace preset roles (the locked Owner
-   * holds every capability key), the first user, that user's security/profile
+   * holds every capability key), its persona row, the first user, that user's security/profile
    * rows and the organization's plan (the registration default, plus a free
    * trial when the plan is free) in ONE transaction. `inTx` runs inside it so
    * the caller can write the audit row and outbox event atomically with the
@@ -205,6 +232,9 @@ export class TenantDirectory {
       // RBAC migration ran for every existing organization. The first user is the Owner (the locked top preset).
       const ownerRole = await tx.execute(sql`SELECT provision_workspace_presets(${orgId}) AS id`);
       const adminRoleId = Number((ownerRole.rows[0] as unknown as { id: number | string }).id);
+
+      // Every workspace has a persona row from its first moment (the `generic` one, which hides nothing).
+      await provisionWorkspacePersona(tx, orgId);
 
       const userRes = await tx.execute(sql`
         INSERT INTO users (org_id, email, full_name, password_hash)

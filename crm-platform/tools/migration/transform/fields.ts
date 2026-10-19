@@ -142,6 +142,18 @@ const FIELD_COLS = cols([
   c('config', 'jsonb'),
 ]);
 
+/** The Waboo "Web Analytics Information" properties WaDesk has no built-in place for (visitor/UTM/device/IP facts and where the contact came from): ordinary, editable, visible fields. */
+export const WEB_ANALYTICS_KEYS: ReadonlySet<string> = new Set([
+  'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url',
+  'utm_medium', 'utm_campaign', 'utm_source',
+  'device_type', 'device_model', 'operating_system', 'operating_system_name', 'browser_version', 'browser_name',
+  'ip_continent', 'ip_country_region', 'ip_state_region', 'ip_city',
+  'channel', 'bot_name', 'module_type', 'module_name', 'platform',
+]);
+
+/** Created Time / Modified Time: system in Waboo, but shown on the contact page as read-only fields (their value is also kept in contacts.data). */
+export const VISIBLE_TIME_KEYS: ReadonlySet<string> = new Set(['created_time', 'modified_time']);
+
 export const fieldDefs: HandlerSpec = {
   handler: 'field_defs',
   collection: 'contact_properties_fields',
@@ -213,10 +225,14 @@ export const fieldDefs: HandlerSpec = {
             field_type: fieldType,
             is_required: bool(doc.required),
             is_hidden: !bool(doc.visible, true) || bool(doc.hidden_from_ui),
-            is_read_only: bool(doc.read_only),
+            // the web-analytics fields are editable in WaDesk: the contact Edit panel lists only editable fields, so a read-only flag would keep
+            // the UTM / referrer / device fields out of it (Waboo shows all of them on the contact)
+            is_read_only: VISIBLE_TIME_KEYS.has(key) ? true : bool(doc.read_only) && !WEB_ANALYTICS_KEYS.has(key),
             is_masked: bool(doc.masked),
             is_unique: bool(doc.unique),
-            is_system: bool(doc.system_default),
+            // Waboo's own web-analytics properties are "system" there but have no built-in place in WaDesk: a system field is hidden on the
+            // contact page, so these stay ordinary (read-only) fields. `source` stays system: it is the native contacts.source column.
+            is_system: bool(doc.system_default) && !WEB_ANALYTICS_KEYS.has(key) && !VISIBLE_TIME_KEYS.has(key),
             is_active: true,
             position: Number(doc.position) || 0,
             config: { legacy: { type: legacyType, ...rest(doc, DEF_COLUMN_KEYS) } },

@@ -145,11 +145,6 @@
         "description": "Edytuj lejki szans sprzedaży, etapy i powody utraty.",
         "keywords": "szanse sprzedaży, etapy sprzedaży, tablica, powód utraty, lejek"
       },
-      "tags": {
-        "label": "Tagi",
-        "description": "Twórz i porządkuj tagi używane w kontaktach i czatach.",
-        "keywords": "etykiety, kolor"
-      },
       "saved-replies": {
         "label": "Zapisane odpowiedzi",
         "description": "Twórz gotowe odpowiedzi, które zespół wyśle jednym kliknięciem.",
@@ -360,15 +355,40 @@
         "description": "Zobacz, jak szybko każdy agent odpowiadał i rozwiązywał rozmowy dziś, w tym tygodniu lub miesiącu.",
         "keywords": "raporty, analityka, agenci, czas odpowiedzi, pierwsza odpowiedź, rozwiązane, obciążenie, wydajność"
       },
-      "contact-assignment": {
-        "label": "Przypisywanie kontaktów",
-        "description": "Automatycznie przydzielaj nowe kontakty i transakcje właściwej osobie, pomijając osoby na urlopie.",
-        "keywords": "przypisanie, właściciel, round robin, nowy kontakt, nowa transakcja, urlop, routing leadów"
-      },
       "privacy-requests": {
         "label": "Wnioski o dane",
         "description": "Odpowiadaj osobom pytającym, co o nich przechowujesz: sprawdzenie tożsamości, eksport, usunięcie z podglądem i dowód, który możesz zachować.",
         "keywords": "prywatność, gdpr, wniosek o dane, dsar, dostęp do danych, eksport danych, usunięcie, prawo do bycia zapomnianym, usunięcie danych osobowych, blokada prawna"
+      },
+      "compliance-center": {
+        "label": "Centrum zgodności",
+        "description": "Narzędzia, które pomagają wywiązywać się z obowiązków dotyczących prywatności: przepisy, według których działasz, osoby kontaktowe ds. prywatności, informacje i linki, podprocesorzy, godziny ciszy oraz lista kontrolna tego, co jest wdrożone.",
+        "keywords": "zgodność, prywatność, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, inspektor ochrony danych, osoba odpowiedzialna za skargi, podprocesor, dpa, regulamin, polityka prywatności, godziny ciszy, do not call, lista kontrolna, dzieci"
+      },
+      "company-properties": {
+        "label": "Właściwości firm",
+        "description": "Dodaj pola, które chcesz zapisywać przy każdej firmie.",
+        "keywords": "pola niestandardowe, pola, wymagane, lista rozwijana, organizacja, konto"
+      },
+      "uncontacted-leads": {
+        "label": "Potencjalni klienci bez kontaktu",
+        "description": "Wybierz, które działania uznawane są za kontakt z potencjalnym klientem oraz które nowe kontakty zaczynają jako nieskontaktowane.",
+        "keywords": "bez kontaktu, skontaktowany, potencjalny klient, nowy potencjalny klient, pierwszy kontakt, kontakt zwrotny, przypisanie, oznaczenie"
+      },
+      "record-assignment": {
+        "label": "Reguły przypisywania rekordów",
+        "description": "Automatycznie przypisuj nowe kontakty, firmy i transakcje swoim opiekunom sprzedaży według reguł priorytetu.",
+        "keywords": "przypisanie, opiekun, round robin, nowy kontakt, nowa transakcja, firma, urlop, routing leadów, obciążenie, terytorium"
+      },
+      "follow-ups": {
+        "label": "Ponowne kontakty",
+        "description": "Automatycznie ustawiaj następny ponowny kontakt, gdy zespół odezwie się do kontaktu, i wybierz datę oraz godzinę przypomnienia.",
+        "keywords": "ponowny kontakt, przypomnienie, następne działanie, zadanie, harmonogram, odłożenie, kiedyś"
+      },
+      "duplicate-leads": {
+        "label": "Zduplikowane leady",
+        "description": "Wybierz, czy nowy lead pasujący do kontaktu ma zostać z nim scalony, czy stać się nowym kontaktem.",
+        "keywords": "duplikat, scalanie, lead, ten sam telefon, ten sam e-mail, nowy kontakt, źródło leadów"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

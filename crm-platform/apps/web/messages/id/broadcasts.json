@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Dijeda: batas pengiriman harian tercapai. Akan lanjut otomatis setelah {when}.",
         "halt": "Dijeda: pengiriman dihentikan untuk workspace ini. Akan lanjut saat penghentian dicabut.",
-        "manual": "Dijeda."
+        "manual": "Dijeda.",
+        "quiet_hours": "Dijeda: sebagian penerima sedang dalam jam tenang. Akan berlanjut sendiri setelah {when}."
       },
       "delete": "Hapus",
       "deleteTitle": "Hapus broadcast?",
@@ -145,7 +146,8 @@
         "queued": "Dalam antrean",
         "queuedHint": "menunggu dikirim",
         "failed": "Gagal",
-        "failedPct": "{pct}% tingkat kegagalan"
+        "failedPct": "{pct}% tingkat kegagalan",
+        "queuedHeld": "{count} ditahan karena jam tenang"
       },
       "tab": {
         "overview": "Ringkasan",
@@ -193,7 +195,8 @@
         "lastClick": "Klik terakhir: {when}",
         "empty": "Tidak ada penerima terlampir.",
         "more": "Muat lebih banyak",
-        "loading": "Memuat"
+        "loading": "Memuat",
+        "heldUntil": "Ditahan sampai {when} (jam tenang)"
       },
       "failures": {
         "kicker": "Alasan kegagalan",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Tidak resmi (dinonaktifkan)"
     },
     "compose": {
-      "back": "Kembali ke Broadcast",
-      "crumb": "Broadcast / Baru",
-      "title": "Buat baru",
-      "titleAccent": "broadcast",
-      "draft": "Draf / belum disimpan",
-      "submit": "Tambah broadcast",
-      "submitting": "Menambahkan…",
-      "created": "Broadcast ditambahkan.",
-      "createdMany": "{count} broadcast ditambahkan, satu per pengirim.",
-      "failed": "Broadcast tidak dapat ditambahkan.",
-      "fixName": "Masukkan nama broadcast.",
-      "fixTemplate": "Pilih template yang disetujui.",
-      "fixSchedule": "Pilih tanggal dan waktu kirim.",
-      "loading": "Memuat",
-      "loadError": "Tidak dapat memuat data penyusunan.",
-      "retry": "Coba lagi",
-      "setup": "Pengaturan broadcast",
-      "templateMessage": "pesan template",
-      "name": "Nama broadcast",
-      "namePlaceholder": "mis. Pengiriman template promo Mei",
-      "nameHint": "Label internal yang digunakan dalam laporan broadcast.",
-      "template": "Pilih pesan template",
-      "pickTemplate": "— Pilih template yang disetujui —",
-      "noTemplates": "Belum ada template yang disetujui.",
       "createOne": "Buat satu",
-      "templateHint": "Broadcast hanya mengirim template yang disetujui.",
-      "twilioHint": "Pengiriman yang patuh Twilio memerlukan Content SID untuk setiap template — tandai template sebagai \"Twilio ready\" melalui /templates/{id}/edit. Template tanpa ContentSid akan dikirim sebagai teks biasa (kehilangan persetujuan template Meta).",
-      "device": "Kirim dari perangkat",
-      "devices": "Kirim dari beberapa perangkat",
-      "multiDevice": "Multi-perangkat — centang semua yang berlaku",
-      "noDevices": "Tidak ada perangkat terhubung.",
-      "connectOne": "Hubungkan satu →",
-      "share": "bagian",
-      "shareHint": "Centang perangkat dan atur bobot pembagian — mis. 7 / 3 mengirim 70% kontak lewat perangkat pertama dan 30% lewat perangkat kedua. Bobot yang sama membagi secara merata.",
       "audience": "Siapa yang ingin Anda kirimi?",
       "audienceHint": "Pilih segmen, tag, grup, atau kontak. Setiap yang dipilih digabung satu kali.",
       "selected": "{count} dipilih",
@@ -276,27 +246,10 @@
       "noContacts": "Belum ada kontak.",
       "addSome": "Tambahkan →",
       "noMatch": "Tidak ada kontak yang cocok dengan pencarian.",
-      "when": "Kapan Anda ingin mengirim broadcast?",
-      "whenHint": "Kirim segera atau pilih tanggal / waktu mendatang.",
-      "sendNow": "Kirim sekarang",
-      "sendNowHint": "Kirim setelah validasi akhir.",
-      "sendLater": "Jadwalkan untuk nanti",
-      "sendLaterHint": "Pilih hari dan waktu tertentu.",
-      "sendDate": "Tanggal kirim",
-      "sendTime": "Waktu kirim",
-      "timezone": "Zona waktu",
-      "preview": "Pratinjau template",
-      "previewTitle": "Pratinjau broadcast",
-      "previewSub": "Pesan template",
-      "pickToPreview": "Pilih template untuk melihat pratinjau…",
-      "previewSelected": "Dipilih",
-      "previewSchedule": "Jadwal",
-      "now": "Sekarang",
-      "later": "Nanti",
-      "media": "Pratinjau {kind}",
       "contactsDenied": "Anda tidak memiliki akses ke daftar kontak. Pilih kontak melalui grup atau tag.",
       "unofficialDisabled": "Pengiriman melalui nomor WhatsApp pribadi (API tidak resmi) tidak diaktifkan untuk workspace Anda. Pilih nomor WhatsApp Business API resmi.",
-      "previewLabel": "Pratinjau templat"
+      "colEmail": "Email",
+      "noEmail": "Tidak ada alamat email"
     },
     "overrides": {
       "title": "Isi pengiriman ini",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Kirim pesan ke orang yang sudah ada di DM Instagram Anda — tanpa persetujuan template.",
         "cta": "Buat broadcast Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Kirim pesan Messenger ke orang yang mengirim pesan ke Halaman Anda dalam 24 jam terakhir.",
+        "cta": "Buat siaran Facebook"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Kirim pesan sebagai email dari kotak surat yang terhubung, lengkap dengan tautan berhenti berlangganan.",
+        "cta": "Buat kampanye email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Kirim pesan ke orang-orang yang sudah mengobrol dengan akun LINE Anda.",
+        "cta": "Buat siaran LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Kirim pesan ke orang-orang yang sudah mengobrol dengan akun Viber Anda.",
+        "cta": "Buat siaran Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Kirim pesan massal ke semua pengikut, satu tag, atau pengguna pilihan di Akun Resmi Anda.",
+        "cta": "Buat siaran WeChat"
       }
     }
   }

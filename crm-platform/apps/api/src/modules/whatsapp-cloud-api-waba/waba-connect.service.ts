@@ -1018,8 +1018,7 @@ export class WabaConnectService {
         const verified = await this.admin.verifyInboundWired(conn, cb.url);
         wired = verified ?? (sub.overrideApplied ? true : null);
         if (!sub.overrideApplied && verified !== true) {
-          message =
-            'Subscribed, but the provider did not accept a per-number callback; the callback configured on its Meta app applies.';
+          message = inboundCaveat(conn, cb.url);
         }
       } else {
         message =
@@ -1158,9 +1157,7 @@ export class WabaConnectService {
     }
     const verified = await this.admin.verifyInboundWired(conn, cb.url);
     if (!sub.overrideApplied && verified !== true) {
-      warnings.push(
-        `This number is on its own Meta app, so it still delivers to that app's webhook. Set the callback URL ${cb.url} and the verify token in the app's WhatsApp > Configuration, then use Fix inbound.`,
-      );
+      warnings.push(inboundCaveat(conn, cb.url));
       return null;
     }
     return verified ?? (sub.overrideApplied ? true : null);
@@ -1453,7 +1450,7 @@ export class WabaConnectService {
 const asApiError = (e: unknown): WabaApiError =>
   e instanceof WabaApiError ? e : WabaApiError.network(e);
 
-function authFor(conn: WabaConnection) {
+export function authFor(conn: WabaConnection) {
   if (conn.registry) return conn.registry;
   return conn.provider === 'interakt' && conn.authKey
     ? ({
@@ -1463,6 +1460,17 @@ function authFor(conn: WabaConnection) {
         phoneNumberId: conn.phoneNumberId,
       } as const)
     : ({ provider: 'meta', accessToken: conn.accessToken ?? '' } as const);
+}
+
+/**
+ * Why inbound is unproven when no per-number callback stuck. An Interakt number was refused by Interakt, so the number's own
+ * Meta app is not the cause; a Meta number's inconclusive check only means its callback may sit on its own Meta app.
+ */
+function inboundCaveat(conn: WabaConnection, callbackUrl: string): string {
+  if (conn.provider === 'interakt') {
+    return `Interakt did not confirm the callback for this number, so inbound may not reach us yet. Set the callback URL ${callbackUrl} and the verify token with Interakt, then use Fix inbound.`;
+  }
+  return `This number is on its own Meta app, so it still delivers to that app's webhook. Set the callback URL ${callbackUrl} and the verify token in the app's WhatsApp > Configuration, then use Fix inbound.`;
 }
 
 function phoneMeta(p: PhoneInfo): Record<string, unknown> {

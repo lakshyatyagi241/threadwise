@@ -29,7 +29,8 @@
       "priorityChanged": "Öncelik güncellendi",
       "snoozed": "Konuşma ertelendi",
       "tagAdded": "Etiket eklendi",
-      "tagRemoved": "Etiket kaldırıldı"
+      "tagRemoved": "Etiket kaldırıldı",
+      "spammed": "Konuşma spam olarak işaretlendi."
     },
     "list": {
       "title": "Gelen kutusu",
@@ -44,12 +45,8 @@
         "unassigned": "Atanmamış",
         "unread": "Okunmamış"
       },
-      "statusFilter": "Durum",
-      "statusOpen": "Açık",
-      "statusAll": "Tüm durumlar",
       "status": {
         "open": "Açık",
-        "pending": "Beklemede",
         "snoozed": "Ertelendi",
         "resolved": "Çözüldü",
         "closed": "Çözüldü",
@@ -61,7 +58,6 @@
         "high": "Yüksek",
         "urgent": "Acil"
       },
-      "channelFilter": "Kanal",
       "allChannels": "Tüm kanallar",
       "archived": "Arşivlendi",
       "backToInbox": "Gelen kutusuna dön",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Seç",
-      "selectDone": "Bitti"
+      "selectDone": "Bitti",
+      "filters": {
+        "open": "Filtreler",
+        "openActive": "Filtreler ({count} açık)",
+        "title": "Filtreler",
+        "close": "Kapat",
+        "reset": "Sıfırla",
+        "cancel": "İptal",
+        "apply": "Uygula",
+        "status": "Sohbet durumu",
+        "statusHint": "Hiçbir şey seçilmezse açık sohbetler gösterilir.",
+        "conversation": "Konuşma",
+        "any": "Herhangi",
+        "assigned": "Atanmış",
+        "unassigned": "Atanmamış",
+        "unattended": "İlgilenilmemiş",
+        "labels": "Etiketler",
+        "channels": "Kanallar",
+        "agents": "Temsilciler",
+        "sortBy": "Sırala",
+        "recent": "En yeni",
+        "old": "En eski",
+        "dateRange": "Tarih aralığı (son etkinlik)",
+        "from": "Başlangıç",
+        "to": "Bitiş",
+        "select": "Bir seçenek seçin",
+        "search": "Ara",
+        "noMatch": "Eşleşme yok",
+        "today": "Bugün",
+        "last7": "Son 7 gün",
+        "last30": "Son 30 gün",
+        "thisMonth": "Bu ay",
+        "clearDates": "Tarihleri temizle",
+        "previousMonth": "Önceki ay",
+        "nextMonth": "Sonraki ay"
+      },
+      "rowMenu": "{name} için diğer işlemler",
+      "priorityMenu": "Öncelik",
+      "statusFilter": "Durum",
+      "statusOpen": "Açık",
+      "statusAll": "Tüm durumlar",
+      "channelFilter": "Kanal",
+      "selectRow": "{name} seç",
+      "snoozedFor": "Ertelendi · {left}",
+      "snoozeLeft": {
+        "due": "şimdi",
+        "minutes": "{count} dakika",
+        "hours": "{count} saat",
+        "days": "{count} gün"
+      },
+      "unsnoozesAt": "{time} için yeniden açılır"
     },
     "status": {
       "received": "Alındı",
@@ -128,6 +174,7 @@
       "mediaNotFound": "Ekin süresi doldu veya kaldırıldı. Yeniden ekleyin.",
       "statusInvalid": "Bu değişikliğe konuşmanın mevcut durumundan izin verilmiyor.",
       "assigneeInvalid": "Bu kişiye bu konuşma atanamaz.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "forbidden": "Bunu yapmak için yetkiniz yok.",
       "rateLimited": "Çok fazla istek. Biraz bekleyip yeniden deneyin.",
       "simulatorDisabled": "Kanal simülatörü bu sunucuda kapalı.",
@@ -232,7 +279,11 @@
         "undone": "Aşama değişikliği geri alındı: tekrar {stage}.",
         "undoneToast": "Aşama {stage} olarak geri yüklendi.",
         "couldNotUndo": "Bu değişiklik artık geri alınamaz: kişi ilerledi veya değişiklik zaten geri alındı."
-      }
+      },
+      "heldUntil": "{when} tarihine kadar bekletiliyor",
+      "heldWhy": "Bu pazarlama mesajı sessiz saatlerinizin bitmesini bekliyor. Bu arada kişi abonelikten çıkmadıysa o zaman gönderilecek.",
+      "templateSent": "“{name}” şablonu {channel} üzerinden gönderildi",
+      "templateSentPlain": "“{name}” şablonu gönderildi"
     },
     "media": {
       "openImage": "{name} görselini aç",
@@ -276,6 +327,8 @@
         "sendTemplate": "Şablon gönder"
       },
       "readOnly": "Bu konuşmayı okuyabilirsiniz ancak yanıtlama yetkiniz yok.",
+      "resolvedBanner": "Bu konuşma çözüldü. Yanıtlamak için yeniden açın.",
+      "assignedToOther": "Bu sohbet başka bir temsilciye atanmış. Yanıtlamak için önce kendinize atayın.",
       "typing": "{count, plural, other {# ekip arkadaşı yazıyor}}",
       "messagesLabel": "Mesajlar",
       "loadOlder": "Önceki mesajları yükle",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Yeni mesaj: {text}",
       "attachment": "bir ek",
       "jumpLatest": "En yeniye git",
-      "jumpLatestNew": "{count, plural, other {# yeni mesaj}}"
+      "jumpLatestNew": "{count, plural, other {# yeni mesaj}}",
+      "searchOpen": "Bu sohbette ara",
+      "searchPlaceholder": "Bu sohbette ara",
+      "searchCount": "{current} / {total}",
+      "searchNone": "Eşleşme yok",
+      "searchPrev": "Önceki eşleşme",
+      "searchNext": "Sonraki eşleşme",
+      "searchClose": "Aramayı kapat"
     },
     "groupThread": {
       "openGroup": "Grubu aç",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Hazır yanıtlar",
-      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin."
+      "savedReplyIssues": "Doldurulmadı ve olduğu gibi bırakıldı ({count}): {list}. Göndermeden önce düzeltin.",
+      "toolbar": {
+        "label": "Mesaj biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "underline": "Altı çizili",
+        "strike": "Üstü çizili",
+        "bullets": "Madde işaretli liste",
+        "numbers": "Numaralı liste",
+        "ai": {
+          "open": "Akıllı Yapay Zekâ Asistanı",
+          "noModel": "Bu çalışma alanı için etkin bir yapay zekâ modeli yok",
+          "title": "Akıllı Yapay Zekâ Asistanı",
+          "condense": "Kısalt",
+          "condenseHint": "Metni daha kısa ve öz yap",
+          "fix": "Dilbilgisini düzelt",
+          "fixHint": "Dilbilgisi ve yazım hatalarını düzelt",
+          "positive": "Olumlu ton",
+          "positiveHint": "Metni daha olumlu ve neşeli yap",
+          "translate": "Çevir",
+          "translateHint": "Farklı dillere çevir",
+          "selectLanguage": "Dil seç",
+          "searchLanguages": "Dil ara…",
+          "noLanguage": "Eşleşen dil yok",
+          "working": "İşleniyor…",
+          "empty": "Önce bir mesaj yazın.",
+          "failed": "Yapay zekâ metni değiştiremedi. Tekrar deneyin."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notlar ve zaman çizelgesi",
@@ -452,7 +540,13 @@
         "pickTeam": "Bu konuşma için bir ekip seçin",
         "noTeam": "Ekip yok",
         "onLeave": "İzinli",
-        "onLeaveUntil": "{date} tarihine kadar izinli"
+        "onLeaveUntil": "{date} tarihine kadar izinli",
+        "availability": {
+          "online": "Çevrimiçi",
+          "away": "Uzakta",
+          "busy": "Meşgul",
+          "offline": "Çevrimdışı"
+        }
       },
       "presence": {
         "online": "Çevrimiçi",
@@ -461,16 +555,8 @@
         "offline": "Çevrimdışı"
       },
       "notes": {
-        "tab": "Notlar",
-        "label": "Yeni dahili not",
-        "placeholder": "Yalnızca ekibinizin görebileceği bir not yazın",
-        "hint": "Ctrl+Enter notu ekler.",
-        "add": "Not ekle",
-        "addFailed": "Not kaydedilemedi.",
-        "loading": "Notlar yükleniyor",
-        "empty": "Henüz not yok.",
-        "unknownAuthor": "Bir ekip arkadaşı",
-        "delete": "Bu notu sil"
+        "tab": "Kişi notları",
+        "noContact": "Bu konuşmada not eklenecek bir kişi yok."
       },
       "timeline": {
         "tab": "Zaman çizelgesi",
@@ -496,6 +582,8 @@
           "tag_removed": "Etiket {actor} tarafından kaldırıldı",
           "first_response": "İlk yanıt gönderildi",
           "sla_breach": "Yanıt süresi kaçırıldı",
+          "spam_flagged": "{actor} tarafından spam olarak işaretlendi",
+          "escalated": "Yükseltildi",
           "unknown": "{actor} tarafından: {what}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Mesaj yok",
         "status": {
           "open": "Açık",
-          "pending": "Beklemede",
           "snoozed": "Ertelendi",
           "resolved": "Çözüldü",
           "closed": "Kapalı",
@@ -620,6 +707,8 @@
         "format": "{label} satır sonu, sekme veya art arda dört boşluk içeremez."
       },
       "reason": {
+        "other_number": "Başka bir WhatsApp numarasına ait, bu sohbetten gönderilemez.",
+        "not_linked": "Bu sohbetin kanalı bir WhatsApp numarasına bağlı değil, bu yüzden buradan şablon gönderilemez.",
         "paused": "WhatsApp tarafından duraklatıldı. Duraklatma bittiğinde yeniden gönderilebilir.",
         "media_header": "Görsel, video veya belge üstbilgisi var; bu, gelen kutusundan henüz gönderilemiyor.",
         "header_variable": "Üstbilgide bir değişken var; bu, gelen kutusundan henüz doldurulamıyor.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-posta"
+        "email": "E-posta",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kişi",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Öncelik",
       "snooze": "Ertele",
-      "wake": "Şimdi göster"
+      "wake": "Şimdi göster",
+      "markSpam": "Spam olarak işaretle",
+      "notSpam": "Spam değil"
     },
     "bulk": {
       "barLabel": "Toplu işlemler",
@@ -959,7 +1053,8 @@
       "tagAdd": "Etiket ekle",
       "tagRemove": "Etiketi kaldır",
       "onLeave": "izinli",
-      "onLeaveUntil": "{date} tarihine kadar izinli"
+      "onLeaveUntil": "{date} tarihine kadar izinli",
+      "spam": "Spam olarak işaretle"
     },
     "tags": {
       "tag": "Etiket",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: kaçırıldı (son zaman {time})",
       "titleOpen": "{kind}: son zaman {time}"
+    },
+    "channelType": {
+      "official": "Resmi",
+      "unofficial": "Resmi olmayan",
+      "officialFull": "Resmi (WhatsApp Cloud API)",
+      "unofficialFull": "Resmi olmayan (QR / Baileys)"
     }
   }
 }

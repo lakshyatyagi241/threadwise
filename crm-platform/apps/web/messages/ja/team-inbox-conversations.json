@@ -29,7 +29,8 @@
       "priorityChanged": "優先度を更新しました",
       "snoozed": "会話をスヌーズしました",
       "tagAdded": "タグを追加しました",
-      "tagRemoved": "タグを外しました"
+      "tagRemoved": "タグを外しました",
+      "spammed": "会話をスパムとしてマークしました。"
     },
     "list": {
       "title": "受信箱",
@@ -44,12 +45,8 @@
         "unassigned": "未割り当て",
         "unread": "未読"
       },
-      "statusFilter": "ステータス",
-      "statusOpen": "未対応",
-      "statusAll": "すべてのステータス",
       "status": {
         "open": "未対応",
-        "pending": "保留中",
         "snoozed": "スヌーズ中",
         "resolved": "解決済み",
         "closed": "解決済み",
@@ -61,7 +58,6 @@
         "high": "高",
         "urgent": "緊急"
       },
-      "channelFilter": "チャネル",
       "allChannels": "すべてのチャネル",
       "archived": "アーカイブ",
       "backToInbox": "受信箱に戻る",
@@ -107,7 +103,57 @@
         }
       },
       "select": "選択",
-      "selectDone": "完了"
+      "selectDone": "完了",
+      "filters": {
+        "open": "フィルター",
+        "openActive": "フィルター（{count}件オン）",
+        "title": "フィルター",
+        "close": "閉じる",
+        "reset": "リセット",
+        "cancel": "キャンセル",
+        "apply": "適用",
+        "status": "チャットの状態",
+        "statusHint": "何も選ばないと、オープンなチャットを表示します。",
+        "conversation": "会話",
+        "any": "すべて",
+        "assigned": "割り当て済み",
+        "unassigned": "未割り当て",
+        "unattended": "未対応",
+        "labels": "タグ",
+        "channels": "チャネル",
+        "agents": "担当者",
+        "sortBy": "並べ替え",
+        "recent": "新しい順",
+        "old": "古い順",
+        "dateRange": "期間（最終アクティビティ）",
+        "from": "開始日",
+        "to": "終了日",
+        "select": "オプションを選択",
+        "search": "検索",
+        "noMatch": "一致なし",
+        "today": "今日",
+        "last7": "過去7日間",
+        "last30": "過去30日間",
+        "thisMonth": "今月",
+        "clearDates": "日付をクリア",
+        "previousMonth": "前の月",
+        "nextMonth": "次の月"
+      },
+      "rowMenu": "{name} のその他の操作",
+      "priorityMenu": "優先度",
+      "statusFilter": "ステータス",
+      "statusOpen": "未対応",
+      "statusAll": "すべてのステータス",
+      "channelFilter": "チャネル",
+      "selectRow": "{name} を選択",
+      "snoozedFor": "スヌーズ中 · {left}",
+      "snoozeLeft": {
+        "due": "まもなく",
+        "minutes": "{count}分",
+        "hours": "{count}時間",
+        "days": "{count}日"
+      },
+      "unsnoozesAt": "{time} に再開"
     },
     "status": {
       "received": "受信済み",
@@ -128,6 +174,7 @@
       "mediaNotFound": "添付ファイルの有効期限が切れたか、削除されました。もう一度添付してください。",
       "statusInvalid": "会話の現在のステータスからは、その変更は行えません。",
       "assigneeInvalid": "その人はこの会話の担当者に指定できません。",
+      "assignedToOther": "このチャットは別の担当者に割り当てられています。返信するには、先に自分に割り当ててください。",
       "forbidden": "その操作を行う権限がありません。",
       "rateLimited": "リクエストが多すぎます。しばらく待ってから、もう一度お試しください。",
       "simulatorDisabled": "このサーバーではチャネルシミュレーターは無効になっています。",
@@ -232,7 +279,11 @@
         "undone": "ステージの変更を取り消しました:「{stage}」に戻りました。",
         "undoneToast": "ステージを「{stage}」に戻しました。",
         "couldNotUndo": "この変更はもう取り消せません。連絡先が先に進んだか、すでに取り消されています。"
-      }
+      },
+      "heldUntil": "{when} まで保留",
+      "heldWhy": "このマーケティングメッセージは、通知を控える時間帯の終了を待っています。その間に連絡先が配信停止していなければ、終了後に送信されます。",
+      "templateSent": "テンプレート「{name}」を{channel}で送信しました",
+      "templateSentPlain": "テンプレート「{name}」を送信しました"
     },
     "media": {
       "openImage": "画像 {name} を開く",
@@ -276,6 +327,8 @@
         "sendTemplate": "テンプレートを送信"
       },
       "readOnly": "この会話は閲覧できますが、返信する権限がありません。",
+      "resolvedBanner": "この会話は解決済みです。返信するには再開してください。",
+      "assignedToOther": "このチャットは別の担当者に割り当てられています。返信するには、先に自分に割り当ててください。",
       "typing": "{count, plural, other {# 人のチームメイトが入力中}}",
       "messagesLabel": "メッセージ",
       "loadOlder": "以前のメッセージを読み込む",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "新しいメッセージ: {text}",
       "attachment": "添付ファイル",
       "jumpLatest": "最新へ移動",
-      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}"
+      "jumpLatestNew": "{count, plural, other {新しいメッセージ #件}}",
+      "searchOpen": "このチャット内を検索",
+      "searchPlaceholder": "このチャット内を検索",
+      "searchCount": "{current} / {total}",
+      "searchNone": "一致なし",
+      "searchPrev": "前の一致",
+      "searchNext": "次の一致",
+      "searchClose": "検索を閉じる"
     },
     "groupThread": {
       "openGroup": "グループを開く",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "返信テンプレート",
-      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。"
+      "savedReplyIssues": "未入力のまま残りました（{count}件）：{list}。送信前に修正してください。",
+      "toolbar": {
+        "label": "メッセージの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "underline": "下線",
+        "strike": "取り消し線",
+        "bullets": "箇条書き",
+        "numbers": "番号付きリスト",
+        "ai": {
+          "open": "スマートAIアシスタント",
+          "noModel": "このワークスペースではAIモデルが有効になっていません",
+          "title": "スマートAIアシスタント",
+          "condense": "要約",
+          "condenseHint": "文章を短く簡潔にします",
+          "fix": "文法を修正",
+          "fixHint": "文法とスペルの誤りを直します",
+          "positive": "前向きなトーン",
+          "positiveHint": "文章をより前向きで明るくします",
+          "translate": "翻訳",
+          "translateHint": "別の言語に翻訳します",
+          "selectLanguage": "言語を選択",
+          "searchLanguages": "言語を検索…",
+          "noLanguage": "一致する言語がありません",
+          "working": "処理中…",
+          "empty": "先にメッセージを入力してください。",
+          "failed": "AIが文章を変更できませんでした。もう一度お試しください。"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "メモとタイムライン",
@@ -452,7 +540,13 @@
         "pickTeam": "この会話のチームを選択",
         "noTeam": "チームなし",
         "onLeave": "休暇中",
-        "onLeaveUntil": "{date}まで休暇中"
+        "onLeaveUntil": "{date}まで休暇中",
+        "availability": {
+          "online": "オンライン",
+          "away": "離席中",
+          "busy": "取り込み中",
+          "offline": "オフライン"
+        }
       },
       "presence": {
         "online": "オンライン",
@@ -461,16 +555,8 @@
         "offline": "オフライン"
       },
       "notes": {
-        "tab": "メモ",
-        "label": "新しい内部メモ",
-        "placeholder": "チームだけが見られるメモを入力",
-        "hint": "Ctrl+Enter でメモを追加します。",
-        "add": "メモを追加",
-        "addFailed": "メモを保存できませんでした。",
-        "loading": "メモを読み込んでいます",
-        "empty": "メモはまだありません。",
-        "unknownAuthor": "チームメイト",
-        "delete": "このメモを削除"
+        "tab": "連絡先のメモ",
+        "noContact": "この会話にはメモを追加できる連絡先がありません。"
       },
       "timeline": {
         "tab": "タイムライン",
@@ -496,6 +582,8 @@
           "tag_removed": "{actor}がタグを外しました",
           "first_response": "最初の返信を送信しました",
           "sla_breach": "返信期限を超過しました",
+          "spam_flagged": "{actor} がスパムとしてマーク",
+          "escalated": "エスカレートしました",
           "unknown": "{actor} による{what}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "メッセージなし",
         "status": {
           "open": "未対応",
-          "pending": "保留中",
           "snoozed": "スヌーズ中",
           "resolved": "解決済み",
           "closed": "終了",
@@ -620,6 +707,8 @@
         "format": "{label} に改行、タブ、連続する4つのスペースを含めることはできません。"
       },
       "reason": {
+        "other_number": "別のWhatsApp番号のテンプレートのため、この会話からは送信できません。",
+        "not_linked": "この会話のチャネルはWhatsApp番号に接続されていないため、テンプレートを送信できません。",
         "paused": "WhatsApp により一時停止されています。一時停止が解除されると再送信できます。",
         "media_header": "画像、動画、ドキュメントのヘッダーがあります。受信箱からはまだ送信できません。",
         "header_variable": "ヘッダーに変数があります。受信箱からはまだ入力できません。",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "メール"
+        "email": "メール",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "連絡先",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "優先度",
       "snooze": "スヌーズ",
-      "wake": "今すぐ再開"
+      "wake": "今すぐ再開",
+      "markSpam": "スパムとしてマーク",
+      "notSpam": "スパムではない"
     },
     "bulk": {
       "barLabel": "一括操作",
@@ -959,7 +1053,8 @@
       "tagAdd": "タグを追加",
       "tagRemove": "タグを外す",
       "onLeave": "休暇中",
-      "onLeaveUntil": "{date}まで休暇中"
+      "onLeaveUntil": "{date}まで休暇中",
+      "spam": "スパムとしてマーク"
     },
     "tags": {
       "tag": "タグ",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}：未達成（期限 {time}）",
       "titleOpen": "{kind}：期限 {time}"
+    },
+    "channelType": {
+      "official": "公式",
+      "unofficial": "非公式",
+      "officialFull": "公式 (WhatsApp Cloud API)",
+      "unofficialFull": "非公式 (QR / Baileys)"
     }
   }
 }

@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { conversationPrioritySchema } from '../chat-conversations/enums';
 import { uuidSchema } from '../common/ids';
 
 /**
@@ -38,8 +37,6 @@ export const inboxSlaPolicySchema = z.object({
   name: z.string(),
   firstResponseMinutes: z.number().int().nullable(),
   resolutionMinutes: z.number().int().nullable(),
-  /** Do not count (or flag) the time a conversation waits on the customer (status pending). */
-  pauseWhenWaitingOnCustomer: z.boolean(),
   /** Count only the workspace's business hours (Settings, business hours). */
   respectBusinessHours: z.boolean(),
   priorityOverrides: slaPriorityOverridesSchema,
@@ -59,7 +56,6 @@ export const createInboxSlaPolicySchema = z.object({
   name: z.string().trim().min(1).max(128),
   firstResponseMinutes: firstResponseSchema.nullish(),
   resolutionMinutes: resolutionSchema.nullish(),
-  pauseWhenWaitingOnCustomer: z.boolean().default(true),
   respectBusinessHours: z.boolean().default(true),
   priorityOverrides: slaPriorityOverridesSchema.default({}),
   isDefault: z.boolean().default(false),
@@ -71,7 +67,6 @@ export const updateInboxSlaPolicySchema = z.object({
   name: z.string().trim().min(1).max(128).optional(),
   firstResponseMinutes: firstResponseSchema.nullish(),
   resolutionMinutes: resolutionSchema.nullish(),
-  pauseWhenWaitingOnCustomer: z.boolean().optional(),
   respectBusinessHours: z.boolean().optional(),
   priorityOverrides: slaPriorityOverridesSchema.optional(),
   isDefault: z.boolean().optional(),

@@ -65,8 +65,8 @@ const pauseOf = (log: unknown) => {
   const p = (log as { pause?: { reason?: string; at?: string; resumeAfter?: string } } | null)
     ?.pause;
   if (!p || !p.reason || !p.at) return null;
-  const reason = ['daily_cap', 'halt', 'manual'].includes(p.reason)
-    ? (p.reason as 'daily_cap' | 'halt' | 'manual')
+  const reason = ['daily_cap', 'halt', 'quiet_hours', 'manual'].includes(p.reason)
+    ? (p.reason as 'daily_cap' | 'halt' | 'quiet_hours' | 'manual')
     : 'manual';
   return { reason, at: p.at, resumeAfter: p.resumeAfter ?? null };
 };
@@ -84,6 +84,8 @@ const toRecipient = (r: RecipientReadRow) => ({
   error: r.error,
   providerMessageId: r.providerMessageId,
   queuedAt: r.createdAt.toISOString(),
+  heldUntil: r.heldUntil?.toISOString() ?? null,
+  heldReason: (r.heldReason as 'quiet_hours' | 'calling_window' | null) ?? null,
   sentAt: r.sentAt?.toISOString() ?? null,
   deliveredAt: r.deliveredAt?.toISOString() ?? null,
   readAt: r.readAt?.toISOString() ?? null,
@@ -164,6 +166,7 @@ export class BroadcastsReadService {
       const sender = await this.repo.sender(tx, ctx.orgId, b.provider, b.deviceId);
       const failures = await this.repo.failureReasons(tx, ctx.orgId, b.id);
       const clicked = await this.repo.clickedContacts(tx, ctx.orgId, b.id);
+      const held = await this.repo.heldCount(tx, ctx.orgId, b.id);
 
       return {
         broadcast: toListItem(b),
@@ -194,6 +197,7 @@ export class BroadcastsReadService {
           read: k.read,
           failed: k.failed,
           queued: k.queued,
+          held,
           clicked,
         },
         pct: headerPct(k, clicked),
@@ -234,7 +238,10 @@ export class BroadcastsReadService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const b = await this.load(tx, ctx.orgId, uuid);
-      return liveStats(b.status, await this.progress.counts(tx, ctx.orgId, b.id), new Date());
+      return {
+        ...liveStats(b.status, await this.progress.counts(tx, ctx.orgId, b.id), new Date()),
+        held: await this.repo.heldCount(tx, ctx.orgId, b.id),
+      };
     });
   }
 

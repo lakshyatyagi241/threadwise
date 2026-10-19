@@ -177,7 +177,7 @@ export function SubscriptionsPage() {
                     <div className="text-[13px]">{r.name}</div>
                     <div className="text-[11px] text-muted-foreground">{t(`kind.${r.kind}`)}</div>
                   </td>
-                  <td className="px-3 py-3 text-right font-mono">
+                  <td className="px-3 py-3 text-end font-mono">
                     {money(r.amount, r.currency, locale)}
                     <span className="block text-[11px] text-muted-foreground">
                       {tc(`periods.${r.billingCycle}`)}
@@ -201,7 +201,7 @@ export function SubscriptionsPage() {
                     </div>
                   </td>
                   {canEdit && (
-                    <td className="px-3 py-3 text-right">
+                    <td className="px-3 py-3 text-end">
                       <div className="inline-flex flex-wrap justify-end gap-1.5">
                         <Button
                           size="sm"

@@ -29,7 +29,8 @@
       "priorityChanged": "Zaktualizowano priorytet",
       "snoozed": "Rozmowa została odłożona",
       "tagAdded": "Dodano tag",
-      "tagRemoved": "Usunięto tag"
+      "tagRemoved": "Usunięto tag",
+      "spammed": "Rozmowa oznaczona jako spam."
     },
     "list": {
       "title": "Skrzynka odbiorcza",
@@ -44,12 +45,8 @@
         "unassigned": "Nieprzypisane",
         "unread": "Nieprzeczytane"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Otwarte",
-      "statusAll": "Wszystkie statusy",
       "status": {
         "open": "Otwarte",
-        "pending": "Oczekujące",
         "snoozed": "Odroczone",
         "resolved": "Zakończone",
         "closed": "Zakończone",
@@ -61,7 +58,6 @@
         "high": "Wysoki",
         "urgent": "Pilny"
       },
-      "channelFilter": "Kanał",
       "allChannels": "Wszystkie kanały",
       "archived": "Zarchiwizowane",
       "backToInbox": "Wróć do skrzynki odbiorczej",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Wybierz",
-      "selectDone": "Gotowe"
+      "selectDone": "Gotowe",
+      "filters": {
+        "open": "Filtry",
+        "openActive": "Filtry ({count} włączone)",
+        "title": "Filtry",
+        "close": "Zamknij",
+        "reset": "Resetuj",
+        "cancel": "Anuluj",
+        "apply": "Zastosuj",
+        "status": "Status czatu",
+        "statusHint": "Bez wyboru pokazywane są otwarte czaty.",
+        "conversation": "Rozmowa",
+        "any": "Dowolna",
+        "assigned": "Przypisana",
+        "unassigned": "Nieprzypisana",
+        "unattended": "Bez obsługi",
+        "labels": "Tagi",
+        "channels": "Kanały",
+        "agents": "Agenci",
+        "sortBy": "Sortuj według",
+        "recent": "Najnowsze",
+        "old": "Najstarsze",
+        "dateRange": "Zakres dat (ostatnia aktywność)",
+        "from": "Od",
+        "to": "Do",
+        "select": "Wybierz opcję",
+        "search": "Szukaj",
+        "noMatch": "Brak wyników",
+        "today": "Dziś",
+        "last7": "Ostatnie 7 dni",
+        "last30": "Ostatnie 30 dni",
+        "thisMonth": "Ten miesiąc",
+        "clearDates": "Wyczyść daty",
+        "previousMonth": "Poprzedni miesiąc",
+        "nextMonth": "Następny miesiąc"
+      },
+      "rowMenu": "Więcej działań dla {name}",
+      "priorityMenu": "Priorytet",
+      "statusFilter": "Status",
+      "statusOpen": "Otwarte",
+      "statusAll": "Wszystkie statusy",
+      "channelFilter": "Kanał",
+      "selectRow": "Zaznacz {name}",
+      "snoozedFor": "Odłożona · {left}",
+      "snoozeLeft": {
+        "due": "teraz",
+        "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+        "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
+        "days": "{count, plural, one {# dzień} other {# dni}}"
+      },
+      "unsnoozesAt": "Wróci {time}"
     },
     "status": {
       "received": "Odebrano",
@@ -128,6 +174,7 @@
       "mediaNotFound": "Załącznik wygasł lub został usunięty. Dołącz go ponownie.",
       "statusInvalid": "Ta zmiana nie jest dozwolona przy obecnym statusie rozmowy.",
       "assigneeInvalid": "Tej osoby nie można przypisać do tej rozmowy.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "forbidden": "Nie masz uprawnień do wykonania tej czynności.",
       "rateLimited": "Zbyt wiele żądań. Poczekaj chwilę i spróbuj ponownie.",
       "simulatorDisabled": "Symulator kanałów jest wyłączony na tym serwerze.",
@@ -232,7 +279,11 @@
         "undone": "Zmiana etapu cofnięta: z powrotem {stage}.",
         "undoneToast": "Etap przywrócono na {stage}.",
         "couldNotUndo": "Tej zmiany nie można już cofnąć: kontakt poszedł dalej albo zmianę już cofnięto."
-      }
+      },
+      "heldUntil": "Wstrzymano do {when}",
+      "heldWhy": "Ta wiadomość marketingowa czeka na koniec Twoich godzin ciszy. Zostanie wysłana wtedy, o ile kontakt w międzyczasie się nie wypisał.",
+      "templateSent": "Szablon „{name}” wysłano przez {channel}",
+      "templateSentPlain": "Szablon „{name}” wysłano"
     },
     "media": {
       "openImage": "Otwórz obraz {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "Wyślij szablon"
       },
       "readOnly": "Możesz czytać tę rozmowę, ale nie masz uprawnień do odpowiadania.",
+      "resolvedBanner": "Ta rozmowa jest rozwiązana. Otwórz ją ponownie, aby odpowiedzieć.",
+      "assignedToOther": "Ten czat jest przypisany do innego agenta. Najpierw przypisz go do siebie, aby odpowiedzieć.",
       "typing": "{count, plural, one {Członek zespołu pisze} few {# członkowie zespołu piszą} many {# członków zespołu pisze} other {# członka zespołu pisze}}",
       "messagesLabel": "Wiadomości",
       "loadOlder": "Wczytaj wcześniejsze wiadomości",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Nowa wiadomość: {text}",
       "attachment": "załącznik",
       "jumpLatest": "Przejdź do najnowszych",
-      "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}"
+      "jumpLatestNew": "{count, plural, one {# nowa wiadomość} few {# nowe wiadomości} many {# nowych wiadomości} other {# nowej wiadomości}}",
+      "searchOpen": "Szukaj w tym czacie",
+      "searchPlaceholder": "Szukaj w tym czacie",
+      "searchCount": "{current} z {total}",
+      "searchNone": "Brak wyników",
+      "searchPrev": "Poprzedni wynik",
+      "searchNext": "Następny wynik",
+      "searchClose": "Zamknij wyszukiwanie"
     },
     "groupThread": {
       "openGroup": "Otwórz grupę",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Szablony odpowiedzi",
-      "savedReplyIssues": "Nie uzupełniono i pozostawiono bez zmian ({count}): {list}. Popraw przed wysłaniem."
+      "savedReplyIssues": "Nie uzupełniono i pozostawiono bez zmian ({count}): {list}. Popraw przed wysłaniem.",
+      "toolbar": {
+        "label": "Formatowanie wiadomości",
+        "bold": "Pogrubienie",
+        "italic": "Kursywa",
+        "underline": "Podkreślenie",
+        "strike": "Przekreślenie",
+        "bullets": "Lista punktowana",
+        "numbers": "Lista numerowana",
+        "ai": {
+          "open": "Inteligentny asystent AI",
+          "noModel": "Dla tego obszaru nie włączono żadnego modelu AI",
+          "title": "Inteligentny asystent AI",
+          "condense": "Skróć",
+          "condenseHint": "Skróć tekst i uczyń go zwięzłym",
+          "fix": "Popraw gramatykę",
+          "fixHint": "Popraw błędy gramatyczne i ortograficzne",
+          "positive": "Pozytywny ton",
+          "positiveHint": "Nadaj tekstowi bardziej pozytywny i radosny ton",
+          "translate": "Przetłumacz",
+          "translateHint": "Przetłumacz na inne języki",
+          "selectLanguage": "Wybierz język",
+          "searchLanguages": "Szukaj języków…",
+          "noLanguage": "Brak pasującego języka",
+          "working": "Trwa przetwarzanie…",
+          "empty": "Najpierw napisz wiadomość.",
+          "failed": "AI nie mogło zmienić tekstu. Spróbuj ponownie."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Notatki i oś czasu",
@@ -452,7 +540,13 @@
         "pickTeam": "Wybierz zespół dla tej rozmowy",
         "noTeam": "Brak zespołu",
         "onLeave": "Na urlopie",
-        "onLeaveUntil": "Na urlopie do {date}"
+        "onLeaveUntil": "Na urlopie do {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Zaraz wracam",
+          "busy": "Zajęty",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Online",
@@ -461,16 +555,8 @@
         "offline": "Offline"
       },
       "notes": {
-        "tab": "Notatki",
-        "label": "Nowa notatka wewnętrzna",
-        "placeholder": "Napisz notatkę widoczną tylko dla zespołu",
-        "hint": "Ctrl+Enter dodaje notatkę.",
-        "add": "Dodaj notatkę",
-        "addFailed": "Nie udało się zapisać notatki.",
-        "loading": "Wczytywanie notatek",
-        "empty": "Brak notatek.",
-        "unknownAuthor": "Członek zespołu",
-        "delete": "Usuń tę notatkę"
+        "tab": "Notatki o kontakcie",
+        "noContact": "Ta rozmowa nie ma kontaktu, do którego można dodać notatki."
       },
       "timeline": {
         "tab": "Oś czasu",
@@ -496,6 +582,8 @@
           "tag_removed": "Tag usunięty przez {actor}",
           "first_response": "Wysłano pierwszą odpowiedź",
           "sla_breach": "Przekroczono termin odpowiedzi",
+          "spam_flagged": "Oznaczono jako spam przez {actor}",
+          "escalated": "Eskalowano",
           "unknown": "{what}, przez {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Brak wiadomości",
         "status": {
           "open": "Otwarte",
-          "pending": "Oczekujące",
           "snoozed": "Odroczone",
           "resolved": "Zakończone",
           "closed": "Zamknięte",
@@ -620,6 +707,8 @@
         "format": "Pole {label} nie może zawierać znaku nowego wiersza, tabulatora ani czterech spacji z rzędu."
       },
       "reason": {
+        "other_number": "Należy do innego numeru WhatsApp, więc nie można go wysłać z tej rozmowy.",
+        "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu.",
         "paused": "Wstrzymany przez WhatsApp. Można go wysłać ponownie po zakończeniu wstrzymania.",
         "media_header": "Ma nagłówek z obrazem, wideo lub dokumentem, którego nie można jeszcze wysłać ze skrzynki odbiorczej.",
         "header_variable": "Ma zmienną w nagłówku, której nie można jeszcze uzupełnić ze skrzynki odbiorczej.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "E-mail"
+        "email": "E-mail",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kontakt",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Priorytet",
       "snooze": "Odłóż",
-      "wake": "Przywróć teraz"
+      "wake": "Przywróć teraz",
+      "markSpam": "Oznacz jako spam",
+      "notSpam": "To nie spam"
     },
     "bulk": {
       "barLabel": "Działania zbiorcze",
@@ -959,7 +1053,8 @@
       "tagAdd": "Dodaj tag",
       "tagRemove": "Usuń tag",
       "onLeave": "na urlopie",
-      "onLeaveUntil": "na urlopie do {date}"
+      "onLeaveUntil": "na urlopie do {date}",
+      "spam": "Oznacz jako spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: nie dotrzymano (termin: {time})",
       "titleOpen": "{kind}: termin {time}"
+    },
+    "channelType": {
+      "official": "Oficjalny",
+      "unofficial": "Nieoficjalny",
+      "officialFull": "Oficjalny (WhatsApp Cloud API)",
+      "unofficialFull": "Nieoficjalny (QR / Baileys)"
     }
   }
 }

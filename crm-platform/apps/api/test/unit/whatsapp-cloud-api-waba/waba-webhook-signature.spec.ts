@@ -16,7 +16,11 @@ const ROUTES: Record<string, { org: number; cfg: number }> = {
 const OWN_SECRET: Record<number, string> = { 21: 'attacker-secret', 22: 'attacker-secret' };
 
 function build() {
-  const queue = { add: vi.fn(async () => undefined) };
+  const queue = {
+    add: vi.fn(async () => undefined),
+    getJobState: vi.fn(async () => 'unknown'),
+    getJob: vi.fn(async () => undefined),
+  };
   const db = {
     primary: {
       execute: vi.fn(async (q: { queryChunks: unknown[] }) => {
@@ -40,7 +44,10 @@ function build() {
     findById: async (_tx: unknown, _org: number, id: number) =>
       OWN_SECRET[id] ? { credentials_json: `enc:${OWN_SECRET[id]}` } : { credentials_json: null },
   };
-  const crypto = { decrypt: (v: string) => JSON.stringify({ app_secret: v.slice(4) }) };
+  const crypto = {
+    decrypt: (v: string) => JSON.stringify({ app_secret: v.slice(4) }),
+    encrypt: (v: string) => `sealed:${Buffer.from(v).toString('base64')}`,
+  };
   const config = {
     get: (k: string) => (k === 'CREDENTIALS_ENCRYPTION_KEY' ? 'k'.repeat(32) : undefined),
   };
@@ -78,6 +85,71 @@ const sign = (secret: string, body: Buffer) =>
 const send = (svc: WabaWebhookService, body: Buffer, secret: string) =>
   svc.receive({ rawBody: body, signatureHeader: sign(secret, body), queryKey: undefined });
 
+describe('WhatsApp webhook: the body parser result is reused (EL-B09)', () => {
+  const sendParsed = (svc: WabaWebhookService, body: Buffer, secret: string) =>
+    svc.receive({
+      rawBody: body,
+      parsedBody: JSON.parse(body.toString('utf8')),
+      signatureHeader: sign(secret, body),
+      queryKey: undefined,
+    });
+
+  it('gives the same answer as parsing the raw bytes, for an accepted delivery', async () => {
+    const body = raw(change('wx', '221'), change('wv', '111'));
+    const a = await sendParsed(build().svc, body, 'platform-secret');
+    const b = await send(build().svc, body, 'platform-secret');
+    expect(a).toEqual(b);
+    expect(a.queued).toBe(2);
+  });
+
+  it('enqueues the same job: the id comes from the raw bytes, the changes from the parsed body', async () => {
+    const one = build();
+    const two = build();
+    const body = raw(change('wx', '221'));
+    await sendParsed(one.svc, body, 'platform-secret');
+    await send(two.svc, body, 'platform-secret');
+    expect(one.queue.add.mock.calls[0]).toEqual(two.queue.add.mock.calls[0]);
+  });
+
+  it('still checks the signature against the raw bytes: a parsed body does not authenticate itself', async () => {
+    const { svc, queue } = build();
+    const body = raw(change('wx', '221'), change('wv', '111'));
+    await expect(sendParsed(svc, body, 'attacker-secret')).rejects.toMatchObject({ status: 401 });
+    // a parsed body that differs from the signed bytes cannot be smuggled in either: the signature covers the bytes
+    const signed = raw(change('wx', '221'));
+    await expect(
+      svc.receive({
+        rawBody: signed,
+        parsedBody: JSON.parse(raw(change('wx', '221'), change('wv', '111')).toString()),
+        signatureHeader: sign('attacker-secret', signed),
+        queryKey: undefined,
+      }),
+    ).rejects.toMatchObject({ status: 401 });
+    expect(queue.add).not.toHaveBeenCalled();
+  });
+
+  it('falls back to parsing the raw bytes when there is no parsed object', async () => {
+    const body = raw(change('wx', '221'));
+    for (const parsedBody of [undefined, null, 'text', 42]) {
+      const res = await build().svc.receive({
+        rawBody: body,
+        parsedBody,
+        signatureHeader: sign('platform-secret', body),
+        queryKey: undefined,
+      });
+      expect(res.queued).toBe(1);
+    }
+    await expect(
+      build().svc.receive({
+        rawBody: Buffer.from('not json'),
+        parsedBody: undefined,
+        signatureHeader: sign('platform-secret', Buffer.from('not json')),
+        queryKey: undefined,
+      }),
+    ).rejects.toMatchObject({ status: 422 }); // AppError.validation, as before
+  });
+});
+
 describe('WhatsApp webhook: signature scope (AZ-015)', () => {
   it('refuses a body naming a victim number next to the attacker own number, signed with the attacker secret', async () => {
     const { svc, queue } = build();
@@ -105,6 +177,10 @@ describe('WhatsApp webhook: signature scope (AZ-015)', () => {
     const res = await send(svc, raw(change('wx', '221'), change('wx', '222')), 'attacker-secret');
     expect(res.queued).toBe(2);
     expect(queue.add).toHaveBeenCalledTimes(1);
+    // The job carries message text and phone numbers: it is queued sealed, never as plain JSON.
+    const data = (queue.add.mock.calls[0] as unknown as [string, Record<string, unknown>])[1];
+    expect(Object.keys(data)).toEqual(['sealed']);
+    expect(JSON.stringify(data)).not.toContain('"changes"');
   });
 
   it('accepts numbers of many workspaces signed with the platform secret', async () => {

@@ -292,7 +292,7 @@ export const pwaSettingsSchema = z.object({
 });
 
 // --- TW-SET-039 -------------------------------------------------------------------------------
-export const STORAGE_PROVIDERS = ['s3', 'wasabi', 'bunny', 'spaces', 'r2', 'minio'] as const;
+export const STORAGE_PROVIDERS = ['s3', 'wasabi', 'bunny', 'spaces', 'r2'] as const;
 export const storageSettingsSchema = z.object({
   enabled: flag(false),
   provider: z.enum(STORAGE_PROVIDERS).default('s3'),
@@ -369,6 +369,20 @@ export const googleCalendarSettingsSchema = z.object({
   redirectUri: url(300),
 });
 
+// --- BL-035: the Microsoft Entra app every workspace connects its Outlook / Microsoft 365 calendar through. Mirrors googleCalendar, plus the
+// tenant the sign-in authority points at. A SEPARATE app from the Email channel's (microsoftMail): different permissions, and an operator may
+// still register one app and paste the same id in both -----------------------------------------------------------------------------------
+export const microsoftCalendarSettingsSchema = z.object({
+  /** The master switch. Off: no workspace can connect an Outlook calendar, and none is read or written (what is stored is kept). */
+  enabled: flag(true),
+  /** The application (client) id of the Entra app registration. Empty: the `MICROSOFT_CALENDAR_CLIENT_ID` environment value applies. */
+  clientId: text(200),
+  /** `common` (work, school and personal accounts), `organizations`, `consumers`, or one directory (tenant) id. Empty: `MICROSOFT_CALENDAR_TENANT`, else `common`. */
+  tenant: text(100),
+  /** The redirect URI registered on that app. Empty: `<APP_URL>/v2/public/appointments/calendar/microsoft/callback`. */
+  redirectUri: url(300),
+});
+
 // --- The Email (Gmail) add-on: the Google OAuth client every workspace connects its mailboxes through. A SEPARATE client from Calendar, because
 // the Gmail scopes are restricted and need Google's own verification (docs/threadwise-port/plan/channel-email-build.md decision 5) -------
 export const googleMailSettingsSchema = z.object({
@@ -422,6 +436,7 @@ export const SET_GROUP_SCHEMAS = {
   whatsapp: whatsappSettingsSchema,
   campaigns: campaignsSettingsSchema,
   googleCalendar: googleCalendarSettingsSchema,
+  microsoftCalendar: microsoftCalendarSettingsSchema,
   googleMail: googleMailSettingsSchema,
   microsoftMail: microsoftMailSettingsSchema,
   flowBuilder: flowBuilderSettingsSchema,
@@ -448,6 +463,8 @@ export const SET_SECRET_FIELDS = {
   campaigns: [],
   /** The OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
   googleCalendar: ['clientSecret'],
+  /** The Entra app's client secret for the calendar: sent to Microsoft when a code is exchanged or a token refreshed, never returned. */
+  microsoftCalendar: ['clientSecret'],
   /** The Gmail OAuth client secret: sent to Google when a code is exchanged or a token refreshed, never returned. */
   googleMail: ['clientSecret'],
   /** The Entra app's client secret: sent to Microsoft when a code is exchanged or a token refreshed, never returned. */

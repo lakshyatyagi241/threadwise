@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "رابطے کے حصے",
+          "section": {
+            "overview": "جائزہ",
+            "activities": "سرگرمی",
+            "conversations": "گفتگو",
+            "notes": "نوٹس",
+            "tasks": "ٹاسکس",
+            "meetings": "میٹنگز",
+            "files": "فائلیں",
+            "deals": "ڈیلز",
+            "appointments": "اپائنٹمنٹس",
+            "sales": "انوائسز",
+            "company": "کمپنی",
+            "details": "تفصیلات",
+            "stats": "اعداد و شمار",
+            "lead-source": "ماخذ",
+            "consent": "رضامندی",
+            "history": "تاریخ"
+          },
+          "more": "مزید",
+          "moreLabel": "مزید حصے"
+        },
+        "actions": {
+          "label": "اس رابطے کے ساتھ آپ کیا کر سکتے ہیں",
+          "call": "کال",
+          "callWhatsapp": "WhatsApp پر کال کریں",
+          "callPhone": "اپنے فون سے کال کریں",
+          "logCall": "کال درج کریں",
+          "callMore": "کال کرنے کے دیگر طریقے",
+          "message": "پیغام",
+          "messageChat": "WhatsApp چیٹ کھولیں",
+          "messageTemplate": "WhatsApp ٹیمپلیٹ بھیجیں",
+          "messageEmail": "ای میل بھیجیں",
+          "messageMore": "لکھنے کے دیگر طریقے",
+          "fieldHistory": "فیلڈ کی تاریخ",
+          "more": "مزید"
+        },
+        "stageStrip": {
+          "noStatus": "کوئی حالت نہیں"
+        },
+        "keyDetails": {
+          "editAll": "سب میں ترمیم کریں",
+          "edit": "{field} میں ترمیم کریں",
+          "add": "{field} شامل کریں",
+          "conflict": "کسی اور نے پہلے یہ رابطہ بدل دیا۔ اسے دوبارہ لوڈ کر دیا گیا ہے؛ دوبارہ کوشش کریں۔",
+          "invalid": "یہ درست {field} نہیں لگتا۔",
+          "forbidden": "آپ کو اس رابطے کو بدلنے کی اجازت نہیں ہے۔",
+          "failed": "محفوظ نہیں ہو سکا۔ دوبارہ کوشش کریں۔",
+          "owner": "مالک",
+          "city": "شہر",
+          "showAll": "تمام تفصیلات دیکھیں",
+          "showLess": "کم دکھائیں",
+          "social": "سوشل میڈیا",
+          "leadSource": "یہ رابطہ کہاں سے آیا",
+          "aboutTitle": "اس رابطے کے بارے میں"
+        },
+        "cards": {
+          "company": "کمپنی",
+          "companyNone": "ابھی کوئی نہیں",
+          "timezone": "ٹائم زون اور مقام",
+          "timezoneNone": "ابھی معلوم نہیں",
+          "privacy": "رازداری",
+          "privacyMinor": "نابالغ",
+          "score": "لیڈ اسکور",
+          "scoreNone": "ابھی اسکور نہیں ہوا",
+          "label": "اس رابطے سے متعلق",
+          "tasks": "کھلے ٹاسکس",
+          "tasksNone": "کچھ بھی زیرِ انتظار نہیں۔",
+          "deals": "ڈیلز",
+          "dealsNone": "ابھی کوئی ڈیل نہیں۔",
+          "add": "+ شامل کریں",
+          "viewAll": "سب دیکھیں"
+        },
+        "compose": {
+          "label": "سرگرمی میں شامل کریں",
+          "tabs": "کیا شامل کرنا ہے",
+          "tab": {
+            "note": "نوٹ",
+            "task": "ٹاسک",
+            "call": "کال",
+            "meeting": "میٹنگ"
+          }
+        },
+        "logCall": {
+          "label": "کال درج کریں",
+          "direction": "کس نے کال کی",
+          "directionOption": {
+            "outbound": "میں نے ان کو کال کی",
+            "inbound": "انہوں نے مجھے کال کی"
+          },
+          "minutesPlaceholder": "اختیاری",
+          "notesPlaceholder": "کیا بات ہوئی؟ (اختیاری)",
+          "duePreset": {
+            "1": "کل",
+            "3": "3 دن میں",
+            "7": "ایک ہفتے میں"
+          },
+          "saved": "کال درج ہو گئی۔",
+          "forbidden": "آپ کو کالیں درج کرنے کی اجازت نہیں ہے۔",
+          "unavailable": "کال درج کرنا یہاں ابھی دستیاب نہیں ہے۔",
+          "failed": "کال درج نہیں ہو سکی۔ کچھ ضائع نہیں ہوا: دوبارہ کوشش کریں۔"
+        },
+        "callNudge": {
+          "question": "{name} کے ساتھ کال کیسی رہی؟",
+          "log": "درج کریں",
+          "dismiss": "ابھی نہیں"
+        },
+        "profile": {
+          "label": "رابطے کی پروفائل"
+        },
+        "stagePicker": {
+          "menu": "مرحلہ منتخب کریں",
+          "search": "مرحلہ تلاش کریں",
+          "none": "کوئی مرحلہ نہیں ملا۔",
+          "moveTo": "{stage} میں منتقل کریں",
+          "statusIn": "{stage} میں حالت",
+          "default": "ڈیفالٹ",
+          "progress": "{total} میں سے {current}",
+          "undo": "واپس کریں",
+          "undone": "{stage} میں واپس کر دیا گیا۔",
+          "statusSet": "حالت {status} پر سیٹ کر دی گئی۔",
+          "prefix": "مرحلہ"
+        },
+        "summary": {
+          "label": "خلاصہ",
+          "tasks": "کھلے ٹاسکس",
+          "overdue": "{count} تاخیر سے",
+          "nextDue": "اگلی آخری تاریخ {when}",
+          "noDue": "کوئی آخری تاریخ نہیں",
+          "meeting": "اگلی میٹنگ",
+          "noMeeting": "کوئی منصوبہ نہیں",
+          "lastActivity": "آخری سرگرمی",
+          "noActivity": "ابھی کوئی سرگرمی نہیں",
+          "deals": "کھلی ڈیلز",
+          "wonDeals": "{count, plural, =0 {کوئی نہیں جیتی} one {1 جیتی} other {# جیتی}}"
+        },
+        "scoreChip": {
+          "title": "لیڈ اسکور {score} · {band}",
+          "aria": "لیڈ اسکور {score}، {band}۔ اسکور کی تفصیل دکھائیں۔"
+        }
+      },
+      "timeline": {
+        "title": "سرگرمی",
+        "viewAll": "تمام سرگرمی دیکھیں",
+        "filterLabel": "دکھائیں",
+        "filters": {
+          "all": "سب",
+          "messages": "پیغامات",
+          "calls": "کالیں",
+          "notes": "نوٹس",
+          "tasks": "ٹاسکس",
+          "meetings": "میٹنگز",
+          "changes": "تبدیلیاں"
+        },
+        "searchLabel": "اس رابطے کی سرگرمی میں تلاش کریں",
+        "searchPlaceholder": "سرگرمی تلاش کریں",
+        "clearSearch": "تلاش صاف کریں",
+        "searchHint": "صرف اب تک لوڈ ہوئے مواد میں تلاش ہو رہی ہے۔ مزید پیچھے دیکھنے کے لیے مزید لوڈ کریں۔",
+        "groups": {
+          "upNext": "آگے",
+          "today": "آج",
+          "yesterday": "گزشتہ کل",
+          "thisWeek": "اس ہفتے",
+          "earlier": "اس سے پہلے"
+        },
+        "loading": "سرگرمی لوڈ ہو رہی ہے...",
+        "loadMore": "مزید لوڈ کریں",
+        "noMatch": "کوئی مماثل نہیں ملا۔",
+        "emptyShort": "یہاں ابھی کچھ نہیں ہے۔",
+        "showAll": "تمام سرگرمی دکھائیں",
+        "noneYet": "ابھی کچھ نیا نہیں ہے۔ مزید پیچھے دیکھنے کے لیے مزید لوڈ کریں۔",
+        "partial": "سرگرمی کا کچھ حصہ لوڈ نہیں ہو سکا۔",
+        "retry": "دوبارہ کوشش کریں",
+        "empty": {
+          "title": "ابھی کوئی سرگرمی نہیں",
+          "message": "{name} کے ساتھ آپ جو کچھ بھی کریں گے وہ یہاں نظر آئے گا: نوٹس، کالیں، پیغامات، ٹاسکس اور میٹنگز۔",
+          "messageNoName": "اس رابطے کے ساتھ آپ جو کچھ بھی کریں گے وہ یہاں نظر آئے گا: نوٹس، کالیں، پیغامات، ٹاسکس اور میٹنگز۔",
+          "note": "نوٹ شامل کریں",
+          "call": "کال درج کریں",
+          "task": "ٹاسک شامل کریں",
+          "meeting": "میٹنگ شیڈول کریں"
+        },
+        "entry": {
+          "note": "نوٹ: {text}",
+          "edited": "ترمیم شدہ",
+          "task": {
+            "done": "ٹاسک مکمل: {title}",
+            "overdue": "مقررہ وقت گزر گیا، آخری تاریخ {when} تھی",
+            "due": "آخری تاریخ {when}",
+            "noDue": "کوئی آخری تاریخ نہیں"
+          },
+          "meeting": {
+            "upcoming": "میٹنگ: {title}",
+            "past": "ملاقات ہوئی: {title}",
+            "notHeld": "منعقد نہیں ہوئی: {title}",
+            "noShow": "حاضر نہیں ہوئے: {title}"
+          },
+          "call": {
+            "inbound": "آنے والی کال",
+            "outbound": "جانے والی کال",
+            "call": "کال",
+            "seconds": "{seconds} سیکنڈ",
+            "minutes": "{minutes} منٹ",
+            "outcome": {
+              "connected": "بات ہوئی",
+              "noAnswer": "جواب نہیں ملا",
+              "busy": "مصروف",
+              "voicemail": "وائس میل چھوڑا",
+              "wrongNumber": "غلط نمبر",
+              "declined": "مسترد",
+              "failed": "ناکام",
+              "inProgress": "جاری ہے"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "دستی طور پر درج",
+              "telephony": "فون سسٹم",
+              "mobile_app": "موبائل ایپ",
+              "web_click_to_call": "فون"
+            }
+          },
+          "message": {
+            "summary": "{channel} پر گفتگو",
+            "unread": "{count} نہ پڑھے ہوئے"
+          },
+          "email": {
+            "sent": "ای میل بھیجی گئی: {title}",
+            "received": "ای میل موصول ہوئی: {title}"
+          },
+          "change": {
+            "stage": "مرحلہ {from} سے {to} میں بدلا",
+            "field": "{field} {from} سے {to} میں بدلا",
+            "stageAndMore": "مرحلہ {from} سے {to} میں بدلا، اور مزید {count, plural, one {1 تفصیل} other {# تفصیلات}}",
+            "several": "{count, plural, one {1 تفصیل} other {# تفصیلات}} اپ ڈیٹ ہوئیں"
+          },
+          "consent": {
+            "granted": "{channel} کی رضامندی دی گئی",
+            "withdrawn": "{channel} کی رضامندی واپس لی گئی",
+            "service": "سروس پیغامات",
+            "marketing": "مارکیٹنگ پیغامات"
+          },
+          "by": "{name} کی طرف سے",
+          "system": "سسٹم"
+        }
+      }
+    }
+  }
+}

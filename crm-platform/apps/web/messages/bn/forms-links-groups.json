@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp ফর্ম",
+      "links": "WhatsApp লিংক"
+    },
+    "errors": {
+      "generic": "কিছু একটা সমস্যা হয়েছে। অনুগ্রহ করে আবার চেষ্টা করুন।",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "ফর্ম ব্যবহার করতে একটি WhatsApp Cloud API নম্বর কানেক্ট করুন।",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "কোনো কানেক্ট করা WhatsApp Cloud API নম্বরে ব্যবহারযোগ্য ক্রেডেনশিয়াল নেই।",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta এই ফর্মের ডেফিনিশন প্রত্যাখ্যান করেছে।",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "ফর্ম প্রকাশ করার আগে আপনার WhatsApp Business অ্যাকাউন্টকে Meta-র ভেরিফিকেশন পাস করতে হবে।",
+      "WFL_FORM_PUBLISH_FAILED": "Meta এই ফর্মটি প্রকাশ করতে পারেনি।",
+      "WFL_LINK_NOT_LIVE": "এই লিংকটি পজ করা আছে বা মেয়াদ শেষ হয়ে গেছে।",
+      "ROW_VERSION_CONFLICT": "এটি অন্য কোথাও পরিবর্তন করা হয়েছে। রিলোড করে আবার চেষ্টা করুন।",
+      "VALIDATION_FAILED": "হাইলাইট করা ফিল্ডগুলো যাচাই করে আবার চেষ্টা করুন।",
+      "PLAN_FEATURE_LOCKED": "এই ফিচার ব্যবহার করতে আপনার প্ল্যান আপগ্রেড করুন।"
+    },
+    "forms": {
+      "heading": "WhatsApp ফর্ম",
+      "intro": "এমন ফর্ম তৈরি করুন যা গ্রাহকরা সরাসরি WhatsApp-এর মধ্যে পূরণ করবেন, তারপর একটি ফ্লো থেকে পাঠান এবং উত্তরগুলো এখানে দেখুন।",
+      "loading": "ফর্ম লোড হচ্ছে…",
+      "retry": "আবার চেষ্টা করুন",
+      "create": {
+        "cta": "নতুন ফর্ম",
+        "creating": "তৈরি করা হচ্ছে…",
+        "defaultTitle": "শিরোনামহীন ফর্ম",
+        "defaultField": "পূর্ণ নাম"
+      },
+      "stats": {
+        "all": "সব ফর্ম",
+        "published": "প্রকাশিত",
+        "draft": "ড্রাফট",
+        "submissions": "জমা"
+      },
+      "empty": {
+        "title": "এখনো কোনো ফর্ম নেই",
+        "description": "একটি ফর্ম তৈরি করুন, তারপর ফ্লোর একটি WhatsApp ফর্ম স্টেপ থেকে এটি পাঠান।"
+      },
+      "table": {
+        "form": "ফর্ম",
+        "type": "ধরন",
+        "fields": "ফিল্ড",
+        "submissions": "জমা"
+      },
+      "status": {
+        "draft": "ড্রাফট",
+        "published": "প্রকাশিত",
+        "paused": "পজ করা"
+      },
+      "audience": {
+        "lead_capture": "লিড সংগ্রহ",
+        "survey": "জরিপ",
+        "appointment_booking": "অ্যাপয়েন্টমেন্ট বুকিং",
+        "customer_support": "কাস্টমার সাপোর্ট",
+        "sign_up": "সাইন আপ",
+        "other": "অন্যান্য"
+      },
+      "row": {
+        "edit": "এডিট করুন",
+        "duplicate": "ডুপ্লিকেট করুন",
+        "delete": "ডিলিট করুন"
+      },
+      "confirm": {
+        "deleteTitle": "এই ফর্মটি ডিলিট করবেন?",
+        "deleteMessage": "এটিকে রেফারেন্স করা সক্রিয় ফ্লো নোডগুলো কাজ করা বন্ধ করে দেবে।",
+        "deleteConfirm": "ডিলিট করুন",
+        "cancel": "বাতিল করুন"
+      },
+      "notice": {
+        "saved": "সেভ হয়েছে।",
+        "published": "WhatsApp-এ প্রকাশিত হয়েছে।"
+      },
+      "builder": {
+        "back": "ফর্মে ফিরে যান",
+        "untitled": "শিরোনামহীন ফর্ম",
+        "saving": "সেভ করা হচ্ছে…",
+        "saveDraft": "ড্রাফট সেভ করুন",
+        "savePublish": "সেভ করুন ও প্রকাশ করুন",
+        "publishing": "প্রকাশ করা হচ্ছে…",
+        "basics": "ফর্মের মৌলিক তথ্য",
+        "title": "শিরোনাম",
+        "audienceType": "ধরন",
+        "purpose": "উদ্দেশ্য",
+        "sendButtonLabel": "সেন্ড বাটনের লেবেল",
+        "thankYouNote": "ধন্যবাদ বার্তা",
+        "screens": "স্ক্রিন",
+        "addScreen": "স্ক্রিন যুক্ত করুন",
+        "removeScreen": "স্ক্রিন সরান",
+        "screenN": "স্ক্রিন {n}",
+        "defaultField": "পূর্ণ নাম",
+        "newFieldLabel": "নতুন ফিল্ড",
+        "fieldKind": "ফিল্ডের ধরন",
+        "fieldLabel": "লেবেল",
+        "required": "আবশ্যক",
+        "removeField": "সরান",
+        "options": "অপশন (কমা দিয়ে আলাদা করা)",
+        "optionsPlaceholder": "অপশন ১, অপশন ২, অপশন ৩",
+        "mapsTo": "ম্যাপ হয়",
+        "mapsToHint": "ফর্ম জমা দেওয়া হলে এই উত্তরটি যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করুন।",
+        "mapsToNone": "যোগাযোগ বৈশিষ্ট্যে সংরক্ষণ করবেন না",
+        "mapsToSystemGroup": "যোগাযোগ ফিল্ড",
+        "mapsToCustomGroup": "কাস্টম বৈশিষ্ট্য",
+        "mapsToSystem": {
+          "name": "পুরো নাম",
+          "first_name": "প্রথম নাম",
+          "last_name": "শেষ নাম",
+          "email": "ইমেইল",
+          "title": "পদবী",
+          "language": "ভাষা",
+          "address": "ঈকলাস"
+        },
+        "mapsToPrivacyGroup": "গোপনীয়তা ও সম্মতি",
+        "mapsToPrivacy": {
+          "age": "বয়स (নাবালক যাচাই)",
+          "date_of_birth": "জন্মতারিখ (নাবালক যাচাই)",
+          "consent_marketing": "মার্কেটিং সম্মতি (ক্যাটসঅ্যাপ)",
+          "consent_service": "পরিষেবা চুক্তি (মার্কেটিং নয়)"
+        }
+      },
+      "fieldKind": {
+        "heading": "শিরোনাম",
+        "short_text": "সংক্ষিপ্ত টেক্সট",
+        "paragraph": "প্যারাগ্রাফ",
+        "email": "ইমেইল",
+        "phone_number": "ফোন নম্বর",
+        "number": "নম্বর",
+        "date": "তারিখ",
+        "dropdown": "ড্রপডাউন",
+        "radio_buttons": "রেডিও বাটন",
+        "checkbox": "চেকবক্স"
+      },
+      "submissions": {
+        "heading": "জমা",
+        "metaFlowId": "Meta Flow আইডি: {id}",
+        "export": "CSV এক্সপোর্ট করুন",
+        "empty": {
+          "title": "এখনো কোনো জমা নেই",
+          "description": "এই ফর্মটি কোনো ফ্লো থেকে পাঠানো হলে এবং কেউ এটি পূরণ করলে, জমাগুলো এখানে দেখা যাবে।"
+        },
+        "table": {
+          "submitted": "জমা দেওয়া হয়েছে",
+          "contact": "যোগাযোগ",
+          "phone": "ফোন"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp লিংক",
+      "intro": "এমন একটি ট্র্যাক করা যায় এমন লিংক তৈরি করুন যা আগে থেকে লেখা একটি বার্তা সহ WhatsApp খোলে — বিজ্ঞাপন, বায়ো এবং QR কোডের জন্য উপযুক্ত।",
+      "loading": "লিংক লোড হচ্ছে…",
+      "retry": "আবার চেষ্টা করুন",
+      "searchPlaceholder": "নাম বা লিংক দিয়ে খুঁজুন",
+      "create": {
+        "cta": "নতুন লিংক"
+      },
+      "stats": {
+        "all": "সব লিংক",
+        "live": "লাইভ",
+        "totalClicks": "মোট ক্লিক",
+        "avgClicks": "গড় ক্লিক / লিংক"
+      },
+      "tabs": {
+        "all": "সব",
+        "live": "লাইভ",
+        "paused": "পজ করা"
+      },
+      "status": {
+        "live": "লাইভ",
+        "paused": "পজ করা"
+      },
+      "empty": {
+        "title": "এখনো কোনো লিংক নেই",
+        "description": "বিজ্ঞাপন, বায়ো বা QR কোডে শেয়ার করার জন্য একটি লিংক তৈরি করুন।"
+      },
+      "table": {
+        "link": "লিংক",
+        "destination": "গন্তব্য",
+        "clicks": "ক্লিক",
+        "lastClicked": "শেষ ক্লিক"
+      },
+      "row": {
+        "open": "খুলুন",
+        "copy": "কপি করুন",
+        "copied": "কপি হয়েছে!",
+        "edit": "এডিট করুন",
+        "duplicate": "ডুপ্লিকেট করুন",
+        "delete": "ডিলিট করুন"
+      },
+      "confirm": {
+        "deleteTitle": "এই লিংকটি ডিলিট করবেন?",
+        "deleteMessage": "শর্ট লিংকটি এখনই কাজ করা বন্ধ করে দেবে।",
+        "deleteConfirm": "ডিলিট করুন",
+        "cancel": "বাতিল করুন"
+      },
+      "notice": {
+        "saved": "সেভ হয়েছে।",
+        "copyFailed": "লিংকটি কপি করা যায়নি।"
+      },
+      "builder": {
+        "back": "লিংকে ফিরে যান",
+        "newHeading": "নতুন লিংক",
+        "step": {
+          "destination": "গন্তব্য",
+          "message": "শুরুর বার্তা",
+          "tracking": "ট্র্যাকিং"
+        },
+        "name": "নাম",
+        "status": "স্ট্যাটাস",
+        "countryCode": "কান্ট্রি কোড",
+        "phoneNumber": "ফোন নম্বর",
+        "welcomeMessage": "শুরুর বার্তা",
+        "welcomeMessageHint": "কেউ লিংকে ট্যাপ করলে এটি চ্যাটে আগে থেকেই লেখা থাকবে।",
+        "slug": "শর্ট লিংক",
+        "slugHint": "শুধু অক্ষর, সংখ্যা এবং হাইফেন। স্বয়ংক্রিয়ভাবে তৈরি করতে খালি রাখুন।",
+        "slugPlaceholder": "summer-sale",
+        "expiresAt": "মেয়াদ শেষ হবে",
+        "utmSource": "UTM সোর্স",
+        "utmMedium": "UTM মিডিয়াম",
+        "utmCampaign": "UTM ক্যাম্পেইন",
+        "previous": "পূর্ববর্তী",
+        "next": "পরবর্তী",
+        "mint": "লিংক তৈরি করুন",
+        "save": "সেভ করুন",
+        "saving": "সেভ করা হচ্ছে…",
+        "fixErrors": "গন্তব্য এবং শর্ট লিংক ফিল্ডগুলো যাচাই করুন।",
+        "mintedHeading": "আপনার লিংক",
+        "shortUrl": "শর্ট লিংক",
+        "waUrl": "WhatsApp লিংক",
+        "qrAlt": "এই লিংকের QR কোড"
+      },
+      "public": {
+        "missingTitle": "লিংক খুঁজে পাওয়া যায়নি",
+        "missingBody": "এই লিংকটি বিদ্যমান নেই, বা মুছে ফেলা হয়েছে।",
+        "goneTitle": "লিংকটি আর সক্রিয় নেই",
+        "goneBody": "এই লিংকটি বিরতি আছে বা মেয়াদ উত্তীর্ণ হয়েছে।",
+        "errorTitle": "কিছু একটা ভুল হয়েছে",
+        "errorBody": "আমরা এই লিংকটি খুলতে পারিনি। অনুগ্রহ করে আবার চেষ্টা করুন।"
+      }
+    }
+  }
+}

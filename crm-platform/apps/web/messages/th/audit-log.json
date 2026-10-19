@@ -92,7 +92,8 @@
       "api_keys": "API key",
       "audit-log": "บันทึกการตรวจสอบ",
       "audit-log-exports": "การส่งออกบันทึกการตรวจสอบ",
-      "contact_consent_exports": "การส่งออกหลักฐานความยินยอม"
+      "contact_consent_exports": "การส่งออกหลักฐานความยินยอม",
+      "revenue-report-exports": "ไฟล์รายงานรายได้"
     },
     "table": {
       "caption": "รายการตรวจสอบ เรียงจากใหม่สุด เวลาแสดงตามเขตเวลาของคุณ ({zone})",

@@ -17,7 +17,8 @@
       "unexpected": "出了点问题。请重试。",
       "exportInProgress": "已有证明文件正在准备中。请等待完成后再试。",
       "exportNotReady": "该文件尚未就绪或已过期。请重新准备。",
-      "noticeTargetMissing": "该小组件、预约页面或店铺已不存在。"
+      "noticeTargetMissing": "该小组件、预约页面或店铺已不存在。",
+      "notMinor": "只能为已标记为未成年人的联系人记录监护人同意。"
     },
     "settings": {
       "title": "同意与 STOP 回复",
@@ -112,7 +113,10 @@
         "instagram": "Instagram",
         "webchat": "网页聊天",
         "voice": "语音通话",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "已订阅",
@@ -139,7 +143,11 @@
         "widget": "网站聊天",
         "booking": "预约页面",
         "commerce": "店铺结账",
-        "lead": "线索收集"
+        "lead": "线索收集",
+        "wa_form": "WhatsApp 表单",
+        "gpc": "全球隐私控制",
+        "dob": "出生日期或年龄",
+        "declaration": "年龄未确认"
       },
       "by": "由 {name}",
       "evidence": {
@@ -162,7 +170,8 @@
         "storeFlag": "店铺设置",
         "leadSourceId": "线索来源",
         "leadFormId": "线索表单",
-        "adId": "广告"
+        "adId": "广告",
+        "guardianConsentRef": "监护人同意引用编号"
       },
       "dialog": {
         "titleGranted": "标记为已订阅",
@@ -178,6 +187,52 @@
         "close": "关闭",
         "savedGranted": "已标记为已订阅。",
         "savedWithdrawn": "已标记为已退订。"
+      },
+      "privacy": {
+        "title": "隐私标记",
+        "saved": "已保存。",
+        "minorLabel": "未成年人",
+        "minorOn": "自 {date} 起标记为未成年人。",
+        "minorOff": "未标记为未成年人。",
+        "rule": {
+          "off": "你的工作区尚未在合规中心回答有关儿童的问题，因此不会拦截对该联系人的营销。",
+          "guardian": "在记录父母或监护人的同意之前，对该联系人的营销会被拦截。",
+          "block": "由于你的工作区声明不处理未成年人的数据，对该联系人的营销会被拦截。"
+        },
+        "guardianBadge": "已记录监护人同意",
+        "guardianLabel": "父母或监护人同意",
+        "guardianOn": "自 {date} 起已记录。这只是证据，不会订阅该联系人。",
+        "guardianOff": "未记录。",
+        "recordGuardian": "记录监护人同意",
+        "clearGuardian": "移除",
+        "dnsLabel": "不出售或共享",
+        "dnsOn": "自 {date} 起已选择退出（{source}）。",
+        "dnsOff": "未选择退出。",
+        "history": "隐私历史",
+        "event": {
+          "minor": {
+            "on": "已标记为未成年人",
+            "off": "已移除未成年人标记"
+          },
+          "guardian_consent": {
+            "on": "已记录监护人同意",
+            "off": "已移除监护人同意"
+          },
+          "sale_share_opt_out": {
+            "on": "已选择退出出售和共享",
+            "off": "已移除退出选择"
+          }
+        },
+        "dialog": {
+          "title": "记录监护人同意",
+          "intro": "记录父母或监护人已同意。这只是证据：不会让该联系人订阅营销。",
+          "note": "他们是如何同意的？（必填）",
+          "noteHint": "例如：在柜台签署了纸质表格。请勿填写监护人的姓名或联系方式。",
+          "ref": "引用编号（可选）",
+          "refHint": "以后可以查到的表格编号或文档 ID。"
+        },
+        "minorFrom": "根据所填的出生日期或年龄设置。除非有人保留该标记,否则将于 {date} 自动解除。",
+        "minorFromDeclaration": "因表单中的年龄未确认而设置。在有人清除之前一直保留。"
       }
     },
     "composer": {
@@ -299,19 +354,25 @@
         "consent_evidence_recorded": "允许：提示已送达且对方同意。",
         "purpose_not_enabled": "不允许：工作区未开启此功能。",
         "consent_declined": "不允许：对方拒绝。",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "不允许：该联系人已标记为未成年人，且你的工作区拦截营销。",
+        "sale_share_opted_out": "不允许：该联系人已选择退出其数据的出售或共享。",
+        "on_dnc_list": "在您的“禁止来电”名单中:不向此号码拨打营销电话或发送营销短信",
+        "legal_hold": "不允许：此联系人的数据处理已受限。"
       }
     },
     "notice": {
       "title": {
         "widget": "聊天表单中的同意行",
         "booking": "预约页面中的同意行",
-        "commerce": "店铺营销复选框的含义"
+        "commerce": "店铺营销复选框的含义",
+        "workspace": "默认同意告知声明"
       },
       "intro": {
         "widget": "显示为访客信息下方的复选框。只有勾选的访客才会被记录为同意，且仅限其提供了电话号码或电子邮件时。",
         "booking": "显示为预约表单上的复选框。只有勾选的人才会被记录为同意；预约从不需要它。",
-        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。"
+        "commerce": "在您的店铺中接受营销的顾客会被记录为同意。请写明该复选框向他们说明了什么，以便证明中注明。",
+        "workspace": "当表单、小组件或预约页面没有自己的文字时,您的工作区在同意框旁显示的文字。每次修改都会生成新的编号版本。"
       },
       "enabled": "开启同意行",
       "text": "此人同意的措辞",
@@ -324,7 +385,21 @@
       "version": "当前版本：{version}",
       "noVersion": "尚未保存。",
       "saveFirst": "请先保存此项，然后即可设置其同意行。",
-      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）"
+      "whatsappToo": "同时计为 WhatsApp 同意（仅当措辞这样说明时）",
+      "termsUrl": "条款链接(可选)",
+      "termsUrlHint": "必须以 https:// 开头",
+      "useWorkspacePrivacy": "使用我的工作区隐私链接",
+      "useWorkspaceTerms": "使用我的工作区条款链接",
+      "useWorkspaceText": "使用我的工作区默认文字",
+      "statement": "我同意通过 {channels} 接收更新和优惠信息。我可以随时回复 STOP 取消订阅。",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "短信",
+        "email": "电子邮件"
+      },
+      "channelsLabel": "此同意涵盖的渠道",
+      "channelsHint": "对方仅会订阅此处勾选的渠道,同意文案也会列出这些渠道。仅当对方提供了对应的手机号码或邮箱时才会使用该渠道。",
+      "channelsUse": "用这些渠道更新文案"
     }
   }
 }

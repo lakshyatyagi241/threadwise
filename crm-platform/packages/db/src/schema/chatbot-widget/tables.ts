@@ -34,6 +34,8 @@ export const chatbotWidgets = pgTable(
     name: text('name').notNull(),
     slug: text('slug').notNull(),
     embedToken: text('embed_token').notNull(),
+    /** The bot id a migrated customer's old embed still carries (see wgt_legacy_lookup). */
+    legacyEmbedId: text('legacy_embed_id'),
     mode: text('mode').notNull().default('ai'),
     targetWhatsappCc: text('target_whatsapp_cc'),
     targetWhatsappNumber: text('target_whatsapp_number'),
@@ -61,6 +63,10 @@ export const chatbotWidgets = pgTable(
     allowedDomains: jsonb('allowed_domains'),
     // migrations/20261010100300_wgt_launcher_config.sql: the WhatsApp widget's look and placement, one object (TW-WGT-028).
     launcher: jsonb('launcher')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
+    // migrations/20261223090000_widget_age_gate.sql: the optional age question of the intake form (BL-218). `{}` = off.
+    ageGate: jsonb('age_gate')
       .notNull()
       .default(sql`'{}'::jsonb`),
     // migrations/20261114090000_wgt_flow_bots.sql: the flow bot this widget belongs to, and when its owner first saved Customize.
@@ -107,6 +113,10 @@ export const chatbotWidgets = pgTable(
     check('chk_chatbot_widgets_body_bg_kind', sql`${t.bodyBgKind} IN ('color', 'image')`),
     check('chk_chatbot_widgets_status', sql`${t.status} IN ('active', 'paused')`),
     check('chk_chatbot_widgets_launcher_object', sql`jsonb_typeof(${t.launcher}) = 'object'`),
+    check(
+      'chk_chatbot_widgets_age_gate_object',
+      sql`jsonb_typeof(${t.ageGate}) = 'object' AND pg_column_size(${t.ageGate}) <= 512`,
+    ),
   ],
 );
 
@@ -171,6 +181,8 @@ export const chatbotWidgetVisitors = pgTable(
     ip: text('ip'),
     firstSeenAt: timestamp('first_seen_at', { withTimezone: true }),
     lastSeenAt: timestamp('last_seen_at', { withTimezone: true }),
+    // migrations/20261223090000_widget_age_gate.sql: when this visitor's answer passed the widget's age gate (BL-218).
+    ageCheckedAt: timestamp('age_checked_at', { withTimezone: true }),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -190,7 +202,6 @@ export const chatbotWidgetVisitors = pgTable(
       foreignColumns: [chatbotWidgets.orgId, chatbotWidgets.id],
     }).onDelete('cascade'),
     index('idx_chatbot_widget_visitors_conversation_id').on(t.orgId, t.conversationId),
-    index('idx_chatbot_widget_visitors_widget_id').on(t.orgId, t.widgetId),
     // migrations/20261010100100_wgt_public_lookup.sql
     index('idx_chatbot_widget_visitors_uuid_widget').on(t.orgId, t.widgetId, t.visitorUuid),
   ],

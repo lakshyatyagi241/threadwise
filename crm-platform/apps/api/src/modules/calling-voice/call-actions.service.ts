@@ -13,6 +13,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { CALLING_GRAPH, type CallingGraph } from '../../infra/providers/calling-voice';
 import { WabaApiError } from '../../infra/providers/whatsapp-cloud-api-waba/waba-errors';
+import { SendWindowService } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { WabaConnectService } from '../whatsapp-cloud-api-waba';
@@ -47,6 +48,7 @@ export class CallActionsService {
     private readonly plans: PlanEntitlementService,
     @Inject(CALLING_GRAPH) private readonly graph: CallingGraph,
     private readonly consentGate: ConsentGate,
+    private readonly sendWindow: SendWindowService,
   ) {}
 
   // --- dial ------------------------------------------------------------------------------------------------------------------
@@ -88,6 +90,7 @@ export class CallActionsService {
         throw unprocessable('CONSENT_OPTED_OUT', 'This contact has asked not to be called.');
       }
     }
+    await this.assertCallingWindow(orgId, ctx.contactId, ctx.conversationId, to);
     if (!(await this.permissions.mayCall(orgId, ctx.number.id, to))) {
       const alreadyPermitted = await this.permissions.send(orgId, ctx.number, ctx.conn, to);
       if (!alreadyPermitted) throw this.permissionRequested();
@@ -122,22 +125,54 @@ export class CallActionsService {
       return { callId: call.uuid, metaCallId, correlation };
     } catch (err) {
       const message = err instanceof WabaApiError ? (err.userMessage ?? err.message) : String(err);
+      // Meta's code 138006 says it outright; older answers only say "permission" in a sentence.
+      const noPermission =
+        isPermissionRefusal(message) || (err instanceof WabaApiError && err.code === 138006);
       await this.db.tx(async (tx) => {
         await this.repo.patchCall(tx, orgId, call.id, {
           status: 'failed',
           endedAt: new Date(),
-          endReason: isPermissionRefusal(message) ? NO_PERMISSION : 'META_REFUSED',
+          endReason: noPermission ? NO_PERMISSION : 'META_REFUSED',
           errorPayload: err instanceof WabaApiError ? err.body : { message },
         });
         await this.repo.logEvent(tx, orgId, call.id, 'dial_failed', { message });
       });
-      if (isPermissionRefusal(message)) {
+      if (noPermission) {
         // Meta says there is no approved permission (our ledger was stale): ask for it, as if we had known.
         await this.permissions.send(orgId, ctx.number, ctx.conn, to).catch(() => undefined);
         throw this.permissionRequested();
       }
       throw refused(err, 'Meta refused the call');
     }
+  }
+
+  /**
+   * The calling window (BL-177): a business-initiated call outside the hours the workspace set is refused, because a live call cannot wait
+   * for the window to open (a message would be held; a call has no queue). The refusal names the instant the window opens. A call back to
+   * someone who reached us in the last 24 hours (a message or a call) is service and is never held. Runs before anything is asked of Meta,
+   * so no permission request goes out and no call row is written.
+   */
+  private async assertCallingWindow(
+    orgId: number,
+    contactId: number | null,
+    conversationId: number | null,
+    to: string,
+  ): Promise<void> {
+    const decision = await this.sendWindow.check(orgId, 'call', { contactId, phone: to });
+    if (decision.decision !== 'hold') return;
+    const answered = await this.db.tx((tx) =>
+      this.repo.contactedUsRecently(tx, orgId, { conversationId, phone: to, hours: 24 }),
+    );
+    if (answered) return;
+    throw unprocessable(
+      'CALL_OUTSIDE_WINDOW',
+      `Calls to this contact are allowed from ${decision.until}. It is outside the workspace's calling hours.`,
+      [
+        { path: 'opensAt', message: decision.until },
+        ...(decision.zone ? [{ path: 'zone', message: decision.zone }] : []),
+        { path: 'zoneSource', message: decision.zoneSource },
+      ],
+    );
   }
 
   private permissionRequested(): AppError {

@@ -13,10 +13,12 @@ import {
   type LscRunTrigger,
   type LscScoreResult,
   type LscSettings,
+  type LscStatus,
   type UpdateLscSettingsInput,
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { legalHoldRestricted } from '../../common/errors/legal-hold.error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   LEAD_SCORING_AI_PORT,
@@ -26,6 +28,7 @@ import {
 import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { AiChargeService } from '../wallet-message-billing';
 import { LeadChatDigestRepository } from './lead-chat-digest.repository';
 import { isChatDigestPilot } from './lead-chat-digest.rules';
@@ -33,6 +36,7 @@ import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
 import {
   AI_PROVIDER,
+  LEAD_SCORING_FEATURE,
   MAX_COMPLETION_TOKENS,
   parseScore,
   resolveCost,
@@ -90,6 +94,7 @@ export class LeadScoringService {
     private readonly meter: AiTokenMeter,
     private readonly audit: AuditService,
     private readonly wallet: AiChargeService,
+    private readonly plans: PlanEntitlementService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadScoreJob>,
   ) {}
@@ -105,7 +110,7 @@ export class LeadScoringService {
       jobId: `lsc-${job.orgId}-${job.contactId}`,
       delay: delayMs,
       attempts: 3,
-      backoff: { type: 'exponential', delay: 15_000 },
+      backoff: { type: 'exponential', delay: 15_000, jitter: 0.5 },
       removeOnComplete: true,
       removeOnFail: { count: 1_000, age: 24 * 3600 },
     });
@@ -123,6 +128,8 @@ export class LeadScoringService {
       this.repo.getSettings(tx, orgId),
     );
     if (!row?.enabled || !row.autoScore) return;
+    // The plan side comes after the cheap checks above: only a workspace that switched scoring on pays for the entitlement read.
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) return;
     await this.enqueue({ orgId, contactId, trigger }, AUTO_DELAY_MS);
   }
 
@@ -159,11 +166,25 @@ export class LeadScoringService {
       }
       return { status: 'skipped', reason: 'not_enabled' };
     }
+    // The workspace opted in, but the AI lead scoring app is not part of it (never bought, uninstalled, paused or killed): nothing is sent.
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) {
+      if (manual) await this.plans.assertFeature(orgId, LEAD_SCORING_FEATURE);
+      return { status: 'skipped', reason: 'feature_off' };
+    }
 
     const contact = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.contactForScoring(tx, orgId, contactId),
     );
     if (!contact) return { status: 'skipped', reason: 'contact_gone' };
+    // A person under a legal hold (BL-295) is restricted from AI processing: nothing is sent.
+    if (
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.isRestricted(tx, orgId, contactId),
+      )
+    ) {
+      if (manual) throw legalHoldRestricted();
+      return { status: 'skipped', reason: 'restricted' };
+    }
     const base: Omit<RunWrite, 'status' | 'billedAgainst'> = {
       contactId,
       contactName: contact.name,
@@ -431,6 +452,13 @@ export class LeadScoringService {
       rowVersion: row?.rowVersion ?? null,
       updatedAt: row ? row.updatedAt.toISOString() : null,
     };
+  }
+
+  /** The workspace switch alone (no cost, model or counts), readable by anyone who reads contacts. */
+  async getStatus(): Promise<LscStatus> {
+    const orgId = RequestContextStore.orgId();
+    const row = await this.db.tx((tx) => this.repo.getSettings(tx, orgId));
+    return { enabled: row?.enabled ?? false };
   }
 
   async updateSettings(input: UpdateLscSettingsInput): Promise<LscSettings> {

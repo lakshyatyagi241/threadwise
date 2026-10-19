@@ -5,12 +5,13 @@ import { cn } from '@crm/ui';
 import { editorType, problems, type BuilderForm, type Problem } from '../../lib/builder-model';
 import type { RecipientTotals, WizardStep } from '../../lib/wizard-model';
 import { stepOf } from '../../lib/wizard-model';
+import { isEmailEngine } from '../../lib/engine-gate';
 import { StepCard } from './parts';
 
 const CHECKS: Array<{ key: string; fails: Problem[] }> = [
   { key: 'name', fails: ['name'] },
   { key: 'sender', fails: ['sender'] },
-  { key: 'content', fails: ['message', 'template', 'flow', 'media'] },
+  { key: 'content', fails: ['message', 'template', 'flow', 'media', 'subject'] },
   { key: 'audience', fails: ['audience'] },
   { key: 'schedule', fails: ['date', 'time', 'window', 'throttle', 'expiry'] },
 ];
@@ -25,22 +26,37 @@ export function StepReview({
   scheduleLabel,
   totals,
   onGo,
+  skipped = null,
+  engine = '',
 }: {
   form: BuilderForm;
   senderLabel: string;
   scheduleLabel: string;
   totals: RecipientTotals;
   onGo: (s: WizardStep) => void;
+  /** Email only: the recipients already known to be skipped (no email address). */
+  skipped?: { contacts: number; numbers: number; total: number } | null;
+  /** The picked sender's engine. */
+  engine?: string;
 }) {
   const t = useTranslations('campaigns.builder.review');
   const bad = problems(form);
   const kind = editorType(form.type);
-  const rows: Array<[string, string]> = [
-    [t('device'), senderLabel],
-    [t('type'), t(`types.${kind === 'text' ? 'custom' : kind}`)],
-    [t('recipients'), String(totals.total)],
-    [t('schedule'), scheduleLabel],
-  ];
+  const email = isEmailEngine(engine);
+  // A mail is always a typed message, so its card shows the sender address and the subject instead of the type.
+  const rows: Array<[string, string]> = email
+    ? [
+        [t('from'), senderLabel],
+        [t('subject'), form.customHeader.trim() !== '' ? form.customHeader : t('subjectFallback')],
+        [t('recipients'), String(totals.total)],
+        [t('schedule'), scheduleLabel],
+      ]
+    : [
+        [t('device'), senderLabel],
+        [t('type'), t(`types.${kind === 'text' ? 'custom' : kind}`)],
+        [t('recipients'), String(totals.total)],
+        [t('schedule'), scheduleLabel],
+      ];
   return (
     <StepCard index="05" title={t('title')} tag={t('tag')}>
       <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
@@ -103,12 +119,26 @@ export function StepReview({
               <dt>{t('numbers')}</dt>
               <dd className="font-semibold">{totals.numbers}</dd>
             </div>
+            {form.previousSends.sends.length > 0 && (
+              <div className="flex justify-between" data-testid="review-previous">
+                <dt>{t('previousSends')}</dt>
+                <dd className="font-semibold">{totals.previous}</dd>
+              </div>
+            )}
             <div className="flex justify-between border-t border-border pt-1.5">
               <dt>{t('total')}</dt>
               <dd className="font-semibold">{totals.total}</dd>
             </div>
+            {email && skipped && (
+              <div className="flex justify-between text-warning" data-testid="email-skipped">
+                <dt>{t('skippedNoEmail')}</dt>
+                <dd className="font-semibold">{skipped.total}</dd>
+              </div>
+            )}
           </dl>
-          <p className="mt-2 text-[11px] text-muted-foreground">{t('estimate')}</p>
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            {email ? t('estimateEmail') : t('estimate')}
+          </p>
         </div>
       </div>
     </StepCard>

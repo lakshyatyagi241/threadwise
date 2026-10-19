@@ -254,7 +254,34 @@
         "off": "Kapalı",
         "none": "Yok"
       },
-      "colorSwatch": "{label} (renk örneği)"
+      "colorSwatch": "{label} (renk örneği)",
+      "age": {
+        "enable": "Sohbet başlamadan önce yaş sor",
+        "enableHint": "Varsayılan olarak kapalıdır. Yalnızca çalışma alanınızın kuralları gerektiriyorsa veya ziyaretçileriniz reşit olmayan kişiler olabilirse kullanın. Sohbet hangi yanıtın geçtiğini asla söylemez.",
+        "mode": "Nasıl sorulsun",
+        "modes": {
+          "declaration": "Bir kutu: “En az N yaşında olduğumu onaylıyorum”",
+          "age": "Yaşını sor",
+          "dob": "Doğum tarihini sor"
+        },
+        "modeHints": {
+          "declaration": "Yaşla ilgili hiçbir şey saklanmaz. En az veri.",
+          "age": "Bir tam sayı. Kontrol için kullanılır; yalnızca sonuç saklanır.",
+          "dob": "Kişide doğum tarihi olarak kaydedilir. Yalnızca tarihe ihtiyacınız varsa kullanın."
+        },
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız Uyumluluk merkezindeki çalışma alanı yaşı kullanılır (hiçbiri ayarlı değilse 18). 1 ile 21 arasında olmalıdır.",
+        "whenUnder": "Ziyaretçi bu yaşın altındaysa",
+        "actions": {
+          "block": "Sohbeti başlatma",
+          "flag": "Sohbeti başlat ve kişiyi reşit olmayan olarak işaretle"
+        },
+        "actionHints": {
+          "block": "Ziyaretçi hakkında hiçbir şey saklanmaz ve tarafsız bir mesaj görür. Kutuyla ziyaretçinin yalnızca kutuyu işaretlemesi yeterlidir.",
+          "flag": "Sohbet devam eder ve ziyaretçi bir telefon numarası veya e-posta verdiğinde kişi reşit olmayan olarak işaretlenir."
+        },
+        "contactNote": "Yaş, ziyaretçi bir telefon numarası veya e-posta adresi verdikten sonra kişiye kaydedilir."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp widget'ı",
@@ -298,7 +325,8 @@
           "url": "Veya kendi görsel adresinizi kullanın",
           "urlHint": "Kare bir görselin adresini yapıştırın (https://...). Dosya yükleme henüz kullanılamıyor.",
           "botName": "Bot adı",
-          "botNameHint": "Sohbet penceresinin başlığında gösterilir. Botunuzun adını kullanmak için boş bırakın."
+          "botNameHint": "Sohbet penceresinin başlığında gösterilir. Botunuzun adını kullanmak için boş bırakın.",
+          "urlHintUpload": "Kare bir görselin adresini (https://...) yapıştırın veya aşağıdan dosya yükleyin."
         },
         "3": {
           "title": "Karşılama mesajınızı ayarlayın",
@@ -558,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Web sitesi ekle",
             "remove": "Web sitesini kaldır"
+          },
+          "feedback": {
+            "label": "Ziyaretçilerin yanıtları puanlamasına izin ver",
+            "hint": "Her bot yanıtının altında beğen ve beğenme düğmeleri.",
+            "message": "Puanlamadan sonra gösterilen mesaj",
+            "keptWhenOff": "Geri bildirim kapalı. Bu mesaj saklanır ve yeniden açarsanız tekrar görünür."
+          },
+          "languages": {
+            "primary": "Ana dil",
+            "follow": "Ziyaretçinin tarayıcısını izle",
+            "primaryHint": "Sohbet penceresinin kendi metinlerinin dili.",
+            "additional": "Diğer diller",
+            "additionalHint": "Tarayıcısı bunlardan birini kullanan ziyaretçi pencereyi o dilde görür. Diğer herkes ana dili görür."
           }
         },
         "rail": {
@@ -672,7 +713,9 @@
         "statusLive": "Yayında",
         "statusDraft": "Yayınlanmadı",
         "codeLabel": "HTML",
-        "localNote": "Bu kod bu bilgisayardaki bir adresi (localhost) gösterir, bu yüzden yalnızca burada açılan sayfalarda çalışır. Canlı bir web sitesinde yayınladığınız adresi kullanın."
+        "localNote": "Bu kod bu bilgisayardaki bir adresi (localhost) gösterir, bu yüzden yalnızca burada açılan sayfalarda çalışır. Canlı bir web sitesinde yayınladığınız adresi kullanın.",
+        "statusNoNumber": "Yayında, numara yok",
+        "noNumber": "Bu bot yayında ancak henüz bir WhatsApp numarası yok; bu yüzden düğme, QR kodu ve doğrudan bağlantı gizli kalıyor. Oluştur sekmesindeki Tetikleyici'den bir numara seçin."
       },
       "whatsapp": {
         "loading": "Düğme yükleniyor…",
@@ -681,7 +724,8 @@
         "saved": "WhatsApp düğmesi kaydedildi",
         "saveFailed": "Düğme kaydedilemedi. Tekrar deneyin.",
         "fromBot": "Düğme, bu botun çalıştığı numara olan {number} üzerinden WhatsApp'ı açar. Numarayı Oluştur sekmesindeki Tetikleyici'den değiştirin.",
-        "noNumber": "Bu botun henüz bir WhatsApp numarası yok. Oluştur sekmesindeki tetikleyiciden bir numara seçin, sonra düğmeyi kaydetmek için geri dönün."
+        "noNumber": "Bu botun henüz bir WhatsApp numarası yok. Oluştur sekmesindeki tetikleyiciden bir numara seçin, sonra düğmeyi kaydetmek için geri dönün.",
+        "keywordMissing": "Yukarıdaki mesaj botunuzun başlangıç sözcüğü \"{keyword}\" sözcüğünü içermiyor. Bot yalnızca bu sözcükle başlıyorsa düğmeye dokunan ziyaretçiler ona ulaşamaz."
       }
     },
     "webBots": {

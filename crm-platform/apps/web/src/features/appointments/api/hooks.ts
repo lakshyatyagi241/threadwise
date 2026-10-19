@@ -9,6 +9,7 @@ import {
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { safeZone } from '../lib/zone';
 import { configureMock, mockEnabled } from './http';
+import { calendarsApi } from './calendars-service';
 import { appointmentsApi, type AppointmentSource } from './service';
 import type { Appointment } from './schemas';
 import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
@@ -22,8 +23,14 @@ export const KEYS = {
   types: ['appointments', 'types'] as const,
   type: (id: string) => ['appointments', 'type', id] as const,
   settings: ['appointments', 'settings'] as const,
+  waTemplates: ['appointments', 'wa-templates'] as const,
   calendar: ['appointments', 'calendar'] as const,
   calendars: ['appointments', 'calendar', 'list'] as const,
+  spreadsheets: ['appointments', 'calendar', 'spreadsheets'] as const,
+  overview: ['appointments', 'calendar', 'overview'] as const,
+  outlookCalendars: ['appointments', 'calendar', 'outlook', 'list'] as const,
+  icsFeeds: ['appointments', 'calendar', 'ics-feeds'] as const,
+  bookingsFeed: ['appointments', 'calendar', 'bookings-feed'] as const,
 };
 
 /** Keeps the development stand-in (when it is on) in step with who is signed in. Call it once near the top of a screen. */
@@ -139,6 +146,16 @@ export function useBookingType(id: string | null) {
   });
 }
 
+/** The approved WhatsApp templates a reminder can use (the picker of a rule). Not worth failing a screen for: an empty list is fine. */
+export function useWaTemplates() {
+  return useQuery({
+    queryKey: KEYS.waTemplates,
+    queryFn: ({ signal }) => appointmentsApi.waTemplates(signal),
+    staleTime: 60_000,
+    retry: false,
+  });
+}
+
 export function useBookingSettings() {
   return useQuery({
     queryKey: KEYS.settings,
@@ -186,5 +203,64 @@ export function useCalendarOptions(enabled: boolean) {
     retry: transientRetry,
     retryDelay: transientRetryDelay,
     staleTime: 60_000,
+  });
+}
+
+/** The spreadsheets of the connected account by name (only asked for while one is connected). */
+export function useSpreadsheetOptions(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.spreadsheets,
+    queryFn: ({ signal }) => appointmentsApi.spreadsheets(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 60_000,
+  });
+}
+
+/** Every calendar provider of the workspace and where bookings are written (BL-035). */
+export function useCalendarOverview() {
+  return useQuery({
+    queryKey: KEYS.overview,
+    queryFn: ({ signal }) => calendarsApi.overview(signal),
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 15_000,
+  });
+}
+
+/** The writable calendars of the connected Outlook account (only asked for while one is connected). */
+export function useOutlookCalendars(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.outlookCalendars,
+    queryFn: ({ signal }) => calendarsApi.outlookCalendars(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 60_000,
+  });
+}
+
+/** The iCal subscriptions of the workspace (busy time only). */
+export function useIcsFeeds(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.icsFeeds,
+    queryFn: ({ signal }) => calendarsApi.icsFeeds(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 15_000,
+  });
+}
+
+/** The signed-in person's own bookings feed link (null url until they make one). */
+export function useBookingsFeed(enabled = true) {
+  return useQuery({
+    queryKey: KEYS.bookingsFeed,
+    queryFn: ({ signal }) => calendarsApi.bookingsFeed(signal),
+    enabled,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+    staleTime: 15_000,
   });
 }

@@ -14,6 +14,8 @@ export interface OutboxSample {
   ready: number;
   /** Seconds the oldest due event has been due (0 when nothing is due). */
   lagSeconds: number;
+  /** Events that exhausted their retries (`status = 'dead'`) and wait for a replay, capped at {@link READY_CAP}. Alert on > 0. */
+  dead?: number;
   /** When the sample was taken, ms since epoch. */
   sampledAt: number;
 }
@@ -22,7 +24,9 @@ export interface OutboxSample {
 export const READY_CAP = 10_000;
 
 /** Identifies one worker process. The hostname is the container id in Docker, which is what the container healthcheck knows. */
-export const instanceId = (host: string, pid: number): string => `${host}:${pid}`;
+// One definition, shared with the runtime monitor's `instance` label (packages/observability), so the heartbeat, /ready, Sentry and
+// the metrics all name a process alike.
+export { instanceId } from '@crm/observability';
 
 /** The beat is `aliveForBeats` times its interval before a worker stops counting as alive. */
 export const ALIVE_FOR_BEATS = 3;

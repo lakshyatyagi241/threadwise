@@ -1,0 +1,227 @@
+{
+  "calling-voice": {
+    "readiness": {
+      "title": "Ready for calls?",
+      "status": {
+        "never_checked": "Not checked yet",
+        "blocked": "Not ready",
+        "ready_to_enable": "Ready to turn on",
+        "attention": "Works, needs a look",
+        "ready": "Ready"
+      },
+      "statusHint": {
+        "never_checked": "This number has not been checked yet.",
+        "blocked": "Calling will not work until the items marked Fix this are sorted out.",
+        "ready_to_enable": "Everything WhatsApp needs is in place. Enable calling to show the Call button.",
+        "attention": "Calling works, but something below needs a look.",
+        "ready": "Calling is on and every check passes."
+      },
+      "checkedAt": "Checked {date}",
+      "checking": "Checking with WhatsApp...",
+      "checkAgain": "Check again",
+      "checkFailed": "Could not check this number.",
+      "checkedDone": "Checked again.",
+      "blockedHint": "Fix the items marked Fix this first. WhatsApp will most likely refuse to turn calling on.",
+      "details": "What was checked",
+      "fixLabel": "What to do:",
+      "state": {
+        "ok": "OK",
+        "warn": "Needs a look",
+        "fail": "Fix this"
+      },
+      "checks": {
+        "plan_feature": "Plan includes WhatsApp calling",
+        "connection": "Number connected",
+        "not_coexistence": "Number is on the Cloud API only",
+        "number_registered": "Number registered with WhatsApp",
+        "messaging_limit": "Messaging limit and quality",
+        "token_scopes": "Access token permissions",
+        "webhook_subscribed": "App subscribed to this account",
+        "calls_field": "Calls webhook delivered",
+        "calling_enabled": "Calling switched on at WhatsApp",
+        "turn": "Call relay (TURN) configured",
+        "dialler_permissions": "Teammates allowed to call",
+        "recording_consent": "Recording and consent rules"
+      },
+      "codes": {
+        "plan_ok": {
+          "detail": "WhatsApp calling is part of your plan."
+        },
+        "plan_missing": {
+          "detail": "Your plan does not include WhatsApp calling.",
+          "fix": "Upgrade your plan, then check again."
+        },
+        "connected": {
+          "detail": "The number is connected and has an access token."
+        },
+        "not_connected": {
+          "detail": "This number is not connected right now.",
+          "fix": "Reconnect it under Channels, then check again."
+        },
+        "no_credentials": {
+          "detail": "This number has no access token or phone number id stored.",
+          "fix": "Reconnect the number so its credentials are saved again."
+        },
+        "cloud_api_only": {
+          "detail": "The number runs on the WhatsApp Cloud API only."
+        },
+        "coexistence": {
+          "detail": "This number is also used in the WhatsApp Business app (coexistence), and WhatsApp does not allow calls on such a number.",
+          "fix": "Register it on the Cloud API only, or use another number for calling."
+        },
+        "on_premise": {
+          "detail": "This number is on the old On-Premises API, which Meta has shut down.",
+          "fix": "Register it on the Cloud API, or use another number."
+        },
+        "number_ok": {
+          "detail": "WhatsApp reports the number as live and verified."
+        },
+        "number_not_verified": {
+          "detail": "The number's ownership code has not been verified.",
+          "fix": "Verify the number from its WhatsApp connection page, then check again."
+        },
+        "number_not_live": {
+          "detail": "WhatsApp reports this number as {status}, not as connected.",
+          "fix": "Fix the number in Meta Business Suite (it may be pending, flagged or restricted), then check again."
+        },
+        "limit_ok": {
+          "detail": "The daily messaging limit and the quality rating are enough for calling."
+        },
+        "limit_test_number": {
+          "detail": "This is a test number, which does not need a messaging limit."
+        },
+        "limit_low": {
+          "detail": "The messaging limit is {tier}. WhatsApp needs at least {needed} customers a day before calling can be turned on.",
+          "fix": "Send more messages with good quality, or verify your business in Meta Business Suite, so the limit rises. Then check again."
+        },
+        "limit_unknown": {
+          "detail": "WhatsApp did not report a messaging limit this app recognises.",
+          "fix": "Open the number in Meta Business Suite to see its limit. Calling needs at least 2,000 customers a day."
+        },
+        "quality_low": {
+          "detail": "The number's quality rating is low (red) and WhatsApp may restrict it.",
+          "fix": "Cut down blocked and reported messages and let the rating recover before relying on calls."
+        },
+        "scopes_ok": {
+          "detail": "The access token has the permissions calling needs."
+        },
+        "scope_missing": {
+          "detail": "The access token is missing: {missing}.",
+          "fix": "Generate a new system user token with both whatsapp_business_management and whatsapp_business_messaging, then reconnect the number."
+        },
+        "token_invalid": {
+          "detail": "WhatsApp does not accept the stored access token.",
+          "fix": "Reconnect the number or save a new permanent token."
+        },
+        "token_expiring": {
+          "detail": "The access token expires in {days, plural, one {# day} other {# days}}.",
+          "fix": "Reconnect the number or save a permanent system user token before it expires."
+        },
+        "scopes_unverifiable": {
+          "detail": "The token's permissions could not be read. The number may be reached through a provider, or this platform has no app credentials to inspect it.",
+          "fix": "If calling is refused, confirm with your provider that the number may use calling."
+        },
+        "subscribed_ok": {
+          "detail": "WhatsApp delivers this account's events to the platform."
+        },
+        "waba_not_subscribed": {
+          "detail": "No app is subscribed to this WhatsApp Business Account, so calls would never reach you.",
+          "fix": "Use Fix inbound on the number's health page, then check again."
+        },
+        "calls_field_ok": {
+          "detail": "The Meta app delivers the calls webhook field."
+        },
+        "calls_field_added": {
+          "detail": "The calls webhook field was missing and has just been added to the platform's Meta app."
+        },
+        "calls_field_missing": {
+          "detail": "The Meta app does not deliver the calls webhook field, so incoming calls and answers never arrive.",
+          "fix": "Ask your platform operator to tick the calls field in the Meta app's webhook settings (WhatsApp, Configuration), then check again."
+        },
+        "calls_field_unverifiable": {
+          "detail": "This number is on a Meta app the platform cannot read, so the calls webhook field could not be checked.",
+          "fix": "Open that app's webhook settings and make sure the calls field is ticked."
+        },
+        "calling_on": {
+          "detail": "Calling is switched on and the call icon is shown to customers."
+        },
+        "calling_off": {
+          "detail": "Calling is switched off for this number.",
+          "fix": "Select Enable calling once the other items are fine."
+        },
+        "icon_hidden": {
+          "detail": "Calling is on, but the call icon is hidden from customers, so they cannot start calls.",
+          "fix": "Set the call icon visibility back to default in the number's calling settings at Meta."
+        },
+        "turn_ok": {
+          "detail": "A TURN relay is configured, so calls work behind strict firewalls."
+        },
+        "turn_missing": {
+          "detail": "No TURN relay is configured, so calls can connect without sound for people behind strict firewalls.",
+          "fix": "Ask your platform operator to add a TURN server to CALLING_ICE_SERVERS."
+        },
+        "turn_incomplete": {
+          "detail": "A TURN server is listed without its username or credential.",
+          "fix": "Add the username and credential to that CALLING_ICE_SERVERS entry."
+        },
+        "ice_invalid": {
+          "detail": "CALLING_ICE_SERVERS is set but is not a valid list, so only public STUN servers are used.",
+          "fix": "Fix the JSON in CALLING_ICE_SERVERS."
+        },
+        "dialler_ok": {
+          "detail": "{people, plural, one {# teammate can} other {# teammates can}} place and answer calls."
+        },
+        "dialler_none": {
+          "detail": "Nobody in this workspace has the right to place and answer calls.",
+          "fix": "Give a role the right to use calling under Settings, Roles."
+        },
+        "recording_off": {
+          "detail": "Call recording is off, so no consent is needed."
+        },
+        "recording_configured": {
+          "detail": "Call recording is on, with a notice and a consent rule."
+        },
+        "recording_notice_missing": {
+          "detail": "Call recording is on but has no notice to read out.",
+          "fix": "Write the recording notice under Recording below."
+        },
+        "meta_unreadable": {
+          "detail": "WhatsApp did not answer this check.",
+          "fix": "Check again in a moment."
+        },
+        "not_checked": {
+          "detail": "Waiting on an item above.",
+          "fix": "Fix the item above first."
+        }
+      },
+      "reasons": {
+        "prerequisites": "WhatsApp will not switch calling on yet. The number needs a daily messaging limit of at least 2,000 customers, and the app must be subscribed to the WhatsApp Business Account and to the calls webhook field with the whatsapp_business_messaging permission. A test number does not need the limit.",
+        "coexistence": "WhatsApp calling needs a number that is fully on the Cloud API. This number shares its line with the WhatsApp Business app (coexistence), which WhatsApp does not allow calls on. Register it on the Cloud API only, or use another number.",
+        "permission_scope": "The access token lacks a permission calling needs (whatsapp_business_management and whatsapp_business_messaging). Generate a new token with both and reconnect the number.",
+        "token_expired": "WhatsApp no longer accepts the stored access token. Reconnect the number, then try again.",
+        "calling_not_enabled": "Calling is not switched on at WhatsApp for this number. Turn it on, then try again.",
+        "no_call_permission": "This customer has not allowed calls yet. A permission request is sent for them to accept.",
+        "permission_request_limit": "WhatsApp limits how often you can ask this customer for call permission. Try again later.",
+        "receiver_uncallable": "This customer's WhatsApp cannot receive calls (an old app version, or calls turned off). Ask them to update WhatsApp.",
+        "meta_unreachable": "WhatsApp did not answer in time. Try again in a moment."
+      },
+      "refusedBecause": "WhatsApp refused when asked: {reason}",
+      "autoEnable": {
+        "title": "Turn calling on automatically",
+        "hint": "When a WhatsApp number is connected or reconnected and meets every requirement, switch calling on for it without asking. Off by default; calling is never switched on without this.",
+        "label": "Turn calling on automatically after a number is connected",
+        "saved": "Saved.",
+        "loadFailed": "Could not load this setting."
+      },
+      "testCall": {
+        "title": "Place a test call",
+        "intro": "Call your own WhatsApp number to hear a call from start to finish. WhatsApp only lets a business call someone who has allowed it: if you have not, a permission request is sent to your phone and no call is placed. Tap Allow in WhatsApp, then press Call me again.",
+        "phoneLabel": "Your WhatsApp number",
+        "phoneHint": "With the country code and no plus, for example 919812345678.",
+        "call": "Call me",
+        "invalid": "Enter your number with the country code (6 to 15 digits).",
+        "show": "Place a test call"
+      }
+    }
+  }
+}

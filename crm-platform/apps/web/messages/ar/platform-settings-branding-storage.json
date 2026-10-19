@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "منشئ التدفقات"
+      "flowBuilder": "منشئ التدفقات",
+      "microsoftCalendar": "تقويم Microsoft"
     },
     "hub": {
       "kicker": "الإدارة - إعدادات المشروع",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "نقطة النهاية",
-            "hint": "مطلوبة لـ Spaces وR2 وMinIO. تُزال /bucket اللاحقة.",
-            "placeholder": "https://… (مطلوب لـ Spaces / R2 / MinIO؛ تلقائي لـ Wasabi وBunny)"
+            "hint": "مطلوبة لـ Spaces وR2. تُزال /bucket اللاحقة.",
+            "placeholder": "https://… (مطلوب لـ Spaces / R2؛ تلقائي لـ Wasabi وBunny)"
           },
           "cdnUrl": {
             "label": "رابط عام / CDN (اختياري)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "استخدام نقطة نهاية بنمط المسار (MinIO / بعض مخازن S3 المتوافقة)"
+            "label": "استخدام نقطة نهاية بنمط المسار (بعض مخازن S3 المتوافقة)"
           },
           "storageZone": {
             "label": "منطقة التخزين",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / متوافق مع S3"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "خاص (روابط موقّعة)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "عميل Google OAuth الذي تربط كل مساحة عمل تقويمها من خلاله.",
+        "description": "عميل Google OAuth الذي تربط كل مساحة عمل حساب Google الخاص بها من خلاله، للتقويم وSheets وDocs وForms.",
         "sections": {
           "oauth": {
             "title": "عميل Google OAuth"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "السماح لمساحات العمل بربط Google Calendar",
-            "hint": "متوقف: لا يمكن لأي مساحة عمل الربط، ولا يُكتب شيء في التقويم ولا يُقرأ منه."
+            "label": "السماح لمساحات العمل بربط Google",
+            "hint": "متوقف: لا يمكن لأي مساحة عمل الربط، ولا يُقرأ أو يُكتب شيء في Google (التقويم وSheets وDocs وForms)."
           },
           "clientId": {
             "label": "معرّف العميل",
@@ -1024,6 +1024,37 @@
             "advanced": "المتقدم فقط"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "تقويم Microsoft",
+        "description": "تطبيق Microsoft الذي تربط عبره كل مساحة عمل تقويم Outlook أو Microsoft 365 الخاص بها.",
+        "sections": {
+          "oauth": {
+            "title": "تطبيق Microsoft Entra"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "السماح لمساحات العمل بربط Outlook",
+            "hint": "إيقاف: لا تستطيع أي مساحة عمل الربط، ولا يُقرأ أو يُكتب أي شيء في أي تقويم Outlook. تبقى التقاويم المتصلة محفوظة."
+          },
+          "clientId": {
+            "label": "معرّف التطبيق (العميل)",
+            "hint": "من مركز إدارة Microsoft Entra، تسجيلات التطبيقات، نظرة عامة. إذا تُرك فارغًا يُستخدم MICROSOFT_CALENDAR_CLIENT_ID."
+          },
+          "clientSecret": {
+            "label": "سر العميل",
+            "hint": "يُخزَّن مشفّرًا ولا يُعرض مرة أخرى. إذا تُرك فارغًا يبقى السر المحفوظ؛ والبديل هو MICROSOFT_CALENDAR_CLIENT_SECRET."
+          },
+          "tenant": {
+            "label": "المستأجر",
+            "hint": "تتيح القيمة common حسابات العمل والمدارس والحسابات الشخصية؛ استخدم معرّف الدليل (المستأجر) لتطبيق أحادي المستأجر. إذا تُرك فارغًا يُستخدم MICROSOFT_CALENDAR_TENANT، وإلا common."
+          },
+          "redirectUri": {
+            "label": "تجاوز عنوان إعادة التوجيه",
+            "hint": "اتركه فارغًا لاستخدام العنوان أعلاه. يجب أن يطابق تمامًا عنوان إعادة توجيه مسجَّلًا في التطبيق."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "التخزين السحابي",
-        "description": "أرسل وسائط العملاء إلى حاويتك الخاصة: Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2 أو MinIO.",
+        "description": "أرسل وسائط العملاء إلى حاويتك الخاصة: Amazon S3 أو Wasabi أو Bunny.net أو DigitalOcean Spaces أو Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط تقويمها للحجوزات وأوقات الانشغال.",
-        "tags": "Google / OAuth / التقويم"
+        "description": "عميل Google OAuth الذي تستخدمه مساحات العمل لربط حساب Google الخاص بها للحجوزات وSheets وDocs وForms.",
+        "tags": "Google / OAuth / التقويم / Sheets"
       },
       "googleMail": {
         "title": "بريد Gmail",
@@ -1151,6 +1182,11 @@
         "title": "منشئ التدفقات",
         "description": "منشئ التدفقات الافتراضي لكل مساحة عمل: البسيط خطوة بخطوة أو المتقدم باللوحة. يمكن لمساحة العمل تجاوزه.",
         "tags": "بسيط / متقدم / أتمتة"
+      },
+      "microsoftCalendar": {
+        "title": "تقويم Microsoft",
+        "description": "تطبيق Microsoft الذي تستخدمه مساحات العمل لربط تقاويم Outlook وMicrosoft 365 الخاصة بها من أجل الحجوزات.",
+        "tags": "Microsoft / OAuth / Outlook / التقويم"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "استخدم حقول Bunny: منطقة التخزين وكلمة المرور. المنطقة هي منطقة التخزين (de وny وla...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "املأ حقول S3 والصق رابط نقطة النهاية. حدد نمط المسار لـ MinIO."
+              "title": "Spaces / R2",
+              "body": "املأ حقول S3 والصق رابط نقطة النهاية."
             },
             "test": {
               "title": "اختبر دائمًا أولًا",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "الإدارة - المواعيد",
-        "description": "عميل Google Cloud OAuth واحد للمنصة بأكملها. ثم تربط كل مساحة عمل حساب Google الخاص بها من المواعيد، الإعدادات؛ ولا ترى مساحة العمل معرّف العميل أو سره أبدًا.",
+        "description": "عميل Google Cloud OAuth واحد للمنصة بأكملها. ثم تربط كل مساحة عمل حساب Google الخاص بها من حساب Google في الإعدادات، وتختار الأذونات التي تمنحها؛ ولا ترى مساحة العمل معرّف العميل أو سره أبدًا.",
         "sections": {
           "oauth": {
             "title": "عميل Google OAuth",
-            "description": "بدون معرّف العميل وسره ترى مساحات العمل Google Calendar غير متاح وتستمر الحجوزات بدون تقويم."
+            "description": "بدون معرّف العميل وسره ترى مساحات العمل Google غير متاح، وتستمر الحجوزات بدون تقويم، وتُتخطى خطوات Google في التدفقات."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. المشروع وواجهة API",
-              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل Google Calendar API."
+              "body": "في Google Cloud Console أنشئ مشروعًا وفعّل واجهات Google Calendar وGoogle Sheets وGoogle Docs وGoogle Drive وGoogle Forms API. لا يعمل الإذن إلا عند تفعيل واجهته."
             },
             "redirect": {
               "title": "2. عميل OAuth",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. شاشة الموافقة",
-              "body": "أضف النطاقات calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال."
+              "body": "أضف النطاقات التي يطلبها المنتج (calendar.events وcalendar.freebusy وcalendar.calendarlist.readonly وspreadsheets وdocuments وdrive وforms.body.readonly وforms.responses.readonly وdrive.metadata.readonly)، ثم انشر التطبيق: في وضع الاختبار تنهي Google كل منح بعد 7 أيام وستحتاج مساحات العمل إلى إعادة الاتصال. نطاقات drive مقيّدة وتحتاج إلى مراجعة Google."
             },
             "workspaces": {
               "title": "4. تربط مساحات العمل",
-              "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من المواعيد، الإعدادات، Google Calendar."
+              "body": "الصق معرّف العميل وسره هنا واحفظ. ثم يربط المشرفون من الإعدادات، التكاملات، حساب Google، أو من المواعيد، الإعدادات، Google Calendar."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "التدفقات الموجودة بالفعل",
               "body": "تغيير هذا الإعداد لا يغيّر أي تدفق ولا يحذفه. يستمر التدفق في العمل؛ ويُفتح فقط في المنشئ المفعّل. مساحة العمل التي اختارت منشئها تحتفظ به حتى تختار افتراضي المنصة مرة أخرى."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "تقويم Microsoft",
+        "eyebrow": "Admin - المواعيد",
+        "description": "تطبيق Microsoft Entra واحد للمنصة بأكملها. بعد ذلك تربط كل مساحة عمل تقويم Outlook أو Microsoft 365 الخاص بها من المواعيد، الإعدادات، ولا ترى معرّف العميل أو السر أبدًا.",
+        "sections": {
+          "oauth": {
+            "title": "تطبيق Microsoft Entra",
+            "description": "بدون معرّف العميل وسره، ترى مساحات العمل أن Outlook غير متاح وتستمر الحجوزات بدونه. لا يتأثر Google Calendar."
+          }
+        },
+        "guide": {
+          "title": "أعدّه في Microsoft Entra",
+          "items": {
+            "registration": {
+              "title": "1. تسجيل التطبيق",
+              "body": "في مركز إدارة Microsoft Entra أنشئ تسجيل تطبيق للحسابات في أي دليل مؤسسي وحسابات Microsoft الشخصية، وانسخ معرّف التطبيق (العميل) إلى هنا. أبقِ المستأجر على common ما لم تختر خيارًا أضيق."
+            },
+            "redirect": {
+              "title": "2. عنوان إعادة التوجيه والسر",
+              "body": "أضف عنوان إعادة التوجيه الظاهر في هذه الصفحة كعنوان إعادة توجيه من نوع Web، ثم أنشئ سر عميل ضمن «الشهادات والأسرار» والصق قيمته هنا. دوّن تاريخ انتهاء صلاحيته: بعد ذلك التاريخ يتوقف تقويم كل مساحة عمل حتى يتم حفظ سر جديد."
+            },
+            "permissions": {
+              "title": "3. أذونات واجهة API",
+              "body": "أضف أذونات Microsoft Graph المفوَّضة Calendars.ReadWrite وUser.Read وoffline_access، ولا شيء غيرها. للاستخدام العام، أكمل التحقق من الناشر؛ وقد يتطلب مستأجر العميل أيضًا موافقة مسؤول على التطبيق."
+            },
+            "workspaces": {
+              "title": "4. تربط مساحات العمل",
+              "body": "الصق معرّف العميل والسر هنا ثم احفظ. بعد ذلك يربط المسؤولون من المواعيد، الإعدادات."
             }
           }
         }

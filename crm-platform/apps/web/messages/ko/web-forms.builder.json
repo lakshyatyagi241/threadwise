@@ -53,7 +53,9 @@
           "crm_required_unbound": "워크스페이스에서 필수로 지정한 속성이 양식에 없습니다.",
           "no_contact_point": "이메일 또는 전화번호 필드를 연락처에 연결해 추가하세요. 그래야 모든 응답을 사람과 매칭할 수 있습니다.",
           "payment_no_gateway": "결제 링크를 만들 수 있는 결제 게이트웨이를 연결하거나 결제를 끄세요.",
-          "captcha_not_configured": "CAPTCHA가 항상 켜짐으로 설정되어 있지만 플랫폼에 CAPTCHA가 없습니다. 다른 설정을 선택하거나 플랫폼 관리자에게 CAPTCHA 추가를 요청하세요."
+          "captcha_not_configured": "CAPTCHA가 항상 켜짐으로 설정되어 있지만 플랫폼에 CAPTCHA가 없습니다. 다른 설정을 선택하거나 플랫폼 관리자에게 CAPTCHA 추가를 요청하세요.",
+          "age_gate_field_missing": "연령 확인에는 질문이 필요합니다. 생년월일 또는 나이 필드를 추가하거나 대신 체크박스를 선택하세요.",
+          "age_gate_field_not_required": "연령 확인이 판단하는 질문은 필수여야 합니다."
         },
         "code": {
           "no_fields": "필드를 하나 이상 추가하세요.",
@@ -66,7 +68,9 @@
           "crm_required_unbound": "워크스페이스에 필수인 CRM 속성 \"{property}\"을(를) 양식에 추가하고 필수로 표시하세요.",
           "crm_required_optional": "필수 CRM 속성에 연결된 필드는 필수여야 합니다.",
           "redirect_not_https": "리디렉션 주소는 https://로 시작해야 합니다.",
-          "too_large": "양식이 너무 큽니다. 일부 필드를 삭제하세요."
+          "too_large": "양식이 너무 큽니다. 일부 필드를 삭제하세요.",
+          "age_gate_field_missing": "연령 확인에는 질문이 필요합니다. 생년월일 또는 나이 필드를 추가하거나 대신 체크박스를 선택하세요.",
+          "age_gate_field_optional": "연령 확인이 판단하는 질문은 필수여야 합니다."
         }
       },
       "versionsTitle": "버전",

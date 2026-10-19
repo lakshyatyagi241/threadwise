@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Google アカウント",
+        "description": "フローで使う Calendar、Sheets、Docs、Forms、Meet のために、Google アカウントを 1 つ接続します。",
+        "keywords": "google, google アカウント, カレンダー, calendar, スプレッドシート, sheets, ドキュメント, docs, フォーム, forms, meet, drive, oauth, google 接続"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "フロー内でスプレッドシートの行の追加、行の検索、連絡先の保存ができます。Google アカウント接続を使用します。",
+        "keywords": "google sheets, スプレッドシート, 行, セル, oauth, google に接続"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "テンプレートドキュメントをコピーして入力し、フローから共有します。Google アカウント接続を使用します。",
+        "keywords": "google docs, ドキュメント, テンプレート, 共有, oauth, google に接続"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "顧客にフォームを送信し、回答されたら処理を続行します。Google アカウント接続を使用します。",
+        "keywords": "google forms, フォーム, アンケート, 回答, oauth, google に接続"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "閉じる"
+    },
+    "page": {
+      "eyebrow": "ワークスペース",
+      "title": "Google アカウント",
+      "subtitle": "接続は一度だけです。同じ Google アカウントが、予約カレンダー、Meet リンク、フローの Sheets・Docs・Forms ステップを支えます。",
+      "loading": "Google アカウントを読み込み中...",
+      "forbidden": {
+        "title": "このページは開けません",
+        "body": "お使いのロールには Google アカウントを表示する権限がありません。ワークスペース管理者に依頼してください。"
+      },
+      "status": {
+        "unavailable": "未設定",
+        "disconnected": "未接続",
+        "connected": "接続済み",
+        "needs_reconnect": "再接続が必要"
+      },
+      "outcome": {
+        "connected": "Google アカウントを接続しました。",
+        "denied": "Google は接続されませんでした。権限の画面がキャンセルされました。",
+        "failed": "Google の接続が完了しませんでした。もう一度お試しください。",
+        "expired": "この接続の試行は期限切れです。ボタンを押して最初からやり直してください。",
+        "not_configured": "このプラットフォームでは Google がまだ設定されていません。プラットフォーム管理者に依頼してください。",
+        "missing_scope": "Google は求めたすべての権限を付与しませんでした。すでに許可された権限はそのまま使えます。不足している権限をもう一度追加し、すべてのボックスにチェックを入れたままにしてください。",
+        "cancelled": "接続をキャンセルしました。何も接続されていません。"
+      },
+      "actions": {
+        "connect": "Google アカウントを接続",
+        "reconnect": "Google を再接続",
+        "addPermissions": "権限を追加",
+        "disconnect": "切断",
+        "working": "Google を開いています...",
+        "retry": "再試行"
+      },
+      "unavailable": {
+        "title": "このプラットフォームでは Google が設定されていません",
+        "body": "誰かが接続できるようになる前に、プラットフォーム管理者がGoogle OAuthクライアントを追加する必要があります。それまでは、フロー内のGoogleステップはその旨のメッセージとともに失敗し、予約はカレンダーなしで処理されます。"
+      },
+      "reconnect": {
+        "title": "Google がこの接続を受け付けなくなりました",
+        "body": "権限が取り消されたか、パスワードが変更されたか、許可の有効期限が切れました。もう一度接続して復旧してください。選択内容は保持されます。",
+        "bodyAccount": "Google が {account} を受け付けなくなりました。もう一度接続して復旧してください。選択内容は保持されます。"
+      },
+      "stats": {
+        "status": "ステータス",
+        "calendars": "カレンダー",
+        "calendarsValue": "{count} 件利用可能",
+        "calendarsNone": "なし",
+        "permissions": "権限",
+        "permissionsValue": "{total} 件中 {granted} 件",
+        "lastUsed": "最終使用",
+        "never": "未使用",
+        "live": "稼働中",
+        "idle": "待機中"
+      },
+      "account": {
+        "title": "接続中のアカウント",
+        "email": "アカウント",
+        "calendar": "予約と Meet 用のカレンダー",
+        "primaryCalendar": "メインのカレンダー",
+        "changeCalendar": "カレンダーを変更",
+        "connectedAgo": "{when}に接続",
+        "none": "Google アカウントはリンクされていません。",
+        "noneBody": "接続するまでは、フロー内のGoogleステップはGoogleの接続を促すメッセージとともに失敗し、予約はカレンダーに追加されません。"
+      },
+      "permissions": {
+        "title": "Google の利用を許可する範囲",
+        "intro": "許可したい項目にチェックを入れてください。Google の画面にはまさにこれらの権限が表示されます。あとから、すでに許可した内容を失わずに追加できます。",
+        "allowed": "許可済み",
+        "notAllowed": "未許可",
+        "allow": "許可する",
+        "restricted": "Google による制限付き",
+        "restrictedNote": "Google はこの権限を制限付きとして扱います。多くのワークスペースで動作させるには、プラットフォームが Google の審査を受ける必要があります。必要な場合以外はオフのままにしてください。",
+        "nothingTicked": "少なくとも 1 つの権限にチェックを入れてください。",
+        "calendar": {
+          "name": "カレンダー",
+          "body": "予約と Meet リンクをカレンダーに追加し、予約ページで埋まっている時間帯を非表示にします。",
+          "usedBy": "予約カレンダー、予約ステップ、Google Meet ステップ"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets、Google Sheet フィールドの確認、Google Sheet から連絡先を保存",
+          "body": "シートに行を追加、行を検索、セルを確認、または行を連絡先にコピーします。"
+        },
+        "docs": {
+          "name": "Docs と Drive",
+          "body": "テンプレートのドキュメントをコピーして入力し、そのコピーをリンクで共有します。",
+          "usedBy": "Google Docs ステップ"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Google Form ステップ",
+          "body": "フォームの公開リンクを読み取ってフローから顧客に送信し、フォームの回答を読み取って顧客の入力後にフローを続行します。"
+        },
+        "drive_listing": {
+          "name": "Drive のファイル一覧",
+          "body": "シート、ドキュメント、フォームを名前で一覧表示し、フロービルダーと予約設定でアカウントから選択できるようにします。すべてのファイルピッカーに必要です。",
+          "usedBy": "フロービルダーと予約設定のファイルピッカー"
+        }
+      },
+      "lastError": {
+        "title": "Google が最後に報告した問題",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google は接続中のアカウントを受け付けなくなりました。もう一度接続してください。",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "プラットフォームの Google クライアントがないか、オフになっています。",
+        "GOOGLE_API_NOT_ENABLED": "プラットフォームの Google Cloud プロジェクトで、この機能に必要な API が有効になっていません。プラットフォーム管理者が有効にする必要があります。",
+        "GOOGLE_SCOPE_MISSING": "ステップに必要な権限が、このアカウントに付与されていませんでした。上で追加してください。",
+        "GOOGLE_RATE_LIMITED": "現在、Google がリクエストを制限しています。ステップは少し後に再試行されます。",
+        "GOOGLE_UNAVAILABLE": "Google から応答がありませんでした。次回の使用時に再試行されます。",
+        "other": "Google が問題を報告しました。"
+      },
+      "usedBy": {
+        "title": "使用箇所",
+        "book": "予約ステップ",
+        "meet": "Google Meet ステップ",
+        "sheets": "Google Sheets ステップ",
+        "docs": "Google Docs ステップ",
+        "forms": "Google Form ステップ",
+        "flow": "フロー"
+      },
+      "disconnectConfirm": {
+        "title": "Google を切断しますか?",
+        "body": "再接続するまで、予約のカレンダー同期とフローのすべての Google ステップが停止します。すでに作成されたイベントとファイルは Google に残ります。",
+        "confirm": "切断",
+        "cancel": "接続したままにする"
+      },
+      "disconnected": "Google アカウントを切断しました。",
+      "failure": {
+        "notConfigured": "このプラットフォームでは Google が設定されていません。プラットフォーム管理者に依頼してください。",
+        "generic": "問題が発生しました。もう一度お試しください。"
+      },
+      "privacy": {
+        "title": "プライバシー",
+        "body": "チェックを入れた権限のみが要求されます。接続は暗号化して保存され、ワークスペースに属し、ここに挙げた機能だけが使用します。切断すると Google 側でも取り消されます。"
+      }
+    },
+    "consent": {
+      "title": "Google接続の確認",
+      "loading": "Googleの接続情報を読み込み中...",
+      "question": "{email}を{workspace}に接続し、{permissions}を許可しますか？",
+      "permissions": "権限",
+      "notGiven": "未付与",
+      "missing": "Googleから次の権限が付与されませんでした: {permissions}。確認すると、付与された権限のみが接続されます。",
+      "replaces": "現在接続中のGoogleアカウント{email}が置き換えられます。以前のアカウントのアクセス権は取り消されます。",
+      "onlyYou": "この操作を完了できるのは、このワークスペースから「接続」を押した本人だけです。誰かからこのリンクが送られてきた場合は、確認せずにページを閉じてください。",
+      "unknownAccount": "このGoogleアカウント",
+      "confirm": "確認",
+      "cancel": "キャンセル",
+      "working": "処理中...",
+      "failure": {
+        "notYours": "このGoogle接続は別のユーザーが開始したため、接続されませんでした。ご本人に接続してもらってください。",
+        "expired": "このGoogle接続は確認までに時間がかかりすぎました。前の画面に戻り、もう一度「接続」を押してください。",
+        "used": "このGoogle接続はすでに確認、キャンセル、または拒否されています。まだ必要な場合は、前の画面に戻ってもう一度「接続」を押してください。",
+        "notFound": "このGoogle接続は確認待ちではないか、別のワークスペースのものです。",
+        "generic": "問題が発生しました。変更は行われていません。もう一度お試しください。",
+        "nothingConnected": "何も接続されていません。"
+      }
+    }
+  }
+}

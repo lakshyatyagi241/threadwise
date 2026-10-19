@@ -1,6 +1,7 @@
 import { Inject, Module, type OnModuleInit } from '@nestjs/common';
 import { CampaignsModule, CAMPAIGN_FLOW_STARTER, NoFlowStarter } from '../campaigns';
 import { ContactConsentModule } from '../contact-consent';
+import { GoogleAccountModule } from '../google-account';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { ShopifyWoocommerceModule } from '../shopify-woocommerce';
@@ -14,6 +15,7 @@ import { SocialHandoffConsumer } from './runtime/nodes/actions/social-handoff.co
 import { FlowRunProcessor } from './runtime/flow-run.processor';
 import { FlowRunRetentionService } from './runtime/flow-run-retention.service';
 import { FlowSweeperService } from './runtime/flow-sweeper.service';
+import { GoogleFormPollService } from './runtime/nodes/integrations/google-form-poll.service';
 import { FlowInboundService } from './triggers/inbound.service';
 import { FlowScheduleSweeper } from './triggers/schedule.sweeper';
 import { LeadFlowConsumer } from './triggers/lead-flow.consumer';
@@ -34,11 +36,13 @@ import { FlowTriggerEventsConsumer } from './triggers/trigger-events.consumer';
     CatalogProductsModule,
     CommerceNodesModule,
     CrmModule,
+    GoogleAccountModule,
     ShopifyWoocommerceModule,
   ],
   providers: [
     FlowRunProcessor,
     FlowSweeperService,
+    GoogleFormPollService,
     FlowRunRetentionService,
     FlowInboundService,
     FlowTriggerEventsConsumer,

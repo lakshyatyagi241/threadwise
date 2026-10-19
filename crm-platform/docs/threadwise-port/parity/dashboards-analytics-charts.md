@@ -125,3 +125,12 @@ Open: none. Not covered: the Apply button flow by click (scenarios drive the add
 - extras.e2e seed updated to the flows constraints the FLB domain added (trigger kinds, non-empty names).
 - Not re-compared this round: admin overview, analytics, health and chart widgets were compared in round 2/3 screenshots only. The admin overview differs from Reference by the "Add workspace" button (blocked, WSP) and an extra MRR column (kept).
 - Verification: API e2e dashboards-analytics-charts 82 tests (dash, health, admin-dash, widgets, panels, quick-access, extras), API unit 46, web feature tests 32, all green on a freshly migrated crm_dash.
+
+## Round 5: login-devices card (owner request, intended addition)
+
+Reference's analytics "Devices" card lists WhatsApp numbers only; sign-in sessions show only as a table under `/account/security`. The owner asked for a graph of login devices on Analytics (audit row "Login-devices graph on Analytics: MISSING"). It is an addition, not a change: the WhatsApp-number card (TW-DASH-026) is untouched.
+
+- Contract: `loginDevices` on `GET /v2/analytics/panels` (`dash.analytics.read` + the plan's analytics feature, the same gates as the other panels). Sessions of the caller's workspace started in the window, bucketed by browser, system and kind parsed from the user agent (`auth_sessions`, forced RLS plus explicit `org_id`); `active` counts live sessions now. Counts only: no user, IP, user agent or session id is returned.
+- Web: "Login devices" panel under the geography/event row of `/analytics`, three bar groups with active vs ended shading, text alternative per row, empty state, 21 locales.
+- Help: `analytics-overview` guide updated.
+- Not verified here: the cloud session had no package registry access, so typecheck, unit/e2e tests and the Playwright twin run were not executed locally; CI is the first run. Reference has no counterpart to compare against.

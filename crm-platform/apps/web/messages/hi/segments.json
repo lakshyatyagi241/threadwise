@@ -23,13 +23,19 @@
       "imported": "फ़ाइल से आयात किया गया",
       "createdAt": "बनाया गया",
       "updatedAt": "अंतिम अपडेट",
-      "lastActivityAt": "अंतिम गतिविधि"
+      "lastActivityAt": "अंतिम गतिविधि",
+      "minor": "नाबालिग के रूप में चिह्नित",
+      "dateOfBirth": "जन्म तिथि",
+      "age": "उम्र (वर्ष)",
+      "timezone": "समय क्षेत्र",
+      "uncontacted": "बात नहीं हुई"
     },
     "fieldGroups": {
       "journey": "यात्रा",
       "who": "कौन",
       "activity": "गतिविधि",
-      "properties": "गुण"
+      "properties": "गुण",
+      "company": "कंपनी प्रॉपर्टी"
     },
     "operators": {
       "equals": "है",

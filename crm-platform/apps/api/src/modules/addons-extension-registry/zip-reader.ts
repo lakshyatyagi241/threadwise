@@ -1,4 +1,5 @@
 import { crc32, inflateRawSync } from 'node:zlib';
+import { inflateRawAsync } from '../../common/async-zlib';
 
 /**
  * A small read-only ZIP reader (no dependency): central directory, stored and deflated entries, nothing else.
@@ -72,16 +73,28 @@ export function readZip(buf: Buffer, limits: { maxEntries: number }): ZipEntry[]
   return entries;
 }
 
-/** The bytes of one entry, verified against its declared size and CRC. */
-export function readEntry(buf: Buffer, entry: ZipEntry): Buffer {
+/** The stored bytes of one entry, after the local header and bounds checks. Shared by both readers below. */
+function storedBytes(buf: Buffer, entry: ZipEntry): Buffer {
   const o = entry.offset;
   if (o + 30 > buf.length || buf.readUInt32LE(o) !== LOC_SIG)
     throw new ZipError(`bad local header for ${entry.name}`);
   const start = o + 30 + buf.readUInt16LE(o + 26) + buf.readUInt16LE(o + 28);
   const end = start + entry.compressedSize;
   if (end > buf.length) throw new ZipError(`${entry.name} runs past the end of the archive`);
-  const raw = buf.subarray(start, end);
+  return buf.subarray(start, end);
+}
 
+/** The size and CRC checks every entry passes before its bytes are returned. */
+function verified(data: Buffer, entry: ZipEntry): Buffer {
+  if (data.length !== entry.size)
+    throw new ZipError(`${entry.name} does not match its declared size`);
+  if (crc32(data) !== entry.crc) throw new ZipError(`${entry.name} is corrupt (checksum mismatch)`);
+  return data;
+}
+
+/** The bytes of one entry, verified against its declared size and CRC. Inflates on the calling thread: for small entries only. */
+export function readEntry(buf: Buffer, entry: ZipEntry): Buffer {
+  const raw = storedBytes(buf, entry);
   let data: Buffer;
   if (entry.method === 0) data = Buffer.from(raw);
   else if (entry.method === 8) {
@@ -92,9 +105,23 @@ export function readEntry(buf: Buffer, entry: ZipEntry): Buffer {
       throw new ZipError(`${entry.name} could not be decompressed`);
     }
   } else throw new ZipError(`${entry.name} uses an unsupported compression method`);
+  return verified(data, entry);
+}
 
-  if (data.length !== entry.size)
-    throw new ZipError(`${entry.name} does not match its declared size`);
-  if (crc32(data) !== entry.crc) throw new ZipError(`${entry.name} is corrupt (checksum mismatch)`);
-  return data;
+/**
+ * The same as `readEntry`, inflating on the thread pool (EL-B08). A 20 MB entry held the event loop for about 100 ms; the install loop
+ * reads every file of a package, so it uses this one.
+ */
+export async function readEntryAsync(buf: Buffer, entry: ZipEntry): Promise<Buffer> {
+  const raw = storedBytes(buf, entry);
+  let data: Buffer;
+  if (entry.method === 0) data = Buffer.from(raw);
+  else if (entry.method === 8) {
+    try {
+      data = await inflateRawAsync(raw, { maxOutputLength: entry.size + 1 });
+    } catch {
+      throw new ZipError(`${entry.name} could not be decompressed`);
+    }
+  } else throw new ZipError(`${entry.name} uses an unsupported compression method`);
+  return verified(data, entry);
 }

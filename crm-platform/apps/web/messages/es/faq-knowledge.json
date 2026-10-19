@@ -6,8 +6,7 @@
         "faqs": "Preguntas frecuentes",
         "test": "Probar",
         "unanswered": "Sin respuesta",
-        "insights": "Estadísticas",
-        "settings": "Ajustes"
+        "insights": "Estadísticas"
       },
       "unansweredCount": "{count, plural, one {# mensaje sin respuesta} other {# mensajes sin respuesta}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Este flujo alcanzó su límite de FAQ. Elimina las FAQ o variaciones sin uso, o pide al administrador de la plataforma que lo aumente."
     },
     "banner": {
-      "enabledToast": "Las respuestas con preguntas frecuentes están activadas.",
-      "engineOff": "La plataforma desactivó las respuestas con preguntas frecuentes. Los clientes no recibirán respuestas hasta que se vuelvan a activar.",
-      "modelChanged": "La plataforma cambió el modelo de IA después de que ajustaras este umbral. Las puntuaciones cambiaron, así que revisa tu sensibilidad.",
-      "reviewSensitivity": "Revisar sensibilidad",
-      "offNoRight": "Pide a alguien con el permiso faq.settings.manage (normalmente un administrador del espacio de trabajo) que las active.",
-      "enable": "Activar respuestas con preguntas frecuentes",
-      "offTitle": "Las respuestas de FAQ están DESACTIVADAS en este flujo",
-      "offBody": "Puedes escribir y probar las FAQ de este flujo, pero los clientes no recibirán respuestas hasta que lo actives."
+      "engineOff": "La plataforma desactivó las respuestas con preguntas frecuentes. Los clientes no recibirán respuestas hasta que se vuelvan a activar."
     },
     "list": {
       "title": "Preguntas frecuentes",
@@ -51,25 +43,15 @@
         "total": "Preguntas frecuentes",
         "active": "Activas",
         "paused": "En pausa",
-        "variations": "Formulaciones",
-        "pending": "Indexando",
-        "pendingHint": "Activas en segundos",
-        "failed": "Error de indexación",
-        "failedHint": "Requiere atención"
+        "variations": "Formulaciones"
       },
-      "failedBanner": "{count, plural, one {# formulación no se pudo indexar} other {# formulaciones no se pudieron indexar}}, por lo que aún no pueden coincidir con mensajes de clientes.",
-      "showFailed": "Ver preguntas frecuentes con errores",
       "search": "Buscar preguntas frecuentes",
       "searchPlaceholder": "Buscar preguntas y formulaciones",
       "filter": {
         "status": "Estado",
         "anyStatus": "Cualquier estado",
         "category": "Categoría",
-        "anyCategory": "Cualquier categoría",
-        "indexing": "Indexación",
-        "anyIndexing": "Cualquiera",
-        "pending": "Aún indexando",
-        "failed": "Con errores"
+        "anyCategory": "Cualquier categoría"
       },
       "status": {
         "active": "Activas",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Pregunta",
         "answer": "Respuesta",
-        "indexing": "Formulaciones activas",
         "answered": "Respondidas (90 días)",
         "status": "Estado",
         "actions": "Acciones"
@@ -130,12 +111,6 @@
         "rowBody": "\"{question}\" y todas sus formulaciones se eliminarán de forma permanente. Esta acción no se puede deshacer.",
         "delete": "Eliminar",
         "cancel": "Cancelar"
-      },
-      "indexing": {
-        "summary": "{ready} activas, {pending} indexando, {failed} con errores",
-        "ready": "{count} activas",
-        "pending": "{count} indexando",
-        "failed": "{count} con errores"
       },
       "stepMissing": "Falta el paso",
       "subtitle": "Preguntas que los clientes hacen en {flow} y lo que responde el bot. Estas FAQ solo responden dentro de este flujo.",
@@ -202,14 +177,6 @@
           "other": "Un paso de otro flujo",
           "otherHint": "Pasar la conversación a un flujo distinto."
         }
-      },
-      "advanced": {
-        "title": "Avanzado: sensibilidad solo para esta pregunta frecuente",
-        "custom": "Usar una sensibilidad personalizada para esta pregunta frecuente",
-        "sliderLabel": "Coincidir desde",
-        "body": "Por defecto, cada FAQ usa la sensibilidad de este flujo. Usa un valor personalizado cuando esta coincida demasiado (súbelo) o muy poco (bájalo).",
-        "workspace": "La sensibilidad de este flujo es {value} %.",
-        "following": "Sigue la sensibilidad de este flujo ({value} %)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Añadir",
       "pasteMany": "Pegar varias",
       "full": "Esta pregunta frecuente alcanzó el límite de {max} formulaciones.",
-      "failedNotice": "{count, plural, one {# formulación no se pudo indexar} other {# formulaciones no se pudieron indexar}}. Edita y guarda la formulación para reintentar.",
       "suggest": "Sugerir con IA",
       "suggestSaveFirst": "Primero guarda la pregunta frecuente; después la IA podrá sugerir formulaciones.",
       "suggesting": "Pidiendo sugerencias a la IA",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# línea no cabe} other {# líneas no caben}} en el límite de formulaciones y se omitió.",
         "more": "y {count} más",
         "add": "Añadir {count, plural, one {# formulación} other {# formulaciones}}"
-      },
-      "state": {
-        "ready": "Activa",
-        "pending": "Indexando",
-        "pendingHint": "Guardada. Empezará a coincidir en unos segundos.",
-        "failed": "Con error",
-        "failedHint": "Edita y guarda la formulación para reintentar.",
-        "noReason": "No se indicó ningún motivo"
       },
       "confirm": {
         "title": "¿Quitar esta formulación?",
@@ -451,7 +409,14 @@
       "learned": "Añadido a \"{question}\". Desde ahora se responderá.",
       "pickTitle": "¿A qué pregunta frecuente quieres añadir este mensaje?",
       "loadMore": "Cargar más",
-      "loadingMore": "Cargando"
+      "loadingMore": "Cargando",
+      "fallback": {
+        "title": "Cuando ninguna FAQ responde",
+        "hint": "Esta respuesta se envía al cliente cuyo mensaje no responde ninguna FAQ. El mensaje sigue apareciendo abajo para que enseñes la respuesta a la FAQ.",
+        "placeholder": "Lo siento, no te he entendido. Un miembro del equipo te responderá.",
+        "save": "Guardar respuesta alternativa",
+        "saved": "Respuesta alternativa guardada"
+      }
     },
     "picker": {
       "close": "Cerrar",
@@ -539,9 +504,7 @@
       },
       "hist": {
         "title": "Qué puntuación obtuvieron los mensajes",
-        "hint": "Cada barra es un rango de puntuación. La línea discontinua es tu sensibilidad actual.",
-        "advice": "Sube el umbral si se cuelan respuestas incorrectas; bájalo si demasiados mensajes quedan sin respuesta.",
-        "tune": "Cambiar sensibilidad"
+        "hint": "Cada barra es un rango de puntuación. La línea discontinua es tu sensibilidad actual."
       },
       "top": {
         "title": "Preguntas frecuentes principales",
@@ -568,98 +531,6 @@
         "bucketTooltip": "{from}-{to} %: {answered} respondidos, {unanswered} sin respuesta",
         "thresholdMarker": "Umbral {value} %"
       }
-    },
-    "settings": {
-      "title": "Ajustes de preguntas frecuentes",
-      "unsaved": "Cambios sin guardar",
-      "discard": "Descartar",
-      "save": "Guardar ajustes",
-      "saved": "Ajustes guardados.",
-      "readOnly": "Puedes ver estos ajustes. Para cambiarlos necesitas el permiso faq.settings.manage, que suelen tener los administradores del espacio de trabajo.",
-      "engineOff": "La plataforma desactivó las respuestas con preguntas frecuentes. Lo que configures aquí se aplicará cuando se vuelvan a activar.",
-      "conflict": "Otra persona guardó estos ajustes. Recarga para ver su versión y vuelve a hacer tu cambio.",
-      "reload": "Recargar ajustes",
-      "modelChanged": {
-        "title": "Revisa tu sensibilidad",
-        "body": "La plataforma cambió el modelo de IA después de que ajustaras este umbral. Las puntuaciones cambiaron, así que revisa tu sensibilidad. Al guardar, la confirmas."
-      },
-      "enable": {
-        "title": "Respuestas con preguntas frecuentes",
-        "on": "Sí",
-        "off": "No",
-        "label": "Responder a los clientes con las FAQ de este flujo",
-        "onBody": "Mientras este flujo esté activo, un mensaje de cliente que no haya captado ningún disparador de palabras clave ni un flujo en ejecución se compara con las FAQ de este flujo. El bot responde con la mejor respuesta o envía al cliente al paso al que apunta la FAQ.",
-        "offBody": "Las FAQ de este flujo no responden a los clientes. Aun así puedes escribirlas y probarlas."
-      },
-      "sens": {
-        "title": "Sensibilidad",
-        "hint": "Qué tan parecido debe ser un mensaje. Las puntuaciones pertenecen al modelo {model}.",
-        "label": "Responder cuando la coincidencia sea al menos",
-        "presets": "Valores predefinidos de sensibilidad",
-        "preset": {
-          "strict": "Estricta",
-          "balanced": "Equilibrada",
-          "forgiving": "Flexible"
-        },
-        "looser": "Responde más",
-        "stricter": "Responde menos",
-        "recommendedMark": "recomendado {value} %",
-        "explain": "Con {value} %, un mensaje solo se responde cuando su mejor coincidencia obtiene {value} % o más. Más alto significa menos respuestas pero más seguras; más bajo significa más respuestas y mayor probabilidad de error.",
-        "useRecommended": "Usar el valor recomendado ({value} %)",
-        "modelScale": "Las puntuaciones solo son comparables dentro de un mismo modelo. Si la plataforma cambia el modelo ({model}), revisa este número."
-      },
-      "margin": {
-        "title": "Protección contra ambigüedad",
-        "hint": "Evita que el bot adivine entre dos preguntas frecuentes con una puntuación casi igual.",
-        "label": "Ventaja mínima sobre la segunda mejor",
-        "off": "Desactivada",
-        "explain": "Cuando la mejor pregunta frecuente supera a la siguiente por menos de este valor, el bot no responde y registra el mensaje como sin respuesta. Déjala desactivada si tus preguntas rara vez se parecen."
-      },
-      "log": {
-        "title": "Mensajes de clientes en el registro",
-        "label": "Conservar los mensajes de clientes en el registro de coincidencias",
-        "onBody": "El texto de cada mensaje se conserva 90 días para que puedas ver por qué se respondió o no y aprender de ello. Después se elimina.",
-        "offBody": "Solo se conservan puntuaciones y resultados, nunca el texto. Aún puedes ver con qué frecuencia responde el bot, pero no puedes aprender de los mensajes sin respuesta."
-      },
-      "facts": {
-        "title": "Modelo y límites",
-        "model": "Modelo de IA para coincidencias",
-        "faqs": "Preguntas frecuentes",
-        "variations": "Formulaciones en uso",
-        "perFaq": "Formulaciones permitidas por pregunta frecuente",
-        "of": "{used} de {max}"
-      },
-      "how": {
-        "title": "Cómo funcionan las coincidencias",
-        "exact": "Exacta: el mensaje es igual a una formulación guardada, sin distinguir mayúsculas ni espacios.",
-        "semantic": "Por significado: el mensaje se compara por significado con todas las formulaciones activas, así que palabras distintas pueden coincidir.",
-        "trigram": "Alternativa por ortografía: si el proveedor de IA no está disponible, se comparan las letras, lo que solo detecta errores de escritura.",
-        "threshold": "La mejor puntuación se compara con la sensibilidad. Si la supera, la pregunta frecuente responde; si no, el mensaje aparece en Sin respuesta.",
-        "verify": "Segunda revisión (opcional): un modelo de chat pequeño puede volver a comprobar una coincidencia que apenas alcanzó la sensibilidad, y solo puede retener una respuesta."
-      },
-      "who": "Cambiar estos ajustes requiere el permiso faq.settings.manage.",
-      "leave": {
-        "title": "¿Salir sin guardar?",
-        "body": "Los cambios en estos ajustes no se han guardado.",
-        "leave": "Salir",
-        "stay": "Quedarme"
-      },
-      "verify": {
-        "title": "Segunda revisión para casos dudosos",
-        "hint": "Un modelo de chat pequeño vuelve a comprobar las coincidencias que apenas alcanzaron el umbral.",
-        "unavailable": "La plataforma desactivó la segunda revisión, así que no se ejecuta aunque la actives aquí. Consulta a tu administrador de plataforma.",
-        "label": "Comprobar los casos dudosos con una segunda opinión",
-        "on": "Activada",
-        "off": "Desactivada",
-        "onBody": "Cuando una coincidencia apenas supera el umbral, un modelo de chat pequeño lee el mensaje del cliente y la pregunta frecuente, y dice si la respuesta encaja. Solo puede decir que no: nunca hace que se envíe una respuesta.",
-        "offBody": "Toda coincidencia que alcanza el umbral se responde sin una segunda revisión.",
-        "bandLabel": "Qué tan cerca cuenta como caso dudoso",
-        "bandValue": "+{value}%",
-        "explainOn": "Las coincidencias con una puntuación de {from} % a {to} % las revisa {model}. Un \"no\" significa que no se envía respuesta y el mensaje aparece en Sin respuesta.",
-        "explainOff": "Toda coincidencia con una puntuación de {threshold} % o más se responde. Activa la segunda revisión para que se vuelvan a comprobar los casos más dudosos.",
-        "cost": "Cada revisión envía al modelo el mensaje del cliente y la pregunta de la pregunta frecuente: unos cientos de tokens, y añade alrededor de un segundo a una respuesta dudosa. Las coincidencias fuera del rango nunca se revisan. Si la revisión falla, no está disponible o se alcanza el límite por hora, la coincidencia se mantiene como si no hubiera revisión."
-      },
-      "subtitle": "Activa las respuestas de FAQ para {flow} y ajusta cuánto debe coincidir un mensaje."
     },
     "flowNode": {
       "start": "El inicio del flujo",

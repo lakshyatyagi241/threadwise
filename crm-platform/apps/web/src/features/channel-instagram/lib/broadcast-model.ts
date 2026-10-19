@@ -49,9 +49,17 @@ export function canSend(s: {
   );
 }
 
-/** What a send came to: nothing went, some went with some failing, or all went. */
-export function outcomeOf(r: IgSendResult): 'none' | 'partial' | 'all' {
-  if (r.sent === 0) return 'none';
+/**
+ * What a send came to: nothing went, some went with some failing, or all went. `held` (BL-191): nothing went and nothing failed, because
+ * everyone is waiting for the workspace's quiet hours to end. `skipped` (BL-141): nothing went and nothing failed, because the consent
+ * check refused everyone who was not waiting; the reasons are listed beside it.
+ */
+export function outcomeOf(r: IgSendResult): 'none' | 'partial' | 'all' | 'held' | 'skipped' {
+  if (r.sent === 0) {
+    if (r.failed > 0) return 'none';
+    if (r.held > 0) return 'held';
+    return r.skipped > 0 ? 'skipped' : 'none';
+  }
   return r.failed > 0 ? 'partial' : 'all';
 }
 

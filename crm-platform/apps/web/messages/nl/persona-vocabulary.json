@@ -1,0 +1,85 @@
+{
+  "persona-vocabulary": {
+    "common": {
+      "loading": "Je woorden worden geladen...",
+      "retry": "Opnieuw proberen",
+      "dismiss": "Sluiten"
+    },
+    "tile": {
+      "label": "Woorden die we gebruiken",
+      "description": "Hernoem Contact, Afspraak, Deal en Vergadering zodat ze bij je bedrijf passen.",
+      "keywords": "hernoemen, patiënt, cliënt, klant, lead, lid, bezoek, terminologie, woordenschat, labels"
+    },
+    "title": "Woorden die we gebruiken",
+    "subtitle": "Noem dingen zoals jouw bedrijf ze noemt: Patiënt, Cliënt, Lid, Bezoek. Alleen de labels die mensen lezen veranderen.",
+    "discard": "Wijzigingen negeren",
+    "save": "Opslaan",
+    "saved": "Opgeslagen. Menu’s en schermen gebruiken nu je woorden.",
+    "resetDone": "Terug naar de standaardwoorden.",
+    "reset": "Standaardwoorden gebruiken",
+    "conflict": "Iemand anders heeft deze woorden gewijzigd terwijl je bewerkte. De nieuwste versie wordt getoond; voer je wijziging opnieuw uit.",
+    "conflictOk": "OK",
+    "language": "Je bewerkt de woorden die mensen zien wanneer de app in {language} staat. Wissel de app-taal om een andere taal te bewerken.",
+    "labelsOnly": "Alleen labels veranderen. Je gegevens, exports, integraties, API en de berichten die je naar klanten stuurt behouden hun gebruikelijke namen.",
+    "applyAll": "Deze woorden in elke taal gebruiken",
+    "applyAllHint": "Slaat dezelfde woorden op voor alle 21 app-talen. Laat uit om alleen de hierboven getoonde taal te wijzigen.",
+    "grammar": "Woorden worden precies zo in de app geplaatst als je ze typt. De app past in andere talen geen grammatica aan (geslacht, naamvallen, lidwoorden) en enkele schermen tonen nog het standaardwoord.",
+    "sharedWord": "In deze taal dekt één woord zowel afspraken als vergaderingen, dus een nieuwe naam hiervoor wordt hier niet getoond. In andere talen blijft hij gelden.",
+    "nouns": {
+      "contact": {
+        "hint": "De mensen met wie je praat. Getoond in het menu, de lijst, de recordpagina en de knoppen daarvan."
+      },
+      "appointment": {
+        "hint": "Een gereserveerd tijdvak met een klant. Getoond in het scherm Afspraken en in het contactrecord."
+      },
+      "deal": {
+        "hint": "Een verkoopkans. Getoond op het dealbord en in het contactrecord."
+      },
+      "meeting": {
+        "hint": "Een gesprek of vergadering die je bij een contact vastlegt."
+      }
+    },
+    "fields": {
+      "name": "Naam",
+      "singular": "Enkelvoud",
+      "plural": "Meervoud",
+      "placeholderHint": "Standaardwoord: {word}"
+    },
+    "source": {
+      "workspace": "Jouw woorden",
+      "operator": "Ingesteld door je accountteam",
+      "persona": "Van je bedrijfstype",
+      "default": "Standaardwoorden"
+    },
+    "problems": {
+      "incomplete": "Vul enkelvoud en meervoud allebei in, of wis ze allebei.",
+      "invalid": "Gebruik alleen letters, cijfers, spaties en - . & / ( ), maximaal 40 tekens."
+    },
+    "errors": {
+      "network": "De server is niet bereikbaar. Controleer je verbinding en probeer het opnieuw.",
+      "forbidden": "Je hebt toestemming nodig om werkruimte-instellingen te beheren om deze woorden te wijzigen.",
+      "conflict": "Deze woorden zijn gewijzigd terwijl je bewerkte. Laad opnieuw en probeer het nog eens.",
+      "validation": "Een van de woorden is niet toegestaan. Controleer het gemarkeerde veld.",
+      "rateLimited": "Te veel wijzigingen achter elkaar. Wacht even en probeer het opnieuw.",
+      "unexpected": "Er ging iets mis. Probeer het opnieuw."
+    },
+    "defaults": {
+      "contact": {
+        "one": "Contact",
+        "other": "Contacten"
+      },
+      "appointment": {
+        "one": "Afspraak",
+        "other": "Afspraken"
+      },
+      "deal": {
+        "one": "Deal",
+        "other": "Deals"
+      },
+      "meeting": {
+        "one": "Vergadering",
+        "other": "Vergaderingen"
+      }
+    }
+  }
+}

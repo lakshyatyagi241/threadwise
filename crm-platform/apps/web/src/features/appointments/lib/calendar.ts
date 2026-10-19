@@ -15,6 +15,8 @@ export const CALENDAR_OUTCOMES = [
   'expired',
   'not_configured',
   'missing_scope',
+  /** The person chose Cancel on the confirmation page. */
+  'cancelled',
 ] as const;
 export type CalendarOutcome = (typeof CALENDAR_OUTCOMES)[number];
 

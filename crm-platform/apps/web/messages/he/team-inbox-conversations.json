@@ -29,7 +29,8 @@
       "priorityChanged": "העדיפות עודכנה",
       "snoozed": "השיחה נדחתה",
       "tagAdded": "התגית נוספה",
-      "tagRemoved": "התגית הוסרה"
+      "tagRemoved": "התגית הוסרה",
+      "spammed": "השיחה סומנה כספאם."
     },
     "list": {
       "title": "תיבת הודעות",
@@ -44,12 +45,8 @@
         "unassigned": "לא משויך",
         "unread": "לא נקרא"
       },
-      "statusFilter": "סטטוס",
-      "statusOpen": "פתוחה",
-      "statusAll": "כל הסטטוסים",
       "status": {
         "open": "פתוחה",
-        "pending": "ממתינה",
         "snoozed": "בהשהיה",
         "resolved": "נפתרה",
         "closed": "נפתרה",
@@ -61,7 +58,6 @@
         "high": "גבוהה",
         "urgent": "דחופה"
       },
-      "channelFilter": "ערוץ",
       "allChannels": "כל הערוצים",
       "archived": "בארכיון",
       "backToInbox": "חזרה לתיבת ההודעות",
@@ -107,7 +103,57 @@
         }
       },
       "select": "בחירה",
-      "selectDone": "סיום"
+      "selectDone": "סיום",
+      "filters": {
+        "open": "מסננים",
+        "openActive": "מסננים ({count} פעילים)",
+        "title": "מסננים",
+        "close": "סגירה",
+        "reset": "איפוס",
+        "cancel": "ביטול",
+        "apply": "החלה",
+        "status": "סטטוס צ׳אט",
+        "statusHint": "אם לא בוחרים דבר, מוצגות שיחות פתוחות.",
+        "conversation": "שיחה",
+        "any": "הכול",
+        "assigned": "משויכת",
+        "unassigned": "לא משויכת",
+        "unattended": "ללא מענה",
+        "labels": "תגיות",
+        "channels": "ערוצים",
+        "agents": "סוכנים",
+        "sortBy": "מיון לפי",
+        "recent": "אחרונים",
+        "old": "ישנים",
+        "dateRange": "טווח תאריכים (פעילות אחרונה)",
+        "from": "מתאריך",
+        "to": "עד תאריך",
+        "select": "בחירת אפשרות",
+        "search": "חיפוש",
+        "noMatch": "אין התאמות",
+        "today": "היום",
+        "last7": "7 הימים האחרונים",
+        "last30": "30 הימים האחרונים",
+        "thisMonth": "החודש",
+        "clearDates": "ניקוי תאריכים",
+        "previousMonth": "החודש הקודם",
+        "nextMonth": "החודש הבא"
+      },
+      "rowMenu": "פעולות נוספות עבור {name}",
+      "priorityMenu": "עדיפות",
+      "statusFilter": "סטטוס",
+      "statusOpen": "פתוחה",
+      "statusAll": "כל הסטטוסים",
+      "channelFilter": "ערוץ",
+      "selectRow": "בחירת {name}",
+      "snoozedFor": "נדחה · {left}",
+      "snoozeLeft": {
+        "due": "הגיע הזמן",
+        "minutes": "{count, plural, one {דקה אחת} two {# דקות} other {# דקות}}",
+        "hours": "{count, plural, one {שעה אחת} two {שעתיים} other {# שעות}}",
+        "days": "{count, plural, one {יום אחד} two {יומיים} other {# ימים}}"
+      },
+      "unsnoozesAt": "ייפתח מחדש ב-{time}"
     },
     "status": {
       "received": "התקבלה",
@@ -128,6 +174,7 @@
       "mediaNotFound": "הקובץ המצורף פג תוקף או הוסר. צרף אותו שוב.",
       "statusInvalid": "שינוי זה אינו מותר מהסטטוס הנוכחי של השיחה.",
       "assigneeInvalid": "לא ניתן לשייך אדם זה לשיחה זו.",
+      "assignedToOther": "הצ'אט הזה מוקצה לסוכן אחר. הקצו אותו לעצמכם קודם כדי להשיב.",
       "forbidden": "אין לך הרשאה לבצע פעולה זו.",
       "rateLimited": "יותר מדי בקשות. המתן רגע ונסה שוב.",
       "simulatorDisabled": "סימולטור הערוצים כבוי בשרת זה.",
@@ -232,7 +279,11 @@
         "undone": "שינוי השלב בוטל: חזרה ל-{stage}.",
         "undoneToast": "השלב הוחזר ל-{stage}.",
         "couldNotUndo": "אי אפשר עוד לבטל את השינוי הזה: איש הקשר התקדם או שהשינוי כבר בוטל."
-      }
+      },
+      "heldUntil": "מוחזק עד {when}",
+      "heldWhy": "הודעת השיווק הזו ממתינה לסיום שעות השקט שלכם. היא תישלח אז, אם איש הקשר לא ביטל את ההרשמה בינתיים.",
+      "templateSent": "התבנית „{name}” נשלחה דרך {channel}",
+      "templateSentPlain": "התבנית „{name}” נשלחה"
     },
     "media": {
       "openImage": "פתח תמונה {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "שלח תבנית"
       },
       "readOnly": "אפשר לקרוא שיחה זו, אך אין לך הרשאה להשיב.",
+      "resolvedBanner": "השיחה הזו נפתרה. פתחו אותה מחדש כדי להשיב.",
+      "assignedToOther": "הצ'אט הזה מוקצה לסוכן אחר. הקצו אותו לעצמכם קודם כדי להשיב.",
       "typing": "{count, plural, one {חבר צוות מקליד} two {# חברי צוות מקלידים} other {# חברי צוות מקלידים}}",
       "messagesLabel": "הודעות",
       "loadOlder": "טען הודעות קודמות",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "הודעה חדשה: {text}",
       "attachment": "קובץ מצורף",
       "jumpLatest": "עבור להודעה האחרונה",
-      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}"
+      "jumpLatestNew": "{count, plural, one {הודעה חדשה אחת} two {# הודעות חדשות} other {# הודעות חדשות}}",
+      "searchOpen": "חיפוש בצ׳אט הזה",
+      "searchPlaceholder": "חיפוש בצ׳אט הזה",
+      "searchCount": "{current} מתוך {total}",
+      "searchNone": "אין התאמות",
+      "searchPrev": "התוצאה הקודמת",
+      "searchNext": "התוצאה הבאה",
+      "searchClose": "סגירת החיפוש"
     },
     "groupThread": {
       "openGroup": "פתיחת הקבוצה",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "תגובות שמורות",
-      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה."
+      "savedReplyIssues": "לא מולאו ונשארו כפי שנכתבו ({count}): {list}. יש לתקן לפני השליחה.",
+      "toolbar": {
+        "label": "עיצוב הודעה",
+        "bold": "מודגש",
+        "italic": "נטוי",
+        "underline": "קו תחתון",
+        "strike": "קו חוצה",
+        "bullets": "רשימת תבליטים",
+        "numbers": "רשימה ממוספרת",
+        "ai": {
+          "open": "עוזר AI חכם",
+          "noModel": "לא הופעל מודל AI למרחב העבודה הזה",
+          "title": "עוזר AI חכם",
+          "condense": "קיצור",
+          "condenseHint": "קיצור הטקסט והפיכתו לתמציתי",
+          "fix": "תיקון דקדוק",
+          "fixHint": "תיקון שגיאות דקדוק וכתיב",
+          "positive": "טון חיובי",
+          "positiveHint": "הפיכת הטקסט לחיובי ונלהב יותר",
+          "translate": "תרגום",
+          "translateHint": "תרגום לשפות שונות",
+          "selectLanguage": "בחירת שפה",
+          "searchLanguages": "חיפוש שפות…",
+          "noLanguage": "אין שפה תואמת",
+          "working": "בעבודה…",
+          "empty": "כתבו הודעה קודם.",
+          "failed": "ה-AI לא הצליח לשנות את הטקסט. נסו שוב."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "הערות וציר זמן",
@@ -452,7 +540,13 @@
         "pickTeam": "בחר צוות לשיחה זו",
         "noTeam": "ללא צוות",
         "onLeave": "בחופשה",
-        "onLeaveUntil": "בחופשה עד {date}"
+        "onLeaveUntil": "בחופשה עד {date}",
+        "availability": {
+          "online": "מחובר",
+          "away": "לא זמין",
+          "busy": "עסוק",
+          "offline": "לא מחובר"
+        }
       },
       "presence": {
         "online": "מחובר",
@@ -461,16 +555,8 @@
         "offline": "לא מחובר"
       },
       "notes": {
-        "tab": "הערות",
-        "label": "הערה פנימית חדשה",
-        "placeholder": "כתוב הערה שרק הצוות שלך יכול לראות",
-        "hint": "Ctrl+Enter מוסיף את ההערה.",
-        "add": "הוסף הערה",
-        "addFailed": "לא ניתן לשמור את ההערה.",
-        "loading": "טוען הערות",
-        "empty": "אין הערות עדיין.",
-        "unknownAuthor": "חבר צוות",
-        "delete": "מחק הערה זו"
+        "tab": "הערות איש קשר",
+        "noContact": "לשיחה זו אין איש קשר שאפשר לצרף אליו הערות."
       },
       "timeline": {
         "tab": "ציר זמן",
@@ -496,6 +582,8 @@
           "tag_removed": "תגית הוסרה על ידי {actor}",
           "first_response": "התשובה הראשונה נשלחה",
           "sla_breach": "מועד המענה הוחמץ",
+          "spam_flagged": "סומן כספאם על ידי {actor}",
+          "escalated": "הוסלם",
           "unknown": "{what} על ידי {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "אין הודעות",
         "status": {
           "open": "פתוחה",
-          "pending": "ממתינה",
           "snoozed": "בהשהיה",
           "resolved": "נפתרה",
           "closed": "סגורה",
@@ -620,6 +707,8 @@
         "format": "{label} אינו יכול להכיל מעבר שורה, טאב או ארבעה רווחים ברצף."
       },
       "reason": {
+        "other_number": "שייך למספר וואטסאפ אחר, ולכן אי אפשר לשלוח אותה מהשיחה הזו.",
+        "not_linked": "הערוץ של השיחה הזו אינו מקושר למספר וואטסאפ, ולכן לא ניתן לשלוח ממנו תבנית.",
         "paused": "הושהתה על ידי WhatsApp. ניתן לשלוח אותה שוב לאחר סיום ההשהיה.",
         "media_header": "יש לה כותרת של תמונה, וידאו או מסמך, שלא ניתן לשלוח מתיבת ההודעות עדיין.",
         "header_variable": "יש בה משתנה בכותרת, שלא ניתן למלא עדיין מתיבת ההודעות.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "אימייל"
+        "email": "אימייל",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "איש קשר",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "עדיפות",
       "snooze": "דחייה",
-      "wake": "החזר עכשיו"
+      "wake": "החזר עכשיו",
+      "markSpam": "סמן כספאם",
+      "notSpam": "לא ספאם"
     },
     "bulk": {
       "barLabel": "פעולות מרוכזות",
@@ -959,7 +1053,8 @@
       "tagAdd": "הוספת תגית",
       "tagRemove": "הסרת תגית",
       "onLeave": "בחופשה",
-      "onLeaveUntil": "בחופשה עד {date}"
+      "onLeaveUntil": "בחופשה עד {date}",
+      "spam": "סמן כספאם"
     },
     "tags": {
       "tag": "תגית",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: הוחמץ (היה אמור עד {time})",
       "titleOpen": "{kind}: עד {time}"
+    },
+    "channelType": {
+      "official": "רשמי",
+      "unofficial": "לא רשמי",
+      "officialFull": "רשמי (WhatsApp Cloud API)",
+      "unofficialFull": "לא רשמי (QR / Baileys)"
     }
   }
 }

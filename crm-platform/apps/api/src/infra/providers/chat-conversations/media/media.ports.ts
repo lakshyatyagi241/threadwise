@@ -13,6 +13,8 @@ export interface ChatMediaObjectGateway {
   /** Writes to the bucket; null when media is local, so the caller writes it to its own disk. */
   put(key: string, body: Buffer, contentType: string): Promise<{ key: string } | null>;
   remove(key: string): Promise<void>;
+  /** The size of an object on the bucket (a HEAD), or null when it is not there. Optional: only the storage backfill asks. */
+  size?(key: string): Promise<number | null>;
   /** A link the server may fetch (signed for a private bucket). Never handed to a browser. */
   url(key: string, ttlSeconds?: number): Promise<string>;
 }

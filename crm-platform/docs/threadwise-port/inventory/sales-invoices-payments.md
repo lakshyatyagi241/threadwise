@@ -1473,7 +1473,7 @@ Connections: **checkout-orders-merchant-payments** (`wa_orders`, `wa_merchant_ga
 - **Settings:** none.
 - **Acceptance criteria:** Given payments in two currencies, Then the report shows the mixed-currency warning.
 - **Source refs:** `app/Http/Controllers/CrmController.php`.
-- **Port notes:** report per currency; derive base-currency totals only with stored FX.
+- **Port notes:** report per currency; derive base-currency totals only with stored FX. Built in the CRM domain as `GET /v2/crm/revenue` and prepared CSV/PDF files: [wiring](../wiring/crm-revenue-report.md), [parity](../parity/crm-revenue-report.md).
 
 ## Data model
 

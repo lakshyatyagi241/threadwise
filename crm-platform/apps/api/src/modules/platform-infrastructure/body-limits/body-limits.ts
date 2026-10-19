@@ -8,7 +8,6 @@ import {
   type Response,
 } from 'express';
 import {
-  EXT_SHEETS_MAX_BODY_BYTES,
   FORM_SUBMIT_MAX_BODY_BYTES,
   HELP_AGENT_MAX_BODY_BYTES,
   LEAD_HOOK_MAX_BODY_BYTES,
@@ -48,13 +47,6 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
     // The Forms add-on's public door: a submission is a few answers, so the class is bounded by its own contract number, not the
     // webhook class (an anonymous caller must not be able to make the parser buffer a megabyte).
     { name: 'public-form', pattern: under('public/forms'), bytes: FORM_SUBMIT_MAX_BODY_BYTES },
-    // The Google Sheets add-on sends up to 500 rows per call. Authenticated by a personal key, so a bigger cap than the default is
-    // bounded by who can reach it; the number is the contract's.
-    {
-      name: 'sheets-addon',
-      pattern: under('api/v1/sheets-addon'),
-      bytes: EXT_SHEETS_MAX_BODY_BYTES,
-    },
     // The Help assistant's model call carries the visible text of a page. Authenticated and throttled; bounded by the contract's number.
     {
       name: 'help-agent',
@@ -77,10 +69,10 @@ export function bodyLimitClasses(env: InfraEnv): BodyLimitClass[] {
             'facebook',
             'instaflow',
             'telegram/inbound',
+            '(?:line|viber|wechat)/inbound',
             'shopify/(?:webhook|compliance)',
             'woocommerce/webhook',
             'campaigns/node',
-            'google/form-response',
           ].join('|') +
           ')(?:/|$)',
       ),

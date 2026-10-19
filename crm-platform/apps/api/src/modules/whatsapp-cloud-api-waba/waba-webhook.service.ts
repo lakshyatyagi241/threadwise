@@ -14,6 +14,8 @@ import {
   WHATSAPP_PROVIDER,
   type WhatsAppProvider,
 } from '../../infra/providers/whatsapp/whatsapp.port';
+import { sealJson } from '../../common/crypto/sealed-json';
+import { addOrRevive } from '../../infra/queue/add-or-revive';
 import { WebhookFanoutService } from '../webhook-fanout';
 import { verifyPayloadProviders, WhatsAppProviderResolver } from '../whatsapp-provider-registry';
 import { WabaConnectionsRepository } from './waba-connections.repository';
@@ -26,8 +28,13 @@ import {
   type WebhookChange,
 } from './waba-rules';
 
+/**
+ * The queued job. `sealed` is `{ changes }` sealed with the credentials key (message text and phone numbers never sit in Redis in
+ * the clear). `changes` is the pre-sealing shape, still accepted by the worker so a job queued before a deploy is not stranded.
+ */
 export interface WabaIngestJob {
-  changes: WebhookChange[];
+  sealed?: string;
+  changes?: WebhookChange[];
 }
 
 /**
@@ -79,18 +86,30 @@ export class WabaWebhookService {
 
   async receive(input: {
     rawBody: Buffer | undefined;
+    /**
+     * What the JSON body parser already made of `rawBody` (`req.body`). When it is an object it is used as the payload instead of
+     * parsing the same bytes a second time: at the 4 MiB cap that second parse (and the 4 MiB string it needs) was about a quarter of
+     * the loop time one delivery cost (EL-B09). The signature is still checked against `rawBody`, the bytes as sent.
+     */
+    parsedBody?: unknown;
     signatureHeader: string | undefined;
     contentType?: string | undefined;
     queryKey: string | undefined;
+    /** The client address after `TRUST_PROXY`, matched against `WABA_TRUSTED_FORWARDER_IPS`. */
+    sourceIp?: string | undefined;
     /** Any request header by lower-case name (a provider of the registry may sign with a header of its own). */
     header?: (name: string) => string | undefined;
   }): Promise<{ queued: number }> {
     if (!input.rawBody || input.rawBody.length === 0) throw AppError.validation('Empty body');
     let payload: unknown;
-    try {
-      payload = JSON.parse(input.rawBody.toString('utf8'));
-    } catch {
-      throw AppError.validation('Body is not JSON');
+    if (typeof input.parsedBody === 'object' && input.parsedBody !== null) {
+      payload = input.parsedBody;
+    } else {
+      try {
+        payload = JSON.parse(input.rawBody.toString('utf8'));
+      } catch {
+        throw AppError.validation('Body is not JSON');
+      }
     }
     const changes = splitWebhook(payload);
 
@@ -113,6 +132,7 @@ export class WabaWebhookService {
       queryKey: input.queryKey,
       expectedKey: inboundUrlKey(this.credentialsKey()),
       requireSignature: this.env.WABA_REQUIRE_INTERAKT_SIGNATURE,
+      trustedSource: this.isTrustedForwarder(input.sourceIp),
     });
     // Numbers on a provider of the registry are authenticated by that provider's own scheme (signature, shared secret header, or the
     // URL secret for a provider that signs nothing). A number on a built-in route keeps the rule above, unchanged.
@@ -151,7 +171,13 @@ export class WabaWebhookService {
     if (actionable.length === 0) return { queued: 0 };
     // Meta retries a payload it thinks we missed; the same body is the same job, so a retry is absorbed here.
     const jobId = createHash('sha256').update(input.rawBody).digest('hex');
-    await this.queue.add('payload', { changes: actionable }, { jobId });
+    // A job of this id that already failed would swallow Meta's redelivery and we would still answer 200, so it is replaced (ASYNC-018).
+    await addOrRevive(
+      this.queue,
+      'payload',
+      { sealed: sealJson(this.crypto, { changes: actionable }) },
+      { jobId },
+    );
     return { queued: actionable.length };
   }
 
@@ -212,6 +238,13 @@ export class WabaWebhookService {
       return null;
     }
     return out;
+  }
+
+  /** True when the request came from an address listed in `WABA_TRUSTED_FORWARDER_IPS` (an IPv4-mapped IPv6 form is unwrapped). */
+  private isTrustedForwarder(ip: string | undefined): boolean {
+    if (!ip) return false;
+    const plain = ip.replace(/^::ffff:/i, '');
+    return this.env.WABA_TRUSTED_FORWARDER_IPS.includes(plain);
   }
 
   private credentialsKey(): string {

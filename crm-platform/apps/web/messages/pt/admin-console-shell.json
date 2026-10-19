@@ -232,12 +232,49 @@
         "loadFailed": "Não foi possível carregar as configurações.",
         "hours": {
           "title": "Horário de atendimento",
-          "note": "Exibido apenas para referência. O horário de atendimento ainda não é aplicado, então estes controles são somente leitura.",
-          "weekdays": "Seg - Sex",
-          "saturday": "Sábado",
-          "sunday": "Domingo",
           "from": "De",
-          "to": "Até"
+          "to": "Até",
+          "note": "Horário de funcionamento da sua equipe, em {timezone}. As regras de roteamento da caixa de entrada, os temporizadores de SLA, os fluxos e as respostas a leads que dependem do horário comercial usam esta agenda.",
+          "ownerOnly": "Somente o proprietário do espaço de trabalho pode editar isto.",
+          "loadFailed": "Não foi possível carregar o horário de trabalho.",
+          "day": {
+            "mon": "Segunda-feira",
+            "tue": "Terça-feira",
+            "wed": "Quarta-feira",
+            "thu": "Quinta-feira",
+            "fri": "Sexta-feira",
+            "sat": "Sábado",
+            "sun": "Domingo"
+          },
+          "closed": "Fechado",
+          "openAllDay": "Aberto o dia todo",
+          "allDay": "Aberto 24 horas",
+          "overnight": "Fecha na manhã seguinte",
+          "addWindow": "Adicionar horário",
+          "remove": "Remover",
+          "removeWindow": "Remover estes horários de {day}",
+          "copyMonday": "Copiar segunda para terça a sexta",
+          "problem": {
+            "required": "Informe os dois horários.",
+            "same": "Os horários de abertura e fechamento devem ser diferentes.",
+            "overlap": "Os horários do mesmo dia não podem se sobrepor."
+          },
+          "holidays": {
+            "title": "Feriados",
+            "note": "O espaço de trabalho é considerado fechado o dia todo nestas datas, independentemente do horário semanal.",
+            "none": "Nenhum feriado adicionado.",
+            "date": "Data",
+            "label": "Nome (opcional)",
+            "add": "Adicionar feriado",
+            "removeFor": "Remover o feriado de {date}",
+            "problem": {
+              "date": "Não é uma data válida.",
+              "duplicate": "Esta data já está na lista."
+            }
+          },
+          "save": "Salvar horário de trabalho",
+          "saved": "Horário de trabalho salvo.",
+          "saveFailed": "Não foi possível salvar o horário de trabalho."
         },
         "preferences": {
           "title": "Resumo automático com IA",
@@ -351,14 +388,6 @@
         "webhooksTitle": "Webhooks",
         "webhooksBody": "Envie eventos para seus próprios endpoints e receba eventos de outras ferramentas.",
         "manage": "Gerenciar integrações",
-        "sheetsTitle": "Chave de API do Google Sheets",
-        "sheetsBody": "Usada pelo complemento do Sheets para enviar contatos e linhas de mensagens para uma planilha. É o único token pessoal exposto atualmente.",
-        "manageInAccount": "Gerenciar na conta",
-        "active": "Ativa",
-        "keyTimes": "gerada em {created} · último uso {used}",
-        "never": "nunca",
-        "noKey": "Nenhuma chave de API do Sheets gerada. Crie uma em",
-        "noKeyLink": "sua conta → complemento do Sheets",
         "outboundTitle": "Endpoints de saída",
         "outboundBody": "Seu workspace → seu servidor (hooks do CRM, eventos de envio / resposta).",
         "inboundTitle": "Webhooks de entrada",

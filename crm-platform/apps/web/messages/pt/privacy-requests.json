@@ -23,7 +23,11 @@
       "exportNotReady": "Esse arquivo não está pronto ou expirou. Prepare uma nova exportação.",
       "rateLimited": "Muitas solicitações. Aguarde um momento e tente novamente.",
       "validation": "Alguns valores não são válidos. Verifique o formulário e tente novamente.",
-      "unexpected": "Algo deu errado. Tente novamente."
+      "unexpected": "Algo deu errado. Tente novamente.",
+      "holdActive": "Este registo está protegido e não pode ser eliminado neste momento.",
+      "holdExists": "Esta pessoa já tem uma retenção legal ativa. Prorrogue-a para acrescentar outro assunto.",
+      "holdNotFound": "Esta retenção legal já não existe.",
+      "holdNotActive": "Esta retenção legal já terminou."
     },
     "type": {
       "access": "Acesso",
@@ -182,7 +186,12 @@
           "erase_previewed": "Exclusão visualizada",
           "erased": "Dados apagados",
           "completed": "Solicitação concluída",
-          "other": "Atualização"
+          "other": "Atualização",
+          "restricted": "Restrito: retenção legal",
+          "erasure_queued": "Apagamento confirmado, a aguardar o fim da retenção",
+          "restriction_lifted": "Restrição levantada",
+          "resume_skipped": "Apagamento automático ignorado",
+          "resume_failed": "O apagamento automático falhou, execute-o manualmente"
         }
       },
       "verify": {
@@ -284,6 +293,168 @@
       "erase": "Apagar esta pessoa",
       "created": "Solicitação {reference} criada.",
       "failed": "Não foi possível criar a solicitação."
+    },
+    "legalHold": {
+      "close": "Fechar",
+      "tab": {
+        "label": "Privacidade",
+        "requests": "Pedidos de dados",
+        "holds": "Retenções legais"
+      },
+      "requesterResponse": "Recebemos o seu pedido. Somos obrigados a conservar alguns dos seus dados para cumprir uma obrigação legal, pelo que não os podemos apagar agora. Restringimos a sua utilização e iremos apagá-los quando a obrigação terminar. Pode apresentar uma reclamação junto da sua autoridade de proteção de dados.",
+      "contactBanner": "Retenção legal: apagamento e eliminação suspensos",
+      "workspaceBanner": "Retenção legal em todo o espaço de trabalho: apagamento e eliminação suspensos",
+      "caseStatus": "Restrito: retenção legal",
+      "blockedMessage": "Este registo está protegido e não pode ser eliminado neste momento.",
+      "listFilter": "A aguardar uma retenção legal",
+      "banner": {
+        "caseRef": "Processo {caseRef}",
+        "reviewBy": "revisão até {date}",
+        "reviewOverdue": "revisão em atraso desde {date}",
+        "effects": "Marketing, tratamento por IA e exportações estão restritos, e cada acesso fica registado.",
+        "open": "Abrir o registo"
+      },
+      "category": {
+        "legal_obligation": "Obrigação legal",
+        "legal_claim": "Ação judicial ou litígio",
+        "regulator_request": "Pedido de regulador ou das autoridades policiais",
+        "internal_investigation": "Investigação interna"
+      },
+      "scope": {
+        "contact": "Contacto",
+        "lead": "Lead",
+        "workspace": "Todo o espaço de trabalho"
+      },
+      "status": {
+        "active": "Ativa",
+        "released": "Libertada",
+        "expired": "Expirada"
+      },
+      "menu": {
+        "place": "Aplicar retenção legal...",
+        "release": "Libertar retenção legal..."
+      },
+      "place": {
+        "title": "Aplicar uma retenção legal a este contacto",
+        "workspaceTitle": "Aplicar uma retenção legal a todo o espaço de trabalho",
+        "intro": "Enquanto a retenção durar, o apagamento, a eliminação e a limpeza por prazo de conservação desta pessoa são recusados, e o marketing, o tratamento por IA e as exportações dos seus dados ficam restritos. O atendimento ao cliente continua normalmente.",
+        "workspaceIntro": "Todas as pessoas do espaço de trabalho ficam retidas: o apagamento, a eliminação, a limpeza por prazo de conservação e a remoção de um espaço de trabalho inativo são recusados, e o marketing, o tratamento por IA e as exportações ficam restritos. Use-a para uma ordem que abranja todos os registos.",
+        "category": "Porque é que os dados são conservados?",
+        "categoryPick": "Escolha um motivo",
+        "caseRef": "Referência do processo",
+        "caseRefHint": "A sua própria referência: um processo judicial, um ticket, o número de uma carta do regulador.",
+        "note": "Nota (opcional)",
+        "noteHint": "Não escreva aqui nomes, números de telefone nem detalhes do assunto.",
+        "reviewAt": "Rever até (opcional)",
+        "reviewHint": "O registo assinala a retenção quando esta data passar.",
+        "expiresAt": "Termina em (opcional)",
+        "expiresHint": "Depois desta data, a retenção termina automaticamente.",
+        "submit": "Aplicar retenção",
+        "submitting": "A aplicar...",
+        "done": "Retenção legal aplicada.",
+        "target": "Aplica-se a",
+        "targetPerson": "Uma pessoa",
+        "targetWorkspace": "Todo o espaço de trabalho",
+        "change": "Alterar",
+        "search": "Encontrar a pessoa",
+        "searchHint": "Digite um nome, número de telefone ou endereço de e-mail (mínimo de dois caracteres).",
+        "noResults": "Ninguém encontrado."
+      },
+      "release": {
+        "title": "Libertar esta retenção legal",
+        "message": "A eliminação, a limpeza por prazo de conservação e o marketing podem então ser retomados para este titular. Os pedidos de apagamento que aguardam esta retenção saem do estado restrito, e um apagamento já confirmado por alguém é executado automaticamente no prazo de um minuto.",
+        "cases": "{count, plural, one {# pedido de dados aguarda esta retenção.} other {# pedidos de dados aguardam esta retenção.}}",
+        "reason": "Porque é libertada? (opcional)",
+        "reasonHint": "Não escreva nomes nem detalhes do assunto.",
+        "submit": "Libertar retenção",
+        "submitting": "A libertar...",
+        "done": "Retenção legal libertada.",
+        "doneResuming": "{count, plural, one {Retenção legal libertada. # apagamento confirmado será executado agora.} other {Retenção legal libertada. # apagamentos confirmados serão executados agora.}}"
+      },
+      "extend": {
+        "title": "Prorrogar esta retenção legal",
+        "caseRefNow": "Referência do processo atual: {caseRef}",
+        "addCaseRef": "Acrescentar outra referência de processo",
+        "addCaseRefHint": "Um segundo assunto sobre a mesma pessoa é acrescentado à mesma retenção.",
+        "clearHint": "Esvazie a data para a remover.",
+        "submit": "Guardar alterações",
+        "submitting": "A guardar...",
+        "done": "Retenção legal atualizada."
+      },
+      "review": {
+        "title": "Registar uma revisão",
+        "message": "Regista que voltou a analisar esta retenção e que continua a aplicar-se.",
+        "next": "Próxima revisão até (opcional)",
+        "nextHint": "Deixe vazio para manter a data de revisão atual.",
+        "submit": "Registar revisão",
+        "submitting": "A guardar...",
+        "done": "Revisão registada."
+      },
+      "actions": {
+        "review": "Rever",
+        "extend": "Prorrogar",
+        "release": "Libertar"
+      },
+      "register": {
+        "title": "Retenções legais",
+        "subtitle": "Pessoas e registos cujo apagamento e eliminação estão suspensos porque os dados têm de ser conservados. Uma retenção sobre uma pessoa é aplicada a partir da página desse contacto.",
+        "export": "Exportar CSV",
+        "empty": "Sem retenções legais.",
+        "emptyFiltered": "Nenhuma retenção legal corresponde a estes filtros.",
+        "loadMore": "Carregar mais",
+        "loadingMore": "A carregar...",
+        "none": "-",
+        "overdue": "Revisão em atraso",
+        "cases": "{count, plural, one {# pedido em espera} other {# pedidos em espera}}",
+        "open": "Abrir a retenção com a referência de processo {caseRef}",
+        "filters": {
+          "label": "Filtros",
+          "status": "Estado",
+          "category": "Motivo",
+          "scope": "Aplica-se a",
+          "caseRef": "Referência do processo",
+          "reviewDue": "Revisão em atraso",
+          "any": "Qualquer"
+        },
+        "columns": {
+          "subject": "Titular",
+          "category": "Motivo",
+          "caseRef": "Referência do processo",
+          "placed": "Aplicada em",
+          "review": "Rever até",
+          "expires": "Termina",
+          "status": "Estado",
+          "actions": "Ações"
+        },
+        "place": "Aplicar retenção legal..."
+      },
+      "detail": {
+        "title": "Retenção legal",
+        "history": "Histórico",
+        "releasedAt": "Terminada",
+        "by": "por {actor}",
+        "system": "o sistema",
+        "action": {
+          "insert": "Retenção aplicada",
+          "update": "Retenção alterada",
+          "delete": "Retenção terminada",
+          "other": "Atualização"
+        }
+      },
+      "case": {
+        "body": "Os dados desta pessoa são conservados e bloqueados enquanto uma retenção legal se aplicar. O apagamento não é executado, o marketing, o tratamento por IA e as exportações ficam restritos, e o prazo continua a correr.",
+        "requesterTitle": "Resposta à pessoa",
+        "requesterHint": "Indica que os dados são conservados por obrigação legal, sem dizer porquê. O advogado pode substituir este texto nas definições de privacidade.",
+        "copy": "Copiar texto",
+        "copied": "Copiado",
+        "queueHint": "Ainda pode confirmar o apagamento agora: fica registado, nada é apagado, e é executado automaticamente quando a retenção terminar.",
+        "queue": "Confirmar o apagamento para quando a retenção terminar",
+        "queued": "Registado. Nada foi apagado; o apagamento será executado automaticamente quando a retenção terminar."
+      },
+      "settings": {
+        "noticeLabel": "Resposta a uma pessoa cujo apagamento está retido",
+        "noticeHint": "O texto do seu advogado. Deixe vazio para usar o texto predefinido. Não indique o assunto nem o motivo."
+      }
     }
   }
 }

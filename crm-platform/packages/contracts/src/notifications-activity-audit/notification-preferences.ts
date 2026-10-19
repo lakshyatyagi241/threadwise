@@ -51,6 +51,7 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   new_chat: { group: 'conversations', toast: true, sound: true, push: true },
   new_message: { group: 'conversations', toast: true, sound: true, push: true },
   conversation_assigned: { group: 'conversations', toast: true, sound: true, push: true },
+  snooze_wake: { group: 'conversations', toast: true, sound: true, push: true },
   mention: { group: 'conversations', toast: true, sound: true, push: true },
   // BL-098: a calm follow-up, so no ping by default; the push stays on because the person may be away from the CRM (owner decision).
   chat_waiting: { group: 'conversations', toast: true, sound: false, push: true },
@@ -89,6 +90,8 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   member_leave_started: { group: 'conversations', toast: true, sound: false, push: false },
   // BL-112: a chat nobody could take is news for the leads; the push stays on because a customer is waiting.
   assignment_blocked_by_leave: { group: 'conversations', toast: true, sound: false, push: true },
+  // TW-GACC-011: one note per appointment when its Google event first stops matching; quiet like the other alerts of the group.
+  appointment_calendar_drift: { group: 'conversations', toast: true, sound: false, push: false },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspended: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   waba_group_suspension_cleared: {
@@ -100,6 +103,11 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   // Groups of a personal number: quiet defaults like the official ones. A removal is news to read, not an emergency; push stays off.
   device_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
   device_group_removed: { group: 'whatsapp_groups', toast: true, sound: false, push: false },
+  // BL-076: money news for the workspace's admins. A failed card payment is something to act on (it also reaches their devices); the reminder and the
+  // end are news to read.
+  marketplace_renewal_due: { group: 'billing', toast: true, sound: false, push: false },
+  marketplace_payment_failed: { group: 'billing', toast: true, sound: false, push: true },
+  marketplace_subscription_ended: { group: 'billing', toast: true, sound: false, push: false },
   // The test button writes one so a person can see the in-app path work: pop-up and ping on by default (they can turn either off), no push of its own (the button sends the Web Push test separately).
   test: { group: 'system', toast: true, sound: true, push: false },
 };

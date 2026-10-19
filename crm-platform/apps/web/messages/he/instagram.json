@@ -85,7 +85,8 @@
       "outsideWindow": "מחוץ ל־24 שעות",
       "selected": "{count, plural, one {# נבחר} two {# נבחרו} other {# נבחרו}}",
       "sent": "שידור Instagram נשלח — {sent} נמסרו{failed, plural, =0 {} other {, # נכשלו}}.",
-      "sentNone": "לא ניתן לשלוח לאף נמען. בדקו את החיבור ל־Instagram."
+      "sentNone": "לא ניתן לשלוח לאף נמען. בדקו את החיבור ל־Instagram.",
+      "skipped": "לא נשלחה הודעה בגלל ההסכמה: {count}"
     }
   }
 }

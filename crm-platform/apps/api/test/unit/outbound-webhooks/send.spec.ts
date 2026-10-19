@@ -61,4 +61,25 @@ describe('customer webhook send: the connection is made to the address that was 
     });
     expect((await send('https://93.184.216.34/hook', null, envelope)).error).toMatch(/Timed out/);
   });
+
+  it('a 429 or 503 with Retry-After tells the queue how long to wait; other answers do not (RF-07)', async () => {
+    guarded.guardedRequest.mockResolvedValue({
+      status: 429,
+      body: '',
+      headers: { 'retry-after': '120' },
+    });
+    expect(await send('https://93.184.216.34/hook', null, envelope)).toMatchObject({
+      ok: false,
+      permanent: false,
+      retryAfterMs: 120_000,
+    });
+    guarded.guardedRequest.mockResolvedValue({
+      status: 500,
+      body: '',
+      headers: { 'retry-after': '120' },
+    });
+    expect((await send('https://93.184.216.34/hook', null, envelope)).retryAfterMs).toBeNull();
+    guarded.guardedRequest.mockResolvedValue({ status: 429, body: '', headers: {} });
+    expect((await send('https://93.184.216.34/hook', null, envelope)).retryAfterMs).toBeNull();
+  });
 });

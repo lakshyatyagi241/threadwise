@@ -64,7 +64,6 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     c.mine = (await inbox.conversation(t, ch.id, { assigneeUserId: agent.userId })).uuid;
     c.unassigned = (await inbox.conversation(t, ch.id, {})).uuid;
     c.unread = (await inbox.conversation(t, ch.id, { unread: 3 })).uuid;
-    c.pending = (await inbox.conversation(t, ch.id, { status: 'pending' })).uuid;
     c.resolved = (await inbox.conversation(t, ch.id, { status: 'resolved' })).uuid;
     c.snoozed = (await inbox.conversation(t, ch.id, { status: 'snoozed' })).uuid;
     c.archived = (await inbox.conversation(t, ch.id, { archived: true, status: 'resolved' })).uuid;
@@ -73,11 +72,11 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     await inbox.conversation(t, ch.id, { messages: 0, lastMessageAt: null });
   });
 
-  it('shows open and pending threads by default, newest activity first, as the summary shape the contract defines', async () => {
+  it('shows open threads by default, newest activity first, as the summary shape the contract defines', async () => {
     const p = await list(agent.token);
-    expect(new Set(ids(p))).toEqual(new Set([c.mine, c.unassigned, c.unread, c.pending, c.other]));
+    expect(new Set(ids(p))).toEqual(new Set([c.mine, c.unassigned, c.unread, c.other]));
     const times = p.data.map((r) => r.id);
-    expect(times).toHaveLength(5);
+    expect(times).toHaveLength(4);
     const first = p.data[0]!;
     expect(first.id).toMatch(uuidRe);
     expect(first.channel.id).toMatch(uuidRe);
@@ -87,19 +86,19 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     expect(p.data[0]!.id).toBe(c.other);
   });
 
-  it('tab mine / unassigned / unread narrow the same set; all is everything open or pending', async () => {
+  it('tab mine / unassigned / unread narrow the same set; all is everything open', async () => {
     expect(ids(await list(agent.token, '?tab=mine'))).toEqual([c.mine]);
     expect(new Set(ids(await list(agent.token, '?tab=unassigned')))).toEqual(
-      new Set([c.unassigned, c.unread, c.pending]),
+      new Set([c.unassigned, c.unread]),
     );
     expect(ids(await list(agent.token, '?tab=unread'))).toEqual([c.unread]);
-    expect(ids(await list(agent.token, '?tab=all'))).toHaveLength(5);
+    expect(ids(await list(agent.token, '?tab=all'))).toHaveLength(4);
   });
 
   it('status filters: resolved, snoozed, all, and a status that does not exist is a validation error', async () => {
     expect(ids(await list(agent.token, '?status=resolved'))).toEqual([c.resolved]);
     expect(ids(await list(agent.token, '?status=snoozed'))).toEqual([c.snoozed]);
-    expect(ids(await list(agent.token, '?status=all'))).toHaveLength(7);
+    expect(ids(await list(agent.token, '?status=all'))).toHaveLength(6);
     const bad = await api.as(agent.token).get('/v2/inbox/conversations?status=bogus');
     expect(bad.status).toBe(422);
     expect(bad.body.code).toBe('VALIDATION_FAILED');
@@ -127,6 +126,50 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     expect(stranger.page.hasMore).toBe(false);
   });
 
+  it('the Filters window: several statuses, Conversation, agents, oldest first and a date range', async () => {
+    expect(new Set(ids(await list(agent.token, '?statuses=resolved,snoozed')))).toEqual(
+      new Set([c.resolved, c.snoozed]),
+    );
+    expect(new Set(ids(await list(agent.token, '?statuses=open,snoozed')))).toEqual(
+      new Set([c.mine, c.unassigned, c.unread, c.other, c.snoozed]),
+    );
+    expect((await api.as(agent.token).get('/v2/inbox/conversations?statuses=pending')).status).toBe(
+      422,
+    );
+    expect((await api.as(agent.token).get('/v2/inbox/conversations?statuses=bogus')).status).toBe(
+      422,
+    );
+    expect(new Set(ids(await list(agent.token, '?assignment=assigned')))).toEqual(
+      new Set([c.mine, c.other]),
+    );
+    expect(new Set(ids(await list(agent.token, '?assignment=unassigned')))).toEqual(
+      new Set([c.unassigned, c.unread]),
+    );
+    expect(ids(await list(agent.token, '?assignment=unattended'))).toEqual([c.unread]);
+    const who = await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [agent.userId]);
+    expect(ids(await list(agent.token, `?agentIds=${who.rows[0].uuid}`))).toEqual([c.mine]);
+    expect(
+      new Set(ids(await list(agent.token, `?channelIds=${ch.id},${ch2.id}&status=all`))),
+    ).toEqual(new Set(ids(await list(agent.token, '?status=all'))));
+    expect(ids(await list(agent.token, `?channelIds=${ch2.id}`))).toEqual([c.other]);
+    expect(
+      (await list(agent.token, '?channelIds=0a5c1d92-1f64-4f9b-8a0e-0e8b6f5a77f1')).data,
+    ).toEqual([]);
+    // Oldest activity first is the exact reverse of the default order when nothing is pinned.
+    const recent = ids(await list(agent.token));
+    expect(ids(await list(agent.token, '?sort=old'))).toEqual([...recent].reverse());
+    const page1 = await list(agent.token, '?sort=old&limit=2');
+    const page2 = await list(agent.token, `?sort=old&limit=2&cursor=${page1.page.nextCursor}`);
+    expect([...ids(page1), ...ids(page2)]).toEqual([...recent].reverse().slice(0, 4));
+    // Everything was seeded today: today is in range, a day in the past is not.
+    const today = new Date().toISOString().slice(0, 10);
+    expect(ids(await list(agent.token, `?from=${today}&to=${today}`))).toHaveLength(4);
+    expect(ids(await list(agent.token, '?to=2000-01-01'))).toEqual([]);
+    expect((await api.as(agent.token).get('/v2/inbox/conversations?from=yesterday')).status).toBe(
+      422,
+    );
+  });
+
   it('the archive view shows every archived thread whatever the tab or status, and archived ones stay out of the other views', async () => {
     const a = await list(agent.token, '?archived=true&tab=mine&status=open');
     expect(ids(a)).toEqual([c.archived]);
@@ -137,7 +180,7 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
 
   it('meta.counts and GET /counts equal what the tabs list, and the archived count is separate', async () => {
     const p = await list(agent.token);
-    expect(p.meta.counts).toEqual({ all: 5, mine: 1, unassigned: 3, unread: 1, archived: 1 });
+    expect(p.meta.counts).toEqual({ all: 4, mine: 1, unassigned: 2, unread: 1, archived: 1 });
     const res = await api.as(agent.token).get('/v2/inbox/counts');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(p.meta.counts);
@@ -159,8 +202,8 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
       if (!p.page.hasMore) break;
       cursor = p.page.nextCursor;
     }
-    expect(seen).toHaveLength(5);
-    expect(new Set(seen).size).toBe(5);
+    expect(seen).toHaveLength(4);
+    expect(new Set(seen).size).toBe(4);
   });
 
   it('refuses a malformed cursor with a validation error, never a 500', async () => {

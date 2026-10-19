@@ -89,7 +89,18 @@
       "NETWORK": "Błąd sieci - spróbuj ponownie.",
       "UNEXPECTED": "Coś poszło nie tak. Spróbuj ponownie.",
       "CALL_PLAYBACK_LINK_INVALID": "Link do nagrania wygasł. Naciśnij odtwarzanie ponownie, aby uzyskać nowy.",
-      "CALL_RANGE_INVALID": "Te daty są nieprawidłowe: początek nie może być po końcu, zakres może obejmować najwyżej rok, a strefa czasowa musi istnieć."
+      "CALL_RANGE_INVALID": "Te daty są nieprawidłowe: początek nie może być po końcu, zakres może obejmować najwyżej rok, a strefa czasowa musi istnieć.",
+      "CALL_OUTSIDE_WINDOW": "Ten kontakt jest poza Twoimi godzinami dzwonienia, więc nie wykonano połączenia. Okno dzwonienia otworzy się {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Nie znaleziono tego połączenia.",
+      "CALL_LOG_CONTACT_REQUIRED": "Podaj kontakt lub numer telefonu, który da się odczytać.",
+      "CALL_LOG_TIME_INVALID": "Połączenie nie może zaczynać się w przyszłości ani ponad 400 dni temu.",
+      "CALL_LOG_NOT_EDITABLE": "To połączenie zgłosił telefon lub dostawca telefonii, więc nie można go zmienić.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Czas na zmianę tego połączenia minął.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Zadanie kontrolne wymaga kontaktu. Podaj numer należący do jednego z Twoich kontaktów.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Nie znaleziono tego połączenia telefonicznego.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Ten dostawca telefonii jest niedostępny.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "To połączenie telefoniczne nie może wykonywać rozmów.",
+      "TELEPHONY_CALL_FAILED": "Dostawca telefonii nie mógł wykonać połączenia."
     },
     "settings": {
       "title": "Połączenia",

@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { legalHoldRestricted } from '../../common/errors/legal-hold.error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   LEAD_SCORING_AI_PORT,
@@ -22,6 +23,7 @@ import { QUEUES } from '../../infra/queue/queues';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { ContactsService } from '../crm';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import {
   LeadChatDigestRepository,
   toSuggestion,
@@ -49,7 +51,7 @@ import {
 import { LeadStageLineService } from './lead-stage-line.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository, type RunWrite } from './lead-scoring.repository';
-import { AI_PROVIDER, resolveCost } from './lead-scoring.rules';
+import { AI_PROVIDER, LEAD_SCORING_FEATURE, resolveCost } from './lead-scoring.rules';
 
 const SUGGESTION_MODULE_KEY = 'lifecycle_stage_suggestions';
 const CONTACTS_MODULE_KEY = 'contacts';
@@ -90,6 +92,7 @@ export class LeadChatDigestService {
     private readonly contacts: ContactsService,
     private readonly listeners: ChatDigestListeners,
     private readonly stageLines: LeadStageLineService,
+    private readonly plans: PlanEntitlementService,
     @Inject(LEAD_SCORING_AI_PORT) private readonly ai: LeadScoringAiPort,
     @InjectQueue(QUEUES.LSC_SCORE) private readonly queue: Queue<LeadDigestJob>,
   ) {}
@@ -103,7 +106,7 @@ export class LeadChatDigestService {
       {
         jobId: `lscd-${c.orgId}-${c.contactId}`,
         attempts: 3,
-        backoff: { type: 'exponential', delay: 15_000 },
+        backoff: { type: 'exponential', delay: 15_000, jitter: 0.5 },
         removeOnComplete: true,
         removeOnFail: { count: 1_000, age: 24 * 3600 },
       },
@@ -158,6 +161,13 @@ export class LeadChatDigestService {
         'not_enabled',
       );
     }
+    if (!(await this.plans.featureEnabled(orgId, LEAD_SCORING_FEATURE))) {
+      return stop(
+        'PLAN_FEATURE_LOCKED',
+        'AI lead scoring is not part of your workspace. Install the AI lead scoring app from the Marketplace.',
+        'feature_off',
+      );
+    }
     if (!isChatDigestPilot(gate.slug) || !gate.settings.chatDigest) {
       return stop(
         'LSC_CHAT_DIGEST_UNAVAILABLE',
@@ -180,6 +190,15 @@ export class LeadChatDigestService {
       };
     });
     if (!loaded?.scoring) return { status: 'skipped', reason: 'contact_gone' };
+    // A person under a legal hold (BL-295) is restricted from AI processing: their conversation is not read by a model.
+    if (
+      await this.db.txAs({ orgId, userId: null }, (tx) =>
+        this.repo.isRestricted(tx, orgId, contactId),
+      )
+    ) {
+      if (manual) throw legalHoldRestricted();
+      return { status: 'skipped', reason: 'restricted' };
+    }
     const { brief, stages, scoring } = loaded;
 
     // The workspace's own words to mask and its own button taps (the growth pilot's settings; empty elsewhere).

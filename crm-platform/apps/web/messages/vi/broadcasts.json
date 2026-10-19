@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Đã tạm dừng: đã đạt giới hạn gửi hằng ngày. Sẽ tự động tiếp tục sau {when}.",
         "halt": "Đã tạm dừng: việc gửi bị dừng đối với không gian làm việc này. Sẽ tiếp tục khi lệnh dừng được gỡ bỏ.",
-        "manual": "Đã tạm dừng."
+        "manual": "Đã tạm dừng.",
+        "quiet_hours": "Đã tạm dừng: một số người nhận đang trong giờ yên tĩnh. Sẽ tự tiếp tục sau {when}."
       },
       "delete": "Xóa",
       "deleteTitle": "Xóa đợt gửi hàng loạt?",
@@ -145,7 +146,8 @@
         "queued": "Đang chờ",
         "queuedHint": "chờ gửi",
         "failed": "Thất bại",
-        "failedPct": "Tỷ lệ thất bại {pct}%"
+        "failedPct": "Tỷ lệ thất bại {pct}%",
+        "queuedHeld": "{count} đang tạm giữ vì giờ yên tĩnh"
       },
       "tab": {
         "overview": "Tổng quan",
@@ -193,7 +195,8 @@
         "lastClick": "Lần nhấp gần nhất: {when}",
         "empty": "Chưa có người nhận nào được đính kèm.",
         "more": "Tải thêm",
-        "loading": "Đang tải"
+        "loading": "Đang tải",
+        "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)"
       },
       "failures": {
         "kicker": "Lý do thất bại",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Không chính thức (đã tắt)"
     },
     "compose": {
-      "back": "Quay lại Gửi hàng loạt",
-      "crumb": "Gửi hàng loạt / Mới",
-      "title": "Tạo mới",
-      "titleAccent": "gửi hàng loạt",
-      "draft": "Bản nháp / chưa lưu",
-      "submit": "Thêm đợt gửi hàng loạt",
-      "submitting": "Đang thêm…",
-      "created": "Đã thêm đợt gửi hàng loạt.",
-      "createdMany": "Đã thêm {count} đợt gửi hàng loạt, mỗi người gửi một đợt.",
-      "failed": "Không thể thêm đợt gửi hàng loạt.",
-      "fixName": "Nhập tên đợt gửi hàng loạt.",
-      "fixTemplate": "Chọn một mẫu đã được duyệt.",
-      "fixSchedule": "Chọn ngày và giờ gửi.",
-      "loading": "Đang tải",
-      "loadError": "Không thể tải dữ liệu soạn tin.",
-      "retry": "Thử lại",
-      "setup": "Thiết lập gửi hàng loạt",
-      "templateMessage": "tin nhắn mẫu",
-      "name": "Tên đợt gửi hàng loạt",
-      "namePlaceholder": "vd: Gửi mẫu ưu đãi tháng 5",
-      "nameHint": "Nhãn nội bộ dùng trong báo cáo gửi hàng loạt.",
-      "template": "Chọn tin nhắn mẫu",
-      "pickTemplate": "— Chọn một mẫu đã được duyệt —",
-      "noTemplates": "Chưa có mẫu nào được duyệt.",
       "createOne": "Tạo mới",
-      "templateHint": "Gửi hàng loạt chỉ gửi các mẫu đã được duyệt.",
-      "twilioHint": "Việc gửi tuân thủ Twilio yêu cầu Content SID cho mỗi mẫu — hãy đánh dấu mẫu là \"Twilio ready\" qua /templates/{id}/edit. Các mẫu không có ContentSid sẽ được gửi dưới dạng văn bản thuần (mất phê duyệt mẫu của Meta).",
-      "device": "Gửi từ thiết bị",
-      "devices": "Gửi từ các thiết bị",
-      "multiDevice": "Nhiều thiết bị — đánh dấu tất cả thiết bị áp dụng",
-      "noDevices": "Không có thiết bị nào được kết nối.",
-      "connectOne": "Kết nối một thiết bị →",
-      "share": "tỷ lệ",
-      "shareHint": "Đánh dấu thiết bị và đặt tỷ lệ chia — ví dụ 7 / 3 sẽ gửi 70% liên hệ qua thiết bị đầu tiên và 30% qua thiết bị thứ hai. Tỷ lệ bằng nhau sẽ chia đều.",
       "audience": "Bạn muốn gửi cho ai?",
       "audienceHint": "Chọn phân khúc, thẻ, nhóm hoặc liên hệ. Mọi người được chọn sẽ được gộp một lần.",
       "selected": "Đã chọn {count}",
@@ -276,27 +246,10 @@
       "noContacts": "Chưa có liên hệ nào.",
       "addSome": "Thêm liên hệ →",
       "noMatch": "Không có liên hệ nào khớp với tìm kiếm.",
-      "when": "Bạn muốn gửi hàng loạt khi nào?",
-      "whenHint": "Gửi ngay hoặc chọn ngày / giờ trong tương lai.",
-      "sendNow": "Gửi ngay",
-      "sendNowHint": "Gửi sau khi kiểm tra cuối cùng.",
-      "sendLater": "Lên lịch gửi sau",
-      "sendLaterHint": "Chọn ngày và giờ cụ thể.",
-      "sendDate": "Ngày gửi",
-      "sendTime": "Giờ gửi",
-      "timezone": "Múi giờ",
-      "preview": "Xem trước mẫu",
-      "previewTitle": "Xem trước gửi hàng loạt",
-      "previewSub": "Tin nhắn mẫu",
-      "pickToPreview": "Chọn một mẫu để xem trước…",
-      "previewSelected": "Đã chọn",
-      "previewSchedule": "Lịch gửi",
-      "now": "Ngay",
-      "later": "Sau",
-      "media": "Xem trước {kind}",
       "contactsDenied": "Bạn không có quyền truy cập danh sách liên hệ. Hãy chọn liên hệ qua nhóm hoặc thẻ.",
       "unofficialDisabled": "Gửi qua số WhatsApp cá nhân (API không chính thức) chưa được bật cho không gian làm việc của bạn. Hãy chọn một số WhatsApp Business API chính thức.",
-      "previewLabel": "Xem trước mẫu"
+      "colEmail": "Email",
+      "noEmail": "Không có địa chỉ email"
     },
     "overrides": {
       "title": "Điền thông tin cho lần gửi này",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Nhắn tin cho những người đã có trong tin nhắn trực tiếp Instagram của bạn — không cần duyệt mẫu.",
         "cta": "Tạo gửi hàng loạt Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Gửi tin nhắn Messenger cho những người đã nhắn tin cho Trang của bạn trong 24 giờ qua.",
+        "cta": "Tạo chiến dịch gửi Facebook"
+      },
+      "email": {
+        "name": "Email",
+        "hint": "Gửi tin nhắn dưới dạng email từ hộp thư đã kết nối, kèm liên kết hủy đăng ký.",
+        "cta": "Tạo chiến dịch email"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Gửi tin nhắn cho những người đang trò chuyện với tài khoản LINE của bạn.",
+        "cta": "Tạo đợt gửi LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Gửi tin nhắn cho những người đã trò chuyện với tài khoản Viber của bạn.",
+        "cta": "Tạo chiến dịch Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Gửi hàng loạt một tin nhắn đến tất cả người theo dõi, một thẻ hoặc những người dùng được chọn của Tài khoản chính thức.",
+        "cta": "Tạo đợt gửi WeChat"
       }
     }
   }

@@ -29,7 +29,8 @@
       "priorityChanged": "우선순위가 업데이트되었습니다",
       "snoozed": "대화를 일시 중지했습니다",
       "tagAdded": "태그를 추가했습니다",
-      "tagRemoved": "태그를 제거했습니다"
+      "tagRemoved": "태그를 제거했습니다",
+      "spammed": "대화를 스팸으로 표시했습니다."
     },
     "list": {
       "title": "수신함",
@@ -44,12 +45,8 @@
         "unassigned": "미배정",
         "unread": "읽지 않음"
       },
-      "statusFilter": "상태",
-      "statusOpen": "진행 중",
-      "statusAll": "모든 상태",
       "status": {
         "open": "진행 중",
-        "pending": "대기",
         "snoozed": "보류",
         "resolved": "완료",
         "closed": "완료",
@@ -61,7 +58,6 @@
         "high": "높음",
         "urgent": "긴급"
       },
-      "channelFilter": "채널",
       "allChannels": "모든 채널",
       "archived": "보관됨",
       "backToInbox": "수신함으로 돌아가기",
@@ -107,7 +103,57 @@
         }
       },
       "select": "선택",
-      "selectDone": "완료"
+      "selectDone": "완료",
+      "filters": {
+        "open": "필터",
+        "openActive": "필터 ({count}개 켜짐)",
+        "title": "필터",
+        "close": "닫기",
+        "reset": "초기화",
+        "cancel": "취소",
+        "apply": "적용",
+        "status": "채팅 상태",
+        "statusHint": "선택하지 않으면 열린 채팅이 표시됩니다.",
+        "conversation": "대화",
+        "any": "전체",
+        "assigned": "배정됨",
+        "unassigned": "미배정",
+        "unattended": "미확인",
+        "labels": "태그",
+        "channels": "채널",
+        "agents": "상담원",
+        "sortBy": "정렬",
+        "recent": "최신순",
+        "old": "오래된순",
+        "dateRange": "기간 (마지막 활동)",
+        "from": "시작일",
+        "to": "종료일",
+        "select": "옵션 선택",
+        "search": "검색",
+        "noMatch": "일치 항목 없음",
+        "today": "오늘",
+        "last7": "최근 7일",
+        "last30": "최근 30일",
+        "thisMonth": "이번 달",
+        "clearDates": "날짜 지우기",
+        "previousMonth": "이전 달",
+        "nextMonth": "다음 달"
+      },
+      "rowMenu": "{name}에 대한 더 많은 작업",
+      "priorityMenu": "우선순위",
+      "statusFilter": "상태",
+      "statusOpen": "진행 중",
+      "statusAll": "모든 상태",
+      "channelFilter": "채널",
+      "selectRow": "{name} 선택",
+      "snoozedFor": "스누즈 · {left}",
+      "snoozeLeft": {
+        "due": "곧",
+        "minutes": "{count}분",
+        "hours": "{count}시간",
+        "days": "{count}일"
+      },
+      "unsnoozesAt": "{time}에 다시 열림"
     },
     "status": {
       "received": "수신됨",
@@ -128,6 +174,7 @@
       "mediaNotFound": "첨부 파일이 만료되었거나 삭제되었습니다. 다시 첨부하세요.",
       "statusInvalid": "현재 대화 상태에서는 이 변경을 할 수 없습니다.",
       "assigneeInvalid": "해당 사용자에게는 이 대화를 배정할 수 없습니다.",
+      "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "forbidden": "이 작업을 수행할 권한이 없습니다.",
       "rateLimited": "요청이 너무 많습니다. 잠시 후 다시 시도하세요.",
       "simulatorDisabled": "이 서버에서는 채널 시뮬레이터가 꺼져 있습니다.",
@@ -232,7 +279,11 @@
         "undone": "단계 변경을 취소했습니다: {stage}(으)로 돌아갔습니다.",
         "undoneToast": "단계를 {stage}(으)로 되돌렸습니다.",
         "couldNotUndo": "이 변경은 더 이상 취소할 수 없습니다. 연락처가 이미 다음 단계로 갔거나 이미 취소되었습니다."
-      }
+      },
+      "heldUntil": "{when}까지 보류",
+      "heldWhy": "이 마케팅 메시지는 방해 금지 시간이 끝나기를 기다리고 있습니다. 그동안 연락처가 수신을 거부하지 않았다면 그때 전송됩니다.",
+      "templateSent": "템플릿 “{name}”을(를) {channel}(으)로 전송함",
+      "templateSentPlain": "템플릿 “{name}”을(를) 전송함"
     },
     "media": {
       "openImage": "이미지 {name} 열기",
@@ -276,6 +327,8 @@
         "sendTemplate": "템플릿 보내기"
       },
       "readOnly": "이 대화는 볼 수 있지만 답장할 권한이 없습니다.",
+      "resolvedBanner": "이 대화는 해결되었습니다. 답장하려면 다시 여세요.",
+      "assignedToOther": "이 채팅은 다른 상담원에게 배정되어 있습니다. 답장하려면 먼저 본인에게 배정하세요.",
       "typing": "{count, plural, other {팀원 #명이 입력 중입니다}}",
       "messagesLabel": "메시지",
       "loadOlder": "이전 메시지 불러오기",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "새 메시지: {text}",
       "attachment": "첨부 파일",
       "jumpLatest": "최신 메시지로 이동",
-      "jumpLatestNew": "{count, plural, other {새 메시지 #개}}"
+      "jumpLatestNew": "{count, plural, other {새 메시지 #개}}",
+      "searchOpen": "이 채팅에서 검색",
+      "searchPlaceholder": "이 채팅에서 검색",
+      "searchCount": "{total}개 중 {current}번째",
+      "searchNone": "일치 항목 없음",
+      "searchPrev": "이전 결과",
+      "searchNext": "다음 결과",
+      "searchClose": "검색 닫기"
     },
     "groupThread": {
       "openGroup": "그룹 열기",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "저장된 답변",
-      "savedReplyIssues": "채워지지 않고 그대로 남음 ({count}개): {list}. 보내기 전에 수정하세요."
+      "savedReplyIssues": "채워지지 않고 그대로 남음 ({count}개): {list}. 보내기 전에 수정하세요.",
+      "toolbar": {
+        "label": "메시지 서식",
+        "bold": "굵게",
+        "italic": "기울임",
+        "underline": "밑줄",
+        "strike": "취소선",
+        "bullets": "글머리 기호 목록",
+        "numbers": "번호 목록",
+        "ai": {
+          "open": "스마트 AI 어시스턴트",
+          "noModel": "이 워크스페이스에는 활성화된 AI 모델이 없습니다",
+          "title": "스마트 AI 어시스턴트",
+          "condense": "간결하게",
+          "condenseHint": "글을 더 짧고 간결하게 만듭니다",
+          "fix": "문법 수정",
+          "fixHint": "문법과 맞춤법 오류를 고칩니다",
+          "positive": "긍정적인 어조",
+          "positiveHint": "글을 더 긍정적이고 밝게 만듭니다",
+          "translate": "번역",
+          "translateHint": "다른 언어로 번역합니다",
+          "selectLanguage": "언어 선택",
+          "searchLanguages": "언어 검색…",
+          "noLanguage": "일치하는 언어가 없습니다",
+          "working": "처리 중…",
+          "empty": "먼저 메시지를 작성하세요.",
+          "failed": "AI가 글을 바꾸지 못했습니다. 다시 시도해 주세요."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "메모 및 타임라인",
@@ -452,7 +540,13 @@
         "pickTeam": "이 대화에 배정할 팀 선택",
         "noTeam": "팀 없음",
         "onLeave": "휴가 중",
-        "onLeaveUntil": "{date}까지 휴가 중"
+        "onLeaveUntil": "{date}까지 휴가 중",
+        "availability": {
+          "online": "온라인",
+          "away": "자리 비움",
+          "busy": "바쁨",
+          "offline": "오프라인"
+        }
       },
       "presence": {
         "online": "온라인",
@@ -461,16 +555,8 @@
         "offline": "오프라인"
       },
       "notes": {
-        "tab": "메모",
-        "label": "새 내부 메모",
-        "placeholder": "팀만 볼 수 있는 메모를 작성하세요",
-        "hint": "Ctrl+Enter로 메모를 추가합니다.",
-        "add": "메모 추가",
-        "addFailed": "메모를 저장할 수 없습니다.",
-        "loading": "메모를 불러오는 중",
-        "empty": "아직 메모가 없습니다.",
-        "unknownAuthor": "팀원",
-        "delete": "이 메모 삭제"
+        "tab": "연락처 메모",
+        "noContact": "이 대화에는 메모를 추가할 연락처가 없습니다."
       },
       "timeline": {
         "tab": "타임라인",
@@ -496,6 +582,8 @@
           "tag_removed": "{actor}님이 태그를 제거했습니다",
           "first_response": "첫 답장 발송됨",
           "sla_breach": "응답 기한 초과",
+          "spam_flagged": "{actor}님이 스팸으로 표시",
+          "escalated": "에스컬레이션됨",
           "unknown": "{actor} 님: {what}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "메시지 없음",
         "status": {
           "open": "진행 중",
-          "pending": "대기",
           "snoozed": "보류",
           "resolved": "완료",
           "closed": "종료됨",
@@ -620,6 +707,8 @@
         "format": "{label}에는 줄 바꿈, 탭 또는 연속된 공백 네 칸을 포함할 수 없습니다."
       },
       "reason": {
+        "other_number": "다른 WhatsApp 번호의 템플릿이므로 이 대화에서는 보낼 수 없습니다.",
+        "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다.",
         "paused": "WhatsApp에서 일시 중지되었습니다. 중지가 해제되면 다시 보낼 수 있습니다.",
         "media_header": "이미지, 동영상 또는 문서 헤더가 있어 아직 수신함에서 보낼 수 없습니다.",
         "header_variable": "헤더에 변수가 있어 아직 수신함에서 입력할 수 없습니다.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "이메일"
+        "email": "이메일",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "연락처",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "우선순위",
       "snooze": "다시 알림",
-      "wake": "지금 다시 표시"
+      "wake": "지금 다시 표시",
+      "markSpam": "스팸으로 표시",
+      "notSpam": "스팸 아님"
     },
     "bulk": {
       "barLabel": "일괄 작업",
@@ -959,7 +1053,8 @@
       "tagAdd": "태그 추가",
       "tagRemove": "태그 제거",
       "onLeave": "휴가 중",
-      "onLeaveUntil": "{date}까지 휴가 중"
+      "onLeaveUntil": "{date}까지 휴가 중",
+      "spam": "스팸으로 표시"
     },
     "tags": {
       "tag": "태그",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: 미달성 (마감 {time})",
       "titleOpen": "{kind}: 마감 {time}"
+    },
+    "channelType": {
+      "official": "공식",
+      "unofficial": "비공식",
+      "officialFull": "공식 (WhatsApp Cloud API)",
+      "unofficialFull": "비공식 (QR / Baileys)"
     }
   }
 }

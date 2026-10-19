@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Wstrzymano: osiągnięto dzienny limit wysyłek. Zostanie wznowiona automatycznie po {when}.",
         "halt": "Wstrzymano: wysyłanie jest zatrzymane dla tej przestrzeni roboczej. Zostanie wznowione po zdjęciu blokady.",
-        "manual": "Wstrzymano."
+        "manual": "Wstrzymano.",
+        "quiet_hours": "Wstrzymano: część odbiorców jest w godzinach ciszy. Wznowi się samoczynnie po {when}."
       },
       "delete": "Usuń",
       "deleteTitle": "Usunąć wiadomość masową?",
@@ -145,7 +146,8 @@
         "queued": "W kolejce",
         "queuedHint": "oczekuje na wysłanie",
         "failed": "Nieudane",
-        "failedPct": "{pct}% wskaźnik niepowodzeń"
+        "failedPct": "{pct}% wskaźnik niepowodzeń",
+        "queuedHeld": "{count} wstrzymano z powodu godzin ciszy"
       },
       "tab": {
         "overview": "Przegląd",
@@ -193,7 +195,8 @@
         "lastClick": "Ostatnie kliknięcie: {when}",
         "empty": "Brak dołączonych odbiorców.",
         "more": "Załaduj więcej",
-        "loading": "Ładowanie"
+        "loading": "Ładowanie",
+        "heldUntil": "Wstrzymano do {when} (godziny ciszy)"
       },
       "failures": {
         "kicker": "Przyczyny niepowodzeń",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Nieoficjalne (wyłączone)"
     },
     "compose": {
-      "back": "Wróć do wiadomości masowych",
-      "crumb": "Wiadomości masowe / Nowa",
-      "title": "Utwórz nową",
-      "titleAccent": "wiadomość masową",
-      "draft": "Wersja robocza / niezapisana",
-      "submit": "Dodaj wiadomość masową",
-      "submitting": "Dodawanie…",
-      "created": "Dodano wiadomość masową.",
-      "createdMany": "Dodano wiadomości masowe: {count}, po jednej dla każdego nadawcy.",
-      "failed": "Nie udało się dodać wiadomości masowej.",
-      "fixName": "Wpisz nazwę wiadomości masowej.",
-      "fixTemplate": "Wybierz zatwierdzony szablon.",
-      "fixSchedule": "Wybierz datę i godzinę wysyłki.",
-      "loading": "Ładowanie",
-      "loadError": "Nie udało się załadować danych tworzenia.",
-      "retry": "Spróbuj ponownie",
-      "setup": "Konfiguracja wiadomości masowej",
-      "templateMessage": "wiadomość szablonowa",
-      "name": "Nazwa wiadomości masowej",
-      "namePlaceholder": "np. Wysyłka szablonu z ofertą majową",
-      "nameHint": "Etykieta wewnętrzna używana w raportach wiadomości masowych.",
-      "template": "Wybierz wiadomość szablonową",
-      "pickTemplate": "— Wybierz zatwierdzony szablon —",
-      "noTemplates": "Brak zatwierdzonych szablonów.",
       "createOne": "Utwórz szablon",
-      "templateHint": "Wiadomości masowe wysyłają wyłącznie zatwierdzone szablony.",
-      "twilioHint": "Wysyłki zgodne z Twilio wymagają Content SID dla każdego szablonu — oznacz szablon jako „Twilio ready” w /templates/{id}/edit. Szablony bez ContentSid zostaną wysłane jako zwykły tekst (traci się zatwierdzenie szablonu przez Meta).",
-      "device": "Wyślij z urządzenia",
-      "devices": "Wyślij z urządzeń",
-      "multiDevice": "Wiele urządzeń — zaznacz wszystkie, które mają być użyte",
-      "noDevices": "Brak połączonych urządzeń.",
-      "connectOne": "Połącz urządzenie →",
-      "share": "udział",
-      "shareHint": "Zaznacz urządzenia i ustaw wagi udziału — np. 7 / 3 wysyła 70% kontaktów przez pierwsze urządzenie, a 30% przez drugie. Równe wagi dzielą wysyłkę po równo.",
       "audience": "Do kogo chcesz wysłać?",
       "audienceHint": "Wybierz segmenty, tagi, grupy lub kontakty. Wszyscy wybrani są scalani i liczeni raz.",
       "selected": "Wybrano: {count}",
@@ -276,27 +246,10 @@
       "noContacts": "Brak kontaktów.",
       "addSome": "Dodaj kontakty →",
       "noMatch": "Żaden kontakt nie pasuje do wyszukiwania.",
-      "when": "Kiedy chcesz wysłać wiadomość masową?",
-      "whenHint": "Wyślij od razu lub wybierz przyszłą datę / godzinę.",
-      "sendNow": "Wyślij teraz",
-      "sendNowHint": "Wyślij po końcowej weryfikacji.",
-      "sendLater": "Zaplanuj na później",
-      "sendLaterHint": "Wybierz konkretny dzień i godzinę.",
-      "sendDate": "Data wysyłki",
-      "sendTime": "Godzina wysyłki",
-      "timezone": "Strefa czasowa",
-      "preview": "Podgląd szablonu",
-      "previewTitle": "Podgląd wiadomości masowej",
-      "previewSub": "Wiadomość szablonowa",
-      "pickToPreview": "Wybierz szablon, aby zobaczyć podgląd…",
-      "previewSelected": "Wybrano",
-      "previewSchedule": "Harmonogram",
-      "now": "Teraz",
-      "later": "Później",
-      "media": "Podgląd: {kind}",
       "contactsDenied": "Nie masz dostępu do listy kontaktów. Wybierz kontakty przez grupy lub tagi.",
       "unofficialDisabled": "Wysyłanie przez osobiste numery WhatsApp (nieoficjalne API) nie jest włączone dla Twojej przestrzeni roboczej. Wybierz numer oficjalnego WhatsApp Business API.",
-      "previewLabel": "Podgląd szablonu"
+      "colEmail": "E-mail",
+      "noEmail": "Brak adresu e-mail"
     },
     "overrides": {
       "title": "Uzupełnij tę wysyłkę",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Pisz do osób, które już są w Twoich wiadomościach prywatnych na Instagramie — bez zatwierdzania szablonu.",
         "cta": "Utwórz wiadomość masową Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Wyślij wiadomość w Messengerze do osób, które napisały do Twojej Strony w ciągu ostatnich 24 godzin.",
+        "cta": "Utwórz wysyłkę na Facebooku"
+      },
+      "email": {
+        "name": "E-mail",
+        "hint": "Wyślij wiadomość jako e-mail z połączonej skrzynki, z linkiem do rezygnacji z subskrypcji.",
+        "cta": "Utwórz kampanię e-mail"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem LINE.",
+        "cta": "Utwórz wysyłkę LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Wyślij wiadomość do osób, które już piszą z Twoim kontem Viber.",
+        "cta": "Utwórz wysyłkę Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Wyślij wiadomość masowo do wszystkich obserwujących, do tagu lub do wybranych użytkowników Twojego Konta oficjalnego.",
+        "cta": "Utwórz broadcast WeChat"
       }
     }
   }

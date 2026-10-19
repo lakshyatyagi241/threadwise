@@ -86,13 +86,24 @@ describe('the flow a rule starts', () => {
 
   it('is none by default, and the payload says null so an edit can clear it', () => {
     expect(emptyForm().triggerFlowId).toBe('');
-    expect(payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1] }, [], true).triggerFlowId).toBeNull();
+    expect(
+      payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1] }, [], true).triggerFlowId,
+    ).toBeNull();
   });
 
   it('goes to the payload as the flow uuid, and comes back from a saved rule', () => {
-    const payload = payloadFromForm({ ...emptyForm(), name: 'x', userIds: [U1], triggerFlowId: FLOW }, [], true);
+    const payload = payloadFromForm(
+      { ...emptyForm(), name: 'x', userIds: [U1], triggerFlowId: FLOW },
+      [],
+      true,
+    );
     expect(payload.triggerFlowId).toBe(FLOW);
-    expect(createRoutingRuleSchema.safeParse({ ...payload, conditions: { ...payload.conditions, channelKinds: ['telegram'] } }).success).toBe(true);
+    expect(
+      createRoutingRuleSchema.safeParse({
+        ...payload,
+        conditions: { ...payload.conditions, channelKinds: ['telegram'] },
+      }).success,
+    ).toBe(true);
     const saved = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
     expect(formFromRule(saved).triggerFlowId).toBe(FLOW);
   });
@@ -101,7 +112,11 @@ describe('the flow a rule starts', () => {
     const a = rule();
     const b = rule({ triggerFlow: { id: FLOW, name: 'Welcome', isActive: true } });
     expect(editableOf(a)).not.toBe(editableOf(b));
-    expect(editableOf(b)).toBe(editableOf(rule({ triggerFlow: { id: FLOW, name: 'Renamed', isActive: false }, firedCount: 5 })));
+    expect(editableOf(b)).toBe(
+      editableOf(
+        rule({ triggerFlow: { id: FLOW, name: 'Renamed', isActive: false }, firedCount: 5 }),
+      ),
+    );
   });
 });
 
@@ -134,5 +149,165 @@ describe('moveId', () => {
   it('moves one item and leaves the list alone at the edges', () => {
     expect(moveId(['a', 'b', 'c'], 2, 1)).toEqual(['a', 'c', 'b']);
     expect(moveId(['a', 'b', 'c'], 0, -1)).toEqual(['a', 'b', 'c']);
+  });
+});
+
+describe('the actions a rule does: assign, mark as spam, or both', () => {
+  const kw = { ...emptyForm(), name: 'Scams', keywords: 'scam' };
+
+  it('a rule that only marks spam is valid and sends no assign', () => {
+    const f = { ...kw, assigns: false, markSpam: true };
+    expect(problemsOf(f, [])).toEqual([]);
+    const body = payloadFromForm(f, [], false);
+    expect(body).toMatchObject({ markSpam: true, assign: null });
+    expect(createRoutingRuleSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('a rule with no action says so, and does not claim an agent is missing', () => {
+    const f = { ...kw, assigns: false, markSpam: false };
+    expect(problemsOf(f, [])).toEqual(['actions']);
+  });
+
+  it('assigning needs an agent or team; with the assign off, no target is asked for', () => {
+    expect(problemsOf({ ...kw, assigns: true, markSpam: false, userIds: [] }, [])).toEqual([
+      'targets',
+    ]);
+    expect(problemsOf({ ...kw, assigns: false, markSpam: false, userIds: [] }, [])).toEqual([
+      'actions',
+    ]);
+  });
+
+  it('an existing rule that only marks spam opens with the assign switched off', () => {
+    const f = formFromRule(rule({ assign: null, markSpam: true }));
+    expect(f).toMatchObject({ assigns: false, markSpam: true });
+  });
+
+  it('an existing rule with an assignment opens with the assign switched on, and the spam mark off', () => {
+    const f = formFromRule(rule());
+    expect(f).toMatchObject({ assigns: true, markSpam: false, userIds: [U1, U2] });
+  });
+});
+
+describe('priority and tags on a rule', () => {
+  const base = { ...emptyForm(), name: 'VIP', keywords: 'vip' };
+
+  it('a rule that only sets a priority or adds tags is valid, and sends them', () => {
+    const f = { ...base, assigns: false, priority: 'urgent' as const, tags: 'VIP, Refunds' };
+    expect(problemsOf(f, [])).toEqual([]);
+    const body = payloadFromForm(f, [], false);
+    expect(body).toMatchObject({
+      priority: 'urgent',
+      addTags: [
+        { name: 'VIP', color: null },
+        { name: 'Refunds', color: null },
+      ],
+    });
+    expect(createRoutingRuleSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('no priority and no tags sends nothing for them', () => {
+    const body = payloadFromForm({ ...base, assigns: true, userIds: [U1] }, [], true);
+    expect(body).toMatchObject({ priority: null, addTags: [] });
+  });
+
+  it('more than five tags is refused before saving', () => {
+    const f = { ...base, assigns: false, priority: '' as const, tags: 'a, b, c, d, e, f' };
+    expect(problemsOf(f, [])).toEqual(['tagsMany']);
+  });
+});
+
+describe('escalation on a rule', () => {
+  const base = { ...emptyForm(), name: 'Wait', keywords: 'wait', assigns: true, userIds: [U1] };
+
+  it('sends the minutes, the reassignment and the priority', () => {
+    const f = {
+      ...base,
+      escalates: true,
+      escalateMinutes: '45',
+      escalateReassign: true,
+      escalatePriority: 'high' as const,
+    };
+    expect(problemsOf(f, [])).toEqual([]);
+    const body = payloadFromForm(f, [], false);
+    expect(body).toMatchObject({ escalation: { minutes: 45, reassign: true, priority: 'high' } });
+    expect(createRoutingRuleSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('no escalation sends null', () => {
+    expect(payloadFromForm(base, [], false)).toMatchObject({ escalation: null });
+  });
+
+  it('refuses minutes out of range, an empty action, and a reassignment with no agents', () => {
+    expect(
+      problemsOf({ ...base, escalates: true, escalateMinutes: '0', escalateReassign: true }, []),
+    ).toContain('escalationMinutes');
+    expect(
+      problemsOf(
+        {
+          ...base,
+          escalates: true,
+          escalateMinutes: '10',
+          escalateReassign: false,
+          escalatePriority: '',
+        },
+        [],
+      ),
+    ).toContain('escalationAction');
+    expect(
+      problemsOf(
+        {
+          ...base,
+          assigns: false,
+          markSpam: true,
+          escalates: true,
+          escalateMinutes: '10',
+          escalateReassign: true,
+        },
+        [],
+      ),
+    ).toContain('escalationAgents');
+  });
+
+  it('an existing rule with an escalation opens with it filled in', () => {
+    const f = formFromRule(
+      rule({ escalation: { minutes: 20, reassign: false, priority: 'urgent' } }),
+    );
+    expect(f).toMatchObject({
+      escalates: true,
+      escalateMinutes: '20',
+      escalateReassign: false,
+      escalatePriority: 'urgent',
+    });
+  });
+});
+
+describe('automatic reply on a rule', () => {
+  const base = { ...emptyForm(), name: 'Hours', keywords: 'hours' };
+
+  it('sends the reply text, trimmed, and counts as an action of its own', () => {
+    const f = { ...base, assigns: false, autoReplies: true, autoReplyBody: '  Open 9 to 6.  ' };
+    expect(problemsOf(f, [])).toEqual([]);
+    const body = payloadFromForm(f, [], false);
+    expect(body).toMatchObject({ autoReply: { body: 'Open 9 to 6.' } });
+    expect(createRoutingRuleSchema.safeParse(body).success).toBe(true);
+  });
+
+  it('refuses an empty reply and one over the limit', () => {
+    expect(
+      problemsOf({ ...base, assigns: false, autoReplies: true, autoReplyBody: '   ' }, []),
+    ).toContain('autoReplyEmpty');
+    expect(
+      problemsOf(
+        { ...base, assigns: false, autoReplies: true, autoReplyBody: 'x'.repeat(1025) },
+        [],
+      ),
+    ).toContain('autoReplyLong');
+  });
+
+  it('an existing rule with a reply opens with it filled in', () => {
+    expect(formFromRule(rule({ autoReply: { body: 'Hi' } }))).toMatchObject({
+      autoReplies: true,
+      autoReplyBody: 'Hi',
+    });
   });
 });

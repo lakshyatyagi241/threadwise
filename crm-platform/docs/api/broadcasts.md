@@ -210,10 +210,15 @@ The sender sends to one recipient at a time, the way Reference's Node loop did, 
   `{ reason: "daily_cap", resumeAfter: <next midnight UTC> }`, and nobody is lost: the unsent recipients stay `pending`.
 - **One run per sender.** Two broadcasts through the same number would break the gaps its quality depends on, so a second run is
   put back for 15 seconds and tries again. The lease expires by itself if a worker dies.
-- **Pause reasons.** `daily_cap`, `halt` (the emergency halt) and `manual`. The detail shows `pause` while paused.
+- **Pause reasons.** `daily_cap`, `halt` (the emergency halt), `quiet_hours` (BL-177) and `manual`. The detail shows `pause` while paused.
+- **Quiet hours.** For a MARKETING template, a recipient whose local time is inside the workspace's quiet hours is not sent and not failed: it stays
+  `pending` with `held_until` and `held_reason = quiet_hours`, the rest of the audience is sent, and the broadcast becomes `paused` with
+  `{ reason: "quiet_hours", resumeAfter: <first held_until> }`. The resume sweep takes it up again; each released recipient is checked with
+  the ConsentGate once more (a contact who unsubscribed meanwhile fails with "Not sent: the contact unsubscribed ..."). A utility template is
+  never held. The detail `counts.held`, the live counters `held` and the recipients' `heldUntil` / `heldReason` show it.
 - **Resume.** `POST /v2/broadcasts/:id/resume` (permission `bcast.broadcasts.resume`, `Idempotency-Key`): 200 `{ status: "processing" }`
   for a paused broadcast, 409 `BCAST_NOT_RESUMABLE` for any other. It carries on where it stopped. The worker also resumes by
-  itself, every 60 seconds, a daily-cap pause after its `resumeAfter` and a halt pause once the halt is lifted.
+  itself, every 60 seconds, a daily-cap or quiet-hours pause after its `resumeAfter` and a halt pause once the halt is lifted.
 
 The pacing numbers (`msg_gap`, batches, the cap) are Reference's defaults until the settings domain exposes them; they sit behind
 `PACING_SETTINGS`. The clock and the dice of a run are injectable (`PacingRuntime`), which is how the tests run instantly.
@@ -288,8 +293,11 @@ the contacts, groups and tags endpoints.
 attachmentType, attachmentUrl, senderLabel, twilioReady`; `category` is `meta_category`, else the local category when it is a
   WhatsApp one, else `utility`.
 - `senders`: connected numbers (`key` is `<engine>:<uuid>`, what `senderKeys` takes), default engine first, with `label, phone,
-engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers are
-  left out.
+engine, engineLabel, isDefault`. Baileys devices must be connected and active; WABA and Twilio configs connected. SMS numbers and
+  mailboxes are left out.
+- `?channel=sms` and `?channel=email` scope the page to that channel. `email` lists the connected mailboxes the caller may send from
+  (`key` `email:<mailbox uuid>`, `phone` the address, `engine` `email`), no templates, and nothing without the Email plan add-on
+  (see [campaigns.md](campaigns.md#email-campaigns)). A template broadcast refuses an `email:` sender (422 on `senderKeys`).
 - `twilioEnabled`: a Twilio number is connected, so the picker marks each template "Twilio ready" or "plain text only".
 
 `templates[].engine` is `baileys`, `waba` or `twilio`: the stored channel, else Twilio when the template has a Content SID, WABA when

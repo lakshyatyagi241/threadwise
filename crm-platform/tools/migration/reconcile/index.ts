@@ -13,7 +13,7 @@ import { verifyAccess } from './access';
 import { verifyAutomations } from './automation';
 import { verifyChat } from './chat';
 import { verifyCampaigns } from './campaigns';
-import { verifyCredits } from './credits';
+import { readHistoryMarker, verifyCredits } from './credits';
 import { verifyFaq } from './faq';
 import { verifyFlows } from './flows';
 import { verifyLeads } from './leads';
@@ -205,6 +205,12 @@ export function norm(v: unknown, pg: string): string {
 }
 const rowHash = (cols: string[], types: Map<string, string>, row: Row): string =>
   sha256(cols.map((c) => norm(row[c], types.get(c) ?? '')).join('␟'));
+
+/** One line of the verifier's heap use per phase: a big client (Karma: 190,000 charge documents, 74,000 chat documents) can exhaust the worker's 768 MB, and this says where. */
+const memLog = (where: string): void =>
+  console.log(
+    `  reconcile heap ${Math.round(process.memoryUsage().heapUsed / 1048576)} MB at ${where}`,
+  );
 
 export async function reconcile(opts: ReconcileOptions): Promise<Report> {
   const { source, client, dumpsDir } = opts;
@@ -557,6 +563,11 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       fallbackAt,
     );
 
+    // a client whose wallet was rebuilt as the full statement (wallet-history): wallet_transactions is judged by verifyCredits against its
+    // own independent oracle, so the generic per-row fingerprint, uuid and extra-row checks leave that one table alone
+    const walletHistory = await readHistoryMarker(db, client);
+    const skipTables = new Set<string>(walletHistory ? ['wallet_transactions'] : []);
+
     // 3. bulk steps
     const claimed = new Map<string, number>();
     const rollups = new Map<string, { s: string[]; t: string[]; rows: number }>();
@@ -572,7 +583,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       // an id_map from before update mode has no written_version column: nothing was ever updated
     }
     const seenKeys = new Set<string>(); // `${mapCollection}\0${key}` of every source document, for the stale-quarantine check
-    const contactOrder: string[] = []; // uuids of the migrated contacts in source order
+    const contactOrder: Array<{ key: string; uuid: string }> = []; // migrated contacts keyed by their Waboo _id (creation order, sorted below)
     const faqItems: Array<{ base: string; outcome: Extract<Outcome, { kind: 'rows' }> }> = []; // the loaded FAQ documents, for reconcile/faq.ts
     const expectedPrimary = new Map<string, string>(); // `${mapCollection}\0${primary key}` -> uuid of the first row
     const aliasCandidates: Array<{ k: string; uuid: string }> = [];
@@ -580,6 +591,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
     const uniqueSeen = new Map<string, string>(); // `${table}\0${unique key}` of every loaded document
     const tableOracle = new TableOracle(await read('contact_lifecycle_stages'), fallbackAt);
     for (const spec of STEPS) {
+      memLog(`step ${spec.handler}`);
       if (!stepRan(spec.handler)) {
         if (source.collections(client).includes(spec.collection)) notRunList.push(spec.handler);
         continue;
@@ -627,6 +639,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
           oracle,
           tableOracle,
           allowExtra: Boolean(opts.allowExtraRows),
+          skipTables,
           bumped,
         });
       };
@@ -705,7 +718,8 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             row.unaccounted++;
           } else {
             chunk.push({ base, outcome, doc });
-            if (spec.handler === 'faq_knowledge' && outcome.kind === 'rows') faqItems.push({ base, outcome });
+            if (spec.handler === 'faq_knowledge' && outcome.kind === 'rows')
+              faqItems.push({ base, outcome });
             row.migrated++;
             // an adopting document points at a row that already exists (the owner, a preset role)
             const first =
@@ -725,7 +739,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
             expectedPrimary.set(`${spec.mapCollection}\u0000${base}`, first);
             for (const k of keys.slice(1))
               aliasCandidates.push({ k: `${spec.mapCollection}\u0000${k.key}`, uuid: first });
-            if (spec.handler === 'contacts') contactOrder.push(first);
+            if (spec.handler === 'contacts') contactOrder.push({ key: base, uuid: first });
             if (ukey !== null && !uniqueSeen.has(`${table0}\u0000${ukey}`))
               uniqueSeen.set(`${table0}\u0000${ukey}`, base);
           }
@@ -837,7 +851,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       }
     }
     // the opening ledger entry belongs to no document: it is the one wallet_transactions row the uuid set must also expect
-    if (ctx.credits?.opening)
+    if (ctx.credits?.opening && !walletHistory)
       (
         expectedUuids.get('wallet_transactions') ??
         expectedUuids.set('wallet_transactions', new Set()).get('wallet_transactions')!
@@ -908,7 +922,11 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
     }
 
     // 3c. display ids follow the allocator: the Nth migrated contact in source order holds CON-(base + N), no gaps, no swaps
-    if (contactOrder.length > 0) {
+    // display ids follow creation order (Waboo _id ascending), the same order the loader numbers them in
+    const contactUuids = [...contactOrder]
+      .sort((a, b) => (a.key < b.key ? -1 : a.key > b.key ? 1 : 0))
+      .map((c) => c.uuid);
+    if (contactUuids.length > 0) {
       const ids = await withTenant(db, { orgId }, (tx) =>
         tx.execute(
           sql`SELECT uuid::text AS uuid, display_id FROM contacts WHERE org_id = ${orgId} AND legacy_id IS NOT NULL`,
@@ -921,12 +939,12 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         ]),
       );
       const firstNo = Number(
-        /^CON-(\d+)$/.exec(String(dmap.get(contactOrder[0]!) ?? ''))?.[1] ?? NaN,
+        /^CON-(\d+)$/.exec(String(dmap.get(contactUuids[0]!) ?? ''))?.[1] ?? NaN,
       );
       if (Number.isFinite(firstNo)) {
         let wrong = 0;
         let sample = '';
-        contactOrder.forEach((u, i) => {
+        contactUuids.forEach((u, i) => {
           const want = `CON-${String(firstNo + i).padStart(5, '0')}`;
           if (dmap.get(u) !== want) {
             wrong++;
@@ -1036,6 +1054,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
 
     // 3d2. roles, grants, users and their per-user rows against the independent oracle; NO-ADMIN over the whole organization
     if (ctx.chat || inboxProblem) {
+      memLog('chat verifier');
       await verifyChat({
         db,
         orgId,
@@ -1069,6 +1088,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       });
     }
     if (creditSettings && anyRan('credit_wallet', 'credit_tokens', 'usage_charges')) {
+      memLog('credits verifier');
       await verifyCredits({
         db,
         orgId,
@@ -1083,9 +1103,11 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         warnings,
         notPresent,
         idmap,
+        history: walletHistory,
       });
     }
     if (ctx.flows && flowSettings) {
+      memLog('flows verifier');
       await verifyFlows({
         db,
         orgId,
@@ -1217,7 +1239,10 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       const stepTables = new Set(
         STEPS.filter((s) => stepRan(s.handler)).flatMap((s) =>
           Object.entries(s.tables)
-            .filter(([t, ts]) => !ts.keyless && !ts.noUuid && t !== 'roles' && t !== 'users')
+            .filter(
+              ([t, ts]) =>
+                !ts.keyless && !ts.noUuid && t !== 'roles' && t !== 'users' && !skipTables.has(t),
+            )
             .map(([t]) => t),
         ),
       );
@@ -1524,6 +1549,8 @@ interface Verify {
   oracle: ContactOracle;
   tableOracle: TableOracle;
   allowExtra: boolean;
+  /** tables another verifier judges (the wallet ledger of a client with a wallet history) */
+  skipTables: Set<string>;
   /** target uuid -> the row_version the `update` command left on a row it updated (accepted in place of the loaded 1) */
   bumped: Map<string, number>;
 }
@@ -1543,6 +1570,7 @@ async function verifyChunk(
     for (const r of it.outcome.rows) {
       if (spec.tables[r.table]?.keyless) continue; // no uuid: held by the access verifier
       if (spec.tables[r.table]?.noUuid) continue; // no uuid column: held by the credits verifier
+      if (v.skipTables.has(r.table)) continue; // judged elsewhere (wallet history)
       const uuid = rowUuid(v.client, v.mapCollection, it.base, r.sub);
       byTable.set(r.table, [
         ...(byTable.get(r.table) ?? []),
@@ -1587,7 +1615,7 @@ async function verifyChunk(
     );
     const res = await withTenant(v.db, { orgId: v.orgId }, (tx) =>
       tx.execute(sql`SELECT ${colSql} FROM ${sql.raw(`"${table}"`)} WHERE org_id = ${v.orgId}
-        AND uuid IN (SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid)`),
+        AND uuid = ANY (ARRAY(SELECT jsonb_array_elements_text(${JSON.stringify(list.map((l) => l.uuid))}::jsonb)::uuid))`),
     );
     const found = new Map((res.rows as Row[]).map((r) => [r.uuid as string, r]));
     const roll = v.fingerprints.get(table) ?? { s: [], t: [], rows: 0 };
@@ -1742,10 +1770,11 @@ async function checkOrg(
           );
       }
     }
-    const { ownerUserId, ...rest } = o.settings as Record<string, unknown>;
+    // timezone is set at provisioning from --timezone (like signup) and is the owner's to change afterwards
+    const { ownerUserId, timezone: _tz, ...rest } = o.settings as Record<string, unknown>;
     if (stable(rest) !== stable({ legacy: { waboo: { client } } }))
       alarm(
-        'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker and ownerUserId)',
+        'ORG_STATE: organizations.settings was changed after the migration (it holds only the legacy marker, ownerUserId and timezone)',
       );
     const plan = (
       await tx.execute(

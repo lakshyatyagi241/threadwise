@@ -685,6 +685,7 @@
         "anotherPart": "Bu akışın başka bir bölümü. Bir düğme veya liste satırı buraya yönlendirdiğinde çalışır{lost, select, true {: henüz buraya hiçbir şey bağlı değil, bu yüzden hiç çalışmaz.} other {.}}",
         "addFirstStep": "İlk adımı ekleyin",
         "branchingEnds": "Bu {kind, select, list {liste} other {düğme seti}} bu bölümü sonlandırır: sonra ne gönderileceği müşterinin seçimine bağlıdır.",
+        "optionsCarryOn": "Her {kind, select, list {satır} other {düğme}} kendi akışını başlatabilir veya aşağıdaki sonraki adımla devam edebilir.",
         "thenGoTo": "Sonra şuraya git",
         "confirmImport": {
           "title": "Bu akış dosyayla değiştirilsin mi?",
@@ -717,9 +718,10 @@
             "ask": "Müşteriye sor",
             "handoff": "Devret",
             "logic": "Karar ver",
-            "answer": "Yanıt"
+            "answer": "Yanıt",
+            "action": "Eylemler"
           },
-          "blockedTitle": "Düğmeler ve listeler akışı sonlandırır, bu yüzden yalnızca en sona konabilirler.",
+          "blockedTitle": "Bu adım bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
           "blockedTitleFaq": "FAQ ile yanıtla adımının iki çıkışı vardır, bu yüzden yalnızca en sona konabilir."
         },
         "card": {
@@ -733,11 +735,27 @@
           "faqExits": {
             "matched": "Yanıtlandı",
             "no_match": "Eşleşme yok"
-          }
+          },
+          "close": "Kapat",
+          "clickToEdit": "Düzenlemek için tıklayın",
+          "outsideToSave": "Değişiklikleri kaydetmek için adımın dışında herhangi bir yere tıklayın",
+          "addCondition": "Bu adımdan sonra bir koşul ekle",
+          "conditionLast": "Koşul bu bölümü bitirir, bu yüzden yalnızca en sona konabilir.",
+          "duplicateTitle": "Bu adım çoğaltılsın mı?",
+          "duplicateBody": "Hemen ardına bir kopya eklenir.",
+          "deleteTitle": "Bu adım silinsin mi?",
+          "deleteBody": "Adım akıştan kaldırılır.",
+          "stage": "Aşama {stage}",
+          "storedIn": "Değerler kişinin <b>{property}</b> özelliğine kaydedilecek",
+          "actions": "Eylemler",
+          "actionsHint": "Bu adımdan hemen sonra çalışan bir adım ekleyin.",
+          "actionsBlocked": "Bölümünü bitiren bir adımın ardından başka adım gelemez."
         },
         "editors": {
           "linkLabel": "Bu nereye gider",
+          "linkChoose": "Nereye gideceğini seçin…",
           "linkEnds": "Burada biter (başka bir şey gönderilmez)",
+          "linkNext": "Sonraki adımla devam eder",
           "linkOption": "{stage} · {label}{self, select, true { (bu adım)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Yeni bir akışa yönlendir…",
           "question": "Soru",
@@ -837,17 +855,13 @@
             "hour": "saat",
             "day": "gün"
           },
-          "location": {
-            "placeName": "Yer adı",
-            "placePlaceholder": "Ofisimiz",
-            "address": "Adres",
-            "latitude": "Enlem",
-            "longitude": "Boylam"
-          },
           "template": {
             "label": "Onaylı şablon",
             "hint": "Yalnızca WhatsApp numaranızın onayladığı şablonlar listelenir.",
-            "choose": "Bir şablon seçin…"
+            "choose": "Bir şablon seçin…",
+            "buttons": "Düğmeler",
+            "variables": "Kişi bilgisinden doldurulur",
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -861,7 +875,12 @@
             "add": "Başka bir düğme ekle",
             "remove": "Düğmeyi kaldır",
             "opensPhone": "Telefon numarası",
-            "opensEmail": "E-posta adresi"
+            "opensEmail": "E-posta adresi",
+            "errors": {
+              "url": "https:// ile başlayan geçerli bir web adresi girin",
+              "phone": "Geçerli bir telefon numarası girin, örn. +91 98765 43210",
+              "email": "Geçerli bir e-posta adresi girin, örn. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Kartların üstündeki mesaj",
@@ -1044,13 +1063,7 @@
           "info": "Tek bir mesajda en fazla {max} CTA düğmesi ekleyin — Web sitesini ziyaret et, Ara ve Kodu kopyala düğmelerini istediğiniz gibi karıştırın. WhatsApp şablon düğmelerindeki sınırın aynısıdır.",
           "buttonLabel": "Düğme etiketi",
           "addButton": "Düğme ekle",
-          "maxReached": "En fazla {max} düğme eklendi.",
-          "locationTitle": "Başlık",
-          "locationTitlePlaceholder": "Ofisimiz",
-          "locationAddress": "Adres",
-          "locationAddressPlaceholder": "Cadde, şehir, ülke",
-          "locationLatitude": "Enlem",
-          "locationLongitude": "Boylam"
+          "maxReached": "En fazla {max} düğme eklendi."
         },
         "logic": {
           "operator": {
@@ -1118,19 +1131,14 @@
           "aiModelPick": "— model seçin —",
           "aiModelNone": "Etkin yapay zekâ modeli yok — yöneticiden birini açmasını isteyin",
           "aiModelNotEnabled": "{value} (etkin değil)",
-          "aiAssistantNone": "— yok (yalnızca yukarıdaki istemi kullan) —",
           "aiAssistantOption": "{name} · {count, plural, one {# kaynak} other {# kaynak}}",
           "aiAssistantMissing": "(asistan {id})",
-          "aiAssistantHintNone": "Henüz bilgi tabanı yok. <link>Yapay zekâ eğitimi</link> bölümünde bir tane oluşturun, ardından burada seçmek için Listeyi yenile'ye basın.",
-          "aiAssistantHintEmpty": "Not: bu asistanın eğitilmiş 0 kaynağı var. <link>Yapay zekâ eğitimi</link> bölümünde ekleyin, aksi halde yanıt yalnızca istemi kullanır.",
-          "aiAssistantHint": "Seçilen asistanın eğitilmiş içeriğini bu yanıta çeker. <link>Bilgiyi yönet →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Yöneticinin etkinleştirdiği modeller — ayrıca kendi anahtarınızı eklediğiniz sağlayıcılar (Ayarlar → Yapay zekâ anahtarları, BYOK planlarında).",
           "aiModelHintNone": "Henüz kullanılabilir sağlayıcı yok. <link>Ayarlar → Yapay zekâ anahtarları</link> bölümünde kendi anahtarınızı ekleyin (BYOK planları) veya yöneticinizden birini etkinleştirmesini isteyin.",
           "aiPrompt": "Sistem istemi",
           "aiSave": "Yanıtı şuraya kaydet",
           "aiSaveHint": "Sonraki düğümler bunu <v>{save}</v> olarak okur — çıkarma yapılırken <v>{path}</v> olarak.",
-          "aiAssistantLabel": "Bilgi tabanı (isteğe bağlı)",
           "aiExtract": "<strong>Yapılandırılmış veri çıkar (JSON)</strong> — mesajı alanlara dönüştürür",
           "aiFields": "Çıkarılacak alanlar",
           "aiFieldsHint": "Virgülle ayrılmış anahtarlar. Yapay zekâ TEK bir JSON nesnesi döndürür; her anahtar <v>{key}</v> olur (birden çok kayıt algılanırsa <v>{rows}</v> da olur — örn. bir Google E-Tablolar düğümü için).",
@@ -1143,7 +1151,25 @@
           "subflowMissing": "Akış {id} (çalışma alanında değil)",
           "subflowLabel": "Çalıştırılacak akış",
           "subflowHint": "Başka bir kayıtlı akış seçin. Bu düğme tetiklendiğinde, kontrol buradaki sonraki düğüme dönmeden önce o akış baştan sona çalışır.",
-          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz."
+          "endInfo": "Bu düğme akışı sonlandırır. Ardından bağlanan hiçbir şey çalışmaz.",
+          "aiSetupLegend": "Bu adım nasıl yanıt vermeli?",
+          "aiSetupAgent": "Yapay zekâ ajanı",
+          "aiSetupAgentDesc": "Yapay zekâ eğitimindeki bir ajanın talimatlarını, modelini ve bilgisini kullanır.",
+          "aiSetupCustom": "Özel kurulum",
+          "aiSetupCustomDesc": "Modeli burada seçin ve talimatları yazın.",
+          "aiAgentLabel": "Yapay zekâ ajanı",
+          "aiAgentPick": "— yapay zekâ ajanı seçin —",
+          "aiAgentHint": "Ajan kendi talimatlarını, modelini ve bilgisini getirir. Bunları <link>Yapay zekâ eğitimi</link> bölümünde değiştirin.",
+          "aiAgentNone": "Henüz yapay zekâ ajanınız yok. <link>İlk yapay zekâ ajanınızı oluşturun</link>, ardından Listeyi yenile’ye basın.",
+          "aiAgentRequired": "Bir yapay zekâ ajanı seçin ya da özel kuruluma geçin.",
+          "aiAgentSummary": "Model {model} · {count, plural, one {# bilgi kaynağı} other {# bilgi kaynağı}}",
+          "aiAgentNoSources": "Bu ajanın henüz bilgisi yok, bu yüzden yalnızca talimatlarına göre yanıt verir. <link>Yapay zekâ eğitimi</link> bölümünden kaynak ekleyin.",
+          "aiPromptRequired": "Yapay zekâ için talimatları yazın.",
+          "aiKnowledgeLabel": "Bir yapay zekâ ajanından bilgi (isteğe bağlı)",
+          "aiKnowledgeNone": "— yok —",
+          "aiKnowledgeHint": "O ajanın eğitilmiş kaynaklarını yanıta ekler. Özel kurulumda ajanın kendi talimatları ve modeli kullanılmaz. <link>Yapay zekâ eğitiminde yönet →</link>",
+          "aiAdvanced": "Gelişmiş seçenekler",
+          "aiCreateAgent": "+ Yapay zekâ ajanı oluştur"
         },
         "options": {
           "prompt": "İstem",
@@ -1317,7 +1343,8 @@
             "date_field_match": "Zamanlama: kişideki bir tarihe göre (doğum günü…)",
             "schedule": "Zamanlama: belirli bir tarih ve saatte",
             "shopify_event": "Ticaret: bir Shopify mağaza olayı",
-            "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı"
+            "woocommerce_event": "Ticaret: bir WooCommerce mağaza olayı",
+            "segment_leave": "Kitle: kişi bir segmentten ayrıldığında"
           },
           "tagsLoading": "Etiketler yükleniyor…",
           "tagPick": "— etiket seçin —",
@@ -1411,7 +1438,8 @@
             "productId": "Ürün kimliği (isteğe bağlı)",
             "productIdHint": "Boş = siparişteki herhangi bir ürün.",
             "storeNote": "Müşteri, telefon numarasına göre kayıtlı bir kişiyle eşleştirilir; sipariş için kimse oluşturulmaz. “Sepete eklendi” ve “ürün görüntülendi” sunulmaz: mağaza bunları bildirmez.",
-            "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz."
+            "updatedNote": "Bir kişi ya da içe aktarma bir kişiyi her değiştirdiğinde tetiklenir. Başka bir akışın yaptığı değişiklik onu başlatmaz.",
+            "segmentLeaveHint": "Bu segmentin içinde olan bir kişi güncellendikten, etiketlendikten veya listelendikten sonra segmentin dışında bulunduğunda her seferinde bir kez çalışır. Bir kişinin ayrıldığı yalnızca akış onu önceden segmentin içinde gördüyse fark edilir."
           }
         }
       },
@@ -1631,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— bir sayfa seçin —",
-              "empty": "Elektronik tablo bulunamadı — aşağıya bir URL/kimlik yapıştırın",
               "loading": "Sayfalar yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden sayfalarınız listelenemiyor. Bunun yerine sayfa kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Sayfa kimliği",
-              "saved": "Sayfa {id}… (yüklenmedi)"
+              "saved": "Sayfa {id}… (yüklenmedi)",
+              "empty": "Bağlı Google hesabında e-tablo bulunamadı",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden sayfalarınız listelenemiyor. Birini seçmek için Google'ı bağlayın."
             },
             "docs": {
               "pick": "— bir şablon belgesi seçin —",
               "empty": "Belge bulunamadı",
               "loading": "Belgeler yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden belgeleriniz listelenemiyor. Bunun yerine belge kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Belge kimliği",
-              "saved": "Belge {id}… (yüklenmedi)"
+              "saved": "Belge {id}… (yüklenmedi)",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden belgeleriniz listelenemiyor. Birini seçmek için Google'ı bağlayın."
             },
             "forms": {
               "pick": "— bir form seçin —",
               "empty": "Form bulunamadı",
               "loading": "Formlar yükleniyor…",
-              "notConnected": "Bu çalışma alanında Google bağlı değil, bu yüzden formlarınız listelenemiyor. Bunun yerine form kimliğini veya bağlantısını yapıştırın.",
-              "idPlaceholder": "Form kimliği",
-              "saved": "Form {id}… (yüklenmedi)"
+              "saved": "Form {id}… (yüklenmedi)",
+              "notConnected": "Bu çalışma alanı için Google bağlı değil, bu yüzden formlarınız listelenemiyor. Birini seçmek için Google'ı bağlayın."
             }
           },
           "sheetsIntro": "Bir Google E-Tablo'ya satır ekler (yazma modu) ya da bir anahtar sütuna göre satır arar (okuma modu). <link>/google-account</link> adresindeki çalışma alanının bağlı Google hesabını kullanır.",
@@ -1673,8 +1698,6 @@
           "addColumn": "Sütun ekle",
           "matchByHeader": "Sütunları başlık adına göre eşleştir",
           "matchByHeaderHint": "Her değeri o başlığa sahip sayfa sütununa yazar (sıra önemli değildir). Kapalı bırakırsanız, varsayılan olarak konuma göre soldan sağa eklenir.",
-          "pasteLabel": "…ya da bir E-Tablo URL'si / kimliği yapıştırın",
-          "pasteHint": "Seçici boş olsa bile çalışır — sayfa bağlantısını yapıştırın, kimliğini biz çıkaralım.",
           "docsIntro": "Bir şablon belgeyi kopyalar, <mono>{placeholders}</mono> alanlarını doldurur, bağlantısı olan herkesle paylaşır ve URL'yi müşteriye gönderir. Değerin yazılacağı yere şablonunuzda <mono>{key}</mono> yerleştirin.",
           "templateDocument": "Şablon belge",
           "newCopyTitle": "Yeni kopya başlığı",
@@ -1689,7 +1712,6 @@
           "messageTemplateHint": "Müşteriye gönderilen bot balonu. <mono>{token}</mono> paylaşım bağlantısını alır.",
           "messageTemplatePlaceholder": "Belgeniz:\n'{{'doc_url'}}'",
           "saveUrl": "URL'yi şu değişken altında kaydet",
-          "formIntro": "Form URL'sini WhatsApp üzerinden gönderir, akışı duraklatır ve müşteri formu doldurduğunda <b>gönderildi</b> çıkışıyla devam eder. Yanıtlar akış değişkenleri olur.",
           "googleForm": "Google Form",
           "bodyBubble": "Gövde balonu (bağlantının üstünde gönderilir)",
           "bodyBubblePlaceholder": "Lütfen bu kısa formu doldurun:",
@@ -1697,11 +1719,21 @@
           "saveResponsesHint": "Tek tek yanıtlar da <mono>{token}</mono> olarak kaydedilir.",
           "expireAfter": "Şu süreden sonra sona ersin (saniye)",
           "expireAfterHint": "Zaman aşımına uğramadan önce gönderim için ne kadar beklenecek. 86400 = 24 saat.",
-          "setupTitle": "Tek seferlik kurulum — bunu Form'unuzun Komut dosyası düzenleyicisine yapıştırın",
-          "setupOpen": "Formunuzu açın → <mono>⋮ menü</mono> → <mono>Komut dosyası düzenleyicisi</mono>",
-          "setupDownload": "<link>Komut dosyasını (.gs) indirin</link> ve yapıştırın",
-          "setupTrigger": "Bir tetikleyici ekleyin: <mono>onFormSubmit</mono> · Formdan · Form gönderildiğinde",
-          "setupWarning": "Bu komut dosyası olmadan form yanıtları yine Google Forms'ta kaydedilir, ancak akış devam etmez."
+          "connection": {
+            "open": "Google hesabını aç",
+            "permission": {
+              "calendar": "Takvim",
+              "sheets": "Sheets",
+              "docs": "Docs ve Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google bu platform için kurulu değil, bu yüzden akış çalıştığında bu adım başarısız olur.",
+            "disconnected": "Bağlı bir Google hesabı yok, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı bağlayın.",
+            "needsReconnect": "Google artık bağlı hesabı kabul etmiyor, bu yüzden akış çalıştığında bu adım başarısız olur. Önce Google'ı yeniden bağlayın.",
+            "missing": "Bağlı Google hesabına {permission} izni verilmedi, bu yüzden akış çalıştığında bu adım başarısız olur."
+          },
+          "formIntro": "Form URL'sini WhatsApp ile gönderir, akışı duraklatır ve müşteri formu doldurduğunda <b>submitted</b> portundan devam eder. Yanıtlar, bağlı Google hesabınız üzerinden formdan okunur; bu yüzden forma hiçbir şey yapıştırılmaz. Yanıtlar akış değişkenlerine dönüşür.",
+          "noListing": "Google hesabı sayfasında Drive dosya listesi izni verilmediği için dosyalarınız listelenemiyor. Dosya seçmek için izni oradan ekleyin."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1984,89 @@
         "label": "Simge (isteğe bağlı)",
         "add": "Simge ekle",
         "saveFirst": "Simge eklemek için botu bir kez kaydedin."
+      },
+      "buttonAction": {
+        "label": "Düğmeye basılınca eylem",
+        "kind": {
+          "none": "Sonraki adıma geç",
+          "flow": "Akış bağla",
+          "live_agent": "Canlı temsilci",
+          "opt_in": "Abone ol",
+          "opt_out": "Abonelikten çık"
+        },
+        "pickFlow": "Bir akış seçin",
+        "loadingFlows": "Akışlar yükleniyor…",
+        "flowMissing": "Akış {id} (bulunamadı)",
+        "hint": {
+          "flow": "Bu kişi için seçilen akışı başlatır ve konuşma orada devam eder. Bu düğmeden sonra hiçbir şey bağlanmaz.",
+          "live_agent": "Konuşmayı seçtiğiniz ekibe devreder. Bu düğmeden sonra hiçbir şey bağlanmaz.",
+          "opt_in": "Kişiyi pazarlama mesajlarına abone olarak işaretler, ardından bağlı adıma geçer.",
+          "opt_out": "Kişiyi pazarlama mesajlarından çıkmış olarak işaretler, ardından bağlı adıma geçer."
+        }
+      },
+      "messageTools": {
+        "format": "Metin biçimlendirme",
+        "bold": "Kalın",
+        "italic": "İtalik",
+        "strike": "Üstü çizili",
+        "mono": "Eş aralıklı",
+        "bullet": "Madde işaretli liste",
+        "numbered": "Numaralı liste",
+        "emoji": "Emoji",
+        "emojiSearch": "Emoji ara",
+        "emojiNone": "Emoji bulunamadı",
+        "variable": "Değişken ekle",
+        "variableSearch": "Değişken ara",
+        "groupContact": "Kişi özellikleri",
+        "groupFlow": "Bu akışta kayıtlı",
+        "variableNone": "Değişken bulunamadı"
+      },
+      "askAge": {
+        "minAge": "En düşük yaş",
+        "minAgeHint": "Boş bırakırsanız Uyumluluk merkezindeki çalışma alanı yaşı kullanılır (hiçbiri ayarlı değilse 18). 1 ile 21 arasında olmalıdır.",
+        "whenUnder": "Yanıt bu yaşın altındaysa",
+        "whenUnderHint": "Kişi her durumda reşit olmayan olarak işaretlenir. Müşteriye hangi yanıtın geçtiği asla söylenmez.",
+        "end": "Akışı kısa, tarafsız bir cümleyle bitir",
+        "continue": "Devam et ve yanıta göre dallanmama izin ver",
+        "endText": "Kapanış cümlesi",
+        "endTextHint": "Akış bitmeden önce gönderilir. Yaştan söz etmeyin. Boş bırakılırsa “Devam edemiyoruz.” kullanılır.",
+        "continueNote": "Sonraki adımlar, yanıtın değişkenini ve ardından _age_gate ekini (örneğin answer_age_gate) okuyabilir; değeri under veya adult olur. Dallanmak için bir Koşul ekleyin, örneğin ebeveyn veya vasi istemek için.",
+        "note": "Yaşı yalnızca ihtiyaç duyduğunuz yerde sorun. Yanıt kişiye yazılır: doğum tarihi doğum tarihi olarak, yaş sınırının altındaki bir yanıt ise kişiyi reşit olmayan olarak işaretler."
+      },
+      "location": {
+        "modeLabel": "Konum nasıl ayarlanır",
+        "modeLink": "Google Haritalar bağlantısı",
+        "modeCoords": "Enlem ve boylam",
+        "linkLabel": "Google Haritalar bağlantısı",
+        "linkPlaceholder": "Bir bağlantı yapıştırın, örn. https://maps.app.goo.gl/…",
+        "linkHint": "Google Haritalar’da yeri açın, Paylaş’a ve ardından Bağlantıyı kopyala’ya dokunun. Kısa ve uzun bağlantılar çalışır.",
+        "finding": "Bağlantı aranıyor…",
+        "retry": "Tekrar dene",
+        "latitude": "Enlem",
+        "longitude": "Boylam",
+        "coordsHint": "Enlem -90 ile 90, boylam -180 ile 180 arasındadır. İki kutudan birine “enlem, boylam” yapıştırabilirsiniz.",
+        "found": "Konum bulundu",
+        "openInMaps": "Google Haritalar’da aç",
+        "optionalHint": "İsteğe bağlı: müşterinin aldığı harita kartında gösterilir. İkisini de boş bırakabilirsiniz.",
+        "optional": "(isteğe bağlı)",
+        "placeName": "Yer adı",
+        "placePlaceholder": "Ofisimiz",
+        "address": "Adres",
+        "problem": {
+          "empty": "Bir Google Haritalar bağlantısı veya koordinat girin.",
+          "lat_missing": "Bir enlem girin.",
+          "lng_missing": "Bir boylam girin.",
+          "lat_nan": "Enlem bir sayı olmalıdır, örneğin 18.5204.",
+          "lng_nan": "Boylam bir sayı olmalıdır, örneğin 73.8567.",
+          "lat_range": "Enlem -90 ile 90 arasında olmalıdır.",
+          "lng_range": "Boylam -180 ile 180 arasında olmalıdır.",
+          "zero": "0, 0 gerçek bir yer değildir. Gerçek koordinatları girin.",
+          "not_url": "Bu bir bağlantıya benzemiyor. Google Haritalar bağlantısının tamamını yapıştırın.",
+          "not_maps": "Bu bir Google Haritalar bağlantısı değil.",
+          "no_coords": "Bu bağlantı tam bir noktayı göstermiyor. Yeri Google Haritalar’da açın, Paylaş’a dokunup o bağlantıyı kopyalayın veya koordinatları girin.",
+          "unresolved": "Bu kısa bağlantı henüz aranmadı. Alandan çıkın veya tekrar deneyin.",
+          "resolve_failed": "Bu bağlantı okunamadı. Google Haritalar’da açıldığını kontrol edin veya koordinatları girin."
+        }
       }
     },
     "contracts": {
@@ -2262,7 +2377,9 @@
         "phone": "Telefon numarası",
         "number": "Sayı",
         "alphanumeric": "Harfler ve sayılar",
-        "date": "Tarih"
+        "date": "Tarih",
+        "age": "Yaş",
+        "date_of_birth": "Doğum tarihi"
       },
       "askInputWrong": {
         "text": "Lütfen tekrar deneyin",
@@ -2271,7 +2388,9 @@
         "phone": "Lütfen geçerli bir telefon numarası girin",
         "number": "Lütfen geçerli bir sayı girin",
         "alphanumeric": "Lütfen yalnızca harf ve rakam kullanın",
-        "date": "Lütfen geçerli bir tarih girin ({format})"
+        "date": "Lütfen geçerli bir tarih girin ({format})",
+        "age": "Lütfen yaşınızı tam sayı olarak girin",
+        "date_of_birth": "Lütfen geçerli bir tarih girin ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2316,7 +2435,8 @@
         "date_field_match": "tarih eşleşince",
         "schedule": "zamanlamaya göre",
         "shopify_event": "Shopify etkinliğinde",
-        "woocommerce_event": "WooCommerce etkinliğinde"
+        "woocommerce_event": "WooCommerce etkinliğinde",
+        "segment_leave": "segmentten ayrılınca"
       },
       "ports": {
         "manual": "manuel",
@@ -2379,7 +2499,9 @@
         "noSenderInstagram": "Tetikleyici düğümünde bir Instagram hesabı seçilmemiş — Tetikleyici adımında bir hesap seçin.",
         "noSenderFacebook": "Tetikleyici düğümünde bir Facebook Sayfası seçilmemiş — Tetikleyici adımında bir sayfa seçin.",
         "noSenderNumber": "Tetikleyici düğümünde bir numara seçilmemiş — Tetikleyici adımında bir numara seçin.",
-        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın."
+        "faqMinScore": "\"{node}\" için en düşük puan 0.05 ile 0.99 aralığının dışında — düzeltin veya akış ayarını kullanmak için boş bırakın.",
+        "locationInvalid": "“{node}” adımında geçerli bir konum yok — bir Google Haritalar bağlantısı yapıştırın veya enlem (-90 ile 90) ve boylam (-180 ile 180) girin.",
+        "aiNoAgent": "\"{node}\" için ne yapay zekâ ajanı ne de istem var — bir yapay zekâ ajanı seçin ya da Özel kurulum’u seçip talimatları yazın."
       }
     },
     "simpleModel": {
@@ -2470,6 +2592,14 @@
         "faq": {
           "label": "FAQ ile yanıtla",
           "help": "Müşterinin mesajını FAQ'larınızla eşleştirir. Bu akışı bitirir: bir FAQ yanıtladıysa bir çıkış, yanıtlamadıysa başka bir çıkış"
+        },
+        "apiLibrary": {
+          "label": "API çağrısı",
+          "help": "API kitaplığınızdan bir API çağırın"
+        },
+        "code": {
+          "label": "JS işlevi",
+          "help": "Küçük bir JavaScript parçası çalıştırın"
         }
       },
       "typeLabel": {
@@ -2487,7 +2617,9 @@
         "assign": "Bir temsilciye ata",
         "carousel": "Karusel",
         "condition": "Koşul",
-        "faq": "FAQ ile yanıtla"
+        "faq": "FAQ ile yanıtla",
+        "api_library": "API çağrısı",
+        "code": "JS işlevi"
       },
       "stepLabel": {
         "questionOf": "Soru · {kind}"
@@ -2510,10 +2642,11 @@
         "writeQuestion": "Adım {stage}: soruyu yazın.",
         "nameVariable": "Adım {stage}: yanıtın kaydedileceği değişkene bir ad verin.",
         "chooseAnswerProperty": "Adım {stage}: yanıtın kopyalanacağı kişi özelliğini seçin.",
-        "setCoordinates": "Adım {stage}: enlem ve boylamı ayarlayın.",
+        "setCoordinates": "{stage}. adım: bir Google Haritalar bağlantısı yapıştırın veya geçerli bir enlem ve boylam girin.",
         "chooseTemplate": "Adım {stage}: bir şablon seçin.",
         "chooseTeam": "Adım {stage}: görüşmenin gideceği ekibi seçin.",
         "ctaLabelLink": "Adım {stage}: düğmeye bir ad ve bağlantı verin.",
+        "ctaLinkInvalid": "Adım {stage}: düğmenin hedefi türü için geçerli değil.",
         "choosePickedProperty": "Adım {stage}: seçilen seçeneğin kopyalanacağı kişi özelliğini seçin.",
         "buttonsPrompt": "Adım {stage}: düğmelerin üstündeki mesajı yazın.",
         "addButton": "Adım {stage}: en az bir düğme ekleyin.",
@@ -2528,7 +2661,15 @@
         "carouselCards": "Adım {stage}: en az bir kart ekleyin ve her karta bir başlık verin.",
         "carouselButtons": "Adım {stage}: her düğmeye bir ad verin, bir şey açan düğmeye de bağlantı, numara veya adres girin.",
         "conditionIncomplete": "Adım {stage}: koşulun kurallarını tamamlayın (her birinde bir değişken ve bir değer).",
-        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı."
+        "faqMinScore": "{stage}. adım: en düşük puan 0.05 ile 0.99 arasında olmalı veya akış ayarı kullanılmalı.",
+        "optionNotConnected": "Adım {stage}: {kind, select, row {\"{label}\" satırı} other {\"{label}\" düğmesi}} hiçbir yere gitmiyor. Ona bir adım ekleyin veya bir eylem verin.",
+        "tooManyOptions": "Adım {stage}: {kind, select, row {bir listede en fazla {max} satır olabilir} other {bir düğme grubunda en fazla {max} düğme olabilir}}.",
+        "chooseFlow": "Adım {stage}: düğmenin başlattığı akışı seçin.",
+        "chooseApi": "Adım {stage}: çağrılacak API'yi seçin.",
+        "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
+        "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
+        "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
       },
       "faqSummary": "{hasCategory, select, true {FAQ'larınızdan · {category}} other {FAQ'larınızdan}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "Simüle satın alma: {name} → çıkış \"satın alındı\"",
       "simAbandon": "Simüle terk → çıkış \"terk edildi\"",
       "faqAnswered": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz, bu yüzden hiçbir şey gönderilmez ve {ref} boş kalır. \"Yanıtlandı\" çıkışı kullanılıyor.",
-      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır."
+      "faqNoMatch": "(simüle) \"{query}\" için FAQ ile yanıtla: test sohbeti FAQ'larınıza bakmaz ve \"yanıtlandı\" çıkışı bağlı değil, bu yüzden \"eşleşme yok\" çıkışı kullanılıyor. {ref} boş kalır.",
+      "locationSkipped": "(konum) atlandı: geçerli koordinat yok"
     }
   }
 }

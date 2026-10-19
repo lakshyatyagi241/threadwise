@@ -17,7 +17,8 @@
       "unexpected": "Bir şeyler ters gitti. Tekrar deneyin.",
       "exportInProgress": "Bir kanıt dosyası zaten hazırlanıyor. Bitmesini bekleyin ve tekrar deneyin.",
       "exportNotReady": "Bu dosya hazır değil veya süresi doldu. Yeni bir dosya hazırlayın.",
-      "noticeTargetMissing": "Bu widget, rezervasyon sayfası veya mağaza artık yok."
+      "noticeTargetMissing": "Bu widget, rezervasyon sayfası veya mağaza artık yok.",
+      "notMinor": "Vasi onayı yalnızca reşit olmayan olarak işaretlenmiş bir kişi için kaydedilebilir."
     },
     "settings": {
       "title": "Onay ve STOP yanıtları",
@@ -112,7 +113,10 @@
         "instagram": "Instagram",
         "webchat": "Web sohbeti",
         "voice": "Sesli arama",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "abone",
@@ -139,7 +143,11 @@
         "widget": "Web sitesi sohbeti",
         "booking": "Rezervasyon sayfası",
         "commerce": "Mağaza ödeme sayfası",
-        "lead": "Potansiyel müşteri toplama"
+        "lead": "Potansiyel müşteri toplama",
+        "wa_form": "WhatsApp formu",
+        "gpc": "Global Privacy Control",
+        "dob": "Doğum tarihi veya yaş",
+        "declaration": "Yaş doğrulanmadı"
       },
       "by": "{name} tarafından",
       "evidence": {
@@ -162,7 +170,8 @@
         "storeFlag": "Mağaza ayarı",
         "leadSourceId": "Müşteri adayı kaynağı",
         "leadFormId": "Müşteri adayı formu",
-        "adId": "Reklam"
+        "adId": "Reklam",
+        "guardianConsentRef": "Vasi onayı referansı"
       },
       "dialog": {
         "titleGranted": "Abone olarak işaretle",
@@ -178,6 +187,52 @@
         "close": "Kapat",
         "savedGranted": "Abone olarak işaretlendi.",
         "savedWithdrawn": "Abonelikten çıkmış olarak işaretlendi."
+      },
+      "privacy": {
+        "title": "Gizlilik işaretleri",
+        "saved": "Kaydedildi.",
+        "minorLabel": "Reşit değil",
+        "minorOn": "{date} tarihinden beri reşit olmayan olarak işaretli.",
+        "minorOff": "Reşit olmayan olarak işaretli değil.",
+        "rule": {
+          "off": "Çalışma alanınız Uyumluluk merkezinde çocuklarla ilgili soruyu yanıtlamadı, bu yüzden bu kişiye pazarlama engellenmiyor.",
+          "guardian": "Ebeveyn veya vasinin onayı kaydedilene kadar bu kişiye pazarlama engellenir.",
+          "block": "Çalışma alanınız reşit olmayanların verilerini işlemediğini belirttiği için bu kişiye pazarlama engellenir."
+        },
+        "guardianBadge": "Vasi onayı kayıtlı",
+        "guardianLabel": "Ebeveyn veya vasi onayı",
+        "guardianOn": "{date} tarihinden beri kayıtlı. Yalnızca kanıttır, kişiyi abone yapmaz.",
+        "guardianOff": "Kayıtlı değil.",
+        "recordGuardian": "Vasi onayını kaydet",
+        "clearGuardian": "Kaldır",
+        "dnsLabel": "Satma veya paylaşma",
+        "dnsOn": "{date} tarihinden beri vazgeçti ({source}).",
+        "dnsOff": "Vazgeçmedi.",
+        "history": "Gizlilik geçmişi",
+        "event": {
+          "minor": {
+            "on": "Reşit olmayan olarak işaretlendi",
+            "off": "Reşit olmayan işareti kaldırıldı"
+          },
+          "guardian_consent": {
+            "on": "Vasi onayı kaydedildi",
+            "off": "Vasi onayı kaldırıldı"
+          },
+          "sale_share_opt_out": {
+            "on": "Satış ve paylaşımdan vazgeçti",
+            "off": "Vazgeçme kaldırıldı"
+          }
+        },
+        "dialog": {
+          "title": "Vasi onayını kaydet",
+          "intro": "Ebeveynin veya vasinin onay verdiğini kaydedin. Bu yalnızca kanıttır: kişiyi pazarlamaya abone yapmaz.",
+          "note": "Nasıl onay verdiler? (zorunlu)",
+          "noteHint": "Örneğin: gişede kâğıt formu imzaladı. Vasinin adını veya iletişim bilgilerini yazmayın.",
+          "ref": "Referans (isteğe bağlı)",
+          "refHint": "Daha sonra bulabileceğiniz bir form numarası veya belge kimliği."
+        },
+        "minorFrom": "Verilen doğum tarihi veya yaştan ayarlandı. Biri tutmadıkça {date} tarihinde kendiliğinden kalkar.",
+        "minorFromDeclaration": "Bir formda yaş doğrulanmadığı için ayarlandı. Biri kaldırana kadar durur."
       }
     },
     "composer": {
@@ -299,19 +354,25 @@
         "consent_evidence_recorded": "İzin verildi: bildirim iletildi ve kişi onay verdi.",
         "purpose_not_enabled": "İzin verilmedi: çalışma alanı bunu açmadı.",
         "consent_declined": "İzin verilmedi: kişi reddetti.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "İzin verilmez: bu kişi reşit olmayan olarak işaretli ve çalışma alanınız pazarlamayı engelliyor.",
+        "sale_share_opted_out": "İzin verilmez: kişi verilerinin satılmasından veya paylaşılmasından vazgeçti.",
+        "on_dnc_list": "Aranmayacaklar listenizde: bu numaraya pazarlama araması veya mesajı yapılmaz",
+        "legal_hold": "İzin verilmiyor: bu kişinin verilerinin işlenmesi kısıtlanmıştır."
       }
     },
     "notice": {
       "title": {
         "widget": "Sohbet formundaki onay satırı",
         "booking": "Rezervasyon sayfasındaki onay satırı",
-        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir"
+        "commerce": "Mağazanın pazarlama kutusu ne anlama gelir",
+        "workspace": "Varsayılan onay bildirimi"
       },
       "intro": {
         "widget": "Ziyaretçinin bilgilerinin altında bir onay kutusu olarak gösterilir. Yalnızca işaretleyen ziyaretçi kabul etmiş olarak kaydedilir, o da telefon veya e-posta verdiyse.",
         "booking": "Rezervasyon formunda bir onay kutusu olarak gösterilir. Yalnızca işaretleyen kişi kabul etmiş olarak kaydedilir; rezervasyon bunu hiçbir zaman gerektirmez.",
-        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin."
+        "commerce": "Mağazanızda pazarlamayı kabul eden müşteri kabul etmiş olarak kaydedilir. Kutunun ona ne söylediğini yazın, kanıt bunu belirtsin.",
+        "workspace": "Bir form, widget veya rezervasyon sayfasının kendi metni olmadığında çalışma alanınızın onay kutusunun yanında gösterdiği metin. Her değişiklik yeni numaralı bir sürümdür."
       },
       "enabled": "Onay satırı açık",
       "text": "Kişinin kabul ettiği metin",
@@ -324,7 +385,21 @@
       "version": "Geçerli sürüm: {version}",
       "noVersion": "Henüz kaydedilmedi.",
       "saveFirst": "Önce bunu kaydedin, sonra onay satırını ayarlayabilirsiniz.",
-      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)"
+      "whatsappToo": "WhatsApp onayı olarak da say (yalnızca metin öyle diyorsa)",
+      "termsUrl": "Şartlarınızın bağlantısı (isteğe bağlı)",
+      "termsUrlHint": "https:// ile başlamalıdır",
+      "useWorkspacePrivacy": "Çalışma alanı gizlilik bağlantımı kullan",
+      "useWorkspaceTerms": "Çalışma alanı şart bağlantımı kullan",
+      "useWorkspaceText": "Çalışma alanı varsayılan metnini kullan",
+      "statement": "{channels} üzerinden güncellemeler ve teklifler almayı kabul ediyorum. İstediğim zaman abonelikten çıkmak için STOP yazabilirim.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "e-posta"
+      },
+      "channelsLabel": "Bu onayın kapsadığı kanallar",
+      "channelsHint": "Kişi yalnızca burada işaretlenen kanallara abone edilir ve onay metni bunları belirtir. Bir kanal, yalnızca kişi ilgili telefon numarasını veya e-postayı verirse kullanılır.",
+      "channelsUse": "Metni bu kanallarla güncelle"
     }
   }
 }

@@ -120,7 +120,13 @@
       "limitDefault": "平台默认值",
       "limitPerHour": "{count, plural, other {每小时 # 封邮件}}",
       "limitSaved": "发送上限已保存。",
-      "needsReauthImap": "邮件服务器拒绝了已保存的密码。请重新连接并再次输入密码。"
+      "needsReauthImap": "邮件服务器拒绝了已保存的密码。请重新连接并再次输入密码。",
+      "test": "测试连接",
+      "testing": "正在测试",
+      "lag": "延迟",
+      "lagUnderMinute": "不到一分钟",
+      "lagMinutes": "{count, plural, other {# 分钟}}",
+      "lagHours": "{count, plural, other {# 小时}}"
     },
     "outcome": {
       "connected": "邮箱已连接。正在将最近 7 天的邮件同步到收件箱。",
@@ -325,6 +331,26 @@
         "smtpAuth": "发信服务器（SMTP）拒绝了用户名或密码。请检查后重试。",
         "unreachable": "无法连接到邮件服务器，或其证书无效。请检查服务器、端口和安全性。",
         "generic": "无法连接邮箱，请重试。"
+      },
+      "test": {
+        "button": "测试凭据",
+        "testing": "正在测试",
+        "imap": "收信 (IMAP)",
+        "smtp": "发信 (SMTP)",
+        "ok": "登录成功。",
+        "inbox": "登录成功。收件箱中有 {count, plural, other {# 封邮件}}。",
+        "smtpOk": "登录成功。未发送任何内容。",
+        "note": "未保存任何内容，也未发送任何邮件。",
+        "tooMany": "短时间内测试次数过多。请等待一分钟后重试。",
+        "failed": "无法运行测试。请重试。",
+        "reasons": {
+          "auth_failed": "服务器拒绝了用户名或密码。",
+          "tls": "无法验证安全连接。请检查服务器名称和安全设置。",
+          "unreachable": "无法连接到服务器。请检查服务器、端口和安全设置。",
+          "blocked_address": "不允许使用此服务器地址。",
+          "rejected": "服务器拒绝了请求。",
+          "unknown": "服务器未按预期响应。"
+        }
       }
     },
     "sharing": {

@@ -1,4 +1,5 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable, Optional } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import {
   AUDIT_LOG_MODULE,
   AUDIT_LOG_PERMISSIONS,
@@ -14,9 +15,11 @@ import {
 import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
+import { engineState, loadPolicy } from '../data-retention';
 import { renderDelta } from './audit-pii';
 import {
   actorKindOf,
@@ -48,6 +51,7 @@ export class AuditLogService {
     private readonly repo: AuditLogRepository,
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
+    @Optional() private readonly config?: ConfigService<Env, true>,
   ) {}
 
   /** Whether this request may see personal values: the Owner key, and never through a platform support (act-as) session. */
@@ -65,7 +69,13 @@ export class AuditLogService {
   async settings(): Promise<AuditLogSettings> {
     let retentionDays: number | null = null;
     try {
-      retentionDays = await this.db.privileged((tx) => this.repo.retentionDays(tx));
+      retentionDays = await this.db.privileged(async (tx) => {
+        // A policy saved on the retention dashboard counts once the archive job really carries it out: the entry stays readable
+        // (live, then archived and available through an export) for live + archive days, or for ever when the archive keeps it.
+        const saved = engineState(this.config).live ? await loadPolicy(tx, 'audit_log') : null;
+        if (saved) return saved.archiveDays === null ? 0 : saved.liveDays + saved.archiveDays;
+        return this.repo.retentionDays(tx);
+      });
     } catch {
       retentionDays = null;
     }

@@ -4,6 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Button, useToast } from '@crm/ui';
 import type { MessageSystemEvent } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useUndoStageChange } from '../api/stage-undo';
 
 type StageEvent = Extract<MessageSystemEvent, { event: 'stage_change' }>;
@@ -16,7 +17,9 @@ type StageEvent = Extract<MessageSystemEvent, { event: 'stage_change' }>;
 export function StageChangeLine({ event, undone }: { event: StageEvent; undone: boolean }) {
   const t = useTranslations('team-inbox-conversations.bubble.stageLine');
   const { toast } = useToast();
-  const canReview = useCan('lsc.stage.review');
+  // Undoing an AI stage change is part of AI lead scoring: it needs the app, like the rest of it.
+  const scoringOn = usePlanFeature('lead_scoring');
+  const canReview = useCan('lsc.stage.review') && scoringOn;
   const undo = useUndoStageChange();
 
   const run = () =>

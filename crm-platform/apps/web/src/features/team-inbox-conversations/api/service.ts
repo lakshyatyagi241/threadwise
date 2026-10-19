@@ -7,6 +7,7 @@ import type {
   CreateConversationNoteInput,
   CreateMessageLogExportInput,
   ConversationPriority,
+  InboxRewriteInput,
   CreateSimulatorChannelInput,
   InboxMediaUpload,
   SendMessageInput,
@@ -14,6 +15,7 @@ import type {
   SimulatorReceiptInput,
   UpdateChannelInput,
 } from '@crm/contracts';
+import { inboxRewriteResponseSchema } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
 import { toApiError } from '@/lib/api/errors';
 import { listQuery, type ListFilters } from '../lib/list';
@@ -140,6 +142,13 @@ export const inboxApi = {
       body: input,
       schema: conversationSummarySchema,
     }),
+  /** The composer's AI button: the agent's draft rewritten (condense, fix, positive tone, translate). Nothing is stored or sent. */
+  rewrite: (body: InboxRewriteInput) =>
+    apiFetch('/inbox/ai/rewrite', {
+      method: 'POST',
+      body,
+      schema: inboxRewriteResponseSchema,
+    }),
   setPriority: (conversationId: string, rowVersion: number, priority: ConversationPriority) =>
     apiFetch(`/inbox/conversations/${conversationId}/priority`, {
       method: 'POST',
@@ -180,6 +189,13 @@ export const inboxApi = {
     apiFetch(`/inbox/conversations/${conversationId}/status`, {
       method: 'POST',
       body: { rowVersion, status },
+    }),
+  /** Marks the thread as spam; taking it off spam is `setStatus(..., 'open')`. */
+  markSpam: (conversationId: string, rowVersion: number) =>
+    apiFetch(`/inbox/conversations/${conversationId}/spam`, {
+      method: 'POST',
+      body: { rowVersion },
+      schema: conversationSummarySchema,
     }),
 
   notes: (conversationId: string, signal?: AbortSignal) =>

@@ -34,6 +34,8 @@ import {
   type MailSyncMode,
   type MailSyncOptions,
   type OAuthMailDriver,
+  sendMayHaveCommitted,
+  sendOutcomeUnknown,
 } from './mail-driver';
 import { MailDriverRegistry } from './mail-driver.registry';
 
@@ -415,6 +417,12 @@ export class GoogleMailDriver implements OAuthMailDriver, OnModuleInit {
     }
     if (err.kind === 'not_found') return new MailDriverError('not_found', 'Not found.', meta);
     if (op === 'send') {
+      if (
+        (err.kind === 'timeout' || err.kind === 'network') &&
+        sendMayHaveCommitted(meta.providerCode)
+      ) {
+        return sendOutcomeUnknown('Google did not answer in time.', meta.providerCode);
+      }
       if (err.retryable) {
         return new MailDriverError(
           err.kind === 'rate_limit' ? 'rate_limit' : 'transient',

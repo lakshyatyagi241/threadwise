@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "未联系",
+        "followUpToday": "今日跟进",
+        "followUpOverdue": "跟进已逾期",
+        "followUpSomeday": "未定期跟进"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "未联系",
+        "chipTitle": "团队中还没有人联系过",
+        "waitingSince": "自 {date} 起等待",
+        "markContacted": "标记为已联系",
+        "markUncontacted": "标记为未联系",
+        "markedContacted": "已标记为已联系",
+        "markedUncontacted": "已标记为未联系",
+        "markFailed": "无法更改标记，请重试。",
+        "bulkMarkedContacted": "{count, plural, other {已将 # 位联系人标记为已联系}}",
+        "bulkMarkedUncontacted": "{count, plural, other {已将 # 位联系人标记为未联系}}"
+      },
+      "settings": {
+        "save": "保存",
+        "discard": "放弃更改",
+        "saved": "设置已保存",
+        "retry": "重试",
+        "loading": "正在加载设置",
+        "conflict": "你编辑期间，其他人保存了这些设置。设置已在下方重新显示，请再次修改。",
+        "conflictOk": "知道了",
+        "errors": {
+          "network": "无法连接到服务器。请检查网络后重试。",
+          "forbidden": "只有管理工作区设置的人员才能更改此页面。",
+          "conflict": "其他人已先更改了这些设置。请刷新后重试。",
+          "validation": "部分设置无效。请检查后重试。",
+          "unexpected": "出了点问题，请重试。"
+        },
+        "uncontacted": {
+          "title": "未联系的潜在客户",
+          "subtitle": "标记出还没有人联系过的潜在客户，让他们在有人跟进之前保持醒目。开启选项之前不会有任何变化。",
+          "clear": {
+            "title": "标记为已联系",
+            "intro": "当团队成员执行以下任一操作时，自动移除“未联系”标记：",
+            "contactButton": "点击联系按钮（电话、短信、邮件或 WhatsApp）或拨打电话",
+            "message": "从收件箱发送消息、模板、快捷回复或文件",
+            "automation": "营销活动、群发或自动化流程向该潜在客户发送内容",
+            "activity": "在时间线中添加备注、会议或其他活动",
+            "manualHint": "你也可以手动更改标记：在联系人上打开“更多”菜单，或选择多位联系人并使用列表上方栏中的“更多”。"
+          },
+          "new": {
+            "title": "将新潜在客户标记为未联系",
+            "intro": "通过以下方式创建潜在客户时，将其标记为未联系：",
+            "manual": "在应用中手动创建",
+            "import": "从文件或 Google Sheets 导入",
+            "leadSource": "潜在客户来源、表单和集成"
+          },
+          "reassign": {
+            "title": "重新分配的潜在客户",
+            "intro": "当潜在客户被分配或重新分配给新负责人时：",
+            "keep": "不更改“未联系”标记",
+            "mark": "重新分配时标记为未联系"
+          }
+        },
+        "followUps": {
+          "title": "跟进",
+          "subtitle": "让每个潜在客户持续推进：团队成员联系某位联系人后，可自动为其设置或调整下次跟进。开启选项之前不会有任何变化。",
+          "when": {
+            "title": "自动设置跟进",
+            "intro": "每当团队成员联系某位联系人或向其发送内容时，在以下情况更新其跟进：",
+            "none": "该联系人没有跟进",
+            "overdue": "跟进已逾期",
+            "today": "跟进今天到期",
+            "future": "跟进在之后到期"
+          },
+          "date": {
+            "title": "默认跟进日期",
+            "intro": "自动更新跟进时，将其设置为：",
+            "day": "1 天后",
+            "three_days": "3 天后",
+            "week": "1 周后",
+            "month": "1 个月后",
+            "custom": "自定义",
+            "someday": "待定",
+            "none": "无跟进",
+            "somedayHint": "该跟进没有日期，会保留在“待定”列表中，不会发送提醒。",
+            "noneHint": "当前未完成的跟进会标记为已完成，且不会创建新的跟进。",
+            "customDays": "天数",
+            "daysLater": "天后"
+          },
+          "time": {
+            "title": "默认跟进时间",
+            "intro": "每当创建新的跟进时，将提醒时间设置为：",
+            "hint": "按工作区所在时区计算。"
+          }
+        },
+        "duplicates": {
+          "title": "重复线索",
+          "subtitle": "设置当线索来源的新线索与已有联系人的电话号码或邮箱相同时的处理方式。",
+          "mode": {
+            "title": "新线索与联系人匹配时",
+            "intro": "线索的电话号码或邮箱已属于某个联系人时即视为匹配。",
+            "merge": "合并到现有联系人",
+            "mergeHint": "填写联系人的空字段，并把线索加入其历史记录。已填写的内容不会被覆盖。",
+            "createNew": "创建新联系人",
+            "createNewHint": "为该线索创建单独的联系人。它计入套餐的联系人上限，之后可以合并。"
+          },
+          "note": {
+            "title": "时间线",
+            "merge": "合并线索时在时间线中添加备注",
+            "hint": "默认关闭，因为备注也会改变联系人的最近活动时间。"
+          }
+        }
+      },
+      "followUp": {
+        "title": "下次跟进",
+        "somedayLabel": "待定",
+        "overdue": "已逾期",
+        "done": "完成",
+        "snooze": "延后",
+        "snoozeDay": "1 天",
+        "snoozeThreeDays": "3 天",
+        "snoozeWeek": "下周",
+        "change": "更改日期",
+        "set": "设置跟进",
+        "edit": "修改跟进",
+        "remove": "移除跟进",
+        "dialogTitle": "跟进",
+        "someday": "待定（无日期）",
+        "dateTime": "日期和时间",
+        "cancel": "取消",
+        "save": "保存",
+        "savedFor": "跟进已保存",
+        "savedSomeday": "跟进已设为待定",
+        "snoozed": "跟进已延期",
+        "doneMessage": "跟进已标记为完成",
+        "clearedMessage": "跟进已移除",
+        "failed": "无法更改跟进，请重试。",
+        "filterLabel": "跟进",
+        "filter": {
+          "any": "全部",
+          "overdue": "已逾期",
+          "today": "今天到期",
+          "upcoming": "即将到期",
+          "someday": "待定",
+          "none": "无跟进"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "下次跟进"
+    }
+  }
+}

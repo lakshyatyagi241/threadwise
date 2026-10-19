@@ -15,6 +15,7 @@ import {
   WARMER_GATE,
   type OutgoingMessage,
 } from '../../../src/modules/broadcasts';
+import { SendWindowService } from '../../../src/modules/compliance-center';
 import { MergeTagService } from '../../../src/modules/crm';
 import {
   CAMPAIGN_BILLING,
@@ -31,6 +32,7 @@ import {
   FixtureEngineSender,
   type FixtureReceipt,
 } from '../../../src/modules/campaigns/fixture/fixture-engine-sender';
+import { WizardFollowUpService } from '../../../src/modules/campaigns/wizard/wizard-follow-up.service';
 import { WizardRetryService } from '../../../src/modules/campaigns/wizard/wizard-retry.service';
 import { WizardRunService } from '../../../src/modules/campaigns/wizard/wizard-run.service';
 import { WizardSeriesService } from '../../../src/modules/campaigns/wizard/wizard-series.service';
@@ -56,11 +58,18 @@ export interface Lab {
   clock: { now: Date };
   /** Every message the sandbox accepted, in order. */
   sent: OutgoingMessage[];
+  /** The same messages with the number (its id in `wa_provider_configs`) each one went out from. */
+  sentFrom: Array<{ to: string; senderId: number; engine: string }>;
   /** What the sandbox queued to report (delivery or failure), until `flush` applies it. */
   reports: FixtureReceipt[];
   dispatch: CampaignDispatchService;
   series: WizardSeriesService;
   retries: WizardRetryService;
+  followUps: WizardFollowUpService;
+  /** The flows the follow-up steps started (the flow runtime is a stub here). */
+  flowCalls: Array<{ orgId: number; flowId: number; contactId: number; campaignId: number }>;
+  /** The Cloud API receipt path, for a delivery or read report the sandbox does not make by itself. */
+  receipts: CampaignReceiptsService;
   /** Applies the sandbox's queued reports the way the Cloud API webhook does. */
   flush(): Promise<number>;
   /** Runs a campaign now (what the BullMQ processor would do). */
@@ -73,10 +82,13 @@ export function buildLab(h: Harness): Lab {
   const runtime = get<PacingRuntime>(PacingRuntime);
   const clock = { now: new Date() };
   runtime.now = () => clock.now;
+  // The quiet hours (BL-177) are read on the same clock.
+  get<SendWindowService>(SendWindowService).now = () => clock.now;
   runtime.sleep = () => Promise.resolve();
   runtime.random = () => 0.5;
 
   const sent: OutgoingMessage[] = [];
+  const sentFrom: Lab['sentFrom'] = [];
   const reports: FixtureReceipt[] = [];
   const sandbox = new FixtureEngineSender(
     {
@@ -87,20 +99,23 @@ export function buildLab(h: Harness): Lab {
     },
     () => clock.now,
   );
-  get<EngineSenderRegistry>(EngineSenderRegistry).register('waba', {
-    open: async (orgId, sender) => {
+  const sandboxAdapter = {
+    open: async (orgId: number, sender: { id: number; engine: string }) => {
       const opened = await sandbox.open();
       void orgId;
-      void sender;
       return {
-        send: async (m) => {
+        send: async (m: OutgoingMessage) => {
           const out = await opened.send(m);
           sent.push(m);
+          sentFrom.push({ to: m.to, senderId: sender.id, engine: sender.engine });
           return out;
         },
       };
     },
-  });
+  };
+  // The personal (device) engine is the sandbox too, so a split send over a Cloud API number and a device can be checked per number.
+  for (const engine of ['waba', 'baileys'])
+    get<EngineSenderRegistry>(EngineSenderRegistry).register(engine, sandboxAdapter as never);
 
   const enqueued: Array<{ orgId: number; campaignId: number }> = [];
   const jobs = new CampaignJobs({
@@ -157,6 +172,33 @@ export function buildLab(h: Harness): Lab {
     get(TEMPLATE_DIRECTORY),
   );
   const receipts = get<CampaignReceiptsService>(CampaignReceiptsService);
+  const flowCalls: Lab['flowCalls'] = [];
+  const followUps = new WizardFollowUpService(
+    db,
+    repo,
+    events,
+    engines,
+    merge,
+    tracker,
+    runtime,
+    get(SENDER_DIRECTORY),
+    get(TEMPLATE_DIRECTORY),
+    get(CAMPAIGN_BILLING),
+    {
+      available: true,
+      start: (_tx, orgId, i) => {
+        flowCalls.push({
+          orgId,
+          flowId: i.flowId,
+          contactId: i.contactId,
+          campaignId: i.campaignId,
+        });
+        return Promise.resolve({ ok: true, error: null });
+      },
+    },
+    undefined,
+    get<SendWindowService>(SendWindowService),
+  );
   const tests = get<WizardTestSendService>(WizardTestSendService);
 
   return {
@@ -165,10 +207,14 @@ export function buildLab(h: Harness): Lab {
     runtime,
     clock,
     sent,
+    sentFrom,
     reports,
     dispatch,
     series,
     retries,
+    followUps,
+    flowCalls,
+    receipts,
     enqueued,
     run: (orgId, campaignId) =>
       RequestContextStore.run(

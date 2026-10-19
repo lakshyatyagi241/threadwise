@@ -34,6 +34,7 @@ const TOP_KEYS = new Set([
   'gates',
   'keywords',
   'routes',
+  'features',
   'audience',
 ]);
 const GATE_KEYS = new Set(['planFeature', 'permission', 'channel']);
@@ -173,6 +174,9 @@ function readMeta(front, where, translation) {
     gates: front.gates ?? {},
     keywords: asList(front.keywords, 'keywords', where, '[people, leads]'),
     routes,
+    // Plan features this guide explains without being gated by them (a feature that unlocks only part of what the guide
+    // covers, so the whole guide must not disappear for a plan that lacks it). Checked against real keys in registry.test.ts.
+    features: asList(front.features, 'features', where, '[personal_history_full]'),
     audience,
   };
 }
@@ -363,6 +367,7 @@ export function compileRegistry(files) {
       gates: meta.gates,
       keywords: meta.keywords,
       routes: meta.routes,
+      features: meta.features,
       audience: meta.audience,
       domain: group.domain,
       text: { en: text },

@@ -28,6 +28,8 @@ import {
   newChatKey,
   newMessageCopy,
   recipientsForAssignment,
+  recipientsForSnoozeWake,
+  snoozeWakeKey,
   recipientsForMention,
   recipientsForMessage,
   recipientsForNewChat,
@@ -42,6 +44,8 @@ export const CONVERSATION_NOTIFY_EVENTS = [
   MESSAGE_RECEIVED_EVENT,
   'conversation.assigned',
   'conversation.note_added',
+  // Only a snoozed thread that came back by the clock is news (see onSnoozeWake); other reopenings are filtered there.
+  'conversation.reopened',
 ] as const;
 
 const str = (v: unknown): string | null => (typeof v === 'string' && v !== '' ? v : null);
@@ -118,7 +122,9 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
         ? await this.onMessage(event)
         : event.eventType === 'conversation.assigned'
           ? await this.onAssigned(event)
-          : await this.onNote(event);
+          : event.eventType === 'conversation.reopened'
+            ? await this.onSnoozeWake(event)
+            : await this.onNote(event);
     // After the commit: the unread total the push carries must include the rows, and a rolled-back row must not be announced.
     for (const p of pending) {
       await this.publisher.created(event.orgId, p.row, {
@@ -316,6 +322,63 @@ export class ConversationNotificationConsumer implements OutboxSubscriber, OnMod
           subjectUuid: conversationUuid,
         });
         // A team-wide assignment fills the bell without a toast or a ping (spec row 3).
+        if (row) written.push({ row, silent: who.team });
+      }
+      return written;
+    });
+  }
+
+  // --- conversation.reopened (by the wake-up sweep) -------------------------------------------------------------------------------
+
+  /**
+   * A snoozed thread came back by its time (the sweep emits `conversation.reopened` with `by: system`, `from: snoozed`). Reference told its
+   * assignee, or its team, in the bell and by push: "reopened, follow up". Other reopenings (a customer's message, an agent's move) are not
+   * news here.
+   */
+  private async onSnoozeWake(event: OutboxEvent): Promise<Pending[]> {
+    const p = event.payload;
+    if (p.by !== 'system' || p.from !== 'snoozed') return [];
+    const conversationUuid = str(p.conversationId);
+    if (!conversationUuid) return [];
+    const workspaceInapp = await this.prefs.inappAllowed(event.orgId, 'snooze_wake');
+
+    const conv = await this.conversation(event.orgId, conversationUuid);
+    if (!conv) return [];
+    const readers = await this.directory.viewers(event.orgId, PERM_CONVERSATION_READ);
+    const who = recipientsForSnoozeWake(conv, readers);
+    const capped = capRecipients(who.userIds, notifyConfig().maxRecipients);
+    if (capped.userIds.length === 0) return [];
+
+    const link = `/inbox?c=${conversationUuid}`;
+    return this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
+      const recipients = await this.users(tx, event.orgId, undefined, capped.userIds);
+      const userPrefs = await this.repo.userPrefsFor(
+        tx,
+        event.orgId,
+        recipients.map((u) => u.id),
+        'snooze_wake',
+      );
+      const written: Pending[] = [];
+      for (const user of recipients) {
+        const row = await this.repo.insertReturning(tx, event.orgId, {
+          userPref: userPrefs.get(user.id) ?? null,
+          workspaceInapp,
+          userId: user.id,
+          type: 'snooze_wake',
+          title: conv.name ?? 'A customer',
+          body: null,
+          link,
+          data: {
+            conversationId: conversationUuid,
+            contactName: conv.name,
+            channelKind: conv.channelKind,
+            teamAssigned: who.team,
+          },
+          dedupeKey: snoozeWakeKey(conversationUuid, user.uuid, event.id),
+          subjectKind: 'conversation',
+          subjectUuid: conversationUuid,
+        });
+        // A team-wide wake-up fills the bell without a toast or a ping, as a team-wide assignment does.
         if (row) written.push({ row, silent: who.team });
       }
       return written;

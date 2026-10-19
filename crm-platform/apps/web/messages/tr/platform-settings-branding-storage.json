@@ -19,7 +19,8 @@
       "googleCalendar": "Google Takvim",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Akış oluşturucu"
+      "flowBuilder": "Akış oluşturucu",
+      "microsoftCalendar": "Microsoft Takvim"
     },
     "hub": {
       "kicker": "Yönetici - Proje ayarları",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "Uç nokta",
-            "hint": "Spaces, R2 ve MinIO için gerekli. Sondaki /bucket kaldırılır.",
-            "placeholder": "https://… (Spaces / R2 / MinIO için gerekli; Wasabi ve Bunny için otomatik)"
+            "hint": "Spaces ve R2 için gerekli. Sondaki /bucket kaldırılır.",
+            "placeholder": "https://… (Spaces / R2 için gerekli; Wasabi ve Bunny için otomatik)"
           },
           "cdnUrl": {
             "label": "Genel / CDN URL'si (isteğe bağlı)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "Yol tabanlı uç nokta kullan (MinIO / bazı S3 uyumlu depolamalar)"
+            "label": "Yol tabanlı uç nokta kullan (bazı S3 uyumlu depolamalar)"
           },
           "storageZone": {
             "label": "Depolama bölgesi",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 uyumlu"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "Özel (imzalı URL'ler)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Takvim",
-        "description": "Her çalışma alanının takvimini bağladığı Google OAuth istemcisi.",
+        "description": "Her çalışma alanının takvim, Sheets, Docs ve Forms için Google hesabını bağladığı Google OAuth istemcisi.",
         "sections": {
           "oauth": {
             "title": "Google OAuth istemcisi"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "Çalışma alanlarının Google Takvim'i bağlamasına izin ver",
-            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve bir takvime hiçbir şey yazılmaz veya okunmaz."
+            "label": "Çalışma alanlarının Google'ı bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve Google'dan (takvim, Sheets, Docs, Forms) hiçbir şey okunmaz veya Google'a yazılmaz."
           },
           "clientId": {
             "label": "İstemci kimliği",
@@ -1024,6 +1024,37 @@
             "advanced": "Yalnızca gelişmiş"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "description": "Her çalışma alanının Outlook veya Microsoft 365 takvimini bağlamak için kullandığı Microsoft uygulaması.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "Çalışma alanlarının Outlook bağlamasına izin ver",
+            "hint": "Kapalı: hiçbir çalışma alanı bağlanamaz ve hiçbir Outlook takviminden okuma ya da takvime yazma yapılmaz. Bağlı takvimler korunur."
+          },
+          "clientId": {
+            "label": "Uygulama (istemci) kimliği",
+            "hint": "Microsoft Entra yönetim merkezinde Uygulama kayıtları, Genel Bakış bölümünden alınır. Boş bırakılırsa MICROSOFT_CALENDAR_CLIENT_ID kullanılır."
+          },
+          "clientSecret": {
+            "label": "İstemci gizli anahtarı",
+            "hint": "Şifrelenmiş olarak saklanır ve bir daha gösterilmez. Boş bırakılırsa kayıtlı olan korunur; yedek olarak MICROSOFT_CALENDAR_CLIENT_SECRET kullanılır."
+          },
+          "tenant": {
+            "label": "Kiracı",
+            "hint": "common; iş, okul ve kişisel hesaplara izin verir. Tek kiracılı bir uygulama için dizin (kiracı) kimliğini kullanın. Boş bırakılırsa MICROSOFT_CALENDAR_TENANT, o da yoksa common kullanılır."
+          },
+          "redirectUri": {
+            "label": "Yönlendirme URI'sini değiştir",
+            "hint": "Yukarıdaki adresi kullanmak için boş bırakın. Uygulamadaki bir yönlendirme URI'siyle birebir eşleşmelidir."
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "Bulut depolama",
-        "description": "Müşteri medyasını kendi depolama alanınıza gönderin: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 veya MinIO.",
+        "description": "Müşteri medyasını kendi depolama alanınıza gönderin: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2.",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Takvim",
-        "description": "Çalışma alanlarının randevu ve meşgul saatler için takvimlerini bağlamak amacıyla kullandığı Google OAuth istemcisi.",
-        "tags": "Google / OAuth / Calendar"
+        "description": "Çalışma alanlarının rezervasyonlar, Sheets, Docs ve Forms için Google hesaplarını bağlamak amacıyla kullandığı Google OAuth istemcisi.",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail e-posta",
@@ -1151,6 +1182,11 @@
         "title": "Akış oluşturucu",
         "description": "Her çalışma alanı için varsayılan akış oluşturucu: Basit adım adım veya Gelişmiş tuval. Bir çalışma alanı bunu geçersiz kılabilir.",
         "tags": "Basit / Gelişmiş / Otomasyon"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "description": "Çalışma alanlarının rezervasyonlar için Outlook ve Microsoft 365 takvimlerini bağlamakta kullandığı Microsoft uygulaması.",
+        "tags": "Microsoft / OAuth / Outlook / Takvim"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Bunny alanlarını kullanın: depolama bölgesi ve parola. Bölge, depolama bölgesinin konumudur (de, ny, la...)."
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 alanlarını doldurun ve Uç Nokta URL'sini yapıştırın. MinIO için yol tabanlı seçeneğini işaretleyin."
+              "title": "Spaces / R2",
+              "body": "S3 alanlarını doldurun ve Uç Nokta URL'sini yapıştırın."
             },
             "test": {
               "title": "Her zaman önce test edin",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Takvim",
         "eyebrow": "Yönetici - Randevular",
-        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi. Her çalışma alanı daha sonra Randevular, Ayarlar bölümünden kendi Google hesabını bağlar; bir çalışma alanı istemci kimliğini veya gizli anahtarı asla görmez.",
+        "description": "Tüm platform için tek bir Google Cloud OAuth istemcisi. Her çalışma alanı daha sonra kendi Google hesabını Ayarlar'daki Google hesabı bölümünden bağlar ve hangi izinleri vereceğini seçer; bir çalışma alanı istemci kimliğini veya gizli anahtarı asla görmez.",
         "sections": {
           "oauth": {
             "title": "Google OAuth istemcisi",
-            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Google Takvim'i kullanılamaz olarak görür ve randevular takvim olmadan devam eder."
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Google'ı kullanılamaz olarak görür, rezervasyonlar takvim olmadan devam eder ve akışlardaki Google adımları atlanır."
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. Proje ve API",
-              "body": "Google Cloud Console'da bir proje oluşturun ve Google Takvim API'sini etkinleştirin."
+              "body": "Google Cloud Console'da bir proje oluşturun ve Google Calendar, Google Sheets, Google Docs, Google Drive ve Google Forms API'lerini etkinleştirin. Bir izin yalnızca API'si etkinse çalışır."
             },
             "redirect": {
               "title": "2. OAuth istemcisi",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. Onay ekranı",
-              "body": "calendar.events, calendar.freebusy ve calendar.calendarlist.readonly kapsamlarını ekleyin, ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir."
+              "body": "Ürünün istediği kapsamları ekleyin (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), ardından uygulamayı yayımlayın: Test aşamasında Google her izni 7 gün sonra sonlandırır ve çalışma alanlarının yeniden bağlanması gerekir. Drive kapsamları kısıtlıdır ve Google incelemesi gerektirir."
             },
             "workspaces": {
               "title": "4. Çalışma alanları bağlanır",
-              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Yöneticiler daha sonra Ayarlar, Entegrasyonlar, Google hesabı bölümünden veya Randevular, Ayarlar, Google Takvim bölümünden bağlanır."
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "Mevcut akışlar",
               "body": "Bu ayarı değiştirmek hiçbir akışı değiştirmez veya silmez. Akış çalışmaya devam eder; yalnızca etkin olan oluşturucuda açılır. Kendi oluşturucusunu seçen bir çalışma alanı, platform varsayılanını yeniden seçene kadar onu korur."
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Takvim",
+        "eyebrow": "Admin - Randevular",
+        "description": "Tüm platform için tek bir Microsoft Entra uygulaması. Her çalışma alanı kendi Outlook veya Microsoft 365 takvimini Randevular, Ayarlar bölümünden bağlar ve istemci kimliğini ya da gizli anahtarı hiçbir zaman görmez.",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra uygulaması",
+            "description": "İstemci kimliği ve gizli anahtar olmadan çalışma alanları Outlook'u kullanılamıyor olarak görür ve rezervasyonlar onsuz sürer. Google Calendar etkilenmez."
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra'da kurun",
+          "items": {
+            "registration": {
+              "title": "1. Uygulama kaydı",
+              "body": "Microsoft Entra yönetim merkezinde, herhangi bir kurumsal dizindeki hesaplar ve kişisel Microsoft hesapları için bir uygulama kaydı oluşturun ve Uygulama (istemci) kimliğini buraya kopyalayın. Daha dar bir seçenek belirlemediyseniz kiracıyı common olarak bırakın."
+            },
+            "redirect": {
+              "title": "2. Yönlendirme URI'si ve gizli anahtar",
+              "body": "Bu sayfada gösterilen yönlendirme URI'sini Web yönlendirmesi olarak ekleyin, ardından Sertifikalar ve gizli anahtarlar bölümünde bir istemci gizli anahtarı oluşturup değerini buraya yapıştırın. Süresinin ne zaman dolacağını not edin: o tarihten sonra yeni bir gizli anahtar kaydedilene kadar tüm çalışma alanlarının takvimi durur."
+            },
+            "permissions": {
+              "title": "3. API izinleri",
+              "body": "Yetki devredilen Microsoft Graph izinlerinden Calendars.ReadWrite, User.Read ve offline_access izinlerini ekleyin, başka hiçbir şey eklemeyin. Genel kullanım için yayıncı doğrulamasını tamamlayın; bir müşterinin kiracısında uygulamayı bir yöneticinin onaylaması da gerekebilir."
+            },
+            "workspaces": {
+              "title": "4. Çalışma alanları bağlanır",
+              "body": "İstemci kimliğini ve gizli anahtarı buraya yapıştırıp kaydedin. Ardından yöneticiler Randevular, Ayarlar bölümünden bağlanır."
             }
           }
         }

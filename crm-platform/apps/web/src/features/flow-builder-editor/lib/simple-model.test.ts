@@ -21,6 +21,8 @@ import {
   stepLabel,
   removeStep,
   stageLabel,
+  LINK_END,
+  LINK_NEXT,
   toGraph,
   toSimple,
   unreachable,
@@ -115,11 +117,13 @@ describe('graph to simple', () => {
     const noTrigger = toSimple(graph([node('a', 'message')], []));
     expect(noTrigger.ok).toBe(false);
     const canvasOnly = toSimple(
-      graph([node('t', 'trigger'), node('w', 'webhook')], [edge('t', 'out', 'w')]),
+      graph([node('t', 'trigger'), node('w', 'book_appointment')], [edge('t', 'out', 'w')]),
     );
     expect(canvasOnly).toEqual({
       ok: false,
-      reasons: [msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('webhook') })],
+      reasons: [
+        msg('simpleModel.reasons.unsupportedStep', { node: nodeLabelMsg('book_appointment') }),
+      ],
     });
     const merge = toSimple(
       graph(
@@ -206,12 +210,53 @@ describe('editing a simple doc', () => {
     return doc;
   };
 
-  it('a step cannot be added after a buttons / list step, and a buttons step has to be last', () => {
+  it('a step cannot follow a condition, and a condition has to be last; buttons / list may go anywhere', () => {
+    let doc = insertStep(emptyDoc(), 0, 0, newStep('message', []));
+    doc = insertStep(doc, 0, 1, newStep('condition', allSteps(doc)));
+    expect(allSteps(insertStep(doc, 0, 2, newStep('message', [])))).toHaveLength(2);
+    expect(allSteps(insertStep(doc, 0, 0, newStep('condition', [])))).toHaveLength(2);
+    const before = insertStep(base(), 0, 0, newStep('list', []));
+    expect(allSteps(before)).toHaveLength(3);
+    expect(allSteps(before)[0]!.type).toBe('list');
+  });
+
+  it('a step added after buttons is what every button carries on with, and it round-trips', () => {
     const doc = base();
-    const after = insertStep(doc, 0, 2, newStep('message', []));
-    expect(allSteps(after)).toHaveLength(2);
-    const before = insertStep(doc, 0, 0, newStep('list', []));
-    expect(allSteps(before)).toHaveLength(2);
+    const b = allSteps(doc)[1]!;
+    const next = newStep('message', allSteps(doc));
+    const after = insertStep(doc, 0, 2, next);
+    expect(allSteps(after).map((s) => s.id)).toEqual([allSteps(doc)[0]!.id, b.id, next.id]);
+    expect(allSteps(after)[1]!.links).toEqual([LINK_NEXT]);
+    const graph = toGraph(after);
+    expect(
+      graph.flowEdges.some(
+        (e) => e.source === b.id && e.sourceHandle === 'p0' && e.target === next.id,
+      ),
+    ).toBe(true);
+    const back = toSimple(graph);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys).toHaveLength(1);
+      expect(allSteps(back.doc).map((s) => s.id)).toEqual([allSteps(doc)[0]!.id, b.id, next.id]);
+      expect(allSteps(back.doc)[1]!.links).toEqual([LINK_NEXT]);
+      expect(allSteps(back.doc)[1]!.data.carryOn).toBeUndefined();
+    }
+  });
+
+  it('a button set to end stays ended when a step follows, and removing the next step ends the rest', () => {
+    const doc = base();
+    const b = allSteps(doc)[1]!;
+    const two = updateStep(doc, b.id, { data: { options: ['A', 'B'] } });
+    const next = newStep('message', allSteps(two));
+    let after = insertStep(two, 0, 2, next);
+    after = updateStep(after, b.id, { links: [LINK_NEXT, null] });
+    const graph = toGraph(after);
+    expect(graph.flowEdges.filter((e) => e.source === b.id).map((e) => e.sourceHandle)).toEqual([
+      'p0',
+    ]);
+    const back = toSimple(graph);
+    expect(back.ok && allSteps(back.doc)[1]!.links).toEqual([LINK_NEXT, null]);
+    expect(allSteps(removeStep(after, next.id))[1]!.links).toEqual([null, null]);
   });
 
   it('keeps one link per button when the buttons change', () => {
@@ -238,13 +283,18 @@ describe('editing a simple doc', () => {
   it('moves a step up or down but never past the end buttons step; duplicates a plain step', () => {
     let doc = base();
     const [a, b] = allSteps(doc);
-    expect(allSteps(moveStep(doc, a!.id, 1)).map((s) => s.id)).toEqual([a!.id, b!.id]);
+    expect(allSteps(moveStep(doc, a!.id, 1)).map((s) => s.id)).toEqual([b!.id, a!.id]);
     doc = insertStep(doc, 0, 1, newStep('delay', allSteps(doc)));
     const [x, d] = allSteps(doc);
     expect(allSteps(moveStep(doc, x!.id, 1)).map((s) => s.id)[0]).toBe(d!.id);
     const dup = duplicateStep(doc, x!.id);
     expect(allSteps(dup)).toHaveLength(4);
-    expect(duplicateStep(doc, allSteps(doc).at(-1)!.id)).toBe(doc);
+    const c = newStep('condition', allSteps(doc));
+    const withCond = insertStep(doc, 0, 3, c);
+    expect(duplicateStep(withCond, c.id)).toBe(withCond);
+    expect(allSteps(moveStep(withCond, allSteps(withCond)[1]!.id, 1)).map((s) => s.id)[2]).not.toBe(
+      c.id,
+    );
   });
 
   it('gives every new question and menu its own variable name', () => {
@@ -278,11 +328,49 @@ describe('checks', () => {
     ]);
   });
 
+  it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('location', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false }).map((p) => en(p.message));
+    };
+    const bad = ['Step 1.1: paste a Google Maps link or enter a valid latitude and longitude.'];
+    expect(run({})).toEqual(bad);
+    expect(run({ locMode: 'link', mapsUrl: '', lat: '', lng: '' })).toEqual(bad);
+    expect(run({ lat: '0', lng: '0' })).toEqual(bad);
+    expect(run({ lat: '91', lng: '10' })).toEqual(bad);
+    expect(run({ lat: 'abc', lng: '10' })).toEqual(bad);
+    // place name and address are optional; a step saved before the modes existed stays valid
+    expect(run({ lat: '18.5204', lng: '73.8567', title: '', address: '' })).toEqual([]);
+    expect(
+      run({
+        locMode: 'link',
+        mapsUrl: 'https://maps.google.com/?q=1.5,2.5',
+        lat: '1.5',
+        lng: '2.5',
+      }),
+    ).toEqual([]);
+  });
+
+  it('a new Location step starts empty in link mode, with no placeholder name or address', () => {
+    expect(newStep('location', []).data).toMatchObject({
+      locMode: 'link',
+      mapsUrl: '',
+      lat: '',
+      lng: '',
+      title: '',
+      address: '',
+    });
+  });
+
   it('flags long button labels and repeated variable names', () => {
     let d = emptyDoc();
     const b = newStep('buttons', []);
     d = insertStep(d, 0, 0, b);
     d = updateStep(d, b.id, { data: { prompt: 'p', options: ['x'.repeat(21)] } });
+    const after = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    d = updateStep(addJourney(d, after), b.id, { links: [after.id] });
     d.trigger.data.keywords = 'hi';
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: a button label is longer than 20 characters.',
@@ -643,6 +731,7 @@ describe('steps per channel', () => {
         'ask_file',
         'delay',
         'cta',
+        'webhook',
       ]),
     );
   });
@@ -720,6 +809,7 @@ describe('the carousel step', () => {
     d = insertStep(d, 0, 0, c);
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: add at least one card and give every card a title.',
+      'Step 1.1: the button "Choose" leads nowhere. Add a step for it, or give it an action.',
     ]);
     d = updateStep(d, c.id, {
       data: {
@@ -823,6 +913,8 @@ describe('a button that hands the visitor to a person', () => {
         handoffs: { '1': { team: '', message: '' } },
       },
     });
+    const pricing = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    d = updateStep(addJourney(d, pricing), b.id, { links: [pricing.id, null] });
     expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toEqual([
       'Step 1.1: choose the team the conversation goes to.',
     ]);
@@ -830,5 +922,315 @@ describe('a button that hands the visitor to a person', () => {
       data: { handoffs: { '1': { team: 'team-1', message: 'Asked for a person' } } },
     });
     expect(problems(d, { senderRequired: false })).toEqual([]);
+  });
+});
+
+describe('API call and JS function steps (the Actions list)', () => {
+  const docWith = (type: 'api_library' | 'code') => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    const a = newStep(type, [m]);
+    const after = newStep('message', [m, a]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, a);
+    d = insertStep(d, 0, 2, after);
+    return { d, a };
+  };
+
+  it('are offered in the + menu on WhatsApp and not on a website chat bot', () => {
+    expect(stepKindsFor('chat').map((k) => k.key)).toEqual(
+      expect.arrayContaining(['api-library', 'code']),
+    );
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('api-library');
+    expect(stepKindsFor('web').map((k) => k.key)).not.toContain('code');
+  });
+
+  it('start with their own result name, never one another step already saves', () => {
+    const first = newStep('api_library', []);
+    const second = newStep('api_library', [first]);
+    expect(first.data.save).toBe('api_response_1');
+    expect(second.data.save).toBe('api_response_2');
+    expect(newStep('code', [first]).data.save).toBe('result_1');
+  });
+
+  it('say what is missing: an API to call, code to run', () => {
+    const { d } = docWith('api_library');
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: choose the API to call.',
+    );
+    const c = docWith('code');
+    c.d = updateStep(c.d, c.a.id, { data: { code: '' } });
+    expect(problems(c.d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: write the code to run.',
+    );
+  });
+
+  it('an API step carries on to the next step on success and on error, and reads back as a plain step', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const from = g.flowEdges.filter((e) => e.source === a.id);
+    expect(from.map((e) => e.sourceHandle).sort()).toEqual(['error', 'success']);
+    expect(new Set(from.map((e) => e.target)).size).toBe(1);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok)
+      expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual([
+        'message',
+        'api_library',
+        'message',
+      ]);
+  });
+
+  it('an API step whose error ends the flow keeps doing so after a save from the Simple builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    g.flowEdges = g.flowEdges.filter((e) => !(e.source === a.id && e.sourceHandle === 'error'));
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    const again = toGraph(back.doc);
+    expect(again.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'success',
+    ]);
+  });
+
+  it('a graph whose API error wire goes elsewhere is left to the Advanced builder', () => {
+    const { d, a } = docWith('api_library');
+    const g = toGraph(d);
+    const stray = g.flowEdges.find((e) => e.source === a.id && e.sourceHandle === 'error')!;
+    stray.target = g.flowNodes[0]!.id;
+    expect(toSimple(g).ok).toBe(false);
+  });
+
+  it('a JS function step is a plain step with one exit', () => {
+    const { d, a } = docWith('code');
+    const g = toGraph(d);
+    expect(g.flowEdges.filter((e) => e.source === a.id).map((e) => e.sourceHandle)).toEqual([
+      'out',
+    ]);
+    expect(toSimple(g).ok).toBe(true);
+  });
+});
+
+describe('Webhook step and the Actions group', () => {
+  it('Wait sits with the other actions (API call, Webhook, JS function), not under Send', () => {
+    const group = (type: string) => STEP_KINDS.find((k) => k.type === type)?.group;
+    for (const t of ['delay', 'api_library', 'webhook', 'code']) expect(group(t)).toBe('action');
+  });
+
+  it('Webhook is offered on WhatsApp and on the website chat, and saves its answer under its own name', () => {
+    expect(stepKindsFor('chat').map((k) => k.type)).toContain('webhook');
+    expect(stepKindsFor('web').map((k) => k.type)).toContain('webhook');
+    const first = newStep('webhook', []);
+    expect(first.data.save).toBe('webhook_response_1');
+    expect(first.data.method).toBe('POST');
+    expect(newStep('webhook', [first]).data.save).toBe('webhook_response_2');
+  });
+
+  it('says the address is missing, shows it on the card and reads back as a plain step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    m.data.text = 'hello';
+    const w = newStep('webhook', [m]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, w);
+    expect(problems(d, { senderRequired: false }).map((p) => en(p.message))).toContain(
+      'Step 1.2: add the address (URL) to call.',
+    );
+    d = updateStep(d, w.id, { data: { url: 'https://api.example.com/stock' } });
+    expect(problems(d, { senderRequired: false })).toEqual([]);
+    const back = toSimple(toGraph(d));
+    expect(back.ok).toBe(true);
+    if (back.ok)
+      expect(back.doc.journeys[0]!.steps.map((s) => s.type)).toEqual(['message', 'webhook']);
+  });
+});
+
+describe('a button, row or reply that leads nowhere is not published', () => {
+  const withStep = (type: 'buttons' | 'list', data: Record<string, unknown>) => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const b = newStep(type, []);
+    d = insertStep(d, 0, 0, b);
+    d = updateStep(d, b.id, { data });
+    return { d, b };
+  };
+  const found = (d: ReturnType<typeof emptyDoc>) =>
+    problems(d, { senderRequired: false }).map((p) => en(p.message));
+  const buttons = { prompt: 'p', options: ['Yes', 'No'] };
+
+  it('names each button with no step', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const yes = { ...newStep('message', allSteps(d)), data: { text: 'hi' } };
+    const wired = updateStep(addJourney(d, yes), b.id, { links: [yes.id, null] });
+    expect(found(d)).toEqual([
+      'Step 1.1: the button "Yes" leads nowhere. Add a step for it, or give it an action.',
+      'Step 1.1: the button "No" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+    expect(found(wired)).toEqual([
+      'Step 1.1: the button "No" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+  });
+
+  it('accepts "ends here" when the author chose it, and keeps the choice through the graph', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const ended = updateStep(d, b.id, { links: [LINK_END, LINK_END] });
+    expect(found(ended)).toEqual([]);
+    const g = toGraph(ended);
+    expect(g.flowEdges.filter((e) => e.source === b.id)).toEqual([]);
+    const back = toSimple({ flowNodes: g.flowNodes, flowEdges: g.flowEdges, vars: g.vars });
+    expect(back.ok && allSteps(back.doc)[0]!.links).toEqual([LINK_END, LINK_END]);
+    expect(back.ok && found(back.doc)).toEqual([]);
+    // the same graph without the choice is an undecided button again
+    const bare = toSimple({
+      flowNodes: g.flowNodes.map((n) => {
+        const { endOptions: _drop, ...data } = n.data as Record<string, unknown>;
+        return { ...n, data };
+      }),
+      flowEdges: g.flowEdges,
+      vars: g.vars,
+    });
+    expect(bare.ok && found(bare.doc)).toHaveLength(2);
+  });
+
+  it('says "row" for a list, and falls back to the position for a nameless one', () => {
+    const { d } = withStep('list', {
+      prompt: 'p',
+      button: 'Pick',
+      options: [{ title: 'Pricing', description: '', section: '' }],
+    });
+    expect(found(d)).toEqual([
+      'Step 1.1: the row "Pricing" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+    const { d: e } = withStep('buttons', { prompt: 'p', options: [' '] });
+    expect(found(e)).toContain('Step 1.1: every button needs a label.');
+    expect(found(e)).toContain(
+      'Step 1.1: the button "#1" leads nowhere. Add a step for it, or give it an action.',
+    );
+  });
+
+  it('accepts "carry on" only when a step follows, and an action as a way out', () => {
+    const { d, b } = withStep('buttons', buttons);
+    const carry = updateStep(d, b.id, { links: [LINK_NEXT, LINK_NEXT] });
+    expect(found(carry)).toHaveLength(2);
+    const next = newStep('message', allSteps(carry));
+    const withNext = insertStep(carry, 0, 1, { ...next, data: { text: 'hi' } });
+    expect(found(withNext)).toEqual([]);
+    const acted = updateStep(d, b.id, {
+      data: {
+        handoffs: { '0': { team: 'team-1', message: '' } },
+        optionActions: { '1': { type: 'opt_out' } },
+      },
+    });
+    expect(found(acted)).toEqual([]);
+    const flowAction = updateStep(d, b.id, {
+      data: { optionActions: { '0': { type: 'flow', flow: 'f-1' }, '1': { type: 'opt_in' } } },
+    });
+    expect(found(flowAction)).toEqual([]);
+  });
+
+  it('checks the reply buttons of a carousel, not its link buttons, and counts a person as a way out', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [
+          {
+            title: 'A',
+            buttons: [
+              { type: 'url', label: 'Open', value: 'https://example.com' },
+              { type: 'reply', label: 'Pick me' },
+              { type: 'agent', label: 'Talk', team: 'team-1' },
+            ],
+          },
+        ],
+      },
+    });
+    expect(found(d)).toEqual([
+      'Step 1.1: the button "Pick me" leads nowhere. Add a step for it, or give it an action.',
+    ]);
+  });
+
+  it('leaves an open condition or FAQ exit alone: nobody taps it', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const f = newStep('faq', []);
+    d = insertStep(d, 0, 0, f);
+    expect(found(d)).toEqual([]);
+  });
+
+  it('refuses more buttons or rows than WhatsApp allows', () => {
+    const { d, b } = withStep('buttons', { prompt: 'p', options: ['a', 'b', 'c', 'd'] });
+    const wired = updateStep(d, b.id, { links: [LINK_NEXT, LINK_NEXT, LINK_NEXT, LINK_NEXT] });
+    const next = insertStep(wired, 0, 1, { ...newStep('message', []), data: { text: 'x' } });
+    expect(found(next)).toEqual(['Step 1.1: a set of buttons can have at most 3 buttons.']);
+  });
+});
+
+describe('the AI assistant step: an agent, or a custom setup with a prompt', () => {
+  const docWithAi = (data: Record<string, unknown>) => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const m = newStep('message', []);
+    const a = newStep('ai', [m]);
+    d = insertStep(d, 0, 0, m);
+    d = insertStep(d, 0, 1, a);
+    d = updateStep(d, a.id, { data });
+    return { d, a };
+  };
+  const ask = (d: SimpleDoc) =>
+    problems(d, { senderRequired: false })
+      .map((p) => en(p.message))
+      .filter((m) => m.includes('AI'));
+
+  it('a new step starts as an agent setup and cannot be published until an agent is chosen', () => {
+    const a = newStep('ai', []);
+    expect(a.data.agentMode).toBe('agent');
+    expect(a.data.assistant).toBe('');
+    const { d } = docWithAi({ ...a.data });
+    expect(ask(d)).toEqual([
+      'Step 1.2: choose the AI agent that answers, or switch the step to a custom setup.',
+    ]);
+  });
+
+  it('an agent setup passes once an agent is chosen, whatever the prompt field holds', () => {
+    expect(ask(docWithAi({ agentMode: 'agent', assistant: 'a-1', prompt: '' }).d)).toEqual([]);
+  });
+
+  it('a custom setup needs a prompt, unless an agent lends its knowledge (a step saved that way before)', () => {
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: '  ', assistant: '' }).d)).toEqual([
+      'Step 1.2: write the instructions for the AI, or choose an AI agent.',
+    ]);
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: 'Be brief', assistant: '' }).d)).toEqual(
+      [],
+    );
+    expect(ask(docWithAi({ agentMode: 'custom', prompt: '', assistant: 'a-1' }).d)).toEqual([]);
+  });
+
+  it('a step saved before the choice existed has no mode, keeps working and keeps its fields', () => {
+    const old = {
+      model: 'gpt-4o-mini',
+      prompt: 'Answer about farms',
+      assistant: 'a-1',
+      save: 'reply',
+    };
+    const g = graph(
+      [node('t', 'trigger', { kind: 'keyword', keywords: 'hi' }), node('ai1', 'ai', old, 80, 250)],
+      [edge('t', 'out', 'ai1')],
+    );
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (!back.ok) return;
+    expect(ask(back.doc)).toEqual([]);
+    const s = allSteps(back.doc).find((x) => x.id === 'ai1')!;
+    expect(s.data).toMatchObject(old);
+    expect(s.data.agentMode).toBeUndefined();
+    const saved = toGraph(back.doc).flowNodes.find((n) => n.id === 'ai1')!;
+    expect(saved.data).toMatchObject(old);
+    expect(saved.data.agentMode).toBeUndefined();
   });
 });

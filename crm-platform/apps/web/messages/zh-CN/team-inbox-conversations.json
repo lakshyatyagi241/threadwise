@@ -29,7 +29,8 @@
       "priorityChanged": "优先级已更新",
       "snoozed": "对话已暂时搁置",
       "tagAdded": "已添加标签",
-      "tagRemoved": "已移除标签"
+      "tagRemoved": "已移除标签",
+      "spammed": "会话已标记为垃圾信息。"
     },
     "list": {
       "title": "收件箱",
@@ -44,12 +45,8 @@
         "unassigned": "未分配",
         "unread": "未读"
       },
-      "statusFilter": "状态",
-      "statusOpen": "打开",
-      "statusAll": "所有状态",
       "status": {
         "open": "打开",
-        "pending": "待处理",
         "snoozed": "已暂停",
         "resolved": "已解决",
         "closed": "已解决",
@@ -61,7 +58,6 @@
         "high": "高",
         "urgent": "紧急"
       },
-      "channelFilter": "渠道",
       "allChannels": "所有渠道",
       "archived": "已归档",
       "backToInbox": "返回收件箱",
@@ -107,7 +103,57 @@
         }
       },
       "select": "选择",
-      "selectDone": "完成"
+      "selectDone": "完成",
+      "filters": {
+        "open": "筛选",
+        "openActive": "筛选（已开启 {count} 项）",
+        "title": "筛选",
+        "close": "关闭",
+        "reset": "重置",
+        "cancel": "取消",
+        "apply": "应用",
+        "status": "聊天状态",
+        "statusHint": "未选择时显示未结束的会话。",
+        "conversation": "会话",
+        "any": "任意",
+        "assigned": "已分配",
+        "unassigned": "未分配",
+        "unattended": "未处理",
+        "labels": "标签",
+        "channels": "渠道",
+        "agents": "客服",
+        "sortBy": "排序",
+        "recent": "最新",
+        "old": "最早",
+        "dateRange": "日期范围（最后活动）",
+        "from": "从",
+        "to": "至",
+        "select": "选择一项",
+        "search": "搜索",
+        "noMatch": "无匹配项",
+        "today": "今天",
+        "last7": "最近 7 天",
+        "last30": "最近 30 天",
+        "thisMonth": "本月",
+        "clearDates": "清除日期",
+        "previousMonth": "上个月",
+        "nextMonth": "下个月"
+      },
+      "rowMenu": "{name} 的更多操作",
+      "priorityMenu": "优先级",
+      "statusFilter": "状态",
+      "statusOpen": "打开",
+      "statusAll": "所有状态",
+      "channelFilter": "渠道",
+      "selectRow": "选择 {name}",
+      "snoozedFor": "已暂停 · {left}",
+      "snoozeLeft": {
+        "due": "即将",
+        "minutes": "{count} 分钟",
+        "hours": "{count} 小时",
+        "days": "{count} 天"
+      },
+      "unsnoozesAt": "{time} 恢复"
     },
     "status": {
       "received": "已接收",
@@ -128,6 +174,7 @@
       "mediaNotFound": "附件已过期或被移除。请重新添加附件。",
       "statusInvalid": "当前会话状态下不允许此更改。",
       "assigneeInvalid": "无法将此会话分配给该用户。",
+      "assignedToOther": "此聊天已分配给其他客服。请先将其分配给自己，然后再回复。",
       "forbidden": "您没有执行此操作的权限。",
       "rateLimited": "请求过于频繁。请稍候再试。",
       "simulatorDisabled": "此服务器已关闭渠道模拟器。",
@@ -232,7 +279,11 @@
         "undone": "阶段变更已撤销：已恢复为“{stage}”。",
         "undoneToast": "阶段已恢复为“{stage}”。",
         "couldNotUndo": "此更改已无法撤销：联系人已进入后续阶段，或已被撤销。"
-      }
+      },
+      "heldUntil": "暂缓至 {when}",
+      "heldWhy": "这条营销消息正在等待您的免打扰时段结束，届时若联系人在此期间未退订，将会发送。",
+      "templateSent": "模板“{name}”已通过{channel}发送",
+      "templateSentPlain": "模板“{name}”已发送"
     },
     "media": {
       "openImage": "打开图片 {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "发送模板"
       },
       "readOnly": "您可以查看此会话，但没有回复的权限。",
+      "resolvedBanner": "此会话已解决。请重新打开后再回复。",
+      "assignedToOther": "此聊天已分配给其他客服。请先将其分配给自己，然后再回复。",
       "typing": "{count, plural, other {# 位团队成员正在输入}}",
       "messagesLabel": "消息",
       "loadOlder": "加载更早的消息",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "新消息：{text}",
       "attachment": "一个附件",
       "jumpLatest": "跳至最新",
-      "jumpLatestNew": "{count, plural, other {# 条新消息}}"
+      "jumpLatestNew": "{count, plural, other {# 条新消息}}",
+      "searchOpen": "在此聊天中搜索",
+      "searchPlaceholder": "在此聊天中搜索",
+      "searchCount": "第 {current} 条，共 {total} 条",
+      "searchNone": "无匹配项",
+      "searchPrev": "上一个匹配",
+      "searchNext": "下一个匹配",
+      "searchClose": "关闭搜索"
     },
     "groupThread": {
       "openGroup": "打开群组",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "快捷回复",
-      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。"
+      "savedReplyIssues": "未填写并保持原样（{count}）：{list}。请在发送前修正。",
+      "toolbar": {
+        "label": "消息格式",
+        "bold": "加粗",
+        "italic": "斜体",
+        "underline": "下划线",
+        "strike": "删除线",
+        "bullets": "项目符号列表",
+        "numbers": "编号列表",
+        "ai": {
+          "open": "智能 AI 助手",
+          "noModel": "此工作区未启用任何 AI 模型",
+          "title": "智能 AI 助手",
+          "condense": "精简",
+          "condenseHint": "让文字更简短精炼",
+          "fix": "修正语法",
+          "fixHint": "纠正语法和拼写错误",
+          "positive": "积极语气",
+          "positiveHint": "让文字更积极、更有活力",
+          "translate": "翻译",
+          "translateHint": "翻译成其他语言",
+          "selectLanguage": "选择语言",
+          "searchLanguages": "搜索语言…",
+          "noLanguage": "没有匹配的语言",
+          "working": "处理中…",
+          "empty": "请先写一条消息。",
+          "failed": "AI 无法修改文本，请重试。"
+        }
+      }
     },
     "panel": {
       "tabsLabel": "备注与时间线",
@@ -452,7 +540,13 @@
         "pickTeam": "为此会话选择团队",
         "noTeam": "无团队",
         "onLeave": "休假中",
-        "onLeaveUntil": "休假至 {date}"
+        "onLeaveUntil": "休假至 {date}",
+        "availability": {
+          "online": "在线",
+          "away": "离开",
+          "busy": "忙碌",
+          "offline": "离线"
+        }
       },
       "presence": {
         "online": "在线",
@@ -461,16 +555,8 @@
         "offline": "离线"
       },
       "notes": {
-        "tab": "备注",
-        "label": "新建内部备注",
-        "placeholder": "撰写仅团队可见的备注",
-        "hint": "按 Ctrl+Enter 添加备注。",
-        "add": "添加备注",
-        "addFailed": "无法保存备注。",
-        "loading": "正在加载备注",
-        "empty": "暂无备注。",
-        "unknownAuthor": "某位团队成员",
-        "delete": "删除此备注"
+        "tab": "联系人备注",
+        "noContact": "此对话没有可添加备注的联系人。"
       },
       "timeline": {
         "tab": "时间线",
@@ -496,6 +582,8 @@
           "tag_removed": "{actor} 移除了标签",
           "first_response": "已发送首次回复",
           "sla_breach": "已错过回复期限",
+          "spam_flagged": "由 {actor} 标记为垃圾信息",
+          "escalated": "已升级",
           "unknown": "{actor} 执行：{what}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "无消息",
         "status": {
           "open": "打开",
-          "pending": "待处理",
           "snoozed": "已暂停",
           "resolved": "已解决",
           "closed": "已关闭",
@@ -620,6 +707,8 @@
         "format": "{label} 不可包含换行、制表符或连续四个空格。"
       },
       "reason": {
+        "other_number": "属于另一个 WhatsApp 号码，因此无法从此会话发送。",
+        "not_linked": "此会话的渠道未关联 WhatsApp 号码，因此无法从此发送任何模板。",
         "paused": "已被 WhatsApp 暂停。暂停结束后可再次发送。",
         "media_header": "包含图片、视频或文档页眉，目前无法从收件箱发送。",
         "header_variable": "页眉包含变量，目前无法在收件箱中填写。",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "电子邮件"
+        "email": "电子邮件",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "联系人",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "优先级",
       "snooze": "暂时搁置",
-      "wake": "立即恢复"
+      "wake": "立即恢复",
+      "markSpam": "标记为垃圾信息",
+      "notSpam": "不是垃圾信息"
     },
     "bulk": {
       "barLabel": "批量操作",
@@ -959,7 +1053,8 @@
       "tagAdd": "添加标签",
       "tagRemove": "移除标签",
       "onLeave": "休假中",
-      "onLeaveUntil": "休假至 {date}"
+      "onLeaveUntil": "休假至 {date}",
+      "spam": "标记为垃圾信息"
     },
     "tags": {
       "tag": "标签",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}：已错过（应于 {time} 完成）",
       "titleOpen": "{kind}：{time} 到期"
+    },
+    "channelType": {
+      "official": "官方",
+      "unofficial": "非官方",
+      "officialFull": "官方 (WhatsApp Cloud API)",
+      "unofficialFull": "非官方 (QR / Baileys)"
     }
   }
 }

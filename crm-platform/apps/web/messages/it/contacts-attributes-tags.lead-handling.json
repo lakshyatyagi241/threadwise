@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Non contattati",
+        "followUpToday": "Ricontatti di oggi",
+        "followUpOverdue": "Ricontatti scaduti",
+        "followUpSomeday": "Ricontatti senza data"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Non contattato",
+        "chipTitle": "Nessuno del team ha ancora contattato questa persona",
+        "waitingSince": "In attesa dal {date}",
+        "markContacted": "Segna come contattato",
+        "markUncontacted": "Segna come non contattato",
+        "markedContacted": "Segnato come contattato",
+        "markedUncontacted": "Segnato come non contattato",
+        "markFailed": "Impossibile modificare il contrassegno. Riprova.",
+        "bulkMarkedContacted": "{count, plural, one {# contatto segnato come contattato} other {# contatti segnati come contattati}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contatto segnato come non contattato} other {# contatti segnati come non contattati}}"
+      },
+      "settings": {
+        "save": "Salva",
+        "discard": "Annulla modifiche",
+        "saved": "Impostazioni salvate",
+        "retry": "Riprova",
+        "loading": "Caricamento impostazioni",
+        "conflict": "Un altro utente ha salvato queste impostazioni mentre le modificavi. Sono mostrate di nuovo qui sotto: ripeti la modifica.",
+        "conflictOk": "Ho capito",
+        "errors": {
+          "network": "Impossibile raggiungere il server. Controlla la connessione e riprova.",
+          "forbidden": "Solo chi gestisce le impostazioni dell'area di lavoro può modificare questa pagina.",
+          "conflict": "Un altro utente ha modificato prima queste impostazioni. Ricarica e riprova.",
+          "validation": "Alcune impostazioni non sono valide. Controllale e riprova.",
+          "unexpected": "Qualcosa è andato storto. Riprova."
+        },
+        "uncontacted": {
+          "title": "Lead non contattati",
+          "subtitle": "Segna i lead che nessuno ha ancora contattato, così restano ben visibili finché qualcuno non si fa sentire. Non cambia nulla finché non attivi un'opzione.",
+          "clear": {
+            "title": "Segna come contattato",
+            "intro": "Rimuovi automaticamente il contrassegno Non contattato quando un membro del team esegue una di queste azioni:",
+            "contactButton": "Preme un pulsante di contatto (chiamata, SMS, email o WhatsApp) o effettua una chiamata",
+            "message": "Invia un messaggio, un template, una risposta salvata o un file dalla inbox",
+            "automation": "Una campagna, un broadcast o un flusso automatico invia un messaggio al lead",
+            "activity": "Aggiunge una nota, una riunione o un'altra attività alla timeline",
+            "manualHint": "Puoi anche cambiare il contrassegno a mano: apri il menu Altro su un contatto, oppure seleziona più contatti e usa Altro nella barra sopra l'elenco."
+          },
+          "new": {
+            "title": "Segna i nuovi lead come non contattati",
+            "intro": "Quando un lead viene creato in uno di questi modi, segnalo come non contattato:",
+            "manual": "Creato manualmente nell'app",
+            "import": "Importato da un file o da Google Sheets",
+            "leadSource": "Fonti di lead, moduli e integrazioni"
+          },
+          "reassign": {
+            "title": "Lead riassegnati",
+            "intro": "Quando un lead viene assegnato o riassegnato a un nuovo responsabile:",
+            "keep": "Non modificare il contrassegno Non contattato",
+            "mark": "Segna come non contattato alla riassegnazione"
+          }
+        },
+        "followUps": {
+          "title": "Ricontatti",
+          "subtitle": "Mantieni ogni lead in movimento: quando un membro del team contatta una persona, il suo prossimo ricontatto può essere impostato o spostato automaticamente. Non cambia nulla finché non attivi un'opzione.",
+          "when": {
+            "title": "Imposta i ricontatti automaticamente",
+            "intro": "Ogni volta che un membro del team contatta una persona o le invia un contenuto, aggiorna il ricontatto se:",
+            "none": "Il contatto non ha un ricontatto",
+            "overdue": "Il ricontatto è scaduto",
+            "today": "Il ricontatto è previsto per oggi",
+            "future": "Il ricontatto è previsto più avanti"
+          },
+          "date": {
+            "title": "Data predefinita del ricontatto",
+            "intro": "Quando un ricontatto viene aggiornato automaticamente, impostalo a:",
+            "day": "1 giorno dopo",
+            "three_days": "3 giorni dopo",
+            "week": "1 settimana dopo",
+            "month": "1 mese dopo",
+            "custom": "Personalizzato",
+            "someday": "Prima o poi",
+            "none": "Nessun ricontatto",
+            "somedayHint": "Il ricontatto non ha una data e resta nell'elenco «Prima o poi». Non viene mai notificato.",
+            "noneHint": "Il ricontatto aperto viene segnato come completato e non ne viene creato uno nuovo.",
+            "customDays": "Numero di giorni",
+            "daysLater": "giorni dopo"
+          },
+          "time": {
+            "title": "Ora predefinita del ricontatto",
+            "intro": "Ogni volta che viene creato un nuovo ricontatto, imposta l'orario di avviso a:",
+            "hint": "Basato sul fuso orario del tuo workspace."
+          }
+        },
+        "duplicates": {
+          "title": "Lead duplicati",
+          "subtitle": "Scegli cosa succede quando un nuovo lead da una fonte di lead ha lo stesso numero di telefono o la stessa e-mail di un contatto che hai già.",
+          "mode": {
+            "title": "Quando un nuovo lead corrisponde a un contatto",
+            "intro": "Un lead corrisponde quando il suo numero di telefono o la sua e-mail appartiene già a un contatto.",
+            "merge": "Unisci al contatto esistente",
+            "mergeHint": "Compila i campi vuoti del contatto e aggiunge il lead alla sua cronologia. Ciò che è già compilato non viene mai sovrascritto.",
+            "createNew": "Crea un nuovo contatto",
+            "createNewHint": "Crea un contatto separato per il lead. Conta nel limite di contatti del tuo piano e può essere unito in seguito."
+          },
+          "note": {
+            "title": "Cronologia",
+            "merge": "Aggiungi una nota alla cronologia quando un lead viene unito",
+            "hint": "Disattivato per impostazione predefinita, perché una nota sposta anche l'ultima attività del contatto."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Prossimo ricontatto",
+        "somedayLabel": "Prima o poi",
+        "overdue": "Scaduto",
+        "done": "Fatto",
+        "snooze": "Posticipa",
+        "snoozeDay": "1 giorno",
+        "snoozeThreeDays": "3 giorni",
+        "snoozeWeek": "Prossima settimana",
+        "change": "Cambia data",
+        "set": "Imposta ricontatto",
+        "edit": "Modifica ricontatto",
+        "remove": "Rimuovi ricontatto",
+        "dialogTitle": "Ricontatto",
+        "someday": "Prima o poi (senza data)",
+        "dateTime": "Data e ora",
+        "cancel": "Annulla",
+        "save": "Salva",
+        "savedFor": "Ricontatto salvato",
+        "savedSomeday": "Ricontatto impostato su «prima o poi»",
+        "snoozed": "Ricontatto spostato",
+        "doneMessage": "Ricontatto segnato come completato",
+        "clearedMessage": "Ricontatto rimosso",
+        "failed": "Impossibile modificare il ricontatto. Riprova.",
+        "filterLabel": "Ricontatto",
+        "filter": {
+          "any": "Qualsiasi",
+          "overdue": "Scaduto",
+          "today": "In scadenza oggi",
+          "upcoming": "In arrivo",
+          "someday": "Prima o poi",
+          "none": "Nessun ricontatto"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Prossimo ricontatto"
+    }
+  }
+}

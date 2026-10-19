@@ -121,7 +121,7 @@ export function ConnectModal({ open, onClose }: { open: boolean; onClose: () => 
           type="button"
           aria-expanded={manual}
           onClick={() => setManual((v) => !v)}
-          className="flex w-full items-center justify-between rounded-xl border border-border bg-background px-4 py-3 text-left hover:bg-muted"
+          className="flex w-full items-center justify-between rounded-xl border border-border bg-background px-4 py-3 text-start hover:bg-muted"
         >
           <span className="text-[12.5px] font-medium">{t('manualToggle')}</span>
           <ChevronDownIcon className="size-3.5 text-muted-foreground" />

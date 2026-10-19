@@ -15,7 +15,7 @@ import { contactName, matchesSearch, toggle } from '../lib/compose-model';
 import { SearchIcon } from './icons';
 
 const KICKER =
-  'mr-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
+  'ms-1 self-center font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground';
 const CHIP =
   'inline-flex min-h-8 cursor-pointer items-center gap-1.5 rounded-full border border-border bg-background px-3 py-1 text-[11.5px] hover:bg-muted';
 
@@ -39,6 +39,7 @@ export function AudiencePicker({
   onGroups,
   onSegments,
   onContacts,
+  email = false,
 }: {
   tags: TagResponse[];
   groups: ContactGroupResponse[];
@@ -57,15 +58,21 @@ export function AudiencePicker({
   onGroups: (ids: string[]) => void;
   onSegments: (ids: string[]) => void;
   onContacts: (ids: string[]) => void;
+  /** An email campaign: the table shows each contact's email address (and says when there is none) instead of the phone. */
+  email?: boolean;
 }) {
   const t = useTranslations('broadcasts.compose');
   const [q, setQ] = useState('');
   const rows = useMemo(
     () =>
       contacts
-        .map((c) => ({ id: c.id, name: contactName(c), phone: c.phone ?? '' }))
+        .map((c) => ({
+          id: c.id,
+          name: contactName(c),
+          phone: (email ? c.email : c.phone) ?? '',
+        }))
         .filter((r) => matchesSearch(r, q)),
-    [contacts, q],
+    [contacts, q, email],
   );
   const allShown = rows.length > 0 && rows.every((r) => selectedContacts.includes(r.id));
   const count = selectedContacts.length;
@@ -233,7 +240,7 @@ export function AudiencePicker({
                   {t('colName')}
                 </th>
                 <th className="w-[200px] px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]">
-                  {t('colPhone')}
+                  {email ? t('colEmail') : t('colPhone')}
                 </th>
               </tr>
             </thead>
@@ -274,7 +281,9 @@ export function AudiencePicker({
                       </label>
                     </td>
                     <td className="truncate px-3 py-2.5 font-semibold">{r.name}</td>
-                    <td className="px-3 py-2.5 font-mono text-[11px]">{r.phone || '—'}</td>
+                    <td className="truncate px-3 py-2.5 font-mono text-[11px]">
+                      {r.phone || (email ? t('noEmail') : '—')}
+                    </td>
                   </tr>
                 ))
               )}

@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Conectado",
           "shopify": "Conectado",
-          "google_sheets": "Chave de API emitida",
-          "meta_catalog": "Catálogo vinculado"
+          "meta_catalog": "Catálogo vinculado",
+          "google_sheets": "Conta Google conectada"
         },
         "notConnected": "não conectado",
         "connect": "Conectar",
@@ -405,6 +405,43 @@
           "sent": "Enviada → {peer}",
           "received": "Recebida de {peer}",
           "empty": "Nenhuma atividade recente neste período."
+        },
+        "loginDevices": {
+          "title": "Dispositivos de login",
+          "subtitle": "Logins do espaço de trabalho neste período, por navegador, sistema e tipo",
+          "active": "{n} ativas agora",
+          "total": "{n, plural, one {# login} other {# logins}}",
+          "empty": "Nenhum login neste período.",
+          "activeLegend": "Ativas agora",
+          "endedLegend": "Encerradas ou expiradas",
+          "row": "{count} logins, {active} ativas agora",
+          "group": {
+            "browser": "Navegador",
+            "os": "Sistema",
+            "kind": "Tipo"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Outro navegador"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Outro sistema"
+          },
+          "kind": {
+            "desktop": "Computador",
+            "mobile": "Celular",
+            "unknown": "Desconhecido"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "Filas",
         "name": "Fila",
         "pending": "Pendentes",
-        "failed": "Com falha"
+        "failed": "Com falha",
+        "lastFailure": "Motivo da última falha"
       },
       "clear": {
         "button": "Limpar tarefas pendentes",

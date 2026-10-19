@@ -7,24 +7,30 @@ import { useState, type ReactNode } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, ConfirmDialog, EmptyState, Spinner, StatTile, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCompanyBrief } from '../api/brief';
 import { companiesApi, invalidateCompanies, useCompany } from '../api/companies';
+import { LinkedTasks } from '@/features/tasks';
 import { errorKind } from '../lib/errors';
 import { websiteHref } from '../lib/form';
 import { formatTotals } from '../lib/money';
 import { ActivityCard } from './activity-card';
+import { BriefCard } from './brief-card';
 import { CompanyFormModal } from './company-form-modal';
 import { ErrorLine } from './error-line';
-import { ChevronLeftIcon, PencilIcon, TrashIcon } from './icons';
+import { ChevronLeftIcon, PencilIcon, SparklesIcon, TrashIcon } from './icons';
 import { LinkedContacts } from './linked-contacts';
 import { LinkedDeals } from './linked-deals';
+import { PropertiesCard } from './properties-card';
 
 /**
  * `/companies/[id]` (TW-CTP-005): Reference's company 360. Name and contact line, the three rollup tiles, the company's contacts and
  * deals side by side, and the notes; here also an edit form, adding and removing contacts, the details Reference stored but never
- * showed, and the activity trail. Reference's "Generate brief" button is not here: the client brief is another feature, not built.
+ * showed, and the activity trail. "Generate brief" (BL-194) is Reference's button in the header, but the brief it makes is written by
+ * AI for the person who asked and shown on this page (see `BriefCard`), not a shared deck with a public link.
  */
 export function CompanyDetail({ id }: { id: string }) {
   const t = useTranslations('companies.detail');
+  const tList = useTranslations('companies.list');
   const tToast = useTranslations('companies.toast');
   const locale = useLocale();
   const router = useRouter();
@@ -36,6 +42,9 @@ export function CompanyDetail({ id }: { id: string }) {
   const canUpdateContacts = useCan('record.contacts.update');
   const canReadDeals = useCan('record.deals.read');
   const company = useCompany(id);
+  const brief = useCompanyBrief(id);
+  // The card shows once there is a brief to show, or once the person asks for one.
+  const [briefAsked, setBriefAsked] = useState(false);
   const [editing, setEditing] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
@@ -76,8 +85,10 @@ export function CompanyDetail({ id }: { id: string }) {
     return (
       <section>
         {back}
-        {kind === 'notFound' || kind === 'unavailable' ? (
+        {kind === 'notFound' ? (
           <EmptyState title={t('notFoundTitle')} message={t('notFound')} />
+        ) : kind === 'unavailable' ? (
+          <EmptyState title={tList('unavailableTitle')} message={tList('unavailable')} />
         ) : (
           <ErrorLine error={company.error} onRetry={() => void company.refetch()} />
         )}
@@ -121,6 +132,19 @@ export function CompanyDetail({ id }: { id: string }) {
           </div>
         </div>
         <div className="flex shrink-0 gap-2">
+          <Button
+            variant="secondary"
+            disabled={brief.generate.isPending}
+            onClick={() => {
+              setBriefAsked(true);
+              // One click writes the brief, as Reference's button did; with no AI key the card explains instead.
+              if (brief.state.data?.available && !brief.state.data.brief)
+                brief.generate.mutate(false);
+              document.getElementById('company-brief')?.scrollIntoView({ block: 'nearest' });
+            }}
+          >
+            {brief.generate.isPending ? <Spinner /> : <SparklesIcon />} {t('generateBrief')}
+          </Button>
           {canUpdate && (
             <Button variant="secondary" onClick={() => setEditing(true)}>
               <PencilIcon /> {t('edit')}
@@ -163,12 +187,15 @@ export function CompanyDetail({ id }: { id: string }) {
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_20rem]">
         <div className="min-w-0 space-y-6">
+          {(briefAsked || brief.state.data?.brief) && <BriefCard name={c.name} brief={brief} />}
           <div className="grid gap-6 xl:grid-cols-2">
             {canReadContacts && (
               <LinkedContacts companyId={id} canLink={canUpdate && canUpdateContacts} />
             )}
             {canReadDeals && <LinkedDeals companyId={id} />}
           </div>
+          <LinkedTasks kind="company" id={id} label={c.name} />
+          <PropertiesCard company={c} />
           {c.notes && (
             <section
               aria-labelledby="company-notes"

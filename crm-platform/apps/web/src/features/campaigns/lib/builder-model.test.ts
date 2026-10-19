@@ -64,6 +64,56 @@ describe('problems', () => {
   });
 });
 
+describe('previous sends', () => {
+  const picked = { sends: [{ kind: 'campaign' as const, id: 'c1' }], outcome: 'read' as const };
+
+  it('count as an audience', () => {
+    const f = { ...ok, contactIds: [], previousSends: picked };
+    expect(problems(f)).toEqual([]);
+    expect(problems({ ...f, previousSends: { sends: [], outcome: 'read' } })).toEqual(['audience']);
+  });
+
+  it('are sent with the outcome, and left out of the body when none is picked', () => {
+    expect(toInput({ ...ok, previousSends: picked }).previousSends).toEqual(picked);
+    expect(toInput(ok)).not.toHaveProperty('previousSends');
+  });
+
+  it('are cleaned the way the server wants them before they are sent', () => {
+    const bad = {
+      sends: [
+        { kind: 'broadcast' as const, id: 'b1' },
+        { kind: 'broadcast' as const, id: 'b1' },
+      ],
+      outcome: 'clicked' as const,
+    };
+    expect(toInput({ ...ok, previousSends: bad }).previousSends).toEqual({
+      sends: [{ kind: 'broadcast', id: 'b1' }],
+      outcome: 'all',
+    });
+  });
+});
+
+describe('sharing a send across several numbers', () => {
+  const shared = {
+    ...ok,
+    senderKeys: ['baileys:1', 'waba:2'],
+    senderShare: { 'baileys:1': 2, 'waba:2': 1 },
+  };
+
+  it('ships the numbers and their weights only when more than one is ticked', () => {
+    const body = toInput(shared);
+    expect(body.senderKeys).toEqual(['baileys:1', 'waba:2']);
+    expect(body.senderShare).toEqual({ 'baileys:1': 2, 'waba:2': 1 });
+    expect(toInput(ok)).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...ok, senderKeys: ['baileys:1'] })).not.toHaveProperty('senderKeys');
+  });
+
+  it('a mail or a flow has no number to share, so nothing is shipped', () => {
+    expect(toInput({ ...shared, senderKey: 'email:1' })).not.toHaveProperty('senderKeys');
+    expect(toInput({ ...shared, type: 'flow' })).not.toHaveProperty('senderKeys');
+  });
+});
+
 describe('toInput', () => {
   it('ships a copy-code button with its code', () => {
     const body = toInput({
@@ -177,6 +227,78 @@ describe('small helpers', () => {
     expect(defaultSchedule(at, 'Asia/Kolkata')).toEqual({
       sendDate: '2026-10-05',
       sendTime: '18:30',
+    });
+  });
+});
+
+describe('an email campaign', () => {
+  const mail: BuilderForm = {
+    ...ok,
+    senderKey: 'email:5d1b',
+    type: 'custom',
+    customHeader: 'Your May offer is live',
+    customMessage: 'Hello {{name}}',
+  };
+
+  it('sends the subject in the Header field and a typed message only', () => {
+    const body = toInput({
+      ...mail,
+      customFooter: 'Bye',
+      mediaUrl: 'https://x.test/a.png',
+      abTesting: true,
+      customMessageB: 'B',
+      buttons: [{ type: 'url', text: 'Go', value: 'https://x.test' }],
+      throttleMinSec: '1',
+      batchSize: '10',
+      dailyLimit: '100',
+      windowStart: '09:00',
+      windowEnd: '18:00',
+    });
+    expect(body).toMatchObject({
+      senderKey: 'email:5d1b',
+      type: 'custom',
+      customHeader: 'Your May offer is live',
+      customMessage: 'Hello {{name}}',
+      abTesting: false,
+      customMessageB: null,
+      customFooter: null,
+      customButtons: null,
+      mediaUrl: null,
+      templateId: null,
+      templateIdB: null,
+      flowId: null,
+      flowIdB: null,
+      trackingEnabled: false,
+      throttleMinSec: null,
+      throttleMaxSec: null,
+      batchSize: null,
+      batchPauseMin: null,
+      dailyLimit: null,
+      windowStart: null,
+      windowEnd: null,
+    });
+  });
+
+  it('a blank subject is left out (the server falls back to the campaign name)', () => {
+    expect(toInput({ ...mail, customHeader: '  ' }).customHeader).toBeNull();
+  });
+
+  it('a subject over 150 characters is a problem, 150 is fine, and only for email', () => {
+    expect(problems({ ...mail, customHeader: 'x'.repeat(150) })).toEqual([]);
+    expect(problems({ ...mail, customHeader: 'x'.repeat(151) })).toEqual(['subject']);
+    expect(problems({ ...ok, customHeader: 'x'.repeat(151) })).toEqual([]);
+  });
+
+  it('ignores sending hours and gaps, which an email does not have', () => {
+    expect(
+      problems({ ...mail, windowStart: '09:00', throttleMinSec: '9', throttleMaxSec: '1' }),
+    ).toEqual([]);
+  });
+
+  it('a WhatsApp form still sends what it holds', () => {
+    expect(toInput({ ...ok, customFooter: 'Bye', trackingEnabled: true })).toMatchObject({
+      customFooter: 'Bye',
+      trackingEnabled: true,
     });
   });
 });

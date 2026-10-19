@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { PgDialect } from 'drizzle-orm/pg-core';
 import type { SQL } from 'drizzle-orm';
 import { describe, expect, it } from 'vitest';
-import type { FieldType, SegmentGroup } from '@crm/contracts';
+import { segmentFieldSchema, type FieldType, type SegmentGroup } from '@crm/contracts';
 import {
   collectRuleRefs,
   compileRules,
@@ -132,12 +132,12 @@ describe('the compiler binds every operand', () => {
     );
   });
 
-  it('the country code field is compared with the contact column, the dial code bound as a parameter', () => {
+  it('the country code field is compared with the contact column, the dial code bound as a parameter (as digits: "+91" is "91")', () => {
     const { invalid, sql, params } = compile(group('and', cond('countryCode', 'equals', '+91')));
     expect(invalid).toEqual([]);
     expect(sql).toContain('country_code');
     expect(sql).not.toContain('+91');
-    expect(params).toContain('+91');
+    expect(params).toContain('91');
   });
 
   it('AND / OR keep their grouping', () => {
@@ -325,3 +325,151 @@ import { sql } from 'drizzle-orm';
 function sqlCol(): SQL {
   return sql`c.col`;
 }
+
+describe('rules on the company of a contact (BL-196)', () => {
+  const rc = () =>
+    ctx({
+      fields: new Map<string, { type: FieldType }>([['tier', { type: 'text' }]]),
+      companyFields: new Map<string, { type: FieldType }>([
+        ['tier', { type: 'select' }],
+        ['seats', { type: 'integer' }],
+        ['channels', { type: 'multiselect' }],
+      ]),
+    });
+
+  it('reads the property off the company row of the contact, with the key and the value bound', () => {
+    const { invalid, sql, params } = compile(
+      group('and', cond('company.tier', 'equals', 'gold')),
+      rc(),
+    );
+    expect(invalid).toEqual([]);
+    expect(sql).toContain('FROM companies co');
+    expect(sql).toContain('co.org_id = "contacts"."org_id"');
+    expect(sql).not.toContain('gold');
+    expect(params).toEqual(expect.arrayContaining(['tier', 'gold']));
+  });
+
+  it('a contact property and a company property of the same key are different conditions', () => {
+    const own = compile(group('and', cond('custom.tier', 'equals', 'x')), rc());
+    const company = compile(group('and', cond('company.tier', 'equals', 'x')), rc());
+    expect(own.sql).not.toContain('companies');
+    expect(company.sql).toContain('companies');
+  });
+
+  it('number and list properties use the same predicates as contact properties', () => {
+    const { invalid, sql } = compile(
+      group(
+        'and',
+        cond('company.seats', 'gte', 50),
+        cond('company.channels', 'has_any', ['email']),
+      ),
+      rc(),
+    );
+    expect(invalid).toEqual([]);
+    expect(sql).toContain('segment_safe_numeric');
+    expect(sql).toContain('?|');
+  });
+
+  it('a company property that does not exist (or was deleted) is an invalid condition, never a throw', () => {
+    const r = compile(group('and', cond('company.ghost', 'equals', 'x')), rc());
+    expect(r.invalid).toHaveLength(1);
+    expect(r.invalid[0]).toMatchObject({ reason: 'field_deleted', field: 'company.ghost' });
+    expect(r.sql).toContain('false');
+  });
+
+  it('collects the company property keys apart from the contact ones', () => {
+    const refs = collectRuleRefs(
+      group('and', cond('company.tier', 'equals', 'a'), cond('custom.plan', 'equals', 'b')),
+    );
+    expect([...refs.companyFieldKeys]).toEqual(['tier']);
+    expect([...refs.fieldKeys]).toEqual(['plan']);
+  });
+
+  it('the schema accepts company.<key> and refuses a malformed one', () => {
+    expect(segmentFieldSchema.safeParse('company.tier').success).toBe(true);
+    expect(segmentFieldSchema.safeParse('company.Tier').success).toBe(false);
+    expect(segmentFieldSchema.safeParse('company.').success).toBe(false);
+    expect(segmentFieldSchema.safeParse('companies.tier').success).toBe(false);
+  });
+
+  it('segment usage tells a company property from a contact property of the same key', () => {
+    const row = (rules: unknown, name: string) => ({ id: 1, name, rules }) as unknown as SegmentRow;
+    const rows = [
+      row(group('and', cond('company.tier', 'equals', 'a')), 'ByCompany'),
+      row(group('and', cond('custom.tier', 'equals', 'a')), 'ByContact'),
+    ];
+    expect(segmentsUsing(rows, 'field', 'company.tier').map((r) => r.name)).toEqual(['ByCompany']);
+    expect(segmentsUsing(rows, 'field', 'tier').map((r) => r.name)).toEqual(['ByContact']);
+  });
+});
+
+describe('phone and country code are compared the way the screen shows them', () => {
+  const phone = (op: string, value: unknown) => compile(group('and', cond('phone', op, value)));
+
+  it('a typed number is reduced to its digits and compared with the digits of the stored phone', () => {
+    const { sql, params } = phone('equals', '+91 88751 37569');
+    expect(sql).toContain(
+      'regexp_replace(coalesce("contacts"."normalized_phone", "contacts"."phone", \'\'), \'\\D\', \'\', \'g\')',
+    );
+    expect(params).toContain('918875137569');
+    expect(params.some((p) => typeof p === 'string' && p.includes(' '))).toBe(false);
+  });
+
+  it.each([
+    ['contains', '%918875137569%'],
+    ['starts_with', '918875137569%'],
+    ['not_contains', '%918875137569%'],
+  ])('%s binds the digits as a pattern', (op, pattern) => {
+    expect(phone(op, '+91 88751 37569').params).toContain(pattern);
+  });
+
+  it('a list is reduced to digits one by one', () => {
+    const { params } = phone('in', ['+91 88751 37569', '+1 (415) 555-0100']);
+    expect(params).toEqual(expect.arrayContaining(['918875137569', '14155550100']));
+  });
+
+  it('"not" operators include contacts with no phone', () => {
+    expect(phone('not_equals', '+91 88751 37569').sql).toContain('NOT');
+    expect(phone('not_in', ['+91 88751 37569']).sql).toContain('NOT IN');
+  });
+
+  it('an operand with no digit is compared as written, and "is empty" reads the stored text', () => {
+    expect(phone('contains', 'abc').params).toContain('%abc%');
+    expect(phone('is_empty', undefined).sql).toContain('btrim(');
+  });
+
+  it.each(['+91', '91', '0091', ' +91 '])('country code %j is the code 91', (typed) => {
+    const { params } = compile(group('and', cond('countryCode', 'equals', typed)));
+    expect(params).toContain('91');
+  });
+
+  it('country codes are compared on their digits with leading zeros dropped', () => {
+    const { sql } = compile(group('and', cond('countryCode', 'in', ['+91', '+1'])));
+    expect(sql).toContain(
+      "ltrim(regexp_replace(coalesce((\"contacts\".\"country_code\")::text, ''), '\\D', '', 'g'), '0')",
+    );
+  });
+});
+
+describe('the search box', () => {
+  it('a phone typed as printed is also matched as a whole against the digits of the phone', () => {
+    const { sql, params } = compile(group('and', cond('search', 'matches', '+91 88751 37569')));
+    expect(params).toContain('%918875137569%');
+    expect(sql).toContain(' OR regexp_replace(');
+  });
+
+  it('a single word or a name search adds no whole-phrase branch', () => {
+    expect(compile(group('and', cond('search', 'matches', 'Aarav Sharma'))).sql).not.toContain(
+      'regexp_replace',
+    );
+    expect(compile(group('and', cond('search', 'matches', '918875137569'))).sql).not.toContain(
+      ' OR regexp_replace(',
+    );
+  });
+
+  it('"+91" is a country code: the digits of the phone start with it', () => {
+    const { sql, params } = compile(group('and', cond('search', 'matches', '+91')));
+    expect(sql).toContain('regexp_replace(');
+    expect(params).toContain('91%');
+  });
+});

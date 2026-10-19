@@ -8,7 +8,18 @@ documents: [nav:waba-groups]
 gates:
   planFeature: waba_groups
   permission: waba.groups.read
-keywords: [groups, whatsapp group, meta groups, invite link, join request, approve, members, official business account, group chat]
+keywords:
+  [
+    groups,
+    whatsapp group,
+    meta groups,
+    invite link,
+    join request,
+    approve,
+    members,
+    official business account,
+    group chat,
+  ]
 ---
 
 ## What it is for
@@ -64,3 +75,7 @@ Groups need a plan that includes WhatsApp groups. Seeing groups and their invite
 - **What does a group message cost?** Every message is charged once per member who receives it, from your workspace's own message wallet. Above the message box the inbox shows how many members the message goes to and an estimated cost for all of them (an upper estimate: the real charge follows what WhatsApp reports for each member). Before sending, the inbox checks that the wallet can cover one message to every member; if it cannot, the message is not sent and you are asked to top up. When the wallet looks short, a warning appears above the box. If WhatsApp has not told us the size of the group yet, the line says so and the check counts one member. Members WhatsApp marks as free are not charged.
 - **What does the line under my message mean?** For example **Delivered to 5 of 8, read by 2**: how many of the members the message reached, how many of them read it and, when there are any, how many it could not be delivered to. A group of 8 does not always show 8: a member who has not been reported on yet is not counted. After it, the line shows how many members were billed and how many were free. Phone numbers of members are never shown in this line.
 - **Who wrote a message in the group?** Each message from a member shows the member's name (when WhatsApp gives one) and number above it.
+
+## Get it as an app
+
+WhatsApp groups is also sold as an app in the **Marketplace**. A workspace whose plan already includes it keeps it as it is, with nothing to buy or install. A workspace without it can subscribe to the app and install it to switch it on. See [Marketplace](help:marketplace-overview).

@@ -292,8 +292,8 @@
         "connected": {
           "woocommerce": "Đã kết nối",
           "shopify": "Đã kết nối",
-          "google_sheets": "Đã cấp khóa API",
-          "meta_catalog": "Đã liên kết danh mục"
+          "meta_catalog": "Đã liên kết danh mục",
+          "google_sheets": "Đã kết nối tài khoản Google"
         },
         "notConnected": "chưa kết nối",
         "connect": "Kết nối",
@@ -405,6 +405,43 @@
           "sent": "Gửi → {peer}",
           "received": "Nhận từ {peer}",
           "empty": "Không có hoạt động gần đây trong khoảng này."
+        },
+        "loginDevices": {
+          "title": "Thiết bị đăng nhập",
+          "subtitle": "Lượt đăng nhập vào không gian làm việc trong khoảng này, theo trình duyệt, hệ thống và loại",
+          "active": "{n} đang hoạt động",
+          "total": "{n, plural, other {# lượt đăng nhập}}",
+          "empty": "Không có lượt đăng nhập nào trong khoảng này.",
+          "activeLegend": "Đang hoạt động",
+          "endedLegend": "Đã đăng xuất hoặc hết hạn",
+          "row": "{count} lượt đăng nhập, {active} đang hoạt động",
+          "group": {
+            "browser": "Trình duyệt",
+            "os": "Hệ thống",
+            "kind": "Loại"
+          },
+          "browser": {
+            "edge": "Edge",
+            "chrome": "Chrome",
+            "firefox": "Firefox",
+            "safari": "Safari",
+            "opera": "Opera",
+            "other": "Trình duyệt khác"
+          },
+          "os": {
+            "android": "Android",
+            "iphone": "iPhone",
+            "ipad": "iPad",
+            "windows": "Windows",
+            "mac": "macOS",
+            "linux": "Linux",
+            "other": "Hệ thống khác"
+          },
+          "kind": {
+            "desktop": "Máy tính",
+            "mobile": "Di động",
+            "unknown": "Không xác định"
+          }
         }
       }
     },
@@ -457,7 +494,8 @@
         "title": "Hàng đợi",
         "name": "Hàng đợi",
         "pending": "Đang chờ",
-        "failed": "Thất bại"
+        "failed": "Thất bại",
+        "lastFailure": "Lý do lỗi gần nhất"
       },
       "clear": {
         "button": "Xóa các công việc đang chờ",

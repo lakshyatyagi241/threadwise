@@ -25,7 +25,7 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
 3. **Find the data**: the service does it from the registry; the module register
    [wiring/privacy-and-data.md](../threadwise-port/wiring/privacy-and-data.md). Run the finder per contact id across every listed
    table and storage prefix.
-4. **Decide exceptions** (legal hold toggle on the request, with the reason): invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
+4. **Decide exceptions** (legal hold on the person, see [legal-hold.md](../specs/legal-hold.md); or the toggle on the request, with the reason): invoices and payment records (statutory retention), consent proof (legitimate interest in proof; anonymise),
    open disputes, legal hold. Write the reason.
 5. **Execute**
    - Access/export (button Export; the workspace admin downloads the ZIP, valid 7 days; nothing is mailed to the person): contacts card, messages, notes, files, leads, orders, call logs and recordings, consent ledger (the ledger export:
@@ -34,6 +34,9 @@ receipt date, verification date, due date. Escalate at 15 and 25 days.
    - Erasure: preview (counts per table), then type `ERASE <reference>`. Messages, files and recordings are deleted; leads, forms, appointments,
      calls keep the row without the person; invoices and payments are kept with the buyer replaced. The proof (counts, digest, hash) stays on the request.
      Deleting a contact in the CRM now also erases its conversation history (option to keep it anonymised).
+     Derived copies go with the person: a buyer's erasure deletes every unexpired revenue report export of the workspace (the file is
+     regenerable and is kept 7 days at most) and the AI briefs of the companies the contact belongs to; a staff member's account deletion
+     deletes the exports they asked for and the briefs they generated. Audit-log rows stay.
    - Rectification: edit the contact; the audit log records the change.
    - Withdrawal/objection: record a `withdrawn` event for every channel and purpose the person names.
 6. **Storage and caches:** done by the service (files go to the purge queue within a minute); confirm `storage_purge_queue` drained.

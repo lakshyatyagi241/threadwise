@@ -1,0 +1,208 @@
+{
+  "waboo-migration": {
+    "nav": {
+      "group": "迁移",
+      "panel": "Waboo 迁移"
+    },
+    "common": {
+      "loading": "加载中",
+      "retry": "重试",
+      "dash": "-",
+      "errors": {
+        "forbidden": "您没有执行此操作的权限。",
+        "request": "无法完成该请求。",
+        "unexpected": "我们这边出了点问题，请稍后再试。",
+        "network": "无法连接到服务器，请检查网络后重试。",
+        "validation": "部分值无效，请检查高亮的字段。",
+        "notFound": "该运行或批次已不存在。",
+        "active": "其中一个组织已有排队中或运行中的任务，请等待其完成。",
+        "dryRequired": "迁移要求每个组织在过去 24 小时内都有一次通过的试运行。请先进行试运行。",
+        "confirm": "您输入的内容不匹配。",
+        "notCancellable": "只有排队中或已计划的运行可以取消，正在运行的迁移无法停止。",
+        "collision": "该组织 ID 生成的客户端密钥已被其他组织使用，或在列表中重复出现。",
+        "schedule": "请选择未来的时间，最多提前 90 天。"
+      }
+    },
+    "page": {
+      "eyebrow": "管理 / 系统 / 迁移",
+      "title": "Waboo 迁移",
+      "description": "使用现有迁移流程将 Waboo 组织迁入 WaDesk，可立即执行或在指定时间执行，并在此跟踪每个组织的进度。",
+      "banner": "此面板不会连接 WhatsApp，也不会向 Waboo 写入任何数据。每次迁移都会先进行一次完整的、不写入任何数据的预演，若预演未通过，则在加载任何数据之前停止。组织按顺序逐个运行。",
+      "superOnly": "只有超级管理员可以运行迁移。",
+      "tabSingle": "单个组织",
+      "tabBulk": "批量"
+    },
+    "form": {
+      "title": "开始运行",
+      "org": "组织 ID",
+      "orgHint": "Waboo 组织（工作区）ID，即 Waboo 数据库名称。可使用字母、数字、下划线和加号。",
+      "orgInvalid": "请使用字母、数字、下划线或加号（最多 128 个字符）。",
+      "derived": "客户端密钥：{client}（由 ID 生成）。",
+      "dryRun": "试运行",
+      "dryRunning": "正在启动",
+      "scheduleDry": "计划试运行",
+      "migrate": "迁移",
+      "scheduleMigrate": "计划迁移",
+      "catchUp": "增量同步",
+      "migrateHint": "迁移会先进行完整预演，若未通过则不会加载任何数据。单独的试运行是可选的。",
+      "queued": "运行已加入队列。",
+      "scheduled": "运行已计划。"
+    },
+    "confirm": {
+      "title": "迁移 {org}",
+      "body": "这将把组织 {org} 加载到 WaDesk。它会先进行完整预演，若未通过则不会加载任何数据；一旦开始加载便无法停止。请输入组织 ID 以确认。",
+      "label": "输入 {org} 以确认",
+      "cancel": "取消",
+      "submit": "迁移",
+      "catchupTitle": "增量同步 {org}",
+      "catchupBody": "这将使已加载的组织 {org} 保持最新：重新从 Waboo 导出，仅加载新增的行，同步钱包并验证结果。如果其自身的试运行未通过则会停止，且一旦开始便无法停止。请输入组织 ID 以确认。",
+      "catchupSubmit": "增量同步"
+    },
+    "bulk": {
+      "title": "批量迁移",
+      "ids": "组织 ID",
+      "idsHint": "每行一个组织 ID，最多 {max} 个。",
+      "invalid": "无效的 ID：{ids}。",
+      "duplicates": "重复列出：{ids}。",
+      "collisions": "与其他 ID 的客户端密钥相同：{ids}。",
+      "tooMany": "一次最多 {max} 个组织。",
+      "count": "{count} / {max} 个组织",
+      "stopOnFailure": "首次失败时停止",
+      "stopHint": "默认关闭：某个组织失败不会中止其余组织。",
+      "sequential": "组织按顺序逐个运行，绝不会同时运行两个，因为暂存服务器无法同时运行两个迁移。",
+      "notReady": "{count, plural, other {# 个组织}}在过去 24 小时内没有通过的试运行，因此“全部迁移”已关闭。",
+      "dryAll": "全部试运行",
+      "dryRunning": "正在启动",
+      "migrateAll": "全部迁移",
+      "migrateHint": "每个组织都会先进行各自的完整预演，若未通过则不会加载任何数据。单独的试运行是可选的。",
+      "queued": "批次已加入队列。",
+      "scheduled": "批次已计划。"
+    },
+    "bulkConfirm": {
+      "title": "迁移 {count} 个组织",
+      "body": "这将把 {count} 个组织依次加载到 WaDesk。每个组织都会先进行各自的完整预演，若未通过则不会加载任何数据；一旦开始加载便无法停止。请输入组织数量以确认。",
+      "label": "输入 {count} 以确认",
+      "cancel": "取消",
+      "submit": "全部迁移"
+    },
+    "readiness": {
+      "ok": "最近一次试运行已通过且时间较近，可以迁移。",
+      "okReview": "最近一次试运行已通过，但出现了需要查看的告警。查看后即可迁移。",
+      "no_dry": "尚无试运行。请先进行试运行。",
+      "not_green": "最近一次试运行未通过。请修复后再次进行试运行。",
+      "stale": "最近一次通过的试运行已超过 24 小时。请重新进行试运行。"
+    },
+    "schedule": {
+      "label": "运行时间（可选）",
+      "hint": "您的时区：{tz}。留空则立即开始。",
+      "utc": "您的时区：{tz}。即 {utc} UTC。",
+      "error": {
+        "invalid": "请输入有效的日期和时间。",
+        "past": "请选择未来的时间。",
+        "tooFar": "最多提前 90 天。"
+      }
+    },
+    "runs": {
+      "title": "运行记录",
+      "empty": "暂无运行记录。",
+      "emptyHint": "请在上方开始一次试运行。",
+      "open": "打开",
+      "client": "客户端",
+      "database": "数据库",
+      "mode": "模式",
+      "status": "状态",
+      "created": "创建时间"
+    },
+    "batches": {
+      "title": "批量批次",
+      "empty": "暂无批次。",
+      "emptyHint": "请使用上方的“批量”标签页。",
+      "open": "打开",
+      "orgs": "{count, plural, other {# 个组织}}"
+    },
+    "batch": {
+      "title": "{count, plural, other {# 个组织}}的批次",
+      "back": "关闭",
+      "cancel": "取消批次",
+      "cancelling": "正在取消",
+      "cancelled": "批次已取消。",
+      "progress": "已完成",
+      "runAt": "计划时间",
+      "started": "开始时间",
+      "finished": "完成时间",
+      "stopOn": "在首次失败时停止。",
+      "stopOff": "某个组织失败不会中止其余组织。",
+      "polling": "批次进行期间将自动更新。"
+    },
+    "batchStatus": {
+      "queued": "排队中",
+      "running": "运行中",
+      "completed": "已完成",
+      "failed": "已结束，但有问题",
+      "cancelled": "已取消"
+    },
+    "detail": {
+      "title": "运行 {org}",
+      "back": "关闭",
+      "cancel": "取消运行",
+      "cancelling": "正在取消",
+      "cancelled": "运行已取消。",
+      "clientKey": "客户端密钥",
+      "runAt": "计划时间",
+      "started": "开始时间",
+      "finished": "完成时间",
+      "steps": "步骤",
+      "noSteps": "尚未报告任何步骤。",
+      "report": "校验结果",
+      "error": "错误",
+      "polling": "运行进行期间将自动更新。",
+      "counts": "数量"
+    },
+    "verdict": {
+      "green": "通过：无未核对项，无完整性错误",
+      "amber": "需查看告警：没有数据缺失，但校验器发出了需要查看的告警",
+      "red": "未通过：需要处理。请勿将此次运行视为已完成",
+      "unaccounted": "未核对项",
+      "integrityErrors": "完整性错误",
+      "alarms": "告警",
+      "short": {
+        "green": "通过",
+        "amber": "需查看告警",
+        "red": "未通过"
+      }
+    },
+    "mode": {
+      "dry": "试运行",
+      "load": "迁移",
+      "catchup": "增量同步"
+    },
+    "status": {
+      "queued": "排队中",
+      "scheduled": "已计划",
+      "running": "运行中",
+      "completed": "已完成",
+      "completedReview": "已完成，需查看告警",
+      "completedRed": "已结束，但有错误",
+      "failed": "失败",
+      "cancelled": "已取消",
+      "blocked": "已阻止，未加载"
+    },
+    "step": {
+      "export": "导出",
+      "preflight": "预检",
+      "backup": "备份",
+      "dry": "试加载",
+      "load": "加载",
+      "core-load": "核心加载",
+      "flow-state": "流程状态",
+      "reconcile": "核对",
+      "report": "报告"
+    },
+    "stepStatus": {
+      "running": "运行中",
+      "done": "已完成",
+      "failed": "失败",
+      "skipped": "已跳过"
+    }
+  }
+}

@@ -29,7 +29,8 @@
       "priorityChanged": "Prioritas diperbarui",
       "snoozed": "Percakapan ditunda",
       "tagAdded": "Tag ditambahkan",
-      "tagRemoved": "Tag dihapus"
+      "tagRemoved": "Tag dihapus",
+      "spammed": "Percakapan ditandai sebagai spam."
     },
     "list": {
       "title": "Inbox",
@@ -44,12 +45,8 @@
         "unassigned": "Belum ditugaskan",
         "unread": "Belum dibaca"
       },
-      "statusFilter": "Status",
-      "statusOpen": "Terbuka",
-      "statusAll": "Semua status",
       "status": {
         "open": "Terbuka",
-        "pending": "Tertunda",
         "snoozed": "Ditunda",
         "resolved": "Selesai",
         "closed": "Selesai",
@@ -61,7 +58,6 @@
         "high": "Tinggi",
         "urgent": "Mendesak"
       },
-      "channelFilter": "Channel",
       "allChannels": "Semua channel",
       "archived": "Diarsipkan",
       "backToInbox": "Kembali ke inbox",
@@ -107,7 +103,57 @@
         }
       },
       "select": "Pilih",
-      "selectDone": "Selesai"
+      "selectDone": "Selesai",
+      "filters": {
+        "open": "Filter",
+        "openActive": "Filter ({count} aktif)",
+        "title": "Filter",
+        "close": "Tutup",
+        "reset": "Atur ulang",
+        "cancel": "Batal",
+        "apply": "Terapkan",
+        "status": "Status chat",
+        "statusHint": "Jika tidak ada yang dipilih, chat yang terbuka ditampilkan.",
+        "conversation": "Percakapan",
+        "any": "Apa saja",
+        "assigned": "Ditugaskan",
+        "unassigned": "Belum ditugaskan",
+        "unattended": "Belum ditangani",
+        "labels": "Tag",
+        "channels": "Kanal",
+        "agents": "Agen",
+        "sortBy": "Urutkan",
+        "recent": "Terbaru",
+        "old": "Terlama",
+        "dateRange": "Rentang tanggal (aktivitas terakhir)",
+        "from": "Dari",
+        "to": "Sampai",
+        "select": "Pilih opsi",
+        "search": "Cari",
+        "noMatch": "Tidak ada yang cocok",
+        "today": "Hari ini",
+        "last7": "7 hari terakhir",
+        "last30": "30 hari terakhir",
+        "thisMonth": "Bulan ini",
+        "clearDates": "Hapus tanggal",
+        "previousMonth": "Bulan sebelumnya",
+        "nextMonth": "Bulan berikutnya"
+      },
+      "rowMenu": "Tindakan lainnya untuk {name}",
+      "priorityMenu": "Prioritas",
+      "statusFilter": "Status",
+      "statusOpen": "Terbuka",
+      "statusAll": "Semua status",
+      "channelFilter": "Channel",
+      "selectRow": "Pilih {name}",
+      "snoozedFor": "Ditunda · {left}",
+      "snoozeLeft": {
+        "due": "sekarang",
+        "minutes": "{count} menit",
+        "hours": "{count} jam",
+        "days": "{count} hari"
+      },
+      "unsnoozesAt": "Dibuka lagi {time}"
     },
     "status": {
       "received": "Diterima",
@@ -128,6 +174,7 @@
       "mediaNotFound": "Lampiran sudah kedaluwarsa atau dihapus. Lampirkan lagi.",
       "statusInvalid": "Perubahan itu tidak diizinkan dari status percakapan saat ini.",
       "assigneeInvalid": "Orang tersebut tidak dapat ditugaskan ke percakapan ini.",
+      "assignedToOther": "Obrolan ini ditugaskan ke agen lain. Tugaskan ke diri Anda terlebih dahulu untuk membalas.",
       "forbidden": "Anda tidak memiliki izin untuk melakukan itu.",
       "rateLimited": "Terlalu banyak permintaan. Tunggu sebentar lalu coba lagi.",
       "simulatorDisabled": "Simulator channel dinonaktifkan di server ini.",
@@ -232,7 +279,11 @@
         "undone": "Perubahan tahap diurungkan: kembali ke {stage}.",
         "undoneToast": "Tahap dikembalikan ke {stage}.",
         "couldNotUndo": "Perubahan ini tidak bisa diurungkan lagi: kontak sudah berpindah tahap atau sudah diurungkan."
-      }
+      },
+      "heldUntil": "Ditahan sampai {when}",
+      "heldWhy": "Pesan pemasaran ini menunggu jam tenang Anda berakhir. Pesan akan dikirim saat itu, jika kontak belum berhenti berlangganan.",
+      "templateSent": "Templat “{name}” dikirim melalui {channel}",
+      "templateSentPlain": "Templat “{name}” dikirim"
     },
     "media": {
       "openImage": "Buka gambar {name}",
@@ -276,6 +327,8 @@
         "sendTemplate": "Kirim templat"
       },
       "readOnly": "Anda dapat membaca percakapan ini tetapi tidak memiliki izin untuk membalas.",
+      "resolvedBanner": "Percakapan ini sudah diselesaikan. Buka kembali untuk membalas.",
+      "assignedToOther": "Obrolan ini ditugaskan ke agen lain. Tugaskan ke diri Anda terlebih dahulu untuk membalas.",
       "typing": "{count, plural, other {# anggota tim sedang mengetik}}",
       "messagesLabel": "Pesan",
       "loadOlder": "Muat pesan sebelumnya",
@@ -283,7 +336,14 @@
       "newMessageAnnounce": "Pesan baru: {text}",
       "attachment": "sebuah lampiran",
       "jumpLatest": "Ke yang terbaru",
-      "jumpLatestNew": "{count, plural, other {# pesan baru}}"
+      "jumpLatestNew": "{count, plural, other {# pesan baru}}",
+      "searchOpen": "Cari di obrolan ini",
+      "searchPlaceholder": "Cari di obrolan ini",
+      "searchCount": "{current} dari {total}",
+      "searchNone": "Tidak ada yang cocok",
+      "searchPrev": "Hasil sebelumnya",
+      "searchNext": "Hasil berikutnya",
+      "searchClose": "Tutup pencarian"
     },
     "groupThread": {
       "openGroup": "Buka grup",
@@ -421,7 +481,35 @@
         }
       },
       "savedReplies": "Balasan tersimpan",
-      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim."
+      "savedReplyIssues": "Tidak terisi dan dibiarkan apa adanya ({count}): {list}. Perbaiki sebelum mengirim.",
+      "toolbar": {
+        "label": "Format pesan",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "underline": "Garis bawah",
+        "strike": "Coret",
+        "bullets": "Daftar berpoin",
+        "numbers": "Daftar bernomor",
+        "ai": {
+          "open": "Asisten AI Cerdas",
+          "noModel": "Tidak ada model AI yang diaktifkan untuk ruang kerja ini",
+          "title": "Asisten AI Cerdas",
+          "condense": "Ringkas",
+          "condenseHint": "Buat teks lebih pendek dan padat",
+          "fix": "Perbaiki tata bahasa",
+          "fixHint": "Koreksi kesalahan tata bahasa dan ejaan",
+          "positive": "Nada positif",
+          "positiveHint": "Buat teks lebih positif dan ceria",
+          "translate": "Terjemahkan",
+          "translateHint": "Terjemahkan ke bahasa lain",
+          "selectLanguage": "Pilih bahasa",
+          "searchLanguages": "Cari bahasa…",
+          "noLanguage": "Tidak ada bahasa yang cocok",
+          "working": "Sedang diproses…",
+          "empty": "Tulis pesan terlebih dahulu.",
+          "failed": "AI tidak dapat mengubah teks. Coba lagi."
+        }
+      }
     },
     "panel": {
       "tabsLabel": "Catatan dan linimasa",
@@ -452,7 +540,13 @@
         "pickTeam": "Pilih tim untuk percakapan ini",
         "noTeam": "Tanpa tim",
         "onLeave": "Sedang cuti",
-        "onLeaveUntil": "Cuti hingga {date}"
+        "onLeaveUntil": "Cuti hingga {date}",
+        "availability": {
+          "online": "Online",
+          "away": "Pergi",
+          "busy": "Sibuk",
+          "offline": "Offline"
+        }
       },
       "presence": {
         "online": "Daring",
@@ -461,16 +555,8 @@
         "offline": "Luring"
       },
       "notes": {
-        "tab": "Catatan",
-        "label": "Catatan internal baru",
-        "placeholder": "Tulis catatan yang hanya dapat dilihat tim Anda",
-        "hint": "Ctrl+Enter untuk menambahkan catatan.",
-        "add": "Tambahkan catatan",
-        "addFailed": "Catatan tidak dapat disimpan.",
-        "loading": "Memuat catatan",
-        "empty": "Belum ada catatan.",
-        "unknownAuthor": "Seorang anggota tim",
-        "delete": "Hapus catatan ini"
+        "tab": "Catatan kontak",
+        "noContact": "Percakapan ini tidak memiliki kontak untuk diberi catatan."
       },
       "timeline": {
         "tab": "Linimasa",
@@ -496,6 +582,8 @@
           "tag_removed": "Tag dihapus oleh {actor}",
           "first_response": "Balasan pertama terkirim",
           "sla_breach": "Tenggat respons terlewat",
+          "spam_flagged": "Ditandai spam oleh {actor}",
+          "escalated": "Dieskalasi",
           "unknown": "{what} oleh {actor}"
         },
         "actors": {
@@ -512,7 +600,6 @@
         "noMessages": "Tidak ada pesan",
         "status": {
           "open": "Terbuka",
-          "pending": "Tertunda",
           "snoozed": "Ditunda",
           "resolved": "Selesai",
           "closed": "Ditutup",
@@ -620,6 +707,8 @@
         "format": "{label} tidak boleh berisi ganti baris, tab, atau empat spasi berturut-turut."
       },
       "reason": {
+        "other_number": "Milik nomor WhatsApp lain, jadi tidak bisa dikirim dari percakapan ini.",
+        "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya.",
         "paused": "Dijeda oleh WhatsApp. Dapat dikirim lagi setelah jeda berakhir.",
         "media_header": "Memiliki header gambar, video, atau dokumen, yang belum dapat dikirim dari inbox.",
         "header_variable": "Memiliki variabel di header, yang belum dapat diisi dari inbox.",
@@ -736,7 +825,10 @@
         "telegram": "Telegram",
         "facebook": "Facebook Messenger",
         "instagram": "Instagram",
-        "email": "Email"
+        "email": "Email",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "variableGroup": {
         "contact": "Kontak",
@@ -926,7 +1018,9 @@
     "triage": {
       "priority": "Prioritas",
       "snooze": "Tunda",
-      "wake": "Aktifkan sekarang"
+      "wake": "Aktifkan sekarang",
+      "markSpam": "Tandai sebagai spam",
+      "notSpam": "Bukan spam"
     },
     "bulk": {
       "barLabel": "Tindakan massal",
@@ -959,7 +1053,8 @@
       "tagAdd": "Tambah tag",
       "tagRemove": "Hapus tag",
       "onLeave": "sedang cuti",
-      "onLeaveUntil": "cuti hingga {date}"
+      "onLeaveUntil": "cuti hingga {date}",
+      "spam": "Tandai sebagai spam"
     },
     "tags": {
       "tag": "Tag",
@@ -1026,6 +1121,12 @@
       },
       "titleBreached": "{kind}: terlewat (jatuh tempo {time})",
       "titleOpen": "{kind}: jatuh tempo {time}"
+    },
+    "channelType": {
+      "official": "Resmi",
+      "unofficial": "Tidak resmi",
+      "officialFull": "Resmi (WhatsApp Cloud API)",
+      "unofficialFull": "Tidak resmi (QR / Baileys)"
     }
   }
 }

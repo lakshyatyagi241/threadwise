@@ -1,7 +1,8 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { Readable } from 'node:stream';
-import { gunzipSync, gzipSync } from 'node:zlib';
+import { promisify } from 'node:util';
+import { gunzip, gzip } from 'node:zlib';
 import { and, eq, sql } from 'drizzle-orm';
 import {
   BULK_FILTER_MAX,
@@ -15,6 +16,7 @@ import {
   type BulkGroupContactsInput,
   type BulkOwnerContactsInput,
   type BulkSelectionResult,
+  type BulkSetUncontactedInput,
   type BulkTagContactsInput,
   type ExportContactsInput,
   type RecordScope,
@@ -25,6 +27,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PersonalDataErasureService } from '../../privacy';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { assertOwnerWithinScope } from '../owner-scope';
@@ -33,6 +36,7 @@ import { resolveContactFilter } from '../contacts/contact-filter.resolver';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { TagsRepository } from '../tags/tags.repository';
 import { TagsService } from '../tags/tags.service';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { ContactBulkRepository, type ActorMeta } from './contact-bulk.repository';
 import { UTF8_BOM, csvLine, guardFormula } from './csv-writer';
 
@@ -42,6 +46,12 @@ const { fields, contactExports } = schema;
 const FAILED_LIST_MAX = 100;
 const DELETE_BATCH = 500;
 const EXPORT_BATCH = 2000;
+
+// The whole export file is compressed once and read back whole. Synchronous zlib holds the event loop for the full call (about 14 ms
+// per MB to compress on the benchmark machine, tools/event-loop-audit/measure-zlib.mjs); the async form does the same work on the
+// libuv pool and returns the same bytes.
+const gzipAsync = promisify(gzip);
+const gunzipAsync = promisify(gunzip);
 
 type Selection = {
   ids?: string[];
@@ -80,6 +90,8 @@ export class ContactBulkService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly erasure: PersonalDataErasureService,
+    private readonly touch: ContactTouchService,
+    private readonly rbac: RbacService,
   ) {}
 
   private meta(): ActorMeta {
@@ -228,7 +240,32 @@ export class ContactBulkService {
       const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
       const changed =
         r.where && r.matched > 0
-          ? await this.repo.setOwner(tx, ctx.orgId, r.where, owner, this.meta())
+          ? await this.repo.setOwner(
+              tx,
+              ctx.orgId,
+              r.where,
+              owner,
+              this.meta(),
+              owner.id !== null && (await this.touch.marksOnReassign(tx, ctx.orgId)),
+            )
+          : 0;
+      return this.result(r, changed);
+    });
+  }
+
+  // --- uncontacted -------------------------------------------------------------------------
+
+  /** Marks a selection as uncontacted or as contacted by hand (BL-290), inside the caller's update record scope. */
+  async setUncontacted(
+    input: BulkSetUncontactedInput,
+    scope: RecordScope,
+  ): Promise<BulkSelectionResult> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const r = await this.resolve(tx, input, scope, { maxMatched: BULK_FILTER_MAX });
+      const changed =
+        r.where && r.matched > 0
+          ? await this.repo.setUncontacted(tx, ctx.orgId, r.where, input.uncontacted, this.meta())
           : 0;
       return this.result(r, changed);
     });
@@ -319,11 +356,13 @@ export class ContactBulkService {
       if (r.where) {
         const mode = input.eraseHistory === false ? 'anonymise' : 'delete';
         for (;;) {
+          // The batch is locked and the delete takes these exact ids, so the history erased is the history of the rows deleted.
           const ids = await this.repo.nextIds(tx, r.where, DELETE_BATCH);
-          if (ids.length) await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
-          const n = await this.repo.deleteBatch(tx, ctx.orgId, r.where, DELETE_BATCH, this.meta());
+          if (ids.length === 0) break;
+          await this.erasure.eraseContactHistory(tx, ctx.orgId, ids, mode);
+          const n = await this.repo.deleteIds(tx, ctx.orgId, ids, this.meta());
           changed += n;
-          if (n < DELETE_BATCH) break;
+          if (ids.length < DELETE_BATCH) break;
         }
       }
       return this.result(r, changed);
@@ -387,7 +426,7 @@ export class ContactBulkService {
     scope: RecordScope,
   ): Promise<{ csv: Buffer; fileName: string }> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
+    const found = await this.db.tx(async (tx) => {
       const [row] = await tx
         .select()
         .from(contactExports)
@@ -409,8 +448,10 @@ export class ContactBulkService {
         action: 'read',
         delta: { exportId: { old: null, new: fileId }, rows: { old: null, new: row.rowCount } },
       });
-      return { csv: gunzipSync(row.csvGz), fileName: row.fileName };
+      return { csvGz: row.csvGz, fileName: row.fileName };
     });
+    // Outside the transaction: inflating a large file must not keep a connection checked out.
+    return { csv: await gunzipAsync(found.csvGz), fileName: found.fileName };
   }
 
   /**
@@ -429,6 +470,9 @@ export class ContactBulkService {
     const ctx = RequestContextStore.require();
     const orgId = ctx.orgId;
     const exportId = randomUUID();
+
+    // Restricted processing (docs/specs/legal-hold.md 3.2): a held contact is exported only to a user who may manage data requests.
+    const legalExport = this.rbac.can(ctx.grants ?? new Map(), 'privacy.requests.manage').allowed;
 
     const prepared = await this.db.tx(async (tx) => {
       const r = await this.resolve(tx, input, scope, {
@@ -456,6 +500,8 @@ export class ContactBulkService {
           exportId: { old: null, new: exportId },
           rows: { old: null, new: r.matched },
           selection: { old: null, new: r.idsMode ? 'ids' : 'filter' },
+          // People under a legal hold (BL-295) are left out of an export unless the caller is an authorised legal user.
+          ...(legalExport ? {} : { legalHoldExcluded: { old: null, new: true } }),
         },
       });
       await this.outbox.emit(tx, {
@@ -486,6 +532,7 @@ export class ContactBulkService {
       'unsubscribed',
       'created_at',
       'owner_email',
+      'timezone',
       ...attributes.map((a) => `attr:${a.key}`),
     ];
 
@@ -500,6 +547,8 @@ export class ContactBulkService {
     // `where` is built from immutable SQL chunks, so later batches (each in a short transaction
     // of their own, so a big export never pins one) reuse it unchanged.
     const conditions = resolved.where ? [resolved.where] : [];
+    if (!legalExport)
+      conditions.push(sql`NOT is_subject_held(contacts.org_id, 'contact', contacts.id)`);
 
     async function* produce(): AsyncGenerator<string> {
       yield (input.bom ? UTF8_BOM : '') + csvLine(header);
@@ -538,6 +587,7 @@ export class ContactBulkService {
             row.isUnsubscribed ? 'true' : 'false',
             row.createdAt.toISOString(),
             guardFormula(row.ownerEmail ?? ''),
+            row.timezone ?? '',
             ...attributes.map((a) => {
               const v = row.data?.[a.key];
               return guardFormula(v === null || v === undefined ? '' : String(v));
@@ -551,12 +601,17 @@ export class ContactBulkService {
     }
 
     const save = async () => {
-      const gz = gzipSync(Buffer.concat(keep));
+      const gz = await gzipAsync(Buffer.concat(keep));
       await db.txAs({ orgId, userId }, async (tx) => {
         // Expired files of this workspace go with the next export; there is no separate sweep.
-        await tx
-          .delete(contactExports)
-          .where(and(eq(contactExports.orgId, orgId), sql`${contactExports.expiresAt} <= now()`));
+        await tx.delete(contactExports).where(
+          and(
+            eq(contactExports.orgId, orgId),
+            sql`${contactExports.expiresAt} <= now()`,
+            // A generated file may be evidence: kept while the workspace is under a workspace-wide legal hold (BL-295).
+            sql`NOT is_subject_held(${contactExports.orgId}, 'contact', NULL)`,
+          ),
+        );
         await tx.insert(contactExports).values({
           orgId,
           uuid: exportId,

@@ -34,7 +34,8 @@
         "too_long": "Wpisz co najwyżej {max} znaków.",
         "pattern": "Ta wartość nie ma oczekiwanego formatu.",
         "invalid_option": "Wybierz jedną z podanych opcji.",
-        "invalid_amount": "Wpisz kwotę w dozwolonym zakresie."
+        "invalid_amount": "Wpisz kwotę w dozwolonym zakresie.",
+        "guardian_required": "Dodaj imię i nazwisko oraz adres e-mail lub numer telefonu rodzica lub opiekuna."
       },
       "closedTitle": "Ten formularz jest zamknięty",
       "payTitle": "Jeszcze jeden krok",
@@ -58,7 +59,16 @@
         "tryAgain": "Spróbuj zapłacić ponownie",
         "missingTitle": "Nie znaleziono tej płatności",
         "missingBody": "Link może być nieprawidłowy lub zbyt stary."
-      }
+      },
+      "termsOfService": "Regulamin",
+      "ageDeclaration": "Potwierdzam, że mam co najmniej {age} lat",
+      "ageBlockedTitle": "Nie możemy kontynuować",
+      "ageBlockedBody": "Dziękujemy za zainteresowanie. Nie możemy przyjąć tego zgłoszenia.",
+      "guardianTitle": "Rodzic lub opiekun",
+      "guardianIntro": "Dodaj dane rodzica lub opiekuna.",
+      "guardianName": "Imię i nazwisko",
+      "guardianEmail": "E-mail",
+      "guardianPhone": "Telefon"
     }
   }
 }

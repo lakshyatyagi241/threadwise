@@ -2,18 +2,20 @@
 
 ## Start here
 
-| If you want to…                  | Read                                                                                                                             |
-| -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| understand the system            | [architecture/overview.md](architecture/overview.md)                                                                             |
-| run it locally                   | [runbooks/local-development.md](runbooks/local-development.md)                                                                   |
-| add a table                      | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist)                                 |
-| add a module                     | copy `apps/api/src/modules/crm/contacts/`                                                                                        |
-| see what is planned              | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                                                               |
-| handle privacy and personal data | [specs/privacy-and-data-governance.md](specs/privacy-and-data-governance.md), [privacy/](privacy/privacy-by-design-checklist.md) |
-| take leads in                    | [api/leads.md](api/leads.md): lead sources, the webhook door, the pipeline                                                       |
-| capture leads with forms         | [api/forms-builder.md](api/forms-builder.md): the Forms add-on, hosted and embedded web forms                                    |
-| call external APIs               | [api/api-library.md](api/api-library.md): saved HTTP calls, the sandboxed function, logs, the flow node                          |
-| extend or connect                | [api/marketplace.md](api/marketplace.md): mini apps, integrations, the kill switch                                               |
+| If you want to…                       | Read                                                                                                                                                                                                          |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| understand the system                 | [architecture/overview.md](architecture/overview.md)                                                                                                                                                          |
+| run it locally                        | [runbooks/local-development.md](runbooks/local-development.md)                                                                                                                                                |
+| add a table                           | [architecture/multi-tenancy.md](architecture/multi-tenancy.md#adding-a-new-table--the-checklist)                                                                                                              |
+| add a module                          | copy `apps/api/src/modules/crm/contacts/`                                                                                                                                                                     |
+| see what is planned                   | [backlog.md](backlog.md) and the product specs in [specs/](specs/)                                                                                                                                            |
+| log calls that are not WhatsApp calls | [specs/call-logging.md](specs/call-logging.md) (the model, sources, mobile contract, privacy), [api/call-logging.md](api/call-logging.md)                                                                     |
+| mark leads nobody has reached, set follow-ups automatically, choose how duplicate leads are handled | [specs/lead-followup-settings.md](specs/lead-followup-settings.md), [api/lead-handling.md](api/lead-handling.md), [wiring/lead-handling.md](threadwise-port/wiring/lead-handling.md) |
+| handle privacy and personal data      | [specs/privacy-and-data-governance.md](specs/privacy-and-data-governance.md), [privacy/](privacy/privacy-by-design-checklist.md), [api/compliance.md](api/compliance.md) (Compliance center, regime profiles) |
+| take leads in                         | [api/leads.md](api/leads.md): lead sources, the webhook door, the pipeline                                                                                                                                    |
+| capture leads with forms              | [api/forms-builder.md](api/forms-builder.md): the Forms add-on, hosted and embedded web forms                                                                                                                 |
+| call external APIs                    | [api/api-library.md](api/api-library.md): saved HTTP calls, the sandboxed function, logs, the flow node                                                                                                       |
+| extend or connect                     | [api/marketplace.md](api/marketplace.md): mini apps, integrations, the kill switch                                                                                                                            |
 
 ## Architecture
 
@@ -42,10 +44,13 @@
 | [migrations.md](runbooks/migrations.md)                                   | writing and applying schema changes safely                      |
 | [outbox-backlog.md](runbooks/outbox-backlog.md)                           | when events stop being processed                                |
 | [google-calendar-setup.md](runbooks/google-calendar-setup.md)             | creating the Google OAuth client for workspace calendars        |
+| [microsoft-calendar-setup.md](runbooks/microsoft-calendar-setup.md)       | registering the Microsoft Entra app for Outlook calendars       |
+| [google-workspace-setup.md](runbooks/google-workspace-setup.md)           | Google Cloud setup for Calendar, Sheets, Docs, Forms and Drive  |
 | [marketplace-publish-listing.md](runbooks/marketplace-publish-listing.md) | publishing a Marketplace listing and writing a connector recipe |
 | [mobile-local-development.md](runbooks/mobile-local-development.md)       | running the mobile app on an emulator or phone                  |
 | [mobile-store-setup.md](runbooks/mobile-store-setup.md)                   | Apple, Google and Expo accounts, bundle id, first store listing |
 | [mobile-release.md](runbooks/mobile-release.md)                           | OTA updates, store releases, rollbacks                          |
+| [enabling-whatsapp-calling.md](runbooks/enabling-whatsapp-calling.md)     | Meta app, number, TURN and the checks before WhatsApp calling   |
 
 ## Database
 

@@ -186,6 +186,7 @@ describe('status page', () => {
     mode: 'recurring',
     templateId: uuid(1),
     templateName: 'order_update',
+    templateCount: 1,
     nextRunAt: '2026-10-12T03:30:00.000Z',
     lastRunAt: '2026-10-05T03:30:00.000Z',
     runs: 2,
@@ -195,6 +196,7 @@ describe('status page', () => {
     createdAt: '2026-10-01T00:00:00.000Z',
     updatedAt: '2026-10-05T00:00:00.000Z',
     rowVersion: 2,
+    senders: [],
     draft: draftResponse().draft,
     runList: [
       {
@@ -212,6 +214,8 @@ describe('status page', () => {
           clicks: 3,
         } as never,
         retries,
+        followUps: [],
+        templateName: null,
       },
     ],
     ...over,
@@ -235,6 +239,31 @@ describe('status page', () => {
     expect(out).toContain('data-testid="director-summary"');
   });
 
+  it('names the template each run sent, and the number of templates in turn', () => {
+    const run = detail().runList[0]!;
+    const out = page(
+      detail({
+        templateCount: 3,
+        runList: [
+          { ...run, id: uuid(71), occurrence: 3, templateName: 'summer_sale' },
+          { ...run, occurrence: 2, templateName: 'otp_code' },
+        ],
+      }),
+    );
+    expect(out).toContain('3 templates in turn');
+    expect(out).toContain(
+      '<th scope="col" class="px-2 py-1.5 text-start font-medium">Template</th>',
+    );
+    expect(out).toContain('>summer_sale<');
+    expect(out).toContain('>otp_code<');
+  });
+
+  it('shows no template column or count for a single template', () => {
+    const out = page(detail());
+    expect(out).not.toContain('in turn');
+    expect(out).not.toContain('>Template</th>');
+  });
+
   it('links every run to the existing campaign page', () => {
     expect(page(detail())).toContain(`href="/campaigns/${uuid(70)}"`);
   });
@@ -246,6 +275,60 @@ describe('status page', () => {
     expect(out).toContain('Gave up');
     expect(out).toContain('Retrying until Oct 20, 2026.');
     expect(out).toContain('4 waiting, 7 recovered, 1 gave up');
+  });
+
+  describe('follow-ups of a run', () => {
+    const steps = [
+      {
+        step: 1,
+        waiting: 12,
+        sent: 300,
+        delivered: 280,
+        read: 90,
+        flowsStarted: 0,
+        skipped: 40,
+        lapsed: 0,
+        failed: 3,
+      },
+      {
+        step: 2,
+        waiting: 0,
+        sent: 0,
+        delivered: 0,
+        read: 0,
+        flowsStarted: 55,
+        skipped: 0,
+        lapsed: 21,
+        failed: 0,
+      },
+    ];
+    const withFollowUps = () =>
+      detail({ runList: [{ ...detail().runList[0]!, followUps: steps }] });
+
+    it('lists what each step did under the run', () => {
+      const out = page(withFollowUps());
+      expect(out).toContain('data-testid="run-follow-ups"');
+      expect(out).toContain('Follow-up 1');
+      expect(out).toContain('Follow-up 2');
+      for (const text of [
+        '12 waiting',
+        '300 sent',
+        '280 delivered',
+        '90 read',
+        '40 skipped',
+        '3 failed',
+        '55 flows started',
+        '21 lapsed',
+      ]) {
+        expect(out).toContain(text);
+      }
+    });
+
+    it('shows nothing for a run without follow-ups', () => {
+      const out = page(detail());
+      expect(out).not.toContain('run-follow-ups');
+      expect(out).not.toContain('Follow-up 1');
+    });
   });
 
   it('shows Pause and Cancel for an active series, Resume and Cancel for a paused one', () => {

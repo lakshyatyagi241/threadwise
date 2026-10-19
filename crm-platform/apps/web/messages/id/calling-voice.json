@@ -89,7 +89,18 @@
       "NETWORK": "Kesalahan jaringan - silakan coba lagi.",
       "UNEXPECTED": "Terjadi kesalahan. Silakan coba lagi.",
       "CALL_PLAYBACK_LINK_INVALID": "Tautan rekaman ini sudah kedaluwarsa. Tekan putar lagi untuk mendapatkan tautan baru.",
-      "CALL_RANGE_INVALID": "Tanggal ini tidak valid: awal tidak boleh setelah akhir, rentang maksimal satu tahun, dan zona waktu harus valid."
+      "CALL_RANGE_INVALID": "Tanggal ini tidak valid: awal tidak boleh setelah akhir, rentang maksimal satu tahun, dan zona waktu harus valid.",
+      "CALL_OUTSIDE_WINDOW": "Kontak ini berada di luar jam telepon Anda, jadi panggilan tidak dilakukan. Jendela panggilan dibuka {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Panggilan ini tidak ditemukan.",
+      "CALL_LOG_CONTACT_REQUIRED": "Isi kontak, atau nomor telepon yang dapat dibaca.",
+      "CALL_LOG_TIME_INVALID": "Panggilan tidak boleh dimulai di masa depan atau lebih dari 400 hari lalu.",
+      "CALL_LOG_NOT_EDITABLE": "Panggilan ini dilaporkan oleh ponsel atau penyedia telepon, jadi tidak dapat diubah.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Batas waktu untuk mengubah panggilan ini sudah lewat.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Tugas tindak lanjut memerlukan kontak. Isi nomor milik salah satu kontak Anda.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Koneksi telepon ini tidak ditemukan.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Penyedia telepon ini tidak tersedia.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Koneksi telepon ini tidak dapat melakukan panggilan.",
+      "TELEPHONY_CALL_FAILED": "Penyedia telepon tidak dapat melakukan panggilan."
     },
     "settings": {
       "title": "Panggilan",

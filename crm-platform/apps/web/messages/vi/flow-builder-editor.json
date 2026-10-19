@@ -685,6 +685,7 @@
         "anotherPart": "Một phần khác của luồng này. Phần này chạy khi một nút hoặc dòng danh sách dẫn tới đây{lost, select, true {: hiện chưa có gì dẫn tới, nên sẽ không bao giờ chạy.} other {.}}",
         "addFirstStep": "Thêm bước đầu tiên",
         "branchingEnds": "{kind, select, list {Danh sách} other {Nhóm nút}} này kết thúc phần này: nội dung gửi tiếp theo phụ thuộc vào lựa chọn của khách.",
+        "optionsCarryOn": "Mỗi {kind, select, list {dòng} other {nút}} có thể bắt đầu luồng riêng hoặc tiếp tục với bước kế tiếp bên dưới.",
         "thenGoTo": "Sau đó chuyển đến",
         "confirmImport": {
           "title": "Thay luồng này bằng tệp?",
@@ -717,9 +718,10 @@
             "ask": "Hỏi khách",
             "handoff": "Chuyển giao",
             "logic": "Quyết định",
-            "answer": "Trả lời"
+            "answer": "Trả lời",
+            "action": "Hành động"
           },
-          "blockedTitle": "Nhóm nút và danh sách kết thúc luồng, nên chỉ có thể đặt ở cuối.",
+          "blockedTitle": "Bước này kết thúc phần này nên chỉ có thể đặt ở cuối.",
           "blockedTitleFaq": "Trả lời từ FAQ có hai lối ra nên chỉ có thể đặt ở cuối."
         },
         "card": {
@@ -733,11 +735,27 @@
           "faqExits": {
             "matched": "Đã trả lời",
             "no_match": "Không khớp"
-          }
+          },
+          "close": "Đóng",
+          "clickToEdit": "Nhấp để chỉnh sửa",
+          "outsideToSave": "Nhấp vào bất kỳ đâu bên ngoài để lưu thay đổi",
+          "addCondition": "Thêm điều kiện sau bước này",
+          "conditionLast": "Điều kiện kết thúc phần này nên chỉ có thể đặt ở cuối.",
+          "duplicateTitle": "Nhân bản bước này?",
+          "duplicateBody": "Một bản sao được thêm ngay sau đó.",
+          "deleteTitle": "Xóa bước này?",
+          "deleteBody": "Bước sẽ bị xóa khỏi luồng.",
+          "stage": "Giai đoạn {stage}",
+          "storedIn": "Giá trị sẽ được lưu vào thuộc tính <b>{property}</b> của liên hệ",
+          "actions": "Hành động",
+          "actionsHint": "Thêm một bước chạy ngay sau bước này.",
+          "actionsBlocked": "Bước kết thúc phần của nó không thể có bước nào sau đó."
         },
         "editors": {
           "linkLabel": "Nơi này dẫn tới",
+          "linkChoose": "Chọn nơi nó dẫn đến…",
           "linkEnds": "Kết thúc tại đây (không gửi thêm gì)",
+          "linkNext": "Tiếp tục với bước kế tiếp",
           "linkOption": "{stage} · {label}{self, select, true { (bước này)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Dẫn tới luồng mới…",
           "question": "Câu hỏi",
@@ -837,17 +855,13 @@
             "hour": "giờ",
             "day": "ngày"
           },
-          "location": {
-            "placeName": "Tên địa điểm",
-            "placePlaceholder": "Văn phòng của chúng tôi",
-            "address": "Địa chỉ",
-            "latitude": "Vĩ độ",
-            "longitude": "Kinh độ"
-          },
           "template": {
             "label": "Mẫu đã được duyệt",
             "hint": "Chỉ liệt kê các mẫu mà số WhatsApp của bạn đã được duyệt.",
-            "choose": "Chọn một mẫu…"
+            "choose": "Chọn một mẫu…",
+            "buttons": "Nút",
+            "variables": "Được điền từ thông tin liên hệ",
+            "variablesHint": "Mỗi số được điền khi gửi tin nhắn bằng thông tin liên hệ nêu ở đây. Hãy thay đổi trong mẫu."
           },
           "cta": {
             "buttonText": "Văn bản nút",
@@ -861,7 +875,12 @@
             "add": "Thêm nút khác",
             "remove": "Xóa nút",
             "opensPhone": "Số điện thoại",
-            "opensEmail": "Địa chỉ email"
+            "opensEmail": "Địa chỉ email",
+            "errors": {
+              "url": "Nhập địa chỉ web hợp lệ bắt đầu bằng https://",
+              "phone": "Nhập số điện thoại hợp lệ, ví dụ +91 98765 43210",
+              "email": "Nhập địa chỉ email hợp lệ, ví dụ name@example.com"
+            }
           },
           "carousel": {
             "intro": "Tin nhắn phía trên các thẻ",
@@ -1044,13 +1063,7 @@
           "info": "Thêm tối đa {max} nút CTA trong một tin nhắn — kết hợp Truy cập website, Gọi và Sao chép mã theo bất kỳ cách nào. Cùng giới hạn với nút Mẫu WhatsApp.",
           "buttonLabel": "Nhãn nút",
           "addButton": "Thêm nút",
-          "maxReached": "Đã đạt tối đa {max} nút.",
-          "locationTitle": "Tiêu đề",
-          "locationTitlePlaceholder": "Văn phòng của chúng tôi",
-          "locationAddress": "Địa chỉ",
-          "locationAddressPlaceholder": "Số nhà, đường, thành phố, quốc gia",
-          "locationLatitude": "Vĩ độ",
-          "locationLongitude": "Kinh độ"
+          "maxReached": "Đã đạt tối đa {max} nút."
         },
         "logic": {
           "operator": {
@@ -1118,19 +1131,14 @@
           "aiModelPick": "— chọn mô hình —",
           "aiModelNone": "Chưa bật mô hình AI nào — nhờ quản trị viên bật một mô hình",
           "aiModelNotEnabled": "{value} (chưa bật)",
-          "aiAssistantNone": "— không có (chỉ dùng lời nhắc ở trên) —",
           "aiAssistantOption": "{name} · {count, plural, other {# nguồn}}",
           "aiAssistantMissing": "(trợ lý {id})",
-          "aiAssistantHintNone": "Chưa có cơ sở tri thức nào. Tạo một cơ sở tại <link>Huấn luyện AI</link>, rồi nhấn Làm mới danh sách để chọn tại đây.",
-          "aiAssistantHintEmpty": "Lưu ý: trợ lý này có 0 nguồn đã huấn luyện. Thêm nguồn tại <link>Huấn luyện AI</link> nếu không phản hồi sẽ chỉ dựa trên lời nhắc.",
-          "aiAssistantHint": "Đưa nội dung đã huấn luyện của trợ lý được chọn vào phản hồi này. <link>Quản lý kiến thức →</link>",
           "aiModelLabel": "Mô hình",
           "aiModelHint": "Các mô hình quản trị viên đã bật — cộng với mọi nhà cung cấp bạn đã thêm khóa riêng (Cài đặt → Khóa AI, trên gói BYOK).",
           "aiModelHintNone": "Chưa có nhà cung cấp nào khả dụng. Thêm khóa riêng tại <link>Cài đặt → Khóa AI</link> (gói BYOK), hoặc nhờ quản trị viên bật một nhà cung cấp.",
           "aiPrompt": "Lời nhắc hệ thống",
           "aiSave": "Lưu phản hồi vào",
           "aiSaveHint": "Các nút sau đọc giá trị này dưới dạng <v>{save}</v> — hoặc <v>{path}</v> khi trích xuất.",
-          "aiAssistantLabel": "Cơ sở tri thức (tùy chọn)",
           "aiExtract": "<strong>Trích xuất dữ liệu có cấu trúc (JSON)</strong> — chuyển tin nhắn thành các trường",
           "aiFields": "Các trường cần trích xuất",
           "aiFieldsHint": "Các khóa phân tách bằng dấu phẩy. AI trả về MỘT object JSON; mỗi khóa trở thành <v>{key}</v> (và <v>{rows}</v> khi phát hiện nhiều bản ghi — ví dụ cho nút Google Sheets).",
@@ -1143,7 +1151,25 @@
           "subflowMissing": "Luồng {id} (không có trong không gian làm việc)",
           "subflowLabel": "Luồng để chạy",
           "subflowHint": "Chọn một luồng đã lưu khác. Khi nút này kích hoạt, luồng đó chạy hết từ đầu đến cuối rồi quyền điều khiển quay lại nút tiếp theo ở đây.",
-          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy."
+          "endInfo": "Nút này kết thúc luồng. Mọi thứ nối sau nó sẽ không chạy.",
+          "aiSetupLegend": "Bước này nên trả lời như thế nào?",
+          "aiSetupAgent": "Tác nhân AI",
+          "aiSetupAgentDesc": "Dùng hướng dẫn, mô hình và kiến thức của một tác nhân trong Huấn luyện AI.",
+          "aiSetupCustom": "Thiết lập tùy chỉnh",
+          "aiSetupCustomDesc": "Chọn mô hình và viết hướng dẫn tại đây.",
+          "aiAgentLabel": "Tác nhân AI",
+          "aiAgentPick": "— chọn tác nhân AI —",
+          "aiAgentHint": "Tác nhân mang theo hướng dẫn, mô hình và kiến thức riêng. Thay đổi chúng trong <link>Huấn luyện AI</link>.",
+          "aiAgentNone": "Bạn chưa có tác nhân AI nào. <link>Tạo tác nhân AI đầu tiên</link>, rồi nhấn Làm mới danh sách.",
+          "aiAgentRequired": "Hãy chọn một tác nhân AI, hoặc chuyển sang thiết lập tùy chỉnh.",
+          "aiAgentSummary": "Mô hình {model} · {count, plural, other {# nguồn kiến thức}}",
+          "aiAgentNoSources": "Tác nhân này chưa có kiến thức nên chỉ trả lời theo hướng dẫn của nó. Thêm nguồn trong <link>Huấn luyện AI</link>.",
+          "aiPromptRequired": "Hãy viết hướng dẫn cho AI.",
+          "aiKnowledgeLabel": "Kiến thức từ một tác nhân AI (tùy chọn)",
+          "aiKnowledgeNone": "— không có —",
+          "aiKnowledgeHint": "Thêm các nguồn đã huấn luyện của tác nhân đó vào phản hồi. Hướng dẫn và mô hình riêng của nó không được dùng trong thiết lập tùy chỉnh. <link>Quản lý trong Huấn luyện AI →</link>",
+          "aiAdvanced": "Tùy chọn nâng cao",
+          "aiCreateAgent": "+ Tạo tác nhân AI"
         },
         "options": {
           "prompt": "Lời nhắc",
@@ -1317,7 +1343,8 @@
             "date_field_match": "Lịch: tương đối so với một ngày trên liên hệ (sinh nhật…)",
             "schedule": "Lịch: vào một ngày và giờ",
             "shopify_event": "Thương mại: một sự kiện cửa hàng Shopify",
-            "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce"
+            "woocommerce_event": "Thương mại: một sự kiện cửa hàng WooCommerce",
+            "segment_leave": "Đối tượng: khi liên hệ rời khỏi phân khúc"
           },
           "tagsLoading": "Đang tải thẻ…",
           "tagPick": "— chọn thẻ —",
@@ -1411,7 +1438,8 @@
             "productId": "ID sản phẩm (không bắt buộc)",
             "productIdHint": "Để trống = bất kỳ sản phẩm nào trong đơn hàng.",
             "storeNote": "Khách hàng được khớp với liên hệ đã lưu theo số điện thoại; không tạo liên hệ mới cho đơn hàng. Không có các mục “Đã thêm vào giỏ” và “Đã xem sản phẩm”: cửa hàng không báo các sự kiện này.",
-            "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt."
+            "updatedNote": "Kích hoạt mỗi khi một người hoặc một lần nhập thay đổi liên hệ. Thay đổi do luồng khác thực hiện sẽ không kích hoạt.",
+            "segmentLeaveHint": "Chạy một lần mỗi khi một liên hệ từng nằm trong phân khúc này được phát hiện đã ở ngoài sau khi được cập nhật, gắn thẻ hoặc liệt kê. Liên hệ chỉ được ghi nhận là đã rời đi nếu luồng đã thấy họ ở trong phân khúc trước đó."
           }
         }
       },
@@ -1631,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— chọn một bảng tính —",
-              "empty": "Không tìm thấy bảng tính — dán URL/ID bên dưới",
               "loading": "Đang tải bảng tính…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê bảng tính. Hãy dán mã hoặc liên kết bảng tính thay thế.",
-              "idPlaceholder": "Mã bảng tính",
-              "saved": "Bảng tính {id}… (chưa tải)"
+              "saved": "Bảng tính {id}… (chưa tải)",
+              "empty": "Không tìm thấy bảng tính nào trong tài khoản Google đã kết nối",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các trang tính của bạn. Hãy kết nối Google để chọn."
             },
             "docs": {
               "pick": "— chọn tài liệu mẫu —",
               "empty": "Không tìm thấy tài liệu",
               "loading": "Đang tải tài liệu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê tài liệu. Hãy dán mã hoặc liên kết tài liệu thay thế.",
-              "idPlaceholder": "Mã tài liệu",
-              "saved": "Tài liệu {id}… (chưa tải)"
+              "saved": "Tài liệu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Docs của bạn. Hãy kết nối Google để chọn."
             },
             "forms": {
               "pick": "— chọn một biểu mẫu —",
               "empty": "Không tìm thấy biểu mẫu",
               "loading": "Đang tải biểu mẫu…",
-              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê biểu mẫu. Hãy dán mã hoặc liên kết biểu mẫu thay thế.",
-              "idPlaceholder": "Mã biểu mẫu",
-              "saved": "Biểu mẫu {id}… (chưa tải)"
+              "saved": "Biểu mẫu {id}… (chưa tải)",
+              "notConnected": "Google chưa được kết nối cho không gian làm việc này nên không thể liệt kê các Forms của bạn. Hãy kết nối Google để chọn."
             }
           },
           "sheetsIntro": "Thêm một dòng vào Google Sheet (chế độ ghi) hoặc tra cứu một dòng theo cột khóa (chế độ đọc). Dùng tài khoản Google đã kết nối của không gian làm việc tại <link>/google-account</link>.",
@@ -1673,8 +1698,6 @@
           "addColumn": "Thêm cột",
           "matchByHeader": "Khớp cột theo tên tiêu đề",
           "matchByHeaderHint": "Ghi mỗi giá trị vào cột bảng tính có tiêu đề đó (theo thứ tự bất kỳ). Tắt để thêm từ trái sang phải theo vị trí — mặc định.",
-          "pasteLabel": "…hoặc dán URL / ID bảng tính",
-          "pasteHint": "Vẫn hoạt động khi danh sách chọn trống — dán liên kết bảng tính và hệ thống sẽ tự lấy ID.",
           "docsIntro": "Sao chép tài liệu mẫu, điền <mono>{placeholders}</mono>, chia sẻ cho bất kỳ ai có liên kết, rồi gửi URL cho khách hàng. Đặt <mono>{key}</mono> trong mẫu ở vị trí cần điền giá trị.",
           "templateDocument": "Tài liệu mẫu",
           "newCopyTitle": "Tiêu đề bản sao mới",
@@ -1689,7 +1712,6 @@
           "messageTemplateHint": "Bong bóng tin nhắn của bot gửi cho khách hàng. <mono>{token}</mono> sẽ nhận liên kết chia sẻ.",
           "messageTemplatePlaceholder": "Đây là tài liệu của bạn:\n'{{'doc_url'}}'",
           "saveUrl": "Lưu URL vào biến",
-          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>đã gửi</b> khi khách hàng điền xong. Câu trả lời trở thành biến của luồng.",
           "googleForm": "Google Form",
           "bodyBubble": "Nội dung bong bóng tin nhắn (gửi phía trên liên kết)",
           "bodyBubblePlaceholder": "Vui lòng điền biểu mẫu ngắn này:",
@@ -1697,11 +1719,21 @@
           "saveResponsesHint": "Từng câu trả lời cũng được lưu dưới dạng <mono>{token}</mono>.",
           "expireAfter": "Hết hạn sau (giây)",
           "expireAfterHint": "Thời gian chờ gửi biểu mẫu trước khi hết giờ. 86400 = 24 giờ.",
-          "setupTitle": "Thiết lập một lần — dán đoạn này vào trình chỉnh sửa Script của biểu mẫu",
-          "setupOpen": "Mở biểu mẫu → <mono>menu ⋮</mono> → <mono>Trình chỉnh sửa Script</mono>",
-          "setupDownload": "<link>Tải script (.gs)</link> và dán vào",
-          "setupTrigger": "Thêm trình kích hoạt: <mono>onFormSubmit</mono> · Từ biểu mẫu · Khi gửi biểu mẫu",
-          "setupWarning": "Nếu không có script này, biểu mẫu vẫn ghi nhận câu trả lời trong Google Forms, nhưng luồng sẽ không tiếp tục."
+          "connection": {
+            "open": "Mở tài khoản Google",
+            "permission": {
+              "calendar": "Lịch",
+              "sheets": "Sheets",
+              "docs": "Docs và Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google chưa được thiết lập cho nền tảng này nên bước này sẽ thất bại khi luồng chạy.",
+            "disconnected": "Chưa có tài khoản Google nào được kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối Google trước.",
+            "needsReconnect": "Google không còn chấp nhận tài khoản đã kết nối nên bước này sẽ thất bại khi luồng chạy. Hãy kết nối lại Google trước.",
+            "missing": "Tài khoản Google đã kết nối chưa được cấp quyền {permission} nên bước này sẽ thất bại khi luồng chạy."
+          },
+          "formIntro": "Gửi URL biểu mẫu qua WhatsApp, tạm dừng luồng và tiếp tục qua cổng <b>submitted</b> khi khách hàng điền xong. Các câu trả lời được đọc từ biểu mẫu thông qua tài khoản Google đã kết nối, nên không cần dán gì vào biểu mẫu. Câu trả lời trở thành biến của luồng.",
+          "noListing": "Không thể liệt kê các tệp của bạn vì chưa cấp quyền Danh sách tệp Drive ở trang Tài khoản Google. Hãy thêm quyền này tại đó để chọn tệp."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1984,89 @@
         "label": "Biểu tượng (tùy chọn)",
         "add": "Thêm biểu tượng",
         "saveFirst": "Hãy lưu bot một lần để thêm biểu tượng."
+      },
+      "buttonAction": {
+        "label": "Hành động khi nhấn nút",
+        "kind": {
+          "none": "Chuyển sang bước tiếp theo",
+          "flow": "Kết nối luồng",
+          "live_agent": "Nhân viên trực tiếp",
+          "opt_in": "Đăng ký nhận tin",
+          "opt_out": "Hủy đăng ký"
+        },
+        "pickFlow": "Chọn một luồng",
+        "loadingFlows": "Đang tải các luồng…",
+        "flowMissing": "Luồng {id} (không tìm thấy)",
+        "hint": {
+          "flow": "Bắt đầu luồng đã chọn cho liên hệ này, và cuộc trò chuyện tiếp tục ở đó. Không có gì được nối sau nút này.",
+          "live_agent": "Chuyển cuộc trò chuyện cho nhóm bạn chọn. Không có gì được nối sau nút này.",
+          "opt_in": "Đánh dấu liên hệ đã đăng ký nhận tin tiếp thị, rồi tiếp tục sang bước được nối.",
+          "opt_out": "Đánh dấu liên hệ đã hủy đăng ký nhận tin tiếp thị, rồi tiếp tục sang bước được nối."
+        }
+      },
+      "messageTools": {
+        "format": "Định dạng văn bản",
+        "bold": "In đậm",
+        "italic": "In nghiêng",
+        "strike": "Gạch ngang",
+        "mono": "Phông đơn cách",
+        "bullet": "Danh sách dấu đầu dòng",
+        "numbered": "Danh sách đánh số",
+        "emoji": "Biểu tượng cảm xúc",
+        "emojiSearch": "Tìm biểu tượng cảm xúc",
+        "emojiNone": "Không tìm thấy biểu tượng cảm xúc",
+        "variable": "Chèn biến",
+        "variableSearch": "Tìm biến",
+        "groupContact": "Thuộc tính liên hệ",
+        "groupFlow": "Đã lưu trong luồng này",
+        "variableNone": "Không tìm thấy biến"
+      },
+      "askAge": {
+        "minAge": "Tuổi tối thiểu",
+        "minAgeHint": "Để trống để dùng độ tuổi của không gian làm việc trong Trung tâm tuân thủ (18 nếu chưa đặt). Từ 1 đến 21.",
+        "whenUnder": "Nếu câu trả lời dưới độ tuổi đó",
+        "whenUnderHint": "Dù thế nào liên hệ cũng được đánh dấu là chưa thành niên. Khách hàng không bao giờ được cho biết câu trả lời nào là hợp lệ.",
+        "end": "Kết thúc luồng bằng một câu ngắn, trung lập",
+        "continue": "Tiếp tục, và để tôi rẽ nhánh theo câu trả lời",
+        "endText": "Câu kết thúc",
+        "endTextHint": "Được gửi trước khi luồng kết thúc. Đừng nhắc đến tuổi. Để trống sẽ dùng “Chúng tôi không thể tiếp tục.”",
+        "continueNote": "Các bước tiếp theo có thể đọc biến của câu trả lời kèm hậu tố _age_gate (ví dụ answer_age_gate), có giá trị là under hoặc adult. Thêm một Điều kiện để rẽ nhánh, ví dụ để yêu cầu cha mẹ hoặc người giám hộ.",
+        "note": "Chỉ hỏi tuổi ở nơi bạn cần. Câu trả lời được ghi vào liên hệ: ngày sinh được ghi là ngày sinh, và câu trả lời dưới độ tuổi sẽ đánh dấu liên hệ là chưa thành niên."
+      },
+      "location": {
+        "modeLabel": "Cách đặt vị trí",
+        "modeLink": "Liên kết Google Maps",
+        "modeCoords": "Vĩ độ và kinh độ",
+        "linkLabel": "Liên kết Google Maps",
+        "linkPlaceholder": "Dán một liên kết, ví dụ https://maps.app.goo.gl/…",
+        "linkHint": "Trong Google Maps, mở địa điểm, nhấn Chia sẻ rồi Sao chép liên kết. Liên kết ngắn và dài đều dùng được.",
+        "finding": "Đang kiểm tra liên kết…",
+        "retry": "Thử lại",
+        "latitude": "Vĩ độ",
+        "longitude": "Kinh độ",
+        "coordsHint": "Vĩ độ từ -90 đến 90 và kinh độ từ -180 đến 180. Bạn có thể dán “vĩ độ, kinh độ” vào một trong hai ô.",
+        "found": "Đã tìm thấy vị trí",
+        "openInMaps": "Mở trong Google Maps",
+        "optionalHint": "Tùy chọn: hiển thị trên thẻ bản đồ khách hàng nhận được. Bạn có thể để trống cả hai.",
+        "optional": "(tùy chọn)",
+        "placeName": "Tên địa điểm",
+        "placePlaceholder": "Văn phòng của chúng tôi",
+        "address": "Địa chỉ",
+        "problem": {
+          "empty": "Nhập liên kết Google Maps hoặc tọa độ.",
+          "lat_missing": "Nhập vĩ độ.",
+          "lng_missing": "Nhập kinh độ.",
+          "lat_nan": "Vĩ độ phải là một số, ví dụ 18.5204.",
+          "lng_nan": "Kinh độ phải là một số, ví dụ 73.8567.",
+          "lat_range": "Vĩ độ phải nằm trong khoảng -90 đến 90.",
+          "lng_range": "Kinh độ phải nằm trong khoảng -180 đến 180.",
+          "zero": "0, 0 không phải là một địa điểm thật. Hãy nhập tọa độ thực tế.",
+          "not_url": "Đây không giống một liên kết. Hãy dán đầy đủ liên kết Google Maps.",
+          "not_maps": "Đây không phải liên kết Google Maps.",
+          "no_coords": "Liên kết này không chỉ đến một điểm chính xác. Hãy mở địa điểm trong Google Maps, nhấn Chia sẻ và sao chép liên kết đó, hoặc nhập tọa độ.",
+          "unresolved": "Liên kết ngắn này chưa được kiểm tra. Hãy thoát khỏi ô hoặc thử lại.",
+          "resolve_failed": "Không đọc được liên kết này. Hãy kiểm tra xem nó có mở trong Google Maps không, hoặc nhập tọa độ."
+        }
       }
     },
     "contracts": {
@@ -2262,7 +2377,9 @@
         "phone": "Số điện thoại",
         "number": "Số",
         "alphanumeric": "Chữ và số",
-        "date": "Ngày"
+        "date": "Ngày",
+        "age": "Tuổi",
+        "date_of_birth": "Ngày sinh"
       },
       "askInputWrong": {
         "text": "Vui lòng thử lại",
@@ -2271,7 +2388,9 @@
         "phone": "Vui lòng nhập số điện thoại hợp lệ",
         "number": "Vui lòng nhập số hợp lệ",
         "alphanumeric": "Vui lòng chỉ dùng chữ và số",
-        "date": "Vui lòng nhập ngày hợp lệ ({format})"
+        "date": "Vui lòng nhập ngày hợp lệ ({format})",
+        "age": "Vui lòng nhập tuổi của bạn bằng một số nguyên",
+        "date_of_birth": "Vui lòng nhập một ngày hợp lệ ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2316,7 +2435,8 @@
         "date_field_match": "khi ngày khớp",
         "schedule": "theo lịch",
         "shopify_event": "khi có sự kiện Shopify",
-        "woocommerce_event": "khi có sự kiện WooCommerce"
+        "woocommerce_event": "khi có sự kiện WooCommerce",
+        "segment_leave": "khi rời phân khúc"
       },
       "ports": {
         "manual": "thủ công",
@@ -2379,7 +2499,9 @@
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
-        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng."
+        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng.",
+        "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180).",
+        "aiNoAgent": "\"{node}\" không có tác nhân AI và cũng không có lời nhắc — hãy chọn tác nhân AI, hoặc chọn Thiết lập tùy chỉnh và viết hướng dẫn."
       }
     },
     "simpleModel": {
@@ -2470,6 +2592,14 @@
         "faq": {
           "label": "Trả lời từ FAQ",
           "help": "So khớp tin nhắn của khách hàng với các FAQ của bạn. Kết thúc luồng này: một lối ra nếu có FAQ trả lời, một lối khác nếu không"
+        },
+        "apiLibrary": {
+          "label": "Gọi API",
+          "help": "Gọi một API từ thư viện API của bạn"
+        },
+        "code": {
+          "label": "Hàm JS",
+          "help": "Chạy một đoạn JavaScript nhỏ"
         }
       },
       "typeLabel": {
@@ -2487,7 +2617,9 @@
         "assign": "Gán cho nhân viên",
         "carousel": "Băng chuyền",
         "condition": "Điều kiện",
-        "faq": "Trả lời từ FAQ"
+        "faq": "Trả lời từ FAQ",
+        "api_library": "Gọi API",
+        "code": "Hàm JS"
       },
       "stepLabel": {
         "questionOf": "Câu hỏi · {kind}"
@@ -2510,10 +2642,11 @@
         "writeQuestion": "Bước {stage}: viết câu hỏi.",
         "nameVariable": "Bước {stage}: đặt tên biến để lưu câu trả lời.",
         "chooseAnswerProperty": "Bước {stage}: chọn thuộc tính liên hệ để sao chép câu trả lời vào.",
-        "setCoordinates": "Bước {stage}: đặt vĩ độ và kinh độ.",
+        "setCoordinates": "Bước {stage}: hãy dán liên kết Google Maps hoặc nhập vĩ độ và kinh độ hợp lệ.",
         "chooseTemplate": "Bước {stage}: chọn một mẫu.",
         "chooseTeam": "Bước {stage}: chọn nhóm mà cuộc trò chuyện sẽ chuyển đến.",
         "ctaLabelLink": "Bước {stage}: đặt tên và liên kết cho nút.",
+        "ctaLinkInvalid": "Bước {stage}: đích của nút không hợp lệ với loại đã chọn.",
         "choosePickedProperty": "Bước {stage}: chọn thuộc tính liên hệ để sao chép lựa chọn đã chọn vào.",
         "buttonsPrompt": "Bước {stage}: viết tin nhắn phía trên các nút.",
         "addButton": "Bước {stage}: thêm ít nhất một nút.",
@@ -2528,7 +2661,15 @@
         "carouselCards": "Bước {stage}: thêm ít nhất một thẻ và đặt tiêu đề cho mỗi thẻ.",
         "carouselButtons": "Bước {stage}: đặt tên cho mỗi nút, cùng liên kết, số hoặc địa chỉ ở nút mở ra điều gì đó.",
         "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị).",
-        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng."
+        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng.",
+        "optionNotConnected": "Bước {stage}: {kind, select, row {hàng} other {nút}} \"{label}\" không dẫn đến đâu. Hãy thêm một bước cho nó hoặc gán một hành động.",
+        "tooManyOptions": "Bước {stage}: {kind, select, row {danh sách có tối đa {max} hàng} other {một nhóm nút có tối đa {max} nút}}.",
+        "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
+        "chooseApi": "Bước {stage}: chọn API cần gọi.",
+        "writeCode": "Bước {stage}: viết mã cần chạy.",
+        "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
+        "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
+        "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI."
       },
       "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "Mô phỏng giao dịch mua: {name} → cổng \"đã mua\"",
       "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\"",
       "faqAnswered": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, nên không gửi gì và {ref} vẫn trống. Đi theo lối \"đã trả lời\".",
-      "faqNoMatch": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, và lối \"đã trả lời\" chưa được nối, nên đi theo \"không khớp\". {ref} vẫn trống."
+      "faqNoMatch": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, và lối \"đã trả lời\" chưa được nối, nên đi theo \"không khớp\". {ref} vẫn trống.",
+      "locationSkipped": "(vị trí) đã bỏ qua: không có tọa độ hợp lệ"
     }
   }
 }

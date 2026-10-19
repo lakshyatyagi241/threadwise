@@ -232,12 +232,49 @@
         "loadFailed": "无法加载设置。",
         "hours": {
           "title": "工作时间",
-          "note": "仅供参考。工作时间尚未生效，因此这些控件为只读。",
-          "weekdays": "周一至周五",
-          "saturday": "周六",
-          "sunday": "周日",
           "from": "从",
-          "to": "至"
+          "to": "至",
+          "note": "您团队的营业时间（时区：{timezone}）。依赖营业时间的收件箱分配规则、SLA 计时器、流程和潜在客户回复都会使用此时间表。",
+          "ownerOnly": "只有工作区所有者可以编辑这些内容。",
+          "loadFailed": "无法加载工作时间。",
+          "day": {
+            "mon": "星期一",
+            "tue": "星期二",
+            "wed": "星期三",
+            "thu": "星期四",
+            "fri": "星期五",
+            "sat": "星期六",
+            "sun": "星期日"
+          },
+          "closed": "休息",
+          "openAllDay": "全天营业",
+          "allDay": "全天营业",
+          "overnight": "次日早晨结束",
+          "addWindow": "添加时段",
+          "remove": "删除",
+          "removeWindow": "删除{day}的这些时段",
+          "copyMonday": "将星期一复制到星期二至星期五",
+          "problem": {
+            "required": "请填写两个时间。",
+            "same": "开始时间和结束时间不能相同。",
+            "overlap": "同一天的时段不能重叠。"
+          },
+          "holidays": {
+            "title": "节假日",
+            "note": "无论每周工作时间如何设置，工作区在这些日期全天视为休息。",
+            "none": "尚未添加节假日。",
+            "date": "日期",
+            "label": "名称（可选）",
+            "add": "添加节假日",
+            "removeFor": "删除 {date} 的节假日",
+            "problem": {
+              "date": "不是有效的日期。",
+              "duplicate": "该日期已在列表中。"
+            }
+          },
+          "save": "保存工作时间",
+          "saved": "工作时间已保存。",
+          "saveFailed": "无法保存工作时间。"
         },
         "preferences": {
           "title": "自动 AI 摘要",
@@ -351,14 +388,6 @@
         "webhooksTitle": "Webhook",
         "webhooksBody": "向你自己的端点发送事件，并接收来自其他工具的事件。",
         "manage": "管理集成",
-        "sheetsTitle": "Google Sheets API 密钥",
-        "sheetsBody": "Sheets 插件用于将联系人和消息记录推送到表格中。这是目前唯一对外展示的个人令牌。",
-        "manageInAccount": "在账户中管理",
-        "active": "活跃",
-        "keyTimes": "生成于 {created} · 最近使用于 {used}",
-        "never": "从未",
-        "noKey": "尚未生成 Sheets API 密钥。请在以下位置创建：",
-        "noKeyLink": "你的账户 → Sheets 插件",
         "outboundTitle": "出站端点",
         "outboundBody": "工作区 → 你的服务器（CRM 钩子、发送/回复事件）。",
         "inboundTitle": "入站 Webhook",

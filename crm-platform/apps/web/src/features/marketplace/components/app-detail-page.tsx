@@ -7,6 +7,7 @@ import type { MarketAppDetail } from '@crm/contracts';
 import { Alert, Badge, Button, EmptyState } from '@crm/ui';
 import { fetchApp, mktKeys } from '../api';
 import { mktError } from '../lib/errors';
+import { appHomeFor } from '../lib/app-home';
 import { installChips, installGate, type InstallGate } from '../lib/install-state';
 import { mktRoutes } from '../lib/routes';
 import { isHttpsLink, paragraphs } from '../lib/text';
@@ -18,6 +19,7 @@ import {
   PricingBlock,
   SubscribeActions,
 } from './pricing-parts';
+import { PaymentReturnBanner } from './payment-return-banner';
 import { RiskCallout, ScopeList } from './scope-list';
 import { SubscriptionPanel } from './subscription-panel';
 import {
@@ -87,6 +89,8 @@ export function AppDetail({ app }: { app: MarketAppDetail }) {
         href={mktRoutes.browse(app.kind)}
         label={app.kind === 'mini_app' ? t('backToApps') : t('backToIntegrations')}
       />
+
+      <PaymentReturnBanner />
 
       <header className="flex flex-wrap items-start justify-between gap-4">
         <div className="flex min-w-0 flex-1 basis-80 items-start gap-4">
@@ -195,14 +199,23 @@ function InstallAction({ gate, app }: { gate: InstallGate; app: MarketAppDetail 
           <NotForSaleNote />
         </div>
       );
-    case 'installed':
+    case 'installed': {
+      // An app with a screen of its own is opened from here; Manage is the installation (health, permissions, uninstall).
+      const open = app.install ? appHomeFor(app.slug, app.install.status) : null;
       return (
         <div className="flex flex-wrap items-center gap-2">
+          {open && (
+            <Link href={open} className={LINK_BUTTON_PRIMARY} data-testid="app-open">
+              {t('open')}
+              <span className="sr-only"> — {app.name}</span>
+            </Link>
+          )}
           <Link href={gate.href} className={LINK_BUTTON}>
             {t('manage')}
           </Link>
         </div>
       );
+    }
     case 'killed':
       return (
         <div className="space-y-2">

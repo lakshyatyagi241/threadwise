@@ -5,6 +5,7 @@ import type {
   MessageTemplateHeader,
   MessageTemplatePreview,
 } from '@crm/contracts';
+import { buttonKindOf, headerFormatOf } from '../../infra/providers/whatsapp/template-vocab';
 import { tokensOf, type VariableMap } from '../message-templates';
 
 /**
@@ -129,28 +130,44 @@ export function renderBody(body: string, variables: Record<string, string>): str
 
 /** The kind of a stored button as the bubble draws it. An OTP button is the copy-code button WhatsApp shows for a login code. */
 export function buttonTypeOf(raw: unknown): MessageTemplateButton['type'] {
-  switch (typeof raw === 'string' ? raw.toUpperCase() : '') {
-    case 'QUICK_REPLY':
+  // Any spelling: Meta's (`URL`), our form's, Reference's (`visit_website`, `call_phone`).
+  switch (buttonKindOf(raw)) {
+    case 'quick_reply':
       return 'quick_reply';
-    case 'URL':
+    case 'url':
       return 'url';
-    case 'PHONE_NUMBER':
+    case 'phone':
       return 'phone';
-    case 'COPY_CODE':
-    case 'OTP':
+    case 'copy_code':
+    case 'otp':
       return 'copy_code';
     default:
       return 'other';
   }
 }
 
-/** The buttons of a stored template in order, each with its kind and label (empty when the button has none, as a copy-code one). */
+/**
+ * The buttons of a stored template in order, each with its kind and label (empty when the button has none, as a copy-code one).
+ * A URL button carries its link only when the template fixes it: a `{{n}}` in it is filled at send time, so the thread cannot know
+ * the final address and the bubble leaves it unlinked. A call button carries its number.
+ */
 export function previewButtonsOf(raw: unknown): MessageTemplateButton[] {
   if (!Array.isArray(raw)) return [];
   return raw.flatMap((b): MessageTemplateButton[] => {
     if (!b || typeof b !== 'object') return [];
     const o = b as Record<string, unknown>;
-    return [{ type: buttonTypeOf(o.type), text: typeof o.text === 'string' ? o.text : '' }];
+    const type = buttonTypeOf(o.type);
+    const out: MessageTemplateButton = {
+      type,
+      text: typeof o.text === 'string' ? o.text : '',
+    };
+    if (type === 'url' && typeof o.url === 'string' && tokensOf(o.url).length === 0) {
+      out.url = o.url;
+    }
+    if (type === 'phone' && typeof o.phone_number === 'string' && o.phone_number.trim() !== '') {
+      out.phone = o.phone_number.trim();
+    }
+    return [out];
   });
 }
 
@@ -160,7 +177,7 @@ const MEDIA_HEADERS: ReadonlySet<string> = new Set(['image', 'video', 'document'
 export function previewHeaderOf(
   t: Pick<TemplateFacts, 'attachmentType' | 'header'>,
 ): MessageTemplateHeader | null {
-  const attachment = (t.attachmentType ?? 'none').toLowerCase();
+  const attachment = headerFormatOf(t.attachmentType);
   if (MEDIA_HEADERS.has(attachment)) {
     return { format: attachment as MessageTemplateHeader['format'], text: null };
   }

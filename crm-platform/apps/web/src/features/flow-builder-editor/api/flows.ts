@@ -7,7 +7,9 @@ import {
   flowExportSchema,
   flowsOverviewSchema,
   flbGoogleFilesResponseSchema,
+  googleAccountSummarySchema,
   listFlowsResponseSchema,
+  flbResolveMapsResponseSchema,
   flbTestWebhookResponseSchema,
   toggleFlowResponseSchema,
   flbAiGenerateResponseSchema,
@@ -21,6 +23,7 @@ import {
   type ListFlowsQuery,
   type SaveFlowRequest,
   type SetBuilderModeRequest,
+  type FlbResolveMapsRequest,
   type FlbTestWebhookRequest,
   type UpdateAdminFlowTemplateInput,
   type UpdateFlowRequest,
@@ -72,6 +75,11 @@ export const flowsApi = {
       schema: flbCommerceProductsResponseSchema,
       signal,
     }),
+  googleStatus: (signal?: AbortSignal) =>
+    apiFetch('/flows/builder-context/google/status', {
+      schema: googleAccountSummarySchema,
+      signal,
+    }),
   googleFiles: (kind: 'sheets' | 'docs' | 'forms', signal?: AbortSignal) =>
     apiFetch(`/flows/builder-context/google/${kind}`, {
       schema: flbGoogleFilesResponseSchema,
@@ -79,6 +87,12 @@ export const flowsApi = {
     }),
   testWebhook: (body: FlbTestWebhookRequest) =>
     apiFetch('/flows/test-webhook', { method: 'POST', body, schema: flbTestWebhookResponseSchema }),
+  resolveMapsLink: (body: FlbResolveMapsRequest) =>
+    apiFetch('/flows/location/resolve', {
+      method: 'POST',
+      body,
+      schema: flbResolveMapsResponseSchema,
+    }),
   aiGenerate,
 };
 

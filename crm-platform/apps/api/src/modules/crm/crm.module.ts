@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { CheckoutOrdersMerchantPaymentsModule } from '../checkout-orders-merchant-payments';
+import { SendWindowModule } from '../compliance-center';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AttributesController } from './attributes/attributes.controller';
@@ -8,9 +9,17 @@ import { AttributesRepository } from './attributes/attributes.repository';
 import { AttributesService } from './attributes/attributes.service';
 import { MergeTagService } from './attributes/merge-tag.service';
 import { CompaniesController } from './companies/companies.controller';
+import { CompaniesCsvService } from './companies/companies-csv.service';
 import { CompaniesRepository } from './companies/companies.repository';
 import { CompaniesService } from './companies/companies.service';
 import { ContactBulkController } from './contact-bulk/contact-bulk.controller';
+import {
+  ContactTouchController,
+  LeadHandlingController,
+} from './lead-handling/lead-handling.controller';
+import { ContactTouchService } from './lead-handling/contact-touch.service';
+import { FollowUpService } from './lead-handling/follow-up.service';
+import { LeadHandlingSettingsService } from './lead-handling/lead-handling-settings.service';
 import { ContactAssignmentController } from './contact-assignment/contact-assignment.controller';
 import { ContactAssignmentEngine } from './contact-assignment/contact-assignment.engine';
 import { ContactAssignmentRepository } from './contact-assignment/contact-assignment.repository';
@@ -60,6 +69,12 @@ import { DealEngine } from './deals/deal-engine.service';
 import { CrmDashboardController } from './crm-dashboard/crm-dashboard.controller';
 import { CrmDashboardRepository } from './crm-dashboard/crm-dashboard.repository';
 import { CrmDashboardService } from './crm-dashboard/crm-dashboard.service';
+import { RevenueExportPublisher } from './revenue-report/revenue-export.publisher';
+import { RevenueExportRepository } from './revenue-report/revenue-export.repository';
+import { RevenueExportService } from './revenue-report/revenue-export.service';
+import { RevenueReportController } from './revenue-report/revenue-report.controller';
+import { RevenueReportRepository } from './revenue-report/revenue-report.repository';
+import { RevenueReportService } from './revenue-report/revenue-report.service';
 import { DealReportsRepository } from './deals/deal-reports.repository';
 import { DealReportsService } from './deals/deal-reports.service';
 import { DealsPlan, SalesPipelineGuard } from './deals/deals-plan';
@@ -84,6 +99,7 @@ import { LostReasonsService } from './pipelines/lost-reasons.service';
 import { PipelinesRepository } from './pipelines/pipelines.repository';
 import { PipelinesService } from './pipelines/pipelines.service';
 import {
+  CompanyTasksController,
   ContactTasksController,
   DealTasksController,
   TasksController,
@@ -185,12 +201,16 @@ import { TagsService } from './tags/tags.service';
     PlatformSettingsModule,
     ContactConsentModule,
     PrivacyModule,
+    SendWindowModule,
   ],
   controllers: [
     // The literal-path controllers go first: `GET /contacts/stats`, `/contacts/duplicates` and
     // `/contacts/import/...` must be registered before ContactsController's `GET /contacts/:id`
     // or Express reads "stats" as an id.
     ContactBulkController,
+    // Lead handling (uncontacted, follow-ups, duplicates): `lead-handling/settings` and `contacts/:id/touch|uncontacted`.
+    LeadHandlingController,
+    ContactTouchController,
     OwnerReassignController,
     ContactAssignmentController,
     ContactDedupeController,
@@ -217,6 +237,8 @@ import { TagsService } from './tags/tags.service';
     DealsController,
     ContactDealsController,
     CrmDashboardController,
+    // The revenue report (`crm/revenue`, its files under `crm/revenue/exports`).
+    RevenueReportController,
     PipelinesController,
     PipelineStagesController,
     LostReasonsController,
@@ -225,6 +247,7 @@ import { TagsService } from './tags/tags.service';
     TasksController,
     ContactTasksController,
     DealTasksController,
+    CompanyTasksController,
     // Proposals and estimates: `sales-docs/settings`, `sales-docs/templates` (settings controller, registered first) and
     // `sales-docs/counts` are literal paths declared before `sales-docs/:id`. The public controller is unauthenticated (token).
     SalesDocSettingsController,
@@ -258,6 +281,9 @@ import { TagsService } from './tags/tags.service';
     ContactGroupsService,
     ContactGroupsRepository,
     ContactBulkService,
+    LeadHandlingSettingsService,
+    ContactTouchService,
+    FollowUpService,
     OwnerReassignRepository,
     OwnerReassignService,
     ContactAssignmentRepository,
@@ -297,6 +323,7 @@ import { TagsService } from './tags/tags.service';
     ContactMeetingsRepository,
     CompaniesRepository,
     CompaniesService,
+    CompaniesCsvService,
     DealsPlan,
     SalesPipelineGuard,
     DealsRepository,
@@ -309,6 +336,11 @@ import { TagsService } from './tags/tags.service';
     DealReportsService,
     CrmDashboardRepository,
     CrmDashboardService,
+    RevenueReportRepository,
+    RevenueReportService,
+    RevenueExportRepository,
+    RevenueExportService,
+    RevenueExportPublisher,
     PipelinesRepository,
     PipelinesService,
     LostReasonsService,
@@ -363,6 +395,9 @@ import { TagsService } from './tags/tags.service';
     CONTACT_RESOLVER,
     ContactGroupsService,
     ContactBulkService,
+    // The uncontacted marker: every action that contacts a person (inbox, calls, campaigns, timeline) and every creation path calls it.
+    LeadHandlingSettingsService,
+    ContactTouchService,
     OwnerReassignRepository,
     OwnerReassignService,
     ContactAssignmentEngine,
@@ -384,7 +419,10 @@ import { TagsService } from './tags/tags.service';
     ContactFilesService,
     ContactActivitiesService,
     ContactMeetingsService,
+    // The appointments module mirrors every booking into the contact's Meetings (AppointmentMeetingMirror), in the booking's transaction.
+    ContactMeetingsRepository,
     CompaniesService,
+    CompaniesRepository,
     DealsService,
     PipelinesService,
     TasksService,
@@ -399,6 +437,10 @@ import { TagsService } from './tags/tags.service';
     ExternalOrderBillingService,
     InvoiceSettingsService,
     ContactActivitiesRepository,
+    // The revenue report file builder (RevenueReportWorkerModule) drives them.
+    RevenueReportRepository,
+    RevenueReportService,
+    RevenueExportRepository,
   ],
 })
 export class CrmModule {}

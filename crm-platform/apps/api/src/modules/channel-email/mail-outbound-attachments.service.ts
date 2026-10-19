@@ -103,6 +103,7 @@ export class MailOutboundAttachments {
       orgId: ctx.orgId,
       filename: file.originalname,
       buffer: file.buffer,
+      category: 'email_attachment_staged',
     });
     const refuse = async (message: string): Promise<never> => {
       await this.store.remove(ctx.orgId, stored.key).catch(() => undefined);

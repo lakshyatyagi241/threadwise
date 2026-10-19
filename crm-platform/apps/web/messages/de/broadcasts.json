@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "Pausiert: Das tägliche Sendelimit wurde erreicht. Der Versand wird nach {when} automatisch fortgesetzt.",
         "halt": "Pausiert: Der Versand ist für diesen Workspace gestoppt. Er wird fortgesetzt, sobald der Stopp aufgehoben wird.",
-        "manual": "Pausiert."
+        "manual": "Pausiert.",
+        "quiet_hours": "Pausiert: Einige Empfänger sind in ihren Ruhezeiten. Der Versand läuft nach {when} von selbst weiter."
       },
       "delete": "Löschen",
       "deleteTitle": "Broadcast löschen?",
@@ -145,7 +146,8 @@
         "queued": "In Warteschlange",
         "queuedHint": "wartet auf Versand",
         "failed": "Fehlgeschlagen",
-        "failedPct": "{pct} % Fehlerrate"
+        "failedPct": "{pct} % Fehlerrate",
+        "queuedHeld": "{count} wegen der Ruhezeiten zurückgehalten"
       },
       "tab": {
         "overview": "Übersicht",
@@ -193,7 +195,8 @@
         "lastClick": "Letzter Klick: {when}",
         "empty": "Keine Empfänger zugeordnet.",
         "more": "Mehr laden",
-        "loading": "Wird geladen"
+        "loading": "Wird geladen",
+        "heldUntil": "Zurückgehalten bis {when} (Ruhezeiten)"
       },
       "failures": {
         "kicker": "Fehlerursachen",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "Inoffiziell (deaktiviert)"
     },
     "compose": {
-      "back": "Zurück zu Broadcasts",
-      "crumb": "Broadcasts / Neu",
-      "title": "Neuen",
-      "titleAccent": "Broadcast erstellen",
-      "draft": "Entwurf / nicht gespeichert",
-      "submit": "Broadcast hinzufügen",
-      "submitting": "Wird hinzugefügt…",
-      "created": "Broadcast hinzugefügt.",
-      "createdMany": "{count} Broadcasts hinzugefügt, einer pro Absender.",
-      "failed": "Der Broadcast konnte nicht hinzugefügt werden.",
-      "fixName": "Geben Sie einen Broadcast-Namen ein.",
-      "fixTemplate": "Wählen Sie eine genehmigte Vorlage aus.",
-      "fixSchedule": "Wählen Sie Datum und Uhrzeit für den Versand.",
-      "loading": "Wird geladen",
-      "loadError": "Die Daten für die Erstellung konnten nicht geladen werden.",
-      "retry": "Erneut versuchen",
-      "setup": "Broadcast-Einrichtung",
-      "templateMessage": "Vorlagennachricht",
-      "name": "Broadcast-Name",
-      "namePlaceholder": "z. B. Versand der Mai-Angebotsvorlage",
-      "nameHint": "Interne Bezeichnung für Broadcast-Berichte.",
-      "template": "Vorlagennachricht auswählen",
-      "pickTemplate": "— Genehmigte Vorlage auswählen —",
-      "noTemplates": "Noch keine genehmigten Vorlagen.",
       "createOne": "Vorlage erstellen",
-      "templateHint": "Broadcasts senden nur genehmigte Vorlagen.",
-      "twilioHint": "Twilio-konforme Versände erfordern pro Vorlage eine Content SID. Markieren Sie eine Vorlage über /templates/{id}/edit als „Twilio ready“. Vorlagen ohne ContentSid werden als einfacher Text gesendet (die Genehmigung der Meta-Vorlage geht verloren).",
-      "device": "Von Gerät senden",
-      "devices": "Von Geräten senden",
-      "multiDevice": "Mehrere Geräte – alle zutreffenden auswählen",
-      "noDevices": "Keine verbundenen Geräte.",
-      "connectOne": "Eines verbinden →",
-      "share": "Anteil",
-      "shareHint": "Wählen Sie Geräte aus und legen Sie Anteilsgewichte fest. Mit 7 / 3 werden z. B. 70 % der Kontakte über das erste Gerät und 30 % über das zweite gesendet. Gleiche Gewichte verteilen gleichmäßig.",
       "audience": "An wen möchten Sie senden?",
       "audienceHint": "Wählen Sie Segmente, Tags, Gruppen oder Kontakte aus. Alle Ausgewählten werden einmalig zusammengeführt.",
       "selected": "{count} ausgewählt",
@@ -276,27 +246,10 @@
       "noContacts": "Noch keine Kontakte.",
       "addSome": "Kontakte hinzufügen →",
       "noMatch": "Keine Kontakte entsprechen der Suche.",
-      "when": "Wann möchten Sie Ihren Broadcast senden?",
-      "whenHint": "Sofort senden oder ein zukünftiges Datum bzw. eine Uhrzeit wählen.",
-      "sendNow": "Jetzt senden",
-      "sendNowHint": "Senden nach der abschließenden Prüfung.",
-      "sendLater": "Für später planen",
-      "sendLaterHint": "Einen bestimmten Tag und eine Uhrzeit wählen.",
-      "sendDate": "Sendedatum",
-      "sendTime": "Sendezeit",
-      "timezone": "Zeitzone",
-      "preview": "Vorlagenvorschau",
-      "previewTitle": "Broadcast-Vorschau",
-      "previewSub": "Vorlagennachricht",
-      "pickToPreview": "Vorlage für die Vorschau auswählen…",
-      "previewSelected": "Ausgewählt",
-      "previewSchedule": "Zeitplan",
-      "now": "Jetzt",
-      "later": "Später",
-      "media": "Vorschau: {kind}",
       "contactsDenied": "Sie haben keinen Zugriff auf die Kontaktliste. Wählen Sie Kontakte über Gruppen oder Tags aus.",
       "unofficialDisabled": "Der Versand über persönliche WhatsApp-Nummern (die inoffizielle API) ist für Ihren Workspace nicht aktiviert. Wählen Sie eine offizielle WhatsApp-Business-API-Nummer.",
-      "previewLabel": "Vorlagenvorschau"
+      "colEmail": "E-Mail",
+      "noEmail": "Keine E-Mail-Adresse"
     },
     "overrides": {
       "title": "Diesen Versand ausfüllen",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Personen anschreiben, die bereits in Ihren Instagram-DMs sind – ohne Vorlagengenehmigung.",
         "cta": "Instagram-Broadcast erstellen"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Sende eine Messenger-Nachricht an Personen, die deiner Seite in den letzten 24 Stunden geschrieben haben.",
+        "cta": "Facebook-Versand erstellen"
+      },
+      "email": {
+        "name": "E-Mail",
+        "hint": "Sende eine Nachricht als E-Mail von einem verbundenen Postfach, mit Abmeldelink.",
+        "cta": "E-Mail-Kampagne erstellen"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Senden Sie eine Nachricht an Personen, die bereits mit Ihrem LINE-Account chatten.",
+        "cta": "LINE-Broadcast erstellen"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Senden Sie eine Nachricht an die Personen, die bereits mit Ihrem Viber-Account chatten.",
+        "cta": "Viber-Rundsendung erstellen"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Senden Sie eine Nachricht als Massenversand an alle Follower, einen Tag oder ausgewählte Nutzer Ihres offiziellen Accounts.",
+        "cta": "WeChat-Rundsendung erstellen"
       }
     }
   }

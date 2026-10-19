@@ -36,6 +36,31 @@ export class SubjectResolver {
     );
   }
 
+  /**
+   * Staff members of the workspace (`users.id`), for the derived copies they leave behind (revenue export files, AI briefs). Only ids
+   * that are users of this workspace reach a predicate; the address is the one the export mail went to.
+   */
+  async fromUsers(tx: Tx, orgId: number, userIds: readonly number[]): Promise<ResolvedSubject> {
+    const found = userIds.length
+      ? await tx.execute(sql`
+          SELECT id, lower(email::text) AS email FROM users WHERE org_id = ${orgId} AND id = ANY(${bigintArray(userIds)})`)
+      : { rows: [] };
+    const rows = found.rows as Array<{ id: number | string; email: string | null }>;
+    return {
+      orgId,
+      contactIds: [],
+      contactUuids: [],
+      userIds: rows.map((r) => Number(r.id)),
+      userEmails: [...new Set(rows.map((r) => r.email).filter((e): e is string => !!e))],
+      leadIds: [],
+      conversationIds: [],
+      conversationUuids: [],
+      phoneDigits: [],
+      emails: [],
+      peerKeys: [],
+    };
+  }
+
   async resolve(tx: Tx, orgId: number, subject: StoredSubject): Promise<ResolvedSubject> {
     const seed = {
       contactIds: new Set<number>(),
@@ -187,6 +212,8 @@ export class SubjectResolver {
       orgId,
       contactIds: [...contactIds],
       contactUuids,
+      userIds: [],
+      userEmails: [],
       leadIds: [...leadIds],
       conversationIds,
       conversationUuids,

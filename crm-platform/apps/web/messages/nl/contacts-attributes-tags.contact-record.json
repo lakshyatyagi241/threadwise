@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Contactgedeelten",
+          "section": {
+            "overview": "Overzicht",
+            "activities": "Activiteit",
+            "conversations": "Gesprekken",
+            "notes": "Notities",
+            "tasks": "Taken",
+            "meetings": "Vergaderingen",
+            "files": "Bestanden",
+            "deals": "Deals",
+            "appointments": "Afspraken",
+            "sales": "Facturen",
+            "company": "Bedrijf",
+            "details": "Details",
+            "stats": "Statistieken",
+            "lead-source": "Bron",
+            "consent": "Toestemming",
+            "history": "Geschiedenis"
+          },
+          "more": "Meer",
+          "moreLabel": "Meer onderdelen"
+        },
+        "actions": {
+          "label": "Wat je met dit contact kunt doen",
+          "call": "Bellen",
+          "callWhatsapp": "Bellen via WhatsApp",
+          "callPhone": "Bellen met je telefoon",
+          "logCall": "Gesprek vastleggen",
+          "callMore": "Andere manieren om te bellen",
+          "message": "Bericht",
+          "messageChat": "De WhatsApp-chat openen",
+          "messageTemplate": "Een WhatsApp-sjabloon sturen",
+          "messageEmail": "Een e-mail sturen",
+          "messageMore": "Andere manieren om te schrijven",
+          "fieldHistory": "Veldgeschiedenis",
+          "more": "Meer"
+        },
+        "stageStrip": {
+          "noStatus": "Geen status"
+        },
+        "keyDetails": {
+          "editAll": "Alles bewerken",
+          "edit": "{field} bewerken",
+          "add": "{field} toevoegen",
+          "conflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
+          "invalid": "Dat lijkt geen geldige waarde voor {field}.",
+          "forbidden": "Je mag dit contact niet wijzigen.",
+          "failed": "Het kon niet worden opgeslagen. Probeer het opnieuw.",
+          "owner": "Eigenaar",
+          "city": "Plaats",
+          "showAll": "Alle details tonen",
+          "showLess": "Minder tonen",
+          "social": "Sociale media",
+          "leadSource": "Waar dit contact vandaan komt",
+          "aboutTitle": "Over dit contact"
+        },
+        "cards": {
+          "company": "Bedrijf",
+          "companyNone": "Nog geen",
+          "timezone": "Tijdzone en locatie",
+          "timezoneNone": "Nog niet bekend",
+          "privacy": "Privacy",
+          "privacyMinor": "Minderjarig",
+          "score": "Leadscore",
+          "scoreNone": "Nog niet beoordeeld",
+          "label": "Gerelateerd aan dit contact",
+          "tasks": "Openstaande taken",
+          "tasksNone": "Er staat niets open.",
+          "deals": "Deals",
+          "dealsNone": "Nog geen deals.",
+          "add": "+ Toevoegen",
+          "viewAll": "Alles bekijken"
+        },
+        "compose": {
+          "label": "Toevoegen aan de activiteit",
+          "tabs": "Wat toevoegen",
+          "tab": {
+            "note": "Notitie",
+            "task": "Taak",
+            "call": "Gesprek",
+            "meeting": "Vergadering"
+          }
+        },
+        "logCall": {
+          "label": "Gesprek vastleggen",
+          "direction": "Wie belde",
+          "directionOption": {
+            "outbound": "Ik belde hen",
+            "inbound": "Zij belden mij"
+          },
+          "minutesPlaceholder": "Optioneel",
+          "notesPlaceholder": "Wat is er gezegd? (optioneel)",
+          "duePreset": {
+            "1": "Morgen",
+            "3": "Over 3 dagen",
+            "7": "Over een week"
+          },
+          "saved": "Gesprek vastgelegd.",
+          "forbidden": "Je mag geen gesprekken vastleggen.",
+          "unavailable": "Gesprekken vastleggen is hier nog niet beschikbaar.",
+          "failed": "Het gesprek kon niet worden vastgelegd. Er is niets verloren gegaan: probeer het opnieuw."
+        },
+        "callNudge": {
+          "question": "Hoe ging het gesprek met {name}?",
+          "log": "Vastleggen",
+          "dismiss": "Niet nu"
+        },
+        "profile": {
+          "label": "Contactprofiel"
+        },
+        "stagePicker": {
+          "menu": "Kies een fase",
+          "search": "Zoek een fase",
+          "none": "Geen fase gevonden.",
+          "moveTo": "Verplaatsen naar {stage}",
+          "statusIn": "Status in {stage}",
+          "default": "standaard",
+          "progress": "{current} van {total}",
+          "undo": "Ongedaan maken",
+          "undone": "Teruggezet naar {stage}.",
+          "statusSet": "Status ingesteld op {status}.",
+          "prefix": "Fase"
+        },
+        "summary": {
+          "label": "Samenvatting",
+          "tasks": "Openstaande taken",
+          "overdue": "{count} te laat",
+          "nextDue": "Volgende deadline {when}",
+          "noDue": "Geen einddatums",
+          "meeting": "Volgende vergadering",
+          "noMeeting": "Niets gepland",
+          "lastActivity": "Laatste activiteit",
+          "noActivity": "Nog geen activiteit",
+          "deals": "Openstaande deals",
+          "wonDeals": "{count, plural, =0 {geen gewonnen} one {1 gewonnen} other {# gewonnen}}"
+        },
+        "scoreChip": {
+          "title": "Leadscore {score} · {band}",
+          "aria": "Leadscore {score}, {band}. Toon de details van de score."
+        }
+      },
+      "timeline": {
+        "title": "Activiteit",
+        "viewAll": "Alle activiteit bekijken",
+        "filterLabel": "Tonen",
+        "filters": {
+          "all": "Alles",
+          "messages": "Berichten",
+          "calls": "Gesprekken",
+          "notes": "Notities",
+          "tasks": "Taken",
+          "meetings": "Vergaderingen",
+          "changes": "Wijzigingen"
+        },
+        "searchLabel": "Zoek in de activiteit van dit contact",
+        "searchPlaceholder": "Activiteit zoeken",
+        "clearSearch": "De zoekopdracht wissen",
+        "searchHint": "Er wordt gezocht in wat tot nu toe is geladen. Laad meer om verder terug te kijken.",
+        "groups": {
+          "upNext": "Straks",
+          "today": "Vandaag",
+          "yesterday": "Gisteren",
+          "thisWeek": "Deze week",
+          "earlier": "Eerder"
+        },
+        "loading": "Activiteit laden...",
+        "loadMore": "Meer laden",
+        "noMatch": "Niets gevonden.",
+        "emptyShort": "Hier is nog niets.",
+        "showAll": "Alle activiteit tonen",
+        "noneYet": "Nog niets nieuwers. Laad meer om verder terug te kijken.",
+        "partial": "Een deel van de activiteit kon niet worden geladen.",
+        "retry": "Opnieuw proberen",
+        "empty": {
+          "title": "Nog geen activiteit",
+          "message": "Alles wat je met {name} doet, verschijnt hier: notities, gesprekken, berichten, taken en vergaderingen.",
+          "messageNoName": "Alles wat je met dit contact doet, verschijnt hier: notities, gesprekken, berichten, taken en vergaderingen.",
+          "note": "Een notitie toevoegen",
+          "call": "Een gesprek vastleggen",
+          "task": "Een taak toevoegen",
+          "meeting": "Een vergadering plannen"
+        },
+        "entry": {
+          "note": "Notitie: {text}",
+          "edited": "Bewerkt",
+          "task": {
+            "done": "Taak afgerond: {title}",
+            "overdue": "Te laat, was verschuldigd op {when}",
+            "due": "Uiterlijk {when}",
+            "noDue": "Geen einddatum"
+          },
+          "meeting": {
+            "upcoming": "Vergadering: {title}",
+            "past": "Gesproken: {title}",
+            "notHeld": "Niet doorgegaan: {title}",
+            "noShow": "Niet verschenen: {title}"
+          },
+          "call": {
+            "inbound": "Inkomend gesprek",
+            "outbound": "Uitgaand gesprek",
+            "call": "Gesprek",
+            "seconds": "{seconds} sec",
+            "minutes": "{minutes} min",
+            "outcome": {
+              "connected": "Verbonden",
+              "noAnswer": "Geen antwoord",
+              "busy": "In gesprek",
+              "voicemail": "Voicemail achtergelaten",
+              "wrongNumber": "Verkeerd nummer",
+              "declined": "Geweigerd",
+              "failed": "Mislukt",
+              "inProgress": "Bezig"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Vastgelegd",
+              "telephony": "Telefoonsysteem",
+              "mobile_app": "Mobiele app",
+              "web_click_to_call": "Telefoon"
+            }
+          },
+          "message": {
+            "summary": "Gesprek op {channel}",
+            "unread": "{count} ongelezen"
+          },
+          "email": {
+            "sent": "E-mail verstuurd: {title}",
+            "received": "E-mail ontvangen: {title}"
+          },
+          "change": {
+            "stage": "Fase gewijzigd van {from} naar {to}",
+            "field": "{field} gewijzigd van {from} naar {to}",
+            "stageAndMore": "Fase gewijzigd van {from} naar {to}, en {count, plural, one {1 detail meer} other {# details meer}}",
+            "several": "{count, plural, one {1 detail} other {# details}} bijgewerkt"
+          },
+          "consent": {
+            "granted": "Toestemming voor {channel} gegeven",
+            "withdrawn": "Toestemming voor {channel} ingetrokken",
+            "service": "Serviceberichten",
+            "marketing": "Marketingberichten"
+          },
+          "by": "door {name}",
+          "system": "Systeem"
+        }
+      }
+    }
+  }
+}

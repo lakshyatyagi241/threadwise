@@ -1,9 +1,11 @@
 'use client';
 
+import { GoogleConnectionNotice } from './google-connection';
 import { FLB_FIELD_MATCH_OPERATORS } from '@crm/contracts';
-import { Field, TextInput, type Opt } from '../kit';
+import { Field, type Opt } from '../kit';
 import type { FormComponent } from '../types';
-import { extractGoogleId, withSavedOption } from './helpers';
+import { GoogleFilePicker } from './google';
+import { withSavedOption } from './helpers';
 import {
   AddLink,
   ExtLink,
@@ -147,13 +149,9 @@ export const WaSessionForm: FormComponent = (p) => (
 function SheetLookup({ p }: { p: Parameters<FormComponent>[0] }) {
   return (
     <>
-      <Field label="Spreadsheet" hint="The sheet's link or id. Needs a connected Google account.">
-        <TextInput
-          value={p.data.sheetId}
-          mono
-          placeholder="https://docs.google.com/spreadsheets/d/<ID>/edit"
-          onChange={(v) => p.set('sheetId', extractGoogleId(v))}
-        />
+      <GoogleConnectionNotice need="sheets" />
+      <Field label="Spreadsheet" hint="Pick a sheet from your connected Google account.">
+        <GoogleFilePicker p={p} kind="sheets" dataKey="sheetId" />
       </Field>
       <Field label="Tab (optional)" hint="Blank = the first tab.">
         {Txt(p, 'tabName', 'Sheet1')}

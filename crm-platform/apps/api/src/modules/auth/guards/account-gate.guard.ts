@@ -51,6 +51,17 @@ export class AccountGateGuard implements CanActivate {
       [context.getHandler(), context.getClass()],
     );
 
+    // The person's own gates (below) and the workspace's suspension are independent reads. Start the first now so both Redis
+    // reads go out together (ioredis sends them back to back on one connection: one round trip, not two). The workspace verdict
+    // is still awaited and thrown first, exactly as before; if it throws, this read is simply abandoned (its rejection, if any,
+    // is swallowed here so it cannot surface as an unhandled rejection).
+    const readsUserGates =
+      ctx.actorType === 'user' && Boolean(ctx.userId) && !isOperatorImpersonation(ctx);
+    const statePromise = readsUserGates
+      ? this.gates.stateFor(ctx.orgId, ctx.userId as number, { includeOrgSuspension: false })
+      : undefined;
+    statePromise?.catch(() => undefined);
+
     // A suspended workspace stops all of its members, not only staff users (ADR-0019). One cached lookup per organization.
     if (
       ORG_GATED_ACTORS.has(ctx.actorType) &&
@@ -67,12 +78,13 @@ export class AccountGateGuard implements CanActivate {
       }
     }
 
-    if (ctx.actorType !== 'user' || !ctx.userId) return true;
-    // The owner's own account gates (password change due, 2FA enrolment, unverified email, a suspended account) are the owner's to
-    // resolve: an operator acting as the owner must reach the workspace to help, and cannot resolve them (the routes are forbidden).
-    if (isOperatorImpersonation(ctx)) return true;
+    // Not a staff user, or an operator acting as the owner: the owner's own account gates (password change due, 2FA enrolment,
+    // unverified email, a suspended account) are the owner's to resolve, and an operator must reach the workspace to help and
+    // cannot resolve them (the routes are forbidden). `readsUserGates` is false for both.
+    if (!statePromise) return true;
 
-    const state = await this.gates.stateFor(ctx.orgId, ctx.userId);
+    // This guard only reads the person's own gates; the workspace was checked above, so it is not looked up a second time.
+    const state = await statePromise;
 
     if (state.suspended && !opts?.suspended) {
       throw new AppError(

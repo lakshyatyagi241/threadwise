@@ -41,7 +41,10 @@
       "notStarted": "Ini hanya dapat dilakukan setelah pemesanan dimulai.",
       "alreadyStarted": "Pemesanan ini sudah dimulai, sehingga tidak dapat diubah lagi.",
       "bookingOff": "Pemesanan tidak tersedia untuk layanan ini saat ini.",
-      "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang."
+      "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang.",
+      "notDrifted": "Pemesanan ini sudah sesuai dengan acaranya di Google. Data telah dimuat ulang.",
+      "calendarNotConnected": "Google Calendar belum terhubung. Hubungkan kembali di halaman akun Google, lalu coba lagi.",
+      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi."
     },
     "picker": {
       "timeZone": "Zona waktu",
@@ -156,7 +159,8 @@
       "yesterday": "Kemarin",
       "rowLabel": "Buka pemesanan: {title}",
       "noName": "Tanpa nama",
-      "needsReview": "Perlu ditinjau"
+      "needsReview": "Perlu ditinjau",
+      "outOfSync": "Kalender tidak sinkron"
     },
     "row": {
       "moreFor": "Aksi lainnya untuk {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "Tolak permintaan ini?",
       "declineMessage": "Pelanggan diberi tahu bahwa permintaan ditolak dan waktunya kembali kosong.",
       "declineConfirm": "Tolak permintaan",
-      "remindersNote": "Pengingat mengikuti jenis pemesanan. Pengiriman tidak dilacak per pengingat."
+      "remindersNote": "Pengingat mengikuti jenis booking. Atur di pengaturan Janji temu atau di jenis booking."
     },
     "source": {
       "chat": "Flow chat",
@@ -269,7 +273,13 @@
       "rescheduled": "Pemesanan dipindahkan ke waktu baru.",
       "linkCopied": "Tautan kelola disalin.",
       "copyFailed": "Tautan tidak dapat disalin.",
-      "declined": "Permintaan ditolak."
+      "declined": "Permintaan ditolak.",
+      "calendarPushed": "Dikirim ke Google: acara kini sesuai dengan pemesanan ini.",
+      "calendarAccepted": {
+        "cancelled": "Perubahan dari Google diterima: pemesanan dibatalkan.",
+        "rescheduled": "Perubahan dari Google diterima: pemesanan dipindahkan ke waktu yang baru.",
+        "acknowledged": "Perubahan dari Google diterima. Pemesanan tetap seperti semula."
+      }
     },
     "typesList": {
       "breadcrumb": "Breadcrumb",
@@ -397,9 +407,6 @@
         "depositTooHigh": "Deposit tidak boleh lebih dari total (biaya ditambah pajak).",
         "cancelFeeInvalid": "Masukkan jumlah seperti 25.00.",
         "cancelWindowInvalid": "Masukkan bilangan bulat menit dari 0 hingga {cancelWindowMax}.",
-        "reminderInvalid": "Masukkan bilangan bulat menit sebelum mulai, dari 1 hingga {reminderMax}.",
-        "remindersDuplicate": "Setiap pengingat memerlukan waktu yang berbeda.",
-        "remindersTooMany": "Satu jenis pemesanan dapat memiliki maksimal {reminders} pengingat.",
         "questionLabelRequired": "Beri label pada pertanyaan (hingga {questionLabelMax} karakter).",
         "questionsTooMany": "Satu jenis pemesanan dapat memiliki maksimal {questions} pertanyaan.",
         "questionOptionsRequired": "Tambahkan minimal satu pilihan, satu per baris.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Perbaiki tanggal yang ditandai dalam daftar pengecualian tanggal.",
         "descriptionTooLong": "Deskripsi maksimal {descriptionMax} karakter.",
         "locationTooLong": "Lokasi maksimal {locationMax} karakter.",
-        "server": "Server tidak menerima nilai ini. Periksa lalu coba lagi."
+        "server": "Server tidak menerima nilai ini. Periksa lalu coba lagi.",
+        "reminderInvalid": "Masukkan bilangan bulat untuk waktunya, hingga 30 hari.",
+        "remindersDuplicate": "Setiap pengingat atau tindak lanjut harus punya waktu yang berbeda.",
+        "remindersTooMany": "Satu jenis booking dapat memiliki paling banyak {reminders} pengingat dan tindak lanjut.",
+        "reminderChannelsNone": "Pilih setidaknya satu saluran.",
+        "reminderBodyTooLong": "Pesan, subjek, atau label terlalu panjang."
       },
       "service": {
         "title": "Detail layanan",
@@ -556,11 +568,12 @@
         "hint": "Pemesanan berfungsi tanpa ini. Hubungkan Google Calendar di Janji Temu, Pengaturan untuk menyinkronkan waktu sibuk/kosong dan menambahkan tautan Meet.",
         "unavailable": "Google Calendar belum disiapkan untuk platform ini. Pengaturan ini disimpan bersama jenis pemesanan untuk saat sudah siap.",
         "calendarId": "Kalender",
-        "calendarPlaceholder": "utama",
         "spreadsheetId": "Tambah ke sheet (opsional)",
-        "spreadsheetPlaceholder": "ID spreadsheet",
         "createMeet": "Buat tautan Google Meet untuk setiap pemesanan",
-        "calendarDefault": "Kalender workspace"
+        "calendarDefault": "Kalender workspace",
+        "connectFirst": "Hubungkan <link>akun Google</link> Anda untuk memilih dari daftarnya.",
+        "spreadsheetNone": "Tanpa sheet",
+        "spreadsheetNoListing": "Daftar sheet Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan. Tambahkan di halaman akun Google."
       },
       "messages": {
         "title": "Pesan siklus pemesanan",
@@ -586,25 +599,6 @@
           "reschedule": "Halo {name}, {type} Anda dipindahkan ke {slot}. Detail: {manage_link}"
         },
         "templatesNote": "Template WhatsApp yang disetujui belum dapat dipilih. Pesan dikirim sebagai teks biasa di atas."
-      },
-      "reminders": {
-        "title": "Pengingat",
-        "hint": "Waktu harus berbeda (1440 = 24 jam sebelumnya, 180 = 3 jam sebelumnya). Hingga {max}.",
-        "add": "Tambah pengingat",
-        "quickAdd": "Tambah cepat",
-        "quick": {
-          "h24": "24 j",
-          "h3": "3 j",
-          "h1": "1 j",
-          "m15": "15 mnt"
-        },
-        "empty": "Tidak ada pengingat. Pelanggan hanya menerima konfirmasi.",
-        "offsetOf": "Pengingat {n}, menit sebelum mulai",
-        "minBefore": "mnt sebelumnya",
-        "labelPlaceholder": "24j",
-        "labelOf": "Pengingat {n}, label",
-        "remove": "Hapus pengingat {n}",
-        "count": "{count} dari {max} pengingat"
       },
       "questions": {
         "title": "Kuesioner",
@@ -962,7 +956,7 @@
         "calendarSaved": "Kalender disimpan.",
         "confirmOff": {
           "title": "Putuskan Google Calendar?",
-          "message": "Pemesanan baru berhenti masuk ke kalender Anda dan waktu sibuknya tidak dibaca lagi. Acara yang sudah ada di kalender Anda tetap di sana, dan Google diminta mencabut akses ini.",
+          "message": "Pemesanan baru berhenti masuk ke kalender Anda dan waktu sibuknya tidak dibaca lagi. Langkah Google di alur Anda juga berhenti, karena menggunakan koneksi yang sama. Acara yang sudah ada di kalender Anda tetap di sana, dan Google diminta mencabut akses ini.",
           "confirm": "Putuskan",
           "cancel": "Pertahankan"
         },
@@ -972,7 +966,8 @@
           "failed": "Proses menghubungkan tidak selesai. Coba lagi; jika terus gagal, minta administrator platform Anda memeriksa pengaturan Google.",
           "expired": "Percobaan itu terlalu lama. Tekan Hubungkan untuk memulai lagi.",
           "not_configured": "Google Calendar belum disiapkan untuk platform ini. Minta administrator platform Anda menambahkan klien OAuth Google.",
-          "missing_scope": "Google tidak memberikan semua izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tetap tercentang."
+          "missing_scope": "Google tidak memberikan semua izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tetap tercentang.",
+          "cancelled": "Anda membatalkan. Tidak ada yang terhubung."
         },
         "whatTitle": "Fungsinya",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Perbaiki waktu yang disorot pada jam kerja."
       },
       "notAvailable": "Pengaturan pemesanan seluruh workspace tidak tersedia di server ini. Setiap jenis pemesanan membawa jam, zona waktu, pengingat, dan pesannya sendiri.",
-      "openTypes": "Buka jenis pemesanan"
+      "openTypes": "Buka jenis pemesanan",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Hubungkan kalender Microsoft agar pemesanan yang dikonfirmasi ditulis ke dalamnya dan waktu sibuknya menutup slot.",
+        "provider": "Kalender Outlook",
+        "providerSub": "Microsoft 365 dan Outlook.com",
+        "status": {
+          "unavailable": "Tidak tersedia",
+          "disconnected": "Belum terhubung",
+          "connected": "Terhubung",
+          "needs_reconnect": "Perlu dihubungkan ulang"
+        },
+        "loading": "Memeriksa koneksi",
+        "unavailableTitle": "Outlook belum disiapkan untuk platform ini",
+        "unavailableBody": "Administrator platform Anda harus mendaftarkan aplikasi Microsoft (Admin, Pengaturan, Microsoft Calendar) sebelum ruang kerja dapat terhubung. Pemesanan Anda tidak terpengaruh.",
+        "disconnectedBody": "Belum terhubung. Saat menghubungkan, Microsoft akan terbuka dan Anda memilih akun serta menyetujui berbagi akses kalender.",
+        "disconnectedReadOnly": "Belum terhubung. Minta admin ruang kerja untuk menghubungkannya.",
+        "reconnectTitle": "Microsoft berhenti menerima koneksi ini",
+        "reconnectBody": "Akses telah dicabut atau kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "reconnectBodyAccount": "Akses untuk {account} telah dicabut atau kedaluwarsa, sehingga pemesanan tidak ditulis ke kalender Anda dan waktu sibuknya tidak dibaca. Hubungkan lagi untuk melanjutkan.",
+        "account": "Akun Microsoft",
+        "calendar": "Kalender",
+        "primaryCalendar": "Kalender utama Anda",
+        "connectedAgo": "Terhubung {when}",
+        "writesHere": "Pemesanan yang dikonfirmasi ditulis ke kalender ini.",
+        "readsOnly": "Hanya waktu sibuknya yang dibaca. Pemesanan ditulis ke kalender Anda yang lain.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft membatasi permintaan. Pemesanan akan dicoba lagi secara otomatis.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft menolak akses ke kalender ini. Pastikan akun tersebut memiliki kotak surat dan boleh membagikan kalendernya.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft tidak merespons. Akan dicoba lagi secara otomatis."
+        },
+        "errors": {
+          "notConfigured": "Outlook belum disiapkan untuk platform ini. Minta administrator platform Anda untuk mendaftarkan aplikasi Microsoft.",
+          "notConnected": "Tidak ada kalender Outlook yang terhubung. Muat ulang halaman lalu hubungkan lagi.",
+          "providerFailed": "Microsoft tidak merespons. Coba lagi sebentar lagi.",
+          "notYours": "Koneksi ini dimulai oleh orang lain, sehingga tidak ada yang dihubungkan. Minta mereka untuk menghubungkan, atau tekan Hubungkan sendiri.",
+          "invalidTicket": "Koneksi ini tidak dapat dikonfirmasi lagi. Tekan Hubungkan untuk memulai ulang."
+        },
+        "loadingCalendars": "Memuat kalender Anda",
+        "chooseLabel": "Tulis pemesanan ke",
+        "chooseHint": "Hanya kalender yang dapat diedit akun ini yang ditampilkan. Acara yang sudah ditulis tetap di tempatnya.",
+        "choosePlaceholder": "Pilih kalender",
+        "chooseOptionPrimary": "{name} (kalender utama)",
+        "chooseSave": "Gunakan kalender ini",
+        "chooseCancel": "Batal",
+        "saving": "Menyimpan",
+        "connect": "Hubungkan Outlook",
+        "reconnect": "Hubungkan ulang Outlook",
+        "redirecting": "Membuka Microsoft",
+        "choose": "Pilih kalender",
+        "disconnect": "Putuskan",
+        "disconnected": "Outlook diputuskan.",
+        "calendarSaved": "Kalender disimpan.",
+        "confirm": {
+          "title": "Hubungkan akun Microsoft ini?",
+          "body": "Microsoft mengarahkan Anda kembali untuk menyelesaikan penghubungan akun ke {workspace}. Lanjutkan hanya jika Anda sendiri yang memulainya beberapa saat lalu.",
+          "confirm": "Hubungkan",
+          "working": "Menghubungkan",
+          "cancel": "Batal"
+        },
+        "confirmOff": {
+          "title": "Putuskan Outlook?",
+          "message": "Pemesanan baru tidak lagi masuk ke kalender Outlook Anda dan waktu sibuknya tidak lagi dibaca. Acara yang sudah ada di kalender Anda tetap di sana. Untuk mencabut izin dari sisi Microsoft, hapus aplikasi tersebut di akun Microsoft Anda.",
+          "confirm": "Putuskan",
+          "cancel": "Pertahankan"
+        },
+        "outcome": {
+          "connected": "Outlook terhubung. Pemesanan yang dikonfirmasi kini masuk ke kalender Anda.",
+          "denied": "Akses tidak diberikan di Microsoft, sehingga tidak ada yang dihubungkan.",
+          "failed": "Proses penghubungan tidak selesai. Coba lagi; jika terus gagal, minta administrator platform Anda memeriksa aplikasi Microsoft.",
+          "expired": "Percobaan itu memakan waktu terlalu lama. Tekan Hubungkan untuk memulai ulang.",
+          "not_configured": "Outlook belum disiapkan untuk platform ini. Minta administrator platform Anda untuk mendaftarkan aplikasi Microsoft.",
+          "missing_scope": "Microsoft tidak memberikan izin kalender yang diperlukan. Hubungkan lagi dan biarkan semua kotak tercentang.",
+          "cancelled": "Anda membatalkan. Tidak ada yang dihubungkan."
+        },
+        "whatTitle": "Fungsi fitur ini",
+        "what": {
+          "freeBusy": "Membaca waktu sibuk dari kalender Anda agar waktu yang sudah dipesan atau diblokir tidak ditawarkan.",
+          "writeBack": "Menulis pemesanan yang dikonfirmasi ke kalender Anda sebagai acara dan mengundang pelanggan.",
+          "teams": "Menambahkan tautan rapat Teams ke layanan online (akun kerja dan sekolah)."
+        },
+        "hint": "Pemesanan tetap berjalan tanpa ini. Jika Google juga terhubung, waktu sibuk dibaca dari keduanya dan setiap pemesanan ditulis ke salah satunya."
+      },
+      "writeTarget": {
+        "title": "Tujuan penulisan pemesanan",
+        "description": "Waktu sibuk dibaca dari setiap kalender yang terhubung. Setiap pemesanan ditulis ke salah satunya.",
+        "label": "Tulis pemesanan ke",
+        "hint": "Otomatis memakai Google Calendar jika berfungsi, jika tidak memakai Outlook. Mengubahnya akan memindahkan acara pemesanan mendatang ke kalender yang Anda pilih.",
+        "auto": "Otomatis",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "belum terhubung",
+        "saved": "Tersimpan.",
+        "backfill": {
+          "body": "{count, plural, other {# pemesanan terkonfirmasi dalam 90 hari ke depan}} belum ada di kalender tujuannya. Pemesanan tersebut ditulis otomatis setelah Anda menghubungkan atau mengganti kalender.",
+          "action": "Tulis sekarang",
+          "working": "Mengantrekan",
+          "queued": "Menulisnya ke kalender Anda di latar belakang.",
+          "notConnected": "Tidak ada kalender yang terhubung, jadi tidak ada tempat untuk menulisnya."
+        }
+      },
+      "feeds": {
+        "title": "Kalender lain (iCal)",
+        "description": "Berlangganan kalender melalui alamat iCal-nya agar waktu sibuknya menutup slot. Hanya status sibuk yang dipakai: tidak ada hal lain darinya yang ditampilkan atau disimpan.",
+        "loading": "Memuat kalender Anda",
+        "empty": "Belum ada kalender yang dilanggan.",
+        "status": {
+          "pending": "Belum dibaca",
+          "ok": "Berfungsi",
+          "error": "Bermasalah"
+        },
+        "paused": "Dijeda",
+        "neverRead": "Belum dibaca.",
+        "lastRead": "Dibaca {when}.",
+        "busyCount": "{count, plural, other {# blok sibuk}} dalam 180 hari ke depan",
+        "allDayLabel": "Acara seharian memblokir hari itu",
+        "pause": "Jeda",
+        "resume": "Lanjutkan",
+        "refresh": "Baca sekarang",
+        "reading": "Membaca",
+        "remove": "Berhenti berlangganan",
+        "removed": "Langganan kalender dihentikan.",
+        "added": "Kalender dilanggan.",
+        "addTitle": "Berlangganan kalender",
+        "nameLabel": "Nama",
+        "namePlaceholder": "Jadwal tim",
+        "urlLabel": "Alamat kalender",
+        "urlHint": "Alamat yang diawali https:// atau webcal:// dan diakhiri .ics. Alamat diperiksa sekarang, lalu disimpan terenkripsi dan tidak pernah ditampilkan lagi.",
+        "add": "Berlangganan",
+        "adding": "Membaca kalender",
+        "hint": "Jangan berlangganan kalender tempat pemesanan Anda ditulis: layanan multi-kursi akan menganggap acaranya sendiri sebagai waktu sibuk. Feed dibaca sekitar setiap 15 menit, jadi perubahan di sana bisa selama itu baru tampil.",
+        "confirmRemove": {
+          "title": "Berhenti berlangganan kalender ini?",
+          "message": "Waktu yang diblokir oleh {name} langsung kosong kembali. Kalender itu sendiri tidak diubah.",
+          "confirm": "Berhenti berlangganan",
+          "cancel": "Pertahankan"
+        },
+        "errors": {
+          "invalid": "Masukkan alamat yang diawali https://, http://, atau webcal://, tanpa nama pengguna atau kata sandi di dalamnya.",
+          "duplicate": "Ruang kerja ini sudah berlangganan kalender tersebut.",
+          "limit": "Satu ruang kerja dapat berlangganan 10 kalender. Berhenti berlangganan salah satunya terlebih dahulu."
+        },
+        "reason": {
+          "unreachable": "Alamat tidak dapat dijangkau. Pastikan alamatnya benar dan bersifat publik.",
+          "timeout": "Kalender terlalu lama merespons.",
+          "not_found": "Tidak ada apa pun di alamat itu. Mungkin sudah tidak dipublikasikan.",
+          "forbidden": "Kalender menolak akses. Pastikan kalender dipublikasikan untuk siapa saja yang memiliki tautannya.",
+          "server_error": "Server kalender mengalami masalah. Akan dicoba lagi secara otomatis.",
+          "redirect_loop": "Alamat itu mengarahkan kami berputar-putar.",
+          "not_a_calendar": "Alamat itu bukan kalender iCal. Seharusnya diakhiri .ics.",
+          "too_large": "Kalender itu terlalu besar untuk dibaca.",
+          "blocked_address": "Alamat itu mengarah ke jaringan privat, yang tidak diizinkan.",
+          "unknown": "Alamat itu tidak dapat dibaca sebagai kalender."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, other {# acara menggunakan zona waktu yang tidak kami kenali dan dibaca dalam zona waktu ruang kerja Anda.}}",
+          "unsupportedRule": "{count, plural, other {# acara berulang memakai}} aturan yang tidak kami dukung: hanya kemunculan pertama yang memblokir waktu.",
+          "truncated": "Kalender ini memiliki lebih banyak blok sibuk daripada yang kami simpan, sehingga sebagian tidak ada."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Pemesanan saya di aplikasi kalender saya",
+        "description": "Langganankan Apple Calendar, Outlook, atau Google Calendar ke pemesanan Anda.",
+        "loading": "Memuat tautan Anda",
+        "none": "Anda belum memiliki tautan.",
+        "make": "Buat tautan saya",
+        "making": "Membuat",
+        "made": "Tautan Anda sudah siap.",
+        "linkLabel": "Tautan Anda",
+        "copy": "Salin tautan",
+        "copied": "Tautan disalin.",
+        "copyFailed": "Tidak dapat menyalin otomatis. Pilih tautan lalu salin.",
+        "open": "Buka di aplikasi kalender saya",
+        "rotate": "Buat tautan baru",
+        "stop": "Berhenti berbagi",
+        "stopped": "Tautan Anda tidak berfungsi lagi.",
+        "lastUsed": "Aplikasi kalender terakhir membacanya {when}.",
+        "neverUsed": "Belum ada aplikasi kalender yang membacanya.",
+        "warning": "Siapa pun yang memiliki tautan ini dapat melihat judul, waktu, dan lokasi pemesanan Anda. Jaga kerahasiaannya. Tautan ini tidak pernah menampilkan nomor telepon, alamat email, atau catatan.",
+        "hint": "Anda melihat apa yang dapat Anda lihat di daftar pemesanan. Aplikasi kalender Anda menyegarkan feed sesuai jadwalnya sendiri, sering kali setiap beberapa jam.",
+        "confirmRotate": {
+          "title": "Buat tautan baru?",
+          "message": "Tautan lama langsung berhenti berfungsi. Aplikasi kalender yang memakainya memerlukan tautan yang baru.",
+          "confirm": "Buat tautan baru"
+        },
+        "confirmStop": {
+          "title": "Berhenti membagikan pemesanan Anda?",
+          "message": "Tautan Anda langsung berhenti berfungsi. Aplikasi kalender yang memakainya tidak akan menampilkan data baru.",
+          "confirm": "Berhenti berbagi"
+        },
+        "confirmCancel": "Pertahankan"
+      }
     },
     "linked": {
       "title": "Janji Temu",
@@ -1060,6 +1248,181 @@
       "loadMore": "Muat lebih banyak",
       "loadMorePast": "Muat lebih banyak yang lampau",
       "noType": "Janji temu"
+    },
+    "sync": {
+      "title": "Kalender tidak sinkron",
+      "reason": {
+        "event_deleted": "Acara dihapus atau dibatalkan di Google Calendar.",
+        "event_missing": "Acara tidak lagi ditemukan di Google Calendar.",
+        "time_changed": "Acara dipindahkan ke waktu lain di Google Calendar.",
+        "attendees_changed": "Tamu acara diubah di Google Calendar."
+      },
+      "googleShows": "Google menampilkan: {time}",
+      "notChanged": "Pemesanan ini belum diubah. Pilih mana yang benar.",
+      "found": "Ditemukan {when}",
+      "push": "Kirim waktu kami kembali ke Google",
+      "accept": "Terima perubahan dari Google",
+      "keep": "Nanti saja",
+      "acceptTitle": {
+        "cancel": "Batalkan pemesanan ini?",
+        "reschedule": "Pindahkan pemesanan ini ke waktu di Google?",
+        "acknowledge": "Terima tamu yang ditampilkan Google?"
+      },
+      "acceptMessage": {
+        "cancel": "Acara sudah tidak ada di Google, sehingga pemesanan ini dibatalkan dan waktunya kembali tersedia. Pelanggan akan diberi tahu, seperti pada pembatalan lainnya.",
+        "reschedule": "Pemesanan ini dipindahkan ke {time}. Pelanggan akan diberi tahu waktu barunya, seperti pada penjadwalan ulang lainnya.",
+        "acknowledge": "Pemesanan itu sendiri tidak berubah. Daftar tamu dari Google akan disimpan, dan pemberitahuan ini akan hilang."
+      },
+      "acceptConfirm": {
+        "cancel": "Batalkan pemesanan",
+        "reschedule": "Pindahkan pemesanan",
+        "acknowledge": "Terima"
+      }
+    },
+    "reminders": {
+      "title": "Pengingat dan tindak lanjut",
+      "hint": "Kirim pesan ke kontak sebelum janji temu dimulai atau setelah selesai. Semuanya nonaktif sampai Anda mengaktifkannya. Maksimal {max} per jenis booking.",
+      "quickAdd": "Tambah cepat",
+      "quick": {
+        "h24": "24 jam sebelumnya",
+        "h3": "3 jam sebelumnya",
+        "h1": "1 jam sebelumnya",
+        "m15": "15 menit sebelumnya",
+        "after2h": "2 jam setelahnya",
+        "afterDay": "1 hari setelahnya"
+      },
+      "add": "Tambah pengingat",
+      "empty": "Tidak ada pengingat atau tindak lanjut. Kontak hanya menerima konfirmasi.",
+      "enabledOf": "Kirim pengingat {n}",
+      "on": "Aktif",
+      "off": "Nonaktif",
+      "offsetOf": "Pengingat {n}, jumlah waktu",
+      "unitOf": "Pengingat {n}, satuan waktu",
+      "kindOf": "Pengingat {n}, sebelum atau sesudah",
+      "units": {
+        "minutes": "menit",
+        "hours": "jam",
+        "days": "hari"
+      },
+      "kind": {
+        "before": "sebelum janji temu dimulai",
+        "after": "setelah janji temu selesai"
+      },
+      "editMessage": "Pesan dan saluran",
+      "hideMessage": "Sembunyikan",
+      "remove": "Hapus pengingat {n}",
+      "withTemplate": "Template WhatsApp",
+      "channelsTitle": "Kirim lewat",
+      "channelsHint": "Saluran pertama yang bisa mengirim akan dipakai, saluran berikutnya sebagai cadangan. Tidak ada yang menerima pengingat yang sama dua kali.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Coba {channel} lebih awal",
+      "moveDown": "Coba {channel} lebih akhir",
+      "removeChannel": "Jangan gunakan {channel}",
+      "messageTitle": "Pesan",
+      "placeholderMeaning": {
+        "name": "Nama kontak",
+        "type": "Nama jenis booking",
+        "slot": "Tanggal dan waktu sekaligus",
+        "date": "Tanggal",
+        "time": "Waktu",
+        "location": "Lokasi, atau tautan untuk bergabung jika online",
+        "join_link": "Tautan untuk bergabung jika online",
+        "manage_link": "Tautan untuk mengubah jadwal atau membatalkan janji temu"
+      },
+      "bodyHintBefore": "Kosongkan untuk memakai pesan pengingat dari jenis booking, atau teks standar.",
+      "bodyHintAfter": "Kosongkan untuk memakai teks tindak lanjut standar.",
+      "subjectTitle": "Subjek email",
+      "subjectPlaceholder": "Kosongkan untuk subjek standar",
+      "templateTitle": "Template WhatsApp",
+      "templateNone": "Tidak ada: teks bebas, hanya dalam jendela 24 jam",
+      "templateUnknown": "Template yang tidak tersedia lagi",
+      "templateHint": "Lewat 24 jam sejak kontak terakhir menulis, WhatsApp hanya mengirim template yang disetujui. Variabelnya diisi dengan urutan ini: 1 nama, 2 layanan, 3 tanggal, 4 waktu, 5 lokasi, 6 tautan bergabung, 7 tautan kelola.",
+      "labelTitle": "Label (opsional)",
+      "labelPlaceholder": "mis. Sehari sebelumnya",
+      "previewTitle": "Pratinjau",
+      "previewNote": "Contoh dengan nilai sampel. Pesan sebenarnya memakai detail janji temu itu sendiri.",
+      "count": "{count} dari {max} pengingat dan tindak lanjut",
+      "note": "Pengingat tidak pernah dikirim setelah janji temu dimulai. Jika janji temu dibatalkan atau dipindah, yang sedang menunggu dihentikan dan dijadwalkan ulang untuk waktu baru. Jam tenang menahan pesan sampai selesai, dan kontak yang berhenti berlangganan atau ada di daftar jangan hubungi akan dilewati.",
+      "sample": {
+        "name": "Alex",
+        "type": "Konsultasi",
+        "location": "Jl. Utama No. 12"
+      },
+      "settingsTitle": "Pengingat dan tindak lanjut",
+      "settingsDescription": "Untuk setiap jenis booking, kirim pesan ke kontak sebelum janji temu dan lakukan tindak lanjut setelahnya. Semuanya nonaktif sampai Anda mengaktifkannya.",
+      "loading": "Memuat jenis booking",
+      "noTypes": "Belum ada jenis booking. Buat satu untuk mengatur pengingatnya.",
+      "paused": "Dijeda",
+      "summaryNone": "Belum diatur",
+      "summary": "{on} dari {total} aktif",
+      "unsaved": "Perubahan belum disimpan",
+      "conflict": "Jenis booking ini diubah di tempat lain. Muat ulang untuk melihat versi terbaru sebelum menyimpan.",
+      "reload": "Muat ulang",
+      "discard": "Buang perubahan",
+      "saving": "Menyimpan",
+      "save": "Simpan pengingat",
+      "saved": "Pengingat untuk {name} disimpan.",
+      "readOnly": "Anda dapat melihat pengingat ini tetapi tidak dapat mengubahnya.",
+      "fixFirst": "Perbaiki dulu pengingat yang ditandai.",
+      "problems": {
+        "offsetInvalid": "Masukkan bilangan bulat untuk waktunya, hingga 30 hari.",
+        "duplicate": "Setiap pengingat atau tindak lanjut harus punya waktu yang berbeda.",
+        "channelsNone": "Pilih setidaknya satu saluran.",
+        "bodyTooLong": "Pesan terlalu panjang.",
+        "subjectTooLong": "Subjek terlalu panjang.",
+        "labelTooLong": "Label terlalu panjang.",
+        "tooMany": "Maksimal 8 pengingat dan tindak lanjut untuk satu jenis booking."
+      },
+      "noneOn": "Tidak ada pengingat atau tindak lanjut yang aktif untuk jenis booking ini.",
+      "when": {
+        "before": "{count, plural, other {# menit sebelumnya}}",
+        "after": "{count, plural, other {# menit setelahnya}}"
+      },
+      "sentOn": "Dikirim lewat {channel}",
+      "status": {
+        "scheduled": "Terjadwal",
+        "pending": "Jatuh tempo",
+        "sending": "Mengirim",
+        "held": "Menunggu",
+        "sent": "Terkirim",
+        "skipped": "Tidak terkirim",
+        "failed": "Gagal",
+        "cancelled": "Dibatalkan"
+      },
+      "reasons": {
+        "rule_removed": "Pengingat dihapus sebelum waktunya.",
+        "rule_off": "Pengingat dinonaktifkan sebelum dikirim.",
+        "rescheduled": "Janji temu dipindah, jadi pengingat ini diganti.",
+        "booking_cancelled": "Janji temu dibatalkan.",
+        "booking_declined": "Permintaan ditolak.",
+        "booking_no_show": "Ditandai tidak hadir.",
+        "booking_not_confirmed": "Janji temu belum dikonfirmasi.",
+        "started": "Janji temu sudah dimulai.",
+        "expired": "Sudah terlambat untuk dikirim.",
+        "no_contact_point": "Kontak tidak punya nomor atau alamat untuk saluran ini.",
+        "no_channel": "Tidak ada saluran yang bisa mengirimnya.",
+        "no_sender": "Tidak ada pengirim yang terhubung untuk saluran ini.",
+        "template_required": "WhatsApp memerlukan template yang disetujui di luar jendela 24 jam.",
+        "template_unavailable": "Template WhatsApp yang dipilih tidak bisa dikirim.",
+        "quiet_hours_too_late": "Jam tenang melewati waktu mulai.",
+        "no_consent": "Tidak ada persetujuan yang tercatat.",
+        "opted_out": "Kontak berhenti berlangganan.",
+        "do_not_call": "Nomor ada di daftar jangan hubungi.",
+        "minor": "Kontak ditandai sebagai anak di bawah umur.",
+        "processing_restricted": "Mengirim pesan ke kontak ini dibatasi.",
+        "plan_limit": "Batas paket tercapai.",
+        "quiet_hours": "Menunggu jam tenang berakhir.",
+        "channel_unavailable": "Saluran sedang tidak terhubung.",
+        "wallet_empty": "Dompet kosong.",
+        "send_halted": "Pengiriman dihentikan.",
+        "provider_error": "Penyedia menolaknya.",
+        "interrupted": "Terhenti dan tidak dicoba lagi.",
+        "internal_error": "Terjadi kesalahan."
+      }
     }
   }
 }

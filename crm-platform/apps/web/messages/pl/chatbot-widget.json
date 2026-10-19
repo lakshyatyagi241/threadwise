@@ -254,7 +254,34 @@
         "off": "Wył.",
         "none": "Brak"
       },
-      "colorSwatch": "{label} (próbka)"
+      "colorSwatch": "{label} (próbka)",
+      "age": {
+        "enable": "Zapytaj o wiek przed rozpoczęciem czatu",
+        "enableHint": "Domyślnie wyłączone. Używaj tego tylko wtedy, gdy wymagają tego zasady Twojego obszaru roboczego lub Twoimi odwiedzającymi mogą być osoby niepełnoletnie. Czat nigdy nie mówi, która odpowiedź przechodzi.",
+        "mode": "Jak pytać",
+        "modes": {
+          "declaration": "Pole wyboru: „Potwierdzam, że mam co najmniej N lat”",
+          "age": "Zapytaj o wiek",
+          "dob": "Zapytaj o datę urodzenia"
+        },
+        "modeHints": {
+          "declaration": "Nic o wieku nie jest zapisywane. Najmniej danych.",
+          "age": "Liczba całkowita. Służy do sprawdzenia; zapisywany jest tylko wynik.",
+          "dob": "Zapisywana w kontakcie jako data urodzenia. Używaj tylko wtedy, gdy potrzebujesz daty."
+        },
+        "minAge": "Minimalny wiek",
+        "minAgeHint": "Zostaw puste, aby użyć wieku z Centrum zgodności Twojego obszaru roboczego (18, jeśli nie ustawiono). Od 1 do 21.",
+        "whenUnder": "Jeśli odwiedzający jest poniżej tego wieku",
+        "actions": {
+          "block": "Nie rozpoczynaj czatu",
+          "flag": "Rozpocznij czat i oznacz kontakt jako niepełnoletni"
+        },
+        "actionHints": {
+          "block": "Nic o odwiedzającym nie jest zapisywane, a on widzi neutralną wiadomość. Przy polu wyboru odwiedzający musi je tylko zaznaczyć.",
+          "flag": "Czat trwa dalej, a gdy odwiedzający poda numer telefonu lub adres e-mail, kontakt zostaje oznaczony jako niepełnoletni."
+        },
+        "contactNote": "Wiek jest zapisywany w kontakcie dopiero wtedy, gdy odwiedzający poda numer telefonu lub adres e-mail."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widżet WhatsApp",
@@ -298,7 +325,8 @@
           "url": "Lub użyj adresu własnego obrazu",
           "urlHint": "Wklej adres kwadratowego obrazu (https://...). Przesyłanie pliku nie jest jeszcze dostępne.",
           "botName": "Nazwa bota",
-          "botNameHint": "Wyświetlana w nagłówku okna czatu. Zostaw puste, aby użyć nazwy Twojego bota."
+          "botNameHint": "Wyświetlana w nagłówku okna czatu. Zostaw puste, aby użyć nazwy Twojego bota.",
+          "urlHintUpload": "Wklej adres kwadratowego obrazu (https://...) lub prześlij plik poniżej."
         },
         "3": {
           "title": "Ustaw wiadomość powitalną",
@@ -558,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Dodaj stronę",
             "remove": "Usuń stronę"
+          },
+          "feedback": {
+            "label": "Pozwól odwiedzającym oceniać odpowiedzi",
+            "hint": "Kciuki w górę i w dół pod każdą odpowiedzią bota.",
+            "message": "Wiadomość po ocenie",
+            "keptWhenOff": "Opinie są wyłączone. Ta wiadomość jest zachowana i pojawi się ponownie po ich włączeniu."
+          },
+          "languages": {
+            "primary": "Język główny",
+            "follow": "Zgodnie z przeglądarką odwiedzającego",
+            "primaryHint": "Język własnych tekstów okna czatu.",
+            "additional": "Inne języki",
+            "additionalHint": "Odwiedzający, którego przeglądarka używa jednego z nich, zobaczy okno w tym języku. Pozostali zobaczą język główny."
           }
         },
         "rail": {
@@ -672,7 +713,9 @@
         "statusLive": "Na żywo",
         "statusDraft": "Nieopublikowany",
         "codeLabel": "HTML",
-        "localNote": "Ten kod wskazuje adres na tym komputerze (localhost), więc działa tylko na stronach otwartych tutaj. Na działającej witrynie użyj wdrożonego adresu."
+        "localNote": "Ten kod wskazuje adres na tym komputerze (localhost), więc działa tylko na stronach otwartych tutaj. Na działającej witrynie użyj wdrożonego adresu.",
+        "statusNoNumber": "Opublikowany, brak numeru",
+        "noNumber": "Ten bot jest opublikowany, ale nie ma jeszcze numeru WhatsApp, więc przycisk, kod QR i bezpośredni link pozostają ukryte. Wybierz numer w Wyzwalaczu na karcie Budowanie."
       },
       "whatsapp": {
         "loading": "Ładowanie przycisku…",
@@ -681,7 +724,8 @@
         "saved": "Przycisk WhatsApp zapisany",
         "saveFailed": "Nie udało się zapisać przycisku. Spróbuj ponownie.",
         "fromBot": "Przycisk otwiera WhatsApp na numer {number}, na którym działa ten bot. Numer zmienisz w wyzwalaczu na karcie Budowanie.",
-        "noNumber": "Ten bot nie ma jeszcze numeru WhatsApp. Wybierz go w wyzwalaczu na karcie Tworzenie, a potem wróć i zapisz przycisk."
+        "noNumber": "Ten bot nie ma jeszcze numeru WhatsApp. Wybierz go w wyzwalaczu na karcie Tworzenie, a potem wróć i zapisz przycisk.",
+        "keywordMissing": "Powyższa wiadomość nie zawiera słowa startowego bota „{keyword}”. Jeśli bot uruchamia się tylko tym słowem, odwiedzający, którzy dotkną przycisku, do niego nie trafią."
       }
     },
     "webBots": {

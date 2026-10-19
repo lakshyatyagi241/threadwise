@@ -23,10 +23,18 @@ const MASKERS = {
   name: maskName,
   address: () => '[hidden address]',
   text: () => '[hidden text]',
+  birth: () => '[hidden date of birth]',
 } as const;
 
 /** Keys that identify the session itself; masking them would break the act-as banner and the handoff. */
 const KEEP = new Set(['operatorname', 'reason']);
+
+/**
+ * Keys whose object value is a map of right names to grant scopes (the session's `permissions`: `{ 'contacts.phone.reveal': 'all' }`),
+ * not personal data. The right names contain words like phone, mail and note, so masking by key turned `all` into `******` and the
+ * web's session schema (`all | team | own`) refused the whole session: an operator's "Login as owner" was bounced to the console.
+ */
+const KEEP_OBJECTS = new Set(['permissions']);
 
 /**
  * Masks personal data in a JSON body: a key that names a phone, e-mail, address, free text or a person's name has its value
@@ -43,6 +51,7 @@ export function maskPersonalData(value: unknown, key = '', depth = 0): unknown {
   }
   if (typeof value === 'object') {
     if (value instanceof Date || Buffer.isBuffer(value)) return value;
+    if (KEEP_OBJECTS.has(key.toLowerCase())) return value;
     const out: Record<string, unknown> = {};
     for (const [k, v] of Object.entries(value as Record<string, unknown>)) {
       out[k] = maskPersonalData(v, k, depth + 1);

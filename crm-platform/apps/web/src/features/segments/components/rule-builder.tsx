@@ -4,7 +4,13 @@ import { createContext, useContext, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Select, cn } from '@crm/ui';
 import type { RuleAction } from '../lib/builder';
-import { fieldsByGroup, findField, type FieldDef, type InvalidReason } from '../lib/fields';
+import {
+  fieldsByGroup,
+  findField,
+  type FieldDef,
+  type FieldGroup,
+  type InvalidReason,
+} from '../lib/fields';
 import type { ValueProblem } from '../lib/model';
 import {
   canAddCondition,
@@ -27,6 +33,8 @@ export interface RuleBuilderContext {
   root: Group;
   catalog: readonly FieldDef[];
   fieldLabel: (field: FieldDef) => string;
+  /** The heading of a group of fields in the picker. Omit to use the segments' own (`segments.fieldGroups`). */
+  groupLabel?: (group: FieldGroup) => string;
   dispatch: (action: RuleAction) => void;
   /** Warnings by condition id. */
   warnings: ReadonlyMap<string, ConditionWarning>;
@@ -235,7 +243,7 @@ function MoveButtons({ id, index, count }: { id: string; index: number; count: n
 function FieldSelect({ condition, label }: { condition: Condition; label: string }) {
   const t = useTranslations('segments.builder');
   const tg = useTranslations('segments.fieldGroups');
-  const { catalog, fieldLabel, dispatch, disabled } = useRules();
+  const { catalog, fieldLabel, groupLabel, dispatch, disabled } = useRules();
   const known = findField(catalog, condition.field);
   return (
     <Select
@@ -250,8 +258,14 @@ function FieldSelect({ condition, label }: { condition: Condition; label: string
           {t('deletedField', { key: condition.field })}
         </option>
       )}
+      {/* A field that is not offered any more but is still in this rule (the lead score while scoring is off) reads as it did. */}
+      {known?.hidden && (
+        <option value={known.id} disabled>
+          {fieldLabel(known)}
+        </option>
+      )}
       {fieldsByGroup(catalog).map((g) => (
-        <optgroup key={g.group} label={tg(g.group)}>
+        <optgroup key={g.group} label={groupLabel ? groupLabel(g.group) : tg(g.group)}>
           {g.fields.map((f) => (
             <option key={f.id} value={f.id}>
               {fieldLabel(f)}

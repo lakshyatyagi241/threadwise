@@ -1,0 +1,37 @@
+# promtool tests for queue-capacity.rules.yml:
+#   docker run --rm -v "<repo>/crm-platform/deploy/observability:/rules" --entrypoint promtool prom/prometheus:v2.55.0 test rules /rules/queue-capacity.rules.test.yml
+# Synthetic series. Each paging alert has a must-fire and a must-not-fire (a deep but young queue does not page).
+rule_files:
+  - queue-capacity.rules.yml
+evaluation_interval: 1m
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'crm_queue_oldest_waiting_seconds{queue="waba-ingest"}'
+        values: '120x10'
+      - series: 'crm_queue_oldest_waiting_seconds{queue="webhook-ingest"}'
+        values: '2x10'
+      - series: 'crm_queue_jobs_pending{queue="webhook-ingest",state="waiting"}'
+        values: '100000x10'
+    alert_rule_test:
+      - eval_time: 8m
+        alertname: CriticalQueueOldestJobAge
+        exp_alerts:
+          - exp_labels: { severity: critical, queue: waba-ingest }
+            exp_annotations:
+              summary: 'Inbound queue waba-ingest: oldest waiting job is 2m 0s old'
+              description: 'Customer messages the provider already got our 200 for are waiting. Check worker liveness, then Postgres, then the queue-capacity runbook (docs/performance/queue-capacity/queue-observability-runbook.md).'
+  - interval: 1m
+    input_series:
+      - series: 'crm_queue_jobs_pending{queue="campaign",state="waiting"}'
+        values: '2000+100x40'
+      - series: 'crm_queue_jobs_pending{queue="bcast-dispatch",state="waiting"}'
+        values: '5000-100x40'
+    alert_rule_test:
+      - eval_time: 38m
+        alertname: BulkQueueBacklogNotDraining
+        exp_alerts:
+          - exp_labels: { queue: campaign, severity: warning }
+            exp_annotations:
+              summary: 'Bulk queue campaign has had a growing backlog of 5800 jobs for 30 min'
+              description: 'Bulk work may be slow by design; this means it is still falling behind. Check the provider rate limit before adding workers.'

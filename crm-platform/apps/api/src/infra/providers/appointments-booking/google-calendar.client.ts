@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { googleScopesFor, type GoogleCapability } from '@crm/contracts';
 import {
-  GOOGLE_CALENDAR_SCOPES,
   googleCalendarEnv,
   type GoogleCalendarEnv,
 } from '../../../config/domains/appointments-booking.env';
@@ -10,6 +10,7 @@ import {
   classifyTokenError,
   GoogleCalendarError,
 } from './google-calendar.errors';
+import { googleRequest } from './google-transport';
 import {
   OWN_EVENT_KEY,
   parseEventIntervals,
@@ -46,6 +47,15 @@ export interface GoogleEventResult {
   hangoutLink?: string;
   conferenceData?: unknown;
   status?: string;
+  etag?: string;
+  start?: { dateTime?: string; date?: string };
+  end?: { dateTime?: string; date?: string };
+  attendees?: Array<{
+    email?: string;
+    organizer?: boolean;
+    self?: boolean;
+    resource?: boolean;
+  }>;
 }
 
 type Json = Record<string, unknown>;
@@ -66,28 +76,44 @@ export class GoogleCalendarClient {
 
   // --- OAuth -----------------------------------------------------------------------------------------------------------
 
-  /** `access_type=offline` + `prompt=consent`: Google issues a refresh token on every consent, a reconnect included. */
-  authorizeUrl(creds: GoogleClientCredentials, state: string): string {
+  /**
+   * `access_type=offline` + `prompt=consent`: Google issues a refresh token on every consent, a reconnect included.
+   * `include_granted_scopes=true`: asking for one more capability later keeps what the account was already given, so the token that comes
+   * back covers the union (incremental authorization). `login_hint` pre-selects the account that is already connected, so adding a
+   * permission does not land on a different Google account by accident.
+   */
+  authorizeUrl(
+    creds: GoogleClientCredentials,
+    state: string,
+    capabilities: readonly GoogleCapability[] = ['calendar'],
+    loginHint?: string | null,
+  ): string {
     const q = new URLSearchParams({
       client_id: creds.clientId,
       redirect_uri: creds.redirectUri,
       response_type: 'code',
-      scope: GOOGLE_CALENDAR_SCOPES.join(' '),
+      scope: googleScopesFor(capabilities).join(' '),
       access_type: 'offline',
+      include_granted_scopes: 'true',
       prompt: 'consent',
       state,
     });
+    if (loginHint) q.set('login_hint', loginHint);
     return `${this.env().GOOGLE_OAUTH_AUTH_URL}?${q.toString()}`;
   }
 
   async exchangeCode(creds: GoogleClientCredentials, code: string): Promise<GoogleTokens> {
-    const body = await this.token({
-      grant_type: 'authorization_code',
-      code,
-      client_id: creds.clientId,
-      client_secret: creds.clientSecret,
-      redirect_uri: creds.redirectUri,
-    });
+    // A code is good once: a repeat after a lost answer would fail with invalid_grant and hide the real outcome.
+    const body = await this.token(
+      {
+        grant_type: 'authorization_code',
+        code,
+        client_id: creds.clientId,
+        client_secret: creds.clientSecret,
+        redirect_uri: creds.redirectUri,
+      },
+      0,
+    );
     return {
       accessToken: String(body.access_token ?? ''),
       refreshToken:
@@ -170,17 +196,46 @@ export class GoogleCalendarClient {
     return out.sort((a, b) => Number(b.primary) - Number(a.primary));
   }
 
+  /**
+   * The account's spreadsheets by name, newest first (Drive `files.list` with the Drive file list permission), for the picker on a
+   * booking type. Never more than a hundred: the picker is for choosing, not for browsing a Drive.
+   */
+  async listSpreadsheets(accessToken: string): Promise<Array<{ id: string; name: string }>> {
+    const q = new URLSearchParams({
+      q: "mimeType='application/vnd.google-apps.spreadsheet' and trashed=false",
+      pageSize: '100',
+      orderBy: 'modifiedTime desc',
+      fields: 'files(id,name)',
+    });
+    const body = (await this.send(`${this.env().GOOGLE_DRIVE_API_URL}?${q}`, {
+      token: accessToken,
+      classify: classifyApiError,
+    })) as Json;
+    return ((body.files as Json[] | undefined) ?? [])
+      .filter((f) => typeof f.id === 'string' && f.id !== '')
+      .map((f) => ({ id: String(f.id), name: typeof f.name === 'string' ? f.name : String(f.id) }));
+  }
+
+  /** `calendars.get`: throws `not_found` when the calendar is gone or not visible to the account. */
+  async getCalendar(accessToken: string, calendarId: string): Promise<{ id: string }> {
+    const body = (await this.api(accessToken, 'GET', `/calendars/${enc(calendarId)}`)) as Json;
+    return { id: typeof body.id === 'string' ? body.id : calendarId };
+  }
+
   async freeBusy(
     accessToken: string,
     calendarId: string,
     from: Date,
     to: Date,
   ): Promise<CalendarBusyInterval[]> {
-    const body = await this.api(accessToken, 'POST', '/freeBusy', {
-      timeMin: from.toISOString(),
-      timeMax: to.toISOString(),
-      items: [{ id: calendarId }],
-    });
+    // No in-call retry: a visitor is waiting on the booking page. A failure trips the adapter's short back-off instead.
+    const body = await this.api(
+      accessToken,
+      'POST',
+      '/freeBusy',
+      { timeMin: from.toISOString(), timeMax: to.toISOString(), items: [{ id: calendarId }] },
+      0,
+    );
     const parsed = parseFreeBusy(body, calendarId);
     if (parsed.error) {
       // Not "free": the calendar could not be read (deleted, access withdrawn).
@@ -269,26 +324,34 @@ export class GoogleCalendarClient {
 
   // --- transport -------------------------------------------------------------------------------------------------------
 
-  private async token(form: Record<string, string>): Promise<Json> {
+  private async token(form: Record<string, string>, retries?: number): Promise<Json> {
     return (await this.send(this.env().GOOGLE_OAUTH_TOKEN_URL, {
       method: 'POST',
       headers: { 'content-type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams(form).toString(),
       classify: classifyTokenError,
+      retries,
     })) as Json;
   }
 
-  private api(token: string, method: string, path: string, body?: unknown): Promise<unknown> {
+  private api(
+    token: string,
+    method: string,
+    path: string,
+    body?: unknown,
+    retries?: number,
+  ): Promise<unknown> {
     return this.send(`${this.env().GOOGLE_CALENDAR_API_URL}${path}`, {
       method,
       token,
       headers: body === undefined ? {} : { 'content-type': 'application/json' },
       body: body === undefined ? undefined : JSON.stringify(body),
       classify: classifyApiError,
+      retries,
     });
   }
 
-  private async send(
+  private send(
     url: string,
     opts: {
       method?: string;
@@ -296,38 +359,10 @@ export class GoogleCalendarClient {
       headers?: Record<string, string>;
       body?: string;
       classify: (status: number, body: unknown) => GoogleCalendarError;
+      retries?: number;
     },
   ): Promise<unknown> {
-    const headers: Record<string, string> = { accept: 'application/json', ...opts.headers };
-    if (opts.token) headers.authorization = `Bearer ${opts.token}`;
-    let res: Response;
-    try {
-      res = await fetch(url, {
-        method: opts.method ?? 'GET',
-        headers,
-        body: opts.body,
-        signal: AbortSignal.timeout(this.env().GOOGLE_HTTP_TIMEOUT_MS),
-      });
-    } catch (err) {
-      const timedOut =
-        err instanceof Error && (err.name === 'TimeoutError' || err.name === 'AbortError');
-      throw new GoogleCalendarError(
-        timedOut ? 'timeout' : 'network',
-        0,
-        timedOut ? 'timeout' : ((err as { cause?: { code?: string } }).cause?.code ?? 'network'),
-      );
-    }
-    const text = await res.text();
-    let parsed: unknown = null;
-    if (text) {
-      try {
-        parsed = JSON.parse(text);
-      } catch {
-        parsed = null;
-      }
-    }
-    if (!res.ok) throw opts.classify(res.status, parsed);
-    return parsed ?? {};
+    return googleRequest(url, opts);
   }
 }
 

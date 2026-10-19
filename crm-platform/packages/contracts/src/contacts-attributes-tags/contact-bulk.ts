@@ -88,6 +88,10 @@ export const contactStatsSchema = z.object({
   /** Contacts in at least one group. */
   grouped: z.number().int(),
   imported: z.number().int(),
+  /** Contacts marked uncontacted (BL-290): the Contacts list offers the "Uncontacted" view only once there is one. */
+  uncontacted: z.number().int(),
+  /** Contacts with an open follow-up (BL-291): the Contacts list offers the follow-up views only once there is one. */
+  withFollowUp: z.number().int(),
 });
 export type ContactStats = z.infer<typeof contactStatsSchema>;
 

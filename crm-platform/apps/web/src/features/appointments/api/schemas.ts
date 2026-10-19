@@ -44,6 +44,9 @@ export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 export const BOOKING_SOURCES = ['chat', 'link', 'manual', 'api'] as const;
 export type BookingSource = (typeof BOOKING_SOURCES)[number];
 
+export const REMINDER_KINDS = ['before', 'after'] as const;
+export const REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+
 const instant = z.string().refine((v) => !Number.isNaN(Date.parse(v)), 'not an ISO 8601 instant');
 const nullableText = z.string().nullable();
 
@@ -59,6 +62,58 @@ export const answerSchema = z.object({
   questionId: z.string().optional(),
 });
 export type Answer = z.infer<typeof answerSchema>;
+
+/** Whether the appointment's Google Calendar event still matches it (TW-GACC-011). `drifted` shows the "Calendar out of sync" badge. */
+export const CALENDAR_DRIFT_REASONS = [
+  'event_deleted',
+  'event_missing',
+  'time_changed',
+  'attendees_changed',
+] as const;
+export type CalendarDriftReason = (typeof CALENDAR_DRIFT_REASONS)[number];
+
+export const calendarSyncSchema = z.object({
+  state: z.enum(['in_sync', 'drifted', 'unreadable']).nullable(),
+  reason: z.enum([...CALENDAR_DRIFT_REASONS, 'event_forbidden', 'event_unreadable']).nullable(),
+  detectedAt: instant.nullable(),
+  /** What Google shows when the time was moved. */
+  googleStartsAt: instant.nullable(),
+  googleEndsAt: instant.nullable(),
+  checkedAt: instant.nullable(),
+});
+export type CalendarSync = z.infer<typeof calendarSyncSchema>;
+
+/** What the two drift actions answer, besides the appointment as it is now. */
+export const calendarDriftResultSchema = z.object({
+  done: z.enum(['pushed', 'accepted']),
+  applied: z.enum(['cancelled', 'rescheduled', 'acknowledged']).nullable(),
+});
+export type CalendarDriftResult = z.infer<typeof calendarDriftResultSchema>;
+
+export const REMINDER_RUN_STATUSES = [
+  'scheduled',
+  'pending',
+  'sending',
+  'held',
+  'sent',
+  'skipped',
+  'failed',
+  'cancelled',
+] as const;
+export type ReminderRunStatus = (typeof REMINDER_RUN_STATUSES)[number];
+
+/** One reminder or follow-up of a booking and what became of it. `reason` is a stable code, never a message or an address. */
+export const appointmentReminderSchema = z.object({
+  kind: z.enum(REMINDER_KINDS),
+  offsetMinutes: z.number().int(),
+  label: nullableText,
+  dueAt: instant,
+  status: z.enum(REMINDER_RUN_STATUSES),
+  reason: nullableText,
+  channel: z.enum(REMINDER_CHANNELS).nullable(),
+  sentAt: instant.nullable(),
+});
+export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 
 export const appointmentSchema = z.object({
   id: z.string(),
@@ -85,6 +140,8 @@ export const appointmentSchema = z.object({
   customer: z.object({ name: nullableText, phone: nullableText, email: nullableText }),
   location: nullableText,
   meetUrl: nullableText,
+  /** The state of its Google Calendar event, when the appointment has one. */
+  calendarSync: calendarSyncSchema.nullable().optional(),
   answers: z.array(answerSchema),
   notes: nullableText,
   source: z.string(),
@@ -100,6 +157,8 @@ export const appointmentSchema = z.object({
   cancelledBy: z.enum(['staff', 'invitee', 'system']).nullable().optional(),
   cancelReason: nullableText.optional(),
   cancelledAt: instant.nullable().optional(),
+  /** What each reminder and follow-up did. Only on a single booking read from a server that records it. */
+  reminders: z.array(appointmentReminderSchema).optional(),
   createdAt: instant,
   updatedAt: instant,
 });
@@ -156,9 +215,20 @@ export const bookingTemplateSchema = z.object({
   plainBody: nullableText,
 });
 
+/** A reminder (before the start) or an after-visit follow-up of a booking type, off until it is switched on (BL-283). */
 export const bookingReminderSchema = z.object({
+  /** The saved rule's id, sent back so the rule (and what it has already sent) is kept. */
+  id: z.string().optional(),
   offsetMinutes: z.number().int(),
   label: nullableText,
+  isActive: z.boolean(),
+  kind: z.enum(REMINDER_KINDS),
+  /** In the order they are tried. */
+  channels: z.array(z.enum(REMINDER_CHANNELS)),
+  subject: nullableText,
+  body: nullableText,
+  /** An approved WhatsApp template of the workspace. */
+  waTemplateId: nullableText,
 });
 
 export const bookingPriceSchema = z.object({
@@ -219,6 +289,13 @@ export const bookingTypeSchema = z.object({
   updatedAt: instant,
 });
 export type BookingType = z.infer<typeof bookingTypeSchema>;
+
+/** An approved WhatsApp template a reminder can use. */
+export interface WaTemplateOption {
+  id: string;
+  name: string;
+  language: string;
+}
 
 export const bookingTypeListSchema = z.object({ data: z.array(bookingTypeSchema) });
 
@@ -284,6 +361,10 @@ export const calendarOptionSchema = z.object({
   timezone: nullableText,
 });
 export type CalendarOption = z.infer<typeof calendarOptionSchema>;
+
+/** A spreadsheet of the connected Google account that a booking type can append to. */
+export const spreadsheetOptionSchema = z.object({ id: z.string(), name: z.string() });
+export type SpreadsheetOption = z.infer<typeof spreadsheetOptionSchema>;
 
 export const calendarStartSchema = z.object({ url: z.string(), expiresInSeconds: z.number() });
 

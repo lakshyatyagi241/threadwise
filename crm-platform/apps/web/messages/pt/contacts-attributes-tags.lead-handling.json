@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Não contatado",
+        "followUpToday": "Acompanhamento hoje",
+        "followUpOverdue": "Acompanhamento atrasado",
+        "followUpSomeday": "Acompanhamentos sem data"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Não contatado",
+        "chipTitle": "Ninguém da equipe entrou em contato ainda",
+        "waitingSince": "Aguardando desde {date}",
+        "markContacted": "Marcar como contatado",
+        "markUncontacted": "Marcar como não contatado",
+        "markedContacted": "Marcado como contatado",
+        "markedUncontacted": "Marcado como não contatado",
+        "markFailed": "Não foi possível alterar a marcação. Tente novamente.",
+        "bulkMarkedContacted": "{count, plural, one {# contato marcado como contatado} other {# contatos marcados como contatados}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contato marcado como não contatado} other {# contatos marcados como não contatados}}"
+      },
+      "settings": {
+        "save": "Salvar",
+        "discard": "Descartar alterações",
+        "saved": "Configurações salvas",
+        "retry": "Tentar novamente",
+        "loading": "Carregando configurações",
+        "conflict": "Outra pessoa salvou estas configurações enquanto você editava. Elas aparecem novamente abaixo; faça sua alteração mais uma vez.",
+        "conflictOk": "Entendi",
+        "errors": {
+          "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente.",
+          "forbidden": "Somente quem gerencia as configurações do espaço de trabalho pode alterar esta página.",
+          "conflict": "Outra pessoa alterou estas configurações primeiro. Recarregue e tente novamente.",
+          "validation": "Algumas dessas configurações não são válidas. Confira e tente novamente.",
+          "unexpected": "Algo deu errado. Tente novamente."
+        },
+        "uncontacted": {
+          "title": "Leads não contatados",
+          "subtitle": "Marque os leads que ninguém contatou ainda, para que fiquem em destaque até alguém entrar em contato. Nada muda até você ativar uma opção.",
+          "clear": {
+            "title": "Marcar como contatado",
+            "intro": "Remover automaticamente a marcação Não contatado quando um membro da equipe fizer qualquer uma destas ações:",
+            "contactButton": "Clica em um botão de contato (ligação, SMS, e-mail ou WhatsApp) ou faz uma ligação",
+            "message": "Envia uma mensagem, modelo, resposta salva ou arquivo pela caixa de entrada",
+            "automation": "Uma campanha, transmissão ou fluxo automático envia para o lead",
+            "activity": "Adiciona uma nota, reunião ou outra atividade à linha do tempo",
+            "manualHint": "Você também pode alterar a marcação manualmente: abra o menu Mais em um contato, ou selecione vários contatos e use Mais na barra acima da lista."
+          },
+          "new": {
+            "title": "Marcar novos leads como não contatados",
+            "intro": "Quando um lead for criado de uma destas formas, marque-o como não contatado:",
+            "manual": "Criado manualmente no app",
+            "import": "Importado de um arquivo ou do Google Sheets",
+            "leadSource": "Fontes de leads, formulários e integrações"
+          },
+          "reassign": {
+            "title": "Leads reatribuídos",
+            "intro": "Quando um lead for atribuído ou reatribuído a um novo responsável:",
+            "keep": "Não alterar a marcação Não contatado",
+            "mark": "Marcar como não contatado ao reatribuir"
+          }
+        },
+        "followUps": {
+          "title": "Acompanhamentos",
+          "subtitle": "Mantenha cada lead em andamento: quando alguém da equipe entra em contato com uma pessoa, o próximo acompanhamento dela pode ser definido ou remarcado automaticamente. Nada muda até você ativar uma opção.",
+          "when": {
+            "title": "Definir acompanhamentos automaticamente",
+            "intro": "Sempre que alguém da equipe entrar em contato com uma pessoa ou enviar conteúdo a ela, atualizar o acompanhamento se:",
+            "none": "O contato não tem acompanhamento",
+            "overdue": "O acompanhamento está atrasado",
+            "today": "O acompanhamento vence hoje",
+            "future": "O acompanhamento vence mais tarde"
+          },
+          "date": {
+            "title": "Data padrão do acompanhamento",
+            "intro": "Quando um acompanhamento for atualizado automaticamente, defini-lo para:",
+            "day": "1 dia depois",
+            "three_days": "3 dias depois",
+            "week": "1 semana depois",
+            "month": "1 mês depois",
+            "custom": "Personalizado",
+            "someday": "Algum dia",
+            "none": "Sem acompanhamento",
+            "somedayHint": "O acompanhamento não tem data e fica na lista \"Algum dia\". Nunca gera lembrete.",
+            "noneHint": "O acompanhamento em aberto é marcado como concluído e nenhum novo é criado.",
+            "customDays": "Número de dias",
+            "daysLater": "dias depois"
+          },
+          "time": {
+            "title": "Horário padrão do acompanhamento",
+            "intro": "Sempre que um novo acompanhamento for criado, definir o horário do alerta para:",
+            "hint": "Considera o fuso horário do seu espaço de trabalho."
+          }
+        },
+        "duplicates": {
+          "title": "Leads duplicados",
+          "subtitle": "Defina o que acontece quando um novo lead de uma fonte de leads tem o mesmo telefone ou e-mail de um contato que você já tem.",
+          "mode": {
+            "title": "Quando um novo lead coincide com um contato",
+            "intro": "Um lead coincide quando o telefone ou e-mail dele já pertence a um contato.",
+            "merge": "Mesclar com o contato existente",
+            "mergeHint": "Preenche os campos vazios do contato e adiciona o lead ao histórico. O que já estava preenchido nunca é sobrescrito.",
+            "createNew": "Criar um novo contato",
+            "createNewHint": "Cria um contato separado para o lead. Conta no limite de contatos do seu plano e pode ser mesclado depois."
+          },
+          "note": {
+            "title": "Linha do tempo",
+            "merge": "Adicionar uma nota à linha do tempo quando um lead for mesclado",
+            "hint": "Desativado por padrão, porque uma nota também move a última atividade do contato."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Próximo acompanhamento",
+        "somedayLabel": "Algum dia",
+        "overdue": "Atrasado",
+        "done": "Concluído",
+        "snooze": "Adiar",
+        "snoozeDay": "1 dia",
+        "snoozeThreeDays": "3 dias",
+        "snoozeWeek": "Próxima semana",
+        "change": "Alterar data",
+        "set": "Definir acompanhamento",
+        "edit": "Alterar acompanhamento",
+        "remove": "Remover acompanhamento",
+        "dialogTitle": "Acompanhamento",
+        "someday": "Algum dia (sem data)",
+        "dateTime": "Data e hora",
+        "cancel": "Cancelar",
+        "save": "Salvar",
+        "savedFor": "Acompanhamento salvo",
+        "savedSomeday": "Acompanhamento definido para algum dia",
+        "snoozed": "Acompanhamento remarcado",
+        "doneMessage": "Acompanhamento marcado como concluído",
+        "clearedMessage": "Acompanhamento removido",
+        "failed": "Não foi possível alterar o acompanhamento. Tente novamente.",
+        "filterLabel": "Acompanhamento",
+        "filter": {
+          "any": "Qualquer",
+          "overdue": "Atrasados",
+          "today": "Vencem hoje",
+          "upcoming": "Próximos",
+          "someday": "Algum dia",
+          "none": "Sem acompanhamento"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Próximo acompanhamento"
+    }
+  }
+}

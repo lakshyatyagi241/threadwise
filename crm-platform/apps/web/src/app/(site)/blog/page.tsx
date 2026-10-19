@@ -40,8 +40,8 @@ export default async function BlogIndex({ searchParams }: { searchParams: Search
     <>
       <section className="relative overflow-hidden bg-paper-0">
         <div className="grid-bg pointer-events-none absolute inset-0 opacity-30" />
-        <div className="blur-bub absolute -right-32 -top-32 h-[520px] w-[520px] rounded-full bg-wa-mint/50" />
-        <div className="blur-bub absolute -bottom-40 -left-32 h-[460px] w-[460px] rounded-full bg-accent-amber/15" />
+        <div className="blur-bub absolute -end-32 -top-32 h-[520px] w-[520px] rounded-full bg-wa-mint/50" />
+        <div className="blur-bub absolute -bottom-40 -start-32 h-[460px] w-[460px] rounded-full bg-accent-amber/15" />
         <div className="relative mx-auto max-w-[1360px] px-4 pb-12 pt-24 sm:px-6 lg:px-7">
           <div className="hairline mono inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[11px] uppercase tracking-widest text-ink-700">
             <span className="pulse-dot h-1.5 w-1.5 rounded-full bg-wa-green" />

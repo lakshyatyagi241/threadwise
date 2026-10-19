@@ -3,6 +3,7 @@ import { Client } from 'pg';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { LeadRetentionSweepService } from '../../../src/modules/leads/lead-retention-sweep.service';
+import { LeadSyncRunsRepository } from '../../../src/modules/leads/lead-sync-runs.repository';
 import {
   LEAD_MANAGE,
   LEAD_READ,
@@ -398,6 +399,41 @@ describe('defaults and mapping are validated against the workspace (L-05, L-07, 
   });
 });
 
+describe('the complete webhook address (BL-061)', () => {
+  const was = process.env.APP_URL;
+  afterAll(() => {
+    if (was === undefined) delete process.env.APP_URL;
+    else process.env.APP_URL = was;
+  });
+
+  it('create, rotate and the list build it from the configured public API address', async () => {
+    const t = await api.signup('hookurl');
+    process.env.APP_URL = 'https://api.acme.test/';
+    const s = await api.source(t.admin, { name: 'Addressed' });
+    expect(s.hookUrl).toBe(`https://api.acme.test/v2/public/lead-hooks/${s.token}`);
+    expect(s.hookUrlProblem).toBeNull();
+    const rotated = await api.as(t.admin).post(`/v2/lead-sources/${s.id}/rotate-token`);
+    expect(rotated.body.hookUrl).toBe(
+      `https://api.acme.test/v2/public/lead-hooks/${rotated.body.token}`,
+    );
+    const list = await api.as(t.admin).get('/v2/lead-sources');
+    expect(list.body.hookAddress).toEqual({ baseUrl: 'https://api.acme.test', problem: null });
+    // a read never carries the token, so never the complete address of a hook either
+    expect(JSON.stringify(list.body.data)).not.toContain('lead-hooks');
+  });
+
+  it('says why there is no address instead of guessing one when the setting is missing', async () => {
+    const t = await api.signup('hookurl2');
+    delete process.env.APP_URL;
+    const s = await api.source(t.admin, { name: 'Unaddressed' });
+    expect(s.hookUrl).toBeNull();
+    expect(s.hookUrlProblem).toBe('base_url_not_configured');
+    expect(s.hookPath).toBe(`/v2/public/lead-hooks/${s.token}`);
+    const list = await api.as(t.admin).get('/v2/lead-sources');
+    expect(list.body.hookAddress).toEqual({ baseUrl: null, problem: 'base_url_not_configured' });
+  });
+});
+
 describe('plan gating (L-12)', () => {
   it('the lead_sources cap counts sources, and a workspace at the cap gets 422 PLAN_LIMIT_REACHED', async () => {
     const t = await api.signup('cap');
@@ -406,8 +442,13 @@ describe('plan gating (L-12)', () => {
     const res = await api.as(t.admin).post('/v2/lead-sources').send({ name: 'Second' });
     expect(res.status).toBe(422);
     expect(res.body.code).toBe('PLAN_LIMIT_REACHED');
+    // The screen says "You have used 1 of 1 lead sources" from these (BL-061).
     expect(res.body.errors).toEqual(
-      expect.arrayContaining([{ path: 'limit', message: 'lead_sources' }]),
+      expect.arrayContaining([
+        { path: 'limit', message: 'lead_sources' },
+        { path: 'used', message: '1' },
+        { path: 'limitValue', message: '1' },
+      ]),
     );
     await api.setOverrides(t.orgId, { limits: { lead_sources: 2 } });
     expect((await api.as(t.admin).post('/v2/lead-sources').send({ name: 'Second' })).status).toBe(
@@ -752,7 +793,10 @@ describe('retention of raw payloads (L-12)', () => {
     expect(days(se! as never)).toBe(1);
     expect(days(le! as never)).toBe(30);
 
-    const sweep = new LeadRetentionSweepService(h.app.get(DatabaseService));
+    const sweep = new LeadRetentionSweepService(
+      h.app.get(DatabaseService),
+      new LeadSyncRunsRepository(),
+    );
     expect(await sweep.sweep()).toBe(0);
 
     await h.owner.query(

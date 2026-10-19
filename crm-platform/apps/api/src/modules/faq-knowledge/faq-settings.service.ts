@@ -21,11 +21,12 @@ export interface EffectiveSettings {
   logQueries: boolean;
   verifyMode: 'off' | 'borderline';
   verifyBand: number;
+  fallbackMessage: string | null;
 }
 
 export const SETTINGS_MODULE_KEY = 'faq_settings';
 
-/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched off. */
+/** One flow's switch and matching knobs; a flow that never saved runs on the platform defaults, switched on. */
 @Injectable()
 export class FaqSettingsService {
   constructor(
@@ -50,12 +51,13 @@ export class FaqSettingsService {
       : await this.db.txAs({ orgId, userId: null }, (t) => this.logs.getSettings(t, orgId, flowId));
     return {
       engineEnabled: cfg.engineEnabled,
-      enabled: row?.enabled ?? false,
+      enabled: row?.enabled ?? true,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
       verifyMode: row?.verifyMode ?? 'off',
       verifyBand: row?.verifyBand ?? 0.1,
+      fallbackMessage: row?.fallbackMessage ?? null,
     };
   }
 
@@ -70,12 +72,13 @@ export class FaqSettingsService {
       };
     });
     return {
-      enabled: row?.enabled ?? false,
+      enabled: row?.enabled ?? true,
       threshold: row?.threshold ?? cfg.defaultThreshold,
       minMargin: row?.minMargin ?? 0,
       logQueries: row?.logQueries ?? true,
       verifyMode: row?.verifyMode ?? 'off',
       verifyBand: row?.verifyBand ?? 0.1,
+      fallbackMessage: row?.fallbackMessage ?? null,
       verifyAvailable: cfg.verifyEnabled,
       verifyModel: cfg.verifyModel,
       isDefault: row === null,
@@ -115,6 +118,11 @@ export class FaqSettingsService {
           // A client that does not know the check yet keeps what is saved.
           verifyMode: input.verifyMode ?? before?.verifyMode ?? 'off',
           verifyBand: input.verifyBand ?? before?.verifyBand ?? 0.1,
+          // Absent keeps the saved text; null removes it.
+          fallbackMessage:
+            input.fallbackMessage === undefined
+              ? (before?.fallbackMessage ?? null)
+              : input.fallbackMessage,
           // Saving is the owner's confirmation that the numbers suit the model in force now.
           tunedModel: cfg.embeddingModel,
         },
@@ -123,17 +131,18 @@ export class FaqSettingsService {
       if (!ok) throw AppError.rowVersionConflict('FAQ settings');
       const delta: Record<string, { old: unknown; new: unknown }> = {};
       const was = before ?? {
-        enabled: false,
+        enabled: true,
         threshold: null,
         minMargin: null,
         logQueries: true,
         verifyMode: 'off',
         verifyBand: 0.1,
+        fallbackMessage: null,
       };
       for (const k of ['enabled', 'threshold', 'minMargin', 'logQueries'] as const) {
         if (was[k] !== input[k]) delta[k] = { old: was[k], new: input[k] };
       }
-      for (const k of ['verifyMode', 'verifyBand'] as const) {
+      for (const k of ['verifyMode', 'verifyBand', 'fallbackMessage'] as const) {
         if (input[k] !== undefined && was[k] !== input[k])
           delta[k] = { old: was[k], new: input[k] };
       }

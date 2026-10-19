@@ -1,3 +1,4 @@
+import type { Tx } from '@crm/db';
 import { Inject, Injectable } from '@nestjs/common';
 import {
   CAMPAIGN_PAGE_SIZE,
@@ -23,6 +24,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   BroadcastsComposeService,
+  PreviousSendsService,
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,
   type SenderDirectory,
@@ -36,7 +38,9 @@ import {
   utcToLocalDateTime,
 } from './campaign-rules';
 import { toCampaign, toConfig } from './campaigns.mapper';
+import { SenderSharesService } from './sender-shares.service';
 import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
+import { WizardReadService } from './wizard/wizard-read.service';
 
 const DAY = 86_400_000;
 const RANGE_DAYS = { '7d': 7, '30d': 30, '90d': 90 } as const;
@@ -66,6 +70,9 @@ export class CampaignsReadService {
     private readonly compose: BroadcastsComposeService,
     @Inject(SENDER_DIRECTORY) private readonly senders: SenderDirectory,
     @Inject(TEMPLATE_DIRECTORY) private readonly templates: TemplateDirectory,
+    private readonly wizardRead: WizardReadService,
+    private readonly previousSends: PreviousSendsService,
+    private readonly shares: SenderSharesService,
   ) {}
 
   async list(q: ListCampaignsQuery): Promise<CampaignListResponse> {
@@ -172,13 +179,17 @@ export class CampaignsReadService {
   async builder(query: BroadcastComposeQuery = {}): Promise<CampaignBuilder> {
     const { orgId } = RequestContextStore.require();
     const base = await this.compose.compose(query);
+    // The WhatsApp templates are the guided wizard's own list (approved, sendable now, not an OTP template, not an SMS one), so both
+    // screens offer the same templates. The SMS card keeps its own list.
+    const usable = query.channel === 'sms' ? null : await this.wizardRead.usableTemplateIds();
     return this.db.tx(async (tx) => ({
       senders: base.senders,
       hidden: base.hidden,
-      templates: base.templates,
+      templates: usable ? base.templates.filter((t) => usable.has(t.id)) : base.templates,
       groups: await this.repo.groupsWithCounts(tx, orgId),
       tags: await this.repo.tagsWithCounts(tx, orgId),
       flows: await this.repo.flowsForOrg(tx, orgId),
+      previousSends: await this.previousSends.options(tx, orgId),
       requiresApprovedTemplates: (await this.senders.defaultEngine(tx, orgId)) === 'waba',
     }));
   }
@@ -199,8 +210,27 @@ export class CampaignsReadService {
         mediaUrl: c.customImage ?? c.customVideo ?? c.customDocument,
         expiresAtLocal: utcToLocalDateTime(c.expiresAt, c.timezone ?? 'UTC'),
         recipientContactIds: await this.repo.recipientContactIds(tx, orgId, c.id),
+        ...(await this.sharedSenders(tx, orgId, c.id, sender.key)),
       });
     });
+  }
+
+  /** The numbers of a shared send for the edit form: the campaign's own first, each weighted by the recipients it was given. */
+  private async sharedSenders(
+    tx: Tx,
+    orgId: number,
+    campaignId: number,
+    primary: string | null,
+  ): Promise<{ senderKeys: string[]; senderShare: Record<string, number> }> {
+    const lines = (await this.shares.breakdown(tx, orgId, [campaignId])).filter(
+      (l): l is typeof l & { key: string } => l.key !== null,
+    );
+    if (lines.length < 2) return { senderKeys: [], senderShare: {} };
+    lines.sort((a, b) => Number(b.key === primary) - Number(a.key === primary));
+    return {
+      senderKeys: lines.map((l) => l.key),
+      senderShare: Object.fromEntries(lines.map((l) => [l.key, l.recipients])),
+    };
   }
 
   async detail(uuid: string): Promise<CampaignDetail> {
@@ -234,6 +264,7 @@ export class CampaignsReadService {
       const buttonClicks = await this.repo.clicksByUrl(tx, orgId, c.id);
       return {
         campaign,
+        senders: await this.shares.breakdown(tx, orgId, [c.id]),
         rates: {
           delivered: pct(n.delivered, n.recipients),
           read: pct(n.read, n.delivered),
@@ -318,6 +349,7 @@ export class CampaignsReadService {
         inFlight: (CAMPAIGN_IN_FLIGHT_STATUSES as readonly string[]).includes(c.status),
         counts: n,
         queued: held.queued ?? 0,
+        held: await this.repo.heldCount(tx, orgId, c.id),
         processing: held.pending ?? 0,
         rates: {
           delivered: pct(n.delivered, n.recipients),
@@ -409,6 +441,8 @@ export class CampaignsReadService {
           readAt: r.readAt?.toISOString() ?? null,
           respondedAt: r.respondedAt?.toISOString() ?? null,
           error: r.error,
+          heldUntil: r.heldUntil?.toISOString() ?? null,
+          heldReason: (r.heldReason as 'quiet_hours' | 'calling_window' | null) ?? null,
         })),
         page: { page: q.page, perPage: RECIPIENT_PAGE_SIZE, total: page.total },
       };

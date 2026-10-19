@@ -1,5 +1,6 @@
 'use client';
 
+import { FormattedText } from './formatted-text';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { memo, useState } from 'react';
 import { cn } from '@crm/ui';
@@ -11,6 +12,9 @@ import {
   MediaStateNote,
   mediaView,
 } from '@/features/channel-whatsapp-cloud';
+import { WhatsAppText } from '@/components/whatsapp-text';
+import { safeHttpHref } from '@/lib/safe-links';
+import { BubbleButton, BubbleButtonList } from '@/components/whatsapp-button';
 import { EmailMessageBody } from '@/features/channel-email/components/email-message';
 import { composerErrorKey } from '@/features/channel-email/lib/composer-errors';
 import { isRetryableSend } from '../lib/errors';
@@ -151,18 +155,18 @@ function MessageBody({
   }
 
   // Buttons an agent or a flow sent: the text, then the buttons as WhatsApp draws them under it.
-  if (m.kind === 'interactive' && m.sentInteractive) {
+  // With a header file (an image above the buttons) the file comes first.
+  if (m.sentInteractive) {
     const s = m.sentInteractive;
     return (
       <div data-testid="inbox-sent-interactive" className="space-y-1.5">
+        {visual}
         {s.header && (
           <p dir="auto" className="font-semibold break-words">
             {s.header}
           </p>
         )}
-        <p dir="auto" className="whitespace-pre-wrap break-words">
-          {s.body}
-        </p>
+        <WhatsAppText text={s.body} />
         {s.footer && (
           <p dir="auto" className="text-xs text-muted-foreground break-words">
             {s.footer}
@@ -187,19 +191,27 @@ function MessageBody({
             ))}
           </ul>
         )}
-        <div className="-mx-1 flex flex-col gap-1 pt-1">
-          {s.buttons.map((b, i) => (
-            <span
-              key={i}
-              data-testid="inbox-sent-button"
-              className="flex items-center justify-center gap-1.5 rounded-lg bg-background/70 px-3 py-1.5 text-center text-sm font-medium text-primary"
-            >
-              {s.type === 'cta_url' && <LinkIcon width={14} height={14} aria-hidden />}
-              {s.type === 'list' && <MenuIcon width={14} height={14} aria-hidden />}
-              <span className="break-words">{b.title}</span>
-            </span>
-          ))}
-        </div>
+        <BubbleButtonList testId="inbox-sent-buttons">
+          {s.buttons.map((b, i) => {
+            // A call-to-action button opens its address; the other kinds have nothing to open.
+            const href = s.type === 'cta_url' ? safeHttpHref(b.url) : null;
+            return (
+              <BubbleButton
+                key={i}
+                href={href}
+                testId="inbox-sent-button"
+                icon={
+                  s.type === 'cta_url' ? (
+                    <LinkIcon width={14} height={14} aria-hidden />
+                  ) : s.type === 'list' ? (
+                    <MenuIcon width={14} height={14} aria-hidden />
+                  ) : undefined
+                }
+                label={b.title}
+              />
+            );
+          })}
+        </BubbleButtonList>
       </div>
     );
   }
@@ -210,9 +222,7 @@ function MessageBody({
       return (
         <div className="space-y-1">
           {referralCard}
-          <p dir="auto" className="whitespace-pre-wrap break-words">
-            {caption}
-          </p>
+          <WhatsAppText text={caption} />
         </div>
       );
     }
@@ -249,9 +259,7 @@ function MessageBody({
       {referralCard}
       {visual}
       {caption ? (
-        <p dir="auto" className="whitespace-pre-wrap break-words">
-          {caption}
-        </p>
+        <WhatsAppText text={caption} />
       ) : !visual ? (
         <p className="text-xs italic text-muted-foreground">{t('unavailable')}</p>
       ) : null}
@@ -267,11 +275,7 @@ function MessageBody({
               ? t('sentIn', { lang: (m.detectedLanguage ?? '').toUpperCase() })
               : t('translatedFrom', { lang: (m.detectedLanguage ?? '').toUpperCase() })}
           </button>
-          {showOriginal && (
-            <p dir="auto" className="mt-0.5 whitespace-pre-wrap break-words italic">
-              {m.body}
-            </p>
-          )}
+          {showOriginal && <WhatsAppText text={m.body} className="mt-0.5 italic" />}
         </div>
       )}
       {m.kind === 'document' && media?.sizeBytes != null && !visual && (
@@ -528,6 +532,11 @@ export const MessageBubble = memo(function MessageBubble({
             {clockTime(m.createdAt, locale, timeZone)}
           </time>
           {out && <Ticks status={m.status} />}
+          {out && m.hold && (
+            <span data-testid="inbox-message-held" className="text-warning" title={t('heldWhy')}>
+              {t('heldUntil', { when: fullStamp(m.hold.until, locale, timeZone) })}
+            </span>
+          )}
           {tally && (
             <span data-testid="inbox-group-tally" className="flex items-center gap-1">
               <span>
@@ -622,11 +631,7 @@ export function PendingBubble({ pending: p, progress, onRetry, onDismiss }: Pend
               {!failed && progress !== undefined && progress < 100 && <span>{progress}%</span>}
             </div>
           )}
-          {p.body && (
-            <p dir="auto" className="whitespace-pre-wrap break-words">
-              {displayMentions(p.body, p.mentions)}
-            </p>
-          )}
+          {p.body && <WhatsAppText text={displayMentions(p.body, p.mentions) ?? ''} />}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 px-1 text-[11px] text-muted-foreground">
           <time dateTime={p.createdAt}>{clockTime(p.createdAt, locale, timeZone)}</time>
@@ -704,7 +709,7 @@ export function NoteBubble({
           )}
         </div>
         <p dir="auto" className="whitespace-pre-wrap break-words">
-          {note.body}
+          <FormattedText text={note.body} />
         </p>
       </div>
     </li>

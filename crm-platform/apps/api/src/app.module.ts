@@ -9,6 +9,7 @@ import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
 import { maskSecretUrl } from './common/logging/mask-secret-url';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
+import { SlowRequestInterceptor } from './common/interceptors/slow-request.interceptor';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
 import { RequestContextStore } from './common/context/request-context';
@@ -35,6 +36,7 @@ import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
+import { GoogleAccountModule } from './modules/google-account';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CallingVoiceModule } from './modules/calling-voice';
 import { CampaignsModule } from './modules/campaigns';
@@ -46,6 +48,9 @@ import { EmailTemplatesModule } from './modules/email-templates';
 import { ChannelSmsModule } from './modules/channel-sms';
 import { HelpAgentModule } from './modules/help-agent';
 import { ChannelTelegramModule } from './modules/channel-telegram';
+import { ChannelLineModule } from './modules/channel-line';
+import { ChannelViberModule } from './modules/channel-viber';
+import { ChannelWechatModule } from './modules/channel-wechat';
 import { AiAgentsTrainingModule } from './modules/ai-agents-training';
 import { AiKeysUsageAdminModule } from './modules/ai-keys-usage-admin';
 import { NodeBridgeRuntimeModule, NodeCatalogBridgeModule } from './modules/node-bridge-runtime';
@@ -58,6 +63,10 @@ import { ScheduledQueueWarmerModule } from './modules/scheduled-queue-warmer';
 import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
+import { PlatformAsyncOpsModule } from './modules/platform-async-ops';
+import { PlatformDataRetentionModule } from './modules/platform-data-retention';
+import { FailedOperationsModule } from './modules/failed-operations';
+import { WebhookRetryModule } from './modules/webhook-retry';
 import { PlatformSupportDeskModule } from './modules/platform-support-desk';
 import { DashboardsAnalyticsChartsModule } from './modules/dashboards-analytics-charts';
 import { NotificationsModule } from './modules/notifications';
@@ -70,6 +79,7 @@ import {
 } from './modules/platform-settings-branding-storage';
 import { InstallUpdateLicensingModule } from './modules/install-update-licensing';
 import { AddonsExtensionRegistryModule } from './modules/addons-extension-registry';
+import { AnalyticsModule } from './modules/analytics';
 import { CmsModule } from './modules/marketing-site-cms';
 import { AdminConsoleShellModule } from './modules/admin-console-shell';
 import { PlatformPaymentGatewaysModule } from './modules/platform-payment-gateways';
@@ -84,6 +94,8 @@ import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
 import { PrivacyModule } from './modules/privacy';
+import { ComplianceCenterModule } from './modules/compliance-center';
+import { DpdpRegisterModule } from './modules/dpdp-register';
 import { AuditLogModule } from './modules/audit-log';
 import { ContactsPqlModule } from './modules/contacts-pql';
 import { MessageTemplatesModule } from './modules/message-templates';
@@ -96,13 +108,17 @@ import { TeamInboxRoutingSlaModule } from './modules/team-inbox-routing-sla';
 import { WorkspacesTeamsTenancyModule } from './modules/workspaces-teams-tenancy';
 import { WorkspaceImpersonationModule } from './modules/workspaces-teams-tenancy/workspace-impersonation.module';
 import { LeadsModule } from './modules/leads';
+import { MetaLeadAdsModule } from './modules/meta-lead-ads';
 import { FormsBuilderModule } from './modules/forms-builder';
+import { FormsLinksGroupsModule } from './modules/forms-links-groups';
+import { AiCopilotLeadFinderModule } from './modules/ai-copilot-lead-finder';
+import { CompanyBriefsModule } from './modules/company-briefs';
 import { MarketplaceModule } from './modules/marketplace';
-import { ChromeExtensionSheetsAddonModule } from './modules/chrome-extension-sheets-addon';
 import { PartnerModule } from './modules/partner/partner.module';
 import { PublicApiModule } from './modules/public-api/public-api.module';
 import { DeveloperRestApiV1Module } from './modules/developer-rest-api-v1';
 import { ChatMediaModule } from './infra/providers/chat-conversations/media';
+import { StorageMeterModule, StorageQuotaModule } from './modules/storage-quota';
 import { RealtimeModule } from './realtime/realtime.module';
 import { HealthModule } from './health/health.module';
 
@@ -180,6 +196,7 @@ import { HealthModule } from './health/health.module';
     LocalizationTranslationModule,
     InstallUpdateLicensingModule,
     AddonsExtensionRegistryModule,
+    AnalyticsModule,
     AiKeysUsageAdminModule,
     AiAgentsTrainingModule,
     NodeBridgeRuntimeModule,
@@ -204,6 +221,9 @@ import { HealthModule } from './health/health.module';
       // A link stops working when the person may no longer see the conversation the file belongs to.
       accessPolicy: { useClass: MessageMediaAccessPolicy },
     }),
+    // The storage meter (observe mode: measures every counted file, refuses nothing) and the operator's read-only storage view.
+    StorageMeterModule,
+    StorageQuotaModule,
     HealthModule,
 
     // Apps
@@ -212,11 +232,15 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
+    GoogleAccountModule,
     NotificationsModule,
     BroadcastsModule,
     CampaignsModule,
     CallingVoiceModule,
     ChannelTelegramModule,
+    ChannelLineModule,
+    ChannelViberModule,
+    ChannelWechatModule,
     ChannelSmsModule,
     HelpAgentModule,
     ChannelEmailModule,
@@ -232,6 +256,10 @@ import { HealthModule } from './health/health.module';
     PublicApiModule,
     DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
+    PlatformAsyncOpsModule,
+    PlatformDataRetentionModule,
+    FailedOperationsModule,
+    WebhookRetryModule,
     TeamChatModule,
     WebhookFanoutModule,
     WabooMigrationModule,
@@ -242,6 +270,8 @@ import { HealthModule } from './health/health.module';
     GrowthPilotModule,
     ContactConsentModule,
     PrivacyModule,
+    ComplianceCenterModule,
+    DpdpRegisterModule,
     AuditLogModule,
     ContactsPqlModule,
     WabaModule,
@@ -253,9 +283,12 @@ import { HealthModule } from './health/health.module';
     WorkspacesTeamsTenancyModule,
     WorkspaceImpersonationModule,
     LeadsModule,
+    MetaLeadAdsModule,
     FormsBuilderModule,
+    FormsLinksGroupsModule,
+    AiCopilotLeadFinderModule,
+    CompanyBriefsModule,
     MarketplaceModule,
-    ChromeExtensionSheetsAddonModule,
     // InboxModule, BroadcastModule, BillingModule, ExamsModule — see each
     // module's README for the intended shape.
   ],
@@ -278,6 +311,8 @@ import { HealthModule } from './health/health.module';
     { provide: APP_GUARD, useClass: PermissionsGuard },
     // Route-level plan gate (TW-PLAN-019): after permissions, so a request that is not allowed at all is refused for that first.
     { provide: APP_GUARD, useExisting: PlanFeatureGuard },
+    // Outermost, so its clock covers the guards-after interceptors too and the log line carries the whole handler time.
+    { provide: APP_INTERCEPTOR, useClass: SlowRequestInterceptor },
     { provide: APP_INTERCEPTOR, useClass: IdempotencyInterceptor },
     { provide: APP_INTERCEPTOR, useClass: ImpersonationMaskInterceptor },
   ],

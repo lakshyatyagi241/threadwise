@@ -16,19 +16,9 @@
       "reason": "Plan feature added with the plan limits work. Invoicing is now gated by this key; the plan guide is written once the plan editor copy for it settles."
     },
     {
-      "unit": "feature:forms_and_links",
-      "owner": "lakshya",
-      "reason": "Plan feature added with the plan limits work. Forms and links is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
       "unit": "feature:extra_channels",
       "owner": "lakshya",
       "reason": "Plan feature added with the plan limits work. The Telegram, Facebook and Instagram channels is now gated by this key; the plan guide is written once the plan editor copy for it settles."
-    },
-    {
-      "unit": "feature:personal_history_full",
-      "owner": "lakshya",
-      "reason": "Plan feature for the FULL choice of the personal-number history import. It is explained in the guide personal-whatsapp-import-history, which is NOT gated by it (the recent choice is open to every plan with personal numbers), so the coverage check cannot see it; revisit if the help center gets a way to document a feature inside an ungated guide."
     }
   ]
 }

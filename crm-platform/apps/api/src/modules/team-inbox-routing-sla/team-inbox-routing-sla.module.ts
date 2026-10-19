@@ -2,8 +2,10 @@ import { Module } from '@nestjs/common';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { TeamAnalyticsController } from './team-analytics.controller';
 import { TeamAnalyticsService } from './team-analytics.service';
+import { ChatConversationsModule } from '../chat-conversations';
 import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AssigneesService } from './assignees.service';
+import { BusinessHoursService } from './business-hours.service';
 import { AssignmentController } from './assignment.controller';
 import { AssignmentService } from './assignment.service';
 import { BulkActionsService } from './bulk-actions.service';
@@ -24,7 +26,7 @@ import { RoutingRulesService } from './routing-rules.service';
  * Kernel services (audit, outbox, RBAC), the database and realtime are global.
  */
 @Module({
-  imports: [TeamInboxConversationsModule, PlansCoreModule],
+  imports: [TeamInboxConversationsModule, ChatConversationsModule, PlansCoreModule],
   controllers: [
     AssignmentController,
     RoutingRulesController,
@@ -35,6 +37,7 @@ import { RoutingRulesService } from './routing-rules.service';
     AssignmentService,
     BulkActionsService,
     AssigneesService,
+    BusinessHoursService,
     RoutingRulesRepository,
     RoutingRulesService,
     RoutingEngine,
@@ -43,6 +46,6 @@ import { RoutingRulesService } from './routing-rules.service';
     SlaClockService,
     TeamAnalyticsService,
   ],
-  exports: [AssignmentService, RoutingEngine, SlaClockService],
+  exports: [AssignmentService, RoutingEngine, RoutingRulesRepository, SlaClockService],
 })
 export class TeamInboxRoutingSlaModule {}

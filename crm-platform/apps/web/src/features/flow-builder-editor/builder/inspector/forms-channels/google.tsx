@@ -1,10 +1,13 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { ERROR_CODES } from '@crm/contracts';
+import { ApiError } from '@/lib/api/errors';
 import { useGoogleFiles } from '../../../api/hooks';
-import { Check, Field, Notice, SelectInput, TextInput } from '../kit';
+import { GoogleConnectionNotice } from './google-connection';
+import { Check, Field, Notice, SelectInput } from '../kit';
 import type { FormComponent, FormProps } from '../types';
-import { appsScriptHref, extractGoogleId, withSavedOption } from './helpers';
+import { withSavedOption } from './helpers';
 import {
   AddLink,
   ExtLink,
@@ -24,29 +27,38 @@ type Kind = 'sheets' | 'docs' | 'forms';
 const NS = 'flb.builder.formsChannels.google';
 
 /**
- * Dropdown over the connected Google account's files. While the Google integration is not connected the list request
- * fails; the field then becomes a plain text input for the id (never a made-up list) with an amber note.
+ * Dropdown over the connected Google account's files. Files are only ever picked from the account's own list: while Google is not
+ * connected (or the Drive file list permission is missing) the field says so and links to the Google account page, it never turns into
+ * a box for a pasted id. A value the flow already holds stays visible and selectable, so opening a step never drops it.
  */
-function GoogleFilePicker({ p, kind, dataKey }: { p: FormProps; kind: Kind; dataKey: string }) {
+export function GoogleFilePicker({
+  p,
+  kind,
+  dataKey,
+}: {
+  p: FormProps;
+  kind: Kind;
+  dataKey: string;
+}) {
   const t = useTranslations(NS);
   const files = useGoogleFiles(kind);
   const value = p.data[dataKey];
+  const saved = value === null || value === undefined ? '' : String(value);
   if (files.isError) {
+    // Connected, but without the Drive file list permission: say that, not "not connected".
+    const noListing =
+      files.error instanceof ApiError && files.error.code === ERROR_CODES.GOOGLE_SCOPE_MISSING;
     return (
       <>
         <Notice tone="warn" className="mb-2">
-          {t(`kinds.${kind}.notConnected`)}
+          {noListing ? t('noListing') : t(`kinds.${kind}.notConnected`)}{' '}
+          <ExtLink href="/google-account">{t('connection.open')}</ExtLink>
         </Notice>
-        <TextInput
-          value={value}
-          mono
-          placeholder={
-            kind === 'sheets'
-              ? 'https://docs.google.com/spreadsheets/d/<ID>/edit'
-              : t(`kinds.${kind}.idPlaceholder`)
-          }
-          onChange={(v) => p.set(dataKey, extractGoogleId(v))}
-        />
+        {saved ? (
+          <div className="font-mono text-[11px] text-muted-foreground">
+            {t(`kinds.${kind}.saved`, { id: saved.slice(0, 12) })}
+          </div>
+        ) : null}
       </>
     );
   }
@@ -79,6 +91,7 @@ export const GoogleSheetsForm: FormComponent = (p) => {
       <Intro>
         {t.rich('sheetsIntro', { link: (c) => <ExtLink href="/google-account">{c}</ExtLink> })}
       </Intro>
+      <GoogleConnectionNotice need="sheets" />
       <Field label={t('mode')}>
         {Sel(p, 'mode', [
           { v: 'write', l: t('modeWrite') },
@@ -88,7 +101,6 @@ export const GoogleSheetsForm: FormComponent = (p) => {
       <Field label={t('spreadsheet')}>
         <GoogleFilePicker p={p} kind="sheets" dataKey="sheetId" />
       </Field>
-      <PasteSheetField p={p} />
       <Field label={t('tabName')}>{Txt(p, 'tabName', 'Sheet1')}</Field>
       {read ? (
         <>
@@ -150,30 +162,13 @@ export const GoogleSheetsForm: FormComponent = (p) => {
             <Check checked={byHeader} onChange={(v) => p.set('matchByHeader', v)}>
               {t('matchByHeader')}
             </Check>
-            <div className="ml-6 text-[10.5px] text-muted-foreground">{t('matchByHeaderHint')}</div>
+            <div className="ms-6 text-[10.5px] text-muted-foreground">{t('matchByHeaderHint')}</div>
           </div>
         </>
       )}
     </>
   );
 };
-
-/** The "paste a link" box next to the picker; only shown while the picker works (otherwise the picker is already a text box). */
-function PasteSheetField({ p }: { p: FormProps }) {
-  const t = useTranslations(NS);
-  const files = useGoogleFiles('sheets');
-  if (files.isError) return null;
-  return (
-    <Field label={t('pasteLabel')} hint={t('pasteHint')}>
-      <TextInput
-        mono
-        value={p.data.sheetId}
-        placeholder="https://docs.google.com/spreadsheets/d/<ID>/edit"
-        onChange={(v) => p.set('sheetId', extractGoogleId(v))}
-      />
-    </Field>
-  );
-}
 
 export const GoogleDocsForm: FormComponent = (p) => {
   const t = useTranslations(NS);
@@ -193,6 +188,7 @@ export const GoogleDocsForm: FormComponent = (p) => {
           mono: (c) => <Mono>{c}</Mono>,
         })}
       </Intro>
+      <GoogleConnectionNotice need="docs" />
       <Field label={t('templateDocument')}>
         <GoogleFilePicker p={p} kind="docs" dataKey="templateId" />
       </Field>
@@ -259,6 +255,7 @@ export const GoogleFormForm: FormComponent = (p) => {
   return (
     <>
       <Intro>{t.rich('formIntro', { b: (c) => <b>{c}</b> })}</Intro>
+      <GoogleConnectionNotice need="forms" />
       <Field label={t('googleForm')}>
         <GoogleFilePicker p={p} kind="forms" dataKey="formId" />
       </Field>
@@ -275,29 +272,6 @@ export const GoogleFormForm: FormComponent = (p) => {
       <Field label={t('expireAfter')} hint={t('expireAfterHint')}>
         {Num(p, 'expiresInSec', '86400')}
       </Field>
-      {p.data.formId ? (
-        <div className="mt-3 rounded-lg border border-border bg-muted p-3">
-          <div className="mb-1 text-[12px] font-semibold">{t('setupTitle')}</div>
-          <ol className="mb-2 list-inside list-decimal space-y-0.5 text-[11.5px] text-foreground/80">
-            <li>{t.rich('setupOpen', { mono: (c) => <Mono>{c}</Mono> })}</li>
-            <li>
-              {t.rich('setupDownload', {
-                link: (c) => (
-                  <a
-                    href={appsScriptHref(String(p.data.formId))}
-                    download
-                    className="text-brand underline"
-                  >
-                    {c}
-                  </a>
-                ),
-              })}
-            </li>
-            <li>{t.rich('setupTrigger', { mono: (c) => <Mono>{c}</Mono> })}</li>
-          </ol>
-          <div className="font-mono text-[10.5px] text-muted-foreground">{t('setupWarning')}</div>
-        </div>
-      ) : null}
     </>
   );
 };

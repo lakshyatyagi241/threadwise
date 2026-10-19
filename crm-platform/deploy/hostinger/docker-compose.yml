@@ -6,9 +6,11 @@
 
 name: desk
 
-# Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. The three
-# app containers are recreated on every release, so setting this on them costs nothing; postgres, redis and minio are left
-# alone so that adding it never restarts the database.
+# Docker's json-file driver keeps every log line forever unless told otherwise, on a host shared with many other apps. Every
+# container has this block. The app containers are recreated on every release, so it cost nothing there; postgres, redis and
+# the object store were first left without it so that adding it would not restart the database. They have it now (the slow-query log and
+# pg_stat_statements make postgres the chattiest container): the FIRST `docker compose up -d` after this change recreates them
+# (a few seconds of downtime, data is on the named volumes), so take that release at a quiet hour. Later releases do not touch them.
 x-app-logging: &app-logging
   driver: json-file
   options:
@@ -41,16 +43,18 @@ x-api-env: &api-env
   # Error reporting. The DSN is public by design (it only lets events in), so it is the default here; set SENTRY_DSN= (empty) in .env to turn reporting off.
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}
-  # api and worker are separate containers: media must live in the bucket, not on a container's own disk.
+  # api and worker are separate containers: media must live in the bucket, not on a container's own disk. The bucket is Cloudflare R2
+  # (any S3-compatible store works); every value comes from .env and a release refuses to start without them.
   MEDIA_STORAGE_DRIVER: s3
-  S3_ENDPOINT: http://minio:9000
-  S3_REGION: us-east-1
-  S3_BUCKET_MEDIA: crm-media
-  S3_BUCKET_DOCUMENTS: crm-documents
-  S3_BUCKET_EXPORTS: crm-exports
-  S3_ACCESS_KEY_ID: ${MINIO_ROOT_USER}
-  S3_SECRET_ACCESS_KEY: ${MINIO_ROOT_PASSWORD}
-  S3_FORCE_PATH_STYLE: 'true'
+  S3_ENDPOINT: ${S3_ENDPOINT:?set S3_ENDPOINT (https://<account id>.r2.cloudflarestorage.com) in .env}
+  S3_REGION: ${S3_REGION:-auto}
+  S3_BUCKET_MEDIA: ${S3_BUCKET_MEDIA:?set S3_BUCKET_MEDIA in .env}
+  S3_BUCKET_DOCUMENTS: ${S3_BUCKET_DOCUMENTS:?set S3_BUCKET_DOCUMENTS in .env}
+  S3_BUCKET_EXPORTS: ${S3_BUCKET_EXPORTS:?set S3_BUCKET_EXPORTS in .env}
+  S3_ACCESS_KEY_ID: ${S3_ACCESS_KEY_ID:?set S3_ACCESS_KEY_ID in .env}
+  S3_SECRET_ACCESS_KEY: ${S3_SECRET_ACCESS_KEY:?set S3_SECRET_ACCESS_KEY in .env}
+  S3_FORCE_PATH_STYLE: ${S3_FORCE_PATH_STYLE:-false}
+  S3_PUBLIC_ENDPOINT: ${S3_PUBLIC_ENDPOINT:-}
   SMTP_HOST: ${SMTP_HOST}
   SMTP_PORT: ${SMTP_PORT}
   SMTP_FROM: ${SMTP_FROM}
@@ -66,6 +70,7 @@ x-api-env: &api-env
   META_APP_ID: ${META_APP_ID:-}
   META_APP_SECRET: ${META_APP_SECRET:-}
   META_EMBEDDED_CONFIG_ID: ${META_EMBEDDED_CONFIG_ID:-}
+  META_CATALOGUE_CONFIG_ID: ${META_CATALOGUE_CONFIG_ID:-}
   INTERAKT_PARTNER_AUTH_KEY: ${INTERAKT_PARTNER_AUTH_KEY:-}
   INTERAKT_SOLUTION_ID: ${INTERAKT_SOLUTION_ID:-}
   META_SYSTEM_USER_ID: ${META_SYSTEM_USER_ID:-}
@@ -73,6 +78,7 @@ x-api-env: &api-env
   META_BUSINESS_ID: ${META_BUSINESS_ID:-}
   # Offer "connect my existing Business App number" (coexistence) in Embedded Signup.
   WABA_COEXISTENCE: ${WABA_COEXISTENCE:-false}
+  WABA_TRUSTED_FORWARDER_IPS: ${WABA_TRUSTED_FORWARDER_IPS:-}
   # Google Calendar for workspaces (blank = set the client on the console's Google Calendar page instead).
   GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
   GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
@@ -83,6 +89,81 @@ x-api-env: &api-env
   WABOO_RUNNER_PICKUP_MIN: ${WABOO_RUNNER_PICKUP_MIN:-}
   WABOO_RUNNER_SILENCE_MIN: ${WABOO_RUNNER_SILENCE_MIN:-}
   WABOO_MIGRATE_TIMEOUT_MIN: ${WABOO_MIGRATE_TIMEOUT_MIN:-}
+  # Event-loop and runtime metrics (docs/performance/event-loop). Every process measures itself; this only decides whether /metrics
+  # is served. Off by default (port 0): deploying this file changes nothing. observability.compose.yml turns it on together with a
+  # Prometheus, an Alertmanager and a probe. The listener refuses to open on a non-loopback host without a token, so setting the port
+  # alone cannot expose it unauthenticated.
+  OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
+  OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}
+  OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:-}
+
+# Slot settings shared by api-blue and api-green. No Traefik labels: the public routes live in the routing file, not on the containers.
+x-api-slot: &api-slot
+  pull_policy: never
+  restart: unless-stopped
+  mem_limit: 1g
+  # Docker kills a container 10 s after SIGTERM by default. The API closes HTTP and websocket connections on SIGTERM; give slow
+  # requests time to finish instead of cutting them off on every release.
+  stop_grace_period: 30s
+  logging: *app-logging
+  # The alias `api` is shared by both slots and resolves only to a running one: Prometheus (deploy/observability) and the probe find the
+  # API by it, so a stopped slot is not a failed scrape. Public traffic never uses it (the routing file names the slot's container).
+  networks:
+    default:
+      aliases: [api]
+    dokploy-network: {}
+  healthcheck:
+    test:
+      [
+        'CMD',
+        'node',
+        '-e',
+        "fetch('http://127.0.0.1:3000/ready').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+      ]
+    interval: 10s
+    timeout: 5s
+    retries: 6
+    start_period: 30s
+  depends_on:
+    postgres: { condition: service_healthy }
+    redis: { condition: service_healthy }
+    migrate: { condition: service_completed_successfully }
+
+# Slot settings shared by web-blue and web-green.
+x-web-slot: &web-slot
+  pull_policy: never
+  restart: unless-stopped
+  mem_limit: 768m
+  stop_grace_period: 20s
+  logging: *app-logging
+  # Same idea as the API's alias: `web` resolves to whichever slot is running.
+  networks:
+    default:
+      aliases: [web]
+    dokploy-network: {}
+  healthcheck:
+    test:
+      [
+        'CMD',
+        'node',
+        '-e',
+        "fetch('http://127.0.0.1:3001/login').then((r) => process.exit(r.ok ? 0 : 1)).catch(() => process.exit(1))",
+      ]
+    interval: 10s
+    timeout: 5s
+    retries: 6
+    start_period: 30s
+
+x-web-env: &web-env
+  NODE_ENV: production
+  TZ: UTC
+  NODE_OPTIONS: --max-old-space-size=512
+  SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
+  REALTIME_URL: https://${DOMAIN}/realtime
+  # Event-loop and runtime metrics of the Next.js server, same switches as the API's (see x-api-env): off unless a port is set.
+  OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
+  OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}
+  OBS_METRICS_TOKEN: ${OBS_METRICS_TOKEN:-}
 
 services:
   postgres:
@@ -96,6 +177,7 @@ services:
       WORKER_DB_PASSWORD: ${WORKER_DB_PASSWORD}
     # Sized for a shared host (see PG_* in .env); the repo's docker-compose.prod.yml assumes a 16 GB+ machine.
     mem_limit: 1g
+    logging: *app-logging
     command:
       - postgres
       - -c
@@ -108,6 +190,11 @@ services:
       - random_page_cost=1.1
       - -c
       - log_min_duration_statement=500
+      # per-statement time, calls and rows: ranks slow queries by total time and p95 (QA 41); the log alone has no statistics
+      - -c
+      - shared_preload_libraries=pg_stat_statements
+      - -c
+      - pg_stat_statements.track=all
     volumes:
       - pgdata:/var/lib/postgresql/data
       - ./init-roles.sh:/docker-entrypoint-initdb.d/01-roles.sh:ro
@@ -122,6 +209,7 @@ services:
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache.
     mem_limit: 256m
+    logging: *app-logging
     command:
       [
         'redis-server',
@@ -139,19 +227,6 @@ services:
       interval: 10s
       timeout: 3s
       retries: 5
-
-  minio:
-    # The registry no longer serves this image; the host has it locally. The API only probes S3 (no bucket access yet).
-    image: minio/minio:latest
-    pull_policy: never
-    restart: unless-stopped
-    mem_limit: 256m
-    command: ['server', '/data']
-    environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    volumes:
-      - miniodata:/data
 
   # Nightly pg_dump with a verified archive, kept on the host in ./backups (14 days, never fewer than the newest 3), plus a dump on
   # demand that the release takes before it migrates. The script is written out here rather than shipped as a file because the
@@ -285,6 +360,7 @@ services:
     working_dir: /app
     command: ['node', 'node_modules/@crm/db/dist/cli/migrate.js', 'up']
     restart: 'no'
+    logging: *app-logging
     environment:
       NODE_ENV: production
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
@@ -292,35 +368,45 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
 
-  api:
-    image: desk-api:${IMAGE_TAG:-local}
-    pull_policy: never
-    build:
-      context: ../..
-      dockerfile: apps/api/Dockerfile
-    restart: unless-stopped
-    mem_limit: 1g
-    # Docker kills a container 10 s after SIGTERM by default. The API closes HTTP and websocket connections on SIGTERM; give
-    # slow requests time to finish instead of cutting them off on every release.
-    stop_grace_period: 30s
-    logging: *app-logging
-    networks: [default, dokploy-network]
-    labels:
-      traefik.enable: 'true'
-      traefik.docker.network: dokploy-network
-      traefik.http.routers.desk-api.rule: Host(`${DOMAIN}`) && (PathPrefix(`/v2`) || PathPrefix(`/socket.io`) || PathPrefix(`/health`) || PathPrefix(`/ready`) || PathPrefix(`/api/v1`) || PathPrefix(`/public/v1`) || Path(`/docs/api.json`))
-      traefik.http.routers.desk-api.priority: '100'
-      traefik.http.routers.desk-api.entrypoints: websecure
-      traefik.http.routers.desk-api.tls.certresolver: letsencrypt
-      traefik.http.services.desk-api.loadbalancer.server.port: '3000'
+  # Two slots, blue and green. Each is an API and a web container. A release starts the IDLE slot on the new image, waits for it to be
+  # healthy, moves the public routes to it (deploy/hostinger/traefik-desk.yml.template, written by ci-entry.sh) and stops the old one.
+  # The old slot serves until that switch, so a release causes no downtime. The worker is not in a slot: one instance only, because its
+  # schedulers must not run twice; it is restarted on the new image with a long graceful stop.
+  api-blue:
+    <<: *api-slot
+    container_name: desk-api-blue
+    image: desk-api:${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
     environment:
       <<: *api-env
       WORKER_MODE: 'false'
-    depends_on:
-      postgres: { condition: service_healthy }
-      redis: { condition: service_healthy }
-      migrate: { condition: service_completed_successfully }
-      minio: { condition: service_started }
+      OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
+
+  api-green:
+    <<: *api-slot
+    container_name: desk-api-green
+    image: desk-api:${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
+    environment:
+      <<: *api-env
+      WORKER_MODE: 'false'
+      OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
+
+  web-blue:
+    <<: *web-slot
+    container_name: desk-web-blue
+    image: desk-web:${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
+    environment:
+      <<: *web-env
+      API_URL: http://desk-api-blue:3000
+      OBS_RELEASE: ${SLOT_BLUE_TAG:-${IMAGE_TAG:-local}}
+
+  web-green:
+    <<: *web-slot
+    container_name: desk-web-green
+    image: desk-web:${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
+    environment:
+      <<: *web-env
+      API_URL: http://desk-api-green:3000
+      OBS_RELEASE: ${SLOT_GREEN_TAG:-${IMAGE_TAG:-local}}
 
   worker:
     image: desk-api:${IMAGE_TAG:-local}
@@ -344,46 +430,13 @@ services:
     environment:
       <<: *api-env
       WORKER_MODE: 'true'
+      OBS_RELEASE: ${IMAGE_TAG:-local}
       DATABASE_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
       DATABASE_REPLICA_URL: postgres://crm_worker_user:${WORKER_DB_PASSWORD}@postgres:5432/${POSTGRES_DB}
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
       migrate: { condition: service_completed_successfully }
-
-  web:
-    image: desk-web:${IMAGE_TAG:-local}
-    pull_policy: never
-    build:
-      context: ../..
-      dockerfile: apps/web/Dockerfile
-    restart: unless-stopped
-    mem_limit: 768m
-    stop_grace_period: 20s
-    logging: *app-logging
-    networks: [default, dokploy-network]
-    labels:
-      traefik.enable: 'true'
-      traefik.docker.network: dokploy-network
-      traefik.http.routers.desk-web.rule: Host(`${DOMAIN}`)
-      traefik.http.routers.desk-web.priority: '10'
-      traefik.http.routers.desk-web.entrypoints: websecure
-      traefik.http.routers.desk-web.tls.certresolver: letsencrypt
-      traefik.http.services.desk-web.loadbalancer.server.port: '3001'
-      # Plain HTTP goes to HTTPS.
-      traefik.http.routers.desk-http.rule: Host(`${DOMAIN}`)
-      traefik.http.routers.desk-http.entrypoints: web
-      traefik.http.routers.desk-http.middlewares: desk-https
-      traefik.http.middlewares.desk-https.redirectscheme.scheme: https
-    environment:
-      NODE_ENV: production
-      TZ: UTC
-      NODE_OPTIONS: --max-old-space-size=512
-      SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
-      API_URL: http://api:3000
-      REALTIME_URL: https://${DOMAIN}/realtime
-    depends_on:
-      - api
 
 networks:
   dokploy-network:
@@ -392,4 +445,3 @@ networks:
 volumes:
   pgdata:
   redisdata:
-  miniodata:

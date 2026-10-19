@@ -270,7 +270,7 @@ export class FlowTriggerService {
           await tx.execute(sql`
             INSERT INTO flow_segment_state (org_id, flow_id, contact_id, inside)
             VALUES (${orgId}, ${f.id}, ${contactId}, ${inside})
-            ON CONFLICT (flow_id, contact_id) DO UPDATE SET inside = EXCLUDED.inside, updated_at = now()`);
+            ON CONFLICT (org_id, flow_id, contact_id) DO UPDATE SET inside = EXCLUDED.inside, updated_at = now()`);
           return res.rows[0]?.inside === true;
         });
         // Only a contact the flow saw inside and now finds outside has left; each departure is its own reason.
@@ -368,7 +368,9 @@ export class FlowTriggerService {
   ): Promise<number> {
     const kinds = await this.db.txAs({ orgId }, async (tx) => {
       const res = (await tx.execute(
-        sql`SELECT inbox_away, business_hours, timezone FROM workspace_settings WHERE org_id = ${orgId}`,
+        sql`SELECT ws.inbox_away, ws.business_hours, COALESCE(o.settings ->> 'timezone', 'UTC') AS timezone
+              FROM organizations o LEFT JOIN workspace_settings ws ON ws.org_id = o.id
+             WHERE o.id = ${orgId}`,
       )) as unknown as Rows;
       const org = res.rows[0];
       if (!org) return [] as string[];

@@ -5,7 +5,18 @@ summary: Build smart agents and teach them from your own pages, files, text and 
 area: settings
 order: 5
 documents: [tile:ai-training]
-keywords: [knowledge base, smart agent, assistant, faq, train, sources, meta business agent, responder, chatbot]
+keywords:
+  [
+    knowledge base,
+    smart agent,
+    assistant,
+    faq,
+    train,
+    sources,
+    meta business agent,
+    responder,
+    chatbot,
+  ]
 ---
 
 ## What it is for
@@ -34,7 +45,7 @@ Only entries that are **ready** are used. Removing an entry stops the agent usin
 
 ## Using an agent
 
-In a flow, open the AI step and pick the agent under **Knowledge base**. If you have none yet, **Create knowledge base** opens this screen in a new tab, and **Refresh list** brings the new agent into the picker. Pick the same agent in the **Smart agent** step of a chat widget.
+In a flow, add the **AI assistant** step and choose **AI agent**: the agent answers with its own instructions, tone, model, reply length and knowledge, so nothing is typed again in the step. If you have none yet, **+ Create AI agent** opens this screen in a new tab, and **Refresh list** brings the new agent into the picker. Choose **Custom setup** instead to pick a model and write the instructions in the step; an agent chosen under **Knowledge from an AI agent** then only adds its knowledge. Pick the same agent in the **Smart agent** step of a chat widget.
 
 Duplicating an agent copies its settings and its entries. The copy is paused, so it never answers until you switch it on. Deleting an agent deletes its entries and uploaded files, and widgets or flows that used it stop answering with it.
 

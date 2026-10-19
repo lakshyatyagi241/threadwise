@@ -6,6 +6,16 @@
  */
 type Doc = Record<string, unknown>;
 
+/** Written from the README ("Contact properties"), not imported from the transform: the two timestamp properties shown as read-only fields. */
+const TIME_NAMES = ['created_time', 'modified_time'];
+
+/** Written from the README ("Contact properties"), not imported from the transform: the Waboo web-analytics property names that become ordinary fields. */
+const WEB_ANALYTICS_NAMES = [
+  'referrer', 'referrer_name', 'referrer_keyword', 'referrer_url', 'utm_medium', 'utm_campaign', 'utm_source',
+  'device_type', 'device_model', 'operating_system', 'operating_system_name', 'browser_version', 'browser_name',
+  'ip_continent', 'ip_country_region', 'ip_state_region', 'ip_city', 'channel', 'bot_name', 'module_type', 'module_name', 'platform',
+];
+
 export const text = (v: unknown): string => (v === null || v === undefined ? '' : String(v).trim());
 
 export function truthy(v: unknown): boolean {
@@ -33,7 +43,7 @@ export function dateOf(v: unknown): Date | null {
     const t = v.trim();
     const d = /^\d{9,13}$/.test(t)
       ? new Date(Number(t) < 1e11 ? Number(t) * 1000 : Number(t))
-      : new Date(t);
+      : new Date(/^\d{4}-\d\d-\d\d[T ]\d\d:\d\d(:\d\d(\.\d+)?)?$/.test(t) ? `${t.replace(' ', 'T')}Z` : t);
     return Number.isNaN(d.getTime()) ? null : d;
   }
   return null;
@@ -199,11 +209,13 @@ export class ContactOracle {
     const name = [first, last].filter(Boolean).join(' ') || null;
     let email: string | null = text(doc.email).toLowerCase() || null;
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) email = null;
-    const phone = oraclePhone(
-      text(doc.mobile_phone_number) || text(doc.whatsapp_phone_number),
-      doc.country_code,
-      this.defaultCc,
-    );
+    // first candidate that reads as a number: mobile, then WhatsApp (a junk mobile does not hide a valid WhatsApp number)
+    let phone: string | null = null;
+    for (const raw of [text(doc.mobile_phone_number), text(doc.whatsapp_phone_number)]) {
+      if (raw === '') continue;
+      phone = oraclePhone(raw, doc.country_code, this.defaultCc);
+      if (phone) break;
+    }
     const hasRejects = Object.keys(doc).some((k) =>
       /^__.+__(error_reason|unverified_value)$/.test(k),
     );
@@ -340,10 +352,11 @@ export class TableOracle {
           field_type: FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text',
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
-          is_read_only: truthy(doc.read_only),
+          is_read_only: TIME_NAMES.includes(String(doc.name)) ? true : truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
-          is_system: truthy(doc.system_default),
+          // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
+          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)) && !TIME_NAMES.includes(String(doc.name)),
           is_active: true,
           position: Number(doc.position) || 0,
           ...this.dates(doc),

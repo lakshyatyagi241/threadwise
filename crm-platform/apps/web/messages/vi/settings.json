@@ -145,11 +145,6 @@
         "description": "Chỉnh sửa pipeline thương vụ, giai đoạn và lý do thất bại.",
         "keywords": "thương vụ, giai đoạn bán hàng, bảng, lý do thất bại, phễu"
       },
-      "tags": {
-        "label": "Thẻ",
-        "description": "Tạo và sắp xếp các thẻ dùng cho liên hệ và cuộc trò chuyện.",
-        "keywords": "nhãn, màu sắc, màu"
-      },
       "saved-replies": {
         "label": "Câu trả lời đã lưu",
         "description": "Soạn các câu trả lời dùng lại để nhóm gửi chỉ bằng một cú nhấp.",
@@ -360,15 +355,40 @@
         "description": "Xem từng nhân viên phản hồi và giải quyết nhanh thế nào hôm nay, tuần này hoặc tháng này.",
         "keywords": "báo cáo, phân tích, nhân viên, thời gian phản hồi, phản hồi đầu tiên, đã giải quyết, khối lượng, hiệu suất"
       },
-      "contact-assignment": {
-        "label": "Phân công liên hệ",
-        "description": "Tự động giao liên hệ và deal mới cho đúng người, bỏ qua những người đang nghỉ phép.",
-        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, deal mới, nghỉ phép, định tuyến lead"
-      },
       "privacy-requests": {
         "label": "Yêu cầu dữ liệu",
         "description": "Trả lời những người hỏi bạn đang giữ gì về họ: kiểm tra danh tính, xuất, xóa có xem trước và bằng chứng bạn có thể lưu giữ.",
         "keywords": "quyền riêng tư, gdpr, yêu cầu dữ liệu, dsar, truy cập dữ liệu cá nhân, xuất dữ liệu, xóa, quyền được lãng quên, xóa dữ liệu cá nhân, lưu giữ pháp lý"
+      },
+      "compliance-center": {
+        "label": "Trung tâm tuân thủ",
+        "description": "Các công cụ giúp bạn thực hiện nghĩa vụ về quyền riêng tư: các luật áp dụng với bạn, đầu mối liên hệ về quyền riêng tư, thông báo và liên kết, bên xử lý phụ, giờ yên tĩnh và danh sách kiểm tra những gì đã có.",
+        "keywords": "tuân thủ, quyền riêng tư, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, cán bộ giải quyết khiếu nại, bên xử lý phụ, dpa, điều khoản, chính sách quyền riêng tư, giờ yên tĩnh, không gọi, danh sách kiểm tra, trẻ em"
+      },
+      "company-properties": {
+        "label": "Thuộc tính công ty",
+        "description": "Thêm các trường bạn muốn giữ trên mọi công ty.",
+        "keywords": "trường tùy chỉnh, trường, bắt buộc, danh sách thả xuống, tổ chức, tài khoản"
+      },
+      "uncontacted-leads": {
+        "label": "Khách hàng tiềm năng chưa liên hệ",
+        "description": "Chọn hành động nào được tính là đã liên hệ với khách hàng tiềm năng, và liên hệ mới nào bắt đầu ở trạng thái chưa liên hệ.",
+        "keywords": "chưa liên hệ, đã liên hệ, khách hàng tiềm năng, khách hàng tiềm năng mới, liên hệ đầu tiên, theo dõi, giao lại, dấu đánh dấu"
+      },
+      "record-assignment": {
+        "label": "Quy tắc phân công bản ghi",
+        "description": "Tự động giao liên hệ, công ty và giao dịch mới cho người phụ trách bán hàng của bạn theo các quy tắc ưu tiên.",
+        "keywords": "phân công, người phụ trách, xoay vòng, liên hệ mới, giao dịch mới, công ty, nghỉ phép, điều phối khách hàng tiềm năng, khối lượng công việc, khu vực"
+      },
+      "follow-ups": {
+        "label": "Theo dõi",
+        "description": "Tự động đặt lịch theo dõi tiếp theo của liên hệ khi nhóm bạn liên hệ với họ, đồng thời chọn ngày và giờ nhắc.",
+        "keywords": "theo dõi, nhắc nhở, hành động tiếp theo, công việc, lịch hẹn, báo lại sau, để sau"
+      },
+      "duplicate-leads": {
+        "label": "Khách hàng tiềm năng trùng lặp",
+        "description": "Chọn việc khách hàng tiềm năng mới khớp với một liên hệ sẽ được gộp vào đó hay trở thành liên hệ mới.",
+        "keywords": "trùng lặp, gộp, khách hàng tiềm năng, cùng số điện thoại, cùng e-mail, liên hệ mới, nguồn"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

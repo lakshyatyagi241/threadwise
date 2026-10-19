@@ -26,6 +26,7 @@ import {
 import { DatabaseService } from '../infra/db/database.service';
 import { RealtimeAuthService, type SocketIdentity } from './realtime-auth.service';
 import { RESTRICTED_EVENT_PERMISSION, RealtimeEmitter } from './realtime-emitter.service';
+import { acceptDeliveryReport, realtimeMetrics } from './realtime-metrics';
 import { RoomAccessService } from './room-access.service';
 import { VisibilityPresence } from './visibility-presence.service';
 import { refFromSpec, roomKeyFor, roomName, type RoomRef } from './rooms';
@@ -39,6 +40,15 @@ const GRANT_WATCH_MS = 1_000;
 const REAUTHORIZE_PARALLEL = 25;
 /** The permissions that have a room of their own: a restricted event goes only to the sockets whose member holds it (AZ-016). */
 const PERMISSION_ROOMS = [...new Set(Object.values(RESTRICTED_EVENT_PERMISSION))];
+
+const JOIN_REFUSAL_LABEL = {
+  FORBIDDEN: 'forbidden',
+  INVALID: 'invalid',
+  LIMIT: 'limit',
+  UNAVAILABLE: 'unavailable',
+} as const;
+
+type DeliveryReportStateHolder = { lastDeliveryReportAt?: number };
 
 interface SocketData {
   identity: SocketIdentity;
@@ -92,8 +102,14 @@ export class RealtimeGateway
     // sees `connect`, so no event can slip past between the two.
     server.use((socket, next) => {
       this.authenticate(socket).then(
-        () => next(),
-        () => next(new Error('unauthorized')),
+        () => {
+          realtimeMetrics.connection('accepted');
+          next();
+        },
+        () => {
+          realtimeMetrics.connection('refused');
+          next(new Error('unauthorized'));
+        },
       );
     });
 
@@ -123,6 +139,7 @@ export class RealtimeGateway
       rooms,
       serverTime: new Date().toISOString(),
     } satisfies RealtimeReady);
+    this.reportSizes();
     this.logger.debug(
       { orgId: identity.orgId, actorId: identity.actorId },
       'realtime client connected',
@@ -130,6 +147,8 @@ export class RealtimeGateway
   }
 
   handleDisconnect(client: Socket): void {
+    realtimeMetrics.disconnect();
+    this.reportSizes();
     const identity = (client.data as Partial<SocketData>).identity;
     if (identity?.actorType === 'user') {
       void this.presence.clear(identity.orgId, identity.actorId, client.id);
@@ -145,6 +164,13 @@ export class RealtimeGateway
     @ConnectedSocket() client: Socket,
     @MessageBody() body: unknown,
   ): Promise<RealtimeRoomAck> {
+    const ack = await this.join(client, body);
+    realtimeMetrics.join(ack.ok ? 'ok' : JOIN_REFUSAL_LABEL[ack.code]);
+    if (ack.ok) this.reportSizes();
+    return ack;
+  }
+
+  private async join(client: Socket, body: unknown): Promise<RealtimeRoomAck> {
     const spec = realtimeRoomSpecSchema.safeParse(body);
     if (!spec.success) return { ok: false, code: 'INVALID' };
 
@@ -176,6 +202,26 @@ export class RealtimeGateway
     return { ok: true, room, seq: await this.emitter.currentSeq(data.identity.orgId, ref) };
   }
 
+  /** Sockets and rooms held by this process, for the metrics. */
+  private reportSizes(): void {
+    realtimeMetrics.setSockets(this.server.sockets.size);
+    realtimeMetrics.setRooms(this.server.adapter?.rooms?.size ?? 0);
+  }
+
+  /**
+   * A tab says how late events have been reaching it (EL-B23): the worst age of an event on arrival over its last minute. Telemetry
+   * for the delivery-lag histogram only; nothing is stored against the person, and a malformed or too-frequent report is ignored.
+   */
+  @SubscribeMessage(REALTIME_CLIENT_EVENTS.deliveryLag)
+  onDeliveryLag(@ConnectedSocket() client: Socket, @MessageBody() body: unknown): void {
+    const seconds = acceptDeliveryReport(
+      body,
+      client.data as DeliveryReportStateHolder,
+      Date.now(),
+    );
+    if (seconds !== null) realtimeMetrics.deliveryLag(seconds);
+  }
+
   /** A tab says whether it is in front (BL-097): the closed-tab browser push skips a person who can see the app. Fire and forget. */
   @SubscribeMessage(REALTIME_CLIENT_EVENTS.visibility)
   async onVisibility(
@@ -202,6 +248,7 @@ export class RealtimeGateway
     await client.leave(name);
     data.joined.delete(name);
     data.specs.delete(name);
+    this.reportSizes();
     return { ok: true, room: realtimeRoomKey(spec.data), seq: 0 };
   }
 

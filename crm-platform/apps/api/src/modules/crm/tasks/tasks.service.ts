@@ -25,7 +25,9 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
-import { assertContactScope, ContactsRepository } from '../contacts';
+import { assertContactScope } from '../contacts/contact-scope';
+import { ContactsRepository } from '../contacts/contacts.repository';
+import { assertCompanyReadable } from '../companies/company-link';
 import { assertOwnerWithinScope } from '../owner-scope';
 // Not the deals barrel: it re-exports the activities service, which imports this one (a cycle that leaves a constructor
 // parameter undefined at runtime).
@@ -44,6 +46,26 @@ import {
 } from './tasks.repository';
 
 export const TASK_MODULE = 'tasks';
+
+/** The title of a follow-up task: an editable task title, not a UI string (the web labels the kind itself). */
+export const FOLLOW_UP_TITLE = 'Follow up';
+
+/** A contact's open follow-up as the lead handling module reads it. */
+export interface OpenFollowUp {
+  id: number;
+  uuid: string;
+  dueAt: Date | null;
+  assigneeId: number | null;
+  assigneeUuid: string | null;
+}
+
+const openOf = (row: TaskRow): OpenFollowUp => ({
+  id: row.id,
+  uuid: row.uuid,
+  dueAt: row.dueAt,
+  assigneeId: row.assigneeId,
+  assigneeUuid: row.assigneeUuid,
+});
 
 const emptyPage = (limit: number): PageResponse<TaskResponse> => ({
   data: [],
@@ -139,6 +161,21 @@ export class TasksService {
     });
   }
 
+  /** A company's tasks (the company page's tasks card): needs record.companies.read on the company, whose own scope applies. */
+  async forCompany(
+    companyUuid: string,
+    query: ListLinkedTasksQuery,
+    scope: RecordScope,
+  ): Promise<PageResponse<TaskResponse>> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const companyId = await this.repo.resolveCompanyId(tx, ctx.orgId, companyUuid);
+      if (companyId === undefined) throw AppError.notFound('Company', companyUuid);
+      await assertCompanyReadable(tx, this.rbac, ctx.orgId, companyId);
+      return this.listIn(tx, query, scope, { companyId });
+    });
+  }
+
   async counts(query: TaskCountsQuery, scope: RecordScope): Promise<TaskCountsResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
@@ -179,29 +216,39 @@ export class TasksService {
   // --- writes ----------------------------------------------------------------------------------------------------------
 
   async create(input: CreateTaskInput, source: TaskSource = 'manual'): Promise<TaskResponse> {
+    return this.db.tx((tx) => this.createIn(tx, input, source));
+  }
+
+  /**
+   * `create` inside a transaction the caller owns: for a module that writes a task together with its own row (a follow-up made while a
+   * call is logged), so both commit or neither does.
+   */
+  async createIn(
+    tx: Tx,
+    input: CreateTaskInput,
+    source: TaskSource = 'manual',
+  ): Promise<TaskResponse> {
     const ctx = RequestContextStore.require();
-    return this.db.tx(async (tx) => {
-      const assigneeId = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
-      await this.assertAssigneeAllowed(
-        tx,
-        assigneeId,
-        ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
-      );
-      const links = await this.resolveLinks(tx, ctx.orgId, input, true);
-      const id = await this.repo.insert(tx, ctx.orgId, {
-        title: input.title,
-        notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
-        priority: input.priority ?? 'medium',
-        dueAt: input.dueAt ? new Date(input.dueAt) : null,
-        assigneeId,
-        createdBy: ctx.userId,
-        contactId: links.contactId ?? null,
-        dealId: links.dealId ?? null,
-        companyId: links.companyId ?? null,
-        source,
-      });
-      return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
+    const assigneeId = await this.resolveAssignee(tx, ctx.orgId, input.assigneeId, ctx.userId);
+    await this.assertAssigneeAllowed(
+      tx,
+      assigneeId,
+      ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
+    );
+    const links = await this.resolveLinks(tx, ctx.orgId, input, true);
+    const id = await this.repo.insert(tx, ctx.orgId, {
+      title: input.title,
+      notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
+      priority: input.priority ?? 'medium',
+      dueAt: input.dueAt ? new Date(input.dueAt) : null,
+      assigneeId,
+      createdBy: ctx.userId,
+      contactId: links.contactId ?? null,
+      dealId: links.dealId ?? null,
+      companyId: links.companyId ?? null,
+      source,
     });
+    return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
   }
 
   async update(uuid: string, input: UpdateTaskInput, scope: RecordScope): Promise<TaskResponse> {
@@ -392,6 +439,96 @@ export class TasksService {
     });
   }
 
+  // --- contact follow-ups (BL-291; called by the lead handling module inside its transaction) -----------------------------------
+
+  /** The workspace's time zone, for the module that plans a follow-up's date and alert time. */
+  workspaceZone(tx: Tx, orgId: number): Promise<string> {
+    return this.zone(tx, orgId);
+  }
+
+  /** The contact's one open follow-up, or undefined. */
+  async openFollowUp(tx: Tx, orgId: number, contactId: number): Promise<OpenFollowUp | undefined> {
+    const id = await this.repo.openFollowUpId(tx, orgId, contactId);
+    if (id === undefined) return undefined;
+    const row = await this.repo.findById(tx, orgId, id, await this.zone(tx, orgId));
+    return row ? openOf(row) : undefined;
+  }
+
+  /**
+   * Sets the contact's next follow-up: creates the one open task of kind `follow_up`, or moves the one that exists (a new due date
+   * re-arms its reminder). `dueAt: null` is "someday". The caller has already decided who may do this (a person's scope or a rule), so
+   * no scope is applied here; audit, events and the `task.assigned` hook are the task module's own.
+   */
+  async setFollowUpIn(
+    tx: Tx,
+    orgId: number,
+    v: {
+      contactId: number;
+      dueAt: Date | null;
+      assigneeId: number | null;
+      source: 'manual' | 'auto';
+    },
+  ): Promise<OpenFollowUp> {
+    const ctx = RequestContextStore.require();
+    await this.repo.lockFollowUp(tx, orgId, v.contactId);
+    const tz = await this.zone(tx, orgId);
+    const existing = await this.repo.openFollowUpId(tx, orgId, v.contactId);
+    if (existing === undefined) {
+      const id = await this.repo.insert(tx, orgId, {
+        title: FOLLOW_UP_TITLE,
+        notesCipher: null,
+        priority: 'medium',
+        dueAt: v.dueAt,
+        assigneeId: v.assigneeId,
+        createdBy: ctx.userId,
+        contactId: v.contactId,
+        dealId: null,
+        companyId: null,
+        source: v.source,
+        kind: 'follow_up',
+      });
+      await this.afterInsert(tx, orgId, ctx.userId, id);
+      return openOf((await this.repo.findById(tx, orgId, id, tz))!);
+    }
+    const row = (await this.repo.findById(tx, orgId, existing, tz))!;
+    const dueChanged = (row.dueAt?.getTime() ?? null) !== (v.dueAt?.getTime() ?? null);
+    const assigneeChanged = v.assigneeId !== row.assigneeId;
+    if (!dueChanged && !assigneeChanged) return openOf(row);
+    const patch: TaskPatch = {};
+    const delta: Record<string, { old: unknown; new: unknown }> = {};
+    if (dueChanged) {
+      patch.due_at = v.dueAt;
+      patch.clearReminder = true;
+      delta.dueAt = { old: row.dueAt?.toISOString() ?? null, new: v.dueAt?.toISOString() ?? null };
+    }
+    if (assigneeChanged) patch.assignee_id = v.assigneeId;
+    await this.repo.update(tx, orgId, row.id, undefined, patch);
+    await this.afterEdit(tx, orgId, ctx.userId, row, delta, {
+      dueChanged,
+      assigneeChanged,
+      newAssignee: v.assigneeId,
+    });
+    return openOf((await this.repo.findById(tx, orgId, row.id, tz))!);
+  }
+
+  /** The contact's open follow-up is done (completed); nothing when there is none. */
+  async completeFollowUpIn(tx: Tx, orgId: number, contactId: number): Promise<void> {
+    await this.repo.lockFollowUp(tx, orgId, contactId);
+    const id = await this.repo.openFollowUpId(tx, orgId, contactId);
+    if (id === undefined) return;
+    const row = (await this.repo.findById(tx, orgId, id, await this.zone(tx, orgId)))!;
+    await this.transition(tx, row, true);
+  }
+
+  /** The contact's open follow-up is removed; nothing when there is none. */
+  async deleteFollowUpIn(tx: Tx, orgId: number, contactId: number): Promise<void> {
+    await this.repo.lockFollowUp(tx, orgId, contactId);
+    const id = await this.repo.openFollowUpId(tx, orgId, contactId);
+    if (id === undefined) return;
+    const row = (await this.repo.findById(tx, orgId, id, await this.zone(tx, orgId)))!;
+    await this.deleteRow(tx, orgId, row);
+  }
+
   // --- the deal timeline's mirror (called by DealActivitiesService inside its transaction) ------------------------------------------
 
   /**
@@ -438,7 +575,7 @@ export class TasksService {
     tx: Tx,
     query: ListTasksQuery | ListLinkedTasksQuery,
     scope: RecordScope,
-    fixed: { contactId?: number; dealId?: number },
+    fixed: { contactId?: number; dealId?: number; companyId?: number },
   ): Promise<PageResponse<TaskResponse>> {
     const ctx = RequestContextStore.require();
     const filter = await this.resolveFilter(tx, ctx.orgId, query as FilterInput, fixed);
@@ -475,7 +612,7 @@ export class TasksService {
     tx: Tx,
     orgId: number,
     f: FilterInput,
-    fixed: { contactId?: number; dealId?: number },
+    fixed: { contactId?: number; dealId?: number; companyId?: number },
   ): Promise<TaskFilter | null> {
     const ctx = RequestContextStore.require();
     const out: TaskFilter = {
@@ -484,6 +621,7 @@ export class TasksService {
       unassigned: f.unassigned,
       contactId: fixed.contactId,
       dealId: fixed.dealId,
+      companyId: fixed.companyId,
     };
     if (f.mine) {
       if (!ctx.userId) return null;

@@ -41,7 +41,10 @@
       "notStarted": "Si può fare solo dopo l'inizio della prenotazione.",
       "alreadyStarted": "Questa prenotazione è già iniziata, quindi non può più essere modificata.",
       "bookingOff": "La prenotazione non è disponibile per questo servizio al momento.",
-      "notDeletable": "Non può essere eliminato finché ha prenotazioni future."
+      "notDeletable": "Non può essere eliminato finché ha prenotazioni future.",
+      "notDrifted": "Questa prenotazione corrisponde già all'evento su Google. È stata ricaricata.",
+      "calendarNotConnected": "Google Calendar non è collegato. Ricollegalo dalla pagina dell'account Google e riprova.",
+      "calendarFailed": "Google non ha risposto o ha rifiutato la modifica. Riprova tra qualche istante."
     },
     "picker": {
       "timeZone": "Fuso orario",
@@ -156,7 +159,8 @@
       "yesterday": "Ieri",
       "rowLabel": "Apri prenotazione: {title}",
       "noName": "Senza nome",
-      "needsReview": "Da rivedere"
+      "needsReview": "Da rivedere",
+      "outOfSync": "Calendario non sincronizzato"
     },
     "row": {
       "moreFor": "Altre azioni per {title}",
@@ -232,7 +236,7 @@
       "declineTitle": "Rifiutare questa richiesta?",
       "declineMessage": "Il cliente viene avvisato del rifiuto della richiesta e l'orario torna libero.",
       "declineConfirm": "Rifiuta richiesta",
-      "remindersNote": "I promemoria seguono il tipo di prenotazione. La consegna non è tracciata per singolo promemoria."
+      "remindersNote": "I promemoria seguono il tipo di prenotazione. Si impostano in Impostazioni appuntamenti o nel tipo di prenotazione."
     },
     "source": {
       "chat": "Un flow di chat",
@@ -269,7 +273,13 @@
       "rescheduled": "Prenotazione spostata al nuovo orario.",
       "linkCopied": "Link di gestione copiato.",
       "copyFailed": "Impossibile copiare il link.",
-      "declined": "Richiesta rifiutata."
+      "declined": "Richiesta rifiutata.",
+      "calendarPushed": "Inviato a Google: l'evento ora corrisponde a questa prenotazione.",
+      "calendarAccepted": {
+        "cancelled": "Modifica di Google accettata: la prenotazione è stata annullata.",
+        "rescheduled": "Modifica di Google accettata: la prenotazione è stata spostata al nuovo orario.",
+        "acknowledged": "Modifica di Google accettata. La prenotazione resta invariata."
+      }
     },
     "typesList": {
       "breadcrumb": "Percorso di navigazione",
@@ -397,9 +407,6 @@
         "depositTooHigh": "L'acconto non può superare il totale (tariffa più imposta).",
         "cancelFeeInvalid": "Inserisci un importo come 25.00.",
         "cancelWindowInvalid": "Inserisci un numero intero di minuti da 0 a {cancelWindowMax}.",
-        "reminderInvalid": "Inserisci minuti interi prima dell'inizio, da 1 a {reminderMax}.",
-        "remindersDuplicate": "Ogni promemoria richiede un orario diverso.",
-        "remindersTooMany": "Un tipo di prenotazione può avere al massimo {reminders} promemoria.",
         "questionLabelRequired": "Dai un'etichetta alla domanda (fino a {questionLabelMax} caratteri).",
         "questionsTooMany": "Un tipo di prenotazione può avere al massimo {questions} domande.",
         "questionOptionsRequired": "Aggiungi almeno una scelta, una per riga.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Correggi le date segnalate nell'elenco delle eccezioni di data.",
         "descriptionTooLong": "La descrizione può avere al massimo {descriptionMax} caratteri.",
         "locationTooLong": "Il luogo può avere al massimo {locationMax} caratteri.",
-        "server": "Il server non ha accettato questo valore. Controllalo e riprova."
+        "server": "Il server non ha accettato questo valore. Controllalo e riprova.",
+        "reminderInvalid": "Inserisci un numero intero per l'orario, fino a 30 giorni.",
+        "remindersDuplicate": "Ogni promemoria o follow-up richiede un orario diverso.",
+        "remindersTooMany": "Un tipo di prenotazione può avere al massimo {reminders} promemoria e follow-up.",
+        "reminderChannelsNone": "Scegli almeno un canale.",
+        "reminderBodyTooLong": "Il messaggio, l'oggetto o l'etichetta è troppo lungo."
       },
       "service": {
         "title": "Dettagli del servizio",
@@ -556,11 +568,12 @@
         "hint": "Le prenotazioni funzionano anche senza. Connetti Google Calendar in Appuntamenti, Impostazioni per sincronizzare gli orari liberi/occupati e aggiungere link Meet.",
         "unavailable": "Google Calendar non è ancora configurato per questa piattaforma. Queste impostazioni vengono conservate con il tipo di prenotazione per quando lo sarà.",
         "calendarId": "Calendario",
-        "calendarPlaceholder": "principale",
         "spreadsheetId": "Aggiunta a foglio (facoltativo)",
-        "spreadsheetPlaceholder": "ID del foglio di calcolo",
         "createMeet": "Crea un link Google Meet per ogni prenotazione",
-        "calendarDefault": "Il calendario del workspace"
+        "calendarDefault": "Il calendario del workspace",
+        "connectFirst": "Collega il tuo <link>account Google</link> per scegliere dal suo elenco.",
+        "spreadsheetNone": "Nessun foglio",
+        "spreadsheetNoListing": "Non è possibile elencare i tuoi fogli perché non è stato concesso il permesso per l'elenco dei file di Drive. Aggiungilo nella pagina dell'account Google."
       },
       "messages": {
         "title": "Messaggi del ciclo di vita",
@@ -586,25 +599,6 @@
           "reschedule": "Ciao {name}, il tuo appuntamento {type} è stato spostato a {slot}. Dettagli: {manage_link}"
         },
         "templatesNote": "Non è ancora possibile scegliere i template WhatsApp approvati. I messaggi vengono inviati come testo semplice qui sopra."
-      },
-      "reminders": {
-        "title": "Promemoria",
-        "hint": "Gli orari devono essere distinti (1440 = 24 h prima, 180 = 3 h prima). Fino a {max}.",
-        "add": "Aggiungi promemoria",
-        "quickAdd": "Aggiunta rapida",
-        "quick": {
-          "h24": "24 h",
-          "h3": "3 h",
-          "h1": "1 h",
-          "m15": "15 min"
-        },
-        "empty": "Nessun promemoria. I clienti ricevono solo la conferma.",
-        "offsetOf": "Promemoria {n}, minuti prima dell'inizio",
-        "minBefore": "min prima",
-        "labelPlaceholder": "24h",
-        "labelOf": "Promemoria {n}, etichetta",
-        "remove": "Rimuovi promemoria {n}",
-        "count": "{count} di {max} promemoria"
       },
       "questions": {
         "title": "Questionario",
@@ -962,7 +956,7 @@
         "calendarSaved": "Calendario salvato.",
         "confirmOff": {
           "title": "Disconnettere Google Calendar?",
-          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario e i suoi orari occupati non vengono più letti. Gli eventi già presenti nel calendario restano, e Google viene avvisato di revocare questo accesso.",
+          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario e i suoi orari occupati non vengono più letti. Anche i passaggi Google nei tuoi flow si fermano, perché condividono questo collegamento. Gli eventi già presenti nel calendario restano, e Google viene avvisato di revocare questo accesso.",
           "confirm": "Disconnetti",
           "cancel": "Mantieni"
         },
@@ -972,7 +966,8 @@
           "failed": "La connessione non è stata completata. Riprova; se continua a fallire, chiedi all'amministratore della piattaforma di controllare la configurazione di Google.",
           "expired": "Il tentativo ha richiesto troppo tempo. Premi Connetti per ricominciare.",
           "not_configured": "Google Calendar non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di aggiungere il client OAuth di Google.",
-          "missing_scope": "Google non ha concesso tutte le autorizzazioni del calendario necessarie. Connetti di nuovo e lascia selezionate tutte le caselle."
+          "missing_scope": "Google non ha concesso tutte le autorizzazioni del calendario necessarie. Connetti di nuovo e lascia selezionate tutte le caselle.",
+          "cancelled": "Hai annullato l'operazione. Non è stato collegato nulla."
         },
         "whatTitle": "Cosa fa",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Correggi gli orari evidenziati negli orari di lavoro."
       },
       "notAvailable": "Le impostazioni di prenotazione a livello di workspace non sono disponibili su questo server. Ogni tipo di prenotazione ha invece i propri orari, fuso orario, promemoria e messaggi.",
-      "openTypes": "Apri i tipi di prenotazione"
+      "openTypes": "Apri i tipi di prenotazione",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Collega un calendario Microsoft in cui scrivere le prenotazioni confermate e i cui orari di occupato chiudono gli slot.",
+        "provider": "Calendario Outlook",
+        "providerSub": "Microsoft 365 e Outlook.com",
+        "status": {
+          "unavailable": "Non disponibile",
+          "disconnected": "Non collegato",
+          "connected": "Collegato",
+          "needs_reconnect": "Richiede un nuovo collegamento"
+        },
+        "loading": "Verifica del collegamento in corso",
+        "unavailableTitle": "Outlook non è ancora configurato per questa piattaforma",
+        "unavailableBody": "L'amministratore della piattaforma deve registrare l'app Microsoft (Admin, Impostazioni, Microsoft Calendar) prima che uno spazio di lavoro possa collegarsi. Le tue prenotazioni non sono interessate.",
+        "disconnectedBody": "Non collegato. Il collegamento apre Microsoft, dove scegli l'account e accetti di condividere l'accesso al calendario.",
+        "disconnectedReadOnly": "Non collegato. Chiedi a un amministratore dello spazio di lavoro di collegarlo.",
+        "reconnectTitle": "Microsoft ha smesso di accettare il collegamento",
+        "reconnectBody": "L'accesso è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "reconnectBodyAccount": "L'accesso per {account} è stato revocato o è scaduto, quindi le prenotazioni non vengono scritte nel tuo calendario e i suoi orari di occupato non vengono letti. Collegalo di nuovo per riprendere.",
+        "account": "Account Microsoft",
+        "calendar": "Calendario",
+        "primaryCalendar": "Il tuo calendario principale",
+        "connectedAgo": "Collegato {when}",
+        "writesHere": "Le prenotazioni confermate vengono scritte in questo calendario.",
+        "readsOnly": "Vengono letti solo i suoi orari di occupato. Le prenotazioni vengono scritte nell'altro calendario.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft sta limitando le richieste. Le prenotazioni vengono riprovate automaticamente.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft ha negato l'accesso a questo calendario. Verifica che l'account abbia una casella di posta e possa condividere il proprio calendario.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft non ha risposto. Verrà riprovato automaticamente."
+        },
+        "errors": {
+          "notConfigured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "notConnected": "Nessun calendario Outlook è collegato. Ricarica la pagina e collegalo di nuovo.",
+          "providerFailed": "Microsoft non ha risposto. Riprova tra un attimo.",
+          "notYours": "Questo collegamento è stato avviato da un'altra persona, quindi non è stato collegato nulla. Chiedi a lei di collegarlo, oppure premi tu Collega.",
+          "invalidTicket": "Questo collegamento non può più essere confermato. Premi Collega per ricominciare."
+        },
+        "loadingCalendars": "Caricamento dei tuoi calendari",
+        "chooseLabel": "Scrivi le prenotazioni in",
+        "chooseHint": "Sono elencati solo i calendari che questo account può modificare. Gli eventi già scritti restano dove sono.",
+        "choosePlaceholder": "Scegli un calendario",
+        "chooseOptionPrimary": "{name} (calendario principale)",
+        "chooseSave": "Usa questo calendario",
+        "chooseCancel": "Annulla",
+        "saving": "Salvataggio in corso",
+        "connect": "Collega Outlook",
+        "reconnect": "Ricollega Outlook",
+        "redirecting": "Apertura di Microsoft",
+        "choose": "Scegli calendario",
+        "disconnect": "Scollega",
+        "disconnected": "Outlook scollegato.",
+        "calendarSaved": "Calendario salvato.",
+        "confirm": {
+          "title": "Collegare questo account Microsoft?",
+          "body": "Microsoft ti ha riportato qui per completare il collegamento di un account a {workspace}. Continua solo se l'hai avviato tu stesso poco fa.",
+          "confirm": "Collega",
+          "working": "Collegamento in corso",
+          "cancel": "Annulla"
+        },
+        "confirmOff": {
+          "title": "Scollegare Outlook?",
+          "message": "Le nuove prenotazioni non vengono più inviate al tuo calendario Outlook e i suoi orari di occupato non vengono più letti. Gli eventi già presenti nel tuo calendario restano lì. Per revocare l'autorizzazione dal lato Microsoft, rimuovi l'app nel tuo account Microsoft.",
+          "confirm": "Scollega",
+          "cancel": "Mantieni"
+        },
+        "outcome": {
+          "connected": "Outlook collegato. Le prenotazioni confermate ora vanno nel tuo calendario.",
+          "denied": "L'accesso non è stato concesso su Microsoft, quindi non è stato collegato nulla.",
+          "failed": "Il collegamento non è stato completato. Riprova; se continua a non funzionare, chiedi all'amministratore della piattaforma di controllare l'app Microsoft.",
+          "expired": "Il tentativo ha richiesto troppo tempo. Premi Collega per ricominciare.",
+          "not_configured": "Outlook non è configurato per questa piattaforma. Chiedi all'amministratore della piattaforma di registrare l'app Microsoft.",
+          "missing_scope": "Microsoft non ha concesso l'autorizzazione al calendario necessaria. Collega di nuovo e lascia selezionate tutte le caselle.",
+          "cancelled": "Hai annullato. Non è stato collegato nulla."
+        },
+        "whatTitle": "Cosa fa",
+        "what": {
+          "freeBusy": "Legge gli orari di occupato dal tuo calendario, così gli orari prenotati o bloccati non vengono proposti.",
+          "writeBack": "Scrive le prenotazioni confermate nel tuo calendario come eventi e invita il cliente.",
+          "teams": "Aggiunge un link a una riunione Teams ai servizi online (account di lavoro e scuola)."
+        },
+        "hint": "Le prenotazioni funzionano anche senza. Se è collegato anche Google, gli orari di occupato vengono letti da entrambi e ogni prenotazione viene scritta in uno solo."
+      },
+      "writeTarget": {
+        "title": "Dove vengono scritte le prenotazioni",
+        "description": "Gli orari di occupato vengono letti da ogni calendario collegato. Ogni prenotazione viene scritta in uno solo di essi.",
+        "label": "Scrivi le prenotazioni in",
+        "hint": "Automatico usa Google Calendar quando funziona, altrimenti Outlook. Cambiandolo, gli eventi delle prenotazioni future vengono spostati nel calendario che scegli.",
+        "auto": "Automatico",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "non collegato",
+        "saved": "Salvato.",
+        "backfill": {
+          "body": "{count, plural, one {# prenotazione confermata nei prossimi 90 giorni non è} many {# prenotazioni confermate nei prossimi 90 giorni non sono} other {# prenotazioni confermate nei prossimi 90 giorni non sono}} ancora nel calendario di destinazione. Vengono scritte automaticamente dopo che colleghi o cambi calendario.",
+          "action": "Scrivile ora",
+          "working": "Messa in coda",
+          "queued": "Le stiamo scrivendo nel tuo calendario in background.",
+          "notConnected": "Nessun calendario è collegato, quindi non c'è dove scriverle."
+        }
+      },
+      "feeds": {
+        "title": "Altri calendari (iCal)",
+        "description": "Iscriviti a un calendario tramite il suo indirizzo iCal, così i suoi orari di occupato chiudono gli slot. Viene usato solo quando sei occupato: nient'altro viene mostrato o conservato.",
+        "loading": "Caricamento dei tuoi calendari",
+        "empty": "Nessun calendario sottoscritto per ora.",
+        "status": {
+          "pending": "Non ancora letto",
+          "ok": "Funzionante",
+          "error": "Problema"
+        },
+        "paused": "In pausa",
+        "neverRead": "Non ancora letto.",
+        "lastRead": "Letto {when}.",
+        "busyCount": "{count, plural, one {# blocco di occupato} many {# blocchi di occupato} other {# blocchi di occupato}} nei prossimi 180 giorni",
+        "allDayLabel": "Gli eventi di tutto il giorno bloccano la giornata",
+        "pause": "Metti in pausa",
+        "resume": "Riprendi",
+        "refresh": "Leggi ora",
+        "reading": "Lettura in corso",
+        "remove": "Annulla iscrizione",
+        "removed": "Iscrizione al calendario annullata.",
+        "added": "Calendario sottoscritto.",
+        "addTitle": "Iscriviti a un calendario",
+        "nameLabel": "Nome",
+        "namePlaceholder": "Orario del team",
+        "urlLabel": "Indirizzo del calendario",
+        "urlHint": "Un indirizzo che inizia con https:// o webcal:// e termina con .ics. Viene verificato subito, poi salvato cifrato e non più mostrato.",
+        "add": "Iscriviti",
+        "adding": "Lettura del calendario",
+        "hint": "Non iscriverti al calendario in cui vengono scritte le tue prenotazioni: un servizio con più postazioni vedrebbe i propri eventi come occupati. Un feed viene letto circa ogni 15 minuti, quindi una modifica può impiegare altrettanto per comparire.",
+        "confirmRemove": {
+          "title": "Annullare l'iscrizione a questo calendario?",
+          "message": "Gli orari bloccati da {name} tornano subito liberi. Il calendario in sé non viene toccato.",
+          "confirm": "Annulla iscrizione",
+          "cancel": "Mantieni"
+        },
+        "errors": {
+          "invalid": "Inserisci un indirizzo che inizia con https://, http:// o webcal://, senza nome utente né password.",
+          "duplicate": "Questo spazio di lavoro è già iscritto a quel calendario.",
+          "limit": "Uno spazio di lavoro può iscriversi a 10 calendari. Annulla prima l'iscrizione a uno di essi."
+        },
+        "reason": {
+          "unreachable": "Impossibile raggiungere l'indirizzo. Verifica che sia corretto e pubblico.",
+          "timeout": "Il calendario ha impiegato troppo tempo a rispondere.",
+          "not_found": "Non è stato trovato nulla a quell'indirizzo. Potrebbe essere stato rimosso dalla pubblicazione.",
+          "forbidden": "Il calendario ha negato l'accesso. Assicurati che sia pubblicato per chiunque abbia il link.",
+          "server_error": "Il server del calendario ha avuto un problema. Verrà riprovato automaticamente.",
+          "redirect_loop": "L'indirizzo ci rimanda in un ciclo senza fine.",
+          "not_a_calendar": "Quell'indirizzo non è un calendario iCal. Dovrebbe terminare con .ics.",
+          "too_large": "Quel calendario è troppo grande per essere letto.",
+          "blocked_address": "Quell'indirizzo punta a una rete privata, il che non è consentito.",
+          "unknown": "Non è stato possibile leggere quell'indirizzo come calendario."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# evento usa un fuso orario che non conosciamo ed è stato letto nel fuso orario del tuo spazio di lavoro.} many {# di eventi usano un fuso orario che non conosciamo e sono stati letti nel fuso orario del tuo spazio di lavoro.} other {# eventi usano un fuso orario che non conosciamo e sono stati letti nel fuso orario del tuo spazio di lavoro.}}",
+          "unsupportedRule": "{count, plural, one {# evento ricorrente usa} many {# eventi ricorrenti usano} other {# eventi ricorrenti usano}} una regola che non supportiamo: solo la prima occorrenza blocca il tempo.",
+          "truncated": "Questo calendario ha più blocchi di occupato di quelli che conserviamo, quindi alcuni mancano."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Le mie prenotazioni nella mia app di calendario",
+        "description": "Iscrivi Apple Calendar, Outlook o Google Calendar alle tue prenotazioni.",
+        "loading": "Caricamento del tuo link",
+        "none": "Non hai ancora un link.",
+        "make": "Crea il mio link",
+        "making": "Creazione in corso",
+        "made": "Il tuo link è pronto.",
+        "linkLabel": "Il tuo link",
+        "copy": "Copia link",
+        "copied": "Link copiato.",
+        "copyFailed": "Impossibile copiare automaticamente. Seleziona il link e copialo.",
+        "open": "Apri nella mia app di calendario",
+        "rotate": "Crea un nuovo link",
+        "stop": "Interrompi la condivisione",
+        "stopped": "Il tuo link non funziona più.",
+        "lastUsed": "Un'app di calendario lo ha letto l'ultima volta {when}.",
+        "neverUsed": "Nessuna app di calendario lo ha ancora letto.",
+        "warning": "Chiunque abbia questo link vede i titoli, gli orari e i luoghi delle tue prenotazioni. Tienilo privato. Non mostra mai numeri di telefono, indirizzi e-mail o note.",
+        "hint": "Vedi ciò che puoi vedere nell'elenco delle prenotazioni. La tua app di calendario aggiorna il feed con i propri tempi, spesso ogni poche ore.",
+        "confirmRotate": {
+          "title": "Creare un nuovo link?",
+          "message": "Il vecchio link smette di funzionare subito. Le app di calendario che lo usano hanno bisogno del nuovo.",
+          "confirm": "Crea un nuovo link"
+        },
+        "confirmStop": {
+          "title": "Interrompere la condivisione delle prenotazioni?",
+          "message": "Il tuo link smette di funzionare subito. Le app di calendario che lo usano non mostreranno più nulla di nuovo.",
+          "confirm": "Interrompi la condivisione"
+        },
+        "confirmCancel": "Mantieni"
+      }
     },
     "linked": {
       "title": "Appuntamenti",
@@ -1060,6 +1248,181 @@
       "loadMore": "Carica altro",
       "loadMorePast": "Carica altri passati",
       "noType": "Appuntamento"
+    },
+    "sync": {
+      "title": "Calendario non sincronizzato",
+      "reason": {
+        "event_deleted": "L'evento è stato eliminato o annullato in Google Calendar.",
+        "event_missing": "L'evento non è più presente in Google Calendar.",
+        "time_changed": "L'evento è stato spostato a un altro orario in Google Calendar.",
+        "attendees_changed": "Gli invitati all'evento sono stati modificati in Google Calendar."
+      },
+      "googleShows": "Google mostra: {time}",
+      "notChanged": "Questa prenotazione non è stata modificata. Scegli quale versione è corretta.",
+      "found": "Trovato {when}",
+      "push": "Reimposta su Google il nostro orario",
+      "accept": "Accetta la modifica di Google",
+      "keep": "Non ora",
+      "acceptTitle": {
+        "cancel": "Annullare questa prenotazione?",
+        "reschedule": "Spostare questa prenotazione all'orario di Google?",
+        "acknowledge": "Accettare gli invitati mostrati da Google?"
+      },
+      "acceptMessage": {
+        "cancel": "L'evento non esiste più su Google, quindi questa prenotazione viene annullata e il suo orario torna disponibile. Il cliente viene avvisato, come per qualsiasi annullamento.",
+        "reschedule": "Questa prenotazione viene spostata a {time}. Il cliente viene avvisato del nuovo orario, come per qualsiasi spostamento.",
+        "acknowledge": "La prenotazione in sé non cambia. L'elenco degli invitati di Google viene memorizzato e questo avviso scompare."
+      },
+      "acceptConfirm": {
+        "cancel": "Annulla prenotazione",
+        "reschedule": "Sposta prenotazione",
+        "acknowledge": "Accetta"
+      }
+    },
+    "reminders": {
+      "title": "Promemoria e follow-up",
+      "hint": "Scrivi al contatto prima che un appuntamento inizi o dopo che finisce. Ognuno resta disattivato finché non lo attivi. Fino a {max} per tipo di prenotazione.",
+      "quickAdd": "Aggiunta rapida",
+      "quick": {
+        "h24": "24 ore prima",
+        "h3": "3 ore prima",
+        "h1": "1 ora prima",
+        "m15": "15 minuti prima",
+        "after2h": "2 ore dopo",
+        "afterDay": "1 giorno dopo"
+      },
+      "add": "Aggiungi promemoria",
+      "empty": "Nessun promemoria o follow-up. Il contatto riceve solo la conferma.",
+      "enabledOf": "Invia promemoria {n}",
+      "on": "Attivo",
+      "off": "Disattivato",
+      "offsetOf": "Promemoria {n}, quantità di tempo",
+      "unitOf": "Promemoria {n}, unità di tempo",
+      "kindOf": "Promemoria {n}, prima o dopo",
+      "units": {
+        "minutes": "minuti",
+        "hours": "ore",
+        "days": "giorni"
+      },
+      "kind": {
+        "before": "prima dell'inizio dell'appuntamento",
+        "after": "dopo la fine dell'appuntamento"
+      },
+      "editMessage": "Messaggio e canali",
+      "hideMessage": "Nascondi",
+      "remove": "Rimuovi promemoria {n}",
+      "withTemplate": "Modello WhatsApp",
+      "channelsTitle": "Invia su",
+      "channelsHint": "Viene usato il primo canale in grado di consegnare, gli altri fanno da riserva. Nessuno riceve lo stesso promemoria due volte.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "Email"
+      },
+      "moveUp": "Prova {channel} prima",
+      "moveDown": "Prova {channel} dopo",
+      "removeChannel": "Non usare {channel}",
+      "messageTitle": "Messaggio",
+      "placeholderMeaning": {
+        "name": "Il nome del contatto",
+        "type": "Il nome del tipo di prenotazione",
+        "slot": "Data e ora insieme",
+        "date": "La data",
+        "time": "L'ora",
+        "location": "Il luogo, o il link per partecipare se è online",
+        "join_link": "Il link per partecipare se è online",
+        "manage_link": "Il link per spostare o annullare l'appuntamento"
+      },
+      "bodyHintBefore": "Lascia vuoto per usare il messaggio di promemoria del tipo di prenotazione, o il testo standard.",
+      "bodyHintAfter": "Lascia vuoto per usare il testo standard di follow-up.",
+      "subjectTitle": "Oggetto dell'email",
+      "subjectPlaceholder": "Lascia vuoto per un oggetto standard",
+      "templateTitle": "Modello WhatsApp",
+      "templateNone": "Nessuno: testo libero, solo entro la finestra di 24 ore",
+      "templateUnknown": "Un modello non più disponibile",
+      "templateHint": "Oltre 24 ore dall'ultimo messaggio del contatto, WhatsApp consegna solo un modello approvato. Le sue variabili vengono compilate in quest'ordine: 1 nome, 2 servizio, 3 data, 4 ora, 5 luogo, 6 link per partecipare, 7 link di gestione.",
+      "labelTitle": "Etichetta (facoltativa)",
+      "labelPlaceholder": "es. Il giorno prima",
+      "previewTitle": "Anteprima",
+      "previewNote": "Un esempio con valori di prova. Il messaggio reale usa i dettagli dell'appuntamento.",
+      "count": "{count} di {max} promemoria e follow-up",
+      "note": "Un promemoria non viene mai inviato dopo l'inizio dell'appuntamento. Se l'appuntamento viene annullato o spostato, ciò che era in attesa si ferma e viene pianificato di nuovo per il nuovo orario. Le ore di silenzio trattengono un messaggio fino alla loro fine, e un contatto che ha rifiutato i messaggi o è nell'elenco Non chiamare viene saltato.",
+      "sample": {
+        "name": "Alex",
+        "type": "Consulenza",
+        "location": "Via Roma 12"
+      },
+      "settingsTitle": "Promemoria e follow-up",
+      "settingsDescription": "Per ogni tipo di prenotazione, scrivi al contatto prima di un appuntamento e fai follow-up dopo. Tutto resta disattivato finché non lo attivi.",
+      "loading": "Caricamento dei tipi di prenotazione",
+      "noTypes": "Non ci sono ancora tipi di prenotazione. Creane uno per impostare i suoi promemoria.",
+      "paused": "In pausa",
+      "summaryNone": "Nessuno impostato",
+      "summary": "{on} di {total} attivi",
+      "unsaved": "Modifiche non salvate",
+      "conflict": "Questo tipo di prenotazione è stato modificato altrove. Ricarica per vedere l'ultima versione prima di salvare.",
+      "reload": "Ricarica",
+      "discard": "Annulla modifiche",
+      "saving": "Salvataggio in corso",
+      "save": "Salva promemoria",
+      "saved": "Promemoria salvati per {name}.",
+      "readOnly": "Puoi vedere questi promemoria ma non modificarli.",
+      "fixFirst": "Correggi prima i promemoria evidenziati.",
+      "problems": {
+        "offsetInvalid": "Inserisci un numero intero per l'orario, fino a 30 giorni.",
+        "duplicate": "Ogni promemoria o follow-up richiede un orario diverso.",
+        "channelsNone": "Scegli almeno un canale.",
+        "bodyTooLong": "Il messaggio è troppo lungo.",
+        "subjectTooLong": "L'oggetto è troppo lungo.",
+        "labelTooLong": "L'etichetta è troppo lunga.",
+        "tooMany": "Al massimo 8 promemoria e follow-up per tipo di prenotazione."
+      },
+      "noneOn": "Nessun promemoria o follow-up è attivo per questo tipo di prenotazione.",
+      "when": {
+        "before": "{count, plural, one {# minuto prima} other {# minuti prima}}",
+        "after": "{count, plural, one {# minuto dopo} other {# minuti dopo}}"
+      },
+      "sentOn": "Inviato su {channel}",
+      "status": {
+        "scheduled": "Pianificato",
+        "pending": "In scadenza",
+        "sending": "Invio in corso",
+        "held": "In attesa",
+        "sent": "Inviato",
+        "skipped": "Non inviato",
+        "failed": "Non riuscito",
+        "cancelled": "Annullato"
+      },
+      "reasons": {
+        "rule_removed": "Il promemoria è stato rimosso prima della scadenza.",
+        "rule_off": "Il promemoria è stato disattivato prima dell'invio.",
+        "rescheduled": "L'appuntamento è stato spostato, quindi questo è stato sostituito.",
+        "booking_cancelled": "L'appuntamento è stato annullato.",
+        "booking_declined": "La richiesta è stata rifiutata.",
+        "booking_no_show": "Segnato come assenza.",
+        "booking_not_confirmed": "L'appuntamento non è confermato.",
+        "started": "L'appuntamento era già iniziato.",
+        "expired": "Era troppo tardi per inviarlo.",
+        "no_contact_point": "Il contatto non ha un numero o un indirizzo per questo canale.",
+        "no_channel": "Nessun canale ha potuto consegnarlo.",
+        "no_sender": "Nessun mittente collegato per questo canale.",
+        "template_required": "WhatsApp richiede un modello approvato fuori dalla finestra di 24 ore.",
+        "template_unavailable": "Il modello WhatsApp scelto non può essere inviato.",
+        "quiet_hours_too_late": "Le ore di silenzio sono andate oltre l'inizio.",
+        "no_consent": "Nessun consenso registrato.",
+        "opted_out": "Il contatto ha rifiutato i messaggi.",
+        "do_not_call": "Il numero è nell'elenco Non chiamare.",
+        "minor": "Il contatto è segnalato come minorenne.",
+        "processing_restricted": "Scrivere a questo contatto è limitato.",
+        "plan_limit": "Il limite del piano è stato raggiunto.",
+        "quiet_hours": "In attesa della fine delle ore di silenzio.",
+        "channel_unavailable": "Il canale al momento non è collegato.",
+        "wallet_empty": "Il credito è esaurito.",
+        "send_halted": "L'invio è sospeso.",
+        "provider_error": "Il provider lo ha rifiutato.",
+        "interrupted": "È stato interrotto e non ritentato.",
+        "internal_error": "Qualcosa è andato storto."
+      }
     }
   }
 }

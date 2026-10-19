@@ -1,0 +1,98 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "deals": {
+        "title": "交易",
+        "loading": "正在加载交易",
+        "empty": "该联系人暂无交易。",
+        "unavailable": "您的套餐不支持交易，或您的角色无权访问交易。",
+        "listLabel": "该联系人的交易",
+        "openRollup": "{count, plural, other {# 笔进行中的交易}}",
+        "wonRollup": "{count, plural, other {# 笔已赢单的交易}}",
+        "noValue": "无金额",
+        "capped": "仅显示前 {count} 笔交易。上方的合计涵盖全部交易。",
+        "pipeline": "销售管道 {name}",
+        "closes": "预计成交日期 {date}",
+        "owner": "负责人 {name}",
+        "status": {
+          "open": "进行中",
+          "won": "赢单",
+          "lost": "输单"
+        }
+      },
+      "conversations": {
+        "title": "会话",
+        "loading": "正在加载会话",
+        "empty": "未找到该联系人的会话。",
+        "listLabel": "该联系人的会话",
+        "unread": "{count, plural, other {# 条未读消息}}",
+        "open": "打开",
+        "openLabel": "打开会话 {title}",
+        "noPreview": "暂无消息",
+        "lastMessage": "最近消息 {time}",
+        "assignedTo": "已分配给 {name}",
+        "unassigned": "未分配",
+        "footnote": "根据联系人的电话号码、电子邮件地址或姓名查找。不显示已归档的会话。",
+        "status": {
+          "open": "进行中",
+          "snoozed": "已暂停",
+          "resolved": "已解决",
+          "closed": "已关闭",
+          "spam": "垃圾信息"
+        }
+      },
+      "history": {
+        "button": "联系人字段历史",
+        "title": "联系人字段历史",
+        "close": "关闭",
+        "loading": "正在加载历史记录",
+        "empty": "该联系人暂无字段变更记录。",
+        "loadMore": "加载更多",
+        "changedTo": "更改为",
+        "noValue": "空",
+        "by": "由{actor}",
+        "actor": {
+          "user": "用户",
+          "system": "系统",
+          "api": "API"
+        },
+        "fields": {
+          "name": "姓名",
+          "firstName": "名",
+          "lastName": "姓",
+          "email": "电子邮件",
+          "phone": "电话",
+          "companyId": "公司",
+          "ownerId": "负责人",
+          "lifecycleStage": "生命周期阶段",
+          "lifecycleState": "生命周期状态",
+          "status": "状态",
+          "lostReason": "输单原因",
+          "leadScore": "线索评分",
+          "source": "来源",
+          "isUnsubscribed": "已退订"
+        }
+      },
+      "stats": {
+        "title": "沟通统计",
+        "loading": "正在加载统计",
+        "conversations": "会话",
+        "unread": "未读消息",
+        "lastInbound": "最近收到的消息",
+        "lastOutbound": "最近发送的消息",
+        "calls": "通话",
+        "callsAnswered": "已接通话",
+        "callsMissed": "未接通话",
+        "callMinutes": "通话分钟数",
+        "openTasks": "未完成任务",
+        "leadScore": "线索评分",
+        "lastActivity": "最近活动",
+        "created": "创建时间",
+        "none": "暂无",
+        "atLeast": "{count}+",
+        "footnote": "消息数据涵盖为该联系人找到的会话（按电话号码、电子邮件地址或姓名匹配）。通话数据涵盖最近一年，按电话号码或姓名匹配。",
+        "callsPartial": "匹配的通话数量超出可读取范围，因此通话数据可能偏少。"
+      }
+    }
+  }
+}

@@ -85,7 +85,8 @@
       "outsideWindow": "超出 24 小时",
       "selected": "{count, plural, other {已选择 #}}",
       "sent": "Instagram 群发已发送，{sent} 条已送达{failed, plural, =0 {} other {，# 条失败}}。",
-      "sentNone": "无法发送给任何收件人，请检查 Instagram 连接。"
+      "sentNone": "无法发送给任何收件人，请检查 Instagram 连接。",
+      "skipped": "因同意状态未发送消息的人数：{count}"
     }
   }
 }

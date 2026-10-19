@@ -1,5 +1,4 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { sql } from 'drizzle-orm';
 import {
   FLOW_ENGINE_LABELS,
@@ -16,9 +15,7 @@ import {
 } from '../auth/unofficial-whatsapp.port';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
-import type { Env } from '../../config/env.schema';
 import { PlatformSettingsService } from '../auth';
-import { GoogleFormWebhookService } from '../flow-runtime-engine';
 import {
   catalogStoreName,
   emailLabel,
@@ -28,7 +25,6 @@ import {
   productOption,
   storeOption,
 } from './builder-context-rules';
-import { appsScriptFileName, buildAppsScript } from './google-apps-script';
 
 /** The store tables a commerce provider's `storeId` is checked against (instagram has no store, it reads the catalogue). */
 const STORE_TABLES: Partial<Record<FlbCommerceProductsQuery['provider'], string>> = {
@@ -95,8 +91,6 @@ export class BuilderContextService {
   constructor(
     private readonly db: DatabaseService,
     private readonly settings: PlatformSettingsService,
-    private readonly config: ConfigService<Env, true>,
-    private readonly formHooks: GoogleFormWebhookService,
     @Inject(UNOFFICIAL_WHATSAPP_GATE) private readonly unofficial: UnofficialWhatsappGate,
   ) {}
 
@@ -244,14 +238,14 @@ export class BuilderContextService {
             FROM pipeline_stages st JOIN pipelines p ON p.org_id = st.org_id AND p.id = st.pipeline_id
             WHERE st.org_id = ${o} ORDER BY p.sort_order, p.id, st.sort_order, st.id`),
         tx.execute(sql`
-            SELECT uuid, template_name, category, header, template_body, footer, attachment_type, attachment_file, buttons, carousel_data
+            SELECT uuid, template_name, category, header, template_body, footer, attachment_type, attachment_file, buttons, carousel_data, variable_map
             FROM wa_templates WHERE org_id = ${o} AND lower(status) = 'approved' ORDER BY template_name, id`),
         tx.execute(
           sql`SELECT uuid, flow_name, flow_type, is_published FROM flows WHERE org_id = ${o} ORDER BY updated_at DESC, id DESC`,
         ),
         tx.execute(sql`SELECT provider FROM ai_provider_keys WHERE org_id = ${o} AND is_active`),
         tx.execute(sql`
-            SELECT a.uuid, a.name, a.status,
+            SELECT a.uuid, a.name, a.status, a.ai_model,
               (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status) = 'ready'
                  AND (src.assistant_id IS NULL OR src.assistant_id = a.id)) AS sources
             FROM ai_chat_assistants a WHERE a.org_id = ${o} ORDER BY a.name`),
@@ -340,6 +334,7 @@ export class BuilderContextService {
           attachmentFile: (r.attachment_file as string | null) ?? null,
           buttons: asArray(r.buttons),
           carousel: asArray(r.carousel_data),
+          variables: templateVariables(r.variable_map),
         })),
         flows: rows(flows).map((r) => ({
           id: s(r.uuid),
@@ -352,6 +347,7 @@ export class BuilderContextService {
           id: s(r.uuid),
           name: s(r.name),
           status: (r.status as string | null) ?? null,
+          model: (r.ai_model as string | null) ?? null,
           sources: Number(r.sources),
         })),
         callAssistants: rows(callAssistants).map((r) => ({ id: s(r.uuid), name: s(r.name) })),
@@ -412,25 +408,6 @@ export class BuilderContextService {
       `);
       return { data: rows(res).map(productOption) };
     });
-  }
-
-  /**
-   * The Apps Script for one Google Form (TW-FLB-059): the file the customer pastes into the form's script editor. It carries this
-   * workspace's webhook token (the FLR webhook, which resumes the run waiting on the form) and the public webhook URL.
-   */
-  googleFormScript(formId: string): { fileName: string; source: string } {
-    const orgId = RequestContextStore.require().orgId;
-    const brand = String(this.config.get('APP_NAME', { infer: true }) ?? '');
-    const base = String(this.config.get('APP_URL', { infer: true })).replace(/\/$/, '');
-    return {
-      fileName: appsScriptFileName(brand, formId),
-      source: buildAppsScript({
-        webhookUrl: `${base}/google/form-response`,
-        token: this.formHooks.tokenFor(orgId),
-        formId,
-        brand,
-      }),
-    };
   }
 
   // --- internals -------------------------------------------------------------------------------------------------------
@@ -533,6 +510,35 @@ function asArray(v: unknown): Array<Record<string, unknown>> {
   return Array.isArray(v)
     ? (v.filter((x) => x && typeof x === 'object') as Array<Record<string, unknown>>)
     : [];
+}
+
+/**
+ * The `{header: [{num, key}], body: [{num, key}]}` map a template stores, as one row per placeholder: the runtime reads each `key`
+ * (a contact detail or a flow variable) when the template is sent. A map in any other shape (or none) has no rows.
+ */
+function templateVariables(
+  raw: unknown,
+): Array<{ section: 'header' | 'body'; slot: string; field: string }> {
+  let map: unknown = raw;
+  if (typeof map === 'string') {
+    try {
+      map = JSON.parse(map);
+    } catch {
+      return [];
+    }
+  }
+  if (!map || typeof map !== 'object' || Array.isArray(map)) return [];
+  const out: Array<{ section: 'header' | 'body'; slot: string; field: string }> = [];
+  for (const section of ['header', 'body'] as const) {
+    const list = (map as Record<string, unknown>)[section];
+    if (!Array.isArray(list)) continue;
+    list.forEach((entry, i) => {
+      const e = entry && typeof entry === 'object' ? (entry as Record<string, unknown>) : {};
+      const field = s(e.key).trim();
+      if (field) out.push({ section, slot: s(e.num ?? i + 1), field });
+    });
+  }
+  return out;
 }
 
 function parseModels(raw: unknown): string[] {

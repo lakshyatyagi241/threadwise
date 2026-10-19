@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
+import { personaViewSchema } from '../persona/view';
 import { planCardSchema } from '../plans-subscriptions-trials/plan';
 import { accountFlagsSchema, landingSchema, orgSlugSchema } from './login';
 
@@ -33,6 +34,11 @@ export const sessionOrgSchema = z.object({
   /** null = platform default footer, '' = deliberately none. */
   messageFooter: z.string().nullable(),
   onboardingStep: onboardingStepSchema,
+  /**
+   * The workspace's persona view (docs/specs/persona-profiles.md). Additive and optional: absent means nothing is hidden. Phase 0 only
+   * delivers it; no screen reads it yet.
+   */
+  persona: personaViewSchema.optional(),
 });
 
 export const grantScopeSchema = z.enum(['all', 'team', 'own']);

@@ -1,0 +1,19 @@
+{
+  "_comment": "Which browser journeys matter most, by e2e folder (QA task 19). P0: a customer cannot use the product without it, or it guards their data. P1: expected by customers. P2: operator or internal tooling. Every folder that holds a spec must be listed; tools/quality/check-browser-priority.mjs fails when one is not, so a new spec is classified the day it is added. The cross-browser run picks folders with E2E_PRIORITY=p0 or p0,p1.",
+  "folders": {
+    "_matrix": "P0",
+    "security": "P0",
+    "team-inbox-conversations": "P0",
+    "workspaces-teams-tenancy": "P0",
+    "admin-console-shell": "P1",
+    "calling-voice": "P1",
+    "campaigns": "P1",
+    "channel-email": "P1",
+    "channel-sms": "P1",
+    "developer-rest-api-v1": "P1",
+    "help-center": "P1",
+    "whatsapp-devices-baileys": "P1",
+    "faq-knowledge": "P2",
+    "cross-browser": "P0"
+  }
+}

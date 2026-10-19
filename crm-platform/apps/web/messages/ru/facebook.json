@@ -471,7 +471,6 @@
       },
       "status": {
         "open": "Открыт",
-        "pending": "В ожидании",
         "resolved": "Решён",
         "closed": "Закрыт",
         "snoozed": "Отложен"

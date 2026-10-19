@@ -5,7 +5,8 @@ summary: Connect your Shopify store so its orders, products and customers reach 
 area: store
 order: 40
 documents: [nav:shopify, tile:shopify]
-keywords: [shopify, store, orders, products, customers, webhooks, automations, abandoned cart, offers, sync]
+keywords:
+  [shopify, store, orders, products, customers, webhooks, automations, abandoned cart, offers, sync]
 ---
 
 ## What it is for
@@ -28,6 +29,16 @@ The Shopify screen connects your Shopify store to this workspace. Once connected
 - **Activity** lists webhook deliveries with their status. The side panel shows whether webhooks are healthy.
 - **Settings** shows the store address, the scopes granted and the registered webhooks. **Disconnect** removes the webhooks and keeps your settings.
 - **Invoices** lists the invoices made from this store's orders. Turn on **Invoice this store's orders automatically** and choose when: placed, paid (the default) or fulfilled. Each order is invoiced once, even if the store sends the event again, and the buyer's copy is queued on WhatsApp, or by email without a phone number. It needs the invoicing feature on your plan.
+
+## Quiet hours
+
+If your workspace has quiet hours in the [Compliance center](help:compliance-center), an offer or a win-back message that uses a marketing template is not sent to a customer while it is night for them. The rest of the audience is sent, and the held customers are sent when their hours end. The result keeps the totals of both. Customers who unsubscribed meanwhile are skipped. A template in the utility category is never held. Order and abandoned cart messages are not affected.
+
+## Customers who opted out
+
+A message that uses a **marketing** template (an offer, a win-back, and an abandoned cart reminder, a back-in-stock alert or a review reward whose template is in the marketing category) is checked against consent for every customer before it is sent, with the same check as the other broadcasts (see [consent settings](help:contact-consent)). Someone who opted out is not messaged. With **Require recorded consent for marketing sends** on, a customer also needs a recorded consent on WhatsApp. This check comes before the quiet hours, so a customer who is refused is never held for later.
+
+Nobody is dropped silently: the Activity tab shows the message as **Skipped**, with the reason, and an offer or win-back adds the number of skipped customers to its result. Messages that use a utility template (order confirmations, shipping and payment updates, the cash-on-delivery confirmation) are never blocked by this check, and neither is the admin number you set on an automation, which is your own phone. Replies to a customer's message (the COD yes or no, the stock alert sign-up) are not checked either.
 
 ## Plan and access
 

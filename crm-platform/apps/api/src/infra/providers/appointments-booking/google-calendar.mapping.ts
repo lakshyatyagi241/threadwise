@@ -1,4 +1,8 @@
-import type { CalendarBusyInterval, CalendarEventRequest } from './calendar-sync.port';
+import type {
+  CalendarBusyInterval,
+  CalendarEventRequest,
+  CalendarEventState,
+} from './calendar-sync.port';
 
 /**
  * Pure translation between the calendar port and Google's Calendar v3 JSON (no I/O: unit-tested).
@@ -171,4 +175,38 @@ export function withoutOwnEvents(
         (o) => o.start.getTime() === b.start.getTime() && o.end.getTime() === b.end.getTime(),
       ),
   );
+}
+
+interface GoogleEventShape {
+  status?: string;
+  etag?: string;
+  start?: { dateTime?: string; date?: string };
+  end?: { dateTime?: string; date?: string };
+  attendees?: Array<{ email?: string; organizer?: boolean; self?: boolean; resource?: boolean }>;
+}
+
+/**
+ * What the reconcile needs from an event Google returned: gone (status `cancelled`: Google keeps a deleted event for a while and
+ * answers it with that status), or its time, guests and etag. Guests are compared without the organizer, the calendar's own entry
+ * (`self`) and rooms, which Google adds by itself and which are not ours to expect.
+ */
+export function eventStateOf(event: unknown): CalendarEventState {
+  const e = (event ?? {}) as GoogleEventShape;
+  if (e.status === 'cancelled') return { kind: 'deleted' };
+  const startRaw = e.start?.dateTime;
+  const endRaw = e.end?.dateTime;
+  const startMs = startRaw ? Date.parse(startRaw) : NaN;
+  const endMs = endRaw ? Date.parse(endRaw) : NaN;
+  const attendees = (e.attendees ?? [])
+    .filter((a) => !a.organizer && !a.self && !a.resource && typeof a.email === 'string')
+    .map((a) => String(a.email).trim().toLowerCase())
+    .sort();
+  return {
+    kind: 'found',
+    startsAt: Number.isNaN(startMs) ? null : new Date(startMs),
+    endsAt: Number.isNaN(endMs) ? null : new Date(endMs),
+    allDay: !startRaw && Boolean(e.start?.date),
+    attendees,
+    etag: typeof e.etag === 'string' ? e.etag : null,
+  };
 }

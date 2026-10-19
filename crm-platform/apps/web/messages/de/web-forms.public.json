@@ -34,7 +34,8 @@
         "too_long": "Geben Sie höchstens {max} Zeichen ein.",
         "pattern": "Dies entspricht nicht dem erwarteten Format.",
         "invalid_option": "Wählen Sie eine der aufgelisteten Optionen.",
-        "invalid_amount": "Geben Sie einen Betrag im zulässigen Bereich ein."
+        "invalid_amount": "Geben Sie einen Betrag im zulässigen Bereich ein.",
+        "guardian_required": "Geben Sie den Namen und eine E-Mail-Adresse oder Telefonnummer eines Elternteils oder Vormunds an."
       },
       "closedTitle": "Dieses Formular ist geschlossen",
       "payTitle": "Noch ein Schritt",
@@ -58,7 +59,16 @@
         "tryAgain": "Erneut zahlen",
         "missingTitle": "Diese Zahlung wurde nicht gefunden",
         "missingBody": "Der Link ist möglicherweise falsch oder zu alt."
-      }
+      },
+      "termsOfService": "Nutzungsbedingungen",
+      "ageDeclaration": "Ich bestätige, dass ich mindestens {age} Jahre alt bin",
+      "ageBlockedTitle": "Wir können nicht fortfahren",
+      "ageBlockedBody": "Vielen Dank für Ihr Interesse. Wir können diese Übermittlung leider nicht annehmen.",
+      "guardianTitle": "Ein Elternteil oder Vormund",
+      "guardianIntro": "Bitte geben Sie die Daten eines Elternteils oder Vormunds an.",
+      "guardianName": "Name",
+      "guardianEmail": "E-Mail",
+      "guardianPhone": "Telefon"
     }
   }
 }

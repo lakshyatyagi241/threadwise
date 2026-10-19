@@ -1,0 +1,253 @@
+{
+  "contacts-attributes-tags": {
+    "contact": {
+      "record": {
+        "nav": {
+          "label": "Kontaktbereiche",
+          "section": {
+            "overview": "Übersicht",
+            "activities": "Aktivität",
+            "conversations": "Gespräche",
+            "notes": "Notizen",
+            "tasks": "Aufgaben",
+            "meetings": "Meetings",
+            "files": "Dateien",
+            "deals": "Deals",
+            "appointments": "Termine",
+            "sales": "Rechnungen",
+            "company": "Unternehmen",
+            "details": "Details",
+            "stats": "Statistik",
+            "lead-source": "Quelle",
+            "consent": "Einwilligung",
+            "history": "Verlauf"
+          },
+          "more": "Mehr",
+          "moreLabel": "Weitere Bereiche"
+        },
+        "actions": {
+          "label": "Was Sie mit diesem Kontakt tun können",
+          "call": "Anrufen",
+          "callWhatsapp": "Über WhatsApp anrufen",
+          "callPhone": "Mit Ihrem Telefon anrufen",
+          "logCall": "Anruf erfassen",
+          "callMore": "Weitere Wege zum Anrufen",
+          "message": "Nachricht",
+          "messageChat": "WhatsApp-Chat öffnen",
+          "messageTemplate": "WhatsApp-Vorlage senden",
+          "messageEmail": "E-Mail senden",
+          "messageMore": "Weitere Wege zum Schreiben",
+          "fieldHistory": "Feldverlauf",
+          "more": "Mehr"
+        },
+        "stageStrip": {
+          "noStatus": "Kein Status"
+        },
+        "keyDetails": {
+          "editAll": "Alle bearbeiten",
+          "edit": "{field} bearbeiten",
+          "add": "{field} hinzufügen",
+          "conflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
+          "invalid": "Das sieht nicht nach einem gültigen Wert für {field} aus.",
+          "forbidden": "Sie dürfen diesen Kontakt nicht ändern.",
+          "failed": "Es konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+          "owner": "Verantwortlicher",
+          "city": "Stadt",
+          "showAll": "Alle Details anzeigen",
+          "showLess": "Weniger anzeigen",
+          "social": "Soziale Medien",
+          "leadSource": "Woher dieser Kontakt kommt",
+          "aboutTitle": "Über diesen Kontakt"
+        },
+        "cards": {
+          "company": "Unternehmen",
+          "companyNone": "Noch keins",
+          "timezone": "Zeitzone und Standort",
+          "timezoneNone": "Noch nicht bekannt",
+          "privacy": "Datenschutz",
+          "privacyMinor": "Minderjährig",
+          "score": "Lead-Score",
+          "scoreNone": "Noch nicht bewertet",
+          "label": "Zu diesem Kontakt gehörig",
+          "tasks": "Offene Aufgaben",
+          "tasksNone": "Nichts steht an.",
+          "deals": "Deals",
+          "dealsNone": "Noch keine Deals.",
+          "add": "+ Hinzufügen",
+          "viewAll": "Alle anzeigen"
+        },
+        "compose": {
+          "label": "Zur Aktivität hinzufügen",
+          "tabs": "Was hinzufügen",
+          "tab": {
+            "note": "Notiz",
+            "task": "Aufgabe",
+            "call": "Anruf",
+            "meeting": "Meeting"
+          }
+        },
+        "logCall": {
+          "label": "Anruf erfassen",
+          "direction": "Wer hat angerufen",
+          "directionOption": {
+            "outbound": "Ich habe angerufen",
+            "inbound": "Der Kontakt hat angerufen"
+          },
+          "minutesPlaceholder": "Optional",
+          "notesPlaceholder": "Was wurde besprochen? (optional)",
+          "duePreset": {
+            "1": "Morgen",
+            "3": "In 3 Tagen",
+            "7": "In einer Woche"
+          },
+          "saved": "Anruf erfasst.",
+          "forbidden": "Sie dürfen keine Anrufe erfassen.",
+          "unavailable": "Anrufe erfassen ist hier noch nicht verfügbar.",
+          "failed": "Der Anruf konnte nicht erfasst werden. Nichts ging verloren: versuchen Sie es erneut."
+        },
+        "callNudge": {
+          "question": "Wie lief der Anruf mit {name}?",
+          "log": "Erfassen",
+          "dismiss": "Jetzt nicht"
+        },
+        "profile": {
+          "label": "Kontaktprofil"
+        },
+        "stagePicker": {
+          "menu": "Phase wählen",
+          "search": "Phase suchen",
+          "none": "Keine Phase gefunden.",
+          "moveTo": "Nach {stage} verschieben",
+          "statusIn": "Status in {stage}",
+          "default": "Standard",
+          "progress": "{current} von {total}",
+          "undo": "Rückgängig",
+          "undone": "Zurück nach {stage} verschoben.",
+          "statusSet": "Status auf {status} gesetzt.",
+          "prefix": "Phase"
+        },
+        "summary": {
+          "label": "Zusammenfassung",
+          "tasks": "Offene Aufgaben",
+          "overdue": "{count} überfällig",
+          "nextDue": "Nächste Fälligkeit {when}",
+          "noDue": "Keine Fälligkeiten",
+          "meeting": "Nächstes Meeting",
+          "noMeeting": "Nichts geplant",
+          "lastActivity": "Letzte Aktivität",
+          "noActivity": "Noch keine Aktivität",
+          "deals": "Offene Deals",
+          "wonDeals": "{count, plural, =0 {keiner gewonnen} one {1 gewonnen} other {# gewonnen}}"
+        },
+        "scoreChip": {
+          "title": "Lead-Score {score} · {band}",
+          "aria": "Lead-Score {score}, {band}. Details zum Score anzeigen."
+        }
+      },
+      "timeline": {
+        "title": "Aktivität",
+        "viewAll": "Alle Aktivitäten anzeigen",
+        "filterLabel": "Anzeigen",
+        "filters": {
+          "all": "Alle",
+          "messages": "Nachrichten",
+          "calls": "Anrufe",
+          "notes": "Notizen",
+          "tasks": "Aufgaben",
+          "meetings": "Meetings",
+          "changes": "Änderungen"
+        },
+        "searchLabel": "Aktivitäten dieses Kontakts durchsuchen",
+        "searchPlaceholder": "Aktivität durchsuchen",
+        "clearSearch": "Suche löschen",
+        "searchHint": "Es werden nur die bisher geladenen Einträge durchsucht. Laden Sie mehr, um weiter zurückzuschauen.",
+        "groups": {
+          "upNext": "Als Nächstes",
+          "today": "Heute",
+          "yesterday": "Gestern",
+          "thisWeek": "Diese Woche",
+          "earlier": "Früher"
+        },
+        "loading": "Aktivität wird geladen...",
+        "loadMore": "Mehr laden",
+        "noMatch": "Nichts passt.",
+        "emptyShort": "Noch nichts hier.",
+        "showAll": "Alle Aktivitäten anzeigen",
+        "noneYet": "Noch nichts Neueres. Laden Sie mehr, um weiter zurückzuschauen.",
+        "partial": "Ein Teil der Aktivität konnte nicht geladen werden.",
+        "retry": "Erneut versuchen",
+        "empty": {
+          "title": "Noch keine Aktivität",
+          "message": "Alles, was Sie mit {name} machen, erscheint hier: Notizen, Anrufe, Nachrichten, Aufgaben und Meetings.",
+          "messageNoName": "Alles, was Sie mit diesem Kontakt machen, erscheint hier: Notizen, Anrufe, Nachrichten, Aufgaben und Meetings.",
+          "note": "Notiz hinzufügen",
+          "call": "Anruf erfassen",
+          "task": "Aufgabe hinzufügen",
+          "meeting": "Meeting planen"
+        },
+        "entry": {
+          "note": "Notiz: {text}",
+          "edited": "Bearbeitet",
+          "task": {
+            "done": "Aufgabe erledigt: {title}",
+            "overdue": "Überfällig, war fällig {when}",
+            "due": "Fällig {when}",
+            "noDue": "Kein Fälligkeitsdatum"
+          },
+          "meeting": {
+            "upcoming": "Meeting: {title}",
+            "past": "Getroffen: {title}",
+            "notHeld": "Nicht stattgefunden: {title}",
+            "noShow": "Nicht erschienen: {title}"
+          },
+          "call": {
+            "inbound": "Eingehender Anruf",
+            "outbound": "Ausgehender Anruf",
+            "call": "Anruf",
+            "seconds": "{seconds} Sek.",
+            "minutes": "{minutes} Min.",
+            "outcome": {
+              "connected": "Verbunden",
+              "noAnswer": "Keine Antwort",
+              "busy": "Besetzt",
+              "voicemail": "Mailbox-Nachricht hinterlassen",
+              "wrongNumber": "Falsche Nummer",
+              "declined": "Abgelehnt",
+              "failed": "Fehlgeschlagen",
+              "inProgress": "Läuft"
+            },
+            "source": {
+              "whatsapp": "WhatsApp",
+              "manual": "Erfasst",
+              "telephony": "Telefonsystem",
+              "mobile_app": "Mobile App",
+              "web_click_to_call": "Telefon"
+            }
+          },
+          "message": {
+            "summary": "Gespräch auf {channel}",
+            "unread": "{count} ungelesen"
+          },
+          "email": {
+            "sent": "E-Mail gesendet: {title}",
+            "received": "E-Mail erhalten: {title}"
+          },
+          "change": {
+            "stage": "Phase von {from} auf {to} geändert",
+            "field": "{field} von {from} auf {to} geändert",
+            "stageAndMore": "Phase von {from} auf {to} geändert, und {count, plural, one {1 weiteres Detail} other {# weitere Details}}",
+            "several": "{count, plural, one {1 Detail} other {# Details}} aktualisiert"
+          },
+          "consent": {
+            "granted": "Einwilligung für {channel} erteilt",
+            "withdrawn": "Einwilligung für {channel} widerrufen",
+            "service": "Servicenachrichten",
+            "marketing": "Marketingnachrichten"
+          },
+          "by": "von {name}",
+          "system": "System"
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,6 @@
 import {
   SEGMENT_BUILTIN_FIELDS,
+  SEGMENT_COMPANY_PREFIX,
   SEGMENT_CUSTOM_PREFIX,
   isCustomSegmentField,
   segmentKindForFieldType,
@@ -16,8 +17,19 @@ import { conditionsOf } from './model';
  * the pickers show real choices and a reference to something deleted can be told from one that never existed.
  */
 
-export type FieldGroup = 'journey' | 'who' | 'activity' | 'properties';
-export const FIELD_GROUPS: readonly FieldGroup[] = ['journey', 'who', 'activity', 'properties'];
+/**
+ * `record` holds the own fields of a record that is not a contact (a company, a deal), for screens that build rules over those (Record
+ * assignment rules); a contact catalog has none, so the segments pickers never show it. Its label comes from the screen (`groupLabel`).
+ */
+export type FieldGroup = 'record' | 'journey' | 'who' | 'activity' | 'properties' | 'company';
+export const FIELD_GROUPS: readonly FieldGroup[] = [
+  'record',
+  'journey',
+  'who',
+  'activity',
+  'properties',
+  'company',
+];
 
 export interface Choice {
   value: string;
@@ -38,6 +50,11 @@ export interface FieldDef {
   /** Choices of an `option`, `user`, `tags`, `groups` or `multi` field. */
   options?: readonly Choice[];
   optionsFrom?: OptionSource;
+  /**
+   * Known (so a rule that already uses it still reads and is not flagged as a deleted field) but not offered for a new condition: the
+   * lead score while lead scoring is off for the workspace.
+   */
+  hidden?: boolean;
 }
 
 /** The workspace's custom property as the catalog needs it (a `FieldResponse` of the contacts module, trimmed). */
@@ -55,6 +72,10 @@ export interface Lookups {
   groups: readonly Choice[];
   users: readonly Choice[];
   properties: readonly PropertyLookup[];
+  /** The workspace's company properties: a rule on one reads the company the contact belongs to (BL-196). */
+  companyProperties?: readonly PropertyLookup[];
+  /** Lead scoring is off for the workspace: the Lead score field is not offered. Absent counts as on. */
+  leadScoring?: boolean;
 }
 
 const without = (ops: readonly Operator[], drop: readonly Operator[]) =>
@@ -63,6 +84,7 @@ const without = (ops: readonly Operator[], drop: readonly Operator[]) =>
 export const PROPERTY_PREFIX = SEGMENT_CUSTOM_PREFIX;
 export const propertyFieldId = (key: string) => `${PROPERTY_PREFIX}${key}`;
 export const isPropertyField = (id: string) => isCustomSegmentField(id);
+export const companyFieldId = (key: string) => `${SEGMENT_COMPANY_PREFIX}${key}`;
 
 /** Every field a condition can test, grouped as the picker shows them: Journey, Who, Activity, Properties. */
 export function buildCatalog(l: Lookups): FieldDef[] {
@@ -78,7 +100,8 @@ export function buildCatalog(l: Lookups): FieldDef[] {
   const system: FieldDef[] = [
     sys('lifecycleStage', 'journey', { options: l.stages, optionsFrom: 'stage' }),
     sys('status', 'journey', { options: l.statuses, optionsFrom: 'status' }),
-    sys('leadScore', 'journey'),
+    // Off: not offered for a new condition, but a segment or view that already tests it still resolves the field.
+    sys('leadScore', 'journey', l.leadScoring === false ? { hidden: true } : {}),
     sys('name', 'who'),
     sys('email', 'who'),
     sys('phone', 'who'),
@@ -88,20 +111,38 @@ export function buildCatalog(l: Lookups): FieldDef[] {
     sys('groups', 'who', { options: l.groups, optionsFrom: 'group' }),
     sys('owner', 'who', { options: l.users, optionsFrom: 'user' }),
     sys('source', 'who'),
+    sys('timezone', 'who'),
     sys('unsubscribed', 'who'),
     sys('imported', 'who'),
+    sys('minor', 'who'),
+    sys('uncontacted', 'who'),
+    sys('dateOfBirth', 'who'),
+    sys('age', 'who'),
     // created and updated are always set, so "is empty" would never match
     sys('createdAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('updatedAt', 'activity', { operators: without(operatorsForKind('date'), never) }),
     sys('lastActivityAt', 'activity'),
   ];
-  const custom: FieldDef[] = l.properties.flatMap((p): FieldDef[] => {
+  return [
+    ...system,
+    ...propertyFields(l.properties, 'properties', propertyFieldId),
+    ...propertyFields(l.companyProperties ?? [], 'company', companyFieldId),
+  ];
+}
+
+/** The workspace's custom properties as fields of a group (a formula, which is computed and never stored, is left out). */
+export function propertyFields(
+  props: readonly PropertyLookup[],
+  group: FieldGroup,
+  idOf: (key: string) => string,
+): FieldDef[] {
+  return props.flatMap((p): FieldDef[] => {
     const kind = segmentKindForFieldType(p.fieldType);
     if (!kind) return [];
     return [
       {
-        id: propertyFieldId(p.key),
-        group: 'properties',
+        id: idOf(p.key),
+        group,
         kind,
         label: { text: p.label },
         operators: operatorsForKind(kind),
@@ -111,7 +152,6 @@ export function buildCatalog(l: Lookups): FieldDef[] {
       },
     ];
   });
-  return [...system, ...custom];
 }
 
 export function fieldsByGroup(
@@ -119,7 +159,7 @@ export function fieldsByGroup(
 ): Array<{ group: FieldGroup; fields: FieldDef[] }> {
   return FIELD_GROUPS.map((group) => ({
     group,
-    fields: catalog.filter((f) => f.group === group),
+    fields: catalog.filter((f) => f.group === group && !f.hidden),
   })).filter((g) => g.fields.length > 0);
 }
 

@@ -141,6 +141,9 @@ export const scheduledMessageContacts = pgTable(
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     readAt: timestamp('read_at', { withTimezone: true }),
     failedAt: timestamp('failed_at', { withTimezone: true }),
+    /** BL-177: the instant this recipient may be messaged after the workspace's quiet hours, and why. Null = not held. */
+    heldUntil: timestamp('held_until', { withTimezone: true }),
+    heldReason: text('held_reason'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -178,6 +181,13 @@ export const scheduledMessageContacts = pgTable(
       t.status,
     ),
     index('idx_scheduled_message_contacts_wa_message_id').on(t.orgId, t.waMessageId),
+    check(
+      'ck_scheduled_message_contacts_held_reason',
+      sql`held_reason IS NULL OR held_reason IN ('quiet_hours', 'calling_window')`,
+    ),
+    index('idx_scheduled_message_contacts_held')
+      .on(t.orgId, t.scheduledMessageId, t.heldUntil)
+      .where(sql`held_until IS NOT NULL`),
     // The Message History feed, newest send first (20261126090000).
     index('idx_scheduled_message_contacts_org_at').on(
       t.orgId,

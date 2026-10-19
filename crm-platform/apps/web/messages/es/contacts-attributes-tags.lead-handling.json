@@ -1,0 +1,154 @@
+{
+  "contacts-attributes-tags": {
+    "views": {
+      "presets": {
+        "uncontacted": "Sin contactar",
+        "followUpToday": "Seguimiento hoy",
+        "followUpOverdue": "Seguimiento vencido",
+        "followUpSomeday": "Seguimientos sin fecha"
+      }
+    },
+    "leadHandling": {
+      "uncontacted": {
+        "chip": "Sin contactar",
+        "chipTitle": "Nadie del equipo se ha puesto en contacto todavía",
+        "waitingSince": "En espera desde {date}",
+        "markContacted": "Marcar como contactado",
+        "markUncontacted": "Marcar como sin contactar",
+        "markedContacted": "Marcado como contactado",
+        "markedUncontacted": "Marcado como sin contactar",
+        "markFailed": "No se pudo cambiar la marca. Inténtalo de nuevo.",
+        "bulkMarkedContacted": "{count, plural, one {# contacto marcado como contactado} other {# contactos marcados como contactados}}",
+        "bulkMarkedUncontacted": "{count, plural, one {# contacto marcado como sin contactar} other {# contactos marcados como sin contactar}}"
+      },
+      "settings": {
+        "save": "Guardar",
+        "discard": "Descartar cambios",
+        "saved": "Ajustes guardados",
+        "retry": "Reintentar",
+        "loading": "Cargando ajustes",
+        "conflict": "Otra persona guardó estos ajustes mientras los editabas. Se muestran de nuevo abajo; vuelve a hacer tu cambio.",
+        "conflictOk": "Entendido",
+        "errors": {
+          "network": "No se pudo conectar con el servidor. Revisa tu conexión e inténtalo de nuevo.",
+          "forbidden": "Solo las personas que gestionan los ajustes del espacio de trabajo pueden cambiar esta página.",
+          "conflict": "Otra persona cambió estos ajustes antes. Recarga e inténtalo de nuevo.",
+          "validation": "Algunos de estos ajustes no son válidos. Revísalos e inténtalo de nuevo.",
+          "unexpected": "Algo salió mal. Inténtalo de nuevo."
+        },
+        "uncontacted": {
+          "title": "Clientes potenciales sin contactar",
+          "subtitle": "Marca los clientes potenciales a los que nadie ha contactado todavía, para que destaquen hasta que alguien se ponga en contacto. No cambia nada hasta que actives una opción.",
+          "clear": {
+            "title": "Marcar como contactado",
+            "intro": "Quitar automáticamente la marca «Sin contactar» cuando un miembro del equipo haga alguna de estas acciones:",
+            "contactButton": "Pulsa un botón de contacto (llamada, SMS, correo o WhatsApp) o realiza una llamada",
+            "message": "Envía un mensaje, una plantilla, una respuesta guardada o un archivo desde la bandeja de entrada",
+            "automation": "Una campaña, difusión o flujo automático envía un mensaje al cliente potencial",
+            "activity": "Añade una nota, una reunión u otra actividad a la cronología",
+            "manualHint": "También puedes cambiar la marca a mano: abre el menú Más de un contacto, o selecciona varios contactos y usa Más en la barra sobre la lista."
+          },
+          "new": {
+            "title": "Marcar los clientes potenciales nuevos como sin contactar",
+            "intro": "Cuando se cree un cliente potencial de alguna de estas formas, márcalo como sin contactar:",
+            "manual": "Creado manualmente en la app",
+            "import": "Importado desde un archivo o Google Sheets",
+            "leadSource": "Fuentes de clientes potenciales, formularios e integraciones"
+          },
+          "reassign": {
+            "title": "Clientes potenciales reasignados",
+            "intro": "Cuando un cliente potencial se asigna o se reasigna a un nuevo responsable:",
+            "keep": "No cambiar la marca «Sin contactar»",
+            "mark": "Marcar como sin contactar al reasignar"
+          }
+        },
+        "followUps": {
+          "title": "Seguimientos",
+          "subtitle": "Mantén en marcha a cada cliente potencial: cuando alguien del equipo se pone en contacto con una persona, su próximo seguimiento puede fijarse o moverse automáticamente. No cambia nada hasta que actives una opción.",
+          "when": {
+            "title": "Fijar seguimientos automáticamente",
+            "intro": "Cada vez que un miembro del equipo contacta a una persona o le envía contenido, actualizar su seguimiento si:",
+            "none": "El contacto no tiene seguimiento",
+            "overdue": "El seguimiento está vencido",
+            "today": "El seguimiento vence hoy",
+            "future": "El seguimiento vence más adelante"
+          },
+          "date": {
+            "title": "Fecha de seguimiento predeterminada",
+            "intro": "Cuando un seguimiento se actualiza automáticamente, fijarlo para:",
+            "day": "Dentro de 1 día",
+            "three_days": "Dentro de 3 días",
+            "week": "Dentro de 1 semana",
+            "month": "Dentro de 1 mes",
+            "custom": "Personalizada",
+            "someday": "Algún día",
+            "none": "Sin seguimiento",
+            "somedayHint": "El seguimiento no tiene fecha y espera en la lista «Algún día». Nunca se recuerda.",
+            "noneHint": "El seguimiento abierto se marca como hecho y no se crea uno nuevo.",
+            "customDays": "Número de días",
+            "daysLater": "días después"
+          },
+          "time": {
+            "title": "Hora de seguimiento predeterminada",
+            "intro": "Cada vez que se crea un seguimiento nuevo, fijar la hora de alerta a las:",
+            "hint": "Se interpreta según la zona horaria de tu espacio de trabajo."
+          }
+        },
+        "duplicates": {
+          "title": "Leads duplicados",
+          "subtitle": "Decide qué ocurre cuando un lead nuevo de una fuente de leads tiene el mismo teléfono o correo que un contacto que ya tienes.",
+          "mode": {
+            "title": "Cuando un lead nuevo coincide con un contacto",
+            "intro": "Un lead coincide cuando su teléfono o correo ya pertenece a un contacto.",
+            "merge": "Fusionar con el contacto existente",
+            "mergeHint": "Rellena los campos vacíos del contacto y añade el lead a su historial. Nunca se sobrescribe lo que ya está escrito.",
+            "createNew": "Crear un contacto nuevo",
+            "createNewHint": "Crea un contacto aparte para el lead. Cuenta para el límite de contactos de tu plan y se puede fusionar más tarde."
+          },
+          "note": {
+            "title": "Cronología",
+            "merge": "Añadir una nota a la cronología cuando se fusiona un lead",
+            "hint": "Desactivado por defecto, porque una nota también mueve la última actividad del contacto."
+          }
+        }
+      },
+      "followUp": {
+        "title": "Próximo seguimiento",
+        "somedayLabel": "Algún día",
+        "overdue": "Vencido",
+        "done": "Hecho",
+        "snooze": "Posponer",
+        "snoozeDay": "1 día",
+        "snoozeThreeDays": "3 días",
+        "snoozeWeek": "La próxima semana",
+        "change": "Cambiar fecha",
+        "set": "Fijar seguimiento",
+        "edit": "Cambiar seguimiento",
+        "remove": "Quitar seguimiento",
+        "dialogTitle": "Seguimiento",
+        "someday": "Algún día (sin fecha)",
+        "dateTime": "Fecha y hora",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "savedFor": "Seguimiento guardado",
+        "savedSomeday": "Seguimiento fijado para algún día",
+        "snoozed": "Seguimiento movido",
+        "doneMessage": "Seguimiento marcado como hecho",
+        "clearedMessage": "Seguimiento eliminado",
+        "failed": "No se pudo cambiar el seguimiento. Inténtalo de nuevo.",
+        "filterLabel": "Seguimiento",
+        "filter": {
+          "any": "Cualquiera",
+          "overdue": "Vencidos",
+          "today": "Vencen hoy",
+          "upcoming": "Próximos",
+          "someday": "Algún día",
+          "none": "Sin seguimiento"
+        }
+      }
+    },
+    "list": {
+      "colNextFollowUp": "Próximo seguimiento"
+    }
+  }
+}

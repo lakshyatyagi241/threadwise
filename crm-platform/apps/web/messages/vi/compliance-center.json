@@ -1,0 +1,546 @@
+{
+  "compliance-center": {
+    "title": "Trung tâm tuân thủ",
+    "subtitle": "Các công cụ giúp bạn thực hiện nghĩa vụ về quyền riêng tư: các luật áp dụng với bạn, đầu mối liên hệ, thông báo và bên xử lý phụ, cùng danh sách kiểm tra những gì đã có. Các công cụ này không tự khiến không gian làm việc tuân thủ, và đây không phải là tư vấn pháp lý.",
+    "readOnly": "Bạn có thể xem trang này nhưng không thể thay đổi.",
+    "saved": "Đã lưu cài đặt tuân thủ.",
+    "conflict": "Người khác đã lưu các cài đặt này trong lúc bạn đang chỉnh sửa. Phiên bản mới nhất đã được tải; hãy kiểm tra và thực hiện lại thay đổi của bạn.",
+    "conflictOk": "Đã hiểu",
+    "common": {
+      "dismiss": "Đóng",
+      "retry": "Thử lại",
+      "loading": "Đang tải..."
+    },
+    "tabs": {
+      "checklist": "Danh sách kiểm tra",
+      "profiles": "Luật và khu vực",
+      "contacts": "Liên hệ và trẻ em",
+      "notices": "Thông báo",
+      "links": "Liên kết quyền riêng tư và điều khoản",
+      "subprocessors": "Bên xử lý phụ",
+      "windows": "Giờ yên tĩnh và cuộc gọi",
+      "dnc": "Không gọi"
+    },
+    "saveBar": {
+      "unsaved": "Bạn có thay đổi chưa lưu.",
+      "problems": "Hãy sửa các trường được đánh dấu trước khi lưu.",
+      "discard": "Hủy thay đổi",
+      "save": "Lưu thay đổi"
+    },
+    "errors": {
+      "network": "Không thể kết nối với máy chủ. Hãy kiểm tra kết nối và thử lại.",
+      "forbidden": "Bạn không có quyền thực hiện thao tác này.",
+      "notFound": "Mục này không còn tồn tại.",
+      "conflict": "Người khác đã thay đổi mục này. Hãy tải lại và thử lại.",
+      "settingsInvalid": "Một số cài đặt không hợp lệ. Hãy kiểm tra giờ yên tĩnh, khung giờ gọi, múi giờ và ngôn ngữ.",
+      "duplicate": "Bạn đã có một bên xử lý phụ với tên này trong danh sách.",
+      "rateLimited": "Quá nhiều yêu cầu. Hãy đợi một lát rồi thử lại.",
+      "validation": "Một số giá trị không hợp lệ. Hãy kiểm tra biểu mẫu và thử lại.",
+      "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
+      "dncInvalid": "Không thể đọc tệp: tệp không có số điện thoại nào, hoặc có quá nhiều số trong một lần."
+    },
+    "problems": {
+      "httpsOnly": "Hãy dùng địa chỉ bắt đầu bằng https://.",
+      "email": "Nhập địa chỉ email hợp lệ.",
+      "quietEmpty": "Giờ kết thúc của giờ yên tĩnh phải khác giờ bắt đầu.",
+      "windowOrder": "Khung giờ gọi phải kết thúc sau giờ bắt đầu, trong cùng một ngày.",
+      "daysEmpty": "Chọn ít nhất một ngày.",
+      "englishFirst": "Tiếng Anh luôn là thông báo đầu tiên. Hãy chọn ngôn ngữ khác."
+    },
+    "phi": {
+      "title": "Không lưu trữ thông tin sức khỏe được bảo vệ.",
+      "body": "Sản phẩm này không được xây dựng để lưu hồ sơ sức khỏe. Chúng tôi không tuyên bố tuân thủ HIPAA và không ký thỏa thuận đối tác kinh doanh, vì vậy đừng đưa chẩn đoán, chi tiết điều trị, số bảo hiểm hoặc thông tin sức khỏe tương tự vào liên hệ, ghi chú, tin nhắn, tệp, biểu mẫu hay bản ghi âm."
+    },
+    "checklist": {
+      "intro": "Những gì đang có trong không gian làm việc của bạn hiện nay, được tính từ chính cài đặt và dữ liệu của bạn. \"Đã xây dựng\" nghĩa là công cụ đã được thiết lập. Điều đó không có nghĩa là một đạo luật đã được đáp ứng.",
+      "summaryLabel": "Tổng cộng",
+      "summary": "{status}: {count}",
+      "status": {
+        "built": "Đã xây dựng",
+        "partial": "Một phần",
+        "open": "Chưa có"
+      },
+      "baselineTitle": "Dành cho mọi không gian làm việc",
+      "baselineHint": "Một bộ tiêu chí nghiêm ngặt chúng tôi cung cấp cho mọi không gian làm việc, ở bất kỳ quốc gia nào.",
+      "profileTitle": "Được yêu cầu bởi các luật bạn đã bật",
+      "profileHint": "Mỗi dòng nêu tên các hồ sơ luật yêu cầu mục đó. Khi có nhiều hồ sơ cùng áp dụng, quy tắc chặt chẽ nhất sẽ được dùng.",
+      "noProfiles": "Chưa bật luật hay khu vực nào, nên chỉ hiển thị các mục dành cho mọi không gian làm việc. Hãy chọn trong Luật và khu vực.",
+      "disclaimer": "Danh sách này giúp bạn theo dõi thiết lập của chính mình. Đây không phải là tư vấn pháp lý và không cho biết không gian làm việc của bạn tuân thủ bất kỳ luật nào. Hãy hỏi luật sư của bạn về những quy định áp dụng.",
+      "open": "Chưa có",
+      "items": {
+        "lawful_basis": {
+          "title": "Đã ghi nhận mục đích và cơ sở",
+          "detail": {
+            "built": "Mỗi sự đồng ý được ghi lại theo một mục đích, kèm người hoặc hệ thống đã ghi, nội dung đã hiển thị, phiên bản và thời gian. Bạn không cần thiết lập gì."
+          }
+        },
+        "consent_withdrawal": {
+          "title": "Đồng ý và rút lại dễ dàng",
+          "detail": {
+            "detectionOff": "Tính năng phát hiện STOP đang tắt, nên liên hệ trả lời STOP sẽ không bị loại khỏi danh sách nhận tin. Hãy bật tính năng này trong cài đặt đồng ý.",
+            "optInOff": "STOP hoạt động, nhưng tiếp thị chưa cần sự đồng ý đã ghi nhận. Hãy bật \"yêu cầu sự đồng ý đã ghi nhận\" trong cài đặt đồng ý.",
+            "built": "STOP được phát hiện và tiếp thị cần có sự đồng ý đã ghi nhận."
+          }
+        },
+        "notices": {
+          "title": "Thông báo có phiên bản",
+          "detail": {
+            "built": "{lines, plural, one {# thông báo đồng ý đang bật} other {# thông báo đồng ý đang bật}}, bao gồm thông báo mặc định của bạn bằng {languages, plural, one {# ngôn ngữ} other {# ngôn ngữ}}.",
+            "noDefault": "{lines, plural, one {# thông báo đồng ý đang bật} other {# thông báo đồng ý đang bật}}, nhưng không gian làm việc chưa có thông báo mặc định.",
+            "none": "Chưa bật thông báo đồng ý nào. Hãy soạn một thông báo mặc định để bản ghi có thể nêu rõ nội dung người dùng đã thấy."
+          }
+        },
+        "rights": {
+          "title": "Yêu cầu của cá nhân (truy cập, xuất, xóa)",
+          "detail": {
+            "overdue": "{overdue, plural, one {# yêu cầu đã quá hạn} other {# yêu cầu đã quá hạn}}, trong tổng số {open} yêu cầu đang mở. Hãy trả lời trong Yêu cầu dữ liệu.",
+            "noContact": "Yêu cầu có thời hạn {days} ngày, nhưng chưa có đầu mối liên hệ về quyền riêng tư. Hãy thêm một người.",
+            "built": "Yêu cầu có thời hạn {days} ngày và có {open} yêu cầu đang mở. Đã có đầu mối liên hệ về quyền riêng tư."
+          }
+        },
+        "retention": {
+          "title": "Lưu giữ và xóa dữ liệu",
+          "detail": {
+            "recordingsOn": "Bản ghi cuộc gọi được lưu giữ {days} ngày và có thể được giữ lại. Chức năng lưu giữ cho dữ liệu khác chưa được xây dựng.",
+            "recordingsOff": "Ghi âm cuộc gọi đang tắt. Cài đặt lưu giữ cho phần dữ liệu còn lại của bạn chưa được xây dựng."
+          }
+        },
+        "security": {
+          "title": "Bảo mật và kế hoạch xử lý vi phạm",
+          "detail": {
+            "runbook": "Cách ly không gian làm việc, thông tin xác thực được mã hóa và nhật ký kiểm toán đã có. Kế hoạch ứng phó vi phạm dữ liệu là bản nháp do nhà vận hành nền tảng hoàn thiện. Bạn không thể bật mục này tại đây."
+          }
+        },
+        "subprocessors": {
+          "title": "Danh sách bên xử lý phụ",
+          "detail": {
+            "built": "{count, plural, one {# bên xử lý phụ được liệt kê} other {# bên xử lý phụ được liệt kê}}. Mẫu DPA sẵn sàng để tải xuống.",
+            "none": "Chưa liệt kê bên xử lý phụ nào. Hãy liệt kê các nhà cung cấp xử lý dữ liệu cá nhân thay cho bạn."
+          }
+        },
+        "children": {
+          "title": "Dữ liệu của trẻ em",
+          "detail": {
+            "unset": "Chưa trả lời. Hãy cho biết liệu người chưa thành niên có thể nằm trong danh sách liên hệ của bạn hay không.",
+            "minorsNoParental": "Có thể có người chưa thành niên, nhưng sự đồng ý của cha mẹ chưa được bật.",
+            "no_minors": "Bạn không cố ý xử lý dữ liệu của người chưa thành niên.",
+            "may_include_minors": "Có thể có người chưa thành niên và sự đồng ý của cha mẹ đã được bật."
+          }
+        },
+        "contact_links": {
+          "title": "Đầu mối liên hệ và liên kết quyền riêng tư",
+          "detail": {
+            "built": "Các liên kết quyền riêng tư, điều khoản và một đầu mối liên hệ đã được thiết lập.",
+            "none": "Chưa có liên kết quyền riêng tư, liên kết điều khoản và đầu mối liên hệ.",
+            "some": "Một số liên kết và thông tin liên hệ đã được thiết lập. Hãy hoàn thiện phần còn lại."
+          }
+        },
+        "dpo_contact": {
+          "title": "Cán bộ bảo vệ dữ liệu hoặc đầu mối liên hệ về quyền riêng tư",
+          "detail": {
+            "built": "Đã có tên và email.",
+            "one": "Hãy thêm cả tên và email.",
+            "none": "Chưa chỉ định cán bộ hoặc đầu mối liên hệ về quyền riêng tư."
+          }
+        },
+        "grievance_officer": {
+          "title": "Cán bộ giải quyết khiếu nại",
+          "detail": {
+            "built": "Đã có tên và email.",
+            "one": "Hãy thêm cả tên và email.",
+            "none": "Chưa chỉ định cán bộ giải quyết khiếu nại."
+          }
+        },
+        "notice_languages": {
+          "title": "Thông báo bằng tiếng Anh và ngôn ngữ thứ hai",
+          "detail": {
+            "built": "Thông báo mặc định của bạn đang bật bằng tiếng Anh và {locale}.",
+            "noSecond": "Hãy chọn ngôn ngữ thứ hai, rồi soạn thông báo bằng ngôn ngữ đó.",
+            "secondMissing": "Tiếng Anh đã bật. Hãy soạn thông báo bằng ngôn ngữ thứ hai.",
+            "englishMissing": "Ngôn ngữ thứ hai đã bật. Hãy soạn thông báo tiếng Anh.",
+            "none": "Chưa bật thông báo nào trong hai thông báo."
+          }
+        },
+        "parental_flag": {
+          "title": "Người chưa thành niên và sự đồng ý của cha mẹ",
+          "detail": {
+            "unset": "Hãy trả lời câu hỏi về trẻ em trong mục Liên hệ và trẻ em.",
+            "minorsNoParental": "Có thể có người chưa thành niên, nhưng sự đồng ý của cha mẹ đang tắt. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
+            "no_minors": "Bạn không cố ý xử lý dữ liệu của người chưa thành niên. Hồ sơ này coi người dưới {age} tuổi là người chưa thành niên.",
+            "may_include_minors": "Sự đồng ý của cha mẹ được bật cho người dưới {age} tuổi. Hãy đánh dấu liên hệ là chưa thành niên trên thẻ đồng ý của họ và ghi nhận sự đồng ý của người giám hộ tại đó."
+          }
+        },
+        "opt_out_notice": {
+          "title": "Tùy chọn Không bán hoặc chia sẻ",
+          "detail": {
+            "built": "Tùy chọn từ chối và liên kết đến thông báo của nó đã được thiết lập.",
+            "noUrl": "Tùy chọn đã bật, nhưng chưa có liên kết đến thông báo từ chối.",
+            "off": "Hãy bật tùy chọn này nếu bạn bán hoặc chia sẻ thông tin cá nhân, và thêm liên kết đến thông báo từ chối của bạn."
+          }
+        },
+        "quiet_hours": {
+          "title": "Giờ yên tĩnh",
+          "detail": {
+            "built": "Đã lưu giờ yên tĩnh từ {start} đến {end}.",
+            "off": "Chưa đặt giờ yên tĩnh."
+          }
+        },
+        "calling_window": {
+          "title": "Khung giờ gọi",
+          "detail": {
+            "built": "Đã lưu khung giờ gọi từ {start} đến {end}.",
+            "off": "Chưa đặt khung giờ gọi."
+          }
+        },
+        "dnd_registry": {
+          "title": "Danh sách Không gọi / DND",
+          "detail": {
+            "off": "Chưa chọn danh sách nào.",
+            "hookOnly": "Đã ghi chú danh sách ({registry}). Hiện chưa có đối chiếu nào với danh sách này."
+          }
+        },
+        "subprocessor_locations": {
+          "title": "Vị trí của các bên xử lý phụ",
+          "detail": {
+            "built": "{count, plural, one {Cả # bên xử lý phụ đều có vị trí} other {Cả # bên xử lý phụ đều có vị trí}}.",
+            "some": "{missing, plural, one {# bên xử lý phụ chưa có vị trí} other {# bên xử lý phụ chưa có vị trí}}.",
+            "none": "Chưa liệt kê bên xử lý phụ nào, hoặc không bên nào có vị trí."
+          }
+        },
+        "request_days": {
+          "title": "Thời gian trả lời yêu cầu",
+          "detail": {
+            "built": "Thời hạn trả lời yêu cầu của bạn là {sla} ngày, nằm trong mức {days} ngày mà hồ sơ chặt chẽ nhất yêu cầu.",
+            "tooLong": "Thời hạn của bạn là {sla} ngày. Hồ sơ chặt chẽ nhất bạn đã bật yêu cầu {days} ngày. Hãy thay đổi trong Yêu cầu dữ liệu."
+          }
+        },
+        "marketing_opt_in": {
+          "title": "Ghi nhận đồng ý trước khi tiếp thị",
+          "detail": {
+            "built": "Tiếp thị cần có sự đồng ý đã ghi nhận.",
+            "off": "Tiếp thị chưa cần sự đồng ý đã ghi nhận. Hãy bật trong cài đặt đồng ý."
+          }
+        },
+        "windows_enforcement": {
+          "title": "Giờ yên tĩnh và khung giờ gọi đang được áp dụng",
+          "detail": {
+            "enforced": "Tin nhắn tiếp thị trong giờ yên tĩnh được giữ lại đến khi hết giờ, còn cuộc gọi ngoài khung giờ gọi bị từ chối kèm thời điểm khung mở. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ. Sổ đăng ký DND chỉ là ghi chú: hiện chưa đối chiếu gì với nó."
+          }
+        }
+      }
+    },
+    "profiles": {
+      "intro": "Hãy bật các luật và khu vực áp dụng với những người bạn liên hệ. Bạn có thể bật nhiều luật; khi có khác biệt, quy tắc chặt chẽ nhất sẽ được dùng. Quốc gia chỉ là gợi ý; quyết định là ở bạn.",
+      "suggested": "Quốc gia {source} của bạn là {country}, gợi ý:",
+      "source": {
+        "billing": "thanh toán",
+        "onboarding": "không gian làm việc"
+      },
+      "useSuggestion": "Dùng gợi ý này",
+      "suggestedNote": "Không gian làm việc liên hệ với người ở các quốc gia khác cũng nên bật các luật của những nơi đó.",
+      "notConfirmed": "Chưa bật gì. Mức cơ bản dành cho mọi không gian làm việc sẽ áp dụng cho đến khi bạn lưu lựa chọn.",
+      "listTitle": "Luật và khu vực",
+      "switchesOn": "Bật các mục:",
+      "items": {
+        "gdpr_eu": {
+          "name": "GDPR (EU và EEA)",
+          "summary": "Dành cho người ở Liên minh châu Âu, Iceland, Liechtenstein và Na Uy.",
+          "extras": "Cán bộ bảo vệ dữ liệu hoặc đầu mối liên hệ về quyền riêng tư, vị trí của bên xử lý phụ, trả lời yêu cầu trong 30 ngày, ghi nhận đồng ý cho tiếp thị."
+        },
+        "uk_gdpr": {
+          "name": "UK GDPR và PECR (Vương quốc Anh)",
+          "summary": "Dành cho người ở Vương quốc Anh.",
+          "extras": "Cán bộ bảo vệ dữ liệu hoặc đầu mối liên hệ về quyền riêng tư, vị trí của bên xử lý phụ, trả lời trong 30 ngày, ghi nhận đồng ý cho tiếp thị điện tử."
+        },
+        "dpdp_in": {
+          "name": "Đạo luật DPDP (Ấn Độ)",
+          "summary": "Dành cho người ở Ấn Độ.",
+          "extras": "Cán bộ giải quyết khiếu nại, thông báo bằng tiếng Anh và một ngôn ngữ của Ấn Độ, cờ đồng ý của cha mẹ đối với người chưa đủ 18 tuổi, phần giữ chỗ cho bên quản lý sự đồng ý, ghi nhận đồng ý."
+        },
+        "ccpa_us": {
+          "name": "CCPA và CPRA (Hoa Kỳ)",
+          "summary": "Dành cho cư dân California, và là điểm khởi đầu hợp lý cho Hoa Kỳ.",
+          "extras": "Tùy chọn Không bán hoặc chia sẻ thông tin cá nhân của tôi kèm liên kết thông báo từ chối, trả lời trong 45 ngày."
+        },
+        "tcpa_us": {
+          "name": "TCPA (cuộc gọi và tin nhắn đến Hoa Kỳ)",
+          "summary": "Dành cho cuộc gọi và tin nhắn tiếp thị đến người ở Hoa Kỳ.",
+          "extras": "Giờ yên tĩnh 21:00 đến 08:00, khung giờ gọi 08:00 đến 21:00, ghi chú về danh sách Không gọi, ghi nhận đồng ý."
+        },
+        "trai_in": {
+          "name": "Quy tắc TRAI (cuộc gọi và tin nhắn đến Ấn Độ)",
+          "summary": "Dành cho cuộc gọi và tin nhắn quảng cáo đến người ở Ấn Độ.",
+          "extras": "Giờ yên tĩnh 21:00 đến 09:00, khung giờ gọi 09:00 đến 21:00, ghi chú về danh sách DND, ghi nhận đồng ý."
+        },
+        "lgpd_br": {
+          "name": "LGPD (Brazil)",
+          "summary": "Dành cho người ở Brazil.",
+          "extras": "Thông tin liên hệ của cán bộ bảo vệ dữ liệu (encarregado), vị trí của bên xử lý phụ, trả lời trong 15 ngày, ghi nhận đồng ý."
+        },
+        "pdpa_sg": {
+          "name": "PDPA (Singapore)",
+          "summary": "Dành cho người ở Singapore.",
+          "extras": "Thông tin liên hệ của cán bộ bảo vệ dữ liệu, ghi chú về danh sách Không gọi, trả lời trong 30 ngày, ghi nhận đồng ý."
+        },
+        "generic": {
+          "name": "Quốc gia khác (chỉ mức cơ bản)",
+          "summary": "Dành cho mọi nơi khác, hoặc khi bạn chưa quyết định.",
+          "extras": "Không có gì ngoài mức cơ bản mà mọi không gian làm việc đều đã có."
+        }
+      },
+      "effective": {
+        "title": "Những gì quy tắc chặt chẽ nhất yêu cầu",
+        "hint": "Được tính từ các luật bạn đã bật. Đây là điểm khởi đầu để bạn kiểm tra cùng luật sư của mình.",
+        "baselineOnly": "Chưa bật luật nào. Chỉ áp dụng mức cơ bản dành cho mọi không gian làm việc.",
+        "optIn": "Ghi nhận đồng ý trước khi tiếp thị",
+        "optInYes": "Khuyến nghị.",
+        "optInNo": "Các hồ sơ này không yêu cầu.",
+        "consentLink": "Mở cài đặt đồng ý",
+        "requestDays": "Thời gian trả lời yêu cầu của một cá nhân",
+        "days": "{count, plural, one {# ngày} other {# ngày}}",
+        "minorAge": "Coi một người là người chưa thành niên khi dưới",
+        "years": "{count, plural, one {# tuổi} other {# tuổi}}",
+        "callingWindow": "Khung giờ gọi",
+        "dnd": "Danh sách Không gọi / DND",
+        "none": "Không có",
+        "registry": {
+          "none": "Không có",
+          "trai_ndnc": "NDNC Ấn Độ (TRAI)",
+          "us_dnc": "Danh sách Không gọi của Hoa Kỳ",
+          "sg_dnc": "Danh sách Không gọi của Singapore",
+          "custom": "Danh sách của riêng bạn"
+        },
+        "strictest": "Khi nhiều hồ sơ cùng bật, quy tắc chặt chẽ nhất được dùng: thời gian trả lời ngắn nhất, độ tuổi cao nhất, khung giờ gọi hẹp nhất."
+      },
+      "ccpa": {
+        "title": "Không bán hoặc chia sẻ",
+        "hint": "Nếu bạn bán hoặc chia sẻ thông tin cá nhân (kể cả để quảng cáo trên các trang khác), mọi người có thể yêu cầu bạn dừng lại.",
+        "offer": "Cung cấp tùy chọn Không bán hoặc chia sẻ thông tin cá nhân của tôi",
+        "url": "Liên kết đến thông báo từ chối của bạn",
+        "urlHint": "Trang để mọi người có thể từ chối. Phải bắt đầu bằng https://."
+      },
+      "dpdp": {
+        "title": "Bên quản lý sự đồng ý",
+        "hint": "Đạo luật DPDP cho phép mọi người quản lý sự đồng ý thông qua một bên quản lý sự đồng ý đã đăng ký. Hãy ghi tên bên bạn dùng tại đây nếu có.",
+        "managerName": "Bên quản lý sự đồng ý",
+        "managerUrl": "Liên kết bên quản lý sự đồng ý",
+        "placeholderNote": "Đây chỉ là ghi chú. Hiện chưa kết nối với bên quản lý sự đồng ý nào.",
+        "managerRegistration": "Số đăng ký của Consent Manager",
+        "managerRegistrationHint": "Số mà Hội đồng Bảo vệ Dữ liệu đã đăng ký cho Consent Manager của bạn. Chỉ để ghi chú."
+      }
+    },
+    "contacts": {
+      "intro": "Ai là người mà cá nhân hoặc cơ quan quản lý có thể liên hệ về dữ liệu của họ, và liệu trẻ em có thể nằm trong danh sách liên hệ của bạn hay không.",
+      "requiredByProfile": "Được yêu cầu bởi hồ sơ bạn đã bật",
+      "officer": {
+        "name": "Tên",
+        "email": "Email",
+        "phone": "Điện thoại",
+        "address": "Địa chỉ bưu điện"
+      },
+      "dpo": {
+        "title": "Cán bộ bảo vệ dữ liệu hoặc đầu mối liên hệ về quyền riêng tư",
+        "hint": "Người hoặc nhóm trả lời các câu hỏi về quyền riêng tư. Được hiển thị trên trang công khai của bạn nếu bạn bật."
+      },
+      "grievance": {
+        "title": "Cán bộ giải quyết khiếu nại",
+        "hint": "Đạo luật DPDP yêu cầu có một cán bộ được chỉ định để xử lý khiếu nại về cách dữ liệu cá nhân được xử lý."
+      },
+      "children": {
+        "title": "Dữ liệu của trẻ em",
+        "hint": "Sản phẩm này dành cho doanh nghiệp. Hãy cho biết bạn có thể lưu dữ liệu của người chưa thành niên hay không để hiển thị đúng quy tắc. Sau khi bạn trả lời, hoạt động tiếp thị tới liên hệ được đánh dấu là chưa thành niên sẽ bị giữ lại: luôn luôn nếu bạn không cố ý xử lý dữ liệu của người chưa thành niên, và cho đến khi ghi nhận sự đồng ý của người giám hộ nếu có thể có người chưa thành niên.",
+        "policy": "Người chưa thành niên trong danh sách liên hệ",
+        "policies": {
+          "unset": "Chưa trả lời",
+          "no_minors": "Chúng tôi không cố ý xử lý dữ liệu của người chưa thành niên",
+          "may_include_minors": "Có thể có người chưa thành niên trong danh sách liên hệ của chúng tôi"
+        },
+        "parental": "Người chưa thành niên cần có sự đồng ý của cha mẹ",
+        "parentalHint": "Ghi lại chính sách của bạn và giữ lại hoạt động tiếp thị tới các liên hệ được đánh dấu là chưa thành niên cho đến khi ghi nhận sự đồng ý của người giám hộ. Bạn đánh dấu liên hệ là chưa thành niên và ghi nhận sự đồng ý đó trên thẻ đồng ý của họ.",
+        "age": "Các hồ sơ bạn đã bật coi người dưới {age} tuổi là người chưa thành niên.",
+        "dpdpNeedsAnswer": "Hồ sơ DPDP yêu cầu bạn trả lời câu hỏi này."
+      }
+    },
+    "links": {
+      "intro": "Lưu liên kết quyền riêng tư và điều khoản của bạn một lần. Chúng được đề xuất chỉ với một cú nhấp trong dòng đồng ý của trình tạo biểu mẫu và trong mọi trình soạn thông báo đồng ý.",
+      "privacy": "Liên kết chính sách quyền riêng tư",
+      "privacyHint": "Phải bắt đầu bằng https://",
+      "terms": "Liên kết điều khoản",
+      "termsHint": "Phải bắt đầu bằng https://",
+      "offered": "Không có gì được tự động điền: mỗi biểu mẫu hoặc thông báo sẽ hiển thị một nút để dùng các liên kết này."
+    },
+    "notices": {
+      "intro": "Nội dung mặc định mà không gian làm việc của bạn hiển thị bên cạnh hộp đồng ý. Mỗi thay đổi được lưu thành một phiên bản được đánh số mới, để bản ghi có thể nêu rõ nội dung chính xác mà người dùng đã đồng ý.",
+      "english": "Thông báo đồng ý mặc định ({language})",
+      "secondEditor": "Thông báo đồng ý mặc định ({language})",
+      "second": {
+        "title": "Ngôn ngữ thứ hai",
+        "requiredByProfile": "Được hồ sơ DPDP yêu cầu",
+        "hint": "Đạo luật DPDP yêu cầu thông báo bằng tiếng Anh và một trong các ngôn ngữ của Ấn Độ. Hãy chọn ngôn ngữ thứ hai và lưu, rồi soạn thông báo bằng ngôn ngữ đó.",
+        "language": "Ngôn ngữ của thông báo thứ hai",
+        "none": "Không có ngôn ngữ thứ hai",
+        "saveFirst": "Hãy lưu thay đổi trước, sau đó trình soạn thông báo cho ngôn ngữ này sẽ xuất hiện."
+      }
+    },
+    "windows": {
+      "intro": "Một số quy định giới hạn thời điểm tin nhắn tiếp thị và cuộc gọi được phép đến với mọi người. Hãy đặt giờ của bạn tại đây: tin nhắn tiếp thị gửi trong giờ yên tĩnh sẽ chờ và được gửi khi hết giờ, còn cuộc gọi ngoài khung giờ gọi sẽ không được thực hiện.",
+      "quiet": {
+        "title": "Giờ yên tĩnh cho tin nhắn",
+        "hint": "Khoảng giờ không gửi tin nhắn tiếp thị. Tin sẽ chờ và được gửi khi hết khoảng giờ này. Khoảng giờ có thể vắt qua nửa đêm.",
+        "enabled": "Bật giờ yên tĩnh",
+        "start": "Yên tĩnh từ",
+        "end": "Yên tĩnh đến"
+      },
+      "calling": {
+        "title": "Khung giờ gọi",
+        "hint": "Những giờ duy nhất được gọi điện tiếp thị, vào các ngày bạn chọn. Cuộc gọi ngoài khung giờ này bị từ chối và cho biết khi nào khung mở.",
+        "enabled": "Bật khung giờ gọi",
+        "start": "Gọi từ",
+        "end": "Gọi đến",
+        "days": "Ngày"
+      },
+      "day": {
+        "1": "Thứ Hai",
+        "2": "Thứ Ba",
+        "3": "Thứ Tư",
+        "4": "Thứ Năm",
+        "5": "Thứ Sáu",
+        "6": "Thứ Bảy",
+        "7": "Chủ Nhật"
+      },
+      "suggested": "Các luật bạn đã bật gợi ý {start} đến {end}.",
+      "zone": {
+        "label": "Múi giờ dự phòng",
+        "hint": "Giờ được đọc theo đồng hồ của từng liên hệ: thuộc tính múi giờ của họ, nếu không có thì dùng mã quốc gia của số điện thoại. Múi giờ này được dùng khi cả hai đều không rõ. Múi giờ của không gian làm việc của bạn là {zone}.",
+        "workspace": "Múi giờ của không gian làm việc ({zone})"
+      },
+      "dnd": {
+        "label": "Danh sách Không gọi / DND",
+        "hint": "Danh sách mà bạn dùng để đối chiếu các danh sách của mình.",
+        "registry": {
+          "none": "Không có",
+          "trai_ndnc": "NDNC Ấn Độ (TRAI)",
+          "us_dnc": "Danh sách Không gọi của Hoa Kỳ",
+          "sg_dnc": "Danh sách Không gọi của Singapore",
+          "custom": "Danh sách của riêng bạn"
+        },
+        "note": "Đây chỉ là ghi chú. Hiện chưa có đối chiếu nào với danh sách.",
+        "listNote": "Các số trong danh sách Không gọi của bạn (tab cuối cùng) đã bị loại khỏi các cuộc gọi và tin nhắn tiếp thị."
+      },
+      "enforcedNote": "Giờ yên tĩnh giữ tin nhắn tiếp thị lại cho đến khi kết thúc, còn khung giờ gọi sẽ từ chối cuộc gọi nằm ngoài khung. Hệ thống dùng giờ của từng liên hệ. Câu trả lời trong cửa sổ 24 giờ và thông báo dịch vụ không bao giờ bị giữ."
+    },
+    "subprocessors": {
+      "intro": "Các nhà cung cấp xử lý dữ liệu cá nhân cho không gian làm việc của bạn: họ làm gì, nhận dữ liệu gì và ở đâu. Bạn có thể công bố danh sách này trên một trang công khai.",
+      "listTitle": "Các bên xử lý phụ của bạn",
+      "add": "Thêm bên xử lý phụ",
+      "saved": "Đã lưu bên xử lý phụ.",
+      "removed": "Đã xóa bên xử lý phụ.",
+      "empty": {
+        "title": "Chưa có bên xử lý phụ",
+        "body": "Hãy thêm từng nhà cung cấp xử lý dữ liệu cá nhân cho bạn, ví dụ nhà cung cấp email hoặc SMS."
+      },
+      "status": {
+        "active": "Đang sử dụng",
+        "planned": "Dự kiến",
+        "removed": "Không còn sử dụng"
+      },
+      "edit": "Sửa",
+      "remove": "Xóa",
+      "public": {
+        "title": "Trang công khai",
+        "hint": "Công bố các nhà cung cấp đang sử dụng, liên kết quyền riêng tư và điều khoản cùng đầu mối liên hệ về quyền riêng tư của bạn trên một trang ai cũng có thể mở. Mặc định là tắt.",
+        "switch": "Bật trang công khai",
+        "saveToApply": "Hãy lưu thay đổi để áp dụng."
+      },
+      "dpa": {
+        "title": "Mẫu thỏa thuận xử lý dữ liệu",
+        "hint": "Một mẫu đã được điền thông tin và danh sách của bạn. Đây không phải là tư vấn pháp lý và không phải là thỏa thuận: hãy nhờ luật sư của bạn xem xét trước khi sử dụng.",
+        "download": "Tải xuống mẫu"
+      },
+      "form": {
+        "addTitle": "Thêm bên xử lý phụ",
+        "editTitle": "Sửa bên xử lý phụ",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "name": "Tên",
+        "required": "Vui lòng nhập tên.",
+        "purpose": "Họ làm gì cho bạn",
+        "data": "Dữ liệu họ nhận",
+        "location": "Vị trí",
+        "locationHint": "Quốc gia hoặc khu vực nơi họ xử lý dữ liệu.",
+        "status": "Trạng thái",
+        "website": "Trang web",
+        "dpa": "Liên kết thỏa thuận",
+        "httpsOnly": "Hãy dùng địa chỉ bắt đầu bằng https://.",
+        "addedOn": "Ngày thêm",
+        "noticeSentOn": "Ngày thông báo cho khách hàng",
+        "noticeHint": "Ngày bạn thông báo cho khách hàng của mình về nhà cung cấp này."
+      },
+      "confirmRemove": {
+        "title": "Xóa bên xử lý phụ này?",
+        "body": "{name} sẽ bị gỡ khỏi danh sách của bạn. Nếu muốn giữ lại lịch sử, hãy đánh dấu là không còn sử dụng.",
+        "confirm": "Xóa"
+      }
+    },
+    "trust": {
+      "title": "{workspace}: bên xử lý phụ và quyền riêng tư",
+      "intro": "Các nhà cung cấp mà doanh nghiệp này dùng để xử lý dữ liệu cá nhân, và cách liên hệ đầu mối về quyền riêng tư.",
+      "subprocessors": "Bên xử lý phụ",
+      "none": "Chưa liệt kê bên xử lý phụ nào.",
+      "contact": "Đầu mối liên hệ và chính sách quyền riêng tư",
+      "privacy": "Chính sách quyền riêng tư",
+      "terms": "Điều khoản",
+      "notFound": "Không tìm thấy trang"
+    },
+    "hold": {
+      "heldUntil": "Tạm giữ đến {when} (giờ yên tĩnh)",
+      "heldCount": "{count} đang tạm giữ vì giờ yên tĩnh"
+    },
+    "dnc": {
+      "intro": "Các số trong danh sách này không nhận tiếp thị qua cuộc gọi thoại hoặc SMS, bất kể lịch sử đồng ý ra sao. WhatsApp, email và tin nhắn dịch vụ không bị giữ lại bởi danh sách này. Không có việc đối chiếu với danh sách quốc gia nào từ đây: hãy thêm bản trích xuất mà bạn được phép tải về.",
+      "addTitle": "Thêm số",
+      "numbers": "Số điện thoại",
+      "numbersHint": "Mỗi dòng một số, hoặc phân tách bằng dấu phẩy. Tối đa {max} số mỗi lần; dùng tệp nếu nhiều hơn.",
+      "country": "Mã quốc gia cho số nội địa",
+      "countryHint": "Số viết không có mã quốc gia sẽ được hiểu theo mã này.",
+      "note": "Ghi chú",
+      "noteHint": "Không bắt buộc. Lý do các số này nằm trong danh sách.",
+      "add": "Thêm vào danh sách",
+      "adding": "Đang thêm...",
+      "or": "hoặc",
+      "import": "Thêm từ tệp CSV",
+      "importing": "Đang đọc tệp...",
+      "importHint": "Cột có tên phone, mobile hoặc number, nếu không có thì lấy cột đầu tiên. Tệp lớn được đọc theo từng phần.",
+      "fromRegistry": "Tệp là bản trích xuất từ một danh sách quốc gia mà tôi được phép sử dụng",
+      "progress": "Đang gửi phần {done} trên {of}...",
+      "added": "{count, plural, =0 {Không có số mới để thêm} one {Đã thêm # số} other {Đã thêm # số}}",
+      "result": "Đã thêm {added}, {already} đã có trong danh sách, {invalid} không phải số điện thoại.",
+      "invalidSamples": "Ví dụ: {samples}",
+      "listTitle": "Các số trong danh sách",
+      "total": "{count, plural, =0 {Chưa có số nào trong danh sách} one {# số trong danh sách} other {# số trong danh sách}}",
+      "search": "Tìm một số",
+      "loading": "Đang tải danh sách...",
+      "empty": "Chưa có số nào",
+      "emptyHint": "Thêm các số đã yêu cầu không bị gọi hoặc nhắn tin, hoặc một bản trích xuất từ danh sách mà bạn được phép dùng.",
+      "noMatch": "Không có số nào khớp",
+      "source": {
+        "manual": "Thêm thủ công",
+        "import": "Từ tệp",
+        "contact_request": "Người đó yêu cầu",
+        "registry_export": "Trích xuất từ danh sách quốc gia"
+      },
+      "remove": "Xóa",
+      "removeLabel": "Xóa {phone} khỏi danh sách",
+      "removed": "Đã xóa số khỏi danh sách",
+      "newer": "Mới hơn",
+      "older": "Cũ hơn",
+      "confirm": {
+        "title": "Xóa số này?",
+        "message": "{phone} có thể nhận lại các cuộc gọi và tin nhắn tiếp thị, trừ khi liên hệ đã rút lại sự đồng ý. Chỉ xóa khi người đó yêu cầu hoặc số được thêm nhầm.",
+        "confirm": "Xóa số",
+        "cancel": "Giữ lại"
+      }
+    }
+  }
+}

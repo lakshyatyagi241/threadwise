@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "WhatsApp-Formulare",
+      "links": "WhatsApp-Links"
+    },
+    "errors": {
+      "generic": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Verbinden Sie eine WhatsApp Cloud API-Nummer, um Formulare zu nutzen.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Keine verbundene WhatsApp Cloud API-Nummer verfügt über gültige Zugangsdaten.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta hat die Formulardefinition abgelehnt.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Ihr WhatsApp Business-Konto muss die Meta-Verifizierung durchlaufen, bevor Sie Formulare veröffentlichen können.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta konnte dieses Formular nicht veröffentlichen.",
+      "WFL_LINK_NOT_LIVE": "Dieser Link ist pausiert oder abgelaufen.",
+      "ROW_VERSION_CONFLICT": "Dies wurde an anderer Stelle geändert. Laden Sie die Seite neu und versuchen Sie es erneut.",
+      "VALIDATION_FAILED": "Überprüfen Sie die markierten Felder und versuchen Sie es erneut.",
+      "PLAN_FEATURE_LOCKED": "Führen Sie ein Upgrade Ihres Plans durch, um diese Funktion zu nutzen."
+    },
+    "forms": {
+      "heading": "WhatsApp-Formulare",
+      "intro": "Erstellen Sie Formulare, die Kunden direkt in WhatsApp ausfüllen, senden Sie sie dann aus einem Flow und sehen Sie sich die Antworten hier an.",
+      "loading": "Formulare werden geladen…",
+      "retry": "Erneut versuchen",
+      "create": {
+        "cta": "Neues Formular",
+        "creating": "Wird erstellt…",
+        "defaultTitle": "Unbenanntes Formular",
+        "defaultField": "Vollständiger Name"
+      },
+      "stats": {
+        "all": "Alle Formulare",
+        "published": "Veröffentlicht",
+        "draft": "Entwürfe",
+        "submissions": "Einreichungen"
+      },
+      "empty": {
+        "title": "Noch keine Formulare",
+        "description": "Erstellen Sie ein Formular und senden Sie es dann über einen WhatsApp-Formularschritt in einem Flow."
+      },
+      "table": {
+        "form": "Formular",
+        "type": "Typ",
+        "fields": "Felder",
+        "submissions": "Einreichungen"
+      },
+      "status": {
+        "draft": "Entwurf",
+        "published": "Veröffentlicht",
+        "paused": "Pausiert"
+      },
+      "audience": {
+        "lead_capture": "Lead-Erfassung",
+        "survey": "Umfrage",
+        "appointment_booking": "Terminbuchung",
+        "customer_support": "Kundensupport",
+        "sign_up": "Anmeldung",
+        "other": "Sonstiges"
+      },
+      "row": {
+        "edit": "Bearbeiten",
+        "duplicate": "Duplizieren",
+        "delete": "Löschen"
+      },
+      "confirm": {
+        "deleteTitle": "Dieses Formular löschen?",
+        "deleteMessage": "Aktive Flow-Knoten, die darauf verweisen, werden dadurch unterbrochen.",
+        "deleteConfirm": "Löschen",
+        "cancel": "Abbrechen"
+      },
+      "notice": {
+        "saved": "Gespeichert.",
+        "published": "Auf WhatsApp veröffentlicht."
+      },
+      "builder": {
+        "back": "Zurück zu Formularen",
+        "untitled": "Unbenanntes Formular",
+        "saving": "Wird gespeichert…",
+        "saveDraft": "Entwurf speichern",
+        "savePublish": "Speichern & veröffentlichen",
+        "publishing": "Wird veröffentlicht…",
+        "basics": "Formular-Grundlagen",
+        "title": "Titel",
+        "audienceType": "Typ",
+        "purpose": "Zweck",
+        "sendButtonLabel": "Beschriftung des Senden-Buttons",
+        "thankYouNote": "Dankesnachricht",
+        "screens": "Bildschirme",
+        "addScreen": "Bildschirm hinzufügen",
+        "removeScreen": "Bildschirm entfernen",
+        "screenN": "Bildschirm {n}",
+        "defaultField": "Vollständiger Name",
+        "newFieldLabel": "Neues Feld",
+        "fieldKind": "Feldtyp",
+        "fieldLabel": "Beschriftung",
+        "required": "Erforderlich",
+        "removeField": "Entfernen",
+        "options": "Optionen (durch Kommas getrennt)",
+        "optionsPlaceholder": "Option 1, Option 2, Option 3",
+        "mapsTo": "Zuordnung zu",
+        "mapsToHint": "Speichert diese Antwort beim Absenden des Formulars in einer Kontakteigenschaft.",
+        "mapsToNone": "Nicht in einer Kontakteigenschaft speichern",
+        "mapsToSystemGroup": "Kontaktfelder",
+        "mapsToCustomGroup": "Benutzerdefinierte Eigenschaften",
+        "mapsToSystem": {
+          "name": "Vollständiger Name",
+          "first_name": "Vorname",
+          "last_name": "Nachname",
+          "email": "E-Mail",
+          "title": "Berufsbezeichnung",
+          "language": "Sprache",
+          "address": "Adresse"
+        },
+        "mapsToPrivacyGroup": "Datenschutz & Einwilligung",
+        "mapsToPrivacy": {
+          "age": "Alter (Minderjährigenprüfung)",
+          "date_of_birth": "Geburtsdatum (Minderjährigenprüfung)",
+          "consent_marketing": "Marketing-Einwilligung (WhatsApp)",
+          "consent_service": "Diensteinwilligung (kein Marketing)"
+        }
+      },
+      "fieldKind": {
+        "heading": "Überschrift",
+        "short_text": "Kurztext",
+        "paragraph": "Absatz",
+        "email": "E-Mail",
+        "phone_number": "Telefonnummer",
+        "number": "Zahl",
+        "date": "Datum",
+        "dropdown": "Dropdown",
+        "radio_buttons": "Optionsfelder",
+        "checkbox": "Kontrollkästchen"
+      },
+      "submissions": {
+        "heading": "Einreichungen",
+        "metaFlowId": "Meta Flow-ID: {id}",
+        "export": "CSV exportieren",
+        "empty": {
+          "title": "Noch keine Einreichungen",
+          "description": "Einreichungen erscheinen hier, sobald dieses Formular aus einem Flow gesendet und von jemandem ausgefüllt wird."
+        },
+        "table": {
+          "submitted": "Eingereicht",
+          "contact": "Kontakt",
+          "phone": "Telefon"
+        }
+      }
+    },
+    "links": {
+      "heading": "WhatsApp-Links",
+      "intro": "Erstellen Sie einen nachverfolgbaren Link, der WhatsApp mit einer vorausgefüllten Nachricht öffnet — für Anzeigen, Bios und QR-Codes.",
+      "loading": "Links werden geladen…",
+      "retry": "Erneut versuchen",
+      "searchPlaceholder": "Nach Name oder Link suchen",
+      "create": {
+        "cta": "Neuer Link"
+      },
+      "stats": {
+        "all": "Alle Links",
+        "live": "Live",
+        "totalClicks": "Klicks gesamt",
+        "avgClicks": "Ø Klicks / Link"
+      },
+      "tabs": {
+        "all": "Alle",
+        "live": "Live",
+        "paused": "Pausiert"
+      },
+      "status": {
+        "live": "Live",
+        "paused": "Pausiert"
+      },
+      "empty": {
+        "title": "Noch keine Links",
+        "description": "Erstellen Sie einen Link zum Teilen in Anzeigen, Bios oder einem QR-Code."
+      },
+      "table": {
+        "link": "Link",
+        "destination": "Ziel",
+        "clicks": "Klicks",
+        "lastClicked": "Zuletzt geklickt"
+      },
+      "row": {
+        "open": "Öffnen",
+        "copy": "Kopieren",
+        "copied": "Kopiert!",
+        "edit": "Bearbeiten",
+        "duplicate": "Duplizieren",
+        "delete": "Löschen"
+      },
+      "confirm": {
+        "deleteTitle": "Diesen Link löschen?",
+        "deleteMessage": "Der Kurzlink funktioniert sofort nicht mehr.",
+        "deleteConfirm": "Löschen",
+        "cancel": "Abbrechen"
+      },
+      "notice": {
+        "saved": "Gespeichert.",
+        "copyFailed": "Der Link konnte nicht kopiert werden."
+      },
+      "builder": {
+        "back": "Zurück zu Links",
+        "newHeading": "Neuer Link",
+        "step": {
+          "destination": "Ziel",
+          "message": "Starternachricht",
+          "tracking": "Tracking"
+        },
+        "name": "Name",
+        "status": "Status",
+        "countryCode": "Landesvorwahl",
+        "phoneNumber": "Telefonnummer",
+        "welcomeMessage": "Starternachricht",
+        "welcomeMessageHint": "Wird in den Chat vorausgefüllt, sobald jemand auf den Link tippt.",
+        "slug": "Kurzlink",
+        "slugHint": "Nur Buchstaben, Zahlen und Bindestriche. Leer lassen, um automatisch einen zu erstellen.",
+        "slugPlaceholder": "sommer-angebot",
+        "expiresAt": "Läuft ab",
+        "utmSource": "UTM-Quelle",
+        "utmMedium": "UTM-Medium",
+        "utmCampaign": "UTM-Kampagne",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "mint": "Link erstellen",
+        "save": "Speichern",
+        "saving": "Wird gespeichert…",
+        "fixErrors": "Überprüfen Sie die Felder für Ziel und Kurzlink.",
+        "mintedHeading": "Ihr Link",
+        "shortUrl": "Kurzlink",
+        "waUrl": "WhatsApp-Link",
+        "qrAlt": "QR-Code für diesen Link"
+      },
+      "public": {
+        "missingTitle": "Link nicht gefunden",
+        "missingBody": "Dieser Link existiert nicht oder wurde gelöscht.",
+        "goneTitle": "Link nicht mehr aktiv",
+        "goneBody": "Dieser Link ist pausiert oder abgelaufen.",
+        "errorTitle": "Etwas ist schiefgelaufen",
+        "errorBody": "Dieser Link konnte nicht geöffnet werden. Bitte versuche es erneut."
+      }
+    }
+  }
+}

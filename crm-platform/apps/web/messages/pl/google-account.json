@@ -1,0 +1,187 @@
+{
+  "settings": {
+    "tiles": {
+      "google-account": {
+        "label": "Konto Google",
+        "description": "Połącz jedno konto Google dla Calendar, Sheets, Docs, Forms i Meet w swoich przepływach.",
+        "keywords": "google, konto google, kalendarz, sheets, docs, forms, meet, drive, oauth, połącz google"
+      },
+      "google-sheets": {
+        "label": "Google Sheets",
+        "description": "Dodawaj wiersze, wyszukuj wiersze i zapisuj kontakty z arkusza w swoich przepływach. Korzysta z połączenia z kontem Google.",
+        "keywords": "google sheets, arkusz kalkulacyjny, wiersze, komórki, oauth, połącz google"
+      },
+      "google-docs": {
+        "label": "Google Docs",
+        "description": "Skopiuj dokument szablonu, wypełnij go i udostępnij w swoich przepływach. Korzysta z połączenia z kontem Google.",
+        "keywords": "google docs, dokument, szablon, udostępnianie, oauth, połącz google"
+      },
+      "google-forms": {
+        "label": "Google Forms",
+        "description": "Wyślij formularz klientowi i kontynuuj, gdy go wypełni. Korzysta z połączenia z kontem Google.",
+        "keywords": "google forms, formularz, ankieta, odpowiedzi, oauth, połącz google"
+      }
+    }
+  },
+  "google-account": {
+    "common": {
+      "dismiss": "Odrzuć"
+    },
+    "page": {
+      "eyebrow": "Przestrzeń robocza",
+      "title": "Konto Google",
+      "subtitle": "Połącz raz. To samo konto Google obsługuje kalendarz rezerwacji, linki Meet oraz kroki Sheets, Docs i Forms w Twoich przepływach.",
+      "loading": "Wczytywanie Twojego konta Google...",
+      "forbidden": {
+        "title": "Nie możesz otworzyć tej strony",
+        "body": "Twoja rola nie obejmuje wyświetlania konta Google. Zapytaj administratora przestrzeni roboczej."
+      },
+      "status": {
+        "unavailable": "Nie skonfigurowano",
+        "disconnected": "Niepołączone",
+        "connected": "Połączone",
+        "needs_reconnect": "Wymaga ponownego połączenia"
+      },
+      "outcome": {
+        "connected": "Konto Google zostało połączone.",
+        "denied": "Nie połączono Google: ekran zgody został anulowany.",
+        "failed": "Łączenie z Google nie zostało ukończone. Spróbuj ponownie.",
+        "expired": "Ta próba połączenia wygasła. Naciśnij przycisk, aby zacząć od nowa.",
+        "not_configured": "Google nie jest jeszcze skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
+        "missing_scope": "Google nie przyznało wszystkich żądanych uprawnień. To, co już zostało dozwolone, nadal działa; dodaj brakujące uprawnienia ponownie i zostaw zaznaczone wszystkie pola.",
+        "cancelled": "Anulowano. Nic nie zostało połączone."
+      },
+      "actions": {
+        "connect": "Połącz konto Google",
+        "reconnect": "Połącz Google ponownie",
+        "addPermissions": "Dodaj uprawnienia",
+        "disconnect": "Rozłącz",
+        "working": "Otwieranie Google...",
+        "retry": "Spróbuj ponownie"
+      },
+      "unavailable": {
+        "title": "Google nie jest skonfigurowane dla tej platformy",
+        "body": "Administrator platformy musi dodać klienta Google OAuth, zanim ktokolwiek będzie mógł się połączyć. Do tego czasu kroki Google w Twoich przepływach kończą się błędem z odpowiednim komunikatem, a rezerwacje działają dalej bez kalendarza."
+      },
+      "reconnect": {
+        "title": "Google przestało akceptować to połączenie",
+        "body": "Uprawnienie zostało wycofane, hasło zmienione lub zgoda wygasła. Połącz ponownie, aby je przywrócić; Twoje wybory zostaną zachowane.",
+        "bodyAccount": "Google przestało akceptować konto {account}. Połącz je ponownie, aby je przywrócić; Twoje wybory zostaną zachowane."
+      },
+      "stats": {
+        "status": "Status",
+        "calendars": "Kalendarze",
+        "calendarsValue": "Dostępne: {count}",
+        "calendarsNone": "brak",
+        "permissions": "Uprawnienia",
+        "permissionsValue": "{granted} z {total}",
+        "lastUsed": "Ostatnio użyto",
+        "never": "nigdy",
+        "live": "aktywne",
+        "idle": "bezczynne"
+      },
+      "account": {
+        "title": "Połączone konto",
+        "email": "Konto",
+        "calendar": "Kalendarz dla rezerwacji i Meet",
+        "primaryCalendar": "Twój główny kalendarz",
+        "changeCalendar": "Zmień kalendarz",
+        "connectedAgo": "Połączono {when}",
+        "none": "Brak powiązanego konta Google.",
+        "noneBody": "Dopóki nie nawiążesz połączenia, kroki Google w Twoich przepływach kończą się błędem z prośbą o połączenie Google, a rezerwacje nie są dodawane do kalendarza."
+      },
+      "permissions": {
+        "title": "Do czego można używać Google",
+        "intro": "Zaznacz, na co chcesz zezwolić. Google pokazuje na swoim ekranie dokładnie te uprawnienia, a kolejne możesz dodać później bez utraty już dozwolonych.",
+        "allowed": "Dozwolone",
+        "notAllowed": "Niedozwolone",
+        "allow": "Zezwól",
+        "restricted": "Ograniczone przez Google",
+        "restrictedNote": "Google traktuje to uprawnienie jako ograniczone: platforma potrzebuje przeglądu Google, aby działało w wielu przestrzeniach roboczych. Zostaw wyłączone, jeśli go nie potrzebujesz.",
+        "nothingTicked": "Zaznacz co najmniej jedno uprawnienie.",
+        "calendar": {
+          "name": "Kalendarz",
+          "body": "Dodawaj rezerwacje i linki Meet do swojego kalendarza i ukrywaj zajęte terminy na stronie rezerwacji.",
+          "usedBy": "Kalendarz rezerwacji, kroki Zarezerwuj termin i Google Meet"
+        },
+        "sheets": {
+          "name": "Sheets",
+          "usedBy": "Google Sheets, Sprawdź pole Google Sheet, Zapisz kontakt z Google Sheet",
+          "body": "Dodaj wiersz do arkusza, wyszukaj wiersz, sprawdź komórkę lub skopiuj wiersz do kontaktu."
+        },
+        "docs": {
+          "name": "Docs i Drive",
+          "body": "Skopiuj dokument szablonu, wypełnij go i udostępnij kopię przez link.",
+          "usedBy": "Krok Google Docs"
+        },
+        "forms": {
+          "name": "Forms",
+          "usedBy": "Krok Google Form",
+          "body": "Odczytaj publiczny link formularza, aby przepływ mógł go wysłać klientowi, oraz odpowiedzi z formularza, aby przepływ był kontynuowany po jego wypełnieniu."
+        },
+        "drive_listing": {
+          "name": "Lista plików Drive",
+          "body": "Wyświetla arkusze, dokumenty i formularze według nazwy, aby można je było wybierać z Twojego konta w kreatorze przepływów i ustawieniach rezerwacji. Wymagane dla każdego selektora plików.",
+          "usedBy": "Selektory plików w kreatorze przepływów i ustawieniach rezerwacji"
+        }
+      },
+      "lastError": {
+        "title": "Ostatni problem zgłoszony przez Google",
+        "when": "{when}",
+        "GOOGLE_ACCOUNT_NEEDS_RECONNECT": "Google nie akceptuje już połączonego konta. Połącz ponownie.",
+        "GOOGLE_ACCOUNT_NOT_CONFIGURED": "Klient Google platformy nie istnieje lub jest wyłączony.",
+        "GOOGLE_API_NOT_ENABLED": "Projekt Google Cloud platformy nie ma włączonego API wymaganego przez tę funkcję. Administrator platformy musi je włączyć.",
+        "GOOGLE_SCOPE_MISSING": "Krok wymagał uprawnienia, którego to konto nie otrzymało. Dodaj je powyżej.",
+        "GOOGLE_RATE_LIMITED": "Google ogranicza teraz liczbę żądań. Kroki zostaną ponowione za chwilę.",
+        "GOOGLE_UNAVAILABLE": "Google nie odpowiedziało. Spróbujemy ponownie przy następnym użyciu.",
+        "other": "Google zgłosiło problem."
+      },
+      "usedBy": {
+        "title": "Używane przez",
+        "book": "Krok Zarezerwuj termin",
+        "meet": "Krok Google Meet",
+        "sheets": "Kroki Google Sheets",
+        "docs": "Krok Google Docs",
+        "forms": "Krok Google Form",
+        "flow": "przepływ"
+      },
+      "disconnectConfirm": {
+        "title": "Rozłączyć Google?",
+        "body": "Synchronizacja kalendarza dla rezerwacji i każdy krok Google w Twoich przepływach przestaną działać, dopóki nie połączysz ponownie. Utworzone już wydarzenia i pliki pozostają w Google.",
+        "confirm": "Rozłącz",
+        "cancel": "Zachowaj połączenie"
+      },
+      "disconnected": "Konto Google zostało rozłączone.",
+      "failure": {
+        "notConfigured": "Google nie jest skonfigurowane dla tej platformy. Zapytaj administratora platformy.",
+        "generic": "Coś poszło nie tak. Spróbuj ponownie."
+      },
+      "privacy": {
+        "title": "Prywatność",
+        "body": "Żądane są tylko zaznaczone przez Ciebie uprawnienia. Połączenie jest przechowywane w formie zaszyfrowanej, należy do przestrzeni roboczej i jest używane wyłącznie przez wymienione tu funkcje. Rozłączenie wycofuje je w Google."
+      }
+    },
+    "consent": {
+      "title": "Potwierdź połączenie z Google",
+      "loading": "Wczytywanie połączenia z Google...",
+      "question": "Połączyć {email} z przestrzenią {workspace} w zakresie: {permissions}?",
+      "permissions": "Uprawnienia",
+      "notGiven": "nie przyznano",
+      "missing": "Google nie przyznał: {permissions}. Jeśli potwierdzisz, zostanie połączone tylko to, co zostało przyznane.",
+      "replaces": "Spowoduje to zastąpienie obecnie połączonego konta Google {email}. Dostęp starego konta zostanie cofnięty.",
+      "onlyYou": "Tylko osoba, która kliknęła Połącz, może to dokończyć, z tej przestrzeni roboczej. Jeśli ktoś przesłał Ci ten link, nie potwierdzaj go: zamknij stronę.",
+      "unknownAccount": "to konto Google",
+      "confirm": "Potwierdź",
+      "cancel": "Anuluj",
+      "working": "Trwa przetwarzanie...",
+      "failure": {
+        "notYours": "To połączenie z Google zostało rozpoczęte przez kogoś innego, więc nie zostało nawiązane. Poproś tę osobę, aby połączyła je samodzielnie.",
+        "expired": "Potwierdzenie tego połączenia z Google trwało zbyt długo. Wróć i kliknij Połącz ponownie.",
+        "used": "To połączenie z Google zostało już potwierdzone, anulowane lub odrzucone. Jeśli nadal go potrzebujesz, wróć i kliknij Połącz ponownie.",
+        "notFound": "To połączenie z Google nie oczekuje na potwierdzenie lub należy do innej przestrzeni roboczej.",
+        "generic": "Coś poszło nie tak i nic nie zostało zmienione. Spróbuj ponownie.",
+        "nothingConnected": "Nic nie zostało połączone."
+      }
+    }
+  }
+}

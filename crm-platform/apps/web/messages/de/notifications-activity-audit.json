@@ -164,6 +164,32 @@
         "title": "Testbenachrichtigung",
         "titleNoName": "Testbenachrichtigung",
         "bodyNoActor": "Wenn du das lesen kannst, funktionieren Live-Benachrichtigungen."
+      },
+      "snooze_wake": {
+        "title": "{name} ist wieder in Ihrer Liste",
+        "titleNoName": "Ein zurückgestellter Chat ist wieder in Ihrer Liste",
+        "titleTeam": "{name} ist wieder für Ihr Team da",
+        "titleTeamNoName": "Ein zurückgestellter Chat ist wieder für Ihr Team da"
+      },
+      "marketplace_renewal_due": {
+        "titleAuto": "{name} verlängert sich am {date, date, medium}",
+        "bodyAuto": "Ihre Karte wird an diesem Datum automatisch belastet, um {name} zu verlängern. Kündigen Sie vorher, um das zu verhindern.",
+        "titleManual": "{name} ist bezahlt bis {date, date, medium}",
+        "bodyManual": "{name} verlängert sich nicht von selbst. Zahlen Sie vor diesem Datum erneut, damit die App ohne Pause weiterläuft.",
+        "titleEnding": "{name} endet am {date, date, medium}",
+        "bodyEnding": "Sie haben {name} gekündigt, daher funktioniert die App an diesem Datum nicht mehr. Abonnieren Sie vorher erneut, um sie zu behalten.",
+        "title": "{name}: Verlängerung steht an",
+        "titleNoName": "Verlängerung einer kostenpflichtigen App steht an"
+      },
+      "marketplace_payment_failed": {
+        "title": "Zahlung für {name} fehlgeschlagen",
+        "body": "Die Kartenzahlung ist nicht durchgegangen. Die App funktioniert einige Tage weiter, während der Zahlungsanbieter es erneut versucht. Zahlen Sie jetzt oder korrigieren Sie Ihre Zahlungsmethode, um eine Pause zu vermeiden.",
+        "titleNoName": "Zahlung für kostenpflichtige App fehlgeschlagen"
+      },
+      "marketplace_subscription_ended": {
+        "title": "Abonnement von {name} beendet",
+        "body": "Die App ist pausiert, ihre Daten und Einstellungen bleiben erhalten. Abonnieren Sie erneut, um sie wieder zu aktivieren.",
+        "titleNoName": "Abonnement einer kostenpflichtigen App beendet"
       }
     },
     "live": {
@@ -195,7 +221,11 @@
         "waba_group_suspension_cleared": "WhatsApp-Gruppe wieder aktiv",
         "device_group_join_request": "Beitrittsanfrage für eine Gruppe",
         "device_group_removed": "Aus einer WhatsApp-Gruppe entfernt",
-        "test": "Testbenachrichtigung"
+        "test": "Testbenachrichtigung",
+        "snooze_wake": "Zurückgestellter Chat ist zurück",
+        "marketplace_renewal_due": "Verlängerung einer kostenpflichtigen App steht an",
+        "marketplace_payment_failed": "Zahlung für kostenpflichtige App fehlgeschlagen",
+        "marketplace_subscription_ended": "Abonnement einer kostenpflichtigen App beendet"
       },
       "generic": "Du hast eine neue Benachrichtigung",
       "paused": "Live-Aktualisierungen sind pausiert, neue Hinweise können daher bis zu einer Minute später ankommen. Lade die Seite neu, um die Verbindung wiederherzustellen."
@@ -379,6 +409,26 @@
         "test": {
           "label": "Testbenachrichtigung",
           "hint": "Der Test, den du unter Browser-Benachrichtigungen sendest, damit du siehst, dass Glocke, Pop-up und Tab-Titel funktionieren."
+        },
+        "appointment_calendar_drift": {
+          "label": "Termin nicht synchron mit Google Calendar",
+          "hint": "Der Google-Calendar-Eintrag eines bevorstehenden Termins wurde gelöscht, verschoben oder seine Gäste wurden geändert. Der Termin selbst bleibt unverändert; Sie entscheiden, was geschehen soll."
+        },
+        "snooze_wake": {
+          "label": "Zurückgestellter Chat kehrt zurück",
+          "hint": "Ein zurückgestellter Chat wird zur festgelegten Zeit wieder geöffnet und Ihnen oder Ihrem Team zugewiesen."
+        },
+        "marketplace_renewal_due": {
+          "label": "Erinnerung an Verlängerung einer kostenpflichtigen App",
+          "hint": "Der Zeitraum einer kostenpflichtigen App endet in einigen Tagen: Sie verlängert sich per Karte, ist bis zu einem Datum bezahlt oder wurde gekündigt und endet."
+        },
+        "marketplace_payment_failed": {
+          "label": "Zahlung für kostenpflichtige App fehlgeschlagen",
+          "hint": "Die Kartenverlängerung einer kostenpflichtigen App ist nicht durchgegangen und erfordert Ihre Aufmerksamkeit."
+        },
+        "marketplace_subscription_ended": {
+          "label": "Abonnement einer kostenpflichtigen App beendet",
+          "hint": "Das Abonnement einer kostenpflichtigen App wurde beendet und die App pausiert."
         }
       },
       "loading": "Ihre Einstellungen werden geladen",

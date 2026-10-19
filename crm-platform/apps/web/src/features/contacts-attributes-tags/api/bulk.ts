@@ -51,7 +51,11 @@ export interface BulkOutcome {
 }
 
 /** Explicit id lists are capped per request; a longer one is sent in slices and the outcomes added up. */
-async function run(path: string, target: BulkTarget, extra: object = {}): Promise<BulkOutcome> {
+export async function run(
+  path: string,
+  target: BulkTarget,
+  extra: object = {},
+): Promise<BulkOutcome> {
   const bodies =
     target.kind === 'ids' && target.ids.length > BULK_IDS_MAX
       ? Array.from({ length: Math.ceil(target.ids.length / BULK_IDS_MAX) }, (_, i) => ({
@@ -148,6 +152,8 @@ export interface BulkUpdateValues {
   ownerId?: string | null;
   lostReason?: string | null;
   otherLostReason?: string | null;
+  /** An IANA time zone to set on every contact (BL-193); `null` clears it. Recorded as set by staff. */
+  timezone?: string | null;
   /** Custom properties by key, in their stored type; `null` clears that property on every contact. Keys left out are not touched. */
   customFields?: Record<string, unknown>;
 }

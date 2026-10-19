@@ -43,6 +43,8 @@ function row(over: Partial<ContactRow> = {}): ContactRow {
     leadScoreSource: null,
     leadScoreReasons: null,
     leadScoredAt: null,
+    uncontactedSince: null,
+    nextFollowUp: null,
     leadScoreModel: null,
     source: null,
     isUnsubscribed: false,
@@ -51,9 +53,13 @@ function row(over: Partial<ContactRow> = {}): ContactRow {
     emailSubscriptionStatus: null,
     emailConfirmed: false,
     faxNumber: null,
+    dateOfBirth: null,
+    isMinor: false,
     lastActivityAt: null,
     customFields: {},
     isArchived: false,
+    timezone: null,
+    timezoneSource: null,
     rowVersion: 3,
     createdAt: '2026-10-01T12:00:00.000Z',
     updatedAt: '2026-10-01T12:00:00.000Z',
@@ -269,6 +275,51 @@ describe('contact form <-> API mapping', () => {
     expect(out.isUnsubscribed).toBe(true);
     const back = toUpdatePayload({ ...EMPTY_FORM, firstName: 'A', optedOut: false }, [], 1, true);
     expect(back.isUnsubscribed).toBe(false);
+  });
+
+  it('the company: opens from the contact, goes out on create only when chosen, and on edit only when it changed (null clears)', () => {
+    const co = '5f1c1e0e-2f4b-4a58-9c1e-1d7a0f0f0001';
+    expect(contactToForm(row({ companyId: co })).companyId).toBe(co);
+    expect(contactToForm(row({ companyId: null })).companyId).toBe('');
+    expect(toCreatePayload({ ...EMPTY_FORM, firstName: 'A' }, [])).not.toHaveProperty('companyId');
+    expect(toCreatePayload({ ...EMPTY_FORM, firstName: 'A', companyId: co }, [])).toMatchObject({
+      companyId: co,
+    });
+    const base = { ...EMPTY_FORM, firstName: 'A' };
+    expect(
+      toUpdatePayload(
+        { ...base, companyId: co },
+        [],
+        1,
+        false,
+        {},
+        undefined,
+        undefined,
+        null,
+        null,
+        co,
+      ),
+    ).not.toHaveProperty('companyId');
+    expect(toUpdatePayload({ ...base, companyId: '' }, [], 1, false)).not.toHaveProperty(
+      'companyId',
+    );
+    expect(toUpdatePayload({ ...base, companyId: co }, [], 1, false)).toMatchObject({
+      companyId: co,
+    });
+    expect(
+      toUpdatePayload(
+        { ...base, companyId: '' },
+        [],
+        1,
+        false,
+        {},
+        undefined,
+        undefined,
+        null,
+        null,
+        co,
+      ),
+    ).toMatchObject({ companyId: null });
   });
 
   it('writes the group-independent extras under the reserved keys', () => {

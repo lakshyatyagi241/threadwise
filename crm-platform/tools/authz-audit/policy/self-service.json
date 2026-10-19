@@ -9,6 +9,10 @@
       "reason": "installed-add-on list shown in the shell to every member (read-only catalogue of this workspace)",
       "review": "documented"
     },
+    "modules/google-account/google-consent.controller.ts": {
+      "reason": "confirming a Google connection: the service accepts only the signed-in person who pressed Connect, in the same workspace (a forwarded link is refused and withdrawn); the grant is stored once, on that confirmation",
+      "review": "tested"
+    },
     "modules/admin-console-shell/shell-user.controller.ts": {
       "reason": "the caller's own shell state: config, tour flag, quick access, announcements, overview tiles",
       "review": "documented"
@@ -43,10 +47,6 @@
     },
     "modules/auth/controllers/registration.controller.ts": {
       "reason": "verification mail for the caller's own address",
-      "review": "documented"
-    },
-    "modules/chrome-extension-sheets-addon/sheets-key.controller.ts": {
-      "reason": "status and revoke act on the caller's own add-on key; a member whose role lost the app can still switch their own key off (generate needs app.google-sheets.use)",
       "review": "documented"
     },
     "modules/coupons-credits-referral-currency/referrals.controller.ts": {

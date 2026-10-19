@@ -15,6 +15,8 @@ const FORWARD_REQUEST = [
   'accept-language',
   'user-agent',
   'origin',
+  // Global Privacy Control: the browser's own statement of the visitor's choice, passed on so the API can record the opt-out (BL-180).
+  'sec-gpc',
 ];
 const FORWARD_RESPONSE = ['content-type', 'x-request-id', 'retry-after'];
 

@@ -1433,13 +1433,16 @@
             "storefront_builder": "Çevrimiçi mağaza vitrini oluşturucu.",
             "invoicing": "Faturalar, alacak dekontları, ödemeler, satış siparişleri ve vergi oranları.",
             "forms_and_links": "Potansiyel müşteri toplama formları ve paylaşılabilir bağlantılar.",
-            "extra_channels": "Telegram, Facebook ve Instagram kanalları.",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat kanalları.",
             "form_builder": "CRM'de kişi oluşturan barındırılan ve gömülü web formları. Bu anahtar ücretli Formlar uygulamasına aittir.",
             "waba_groups": "Bir Cloud API numarasından WhatsApp grupları oluşturun ve yönetin: davet bağlantısı, katılma istekleri, üyeler. Numara Resmi İşletme Hesabı olmalıdır.",
             "sms": "Twilio veya MSG91 üzerinden yalnızca gönderim yapan SMS: gönderenleri bağlayın, SMS yayınları ve kampanyaları gönderin.",
             "help_agent": "Uygulama içi Yardım asistanı: kullanıcılar yapmak istediklerini sade kelimelerle yazar, asistan kendi oturumlarında yol gösterir veya işi yapar, riskli bir şeyden önce sorar. Yapay zeka jetonu harcar.",
             "email_channel": "Gmail ve Google Workspace posta kutularını ekip gelen kutusuna bağlayın. Bu anahtarı ücretli E-posta uygulaması yönetir.",
-            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir."
+            "personal_history_full": "Kişisel bir WhatsApp numarasının ilk bağlanışta tüm sohbet geçmişini içe aktarmasını sağlar. Son sohbetlerin içe aktarılması, kişisel numara içeren tüm planlarda kullanılabilir.",
+            "ai_crm_copilot": "Kişilerinizden yapay zekâyla potansiyel müşterileri bulur ve puanlar.",
+            "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır.",
+            "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar."
           },
           "units": {
             "days": "Gün",
@@ -1582,7 +1585,9 @@
             "form_submissions_monthly": "Aylık form gönderimleri",
             "ai_form_generations_monthly": "Aylık yapay zeka form oluşturucu üretimleri",
             "sms_monthly": "Aylık SMS",
-            "email_mailboxes": "E-posta kutuları"
+            "email_mailboxes": "E-posta kutuları",
+            "email_monthly": "Aylık e-posta",
+            "storage_gb": "Depolama (GB)"
           },
           "featureGroups": {
             "messaging": "Mesajlaşma",
@@ -1617,13 +1622,16 @@
             "storefront_builder": "Mağaza vitrini ve web sitesi oluşturucu",
             "invoicing": "Faturalama (faturalar, alacak dekontları, yinelenen faturalar)",
             "forms_and_links": "Formlar, tıkla ve sohbet et bağlantıları ve gruplar",
-            "extra_channels": "Telegram, Facebook ve Instagram kanalları",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber ve WeChat kanalları",
             "form_builder": "Formlar (web formu oluşturucu)",
             "waba_groups": "WhatsApp grupları (Cloud API)",
             "sms": "SMS kanalı",
             "help_agent": "Yardım asistanı (yapay zeka, jeton harcar)",
             "email_channel": "E-posta (Gmail) kanalı",
-            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)"
+            "personal_history_full": "Tam sohbet geçmişini içe aktarma (kişisel WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
+            "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)"
           },
           "problems": {
             "required": "Bu alan zorunludur.",
@@ -1677,7 +1685,9 @@
             "form_submissions_monthly": "Takvim ayında kabul edilen form gönderimleri, spam hariç. Sınır aşıldığında gönderim yine de inceleme için kaydedilir, asla atılmaz. 0 = sınırsız.",
             "ai_form_generations_monthly": "Takvim ayındaki yapay zeka form oluşturucu üretimleri, onarım yeniden denemesi dahil. 0 = sınırsız.",
             "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
-            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız."
+            "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
+            "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
+            "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez."
           }
         }
       },
@@ -1725,6 +1735,10 @@
           "aurora": {
             "name": "Aurora",
             "description": "Buzlu bir kartın arkasında yumuşak parlayan renk."
+          },
+          "geta": {
+            "name": "Geta bölünmüş",
+            "description": "Bir yanda form, diğer yanda istatistikli hareketli bir marka paneli."
           }
         },
         "fields": {

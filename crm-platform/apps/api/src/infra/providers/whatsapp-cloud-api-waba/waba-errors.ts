@@ -35,8 +35,43 @@ export class WabaApiError extends Error {
     readonly transient: boolean,
     /** The raw decoded body, kept for logs and audit; never shown to a user. */
     readonly body: unknown,
+    /**
+     * True when the request may have reached Meta and been acted on although no usable answer came back (a timeout, a reset, a 200
+     * whose body could not be read). Repeating a send after such an error can deliver it twice (RET-031, RET-032).
+     */
+    readonly outcomeMayHaveCommitted = false,
+    /**
+     * Set only by the platform's own send limiter (`WabaApiError.held`): how long the caller should wait before trying again. Meta's
+     * answers never carry it, so a throttle that came from Meta and one the limiter chose can be told apart.
+     */
+    readonly retryAfterMs: number | null = null,
   ) {
     super(message);
+  }
+
+  /**
+   * A send the platform's limiter handed back before it reached Meta: the number's queue is deeper than the maximum local wait. It reads
+   * as a throughput limit (HTTP 429, Meta's 130429) to every caller that already backs off on one, with the wait the limiter computed.
+   */
+  static held(retryAfterMs: number, message: string): WabaApiError {
+    return new WabaApiError(
+      message,
+      429,
+      130429,
+      null,
+      null,
+      null,
+      null,
+      true,
+      null,
+      false,
+      retryAfterMs,
+    );
+  }
+
+  /** True when the platform's own limiter produced this error (nothing was sent to Meta). */
+  get heldLocally(): boolean {
+    return this.retryAfterMs !== null;
   }
 
   static fromResponse(status: number, body: unknown): WabaApiError {
@@ -55,7 +90,7 @@ export class WabaApiError extends Error {
     );
   }
 
-  static network(cause: unknown): WabaApiError {
+  static network(cause: unknown, options: { bodyUnreadable?: boolean } = {}): WabaApiError {
     const reason = cause instanceof Error ? cause.message : String(cause);
     const timedOut =
       cause instanceof Error && (cause.name === 'TimeoutError' || cause.name === 'AbortError');
@@ -69,6 +104,7 @@ export class WabaApiError extends Error {
       null,
       true,
       null,
+      options.bodyUnreadable === true || !neverLeft(cause),
     );
   }
 
@@ -76,12 +112,41 @@ export class WabaApiError extends Error {
   get retryable(): boolean {
     if (this.transient || this.status === 0 || this.status >= 500 || this.status === 429)
       return true;
-    return this.code === 130429 || this.code === 131056 || this.code === 4 || this.code === 80007;
+    return (
+      this.code === 130429 ||
+      this.code === 131057 ||
+      this.code === 131056 ||
+      this.code === 4 ||
+      this.code === 80007
+    );
   }
 
   get missingBusinessManagement(): boolean {
     return this.subcode === SUBCODE_MISSING_BUSINESS_MANAGEMENT;
   }
+}
+
+/** Connection errors that happen before a single byte of the request is sent: the call cannot have been acted on. */
+const NEVER_SENT = new Set([
+  'ECONNREFUSED',
+  'ENOTFOUND',
+  'EAI_AGAIN',
+  'ENETUNREACH',
+  'EHOSTUNREACH',
+  'CERT_HAS_EXPIRED',
+  'DEPTH_ZERO_SELF_SIGNED_CERT',
+  'UNABLE_TO_VERIFY_LEAF_SIGNATURE',
+  'ERR_TLS_CERT_ALTNAME_INVALID',
+]);
+
+/** True only when the error proves the request never left. Anything else (a timeout, a reset, an unknown error) is treated as possibly sent. */
+function neverLeft(cause: unknown): boolean {
+  for (let e: unknown = cause, depth = 0; e && depth < 4; depth++) {
+    const code = (e as { code?: unknown }).code;
+    if (typeof code === 'string' && NEVER_SENT.has(code)) return true;
+    e = (e as { cause?: unknown }).cause;
+  }
+  return false;
 }
 
 function extractError(body: unknown): MetaErrorBody | null {
@@ -154,7 +219,7 @@ export function translateRegisterError(err: WabaApiError): string {
 /** What to do about a failed send. Geta only branches on 131049; the rest is what the codes mean in Meta's docs. */
 export type SendFailureKind =
   | 'frequency_capped' // 131049: the user got enough marketing today, try again later
-  | 'rate_limited' // 130429 / 131056 / 4 / 80007: slow down and retry
+  | 'rate_limited' // 130429 / 131057 / 131056 / 4 / 80007: slow down and retry
   | 'window_closed' // 131047: free-form outside the 24h window
   | 'opted_out' // 131050: the user stopped marketing from this business
   | 'undeliverable' // 131026: not a WhatsApp number / cannot receive
@@ -168,7 +233,7 @@ export type SendFailureKind =
 export function classifySendError(err: WabaApiError): SendFailureKind {
   const c = err.code;
   if (c === 131049) return 'frequency_capped';
-  if (c === 130429 || c === 131056 || c === 4 || c === 80007) return 'rate_limited';
+  if (c === 130429 || c === 131057 || c === 131056 || c === 4 || c === 80007) return 'rate_limited';
   if (c === 131047) return 'window_closed';
   if (c === 131050) return 'opted_out';
   if (c === 131026) return 'undeliverable';

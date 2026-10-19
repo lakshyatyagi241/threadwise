@@ -49,6 +49,13 @@ describe('ProfileView', () => {
     expect(render({ displayName: 'Ash' })).toMatch(/<input[^>]*value="Ash"/);
   });
 
+  it('no longer offers the paper/bright/dark theme picker (it moved to the profile dropdown)', () => {
+    const html = render();
+    expect(html).not.toContain('>Theme<');
+    expect(html).not.toContain('>Paper<');
+    expect(html).not.toContain('>Bright<');
+  });
+
   it('shows the workspace timezone to everyone, tagged and naming the workspace', () => {
     const html = render({ canEditWorkspaceTimezone: false });
     expect(html).toContain('(workspace)');

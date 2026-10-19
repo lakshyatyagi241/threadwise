@@ -42,6 +42,7 @@ import {
 } from './icons';
 import { ErrorLine, LinkButton, useAppointmentsCan, useErrorText } from './parts';
 import { RowMenu } from './row-menu';
+import { PageFill } from '@/components/shell/page-fill';
 
 const LOCATION_ICON = {
   address: PinIcon,
@@ -134,7 +135,7 @@ export function BookingTypesScreen() {
   }
 
   return (
-    <div className="space-y-3">
+    <PageFill minHeight="28rem" className="space-y-3">
       <header className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-background px-4 py-3">
         <div className="flex min-w-0 items-center gap-4">
           <span
@@ -216,7 +217,7 @@ export function BookingTypesScreen() {
       <section
         aria-label={t('tableLabel')}
         aria-busy={types.isFetching}
-        className="flex max-h-[max(26rem,calc(100dvh-16rem))] flex-col overflow-hidden rounded-xl border border-border bg-background"
+        className="flex min-h-0 shrink flex-col overflow-hidden rounded-xl border border-border bg-background"
       >
         {types.isPending ? (
           <div role="status" aria-label={t('loading')} className="space-y-px">
@@ -499,6 +500,6 @@ export function BookingTypesScreen() {
         onClose={() => setDeleteTarget(null)}
         onConfirm={() => void remove()}
       />
-    </div>
+    </PageFill>
   );
 }

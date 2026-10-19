@@ -27,6 +27,8 @@ export const NOTIFICATION_TYPES = [
   'conversation_assigned',
   /** Someone mentioned me in a conversation note. */
   'mention',
+  /** A snoozed chat reached its time and is open again: told to its assignee, or to the team it is assigned to (Reference: "reopened, follow up"). */
+  'snooze_wake',
   /**
    * An unassigned, open chat has had a customer message nobody answered for N minutes (BL-098): told once per waiting episode to the people
    * who may read and reply, by the worker's sweep (not by an outbox event).
@@ -61,6 +63,13 @@ export const NOTIFICATION_TYPES = [
   'device_group_join_request',
   /** The personal number was removed from a group by someone else (a useful abuse or ban signal). */
   'device_group_removed',
+  // --- Paid Marketplace apps (BL-076): told to the workspace's admins by the Marketplace's subscription events ------------------------
+  /** A paid app's period ends in a few days (it renews by card, is paid until a date, or was cancelled and ends). Once per period. */
+  'marketplace_renewal_due',
+  /** The card renewal of a paid app failed; the app keeps working for the grace days while the payment is retried. */
+  'marketplace_payment_failed',
+  /** A paid app's subscription ended and the app was paused (its data is kept). */
+  'marketplace_subscription_ended',
   // --- The test button (Account, Notifications, Browser notifications) -------------------------------------------------------------
   /** "Send a test notification": a harmless row written for the person who pressed the button, so the bell, the toast, the ping and the tab title can be seen working. */
   'test',
@@ -89,6 +98,8 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'member_leave_started',
   /** Routing found nobody for a new chat because the people it wanted are on leave (BL-112). Told to the leads. */
   'assignment_blocked_by_leave',
+  /** An appointment's Google Calendar event no longer matches it (moved, deleted or its guests changed). Told once, to the appointment's owner. */
+  'appointment_calendar_drift',
 ] as const;
 
 /** Every type a person can set preferences for. */

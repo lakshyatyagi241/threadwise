@@ -1,90 +1,34 @@
-import { createHash, createHmac } from 'node:crypto';
 import { createReadStream, createWriteStream } from 'node:fs';
 import { request as httpRequest } from 'node:http';
 import { request as httpsRequest } from 'node:https';
 import { pipeline } from 'node:stream/promises';
+import {
+  EMPTY_SHA256,
+  signS3Request,
+  type S3SignInput,
+  type S3SigningConfig,
+} from '../../../infra/net/s3-sigv4';
 
 /**
- * The few S3 calls the off-host backup needs (PUT from a file, HEAD, list, GET to a file, DELETE), signed with AWS Signature V4.
- * No SDK: the API image has none and these providers (Cloudflare R2, S3, MinIO, ...) all accept plain SigV4. Mirrors the signer in
- * the platform-settings storage probe on purpose; that one lives in another domain and signs whole in-memory bodies, this one
- * streams files and signs a precomputed payload hash.
+ * The few S3 calls the off-host backup needs (PUT from a file, HEAD, list, GET to a file, DELETE), signed with AWS Signature V4
+ * (the shared signer in infra/net). No SDK: the API image has none and these providers (Cloudflare R2, S3, ...) all accept
+ * plain SigV4. This client streams files and signs a precomputed payload hash.
  */
-export interface S3Config {
-  /** Origin, e.g. https://<account>.r2.cloudflarestorage.com */
-  endpoint: string;
-  /** `auto` for R2. */
-  region: string;
-  bucket: string;
-  accessKeyId: string;
-  secretAccessKey: string;
-  /** Path-style addressing (`endpoint/bucket/key`): what R2 and MinIO want. */
-  pathStyle: boolean;
-}
+export type S3Config = S3SigningConfig;
 
 export interface RemoteObject {
   key: string;
   size: number;
 }
 
-const sha256 = (data: string | Buffer) => createHash('sha256').update(data).digest('hex');
-const hmac = (key: string | Buffer, data: string) =>
-  createHmac('sha256', key).update(data).digest();
-const enc = (s: string) =>
-  encodeURIComponent(s).replace(
-    /[!'()*]/g,
-    (c) => `%${c.charCodeAt(0).toString(16).toUpperCase()}`,
-  );
-const encPath = (key: string) => key.split('/').map(enc).join('/');
-export const EMPTY_SHA256 = sha256('');
-
-interface SignInput {
-  method: 'GET' | 'PUT' | 'HEAD' | 'DELETE';
-  key: string;
-  query?: Array<[string, string]>;
-  payloadSha256: string;
-  now?: Date;
-}
+export { EMPTY_SHA256 };
 
 /** URL and signed headers for one request (exported for tests). */
 export function signRequest(
   c: S3Config,
-  i: SignInput,
+  i: S3SignInput,
 ): { url: URL; headers: Record<string, string> } {
-  const base = new URL(c.endpoint);
-  const host = c.pathStyle ? base.host : `${c.bucket}.${base.host}`;
-  const path =
-    (c.pathStyle ? `/${enc(c.bucket)}` : '') + (i.key === '' ? '/' : `/${encPath(i.key)}`);
-  const canonicalQuery = (i.query ?? [])
-    .map(([k, v]) => `${enc(k)}=${enc(v)}`)
-    .sort()
-    .join('&');
-  const amzDate = (i.now ?? new Date()).toISOString().replace(/[:-]|\.\d{3}/g, '');
-  const day = amzDate.slice(0, 8);
-  const signedHeaders = 'host;x-amz-content-sha256;x-amz-date';
-  const canonical = [
-    i.method,
-    path,
-    canonicalQuery,
-    `host:${host}\nx-amz-content-sha256:${i.payloadSha256}\nx-amz-date:${amzDate}\n`,
-    signedHeaders,
-    i.payloadSha256,
-  ].join('\n');
-  const scope = `${day}/${c.region}/s3/aws4_request`;
-  const toSign = ['AWS4-HMAC-SHA256', amzDate, scope, sha256(canonical)].join('\n');
-  const signingKey = hmac(
-    hmac(hmac(hmac(`AWS4${c.secretAccessKey}`, day), c.region), 's3'),
-    'aws4_request',
-  );
-  const signature = createHmac('sha256', signingKey).update(toSign).digest('hex');
-  return {
-    url: new URL(`${base.protocol}//${host}${path}${canonicalQuery ? `?${canonicalQuery}` : ''}`),
-    headers: {
-      'x-amz-date': amzDate,
-      'x-amz-content-sha256': i.payloadSha256,
-      authorization: `AWS4-HMAC-SHA256 Credential=${c.accessKeyId}/${scope}, SignedHeaders=${signedHeaders}, Signature=${signature}`,
-    },
-  };
+  return signS3Request(c, i);
 }
 
 export class S3Error extends Error {
@@ -107,7 +51,7 @@ export class S3Client {
   constructor(readonly config: S3Config) {}
 
   private send(
-    method: SignInput['method'],
+    method: S3SignInput['method'],
     key: string,
     opts: {
       query?: Array<[string, string]>;

@@ -23,13 +23,19 @@
       "imported": "파일에서 가져옴",
       "createdAt": "생성일",
       "updatedAt": "마지막 수정",
-      "lastActivityAt": "마지막 활동"
+      "lastActivityAt": "마지막 활동",
+      "minor": "미성년자로 표시됨",
+      "dateOfBirth": "생년월일",
+      "age": "나이(세)",
+      "timezone": "시간대",
+      "uncontacted": "미연락"
     },
     "fieldGroups": {
       "journey": "여정",
       "who": "대상",
       "activity": "활동",
-      "properties": "속성"
+      "properties": "속성",
+      "company": "회사 속성"
     },
     "operators": {
       "equals": "같음",

@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { DASH_RANGES, dashRangeSchema, type DashRange } from '@crm/contracts';
 import { Button, Card, Input, Select, Spinner, cn } from '@crm/ui';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { usePersonaVisibility } from '@/features/persona';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import { flash } from '@/features/admin-console-shell/flash/flash-store';
@@ -105,6 +106,9 @@ export function DashboardScreen() {
   const tr = useTranslations('dashboards-analytics-charts.range');
   const locale = useLocale();
   const session = useSession();
+  // The cards the workspace's persona hides (`card:dashboard.<id>`, ids in ../home-cards.ts) are not drawn; their data and API stay.
+  const { isCardHidden } = usePersonaVisibility();
+  const showCard = (id: string) => !isCardHidden(id);
   const [range, custom, setRange] = useRange();
   const [draft, setDraft] = useState<CustomDates>({});
   const summary = useSummary(range, custom);
@@ -169,8 +173,9 @@ export function DashboardScreen() {
     <div className="space-y-5">
       {/* Sticky under the 56px top bar (`top-14`); the bleed (-mx / px) lets its background cover the page padding while the cards scroll beneath it. */}
       <header className="sticky top-14 z-30 -mx-4 -mt-4 flex flex-wrap items-end justify-between gap-3 border-b border-border bg-background px-4 pb-3 pt-4 md:-mx-6 md:-mt-6 md:px-6 md:pt-6">
-        <div className="space-y-1.5">
-          <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+        {/* The whole heading block is Inter, weight 600 (the kicker, the greeting and the line under it). */}
+        <div className="space-y-1.5 font-[family-name:var(--font-inter)] font-semibold">
+          <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>{t('kicker')}</span>
             {syncedAgo !== null && nowMs > 0 && (
               <>
@@ -182,14 +187,14 @@ export function DashboardScreen() {
               </>
             )}
           </p>
-          <h1 className="font-serif text-2xl leading-tight sm:text-4xl">
+          <h1 className="text-[32px] leading-tight">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
             <em className="text-primary">
               {running > 0 ? t('running', { n: running }) : t('calm')}
             </em>
           </h1>
           {s && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-semibold text-muted-foreground">
               {t(unofficial ? 'subline' : 'sublineOfficial', {
                 date: new Intl.DateTimeFormat(locale, {
                   timeZone: tz,
@@ -266,206 +271,253 @@ export function DashboardScreen() {
         <LoadError error={summary.error} />
       ) : (
         <>
-          <section aria-label={t('kpis')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-            <Card className="space-y-3" data-testid="card-sent">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-sm text-muted-foreground">
-                  {t('kpi.sent', { range: tr(`short.${range}`) })}
-                </p>
-                {s && <Trend delta={s.sentDeltaPct} />}
-              </div>
-              <p className="text-3xl font-semibold leading-none tabular-nums">
-                {s ? s.current.sent.toLocaleString(locale) : '-'}
-              </p>
-              {s && (
-                <>
-                  <Sparkline values={s.sparkline} label={t('sparkline.title')} />
-                  <p className="text-xs text-muted-foreground">
-                    {t('kpi.sentLegend', {
-                      delivered: s.current.delivered,
-                      failed: s.current.failed,
-                    })}
+          {(showCard('sent') || showCard('read') || showCard('contacts') || showCard('wallet')) && (
+            <section aria-label={t('kpis')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {showCard('sent') && (
+                <Card className="space-y-3" data-testid="card-sent">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm text-muted-foreground">
+                      {t('kpi.sent', { range: tr(`short.${range}`) })}
+                    </p>
+                    {s && <Trend delta={s.sentDeltaPct} />}
+                  </div>
+                  <p className="text-3xl font-semibold leading-none tabular-nums">
+                    {s ? s.current.sent.toLocaleString(locale) : '-'}
                   </p>
-                </>
+                  {s && (
+                    <>
+                      <Sparkline values={s.sparkline} label={t('sparkline.title')} />
+                      <p className="text-xs text-muted-foreground">
+                        {t('kpi.sentLegend', {
+                          delivered: s.current.delivered,
+                          failed: s.current.failed,
+                        })}
+                      </p>
+                    </>
+                  )}
+                </Card>
               )}
-            </Card>
-            <Card className="space-y-3" data-testid="card-read">
-              <div className="flex items-start justify-between gap-2">
-                <p className="text-sm text-muted-foreground">{t('kpi.readRate')}</p>
-                {s && <Trend delta={s.readRateDeltaPp} unit="pp" />}
-              </div>
-              <div className="flex items-end gap-3">
-                <p className="text-3xl font-semibold leading-none tabular-nums">
-                  {s ? `${s.current.readRate}%` : '-'}
-                </p>
-                {s && <ReadRing pct={s.current.readRate} label={t('kpi.readRate')} />}
-              </div>
-              {s && (
-                <dl className="grid grid-cols-3 gap-2 text-center text-xs">
-                  <div className="rounded-md border border-border p-1.5">
-                    <dt className="text-muted-foreground">{t('kpi.readMini.sent')}</dt>
-                    <dd className="font-semibold tabular-nums">{compact(s.current.sent)}</dd>
+              {showCard('read') && (
+                <Card className="space-y-3" data-testid="card-read">
+                  <div className="flex items-start justify-between gap-2">
+                    <p className="text-sm text-muted-foreground">{t('kpi.readRate')}</p>
+                    {s && <Trend delta={s.readRateDeltaPp} unit="pp" />}
                   </div>
-                  <div className="rounded-md border border-border p-1.5">
-                    <dt className="text-muted-foreground">{t('kpi.readMini.delivered')}</dt>
-                    <dd className="font-semibold tabular-nums">{s.current.deliverability}%</dd>
+                  <div className="flex items-end gap-3">
+                    <p className="text-3xl font-semibold leading-none tabular-nums">
+                      {s ? `${s.current.readRate}%` : '-'}
+                    </p>
+                    {s && <ReadRing pct={s.current.readRate} label={t('kpi.readRate')} />}
                   </div>
-                  <div className="rounded-md border border-border p-1.5">
-                    <dt className="text-muted-foreground">{t('kpi.readMini.read')}</dt>
-                    <dd className="font-semibold tabular-nums">{s.current.readRate}%</dd>
-                  </div>
-                </dl>
+                  {s && (
+                    <dl className="grid grid-cols-3 gap-2 text-center text-xs">
+                      <div className="rounded-md border border-border p-1.5">
+                        <dt className="text-muted-foreground">{t('kpi.readMini.sent')}</dt>
+                        <dd className="font-semibold tabular-nums">{compact(s.current.sent)}</dd>
+                      </div>
+                      <div className="rounded-md border border-border p-1.5">
+                        <dt className="text-muted-foreground">{t('kpi.readMini.delivered')}</dt>
+                        <dd className="font-semibold tabular-nums">{s.current.deliverability}%</dd>
+                      </div>
+                      <div className="rounded-md border border-border p-1.5">
+                        <dt className="text-muted-foreground">{t('kpi.readMini.read')}</dt>
+                        <dd className="font-semibold tabular-nums">{s.current.readRate}%</dd>
+                      </div>
+                    </dl>
+                  )}
+                </Card>
               )}
-            </Card>
-            {w ? <ContactsCard data={w.contacts} /> : <Card className="min-h-32" />}
-            <WalletOrAutopilotCard />
-          </section>
+              {showCard('contacts') &&
+                (w ? <ContactsCard data={w.contacts} /> : <Card className="min-h-32" />)}
+              {showCard('wallet') && <WalletOrAutopilotCard />}
+            </section>
+          )}
 
-          {w?.instagram && <InstagramBand data={w.instagram} />}
+          {showCard('instagram') && w?.instagram && <InstagramBand data={w.instagram} />}
 
-          <QuickAccessTiles />
+          {showCard('quick-access') && <QuickAccessTiles />}
 
-          {w?.pipeline && <PipelineStrip data={w.pipeline} />}
+          {showCard('pipeline') && w?.pipeline && <PipelineStrip data={w.pipeline} />}
 
           <div className="grid gap-4 lg:grid-cols-12">
-            <div className="space-y-4 lg:col-span-8">
-              <Panel
-                title={t('throughput.title')}
-                subtitle={t(`throughput.subtitle.${range}`)}
-                titleBadge={
-                  <span className="rounded-full bg-muted px-2.5 py-1 font-mono text-[11px]">
-                    {tzChip(f?.timezone ?? tz)}
-                  </span>
-                }
-                action={
-                  <div className="flex flex-wrap items-center justify-end gap-2">
-                    {f?.peak && (
-                      <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
-                        {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
-                      </span>
-                    )}
-                    <RangePicker value={range} onChange={setRange} ranges={DASH_RANGES} />
-                  </div>
-                }
-              >
-                {f ? (
-                  <>
-                    {s && (
-                      <Legend
-                        series={[
-                          {
-                            name: t('throughput.sent'),
-                            color: 'var(--brand)',
-                            total: s.current.sent,
-                          },
-                          {
-                            name: t('throughput.delivered'),
-                            color: 'var(--success)',
-                            total: s.current.delivered,
-                          },
-                          {
-                            name: t('throughput.failed'),
-                            color: 'var(--danger)',
-                            total: s.current.failed,
-                          },
-                        ]}
-                      />
-                    )}
-                    <BarChart
-                      emptyAxes
-                      hideLegend
-                      label={t('throughput.title')}
-                      labels={f.starts.map(label)}
-                      series={[
-                        { name: t('throughput.sent'), values: f.sent, color: 'var(--brand)' },
-                        {
-                          name: t('throughput.delivered'),
-                          values: f.delivered,
-                          color: 'var(--success)',
-                        },
-                        { name: t('throughput.failed'), values: f.failed, color: 'var(--danger)' },
-                      ]}
-                      seriesTotals={
-                        s ? [s.current.sent, s.current.delivered, s.current.failed] : undefined
-                      }
-                    />
-                    {s && (
-                      <>
-                        <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
-                          <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
-                          <Tile
-                            label={t('throughput.replies')}
-                            value={compact(s.current.replies)}
-                          />
-                          <Tile
-                            label={t('throughput.replyRate')}
-                            value={`${s.current.replyRate}%`}
-                          />
-                          <Tile label={t('throughput.failed')} value={compact(s.current.failed)} />
-                        </dl>
-                      </>
-                    )}
-                  </>
-                ) : flow.error ? (
-                  <LoadError error={flow.error} />
-                ) : (
-                  <Spinner />
+            {(showCard('throughput') ||
+              showCard('campaigns') ||
+              (unofficial && showCard('devices')) ||
+              showCard('templates')) && (
+              <div
+                className={cn(
+                  'space-y-4',
+                  showCard('inbox') || showCard('copilot') || showCard('flows')
+                    ? 'lg:col-span-8'
+                    : 'lg:col-span-12',
                 )}
-              </Panel>
+              >
+                {showCard('throughput') && (
+                  <Panel
+                    title={t('throughput.title')}
+                    subtitle={t(`throughput.subtitle.${range}`)}
+                    titleBadge={
+                      <span className="rounded-full bg-muted px-2.5 py-1 font-mono text-[11px]">
+                        {tzChip(f?.timezone ?? tz)}
+                      </span>
+                    }
+                    action={
+                      <div className="flex flex-wrap items-center justify-end gap-2">
+                        {f?.peak && (
+                          <span className="rounded-full bg-muted px-2.5 py-1 text-xs">
+                            {t('throughput.peak', { when: label(f.peak.start), n: f.peak.count })}
+                          </span>
+                        )}
+                        <RangePicker value={range} onChange={setRange} ranges={DASH_RANGES} />
+                      </div>
+                    }
+                  >
+                    {f ? (
+                      <>
+                        {s && (
+                          <Legend
+                            series={[
+                              {
+                                name: t('throughput.sent'),
+                                color: 'var(--brand)',
+                                total: s.current.sent,
+                              },
+                              {
+                                name: t('throughput.delivered'),
+                                color: 'var(--success)',
+                                total: s.current.delivered,
+                              },
+                              {
+                                name: t('throughput.failed'),
+                                color: 'var(--danger)',
+                                total: s.current.failed,
+                              },
+                            ]}
+                          />
+                        )}
+                        <BarChart
+                          emptyAxes
+                          hideLegend
+                          label={t('throughput.title')}
+                          labels={f.starts.map(label)}
+                          series={[
+                            { name: t('throughput.sent'), values: f.sent, color: 'var(--brand)' },
+                            {
+                              name: t('throughput.delivered'),
+                              values: f.delivered,
+                              color: 'var(--success)',
+                            },
+                            {
+                              name: t('throughput.failed'),
+                              values: f.failed,
+                              color: 'var(--danger)',
+                            },
+                          ]}
+                          seriesTotals={
+                            s ? [s.current.sent, s.current.delivered, s.current.failed] : undefined
+                          }
+                        />
+                        {s && (
+                          <>
+                            <dl className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-sm sm:grid-cols-4">
+                              <Tile label={t('throughput.avgHour')} value={compact(f.avgPerHour)} />
+                              <Tile
+                                label={t('throughput.replies')}
+                                value={compact(s.current.replies)}
+                              />
+                              <Tile
+                                label={t('throughput.replyRate')}
+                                value={`${s.current.replyRate}%`}
+                              />
+                              <Tile
+                                label={t('throughput.failed')}
+                                value={compact(s.current.failed)}
+                              />
+                            </dl>
+                          </>
+                        )}
+                      </>
+                    ) : flow.error ? (
+                      <LoadError error={flow.error} />
+                    ) : (
+                      <Spinner />
+                    )}
+                  </Panel>
+                )}
 
-              {w && (
-                <>
-                  <div className="grid gap-4 lg:grid-cols-12">
-                    <div className={unofficial ? 'lg:col-span-7' : 'lg:col-span-12'}>
-                      <CampaignsCard data={w.campaigns} />
-                    </div>
-                    {/* The Devices card counts personal numbers paired by QR: it exists only while the platform has that engine on. */}
-                    {unofficial && (
-                      <div className="lg:col-span-5">
-                        <DevicesCard data={w.devices} />
+                {w && (
+                  <>
+                    {(showCard('campaigns') || (unofficial && showCard('devices'))) && (
+                      <div className="grid gap-4 lg:grid-cols-12">
+                        {showCard('campaigns') && (
+                          <div
+                            className={
+                              unofficial && showCard('devices') ? 'lg:col-span-7' : 'lg:col-span-12'
+                            }
+                          >
+                            <CampaignsCard data={w.campaigns} />
+                          </div>
+                        )}
+                        {/* The Devices card counts personal numbers paired by QR: it exists only while the platform has that engine on. */}
+                        {unofficial && showCard('devices') && (
+                          <div
+                            className={showCard('campaigns') ? 'lg:col-span-5' : 'lg:col-span-12'}
+                          >
+                            <DevicesCard data={w.devices} />
+                          </div>
+                        )}
                       </div>
                     )}
-                  </div>
-                  <TemplatesCard data={w.templates} />
-                </>
-              )}
-            </div>
-            <div className="flex flex-col gap-4 lg:col-span-4">
-              {w ? <InboxCard data={w.inbox} /> : <Card className="min-h-32" />}
-              {w && (
-                <>
-                  <CopilotCard data={w.flows} />
-                  <FlowsCard data={w.flows} />
-                </>
-              )}
-            </div>
+                    {showCard('templates') && <TemplatesCard data={w.templates} />}
+                  </>
+                )}
+              </div>
+            )}
+            {(showCard('inbox') || showCard('copilot') || showCard('flows')) && (
+              <div className="flex flex-col gap-4 lg:col-span-4">
+                {showCard('inbox') &&
+                  (w ? <InboxCard data={w.inbox} /> : <Card className="min-h-32" />)}
+                {w && (
+                  <>
+                    {showCard('copilot') && <CopilotCard data={w.flows} />}
+                    {showCard('flows') && <FlowsCard data={w.flows} />}
+                  </>
+                )}
+              </div>
+            )}
           </div>
 
           <div className="grid gap-4 lg:grid-cols-12">
-            <div className="lg:col-span-5">
-              <Panel
-                title={t('funnel.title')}
-                subtitle={tr(`long.${range}`)}
-                action={
-                  <Link href="/analytics" className="text-xs font-medium text-primary underline">
-                    {t('funnel.viewAll')}
-                  </Link>
-                }
-              >
-                {s ? <Funnel funnel={s.funnel} /> : <Spinner />}
-              </Panel>
-            </div>
-            <div className="md:col-span-1 lg:col-span-4">
-              {w && <ActivityCard data={w.activity} />}
-            </div>
-            <div className="space-y-3 lg:col-span-3">
-              {w && (
-                <>
-                  <QuickActionsCard />
-                  <IntegrationsCard data={w.integrations} />
-                </>
-              )}
-            </div>
+            {showCard('funnel') && (
+              <div className="lg:col-span-5">
+                <Panel
+                  title={t('funnel.title')}
+                  subtitle={tr(`long.${range}`)}
+                  action={
+                    <Link href="/analytics" className="text-xs font-medium text-primary underline">
+                      {t('funnel.viewAll')}
+                    </Link>
+                  }
+                >
+                  {s ? <Funnel funnel={s.funnel} /> : <Spinner />}
+                </Panel>
+              </div>
+            )}
+            {showCard('activity') && (
+              <div className="md:col-span-1 lg:col-span-4">
+                {w && <ActivityCard data={w.activity} />}
+              </div>
+            )}
+            {(showCard('quick-actions') || showCard('integrations')) && (
+              <div className="space-y-3 lg:col-span-3">
+                {w && (
+                  <>
+                    {showCard('quick-actions') && <QuickActionsCard />}
+                    {showCard('integrations') && <IntegrationsCard data={w.integrations} />}
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </>
       )}

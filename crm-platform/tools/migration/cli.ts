@@ -8,7 +8,7 @@
  *   run       --client <c> [--org-name N] [--org-slug S] [--org-plan P] [--owner-email E] [--owner-name N]
  *             [--dry-run] [--batch N] [--force] [--skip-hash] [--default-cc 91]
  *             [--allow-target-host H[,H]] [--allow-docker-host N[,N]] [--confirm-db-name=<exact db name>]
- *             [--owner-verified] [--trial-days N] [--lock-wait-seconds N]
+ *             [--owner-verified] [--timezone Asia/Kolkata] [--trial-days N] [--lock-wait-seconds N]
  *             [--allow-no-owner]   (load users into an organization with no Owner; refused by default)
  *             [--channel-map FILE] [--keep-deleted-contact-chats] [--thread-status waboo|closed] [--no-assign-agents] [--window-hours 24]
  *                                  (chat history = inbox; the channel map is required when the dump has chathistory)
@@ -25,6 +25,10 @@
  *                                  OPERATOR step, NEVER part of run/migrate, DRY RUN by default: connects the migrated WhatsApp number (see README "WhatsApp cutover")
  *   chat-reparse --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (re-read the saved bot payloads of messages loaded with an empty body)
  *   chat-relink  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (contact_id of loaded conversations that have none, by the planner's rule)
+ *   wallet-history --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (the full wallet statement: daily WhatsApp charges and reverts, AI charges, top-ups, purchases, chained to the live balance; replaces the one-opening-balance ledger)
+ *   chat-buttons --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (gives loaded bot messages their buttons: Visit our website, Call now ...; reads only the database)
+ *   chat-delivery --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]   (moves loaded outbound messages from sent to delivered / read / failed from the billing log; forward only; DRY RUN by default)
+ *   chat-status  --client <c> --org-slug <s> [--channel-map FILE] [--apply --confirm-org-slug <s>]   (closes loaded conversations that Waboo has closed: the status of the newest visitor_logs session)
  *   usage-charges-append --client <c> --org-slug <s> [--skip-hash] [--apply --confirm-org-slug <s>]  (credits catch-up: ONLY the billing-log charges and token rows not yet in id_map; never the ledger or the wallet; DRY RUN by default)
  *   campaign-link --client <c> --org-slug <s> [--apply --confirm-org-slug <s>]  (set wpcampaigns.template_id on campaigns loaded before the templates; exact matches only, DRY RUN by default)
  *                                  OPERATOR step, DRY RUN by default: migrated knowledge-base url entries -> processing + ai_training_source.requested (the app worker then makes outbound requests)
@@ -67,6 +71,10 @@ import { cutover } from './load/cutover';
 import { updateRows } from './load/update';
 import { chatReparse } from './load/chatreparse';
 import { chatRelink } from './load/chatrelink';
+import { chatDelivery } from './load/chatdelivery';
+import { chatStatus } from './load/chatstatus';
+import { chatButtons } from './load/chatbuttons';
+import { walletHistory } from './load/wallethistory';
 import { campaignLink } from './load/campaignlink';
 import { runClient, RunLockedError } from './load/run';
 import { formatSteps, StepsError } from './load/steps';
@@ -234,6 +242,7 @@ async function main(): Promise<number> {
           ownerEmail: flags.get('owner-email') ? String(flags.get('owner-email')) : null,
           ownerName: flags.get('owner-name') ? String(flags.get('owner-name')) : null,
           ownerVerified: flags.has('owner-verified'),
+          timezone: flags.get('timezone') ? String(flags.get('timezone')) : null,
           trialDays: flags.get('trial-days') ? Number(flags.get('trial-days')) : null,
         },
       });
@@ -541,6 +550,116 @@ async function main(): Promise<number> {
         source,
         dumpsDir,
         inbox: inboxOf(flags),
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'chat-delivery': {
+      // delivery state of the loaded outbound messages from the billing log (see load/chatdelivery.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('chat-delivery --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !apply }),
+      );
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await chatDelivery({
+        client: clients[0]!,
+        orgSlug: slug,
+        targetUrl: need('TARGET_DATABASE_URL'),
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'chat-status': {
+      // status of the conversations an earlier load wrote open that Waboo has closed (see load/chatstatus.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('chat-status --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !apply }),
+      );
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await chatStatus({
+        client: clients[0]!,
+        orgSlug: slug,
+        targetUrl: need('TARGET_DATABASE_URL'),
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
+        dumpsDir,
+        inbox: inboxOf(flags),
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'wallet-history': {
+      // the full wallet statement (charges, reverts, AI, top-ups, purchases) from the dump and core.json (see load/wallethistory.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('wallet-history --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !apply }),
+      );
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await walletHistory({
+        client: clients[0]!,
+        orgSlug: slug,
+        targetUrl: need('TARGET_DATABASE_URL'),
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
+        source,
+        dumpsDir,
+        apply,
+        log: (l) => console.log(l),
+      });
+      return 0;
+    }
+    case 'chat-buttons': {
+      // meta.sentInteractive of the bot messages an earlier load wrote without their buttons (see load/chatbuttons.ts); DRY RUN unless --apply
+      if (clients.length !== 1) return usage();
+      const slug = flags.get('org-slug') ? String(flags.get('org-slug')) : '';
+      if (!slug) return usage();
+      const apply = flags.has('apply');
+      if (apply && String(flags.get('confirm-org-slug') ?? '') !== slug) {
+        console.error('chat-buttons --apply needs --confirm-org-slug <the same org slug>');
+        return 2;
+      }
+      console.log(
+        assertTargetAllowed(need('TARGET_DATABASE_URL'), 'target', { ...guard, dryRun: !apply }),
+      );
+      console.log(
+        assertTargetAllowed(need('MIGRATION_DATABASE_URL'), 'owner ', { ...guard, dryRun: !apply }),
+      );
+      await chatButtons({
+        client: clients[0]!,
+        orgSlug: slug,
+        targetUrl: need('TARGET_DATABASE_URL'),
+        ownerUrl: need('MIGRATION_DATABASE_URL'),
         apply,
         log: (l) => console.log(l),
       });

@@ -89,7 +89,18 @@
       "NETWORK": "Errore di rete: riprova.",
       "UNEXPECTED": "Qualcosa è andato storto. Riprova.",
       "CALL_PLAYBACK_LINK_INVALID": "Questo link della registrazione è scaduto. Premi di nuovo riproduci per ottenerne uno nuovo.",
-      "CALL_RANGE_INVALID": "Queste date non sono valide: l'inizio non può essere successivo alla fine, un intervallo può coprire al massimo un anno e il fuso orario deve essere reale."
+      "CALL_RANGE_INVALID": "Queste date non sono valide: l'inizio non può essere successivo alla fine, un intervallo può coprire al massimo un anno e il fuso orario deve essere reale.",
+      "CALL_OUTSIDE_WINDOW": "Questo contatto è fuori dal tuo orario di chiamata, quindi la chiamata non è stata effettuata. La finestra di chiamata si apre {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Impossibile trovare questa chiamata.",
+      "CALL_LOG_CONTACT_REQUIRED": "Indica il contatto o un numero di telefono valido.",
+      "CALL_LOG_TIME_INVALID": "Una chiamata non può iniziare nel futuro né più di 400 giorni fa.",
+      "CALL_LOG_NOT_EDITABLE": "Questa chiamata è stata segnalata da un telefono o da un provider di telefonia, quindi non può essere modificata.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "Il tempo concesso per modificare questa chiamata è scaduto.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Un'attività di follow-up richiede un contatto. Indica un numero che appartiene a uno dei tuoi contatti.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Impossibile trovare questa connessione di telefonia.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Questo provider di telefonia non è disponibile.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Questa connessione di telefonia non può effettuare chiamate.",
+      "TELEPHONY_CALL_FAILED": "Il provider di telefonia non è riuscito a effettuare la chiamata."
     },
     "settings": {
       "title": "Chiamate",

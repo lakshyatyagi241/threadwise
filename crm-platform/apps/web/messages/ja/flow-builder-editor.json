@@ -685,6 +685,7 @@
         "anotherPart": "このフローの別の部分です。ボタンまたはリスト行がここに誘導したときに実行されます{lost, select, true {(まだどこからも誘導されていないため、実行されません)。} other {。}}",
         "addFirstStep": "最初のステップを追加",
         "branchingEnds": "この{kind, select, list {リスト} other {ボタン群}}でこの部分は終わります。次に送信される内容は、顧客が選んだものによって決まります。",
+        "optionsCarryOn": "各{kind, select, list {行} other {ボタン}}は、独自のフローを開始するか、下の次のステップに進めます。",
         "thenGoTo": "次の移動先",
         "confirmImport": {
           "title": "このフローをファイルで置き換えますか?",
@@ -717,9 +718,10 @@
             "ask": "顧客に質問",
             "handoff": "引き継ぎ",
             "logic": "判断",
-            "answer": "回答"
+            "answer": "回答",
+            "action": "アクション"
           },
-          "blockedTitle": "ボタンとリストはフローを終了させるため、最後にのみ置けます。",
+          "blockedTitle": "このステップはこのパートを終了するため、最後にのみ配置できます。",
           "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
         },
         "card": {
@@ -733,11 +735,27 @@
           "faqExits": {
             "matched": "回答済み",
             "no_match": "一致なし"
-          }
+          },
+          "close": "閉じる",
+          "clickToEdit": "クリックして編集",
+          "outsideToSave": "変更を保存するには外側のどこかをクリックしてください",
+          "addCondition": "このステップの後に条件を追加",
+          "conditionLast": "条件はこの部分を終了させるため、最後にしか置けません。",
+          "duplicateTitle": "このステップを複製しますか？",
+          "duplicateBody": "直後にコピーが追加されます。",
+          "deleteTitle": "このステップを削除しますか？",
+          "deleteBody": "ステップはフローから削除されます。",
+          "stage": "ステージ {stage}",
+          "storedIn": "値は連絡先の <b>{property}</b> プロパティに保存されます",
+          "actions": "アクション",
+          "actionsHint": "このステップの直後に実行されるステップを追加します。",
+          "actionsBlocked": "自分の部分を終えるステップの後には、ステップを続けられません。"
         },
         "editors": {
           "linkLabel": "この後の移動先",
+          "linkChoose": "移動先を選択…",
           "linkEnds": "ここで終了(これ以上は送信されません)",
+          "linkNext": "次のステップに進む",
           "linkOption": "{stage} · {label}{self, select, true {(このステップ)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ 新しいフローへ誘導…",
           "question": "質問",
@@ -837,17 +855,13 @@
             "hour": "時間",
             "day": "日"
           },
-          "location": {
-            "placeName": "場所の名前",
-            "placePlaceholder": "当社オフィス",
-            "address": "住所",
-            "latitude": "緯度",
-            "longitude": "経度"
-          },
           "template": {
             "label": "承認済みテンプレート",
             "hint": "お使いのWhatsApp番号で承認されたテンプレートのみ表示されます。",
-            "choose": "テンプレートを選択…"
+            "choose": "テンプレートを選択…",
+            "buttons": "ボタン",
+            "variables": "連絡先の情報で入力されます",
+            "variablesHint": "各番号はメッセージの送信時に、ここに示された連絡先の情報で入力されます。変更はテンプレートで行ってください。"
           },
           "cta": {
             "buttonText": "ボタンのテキスト",
@@ -861,7 +875,12 @@
             "add": "ボタンを追加",
             "remove": "ボタンを削除",
             "opensPhone": "電話番号",
-            "opensEmail": "メールアドレス"
+            "opensEmail": "メールアドレス",
+            "errors": {
+              "url": "https:// で始まる有効なウェブアドレスを入力してください",
+              "phone": "有効な電話番号を入力してください（例: +91 98765 43210）",
+              "email": "有効なメールアドレスを入力してください（例: name@example.com）"
+            }
           },
           "carousel": {
             "intro": "カードの上のメッセージ",
@@ -1044,13 +1063,7 @@
           "info": "1つのメッセージにCTAボタンを最大{max}個追加できます。ウェブサイトを開く、電話、コードをコピーを自由に組み合わせられます。WhatsAppテンプレートのボタンと同じ上限です。",
           "buttonLabel": "ボタンのラベル",
           "addButton": "ボタンを追加",
-          "maxReached": "ボタンは最大{max}個です。",
-          "locationTitle": "タイトル",
-          "locationTitlePlaceholder": "当社オフィス",
-          "locationAddress": "住所",
-          "locationAddressPlaceholder": "番地、市区町村、国",
-          "locationLatitude": "緯度",
-          "locationLongitude": "経度"
+          "maxReached": "ボタンは最大{max}個です。"
         },
         "logic": {
           "operator": {
@@ -1118,19 +1131,14 @@
           "aiModelPick": "— モデルを選択 —",
           "aiModelNone": "有効なAIモデルがありません。管理者にオンにするよう依頼してください",
           "aiModelNotEnabled": "{value}(無効)",
-          "aiAssistantNone": "— なし(上のプロンプトのみ使用)—",
           "aiAssistantOption": "{name} · {count, plural, other {ソース#件}}",
           "aiAssistantMissing": "(アシスタント{id})",
-          "aiAssistantHintNone": "ナレッジベースはまだありません。<link>AIトレーニング</link>で作成し、「リストを更新」を押してここで選択してください。",
-          "aiAssistantHintEmpty": "注意: このアシスタントには学習済みソースが0件です。<link>AIトレーニング</link>で追加しないと、返信はプロンプトのみで生成されます。",
-          "aiAssistantHint": "選択したアシスタントの学習済みコンテンツをこの返信に取り込みます。<link>ナレッジを管理 →</link>",
           "aiModelLabel": "モデル",
           "aiModelHint": "管理者が有効にしたモデルと、独自のキーを追加したプロバイダー(設定 → AIキー、BYOKプラン)が利用できます。",
           "aiModelHintNone": "利用可能なプロバイダーがまだありません。<link>設定 → AIキー</link>で独自のキーを追加する(BYOKプラン)か、管理者に有効化を依頼してください。",
           "aiPrompt": "システムプロンプト",
           "aiSave": "レスポンスの保存先",
           "aiSaveHint": "後続のノードは<v>{save}</v>として読み取ります。抽出時は<v>{path}</v>です。",
-          "aiAssistantLabel": "ナレッジベース(任意)",
           "aiExtract": "<strong>構造化データ(JSON)を抽出</strong> — メッセージをフィールドに変換します",
           "aiFields": "抽出するフィールド",
           "aiFieldsHint": "カンマ区切りのキーです。AIは1つのJSONオブジェクトを返し、各キーは<v>{key}</v>になります(複数のレコードが検出された場合は<v>{rows}</v>も。例: Googleスプレッドシートのノード用)。",
@@ -1143,7 +1151,25 @@
           "subflowMissing": "フロー{id}(ワークスペースにありません)",
           "subflowLabel": "実行するフロー",
           "subflowHint": "保存済みの別のフローを選択します。このノードが実行されると、そのフローが最後まで実行されてから、ここの次のノードに制御が戻ります。",
-          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。"
+          "endInfo": "このノードはフローを終了します。この後に接続したものは実行されません。",
+          "aiSetupLegend": "このステップはどのように返信しますか?",
+          "aiSetupAgent": "AIエージェント",
+          "aiSetupAgentDesc": "AIトレーニングのエージェントの指示、モデル、ナレッジを使います。",
+          "aiSetupCustom": "カスタム設定",
+          "aiSetupCustomDesc": "ここでモデルを選び、指示を書きます。",
+          "aiAgentLabel": "AIエージェント",
+          "aiAgentPick": "— AIエージェントを選択 —",
+          "aiAgentHint": "エージェントは自身の指示、モデル、ナレッジを持っています。変更は<link>AIトレーニング</link>で行います。",
+          "aiAgentNone": "AIエージェントがまだありません。<link>最初のAIエージェントを作成</link>してから、リストを更新を押してください。",
+          "aiAgentRequired": "AIエージェントを選ぶか、カスタム設定に切り替えてください。",
+          "aiAgentSummary": "モデル {model} · {count, plural, other {ナレッジソース#件}}",
+          "aiAgentNoSources": "このエージェントにはまだナレッジがないため、指示だけで回答します。<link>AIトレーニング</link>でソースを追加してください。",
+          "aiPromptRequired": "AIへの指示を書いてください。",
+          "aiKnowledgeLabel": "AIエージェントのナレッジ(任意)",
+          "aiKnowledgeNone": "— なし —",
+          "aiKnowledgeHint": "そのエージェントの学習済みソースを返信に加えます。カスタム設定では、そのエージェントの指示とモデルは使われません。<link>AIトレーニングで管理 →</link>",
+          "aiAdvanced": "詳細オプション",
+          "aiCreateAgent": "+ AIエージェントを作成"
         },
         "options": {
           "prompt": "プロンプト",
@@ -1317,7 +1343,8 @@
             "date_field_match": "スケジュール: 連絡先の日付を基準（誕生日など）",
             "schedule": "スケジュール: 指定の日時",
             "shopify_event": "コマース: Shopifyストアのイベント",
-            "woocommerce_event": "コマース: WooCommerceストアのイベント"
+            "woocommerce_event": "コマース: WooCommerceストアのイベント",
+            "segment_leave": "オーディエンス: コンタクトがセグメントから外れたとき"
           },
           "tagsLoading": "タグを読み込み中…",
           "tagPick": "— タグを選択 —",
@@ -1411,7 +1438,8 @@
             "productId": "商品ID（任意）",
             "productIdHint": "空欄の場合は注文内の任意の商品。",
             "storeNote": "お客様は電話番号で保存済みの連絡先と照合されます。注文によって新しい連絡先が作成されることはありません。「カートに追加」と「商品閲覧」は提供していません。ストア側からこれらの情報が送られないためです。",
-            "updatedNote": "担当者またはインポートによって連絡先が変更されるたびに実行されます。別のフローによる変更では開始されません。"
+            "updatedNote": "担当者またはインポートによって連絡先が変更されるたびに実行されます。別のフローによる変更では開始されません。",
+            "segmentLeaveHint": "このセグメント内にいたコンタクトが、更新、タグ付け、またはリスト化の後にセグメント外にいると判明するたびに、1回実行されます。コンタクトの離脱は、フローが先にセグメント内にいるのを確認していた場合にのみ検出されます。"
           }
         }
       },
@@ -1631,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— シートを選択 —",
-              "empty": "スプレッドシートが見つかりません。下にURLまたはIDを貼り付けてください",
               "loading": "シートを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、シートを一覧表示できません。代わりにシートのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "シートID",
-              "saved": "シート {id}…（未読み込み）"
+              "saved": "シート {id}…（未読み込み）",
+              "empty": "連携中の Google アカウントにスプレッドシートが見つかりません",
+              "notConnected": "このワークスペースでは Google が連携されていないため、シートを一覧表示できません。シートを選ぶには Google を連携してください。"
             },
             "docs": {
               "pick": "— テンプレートのドキュメントを選択 —",
               "empty": "ドキュメントが見つかりません",
               "loading": "ドキュメントを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、ドキュメントを一覧表示できません。代わりにドキュメントのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "ドキュメントID",
-              "saved": "ドキュメント {id}…（未読み込み）"
+              "saved": "ドキュメント {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、ドキュメントを一覧表示できません。ドキュメントを選ぶには Google を連携してください。"
             },
             "forms": {
               "pick": "— フォームを選択 —",
               "empty": "フォームが見つかりません",
               "loading": "フォームを読み込み中…",
-              "notConnected": "このワークスペースはGoogleに接続されていないため、フォームを一覧表示できません。代わりにフォームのIDまたはリンクを貼り付けてください。",
-              "idPlaceholder": "フォームID",
-              "saved": "フォーム {id}…（未読み込み）"
+              "saved": "フォーム {id}…（未読み込み）",
+              "notConnected": "このワークスペースでは Google が連携されていないため、フォームを一覧表示できません。フォームを選ぶには Google を連携してください。"
             }
           },
           "sheetsIntro": "Googleスプレッドシートに行を追加します（書き込みモード）、またはキー列で行を検索します（読み取りモード）。<link>/google-account</link>で接続されたワークスペースのGoogleアカウントを使用します。",
@@ -1673,8 +1698,6 @@
           "addColumn": "列を追加",
           "matchByHeader": "見出し名で列を照合",
           "matchByHeaderHint": "見出しが一致するシートの列に各値を書き込みます（順序は問いません）。オフにすると位置に従って左から右に追加します（既定）。",
-          "pasteLabel": "…またはスプレッドシートのURL／IDを貼り付け",
-          "pasteHint": "選択肢が空でも使用できます。シートのリンクを貼り付けると、IDを自動で抽出します。",
           "docsIntro": "テンプレートのドキュメントをコピーし、<mono>{placeholders}</mono>を埋めて、リンクを知っている全員が閲覧できるように共有し、そのURLを顧客に送信します。値を入れたい場所にテンプレートで<mono>{key}</mono>を配置してください。",
           "templateDocument": "テンプレートのドキュメント",
           "newCopyTitle": "新しいコピーのタイトル",
@@ -1689,7 +1712,6 @@
           "messageTemplateHint": "顧客に送信されるボットのメッセージです。<mono>{token}</mono>には共有リンクが入ります。",
           "messageTemplatePlaceholder": "ドキュメントはこちらです:\n'{{'doc_url'}}'",
           "saveUrl": "URLの保存先変数",
-          "formIntro": "フォームのURLをWhatsAppで送信し、フローを一時停止します。顧客が入力すると<b>submitted</b>ポートから再開します。回答はフロー変数になります。",
           "googleForm": "Googleフォーム",
           "bodyBubble": "本文（リンクの上に送信）",
           "bodyBubblePlaceholder": "次の簡単なフォームにご記入ください:",
@@ -1697,11 +1719,21 @@
           "saveResponsesHint": "個別の回答も<mono>{token}</mono>として格納されます。",
           "expireAfter": "有効期限（秒）",
           "expireAfterHint": "送信を待つ時間の上限です。86400 = 24時間。",
-          "setupTitle": "初回のみの設定 — フォームのスクリプトエディタに貼り付けてください",
-          "setupOpen": "フォームを開く → <mono>⋮ メニュー</mono> → <mono>スクリプトエディタ</mono>",
-          "setupDownload": "<link>スクリプト（.gs）をダウンロード</link>して貼り付けてください",
-          "setupTrigger": "トリガーを追加: <mono>onFormSubmit</mono> · フォームから · フォーム送信時",
-          "setupWarning": "このスクリプトがない場合、フォームへの回答はGoogleフォームに記録されますが、フローは再開しません。"
+          "connection": {
+            "open": "Google アカウントを開く",
+            "permission": {
+              "calendar": "カレンダー",
+              "sheets": "Sheets",
+              "docs": "Docs と Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "このプラットフォームではGoogleが設定されていないため、フローの実行時にこのステップは失敗します。",
+            "disconnected": "Googleアカウントが接続されていないため、フローの実行時にこのステップは失敗します。先にGoogleを接続してください。",
+            "needsReconnect": "接続中のアカウントがGoogleに受け付けられなくなったため、フローの実行時にこのステップは失敗します。先にGoogleを再接続してください。",
+            "missing": "接続されたGoogleアカウントに{permission}の権限が付与されていないため、フローの実行時にこのステップは失敗します。"
+          },
+          "formIntro": "フォームの URL を WhatsApp で送信してフローを一時停止し、顧客が入力すると <b>submitted</b> ポートから再開します。回答は連携済みの Google アカウント経由でフォームから読み取られるため、フォームに何かを貼り付ける必要はありません。回答はフロー変数になります。",
+          "noListing": "Google アカウントのページで Drive ファイル一覧の権限が付与されていないため、ファイルを一覧表示できません。ファイルを選ぶには、そこで追加してください。"
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1984,89 @@
         "label": "アイコン(任意)",
         "add": "アイコンを追加",
         "saveFirst": "アイコンを追加するには、ボットを一度保存してください。"
+      },
+      "buttonAction": {
+        "label": "ボタン押下時のアクション",
+        "kind": {
+          "none": "次のステップへ進む",
+          "flow": "フローを接続",
+          "live_agent": "ライブエージェント",
+          "opt_in": "オプトイン",
+          "opt_out": "オプトアウト"
+        },
+        "pickFlow": "フローを選択",
+        "loadingFlows": "フローを読み込み中…",
+        "flowMissing": "フロー {id}（見つかりません）",
+        "hint": {
+          "flow": "この連絡先に対して選んだフローを開始し、会話はそのフローで続きます。このボタンの先には何もつなぎません。",
+          "live_agent": "選んだチームに会話を引き継ぎます。このボタンの先には何もつなぎません。",
+          "opt_in": "連絡先をマーケティングメッセージの配信登録済みにし、その後このボタンの先につないだステップへ進みます。",
+          "opt_out": "連絡先をマーケティングメッセージの配信停止にし、その後このボタンの先につないだステップへ進みます。"
+        }
+      },
+      "messageTools": {
+        "format": "テキストの書式",
+        "bold": "太字",
+        "italic": "斜体",
+        "strike": "取り消し線",
+        "mono": "等幅",
+        "bullet": "箇条書き",
+        "numbered": "番号付きリスト",
+        "emoji": "絵文字",
+        "emojiSearch": "絵文字を検索",
+        "emojiNone": "絵文字が見つかりません",
+        "variable": "変数を挿入",
+        "variableSearch": "変数を検索",
+        "groupContact": "連絡先のプロパティ",
+        "groupFlow": "このフローに保存済み",
+        "variableNone": "変数が見つかりません"
+      },
+      "askAge": {
+        "minAge": "最低年齢",
+        "minAgeHint": "空欄の場合は、コンプライアンスセンターで設定したワークスペースの年齢を使用します(未設定の場合は 18 歳)。1 から 21 の間で指定してください。",
+        "whenUnder": "回答がその年齢未満の場合",
+        "whenUnderHint": "いずれの場合も、連絡先は未成年として設定されます。お客様には、どの回答なら通過できるかは伝えられません。",
+        "end": "短く中立的な一文でフローを終了する",
+        "continue": "続行し、回答に応じて分岐できるようにする",
+        "endText": "終了メッセージ",
+        "endTextHint": "フローの終了前に送信されます。年齢には触れないでください。空欄の場合は「続行できません。」が使用されます。",
+        "continueNote": "後続のステップでは、回答の変数名に _age_gate を付けた変数(例: answer_age_gate)を参照できます。値は under または adult です。条件を追加して分岐できます(例: 親または保護者の情報を尋ねる)。",
+        "note": "年齢は必要な場合にのみ尋ねてください。回答は連絡先に書き込まれます。生年月日は生年月日として、年齢未満の回答は連絡先を未成年として設定します。"
+      },
+      "location": {
+        "modeLabel": "位置情報の設定方法",
+        "modeLink": "Google マップのリンク",
+        "modeCoords": "緯度と経度",
+        "linkLabel": "Google マップのリンク",
+        "linkPlaceholder": "リンクを貼り付け（例：https://maps.app.goo.gl/…）",
+        "linkHint": "Google マップで場所を開き、［共有］→［リンクをコピー］をタップします。短いリンクも長いリンクも使えます。",
+        "finding": "リンクを確認中…",
+        "retry": "再試行",
+        "latitude": "緯度",
+        "longitude": "経度",
+        "coordsHint": "緯度は -90～90、経度は -180～180 です。どちらの欄にも「緯度, 経度」を貼り付けられます。",
+        "found": "位置情報が見つかりました",
+        "openInMaps": "Google マップで開く",
+        "optionalHint": "任意：お客様に届く地図カードに表示されます。どちらも空のままで構いません。",
+        "optional": "（任意）",
+        "placeName": "場所の名前",
+        "placePlaceholder": "当社オフィス",
+        "address": "住所",
+        "problem": {
+          "empty": "Google マップのリンクまたは座標を入力してください。",
+          "lat_missing": "緯度を入力してください。",
+          "lng_missing": "経度を入力してください。",
+          "lat_nan": "緯度は数値で入力してください（例：18.5204）。",
+          "lng_nan": "経度は数値で入力してください（例：73.8567）。",
+          "lat_range": "緯度は -90 から 90 の間で入力してください。",
+          "lng_range": "経度は -180 から 180 の間で入力してください。",
+          "zero": "0, 0 は実在の場所ではありません。実際の座標を入力してください。",
+          "not_url": "リンクではないようです。Google マップのリンク全体を貼り付けてください。",
+          "not_maps": "Google マップのリンクではありません。",
+          "no_coords": "このリンクは特定の地点を指していません。Google マップで場所を開き、［共有］からリンクをコピーするか、座標を入力してください。",
+          "unresolved": "この短縮リンクはまだ確認されていません。入力欄から移動するか、再試行してください。",
+          "resolve_failed": "このリンクを読み取れませんでした。Google マップで開けるか確認するか、座標を入力してください。"
+        }
       }
     },
     "contracts": {
@@ -2262,7 +2377,9 @@
         "phone": "電話番号",
         "number": "数値",
         "alphanumeric": "英数字",
-        "date": "日付"
+        "date": "日付",
+        "age": "年齢",
+        "date_of_birth": "生年月日"
       },
       "askInputWrong": {
         "text": "もう一度お試しください",
@@ -2271,7 +2388,9 @@
         "phone": "有効な電話番号を入力してください",
         "number": "有効な数値を入力してください",
         "alphanumeric": "英数字のみを使用してください",
-        "date": "有効な日付を入力してください（{format}）"
+        "date": "有効な日付を入力してください（{format}）",
+        "age": "年齢を整数で入力してください",
+        "date_of_birth": "有効な日付を入力してください({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2316,7 +2435,8 @@
         "date_field_match": "日付一致時",
         "schedule": "スケジュール時",
         "shopify_event": "Shopifyイベント発生時",
-        "woocommerce_event": "WooCommerceイベント発生時"
+        "woocommerce_event": "WooCommerceイベント発生時",
+        "segment_leave": "セグメント離脱時"
       },
       "ports": {
         "manual": "手動",
@@ -2379,7 +2499,9 @@
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
-        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。"
+        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
+        "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。",
+        "aiNoAgent": "「{node}」にはAIエージェントもプロンプトもありません。AIエージェントを選ぶか、カスタム設定を選んで指示を書いてください。"
       }
     },
     "simpleModel": {
@@ -2470,6 +2592,14 @@
         "faq": {
           "label": "FAQから回答",
           "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
+        },
+        "apiLibrary": {
+          "label": "API呼び出し",
+          "help": "API ライブラリの API を呼び出します"
+        },
+        "code": {
+          "label": "JS関数",
+          "help": "小さな JavaScript を実行します"
         }
       },
       "typeLabel": {
@@ -2487,7 +2617,9 @@
         "assign": "担当者に割り当て",
         "carousel": "カルーセル",
         "condition": "条件",
-        "faq": "FAQから回答"
+        "faq": "FAQから回答",
+        "api_library": "API呼び出し",
+        "code": "JS関数"
       },
       "stepLabel": {
         "questionOf": "質問 · {kind}"
@@ -2510,10 +2642,11 @@
         "writeQuestion": "ステップ {stage}: 質問を入力してください。",
         "nameVariable": "ステップ {stage}: 回答の保存先となる変数名を入力してください。",
         "chooseAnswerProperty": "ステップ {stage}: 回答のコピー先となる連絡先の項目を選択してください。",
-        "setCoordinates": "ステップ {stage}: 緯度と経度を設定してください。",
+        "setCoordinates": "ステップ {stage}：Google マップのリンクを貼り付けるか、有効な緯度と経度を入力してください。",
         "chooseTemplate": "ステップ {stage}: テンプレートを選択してください。",
         "chooseTeam": "ステップ {stage}: 会話の振り分け先のチームを選択してください。",
         "ctaLabelLink": "ステップ {stage}: ボタンの名前とリンクを設定してください。",
+        "ctaLinkInvalid": "ステップ {stage}: ボタンのリンク先が種類に合っていません。",
         "choosePickedProperty": "ステップ {stage}: 選択された項目のコピー先となる連絡先の項目を選択してください。",
         "buttonsPrompt": "ステップ {stage}: ボタンの上のメッセージを入力してください。",
         "addButton": "ステップ {stage}: ボタンを1つ以上追加してください。",
@@ -2528,7 +2661,15 @@
         "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
         "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
-        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。"
+        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
+        "optionNotConnected": "ステップ {stage}: {kind, select, row {行} other {ボタン}}「{label}」の行き先がありません。ステップを追加するか、アクションを設定してください。",
+        "tooManyOptions": "ステップ {stage}: {kind, select, row {リストの行は最大 {max} 件までです} other {ボタンは最大 {max} 個までです}}。",
+        "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
+        "chooseApi": "ステップ {stage}: 呼び出す API を選んでください。",
+        "writeCode": "ステップ {stage}: 実行するコードを書いてください。",
+        "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
+        "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
+        "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。"
       },
       "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
       "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
       "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
-      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。"
+      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。",
+      "locationSkipped": "（位置情報）スキップ：有効な座標がありません"
     }
   }
 }

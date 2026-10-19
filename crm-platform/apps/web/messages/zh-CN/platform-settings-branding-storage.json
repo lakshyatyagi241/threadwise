@@ -19,7 +19,8 @@
       "googleCalendar": "Google 日历",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "流程构建器"
+      "flowBuilder": "流程构建器",
+      "microsoftCalendar": "Microsoft 日历"
     },
     "hub": {
       "kicker": "管理员 - 项目设置",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "端点",
-            "hint": "Spaces、R2 和 MinIO 必需。末尾的 /bucket 会被移除。",
-            "placeholder": "https://…（Spaces / R2 / MinIO 必需；Wasabi 和 Bunny 自动设置）"
+            "hint": "Spaces 和 R2 必需。末尾的 /bucket 会被移除。",
+            "placeholder": "https://…（Spaces / R2 必需；Wasabi 和 Bunny 自动设置）"
           },
           "cdnUrl": {
             "label": "公开 / CDN URL（可选）",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "使用路径风格端点（MinIO / 部分 S3 兼容存储）"
+            "label": "使用路径风格端点（部分 S3 兼容存储）"
           },
           "storageZone": {
             "label": "存储区",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net 存储",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3 兼容"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "私有（签名 URL）",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google 日历",
-        "description": "每个工作区连接日历时使用的 Google OAuth 客户端。",
+        "description": "每个工作区用于连接其 Google 账户（用于日历、Sheets、Docs 和 Forms）的 Google OAuth 客户端。",
         "sections": {
           "oauth": {
             "title": "Google OAuth 客户端"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "允许工作区连接 Google 日历",
-            "hint": "关闭时：任何工作区都无法连接，也不会写入或读取日历。"
+            "label": "允许工作区连接 Google",
+            "hint": "关闭时：任何工作区都无法连接，也不会从 Google（日历、Sheets、Docs、Forms）读取或写入任何内容。"
           },
           "clientId": {
             "label": "客户端 ID",
@@ -1024,6 +1024,37 @@
             "advanced": "仅高级模式"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "description": "所有工作区连接其 Outlook 或 Microsoft 365 日历时使用的 Microsoft 应用。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "允许工作区连接 Outlook",
+            "hint": "关闭后：任何工作区都无法连接，也不会读取或写入任何 Outlook 日历。已连接的日历会保留。"
+          },
+          "clientId": {
+            "label": "应用程序（客户端）ID",
+            "hint": "在 Microsoft Entra 管理中心的“应用注册”“概述”中获取。留空则使用 MICROSOFT_CALENDAR_CLIENT_ID。"
+          },
+          "clientSecret": {
+            "label": "客户端密码",
+            "hint": "加密存储，之后不再显示。留空则保留已保存的密码；备用来源为 MICROSOFT_CALENDAR_CLIENT_SECRET。"
+          },
+          "tenant": {
+            "label": "租户",
+            "hint": "common 允许工作账户、学校账户和个人账户；单租户应用请使用目录（租户）ID。留空则使用 MICROSOFT_CALENDAR_TENANT，否则使用 common。"
+          },
+          "redirectUri": {
+            "label": "重定向 URI 覆盖值",
+            "hint": "留空则使用上方的地址。它必须与应用上的某个重定向 URI 完全一致。"
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "云存储",
-        "description": "将客户媒体发送到您自己的存储桶：Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2 或 MinIO。",
+        "description": "将客户媒体发送到您自己的存储桶：Amazon S3、Wasabi、Bunny.net、DigitalOcean Spaces、Cloudflare R2。",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google 日历",
-        "description": "工作区用于连接日历以进行预约和忙碌时段查询的 Google OAuth 客户端。",
-        "tags": "Google / OAuth / 日历"
+        "description": "工作区用于连接其 Google 账户以进行预订、Sheets、Docs 和 Forms 的 Google OAuth 客户端。",
+        "tags": "Google / OAuth / 日历 / Sheets"
       },
       "googleMail": {
         "title": "Gmail 邮件",
@@ -1151,6 +1182,11 @@
         "title": "流程构建器",
         "description": "每个工作区的默认流程构建器：简单逐步模式或高级画布模式。工作区可覆盖此设置。",
         "tags": "简单 / 高级 / 自动化"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "description": "工作区连接其 Outlook 和 Microsoft 365 日历以用于预约时使用的 Microsoft 应用。",
+        "tags": "Microsoft / OAuth / Outlook / 日历"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "使用 Bunny 字段：存储区和密码。区域为存储区所在区域（de、ny、la 等）。"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "填写 S3 字段并粘贴端点 URL。MinIO 请勾选路径风格。"
+              "title": "Spaces / R2",
+              "body": "填写 S3 字段并粘贴端点 URL。"
             },
             "test": {
               "title": "务必先测试",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google 日历",
         "eyebrow": "管理员 - 预约",
-        "description": "整个平台使用一个 Google Cloud OAuth 客户端。每个工作区随后可在“预约 > 设置”中连接自己的 Google 账户；工作区永远看不到客户端 ID 或密钥。",
+        "description": "整个平台使用一个 Google Cloud OAuth 客户端。每个工作区随后可在“设置”中的“Google 账户”里连接自己的 Google 账户，并选择授予哪些权限；工作区永远看不到客户端 ID 或密钥。",
         "sections": {
           "oauth": {
             "title": "Google OAuth 客户端",
-            "description": "没有客户端 ID 和密钥时，工作区会看到 Google 日历不可用，预约仍可继续，只是没有日历。"
+            "description": "没有客户端 ID 和密钥时，工作区会看到 Google 不可用，预订仍可继续（只是没有日历），流程中的 Google 步骤会被跳过。"
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "1. 项目与 API",
-              "body": "在 Google Cloud Console 中创建项目并启用 Google Calendar API。"
+              "body": "在 Google Cloud Console 中创建项目，并启用 Google Calendar、Google Sheets、Google Docs、Google Drive 和 Google Forms API。只有启用了相应的 API，权限才能生效。"
             },
             "redirect": {
               "title": "2. OAuth 客户端",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "3. 同意屏幕",
-              "body": "添加 calendar.events、calendar.freebusy 和 calendar.calendarlist.readonly 权限范围，然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。"
+              "body": "添加产品所请求的权限范围（calendar.events、calendar.freebusy、calendar.calendarlist.readonly、spreadsheets、documents、drive、forms.body.readonly、forms.responses.readonly、drive.metadata.readonly），然后发布应用：处于测试状态时，Google 会在 7 天后使所有授权失效，工作区需要重新连接。Drive 权限范围属于受限范围，需要通过 Google 的审核。"
             },
             "workspaces": {
               "title": "4. 工作区连接",
-              "body": "在此粘贴客户端 ID 和密钥并保存。管理员随后可在“预约 > 设置 > Google 日历”中连接。"
+              "body": "在此粘贴客户端 ID 和密钥并保存。管理员随后可在“设置 > 集成 > Google 账户”或“预约 > 设置 > Google 日历”中连接。"
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "已存在的流程",
               "body": "更改此设置绝不会更改或删除流程。流程仍会正常运行，只是会在当前启用的构建器中打开。自行选择构建器的工作区会保留该选择，直到其重新选择平台默认值。"
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft 日历",
+        "eyebrow": "Admin - 预约",
+        "description": "整个平台共用一个 Microsoft Entra 应用。各工作区随后在“预约”“设置”中连接各自的 Outlook 或 Microsoft 365 日历，无法看到客户端 ID 或密码。",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra 应用",
+            "description": "如果没有客户端 ID 和密码，工作区会看到 Outlook 不可用，预约功能仍可照常使用。Google Calendar 不受影响。"
+          }
+        },
+        "guide": {
+          "title": "在 Microsoft Entra 中设置",
+          "items": {
+            "registration": {
+              "title": "1. 应用注册",
+              "body": "在 Microsoft Entra 管理中心创建应用注册，支持任何组织目录中的账户和个人 Microsoft 账户，并将应用程序（客户端）ID 复制到此处。除非您选择了更窄的范围，否则请将租户保持为 common。"
+            },
+            "redirect": {
+              "title": "2. 重定向 URI 和密码",
+              "body": "将本页显示的重定向 URI 添加为 Web 重定向，然后在“证书和密码”下创建客户端密码，并将其值粘贴到此处。请记下它的到期时间：到期后，所有工作区的日历都会停止工作，直到保存新的密码。"
+            },
+            "permissions": {
+              "title": "3. API 权限",
+              "body": "添加 Microsoft Graph 的委托权限 Calendars.ReadWrite、User.Read 和 offline_access，不要添加其他权限。若要广泛使用，请完成发布者验证；客户的租户也可能要求管理员批准该应用。"
+            },
+            "workspaces": {
+              "title": "4. 工作区连接",
+              "body": "在此处粘贴客户端 ID 和密码并保存。之后管理员即可在“预约”“设置”中进行连接。"
             }
           }
         }

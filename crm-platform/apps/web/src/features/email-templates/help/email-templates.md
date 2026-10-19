@@ -5,7 +5,22 @@ summary: Write an email once with a subject, formatted text and variables, then 
 area: audience
 order: 80
 documents: [nav:email-templates]
-keywords: [email, template, reply, subject, variables, merge tags, personalise, marketing, unsubscribe, shared, personal, archive, category]
+keywords:
+  [
+    email,
+    template,
+    reply,
+    subject,
+    variables,
+    merge tags,
+    personalise,
+    marketing,
+    unsubscribe,
+    shared,
+    personal,
+    archive,
+    category,
+  ]
 ---
 
 ## What it is for

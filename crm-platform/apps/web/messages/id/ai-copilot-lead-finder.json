@@ -1,0 +1,33 @@
+{
+  "ai-copilot-lead-finder": {
+    "nav": {
+      "aiCrm": "Copilot AI CRM"
+    },
+    "errors": {
+      "generic": "Terjadi kesalahan. Silakan coba lagi.",
+      "AICRM_NO_AI_PROVIDER": "Tidak ada penyedia AI yang dikonfigurasi. Minta admin Anda menambahkan kunci AI.",
+      "AICRM_PROVIDER_FAILED": "Layanan AI mengembalikan error. Silakan coba lagi.",
+      "VALIDATION_FAILED": "Periksa kolom yang disorot dan coba lagi.",
+      "PLAN_FEATURE_LOCKED": "Tingkatkan paket Anda untuk menggunakan fitur ini."
+    },
+    "chat": {
+      "title": "Copilot AI CRM",
+      "subtitle": "Minta Copilot mencari atau membuat kontak dan deal, memindahkan tahap pipeline, atau menjalankan laporan.",
+      "loading": "Memuat…",
+      "thinking": "Sedang berpikir…",
+      "emptyState": "Sapa dengan \"halo\", atau tanyakan sesuatu seperti \"deal apa saja yang masih terbuka?\"",
+      "inputPlaceholder": "Tanyakan pada Copilot…",
+      "send": "Kirim",
+      "resetConversation": "Atur ulang percakapan",
+      "recentActions": "Aktivitas terbaru",
+      "noRecentActions": "Belum ada aktivitas.",
+      "notice": {
+        "settingsSaved": "Pengaturan disimpan."
+      },
+      "settings": {
+        "title": "Kanal staf WhatsApp",
+        "waCopilotToggle": "Izinkan staf mengobrol dengan Copilot melalui WhatsApp (belum tersedia)"
+      }
+    }
+  }
+}

@@ -45,8 +45,25 @@
         "stage_not_in_pipeline": "このステージは別のパイプラインに属しています。",
         "pipeline_required": "このステージが属するパイプラインを選択してください。",
         "unknown_or_lost_stage": "このライフサイクルステージは存在しないか、失注ステージです。",
-        "unknown_or_inactive_user": "選択された人の中に、このワークスペースの有効なメンバーではない人が含まれています。"
-      }
+        "unknown_or_inactive_user": "選択された人の中に、このワークスペースの有効なメンバーではない人が含まれています。",
+        "template_required": "送信するテンプレートを選択してください。",
+        "template_not_found": "このワークスペースのこのチャンネルには、このテンプレートは存在しません。",
+        "template_not_sendable": "このテンプレートは送信できません。承認されていない、一時停止中、またはファイルやリンクの変数が必要です。",
+        "sender_not_found": "この送信元は接続されていません。"
+      },
+      "planLimitUsed": "リードソースを{limit}件中{used}件使用しています。プランをアップグレードするか、使わなくなったソースを削除してください。",
+      "syncNotSupported": "このソースはリードを自動で送信してくるため、取得するものはありません。",
+      "syncInProgress": "このソースは現在取得中です。完了するまでお待ちください。",
+      "syncTooSoon": "このソースには少し前にリクエストしました。{seconds}秒後にもう一度お試しください。",
+      "syncTooSoonNoWait": "このソースには少し前にリクエストしました。しばらくしてからもう一度お試しください。",
+      "backfillRange": "この期間は取得できません。ソースがリードを保持している期間より前、または未来の日付が含まれています。",
+      "mlaNotConfigured": "このインストールでは Meta が設定されていません。先に管理者が Meta アプリを追加する必要があります。",
+      "mlaLeadAccessMissing": "このページには、Meta がリードの読み取りに必要とする権限がありません。リードへのアクセスを許可してから、もう一度お試しください。",
+      "mlaPageReconnect": "Meta はこのページの接続を受け付けなくなりました。ページを再接続してから、もう一度お試しください。",
+      "mlaSubscribeFailed": "Meta がこのページのリード配信を有効にしませんでした。Meta アプリにリード権限があり、ページの Webhook が設定されていることを確認してから、もう一度お試しください。",
+      "mlaFormsUnavailable": "Meta からリードフォームが返されませんでした。しばらくしてからもう一度お試しください。",
+      "mlaFormNotFound": "このフォームは、もうこのページのリードフォームではありません。一覧を更新してから、もう一度お試しください。",
+      "mlaSyncOff": "フォームを選ぶ前に、このページのリード同期をオンにしてください。"
     },
     "problems": {
       "nameRequired": "ソースに名前を付けてください。",
@@ -68,7 +85,10 @@
       "propertyDuplicate": "このプロパティは 2 回マッピングされています。",
       "pathRequired": "値がペイロードのどこにあるかを指定してください。",
       "customFieldsTooMany": "カスタムプロパティのマッピングは最大 {max} 件です。",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "送信するテンプレートを選択してください。",
+      "speedDelayRange": "0~{max}の整数(分)で入力してください。",
+      "speedMaxAgeRange": "リードの最大経過時間を、1分から90日の範囲で選んでください。"
     },
     "kinds": {
       "webhook": "Webhook",
@@ -131,7 +151,8 @@
       "tabs": {
         "ads": "広告",
         "webhook": "Webhook",
-        "attention": "{count, plural, other {# 件のリードが要対応です}}"
+        "attention": "{count, plural, other {# 件のリードが要対応です}}",
+        "inbox": "リード受信箱"
       }
     },
     "ads": {
@@ -149,7 +170,7 @@
         },
         "meta": {
           "name": "Meta リードフォーム",
-          "body": "Facebook と Instagram のリード広告を、ページから直接受け付けます。"
+          "body": "Facebook と Instagram のリード広告を、ページからそのままコンタクトへ。"
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +184,8 @@
           "name": "Google 広告",
           "body": "Google 広告のリードフォーム拡張。"
         }
-      }
+      },
+      "dismissNotice": "閉じる"
     },
     "sources": {
       "emptyTitle": "ソースはまだありません",
@@ -182,7 +204,8 @@
       "connector": "マーケットプレイス経由",
       "endsIn": "{hint} で終了",
       "noEvents": "リードはまだありません",
-      "needsAttention": "{count, plural, other {# 件のリード}}"
+      "needsAttention": "{count, plural, other {# 件のリード}}",
+      "metaDelivery": "Meta から"
     },
     "wizard": {
       "title": "新しいリードソース",
@@ -219,7 +242,8 @@
       "skipMapping": "今はスキップ",
       "finish": "保存して完了",
       "revealGone": "URLとトークンは再表示されません。控えていない場合は、ソースを開いてトークンを再発行すると、新しいURLを取得できます。",
-      "toMapping": "マッピングに進む"
+      "toMapping": "マッピングに進む",
+      "planLimitUsed": "リードソースを{limit}件中{used}件使用しているため、新しいソースは作成できません。"
     },
     "form": {
       "name": "ソース名",
@@ -250,7 +274,8 @@
         "contact": "連絡先",
         "owner": "担当者",
         "deal": "案件",
-        "notify": "通知"
+        "notify": "通知",
+        "speed": "新規リードへの最初のメッセージ"
       },
       "membersFailed": "チームを読み込めなかったため、現在担当者を選択できません。ページを再読み込みしてください。",
       "countryCode": "既定の国番号",
@@ -288,7 +313,41 @@
       "notifyOwner": "連絡先の担当者に通知",
       "notifyOwnerHint": "新しいリードが届くとアプリ内通知を送ります。テストリードは通知しません。",
       "notifyUsers": "追加の通知先",
-      "notifyUsersHint": "例: 営業マネージャー。最大20人。"
+      "notifyUsersHint": "例: 営業マネージャー。最大20人。",
+      "speed": {
+        "enabled": "最初のメッセージを自動で送信する",
+        "enabledHint": "初期設定ではオフです。新しいリードがコンタクトになると、同意、配信停止時間帯、プラン、ウォレットの条件を満たす場合に、メッセージが自動で送信されます。",
+        "consentNote": "同意は自動的に付与されたものとはみなされません。WhatsAppのユーティリティテンプレートはサービスメッセージです。マーケティングテンプレート、SMS、メールはマーケティング配信として扱われ、ワークスペースで必要な場合は同意の記録が必要です。配信停止時間帯が終わるまで待機し、オプトアウトしたコンタクトには送信されません。同意の証拠とともに届いたリードの場合は、その同意が記録されます。",
+        "channel": "チャンネル",
+        "channels": {
+          "whatsapp": "WhatsAppテンプレート",
+          "sms": "SMS",
+          "email": "メール"
+        },
+        "template": "テンプレート",
+        "templateChoose": "テンプレートを選択",
+        "templateNone": "このチャンネルで利用できるテンプレートがありません",
+        "templateUnavailable": "保存されているテンプレートは利用できなくなりました",
+        "templateHint": {
+          "whatsapp": "コンタクト情報(名前など)だけで送信できる承認済みテンプレートです。ファイルやリンクの変数が必要なテンプレートは表示されません。",
+          "sms": "承認済みのSMSテンプレートです。",
+          "email": "共有のメールテンプレートです。個人用テンプレートは使用できません。"
+        },
+        "sender": "送信元",
+        "senderDefault": "最初に接続されたもの",
+        "senderUnavailable": "保存されている送信元は接続されていません",
+        "senderHint": {
+          "sms": "メッセージの送信元となるSMS番号です。",
+          "email": "メッセージの送信元となる共有メールボックスです。"
+        },
+        "delay": "送信までの待機時間(分)",
+        "delayHint": "0~{max}の整数(分)で指定します。0の場合はすぐに送信されます。",
+        "maxAge": "次より古いリードにはメッセージを送らない",
+        "maxAgeHint": "遅れて届いたリード（遡及取り込み、再試行、取りこぼした同期）も保存・割り当て・通知されますが、この期間より古い場合は最初のメッセージは送られません。古いリードにも送りたい場合にのみ、長い期間を選んでください。同意のルールは常に適用されます。",
+        "businessHours": "営業時間内のみ",
+        "businessHoursHint": "ワークスペースで設定した営業時間外は、営業時間が始まるまで送信を待機します。",
+        "optionsFailed": "テンプレートと送信元を読み込めませんでした。しばらくしてからもう一度お試しください。"
+      }
     },
     "mapping": {
       "contact": "連絡先のフィールド",
@@ -394,7 +453,7 @@
       "bodyRotated": "古いURLは直ちに無効になりました。この新しいURLはこの画面でのみ表示されます。",
       "url": "Webhook URL",
       "copyUrl": "URLをコピー",
-      "noOrigin": "完全なURLを得るには、このパスの前に API のアドレスを付けてください。",
+      "noOrigin": "プラットフォームの公開APIアドレスが設定されていないため、完全なURLを作成できませんでした。このプラットフォームの運用担当者に設定を依頼してください。設定されるまでは、このパスの前にお使いのAPIアドレスを付けてください。",
       "token": "トークン",
       "copyToken": "トークンをコピー",
       "secretHint": "このソースには共有シークレットも必要です。送信元は {header} ヘッダーで送信する必要があります。",
@@ -402,7 +461,8 @@
       "sampleHelp": "ZapierやMakeでは、URLにJSONをPOSTするWebhookアクションを使用します。このコマンドはサンプルリードを1件送信します。",
       "copied": "URLとトークンを安全な場所に控えました",
       "done": "控えたので続行",
-      "doneHint": "先にチェックボックスをオンにしてください。この後、トークンは再表示できません。"
+      "doneHint": "先にチェックボックスをオンにしてください。この後、トークンは再表示できません。",
+      "notPublic": "プラットフォームの公開APIアドレスが、広告プラットフォームから到達できないプライベートまたはローカルのアドレスを指しているため、完全なURLは表示されません。このプラットフォームの運用担当者に公開アドレスの設定を依頼し、その後トークンをローテーションして完全なURLを取得してください。"
     },
     "test": {
       "title": "テストリードを送信",
@@ -480,7 +540,9 @@
           "body": "URLは無効になり、保存されたリードも一緒に削除されます。すでに作成された連絡先は残ります。この操作は元に戻せません。",
           "action": "ソースを削除"
         }
-      }
+      },
+      "metaForm": "リードは Meta から届きます。このソースには URL もトークンもありません。フォームの管理（質問のマッピング、担当者と商談の設定、停止）は「広告」タブで行います。",
+      "metaFormLink": "Meta リードフォームを開く"
     },
     "events": {
       "title": "受信したリード",
@@ -536,7 +598,8 @@
       "retried": "再試行しました。リードの現在の状態:",
       "payload": "保存されたペイロード",
       "loadingPayload": "ペイロードを開く",
-      "purged": "生のペイロードは {days} 日後に削除されました。リードと連絡先は残ります。"
+      "purged": "生のペイロードは {days} 日後に削除されました。リードと連絡先は残ります。",
+      "firstReply": "最初のメッセージ"
     },
     "attribution": {
       "title": "リードのアトリビューション",
@@ -550,10 +613,437 @@
         "campaign": "キャンペーン",
         "adset": "広告セット",
         "ad": "広告",
-        "form": "フォーム"
+        "form": "フォーム",
+        "channel": "チャネル",
+        "moduleType": "モジュールの種類"
       },
       "capturedAt": "取得日時",
       "openSource": "リードソースを開く"
+    },
+    "hookAddress": {
+      "title": "新しいwebhook URLは不完全になります",
+      "notConfigured": "プラットフォームの公開APIアドレスが設定されていません。このプラットフォームの運用担当者に設定を依頼してください。設定されるまでは、新しいソースにはURLのパスのみが表示されます。",
+      "notPublic": "プラットフォームの公開APIアドレスが、広告プラットフォームから到達できないプライベートまたはローカルのアドレスを指しています。このプラットフォームの運用担当者に公開アドレスの設定を依頼してください。"
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "予定済み",
+        "sending": "送信中",
+        "held": "保留中",
+        "sent": "送信済み",
+        "blocked": "ブロック済み",
+        "skipped": "スキップ",
+        "failed": "失敗"
+      },
+      "reasons": {
+        "quiet_hours": "配信停止時間帯の終了を待機中",
+        "outside_business_hours": "営業時間の開始を待機中",
+        "channel_unavailable": "チャンネルが接続されていません",
+        "wallet_empty": "ウォレットの残高がありません",
+        "send_halted": "送信が停止されています",
+        "opted_out": "コンタクトがオプトアウトしました",
+        "no_consent": "同意が記録されていません",
+        "minor": "コンタクトが未成年として設定されています",
+        "plan_limit": "プランの上限に達しています",
+        "disabled": "設定がオフになりました",
+        "source_paused": "リードソースが一時停止中です",
+        "no_contact_point": "このチャンネルの番号またはアドレスがありません",
+        "no_sender": "接続済みの送信元がありません",
+        "template_unavailable": "テンプレートを送信できません",
+        "missing_value": "このコンタクトのテンプレート値が不足しています",
+        "lead_too_old": "リードが設定で許可された期間より古かった",
+        "provider_error": "プロバイダーに拒否されました",
+        "interrupted": "中断されました",
+        "expired": "待機時間が長すぎました",
+        "internal_error": "内部エラーが発生しました"
+      },
+      "nextTry": "次回の試行",
+      "sentAt": "送信日時"
+    },
+    "inbox": {
+      "intro": "ソースが受信したすべてのリードです。連絡先にできなかったものも含まれます。リードを開くと理由を確認でき、待機中のものは再試行できます。",
+      "chipsLabel": "ステータスで絞り込み",
+      "loading": "リードを読み込み中",
+      "more": "さらに読み込む",
+      "chips": {
+        "all": "すべて",
+        "attention": "要対応",
+        "needs_review": "要確認",
+        "failed": "失敗",
+        "created": "作成済み",
+        "updated": "更新済み",
+        "duplicate": "重複"
+      },
+      "filters": {
+        "source": "ソース",
+        "allSources": "すべてのソース",
+        "reason": "理由",
+        "anyReason": "すべての理由",
+        "range": "受信日",
+        "ranges": {
+          "all": "全期間",
+          "day": "過去24時間",
+          "week": "過去7日間",
+          "month": "過去30日間",
+          "custom": "日付を選択"
+        },
+        "from": "開始日",
+        "to": "終了日（含む）",
+        "rangeOrder": "終了日が開始日より前になっています。",
+        "tests": "テストリード",
+        "testChoices": {
+          "all": "表示",
+          "only": "テストリードのみ",
+          "hide": "非表示"
+        },
+        "search": "リードIDの先頭文字",
+        "searchHint": "検索の対象は送信元が付けたリードIDのみです。名前・電話番号・住所などは検索されません。",
+        "searchPlaceholder": "lead-100",
+        "apply": "検索",
+        "reset": "待機中のリードに戻る",
+        "showAll": "すべて表示"
+      },
+      "table": {
+        "caption": "すべてのソースが受信したリード",
+        "received": "受信日時",
+        "source": "ソース",
+        "lead": "リード",
+        "status": "ステータス",
+        "reason": "理由",
+        "firstMessage": "最初のメッセージ",
+        "actions": "操作",
+        "select": "リード {id} を選択",
+        "test": "テスト",
+        "view": "開く",
+        "retry": "再試行"
+      },
+      "empty": {
+        "attentionTitle": "対応が必要なものはありません",
+        "attention": "届いたリードはすべて連絡先になりました。確認が必要なリードや失敗したリードはここに表示されます。",
+        "filteredTitle": "該当するリードがありません",
+        "filtered": "この条件に一致するものはありません。"
+      },
+      "bulk": {
+        "selectPage": "このページで再試行できるリードをすべて選択",
+        "selected": "{count, plural, one {#件のリードを選択中} other {#件のリードを選択中}}",
+        "retry": "選択したものを再試行",
+        "limit": "一度に最大{max}件までです。"
+      },
+      "result": {
+        "retried": "{count, plural, one {#件のリードを再試行しました。} other {#件のリードを再試行しました。}}",
+        "fixed": "{count, plural, one {#件が連絡先になりました。} other {#件が連絡先になりました。}}",
+        "stillWaiting": "{count, plural, one {#件はまだ確認が必要です。} other {#件はまだ確認が必要です。}}",
+        "skipped": {
+          "not_found": "{count, plural, one {#件のリードが見つかりませんでした。} other {#件のリードが見つかりませんでした。}}",
+          "not_retryable": "{count, plural, one {#件のリードはすでに待機中ではありません。} other {#件のリードはすでに待機中ではありません。}}",
+          "payload_purged": "{count, plural, one {#件のリードは再試行できる保存データが残っていません。} other {#件のリードは再試行できる保存データが残っていません。}}",
+          "source_paused": "{count, plural, one {#件のリードは一時停止中のソースのものです。} other {#件のリードは一時停止中のソースのものです。}}",
+          "error": "{count, plural, one {#件のリードを再試行できませんでした。} other {#件のリードを再試行できませんでした。}}"
+        }
+      },
+      "drawer": {
+        "title": "リード",
+        "close": "閉じる",
+        "retry": "再試行",
+        "auditNote": "リードを開いた操作は監査ログに記録されます。個人データは非表示になっています。",
+        "source": "ソース",
+        "lead": "リードID",
+        "received": "受信日時",
+        "processed": "処理日時",
+        "notProcessed": "未処理",
+        "attempts": "試行回数",
+        "duplicates": "再送信",
+        "deliveredAgain": "{count, plural, one {#回} other {#回}}",
+        "reason": "理由",
+        "firstReply": "最初のメッセージ",
+        "contact": "連絡先",
+        "openContact": "連絡先を開く",
+        "error": "エラー",
+        "payload": "送信元から届いたデータ",
+        "showOriginal": "元のデータを表示",
+        "maskedNote": "電話番号、メールアドレス、氏名、住所、自由入力のテキストは非表示です。機密情報は削除されています。",
+        "nothingToMask": "このリードには非表示にする個人情報はありません。",
+        "originalNote": "元のデータです。リードソースを管理する権限があるため表示しています。表示した操作は監査ログに記録されました。",
+        "loadingPayload": "データを読み込み中",
+        "purged": "データは保持期間の経過後に削除されたため、表示も再試行もできません。"
+      },
+      "pull": {
+        "title": "同期とバックフィル",
+        "intro": "これらのソースにはリードを問い合わせることができます。「今すぐ同期」は新しいリードを取得し、「バックフィル」は過去の期間のリードを再取得します。すでにあるリードは認識され、重複して追加されることはありません。",
+        "backfill": "バックフィル...",
+        "history": "最近の同期とバックフィル",
+        "syncNow": "今すぐ同期",
+        "syncStarted": "{name} を同期しています",
+        "paused": "このソースは一時停止中です。リードを取得するには再開してください。",
+        "nextSync": "再度同期できます",
+        "syncReady": "今すぐ同期できます。リクエストの間隔は最低{seconds}秒空けてください。",
+        "reach": "バックフィルでは{days, plural, one {#日} other {#日}}前までさかのぼれます。",
+        "never": "まだ取得していません。",
+        "progress": "{percent}パーセント",
+        "counts": "取得 {fetched} 件、新規 {accepted} 件、既知 {duplicates} 件、未引き渡し {failed} 件",
+        "kinds": {
+          "sync": "同期",
+          "backfill": "バックフィル"
+        },
+        "statuses": {
+          "queued": "キュー待ち",
+          "running": "実行中",
+          "done": "完了",
+          "partial": "一部完了",
+          "failed": "失敗"
+        },
+        "errors": {
+          "too_soon": "ソースから待つよう求められました。",
+          "not_now": "ソースの準備ができていませんでした。間隔が短すぎたか、接続が一時停止中です。",
+          "provider_error": "ソースが要求を拒否したか、処理に失敗しました。",
+          "credentials_refused": "ソースが認証情報を拒否しました。再接続してください。",
+          "permission_missing": "Meta はこのページによるリードの読み取りを許可しませんでした。Meta リードフォームでリードへのアクセスを許可してから、もう一度実行してください。",
+          "interrupted": "中断されました。もう一度実行してください。",
+          "internal_error": "内部エラーが発生しました。もう一度実行してください。",
+          "incomplete": "一部のリードが引き渡されませんでした。もう一度実行して完了させてください。",
+          "not_supported": "このソースではその操作はできません。",
+          "not_active": "接続が有効ではありません。",
+          "range_too_old": "ソースはそれほど過去のリードを保持していません。",
+          "range_invalid": "期間が正しくありません。"
+        }
+      },
+      "backfill": {
+        "title": "期間を指定してバックフィル",
+        "intro": "リードを保持しているソースから、過去の日付のリードを再取得します。一度に最大{days}日分までです。すでに受信済みのリードは認識され、何も書き込まれません。",
+        "from": "開始日",
+        "to": "終了日（含む）",
+        "sources": "ソース",
+        "noSources": "バックフィルできるソースがありません。",
+        "submit": "バックフィルを開始",
+        "cancel": "キャンセル",
+        "close": "閉じる",
+        "done": "完了",
+        "started": "{count, plural, one {バックフィルを開始しました} other {#件のバックフィルを開始しました}}",
+        "skippedTitle": "一部のソースは取得されませんでした:",
+        "skipped": {
+          "not_supported": "はバックフィルできません",
+          "paused": "は一時停止中です",
+          "in_progress": "はすでに取得中です",
+          "too_soon": "は少し前に取得されました",
+          "range_too_old": "はそれほど過去のリードを保持していません",
+          "not_found": "が見つかりませんでした"
+        },
+        "problems": {
+          "fromRequired": "開始日を選択してください。",
+          "toRequired": "終了日を選択してください。",
+          "order": "終了日が開始日より前です。",
+          "future": "開始日が未来の日付です。",
+          "tooWide": "一度に最大{days}日までです。",
+          "noSource": "ソースを1つ以上選択してください。"
+        },
+        "safe": "もう一度実行しても、失われたり重複したりするものはありません。不足しているリードだけが追加されます。",
+        "speedNote": "遡及取り込みしたリードは、新しいリードと同様に連絡先になり、担当者に割り当てられ、チームに通知されます。ソースの上限（ソースの最初のメッセージ設定で変更していなければ1時間）より古いリードには、自動の最初のメッセージは送信されません。"
+      }
+    },
+    "meta": {
+      "heading": "Meta リードフォーム",
+      "intro": "Facebook と Instagram のリード広告からのリードを、そのままコンタクトに取り込めます。Facebook ページを接続し、リード同期をオンにしてから、取り込むリードフォームを選びます。",
+      "loading": "Meta リードフォームを読み込み中",
+      "pagesLabel": "接続済みの Facebook ページ",
+      "planLocked": "Meta リードフォームを使うには、ソーシャルリードと追加チャネル（Facebook）機能の両方を含むプランが必要です。アップグレードしてご利用ください。",
+      "metaSaid": "Meta からのメッセージ:",
+      "requestId": "リクエスト ID:",
+      "connectPage": "Facebook ページを接続",
+      "connectAnother": "別のページを接続",
+      "connectNeedsPermission": "ページを接続するには、権限 {permission} も必要です。",
+      "card": {
+        "checking": "接続を確認中",
+        "unavailable": "接続状態を読み込めませんでした。パネルを開いて、もう一度お試しください。",
+        "notConfigured": "このインストールではまだ設定されていません",
+        "noPages": "接続済みの Facebook ページはまだありません",
+        "summary": "{pages, plural, other {# ページ}}接続済み、{forms, plural, other {# フォーム}}選択済み",
+        "attention": "{count, plural, other {# ページで対応が必要です}}",
+        "open": "Meta リードフォームを開く",
+        "close": "Meta リードフォームを非表示"
+      },
+      "notConfigured": {
+        "title": "Meta はまだ設定されていません",
+        "body": "Meta リードフォームを使うには、このインストールに Meta アプリが必要です。ワークスペースの管理者に追加を依頼してから、ここに戻ってページを接続してください。",
+        "bodyManage": "このインストールには Meta アプリがまだないため、リード広告用にページを接続できません。先に管理者が Meta アプリ（アプリ ID とシークレット）を追加する必要があります。完了したら、以下の手順で Webhook を登録してください。"
+      },
+      "noPages": {
+        "title": "Facebook ページが接続されていません",
+        "body": "リード広告を配信している Facebook ページを接続してください。Meta がリードの読み取りに必要とする権限の許可を求められます。",
+        "bodyNoManage": "Facebook ページはまだ接続されていません。リードソースを管理できる人に接続を依頼してください。"
+      },
+      "setup": {
+        "title": "Meta アプリの Webhook 設定",
+        "summary": "Meta アプリの Webhook 設定",
+        "intro": "Meta は新しいリードをコールバック URL に配信します。管理者が Meta アプリのダッシュボードで一度だけ登録します。",
+        "callbackUrl": "コールバック URL",
+        "copyUrl": "URL をコピー",
+        "verifyToken": "検証トークン",
+        "verifyTokenSet": "このインストールで設定済み",
+        "verifyTokenMissing": "未設定",
+        "verifyTokenHelp": "このインストールに検証トークンが設定されるまで、Meta はコールバック URL を確認できません。このインストールの Facebook 設定で設定してください。",
+        "steps": {
+          "callback": "Meta アプリのダッシュボードで Webhooks を開き、Page オブジェクトを選んで、上のコールバック URL を貼り付けます。",
+          "verify": "Meta から検証トークンを求められたら、このインストールの Facebook 設定にあるトークンを入力し、検証して保存します。",
+          "subscribe": "Page オブジェクトを {field} フィールドにサブスクライブします。"
+        },
+        "scopes": "ログイン時に求める権限: {scopes}",
+        "scopesFromConfiguration": "ログイン時に求める権限は、Meta のログイン設定によって決まります。"
+      },
+      "pageStatus": {
+        "connected": "ページ接続済み",
+        "disconnected": "ページ切断済み",
+        "expired": "接続の有効期限切れ",
+        "error": "ページエラー"
+      },
+      "leadAccess": {
+        "granted": "リードへのアクセス許可済み",
+        "missing": "リードへのアクセス未許可"
+      },
+      "syncState": {
+        "off": "リード同期オフ",
+        "subscribed": "リード受信中",
+        "needs_lead_access": "リードへのアクセスが必要",
+        "needs_reconnect": "再接続が必要",
+        "error": "エラー"
+      },
+      "page": {
+        "pageId": "ページ ID",
+        "missingScopes": "不足している権限:",
+        "lastLead": "最新のリード",
+        "lastSweep": "最終確認",
+        "subscribedAt": "リード同期オン開始日",
+        "never": "なし",
+        "formsConnected": "選択したフォーム",
+        "lastError": "最後のエラー:",
+        "grant": "リードへのアクセスを許可",
+        "reconnect": "再接続",
+        "enable": "リード同期をオンにする",
+        "disable": "リード同期をオフにする",
+        "chooseForms": "リードフォームを選択",
+        "hideForms": "リードフォームを非表示",
+        "enabledToast": "{name} のリード同期はオンです",
+        "disabledToast": "{name} のリード同期はオフです",
+        "stateHelp": {
+          "off": "リード同期がオフです。オンにすると、このページのリードの受信を開始します。",
+          "subscribed": "リード同期はオンです。選択したフォームの新しいリードはすぐに届き、定期チェックで取りこぼしも拾われます。",
+          "needs_lead_access": "リード同期はオンですが、このページは Meta がリードの読み取りに必要とする権限なしで接続されています。続けるには、リードへのアクセスを許可してください。",
+          "needs_reconnect": "Meta はこのページの接続を受け付けなくなりました。リードを再び受信するには、ページを再接続してください。",
+          "error": "前回の試行で Meta が何かを拒否しました。内容は下のメッセージに表示され、次に成功すると消えます。"
+        },
+        "hints": {
+          "needManage": "リード同期を変更するには、権限 {permission} が必要です。",
+          "needFacebook": "アクセスの許可や再接続にも権限 {permission} が必要です。ページの接続情報を保存するためです。",
+          "enableNeedsAccess": "先にリードへのアクセスを許可してください。許可がないページでは、Meta がリード同期を拒否します。",
+          "enableNeedsReconnect": "先にページを再接続してください。現在の接続は使えなくなっています。",
+          "pickNeedsSync": "フォームを選ぶには、リード同期をオンにしてください。",
+          "pickNeedsAccess": "フォームを選ぶには、リードへのアクセスを許可してください。",
+          "pickNeedsReconnect": "フォームを選ぶには、ページを再接続してください。"
+        },
+        "confirmOff": {
+          "title": "{name} のリード同期をオフにしますか？",
+          "body": "このページは Meta から新しいリードを受信しなくなります。選択したフォームと保存済みのリードは残り、リード同期はいつでも再びオンにできます。",
+          "action": "リード同期をオフにする",
+          "cancel": "キャンセル"
+        }
+      },
+      "forms": {
+        "title": "{name} のリードフォーム",
+        "intro": "Meta がこのページ用に一覧表示しているリードフォームです。フォームを選ぶとそのリードを取り込み、選んだフォームは Webhook タブのリードソースになります。",
+        "refresh": "一覧を更新",
+        "loading": "Meta からリードフォームを読み込み中",
+        "emptyTitle": "リードフォームなし",
+        "empty": "このページにはまだリードフォームがありません。Meta 広告マネージャまたはページで作成してから、この一覧を更新してください。",
+        "caption": "ページのリードフォーム",
+        "col": {
+          "form": "フォーム",
+          "status": "Meta のステータス",
+          "leads": "リード",
+          "questions": "質問",
+          "consent": "同意チェックボックス",
+          "connected": "接続済み",
+          "lastLead": "最新のリード",
+          "lastError": "最後のエラー",
+          "actions": "操作"
+        },
+        "formId": "フォーム ID",
+        "formStatus": {
+          "ACTIVE": "有効",
+          "ARCHIVED": "アーカイブ済み",
+          "DELETED": "削除済み",
+          "DRAFT": "下書き",
+          "unknown": "不明"
+        },
+        "leadsUnknown": "Meta から報告なし",
+        "consentYes": "同意チェックボックスあり",
+        "consentNo": "なし",
+        "connected": "接続済み",
+        "notConnected": "未選択",
+        "noLeads": "リードはまだありません",
+        "pick": "選択",
+        "pickFor": "{name} を選択",
+        "stop": "停止",
+        "stopFor": "{name} を停止",
+        "mapFields": "フィールドをマッピング",
+        "mapFieldsFor": "{name} のフィールドをマッピング",
+        "rules": "担当者と商談",
+        "rulesFor": "{name} の担当者と商談",
+        "openSource": "ソースを開く",
+        "openSourceFor": "{name} のリードソースを開く",
+        "pickedToast": "{name} を選択しました",
+        "stoppedToast": "{name} を停止しました",
+        "confirmStop": {
+          "title": "{name} の取り込みを停止しますか？",
+          "body": "このフォームのリードソースと、その下に保存されたリードは削除されます。それらから作成済みのコンタクトは残ります。フォームは後から再び選択できます。",
+          "action": "リードの取り込みを停止",
+          "cancel": "キャンセル"
+        }
+      },
+      "mapping": {
+        "title": "フィールドのマッピング: {name}",
+        "close": "閉じる",
+        "noSource": "このフォームのリードソースが見つかりません。一覧を更新してから、もう一度お試しください。",
+        "loading": "リードソースを読み込み中",
+        "intro": "このフォームの各回答をコンタクトのどのフィールドに入れるか選びます。「自動」のままの質問は、email や phone_number など一般的な名前で探されます。",
+        "suggested": "各質問のタイプをもとに自動で入力しました。確認してから保存してください。",
+        "multiUse": "保存済みのマッピングで、1 つの質問が複数のフィールド（{keys}）に使われていました。保存すると最初のものだけが残ります。",
+        "noQuestions": "Meta がこのフォームの質問を返さなかったため、マッピングするものがありません。一般的な名前は引き続き探されます。",
+        "ignore": "自動（ここではマッピングしない）",
+        "contactFields": "コンタクトフィールド",
+        "contactProperties": "コンタクトプロパティ",
+        "problems": {
+          "duplicateTarget": "別の質問がすでにこのフィールドに割り当てられています。別のフィールドを選んでください。",
+          "propertyKey": "このプロパティキーは無効です。"
+        },
+        "conflict": "他のユーザーがこのリードソースを変更しました。最新の内容を見るには再読み込みしてください。未保存の選択内容は失われます。",
+        "cancel": "キャンセル",
+        "save": "マッピングを保存",
+        "saved": "{name} のフィールドマッピングを保存しました"
+      },
+      "rules": {
+        "title": "担当者と商談: {name}",
+        "close": "閉じる",
+        "noSource": "このフォームのリードソースが見つかりません。一覧を更新してから、もう一度お試しください。",
+        "loading": "リードソースを読み込み中",
+        "intro": "このフォームが作成するコンタクトの担当者、リードごとに商談を作成するかどうか、通知する相手を決めます。変更は、保存後に届くリードに適用されます。",
+        "conflict": "他のユーザーがこのリードソースを変更しました。最新の内容を見るには再読み込みしてください。未保存の変更は失われます。",
+        "cancel": "キャンセル",
+        "save": "保存",
+        "saved": "{name} の担当者と商談を保存しました"
+      },
+      "health": {
+        "title": "Meta リードフォームの状態",
+        "loading": "フォームを確認中",
+        "notConnected": "このソースは Meta リードフォームとの連携が解除されているため、確認する項目がありません。「広告」タブでフォームを選び直してください。",
+        "page": "ページ",
+        "form": "フォーム",
+        "state": "リード同期",
+        "leadAccess": "リードへのアクセス",
+        "lastLead": "最新のリード",
+        "never": "リードはまだありません",
+        "lastError": "最後のエラー:",
+        "fixHint": "修正するには「広告」タブを開き、リードへのアクセスを許可するか、ページを再接続するか、リード同期を再びオンにしてください。",
+        "openAds": "「広告」タブを開く"
+      }
     }
   }
 }

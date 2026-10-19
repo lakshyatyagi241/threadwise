@@ -85,7 +85,8 @@
       "outsideWindow": "Außerhalb 24 Std.",
       "selected": "{count, plural, one {# ausgewählt} other {# ausgewählt}}",
       "sent": "Instagram-Broadcast gesendet, {sent} zugestellt{failed, plural, =0 {} other {, # fehlgeschlagen}}.",
-      "sentNone": "Es konnte an keinen Empfänger gesendet werden. Prüfen Sie die Instagram-Verbindung."
+      "sentNone": "Es konnte an keinen Empfänger gesendet werden. Prüfen Sie die Instagram-Verbindung.",
+      "skipped": "Wegen der Einwilligung nicht angeschrieben: {count}"
     }
   }
 }

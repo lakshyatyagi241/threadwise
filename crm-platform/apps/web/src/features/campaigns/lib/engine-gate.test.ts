@@ -4,6 +4,7 @@ import { EMPTY_FORM } from './builder-model';
 import {
   coerceForEngine,
   engineOf,
+  isEmailEngine,
   isLimitedEngine,
   isSmsEngine,
   kindsFor,
@@ -132,5 +133,89 @@ describe('what a form is forced to when the number cannot send it', () => {
     const f = { ...form, buttons: [{ type: 'url' as const, text: 'Go', value: 'https://x.test' }] };
     expect(coerceForEngine(f, 'twilio', [])).toEqual({ buttons: [] });
     expect(coerceForEngine(f, 'baileys', [])).toEqual({});
+  });
+});
+
+describe('an email sender (a connected mailbox)', () => {
+  const mail = {
+    ...EMPTY_FORM,
+    senderKey: 'email:5d1b',
+    type: 'custom' as const,
+    customHeader: 'Your May offer is live',
+    customMessage: 'Hello',
+  };
+
+  it('reads the engine from the key and sends a typed message only', () => {
+    expect(engineOf('email:5d1b')).toBe('email');
+    expect(isEmailEngine('email')).toBe(true);
+    expect(isEmailEngine('sms')).toBe(false);
+    expect(kindsFor('email')).toEqual(['custom']);
+    // Email is not one of the "limited" WhatsApp-style engines; it hides its own parts.
+    expect(isLimitedEngine('email')).toBe(false);
+  });
+
+  it('keeps a complete email form as it is (the subject is the Header field)', () => {
+    expect(coerceForEngine(mail, 'email', [])).toEqual({ trackingEnabled: false });
+    expect(coerceForEngine({ ...mail, type: 'text' }, 'email', [])).toEqual({
+      trackingEnabled: false,
+    });
+  });
+
+  it('turns a template or flow into a custom message and clears everything a mail cannot carry', () => {
+    const f = {
+      ...mail,
+      type: 'template' as const,
+      templateId: 't1',
+      templateIdB: 't2',
+      templateOverrides: { a: 1 },
+      templateOverridesB: { b: 1 },
+      flowId: 'f1',
+      flowIdB: 'f2',
+      abTesting: true,
+      customMessageB: 'B',
+      mediaUrl: 'https://x.test/a.png',
+      customFooter: 'Bye',
+      buttons: [{ type: 'url' as const, text: 'Go', value: 'https://x.test' }],
+      throttleMinSec: '1',
+      throttleMaxSec: '2',
+      batchSize: '10',
+      batchPauseMin: '5',
+      dailyLimit: '100',
+      windowStart: '09:00',
+      windowEnd: '18:00',
+    };
+    expect(coerceForEngine(f, 'email', [{ id: 't1' } as ComposeTemplate])).toEqual({
+      type: 'custom',
+      templateId: '',
+      templateIdB: '',
+      templateOverrides: null,
+      templateOverridesB: null,
+      flowId: '',
+      flowIdB: '',
+      abTesting: false,
+      customMessageB: '',
+      mediaUrl: '',
+      customFooter: '',
+      buttons: [],
+      trackingEnabled: false,
+      throttleMinSec: '',
+      throttleMaxSec: '',
+      batchSize: '',
+      batchPauseMin: '',
+      dailyLimit: '',
+      windowStart: '',
+      windowEnd: '',
+    });
+  });
+
+  it('cuts a subject longer than 150 and leaves SMS and WhatsApp forms unchanged', () => {
+    const long = 'x'.repeat(200);
+    expect(coerceForEngine({ ...mail, customHeader: long }, 'email', []).customHeader).toHaveLength(
+      150,
+    );
+    // The same fields on a Baileys number are left alone.
+    expect(
+      coerceForEngine({ ...mail, customHeader: long, batchSize: '10' }, 'baileys', []),
+    ).toEqual({});
   });
 });

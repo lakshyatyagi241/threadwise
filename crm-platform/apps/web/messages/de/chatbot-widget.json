@@ -254,7 +254,34 @@
         "off": "Aus",
         "none": "Keine"
       },
-      "colorSwatch": "{label} (Farbfeld)"
+      "colorSwatch": "{label} (Farbfeld)",
+      "age": {
+        "enable": "Vor Beginn des Chats nach dem Alter fragen",
+        "enableHint": "Standardmäßig aus. Nutzen Sie dies nur, wenn die Regeln Ihres Arbeitsbereichs es verlangen oder Ihre Besucher minderjährig sein könnten. Der Chat verrät nie, welche Antwort durchgeht.",
+        "mode": "Art der Abfrage",
+        "modes": {
+          "declaration": "Ein Kästchen: „Ich bestätige, dass ich mindestens N Jahre alt bin“",
+          "age": "Nach dem Alter fragen",
+          "dob": "Nach dem Geburtsdatum fragen"
+        },
+        "modeHints": {
+          "declaration": "Es wird nichts zum Alter gespeichert. Die geringste Datenmenge.",
+          "age": "Eine ganze Zahl. Sie wird für die Prüfung verwendet; nur das Ergebnis wird gespeichert.",
+          "dob": "Wird am Kontakt als Geburtsdatum gespeichert. Nutzen Sie dies nur, wenn Sie das Datum benötigen."
+        },
+        "minAge": "Mindestalter",
+        "minAgeHint": "Leer lassen, um das Alter Ihres Arbeitsbereichs aus dem Compliance-Center zu verwenden (18, wenn keines festgelegt ist). Zwischen 1 und 21.",
+        "whenUnder": "Wenn der Besucher jünger ist",
+        "actions": {
+          "block": "Chat nicht starten",
+          "flag": "Chat starten und den Kontakt als minderjährig markieren"
+        },
+        "actionHints": {
+          "block": "Es wird nichts über den Besucher gespeichert, und er sieht eine neutrale Meldung. Beim Kästchen muss der Besucher es nur anhaken.",
+          "flag": "Der Chat läuft weiter, und sobald der Besucher eine Telefonnummer oder E-Mail-Adresse angegeben hat, wird der Kontakt als minderjährig markiert."
+        },
+        "contactNote": "Das Alter wird erst dann an einem Kontakt erfasst, wenn der Besucher eine Telefonnummer oder E-Mail-Adresse angegeben hat."
+      }
     },
     "whatsappBuilder": {
       "crumb": "WhatsApp-Widget",
@@ -298,7 +325,8 @@
           "url": "Oder verwenden Sie Ihre eigene Bildadresse",
           "urlHint": "Fügen Sie die Adresse eines quadratischen Bildes ein (https://...). Das Hochladen einer Datei ist noch nicht verfügbar.",
           "botName": "Bot-Name",
-          "botNameHint": "Wird in der Kopfzeile des Chatfensters angezeigt. Leer lassen, um den Namen Ihres Bots zu verwenden."
+          "botNameHint": "Wird in der Kopfzeile des Chatfensters angezeigt. Leer lassen, um den Namen Ihres Bots zu verwenden.",
+          "urlHintUpload": "Fügen Sie die Adresse eines quadratischen Bildes (https://...) ein oder laden Sie unten eine Datei hoch."
         },
         "3": {
           "title": "Legen Sie Ihre Willkommensnachricht fest",
@@ -558,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Website hinzufügen",
             "remove": "Website entfernen"
+          },
+          "feedback": {
+            "label": "Besucher dürfen Antworten bewerten",
+            "hint": "Daumen hoch und runter unter jeder Bot-Antwort.",
+            "message": "Nachricht nach einer Bewertung",
+            "keptWhenOff": "Feedback ist aus. Diese Nachricht bleibt gespeichert und erscheint wieder, wenn Sie es einschalten."
+          },
+          "languages": {
+            "primary": "Hauptsprache",
+            "follow": "Dem Browser des Besuchers folgen",
+            "primaryHint": "Die Sprache der eigenen Texte des Chatfensters.",
+            "additional": "Weitere Sprachen",
+            "additionalHint": "Besucher, deren Browser eine dieser Sprachen nutzt, sehen das Fenster in dieser Sprache. Alle anderen sehen die Hauptsprache."
           }
         },
         "rail": {
@@ -672,7 +713,9 @@
         "statusLive": "Live",
         "statusDraft": "Nicht veröffentlicht",
         "codeLabel": "HTML",
-        "localNote": "Dieser Code verweist auf eine Adresse auf diesem Computer (localhost) und funktioniert daher nur auf hier geöffneten Seiten. Verwenden Sie auf einer Live-Website stattdessen Ihre bereitgestellte Adresse."
+        "localNote": "Dieser Code verweist auf eine Adresse auf diesem Computer (localhost) und funktioniert daher nur auf hier geöffneten Seiten. Verwenden Sie auf einer Live-Website stattdessen Ihre bereitgestellte Adresse.",
+        "statusNoNumber": "Veröffentlicht, keine Nummer",
+        "noNumber": "Dieser Bot ist veröffentlicht, hat aber noch keine WhatsApp-Nummer. Deshalb bleiben Schaltfläche, QR-Code und Direktlink ausgeblendet. Wählen Sie im Tab „Erstellen“ beim Auslöser eine Nummer."
       },
       "whatsapp": {
         "loading": "Button wird geladen …",
@@ -681,7 +724,8 @@
         "saved": "WhatsApp-Button gespeichert",
         "saveFailed": "Der Button konnte nicht gespeichert werden. Versuchen Sie es erneut.",
         "fromBot": "Der Button öffnet WhatsApp unter {number}, der Nummer, auf der dieser Bot läuft. Ändern Sie die Nummer im Trigger auf dem Tab „Erstellen“.",
-        "noNumber": "Dieser Bot hat noch keine WhatsApp-Nummer. Wählen Sie im Auslöser auf der Registerkarte „Erstellen“ eine aus und speichern Sie die Schaltfläche dann hier."
+        "noNumber": "Dieser Bot hat noch keine WhatsApp-Nummer. Wählen Sie im Auslöser auf der Registerkarte „Erstellen“ eine aus und speichern Sie die Schaltfläche dann hier.",
+        "keywordMissing": "Die Nachricht oben enthält das Startwort Ihres Bots „{keyword}“ nicht. Startet der Bot nur mit diesem Wort, erreichen Besucher, die auf die Schaltfläche tippen, ihn nicht."
       }
     },
     "webBots": {

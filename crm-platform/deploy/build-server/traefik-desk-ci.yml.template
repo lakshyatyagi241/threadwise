@@ -1,0 +1,15 @@
+# Dokploy's Traefik watches /etc/dokploy/traefik/dynamic. This publishes the webhook (only /hooks/*) over HTTPS with its own
+# certificate. install.sh fills in __CI_HOST__ and the docker bridge address and writes it as desk-ci.yml.
+http:
+  routers:
+    desk-ci-webhook:
+      rule: Host(`__CI_HOST__`) && PathPrefix(`/hooks/`)
+      entryPoints: [websecure]
+      service: desk-ci-webhook
+      tls:
+        certResolver: letsencrypt
+  services:
+    desk-ci-webhook:
+      loadBalancer:
+        servers:
+          - url: http://__BRIDGE_IP__:9099

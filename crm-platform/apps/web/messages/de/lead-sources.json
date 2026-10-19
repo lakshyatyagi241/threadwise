@@ -45,8 +45,25 @@
         "stage_not_in_pipeline": "Diese Phase gehört zu einer anderen Pipeline.",
         "pipeline_required": "Wählen Sie die Pipeline, zu der diese Phase gehört.",
         "unknown_or_lost_stage": "Diese Lebenszyklusphase existiert nicht oder ist eine verlorene Phase.",
-        "unknown_or_inactive_user": "Eine der ausgewählten Personen ist kein aktives Mitglied dieses Workspace."
-      }
+        "unknown_or_inactive_user": "Eine der ausgewählten Personen ist kein aktives Mitglied dieses Workspace.",
+        "template_required": "Wählen Sie die Vorlage aus, die gesendet werden soll.",
+        "template_not_found": "Diese Vorlage gibt es für diesen Kanal in diesem Workspace nicht.",
+        "template_not_sendable": "Diese Vorlage kann nicht gesendet werden: Sie ist nicht genehmigt, pausiert oder benötigt eine Datei- oder Link-Variable.",
+        "sender_not_found": "Dieser Absender ist nicht verbunden."
+      },
+      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt. Upgraden Sie Ihren Tarif oder löschen Sie eine Quelle, die Sie nicht mehr verwenden.",
+      "syncNotSupported": "Diese Quelle sendet ihre Leads selbst, daher gibt es nichts abzurufen.",
+      "syncInProgress": "Diese Quelle wird bereits abgerufen. Warten Sie, bis der Vorgang abgeschlossen ist.",
+      "syncTooSoon": "Diese Quelle wurde gerade erst abgefragt. Versuchen Sie es in {seconds} Sekunden erneut.",
+      "syncTooSoonNoWait": "Diese Quelle wurde gerade erst abgefragt. Versuchen Sie es in Kürze erneut.",
+      "backfillRange": "Dieser Zeitraum kann nicht abgerufen werden: Er reicht weiter zurück, als die Quelle Leads aufbewahrt, oder in die Zukunft.",
+      "mlaNotConfigured": "Meta ist in dieser Installation nicht eingerichtet. Zuerst muss ein Administrator die Meta-App hinzufügen.",
+      "mlaLeadAccessMissing": "Diese Seite hat nicht die Berechtigungen, die Meta zum Lesen von Leads verlangt. Erteilen Sie den Lead-Zugriff und versuchen Sie es erneut.",
+      "mlaPageReconnect": "Meta akzeptiert die Verbindung dieser Seite nicht mehr. Verbinden Sie die Seite neu und versuchen Sie es erneut.",
+      "mlaSubscribeFailed": "Meta hat die Lead-Zustellung für diese Seite nicht aktiviert. Prüfen Sie, ob die Meta-App die Leads-Berechtigung hat und der Seiten-Webhook eingerichtet ist, und versuchen Sie es erneut.",
+      "mlaFormsUnavailable": "Meta hat die Lead-Formulare nicht zurückgegeben. Versuchen Sie es gleich noch einmal.",
+      "mlaFormNotFound": "Dieses Formular gehört nicht mehr zu den Lead-Formularen dieser Seite. Aktualisieren Sie die Liste und versuchen Sie es erneut.",
+      "mlaSyncOff": "Aktivieren Sie die Lead-Synchronisierung für diese Seite, bevor Sie Formulare auswählen."
     },
     "problems": {
       "nameRequired": "Geben Sie der Quelle einen Namen.",
@@ -68,7 +85,10 @@
       "propertyDuplicate": "Diese Eigenschaft ist doppelt zugeordnet.",
       "pathRequired": "Geben Sie an, wo sich der Wert im Payload befindet.",
       "customFieldsTooMany": "Ordnen Sie höchstens {max} benutzerdefinierte Eigenschaften zu.",
-      "contract": "{message}"
+      "contract": "{message}",
+      "speedTemplateRequired": "Wählen Sie die Vorlage aus, die gesendet werden soll.",
+      "speedDelayRange": "Geben Sie ganze Minuten von 0 bis {max} ein.",
+      "speedMaxAgeRange": "Wähle, wie alt ein Lead höchstens sein darf, von 1 Minute bis 90 Tage."
     },
     "kinds": {
       "webhook": "Webhook",
@@ -131,7 +151,8 @@
       "tabs": {
         "ads": "Anzeigen",
         "webhook": "Webhook",
-        "attention": "{count, plural, one {# Lead benötigt Aufmerksamkeit} other {# Leads benötigen Aufmerksamkeit}}"
+        "attention": "{count, plural, one {# Lead benötigt Aufmerksamkeit} other {# Leads benötigen Aufmerksamkeit}}",
+        "inbox": "Lead-Posteingang"
       }
     },
     "ads": {
@@ -149,7 +170,7 @@
         },
         "meta": {
           "name": "Meta-Lead-Formulare",
-          "body": "Facebook- und Instagram-Lead-Anzeigen direkt von Ihrer Seite."
+          "body": "Facebook- und Instagram-Lead-Anzeigen, direkt von Ihrer Seite in Ihre Kontakte."
         },
         "linkedin": {
           "name": "LinkedIn",
@@ -163,7 +184,8 @@
           "name": "Google Ads",
           "body": "Google-Ads-Erweiterungen für Lead-Formulare."
         }
-      }
+      },
+      "dismissNotice": "Ausblenden"
     },
     "sources": {
       "emptyTitle": "Noch keine Quellen",
@@ -182,7 +204,8 @@
       "connector": "Über den Marketplace",
       "endsIn": "Endet in {hint}",
       "noEvents": "Noch keine Leads",
-      "needsAttention": "{count, plural, one {# Lead} other {# Leads}}"
+      "needsAttention": "{count, plural, one {# Lead} other {# Leads}}",
+      "metaDelivery": "Von Meta"
     },
     "wizard": {
       "title": "Neue Lead-Quelle",
@@ -219,7 +242,8 @@
       "skipMapping": "Vorerst überspringen",
       "finish": "Speichern und abschließen",
       "revealGone": "URL und Token werden nicht mehr angezeigt. Falls Sie sie nicht gespeichert haben, öffnen Sie die Quelle und erneuern Sie das Token, um eine neue URL zu erhalten.",
-      "toMapping": "Weiter zur Zuordnung"
+      "toMapping": "Weiter zur Zuordnung",
+      "planLimitUsed": "Sie haben {used} von {limit} Lead-Quellen genutzt, daher kann keine neue Quelle angelegt werden."
     },
     "form": {
       "name": "Quellenname",
@@ -250,7 +274,8 @@
         "contact": "Der Kontakt",
         "owner": "Verantwortlicher",
         "deal": "Deal",
-        "notify": "Benachrichtigungen"
+        "notify": "Benachrichtigungen",
+        "speed": "Erste Nachricht an einen neuen Lead"
       },
       "membersFailed": "Ihr Team konnte nicht geladen werden, daher können gerade keine Personen ausgewählt werden. Laden Sie die Seite neu, um es erneut zu versuchen.",
       "countryCode": "Standard-Ländervorwahl",
@@ -288,7 +313,41 @@
       "notifyOwner": "Den Verantwortlichen des Kontakts benachrichtigen",
       "notifyOwnerHint": "Eine In-App-Benachrichtigung, wenn ein neuer Lead eingeht. Test-Leads lösen nie eine Benachrichtigung aus.",
       "notifyUsers": "Zusätzlich benachrichtigen",
-      "notifyUsersHint": "Zum Beispiel Ihre Vertriebsleitung. Bis zu 20 Personen."
+      "notifyUsersHint": "Zum Beispiel Ihre Vertriebsleitung. Bis zu 20 Personen.",
+      "speed": {
+        "enabled": "Erste Nachricht automatisch senden",
+        "enabledHint": "Standardmäßig aus. Sobald ein neuer Lead zum Kontakt wird, geht automatisch eine Nachricht raus, sofern Einwilligung, Ruhezeiten, Tarif und Guthaben das zulassen.",
+        "consentNote": "Eine Einwilligung wird nie vorausgesetzt. Eine WhatsApp-Utility-Vorlage ist eine Servicenachricht. Eine Marketing-Vorlage, eine SMS oder eine E-Mail gilt als Marketing: Sie erfordert eine dokumentierte Einwilligung, wo Ihr Workspace sie verlangt, wartet das Ende der Ruhezeiten ab und wird für Kontakte, die sich abgemeldet haben, blockiert. Ein Lead, der mit Einwilligungsnachweis eingeht, speichert diese Einwilligung.",
+        "channel": "Kanal",
+        "channels": {
+          "whatsapp": "WhatsApp-Vorlage",
+          "sms": "SMS",
+          "email": "E-Mail"
+        },
+        "template": "Vorlage",
+        "templateChoose": "Vorlage auswählen",
+        "templateNone": "Für diesen Kanal ist keine Vorlage verfügbar",
+        "templateUnavailable": "Die gespeicherte Vorlage ist nicht mehr verfügbar",
+        "templateHint": {
+          "whatsapp": "Genehmigte Vorlagen, die nur den Kontakt benötigen (zum Beispiel einen Namen). Vorlagen mit Datei- oder Link-Variable werden nicht angezeigt.",
+          "sms": "Genehmigte SMS-Vorlagen.",
+          "email": "Gemeinsame E-Mail-Vorlagen. Persönliche Vorlagen können nicht verwendet werden."
+        },
+        "sender": "Senden von",
+        "senderDefault": "Der erste verbundene",
+        "senderUnavailable": "Der gespeicherte Absender ist nicht mehr verbunden",
+        "senderHint": {
+          "sms": "Die SMS-Nummer, von der die Nachricht gesendet wird.",
+          "email": "Das gemeinsame Postfach, von dem die Nachricht gesendet wird."
+        },
+        "delay": "Wartezeit vor dem Senden (Minuten)",
+        "delayHint": "Ganze Minuten von 0 bis {max}. Bei 0 wird sofort gesendet.",
+        "maxAge": "Leads nicht anschreiben, die älter sind als",
+        "maxAgeHint": "Ein verspätet eintreffender Lead (Nachladen, erneuter Versuch, verpasster Abgleich) wird trotzdem gespeichert, zugewiesen und gemeldet, bekommt aber keine erste Nachricht, wenn er älter ist als dieser Wert. Wähle nur dann einen längeren Zeitraum, wenn alte Leads angeschrieben werden sollen. Die Einwilligungsregeln gelten immer.",
+        "businessHours": "Nur zu Geschäftszeiten",
+        "businessHoursHint": "Außerhalb der in Ihrem Workspace festgelegten Geschäftszeiten wartet die Nachricht, bis diese beginnen.",
+        "optionsFailed": "Die Vorlagen und Absender konnten nicht geladen werden. Versuchen Sie es gleich noch einmal."
+      }
     },
     "mapping": {
       "contact": "Kontaktfelder",
@@ -394,7 +453,7 @@
       "bodyRotated": "Die alte URL hat sofort aufgehört zu funktionieren. Diese neue wird nur jetzt angezeigt.",
       "url": "Webhook-URL",
       "copyUrl": "URL kopieren",
-      "noOrigin": "Stellen Sie Ihre API-Adresse vor diesen Pfad, um die vollständige URL zu erhalten.",
+      "noOrigin": "Die öffentliche API-Adresse der Plattform ist nicht festgelegt, daher konnte die vollständige URL nicht erstellt werden. Bitten Sie die Person, die diese Plattform betreibt, sie festzulegen. Stellen Sie bis dahin die Adresse Ihrer API vor diesen Pfad.",
       "token": "Token",
       "copyToken": "Token kopieren",
       "secretHint": "Diese Quelle benötigt außerdem einen geheimen Schlüssel: der Absender muss ihn im Header {header} senden.",
@@ -402,7 +461,8 @@
       "sampleHelp": "Verwenden Sie in Zapier oder Make eine Webhooks-Aktion, die JSON an die URL sendet. Dieser Befehl sendet einen Beispiel-Lead.",
       "copied": "Ich habe URL und Token an einem sicheren Ort kopiert",
       "done": "Ich habe es kopiert, weiter",
-      "doneHint": "Setzen Sie zuerst das Häkchen. Danach kann das Token nicht erneut angezeigt werden."
+      "doneHint": "Setzen Sie zuerst das Häkchen. Danach kann das Token nicht erneut angezeigt werden.",
+      "notPublic": "Die öffentliche API-Adresse der Plattform verweist auf eine private oder lokale Adresse, die Werbeplattformen nicht erreichen können, daher wird die vollständige URL nicht angezeigt. Bitten Sie die Person, die diese Plattform betreibt, eine öffentliche Adresse festzulegen, und rotieren Sie dann das Token, um eine vollständige URL zu erhalten."
     },
     "test": {
       "title": "Test-Lead senden",
@@ -480,7 +540,9 @@
           "body": "Ihre URL funktioniert dann nicht mehr und die darin gespeicherten Leads werden mitgelöscht. Bereits angelegte Kontakte bleiben erhalten. Dies kann nicht rückgängig gemacht werden.",
           "action": "Quelle löschen"
         }
-      }
+      },
+      "metaForm": "Leads kommen von Meta. Diese Quelle hat weder URL noch Token; verwalten Sie das Formular (Fragen zuordnen, Zuweisung und Deal oder Stopp) im Tab „Anzeigen“.",
+      "metaFormLink": "Meta-Lead-Formulare öffnen"
     },
     "events": {
       "title": "Empfangene Leads",
@@ -536,7 +598,8 @@
       "retried": "Erneut verarbeitet. Der Lead ist jetzt",
       "payload": "Gespeicherte Nutzdaten",
       "loadingPayload": "Nutzdaten werden geöffnet",
-      "purged": "Die Rohdaten wurden nach {days} Tagen gelöscht. Der Lead und sein Kontakt bleiben erhalten."
+      "purged": "Die Rohdaten wurden nach {days} Tagen gelöscht. Der Lead und sein Kontakt bleiben erhalten.",
+      "firstReply": "Erste Nachricht"
     },
     "attribution": {
       "title": "Lead-Zuordnung",
@@ -550,10 +613,437 @@
         "campaign": "Kampagne",
         "adset": "Anzeigengruppe",
         "ad": "Anzeige",
-        "form": "Formular"
+        "form": "Formular",
+        "channel": "Kanal",
+        "moduleType": "Modultyp"
       },
       "capturedAt": "Erfasst",
       "openSource": "Lead-Quelle öffnen"
+    },
+    "hookAddress": {
+      "title": "Neue Webhook-URLs sind unvollständig",
+      "notConfigured": "Die öffentliche API-Adresse der Plattform ist nicht festgelegt. Bitten Sie die Person, die diese Plattform betreibt, sie festzulegen; bis dahin kann eine neue Quelle nur den Pfad ihrer URL anzeigen.",
+      "notPublic": "Die öffentliche API-Adresse der Plattform verweist auf eine private oder lokale Adresse, die Werbeplattformen nicht erreichen können. Bitten Sie die Person, die diese Plattform betreibt, eine öffentliche Adresse festzulegen."
+    },
+    "firstReply": {
+      "status": {
+        "scheduled": "Geplant",
+        "sending": "Wird gesendet",
+        "held": "Zurückgehalten",
+        "sent": "Gesendet",
+        "blocked": "Blockiert",
+        "skipped": "Übersprungen",
+        "failed": "Fehlgeschlagen"
+      },
+      "reasons": {
+        "quiet_hours": "Wartet auf das Ende der Ruhezeiten",
+        "outside_business_hours": "Wartet auf die Geschäftszeiten",
+        "channel_unavailable": "Der Kanal ist nicht verbunden",
+        "wallet_empty": "Das Guthaben ist aufgebraucht",
+        "send_halted": "Das Senden ist angehalten",
+        "opted_out": "Der Kontakt hat sich abgemeldet",
+        "no_consent": "Keine dokumentierte Einwilligung",
+        "minor": "Der Kontakt ist als minderjährig markiert",
+        "plan_limit": "Das Limit des Tarifs ist erreicht",
+        "disabled": "Die Einstellung wurde ausgeschaltet",
+        "source_paused": "Die Lead-Quelle ist pausiert",
+        "no_contact_point": "Keine Nummer oder Adresse für diesen Kanal",
+        "no_sender": "Kein verbundener Absender",
+        "template_unavailable": "Die Vorlage kann nicht gesendet werden",
+        "missing_value": "Für diesen Kontakt fehlt ein Vorlagenwert",
+        "lead_too_old": "Der Lead war älter, als die Einstellung erlaubt",
+        "provider_error": "Der Anbieter hat es abgelehnt",
+        "interrupted": "Der Vorgang wurde unterbrochen",
+        "expired": "Es hat zu lange gewartet",
+        "internal_error": "Ein interner Fehler"
+      },
+      "nextTry": "Nächster Versuch",
+      "sentAt": "Gesendet am"
+    },
+    "inbox": {
+      "intro": "Alle Leads, die Ihre Quellen empfangen haben – auch die, aus denen kein Kontakt werden konnte. Öffnen Sie einen Lead, um den Grund zu sehen, und wiederholen Sie die wartenden Leads.",
+      "chipsLabel": "Nach Status filtern",
+      "loading": "Leads werden geladen",
+      "more": "Mehr laden",
+      "chips": {
+        "all": "Alle",
+        "attention": "Erfordert Aufmerksamkeit",
+        "needs_review": "Zu prüfen",
+        "failed": "Fehlgeschlagen",
+        "created": "Erstellt",
+        "updated": "Aktualisiert",
+        "duplicate": "Duplikate"
+      },
+      "filters": {
+        "source": "Quelle",
+        "allSources": "Alle Quellen",
+        "reason": "Grund",
+        "anyReason": "Beliebiger Grund",
+        "range": "Empfangen",
+        "ranges": {
+          "all": "Beliebiger Zeitraum",
+          "day": "Letzte 24 Stunden",
+          "week": "Letzte 7 Tage",
+          "month": "Letzte 30 Tage",
+          "custom": "Datum wählen"
+        },
+        "from": "Von",
+        "to": "Bis (einschließlich)",
+        "rangeOrder": "Das Enddatum liegt vor dem Startdatum.",
+        "tests": "Test-Leads",
+        "testChoices": {
+          "all": "Anzeigen",
+          "only": "Nur Test-Leads",
+          "hide": "Ausblenden"
+        },
+        "search": "Lead-ID beginnt mit",
+        "searchHint": "Durchsucht wird nur die eigene ID des Absenders für den Lead, niemals Namen, Nummern oder Adressen.",
+        "searchPlaceholder": "lead-100",
+        "apply": "Suchen",
+        "reset": "Zurück zu den wartenden Leads",
+        "showAll": "Alles anzeigen"
+      },
+      "table": {
+        "caption": "Von allen Quellen empfangene Leads",
+        "received": "Empfangen",
+        "source": "Quelle",
+        "lead": "Lead",
+        "status": "Status",
+        "reason": "Grund",
+        "firstMessage": "Erste Nachricht",
+        "actions": "Aktionen",
+        "select": "Lead {id} auswählen",
+        "test": "Test",
+        "view": "Öffnen",
+        "retry": "Wiederholen"
+      },
+      "empty": {
+        "attentionTitle": "Nichts wartet auf Sie",
+        "attention": "Jeder eingegangene Lead ist zu einem Kontakt geworden. Leads, die geprüft werden müssen oder fehlgeschlagen sind, erscheinen hier.",
+        "filteredTitle": "Keine passenden Leads",
+        "filtered": "Zu diesen Filtern gibt es keine Treffer."
+      },
+      "bulk": {
+        "selectPage": "Alle Leads dieser Seite auswählen, die wiederholt werden können",
+        "selected": "{count, plural, one {# Lead ausgewählt} other {# Leads ausgewählt}}",
+        "retry": "Auswahl wiederholen",
+        "limit": "Maximal {max} auf einmal."
+      },
+      "result": {
+        "retried": "{count, plural, one {# Lead wurde wiederholt.} other {# Leads wurden wiederholt.}}",
+        "fixed": "{count, plural, one {# wurde zum Kontakt.} other {# wurden zu Kontakten.}}",
+        "stillWaiting": "{count, plural, one {# muss weiterhin geprüft werden.} other {# müssen weiterhin geprüft werden.}}",
+        "skipped": {
+          "not_found": "{count, plural, one {# Lead wurde nicht gefunden.} other {# Leads wurden nicht gefunden.}}",
+          "not_retryable": "{count, plural, one {# Lead wartet nicht mehr.} other {# Leads warten nicht mehr.}}",
+          "payload_purged": "{count, plural, one {# Lead hat keine gespeicherten Daten mehr für eine Wiederholung.} other {# Leads haben keine gespeicherten Daten mehr für eine Wiederholung.}}",
+          "source_paused": "{count, plural, one {# Lead gehört zu einer pausierten Quelle.} other {# Leads gehören zu pausierten Quellen.}}",
+          "error": "{count, plural, one {# Lead konnte nicht wiederholt werden.} other {# Leads konnten nicht wiederholt werden.}}"
+        }
+      },
+      "drawer": {
+        "title": "Lead",
+        "close": "Schließen",
+        "retry": "Wiederholen",
+        "auditNote": "Das Öffnen eines Leads wird im Audit-Protokoll festgehalten. Personenbezogene Daten darin sind ausgeblendet.",
+        "source": "Quelle",
+        "lead": "Lead-ID",
+        "received": "Empfangen",
+        "processed": "Verarbeitet",
+        "notProcessed": "Nicht verarbeitet",
+        "attempts": "Versuche",
+        "duplicates": "Erneut zugestellt",
+        "deliveredAgain": "{count, plural, one {# Mal} other {# Mal}}",
+        "reason": "Grund",
+        "firstReply": "Erste Nachricht",
+        "contact": "Kontakt",
+        "openContact": "Kontakt öffnen",
+        "error": "Fehler",
+        "payload": "Was der Absender gesendet hat",
+        "showOriginal": "Original anzeigen",
+        "maskedNote": "Telefonnummern, E-Mail-Adressen, Namen, Adressen und Freitext sind ausgeblendet. Geheime Zugangsdaten werden entfernt.",
+        "nothingToMask": "In diesem Lead gibt es keine personenbezogenen Daten, die ausgeblendet werden müssten.",
+        "originalNote": "Die Originaldaten, angezeigt, weil Sie Lead-Quellen verwalten. Die Anzeige wurde im Audit-Protokoll festgehalten.",
+        "loadingPayload": "Daten werden geladen",
+        "purged": "Die Daten wurden nach Ablauf der Aufbewahrungsfrist gelöscht, daher gibt es nichts anzuzeigen oder zu wiederholen."
+      },
+      "pull": {
+        "title": "Synchronisieren und Nachladen",
+        "intro": "Bei diesen Quellen können Leads abgefragt werden. „Jetzt synchronisieren“ holt neue Leads ab, „Nachladen“ ruft einen zurückliegenden Zeitraum erneut ab. Bereits vorhandene Leads werden erkannt und nicht doppelt angelegt.",
+        "backfill": "Nachladen...",
+        "history": "Letzte Synchronisierungen und Nachladevorgänge",
+        "syncNow": "Jetzt synchronisieren",
+        "syncStarted": "{name} wird synchronisiert",
+        "paused": "Diese Quelle ist pausiert. Setzen Sie sie fort, um ihre Leads abzurufen.",
+        "nextSync": "Wieder synchronisierbar",
+        "syncReady": "Kann jetzt synchronisiert werden. Zwischen zwei Anfragen müssen mindestens {seconds} Sekunden liegen.",
+        "reach": "Nachladen reicht {days, plural, one {# Tag} other {# Tage}} zurück.",
+        "never": "Noch nicht abgerufen.",
+        "progress": "{percent} Prozent",
+        "counts": "{fetched} abgerufen, {accepted} neu, {duplicates} bereits bekannt, {failed} nicht übergeben",
+        "kinds": {
+          "sync": "Synchronisierung",
+          "backfill": "Nachladen"
+        },
+        "statuses": {
+          "queued": "In Warteschlange",
+          "running": "Läuft",
+          "done": "Fertig",
+          "partial": "Teilweise abgeschlossen",
+          "failed": "Fehlgeschlagen"
+        },
+        "errors": {
+          "too_soon": "Die Quelle hat uns gebeten zu warten.",
+          "not_now": "Die Quelle war nicht bereit: zu früh für sie, oder ihre Verbindung ist pausiert.",
+          "provider_error": "Die Quelle hat abgelehnt oder ist fehlgeschlagen.",
+          "credentials_refused": "Die Quelle hat die Zugangsdaten abgelehnt. Verbinden Sie sie erneut.",
+          "permission_missing": "Meta hat dieser Seite das Lesen von Leads nicht erlaubt. Erteile unter Meta-Lead-Formulare den Lead-Zugriff und starte es dann erneut.",
+          "interrupted": "Der Vorgang wurde unterbrochen. Führen Sie ihn erneut aus.",
+          "internal_error": "Ein interner Fehler ist aufgetreten. Führen Sie den Vorgang erneut aus.",
+          "incomplete": "Einige Leads wurden nicht übergeben. Führen Sie den Vorgang erneut aus, um ihn abzuschließen.",
+          "not_supported": "Diese Quelle unterstützt das nicht.",
+          "not_active": "Die Verbindung ist nicht aktiv.",
+          "range_too_old": "Die Quelle bewahrt Leads nicht so weit zurück auf.",
+          "range_invalid": "Der Zeitraum ist ungültig."
+        }
+      },
+      "backfill": {
+        "title": "Zeitraum nachladen",
+        "intro": "Ruft die Leads vergangener Tage erneut von den Quellen ab, die sie aufbewahren – bis zu {days} Tage auf einmal. Bereits empfangene Leads werden erkannt und es wird nichts gespeichert.",
+        "from": "Von",
+        "to": "Bis (einschließlich)",
+        "sources": "Quellen",
+        "noSources": "Keine Quelle unterstützt das Nachladen.",
+        "submit": "Nachladen starten",
+        "cancel": "Abbrechen",
+        "close": "Schließen",
+        "done": "Fertig",
+        "started": "{count, plural, one {Nachladen gestartet} other {# Nachladevorgänge gestartet}}",
+        "skippedTitle": "Einige Quellen wurden nicht abgerufen:",
+        "skipped": {
+          "not_supported": "unterstützt kein Nachladen",
+          "paused": "ist pausiert",
+          "in_progress": "wird bereits abgerufen",
+          "too_soon": "wurde gerade erst abgerufen",
+          "range_too_old": "bewahrt Leads nicht so weit zurück auf",
+          "not_found": "wurde nicht gefunden"
+        },
+        "problems": {
+          "fromRequired": "Wählen Sie den ersten Tag.",
+          "toRequired": "Wählen Sie den letzten Tag.",
+          "order": "Der letzte Tag liegt vor dem ersten.",
+          "future": "Der erste Tag liegt in der Zukunft.",
+          "tooWide": "Höchstens {days} Tage auf einmal.",
+          "noSource": "Wählen Sie mindestens eine Quelle."
+        },
+        "safe": "Beim erneuten Ausführen geht nichts verloren und nichts wird doppelt angelegt; es werden nur die fehlenden Leads hinzugefügt.",
+        "speedNote": "Nachgeladene Leads werden wie neue Leads zu Kontakten, einem Verantwortlichen zugewiesen und melden sich bei deinem Team. Die automatische erste Nachricht bekommen sie nicht, wenn sie älter sind als das Limit der Quelle (eine Stunde, solange du es nicht in der Einstellung der ersten Nachricht der Quelle geändert hast)."
+      }
+    },
+    "meta": {
+      "heading": "Meta-Lead-Formulare",
+      "intro": "Übernehmen Sie Leads aus Ihren Facebook- und Instagram-Lead-Anzeigen direkt in Ihre Kontakte. Verbinden Sie eine Facebook-Seite, aktivieren Sie dafür die Lead-Synchronisierung und wählen Sie dann die Lead-Formulare aus, die übernommen werden sollen.",
+      "loading": "Meta-Lead-Formulare werden geladen",
+      "pagesLabel": "Verbundene Facebook-Seiten",
+      "planLocked": "Meta-Lead-Formulare erfordern einen Tarif mit „Social Leads“ und der Funktion für zusätzliche Kanäle (Facebook). Wechseln Sie auf einen höheren Tarif, um sie zu nutzen.",
+      "metaSaid": "Meta meldet:",
+      "requestId": "Anfrage-ID:",
+      "connectPage": "Facebook-Seite verbinden",
+      "connectAnother": "Weitere Seite verbinden",
+      "connectNeedsPermission": "Zum Verbinden einer Seite ist zusätzlich die Berechtigung {permission} nötig.",
+      "card": {
+        "checking": "Verbindung wird geprüft",
+        "unavailable": "Der Verbindungsstatus konnte nicht geladen werden. Öffnen Sie das Panel und versuchen Sie es erneut.",
+        "notConfigured": "In dieser Installation noch nicht eingerichtet",
+        "noPages": "Noch keine Facebook-Seite verbunden",
+        "summary": "{pages, plural, one {# Seite} other {# Seiten}} verbunden, {forms, plural, one {# Formular} other {# Formulare}} ausgewählt",
+        "attention": "{count, plural, one {# Seite erfordert Aufmerksamkeit} other {# Seiten erfordern Aufmerksamkeit}}",
+        "open": "Meta-Lead-Formulare öffnen",
+        "close": "Meta-Lead-Formulare ausblenden"
+      },
+      "notConfigured": {
+        "title": "Meta ist noch nicht eingerichtet",
+        "body": "Meta-Lead-Formulare benötigen eine Meta-App in dieser Installation. Bitten Sie einen Workspace-Administrator, sie hinzuzufügen, und kehren Sie dann hierher zurück, um eine Seite zu verbinden.",
+        "bodyManage": "Diese Installation hat noch keine Meta-App, daher können keine Seiten für Lead-Anzeigen verbunden werden. Zuerst muss ein Administrator die Meta-App (App-ID und Secret) hinzufügen. Registrieren Sie danach den Webhook wie unten beschrieben."
+      },
+      "noPages": {
+        "title": "Keine Facebook-Seite verbunden",
+        "body": "Verbinden Sie die Facebook-Seite, über die Ihre Lead-Anzeigen laufen. Sie werden nach den Berechtigungen gefragt, die Meta zum Lesen von Leads verlangt.",
+        "bodyNoManage": "Es ist noch keine Facebook-Seite verbunden. Bitten Sie jemanden, der Lead-Quellen verwalten darf, eine zu verbinden."
+      },
+      "setup": {
+        "title": "Webhook-Einstellungen für die Meta-App",
+        "summary": "Webhook-Einstellungen für die Meta-App",
+        "intro": "Meta liefert neue Leads an eine Callback-Adresse. Ein Administrator registriert sie einmalig im Dashboard der Meta-App.",
+        "callbackUrl": "Callback-URL",
+        "copyUrl": "URL kopieren",
+        "verifyToken": "Verifizierungs-Token",
+        "verifyTokenSet": "In dieser Installation gesetzt",
+        "verifyTokenMissing": "Nicht gesetzt",
+        "verifyTokenHelp": "Meta kann die Callback-Adresse erst bestätigen, wenn diese Installation ein Verifizierungs-Token hat. Legen Sie es in den Facebook-Einstellungen dieser Installation fest.",
+        "steps": {
+          "callback": "Öffnen Sie im Dashboard der Meta-App Webhooks, wählen Sie das Objekt Page und fügen Sie die Callback-URL von oben ein.",
+          "verify": "Wenn Meta nach einem Verifizierungs-Token fragt, geben Sie das aus den Facebook-Einstellungen dieser Installation ein, verifizieren Sie und speichern Sie.",
+          "subscribe": "Abonnieren Sie das Objekt Page für das Feld {field}."
+        },
+        "scopes": "Bei der Anmeldung angefragte Berechtigungen: {scopes}.",
+        "scopesFromConfiguration": "Die bei der Anmeldung angefragten Berechtigungen stammen aus Ihrer Meta-Login-Konfiguration."
+      },
+      "pageStatus": {
+        "connected": "Seite verbunden",
+        "disconnected": "Seite getrennt",
+        "expired": "Verbindung abgelaufen",
+        "error": "Seitenfehler"
+      },
+      "leadAccess": {
+        "granted": "Lead-Zugriff erteilt",
+        "missing": "Lead-Zugriff fehlt"
+      },
+      "syncState": {
+        "off": "Lead-Synchronisierung aus",
+        "subscribed": "Empfängt Leads",
+        "needs_lead_access": "Lead-Zugriff erforderlich",
+        "needs_reconnect": "Neu verbinden erforderlich",
+        "error": "Fehler"
+      },
+      "page": {
+        "pageId": "Seiten-ID",
+        "missingScopes": "Fehlende Berechtigungen:",
+        "lastLead": "Letzter Lead",
+        "lastSweep": "Letzte Prüfung",
+        "subscribedAt": "Lead-Synchronisierung aktiv seit",
+        "never": "Nie",
+        "formsConnected": "Ausgewählte Formulare",
+        "lastError": "Letzter Fehler:",
+        "grant": "Lead-Zugriff erteilen",
+        "reconnect": "Neu verbinden",
+        "enable": "Lead-Synchronisierung aktivieren",
+        "disable": "Lead-Synchronisierung deaktivieren",
+        "chooseForms": "Lead-Formulare auswählen",
+        "hideForms": "Lead-Formulare ausblenden",
+        "enabledToast": "Lead-Synchronisierung ist für {name} aktiviert",
+        "disabledToast": "Lead-Synchronisierung ist für {name} deaktiviert",
+        "stateHelp": {
+          "off": "Die Lead-Synchronisierung ist aus. Aktivieren Sie sie, um die Leads dieser Seite zu empfangen.",
+          "subscribed": "Die Lead-Synchronisierung ist aktiv. Neue Leads aus den ausgewählten Formularen treffen innerhalb kurzer Zeit ein, und eine regelmäßige Prüfung holt verpasste nach.",
+          "needs_lead_access": "Die Lead-Synchronisierung ist aktiv, aber diese Seite wurde ohne die Berechtigungen verbunden, die Meta zum Lesen von Leads verlangt. Erteilen Sie den Lead-Zugriff, um fortzufahren.",
+          "needs_reconnect": "Meta akzeptiert die Verbindung dieser Seite nicht mehr. Verbinden Sie die Seite neu, um wieder Leads zu empfangen.",
+          "error": "Meta hat beim letzten Versuch etwas abgelehnt. Was, steht in der Meldung unten; sie verschwindet nach dem nächsten erfolgreichen Versuch."
+        },
+        "hints": {
+          "needManage": "Zum Ändern der Lead-Synchronisierung ist die Berechtigung {permission} nötig.",
+          "needFacebook": "Zum Erteilen des Zugriffs oder Neuverbinden ist ebenfalls die Berechtigung {permission} nötig, weil dabei die Verbindung der Seite gespeichert wird.",
+          "enableNeedsAccess": "Erteilen Sie zuerst den Lead-Zugriff; Meta lehnt die Lead-Synchronisierung für eine Seite ohne ihn ab.",
+          "enableNeedsReconnect": "Verbinden Sie die Seite zuerst neu; ihre Verbindung funktioniert nicht mehr.",
+          "pickNeedsSync": "Aktivieren Sie die Lead-Synchronisierung, um Formulare auszuwählen.",
+          "pickNeedsAccess": "Erteilen Sie den Lead-Zugriff, um Formulare auszuwählen.",
+          "pickNeedsReconnect": "Verbinden Sie die Seite neu, um Formulare auszuwählen."
+        },
+        "confirmOff": {
+          "title": "Lead-Synchronisierung für {name} deaktivieren?",
+          "body": "Diese Seite empfängt keine neuen Leads mehr von Meta. Die ausgewählten Formulare und bereits gespeicherte Leads bleiben erhalten, und Sie können die Lead-Synchronisierung jederzeit wieder aktivieren.",
+          "action": "Lead-Synchronisierung deaktivieren",
+          "cancel": "Abbrechen"
+        }
+      },
+      "forms": {
+        "title": "Lead-Formulare von {name}",
+        "intro": "Das sind die Lead-Formulare, die Meta für diese Seite auflistet. Wählen Sie ein Formular aus, um dessen Leads zu übernehmen; jedes ausgewählte Formular wird im Tab „Webhook“ zu einer Lead-Quelle.",
+        "refresh": "Liste aktualisieren",
+        "loading": "Lead-Formulare werden von Meta geladen",
+        "emptyTitle": "Keine Lead-Formulare",
+        "empty": "Diese Seite hat noch keine Lead-Formulare. Erstellen Sie eines im Meta Ads Manager oder auf der Seite und aktualisieren Sie dann diese Liste.",
+        "caption": "Lead-Formulare der Seite",
+        "col": {
+          "form": "Formular",
+          "status": "Meta-Status",
+          "leads": "Leads",
+          "questions": "Fragen",
+          "consent": "Einwilligungs-Checkbox",
+          "connected": "Verbunden",
+          "lastLead": "Letzter Lead",
+          "lastError": "Letzter Fehler",
+          "actions": "Aktionen"
+        },
+        "formId": "Formular-ID",
+        "formStatus": {
+          "ACTIVE": "Aktiv",
+          "ARCHIVED": "Archiviert",
+          "DELETED": "Gelöscht",
+          "DRAFT": "Entwurf",
+          "unknown": "Unbekannt"
+        },
+        "leadsUnknown": "Von Meta nicht gemeldet",
+        "consentYes": "Hat eine Einwilligungs-Checkbox",
+        "consentNo": "Keine",
+        "connected": "Verbunden",
+        "notConnected": "Nicht ausgewählt",
+        "noLeads": "Noch keine Leads",
+        "pick": "Auswählen",
+        "pickFor": "{name} auswählen",
+        "stop": "Stoppen",
+        "stopFor": "{name} stoppen",
+        "mapFields": "Felder zuordnen",
+        "mapFieldsFor": "Felder von {name} zuordnen",
+        "rules": "Zuweisung und Deal",
+        "rulesFor": "Zuweisung und Deal von {name}",
+        "openSource": "Quelle öffnen",
+        "openSourceFor": "Lead-Quelle von {name} öffnen",
+        "pickedToast": "{name} ausgewählt",
+        "stoppedToast": "{name} gestoppt",
+        "confirmStop": {
+          "title": "Übernahme von {name} beenden?",
+          "body": "Die Lead-Quelle für dieses Formular und die darunter gespeicherten Leads werden gelöscht. Bereits daraus erstellte Kontakte bleiben erhalten. Sie können das Formular später erneut auswählen.",
+          "action": "Übernahme von Leads beenden",
+          "cancel": "Abbrechen"
+        }
+      },
+      "mapping": {
+        "title": "Felder zuordnen: {name}",
+        "close": "Schließen",
+        "noSource": "Die Lead-Quelle dieses Formulars wurde nicht gefunden. Aktualisieren Sie die Liste und versuchen Sie es erneut.",
+        "loading": "Lead-Quelle wird geladen",
+        "intro": "Legen Sie fest, in welches Kontaktfeld jede Antwort dieses Formulars geht. Eine Frage auf „Automatisch“ wird unter den üblichen Namen gesucht, etwa email oder phone_number.",
+        "suggested": "Wir haben diese anhand des Typs jeder Frage ausgefüllt. Prüfen Sie sie und speichern Sie dann.",
+        "multiUse": "Die gespeicherte Zuordnung hat dieselbe Frage für mehr als ein Feld verwendet ({keys}). Beim Speichern bleibt nur die erste erhalten.",
+        "noQuestions": "Meta hat keine Fragen für dieses Formular aufgelistet, daher gibt es nichts zuzuordnen. Die üblichen Namen werden weiterhin gesucht.",
+        "ignore": "Automatisch (hier nicht zugeordnet)",
+        "contactFields": "Kontaktfelder",
+        "contactProperties": "Kontakteigenschaften",
+        "problems": {
+          "duplicateTarget": "Eine andere Frage geht bereits in dieses Feld. Wählen Sie ein anderes.",
+          "propertyKey": "Dieser Eigenschaftsschlüssel ist ungültig."
+        },
+        "conflict": "Jemand anderes hat diese Lead-Quelle geändert. Laden Sie neu, um die andere Version zu sehen; Ihre nicht gespeicherten Auswahlen gehen verloren.",
+        "cancel": "Abbrechen",
+        "save": "Zuordnung speichern",
+        "saved": "Feldzuordnung für {name} gespeichert"
+      },
+      "rules": {
+        "title": "Zuweisung und Deal: {name}",
+        "close": "Schließen",
+        "noSource": "Die Lead-Quelle dieses Formulars wurde nicht gefunden. Aktualisieren Sie die Liste und versuchen Sie es erneut.",
+        "loading": "Lead-Quelle wird geladen",
+        "intro": "Legen Sie fest, wem die von diesem Formular erstellten Kontakte gehören, ob für jeden Lead ein Deal angelegt wird und wer benachrichtigt wird. Änderungen gelten für Leads, die nach dem Speichern eingehen.",
+        "conflict": "Jemand anderes hat diese Lead-Quelle geändert. Laden Sie neu, um die andere Version zu sehen; Ihre nicht gespeicherten Änderungen gehen verloren.",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "saved": "Zuweisung und Deal für {name} gespeichert"
+      },
+      "health": {
+        "title": "Zustand des Meta-Lead-Formulars",
+        "loading": "Formular wird geprüft",
+        "notConnected": "Diese Quelle ist nicht mehr mit einem Meta-Lead-Formular verknüpft, daher gibt es nichts zu prüfen. Wählen Sie das Formular im Tab „Anzeigen“ erneut aus.",
+        "page": "Seite",
+        "form": "Formular",
+        "state": "Lead-Synchronisierung",
+        "leadAccess": "Lead-Zugriff",
+        "lastLead": "Letzter Lead",
+        "never": "Noch keine Leads",
+        "lastError": "Letzter Fehler:",
+        "fixHint": "Öffnen Sie zur Behebung den Tab „Anzeigen“: Lead-Zugriff erteilen, die Seite neu verbinden oder die Lead-Synchronisierung wieder aktivieren.",
+        "openAds": "Tab „Anzeigen“ öffnen"
+      }
     }
   }
 }

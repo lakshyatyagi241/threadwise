@@ -9,7 +9,19 @@ gates:
   permission: inbox.analytics.view
   planFeature: team_performance
 routes: [/inbox/analytics/team]
-keywords: [team performance, report, analytics, agents, replies, resolved, first reply, response time, workload, load]
+keywords:
+  [
+    team performance,
+    report,
+    analytics,
+    agents,
+    replies,
+    resolved,
+    first reply,
+    response time,
+    workload,
+    load,
+  ]
 ---
 
 ## What it is for
@@ -29,7 +41,7 @@ The Team performance report answers "how fast did your team respond?". It shows 
 - **Resolved** counts conversations resolved in the period.
 - **Inbounds** counts messages customers sent in the period.
 - **Avg first reply** is the average time from the start of a conversation to the first reply, over the conversations resolved in the period. It is clock time, not business hours, and it is credited to the person the conversation is assigned to.
-- **Status**, **Load** and **Last seen** show the agent's availability, how many open and pending conversations they hold right now, and when they were last active.
+- **Status**, **Load** and **Last seen** show the agent's availability, how many open conversations they hold right now, and when they were last active.
 
 An agent appears in the table once they have sent at least one reply in the period.
 

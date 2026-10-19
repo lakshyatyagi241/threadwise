@@ -45,7 +45,9 @@
       "form_submissions_monthly": "فی مہینہ فارم جمع کرائیں",
       "ai_form_generations_monthly": "فی مہینہ AI فارم بلڈر جنریشنز",
       "sms_monthly": "ماہانہ SMS",
-      "email_mailboxes": "ای میل میل باکس"
+      "email_mailboxes": "ای میل میل باکس",
+      "email_monthly": "ماہانہ ای میل",
+      "storage_gb": "اسٹوریج (GB)"
     },
     "features": {
       "automation": "آٹومیشن",
@@ -74,13 +76,16 @@
       "storefront_builder": "اسٹور فرنٹ بلڈر",
       "invoicing": "انوائسنگ",
       "forms_and_links": "فارمز اور لنکس",
-      "extra_channels": "Telegram، Facebook اور Instagram",
+      "extra_channels": "Telegram، Facebook، Instagram، LINE، Viber اور WeChat",
       "form_builder": "فارمز",
       "waba_groups": "WhatsApp گروپس",
       "sms": "SMS چینل",
       "help_agent": "مددگار اسسٹنٹ",
       "email_channel": "ای میل (Gmail) چینل",
-      "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)"
+      "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)",
+      "ai_crm_copilot": "AI CRM Copilot",
+      "lead_scoring": "AI لیڈ اسکورنگ",
+      "record_assignment": "ریکارڈ تفویض کے اصول"
     },
     "limitGroups": {
       "messaging": "میسجنگ",
@@ -132,7 +137,9 @@
       "form_submissions_monthly": "کیلنڈر مہینے میں قبول کی گئی فارم جمع کرانے کی درخواستیں، اسپیم کے علاوہ۔ حد سے زیادہ ہونے پر جمع کرانا جائزے کے لیے پھر بھی محفوظ ہوتا ہے، کبھی ضائع نہیں ہوتا۔ 0 = غیر محدود۔",
       "ai_form_generations_monthly": "کیلنڈر مہینے میں AI فارم بلڈر کی جنریشنز، جن میں مرمت کی دوبارہ کوشش بھی شامل ہے۔ 0 = غیر محدود۔",
       "sms_monthly": "کیلنڈر مہینے میں بھیجے گئے آؤٹ باؤنڈ SMS پیغامات۔ 0 = لامحدود۔",
-      "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔"
+      "email_mailboxes": "جُڑے ہوئے Gmail میل باکس (منقطع میل باکس اپنی جگہ خالی کر دیتا ہے)۔ 0 = لامحدود۔",
+      "email_monthly": "کیلنڈر مہینے میں بھیجی گئی ای میلز، جوابات اور مہم کی ای میلز ملا کر۔ 0 = لامحدود۔",
+      "storage_gb": "ورک اسپیس جتنی اسٹوریج رکھ سکتا ہے، GB میں (کال ریکارڈنگز، چیٹ میڈیا، ای میل اٹیچمنٹس اور فائلیں)۔ 0 = لامحدود۔ فی الحال صرف ناپا جاتا ہے: ابھی کچھ بلاک نہیں ہوتا۔"
     },
     "planAddons": {
       "title": "آپ کے پلان پر دستیاب ایڈ آنز",
@@ -561,7 +568,9 @@
       "continueFree": "مفت جاری رکھیں",
       "choose": "{name} منتخب کریں",
       "back": "واپس جائیں",
-      "compare": "تمام پلانز کا موازنہ کریں"
+      "compare": "تمام پلانز کا موازنہ کریں",
+      "appHint": "{feature} مارکیٹ پلیس میں ایپ کے طور پر بھی فروخت ہوتا ہے۔",
+      "appLink": "ایپ دیکھیں"
     }
   }
 }

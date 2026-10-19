@@ -88,6 +88,18 @@ A STOP (or an unsubscribe link, or a person marking the contact as opted out) st
 
 With **Require recorded consent for marketing sends** on, a MARKETING template also needs a recorded consent on that channel; replies never do.
 
+## Broadcasts on Messenger, Telegram, Viber, LINE, WeChat and Instagram
+
+The broadcasts of these channels check consent for every person at the moment they are sent, the first time as well as when a message was held back for the quiet hours. Someone who opted out of marketing (by replying STOP on any channel, through an unsubscribe link, or because a person marked them) is not messaged. With **Require recorded consent for marketing sends** on, a person also needs a recorded consent on that channel; a chat or follower that is not a contact yet has none. A contact marked as a minor is held back when your children setting says so (see below). Replies in a conversation and service notices are never held back by this.
+
+Nobody is dropped silently. On Messenger, Telegram and LINE the person is marked **Blocked** and the broadcast's Blocked count includes them; on Viber they count as **Failed** (Viber has no blocked state); on the Instagram broadcast page the result says how many were not messaged because of consent, with the reason for each group. The reason is the same sentence the contact's Consent card uses, for example "Not allowed: the contact unsubscribed".
+
+WeChat sends one call to an audience that WeChat itself works out. A broadcast to **picked people** leaves out whoever is refused and sends to the rest (it needs at least two people left). A broadcast to **all followers** or to **a tag** cannot leave anyone out, so it is refused, with the reason in the broadcast's error, when your workspace requires recorded consent or when any follower you already know is refused. Send to a picked list instead.
+
+## Shopify and WooCommerce messages
+
+The messages a connected store sends to customers follow the same rule. A message that uses a **marketing** template (an offer, a win-back, and an abandoned cart reminder, a back-in-stock alert or a review reward whose template is in the marketing category) is checked for every customer before it is sent, and again when it was held back for the quiet hours. Someone who opted out of marketing is not messaged, and with **Require recorded consent for marketing sends** on a customer also needs a recorded consent on WhatsApp. The store's Activity tab shows the customer as **Skipped** with the reason, in the same words as the contact's Consent card. Messages that use a utility template (order confirmations, shipping and payment updates, the cash-on-delivery confirmation) are never blocked by this, so a customer who unsubscribed from offers still hears about their order.
+
 ## The unsubscribe link in marketing emails
 
 A marketing email carries a personal unsubscribe link and the standard one-click unsubscribe header, so the mail app can show its own Unsubscribe button. The link opens a short page (no login) with one button. Pressing it records that the contact opted out of marketing emails, and every marketing path then skips them, including WhatsApp and SMS. A marketing email can only go to someone who is a contact, so there is always a link that works.
@@ -100,16 +112,16 @@ These are the places that record it:
 
 - **A person on your team** sets a contact's WhatsApp, SMS or email status to **subscribed**, or uses **Mark as subscribed**. You are asked how they agreed (what they said or signed, and where). A status set to subscribed with no explanation is refused: a status on its own is a label, not proof.
 - **A form** with the marketing box ticked, **the website chat form** and **the booking page** when the person ticks the consent line you wrote for them (see below), and **your Shopify or WooCommerce store** when the customer accepted marketing there.
-- **The customer API, partner and public lead submissions and the Google Sheets add-on**, when the request says the person agreed and explains how. In a sheet, put yes in a `consent` column and say how in a `consent_note` column; a yes without a note is refused for that row, and a no or a blank changes nothing.
+- **The customer API, partner and public lead submissions**, when the request says the person agreed and explains how. A yes without an explanation is refused, and a no or a blank changes nothing.
 
 A grant never overrides a STOP the contact sent: to bring an opted-out contact back, use **Mark as subscribed** on their Consent card and say why.
 
 ## The consent line of the chat widget, a booking page or a store
 
-On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy, and switch the line on. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
+On the chat widget's settings, on a booking type and on your Shopify or WooCommerce connection you can write the wording a person agrees to, add a link to your privacy policy and one to your terms, and switch the line on. If you stored your links and a default wording in the [Compliance center](help:compliance-center), a button offers them; nothing is filled in on its own. Every change to the wording, the link or the switch is saved as a numbered **version**, and a person who ticks the box is recorded against the version they saw. Switching the line on grants nothing by itself.
 
-- **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. A visitor who ticks it is recorded as agreeing on the channels they gave (WhatsApp for a phone, email for an address).
-- **Booking page**: an optional tick box on the booking form. Booking never needs it.
+- **Chat widget**: shown under the details form, only when the widget asks for a phone number or an email. Tick the channels the wording covers (WhatsApp, SMS, email); the sentence is written for you. A visitor who ticks the line is recorded only on those channels, and only where they gave a phone number or an email address.
+- **Booking page**: an optional tick box on the booking form. Booking never needs it. It has the same channel boxes as the chat widget.
 - **Store**: the store's own marketing choice (Shopify's email and SMS consent) is recorded when a customer is synced or orders. Write what that checkbox tells your customers; tick "also count it as WhatsApp consent" only if the wording says so.
 
 You need the permission to manage consent settings to edit these lines.
@@ -121,6 +133,30 @@ A lead, an uploaded file or a form submission never counts as consent by itself.
 - **Leads**: when your form tool or ad platform sends the person's agreement together with the lead (a yes, plus the wording, its version, the form or the ad), it is recorded with the source **Lead capture**. A lead that carries no such proof records nothing, and a test lead never records anything. See [Lead sources](help:lead-sources).
 - **Click-to-WhatsApp ads**: when someone writes to you from an ad, the ad is kept on their contact as the way they reached you. It is not consent: you may reply, and you may not send them marketing until they agree.
 - **Contact import and Broadcast via CSV**: ticking **I have consent to message these contacts** records a consent for each person in the file, with the file name and, if you typed it, the notice or lawful basis and its version. Columns for SMS and email consent record those channels, only for the rows that say yes.
-- **Forms**: a ticked marketing box records marketing consent. A ticked box that is not marketing (for example "I agree to be contacted about my request") is recorded as agreement to **service messages** only, and the Consent card shows it that way, not as a subscription. A box left unticked records nothing.
+- **Forms**: in the form's settings you tick the channels the consent line covers (WhatsApp, SMS, email) and the sentence is written for you. A ticked marketing box records marketing consent on those channels only, and only where the form collected a phone number or an email address. A channel the form has no field for is flagged. A ticked box that is not marketing (for example "I agree to be contacted about my request") is recorded as agreement to **service messages** only, and the Consent card shows it that way, not as a subscription. A box left unticked records nothing.
 
 Nobody who opted out is turned back on by any of these.
+
+## Minors, guardian consent and Do Not Sell or Share
+
+The **Consent** card of a contact also has a **Privacy flags** part. Each switch writes one line to a privacy history that can only be added to, with who did it, when and from where.
+
+- **Minor.** Switch it on for a contact who is under the age of consent. What it does depends on the children question you answered in the [Compliance center](help:compliance-center): if you do not knowingly process minors, marketing to a contact marked as a minor is held back; if minors may be included, or parental consent is required, marketing is held back until a parent or guardian's consent is on record. If you have not answered, the flag is only recorded and shown, and nothing is held back. Service messages such as replies and order or appointment notices are never held back by it. A held send is refused with the reason "marked as a minor".
+- **Parent or guardian consent.** Appears for a minor. **Record guardian consent** asks how the guardian agreed (for example, signed the paper form at the counter) and an optional reference such as a form number. Do not write the guardian's name or contact details. This is evidence only: it never subscribes the contact. To send marketing you still use **Mark as subscribed**, and the strict consent switch still applies. Clearing the minor switch also removes the guardian consent, and both stay in the history.
+- **Do Not Sell or Share.** Shown when the United States CCPA profile is switched on in the Compliance center (and for a contact who already has it). Switch it on when a person asks not to have their data sold or shared. The date and where it came from are shown.
+- **Global Privacy Control.** When a visitor's browser sends the Global Privacy Control signal (`Sec-GPC: 1`) with a public form submission or a message to your website chat widget, and the CCPA profile is on, the contact it belongs to is opted out of sale and sharing, with the source **Global Privacy Control**. Nothing else about the visitor's browser is kept. In the chat widget the contact must exist for the visitor, which happens once they give a phone number or an email address. This does not subscribe or unsubscribe anyone from marketing.
+
+Minor and Do Not Sell or Share badges also show beside the contact's name. Changing a flag needs **contacts.consent.manage**; seeing them needs **contacts.consent.read**. Nothing in the product sells or shares contact data with third parties today, so Do Not Sell or Share is a record that any future path must respect.
+
+## How a minor is detected
+
+Names, emails and phone numbers say nothing about age, so a contact is only marked as a minor when something tells us. There are four ways, and none of them asks everyone by default:
+
+- **A date of birth.** The contact has a **Date of birth** (on its page, in an import column, from a form or chat question, or through the API). If the person is under your workspace's age, the contact is flagged as a minor with the source "date of birth". The flag lapses by itself on the birthday: a nightly check lifts it, and only flags that came from a date of birth. A flag a colleague set, or one from a request, an import, a flow or a declaration box, is never lifted by a birthday. If a colleague switches a date-of-birth flag off, it stays off.
+- **A form, chat or flow question.** A form can have an age check, the website chat can ask for an age before the chat starts, and a flow can ask it with an Ask step. See [forms](help:forms-builder), [website chat bots](help:website-chat-bots) and [flows](help:flows-overview). An under-age answer flags the contact. The page never says which answer passes.
+- **A person.** Switch **Minor** on, on the Consent card, when a customer says they are a child or you learn it on a call.
+- **A flow.** A flow can set the flag when it learns the customer is a minor.
+
+In the contact list, the **Minors** view shows the flagged contacts, and the contact filter and segments know "minor". In an import, map a column to **Date of birth**. The REST API reads and writes `date_of_birth` and reads `is_minor`; the flag itself is read and changed on `/privacy` of a contact.
+
+Asking a date of birth is data you collect, so ask it only where you need it. The least data is the box "I confirm I am at least N years old", which keeps nothing about the age.

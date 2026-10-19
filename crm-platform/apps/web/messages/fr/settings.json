@@ -145,11 +145,6 @@
         "description": "Modifiez vos pipelines d’opportunités, leurs étapes et les motifs de perte.",
         "keywords": "opportunités, étapes de vente, tableau, motif de perte, entonnoir"
       },
-      "tags": {
-        "label": "Étiquettes",
-        "description": "Créez et organisez les étiquettes utilisées pour les contacts et les discussions.",
-        "keywords": "libellés, couleur, color"
-      },
       "saved-replies": {
         "label": "Réponses enregistrées",
         "description": "Rédigez des réponses réutilisables que votre équipe peut envoyer en un clic.",
@@ -360,15 +355,40 @@
         "description": "Voyez la rapidité de chaque agent à répondre et résoudre aujourd'hui, cette semaine ou ce mois-ci.",
         "keywords": "rapports, analyses, agents, temps de réponse, première réponse, résolues, charge, performance"
       },
-      "contact-assignment": {
-        "label": "Attribution des contacts",
-        "description": "Attribuez automatiquement les nouveaux contacts et affaires à la bonne personne, en ignorant les personnes en congé.",
-        "keywords": "attribuer, propriétaire, round robin, tourniquet, nouveau contact, nouvelle affaire, congé, absence, routage des leads"
-      },
       "privacy-requests": {
         "label": "Demandes de données",
         "description": "Répondez aux personnes qui demandent ce que vous détenez sur elles : vérification d'identité, export, effacement avec aperçu et une preuve à conserver.",
         "keywords": "confidentialité, RGPD, GDPR, demande de données, DSR, droit d'accès, exporter les données, effacer, droit à l'oubli, supprimer des données personnelles, blocage légal"
+      },
+      "compliance-center": {
+        "label": "Centre de conformité",
+        "description": "Des outils pour vous aider à respecter vos obligations en matière de vie privée : les lois auxquelles vous êtes soumis, les contacts vie privée, les avis et liens, les sous-traitants ultérieurs, les heures de silence et une liste de contrôle de ce qui est en place.",
+        "keywords": "conformité, vie privée, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, délégué à la protection des données, responsable des réclamations, sous-traitant ultérieur, dpa, conditions, politique de confidentialité, heures de silence, do not call, liste de contrôle, enfants"
+      },
+      "company-properties": {
+        "label": "Propriétés des entreprises",
+        "description": "Ajoutez les champs à conserver sur chaque entreprise.",
+        "keywords": "champs personnalisés, champs, obligatoire, liste déroulante, organisation, compte"
+      },
+      "uncontacted-leads": {
+        "label": "Prospects non contactés",
+        "description": "Choisissez les actions qui comptent comme une prise de contact avec un prospect, et les nouveaux contacts qui démarrent comme non contactés.",
+        "keywords": "non contacté, contacté, prospect, nouveau prospect, premier contact, relance, réattribuer, marquage"
+      },
+      "record-assignment": {
+        "label": "Règles d'attribution des enregistrements",
+        "description": "Attribuez automatiquement les nouveaux contacts, entreprises et affaires à vos responsables commerciaux, selon des règles de priorité.",
+        "keywords": "attribuer, responsable, tourniquet, round robin, nouveau contact, nouvelle affaire, entreprise, congé, routage des leads, charge de travail, territoire"
+      },
+      "follow-ups": {
+        "label": "Relances",
+        "description": "Définissez automatiquement la prochaine relance d'un contact quand votre équipe le contacte, puis choisissez la date et l'heure de l'alerte.",
+        "keywords": "relance, rappel, prochaine action, tâche, planification, reporter, un jour"
+      },
+      "duplicate-leads": {
+        "label": "Leads en double",
+        "description": "Choisissez si un nouveau lead qui correspond à un contact est fusionné avec lui ou devient un nouveau contact.",
+        "keywords": "doublon, fusionner, lead, même téléphone, même e-mail, nouveau contact, source de leads"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

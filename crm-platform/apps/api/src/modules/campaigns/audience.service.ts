@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { Tx } from '@crm/db';
+import { hasPreviousSends, type PreviousSendsAudience } from '@crm/contracts';
 import { cleanNumbers, parseCsv, parseManualNumbers } from './campaign-rules';
 import { ContactsService, SegmentsService } from '../crm';
 import { CampaignsRepository } from './campaigns.repository';
@@ -11,6 +12,8 @@ export interface AudienceInput {
   segmentIds?: readonly string[];
   manualNumbers?: string;
   csvText?: string;
+  /** Who earlier broadcasts and campaigns went to (optionally only those who read, replied...). */
+  previousSends?: PreviousSendsAudience | null;
 }
 
 /** Whether the form carried any audience at all (an edit that sent none leaves the recipients alone). */
@@ -20,7 +23,8 @@ export const hasAudience = (a: AudienceInput): boolean =>
     (a.tagIds?.length ?? 0) +
     (a.segmentIds?.length ?? 0) +
     (a.manualNumbers?.trim().length ?? 0) +
-    (a.csvText?.trim().length ?? 0) >
+    (a.csvText?.trim().length ?? 0) +
+    (hasPreviousSends(a.previousSends) ? 1 : 0) >
   0;
 
 /**
@@ -48,6 +52,7 @@ export class CampaignAudienceService {
       ...(await this.repo.groupMemberIds(tx, orgId, input.groupIds ?? [])),
       ...(await this.repo.tagMemberIds(tx, orgId, input.tagIds ?? [])),
       ...(await this.segments.memberIdsIn(tx, orgId, input.segmentIds ?? [])),
+      ...(await this.repo.previousSendContactIds(tx, orgId, input.previousSends)),
     ];
 
     const csv = parseCsv(input.csvText ?? '');
@@ -55,23 +60,34 @@ export class CampaignAudienceService {
       ...parseManualNumbers(input.manualNumbers ?? ''),
       ...csv.numbers,
     ]);
-    for (const digits of numbers) {
+    // A typed or uploaded number becomes a contact through the contacts service (identity lookup, the plan's contact cap, default stage
+    // and status, audit). Quiet: a recipient list is not live engagement, so no `contact.created` flows start. It grants NO consent: the
+    // person has not agreed to anything by being on a list. The numbers that are already contacts are answered in two queries for the whole
+    // list; only the new ones go through the full create path.
+    const rows = numbers.map((digits) => {
       const attrs = { ...(csv.attrsByPhone.get(digits) ?? {}) };
       const csvName = attrs.name ?? '';
       delete attrs.name;
-      // A typed or uploaded number becomes a contact through the contacts service (identity lookup, the plan's contact cap, default stage
-      // and status, audit). Quiet: a recipient list is not live engagement, so no `contact.created` flows start. It grants NO consent: the
-      // person has not agreed to anything by being on a list.
-      const resolved = await this.contacts.resolveOrCreateByIdentity(tx, orgId, {
-        kind: 'phone',
-        value: `+${digits}`,
-        name: csvName !== '' ? csvName : null,
-        createdName: `Recipient · ${digits.slice(-4)}`,
-        quiet: true,
-      });
+      return {
+        attrs,
+        input: {
+          kind: 'phone' as const,
+          value: `+${digits}`,
+          name: csvName !== '' ? csvName : null,
+          createdName: `Recipient · ${digits.slice(-4)}`,
+          quiet: true,
+        },
+      };
+    });
+    const resolvedAll = await this.contacts.resolveManyByIdentity(
+      tx,
+      orgId,
+      rows.map((r) => r.input),
+    );
+    for (const [i, resolved] of resolvedAll.entries()) {
       // Over the contact cap (or not a usable number) the number is left out; the audience step cannot send to a non-contact anyway.
       if (resolved.outcome !== 'found' && resolved.outcome !== 'created') continue;
-      await this.repo.mergeAttributes(tx, orgId, resolved.contactId, attrs);
+      await this.repo.mergeAttributes(tx, orgId, resolved.contactId, rows[i]!.attrs);
       merged.push(resolved.contactId);
     }
 

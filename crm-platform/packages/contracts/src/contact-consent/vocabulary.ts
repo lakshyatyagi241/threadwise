@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import type { ContactPrivacy } from './privacy';
 
 /** Channels a consent is recorded for. WhatsApp Cloud and the QR number are one phone, so one consent: `whatsapp`. */
 export const CONSENT_CHANNELS = [
@@ -9,6 +10,9 @@ export const CONSENT_CHANNELS = [
   'facebook',
   'instagram',
   'webchat',
+  'line',
+  'viber',
+  'wechat',
   // Added with the purpose registry (BL-140): a voice call and RCS are consent channels too. The ledger column is free text with a
   // pattern check, so older rows and the older API calls are unaffected.
   'voice',
@@ -48,6 +52,9 @@ export const CONSENT_SOURCES = [
   // Lead capture (BL-168, migration 20261205090000): the agreement was given on a lead form or ad that a connector or the generic lead
   // webhook delivered, and the sender passed the proof (wording, version, time, form or ad) along with the lead.
   'lead',
+  // WhatsApp Form submission (TW-WFL, migration 20261225090000, net addition -- Reference never captures consent on a form): a field
+  // mapped to a consent privacy key agreed on a WhatsApp Form, distinct from the web-forms feature's own `form` source.
+  'wa_form',
 ] as const;
 export const consentSourceSchema = z.enum(CONSENT_SOURCES);
 export type ConsentSource = z.infer<typeof consentSourceSchema>;
@@ -113,6 +120,9 @@ export function consentChannelOfKind(kind: string): ConsentChannel | null {
     case 'facebook':
     case 'instagram':
     case 'webchat':
+    case 'line':
+    case 'viber':
+    case 'wechat':
     case 'sms':
     case 'rcs':
     case 'voice':
@@ -153,6 +163,8 @@ export interface ContactConsent {
   optedOut: boolean;
   states: ConsentStateRow[];
   events: ConsentEvent[];
+  /** The minor and Do Not Sell or Share flags of the contact (BL-180). */
+  privacy: ContactPrivacy;
 }
 
 /** Evidence keys a caller may supply, per source. Anything else is dropped; the values are short strings. */
@@ -179,6 +191,9 @@ export const CONSENT_EVIDENCE_KEYS = [
   'leadSourceId',
   'leadFormId',
   'adId',
+  // Minors (BL-180): a REFERENCE to how a parent or guardian agreed (a signed form number, a document id). Evidence of the agreement
+  // only: it never makes a marketing grant by itself and is never a name or free text about the guardian.
+  'guardianConsentRef',
 ] as const;
 
 export const recordConsentSchema = z.object({

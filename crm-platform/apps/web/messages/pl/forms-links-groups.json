@@ -1,0 +1,242 @@
+{
+  "forms-links-groups": {
+    "nav": {
+      "forms": "Formularze WhatsApp",
+      "links": "Linki WhatsApp"
+    },
+    "errors": {
+      "generic": "Coś poszło nie tak. Spróbuj ponownie.",
+      "WFL_FORM_ENGINE_NOT_ENABLED": "Połącz numer WhatsApp Cloud API, aby korzystać z formularzy.",
+      "WFL_FORM_NO_WABA_CREDENTIALS": "Żaden połączony numer WhatsApp Cloud API nie ma działających danych uwierzytelniających.",
+      "WFL_FORM_META_VALIDATION_FAILED": "Meta odrzuciła definicję formularza.",
+      "WFL_FORM_ACCOUNT_VERIFICATION_REQUIRED": "Twoje konto WhatsApp Business musi przejść weryfikację Meta, zanim będzie można publikować formularze.",
+      "WFL_FORM_PUBLISH_FAILED": "Meta nie mogła opublikować tego formularza.",
+      "WFL_LINK_NOT_LIVE": "Ten link jest wstrzymany lub wygasł.",
+      "ROW_VERSION_CONFLICT": "To zostało zmienione w innym miejscu. Odśwież i spróbuj ponownie.",
+      "VALIDATION_FAILED": "Sprawdź podświetlone pola i spróbuj ponownie.",
+      "PLAN_FEATURE_LOCKED": "Przejdź na wyższy plan, aby korzystać z tej funkcji."
+    },
+    "forms": {
+      "heading": "Formularze WhatsApp",
+      "intro": "Twórz formularze, które klienci wypełniają bezpośrednio w WhatsApp, wysyłaj je z automatyzacji i przeglądaj odpowiedzi tutaj.",
+      "loading": "Wczytywanie formularzy…",
+      "retry": "Spróbuj ponownie",
+      "create": {
+        "cta": "Nowy formularz",
+        "creating": "Tworzenie…",
+        "defaultTitle": "Formularz bez nazwy",
+        "defaultField": "Imię i nazwisko"
+      },
+      "stats": {
+        "all": "Wszystkie formularze",
+        "published": "Opublikowane",
+        "draft": "Wersje robocze",
+        "submissions": "Odpowiedzi"
+      },
+      "empty": {
+        "title": "Brak formularzy",
+        "description": "Utwórz formularz, a następnie wyślij go z kroku formularza WhatsApp w automatyzacji."
+      },
+      "table": {
+        "form": "Formularz",
+        "type": "Typ",
+        "fields": "Pola",
+        "submissions": "Odpowiedzi"
+      },
+      "status": {
+        "draft": "Wersja robocza",
+        "published": "Opublikowany",
+        "paused": "Wstrzymany"
+      },
+      "audience": {
+        "lead_capture": "Zbieranie leadów",
+        "survey": "Ankieta",
+        "appointment_booking": "Rezerwacja wizyt",
+        "customer_support": "Obsługa klienta",
+        "sign_up": "Rejestracja",
+        "other": "Inne"
+      },
+      "row": {
+        "edit": "Edytuj",
+        "duplicate": "Duplikuj",
+        "delete": "Usuń"
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć ten formularz?",
+        "deleteMessage": "Aktywne węzły automatyzacji, które do niego się odwołują, przestaną działać.",
+        "deleteConfirm": "Usuń",
+        "cancel": "Anuluj"
+      },
+      "notice": {
+        "saved": "Zapisano.",
+        "published": "Opublikowano w WhatsApp."
+      },
+      "builder": {
+        "back": "Wróć do formularzy",
+        "untitled": "Formularz bez nazwy",
+        "saving": "Zapisywanie…",
+        "saveDraft": "Zapisz wersję roboczą",
+        "savePublish": "Zapisz i opublikuj",
+        "publishing": "Publikowanie…",
+        "basics": "Podstawowe informacje o formularzu",
+        "title": "Tytuł",
+        "audienceType": "Typ",
+        "purpose": "Cel",
+        "sendButtonLabel": "Etykieta przycisku wysyłania",
+        "thankYouNote": "Wiadomość z podziękowaniem",
+        "screens": "Ekrany",
+        "addScreen": "Dodaj ekran",
+        "removeScreen": "Usuń ekran",
+        "screenN": "Ekran {n}",
+        "defaultField": "Imię i nazwisko",
+        "newFieldLabel": "Nowe pole",
+        "fieldKind": "Typ pola",
+        "fieldLabel": "Etykieta",
+        "required": "Wymagane",
+        "removeField": "Usuń",
+        "options": "Opcje (rozdzielone przecinkami)",
+        "optionsPlaceholder": "Opcja 1, Opcja 2, Opcja 3",
+        "mapsTo": "Mapuje do",
+        "mapsToHint": "Zapisuje tę odpowiedź we właściwości kontaktu po wysłaniu formularza.",
+        "mapsToNone": "Nie zapisuj we właściwości kontaktu",
+        "mapsToSystemGroup": "Pola kontaktu",
+        "mapsToCustomGroup": "Właściwości niestandardowe",
+        "mapsToSystem": {
+          "name": "Imię i nazwisko",
+          "first_name": "Imię",
+          "last_name": "Nazwisko",
+          "email": "E-mail",
+          "title": "Stanowisko",
+          "language": "Język",
+          "address": "Adres"
+        },
+        "mapsToPrivacyGroup": "Prywatność i zgoda",
+        "mapsToPrivacy": {
+          "age": "Wiek (weryfikacja nieletnich)",
+          "date_of_birth": "Data urodzenia (weryfikacja nieletnich)",
+          "consent_marketing": "Zgoda marketingowa (WhatsApp)",
+          "consent_service": "Zgoda na usługę (nie marketing)"
+        }
+      },
+      "fieldKind": {
+        "heading": "Nagłówek",
+        "short_text": "Krótki tekst",
+        "paragraph": "Akapit",
+        "email": "E-mail",
+        "phone_number": "Numer telefonu",
+        "number": "Liczba",
+        "date": "Data",
+        "dropdown": "Lista rozwijana",
+        "radio_buttons": "Przyciski opcji",
+        "checkbox": "Pola wyboru"
+      },
+      "submissions": {
+        "heading": "Odpowiedzi",
+        "metaFlowId": "Identyfikator Meta Flow: {id}",
+        "export": "Eksportuj CSV",
+        "empty": {
+          "title": "Brak odpowiedzi",
+          "description": "Odpowiedzi pojawią się tutaj, gdy formularz zostanie wysłany z automatyzacji i ktoś go wypełni."
+        },
+        "table": {
+          "submitted": "Wysłano",
+          "contact": "Kontakt",
+          "phone": "Telefon"
+        }
+      }
+    },
+    "links": {
+      "heading": "Linki WhatsApp",
+      "intro": "Wygeneruj śledzony link, który otwiera WhatsApp z wcześniej wypełnioną wiadomością — do reklam, bio i kodów QR.",
+      "loading": "Wczytywanie linków…",
+      "retry": "Spróbuj ponownie",
+      "searchPlaceholder": "Szukaj według nazwy lub linku",
+      "create": {
+        "cta": "Nowy link"
+      },
+      "stats": {
+        "all": "Wszystkie linki",
+        "live": "Aktywne",
+        "totalClicks": "Łączna liczba kliknięć",
+        "avgClicks": "Śr. kliknięć / link"
+      },
+      "tabs": {
+        "all": "Wszystkie",
+        "live": "Aktywne",
+        "paused": "Wstrzymane"
+      },
+      "status": {
+        "live": "Aktywny",
+        "paused": "Wstrzymany"
+      },
+      "empty": {
+        "title": "Brak linków",
+        "description": "Wygeneruj link do udostępnienia w reklamach, bio lub kodzie QR."
+      },
+      "table": {
+        "link": "Link",
+        "destination": "Cel",
+        "clicks": "Kliknięcia",
+        "lastClicked": "Ostatnie kliknięcie"
+      },
+      "row": {
+        "open": "Otwórz",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano!",
+        "edit": "Edytuj",
+        "duplicate": "Duplikuj",
+        "delete": "Usuń"
+      },
+      "confirm": {
+        "deleteTitle": "Usunąć ten link?",
+        "deleteMessage": "Krótki link przestanie działać natychmiast.",
+        "deleteConfirm": "Usuń",
+        "cancel": "Anuluj"
+      },
+      "notice": {
+        "saved": "Zapisano.",
+        "copyFailed": "Nie udało się skopiować linku."
+      },
+      "builder": {
+        "back": "Wróć do linków",
+        "newHeading": "Nowy link",
+        "step": {
+          "destination": "Cel",
+          "message": "Wiadomość początkowa",
+          "tracking": "Śledzenie"
+        },
+        "name": "Nazwa",
+        "status": "Status",
+        "countryCode": "Kod kraju",
+        "phoneNumber": "Numer telefonu",
+        "welcomeMessage": "Wiadomość początkowa",
+        "welcomeMessageHint": "Wstawiana automatycznie w czacie, gdy ktoś kliknie link.",
+        "slug": "Krótki link",
+        "slugHint": "Tylko litery, cyfry i myślniki. Pozostaw puste, aby wygenerować automatycznie.",
+        "slugPlaceholder": "letnia-wyprzedaz",
+        "expiresAt": "Wygasa",
+        "utmSource": "Źródło UTM",
+        "utmMedium": "Medium UTM",
+        "utmCampaign": "Kampania UTM",
+        "previous": "Wstecz",
+        "next": "Dalej",
+        "mint": "Wygeneruj link",
+        "save": "Zapisz",
+        "saving": "Zapisywanie…",
+        "fixErrors": "Sprawdź pola celu i krótkiego linku.",
+        "mintedHeading": "Twój link",
+        "shortUrl": "Krótki link",
+        "waUrl": "Link WhatsApp",
+        "qrAlt": "Kod QR dla tego linku"
+      },
+      "public": {
+        "missingTitle": "Nie znaleziono linku",
+        "missingBody": "Ten link nie istnieje lub został usunięty.",
+        "goneTitle": "Link już nieaktywny",
+        "goneBody": "Ten link jest wstrzymany lub wygasł.",
+        "errorTitle": "Coś poszło nie tak",
+        "errorBody": "Nie udało się otworzyć tego linku. Spróbuj ponownie."
+      }
+    }
+  }
+}

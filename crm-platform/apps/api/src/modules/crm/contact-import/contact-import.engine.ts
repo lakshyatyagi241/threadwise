@@ -15,11 +15,17 @@ import { DisplayIdService } from '../../../kernel/identifiers/display-id.service
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { ContactGroupsRepository } from '../contact-groups/contact-groups.repository';
 import { ContactQuotaService } from '../contacts/contact-quota.service';
-import { ContactConsentService, intakeEvidence } from '../../contact-consent';
+import {
+  ContactConsentService,
+  ContactPrivacyService,
+  MinorDetectionService,
+  intakeEvidence,
+} from '../../contact-consent';
 import { TagsService } from '../tags/tags.service';
 import { ContactImportRepository, type ImportJobRow } from './contact-import.repository';
 import { parseCsv, type Delimiter } from './csv-parser';
 import { extractRow, resolveMapping, type ParsedRow, type ResolvedMapping } from './import-rows';
+import { ContactTouchService } from '../lead-handling/contact-touch.service';
 
 const { contacts, contactGroupMembers, contactTags } = schema;
 
@@ -93,6 +99,9 @@ export class ContactImportEngine {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly consent: ContactConsentService,
+    private readonly privacy: ContactPrivacyService,
+    private readonly minors: MinorDetectionService,
+    private readonly touch: ContactTouchService,
   ) {}
 
   /** Runs (or resumes) an import job to the end. Needs a request context (the processor sets one). */
@@ -212,9 +221,13 @@ export class ContactImportEngine {
       );
     }
 
+    // What already exists, read once for the whole file: one query for the groups and one for the tags, not one per distinct name.
+    const knownGroups = await this.groupsRepo.findByNames(tx, orgId, [...groupNames.values()]);
+    const knownTags = await this.tags.findManyByNames(tx, orgId, [...tagNames.values()]);
+
     const groupIds = new Map<string, number>();
     for (const [key, name] of groupNames) {
-      let group = await this.groupsRepo.findByName(tx, orgId, name);
+      let group = knownGroups.get(lower(name.trim()));
       if (!group) {
         const created = await this.groupsRepo.insertIfAbsent(tx, orgId, {
           name,
@@ -242,6 +255,11 @@ export class ContactImportEngine {
 
     const tagIds = new Map<string, number>();
     for (const [key, name] of tagNames) {
+      const known = knownTags.get(lower(name.trim()));
+      if (known) {
+        tagIds.set(key, known.id);
+        continue;
+      }
       // Permission to create tags was checked when the import was accepted; a worker has no
       // grants. The plan's tag limit is checked here, as everywhere.
       const { row } = await this.tags.findOrCreateByName(tx, orgId, name, {
@@ -286,6 +304,21 @@ export class ContactImportEngine {
   }
 
   /** Existing contacts by canonical phone: through the identity table, else the stored number. Oldest wins. */
+  /** Of these contact ids, the ones under a legal hold (one statement per chunk; nothing is read when the workspace has no hold at all). */
+  async heldAmong(tx: Tx, orgId: number, ids: number[]): Promise<Set<number>> {
+    const out = new Set<number>();
+    if (ids.length === 0) return out;
+    const any = await tx.execute(sql`SELECT org_has_active_legal_hold(${orgId}::bigint) AS held`);
+    if ((any.rows[0] as { held: boolean }).held !== true) return out;
+    for (let i = 0; i < ids.length; i += 5000) {
+      const res = await tx.execute(sql`
+        SELECT c AS id FROM unnest(${`{${ids.slice(i, i + 5000).join(',')}}`}::bigint[]) AS c
+         WHERE is_subject_held(${orgId}::bigint, 'contact', c)`);
+      for (const r of res.rows as Array<{ id: number | string }>) out.add(Number(r.id));
+    }
+    return out;
+  }
+
   async findExisting(tx: Tx, orgId: number, keys: string[]): Promise<Map<string, number>> {
     const found = new Map<string, number>();
     for (let i = 0; i < keys.length; i += 2000) {
@@ -341,6 +374,8 @@ export class ContactImportEngine {
     // 2. who already exists
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));
     const existing = await this.findExisting(tx, orgId, keys);
+    // An import that would overwrite a person under a legal hold (BL-295) skips that row: evidence is not rewritten by a spreadsheet.
+    const held = await this.heldAmong(tx, orgId, [...new Set(existing.values())]);
 
     // A repeated number is merged, not lost, but it is listed in the report so the person sees what was folded in.
     const cellsByLine = new Map(slice.map((rec) => [rec.line, rec.cells]));
@@ -377,6 +412,10 @@ export class ContactImportEngine {
         continue;
       }
       const knownId = state.fileMap.get(row.phone) ?? existing.get(row.phone);
+      if (knownId !== undefined && held.has(knownId)) {
+        reject(row.line, 'legal_hold');
+        continue;
+      }
       if (knownId !== undefined) {
         if (state.fileMap.has(row.phone)) {
           state.counters.duplicatesInFile += 1;
@@ -422,10 +461,13 @@ export class ContactImportEngine {
           language: o.row.language ?? null,
           title: o.row.title ?? null,
           address: o.row.address ?? null,
+          dateOfBirth: o.row.dateOfBirth ?? null,
           message: o.row.memo ?? null,
           status: o.row.status ?? options.status ?? null,
           // "import" when nothing says otherwise, so the Imported filter and the source column agree
           source: o.row.source ?? options.source ?? 'import',
+          timezone: o.row.timezone ?? null,
+          timezoneSource: o.row.timezone ? 'import' : null,
           importJobId: job.id,
           ownerId: userId,
           createdBy: userId,
@@ -449,6 +491,13 @@ export class ContactImportEngine {
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
       await this.addIdentities(tx, identityRows);
+      // Start uncontacted when the workspace says imported contacts do (BL-290). Off by default: no write.
+      await this.touch.markNewMany(
+        tx,
+        orgId,
+        inserted.map((r) => r.id),
+        'import',
+      );
 
       if (options.triggerAutomations) {
         for (const row of inserted) {
@@ -475,6 +524,13 @@ export class ContactImportEngine {
       if (o.row.title) patch.title = o.row.title;
       if (o.row.address) patch.address = o.row.address;
       if (o.row.memo) patch.message = o.row.memo;
+      // A zone in the file fills a contact that has none (or one an earlier import set); it never replaces a zone a person or the API chose.
+      if (o.row.timezone) {
+        patch.timezone = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN ${o.row.timezone} ELSE ${contacts.timezone} END`;
+        patch.timezoneSource = sql`CASE WHEN ${contacts.timezone} IS NULL OR ${contacts.timezoneSource} = 'import' THEN 'import' ELSE ${contacts.timezoneSource} END`;
+      }
+      // The importer's date replaces the stored one: a file is a person's deliberate correction (the sweep reads the new date).
+      if (o.row.dateOfBirth) patch.dateOfBirth = o.row.dateOfBirth;
       await tx
         .update(contacts)
         .set(patch)
@@ -483,6 +539,26 @@ export class ContactImportEngine {
         sql`(${orgId}, ${o.contactId}, 'phone', ${o.row.phone}, true)`,
         ...(o.row.email ? [sql`(${orgId}, ${o.contactId}, 'email', ${o.row.email}, true)`] : []),
       ]);
+    }
+
+    // 5a. age (BL-190): a date of birth brings the minor flag in line with it (source `dob`); a yes in the minor column flags the contact
+    //     (source `import`, the file as evidence). A no, a blank and a word nobody knows change nothing, and a file never clears a flag.
+    for (const o of ops.values()) {
+      if (o.contactId === undefined) continue;
+      if (o.row.dateOfBirth) {
+        await this.minors.evaluateInTx(tx, orgId, o.contactId, new Date(), { dobChanged: true });
+      }
+      if (o.row.minor) {
+        await this.privacy.changeInTx(tx, orgId, {
+          contactId: o.contactId,
+          kind: 'minor',
+          value: true,
+          source: 'import',
+          evidence: { fileName: job.fileName, reference: job.uuid },
+          actorUserId: userId,
+          idempotencyKey: `import:${job.uuid}:${o.contactId}:minor`,
+        });
+      }
     }
 
     // 5b. consent: the importer confirmed they have it, so contacts of the batch get ledger grants (never over an opt-out). The proof is
@@ -671,9 +747,11 @@ function mergeRows(a: ParsedRow, b: ParsedRow): ParsedRow {
     'memo',
     'status',
     'source',
+    'dateOfBirth',
   ] as const) {
     if (b[key]) (out as unknown as Record<string, unknown>)[key] = b[key];
   }
+  if (b.minor) out.minor = true;
   // A later row for the same number refines the answer, except with a blank cell.
   if (b.consent) out.consent = b.consent;
   if (b.consentSms) out.consentSms = b.consentSms;

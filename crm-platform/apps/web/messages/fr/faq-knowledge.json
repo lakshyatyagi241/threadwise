@@ -6,8 +6,7 @@
         "faqs": "FAQ",
         "test": "Tester",
         "unanswered": "Sans réponse",
-        "insights": "Statistiques",
-        "settings": "Paramètres"
+        "insights": "Statistiques"
       },
       "unansweredCount": "{count, plural, one {# message sans réponse} many {# de messages sans réponse} other {# messages sans réponse}}"
     },
@@ -34,14 +33,7 @@
       "limitReached": "Ce flux a atteint sa limite de FAQ. Supprimez les FAQ ou variantes inutilisées, ou demandez à l’administrateur de la plateforme de la relever."
     },
     "banner": {
-      "enabledToast": "Les réponses FAQ sont activées.",
-      "engineOff": "Les réponses FAQ ont été désactivées par la plateforme. Les clients ne reçoivent aucune réponse FAQ tant qu’elles ne sont pas réactivées.",
-      "modelChanged": "La plateforme a changé le modèle d’IA après le réglage de ce seuil. Les scores ont évolué : vérifiez votre sensibilité.",
-      "reviewSensitivity": "Vérifier la sensibilité",
-      "offNoRight": "Demandez à une personne disposant de la permission faq.settings.manage (en général un administrateur de l’espace de travail) de l’activer.",
-      "enable": "Activer les réponses FAQ",
-      "offTitle": "Les réponses FAQ sont DÉSACTIVÉES pour ce flux",
-      "offBody": "Vous pouvez rédiger et tester les FAQ de ce flux, mais les clients ne reçoivent pas de réponses tant que vous ne l’activez pas."
+      "engineOff": "Les réponses FAQ ont été désactivées par la plateforme. Les clients ne reçoivent aucune réponse FAQ tant qu’elles ne sont pas réactivées."
     },
     "list": {
       "title": "FAQ",
@@ -51,25 +43,15 @@
         "total": "FAQ",
         "active": "Actives",
         "paused": "En pause",
-        "variations": "Formulations",
-        "pending": "Indexation",
-        "pendingHint": "Actif en quelques secondes",
-        "failed": "Échec de l’indexation",
-        "failedHint": "À vérifier"
+        "variations": "Formulations"
       },
-      "failedBanner": "{count, plural, one {# formulation n’a pas pu être indexée} many {# de formulations n’ont pas pu être indexées} other {# formulations n’ont pas pu être indexées}} et ne peut donc pas encore correspondre aux messages des clients.",
-      "showFailed": "Afficher les FAQ en échec",
       "search": "Rechercher des FAQ",
       "searchPlaceholder": "Rechercher dans les questions et formulations",
       "filter": {
         "status": "Statut",
         "anyStatus": "Tous les statuts",
         "category": "Catégorie",
-        "anyCategory": "Toutes les catégories",
-        "indexing": "Indexation",
-        "anyIndexing": "Toutes",
-        "pending": "Indexation en cours",
-        "failed": "Échec"
+        "anyCategory": "Toutes les catégories"
       },
       "status": {
         "active": "Actives",
@@ -108,7 +90,6 @@
       "col": {
         "question": "Question",
         "answer": "Réponse",
-        "indexing": "Formulations actives",
         "answered": "Avec réponse (90 jours)",
         "status": "Statut",
         "actions": "Actions"
@@ -130,12 +111,6 @@
         "rowBody": "« {question} » et toutes ses formulations seront supprimées définitivement. Cette action est irréversible.",
         "delete": "Supprimer",
         "cancel": "Annuler"
-      },
-      "indexing": {
-        "summary": "{ready} actives, {pending} en indexation, {failed} en échec",
-        "ready": "{count} actives",
-        "pending": "{count} en indexation",
-        "failed": "{count} en échec"
       },
       "stepMissing": "Étape manquante",
       "subtitle": "Les questions que les clients posent dans {flow} et ce que répond le bot. Ces FAQ ne répondent qu’à l’intérieur de ce flux.",
@@ -202,14 +177,6 @@
           "other": "Une étape d’un autre flux",
           "otherHint": "Transférer la conversation à un autre flux."
         }
-      },
-      "advanced": {
-        "title": "Avancé : sensibilité pour cette FAQ uniquement",
-        "custom": "Utiliser une sensibilité personnalisée pour cette FAQ",
-        "sliderLabel": "Correspondre à partir de",
-        "body": "Par défaut, chaque FAQ utilise la sensibilité de ce flux. Utilisez une valeur personnalisée quand celle-ci correspond trop facilement (augmentez) ou trop rarement (diminuez).",
-        "workspace": "La sensibilité de ce flux est de {value} %.",
-        "following": "Suit la sensibilité de ce flux ({value} %)."
       },
       "problem": {
         "question": {
@@ -299,7 +266,6 @@
       "add": "Ajouter",
       "pasteMany": "Coller plusieurs",
       "full": "Cette FAQ a atteint sa limite de {max} formulations.",
-      "failedNotice": "{count, plural, one {# formulation n’a pas pu être indexée} many {# de formulations n’ont pas pu être indexées} other {# formulations n’ont pas pu être indexées}}. Modifiez et enregistrez la formulation pour réessayer.",
       "suggest": "Suggérer avec l’IA",
       "suggestSaveFirst": "Enregistrez d’abord la FAQ, l’IA pourra ensuite suggérer des formulations.",
       "suggesting": "Demande de suggestions à l’IA",
@@ -318,14 +284,6 @@
         "overflow": "{count, plural, one {# ligne ne tient} many {# de lignes ne tiennent} other {# lignes ne tiennent}} pas dans la limite de formulations et {count, plural, one {a été écartée} many {ont été écartées} other {ont été écartées}}.",
         "more": "et {count} de plus",
         "add": "Ajouter {count, plural, one {# formulation} many {# de formulations} other {# formulations}}"
-      },
-      "state": {
-        "ready": "Active",
-        "pending": "Indexation",
-        "pendingHint": "Enregistrée. Elle sera prise en compte dans quelques secondes.",
-        "failed": "Échec",
-        "failedHint": "Modifiez et enregistrez la formulation pour réessayer.",
-        "noReason": "Aucune raison n’a été indiquée"
       },
       "confirm": {
         "title": "Supprimer cette formulation ?",
@@ -451,7 +409,14 @@
       "learned": "Ajouté à « {question} ». Il recevra une réponse désormais.",
       "pickTitle": "À quelle FAQ ajouter ce message ?",
       "loadMore": "Charger plus",
-      "loadingMore": "Chargement"
+      "loadingMore": "Chargement",
+      "fallback": {
+        "title": "Quand aucune FAQ ne répond",
+        "hint": "Cette réponse est envoyée au client dont aucune FAQ ne traite le message. Le message reste affiché ci-dessous pour que vous puissiez enrichir la FAQ.",
+        "placeholder": "Désolé, je n'ai pas compris. Un membre de l'équipe vous répondra.",
+        "save": "Enregistrer la réponse de repli",
+        "saved": "Réponse de repli enregistrée"
+      }
     },
     "picker": {
       "close": "Fermer",
@@ -539,9 +504,7 @@
       },
       "hist": {
         "title": "Scores des messages",
-        "hint": "Chaque barre représente une plage de scores. La ligne en pointillés est votre sensibilité actuelle.",
-        "advice": "Augmentez le seuil si de mauvaises réponses passent, diminuez-le si trop de messages restent sans réponse.",
-        "tune": "Modifier la sensibilité"
+        "hint": "Chaque barre représente une plage de scores. La ligne en pointillés est votre sensibilité actuelle."
       },
       "top": {
         "title": "FAQ les plus efficaces",
@@ -568,98 +531,6 @@
         "bucketTooltip": "{from}-{to} % : {answered} avec réponse, {unanswered} sans réponse",
         "thresholdMarker": "Seuil {value} %"
       }
-    },
-    "settings": {
-      "title": "Paramètres des FAQ",
-      "unsaved": "Modifications non enregistrées",
-      "discard": "Abandonner",
-      "save": "Enregistrer les paramètres",
-      "saved": "Paramètres enregistrés.",
-      "readOnly": "Vous pouvez consulter ces paramètres. Les modifier nécessite la permission faq.settings.manage, généralement détenue par les administrateurs de l’espace de travail.",
-      "engineOff": "Les réponses FAQ sont désactivées par la plateforme. Vos réglages s’appliqueront dès qu’elles seront réactivées.",
-      "conflict": "Quelqu’un d’autre a enregistré ces paramètres. Rechargez pour voir sa version, puis refaites votre modification.",
-      "reload": "Recharger les paramètres",
-      "modelChanged": {
-        "title": "Vérifier votre sensibilité",
-        "body": "La plateforme a changé le modèle d’IA après le réglage de ce seuil. Les scores ont évolué : vérifiez votre sensibilité. L’enregistrement la confirme."
-      },
-      "enable": {
-        "title": "Réponses FAQ",
-        "on": "Activé",
-        "off": "Désactivé",
-        "label": "Répondre aux clients avec les FAQ de ce flux",
-        "onBody": "Tant que ce flux est actif, un message client qu’aucun déclencheur par mot-clé ni flux en cours n’a pris en charge est comparé aux FAQ de ce flux. Le bot répond avec la meilleure réponse ou envoie le client à l’étape visée par la FAQ.",
-        "offBody": "Les FAQ de ce flux ne répondent pas aux clients. Vous pouvez toujours les rédiger et les tester."
-      },
-      "sens": {
-        "title": "Sensibilité",
-        "hint": "Précision de correspondance exigée pour un message. Les scores dépendent du modèle {model}.",
-        "label": "Répondre quand la correspondance atteint au moins",
-        "presets": "Préréglages de sensibilité",
-        "preset": {
-          "strict": "Strict",
-          "balanced": "Équilibré",
-          "forgiving": "Souple"
-        },
-        "looser": "Répond davantage",
-        "stricter": "Répond moins",
-        "recommendedMark": "recommandé : {value} %",
-        "explain": "À {value} %, un message reçoit une réponse uniquement si sa meilleure correspondance obtient {value} % ou plus. Plus haut, il y a moins de réponses mais plus sûres ; plus bas, il y en a davantage avec plus de risque d’erreur.",
-        "useRecommended": "Utiliser la valeur recommandée ({value} %)",
-        "modelScale": "Les scores ne sont comparables qu’au sein d’un même modèle. Si la plateforme change de modèle ({model}), vérifiez cette valeur."
-      },
-      "margin": {
-        "title": "Garde-fou contre l’ambiguïté",
-        "hint": "Empêche le bot de deviner entre deux FAQ dont les scores sont presque identiques.",
-        "label": "Avance minimale sur la deuxième meilleure",
-        "off": "Désactivé",
-        "explain": "Lorsque la meilleure FAQ devance la suivante de moins que cette valeur, le bot reste silencieux et consigne le message comme sans réponse. Laissez désactivé si vos FAQ se recoupent rarement."
-      },
-      "log": {
-        "title": "Messages clients dans le journal",
-        "label": "Conserver les messages clients dans le journal des correspondances",
-        "onBody": "Le texte de chaque message est conservé 90 jours pour que vous voyiez pourquoi il a reçu ou non une réponse et que vous puissiez en tirer des enseignements. Il est ensuite supprimé.",
-        "offBody": "Seuls les scores et les résultats sont conservés, jamais le texte. Vous voyez toujours à quelle fréquence le bot répond, mais vous ne pouvez pas apprendre des messages sans réponse."
-      },
-      "facts": {
-        "title": "Modèle et limites",
-        "model": "Modèle d’IA de correspondance",
-        "faqs": "FAQ",
-        "variations": "Formulations utilisées",
-        "perFaq": "Formulations autorisées par FAQ",
-        "of": "{used} sur {max}"
-      },
-      "how": {
-        "title": "Fonctionnement de la correspondance",
-        "exact": "Exacte : le message est identique à une formulation enregistrée, sans tenir compte de la casse ni des espaces.",
-        "semantic": "Par le sens : le message est comparé par le sens à chaque formulation active, des mots différents peuvent donc correspondre.",
-        "trigram": "Repli orthographique : si le fournisseur d’IA est indisponible, les lettres sont comparées, ce qui ne détecte que les fautes de frappe.",
-        "threshold": "Le meilleur score est comparé à la sensibilité. Au-dessus, la FAQ répond ; en dessous, le message est listé dans Sans réponse.",
-        "verify": "Seconde vérification (facultative) : une correspondance qui atteint tout juste la sensibilité peut être revérifiée par un petit modèle de chat, qui peut uniquement retenir une réponse."
-      },
-      "who": "La modification de ces paramètres nécessite la permission faq.settings.manage.",
-      "leave": {
-        "title": "Quitter sans enregistrer ?",
-        "body": "Vos modifications de ces paramètres ne sont pas enregistrées.",
-        "leave": "Quitter",
-        "stay": "Rester"
-      },
-      "verify": {
-        "title": "Seconde vérification des cas limites",
-        "hint": "Un petit modèle de chat revérifie les correspondances qui atteignent tout juste le seuil.",
-        "unavailable": "La plateforme a désactivé la seconde vérification : elle ne s’exécute pas, même si vous l’activez ici. Contactez l’administrateur de votre plateforme.",
-        "label": "Revérifier les cas limites avec un second avis",
-        "on": "Activée",
-        "off": "Désactivée",
-        "onBody": "Quand une correspondance atteint tout juste le seuil, un petit modèle de chat lit le message du client et la FAQ, puis dit si la réponse convient. Il ne peut que dire non : il ne déclenche jamais une réponse.",
-        "offBody": "Toute correspondance qui atteint le seuil reçoit une réponse sans second contrôle.",
-        "bandLabel": "À partir de quand une correspondance est un cas limite",
-        "bandValue": "+{value}%",
-        "explainOn": "Les correspondances dont le score va de {from} % à {to} % sont vérifiées par {model}. Un « non » signifie qu’aucune réponse n’est envoyée et que le message apparaît dans Sans réponse.",
-        "explainOff": "Toute correspondance dont le score atteint {threshold} % ou plus reçoit une réponse. Activez la seconde vérification pour revérifier les cas les plus limites.",
-        "cost": "Chaque vérification envoie le message du client et la question de la FAQ au modèle : quelques centaines de jetons, et environ une seconde de plus pour une réponse limite. Les correspondances hors de cette plage ne sont jamais vérifiées. Si la vérification échoue, n’est pas disponible ou si la limite horaire est atteinte, la correspondance est conservée comme s’il n’y avait pas de vérification."
-      },
-      "subtitle": "Activez les réponses FAQ pour {flow} et réglez la précision de correspondance requise."
     },
     "flowNode": {
       "start": "Le début du flux",

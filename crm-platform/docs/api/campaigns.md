@@ -23,16 +23,16 @@ starts.
 
 ## Read
 
-| Method and path                 | What it returns                                                                                                                                                                                                                                                                                 |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /campaigns`                | `data` (12 a page), `page`, `stats`, `statusCounts`, `messageTypes`, `deliveryHealth`, `queueHealth`. Query `status`, `type`, `range`, `q`, `page`                                                                                                                                              |
-| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`                                                                                                                                                                                            |
-| `GET /campaigns/sample-csv`     | `campaign-recipients-sample.csv`: `name,country_code,phone` and two rows                                                                                                                                                                                                                        |
-| `GET /campaigns/:id/config`     | The whole campaign for the edit form, with `recipientContactIds` and the end date as typed (`expiresAtLocal`)                                                                                                                                                                                   |
-| `GET /campaigns/:id`            | Rates, funnel, hourly and daily charts, outcomes, per-variant results, preview, audience, failures, replies, opt-outs                                                                                                                                                                           |
-| `GET /campaigns/:id/live`       | Live stats, polled every 12 s while `inFlight` (scheduled or running): `status`, `inFlight`, `counts`, `queued` (waiting to send), `processing` (claimed by a run now), `rates`, newest failures, failure summary, `fetchedAt`. Recounted from the recipient rows on every call                 |
-| `GET /campaigns/:id/statistics` | Statistics: `breakdown` (every recipient once, at its status, adds up to `total`), the cumulative `counts` and `rates`, and the `lifecycle` (created, scheduled for, first message, last run, completed). Both reads need `camp.campaigns.read` and answer 404 for another workspace's campaign |
-| `GET /campaigns/:id/recipients` | The recipient log, 50 a page, filter `status`, search `q` (name or phone)                                                                                                                                                                                                                       |
+| Method and path                 | What it returns                                                                                                                                                                                                                                                                                                                      |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /campaigns`                | `data` (12 a page), `page`, `stats`, `statusCounts`, `messageTypes`, `deliveryHealth`, `queueHealth`. Query `status`, `type`, `range`, `q`, `page`                                                                                                                                                                                   |
+| `GET /campaigns/builder`        | `senders`, `templates`, `groups` and `tags` with member counts, `flows`, `requiresApprovedTemplates`. `?channel=sms` or `?channel=email` scopes the senders and templates to that channel (see Email campaigns)                                                                                                                      |
+| `GET /campaigns/sample-csv`     | `campaign-recipients-sample.csv`: `name,country_code,phone` and two rows                                                                                                                                                                                                                                                             |
+| `GET /campaigns/:id/config`     | The whole campaign for the edit form, with `recipientContactIds` and the end date as typed (`expiresAtLocal`)                                                                                                                                                                                                                        |
+| `GET /campaigns/:id`            | Rates, funnel, hourly and daily charts, outcomes, per-variant results, preview, audience, failures, replies, opt-outs                                                                                                                                                                                                                |
+| `GET /campaigns/:id/live`       | Live stats, polled every 12 s while `inFlight` (scheduled or running): `status`, `inFlight`, `counts`, `queued` (waiting to send), `held` (of the queued, waiting for the quiet hours), `processing` (claimed by a run now), `rates`, newest failures, failure summary, `fetchedAt`. Recounted from the recipient rows on every call |
+| `GET /campaigns/:id/statistics` | Statistics: `breakdown` (every recipient once, at its status, adds up to `total`), the cumulative `counts` and `rates`, and the `lifecycle` (created, scheduled for, first message, last run, completed). Both reads need `camp.campaigns.read` and answer 404 for another workspace's campaign                                      |
+| `GET /campaigns/:id/recipients` | The recipient log, 50 a page, filter `status`, search `q` (name or phone)                                                                                                                                                                                                                                                            |
 
 Every count comes from the recipient rows. The list and the detail also finish a campaign whose recipients are all resolved
 (`completed`, or `failed` when nothing was sent), so the screens never disagree with the log. Phone numbers are shown in full
@@ -56,7 +56,7 @@ people messaged, how many received it, read it, **wrote back** and **filled an a
 
 `GET /v2/broadcasts/:id/summary` and `/summary/people` answer the same shapes for the legacy broadcasts (`kind: 'broadcast'`, from
 `broadcast_contacts`, permission `bcast.broadcasts.read`). A wizard campaign, a recurring run and an SMS campaign are campaign rows, so the
-campaign route covers them.
+campaign route covers them. So does an email campaign.
 
 ```json
 {
@@ -167,6 +167,61 @@ the tokens are written to the usage ledger either way. The key is never returned
 - 502 `CAMP_AI_PROVIDER_FAILED`: the vendor errored, timed out or answered nothing.
 - 422 `CAMP_AI_BAD_JSON`: the answer was not a JSON object (a code fence around it is tolerated); `errors[0].message` carries the first 600 characters.
 
+## Email campaigns
+
+A campaign whose sender is a connected mailbox (`senderKey` `email:<mailbox uuid>`, stored as `provider` `email` and `deviceId` the mailbox id) is an
+email campaign, as Reference's `?channel=email`. It reuses the builder, the audience, the schedule (send now, scheduled, recurring), pause, resume,
+cancel and resend, the reports and the auto-end date; only the transport and what a mail can carry differ. The engine is `EmailEngineSender`
+(`modules/channel-email`), registered in the engine registry in the API and the worker like the SMS one.
+
+**The sender.** `GET /campaigns/builder?channel=email` lists the connected mailboxes the caller may send from as `senders` (`key`, `label` the
+mailbox's display name, `phone` the address, `engine` `email`, `engineLabel` `Email`), no templates, and `hidden` counts the mailboxes that cannot send
+(`error`: needs reconnecting; `not_connected`: disconnected). It lists nothing when the plan has no Email add-on. A shared mailbox may be picked by anyone
+who may send a campaign; a personal mailbox only by its owner. The default builder (no `channel`) never lists a mailbox, and a template broadcast
+(`POST /broadcasts`) refuses an `email:` sender with a 422 on `senderKeys`.
+
+**The form.** A typed message only. `customHeader` is the **subject** (at most 150 characters, `CAMPAIGN_EMAIL_SUBJECT_MAX`; blank falls back to the campaign name; the
+`{{...}}` tags are merged per contact). 422 `VALIDATION_FAILED` on the field: `type` (not `custom` or `text`), `templateId` (a template), `flowId`, `abTesting`, `mediaUrl`
+(Reference hides the template picker, the flow choice, the A/B test and the attachment on this channel), `customHeader` (over 150). Plan: 422 `PLAN_FEATURE_LOCKED` without the
+`email_channel` feature. What a mail does not use is cleared whatever the form says, so the saved campaign equals what is sent: `customFooter`, buttons and quick
+replies, `throttleMinSec`, `throttleMaxSec`, `batchSize`, `batchPauseMin`, `dailyLimit`, `windowStart`, `windowEnd`, and `trackingEnabled` (Reference's mail runner honours the auto-end date alone).
+The wallet is never asked (no launch precheck, no per-recipient charge): email has its own plan caps.
+
+**The run** (the order of Reference's `EmailCampaignRunner`):
+
+1. A lock per campaign (the run lock) so two runs never mail anyone twice; a heartbeat keeps the sweeper away.
+2. Recipients: opted-out contacts are stamped `unsubscribed` (the contact flag, and a withdrawal on the `email` channel in the consent ledger); a contact with no address is `skipped` ("No email address on this contact");
+   the same address on two contacts (compared lower-cased) is mailed once, the later rows are `skipped` ("Duplicate email address — already sent on this run"). None of these is a failure.
+3. The mailbox: still connected, else the run fails ("no sender"); it is never swapped for another. The plan has the Email add-on, else the run fails ("Your plan does not include Email.").
+   The plan's `email_monthly` cap (mails sent this calendar month, replies and campaign mail together, 0 = unlimited) is checked once at the start (the run fails with the plan sentence when the month is spent)
+   and again per mail, so a run cannot overshoot it: the recipients past the cap fail for good with the plan sentence.
+4. Per recipient: the end date and Pause/Cancel are read before each mail; the address must look like an address ("Invalid email address or empty message" otherwise); the ConsentGate is asked for the `email` channel and purpose
+   `marketing_messaging` (a withdrawn contact is refused for good); the mailbox's send guard (`MailSendGuard`): an address that hard-bounced within `MAIL_BOUNCE_BLOCK_DAYS` is refused for good with the reason,
+   and the mailbox's hourly cap (its own `send_limit_per_hour`, else `MAIL_SEND_LIMIT_PER_HOUR`) **stops the run and schedules the campaign again after a slot frees** (the rest stays `queued`, nobody fails), so a long campaign spreads over the hours the mailbox allows.
+5. The mail: subject = merged Header (line breaks turned into spaces: a CR or LF that arrives through a contact value cannot open a second header; cut at 255; "Message" when empty), the body HTML-escaped with a plain-text part,
+   the signed unsubscribe link (text and HTML) and the RFC 8058 headers `List-Unsubscribe` and `List-Unsubscribe-Post`; a unique Message-ID per mail (a recurring run mails the same contact again). Sent through the mailbox's driver (Gmail, Microsoft or IMAP/SMTP)
+   with the mailbox's own token handling. A provider failure is recorded on the recipient and retried under the campaign's retry settings (`retryFailed`).
+6. The mail is written as a message of the mailbox's inbox thread (`source` `campaign`, `meta.email` with the subject), linked to the contact, so their reply lands beside it. Reference keyed the thread by the address; here each mail opens a thread of the provider's own thread id, and a reply joins it.
+   A mailbox with no inbox channel yet (before its first sync) is sent from but not mirrored.
+7. The campaign ends `completed`, or `failed` when nothing was sent and some failed, or is scheduled again for retries and the mailbox's hourly cap. The platform's default end date (24 hours after the first send) does not apply to a mail: only the operator's `expiresAt` does.
+
+The recipients list and the export show the contact's address where other campaigns show the phone. Reports, receipts and the wallet: a mail has no delivery receipt (Gmail only says `sent`), the outbox's delivery report is not emitted for it and nothing is charged.
+
+### The picture (an addition beyond Reference)
+
+`POST /campaigns/ai-image` (200, needs `camp.campaigns.create`): a brief in, one generated image out, stored as a marketing upload (the same storage and link rules as `POST /media/marketing`) so the builder can attach it to the campaign. Reference's builder writes the text only.
+
+Request: `provider` (only `openai`), `model` (default `gpt-image-1`), `businessName` (required), optional `product`, `offer`, `tone`, `customPrompt` (up to 1,000, what the picture should show), `size` (`1024x1024` default, `1536x1024`, `1024x1536`). The prompt sent asks for a clean marketing picture and bans text, logos, watermarks and real people's faces.
+
+Response: `{ image: { url, name, mime, kind: "image", size }, model }`. The image comes back from the vendor as base64 (no address of the vendor's is ever fetched) and is stored under the workspace's folder.
+
+The key and allowance rules are the text generation's. An image is priced per picture, so the usage ledger gets a flat 4,000 token-equivalent per picture (billed against the key's side). A refused or failed call writes nothing and stores nothing.
+
+- 422 `CAMP_AI_NO_KEY` / `CAMP_AI_LIMIT_REACHED`: as for the text.
+- 422 `CAMP_AI_IMAGE_REFUSED`: the vendor's safety system refused the prompt.
+- 502 `CAMP_AI_PROVIDER_FAILED`: the vendor failed, timed out (90 s) or returned no image.
+- 422 (validation): the workspace storage is local, so a provider could not fetch the file; cloud object storage must be on.
+
 ## Run
 
 | Method and path                | What it does                                                                                                               |
@@ -190,6 +245,11 @@ daily limit), the gap (none for official engines; the platform gap with 20 perce
 the others; a batch pause every `batchSize`), the variant's content, merge, link tracking, billing, the send and its record.
 
 - **Retries:** a refused send keeps the row `failed` with a next attempt at `60 s x 2^(n-1)` (at most an hour); after 3 attempts it is final. Meta's ecosystem throttle (131049) is tried twice, 6 h and 12 h apart.
+- **Quiet hours (BL-177):** a MARKETING campaign puts a recipient whose local time is inside the workspace's quiet hours back to `queued` with
+  `held_until` / `held_reason` (the claim skips it until then), sends the rest, and is scheduled again for the minute the first of them opens.
+  The ConsentGate screens the audience again at the start of every run. A utility-only campaign is never held. A guided campaign's follow-up
+  step is looked at again when the hours end. The live stats carry `held` (of `queued`) and the recipients list `heldUntil` / `heldReason`. A
+  recurring campaign sends its held recipients at its next occurrence (BL-192).
 - **End:** completed; or `scheduled` again for the closed window, tomorrow's quota or the retries; a recurring campaign moves to its next date with every recipient queued again.
 - **End date:** the operator's `expiresAt`, else (not Baileys, not deliberately paced) 24 hours after the first send. Past it, what was not sent is failed ("auto-expired") and the campaign ends.
 - A custom message needs an engine that can send one; the Cloud API cannot (Reference's rule), so those recipients fail for good with the reason.
@@ -221,7 +281,7 @@ request and response shapes are `broadcast-wizard.ts` and `recurrence.ts` in `@c
 
 | Method and path                                  | Key     | What it does                                                                                                                                                                                                                                                                                                                                                                                                     |
 | ------------------------------------------------ | ------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /templates`                                 | create  | Approved templates (not OTP, number connected) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                                                                                            |
+| `GET /templates`                                 | create  | Approved templates (not OTP, not an SMS template, number connected, nothing the campaign gate would refuse) with `slots` (`body.1`, `header.1`, `button.0`), language and category                                                                                                                                                                                                                               |
 | `GET /audience-sources`                          | create  | `groups` and `segments` with `memberCount` (a segment's is its last stored count)                                                                                                                                                                                                                                                                                                                                |
 | `POST /audience/count`                           | create  | `{ audience }` to `matching`, `optedOut`, `invalidNumber`, `recipients`, `countries`, `approximate`, `invalidConditions`                                                                                                                                                                                                                                                                                         |
 | `POST /drafts`, `GET /drafts/:id`                | create  | Start and read a draft. A draft takes whatever is filled in so far                                                                                                                                                                                                                                                                                                                                               |
@@ -304,6 +364,101 @@ day. A claim whose worker died with no attempt logged goes back; one with an att
 never resent). No extra cost: the wallet charges a message when its delivery is reported, once per provider message id, and a failed message is not
 charged, so a retry is charged only if it is delivered. The 6 h / 12 h backoff of TW-CAMP-012 is not applied to a wizard campaign.
 
+### Follow-up steps (an addition beyond Reference)
+
+`followUps` on the draft, 0 to 3 steps in order, for Cloud API numbers (`waba:` sender) only. Reference's campaign screens have no such step; it is
+built from the meeting's "Add a follow-up": after the campaign message goes out, a recipient's reaction (or silence) triggers another message or starts a flow.
+
+```json
+{ "trigger": "not_read", "waitMinutes": 120, "action": { "kind": "template", "templateId": "<uuid>" } }
+{ "trigger": "replied",  "waitMinutes": 1440, "action": { "kind": "flow", "flowId": "<uuid>" } }
+```
+
+- `trigger`: `replied`, `read` (watch for `waitMinutes`: the step fires the moment the event happens and lapses, ending the chain, when the time runs out first)
+  or `not_replied`, `not_read` (wait `waitMinutes`, then fire if the event did not happen; an event before then ends the chain at once).
+  `waitMinutes` is 1 to 10080 (seven days). Step 1 is measured from the campaign message, step 2 from step 1's message, and so on.
+- `action`: an approved template sent from the campaign's number (the template's own variable defaults fill it), or a published flow started for the recipient.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `follow_up_template_required`, `follow_up_flow_required` (path `followUps.<i>.action`) or `follow_up_cloud_api_only` (path `followUps`).
+  A template must be usable from the number (same check as the campaign's template), a flow must exist in the workspace. A recurring series carries the steps to every run.
+- `reply` is a message from the contact in the inbox after the base time; the first one since the campaign went out also becomes the recipient's `response` (its statistics
+  and the `campaign.contact_replied` event). `read` is the provider's read report of the message before the step.
+- Worker (`WizardFollowUpService`, every 10 seconds): `arm` puts a recipient whose message went out into its chain (`wp_campaign_contacts.follow_up_state`, `follow_up_next`,
+  `follow_up_base_at`, `follow_up_check_at`); `run` claims the recipients due to be looked at (one worker takes each; a crashed one only delays it) and decides: wait, fire, skip or lapse.
+  A step is logged in `camp_follow_up_attempts` with a unique `(recipient, step)` row BEFORE the provider is called, so it happens at most once. A recipient who opted out, whose
+  consent is gone, whose message failed, or whose wallet cannot pay never gets a later step; the log row says why. The campaign's Smart Delivery gap spaces the sends.
+- Cost: a template follow-up is charged like any campaign message, by the wallet once its delivery is reported (`camp_follow_up_receipt_lookup` names the attempt of the message id,
+  `CampaignReceiptsService` records the step's own delivery and read, and emits `message.delivery_reported`). A resend of a recipient restarts its chain.
+- Limits: a follow-up template is a second marketing message to someone who has not engaged, and Meta may refuse it with its frequency cap (`131049`). The step is given its claim back and tried again every 24 hours, for up to seven days after its base time, then logged `failed` with the provider's text and the chain ends. A step whose worker died after claiming it is logged `failed` (`interrupted before the provider answered`), never sent again. A paused campaign's recipients are not looked at until it resumes (a watching step may then have lapsed).
+- `GET /broadcast-wizard/broadcasts/:id`: `runList[].followUps` has, per step, `waiting`, `sent`, `delivered`, `read`, `flowsStarted`, `skipped`, `lapsed`, `failed`.
+
+### The same templates in both builders
+
+The classic builder's pickers (`GET /campaigns/builder`, WhatsApp, not the SMS card) list exactly the templates of `GET /broadcast-wizard/templates`: the broadcast composer's list narrowed to what the wizard offers, so a workspace never has templates in one screen and none in the other.
+
+### Templates in sequence (an addition beyond Reference)
+
+Reference's recurring campaign repeats one template. A recurring broadcast of the guided wizard can send several, in turn: `templateSequence` on the draft, 0 to 9 entries `{ templateId, variables }` after the draft's own `templateId` (so up to 10 templates), each with its own variable mapping (a template has its own placeholders).
+
+- The runs of the series take them in turn, round and round, counted by the runs made so far (an occurrence stepped over after an outage does not use one up): run 1 sends the draft's template, run 2 the first entry, ..., and after the last the sequence starts again.
+- A run's own draft (`wizard.draft` of its campaign) is the series' blueprint with that run's template and mapping and no sequence of its own, so a retry of failed messages, the frequency-cap retries and the follow-up steps of a run read the right template and variables. Follow-ups, pacing, retries and the audience are the series' for every run.
+- Launch: 422 `CAMP_WIZARD_INCOMPLETE` with `sequence_not_recurring` (a sequence on a schedule that does not repeat), `sequence_with_ab` (an A/B test already has two templates), `sequence_template_required` (an entry with no template, or one that does not exist in the workspace, path `templateSequence.<i>.templateId`) or `variable_unmapped` (path `templateSequence.<i>.variables.<slot>`). Each template must be usable from the number, like the first.
+- `GET /broadcasts/:id`: a series has `templateCount` (1 without a sequence) and each run in `runList` has the `templateName` it sent.
+- Not done: the credit check at launch prices the first template only (a sequence with templates of another category can cost more per message); a run whose template was deleted or refused fails with the reason and the series goes on.
+
+### Previous sends as the audience (an addition beyond Reference)
+
+Reference's Scheduled composer can take "Previous broadcast" as its recipients (broadcasts only). Here every audience can, and a send is a broadcast or a campaign (each run of a recurring broadcast is a campaign). `previous` on the wizard's audience and `previousSends` on the classic create and update bodies are `{ "sends": [{ "kind": "broadcast" | "campaign", "id": "<uuid>" }], "outcome": "all" }`, up to 20 sends. A contact in several is one recipient; it is another source like a group (the audience is the union), and opted-out and unusable numbers are still left out last.
+
+`outcome` narrows the contacts of those sends:
+
+| outcome                  | who                                                                                      |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| `all`                    | everyone the message was meant for (a recipient who was skipped or opted out is not one) |
+| `delivered`              | it reached their phone (delivered or read)                                               |
+| `read`                   | they read it (a reply counts: they saw it)                                               |
+| `not_read`               | it was sent to them and they did not read it, nor reply                                  |
+| `replied`, `not_replied` | they replied / it was sent and they did not (campaigns only)                             |
+| `clicked`                | they clicked a tracked link (campaigns only)                                             |
+| `failed`                 | it could not be delivered to them                                                        |
+
+A broadcast records delivery and reading only, so `replied`, `not_replied` and `clicked` with a broadcast in the list are 422 (`previous_outcome_unsupported`). A send of another workspace matches nobody (the lookup is by the send's own organization).
+
+The picker's rows: `GET /broadcast-wizard/audience-sources` has `previousSends` and `GET /campaigns/builder` has `previousSends`: finished broadcasts and every campaign that has gone out, newest first (100), each with `recipients`, `delivered`, `read`, `failed` and, for a campaign, `replied` and `clicked`. The Scheduled composer's `queues` (`GET /scheduled/options`) lists the same sends with `kind`, and its `queueIds` take a broadcast's or a campaign's uuid (no outcome filter there, as in Reference). The classic builder's edit form rebuilds its recipients from the campaign's resolved contacts, so a previous-sends choice is not shown again on edit.
+
+### Several numbers sharing one send (an addition; carries Reference's TW-BCAST-006 and 014)
+
+The draft takes `senderKeys` (the numbers a send is shared across, each `<engine>:<uuid>`, up to 50; empty means the one number in `senderKey`) and
+`senderShare` (weight per key, 0 to 1000). `senderKey` stays the first number, the campaign's own (`provider` and `deviceId` of the `wpcampaigns` row);
+a draft saved before this has neither and sends from one number exactly as before. `wizardSenderPicks`, `splitSizes`, `splitAudience` and
+`senderSplit` in `@crm/contracts` are the one definition of the rule, so the Review step shows the counts the launch cuts.
+
+- **Saving a draft** (`PUT /drafts/:id`) checks each pick: connected, and not a mailbox. A pick that is not is a 422 `VALIDATION_FAILED` with
+  `errors[].path` `senderKeys.<n>`.
+- **Launch** resolves the picks again (422 `CAMP_TEMPLATE_NOT_ALLOWED`, path `senderKeys.<n>`, message `sender_not_connected` or `sender_is_mailbox`),
+  then requires the template, variant B, every sequence template and every follow-up template to be sendable from every pick. A template tied to one
+  WhatsApp connection is sendable from numbers of the same Meta account (`wa_provider_configs.meta_json.waba_id`) and the number it is tied to; a template
+  tied to none, from any. Otherwise 422 `CAMP_TEMPLATE_NOT_ALLOWED` with `errors[] = { path: "senderKeys.<n>", message: "template_not_on_sender" }`; nothing is
+  written and the draft stays editable. A send from one number is not checked this way (unchanged).
+- **The split.** The audience (contact order) is cut into sequential slices by weight: a missing, empty, 0 or negative weight counts as 1; each number gets the
+  floor of its share and the leftover goes one at a time to the largest fractions (ties to the number picked first). Every contact lands in exactly one slice and
+  the sizes add up. Each recipient row stores its number in `sender_provider` and `sender_device_id` (null for a one-number send). `wizard.launch.split` keeps
+  `{ key, weight, count }` per number. With fewer contacts than numbers some numbers get nobody.
+- **Wallet.** One precheck for the whole audience: the template's category, and so the price, is the same for every number.
+- **The run.** Each number is a lane: it opens its own sender, holds its own sender lock, paces itself and sends only the recipients on its rows, all lanes at
+  once. The campaign lock, the daily limit and the end state belong to the campaign and are decided once after every lane stopped. A number that cannot be
+  opened fails only its own recipients (`Sender unavailable: ...`); if none can, the campaign fails like an ordinary one. A number another run holds is skipped
+  and the campaign is scheduled again about a minute later.
+- **131049 retries and follow-ups** go out from the number the recipient was first sent from (the campaign's number when the row has none). The test send goes from
+  the first number. A recurring broadcast splits every run the same way; a run that cannot (a number gone, a template no longer fitting) is a refused run.
+- **Any engine.** A Cloud API number, a Twilio number and a personal (device) number can share a send; a mailbox cannot. The template-account rule above
+  applies to Cloud API numbers only. Each lane sends through its own engine's adapter; a personal-number lane waits while the platform switch is off.
+- **Classic campaigns** (`POST /campaigns`, `PUT /campaigns/:id`) take the same `senderKeys` and `senderShare`, and the create cuts the recipients the same way
+  (a flow campaign or a mailbox refuses it: 422 on `senderKeys`). An edit that changes the numbers cuts the recipients already on the campaign again.
+  `GET /campaigns/:id/config` returns `senderKeys` (the campaign's own first) and `senderShare` (the recipients each number was given) for the edit form.
+- **Per-number figures.** `GET /campaigns/:id` and `GET /broadcast-wizard/broadcasts/:id` carry `senders`: `{ key, label, engine, recipients, sent, delivered,
+failed }` per number (a series: all its runs together), in the order the numbers were first used; empty for a send from one number.
+- Not covered: the test send goes from the first number only.
+
 ### Test send
 
 `{ "draftId": "...", "recipients": "+919876543210,+14155550123" }`: the draft's template and variables resolved for the first messageable contact of
@@ -321,3 +476,7 @@ registry is a sandbox behind the same `EngineSender` port. It decides from the r
 capping on the first `d` sends (`1049`: the original fails, the first retry goes through; `2049`: also the first retry; `9049`: never), `...0000` is
 undeliverable (131026, not retried), `...9999` is refused on the spot (131030), anything else is delivered. It reports afterwards through the same receipt
 path a webhook takes (a delayed job on the campaign queue). Real Meta behaviour of these paths is not verified here.
+
+## Quiet hours on the wizard test send (BL-191)
+
+`POST /v2/broadcast-wizard/test-send` with a MARKETING template: a number whose local time is inside the workspace's quiet hours gets a result with `status: "held"` and `heldUntil`; the test is sent at the opening by a `test-send-release` job (hours, wallet and draft are checked again). A utility template is sent at once. See [compliance.md](compliance.md).

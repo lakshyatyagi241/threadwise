@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { archiveEraseMarker } from '../../data-retention';
 import { OWNER_DELETED_GRACE_DAYS } from './lifecycle.policy';
 
 /** One row of the lifecycle view: the org plus its reminder counters for the current cycle. */
@@ -21,6 +22,8 @@ export interface LifecycleRow {
   retention_exempt_until: Date | null;
   retention_exempt_by: string | null;
   legal_hold: boolean;
+  /** A hold placed by the workspace itself on a person or on all its records (BL-295): the hold wins, like the operator's. */
+  tenant_hold: boolean;
   exempt_by_plan: boolean;
   reminders_archive: number;
   reminders_delete: number;
@@ -53,6 +56,7 @@ export class LifecycleRepository {
     SELECT o.id, o.uuid, o.name, o.slug, o.status, o.plan, o.last_activity_at, o.archived_at, o.deleted_at,
            o.archive_after_days, o.delete_after_days, o.retention_exempt,
            o.retention_exempt_reason, o.retention_exempt_until, o.retention_exempt_by, o.legal_hold,
+           org_has_active_legal_hold(o.id) AS tenant_hold,
            EXISTS (
              SELECT 1 FROM org_plan_state ps
                LEFT JOIN plans pl ON pl.slug = o.plan AND pl.kind = 'plan'
@@ -104,6 +108,7 @@ export class LifecycleRepository {
       SELECT id FROM organizations
        WHERE id > ${afterId}
          AND legal_hold = false
+         AND NOT org_has_active_legal_hold(id)
          AND (
            -- idle workspaces: the cheap pre-filter, the policy decides
            (status IN ('active', 'archived')
@@ -334,10 +339,18 @@ export class LifecycleRepository {
         RETURNING id`);
       filesQueued += res.rows.length;
     }
+    // The cold event archive is keyed by workspace, not by a column of any table; one marker has the purge worker delete its objects.
+    await tx.execute(sql`
+      INSERT INTO storage_purge_queue (org_id, org_uuid, storage_key)
+      VALUES (${id}::bigint, ${uuid}::uuid, ${archiveEraseMarker(id)})`);
     // audit_log / event_outbox / security_events carry field values, IPs and user agents and have no cascading FK.
     await tx.execute(sql`DELETE FROM audit_log WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM event_outbox WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM security_events WHERE subject_org_id = ${id}`);
+    // The analytics event stream and its rollups also have no foreign key to organizations.
+    await tx.execute(sql`DELETE FROM an_events WHERE org_id = ${id}`);
+    await tx.execute(sql`DELETE FROM an_rollup_hour WHERE org_id = ${id}`);
+    await tx.execute(sql`DELETE FROM an_rollup_day WHERE org_id = ${id}`);
     await tx.execute(sql`DELETE FROM organizations WHERE id = ${id}`);
     return { filesQueued, ordersKept };
   }

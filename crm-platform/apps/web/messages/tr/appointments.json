@@ -41,7 +41,10 @@
       "notStarted": "Bu işlem yalnızca rezervasyon başladıktan sonra yapılabilir.",
       "alreadyStarted": "Bu rezervasyon zaten başladı, bu yüzden artık değiştirilemez.",
       "bookingOff": "Bu hizmet için şu anda rezervasyon yapılamıyor.",
-      "notDeletable": "Gelecek rezervasyonları olduğu sürece bu silinemez."
+      "notDeletable": "Gelecek rezervasyonları olduğu sürece bu silinemez.",
+      "notDrifted": "Bu randevu zaten Google etkinliğiyle eşleşiyor. Sayfa yeniden yüklendi.",
+      "calendarNotConnected": "Google Calendar bağlı değil. Google hesabı sayfasından yeniden bağlayıp tekrar deneyin.",
+      "calendarFailed": "Google yanıt vermedi veya değişikliği reddetti. Lütfen birazdan tekrar deneyin."
     },
     "picker": {
       "timeZone": "Saat dilimi",
@@ -156,7 +159,8 @@
       "yesterday": "Dün",
       "rowLabel": "Rezervasyonu aç: {title}",
       "noName": "Ad yok",
-      "needsReview": "İnceleme gerekiyor"
+      "needsReview": "İnceleme gerekiyor",
+      "outOfSync": "Takvim senkronize değil"
     },
     "row": {
       "moreFor": "{title} için diğer işlemler",
@@ -232,7 +236,7 @@
       "declineTitle": "Bu talep reddedilsin mi?",
       "declineMessage": "Müşteriye talebin reddedildiği bildirilir ve saat yeniden boşa çıkar.",
       "declineConfirm": "Talebi reddet",
-      "remindersNote": "Hatırlatmalar rezervasyon türünü izler. Teslimat hatırlatma bazında izlenmez."
+      "remindersNote": "Hatırlatmalar randevu türüne bağlıdır. Randevu ayarlarından veya randevu türünün içinden belirlenir."
     },
     "source": {
       "chat": "Bir sohbet akışı",
@@ -269,7 +273,13 @@
       "rescheduled": "Rezervasyon yeni saate taşındı.",
       "linkCopied": "Yönetim bağlantısı kopyalandı.",
       "copyFailed": "Bağlantı kopyalanamadı.",
-      "declined": "Talep reddedildi."
+      "declined": "Talep reddedildi.",
+      "calendarPushed": "Google'a gönderildi: etkinlik artık bu randevuyla eşleşiyor.",
+      "calendarAccepted": {
+        "cancelled": "Google'daki değişiklik kabul edildi: randevu iptal edildi.",
+        "rescheduled": "Google'daki değişiklik kabul edildi: randevu yeni saate taşındı.",
+        "acknowledged": "Google'daki değişiklik kabul edildi. Randevu olduğu gibi kalıyor."
+      }
     },
     "typesList": {
       "breadcrumb": "Gezinti yolu",
@@ -397,9 +407,6 @@
         "depositTooHigh": "Kapora toplamdan (ücret artı vergi) fazla olamaz.",
         "cancelFeeInvalid": "25,00 gibi bir tutar girin.",
         "cancelWindowInvalid": "0 ile {cancelWindowMax} arasında tam sayı olarak dakika girin.",
-        "reminderInvalid": "Başlangıçtan önce 1 ile {reminderMax} arasında tam dakika girin.",
-        "remindersDuplicate": "Her hatırlatmanın farklı bir zamanı olmalıdır.",
-        "remindersTooMany": "Bir rezervasyon türünde en fazla {reminders} hatırlatma olabilir.",
         "questionLabelRequired": "Soruya bir etiket verin (en fazla {questionLabelMax} karakter).",
         "questionsTooMany": "Bir rezervasyon türünde en fazla {questions} soru olabilir.",
         "questionOptionsRequired": "Satır başına bir tane olacak şekilde en az bir seçenek ekleyin.",
@@ -407,7 +414,12 @@
         "overridesInvalid": "Tarih istisnaları listesinde işaretlenen tarihleri düzeltin.",
         "descriptionTooLong": "Açıklama en fazla {descriptionMax} karakter olabilir.",
         "locationTooLong": "Konum en fazla {locationMax} karakter olabilir.",
-        "server": "Sunucu bu değeri kabul etmedi. Kontrol edip tekrar deneyin."
+        "server": "Sunucu bu değeri kabul etmedi. Kontrol edip tekrar deneyin.",
+        "reminderInvalid": "Süre için tam sayı girin, en fazla 30 gün.",
+        "remindersDuplicate": "Her hatırlatma veya takip mesajı için farklı bir zaman gerekir.",
+        "remindersTooMany": "Bir randevu türünde en fazla {reminders} hatırlatma ve takip mesajı olabilir.",
+        "reminderChannelsNone": "En az bir kanal seçin.",
+        "reminderBodyTooLong": "Mesaj, konu veya etiket çok uzun."
       },
       "service": {
         "title": "Hizmet ayrıntıları",
@@ -556,11 +568,12 @@
         "hint": "Rezervasyonlar bu olmadan da çalışır. Müsait/meşgul saatleri eşitlemek ve Meet bağlantıları eklemek için Randevular, Ayarlar altında Google Takvim'i bağlayın.",
         "unavailable": "Google Takvim bu platform için henüz kurulmadı. Bu ayarlar, kurulduğunda kullanılmak üzere rezervasyon türüyle birlikte saklanır.",
         "calendarId": "Takvim",
-        "calendarPlaceholder": "birincil",
         "spreadsheetId": "Sayfaya satır ekleme (isteğe bağlı)",
-        "spreadsheetPlaceholder": "Elektronik tablo kimliği",
         "createMeet": "Her rezervasyon için bir Google Meet bağlantısı oluştur",
-        "calendarDefault": "Çalışma alanı takvimi"
+        "calendarDefault": "Çalışma alanı takvimi",
+        "connectFirst": "Listeden seçim yapmak için <link>Google hesabınızı</link> bağlayın.",
+        "spreadsheetNone": "Sayfa yok",
+        "spreadsheetNoListing": "Drive dosya listesi izni verilmediği için sayfalarınız listelenemiyor. Bu izni Google hesabı sayfasından ekleyin."
       },
       "messages": {
         "title": "Yaşam döngüsü mesajları",
@@ -586,25 +599,6 @@
           "reschedule": "Merhaba {name}, {type} randevunuz {slot} tarihine taşındı. Ayrıntılar: {manage_link}"
         },
         "templatesNote": "Onaylı WhatsApp şablonları henüz seçilemiyor. Mesajlar yukarıdaki düz metin olarak gönderilir."
-      },
-      "reminders": {
-        "title": "Hatırlatmalar",
-        "hint": "Süreler farklı olmalıdır (1440 = 24 sa önce, 180 = 3 sa önce). En fazla {max}.",
-        "add": "Hatırlatma ekle",
-        "quickAdd": "Hızlı ekle",
-        "quick": {
-          "h24": "24 sa",
-          "h3": "3 sa",
-          "h1": "1 sa",
-          "m15": "15 dk"
-        },
-        "empty": "Hatırlatma yok. Müşteriler yalnızca onayı alır.",
-        "offsetOf": "Hatırlatma {n}, başlangıçtan kaç dakika önce",
-        "minBefore": "dk önce",
-        "labelPlaceholder": "24sa",
-        "labelOf": "Hatırlatma {n}, etiket",
-        "remove": "{n}. hatırlatmayı kaldır",
-        "count": "{count} / {max} hatırlatma"
       },
       "questions": {
         "title": "Anket",
@@ -962,7 +956,7 @@
         "calendarSaved": "Takvim kaydedildi.",
         "confirmOff": {
           "title": "Google Takvim bağlantısı kesilsin mi?",
-          "message": "Yeni rezervasyonlar takviminize gitmeyi bırakır ve meşgul saatleri artık okunmaz. Takviminizdeki mevcut etkinlikler orada kalır ve Google'a bu erişimi geri çekmesi bildirilir.",
+          "message": "Yeni rezervasyonlar takviminize gitmeyi bırakır ve meşgul saatleri artık okunmaz. Akışlarınızdaki Google adımları da bu bağlantıyı paylaştığı için durur. Takviminizdeki mevcut etkinlikler orada kalır ve Google'a bu erişimi geri çekmesi bildirilir.",
           "confirm": "Bağlantıyı kes",
           "cancel": "Koru"
         },
@@ -972,7 +966,8 @@
           "failed": "Bağlanma tamamlanmadı. Tekrar deneyin; başarısız olmaya devam ederse platform yöneticinizden Google kurulumunu kontrol etmesini isteyin.",
           "expired": "Bu deneme çok uzun sürdü. Yeniden başlamak için Bağlan'a basın.",
           "not_configured": "Google Takvim bu platform için kurulmadı. Platform yöneticinizden Google OAuth istemcisini eklemesini isteyin.",
-          "missing_scope": "Google gereken tüm takvim izinlerini vermedi. Tekrar bağlanın ve tüm kutuları işaretli tutun."
+          "missing_scope": "Google gereken tüm takvim izinlerini vermedi. Tekrar bağlanın ve tüm kutuları işaretli tutun.",
+          "cancelled": "İptal ettiniz. Hiçbir şey bağlanmadı."
         },
         "whatTitle": "Bunun yaptığı",
         "what": {
@@ -1046,7 +1041,200 @@
         "badHours": "Çalışma saatlerindeki vurgulanan saatleri düzeltin."
       },
       "notAvailable": "Çalışma alanı genelinde rezervasyon ayarları bu sunucuda kullanılamıyor. Bunun yerine her rezervasyon türünün kendi saatleri, saat dilimi, hatırlatmaları ve mesajları vardır.",
-      "openTypes": "Rezervasyon türlerini aç"
+      "openTypes": "Rezervasyon türlerini aç",
+      "outlook": {
+        "title": "Outlook / Microsoft 365",
+        "description": "Onaylanan rezervasyonların yazılması ve meşgul olduğunuz saatlerin slotları kapatması için bir Microsoft takvimi bağlayın.",
+        "provider": "Outlook takvimi",
+        "providerSub": "Microsoft 365 ve Outlook.com",
+        "status": {
+          "unavailable": "Kullanılamıyor",
+          "disconnected": "Bağlı değil",
+          "connected": "Bağlı",
+          "needs_reconnect": "Yeniden bağlanmalı"
+        },
+        "loading": "Bağlantı denetleniyor",
+        "unavailableTitle": "Outlook bu platform için henüz kurulmadı",
+        "unavailableBody": "Bir çalışma alanının bağlanabilmesi için platform yöneticinizin Microsoft uygulamasını kaydetmesi gerekir (Admin, Ayarlar, Microsoft Takvim). Rezervasyonlarınız bundan etkilenmez.",
+        "disconnectedBody": "Bağlı değil. Bağlandığınızda Microsoft açılır; orada hesabı seçer ve takvim erişimini paylaşmayı onaylarsınız.",
+        "disconnectedReadOnly": "Bağlı değil. Bağlamasını çalışma alanı yöneticisinden isteyin.",
+        "reconnectTitle": "Microsoft bağlantıyı artık kabul etmiyor",
+        "reconnectBody": "Erişim geri çekildi veya süresi doldu; bu yüzden rezervasyonlar takviminize yazılmıyor ve takvimdeki meşgul saatler okunmuyor. Devam etmek için yeniden bağlanın.",
+        "reconnectBodyAccount": "{account} hesabının erişimi geri çekildi veya süresi doldu; bu yüzden rezervasyonlar takviminize yazılmıyor ve takvimdeki meşgul saatler okunmuyor. Devam etmek için yeniden bağlanın.",
+        "account": "Microsoft hesabı",
+        "calendar": "Takvim",
+        "primaryCalendar": "Ana takviminiz",
+        "connectedAgo": "Bağlanma zamanı: {when}",
+        "writesHere": "Onaylanan rezervasyonlar bu takvime yazılır.",
+        "readsOnly": "Yalnızca meşgul saatleri okunur. Rezervasyonlar diğer takviminize yazılır.",
+        "health": {
+          "MICROSOFT_RATE_LIMITED": "Microsoft istekleri sınırlıyor. Rezervasyonlar otomatik olarak yeniden denenir.",
+          "MICROSOFT_ACCESS_DENIED": "Microsoft bu takvime erişimi reddetti. Hesabın bir posta kutusu olduğunu ve takvimini paylaşabildiğini kontrol edin.",
+          "MICROSOFT_UNAVAILABLE": "Microsoft yanıt vermedi. Otomatik olarak yeniden denenir."
+        },
+        "errors": {
+          "notConfigured": "Outlook bu platform için kurulmadı. Platform yöneticinizden Microsoft uygulamasını kaydetmesini isteyin.",
+          "notConnected": "Bağlı bir Outlook takvimi yok. Sayfayı yenileyin ve yeniden bağlanın.",
+          "providerFailed": "Microsoft yanıt vermedi. Birazdan tekrar deneyin.",
+          "notYours": "Bu bağlantıyı başka biri başlattı, bu yüzden hiçbir şey bağlanmadı. Ondan bağlamasını isteyin veya Bağlan düğmesine kendiniz basın.",
+          "invalidTicket": "Bu bağlantı artık onaylanamıyor. Yeniden başlamak için Bağlan düğmesine basın."
+        },
+        "loadingCalendars": "Takvimleriniz yükleniyor",
+        "chooseLabel": "Rezervasyonların yazılacağı yer",
+        "chooseHint": "Yalnızca bu hesabın düzenleyebildiği takvimler listelenir. Daha önce yazılmış etkinlikler olduğu yerde kalır.",
+        "choosePlaceholder": "Bir takvim seçin",
+        "chooseOptionPrimary": "{name} (ana takvim)",
+        "chooseSave": "Bu takvimi kullan",
+        "chooseCancel": "İptal",
+        "saving": "Kaydediliyor",
+        "connect": "Outlook'u bağla",
+        "reconnect": "Outlook'u yeniden bağla",
+        "redirecting": "Microsoft açılıyor",
+        "choose": "Takvim seç",
+        "disconnect": "Bağlantıyı kes",
+        "disconnected": "Outlook bağlantısı kesildi.",
+        "calendarSaved": "Takvim kaydedildi.",
+        "confirm": {
+          "title": "Bu Microsoft hesabı bağlansın mı?",
+          "body": "Microsoft, bir hesabın {workspace} çalışma alanına bağlanmasını tamamlamanız için sizi geri yönlendirdi. Yalnızca bunu birkaç dakika önce kendiniz başlattıysanız devam edin.",
+          "confirm": "Bağla",
+          "working": "Bağlanıyor",
+          "cancel": "İptal"
+        },
+        "confirmOff": {
+          "title": "Outlook bağlantısı kesilsin mi?",
+          "message": "Yeni rezervasyonlar artık Outlook takviminize gitmez ve takvimdeki meşgul saatler okunmaz. Takviminizde zaten bulunan etkinlikler orada kalır. İzni Microsoft tarafında geri çekmek için Microsoft hesabınızdan uygulamayı kaldırın.",
+          "confirm": "Bağlantıyı kes",
+          "cancel": "Vazgeç"
+        },
+        "outcome": {
+          "connected": "Outlook bağlandı. Onaylanan rezervasyonlar artık takviminize gidiyor.",
+          "denied": "Microsoft'ta erişim verilmedi, bu yüzden hiçbir şey bağlanmadı.",
+          "failed": "Bağlantı tamamlanamadı. Tekrar deneyin; sorun sürerse platform yöneticinizden Microsoft uygulamasını kontrol etmesini isteyin.",
+          "expired": "Bu deneme çok uzun sürdü. Yeniden başlamak için Bağlan düğmesine basın.",
+          "not_configured": "Outlook bu platform için kurulmadı. Platform yöneticinizden Microsoft uygulamasını kaydetmesini isteyin.",
+          "missing_scope": "Microsoft gereken takvim iznini vermedi. Yeniden bağlanın ve tüm kutuları işaretli bırakın.",
+          "cancelled": "İptal ettiniz. Hiçbir şey bağlanmadı."
+        },
+        "whatTitle": "Bu ne işe yarar",
+        "what": {
+          "freeBusy": "Takviminizdeki meşgul saatleri okur; böylece dolu veya engellenmiş saatler sunulmaz.",
+          "writeBack": "Onaylanan rezervasyonları takviminize etkinlik olarak yazar ve müşteriyi davet eder.",
+          "teams": "Online hizmetlere bir Teams toplantı bağlantısı ekler (iş ve okul hesapları)."
+        },
+        "hint": "Rezervasyonlar bu olmadan da çalışır. Google da bağlıysa meşgul saatler ikisinden de okunur ve her rezervasyon yalnızca birine yazılır."
+      },
+      "writeTarget": {
+        "title": "Rezervasyonların yazıldığı yer",
+        "description": "Meşgul saatler bağlı her takvimden okunur. Her rezervasyon bunlardan birine yazılır.",
+        "label": "Rezervasyonların yazılacağı yer",
+        "hint": "Otomatik seçenek, çalışıyorsa Google Calendar'ı, aksi halde Outlook'u kullanır. Değiştirirseniz yaklaşan rezervasyonların etkinlikleri seçtiğiniz takvime taşınır.",
+        "auto": "Otomatik",
+        "provider": {
+          "google": "Google Calendar",
+          "microsoft": "Outlook"
+        },
+        "notConnected": "bağlı değil",
+        "saved": "Kaydedildi.",
+        "backfill": {
+          "body": "Önümüzdeki 90 gün içindeki {count, plural, one {# onaylı rezervasyon} other {# onaylı rezervasyon}} gitmesi gereken takvimde henüz yok. Takvim bağladığınızda veya değiştirdiğinizde otomatik olarak yazılırlar.",
+          "action": "Şimdi yaz",
+          "working": "Sıraya alınıyor",
+          "queued": "Takviminize arka planda yazılıyor.",
+          "notConnected": "Bağlı bir takvim yok, bu yüzden yazılacak bir yer yok."
+        }
+      },
+      "feeds": {
+        "title": "Diğer takvimler (iCal)",
+        "description": "Bir takvime iCal adresiyle abone olun; böylece meşgul saatleri slotları kapatır. Yalnızca ne zaman meşgul olduğunuz kullanılır: ondan başka hiçbir şey gösterilmez ya da saklanmaz.",
+        "loading": "Takvimleriniz yükleniyor",
+        "empty": "Henüz abone olunan takvim yok.",
+        "status": {
+          "pending": "Henüz okunmadı",
+          "ok": "Çalışıyor",
+          "error": "Sorun var"
+        },
+        "paused": "Duraklatıldı",
+        "neverRead": "Henüz okunmadı.",
+        "lastRead": "Okunma zamanı: {when}.",
+        "busyCount": "Önümüzdeki 180 günde {count, plural, one {# meşgul blok} other {# meşgul blok}}",
+        "allDayLabel": "Tüm gün süren etkinlikler günü kapatır",
+        "pause": "Duraklat",
+        "resume": "Sürdür",
+        "refresh": "Şimdi oku",
+        "reading": "Okunuyor",
+        "remove": "Aboneliği bitir",
+        "removed": "Takvim aboneliği bitirildi.",
+        "added": "Takvime abone olundu.",
+        "addTitle": "Bir takvime abone ol",
+        "nameLabel": "Ad",
+        "namePlaceholder": "Ekip programı",
+        "urlLabel": "Takvim adresi",
+        "urlHint": "https:// veya webcal:// ile başlayan ve .ics ile biten bir adres. Şimdi denetlenir, sonra şifrelenmiş olarak saklanır ve bir daha gösterilmez.",
+        "add": "Abone ol",
+        "adding": "Takvim okunuyor",
+        "hint": "Rezervasyonlarınızın yazıldığı takvime abone olmayın: çok koltuklu bir hizmet kendi etkinliklerini meşgul olarak görür. Bir akış yaklaşık her 15 dakikada bir okunur, bu yüzden oradaki bir değişikliğin görünmesi o kadar sürebilir.",
+        "confirmRemove": {
+          "title": "Bu takvimin aboneliği bitirilsin mi?",
+          "message": "{name} tarafından engellenen saatler hemen yeniden boşalır. Takvimin kendisine dokunulmaz.",
+          "confirm": "Aboneliği bitir",
+          "cancel": "Vazgeç"
+        },
+        "errors": {
+          "invalid": "https://, http:// veya webcal:// ile başlayan, içinde kullanıcı adı ya da parola bulunmayan bir adres girin.",
+          "duplicate": "Bu çalışma alanı o takvime zaten abone.",
+          "limit": "Bir çalışma alanı en fazla 10 takvime abone olabilir. Önce birinin aboneliğini bitirin."
+        },
+        "reason": {
+          "unreachable": "Adrese ulaşılamadı. Doğru ve herkese açık olduğunu kontrol edin.",
+          "timeout": "Takvim yanıt vermek için çok uzun sürdü.",
+          "not_found": "Bu adreste hiçbir şey bulunamadı. Yayından kaldırılmış olabilir.",
+          "forbidden": "Takvim erişimi reddetti. Bağlantıya sahip herkese yayınlandığından emin olun.",
+          "server_error": "Takvimin sunucusunda bir sorun oluştu. Otomatik olarak yeniden denenir.",
+          "redirect_loop": "Adres bizi sürekli aynı yerlere yönlendiriyor.",
+          "not_a_calendar": "Bu adres bir iCal takvimi değil. .ics ile bitmelidir.",
+          "too_large": "Bu takvim okunamayacak kadar büyük.",
+          "blocked_address": "Bu adres özel bir ağı gösteriyor, buna izin verilmiyor.",
+          "unknown": "Bu adres bir takvim olarak okunamadı."
+        },
+        "warnings": {
+          "unknownZone": "{count, plural, one {# etkinlik bilmediğimiz bir saat dilimi kullanıyor ve çalışma alanınızın saat diliminde okundu.} other {# etkinlik bilmediğimiz bir saat dilimi kullanıyor ve çalışma alanınızın saat diliminde okundu.}}",
+          "unsupportedRule": "{count, plural, one {# yinelenen etkinlik} other {# yinelenen etkinlik}} desteklemediğimiz bir kural kullanıyor: yalnızca ilk tekrar zamanı engelliyor.",
+          "truncated": "Bu takvimde sakladığımızdan fazla meşgul blok var, bu yüzden bazıları eksik."
+        }
+      },
+      "bookingsFeed": {
+        "title": "Rezervasyonlarım takvim uygulamamda",
+        "description": "Apple Calendar, Outlook veya Google Calendar'ı rezervasyonlarınıza abone edin.",
+        "loading": "Bağlantınız yükleniyor",
+        "none": "Henüz bir bağlantınız yok.",
+        "make": "Bağlantımı oluştur",
+        "making": "Oluşturuluyor",
+        "made": "Bağlantınız hazır.",
+        "linkLabel": "Bağlantınız",
+        "copy": "Bağlantıyı kopyala",
+        "copied": "Bağlantı kopyalandı.",
+        "copyFailed": "Otomatik olarak kopyalanamadı. Bağlantıyı seçip kopyalayın.",
+        "open": "Takvim uygulamamda aç",
+        "rotate": "Yeni bağlantı oluştur",
+        "stop": "Paylaşımı durdur",
+        "stopped": "Bağlantınız artık çalışmıyor.",
+        "lastUsed": "Bir takvim uygulaması bunu en son {when} okudu.",
+        "neverUsed": "Henüz hiçbir takvim uygulaması bunu okumadı.",
+        "warning": "Bu bağlantıya sahip herkes rezervasyonlarınızın başlıklarını, saatlerini ve yerlerini görür. Gizli tutun. Telefon numaraları, e-posta adresleri ve notlar hiçbir zaman gösterilmez.",
+        "hint": "Rezervasyon listesinde görebildiklerinizi görürsünüz. Takvim uygulamanız akışı kendi takvimine göre yeniler, çoğunlukla birkaç saatte bir.",
+        "confirmRotate": {
+          "title": "Yeni bağlantı oluşturulsun mu?",
+          "message": "Eski bağlantı hemen çalışmaz hale gelir. Onu kullanan takvim uygulamalarının yeni bağlantıya ihtiyacı olur.",
+          "confirm": "Yeni bağlantı oluştur"
+        },
+        "confirmStop": {
+          "title": "Rezervasyonlarınızın paylaşımı durdurulsun mu?",
+          "message": "Bağlantınız hemen çalışmaz hale gelir. Onu kullanan takvim uygulamaları yeni bir şey göstermez.",
+          "confirm": "Paylaşımı durdur"
+        },
+        "confirmCancel": "Vazgeç"
+      }
     },
     "linked": {
       "title": "Randevular",
@@ -1060,6 +1248,181 @@
       "loadMore": "Daha fazla yükle",
       "loadMorePast": "Daha fazla geçmiş yükle",
       "noType": "Randevu"
+    },
+    "sync": {
+      "title": "Takvim senkronize değil",
+      "reason": {
+        "event_deleted": "Etkinlik Google Calendar'da silindi veya iptal edildi.",
+        "event_missing": "Etkinlik artık Google Calendar'da bulunamıyor.",
+        "time_changed": "Etkinlik Google Calendar'da başka bir saate taşındı.",
+        "attendees_changed": "Etkinliğin konukları Google Calendar'da değiştirildi."
+      },
+      "googleShows": "Google'da görünen: {time}",
+      "notChanged": "Bu randevu değiştirilmedi. Hangisinin doğru olduğunu seçin.",
+      "found": "Bulunan: {when}",
+      "push": "Bizim saatimizi Google'a geri gönder",
+      "accept": "Google'daki değişikliği kabul et",
+      "keep": "Şimdi değil",
+      "acceptTitle": {
+        "cancel": "Bu randevu iptal edilsin mi?",
+        "reschedule": "Bu randevu Google'daki saate taşınsın mı?",
+        "acknowledge": "Google'da görünen konuklar kabul edilsin mi?"
+      },
+      "acceptMessage": {
+        "cancel": "Etkinlik Google'dan kaldırıldığı için bu randevu iptal edilir ve saati yeniden boşa çıkar. Müşteriye, her iptalde olduğu gibi bilgi verilir.",
+        "reschedule": "Bu randevu {time} saatine taşınır. Müşteriye, her erteleme işleminde olduğu gibi yeni saat bildirilir.",
+        "acknowledge": "Randevunun kendisi değişmez. Google'daki konuk listesi kaydedilir ve bu uyarı kaybolur."
+      },
+      "acceptConfirm": {
+        "cancel": "Randevuyu iptal et",
+        "reschedule": "Randevuyu taşı",
+        "acknowledge": "Kabul et"
+      }
+    },
+    "reminders": {
+      "title": "Hatırlatmalar ve takipler",
+      "hint": "Randevu başlamadan önce veya bittikten sonra kişiye mesaj gönderin. Her biri siz açana kadar kapalıdır. Randevu türü başına en fazla {max}.",
+      "quickAdd": "Hızlı ekle",
+      "quick": {
+        "h24": "24 saat önce",
+        "h3": "3 saat önce",
+        "h1": "1 saat önce",
+        "m15": "15 dakika önce",
+        "after2h": "2 saat sonra",
+        "afterDay": "1 gün sonra"
+      },
+      "add": "Hatırlatma ekle",
+      "empty": "Hatırlatma veya takip yok. Kişi yalnızca onay mesajını alır.",
+      "enabledOf": "{n}. hatırlatmayı gönder",
+      "on": "Açık",
+      "off": "Kapalı",
+      "offsetOf": "{n}. hatırlatma, süre miktarı",
+      "unitOf": "{n}. hatırlatma, süre birimi",
+      "kindOf": "{n}. hatırlatma, önce veya sonra",
+      "units": {
+        "minutes": "dakika",
+        "hours": "saat",
+        "days": "gün"
+      },
+      "kind": {
+        "before": "randevu başlamadan önce",
+        "after": "randevu bittikten sonra"
+      },
+      "editMessage": "Mesaj ve kanallar",
+      "hideMessage": "Gizle",
+      "remove": "{n}. hatırlatmayı kaldır",
+      "withTemplate": "WhatsApp şablonu",
+      "channelsTitle": "Gönderim kanalı",
+      "channelsHint": "Teslim edebilen ilk kanal kullanılır, sonrakiler yedektir. Aynı hatırlatma kimseye iki kez gönderilmez.",
+      "channels": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "E-posta"
+      },
+      "moveUp": "{channel} kanalını öne al",
+      "moveDown": "{channel} kanalını arkaya al",
+      "removeChannel": "{channel} kullanma",
+      "messageTitle": "Mesaj",
+      "placeholderMeaning": {
+        "name": "Kişinin adı",
+        "type": "Randevu türünün adı",
+        "slot": "Tarih ve saat birlikte",
+        "date": "Tarih",
+        "time": "Saat",
+        "location": "Yer veya çevrimiçiyse katılım bağlantısı",
+        "join_link": "Çevrimiçiyse katılım bağlantısı",
+        "manage_link": "Randevuyu değiştirme veya iptal etme bağlantısı"
+      },
+      "bodyHintBefore": "Randevu türünün hatırlatma mesajını veya standart metni kullanmak için boş bırakın.",
+      "bodyHintAfter": "Standart takip metnini kullanmak için boş bırakın.",
+      "subjectTitle": "E-posta konusu",
+      "subjectPlaceholder": "Standart konu için boş bırakın",
+      "templateTitle": "WhatsApp şablonu",
+      "templateNone": "Yok: serbest metin, yalnızca 24 saatlik pencere içinde",
+      "templateUnknown": "Artık mevcut olmayan bir şablon",
+      "templateHint": "Kişi en son yazdıktan 24 saat sonra WhatsApp yalnızca onaylı şablon iletir. Değişkenler şu sırayla doldurulur: 1 ad, 2 hizmet, 3 tarih, 4 saat, 5 yer, 6 katılım bağlantısı, 7 yönetim bağlantısı.",
+      "labelTitle": "Etiket (isteğe bağlı)",
+      "labelPlaceholder": "ör. Bir gün önce",
+      "previewTitle": "Önizleme",
+      "previewNote": "Örnek değerlerle bir örnek. Gerçek mesaj randevunun kendi bilgilerini kullanır.",
+      "count": "{count} / {max} hatırlatma ve takip",
+      "note": "Hatırlatma randevu başladıktan sonra asla gönderilmez. Randevu iptal edilir veya ertelenirse bekleyenler durur ve yeni zamana göre yeniden planlanır. Sessiz saatler bitene kadar mesaj bekletilir; mesaj almayı reddeden veya aranmayanlar listesindeki kişiler atlanır.",
+      "sample": {
+        "name": "Ali",
+        "type": "Danışma",
+        "location": "Ana Cadde 12"
+      },
+      "settingsTitle": "Hatırlatmalar ve takipler",
+      "settingsDescription": "Her randevu türü için randevudan önce kişiye mesaj gönderin, sonrasında takip edin. Siz açana kadar her şey kapalıdır.",
+      "loading": "Randevu türleri yükleniyor",
+      "noTypes": "Henüz randevu türü yok. Hatırlatmalarını ayarlamak için bir tane oluşturun.",
+      "paused": "Duraklatıldı",
+      "summaryNone": "Ayarlanmadı",
+      "summary": "{on} / {total} açık",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "conflict": "Bu randevu türü başka bir yerde değiştirildi. Kaydetmeden önce en son sürümü görmek için yeniden yükleyin.",
+      "reload": "Yeniden yükle",
+      "discard": "Değişiklikleri at",
+      "saving": "Kaydediliyor",
+      "save": "Hatırlatmaları kaydet",
+      "saved": "{name} için hatırlatmalar kaydedildi.",
+      "readOnly": "Bu hatırlatmaları görebilirsiniz ancak değiştiremezsiniz.",
+      "fixFirst": "Önce vurgulanan hatırlatmaları düzeltin.",
+      "problems": {
+        "offsetInvalid": "Süre için tam sayı girin, en fazla 30 gün.",
+        "duplicate": "Her hatırlatma veya takip mesajı için farklı bir zaman gerekir.",
+        "channelsNone": "En az bir kanal seçin.",
+        "bodyTooLong": "Mesaj çok uzun.",
+        "subjectTooLong": "Konu çok uzun.",
+        "labelTooLong": "Etiket çok uzun.",
+        "tooMany": "Bir randevu türü için en fazla 8 hatırlatma ve takip."
+      },
+      "noneOn": "Bu randevu türü için açık hatırlatma veya takip yok.",
+      "when": {
+        "before": "{count, plural, one {# dakika önce} other {# dakika önce}}",
+        "after": "{count, plural, one {# dakika sonra} other {# dakika sonra}}"
+      },
+      "sentOn": "{channel} ile gönderildi",
+      "status": {
+        "scheduled": "Planlandı",
+        "pending": "Zamanı geldi",
+        "sending": "Gönderiliyor",
+        "held": "Bekliyor",
+        "sent": "Gönderildi",
+        "skipped": "Gönderilmedi",
+        "failed": "Başarısız",
+        "cancelled": "İptal edildi"
+      },
+      "reasons": {
+        "rule_removed": "Hatırlatma zamanı gelmeden kaldırıldı.",
+        "rule_off": "Hatırlatma gönderilmeden önce kapatıldı.",
+        "rescheduled": "Randevu ertelendi, bu yüzden bu hatırlatma değiştirildi.",
+        "booking_cancelled": "Randevu iptal edildi.",
+        "booking_declined": "İstek reddedildi.",
+        "booking_no_show": "Gelmedi olarak işaretlendi.",
+        "booking_not_confirmed": "Randevu onaylanmadı.",
+        "started": "Randevu zaten başlamıştı.",
+        "expired": "Göndermek için çok geçti.",
+        "no_contact_point": "Kişinin bu kanal için numarası veya adresi yok.",
+        "no_channel": "Hiçbir kanal ileti teslim edemedi.",
+        "no_sender": "Bu kanal için bağlı gönderici yok.",
+        "template_required": "WhatsApp, 24 saatlik pencerenin dışında onaylı şablon gerektirir.",
+        "template_unavailable": "Seçilen WhatsApp şablonu gönderilemiyor.",
+        "quiet_hours_too_late": "Sessiz saatler başlangıç zamanını geçti.",
+        "no_consent": "Kayıtlı izin yok.",
+        "opted_out": "Kişi mesaj almayı reddetti.",
+        "do_not_call": "Numara aranmayanlar listesinde.",
+        "minor": "Kişi reşit olmayan olarak işaretli.",
+        "processing_restricted": "Bu kişiye mesaj göndermek kısıtlı.",
+        "plan_limit": "Planın sınırına ulaşıldı.",
+        "quiet_hours": "Sessiz saatlerin bitmesi bekleniyor.",
+        "channel_unavailable": "Kanal şu anda bağlı değil.",
+        "wallet_empty": "Cüzdan boş.",
+        "send_halted": "Gönderim durduruldu.",
+        "provider_error": "Sağlayıcı reddetti.",
+        "interrupted": "Kesintiye uğradı ve yeniden denenmedi.",
+        "internal_error": "Bir şeyler ters gitti."
+      }
     }
   }
 }

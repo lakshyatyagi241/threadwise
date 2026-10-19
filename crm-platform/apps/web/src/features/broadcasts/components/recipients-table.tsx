@@ -62,6 +62,11 @@ export function RecipientsTable({
                   >
                     {r.status}
                   </span>
+                  {r.heldUntil && (
+                    <div className="mt-1 text-[10.5px] text-warning" data-testid="recipient-held">
+                      {t('heldUntil', { when: formatTime(r.heldUntil, timezone) })}
+                    </div>
+                  )}
                 </td>
                 <td className="px-3 py-2.5 font-mono text-[10.5px]">
                   {formatTime(r.sentAt, timezone)}

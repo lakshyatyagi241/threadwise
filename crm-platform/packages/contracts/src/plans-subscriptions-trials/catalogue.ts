@@ -87,6 +87,12 @@ export const PLAN_LIMIT_DEFS = [
   { key: 'sms_monthly', group: 'messaging' },
   // Connected Gmail mailboxes the workspace holds (the Email add-on; not disconnected ones). Default for a plan that has it: 3 (DEFAULT_EMAIL_MAILBOXES). 0 = unlimited.
   { key: 'email_mailboxes', group: 'messaging' },
+  // Emails sent per calendar month, replies and campaign mails together (Reference's `email_monthly_limit`). Enforced by the email campaign sender. 0 = unlimited.
+  { key: 'email_monthly', group: 'messaging' },
+  // Storage the workspace may hold, in whole GB (1 GB = 2^30 bytes): call recordings, chat media, mail attachments, contact files and the other counted kinds
+  // (docs/specs/storage-quota-and-archival.md section 5.1). 0 = unlimited, so a plan row that predates the key is not limited by it. MEASURED ONLY for now
+  // (phase S1, observe mode): nothing is refused until enforcement ships (phase S2).
+  { key: 'storage_gb', group: 'workspace' },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanLimitGroup }>;
 
 export type PlanLimitKey = (typeof PLAN_LIMIT_DEFS)[number]['key'];
@@ -159,6 +165,16 @@ export const PLAN_FEATURE_DEFS = [
   // The FULL history choice of the opt-in import of a personal WhatsApp number (TW-WAHIST; owner decision 2026-10-14). The `recent` choice is open to every workspace that
   // may use personal numbers; only `full` needs this. Default false, switched on for the plans with the most generous personal-number allowance (migration 20261204090100).
   { key: 'personal_history_full', group: 'messaging', default: false },
+  // The AI CRM Copilot (TW-AICRM-016): a chat assistant that runs the CRM by tool-calling. Default false: it spends AI tokens like `help_agent`,
+  // so the owner hands it to chosen plans. Reference's `access_ai_agents` column — deliberately NOT `ai_assistants` (Reference's own, different,
+  // `access_ai_chat_assistant` flag already mapped to that key for the AI Training/chat-assistants domain).
+  { key: 'ai_crm_copilot', group: 'aiCalling', default: false },
+  // AI lead scoring and the growth pilot built on it (Marketplace app `lead-scoring`). Default FALSE: the app owns this key (`grants_plan_features`).
+  // The workspaces that already used scoring keep it through a per-workspace override written by migration 20261228090000, then the operator's comp.
+  { key: 'lead_scoring', group: 'aiCalling', default: false },
+  // Record assignment rules (BL-340..345): rules that give new contacts, companies and deals to sales owners (Settings > Automation). Default FALSE and
+  // switched on by migration 20270115090000 only for the higher plans (the ones that already carry SLA policies); the basic plan does not get it.
+  { key: 'record_assignment', group: 'advanced', default: false },
 ] as const satisfies ReadonlyArray<{ key: string; group: PlanFeatureGroup; default: boolean }>;
 
 export type PlanFeatureKey = (typeof PLAN_FEATURE_DEFS)[number]['key'];
@@ -191,13 +207,16 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   storefront_builder: 'Storefront builder',
   invoicing: 'Invoicing',
   forms_and_links: 'Forms and links',
-  extra_channels: 'Telegram, Facebook and Instagram channels',
+  extra_channels: 'Telegram, Facebook, Instagram, LINE, Viber and WeChat channels',
   form_builder: 'Forms',
   waba_groups: 'WhatsApp groups',
   sms: 'SMS channel',
   help_agent: 'Help assistant',
   email_channel: 'Email (Gmail) channel',
   personal_history_full: 'Full history import (personal WhatsApp)',
+  ai_crm_copilot: 'AI CRM Copilot',
+  lead_scoring: 'AI lead scoring',
+  record_assignment: 'Record assignment rules',
 };
 export const PLAN_FEATURE_KEYS = PLAN_FEATURE_DEFS.map((d) => d.key) as PlanFeatureKey[];
 
@@ -240,6 +259,9 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'help_agent',
   'email_channel',
   'personal_history_full',
+  'ai_crm_copilot',
+  'lead_scoring',
+  'record_assignment',
 ];
 export const PLAN_CHIP_MAX = 3;
 

@@ -4,6 +4,8 @@ export { BroadcastsWorkerModule } from './broadcasts-worker.module';
 export { BroadcastReceiptsService, type DeliveryReceipt } from './broadcast-receipts.service';
 /** The staff services, for the customer REST API (`/api/v1`), which runs the same create, read and status paths as the dashboard. */
 export { BroadcastsService } from './broadcasts.service';
+export { MarketingMediaService } from './marketing-media.service';
+export { PreviousSendsService, previousSendContactsSql } from './previous-sends';
 export { BroadcastsReadService } from './broadcasts-read.service';
 export { BroadcastsRepository } from './broadcasts.repository';
 export { BroadcastProgressService } from './broadcast-progress.service';
@@ -23,6 +25,8 @@ export {
   EngineSenderRegistry,
   commandForText,
   renderPlainBody,
+  SenderRefused,
+  SenderThrottled,
   type EngineSender,
   type OpenedSender,
   type OutgoingMessage,
@@ -49,7 +53,14 @@ export {
 export { isKnownTimeZone, wallTimeToUtc } from './schedule';
 export { mediaUrlProblem, templateRefusals } from './template-guards';
 export { assemblePhone } from './recipient-phone';
-export { DEFAULT_RETRY_POLICY, resolvePolicy, retryDelaySeconds } from './retry-policy';
+export {
+  DEFAULT_RETRY_POLICY,
+  OUTCOME_UNKNOWN_PREFIX,
+  isOutcomeUnknown,
+  isPermanentFailure,
+  resolvePolicy,
+  retryDelaySeconds,
+} from './retry-policy';
 export {
   SENDER_DIRECTORY,
   TEMPLATE_DIRECTORY,

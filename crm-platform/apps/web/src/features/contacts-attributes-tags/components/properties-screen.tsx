@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
-import type { FieldResponse, FieldSectionResponse } from '@crm/contracts';
+import type { FieldResponse, FieldSectionResponse, ModuleKey } from '@crm/contracts';
 import { Badge, Button, ConfirmDialog, EmptyState, Input, Spinner, cn, useToast } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
@@ -14,12 +14,13 @@ import {
   reorderFields,
   reorderSections,
   updateField,
-  useContactFields,
   useFieldDependencies,
   useFieldSections,
   useFieldUsage,
+  useModuleFields,
 } from '../api/properties';
 import { errorKind } from '../lib/errors';
+import { propertyPermissionSegment, useModuleCopy } from '../lib/module-copy';
 import {
   BUILT_IN_PROPERTIES,
   describeCondition,
@@ -51,19 +52,25 @@ import { SectionModal } from './section-modal';
 /**
  * `/contact-properties`: every property a contact has in one place. The built-in ones (fixed), then the workspace's
  * own, grouped by section, with what type each is, whether it is required and shown, and how many contacts hold a value.
+ * The same screen serves `/company-properties` (`moduleKey="companies"`): the registry, the sections, the forms and the
+ * permission keys are the same, the module's own records are named from its own words, and the contact-only parts (the
+ * built-in contact properties, the links to Attributes and Contact stages, the template variable note) are left out.
  */
-export function PropertiesScreen() {
+export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: ModuleKey }) {
   const t = useTranslations('contacts-attributes-tags.properties');
+  const copy = useModuleCopy(moduleKey);
+  const forContacts = moduleKey === 'contacts';
   const qc = useQueryClient();
   const { toast } = useToast();
-  const canCreate = useCan('record.contact-properties.create');
-  const canUpdate = useCan('record.contact-properties.update');
-  const canDelete = useCan('record.contact-properties.delete');
+  const segment = propertyPermissionSegment(moduleKey);
+  const canCreate = useCan(`record.${segment}.create`);
+  const canUpdate = useCan(`record.${segment}.update`);
+  const canDelete = useCan(`record.${segment}.delete`);
 
-  const fields = useContactFields(true);
-  const sections = useFieldSections();
-  const usage = useFieldUsage();
-  const deps = useFieldDependencies();
+  const fields = useModuleFields(moduleKey, true);
+  const sections = useFieldSections(moduleKey);
+  const usage = useFieldUsage(true, moduleKey);
+  const deps = useFieldDependencies(moduleKey);
 
   const [query, setQuery] = useState('');
   const [showInactive, setShowInactive] = useState(false);
@@ -74,6 +81,8 @@ export function PropertiesScreen() {
   const [sectionEditing, setSectionEditing] = useState<FieldSectionResponse | 'new' | null>(null);
   const [deactivating, setDeactivating] = useState<FieldResponse | null>(null);
   const [deletingSection, setDeletingSection] = useState<SectionGroup | null>(null);
+  /** Sections the owner folded away (by id); a section is open until they do. */
+  const [folded, setFolded] = useState<ReadonlySet<string>>(new Set());
   /** The order just chosen for one section's properties, until the server's list catches up. */
   const [pending, setPending] = useState<{ sectionId: string; ids: string[] } | null>(null);
 
@@ -117,7 +126,7 @@ export function PropertiesScreen() {
     const next = moveRelative(sectionIds(sectionId), id, targetId);
     setPending({ sectionId, ids: next });
     try {
-      await reorderFields(sectionId, next);
+      await reorderFields(sectionId, next, moduleKey);
       await invalidateProperties(qc);
     } catch (e) {
       failToast(e);
@@ -131,7 +140,7 @@ export function PropertiesScreen() {
     const ids = allSections.map((s) => s.id);
     const next = moveItem(ids, ids.indexOf(id), ids.indexOf(id) + delta);
     try {
-      await reorderSections(next);
+      await reorderSections(next, moduleKey);
       await invalidateProperties(qc);
     } catch (e) {
       failToast(e);
@@ -198,8 +207,8 @@ export function PropertiesScreen() {
           <div className="mb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">
             {t('eyebrow')}
           </div>
-          <h1 className="text-3xl font-semibold tracking-tight">{t('title')}</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('subtitle')}</p>
+          <h1 className="text-3xl font-semibold tracking-tight">{copy('title')}</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{copy('subtitle')}</p>
         </div>
         <div className="flex shrink-0 flex-wrap gap-2">
           {canCreate && (
@@ -215,28 +224,30 @@ export function PropertiesScreen() {
         </div>
       </div>
 
-      <div className="grid gap-3 md:grid-cols-2">
-        <div className="rounded-md border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed">
-          <div className="mb-1 font-semibold">{t('related.attributesTitle')}</div>
-          <p className="text-muted-foreground">{t('related.attributesBody')}</p>
-          <Link
-            href="/attributes"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            {t('related.attributesLink')} <ArrowRightIcon className="size-3.5 rtl:rotate-180" />
-          </Link>
+      {forContacts && (
+        <div className="grid gap-3 md:grid-cols-2">
+          <div className="rounded-md border border-primary/20 bg-primary/5 p-4 text-sm leading-relaxed">
+            <div className="mb-1 font-semibold">{t('related.attributesTitle')}</div>
+            <p className="text-muted-foreground">{t('related.attributesBody')}</p>
+            <Link
+              href="/attributes"
+              className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              {t('related.attributesLink')} <ArrowRightIcon className="size-3.5 rtl:rotate-180" />
+            </Link>
+          </div>
+          <div className="rounded-md border border-border bg-background p-4 text-sm leading-relaxed">
+            <div className="mb-1 font-semibold">{t('related.stagesTitle')}</div>
+            <p className="text-muted-foreground">{t('related.stagesBody')}</p>
+            <Link
+              href="/contact-stages"
+              className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+            >
+              {t('related.stagesLink')} <ArrowRightIcon className="size-3.5 rtl:rotate-180" />
+            </Link>
+          </div>
         </div>
-        <div className="rounded-md border border-border bg-background p-4 text-sm leading-relaxed">
-          <div className="mb-1 font-semibold">{t('related.stagesTitle')}</div>
-          <p className="text-muted-foreground">{t('related.stagesBody')}</p>
-          <Link
-            href="/contact-stages"
-            className="mt-2 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
-          >
-            {t('related.stagesLink')} <ArrowRightIcon className="size-3.5 rtl:rotate-180" />
-          </Link>
-        </div>
-      </div>
+      )}
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="relative w-full max-w-sm flex-1">
@@ -261,11 +272,13 @@ export function PropertiesScreen() {
         </label>
       </div>
 
-      <BuiltInCard
-        open={builtInOpen && !searching}
-        onToggle={() => setBuiltInOpen((v) => !v)}
-        query={query}
-      />
+      {forContacts && (
+        <BuiltInCard
+          open={builtInOpen && !searching}
+          onToggle={() => setBuiltInOpen((v) => !v)}
+          query={query}
+        />
+      )}
 
       {loading ? (
         <div role="status" className="flex items-center gap-2 p-6 text-muted-foreground">
@@ -307,21 +320,45 @@ export function PropertiesScreen() {
                       .filter((f): f is FieldResponse => Boolean(f)),
                   ]
                 : g.fields;
+            const key = section?.id ?? 'loose';
+            const open = !folded.has(key);
             return (
               <section
                 key={section?.id ?? 'loose'}
                 aria-label={section?.name ?? t('noSection')}
                 className="rounded-md border border-border bg-background"
               >
-                <header className="flex flex-wrap items-center justify-between gap-2 border-b border-border px-4 py-3">
-                  <div className="min-w-0">
-                    <h2 className="truncate text-base font-semibold" dir="auto">
-                      {section?.name ?? t('noSection')}
-                    </h2>
-                    <p className="text-xs text-muted-foreground">
-                      {section ? t('sectionCount', { count: g.fields.length }) : t('noSectionHint')}
-                    </p>
-                  </div>
+                <header
+                  className={`flex flex-wrap items-center justify-between gap-2 px-4 py-3 ${open ? 'border-b border-border' : ''}`}
+                >
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-label={section?.name ?? t('noSection')}
+                    onClick={() =>
+                      setFolded((cur) => {
+                        const next = new Set(cur);
+                        if (next.has(key)) next.delete(key);
+                        else next.add(key);
+                        return next;
+                      })
+                    }
+                    className="flex min-w-0 items-center gap-2 rounded-md text-start outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <ChevronRightIcon
+                      className={`size-4 shrink-0 text-muted-foreground transition-transform rtl:-scale-x-100 ${open ? 'rotate-90 rtl:-rotate-90' : ''}`}
+                    />
+                    <span className="min-w-0">
+                      <span className="block truncate text-base font-semibold" dir="auto">
+                        {section?.name ?? t('noSection')}
+                      </span>
+                      <span className="block text-xs text-muted-foreground">
+                        {section
+                          ? t('sectionCount', { count: g.fields.length })
+                          : t('noSectionHint')}
+                      </span>
+                    </span>
+                  </button>
                   <div className="flex items-center gap-1">
                     {canCreate && section && (
                       <Button variant="secondary" size="sm" onClick={() => newProperty(section.id)}>
@@ -366,7 +403,7 @@ export function PropertiesScreen() {
                   </div>
                 </header>
 
-                {ordered.length === 0 ? (
+                {!open ? null : ordered.length === 0 ? (
                   <p className="px-4 py-5 text-sm text-muted-foreground">{t('sectionEmpty')}</p>
                 ) : (
                   <div className="overflow-x-auto">
@@ -393,6 +430,7 @@ export function PropertiesScreen() {
                           <PropertyRow
                             key={f.id}
                             f={f}
+                            moduleKey={moduleKey}
                             holders={heldBy(f)}
                             conditions={dependencies
                               .filter((d) => d.fieldId === f.id)
@@ -432,12 +470,14 @@ export function PropertiesScreen() {
         sections={allSections}
         fields={allFields}
         dependencies={dependencies}
+        moduleKey={moduleKey}
         onClose={() => setEditing(null)}
       />
       <SectionModal
         open={sectionEditing !== null}
         section={sectionEditing === 'new' || sectionEditing === null ? undefined : sectionEditing}
         sections={allSections}
+        moduleKey={moduleKey}
         onClose={() => setSectionEditing(null)}
       />
       <ConfirmDialog
@@ -449,10 +489,12 @@ export function PropertiesScreen() {
           <div className="space-y-2">
             <p>
               {deactivatingHolders > 0
-                ? t('deactivate.inUse', { count: deactivatingHolders })
-                : t('deactivate.unused')}
+                ? copy('deactivate.inUse', { count: deactivatingHolders })
+                : copy('deactivate.unused')}
             </p>
-            <p>{t('deactivate.mergeTag', { key: `{{${deactivating?.key ?? ''}}}` })}</p>
+            {forContacts && (
+              <p>{t('deactivate.mergeTag', { key: `{{${deactivating?.key ?? ''}}}` })}</p>
+            )}
             {deactivatingDependents > 0 && (
               <p>{t('deactivate.dependents', { count: deactivatingDependents })}</p>
             )}
@@ -588,6 +630,7 @@ function BuiltInCard({
 
 function PropertyRow({
   f,
+  moduleKey,
   holders,
   conditions,
   canUpdate,
@@ -602,6 +645,7 @@ function PropertyRow({
   onReactivate,
 }: {
   f: FieldResponse;
+  moduleKey: ModuleKey;
   holders: number | undefined;
   conditions: Array<{ field: string; value: string }>;
   canUpdate: boolean;
@@ -616,6 +660,7 @@ function PropertyRow({
   onReactivate: () => void;
 }) {
   const t = useTranslations('contacts-attributes-tags.properties');
+  const copy = useModuleCopy(moduleKey);
   const [over, setOver] = useState(false);
   const description = typeof f.config.description === 'string' ? f.config.description : '';
   return (
@@ -701,7 +746,7 @@ function PropertyRow({
         )}
       </td>
       <td className="px-3 py-3 tabular-nums">
-        {holders === undefined ? '—' : t('row.contacts', { count: holders })}
+        {holders === undefined ? '—' : copy('row.contacts', { count: holders })}
       </td>
       <td className="whitespace-nowrap px-3 py-3 pe-4 text-end">
         {canReorder && f.isActive && (

@@ -232,12 +232,49 @@
         "loadFailed": "Ayarlar yüklenemedi.",
         "hours": {
           "title": "Çalışma saatleri",
-          "note": "Yalnızca bilgi için gösterilir. Çalışma saatleri henüz uygulanmıyor, bu yüzden bu denetimler salt okunurdur.",
-          "weekdays": "Pzt - Cum",
-          "saturday": "Cumartesi",
-          "sunday": "Pazar",
           "from": "Başlangıç",
-          "to": "Bitiş"
+          "to": "Bitiş",
+          "note": "Ekibinizin çalışma saatleri, {timezone} saat dilimine göre. Çalışma saatlerine bağlı gelen kutusu yönlendirme kuralları, SLA zamanlayıcıları, akışlar ve potansiyel müşteri yanıtları bu programı kullanır.",
+          "ownerOnly": "Bunları yalnızca çalışma alanı sahibi düzenleyebilir.",
+          "loadFailed": "Çalışma saatleri yüklenemedi.",
+          "day": {
+            "mon": "Pazartesi",
+            "tue": "Salı",
+            "wed": "Çarşamba",
+            "thu": "Perşembe",
+            "fri": "Cuma",
+            "sat": "Cumartesi",
+            "sun": "Pazar"
+          },
+          "closed": "Kapalı",
+          "openAllDay": "Tüm gün açık",
+          "allDay": "Tüm gün açık",
+          "overnight": "Ertesi sabah kapanır",
+          "addWindow": "Saat ekle",
+          "remove": "Kaldır",
+          "removeWindow": "{day} için bu saatleri kaldır",
+          "copyMonday": "Pazartesiyi Salı-Cuma günlerine kopyala",
+          "problem": {
+            "required": "Her iki saati de girin.",
+            "same": "Açılış ve kapanış saatleri farklı olmalıdır.",
+            "overlap": "Aynı gündeki saatler çakışmamalıdır."
+          },
+          "holidays": {
+            "title": "Tatiller",
+            "note": "Haftalık saatler ne olursa olsun, çalışma alanı bu tarihlerde tüm gün kapalı sayılır.",
+            "none": "Tatil eklenmedi.",
+            "date": "Tarih",
+            "label": "Ad (isteğe bağlı)",
+            "add": "Tatil ekle",
+            "removeFor": "{date} tarihindeki tatili kaldır",
+            "problem": {
+              "date": "Geçerli bir tarih değil.",
+              "duplicate": "Bu tarih zaten listede."
+            }
+          },
+          "save": "Çalışma saatlerini kaydet",
+          "saved": "Çalışma saatleri kaydedildi.",
+          "saveFailed": "Çalışma saatleri kaydedilemedi."
         },
         "preferences": {
           "title": "Otomatik yapay zekâ özeti",
@@ -351,14 +388,6 @@
         "webhooksTitle": "Webhook'lar",
         "webhooksBody": "Olayları kendi uç noktalarınıza gönderin ve diğer araçlardan olay alın.",
         "manage": "Entegrasyonları yönet",
-        "sheetsTitle": "Google Sheets API anahtarı",
-        "sheetsBody": "Sheets eklentisinin kişi ve mesaj satırlarını bir tabloya göndermek için kullandığı anahtar. Bugün açığa çıkan tek kişisel belirteç budur.",
-        "manageInAccount": "Hesapta yönet",
-        "active": "Etkin",
-        "keyTimes": "oluşturulma: {created} · son kullanım: {used}",
-        "never": "hiçbir zaman",
-        "noKey": "Henüz Sheets API anahtarı oluşturulmadı. Bir tane oluşturun:",
-        "noKeyLink": "hesabınız → Sheets eklentisi",
         "outboundTitle": "Giden uç noktalar",
         "outboundBody": "Çalışma alanınız → sunucunuz (CRM kancaları, gönderme / yanıt olayları).",
         "inboundTitle": "Gelen webhook'lar",

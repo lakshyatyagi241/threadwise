@@ -254,7 +254,34 @@
         "off": "No",
         "none": "Ninguno"
       },
-      "colorSwatch": "{label} (muestra de color)"
+      "colorSwatch": "{label} (muestra de color)",
+      "age": {
+        "enable": "Pedir la edad antes de iniciar el chat",
+        "enableHint": "Desactivado por defecto. Úsalo solo si las reglas de tu espacio de trabajo lo piden o tus visitantes pueden ser menores. El chat nunca indica qué respuesta es válida.",
+        "mode": "Cómo preguntar",
+        "modes": {
+          "declaration": "Una casilla: \"Confirmo que tengo al menos N años\"",
+          "age": "Pedir su edad",
+          "dob": "Pedir su fecha de nacimiento"
+        },
+        "modeHints": {
+          "declaration": "No se guarda nada sobre su edad. Es lo mínimo de datos.",
+          "age": "Un número entero. Se usa para la comprobación; solo se guarda el resultado.",
+          "dob": "Se guarda en el contacto como fecha de nacimiento. Úsalo solo si necesitas la fecha."
+        },
+        "minAge": "Edad mínima",
+        "minAgeHint": "Déjalo vacío para usar la edad de tu espacio de trabajo del Centro de cumplimiento normativo (18 si no hay ninguna). Entre 1 y 21.",
+        "whenUnder": "Si el visitante es menor de esa edad",
+        "actions": {
+          "block": "No iniciar el chat",
+          "flag": "Iniciar el chat y marcar el contacto como menor"
+        },
+        "actionHints": {
+          "block": "No se guarda nada del visitante y ve un mensaje neutro. Con la casilla, el visitante solo tiene que marcarla.",
+          "flag": "El chat continúa y, cuando el visitante da un teléfono o un correo electrónico, el contacto se marca como menor."
+        },
+        "contactNote": "La edad solo se registra en un contacto cuando el visitante ha dado un teléfono o una dirección de correo electrónico."
+      }
     },
     "whatsappBuilder": {
       "crumb": "Widget de WhatsApp",
@@ -298,7 +325,8 @@
           "url": "O usa la dirección de tu propia imagen",
           "urlHint": "Pega la dirección de una imagen cuadrada (https://...). Subir un archivo aún no está disponible.",
           "botName": "Nombre del bot",
-          "botNameHint": "Se muestra en el encabezado de la ventana del chat. Déjalo vacío para usar el nombre de tu bot."
+          "botNameHint": "Se muestra en el encabezado de la ventana del chat. Déjalo vacío para usar el nombre de tu bot.",
+          "urlHintUpload": "Pega la dirección de una imagen cuadrada (https://...) o sube un archivo abajo."
         },
         "3": {
           "title": "Define tu mensaje de bienvenida",
@@ -558,6 +586,19 @@
             "placeholder": "example.com",
             "add": "Añadir un sitio web",
             "remove": "Quitar sitio web"
+          },
+          "feedback": {
+            "label": "Dejar que los visitantes valoren las respuestas",
+            "hint": "Pulgares arriba y abajo bajo cada respuesta del bot.",
+            "message": "Mensaje que se muestra tras una valoración",
+            "keptWhenOff": "Los comentarios están desactivados. Este mensaje se conserva y vuelve a mostrarse si los reactivas."
+          },
+          "languages": {
+            "primary": "Idioma principal",
+            "follow": "Seguir el navegador del visitante",
+            "primaryHint": "El idioma de los textos propios de la ventana del chat.",
+            "additional": "Otros idiomas",
+            "additionalHint": "Un visitante cuyo navegador usa uno de estos ve la ventana en ese idioma. Los demás ven el idioma principal."
           }
         },
         "rail": {
@@ -672,7 +713,9 @@
         "statusLive": "En vivo",
         "statusDraft": "Sin publicar",
         "codeLabel": "HTML",
-        "localNote": "Este código apunta a una dirección de este equipo (localhost), así que solo funciona en páginas abiertas aquí. En un sitio web real, usa tu dirección desplegada."
+        "localNote": "Este código apunta a una dirección de este equipo (localhost), así que solo funciona en páginas abiertas aquí. En un sitio web real, usa tu dirección desplegada.",
+        "statusNoNumber": "Publicado, sin número",
+        "noNumber": "Este bot está publicado, pero aún no tiene un número de WhatsApp, así que el botón, el código QR y el enlace directo siguen ocultos. Elige un número en el Disparador, en la pestaña Crear."
       },
       "whatsapp": {
         "loading": "Cargando el botón…",
@@ -681,7 +724,8 @@
         "saved": "Botón de WhatsApp guardado",
         "saveFailed": "No se pudo guardar el botón. Inténtalo de nuevo.",
         "fromBot": "El botón abre WhatsApp en el {number}, el número en el que funciona este bot. Cambia el número en el disparador de la pestaña Crear.",
-        "noNumber": "Este bot aún no tiene número de WhatsApp. Elige uno en el disparador, en la pestaña Crear, y vuelve para guardar el botón."
+        "noNumber": "Este bot aún no tiene número de WhatsApp. Elige uno en el disparador, en la pestaña Crear, y vuelve para guardar el botón.",
+        "keywordMissing": "El mensaje de arriba no contiene la palabra de inicio de tu bot \"{keyword}\". Si el bot solo se inicia con esa palabra, los visitantes que toquen el botón no llegarán a él."
       }
     },
     "webBots": {

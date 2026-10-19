@@ -1,14 +1,18 @@
 import {
   EMPTY_WIZARD_DRAFT,
   WIZARD_STEP_COUNT,
+  WIZARD_TEMPLATE_SEQUENCE_MAX,
   type WizardAudience,
   type WizardDraft,
+  type WizardFollowUp,
   type WizardRetries,
+  type WizardSequenceTemplate,
   type WizardSchedule,
   type WizardTemplate,
   type WizardVariableSource,
   type WizardVariables,
 } from '@crm/contracts';
+import { sanitizePrevious } from '../../lib/previous-sends';
 
 /** What a save sends: the keys of the draft that changed. */
 export type DraftPatch = Partial<WizardDraft>;
@@ -26,6 +30,11 @@ export type WizardAction =
   | { type: 'name'; name: string }
   | { type: 'template'; template: WizardTemplate | null }
   | { type: 'sender'; senderKey: string | null }
+  /**
+   * The numbers a send is shared across (TW-BCAST-006): the ticked keys in the order picked and each one's weight. One key, or none,
+   * is the ordinary single number (`senderKeys` is then empty); the first key is always the draft's `senderKey`.
+   */
+  | { type: 'senders'; keys: readonly string[]; share: Readonly<Record<string, number>> }
   | { type: 'audience'; patch: Partial<WizardAudience> }
   | { type: 'variable'; slot: string; source: WizardVariableSource | null }
   | { type: 'variables'; variables: WizardVariables }
@@ -43,8 +52,22 @@ export type WizardAction =
   | { type: 'templateB'; template: WizardTemplate | null }
   | { type: 'variableB'; slot: string; source: WizardVariableSource | null }
   | { type: 'variablesB'; variables: WizardVariables }
+  /**
+   * The templates after the draft's own in a recurring broadcast, which the runs send in turn: add an empty one at the end, remove or
+   * move one (it takes its variable mapping along), clear them all, pick one's template (its mapping keeps what still fits) and map
+   * its variables.
+   */
+  | { type: 'sequenceAdd' }
+  | { type: 'sequenceRemove'; index: number }
+  | { type: 'sequenceMove'; index: number; by: -1 | 1 }
+  | { type: 'sequenceClear' }
+  | { type: 'sequenceTemplate'; index: number; template: WizardTemplate | null }
+  | { type: 'sequenceVariable'; index: number; slot: string; source: WizardVariableSource | null }
+  | { type: 'sequenceVariables'; index: number; variables: WizardVariables }
   | { type: 'schedule'; schedule: WizardSchedule }
   | { type: 'retries'; retries: WizardRetries }
+  /** The follow-up steps after the campaign message, as the whole list (add, remove and edit build the next list). */
+  | { type: 'followUps'; followUps: WizardFollowUp[] }
   | { type: 'go'; step: WizardView }
   | { type: 'hydrate'; draft: WizardDraft };
 
@@ -65,6 +88,15 @@ export function keepMatchingVariables(
   return Object.fromEntries(Object.entries(variables).filter(([k]) => slots.has(k)));
 }
 
+/** The sequence with the entry at `index` replaced (the same list when there is no such entry). */
+function withEntry(
+  list: readonly WizardSequenceTemplate[],
+  index: number,
+  change: (e: WizardSequenceTemplate) => WizardSequenceTemplate,
+): WizardSequenceTemplate[] {
+  return list.map((e, i) => (i === index ? change(e) : e));
+}
+
 export function wizardReducer(state: WizardState, action: WizardAction): WizardState {
   const d = state.draft;
   switch (action.type) {
@@ -83,11 +115,35 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
       };
     }
     case 'sender':
-      return action.senderKey === d.senderKey
+      // Picking one number in the list ends any sharing: the draft is back to a single number.
+      return action.senderKey === d.senderKey && d.senderKeys.length === 0
         ? state
-        : { ...state, draft: { ...d, senderKey: action.senderKey } };
-    case 'audience':
-      return { ...state, draft: { ...d, audience: { ...d.audience, ...action.patch } } };
+        : {
+            ...state,
+            draft: { ...d, senderKey: action.senderKey, senderKeys: [], senderShare: {} },
+          };
+    case 'senders': {
+      const keys = [...new Set(action.keys)];
+      const share = Object.fromEntries(
+        keys.flatMap((k) => (k in action.share ? [[k, action.share[k]!]] : [])),
+      );
+      return {
+        ...state,
+        draft: {
+          ...d,
+          senderKey: keys[0] ?? d.senderKey,
+          senderKeys: keys.length > 1 ? keys : [],
+          senderShare: keys.length > 1 ? share : {},
+        },
+      };
+    }
+    case 'audience': {
+      const patch =
+        action.patch.previous === undefined
+          ? action.patch
+          : { ...action.patch, previous: sanitizePrevious(action.patch.previous) };
+      return { ...state, draft: { ...d, audience: { ...d.audience, ...patch } } };
+    }
     case 'variable': {
       const next = { ...d.variables };
       if (action.source) next[action.slot] = action.source;
@@ -118,10 +174,87 @@ export function wizardReducer(state: WizardState, action: WizardAction): WizardS
     }
     case 'variablesB':
       return { ...state, draft: { ...d, variablesB: action.variables } };
+    case 'sequenceAdd':
+      return d.templateSequence.length >= WIZARD_TEMPLATE_SEQUENCE_MAX
+        ? state
+        : {
+            ...state,
+            draft: {
+              ...d,
+              templateSequence: [...d.templateSequence, { templateId: null, variables: {} }],
+            },
+          };
+    case 'sequenceRemove':
+      return action.index < 0 || action.index >= d.templateSequence.length
+        ? state
+        : {
+            ...state,
+            draft: {
+              ...d,
+              templateSequence: d.templateSequence.filter((_, i) => i !== action.index),
+            },
+          };
+    case 'sequenceClear':
+      return d.templateSequence.length === 0
+        ? state
+        : { ...state, draft: { ...d, templateSequence: [] } };
+    case 'sequenceMove': {
+      const to = action.index + action.by;
+      const n = d.templateSequence.length;
+      if (action.index < 0 || action.index >= n || to < 0 || to >= n) return state;
+      const next = [...d.templateSequence];
+      [next[action.index], next[to]] = [next[to]!, next[action.index]!];
+      return { ...state, draft: { ...d, templateSequence: next } };
+    }
+    case 'sequenceTemplate': {
+      const current = d.templateSequence[action.index];
+      const templateId = action.template?.id ?? null;
+      if (!current || current.templateId === templateId) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => ({
+            templateId,
+            variables: keepMatchingVariables(e.variables, action.template),
+          })),
+        },
+      };
+    }
+    case 'sequenceVariable': {
+      if (!d.templateSequence[action.index]) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => {
+            const next = { ...e.variables };
+            if (action.source) next[action.slot] = action.source;
+            else delete next[action.slot];
+            return { ...e, variables: next };
+          }),
+        },
+      };
+    }
+    case 'sequenceVariables': {
+      if (!d.templateSequence[action.index]) return state;
+      return {
+        ...state,
+        draft: {
+          ...d,
+          templateSequence: withEntry(d.templateSequence, action.index, (e) => ({
+            ...e,
+            variables: action.variables,
+          })),
+        },
+      };
+    }
     case 'schedule':
       return { ...state, draft: { ...d, schedule: action.schedule } };
     case 'retries':
       return { ...state, draft: { ...d, retries: action.retries } };
+    case 'followUps':
+      return { ...state, draft: { ...d, followUps: action.followUps } };
     case 'go': {
       const step = Math.max(d.step, action.step);
       return {

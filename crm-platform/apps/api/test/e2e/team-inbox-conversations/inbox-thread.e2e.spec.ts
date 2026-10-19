@@ -292,6 +292,45 @@ describe('sending: 202, queued, idempotent, and refused before anything is store
     expect(ok.status).toBe(202);
   });
 
+  it('a chat assigned to another agent is locked: send, retry and template list answer 403, notes stay open, the assignee and unassigned chats are free', async () => {
+    const theirs = await inbox.conversation(t, ch.id, {
+      assigneeUserId: ownReplier.userId,
+      lastInboundAt: new Date().toISOString(),
+    });
+    const before = (await rows(theirs.id)).length;
+    const blocked = await api
+      .as(agent.token)
+      .post(`/v2/inbox/conversations/${theirs.uuid}/messages`)
+      .send(text());
+    expect(blocked.status).toBe(403);
+    expect(blocked.body.code).toBe('CONVERSATION_ASSIGNED_TO_OTHER');
+    expect((await rows(theirs.id)).length).toBe(before);
+
+    const templates = await api
+      .as(agent.token)
+      .get(`/v2/inbox/conversations/${theirs.uuid}/templates`);
+    expect(templates.status).toBe(403);
+
+    const note = await api
+      .as(agent.token)
+      .post(`/v2/inbox/conversations/${theirs.uuid}/notes`)
+      .send({ body: 'FYI from a teammate' });
+    expect(note.status).toBeLessThan(300);
+
+    const own = await api
+      .as(ownReplier.token)
+      .post(`/v2/inbox/conversations/${theirs.uuid}/messages`)
+      .send(text());
+    expect(own.status).toBe(202);
+
+    // Nobody is assigned: any agent who may reply sends.
+    const free = await api
+      .as(agent.token)
+      .post(`/v2/inbox/conversations/${conv.uuid}/messages`)
+      .send(text());
+    expect(free.status).toBe(202);
+  });
+
   it('refuses a free-form message outside the 24 hour window with SERVICE_WINDOW_CLOSED and stores nothing', async () => {
     const stale = await inbox.conversation(t, ch.id, {
       lastInboundAt: new Date(Date.now() - 30 * 3600_000).toISOString(),

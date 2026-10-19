@@ -120,7 +120,8 @@
       "paused": {
         "daily_cap": "En pausa: se alcanzó el límite diario de envíos. Se reanuda sola después de {when}.",
         "halt": "En pausa: los envíos están detenidos para este espacio de trabajo. Se reanuda cuando se levante la detención.",
-        "manual": "En pausa."
+        "manual": "En pausa.",
+        "quiet_hours": "En pausa: algunos destinatarios están en sus horas de silencio. Se reanuda solo después de {when}."
       },
       "delete": "Eliminar",
       "deleteTitle": "¿Eliminar la difusión?",
@@ -145,7 +146,8 @@
         "queued": "En cola",
         "queuedHint": "pendientes de envío",
         "failed": "Fallidos",
-        "failedPct": "{pct}% de tasa de fallos"
+        "failedPct": "{pct}% de tasa de fallos",
+        "queuedHeld": "{count} en espera por las horas de silencio"
       },
       "tab": {
         "overview": "Resumen",
@@ -193,7 +195,8 @@
         "lastClick": "Último clic: {when}",
         "empty": "No hay destinatarios adjuntos.",
         "more": "Cargar más",
-        "loading": "Cargando"
+        "loading": "Cargando",
+        "heldUntil": "En espera hasta {when} (horas de silencio)"
       },
       "failures": {
         "kicker": "Motivos de los fallos",
@@ -219,40 +222,7 @@
       "unofficialDisabled": "No oficial (desactivado)"
     },
     "compose": {
-      "back": "Volver a Difusiones",
-      "crumb": "Difusiones / Nueva",
-      "title": "Crear nueva",
-      "titleAccent": "difusión",
-      "draft": "Borrador / sin guardar",
-      "submit": "Añadir difusión",
-      "submitting": "Añadiendo…",
-      "created": "Difusión añadida.",
-      "createdMany": "Se añadieron {count} difusiones, una por remitente.",
-      "failed": "No se pudo añadir la difusión.",
-      "fixName": "Escribe un nombre para la difusión.",
-      "fixTemplate": "Elige una plantilla aprobada.",
-      "fixSchedule": "Elige una fecha y hora de envío.",
-      "loading": "Cargando",
-      "loadError": "No se pudieron cargar los datos de redacción.",
-      "retry": "Reintentar",
-      "setup": "Configuración de la difusión",
-      "templateMessage": "mensaje de plantilla",
-      "name": "Nombre de la difusión",
-      "namePlaceholder": "p. ej., Envío de plantilla de la oferta de mayo",
-      "nameHint": "Etiqueta interna usada en los informes de difusión.",
-      "template": "Seleccionar mensaje de plantilla",
-      "pickTemplate": "— Elige una plantilla aprobada —",
-      "noTemplates": "Aún no hay plantillas aprobadas.",
       "createOne": "Crear una",
-      "templateHint": "Las difusiones solo envían plantillas aprobadas.",
-      "twilioHint": "Los envíos conformes con Twilio requieren un Content SID por plantilla: marca una plantilla como \"Twilio ready\" en /templates/{id}/edit. Las plantillas sin ContentSid se enviarán como texto sin formato (se pierde la aprobación de plantilla de Meta).",
-      "device": "Enviar desde el dispositivo",
-      "devices": "Enviar desde dispositivos",
-      "multiDevice": "Varios dispositivos: marca todos los que correspondan",
-      "noDevices": "No hay dispositivos conectados.",
-      "connectOne": "Conectar uno →",
-      "share": "proporción",
-      "shareHint": "Marca los dispositivos y define las proporciones de reparto: por ejemplo, 7 / 3 envía el 70% de los contactos por el primer dispositivo y el 30% por el segundo. Con proporciones iguales, el reparto es uniforme.",
       "audience": "¿A quién quieres enviarla?",
       "audienceHint": "Elige segmentos, etiquetas, grupos o contactos. Quienes se elijan se combinan una sola vez.",
       "selected": "{count} seleccionados",
@@ -276,27 +246,10 @@
       "noContacts": "Aún no hay contactos.",
       "addSome": "Añadir algunos →",
       "noMatch": "Ningún contacto coincide con la búsqueda.",
-      "when": "¿Cuándo quieres enviar tu difusión?",
-      "whenHint": "Envíala de inmediato o elige una fecha y hora futuras.",
-      "sendNow": "Enviar ahora",
-      "sendNowHint": "Se envía tras la validación final.",
-      "sendLater": "Programar para más tarde",
-      "sendLaterHint": "Elige un día y una hora concretos.",
-      "sendDate": "Fecha de envío",
-      "sendTime": "Hora de envío",
-      "timezone": "Zona horaria",
-      "preview": "Vista previa de la plantilla",
-      "previewTitle": "Vista previa de la difusión",
-      "previewSub": "Mensaje de plantilla",
-      "pickToPreview": "Elige una plantilla para ver la vista previa…",
-      "previewSelected": "Seleccionados",
-      "previewSchedule": "Programación",
-      "now": "Ahora",
-      "later": "Más tarde",
-      "media": "Vista previa de {kind}",
       "contactsDenied": "No tienes acceso a la lista de contactos. Elige contactos mediante grupos o etiquetas.",
       "unofficialDisabled": "El envío mediante números personales de WhatsApp (la API no oficial) no está activado en tu espacio de trabajo. Elige un número oficial de la API de WhatsApp Business.",
-      "previewLabel": "Vista previa de la plantilla"
+      "colEmail": "Correo electrónico",
+      "noEmail": "Sin dirección de correo"
     },
     "overrides": {
       "title": "Completa este envío",
@@ -353,6 +306,31 @@
         "name": "Instagram",
         "hint": "Escribe a personas que ya están en tus mensajes directos de Instagram, sin aprobación de plantilla.",
         "cta": "Crear difusión de Instagram"
+      },
+      "facebook": {
+        "name": "Facebook",
+        "hint": "Envía un mensaje de Messenger a quienes escribieron a tu Página en las últimas 24 horas.",
+        "cta": "Crear difusión de Facebook"
+      },
+      "email": {
+        "name": "Correo electrónico",
+        "hint": "Envía un mensaje como correo electrónico desde un buzón conectado, con un enlace para darse de baja.",
+        "cta": "Crear campaña de correo"
+      },
+      "line": {
+        "name": "LINE",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de LINE.",
+        "cta": "Crear difusión de LINE"
+      },
+      "viber": {
+        "name": "Viber",
+        "hint": "Envía un mensaje a las personas que ya chatean con tu cuenta de Viber.",
+        "cta": "Crear difusión de Viber"
+      },
+      "wechat": {
+        "name": "WeChat",
+        "hint": "Envía un mensaje masivo a todos los seguidores, a una etiqueta o a usuarios elegidos de tu Cuenta oficial.",
+        "cta": "Crear difusión de WeChat"
       }
     }
   }

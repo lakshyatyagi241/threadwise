@@ -685,6 +685,7 @@
         "anotherPart": "Bagian lain dari alur ini. Dijalankan saat tombol atau baris daftar menuju ke sini{lost, select, true {: belum ada yang menuju ke sini, sehingga tidak akan pernah dijalankan.} other {.}}",
         "addFirstStep": "Tambahkan langkah pertama",
         "branchingEnds": "{kind, select, list {Daftar} other {Kumpulan tombol}} ini mengakhiri bagian ini: apa yang dikirim berikutnya bergantung pada pilihan pelanggan.",
+        "optionsCarryOn": "Setiap {kind, select, list {baris} other {tombol}} dapat memulai alurnya sendiri atau melanjutkan ke langkah berikutnya di bawah.",
         "thenGoTo": "Lalu ke",
         "confirmImport": {
           "title": "Ganti alur ini dengan berkas tersebut?",
@@ -717,9 +718,10 @@
             "ask": "Tanya pelanggan",
             "handoff": "Serahkan",
             "logic": "Putuskan",
-            "answer": "Jawaban"
+            "answer": "Jawaban",
+            "action": "Aksi"
           },
-          "blockedTitle": "Tombol dan daftar mengakhiri alur, sehingga hanya boleh di posisi terakhir.",
+          "blockedTitle": "Langkah ini mengakhiri bagian ini, jadi hanya bisa diletakkan paling akhir.",
           "blockedTitleFaq": "Jawab dari FAQ punya dua jalur keluar, jadi hanya bisa di posisi terakhir."
         },
         "card": {
@@ -733,11 +735,27 @@
           "faqExits": {
             "matched": "Terjawab",
             "no_match": "Tidak cocok"
-          }
+          },
+          "close": "Tutup",
+          "clickToEdit": "Klik untuk mengedit",
+          "outsideToSave": "Klik di mana saja di luar untuk menyimpan perubahan",
+          "addCondition": "Tambahkan kondisi setelah langkah ini",
+          "conditionLast": "Kondisi mengakhiri bagian ini, jadi hanya bisa di paling akhir.",
+          "duplicateTitle": "Duplikat langkah ini?",
+          "duplicateBody": "Salinan ditambahkan tepat setelahnya.",
+          "deleteTitle": "Hapus langkah ini?",
+          "deleteBody": "Langkah dihapus dari flow.",
+          "stage": "Tahap {stage}",
+          "storedIn": "Nilai akan disimpan di properti <b>{property}</b> milik kontak",
+          "actions": "Aksi",
+          "actionsHint": "Tambahkan langkah yang berjalan tepat setelah langkah ini.",
+          "actionsBlocked": "Langkah yang mengakhiri bagiannya tidak bisa diikuti langkah lain."
         },
         "editors": {
           "linkLabel": "Tujuan",
+          "linkChoose": "Pilih ke mana ini mengarah…",
           "linkEnds": "Berakhir di sini (tidak ada yang dikirim lagi)",
+          "linkNext": "Lanjut ke langkah berikutnya",
           "linkOption": "{stage} · {label}{self, select, true { (langkah ini)} other {}}{hasSummary, select, true { · {summary}} other {}}",
           "linkNew": "+ Arahkan ke alur baru…",
           "question": "Pertanyaan",
@@ -837,17 +855,13 @@
             "hour": "jam",
             "day": "hari"
           },
-          "location": {
-            "placeName": "Nama tempat",
-            "placePlaceholder": "Kantor kami",
-            "address": "Alamat",
-            "latitude": "Lintang",
-            "longitude": "Bujur"
-          },
           "template": {
             "label": "Templat yang disetujui",
             "hint": "Hanya templat yang sudah disetujui untuk nomor WhatsApp Anda yang ditampilkan.",
-            "choose": "Pilih templat…"
+            "choose": "Pilih templat…",
+            "buttons": "Tombol",
+            "variables": "Diisi dari data kontak",
+            "variablesHint": "Setiap nomor diisi saat pesan dikirim dengan data kontak yang disebut di sini. Ubah ini di templat."
           },
           "cta": {
             "buttonText": "Teks tombol",
@@ -861,7 +875,12 @@
             "add": "Tambah tombol lain",
             "remove": "Hapus tombol",
             "opensPhone": "Nomor telepon",
-            "opensEmail": "Alamat email"
+            "opensEmail": "Alamat email",
+            "errors": {
+              "url": "Masukkan alamat web yang valid yang diawali https://",
+              "phone": "Masukkan nomor telepon yang valid, mis. +91 98765 43210",
+              "email": "Masukkan alamat email yang valid, mis. name@example.com"
+            }
           },
           "carousel": {
             "intro": "Pesan di atas kartu",
@@ -1044,13 +1063,7 @@
           "info": "Tambahkan hingga {max} tombol CTA dalam satu pesan — campur Kunjungi situs web, Call, dan Salin kode dalam kombinasi apa pun. Batas yang sama dengan tombol templat WhatsApp.",
           "buttonLabel": "Label tombol",
           "addButton": "Tambahkan tombol",
-          "maxReached": "Maks. {max} tombol sudah tercapai.",
-          "locationTitle": "Judul",
-          "locationTitlePlaceholder": "Kantor kami",
-          "locationAddress": "Alamat",
-          "locationAddressPlaceholder": "Jalan, kota, negara",
-          "locationLatitude": "Lintang",
-          "locationLongitude": "Bujur"
+          "maxReached": "Maks. {max} tombol sudah tercapai."
         },
         "logic": {
           "operator": {
@@ -1118,19 +1131,14 @@
           "aiModelPick": "— pilih model —",
           "aiModelNone": "Tidak ada model AI yang aktif — minta admin mengaktifkan salah satu",
           "aiModelNotEnabled": "{value} (tidak aktif)",
-          "aiAssistantNone": "— tidak ada (gunakan prompt di atas saja) —",
           "aiAssistantOption": "{name} · {count, plural, other {# sumber}}",
           "aiAssistantMissing": "(asisten {id})",
-          "aiAssistantHintNone": "Belum ada basis pengetahuan. Buat di <link>Pelatihan AI</link>, lalu tekan Segarkan daftar untuk memilihnya di sini.",
-          "aiAssistantHintEmpty": "Catatan: asisten ini memiliki 0 sumber terlatih. Tambahkan di <link>Pelatihan AI</link> atau balasan hanya memakai prompt.",
-          "aiAssistantHint": "Menarik konten terlatih dari asisten yang dipilih ke balasan ini. <link>Kelola pengetahuan →</link>",
           "aiModelLabel": "Model",
           "aiModelHint": "Model yang diaktifkan admin — ditambah penyedia yang Anda tambahkan kunci sendiri (Pengaturan → Kunci AI, pada paket BYOK).",
           "aiModelHintNone": "Belum ada penyedia yang tersedia. Tambahkan kunci Anda sendiri di <link>Pengaturan → Kunci AI</link> (paket BYOK), atau minta admin mengaktifkan salah satu.",
           "aiPrompt": "System prompt",
           "aiSave": "Simpan respons ke",
           "aiSaveHint": "Node berikutnya membacanya sebagai <v>{save}</v> — atau <v>{path}</v> saat ekstraksi.",
-          "aiAssistantLabel": "Basis pengetahuan (opsional)",
           "aiExtract": "<strong>Ekstrak data terstruktur (JSON)</strong> — ubah pesan menjadi field",
           "aiFields": "Field yang diekstrak",
           "aiFieldsHint": "Kunci dipisahkan koma. AI mengembalikan SATU objek JSON; setiap kunci menjadi <v>{key}</v> (dan <v>{rows}</v> saat beberapa rekaman terdeteksi — mis. untuk node Google Sheets).",
@@ -1143,7 +1151,25 @@
           "subflowMissing": "Alur {id} (tidak ada di workspace)",
           "subflowLabel": "Alur yang dijalankan",
           "subflowHint": "Pilih alur tersimpan lain. Saat node ini aktif, alur tersebut berjalan sampai selesai sebelum kendali kembali ke node berikutnya di sini.",
-          "endInfo": "Node ini mengakhiri alur. Apa pun yang terhubung setelahnya tidak akan dijalankan."
+          "endInfo": "Node ini mengakhiri alur. Apa pun yang terhubung setelahnya tidak akan dijalankan.",
+          "aiSetupLegend": "Bagaimana langkah ini harus menjawab?",
+          "aiSetupAgent": "Agen AI",
+          "aiSetupAgentDesc": "Memakai instruksi, model, dan pengetahuan milik agen dari Pelatihan AI.",
+          "aiSetupCustom": "Pengaturan kustom",
+          "aiSetupCustomDesc": "Pilih model dan tulis instruksi di sini.",
+          "aiAgentLabel": "Agen AI",
+          "aiAgentPick": "— pilih agen AI —",
+          "aiAgentHint": "Agen membawa instruksi, model, dan pengetahuannya sendiri. Ubah di <link>Pelatihan AI</link>.",
+          "aiAgentNone": "Anda belum punya agen AI. <link>Buat agen AI pertama Anda</link>, lalu tekan Segarkan daftar.",
+          "aiAgentRequired": "Pilih agen AI, atau beralih ke pengaturan kustom.",
+          "aiAgentSummary": "Model {model} · {count, plural, other {# sumber pengetahuan}}",
+          "aiAgentNoSources": "Agen ini belum punya pengetahuan, jadi hanya menjawab dari instruksinya. Tambahkan sumber di <link>Pelatihan AI</link>.",
+          "aiPromptRequired": "Tulis instruksi untuk AI.",
+          "aiKnowledgeLabel": "Pengetahuan dari agen AI (opsional)",
+          "aiKnowledgeNone": "— tidak ada —",
+          "aiKnowledgeHint": "Menambahkan sumber terlatih milik agen itu ke balasan. Instruksi dan modelnya sendiri tidak dipakai pada pengaturan kustom. <link>Kelola di Pelatihan AI →</link>",
+          "aiAdvanced": "Opsi lanjutan",
+          "aiCreateAgent": "+ Buat agen AI"
         },
         "options": {
           "prompt": "Prompt",
@@ -1317,7 +1343,8 @@
             "date_field_match": "Jadwal: relatif terhadap tanggal pada kontak (ulang tahun…)",
             "schedule": "Jadwal: pada tanggal dan waktu tertentu",
             "shopify_event": "Komersial: event toko Shopify",
-            "woocommerce_event": "Komersial: event toko WooCommerce"
+            "woocommerce_event": "Komersial: event toko WooCommerce",
+            "segment_leave": "Audiens: saat kontak keluar dari segmen"
           },
           "tagsLoading": "Memuat tag…",
           "tagPick": "— pilih tag —",
@@ -1411,7 +1438,8 @@
             "productId": "ID produk (opsional)",
             "productIdHint": "Kosong = produk apa pun dalam pesanan.",
             "storeNote": "Pelanggan dicocokkan dengan kontak tersimpan berdasarkan nomor telepon; tidak ada kontak baru yang dibuat untuk pesanan. \"Ditambahkan ke keranjang\" dan \"produk dilihat\" tidak tersedia: toko tidak melaporkannya.",
-            "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya."
+            "updatedNote": "Berjalan setiap kali seseorang atau impor mengubah kontak. Perubahan oleh alur lain tidak memulainya.",
+            "segmentLeaveHint": "Berjalan satu kali setiap kali kontak yang tadinya ada di segmen ini ditemukan berada di luarnya setelah diperbarui, diberi tag, atau didaftar. Kontak hanya terdeteksi keluar jika alur sebelumnya melihatnya berada di dalam segmen."
           }
         }
       },
@@ -1631,27 +1659,24 @@
           "kinds": {
             "sheets": {
               "pick": "— pilih lembar —",
-              "empty": "Tidak ada spreadsheet ditemukan — tempel URL/ID di bawah",
               "loading": "Memuat lembar…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga lembar Anda tidak dapat ditampilkan. Tempel ID atau tautan lembar sebagai gantinya.",
-              "idPlaceholder": "ID lembar",
-              "saved": "Lembar {id}… (belum dimuat)"
+              "saved": "Lembar {id}… (belum dimuat)",
+              "empty": "Tidak ada spreadsheet di akun Google yang terhubung",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar sheet Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih sheet."
             },
             "docs": {
               "pick": "— pilih dokumen templat —",
               "empty": "Dokumen tidak ditemukan",
               "loading": "Memuat dokumen…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga dokumen Anda tidak dapat ditampilkan. Tempel ID atau tautan dokumen sebagai gantinya.",
-              "idPlaceholder": "ID dokumen",
-              "saved": "Dokumen {id}… (belum dimuat)"
+              "saved": "Dokumen {id}… (belum dimuat)",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar dokumen Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih dokumen."
             },
             "forms": {
               "pick": "— pilih formulir —",
               "empty": "Formulir tidak ditemukan",
               "loading": "Memuat formulir…",
-              "notConnected": "Google belum terhubung untuk workspace ini, sehingga formulir Anda tidak dapat ditampilkan. Tempel ID atau tautan formulir sebagai gantinya.",
-              "idPlaceholder": "ID formulir",
-              "saved": "Formulir {id}… (belum dimuat)"
+              "saved": "Formulir {id}… (belum dimuat)",
+              "notConnected": "Google belum terhubung untuk workspace ini, sehingga daftar formulir Anda tidak dapat ditampilkan. Hubungkan Google untuk memilih formulir."
             }
           },
           "sheetsIntro": "Tambahkan baris ke Google Sheet (mode tulis) atau cari baris berdasarkan kolom kunci (mode baca). Menggunakan akun Google workspace yang terhubung di <link>/google-account</link>.",
@@ -1673,8 +1698,6 @@
           "addColumn": "Tambah kolom",
           "matchByHeader": "Cocokkan kolom berdasarkan nama header",
           "matchByHeaderHint": "Tulis setiap nilai ke kolom lembar dengan header tersebut (urutan bebas). Biarkan mati untuk menambahkan dari kiri ke kanan sesuai posisi — default.",
-          "pasteLabel": "…atau tempel URL / ID Spreadsheet",
-          "pasteHint": "Tetap berfungsi meskipun daftar pilihan kosong — tempel tautan lembar dan kami akan mengambil ID-nya.",
           "docsIntro": "Salin dokumen templat, isi <mono>{placeholders}</mono>, bagikan dengan siapa pun yang memiliki tautan, lalu kirim URL ke pelanggan. Letakkan <mono>{key}</mono> di templat Anda tempat nilai akan muncul.",
           "templateDocument": "Dokumen templat",
           "newCopyTitle": "Judul salinan baru",
@@ -1689,7 +1712,6 @@
           "messageTemplateHint": "Gelembung bot yang dikirim ke pelanggan. <mono>{token}</mono> akan berisi tautan berbagi.",
           "messageTemplatePlaceholder": "Berikut dokumen Anda:\n'{{'doc_url'}}'",
           "saveUrl": "Simpan URL ke variabel",
-          "formIntro": "Mengirim URL formulir melalui WhatsApp, menjeda alur, dan melanjutkan melalui port <b>submitted</b> saat pelanggan mengisinya. Jawaban menjadi variabel alur.",
           "googleForm": "Google Form",
           "bodyBubble": "Gelembung isi (dikirim di atas tautan)",
           "bodyBubblePlaceholder": "Silakan isi formulir singkat ini:",
@@ -1697,11 +1719,21 @@
           "saveResponsesHint": "Jawaban individual juga tersimpan sebagai <mono>{token}</mono>.",
           "expireAfter": "Kedaluwarsa setelah (detik)",
           "expireAfterHint": "Berapa lama menunggu pengiriman sebelum waktu habis. 86400 = 24 jam.",
-          "setupTitle": "Pengaturan sekali — tempel ini ke Editor Skrip Formulir Anda",
-          "setupOpen": "Buka formulir Anda → <mono>menu ⋮</mono> → <mono>Editor skrip</mono>",
-          "setupDownload": "<link>Unduh skrip (.gs)</link> lalu tempel",
-          "setupTrigger": "Tambahkan pemicu: <mono>onFormSubmit</mono> · Dari formulir · Saat formulir dikirim",
-          "setupWarning": "Tanpa skrip ini, formulir tetap mencatat jawaban di Google Forms, tetapi alur tidak akan dilanjutkan."
+          "connection": {
+            "open": "Buka akun Google",
+            "permission": {
+              "calendar": "Kalender",
+              "sheets": "Sheets",
+              "docs": "Docs dan Drive",
+              "forms": "Forms"
+            },
+            "unavailable": "Google belum disiapkan untuk platform ini, sehingga langkah ini gagal saat alur dijalankan.",
+            "disconnected": "Belum ada akun Google yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan Google terlebih dahulu.",
+            "needsReconnect": "Google tidak lagi menerima akun yang terhubung, sehingga langkah ini gagal saat alur dijalankan. Hubungkan kembali Google terlebih dahulu.",
+            "missing": "Akun Google yang terhubung tidak diberi izin {permission}, sehingga langkah ini gagal saat alur dijalankan."
+          },
+          "formIntro": "Mengirim URL formulir lewat WhatsApp, menjeda alur, lalu melanjutkan lewat port <b>submitted</b> saat pelanggan mengisinya. Jawaban dibaca dari formulir melalui akun Google Anda yang terhubung, jadi tidak perlu menempelkan apa pun ke formulir. Jawaban menjadi variabel alur.",
+          "noListing": "Daftar file Anda tidak dapat ditampilkan karena izin daftar file Drive belum diberikan di halaman akun Google. Tambahkan di sana untuk memilih file."
         },
         "helpers": {
           "storeWithCurrency": "{name} · {currency}",
@@ -1952,6 +1984,89 @@
         "label": "Ikon (opsional)",
         "add": "Tambah ikon",
         "saveFirst": "Simpan bot sekali untuk menambahkan ikon."
+      },
+      "buttonAction": {
+        "label": "Aksi saat tombol ditekan",
+        "kind": {
+          "none": "Lanjut ke langkah berikutnya",
+          "flow": "Hubungkan flow",
+          "live_agent": "Agen langsung",
+          "opt_in": "Opt-in",
+          "opt_out": "Opt-out"
+        },
+        "pickFlow": "Pilih flow",
+        "loadingFlows": "Memuat flow…",
+        "flowMissing": "Flow {id} (tidak ditemukan)",
+        "hint": {
+          "flow": "Memulai flow yang dipilih untuk kontak ini, dan percakapan berlanjut di sana. Tidak ada yang terhubung setelah tombol ini.",
+          "live_agent": "Menyerahkan percakapan ke tim yang Anda pilih. Tidak ada yang terhubung setelah tombol ini.",
+          "opt_in": "Menandai kontak sebagai berlangganan pesan pemasaran, lalu lanjut ke langkah yang terhubung setelah tombol ini.",
+          "opt_out": "Menandai kontak sebagai berhenti berlangganan pesan pemasaran, lalu lanjut ke langkah yang terhubung setelah tombol ini."
+        }
+      },
+      "messageTools": {
+        "format": "Format teks",
+        "bold": "Tebal",
+        "italic": "Miring",
+        "strike": "Coret",
+        "mono": "Monospasi",
+        "bullet": "Daftar poin",
+        "numbered": "Daftar bernomor",
+        "emoji": "Emoji",
+        "emojiSearch": "Cari emoji",
+        "emojiNone": "Emoji tidak ditemukan",
+        "variable": "Sisipkan variabel",
+        "variableSearch": "Cari variabel",
+        "groupContact": "Properti kontak",
+        "groupFlow": "Tersimpan di flow ini",
+        "variableNone": "Variabel tidak ditemukan"
+      },
+      "askAge": {
+        "minAge": "Usia minimum",
+        "minAgeHint": "Kosongkan untuk memakai usia ruang kerja Anda dari Pusat kepatuhan (18 jika belum diatur). Antara 1 dan 21.",
+        "whenUnder": "Jika jawabannya di bawah usia itu",
+        "whenUnderHint": "Kontak ditandai sebagai di bawah umur dalam kedua kasus. Pelanggan tidak pernah diberi tahu jawaban mana yang lolos.",
+        "end": "Akhiri alur dengan kalimat singkat yang netral",
+        "continue": "Lanjutkan, dan biarkan saya membuat percabangan berdasarkan jawaban",
+        "endText": "Kalimat penutup",
+        "endTextHint": "Dikirim sebelum alur berakhir. Jangan menyebut usia. Jika kosong, dipakai “Kami tidak dapat melanjutkan.”",
+        "continueNote": "Langkah berikutnya dapat membaca variabel jawaban diikuti _age_gate (misalnya answer_age_gate), yang bernilai under atau adult. Tambahkan Kondisi untuk membuat percabangan, misalnya untuk meminta orang tua atau wali.",
+        "note": "Tanyakan usia hanya jika Anda memerlukannya. Jawaban ditulis ke kontak: tanggal lahir sebagai tanggal lahir, dan jawaban di bawah usia menandai kontak sebagai di bawah umur."
+      },
+      "location": {
+        "modeLabel": "Cara menetapkan lokasi",
+        "modeLink": "Tautan Google Maps",
+        "modeCoords": "Lintang & bujur",
+        "linkLabel": "Tautan Google Maps",
+        "linkPlaceholder": "Tempel tautan, mis. https://maps.app.goo.gl/…",
+        "linkHint": "Di Google Maps, buka tempatnya, ketuk Bagikan, lalu Salin link. Tautan pendek dan panjang sama-sama bisa.",
+        "finding": "Memeriksa tautan…",
+        "retry": "Coba lagi",
+        "latitude": "Lintang",
+        "longitude": "Bujur",
+        "coordsHint": "Lintang berkisar -90 sampai 90 dan bujur -180 sampai 180. Anda bisa menempel “lintang, bujur” di salah satu kolom.",
+        "found": "Lokasi ditemukan",
+        "openInMaps": "Buka di Google Maps",
+        "optionalHint": "Opsional: ditampilkan pada kartu peta yang diterima pelanggan. Keduanya boleh dikosongkan.",
+        "optional": "(opsional)",
+        "placeName": "Nama tempat",
+        "placePlaceholder": "Kantor kami",
+        "address": "Alamat",
+        "problem": {
+          "empty": "Masukkan tautan Google Maps atau koordinat.",
+          "lat_missing": "Masukkan lintang.",
+          "lng_missing": "Masukkan bujur.",
+          "lat_nan": "Lintang harus berupa angka, misalnya 18.5204.",
+          "lng_nan": "Bujur harus berupa angka, misalnya 73.8567.",
+          "lat_range": "Lintang harus antara -90 dan 90.",
+          "lng_range": "Bujur harus antara -180 dan 180.",
+          "zero": "0, 0 bukan tempat yang nyata. Masukkan koordinat yang sebenarnya.",
+          "not_url": "Ini tidak tampak seperti tautan. Tempel tautan Google Maps lengkap.",
+          "not_maps": "Ini bukan tautan Google Maps.",
+          "no_coords": "Tautan ini tidak menunjuk ke titik yang tepat. Buka tempatnya di Google Maps, ketuk Bagikan lalu salin tautannya, atau masukkan koordinat.",
+          "unresolved": "Tautan pendek ini belum diperiksa. Keluar dari kolom atau coba lagi.",
+          "resolve_failed": "Tautan ini tidak dapat dibaca. Pastikan tautan terbuka di Google Maps, atau masukkan koordinat."
+        }
       }
     },
     "contracts": {
@@ -2262,7 +2377,9 @@
         "phone": "Nomor telepon",
         "number": "Angka",
         "alphanumeric": "Huruf dan angka",
-        "date": "Tanggal"
+        "date": "Tanggal",
+        "age": "Usia",
+        "date_of_birth": "Tanggal lahir"
       },
       "askInputWrong": {
         "text": "Silakan coba lagi",
@@ -2271,7 +2388,9 @@
         "phone": "Masukkan nomor telepon yang valid",
         "number": "Masukkan angka yang valid",
         "alphanumeric": "Gunakan huruf dan angka saja",
-        "date": "Masukkan tanggal yang valid ({format})"
+        "date": "Masukkan tanggal yang valid ({format})",
+        "age": "Masukkan usia Anda sebagai bilangan bulat",
+        "date_of_birth": "Masukkan tanggal yang valid ({format})"
       },
       "flowTypes": {
         "chat": "WhatsApp",
@@ -2316,7 +2435,8 @@
         "date_field_match": "saat tanggal cocok",
         "schedule": "sesuai jadwal",
         "shopify_event": "saat event Shopify",
-        "woocommerce_event": "saat event WooCommerce"
+        "woocommerce_event": "saat event WooCommerce",
+        "segment_leave": "saat keluar segmen"
       },
       "ports": {
         "manual": "manual",
@@ -2379,7 +2499,9 @@
         "noSenderInstagram": "Node Pemicu belum memilih akun Instagram — pilih salah satu pada langkah Pemicu.",
         "noSenderFacebook": "Node Pemicu belum memilih Halaman Facebook — pilih salah satu pada langkah Pemicu.",
         "noSenderNumber": "Node Pemicu belum memilih nomor — pilih salah satu pada langkah Pemicu.",
-        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan alur."
+        "faqMinScore": "\"{node}\" memiliki skor minimum di luar 0.05 sampai 0.99 — perbaiki atau kosongkan untuk memakai pengaturan alur.",
+        "locationInvalid": "“{node}” tidak memiliki lokasi yang valid — tempel tautan Google Maps atau masukkan lintang (-90 sampai 90) dan bujur (-180 sampai 180).",
+        "aiNoAgent": "\"{node}\" tidak punya agen AI maupun prompt — pilih agen AI, atau pilih Pengaturan kustom dan tulis instruksinya."
       }
     },
     "simpleModel": {
@@ -2470,6 +2592,14 @@
         "faq": {
           "label": "Jawab dari FAQ",
           "help": "Cocokkan pesan pelanggan dengan FAQ Anda. Mengakhiri alur ini: satu jalur keluar jika FAQ menjawab, satu lagi jika tidak"
+        },
+        "apiLibrary": {
+          "label": "Panggilan API",
+          "help": "Panggil API dari pustaka API Anda"
+        },
+        "code": {
+          "label": "Fungsi JS",
+          "help": "Jalankan potongan kecil JavaScript"
         }
       },
       "typeLabel": {
@@ -2487,7 +2617,9 @@
         "assign": "Tugaskan ke agen",
         "carousel": "Carousel",
         "condition": "Kondisi",
-        "faq": "Jawab dari FAQ"
+        "faq": "Jawab dari FAQ",
+        "api_library": "Panggilan API",
+        "code": "Fungsi JS"
       },
       "stepLabel": {
         "questionOf": "Pertanyaan · {kind}"
@@ -2510,10 +2642,11 @@
         "writeQuestion": "Langkah {stage}: tulis pertanyaannya.",
         "nameVariable": "Langkah {stage}: beri nama variabel tempat jawaban disimpan.",
         "chooseAnswerProperty": "Langkah {stage}: pilih properti kontak tempat jawaban disalin.",
-        "setCoordinates": "Langkah {stage}: atur lintang dan bujur.",
+        "setCoordinates": "Langkah {stage}: tempel tautan Google Maps atau masukkan lintang dan bujur yang valid.",
         "chooseTemplate": "Langkah {stage}: pilih templat.",
         "chooseTeam": "Langkah {stage}: pilih tim tujuan percakapan.",
         "ctaLabelLink": "Langkah {stage}: beri tombol nama dan tautan.",
+        "ctaLinkInvalid": "Langkah {stage}: tujuan tombol tidak valid untuk jenisnya.",
         "choosePickedProperty": "Langkah {stage}: pilih properti kontak tempat opsi yang dipilih disalin.",
         "buttonsPrompt": "Langkah {stage}: tulis pesan di atas tombol.",
         "addButton": "Langkah {stage}: tambahkan minimal satu tombol.",
@@ -2528,7 +2661,15 @@
         "carouselCards": "Langkah {stage}: tambahkan minimal satu kartu dan beri setiap kartu judul.",
         "carouselButtons": "Langkah {stage}: beri setiap tombol nama, serta tautan, nomor, atau alamat di tempat tombol membuka sesuatu.",
         "conditionIncomplete": "Langkah {stage}: lengkapi aturan kondisi (variabel dan nilai di setiap aturan).",
-        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur."
+        "faqMinScore": "Langkah {stage}: skor minimum harus dari 0.05 sampai 0.99, atau gunakan pengaturan alur.",
+        "optionNotConnected": "Langkah {stage}: {kind, select, row {baris} other {tombol}} \"{label}\" tidak mengarah ke mana pun. Tambahkan langkah untuknya atau beri tindakan.",
+        "tooManyOptions": "Langkah {stage}: {kind, select, row {daftar dapat memiliki paling banyak {max} baris} other {satu set tombol dapat memiliki paling banyak {max} tombol}}.",
+        "chooseFlow": "Langkah {stage}: pilih flow yang dimulai tombol.",
+        "chooseApi": "Langkah {stage}: pilih API yang dipanggil.",
+        "writeCode": "Langkah {stage}: tulis kode yang dijalankan.",
+        "webhookUrl": "Langkah {stage}: tambahkan alamat (URL) yang akan dipanggil.",
+        "chooseAiAgent": "Langkah {stage}: pilih agen AI yang menjawab, atau ubah langkah ini ke pengaturan kustom.",
+        "writeAiPrompt": "Langkah {stage}: tulis instruksi untuk AI, atau pilih agen AI."
       },
       "faqSummary": "{hasCategory, select, true {Dari FAQ Anda · {category}} other {Dari FAQ Anda}}"
     },
@@ -2643,7 +2784,8 @@
       "simPurchase": "Simulasi pembelian: {name} → port \"purchased\"",
       "simAbandon": "Simulasi ditinggalkan → port \"abandoned\"",
       "faqAnswered": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, jadi tidak ada yang dikirim dan {ref} tetap kosong. Mengambil jalur \"terjawab\".",
-      "faqNoMatch": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, dan jalur \"terjawab\" tidak terhubung, jadi mengambil \"tidak cocok\". {ref} tetap kosong."
+      "faqNoMatch": "(simulasi) Jawab dari FAQ untuk \"{query}\": chat uji tidak mencari di FAQ Anda, dan jalur \"terjawab\" tidak terhubung, jadi mengambil \"tidak cocok\". {ref} tetap kosong.",
+      "locationSkipped": "(lokasi) dilewati: tidak ada koordinat yang valid"
     }
   }
 }

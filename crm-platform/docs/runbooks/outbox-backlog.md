@@ -73,9 +73,12 @@ GROUP BY event_type
 ORDER BY count(*) DESC;
 ```
 
-Backoff is `2^attempts` seconds capped at 15 minutes, dead-lettered at 8
-attempts — so a poison event cannot block the queue behind it indefinitely. Fix
-the consumer, then re-queue:
+Backoff is `2^attempts` seconds capped at 15 minutes with jitter (a random point
+in the upper half), dead-lettered at 26 attempts (2 to 4 hours of retrying,
+`workers/outbox-retry-policy.ts`) — so a poison event cannot block the queue
+behind it indefinitely, and an outage of a few hours does not lose events. The
+worker heartbeat publishes the `dead` count (`/health` outbox check, field
+`dead`); alert on any value above 0. Fix the consumer, then re-queue:
 
 ```sql
 UPDATE event_outbox

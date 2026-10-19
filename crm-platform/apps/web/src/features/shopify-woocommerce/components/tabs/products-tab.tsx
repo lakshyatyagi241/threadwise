@@ -22,7 +22,7 @@ function Card({ p, currency, kind }: { p: DashboardProduct; currency: string; ki
           </div>
         )}
         {p.discountPct > 0 && (
-          <span className="absolute left-2 top-2 rounded-full bg-danger px-2 py-0.5 text-[10px] font-semibold text-white">
+          <span className="absolute start-2 top-2 rounded-full bg-danger px-2 py-0.5 text-[10px] font-semibold text-white">
             {t('save', { pct: p.discountPct })}
           </span>
         )}

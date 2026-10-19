@@ -19,7 +19,8 @@
       "googleCalendar": "Google Calendar",
       "googleMail": "Gmail",
       "microsoftMail": "Microsoft 365",
-      "flowBuilder": "Flow builder"
+      "flowBuilder": "Flow builder",
+      "microsoftCalendar": "Microsoft Calendar"
     },
     "hub": {
       "kicker": "অ্যাডমিন - প্রজেক্ট সেটিংস",
@@ -765,15 +766,15 @@
           },
           "endpoint": {
             "label": "এন্ডপয়েন্ট",
-            "hint": "Spaces, R2 ও MinIO-র জন্য প্রয়োজন। শেষের /bucket মুছে ফেলা হয়।",
-            "placeholder": "https://… (Spaces / R2 / MinIO-র জন্য প্রয়োজন; Wasabi ও Bunny-র জন্য স্বয়ংক্রিয়)"
+            "hint": "Spaces ও R2-র জন্য প্রয়োজন। শেষের /bucket মুছে ফেলা হয়।",
+            "placeholder": "https://… (Spaces / R2-র জন্য প্রয়োজন; Wasabi ও Bunny-র জন্য স্বয়ংক্রিয়)"
           },
           "cdnUrl": {
             "label": "পাবলিক / CDN URL (ঐচ্ছিক)",
             "placeholder": "https://cdn.example.com"
           },
           "pathStyle": {
-            "label": "path-style এন্ডপয়েন্ট ব্যবহার করুন (MinIO / কিছু S3-সামঞ্জস্যপূর্ণ স্টোর)"
+            "label": "path-style এন্ডপয়েন্ট ব্যবহার করুন (কিছু S3-সামঞ্জস্যপূর্ণ স্টোর)"
           },
           "storageZone": {
             "label": "স্টোরেজ জোন",
@@ -791,8 +792,7 @@
             "wasabi": "Wasabi",
             "bunny": "Bunny.net Storage",
             "spaces": "DigitalOcean Spaces",
-            "r2": "Cloudflare R2",
-            "minio": "MinIO / S3-compatible"
+            "r2": "Cloudflare R2"
           },
           "visibility": {
             "private": "ব্যক্তিগত (সাইন করা URL)",
@@ -906,7 +906,7 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "যে Google OAuth ক্লায়েন্টের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তার ক্যালেন্ডার সংযুক্ত করে।",
+        "description": "যে Google OAuth ক্লায়েন্টের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তার Google অ্যাকাউন্ট সংযুক্ত করে, ক্যালেন্ডার, Sheets, Docs ও Forms-এর জন্য।",
         "sections": {
           "oauth": {
             "title": "Google OAuth client"
@@ -914,8 +914,8 @@
         },
         "fields": {
           "enabled": {
-            "label": "ওয়ার্কস্পেসকে Google Calendar সংযুক্ত করার অনুমতি দিন",
-            "hint": "বন্ধ: কোনো ওয়ার্কস্পেস সংযুক্ত করতে পারবে না, এবং কোনো ক্যালেন্ডারে লেখা বা পড়া হবে না।"
+            "label": "ওয়ার্কস্পেসকে Google সংযুক্ত করার অনুমতি দিন",
+            "hint": "বন্ধ: কোনো ওয়ার্কস্পেস সংযুক্ত করতে পারবে না, এবং Google থেকে কিছু পড়া বা Google-এ কিছু লেখা হবে না (ক্যালেন্ডার, Sheets, Docs, Forms)।"
           },
           "clientId": {
             "label": "Client ID",
@@ -1024,6 +1024,37 @@
             "advanced": "শুধু Advanced"
           }
         }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "যে Microsoft অ্যাপের মাধ্যমে প্রতিটি ওয়ার্কস্পেস তাদের Outlook বা Microsoft 365 ক্যালেন্ডার যুক্ত করে।",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra অ্যাপ"
+          }
+        },
+        "fields": {
+          "enabled": {
+            "label": "ওয়ার্কস্পেসগুলোকে Outlook যুক্ত করার অনুমতি দিন",
+            "hint": "বন্ধ থাকলে: কোনো ওয়ার্কস্পেস যুক্ত করতে পারবে না, এবং কোনো Outlook ক্যালেন্ডার থেকে কিছু পড়া বা তাতে কিছু লেখা হবে না। যুক্ত থাকা ক্যালেন্ডারগুলো রাখা হবে।"
+          },
+          "clientId": {
+            "label": "অ্যাপ্লিকেশন (ক্লায়েন্ট) ID",
+            "hint": "Microsoft Entra admin center-এর App registrations, Overview থেকে নিন। খালি রাখলে MICROSOFT_CALENDAR_CLIENT_ID ব্যবহার হয়।"
+          },
+          "clientSecret": {
+            "label": "ক্লায়েন্ট সিক্রেট",
+            "hint": "এনক্রিপ্ট করে সংরক্ষণ করা হয় এবং আর কখনো দেখানো হয় না। খালি রাখলে সংরক্ষিতটি থাকে; বিকল্প হিসেবে MICROSOFT_CALENDAR_CLIENT_SECRET ব্যবহার হয়।"
+          },
+          "tenant": {
+            "label": "টেন্যান্ট",
+            "hint": "common অফিস, স্কুল ও ব্যক্তিগত অ্যাকাউন্ট অনুমোদন করে; একক-টেন্যান্ট অ্যাপের জন্য ডিরেক্টরি (টেন্যান্ট) ID ব্যবহার করুন। খালি রাখলে MICROSOFT_CALENDAR_TENANT ব্যবহার হয়, না থাকলে common।"
+          },
+          "redirectUri": {
+            "label": "রিডাইরেক্ট URI ওভাররাইড",
+            "hint": "উপরের ঠিকানাটি ব্যবহার করতে খালি রাখুন। এটি অ্যাপের কোনো একটি রিডাইরেক্ট URI-র সঙ্গে হুবহু মিলতে হবে।"
+          }
+        }
       }
     },
     "cards": {
@@ -1119,7 +1150,7 @@
       },
       "storage": {
         "title": "ক্লাউড স্টোরেজ",
-        "description": "ক্লায়েন্টের মিডিয়া আপনার নিজের বাকেটে পাঠান: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2 বা MinIO।",
+        "description": "ক্লায়েন্টের মিডিয়া আপনার নিজের বাকেটে পাঠান: Amazon S3, Wasabi, Bunny.net, DigitalOcean Spaces, Cloudflare R2।",
         "tags": "S3 / Wasabi / Bunny / R2"
       },
       "whatsapp": {
@@ -1134,8 +1165,8 @@
       },
       "googleCalendar": {
         "title": "Google Calendar",
-        "description": "বুকিং ও ব্যস্ত সময়ের জন্য ওয়ার্কস্পেস যে Google OAuth ক্লায়েন্ট দিয়ে ক্যালেন্ডার সংযুক্ত করে।",
-        "tags": "Google / OAuth / Calendar"
+        "description": "বুকিং, Sheets, Docs ও Forms-এর জন্য ওয়ার্কস্পেস যে Google OAuth ক্লায়েন্ট দিয়ে নিজের Google অ্যাকাউন্ট সংযুক্ত করে।",
+        "tags": "Google / OAuth / Calendar / Sheets"
       },
       "googleMail": {
         "title": "Gmail ইমেল",
@@ -1151,6 +1182,11 @@
         "title": "Flow builder",
         "description": "প্রতিটি ওয়ার্কস্পেসের ডিফল্ট Flow builder: Simple ধাপে ধাপে বা Advanced ক্যানভাস। ওয়ার্কস্পেস এটি বদলাতে পারে।",
         "tags": "Simple / Advanced / Automation"
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "description": "যে Microsoft অ্যাপের মাধ্যমে ওয়ার্কস্পেসগুলো বুকিংয়ের জন্য তাদের Outlook ও Microsoft 365 ক্যালেন্ডার যুক্ত করে।",
+        "tags": "Microsoft / OAuth / Outlook / ক্যালেন্ডার"
       }
     },
     "signup": {
@@ -1613,8 +1649,8 @@
               "body": "Bunny-র ফিল্ড ব্যবহার করুন: স্টোরেজ জোন ও পাসওয়ার্ড। রিজিয়ন হলো জোনের রিজিয়ন (de, ny, la...)।"
             },
             "spaces": {
-              "title": "Spaces / R2 / MinIO",
-              "body": "S3 ফিল্ড পূরণ করুন এবং Endpoint URL পেস্ট করুন। MinIO-র জন্য path-style টিক দিন।"
+              "title": "Spaces / R2",
+              "body": "S3 ফিল্ড পূরণ করুন এবং Endpoint URL পেস্ট করুন।"
             },
             "test": {
               "title": "আগে সবসময় পরীক্ষা করুন",
@@ -1703,11 +1739,11 @@
       "googleCalendar": {
         "title": "Google Calendar",
         "eyebrow": "অ্যাডমিন - অ্যাপয়েন্টমেন্ট",
-        "description": "পুরো প্ল্যাটফর্মের জন্য একটিমাত্র Google Cloud OAuth ক্লায়েন্ট। এরপর প্রতিটি ওয়ার্কস্পেস অ্যাপয়েন্টমেন্ট, সেটিংস থেকে নিজের Google অ্যাকাউন্ট সংযুক্ত করে; ওয়ার্কস্পেস কখনও ক্লায়েন্ট ID বা সিক্রেট দেখে না।",
+        "description": "পুরো প্ল্যাটফর্মের জন্য একটিমাত্র Google Cloud OAuth ক্লায়েন্ট। এরপর প্রতিটি ওয়ার্কস্পেস সেটিংসের Google অ্যাকাউন্ট থেকে নিজের Google অ্যাকাউন্ট সংযুক্ত করে এবং কোন অনুমতি দেবে তা বেছে নেয়; ওয়ার্কস্পেস কখনও ক্লায়েন্ট ID বা সিক্রেট দেখে না।",
         "sections": {
           "oauth": {
             "title": "Google OAuth client",
-            "description": "ক্লায়েন্ট ID ও সিক্রেট ছাড়া ওয়ার্কস্পেসে Google Calendar অনুপলব্ধ দেখায় এবং বুকিং ক্যালেন্ডার ছাড়াই চলতে থাকে।"
+            "description": "ক্লায়েন্ট ID ও সিক্রেট ছাড়া ওয়ার্কস্পেসে Google অনুপলব্ধ দেখায়, বুকিং ক্যালেন্ডার ছাড়াই চলতে থাকে এবং ফ্লোর Google ধাপগুলো বাদ যায়।"
           }
         },
         "guide": {
@@ -1715,7 +1751,7 @@
           "items": {
             "project": {
               "title": "১. প্রজেক্ট ও API",
-              "body": "Google Cloud Console-এ একটি প্রজেক্ট তৈরি করুন এবং Google Calendar API চালু করুন।"
+              "body": "Google Cloud Console-এ একটি প্রজেক্ট তৈরি করুন এবং Google Calendar, Google Sheets, Google Docs, Google Drive ও Google Forms API চালু করুন। কোনো অনুমতি তখনই কাজ করে যখন তার API চালু থাকে।"
             },
             "redirect": {
               "title": "২. OAuth ক্লায়েন্ট",
@@ -1723,11 +1759,11 @@
             },
             "consent": {
               "title": "৩. সম্মতি স্ক্রিন",
-              "body": "calendar.events, calendar.freebusy ও calendar.calendarlist.readonly স্কোপ যোগ করুন, তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়।"
+              "body": "পণ্যটি যে স্কোপ চায় সেগুলো যোগ করুন (calendar.events, calendar.freebusy, calendar.calendarlist.readonly, spreadsheets, documents, drive, forms.body.readonly, forms.responses.readonly, drive.metadata.readonly), তারপর অ্যাপ প্রকাশ করুন: Testing অবস্থায় Google ৭ দিন পর প্রতিটি অনুমতি বন্ধ করে দেয় এবং ওয়ার্কস্পেসকে আবার সংযুক্ত করতে হয়। drive স্কোপগুলো সীমাবদ্ধ এবং Google-এর পর্যালোচনা লাগে।"
             },
             "workspaces": {
               "title": "৪. ওয়ার্কস্পেস সংযুক্ত করে",
-              "body": "ক্লায়েন্ট ID ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা অ্যাপয়েন্টমেন্ট, সেটিংস, Google Calendar থেকে সংযুক্ত করেন।"
+              "body": "ক্লায়েন্ট ID ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা সেটিংস, ইন্টিগ্রেশন, Google অ্যাকাউন্ট থেকে, অথবা অ্যাপয়েন্টমেন্ট, সেটিংস, Google Calendar থেকে সংযুক্ত করেন।"
             }
           }
         }
@@ -1823,6 +1859,38 @@
             "existing": {
               "title": "বিদ্যমান Flow",
               "body": "এই সেটিং বদলালে কোনো flow কখনও বদলায় বা মোছা হয় না। flow চালু থাকে; শুধু চালু থাকা বিল্ডারে খোলে। যে ওয়ার্কস্পেস নিজের বিল্ডার বেছেছে, সে আবার প্ল্যাটফর্মের ডিফল্ট না বেছে নেওয়া পর্যন্ত সেটিই রাখে।"
+            }
+          }
+        }
+      },
+      "microsoftCalendar": {
+        "title": "Microsoft Calendar",
+        "eyebrow": "Admin - অ্যাপয়েন্টমেন্ট",
+        "description": "পুরো প্ল্যাটফর্মের জন্য একটি Microsoft Entra অ্যাপ। এরপর প্রতিটি ওয়ার্কস্পেস অ্যাপয়েন্টমেন্ট, সেটিংস থেকে নিজের Outlook বা Microsoft 365 ক্যালেন্ডার যুক্ত করে এবং ক্লায়েন্ট আইডি বা সিক্রেট কখনো দেখতে পায় না।",
+        "sections": {
+          "oauth": {
+            "title": "Microsoft Entra অ্যাপ",
+            "description": "ক্লায়েন্ট আইডি ও সিক্রেট না থাকলে ওয়ার্কস্পেসগুলোতে Outlook উপলব্ধ নয় বলে দেখায় এবং বুকিং সেটি ছাড়াই চলে। Google Calendar-এর কোনো ক্ষতি হয় না।"
+          }
+        },
+        "guide": {
+          "title": "Microsoft Entra-তে সেট আপ করুন",
+          "items": {
+            "registration": {
+              "title": "1. অ্যাপ নিবন্ধন",
+              "body": "Microsoft Entra admin center-এ যেকোনো প্রাতিষ্ঠানিক ডিরেক্টরির অ্যাকাউন্ট এবং ব্যক্তিগত Microsoft অ্যাকাউন্টের জন্য একটি অ্যাপ নিবন্ধন তৈরি করুন, এবং Application (client) ID কপি করে এখানে বসান। আরও সীমিত বিকল্প বেছে না থাকলে টেন্যান্ট common রাখুন।"
+            },
+            "redirect": {
+              "title": "2. রিডাইরেক্ট URI ও সিক্রেট",
+              "body": "এই পেজে দেখানো রিডাইরেক্ট URI-টি Web রিডাইরেক্ট হিসেবে যোগ করুন, তারপর Certificates and secrets-এর অধীনে একটি ক্লায়েন্ট সিক্রেট তৈরি করে তার মান এখানে পেস্ট করুন। মেয়াদ কবে শেষ হবে তা লিখে রাখুন: সেই তারিখের পর নতুন সিক্রেট সংরক্ষণ না করা পর্যন্ত প্রতিটি ওয়ার্কস্পেসের ক্যালেন্ডার বন্ধ থাকবে।"
+            },
+            "permissions": {
+              "title": "3. API অনুমতি",
+              "body": "Microsoft Graph-এর delegated অনুমতি Calendars.ReadWrite, User.Read এবং offline_access যোগ করুন, এর বেশি কিছু নয়। সাধারণ ব্যবহারের জন্য পাবলিশার যাচাইকরণ সম্পূর্ণ করুন; কোনো গ্রাহকের টেন্যান্টে অ্যাপটি অনুমোদনের জন্য অ্যাডমিনিস্ট্রেটরও প্রয়োজন হতে পারে।"
+            },
+            "workspaces": {
+              "title": "4. ওয়ার্কস্পেসগুলো যুক্ত করে",
+              "body": "ক্লায়েন্ট আইডি ও সিক্রেট এখানে পেস্ট করে সংরক্ষণ করুন। এরপর অ্যাডমিনরা অ্যাপয়েন্টমেন্ট, সেটিংস থেকে যুক্ত করতে পারবেন।"
             }
           }
         }

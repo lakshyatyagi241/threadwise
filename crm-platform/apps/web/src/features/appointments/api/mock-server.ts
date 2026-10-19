@@ -121,9 +121,30 @@ const emptyType = (
     availability: rulesFromWeek(defaultWeek()),
     overrides: [],
     templates: [],
+    // Rules are created OFF; the stand-in starts with a switched-on reminder and an off follow-up.
     reminders: [
-      { offsetMinutes: 1440, label: '24h' },
-      { offsetMinutes: 180, label: '3h' },
+      {
+        id: uid(),
+        offsetMinutes: 1440,
+        label: '24h',
+        isActive: true,
+        kind: 'before',
+        channels: ['whatsapp', 'sms', 'email'],
+        subject: null,
+        body: null,
+        waTemplateId: null,
+      },
+      {
+        id: uid(),
+        offsetMinutes: 120,
+        label: null,
+        isActive: false,
+        kind: 'after',
+        channels: ['whatsapp', 'email'],
+        subject: null,
+        body: null,
+        waTemplateId: null,
+      },
     ],
     questions: [],
     appointmentsCount: 0,
@@ -540,6 +561,7 @@ function inputToType(s: State, input: BookingTypeInput, base?: BookingType): Boo
   const t: BookingType = {
     ...(base ?? emptyType({ id: uid(), name, slug })),
     ...input,
+    reminders: input.reminders.map((r) => ({ ...r, id: r.id ?? uid() })),
     id: base?.id ?? uid(),
     name,
     slug,
@@ -649,6 +671,12 @@ function route(
         { id: 'team@example.com', name: 'Team calendar', primary: false, timezone: 'UTC' },
       ];
     }
+    if (c === 'google' && d === 'spreadsheets') {
+      return [
+        { id: '1AbCdEfGhIjKlMnOp', name: 'Bookings' },
+        { id: '1QrStUvWxYz0123456', name: 'Leads 2026' },
+      ];
+    }
     if (c === 'google' && d === 'calendar' && method === 'PUT') {
       const id = String(body.calendarId ?? 'primary');
       s.settings.calendar = {
@@ -723,6 +751,15 @@ function route(
       if (method === 'DELETE') {
         s.types = s.types.filter((x) => x.id !== t.id);
         return undefined;
+      }
+      if (method === 'PATCH') {
+        if (body.rowVersion !== undefined && body.rowVersion !== t.rowVersion)
+          throw problem(409, 'ROW_VERSION_CONFLICT', 'Changed elsewhere');
+        const rules = (body.reminders ?? t.reminders) as BookingType['reminders'];
+        t.reminders = rules.map((r) => ({ ...r, id: r.id ?? uid() }));
+        t.rowVersion = (t.rowVersion ?? 1) + 1;
+        t.updatedAt = new Date().toISOString();
+        return withCounts(s, t);
       }
       if (method === 'PUT') {
         if (body.rowVersion !== undefined && body.rowVersion !== t.rowVersion)

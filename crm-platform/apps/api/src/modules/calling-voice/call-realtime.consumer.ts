@@ -13,7 +13,9 @@ import { RealtimeEmitter } from '../../realtime';
  * Tells every open screen of a workspace that a WhatsApp call changed (TW-CALL-012), so the incoming-call toast appears the moment a call
  * rings and goes the moment somebody answers, instead of waiting for its poll. A signal with the call's uuid and nothing else: the
  * screen refetches `/calling/calls/pending`, where the permission and the workspace apply. Runs in a worker on the committed ledger
- * step, so a push is never sent for a rolled-back change; best effort, the poll stays as the fallback.
+ * step, so a push is never sent for a rolled-back change; best effort, the poll stays as the fallback. A redelivered event is harmless:
+ * the handler only reads the call's uuid and publishes the same signal again, it writes nothing, and the screen's refetch returns the
+ * call's current state either way.
  */
 @Injectable()
 export class CallRealtimeConsumer implements OutboxSubscriber, OnModuleInit {

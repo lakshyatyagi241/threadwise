@@ -89,7 +89,18 @@
       "NETWORK": "Netwerkfout - probeer het opnieuw.",
       "UNEXPECTED": "Er is iets misgegaan. Probeer het opnieuw.",
       "CALL_PLAYBACK_LINK_INVALID": "Deze opnamelink is verlopen. Druk opnieuw op afspelen om een nieuwe te krijgen.",
-      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan."
+      "CALL_RANGE_INVALID": "Deze datums kloppen niet: het begin mag niet na het einde liggen, een bereik mag maximaal een jaar beslaan en de tijdzone moet bestaan.",
+      "CALL_OUTSIDE_WINDOW": "Dit contact valt buiten uw beluren, dus er is niet gebeld. Het belvenster opent {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Dit gesprek is niet gevonden.",
+      "CALL_LOG_CONTACT_REQUIRED": "Geef het contact of een telefoonnummer dat gelezen kan worden.",
+      "CALL_LOG_TIME_INVALID": "Een gesprek kan niet in de toekomst of meer dan 400 dagen geleden beginnen.",
+      "CALL_LOG_NOT_EDITABLE": "Dit gesprek is gemeld door een telefoon of telefonieprovider en kan daarom niet worden gewijzigd.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "De tijd om dit gesprek te wijzigen is verstreken.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Een vervolgtaak heeft een contact nodig. Geef een nummer dat bij een van je contacten hoort.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Deze telefonieverbinding is niet gevonden.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Deze telefonieprovider is niet beschikbaar.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Deze telefonieverbinding kan geen gesprekken starten.",
+      "TELEPHONY_CALL_FAILED": "De telefonieprovider kon het gesprek niet starten."
     },
     "settings": {
       "title": "Bellen",

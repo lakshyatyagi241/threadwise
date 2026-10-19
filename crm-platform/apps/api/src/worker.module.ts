@@ -10,7 +10,7 @@ import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { SendGuardModule } from './modules/auth';
 import { ApiKeyAccessModule } from './modules/public-api/api-key-access.module';
-import { WorkerHeartbeatModule } from './modules/platform-infrastructure';
+import { JobMetricsModule, QueueDepthModule, WorkerHeartbeatModule } from './modules/platform-infrastructure';
 import { RealtimeEmitterModule } from './realtime';
 import { WorkersModule } from './workers/workers.module';
 
@@ -54,6 +54,10 @@ import { WorkersModule } from './workers/workers.module';
     WorkersModule,
     // Says the worker is alive and how far behind the outbox is, for /ready and the container healthcheck (TW-INFRA-015).
     WorkerHeartbeatModule,
+    // Job wait and duration per queue for every processor, from one hook (docs/performance/event-loop).
+    JobMetricsModule,
+    // Backlog and oldest waiting age per queue: the signals a saturated queue shows before any job finishes late.
+    QueueDepthModule,
   ],
 })
 export class WorkerModule {}

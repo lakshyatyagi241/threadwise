@@ -552,13 +552,16 @@
             "storefront_builder": "Winkelbouwer",
             "invoicing": "Facturatie",
             "forms_and_links": "Formulieren en links",
-            "extra_channels": "Telegram, Facebook en Instagram",
+            "extra_channels": "Telegram, Facebook, Instagram, LINE, Viber en WeChat",
             "form_builder": "Formulieren",
             "waba_groups": "WhatsApp-groepen",
             "sms": "SMS",
             "help_agent": "Hulpassistent",
             "email_channel": "E-mailkanaal (Gmail)",
-            "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)"
+            "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
+            "ai_crm_copilot": "AI CRM Copilot",
+            "lead_scoring": "AI-leadscoring",
+            "record_assignment": "Regels voor recordtoewijzing"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

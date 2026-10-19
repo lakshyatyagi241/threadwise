@@ -17,7 +17,8 @@
       "unexpected": "Đã xảy ra lỗi. Hãy thử lại.",
       "exportInProgress": "Tệp bằng chứng đang được chuẩn bị. Hãy đợi hoàn tất rồi thử lại.",
       "exportNotReady": "Tệp đó chưa sẵn sàng hoặc đã hết hạn. Hãy chuẩn bị tệp mới.",
-      "noticeTargetMissing": "Tiện ích, trang đặt lịch hoặc cửa hàng đó không còn tồn tại."
+      "noticeTargetMissing": "Tiện ích, trang đặt lịch hoặc cửa hàng đó không còn tồn tại.",
+      "notMinor": "Chỉ có thể ghi nhận đồng ý của người giám hộ cho liên hệ được đánh dấu là chưa thành niên."
     },
     "settings": {
       "title": "Đồng ý nhận tin và phản hồi STOP",
@@ -112,7 +113,10 @@
         "instagram": "Instagram",
         "webchat": "Chat web",
         "voice": "Cuộc gọi thoại",
-        "rcs": "RCS"
+        "rcs": "RCS",
+        "line": "LINE",
+        "viber": "Viber",
+        "wechat": "WeChat"
       },
       "state": {
         "granted": "đã đăng ký",
@@ -139,7 +143,11 @@
         "widget": "Trò chuyện trên website",
         "booking": "Trang đặt lịch",
         "commerce": "Thanh toán của cửa hàng",
-        "lead": "Thu thập lead"
+        "lead": "Thu thập lead",
+        "wa_form": "Biểu mẫu WhatsApp",
+        "gpc": "Global Privacy Control",
+        "dob": "Ngày sinh hoặc tuổi",
+        "declaration": "Chưa xác nhận tuổi"
       },
       "by": "bởi {name}",
       "evidence": {
@@ -162,7 +170,8 @@
         "storeFlag": "Cài đặt cửa hàng",
         "leadSourceId": "Nguồn lead",
         "leadFormId": "Biểu mẫu lead",
-        "adId": "Quảng cáo"
+        "adId": "Quảng cáo",
+        "guardianConsentRef": "Tham chiếu đồng ý của người giám hộ"
       },
       "dialog": {
         "titleGranted": "Đánh dấu đã đăng ký",
@@ -178,6 +187,52 @@
         "close": "Đóng",
         "savedGranted": "Đã đánh dấu đăng ký.",
         "savedWithdrawn": "Đã đánh dấu hủy đăng ký."
+      },
+      "privacy": {
+        "title": "Dấu hiệu quyền riêng tư",
+        "saved": "Đã lưu.",
+        "minorLabel": "Chưa thành niên",
+        "minorOn": "Được đánh dấu là chưa thành niên từ {date}.",
+        "minorOff": "Không được đánh dấu là chưa thành niên.",
+        "rule": {
+          "off": "Không gian làm việc của bạn chưa trả lời câu hỏi về trẻ em trong Trung tâm tuân thủ, nên hoạt động tiếp thị tới liên hệ này không bị giữ lại.",
+          "guardian": "Hoạt động tiếp thị tới liên hệ này bị giữ lại cho đến khi ghi nhận sự đồng ý của cha mẹ hoặc người giám hộ.",
+          "block": "Hoạt động tiếp thị tới liên hệ này bị giữ lại vì không gian làm việc của bạn cho biết không xử lý dữ liệu của người chưa thành niên."
+        },
+        "guardianBadge": "Đã ghi nhận đồng ý của người giám hộ",
+        "guardianLabel": "Sự đồng ý của cha mẹ hoặc người giám hộ",
+        "guardianOn": "Đã ghi nhận từ {date}. Đây chỉ là bằng chứng và không đăng ký nhận tin cho liên hệ.",
+        "guardianOff": "Chưa ghi nhận.",
+        "recordGuardian": "Ghi nhận đồng ý của người giám hộ",
+        "clearGuardian": "Xóa",
+        "dnsLabel": "Không bán hoặc chia sẻ",
+        "dnsOn": "Đã từ chối từ {date} ({source}).",
+        "dnsOff": "Chưa từ chối.",
+        "history": "Lịch sử quyền riêng tư",
+        "event": {
+          "minor": {
+            "on": "Đã đánh dấu là chưa thành niên",
+            "off": "Đã bỏ dấu chưa thành niên"
+          },
+          "guardian_consent": {
+            "on": "Đã ghi nhận đồng ý của người giám hộ",
+            "off": "Đã xóa đồng ý của người giám hộ"
+          },
+          "sale_share_opt_out": {
+            "on": "Đã từ chối việc bán và chia sẻ",
+            "off": "Đã xóa từ chối"
+          }
+        },
+        "dialog": {
+          "title": "Ghi nhận đồng ý của người giám hộ",
+          "intro": "Ghi nhận rằng cha mẹ hoặc người giám hộ đã đồng ý. Đây chỉ là bằng chứng: liên hệ không được đăng ký nhận tiếp thị.",
+          "note": "Họ đã đồng ý bằng cách nào? (bắt buộc)",
+          "noteHint": "Ví dụ: đã ký biểu mẫu giấy tại quầy. Không ghi tên hoặc thông tin liên hệ của người giám hộ.",
+          "ref": "Tham chiếu (không bắt buộc)",
+          "refHint": "Số biểu mẫu hoặc mã tài liệu mà bạn có thể tra cứu sau."
+        },
+        "minorFrom": "Được đặt từ ngày sinh hoặc tuổi đã cung cấp. Dấu này tự gỡ vào {date}, trừ khi có người giữ lại.",
+        "minorFromDeclaration": "Được đặt vì tuổi chưa được xác nhận trên một biểu mẫu. Dấu này giữ nguyên cho đến khi có người gỡ."
       }
     },
     "composer": {
@@ -299,19 +354,25 @@
         "consent_evidence_recorded": "Được phép: đã gửi thông báo và người đó đồng ý.",
         "purpose_not_enabled": "Không được phép: không gian làm việc chưa bật tính năng này.",
         "consent_declined": "Không được phép: người đó đã từ chối.",
-        "notice_required": "A notice must be delivered first."
+        "notice_required": "A notice must be delivered first.",
+        "subject_minor": "Không được phép: liên hệ này được đánh dấu là chưa thành niên và không gian làm việc của bạn giữ lại hoạt động tiếp thị.",
+        "sale_share_opted_out": "Không được phép: liên hệ đã từ chối việc bán hoặc chia sẻ dữ liệu của họ.",
+        "on_dnc_list": "Nằm trong danh sách Không gọi của bạn: không có cuộc gọi hay tin nhắn tiếp thị tới số này",
+        "legal_hold": "Không được phép: việc xử lý liên hệ này đang bị hạn chế."
       }
     },
     "notice": {
       "title": {
         "widget": "Dòng đồng ý trong biểu mẫu trò chuyện",
         "booking": "Dòng đồng ý trên trang đặt lịch",
-        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì"
+        "commerce": "Ô tiếp thị của cửa hàng có nghĩa là gì",
+        "workspace": "Thông báo đồng ý mặc định"
       },
       "intro": {
         "widget": "Hiển thị dưới dạng ô đánh dấu bên dưới thông tin của khách truy cập. Chỉ khách đánh dấu mới được ghi nhận là đồng ý, và chỉ khi họ cung cấp số điện thoại hoặc email.",
         "booking": "Hiển thị dưới dạng ô đánh dấu trên biểu mẫu đặt lịch. Chỉ người đánh dấu mới được ghi nhận là đồng ý; việc đặt lịch không bao giờ cần ô này.",
-        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ."
+        "commerce": "Khách hàng chấp nhận tiếp thị trong cửa hàng của bạn được ghi nhận là đồng ý. Hãy viết điều ô đó nói với họ để bằng chứng nêu rõ.",
+        "workspace": "Nội dung mà không gian làm việc của bạn hiển thị bên cạnh hộp đồng ý khi biểu mẫu, tiện ích hoặc trang đặt lịch không có nội dung riêng. Mỗi thay đổi là một phiên bản được đánh số mới."
       },
       "enabled": "Bật dòng đồng ý",
       "text": "Nội dung mà người đó đồng ý",
@@ -324,7 +385,21 @@
       "version": "Phiên bản hiện tại: {version}",
       "noVersion": "Chưa lưu.",
       "saveFirst": "Hãy lưu mục này trước, sau đó bạn có thể đặt dòng đồng ý cho nó.",
-      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)"
+      "whatsappToo": "Tính cả là đồng ý trên WhatsApp (chỉ khi nội dung nói vậy)",
+      "termsUrl": "Liên kết đến điều khoản của bạn (tùy chọn)",
+      "termsUrlHint": "Phải bắt đầu bằng https://",
+      "useWorkspacePrivacy": "Dùng liên kết quyền riêng tư của không gian làm việc",
+      "useWorkspaceTerms": "Dùng liên kết điều khoản của không gian làm việc",
+      "useWorkspaceText": "Dùng nội dung mặc định của không gian làm việc",
+      "statement": "Tôi đồng ý nhận cập nhật và ưu đãi qua {channels}. Tôi có thể trả lời STOP bất cứ lúc nào để hủy đăng ký.",
+      "channelNames": {
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "email": "email"
+      },
+      "channelsLabel": "Kênh mà sự đồng ý này bao gồm",
+      "channelsHint": "Người đó chỉ được đăng ký trên các kênh được chọn tại đây và nội dung đồng ý sẽ nêu tên các kênh đó. Một kênh chỉ được dùng khi người đó cung cấp số điện thoại hoặc email tương ứng.",
+      "channelsUse": "Cập nhật nội dung theo các kênh này"
     }
   }
 }

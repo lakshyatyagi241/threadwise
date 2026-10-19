@@ -89,7 +89,18 @@
       "NETWORK": "Erro de rede - tente novamente.",
       "UNEXPECTED": "Algo deu errado. Tente novamente.",
       "CALL_PLAYBACK_LINK_INVALID": "O link desta gravação expirou. Toque em reproduzir novamente para obter um novo.",
-      "CALL_RANGE_INVALID": "Estas datas não fazem sentido: o início não pode ser depois do fim, o intervalo pode abranger no máximo um ano e o fuso horário deve ser válido."
+      "CALL_RANGE_INVALID": "Estas datas não fazem sentido: o início não pode ser depois do fim, o intervalo pode abranger no máximo um ano e o fuso horário deve ser válido.",
+      "CALL_OUTSIDE_WINDOW": "Este contato está fora do seu horário de chamadas, então a ligação não foi feita. A janela de chamadas abre {when}.",
+      "CALL_LOG_ENTRY_NOT_FOUND": "Não foi possível encontrar esta chamada.",
+      "CALL_LOG_CONTACT_REQUIRED": "Informe o contato ou um número de telefone válido.",
+      "CALL_LOG_TIME_INVALID": "Uma chamada não pode começar no futuro nem há mais de 400 dias.",
+      "CALL_LOG_NOT_EDITABLE": "Esta chamada foi informada por um telefone ou provedor de telefonia, por isso não pode ser alterada.",
+      "CALL_LOG_EDIT_WINDOW_CLOSED": "O prazo para alterar esta chamada já passou.",
+      "CALL_LOG_FOLLOW_UP_NEEDS_CONTACT": "Uma tarefa de acompanhamento precisa de um contato. Informe um número que pertença a um dos seus contatos.",
+      "TELEPHONY_CONNECTION_NOT_FOUND": "Não foi possível encontrar esta conexão de telefonia.",
+      "TELEPHONY_PROVIDER_UNKNOWN": "Este provedor de telefonia não está disponível.",
+      "TELEPHONY_CLICK_UNSUPPORTED": "Esta conexão de telefonia não pode fazer chamadas.",
+      "TELEPHONY_CALL_FAILED": "O provedor de telefonia não conseguiu fazer a chamada."
     },
     "settings": {
       "title": "Chamadas",

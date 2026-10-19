@@ -145,11 +145,6 @@
         "description": "Edite seus funis de vendas, etapas e motivos de perda.",
         "keywords": "negócios, etapas de venda, quadro, motivo de perda, funil"
       },
-      "tags": {
-        "label": "Tags",
-        "description": "Crie e organize as tags usadas em contatos e conversas.",
-        "keywords": "rótulos, cor, color"
-      },
       "saved-replies": {
         "label": "Respostas salvas",
         "description": "Escreva respostas reutilizáveis que sua equipe pode enviar com um clique.",
@@ -360,15 +355,40 @@
         "description": "Veja a rapidez com que cada agente respondeu e resolveu hoje, nesta semana ou neste mês.",
         "keywords": "relatórios, análises, agentes, tempo de resposta, primeira resposta, resolvidas, carga, desempenho"
       },
-      "contact-assignment": {
-        "label": "Atribuição de contatos",
-        "description": "Atribui automaticamente novos contatos e negócios à pessoa certa, ignorando quem está de licença.",
-        "keywords": "atribuir, responsável, round robin, rodízio, novo contato, novo negócio, licença, férias, roteamento de leads"
-      },
       "privacy-requests": {
         "label": "Solicitações de dados",
         "description": "Responda a quem pergunta o que você mantém sobre elas: verificação de identidade, exportação, exclusão com prévia e um comprovante que você pode guardar.",
         "keywords": "privacidade, gdpr, solicitação de dados, dsar, acesso do titular, exportar dados, apagar, direito ao esquecimento, excluir dados pessoais, bloqueio legal"
+      },
+      "compliance-center": {
+        "label": "Central de conformidade",
+        "description": "Ferramentas que ajudam você a cumprir suas obrigações de privacidade: as leis a que você está sujeito, contatos de privacidade, avisos e links, suboperadores, horário de silêncio e uma lista de verificação do que já está em vigor.",
+        "keywords": "conformidade, privacidade, gdpr, dpdp, ccpa, tcpa, trai, lgpd, pdpa, hipaa, dpo, encarregado, responsável por reclamações, suboperador, dpa, termos, política de privacidade, horário de silêncio, não perturbe, lista de verificação, menores"
+      },
+      "company-properties": {
+        "label": "Propriedades da empresa",
+        "description": "Adicione os campos que você quer manter em cada empresa.",
+        "keywords": "campos personalizados, campos, obrigatório, lista suspensa, organização, conta"
+      },
+      "uncontacted-leads": {
+        "label": "Leads não contatados",
+        "description": "Escolha quais ações contam como contato com um lead e quais novos contatos começam como não contatados.",
+        "keywords": "não contatado, contatado, lead, novo lead, primeiro contato, acompanhamento, reatribuir, marcação"
+      },
+      "record-assignment": {
+        "label": "Regras de atribuição de registros",
+        "description": "Atribua automaticamente novos contatos, empresas e negócios aos seus responsáveis de vendas, por regras de prioridade.",
+        "keywords": "atribuir, responsável, rodízio, round robin, novo contato, novo negócio, empresa, licença, distribuição de leads, carga de trabalho, território"
+      },
+      "follow-ups": {
+        "label": "Acompanhamentos",
+        "description": "Defina automaticamente o próximo acompanhamento de um contato quando sua equipe entrar em contato com ele e escolha a data e o horário do alerta.",
+        "keywords": "acompanhamento, retorno, lembrete, próxima ação, tarefa, agendar, adiar, algum dia"
+      },
+      "duplicate-leads": {
+        "label": "Leads duplicados",
+        "description": "Escolha se um novo lead que coincide com um contato é mesclado a ele ou vira um novo contato.",
+        "keywords": "duplicado, mesclar, lead, mesmo telefone, mesmo e-mail, novo contato, fonte de leads"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

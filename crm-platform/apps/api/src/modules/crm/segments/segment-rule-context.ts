@@ -1,6 +1,7 @@
 import { and, eq, inArray } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import { fieldTypeSchema, type FieldType } from '@crm/contracts';
+import { stagesInUse, statusesInUse } from '../contacts/contact-values-in-use';
 import { emptyRuleContext, type RuleContext, type RuleRefs } from './segment-compiler';
 
 const { fields, statusOptions, tags, contactGroups, users } = schema;
@@ -49,6 +50,9 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
         ),
       );
     for (const r of rows) rc.stages.add(r.value);
+    // A stage no option lists but contacts hold (the default `new`, a stage removed from the list) is not a deleted reference.
+    const unlisted = [...refs.stageValues].filter((v) => !rc.stages.has(v));
+    for (const v of await stagesInUse(tx, orgId, unlisted)) rc.stages.add(v);
   }
   if (refs.statusValues.size > 0) {
     const rows = await tx
@@ -63,6 +67,9 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
         ),
       );
     for (const r of rows) rc.statuses.add(r.value);
+    // Same for a status contacts hold that the workspace's configured list does not include.
+    const unlisted = [...refs.statusValues].filter((v) => !rc.statuses.has(v));
+    for (const v of await statusesInUse(tx, orgId, unlisted)) rc.statuses.add(v);
   }
   if (refs.fieldKeys.size > 0) {
     // A deleted property is deactivated, not removed (contacts.data still has the key): inactive = gone for a rule.
@@ -80,6 +87,24 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
     for (const r of rows) {
       const type = fieldTypeSchema.safeParse(r.type);
       if (type.success) rc.fields.set(r.key, { type: type.data as FieldType });
+    }
+  }
+  if (refs.companyFieldKeys.size > 0) {
+    // The same rule for company properties: deactivated = gone.
+    const rows = await tx
+      .select({ key: fields.key, type: fields.fieldType })
+      .from(fields)
+      .where(
+        and(
+          eq(fields.orgId, orgId),
+          eq(fields.moduleKey, 'companies'),
+          eq(fields.isActive, true),
+          inArray(fields.key, [...refs.companyFieldKeys]),
+        ),
+      );
+    for (const r of rows) {
+      const type = fieldTypeSchema.safeParse(r.type);
+      if (type.success) rc.companyFields.set(r.key, { type: type.data as FieldType });
     }
   }
   return rc;

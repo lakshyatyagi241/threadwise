@@ -43,6 +43,23 @@ export const CONSENT_GATE_REASONS = [
   'purpose_not_enabled',
   /** The notice was delivered and the person declined. */
   'consent_declined',
+  /**
+   * Marketing to a contact flagged as a minor, held by the workspace's children setting (Compliance center): "no minors" holds it, and
+   * "minors may be included" holds it until a parent's or guardian's consent is on record (BL-180).
+   */
+  'subject_minor',
+  /** The contact opted out of the sale or sharing of their personal information (CCPA / CPRA, or the Global Privacy Control signal). */
+  'sale_share_opted_out',
+  /**
+   * Marketing by voice or SMS to a number on the workspace's Do-Not-Call list (BL-181). Checked after a withdrawal and before the minor
+   * hold; WhatsApp, email and service messages are never held by it.
+   */
+  'on_dnc_list',
+  /**
+   * The contact's data is under a legal hold (BL-295): marketing, AI processing, profiling and third-party sharing are refused while the
+   * record is kept and locked. The shown text is neutral ("processing of this contact is restricted"): it never mentions a hold or a matter.
+   */
+  'legal_hold',
   // needs_notice
   /** The purpose needs its versioned notice delivered first (a recording announcement, an AI disclosure). */
   'notice_required',

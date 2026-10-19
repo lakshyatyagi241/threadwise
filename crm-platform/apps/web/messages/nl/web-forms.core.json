@@ -19,7 +19,9 @@
       "checkbox_group": "Meerdere keuzes",
       "checkbox": "Selectievakje",
       "rating": "Beoordeling",
-      "hidden": "Verborgen veld"
+      "hidden": "Verborgen veld",
+      "date_of_birth": "Geboortedatum",
+      "age": "Leeftijd"
     },
     "errors": {
       "network": "De server kon niet worden bereikt. Controleer je verbinding en probeer het opnieuw.",
