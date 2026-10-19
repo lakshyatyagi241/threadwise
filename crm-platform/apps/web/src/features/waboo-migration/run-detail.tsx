@@ -55,6 +55,7 @@ export function RunDetail({ id, onClose }: { id: string; onClose: () => void }) 
           {t('title', { org: run.organizationId })}
         </h2>
         <Badge>{tm(run.mode)}</Badge>
+        {run.skipWhatsapp && <Badge>{tm('skipWhatsapp')}</Badge>}
         <StatusBadge run={run} />
         {run.status === 'queued' && (
           <Button

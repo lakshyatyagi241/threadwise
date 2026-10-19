@@ -46,7 +46,9 @@
       "catchUp": "추가 동기화",
       "migrateHint": "마이그레이션은 전체 리허설로 시작하며 문제가 있으면 아무것도 불러오지 않습니다. 별도의 드라이런은 선택 사항입니다.",
       "queued": "실행이 대기열에 추가되었습니다.",
-      "scheduled": "실행이 예약되었습니다."
+      "scheduled": "실행이 예약되었습니다.",
+      "skipWhatsapp": "WhatsApp 번호를 마이그레이션하지 않음 (테스트용)",
+      "skipWhatsappHint": "워크스페이스는 전부 마이그레이션되지만 WhatsApp 번호는 가져오거나 연결하지 않습니다."
     },
     "confirm": {
       "title": "{org} 마이그레이션",
@@ -76,7 +78,9 @@
       "migrateAll": "모두 마이그레이션",
       "migrateHint": "각 조직은 자체 전체 리허설로 시작하며 문제가 있으면 아무것도 불러오지 않습니다. 별도의 드라이런은 선택 사항입니다.",
       "queued": "배치가 대기열에 추가되었습니다.",
-      "scheduled": "배치가 예약되었습니다."
+      "scheduled": "배치가 예약되었습니다.",
+      "skipWhatsapp": "WhatsApp 번호를 마이그레이션하지 않음 (테스트용)",
+      "skipWhatsappHint": "이 워크스페이스들 중 어느 것도 WhatsApp 번호를 가져오거나 연결하지 않습니다."
     },
     "bulkConfirm": {
       "title": "조직 {count}개 마이그레이션",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "드라이런",
       "load": "마이그레이션",
-      "catchup": "추가 동기화"
+      "catchup": "추가 동기화",
+      "skipWhatsapp": "WhatsApp 번호 없음"
     },
     "status": {
       "queued": "대기 중",

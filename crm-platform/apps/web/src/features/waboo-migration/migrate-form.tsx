@@ -4,7 +4,7 @@ import { useId, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { deriveClientKey, wabooMigrationRunSchema, type WabooMigrationRun } from '@crm/contracts';
-import { Alert, Button, Field, Input, Modal } from '@crm/ui';
+import { Alert, Button, Checkbox, Field, Input, Modal } from '@crm/ui';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 import { useToast } from '@/features/auth-registration-security/platform/ui/toast';
 import { WMIG_DB_RE, errorKind } from './lib/errors';
@@ -28,6 +28,8 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
   const id = useId();
   const [org, setOrg] = useState('');
   const [runAt, setRunAt] = useState('');
+  // testing switch: the whole workspace migrates but its WhatsApp number is not imported or connected
+  const [skipWhatsapp, setSkipWhatsapp] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [confirmMode, setConfirmMode] = useState<'load' | 'catchup'>('load');
   const [typed, setTyped] = useState('');
@@ -46,6 +48,7 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
         body: {
           organizationId: org,
           mode,
+          skipWhatsapp,
           ...(mode !== 'dry' ? { confirm: typed } : {}),
           ...(runAt ? { runAt: localToIso(runAt) } : {}),
         },
@@ -89,6 +92,15 @@ export function MigrateForm({ onStarted }: { onStarted: (run: WabooMigrationRun)
           />
         </Field>
         <RunAtField value={runAt} onChange={setRunAt} />
+      </div>
+      <div>
+        <Checkbox
+          id={`${id}-skipwa`}
+          checked={skipWhatsapp}
+          onChange={(e) => setSkipWhatsapp(e.target.checked)}
+          label={t('skipWhatsapp')}
+        />
+        <p className="mt-1 text-xs text-muted-foreground">{t('skipWhatsappHint')}</p>
       </div>
       {problem && !confirming && <Alert tone="danger">{problem}</Alert>}
       <div className="flex flex-wrap items-center gap-3">
