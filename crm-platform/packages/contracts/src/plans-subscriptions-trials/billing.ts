@@ -86,6 +86,12 @@ export type BillingPlan = z.infer<typeof billingPlanSchema>;
 export const billingSubscriptionSchema = z.object({
   status: z.enum(['active', 'past_due']),
   renewsAt: z.string().datetime().nullable(),
+  /** The provider's id of the subscription (Zoho, Razorpay, ...), as the old subscription page showed it. */
+  subscriptionId: z.string().nullable().optional(),
+  /** When the subscription started. */
+  activatedAt: z.string().datetime().nullable().optional(),
+  /** The last date the subscription was billed, when the provider or the import recorded it. */
+  previousBillingAt: z.string().datetime().nullable().optional(),
 });
 export type BillingSubscription = z.infer<typeof billingSubscriptionSchema>;
 
@@ -156,6 +162,8 @@ export type BillingUsageResponse = z.infer<typeof billingUsageResponseSchema>;
 /** What `GET billing/usage` answers: the usage above plus the add-ons the workspace's current plan makes visible (owned or not). */
 export const billingUsagePanelResponseSchema = billingUsageResponseSchema.extend({
   visibleAddons: z.array(visibleAddonSchema),
+  /** The renewing subscription behind the plan, if any: the plan card shows its id, activation date and previous billing date. */
+  subscription: billingSubscriptionSchema.nullable().optional(),
 });
 export type BillingUsagePanelResponse = z.infer<typeof billingUsagePanelResponseSchema>;
 

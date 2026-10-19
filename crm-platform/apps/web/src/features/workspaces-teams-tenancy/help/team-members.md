@@ -22,18 +22,25 @@ keywords:
     on leave,
     delegate,
     reassign,
+    concurrent chats,
+    chat limit,
+    phone,
+    last login,
+    available,
+    offline,
+    availability,
   ]
 ---
 
 ## What it is for
 
-Team members lists everyone who has access to the workspace, with their role, status and whether they are online, away, busy or offline. Use it to invite people, change what they can do, and remove access when someone leaves.
+Team members lists everyone who has access to the workspace, with their role, status (online, away, busy or offline), phone number, the most chats they can handle at once (**Concurrent chats**) and when they last signed in. Use it to invite people, change what they can do, set how many chats each agent takes, and remove access when someone leaves.
 
 ## How to use it
 
 1. Open **Settings**, go to **Team and permissions** and select **Team members**.
-2. To invite someone, select **Invite teammate**, enter their name and email, choose a role and select **Send invite**. If email is not set up on the server, the invite link is shown once; copy it and send it yourself.
-3. To change a role, pick the new role in the row's role list.
+2. To invite someone, select **Invite teammate**, enter their name and email, choose a role, optionally add a phone number with its country code and set **Concurrent chats** (it starts at 4; empty means no limit), then select **Send invite**. If email is not set up on the server, the invite link is shown once; copy it and send it yourself.
+3. To change a role, pick the new role in the row's role list. To change a phone number or the chat limit, select the pencil icon on the row (**Change phone and chat limit**).
 4. To send a pending invite again, select **Resend invite**.
 5. To send a password reset, select **Reset password** and confirm. Without email, a one-time link is shown.
 6. To remove someone, select **Remove from workspace** and confirm. They lose access straight away; their account is kept.
@@ -41,6 +48,12 @@ Team members lists everyone who has access to the workspace, with their role, st
 8. To record time off, select the calendar icon on a person's row (**Leave and delegate**). Everyone can do this for themselves; managers can do it for anyone.
 
 > The count above the list is the number of members that match. Seats in use against your plan limit are shown next to the invite button.
+
+## Concurrent chats and availability
+
+- **Concurrent chats** is the most open chats automatic assignment gives one agent at once. When an agent already holds that many open chats, round robin and least busy skip them until one is resolved or moved. Empty means no limit. Picking someone by hand is still allowed.
+- **Last login** is read only. It is the last time the person signed in, shown in your workspace time zone (set in your account settings). **Never** means they have not signed in yet.
+- **Available / Offline.** Open the account menu (your avatar at the top right) and use the **Availability** switch. While you are **Offline**, nothing is assigned to you automatically; chats you already have stay yours. Switch back to **Available** to receive new chats again.
 
 ## Leave, delegate and reassigning work
 
@@ -58,10 +71,11 @@ Someone who is **on leave** shows an **On leave until** badge. Dates are days in
 
 ## Plan and access
 
-Everyone in the workspace can see this list and who is on leave. Setting your own leave needs no special rights; setting someone else's, naming their delegate and reassigning their work need the leave management permission with the "all" scope (Managers and above) and, for moving contacts and deals, the permission to edit them. Inviting, resetting passwords and removing members need the permission to invite members. Changing roles needs the permission to assign member roles. Owners and Admins hold these by default. You cannot act on yourself or on someone of a higher role, and only an Owner can act on an Owner.
+Everyone in the workspace can see this list and who is on leave. Setting your own leave needs no special rights; setting someone else's, naming their delegate and reassigning their work need the leave management permission with the "all" scope (Managers and above) and, for moving contacts and deals, the permission to edit them. Inviting, resetting passwords, removing members and changing a phone number or chat limit need the permission to invite members. The Available / Offline switch is only ever yours. Changing roles needs the permission to assign member roles. Owners and Admins hold these by default. You cannot act on yourself or on someone of a higher role, and only an Owner can act on an Owner.
 
 ## If something looks wrong
 
 - **Invite says all seats are in use.** Your plan limits the number of seats. Upgrade the plan from [Plans](/account/plans) to add more people.
+- **An agent gets no new chats.** Check that they are **Available** in their account menu, not on leave, and below their **Concurrent chats** number.
 - **A row has no actions.** You do not have the permission for that action, or the member ranks above you.
 - **Reset or invite says email was not sent.** Use the one-time link that is shown; it works once and the invite link expires after 7 days.

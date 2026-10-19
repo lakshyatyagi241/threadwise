@@ -32,8 +32,13 @@ describe('toAttribute', () => {
       defaultValue: 'N/A',
       description: 'Shop order',
       active: true,
+      hidden: false,
       rowVersion: 4,
     });
+  });
+
+  it('carries the hidden flag of an imported leftover property', () => {
+    expect(toAttribute({ ...dto, isHidden: true }).hidden).toBe(true);
   });
 
   it('turns missing default and description into empty text for the form', () => {

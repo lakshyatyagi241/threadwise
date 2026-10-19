@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Conecta un buzón",
-          "body": "Inicia sesión con Google o Microsoft, o introduce los ajustes de tu servidor de correo, y permite que Threadwise lea y envíe correo de esa dirección."
+          "body": "Inicia sesión con Google o Microsoft, o introduce los ajustes de tu servidor de correo, y permite que {app} lea y envíe correo de esa dirección."
         },
         "inbox": {
           "title": "El correo llega a la bandeja",

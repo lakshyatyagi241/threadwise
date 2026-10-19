@@ -245,6 +245,11 @@
         "description": "Klucze i dokumentacja do tworzenia rozwiązań na bazie produktu.",
         "keywords": "klucze api, deweloperzy, tokeny, dokumentacja, openapi"
       },
+      "api-keys": {
+        "label": "Klucze API",
+        "description": "Twórz klucze, których inne systemy używają do wywoływania API, i zarządzaj nimi.",
+        "keywords": "klucz api, token, sekret, programiści, dostęp, integracja"
+      },
       "webhooks": {
         "label": "Webhooki",
         "description": "Wysyłaj zdarzenia do własnych systemów na bieżąco.",

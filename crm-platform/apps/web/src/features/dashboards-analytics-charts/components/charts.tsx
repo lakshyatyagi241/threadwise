@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
-import { barLength, compact, heatLevel, niceMax } from '../lib/format';
+import { barLength, compact, heatLevel, niceMax, sparkBar } from '../lib/format';
 
 /**
  * The chart layer (TW-DASH-052): small SVG and CSS charts drawn from the page's colour tokens (so light, dark and a
@@ -196,7 +196,6 @@ export function Legend({
 /** A small area-less bar sparkline; zeros draw as a flat line, never an error. */
 export function Sparkline({ values, label }: { values: number[]; label: string }) {
   const top = Math.max(...values, 1);
-  const w = 100 / Math.max(values.length, 1);
   return (
     <svg
       viewBox="0 0 100 24"
@@ -207,12 +206,13 @@ export function Sparkline({ values, label }: { values: number[]; label: string }
     >
       {values.map((v, i) => {
         const h = Math.max(1, (v / top) * 22);
+        const bar = sparkBar(i, values.length);
         return (
           <rect
             key={i}
-            x={i * w + 0.5}
+            x={bar.x}
             y={24 - h}
-            width={w - 1}
+            width={bar.width}
             height={h}
             fill={v >= 10 ? 'var(--success)' : 'var(--primary)'}
             opacity={v === 0 ? 0.3 : 1}

@@ -136,7 +136,11 @@
         "previousStage": "Etapa anterior",
         "previousStageSince": "Etapa anterior desde",
         "lostReason": "Motivo de pérdida",
-        "updatedAt": "Última actualización"
+        "updatedAt": "Última actualización",
+        "leadScore": "Puntuación del lead",
+        "originalStage": "Etapa original del ciclo de vida",
+        "createdBy": "Creado por",
+        "updatedBy": "Actualizado por"
       },
       "company": {
         "title": "Empresa",

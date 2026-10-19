@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode, RefObject } from 'react';
 import { cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useBrandName } from './brand';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
 import { NavCollapsedContext } from './nav-context';
 import { SEARCH_EVENT } from './command-palette-model';
@@ -97,6 +98,7 @@ export function TopNav({
   helpItems,
 }: TopNavProps) {
   const tAll = useTranslations();
+  const brand = useBrandName();
   const tn = useTranslations('admin-console-shell.topNav');
   const brandLogoUrl = useOptionalShellData()?.brandLogoUrl ?? null;
   return (
@@ -126,7 +128,7 @@ export function TopNav({
             <>
               <BrandMark className="size-8" />
               <span className="hidden font-serif text-2xl font-normal tracking-tight sm:inline">
-                {tAll('common.appName')}
+                {brand}
               </span>
             </>
           )}

@@ -317,7 +317,13 @@
         "delivered": "डिलीवर हुए",
         "queued": "कतार में",
         "failed": "विफल",
-        "replyRate": "जवाब दर"
+        "replyRate": "जवाब दर",
+        "received": "प्राप्त संदेश",
+        "conversationsOpen": "खुली बातचीत",
+        "conversationsClosed": "बंद बातचीत",
+        "conversationsAssigned": "असाइन की गई",
+        "conversationsUnassigned": "असाइन नहीं की गई",
+        "conversationsTotal": "{count, plural, one {# बातचीत} other {# बातचीतें}}"
       },
       "series": {
         "sent": "भेजे गए",
@@ -443,7 +449,8 @@
             "unknown": "अज्ञात"
           }
         }
-      }
+      },
+      "moreKpis": "संदेश और बातचीत"
     },
     "health": {
       "nav": "सिस्टम की सेहत",

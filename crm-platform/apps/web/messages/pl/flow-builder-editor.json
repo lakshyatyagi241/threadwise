@@ -104,6 +104,7 @@
       "failed": "nieudany",
       "edited": "Edytowano {when}",
       "openBuilder": "Otwórz kreator",
+      "faqs": "Najczęstsze pytania",
       "pause": "Wstrzymaj",
       "resume": "Wznów",
       "rename": "Zmień nazwę",
@@ -565,7 +566,7 @@
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
           "startMake": "Ustaw jako punkt startowy",
           "startPoint": "Punkt startowy",
-          "editTitle": "Edytuj (otwórz inspektor)",
+          "editTitle": "Edytuj (otwórz inspektor, kliknij węzeł dwukrotnie lub naciśnij Enter)",
           "edit": "Edytuj",
           "duplicateTitle": "Duplikuj (Ctrl+D)",
           "duplicate": "Duplikuj",
@@ -581,7 +582,9 @@
           "nothingHint": "Kliknij węzeł na kanwie, aby edytować jego właściwości,<br/>lub przeciągnij kartę z lewej, aby dodać nowy węzeł.",
           "nodeFallback": "Węzeł",
           "id": "id",
-          "noSettings": "Ten węzeł nie ma ustawień."
+          "noSettings": "Ten węzeł nie ma ustawień.",
+          "confirmDeleteTitle": "Usunąć ten węzeł?",
+          "confirmDeleteMessage": "Węzeł i jego połączenia zostaną usunięte. Dopóki nie opuścisz kreatora, możesz to cofnąć skrótem Ctrl+Z."
         },
         "palette": {
           "modeCall": "Połączenie",

@@ -5,7 +5,7 @@ summary: How search and the question mark tips work, and why some guides are not
 area: getting-started
 order: 2
 documents: [nav:help-center]
-keywords: [help, guides, search, tooltip, question mark, documentation]
+keywords: [help, guides, search, tooltip, question mark, documentation, ctrl k, shortcut, command palette]
 ---
 
 ## Where to find it
@@ -23,6 +23,10 @@ On a screen that has a guide, a small question mark button appears in the bar at
 1. Select the button to read a short summary of the screen.
 2. Select **Read the guide** to open the full guide.
 3. Press Escape, or select outside the summary, to close it.
+
+## Jumping to any page with Ctrl K
+
+Press Ctrl K (Cmd K on a Mac) on any page, or select the search button in the top bar, to open the page search. Type part of a menu entry or a Settings tile, such as "templates" or "tax", use the up and down arrow keys and press Enter to open it. It only lists pages your role and plan allow you to open. If nothing matches and the screen you are on has its own search box, press Enter to search there with what you typed. On a screen that uses Ctrl K for its own search box, such as Contacts or the help center, the shortcut goes to that box instead.
 
 ## Why some guides are not listed
 

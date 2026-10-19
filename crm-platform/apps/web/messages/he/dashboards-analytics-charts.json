@@ -317,7 +317,13 @@
         "delivered": "נמסרו",
         "queued": "בתור",
         "failed": "נכשלו",
-        "replyRate": "שיעור תגובות"
+        "replyRate": "שיעור תגובות",
+        "received": "הודעות שהתקבלו",
+        "conversationsOpen": "שיחות פתוחות",
+        "conversationsClosed": "שיחות סגורות",
+        "conversationsAssigned": "משויכות",
+        "conversationsUnassigned": "לא משויכות",
+        "conversationsTotal": "{count, plural, one {שיחה אחת} other {# שיחות}}"
       },
       "series": {
         "sent": "נשלחו",
@@ -443,7 +449,8 @@
             "unknown": "לא ידוע"
           }
         }
-      }
+      },
+      "moreKpis": "הודעות ושיחות"
     },
     "health": {
       "nav": "תקינות המערכת",

@@ -75,8 +75,8 @@ export function CrmDashboardScreen() {
   const members = useMemberOptions();
   const teams = useTeamOptions();
   const picked = (pipelines.data ?? []).find((p) => p.id === filters.pipeline);
-  // Figures are converted into one currency: the chosen pipeline's, else the workspace's.
-  const currency = picked?.currency ?? session.org.currency ?? 'USD';
+  // Figures are converted into one currency: the workspace's, so the page never mixes a pipeline's $ into an INR workspace.
+  const currency = session.org.currency ?? picked?.currency ?? 'USD';
   const dash = useCrmDashboard(apiQuery(filters, currency));
   const data = dash.data;
 

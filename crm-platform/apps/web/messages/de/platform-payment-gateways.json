@@ -164,7 +164,12 @@
       "change": "Ändern",
       "terms": "Mit der Zahlung stimmen Sie unseren <terms>Nutzungsbedingungen</terms> und unserer <privacy>Datenschutzerklärung</privacy> zu.",
       "refundNote": "Nicht zufrieden? Schreiben Sie uns innerhalb der ersten {days} Tage, und wir erstatten den vollen Betrag — ohne Fragen und ohne Formulare.",
-      "autoRenewTitle": "Diesen Tarif automatisch verlängern"
+      "autoRenewTitle": "Diesen Tarif automatisch verlängern",
+      "amountSubtitle": "Geben Sie ein, wie viel Sie hinzufügen möchten. Danach sehen Sie den Endpreis und die Zahlungsarten.",
+      "amountLabel": "Betrag zum Aufladen",
+      "amountHint": "Nur Ziffern, zum Beispiel 1000 oder 250,50.",
+      "amountInvalid": "Geben Sie einen Betrag größer als null ein, zum Beispiel 500 oder 250,50.",
+      "amountContinue": "Weiter"
     },
     "orders": {
       "title": "Bestellverlauf",

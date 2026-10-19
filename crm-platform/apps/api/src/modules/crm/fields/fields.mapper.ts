@@ -22,7 +22,12 @@ export function toFieldOptionResponse(row: FieldOptionRow): FieldOptionResponse 
   };
 }
 
-export function toFieldResponse(row: FieldRow, options?: FieldOptionRow[]): FieldResponse {
+export function toFieldResponse(
+  row: FieldRow,
+  options?: FieldOptionRow[],
+  /** How many options the field has in all (an option-backed field only); `options` may hold fewer or none. */
+  optionCount?: number,
+): FieldResponse {
   return {
     id: row.uuid,
     moduleKey: row.moduleKey as ModuleKey,
@@ -46,6 +51,7 @@ export function toFieldResponse(row: FieldRow, options?: FieldOptionRow[]): Fiel
     // Phase 8's CRUD surface. Always null until that lands.
     replacesFieldId: null,
     options: options?.map(toFieldOptionResponse),
+    optionCount,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),

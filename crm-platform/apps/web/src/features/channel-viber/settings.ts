@@ -9,6 +9,6 @@ export const settings = [
     href: '/viber',
     icon: 'phone',
     order: 90,
-    gates: { permission: 'viber.channels.read' },
+    gates: { permission: 'viber.channels.read', planFeature: 'extra_channels' },
   }),
 ];

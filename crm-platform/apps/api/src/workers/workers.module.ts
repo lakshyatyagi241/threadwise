@@ -6,6 +6,7 @@ import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-bill
 import { AnalyticsWorkerModule } from '../modules/analytics';
 import { DataRetentionWorkerModule } from '../modules/data-retention';
 import { AppointmentsBookingWorkerModule } from '../modules/appointments-booking';
+import { MeetingConferencingWorkerModule } from '../modules/meeting-conferencing';
 import { BroadcastsWorkerModule } from '../modules/broadcasts';
 import { CallingVoiceWorkerModule } from '../modules/calling-voice';
 import { CatalogProductsWorkerModule } from '../modules/catalog-products';
@@ -100,6 +101,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
     ContactAssignmentWorkerModule,
     NotificationsWorkerModule,
     AppointmentsBookingWorkerModule,
+    MeetingConferencingWorkerModule,
     BroadcastsWorkerModule,
     PlansWorkerModule,
     PaygwWorkerModule,

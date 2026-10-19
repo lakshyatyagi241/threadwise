@@ -92,7 +92,8 @@
         "contact": "Contatto",
         "deal": "Trattativa",
         "created": "Creato",
-        "completed": "Completato il"
+        "completed": "Completato il",
+        "outcome": "Esito"
       },
       "refresh": "Aggiorna",
       "shortcuts": "Scorciatoie da tastiera",
@@ -101,7 +102,9 @@
         "list": "Elenco",
         "board": "Board per scadenza"
       },
-      "linkCompany": "Un’azienda"
+      "linkCompany": "Un’azienda",
+      "outcome": "Esito",
+      "allOutcomes": "Tutti gli esiti"
     },
     "table": {
       "scrollArea": "Tabella dei task",
@@ -115,7 +118,8 @@
         "contact": "Contatto",
         "deal": "Trattativa",
         "created": "Creato",
-        "completed": "Completato il"
+        "completed": "Completato il",
+        "outcome": "Esito"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "Il task è troppo lungo (massimo 255 caratteri).",
         "notesTooLong": "Le note sono troppo lunghe (massimo 5000 caratteri).",
         "dueInvalid": "Questa data non è valida.",
-        "assigneeInvalid": "Questa persona non è un membro attivo del Workspace."
+        "assigneeInvalid": "Questa persona non è un membro attivo del Workspace.",
+        "outcomeInvalid": "Questo esito non è disponibile. Sceglierne uno dall'elenco."
       },
-      "company": "Azienda"
+      "company": "Azienda",
+      "outcome": "Esito"
     },
     "drawer": {
       "loading": "Caricamento del task",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Eliminare questa attività?",
       "deleteMessage": "«{title}» verrà eliminata per tutti. L’operazione non è reversibile.",
-      "cancel": "Conserva"
+      "cancel": "Conserva",
+      "outcomeChip": "Esito: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "Il tuo piano non include le attività. Passa a un piano superiore per sbloccarle.",
       "assigneeInvalid": "Questa persona non è un membro attivo di questo Workspace.",
       "unexpected": "Si è verificato un errore. Riprova tra poco.",
-      "retry": "Riprova"
+      "retry": "Riprova",
+      "outcomeInvalid": "Questo esito non è disponibile. Sceglierne uno dall'elenco.",
+      "outcomeNameTaken": "Un altro esito ha già questo nome.",
+      "outcomeInUse": "Alcune attività usano ancora questo esito, quindi non può essere eliminato. Nascondilo."
     },
     "toast": {
       "completed": "Attività completata.",
@@ -342,6 +352,43 @@
       "save": "Aggiungi task",
       "cancel": "Annulla",
       "failed": "Impossibile salvare il task. Il tuo testo è tornato nella casella."
+    },
+    "outcomes": {
+      "title": "Esiti delle attività",
+      "subtitle": "I risultati che una persona sceglie quando completa o registra un'attività, come Interessato o Messaggio lasciato.",
+      "listTitle": "Esiti",
+      "listHint": "Gli esiti nascosti non vengono più proposti, ma le attività che ne hanno già uno lo mantengono. Un esito usato da attività non può essere eliminato.",
+      "loading": "Caricamento degli esiti",
+      "empty": "Ancora nessun esito. Aggiungi il primo qui sotto.",
+      "newName": "Nuovo esito",
+      "newNamePlaceholder": "es. Messaggio lasciato",
+      "add": "Aggiungi esito",
+      "readOnly": "Puoi vedere questo elenco, ma ti serve il permesso per modificarlo.",
+      "failed": "Operazione non riuscita.",
+      "conflict": "Un'altra persona ha modificato questo esito. L'elenco è stato ricaricato. Riprova.",
+      "added": "Esito aggiunto.",
+      "saved": "Esito salvato.",
+      "deleted": "Esito eliminato.",
+      "moveUp": "Sposta {name} in su",
+      "moveDown": "Sposta {name} in giù",
+      "nameLabel": "Nome dell'esito",
+      "taskCount": "{count, plural, one {# attività} other {# attività}}",
+      "shownLabel": "Proponi {name} al completamento di un'attività",
+      "shown": "Visibile",
+      "hidden": "Nascosto",
+      "deleteNamed": "Elimina {name}",
+      "deleteInUse": "Alcune attività usano ancora questo esito, quindi non può essere eliminato. Nascondilo.",
+      "deleteTitle": "Eliminare {name}?",
+      "deleteMessage": "L'esito viene rimosso dall'elenco. Nessuna attività lo usa.",
+      "delete": "Elimina",
+      "cancel": "Mantieni",
+      "problems": {
+        "nameRequired": "Scrivi un nome per l'esito.",
+        "nameTooLong": "Il nome è troppo lungo (massimo 191 caratteri)."
+      },
+      "none": "Nessun esito",
+      "hiddenName": "{name} (nascosto)",
+      "completeWith": "Completa con esito"
     }
   }
 }

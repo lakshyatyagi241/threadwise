@@ -91,7 +91,14 @@
         "none": "Belum ada",
         "atLeast": "{count}+",
         "footnote": "Angka pesan mencakup percakapan yang ditemukan untuk kontak ini (berdasarkan nomor telepon, alamat email, atau nama). Angka panggilan mencakup satu tahun terakhir, dicocokkan berdasarkan nomor telepon atau nama.",
-        "callsPartial": "Panggilan yang cocok lebih banyak daripada yang dapat dibaca, sehingga angka panggilan mungkin kurang."
+        "callsPartial": "Panggilan yang cocok lebih banyak daripada yang dapat dibaca, sehingga angka panggilan mungkin kurang.",
+        "waSent": "WhatsApp terkirim",
+        "waDelivered": "WhatsApp sampai",
+        "waSeen": "WhatsApp dilihat",
+        "waReceived": "WhatsApp diterima",
+        "waFailed": "WhatsApp gagal",
+        "waReplied": "WhatsApp dibalas",
+        "waFootnote": "Angka WhatsApp menghitung setiap pesan dalam percakapan WhatsApp kontak ini. Pesan terkirim dihitung dibalas jika pesan berikutnya berasal dari kontak."
       }
     }
   }

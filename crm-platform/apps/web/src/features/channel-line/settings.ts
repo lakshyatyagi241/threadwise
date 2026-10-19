@@ -9,6 +9,6 @@ export const settings = [
     href: '/line',
     icon: 'chat',
     order: 80,
-    gates: { permission: 'line.channels.read' },
+    gates: { permission: 'line.channels.read', planFeature: 'extra_channels' },
   }),
 ];

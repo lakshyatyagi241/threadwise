@@ -60,6 +60,23 @@ describe('flow card (TW-FLB-001)', () => {
     expect(html).not.toContain('href="/flow-runtime/flows/');
   });
 
+  it('offers the flow\'s FAQs tab only to a person who can read FAQs, and never on a call flow', () => {
+    const withFaqs = (over: Partial<FlowSummary> = {}, faqs = true) =>
+      renderToStaticMarkup(
+        <FlowCard
+          flow={flow(over)}
+          actions={{ ...actions, can: { ...actions.can, faqs }, builderMode: 'simple' }}
+        />,
+      );
+    expect(withFaqs()).toContain(
+      'href="/flows/simple/11111111-1111-4111-8111-111111111111?tab=faqs"',
+    );
+    expect(withFaqs({ state: 'draft', isPublished: false })).toContain('data-flow-faqs');
+    expect(withFaqs({}, false)).not.toContain('data-flow-faqs');
+    expect(card()).not.toContain('data-flow-faqs');
+    expect(withFaqs({ flowType: 'call' })).not.toContain('data-flow-faqs');
+  });
+
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {
     const html = card({ flowType: 'instagram' });
     expect(html).not.toContain('/flow-runtime/analytics');

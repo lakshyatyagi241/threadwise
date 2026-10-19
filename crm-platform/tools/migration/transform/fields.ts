@@ -1,6 +1,6 @@
 import { bool, isDeleted, isSecretName, str, type Doc } from '../util';
 import { c, rest, times, TS_COLS } from './common';
-import { CONTACT_FIELDS, REJECT_MARKER } from './contacts';
+import { BUILT_IN_ALIAS, CONTACT_FIELDS, REJECT_MARKER } from './contacts';
 import type { Ctx, FieldMap, HandlerSpec, Outcome, Soft } from './types';
 
 /** Waboo property type -> fields.field_type (chk_fields_type). Unknown types become text and keep the original in config. */
@@ -154,6 +154,34 @@ export const WEB_ANALYTICS_KEYS: ReadonlySet<string> = new Set([
 /** Created Time / Modified Time: system in Waboo, but shown on the contact page as read-only fields (their value is also kept in contacts.data). */
 export const VISIBLE_TIME_KEYS: ReadonlySet<string> = new Set(['created_time', 'modified_time']);
 
+/**
+ * Keys the app already has as built-in properties (first name, last name, phone, e-mail, title, middle name, language, address, memo,
+ * source, lifecycle stage, status, groups, owner, marketing opt-out: the "Built-in properties" block of Contact properties) plus every key
+ * the contacts loader stores in a column of its own (CONTACT_FIELDS: mobile_phone_number, marketing_list, lifecycle_stage_status,
+ * the three subscription statuses, country_code ...). A Waboo property with one of these keys is NOT created again: the app shows the
+ * value in the built-in property (title, middle name, language, address and memo stay in contacts.data under their own key, which the
+ * built-in property reads). Created / Modified Time stay: they are shown as read-only fields on purpose.
+ */
+export const BUILT_IN_FIELD_KEYS: ReadonlySet<string> = new Set([
+  'first_name', 'last_name', 'phone', 'email', 'title', 'middle_name', 'language', 'address', 'memo', 'source',
+  'lifecycle_stage', 'status', 'groups', 'owner', 'opt_out',
+  ...Object.keys(CONTACT_FIELDS).filter((k) => !VISIBLE_TIME_KEYS.has(k)),
+  // Waboo names for a built-in property (Title, Language, Address, Owner): see BUILT_IN_ALIAS in contacts.ts
+  ...Object.keys(BUILT_IN_ALIAS),
+  'contact_owner',
+]);
+export const isBuiltInKey = (key: string | null | undefined): boolean => Boolean(key) && BUILT_IN_FIELD_KEYS.has(key as string);
+
+/**
+ * Waboo "system" properties the old contact page showed as ordinary read-only rows (Original Lifecycle Stage and its date, Created By, Updated By,
+ * Chatbot Language): in Desk a system field is hidden on the contact page, so these stay ordinary read-only fields. Created By / Updated By /
+ * Original Lifecycle Stage hold a person's name or a stage label in Desk (the contacts loader translates the Waboo ids), so they are text fields.
+ */
+export const VISIBLE_SYSTEM_KEYS: ReadonlySet<string> = new Set([
+  'original_lifecycle_stage', 'original_lifecycle_stage_date', 'created_by', 'updated_by', 'chatbot_language',
+]);
+export const NAME_VALUED_KEYS: ReadonlySet<string> = new Set(['original_lifecycle_stage', 'created_by', 'updated_by']);
+
 export const fieldDefs: HandlerSpec = {
   handler: 'field_defs',
   collection: 'contact_properties_fields',
@@ -195,9 +223,16 @@ export const fieldDefs: HandlerSpec = {
         reason: 'the property name looks like a credential; it is not copied anywhere',
       };
     }
+    if (isBuiltInKey(key)) {
+      return {
+        kind: 'exclude',
+        code: 'BUILT_IN_PROPERTY',
+        reason: 'the app already has this property built in (or stores it in a column of the contact); it is not created again',
+      };
+    }
     const soft: Soft[] = [];
     const legacyType = String(doc.type ?? '');
-    let fieldType = TYPE_MAP[legacyType.toLowerCase()];
+    let fieldType = NAME_VALUED_KEYS.has(key) ? 'text' : TYPE_MAP[legacyType.toLowerCase()];
     if (!fieldType) {
       fieldType = 'text';
       soft.push({
@@ -232,7 +267,7 @@ export const fieldDefs: HandlerSpec = {
             is_unique: bool(doc.unique),
             // Waboo's own web-analytics properties are "system" there but have no built-in place in WaDesk: a system field is hidden on the
             // contact page, so these stay ordinary (read-only) fields. `source` stays system: it is the native contacts.source column.
-            is_system: bool(doc.system_default) && !WEB_ANALYTICS_KEYS.has(key) && !VISIBLE_TIME_KEYS.has(key),
+            is_system: bool(doc.system_default) && !WEB_ANALYTICS_KEYS.has(key) && !VISIBLE_TIME_KEYS.has(key) && !VISIBLE_SYSTEM_KEYS.has(key),
             is_active: true,
             position: Number(doc.position) || 0,
             config: { legacy: { type: legacyType, ...rest(doc, DEF_COLUMN_KEYS) } },
@@ -305,7 +340,8 @@ export const fieldUndeclared: HandlerSpec = {
             label: key,
             field_type: 'text',
             is_required: false,
-            is_hidden: false,
+            // nobody defined this property in Waboo, so Waboo never showed it: it is kept (the value stays in contacts.data) but hidden
+            is_hidden: true,
             is_read_only: false,
             is_masked: false,
             is_unique: false,
@@ -356,6 +392,9 @@ export const fieldOptions: HandlerSpec = {
     const parent = str(doc.parent_id);
     if (parent && ctx.idx.deletedFieldIds.has(parent)) {
       return { kind: 'exclude', code: 'PARENT_EXCLUDED', reason: 'its property is soft-deleted' };
+    }
+    if (parent && isBuiltInKey(str(ctx.idx.fieldsById.get(parent)?.name))) {
+      return { kind: 'exclude', code: 'PARENT_BUILT_IN', reason: 'its property is a built-in one of the app, not created again' };
     }
     const field = parent ? ctx.ref('contact_properties_fields', parent) : undefined;
     if (!field || field.table !== 'fields') {
@@ -418,6 +457,10 @@ export const fieldDeps: HandlerSpec = {
     dependant_field_id: 'col:field_id (the dependent field)',
   },
   transform(doc: Doc, ctx: Ctx): Outcome {
+    const nameOf = (id: unknown): string | null => str(ctx.idx.fieldsById.get(String(id ?? ''))?.name);
+    if (isBuiltInKey(nameOf(doc.field_id)) || isBuiltInKey(nameOf(doc.dependant_field_id))) {
+      return { kind: 'exclude', code: 'BUILT_IN_PROPERTY', reason: 'one side of the dependency is a built-in property of the app, not created again' };
+    }
     const parent = ctx.ref('contact_properties_fields', doc.field_id);
     const child = ctx.ref('contact_properties_fields', doc.dependant_field_id);
     if (!parent || !child || parent.table !== 'fields' || child.table !== 'fields') {

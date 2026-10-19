@@ -164,7 +164,12 @@
       "change": "Modifier",
       "terms": "En payant, vous acceptez nos <terms>Conditions</terms> et notre <privacy>Politique de confidentialité</privacy>.",
       "refundNote": "Pas satisfait ? Écrivez-nous dans les {days} premiers jours et nous vous remboursons la totalité, sans question ni formulaire.",
-      "autoRenewTitle": "Renouveler automatiquement ce forfait"
+      "autoRenewTitle": "Renouveler automatiquement ce forfait",
+      "amountSubtitle": "Indiquez le montant que vous souhaitez ajouter. Vous verrez ensuite le prix final et les moyens de paiement.",
+      "amountLabel": "Montant à ajouter",
+      "amountHint": "Chiffres uniquement, par exemple 1000 ou 250,50.",
+      "amountInvalid": "Saisissez un montant supérieur à zéro, par exemple 500 ou 250,50.",
+      "amountContinue": "Continuer"
     },
     "orders": {
       "title": "Historique des commandes",

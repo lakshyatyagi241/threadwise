@@ -293,3 +293,13 @@ export function storedLimit(raw: unknown, key: PlanLimitKey): number {
     typeof raw === 'object' && raw !== null ? (raw as Record<string, unknown>)[key] : undefined;
   return typeof value === 'number' && Number.isInteger(value) && value > 0 ? value : 0;
 }
+
+/**
+ * A cap this big is a stand-in for "no cap" (the plan catalogue and the migrated workspaces store 1,000,000 or 100,000,000 where
+ * Reference said unlimited). The stored value is kept; every screen reads it through {@link isUnlimitedLimit} and prints "Unlimited".
+ */
+export const PLAN_UNLIMITED_FROM = 1_000_000;
+
+/** 0 (or less) and an effectively unlimited value are both "no cap". */
+export const isUnlimitedLimit = (limit: number): boolean =>
+  !Number.isFinite(limit) || limit <= 0 || limit >= PLAN_UNLIMITED_FROM;

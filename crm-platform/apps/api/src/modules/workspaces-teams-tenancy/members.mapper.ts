@@ -33,6 +33,8 @@ export function toMemberResponse(
     email: row.email,
     // Teammates' avatars are not exposed yet: the account domain serves only the caller's own picture.
     avatarUrl: null,
+    phone: row.phone,
+    chatLimit: row.chatLimit,
     tier: row.tier,
     roles: roles.map((r) =>
       toRoleRef({ uuid: r.roleUuid, name: r.roleName, systemKey: r.systemKey }),
@@ -41,6 +43,7 @@ export function toMemberResponse(
     status: toMemberStatus(row),
     presence: toPresence(row.presence),
     lastSeenAt: row.lastSeenAt ? row.lastSeenAt.toISOString() : null,
+    lastLoginAt: row.lastLoginAt ? row.lastLoginAt.toISOString() : null,
     invitedAt: row.invitedAt ? row.invitedAt.toISOString() : null,
     joinedAt: row.joinedAt ? row.joinedAt.toISOString() : null,
     teamIds,

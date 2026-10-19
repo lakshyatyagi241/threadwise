@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { DEFAULT_TIMEZONE, resolveTimezone } from '../load/org';
+import {
+  ADDITIONAL_OWNER_EMAIL,
+  DEFAULT_TIMEZONE,
+  resolveAdditionalOwner,
+  resolveTimezone,
+} from '../load/org';
 
 describe('resolveTimezone', () => {
   it('defaults to IST when none is given', () => {
@@ -15,5 +20,22 @@ describe('resolveTimezone', () => {
 
   it('refuses a zone that is not an IANA zone', () => {
     expect(() => resolveTimezone('Not/AZone')).toThrow(/not an IANA time zone/);
+  });
+});
+
+describe('resolveAdditionalOwner', () => {
+  it('adds lakshya.tyagi@geta.ai by default', () => {
+    expect(resolveAdditionalOwner({})).toBe('lakshya.tyagi@geta.ai');
+    expect(ADDITIONAL_OWNER_EMAIL).toBe('lakshya.tyagi@geta.ai');
+  });
+
+  it('can be replaced, lower-cased, or turned off', () => {
+    expect(resolveAdditionalOwner({ additionalOwnerEmail: ' Ops@Geta.AI ' })).toBe('ops@geta.ai');
+    expect(resolveAdditionalOwner({ additionalOwnerEmail: null })).toBeNull();
+    expect(resolveAdditionalOwner({ additionalOwnerEmail: '  ' })).toBeNull();
+  });
+
+  it('adds nobody when it is already the customer owner', () => {
+    expect(resolveAdditionalOwner({ ownerEmail: 'Lakshya.Tyagi@geta.ai' })).toBeNull();
   });
 });

@@ -28,6 +28,7 @@ import {
   createFieldOption,
   deleteFieldDependency,
   deleteFieldOption,
+  hasLazyOptions,
   invalidateProperties,
   renameFieldOption,
   reorderFieldOptions,
@@ -106,6 +107,8 @@ function PropertyForm({
   const uid = useId();
   const id = (n: string) => `${uid}-${n}`;
   const editing = field !== undefined;
+  // Options too many to send with the property list (every City): they are not edited here and are left untouched on save.
+  const lazyOptions = field !== undefined && hasLazyOptions(field);
 
   const [draft, setDraft] = useState<PropertyDraft>(() =>
     field ? draftFromField(field, dependencies) : emptyDraft(sectionId ?? sections[0]?.id ?? ''),
@@ -117,7 +120,7 @@ function PropertyForm({
     setDraft((d) => ({ ...d, [k]: v }));
 
   const takenKeys = useMemo(() => new Set(fields.map((f) => f.key)), [fields]);
-  const problems = shown ? checkDraft(draft, { editing, takenKeys }) : {};
+  const problems = shown ? checkDraft(draft, { editing, takenKeys, lazyOptions }) : {};
   const others = fields.filter((f) => f.id !== field?.id && f.isActive);
   const savedDeps = dependencies.filter((d) => d.fieldId === field?.id);
 
@@ -126,7 +129,7 @@ function PropertyForm({
       let target: FieldResponse;
       if (field) {
         target = await updateField(field.id, toUpdateBody(draft, field));
-        if (isOptionType(field.fieldType)) {
+        if (isOptionType(field.fieldType) && !lazyOptions) {
           const diff = diffOptions(field.options ?? [], draft.options);
           for (const r of diff.rename) await renameFieldOption(r.option, r.label);
           const made: Array<{ id: string }> = [];
@@ -168,7 +171,7 @@ function PropertyForm({
   function onSubmit(e: FormEvent) {
     e.preventDefault();
     setShown(true);
-    const found = checkDraft(draft, { editing, takenKeys });
+    const found = checkDraft(draft, { editing, takenKeys, lazyOptions });
     if (hasProblems(found)) {
       const first = found.label ? 'label' : found.key ? 'key' : found.section ? 'section' : null;
       if (first) document.getElementById(id(first))?.focus();
@@ -308,7 +311,12 @@ function PropertyForm({
         />
       </Field>
 
-      {isOptionType(draft.type) && (
+      {isOptionType(draft.type) && lazyOptions && (
+        <p className="text-xs text-muted-foreground">
+          {t('modal.optionsLazy', { count: field?.optionCount ?? 0 })}
+        </p>
+      )}
+      {isOptionType(draft.type) && !lazyOptions && (
         <fieldset className="space-y-2">
           <legend className="text-sm font-medium">{t('modal.options')} *</legend>
           {draft.options.length > 0 && (
@@ -430,7 +438,11 @@ function PropertyForm({
         <p className="text-xs text-muted-foreground">{copy('modal.conditionsHint')}</p>
         {draft.conditions.map((c, i) => {
           const parent = others.find((f) => f.id === c.fieldId);
-          const choices = parent && isOptionType(parent.fieldType) ? (parent.options ?? []) : null;
+          // a parent with a very long list comes without its options: its value is typed (the rule then matches that stored value)
+          const choices =
+            parent && isOptionType(parent.fieldType) && !hasLazyOptions(parent)
+              ? (parent.options ?? [])
+              : null;
           const yesNo =
             parent && (parent.fieldType === 'checkbox' || parent.fieldType === 'boolean');
           return (

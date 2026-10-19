@@ -104,6 +104,7 @@
       "failed": "échoués",
       "edited": "Modifié {when}",
       "openBuilder": "Ouvrir le générateur",
+      "faqs": "Questions fréquentes",
       "pause": "Mettre en pause",
       "resume": "Reprendre",
       "rename": "Renommer",
@@ -565,7 +566,7 @@
           "startPinned": "Ceci est le point de départ (cliquez pour le retirer)",
           "startMake": "Définir comme point de départ",
           "startPoint": "Point de départ",
-          "editTitle": "Modifier (ouvrir l’inspecteur)",
+          "editTitle": "Modifier (ouvrir l'inspecteur, ou double-cliquer sur le nœud, ou appuyer sur Entrée)",
           "edit": "Modifier",
           "duplicateTitle": "Dupliquer (Ctrl+D)",
           "duplicate": "Dupliquer",
@@ -581,7 +582,9 @@
           "nothingHint": "Cliquez sur un nœud du canevas pour modifier ses propriétés,<br/>ou faites glisser une carte depuis la gauche pour ajouter un nouveau nœud.",
           "nodeFallback": "Nœud",
           "id": "id",
-          "noSettings": "Ce nœud n’a aucun réglage."
+          "noSettings": "Ce nœud n’a aucun réglage.",
+          "confirmDeleteTitle": "Supprimer ce nœud ?",
+          "confirmDeleteMessage": "Le nœud et ses connexions seront supprimés. Appuyez sur Ctrl+Z pour annuler tant que vous ne quittez pas l'éditeur."
         },
         "palette": {
           "modeCall": "Appel",

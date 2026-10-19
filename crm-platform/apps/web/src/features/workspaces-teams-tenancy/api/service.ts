@@ -1,11 +1,15 @@
 import {
   inviteWspMemberResponseSchema,
   wspInvitePreviewSchema,
+  wspAvailabilitySchema,
   wspMemberActionResponseSchema,
+  wspMemberSchema,
   wspMembersSummarySchema,
   type ChangeWspMemberRoleInput,
   type CreateWspTeamInput,
   type InviteWspMemberInput,
+  type SetWspAvailabilityInput,
+  type UpdateWspMemberDetailsInput,
   type UpdateWspTeamInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -29,6 +33,22 @@ export const wspApi = {
     }),
   changeRole: (id: string, input: ChangeWspMemberRoleInput) =>
     apiFetch(`${base}/members/${id}/role`, { method: 'PATCH', body: input }),
+  /** The Change member dialog: phone and chat limit. */
+  updateDetails: (id: string, input: UpdateWspMemberDetailsInput) =>
+    apiFetch(`${base}/members/${id}/details`, {
+      method: 'PATCH',
+      body: input,
+      schema: wspMemberSchema,
+    }),
+  /** The caller's own Available / Offline switch (the account menu). */
+  myAvailability: (signal?: AbortSignal) =>
+    apiFetch(`${base}/members/me/availability`, { schema: wspAvailabilitySchema, signal }),
+  setMyAvailability: (input: SetWspAvailabilityInput) =>
+    apiFetch(`${base}/members/me/availability`, {
+      method: 'PUT',
+      body: input,
+      schema: wspAvailabilitySchema,
+    }),
   removeMember: (id: string) => apiFetch(`${base}/members/${id}`, { method: 'DELETE' }),
   resetPassword: (id: string) =>
     apiFetch(`${base}/members/${id}/reset-password`, {

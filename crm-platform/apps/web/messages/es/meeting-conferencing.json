@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Reuniones por video",
+        "description": "Conecta tu propia cuenta de Zoom o Microsoft Teams para añadir enlaces de video a tus reuniones.",
+        "keywords": "zoom, teams, microsoft teams, video, videollamada, enlace de reunión, enlace para unirse, videoconferencia, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Cerrar"
+    },
+    "form": {
+      "label": "Videoconferencia",
+      "add": {
+        "zoom": "Añadir enlace de Zoom",
+        "teams": "Añadir enlace de Teams",
+        "meet": "Añadir enlace de Google Meet"
+      },
+      "chosen": {
+        "zoom": "Enlace de Zoom",
+        "teams": "Enlace de Teams",
+        "meet": "Enlace de Google Meet"
+      },
+      "remove": "Quitar el enlace de video",
+      "needsStart": "Define una hora de inicio para añadir un enlace de video o una entrada de calendario.",
+      "meetNote": "Un enlace de Google Meet forma parte de un evento de calendario, por lo que esta reunión también se añade a tu calendario.",
+      "teamsViaCalendar": "Este enlace de Teams lo crea tu calendario de Microsoft 365, por lo que esta reunión también se añade allí.",
+      "calendar": "Añadir a mi calendario ({account})",
+      "calendarNamed": "Añadir a mi calendario ({account}, {calendar})",
+      "invite": "Enviar una invitación de calendario al contacto",
+      "inviteHint": "Tu calendario envía la invitación por correo a la dirección del contacto. Nuestra propia invitación por correo no se ve afectada.",
+      "connectLink": "Conectar videoconferencia"
+    },
+    "row": {
+      "join": "Unirse",
+      "joinAria": "Unirse a la reunión de {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Añadiendo el enlace de video...",
+      "onCalendar": "En tu calendario",
+      "invited": "El calendario envió una invitación al contacto",
+      "retry": "Intentar de nuevo",
+      "retrying": "Intentando de nuevo...",
+      "retried": "Se volvieron a comprobar el enlace de video y la entrada de calendario.",
+      "retryFailed": "No funcionó. La reunión está guardada; puedes intentarlo de nuevo.",
+      "problem": {
+        "not_installed": "La integración de {provider} no está instalada en este espacio de trabajo.",
+        "not_connected": "Tu cuenta de {provider} no está conectada. Conéctala en Configuración, Reuniones por video.",
+        "needs_reconnect": "Tu conexión con {provider} debe renovarse. Reconéctala en Configuración, Reuniones por video.",
+        "not_configured": "{provider} aún no se ha configurado para esta plataforma. Consulta con el administrador de la plataforma.",
+        "calendar_not_connected": "El calendario no está conectado, por lo que no se pudo añadir la reunión.",
+        "provider_failed": "{provider} no respondió. La reunión está guardada; inténtalo de nuevo.",
+        "no_start_time": "Un enlace de video necesita una hora de inicio en la reunión."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "No se pudo añadir la reunión al calendario porque no hay ningún calendario conectado.",
+        "provider_failed": "El calendario no respondió, así que la reunión aún no está en él. La reunión está guardada; inténtalo de nuevo.",
+        "other": "No se pudo añadir la reunión al calendario."
+      }
+    },
+    "page": {
+      "eyebrow": "Configuración",
+      "title": "Reuniones por video",
+      "subtitle": "Conecta tu propia cuenta de Zoom o Microsoft Teams. El formulario Añadir reunión ofrecerá entonces un enlace de video, creado en tu cuenta y mostrado en la reunión con un botón Unirse.",
+      "loading": "Cargando tus conexiones de video...",
+      "forbidden": {
+        "title": "No puedes usar esta página",
+        "body": "Pide a un administrador del espacio de trabajo que dé a tu rol acceso para editar contactos."
+      },
+      "failure": {
+        "generic": "No se pudieron cargar tus conexiones de video."
+      },
+      "retry": "Intentar de nuevo",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Crea una reunión de Zoom en tu cuenta de Zoom por cada reunión que programes, la mueve cuando mueves la reunión y la elimina cuando eliminas la reunión."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Crea una reunión de Teams en tu cuenta de trabajo o de centro educativo de Microsoft por cada reunión que programes, y la actualiza o elimina junto con la reunión."
+        }
+      },
+      "status": {
+        "connected": "Conectado",
+        "needs_reconnect": "Requiere reconexión",
+        "disconnected": "No conectado",
+        "not_installed": "No instalado",
+        "unavailable": "No disponible"
+      },
+      "account": "Cuenta: {account}",
+      "connectedOn": "Conectado {when}",
+      "lastError": {
+        "forbidden": "El proveedor rechazó la última solicitud. Es posible que tu cuenta no tenga permiso para crear reuniones.",
+        "rate_limited": "El proveedor está limitando las solicitudes en este momento.",
+        "unavailable": "El proveedor no respondió a la última solicitud."
+      },
+      "actions": {
+        "connect": "Conectar",
+        "reconnect": "Reconectar",
+        "disconnect": "Desconectar",
+        "install": "Instalar en el Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Tu espacio de trabajo aún no ha instalado {provider}. Instálalo desde el Marketplace y luego conecta aquí tu cuenta.",
+        "cannotInstall": "Tu espacio de trabajo aún no ha instalado {provider}. Pide a un administrador del espacio de trabajo que lo instale desde el Marketplace."
+      },
+      "unavailable": "{provider} aún no se ha configurado para esta plataforma. Consulta con el administrador de la plataforma.",
+      "outcome": {
+        "connected": "{provider} está conectado.",
+        "denied": "{provider} no se conectó porque se canceló el inicio de sesión.",
+        "failed": "No se pudo conectar {provider}. Inténtalo de nuevo.",
+        "expired": "Ese inicio de sesión tardó demasiado. Pulsa Conectar de nuevo.",
+        "not_configured": "{provider} aún no se ha configurado para esta plataforma.",
+        "notYours": "Ese inicio de sesión lo inició otra persona, así que no se conectó nada."
+      },
+      "confirming": "Finalizando la conexión...",
+      "disconnected": "{provider} desconectado.",
+      "disconnectTitle": "¿Desconectar {provider}?",
+      "disconnectBody": "Las reuniones que ya tienen un enlace de {provider} lo conservan, pero mover o eliminar esas reuniones ya no podrá cambiar la sala. Puedes volver a conectar en cualquier momento.",
+      "disconnectConfirm": "Desconectar",
+      "keep": "Mantener conectado",
+      "calendarNote": "Los enlaces de Google Meet y Teams creados mediante tu calendario no necesitan conexión aquí: usan el calendario que tu espacio de trabajo ya ha conectado."
+    }
+  }
+}

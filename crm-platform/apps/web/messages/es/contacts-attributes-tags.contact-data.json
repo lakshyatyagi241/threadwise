@@ -91,7 +91,14 @@
         "none": "Ninguno todavía",
         "atLeast": "{count}+",
         "footnote": "Las cifras de mensajes abarcan las conversaciones encontradas para este contacto (por teléfono, correo electrónico o nombre). Las cifras de llamadas abarcan el último año, según el teléfono o el nombre.",
-        "callsPartial": "Había más llamadas de las que se pudieron leer, por lo que las cifras de llamadas pueden quedarse cortas."
+        "callsPartial": "Había más llamadas de las que se pudieron leer, por lo que las cifras de llamadas pueden quedarse cortas.",
+        "waSent": "WhatsApp enviados",
+        "waDelivered": "WhatsApp entregados",
+        "waSeen": "WhatsApp vistos",
+        "waReceived": "WhatsApp recibidos",
+        "waFailed": "WhatsApp fallidos",
+        "waReplied": "WhatsApp respondidos",
+        "waFootnote": "Las cifras de WhatsApp cuentan todos los mensajes de las conversaciones de WhatsApp de este contacto. Un mensaje enviado cuenta como respondido cuando el siguiente mensaje es del contacto."
       }
     }
   }

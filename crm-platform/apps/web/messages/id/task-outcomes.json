@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Hasil tugas",
+        "description": "Hasil yang dipilih seseorang saat menyelesaikan atau mencatat tugas.",
+        "keywords": "hasil tugas, hasil panggilan, hasil, tertarik, meninggalkan pesan, tidak ada respons"
+      }
+    }
+  }
+}

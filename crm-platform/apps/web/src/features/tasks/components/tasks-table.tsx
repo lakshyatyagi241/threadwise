@@ -63,6 +63,8 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <ContactIcon className={cls} />;
     case 'deal':
       return <DealIcon className={cls} />;
+    case 'outcome':
+      return <FlagIcon className={cls} />;
     case 'created':
     case 'completed':
       return <ClockIcon className={cls} />;
@@ -203,6 +205,14 @@ function Cell({
     case 'deal':
       return task.deal ? (
         <RecordPill kind="deal" id={task.deal.id} label={task.deal.title} />
+      ) : (
+        <Dash />
+      );
+    case 'outcome':
+      return task.outcome ? (
+        <span className="block truncate" title={task.outcome.name}>
+          {task.outcome.name}
+        </span>
       ) : (
         <Dash />
       );

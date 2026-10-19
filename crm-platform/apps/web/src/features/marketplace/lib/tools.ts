@@ -20,6 +20,7 @@ export const INTEGRATION_TOOL_IDS: readonly string[] = [
   'google-docs',
   'google-forms',
   'google-calendar',
+  'video-meetings',
   'email',
 ];
 

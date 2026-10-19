@@ -317,7 +317,13 @@
         "delivered": "전달됨",
         "queued": "대기 중",
         "failed": "실패",
-        "replyRate": "답장률"
+        "replyRate": "답장률",
+        "received": "수신 메시지",
+        "conversationsOpen": "진행 중인 대화",
+        "conversationsClosed": "종료된 대화",
+        "conversationsAssigned": "배정됨",
+        "conversationsUnassigned": "미배정",
+        "conversationsTotal": "{count, plural, other {대화 #건}}"
       },
       "series": {
         "sent": "발송됨",
@@ -443,7 +449,8 @@
             "unknown": "알 수 없음"
           }
         }
-      }
+      },
+      "moreKpis": "메시지 및 대화"
     },
     "health": {
       "nav": "시스템 상태",

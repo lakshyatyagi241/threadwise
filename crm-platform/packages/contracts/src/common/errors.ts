@@ -41,9 +41,11 @@ import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 import { STORAGE_ERROR_CODES } from '../storage-quota/errors';
+import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
 
 export const ERROR_CODES = {
   ...STORAGE_ERROR_CODES,
+  ...CONF_ERROR_CODES,
   ...FAQ_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
@@ -487,6 +489,14 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+  /** The outcome is not one of this workspace's active task outcomes (unknown, or hidden and not already on the task). */
+  TASK_OUTCOME_INVALID: 'TASK_OUTCOME_INVALID',
+  /** Another task outcome already has this name (compared without case). */
+  TASK_OUTCOME_NAME_TAKEN: 'TASK_OUTCOME_NAME_TAKEN',
+  /** Tasks still carry the outcome, so it cannot be deleted (Waboo refused too); hide it instead. */
+  TASK_OUTCOME_IN_USE: 'TASK_OUTCOME_IN_USE',
+  /** A reorder that does not list every outcome exactly once. */
+  TASK_OUTCOME_ORDER_INVALID: 'TASK_OUTCOME_ORDER_INVALID',
 
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */

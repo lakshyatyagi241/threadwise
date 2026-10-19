@@ -61,3 +61,35 @@ export const WALLET_LIMITS = {
   /** Price of one message in the rate grid, hundredths: 1,000,000.00. */
   maxPriceMinor: 100_000_000,
 } as const;
+
+/**
+ * The ledger keeps four decimals (numeric(20,4)) while the wire carries hundredths, so a balance such as 192.9990 would lose its
+ * last digit. The exact figure travels beside the hundredths as text: "192.9990" -> "192.999", "7.0000" -> "7.00", "-0.9580" ->
+ * "-0.958". Trailing zeros are trimmed down to two decimals, so every figure that was exact in hundredths reads as it always did.
+ */
+export function walletExactAmount(text: string | number | null | undefined): string {
+  if (text === null || text === undefined) return '0.00';
+  const raw = String(text).trim();
+  const m = /^(-?)(\d+)(?:\.(\d*))?$/.exec(raw);
+  if (!m) return '0.00';
+  const [, sign = '', whole = '0', frac = ''] = m;
+  let f = frac.replace(/0+$/, '');
+  if (f.length < 2) f = f.padEnd(2, '0');
+  const zero = /^0+$/.test(whole) && /^0+$/.test(f);
+  return `${zero ? '' : sign}${whole.replace(/^0+(?=\d)/, '')}.${f}`;
+}
+
+/** `a - b` of two exact amounts (text), exact to the ledger's four decimals; trimmed like {@link walletExactAmount}. */
+export function walletExactSubtract(a: string, b: string): string {
+  const scale = (t: string): bigint => {
+    const neg = t.startsWith('-');
+    const [w = '0', f = ''] = (neg ? t.slice(1) : t).split('.');
+    const n = BigInt(w) * 10000n + BigInt((f + '0000').slice(0, 4));
+    return neg ? -n : n;
+  };
+  const d = scale(a) - scale(b);
+  const neg = d < 0n;
+  const abs = neg ? -d : d;
+  const text = `${neg ? '-' : ''}${abs / 10000n}.${String(abs % 10000n).padStart(4, '0')}`;
+  return walletExactAmount(text);
+}

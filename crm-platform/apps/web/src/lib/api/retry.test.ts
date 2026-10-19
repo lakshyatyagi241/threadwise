@@ -15,6 +15,10 @@ describe('transientRetry', () => {
     for (const s of [400, 401, 403, 404, 409, 422, 429])
       expect(transientRetry(0, err(s))).toBe(false);
   });
+  it('never retries a 501: "not implemented" does not change by waiting', () => {
+    expect(transientRetry(0, err(501))).toBe(false);
+    expect(transientRetry(0, err(500))).toBe(true);
+  });
   it('waits 1, 2, 4, then 8 seconds at most', () => {
     expect([0, 1, 2, 3, 4, 9].map(transientRetryDelay)).toEqual([
       1000, 2000, 4000, 8000, 8000, 8000,

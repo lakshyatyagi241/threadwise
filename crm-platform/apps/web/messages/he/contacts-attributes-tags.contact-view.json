@@ -136,7 +136,11 @@
         "previousStage": "השלב הקודם",
         "previousStageSince": "השלב הקודם מאז",
         "lostReason": "סיבת ההפסד",
-        "updatedAt": "עודכן לאחרונה"
+        "updatedAt": "עודכן לאחרונה",
+        "leadScore": "ציון ליד",
+        "originalStage": "שלב מחזור החיים המקורי",
+        "createdBy": "נוצר על ידי",
+        "updatedBy": "עודכן על ידי"
       },
       "company": {
         "title": "חברה",

@@ -250,6 +250,20 @@
   background: var(--muted);
   color: var(--brand);
 }
+.flb-root .node-actions button.danger {
+  /* Set apart from the edit and duplicate buttons so a slip of the pointer does not land on the trash. */
+  margin-inline-start: 8px;
+  position: relative;
+}
+.flb-root .node-actions button.danger::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: -6px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--border);
+}
 .flb-root .node-actions button.danger:hover {
   background: #fbe9e7;
   color: #c56b4f;

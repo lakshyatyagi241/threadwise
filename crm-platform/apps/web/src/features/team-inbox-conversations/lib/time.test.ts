@@ -97,8 +97,11 @@ describe('small helpers', () => {
     expect(initials('Asha Verma')).toBe('AV');
     expect(initials('  madonna ')).toBe('M');
     expect(initials('')).toBe('?');
-    expect(initials('+91 98765 43210')).toBe('94');
-    expect(initials('+918858734844')).toBe('9');
+    // A contact without a name is listed by its number: one mark for all of them, not a slice of the digits.
+    expect(initials('+91 98765 43210')).toBe('#');
+    expect(initials('+918858734844')).toBe('#');
+    expect(initials('919218467176')).toBe('#');
+    expect(initials('Room 101')).toBe('R1');
   });
 
   it('gives the same person the same colour', () => {

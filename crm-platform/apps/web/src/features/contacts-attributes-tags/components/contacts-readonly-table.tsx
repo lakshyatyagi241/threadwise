@@ -35,7 +35,7 @@ export function ContactsReadonlyTable({ rows }: { rows: readonly ContactRow[] })
   const [storedColumns] = useStoredValue(COLUMNS_KEY);
   const attributeColumns = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   const scoringOn = useLeadScoringEnabled();

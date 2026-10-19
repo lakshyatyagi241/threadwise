@@ -85,6 +85,7 @@ export function FlowsScreen() {
   const orgName = useSession().org.name;
   const canRead = useCan('flb.flows.read');
   const canCreate = useCan('flb.flows.create');
+  const canFaqs = useCan('faq.entries.read');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
 
@@ -132,7 +133,7 @@ export function FlowsScreen() {
   const fail = (e: unknown) => toast(t('actionFailed', { message: reason(e) }), 'danger');
 
   const actions: CardActions = {
-    can: { update: canUpdate, create: canCreate, remove: canDelete },
+    can: { update: canUpdate, create: canCreate, remove: canDelete, faqs: canFaqs },
     builderMode,
     onToggle: async (f) => {
       try {
@@ -762,6 +763,10 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
   const tc = useTranslations('flb.common');
   const tb = useTranslations('flb.list.builder');
   const router = useRouter();
+  // A kind of flow is offered only to someone who holds what it needs: the website chat widget, the calling feature. A workspace that
+  // came from a product without website bots or voice flows (see tools/migration/access/module-ceiling.ts) is not offered them.
+  const canWeb = useCan('wgt.widgets.read');
+  const canCall = useCan('call.calls.use');
   const go = (href: string) => {
     onClose();
     router.push(href);
@@ -819,14 +824,15 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
           'bg-[var(--flb-mint)]',
           'whatsapp-simple',
         )}
-        {row(
-          '/flows/simple?type=web',
-          `${t('web')} (${tb('simple')})`,
-          t('webNote'),
-          'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
-          'bg-muted',
-          'web-simple',
-        )}
+        {canWeb &&
+          row(
+            '/flows/simple?type=web',
+            `${t('web')} (${tb('simple')})`,
+            t('webNote'),
+            'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
+            'bg-muted',
+            'web-simple',
+          )}
         {row(
           '/flows/builder',
           `${t('messaging')} (${tb('advanced')})`,
@@ -835,22 +841,24 @@ function CreateSheet({ open, onClose }: { open: boolean; onClose: () => void }) 
           'bg-[var(--flb-mint)]',
           'messaging-advanced',
         )}
-        {row(
-          '/flows/builder?type=web',
-          `${t('web')} (${tb('advanced')})`,
-          t('webNote'),
-          'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
-          'bg-muted',
-          'web-advanced',
-        )}
-        {row(
-          '/flows/builder?type=call',
-          `${t('call')} (${tb('advanced')})`,
-          t('callNote'),
-          'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
-          'bg-muted',
-          'call-advanced',
-        )}
+        {canWeb &&
+          row(
+            '/flows/builder?type=web',
+            `${t('web')} (${tb('advanced')})`,
+            t('webNote'),
+            'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
+            'bg-muted',
+            'web-advanced',
+          )}
+        {canCall &&
+          row(
+            '/flows/builder?type=call',
+            `${t('call')} (${tb('advanced')})`,
+            t('callNote'),
+            'M3 4c0 5 4 9 9 9l1.5-2.5-3-1.5-1 1A7 7 0 0 1 6 6l1-1L5.5 2 3 3.5z',
+            'bg-muted',
+            'call-advanced',
+          )}
       </div>
     </Modal>
   );

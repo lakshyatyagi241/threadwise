@@ -58,7 +58,10 @@
         "role": "Peran",
         "status": "Status",
         "joined": "Bergabung",
-        "actions": "Tindakan"
+        "actions": "Tindakan",
+        "phone": "Telepon",
+        "chatLimit": "Obrolan bersamaan",
+        "lastLogin": "Login terakhir"
       },
       "pending": "menunggu",
       "you": "Anda",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "Cuti hingga {date}",
       "onLeaveOpen": "Sedang cuti",
       "leaveFrom": "Cuti mulai {date}",
-      "leaveAction": "Cuti dan delegasi"
+      "leaveAction": "Cuti dan delegasi",
+      "noLimit": "Tanpa batas",
+      "neverSignedIn": "Belum pernah",
+      "editAction": "Ubah telepon dan batas obrolan"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -129,7 +135,14 @@
       "nameTooLong": "Nama maksimal {max} karakter.",
       "emailInvalid": "Masukkan alamat email yang valid.",
       "upgrade": "Tingkatkan paket",
-      "emailRequired": "Masukkan alamat email."
+      "emailRequired": "Masukkan alamat email.",
+      "phone": "Nomor telepon (opsional)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Dengan kode negara.",
+      "phoneInvalid": "Masukkan nomor beserta kode negaranya, misalnya +91 98765 43210.",
+      "chatLimit": "Obrolan bersamaan",
+      "chatLimitHint": "Jumlah maksimum obrolan terbuka yang diberikan kepada orang ini sekaligus. Kosongkan jika tanpa batas.",
+      "chatLimitInvalid": "Masukkan bilangan bulat dari 1 sampai {max}, atau kosongkan jika tanpa batas."
     },
     "teams": {
       "eyebrow": "Workspace",
@@ -320,6 +333,31 @@
       "undoTitle": "Urungkan penugasan ulang ini?",
       "undoMessage": "Kontak dan deal yang belum diubah siapa pun sejak itu kembali ke pemilik sebelumnya. Sisanya tetap di tempatnya.",
       "restored": "{count} dikembalikan, {skipped} tetap di tempatnya."
+    },
+    "details": {
+      "eyebrow": "Workspace",
+      "title": "Ubah anggota",
+      "intro": "Telepon dan batas obrolan {name}.",
+      "phone": "Nomor telepon",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Dengan kode negara. Kosongkan untuk menghapus.",
+      "phoneInvalid": "Masukkan nomor beserta kode negaranya, misalnya +91 98765 43210.",
+      "chatLimit": "Obrolan bersamaan",
+      "chatLimitHint": "Penugasan otomatis berhenti memberi obrolan kepada orang ini setelah obrolan terbukanya mencapai jumlah ini. Kosongkan jika tanpa batas.",
+      "chatLimitPlaceholder": "Tanpa batas",
+      "chatLimitInvalid": "Masukkan bilangan bulat dari 1 sampai {max}, atau kosongkan jika tanpa batas.",
+      "lastLogin": "Login terakhir",
+      "lastLoginNever": "Belum pernah masuk",
+      "submit": "Simpan",
+      "saving": "Menyimpan…",
+      "saved": "Anggota diperbarui."
+    },
+    "availability": {
+      "label": "Ketersediaan",
+      "available": "Tersedia",
+      "offline": "Offline",
+      "hint": "Selama Anda offline, obrolan baru tidak ditugaskan kepada Anda secara otomatis. Obrolan yang sudah Anda pegang tetap milik Anda.",
+      "failed": "Tidak dapat mengubah"
     }
   }
 }

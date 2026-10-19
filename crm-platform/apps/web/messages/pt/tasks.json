@@ -92,7 +92,8 @@
         "contact": "Contato",
         "deal": "Negócio",
         "created": "Criada em",
-        "completed": "Concluída em"
+        "completed": "Concluída em",
+        "outcome": "Resultado"
       },
       "refresh": "Atualizar",
       "shortcuts": "Atalhos de teclado",
@@ -101,7 +102,9 @@
         "list": "Lista",
         "board": "Quadro por data de vencimento"
       },
-      "linkCompany": "Uma empresa"
+      "linkCompany": "Uma empresa",
+      "outcome": "Resultado",
+      "allOutcomes": "Todos os resultados"
     },
     "table": {
       "scrollArea": "Tabela de tarefas",
@@ -115,7 +118,8 @@
         "contact": "Contato",
         "deal": "Negócio",
         "created": "Criada em",
-        "completed": "Concluída em"
+        "completed": "Concluída em",
+        "outcome": "Resultado"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "A tarefa é longa demais (no máximo 255 caracteres).",
         "notesTooLong": "As observações são longas demais (no máximo 5000 caracteres).",
         "dueInvalid": "Data inválida.",
-        "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho."
+        "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho.",
+        "outcomeInvalid": "Esse resultado não está disponível. Escolha um da lista."
       },
-      "company": "Empresa"
+      "company": "Empresa",
+      "outcome": "Resultado"
     },
     "drawer": {
       "loading": "Carregando tarefa",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Excluir esta tarefa?",
       "deleteMessage": "“{title}” será excluída para todos. Esta ação não pode ser desfeita.",
-      "cancel": "Manter"
+      "cancel": "Manter",
+      "outcomeChip": "Resultado: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "Seu plano não inclui tarefas. Faça upgrade para desbloqueá-las.",
       "assigneeInvalid": "Esta pessoa não é um membro ativo deste espaço de trabalho.",
       "unexpected": "Algo deu errado. Tente novamente em instantes.",
-      "retry": "Tentar novamente"
+      "retry": "Tentar novamente",
+      "outcomeInvalid": "Esse resultado não está disponível. Escolha um da lista.",
+      "outcomeNameTaken": "Outro resultado já tem este nome.",
+      "outcomeInUse": "Ainda há tarefas que usam este resultado, então ele não pode ser excluído. Oculte-o em vez disso."
     },
     "toast": {
       "completed": "Tarefa concluída.",
@@ -342,6 +352,43 @@
       "save": "Adicionar tarefa",
       "cancel": "Cancelar",
       "failed": "Não foi possível salvar a tarefa. Seu texto voltou para o campo."
+    },
+    "outcomes": {
+      "title": "Resultados de tarefas",
+      "subtitle": "Os resultados que uma pessoa escolhe ao concluir ou registrar uma tarefa, como Interessado ou Deixou mensagem.",
+      "listTitle": "Resultados",
+      "listHint": "Os resultados ocultos deixam de ser oferecidos, mas as tarefas que já têm um o mantêm. Um resultado usado por tarefas não pode ser excluído.",
+      "loading": "Carregando resultados",
+      "empty": "Ainda não há resultados. Adicione o primeiro abaixo.",
+      "newName": "Novo resultado",
+      "newNamePlaceholder": "ex.: Deixou mensagem",
+      "add": "Adicionar resultado",
+      "readOnly": "Você pode ver esta lista, mas precisa de permissão para alterá-la.",
+      "failed": "Não foi possível concluir a ação.",
+      "conflict": "Outra pessoa alterou este resultado. A lista foi recarregada. Tente novamente.",
+      "added": "Resultado adicionado.",
+      "saved": "Resultado salvo.",
+      "deleted": "Resultado excluído.",
+      "moveUp": "Subir {name}",
+      "moveDown": "Descer {name}",
+      "nameLabel": "Nome do resultado",
+      "taskCount": "{count, plural, one {# tarefa} other {# tarefas}}",
+      "shownLabel": "Oferecer {name} ao concluir uma tarefa",
+      "shown": "Visível",
+      "hidden": "Oculto",
+      "deleteNamed": "Excluir {name}",
+      "deleteInUse": "Ainda há tarefas que usam este resultado, então ele não pode ser excluído. Oculte-o em vez disso.",
+      "deleteTitle": "Excluir {name}?",
+      "deleteMessage": "O resultado será removido da lista. Nenhuma tarefa o usa.",
+      "delete": "Excluir",
+      "cancel": "Manter",
+      "problems": {
+        "nameRequired": "Digite um nome para o resultado.",
+        "nameTooLong": "O nome é muito longo (máximo de 191 caracteres)."
+      },
+      "none": "Sem resultado",
+      "hiddenName": "{name} (oculto)",
+      "completeWith": "Concluir com resultado"
     }
   }
 }

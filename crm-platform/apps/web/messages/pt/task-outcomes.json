@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Resultados de tarefas",
+        "description": "Os resultados que uma pessoa escolhe ao concluir ou registrar uma tarefa.",
+        "keywords": "resultado da tarefa, resultado da ligação, desfecho, interessado, deixou mensagem, sem resposta"
+      }
+    }
+  }
+}

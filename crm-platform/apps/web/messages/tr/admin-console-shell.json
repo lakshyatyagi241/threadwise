@@ -513,7 +513,8 @@
         "profileHint": "Adınız, fotoğrafınız ve iletişim bilgileriniz",
         "password": "Parola ve güvenlik",
         "passwordHint": "Parola, iki adımlı oturum açma ve etkin oturumlar"
-      }
+      },
+      "searchPage": "Bu sayfada \"{query}\" ara"
     },
     "strip": {
       "jump": "Ara veya git...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Gelen kutusu",
       "clearAll": "Tümünü temizle",
       "viewAll": "Tümünü gör →"
+    },
+    "notFound": {
+      "title": "Sayfa bulunamadı",
+      "body": "Bu sayfa mevcut değil veya taşınmış. Adresi kontrol edin ya da panonuza dönün.",
+      "home": "Panoya git"
     }
   }
 }

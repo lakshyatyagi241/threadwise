@@ -1,4 +1,5 @@
 import {
+  isUnlimitedLimit,
   PLAN_FEATURE_DEFS,
   PLAN_FEATURE_GROUPS,
   PLAN_LIMIT_DEFS,
@@ -92,8 +93,9 @@ export function limitRow(
       tone: 'normal',
     };
   }
-  const uncapped = meter.limit <= 0;
-  const platformDefault = uncapped && key === PLATFORM_DEFAULT_KEY;
+  // 0 and the stand-in values (1,000,000 and up) are both "no cap": the stored value stays, the screen says Unlimited.
+  const uncapped = isUnlimitedLimit(meter.limit);
+  const platformDefault = meter.limit <= 0 && key === PLATFORM_DEFAULT_KEY;
   return {
     key,
     group,
@@ -103,8 +105,8 @@ export function limitRow(
     platformDefault,
     tracked: true,
     window: meter.window,
-    percent: limitPercent(meter.used, meter.limit),
-    tone: limitTone(meter.used, meter.limit),
+    percent: uncapped ? null : limitPercent(meter.used, meter.limit),
+    tone: uncapped ? 'normal' : limitTone(meter.used, meter.limit),
   };
 }
 
@@ -215,7 +217,7 @@ export interface CompareSection {
 export function cellValue(plan: BillingPlan, row: CompareRowDef): string {
   if (row.kind === 'limit') {
     const v = (plan.limits as Record<string, number | undefined>)[row.key] ?? 0;
-    if (v > 0) return String(v);
+    if (!isUnlimitedLimit(v)) return String(v);
     return row.key === PLATFORM_DEFAULT_KEY ? 'default' : 'unlimited';
   }
   if (row.kind === 'flag')

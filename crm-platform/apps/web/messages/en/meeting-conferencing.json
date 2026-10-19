@@ -1,0 +1,132 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Video meetings",
+        "description": "Connect your own Zoom or Microsoft Teams account to add video links to your meetings.",
+        "keywords": "zoom, teams, microsoft teams, video, video call, meeting link, join link, conferencing, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Dismiss"
+    },
+    "form": {
+      "label": "Video conferencing",
+      "add": {
+        "zoom": "Add Zoom link",
+        "teams": "Add Teams link",
+        "meet": "Add Google Meet link"
+      },
+      "chosen": {
+        "zoom": "Zoom link",
+        "teams": "Teams link",
+        "meet": "Google Meet link"
+      },
+      "remove": "Remove the video link",
+      "needsStart": "Set a start time to add a video link or a calendar entry.",
+      "meetNote": "A Google Meet link is part of a calendar event, so this meeting is also added to your calendar.",
+      "teamsViaCalendar": "This Teams link is made by your Microsoft 365 calendar, so this meeting is also added to it.",
+      "calendar": "Add to my calendar ({account})",
+      "calendarNamed": "Add to my calendar ({account}, {calendar})",
+      "invite": "Send a calendar invitation to the contact",
+      "inviteHint": "Your calendar emails the invitation to the contact's email address. Our own email invitation is not affected.",
+      "connectLink": "Connect video conferencing"
+    },
+    "row": {
+      "join": "Join",
+      "joinAria": "Join the {provider} meeting {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Adding the video link...",
+      "onCalendar": "On your calendar",
+      "invited": "The calendar sent the contact an invitation",
+      "retry": "Try again",
+      "retrying": "Trying again...",
+      "retried": "The video link and calendar entry were checked again.",
+      "retryFailed": "That did not work. The meeting is saved; you can try again.",
+      "problem": {
+        "not_installed": "The {provider} integration is not installed for this workspace.",
+        "not_connected": "Your {provider} account is not connected. Connect it in Settings, Video meetings.",
+        "needs_reconnect": "Your {provider} connection needs to be renewed. Reconnect it in Settings, Video meetings.",
+        "not_configured": "{provider} has not been set up for this platform yet. Ask your platform administrator.",
+        "calendar_not_connected": "The calendar is not connected, so the meeting could not be added to it.",
+        "provider_failed": "{provider} did not answer. The meeting is saved; try again.",
+        "no_start_time": "A video link needs a start time on the meeting."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "The meeting could not be added to the calendar because no calendar is connected.",
+        "provider_failed": "The calendar did not answer, so the meeting is not on it yet. The meeting is saved; try again.",
+        "other": "The meeting could not be added to the calendar."
+      }
+    },
+    "page": {
+      "eyebrow": "Settings",
+      "title": "Video meetings",
+      "subtitle": "Connect your own Zoom or Microsoft Teams account. The Add meeting form then offers a video link, made in your account and shown on the meeting with a Join button.",
+      "loading": "Loading your video connections...",
+      "forbidden": {
+        "title": "You cannot use this page",
+        "body": "Ask a workspace admin to give your role access to edit contacts."
+      },
+      "failure": {
+        "generic": "Your video connections could not be loaded."
+      },
+      "retry": "Try again",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Creates a Zoom meeting in your Zoom account for each meeting you schedule, moves it when you move the meeting and removes it when you delete the meeting."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Creates a Teams meeting in your Microsoft work or school account for each meeting you schedule, and updates or removes it with the meeting."
+        }
+      },
+      "status": {
+        "connected": "Connected",
+        "needs_reconnect": "Needs reconnecting",
+        "disconnected": "Not connected",
+        "not_installed": "Not installed",
+        "unavailable": "Not available"
+      },
+      "account": "Account: {account}",
+      "connectedOn": "Connected {when}",
+      "lastError": {
+        "forbidden": "The provider refused the last request. Your account may not be allowed to create meetings.",
+        "rate_limited": "The provider is limiting requests right now.",
+        "unavailable": "The provider did not answer the last request."
+      },
+      "actions": {
+        "connect": "Connect",
+        "reconnect": "Reconnect",
+        "disconnect": "Disconnect",
+        "install": "Install in the Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Your workspace has not installed {provider} yet. Install it from the Marketplace, then connect your account here.",
+        "cannotInstall": "Your workspace has not installed {provider} yet. Ask a workspace admin to install it from the Marketplace."
+      },
+      "unavailable": "{provider} has not been set up for this platform yet. Ask your platform administrator.",
+      "outcome": {
+        "connected": "{provider} is connected.",
+        "denied": "{provider} was not connected because the sign-in was cancelled.",
+        "failed": "{provider} could not be connected. Try again.",
+        "expired": "That sign-in took too long. Press Connect again.",
+        "not_configured": "{provider} has not been set up for this platform yet.",
+        "notYours": "That sign-in was started by someone else, so nothing was connected."
+      },
+      "confirming": "Finishing the connection...",
+      "disconnected": "{provider} disconnected.",
+      "disconnectTitle": "Disconnect {provider}?",
+      "disconnectBody": "Meetings that already have a {provider} link keep it, but moving or deleting those meetings can no longer change the room. You can connect again at any time.",
+      "disconnectConfirm": "Disconnect",
+      "keep": "Keep connected",
+      "calendarNote": "Google Meet and Teams links made through your calendar need no connection here: they use the calendar your workspace has already connected."
+    }
+  }
+}

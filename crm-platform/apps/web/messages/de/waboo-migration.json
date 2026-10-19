@@ -196,7 +196,8 @@
       "core-load": "Kernladung",
       "flow-state": "Flow-Status",
       "reconcile": "Abgleich",
-      "report": "Bericht"
+      "report": "Bericht",
+      "whatsapp": "WhatsApp-Nummer"
     },
     "stepStatus": {
       "running": "Läuft",

@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Your access does not let you assign this contact to that person.",
       "company": "Company",
       "companyHint": "Groups this contact under an organization.",
-      "companyRefused": "You cannot use that company. Pick another one or clear the field."
+      "companyRefused": "You cannot use that company. Pick another one or clear the field.",
+      "searchOptions": "Search options",
+      "searchOptionsFor": "Search the options of {field}",
+      "noOptionsFound": "No option matches your search."
     },
     "tags": {
       "title": "Tags",
@@ -1225,7 +1228,8 @@
             "duplicate": "Two options have the same name."
           },
           "condition": "Choose the property and the value for every condition."
-        }
+        },
+        "optionsLazy": "This property has {count, plural, one {# option} other {# options}}, too many to edit here. They are kept as they are; the other settings can be changed."
       },
       "builtinCard": {
         "title": "Built-in properties",

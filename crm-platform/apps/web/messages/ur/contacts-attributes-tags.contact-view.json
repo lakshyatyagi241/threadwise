@@ -136,7 +136,11 @@
         "previousStage": "پچھلا مرحلہ",
         "previousStageSince": "پچھلا مرحلہ کب سے",
         "lostReason": "ہار کی وجہ",
-        "updatedAt": "آخری اپ ڈیٹ"
+        "updatedAt": "آخری اپ ڈیٹ",
+        "leadScore": "لیڈ اسکور",
+        "originalStage": "اصل لائف سائیکل مرحلہ",
+        "createdBy": "بنانے والا",
+        "updatedBy": "اپ ڈیٹ کرنے والا"
       },
       "company": {
         "title": "کمپنی",

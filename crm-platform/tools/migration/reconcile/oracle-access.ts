@@ -201,7 +201,11 @@ export class AccessOracle {
     const waScope = (v: unknown): string | null => {
       if (v === true) return 'all';
       const s = typeof v === 'string' ? v.trim().toLowerCase() : '';
-      return s === 'global_access' || s === 'true' || s === 'all' ? 'all' : s === 'restricted_access' || s === 'own' ? 'own' : null;
+      return s === 'global_access' || s === 'true' || s === 'all'
+        ? 'all'
+        : s === 'restricted_access' || s === 'own'
+          ? 'own'
+          : null;
     };
     const take = (ident: string, e: OEntry | undefined, keys: string[], over?: string): void => {
       if (!e || e.status !== 'REVIEWED' || text(e.reviewedBy) === '') return;
@@ -338,6 +342,13 @@ export class AccessOracle {
       joined: verified ? isoOf(joined ?? created) : null,
       phone,
       phoneVerified: phone && flag(d.is_phone_verified, false) ? isoOf(updated) : null,
+      // written independently: a count from 1, capped at 1000 (the column's CHECK); empty, 0 or text means no limit
+      chatLimit: (() => {
+        const n = Number(typeof d.chat_limit === 'string' ? d.chat_limit.trim() : d.chat_limit);
+        return typeof d.chat_limit !== 'boolean' && Number.isFinite(n) && n >= 1
+          ? Math.min(1000, Math.trunc(n))
+          : null;
+      })(),
       emailVerified: verified ? isoOf(updated) : null,
       role,
     };
@@ -365,6 +376,7 @@ export interface OUser {
   joined: string | null;
   phone: string | null;
   phoneVerified: string | null;
+  chatLimit: number | null;
   emailVerified: string | null;
   role:
     | { kind: 'viewer' }

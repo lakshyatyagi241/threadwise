@@ -317,7 +317,13 @@
         "delivered": "Dostarczone",
         "queued": "W kolejce",
         "failed": "Nieudane",
-        "replyRate": "Wskaźnik odpowiedzi"
+        "replyRate": "Wskaźnik odpowiedzi",
+        "received": "Odebrane wiadomości",
+        "conversationsOpen": "Otwarte rozmowy",
+        "conversationsClosed": "Zamknięte rozmowy",
+        "conversationsAssigned": "Przypisane",
+        "conversationsUnassigned": "Nieprzypisane",
+        "conversationsTotal": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}"
       },
       "series": {
         "sent": "Wysłane",
@@ -443,7 +449,8 @@
             "unknown": "Nieznane"
           }
         }
-      }
+      },
+      "moreKpis": "Wiadomości i rozmowy"
     },
     "health": {
       "nav": "Stan systemu",

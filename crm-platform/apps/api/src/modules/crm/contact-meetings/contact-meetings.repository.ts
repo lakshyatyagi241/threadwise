@@ -379,6 +379,14 @@ export class ContactMeetingsRepository {
     };
   }
 
+  /** Sets (or clears) the address that joins the call. Written by the meeting-conferencing module after a provider answered. */
+  async setJoinUrl(tx: Tx, orgId: number, id: number, joinUrl: string | null): Promise<void> {
+    await tx
+      .update(contactMeetings)
+      .set({ joinUrl })
+      .where(and(eq(contactMeetings.orgId, orgId), eq(contactMeetings.id, id)));
+  }
+
   /** The user ids that share a team with `userId` (the caller's own `team` record scope). */
   async teamPeerIds(tx: Tx, orgId: number, userId: number): Promise<Set<number>> {
     const rows = await tx.execute(sql`

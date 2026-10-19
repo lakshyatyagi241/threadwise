@@ -11,6 +11,7 @@ import { wspApi } from '../api/service';
 import { primaryRole, seatsLine, tierQuery, type FilterTier } from '../lib/roles';
 import { useLeaves } from '../api/leave';
 import { InviteDialog } from './invite-dialog';
+import { MemberDetailsDialog } from './member-details-dialog';
 import { MemberLeaveDialog } from './member-leave-dialog';
 import { PlusIcon, SearchIcon } from './icons';
 import { LinkBanner, WspProviders, useDebounced, useErrorText } from './parts';
@@ -71,6 +72,7 @@ function Members() {
   const shown = refreshing ? previous.items : items;
 
   const [inviteOpen, setInviteOpen] = useState(false);
+  const [editing, setEditing] = useState<WspMember | null>(null);
   const [confirm, setConfirm] = useState<{ kind: 'remove' | 'reset'; member: WspMember } | null>(
     null,
   );
@@ -256,6 +258,8 @@ function Members() {
                 actions={{
                   busyId,
                   leaves: { items: leavesQ.data?.data ?? [], today: leavesQ.data?.today ?? '' },
+                  timeZone: session.org.timezone,
+                  onEdit: setEditing,
                   onLeave: (m) => setLeaveFor({ id: m.id, name: m.fullName, reassign: false }),
                   onRole: (m, roleId) => void changeRole(m, roleId),
                   onReset: (m) => setConfirm({ kind: 'reset', member: m }),
@@ -276,6 +280,12 @@ function Members() {
           onInvited={() => void refresh()}
         />
       )}
+
+      <MemberDetailsDialog
+        member={editing}
+        onClose={() => setEditing(null)}
+        onSaved={() => void refresh()}
+      />
 
       <MemberLeaveDialog
         memberId={leaveFor?.id ?? null}

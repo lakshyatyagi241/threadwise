@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Votre accès ne vous permet pas d'attribuer ce contact à cette personne.",
       "company": "Entreprise",
       "companyHint": "Rattache ce contact à une organisation.",
-      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ."
+      "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ.",
+      "searchOptions": "Rechercher des options",
+      "searchOptionsFor": "Rechercher dans les options de {field}",
+      "noOptionsFound": "Aucune option ne correspond à votre recherche."
     },
     "tags": {
       "title": "Étiquettes",
@@ -1225,7 +1228,8 @@
             "duplicate": "Deux options portent le même nom."
           },
           "condition": "Choisissez la propriété et la valeur pour chaque condition."
-        }
+        },
+        "optionsLazy": "Cette propriété compte {count, plural, one {# option} other {# options}}, trop pour les modifier ici. Elles sont conservées telles quelles ; les autres réglages peuvent être modifiés."
       },
       "builtinCard": {
         "title": "Propriétés intégrées",

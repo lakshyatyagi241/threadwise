@@ -164,7 +164,12 @@
       "change": "Alterar",
       "terms": "Ao pagar, você concorda com nossos <terms>Termos</terms> e nossa <privacy>Política de privacidade</privacy>.",
       "refundNote": "Não está satisfeito? Escreva para nós nos primeiros {days} dias e devolvemos o valor integral — sem perguntas, sem formulários.",
-      "autoRenewTitle": "Renovar automaticamente este plano"
+      "autoRenewTitle": "Renovar automaticamente este plano",
+      "amountSubtitle": "Informe quanto você quer adicionar. Em seguida, você verá o preço final e as formas de pagamento.",
+      "amountLabel": "Valor a adicionar",
+      "amountHint": "Apenas dígitos, por exemplo 1000 ou 250,50.",
+      "amountInvalid": "Informe um valor maior que zero, como 500 ou 250,50.",
+      "amountContinue": "Continuar"
     },
     "orders": {
       "title": "Histórico de pedidos",

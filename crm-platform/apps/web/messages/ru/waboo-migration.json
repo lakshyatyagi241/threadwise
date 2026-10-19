@@ -196,7 +196,8 @@
       "core-load": "Загрузка основных данных",
       "flow-state": "Состояние сценариев",
       "reconcile": "Сверка",
-      "report": "Отчёт"
+      "report": "Отчёт",
+      "whatsapp": "Номер WhatsApp"
     },
     "stepStatus": {
       "running": "Выполняется",

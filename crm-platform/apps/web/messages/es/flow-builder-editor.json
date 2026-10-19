@@ -104,6 +104,7 @@
       "failed": "fallidos",
       "edited": "Editado {when}",
       "openBuilder": "Abrir constructor",
+      "faqs": "Preguntas frecuentes",
       "pause": "Pausar",
       "resume": "Reanudar",
       "rename": "Renombrar",
@@ -565,7 +566,7 @@
           "startPinned": "Este es el punto de inicio (clic para desfijar)",
           "startMake": "Convertir en punto de inicio",
           "startPoint": "Punto de inicio",
-          "editTitle": "Editar (abrir inspector)",
+          "editTitle": "Editar (abrir el inspector, o doble clic en el nodo, o pulsar Intro)",
           "edit": "Editar",
           "duplicateTitle": "Duplicar (Ctrl+D)",
           "duplicate": "Duplicar",
@@ -581,7 +582,9 @@
           "nothingHint": "Haz clic en un nodo del lienzo para editar sus propiedades,<br/>o arrastra una tarjeta desde la izquierda para añadir un nodo nuevo.",
           "nodeFallback": "Nodo",
           "id": "id",
-          "noSettings": "Este nodo no tiene ajustes."
+          "noSettings": "Este nodo no tiene ajustes.",
+          "confirmDeleteTitle": "¿Eliminar este nodo?",
+          "confirmDeleteMessage": "Se quitan el nodo y sus conexiones. Pulsa Ctrl+Z para deshacerlo mientras no salgas del editor."
         },
         "palette": {
           "modeCall": "Llamada",

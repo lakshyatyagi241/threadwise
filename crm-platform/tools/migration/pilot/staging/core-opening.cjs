@@ -33,7 +33,7 @@ const expr = `(()=>{const w=db.workspace.findOne({workspace_id:${JSON.stringify(
 const b=db.business.findOne({id:w.business_id})||{};const sd=b.subscription_data||{};
 const tops=db.reseller_credit_logs.find({to_workspace:${JSON.stringify(ws)}}).sort({transaction_datetime:1}).toArray().map(r=>({action:r.action,added:r.credits_added,removed:r.credits_removed,at:r.transaction_datetime}));
 const wev=db.reseller_credit_logs.find({$or:[{from_workspace:${JSON.stringify(ws)}},{to_workspace:${JSON.stringify(ws)}}]}).sort({transaction_datetime:1}).toArray().map(r=>{const inn=r.to_workspace===${JSON.stringify(ws)};const prev=inn?r.to_previous_balance:r.from_previous_balance;const upd=inn?r.to_updated_balance:r.from_updated_balance;return {src:'reseller',id:String(r.id||r._id),at:r.transaction_datetime,delta:Math.round((upd-prev)*10000)/10000,prev:prev,reason:r.reason||null};});
-return "@@CORE@@"+JSON.stringify({walletEvents:wev,workspace:{id:w.workspace_id,businessId:w.business_id,status:w.status,timezone:w.timezone,primaryLanguage:w.primary_language,provider:w.meta_provider,credits:w.credits},
+return "@@CORE@@"+JSON.stringify({walletEvents:wev,workspace:{id:w.workspace_id,businessId:w.business_id,status:w.status,timezone:w.timezone,primaryLanguage:w.primary_language,provider:w.meta_provider,credits:w.credits,autoAssignment:(w.config||{}).auto_assignment===true},
 business:{id:b.id,name:b.name,domain:b.domain,schemaName:b.schema_name},subscription:{id:sd.subscription_id,planCode:sd.plan_code,name:sd.name,status:sd.status,amount:sd.amount,subTotal:sd.sub_total,interval:sd.interval,intervalUnit:sd.interval_unit,activation:sd.activation_date,lastBilling:sd.last_billing_date,nextBilling:sd.next_billing_date,customerId:sd.customer_id,quantity:sd.quantity,discount:sd.discount,config:(sd.config||[]).map(c=>({code:c.code,name:c.name,status:c.status,limit:c.limit,visible:c.is_visible}))},sub:(function(){const s=db.subscriptions.findOne({subscription_id:sd.subscription_id})||{};return {number:s.subscription_number,invoiceId:s.invoice_id,paymentMethod:s.associated_payment_method,paymentTerms:s.payment_terms_label};})(),planCatalogue:(function(){const p=db.plan_permissions.findOne({plan_code:sd.plan_code})||{};return {planCode:p.plan_code,term:p.term,type:p.type,amount:p.amount,isCustom:p.is_custom};})(),topups:tops});})()`;
 
 const r = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), 'geta_core', expr], {
@@ -71,6 +71,19 @@ for (const e of JSON.parse(me[1])) {
   if (!Number.isFinite(money) || money <= 0 || !e.at) continue;
   core.walletEvents.push({ src: 'expense', id: e.id, at: e.at, delta: e.type === 'debit' ? -money : money, invoice: e.invoice });
 }
+// the workspace's own settings the app has a home for (no credentials, no personal data): the deal pipelines with their stages and lost
+// reasons, and the opt-in / opt-out keyword rows of the consent screen
+const exprS = `(()=>{const day=x=>x&&x.$date?x.$date:x;
+const pipes=db.getCollection("deal_pipelines").find({type:"Pipeline"}).sort({created_at:1,_id:1}).toArray().map(p=>({id:p.id,name:p.name,stages:(p.stages||[]).map(s=>({id:s.id,name:s.name,probability:s.win_probability}))}));
+const lost=db.getCollection("deal_pipelines").find({type:"Lost_Reason"}).toArray().flatMap(d=>(d.lost_reasons||[]).map(r=>({id:r.id,reason:r.lost_reason})));
+const consent=db.getCollection("workspace_settings").find({type:{$in:["opt-in","opt-out"]}}).toArray().map(d=>({type:d.type,channel:d.channel,status:d.status,keywords:(d.config||{}).keywords||[],response:((d.config||{}).response||{}).value||null,responseType:(d.config||{}).type||null}));
+const outcomes=db.getCollection("contact_task_config").find({action_name:"task_outcomes"}).sort({_id:1}).toArray().flatMap(d=>(d.options||[]).map((o,i)=>({label:o.label,name:o.name,position:o.position===undefined?null:o.position,visible:o.visible!==false,at:i})));
+const logins=db.getCollection("auth_logs").aggregate([{$match:{type:"login",user_id:{$ne:null}}},{$group:{_id:"$user_id",at:{$max:"$timestamp"}}}]).toArray().map(r=>({userId:String(r._id),at:day(r.at)}));
+return "@@SET@@"+JSON.stringify({pipelines:pipes,lostReasons:lost,consent:consent,taskOutcomes:outcomes,lastLogins:logins})})()`;
+const rs = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), ws, exprS], { encoding: 'utf8', timeout: 120000, env: { ...process.env, MSYS_NO_PATHCONV: '1' } });
+const ms = /@@SET@@(\{.*\})/.exec(rs.stdout || '');
+if (!ms) console.error('core-opening: no answer for the workspace settings of', ws, '(exit', rs.status, '): pipelines, lost reasons and consent keywords are left out');
+else core.settings = JSON.parse(ms[1]);
 core.walletEvents.sort((a, b) => String(a.at).localeCompare(String(b.at)));
 core.readAt = new Date().toISOString();
 const opening = {

@@ -126,7 +126,7 @@ export interface CardActions {
   onDuplicate: (f: FlowSummary | FlowFeatured) => void | Promise<void>;
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
-  can: { update: boolean; create: boolean; remove: boolean };
+  can: { update: boolean; create: boolean; remove: boolean; faqs?: boolean };
   /** Which builder(s) the platform admin offers; absent means both. */
   builderMode?: BuilderMode;
 }
@@ -300,6 +300,18 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
         >
           {t('openBuilder')}
         </Link>
+        {actions.can.faqs && flow.flowType !== 'call' ? (
+          // A flow's FAQs, its unanswered questions and the message sent when nothing matches are on the FAQs tab of its builder.
+          <Link
+            href={`${openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}?tab=faqs`}
+            data-flow-faqs={flow.id}
+            title={t('faqs')}
+            aria-label={t('faqs')}
+            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted"
+          >
+            <Svg d="M8 14a6 6 0 1 0 0-12 6 6 0 0 0 0 12ZM6.2 6.3A1.9 1.9 0 0 1 8 5c1 0 1.9.7 1.9 1.7 0 1.3-1.9 1.4-1.9 2.6M8 11.2v.1" />
+          </Link>
+        ) : null}
         {flow.flowType !== 'instagram' ? (
           // Per-flow runs, errors and retries live in the runtime's analytics (FLR); an Instagram flow has no local runs.
           <Link

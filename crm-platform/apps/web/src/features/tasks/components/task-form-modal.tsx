@@ -18,6 +18,7 @@ import {
   validateDraft,
   type TaskDraft,
 } from '../lib/task-form';
+import { OutcomeSelect } from './outcome-select';
 import { RecordPicker } from './record-picker';
 import { useErrorText } from './parts';
 import { useTaskActions } from './use-task-actions';
@@ -33,7 +34,7 @@ export interface TaskFormModalProps {
   onSaved?: (task: TaskResponse) => void;
 }
 
-type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'priority' | 'form';
+type FormField = 'title' | 'notes' | 'due' | 'assignee' | 'priority' | 'outcome' | 'form';
 
 /** "New task" and "Edit task" (TW-TASK-003/005). Mount it only while it is open: it starts from the task every time. */
 export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: TaskFormModalProps) {
@@ -109,8 +110,13 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
         notes: server.notes ? t('problems.notesTooLong') : undefined,
         due: server.dueAt ? t('problems.dueInvalid') : undefined,
         assignee: kind === 'assigneeInvalid' ? t('problems.assigneeInvalid') : undefined,
+        outcome: kind === 'outcomeInvalid' ? t('problems.outcomeInvalid') : undefined,
         form:
-          Object.keys(server).length === 0 && kind !== 'assigneeInvalid' ? errorText(e) : undefined,
+          Object.keys(server).length === 0 &&
+          kind !== 'assigneeInvalid' &&
+          kind !== 'outcomeInvalid'
+            ? errorText(e)
+            : undefined,
       });
     } finally {
       setBusy(false);
@@ -255,6 +261,14 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             }}
           />
         </Field>
+        <OutcomeSelect
+          id="task-outcome"
+          label={t('outcome')}
+          error={errors.outcome}
+          value={draft.outcomeId}
+          current={task?.outcome ?? null}
+          onChange={(v) => set('outcomeId', v)}
+        />
         <Field
           label={t('notes')}
           htmlFor="task-notes"

@@ -13,7 +13,8 @@ import {
   cn,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useRecordRef } from '../api/hooks';
+import { useRecordRef, useTaskOutcomes } from '../api/hooks';
+import { outcomeChoices } from '../lib/outcomes';
 import { PRIORITIES, type Member } from '../api/schemas';
 import { COLUMN_IDS, LOCKED_COLUMNS, type ColumnId } from '../lib/columns';
 import {
@@ -71,6 +72,11 @@ export function TasksToolbar(p: TasksToolbarProps) {
         : linkKind === 'company'
           ? f.company
           : '';
+  const outcomes = useTaskOutcomes(false);
+  const outcomeOptions = outcomeChoices(
+    outcomes.data ?? [],
+    f.outcome ? { id: f.outcome, name: '…', isActive: true } : null,
+  );
   const ref = useRecordRef(linkKind === '' ? 'contact' : linkKind, linkId);
   const views: Array<{ id: TasksView; icon: typeof ListIcon }> = [
     { id: 'list', icon: ListIcon },
@@ -119,6 +125,22 @@ export function TasksToolbar(p: TasksToolbarProps) {
           </option>
         ))}
       </Select>
+
+      {outcomeOptions.length > 0 && (
+        <Select
+          aria-label={t('outcome')}
+          className="h-9 w-auto min-w-36 max-w-52"
+          value={f.outcome}
+          onChange={(e) => p.onChange({ outcome: e.target.value })}
+        >
+          <option value="">{t('allOutcomes')}</option>
+          {outcomeOptions.map((o) => (
+            <option key={o.id} value={o.id}>
+              {o.name}
+            </option>
+          ))}
+        </Select>
+      )}
 
       {f.tab !== 'mine' && (
         <Select
@@ -180,6 +202,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
               contact: '',
               deal: '',
               company: '',
+              outcome: '',
             });
           }}
         >

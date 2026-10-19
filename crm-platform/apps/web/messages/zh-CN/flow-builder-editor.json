@@ -104,6 +104,7 @@
       "failed": "失败",
       "edited": "编辑于 {when}",
       "openBuilder": "打开构建器",
+      "faqs": "常见问题",
       "pause": "暂停",
       "resume": "恢复",
       "rename": "重命名",
@@ -565,7 +566,7 @@
           "startPinned": "这是起点（点击取消固定）",
           "startMake": "设为起点",
           "startPoint": "起点",
-          "editTitle": "编辑（打开检查器）",
+          "editTitle": "编辑（打开检查器，也可双击节点或按 Enter）",
           "edit": "编辑",
           "duplicateTitle": "复制（Ctrl+D）",
           "duplicate": "复制",
@@ -581,7 +582,9 @@
           "nothingHint": "点击画布上的节点以编辑其属性，<br/>或从左侧拖入卡片以添加新节点。",
           "nodeFallback": "节点",
           "id": "ID",
-          "noSettings": "此节点没有设置。"
+          "noSettings": "此节点没有设置。",
+          "confirmDeleteTitle": "删除此节点？",
+          "confirmDeleteMessage": "节点及其连线将被移除。在离开构建器之前，可按 Ctrl+Z 撤销。"
         },
         "palette": {
           "modeCall": "通话",

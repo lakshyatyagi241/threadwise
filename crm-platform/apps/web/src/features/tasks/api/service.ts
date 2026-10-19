@@ -1,10 +1,13 @@
+import { z } from 'zod';
 import {
   taskCountsResponseSchema,
+  taskOutcomeResponseSchema,
   taskBulkResultSchema,
   taskPageResponseSchema,
   taskResponseSchema,
   type CreateTaskInput,
   type TaskBulkResult,
+  type TaskOutcomeResponse,
   type TaskCountsResponse,
   type TaskResponse,
 } from '@crm/contracts';
@@ -69,8 +72,12 @@ export const tasksApi = {
     });
   },
   /** Idempotent: completing a done task or reopening an open one changes nothing. */
-  complete: (id: string): Promise<TaskResponse> =>
-    call(`/tasks/${id}/complete`, { method: 'POST', body: {}, schema: taskResponseSchema }),
+  complete: (id: string, outcomeId?: string | null): Promise<TaskResponse> =>
+    call(`/tasks/${id}/complete`, {
+      method: 'POST',
+      body: outcomeId === undefined ? {} : { outcomeId },
+      schema: taskResponseSchema,
+    }),
   reopen: (id: string): Promise<TaskResponse> =>
     call(`/tasks/${id}/reopen`, { method: 'POST', body: {}, schema: taskResponseSchema }),
   remove: (id: string): Promise<void> => call(`/tasks/${id}`, { method: 'DELETE' }),
@@ -151,6 +158,47 @@ export const tasksApi = {
     });
     return page.data;
   },
+};
+
+/**
+ * The task outcome list (Settings > Task outcomes, and the pickers on a task). Always the real API: the tasks stand-in has no list of
+ * its own. Each write is one call; the screen refetches the list after it.
+ */
+export const taskOutcomesApi = {
+  list(activeOnly: boolean, signal?: AbortSignal): Promise<TaskOutcomeResponse[]> {
+    return callReal('/task-outcomes', {
+      query: { activeOnly: activeOnly ? 'true' : undefined },
+      schema: z.array(taskOutcomeResponseSchema),
+      signal,
+    });
+  },
+  create(input: { name: string; isActive?: boolean }): Promise<TaskOutcomeResponse> {
+    return callReal('/task-outcomes', {
+      method: 'POST',
+      body: input,
+      schema: taskOutcomeResponseSchema,
+    });
+  },
+  /** Needs the `rowVersion` that was read; a 409 means someone else changed it. */
+  update(
+    o: Pick<TaskOutcomeResponse, 'id' | 'rowVersion'>,
+    input: { name?: string; isActive?: boolean },
+  ): Promise<TaskOutcomeResponse> {
+    return callReal(`/task-outcomes/${o.id}`, {
+      method: 'PATCH',
+      body: { ...input, rowVersion: o.rowVersion },
+      schema: taskOutcomeResponseSchema,
+    });
+  },
+  /** Every outcome exactly once, in the order wanted. */
+  reorder(outcomeIds: readonly string[]): Promise<TaskOutcomeResponse[]> {
+    return callReal('/task-outcomes/order', {
+      method: 'PUT',
+      body: { outcomeIds },
+      schema: z.array(taskOutcomeResponseSchema),
+    });
+  },
+  remove: (id: string): Promise<void> => callReal(`/task-outcomes/${id}`, { method: 'DELETE' }),
 };
 
 function sum(results: readonly TaskBulkResult[]): BulkOutcome {

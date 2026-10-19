@@ -6,6 +6,7 @@ export const COLUMN_IDS = [
   'assignee',
   'contact',
   'deal',
+  'outcome',
   'created',
   'completed',
 ] as const;
@@ -20,6 +21,7 @@ export const DEFAULT_COLUMNS: readonly ColumnId[] = [
   'assignee',
   'contact',
   'deal',
+  'outcome',
 ];
 export const STORAGE_KEY = 'tasks:columns';
 

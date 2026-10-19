@@ -196,7 +196,8 @@
       "core-load": "মূল লোড",
       "flow-state": "ফ্লো অবস্থা",
       "reconcile": "মিলিয়ে দেখা",
-      "report": "রিপোর্ট"
+      "report": "রিপোর্ট",
+      "whatsapp": "WhatsApp নম্বর"
     },
     "stepStatus": {
       "running": "চলছে",
