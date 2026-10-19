@@ -646,3 +646,15 @@ A live WhatsApp or e-mail send through a real provider (the dispatch hook is cov
 | --- | -------- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | L09 | Settings | Nothing            | Settings > Automation and AI > Duplicate leads: a lead whose phone or e-mail matches a contact is merged (default, today's behaviour) or becomes a separate contact; optional timeline note on merge (off by default).         |
 | L10 | Identity | n/a                | A separate contact never takes the shared identity: it stays with the first contact so messages keep routing there; the new contact says on its timeline that it may be a duplicate of which contact, and can be merged later. |
+
+### Contact detail: values imported from another system (Sheet issues #3 and #4)
+
+Not in the reference platform (it has no imported properties), so this was run on our app only
+(`adhoc-contact-detail-imported-values.twin.mjs`, 5 scenarios, no console, page or 5xx errors).
+
+| Case                                                                     | Ours                                                    |
+| ------------------------------------------------------------------------ | ------------------------------------------------------- |
+| An ISO timestamp in a property, or in an imported value with no property | Shown as a date in the workspace's time zone and format |
+| `last_chat_assigned_to` holding an agent id                              | The agent's name; upper-case ids work                   |
+| That id when no active agent matches                                     | The stored id, unchanged                                |
+| A UUID under any other key                                               | Unchanged                                               |
