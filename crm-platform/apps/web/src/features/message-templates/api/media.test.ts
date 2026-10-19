@@ -7,7 +7,7 @@ describe('uploadTemplateMedia', () => {
   it('sends the number and the file in one multipart form, as the API expects', async () => {
     const reply = { handle: '4::abc', fileName: 'a.png', mimeType: 'image/png' };
     const fetchMock = vi.fn(
-      async () =>
+      async (_url: RequestInfo | URL, _init?: RequestInit) =>
         new Response(JSON.stringify(reply), {
           status: 200,
           headers: { 'content-type': 'application/json' },
