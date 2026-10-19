@@ -33,14 +33,14 @@ const isField = (value: string): value is SignUpField =>
   (SIGN_UP_FIELD_ORDER as readonly string[]).includes(value);
 
 /**
- * The password policy answer lists each broken rule as `password.<rule>`. Each becomes one line in the person's language; a rule
+ * The password policy answer lists each broken rule as `<field>.<rule>` (`password` when signing up, `newPassword` when changing it). Each becomes one line in the person's language; a rule
  * this app does not know is left out (the header line still says the password was refused).
  */
-function policyMessage(error: ApiError, t: TFunction): string {
+export function policyMessage(error: ApiError, t: TFunction, name = 'password'): string {
   const lines: string[] = [];
   for (const detail of error.fieldErrors) {
     const [field, rule] = detail.path.split('.');
-    if (field !== 'password') continue;
+    if (field !== name) continue;
     switch (rule) {
       case 'min_length': {
         // The server's text is "Use at least N characters.": the number is the only part we need from it.

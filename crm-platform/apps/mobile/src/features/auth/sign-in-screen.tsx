@@ -75,6 +75,17 @@ export function SignInScreen() {
                 onSubmitEditing={() => void submitPassword(email, password)}
               />
               <Button
+                variant="link"
+                label={t('auth.forgotPassword')}
+                disabled={pending}
+                onPress={() =>
+                  router.push({
+                    pathname: '/forgot-password',
+                    params: email.trim() ? { email: email.trim() } : {},
+                  })
+                }
+              />
+              <Button
                 label={t('auth.signInSubmit')}
                 testID="sign-in-submit"
                 loading={pending}

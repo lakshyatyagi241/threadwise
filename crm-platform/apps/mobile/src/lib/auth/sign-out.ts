@@ -1,6 +1,7 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { apiFetch } from '@/lib/api/client';
 import { identifyUser } from '@/lib/observability/sentry';
+import { clearWorkspaceSuspended } from '@/lib/session/account-gate';
 import { currentRefreshToken, endSession } from './session-manager';
 
 /**
@@ -26,5 +27,6 @@ export async function signOut(queryClient: QueryClient): Promise<void> {
   if (refreshToken) await revokeSession(refreshToken).catch(() => undefined);
   await endSession();
   identifyUser(null);
+  clearWorkspaceSuspended();
   queryClient.clear();
 }

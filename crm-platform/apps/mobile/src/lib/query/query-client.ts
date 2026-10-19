@@ -1,16 +1,28 @@
 import NetInfo from '@react-native-community/netinfo';
-import { QueryClient, focusManager, onlineManager } from '@tanstack/react-query';
+import {
+  MutationCache,
+  QueryCache,
+  QueryClient,
+  focusManager,
+  onlineManager,
+} from '@tanstack/react-query';
 import { AppState, Platform, type AppStateStatus } from 'react-native';
 import { env } from '@/config/env';
 import { isApiError } from '@/lib/api/errors';
 import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
+import { noteGateError } from '@/lib/session/account-gate';
 
 /**
  * Server state lives here and only here (docs/adr/0024). Screens read it with `useQuery`/`useInfiniteQuery`; nothing copies it
  * into a store.
  */
 export function createQueryClient(): QueryClient {
-  return new QueryClient({
+  // A gate that closes while the app is open (an administrator forces a password change, suspends the account) shows up as an error
+  // on whatever the person was doing; the session is read again and the gate screen takes over.
+  const onError = (error: unknown) => noteGateError(error, client);
+  const client: QueryClient = new QueryClient({
+    queryCache: new QueryCache({ onError }),
+    mutationCache: new MutationCache({ onError }),
     defaultOptions: {
       queries: {
         // Fresh enough to open a screen instantly, stale enough that pull-to-refresh and focus really refetch.
@@ -25,6 +37,7 @@ export function createQueryClient(): QueryClient {
       mutations: { retry: false },
     },
   });
+  return client;
 }
 
 /** Plain-language check used by screens: "is this an error the person can fix by trying again later?" */

@@ -1,0 +1,30 @@
+# A person who manages saved replies adds one from Menu > Settings > Saved replies, and it shows in the list.
+# Needs an account with `inbox.savedreply.manage` (an owner or admin) on a workspace whose plan has room for one more reply.
+#   maestro test apps/mobile/.maestro/saved-replies.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Saved replies'
+- tapOn: 'New saved reply'
+- tapOn: 'Shortcut'
+- inputText: 'maestro_hello'
+- tapOn: 'Title'
+- inputText: 'Maestro hello'
+- tapOn: 'Text'
+- inputText: 'Hi {{first_name}}, this reply was added by a test.'
+- assertVisible: 'Hi Amira, this reply was added by a test.'
+- hideKeyboard
+- tapOn:
+    id: 'quick-reply-save'
+- assertVisible: 'Maestro hello'
+- assertVisible: '/maestro_hello'

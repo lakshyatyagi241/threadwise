@@ -3,6 +3,8 @@ import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
 import {
   fetchPasswordPolicy,
   fetchRegistrationConfig,
+  requestPasswordReset,
+  requestWorkspaceList,
   resendSignUpOtp,
   signUp,
   verifySignUpOtp,
@@ -76,6 +78,25 @@ describe('the public doors of sign-up', () => {
       requireSymbol: false,
     });
     expect(f.calls[0]?.url).toBe('http://api.test/v2/auth/password-policy');
+  });
+
+  it('asks for a password reset link with no bearer token, and reads the neutral answer', async () => {
+    const f = mockFetch(jsonResponse(200, { ok: true }));
+    await expect(
+      requestPasswordReset({ orgSlug: 'acme', email: 'person@example.com' }),
+    ).resolves.toEqual({ ok: true });
+    expect(f.calls[0]?.url).toBe('http://api.test/v2/auth/forgot-password');
+    expect(f.calls[0]?.init.method).toBe('POST');
+    expect(f.calls[0]?.body).toEqual({ orgSlug: 'acme', email: 'person@example.com' });
+    expect(f.calls[0]?.headers.Authorization).toBeUndefined();
+  });
+
+  it('asks for the list of workspaces of an email with no bearer token', async () => {
+    const f = mockFetch(jsonResponse(200, { ok: true }));
+    await requestWorkspaceList({ email: 'person@example.com' });
+    expect(f.calls[0]?.url).toBe('http://api.test/v2/auth/find-workspaces');
+    expect(f.calls[0]?.body).toEqual({ email: 'person@example.com' });
+    expect(f.calls[0]?.headers.Authorization).toBeUndefined();
   });
 
   it('refuses an answer in a shape this build does not understand', async () => {

@@ -32,7 +32,7 @@ interface Child {
   permission: string;
 }
 
-type Group = 'dashboard' | 'contacts';
+type Group = 'dashboard' | 'contacts' | 'settings';
 
 /**
  * The Account tab, laid out like the reference app's menu: the person at the top, then sections (Workspace, Account, Preferences,
@@ -125,6 +125,35 @@ export function MenuScreen() {
     },
   ];
 
+  // Settings holds the workspace's own setup. Each line opens with the right that manages it; the row is faded only when none opens.
+  const settingsChildren: Child[] = [
+    {
+      key: 'savedReplies',
+      label: t('settings.quickReplies.title'),
+      href: '/quick-replies',
+      permission: 'inbox.savedreply.manage',
+    },
+    {
+      key: 'labels',
+      label: t('inbox.filter.labels'),
+      href: '/labels',
+      permission: 'inbox.tag.manage',
+    },
+    {
+      key: 'businessHours',
+      label: t('settings.businessHours.title'),
+      href: '/business-hours',
+      permission: 'inbox.settings.read',
+    },
+    {
+      key: 'autoAssignment',
+      label: t('settings.routing.title'),
+      href: '/auto-assignment',
+      permission: 'inbox.settings.read',
+    },
+  ];
+  const settingsOpen = settingsChildren.some((child) => allowed(child.permission));
+
   const confirmSignOut = async () => {
     setSigningOut(true);
     await signOut(queryClient);
@@ -212,6 +241,19 @@ export function MenuScreen() {
             faded={faded('leads.sources.read')}
             onPress={() => go('leads.sources.read', '/leads')}
           />
+          <Row
+            icon="settings-outline"
+            label={t('menu.settings')}
+            expanded={open === 'settings'}
+            faded={session.data !== undefined && !settingsOpen}
+            onPress={() => {
+              setNoAccess(!settingsOpen);
+              if (settingsOpen) setOpen(open === 'settings' ? null : 'settings');
+            }}
+          />
+          {open === 'settings' ? (
+            <Children items={settingsChildren} faded={faded} onOpen={go} />
+          ) : null}
         </Section>
         {noAccess ? (
           <View style={styles.notice}>

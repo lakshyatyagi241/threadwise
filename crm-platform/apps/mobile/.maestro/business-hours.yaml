@@ -1,0 +1,25 @@
+# A person who manages business hours changes Monday's closing time from Menu > Settings > Business hours, and it is still there after saving.
+# Needs an account with `inbox.routing.manage` (an owner or admin) on a plan with auto-assignment (`inbox_routing`).
+#   maestro test apps/mobile/.maestro/business-hours.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Business hours'
+- assertVisible: 'Opening hours'
+- tapOn: 'Monday To'
+- eraseText: 5
+- inputText: '1730'
+- hideKeyboard
+- tapOn:
+    id: 'business-hours-save'
+- assertVisible: 'Business hours saved'

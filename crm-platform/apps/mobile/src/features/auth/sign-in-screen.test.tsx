@@ -92,6 +92,19 @@ describe('SignInScreen', () => {
     expect(await screen.findByText('Create an account')).toBeTruthy();
   }, 40000);
 
+  it('opens the forgot-password screen, taking the email typed so far along', async () => {
+    await renderScreen();
+    await press('Forgot password?');
+    expect(router.push).toHaveBeenCalledWith({ pathname: '/forgot-password', params: {} });
+    await fill('Email', ' person@example.com ');
+    await press('Forgot password?');
+    expect(router.push).toHaveBeenLastCalledWith({
+      pathname: '/forgot-password',
+      params: { email: 'person@example.com' },
+    });
+    expect(await screen.findByText('Create an account')).toBeTruthy();
+  });
+
   it('validates the fields before calling the API', async () => {
     await renderScreen();
     await fill('Email', 'not-an-email');

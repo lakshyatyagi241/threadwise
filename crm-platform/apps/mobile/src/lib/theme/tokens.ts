@@ -97,3 +97,21 @@ export const typography = {
   metric: { fontSize: 32, lineHeight: 38, fontWeight: '700' },
 } as const;
 export type TypographyVariant = keyof typeof typography;
+
+/**
+ * Colours a person can give a label (Settings, Labels). They are data the person chooses, not the app's look: the same swatch on a light
+ * or a dark screen. The first is the default, the web's own (WhatsApp green).
+ */
+export const LABEL_COLORS: readonly string[] = [
+  '#075E54',
+  '#1B7F4B',
+  '#2563EB',
+  '#7C3AED',
+  '#DB2777',
+  '#DC2626',
+  '#EA580C',
+  '#CA8A04',
+  '#0891B2',
+  '#475569',
+];
+export const DEFAULT_LABEL_COLOR: string = LABEL_COLORS[0]!;

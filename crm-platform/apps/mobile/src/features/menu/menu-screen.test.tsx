@@ -177,6 +177,45 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/contact/new');
     });
 
+    it('opens a list under Settings with the saved replies, for a person who may manage them', async () => {
+      await show({ ...session.permissions, 'inbox.savedreply.manage': 'all' });
+      await press('Settings');
+      await press('Saved replies');
+      expect(mockNavigate).toHaveBeenCalledWith('/quick-replies');
+    });
+
+    it('opens the Settings lines the person may use, and fades the others, explaining when one is pressed', async () => {
+      await show({ ...session.permissions, 'inbox.tag.manage': 'all' });
+      await press('Settings');
+      await press('Saved replies');
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
+      await press('Labels');
+      expect(mockNavigate).toHaveBeenCalledWith('/labels');
+    });
+
+    it('opens Business hours for a person who may read the inbox settings', async () => {
+      await show({ ...session.permissions, 'inbox.settings.read': 'all' });
+      await press('Settings');
+      await press('Business hours');
+      expect(mockNavigate).toHaveBeenCalledWith('/business-hours');
+    });
+
+    it('opens Auto-assignment for a person who may read the inbox settings', async () => {
+      await show({ ...session.permissions, 'inbox.settings.read': 'all' });
+      await press('Settings');
+      await press('Auto-assignment');
+      expect(mockNavigate).toHaveBeenCalledWith('/auto-assignment');
+    });
+
+    it('explains instead of opening Settings for a person who may not manage anything in it', async () => {
+      await show();
+      await press('Settings');
+      expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
+      expect(mockNavigate).not.toHaveBeenCalled();
+      expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
+    });
+
     it('explains instead of opening a module the person cannot read', async () => {
       await show();
       await press('Contacts');

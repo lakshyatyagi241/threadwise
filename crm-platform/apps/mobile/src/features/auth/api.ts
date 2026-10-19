@@ -1,11 +1,14 @@
 import {
   authenticatedSchema,
   loginResponseSchema,
+  neutralAckSchema,
   passwordLoginResponseSchema,
   passwordPolicyHintSchema,
   registrationConfigResponseSchema,
   signupResendOtpResponseSchema,
   signupResponseSchema,
+  type FindWorkspacesRequest,
+  type ForgotPasswordRequest,
   type LoginRequest,
   type MfaLoginRequest,
   type SelectWorkspaceRequest,
@@ -78,5 +81,26 @@ export const resendSignUpOtp = (body: SignupResendOtpRequest) =>
     method: 'POST',
     body,
     schema: signupResendOtpResponseSchema,
+    auth: false,
+  });
+
+/**
+ * Emails a password reset link (TW-AUTH-013). The answer is the same whether or not the address belongs to an account, so nothing here
+ * says which. The link in the mail opens the web's reset page, where the new password is chosen.
+ */
+export const requestPasswordReset = (body: ForgotPasswordRequest) =>
+  apiFetch('/v2/auth/forgot-password', {
+    method: 'POST',
+    body,
+    schema: neutralAckSchema,
+    auth: false,
+  });
+
+/** Emails the workspace addresses an email can sign in to, for a person who forgot theirs. Answers the same either way. */
+export const requestWorkspaceList = (body: FindWorkspacesRequest) =>
+  apiFetch('/v2/auth/find-workspaces', {
+    method: 'POST',
+    body,
+    schema: neutralAckSchema,
     auth: false,
   });

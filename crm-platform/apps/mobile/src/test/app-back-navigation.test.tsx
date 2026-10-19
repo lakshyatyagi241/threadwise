@@ -13,15 +13,19 @@ jest.mock('@/lib/session/api');
 // The theme sync has its own test; here it is only a child of the layout.
 jest.mock('@/features/menu/theme-sync', () => ({ ThemeSync: () => null }));
 
-function Tabs() {
-  const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+// One client for the whole tree, as in the real root layout: the signed-in layout reads the session before it shows anything.
+const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+function Root() {
   return (
     <I18nextProvider i18n={i18n}>
       <QueryClientProvider client={client}>
-        <TabsLayout />
+        <Stack screenOptions={{ headerShown: false }} />
       </QueryClientProvider>
     </I18nextProvider>
   );
+}
+function Tabs() {
+  return <TabsLayout />;
 }
 const { router } = jest.requireActual<typeof import('expo-router')>('expo-router');
 const OpenContact = () => (
@@ -35,7 +39,7 @@ const OpenContact = () => (
 
 /** The app's real nesting: root stack, the real signed-in layout (the one under test), the real tabs; a marker on each page. */
 const structure = {
-  _layout: () => <Stack screenOptions={{ headerShown: false }} />,
+  _layout: Root,
   '(app)/_layout': appLayout,
   '(app)/(tabs)/_layout': Tabs,
   '(app)/(tabs)/index': () => <Text>DASHBOARD PAGE</Text>,
@@ -72,6 +76,7 @@ beforeAll(async () => {
   });
 });
 beforeEach(() => {
+  client.clear();
   handlers.length = 0;
   jest.mocked(fetchSession).mockResolvedValue(session);
 });
@@ -79,6 +84,8 @@ beforeEach(() => {
 describe('the Back button inside the signed-in app', () => {
   it('goes from a contact back to the Contacts list, then to the tab before it', async () => {
     await renderRouter(structure, { initialUrl: '/' });
+    // The signed-in layout reads the session first (an account gate would replace the app), so the app opens a moment later.
+    await screen.findByText('DASHBOARD PAGE');
     await fireEvent.press(screen.getByLabelText('Contacts'));
     await fireEvent.press(screen.getByText('OPEN CONTACT'));
     expect(showing()).toBe('CONTACT PAGE');
@@ -89,6 +96,7 @@ describe('the Back button inside the signed-in app', () => {
 
   it('still has a screen to go back to when a contact is opened directly (a link, a notification, a reload)', async () => {
     await renderRouter(structure, { initialUrl: '/contact/42' });
+    await screen.findByText('CONTACT PAGE');
     expect(showing()).toBe('CONTACT PAGE');
     expect(await back()).toBe('DASHBOARD PAGE');
   });

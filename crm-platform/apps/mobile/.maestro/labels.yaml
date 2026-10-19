@@ -1,0 +1,26 @@
+# A person who manages labels adds one from Menu > Settings > Labels, and it shows in the list with its colour and a count.
+# Needs an account with `inbox.tag.manage` (an owner or admin) on a workspace whose plan has room for one more label.
+#   maestro test apps/mobile/.maestro/labels.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Labels'
+- tapOn: 'New label'
+- tapOn: 'Name'
+- inputText: 'Maestro label'
+- tapOn: '#2563EB'
+- hideKeyboard
+- tapOn:
+    id: 'label-save'
+- assertVisible: 'Maestro label'
+- assertVisible: '0 conversations'
