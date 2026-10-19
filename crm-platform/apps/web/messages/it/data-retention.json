@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "File di esportazione dell'audit",
         "description": "Il CSV che un workspace richiede dal proprio registro di audit. Chi lo richiede riceve un'email con un link per accedere e scaricarlo; il file viene eliminato dopo i giorni attivi."
+      },
+      "message_log": {
+        "title": "Registro di consegna dei messaggi",
+        "description": "Il registro di consegna di ogni messaggio: inviato, consegnato, fallito, ritentato. Gli eventi lasciano la tabella attiva dopo i giorni attivi e passano, compressi, nell'archivio; i giorni di archivio contano da quel giorno. Il registro di un messaggio e le esportazioni del registro possono comunque leggere l'archivio."
+      },
+      "notifications_read": {
+        "title": "Notifiche (lette)",
+        "description": "Notifiche della campanella già lette da un utente. Vengono eliminate quando raggiungono questo numero di giorni. Il valore predefinito proviene dalle impostazioni del server (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notifiche (mai lette)",
+        "description": "Notifiche della campanella che nessuno ha aperto. Vengono eliminate quando raggiungono questo numero di giorni e mai prima di quelle lette (il salvataggio viene rifiutato in tal caso). Il valore predefinito proviene dalle impostazioni del server (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Dispositivi push revocati",
+        "description": "Browser e telefoni che hanno smesso di accettare notifiche push. Conservati brevemente, così un dispositivo che torna può riattivare le notifiche, poi eliminati."
+      },
+      "faq_match_log": {
+        "title": "Registro corrispondenze FAQ",
+        "description": "Quale FAQ ha risposto a quale messaggio del cliente, conservato per mostrare a ogni flusso come rendono le sue risposte. Eliminato dopo i giorni attivi."
+      },
+      "assignment_runs": {
+        "title": "Registro delle esecuzioni di assegnazione",
+        "description": "Il resoconto di ogni esecuzione di assegnazione automatica dei contatti, con chi ha ricevuto cosa e perché. Eliminato dopo i giorni attivi."
+      },
+      "form_events": {
+        "title": "Eventi di analisi dei moduli",
+        "description": "Visualizzazioni, avvii e invii dei moduli web, usati per i grafici di conversione dei moduli. Non contengono risposte. Eliminati dopo i giorni attivi. Le risposte seguono la conservazione propria di ciascun modulo."
+      },
+      "lead_sync_runs": {
+        "title": "Esecuzioni di sincronizzazione dei lead",
+        "description": "Il resoconto di ogni sincronizzazione o recupero dei lead da una piattaforma pubblicitaria: chi ha prelevato cosa e quando. Eliminato dopo i giorni attivi. I dati grezzi dei lead seguono la conservazione propria di ciascuna fonte."
+      },
+      "lead_scoring_runs": {
+        "title": "Registro del punteggio lead con IA",
+        "description": "Ogni punteggio lead con IA con i suoi motivi, insieme alle letture delle conversazioni e ai suggerimenti di fase che lo motivano. Finché non salvi un valore qui, viene usato il numero impostato nelle impostazioni del punteggio lead con IA. Una persona sotto blocco legale conserva i propri dati."
+      },
+      "api_library_logs": {
+        "title": "Registro di esecuzione della Libreria API",
+        "description": "Il registro di richiesta e risposta di ogni chiamata alla Libreria API. Eliminato dopo i giorni attivi."
+      },
+      "flow_run_logs": {
+        "title": "Registro di esecuzione delle automazioni",
+        "description": "Ogni esecuzione conclusa di un flusso di automazione con i suoi passaggi, e le versioni del flusso a cui non punta più alcuna esecuzione. Le esecuzioni ancora in corso non vengono mai toccate."
+      },
+      "webhook_forward_failures": {
+        "title": "Consegne webhook fallite",
+        "description": "Consegne webhook fallite che possono ancora essere rieseguite. Dopo i giorni attivi non possono più essere rieseguite e vengono eliminate."
+      },
+      "click_calls": {
+        "title": "Chiamate click-to-call non segnalate",
+        "description": "Una chiamata click-to-call la cui chiamata conclusa non è mai tornata dal provider. Dimenticata dopo i giorni attivi."
+      },
+      "call_recordings": {
+        "title": "Registrazioni delle chiamate",
+        "description": "Il numero predefinito di giorni di conservazione di una registrazione di chiamata, per gli spazi di lavoro che non hanno mai scelto un periodo proprio; il periodo proprio di uno spazio di lavoro prevale comunque. Dopo, il file della registrazione viene eliminato e la chiamata resta. Una registrazione sotto blocco legale viene conservata."
       }
     },
     "fields": {
@@ -45,7 +101,8 @@
       "liveDaysHint": "Giorni in cui i dati restano nel database. Consentiti: da {min} a {max}.",
       "keepForever": "Conserva l'archivio per sempre",
       "archiveDays": "Giorni di archivio",
-      "archiveDaysHint": "Giorni aggiuntivi in cui l'archivio lo conserva, poi viene eliminato. Consentiti: da {min} a {max}."
+      "archiveDaysHint": "Giorni aggiuntivi in cui l'archivio lo conserva, poi viene eliminato. Consentiti: da {min} a {max}.",
+      "keepForeverShort": "Conserva per sempre"
     },
     "summary": {
       "noArchive": "Eliminato definitivamente {live, plural, one {# giorno} other {# giorni}} dopo la scrittura.",
@@ -73,7 +130,9 @@
       "neverRun": "Non ancora eseguito",
       "runLive": "{when}: {months, plural, one {# mese archiviato} other {# mesi archiviati}} ({rows} righe, {size}), {expired} eliminati dall'archivio, {deleted} righe o file eliminati",
       "runDry": "{when}: dry run, nulla è stato modificato",
-      "runFailed": "L'ultima esecuzione ha avuto un problema: {error}"
+      "runFailed": "L'ultima esecuzione ha avuto un problema: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# riga o file eliminato} other {# righe o file eliminati}}",
+      "runDaily": "{when}: {rows} eventi spostati nell'archivio, {expired} giorni archiviati eliminati"
     },
     "actions": {
       "save": "Salva",
@@ -85,7 +144,8 @@
       "confirmSave": "Salva e applica",
       "resetTitle": "Riportare {item} al comportamento attuale?",
       "resetBody": "I valori salvati vengono rimossi. I job notturni tornano alle regole integrate per questo elemento. I dati già archiviati restano nell'archivio.",
-      "confirmReset": "Torna al comportamento attuale"
+      "confirmReset": "Torna al comportamento attuale",
+      "resetShort": "Ripristina"
     },
     "preview": {
       "title": "Salvare la conservazione per {item}?",
@@ -94,7 +154,8 @@
       "toDeleteFromArchive": "{count, plural, one {# mese archiviato verrà eliminato} other {# mesi archiviati verranno eliminati}} definitivamente dall'archivio.",
       "rowsToDelete": "{count, plural, one {# riga o file verrà eliminato} other {# righe o file verranno eliminati}} definitivamente.",
       "notApplied": "Il job di archiviazione non sta ancora applicando i valori salvati, quindi nulla di tutto questo accade finché non viene attivato.",
-      "permanent": "L'eliminazione è permanente e non può essere annullata."
+      "permanent": "L'eliminazione è permanente e non può essere annullata.",
+      "rowsToArchive": "{count, plural, one {# evento verrà spostato} other {# eventi verranno spostati}} dalla tabella attiva all'archivio."
     },
     "saved": "Conservazione salvata.",
     "resetDone": "Tornato al comportamento attuale.",
@@ -103,7 +164,8 @@
       "archive_out_of_range": "I giorni di archivio devono essere un numero intero da {min} a {max}.",
       "archive_not_supported": "Questo elemento non può essere archiviato.",
       "delete_before_archive": "I dati non possono essere eliminati prima di essere archiviati.",
-      "not_a_number": "Inserisci un numero intero di giorni."
+      "not_a_number": "Inserisci un numero intero di giorni.",
+      "unread_before_read": "Le notifiche non lette non possono essere eliminate prima di quelle lette. Imposta i giorni delle non lette almeno uguali a quelli delle lette."
     },
     "errors": {
       "forbidden": "Non hai il permesso di farlo.",
@@ -112,6 +174,36 @@
       "request": "La richiesta è stata rifiutata.",
       "unexpected": "Si è verificato un errore sul server. Riprova.",
       "network": "Impossibile raggiungere il server. Controlla la connessione e riprova."
+    },
+    "groups": {
+      "analytics": "Analisi",
+      "security": "Sicurezza e audit",
+      "messaging": "Messaggistica e notifiche",
+      "crm": "CRM e lead",
+      "automation": "Automazione e integrazioni",
+      "calling": "Chiamate"
+    },
+    "table": {
+      "title": "Conservazione in sintesi",
+      "description": "Cosa conserva ogni tipo di dato e per quanto tempo. Seleziona una voce per modificarne i valori qui sotto.",
+      "item": "Dati",
+      "storedIn": "Archiviato in",
+      "live": "Attivo (database)",
+      "archive": "Archivio",
+      "deleted": "Eliminato definitivamente dopo",
+      "setting": "Impostazione",
+      "days": "{count, plural, one {# giorno} other {# giorni}}",
+      "noArchive": "Nessun archivio",
+      "forever": "Per sempre",
+      "never": "Mai",
+      "where": {
+        "partitioned": "Database, poi archivio {driver}",
+        "daily_archive": "Database, poi archivio nel database",
+        "table": "Solo database",
+        "file": "File"
+      },
+      "actions": "Azioni",
+      "about": "Che cos’è?"
     }
   }
 }

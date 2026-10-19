@@ -6,6 +6,7 @@ import {
   RETENTION_AUDIT_EVENTS,
   RETENTION_ITEMS,
   retentionDeleteAfterDays,
+  retentionCrossProblem,
   retentionProblem,
   retentionSpecOf,
   type RetentionItemId,
@@ -19,6 +20,7 @@ import {
 } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import type { Env } from '../../config/env.schema';
+import { retentionConfig } from '../../config/domains/notifications.env';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   ARCHIVE_STORAGE,
@@ -26,7 +28,9 @@ import {
 } from '../../infra/providers/data-retention/archive-storage.port';
 import { AuthAuditService } from '../auth';
 import {
+  countArchiveDaysOlderThan,
   countOlderThan,
+  dbArchiveStats,
   deletePolicy,
   engineState,
   isPastLiveWindow,
@@ -68,6 +72,7 @@ export class RetentionDashboardService {
             live: await liveStats(tx, spec.id),
             run: runs.get(spec.id) ?? null,
             engineLive: engine.live,
+            dbArchive: await dbArchiveStats(tx, spec.id),
           }),
         );
       }
@@ -95,7 +100,21 @@ export class RetentionDashboardService {
 
     await this.db.privileged(async (tx) => {
       const defaults = await this.defaultsFor(tx);
-      const was = (await loadPolicies(tx)).get(id) ?? null;
+      const policies = await loadPolicies(tx);
+      const was = policies.get(id) ?? null;
+      const cross = retentionCrossProblem(id, values, {
+        notificationsRead:
+          id === 'notifications_read'
+            ? values.liveDays
+            : (policies.get('notifications_read')?.liveDays ??
+              defaults.notifications_read.liveDays),
+        notificationsUnread:
+          id === 'notifications_unread'
+            ? values.liveDays
+            : (policies.get('notifications_unread')?.liveDays ??
+              defaults.notifications_unread.liveDays),
+      });
+      if (cross) throw AppError.validation(cross, [{ path: 'liveDays', message: cross }]);
       // A client that never saw a policy sends null; one that did must send its version. A mismatch either way is a conflict.
       if ((was === null) !== (body.rowVersion === null)) {
         throw AppError.rowVersionConflict('Retention policy');
@@ -164,9 +183,17 @@ export class RetentionDashboardService {
       }
       return { id, toArchive, toDeleteFromArchive, rowsToDelete: null };
     }
-    const rowsToDelete = await this.db.privileged((tx) =>
-      countOlderThan(tx, id as 'security_events' | 'audit_log_exports', values.liveDays),
-    );
+    if (spec.kind === 'daily_archive') {
+      // Live events older than the live window move into the archive; archived days older than live + archive days are deleted.
+      const [rowsToArchive, rowsToDelete] = await this.db.privileged(async (tx) => [
+        await countOlderThan(tx, id, values.liveDays),
+        values.archiveDays === null
+          ? 0
+          : await countArchiveDaysOlderThan(tx, values.liveDays + values.archiveDays),
+      ]);
+      return { id, toArchive: [], toDeleteFromArchive: [], rowsToDelete, rowsToArchive };
+    }
+    const rowsToDelete = await this.db.privileged((tx) => countOlderThan(tx, id, values.liveDays));
     return { id, toArchive: [], toDeleteFromArchive: [], rowsToDelete };
   }
 
@@ -184,6 +211,12 @@ export class RetentionDashboardService {
       sql`SELECT (value ->> 'auditLogRetentionDays')::int AS days FROM platform_settings WHERE key = 'security.policy'`,
     );
     const days = (res.rows[0] as { days: number | null } | undefined)?.days;
+    // The AI lead scoring settings carry their own retention (90 when never saved); it is the default of the scoring log.
+    const scoring = await tx.execute(
+      sql`SELECT (value ->> 'retentionDays')::int AS days FROM platform_settings WHERE key = 'lead_scoring.config'`,
+    );
+    const scoringDays = (scoring.rows[0] as { days: number | null } | undefined)?.days;
+    const notify = retentionConfig();
     const out = {} as Record<RetentionItemId, RetentionValues>;
     for (const spec of RETENTION_ITEMS) {
       out[spec.id] = { ...spec.defaults };
@@ -194,8 +227,30 @@ export class RetentionDashboardService {
       ) {
         out[spec.id] = { liveDays: days, archiveDays: null };
       }
+      if (spec.id === 'lead_scoring_runs' && scoringDays !== null && scoringDays !== undefined) {
+        out[spec.id] = { liveDays: scoringDays, archiveDays: null };
+      }
+      // The bell feed's built-in windows come from the environment (NOTIFY_RETENTION_READ_DAYS / _UNREAD_DAYS).
+      if (spec.id === 'notifications_read') {
+        out[spec.id] = { liveDays: notify.readDays, archiveDays: null };
+      }
+      if (spec.id === 'notifications_unread') {
+        out[spec.id] = { liveDays: notify.unreadDays, archiveDays: null };
+      }
     }
     return out;
+  }
+
+  /**
+   * Whether a saved value is being carried out now. Partitioned items need the archive job switched on and not in dry-run; the bell feed's
+   * sweep has its own switch (NOTIFY_RETENTION_ENABLED); every other sweep always runs.
+   */
+  private isApplied(spec: RetentionItemSpec, engineLive: boolean): boolean {
+    if (spec.kind === 'partitioned') return engineLive;
+    if (spec.id === 'notifications_read' || spec.id === 'notifications_unread') {
+      return retentionConfig().enabled;
+    }
+    return true;
   }
 
   private view(
@@ -206,6 +261,7 @@ export class RetentionDashboardService {
       live: RetentionItemView['live'];
       run: Awaited<ReturnType<typeof loadRuns>> extends Map<string, infer R> ? R | null : never;
       engineLive: boolean;
+      dbArchive: { objects: number; bytes: number } | null;
     },
   ): RetentionItemView {
     const values: RetentionValues = saved
@@ -215,6 +271,7 @@ export class RetentionDashboardService {
     return {
       id: spec.id,
       kind: spec.kind,
+      group: spec.group,
       canArchive: spec.canArchive,
       source: saved ? 'custom' : 'default',
       liveDays: values.liveDays,
@@ -225,9 +282,13 @@ export class RetentionDashboardService {
       rowVersion: saved?.rowVersion ?? null,
       updatedAt: saved?.updatedAt.toISOString() ?? null,
       // Partitioned items are cut by the archive job, which only does real work when it is switched on and not in dry-run.
-      applied: !saved || spec.kind !== 'partitioned' || extra.engineLive,
+      applied: !saved || this.isApplied(spec, extra.engineLive),
       live: extra.live,
-      archive: spec.canArchive ? (run?.archive ?? null) : null,
+      archive: extra.dbArchive
+        ? { ...extra.dbArchive, measuredAt: new Date().toISOString() }
+        : spec.canArchive
+          ? (run?.archive ?? null)
+          : null,
       lastRun: run
         ? {
             at: run.at,

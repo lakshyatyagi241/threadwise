@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "監査エクスポートファイル",
         "description": "ワークスペースが監査ログからリクエストする CSV です。リクエストした人には、サインインしてダウンロードするためのリンクがメールで届きます。ファイルはライブ日数が過ぎると削除されます。"
+      },
+      "message_log": {
+        "title": "メッセージ配信ログ",
+        "description": "各メッセージの配信ログ（送信、配信済み、失敗、再試行）。イベントはライブ日数を過ぎるとライブテーブルから圧縮されてアーカイブに移され、アーカイブ日数はその日から数えます。メッセージのログやログのエクスポートからは、引き続きアーカイブを参照できます。"
+      },
+      "notifications_read": {
+        "title": "通知（既読）",
+        "description": "ユーザーがすでに読んだベル通知。この日数が経過すると削除されます。標準値はサーバー設定（NOTIFY_RETENTION_READ_DAYS）から取得されます。"
+      },
+      "notifications_unread": {
+        "title": "通知（未読）",
+        "description": "誰も開いていないベル通知。この日数が経過すると削除されますが、既読より先に削除されることはありません（そうなる場合、保存は拒否されます）。標準値はサーバー設定（NOTIFY_RETENTION_UNREAD_DAYS）から取得されます。"
+      },
+      "push_devices_revoked": {
+        "title": "無効化されたプッシュデバイス",
+        "description": "プッシュ通知を受け付けなくなったブラウザとスマートフォン。復帰したデバイスが通知を再びオンにできるよう、しばらく保持してから削除されます。"
+      },
+      "faq_match_log": {
+        "title": "FAQ一致ログ",
+        "description": "どのFAQがどの顧客メッセージに回答したかの記録。各フローで回答の成果を確認するために保持されます。ライブ日数が経過すると削除されます。"
+      },
+      "assignment_runs": {
+        "title": "割り当て実行ログ",
+        "description": "連絡先の自動割り当て実行ごとの記録（誰に何を、なぜ割り当てたか）。ライブ日数が経過すると削除されます。"
+      },
+      "form_events": {
+        "title": "フォーム分析イベント",
+        "description": "Webフォームの表示、開始、送信。フォームのコンバージョングラフに使用されます。回答は含まれません。ライブ日数が経過すると削除されます。回答自体は各フォームの保持設定に従います。"
+      },
+      "lead_sync_runs": {
+        "title": "リード同期の実行",
+        "description": "広告プラットフォームからのリード同期またはバックフィルごとの記録（誰がいつ何を取得したか）。ライブ日数が経過すると削除されます。生のリードデータは各ソースの保持設定に従います。"
+      },
+      "lead_scoring_runs": {
+        "title": "AIリードスコアリングログ",
+        "description": "AIによる各リードスコアとその理由、およびその根拠となる会話の読み取りとステージの提案。ここで値を保存するまでは、AIリードスコアリング設定の日数が使用されます。法的保全中の人物の記録は保持されます。"
+      },
+      "api_library_logs": {
+        "title": "API Libraryの実行ログ",
+        "description": "API Libraryの各呼び出しのリクエストとレスポンスのログ。ライブ日数が経過すると削除されます。"
+      },
+      "flow_run_logs": {
+        "title": "自動化の実行ログ",
+        "description": "自動化フローの完了した各実行とそのステップ、および実行から参照されなくなったフローのバージョン。進行中の実行は対象になりません。"
+      },
+      "webhook_forward_failures": {
+        "title": "失敗したWebhook配信",
+        "description": "失敗して再送可能なWebhook配信。ライブ日数が経過すると再送できなくなり、削除されます。"
+      },
+      "click_calls": {
+        "title": "未報告のクリックトゥコール発信",
+        "description": "完了した通話の結果がプロバイダーから返ってこなかったクリックトゥコール。ライブ日数が経過すると破棄されます。"
+      },
+      "call_recordings": {
+        "title": "通話録音",
+        "description": "独自の期間を選んでいないワークスペース向けの、通話録音を保持する既定の日数。ワークスペース独自の期間が優先されます。経過後は録音ファイルが削除され、通話記録は残ります。法的保全中の録音は保持されます。"
       }
     },
     "fields": {
@@ -45,7 +101,8 @@
       "liveDaysHint": "データがデータベースに残る日数です。指定可能: {min} ～ {max}。",
       "keepForever": "アーカイブを無期限に保持",
       "archiveDays": "アーカイブ日数",
-      "archiveDaysHint": "アーカイブがさらに保持する日数です。その後削除されます。指定可能: {min} ～ {max}。"
+      "archiveDaysHint": "アーカイブがさらに保持する日数です。その後削除されます。指定可能: {min} ～ {max}。",
+      "keepForeverShort": "無期限で保持"
     },
     "summary": {
       "noArchive": "書き込みから {live, plural, other {# 日}}後に完全に削除されます。",
@@ -73,7 +130,9 @@
       "neverRun": "まだ実行されていません",
       "runLive": "{when}: {months, plural, other {# か月}}をアーカイブ ({rows} 行、{size})、アーカイブから {expired} を削除、{deleted} 行またはファイルを削除",
       "runDry": "{when}: ドライランのため、何も変更されていません",
-      "runFailed": "前回の実行で問題が発生しました: {error}"
+      "runFailed": "前回の実行で問題が発生しました: {error}",
+      "runDeleted": "{when}：{deleted, plural, other {#件の行またはファイル}}を削除",
+      "runDaily": "{when}：{rows}件のイベントをアーカイブに移動、{expired}日分のアーカイブを削除"
     },
     "actions": {
       "save": "保存",
@@ -85,7 +144,8 @@
       "confirmSave": "保存して適用",
       "resetTitle": "{item} を現在の動作に戻しますか?",
       "resetBody": "保存した値は削除されます。夜間ジョブはこの項目の組み込みルールに戻ります。すでにアーカイブされたデータはアーカイブに残ります。",
-      "confirmReset": "現在の動作に戻す"
+      "confirmReset": "現在の動作に戻す",
+      "resetShort": "リセット"
     },
     "preview": {
       "title": "{item} の保持設定を保存しますか?",
@@ -94,7 +154,8 @@
       "toDeleteFromArchive": "アーカイブ済みの{count, plural, other {# か月}}分がアーカイブから完全に削除されます。",
       "rowsToDelete": "{count, plural, other {# 行またはファイル}}が完全に削除されます。",
       "notApplied": "アーカイブジョブはまだ保存した値を適用していないため、有効にするまでこれらは実行されません。",
-      "permanent": "削除は永続的で、元に戻せません。"
+      "permanent": "削除は永続的で、元に戻せません。",
+      "rowsToArchive": "{count, plural, other {#件のイベント}}がライブテーブルからアーカイブに移動されます。"
     },
     "saved": "保持設定を保存しました。",
     "resetDone": "現在の動作に戻しました。",
@@ -103,7 +164,8 @@
       "archive_out_of_range": "アーカイブ日数は {min} から {max} までの整数にしてください。",
       "archive_not_supported": "この項目はアーカイブできません。",
       "delete_before_archive": "アーカイブされる前にデータを削除することはできません。",
-      "not_a_number": "日数を整数で入力してください。"
+      "not_a_number": "日数を整数で入力してください。",
+      "unread_before_read": "未読の通知を既読より先に削除することはできません。未読の日数を既読の日数以上に設定してください。"
     },
     "errors": {
       "forbidden": "この操作を行う権限がありません。",
@@ -112,6 +174,36 @@
       "request": "リクエストは拒否されました。",
       "unexpected": "サーバーでエラーが発生しました。もう一度お試しください。",
       "network": "サーバーに接続できませんでした。接続を確認してもう一度お試しください。"
+    },
+    "groups": {
+      "analytics": "分析",
+      "security": "セキュリティと監査",
+      "messaging": "メッセージと通知",
+      "crm": "CRMとリード",
+      "automation": "自動化と連携",
+      "calling": "通話"
+    },
+    "table": {
+      "title": "保持期間の概要",
+      "description": "各種データの保持内容と保持期間。項目を選択すると、下で日数を変更できます。",
+      "item": "データ",
+      "storedIn": "保存先",
+      "live": "ライブ（データベース）",
+      "archive": "アーカイブ",
+      "deleted": "完全に削除されるまで",
+      "setting": "設定",
+      "days": "{count, plural, other {#日}}",
+      "noArchive": "アーカイブなし",
+      "forever": "無期限",
+      "never": "しない",
+      "where": {
+        "partitioned": "データベース、その後{driver}アーカイブ",
+        "daily_archive": "データベース、その後データベースアーカイブ",
+        "table": "データベースのみ",
+        "file": "ファイル"
+      },
+      "actions": "操作",
+      "about": "これは何?"
     }
   }
 }

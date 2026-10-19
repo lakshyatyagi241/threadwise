@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "Auditexportbestanden",
         "description": "De CSV die een werkruimte aanvraagt uit het auditlogboek. De aanvrager krijgt een e-mail met een link om in te loggen en het bestand te downloaden; het bestand wordt verwijderd na de live dagen."
+      },
+      "message_log": {
+        "title": "Bezorglogboek van berichten",
+        "description": "Het bezorglogboek van elk bericht: verzonden, bezorgd, mislukt, opnieuw geprobeerd. Gebeurtenissen verlaten de live tabel na de live dagen en gaan gecomprimeerd naar het archief; archiefdagen tellen dan vanaf die dag. Het logboek van een bericht en de logboekexports kunnen het archief nog steeds lezen."
+      },
+      "notifications_read": {
+        "title": "Meldingen (gelezen)",
+        "description": "Belmeldingen die een gebruiker al heeft gelezen. Ze worden verwijderd zodra ze zo veel dagen oud zijn. Het ingebouwde getal komt uit de serverinstellingen (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Meldingen (nooit gelezen)",
+        "description": "Belmeldingen die niemand heeft geopend. Ze worden verwijderd zodra ze zo veel dagen oud zijn, en nooit eerder dan de gelezen meldingen (het opslaan wordt geweigerd als dat zou gebeuren). Het ingebouwde getal komt uit de serverinstellingen (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Ingetrokken pushapparaten",
+        "description": "Browsers en telefoons die geen pushmeldingen meer accepteren. Ze worden kort bewaard zodat een apparaat dat terugkomt meldingen weer kan inschakelen, en daarna verwijderd."
+      },
+      "faq_match_log": {
+        "title": "FAQ-matchlogboek",
+        "description": "Welke FAQ welk klantbericht heeft beantwoord, bewaard om elke flow te laten zien hoe zijn antwoorden presteren. Verwijderd na de live dagen."
+      },
+      "assignment_runs": {
+        "title": "Logboek van toewijzingsruns",
+        "description": "Het verslag van elke automatische contacttoewijzing: wie wat kreeg en waarom. Verwijderd na de live dagen."
+      },
+      "form_events": {
+        "title": "Formulieranalysegebeurtenissen",
+        "description": "Weergaven, starts en verzendingen van de webformulieren, gebruikt voor de conversiegrafieken van formulieren. Ze bevatten geen antwoorden. Verwijderd na de live dagen. De antwoorden zelf volgen de eigen bewaartermijn van elk formulier."
+      },
+      "lead_sync_runs": {
+        "title": "Leadsynchronisatieruns",
+        "description": "Het verslag van elke leadsynchronisatie of aanvulling vanuit een advertentieplatform: wie wat heeft opgehaald en wanneer. Verwijderd na de live dagen. De ruwe leaddata volgen de eigen bewaartermijn van elke bron."
+      },
+      "lead_scoring_runs": {
+        "title": "AI-leadscoringlogboek",
+        "description": "Elke AI-leadscore met de redenen, plus de gespreksanalyses en fasesuggesties erachter. Zolang je hier geen waarde opslaat, wordt het getal uit de instellingen voor AI-leadscoring gebruikt. Een persoon onder juridische bewaring behoudt zijn gegevens."
+      },
+      "api_library_logs": {
+        "title": "Runlogboek van API Library",
+        "description": "Het verzoek- en antwoordlogboek van elke API Library-aanroep. Verwijderd na de live dagen."
+      },
+      "flow_run_logs": {
+        "title": "Runlogboek van automatiseringen",
+        "description": "Elke voltooide run van een automatiseringsflow met zijn stappen, en flowversies waar geen run meer naar verwijst. Runs die nog bezig zijn, worden nooit aangeraakt."
+      },
+      "webhook_forward_failures": {
+        "title": "Mislukte webhookleveringen",
+        "description": "Webhookleveringen die mislukt zijn en nog opnieuw kunnen worden afgespeeld. Na de live dagen kunnen ze niet meer worden afgespeeld en worden ze verwijderd."
+      },
+      "click_calls": {
+        "title": "Niet-gemelde click-to-call-pogingen",
+        "description": "Een click-to-call waarvan het beëindigde gesprek nooit van de provider is teruggekomen. Vergeten na de live dagen."
+      },
+      "call_recordings": {
+        "title": "Gespreksopnamen",
+        "description": "Het standaardaantal dagen dat een gespreksopname wordt bewaard, voor werkruimtes die nooit een eigen termijn hebben gekozen; de eigen termijn van een werkruimte gaat voor. Daarna wordt het opnamebestand verwijderd en blijft het gesprek bestaan. Een opname onder juridische bewaring blijft behouden."
       }
     },
     "fields": {
@@ -45,7 +101,8 @@
       "liveDaysHint": "Dagen dat de gegevens in de database blijven. Toegestaan: {min} tot {max}.",
       "keepForever": "Archief eeuwig bewaren",
       "archiveDays": "Archiefdagen",
-      "archiveDaysHint": "Extra dagen dat het archief ze bewaart, daarna worden ze verwijderd. Toegestaan: {min} tot {max}."
+      "archiveDaysHint": "Extra dagen dat het archief ze bewaart, daarna worden ze verwijderd. Toegestaan: {min} tot {max}.",
+      "keepForeverShort": "Voor altijd bewaren"
     },
     "summary": {
       "noArchive": "Definitief verwijderd {live, plural, one {# dag} other {# dagen}} nadat ze zijn vastgelegd.",
@@ -73,7 +130,9 @@
       "neverRun": "Nog niet uitgevoerd",
       "runLive": "{when}: {months, plural, one {# maand} other {# maanden}} gearchiveerd ({rows} rijen, {size}), {expired} uit het archief verwijderd, {deleted} rijen of bestanden verwijderd",
       "runDry": "{when}: dry-run, er is niets gewijzigd",
-      "runFailed": "De laatste run had een probleem: {error}"
+      "runFailed": "De laatste run had een probleem: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# rij of bestand} other {# rijen of bestanden}} verwijderd",
+      "runDaily": "{when}: {rows} gebeurtenissen naar het archief verplaatst, {expired} archiefdagen verwijderd"
     },
     "actions": {
       "save": "Opslaan",
@@ -85,7 +144,8 @@
       "confirmSave": "Opslaan en toepassen",
       "resetTitle": "{item} terugzetten naar het huidige gedrag?",
       "resetBody": "De opgeslagen waarden worden verwijderd. De nachtelijke taken gaan voor dit item terug naar de ingebouwde regels. Gegevens die al zijn gearchiveerd, blijven in het archief.",
-      "confirmReset": "Terugzetten naar huidig gedrag"
+      "confirmReset": "Terugzetten naar huidig gedrag",
+      "resetShort": "Herstellen"
     },
     "preview": {
       "title": "Retentie voor {item} opslaan?",
@@ -94,7 +154,8 @@
       "toDeleteFromArchive": "{count, plural, one {# gearchiveerde maand} other {# gearchiveerde maanden}} wordt definitief uit het archief verwijderd.",
       "rowsToDelete": "{count, plural, one {# rij of bestand} other {# rijen of bestanden}} wordt definitief verwijderd.",
       "notApplied": "De archieftaak voert opgeslagen waarden nog niet uit, dus niets hiervan gebeurt totdat hij is ingeschakeld.",
-      "permanent": "Verwijderen is permanent en kan niet ongedaan worden gemaakt."
+      "permanent": "Verwijderen is permanent en kan niet ongedaan worden gemaakt.",
+      "rowsToArchive": "{count, plural, one {# gebeurtenis wordt} other {# gebeurtenissen worden}} van de live tabel naar het archief verplaatst."
     },
     "saved": "Retentie opgeslagen.",
     "resetDone": "Terug naar het huidige gedrag.",
@@ -103,7 +164,8 @@
       "archive_out_of_range": "Archiefdagen moeten een geheel getal zijn van {min} tot {max}.",
       "archive_not_supported": "Dit item kan niet worden gearchiveerd.",
       "delete_before_archive": "De gegevens kunnen niet worden verwijderd voordat ze zijn gearchiveerd.",
-      "not_a_number": "Voer een geheel aantal dagen in."
+      "not_a_number": "Voer een geheel aantal dagen in.",
+      "unread_before_read": "Ongelezen meldingen kunnen niet eerder worden verwijderd dan gelezen meldingen. Stel de ongelezen dagen in op minstens de gelezen dagen."
     },
     "errors": {
       "forbidden": "U heeft hiervoor geen toestemming.",
@@ -112,6 +174,36 @@
       "request": "Het verzoek is geweigerd.",
       "unexpected": "Er is iets misgegaan op de server. Probeer het opnieuw.",
       "network": "Kan de server niet bereiken. Controleer uw verbinding en probeer het opnieuw."
+    },
+    "groups": {
+      "analytics": "Analyses",
+      "security": "Beveiliging en audit",
+      "messaging": "Berichten en meldingen",
+      "crm": "CRM en leads",
+      "automation": "Automatisering en integraties",
+      "calling": "Bellen"
+    },
+    "table": {
+      "title": "Bewaartermijnen in één oogopslag",
+      "description": "Wat elk soort gegevens bewaart en hoe lang. Selecteer een item om de getallen ervan hieronder te wijzigen.",
+      "item": "Gegevens",
+      "storedIn": "Opgeslagen in",
+      "live": "Live (database)",
+      "archive": "Archief",
+      "deleted": "Definitief verwijderd na",
+      "setting": "Instelling",
+      "days": "{count, plural, one {# dag} other {# dagen}}",
+      "noArchive": "Geen archief",
+      "forever": "Voor altijd",
+      "never": "Nooit",
+      "where": {
+        "partitioned": "Database, daarna {driver}-archief",
+        "daily_archive": "Database, daarna databasearchief",
+        "table": "Alleen database",
+        "file": "Bestanden"
+      },
+      "actions": "Acties",
+      "about": "Wat is dit?"
     }
   }
 }
