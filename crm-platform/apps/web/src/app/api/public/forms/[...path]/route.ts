@@ -1,6 +1,7 @@
 import { apiBase } from '@/lib/auth/server';
 import { isSameOrigin, problem } from '@/lib/auth/proxy';
 import { matchPublicPath } from '@/features/web-forms/lib/public-paths';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * The visitor's relay: forwards a short allowlist of calls to the API's public form routes WITHOUT any session cookie, because a
@@ -42,7 +43,7 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
 
   let upstream: Response;
   try {
-    upstream = await fetch(`${apiBase()}/v2/public/forms/${match.path}`, {
+    upstream = await upstreamFetch(`${apiBase()}/v2/public/forms/${match.path}`, {
       method: match.method,
       headers,
       body: match.hasBody ? await req.arrayBuffer() : undefined,

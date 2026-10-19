@@ -12,6 +12,7 @@ import { headers } from 'next/headers';
 import { cache } from 'react';
 import type { ZodType, ZodTypeDef } from 'zod';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** Server-side reads of the public shop API. No session is involved: the shop is named by its slug. */
 const base = () => `${apiBase()}/v2/store-public`;
@@ -26,7 +27,7 @@ async function getPublic<T>(
   path: string,
   schema: ZodType<T, ZodTypeDef, unknown>,
 ): Promise<T | null> {
-  const res = await fetch(`${base()}${path}`, {
+  const res = await upstreamFetch(`${base()}${path}`, {
     cache: 'no-store',
     headers: await clientHeaders(),
   });
@@ -59,7 +60,7 @@ export async function resolveShopForHost(host: string): Promise<string | null> {
   const clean = host.trim().toLowerCase().replace(/:\d+$/, '');
   if (!clean) return null;
   try {
-    const res = await fetch(`${base()}/host?host=${seg(clean)}`, {
+    const res = await upstreamFetch(`${base()}/host?host=${seg(clean)}`, {
       cache: 'no-store',
       headers: await clientHeaders(),
     });

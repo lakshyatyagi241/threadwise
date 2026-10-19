@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #18 - Network-failure testing, part 2 (Postgres, Redis, queues, web fetch)</title>
+<style>
+  :root { --bg:#fff; --fg:#1b1f24; --muted:#5b6570; --line:#d8dee4; --card:#f6f8fa; --ok:#1a7f37; --warn:#9a6700; --bad:#cf222e; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0d1117; --fg:#e6edf3; --muted:#8b949e; --line:#30363d; --card:#161b22; --ok:#3fb950; --warn:#d29922; --bad:#f85149; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif; }
+  main { max-width:960px; margin:0 auto; padding:24px 16px 64px; }
+  h1 { font-size:26px; margin:0 0 4px; } h2 { font-size:19px; margin:32px 0 8px; border-bottom:1px solid var(--line); padding-bottom:4px; }
+  p, li { max-width:75ch; } .muted { color:var(--muted); }
+  table { border-collapse:collapse; width:100%; font-size:14px; margin:8px 0; display:block; overflow-x:auto; }
+  th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; } th { background:var(--card); }
+  code { background:var(--card); padding:1px 5px; border-radius:4px; font-size:13px; }
+  .pill { display:inline-block; padding:1px 9px; border-radius:99px; font-size:12px; font-weight:600; border:1px solid currentColor; }
+  .ok { color:var(--ok); } .warn { color:var(--warn); } .bad { color:var(--bad); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:10px; margin:12px 0; }
+  .stat { background:var(--card); border:1px solid var(--line); border-radius:8px; padding:10px 12px; } .stat b { font-size:24px; display:block; }
+</style>
+</head>
+<body>
+<main>
+<h1>Sheet3 #18 - Network-failure testing, part 2</h1>
+<p class="muted">QA sheet 3, item 18 &middot; P1 &middot; owner Vedant &middot; run 2026-10-19 &middot; branch <code>vedant/qa/network-failure-2</code> &middot; continues <a href="REPORT.html">part 1</a> (outbound HTTP, PR #436)</p>
+
+<p><b>Target:</b> automated suite with &ge;95% P0/P1 scenario coverage and zero flaky P0 tests.
+<b>Status:</b> <span class="pill warn">In Process &mdash; every part-1 "not done" item is now tested and the defects found are fixed; not marked Completed because of the open items in section 5 and because the 95% scenario coverage is not measured</span></p>
+
+<div class="grid">
+  <div class="stat"><b>43</b>new tests (15 unit + 22 integration + 6 web)</div>
+  <div class="stat"><b>8</b>defects found, all 8 fixed</div>
+  <div class="stat"><b>3 / 3</b>clean runs of every new file</div>
+  <div class="stat"><b>49</b>browser fetch calls reviewed (+27 server-side fixed)</div>
+</div>
+
+<h2>1. Method</h2>
+<p>Nothing was stopped or restarted. Faults come from a TCP proxy (<code>test/unit/network-failure/tcp-fault-proxy.ts</code>, 127.0.0.1 only) placed in front of Postgres and Redis, or from a port nobody listens on. Two small fakes (<code>frozen-backends.ts</code>) complete the Postgres or Redis handshake and then never answer: the "connected, then silent" case, which raises no error on its own. Each case must (1) end within a deadline, (2) end in an error the caller can classify (503 / typed error, no stack, no address), (3) leave no connection or pool slot behind, and (4) recover by itself when the dependency returns.</p>
+<table>
+<tr><th>Fault</th><th>What the proxy does</th></tr>
+<tr><td>refuse</td><td>nothing listens: connect is refused at once</td></tr>
+<tr><td>reset</td><td>connections are dropped (existing ones killed, new ones closed unanswered)</td></tr>
+<tr><td>stall</td><td>connections stay open, bytes are held and delivered when the link returns</td></tr>
+<tr><td>blackhole</td><td>new connections are accepted and swallowed, existing ones go silent</td></tr>
+<tr><td>connected, then silent (fake)</td><td>handshake done, every later request ignored</td></tr>
+<tr><td>dies at first statement (fake)</td><td>handshake done, connection dropped at the first query (a restarted server under a pooled connection)</td></tr>
+</table>
+<p>Layers: the unit file needs no server. The integration files (<code>test/integration/network-failure/</code>) use real Postgres and Redis. By default they start their own containers like every other integration test; with <code>NF_PG_ADMIN_URL</code> and <code>NF_REDIS_URL</code> set they use running servers, create a throwaway database <code>crm_nf2_&lt;random&gt;</code> (dropped at the end), and give every BullMQ queue a random prefix (obliterated at the end). Redis keys written by the full-app run (rate limits, sessions) were not deleted from the shared Redis; they carry TTLs.</p>
+
+<h2>2. Findings</h2>
+<table>
+<tr><th>#</th><th>Finding</th><th>Impact</th><th>Severity</th><th>Status</th></tr>
+<tr><td>N6</td><td>Postgres: no client-side query timeout. The server-side <code>statement_timeout</code> cannot fire when the connection is up but the other end is silent, so the query waited for ever. Before the fix the test hung until the test runner's timeout.</td><td>A request hangs; an outbox tick hangs and its overlap guard (<code>running</code>) is never cleared, so the outbox stops draining for good, even after the database returns.</td><td><span class="pill bad">High</span></td><td class="ok">Fixed: <code>query_timeout</code> = statement timeout + 2.5 s (<code>packages/db/src/client.ts</code>).</td></tr>
+<tr><td>N10</td><td>drizzle's <code>db.transaction</code> runs <code>begin</code> outside its try/finally. When <code>begin</code> fails (connection dead or silent between checkout and first statement) the connection is never released: one pool slot lost per failure (observed: the 3rd transaction on a 2-slot pool waited the full 10 s connection timeout). The dead checked-out connection also emits an unhandled <code>error</code> event, which is a process crash.</td><td>A database restart or network blip drains the pool; the API cannot recover after the database is back. Process-level exception risk.</td><td><span class="pill bad">High</span></td><td class="ok">Fixed once in shared code: <code>runTransaction</code> (used by <code>withTenant</code> and <code>withPrivileged</code>, so every tenant and privileged transaction) always releases, discards a connection with an unanswered query, and holds an error listener while checked out.</td></tr>
+<tr><td>N7</td><td>Shared Redis client had no command timeout: connected-but-silent Redis hangs every auth check, rate limit and cache read.</td><td>Every authenticated request hangs.</td><td><span class="pill bad">High</span></td><td class="ok">Fixed: <code>commandTimeout</code> 2 s (nothing blocks on this client).</td></tr>
+<tr><td>N8</td><td>BullMQ producers: (a) connected-but-silent Redis, <code>queue.add</code> waits for ever; (b) a process that started while Redis was down waits for ever on its first connection (BullMQ's ready wait), whatever the "fail fast" options say. Mid-life outages already failed fast, as the earlier commit intended.</td><td>Any request that enqueues hangs for the length of the outage after a restart during an outage.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: producer <code>commandTimeout</code>, and <code>BoundedQueue</code> (registered for all Nest queues) bounds the first-connection wait to 3 s on <code>add</code>/<code>addBulk</code>; the wait carries on in the background, so the queue works once Redis returns. Workers keep waiting (<code>commandTimeout</code> is explicitly unset for them).</td></tr>
+<tr><td>N9</td><td><code>/ready</code> had no deadline per check and returned the driver's raw message on a public endpoint (host, port, role name).</td><td>Probe hangs (orchestrator kills a healthy pod); internal addresses disclosed to anonymous callers.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: 2 s per check, all checks in parallel, and the error is one of <code>timeout</code>, <code>unreachable</code>, <code>error</code>.</td></tr>
+<tr><td>N11</td><td>A dead database, Redis or queue surfaced as 500 <code>INTERNAL</code>, which a client reads as "my request is broken".</td><td>Clients and retry logic cannot tell an outage from a bug (the web app retries reads on 5xx other than 501, so 503 now gets that retry).</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: <code>isDependencyOutage</code> classifier and <code>ProblemExceptionFilter</code> answer 503 <code>SERVICE_UNAVAILABLE</code> with <code>Retry-After: 5</code> (new code in <code>@crm/contracts</code>); no address or driver text in the body.</td></tr>
+<tr><td>N12</td><td>ioredis back-off grew to 2 s a try and <code>maxRetriesPerRequest</code> counts tries, so in a long outage each Redis command took about 5 s to fail; an authenticated request took 11 to 35 s.</td><td>Slow, not stuck, but the request path is unusable during an outage.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: back-off capped at 500 ms. Closed-mode requests now answer 503 in about 2 s.</td></tr>
+<tr><td>N13</td><td>Web app: 27 server-side calls to the API (SSR pages, route handlers, public proxies, widget proxy) had no deadline; 16 browser JSON helpers, the sign-out calls and <code>apiFetch</code> had none either.</td><td>A stalled API freezes page renders and the sign-in form, the sign-out button, and public form submits.</td><td><span class="pill warn">Medium</span></td><td class="ok">Fixed: server-side calls use <code>upstreamFetch</code> (30 s to first byte); browser JSON calls 30 s, sign-out 5 s, <code>apiFetch</code> 60 s unless the caller passes its own signal.</td></tr>
+</table>
+<p>Already correct: a Postgres or Redis that is refused or resets fails in milliseconds; a worker keeps waiting through an outage and picks the next job up; a producer that lost Redis mid-life fails at once and recovers; liveness (<code>/health</code>) stays 200 during every outage; the closed-mode auth path answers 503 <code>AUTH_SERVICE_DEGRADED</code>.</p>
+
+<h2>3. Web fetch review (the "about 45" calls)</h2>
+<table>
+<tr><th>Group</th><th>Calls</th><th>Timeout before</th><th>Error handling</th><th>Retry safety</th><th>Result</th></tr>
+<tr><td>Server-side calls to the API (pages, route handlers, proxies)</td><td>27</td><td>none</td><td>most catch and degrade</td><td>reads and idempotent proxies; nothing retries by itself</td><td>now <code>upstreamFetch</code> (30 s to first byte, bodies are not cut off)</td></tr>
+<tr><td>Browser JSON helpers (auth actions, setup, invoices, form submit, storefront, impersonation, group form, flow platform call, unsubscribe)</td><td>12</td><td>none</td><td>network error mapped or thrown</td><td>mutations are never replayed automatically (<code>transientRetry</code> wraps reads only)</td><td>30 s deadline</td></tr>
+<tr><td>Sign-out / logout calls</td><td>7</td><td>none; sign-out waited for it before navigating</td><td>swallowed</td><td>idempotent</td><td>5 s deadline</td></tr>
+<tr><td><code>apiFetch</code> (the central client)</td><td>1</td><td>only if the caller passed a signal</td><td>problem+json parsed</td><td>reads retried by <code>transientRetry</code>, mutations carry an Idempotency-Key</td><td>60 s default, caller's signal wins</td></tr>
+<tr><td>Uploads (avatar, branding, logos, media, extension package, proof, groups picture, CSV)</td><td>13</td><td>none</td><td>caller handles</td><td>not retried</td><td>reviewed exception: duration follows the file size</td></tr>
+<tr><td>Downloads and exports (CSV, zip, recording, sitemap)</td><td>18</td><td>none</td><td>caller handles</td><td>reads</td><td>reviewed exception: duration follows the transfer</td></tr>
+<tr><td>AI flow generation, analytics beacon, injectable wrapper</td><td>3</td><td>none</td><td>caller handles / swallowed</td><td>not retried</td><td>reviewed exceptions with reasons</td></tr>
+</table>
+<p>The ratchet <code>apps/web/src/lib/network-failure/fetch-ratchet.test.ts</code> fails when a new <code>fetch(</code> has no signal or timeout and is not on the reviewed list with a stated reason, when the list has a stale entry, and when a server-side file that calls <code>apiBase()</code> uses a bare <code>fetch</code>.</p>
+
+<h2>4. Tests added and what was run</h2>
+<table>
+<tr><th>File</th><th>Tests</th><th>Needs</th></tr>
+<tr><td><code>apps/api/test/unit/network-failure/dependency-outage.spec.ts</code> (+ <code>tcp-fault-proxy.ts</code>, <code>frozen-backends.ts</code>)</td><td>15: Postgres refuse/reset/black hole/silent/dies-at-first-statement, Redis refused/silent, producer cold start and silent, readiness (refused, silent), outbox drain (refused, silent), error mapping</td><td>nothing external</td></tr>
+<tr><td><code>apps/api/test/integration/network-failure/recovery.spec.ts</code></td><td>13: Postgres and Redis x reset/refuse/stall/blackhole with recovery on the same pool/client; producer cold start and mid-life; worker through reset and black hole; outbox drain across an outage delivers exactly once</td><td>Postgres + Redis</td></tr>
+<tr><td><code>apps/api/test/integration/network-failure/api-outage.spec.ts</code></td><td>9: the real AppModule behind the proxies: sign-in, session, contacts list (read), contact create (write), <code>/ready</code>, <code>/health</code>, for Postgres and for Redis in closed and open mode, with recovery</td><td>Postgres + Redis</td></tr>
+<tr><td><code>apps/web/src/lib/network-failure/fetch-ratchet.test.ts</code>, <code>apps/web/src/lib/api/client-deadline.test.ts</code></td><td>3 + 3</td><td>nothing external</td></tr>
+<tr><td><code>apps/api/src/infra/queue/queue.module.spec.ts</code> (changed)</td><td>producer options now include the command timeout; the worker connection has none</td><td>nothing external</td></tr>
+</table>
+<ul>
+  <li>Each new file was run 3 times in a row with no failure and no change in result (counts in the hand-off message). The integration files ran against the already-running Postgres and Redis through the proxy, in a throwaway database.</li>
+  <li>ESLint and Prettier on every changed file: clean. Typecheck of <code>apps/api</code> (source) and <code>apps/web</code>, <code>packages/db</code>, <code>packages/contracts</code>: clean. The API spec typecheck still shows 20 errors in files this work did not touch.</li>
+  <li>Existing suites: web 11 939 pass and 3 fail (help-center coverage gate x2, settings registry). The API unit run showed 7 failing spec files; all were re-run and fail on code this change does not touch (boundaries matrix, route-permission coverage, dashboards health, chatbot launcher, flow editor seam, google capabilities, encryption audit). Not confirmed against a pristine main.</li>
+</ul>
+
+<h2>5. Not done, open, and not verified</h2>
+<table>
+<tr><th>#</th><th>Item</th><th>Why left open</th></tr>
+<tr><td>O1</td><td>A half-open TCP link (route dropped, no reset): every call is bounded and returns 503, but the connection stays "up" until the operating system gives up on it (minutes), so calls keep failing for that long. No TCP keepalive or user-timeout tuning, and no drop-after-N-timeouts.</td><td>Needs an infrastructure decision (keepalive values, platform). The system does recover by itself, just not at once.</td></tr>
+<tr><td>O2</td><td>Redis outage with <code>AUTH_REDIS_FAILURE_MODE=open</code> (the non-production default): each degraded check waits its own deadline, so one request took about 9 s (refused) and about 13 s (silent).</td><td>Non-production default; production default is closed. A circuit breaker would be new behaviour.</td></tr>
+<tr><td>O3</td><td>A new Postgres connection to a silent host waits the existing 10 s connection timeout before a 503.</td><td>Existing setting; changing it is a judgement call.</td></tr>
+<tr><td>O4</td><td>Not tested: the socket.io Redis adapter (<code>maxRetriesPerRequest: null</code>), the worker process end to end (only <code>BlockingWorker</code> and the outbox drain), the other sweepers and consumers, the read replica, TLS, DNS, packet loss, a real Postgres restart or failover, Redis Sentinel or cluster, commit-time ambiguity (a connection lost between COMMIT and its answer).</td><td>Out of scope for this pass; queue worker behaviour overlaps items 69 to 72 (owner Lakshya).</td></tr>
+<tr><td>O5</td><td>Duplicate sends on job retry, dead-letter policy.</td><td>Items 69 to 72.</td></tr>
+<tr><td>O6</td><td>Browser offline behaviour (what the UI shows).</td><td>Needs a browser; item 10 (Playwright).</td></tr>
+<tr><td>O7</td><td>The 95% P0/P1 scenario coverage figure is not measured; there is no scenario inventory to divide by.</td><td>Status stays In Process.</td></tr>
+</table>
+<p>Repo audits (<code>audit:tenancy</code>, <code>audit:authz</code>, <code>audit:auth</code>) exit non-zero because of open findings that already exist on the base (for example TI-014, TI-018, TI-022; authz and auth exit 20); none points at a file this change touches. The built-in <code>security-review</code> pass found nothing; the <code>code-review</code> step was not run. <code>tools/quality/security-specs.sh</code> could not be run as a script in this session, so its commands were run one by one: the web part passed (96 tests), the API part has 2 failures in <code>encryption-audit.spec.ts</code> about files this change does not touch (<code>throughput-store.ts</code>, <code>routing-engine.service.ts</code>, <code>s3-sigv4.ts</code>).</p>
+
+<h2>6. Files</h2>
+<p>New: <code>apps/api/src/common/errors/dependency-outage.ts</code>, <code>apps/api/test/unit/network-failure/{tcp-fault-proxy,frozen-backends,dependency-outage.spec}.ts</code>, <code>apps/api/test/integration/network-failure/{infra,recovery.spec,api-outage.spec}.ts</code>, <code>apps/web/src/lib/network-failure/fetch-ratchet.test.ts</code>, <code>apps/web/src/lib/api/client-deadline.test.ts</code>.
+Changed: <code>packages/db/src/{client,tenant}.ts</code>, <code>packages/contracts/src/common/errors.ts</code>, <code>apps/api/src/{health/health.controller,common/filters/problem-exception.filter,infra/redis/redis.module,infra/queue/queue.module,infra/queue/queue.module.spec}.ts</code>, and the web files that now use <code>upstreamFetch</code> or a deadline (<code>lib/api/client.ts</code> included).</p>
+</main>
+</body>
+</html>

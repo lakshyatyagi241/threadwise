@@ -18,6 +18,7 @@ export const impersonationApi = {
  */
 export async function stopImpersonation(): Promise<string> {
   const res = await fetch('/api/auth/impersonation/stop', {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: { Accept: 'application/json' },
     credentials: 'same-origin',

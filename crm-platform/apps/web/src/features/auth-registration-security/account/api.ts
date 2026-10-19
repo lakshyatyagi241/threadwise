@@ -225,6 +225,7 @@ export async function bffPost<T>(
   schema: { parse(json: unknown): T },
 ): Promise<T> {
   const res = await fetch(`/api/auth/${action}`, {
+    signal: AbortSignal.timeout(30000),
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
     body: JSON.stringify(body),

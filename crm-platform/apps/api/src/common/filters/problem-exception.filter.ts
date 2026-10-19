@@ -12,6 +12,7 @@ import { AppError } from '../errors/app-error';
 import { RequestContextStore } from '../context/request-context';
 import { maskSecretUrl } from '../logging/mask-secret-url';
 import { reportServerError } from '../../modules/platform-infrastructure';
+import { isDependencyOutage } from '../errors/dependency-outage';
 import { LEGAL_HOLD_BLOCKED_MESSAGE, isLegalHoldDbError } from '../errors/legal-hold.error';
 
 /**
@@ -66,6 +67,8 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         problem.title,
       );
     }
+
+    if (problem.code === ERROR_CODES.SERVICE_UNAVAILABLE) response.setHeader('Retry-After', '5');
 
     const path = request.path ?? request.url;
     for (const { prefix, render } of problemRenderers) {
@@ -135,6 +138,21 @@ export class ProblemExceptionFilter implements ExceptionFilter {
         instance: path,
         code: this.codeForStatus(parsed.status),
         requestId,
+      };
+    }
+
+    // The database, Redis or the queue is down or silent: not a bug in this request, so 503 and a retry hint instead of a 500.
+    if (isDependencyOutage(exception)) {
+      return {
+        type: `https://errors.crm.platform/${ERROR_CODES.SERVICE_UNAVAILABLE.toLowerCase()}`,
+        title: this.titleFor(HttpStatus.SERVICE_UNAVAILABLE),
+        status: HttpStatus.SERVICE_UNAVAILABLE,
+        detail:
+          'A service this request depends on is temporarily unavailable. Try again in a moment.',
+        instance: path,
+        code: ERROR_CODES.SERVICE_UNAVAILABLE,
+        requestId,
+        errors: [{ path: 'retryAfterSeconds', message: '5' }],
       };
     }
 

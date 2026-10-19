@@ -5,6 +5,7 @@ import { clientIpFrom } from '@/lib/auth/client-ip';
 import { logoutOperator } from '@/lib/auth/logout';
 import { isSameOrigin, problem, redirectTo } from '@/lib/auth/proxy';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** Platform-operator sign-in (a separate identity pool and cookie set). */
 const UPSTREAM: Record<string, string> = {
@@ -45,7 +46,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
     return problem(403, 'FORBIDDEN', 'Cross-origin request refused');
   }
 
-  const upstream = await fetch(`${apiBase()}${path}`, {
+  const upstream = await upstreamFetch(`${apiBase()}${path}`, {
     method: 'POST',
     headers: headersFor(req),
     body: await req.text(),

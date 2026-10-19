@@ -99,6 +99,8 @@ export const ERROR_CODES = {
   /** The request body is larger than the server accepts (body-parser limit). */
   PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
+  /** A dependency (database, Redis, queue) could not be reached or stopped answering: 503, retry shortly. */
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
 
   // platform invariants
   ROW_VERSION_CONFLICT: 'ROW_VERSION_CONFLICT',

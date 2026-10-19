@@ -150,6 +150,7 @@ async function platformFetch<T>(
   if (method !== 'GET') headers['Idempotency-Key'] = crypto.randomUUID();
   const res = await fetch(`/api/platform${path}${qs.size ? `?${qs}` : ''}`, {
     method,
+    signal: AbortSignal.timeout(30_000),
     headers,
     body: init.body === undefined ? undefined : JSON.stringify(init.body),
     credentials: 'same-origin',

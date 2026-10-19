@@ -1,6 +1,7 @@
 import 'server-only';
 import { headers } from 'next/headers';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 export type WaChatLinkResolveResult =
   | { status: 'ok'; url: string }
@@ -23,7 +24,7 @@ export async function resolveWaChatLink(slug: string): Promise<WaChatLinkResolve
   const realIp = incoming.get('x-real-ip');
   let res: Response;
   try {
-    res = await fetch(`${apiBase()}/l/${encodeURIComponent(slug)}`, {
+    res = await upstreamFetch(`${apiBase()}/l/${encodeURIComponent(slug)}`, {
       redirect: 'manual',
       cache: 'no-store',
       headers: {
