@@ -14,22 +14,37 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { root, sourceFiles, redisCalls, clientSites, GROWTH, LIFETIME, setHasTtl } from './scan.mjs';
+import {
+  root,
+  sourceFiles,
+  redisCalls,
+  clientSites,
+  GROWTH,
+  LIFETIME,
+  setHasTtl,
+} from './scan.mjs';
 import { buildIndex, normalize, interpolations } from './keys.mjs';
 
 const OUT = join(root, 'docs/performance/redis/inventory.json');
 const read = (p) => readFileSync(join(root, p), 'utf8');
 
 /** Strings that look like keys but are not (permission names, header names, SQL casts, MIME types, URL schemes). */
-const NOT_KEYS = /^(?:node|http|https|data|user|users|bucket|text|image|audio|video|application|multipart|x|content|api|oauth|org|ws|wss|mailto|tel)[:.-]/i;
+const NOT_KEYS =
+  /^(?:node|http|https|data|user|users|bucket|text|image|audio|video|application|multipart|x|content|api|oauth|org|ws|wss|mailto|tel)[:.-]/i;
 
 function ttlOf(c) {
-  if (c.cmd === 'setex' || c.cmd === 'psetex') return `${c.cmd === 'psetex' ? 'PX' : 'EX'} ${c.args[1]}`;
+  if (c.cmd === 'setex' || c.cmd === 'psetex')
+    return `${c.cmd === 'psetex' ? 'PX' : 'EX'} ${c.args[1]}`;
   if (c.cmd === 'set') {
     const i = c.args.findIndex((a, n) => n >= 2 && /^['"`](EX|PX|EXAT|PXAT)['"`]$/i.test(a));
-    return i >= 0 ? `${c.args[i].replace(/['"`]/g, '').toUpperCase()} ${c.args[i + 1]}` : /\b(EX|PX)\s*:/.test(c.text) ? 'options' : null;
+    return i >= 0
+      ? `${c.args[i].replace(/['"`]/g, '').toUpperCase()} ${c.args[i + 1]}`
+      : /\b(EX|PX)\s*:/.test(c.text)
+        ? 'options'
+        : null;
   }
-  if (['expire', 'pexpire', 'expireat', 'pexpireat'].includes(c.cmd)) return `${c.cmd.toUpperCase()} ${c.args[1]}`;
+  if (['expire', 'pexpire', 'expireat', 'pexpireat'].includes(c.cmd))
+    return `${c.cmd.toUpperCase()} ${c.args[1]}`;
   return null;
 }
 
@@ -42,12 +57,23 @@ function scopeOf(vars) {
   return 'other';
 }
 
-const stripComments = (s) => s.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' ')).replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
+const stripComments = (s) =>
+  s
+    .replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '))
+    .replace(/(^|[^:'"`])\/\/[^\n]*/g, '$1');
 
 export function buildInventory() {
   const files = sourceFiles();
   const index = buildIndex(files);
-  const forbidden = { keys: [], flush: [], scan: [], fullRange: [], smembers: [], hgetall: [], directIncr: [] };
+  const forbidden = {
+    keys: [],
+    flush: [],
+    scan: [],
+    fullRange: [],
+    smembers: [],
+    hgetall: [],
+    directIncr: [],
+  };
   const calls = [];
   const fileRows = [];
   const keyFamilies = new Map();
@@ -68,7 +94,8 @@ export function buildInventory() {
       calls.push(rec);
       if (c.cmd === 'keys') forbidden.keys.push(rec);
       if (c.cmd === 'flushall' || c.cmd === 'flushdb') forbidden.flush.push(rec);
-      if (['scan', 'sscan', 'hscan', 'zscan'].includes(c.cmd)) forbidden.scan.push({ ...rec, args: c.args.join(', ').slice(0, 120) });
+      if (['scan', 'sscan', 'hscan', 'zscan'].includes(c.cmd))
+        forbidden.scan.push({ ...rec, args: c.args.join(', ').slice(0, 120) });
       if (c.cmd === 'lrange' && /,\s*-1\s*$/.test(c.text)) forbidden.fullRange.push(rec);
       if (c.cmd === 'smembers') forbidden.smembers.push(rec);
       if (c.cmd === 'hgetall') forbidden.hgetall.push(rec);
@@ -89,15 +116,27 @@ export function buildInventory() {
     for (const m of text.matchAll(/(`(?:\\.|[^`\\\n])*`|'[^'\n]*'|"[^"\n]*")/g)) {
       const lit = m[1];
       const body = lit.slice(1, -1);
-      if (!/^[a-z][a-z0-9_.-]*(?::[^\s'"`]*)+$/.test(body.replace(/\$\{[^}]*\}/g, '*')) || NOT_KEYS.test(body) || body.includes('//') || body.length > 120) continue;
+      if (
+        !/^[a-z][a-z0-9_.-]*(?::[^\s'"`]*)+$/.test(body.replace(/\$\{[^}]*\}/g, '*')) ||
+        NOT_KEYS.test(body) ||
+        body.includes('//') ||
+        body.length > 120
+      )
+        continue;
       const tpl = normalize(lit, f.path, index);
       if (!tpl || seen.has(tpl)) continue;
       seen.add(tpl);
-      const e = keyFamilies.get(tpl) ?? keyFamilies.set(tpl, { template: tpl, files: new Set(), vars: new Set(), props: new Map() }).get(tpl);
+      const e =
+        keyFamilies.get(tpl) ??
+        keyFamilies
+          .set(tpl, { template: tpl, files: new Set(), vars: new Set(), props: new Map() })
+          .get(tpl);
       e.files.add(f.path);
       // the builder name (`epoch:` in `AuthKeys = { epoch: ... }`), to find the files that really use this key
       const before = text.slice(Math.max(0, m.index - 160), m.index);
-      const prop = /(\w+)\s*[:=]\s*(?:async\s*)?(?:\([^)]*\)\s*(?::[^=]+)?=>\s*)?\(?\s*$/.exec(before)?.[1];
+      const prop = /(\w+)\s*[:=]\s*(?:async\s*)?(?:\([^)]*\)\s*(?::[^=]+)?=>\s*)?\(?\s*$/.exec(
+        before,
+      )?.[1];
       if (prop && !usesRedis) e.props.set(f.path, prop);
       for (const v of interpolations(lit)) e.vars.add(v);
     }
@@ -107,7 +146,11 @@ export function buildInventory() {
       continue;
     }
     const ttlStatus =
-      growth === 0 && !cs.some((c) => c.cmd === 'eval') ? 'read-only' : growthWithoutInlineTtl === 0 || lifetime > 0 ? 'ttl' : 'review';
+      growth === 0 && !cs.some((c) => c.cmd === 'eval')
+        ? 'read-only'
+        : growthWithoutInlineTtl === 0 || lifetime > 0
+          ? 'ttl'
+          : 'review';
     fileRows.push({
       file: f.path,
       commands: [...new Set(cs.map((c) => c.cmd))].sort(),
@@ -118,10 +161,26 @@ export function buildInventory() {
 
   // Lua scripts: any template string containing redis.call.
   const lua = [];
-  const WRITE_LUA = new Set(['set', 'incr', 'incrby', 'hset', 'hincrby', 'zadd', 'sadd', 'lpush', 'rpush', 'setex', 'pfadd']);
+  const WRITE_LUA = new Set([
+    'set',
+    'incr',
+    'incrby',
+    'hset',
+    'hincrby',
+    'zadd',
+    'sadd',
+    'lpush',
+    'rpush',
+    'setex',
+    'pfadd',
+  ]);
   for (const f of files)
-    for (const m of f.src.matchAll(/(?:const|static)\s+(\w+)\s*(?::[^=]+)?=\s*`([^`]*redis\.call[^`]*)`/g)) {
-      const commands = [...new Set([...m[2].matchAll(/redis\.call\(\s*'(\w+)'/gi)].map((x) => x[1].toLowerCase()))].sort();
+    for (const m of f.src.matchAll(
+      /(?:const|static)\s+(\w+)\s*(?::[^=]+)?=\s*`([^`]*redis\.call[^`]*)`/g,
+    )) {
+      const commands = [
+        ...new Set([...m[2].matchAll(/redis\.call\(\s*'(\w+)'/gi)].map((x) => x[1].toLowerCase())),
+      ].sort();
       lua.push({
         file: f.path,
         name: m[1],
@@ -135,8 +194,11 @@ export function buildInventory() {
   const batched = [];
   const sequential = [];
   for (const f of files) {
-    for (const m of f.src.matchAll(/\bredis\s*\.\s*(pipeline|multi)\s*\(/g)) batched.push({ file: f.path, kind: m[1] });
-    for (const m of f.src.matchAll(/\b(for\s*\([^)]*\)|for\s+await\s*\([^)]*\)|while\s*\([^)]*\))\s*\{/g)) {
+    for (const m of f.src.matchAll(/\bredis\s*\.\s*(pipeline|multi)\s*\(/g))
+      batched.push({ file: f.path, kind: m[1] });
+    for (const m of f.src.matchAll(
+      /\b(for\s*\([^)]*\)|for\s+await\s*\([^)]*\)|while\s*\([^)]*\))\s*\{/g,
+    )) {
       const open = m.index + m[0].length - 1;
       let d = 0;
       let end = open;
@@ -147,8 +209,15 @@ export function buildInventory() {
           break;
         }
       }
-      const hit = /\bawait\s+(?:this\.)?redis\s*\.\s*(?!multi|pipeline)(\w+)\s*\(/.exec(f.src.slice(open, end));
-      if (hit) sequential.push({ file: f.path, line: f.src.slice(0, open).split('\n').length, cmd: hit[1] });
+      const hit = /\bawait\s+(?:this\.)?redis\s*\.\s*(?!multi|pipeline)(\w+)\s*\(/.exec(
+        f.src.slice(open, end),
+      );
+      if (hit)
+        sequential.push({
+          file: f.path,
+          line: f.src.slice(0, open).split('\n').length,
+          cmd: hit[1],
+        });
     }
   }
 
@@ -158,12 +227,24 @@ export function buildInventory() {
         const own = fileRows.find((r) => r.file === p);
         if (own) return [own];
         const base = p.split('/').pop().replace(/\.ts$/, '');
-        const importers = fileRows.filter((r) => files.find((x) => x.path === r.file).src.includes(`/${base}'`));
+        const importers = fileRows.filter((r) =>
+          files.find((x) => x.path === r.file).src.includes(`/${base}'`),
+        );
         const prop = e.props.get(p);
-        const users = prop ? importers.filter((r) => new RegExp(`\\.${prop}\\b`).test(files.find((x) => x.path === r.file).src)) : [];
+        const users = prop
+          ? importers.filter((r) =>
+              new RegExp(`\\.${prop}\\b`).test(files.find((x) => x.path === r.file).src),
+            )
+          : [];
         return prop ? users : importers;
       });
-      const status = rows.some((r) => r.ttlStatus === 'review') ? 'review' : rows.length && rows.every((r) => r.ttlStatus === 'read-only') ? 'read-only' : rows.length ? 'ttl' : 'indirect';
+      const status = rows.some((r) => r.ttlStatus === 'review')
+        ? 'review'
+        : rows.length && rows.every((r) => r.ttlStatus === 'read-only')
+          ? 'read-only'
+          : rows.length
+            ? 'ttl'
+            : 'indirect';
       return {
         template: e.template,
         files: [...e.files].sort(),
@@ -173,7 +254,12 @@ export function buildInventory() {
     })
     .sort((a, b) => a.template.localeCompare(b.template));
 
-  const sites = clientSites(files).map((s) => ({ file: s.file, line: s.line, kind: s.kind, options: s.args.replace(/\s+/g, ' ').trim() }));
+  const sites = clientSites(files).map((s) => ({
+    file: s.file,
+    line: s.line,
+    kind: s.kind,
+    options: s.args.replace(/\s+/g, ' ').trim(),
+  }));
   return { files, fileRows, families, lua, batched, sequential, forbidden, sites, calls };
 }
 
@@ -211,7 +297,11 @@ function composeRedis() {
       policy: (/maxmemory-policy['",\s]+(\w+)/.exec(b) ?? [])[1] ?? null,
     };
   };
-  return ['docker-compose.yml', 'docker-compose.prod.yml', 'deploy/hostinger/docker-compose.yml'].map(grab);
+  return [
+    'docker-compose.yml',
+    'docker-compose.prod.yml',
+    'deploy/hostinger/docker-compose.yml',
+  ].map(grab);
 }
 
 export async function render() {
@@ -221,7 +311,8 @@ export async function render() {
   const count = (f) => fams.filter(f).length;
   return {
     generatedBy: 'node tools/redis-audit/inventory.mjs',
-    generatedFrom: 'apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)',
+    generatedFrom:
+      'apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)',
     totals: {
       sourceFilesUsingRedis: inv.fileRows.length,
       commandCallSites: inv.calls.length,
@@ -266,7 +357,9 @@ if (import.meta.url === pathToFileURL(process.argv[1]).href) {
       /* missing */
     }
     if (cur !== doc) {
-      console.error('docs/performance/redis/inventory.json is stale. Run: node tools/redis-audit/inventory.mjs');
+      console.error(
+        'docs/performance/redis/inventory.json is stale. Run: node tools/redis-audit/inventory.mjs',
+      );
       process.exit(1);
     }
     console.log('redis inventory is current');

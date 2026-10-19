@@ -124,6 +124,9 @@ describe('queue retention (default job options)', () => {
       retainedJobsAllQueuesMax: queues * perQueue,
       productionMaxmemoryMb: 192,
     });
-    expect(queues * perQueue).toBe(queues * (DEFAULT_JOB_OPTIONS.removeOnComplete.count + DEFAULT_JOB_OPTIONS.removeOnFail.count));
+    expect(queues * perQueue).toBe(
+      queues *
+        (DEFAULT_JOB_OPTIONS.removeOnComplete.count + DEFAULT_JOB_OPTIONS.removeOnFail.count),
+    );
   });
 });

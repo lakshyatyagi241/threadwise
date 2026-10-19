@@ -261,7 +261,7 @@ describe('Redis hygiene: BullMQ queues and jobs are bounded', () => {
       QUEUES: Record<string, string>;
       jobOptionsFor(n: string): QueueRow;
     };
-    queues = Object.values(q.QUEUES).map((n) => ({ queue: n, ...q.jobOptionsFor(n) }));
+    queues = Object.values(q.QUEUES).map((n) => ({ ...q.jobOptionsFor(n), queue: n }));
   });
 
   const bounded = (v: unknown): boolean =>
@@ -331,7 +331,7 @@ describe('Redis hygiene: connections have deadlines', () => {
       bad.map(short),
       'A silent Redis (dropped route, frozen host) raises no error; without commandTimeout the command waits for ever.',
     ).toEqual([]);
-    for (const [f, a] of Object.entries(NO_COMMAND_TIMEOUT_ALLOWED)) {
+    for (const f of Object.keys(NO_COMMAND_TIMEOUT_ALLOWED)) {
       expect(
         missing,
         `${short(f)} sets commandTimeout now: remove it from NO_COMMAND_TIMEOUT_ALLOWED`,

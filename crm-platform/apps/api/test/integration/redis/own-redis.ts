@@ -2,7 +2,7 @@ import { randomBytes } from 'node:crypto';
 import { createServer } from 'node:net';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
-import { Redis } from 'ioredis';
+import { Redis, type RedisOptions } from 'ioredis';
 import { GenericContainer, type StartedTestContainer } from 'testcontainers';
 
 /**
@@ -20,7 +20,7 @@ export interface OwnRedis {
   /** The container, or null when the suite runs against REDIS_AUDIT_URL. */
   container: StartedTestContainer | null;
   /** A client for the test's own use. */
-  client: (opts?: ConstructorParameters<typeof Redis>[1]) => Redis;
+  client: (opts?: RedisOptions) => Redis;
   stop: () => Promise<void>;
 }
 
@@ -37,7 +37,7 @@ const freePort = (): Promise<number> =>
 export async function startOwnRedis(args: string[] = []): Promise<OwnRedis> {
   const external = process.env.REDIS_AUDIT_URL;
   const made: Redis[] = [];
-  const mk = (url: string) => (opts?: ConstructorParameters<typeof Redis>[1]) => {
+  const mk = (url: string) => (opts?: RedisOptions) => {
     const r = new Redis(url, { maxRetriesPerRequest: null, ...opts });
     made.push(r);
     return r;

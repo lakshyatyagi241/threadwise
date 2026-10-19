@@ -82,7 +82,10 @@ const lineOf = (src, idx) => src.slice(0, idx).split('\n').length;
 /** Receivers: the injected client plus any local bound from `redis.pipeline()` / `redis.multi()`. */
 function receivers(src) {
   const names = new Set(['redis']);
-  for (const m of src.matchAll(/\b(?:const|let)\s+(\w+)\s*=\s*(?:this\.)?redis\s*\.\s*(?:pipeline|multi)\s*\(/g)) names.add(m[1]);
+  for (const m of src.matchAll(
+    /\b(?:const|let)\s+(\w+)\s*=\s*(?:this\.)?redis\s*\.\s*(?:pipeline|multi)\s*\(/g,
+  ))
+    names.add(m[1]);
   return names;
 }
 
@@ -90,7 +93,10 @@ function receivers(src) {
 export function callsIn(src) {
   const recv = receivers(src);
   const calls = [];
-  const start = new RegExp(`(?<![\\w.])(?:this\\.)?(${[...recv].join('|')})\\s*\\??\\.\\s*(\\w+)\\s*\\(`, 'g');
+  const start = new RegExp(
+    `(?<![\\w.])(?:this\\.)?(${[...recv].join('|')})\\s*\\??\\.\\s*(\\w+)\\s*\\(`,
+    'g',
+  );
   for (const m of src.matchAll(start)) {
     let cmdName = m[2];
     let idx = 0;
@@ -135,7 +141,10 @@ const SET_FAMILY = new Set(['set', 'setex', 'psetex', 'setnx', 'getset']);
 /** True when a SET carries a lifetime: SETEX/PSETEX, or an EX/PX/EXAT/PXAT/KEEPTTL option. */
 export function setHasTtl(call) {
   if (call.cmd === 'setex' || call.cmd === 'psetex') return true;
-  return call.args.slice(2).some((a) => /^['"`](?:EX|PX|EXAT|PXAT|KEEPTTL)['"`]$/i.test(a)) || /\b(?:EX|PX)\s*:/.test(call.text);
+  return (
+    call.args.slice(2).some((a) => /^['"`](?:EX|PX|EXAT|PXAT|KEEPTTL)['"`]$/i.test(a)) ||
+    /\b(?:EX|PX)\s*:/.test(call.text)
+  );
 }
 
 export function setCalls(file) {
@@ -158,7 +167,9 @@ export const GROWTH = new Set(
   ),
 );
 /** Commands that give an existing key a lifetime. */
-export const LIFETIME = new Set('expire pexpire expireat pexpireat setex psetex persist'.split(' '));
+export const LIFETIME = new Set(
+  'expire pexpire expireat pexpireat setex psetex persist'.split(' '),
+);
 
 export function redisCalls(file) {
   return callsIn(file.src)
@@ -172,10 +183,16 @@ export function clientSites(files) {
   for (const f of files) {
     for (const m of f.src.matchAll(/new\s+(?:Redis|IORedis)\s*\(/g)) {
       const close = closeParen(f.src, m.index + m[0].length - 1);
-      sites.push({ file: f.path, line: lineOf(f.src, m.index), kind: 'new', args: f.src.slice(m.index + m[0].length, close) });
+      sites.push({
+        file: f.path,
+        line: lineOf(f.src, m.index),
+        kind: 'new',
+        args: f.src.slice(m.index + m[0].length, close),
+      });
     }
     for (const m of f.src.matchAll(/\b(\w+)\.duplicate\s*\(\s*\)/g)) {
-      if (/redis|pub|client/i.test(m[1])) sites.push({ file: f.path, line: lineOf(f.src, m.index), kind: 'duplicate', args: '' });
+      if (/redis|pub|client/i.test(m[1]))
+        sites.push({ file: f.path, line: lineOf(f.src, m.index), kind: 'duplicate', args: '' });
     }
   }
   return sites;

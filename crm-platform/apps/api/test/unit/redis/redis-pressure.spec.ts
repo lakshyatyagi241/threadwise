@@ -61,7 +61,7 @@ describe('createRedisSampler', () => {
     const sampler = createRedisSampler(registry);
     const s = () => sampler.sample(redis as never);
     await s();
-    let text = registry.render();
+    const text = registry.render();
     expect(metric(text, 'crm_redis_up')).toBe(1);
     expect(metric(text, 'crm_redis_memory_used_bytes')).toBe(5_216_488);
     expect(metric(text, 'crm_redis_memory_max_bytes')).toBe(201_326_592);

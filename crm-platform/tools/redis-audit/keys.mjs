@@ -25,16 +25,24 @@ export function buildIndex(files) {
     const put = (name, lit) => {
       if (!lit || local.has(name)) return;
       local.set(name, lit);
-      global.set(name, global.has(name) && global.get(name)?.file !== f.path ? null : { file: f.path, lit });
+      global.set(
+        name,
+        global.has(name) && global.get(name)?.file !== f.path ? null : { file: f.path, lit },
+      );
     };
     // name: (args) => `tpl`  |  name = (args) => `tpl`
-    for (const m of s.matchAll(/\b(\w+)\s*[:=]\s*(?:async\s*)?\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*=>\s*(?:\(\s*)?(?=[`'"])/g))
+    for (const m of s.matchAll(
+      /\b(\w+)\s*[:=]\s*(?:async\s*)?\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*=>\s*(?:\(\s*)?(?=[`'"])/g,
+    ))
       put(m[1], s.slice(m.index + m[0].length).match(LIT)?.[0]);
     // name(args) { return `tpl` }  |  function name(args) { return `tpl` }
-    for (const m of s.matchAll(/\b(\w+)\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{\s*return\s+(?=[`'"])/g))
+    for (const m of s.matchAll(
+      /\b(\w+)\s*\([^)]*\)\s*(?::\s*[\w<>[\]| ]+)?\s*\{\s*return\s+(?=[`'"])/g,
+    ))
       put(m[1], s.slice(m.index + m[0].length).match(LIT)?.[0]);
     // name: 'literal'  |  const NAME = 'literal'
-    for (const m of s.matchAll(/\b(\w+)\s*(?::|=)\s*(?=['"`])/g)) put(m[1], s.slice(m.index + m[0].length).match(LIT)?.[0]);
+    for (const m of s.matchAll(/\b(\w+)\s*(?::|=)\s*(?=['"`])/g))
+      put(m[1], s.slice(m.index + m[0].length).match(LIT)?.[0]);
     byFile.set(f.path, local);
   }
   return { byFile, global };
@@ -61,7 +69,8 @@ function render(literal, file, index, depth = 0) {
         else if (s[j] === '}' && --d === 0) break;
       }
       const inner = s.slice(i + 2, j).trim();
-      const known = depth < 3 && /^[A-Z][A-Z0-9_]+$/.test(inner) ? lookup(inner, file, index) : null;
+      const known =
+        depth < 3 && /^[A-Z][A-Z0-9_]+$/.test(inner) ? lookup(inner, file, index) : null;
       const sub = known ? render(known, file, index, depth + 1) : null;
       out += sub !== null && !sub.includes('*') ? sub : '*';
       i = j;
@@ -86,8 +95,13 @@ export function resolveKey(expr, src, line, index, file) {
   if (TPL.test(e)) return viaLit(e.match(LIT)?.[0] ?? e);
   const id = /^(?:this\.)?(\w+)$/.exec(e);
   if (id) {
-    const before = src.split('\n').slice(Math.max(0, line - 40), line).join('\n');
-    const all = [...before.matchAll(new RegExp(`(?:const|let)\\s+${id[1]}\\s*(?::[^=]+)?=\\s*`, 'g'))];
+    const before = src
+      .split('\n')
+      .slice(Math.max(0, line - 40), line)
+      .join('\n');
+    const all = [
+      ...before.matchAll(new RegExp(`(?:const|let)\\s+${id[1]}\\s*(?::[^=]+)?=\\s*`, 'g')),
+    ];
     const last = all[all.length - 1];
     if (last) {
       const rest = before.slice(last.index + last[0].length);
