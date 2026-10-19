@@ -525,7 +525,7 @@
 <li>Flakiness: 3 of 3 runs green, 1289 / 1289 tests each (75 files). Round 1: 60 / 60 three times.</li>
 <li>Throwaway databases were created on the shared Postgres server and dropped; the final listing shows only <code>crm</code> and <code>postgres</code>. Only Redis db 13 (empty before) was used and flushed. No existing container was stopped, restarted or removed.</li>
 <li>The push-subscriptions integration spec starts its own test container (the image was already local).</li>
-<li>Browser check of this page: headless Google Chrome at 1280 px and 390 px (see the commit message of the redesign for the result).</li>
+<li>Browser check of this page: headless Google Chrome at 1280 px and 390 px, screenshots viewed. A first render showed text overflowing the rollout stepper boxes and a label crossing a line in the scanner diagram; both were fixed and the page re-rendered. Not inspected: dark mode, and the page breaks of the print-to-PDF output.</li>
 </ul>
 
 </main>
