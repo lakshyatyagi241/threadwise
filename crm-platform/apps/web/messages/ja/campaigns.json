@@ -1045,7 +1045,7 @@
         "loadFailed": "統計を読み込めませんでした。",
         "rates": {
           "delivered": "配信率",
-          "deliveredHint": "対象全体に対して",
+          "deliveredHint": "送信済みに対して",
           "read": "開封率",
           "readHint": "配信済みに対して",
           "replies": "返信率",

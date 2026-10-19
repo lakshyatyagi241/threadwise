@@ -1045,7 +1045,7 @@
         "loadFailed": "Statistik tidak dapat dimuat.",
         "rates": {
           "delivered": "Tingkat pengiriman",
-          "deliveredHint": "dari audiens",
+          "deliveredHint": "dari yang terkirim",
           "read": "Tingkat dibaca",
           "readHint": "dari yang terkirim",
           "replies": "Tingkat balasan",

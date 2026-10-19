@@ -1088,7 +1088,7 @@
         "loadFailed": "The statistics could not be loaded.",
         "rates": {
           "delivered": "Delivery rate",
-          "deliveredHint": "of the audience",
+          "deliveredHint": "of sent",
           "read": "Read rate",
           "readHint": "of delivered",
           "replies": "Reply rate",

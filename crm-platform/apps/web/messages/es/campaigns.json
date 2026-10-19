@@ -1045,7 +1045,7 @@
         "loadFailed": "No se pudieron cargar las estadísticas.",
         "rates": {
           "delivered": "Tasa de entrega",
-          "deliveredHint": "de la audiencia",
+          "deliveredHint": "de los enviados",
           "read": "Tasa de lectura",
           "readHint": "de los entregados",
           "replies": "Tasa de respuesta",
