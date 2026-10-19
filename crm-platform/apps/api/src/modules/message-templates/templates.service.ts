@@ -40,6 +40,7 @@ import type { FlowTemplate } from './flow-template';
 import { describeTemplateFailure, providerProblem } from './template-errors';
 import {
   detailWithMedia,
+  headerPreviewUrl,
   isTemplateMediaKey,
   MEDIA_PREVIEW_TTL_S,
   templateMediaFolder,
@@ -155,6 +156,11 @@ export class TemplatesService {
 
   async get(uuid: string): Promise<TemplateDetail> {
     return detailWithMedia(this.storage, await this.require(uuid));
+  }
+
+  /** A link to the template's header file for the team inbox to show in a thread (null when there is none to show). */
+  previewFileUrl(row: TemplateRow): Promise<string | null> {
+    return headerPreviewUrl(this.storage, row);
   }
 
   /**

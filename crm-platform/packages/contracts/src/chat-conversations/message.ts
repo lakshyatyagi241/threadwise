@@ -75,11 +75,16 @@ export const messageLocationSchema = z.object({
 });
 export type MessageLocation = z.infer<typeof messageLocationSchema>;
 
-/** What the template's header is. A media header carries only its format: the file is not stored with the message. */
+/**
+ * What the template's header is. The file itself is not stored with the message: a media header carries its format and, when the
+ * template still has a file to show (our stored copy, else the channel's sample), a short-lived link to it so the bubble can play or show it.
+ */
 export const messageTemplateHeaderSchema = z.object({
   format: z.enum(['text', 'image', 'video', 'document', 'location']),
   /** The header text of a `text` header; null for the other formats. */
   text: z.string().nullable().optional(),
+  /** A short-lived link to the header file, minted at each read. Absent when the template has no file to show. */
+  mediaUrl: z.string().nullable().optional(),
 });
 export type MessageTemplateHeader = z.infer<typeof messageTemplateHeaderSchema>;
 

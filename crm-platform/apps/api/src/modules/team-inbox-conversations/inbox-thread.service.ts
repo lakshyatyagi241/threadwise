@@ -22,7 +22,7 @@ import {
   type OutboundContent,
 } from '../chat-conversations';
 import { EmailTemplatesReader } from '../email-templates';
-import { TemplatesRepository } from '../message-templates';
+import { TemplatesRepository, TemplatesService } from '../message-templates';
 import { ConversationsRepository } from './conversations.repository';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import {
@@ -56,6 +56,7 @@ export class InboxThreadService {
     private readonly templates: TemplatesRepository,
     private readonly emailTemplates: EmailTemplatesReader,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
+    private readonly templateService: TemplatesService,
   ) {}
 
   /** The conversation for a contact on a channel, created if missing. The route requires `inbox.conversation.reply`, like sending the first message. */
@@ -92,7 +93,15 @@ export class InboxThreadService {
     if (ids.length === 0) return messages;
     const orgId = RequestContextStore.orgId();
     const rows = await this.db.tx((tx) => this.templates.findManyByUuids(tx, orgId, ids));
-    const byUuid = new Map(rows.map((r) => [r.uuid, templatePreviewOf(r)]));
+    // A fresh link to each template's header file (its stored copy or the channel's sample), made at each read like the template detail's.
+    const byUuid = new Map(
+      await Promise.all(
+        rows.map(
+          async (r) =>
+            [r.uuid, templatePreviewOf(r, await this.templateService.previewFileUrl(r))] as const,
+        ),
+      ),
+    );
     return messages.map((m) => {
       const preview = m.template?.templateId ? byUuid.get(m.template.templateId) : undefined;
       return preview && m.template ? { ...m, template: { ...m.template, preview } } : m;

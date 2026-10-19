@@ -15,6 +15,20 @@ export const isTemplateMediaKey = (orgId: number, key: string): boolean =>
   storageKeyIsOwnedBy(orgId, key) &&
   canonicalStorageKey(key).startsWith(templateMediaFolder(orgId));
 
+/**
+ * A link the thread can play or show a template's header file with: our stored copy first (a fresh link), else the channel's sample
+ * when it is a web address. Null when the template has neither.
+ */
+export async function headerPreviewUrl(
+  storage: MediaStorageService,
+  row: Pick<TemplateRow, 'headerMediaKey' | 'headerSampleUrl'>,
+): Promise<string | null> {
+  if (row.headerMediaKey) return storage.url(row.headerMediaKey, MEDIA_PREVIEW_TTL_S);
+  return row.headerSampleUrl && /^https?:\/\//i.test(row.headerSampleUrl)
+    ? row.headerSampleUrl
+    : null;
+}
+
 /** The template detail with a link to its stored header file (null when none was stored). */
 export async function detailWithMedia(
   storage: MediaStorageService,

@@ -67,6 +67,23 @@ describe('template preview: the pieces', () => {
     expect(previewHeaderOf({ attachmentType: null, header: '  ' })).toBeNull();
   });
 
+  it('carries the header file link only when the caller has one', () => {
+    expect(previewHeaderOf({ attachmentType: 'video', header: null }, FILE_URL)).toEqual({
+      format: 'video',
+      text: null,
+      mediaUrl: FILE_URL,
+    });
+    expect(previewHeaderOf({ attachmentType: 'video', header: null }, null)).toEqual({
+      format: 'video',
+      text: null,
+    });
+    // A location pin has no file, so no link is passed for it and none is drawn.
+    expect(previewHeaderOf({ attachmentType: 'location', header: null }, null)).toEqual({
+      format: 'location',
+      text: null,
+    });
+  });
+
   it('carries no file locator for a media header, and a blank footer is none', () => {
     const p = templatePreviewOf({
       attachmentType: 'document',
@@ -82,6 +99,7 @@ const ctx: RequestContext = { requestId: 'r', orgId: 1, actorType: 'user', actor
 const A = '8a1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e11';
 const B = '8a1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e12';
 const GONE = '8a1c7a52-3d7a-4a53-9b6e-2f0d2c1a9e13';
+const FILE_URL = 'https://files.example/header.mp4';
 
 const row = (uuid: string, over: Partial<TemplateRow> = {}): TemplateRow =>
   ({
@@ -121,6 +139,9 @@ function setup(page: MessageResponse[]) {
         page: { hasMoreBefore: false, hasMoreAfter: false, limit: 50 },
       }),
     } as never,
+    {
+      previewFileUrl: async (r: TemplateRow) => (r.uuid === B ? FILE_URL : null),
+    } as never,
   );
   const read = () =>
     RequestContextStore.run(ctx, () => service.listMessages('conv', { limit: 50 } as never));
@@ -143,7 +164,12 @@ describe('InboxThreadService: template previews on a thread page', () => {
       footer: 'Reply STOP to opt out',
       buttons: [{ type: 'quick_reply', text: 'Yes' }],
     });
-    expect(data[1]!.template!.preview!.header).toEqual({ format: 'video', text: null });
+    expect(data[1]!.template!.preview!.header).toEqual({
+      format: 'video',
+      text: null,
+      mediaUrl: FILE_URL,
+    });
+    expect(data[0]!.template!.preview!.header).not.toHaveProperty('mediaUrl');
     expect(data[2]!.template!.preview).toEqual(data[0]!.template!.preview);
     expect(data[3]!.template).toBeNull();
   });
