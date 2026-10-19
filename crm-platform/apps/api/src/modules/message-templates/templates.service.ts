@@ -158,9 +158,13 @@ export class TemplatesService {
     return detailWithMedia(this.storage, await this.require(uuid));
   }
 
-  /** A link to the template's header file for the team inbox to show in a thread (null when there is none to show). */
-  previewFileUrl(row: TemplateRow): Promise<string | null> {
-    return headerPreviewUrl(this.storage, row);
+  /**
+   * Links the header files a team-inbox thread shows: the returned function links one template row. The storage destination is resolved
+   * once for the whole read, on the first stored file asked for.
+   */
+  async previewLinker(): Promise<(row: TemplateRow) => Promise<string | null>> {
+    const link = await this.storage.linker(MEDIA_PREVIEW_TTL_S);
+    return (row) => headerPreviewUrl(link, row);
   }
 
   /**

@@ -52,6 +52,9 @@ export function StickerMedia({ media, alt }: { media: MessageMedia; alt: string 
 
 export function VideoMedia({ media }: { media: MessageMedia }) {
   const t = useTranslations('team-inbox-conversations.media');
+  const [broken, setBroken] = useState(false);
+  // A link that expired or was refused: offer the file as a link, not a player that does nothing.
+  if (broken) return <DocumentMedia media={{ ...media, name: media.name ?? t('video') }} />;
   return (
     <video
       controls
@@ -59,7 +62,7 @@ export function VideoMedia({ media }: { media: MessageMedia }) {
       aria-label={media.name ?? t('video')}
       className="max-h-72 w-full max-w-xs rounded-md bg-black"
     >
-      <source src={media.url} type={media.mime} />
+      <source src={media.url} type={media.mime} onError={() => setBroken(true)} />
       <a
         href={media.url}
         target="_blank"

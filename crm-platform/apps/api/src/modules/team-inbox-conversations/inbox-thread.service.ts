@@ -1,4 +1,4 @@
-import { HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { HttpStatus, Inject, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
   INBOX_TEMPLATE_LIST_MAX,
@@ -47,6 +47,8 @@ import { MediaUploadsRepository } from './media-uploads.repository';
  */
 @Injectable()
 export class InboxThreadService {
+  private readonly logger = new Logger(InboxThreadService.name);
+
   constructor(
     private readonly db: DatabaseService,
     private readonly repo: ConversationsRepository,
@@ -94,12 +96,17 @@ export class InboxThreadService {
     const orgId = RequestContextStore.orgId();
     const rows = await this.db.tx((tx) => this.templates.findManyByUuids(tx, orgId, ids));
     // A fresh link to each template's header file (its stored copy or the channel's sample), made at each read like the template detail's.
+    // A link that cannot be made costs its bubble the media only: the page still loads, with the marker.
+    const linkOf = await this.templateService.previewLinker();
     const byUuid = new Map(
       await Promise.all(
-        rows.map(
-          async (r) =>
-            [r.uuid, templatePreviewOf(r, await this.templateService.previewFileUrl(r))] as const,
-        ),
+        rows.map(async (r) => {
+          const file = await linkOf(r).catch((err: unknown) => {
+            this.logger.warn(`header link for template ${r.uuid} not made: ${String(err)}`);
+            return null;
+          });
+          return [r.uuid, templatePreviewOf(r, file)] as const;
+        }),
       ),
     );
     return messages.map((m) => {

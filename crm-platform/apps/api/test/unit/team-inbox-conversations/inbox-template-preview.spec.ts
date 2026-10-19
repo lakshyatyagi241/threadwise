@@ -12,6 +12,65 @@ import {
 } from '../../../src/modules/team-inbox-conversations/inbox-template-rules';
 import { InboxThreadService } from '../../../src/modules/team-inbox-conversations/inbox-thread.service';
 import type { TemplateRow } from '../../../src/modules/message-templates';
+import {
+  headerPreviewUrl,
+  storedHeaderUrl,
+} from '../../../src/modules/message-templates/template-media';
+
+describe('template header link', () => {
+  const link = async (key: string) => `https://files.example/${key}`;
+  const row = (over: Partial<TemplateRow>) => over as TemplateRow;
+
+  it('links the stored upload first, then the channel sample when no stored link is made', async () => {
+    const keyed = row({
+      attachmentType: 'video',
+      headerMediaKey: 'template-media/1/a.mp4',
+      headerSampleUrl: 'https://cdn.example/s.mp4',
+    });
+    expect(await headerPreviewUrl(link, keyed)).toBe(
+      'https://files.example/template-media/1/a.mp4',
+    );
+    // Local disk gives no link for a stored file: the sample is the fallback.
+    expect(await headerPreviewUrl(async () => null, keyed)).toBe('https://cdn.example/s.mp4');
+  });
+
+  it('uses a sample only when it is a web address', async () => {
+    const withSample = (sample: string | null) =>
+      row({ attachmentType: 'image', headerMediaKey: null, headerSampleUrl: sample });
+    expect(await headerPreviewUrl(link, withSample('https://cdn.example/s.jpg'))).toBe(
+      'https://cdn.example/s.jpg',
+    );
+    expect(await headerPreviewUrl(link, withSample('javascript:alert(1)'))).toBeNull();
+    expect(await headerPreviewUrl(link, withSample(null))).toBeNull();
+  });
+
+  it('gives a location pin no file link, even with a stored key or sample', async () => {
+    expect(
+      await headerPreviewUrl(
+        link,
+        row({
+          attachmentType: 'location',
+          headerMediaKey: 'template-media/1/x',
+          headerSampleUrl: 'https://cdn.example/x',
+        }),
+      ),
+    ).toBeNull();
+  });
+
+  it('asks the storage linker only for a stored key', async () => {
+    const asked: string[] = [];
+    const spy = async (key: string) => {
+      asked.push(key);
+      return 'https://files.example/x';
+    };
+    expect(await storedHeaderUrl(spy, row({ headerMediaKey: null }))).toBeNull();
+    expect(asked).toEqual([]);
+    expect(await storedHeaderUrl(spy, row({ headerMediaKey: 'template-media/1/x' }))).toBe(
+      'https://files.example/x',
+    );
+    expect(asked).toEqual(['template-media/1/x']);
+  });
+});
 
 describe('template preview: the pieces', () => {
   it('names a button kind, treating an OTP button as copy code and anything unknown as other', () => {
@@ -119,7 +178,11 @@ const msg = (id: string, templateId: string | null, kind = 'template'): MessageR
     template: kind === 'template' ? { templateId, name: 'n', language: 'en', variables: {} } : null,
   }) as MessageResponse;
 
-function setup(page: MessageResponse[]) {
+function setup(
+  page: MessageResponse[],
+  linkerOf: (r: TemplateRow) => Promise<string | null> = async (r) =>
+    r.uuid === B ? FILE_URL : null,
+) {
   const findManyByUuids = vi.fn(async (_tx: unknown, _org: number, uuids: readonly string[]) =>
     [row(A), row(B, { header: null, attachmentType: 'video' })].filter((r) =>
       uuids.includes(r.uuid),
@@ -139,9 +202,7 @@ function setup(page: MessageResponse[]) {
         page: { hasMoreBefore: false, hasMoreAfter: false, limit: 50 },
       }),
     } as never,
-    {
-      previewFileUrl: async (r: TemplateRow) => (r.uuid === B ? FILE_URL : null),
-    } as never,
+    { previewLinker: async () => linkerOf } as never,
   );
   const read = () =>
     RequestContextStore.run(ctx, () => service.listMessages('conv', { limit: 50 } as never));
@@ -172,6 +233,16 @@ describe('InboxThreadService: template previews on a thread page', () => {
     expect(data[0]!.template!.preview!.header).not.toHaveProperty('mediaUrl');
     expect(data[2]!.template!.preview).toEqual(data[0]!.template!.preview);
     expect(data[3]!.template).toBeNull();
+  });
+
+  it('keeps the page and drops only the link when a header link cannot be made', async () => {
+    const { read } = setup([msg('1', A), msg('2', B)], async (r) => {
+      if (r.uuid === B) throw new Error('settings unreadable');
+      return null;
+    });
+    const { data } = await read();
+    expect(data[0]!.template!.preview!.header).toEqual({ format: 'text', text: 'Hello' });
+    expect(data[1]!.template!.preview!.header).toEqual({ format: 'video', text: null });
   });
 
   it('leaves a message whose template is gone, or was never linked, without a preview', async () => {
