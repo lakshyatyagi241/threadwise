@@ -8,7 +8,15 @@
  */
 export const MODULE_CEILING: Record<string, string[]> = {
   companies: ['record.companies.', 'record.company-properties.'],
-  'sales-docs': ['record.sales-docs.', 'record.sales-orders.', 'record.invoices.', 'record.recurring-invoices.', 'record.credit-notes.', 'record.payments.', 'record.tax-rates.'],
+  'sales-docs': [
+    'record.sales-docs.',
+    'record.sales-orders.',
+    'record.invoices.',
+    'record.recurring-invoices.',
+    'record.credit-notes.',
+    'record.payments.',
+    'record.tax-rates.',
+  ],
   deals: ['record.deals.', 'record.pipelines.'],
   // Task outcomes and the Sales Activities page are part of tasks: they close with it
   tasks: ['record.tasks.', 'settings.task_outcomes.', 'crm.activity_types.'],

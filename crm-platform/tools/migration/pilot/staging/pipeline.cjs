@@ -177,7 +177,13 @@ const ORDER = [
   'whatsapp',
 ].filter((n) => PANEL_STEPS.includes(n));
 // the WhatsApp number is two cycle steps (token import, cutover) shown as one panel step: it is done when the cutover is
-const EVENT_OF = { ship: 'preflight', init: 'preflight', complete: 'report', 'wa-credentials': 'whatsapp', 'wa-cutover': 'whatsapp' };
+const EVENT_OF = {
+  ship: 'preflight',
+  init: 'preflight',
+  complete: 'report',
+  'wa-credentials': 'whatsapp',
+  'wa-cutover': 'whatsapp',
+};
 
 const problem = ensureConfig();
 if (problem) fail(problem);

@@ -18,7 +18,8 @@ const { spawnSync } = require('child_process');
 const PHONE_ID = /^\d{5,32}$/;
 const DEFAULT_KIT = path.resolve(__dirname, '..', '..', 'exporter');
 
-const asStr = (v) => (v === undefined || v === null ? '' : String(v?.$numberLong ?? v?.$numberInt ?? v).trim());
+const asStr = (v) =>
+  v === undefined || v === null ? '' : String(v?.$numberLong ?? v?.$numberInt ?? v).trim();
 
 /** "+65 6250 2280" / "6562502280" -> "+6562502280"; null when it does not look like a number */
 function address(v) {
@@ -61,10 +62,16 @@ function buildMap({ botids, docs }, orgName) {
     if (exts.size === 1) map[b] = entry(numbers.get([...exts][0]));
     else if (exts.size === 0 && ids.length === 1 && numbers.size === 1) {
       map[b] = entry([...numbers.values()][0]);
-      notes.push('the only botid was paired with the only live number (the configuration document names a different chatbot_id)');
+      notes.push(
+        'the only botid was paired with the only live number (the configuration document names a different chatbot_id)',
+      );
     } else {
       unresolved.push(b);
-      notes.push(exts.size > 1 ? `botid ${b}: several live numbers, not guessed` : `botid ${b}: no live WhatsApp number found`);
+      notes.push(
+        exts.size > 1
+          ? `botid ${b}: several live numbers, not guessed`
+          : `botid ${b}: no live WhatsApp number found`,
+      );
     }
   }
   if (!ids.length) notes.push('the workspace has no chat history: no botid to key the map with');
@@ -73,11 +80,15 @@ function buildMap({ botids, docs }, orgName) {
 
 function readWorkspace(ws) {
   const kit = process.env.GETA_MONGO_KIT || DEFAULT_KIT;
-  const r = spawnSync(process.execPath, [path.join(kit, 'bin', 'mongo-eval.cjs'), '--query', 'wa', '--workspace', ws], {
-    encoding: 'utf8',
-    timeout: 120000,
-    env: { ...process.env, MSYS_NO_PATHCONV: '1' },
-  });
+  const r = spawnSync(
+    process.execPath,
+    [path.join(kit, 'bin', 'mongo-eval.cjs'), '--query', 'wa', '--workspace', ws],
+    {
+      encoding: 'utf8',
+      timeout: 120000,
+      env: { ...process.env, MSYS_NO_PATHCONV: '1' },
+    },
+  );
   const m = /@@WA@@(\{.*\})/.exec(r.stdout || '');
   if (!m) throw new Error(`no answer from the read replica (exit ${r.status}; host key / VPN?)`);
   return JSON.parse(m[1]);
@@ -90,7 +101,9 @@ if (require.main === module) {
   const flag = (n) => (a.includes(`--${n}`) ? a[a.indexOf(`--${n}`) + 1] : undefined);
   const ws = flag('workspace');
   if (!ws || !/^[\w.+-]+$/.test(ws)) {
-    console.error('usage: wa-numbers.cjs --workspace <waboo db name> --name "Org name" [--out <file>]');
+    console.error(
+      'usage: wa-numbers.cjs --workspace <waboo db name> --name "Org name" [--out <file>]',
+    );
     process.exit(2);
   }
   let res;

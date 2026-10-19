@@ -68,7 +68,13 @@ interface Core {
     customerId?: string;
     quantity?: number;
     discount?: number;
-    config: Array<{ code: string; name?: string; status?: unknown; limit?: unknown; visible?: unknown }>;
+    config: Array<{
+      code: string;
+      name?: string;
+      status?: unknown;
+      limit?: unknown;
+      visible?: unknown;
+    }>;
   };
   sub?: { number?: string; invoiceId?: string; paymentMethod?: string; paymentTerms?: string };
   readOn: string;
@@ -87,7 +93,11 @@ const ianaOf = (z: unknown): string | null => {
   }
 };
 export const slugOfPlan = (code: string): string =>
-  code.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_+|_+$/g, '').slice(0, 32);
+  code
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '_')
+    .replace(/^_+|_+$/g, '')
+    .slice(0, 32);
 
 const isOff = (s: unknown): boolean => s === false || String(s).toLowerCase() === 'inactive';
 const num = (v: unknown): number | null => {
@@ -102,18 +112,28 @@ const num = (v: unknown): number | null => {
 export function derivePlan(
   core: Core,
   base: { limits: Record<string, number>; features: Record<string, boolean> },
-): { slug: string; name: string; amount: number; limits: Record<string, number>; features: Record<string, boolean>; notes: string[] } {
+): {
+  slug: string;
+  name: string;
+  amount: number;
+  limits: Record<string, number>;
+  features: Record<string, boolean>;
+  notes: string[];
+} {
   const s = core.subscription;
   const slug = slugOfPlan(s.planCode);
-  if (!PLAN_SLUG.test(slug) || !/[a-z]/.test(slug)) throw new Error(`CORE_PLAN_SLUG: ${s.planCode} gives no valid plan slug`);
+  if (!PLAN_SLUG.test(slug) || !/[a-z]/.test(slug))
+    throw new Error(`CORE_PLAN_SLUG: ${s.planCode} gives no valid plan slug`);
   const cfg = new Map(s.config.map((c) => [c.code, c]));
   const on = (code: string): boolean => cfg.has(code) && !isOff(cfg.get(code)!.status);
   const notes: string[] = [];
   const features: Record<string, boolean> = {};
   for (const k of Object.keys(base.features)) features[k] = false;
-  for (const [feature, codes] of Object.entries(FEATURE_FROM_WABOO)) features[feature] = codes.some(on);
+  for (const [feature, codes] of Object.entries(FEATURE_FROM_WABOO))
+    features[feature] = codes.some(on);
   const limits: Record<string, number> = {};
-  for (const [k, v] of Object.entries(base.limits)) limits[k] = LIMITS_KEPT_FROM_BASE.has(k) ? v : 0;
+  for (const [k, v] of Object.entries(base.limits))
+    limits[k] = LIMITS_KEPT_FROM_BASE.has(k) ? v : 0;
   for (const [limit, code] of Object.entries(LIMIT_FROM_WABOO)) {
     const n = num(cfg.get(code)?.limit);
     if (on(code) && n !== null && n > 0) limits[limit] = n;
@@ -124,7 +144,9 @@ export function derivePlan(
   if (autos && flows) limits.flows = autos + flows;
   else if (autos || flows) limits.flows = (autos ?? 0) + (flows ?? 0);
   const closed = Object.entries(features).filter(([, v]) => !v).length;
-  notes.push(`${Object.values(features).filter(Boolean).length} features open, ${closed} closed (only what the Waboo plan has)`);
+  notes.push(
+    `${Object.values(features).filter(Boolean).length} features open, ${closed} closed (only what the Waboo plan has)`,
+  );
   return {
     slug,
     name: `${s.name ?? s.planCode} (Waboo ${s.planCode})`.slice(0, 120),
@@ -155,38 +177,77 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         ),
       )
     ).rows[0] as { id: number | string } | undefined;
-    if (!org) throw new Error(`CORE_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`);
+    if (!org)
+      throw new Error(
+        `CORE_NO_ORG: no organization "${o.orgSlug}" made by this tool for ${o.client}`,
+      );
     const orgId = Number(org.id);
 
     // --- plan ------------------------------------------------------------------------------------------------------------------
     const baseRow = (
       await withPrivileged(owner.db, (tx) =>
-        tx.execute(sql`SELECT limits, features FROM plans WHERE slug = 'enterprise' AND kind = 'plan'`),
+        tx.execute(
+          sql`SELECT limits, features FROM plans WHERE slug = 'enterprise' AND kind = 'plan'`,
+        ),
       )
     ).rows[0] as { limits: Record<string, number>; features: Record<string, boolean> } | undefined;
     if (!baseRow) throw new Error('CORE_NO_BASE_PLAN: the platform plan "enterprise" is missing');
     const plan = derivePlan(core, baseRow);
     const s = core.subscription;
-    o.log(`  core  ${o.client}: org ${orgId}; Waboo plan ${s.planCode} -> platform plan "${plan.slug}" (hidden), price ${plan.amount}`);
-    o.log(`  core  limits changed: ${Object.entries(plan.limits).filter(([k, v]) => baseRow.limits[k] !== v).map(([k, v]) => `${k}=${v}`).join(', ') || 'none'}; ${plan.notes.join('; ') || 'no feature closed'}`);
+    o.log(
+      `  core  ${o.client}: org ${orgId}; Waboo plan ${s.planCode} -> platform plan "${plan.slug}" (hidden), price ${plan.amount}`,
+    );
+    o.log(
+      `  core  limits changed: ${
+        Object.entries(plan.limits)
+          .filter(([k, v]) => baseRow.limits[k] !== v)
+          .map(([k, v]) => `${k}=${v}`)
+          .join(', ') || 'none'
+      }; ${plan.notes.join('; ') || 'no feature closed'}`,
+    );
 
     // --- time zone: Waboo shows every time in the workspace's zone; WaDesk shows it in organizations.settings.timezone (and workspace_settings.timezone), default UTC ------
-    const tz = (core.workspace.timezone?.utc ?? []).map(ianaOf).find((z): z is string => z !== null) ?? null;
-    o.log(`  core  time zone: ${tz ?? 'not stated in geta_core (stays as it is)'}; WaDesk shows times in it (only replaces the default UTC)`);
+    const tz =
+      (core.workspace.timezone?.utc ?? []).map(ianaOf).find((z): z is string => z !== null) ?? null;
+    o.log(
+      `  core  time zone: ${tz ?? 'not stated in geta_core (stays as it is)'}; WaDesk shows times in it (only replaces the default UTC)`,
+    );
 
     // --- role grants (computed in both modes) ------------------------------------------------------------------------------------
     const config = loadAccessConfig();
     const roleDocs = await collect(new NdjsonDirSource(o.dumpsDir).read(o.client, 'roles'));
     const rolePlans = buildRolePlan(o.client, roleDocs, config);
-    const defsRows = (await worker.db.execute(sql`SELECT key, category, supports_scope, plan_feature, app_slug FROM permission_defs`)).rows as Array<{
-      key: string; category: string; supports_scope: boolean; plan_feature: string | null; app_slug: string | null;
+    const defsRows = (
+      await worker.db.execute(
+        sql`SELECT key, category, supports_scope, plan_feature, app_slug FROM permission_defs`,
+      )
+    ).rows as Array<{
+      key: string;
+      category: string;
+      supports_scope: boolean;
+      plan_feature: string | null;
+      app_slug: string | null;
     }>;
     const defs = new Map<string, KeyDef>(
-      defsRows.map((r) => [r.key, { category: r.category, supportsScope: r.supports_scope, planFeature: r.plan_feature, appSlug: r.app_slug }]),
+      defsRows.map((r) => [
+        r.key,
+        {
+          category: r.category,
+          supportsScope: r.supports_scope,
+          planFeature: r.plan_feature,
+          appSlug: r.app_slug,
+        },
+      ]),
     );
     // the plan decides which feature-gated keys stay open: judge against the NEW plan's features (it is not stored yet in a dry run)
     const featureOpen = (f: string): boolean => plan.features[f] === true;
-    const grantPlan: Array<{ name: string; roleId: number; grants: Array<{ key: string; scope: string }>; withheld: number; unmapped: number }> = [];
+    const grantPlan: Array<{
+      name: string;
+      roleId: number;
+      grants: Array<{ key: string; scope: string }>;
+      withheld: number;
+      unmapped: number;
+    }> = [];
     for (const d of roleDocs) {
       const rp = rolePlans.get(docKeys(d)[0]?.key ?? '');
       if (!rp || rp.deleted || rp.target !== 'custom') continue;
@@ -206,19 +267,32 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         o.log(`  core  role ${rp.name}: not loaded yet, skipped`);
         continue;
       }
-      grantPlan.push({ name: rp.name, roleId: Number(mapped.target_id), grants: res.grants, withheld: res.adminWithheld.length, unmapped: res.unmapped.length });
+      grantPlan.push({
+        name: rp.name,
+        roleId: Number(mapped.target_id),
+        grants: res.grants,
+        withheld: res.adminWithheld.length,
+        unmapped: res.unmapped.length,
+      });
     }
     for (const g of grantPlan)
-      o.log(`  core  role "${g.name}": ${g.grants.length} grants (${g.grants.filter((x) => x.scope === 'own').length} own-scope), ${g.withheld} admin-class withheld, ${g.unmapped} Waboo permissions grant nothing`);
+      o.log(
+        `  core  role "${g.name}": ${g.grants.length} grants (${g.grants.filter((x) => x.scope === 'own').length} own-scope), ${g.withheld} admin-class withheld, ${g.unmapped} Waboo permissions grant nothing`,
+      );
 
     // --- module ceiling: close the modules the Waboo workspace had no permission in ------------------------------------------------
     const catalogue = await permissionCatalogue(new NdjsonDirSource(o.dumpsDir), o.client, config);
     const oldKeys = oldWorkspaceKeys(catalogue, config.permissionMap);
     const hadRoles = catalogue.some((r) => r.rolesWithAccess > 0);
     const ceiling = hadRoles ? closedKeys(loadModuleCeiling(), oldKeys, [...defs.keys()]) : null;
-    if (!ceiling) o.log('  core  module ceiling: the dump has no role with a permission, so nothing is closed (the old permissions are unknown)');
+    if (!ceiling)
+      o.log(
+        '  core  module ceiling: the dump has no role with a permission, so nothing is closed (the old permissions are unknown)',
+      );
     else
-      o.log(`  core  module ceiling: ${oldKeys.size} keys held in Waboo; kept ${ceiling.kept.join(', ') || 'none'}; CLOSED ${ceiling.closed.join(', ') || 'none'} (${ceiling.keys.length} keys denied on the preset roles)`);
+      o.log(
+        `  core  module ceiling: ${oldKeys.size} keys held in Waboo; kept ${ceiling.kept.join(', ') || 'none'}; CLOSED ${ceiling.closed.join(', ') || 'none'} (${ceiling.keys.length} keys denied on the preset roles)`,
+      );
 
     // --- workspace settings: pipelines, lost reasons, consent keywords, auto-assignment -------------------------------------------
     const settingsPlan = planSettings(core.settings, core.workspace.autoAssignment);
@@ -226,7 +300,10 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       `  core  settings: ${settingsPlan.pipelines.length} pipeline(s) [${settingsPlan.pipelines.map((p) => `${p.name}: ${p.stages.map((x) => x.name).join(' > ')}`).join(' | ')}]; ${settingsPlan.lostReasons.length} lost reason(s); consent ${settingsPlan.consent ? 'keywords from Waboo' : 'not stated (the app defaults stay)'}; ${settingsPlan.taskOutcomes.length} task outcome(s); last login for ${settingsPlan.lastLogins.length} user(s); auto-assignment ${settingsPlan.autoAssign ? 'on' : 'off'}`,
     );
     if (settingsPlan.consent?.note) o.log(`  core  consent: ${settingsPlan.consent.note}`);
-    if (!core.settings) o.log('  core  settings: core.json has none (re-run core-opening.cjs): nothing of the above is written');
+    if (!core.settings)
+      o.log(
+        '  core  settings: core.json has none (re-run core-opening.cjs): nothing of the above is written',
+      );
 
     if (!o.apply) {
       o.log('  core  DRY RUN: nothing was written (add --apply --confirm-org-slug <slug>)');
@@ -245,7 +322,9 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       provider: core.workspace.provider ?? null,
       readOn: core.readOn,
     };
-    const periodEnd = s.nextBilling ? new Date(`${s.nextBilling}T00:00:00+05:30`).toISOString() : null;
+    const periodEnd = s.nextBilling
+      ? new Date(`${s.nextBilling}T00:00:00+05:30`).toISOString()
+      : null;
     const planInserted = await withPrivileged(owner.db, async (tx) => {
       const ins = await tx.execute(sql`
         INSERT INTO plans (slug, name, detail, kind, amount, currency, billing_unit, billing_duration, is_active, is_default, sort_order, limits, features)
@@ -279,22 +358,40 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
           UPDATE workspace_settings SET timezone = ${tz}, updated_at = now(), row_version = row_version + 1
           WHERE org_id = ${orgId} AND timezone = 'UTC'`);
       }
-      return ins.rows.length === 0 ? 'left' : (ins.rows[0] as { inserted: boolean }).inserted ? 'created' : 'updated';
+      return ins.rows.length === 0
+        ? 'left'
+        : (ins.rows[0] as { inserted: boolean }).inserted
+          ? 'created'
+          : 'updated';
     });
-    o.log(`  core  plan "${plan.slug}": ${planInserted === 'created' ? 'created' : planInserted === 'updated' ? 'already made by this tool: limits and features brought in line' : 'already existed (not made by this tool), left as it is'}; organization on it; plan ends ${periodEnd ?? 'n/a'}`);
+    o.log(
+      `  core  plan "${plan.slug}": ${planInserted === 'created' ? 'created' : planInserted === 'updated' ? 'already made by this tool: limits and features brought in line' : 'already existed (not made by this tool), left as it is'}; organization on it; plan ends ${periodEnd ?? 'n/a'}`,
+    );
 
     // --- subscription (tenant) -------------------------------------------------------------------------------------------------------
-    const istIso = (d?: string | null): string | null => (d ? new Date(`${d}T00:00:00+05:30`).toISOString() : null);
+    const istIso = (d?: string | null): string | null =>
+      d ? new Date(`${d}T00:00:00+05:30`).toISOString() : null;
     const meta = {
       // the plan card (subscription.service current()) reads these two
       activatedAt: istIso(s.activation),
       previousBillingAt: istIso(s.lastBilling),
       legacy: {
         waboo: {
-          planCode: s.planCode, planName: s.name ?? null, subscriptionNumber: core.sub?.number ?? null, invoiceId: core.sub?.invoiceId ?? null,
-          paymentMethod: core.sub?.paymentMethod ?? null, paymentTerms: core.sub?.paymentTerms ?? null, subTotal: s.subTotal ?? null,
-          discount: s.discount ?? null, quantity: s.quantity ?? null, activation: s.activation ?? null, lastBilling: s.lastBilling ?? null,
-          interval: s.interval ?? null, intervalUnit: s.intervalUnit ?? null, status: s.status ?? null, config: s.config,
+          planCode: s.planCode,
+          planName: s.name ?? null,
+          subscriptionNumber: core.sub?.number ?? null,
+          invoiceId: core.sub?.invoiceId ?? null,
+          paymentMethod: core.sub?.paymentMethod ?? null,
+          paymentTerms: core.sub?.paymentTerms ?? null,
+          subTotal: s.subTotal ?? null,
+          discount: s.discount ?? null,
+          quantity: s.quantity ?? null,
+          activation: s.activation ?? null,
+          lastBilling: s.lastBilling ?? null,
+          interval: s.interval ?? null,
+          intervalUnit: s.intervalUnit ?? null,
+          status: s.status ?? null,
+          config: s.config,
         },
       },
     };
@@ -308,7 +405,9 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         WHERE NOT EXISTS (SELECT 1 FROM subscriptions x WHERE x.org_id = ${orgId} AND x.gateway = 'zoho' AND x.gateway_subscription_id = ${s.id})
         RETURNING 1`),
     );
-    o.log(`  core  subscription ${s.id}: ${subIns.rows.length ? 'created (active)' : 'already existed'}`);
+    o.log(
+      `  core  subscription ${s.id}: ${subIns.rows.length ? 'created (active)' : 'already existed'}`,
+    );
 
     // --- role grants (tenant) --------------------------------------------------------------------------------------------------------
     let inserted = 0;
@@ -345,17 +444,26 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       o.log(`  core  module ceiling: ${denied} preset grants closed`);
     }
     if (inserted > 0 || denied > 0) {
-      const b = await bumpRolesVersion({ client: o.client, orgId, ownerDb: owner.db, inserted: true, touched: true });
+      const b = await bumpRolesVersion({
+        client: o.client,
+        orgId,
+        ownerDb: owner.db,
+        inserted: true,
+        touched: true,
+      });
       o.log(`  core  roles_version ${b.before} -> ${b.after}`);
     }
 
     // --- workspace settings, once (a re-run never overwrites what a person changed afterwards) -----------------------------------
     if (core.settings || settingsPlan.autoAssign) {
-      const done = (
-        await withPrivileged(owner.db, (tx) =>
-          tx.execute(sql`SELECT 1 FROM migration.run_log WHERE source_client = ${o.client} AND collection = '_org' AND step = 'settings'`),
-        )
-      ).rows.length > 0;
+      const done =
+        (
+          await withPrivileged(owner.db, (tx) =>
+            tx.execute(
+              sql`SELECT 1 FROM migration.run_log WHERE source_client = ${o.client} AND collection = '_org' AND step = 'settings'`,
+            ),
+          )
+        ).rows.length > 0;
       if (done) o.log('  core  settings: already applied by an earlier run, left as they are');
       else {
         const r = await applySettings(owner.db, orgId, settingsPlan);
@@ -382,7 +490,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       ).rows as Array<{ name: string; lim: number; open_n: number }>;
       for (const r of rows)
         o.log(
-          `  core  chat limit: ${r.name} holds ${r.open_n} open chat(s) of a limit of ${r.lim}${r.open_n >= r.lim ? ' (AT THE LIMIT: the app\'s routing skips this agent until a chat is closed)' : ''}`,
+          `  core  chat limit: ${r.name} holds ${r.open_n} open chat(s) of a limit of ${r.lim}${r.open_n >= r.lim ? " (AT THE LIMIT: the app's routing skips this agent until a chat is closed)" : ''}`,
         );
     });
 
@@ -394,13 +502,26 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         )
       ).rows[0] as { counts?: Record<string, string[]> } | undefined;
       if (!rec?.counts) return;
-      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes', 'workspace_settings']);
+      const fresh = await digest(tx, orgId, [
+        'org_plan_state',
+        'subscriptions',
+        'role_grants',
+        'pipelines',
+        'pipeline_stages',
+        'deal_lost_reasons',
+        'contact_consent_settings',
+        'routing_rules',
+        'task_outcomes',
+        'workspace_settings',
+      ]);
       await tx.execute(sql`
         UPDATE migration.run_log SET counts = ${JSON.stringify({ ...rec.counts, ...fresh })}::jsonb, updated_at = now()
         WHERE source_client = ${o.client} AND collection = '_org' AND step = 'baseline'`);
     });
     const after = await planRow(worker.db, orgId);
-    o.log(`  core  done: plan found ${after?.plan_found ? 'yes' : 'no'}, feature gate sample (form_builder) ${featureResolver(after)('form_builder') ? 'open' : 'closed'}`);
+    o.log(
+      `  core  done: plan found ${after?.plan_found ? 'yes' : 'no'}, feature gate sample (form_builder) ${featureResolver(after)('form_builder') ? 'open' : 'closed'}`,
+    );
   } finally {
     await worker.close();
     await owner.close();

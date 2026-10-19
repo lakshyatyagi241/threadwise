@@ -181,7 +181,8 @@ export async function verifyLeads(a: Args): Promise<void> {
   const firstOnly = (list: LVerdict[]): LVerdict[] => {
     const seen = new Set<string>();
     return list.filter(
-      (v) => !seen.has(`${v.collection}\u0000${v.key}`) && seen.add(`${v.collection}\u0000${v.key}`),
+      (v) =>
+        !seen.has(`${v.collection}\u0000${v.key}`) && seen.add(`${v.collection}\u0000${v.key}`),
     );
   };
   events.splice(0, events.length, ...firstOnly(events));
