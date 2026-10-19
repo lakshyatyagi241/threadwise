@@ -15,8 +15,9 @@ import type { PushUiState, TestOutcome } from '../push/support';
  * Account, Notifications: "Browser notifications". An OS-level notification for the events that reach your bell, even with the CRM
  * closed, on the devices where you allowed it. It does not exist at all when the deployment has no push keys.
  *
- * Permission is asked only from the click on "Enable" (never on page load), and every state the browser can be in has its own honest
- * sentence: unsupported, needs installing (iPhone and iPad), blocked in the browser's settings, off, on for this device.
+ * Permission is asked from the click on "Enable" here, or by the prompt that asks once on arrival until the person answers. Every state
+ * the browser can be in has its own honest sentence: unsupported, needs installing (iPhone and iPad), blocked in the browser's
+ * settings, off, on for this device.
  */
 export function BrowserNotificationsCard() {
   const deployment = usePushDeployment();

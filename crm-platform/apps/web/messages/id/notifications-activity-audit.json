@@ -513,6 +513,11 @@
           "watch": "Anda akan melihat pop-up, dan angka lonceng serta judul tab berubah.",
           "notConnected": "Pembaruan langsung tidak terhubung di halaman ini, sehingga pop-up tidak bisa muncul di sini. Muat ulang halaman lalu coba lagi.",
           "off": "Tidak ada notifikasi yang dibuat di lonceng: lonceng dimatikan untuk \"Notifikasi uji\" di tabel di bawah, atau oleh pemilik ruang kerja Anda."
+        },
+        "prompt": {
+          "message": "Aktifkan notifikasi browser untuk mendapat pemberitahuan atas peristiwa yang Anda pilih, meski CRM tertutup.",
+          "enable": "Izinkan notifikasi",
+          "enabling": "Mengaktifkan..."
         }
       }
     },

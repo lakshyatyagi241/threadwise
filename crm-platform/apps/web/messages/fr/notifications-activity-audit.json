@@ -513,6 +513,11 @@
           "watch": "Vous devriez voir un pop-up, et le nombre de la cloche ainsi que le titre de l’onglet changer.",
           "notConnected": "Les mises à jour en direct ne sont pas connectées sur cette page, le pop-up ne peut donc pas s’y afficher. Rechargez la page et réessayez.",
           "off": "Aucune notification n’a été créée dans la cloche : la cloche est désactivée pour « Notification de test » dans le tableau ci-dessous, ou par le propriétaire de votre espace de travail."
+        },
+        "prompt": {
+          "message": "Activez les notifications du navigateur pour être alerté des événements que vous choisissez, même lorsque le CRM est fermé.",
+          "enable": "Autoriser les notifications",
+          "enabling": "Activation..."
         }
       }
     },
