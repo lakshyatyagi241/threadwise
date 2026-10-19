@@ -44,6 +44,11 @@
         "editJobTitle": "Sửa chức danh",
         "jobTitleConflict": "Người khác đã đổi liên hệ này trước. Liên hệ đã được tải lại; hãy thử lại.",
         "jobTitleFailed": "Không thể lưu chức danh. Hãy thử lại.",
+        "jobTitleRequired": "Không thể để trống chức danh: không gian làm việc này yêu cầu có chức danh.",
+        "jobTitleOtherRequired": "Các thuộc tính bắt buộc khác của liên hệ này đang trống. Mở Sửa liên hệ để điền.",
+        "jobTitleNotEditable": "Chức danh ở chế độ chỉ đọc hoặc bị ẩn trong không gian làm việc này nên không thể sửa tại đây.",
+        "jobTitleForbidden": "Bạn không có quyền sửa liên hệ này.",
+        "jobTitleGone": "Liên hệ này không còn khả dụng với bạn: đã bị xóa hoặc được giao cho người khác.",
         "owner": "Người phụ trách"
       },
       "social": {

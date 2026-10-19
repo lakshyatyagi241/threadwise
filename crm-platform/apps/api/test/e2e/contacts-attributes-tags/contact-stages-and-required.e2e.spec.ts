@@ -310,7 +310,7 @@ describe('required properties on create and update', () => {
     expect(filled.status).toBe(201);
   });
 
-  it('a save that edits properties is held to the rules; a stage or owner change alone is not', async () => {
+  it('a save is held to the properties it names; a stage or owner change, or an edit of another property, is not', async () => {
     // A contact that predates the rule (arranged straight in the table).
     const [uuid] = await api.seedContacts(t, [{ name: 'Old contact', phone: '+919811100001' }]);
     const row = (await api.as(t.admin).get(`/v2/contacts/${uuid}`)).body;
@@ -321,17 +321,28 @@ describe('required properties on create and update', () => {
       .send({ source: 'import', rowVersion: row.rowVersion });
     expect(stageOnly.status, JSON.stringify(stageOnly.body)).toBe(200);
 
-    const editsProps = await api
+    // An inline edit of one property (the job title on the header) does not answer for a required property it never mentioned.
+    const editsOther = await api
       .as(t.admin)
       .patch(`/v2/contacts/${uuid}`)
       .send({ customFields: { needs_visa: 'no' }, rowVersion: stageOnly.body.rowVersion });
-    expect(editsProps.status).toBe(422);
-    expect(editsProps.body.errors).toEqual([{ path: 'customFields.budget', message: 'required' }]);
+    expect(editsOther.status, JSON.stringify(editsOther.body)).toBe(200);
+
+    // The contact form sends every property, the blank required one as null: that save answers for it.
+    const formSave = await api
+      .as(t.admin)
+      .patch(`/v2/contacts/${uuid}`)
+      .send({
+        customFields: { needs_visa: 'no', budget: null },
+        rowVersion: editsOther.body.rowVersion,
+      });
+    expect(formSave.status).toBe(422);
+    expect(formSave.body.errors).toEqual([{ path: 'customFields.budget', message: 'required' }]);
 
     const fixed = await api
       .as(t.admin)
       .patch(`/v2/contacts/${uuid}`)
-      .send({ customFields: { budget: 5 }, rowVersion: stageOnly.body.rowVersion });
+      .send({ customFields: { budget: 5 }, rowVersion: editsOther.body.rowVersion });
     expect(fixed.status, JSON.stringify(fixed.body)).toBe(200);
 
     const clears = await api

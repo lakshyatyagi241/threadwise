@@ -10,12 +10,13 @@ import { updateContact } from '../../api/contacts';
 import { useContactFields } from '../../api/properties';
 import type { ContactRow } from '../../api/schemas';
 import {
+  jobTitleEditable,
   jobTitleField,
   jobTitleOf,
   socialLinks,
   type SocialNetwork,
 } from '../../lib/contact-overview';
-import { errorKind } from '../../lib/errors';
+import { jobTitleFailure } from '../../lib/errors';
 import type { OptIn } from '../../lib/subscription';
 import { GlobeIcon, PencilIcon } from '../icons';
 import { useRefreshContact } from './shared';
@@ -74,6 +75,8 @@ export function JobTitle({ contact }: { contact: ContactRow }) {
   const field = jobTitleField(fields.data);
   const refresh = useRefreshContact(contact.id);
   const current = jobTitleOf(contact, field);
+  // The API refuses a write to a read-only or formula property, so it is shown as text instead of offering an edit that cannot save.
+  const editable = canUpdate && jobTitleEditable(field);
   const [draft, setDraft] = useState<string | null>(null);
   const id = useId();
 
@@ -88,9 +91,9 @@ export function JobTitle({ contact }: { contact: ContactRow }) {
       await refresh();
     },
     onError: async (e) => {
-      const kind = errorKind(e);
-      toast(t(kind === 'conflict' ? 'jobTitleConflict' : 'jobTitleFailed'), 'danger');
-      if (kind === 'conflict') await refresh();
+      const why = jobTitleFailure(e, field!.key);
+      toast(t(why), 'danger');
+      if (why === 'jobTitleConflict') await refresh();
     },
   });
 
@@ -126,7 +129,7 @@ export function JobTitle({ contact }: { contact: ContactRow }) {
       />
     );
   }
-  if (!canUpdate)
+  if (!editable)
     return current ? (
       <p dir="auto" className="text-sm text-muted-foreground">
         {current}

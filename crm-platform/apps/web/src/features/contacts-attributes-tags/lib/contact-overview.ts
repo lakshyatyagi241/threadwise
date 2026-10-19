@@ -66,13 +66,21 @@ export function socialLinks(customFields: Readonly<Record<string, unknown>>): So
 
 const JOB_TITLE_KEYS = ['job_title', 'jobtitle', 'designation'] as const;
 
-/** The custom property the job title is kept in: an active, editable property of the workspace with one of the usual keys. */
+/**
+ * The custom property the job title is kept in: an active, visible property of the workspace with one of the usual keys. It may be
+ * read-only (see `jobTitleEditable`): the title still shows, but the API refuses a write to it.
+ */
 export function jobTitleField(fields: readonly FieldResponse[] | undefined): FieldResponse | null {
   for (const key of JOB_TITLE_KEYS) {
-    const f = (fields ?? []).find((x) => x.key === key && x.isActive && !x.isSystem);
+    const f = (fields ?? []).find((x) => x.key === key && x.isActive && !x.isSystem && !x.isHidden);
     if (f) return f;
   }
   return null;
+}
+
+/** Whether the API accepts a write to the property: not read-only and not a formula (CON_PROPERTY_NOT_EDITABLE otherwise). */
+export function jobTitleEditable(field: FieldResponse | null): boolean {
+  return field !== null && !field.isReadOnly && field.fieldType !== 'formula';
 }
 
 /** The job title text the contact holds under `field`, empty when none. */

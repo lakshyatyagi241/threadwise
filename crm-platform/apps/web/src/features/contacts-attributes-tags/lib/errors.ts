@@ -117,3 +117,32 @@ export function planLimitOf(error: unknown): number | undefined {
 
 export const requestIdOf = (error: unknown): string | undefined =>
   error instanceof ApiError ? error.requestId : undefined;
+
+/** The message (under `contact.header`) that tells the person WHY an in-place job title save was refused. */
+export type JobTitleFailure =
+  | 'jobTitleConflict'
+  | 'jobTitleRequired'
+  | 'jobTitleOtherRequired'
+  | 'jobTitleNotEditable'
+  | 'jobTitleForbidden'
+  | 'jobTitleGone'
+  | 'jobTitleFailed';
+
+/**
+ * Chosen by the error `code` and the properties it names (`customFields.<key>`), never by the server's wording. `propertyKey` is the
+ * job title property: a required-property refusal that names it means the title itself may not be empty, one that names others means
+ * the edit made another property required (the full contact form can fill it in).
+ */
+export function jobTitleFailure(error: unknown, propertyKey: string): JobTitleFailure {
+  const kind = errorKind(error);
+  if (kind === 'conflict') return 'jobTitleConflict';
+  if (kind === 'propertyNotEditable') return 'jobTitleNotEditable';
+  if (kind === 'forbidden') return 'jobTitleForbidden';
+  if (kind === 'requiredProperty') {
+    const named = fieldErrors(error);
+    return `customFields.${propertyKey}` in named ? 'jobTitleRequired' : 'jobTitleOtherRequired';
+  }
+  // The scope of the caller's update permission answers 404 for a contact they may not edit (it also covers a deleted one).
+  if (error instanceof ApiError && error.status === 404) return 'jobTitleGone';
+  return 'jobTitleFailed';
+}
