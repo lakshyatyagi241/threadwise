@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { ActivityOptionRef, CallEntrySource, CallOutcome } from '@crm/contracts';
-import { optionRefColumns, optionRefFrom } from '../../crm/activity-types/activity-option-ref';
+import { optionRefColumns, optionRefFrom } from '../../crm';
 
 type Row = Record<string, unknown>;
 const rowsOf = (res: unknown): Row[] => (res as { rows: Row[] }).rows;

@@ -18,6 +18,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService, type GrantSet } from '../../../kernel/rbac/rbac.service';
 import {
+  ActivityTypesService,
   assertContactScope,
   ContactActivitiesRepository,
   ContactResolverService,
@@ -41,7 +42,6 @@ import {
   type EntryRow,
   type NewEntry,
 } from './call-log-entries.repository';
-import { ActivityTypesService } from '../../crm/activity-types/activity-types.service';
 import { CallLoggingSettingsService } from './call-logging-settings.service';
 
 const MODULE = 'call_log_entries';

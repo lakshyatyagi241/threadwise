@@ -130,6 +130,8 @@ export {
 } from './deals';
 export type { DealRow } from './deals';
 export { TasksService, TasksRepository, toTaskResponse } from './tasks';
+// Sales activities settings: the lists tasks, meetings and logged calls pick from (call logging reads them through here).
+export { ActivityTypesService, optionRefColumns, optionRefFrom } from './activity-types';
 export type { TaskRow } from './tasks';
 export { TasksWorkerModule } from './tasks/tasks-worker.module';
 export { SalesDocsService, SalesDocsRepository, SALES_DOC_INVOICE_PORT } from './sales-docs';
