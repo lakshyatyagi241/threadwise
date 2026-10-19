@@ -1,3 +1,6 @@
+import { isIP } from 'node:net';
+import { isBlockedAddress } from '../../infra/net/blocked-address';
+
 /**
  * Pre-flight checks on the template a broadcast will send (TW-BCAST-012). They refuse the broadcast before any
  * quota is spent or any row is written. All pure so they can be tested without a database.
@@ -19,22 +22,6 @@ export const AUTH_TEMPLATE_MESSAGE =
   'Authentication (OTP) templates cannot be broadcast — each recipient needs a unique verifiable code. ' +
   'Send them 1:1 from your backend using the transactional template send endpoint instead.';
 
-const PRIVATE_V4 = [
-  /^10\./,
-  /^127\./,
-  /^169\.254\./,
-  /^172\.(1[6-9]|2\d|3[01])\./,
-  /^192\.168\./,
-  /^0\./,
-  /^(22[4-9]|2[3-5]\d)\./,
-];
-
-const isIpLiteral = (host: string) => /^\d{1,3}(\.\d{1,3}){3}$/.test(host) || host.includes(':');
-const isPrivateIp = (host: string) =>
-  host.includes(':')
-    ? host === '::1' || /^(fc|fd|fe80)/i.test(host)
-    : PRIVATE_V4.some((r) => r.test(host));
-
 /** Meta (and every recipient's client) must be able to fetch the media: https, public host. Null means fine. */
 export function mediaUrlProblem(url: string): string | null {
   let parsed: URL;
@@ -48,8 +35,8 @@ export function mediaUrlProblem(url: string): string | null {
     return `Media URL must be HTTPS for Meta to fetch it (got: ${scheme}). Configure a public https:// media domain.`;
   }
   const host = parsed.hostname.replace(/^\[|\]$/g, '').toLowerCase();
-  if (isIpLiteral(host)) {
-    return isPrivateIp(host)
+  if (isIP(host) !== 0) {
+    return isBlockedAddress(host)
       ? `Media URL host '${host}' is a private/reserved IP. Meta cannot reach it. Use a public domain.`
       : null;
   }

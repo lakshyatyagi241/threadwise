@@ -167,7 +167,8 @@ const CATALOG_KEYS = new Set(QUICK_ACCESS_CATALOG.map((c) => c.key));
  */
 export function isSafeShortcutUrl(url: string): boolean {
   if (/^https?:\/\/\S/i.test(url)) return true;
-  return url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\');
+  // A browser drops tab, CR and LF from a URL before parsing it, so "/\n/evil.com" is "//evil.com".
+  return url.startsWith('/') && !/^\/[\t\r\n]*[\\/]/.test(url);
 }
 
 /** Reference's sanitiser: anything that is not an array is empty; unknown keys and unsafe or blank links are dropped; ten at most. */

@@ -12,7 +12,6 @@ export const CONSENT_KEYWORD_MAX_TEXT = 64;
 const INVISIBLE = /[\u200B-\u200F\u202A-\u202E\u2066-\u2069\uFEFF\u00AD]/gu;
 const ARABIC_MARKS = /[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED\u0640]/gu;
 const ALEF_VARIANTS = /[\u0622\u0623\u0625\u0671]/gu;
-const EDGE = /^[^\p{L}\p{N}]+|[^\p{L}\p{N}]+$/gu;
 const INNER = /[^\p{L}\p{N}]+/gu;
 
 /** Normal form used on both the keyword and the message. */
@@ -23,7 +22,6 @@ export function normaliseConsentText(input: string): string {
     .replace(ARABIC_MARKS, '')
     .replace(ALEF_VARIANTS, 'ا')
     .toLowerCase()
-    .replace(EDGE, '')
     .replace(INNER, ' ')
     .trim();
 }
@@ -114,5 +112,5 @@ export function hasOptOutInstruction(body: string, footers: string[] = []): bool
 export function appendOptOutLine(body: string, line: string, allLines: string[] = []): string {
   const l = line.trim();
   if (l === '' || hasOptOutInstruction(body, [l, ...allLines])) return body;
-  return `${body.replace(/\s+$/, '')}\n\n${l}`;
+  return `${body.trimEnd()}\n\n${l}`;
 }
