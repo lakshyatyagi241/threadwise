@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, type OnModuleDestroy } from '@nestjs/common';
+import { Inject, Injectable, Logger, type OnApplicationShutdown } from '@nestjs/common';
 import {
   withPrivileged,
   withTenant,
@@ -20,7 +20,7 @@ export const DB_CLIENT_PAIR = Symbol('DB_CLIENT_PAIR');
  * design exists to prevent.
  */
 @Injectable()
-export class DatabaseService implements OnModuleDestroy {
+export class DatabaseService implements OnApplicationShutdown {
   private readonly logger = new Logger(DatabaseService.name);
 
   constructor(@Inject(DB_CLIENT_PAIR) private readonly clients: DbClientPair) {}
@@ -87,7 +87,11 @@ export class DatabaseService implements OnModuleDestroy {
     return withPrivileged(this.primary, fn);
   }
 
-  async onModuleDestroy(): Promise<void> {
+  /**
+   * Closed in `onApplicationShutdown`, the last shutdown step, not `onModuleDestroy`: a job still running while the worker drains
+   * (WorkerDrainService) and a request still finishing need the pool until then.
+   */
+  async onApplicationShutdown(): Promise<void> {
     this.logger.log('closing database pools');
     await this.clients.close();
   }
