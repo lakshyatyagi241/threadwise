@@ -10,7 +10,12 @@ import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
 import { SendGuardModule } from './modules/auth';
 import { ApiKeyAccessModule } from './modules/public-api/api-key-access.module';
-import { JobMetricsModule, QueueDepthModule, WorkerHeartbeatModule } from './modules/platform-infrastructure';
+import {
+  JobMetricsModule,
+  QueueDepthModule,
+  RedisPressureModule,
+  WorkerHeartbeatModule,
+} from './modules/platform-infrastructure';
 import { RealtimeEmitterModule } from './realtime';
 import { WorkersModule } from './workers/workers.module';
 
@@ -58,6 +63,8 @@ import { WorkersModule } from './workers/workers.module';
     JobMetricsModule,
     // Backlog and oldest waiting age per queue: the signals a saturated queue shows before any job finishes late.
     QueueDepthModule,
+    // Redis memory/clients/evictions (crm_redis_*), and a pause for workers while Redis is at maxmemory instead of a hot error loop.
+    RedisPressureModule,
   ],
 })
 export class WorkerModule {}
