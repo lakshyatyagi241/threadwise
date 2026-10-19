@@ -9,7 +9,6 @@ import {
   retentionSpecOf,
   type RetentionItemId,
 } from '@crm/contracts';
-import { LOG_RETENTION_DAYS } from '../../../src/modules/faq-knowledge/faq.rules';
 import { FORM_EVENT_RETENTION_DAYS } from '../../../src/modules/forms-builder/form-retention-sweep.service';
 import { SYNC_RUN_RETENTION_DAYS } from '../../../src/modules/leads/lead-retention-sweep.service';
 import { FAILURE_RETENTION_DAYS } from '../../../src/modules/webhook-fanout/webhook-forward-retention.service';
@@ -20,7 +19,6 @@ import { FAILURE_RETENTION_DAYS } from '../../../src/modules/webhook-fanout/webh
  */
 describe('the built-in number of each sweep is the registry default of its item', () => {
   const pairs: Array<[RetentionItemId, number]> = [
-    ['faq_match_log', LOG_RETENTION_DAYS],
     ['assignment_runs', ASSIGNMENT_RUN_RETENTION_DAYS],
     ['form_events', FORM_EVENT_RETENTION_DAYS],
     ['lead_sync_runs', SYNC_RUN_RETENTION_DAYS],

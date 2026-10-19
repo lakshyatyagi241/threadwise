@@ -55,10 +55,6 @@
         "title": "Dispositivos push revogados",
         "description": "Navegadores e telemóveis que deixaram de aceitar notificações push. Mantidos por pouco tempo para que um dispositivo que regresse possa reativar as notificações, e depois eliminados."
       },
-      "faq_match_log": {
-        "title": "Registo de correspondências de FAQ",
-        "description": "Que FAQ respondeu a que mensagem de cliente, guardado para mostrar a cada fluxo o desempenho das suas respostas. Eliminado após os dias ativos."
-      },
       "assignment_runs": {
         "title": "Registo de execuções de atribuição",
         "description": "O registo de cada execução de atribuição automática de contactos, com quem recebeu o quê e porquê. Eliminado após os dias ativos."

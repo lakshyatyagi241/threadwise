@@ -69,7 +69,6 @@ describe('overview', () => {
       ['notifications_read', 'default', 90, null],
       ['notifications_unread', 'default', 180, null],
       ['push_devices_revoked', 'default', 30, null],
-      ['faq_match_log', 'default', 90, null],
       ['assignment_runs', 'default', 90, null],
       ['form_events', 'default', 90, null],
       ['lead_sync_runs', 'default', 90, null],
@@ -299,7 +298,7 @@ describe('every sweep is covered', () => {
     const log = o.items.find((i) => i.id === 'message_log')!;
     expect(log).toMatchObject({ kind: 'daily_archive', canArchive: true, deleteAfterDays: 365 });
     expect(log.archive).toMatchObject({ objects: 12, bytes: 4096 });
-    expect(o.items.find((i) => i.id === 'faq_match_log')?.archive).toBeNull();
+    expect(o.items.find((i) => i.id === 'assignment_runs')?.archive).toBeNull();
   });
 
   it('refuses unread notifications that would go before the read ones, either way round', async () => {
@@ -345,15 +344,15 @@ describe('every sweep is covered', () => {
 
   it('previews any plain table by its id', async () => {
     store.countOlderThan.mockResolvedValue(77);
-    const p = await build().svc.preview('faq_match_log', { liveDays: 30, archiveDays: null });
+    const p = await build().svc.preview('assignment_runs', { liveDays: 30, archiveDays: null });
     expect(p.rowsToDelete).toBe(77);
-    expect(store.countOlderThan).toHaveBeenCalledWith(expect.anything(), 'faq_match_log', 30);
+    expect(store.countOlderThan).toHaveBeenCalledWith(expect.anything(), 'assignment_runs', 30);
   });
 
   it('refuses an archive on a plain table and values outside the limits for the new items', async () => {
     const { svc } = build();
     await expect(
-      svc.preview('faq_match_log', { liveDays: 30, archiveDays: 10 }),
+      svc.preview('assignment_runs', { liveDays: 30, archiveDays: 10 }),
     ).rejects.toMatchObject({ code: 'VALIDATION_FAILED' });
     await expect(
       svc.save('click_calls', { liveDays: 31, archiveDays: null, rowVersion: null }, 9),

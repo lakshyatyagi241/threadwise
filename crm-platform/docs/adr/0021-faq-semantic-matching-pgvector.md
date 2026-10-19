@@ -93,8 +93,8 @@ second check, indexing status, a test tab and insights are not theirs to run. Tw
    `20270205090000_kb_per_agent_vector_faq_merge.sql` copies the active text FAQs of each flow, with their phrasings, into one text entry
    labelled "FAQ" on the AI agent that flow talks through (else the workspace's first active agent; a workspace with FAQs and no agent gets one).
    FAQs that answered with "go to a step" and paused FAQs have no text to keep and are not copied (counted in the migration's NOTICE). The old
-   tables stay as an archive until the legacy-data migration tool (`tools/migration`, which still writes them) is retargeted; a later
-   migration drops them.
+   tables were kept as an archive until the legacy-data migration tool (`tools/migration`) was retargeted to write the same "FAQ" text
+   entry per agent; migration `20270206090000_drop_faq_tables.sql` then dropped them.
 2. **One knowledge base per agent.** Entries belong to exactly one agent. Workspace-wide entries (only ever imported from Reference) are copied to
    every agent of the workspace by the migration; nothing reads "no agent" any more.
 3. **One search for every reader.** Each entry is cut into passages (`ai_training_chunks`, `halfvec(3072)`, same model allow-list and scan as

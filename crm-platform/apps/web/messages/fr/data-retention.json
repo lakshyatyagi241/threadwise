@@ -55,10 +55,6 @@
         "title": "Appareils push révoqués",
         "description": "Navigateurs et téléphones qui n'acceptent plus les notifications push. Conservés brièvement pour qu'un appareil qui revient puisse réactiver les notifications, puis supprimés."
       },
-      "faq_match_log": {
-        "title": "Journal des correspondances FAQ",
-        "description": "Quelle FAQ a répondu à quel message client, conservé pour montrer à chaque flux les performances de ses réponses. Supprimé après les jours actifs."
-      },
       "assignment_runs": {
         "title": "Journal des exécutions d'attribution",
         "description": "L'historique de chaque exécution d'attribution automatique des contacts, avec qui a reçu quoi et pourquoi. Supprimé après les jours actifs."

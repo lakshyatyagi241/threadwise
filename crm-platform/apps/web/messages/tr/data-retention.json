@@ -55,10 +55,6 @@
         "title": "İptal edilen push cihazları",
         "description": "Push bildirimlerini kabul etmeyi bırakan tarayıcılar ve telefonlar. Geri dönen bir cihaz bildirimleri yeniden açabilsin diye kısa süre saklanır, sonra silinir."
       },
-      "faq_match_log": {
-        "title": "SSS eşleşme günlüğü",
-        "description": "Hangi SSS'nin hangi müşteri mesajını yanıtladığı; her akışa yanıtlarının nasıl performans gösterdiğini göstermek için saklanır. Canlı günlerden sonra silinir."
-      },
       "assignment_runs": {
         "title": "Atama çalıştırma günlüğü",
         "description": "Her otomatik kişi atama çalıştırmasının kaydı: kime ne verildiği ve nedeni. Canlı günlerden sonra silinir."

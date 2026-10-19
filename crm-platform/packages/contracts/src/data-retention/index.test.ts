@@ -98,7 +98,6 @@ describe('the registry', () => {
   it('keeps today’s built-in numbers for the items that were hard-coded', () => {
     const live = (id: Parameters<typeof retentionSpecOf>[0]) => retentionSpecOf(id).defaults;
     expect(live('message_log')).toEqual({ liveDays: 90, archiveDays: 275 });
-    expect(live('faq_match_log').liveDays).toBe(90);
     expect(live('assignment_runs').liveDays).toBe(90);
     expect(live('form_events').liveDays).toBe(90);
     expect(live('lead_sync_runs').liveDays).toBe(90);
@@ -139,6 +138,6 @@ describe('rules between items', () => {
     expect(retentionCrossProblem('notifications_unread', v(90), other)).toBeNull();
     expect(retentionCrossProblem('notifications_read', v(181), other)).toBe('unread_before_read');
     expect(retentionCrossProblem('notifications_read', v(180), other)).toBeNull();
-    expect(retentionCrossProblem('faq_match_log', v(1), other)).toBeNull();
+    expect(retentionCrossProblem('assignment_runs', v(1), other)).toBeNull();
   });
 });

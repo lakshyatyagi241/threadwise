@@ -6,6 +6,7 @@ import {
   bigint,
   boolean,
   check,
+  customType,
   foreignKey,
   index,
   integer,
@@ -22,7 +23,17 @@ import {
 import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
-import { halfvec } from '../faq-knowledge/tables';
+
+/** The embedding width the passages store: every model the platform allows answers in this many dimensions (ADR-0021). */
+export const EMBEDDING_DIMENSIONS = 3072;
+
+/**
+ * pgvector's half-precision vector. Never selected by the list queries; the knowledge base writes and compares it in raw SQL
+ * (`embedding <=> $1::halfvec`), so the app only ever binds it as the text form `[0.1,0.2,...]`.
+ */
+export const halfvec = customType<{ data: string; driverData: string }>({
+  dataType: () => `halfvec(${EMBEDDING_DIMENSIONS})`,
+});
 
 export const aiChatAssistants = pgTable(
   'ai_chat_assistants',

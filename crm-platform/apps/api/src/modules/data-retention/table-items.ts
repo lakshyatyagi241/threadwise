@@ -27,7 +27,6 @@ export const TABLE_ITEMS: Partial<Record<RetentionItemId, TableItem>> = {
     where: 'read_at IS NULL',
   },
   push_devices_revoked: { table: 'push_subscriptions', at: 'revoked_at' },
-  faq_match_log: { table: 'faq_match_logs', at: 'created_at' },
   assignment_runs: { table: 'assignment_runs', at: 'created_at' },
   form_events: { table: 'web_form_events', at: 'created_at' },
   lead_sync_runs: { table: 'lead_sync_runs', at: 'finished_at', where: 'finished_at IS NOT NULL' },
