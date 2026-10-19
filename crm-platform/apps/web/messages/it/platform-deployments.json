@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Deployment" },
+    "nav": {
+      "item": "Deployment"
+    },
     "eyebrow": "Operazioni",
     "title": "Deployment",
     "description": "Ogni flusso pubblicato sulla console Geta: cosa è in coda, cosa è in esecuzione ora e cosa è fallito e perché. Si aggiorna ogni pochi secondi.",
@@ -54,6 +56,29 @@
       "queued": "Nulla è in attesa in coda.",
       "failed": "Nessuna pubblicazione è fallita.",
       "live": "Nessun flusso è ancora attivo sulla console Geta."
+    },
+    "tabs": {
+      "label": "Scegli cosa mostrare",
+      "publishes": "Pubblicazioni dei flussi",
+      "geta": "Console Geta"
+    },
+    "publishes": {
+      "description": "Ogni pubblicazione di un flusso: cosa il worker ha messo in coda, cosa sta gestendo ora e quali pubblicazioni sono fallite e perché. Si aggiorna ogni pochi secondi.",
+      "stalledAlert": "{count} pubblicazione/i di flussi non avanza/no da {minutes} minuti. Il worker potrebbe aver smesso di svuotare la coda.",
+      "truncated": "Vengono mostrate le prime {limit} pubblicazioni. Scegli uno stato per vedere le altre.",
+      "notProcessed": "Non ancora",
+      "cols": {
+        "attempts": "Tentativi",
+        "queued": "In coda dal",
+        "finished": "Completato il"
+      },
+      "status": {
+        "done": "Completato"
+      },
+      "empty": {
+        "all": "Nessun flusso è stato ancora pubblicato.",
+        "done": "Nessuna pubblicazione è stata completata negli ultimi 30 giorni."
+      }
     }
   }
 }

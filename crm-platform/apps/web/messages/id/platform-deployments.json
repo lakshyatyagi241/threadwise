@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Deployment" },
+    "nav": {
+      "item": "Deployment"
+    },
     "eyebrow": "Operasi",
     "title": "Deployment",
     "description": "Setiap flow yang dipublikasikan ke konsol Geta: apa yang antre, apa yang sedang berjalan, dan apa yang gagal beserta alasannya. Diperbarui setiap beberapa detik.",
@@ -32,8 +34,16 @@
       "updated": "Perubahan terakhir",
       "error": "Galat"
     },
-    "status": { "running": "Berjalan", "queued": "Antre", "failed": "Gagal", "live": "Langsung" },
-    "steps": { "configuration_update": "Pembaruan konfigurasi", "publish_bot": "Publikasikan bot" },
+    "status": {
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung"
+    },
+    "steps": {
+      "configuration_update": "Pembaruan konfigurasi",
+      "publish_bot": "Publikasikan bot"
+    },
     "stalledBadge": "Macet",
     "version": "Versi {version}",
     "notStarted": "Belum dimulai",
@@ -46,6 +56,29 @@
       "queued": "Tidak ada yang menunggu di antrean.",
       "failed": "Tidak ada publikasi yang gagal.",
       "live": "Belum ada flow yang langsung di konsol Geta."
+    },
+    "tabs": {
+      "label": "Pilih yang ditampilkan",
+      "publishes": "Publikasi flow",
+      "geta": "Konsol Geta"
+    },
+    "publishes": {
+      "description": "Setiap publikasi flow: apa yang diantrekan worker, apa yang sedang ditangani, dan publikasi mana yang gagal beserta alasannya. Diperbarui setiap beberapa detik.",
+      "stalledAlert": "{count} publikasi flow tidak bergerak selama {minutes} menit. Worker mungkin berhenti memproses outbox.",
+      "truncated": "Menampilkan {limit} publikasi pertama. Pilih status untuk melihat sisanya.",
+      "notProcessed": "Belum",
+      "cols": {
+        "attempts": "Percobaan",
+        "queued": "Diantrekan pada",
+        "finished": "Selesai pada"
+      },
+      "status": {
+        "done": "Selesai"
+      },
+      "empty": {
+        "all": "Belum ada flow yang dipublikasikan.",
+        "done": "Tidak ada publikasi yang selesai dalam 30 hari terakhir."
+      }
     }
   }
 }

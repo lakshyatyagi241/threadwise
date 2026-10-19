@@ -1,6 +1,8 @@
 {
   "platform-deployments": {
-    "nav": { "item": "Despliegues" },
+    "nav": {
+      "item": "Despliegues"
+    },
     "eyebrow": "Operaciones",
     "title": "Despliegues",
     "description": "Cada flujo publicado en la consola de Geta: qué está en cola, qué se ejecuta ahora y qué falló y por qué. Se actualiza cada pocos segundos.",
@@ -54,6 +56,29 @@
       "queued": "No hay nada esperando en la cola.",
       "failed": "Ninguna publicación ha fallado.",
       "live": "Ningún flujo está activo en la consola de Geta todavía."
+    },
+    "tabs": {
+      "label": "Elija qué mostrar",
+      "publishes": "Publicaciones de flujos",
+      "geta": "Consola de Geta"
+    },
+    "publishes": {
+      "description": "Cada publicación de flujo: lo que el worker tiene en cola, lo que está procesando ahora y qué publicaciones fallaron y por qué. Se actualiza cada pocos segundos.",
+      "stalledAlert": "{count} publicación(es) de flujo no se han movido durante {minutes} minutos. Puede que el worker haya dejado de procesar la cola.",
+      "truncated": "Se muestran las primeras {limit} publicaciones. Elija un estado para ver el resto.",
+      "notProcessed": "Todavía no",
+      "cols": {
+        "attempts": "Intentos",
+        "queued": "En cola desde",
+        "finished": "Terminado"
+      },
+      "status": {
+        "done": "Hecho"
+      },
+      "empty": {
+        "all": "Ningún flujo se ha publicado todavía.",
+        "done": "Ninguna publicación ha terminado en los últimos 30 días."
+      }
     }
   }
 }
