@@ -1,0 +1,191 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Taak",
+        "meeting": "Afspraak",
+        "phone": "Telefoon",
+        "email": "E-mail",
+        "reminder": "Herinnering",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Opvolgen",
+          "call_reminder": "Belherinnering"
+        },
+        "meeting": {
+          "interested": "Geïnteresseerd",
+          "not_interested": "Niet geïnteresseerd",
+          "needs_follow_up": "Opvolging nodig",
+          "rescheduled": "Verplaatst",
+          "no_show": "Niet verschenen"
+        },
+        "phone": {
+          "connected": "Verbonden",
+          "no_answer": "Geen gehoor",
+          "busy": "Bezet",
+          "left_voicemail": "Voicemail achtergelaten",
+          "wrong_number": "Verkeerd nummer",
+          "declined": "Geweigerd",
+          "failed": "Mislukt"
+        }
+      }
+    },
+    "list": {
+      "back": "Gegevens",
+      "title": "Verkoopactiviteiten",
+      "intro": "Beheer de activiteiten van je team op één plek: taken, afspraken, gesprekken en eigen activiteiten. Kies wat elke activiteit kan, welke taaktypen en uitkomsten ze heeft.",
+      "create": "Activiteit maken",
+      "loading": "Activiteiten laden…",
+      "loadFailed": "De activiteiten konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "listLabel": "Activiteiten",
+      "default": "Standaard",
+      "custom": "Eigen",
+      "noEditor": "Een standaardactiviteit zonder instellingen.",
+      "edit": "Activiteit bewerken",
+      "editNamed": "Activiteit {name} bewerken",
+      "chip": {
+        "completable": "Kan worden voltooid",
+        "notCompletable": "Kan niet worden voltooid",
+        "calendar": "In agenda",
+        "taskTypes": "{count, plural, one {# taaktype} other {# taaktypen}}",
+        "outcomes": "{count, plural, one {# uitkomst} other {# uitkomsten}}"
+      }
+    },
+    "drawer": {
+      "title": "Activiteit bewerken: {name}",
+      "close": "Sluiten",
+      "done": "Klaar",
+      "cancel": "Annuleren",
+      "saved": "Opgeslagen.",
+      "autosave": "Wijzigingen worden direct opgeslagen.",
+      "readOnly": "Je kunt deze instellingen zien maar niet wijzigen.",
+      "name": "Naam van de activiteit",
+      "nameLocked": "De naam van een standaardactiviteit kan niet worden gewijzigd.",
+      "mobileCheckIn": "Gebruikers toestaan om in en uit te checken via de mobiele app",
+      "mobileCheckInPending": "Opgeslagen, maar nog zonder effect: de mobiele app ondersteunt nog geen inchecken bij afspraken. Het werkt zodra de app dat kan.",
+      "showInCalendar": "Deze activiteit tonen in Mijn agenda op het activiteitendashboard",
+      "showInCalendarHint": "Opgeslagen, maar er is nog geen activiteitenagenda. Het werkt zodra die er is.",
+      "allowComplete": "Gebruikers toestaan om deze activiteit als voltooid te markeren",
+      "allowEditCompleted": "Gebruikers toestaan om de voltooiingsdatum en -tijd van deze activiteit te bewerken",
+      "taskTypes": "Taaktypen",
+      "taskTypesHint": "Kies er een bij het maken van een taak, bijvoorbeeld Opvolgen of Belherinnering.",
+      "addTaskType": "Taaktype toevoegen",
+      "taskTypePlaceholder": "Nieuw taaktype",
+      "predictOutcomes": "Uitkomsten voor deze activiteit voorspellen",
+      "predictOutcomesHint": "Een uitkomst aanbieden als de activiteit wordt voltooid.",
+      "outcomes": "Uitkomsten",
+      "taskOutcomesHint": "De uitkomsten van een voltooide taak zijn één lijst voor de hele werkruimte, beheerd onder Taakuitkomsten.",
+      "taskOutcomesLink": "Taakuitkomsten openen",
+      "outcomesHint": "Een verwijderde uitkomst blijft behouden bij de records die haar al hebben.",
+      "phoneOutcomesHint": "Kies hoe elke uitkomst meetelt in gesprekrapporten. Een verwijderde uitkomst blijft behouden bij de gesprekken die haar al hebben.",
+      "addOutcome": "Uitkomst toevoegen",
+      "outcomePlaceholder": "Nieuwe uitkomst",
+      "listEmpty": "Nog niets.",
+      "moveUp": "{name} omhoog",
+      "moveDown": "{name} omlaag",
+      "remove": "{name} verwijderen",
+      "countsAsShort": "telt als {as}",
+      "countsAsLabel": "Telt als",
+      "countsAsOption": "Telt als {as}",
+      "countsAs": {
+        "connected": "verbonden",
+        "no_answer": "geen gehoor",
+        "busy": "bezet",
+        "left_voicemail": "voicemail achtergelaten",
+        "wrong_number": "verkeerd nummer",
+        "declined": "geweigerd",
+        "failed": "mislukt"
+      },
+      "removeActivity": "Activiteit verwijderen",
+      "removeConfirmTitle": "{name} verwijderen?",
+      "removeConfirmBody": "Ze verdwijnt uit de lijst. Records die haar gebruikten houden hun uitkomsten.",
+      "removed": "Activiteit verwijderd.",
+      "noSettings": "Deze activiteit heeft niets in te stellen.",
+      "errors": {
+        "nameRequired": "Geef de activiteit een naam.",
+        "nameTaken": "Die naam is hier al in gebruik.",
+        "limit": "Je hebt de limiet van deze lijst bereikt.",
+        "conflict": "Iemand anders heeft deze activiteit gewijzigd. Ze is opnieuw geladen; probeer het opnieuw.",
+        "forbidden": "Je hebt geen toestemming om dit te wijzigen.",
+        "failed": "Dat kon niet worden opgeslagen. Probeer het opnieuw."
+      }
+    },
+    "create": {
+      "title": "Activiteit maken",
+      "close": "Sluiten",
+      "cancel": "Annuleren",
+      "create": "Maken",
+      "intro": "Voeg een activiteit toe die bij jouw bedrijf past. Ze begint met de instellingen van het gekozen soort.",
+      "name": "Naam",
+      "namePlaceholder": "Bijvoorbeeld Locatiebezoek",
+      "behavesAs": "Werkt als",
+      "behavesAsHint": {
+        "task": "Iets dat vóór een datum moet gebeuren en kan worden voltooid.",
+        "meeting": "Iets dat op een tijdstip plaatsvindt en kan worden voltooid.",
+        "phone": "Een gesprek, met de uitkomsten van een gesprek."
+      },
+      "behaves": {
+        "task": "Een taak",
+        "meeting": "Een afspraak",
+        "phone": "Een telefoongesprek"
+      },
+      "icon": "Pictogram",
+      "icons": {
+        "task": "Taak",
+        "meeting": "Agenda",
+        "phone": "Telefoon",
+        "email": "E-mail",
+        "reminder": "Bel",
+        "sms": "Bericht",
+        "chat": "Chat",
+        "visit": "Plaats",
+        "video": "Video",
+        "document": "Document",
+        "flag": "Vlag",
+        "star": "Ster"
+      },
+      "errors": {
+        "nameRequired": "Geef de activiteit een naam.",
+        "nameTaken": "Er bestaat al een activiteit met die naam.",
+        "limit": "Je hebt de limiet voor eigen activiteiten bereikt.",
+        "failed": "De activiteit kon niet worden gemaakt. Probeer het opnieuw."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(verwijderd)",
+      "taskType": "Taaktype",
+      "taskTypeNone": "Geen type",
+      "outcome": "Uitkomst",
+      "outcomeNone": "Geen uitkomst",
+      "completeOff": "Taken voltooien staat uit in Verkoopactiviteiten."
+    },
+    "meeting": {
+      "saved": "Afspraak bijgewerkt.",
+      "reopened": "Afspraak heropend.",
+      "errors": {
+        "disabled": "Afspraken voltooien staat uit in Verkoopactiviteiten.",
+        "optionGone": "Die uitkomst is verwijderd. Kies een andere.",
+        "failed": "Dat kon niet worden opgeslagen. Probeer het opnieuw."
+      },
+      "outcome": "Uitkomst",
+      "noOutcome": "Geen uitkomst",
+      "removedSuffix": "(verwijderd)",
+      "notes": "Notities",
+      "cancel": "Annuleren",
+      "save": "Opslaan",
+      "outcomeChip": "Uitkomst: {name}",
+      "completed": "Voltooid",
+      "editAria": "Uitkomst van {title} bewerken",
+      "edit": "Bewerken",
+      "reopenAria": "{title} heropenen",
+      "reopen": "Heropenen",
+      "addAria": "Een uitkomst toevoegen aan {title}",
+      "add": "Uitkomst toevoegen",
+      "markCompleted": "Markeren als voltooid"
+    }
+  }
+}

@@ -1,0 +1,191 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "任务",
+        "meeting": "会议",
+        "phone": "电话",
+        "email": "电子邮件",
+        "reminder": "提醒",
+        "sms": "短信",
+        "chat": "聊天"
+      },
+      "option": {
+        "task": {
+          "follow_up": "跟进",
+          "call_reminder": "回电提醒"
+        },
+        "meeting": {
+          "interested": "有兴趣",
+          "not_interested": "没有兴趣",
+          "needs_follow_up": "需要跟进",
+          "rescheduled": "已改期",
+          "no_show": "未到场"
+        },
+        "phone": {
+          "connected": "已接通",
+          "no_answer": "无人接听",
+          "busy": "忙线",
+          "left_voicemail": "已留语音信箱",
+          "wrong_number": "号码错误",
+          "declined": "已拒接",
+          "failed": "失败"
+        }
+      }
+    },
+    "list": {
+      "back": "数据",
+      "title": "销售活动",
+      "intro": "在一处管理团队记录的活动：任务、会议、通话以及您自己的活动。选择每种活动能做什么、有哪些任务类型和结果。",
+      "create": "创建活动",
+      "loading": "正在加载活动…",
+      "loadFailed": "无法加载活动。",
+      "retry": "重试",
+      "listLabel": "活动",
+      "default": "默认",
+      "custom": "自定义",
+      "noEditor": "无需设置的默认活动。",
+      "edit": "编辑活动",
+      "editNamed": "编辑活动 {name}",
+      "chip": {
+        "completable": "可以完成",
+        "notCompletable": "不能完成",
+        "calendar": "显示在日历中",
+        "taskTypes": "{count, plural, other {# 个任务类型}}",
+        "outcomes": "{count, plural, other {# 个结果}}"
+      }
+    },
+    "drawer": {
+      "title": "编辑活动：{name}",
+      "close": "关闭",
+      "done": "完成",
+      "cancel": "取消",
+      "saved": "已保存。",
+      "autosave": "更改会即时保存。",
+      "readOnly": "您可以查看这些设置，但无法更改。",
+      "name": "活动名称",
+      "nameLocked": "默认活动的名称无法更改。",
+      "mobileCheckIn": "允许用户通过移动应用签到和签退",
+      "mobileCheckInPending": "已保存，但暂时没有效果：移动应用尚不支持会议签到。应用支持后即会生效。",
+      "showInCalendar": "在活动仪表板的“我的日历”中显示此活动",
+      "showInCalendarHint": "已保存，但目前还没有活动日历。添加后即会生效。",
+      "allowComplete": "允许用户将此活动标记为已完成",
+      "allowEditCompleted": "允许用户编辑此活动的完成日期和时间",
+      "taskTypes": "任务类型",
+      "taskTypesHint": "创建任务时选择一个，例如“跟进”或“回电提醒”。",
+      "addTaskType": "添加任务类型",
+      "taskTypePlaceholder": "新任务类型",
+      "predictOutcomes": "预测此活动的结果",
+      "predictOutcomesHint": "活动完成时提供结果选项。",
+      "outcomes": "结果",
+      "taskOutcomesHint": "已完成任务的结果是整个工作区共用的一份列表，在“任务结果”中维护。",
+      "taskOutcomesLink": "打开“任务结果”",
+      "outcomesHint": "删除结果后，已有该结果的记录仍会保留它。",
+      "phoneOutcomesHint": "选择每个结果在通话报告中的计算方式。删除结果后，已有该结果的通话仍会保留它。",
+      "addOutcome": "添加结果",
+      "outcomePlaceholder": "新结果",
+      "listEmpty": "这里还没有内容。",
+      "moveUp": "上移 {name}",
+      "moveDown": "下移 {name}",
+      "remove": "删除 {name}",
+      "countsAsShort": "计为{as}",
+      "countsAsLabel": "计为",
+      "countsAsOption": "计为{as}",
+      "countsAs": {
+        "connected": "已接通",
+        "no_answer": "无人接听",
+        "busy": "忙线",
+        "left_voicemail": "已留语音信箱",
+        "wrong_number": "号码错误",
+        "declined": "已拒接",
+        "failed": "失败"
+      },
+      "removeActivity": "删除活动",
+      "removeConfirmTitle": "删除 {name}？",
+      "removeConfirmBody": "它会从列表中移除。使用过它的记录会保留各自的结果。",
+      "removed": "活动已删除。",
+      "noSettings": "此活动没有可设置的内容。",
+      "errors": {
+        "nameRequired": "请为活动命名。",
+        "nameTaken": "此名称已被使用。",
+        "limit": "已达到此列表的上限。",
+        "conflict": "其他人更改了此活动。已重新加载，请重试。",
+        "forbidden": "您无权更改此项。",
+        "failed": "无法保存，请重试。"
+      }
+    },
+    "create": {
+      "title": "创建活动",
+      "close": "关闭",
+      "cancel": "取消",
+      "create": "创建",
+      "intro": "添加适合您业务的活动。它会以您所选类型的设置开始。",
+      "name": "名称",
+      "namePlaceholder": "例如：实地拜访",
+      "behavesAs": "工作方式类似",
+      "behavesAsHint": {
+        "task": "需要在某个日期前完成、可以标记完成的事项。",
+        "meeting": "在某个时间发生、可以标记完成的事项。",
+        "phone": "一次通话，带有通话结果。"
+      },
+      "behaves": {
+        "task": "任务",
+        "meeting": "会议",
+        "phone": "电话通话"
+      },
+      "icon": "图标",
+      "icons": {
+        "task": "任务",
+        "meeting": "日历",
+        "phone": "电话",
+        "email": "电子邮件",
+        "reminder": "铃铛",
+        "sms": "消息",
+        "chat": "聊天",
+        "visit": "地点",
+        "video": "视频",
+        "document": "文档",
+        "flag": "旗帜",
+        "star": "星标"
+      },
+      "errors": {
+        "nameRequired": "请为活动命名。",
+        "nameTaken": "已存在同名活动。",
+        "limit": "已达到自定义活动的上限。",
+        "failed": "无法创建活动，请重试。"
+      }
+    },
+    "picker": {
+      "removedSuffix": "（已删除）",
+      "taskType": "任务类型",
+      "taskTypeNone": "无类型",
+      "outcome": "结果",
+      "outcomeNone": "无结果",
+      "completeOff": "“销售活动”中已关闭完成任务。"
+    },
+    "meeting": {
+      "saved": "会议已更新。",
+      "reopened": "会议已重新打开。",
+      "errors": {
+        "disabled": "“销售活动”中已关闭完成会议。",
+        "optionGone": "该结果已被删除。请选择其他结果。",
+        "failed": "无法保存，请重试。"
+      },
+      "outcome": "结果",
+      "noOutcome": "无结果",
+      "removedSuffix": "（已删除）",
+      "notes": "备注",
+      "cancel": "取消",
+      "save": "保存",
+      "outcomeChip": "结果：{name}",
+      "completed": "已完成",
+      "editAria": "编辑 {title} 的结果",
+      "edit": "编辑",
+      "reopenAria": "重新打开 {title}",
+      "reopen": "重新打开",
+      "addAria": "为 {title} 添加结果",
+      "add": "添加结果",
+      "markCompleted": "标记为已完成"
+    }
+  }
+}

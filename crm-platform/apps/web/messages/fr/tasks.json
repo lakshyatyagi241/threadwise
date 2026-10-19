@@ -296,7 +296,8 @@
       "retry": "Réessayer",
       "outcomeInvalid": "Ce résultat n'est pas disponible. Choisissez-en un dans la liste.",
       "outcomeNameTaken": "Un autre résultat porte déjà ce nom.",
-      "outcomeInUse": "Des tâches utilisent encore ce résultat, il ne peut donc pas être supprimé. Masquez-le plutôt."
+      "outcomeInUse": "Des tâches utilisent encore ce résultat, il ne peut donc pas être supprimé. Masquez-le plutôt.",
+      "completionDisabled": "Terminer des tâches est désactivé dans les activités commerciales."
     },
     "toast": {
       "completed": "Tâche terminée.",

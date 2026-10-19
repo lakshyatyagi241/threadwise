@@ -1,0 +1,191 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Aufgabe",
+        "meeting": "Termin",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "reminder": "Erinnerung",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Nachfassen",
+          "call_reminder": "Rückruferinnerung"
+        },
+        "meeting": {
+          "interested": "Interessiert",
+          "not_interested": "Nicht interessiert",
+          "needs_follow_up": "Nachfassen nötig",
+          "rescheduled": "Verschoben",
+          "no_show": "Nicht erschienen"
+        },
+        "phone": {
+          "connected": "Verbunden",
+          "no_answer": "Keine Antwort",
+          "busy": "Besetzt",
+          "left_voicemail": "Mailbox besprochen",
+          "wrong_number": "Falsche Nummer",
+          "declined": "Abgelehnt",
+          "failed": "Fehlgeschlagen"
+        }
+      }
+    },
+    "list": {
+      "back": "Daten",
+      "title": "Vertriebsaktivitäten",
+      "intro": "Verwalten Sie die Aktivitäten Ihres Teams an einem Ort: Aufgaben, Termine, Anrufe und eigene Aktivitäten. Legen Sie fest, was jede Aktivität kann, welche Aufgabentypen und Ergebnisse sie hat.",
+      "create": "Aktivität erstellen",
+      "loading": "Aktivitäten werden geladen …",
+      "loadFailed": "Die Aktivitäten konnten nicht geladen werden.",
+      "retry": "Erneut versuchen",
+      "listLabel": "Aktivitäten",
+      "default": "Standard",
+      "custom": "Eigene",
+      "noEditor": "Eine Standardaktivität, die nichts einzurichten braucht.",
+      "edit": "Aktivität bearbeiten",
+      "editNamed": "Aktivität {name} bearbeiten",
+      "chip": {
+        "completable": "Kann abgeschlossen werden",
+        "notCompletable": "Kann nicht abgeschlossen werden",
+        "calendar": "Im Kalender",
+        "taskTypes": "{count, plural, one {# Aufgabentyp} other {# Aufgabentypen}}",
+        "outcomes": "{count, plural, one {# Ergebnis} other {# Ergebnisse}}"
+      }
+    },
+    "drawer": {
+      "title": "Aktivität bearbeiten: {name}",
+      "close": "Schließen",
+      "done": "Fertig",
+      "cancel": "Abbrechen",
+      "saved": "Gespeichert.",
+      "autosave": "Änderungen werden sofort gespeichert.",
+      "readOnly": "Sie können diese Einstellungen sehen, aber nicht ändern.",
+      "name": "Name der Aktivität",
+      "nameLocked": "Der Name einer Standardaktivität kann nicht geändert werden.",
+      "mobileCheckIn": "Nutzern erlauben, sich in der mobilen App ein- und auszuchecken",
+      "mobileCheckInPending": "Gespeichert, aber noch ohne Wirkung: Die mobile App unterstützt das Einchecken zu Terminen noch nicht. Es wirkt, sobald die App es kann.",
+      "showInCalendar": "Diese Aktivität in „Mein Kalender“ im Aktivitäten-Dashboard anzeigen",
+      "showInCalendarHint": "Gespeichert, aber es gibt noch keinen Aktivitätenkalender. Es wirkt, sobald einer hinzukommt.",
+      "allowComplete": "Nutzern erlauben, diese Aktivität als erledigt zu markieren",
+      "allowEditCompleted": "Nutzern erlauben, Datum und Uhrzeit der Erledigung dieser Aktivität zu bearbeiten",
+      "taskTypes": "Aufgabentypen",
+      "taskTypesHint": "Wählen Sie beim Anlegen einer Aufgabe einen aus, zum Beispiel Nachfassen oder Rückruferinnerung.",
+      "addTaskType": "Aufgabentyp hinzufügen",
+      "taskTypePlaceholder": "Neuer Aufgabentyp",
+      "predictOutcomes": "Ergebnisse für diese Aktivität vorhersagen",
+      "predictOutcomesHint": "Beim Abschließen der Aktivität ein Ergebnis anbieten.",
+      "outcomes": "Ergebnisse",
+      "taskOutcomesHint": "Die Ergebnisse einer erledigten Aufgabe sind eine gemeinsame Liste für den ganzen Arbeitsbereich und stehen unter Aufgabenergebnisse.",
+      "taskOutcomesLink": "Aufgabenergebnisse öffnen",
+      "outcomesHint": "Ein entferntes Ergebnis bleibt bei den Datensätzen erhalten, die es schon haben.",
+      "phoneOutcomesHint": "Legen Sie fest, wie jedes Ergebnis in Anrufberichten zählt. Ein entferntes Ergebnis bleibt bei den Anrufen erhalten, die es schon haben.",
+      "addOutcome": "Ergebnis hinzufügen",
+      "outcomePlaceholder": "Neues Ergebnis",
+      "listEmpty": "Noch nichts vorhanden.",
+      "moveUp": "{name} nach oben",
+      "moveDown": "{name} nach unten",
+      "remove": "{name} entfernen",
+      "countsAsShort": "zählt als {as}",
+      "countsAsLabel": "Zählt als",
+      "countsAsOption": "Zählt als {as}",
+      "countsAs": {
+        "connected": "verbunden",
+        "no_answer": "keine Antwort",
+        "busy": "besetzt",
+        "left_voicemail": "Mailbox besprochen",
+        "wrong_number": "falsche Nummer",
+        "declined": "abgelehnt",
+        "failed": "fehlgeschlagen"
+      },
+      "removeActivity": "Aktivität entfernen",
+      "removeConfirmTitle": "{name} entfernen?",
+      "removeConfirmBody": "Sie verschwindet aus der Liste. Datensätze, die sie verwendet haben, behalten ihre Ergebnisse.",
+      "removed": "Aktivität entfernt.",
+      "noSettings": "Diese Aktivität braucht keine Einrichtung.",
+      "errors": {
+        "nameRequired": "Geben Sie der Aktivität einen Namen.",
+        "nameTaken": "Dieser Name wird hier bereits verwendet.",
+        "limit": "Sie haben die Grenze für diese Liste erreicht.",
+        "conflict": "Jemand anderes hat diese Aktivität geändert. Sie wurde neu geladen, bitte versuchen Sie es erneut.",
+        "forbidden": "Sie haben keine Berechtigung, dies zu ändern.",
+        "failed": "Das konnte nicht gespeichert werden. Bitte erneut versuchen."
+      }
+    },
+    "create": {
+      "title": "Aktivität erstellen",
+      "close": "Schließen",
+      "cancel": "Abbrechen",
+      "create": "Erstellen",
+      "intro": "Fügen Sie eine Aktivität hinzu, die zu Ihrem Geschäft passt. Sie startet mit den Einstellungen der gewählten Art.",
+      "name": "Name",
+      "namePlaceholder": "Zum Beispiel Objektbesichtigung",
+      "behavesAs": "Funktioniert wie",
+      "behavesAsHint": {
+        "task": "Etwas, das bis zu einem Datum zu tun ist und abgeschlossen werden kann.",
+        "meeting": "Etwas, das zu einer bestimmten Zeit stattfindet und abgeschlossen werden kann.",
+        "phone": "Ein Anruf mit den Ergebnissen eines Anrufs."
+      },
+      "behaves": {
+        "task": "Eine Aufgabe",
+        "meeting": "Ein Termin",
+        "phone": "Ein Telefonanruf"
+      },
+      "icon": "Symbol",
+      "icons": {
+        "task": "Aufgabe",
+        "meeting": "Kalender",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "reminder": "Glocke",
+        "sms": "Nachricht",
+        "chat": "Chat",
+        "visit": "Ort",
+        "video": "Video",
+        "document": "Dokument",
+        "flag": "Flagge",
+        "star": "Stern"
+      },
+      "errors": {
+        "nameRequired": "Geben Sie der Aktivität einen Namen.",
+        "nameTaken": "Eine Aktivität mit diesem Namen gibt es schon.",
+        "limit": "Sie haben die Grenze für eigene Aktivitäten erreicht.",
+        "failed": "Die Aktivität konnte nicht erstellt werden. Bitte erneut versuchen."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(entfernt)",
+      "taskType": "Aufgabentyp",
+      "taskTypeNone": "Kein Typ",
+      "outcome": "Ergebnis",
+      "outcomeNone": "Kein Ergebnis",
+      "completeOff": "Das Abschließen von Aufgaben ist in den Vertriebsaktivitäten ausgeschaltet."
+    },
+    "meeting": {
+      "saved": "Termin aktualisiert.",
+      "reopened": "Termin wieder geöffnet.",
+      "errors": {
+        "disabled": "Das Abschließen von Terminen ist in den Vertriebsaktivitäten ausgeschaltet.",
+        "optionGone": "Dieses Ergebnis wurde entfernt. Wählen Sie ein anderes.",
+        "failed": "Das konnte nicht gespeichert werden. Bitte erneut versuchen."
+      },
+      "outcome": "Ergebnis",
+      "noOutcome": "Kein Ergebnis",
+      "removedSuffix": "(entfernt)",
+      "notes": "Notizen",
+      "cancel": "Abbrechen",
+      "save": "Speichern",
+      "outcomeChip": "Ergebnis: {name}",
+      "completed": "Abgeschlossen",
+      "editAria": "Ergebnis von {title} bearbeiten",
+      "edit": "Bearbeiten",
+      "reopenAria": "{title} wieder öffnen",
+      "reopen": "Wieder öffnen",
+      "addAria": "Ergebnis zu {title} hinzufügen",
+      "add": "Ergebnis hinzufügen",
+      "markCompleted": "Als erledigt markieren"
+    }
+  }
+}

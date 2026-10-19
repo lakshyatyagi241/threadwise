@@ -117,6 +117,17 @@ export const contactsNotesFiles = defineHolder({
       retention: 'With the contact.',
     },
     {
+      // The outcome and notes of a completed meeting (Settings > Sales Activities). The note is free text a person wrote about the contact.
+      table: 'contact_meeting_outcomes',
+      link: CONTACT,
+      disposition: 'cascade',
+      parent: 'contacts',
+      tier: 'core',
+      categories: ['content'],
+      pii: ['note'],
+      retention: 'With the contact.',
+    },
+    {
       // The video link and calendar entry asked for on a typed-in meeting (BL-361, BL-362): the provider's ids of the room and the event.
       // The room and the event themselves live at Zoom, Teams, Google or Outlook and are removed by the worker when the meeting is deleted.
       table: 'contact_meeting_conferencing',

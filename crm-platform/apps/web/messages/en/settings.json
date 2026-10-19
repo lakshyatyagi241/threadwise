@@ -375,6 +375,11 @@
         "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",
         "keywords": "assign, owner, round robin, new contact, new deal, company, leave, lead routing, workload, territory"
       },
+      "sales-activities": {
+        "label": "Sales Activities",
+        "description": "Manage tasks, meetings, calls and your own activities: what each can do, its task types and its outcomes.",
+        "keywords": "activities, task types, outcomes, meeting outcome, call outcome, follow up, check in, custom activity, calendar, complete"
+      },
       "company-properties": {
         "label": "Company properties",
         "description": "Add the fields you want to keep on every company.",

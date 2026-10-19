@@ -296,7 +296,8 @@
       "retry": "Riprova",
       "outcomeInvalid": "Questo esito non è disponibile. Sceglierne uno dall'elenco.",
       "outcomeNameTaken": "Un altro esito ha già questo nome.",
-      "outcomeInUse": "Alcune attività usano ancora questo esito, quindi non può essere eliminato. Nascondilo."
+      "outcomeInUse": "Alcune attività usano ancora questo esito, quindi non può essere eliminato. Nascondilo.",
+      "completionDisabled": "Il completamento dei compiti è disattivato in Attività di vendita."
     },
     "toast": {
       "completed": "Attività completata.",

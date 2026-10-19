@@ -296,7 +296,8 @@
       "retry": "Opnieuw proberen",
       "outcomeInvalid": "Dat resultaat is niet beschikbaar. Kies er een uit de lijst.",
       "outcomeNameTaken": "Een ander resultaat heeft al deze naam.",
-      "outcomeInUse": "Taken gebruiken dit resultaat nog, dus het kan niet worden verwijderd. Verberg het in plaats daarvan."
+      "outcomeInUse": "Taken gebruiken dit resultaat nog, dus het kan niet worden verwijderd. Verberg het in plaats daarvan.",
+      "completionDisabled": "Taken voltooien staat uit in Verkoopactiviteiten."
     },
     "toast": {
       "completed": "Taak voltooid.",

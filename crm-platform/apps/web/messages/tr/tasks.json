@@ -296,7 +296,8 @@
       "retry": "Yeniden dene",
       "outcomeInvalid": "Bu sonuç kullanılamıyor. Listeden birini seçin.",
       "outcomeNameTaken": "Başka bir sonuç zaten bu ada sahip.",
-      "outcomeInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin."
+      "outcomeInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin.",
+      "completionDisabled": "Görevleri tamamlama, Satış Etkinlikleri’nde kapalı."
     },
     "toast": {
       "completed": "Görev tamamlandı.",

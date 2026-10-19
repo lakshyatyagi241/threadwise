@@ -11,6 +11,7 @@ import {
   useLogCall,
   type LogCallProblem,
 } from '@/features/calling-voice';
+import { useActivityLabels, useActivitySettings } from '@/features/sales-activities';
 import { useRefreshAfterCall } from '../../../api/call-log';
 import type { ContactRow } from '../../../api/schemas';
 import { FORM_OUTCOMES } from '../../../lib/call-log';
@@ -26,6 +27,8 @@ const DIRECTIONS: readonly Direction[] = ['outbound', 'inbound'];
 interface Draft {
   direction: Direction;
   outcome: CallOutcome;
+  /** The Phone activity item picked (Settings > Sales Activities); '' until one is, then the connected one stands in. */
+  optionId: string;
   /** `YYYY-MM-DDTHH:mm`, the person's own clock. */
   when: string;
   /** Minutes as typed; empty means not known. */
@@ -39,6 +42,7 @@ interface Draft {
 const emptyDraft = (at: Date = new Date()): Draft => ({
   direction: 'outbound',
   outcome: 'connected',
+  optionId: '',
   when: localDateTimeValue(at),
   minutes: '',
   notes: '',
@@ -164,12 +168,24 @@ export function LogCallForm({
     return () => window.cancelAnimationFrame(frame);
   }, [focusSignal]);
 
+  const phoneActivity = useActivitySettings('phone').activity;
+  const activityLabels = useActivityLabels();
+  // The inline form has always offered five outcomes; `declined` and `failed` are what phones and providers report, so they stay out of it.
+  const items = (phoneActivity?.outcomes ?? []).filter(
+    (o) => !(o.isSystem && (o.key === 'declined' || o.key === 'failed')),
+  );
+  const chosen =
+    items.length > 0
+      ? (items.find((o) => o.id === draft.optionId) ??
+        items.find((o) => o.key === 'connected') ??
+        items[0])
+      : undefined;
   const buildNow = () =>
     buildLogCallInput({
       contactId: contact.id,
       phone: '',
       direction: draft.direction,
-      outcome: draft.outcome,
+      outcome: chosen ? ((chosen.countsAs ?? chosen.key) as CallOutcome) : draft.outcome,
       when: draft.when,
       minutes: draft.minutes,
       notes: draft.notes,
@@ -193,7 +209,7 @@ export function LogCallForm({
     const built = buildNow();
     if (!built.ok) return;
     log.mutate(
-      { ...built.input, externalId: attempt },
+      { ...built.input, externalId: attempt, ...(chosen ? { outcomeOptionId: chosen.id } : {}) },
       {
         onSuccess: (result) => {
           toast(t('saved'), 'success');
@@ -241,13 +257,23 @@ export function LogCallForm({
         <p className="text-xs font-medium text-muted-foreground" id={`${id}-outcome`}>
           {tl('outcome')}
         </p>
-        <Choices
-          label={tl('outcome')}
-          value={draft.outcome}
-          disabled={log.isPending}
-          onChange={(outcome) => set({ outcome })}
-          options={FORM_OUTCOMES.map((v) => ({ value: v, text: tl(`outcomes.${v}`) }))}
-        />
+        {chosen ? (
+          <Choices
+            label={tl('outcome')}
+            value={chosen.id}
+            disabled={log.isPending}
+            onChange={(optionId) => set({ optionId })}
+            options={items.map((o) => ({ value: o.id, text: activityLabels.option('phone', o) }))}
+          />
+        ) : (
+          <Choices
+            label={tl('outcome')}
+            value={draft.outcome}
+            disabled={log.isPending}
+            onChange={(outcome) => set({ outcome })}
+            options={FORM_OUTCOMES.map((v) => ({ value: v, text: tl(`outcomes.${v}`) }))}
+          />
+        )}
       </div>
       <div className="grid gap-2 sm:grid-cols-2">
         <label className="block space-y-1" htmlFor={`${id}-when`}>

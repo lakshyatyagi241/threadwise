@@ -296,7 +296,8 @@
       "retry": "Erneut versuchen",
       "outcomeInvalid": "Dieses Ergebnis ist nicht verfügbar. Wählen Sie eines aus der Liste.",
       "outcomeNameTaken": "Ein anderes Ergebnis hat bereits diesen Namen.",
-      "outcomeInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus."
+      "outcomeInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus.",
+      "completionDisabled": "Das Abschließen von Aufgaben ist in den Vertriebsaktivitäten ausgeschaltet."
     },
     "toast": {
       "completed": "Aufgabe abgeschlossen.",
