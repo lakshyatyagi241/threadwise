@@ -239,7 +239,10 @@ export function ThreadPane(props: ThreadPaneProps) {
 
   return (
     <section aria-label={detail?.title ?? t('title')} className="flex h-full min-h-0 flex-col">
-      <header className="flex items-center gap-2 border-b border-border px-3 py-2">
+      <header
+        data-testid="inbox-thread-header"
+        className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border px-3 py-2"
+      >
         <button
           type="button"
           aria-label={t('back')}
@@ -252,7 +255,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         {detail ? (
           <>
             <Avatar id={detail.id} name={detail.title} />
-            <div className={cn('min-w-0 flex-1', searching && 'hidden')}>
+            <div className={cn('min-w-[12rem] flex-1 basis-48', searching && 'hidden')}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <h2 className="truncate text-base font-semibold" data-testid="inbox-thread-title">
                   {detail.title}
@@ -326,7 +329,10 @@ export function ThreadPane(props: ThreadPaneProps) {
             className="flex-1"
           />
         ) : (
-          <div className="flex shrink-0 items-center gap-1">
+          <div
+            data-testid="inbox-thread-actions"
+            className="ms-auto flex max-w-full shrink-0 flex-wrap items-center justify-end gap-1"
+          >
             {detail && (
               <CallButton
                 conversationId={detail.id}
@@ -388,7 +394,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 variant="secondary"
                 size="sm"
                 data-testid="inbox-resolve"
-                className="h-9 gap-1.5 rounded-full px-3"
+                className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-full px-3"
                 disabled={props.resolving}
                 onClick={props.onToggleResolved}
                 title={t('resolveShortcut')}
@@ -436,6 +442,7 @@ export function ThreadPane(props: ThreadPaneProps) {
       <MessageStream
         conversationId={props.conversationId}
         channelKind={detail?.channel.kind}
+        customerName={detail?.title}
         state={thread.state}
         notes={props.notes}
         progress={thread.progress}

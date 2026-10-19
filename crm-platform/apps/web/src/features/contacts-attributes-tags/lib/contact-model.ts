@@ -70,14 +70,8 @@ export function displayName(
   );
 }
 
-/** One or two letters for the avatar circle: the first letters of the first two words. */
-export function initials(name: string): string {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) return '?';
-  const letters =
-    words.length === 1 ? [...words[0]!].slice(0, 2) : [[...words[0]!][0]!, [...words[1]!][0]!];
-  return letters.join('').toLocaleUpperCase();
-}
+/** The letters of the avatar circle: the one shared rule, so a person reads the same in Contacts and the Inbox. */
+export { initials } from '@/lib/initials';
 
 /** Six fixed avatar tints, picked from the contact id so a person keeps the same colour everywhere. */
 export const AVATAR_TONES = [

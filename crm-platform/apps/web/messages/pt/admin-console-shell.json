@@ -513,7 +513,8 @@
         "profileHint": "Seu nome, foto e dados de contato",
         "password": "Senha e segurança",
         "passwordHint": "Senha, login em duas etapas e sessões ativas"
-      }
+      },
+      "searchPage": "Pesquisar \"{query}\" nesta página"
     },
     "strip": {
       "jump": "Buscar ou ir para...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Caixa de entrada",
       "clearAll": "Limpar tudo",
       "viewAll": "Ver tudo →"
+    },
+    "notFound": {
+      "title": "Página não encontrada",
+      "body": "Esta página não existe ou foi movida. Verifique o endereço ou volte ao seu painel.",
+      "home": "Ir para o painel"
     }
   }
 }

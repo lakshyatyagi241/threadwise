@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useLocale, useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { publicApi } from '../api/service';
-import type { PublicType } from '../api/schemas';
+import type { PublicDirectory as PublicDirectoryData, PublicType } from '../api/schemas';
 import { safeColor } from '../lib/format';
 import { priceLabel } from '../lib/public-booking';
 import { ChevronRightIcon, ClockIcon, CoinIcon, InfoIcon, flip } from './icons';
@@ -16,13 +16,13 @@ import {
   useDurationLabel,
 } from './public-parts';
 import { PublicShell } from './public-shell';
+import { useBookingTheme } from './public-theme';
 
 /**
  * `/book/<org>`: the services a business offers online. Each card shows what the visitor needs to choose (name, what it is,
  * how long, where, what it costs) and leads to the service's own page, where times are picked.
  */
 export function PublicDirectory({ org }: { org: string }) {
-  const t = useTranslations('appointments.public.directory');
   const q = useQuery({
     queryKey: ['appointments', 'public', 'directory', org],
     queryFn: ({ signal }) => publicApi.directory(org, signal),
@@ -31,44 +31,57 @@ export function PublicDirectory({ org }: { org: string }) {
   });
 
   return (
-    <PublicShell orgName={q.data?.org.name}>
+    <PublicShell orgName={q.data?.org.name} org={q.data?.org.slug ?? org} theme={q.data?.theme}>
       {q.isPending ? (
         <PublicSkeleton />
       ) : q.isError ? (
         <ProblemCard error={q.error} context="org" onRetry={() => void q.refetch()} />
       ) : (
-        <div className="space-y-5">
-          <div>
-            <h1 className="text-xl font-semibold" dir="auto">
-              {t('title')}
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              {t('subtitle', { name: q.data.org.name })}
-            </p>
-          </div>
-          {q.data.types.length === 0 ? (
-            <div
-              role="status"
-              className="rounded-xl border border-border bg-background p-8 text-center"
-            >
-              <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
-                <InfoIcon className="size-6" />
-              </span>
-              <h2 className="mt-4 text-base font-semibold">{t('empty.title')}</h2>
-              <p className="mt-2 text-sm text-muted-foreground">{t('empty.message')}</p>
-            </div>
-          ) : (
-            <ul className="grid gap-4 sm:grid-cols-2" aria-label={t('services')}>
-              {q.data.types.map((type) => (
-                <li key={type.slug} className="min-w-0">
-                  <ServiceCard org={org} type={type} />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
+        <DirectoryBody org={org} data={q.data} />
       )}
     </PublicShell>
+  );
+}
+
+/** The chooser itself, without its frame: the editor's preview draws the same thing around sample services. */
+export function DirectoryBody({ org, data }: { org: string; data: PublicDirectoryData }) {
+  const t = useTranslations('appointments.public.directory');
+  const theme = useBookingTheme();
+  return (
+    <div className="space-y-5">
+      <div>
+        <h1 className="text-xl font-semibold text-[color:var(--bk-backdrop-fg)]" dir="auto">
+          {t('title')}
+        </h1>
+        <p
+          className="mt-1 whitespace-pre-line break-words text-sm text-[color:var(--bk-backdrop-muted)]"
+          dir="auto"
+          data-testid="booking-welcome"
+        >
+          {theme.welcomeText || t('subtitle', { name: data.org.name })}
+        </p>
+      </div>
+      {data.types.length === 0 ? (
+        <div
+          role="status"
+          className="rounded-xl border border-border bg-background p-8 text-center"
+        >
+          <span className="mx-auto flex size-12 items-center justify-center rounded-full bg-muted text-muted-foreground">
+            <InfoIcon className="size-6" />
+          </span>
+          <h2 className="mt-4 text-base font-semibold">{t('empty.title')}</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{t('empty.message')}</p>
+        </div>
+      ) : (
+        <ul className="grid gap-4 sm:grid-cols-2" aria-label={t('services')}>
+          {data.types.map((type) => (
+            <li key={type.slug} className="min-w-0">
+              <ServiceCard org={org} type={type} />
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
   );
 }
 
@@ -112,7 +125,7 @@ function ServiceCard({ org, type }: { org: string; type: PublicType }) {
             </InfoRow>
           )}
         </span>
-        <span className="inline-flex items-center gap-1 text-sm font-medium text-brand dark:text-primary">
+        <span className="inline-flex items-center gap-1 text-sm font-medium text-primary">
           {t('directory.choose')}
           <ChevronRightIcon className={flip} />
         </span>

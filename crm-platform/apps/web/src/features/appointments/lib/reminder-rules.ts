@@ -40,6 +40,7 @@ export const REMINDER_REASON_CODES = [
   'no_contact_point',
   'no_channel',
   'no_sender',
+  'channel_disabled',
   'template_required',
   'template_unavailable',
   'quiet_hours_too_late',

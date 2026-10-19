@@ -245,6 +245,11 @@
         "description": "Schlüssel und Dokumentation für die Entwicklung auf Basis des Produkts.",
         "keywords": "api-schlüssel, entwickler, tokens, docs, openapi"
       },
+      "api-keys": {
+        "label": "API-Schlüssel",
+        "description": "Erstellen und verwalten Sie die Schlüssel, mit denen andere Systeme die API aufrufen.",
+        "keywords": "api-schlüssel, token, geheimnis, entwickler, zugriff, integration"
+      },
       "webhooks": {
         "label": "Webhooks",
         "description": "Senden Sie Ereignisse in Echtzeit an Ihre eigenen Systeme.",
@@ -301,7 +306,7 @@
         "keywords": "geta, veröffentlichen, bot, konsole, live schalten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatische Zuweisung",
+        "label": "Automatische Zuweisung von Unterhaltungen",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
       },

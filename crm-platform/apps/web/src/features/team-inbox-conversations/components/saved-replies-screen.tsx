@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useQueryClient } from '@tanstack/react-query';
 import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useDeferredValue, useMemo, useState } from 'react';
-import { PLAN_UPGRADE_PATH, type SavedReply } from '@crm/contracts';
+import { PLAN_UPGRADE_PATH, isUnlimitedLimit, type SavedReply } from '@crm/contracts';
 import {
   Alert,
   Badge,
@@ -51,7 +51,9 @@ export function SavedRepliesScreen() {
   const rows = useMemo(() => list.data?.pages.flatMap((p) => p.data) ?? [], [list.data]);
   const first = list.data?.pages[0];
   const counts = first?.counts;
-  const limit = first?.limit ?? null;
+  // An unlimited plan (0, or the 1,000,000 stand-in) has no cap to meter.
+  const rawLimit = first?.limit ?? null;
+  const limit = rawLimit !== null && !isUnlimitedLimit(rawLimit) ? rawLimit : null;
   const total = first?.total ?? 0;
   const atLimit = limit !== null && total >= limit;
   const nearLimit = limit !== null && !atLimit && total >= limit * NEAR_LIMIT;

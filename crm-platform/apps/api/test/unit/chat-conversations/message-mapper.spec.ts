@@ -271,3 +271,29 @@ describe('toMessageResponse: the delivery tally of a message sent to a WhatsApp 
     expect(sent({}).groupDelivery).toBeUndefined();
   });
 });
+
+describe('a system line (a migrated live-chat "Connected to ..." event)', () => {
+  it('is exposed as a system item with the system as sender', () => {
+    const wire = toMessageResponse(
+      row({
+        direction: 'out',
+        kind: 'system',
+        senderKind: 'system',
+        body: 'Connected to Aashish',
+        status: 'sent',
+      }),
+      () => null,
+    );
+    expect(wire.kind).toBe('system');
+    expect(wire.sender.kind).toBe('system');
+    expect(wire.body).toBe('Connected to Aashish');
+    expect(messageResponseSchema.parse(wire)).toEqual(wire);
+  });
+
+  it('keeps a text message sent by the system (a product share through the API) a text message', () => {
+    expect(
+      toMessageResponse(row({ direction: 'out', senderKind: 'system', status: 'sent' }), () => null)
+        .kind,
+    ).toBe('text');
+  });
+});

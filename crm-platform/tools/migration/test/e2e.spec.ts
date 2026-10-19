@@ -98,7 +98,7 @@ describe('(i) full run -> reconcile passes with unaccounted 0', () => {
     expect(row('contact_notes')).toMatchObject({ migrated: 2, quarantined: 1, excluded: 1 });
     expect(row('broadcast_templates')).toMatchObject({ disposition: 'EXCLUDE', excluded: 3 });
     expect(row('project')).toMatchObject({ disposition: 'EXCLUDE', excluded: 1 });
-    expect(row('contact_properties_fields')).toMatchObject({ read: 14, migrated: 13, excluded: 1 });
+    expect(row('contact_properties_fields')).toMatchObject({ read: 14, migrated: 7, excluded: 7 });
     const q = r.nonMigrated.map((n) => `${n.collection}:${n.code}`);
     expect(q).toEqual(
       expect.arrayContaining([
@@ -108,6 +108,7 @@ describe('(i) full run -> reconcile passes with unaccounted 0', () => {
         'contact_notes:PARENT_EXCLUDED',
         'contact_properties_field_options:ORPHAN_PARENT',
         'contact_properties_field_options:PARENT_EXCLUDED',
+        'contact_properties_field_options:PARENT_BUILT_IN',
         'contact_properties_field_dependancy_mapping:SELF_DEPENDENCY',
       ]),
     );

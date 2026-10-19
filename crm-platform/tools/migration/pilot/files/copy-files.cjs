@@ -503,6 +503,17 @@ async function collectRefs(db, org, rekey = false, cfg = { allowedHosts: [] }) {
                 AND COALESCE(meta->'legacy'->>'mediaUrl', media_key) ~* '^https?://'`,
             [org.id],
           );
+      // rows an earlier run of a rolled-back migration of the SAME client left with a key of another organization (`chat/<other org id>/waboo/...`):
+      // the app answers 404 for them, so they are fetched again from the query-free source url kept in meta.legacy.sourceUrl
+      if (!rekey) {
+        const foreign = await db.query(
+          `SELECT id, created_at::text AS created_at, meta->'legacy'->>'sourceUrl' AS url, media_key AS match
+             FROM messages
+            WHERE org_id = $1 AND media_key LIKE 'chat/%/waboo/%' AND media_key NOT LIKE $2 AND meta->'legacy'->>'sourceUrl' ~* '^https?://'`,
+          [org.id, `chat/${org.id}/waboo/%`],
+        );
+        m.rows.push(...foreign.rows);
+      }
       const c = rekey ? { rows: [] } : await db.query(`SELECT id, storage_key AS url FROM contact_files WHERE org_id = $1 AND storage_key ~* '^https?://'`, [org.id]);
       // media steps of converted flows hold the Waboo address inside flow_data
       const f = rekey ? { rows: [] } : await db.query(`SELECT id, flow_data FROM flows WHERE org_id = $1 AND flow_data IS NOT NULL`, [org.id]);
@@ -688,6 +699,10 @@ async function runCopy(ctx) {
   };
   async function one(g) {
     let done = state.get(g.k);
+    // A state entry only counts when it was written for THIS organization and THIS storage: the state file outlives a rolled-back
+    // migration and a change of bucket, and a "done" for another organization's key or another bucket leaves the object where the app
+    // will never look (the row then points at a key of an organization that is not this one: a 404 for the person).
+    if (done && done.status === 'done' && !(done.targetKey === targetKeyOf(org, g) && done.bucket === s3.bucket[g.kind] && done.endpoint === s3.endpoint)) done = undefined;
     if (!(done && done.status === 'done')) {
       if (attempted >= maxFiles || stats.bytes >= maxBytes) return void stats.deferred++;
       attempted++;
@@ -700,7 +715,7 @@ async function runCopy(ctx) {
           contentType && contentType !== 'application/octet-stream' ? contentType : exp?.ct || MIME_BY_EXT[extOf(g.id.path)] || 'application/octet-stream';
         const targetKey = targetKeyOf(org, g);
         await s3Put(s3, s3.bucket[g.kind], fullKey(prefix, targetKey), buf, mime);
-        done = { k: g.k, status: 'done', kind: g.kind, bucket: s3.bucket[g.kind], targetKey, objectKey: fullKey(prefix, targetKey), bytes: buf.length, sha256: sha256(buf), mime, sourceUrl: strip(g.url), host: g.id.host, at: new Date().toISOString() };
+        done = { k: g.k, status: 'done', kind: g.kind, bucket: s3.bucket[g.kind], endpoint: s3.endpoint, targetKey, objectKey: fullKey(prefix, targetKey), bytes: buf.length, sha256: sha256(buf), mime, sourceUrl: strip(g.url), host: g.id.host, at: new Date().toISOString() };
         appendState(flags.state, done);
         state.set(g.k, done);
         stats.copied++;
@@ -763,6 +778,13 @@ async function runVerify(ctx) {
     ],
     true,
   );
+  // a message file whose key belongs to ANOTHER organization (left by a rolled-back run of this client): the app answers 404 for it
+  const foreignKeys = await tenant(
+    db,
+    org.id,
+    async () => Number((await db.query(`SELECT count(*)::int AS n FROM messages WHERE org_id = $1 AND media_key LIKE 'chat/%/waboo/%' AND media_key NOT LIKE $2`, [org.id, `chat/${org.id}/waboo/%`])).rows[0].n),
+    true,
+  );
   // flows: any link still on a Waboo host is a leftover; a link under the R2 public base must exist in the bucket
   const flowUrls = flowRows.flatMap((r) => [...jsonUrls(r.flow_data, cfg.allowedHosts)]);
   for (const u of flowUrls) left.push({ t: 'flows', url: u });
@@ -794,6 +816,7 @@ async function runVerify(ctx) {
   const bad = new Map();
   const byKind = new Map();
   for (const r of noSource) bad.set(`NO_SOURCE_${String(r.kind).toUpperCase()}`, r.n);
+  if (foreignKeys > 0) bad.set('FOREIGN_ORG_KEY', foreignKeys);
   for (const j of msgs) tally(byKind, j.kind);
   if (flowObjects.size) byKind.set('flows (R2 objects)', flowObjects.size);
   const q = [...jobs];

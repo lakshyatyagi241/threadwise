@@ -114,6 +114,7 @@ const typeWire = bookingTypeResponseSchema.parse({
       event: 'reminder',
       channel: 'email',
       waTemplateId: null,
+      libraryTemplateId: null,
       plainBody: 'See you {{slot}}',
       variableMap: null,
     },

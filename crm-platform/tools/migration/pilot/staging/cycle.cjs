@@ -98,9 +98,13 @@ function loadClient(client) {
   if (!fs.existsSync(file))
     refuse(`no config ${file} (copy a template in pilot/staging/clients/ and fill it in)`);
   const c = JSON.parse(fs.readFileSync(file, 'utf8'));
-  for (const k of ['orgName', 'orgSlug', 'orgPlan', 'ownerEmail', 'ownerName'])
+  for (const k of ['orgName', 'orgSlug', 'orgPlan'])
     if (typeof c[k] !== 'string' || PLACEHOLDER.test(c[k]))
       refuse(`${path.basename(file)}: "${k}" is empty or still a placeholder`);
+  // the customer's own owner is optional: without one the workspace's Owner is the additional owner (load/org.ts), nobody else is created
+  for (const k of ['ownerEmail', 'ownerName'])
+    if (c[k] != null && (typeof c[k] !== 'string' || PLACEHOLDER.test(c[k])))
+      refuse(`${path.basename(file)}: "${k}" must be a real value or null`);
   if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(c.orgSlug))
     refuse('orgSlug must be lowercase letters, digits, dashes');
   for (const k of ['channelMap', 'creditOpening', 'coreFile'])
@@ -130,18 +134,9 @@ function runArgs(cfg, { dry, steps, skipSteps } = {}) {
   const a = ['run', '--client', cfg.client];
   if (dry) a.push('--dry-run');
   a.push('--batch', String(cfg.batch || 250), ...GUARD);
-  a.push(
-    '--org-name',
-    cfg.orgName,
-    '--org-slug',
-    cfg.orgSlug,
-    '--org-plan',
-    cfg.orgPlan,
-    '--owner-email',
-    cfg.ownerEmail,
-    '--owner-name',
-    cfg.ownerName,
-  );
+  a.push('--org-name', cfg.orgName, '--org-slug', cfg.orgSlug, '--org-plan', cfg.orgPlan);
+  if (cfg.ownerEmail) a.push('--owner-email', cfg.ownerEmail);
+  if (cfg.ownerName) a.push('--owner-name', cfg.ownerName);
   if (cfg.defaultCc) a.push('--default-cc', String(cfg.defaultCc));
   if (cfg.channelMap) a.push('--channel-map', inMig(cfg, cfg.channelMap));
   if (cfg.creditOpening) a.push('--credit-opening', inMig(cfg, cfg.creditOpening));
@@ -308,6 +303,8 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
     [path.join(DIST, 'BUILD-INFO.json'), 'bundle/BUILD-INFO.json'],
     [path.join(HERE, 'set-owner-password.cjs'), 'bundle/set-owner-password.cjs'],
     [path.join(HERE, 'rollback-org.sql'), 'bundle/rollback-org.sql'],
+    // the WhatsApp token import of the wa-credentials step (pilot/credentials); runs in the desk-api image, which has `pg`
+    [path.join(HERE, '..', 'credentials', 'import-whatsapp-credentials.cjs'), 'bundle/import-whatsapp-credentials.cjs'],
     // the media copy (Waboo urls -> the app's object store, see pilot/files/copy-files.cjs); runs in the desk-api image, which has `pg`
     [path.join(HERE, '..', 'files', 'copy-files.cjs'), 'files/copy-files.cjs'],
   ];
@@ -598,6 +595,90 @@ async function cmdCutover(srv, cfg, flags = {}) {
   return r.code === 0 ? 0 : 1;
 }
 
+/** the client's channel map still holds the placeholder entry: there is no real number to import a token for */
+function channelMapIsPlaceholder(cfg) {
+  try {
+    return !cfg.channelMap || /PLACEHOLDER/.test(fs.readFileSync(cfg.channelMap, 'utf8'));
+  } catch {
+    return true;
+  }
+}
+
+/** the exporter's arguments for the ONE collection that holds the WhatsApp token (denylisted: the override and a reason are the owner's approval) */
+function waExportArgs(client, db) {
+  return [
+    '--db', db,
+    '--client', client,
+    '--to-ssh',
+    '--i-confirm-server-is-staging',
+    '--collections', 'chatbot_misc_config',
+    '--i-know-what-i-am-doing',
+    '--reason', `WhatsApp credential import for ${client}, migration of the WABA number approved by the project owner, ${new Date().toISOString().slice(0, 10)}`,
+    '--force',
+    '--no-manifest', // the manifest of the real export must stay the one of the whole dump
+  ];
+}
+
+/**
+ * wa-credentials: moves the Meta token of the migrated number into WaDesk. Exports ONLY chatbot_misc_config to the server (never kept: it is
+ * deleted again at the end, whatever happens), then pilot/credentials/import-whatsapp-credentials.cjs seals the token with the app's own key
+ * into a pending wa_provider_configs row and --verify opens it again in memory. Nothing is printed but key names and booleans. Any refusal
+ * (no live number, no token, a token of the wrong shape) stops the migration here: the cutover never runs on a half-imported number.
+ */
+async function cmdWaCredentials(srv, cfg, db) {
+  await assertStaging(srv);
+  if (channelMapIsPlaceholder(cfg)) {
+    console.log('wa-credentials: skipped, the channel map holds no real WhatsApp number (placeholder), so there is nothing to import');
+    return 'skipped';
+  }
+  if (!db) refuse('wa-credentials: no Mongo database name (pass --db <waboo db> or set "mongoDb" in the client config)');
+  const bin = process.env.MONGO_EXPORT_BIN || KIT_EXPORT;
+  if (!fs.existsSync(bin)) refuse(`the exporter ${bin} does not exist (set MONGO_EXPORT_BIN)`);
+  const file = `${srv.mig}/dumps/${cfg.client}/chatbot_misc_config.ndjson`;
+  const wipe = () => remote(srv, `rm -f ${shq(file)}`);
+  try {
+    const ex = await new Promise((res) => {
+      const c = spawn(process.execPath, [bin, ...waExportArgs(cfg.client, db)], { stdio: ['ignore', 'pipe', 'pipe'] });
+      for (const st of [c.stdout, c.stderr]) st.on('data', (d) => d.toString('utf8').split('\n').filter(Boolean).forEach((l) => console.log('  wa-export: ' + maskPII(l))));
+      c.on('error', () => res(1));
+      c.on('close', (code) => res(code));
+    });
+    summary('wa-export', ex);
+    if (ex !== 0) return 1;
+    const base = ['--client', cfg.client, '--org-slug', cfg.orgSlug, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres', '--dumps-dir', '/mig/dumps'];
+    const inner = (extra) => `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/import-whatsapp-credentials.cjs ${[...base, ...extra].map(shq).join(' ')}`;
+    const mounts = [`${srv.mig}/bundle/import-whatsapp-credentials.cjs:/app/import-whatsapp-credentials.cjs:ro`];
+    const imp = await runShown(srv, containerRun(srv, inner(['--apply', '--confirm-org-slug', cfg.orgSlug]), { mounts }), 'wa-credentials import (APPLY)');
+    if (imp.code !== 0) return 1;
+    const ver = await runShown(srv, containerRun(srv, inner(['--verify']), { mounts }), 'wa-credentials verify');
+    return ver.code === 0 ? 0 : 1;
+  } finally {
+    const w = await wipe();
+    console.log(`wa-credentials: the exported chatbot_misc_config ${w.code === 0 ? 'was deleted from the server' : 'COULD NOT be deleted: remove ' + file + ' by hand'}`);
+  }
+}
+
+/**
+ * wa-cutover: the cutover (cmdCutover) applied by the pipeline itself. The three confirmations that the operator types by hand in the
+ * standalone command are given here because the project owner chose the automatic activation: the log says so. --webhook-base (or
+ * WABA_WEBHOOK_PUBLIC_URL / APP_URL of the container) must be the https address Meta can reach, or the cutover refuses.
+ */
+async function cmdWaCutover(srv, cfg, flags = {}) {
+  if (channelMapIsPlaceholder(cfg)) {
+    console.log('wa-cutover: skipped, the channel map holds no real WhatsApp number (placeholder)');
+    return 'skipped';
+  }
+  console.log(`wa-cutover: automatic activation requested (--activate-whatsapp): confirming "${cfg.orgSlug}" and that Waboo is switched off on the operator's behalf`);
+  const r = await cmdCutover(srv, cfg, {
+    apply: true,
+    'confirm-org-slug': cfg.orgSlug,
+    'i-switched-waboo-off': true,
+    'confirm-cutover': `CUT OVER ${cfg.orgSlug}`,
+    ...(flags['webhook-base'] ? { 'webhook-base': flags['webhook-base'] } : {}),
+  });
+  return r;
+}
+
 /** Re-read the saved bot payloads of migrated messages that were stored with an empty body (interactive messages): text, buttons kept, header file url. Reads the database only. Dry run unless --apply. */
 async function cmdChatReparse(srv, cfg, flags = {}) {
   await assertStaging(srv);
@@ -637,6 +718,19 @@ async function cmdWalletHistory(srv, cfg, flags = {}) {
 }
 
 /** Give the bot messages an earlier load wrote without their buttons (Visit our website, Call now ...) the meta.sentInteractive the inbox draws them from. Reads only the database. Dry run unless --apply. */
+/**
+ * chat-delivery: gives the loaded outbound messages the delivery state Waboo had (delivered / read / failed) from its billing log. The chat history
+ * carries no receipt, so the load leaves every outbound message `sent`, and the dashboard and analytics then show "Delivered 0 / Queued N". Forward
+ * only, idempotent, never `queued` (nothing is re-sent); it runs in every migrate, not only in a catch-up.
+ */
+async function cmdChatDelivery(srv, cfg, flags = {}) {
+  await assertStaging(srv);
+  const a = ['chat-delivery', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
+  if (flags.apply) a.push('--apply', '--confirm-org-slug', cfg.orgSlug);
+  const r = await runShown(srv, containerRun(srv, migrateInner(a)), flags.apply ? 'chat-delivery (APPLY)' : 'chat-delivery (dry run)', `chat-delivery-${cfg.client}.txt`);
+  return r.code === 0 ? 0 : 1;
+}
+
 async function cmdChatButtons(srv, cfg, flags = {}) {
   await assertStaging(srv);
   const a = ['chat-buttons', '--client', cfg.client, '--org-slug', cfg.orgSlug, ...GUARD];
@@ -795,6 +889,7 @@ async function cmdOwnerPassword(srv, cfg) {
   const pw = process.env.OWNER_NEW_PASSWORD;
   if (!pw)
     refuse('set OWNER_NEW_PASSWORD in your shell (it is sent over stdin, never on a command line)');
+  if (!cfg.ownerEmail) refuse('this client has no owner e-mail in its config: nobody to set a password for');
   await assertStaging(srv);
   const inner = `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/set-owner-password.cjs ${['--org-slug', cfg.orgSlug, '--email', cfg.ownerEmail, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres'].map(shq).join(' ')}`;
   const cmd = `IFS= read -r OWNER_NEW_PASSWORD; export OWNER_NEW_PASSWORD; ${containerRun(srv, inner, { mounts: [`${srv.mig}/bundle/set-owner-password.cjs:/app/set-owner-password.cjs:ro`], env: ['OWNER_NEW_PASSWORD'] })}`;
@@ -871,11 +966,11 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
-const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'files', 'core-load', 'wallet-sync', 'wallet-history', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete'];
+const MIG_STEPS = ['export', 'ship', 'preflight', 'dry', 'backup', 'load', 'update', 'chat-status', 'chat-buttons', 'chat-delivery', 'files', 'core-load', 'wallet-sync', 'wallet-history', 'usage-append', 'flow-state', 'reconcile', 'report', 'complete', 'wa-credentials', 'wa-cutover'];
 /** steps that only make sense for a client that is ALREADY loaded: --catch-up adds them; a fresh load never runs them (a fresh load reads everything once) */
 const CATCHUP_ONLY = new Set(['update', 'chat-status', 'chat-buttons', 'usage-append']);
 /** steps a catch-up refuses: flow-state would publish flows again (the flows are already live) */
-const CATCHUP_SKIPPED = new Set(['flow-state']);
+const CATCHUP_SKIPPED = new Set(['flow-state', 'wa-credentials', 'wa-cutover']);
 /** free memory (MB, MemAvailable) the server must have: one migrate container uses up to ~400 MB next to the live stack and the 1 GB Postgres */
 const MIN_FREE_MB = { 1: 700, 2: 1200 };
 const MAX_CONCURRENCY = 2;
@@ -1131,7 +1226,9 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
-      (s !== 'flow-state' || cfg.flowState !== 'inactive'), // "flowState": "inactive" in the client config keeps every flow a draft
+      (s !== 'flow-state' || cfg.flowState !== 'inactive') && // "flowState": "inactive" in the client config keeps every flow a draft
+      // the WhatsApp number (the last steps, so a failure there never costs the reports of the data migration): only on request (--activate-whatsapp, the panel's load passes it), never for a catch-up, and "whatsapp": "off" in the client config skips it
+      ((s !== 'wa-credentials' && s !== 'wa-cutover') || (flags['activate-whatsapp'] && cfg.whatsapp !== 'off')),
   );
   const ctxL = {};
   dir = rec.from === 'complete' ? newestReportDir(cfg.client) : null;
@@ -1169,10 +1266,13 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     'wallet-history': () => cmdWalletHistory(srv, cfg, { ...flags, apply: true }),
     'chat-status': () => cmdChatStatus(srv, cfg, { ...flags, apply: true }),
     'chat-buttons': () => cmdChatButtons(srv, cfg, { ...flags, apply: true }),
+    'chat-delivery': () => cmdChatDelivery(srv, cfg, { ...flags, apply: true }),
     'usage-append': () => cmdUsageAppend(srv, cfg, { ...flags, apply: true }),
     'flow-state': () => cmdFlowState(srv, cfg, { ...flags, apply: true }),
     load: () => cmdLoad(srv, cfg, flags, ctxL),
     reconcile: () => cmdReconcile(srv, cfg, { ...flags, alarmsOk: true }),
+    'wa-credentials': () => cmdWaCredentials(srv, cfg, rec.db),
+    'wa-cutover': () => cmdWaCutover(srv, cfg, flags),
     report: async () => {
       dir = runDir(cfg.client);
       return cmdReport(srv, cfg, { dir });
@@ -1301,11 +1401,12 @@ function cmdNewClient(flags) {
   const key = flags.client;
   if (!/^[a-z0-9][a-z0-9_-]{0,40}$/.test(key || '')) refuse('--client must be a short lowercase key');
   const orgName = cleanText('name', flags.name);
-  const ownerName = cleanText('owner-name', flags['owner-name']);
+  // the owner is optional: no --owner-email means no owner user is made for the customer (the additional owner is the workspace's Owner)
+  const ownerName = flags['owner-email'] ? cleanText('owner-name', flags['owner-name']) : null;
   const slug = flags.slug;
   if (!/^[a-z0-9][a-z0-9-]{1,60}$/.test(slug || '')) refuse('--slug must be lowercase letters, digits, dashes (2-61 chars)');
-  const email = cleanText('owner-email', flags['owner-email'], 120);
-  if (!/^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/.test(email)) refuse('--owner-email is not an e-mail address');
+  const email = flags['owner-email'] ? cleanText('owner-email', flags['owner-email'], 120) : null;
+  if (email !== null && !/^[^\s@<>"']+@[^\s@<>"']+\.[^\s@<>"']{2,}$/.test(email)) refuse('--owner-email is not an e-mail address');
   const plan = flags.plan || 'enterprise';
   if (!/^[a-z][a-z0-9_-]{1,30}$/.test(plan)) refuse('--plan must be a plan slug such as enterprise');
   const db = flags.db;
@@ -1407,6 +1508,7 @@ const BOOL_FLAGS = [
   'check-meta',
   'i-switched-waboo-off',
   'replace-existing-override',
+  'activate-whatsapp',
 ];
 const VALUE_FLAGS = [
   'client',
@@ -1465,6 +1567,7 @@ const COMMANDS = [
   'chat-relink',
   'chat-status',
   'chat-buttons',
+  'chat-delivery',
   'campaign-link',
   'pricing-seed',
   'load',
@@ -1518,6 +1621,7 @@ async function main(argv) {
     'chat-relink': () => cmdChatRelink(srv, cfg, flags),
     'chat-status': () => cmdChatStatus(srv, cfg, flags),
     'chat-buttons': () => cmdChatButtons(srv, cfg, flags),
+    'chat-delivery': () => cmdChatDelivery(srv, cfg, flags),
     'campaign-link': () => cmdCampaignLink(srv, cfg, flags),
   };
   if (cmd !== 'all-dry') return timed(cmd, one[cmd]);

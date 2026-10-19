@@ -245,6 +245,11 @@
         "description": "Khóa và tài liệu để phát triển trên sản phẩm.",
         "keywords": "khóa api, nhà phát triển, token, tài liệu, openapi"
       },
+      "api-keys": {
+        "label": "Khóa API",
+        "description": "Tạo và quản lý các khóa mà hệ thống khác dùng để gọi API.",
+        "keywords": "khóa api, token, bí mật, nhà phát triển, truy cập, tích hợp"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "Gửi sự kiện đến hệ thống của bạn ngay khi chúng xảy ra.",
@@ -301,7 +306,7 @@
         "keywords": "geta, xuất bản, bot, bảng điều khiển, đưa lên, chatbot"
       },
       "auto-assignment": {
-        "label": "Tự động phân công",
+        "label": "Tự động phân công cuộc trò chuyện",
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
       },

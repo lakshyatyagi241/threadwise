@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby.",
       "company": "Firma",
       "companyHint": "Przypisuje ten kontakt do organizacji.",
-      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole."
+      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole.",
+      "searchOptions": "Szukaj opcji",
+      "searchOptionsFor": "Szukaj w opcjach pola {field}",
+      "noOptionsFound": "Żadna opcja nie pasuje do wyszukiwania."
     },
     "tags": {
       "title": "Tagi",
@@ -1225,7 +1228,8 @@
             "duplicate": "Dwie opcje mają tę samą nazwę."
           },
           "condition": "Wybierz właściwość i wartość dla każdego warunku."
-        }
+        },
+        "optionsLazy": "Ta właściwość ma {count, plural, one {# opcję} few {# opcje} many {# opcji} other {# opcji}}, zbyt wiele, by edytować je tutaj. Pozostają bez zmian; pozostałe ustawienia można zmienić."
       },
       "builtinCard": {
         "title": "Właściwości wbudowane",

@@ -13,6 +13,8 @@ export interface Attribute {
   defaultValue: string;
   description: string;
   active: boolean;
+  /** Hidden in the property registry: kept, but not offered as a column, filter or input. */
+  hidden: boolean;
   rowVersion: number;
 }
 
@@ -24,6 +26,7 @@ export function toAttribute(a: AttributeResponse): Attribute {
     defaultValue: a.defaultValue ?? '',
     description: a.description ?? '',
     active: a.isActive,
+    hidden: a.isHidden === true,
     rowVersion: a.rowVersion,
   };
 }

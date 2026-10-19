@@ -44,6 +44,11 @@
         "editJobTitle": "Modifier le poste",
         "jobTitleConflict": "Quelqu'un d'autre a d'abord modifié ce contact. Il a été rechargé ; réessayez.",
         "jobTitleFailed": "Impossible d'enregistrer le poste. Réessayez.",
+        "jobTitleRequired": "Le poste ne peut pas rester vide : cet espace de travail l'exige.",
+        "jobTitleOtherRequired": "D'autres propriétés obligatoires de ce contact sont vides. Ouvrez Modifier le contact pour les renseigner.",
+        "jobTitleNotEditable": "Le poste est en lecture seule ou masqué dans cet espace de travail ; il ne peut donc pas être modifié ici.",
+        "jobTitleForbidden": "Vous n'avez pas l'autorisation de modifier ce contact.",
+        "jobTitleGone": "Ce contact n'est plus disponible pour vous : il a été supprimé ou attribué à quelqu'un d'autre.",
         "owner": "Propriétaire"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Étape précédente",
         "previousStageSince": "Étape précédente depuis",
         "lostReason": "Motif de perte",
-        "updatedAt": "Dernière mise à jour"
+        "updatedAt": "Dernière mise à jour",
+        "leadScore": "Score du lead",
+        "originalStage": "Étape d'origine du cycle de vie",
+        "createdBy": "Créé par",
+        "updatedBy": "Mis à jour par"
       },
       "company": {
         "title": "Entreprise",

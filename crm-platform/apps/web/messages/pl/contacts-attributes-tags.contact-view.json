@@ -44,6 +44,11 @@
         "editJobTitle": "Edytuj stanowisko",
         "jobTitleConflict": "Ktoś inny zmienił ten kontakt wcześniej. Został wczytany ponownie; spróbuj jeszcze raz.",
         "jobTitleFailed": "Nie udało się zapisać stanowiska. Spróbuj ponownie.",
+        "jobTitleRequired": "Stanowisko nie może być puste: ta przestrzeń robocza go wymaga.",
+        "jobTitleOtherRequired": "Inne wymagane właściwości tego kontaktu są puste. Otwórz Edytuj kontakt, aby je uzupełnić.",
+        "jobTitleNotEditable": "Stanowisko jest w tej przestrzeni roboczej tylko do odczytu lub ukryte, więc nie można go tu edytować.",
+        "jobTitleForbidden": "Nie masz uprawnień do edycji tego kontaktu.",
+        "jobTitleGone": "Ten kontakt nie jest już dla Ciebie dostępny: został usunięty lub przypisany komuś innemu.",
         "owner": "Właściciel"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Poprzedni etap",
         "previousStageSince": "Poprzedni etap od",
         "lostReason": "Powód przegranej",
-        "updatedAt": "Ostatnia aktualizacja"
+        "updatedAt": "Ostatnia aktualizacja",
+        "leadScore": "Wynik leada",
+        "originalStage": "Pierwotny etap cyklu życia",
+        "createdBy": "Utworzył(a)",
+        "updatedBy": "Zaktualizował(a)"
       },
       "company": {
         "title": "Firma",

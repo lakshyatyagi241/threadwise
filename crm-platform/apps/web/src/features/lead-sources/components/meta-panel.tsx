@@ -1,9 +1,12 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
+import { PLAN_UPGRADE_PATH } from '@crm/contracts';
 import { Alert, Button, Card, EmptyState, Spinner } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { usePlanFeature } from '@/lib/plan-features';
 import { useMetaOverview } from '../meta-api';
 import { useLeadsCan } from '../lib/permissions';
 import type { PageCaps } from '../lib/meta-view';
@@ -23,14 +26,26 @@ export function useMetaCaps(): PageCaps {
 }
 
 /**
+ * Meta lead forms need Social leads AND the extra channels feature (Facebook). A plan without either is told so and the Meta calls are
+ * never made: the API would refuse each of them with `PLAN_FEATURE_LOCKED`. Unknown plan (no provider) counts as on.
+ */
+export function useMetaPlanOn(): boolean {
+  const leads = usePlanFeature('lead_sources');
+  const channels = usePlanFeature('extra_channels');
+  return leads && channels;
+}
+
+/**
  * Everything about Meta lead forms in one place: whether this install can talk to Meta at all, the connected Facebook Pages with
  * their lead sync, and (per Page) the form picker. It answers each state in words: no Meta app set, no Page connected, a Page that
  * needs lead access or a reconnect, a Meta call that failed.
  */
 export function MetaPanel() {
   const t = useTranslations('lead-sources.meta');
+  const tStates = useTranslations('lead-sources.states');
   const caps = useMetaCaps();
-  const overview = useMetaOverview(true);
+  const planOn = useMetaPlanOn();
+  const overview = useMetaOverview(planOn);
   const login = useMetaLogin();
   const canLogin = caps.manage && caps.facebook;
 
@@ -48,7 +63,17 @@ export function MetaPanel() {
         <p className="max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
       </div>
 
-      {overview.isPending ? (
+      {!planOn ? (
+        <Alert tone="warning" className="space-y-2" data-testid="meta-failure" data-kind="locked">
+          <p>{t('planLocked')}</p>
+          <Link
+            href={PLAN_UPGRADE_PATH}
+            className="font-medium underline underline-offset-2 focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            {tStates('upgrade')}
+          </Link>
+        </Alert>
+      ) : overview.isPending ? (
         <Loading label={t('loading')} />
       ) : overview.isError ? (
         <MetaFailure error={overview.error} onRetry={() => void overview.refetch()} />

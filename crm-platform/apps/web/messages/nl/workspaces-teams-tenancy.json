@@ -58,7 +58,10 @@
         "role": "Rol",
         "status": "Status",
         "joined": "Lid sinds",
-        "actions": "Acties"
+        "actions": "Acties",
+        "phone": "Telefoon",
+        "chatLimit": "Gelijktijdige chats",
+        "lastLogin": "Laatste login"
       },
       "pending": "in behandeling",
       "you": "Jij",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "Met verlof tot {date}",
       "onLeaveOpen": "Met verlof",
       "leaveFrom": "Verlof vanaf {date}",
-      "leaveAction": "Verlof en vervanging"
+      "leaveAction": "Verlof en vervanging",
+      "noLimit": "Geen limiet",
+      "neverSignedIn": "Nooit",
+      "editAction": "Telefoon en chatlimiet wijzigen"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -129,7 +135,14 @@
       "nameTooLong": "De naam mag maximaal {max} tekens bevatten.",
       "emailInvalid": "Voer een geldig e-mailadres in.",
       "upgrade": "Abonnement upgraden",
-      "emailRequired": "Voer een e-mailadres in."
+      "emailRequired": "Voer een e-mailadres in.",
+      "phone": "Telefoonnummer (optioneel)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Met landcode.",
+      "phoneInvalid": "Voer het nummer in met landcode, bijvoorbeeld +91 98765 43210.",
+      "chatLimit": "Gelijktijdige chats",
+      "chatLimitHint": "Maximaal aantal open chats dat deze persoon tegelijk krijgt toegewezen. Laat leeg voor geen limiet.",
+      "chatLimitInvalid": "Voer een geheel getal in van 1 tot {max}, of laat leeg voor geen limiet."
     },
     "teams": {
       "eyebrow": "Workspace",
@@ -320,6 +333,31 @@
       "undoTitle": "Deze hertoewijzing ongedaan maken?",
       "undoMessage": "Contacten en deals die sindsdien niemand heeft gewijzigd, gaan terug naar de vorige eigenaar. De rest blijft waar het is.",
       "restored": "{count} teruggezet, {skipped} gelaten waar ze zijn."
+    },
+    "details": {
+      "eyebrow": "Workspace",
+      "title": "Lid wijzigen",
+      "intro": "Telefoon en chatlimiet van {name}.",
+      "phone": "Telefoonnummer",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Met landcode. Laat leeg om te verwijderen.",
+      "phoneInvalid": "Voer het nummer in met landcode, bijvoorbeeld +91 98765 43210.",
+      "chatLimit": "Gelijktijdige chats",
+      "chatLimitHint": "Automatische toewijzing geeft deze persoon geen chats meer zodra die zoveel open chats heeft. Laat leeg voor geen limiet.",
+      "chatLimitPlaceholder": "Geen limiet",
+      "chatLimitInvalid": "Voer een geheel getal in van 1 tot {max}, of laat leeg voor geen limiet.",
+      "lastLogin": "Laatste login",
+      "lastLoginNever": "Nog niet ingelogd",
+      "submit": "Opslaan",
+      "saving": "Opslaan…",
+      "saved": "Lid bijgewerkt."
+    },
+    "availability": {
+      "label": "Beschikbaarheid",
+      "available": "Beschikbaar",
+      "offline": "Offline",
+      "hint": "Zolang je offline bent, worden je geen nieuwe chats automatisch toegewezen. Chats die je al hebt, blijven van jou.",
+      "failed": "Wijzigen is niet gelukt"
     }
   }
 }

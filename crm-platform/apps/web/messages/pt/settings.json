@@ -245,6 +245,11 @@
         "description": "Chaves e documentação para criar sobre o produto.",
         "keywords": "chaves de API, desenvolvedores, tokens, docs, openapi"
       },
+      "api-keys": {
+        "label": "Chaves de API",
+        "description": "Crie e gerencie as chaves que outros sistemas usam para chamar a API.",
+        "keywords": "chave api, token, segredo, desenvolvedores, acesso, integração"
+      },
       "webhooks": {
         "label": "Webhooks",
         "description": "Envie eventos para seus próprios sistemas conforme acontecem.",
@@ -301,7 +306,7 @@
         "keywords": "geta, publicar, bot, console, colocar no ar, chatbot"
       },
       "auto-assignment": {
-        "label": "Atribuição automática",
+        "label": "Atribuição automática de conversas",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
       },

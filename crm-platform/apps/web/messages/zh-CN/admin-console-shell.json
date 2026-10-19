@@ -513,7 +513,8 @@
         "profileHint": "你的姓名、头像和联系方式",
         "password": "密码和安全",
         "passwordHint": "密码、双重验证登录和活动会话"
-      }
+      },
+      "searchPage": "在此页面中搜索“{query}”"
     },
     "strip": {
       "jump": "搜索或跳转到...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "收件箱",
       "clearAll": "全部清除",
       "viewAll": "查看全部 →"
+    },
+    "notFound": {
+      "title": "页面未找到",
+      "body": "此页面不存在或已被移动。请检查地址，或返回仪表盘。",
+      "home": "前往仪表盘"
     }
   }
 }

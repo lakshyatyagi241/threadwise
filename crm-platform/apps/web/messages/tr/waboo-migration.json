@@ -196,7 +196,8 @@
       "core-load": "Çekirdek yükleme",
       "flow-state": "Akış durumu",
       "reconcile": "Mutabakat",
-      "report": "Rapor"
+      "report": "Rapor",
+      "whatsapp": "WhatsApp numarası"
     },
     "stepStatus": {
       "running": "Çalışıyor",

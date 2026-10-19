@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automatisering en AI",
-      "title": "Automatisch toewijzen",
+      "title": "Automatische toewijzing van gesprekken",
       "subtitle": "Geef elk nieuw gesprek automatisch aan de juiste medewerker. Regels worden in volgorde van boven naar beneden gecontroleerd.",
       "noAccess": "Je hebt geen toestemming om de instellingen voor automatisch toewijzen te bekijken.",
       "create": "Regel aanmaken",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Stuurt het antwoord: {body}"
     },
     "form": {
-      "back": "Automatisch toewijzen",
+      "back": "Automatische toewijzing van gesprekken",
       "noAccess": "Je hebt geen toestemming om de regels voor automatisch toewijzen te wijzigen.",
       "loading": "Regel laden",
       "notFound": "Deze regel bestaat niet meer.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Automatische toewijzing",
+      "eyebrow": "Automatische toewijzing van gesprekken",
       "title": "Werktijden",
       "subtitle": "Regels en SLA-doelen die werktijden gebruiken, tellen alleen de tijd binnen deze uren.",
       "close": "Sluiten",

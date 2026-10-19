@@ -12,6 +12,13 @@ describe('where a flow keeps its FAQs', () => {
     expect(faqHref(FLOW, { faqId: FAQ })).toBe(`/flows/simple/${FLOW}?tab=faqs&view=${FAQ}`);
   });
 
+  it('links into the same tab of the Advanced builder when asked', () => {
+    expect(faqHref(FLOW, 'unanswered', 'advanced')).toBe(
+      `/flows/builder/${FLOW}?tab=faqs&view=unanswered`,
+    );
+    expect(faqHref(FLOW, 'list', 'advanced')).toBe(`/flows/builder/${FLOW}?tab=faqs`);
+  });
+
   it('reads every deep link: list, new, an FAQ id, test, unanswered, insights', () => {
     expect(parseFaqLocation('list')).toEqual({ view: 'list' });
     expect(parseFaqLocation('new')).toEqual({ view: 'new' });

@@ -11,7 +11,9 @@ import type { PropertyDef } from './contact-property-values';
 import type { RequiredRule } from './required-properties';
 import {
   contactConditions,
+  contactLastActivity,
   contactScopeCondition,
+  whatsappSubscribedSql,
   whereOf,
   type ResolvedContactFilter,
 } from './contact-conditions';
@@ -195,7 +197,8 @@ export class ContactsRepository {
       faxNumber: contacts.faxNumber,
       dateOfBirth: contacts.dateOfBirth,
       isMinor: sql<boolean>`EXISTS (SELECT 1 FROM contact_privacy_flags pf WHERE pf.org_id = ${contacts.orgId} AND pf.contact_id = ${contacts.id} AND pf.is_minor)`,
-      lastActivityAt: contacts.lastActivityAt,
+      // The stamp on the contact or its latest conversation message, whichever is later (a migrated contact has no stamp).
+      lastActivityAt: sql<Date | null>`${contactLastActivity}`.mapWith(contacts.lastActivityAt),
       uncontactedSince: contacts.uncontactedSince,
       nextFollowUp: sql<
         ContactRow['nextFollowUp']
@@ -350,7 +353,7 @@ export class ContactsRepository {
     );
     const rows = await tx.execute(sql`
       SELECT count(*)::int AS total,
-             count(*) FILTER (WHERE NOT ${contacts.isUnsubscribed})::int AS subscribed,
+             count(*) FILTER (WHERE ${whatsappSubscribedSql})::int AS subscribed,
              count(*) FILTER (WHERE ${contacts.isUnsubscribed})::int AS unsubscribed,
              count(*) FILTER (WHERE ${contacts.importJobId} IS NOT NULL)::int AS imported,
              count(*) FILTER (WHERE ${contacts.uncontactedSince} IS NOT NULL)::int AS uncontacted,

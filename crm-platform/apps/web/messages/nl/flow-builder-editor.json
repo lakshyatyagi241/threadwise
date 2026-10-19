@@ -104,6 +104,7 @@
       "failed": "mislukt",
       "edited": "Bewerkt {when}",
       "openBuilder": "Bouwer openen",
+      "faqs": "Veelgestelde vragen",
       "pause": "Pauzeren",
       "resume": "Hervatten",
       "rename": "Hernoemen",
@@ -948,7 +949,7 @@
           "startPinned": "Dit is het startpunt (klik om los te maken)",
           "startMake": "Maak dit het startpunt",
           "startPoint": "Startpunt",
-          "editTitle": "Bewerken (open inspector)",
+          "editTitle": "Bewerken (inspector openen, dubbelklik op het knooppunt of druk op Enter)",
           "edit": "Bewerken",
           "duplicateTitle": "Dupliceren (Ctrl+D)",
           "duplicate": "Dupliceren",
@@ -964,7 +965,9 @@
           "nothingHint": "Klik op een node op het canvas om de eigenschappen te bewerken,<br/>of sleep een kaart van links om een nieuwe node toe te voegen.",
           "nodeFallback": "Node",
           "id": "id",
-          "noSettings": "Deze node heeft geen instellingen."
+          "noSettings": "Deze node heeft geen instellingen.",
+          "confirmDeleteTitle": "Dit knooppunt verwijderen?",
+          "confirmDeleteMessage": "Het knooppunt en zijn verbindingen worden verwijderd. Druk op Ctrl+Z om dit ongedaan te maken zolang je de builder niet verlaat."
         },
         "palette": {
           "modeCall": "Bellen",

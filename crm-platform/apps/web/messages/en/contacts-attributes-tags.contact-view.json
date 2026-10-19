@@ -44,6 +44,11 @@
         "editJobTitle": "Edit job title",
         "jobTitleConflict": "Someone else changed this contact first. It was reloaded; try again.",
         "jobTitleFailed": "The job title could not be saved. Try again.",
+        "jobTitleRequired": "A job title cannot be left empty: this workspace requires one.",
+        "jobTitleOtherRequired": "Other required properties of this contact are empty. Open Edit contact to fill them in.",
+        "jobTitleNotEditable": "The job title is read-only or hidden in this workspace, so it cannot be edited here.",
+        "jobTitleForbidden": "You do not have permission to edit this contact.",
+        "jobTitleGone": "This contact is no longer available to you: it was deleted or is assigned to someone else.",
         "owner": "Owner"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Previous stage",
         "previousStageSince": "Previous stage since",
         "lostReason": "Lost reason",
-        "updatedAt": "Last updated"
+        "updatedAt": "Last updated",
+        "leadScore": "Lead score",
+        "originalStage": "Original lifecycle stage",
+        "createdBy": "Created by",
+        "updatedBy": "Updated by"
       },
       "company": {
         "title": "Company",

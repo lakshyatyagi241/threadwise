@@ -245,6 +245,11 @@
         "description": "প্রোডাক্টের উপর তৈরির জন্য কী ও ডকুমেন্টেশন।",
         "keywords": "api keys, ডেভেলপার, token, docs, openapi"
       },
+      "api-keys": {
+        "label": "API কী",
+        "description": "অন্য সিস্টেম API কল করতে যে কীগুলো ব্যবহার করে সেগুলো তৈরি ও পরিচালনা করুন।",
+        "keywords": "api কী, টোকেন, সিক্রেট, ডেভেলপার, অ্যাক্সেস, ইন্টিগ্রেশন"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "ঘটনা ঘটার সঙ্গে সঙ্গে আপনার নিজের সিস্টেমে ইভেন্ট পাঠান।",
@@ -301,7 +306,7 @@
         "keywords": "geta, publish, bot, কনসোল, go live, chatbot"
       },
       "auto-assignment": {
-        "label": "অটো-অ্যাসাইনমেন্ট",
+        "label": "কথোপকথনের স্বয়ংক্রিয় বরাদ্দ",
         "description": "নতুন কথোপকথন সঠিক এজেন্টকে স্বয়ংক্রিয়ভাবে দিন, পালাক্রমে বা নিয়ম অনুযায়ী।",
         "keywords": "routing, round robin, assign, agents, ইনবক্স নিয়ম, distribute, owner"
       },

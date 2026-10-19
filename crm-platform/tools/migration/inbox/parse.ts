@@ -330,7 +330,10 @@ export function parseTurn(doc: Doc): ParsedTurn {
         reason: 'the document has both bot_response and user_query_object; read as the bot turn',
       });
     const ctype = str(doc.ctype)?.toLowerCase();
-    const senderKind = ctype === 'livechat' ? 'agent' : 'bot';
+    // a live-chat hand-over ("Connected to Aashish", "You are now Connected to WABO DEMO": {type: 'info'} elements of a turn flagged
+    // live_chat_connected) is an event of the conversation, not something an agent or the bot wrote: the inbox shows it as a system notice
+    const liveEvent = br.live_chat_connected === true;
+    const senderKind: ParsedTurn['senderKind'] = liveEvent ? 'system' : ctype === 'livechat' ? 'agent' : 'bot';
     const raw = br.response;
     const parts: string[] = [];
     const media = { url: null as string | null };
@@ -384,7 +387,9 @@ export function parseTurn(doc: Doc): ParsedTurn {
     const typeRaw = str(br.type);
     let kind: MessageKind = 'text';
     const known = kindOfType(typeRaw);
-    if (hasInteractive) {
+    if (liveEvent) {
+      kind = 'system';
+    } else if (hasInteractive) {
       // a header file makes it that file's message (the text is its caption); no file: an interactive message
       kind = iaMediaKind ?? 'interactive';
     } else if (known) kind = known;

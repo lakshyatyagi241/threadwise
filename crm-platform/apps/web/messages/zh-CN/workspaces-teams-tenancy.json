@@ -58,7 +58,10 @@
         "role": "角色",
         "status": "状态",
         "joined": "加入时间",
-        "actions": "操作"
+        "actions": "操作",
+        "phone": "电话",
+        "chatLimit": "并发聊天数",
+        "lastLogin": "上次登录"
       },
       "pending": "待处理",
       "you": "您",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "休假至 {date}",
       "onLeaveOpen": "休假中",
       "leaveFrom": "从 {date} 起休假",
-      "leaveAction": "休假与代理"
+      "leaveAction": "休假与代理",
+      "noLimit": "不限",
+      "neverSignedIn": "从未",
+      "editAction": "更改电话和聊天上限"
     },
     "invite": {
       "eyebrow": "工作区",
@@ -129,7 +135,14 @@
       "nameTooLong": "姓名最多 {max} 个字符。",
       "emailInvalid": "请输入有效的邮箱地址。",
       "upgrade": "升级套餐",
-      "emailRequired": "请输入邮箱地址。"
+      "emailRequired": "请输入邮箱地址。",
+      "phone": "电话号码（可选）",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "请带上国家区号。",
+      "phoneInvalid": "请输入带国家区号的号码，例如 +91 98765 43210。",
+      "chatLimit": "并发聊天数",
+      "chatLimitHint": "同时分配给此人的进行中聊天的最大数量。留空表示不限。",
+      "chatLimitInvalid": "请输入 1 到 {max} 之间的整数，或留空表示不限。"
     },
     "teams": {
       "eyebrow": "工作区",
@@ -320,6 +333,31 @@
       "undoTitle": "撤销此次重新分配？",
       "undoMessage": "此后无人更改过的联系人和商机会回到原负责人名下，其余的保持不变。",
       "restored": "{count} 个已收回，{skipped} 个保持原处。"
+    },
+    "details": {
+      "eyebrow": "工作区",
+      "title": "更改成员",
+      "intro": "{name} 的电话和聊天上限。",
+      "phone": "电话号码",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "请带上国家区号。留空即可删除。",
+      "phoneInvalid": "请输入带国家区号的号码，例如 +91 98765 43210。",
+      "chatLimit": "并发聊天数",
+      "chatLimitHint": "当此人进行中的聊天达到该数量时，自动分配将不再给他们分配聊天。留空表示不限。",
+      "chatLimitPlaceholder": "不限",
+      "chatLimitInvalid": "请输入 1 到 {max} 之间的整数，或留空表示不限。",
+      "lastLogin": "上次登录",
+      "lastLoginNever": "尚未登录",
+      "submit": "保存",
+      "saving": "正在保存…",
+      "saved": "成员已更新。"
+    },
+    "availability": {
+      "label": "在线状态",
+      "available": "可接待",
+      "offline": "离线",
+      "hint": "离线期间，系统不会自动给你分配新聊天。你已有的聊天仍归你。",
+      "failed": "无法更改"
     }
   }
 }

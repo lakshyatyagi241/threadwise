@@ -489,6 +489,14 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+  /** The outcome is not one of this workspace's active task outcomes (unknown, or hidden and not already on the task). */
+  TASK_OUTCOME_INVALID: 'TASK_OUTCOME_INVALID',
+  /** Another task outcome already has this name (compared without case). */
+  TASK_OUTCOME_NAME_TAKEN: 'TASK_OUTCOME_NAME_TAKEN',
+  /** Tasks still carry the outcome, so it cannot be deleted (Waboo refused too); hide it instead. */
+  TASK_OUTCOME_IN_USE: 'TASK_OUTCOME_IN_USE',
+  /** A reorder that does not list every outcome exactly once. */
+  TASK_OUTCOME_ORDER_INVALID: 'TASK_OUTCOME_ORDER_INVALID',
 
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
@@ -716,6 +724,18 @@ export const ERROR_CODES = {
   APPT_ICS_FEED_DUPLICATE: 'APPT_ICS_FEED_DUPLICATE',
   /** The workspace is at its limit of iCal feeds. */
   APPT_ICS_FEED_LIMIT: 'APPT_ICS_FEED_LIMIT',
+  /** The workspace owner has not switched this channel on for appointment messages (BL-350). */
+  APPT_CHANNEL_NOT_ENABLED: 'APPT_CHANNEL_NOT_ENABLED',
+  /** The channel cannot be used yet (the outbound reminder call arrives with the Voice bot). */
+  APPT_CHANNEL_COMING_SOON: 'APPT_CHANNEL_COMING_SOON',
+  /** The chosen sender is not a connected sender of that channel in this workspace. */
+  APPT_CHANNEL_SENDER_INVALID: 'APPT_CHANNEL_SENDER_INVALID',
+  /** A WhatsApp message can be chosen only once Meta has approved it (BL-351). */
+  APPT_TEMPLATE_NOT_APPROVED: 'APPT_TEMPLATE_NOT_APPROVED',
+  /** The message is chosen by a booking type; unchoose it there first. */
+  APPT_TEMPLATE_IN_USE: 'APPT_TEMPLATE_IN_USE',
+  /** The text cannot be sent as that kind of message (a WhatsApp message may only use the placeholders WhatsApp can fill). */
+  APPT_TEMPLATE_INVALID: 'APPT_TEMPLATE_INVALID',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */

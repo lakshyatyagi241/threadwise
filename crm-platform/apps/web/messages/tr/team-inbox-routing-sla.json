@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Otomasyon ve yapay zekâ",
-      "title": "Otomatik atama",
+      "title": "Konuşmalarda otomatik atama",
       "subtitle": "Her yeni konuşmayı otomatik olarak doğru temsilciye verin. Kurallar yukarıdan aşağıya sırayla denenir.",
       "noAccess": "Otomatik atama ayarlarını görüntüleme yetkiniz yok.",
       "create": "Kural oluştur",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Yanıtı gönderir: {body}"
     },
     "form": {
-      "back": "Otomatik atama",
+      "back": "Konuşmalarda otomatik atama",
       "noAccess": "Otomatik atama kurallarını değiştirme yetkiniz yok.",
       "loading": "Kural yükleniyor",
       "notFound": "Bu kural artık mevcut değil.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Otomatik atama",
+      "eyebrow": "Konuşmalarda otomatik atama",
       "title": "Çalışma saatleri",
       "subtitle": "Çalışma saatlerini kullanan kurallar ve SLA hedefleri yalnızca bu saatler içindeki süreyi sayar.",
       "close": "Kapat",

@@ -21,6 +21,7 @@ import {
   listFieldsQuerySchema,
   reorderFieldOptionsSchema,
   reorderFieldsSchema,
+  searchFieldOptionsQuerySchema,
   updateFieldOptionSchema,
   updateFieldSchema,
   type CreateFieldDependencyInput,
@@ -31,6 +32,7 @@ import {
   type ListFieldsQuery,
   type ReorderFieldOptionsInput,
   type ReorderFieldsInput,
+  type SearchFieldOptionsQuery,
   type UpdateFieldInput,
   type UpdateFieldOptionInput,
 } from '@crm/contracts';
@@ -130,6 +132,20 @@ export class FieldsController {
   @ApiOperation({ summary: "List a field's options" })
   async listOptions(@Param('id', ParseUUIDPipe) id: string) {
     return this.fields.listOptions(id);
+  }
+
+  @Get(':id/option-search')
+  @RequirePermission(...anyPropertyPermission('read'))
+  @ApiOperation({
+    summary: "Search and page a field's options",
+    description:
+      'For a field whose list leaves its options out (optionCount above the inline limit): `q` filters by label, `values` reads the labels of stored values.',
+  })
+  async searchOptions(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Query(zodPipe(searchFieldOptionsQuerySchema)) query: SearchFieldOptionsQuery,
+  ) {
+    return this.fields.searchOptions(id, query);
   }
 
   @Post(':id/options')

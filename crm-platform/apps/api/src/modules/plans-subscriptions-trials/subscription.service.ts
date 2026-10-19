@@ -27,6 +27,8 @@ interface SubRow {
   gateway_plan_id: string | null;
   status: 'active' | 'past_due';
   current_period_end: string | null;
+  created_at?: string | Date | null;
+  meta?: { activatedAt?: unknown; previousBillingAt?: unknown } | null;
 }
 
 /**
@@ -188,6 +190,10 @@ export class SubscriptionService {
       ? {
           status: row.status,
           renewsAt: row.current_period_end ? new Date(row.current_period_end).toISOString() : null,
+          subscriptionId: row.gateway_subscription_id,
+          // The import records the old activation and last billing dates in `meta`; a subscription created here started when it was created.
+          activatedAt: validIso(row.meta?.activatedAt) ?? validIso(row.created_at),
+          previousBillingAt: validIso(row.meta?.previousBillingAt),
         }
       : null;
   }
@@ -272,7 +278,8 @@ export class SubscriptionService {
 
   private async latest(tx: Tx, orgId: number): Promise<SubRow | null> {
     const res = await tx.execute(sql`
-      SELECT id, gateway, gateway_subscription_id, gateway_customer_id, gateway_plan_id, status, current_period_end
+      SELECT id, gateway, gateway_subscription_id, gateway_customer_id, gateway_plan_id, status, current_period_end,
+             created_at, meta
       FROM subscriptions
       WHERE org_id = ${orgId} AND kind = 'plan' AND status IN ('active', 'past_due')
       ORDER BY created_at DESC, id DESC LIMIT 1`);
@@ -328,6 +335,13 @@ interface ItemRow {
   created_at: string | Date;
   meta: { cancel?: unknown } | null;
   item_name: string;
+}
+
+/** An ISO instant from a stored value, or null when it is missing or not a date. */
+function validIso(v: unknown): string | null {
+  if (typeof v !== 'string' && !(v instanceof Date)) return null;
+  const d = new Date(v);
+  return Number.isNaN(d.getTime()) ? null : d.toISOString();
 }
 
 const iso = (v: unknown): string | null => (v ? new Date(v as string).toISOString() : null);

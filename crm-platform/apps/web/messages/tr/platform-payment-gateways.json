@@ -164,7 +164,12 @@
       "change": "Değiştir",
       "terms": "Ödeyerek <terms>Kullanım Koşulları</terms> ve <privacy>Gizlilik politikası</privacy>'nı kabul etmiş olursunuz.",
       "refundNote": "Memnun kalmadıysanız ilk {days} gün içinde bize e-posta gönderin; tutarın tamamını sorgusuz sualsiz, form doldurmadan iade ederiz.",
-      "autoRenewTitle": "Bu planı otomatik yenile"
+      "autoRenewTitle": "Bu planı otomatik yenile",
+      "amountSubtitle": "Eklemek istediğiniz tutarı girin. Ardından nihai fiyatı ve ödeme yöntemlerini göreceksiniz.",
+      "amountLabel": "Eklenecek tutar",
+      "amountHint": "Yalnızca rakam, örneğin 1000 veya 250,50.",
+      "amountInvalid": "Sıfırdan büyük bir tutar girin, örneğin 500 veya 250,50.",
+      "amountContinue": "Devam"
     },
     "orders": {
       "title": "Sipariş geçmişi",

@@ -14,4 +14,17 @@ export const settings = [
     order: 20,
     gates: { permission: 'webhooks.read', planFeature: 'outbound_webhooks' },
   }),
+  // The old product kept Webhooks under Settings. The same screen is also a Marketplace add-on card (the tile above); this one puts it where
+  // people look for it. It shares the add-on tile's copy (`settings.tiles.webhooks`) and gates.
+  settingsTile({
+    id: 'webhooks-endpoints',
+    labelKey: 'settings.tiles.webhooks.label',
+    descriptionKey: 'settings.tiles.webhooks.description',
+    keywordsKey: 'settings.tiles.webhooks.keywords',
+    section: 'security',
+    href: '/webhooks',
+    icon: 'webhook',
+    order: 61,
+    gates: { permission: 'webhooks.read', planFeature: 'outbound_webhooks' },
+  }),
 ];

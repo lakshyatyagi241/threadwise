@@ -245,6 +245,11 @@
         "description": "Clés et documentation pour développer à partir du produit.",
         "keywords": "clés api, développeurs, jetons, docs, openapi"
       },
+      "api-keys": {
+        "label": "Clés d'API",
+        "description": "Créez et gérez les clés que d'autres systèmes utilisent pour appeler l'API.",
+        "keywords": "clé api, jeton, secret, développeurs, accès, intégration"
+      },
       "webhooks": {
         "label": "Webhooks",
         "description": "Envoyez des événements à vos propres systèmes dès qu’ils se produisent.",
@@ -301,7 +306,7 @@
         "keywords": "geta, publier, bot, console, mise en ligne, chatbot"
       },
       "auto-assignment": {
-        "label": "Attribution automatique",
+        "label": "Attribution automatique des conversations",
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
       },

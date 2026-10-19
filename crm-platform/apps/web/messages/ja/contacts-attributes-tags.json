@@ -439,7 +439,10 @@
       "ownerOutOfScope": "アクセス権では、この連絡先をそのユーザーに割り当てることはできません。",
       "company": "会社",
       "companyHint": "この連絡先を組織にまとめます。",
-      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。"
+      "companyRefused": "その会社は使用できません。別の会社を選ぶか、欄を空にしてください。",
+      "searchOptions": "選択肢を検索",
+      "searchOptionsFor": "{field}の選択肢を検索",
+      "noOptionsFound": "検索に一致する選択肢はありません。"
     },
     "tags": {
       "title": "タグ",
@@ -1225,7 +1228,8 @@
             "duplicate": "同じ名前のオプションが2つあります。"
           },
           "condition": "すべての条件について、プロパティと値を選択してください。"
-        }
+        },
+        "optionsLazy": "このプロパティには{count, plural, other {#件の選択肢}}があり、ここで編集するには多すぎます。選択肢はそのまま保持され、ほかの設定は変更できます。"
       },
       "builtinCard": {
         "title": "組み込みプロパティ",

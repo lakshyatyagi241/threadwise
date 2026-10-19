@@ -44,6 +44,11 @@
         "editJobTitle": "Editar cargo",
         "jobTitleConflict": "Outra pessoa alterou este contato antes. Ele foi recarregado; tente novamente.",
         "jobTitleFailed": "Não foi possível salvar o cargo. Tente novamente.",
+        "jobTitleRequired": "O cargo não pode ficar vazio: este espaço de trabalho o exige.",
+        "jobTitleOtherRequired": "Outras propriedades obrigatórias deste contato estão vazias. Abra Editar contato para preenchê-las.",
+        "jobTitleNotEditable": "O cargo é somente leitura ou está oculto neste espaço de trabalho, por isso não pode ser editado aqui.",
+        "jobTitleForbidden": "Você não tem permissão para editar este contato.",
+        "jobTitleGone": "Este contato não está mais disponível para você: foi excluído ou está atribuído a outra pessoa.",
         "owner": "Responsável"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Etapa anterior",
         "previousStageSince": "Etapa anterior desde",
         "lostReason": "Motivo da perda",
-        "updatedAt": "Última atualização"
+        "updatedAt": "Última atualização",
+        "leadScore": "Pontuação do lead",
+        "originalStage": "Etapa original do ciclo de vida",
+        "createdBy": "Criado por",
+        "updatedBy": "Atualizado por"
       },
       "company": {
         "title": "Empresa",

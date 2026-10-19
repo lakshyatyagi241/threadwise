@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Rezervasyon sayfası görünümü",
+      "subtitle": "Müşterilerinizin randevu almak için kullandığı sayfayı işletmenize benzetin.",
+      "backToSettings": "Randevu ayarları",
+      "loading": "Rezervasyon sayfası teması yükleniyor",
+      "forbidden": "Rezervasyon sayfası görünümünü görüntüleme izniniz yok.",
+      "notAvailable": "Rezervasyon sayfası görünümü bu sunucuda henüz kullanılamıyor.",
+      "readOnly": "Görünümü inceleyebilirsiniz ancak değiştiremezsiniz. Değiştirmek için rezervasyon türlerini düzenleme izni gerekir.",
+      "fixFirst": "Önce vurgulanan alanları düzeltin.",
+      "issues": "{count, plural, one {Kaydetmeden önce # alanın düzeltilmesi gerekiyor.} other {Kaydetmeden önce # alanın düzeltilmesi gerekiyor.}}",
+      "saved": "Rezervasyon sayfası görünümü kaydedildi",
+      "saving": "Kaydediliyor...",
+      "unsaved": "Kaydedilmemiş değişiklikler",
+      "allSaved": "Tüm değişiklikler kaydedildi",
+      "discard": "Değişiklikleri at",
+      "save": "Görünümü kaydet",
+      "conflict": {
+        "message": "Siz düzenlerken görünüm başka biri tarafından değiştirildi.",
+        "reload": "Son sürümü yükle"
+      },
+      "leave": {
+        "title": "Kaydetmeden çıkılsın mı?",
+        "message": "Rezervasyon sayfası görünümünde yaptığınız değişiklikler kaydedilmedi.",
+        "leave": "Çık",
+        "stay": "Düzenlemeye devam et"
+      },
+      "tile": {
+        "label": "Rezervasyon sayfası görünümü",
+        "description": "Müşterilerin rezervasyon yaptığı sayfanın logosu, renkleri, yazı tipleri ve karşılama metni",
+        "keywords": "markalama, logo, renkler, tema, rezervasyon sayfası, görünüm, yazı tipleri, beyaz etiket"
+      },
+      "card": {
+        "title": "Rezervasyon sayfası görünümü",
+        "description": "Logonuzu ve renklerinizi ekleyin, bir karşılama mesajı yazın, müşterilerin rezervasyon yaptığı sayfa için yazı tipi ve köşe stili seçin. Düzenlerken canlı önizleme görürsünüz.",
+        "open": "Rezervasyon sayfası görünümünü aç"
+      },
+      "editorLink": {
+        "link": "Sayfa görünümü",
+        "saveFirst": "Önce rezervasyon türünü kaydedin, sonra sayfa görünümünü açın."
+      },
+      "typesList": {
+        "menu": "Sayfa görünümü"
+      },
+      "pictures": {
+        "title": "Logo ve kapak görseli",
+        "description": "Sayfanın üst kısmında gösterilir. Üst düzeydeki ayarın kullanılması için boş bırakın.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP veya GIF, en fazla {mb} MB. Saydam arka planlı geniş bir logo en iyi sonucu verir.",
+        "cover": "Kapak görseli",
+        "coverHint": "PNG, JPG, WebP veya GIF, en fazla {mb} MB. Arka plan kapak görseli olarak ayarlandığında afiş olarak gösterilir.",
+        "useBrand": "Boş olduğunda Markalama logomu ve renklerimi kullan",
+        "useBrandHint": "Burada boş bıraktığınız her şey Ayarlar, Markalama bölümünden alınır; böylece rezervasyon sayfası markanızın geri kalanıyla uyumlu olur."
+      },
+      "fields": {
+        "picker": "{name}: renk seçin",
+        "clear": "Temizle",
+        "noPicture": "Görsel yok",
+        "upload": "Yükle",
+        "replace": "Değiştir",
+        "remove": "Kaldır",
+        "inheritedPicture": "Üst düzeyde ayarlanan kullanılıyor.",
+        "inheritedColour": "Boş bırakılırsa {colour} kullanılır.",
+        "productColour": "Boş bırakılırsa varsayılan renk kullanılır.",
+        "pictureType": "PNG, JPG, WebP veya GIF görseli kullanın.",
+        "pictureSize": "Görsel çok büyük. Sınır {mb} MB.",
+        "pictureRejected": "Bu görsel kabul edilmedi. Boyut sınırı içinde bir PNG, JPG, WebP veya GIF görseli kullanın."
+      },
+      "colours": {
+        "title": "Renkler ve arka plan",
+        "description": "Her şeyin okunaklı kalması için metin renkleri sizin yerinize seçilir.",
+        "primary": "Ana renk",
+        "typeHint": "Boş bırakılırsa çalışma alanı rengi kullanılır.",
+        "button": "Düğme rengi",
+        "buttonHint": "Düğmelerin ve seçili saatlerin rengi. Boş bırakılırsa ana renk kullanılır.",
+        "background": "Sayfa arka planı",
+        "backgroundHint": "Düz renk, ana renginizin yumuşak bir tonu veya afiş olarak kapak görseliniz.",
+        "sameAsWorkspace": "Çalışma alanıyla aynı",
+        "backgrounds": {
+          "solid": "Düz renk",
+          "tint": "Yumuşak ton",
+          "image": "Kapak görseli"
+        },
+        "backgroundColour": "Arka plan rengi",
+        "needCover": "Bu arka planı kullanmak için bir kapak görseli yükleyin.",
+        "invalid": "#1a73e8 gibi bir renk kullanın."
+      },
+      "checks": {
+        "title": "Okunabilirlik kontrolleri",
+        "autoText": "Düğmelerinizdeki metin, hangisi daha okunaklıysa siyah veya beyaz olur; metin olarak kullanılan ana renginiz gerektiğinde koyulaştırılır veya açılır.",
+        "primaryText": "Ana renginizin sayfadaki kontrastı {ratio}:1 ve {min}:1 değerinin altında; bu yüzden metin olarak kullanıldığı yerlerde ayarlanır.",
+        "button": "Düğme metninin düğme renginizdeki kontrastı {ratio}:1 ve {min}:1 değerinin altında.",
+        "buttonEdge": "Düğme renginizin sayfaya göre kontrastı {ratio}:1 ve {min}:1 değerinin altında; bu yüzden düğmeler zor görünebilir.",
+        "inDark": "(koyu mod)"
+      },
+      "wording": {
+        "title": "Metinler",
+        "description": "Yalnızca düz metin. Müşteriler bunu yazdığınız dilde görür.",
+        "pageTitle": "Sayfa başlığı",
+        "pageTitleHint": "Sayfanın üstünde ve tarayıcı sekmesinde gösterilir. Boş bırakılırsa işletme adınız kullanılır.",
+        "welcome": "Karşılama mesajı",
+        "welcomeHint": "{count} / {max} karakter. Rezervasyon formunun üstünde gösterilir.",
+        "button": "Onay düğmesi etiketi",
+        "buttonHint": "Son düğmedeki metin, örneğin Yerimi ayır. Onay gerektiren talepler kendi etiketini korur.",
+        "buttonDefault": "Rezervasyonu onayla",
+        "tooLong": "En fazla {max} karakter kullanın."
+      },
+      "style": {
+        "title": "Yazı tipleri ve köşeler",
+        "description": "Her cihazda çalışan küçük bir güvenli seçenek seti.",
+        "font": "Yazı tipi",
+        "fontHint": "Müşterinin cihazında zaten bulunan yazı tiplerini kullanır, bu yüzden sayfa hızlı yüklenir.",
+        "fonts": {
+          "default": "Ürün varsayılanı",
+          "system": "Sistem",
+          "serif": "Tırnaklı",
+          "rounded": "Yuvarlak",
+          "humanist": "Hümanist"
+        },
+        "corners": "Köşeler",
+        "cornerStyles": {
+          "square": "Köşeli",
+          "rounded": "Yuvarlatılmış",
+          "pill": "Hap biçimli"
+        },
+        "mode": "Açık veya koyu",
+        "modes": {
+          "light": "Açık",
+          "dark": "Koyu",
+          "auto": "Cihazı takip et"
+        }
+      },
+      "options": {
+        "title": "Sayfa seçenekleri",
+        "description": "Rezervasyon formunun çevresinde başka neler görünsün.",
+        "language": "Dil değiştiriciyi göster",
+        "languageHint": "Müşterilerin sayfanın dilini değiştirmesine izin verir.",
+        "poweredBy": "Altta \"Powered by\" göster",
+        "poweredByHint": "Yalnızca kendi markanızın görünmesi için kapatın.",
+        "poweredByLocked": "\"Powered by\" ifadesini kaldırmak beyaz etiket markalamanın bir parçasıdır ve planınızda yer almaz."
+      },
+      "links": {
+        "title": "Sayfa adresi",
+        "description": "Müşterilerin sayfayı açtığı yer. Değişiklikler kaydettiğiniz anda orada görünür.",
+        "page": "Rezervasyon sayfası adresi",
+        "open": "Sayfayı aç",
+        "copy": "Kopyala",
+        "copied": "Kopyalandı",
+        "later": "Kendi alan adınızı kullanma ve sayfayı başka bir web sitesinin içine yerleştirme henüz kullanılamıyor."
+      },
+      "type": {
+        "title": "Sayfa görünümü: {name}",
+        "subtitle": "Bu rezervasyon türüne kendi logosunu, renklerini veya karşılama mesajını verin. Boş bıraktığınız her şey çalışma alanı görünümünü kullanır.",
+        "back": "Rezervasyon türüne dön",
+        "notFoundTitle": "Rezervasyon türü bulunamadı",
+        "notFound": "Bu rezervasyon türü artık mevcut değil.",
+        "resetTitle": "Çalışma alanı görünümünü kullan",
+        "resetDescription": "Bu rezervasyon türü için ayarlanan her şeyi, görseller dahil, kaldırır.",
+        "reset": "Çalışma alanı görünümünü kullan",
+        "resetConfirmTitle": "Çalışma alanı görünümü kullanılsın mı?",
+        "resetConfirmMessage": "Bu rezervasyon türü için ayarlanan logo, kapak görseli, renkler ve metinler kaldırılacak.",
+        "resetDone": "Bu rezervasyon türü artık çalışma alanı görünümünü kullanıyor"
+      },
+      "preview": {
+        "title": "Canlı önizleme",
+        "device": "Cihaz",
+        "desktop": "Masaüstü",
+        "mobile": "Mobil",
+        "page": "Sayfa",
+        "servicePage": "Rezervasyon sayfası",
+        "serviceList": "Hizmet listesi",
+        "scheme": "Renk modu",
+        "asSet": "Ayarlandığı gibi",
+        "light": "Açık",
+        "dark": "Koyu",
+        "direction": "Yön",
+        "ltr": "Soldan sağa",
+        "rtl": "Sağdan sola",
+        "frameTitle": "Rezervasyon sayfası önizlemesi",
+        "note": "Bu, örnek saatlerle gerçek sayfadır. Burada yaptığınız hiçbir şey rezervasyona dönüşmez.",
+        "sampleName": "Tanışma görüşmesi",
+        "sampleName2": "Tam seans",
+        "sampleDescription": "İhtiyacınızı anlamak ve sorularınızı yanıtlamak için kısa bir görüşme.",
+        "sampleIntro": "Lütfen birkaç dakika erken gelin.",
+        "sampleQuestion": "Önceden bilmemiz gereken bir şey var mı?"
+      }
+    }
+  }
+}

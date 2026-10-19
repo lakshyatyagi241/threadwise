@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "メッセージチャネル",
+      "description": "予約メッセージを連絡先に送れるチャネルを選びます：確認、リマインダー、変更・キャンセルの通知、来院後のフォローアップ。予約タイプは、ここでオンになっていて接続済みのチャネルのみ使えます。",
+      "loading": "チャネルを読み込み中...",
+      "undecidedOwner": "まだオンのチャネルがないため、予約メッセージは送信されません。チームが使えるチャネルをオンにしてください。",
+      "undecidedMember": "まだオンのチャネルがないため、予約メッセージは送信されません。ワークスペースのオーナーにチャネルの選択を依頼してください。",
+      "readOnly": "これを変更できるのはワークスペースのオーナーと管理者のみです。",
+      "enableLabel": "予約メッセージに{channel}を使う",
+      "switchedOn": "予約メッセージで{channel}はオンです。",
+      "switchedOff": "予約メッセージで{channel}はオフです。",
+      "senderSaved": "{channel}の既定の送信元を保存しました。",
+      "defaultSender": "既定の送信元",
+      "defaultSenderOf": "{channel}の既定の送信元",
+      "firstConnected": "最初に接続されたもの",
+      "sendsFrom": "{sender}から送信",
+      "notConnected": "このチャネルにはまだ何も接続されていません。",
+      "connect": "設定で接続する",
+      "voiceSoon": "音声ボットで近日対応：予約タイプごとにオンにできる発信のリマインダー通話。まだオンにできません。",
+      "names": {
+        "email": "メール",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "リマインダー通話"
+      },
+      "about": {
+        "email": "ワークスペースの共有メールボックスから送信します。個人のメールボックスからは送りません。",
+        "whatsapp": "24時間ウィンドウ内は自由な文章、それ以外は承認済みテンプレートのみ。",
+        "sms": "接続済みのSMS送信元からのプレーンテキスト。",
+        "voice": "連絡先に知らせる自動の発信通話。"
+      },
+      "status": {
+        "usable": "オン・接続済み",
+        "off": "オフ",
+        "notChosen": "未選択",
+        "not_connected": "オン・未接続",
+        "coming_soon": "音声ボットで近日対応"
+      },
+      "editorTitle": "この予約タイプのチャネル",
+      "editorHint": "オーナーがオンにして接続済みのチャネルのみ使えます。それ以外は理由が分かるよう表示しています。",
+      "noneUsable": "使えるチャネルがまだないため、この予約タイプのメッセージは送信できません。",
+      "openSettings": "チャネル設定を開く",
+      "offByOwner": "ワークスペースのオーナーがこのチャネルをオンにしていません。",
+      "sendOn": "送信先チャネル",
+      "sendOnAuto": "チャネル未選択：最初に使えるチャネルで標準の文章を送ります。",
+      "sendOnEach": "ここでチェックしたすべてのチャネルで送信されます。",
+      "attachedButUnusable": "このチャネルは現在使えないため、このメッセージはスキップされます。チェックを外すか、オーナーにオンを依頼してください。"
+    },
+    "templates": {
+      "title": "メッセージテンプレート",
+      "description": "確認、リマインダー、変更、キャンセル、来院後のフォローアップ用の定型メッセージ。ワンクリックで追加して編集できます。メールはここに保存され、WhatsAppはMetaに承認を申請し、承認済みのみ使えます。",
+      "loading": "メッセージを読み込み中...",
+      "readOnly": "これを変更できるのは予約テンプレートを管理するユーザーのみです。",
+      "empty": "まだメッセージがありません。下の定型セットから追加してください。",
+      "yours": "あなたのメッセージ",
+      "status": {
+        "draft": "下書き",
+        "pending": "Metaで審査中",
+        "approved": "承認済み",
+        "rejected": "却下"
+      },
+      "kinds": {
+        "confirmation": "予約確認",
+        "reminder": "リマインダー",
+        "reschedule": "日時変更",
+        "cancellation": "キャンセル",
+        "follow_up": "来院後のフォローアップ"
+      },
+      "channels": {
+        "email": "メール",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {#件の予約タイプが使用中}}",
+      "inactive": "オフ",
+      "submit": "承認のためMetaに送信",
+      "submitting": "送信中...",
+      "submitted": "Metaに送信しました。現在審査中です。",
+      "metaRefused": "保存しましたが、Metaに却下されました。メッセージを開いて理由を確認してください。",
+      "refresh": "ステータスを確認",
+      "refreshing": "確認中...",
+      "refreshed": "ステータスを更新しました。",
+      "edit": "編集",
+      "view": "表示",
+      "close": "閉じる",
+      "delete": "削除",
+      "deleteTitle": "「{name}」を削除しますか？",
+      "deleteWhatsapp": "この一覧から削除されます。WhatsAppテンプレートはWhatsAppテンプレートに残るので、不要ならそちらで削除してください。",
+      "deleteBody": "ライブラリから削除されます。使用中の予約タイプは先に別のメッセージを選ぶ必要があります。",
+      "deleted": "メッセージを削除しました。",
+      "cancel": "キャンセル",
+      "rejectedBecause": "Metaが却下しました：{reason}",
+      "pendingNote": "Metaがこのテンプレートを審査中です。承認されるまで選択も送信もできません。",
+      "nameLabel": "名前",
+      "subjectLabel": "件名",
+      "bodyLabel": "メッセージ",
+      "textLocked": "審査中または承認済みのテンプレートはここでは編集できません。",
+      "placeholders": "使えるもの：",
+      "whatsappPlaceholders": "WhatsAppが埋められるのはこれだけで、この順序で飛ばさずに使います：",
+      "activeLabel": "選択可能",
+      "save": "保存",
+      "saving": "保存中...",
+      "saveAndSubmit": "保存してMetaに送信",
+      "saved": "メッセージを保存しました。",
+      "predefinedTitle": "定型メッセージ",
+      "predefinedHint": "メッセージを追加してライブラリにコピーし、編集します。WhatsAppメッセージはまず下書きとして作成され、Metaへ送るタイミングは自分で決めます。",
+      "machineNote": "定型文は英語です。追加後にお使いの言語へ編集してください。",
+      "category": {
+        "UTILITY": "ユーティリティ",
+        "MARKETING": "マーケティング"
+      },
+      "preview": "プレビュー",
+      "hidePreview": "プレビューを隠す",
+      "inLibrary": "ライブラリ内：{status}",
+      "adopt": "自分のメッセージに追加",
+      "adopting": "追加中...",
+      "adoptDraft": "下書きとして追加",
+      "adoptSubmit": "追加してMetaに送信",
+      "adopted": "メッセージに追加しました。",
+      "newEmail": "新しいメールメッセージ",
+      "kindLabel": "種類",
+      "create": "作成",
+      "created": "メッセージを作成しました。",
+      "chooseLabel": "使用するメッセージ",
+      "useText": "上の文章",
+      "unknownMessage": "利用できなくなったメッセージ",
+      "noneYet": "この種類のメッセージはまだありません。",
+      "openLibrary": "設定で追加",
+      "whatsappApprovedOnly": "Metaが承認したテンプレートのみ選べます。24時間ウィンドウ外ではWhatsAppは他のものを送りません。"
+    },
+    "reminders": {
+      "channels": {
+        "voice": "リマインダー通話"
+      },
+      "voiceSoon": "音声ボットで近日対応：発信のリマインダー通話。まだ追加できません。",
+      "voiceSoonShort": "音声ボットで近日対応",
+      "channelUnusable": "現在使えません",
+      "noUsableChannel": "このルールのチャネルがどれも使えないため、オンにできません。",
+      "openChannels": "チャネル設定を開く",
+      "fromLibrary": "ライブラリのメッセージを使う",
+      "openLibrary": "設定でメッセージを追加",
+      "reasons": {
+        "channel_disabled": "ワークスペースが予約メッセージでこのチャネルをオフにしています。"
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "このメッセージに少なくとも1つのチャネルを選ぶか、文章を消してください。"
+      }
+    }
+  }
+}

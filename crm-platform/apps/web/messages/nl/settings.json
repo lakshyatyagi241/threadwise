@@ -229,6 +229,11 @@
         "description": "Sleutels en documentatie om bovenop het product te bouwen.",
         "keywords": "api-sleutels, ontwikkelaars, tokens, documentatie, openapi"
       },
+      "api-keys": {
+        "label": "API-sleutels",
+        "description": "Maak en beheer de sleutels waarmee andere systemen de API aanroepen.",
+        "keywords": "api-sleutel, token, geheim, ontwikkelaars, toegang, integratie"
+      },
       "webhooks": {
         "label": "Webhooks",
         "description": "Stuur gebeurtenissen naar je eigen systemen zodra ze zich voordoen.",
@@ -285,7 +290,7 @@
         "keywords": "geta, publiceren, bot, console, live zetten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatisch toewijzen",
+        "label": "Automatische toewijzing van gesprekken",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
       },

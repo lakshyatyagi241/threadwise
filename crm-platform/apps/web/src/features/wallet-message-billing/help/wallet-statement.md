@@ -17,12 +17,12 @@ The wallet screen shows your message balance and how it has moved in the last 30
 
 1. Open **Settings**, go to **Business and billing** and select **Expenses, wallet and statement**.
 2. Read the balance. When it is at or below your low-balance threshold, a warning appears at the top.
-3. To add money, enter a whole amount in **Add money** or pick a quick amount. This opens the [Wallet top-up](/billing/checkout/wallet) checkout.
+3. To add money, enter a whole amount in **Add money** or pick a quick amount. This opens the [Wallet top-up](/billing/checkout/wallet) checkout. If you open the top-up page without an amount, it asks for the amount first and shows the price and payment methods after you continue.
 4. Select **Full statement** to open [the statement](/billing/wallet/statement).
 5. On the statement, choose a type, a from and to date, or words to search for, then select **Apply**. **Reset** clears them.
 6. Select **Export CSV** to download the rows that match the filters.
 
-> The totals on the statement cover everything that matches the filters, not only the rows on the page.
+> The totals on the statement cover everything that matches the filters, not only the rows on the page. Amounts are shown exactly as the wallet holds them, up to three or four decimals (for example 0.958), so the rows, the totals and the balance add up. "Messages used this month" is the same number you see on the plan page and in Analytics.
 
 ## Options and settings
 

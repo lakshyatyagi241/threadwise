@@ -14,6 +14,7 @@ export interface AttributeRow {
   fieldType: string;
   isSystem: boolean;
   isActive: boolean;
+  isHidden: boolean;
   config: Record<string, unknown>;
   rowVersion: number;
   createdAt: Date;
@@ -37,6 +38,7 @@ export class AttributesRepository {
       fieldType: fields.fieldType,
       isSystem: fields.isSystem,
       isActive: fields.isActive,
+      isHidden: fields.isHidden,
       config: fields.config,
       rowVersion: fields.rowVersion,
       createdAt: fields.createdAt,

@@ -34,6 +34,7 @@ export const WIDTH: Record<string, number> = {
   assignee: 170,
   contact: 190,
   deal: 190,
+  outcome: 160,
   created: 170,
   completed: 170,
 };

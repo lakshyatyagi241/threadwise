@@ -46,6 +46,16 @@ export function barLength(value: number, top: number, size: number): number {
   return Math.max(2, Math.min(size, (value / top) * size));
 }
 
+/**
+ * The x and width of bar `i` of `count` in a 0..100 sparkline. A long range has more than 100 points, so a slot is narrower than the
+ * 1-unit gap: the width never goes below half a slot (an SVG rect with a negative width is an error, one per bar).
+ */
+export function sparkBar(i: number, count: number): { x: number; width: number } {
+  const slot = 100 / Math.max(count, 1);
+  const width = Math.max(slot - 1, slot * 0.5);
+  return { x: i * slot + (slot - width) / 2, width };
+}
+
 /** Heatmap intensity 0..4 relative to the busiest cell (TW-DASH-031 port note: Reference's fixed counts never reached "peak"). */
 export function heatLevel(value: number, max: number): 0 | 1 | 2 | 3 | 4 {
   if (value <= 0 || max <= 0) return 0;

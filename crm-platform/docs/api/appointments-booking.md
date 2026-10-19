@@ -334,6 +334,41 @@ The book response is `{ status, startsAt, endsAt, timezone, requiresApproval, pa
 token is rejected before any query. `GET` never changes anything. A booking that is cancelled, declined, completed or no-show is `410
 APPT_LINK_UNAVAILABLE` for slots, reschedule and cancel (the page itself still shows the outcome); after its start `409 APPT_ALREADY_STARTED`.
 
+## Booking page appearance (BL-355..BL-358)
+
+How the customer's booking page and manage page look. Three levels, most specific first: a service's override, the workspace booking page theme, the
+workspace brand kit (Settings, Branding: primary, accent, background, logo), the product look. Every appearance field is nullable and null means inherit.
+Contracts: `packages/contracts/src/appointments/booking-page.ts`. Tables `booking_page_themes`, `booking_page_assets` (forced RLS, `touch_row`).
+
+Staff routes (plan `appointment_booking`; read = `record.booking-types.read`, change = `record.booking-types.update`):
+
+| Method and path                                             | What                                                                                                                                      |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /v2/booking-page/theme`                                | `{ scope, workspaceSlug, typeSlug, theme (saved), resolved (what visitors see), inherited, brand, canRemovePoweredBy, limits }`           |
+| `PUT /v2/booking-page/theme`                                | Replaces the saved theme. Needs `rowVersion` (null for the first save) else 409 `ROW_VERSION_CONFLICT`. 422 on a bad colour or text.      |
+| `PUT /v2/booking-page/theme/assets/:slot` (`logo`, `cover`) | Multipart `file`: PNG, JPG, WebP, GIF, never SVG; logo 1 MB, cover 3 MB; type checked from the bytes. Returns the theme with the new ref. |
+| `DELETE /v2/booking-page/theme/assets/:slot`                | Removes the picture.                                                                                                                      |
+| `GET/PUT/DELETE /v2/booking-types/:id/page-theme`           | The service's override (primary and button colour, background style, welcome text, button label). DELETE returns to the workspace look.   |
+| `PUT/DELETE /v2/booking-types/:id/page-theme/assets/:slot`  | The service's own logo or cover.                                                                                                          |
+
+Rules: colours are `#RRGGBB` (stored lower case; a CHECK enforces it); fonts, corners, light / dark / auto and background styles are fixed lists; text is plain
+text (page title 120, welcome text 600, button label 40 characters) and is never interpreted as markup. Hiding "Powered by" needs the plan feature
+`remove_branding` (422 `showPoweredBy` otherwise; a plan that later loses it shows the line again without any save). A cover background with no cover
+resolves to solid.
+
+Public: `GET /v2/public/booking/:org`, `/:org/:type` and `GET /v2/public/booking-manage/:token` carry `theme` (the resolved look: colours, wording, switches and
+picture refs `{ id, v }`, nothing else; no workspace ids, no staff or customer data). `GET /v2/public/booking-assets/:org/:assetId` serves a picture (`assetId`
+is the uuid or `brand-logo`): fixed raster content type, `nosniff`, `Content-Security-Policy: default-src 'none'; sandbox`, ETag, one-year immutable cache
+(the `?v=` of the address changes with the file), throttled like any browse of the page. The web relay (`/api/public/appointments/assets/...`) is the only
+place the address is built, from the workspace slug and the ref.
+
+Caching: the public pages read a per-workspace bundle from Redis (`appt:page-theme:v1:<orgId>`, 120 s), dropped after every save, upload, removal and reset.
+Brand kit and plan changes are made elsewhere, so they show within two minutes (or at the next theme save).
+
+Events: audit module `booking_page_themes` (insert / update / delete, delta of the changed fields) and outbox `booking_page_theme.updated`
+`{ scope, bookingTypeId }`. Storage: `booking_page_assets` is a bounded, replace-in-place table classified `system_asset` (not counted) in the storage quota
+coverage test, like `workspace_brand_assets`.
+
 ## Events (outbox) and what consumes them
 
 Written in the same transaction as the change, with an audit row (module `appointments` / `booking_types`). Payloads carry identifiers and
@@ -706,3 +741,56 @@ as actor `bot`, source `chat`). Subscribe to `appointment.booked` for the `appoi
 appointments with an event in the next 60 days, each read about once an hour) compares the Google event with what we last wrote and records `drifted` with one of `event_deleted`, `event_missing`, `time_changed`, `attendees_changed`. It never
 changes the appointment; the first detection writes an audit row and the outbox event `appointment.calendar_drifted` (one in-app notification, type `appointment_calendar_drift`, to the host or the person who booked). Our own writes and a guest
 answering are not drift. Plan section 8: [google-workspace-build.md](../threadwise-port/plan/google-workspace-build.md).
+
+## Appointment channels and the message library (BL-350..BL-354)
+
+The workspace owner decides which channels may carry appointment messages, and keeps a library of messages (predefined or their own) that booking
+types choose from. All routes are under `/v2`, behind the plan's `appointment_booking` gate. Reading needs `record.booking-types.read`.
+
+**Channels** (`appointment_channel_settings`, one row per workspace and channel):
+
+| Route | Key | What |
+| ----- | --- | ---- |
+| `GET /appointment-channels` | `record.booking-types.read` | `email`, `whatsapp`, `sms` and the reserved `voice`: `enabled`, `decided`, `source` (`owner` / `legacy_default` / null), `connection` (`connected` / `not_connected` / `coming_soon`), `usable` (enabled and connected), the connected `senders` and the chosen `defaultSenderId` |
+| `PUT /appointment-channels/:channel` | `appointments.channels.manage` | `{ enabled, defaultSenderId? }`; a default must be a connected sender of that channel (`422 APPT_CHANNEL_SENDER_INVALID`); `null` = the first connected one. `voice` answers `422 APPT_CHANNEL_COMING_SOON` (the database also refuses `enabled` for it). Audited (`appointment_channel_settings`). |
+
+Defaults: a workspace that existed when `20270120090000_appt_channels_templates.sql` ran has email, WhatsApp and SMS on with `source = legacy_default`
+(what is not connected stays unusable), so nothing silently stops. A workspace created later has no rows: nothing is on until the owner chooses.
+
+**Enforcement.** A booking type may name only enabled channels: a lifecycle message row or an ACTIVE reminder rule that adds a channel that is off is
+`422 APPT_CHANNEL_NOT_ENABLED` (a channel the type already had is not asked again, so a type keeps saving after the owner switches one off). At send
+time the shared sender (`ChannelAppointmentMessenger`) asks again, before anything else: a channel that is off is skipped with the reason
+`channel_disabled` and the rule falls to its next channel. Quiet hours, the ConsentGate and the WhatsApp template rule are unchanged. The default
+sender is preferred when it is still connected (SMS number, shared mailbox, Cloud API number), else the first connected one.
+
+**Library** (`appointment_message_templates`: kind `confirmation | reminder | reschedule | cancellation | follow_up`, channel `email | whatsapp`,
+language, name, subject, body with `{{placeholders}}`, variables, link to the WhatsApp template, `predefined_key`, `is_active`):
+
+| Route | Key | What |
+| ----- | --- | ---- |
+| `GET /appointment-message-templates/predefined` | read | The built-in set (10 messages, English), which ones are adopted, the placeholders and the ones WhatsApp can fill |
+| `GET /appointment-message-templates?kind&channel&usable` | read | The library. `status` is `draft`, `pending`, `approved` or `rejected` (+ `rejectionReason`); `usable` = active and, for WhatsApp, approved; `usedByTypes` |
+| `POST /appointment-message-templates/adopt` | `appointments.templates.manage` | `{ key, channel, language?, connectionId?, submit? }`. Email: lands at once. WhatsApp: needs `tpl.templates.create` (and `tpl.templates.sync` with `submit`) and a connected Cloud API number (`409 TPL_NO_CONNECTION`); creates a normal WhatsApp template (positional `{{1}}`..., examples, category UTILITY, MARKETING for the follow-up) through `TemplatesService` and links it. Adopting twice is `409`. |
+| `POST /appointment-message-templates` | manage | The owner's own email message |
+| `PATCH /appointment-message-templates/:id` | manage | Email: name, subject, text, `isActive`. WhatsApp: the text of a DRAFT or REJECTED message (`409 APPT_TEMPLATE_INVALID` otherwise), `submit` to send it to Meta again. `rowVersion` required. A WhatsApp text may use only `name, type, date, time, location, join_link, manage_link`, in that order without skipping one (`422 APPT_TEMPLATE_INVALID`): the sender fills numbered variables in that order. |
+| `POST /appointment-message-templates/:id/submit` , `/refresh` | manage | Send to Meta / read the status again (the existing template machinery and sync) |
+| `DELETE /appointment-message-templates/:id` | manage | Refused while a booking type chooses it (`409 APPT_TEMPLATE_IN_USE`); the WhatsApp template stays in the template library |
+
+The status of a WhatsApp message is **read from the linked `wa_templates` row on every request**, never copied, so the library cannot say "approved"
+after Meta paused or disabled the template (paused, disabled, deleted and rejected all read as `rejected` with a reason).
+
+**Booking types choose.** A `templates[]` row (`event`, `channel`) accepts `libraryTemplateId`. It must exist, be active and of the same kind and
+channel; a WhatsApp one must be approved (`422 APPT_TEMPLATE_NOT_APPROVED`; a choice the type already had is not asked again, and the sender skips an
+unapproved template anyway). The message is read when it is sent: an email uses the library subject and text, a WhatsApp one uses the approved
+template (free text from the library body inside the 24 hour window). A reminder rule's text and subject are copied from an email library message in
+the editor (a snapshot, editable); its WhatsApp template stays the rule's own `waTemplateId`.
+
+**Voice (reserved, not built).** The channel id `voice` is allowed by the database in `appointment_channel_settings` (never enabled),
+`appointment_message_templates` (body = the call script), `booking_templates.channel`, `booking_reminders.channels` and
+`appointment_reminder_runs.channel`, so the outbound reminder call arrives with the Voice bot without a migration of these tables. The API contract
+does not accept it on a reminder rule yet (a rule with `voice` is a validation error); the channel settings row has a `config` jsonb reserved for its
+call window and attempts. There is no bot, no call and no adapter.
+
+New error codes: `APPT_CHANNEL_NOT_ENABLED`, `APPT_CHANNEL_COMING_SOON`, `APPT_CHANNEL_SENDER_INVALID`, `APPT_TEMPLATE_NOT_APPROVED`,
+`APPT_TEMPLATE_IN_USE`, `APPT_TEMPLATE_INVALID`. New permission keys: `appointments.channels.manage`, `appointments.templates.manage` (Owner and
+Admin presets).

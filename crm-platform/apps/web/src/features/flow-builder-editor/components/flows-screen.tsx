@@ -85,6 +85,7 @@ export function FlowsScreen() {
   const orgName = useSession().org.name;
   const canRead = useCan('flb.flows.read');
   const canCreate = useCan('flb.flows.create');
+  const canFaqs = useCan('faq.entries.read');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
 
@@ -132,7 +133,7 @@ export function FlowsScreen() {
   const fail = (e: unknown) => toast(t('actionFailed', { message: reason(e) }), 'danger');
 
   const actions: CardActions = {
-    can: { update: canUpdate, create: canCreate, remove: canDelete },
+    can: { update: canUpdate, create: canCreate, remove: canDelete, faqs: canFaqs },
     builderMode,
     onToggle: async (f) => {
       try {
@@ -818,6 +819,10 @@ function CreateSheet({
   const t = useTranslations('flb.create');
   const tc = useTranslations('flb.common');
   const router = useRouter();
+  // A kind of flow is offered only to someone who holds what it needs: the website chat widget, the calling feature. A workspace that
+  // came from a product without website bots or voice flows (see tools/migration/access/module-ceiling.ts) is not offered them.
+  const canWeb = useCan('wgt.widgets.read');
+  const canCall = useCan('call.calls.use');
   const go = (href: string) => {
     onClose();
     router.push(href);
@@ -877,15 +882,16 @@ function CreateSheet({
           'bg-[var(--flb-mint)]',
           'chat',
         )}
-        {row(
-          newHref(mode, 'web'),
-          t('web'),
-          t('webNote'),
-          'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
-          'bg-muted',
-          'web',
-        )}
-        {mode === 'simple'
+        {canWeb &&
+          row(
+            newHref(mode, 'web'),
+            t('web'),
+            t('webNote'),
+            'M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Zm0 0h12M8 2c1.7 1.7 2.5 3.7 2.5 6S9.7 12.3 8 14C6.3 12.3 5.5 10.3 5.5 8S6.3 3.7 8 2Z',
+            'bg-muted',
+            'web',
+          )}
+        {mode === 'simple' || !canCall
           ? null
           : row(
               '/flows/builder?type=call',

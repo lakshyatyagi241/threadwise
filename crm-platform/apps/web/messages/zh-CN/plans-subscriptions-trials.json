@@ -304,7 +304,10 @@
       "showUnlimited": "显示 {count, plural, other {# 项无限额}}",
       "hideUnlimited": "隐藏无限额项",
       "groupCount": "{count, plural, other {# 项限额}}",
-      "groupHidden": "另有 {count, plural, other {# 项限额为无限额，已隐藏。}}"
+      "groupHidden": "另有 {count, plural, other {# 项限额为无限额，已隐藏。}}",
+      "activatedOn": "激活于 {date}",
+      "previousBilling": "上次扣费日期：{date}",
+      "subscriptionId": "订阅 ID：{id}"
     },
     "operator": {
       "title": "工作区套餐",

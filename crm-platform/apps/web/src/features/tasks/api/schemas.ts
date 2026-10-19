@@ -10,6 +10,8 @@ export {
   TASK_TITLE_MAX,
   type CreateTaskInput,
   type TaskBucket,
+  type TaskOutcomeRef,
+  type TaskOutcomeResponse,
   type TaskCountsResponse,
   type TaskPriority,
   type TaskResponse,

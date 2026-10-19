@@ -58,7 +58,10 @@
         "role": "Rol",
         "status": "Durum",
         "joined": "Katılma",
-        "actions": "İşlemler"
+        "actions": "İşlemler",
+        "phone": "Telefon",
+        "chatLimit": "Eşzamanlı sohbetler",
+        "lastLogin": "Son giriş"
       },
       "pending": "beklemede",
       "you": "Siz",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "{date} tarihine kadar izinli",
       "onLeaveOpen": "İzinli",
       "leaveFrom": "{date} tarihinden itibaren izinli",
-      "leaveAction": "İzin ve vekil"
+      "leaveAction": "İzin ve vekil",
+      "noLimit": "Sınır yok",
+      "neverSignedIn": "Hiç",
+      "editAction": "Telefonu ve sohbet sınırını değiştir"
     },
     "invite": {
       "eyebrow": "Çalışma alanı",
@@ -129,7 +135,14 @@
       "nameTooLong": "Ad en fazla {max} karakter olabilir.",
       "emailInvalid": "Geçerli bir e-posta adresi girin.",
       "upgrade": "Planı yükselt",
-      "emailRequired": "Bir e-posta adresi girin."
+      "emailRequired": "Bir e-posta adresi girin.",
+      "phone": "Telefon numarası (isteğe bağlı)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Ülke koduyla birlikte.",
+      "phoneInvalid": "Numarayı ülke koduyla girin, örneğin +91 98765 43210.",
+      "chatLimit": "Eşzamanlı sohbetler",
+      "chatLimitHint": "Bu kişiye aynı anda verilen en fazla açık sohbet sayısı. Sınır istemiyorsanız boş bırakın.",
+      "chatLimitInvalid": "1 ile {max} arasında bir tam sayı girin veya sınır istemiyorsanız boş bırakın."
     },
     "teams": {
       "eyebrow": "Çalışma alanı",
@@ -320,6 +333,31 @@
       "undoTitle": "Bu yeniden atama geri alınsın mı?",
       "undoMessage": "O zamandan beri kimsenin değiştirmediği kişiler ve fırsatlar önceki sahibine döner. Diğerleri olduğu yerde kalır.",
       "restored": "{count} geri döndü, {skipped} olduğu yerde kaldı."
+    },
+    "details": {
+      "eyebrow": "Çalışma alanı",
+      "title": "Üyeyi değiştir",
+      "intro": "{name} için telefon ve sohbet sınırı.",
+      "phone": "Telefon numarası",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Ülke koduyla birlikte. Kaldırmak için boş bırakın.",
+      "phoneInvalid": "Numarayı ülke koduyla girin, örneğin +91 98765 43210.",
+      "chatLimit": "Eşzamanlı sohbetler",
+      "chatLimitHint": "Bu kişinin açık sohbet sayısı bu sayıya ulaşınca otomatik atama ona sohbet vermeyi bırakır. Sınır istemiyorsanız boş bırakın.",
+      "chatLimitPlaceholder": "Sınır yok",
+      "chatLimitInvalid": "1 ile {max} arasında bir tam sayı girin veya sınır istemiyorsanız boş bırakın.",
+      "lastLogin": "Son giriş",
+      "lastLoginNever": "Henüz giriş yapmadı",
+      "submit": "Kaydet",
+      "saving": "Kaydediliyor…",
+      "saved": "Üye güncellendi."
+    },
+    "availability": {
+      "label": "Uygunluk",
+      "available": "Müsait",
+      "offline": "Çevrimdışı",
+      "hint": "Çevrimdışı olduğunuz sürece size otomatik olarak yeni sohbet atanmaz. Zaten sizde olan sohbetler sizde kalır.",
+      "failed": "Değiştirilemedi"
     }
   }
 }

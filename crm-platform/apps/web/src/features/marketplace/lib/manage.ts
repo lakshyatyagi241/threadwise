@@ -1,4 +1,5 @@
 import {
+  isUnlimitedLimit,
   MARKET_DATA_CHOICES,
   type MarketDataChoice,
   type MarketInstallation,
@@ -113,7 +114,7 @@ export interface UsageView {
 export function usageView(usage: { installed: number; limit: number }): UsageView {
   const installed = Math.max(0, usage.installed);
   const limit = Math.max(0, usage.limit);
-  if (limit === 0) {
+  if (isUnlimitedLimit(limit)) {
     return {
       installed,
       limit,

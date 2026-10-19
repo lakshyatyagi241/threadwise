@@ -22,6 +22,7 @@ import {
 import { imapFormFor } from '../lib/imap-form';
 import { outcomeFromParam, outcomeView } from '../lib/outcome';
 import { ImapConnectDialog, type ImapDialogTarget } from './imap-connect-dialog';
+import { useBrandName } from '@/components/shell/brand';
 import { MailboxCard } from './mailbox-card';
 import { SharingPanel } from './sharing-panel';
 import { SignaturesPanel } from './signatures-panel';
@@ -39,6 +40,7 @@ const pillLink =
  */
 export function HubScreen() {
   const t = useTranslations('email.hub');
+  const brand = useBrandName();
   const g = useTranslations('email.guide');
   const root = useTranslations('email');
   const router = useRouter();
@@ -220,7 +222,7 @@ export function HubScreen() {
                       {t(`how.${k}.title`)}
                     </div>
                     <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-                      {t(`how.${k}.body`)}
+                      {t(`how.${k}.body`, { app: brand })}
                     </p>
                   </div>
                 </li>

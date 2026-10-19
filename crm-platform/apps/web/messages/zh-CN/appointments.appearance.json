@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "预约页面外观",
+      "subtitle": "让客户用来预约的页面更像您的品牌。",
+      "backToSettings": "预约设置",
+      "loading": "正在加载预约页面主题",
+      "forbidden": "您没有查看预约页面外观的权限。",
+      "notAvailable": "此服务器暂不支持预约页面外观。",
+      "readOnly": "您只能查看外观，无法修改。修改外观需要编辑预约类型的权限。",
+      "fixFirst": "请先修正高亮显示的字段。",
+      "issues": "{count, plural, other {# 个字段需要处理后才能保存。}}",
+      "saved": "预约页面外观已保存",
+      "saving": "正在保存...",
+      "unsaved": "有未保存的更改",
+      "allSaved": "所有更改已保存",
+      "discard": "放弃更改",
+      "save": "保存外观",
+      "conflict": {
+        "message": "在您编辑期间，其他人修改了外观。",
+        "reload": "重新加载最新内容"
+      },
+      "leave": {
+        "title": "不保存就离开？",
+        "message": "您对预约页面外观的更改尚未保存。",
+        "leave": "离开",
+        "stay": "继续编辑"
+      },
+      "tile": {
+        "label": "预约页面外观",
+        "description": "客户预约页面的徽标、颜色、字体和欢迎语",
+        "keywords": "品牌, 徽标, 颜色, 主题, 预约页面, 外观, 字体, 白标"
+      },
+      "card": {
+        "title": "预约页面外观",
+        "description": "添加徽标和颜色，撰写欢迎语，并为客户预约页面选择字体和圆角。编辑时可实时预览。",
+        "open": "打开预约页面外观"
+      },
+      "editorLink": {
+        "link": "页面外观",
+        "saveFirst": "请先保存预约类型，再打开其页面外观。"
+      },
+      "typesList": {
+        "menu": "页面外观"
+      },
+      "pictures": {
+        "title": "徽标和封面图片",
+        "description": "显示在页面顶部。留空则使用上一级的设置。",
+        "logo": "徽标",
+        "logoHint": "PNG、JPG、WebP 或 GIF，最大 {mb} MB。建议使用透明背景的横向徽标。",
+        "cover": "封面图片",
+        "coverHint": "PNG、JPG、WebP 或 GIF，最大 {mb} MB。当背景设为封面图片时，将作为横幅显示。",
+        "useBrand": "留空时使用我的品牌徽标和颜色",
+        "useBrandHint": "此处留空的内容将取自“设置”中的“品牌”，使预约页面与您的整体品牌保持一致。"
+      },
+      "fields": {
+        "picker": "{name}：选择颜色",
+        "clear": "清除",
+        "noPicture": "无图片",
+        "upload": "上传",
+        "replace": "替换",
+        "remove": "移除",
+        "inheritedPicture": "正在使用上一级的设置。",
+        "inheritedColour": "留空则使用 {colour}。",
+        "productColour": "留空则使用默认颜色。",
+        "pictureType": "请使用 PNG、JPG、WebP 或 GIF 图片。",
+        "pictureSize": "图片过大。上限为 {mb} MB。",
+        "pictureRejected": "该图片未被接受。请使用符合大小限制的 PNG、JPG、WebP 或 GIF 图片。"
+      },
+      "colours": {
+        "title": "颜色和背景",
+        "description": "文字颜色会自动选择，以确保内容清晰易读。",
+        "primary": "主色",
+        "typeHint": "留空则使用工作区颜色。",
+        "button": "按钮颜色",
+        "buttonHint": "按钮和所选时间的颜色。留空则使用主色。",
+        "background": "页面背景",
+        "backgroundHint": "纯色、主色的柔和浅色调，或将封面图片作为横幅。",
+        "sameAsWorkspace": "与工作区相同",
+        "backgrounds": {
+          "solid": "纯色",
+          "tint": "柔和浅色调",
+          "image": "封面图片"
+        },
+        "backgroundColour": "背景颜色",
+        "needCover": "请上传封面图片以使用此背景。",
+        "invalid": "请使用类似 #1a73e8 的颜色。"
+      },
+      "checks": {
+        "title": "可读性检查",
+        "autoText": "按钮上的文字会自动选用黑色或白色中更易读的一种，用作文字的主色也会适当加深或调亮。",
+        "primaryText": "您的主色在页面上的对比度为 {ratio}:1，低于 {min}:1，因此用作文字时会进行调整。",
+        "button": "按钮文字在您的按钮颜色上的对比度为 {ratio}:1，低于 {min}:1。",
+        "buttonEdge": "您的按钮颜色与页面的对比度为 {ratio}:1，低于 {min}:1，按钮可能不易看清。",
+        "inDark": "（深色模式）"
+      },
+      "wording": {
+        "title": "文案",
+        "description": "仅限纯文本。客户看到的语言与您输入的语言一致。",
+        "pageTitle": "页面标题",
+        "pageTitleHint": "显示在页面顶部和浏览器标签页中。留空则使用您的企业名称。",
+        "welcome": "欢迎语",
+        "welcomeHint": "{count} / {max} 个字符。显示在预约表单上方。",
+        "button": "确认按钮文字",
+        "buttonHint": "最后一个按钮上的文字，例如“预留我的位置”。需要审批的请求保留其自身的文字。",
+        "buttonDefault": "确认预约",
+        "tooLong": "最多使用 {max} 个字符。"
+      },
+      "style": {
+        "title": "字体和圆角",
+        "description": "一组在所有设备上都适用的安全选项。",
+        "font": "字体",
+        "fontHint": "使用客户设备上已有的字体，因此页面加载很快。",
+        "fonts": {
+          "default": "产品默认",
+          "system": "系统",
+          "serif": "衬线",
+          "rounded": "圆体",
+          "humanist": "人文体"
+        },
+        "corners": "圆角",
+        "cornerStyles": {
+          "square": "方形",
+          "rounded": "圆角",
+          "pill": "胶囊形"
+        },
+        "mode": "浅色或深色",
+        "modes": {
+          "light": "浅色",
+          "dark": "深色",
+          "auto": "跟随设备"
+        }
+      },
+      "options": {
+        "title": "页面选项",
+        "description": "预约表单周围还显示哪些内容。",
+        "language": "显示语言切换",
+        "languageHint": "允许客户更改页面语言。",
+        "poweredBy": "在底部显示“Powered by”",
+        "poweredByHint": "关闭后仅显示您自己的品牌。",
+        "poweredByLocked": "移除“Powered by”属于白标品牌功能，您的套餐不包含此功能。"
+      },
+      "links": {
+        "title": "页面地址",
+        "description": "客户打开页面的地址。保存后更改会立即在该页面生效。",
+        "page": "预约页面地址",
+        "open": "打开页面",
+        "copy": "复制",
+        "copied": "已复制",
+        "later": "暂不支持使用自己的域名，以及将页面嵌入其他网站。"
+      },
+      "type": {
+        "title": "页面外观：{name}",
+        "subtitle": "为此预约类型设置专属的徽标、颜色或欢迎语。留空的项目将使用工作区外观。",
+        "back": "返回预约类型",
+        "notFoundTitle": "未找到预约类型",
+        "notFound": "此预约类型已不存在。",
+        "resetTitle": "使用工作区外观",
+        "resetDescription": "移除为此预约类型设置的所有内容，包括图片。",
+        "reset": "使用工作区外观",
+        "resetConfirmTitle": "使用工作区外观？",
+        "resetConfirmMessage": "为此预约类型设置的徽标、封面图片、颜色和文案将被移除。",
+        "resetDone": "此预约类型现在使用工作区外观"
+      },
+      "preview": {
+        "title": "实时预览",
+        "device": "设备",
+        "desktop": "桌面端",
+        "mobile": "移动端",
+        "page": "页面",
+        "servicePage": "预约页面",
+        "serviceList": "服务列表",
+        "scheme": "颜色模式",
+        "asSet": "按设置",
+        "light": "浅色",
+        "dark": "深色",
+        "direction": "方向",
+        "ltr": "从左到右",
+        "rtl": "从右到左",
+        "frameTitle": "预约页面预览",
+        "note": "这是带有示例时间的真实页面。您在此的任何操作都不会产生预约。",
+        "sampleName": "初次沟通电话",
+        "sampleName2": "完整咨询",
+        "sampleDescription": "一次简短的通话，了解您的需求并解答您的问题。",
+        "sampleIntro": "请提前几分钟到达。",
+        "sampleQuestion": "有什么需要我们提前了解的吗？"
+      }
+    }
+  }
+}

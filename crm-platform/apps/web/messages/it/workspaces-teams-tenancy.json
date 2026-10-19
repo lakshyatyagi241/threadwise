@@ -58,7 +58,10 @@
         "role": "Ruolo",
         "status": "Stato",
         "joined": "Iscritto",
-        "actions": "Azioni"
+        "actions": "Azioni",
+        "phone": "Telefono",
+        "chatLimit": "Chat simultanee",
+        "lastLogin": "Ultimo accesso"
       },
       "pending": "in attesa",
       "you": "Tu",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "In ferie fino al {date}",
       "onLeaveOpen": "In ferie",
       "leaveFrom": "Ferie dal {date}",
-      "leaveAction": "Ferie e delegato"
+      "leaveAction": "Ferie e delegato",
+      "noLimit": "Nessun limite",
+      "neverSignedIn": "Mai",
+      "editAction": "Modifica telefono e limite chat"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -129,7 +135,14 @@
       "nameTooLong": "Il nome può contenere al massimo {max} caratteri.",
       "emailInvalid": "Inserisci un indirizzo email valido.",
       "upgrade": "Passa a un piano superiore",
-      "emailRequired": "Inserisci un indirizzo email."
+      "emailRequired": "Inserisci un indirizzo email.",
+      "phone": "Numero di telefono (facoltativo)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con il prefisso internazionale.",
+      "phoneInvalid": "Inserisci il numero con il prefisso internazionale, ad esempio +91 98765 43210.",
+      "chatLimit": "Chat simultanee",
+      "chatLimitHint": "Numero massimo di chat aperte assegnate a questa persona contemporaneamente. Lascia vuoto per nessun limite.",
+      "chatLimitInvalid": "Inserisci un numero intero da 1 a {max}, oppure lascia vuoto per nessun limite."
     },
     "teams": {
       "eyebrow": "Workspace",
@@ -320,6 +333,31 @@
       "undoTitle": "Annullare questa riassegnazione?",
       "undoMessage": "I contatti e le trattative che nessuno ha modificato da allora tornano al proprietario precedente. Gli altri restano dove sono.",
       "restored": "{count} riportati, {skipped} lasciati dove sono."
+    },
+    "details": {
+      "eyebrow": "Workspace",
+      "title": "Modifica membro",
+      "intro": "Telefono e limite chat di {name}.",
+      "phone": "Numero di telefono",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con il prefisso internazionale. Lascia vuoto per rimuoverlo.",
+      "phoneInvalid": "Inserisci il numero con il prefisso internazionale, ad esempio +91 98765 43210.",
+      "chatLimit": "Chat simultanee",
+      "chatLimitHint": "L'assegnazione automatica smette di dare chat a questa persona quando ne ha già tante aperte. Lascia vuoto per nessun limite.",
+      "chatLimitPlaceholder": "Nessun limite",
+      "chatLimitInvalid": "Inserisci un numero intero da 1 a {max}, oppure lascia vuoto per nessun limite.",
+      "lastLogin": "Ultimo accesso",
+      "lastLoginNever": "Non ha ancora effettuato l'accesso",
+      "submit": "Salva",
+      "saving": "Salvataggio…",
+      "saved": "Membro aggiornato."
+    },
+    "availability": {
+      "label": "Disponibilità",
+      "available": "Disponibile",
+      "offline": "Offline",
+      "hint": "Finché sei offline, nessuna nuova chat ti viene assegnata automaticamente. Le chat che hai già restano tue.",
+      "failed": "Impossibile modificare"
     }
   }
 }

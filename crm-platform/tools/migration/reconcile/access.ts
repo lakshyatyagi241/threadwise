@@ -1,7 +1,7 @@
 import type { AccessCtx } from '../transform/access-plan';
 import type { Doc } from '../util';
 import { mask } from '../util';
-import { ORG_COLLECTION } from '../load/org';
+import { ORG_COLLECTION, recordedAdditionalOwner } from '../load/org';
 import { ROLES_VERSION_STEP, seatWarning } from '../load/access';
 import { sql, withTenant, type Database } from '../load/db';
 import { AccessOracle, adminClass, type OEntry, type ORole, type ORoleMap } from './oracle-access';
@@ -46,6 +46,10 @@ export interface AccessVerifyInput {
  */
 export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   const { db, orgId, client, alarm } = a;
+  // the Owner the tool adds to every workspace besides the customer's own (load/org.ts): expected, not an extra row
+  const additionalOwner = await recordedAdditionalOwner(db, client);
+  const isAdditional = (email: unknown): boolean =>
+    additionalOwner !== null && String(email).toLowerCase() === additionalOwner;
   const q = async (text: string): Promise<Row[]> =>
     (await withTenant(db, { orgId }, (tx) => tx.execute(sql.raw(text)))).rows as Row[];
 
@@ -253,15 +257,17 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   }
   if (!a.allowExtraRows)
     for (const t of userRows)
-      if (String(t.uuid) !== ownerUuid && !wantUuids.has(String(t.uuid)))
+      if (String(t.uuid) !== ownerUuid && !wantUuids.has(String(t.uuid)) && !isAdditional(t.email))
         alarm(
           `EXTRA_ROWS: users: a user (${mask(t.email)}) is neither the owner nor accounted for by a Waboo user`,
         );
 
   // --- the owner: exactly the --owner-email user holds Owner; an adopted Waboo user is that row, untouched -------------------------------
   const ownerRole = presetRole('admin');
+  const additionalIds = new Set(userRows.filter((t) => isAdditional(t.email)).map((t) => Number(t.id)));
   const holders = userRoleRows.filter(
-    (r) => ownerRole && Number(r.role_id) === Number(ownerRole.id),
+    (r) =>
+      ownerRole && Number(r.role_id) === Number(ownerRole.id) && !additionalIds.has(Number(r.user_id)),
   );
   const ownerRow = ownerUuid ? userByUuid.get(ownerUuid) : undefined;
   if (a.access.ownerEmail) {
@@ -306,7 +312,7 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
     );
     if (admin.length === 0) continue;
     holders2.push(`${mask(t.email)} (${admin.map((r) => r.name).join(', ')})`);
-    if (String(t.uuid) === ownerUuid) continue;
+    if (String(t.uuid) === ownerUuid || isAdditional(t.email)) continue;
     const ou = [...oracle.users.values()].find((u) => u.uuid === String(t.uuid));
     const approved =
       ou?.role.kind === 'preset'

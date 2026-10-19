@@ -92,7 +92,8 @@
         "contact": "Kişi",
         "deal": "Fırsat",
         "created": "Oluşturulma",
-        "completed": "Tamamlanma tarihi"
+        "completed": "Tamamlanma tarihi",
+        "outcome": "Sonuç"
       },
       "refresh": "Yenile",
       "shortcuts": "Klavye kısayolları",
@@ -101,7 +102,9 @@
         "list": "Liste",
         "board": "Son tarihe göre pano"
       },
-      "linkCompany": "Bir şirket"
+      "linkCompany": "Bir şirket",
+      "outcome": "Sonuç",
+      "allOutcomes": "Tüm sonuçlar"
     },
     "table": {
       "scrollArea": "Görev tablosu",
@@ -115,7 +118,8 @@
         "contact": "Kişi",
         "deal": "Fırsat",
         "created": "Oluşturulma",
-        "completed": "Tamamlanma tarihi"
+        "completed": "Tamamlanma tarihi",
+        "outcome": "Sonuç"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "Görev çok uzun (en fazla 255 karakter).",
         "notesTooLong": "Notlar çok uzun (en fazla 5000 karakter).",
         "dueInvalid": "Bu tarih geçerli değil.",
-        "assigneeInvalid": "Bu kişi bu çalışma alanının etkin bir üyesi değil."
+        "assigneeInvalid": "Bu kişi bu çalışma alanının etkin bir üyesi değil.",
+        "outcomeInvalid": "Bu sonuç kullanılamıyor. Listeden birini seçin."
       },
-      "company": "Şirket"
+      "company": "Şirket",
+      "outcome": "Sonuç"
     },
     "drawer": {
       "loading": "Görev yükleniyor",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Bu görev silinsin mi?",
       "deleteMessage": "\"{title}\" herkesten silinecek. Bu işlem geri alınamaz.",
-      "cancel": "Vazgeç"
+      "cancel": "Vazgeç",
+      "outcomeChip": "Sonuç: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +293,10 @@
       "planDisabled": "Planınız görevleri içermiyor. Açmak için planınızı yükseltin.",
       "assigneeInvalid": "Bu kişi bu çalışma alanının aktif bir üyesi değil.",
       "unexpected": "Bir sorun oluştu. Biraz sonra yeniden deneyin.",
-      "retry": "Yeniden dene"
+      "retry": "Yeniden dene",
+      "outcomeInvalid": "Bu sonuç kullanılamıyor. Listeden birini seçin.",
+      "outcomeNameTaken": "Başka bir sonuç zaten bu ada sahip.",
+      "outcomeInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin."
     },
     "toast": {
       "completed": "Görev tamamlandı.",
@@ -342,6 +352,43 @@
       "save": "Görev ekle",
       "cancel": "İptal",
       "failed": "Görev kaydedilemedi. Metniniz kutuda duruyor."
+    },
+    "outcomes": {
+      "title": "Görev sonuçları",
+      "subtitle": "Bir görevi tamamlarken veya kaydederken seçilen sonuçlar; örneğin İlgileniyor ya da Mesaj bırakıldı.",
+      "listTitle": "Sonuçlar",
+      "listHint": "Gizlenen sonuçlar artık sunulmaz, ancak onu zaten taşıyan görevlerde kalır. Görevlerin kullandığı bir sonuç silinemez.",
+      "loading": "Sonuçlar yükleniyor",
+      "empty": "Henüz sonuç yok. İlkini aşağıdan ekleyin.",
+      "newName": "Yeni sonuç",
+      "newNamePlaceholder": "örn. Mesaj bırakıldı",
+      "add": "Sonuç ekle",
+      "readOnly": "Bu listeyi görebilirsiniz ancak değiştirmek için izniniz olmalı.",
+      "failed": "İşlem başarısız oldu.",
+      "conflict": "Bu sonucu başka biri değiştirdi. Liste yeniden yüklendi. Tekrar deneyin.",
+      "added": "Sonuç eklendi.",
+      "saved": "Sonuç kaydedildi.",
+      "deleted": "Sonuç silindi.",
+      "moveUp": "{name} sonucunu yukarı taşı",
+      "moveDown": "{name} sonucunu aşağı taşı",
+      "nameLabel": "Sonuç adı",
+      "taskCount": "{count, plural, one {# görev} other {# görev}}",
+      "shownLabel": "Bir görev tamamlanırken {name} sonucunu sun",
+      "shown": "Gösteriliyor",
+      "hidden": "Gizli",
+      "deleteNamed": "{name} sonucunu sil",
+      "deleteInUse": "Görevler bu sonucu hâlâ kullanıyor, bu yüzden silinemez. Bunun yerine gizleyin.",
+      "deleteTitle": "{name} silinsin mi?",
+      "deleteMessage": "Sonuç listeden kaldırılır. Hiçbir görev bunu kullanmıyor.",
+      "delete": "Sil",
+      "cancel": "Tut",
+      "problems": {
+        "nameRequired": "Sonuç için bir ad yazın.",
+        "nameTooLong": "Ad çok uzun (en fazla 191 karakter)."
+      },
+      "none": "Sonuç yok",
+      "hiddenName": "{name} (gizli)",
+      "completeWith": "Sonuçla tamamla"
     }
   }
 }

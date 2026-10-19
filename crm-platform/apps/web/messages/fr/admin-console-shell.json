@@ -513,7 +513,8 @@
         "profileHint": "Votre nom, photo et coordonnées",
         "password": "Mot de passe et sécurité",
         "passwordHint": "Mot de passe, connexion en deux étapes et sessions actives"
-      }
+      },
+      "searchPage": "Rechercher \"{query}\" sur cette page"
     },
     "strip": {
       "jump": "Rechercher ou aller à...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Boîte de réception",
       "clearAll": "Tout effacer",
       "viewAll": "Tout afficher →"
+    },
+    "notFound": {
+      "title": "Page introuvable",
+      "body": "Cette page n'existe pas ou a été déplacée. Vérifiez l'adresse ou revenez à votre tableau de bord.",
+      "home": "Aller au tableau de bord"
     }
   }
 }

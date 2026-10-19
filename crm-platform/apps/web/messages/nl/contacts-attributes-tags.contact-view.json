@@ -44,6 +44,11 @@
         "editJobTitle": "Functietitel bewerken",
         "jobTitleConflict": "Iemand anders heeft dit contact eerder gewijzigd. Het is opnieuw geladen; probeer het opnieuw.",
         "jobTitleFailed": "De functietitel kon niet worden opgeslagen. Probeer het opnieuw.",
+        "jobTitleRequired": "De functietitel mag niet leeg blijven: deze werkruimte vereist er een.",
+        "jobTitleOtherRequired": "Andere verplichte eigenschappen van dit contact zijn leeg. Open Contact bewerken om ze in te vullen.",
+        "jobTitleNotEditable": "De functietitel is in deze werkruimte alleen-lezen of verborgen en kan hier dus niet worden bewerkt.",
+        "jobTitleForbidden": "Je hebt geen toestemming om dit contact te bewerken.",
+        "jobTitleGone": "Dit contact is niet meer beschikbaar voor jou: het is verwijderd of aan iemand anders toegewezen.",
         "owner": "Eigenaar"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Vorige fase",
         "previousStageSince": "Vorige fase sinds",
         "lostReason": "Reden van verlies",
-        "updatedAt": "Laatst bijgewerkt"
+        "updatedAt": "Laatst bijgewerkt",
+        "leadScore": "Leadscore",
+        "originalStage": "Oorspronkelijke levenscyclusfase",
+        "createdBy": "Aangemaakt door",
+        "updatedBy": "Bijgewerkt door"
       },
       "company": {
         "title": "Bedrijf",

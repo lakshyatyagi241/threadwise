@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, one {# असीमित सीमा दिखाएँ} other {# असीमित सीमाएँ दिखाएँ}}",
       "hideUnlimited": "असीमित सीमाएँ छिपाएँ",
       "groupCount": "{count, plural, one {# सीमा} other {# सीमाएँ}}",
-      "groupHidden": "{count, plural, one {# और सीमा असीमित है और छिपी है।} other {# और सीमाएँ असीमित हैं और छिपी हैं।}}"
+      "groupHidden": "{count, plural, one {# और सीमा असीमित है और छिपी है।} other {# और सीमाएँ असीमित हैं और छिपी हैं।}}",
+      "activatedOn": "{date} को सक्रिय किया गया",
+      "previousBilling": "पिछली बिलिंग की तारीख: {date}",
+      "subscriptionId": "सब्सक्रिप्शन आईडी: {id}"
     },
     "operator": {
       "title": "वर्कस्पेस प्लान",

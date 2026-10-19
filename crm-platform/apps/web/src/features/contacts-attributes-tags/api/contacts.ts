@@ -117,7 +117,9 @@ export function contactFilterBody(
     groupId: f.group && f.group !== 'no_group' ? f.group : undefined,
     noGroup: f.group === 'no_group' ? true : undefined,
     tagIds: f.tag ? [f.tag] : undefined,
-    unsubscribed: f.consent === '' ? undefined : f.consent === 'unsubscribed',
+    // "Subscribed" is the list's WhatsApp opt-in column (label subscribed, not opted out), not merely "has not opted out".
+    unsubscribed: f.consent === 'unsubscribed' ? true : undefined,
+    subscribed: f.consent === 'subscribed' ? true : undefined,
     imported: f.imported ? true : undefined,
     status: f.status?.trim() || undefined,
     minor: f.minor ? f.minor === 'yes' : undefined,
@@ -155,6 +157,7 @@ export function listQuery(f: ContactFilters) {
     noGroup: b.noGroup,
     tagIds: f.tag || undefined,
     unsubscribed: b.unsubscribed,
+    subscribed: b.subscribed,
     imported: b.imported,
     status: b.status,
     minor: b.minor,

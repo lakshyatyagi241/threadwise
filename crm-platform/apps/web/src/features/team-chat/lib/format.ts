@@ -1,11 +1,5 @@
-/** Two letters for an avatar: the first letters of the first and last word of the name. */
-export function initials(name: string): string {
-  const words = name.trim().split(/\s+/).filter(Boolean);
-  if (words.length === 0) return '?';
-  const first = [...words[0]!][0] ?? '?';
-  const last = words.length > 1 ? ([...words[words.length - 1]!][0] ?? '') : '';
-  return (first + last).toUpperCase();
-}
+/** Two letters for an avatar: the one shared rule (`@/lib/initials`). */
+export { initials } from '@/lib/initials';
 
 /** Eight avatar colours; the same person always gets the same one. Whole class names, so the style scanner finds them. */
 export const AVATAR_COLORS = [

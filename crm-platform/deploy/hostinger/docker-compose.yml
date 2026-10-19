@@ -160,6 +160,8 @@ x-web-env: &web-env
   NODE_OPTIONS: --max-old-space-size=512
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   REALTIME_URL: https://${DOMAIN}/realtime
+  # What the Developers page shows customers as the API address. API_URL (per slot, below) is the internal container name and must never be shown.
+  PUBLIC_API_URL: https://${DOMAIN}
   # Event-loop and runtime metrics of the Next.js server, same switches as the API's (see x-api-env): off unless a port is set.
   OBS_METRICS_PORT: ${OBS_METRICS_PORT:-0}
   OBS_METRICS_HOST: ${OBS_METRICS_HOST:-0.0.0.0}

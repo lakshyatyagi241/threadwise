@@ -513,7 +513,8 @@
         "profileHint": "Il tuo nome, la foto e i dati di contatto",
         "password": "Password e sicurezza",
         "passwordHint": "Password, accesso a due fattori e sessioni attive"
-      }
+      },
+      "searchPage": "Cerca \"{query}\" in questa pagina"
     },
     "strip": {
       "jump": "Cerca o vai a...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Inbox",
       "clearAll": "Cancella tutto",
       "viewAll": "Vedi tutto →"
+    },
+    "notFound": {
+      "title": "Pagina non trovata",
+      "body": "Questa pagina non esiste o è stata spostata. Controlla l'indirizzo o torna alla dashboard.",
+      "home": "Vai alla dashboard"
     }
   }
 }

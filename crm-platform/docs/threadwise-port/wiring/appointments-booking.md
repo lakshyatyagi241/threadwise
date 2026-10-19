@@ -57,6 +57,24 @@ workspace vocabulary (`appointments.reminders` is a bound surface of `persona-vo
 | WIRE-APPT-017 | The messenger (`ChannelAppointmentMessenger`): quiet hours (hold), ConsentGate, WhatsApp via `enqueueOutbound`, SMS and email via `EngineSenderRegistry` | `APPOINTMENT_MESSENGER` (worker process only); the confirmation, reschedule and cancellation messages use it too                                                               | the contact's thread (WhatsApp), the broadcast engines' sender caps and bounce list (SMS, email), the dispatcher's plan cap, wallet and halt                                                                 |
 | WIRE-APPT-018 | The booking's own view of its reminders (`reminders` on `GET /v2/appointments/:id`, merged from rules and runs)                                          | `remindersOf` (pure): the recorded run, else `scheduled`                                                                                                                       | the appointment drawer ("Reminders": status, channel, reason)                                                                                                                                                |
 
+## BL-355..BL-358 rows (booking page appearance)
+
+The customer's page is drawn from a resolved theme: a service's override, then the workspace theme, then the workspace brand kit (Settings, Branding),
+then the product look (`booking-page-theme.rules.ts`, pure). Tables `booking_page_themes` (one row per scope, NULL = inherit) and `booking_page_assets`
+(logo and cover bytes, one row per slot). Permissions are the existing `record.booking-types.read` / `.update`; "Powered by" off needs the plan feature `remove_branding`.
+
+| Id            | What                                                                                                                                        | Fed by                                                                                             | Read by                                                                                          |
+| ------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ |
+| WIRE-APPT-019 | Workspace theme `GET/PUT /v2/booking-page/theme`, pictures `PUT/DELETE .../assets/:slot`                                                    | `/appointments/settings/appearance` (tile `booking-page-appearance`, card on Appointment settings) | `PublicBookingService.page` (service chooser)                                                    |
+| WIRE-APPT-020 | Service override `GET/PUT/DELETE /v2/booking-types/:id/page-theme`, pictures under `.../assets/:slot`                                       | `/appointments/types/:id/appearance` (editor header link, row menu of the types list)              | `PublicBookingService.typeView` and `.manageView` (the manage page of a booking of that service) |
+| WIRE-APPT-021 | Public pictures `GET /v2/public/booking-assets/:orgSlug/:assetId` (uuid or `brand-logo`), relayed at `/api/public/appointments/assets/...`  | the `logo` / `cover` refs inside the resolved theme; the brand kit logo (`workspace_brand_assets`) | `<img>` in `PublicShell` (addresses built by `bookingPageAssetPath`, checked by `safeImageSrc`)  |
+| WIRE-APPT-022 | Cache `appt:page-theme:v1:<org>` (Redis, 120 s), dropped after every save / picture change; brand kit and plan are read into it             | `BookingPageThemesService`                                                                         | every public page view                                                                           |
+| WIRE-APPT-023 | Audit module `booking_page_themes` and outbox `booking_page_theme.updated` in the saving transaction                                        | every save, picture change, reset                                                                  | audit log                                                                                        |
+| WIRE-APPT-024 | Live preview: the real `PublicShell` + `Service` / `DirectoryBody` inside `PreviewFrame` (1024 px and 375 px), sample times, nothing booked | the draft in `appearance-editor`                                                                   | the owner                                                                                        |
+
+Not built (BL-359): custom domain; placing the page inside another website (needs a per-workspace frame-ancestors allow-list); a welcome text per language;
+more fonts than the five system stacks; the invoice, form and link pages adopting `apps/web/src/lib/brand-kit`; a preview link to share before saving.
+
 ## Not built, recorded
 
 - The hourly drift check reads Google events only; Outlook drift is BL-200.
@@ -65,3 +83,18 @@ workspace vocabulary (`appointments.reminders` is a bound surface of `persona-vo
 - Creating a meeting from the contact with the Appointments add-on, and changing or cancelling a booking from its Meetings row (BL-282); persona wording of the nouns (BL-284).
 - Reminders (BL-283): a test-send to yourself (a real send to a phone cannot be made safe without choosing whose number); a per-contact language for the standard texts (they are English); a business-hours window for reminders (quiet hours only); leave-aware availability and reassignment (a separate task); real WhatsApp, SMS and email delivery has only been exercised against fakes.
 - Real-account verification of Google and Microsoft (BL-199): everything here is exercised against local stand-ins written from the vendors' documentation.
+
+## BL-350..BL-354 rows (owner-enabled channels and the message library)
+
+| Id | What | Fed by | Read by |
+| -- | ---- | ------ | ------- |
+| WIRE-APPT-019 | The owner's channel choice (`appointment_channel_settings`; existing workspaces seeded on, `legacy_default`) | `PUT /v2/appointment-channels/:channel` (`appointments.channels.manage`) | `GET /v2/appointment-channels`; the settings card "Message channels"; the editor's Messaging step; `ChannelAppointmentMessenger` (`gate`) |
+| WIRE-APPT-020 | The send-time gate and default sender | the messenger asks `AppointmentChannelsRepository.gate` first; `channel_disabled` is a skip reason (run, drawer, timeline) | reminder runs, lifecycle messages |
+| WIRE-APPT-021 | The message library (`appointment_message_templates`) and the built-in set | `POST .../adopt`, `POST`, `PATCH`, `DELETE /v2/appointment-message-templates` | the settings card "Message templates"; pickers in the editor |
+| WIRE-APPT-022 | WhatsApp message to Meta | `adopt` / `submit` call `TemplatesService.create` / `submit` (the template library's own lint, plan cap, Graph call); status is read live from `wa_templates` | `GET .../appointment-message-templates` (`status`, `rejectionReason`) |
+| WIRE-APPT-023 | A type's choice (`booking_templates.library_template_id`) | `PATCH /v2/booking-types/:id` `templates[].libraryTemplateId` (approved-only check, enabled-channel check) | `AppointmentMessageConsumer` and `AppointmentReminderService` read the library text, subject and WhatsApp template at send time |
+| WIRE-APPT-024 | Voice reserved | database checks only; `voice` is listed disabled "Coming with the Voice bot" | nothing sends on it |
+
+Not built: the Voice bot and the outbound reminder call; predefined texts in languages other than English; SMS library messages (an SMS uses the type's
+or rule's text); copying a WhatsApp library message into a reminder rule as its template (pick the approved template in the rule's own list); real Meta
+approval (exercised against a fake Graph edge only).

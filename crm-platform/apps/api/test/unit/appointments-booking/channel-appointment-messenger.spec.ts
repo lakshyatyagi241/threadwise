@@ -68,6 +68,8 @@ interface Setup {
   mailRow?: Record<string, unknown> | undefined;
   engineSend?: () => Promise<unknown>;
   noEngine?: boolean;
+  /** The workspace owner's choice for the channel (BL-350). Default: on, no default sender. */
+  channelGate?: { enabled: boolean; defaultSenderId: number | null };
 }
 
 function make(s: Setup = {}) {
@@ -123,6 +125,9 @@ function make(s: Setup = {}) {
       return { rows: [] };
     },
   };
+  const channelGate = vi.fn(
+    async (..._a: unknown[]) => s.channelGate ?? { enabled: true, defaultSenderId: null },
+  );
   const messenger = new ChannelAppointmentMessenger(
     { txAs: async (_c: unknown, fn: (t: unknown) => unknown) => fn(tx) } as never,
     {
@@ -138,6 +143,7 @@ function make(s: Setup = {}) {
     } as never,
     engines as never,
     { findByUuid: async () => ('tpl' in s ? s.tpl : template()) } as never,
+    { gate: channelGate } as never,
     { openConversationFor, enqueueOutbound } as never,
   );
   return {
@@ -150,6 +156,7 @@ function make(s: Setup = {}) {
     open,
     purposeOfTemplate,
     engines,
+    channelGate,
   };
 }
 
@@ -463,5 +470,42 @@ describe('the ConsentGate', () => {
     const b = make({ contact: undefined });
     await b.messenger.send(message({ channel: 'sms', contactId: null }));
     expect(b.gateCheck.mock.calls[0]![1]).toEqual({ type: 'phone', phone: '919876543210' });
+  });
+});
+
+describe("the owner's channel choice (BL-350)", () => {
+  it.each(['whatsapp', 'sms', 'email'] as const)(
+    'skips %s with channel_disabled when the owner has not switched it on, before anything else is asked',
+    async (channel) => {
+      const { messenger, gateCheck, windowCheck, enqueueOutbound, open, channelGate } = make({
+        channelGate: { enabled: false, defaultSenderId: null },
+      });
+      expect(await messenger.send(message({ channel }))).toEqual({
+        status: 'skipped',
+        reason: 'channel_disabled',
+      });
+      expect(channelGate).toHaveBeenCalledWith(expect.anything(), ORG, channel);
+      expect(gateCheck).not.toHaveBeenCalled();
+      expect(windowCheck).not.toHaveBeenCalled();
+      expect(enqueueOutbound).not.toHaveBeenCalled();
+      expect(open).not.toHaveBeenCalled();
+    },
+  );
+
+  it('sends as before when the channel is on', async () => {
+    const { messenger, open } = make({
+      channelGate: { enabled: true, defaultSenderId: null },
+    });
+    expect(await messenger.send(message({ channel: 'sms' }))).toEqual({ status: 'sent' });
+    expect(open).toHaveBeenCalled();
+  });
+
+  it('the reserved voice channel is never delivered', async () => {
+    const { messenger, channelGate } = make();
+    expect(await messenger.send(message({ channel: 'voice' as never }))).toEqual({
+      status: 'skipped',
+      reason: 'no_channel',
+    });
+    expect(channelGate).not.toHaveBeenCalled();
   });
 });

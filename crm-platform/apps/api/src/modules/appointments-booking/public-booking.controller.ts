@@ -9,10 +9,11 @@ import {
   Param,
   Post,
   Query,
+  Req,
   Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import {
   publicBookInputSchema,
   publicCancelInputSchema,
@@ -23,6 +24,7 @@ import {
   type PublicRescheduleInput,
   type SlotsQuery,
 } from '@crm/contracts';
+import { AppError } from '../../common/errors/app-error';
 import { Public } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
 import { PublicBookingService } from './public-booking.service';
@@ -164,5 +166,46 @@ export class PublicBookingManageController {
     @Body(zodPipe(publicCancelInputSchema)) body: PublicCancelInput,
   ) {
     return this.pub.cancel(token, body);
+  }
+}
+
+/** The uuid of an uploaded picture, or the workspace brand kit's logo. Anything else is not a picture of ours. */
+const ASSET_ID = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|brand-logo)$/;
+
+/**
+ * The pictures of a booking page (BL-358): `/v2/public/booking-assets/<workspace slug>/<asset id>`. The theme names an id and a version
+ * (`?v=`), the web relay serves it at `/api/public/appointments/assets/...`. A picture a workspace chose for its public page is public by
+ * design, so it is cached for a year (the version changes with the file) and served so a browser cannot run it as anything but an
+ * image: a fixed raster type from a stored allow-list, `nosniff`, and a policy that allows nothing.
+ */
+@ApiTags('booking-public')
+@Public()
+@Controller({ path: 'public/booking-assets', version: '2' })
+export class PublicBookingAssetsController {
+  constructor(private readonly pub: PublicBookingService) {}
+
+  @Get(':orgSlug/:assetId')
+  @ApiOperation({ summary: "A booking page's logo or cover image" })
+  async asset(
+    @Param('orgSlug') orgSlug: string,
+    @Param('assetId') assetId: string,
+    @Req() req: Request,
+    @Res() res: Response,
+  ): Promise<void> {
+    if (!ASSET_ID.test(assetId)) throw AppError.notFound('Picture');
+    const found = await this.pub.pageAsset(orgSlug, assetId);
+    const etag = `"${found.etag}"`;
+    res
+      .setHeader('etag', etag)
+      .setHeader('cache-control', 'public, max-age=31536000, immutable')
+      .setHeader('x-content-type-options', 'nosniff')
+      .setHeader('content-security-policy', "default-src 'none'; sandbox")
+      .setHeader('cross-origin-resource-policy', 'same-site')
+      .setHeader('referrer-policy', 'no-referrer');
+    if (req.headers['if-none-match'] === etag) {
+      res.status(304).end();
+      return;
+    }
+    res.status(200).setHeader('content-type', found.mime).send(found.bytes);
   }
 }

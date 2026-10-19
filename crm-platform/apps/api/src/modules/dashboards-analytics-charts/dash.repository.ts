@@ -10,16 +10,25 @@ type Raw = Record<string, unknown>;
  * (`messages`: conversations, broadcast mirrors, sends), so every count reads that one table. Row-level security already scopes it
  * to the caller's workspace; the explicit `org_id` is the index prefix. Nothing is cached and nothing is pre-aggregated.
  */
-/** A message is delivered once the provider said so (delivered / read); a message that is only `sent` is counted as sent, not delivered. */
-const DELIVERED = sql.raw(`status IN ('delivered','read')`);
+/**
+ * A message is delivered once the provider said so: its status says delivered / read, or a delivery / read time was recorded (an
+ * imported message keeps its history in the timestamps and may still read `sent`). A message that is only `sent` counts as sent.
+ */
+const DELIVERED = sql.raw(
+  `(status IN ('delivered','read') OR delivered_at IS NOT NULL OR read_at IS NOT NULL)`,
+);
 const READ = sql.raw(`(read_at IS NOT NULL OR status = 'read')`);
+/** Failed: the status says so, or a failure reason was recorded and nothing was ever delivered or read. */
+const FAILED = sql.raw(
+  `(status IN ('failed','undelivered') OR (failure_reason IS NOT NULL AND delivered_at IS NULL AND read_at IS NULL AND status NOT IN ('delivered','read')))`,
+);
 
 /** The message stream over [from, to). */
 function stream(orgId: number, from: Date, to: Date): SQL {
   const f = from.toISOString();
   const t = to.toISOString();
   return sql`(
-    SELECT created_at, direction, status, read_at, template_id, kind, conversation_id
+    SELECT created_at, direction, status, delivered_at, read_at, failure_reason, template_id, kind, conversation_id
       FROM messages WHERE org_id = ${orgId} AND kind <> 'reaction'
         AND created_at >= ${f}::timestamptz AND created_at < ${t}::timestamptz
   ) m`;
@@ -46,7 +55,7 @@ export class DashRepository {
       SELECT
         count(*) FILTER (WHERE direction = 'out')::int AS sent,
         count(*) FILTER (WHERE direction = 'out' AND ${DELIVERED})::int AS delivered,
-        count(*) FILTER (WHERE direction = 'out' AND status = 'failed')::int AS failed,
+        count(*) FILTER (WHERE direction = 'out' AND ${FAILED})::int AS failed,
         count(*) FILTER (WHERE direction = 'out' AND ${READ})::int AS read,
         count(*) FILTER (WHERE direction = 'in')::int AS replies,
         count(DISTINCT conversation_id) FILTER (WHERE direction = 'in')::int AS repliers,
@@ -121,7 +130,7 @@ export class DashRepository {
       SELECT ${idx} AS i,
         count(*)::int AS sent,
         count(*) FILTER (WHERE ${DELIVERED})::int AS delivered,
-        count(*) FILTER (WHERE status = 'failed')::int AS failed
+        count(*) FILTER (WHERE ${FAILED})::int AS failed
       FROM ${stream(orgId, from, to)} WHERE direction = 'out' GROUP BY 1`);
     return new Map(
       (res.rows as Raw[]).map((r) => [
@@ -152,6 +161,42 @@ export class DashRepository {
       count: n(r.c),
       delivered: n(r.d),
     }));
+  }
+
+  /**
+   * Conversations whose last message falls in [from, to), split open / closed (resolved counts as closed) and assigned / unassigned
+   * (a person, a team or an AI agent holds it). Archived chats are left out, as the inbox does.
+   */
+  async conversationStates(
+    tx: Tx,
+    orgId: number,
+    from: Date,
+    to: Date,
+  ): Promise<{
+    total: number;
+    open: number;
+    closed: number;
+    assigned: number;
+    unassigned: number;
+  }> {
+    const res = await tx.execute(sql`
+      SELECT count(*)::int AS total,
+        count(*) FILTER (WHERE status IN ('resolved','closed'))::int AS closed,
+        count(*) FILTER (
+          WHERE assignee_user_id IS NOT NULL OR assignee_team_id IS NOT NULL OR assignee_agent_id IS NOT NULL
+        )::int AS assigned
+      FROM conversations
+      WHERE org_id = ${orgId} AND NOT archived
+        AND last_message_at >= ${from.toISOString()}::timestamptz AND last_message_at < ${to.toISOString()}::timestamptz`);
+    const r = (res.rows[0] ?? {}) as Raw;
+    const total = n(r.total);
+    return {
+      total,
+      open: total - n(r.closed),
+      closed: n(r.closed),
+      assigned: n(r.assigned),
+      unassigned: total - n(r.assigned),
+    };
   }
 
   /** Message volume by weekday (Sunday 0) and hour in the zone, both directions (TW-DASH-031). */

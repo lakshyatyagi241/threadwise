@@ -245,6 +245,11 @@
         "description": "제품 위에 구축하기 위한 키와 문서.",
         "keywords": "API 키, 개발자, 토큰, 문서, openapi"
       },
+      "api-keys": {
+        "label": "API 키",
+        "description": "다른 시스템이 API를 호출할 때 사용하는 키를 만들고 관리합니다.",
+        "keywords": "api 키, 토큰, 시크릿, 개발자, 접근, 연동"
+      },
       "webhooks": {
         "label": "웹훅",
         "description": "이벤트가 발생하는 즉시 자체 시스템으로 보내세요.",
@@ -301,7 +306,7 @@
         "keywords": "geta, 게시, 봇, 콘솔, 라이브 전환, 챗봇"
       },
       "auto-assignment": {
-        "label": "자동 배정",
+        "label": "대화 자동 배정",
         "description": "새 대화를 순번 또는 규칙에 따라 적절한 상담원에게 자동으로 배정하세요.",
         "keywords": "라우팅, 라운드 로빈, 배정, 상담원, 수신함 규칙, 분배, 담당자"
       },

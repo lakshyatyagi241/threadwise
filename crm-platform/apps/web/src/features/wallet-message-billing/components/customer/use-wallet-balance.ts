@@ -8,12 +8,13 @@ import {
   realtimeEventSchemas,
   type RealtimeEventPayload,
   type WalletSummary,
+  walletMinorToMajor,
 } from '@crm/contracts';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { BACKGROUND_META } from '@/lib/api/background';
 import { useRealtimeClient, type RealtimeClient } from '@/lib/realtime';
 import { KEYS, customerApi } from '../../api';
-import { formatMinor } from '../../lib/money';
+import { formatAmount } from '../../lib/money';
 
 /** Fallback poll. The balance arrives by `wallet.updated`; this only covers a socket that is down or a missed event. */
 export const BALANCE_REFRESH_MS = 300_000;
@@ -32,6 +33,11 @@ export function applyWalletUpdate(
       ? {
           ...old,
           balanceMinor: payload.balanceMinor,
+          // The push carries hundredths only; the refetch right after restores the exact figure.
+          balanceExact:
+            payload.balanceMinor === old.balanceMinor
+              ? old.balanceExact
+              : walletMinorToMajor(payload.balanceMinor),
           lowBalance:
             old.lowBalanceThresholdMinor > 0 &&
             payload.balanceMinor <= old.lowBalanceThresholdMinor,
@@ -92,7 +98,9 @@ export function useWalletBalance() {
     allowed,
     summary,
     /** The balance as money in the wallet's currency, or null until it is known. */
-    label: summary ? formatMinor(summary.balanceMinor, summary.currency, locale) : null,
+    label: summary
+      ? formatAmount(summary.balanceMinor, summary.balanceExact, summary.currency, locale)
+      : null,
     lowBalance: summary?.lowBalance ?? false,
     isPending: allowed && query.isPending,
     isError: query.isError,

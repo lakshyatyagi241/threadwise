@@ -1,0 +1,1642 @@
+{
+  "generatedAt": "2026-10-18T18:28:17.110Z",
+  "mode": "web",
+  "result": {
+    "/_app": {
+      "chunks": 7,
+      "gzipBytes": 195500
+    },
+    "/admin/addons/[id]/edit": {
+      "chunks": 17,
+      "gzipBytes": 647386
+    },
+    "/admin/addons/new": {
+      "chunks": 17,
+      "gzipBytes": 647386
+    },
+    "/admin/addons": {
+      "chunks": 17,
+      "gzipBytes": 646517
+    },
+    "/admin/extensions": {
+      "chunks": 17,
+      "gzipBytes": 648627
+    },
+    "/admin/notifications": {
+      "chunks": 17,
+      "gzipBytes": 643624
+    },
+    "/admin": {
+      "chunks": 17,
+      "gzipBytes": 642413
+    },
+    "/admin/settings/menu-order": {
+      "chunks": 17,
+      "gzipBytes": 643008
+    },
+    "/admin/ai-dashboard": {
+      "chunks": 17,
+      "gzipBytes": 644704
+    },
+    "/admin/ai-keys": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/api-keys": {
+      "chunks": 17,
+      "gzipBytes": 645016
+    },
+    "/admin/account/security": {
+      "chunks": 18,
+      "gzipBytes": 657249
+    },
+    "/admin/plans": {
+      "chunks": 18,
+      "gzipBytes": 658581
+    },
+    "/admin/security/events": {
+      "chunks": 17,
+      "gzipBytes": 645453
+    },
+    "/admin/security": {
+      "chunks": 18,
+      "gzipBytes": 656706
+    },
+    "/admin/settings/auth-pages": {
+      "chunks": 18,
+      "gzipBytes": 662330
+    },
+    "/admin/settings/registration": {
+      "chunks": 19,
+      "gzipBytes": 677959
+    },
+    "/admin/settings/social-login": {
+      "chunks": 17,
+      "gzipBytes": 647268
+    },
+    "/admin/bsp/credit": {
+      "chunks": 17,
+      "gzipBytes": 648427
+    },
+    "/admin/bsp/dashboard": {
+      "chunks": 17,
+      "gzipBytes": 643456
+    },
+    "/admin/bsp": {
+      "chunks": 17,
+      "gzipBytes": 643456
+    },
+    "/admin/bsp/rate-cards": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/settings/catalog": {
+      "chunks": 17,
+      "gzipBytes": 649098
+    },
+    "/admin/sms": {
+      "chunks": 17,
+      "gzipBytes": 642999
+    },
+    "/admin/coupons/[id]/edit": {
+      "chunks": 17,
+      "gzipBytes": 649823
+    },
+    "/admin/coupons/new": {
+      "chunks": 17,
+      "gzipBytes": 649823
+    },
+    "/admin/coupons": {
+      "chunks": 17,
+      "gzipBytes": 649186
+    },
+    "/admin/currencies": {
+      "chunks": 17,
+      "gzipBytes": 650488
+    },
+    "/admin/analytics": {
+      "chunks": 17,
+      "gzipBytes": 647104
+    },
+    "/admin/health": {
+      "chunks": 17,
+      "gzipBytes": 647240
+    },
+    "/admin/data-retention": {
+      "chunks": 17,
+      "gzipBytes": 645306
+    },
+    "/admin/dpdp-register": {
+      "chunks": 18,
+      "gzipBytes": 661286
+    },
+    "/admin/faq": {
+      "chunks": 18,
+      "gzipBytes": 661126
+    },
+    "/admin/flow-templates/[id]/edit": {
+      "chunks": 18,
+      "gzipBytes": 658950
+    },
+    "/admin/flow-templates/new": {
+      "chunks": 18,
+      "gzipBytes": 658950
+    },
+    "/admin/flow-templates": {
+      "chunks": 18,
+      "gzipBytes": 661124
+    },
+    "/admin/system": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/update": {
+      "chunks": 17,
+      "gzipBytes": 645082
+    },
+    "/admin/lead-scoring": {
+      "chunks": 18,
+      "gzipBytes": 661698
+    },
+    "/admin/i18n/languages": {
+      "chunks": 17,
+      "gzipBytes": 644293
+    },
+    "/admin/i18n/providers": {
+      "chunks": 17,
+      "gzipBytes": 644509
+    },
+    "/admin/i18n/usage": {
+      "chunks": 17,
+      "gzipBytes": 643125
+    },
+    "/admin/announcements/[id]": {
+      "chunks": 17,
+      "gzipBytes": 647228
+    },
+    "/admin/announcements/new": {
+      "chunks": 17,
+      "gzipBytes": 647228
+    },
+    "/admin/announcements": {
+      "chunks": 17,
+      "gzipBytes": 645241
+    },
+    "/admin/blog/[id]": {
+      "chunks": 17,
+      "gzipBytes": 644672
+    },
+    "/admin/blog/new": {
+      "chunks": 17,
+      "gzipBytes": 644672
+    },
+    "/admin/blog": {
+      "chunks": 17,
+      "gzipBytes": 645106
+    },
+    "/admin/contact-messages": {
+      "chunks": 17,
+      "gzipBytes": 644846
+    },
+    "/admin/frontend": {
+      "chunks": 17,
+      "gzipBytes": 647331
+    },
+    "/admin/legal-pages/[slug]": {
+      "chunks": 17,
+      "gzipBytes": 645371
+    },
+    "/admin/legal-pages": {
+      "chunks": 17,
+      "gzipBytes": 643806
+    },
+    "/admin/marketplace/[ref]": {
+      "chunks": 21,
+      "gzipBytes": 684795
+    },
+    "/admin/marketplace/categories": {
+      "chunks": 19,
+      "gzipBytes": 666089
+    },
+    "/admin/marketplace/new": {
+      "chunks": 19,
+      "gzipBytes": 669492
+    },
+    "/admin/marketplace": {
+      "chunks": 19,
+      "gzipBytes": 665899
+    },
+    "/admin/marketplace/requests": {
+      "chunks": 19,
+      "gzipBytes": 665102
+    },
+    "/admin/marketplace/subscriptions": {
+      "chunks": 19,
+      "gzipBytes": 673318
+    },
+    "/admin/marketplace/usage": {
+      "chunks": 18,
+      "gzipBytes": 660746
+    },
+    "/admin/node-bridge": {
+      "chunks": 17,
+      "gzipBytes": 647659
+    },
+    "/admin/financial": {
+      "chunks": 17,
+      "gzipBytes": 647667
+    },
+    "/admin/plan-analytics": {
+      "chunks": 17,
+      "gzipBytes": 648066
+    },
+    "/admin/plan-settings": {
+      "chunks": 17,
+      "gzipBytes": 644970
+    },
+    "/admin/premium": {
+      "chunks": 17,
+      "gzipBytes": 647833
+    },
+    "/admin/pricing-faqs": {
+      "chunks": 17,
+      "gzipBytes": 645715
+    },
+    "/admin/workspace-plans": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/billing-history/analytics": {
+      "chunks": 19,
+      "gzipBytes": 664563
+    },
+    "/admin/billing-history": {
+      "chunks": 19,
+      "gzipBytes": 663466
+    },
+    "/admin/checkout-settings": {
+      "chunks": 18,
+      "gzipBytes": 662043
+    },
+    "/admin/invoices/[id]": {
+      "chunks": 19,
+      "gzipBytes": 665667
+    },
+    "/admin/invoices": {
+      "chunks": 18,
+      "gzipBytes": 662741
+    },
+    "/admin/order-history/analytics": {
+      "chunks": 19,
+      "gzipBytes": 664563
+    },
+    "/admin/order-history": {
+      "chunks": 18,
+      "gzipBytes": 663208
+    },
+    "/admin/payment-gateways": {
+      "chunks": 18,
+      "gzipBytes": 662789
+    },
+    "/admin/subscriptions": {
+      "chunks": 18,
+      "gzipBytes": 662136
+    },
+    "/admin/settings/[group]": {
+      "chunks": 19,
+      "gzipBytes": 676355
+    },
+    "/admin/settings": {
+      "chunks": 17,
+      "gzipBytes": 644654
+    },
+    "/admin/support/agents": {
+      "chunks": 17,
+      "gzipBytes": 644873
+    },
+    "/admin/support/customers/[id]": {
+      "chunks": 17,
+      "gzipBytes": 643472
+    },
+    "/admin/support/customers": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/support": {
+      "chunks": 17,
+      "gzipBytes": 647561
+    },
+    "/admin/support/playbooks": {
+      "chunks": 17,
+      "gzipBytes": 645017
+    },
+    "/admin/support/reports": {
+      "chunks": 17,
+      "gzipBytes": 643692
+    },
+    "/admin/support/sla": {
+      "chunks": 17,
+      "gzipBytes": 645410
+    },
+    "/admin/support/team-inbox": {
+      "chunks": 17,
+      "gzipBytes": 644587
+    },
+    "/admin/team-inbox": {
+      "chunks": 17,
+      "gzipBytes": 647151
+    },
+    "/admin/permissions/new": {
+      "chunks": 18,
+      "gzipBytes": 659527
+    },
+    "/admin/permissions": {
+      "chunks": 18,
+      "gzipBytes": 659881
+    },
+    "/admin/roles/[id]": {
+      "chunks": 18,
+      "gzipBytes": 662174
+    },
+    "/admin/roles/new": {
+      "chunks": 18,
+      "gzipBytes": 662174
+    },
+    "/admin/roles": {
+      "chunks": 18,
+      "gzipBytes": 660329
+    },
+    "/admin/roles/staff": {
+      "chunks": 18,
+      "gzipBytes": 659368
+    },
+    "/admin/waboo-migration": {
+      "chunks": 17,
+      "gzipBytes": 647225
+    },
+    "/admin/wallet/logs": {
+      "chunks": 18,
+      "gzipBytes": 660717
+    },
+    "/admin/wallet/margins": {
+      "chunks": 18,
+      "gzipBytes": 663117
+    },
+    "/admin/wallet/packages/[id]": {
+      "chunks": 18,
+      "gzipBytes": 660990
+    },
+    "/admin/wallet/packages/new": {
+      "chunks": 18,
+      "gzipBytes": 660990
+    },
+    "/admin/wallet/packages": {
+      "chunks": 18,
+      "gzipBytes": 660084
+    },
+    "/admin/wallet": {
+      "chunks": 18,
+      "gzipBytes": 660054
+    },
+    "/admin/wallet/pricing": {
+      "chunks": 19,
+      "gzipBytes": 668017
+    },
+    "/admin/wallet/workspaces/[id]": {
+      "chunks": 19,
+      "gzipBytes": 667822
+    },
+    "/admin/wallet/workspaces": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/webhook-forwarding": {
+      "chunks": 17,
+      "gzipBytes": 647778
+    },
+    "/admin/whatsapp-providers/[id]": {
+      "chunks": 19,
+      "gzipBytes": 673334
+    },
+    "/admin/whatsapp-providers/assignments": {
+      "chunks": 16,
+      "gzipBytes": 640719
+    },
+    "/admin/whatsapp-providers/new": {
+      "chunks": 19,
+      "gzipBytes": 669887
+    },
+    "/admin/whatsapp-providers": {
+      "chunks": 19,
+      "gzipBytes": 667089
+    },
+    "/admin/whatsapp-providers/switch": {
+      "chunks": 19,
+      "gzipBytes": 668855
+    },
+    "/admin/whatsapp-throughput/[id]": {
+      "chunks": 17,
+      "gzipBytes": 645625
+    },
+    "/admin/whatsapp-throughput": {
+      "chunks": 17,
+      "gzipBytes": 645730
+    },
+    "/admin/workspaces/[id]": {
+      "chunks": 19,
+      "gzipBytes": 683017
+    },
+    "/admin/workspaces": {
+      "chunks": 19,
+      "gzipBytes": 683017
+    },
+    "/admin/workspaces/retention": {
+      "chunks": 19,
+      "gzipBytes": 683017
+    },
+    "/addons": {
+      "chunks": 37,
+      "gzipBytes": 991930
+    },
+    "/more": {
+      "chunks": 38,
+      "gzipBytes": 998837
+    },
+    "/workspace-settings": {
+      "chunks": 37,
+      "gzipBytes": 997206
+    },
+    "/ai-training/[id]/edit": {
+      "chunks": 38,
+      "gzipBytes": 997979
+    },
+    "/ai-training/create": {
+      "chunks": 38,
+      "gzipBytes": 997979
+    },
+    "/ai-training": {
+      "chunks": 38,
+      "gzipBytes": 995607
+    },
+    "/ai-crm": {
+      "chunks": 37,
+      "gzipBytes": 990178
+    },
+    "/ai-keys": {
+      "chunks": 38,
+      "gzipBytes": 991082
+    },
+    "/ai-usage": {
+      "chunks": 38,
+      "gzipBytes": 992348
+    },
+    "/ai-studio": {
+      "chunks": 37,
+      "gzipBytes": 989770
+    },
+    "/api-library/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1005551
+    },
+    "/api-library/logs": {
+      "chunks": 39,
+      "gzipBytes": 998002
+    },
+    "/api-library/new": {
+      "chunks": 39,
+      "gzipBytes": 1005551
+    },
+    "/api-library": {
+      "chunks": 39,
+      "gzipBytes": 1009643
+    },
+    "/appointments/booking-types/[id]/edit": {
+      "chunks": 37,
+      "gzipBytes": 988725
+    },
+    "/appointments/booking-types/create": {
+      "chunks": 37,
+      "gzipBytes": 988725
+    },
+    "/appointments/booking-types": {
+      "chunks": 37,
+      "gzipBytes": 988725
+    },
+    "/appointments": {
+      "chunks": 39,
+      "gzipBytes": 1006580
+    },
+    "/appointments/settings": {
+      "chunks": 39,
+      "gzipBytes": 1003330
+    },
+    "/appointments/types/[id]": {
+      "chunks": 40,
+      "gzipBytes": 1020682
+    },
+    "/appointments/types/new": {
+      "chunks": 40,
+      "gzipBytes": 1020682
+    },
+    "/appointments/types": {
+      "chunks": 38,
+      "gzipBytes": 994354
+    },
+    "/account/[...rest]": {
+      "chunks": 37,
+      "gzipBytes": 996059
+    },
+    "/account/delete": {
+      "chunks": 38,
+      "gzipBytes": 998511
+    },
+    "/account": {
+      "chunks": 37,
+      "gzipBytes": 996059
+    },
+    "/account/plans": {
+      "chunks": 38,
+      "gzipBytes": 1003486
+    },
+    "/account/profile": {
+      "chunks": 38,
+      "gzipBytes": 1002728
+    },
+    "/account/security": {
+      "chunks": 38,
+      "gzipBytes": 1012857
+    },
+    "/settings/message-footer": {
+      "chunks": 37,
+      "gzipBytes": 991199
+    },
+    "/broadcasts/[id]": {
+      "chunks": 38,
+      "gzipBytes": 1004486
+    },
+    "/broadcasts/create": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/broadcasts": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/call-logs/[id]": {
+      "chunks": 38,
+      "gzipBytes": 997834
+    },
+    "/call-logs/analytics": {
+      "chunks": 38,
+      "gzipBytes": 996704
+    },
+    "/call-logs": {
+      "chunks": 38,
+      "gzipBytes": 994980
+    },
+    "/calling": {
+      "chunks": 37,
+      "gzipBytes": 988726
+    },
+    "/campaigns/[id]/edit": {
+      "chunks": 40,
+      "gzipBytes": 1035286
+    },
+    "/campaigns/[id]": {
+      "chunks": 38,
+      "gzipBytes": 1006019
+    },
+    "/campaigns/create": {
+      "chunks": 42,
+      "gzipBytes": 1075864
+    },
+    "/campaigns/history/legacy": {
+      "chunks": 38,
+      "gzipBytes": 1000601
+    },
+    "/campaigns/history": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/campaigns": {
+      "chunks": 38,
+      "gzipBytes": 1001311
+    },
+    "/campaigns/recurring": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/campaigns/scheduled": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/campaigns/wizard/[id]": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/campaigns/wizard/broadcasts/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1006034
+    },
+    "/campaigns/wizard": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/catalog/activity": {
+      "chunks": 38,
+      "gzipBytes": 1026035
+    },
+    "/catalog/collections": {
+      "chunks": 38,
+      "gzipBytes": 1026035
+    },
+    "/catalog": {
+      "chunks": 38,
+      "gzipBytes": 1026035
+    },
+    "/catalog/send": {
+      "chunks": 38,
+      "gzipBytes": 1026035
+    },
+    "/store/products/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1031792
+    },
+    "/store/products/create": {
+      "chunks": 39,
+      "gzipBytes": 1031792
+    },
+    "/store/products": {
+      "chunks": 39,
+      "gzipBytes": 1031792
+    },
+    "/store/reviews": {
+      "chunks": 39,
+      "gzipBytes": 1031792
+    },
+    "/email": {
+      "chunks": 38,
+      "gzipBytes": 999767
+    },
+    "/sms": {
+      "chunks": 38,
+      "gzipBytes": 993897
+    },
+    "/channels/web": {
+      "chunks": 38,
+      "gzipBytes": 992858
+    },
+    "/chatbot-widgets/[id]/edit": {
+      "chunks": 40,
+      "gzipBytes": 1093750
+    },
+    "/chatbot-widgets/create": {
+      "chunks": 40,
+      "gzipBytes": 1093750
+    },
+    "/chatbot-widgets": {
+      "chunks": 38,
+      "gzipBytes": 995749
+    },
+    "/companies/[id]": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/companies": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/company-properties": {
+      "chunks": 37,
+      "gzipBytes": 996302
+    },
+    "/compliance": {
+      "chunks": 40,
+      "gzipBytes": 1011420
+    },
+    "/contact-consent": {
+      "chunks": 38,
+      "gzipBytes": 994238
+    },
+    "/attributes": {
+      "chunks": 38,
+      "gzipBytes": 993260
+    },
+    "/contact-groups": {
+      "chunks": 40,
+      "gzipBytes": 1008651
+    },
+    "/contact-properties": {
+      "chunks": 38,
+      "gzipBytes": 996586
+    },
+    "/contact-stages": {
+      "chunks": 38,
+      "gzipBytes": 994832
+    },
+    "/contacts/[id]/[[...section]]": {
+      "chunks": 49,
+      "gzipBytes": 1201858
+    },
+    "/contacts": {
+      "chunks": 50,
+      "gzipBytes": 1234283
+    },
+    "/contacts/views/[id]": {
+      "chunks": 38,
+      "gzipBytes": 994220
+    },
+    "/contacts/views/new": {
+      "chunks": 38,
+      "gzipBytes": 994220
+    },
+    "/import-export": {
+      "chunks": 40,
+      "gzipBytes": 1007601
+    },
+    "/uncontacted-leads": {
+      "chunks": 38,
+      "gzipBytes": 992428
+    },
+    "/account/affiliate": {
+      "chunks": 37,
+      "gzipBytes": 1001944
+    },
+    "/crm": {
+      "chunks": 37,
+      "gzipBytes": 998291
+    },
+    "/crm/revenue": {
+      "chunks": 37,
+      "gzipBytes": 999015
+    },
+    "/analytics": {
+      "chunks": 38,
+      "gzipBytes": 1007215
+    },
+    "/dashboard": {
+      "chunks": 38,
+      "gzipBytes": 1004178
+    },
+    "/deals/[id]": {
+      "chunks": 37,
+      "gzipBytes": 988727
+    },
+    "/deals": {
+      "chunks": 46,
+      "gzipBytes": 1127298
+    },
+    "/deals/reports": {
+      "chunks": 39,
+      "gzipBytes": 998305
+    },
+    "/deals/settings": {
+      "chunks": 39,
+      "gzipBytes": 1000115
+    },
+    "/developers": {
+      "chunks": 38,
+      "gzipBytes": 995220
+    },
+    "/shopify": {
+      "chunks": 40,
+      "gzipBytes": 1016865
+    },
+    "/woocommerce": {
+      "chunks": 40,
+      "gzipBytes": 1016865
+    },
+    "/email-templates": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/facebook/broadcasts": {
+      "chunks": 38,
+      "gzipBytes": 993984
+    },
+    "/facebook/insights": {
+      "chunks": 38,
+      "gzipBytes": 995507
+    },
+    "/facebook/my-posts": {
+      "chunks": 38,
+      "gzipBytes": 993117
+    },
+    "/facebook": {
+      "chunks": 38,
+      "gzipBytes": 994533
+    },
+    "/facebook/posts/create": {
+      "chunks": 38,
+      "gzipBytes": 996240
+    },
+    "/facebook/posts": {
+      "chunks": 38,
+      "gzipBytes": 994714
+    },
+    "/facebook/setup": {
+      "chunks": 38,
+      "gzipBytes": 995725
+    },
+    "/faq/[[...path]]": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/flows/builder/[id]": {
+      "chunks": 45,
+      "gzipBytes": 1218581
+    },
+    "/flows/builder": {
+      "chunks": 45,
+      "gzipBytes": 1218581
+    },
+    "/flows/geta-publishing": {
+      "chunks": 38,
+      "gzipBytes": 991416
+    },
+    "/flows": {
+      "chunks": 40,
+      "gzipBytes": 1020090
+    },
+    "/flows/simple/[id]": {
+      "chunks": 44,
+      "gzipBytes": 1201718
+    },
+    "/flows/simple": {
+      "chunks": 44,
+      "gzipBytes": 1201718
+    },
+    "/flow-runtime/analytics": {
+      "chunks": 39,
+      "gzipBytes": 1001441
+    },
+    "/flow-runtime/flows/[flowId]": {
+      "chunks": 38,
+      "gzipBytes": 997488
+    },
+    "/flow-runtime": {
+      "chunks": 38,
+      "gzipBytes": 995237
+    },
+    "/flow-runtime/runs/[id]": {
+      "chunks": 38,
+      "gzipBytes": 997581
+    },
+    "/wa-forms/[id]": {
+      "chunks": 37,
+      "gzipBytes": 991614
+    },
+    "/wa-forms/[id]/submissions": {
+      "chunks": 37,
+      "gzipBytes": 990240
+    },
+    "/wa-forms": {
+      "chunks": 37,
+      "gzipBytes": 990919
+    },
+    "/wa-links/[id]": {
+      "chunks": 37,
+      "gzipBytes": 991131
+    },
+    "/wa-links/new": {
+      "chunks": 37,
+      "gzipBytes": 991131
+    },
+    "/wa-links": {
+      "chunks": 37,
+      "gzipBytes": 991048
+    },
+    "/google-account/confirm": {
+      "chunks": 38,
+      "gzipBytes": 991554
+    },
+    "/google-account": {
+      "chunks": 38,
+      "gzipBytes": 993200
+    },
+    "/growth": {
+      "chunks": 38,
+      "gzipBytes": 998351
+    },
+    "/settings/help-assistant": {
+      "chunks": 37,
+      "gzipBytes": 989267
+    },
+    "/help/[id]": {
+      "chunks": 37,
+      "gzipBytes": 988759
+    },
+    "/help": {
+      "chunks": 37,
+      "gzipBytes": 990497
+    },
+    "/instagram/broadcast": {
+      "chunks": 38,
+      "gzipBytes": 991702
+    },
+    "/instagram": {
+      "chunks": 38,
+      "gzipBytes": 993354
+    },
+    "/business-profile": {
+      "chunks": 39,
+      "gzipBytes": 1011960
+    },
+    "/credit-notes/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1007496
+    },
+    "/credit-notes/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1003358
+    },
+    "/credit-notes/new": {
+      "chunks": 39,
+      "gzipBytes": 1007496
+    },
+    "/credit-notes": {
+      "chunks": 39,
+      "gzipBytes": 1005063
+    },
+    "/invoices/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1014264
+    },
+    "/invoices/[id]": {
+      "chunks": 40,
+      "gzipBytes": 1022750
+    },
+    "/invoices/new": {
+      "chunks": 39,
+      "gzipBytes": 1014264
+    },
+    "/invoices": {
+      "chunks": 39,
+      "gzipBytes": 1011621
+    },
+    "/payments": {
+      "chunks": 40,
+      "gzipBytes": 1010632
+    },
+    "/recurring-invoices/[id]": {
+      "chunks": 40,
+      "gzipBytes": 1017254
+    },
+    "/recurring-invoices/new": {
+      "chunks": 39,
+      "gzipBytes": 1013281
+    },
+    "/recurring-invoices": {
+      "chunks": 39,
+      "gzipBytes": 1008278
+    },
+    "/sales-orders/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1013084
+    },
+    "/sales-orders/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1011063
+    },
+    "/sales-orders/new": {
+      "chunks": 39,
+      "gzipBytes": 1013084
+    },
+    "/sales-orders": {
+      "chunks": 39,
+      "gzipBytes": 1013282
+    },
+    "/tax-rates": {
+      "chunks": 38,
+      "gzipBytes": 1003562
+    },
+    "/lead-scoring": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/lead-sources/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1014719
+    },
+    "/lead-sources/new": {
+      "chunks": 39,
+      "gzipBytes": 1010064
+    },
+    "/lead-sources": {
+      "chunks": 40,
+      "gzipBytes": 1017821
+    },
+    "/line/broadcasts/create": {
+      "chunks": 38,
+      "gzipBytes": 993468
+    },
+    "/line/broadcasts": {
+      "chunks": 38,
+      "gzipBytes": 992133
+    },
+    "/line": {
+      "chunks": 38,
+      "gzipBytes": 993026
+    },
+    "/i18n/translation": {
+      "chunks": 37,
+      "gzipBytes": 990553
+    },
+    "/legal/data-processing": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/integrations": {
+      "chunks": 37,
+      "gzipBytes": 988729
+    },
+    "/marketplace/addons": {
+      "chunks": 39,
+      "gzipBytes": 997976
+    },
+    "/marketplace/app/[slug]/install": {
+      "chunks": 39,
+      "gzipBytes": 1007448
+    },
+    "/marketplace/app/[slug]": {
+      "chunks": 39,
+      "gzipBytes": 1005668
+    },
+    "/marketplace/apps": {
+      "chunks": 39,
+      "gzipBytes": 1004479
+    },
+    "/marketplace/installed/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1011536
+    },
+    "/marketplace/installed": {
+      "chunks": 39,
+      "gzipBytes": 1000850
+    },
+    "/marketplace/integrations": {
+      "chunks": 39,
+      "gzipBytes": 1004479
+    },
+    "/marketplace": {
+      "chunks": 37,
+      "gzipBytes": 988729
+    },
+    "/marketplace/requests": {
+      "chunks": 38,
+      "gzipBytes": 999896
+    },
+    "/message-history": {
+      "chunks": 37,
+      "gzipBytes": 1000274
+    },
+    "/templates/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1018079
+    },
+    "/templates/[id]": {
+      "chunks": 38,
+      "gzipBytes": 1000650
+    },
+    "/templates/new": {
+      "chunks": 39,
+      "gzipBytes": 1018079
+    },
+    "/templates": {
+      "chunks": 38,
+      "gzipBytes": 1004278
+    },
+    "/account/notifications": {
+      "chunks": 37,
+      "gzipBytes": 999856
+    },
+    "/activity-log": {
+      "chunks": 37,
+      "gzipBytes": 995546
+    },
+    "/notifications": {
+      "chunks": 37,
+      "gzipBytes": 991915
+    },
+    "/webhooks": {
+      "chunks": 38,
+      "gzipBytes": 992963
+    },
+    "/workspace-words": {
+      "chunks": 37,
+      "gzipBytes": 991619
+    },
+    "/account/usage": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/billing/checkout/[planSlug]": {
+      "chunks": 37,
+      "gzipBytes": 996205
+    },
+    "/billing/checkout/wallet": {
+      "chunks": 37,
+      "gzipBytes": 996205
+    },
+    "/billing/orders/[id]/invoice": {
+      "chunks": 38,
+      "gzipBytes": 1003022
+    },
+    "/billing/orders": {
+      "chunks": 37,
+      "gzipBytes": 992037
+    },
+    "/billing/subscriptions": {
+      "chunks": 37,
+      "gzipBytes": 991661
+    },
+    "/support/[id]": {
+      "chunks": 37,
+      "gzipBytes": 993391
+    },
+    "/support": {
+      "chunks": 37,
+      "gzipBytes": 992068
+    },
+    "/privacy-requests/[id]": {
+      "chunks": 38,
+      "gzipBytes": 995841
+    },
+    "/privacy-requests/legal-holds": {
+      "chunks": 38,
+      "gzipBytes": 995658
+    },
+    "/privacy-requests": {
+      "chunks": 38,
+      "gzipBytes": 994640
+    },
+    "/settings/roles/[id]": {
+      "chunks": 38,
+      "gzipBytes": 997559
+    },
+    "/settings/roles/new": {
+      "chunks": 38,
+      "gzipBytes": 997559
+    },
+    "/settings/roles": {
+      "chunks": 38,
+      "gzipBytes": 994612
+    },
+    "/settings/team": {
+      "chunks": 38,
+      "gzipBytes": 996828
+    },
+    "/estimates/[id]": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/estimates/new": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/estimates": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/proposals/[id]": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/proposals/new": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/proposals": {
+      "chunks": 44,
+      "gzipBytes": 1106629
+    },
+    "/scheduled/[id]/edit": {
+      "chunks": 39,
+      "gzipBytes": 1009118
+    },
+    "/scheduled/[id]": {
+      "chunks": 38,
+      "gzipBytes": 998590
+    },
+    "/scheduled/create": {
+      "chunks": 39,
+      "gzipBytes": 1009118
+    },
+    "/scheduled": {
+      "chunks": 38,
+      "gzipBytes": 996218
+    },
+    "/warmer": {
+      "chunks": 38,
+      "gzipBytes": 993825
+    },
+    "/segments/[id]/edit": {
+      "chunks": 38,
+      "gzipBytes": 999753
+    },
+    "/segments/[id]": {
+      "chunks": 38,
+      "gzipBytes": 997414
+    },
+    "/segments/new": {
+      "chunks": 38,
+      "gzipBytes": 999753
+    },
+    "/segments": {
+      "chunks": 38,
+      "gzipBytes": 998308
+    },
+    "/settings/[section]": {
+      "chunks": 38,
+      "gzipBytes": 992658
+    },
+    "/settings": {
+      "chunks": 38,
+      "gzipBytes": 992658
+    },
+    "/connect": {
+      "chunks": 38,
+      "gzipBytes": 1003815
+    },
+    "/store/coupons": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/customers": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/gateways": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/groups": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/invoices": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/orders/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/orders": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store": {
+      "chunks": 38,
+      "gzipBytes": 997614
+    },
+    "/store/payments": {
+      "chunks": 39,
+      "gzipBytes": 1028313
+    },
+    "/store/storefront": {
+      "chunks": 38,
+      "gzipBytes": 1003266
+    },
+    "/tasks": {
+      "chunks": 37,
+      "gzipBytes": 988724
+    },
+    "/team-chat": {
+      "chunks": 38,
+      "gzipBytes": 1004962
+    },
+    "/inbox/channels": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/inbox/labels": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/inbox/message-logs": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/inbox": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/inbox/saved-replies": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/inbox/tags": {
+      "chunks": 37,
+      "gzipBytes": 988791
+    },
+    "/auto-assignment/[id]": {
+      "chunks": 38,
+      "gzipBytes": 997373
+    },
+    "/auto-assignment/new": {
+      "chunks": 38,
+      "gzipBytes": 997373
+    },
+    "/auto-assignment": {
+      "chunks": 38,
+      "gzipBytes": 997737
+    },
+    "/contact-assignment": {
+      "chunks": 38,
+      "gzipBytes": 995805
+    },
+    "/inbox/analytics/team": {
+      "chunks": 38,
+      "gzipBytes": 991137
+    },
+    "/sla-policies": {
+      "chunks": 38,
+      "gzipBytes": 991903
+    },
+    "/telegram/broadcasts/create": {
+      "chunks": 38,
+      "gzipBytes": 993653
+    },
+    "/telegram/broadcasts": {
+      "chunks": 38,
+      "gzipBytes": 992409
+    },
+    "/telegram": {
+      "chunks": 38,
+      "gzipBytes": 993871
+    },
+    "/viber/broadcasts/create": {
+      "chunks": 38,
+      "gzipBytes": 992838
+    },
+    "/viber/broadcasts": {
+      "chunks": 38,
+      "gzipBytes": 991997
+    },
+    "/viber/insights": {
+      "chunks": 38,
+      "gzipBytes": 991152
+    },
+    "/viber": {
+      "chunks": 38,
+      "gzipBytes": 992157
+    },
+    "/billing/wallet": {
+      "chunks": 37,
+      "gzipBytes": 991665
+    },
+    "/billing/wallet/statement": {
+      "chunks": 37,
+      "gzipBytes": 992224
+    },
+    "/forms/[id]": {
+      "chunks": 42,
+      "gzipBytes": 1045468
+    },
+    "/forms/[id]/submissions": {
+      "chunks": 39,
+      "gzipBytes": 998097
+    },
+    "/forms": {
+      "chunks": 38,
+      "gzipBytes": 997550
+    },
+    "/forms/templates": {
+      "chunks": 38,
+      "gzipBytes": 995556
+    },
+    "/wechat/broadcasts/create": {
+      "chunks": 38,
+      "gzipBytes": 992008
+    },
+    "/wechat/broadcasts": {
+      "chunks": 38,
+      "gzipBytes": 991681
+    },
+    "/wechat": {
+      "chunks": 38,
+      "gzipBytes": 993281
+    },
+    "/channels/whatsapp/[id]/health": {
+      "chunks": 38,
+      "gzipBytes": 995804
+    },
+    "/channels/whatsapp": {
+      "chunks": 38,
+      "gzipBytes": 998192
+    },
+    "/waba-groups": {
+      "chunks": 38,
+      "gzipBytes": 996187
+    },
+    "/devices/[id]": {
+      "chunks": 39,
+      "gzipBytes": 1011626
+    },
+    "/devices/groups": {
+      "chunks": 39,
+      "gzipBytes": 1004365
+    },
+    "/devices/notice": {
+      "chunks": 38,
+      "gzipBytes": 991655
+    },
+    "/devices": {
+      "chunks": 39,
+      "gzipBytes": 1010981
+    },
+    "/team-members": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/teams": {
+      "chunks": 36,
+      "gzipBytes": 988449
+    },
+    "/accept-invite": {
+      "chunks": 20,
+      "gzipBytes": 662901
+    },
+    "/auth/social/[provider]/callback": {
+      "chunks": 18,
+      "gzipBytes": 639332
+    },
+    "/confirm-email-change": {
+      "chunks": 17,
+      "gzipBytes": 632369
+    },
+    "/find-workspace": {
+      "chunks": 17,
+      "gzipBytes": 634090
+    },
+    "/forgot-password": {
+      "chunks": 17,
+      "gzipBytes": 634427
+    },
+    "/login": {
+      "chunks": 18,
+      "gzipBytes": 644125
+    },
+    "/register": {
+      "chunks": 15,
+      "gzipBytes": 615004
+    },
+    "/reset-password": {
+      "chunks": 17,
+      "gzipBytes": 633599
+    },
+    "/signup": {
+      "chunks": 20,
+      "gzipBytes": 678265
+    },
+    "/signup/password": {
+      "chunks": 17,
+      "gzipBytes": 632506
+    },
+    "/signup/verify-email": {
+      "chunks": 17,
+      "gzipBytes": 634283
+    },
+    "/verify-email": {
+      "chunks": 17,
+      "gzipBytes": 632369
+    },
+    "/verify-otp": {
+      "chunks": 17,
+      "gzipBytes": 634603
+    },
+    "/developers/docs": {
+      "chunks": 15,
+      "gzipBytes": 619810
+    },
+    "/shopify/embedded": {
+      "chunks": 15,
+      "gzipBytes": 614117
+    },
+    "/onboarding": {
+      "chunks": 20,
+      "gzipBytes": 691007
+    },
+    "/suspended": {
+      "chunks": 17,
+      "gzipBytes": 630757
+    },
+    "/verify-email-required": {
+      "chunks": 17,
+      "gzipBytes": 632085
+    },
+    "/admin/login": {
+      "chunks": 17,
+      "gzipBytes": 644600
+    },
+    "/setup": {
+      "chunks": 16,
+      "gzipBytes": 626280
+    },
+    "/about": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/blog/[slug]": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/blog": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/contact": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/features": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/legal/[slug]": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/pricing": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/frontend-preview/[page]": {
+      "chunks": 16,
+      "gzipBytes": 623892
+    },
+    "/_global-error": {
+      "chunks": 8,
+      "gzipBytes": 200771
+    },
+    "/_not-found": {
+      "chunks": 14,
+      "gzipBytes": 611748
+    },
+    "/b/manage/[token]": {
+      "chunks": 19,
+      "gzipBytes": 651716
+    },
+    "/b/manage/[token]/reschedule": {
+      "chunks": 19,
+      "gzipBytes": 654481
+    },
+    "/book/[org]/[slug]": {
+      "chunks": 19,
+      "gzipBytes": 655629
+    },
+    "/book/[org]": {
+      "chunks": 18,
+      "gzipBytes": 649506
+    },
+    "/f/[publicKey]": {
+      "chunks": 16,
+      "gzipBytes": 626305
+    },
+    "/f/[publicKey]/pay-return": {
+      "chunks": 16,
+      "gzipBytes": 619306
+    },
+    "/i/[token]": {
+      "chunks": 18,
+      "gzipBytes": 650952
+    },
+    "/impersonate/ended": {
+      "chunks": 15,
+      "gzipBytes": 615072
+    },
+    "/l/[slug]": {
+      "chunks": 15,
+      "gzipBytes": 612224
+    },
+    "/": {
+      "chunks": 17,
+      "gzipBytes": 649790
+    },
+    "/q/[token]": {
+      "chunks": 24,
+      "gzipBytes": 751212
+    },
+    "/s/[slug]/order/[token]": {
+      "chunks": 16,
+      "gzipBytes": 638063
+    },
+    "/s/[slug]/p/[productSlug]": {
+      "chunks": 16,
+      "gzipBytes": 638063
+    },
+    "/s/[slug]": {
+      "chunks": 16,
+      "gzipBytes": 638063
+    },
+    "/trust/[org]": {
+      "chunks": 14,
+      "gzipBytes": 611748
+    },
+    "/u/[token]": {
+      "chunks": 15,
+      "gzipBytes": 612627
+    }
+  }
+}

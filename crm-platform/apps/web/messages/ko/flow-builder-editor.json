@@ -104,6 +104,7 @@
       "failed": "실패",
       "edited": "{when} 수정됨",
       "openBuilder": "빌더 열기",
+      "faqs": "자주 묻는 질문",
       "pause": "일시 중지",
       "resume": "재개",
       "rename": "이름 변경",
@@ -565,7 +566,7 @@
           "startPinned": "시작 지점입니다(클릭하면 해제)",
           "startMake": "시작 지점으로 설정",
           "startPoint": "시작 지점",
-          "editTitle": "편집(인스펙터 열기)",
+          "editTitle": "편집 (인스펙터 열기, 노드를 더블클릭하거나 Enter 키)",
           "edit": "편집",
           "duplicateTitle": "복제(Ctrl+D)",
           "duplicate": "복제",
@@ -581,7 +582,9 @@
           "nothingHint": "캔버스에서 노드를 클릭해 속성을 편집하거나,<br/>왼쪽에서 카드를 끌어다 새 노드를 추가하세요.",
           "nodeFallback": "노드",
           "id": "ID",
-          "noSettings": "이 노드에는 설정이 없습니다."
+          "noSettings": "이 노드에는 설정이 없습니다.",
+          "confirmDeleteTitle": "이 노드를 삭제할까요?",
+          "confirmDeleteMessage": "노드와 연결이 제거됩니다. 빌더를 나가기 전까지는 Ctrl+Z로 되돌릴 수 있습니다."
         },
         "palette": {
           "modeCall": "통화",

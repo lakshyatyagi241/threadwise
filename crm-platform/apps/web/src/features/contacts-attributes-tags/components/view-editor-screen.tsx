@@ -105,7 +105,7 @@ function Editor({ view }: { view?: View }) {
 
   const attrCols = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: the Lead score column is not offered. A view that already lists it keeps it (it comes back with scoring).

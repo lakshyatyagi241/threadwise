@@ -9,6 +9,6 @@ export const settings = [
     href: '/telegram',
     icon: 'send',
     order: 40,
-    gates: { permission: 'tg.bots.read' },
+    gates: { permission: 'tg.bots.read', planFeature: 'extra_channels' },
   }),
 ];

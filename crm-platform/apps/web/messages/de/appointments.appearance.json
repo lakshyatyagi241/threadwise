@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Darstellung der Buchungsseite",
+      "subtitle": "Gestalten Sie die Seite, auf der Ihre Kunden Termine buchen, passend zu Ihrem Unternehmen.",
+      "backToSettings": "Termineinstellungen",
+      "loading": "Design der Buchungsseite wird geladen",
+      "forbidden": "Sie haben keine Berechtigung, die Darstellung der Buchungsseite anzuzeigen.",
+      "notAvailable": "Die Darstellung der Buchungsseite ist auf diesem Server noch nicht verfügbar.",
+      "readOnly": "Sie können die Darstellung ansehen, aber nicht ändern. Zum Ändern ist die Berechtigung zum Bearbeiten von Buchungstypen nötig.",
+      "fixFirst": "Korrigieren Sie zuerst die markierten Felder.",
+      "issues": "{count, plural, one {# Feld muss geprüft werden, bevor Sie speichern können.} other {# Felder müssen geprüft werden, bevor Sie speichern können.}}",
+      "saved": "Darstellung der Buchungsseite gespeichert",
+      "saving": "Wird gespeichert...",
+      "unsaved": "Nicht gespeicherte Änderungen",
+      "allSaved": "Alle Änderungen gespeichert",
+      "discard": "Änderungen verwerfen",
+      "save": "Darstellung speichern",
+      "conflict": {
+        "message": "Die Darstellung wurde während Ihrer Bearbeitung von jemand anderem geändert.",
+        "reload": "Neueste Version laden"
+      },
+      "leave": {
+        "title": "Ohne Speichern verlassen?",
+        "message": "Ihre Änderungen an der Darstellung der Buchungsseite wurden nicht gespeichert.",
+        "leave": "Verlassen",
+        "stay": "Weiter bearbeiten"
+      },
+      "tile": {
+        "label": "Darstellung der Buchungsseite",
+        "description": "Logo, Farben, Schriften und Willkommenstext der Seite, auf der Kunden buchen",
+        "keywords": "Branding, Logo, Farben, Design, Buchungsseite, Erscheinungsbild, Schriften, White Label"
+      },
+      "card": {
+        "title": "Darstellung der Buchungsseite",
+        "description": "Fügen Sie Ihr Logo und Ihre Farben hinzu, schreiben Sie eine Willkommensnachricht und wählen Sie Schriften und Ecken für die Seite, auf der Kunden buchen. Beim Bearbeiten sehen Sie eine Live-Vorschau.",
+        "open": "Darstellung der Buchungsseite öffnen"
+      },
+      "editorLink": {
+        "link": "Seitendarstellung",
+        "saveFirst": "Speichern Sie zuerst den Buchungstyp und öffnen Sie dann seine Seitendarstellung."
+      },
+      "typesList": {
+        "menu": "Seitendarstellung"
+      },
+      "pictures": {
+        "title": "Logo und Titelbild",
+        "description": "Wird oben auf der Seite angezeigt. Lassen Sie die Felder leer, um die übergeordnete Einstellung zu verwenden.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP oder GIF, bis zu {mb} MB. Ein breites Logo auf transparentem Hintergrund eignet sich am besten.",
+        "cover": "Titelbild",
+        "coverHint": "PNG, JPG, WebP oder GIF, bis zu {mb} MB. Wird als Banner angezeigt, wenn der Hintergrund auf Titelbild eingestellt ist.",
+        "useBrand": "Mein Logo und meine Farben aus Branding verwenden, wenn leer",
+        "useBrandHint": "Was Sie hier leer lassen, wird aus Einstellungen, Branding übernommen, damit die Buchungsseite zum Rest Ihrer Marke passt."
+      },
+      "fields": {
+        "picker": "{name}: Farbe auswählen",
+        "clear": "Löschen",
+        "noPicture": "Kein Bild",
+        "upload": "Hochladen",
+        "replace": "Ersetzen",
+        "remove": "Entfernen",
+        "inheritedPicture": "Es wird die übergeordnete Einstellung verwendet.",
+        "inheritedColour": "Leer verwendet {colour}.",
+        "productColour": "Leer verwendet die Standardfarbe.",
+        "pictureType": "Verwenden Sie ein PNG-, JPG-, WebP- oder GIF-Bild.",
+        "pictureSize": "Das Bild ist zu groß. Das Limit beträgt {mb} MB.",
+        "pictureRejected": "Dieses Bild wurde nicht akzeptiert. Verwenden Sie ein PNG-, JPG-, WebP- oder GIF-Bild innerhalb der Größenbeschränkung."
+      },
+      "colours": {
+        "title": "Farben und Hintergrund",
+        "description": "Textfarben werden automatisch so gewählt, dass alles gut lesbar bleibt.",
+        "primary": "Primärfarbe",
+        "typeHint": "Leer verwendet die Farbe des Arbeitsbereichs.",
+        "button": "Schaltflächenfarbe",
+        "buttonHint": "Die Farbe von Schaltflächen und ausgewählten Zeiten. Leer verwendet die Primärfarbe.",
+        "background": "Seitenhintergrund",
+        "backgroundHint": "Einfarbig, ein sanfter Farbton Ihrer Primärfarbe oder Ihr Titelbild als Banner.",
+        "sameAsWorkspace": "Wie im Arbeitsbereich",
+        "backgrounds": {
+          "solid": "Einfarbig",
+          "tint": "Sanfter Farbton",
+          "image": "Titelbild"
+        },
+        "backgroundColour": "Hintergrundfarbe",
+        "needCover": "Laden Sie ein Titelbild hoch, um diesen Hintergrund zu verwenden.",
+        "invalid": "Verwenden Sie eine Farbe wie #1a73e8."
+      },
+      "checks": {
+        "title": "Lesbarkeitsprüfungen",
+        "autoText": "Der Text auf Ihren Schaltflächen ist schwarz oder weiß, je nachdem, was besser lesbar ist, und Ihre Primärfarbe wird als Textfarbe abgedunkelt oder aufgehellt.",
+        "primaryText": "Ihre Primärfarbe hat auf der Seite einen Kontrast von {ratio}:1, unter {min}:1, und wird daher als Textfarbe angepasst.",
+        "button": "Der Schaltflächentext hat auf Ihrer Schaltflächenfarbe einen Kontrast von {ratio}:1, unter {min}:1.",
+        "buttonEdge": "Ihre Schaltflächenfarbe hat gegenüber der Seite einen Kontrast von {ratio}:1, unter {min}:1, sodass Schaltflächen schwer erkennbar sein können.",
+        "inDark": "(dunkler Modus)"
+      },
+      "wording": {
+        "title": "Texte",
+        "description": "Nur reiner Text. Kunden sehen ihn in der Sprache, in der Sie ihn schreiben.",
+        "pageTitle": "Seitentitel",
+        "pageTitleHint": "Wird oben auf der Seite und im Browser-Tab angezeigt. Leer verwendet Ihren Firmennamen.",
+        "welcome": "Willkommensnachricht",
+        "welcomeHint": "{count} von {max} Zeichen. Wird über dem Buchungsformular angezeigt.",
+        "button": "Beschriftung der Bestätigungsschaltfläche",
+        "buttonHint": "Der Text auf der letzten Schaltfläche, zum Beispiel Platz reservieren. Anfragen, die eine Genehmigung brauchen, behalten ihre eigene Beschriftung.",
+        "buttonDefault": "Buchung bestätigen",
+        "tooLong": "Verwenden Sie höchstens {max} Zeichen."
+      },
+      "style": {
+        "title": "Schriften und Ecken",
+        "description": "Eine kleine Auswahl sicherer Optionen, die auf jedem Gerät funktionieren.",
+        "font": "Schrift",
+        "fontHint": "Es werden Schriften verwendet, die bereits auf dem Gerät des Kunden vorhanden sind, damit die Seite schnell lädt.",
+        "fonts": {
+          "default": "Produktstandard",
+          "system": "System",
+          "serif": "Serif",
+          "rounded": "Abgerundet",
+          "humanist": "Humanistisch"
+        },
+        "corners": "Ecken",
+        "cornerStyles": {
+          "square": "Eckig",
+          "rounded": "Abgerundet",
+          "pill": "Pillenform"
+        },
+        "mode": "Hell oder dunkel",
+        "modes": {
+          "light": "Hell",
+          "dark": "Dunkel",
+          "auto": "Dem Gerät folgen"
+        }
+      },
+      "options": {
+        "title": "Seitenoptionen",
+        "description": "Was sonst noch um das Buchungsformular herum erscheint.",
+        "language": "Sprachumschalter anzeigen",
+        "languageHint": "Ermöglicht Kunden, die Sprache der Seite zu ändern.",
+        "poweredBy": "\"Powered by\" unten anzeigen",
+        "poweredByHint": "Schalten Sie es aus, um nur Ihre eigene Marke zu zeigen.",
+        "poweredByLocked": "Das Entfernen von \"Powered by\" gehört zum White-Label-Branding, das in Ihrem Tarif nicht enthalten ist."
+      },
+      "links": {
+        "title": "Seitenadresse",
+        "description": "Wo Kunden die Seite öffnen. Änderungen erscheinen dort, sobald Sie speichern.",
+        "page": "Adresse der Buchungsseite",
+        "open": "Seite öffnen",
+        "copy": "Kopieren",
+        "copied": "Kopiert",
+        "later": "Eine eigene Domain zu verwenden und die Seite in eine andere Website einzubetten, ist noch nicht möglich."
+      },
+      "type": {
+        "title": "Seitendarstellung: {name}",
+        "subtitle": "Geben Sie diesem Buchungstyp ein eigenes Logo, eigene Farben oder eine eigene Willkommensnachricht. Was Sie leer lassen, übernimmt die Darstellung des Arbeitsbereichs.",
+        "back": "Zurück zum Buchungstyp",
+        "notFoundTitle": "Buchungstyp nicht gefunden",
+        "notFound": "Dieser Buchungstyp existiert nicht mehr.",
+        "resetTitle": "Darstellung des Arbeitsbereichs verwenden",
+        "resetDescription": "Entfernt alles, was für diesen Buchungstyp festgelegt wurde, einschließlich seiner Bilder.",
+        "reset": "Darstellung des Arbeitsbereichs verwenden",
+        "resetConfirmTitle": "Darstellung des Arbeitsbereichs verwenden?",
+        "resetConfirmMessage": "Logo, Titelbild, Farben und Texte, die für diesen Buchungstyp festgelegt wurden, werden entfernt.",
+        "resetDone": "Dieser Buchungstyp verwendet jetzt die Darstellung des Arbeitsbereichs"
+      },
+      "preview": {
+        "title": "Live-Vorschau",
+        "device": "Gerät",
+        "desktop": "Desktop",
+        "mobile": "Mobil",
+        "page": "Seite",
+        "servicePage": "Buchungsseite",
+        "serviceList": "Serviceliste",
+        "scheme": "Farbmodus",
+        "asSet": "Wie eingestellt",
+        "light": "Hell",
+        "dark": "Dunkel",
+        "direction": "Richtung",
+        "ltr": "Von links nach rechts",
+        "rtl": "Von rechts nach links",
+        "frameTitle": "Vorschau der Buchungsseite",
+        "note": "Dies ist die echte Seite mit Beispielzeiten. Nichts, was Sie hier tun, wird gebucht.",
+        "sampleName": "Kennenlerngespräch",
+        "sampleName2": "Vollständige Sitzung",
+        "sampleDescription": "Ein kurzes Gespräch, um Ihren Bedarf zu verstehen und Ihre Fragen zu beantworten.",
+        "sampleIntro": "Bitte kommen Sie einige Minuten früher.",
+        "sampleQuestion": "Gibt es etwas, das wir vorab wissen sollten?"
+      }
+    }
+  }
+}

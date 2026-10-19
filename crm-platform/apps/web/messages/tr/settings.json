@@ -245,6 +245,11 @@
         "description": "Ürün üzerine geliştirme yapmak için anahtarlar ve dokümantasyon.",
         "keywords": "api anahtarları, geliştiriciler, tokenlar, dokümanlar, openapi"
       },
+      "api-keys": {
+        "label": "API anahtarları",
+        "description": "Diğer sistemlerin API'yi çağırmak için kullandığı anahtarları oluşturun ve yönetin.",
+        "keywords": "api anahtarı, jeton, gizli anahtar, geliştiriciler, erişim, entegrasyon"
+      },
       "webhooks": {
         "label": "Webhook'lar",
         "description": "Olayları gerçekleştikçe kendi sistemlerinize gönderin.",
@@ -301,7 +306,7 @@
         "keywords": "geta, yayınla, bot, konsol, canlıya al, sohbet botu"
       },
       "auto-assignment": {
-        "label": "Otomatik atama",
+        "label": "Konuşmalarda otomatik atama",
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
       },

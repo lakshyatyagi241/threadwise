@@ -91,7 +91,14 @@
         "none": "Henüz yok",
         "atLeast": "{count}+",
         "footnote": "Mesaj rakamları, bu kişi için bulunan görüşmeleri kapsar (telefon numarası, e-posta adresi veya ada göre). Arama rakamları son bir yılı kapsar ve telefon numarası veya ada göre eşleşir.",
-        "callsPartial": "Okunabilenden fazla arama eşleşti, bu yüzden arama rakamları eksik olabilir."
+        "callsPartial": "Okunabilenden fazla arama eşleşti, bu yüzden arama rakamları eksik olabilir.",
+        "waSent": "WhatsApp gönderilen",
+        "waDelivered": "WhatsApp iletilen",
+        "waSeen": "WhatsApp görülen",
+        "waReceived": "WhatsApp alınan",
+        "waFailed": "WhatsApp başarısız",
+        "waReplied": "WhatsApp yanıtlanan",
+        "waFootnote": "WhatsApp rakamları bu kişinin WhatsApp görüşmelerindeki her mesajı sayar. Gönderilen bir mesajdan sonra kişinin mesajı geldiyse mesaj yanıtlanmış sayılır."
       }
     }
   }

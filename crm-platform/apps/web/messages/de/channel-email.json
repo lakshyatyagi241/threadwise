@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Postfach verbinden",
-          "body": "Melden Sie sich mit Google oder Microsoft an oder geben Sie die Einstellungen Ihres Mailservers ein, und erlauben Sie Threadwise, E-Mails dieser Adresse zu lesen und zu senden."
+          "body": "Melden Sie sich mit Google oder Microsoft an oder geben Sie die Einstellungen Ihres Mailservers ein, und erlauben Sie {app}, E-Mails dieser Adresse zu lesen und zu senden."
         },
         "inbox": {
           "title": "E-Mails landen im Posteingang",

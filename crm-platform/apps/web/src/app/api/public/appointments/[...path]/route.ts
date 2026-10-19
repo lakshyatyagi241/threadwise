@@ -17,6 +17,13 @@ const FORWARD_REQUEST = [
   'user-agent',
 ];
 const FORWARD_RESPONSE = ['content-type', 'x-request-id', 'retry-after'];
+/** A booking page picture is public and its address carries a version, so unlike everything else here it may be cached. */
+const FORWARD_ASSET = [
+  'etag',
+  'cache-control',
+  'x-content-type-options',
+  'content-security-policy',
+];
 /** A booking is a few fields and answers; anything bigger is not from our page. */
 const MAX_BODY_BYTES = 64 * 1024;
 
@@ -68,6 +75,13 @@ async function handler(req: Request, ctx: { params: Promise<{ path: string[] }> 
     if (v) out.set(h, v);
   }
   out.set('cache-control', 'no-store');
+  if (match.asset && upstream.ok) {
+    for (const h of FORWARD_ASSET) {
+      const v = upstream.headers.get(h);
+      if (v) out.set(h, v);
+    }
+    out.set('x-content-type-options', 'nosniff');
+  }
   out.set('x-robots-tag', 'noindex, nofollow');
   out.set('referrer-policy', 'no-referrer');
   return new Response([204, 304].includes(upstream.status) ? null : upstream.body, {

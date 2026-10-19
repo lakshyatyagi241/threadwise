@@ -1,5 +1,5 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { ERROR_CODES, RESERVED_ATTRIBUTE_KEYS } from '@crm/contracts';
+import { ERROR_CODES, FIELD_INLINE_OPTIONS_MAX, RESERVED_ATTRIBUTE_KEYS } from '@crm/contracts';
 import type {
   CreateFieldDependencyInput,
   CreateFieldInput,
@@ -14,6 +14,7 @@ import type {
   ListFieldsQuery,
   ModuleKey,
   PageResponse,
+  SearchFieldOptionsQuery,
   ReorderFieldOptionsInput,
   ReorderFieldsInput,
   UpdateFieldInput,
@@ -67,7 +68,7 @@ export class FieldsService {
     const options = OPTION_BACKED_TYPES.has(row.fieldType)
       ? await this.optionsRepo.listByField(tx, orgId, row.id)
       : undefined;
-    return toFieldResponse(row, options);
+    return toFieldResponse(row, options, options?.length);
   }
 
   // --- fields ---------------------------------------------------------
@@ -90,14 +91,28 @@ export class FieldsService {
       });
 
       const optionBacked = rows.filter((r) => OPTION_BACKED_TYPES.has(r.fieldType));
-      const optionsByField = await this.optionsRepo.listByFieldIds(
+      // A field with a very long option list (every City) is listed without them: `optionCount` says how many there are and
+      // `GET /fields/:id/option-search` pages through them. The rest keep their options inline, as before.
+      const counts = await this.optionsRepo.countByFieldIds(
         tx,
         ctx.orgId,
         optionBacked.map((r) => r.id),
       );
+      const inline = optionBacked.filter(
+        (r) => query.options === 'all' || (counts.get(r.id) ?? 0) <= FIELD_INLINE_OPTIONS_MAX,
+      );
+      const optionsByField = await this.optionsRepo.listByFieldIds(
+        tx,
+        ctx.orgId,
+        inline.map((r) => r.id),
+      );
 
       return {
-        data: rows.map((row) => toFieldResponse(row, optionsByField.get(row.id))),
+        data: rows.map((row) => {
+          if (!OPTION_BACKED_TYPES.has(row.fieldType)) return toFieldResponse(row);
+          const options = optionsByField.get(row.id) ?? (counts.has(row.id) ? undefined : []);
+          return toFieldResponse(row, options, counts.get(row.id) ?? 0);
+        }),
         page: { nextCursor: null, hasMore: false, limit: query.limit },
       };
     });
@@ -325,6 +340,23 @@ export class FieldsService {
   }
 
   // --- field options ----------------------------------------------------
+
+  /** One page of a field's options for a search box (or the labels of some stored values): see FieldOptionsRepository.search. */
+  async searchOptions(
+    fieldUuid: string,
+    query: SearchFieldOptionsQuery,
+  ): Promise<PageResponse<FieldOptionResponse>> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const field = await this.requireField(tx, ctx.orgId, fieldUuid);
+      this.requireModulePermission(field.moduleKey as ModuleKey, 'read');
+      const { rows, nextCursor } = await this.optionsRepo.search(tx, ctx.orgId, field.id, query);
+      return {
+        data: rows.map(toFieldOptionResponse),
+        page: { nextCursor, hasMore: nextCursor !== null, limit: query.limit },
+      };
+    });
+  }
 
   async listOptions(fieldUuid: string): Promise<FieldOptionResponse[]> {
     const ctx = RequestContextStore.require();

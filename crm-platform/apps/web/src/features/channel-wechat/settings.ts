@@ -9,6 +9,6 @@ export const settings = [
     href: '/wechat',
     icon: 'team-chat',
     order: 100,
-    gates: { permission: 'wechat.channels.read' },
+    gates: { permission: 'wechat.channels.read', planFeature: 'extra_channels' },
   }),
 ];

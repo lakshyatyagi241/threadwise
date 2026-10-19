@@ -104,6 +104,7 @@
       "failed": "başarısız",
       "edited": "{when} düzenlendi",
       "openBuilder": "Oluşturucuyu aç",
+      "faqs": "Sık sorulan sorular",
       "pause": "Duraklat",
       "resume": "Devam et",
       "rename": "Yeniden adlandır",
@@ -565,7 +566,7 @@
           "startPinned": "Bu başlangıç noktasıdır (sabitlemeyi kaldırmak için tıklayın)",
           "startMake": "Bunu başlangıç noktası yap",
           "startPoint": "Başlangıç noktası",
-          "editTitle": "Düzenle (denetçiyi aç)",
+          "editTitle": "Düzenle (denetçiyi aç; düğüme çift tıklayın veya Enter'a basın)",
           "edit": "Düzenle",
           "duplicateTitle": "Çoğalt (Ctrl+D)",
           "duplicate": "Çoğalt",
@@ -581,7 +582,9 @@
           "nothingHint": "Özelliklerini düzenlemek için tuvaldeki bir düğüme tıklayın,<br/>ya da yeni düğüm eklemek için soldaki bir kartı sürükleyin.",
           "nodeFallback": "Düğüm",
           "id": "kimlik",
-          "noSettings": "Bu düğümün ayarı yok."
+          "noSettings": "Bu düğümün ayarı yok.",
+          "confirmDeleteTitle": "Bu düğüm silinsin mi?",
+          "confirmDeleteMessage": "Düğüm ve bağlantıları kaldırılır. Oluşturucudan çıkana kadar Ctrl+Z ile geri alabilirsiniz."
         },
         "palette": {
           "modeCall": "Arama",

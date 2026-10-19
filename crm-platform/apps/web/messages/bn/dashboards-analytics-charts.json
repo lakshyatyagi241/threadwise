@@ -317,7 +317,13 @@
         "delivered": "পৌঁছে গেছে",
         "queued": "সারিতে আছে",
         "failed": "ব্যর্থ",
-        "replyRate": "উত্তরের হার"
+        "replyRate": "উত্তরের হার",
+        "received": "প্রাপ্ত বার্তা",
+        "conversationsOpen": "চলমান কথোপকথন",
+        "conversationsClosed": "বন্ধ কথোপকথন",
+        "conversationsAssigned": "অ্যাসাইন করা",
+        "conversationsUnassigned": "অ্যাসাইন করা হয়নি",
+        "conversationsTotal": "{count, plural, one {#টি কথোপকথন} other {#টি কথোপকথন}}"
       },
       "series": {
         "sent": "পাঠানো",
@@ -443,7 +449,8 @@
             "unknown": "অজানা"
           }
         }
-      }
+      },
+      "moreKpis": "বার্তা ও কথোপকথন"
     },
     "health": {
       "nav": "সিস্টেমের স্বাস্থ্য",

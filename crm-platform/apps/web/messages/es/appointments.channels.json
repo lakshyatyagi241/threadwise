@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Canales de mensajes",
+      "description": "Elige qué canales pueden enviar mensajes sobre citas a tus contactos: confirmaciones, recordatorios, avisos de cambio y cancelación y seguimientos posteriores a la visita. Un tipo de reserva solo puede usar un canal si está activado aquí y conectado.",
+      "loading": "Cargando los canales...",
+      "undecidedOwner": "Todavía no hay ningún canal activado, así que no se envía ningún mensaje de citas. Activa los canales que tu equipo puede usar.",
+      "undecidedMember": "Todavía no hay ningún canal activado, así que no se envía ningún mensaje de citas. Pide al propietario del espacio que elija los canales.",
+      "readOnly": "Solo el propietario del espacio y los administradores pueden cambiar esto.",
+      "enableLabel": "Usar {channel} para mensajes de citas",
+      "switchedOn": "{channel} está activado para mensajes de citas.",
+      "switchedOff": "{channel} está desactivado para mensajes de citas.",
+      "senderSaved": "Se guardó el remitente predeterminado de {channel}.",
+      "defaultSender": "Remitente predeterminado",
+      "defaultSenderOf": "Remitente predeterminado de {channel}",
+      "firstConnected": "El primero conectado",
+      "sendsFrom": "Envía desde {sender}",
+      "notConnected": "Todavía no hay nada conectado para este canal.",
+      "connect": "Conéctalo en Ajustes",
+      "voiceSoon": "Próximamente con el bot de voz: una llamada de recordatorio saliente que podrás activar para cada tipo de reserva. Todavía no se puede activar.",
+      "names": {
+        "email": "Correo electrónico",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Llamada de recordatorio"
+      },
+      "about": {
+        "email": "Desde un buzón compartido de tu espacio. Nunca desde un buzón personal.",
+        "whatsapp": "Texto libre dentro de la ventana de 24 horas; fuera de ella, solo una plantilla aprobada.",
+        "sms": "Texto sin formato desde tu remitente de SMS conectado.",
+        "voice": "Una llamada saliente automática que recuerda al contacto."
+      },
+      "status": {
+        "usable": "Activado y conectado",
+        "off": "Desactivado",
+        "notChosen": "Aún sin elegir",
+        "not_connected": "Activado, sin conectar",
+        "coming_soon": "Próximamente con el bot de voz"
+      },
+      "editorTitle": "Canales de este tipo de reserva",
+      "editorHint": "Solo se pueden usar los canales que el propietario activó y que están conectados. Los demás se muestran para que sepas por qué.",
+      "noneUsable": "Aún no hay ningún canal disponible, así que no se puede enviar ningún mensaje de este tipo de reserva.",
+      "openSettings": "Abrir los ajustes de canales",
+      "offByOwner": "El propietario del espacio no ha activado este canal.",
+      "sendOn": "Enviar por",
+      "sendOnAuto": "Ningún canal elegido: se usa el primer canal disponible, con el texto estándar.",
+      "sendOnEach": "El mensaje sale por cada canal marcado aquí.",
+      "attachedButUnusable": "Este canal no está disponible ahora, así que este mensaje se omite en él. Desmárcalo o pide al propietario que lo active."
+    },
+    "templates": {
+      "title": "Plantillas de mensajes",
+      "description": "Mensajes predefinidos para confirmaciones, recordatorios, cambios, cancelaciones y seguimientos posteriores a la visita. Añade uno con un clic y edítalo. Los mensajes de correo viven aquí; los de WhatsApp se envían a Meta para su aprobación y solo se puede usar uno aprobado.",
+      "loading": "Cargando los mensajes...",
+      "readOnly": "Solo quienes gestionan las plantillas de citas pueden cambiar esto.",
+      "empty": "Aún no has añadido ningún mensaje. Añade uno del conjunto predefinido de abajo.",
+      "yours": "Tus mensajes",
+      "status": {
+        "draft": "Borrador",
+        "pending": "En revisión en Meta",
+        "approved": "Aprobada",
+        "rejected": "Rechazada"
+      },
+      "kinds": {
+        "confirmation": "Confirmación de reserva",
+        "reminder": "Recordatorio",
+        "reschedule": "Reprogramada",
+        "cancellation": "Cancelada",
+        "follow_up": "Seguimiento posterior a la visita"
+      },
+      "channels": {
+        "email": "Correo electrónico",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {usada por # tipos de reserva}}",
+      "inactive": "desactivado",
+      "submit": "Enviar a Meta para aprobación",
+      "submitting": "Enviando...",
+      "submitted": "Enviada a Meta. Ahora está en revisión.",
+      "metaRefused": "Guardada, pero Meta la rechazó. Abre el mensaje para ver el motivo.",
+      "refresh": "Comprobar estado",
+      "refreshing": "Comprobando...",
+      "refreshed": "Estado actualizado.",
+      "edit": "Editar",
+      "view": "Ver",
+      "close": "Cerrar",
+      "delete": "Quitar",
+      "deleteTitle": "¿Quitar \"{name}\"?",
+      "deleteWhatsapp": "Se quita de esta lista. La plantilla de WhatsApp permanece en tus plantillas de WhatsApp; elimínala allí si ya no la necesitas.",
+      "deleteBody": "Se quita de tu biblioteca. Un tipo de reserva que la use debe elegir antes otro mensaje.",
+      "deleted": "Mensaje quitado.",
+      "cancel": "Cancelar",
+      "rejectedBecause": "Meta la rechazó: {reason}",
+      "pendingNote": "Meta está revisando esta plantilla. Hasta que se apruebe no se puede elegir ni enviar.",
+      "nameLabel": "Nombre",
+      "subjectLabel": "Asunto",
+      "bodyLabel": "Mensaje",
+      "textLocked": "Una plantilla en revisión o aprobada no se puede editar aquí.",
+      "placeholders": "Puedes usar:",
+      "whatsappPlaceholders": "WhatsApp solo puede rellenar estos, usados en este orden sin saltarse ninguno:",
+      "activeLabel": "Disponible para elegir",
+      "save": "Guardar",
+      "saving": "Guardando...",
+      "saveAndSubmit": "Guardar y enviar a Meta",
+      "saved": "Mensaje guardado.",
+      "predefinedTitle": "Mensajes predefinidos",
+      "predefinedHint": "Adopta un mensaje para copiarlo a tu biblioteca y luego edítalo. Un mensaje de WhatsApp se crea primero como borrador; tú decides cuándo enviarlo a Meta.",
+      "machineNote": "Los textos predefinidos están en inglés. Edítalos a tu idioma después de añadirlos.",
+      "category": {
+        "UTILITY": "Utilidad",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Vista previa",
+      "hidePreview": "Ocultar vista previa",
+      "inLibrary": "En tu biblioteca: {status}",
+      "adopt": "Añadir a mis mensajes",
+      "adopting": "Añadiendo...",
+      "adoptDraft": "Añadir como borrador",
+      "adoptSubmit": "Añadir y enviar a Meta",
+      "adopted": "Añadido a tus mensajes.",
+      "newEmail": "Nuevo mensaje de correo",
+      "kindLabel": "Tipo",
+      "create": "Crear",
+      "created": "Mensaje creado.",
+      "chooseLabel": "Mensaje a usar",
+      "useText": "El texto de arriba",
+      "unknownMessage": "Un mensaje que ya no está disponible",
+      "noneYet": "Aún no hay ningún mensaje de este tipo.",
+      "openLibrary": "Añade uno en los ajustes",
+      "whatsappApprovedOnly": "Solo se pueden elegir plantillas aprobadas por Meta. Fuera de la ventana de 24 horas WhatsApp no envía nada más."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Llamada de recordatorio"
+      },
+      "voiceSoon": "Próximamente con el bot de voz: una llamada de recordatorio saliente. Todavía no se puede añadir.",
+      "voiceSoonShort": "próximamente con el bot de voz",
+      "channelUnusable": "no disponible ahora",
+      "noUsableChannel": "Ningún canal de esta regla está disponible, así que no se puede activar.",
+      "openChannels": "Abrir los ajustes de canales",
+      "fromLibrary": "Usar un mensaje de la biblioteca",
+      "openLibrary": "Añade mensajes en los ajustes",
+      "reasons": {
+        "channel_disabled": "El espacio ha desactivado este canal para mensajes de citas."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Elige al menos un canal para este mensaje o borra su texto."
+      }
+    }
+  }
+}

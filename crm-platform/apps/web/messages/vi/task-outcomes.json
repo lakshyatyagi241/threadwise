@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Kết quả công việc",
+        "description": "Các kết quả mà một người chọn khi hoàn thành hoặc ghi nhận công việc.",
+        "keywords": "kết quả công việc, kết quả cuộc gọi, kết quả, quan tâm, để lại tin nhắn, không phản hồi"
+      }
+    }
+  }
+}

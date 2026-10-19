@@ -39,9 +39,18 @@ export class WalletExportService {
               r.context?.country ?? '',
               r.context?.category ?? '',
               r.context?.engine ?? '',
-              r.moneyInMinor > 0 ? formatMinor(r.moneyInMinor) : '',
-              r.moneyOutMinor > 0 ? formatMinor(r.moneyOutMinor) : '',
-              formatMinor(r.balanceAfterMinor),
+              // The exact ledger figure (up to four decimals), so the file adds up to the on-screen totals.
+              r.moneyInExact && r.moneyInExact !== '0.00'
+                ? r.moneyInExact
+                : r.moneyInMinor > 0
+                  ? formatMinor(r.moneyInMinor)
+                  : '',
+              r.moneyOutExact && r.moneyOutExact !== '0.00'
+                ? r.moneyOutExact
+                : r.moneyOutMinor > 0
+                  ? formatMinor(r.moneyOutMinor)
+                  : '',
+              r.balanceAfterExact ?? formatMinor(r.balanceAfterMinor),
             ]
               .map(csvCell)
               .join(','),
