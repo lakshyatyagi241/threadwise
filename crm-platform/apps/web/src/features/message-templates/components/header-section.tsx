@@ -37,7 +37,7 @@ export function HeaderSection({
   const input = useRef<HTMLInputElement>(null);
   const [problem, setProblem] = useState<string | null>(null);
   const upload = useMutation({
-    mutationFn: (file: File) => uploadTemplateMedia(file),
+    mutationFn: (file: File) => uploadTemplateMedia(file, state.connectionId),
     onSuccess: (r) => onUploaded({ handle: r.handle, fileName: r.fileName }),
   });
   const kind = state.headerKind;
@@ -139,7 +139,7 @@ export function HeaderSection({
             <Button
               variant="secondary"
               size="sm"
-              disabled={upload.isPending}
+              disabled={upload.isPending || !state.connectionId}
               onClick={() => input.current?.click()}
             >
               {state.headerFileName || state.headerSampleUrl ? t('replace') : t('choose')}

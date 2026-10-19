@@ -231,6 +231,10 @@ export const syncTemplatesResultSchema = z.object({
 });
 export type SyncTemplatesResult = z.infer<typeof syncTemplatesResultSchema>;
 
+/** `POST /v2/templates/media` (multipart): the WhatsApp number the header sample is uploaded through, plus the `file` part. */
+export const uploadTemplateMediaInputSchema = z.object({ connectionId: uuidSchema });
+export type UploadTemplateMediaInput = z.infer<typeof uploadTemplateMediaInputSchema>;
+
 export const uploadTemplateMediaResultSchema = z.object({
   handle: z.string(),
   fileName: z.string(),
