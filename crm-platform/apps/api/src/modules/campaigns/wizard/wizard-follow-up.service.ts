@@ -75,6 +75,15 @@ const when = (v: unknown) => new Date(v as string);
 const iso = (d: Date) => d.toISOString();
 
 /**
+ * A reply counts only in the WhatsApp Cloud API conversation of the number the recipient was sent from (the campaign's number, or the
+ * recipient's own number in a split send). The same contact on another channel (Instagram, web chat, another number) is not that
+ * conversation. Used on the message join `ch` (channels) against the recipient `r` and campaign `c` of `claim`.
+ */
+const REPLY_ON_SENDER_NUMBER = sql`ch.kind = 'whatsapp_cloud'
+  AND ch.waba_config_id = coalesce(r.sender_device_id, c.device_id)
+  AND coalesce(r.sender_provider, c.provider) = 'waba'`;
+
+/**
  * Follow-up steps of a guided campaign, in the worker (the draft's `followUps`). After the campaign message goes out, a recipient's
  * reaction, or silence, decides whether another message goes out or a flow starts, up to three steps in a row. Step 1 is measured
  * from the campaign message, step 2 from step 1's message, and so on (see `decideFollowUp` for the rules of each trigger).
@@ -177,11 +186,13 @@ export class WizardFollowUpService {
           r.response IS NOT NULL AS already_responded,
           c.wizard, c.tracking_enabled, c.throttle_min_sec, c.throttle_max_sec, c.uuid AS campaign_uuid, c.campaign_name,
           (SELECT m.created_at FROM messages m JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+            JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
             WHERE m.org_id = r.org_id AND cv.contact_id = r.contact_id AND m.direction = 'in'
-              AND m.created_at > r.follow_up_base_at ORDER BY m.created_at LIMIT 1) AS replied_at,
+              AND ${REPLY_ON_SENDER_NUMBER} AND m.created_at > r.follow_up_base_at ORDER BY m.created_at LIMIT 1) AS replied_at,
           (SELECT coalesce(nullif(m.body, ''), '[' || m.kind || ']') FROM messages m JOIN conversations cv ON cv.org_id = m.org_id AND cv.id = m.conversation_id
+            JOIN channels ch ON ch.org_id = cv.org_id AND ch.id = cv.channel_id
             WHERE m.org_id = r.org_id AND cv.contact_id = r.contact_id AND m.direction = 'in'
-              AND m.created_at > r.follow_up_base_at ORDER BY m.created_at LIMIT 1) AS reply_text,
+              AND ${REPLY_ON_SENDER_NUMBER} AND m.created_at > r.follow_up_base_at ORDER BY m.created_at LIMIT 1) AS reply_text,
           CASE WHEN r.follow_up_next = 1 THEN r.read_at IS NOT NULL
                ELSE coalesce((SELECT a.read_at IS NOT NULL FROM camp_follow_up_attempts a
                               WHERE a.org_id = r.org_id AND a.recipient_id = r.id AND a.step_no = r.follow_up_next - 1), false)
