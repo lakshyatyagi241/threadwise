@@ -139,7 +139,11 @@ export const waOrders = pgTable(
     shopifyOrderId: text('shopify_order_id'),
     wooOrderId: text('woo_order_id'),
     metaJson: jsonb('meta_json'),
+    /** Legacy plaintext tracking token; NULL once the audit backfill has run (encryption audit E8). Look up by `recoveryTokenHash`. */
     recoveryToken: text('recovery_token'),
+    recoveryTokenHash: text('recovery_token_hash'),
+    /** The tracking token sealed with CryptoService, so the admin screen can show the link again. */
+    recoveryTokenEnc: text('recovery_token_enc'),
     waPaymentReferenceId: text('wa_payment_reference_id'),
     waPaymentStatus: text('wa_payment_status'),
     waPaymentTxnId: text('wa_payment_txn_id'),
@@ -199,6 +203,9 @@ export const waOrders = pgTable(
       .on(t.orgId, t.invoiceId)
       .where(sql`invoice_id IS NOT NULL`),
     index('idx_wa_orders_recovery_token').on(t.orgId, t.recoveryToken),
+    uniqueIndex('uq_wa_orders_recovery_token_hash')
+      .on(t.orgId, t.recoveryTokenHash)
+      .where(sql`${t.recoveryTokenHash} IS NOT NULL`),
     index('idx_wa_orders_shopify_order_id').on(t.orgId, t.shopifyOrderId),
     index('idx_wa_orders_storefront_id').on(t.orgId, t.storefrontId),
     index('idx_wa_orders_wa_payment_reference_id').on(t.orgId, t.waPaymentReferenceId),

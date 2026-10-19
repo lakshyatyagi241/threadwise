@@ -49,7 +49,7 @@ const REVIEWED_BARE_FETCH: Record<string, string> = {
     'fixed vendor hosts (env override is deploy-time)',
   'infra/providers/coupons-credits-referral-currency/open-er-api.adapter.ts':
     'fixed rates host (env override is deploy-time)',
-  'infra/providers/faq-knowledge/openrouter-faq-ai.adapter.ts':
+  'infra/providers/knowledge-base/openrouter-kb-ai.adapter.ts':
     'fixed openrouter.ai (env override is deploy-time)',
   'infra/providers/flow-runtime-engine/http-flow-ai.adapter.ts':
     'fixed vendor hosts (env override is deploy-time)',

@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import type { Database, Tx } from './client';
+import { runTransaction, type Database, type Tx } from './client';
 
 export interface TenantContext {
   orgId: number;
@@ -36,7 +36,7 @@ export async function withTenant<T>(
     );
   }
 
-  return db.transaction(async (tx) => {
+  return runTransaction(db, async (tx) => {
     // One statement, not one per setting: every statement is a network round trip, and this runs in front of every
     // request's transaction. Each value is still a bind parameter and `true` still makes it transaction-local.
     await tx.execute(
@@ -68,7 +68,7 @@ export async function withTenant<T>(
  * that no path reachable from a controller does.
  */
 export async function withPrivileged<T>(db: Database, fn: (tx: Tx) => Promise<T>): Promise<T> {
-  return db.transaction(async (tx) => {
+  return runTransaction(db, async (tx) => {
     await tx.execute(sql`select set_config('app.privileged', 'on', true)`);
     return fn(tx);
   });

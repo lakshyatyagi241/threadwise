@@ -3,7 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { ActivityType } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
-import { decodeCursor } from '../../../common/pagination/cursor';
+import { decodeCursor, isCursorTimestamp } from '../../../common/pagination/cursor';
 
 export interface StageChangeMeta {
   from: { id: string; name: string } | null;
@@ -207,7 +207,7 @@ function decodeTaskCursor(raw: string): [string, number] {
   try {
     const [key, id] = Buffer.from(raw, 'base64url').toString('utf8').split('|');
     if (!key || !id || !/^\d+$/.test(id)) throw new Error('malformed');
-    if (key !== 'infinity' && Number.isNaN(new Date(key).getTime())) throw new Error('malformed');
+    if (key !== 'infinity' && !isCursorTimestamp(key)) throw new Error('malformed');
     return [key, Number(id)];
   } catch {
     throw new AppError('VALIDATION_FAILED', 'Invalid pagination cursor', 400);

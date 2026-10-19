@@ -1530,7 +1530,8 @@ export function isSafeLink(value: string): boolean {
   if (v === '' || v.length > 500 || /\s/.test(v) || [...v].some((c) => c.charCodeAt(0) <= 0x1f)) {
     return false;
   }
-  if (v.startsWith('//')) return false;
+  // `/\evil.com` is `//evil.com` to a browser: a second slash, or a backslash, after the first is off the site.
+  if (/^\/[\\/]/.test(v)) return false;
   return /^(\/|#|https?:\/\/|mailto:|tel:)/i.test(v);
 }
 

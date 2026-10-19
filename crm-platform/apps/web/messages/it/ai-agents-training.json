@@ -224,20 +224,20 @@
           "title": "Testo libero",
           "body": "Incolla un frammento di aiuto o una policy."
         },
-        "qa": {
-          "title": "Coppia D&R",
-          "body": "Una domanda con la sua risposta canonica."
-        },
         "file": {
           "title": "PDF, DOCX, TXT e altro",
           "body": "Carica un file. Il testo viene estratto per te."
+        },
+        "faq": {
+          "title": "Aggiungi FAQ",
+          "body": "Domande e le risposte che vuoi far dare."
         }
       },
       "panel": {
         "url": "Recupera un URL pubblico",
         "text": "Incolla testo semplice",
-        "qa": "Singola D&R",
-        "file": "Carica un file di conoscenza"
+        "file": "Carica un file di conoscenza",
+        "faq": "Aggiungi domande e risposte"
       },
       "label": "Etichetta",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Etichetta (es. Pagina dei prezzi)",
           "text": "Etichetta (es. Riepilogo policy rimborsi)",
-          "qa": "Etichetta (es. Tempi di rimborso)",
           "file": "Etichetta (es. Manuale del prodotto)"
         },
         "content": "Incolla qualsiasi testo che l'agente deve conoscere…",
         "question": "Domanda, es. Quanto tempo richiedono i rimborsi?",
         "answer": "Risposta, es. I rimborsi vengono accreditati entro 3-5 giorni lavorativi."
       },
-      "urlHint": "Vengono lette solo pagine pubbliche http e https. La pagina viene recuperata in background, quindi la voce mostra In elaborazione per un momento.",
+      "urlHint": "Vengono lette solo pagine pubbliche http e https. La pagina viene letta in background, quindi può volerci un momento.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV o HTML, fino a 10 MB. Il testo viene estratto automaticamente.",
       "uploading": "Avanzamento del caricamento",
       "submit": {
         "url": "Recupera e addestra",
         "text": "Salva testo",
-        "qa": "Salva coppia",
-        "file": "Carica"
+        "file": "Carica",
+        "faq": "Salva FAQ"
       },
       "cancel": "Annulla",
       "added": "Conoscenza aggiunta.",
@@ -281,25 +280,6 @@
         "file_empty": "Il file è vuoto.",
         "tooLarge": "Troppo testo per un solo incolla. Caricalo invece come file."
       },
-      "col": {
-        "kind": "Tipo",
-        "label": "Etichetta",
-        "state": "Stato",
-        "actions": "Azioni"
-      },
-      "kind": {
-        "url": "url",
-        "text": "testo",
-        "qa": "d&r",
-        "file": "file"
-      },
-      "state": {
-        "ready": "pronto",
-        "processing": "in elaborazione",
-        "failed": "non riuscito"
-      },
-      "tokens": "circa {count} token",
-      "workspaceWide": "a livello di workspace",
       "loading": "Caricamento delle voci",
       "loadError": "Impossibile caricare le voci.",
       "retry": "Riprova",
@@ -310,7 +290,14 @@
       "removeBody": "L'agente smetterà di usarla per le nuove risposte. Le conversazioni precedenti restano invariate.",
       "keep": "Mantieni",
       "removed": "Rimossa.",
-      "removeFailed": "Rimozione non riuscita."
+      "removeFailed": "Rimozione non riuscita.",
+      "ownedNote": "Questa conoscenza appartiene solo a questo agente. Nessun altro agente può usarla.",
+      "faq": {
+        "addAnother": "Aggiungi un'altra domanda",
+        "removeRow": "Rimuovi questa domanda"
+      },
+      "reading": "Lettura in corso…",
+      "failed": "Non è stato possibile leggerlo."
     }
   }
 }

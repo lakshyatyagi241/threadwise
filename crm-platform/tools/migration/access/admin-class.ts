@@ -18,6 +18,10 @@ const PATTERNS: RegExp[] = [
   /^inbox\.channel\.manage$/,
   /^auth\.branding\.update$/,
   /^market\.apps\.manage$/,
+  /^market\.apps\.install$/,
+  /^storage\.files\.manage$/,
+  /^crm\.activity_types\.manage$/,
+  /^appointments\.(channels|templates)\.manage$/,
   /^wallet\.[a-z_.]*(topup|adjust|manage)/,
 ];
 const CATEGORIES = new Set(['admin']);

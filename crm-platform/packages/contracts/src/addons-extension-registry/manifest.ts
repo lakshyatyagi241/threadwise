@@ -25,7 +25,11 @@ const ICON_RE = /^[a-z0-9-]{1,32}$/;
 
 /** A path that can only point at this app: scheme and host are dropped, so a manifest cannot link off-site. */
 export function toLocalPath(href: string): string | null {
-  const trimmed = href.trim().replace(/\\/g, '/');
+  // A browser drops tab, CR and LF from a URL before parsing it, so "/\n/evil.com" is "//evil.com" and they go first.
+  const trimmed = href
+    .trim()
+    .replace(/[\t\r\n]/g, '')
+    .replace(/\\/g, '/');
   if (!trimmed) return null;
   const noScheme = trimmed.replace(/^[a-z][a-z0-9+.-]*:/i, '').replace(/^\/\/[^/?#]*/, '');
   const path = `/${noScheme.replace(/^\/+/, '')}`;

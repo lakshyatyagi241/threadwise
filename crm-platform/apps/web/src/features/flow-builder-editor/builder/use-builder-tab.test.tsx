@@ -37,7 +37,7 @@ function Probe({ exists, set }: { exists: boolean; set: TabSet }) {
   return (
     <>
       <p data-testid="tab">{tab}</p>
-      {(['build', 'faqs', 'customize'] as const).map((k) => (
+      {(['build', 'customize', 'deploy'] as const).map((k) => (
         <button key={k} type="button" data-go={k} onClick={() => setTab(k)} />
       ))}
     </>
@@ -46,7 +46,7 @@ function Probe({ exists, set }: { exists: boolean; set: TabSet }) {
 const go = (k: BuilderTab) =>
   act(async () => host.querySelector<HTMLButtonElement>(`[data-go="${k}"]`)!.click());
 const shown = () => host.querySelector('[data-testid="tab"]')!.textContent;
-const mount = (exists: boolean, set: TabSet = { faqs: true, web: false }) =>
+const mount = (exists: boolean, set: TabSet = { web: true }) =>
   act(async () => root.render(<Probe exists={exists} set={set} />));
 
 beforeEach(() => {
@@ -61,52 +61,50 @@ afterEach(async () => {
 });
 
 describe('the builder tab and the address', () => {
-  it('opens on FAQs for ?tab=faqs on a saved flow', async () => {
-    window.history.replaceState(null, '', '/flows/simple/f1?tab=faqs&view=settings');
+  it('opens on Customize for ?tab=customize on a saved flow', async () => {
+    window.history.replaceState(null, '', '/flows/simple/f1?tab=customize');
     await mount(true);
-    expect(shown()).toBe('faqs');
+    expect(shown()).toBe('customize');
   });
 
   it('a flow that has not been saved always opens on Build', async () => {
-    window.history.replaceState(null, '', '/flows/simple/?tab=faqs');
+    window.history.replaceState(null, '', '/flows/simple/?tab=customize');
     await mount(false);
     expect(shown()).toBe('build');
   });
 
-  it('ignores FAQs when the person cannot read them, and Customize on a chat flow', async () => {
+  it('opens on Build for an old ?tab=faqs link, and for Customize on a flow without it', async () => {
     window.history.replaceState(null, '', '/flows/simple/f1?tab=faqs');
-    await mount(true, { faqs: false, web: false });
+    await mount(true);
+    expect(shown()).toBe('build');
+    window.history.replaceState(null, '', '/flows/simple/f1?tab=customize');
+    await mount(true, { web: false });
     expect(shown()).toBe('build');
   });
 
   it('choosing a tab writes it to the address without leaving the page, and Build clears it', async () => {
     await mount(true);
-    await go('faqs');
-    expect(shown()).toBe('faqs');
-    expect(window.location.pathname + window.location.search).toBe('/flows/simple/f1?tab=faqs');
+    await go('customize');
+    expect(shown()).toBe('customize');
+    expect(window.location.pathname + window.location.search).toBe(
+      '/flows/simple/f1?tab=customize',
+    );
     await go('build');
     expect(shown()).toBe('build');
     expect(window.location.search).toBe('');
   });
 
-  it('leaving FAQs drops the panel screen from the address', async () => {
-    window.history.replaceState(null, '', '/flows/simple/f1?tab=faqs&view=new');
-    await mount(true, { faqs: true, web: true });
-    await go('customize');
-    expect(window.location.search).toBe('?tab=customize');
-  });
-
   it('follows the back button between tabs', async () => {
     await mount(true);
-    await navigate('/flows/simple/f1?tab=faqs&view=test');
-    expect(shown()).toBe('faqs');
+    await navigate('/flows/simple/f1?tab=deploy');
+    expect(shown()).toBe('deploy');
     await navigate('/flows/simple/f1');
     expect(shown()).toBe('build');
   });
 
   it('a tab change before the first save does not touch the address', async () => {
     await mount(false);
-    await go('faqs');
+    await go('customize');
     expect(window.location.search).toBe('');
   });
 });

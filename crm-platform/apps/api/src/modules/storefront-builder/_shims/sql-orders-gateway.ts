@@ -1,3 +1,5 @@
+import { CryptoService } from '../../../common/crypto/crypto.service';
+import { tokenColumns, tokenHash, tokenOf } from '../../../common/crypto/secret-columns';
 import { Inject, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
@@ -30,15 +32,16 @@ interface RawOrder {
   payment_link: string | null;
   meta_json: Record<string, unknown> | null;
   recovery_token: string | null;
+  recovery_token_enc: string | null;
   created_at: Date | string;
   updated_at: Date | string;
 }
 
 const ORDER_COLUMNS = sql`id, uuid, storefront_id, status, payment_method, customer_name, customer_phone, customer_email,
   customer_address, items_json, total_minor, shipping_minor, discount_minor, currency_code, payment_link, meta_json,
-  recovery_token, created_at, updated_at`;
+  recovery_token, recovery_token_enc, created_at, updated_at`;
 
-const toRecord = (r: RawOrder): OrderRecord => ({
+const toRecord = (r: RawOrder, crypto: CryptoService): OrderRecord => ({
   id: Number(r.id),
   uuid: r.uuid,
   storefrontId: r.storefront_id === null ? null : Number(r.storefront_id),
@@ -55,7 +58,10 @@ const toRecord = (r: RawOrder): OrderRecord => ({
   currencyCode: r.currency_code,
   paymentLink: r.payment_link,
   metaJson: r.meta_json,
-  recoveryToken: r.recovery_token,
+  recoveryToken:
+    r.recovery_token_enc || r.recovery_token
+      ? tokenOf(crypto, { enc: r.recovery_token_enc, plain: r.recovery_token })
+      : null,
   createdAt: new Date(r.created_at),
   updatedAt: new Date(r.updated_at),
 });
@@ -63,7 +69,10 @@ const toRecord = (r: RawOrder): OrderRecord => ({
 /** Reads and writes `wa_orders` directly until checkout-orders-merchant-payments (CHK) exports its own order service. */
 @Injectable()
 export class SqlOrdersGateway implements OrdersGateway {
-  constructor(@Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort) {}
+  constructor(
+    @Inject(CONTACT_RESOLVER) private readonly contacts: ContactResolverPort,
+    private readonly crypto: CryptoService,
+  ) {}
 
   async create(tx: Tx, orgId: number, o: NewStorefrontOrder): Promise<PlacedOrder> {
     // The buyer is a contact of the workspace (found or created by phone), in this same transaction. A cap on contacts or an unusable
@@ -78,16 +87,17 @@ export class SqlOrdersGateway implements OrdersGateway {
       saveProfile: true,
     });
     const contactId = link.outcome === 'skipped' ? null : link.contactId;
+    const token = tokenColumns(this.crypto, o.recoveryToken);
     const res = await tx.execute(sql`
       INSERT INTO wa_orders (
         org_id, source, customer_phone, customer_name, customer_email, customer_address, items_json,
         total_minor, shipping_minor, discount_minor, coupon_code, currency_code, payment_method,
-        rto_score, rto_band, status, storefront_id, recovery_token, notes, meta_json, contact_id
+        rto_score, rto_band, status, storefront_id, recovery_token, recovery_token_hash, recovery_token_enc, notes, meta_json, contact_id
       ) VALUES (
         ${orgId}, 'storefront', ${o.customerPhone}, ${o.customerName}, ${o.customerEmail}, ${o.customerAddress},
         ${JSON.stringify(o.items)}::jsonb,
         ${o.totalMinor}, ${o.shippingMinor}, ${o.discountMinor}, ${o.couponCode}, ${o.currencyCode}, ${o.paymentMethod},
-        ${o.rtoScore}, ${o.rtoBand}, 'new', ${o.storefrontId}, ${o.recoveryToken}, ${o.notes},
+        ${o.rtoScore}, ${o.rtoBand}, 'new', ${o.storefrontId}, ${token.plain}, ${token.hash}, ${token.enc}, ${o.notes},
         ${JSON.stringify({ placed_via: 'storefront_checkout' })}::jsonb, ${contactId}
       )
       RETURNING id, uuid`);
@@ -246,9 +256,9 @@ export class SqlOrdersGateway implements OrdersGateway {
   ): Promise<OrderRecord | undefined> {
     const res = await tx.execute(sql`
       SELECT ${ORDER_COLUMNS} FROM wa_orders
-      WHERE org_id = ${orgId} AND storefront_id = ${storefrontId} AND recovery_token = ${token}`);
+      WHERE org_id = ${orgId} AND storefront_id = ${storefrontId} AND (recovery_token_hash = ${tokenHash(token)} OR recovery_token = ${token})`);
     const row = res.rows[0] as unknown as RawOrder | undefined;
-    return row ? toRecord(row) : undefined;
+    return row ? toRecord(row, this.crypto) : undefined;
   }
 
   async findForPayment(tx: Tx, orgId: number, orderId: number): Promise<OrderRecord | undefined> {
@@ -256,7 +266,7 @@ export class SqlOrdersGateway implements OrdersGateway {
       SELECT ${ORDER_COLUMNS} FROM wa_orders
       WHERE org_id = ${orgId} AND id = ${orderId} FOR UPDATE`);
     const row = res.rows[0] as unknown as RawOrder | undefined;
-    return row ? toRecord(row) : undefined;
+    return row ? toRecord(row, this.crypto) : undefined;
   }
 
   async markPaid(

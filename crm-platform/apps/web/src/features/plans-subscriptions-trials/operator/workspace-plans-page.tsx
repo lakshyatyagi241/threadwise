@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useInfiniteQuery, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { WorkspacePlan } from '@crm/contracts';
 import { Badge, Button, Card, EmptyState, Input, Select } from '@crm/ui';
@@ -25,6 +25,7 @@ export function WorkspacePlansPage() {
   const t = useTranslations(NS);
   const ts = useTranslations(`${NS}.state`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const canEdit = useCanEdit('plans');
   const [search, setSearch] = useState('');
@@ -51,7 +52,7 @@ export function WorkspacePlansPage() {
   const rows = list.data?.pages.flatMap((p) => p.data) ?? [];
   const date = (iso: string | null) =>
     iso
-      ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso))
+      ? new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(new Date(iso))
       : t('never');
 
   return (

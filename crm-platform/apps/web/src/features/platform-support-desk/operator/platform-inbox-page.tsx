@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -43,6 +43,7 @@ type Tab = (typeof SUPP_INBOX_TABS)[number];
 export function PlatformInboxPage() {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const [tab, setTab] = useState<Tab>('sla_breach');
   const [workspaceId, setWorkspaceId] = useState('');
   const [openId, setOpenId] = useState<string | null>(null);
@@ -185,7 +186,9 @@ export function PlatformInboxPage() {
                           {c.slaBreached && <Badge tone="danger">{t('sla')}</Badge>}
                           {c.isSpam && <Badge>{t('spamChip')}</Badge>}
                           <span className="ms-auto shrink-0 font-mono text-[11px] text-muted-foreground">
-                            {c.lastMessageAt ? shortDate(c.lastMessageAt, locale).day : ''}
+                            {c.lastMessageAt
+                              ? shortDate(c.lastMessageAt, locale, timeZone).day
+                              : ''}
                           </span>
                         </div>
                         {c.preview && (
@@ -293,6 +296,7 @@ function ConversationDrawer({
 }) {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const toast = useToast();
   const key = ['support', 'inbox', 'conversation', id] as const;

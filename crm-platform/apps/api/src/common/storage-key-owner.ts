@@ -20,5 +20,10 @@ export function storageKeyOrg(key: string): number | null {
 export function storageKeyIsOwnedBy(orgId: number, key: string): boolean {
   const canonical = canonicalStorageKey(key);
   if (canonical.split('/').some((s) => s === '.' || s === '..' || s === '')) return false;
-  return storageKeyOrg(canonical) === orgId;
+  // eslint-disable-next-line no-control-regex
+  if (/[\u0000-\u001f\u007f]/.test(canonical)) return false;
+  // The org is read from THIS canonical form: `storageKeyOrg` canonicalises again, and "/ /chat/7/x" is " /chat/7/x" after one pass
+  // (the object the storage layer acts on) but "chat/7/x" after two.
+  const m = /^[^/]+\/(\d+)\//.exec(canonical);
+  return m !== null && Number(m[1]) === orgId;
 }

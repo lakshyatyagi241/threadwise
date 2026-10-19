@@ -1,4 +1,10 @@
-import { deploymentsResponseSchema, type DeploymentStatus } from '@crm/contracts';
+import {
+  deploymentsResponseSchema,
+  publishesResponseSchema,
+  releasesResponseSchema,
+  type DeploymentStatus,
+  type PublishStatus,
+} from '@crm/contracts';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
 
 /** Operator console, through the same-origin operator proxy (`/api/platform/*` becomes `/v2/platform/*`). */
@@ -22,3 +28,22 @@ export const fetchDeployments = (status: DeploymentStatus | null, signal?: Abort
     schema: deploymentsResponseSchema,
     signal,
   });
+
+export const publishesKeys = {
+  list: (status: PublishStatus | null) =>
+    ['operator', 'deployments', 'publishes', status ?? 'all'] as const,
+};
+
+export const fetchPublishes = (status: PublishStatus | null, signal?: AbortSignal) =>
+  operatorFetch(`${ROOT}/publishes`, {
+    query: { status: status ?? undefined, limit: DEPLOYMENTS_LIMIT },
+    schema: publishesResponseSchema,
+    signal,
+  });
+
+export const releasesKeys = {
+  all: ['operator', 'deployments', 'releases'] as const,
+};
+
+export const fetchReleases = (signal?: AbortSignal) =>
+  operatorFetch(`${ROOT}/releases`, { schema: releasesResponseSchema, signal });

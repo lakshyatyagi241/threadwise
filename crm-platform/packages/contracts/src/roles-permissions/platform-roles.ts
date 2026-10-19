@@ -39,6 +39,11 @@ export const PLATFORM_PERMISSION_KEYS = [
   // Storage quota (docs/specs/storage-quota-and-archival.md O12): re-run a workspace's reconcile and re-evaluate its cap; grant extra space with a reason and an expiry (Super Admin).
   'platform.workspace.storage',
   'platform.workspace.storage_grant',
+  // Persona profiles (migration 20261230090100)
+  'platform.persona.view',
+  'platform.persona.manage',
+  'platform.persona.publish',
+  'platform.persona.override',
 ] as const;
 export type PlatformPermissionKey = (typeof PLATFORM_PERMISSION_KEYS)[number];
 

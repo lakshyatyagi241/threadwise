@@ -34,7 +34,11 @@ export function endpointProblem(raw: string): string | null {
   }
   if (url.username || url.password) return 'Put credentials in the API key field, not in the URL.';
 
-  const host = url.hostname.toLowerCase().replace(/^\[|\]$/g, '');
+  // A trailing dot names the same host (`metadata.google.internal.`), so it is dropped before the names are compared.
+  const host = url.hostname
+    .toLowerCase()
+    .replace(/^\[|\]$/g, '')
+    .replace(/\.+$/, '');
   if (host === 'metadata.google.internal' || host === 'metadata') {
     return 'That address is not allowed.';
   }

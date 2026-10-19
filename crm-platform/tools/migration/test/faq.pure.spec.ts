@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { FAQ_LIMITS, buildFaqDocs, type FaqDoc } from '../flows/faq';
+import { FAQ_LIMITS, KB_FAQ_BODY_MAX, buildFaqDocs, buildKbFaqDocs, faqEntryText, type FaqDoc } from '../flows/faq';
 import { STEP_DEPS, STEP_GROUPS } from '../load/steps';
 import { REGISTRY } from '../registry';
 import { STEPS, transformDoc } from '../transform';
@@ -35,13 +35,18 @@ const owns = () => ({ ok: true as const });
 const build = (workspace: Doc[], vars: Doc[] = [], owner: Parameters<typeof buildFaqDocs>[0]['owner'] = owns): FaqDoc[] =>
   buildFaqDocs({ workspace, variations: vars, owner });
 
-const ctxFor = (ok = true): Ctx =>
+const ctxFor = (ok = true, agent = true): Ctx =>
   ({
     client: 'acme',
     fallbackAt: '2026-06-01T00:00:00.000Z',
     ref: (c: string, k: unknown) =>
-      ok && c === 'flow_bots' && k === BOT ? { id: 7, uuid: 'u', table: 'flows' } : undefined,
+      ok && c === 'flow_bots' && k === BOT
+        ? { id: 7, uuid: 'u', table: 'flows' }
+        : agent && c === 'widget_assistants' && k === BOT
+          ? { id: 11, uuid: 'a', table: 'ai_chat_assistants' }
+          : undefined,
     flows: {
+      widgets: new Map(agent ? [[BOT, { assistant: {}, verdict: { kind: 'load' } }]] : []),
       bots: new Map([
         [BOT, { verdict: ok ? { kind: 'load' } : { kind: 'exclude', code: 'WEB_BOT_NO_FLOW', reason: 'web' } }],
       ]),
@@ -60,7 +65,11 @@ const stream = async (c: Record<string, Doc[]>, ctx = ctxFor()): Promise<Doc[]> 
     out.push(d);
   return out;
 };
-const rowsOf = (d: FaqDoc, ctx = ctxFor()) => transformDoc(faqKnowledge, d as unknown as Doc, ctx);
+/** the question as the step sees it: grouped into the entry of its agent (a left-behind question stays itself) */
+const rowsOf = (d: FaqDoc, ctx = ctxFor(), hasAgent = (b: string) => b === BOT) => {
+  const [k] = buildKbFaqDocs([d], hasAgent);
+  return transformDoc(faqKnowledge, k as unknown as Doc, ctx);
+};
 const codeOf = (d: FaqDoc, ctx = ctxFor()): string => {
   const o = rowsOf(d, ctx);
   return o.kind === 'quarantine' ? o.code : o.kind;
@@ -71,61 +80,93 @@ describe('faq_knowledge wiring', () => {
     const names: string[] = STEPS.map((s) => s.handler);
     expect(names.indexOf('faq_knowledge')).toBeGreaterThan(names.indexOf('flow_bots'));
     expect(names).toContain('faq_replies');
-    expect(STEP_DEPS.faq_knowledge).toEqual(['flow_bots']);
+    expect(STEP_DEPS.faq_knowledge).toEqual(['flow_bots', 'widget_assistants']);
+    expect(names.indexOf('faq_knowledge')).toBeGreaterThan(names.indexOf('widget_assistants'));
     expect(STEP_GROUPS.flows).toContain('faq_knowledge');
     expect(STEP_GROUPS.faq).toEqual(['faq_knowledge']);
     const e = REGISTRY.find((x) => x.collection === 'faq_variations')!;
     expect(e.handler).toBe('faq_replies');
-    expect(e.targets).toEqual(expect.arrayContaining(['keyword_replies', 'faqs', 'faq_variations', 'faq_settings']));
+    expect(e.targets).toEqual(['keyword_replies', 'ai_training_sources']);
     expect(faqKnowledge.virtual).toBe(true);
     expect(STEPS.filter((s) => s.mapCollection === faqKnowledge.mapCollection)).toHaveLength(1);
   });
 
-  it('writes no vector column and names the settings table in raw-writes.json', () => {
+  it('writes no vector column and no retired faq table', () => {
     for (const t of Object.values(faqKnowledge.tables))
       for (const c of t.columns) expect(c.name).not.toMatch(/embed/);
-    expect(scanRawWrites().sql.faq_settings).toEqual(raw.sql.faq_settings);
+    expect(Object.keys(faqKnowledge.tables)).toEqual(['ai_training_sources']);
+    expect(Object.keys(raw.sql).filter((t) => t.startsWith('faq'))).toEqual([]);
+    expect(Object.keys(scanRawWrites().sql).filter((t) => t.startsWith('faq'))).toEqual([]);
   });
 });
 
 describe('faq_knowledge documents', () => {
-  it('an inline answer becomes a paused text FAQ with the question and the phrases as pending variations', () => {
+  it('an inline answer becomes a Q / Also asked as / A block in the "FAQ" text entry of the assistant of its bot', () => {
     const [d] = build([rec(1)], [variations(1, ['can i pay by upi', 'how to pay', 'HOW do I pay 1?'])]);
     const out = rowsOf(d!);
     if (out.kind !== 'rows') throw new Error('rows expected');
-    const faq = out.rows[0]!;
-    expect(faq.table).toBe('faqs');
-    expect(faq.row).toMatchObject({
-      owner_flow_id: 7,
-      question: 'How do I pay 1?',
-      answer_type: 'text',
-      answer_text: 'Pay by card.\n\nOr UPI.',
-      flow_id: null,
-      status: 'paused',
+    expect(out.rows).toHaveLength(1);
+    const e = out.rows[0]!;
+    expect(e.table).toBe('ai_training_sources');
+    expect(e.row).toMatchObject({
+      assistant_id: 11,
+      kind: 'text',
+      label: 'FAQ',
+      content:
+        'Q: How do I pay 1?\nAlso asked as: can i pay by upi | how to pay\nA: Pay by card.\n\nOr UPI.',
+      status: 'ready',
       created_at: '2026-01-01T00:00:00.000Z',
       updated_at: '2026-02-01T00:00:00.000Z',
     });
-    const v = out.rows.slice(1);
-    expect(v.every((r) => r.table === 'faq_variations')).toBe(true);
-    expect(v.map((r) => [r.row.text, r.row.source])).toEqual([
-      ['How do I pay 1?', 'question'],
-      ['can i pay by upi', 'import'],
-      ['how to pay', 'import'],
-    ]); // the repeat of the question (any case) is not a second variation
-    const cols = new Set(faqKnowledge.tables.faq_variations!.columns.map((c) => c.name));
-    for (const r of v) for (const k of Object.keys(r.row)) expect(cols.has(k)).toBe(true);
-    for (const k of Object.keys(faq.row))
-      expect(faqKnowledge.tables.faqs!.columns.some((c) => c.name === k)).toBe(true);
+    expect(e.row.tokens_estimate).toBe(Math.ceil(String(e.row.content).length / 4));
+    for (const k of Object.keys(e.row))
+      expect(faqKnowledge.tables.ai_training_sources!.columns.some((c) => c.name === k)).toBe(true);
   });
 
-  it('without an inline answer the FAQ starts the flow of its bot (the journey cannot be addressed)', () => {
+  it('a question with no other phrasing has no "Also asked as" line; blocks are separated by a blank line', () => {
+    expect(
+      faqEntryText([
+        { question: 'A?', also: [], answer: 'a' },
+        { question: 'B?', also: ['b1', 'b2'], answer: 'b' },
+      ]),
+    ).toBe('Q: A?\nA: a\n\nQ: B?\nAlso asked as: b1 | b2\nA: b');
+  });
+
+  it('one entry per agent: the questions of a bot are one entry; bots without an assistant share one with no agent yet', () => {
+    const docs = build([rec(1), rec(2), rec(3, { botid: 'bot-2' }), rec(4, { botid: 'bot-3' })]);
+    const out = buildKbFaqDocs(docs, (b) => b === BOT).filter((d) => 'entries' in d) as unknown as Array<{
+      id: string;
+      botid: string | null;
+      entries: unknown[];
+    }>;
+    expect(out.map((d) => [d.id, d.botid, d.entries.length])).toEqual([
+      ['kb|bot-1', 'bot-1', 2],
+      ['kb|*', null, 2],
+    ]);
+    const shared = transformDoc(faqKnowledge, out[1] as unknown as Doc, ctxFor(true, false));
+    if (shared.kind !== 'rows') throw new Error('rows expected');
+    expect(shared.rows[0]!.row.assistant_id).toBeNull(); // chosen by the loader hook
+  });
+
+  it('an entry whose assistant was not loaded is quarantined, not parked on another agent', () => {
+    const [d] = build([rec(1)]);
+    expect(codeOf(d!, ctxFor(true, false))).toBe('ASSISTANT_NOT_LOADED');
+  });
+
+  it('keeps the questions that fit and says how many did not when the entry would pass 200000 characters', () => {
+    const big = (n: number) => rec(n, { question: `Question ${n}`, response: [{ type: 'text', value: 'x'.repeat(4000) }] });
+    const docs = build(Array.from({ length: 60 }, (_, i) => big(i + 1)));
+    const [g] = buildKbFaqDocs(docs, () => true) as unknown as Array<{ entries: unknown[]; soft: Array<{ code: string }> }>;
+    expect(faqEntryText(g!.entries as never).length).toBeLessThanOrEqual(KB_FAQ_BODY_MAX);
+    expect(g!.entries.length).toBeLessThan(60);
+    expect(g!.soft.map((s) => s.code)).toContain('FAQ_BODY_CAPPED');
+  });
+
+  it('without an inline answer there is no text to keep: quarantined FLOW_ANSWER_NOT_CARRIED', () => {
     const [d] = build([
       rec(2, { response: undefined, journey: { qid: 'j9', name: 'Pay', nodeId: 'n1' }, type: 'Intent' }),
     ]);
-    const out = rowsOf(d!);
-    if (out.kind !== 'rows') throw new Error('rows expected');
-    expect(out.rows[0]!.row).toMatchObject({ answer_type: 'flow', answer_text: null, flow_id: 7, status: 'paused' });
-    expect(out.soft?.map((s) => s.code)).toContain('QID_NOT_ADDRESSABLE');
+    expect(codeOf(d!)).toBe('FLOW_ANSWER_NOT_CARRIED');
   });
 
   it('the Intent records and the faq_variations of one journey are one FAQ', () => {
@@ -157,7 +198,6 @@ describe('faq_knowledge documents', () => {
   it('quarantines, never guesses: no flow, no question, no answer, too long', () => {
     const off = () => ({ ok: false as const, code: 'BOT_INACTIVE', reason: 'off' });
     expect(codeOf(build([rec(1)], [], off)[0]!)).toBe('NO_OWNER_FLOW');
-    expect(codeOf(build([rec(1)])[0]!, ctxFor(false))).toBe('NO_OWNER_FLOW');
     expect(codeOf(build([rec(1, { question: '  ', query: undefined })])[0]!)).toBe('NO_QUESTION');
     expect(codeOf(build([], [variations(1, ['only phrases'])])[0]!)).toBe('NO_QUESTION');
     expect(codeOf(build([rec(1, { response: [] })])[0]!)).toBe('NO_ANSWER');

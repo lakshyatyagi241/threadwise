@@ -27,7 +27,13 @@ export function verifyTwilioSignature(
   header: string | undefined,
 ): boolean {
   if (!authToken || !header) return false;
-  const want = Buffer.from(twilioSignature(authToken, url, params));
+  let want: Buffer;
+  try {
+    want = Buffer.from(twilioSignature(authToken, url, params));
+  } catch {
+    // A field that is an object (`a[toString]=x` in a form body) cannot be part of what Twilio signed: not genuine, not a 500.
+    return false;
+  }
   const got = Buffer.from(header.trim());
   return want.length === got.length && timingSafeEqual(want, got);
 }

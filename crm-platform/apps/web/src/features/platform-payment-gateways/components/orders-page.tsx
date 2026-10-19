@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useSearchParams } from 'next/navigation';
 import { Fragment, useState } from 'react';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
@@ -26,6 +26,7 @@ const TONE: Record<PaygwOrderStatus, 'success' | 'danger' | 'warning' | 'neutral
 export function OrdersPage() {
   const t = useTranslations(NS);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const params = useSearchParams();
   const outcome = parseOutcome(params.get('payment'));
   const justPaid = params.get('order');
@@ -44,7 +45,7 @@ export function OrdersPage() {
   const items: PaygwOrderItem[] = q.data?.pages.flatMap((p) => p.data) ?? [];
   const spend = q.data?.pages[0]?.lifetimeSpend ?? [];
   const date = (iso: string) =>
-    new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(iso));
+    new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }).format(new Date(iso));
 
   return (
     <div className="mx-auto max-w-5xl space-y-4 p-4">

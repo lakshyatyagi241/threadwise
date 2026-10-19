@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { randomInt } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
+import { legacyValue, tokenHash } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -765,6 +766,7 @@ export class CheckoutService {
       const orderNumber = newOrderNumber(new Date(), (n) =>
         Array.from({ length: n }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(32)]).join(''),
       );
+      const returnToken = randomUUID().replace(/-/g, '');
       try {
         return await this.db.tx(async (tx) => {
           const order = await this.orders.insert(tx, {
@@ -796,9 +798,11 @@ export class CheckoutService {
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,
+            returnToken: { plain: legacyValue(returnToken), hash: tokenHash(returnToken) },
           });
           await recordOrderEvent(tx, this.outbox, order, 'created', { gateway: gateway.slug });
-          return order;
+          // The return URL needs the token once, now; the row may hold only its hash.
+          return { ...order, returnToken };
         });
       } catch (err) {
         const e = err as { code?: string; constraint?: string };

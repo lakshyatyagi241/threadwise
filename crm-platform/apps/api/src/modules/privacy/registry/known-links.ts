@@ -21,7 +21,6 @@ export const KNOWN_NO_FK_LINKS: readonly KnownLink[] = [
   },
   { table: 'message_events', column: 'message_id', holds: 'messages.id' },
   { table: 'conversation_events', column: 'conversation_id', holds: 'conversations.id' },
-  { table: 'faq_match_logs', column: 'conversation_id', holds: 'conversations.id' },
   { table: 'flow_runs', column: 'conversation_id', holds: 'conversations.id' },
   { table: 'ai_call_logs', column: 'caller_phone', holds: 'the caller number as text' },
   { table: 'ai_call_logs', column: 'callee_phone', holds: 'the callee number as text' },

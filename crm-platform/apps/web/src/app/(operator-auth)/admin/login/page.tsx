@@ -10,11 +10,14 @@ import {
 } from '@/features/auth-registration-security/platform/operator-nav';
 import { safeConsolePath } from '@/features/auth-registration-security/platform/lib/next-path';
 import { apiBase, getOperatorSession } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /** Captcha is configured by the platform; the public config says whether the sign-in form needs it. */
 async function captchaConfig(): Promise<CaptchaConfig | null> {
   try {
-    const res = await fetch(`${apiBase()}/v2/auth/registration-config`, { cache: 'no-store' });
+    const res = await upstreamFetch(`${apiBase()}/v2/auth/registration-config`, {
+      cache: 'no-store',
+    });
     if (!res.ok) return null;
     const parsed = registrationConfigResponseSchema.safeParse(await res.json());
     return parsed.success ? parsed.data.captcha : null;

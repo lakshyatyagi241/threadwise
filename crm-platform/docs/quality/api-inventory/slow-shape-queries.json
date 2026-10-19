@@ -939,7 +939,7 @@
  },
  {
   "shape": "count(*) FILTER aggregate",
-  "line": 354,
+  "line": 356,
   "text": "SELECT count(*)::int AS total, count(*) FILTER (WHERE ${whatsappSubscribedSql})::int AS subscribed, count(*) FILTER (WHERE ${contacts.isUnsu",
   "file": "apps/api/src/modules/crm/contacts/contacts.repository.ts",
   "module": "crm"
@@ -1821,6 +1821,13 @@
  },
  {
   "shape": "correlated subquery in SELECT list",
+  "line": 364,
+  "text": "SELECT count(*)::int AS n FROM organizations o JOIN org_plan_state s ON s.org_id = o.id JOIN plans p ON p.slug = o.plan WHERE NOT p.is_free ",
+  "file": "apps/api/src/modules/plans-subscriptions-trials/plan-analytics.service.ts",
+  "module": "plans-subscriptions-trials"
+ },
+ {
+  "shape": "correlated subquery in SELECT list",
   "line": 78,
   "text": "WITH picked AS ( SELECT o.id, o.created_at FROM event_outbox o WHERE o.status = 'dead' AND o.event_type = ${req.eventType} AND EXISTS ( SELE",
   "file": "apps/api/src/modules/platform-async-ops/async-ops.service.ts",
@@ -2499,8 +2506,15 @@
   "module": "workspaces-teams-tenancy"
  },
  {
+  "shape": "correlated subquery in SELECT list",
+  "line": 262,
+  "text": "SELECT org_id, at FROM (SELECT o.id AS org_id, (SELECT max(m.created_at) FROM messages m WHERE m.org_id = o.id) AS at FROM organizations o W",
+  "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.repository.ts",
+  "module": "workspaces-teams-tenancy"
+ },
+ {
   "shape": "count(*) FILTER aggregate",
-  "line": 337,
+  "line": 339,
   "text": "SELECT to_char(created_at AT TIME ZONE 'UTC', 'YYYY-MM-DD') AS day, count(*)::int AS sent, count(*) FILTER (WHERE status IN ('delivered', 'r",
   "file": "apps/api/src/modules/workspaces-teams-tenancy/platform-workspaces.repository.ts",
   "module": "workspaces-teams-tenancy"

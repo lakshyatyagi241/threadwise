@@ -34,6 +34,7 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
   const [text, setText] = useState('');
   const [runAt, setRunAt] = useState('');
   const [stopOnFailure, setStop] = useState(false);
+  const [skipWhatsapp, setSkipWhatsapp] = useState(false);
   const [confirming, setConfirming] = useState(false);
   const [typed, setTyped] = useState('');
   const [problem, setProblem] = useState<string | null>(null);
@@ -52,6 +53,7 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
           organizationIds: parsed.ids,
           mode,
           stopOnFailure,
+          skipWhatsapp,
           ...(mode === 'load' ? { confirmCount: Number(typed) } : {}),
           ...(runAt ? { runAt: localToIso(runAt) } : {}),
         },
@@ -113,6 +115,15 @@ export function BulkForm({ onStarted }: { onStarted: (batch: WabooMigrationBatch
           />
           <p className="mt-1 text-xs text-muted-foreground">{t('stopHint')}</p>
         </div>
+      </div>
+      <div>
+        <Checkbox
+          id={`${id}-skipwa`}
+          checked={skipWhatsapp}
+          onChange={(e) => setSkipWhatsapp(e.target.checked)}
+          label={t('skipWhatsapp')}
+        />
+        <p className="mt-1 text-xs text-muted-foreground">{t('skipWhatsappHint')}</p>
       </div>
       <p className="text-xs text-muted-foreground">{t('sequential')}</p>
       {problem && !confirming && <Alert tone="danger">{problem}</Alert>}

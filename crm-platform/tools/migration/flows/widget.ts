@@ -336,7 +336,7 @@ export function launcherLook(
   return { buttonType, animation, popup };
 }
 
-/** FAQ_LIMITS.fallbackMessage of the application (faq_settings.fallback_message). */
+/** FAQ_LIMITS.fallbackMessage of the application (ai_chat_assistants.fallback_message). */
 export const FALLBACK_MAX = 1024;
 
 /**

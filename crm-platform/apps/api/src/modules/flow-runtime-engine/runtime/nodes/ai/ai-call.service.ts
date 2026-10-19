@@ -6,6 +6,7 @@ import {
   type FlowAiPort,
 } from '../../../../../infra/providers/flow-runtime-engine/flow-ai.port';
 import { AiKeyResolver, AiTokenMeter } from '../../../../ai-keys-usage-admin';
+import { GROUNDED_NOTE, KbRetrievalService } from '../../../../knowledge-base';
 import { type FlowRef } from '../flow-refs';
 import { agentSystemPrompt, extractionSuffix, providerOfModel } from './ai-rules';
 
@@ -85,17 +86,9 @@ interface AgentProfile {
   temperature: number | null;
 }
 
-interface SourceRow {
-  label: string;
-  kind: string;
-  content: string | null;
-  question: string | null;
-  answer: string | null;
-}
-
 /**
  * The flow AI node's one door to a model (TW-FLR-030, Reference's `POST /api/flow-node/ai-call`): picks the vendor from the model name,
- * forces JSON in extraction mode, stitches the attached assistant's knowledge base into the system prompt, resolves the key (the
+ * forces JSON in extraction mode, adds what the attached assistant knows about the message (a few passages of its own knowledge base) to the system prompt, resolves the key (the
  * workspace's own, else the platform's), asks the monthly allowance before using the platform's key, calls the vendor behind the port,
  * and writes the token ledger. It never throws: every failure is an outcome, so a provider problem never crashes a step.
  */
@@ -108,6 +101,7 @@ export class AiCallService {
     private readonly keys: AiKeyResolver,
     private readonly meter: AiTokenMeter,
     @Inject(FLOW_AI_PORT) private readonly port: FlowAiPort,
+    private readonly retrieval: KbRetrievalService,
   ) {}
 
   async call(input: AiCallInput): Promise<AiCallOutcome> {
@@ -177,11 +171,16 @@ export class AiCallService {
       if (input.json) system += extractionSuffix(input.fields ?? []);
       const assistant = input.agentUse === 'model' ? null : assistantRefOf(input.assistantId);
       if (assistant) {
-        const kb = await this.knowledge(input.orgId, assistant).catch((err: unknown) => {
-          this.logger.warn({ err: String(err) }, '[FLR] knowledge base lookup failed');
-          return '';
-        });
-        if (kb !== '') system += `\n\n--- Knowledge base ---\n${kb}\n--- End knowledge base ---`;
+        const kb = await this.knowledge(input.orgId, assistant, input.userPrompt).catch(
+          (err: unknown) => {
+            this.logger.warn({ err: String(err) }, '[FLR] knowledge base lookup failed');
+            return { text: '', grounded: false };
+          },
+        );
+        if (kb.text !== '' || kb.grounded) {
+          system += `\n\n--- Knowledge base ---\n${kb.text || '(no matching excerpts)'}\n--- End knowledge base ---`;
+        }
+        if (kb.grounded) system += `\n\n${GROUNDED_NOTE}`;
       }
 
       const requested = Math.min(MAX_TOKENS, Math.max(1, Math.trunc(eff.maxTokens) || 350));
@@ -247,37 +246,36 @@ export class AiCallService {
     };
   }
 
-  /** The assistant's ready training sources (its own and the workspace-wide ones), as one text block. Empty for another tenant's assistant. */
-  private async knowledge(orgId: number, ref: FlowRef): Promise<string> {
-    const rows = await this.db.txAs({ orgId, userId: null }, async (tx) => {
-      // The workspace's own assistant by row id or uuid; another tenant's (or no) assistant has no row here, so no knowledge.
+  /**
+   * What the assistant reads for this message, as one text block: the few passages of ITS OWN knowledge base that match (`grounded`),
+   * or its whole base when the search cannot run. Empty for another tenant's assistant.
+   */
+  private async knowledge(
+    orgId: number,
+    ref: FlowRef,
+    message: string,
+  ): Promise<{ text: string; grounded: boolean }> {
+    // The workspace's own assistant by row id or uuid; another tenant's (or no) assistant has no row here, so no knowledge.
+    const assistantId = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const own = await tx.execute(
         ref.kind === 'id'
           ? sql`SELECT id FROM ai_chat_assistants WHERE org_id = ${orgId} AND id = ${ref.id}`
           : sql`SELECT id FROM ai_chat_assistants WHERE org_id = ${orgId} AND uuid = ${ref.uuid}::uuid`,
       );
-      if (own.rows.length === 0) return [] as SourceRow[];
-      const assistantId = Number((own.rows[0] as { id: number | string }).id);
-      const res = await tx.execute(sql`
-        SELECT label, kind, content, question, answer FROM ai_training_sources
-        WHERE org_id = ${orgId} AND status = 'ready' AND (assistant_id = ${assistantId} OR assistant_id IS NULL)
-        ORDER BY id`);
-      return res.rows as unknown as SourceRow[];
+      return own.rows.length === 0 ? null : Number((own.rows[0] as { id: number | string }).id);
     });
+    if (assistantId === null) return { text: '', grounded: false };
+    const found = await this.retrieval.retrieve(orgId, assistantId, message);
     const parts: string[] = [];
     let budget = KNOWLEDGE_BUDGET;
-    for (const s of rows) {
-      const text = (
-        s.kind === 'qa'
-          ? `Q: ${(s.question ?? '').trim()}\nA: ${(s.answer ?? '').trim()}`
-          : (s.content ?? '')
-      ).trim();
+    for (const p of found.passages) {
+      const text = p.text.trim();
       if (text === '') continue;
-      const chunk = `[${s.label}]\n${text}`;
+      const chunk = `[${p.label}]\n${text}`;
       parts.push(chunk.slice(0, Math.max(500, budget)));
       budget -= chunk.length;
       if (budget <= 0) break;
     }
-    return parts.join('\n\n');
+    return { text: parts.join('\n\n'), grounded: found.grounded };
   }
 }

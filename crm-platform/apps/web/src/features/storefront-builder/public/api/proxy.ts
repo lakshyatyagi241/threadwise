@@ -1,6 +1,7 @@
 import 'server-only';
 import { apiBase } from '@/lib/auth/server';
 import { isSameOrigin } from '../lib/same-origin';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * Forwarding for the shop's route handlers (`/s/<slug>/checkout|coupon|review|abandon|more`). They validate nothing: the API owns
@@ -57,7 +58,7 @@ export async function forwardPublicPost(
   const body = await req.text();
   if (body.length > MAX_BODY) return problem(413, 'VALIDATION_FAILED', 'Request too large');
   return relay(
-    fetch(`${apiBase()}/v2/store-public/${encodeURIComponent(slug)}/${action}`, {
+    upstreamFetch(`${apiBase()}/v2/store-public/${encodeURIComponent(slug)}/${action}`, {
       method: 'POST',
       headers: forwardHeaders(req, true),
       body,
@@ -73,11 +74,14 @@ export async function forwardPublicHome(req: Request, slug: string): Promise<Res
   const raw = Number.parseInt(new URL(req.url).searchParams.get('page') ?? '1', 10);
   const page = Number.isFinite(raw) && raw >= 1 ? raw : 1;
   return relay(
-    fetch(`${apiBase()}/v2/store-public/${encodeURIComponent(slug)}/home?page=${page}&partial=1`, {
-      method: 'GET',
-      headers: forwardHeaders(req, false),
-      cache: 'no-store',
-    }),
+    upstreamFetch(
+      `${apiBase()}/v2/store-public/${encodeURIComponent(slug)}/home?page=${page}&partial=1`,
+      {
+        method: 'GET',
+        headers: forwardHeaders(req, false),
+        cache: 'no-store',
+      },
+    ),
   );
 }
 
@@ -92,7 +96,7 @@ export async function forwardPaymentWebhook(req: Request): Promise<Response> {
   const signature = req.headers.get('x-razorpay-signature');
   if (signature) headers['X-Razorpay-Signature'] = signature;
   return relay(
-    fetch(`${apiBase()}/v2/store-public/webhooks/razorpay`, {
+    upstreamFetch(`${apiBase()}/v2/store-public/webhooks/razorpay`, {
       method: 'POST',
       headers,
       body: raw,

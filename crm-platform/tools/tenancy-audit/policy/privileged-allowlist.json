@@ -259,21 +259,6 @@
     "reason": "pre-tenant lookup keyed by a high-entropy secret or hash; returns routing data; the org is set only after the secret verifies (unique key prefix, constant-time hash compare, status/expiry/owner checks, failure throttle)",
     "reviewedOn": "2026-10-11"
   },
-  "modules/faq-knowledge/faq-embed.worker.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; markStale is an intentional platform-wide model-change heal",
-    "reviewedOn": "2026-10-11"
-  },
-  "modules/faq-knowledge/faq-platform.service.ts": {
-    "status": "reviewed",
-    "reason": "platform/operator data behind OperatorGuard routes; no tenant route reaches it (FaqPlatformService is not exported from its module)",
-    "reviewedOn": "2026-10-11"
-  },
-  "modules/faq-knowledge/faq-retention.service.ts": {
-    "status": "reviewed",
-    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs",
-    "reviewedOn": "2026-10-11"
-  },
   "modules/flow-builder-editor/builder-context.service.ts": {
     "status": "reviewed",
     "reason": "reads platform admin_ai_keys model list (no tenant data)"
@@ -598,5 +583,10 @@
     "status": "reviewed",
     "reason": "due-escalation sweep; each due row runs inside RequestContextStore for its own workspace, so the audit rows name it",
     "reviewedOn": "2026-10-19"
+  },
+  "modules/knowledge-base/kb-embed.worker.ts": {
+    "status": "reviewed",
+    "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; markStale is an intentional platform-wide model-change heal",
+    "reviewedOn": "2026-10-11"
   }
 }

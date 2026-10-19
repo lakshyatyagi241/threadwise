@@ -77,7 +77,7 @@ export type UploadAiagSourceFields = z.infer<typeof uploadAiagSourceFieldsSchema
 
 export const aiagSourceSchema = z.object({
   id: uuidSchema,
-  /** Null for a workspace-wide entry, which every assistant of the workspace also answers from. */
+  /** Always the assistant it belongs to: a knowledge base is one agent's. Null only for a leftover agent-less row, which nobody reads. */
   assistantId: uuidSchema.nullable(),
   kind: z.enum(AIAG_SOURCE_KINDS),
   label: z.string(),

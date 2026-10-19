@@ -24,7 +24,6 @@ import { DEP_OPERATOR_NAV } from '../../platform-deployments/operator-nav';
 import { CAT_OPERATOR_NAV } from '../../catalog-products/operator-nav';
 import { MARKET_OPERATOR_NAV } from '../../marketplace/operator-nav';
 import { SUPP_OPERATOR_NAV } from '../../platform-support-desk/operator-nav';
-import { FAQ_OPERATOR_NAV } from '../../faq-knowledge/platform/operator-nav';
 import { LSC_OPERATOR_NAV } from '../../lead-scoring/platform/operator-nav';
 import { RETENTION_OPERATOR_NAV } from '../../data-retention/operator-nav';
 import { DPDP_OPERATOR_NAV } from '../../dpdp-register/platform/operator-nav';
@@ -147,8 +146,6 @@ export const OPERATOR_NAV: readonly OperatorNavItem[] = [
     labelKey: 'ai-keys-usage-admin.admin.nav.dashboard',
     groupKey: 'ai-keys-usage-admin.admin.nav.group',
   },
-  // FAQ engine (FAQ, not a Reference feature): messages/en/faq-knowledge-admin.json
-  ...FAQ_OPERATOR_NAV,
   // AI lead scoring (LSC, not a Reference feature): messages/en/lead-scoring-admin.json
   ...LSC_OPERATOR_NAV,
   // DPDP compliance register (not a Reference feature): messages/en/dpdp-register-admin.json

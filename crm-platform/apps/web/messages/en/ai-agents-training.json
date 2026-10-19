@@ -224,20 +224,20 @@
           "title": "Free text",
           "body": "Paste a help snippet or a policy."
         },
-        "qa": {
-          "title": "Q&A pair",
-          "body": "One question with its canonical answer."
-        },
         "file": {
           "title": "PDF, DOCX, TXT & more",
           "body": "Upload a file. The text is extracted for you."
+        },
+        "faq": {
+          "title": "Add FAQ",
+          "body": "Questions and the answers you want given."
         }
       },
       "panel": {
         "url": "Fetch a public URL",
         "text": "Paste plain text",
-        "qa": "Single Q&A",
-        "file": "Upload a knowledge file"
+        "file": "Upload a knowledge file",
+        "faq": "Add questions and answers"
       },
       "label": "Label",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Label (e.g. Pricing page)",
           "text": "Label (e.g. Refund policy summary)",
-          "qa": "Label (e.g. Refund timing)",
           "file": "Label (e.g. Product handbook)"
         },
         "content": "Paste any text the agent should know…",
         "question": "Question, e.g. How long do refunds take?",
         "answer": "Answer, e.g. Refunds settle within 3 to 5 business days."
       },
-      "urlHint": "Only public http and https pages are read. The page is fetched in the background, so the entry shows Processing for a moment.",
+      "urlHint": "Only public http and https pages are read. The page is read in the background, so it may take a moment.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV or HTML, up to 10 MB. Text is extracted automatically.",
       "uploading": "Upload progress",
       "submit": {
         "url": "Fetch & train",
         "text": "Save text",
-        "qa": "Save pair",
-        "file": "Upload"
+        "file": "Upload",
+        "faq": "Save FAQ"
       },
       "cancel": "Cancel",
       "added": "Knowledge added.",
@@ -281,25 +280,6 @@
         "file_empty": "That file is empty.",
         "tooLarge": "That is too much text for one paste. Upload it as a file instead."
       },
-      "col": {
-        "kind": "Kind",
-        "label": "Label",
-        "state": "State",
-        "actions": "Actions"
-      },
-      "kind": {
-        "url": "url",
-        "text": "text",
-        "qa": "q&a",
-        "file": "file"
-      },
-      "state": {
-        "ready": "ready",
-        "processing": "processing",
-        "failed": "failed"
-      },
-      "tokens": "about {count} tokens",
-      "workspaceWide": "workspace-wide",
       "loading": "Loading entries",
       "loadError": "Could not load the entries.",
       "retry": "Try again",
@@ -310,7 +290,14 @@
       "removeBody": "The agent will stop using it for new replies. Older conversations stay unchanged.",
       "keep": "Keep",
       "removed": "Removed.",
-      "removeFailed": "Remove failed."
+      "removeFailed": "Remove failed.",
+      "ownedNote": "This knowledge belongs to this agent only. No other agent can use it.",
+      "faq": {
+        "addAnother": "Add another question",
+        "removeRow": "Remove this question"
+      },
+      "reading": "Reading…",
+      "failed": "This could not be read."
     }
   }
 }

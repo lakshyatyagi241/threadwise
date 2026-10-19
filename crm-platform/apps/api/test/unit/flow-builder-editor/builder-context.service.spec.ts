@@ -35,11 +35,7 @@ const run = <T>(fn: () => Promise<T>): Promise<T> =>
 function service(answers: Array<[RegExp, Row[]]>, flags: Record<string, unknown> = {}) {
   const { db, seen } = fakeDb(answers);
   const settings = { get: async (k: string) => flags[k] };
-  const svc = new BuilderContextService(
-    db as never,
-    settings as never,
-    GATE_ON,
-  );
+  const svc = new BuilderContextService(db as never, settings as never, GATE_ON);
   return { svc, seen };
 }
 
@@ -197,6 +193,42 @@ describe('BuilderContextService.context (TW-FLB-026)', () => {
     const q = seen.find((x) => x.includes('FROM ai_agents'))!;
     expect(q).not.toContain('is_active');
     expect(q).toContain('ORDER BY id');
+  });
+
+  it('offers templates the way the broadcast composer does: Meta approval on a Meta workspace, the local approval (or public) elsewhere', async () => {
+    const tpl = {
+      uuid: 't-1',
+      template_name: 'order_ready',
+      category: 'utility',
+      header: null,
+      template_body: 'Hi',
+      footer: null,
+      attachment_type: null,
+      attachment_file: null,
+      buttons: [],
+      carousel_data: null,
+      variable_map: {},
+    };
+    const waba = service([
+      [/FROM workspace_settings/, [{ default_engine: 'waba' }]],
+      [/FROM wa_templates/, [tpl]],
+    ]);
+    const wctx = await run(() => waba.svc.context());
+    expect(wctx.templates.map((t) => t.name)).toEqual(['order_ready']);
+    const metaQuery = waba.seen.find((q) => q.includes('FROM wa_templates'))!;
+    expect(metaQuery).toContain("t.meta_status = 'APPROVED'");
+    expect(metaQuery).not.toContain("t.status IN ('approved', 'public')");
+
+    const local = service([
+      [/FROM workspace_settings/, [{ default_engine: 'twilio' }]],
+      [/FROM wa_templates/, [tpl]],
+    ]);
+    await run(() => local.svc.context());
+    const localQuery = local.seen.find((q) => q.includes('FROM wa_templates'))!;
+    expect(localQuery).toContain("t.status IN ('approved', 'public')");
+    expect(localQuery).not.toContain("t.meta_status = 'APPROVED'");
+    expect(localQuery).toContain("c.status = 'connected'");
+    expect(localQuery).toContain("coalesce(t.channel, 'waba') <> 'sms'");
   });
 
   it('teams group their members; a team with no member has an empty list', async () => {
