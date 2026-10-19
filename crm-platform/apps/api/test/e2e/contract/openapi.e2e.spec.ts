@@ -102,7 +102,7 @@ describe('customer API document (/api/v1)', () => {
       }
     }
     expect(Object.keys(doc.paths).length).toBeGreaterThan(0);
-    expect(problems.slice(0, 40)).toEqual([]);
+    expect(problems.slice(0, 40), problems.join('\n')).toEqual([]);
   });
 
   it('does not break the callers of the committed baseline', async () => {
