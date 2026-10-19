@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "Arquivos de exportação de auditoria",
         "description": "O CSV que um espaço de trabalho solicita do seu log de auditoria. Quem solicitou recebe um e-mail com um link para entrar e baixá-lo; o arquivo é excluído após os dias ativos."
+      },
+      "message_log": {
+        "title": "Registo de entrega de mensagens",
+        "description": "O registo de entrega de cada mensagem: enviada, entregue, falhada, repetida. Os eventos saem da tabela ativa após os dias ativos e passam, comprimidos, para o arquivo; os dias de arquivo contam a partir desse dia. O registo de uma mensagem e as exportações do registo ainda podem ler o arquivo."
+      },
+      "notifications_read": {
+        "title": "Notificações (lidas)",
+        "description": "Notificações do sino que um utilizador já leu. São eliminadas quando atingem este número de dias. O valor predefinido vem das definições do servidor (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notificações (nunca lidas)",
+        "description": "Notificações do sino que ninguém abriu. São eliminadas quando atingem este número de dias, e nunca antes das lidas (a gravação é recusada se isso acontecesse). O valor predefinido vem das definições do servidor (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Dispositivos push revogados",
+        "description": "Navegadores e telemóveis que deixaram de aceitar notificações push. Mantidos por pouco tempo para que um dispositivo que regresse possa reativar as notificações, e depois eliminados."
+      },
+      "faq_match_log": {
+        "title": "Registo de correspondências de FAQ",
+        "description": "Que FAQ respondeu a que mensagem de cliente, guardado para mostrar a cada fluxo o desempenho das suas respostas. Eliminado após os dias ativos."
+      },
+      "assignment_runs": {
+        "title": "Registo de execuções de atribuição",
+        "description": "O registo de cada execução de atribuição automática de contactos, com quem recebeu o quê e porquê. Eliminado após os dias ativos."
+      },
+      "form_events": {
+        "title": "Eventos de análise de formulários",
+        "description": "Visualizações, inícios e envios dos formulários web, usados nos gráficos de conversão de formulários. Não contêm respostas. Eliminados após os dias ativos. As respostas seguem a retenção própria de cada formulário."
+      },
+      "lead_sync_runs": {
+        "title": "Execuções de sincronização de leads",
+        "description": "O registo de cada sincronização ou recuperação de leads de uma plataforma de anúncios: quem obteve o quê e quando. Eliminado após os dias ativos. Os dados brutos dos leads seguem a retenção própria de cada origem."
+      },
+      "lead_scoring_runs": {
+        "title": "Registo de pontuação de leads com IA",
+        "description": "Cada pontuação de lead com IA com os seus motivos, e as leituras de conversas e sugestões de fase que a sustentam. Até guardar um valor aqui, é usado o número definido nas definições de pontuação de leads com IA. Uma pessoa sob retenção legal mantém os seus registos."
+      },
+      "api_library_logs": {
+        "title": "Registo de execuções da Biblioteca de API",
+        "description": "O registo de pedido e resposta de cada chamada à Biblioteca de API. Eliminado após os dias ativos."
+      },
+      "flow_run_logs": {
+        "title": "Registo de execuções de automação",
+        "description": "Cada execução concluída de um fluxo de automação com os seus passos, e as versões de fluxo para as quais já nenhuma execução aponta. As execuções em curso nunca são tocadas."
+      },
+      "webhook_forward_failures": {
+        "title": "Entregas de webhook falhadas",
+        "description": "Entregas de webhook que falharam e ainda podem ser reenviadas. Após os dias ativos já não podem ser reenviadas e são eliminadas."
+      },
+      "click_calls": {
+        "title": "Chamadas click-to-call não reportadas",
+        "description": "Uma chamada click-to-call cuja chamada concluída nunca voltou do fornecedor. Esquecida após os dias ativos."
+      },
+      "call_recordings": {
+        "title": "Gravações de chamadas",
+        "description": "O número predefinido de dias que uma gravação de chamada é mantida, para os espaços de trabalho que nunca escolheram o seu próprio prazo; o prazo próprio de um espaço de trabalho continua a prevalecer. Depois disso, o ficheiro da gravação é eliminado e a chamada permanece. Uma gravação sob retenção legal é mantida."
       }
     },
     "fields": {
@@ -73,7 +129,9 @@
       "neverRun": "Ainda não foi executada",
       "runLive": "{when}: {months, plural, one {# mês arquivado} many {# meses arquivados} other {# meses arquivados}} ({rows} linhas, {size}), {expired} excluídos do arquivo, {deleted} linhas ou arquivos excluídos",
       "runDry": "{when}: execução de teste (dry-run), nada foi alterado",
-      "runFailed": "A última execução teve um problema: {error}"
+      "runFailed": "A última execução teve um problema: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# linha ou ficheiro eliminado} other {# linhas ou ficheiros eliminados}}",
+      "runDaily": "{when}: {rows} eventos movidos para o arquivo, {expired} dias arquivados eliminados"
     },
     "actions": {
       "save": "Salvar",
@@ -94,7 +152,8 @@
       "toDeleteFromArchive": "{count, plural, one {# mês arquivado será excluído definitivamente do arquivo.} many {# meses arquivados serão excluídos definitivamente do arquivo.} other {# meses arquivados serão excluídos definitivamente do arquivo.}}",
       "rowsToDelete": "{count, plural, one {# linha ou arquivo será excluído definitivamente.} many {# linhas ou arquivos serão excluídos definitivamente.} other {# linhas ou arquivos serão excluídos definitivamente.}}",
       "notApplied": "A tarefa de arquivamento ainda não aplica os valores salvos, portanto nada disso acontece até que ela seja ativada.",
-      "permanent": "A exclusão é permanente e não pode ser desfeita."
+      "permanent": "A exclusão é permanente e não pode ser desfeita.",
+      "rowsToArchive": "{count, plural, one {# evento vai ser movido} other {# eventos vão ser movidos}} da tabela ativa para o arquivo."
     },
     "saved": "Retenção salva.",
     "resetDone": "Voltou ao comportamento atual.",
@@ -103,7 +162,8 @@
       "archive_out_of_range": "Os dias de arquivo devem ser um número inteiro de {min} a {max}.",
       "archive_not_supported": "Este item não pode ser arquivado.",
       "delete_before_archive": "Os dados não podem ser excluídos antes de serem arquivados.",
-      "not_a_number": "Informe um número inteiro de dias."
+      "not_a_number": "Informe um número inteiro de dias.",
+      "unread_before_read": "As notificações não lidas não podem ser eliminadas antes das lidas. Defina os dias das não lidas para pelo menos os dias das lidas."
     },
     "errors": {
       "forbidden": "Você não tem permissão para fazer isso.",
@@ -112,6 +172,34 @@
       "request": "A solicitação foi recusada.",
       "unexpected": "Algo deu errado no servidor. Tente novamente.",
       "network": "Não foi possível conectar ao servidor. Verifique sua conexão e tente novamente."
+    },
+    "groups": {
+      "analytics": "Análises",
+      "security": "Segurança e auditoria",
+      "messaging": "Mensagens e notificações",
+      "crm": "CRM e leads",
+      "automation": "Automação e integrações",
+      "calling": "Chamadas"
+    },
+    "table": {
+      "title": "Retenção num relance",
+      "description": "O que cada tipo de dados guarda e durante quanto tempo. Selecione um item para alterar os respetivos valores abaixo.",
+      "item": "Dados",
+      "storedIn": "Guardado em",
+      "live": "Ativo (base de dados)",
+      "archive": "Arquivo",
+      "deleted": "Eliminado definitivamente após",
+      "setting": "Definição",
+      "days": "{count, plural, one {# dia} other {# dias}}",
+      "noArchive": "Sem arquivo",
+      "forever": "Para sempre",
+      "never": "Nunca",
+      "where": {
+        "partitioned": "Base de dados e depois arquivo {driver}",
+        "daily_archive": "Base de dados e depois arquivo na base de dados",
+        "table": "Apenas base de dados",
+        "file": "Ficheiros"
+      }
     }
   }
 }

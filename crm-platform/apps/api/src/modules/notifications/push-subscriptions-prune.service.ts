@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 import { PushSubscriptionsRepository } from './push-subscriptions.repository';
 
 /** A revoked device is kept this long (so a browser that comes back after a hiccup can re-enable) and then deleted. */
@@ -30,8 +31,12 @@ export class PushSubscriptionsPruneService {
   }
 
   async runOnce(now: Date = new Date()): Promise<number> {
-    const cutoff = new Date(now.getTime() - REVOKED_KEEP_DAYS * 86_400_000);
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'push_devices_revoked', REVOKED_KEEP_DAYS),
+    );
+    const cutoff = new Date(now.getTime() - days * 86_400_000);
     const deleted = await this.db.privileged((tx) => this.repo.pruneRevoked(tx, cutoff));
+    await recordSweep(this.db, this.logger, 'push_devices_revoked', { deletedRows: deleted }, now);
     if (deleted > 0) this.logger.log({ deleted }, 'revoked push devices pruned');
     return deleted;
   }

@@ -27,6 +27,7 @@ import {
   toLogEvent,
   type StoredEvent,
 } from './message-log-rules';
+import { MESSAGE_LOG_MIN_HOT_DAYS, messageLogWindows } from './message-log-windows';
 import type { HistoryExportRequest, MessageLogFacade } from './message-log.facade';
 import { MessagesRepository } from './messages.repository';
 
@@ -37,6 +38,14 @@ const RANGE_MESSAGES = {
   future: 'The end date cannot be in the future.',
   too_old: 'Logs are kept for one year. Choose dates within the last 365 days.',
 } as const;
+
+/** The refusal text for a range; the "too old" line names the window the platform currently keeps. */
+function rangeMessage(problem: keyof typeof RANGE_MESSAGES, retentionDays: number | null): string {
+  if (problem === 'too_old' && retentionDays !== null && retentionDays !== 365) {
+    return `Logs are kept for ${retentionDays} days. Choose dates within the last ${retentionDays} days.`;
+  }
+  return RANGE_MESSAGES[problem];
+}
 
 /** The archive's lines of one message: every line of the day objects that names it. */
 export async function archivedEventsOf(
@@ -78,6 +87,8 @@ export class MessageLogService implements MessageLogFacade {
 
   async messageLog(messageUuid: string, now: Date = new Date()): Promise<MessageLogResponse> {
     const ctx = RequestContextStore.require();
+    // The windows the platform retention settings give the log now (the tenant session cannot read the policy table).
+    const windows = await this.db.privileged((ptx) => messageLogWindows(ptx));
     return this.db.tx(async (tx) => {
       const row = await this.messages.byUuid(tx, ctx.orgId, messageUuid);
       if (!row) {
@@ -93,12 +104,14 @@ export class MessageLogService implements MessageLogFacade {
         sortId: Number.MAX_SAFE_INTEGER - 1_000_000 + i,
       }));
 
-      // Events older than the live window are in the archive: only a message that is itself older than the cut can have any.
-      const cut = hotCutoff(now);
+      // Events older than the live window are in the archive: only a message that is itself older than the cut can have any. The
+      // live window can have been longer or shorter on the days the sweep ran, so the archive is searched from the shortest window the
+      // settings allow up to yesterday; a day with nothing archived costs one empty lookup.
+      const cut = hotCutoff(now, Math.min(windows.hotDays, MESSAGE_LOG_MIN_HOT_DAYS));
       let archived: Array<StoredEvent & { sortId: number }> = [];
       if (row.createdAt.getTime() < cut.getTime()) {
         const from = dayOf(row.createdAt);
-        const lastArchivedDay = addDays(dayOf(cut), -1);
+        const lastArchivedDay = addDays(dayOf(now), -1);
         const to =
           addDays(from, ARCHIVE_LOOKAHEAD_DAYS) < lastArchivedDay
             ? addDays(from, ARCHIVE_LOOKAHEAD_DAYS)
@@ -128,7 +141,9 @@ export class MessageLogService implements MessageLogFacade {
           return toLogEvent(e, by === null ? null : (uuids.get(by) ?? null));
         }),
         fromArchive: archived.length > 0,
-        expired: row.createdAt.getTime() < retentionCutoff(now).getTime() && events.length === 0,
+        expired:
+          row.createdAt.getTime() < retentionCutoff(now, windows.retentionDays).getTime() &&
+          events.length === 0,
       };
     });
   }
@@ -137,13 +152,19 @@ export class MessageLogService implements MessageLogFacade {
     input: CreateMessageLogExportInput,
     now: Date = new Date(),
   ): Promise<MessageLogExport> {
-    const problem = exportRangeProblem(input.from, input.to, now);
+    const windows = await this.db.privileged((tx) => messageLogWindows(tx));
+    const problem = exportRangeProblem(input.from, input.to, now, windows.retentionDays);
     if (problem) {
       throw new AppError(
         ERROR_CODES.MESSAGE_LOG_EXPORT_RANGE_INVALID,
-        RANGE_MESSAGES[problem],
+        rangeMessage(problem, windows.retentionDays),
         HttpStatus.UNPROCESSABLE_ENTITY,
-        [{ path: problem === 'order' ? 'from' : 'to', message: RANGE_MESSAGES[problem] }],
+        [
+          {
+            path: problem === 'order' ? 'from' : 'to',
+            message: rangeMessage(problem, windows.retentionDays),
+          },
+        ],
       );
     }
     return this.queueExport({

@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "Denetim dışa aktarma dosyaları",
         "description": "Bir çalışma alanının denetim günlüğünden talep ettiği CSV. Talep eden, oturum açıp indirmesi için bağlantı içeren bir e-posta alır; dosya canlı günler sonunda silinir."
+      },
+      "message_log": {
+        "title": "Mesaj teslim günlüğü",
+        "description": "Her mesajın teslim günlüğü: gönderildi, teslim edildi, başarısız, yeniden denendi. Olaylar canlı günlerin ardından canlı tablodan ayrılır ve sıkıştırılarak arşive taşınır; arşiv günleri o günden itibaren sayılır. Bir mesajın günlüğü ve günlük dışa aktarımları arşivi yine de okuyabilir."
+      },
+      "notifications_read": {
+        "title": "Bildirimler (okunmuş)",
+        "description": "Kullanıcının zaten okuduğu zil bildirimleri. Bu kadar günlük olduklarında silinirler. Yerleşik sayı sunucu ayarlarından gelir (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Bildirimler (hiç okunmamış)",
+        "description": "Kimsenin açmadığı zil bildirimleri. Bu kadar günlük olduklarında silinirler ve asla okunmuş olanlardan önce silinmezler (böyle olacaksa kayıt reddedilir). Yerleşik sayı sunucu ayarlarından gelir (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "İptal edilen push cihazları",
+        "description": "Push bildirimlerini kabul etmeyi bırakan tarayıcılar ve telefonlar. Geri dönen bir cihaz bildirimleri yeniden açabilsin diye kısa süre saklanır, sonra silinir."
+      },
+      "faq_match_log": {
+        "title": "SSS eşleşme günlüğü",
+        "description": "Hangi SSS'nin hangi müşteri mesajını yanıtladığı; her akışa yanıtlarının nasıl performans gösterdiğini göstermek için saklanır. Canlı günlerden sonra silinir."
+      },
+      "assignment_runs": {
+        "title": "Atama çalıştırma günlüğü",
+        "description": "Her otomatik kişi atama çalıştırmasının kaydı: kime ne verildiği ve nedeni. Canlı günlerden sonra silinir."
+      },
+      "form_events": {
+        "title": "Form analitik olayları",
+        "description": "Web formlarının görüntülenme, başlatma ve gönderme olayları; form dönüşüm grafiklerinde kullanılır. Yanıt içermezler. Canlı günlerden sonra silinir. Yanıtların kendisi her formun kendi saklama süresine uyar."
+      },
+      "lead_sync_runs": {
+        "title": "Potansiyel müşteri senkronizasyon çalıştırmaları",
+        "description": "Bir reklam platformundan yapılan her potansiyel müşteri senkronizasyonunun veya geri doldurmanın kaydı: kimin neyi ne zaman çektiği. Canlı günlerden sonra silinir. Ham potansiyel müşteri verileri her kaynağın kendi saklama süresine uyar."
+      },
+      "lead_scoring_runs": {
+        "title": "Yapay zeka potansiyel müşteri puanlama günlüğü",
+        "description": "Nedenleriyle birlikte her yapay zeka potansiyel müşteri puanı ve arkasındaki görüşme okumaları ile aşama önerileri. Burada bir değer kaydedene kadar yapay zeka potansiyel müşteri puanlama ayarlarındaki sayı kullanılır. Yasal saklama altındaki bir kişinin kayıtları korunur."
+      },
+      "api_library_logs": {
+        "title": "API Library çalıştırma günlüğü",
+        "description": "Her API Library çağrısının istek ve yanıt günlüğü. Canlı günlerden sonra silinir."
+      },
+      "flow_run_logs": {
+        "title": "Otomasyon çalıştırma günlüğü",
+        "description": "Bir otomasyon akışının adımlarıyla birlikte her tamamlanmış çalıştırması ve artık hiçbir çalıştırmanın işaret etmediği akış sürümleri. Devam eden çalıştırmalara asla dokunulmaz."
+      },
+      "webhook_forward_failures": {
+        "title": "Başarısız webhook teslimleri",
+        "description": "Başarısız olan ve hâlâ yeniden oynatılabilen webhook teslimleri. Canlı günlerden sonra artık yeniden oynatılamaz ve silinir."
+      },
+      "click_calls": {
+        "title": "Bildirilmemiş click-to-call aramaları",
+        "description": "Biten araması sağlayıcıdan hiç dönmeyen bir click-to-call. Canlı günlerden sonra unutulur."
+      },
+      "call_recordings": {
+        "title": "Arama kayıtları",
+        "description": "Kendi süresini hiç seçmemiş çalışma alanları için bir arama kaydının saklanacağı varsayılan gün sayısı; çalışma alanının kendi süresi yine önceliklidir. Süre dolunca kayıt dosyası silinir, arama kalır. Yasal saklama altındaki kayıt korunur."
       }
     },
     "fields": {
@@ -73,7 +129,9 @@
       "neverRun": "Henüz çalışmadı",
       "runLive": "{when}: {months, plural, one {# ay} other {# ay}} arşivlendi ({rows} satır, {size}), arşivden {expired} silindi, {deleted} satır veya dosya silindi",
       "runDry": "{when}: dry-run, hiçbir şey değiştirilmedi",
-      "runFailed": "Son çalışmada bir sorun oluştu: {error}"
+      "runFailed": "Son çalışmada bir sorun oluştu: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# satır veya dosya} other {# satır veya dosya}} silindi",
+      "runDaily": "{when}: {rows} olay arşive taşındı, {expired} arşiv günü silindi"
     },
     "actions": {
       "save": "Kaydet",
@@ -94,7 +152,8 @@
       "toDeleteFromArchive": "{count, plural, one {# arşivlenmiş ay} other {# arşivlenmiş ay}} arşivden kalıcı olarak silinecek.",
       "rowsToDelete": "{count, plural, one {# satır veya dosya} other {# satır veya dosya}} kalıcı olarak silinecek.",
       "notApplied": "Arşiv işi kaydedilen değerleri henüz uygulamıyor, bu yüzden etkinleştirilene kadar bunların hiçbiri gerçekleşmez.",
-      "permanent": "Silme kalıcıdır ve geri alınamaz."
+      "permanent": "Silme kalıcıdır ve geri alınamaz.",
+      "rowsToArchive": "{count, plural, one {# olay} other {# olay}} canlı tablodan arşive taşınacak."
     },
     "saved": "Saklama kaydedildi.",
     "resetDone": "Mevcut davranışa dönüldü.",
@@ -103,7 +162,8 @@
       "archive_out_of_range": "Arşiv günü, {min} ile {max} arasında bir tam sayı olmalıdır.",
       "archive_not_supported": "Bu öğe arşivlenemez.",
       "delete_before_archive": "Veri, arşivlenmeden önce silinemez.",
-      "not_a_number": "Tam sayı olarak gün sayısı girin."
+      "not_a_number": "Tam sayı olarak gün sayısı girin.",
+      "unread_before_read": "Okunmamış bildirimler okunmuş olanlardan önce silinemez. Okunmamış gün sayısını en az okunmuş gün sayısı kadar yapın."
     },
     "errors": {
       "forbidden": "Bunu yapma izniniz yok.",
@@ -112,6 +172,34 @@
       "request": "İstek reddedildi.",
       "unexpected": "Sunucuda bir sorun oluştu. Tekrar deneyin.",
       "network": "Sunucuya ulaşılamadı. Bağlantınızı kontrol edip tekrar deneyin."
+    },
+    "groups": {
+      "analytics": "Analitik",
+      "security": "Güvenlik ve denetim",
+      "messaging": "Mesajlaşma ve bildirimler",
+      "crm": "CRM ve potansiyel müşteriler",
+      "automation": "Otomasyon ve entegrasyonlar",
+      "calling": "Arama"
+    },
+    "table": {
+      "title": "Saklama özeti",
+      "description": "Her veri türünün neyi ne kadar süre sakladığı. Aşağıdaki sayılarını değiştirmek için bir öğe seçin.",
+      "item": "Veri",
+      "storedIn": "Saklandığı yer",
+      "live": "Canlı (veritabanı)",
+      "archive": "Arşiv",
+      "deleted": "Kalıcı olarak silinme süresi",
+      "setting": "Ayar",
+      "days": "{count, plural, one {# gün} other {# gün}}",
+      "noArchive": "Arşiv yok",
+      "forever": "Süresiz",
+      "never": "Asla",
+      "where": {
+        "partitioned": "Veritabanı, ardından {driver} arşivi",
+        "daily_archive": "Veritabanı, ardından veritabanı arşivi",
+        "table": "Yalnızca veritabanı",
+        "file": "Dosyalar"
+      }
     }
   }
 }

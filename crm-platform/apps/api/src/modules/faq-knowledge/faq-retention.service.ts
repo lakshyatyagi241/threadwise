@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { DatabaseService } from '../../infra/db/database.service';
 import { FaqLogRepository } from './faq-log.repository';
+import { liveDaysFor, recordSweep } from '../data-retention';
 import { LOG_RETENTION_DAYS } from './faq.rules';
 
 const BATCH = 1000;
@@ -33,14 +34,17 @@ export class FaqRetentionService {
   }
 
   async sweep(): Promise<number> {
+    // A window saved on the retention dashboard replaces the built-in number; read at every run.
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'faq_match_log', LOG_RETENTION_DAYS),
+    );
     let total = 0;
     for (let i = 0; i < MAX_BATCHES; i++) {
-      const n = await this.db.privileged((tx) =>
-        this.logs.purgeOlderThan(tx, LOG_RETENTION_DAYS, BATCH),
-      );
+      const n = await this.db.privileged((tx) => this.logs.purgeOlderThan(tx, days, BATCH));
       total += n;
       if (n < BATCH) break;
     }
+    await recordSweep(this.db, this.logger, 'faq_match_log', { deletedRows: total });
     return total;
   }
 }

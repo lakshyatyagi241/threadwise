@@ -6,7 +6,9 @@ import { retentionOverviewSchema, type RetentionOverview } from '@crm/contracts'
 import { Alert, Button, Spinner } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
+import { RETENTION_GROUPS } from '@crm/contracts';
 import { ItemCard } from './item-card';
+import { RetentionTable } from './retention-table';
 import { errorKind } from './lib/errors';
 import { DATA_RETENTION_QUERY_KEY } from './queries';
 
@@ -75,14 +77,29 @@ export function DataRetentionPage() {
           })}
         </p>
       </Alert>
-      {/* Remounted on every new version so a save, a reset or a conflict leaves the form showing what the server holds. */}
-      {q.data.items.map((item) => (
-        <ItemCard
-          key={`${item.id}:${item.rowVersion ?? 0}:${item.source}`}
-          item={item}
-          canEdit={canEdit}
-        />
-      ))}
+      <RetentionTable items={q.data.items} archiveDriver={q.data.engine.archiveDriver} />
+      {RETENTION_GROUPS.map((group) => {
+        const items = q.data.items.filter((i) => i.group === group);
+        if (items.length === 0) return null;
+        return (
+          <section key={group} className="space-y-4" aria-labelledby={`retention-group-${group}`}>
+            <h2
+              id={`retention-group-${group}`}
+              className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground"
+            >
+              {t(`groups.${group}`)}
+            </h2>
+            {/* Remounted on every new version so a save, a reset or a conflict leaves the form showing what the server holds. */}
+            {items.map((item) => (
+              <ItemCard
+                key={`${item.id}:${item.rowVersion ?? 0}:${item.source}`}
+                item={item}
+                canEdit={canEdit}
+              />
+            ))}
+          </section>
+        );
+      })}
     </div>
   );
 }

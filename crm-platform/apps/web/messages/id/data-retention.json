@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "File ekspor audit",
         "description": "CSV yang diminta workspace dari log auditnya. Peminta menerima email berisi tautan untuk masuk dan mengunduhnya; file dihapus setelah hari aktif."
+      },
+      "message_log": {
+        "title": "Log pengiriman pesan",
+        "description": "Log pengiriman setiap pesan: terkirim, tersampaikan, gagal, dicoba ulang. Peristiwa meninggalkan tabel aktif setelah hari aktif berlalu dan dipindahkan, terkompresi, ke arsip; hari arsip lalu dihitung sejak hari itu. Log sebuah pesan dan ekspor log tetap dapat membaca arsip."
+      },
+      "notifications_read": {
+        "title": "Notifikasi (sudah dibaca)",
+        "description": "Notifikasi lonceng yang sudah dibaca pengguna. Dihapus setelah berusia sekian hari. Angka bawaan berasal dari pengaturan server (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notifikasi (belum pernah dibaca)",
+        "description": "Notifikasi lonceng yang tidak dibuka siapa pun. Dihapus setelah berusia sekian hari, dan tidak pernah lebih awal dari yang sudah dibaca (penyimpanan ditolak jika hal itu terjadi). Angka bawaan berasal dari pengaturan server (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Perangkat push yang dicabut",
+        "description": "Peramban dan ponsel yang berhenti menerima notifikasi push. Disimpan sebentar agar perangkat yang kembali dapat mengaktifkan notifikasi lagi, lalu dihapus."
+      },
+      "faq_match_log": {
+        "title": "Log kecocokan FAQ",
+        "description": "FAQ mana yang menjawab pesan pelanggan mana, disimpan untuk menunjukkan kepada setiap alur seberapa baik jawabannya. Dihapus setelah hari aktif."
+      },
+      "assignment_runs": {
+        "title": "Log eksekusi penugasan",
+        "description": "Catatan setiap eksekusi penugasan kontak otomatis: siapa mendapat apa dan mengapa. Dihapus setelah hari aktif."
+      },
+      "form_events": {
+        "title": "Peristiwa analitik formulir",
+        "description": "Tampilan, awal pengisian, dan pengiriman formulir web, digunakan untuk grafik konversi formulir. Tidak berisi jawaban. Dihapus setelah hari aktif. Jawaban itu sendiri mengikuti retensi masing-masing formulir."
+      },
+      "lead_sync_runs": {
+        "title": "Eksekusi sinkronisasi lead",
+        "description": "Catatan setiap sinkronisasi atau pengisian ulang lead dari platform iklan: siapa mengambil apa dan kapan. Dihapus setelah hari aktif. Data mentah lead mengikuti retensi masing-masing sumber."
+      },
+      "lead_scoring_runs": {
+        "title": "Log penilaian lead AI",
+        "description": "Setiap skor lead AI beserta alasannya, dan pembacaan percakapan serta saran tahap yang mendasarinya. Sebelum Anda menyimpan nilai di sini, angka dari pengaturan penilaian lead AI yang dipakai. Orang yang berada di bawah penahanan hukum tetap menyimpan catatannya."
+      },
+      "api_library_logs": {
+        "title": "Log eksekusi API Library",
+        "description": "Log permintaan dan respons setiap panggilan API Library. Dihapus setelah hari aktif."
+      },
+      "flow_run_logs": {
+        "title": "Log eksekusi otomasi",
+        "description": "Setiap eksekusi alur otomasi yang selesai beserta langkah-langkahnya, dan versi alur yang tidak lagi dirujuk eksekusi mana pun. Eksekusi yang masih berjalan tidak pernah disentuh."
+      },
+      "webhook_forward_failures": {
+        "title": "Pengiriman webhook yang gagal",
+        "description": "Pengiriman webhook yang gagal dan masih dapat diputar ulang. Setelah hari aktif, pengiriman itu tidak dapat diputar ulang lagi dan dihapus."
+      },
+      "click_calls": {
+        "title": "Panggilan click-to-call yang tidak dilaporkan",
+        "description": "Click-to-call yang panggilan selesainya tidak pernah kembali dari penyedia. Dilupakan setelah hari aktif."
+      },
+      "call_recordings": {
+        "title": "Rekaman panggilan",
+        "description": "Jumlah hari default rekaman panggilan disimpan, untuk ruang kerja yang tidak pernah memilih jangka waktunya sendiri; jangka waktu ruang kerja sendiri tetap diutamakan. Setelah itu file rekaman dihapus dan panggilannya tetap ada. Rekaman di bawah penahanan hukum tetap disimpan."
       }
     },
     "fields": {
@@ -73,7 +129,9 @@
       "neverRun": "Belum pernah berjalan",
       "runLive": "{when}: {months, plural, other {# bulan}} diarsipkan ({rows} baris, {size}), {expired} dihapus dari arsip, {deleted} baris atau file dihapus",
       "runDry": "{when}: dry run, tidak ada yang diubah",
-      "runFailed": "Proses terakhir mengalami masalah: {error}"
+      "runFailed": "Proses terakhir mengalami masalah: {error}",
+      "runDeleted": "{when}: {deleted, plural, other {# baris atau file}} dihapus",
+      "runDaily": "{when}: {rows} peristiwa dipindahkan ke arsip, {expired} hari arsip dihapus"
     },
     "actions": {
       "save": "Simpan",
@@ -94,7 +152,8 @@
       "toDeleteFromArchive": "{count, plural, other {# bulan arsip}} akan dihapus permanen dari arsip.",
       "rowsToDelete": "{count, plural, other {# baris atau file}} akan dihapus permanen.",
       "notApplied": "Job arsip belum menjalankan nilai yang disimpan, jadi tidak ada yang terjadi sampai job diaktifkan.",
-      "permanent": "Penghapusan bersifat permanen dan tidak dapat dibatalkan."
+      "permanent": "Penghapusan bersifat permanen dan tidak dapat dibatalkan.",
+      "rowsToArchive": "{count, plural, other {# peristiwa}} akan dipindahkan dari tabel aktif ke arsip."
     },
     "saved": "Retensi disimpan.",
     "resetDone": "Kembali ke perilaku saat ini.",
@@ -103,7 +162,8 @@
       "archive_out_of_range": "Hari arsip harus berupa bilangan bulat dari {min} sampai {max}.",
       "archive_not_supported": "Item ini tidak dapat diarsipkan.",
       "delete_before_archive": "Data tidak dapat dihapus sebelum diarsipkan.",
-      "not_a_number": "Masukkan jumlah hari berupa bilangan bulat."
+      "not_a_number": "Masukkan jumlah hari berupa bilangan bulat.",
+      "unread_before_read": "Notifikasi yang belum dibaca tidak dapat dihapus sebelum yang sudah dibaca. Atur hari belum dibaca minimal sama dengan hari sudah dibaca."
     },
     "errors": {
       "forbidden": "Anda tidak diizinkan melakukan itu.",
@@ -112,6 +172,34 @@
       "request": "Permintaan ditolak.",
       "unexpected": "Terjadi kesalahan di server. Coba lagi.",
       "network": "Tidak dapat menjangkau server. Periksa koneksi Anda dan coba lagi."
+    },
+    "groups": {
+      "analytics": "Analitik",
+      "security": "Keamanan dan audit",
+      "messaging": "Pesan dan notifikasi",
+      "crm": "CRM dan lead",
+      "automation": "Otomasi dan integrasi",
+      "calling": "Panggilan"
+    },
+    "table": {
+      "title": "Ringkasan retensi",
+      "description": "Apa yang disimpan setiap jenis data dan berapa lama. Pilih item untuk mengubah angkanya di bawah.",
+      "item": "Data",
+      "storedIn": "Disimpan di",
+      "live": "Aktif (database)",
+      "archive": "Arsip",
+      "deleted": "Dihapus permanen setelah",
+      "setting": "Pengaturan",
+      "days": "{count, plural, other {# hari}}",
+      "noArchive": "Tanpa arsip",
+      "forever": "Selamanya",
+      "never": "Tidak pernah",
+      "where": {
+        "partitioned": "Database, lalu arsip {driver}",
+        "daily_archive": "Database, lalu arsip database",
+        "table": "Hanya database",
+        "file": "File"
+      }
     }
   }
 }

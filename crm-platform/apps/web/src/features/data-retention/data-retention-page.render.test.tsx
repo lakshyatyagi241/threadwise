@@ -19,6 +19,7 @@ const item = (
   return {
     id,
     kind: spec.kind,
+    group: spec.group,
     canArchive: spec.canArchive,
     source: 'default',
     liveDays: spec.defaults.liveDays,
@@ -75,8 +76,57 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
     for (const spec of RETENTION_ITEMS)
       expect(html).toContain(`data-testid="retention-${spec.id}"`);
     // Items that can be archived have an archive field and the "for ever" switch; the others do not.
-    expect(html.match(/type="number"/g)).toHaveLength(2 + 2 + 1 + 1);
+    const archivable = RETENTION_ITEMS.filter((i) => i.canArchive).length;
+    expect(html.match(/type="number"/g)).toHaveLength(RETENTION_ITEMS.length + archivable);
     expect(html).toContain('data-testid="retention-summary-an_events"');
+  });
+
+  it('covers every item the platform deletes on a schedule, in both kinds of retention', () => {
+    const ids = RETENTION_ITEMS.map((i) => i.id);
+    for (const id of [
+      'an_events',
+      'audit_log',
+      'security_events',
+      'audit_log_exports',
+      'message_log',
+      'notifications_read',
+      'notifications_unread',
+      'push_devices_revoked',
+      'faq_match_log',
+      'assignment_runs',
+      'form_events',
+      'lead_sync_runs',
+      'lead_scoring_runs',
+      'api_library_logs',
+      'flow_run_logs',
+      'webhook_forward_failures',
+      'click_calls',
+      'call_recordings',
+    ] as const) {
+      expect(ids).toContain(id);
+    }
+    // Database cleanup (days in the database) and archival (days in the archive) are both editable.
+    expect(RETENTION_ITEMS.some((i) => i.canArchive && i.kind === 'partitioned')).toBe(true);
+    expect(RETENTION_ITEMS.some((i) => i.canArchive && i.kind === 'daily_archive')).toBe(true);
+  });
+
+  it('puts every number in one table that links to the cards', () => {
+    const html = page(
+      overview({}, [
+        item('an_events', { source: 'custom', liveDays: 30, archiveDays: 120, rowVersion: 1 }),
+        item('faq_match_log'),
+        item('audit_log', { liveDays: 365, archiveDays: null }),
+      ]),
+      locale,
+    );
+    expect(html).toContain('data-testid="retention-table"');
+    expect(html).toContain('data-testid="retention-row-live-an_events"');
+    expect(html).toContain('href="#retention-faq_match_log"');
+    // 30 days live + 120 archived = deleted for good after 150 days; a database-only item is deleted after its live days.
+    expect(html).toMatch(/retention-row-deleted-an_events"[^>]*>[^<]*150/);
+    expect(html).toMatch(/retention-row-deleted-faq_match_log"[^>]*>[^<]*90/);
+    // An archive kept for ever is never deleted.
+    expect(html).toContain('data-testid="retention-row-deleted-audit_log"');
   });
 
   it('shows the archive job state above the items', () => {

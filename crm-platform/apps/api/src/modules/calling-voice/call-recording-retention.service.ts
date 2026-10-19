@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { CALL_RECORDING_RETENTION_DEFAULT_DAYS } from '@crm/contracts';
+import { liveDaysFor, recordSweep } from '../data-retention';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ChatMediaStore } from '../../infra/providers/chat-conversations/media';
 import { CallRecordingRepository } from './call-recording.repository';
@@ -42,25 +43,22 @@ export class CallRecordingRetentionService {
 
   async sweep(now: Date = new Date()): Promise<{ deleted: number; failed: number }> {
     await this.db.privileged((tx) => this.repo.stampUnclocked(tx));
+    // The platform default for a workspace that never chose its own window; a workspace's own window still wins.
+    const defaultDays = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'call_recordings', CALL_RECORDING_RETENTION_DEFAULT_DAYS),
+    );
     let deleted = 0;
     let failed = 0;
     for (let i = 0; i < MAX_BATCHES; i++) {
       const batch = await this.db.privileged((tx) =>
-        this.repo.expired(tx, now, BATCH, CALL_RECORDING_RETENTION_DEFAULT_DAYS),
+        this.repo.expired(tx, now, BATCH, defaultDays),
       );
       if (batch.length === 0) break;
       let progressed = 0;
       for (const r of batch) {
         try {
           const done = await this.db.txAs({ orgId: r.orgId, userId: null }, async (tx) => {
-            const ok = await this.repo.lockExpired(
-              tx,
-              r.orgId,
-              r.id,
-              r.key,
-              now,
-              CALL_RECORDING_RETENTION_DEFAULT_DAYS,
-            );
+            const ok = await this.repo.lockExpired(tx, r.orgId, r.id, r.key, now, defaultDays);
             if (!ok) return false;
             await this.media.remove(r.orgId, r.key);
             await this.repo.writeRemoved(tx, r.orgId, r.id, 'retention');
@@ -80,6 +78,17 @@ export class CallRecordingRetentionService {
       }
       if (progressed === 0) break;
     }
+    await recordSweep(
+      this.db,
+      this.logger,
+      'call_recordings',
+      {
+        deletedRows: deleted,
+        outcome: failed > 0 ? 'partial' : 'ok',
+        error: failed > 0 ? `${failed} recordings could not be deleted` : null,
+      },
+      now,
+    );
     return { deleted, failed };
   }
 }

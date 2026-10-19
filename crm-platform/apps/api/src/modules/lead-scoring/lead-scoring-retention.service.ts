@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 import { LeadChatDigestService } from './lead-chat-digest.service';
 import { LeadScoringConfigService } from './lead-scoring-config.service';
 import { LeadScoringRepository } from './lead-scoring.repository';
@@ -33,9 +34,15 @@ export class LeadScoringRetentionService {
   }
 
   async sweep(): Promise<number> {
-    const { retentionDays } = await this.config.getFresh();
+    const configured = (await this.config.getFresh()).retentionDays;
+    // A window saved on the retention dashboard replaces the one in the AI lead scoring settings.
+    const retentionDays = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'lead_scoring_runs', configured),
+    );
     const runs = await this.db.privileged((tx) => this.repo.deleteOlderThan(tx, retentionDays));
     // The conversation readings and the stage suggestions follow the same retention (and open suggestions expire).
-    return runs + (await this.digests.sweepOld(retentionDays));
+    const total = runs + (await this.digests.sweepOld(retentionDays));
+    await recordSweep(this.db, this.logger, 'lead_scoring_runs', { deletedRows: total });
+    return total;
   }
 }

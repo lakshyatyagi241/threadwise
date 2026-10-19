@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "Audit-Exportdateien",
         "description": "Die CSV-Datei, die ein Workspace aus seinem Audit-Protokoll anfordert. Der Anfragende erhält eine E-Mail mit einem Link zum Anmelden und Herunterladen; die Datei wird nach den Live-Tagen gelöscht."
+      },
+      "message_log": {
+        "title": "Zustellprotokoll der Nachrichten",
+        "description": "Das Zustellprotokoll jeder Nachricht: gesendet, zugestellt, fehlgeschlagen, wiederholt. Ereignisse verlassen die Live-Tabelle nach den Live-Tagen und wandern komprimiert ins Archiv; die Archivtage zählen ab diesem Tag. Das Protokoll einer Nachricht und die Protokoll-Exporte können weiterhin das Archiv lesen."
+      },
+      "notifications_read": {
+        "title": "Benachrichtigungen (gelesen)",
+        "description": "Glocken-Benachrichtigungen, die ein Benutzer bereits gelesen hat. Sie werden gelöscht, sobald sie so viele Tage alt sind. Der integrierte Wert stammt aus den Servereinstellungen (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Benachrichtigungen (nie gelesen)",
+        "description": "Glocken-Benachrichtigungen, die niemand geöffnet hat. Sie werden gelöscht, sobald sie so viele Tage alt sind, und nie vor den gelesenen (das Speichern wird abgelehnt, wenn dies der Fall wäre). Der integrierte Wert stammt aus den Servereinstellungen (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Widerrufene Push-Geräte",
+        "description": "Browser und Handys, die keine Push-Benachrichtigungen mehr annehmen. Sie werden kurz aufbewahrt, damit ein Gerät, das zurückkehrt, Benachrichtigungen wieder aktivieren kann, und dann gelöscht."
+      },
+      "faq_match_log": {
+        "title": "FAQ-Trefferprotokoll",
+        "description": "Welche FAQ welche Kundennachricht beantwortet hat, aufbewahrt, um jedem Flow zu zeigen, wie seine Antworten abschneiden. Wird nach den Live-Tagen gelöscht."
+      },
+      "assignment_runs": {
+        "title": "Zuweisungslauf-Protokoll",
+        "description": "Die Aufzeichnung jedes automatischen Kontaktzuweisungslaufs, mit Angabe, wer was bekam und warum. Wird nach den Live-Tagen gelöscht."
+      },
+      "form_events": {
+        "title": "Formular-Analyseereignisse",
+        "description": "Aufrufe, Starts und Absendungen der Web-Formulare, verwendet für die Formular-Conversion-Diagramme. Sie enthalten keine Antworten. Werden nach den Live-Tagen gelöscht. Die Antworten selbst folgen der eigenen Aufbewahrung jedes Formulars."
+      },
+      "lead_sync_runs": {
+        "title": "Lead-Synchronisierungsläufe",
+        "description": "Die Aufzeichnung jeder Lead-Synchronisierung oder Nachholung von einer Werbeplattform: wer was wann abgerufen hat. Wird nach den Live-Tagen gelöscht. Die rohen Lead-Daten folgen der eigenen Aufbewahrung jeder Quelle."
+      },
+      "lead_scoring_runs": {
+        "title": "KI-Lead-Scoring-Protokoll",
+        "description": "Jeder KI-Lead-Score mit seinen Gründen sowie die Gesprächsauswertungen und Phasenvorschläge dahinter. Bis Sie hier einen Wert speichern, gilt die Zahl aus den Einstellungen für KI-Lead-Scoring. Bei einer Person unter Legal Hold bleiben die Datensätze erhalten."
+      },
+      "api_library_logs": {
+        "title": "API-Library-Ausführungsprotokoll",
+        "description": "Das Anfrage- und Antwortprotokoll jedes API-Library-Aufrufs. Wird nach den Live-Tagen gelöscht."
+      },
+      "flow_run_logs": {
+        "title": "Automatisierungs-Ausführungsprotokoll",
+        "description": "Jede beendete Ausführung eines Automatisierungs-Flows mit ihren Schritten sowie Flow-Versionen, auf die keine Ausführung mehr verweist. Laufende Ausführungen werden nie angetastet."
+      },
+      "webhook_forward_failures": {
+        "title": "Fehlgeschlagene Webhook-Zustellungen",
+        "description": "Webhook-Zustellungen, die fehlgeschlagen sind und noch wiederholt werden können. Nach den Live-Tagen können sie nicht mehr wiederholt werden und werden gelöscht."
+      },
+      "click_calls": {
+        "title": "Nicht zurückgemeldete Click-to-Call-Anrufe",
+        "description": "Ein Click-to-Call, dessen beendeter Anruf nie vom Anbieter zurückgemeldet wurde. Wird nach den Live-Tagen vergessen."
+      },
+      "call_recordings": {
+        "title": "Anrufaufzeichnungen",
+        "description": "Die Standardanzahl an Tagen, die eine Anrufaufzeichnung aufbewahrt wird, für Arbeitsbereiche, die nie ein eigenes Fenster gewählt haben; das eigene Fenster eines Arbeitsbereichs hat weiterhin Vorrang. Danach wird die Aufzeichnungsdatei gelöscht, der Anruf bleibt bestehen. Eine Aufzeichnung unter Legal Hold bleibt erhalten."
       }
     },
     "fields": {
@@ -73,7 +129,9 @@
       "neverRun": "Noch nicht gelaufen",
       "runLive": "{when}: {months, plural, one {# Monat} other {# Monate}} archiviert ({rows} Zeilen, {size}), {expired} aus dem Archiv gelöscht, {deleted} Zeilen oder Dateien gelöscht",
       "runDry": "{when}: Probelauf, nichts wurde geändert",
-      "runFailed": "Beim letzten Lauf ist ein Problem aufgetreten: {error}"
+      "runFailed": "Beim letzten Lauf ist ein Problem aufgetreten: {error}",
+      "runDeleted": "{when}: {deleted, plural, one {# Zeile oder Datei} other {# Zeilen oder Dateien}} gelöscht",
+      "runDaily": "{when}: {rows} Ereignisse ins Archiv verschoben, {expired} archivierte Tage gelöscht"
     },
     "actions": {
       "save": "Speichern",
@@ -94,7 +152,8 @@
       "toDeleteFromArchive": "{count, plural, one {# archivierter Monat} other {# archivierte Monate}} werden endgültig aus dem Archiv gelöscht.",
       "rowsToDelete": "{count, plural, one {# Zeile oder Datei} other {# Zeilen oder Dateien}} werden endgültig gelöscht.",
       "notApplied": "Der Archivierungsjob setzt gespeicherte Werte noch nicht um, daher passiert nichts davon, bis er aktiviert ist.",
-      "permanent": "Das Löschen ist endgültig und kann nicht rückgängig gemacht werden."
+      "permanent": "Das Löschen ist endgültig und kann nicht rückgängig gemacht werden.",
+      "rowsToArchive": "{count, plural, one {# Ereignis wird} other {# Ereignisse werden}} aus der Live-Tabelle ins Archiv verschoben."
     },
     "saved": "Aufbewahrung gespeichert.",
     "resetDone": "Zurück zum aktuellen Verhalten.",
@@ -103,7 +162,8 @@
       "archive_out_of_range": "Archivtage müssen eine ganze Zahl von {min} bis {max} sein.",
       "archive_not_supported": "Dieser Eintrag kann nicht archiviert werden.",
       "delete_before_archive": "Die Daten können nicht gelöscht werden, bevor sie archiviert sind.",
-      "not_a_number": "Geben Sie eine ganze Zahl von Tagen ein."
+      "not_a_number": "Geben Sie eine ganze Zahl von Tagen ein.",
+      "unread_before_read": "Ungelesene Benachrichtigungen können nicht vor gelesenen gelöscht werden. Setzen Sie die Tage für ungelesene auf mindestens die Tage für gelesene."
     },
     "errors": {
       "forbidden": "Sie sind dazu nicht berechtigt.",
@@ -112,6 +172,34 @@
       "request": "Die Anfrage wurde abgelehnt.",
       "unexpected": "Auf dem Server ist ein Fehler aufgetreten. Versuchen Sie es erneut.",
       "network": "Der Server ist nicht erreichbar. Prüfen Sie Ihre Verbindung und versuchen Sie es erneut."
+    },
+    "groups": {
+      "analytics": "Analysen",
+      "security": "Sicherheit und Audit",
+      "messaging": "Nachrichten und Benachrichtigungen",
+      "crm": "CRM und Leads",
+      "automation": "Automatisierung und Integrationen",
+      "calling": "Telefonie"
+    },
+    "table": {
+      "title": "Aufbewahrung im Überblick",
+      "description": "Was jede Datenart behält und wie lange. Wählen Sie einen Eintrag, um die Zahlen unten zu ändern.",
+      "item": "Daten",
+      "storedIn": "Gespeichert in",
+      "live": "Live (Datenbank)",
+      "archive": "Archiv",
+      "deleted": "Endgültig gelöscht nach",
+      "setting": "Einstellung",
+      "days": "{count, plural, one {# Tag} other {# Tage}}",
+      "noArchive": "Kein Archiv",
+      "forever": "Unbegrenzt",
+      "never": "Nie",
+      "where": {
+        "partitioned": "Datenbank, danach {driver}-Archiv",
+        "daily_archive": "Datenbank, danach Datenbankarchiv",
+        "table": "Nur Datenbank",
+        "file": "Dateien"
+      }
     }
   }
 }

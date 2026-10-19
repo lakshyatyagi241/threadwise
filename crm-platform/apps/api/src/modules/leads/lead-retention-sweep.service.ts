@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 import { LeadSyncRunsRepository } from './lead-sync-runs.repository';
 
 const BATCH = 1000;
@@ -35,7 +36,11 @@ export class LeadRetentionSweepService {
     try {
       const purged = await this.sweep();
       if (purged > 0) this.logger.log({ purged }, 'lead payload retention sweep');
-      const pruned = await this.db.privileged((tx) => this.runs.prune(tx, SYNC_RUN_RETENTION_DAYS));
+      const days = await this.db.privileged((tx) =>
+        liveDaysFor(tx, 'lead_sync_runs', SYNC_RUN_RETENTION_DAYS),
+      );
+      const pruned = await this.db.privileged((tx) => this.runs.prune(tx, days));
+      await recordSweep(this.db, this.logger, 'lead_sync_runs', { deletedRows: pruned });
       if (pruned > 0) this.logger.log({ pruned }, 'lead sync run retention sweep');
     } catch (err) {
       this.logger.error({ err }, 'lead payload retention sweep failed');

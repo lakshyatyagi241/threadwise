@@ -78,6 +78,12 @@ export function hasImpact(p: {
   toArchive: readonly unknown[];
   toDeleteFromArchive: readonly unknown[];
   rowsToDelete: number | null;
+  rowsToArchive?: number | null | undefined;
 }): boolean {
-  return p.toArchive.length > 0 || p.toDeleteFromArchive.length > 0 || (p.rowsToDelete ?? 0) > 0;
+  return (
+    p.toArchive.length > 0 ||
+    p.toDeleteFromArchive.length > 0 ||
+    (p.rowsToDelete ?? 0) > 0 ||
+    (p.rowsToArchive ?? 0) > 0
+  );
 }

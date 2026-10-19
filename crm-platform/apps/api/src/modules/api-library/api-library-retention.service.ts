@@ -3,6 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { API_LIBRARY_LOG_RETENTION_DAYS } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../data-retention';
 
 const BATCH = 1000;
 const MAX_BATCHES = 50;
@@ -34,6 +35,9 @@ export class ApiLibraryRetentionService {
   }
 
   async sweep(): Promise<number> {
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'api_library_logs', API_LIBRARY_LOG_RETENTION_DAYS),
+    );
     let total = 0;
     for (let i = 0; i < MAX_BATCHES; i++) {
       const n = await this.db.privileged(async (tx) => {
@@ -41,13 +45,14 @@ export class ApiLibraryRetentionService {
           DELETE FROM api_library_logs
           WHERE (id, created_at) IN (
             SELECT id, created_at FROM api_library_logs
-            WHERE created_at < now() - make_interval(days => ${API_LIBRARY_LOG_RETENTION_DAYS}) LIMIT ${BATCH})
+            WHERE created_at < now() - make_interval(days => ${days}) LIMIT ${BATCH})
           RETURNING 1`);
         return res.rows.length;
       });
       total += n;
       if (n < BATCH) break;
     }
+    await recordSweep(this.db, this.logger, 'api_library_logs', { deletedRows: total });
     return total;
   }
 }

@@ -47,7 +47,12 @@ export function ItemCard({ item, canEdit }: { item: RetentionItemView; canEdit: 
   const refresh = () => qc.invalidateQueries({ queryKey: DATA_RETENTION_QUERY_KEY });
   const onError = (err: unknown) => {
     const kind = errorKind(err);
-    toast.error(t(`errors.${kind}`));
+    // The client already checked the ranges, so for the bell feed the one rule left is read-before-unread.
+    toast.error(
+      kind === 'validation' && item.id.startsWith('notifications_')
+        ? t('validation.unread_before_read')
+        : t(`errors.${kind}`),
+    );
     if (kind === 'conflict') void refresh();
   };
 
@@ -126,10 +131,14 @@ export function ItemCard({ item, canEdit }: { item: RetentionItemView; canEdit: 
   const run = item.lastRun;
 
   return (
-    <Card className="space-y-4" data-testid={`retention-${item.id}`}>
+    <Card
+      className="scroll-mt-20 space-y-4"
+      id={`retention-${item.id}`}
+      data-testid={`retention-${item.id}`}
+    >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold">{itemName}</h2>
+          <h3 className="text-lg font-semibold">{itemName}</h3>
           <p className="max-w-3xl text-sm text-muted-foreground">
             {t(`items.${item.id}.description`)}
           </p>
@@ -286,6 +295,14 @@ export function ItemCard({ item, canEdit }: { item: RetentionItemView; canEdit: 
             {run ? (
               run.mode === 'dry_run' ? (
                 t('stats.runDry', { when: when(run.at) })
+              ) : item.kind === 'table' || item.kind === 'file' ? (
+                t('stats.runDeleted', { when: when(run.at), deleted: f.number(run.deletedRows) })
+              ) : item.kind === 'daily_archive' ? (
+                t('stats.runDaily', {
+                  when: when(run.at),
+                  rows: f.number(run.deletedRows),
+                  expired: f.number(run.expiredItems),
+                })
               ) : (
                 t('stats.runLive', {
                   when: when(run.at),
@@ -332,6 +349,11 @@ export function ItemCard({ item, canEdit }: { item: RetentionItemView; canEdit: 
                     {t('preview.toDeleteFromArchive', {
                       count: pending.preview.toDeleteFromArchive.length,
                     })}
+                  </li>
+                )}
+                {(pending.preview.rowsToArchive ?? 0) > 0 && (
+                  <li>
+                    {t('preview.rowsToArchive', { count: pending.preview.rowsToArchive ?? 0 })}
                   </li>
                 )}
                 {(pending.preview.rowsToDelete ?? 0) > 0 && (

@@ -3,6 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { sql } from 'drizzle-orm';
 import { CALL_RECORDING_RETENTION_DEFAULT_DAYS } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../../data-retention';
 
 /** A click-to-call whose finished call never came back is forgotten after this many days. */
 const PLACEMENT_DAYS = 2;
@@ -34,7 +35,13 @@ export class CallLogRetentionService {
   }
 
   async sweep(): Promise<{ recordings: number; placements: number }> {
-    return this.db.privileged(async (tx) => {
+    const out = await this.db.privileged(async (tx) => {
+      const recordingDays = await liveDaysFor(
+        tx,
+        'call_recordings',
+        CALL_RECORDING_RETENTION_DEFAULT_DAYS,
+      );
+      const placementDays = await liveDaysFor(tx, 'click_calls', PLACEMENT_DAYS);
       const cleared = await tx.execute(sql`
         UPDATE call_log_entries e
         SET recording_ref = NULL, recording_deleted_at = now()
@@ -43,14 +50,16 @@ export class CallLogRetentionService {
           AND NOT is_subject_held(e.org_id, 'contact', e.contact_id)
           AND e.recording_stored_at < now() - make_interval(days => coalesce(
                 (SELECT s.retention_days FROM call_recording_settings s WHERE s.org_id = e.org_id),
-                ${CALL_RECORDING_RETENTION_DEFAULT_DAYS}))
+                ${recordingDays}))
         RETURNING e.id`);
       const placements = await tx.execute(sql`
-        DELETE FROM telephony_click_calls WHERE created_at < now() - make_interval(days => ${PLACEMENT_DAYS}) RETURNING id`);
+        DELETE FROM telephony_click_calls WHERE created_at < now() - make_interval(days => ${placementDays}) RETURNING id`);
       return {
         recordings: (cleared as { rows: unknown[] }).rows.length,
         placements: (placements as { rows: unknown[] }).rows.length,
       };
     });
+    await recordSweep(this.db, this.logger, 'click_calls', { deletedRows: out.placements });
+    return out;
   }
 }

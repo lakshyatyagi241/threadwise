@@ -38,6 +38,62 @@
       "audit_log_exports": {
         "title": "审计导出文件",
         "description": "工作区从其审计日志请求的 CSV。请求者会收到一封带有登录并下载链接的邮件；文件在在线天数后删除。"
+      },
+      "message_log": {
+        "title": "消息投递日志",
+        "description": "每条消息的投递日志：已发送、已送达、失败、重试。事件在超过在线天数后会从在线表压缩移入归档，归档天数从移入当天开始计算。消息日志和日志导出仍可读取归档。"
+      },
+      "notifications_read": {
+        "title": "通知（已读）",
+        "description": "用户已读的铃铛通知。存放满这个天数后会被删除。默认值来自服务器设置（NOTIFY_RETENTION_READ_DAYS）。"
+      },
+      "notifications_unread": {
+        "title": "通知（从未读）",
+        "description": "无人打开过的铃铛通知。存放满这个天数后会被删除，且不会早于已读通知（若会出现这种情况，保存将被拒绝）。默认值来自服务器设置（NOTIFY_RETENTION_UNREAD_DAYS）。"
+      },
+      "push_devices_revoked": {
+        "title": "已撤销的推送设备",
+        "description": "已停止接收推送通知的浏览器和手机。会短暂保留，以便重新上线的设备可以再次开启通知，之后将被删除。"
+      },
+      "faq_match_log": {
+        "title": "FAQ 匹配日志",
+        "description": "记录哪条 FAQ 回答了哪条客户消息，用于向每个流程展示其回答的效果。超过在线天数后删除。"
+      },
+      "assignment_runs": {
+        "title": "分配运行日志",
+        "description": "每次联系人自动分配运行的记录，包括谁获得了什么以及原因。超过在线天数后删除。"
+      },
+      "form_events": {
+        "title": "表单分析事件",
+        "description": "网页表单的浏览、开始和提交，用于表单转化图表。不包含任何答案。超过在线天数后删除。答案本身遵循各表单自己的保留设置。"
+      },
+      "lead_sync_runs": {
+        "title": "线索同步运行",
+        "description": "每次从广告平台同步或回填线索的记录：谁在何时拉取了什么。超过在线天数后删除。原始线索数据遵循各来源自己的保留设置。"
+      },
+      "lead_scoring_runs": {
+        "title": "AI 线索评分日志",
+        "description": "每个 AI 线索评分及其原因，以及作为依据的对话解读和阶段建议。在此处保存数值之前，将使用 AI 线索评分设置中的天数。处于法律保全状态的人员，其记录会保留。"
+      },
+      "api_library_logs": {
+        "title": "API Library 运行日志",
+        "description": "每次 API Library 调用的请求和响应日志。超过在线天数后删除。"
+      },
+      "flow_run_logs": {
+        "title": "自动化运行日志",
+        "description": "自动化流程每次已完成的运行及其步骤，以及不再被任何运行引用的流程版本。进行中的运行不会受到影响。"
+      },
+      "webhook_forward_failures": {
+        "title": "失败的 Webhook 投递",
+        "description": "已失败但仍可重放的 Webhook 投递。超过在线天数后将无法再重放，并被删除。"
+      },
+      "click_calls": {
+        "title": "未回报的点击拨号呼叫",
+        "description": "已完成的通话结果始终未从服务商返回的点击拨号。超过在线天数后丢弃。"
+      },
+      "call_recordings": {
+        "title": "通话录音",
+        "description": "通话录音的默认保留天数，适用于从未自行选择期限的工作区；工作区自己的期限仍然优先。到期后录音文件将被删除，通话记录保留。处于法律保全状态的录音会保留。"
       }
     },
     "fields": {
@@ -73,7 +129,9 @@
       "neverRun": "尚未运行",
       "runLive": "{when}：已归档 {months, plural, other {# 个月}}（{rows} 行，{size}），从归档中删除 {expired}，删除 {deleted} 行或文件",
       "runDry": "{when}：试运行，未更改任何内容",
-      "runFailed": "上次运行出现问题：{error}"
+      "runFailed": "上次运行出现问题：{error}",
+      "runDeleted": "{when}：已删除{deleted, plural, other {#行或文件}}",
+      "runDaily": "{when}：已将 {rows} 个事件移入归档，已删除 {expired} 天的归档"
     },
     "actions": {
       "save": "保存",
@@ -94,7 +152,8 @@
       "toDeleteFromArchive": "{count, plural, other {# 个已归档月份}}将从归档中永久删除。",
       "rowsToDelete": "{count, plural, other {# 行或文件}}将被永久删除。",
       "notApplied": "归档任务尚未执行已保存的数值，因此在启用之前，以上操作都不会发生。",
-      "permanent": "删除是永久性的，无法撤销。"
+      "permanent": "删除是永久性的，无法撤销。",
+      "rowsToArchive": "{count, plural, other {#个事件}}将从在线表移入归档。"
     },
     "saved": "保留设置已保存。",
     "resetDone": "已恢复为当前行为。",
@@ -103,7 +162,8 @@
       "archive_out_of_range": "归档天数必须是 {min} 到 {max} 之间的整数。",
       "archive_not_supported": "此项目无法归档。",
       "delete_before_archive": "数据在归档之前不能被删除。",
-      "not_a_number": "请输入整数天数。"
+      "not_a_number": "请输入整数天数。",
+      "unread_before_read": "未读通知不能早于已读通知删除。请将未读天数设置为不少于已读天数。"
     },
     "errors": {
       "forbidden": "你无权执行此操作。",
@@ -112,6 +172,34 @@
       "request": "请求被拒绝。",
       "unexpected": "服务器出错。请重试。",
       "network": "无法连接到服务器。请检查网络连接后重试。"
+    },
+    "groups": {
+      "analytics": "分析",
+      "security": "安全与审计",
+      "messaging": "消息与通知",
+      "crm": "CRM 与线索",
+      "automation": "自动化与集成",
+      "calling": "通话"
+    },
+    "table": {
+      "title": "保留概览",
+      "description": "每类数据保留什么以及保留多久。选择一项即可在下方更改其数值。",
+      "item": "数据",
+      "storedIn": "存储位置",
+      "live": "在线（数据库）",
+      "archive": "归档",
+      "deleted": "彻底删除于",
+      "setting": "设置",
+      "days": "{count, plural, other {#天}}",
+      "noArchive": "无归档",
+      "forever": "永久",
+      "never": "从不",
+      "where": {
+        "partitioned": "数据库，然后是 {driver} 归档",
+        "daily_archive": "数据库，然后是数据库归档",
+        "table": "仅数据库",
+        "file": "文件"
+      }
     }
   }
 }
