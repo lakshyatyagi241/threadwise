@@ -178,9 +178,21 @@
       "updateFailed": "更新失败：{reason}",
       "deleteFailed": "删除失败：{reason}",
       "deleteTitle": "删除此团队？",
-      "deleteMessage": "删除团队“{name}”？分配给该团队的会话将变为未分配状态。",
+      "deleteMessage": "删除团队 \"{name}\"？团队中的成员会保留在工作区中。该团队将从目前使用它的所有位置移除。",
       "deleteConfirm": "删除团队",
-      "delete": "删除团队"
+      "delete": "删除团队",
+      "deleteUsage": {
+        "title": "将会发生的变化",
+        "loading": "正在检查此团队的使用位置...",
+        "failed": "无法检查此团队的使用位置。您仍可删除它。",
+        "nothing": "没有其他地方使用此团队。",
+        "members": "{count, plural, one {# 人将离开团队} other {# 人将离开团队}}",
+        "routingRules": "{count, plural, one {# 条路由规则将不再以此团队为目标；没有可执行内容的规则会被关闭} other {# 条路由规则将不再以此团队为目标；没有可执行内容的规则会被关闭}}",
+        "assignmentRules": "{count, plural, one {# 条记录分配规则将从其分配池中移除此团队} other {# 条记录分配规则将从其分配池中移除此团队}}",
+        "segmentShares": "{count, plural, one {# 个细分将不再与此团队共享} other {# 个细分将不再与此团队共享}}",
+        "conversationsAssigned": "{count, plural, one {# 个分配给此团队的会话将保留原位，且不属于任何团队} other {# 个分配给此团队的会话将保留原位，且不属于任何团队}}",
+        "peopleWithReachChange": "{count, plural, one {# 人在团队访问权限下将看到更少的同事记录} other {# 人在团队访问权限下将看到更少的同事记录}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "工作区",

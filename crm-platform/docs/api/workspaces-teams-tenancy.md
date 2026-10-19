@@ -253,7 +253,13 @@ A team of another workspace is `404`.
 ### `DELETE /workspace/teams/:id` (User, `inbox.team.manage`) → 204
 
 Removes the team and its member places; conversations assigned to it lose the team (the foreign key sets `assignee_team_id` null) and
-the `team.deleted` event lets routing drop its references.
+the `team.deleted` event lets routing drop its references: the worker consumer `team-deleted-references` takes the team out of every routing
+rule's targets and every record assignment pool (BL-380, `docs/api/teams-scope.md`).
+
+### `GET /workspace/teams/:id/usage` (User, `inbox.team.manage`) → 200 `WspTeamUsage`
+
+What the delete would change, as counts: `members`, `routingRules`, `assignmentRules`, `segmentShares`, `conversationsAssigned`,
+`peopleWithReachChange`. Read-only; the delete confirmation shows it. A team of another workspace is `404`. Details in `docs/api/teams-scope.md`.
 
 ## Operator Workspaces hub (TW-WSP-023, 025)
 

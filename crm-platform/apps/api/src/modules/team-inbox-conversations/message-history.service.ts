@@ -1,5 +1,4 @@
 import { HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
   type ListMessageHistoryQuery,
@@ -203,13 +202,6 @@ export class MessageHistoryService {
     // The route let them in with `msg.history.read`; without a read scope there is nothing they may see.
     if (viewer.scope === null) throw AppError.forbidden('inbox.conversation.read');
     const contacts = this.rbac.can(grants, PERM_CONTACTS_READ);
-    let teamIds: number[] = [];
-    if (contacts.allowed && contacts.scope === 'team') {
-      const res = await tx.execute(
-        sql`SELECT team_id FROM team_members WHERE org_id = ${ctx.orgId} AND user_id = ${ctx.userId}`,
-      );
-      teamIds = (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
-    }
     const visible = visibleToJoinedSql(viewer, 'c');
     return {
       orgId: ctx.orgId,
@@ -219,7 +211,6 @@ export class MessageHistoryService {
       contacts: {
         scope: contacts.allowed ? contacts.scope : null,
         userId: ctx.userId!,
-        teamIds,
       },
       cost: this.rbac.can(grants, PERM_WALLET_STATEMENT).allowed,
     };

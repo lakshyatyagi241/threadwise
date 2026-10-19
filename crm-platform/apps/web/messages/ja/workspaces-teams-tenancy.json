@@ -178,9 +178,21 @@
       "updateFailed": "更新に失敗しました: {reason}",
       "deleteFailed": "削除に失敗しました: {reason}",
       "deleteTitle": "このチームを削除しますか?",
-      "deleteMessage": "チーム「{name}」を削除しますか? このチームに割り当てられた会話は、担当者未設定になります。",
+      "deleteMessage": "チーム「{name}」を削除しますか？所属メンバーはワークスペースに残ります。チームは現在使われているすべての場所から削除されます。",
       "deleteConfirm": "チームを削除",
-      "delete": "チームを削除"
+      "delete": "チームを削除",
+      "deleteUsage": {
+        "title": "変更される内容",
+        "loading": "このチームの使用箇所を確認しています...",
+        "failed": "このチームの使用箇所を確認できませんでした。削除は引き続き可能です。",
+        "nothing": "このチームを使用しているものは他にありません。",
+        "members": "{count, plural, one {# 人がチームから外れます} other {# 人がチームから外れます}}",
+        "routingRules": "{count, plural, one {# 件のルーティングルールからこのチームが対象外になります。実行内容がなくなったルールはオフになります} other {# 件のルーティングルールからこのチームが対象外になります。実行内容がなくなったルールはオフになります}}",
+        "assignmentRules": "{count, plural, one {# 件のレコード割り当てルールのプールからこのチームが外れます} other {# 件のレコード割り当てルールのプールからこのチームが外れます}}",
+        "segmentShares": "{count, plural, one {# 件のセグメントがこのチームと共有されなくなります} other {# 件のセグメントがこのチームと共有されなくなります}}",
+        "conversationsAssigned": "{count, plural, one {このチームに割り当てられた # 件の会話はそのまま残り、チームなしになります} other {このチームに割り当てられた # 件の会話はそのまま残り、チームなしになります}}",
+        "peopleWithReachChange": "{count, plural, one {# 人はチームアクセスで見られる同僚のレコードが減ります} other {# 人はチームアクセスで見られる同僚のレコードが減ります}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "ワークスペース",

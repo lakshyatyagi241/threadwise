@@ -178,9 +178,21 @@
       "updateFailed": "Bijwerken mislukt: {reason}",
       "deleteFailed": "Verwijderen mislukt: {reason}",
       "deleteTitle": "Dit team verwijderen?",
-      "deleteMessage": "Team \"{name}\" verwijderen? Gesprekken die aan dit team zijn toegewezen worden niet langer toegewezen.",
+      "deleteMessage": "Team \"{name}\" verwijderen? De mensen in het team blijven in de werkruimte. Het team wordt overal verwijderd waar het nu wordt gebruikt.",
       "deleteConfirm": "Team verwijderen",
-      "delete": "Team verwijderen"
+      "delete": "Team verwijderen",
+      "deleteUsage": {
+        "title": "Wat er verandert",
+        "loading": "Controleren waar dit team wordt gebruikt...",
+        "failed": "Kan niet controleren waar dit team wordt gebruikt. Je kunt het nog steeds verwijderen.",
+        "nothing": "Niets anders gebruikt dit team.",
+        "members": "{count, plural, one {# persoon verlaat het team} other {# mensen verlaten het team}}",
+        "routingRules": "{count, plural, one {# routeringsregel verliest dit team als doel; een regel zonder doel wordt uitgeschakeld} other {# routeringsregels verliezen dit team als doel; een regel zonder doel wordt uitgeschakeld}}",
+        "assignmentRules": "{count, plural, one {# toewijzingsregel voor records verliest dit team uit zijn pool} other {# toewijzingsregels voor records verliezen dit team uit hun pool}}",
+        "segmentShares": "{count, plural, one {# segment wordt niet meer gedeeld met dit team} other {# segmenten worden niet meer gedeeld met dit team}}",
+        "conversationsAssigned": "{count, plural, one {# gesprek dat aan dit team is toegewezen blijft staan en heeft geen team} other {# gesprekken die aan dit team zijn toegewezen blijven staan en hebben geen team}}",
+        "peopleWithReachChange": "{count, plural, one {# persoon ziet minder records van collega's via teamtoegang} other {# mensen zien minder records van collega's via teamtoegang}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",

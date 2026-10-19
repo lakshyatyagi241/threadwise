@@ -29,14 +29,7 @@ export class ContactMessageStatsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       return this.repo.whatsapp(tx, ctx.orgId, contact.id);
     });
   }

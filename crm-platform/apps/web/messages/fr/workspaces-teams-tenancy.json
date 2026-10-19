@@ -178,9 +178,21 @@
       "updateFailed": "Échec de la mise à jour : {reason}",
       "deleteFailed": "Échec de la suppression : {reason}",
       "deleteTitle": "Supprimer cette équipe ?",
-      "deleteMessage": "Supprimer l’équipe « {name} » ? Les conversations assignées à cette équipe seront désassignées.",
+      "deleteMessage": "Supprimer l'équipe \"{name}\" ? Ses membres restent dans l'espace de travail. L'équipe sera retirée de tous les endroits où elle est utilisée actuellement.",
       "deleteConfirm": "Supprimer l’équipe",
-      "delete": "Supprimer l’équipe"
+      "delete": "Supprimer l’équipe",
+      "deleteUsage": {
+        "title": "Ce qui va changer",
+        "loading": "Vérification des endroits où cette équipe est utilisée...",
+        "failed": "Impossible de vérifier où cette équipe est utilisée. Vous pouvez quand même la supprimer.",
+        "nothing": "Rien d'autre n'utilise cette équipe.",
+        "members": "{count, plural, one {# personne quitte l'équipe} other {# personnes quittent l'équipe}}",
+        "routingRules": "{count, plural, one {# règle de routage perd cette équipe comme cible ; une règle qui n'a plus rien à faire est désactivée} other {# règles de routage perdent cette équipe comme cible ; une règle qui n'a plus rien à faire est désactivée}}",
+        "assignmentRules": "{count, plural, one {# règle d'attribution d'enregistrements perd cette équipe de son groupe} other {# règles d'attribution d'enregistrements perdent cette équipe de leur groupe}}",
+        "segmentShares": "{count, plural, one {# segment n'est plus partagé avec cette équipe} other {# segments ne sont plus partagés avec cette équipe}}",
+        "conversationsAssigned": "{count, plural, one {# conversation attribuée à cette équipe garde sa place et n'a plus d'équipe} other {# conversations attribuées à cette équipe gardent leur place et n'ont plus d'équipe}}",
+        "peopleWithReachChange": "{count, plural, one {# personne verra moins d'enregistrements de ses collègues avec l'accès par équipe} other {# personnes verront moins d'enregistrements de leurs collègues avec l'accès par équipe}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Espace de travail",

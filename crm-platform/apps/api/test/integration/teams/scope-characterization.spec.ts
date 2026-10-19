@@ -8,6 +8,7 @@ import { scopeClause } from '../../../src/modules/calling-voice/call-logs.reposi
 import { companyScopeCondition } from '../../../src/modules/crm/companies/companies.repository';
 import { contactScopeCondition } from '../../../src/modules/crm/contacts/contact-conditions';
 import { ownerScope } from '../../../src/modules/crm/crm-dashboard/crm-dashboard.repository';
+import { contactOpen } from '../../../src/modules/chat-conversations/message-history.query';
 import { dealScopeCondition } from '../../../src/modules/crm/deals/deals.repository';
 import { creditNoteScopeCondition } from '../../../src/modules/crm/invoicing/credit-notes.repository';
 import { invoiceScopeCondition } from '../../../src/modules/crm/invoicing/invoices.repository';
@@ -89,6 +90,21 @@ const PROBES: Probe[] = [
     unchanged: false,
   },
   {
+    name: 'message history contact panel (ct.owner_id; D1 adds ct.created_by)',
+    tables: [{ table: 'ct', alias: 'ct', columns: ['owner_id', 'created_by'] }],
+    // A history reader always has a person; 0 stands for "nobody" and matches no row.
+    live: (o, s, a) =>
+      contactOpen(
+        { orgId: o, contacts: { scope: s, userId: a ?? 0 } } as unknown as Parameters<
+          typeof contactOpen
+        >[0],
+        'ct',
+      ),
+    legacy: ownOrPeers(['ct.owner_id'], ['ct.owner_id']),
+    creatorColumns: ['created_by'],
+    unchanged: false,
+  },
+  {
     name: 'deals (owner_user_id; D1 adds created_by)',
     tables: [{ table: 'deals', alias: 'd', columns: ['owner_user_id', 'created_by'] }],
     live: (o, s, a) => dealScopeCondition(o, s, a),
@@ -99,7 +115,7 @@ const PROBES: Probe[] = [
   {
     name: 'crm dashboard contacts (c.owner_id; D1 adds c.created_by)',
     tables: [{ table: 'c', alias: 'c', columns: ['owner_id', 'created_by'] }],
-    live: (o, s, a) => ownerScope(sql`c.owner_id`, o, s, a),
+    live: (o, s, a) => ownerScope([sql`c.owner_id`, sql`c.created_by`], o, s, a),
     legacy: peersOnly('c.owner_id'),
     creatorColumns: ['created_by'],
     unchanged: false,
@@ -201,7 +217,9 @@ const PROBES: Probe[] = [
     name: 'call logs (handler)',
     tables: [{ table: 'w', alias: 'w', columns: ['handler_user_id'] }],
     live: (o, s, a) =>
-      scopeClause({ orgId: o, userId: a, scope: s } as unknown as Parameters<typeof scopeClause>[0]),
+      scopeClause({ orgId: o, userId: a, scope: s } as unknown as Parameters<
+        typeof scopeClause
+      >[0]),
     legacy: ownOrPeers(['w.handler_user_id'], ['w.handler_user_id']),
     unchanged: true,
   },
@@ -221,8 +239,11 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
 
   beforeAll(async () => {
     pg = await startTestPg();
-    const one = async (q: string, p: unknown[] = []) => Number((await pg.owner.query(q, p)).rows[0].id);
-    orgId = await one(`INSERT INTO organizations (slug, name, plan) VALUES ('scp','S','starter') RETURNING id`);
+    const one = async (q: string, p: unknown[] = []) =>
+      Number((await pg.owner.query(q, p)).rows[0].id);
+    orgId = await one(
+      `INSERT INTO organizations (slug, name, plan) VALUES ('scp','S','starter') RETURNING id`,
+    );
     for (const u of USERS) {
       ids[u] = await one(
         `INSERT INTO users (org_id, email, full_name, password_hash) VALUES ($1,$2,$3,'x') RETURNING id`,
@@ -232,15 +253,17 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
     }
     const teamIds: Record<number, number> = {};
     for (const t of [1, 2, 3]) {
-      teamIds[t] = await one(`INSERT INTO teams (org_id, name) VALUES ($1,$2) RETURNING id`, [orgId, `T${t}`]);
+      teamIds[t] = await one(`INSERT INTO teams (org_id, name) VALUES ($1,$2) RETURNING id`, [
+        orgId,
+        `T${t}`,
+      ]);
     }
     for (const u of USERS) {
       for (const t of TEAMS[u]) {
-        await pg.owner.query(`INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`, [
-          orgId,
-          teamIds[t],
-          ids[u],
-        ]);
+        await pg.owner.query(
+          `INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`,
+          [orgId, teamIds[t], ids[u]],
+        );
       }
     }
   }, 180_000);
@@ -268,7 +291,10 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
     const from =
       `FROM ${rowsByTable.get(first!.table + first!.alias)} ${first!.alias ? `AS ${first!.alias}` : ''} ` +
       rest
-        .map((t) => `JOIN ${rowsByTable.get(t.table + t.alias)} AS ${t.alias} ON ${t.alias}.id = ${first!.alias || first!.table}.id`)
+        .map(
+          (t) =>
+            `JOIN ${rowsByTable.get(t.table + t.alias)} AS ${t.alias} ON ${t.alias}.id = ${first!.alias || first!.table}.id`,
+        )
         .join(' ');
     const where = cond ? dialect.sqlToQuery(cond) : { sql: 'true', params: [] as unknown[] };
     const res = await pg.owner.query(
@@ -292,7 +318,10 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
       const tableNames = new Map<string, string>();
       for (const [ti, t] of probe.tables.entries()) {
         // The condition may name the table itself (contacts) or its alias; the physical name is a temp table of that name.
-        const physical = t.alias === '' ? t.table : `${t.table}_${probe.name.replace(/\W+/g, '_').slice(0, 20)}_${ti}`;
+        const physical =
+          t.alias === ''
+            ? t.table
+            : `${t.table}_${probe.name.replace(/\W+/g, '_').slice(0, 20)}_${ti}`;
         tableNames.set(t.table + t.alias, physical);
         await pg.owner.query(`DROP TABLE IF EXISTS pg_temp.${physical}`);
         await pg.owner.query(
@@ -326,26 +355,29 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
           const model = new Set(
             combos.map((_, n) => n + 1).filter((id) => visible(scope, actor, valuesOf(id - 1))),
           );
-          expect([...live].sort((a, b) => a - b), `${probe.name} ${scope} as ${actor}: live vs model`).toEqual(
-            [...model].sort((a, b) => a - b),
-          );
+          expect(
+            [...live].sort((a, b) => a - b),
+            `${probe.name} ${scope} as ${actor}: live vs model`,
+          ).toEqual([...model].sort((a, b) => a - b));
 
           if (!probe.legacy) continue;
           const old = await rowsOf(probe, tableNames, probe.legacy(orgId, scope, actorId));
           if (probe.unchanged) {
-            expect([...live].sort((a, b) => a - b), `${probe.name} ${scope} as ${actor}: live vs legacy`).toEqual(
-              [...old].sort((a, b) => a - b),
-            );
+            expect(
+              [...live].sort((a, b) => a - b),
+              `${probe.name} ${scope} as ${actor}: live vs legacy`,
+            ).toEqual([...old].sort((a, b) => a - b));
             continue;
           }
-          for (const id of old) expect(live.has(id), `${probe.name} ${scope} as ${actor}: legacy row ${id} lost`).toBe(true);
+          for (const id of old)
+            expect(live.has(id), `${probe.name} ${scope} as ${actor}: legacy row ${id} lost`).toBe(
+              true,
+            );
           for (const id of live) {
             if (old.has(id)) continue;
             const vals = valuesOf(id - 1);
             // Explained by D1: a creator column is me (own) or me / a teammate (team) ...
-            const byCreator = [...creatorIdx].some((i) =>
-              visible(scope, actor, [vals[i] ?? null]),
-            );
+            const byCreator = [...creatorIdx].some((i) => visible(scope, actor, [vals[i] ?? null]));
             // ... or the old team scope hid my own record because I am in no team.
             const byNoTeam = scope === 'team' && actor !== null && vals.includes(actor);
             expect(

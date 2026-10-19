@@ -20,6 +20,7 @@ import {
 } from '../lib/team-form';
 import { PRESENCE_DOT } from '../lib/roles';
 import { Avatar, useErrorText } from './parts';
+import { TeamUsageSummary } from './team-usage-summary';
 
 /** A device (channel line) a team can be limited to. */
 export interface TeamDevice {
@@ -98,7 +99,12 @@ export function TeamDialog({
       <ConfirmDialog
         open={open && confirmDelete}
         title={tt('deleteTitle')}
-        message={tt('deleteMessage', { name: team?.name ?? '' })}
+        message={
+          <>
+            <p>{tt('deleteMessage', { name: team?.name ?? '' })}</p>
+            {team && <TeamUsageSummary teamId={team.id} open={open && confirmDelete} />}
+          </>
+        }
         confirmLabel={tt('deleteConfirm')}
         cancelLabel={tc('cancel')}
         tone="danger"

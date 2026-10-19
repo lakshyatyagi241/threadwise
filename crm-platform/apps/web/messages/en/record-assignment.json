@@ -233,6 +233,13 @@
         "nobody": "Matched, but nobody was available",
         "broken": "Has a broken condition"
       },
+      "excluded": {
+        "label": "Left out",
+        "no_access": "{name}: cannot open this kind of record",
+        "inactive": "{name}: no longer active",
+        "on_leave": "{name}: on leave today",
+        "offline": "{name}: offline"
+      },
       "skipped": "Skipped because nobody was available: {names}"
     },
     "log": {

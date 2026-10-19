@@ -55,7 +55,7 @@ export class DealActivitiesService {
     return this.db.tx(async (tx) => {
       const deal = await this.dealsRepo.findByUuid(tx, ctx.orgId, dealUuid);
       if (!deal) throw AppError.notFound('Deal', dealUuid);
-      await this.deals.assertScope(tx, scope, deal.ownerId);
+      await this.deals.assertScope(tx, scope, deal);
       const rows = await this.repo.listForDeal(tx, ctx.orgId, deal.id, query);
       const { items, page } = buildPage(rows, query.limit);
       return { data: items.map((r) => this.toResponse(r)), page };

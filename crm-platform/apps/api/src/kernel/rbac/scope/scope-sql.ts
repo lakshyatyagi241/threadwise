@@ -41,8 +41,11 @@ export function teamPeersSql(orgId: number, userId: number): SQL {
       WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${userId})`;
 }
 
-/** The ids of the teams `userId` is in, as a sub-select: for things shared with a team (a segment) rather than owned by a person. */
-export function memberTeamIdsSql(orgId: number, userId: number | SQL): SQL {
+/**
+ * The ids of the teams `userId` is in, as a sub-select: for things shared with a team (a segment) rather than owned by a person.
+ * `orgId` and `userId` are values or SQL (a column of the row being filtered, `current_actor_id()`).
+ */
+export function memberTeamIdsSql(orgId: number | SQL, userId: number | SQL): SQL {
   return sql`(SELECT tm.team_id FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.user_id = ${userId})`;
 }
 

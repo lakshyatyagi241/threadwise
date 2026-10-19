@@ -178,9 +178,21 @@
       "updateFailed": "Pembaruan gagal: {reason}",
       "deleteFailed": "Penghapusan gagal: {reason}",
       "deleteTitle": "Hapus tim ini?",
-      "deleteMessage": "Hapus tim \"{name}\"? Percakapan yang ditugaskan ke tim ini akan menjadi tidak ditugaskan.",
+      "deleteMessage": "Hapus tim \"{name}\"? Anggotanya tetap berada di ruang kerja. Tim akan dihapus dari semua tempat yang saat ini menggunakannya.",
       "deleteConfirm": "Hapus tim",
-      "delete": "Hapus tim"
+      "delete": "Hapus tim",
+      "deleteUsage": {
+        "title": "Apa yang akan berubah",
+        "loading": "Memeriksa di mana tim ini digunakan...",
+        "failed": "Tidak dapat memeriksa di mana tim ini digunakan. Anda tetap dapat menghapusnya.",
+        "nothing": "Tidak ada hal lain yang menggunakan tim ini.",
+        "members": "{count, plural, one {# orang keluar dari tim} other {# orang keluar dari tim}}",
+        "routingRules": "{count, plural, one {# aturan perutean kehilangan tim ini sebagai target; aturan yang tidak punya tindakan lagi akan dinonaktifkan} other {# aturan perutean kehilangan tim ini sebagai target; aturan yang tidak punya tindakan lagi akan dinonaktifkan}}",
+        "assignmentRules": "{count, plural, one {# aturan penugasan data kehilangan tim ini dari kumpulannya} other {# aturan penugasan data kehilangan tim ini dari kumpulannya}}",
+        "segmentShares": "{count, plural, one {# segmen berhenti dibagikan ke tim ini} other {# segmen berhenti dibagikan ke tim ini}}",
+        "conversationsAssigned": "{count, plural, one {# percakapan yang ditugaskan ke tim ini tetap di tempatnya dan tidak memiliki tim} other {# percakapan yang ditugaskan ke tim ini tetap di tempatnya dan tidak memiliki tim}}",
+        "peopleWithReachChange": "{count, plural, one {# orang akan melihat lebih sedikit data rekan kerja dengan akses tim} other {# orang akan melihat lebih sedikit data rekan kerja dengan akses tim}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",

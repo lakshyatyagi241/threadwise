@@ -12,4 +12,4 @@ export {
   type ConversationAssignment,
   type ConversationScopeViewer,
 } from './conversation-scope';
-export { ScopeResolver } from './scope-resolver';
+export { canActOn, isTeamPeer, ScopeResolver, teamIdsOf, teamPeers } from './scope-resolver';

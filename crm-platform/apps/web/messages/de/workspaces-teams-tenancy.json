@@ -178,9 +178,21 @@
       "updateFailed": "Aktualisierung fehlgeschlagen: {reason}",
       "deleteFailed": "Löschen fehlgeschlagen: {reason}",
       "deleteTitle": "Dieses Team löschen?",
-      "deleteMessage": "Team „{name}“ löschen? Unterhaltungen, die diesem Team zugewiesen sind, werden danach nicht mehr zugewiesen sein.",
+      "deleteMessage": "Team \"{name}\" löschen? Die Mitglieder bleiben im Workspace. Das Team wird überall entfernt, wo es derzeit verwendet wird.",
       "deleteConfirm": "Team löschen",
-      "delete": "Team löschen"
+      "delete": "Team löschen",
+      "deleteUsage": {
+        "title": "Was sich ändert",
+        "loading": "Es wird geprüft, wo dieses Team verwendet wird...",
+        "failed": "Die Verwendung dieses Teams konnte nicht geprüft werden. Du kannst es trotzdem löschen.",
+        "nothing": "Sonst wird dieses Team nirgends verwendet.",
+        "members": "{count, plural, one {# Person verlässt das Team} other {# Personen verlassen das Team}}",
+        "routingRules": "{count, plural, one {# Routing-Regel verliert dieses Team als Ziel; eine Regel ohne verbleibendes Ziel wird deaktiviert} other {# Routing-Regeln verlieren dieses Team als Ziel; eine Regel ohne verbleibendes Ziel wird deaktiviert}}",
+        "assignmentRules": "{count, plural, one {# Datensatz-Zuweisungsregel verliert dieses Team aus ihrem Pool} other {# Datensatz-Zuweisungsregeln verlieren dieses Team aus ihrem Pool}}",
+        "segmentShares": "{count, plural, one {# Segment wird nicht mehr mit diesem Team geteilt} other {# Segmente werden nicht mehr mit diesem Team geteilt}}",
+        "conversationsAssigned": "{count, plural, one {# Unterhaltung, die diesem Team zugewiesen ist, bleibt erhalten und hat kein Team} other {# Unterhaltungen, die diesem Team zugewiesen sind, bleiben erhalten und haben kein Team}}",
+        "peopleWithReachChange": "{count, plural, one {# Person sieht mit Teamzugriff weniger Datensätze von Kollegen} other {# Personen sehen mit Teamzugriff weniger Datensätze von Kollegen}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Workspace",

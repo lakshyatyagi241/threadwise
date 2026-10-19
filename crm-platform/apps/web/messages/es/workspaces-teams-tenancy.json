@@ -178,9 +178,21 @@
       "updateFailed": "Error al actualizar: {reason}",
       "deleteFailed": "Error al eliminar: {reason}",
       "deleteTitle": "¿Eliminar este equipo?",
-      "deleteMessage": "¿Eliminar el equipo \"{name}\"? Las conversaciones asignadas a este equipo quedarán sin asignar.",
+      "deleteMessage": "¿Eliminar el equipo \"{name}\"? Sus miembros siguen en el espacio de trabajo. El equipo se quitará de todos los lugares donde se usa actualmente.",
       "deleteConfirm": "Eliminar equipo",
-      "delete": "Eliminar equipo"
+      "delete": "Eliminar equipo",
+      "deleteUsage": {
+        "title": "Qué cambiará",
+        "loading": "Comprobando dónde se usa este equipo...",
+        "failed": "No se pudo comprobar dónde se usa este equipo. Aún puedes eliminarlo.",
+        "nothing": "Nada más usa este equipo.",
+        "members": "{count, plural, one {# persona deja el equipo} other {# personas dejan el equipo}}",
+        "routingRules": "{count, plural, one {# regla de enrutamiento pierde este equipo como destino; una regla que se quede sin nada que hacer se desactiva} other {# reglas de enrutamiento pierden este equipo como destino; una regla que se quede sin nada que hacer se desactiva}}",
+        "assignmentRules": "{count, plural, one {# regla de asignación de registros pierde este equipo de su grupo} other {# reglas de asignación de registros pierden este equipo de su grupo}}",
+        "segmentShares": "{count, plural, one {# segmento deja de compartirse con este equipo} other {# segmentos dejan de compartirse con este equipo}}",
+        "conversationsAssigned": "{count, plural, one {# conversación asignada a este equipo conserva su lugar y se queda sin equipo} other {# conversaciones asignadas a este equipo conservan su lugar y se quedan sin equipo}}",
+        "peopleWithReachChange": "{count, plural, one {# persona verá menos registros de sus compañeros con el acceso por equipo} other {# personas verán menos registros de sus compañeros con el acceso por equipo}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Espacio de trabajo",

@@ -22,6 +22,7 @@ import { AppError } from '../../../common/errors/app-error';
 import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
+import { canActOn } from '../../../kernel/rbac/scope';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
@@ -39,6 +40,7 @@ import {
   DealsRepository,
   dealScopeCondition,
   type DealFilter,
+  type DealPeople,
   type DealRow,
 } from './deals.repository';
 
@@ -106,7 +108,7 @@ export class DealsService {
     return this.db.tx(async (tx) => {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Deal', uuid);
-      await this.assertScope(tx, scope, row.ownerId);
+      await this.assertScope(tx, scope, row);
       return toDealResponse(row);
     });
   }
@@ -126,12 +128,12 @@ export class DealsService {
         ctx.orgId,
         contactRead.scope,
         ctx.userId!,
-        contact.ownerId,
+        contact,
       );
 
       const rows = await this.repo.forContact(tx, ctx.orgId, contact.id, 50);
       const scoped: DealRow[] = [];
-      for (const r of rows) if (await this.inScope(tx, scope, r.ownerId)) scoped.push(r);
+      for (const r of rows) if (await this.inScope(tx, scope, r)) scoped.push(r);
       const rollupRows = await this.repo.contactRollup(tx, ctx.orgId, contact.id);
       const open: CurrencySums = new Map();
       const won: CurrencySums = new Map();
@@ -214,6 +216,7 @@ export class DealsService {
         valueMinor,
         currency,
         ownerUserId: ownerId,
+        createdBy: ctx.userId ?? null,
         expectedCloseDate: input.expectedCloseDate ?? null,
         status: stamps.status,
         lostReason: null,
@@ -546,21 +549,24 @@ export class DealsService {
     const ctx = RequestContextStore.require();
     const deal = await this.repo.findByUuid(tx, ctx.orgId, uuid, true);
     if (!deal) throw AppError.notFound('Deal', uuid);
-    await this.assertScope(tx, scope, deal.ownerId);
+    await this.assertScope(tx, scope, deal);
     return deal;
   }
 
-  async inScope(tx: Tx, scope: RecordScope, ownerId: number | null): Promise<boolean> {
+  async inScope(tx: Tx, scope: RecordScope, deal: DealPeople): Promise<boolean> {
     const ctx = RequestContextStore.require();
     if (scope === 'all') return true;
-    if (ownerId === null || !ctx.userId) return false;
-    if (scope === 'own') return ownerId === ctx.userId;
-    return this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId, ownerId);
+    if (!ctx.userId) return false;
+    // Owner and creator, the same people `dealScopeCondition` filters a list by (D1).
+    return canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+      deal.ownerId,
+      deal.createdBy,
+    ]);
   }
 
   /** Not-found, never forbidden: a deal outside the caller's scope is not revealed to exist. */
-  async assertScope(tx: Tx, scope: RecordScope, ownerId: number | null): Promise<void> {
-    if (!(await this.inScope(tx, scope, ownerId))) throw AppError.notFound('Deal');
+  async assertScope(tx: Tx, scope: RecordScope, deal: DealPeople): Promise<void> {
+    if (!(await this.inScope(tx, scope, deal))) throw AppError.notFound('Deal');
   }
 
   private checkVersion(deal: DealRow, expected: number | undefined): void {

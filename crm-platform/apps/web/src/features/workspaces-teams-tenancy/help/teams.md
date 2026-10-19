@@ -18,7 +18,9 @@ Teams group your people by department, such as Sales or Support. Each team has a
 2. Each card shows the team's name, its strategy, how many members it has and how many are online.
 3. To create a team, select **Create team**. Enter a name (up to 64 characters), pick a colour, choose the assignment strategy and tick its members.
 4. To change a team, select the pencil on its card, change what you need and select **Save changes**.
-5. To delete a team, open it and select **Delete team**, then confirm. Conversations assigned to it become unassigned.
+5. To delete a team, open it and select **Delete team**. The confirmation lists what will change: the people who leave the team, the routing rules and record assignment rules that name it, the segments shared with it, the conversations assigned to it and the people who would stop seeing each other's records under **Team records**. Then confirm. The team is removed from those rules, a routing rule left with nothing to do is switched off, and conversations assigned to the team keep their place with no team.
+
+For what "Team records" means, see [How team access works](help:team-access).
 
 > You can open **How teams work** at the top of the page for a short summary.
 
