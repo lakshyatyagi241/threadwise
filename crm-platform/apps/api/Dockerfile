@@ -28,7 +28,10 @@ COPY packages/db/package.json       packages/db/
 COPY packages/observability/package.json packages/observability/
 COPY packages/tax/package.json      packages/tax/
 COPY packages/ui/package.json       packages/ui/
-RUN pnpm install --frozen-lockfile
+# Only this app and the workspace packages it depends on (the other app's dependencies are not needed to build this image); the store is
+# cached between builds so a changed lockfile re-downloads only what changed.
+RUN --mount=type=cache,id=pnpm-store,target=/root/.local/share/pnpm/store \
+    pnpm install --frozen-lockfile --filter @crm/api...
 
 # --- build -----------------------------------------------------------------
 FROM deps AS build

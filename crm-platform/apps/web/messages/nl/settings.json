@@ -378,6 +378,11 @@
         "label": "Dubbele leads",
         "description": "Kies of een nieuwe lead die bij een contact past daarmee wordt samengevoegd of een nieuw contact wordt.",
         "keywords": "dubbel, samenvoegen, lead, zelfde telefoon, zelfde e-mail, nieuw contact, leadbron"
+      },
+      "sales-activities": {
+        "label": "Verkoopactiviteiten",
+        "description": "Beheer taken, afspraken, gesprekken en eigen activiteiten: wat elke activiteit kan, welke taaktypen en uitkomsten ze heeft.",
+        "keywords": "activiteiten, taaktypen, uitkomsten, afspraakuitkomst, gespreksuitkomst, opvolgen, inchecken, eigen activiteit, agenda, voltooien"
       }
     },
     "title": "Instellingen",

@@ -7,6 +7,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { cursorSchema } from '../common/pagination';
+import { activityOptionRefSchema } from '../sales-activities/activity-types';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------------
 
@@ -60,6 +61,8 @@ export const callLogEntrySchema = z.object({
   source: z.enum(CALL_ENTRY_SOURCES),
   direction: z.enum(CALL_ENTRY_DIRECTIONS),
   outcome: callOutcomeSchema,
+  /** The outcome as the workspace's Phone activity lists it (a custom outcome counts as `outcome` in reports); null on an older entry. */
+  outcomeOption: activityOptionRefSchema.nullable().optional(),
   startedAt: z.string(),
   durationSec: z.number().int().nonnegative(),
   contactId: uuidSchema.nullable(),
@@ -105,7 +108,10 @@ export const logCallInputSchema = z
     contactId: uuidSchema.optional(),
     customerPhone: phoneText.optional(),
     direction: z.enum(CALL_ENTRY_DIRECTIONS),
-    outcome: callOutcomeSchema,
+    /** The built-in outcome. Optional when `outcomeOptionId` names a list item (then it is what that item counts as). */
+    outcome: callOutcomeSchema.optional(),
+    /** A current outcome of the Phone activity (Settings > Sales Activities). */
+    outcomeOptionId: uuidSchema.optional(),
     startedAt: startedAt.optional(),
     durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
     notes: z.string().trim().max(CALL_NOTES_MAX).optional(),
@@ -121,6 +127,10 @@ export const logCallInputSchema = z
   .refine((v) => v.contactId !== undefined || v.customerPhone !== undefined, {
     message: 'Give the contact or the phone number.',
     path: ['contactId'],
+  })
+  .refine((v) => v.outcome !== undefined || v.outcomeOptionId !== undefined, {
+    message: 'Give the outcome.',
+    path: ['outcome'],
   });
 export type LogCallInput = z.infer<typeof logCallInputSchema>;
 
@@ -146,6 +156,7 @@ export type LogCallResult = z.infer<typeof logCallResultSchema>;
 
 export const updateCallLogEntryInputSchema = z.object({
   outcome: callOutcomeSchema.optional(),
+  outcomeOptionId: uuidSchema.optional(),
   direction: z.enum(CALL_ENTRY_DIRECTIONS).optional(),
   startedAt: startedAt.optional(),
   durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).optional(),

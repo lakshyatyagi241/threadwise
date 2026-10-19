@@ -24,6 +24,7 @@ export function toTaskResponse(row: TaskRow, notes: string | null): TaskResponse
       : null,
     source: row.source,
     kind: row.kind,
+    taskType: row.taskType,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
     updatedAt: row.updatedAt.toISOString(),
@@ -46,5 +47,6 @@ export function taskEventPayload(row: TaskRow): Record<string, unknown> {
     outcomeId: row.outcomeUuid,
     source: row.source,
     kind: row.kind,
+    taskType: row.taskType?.key ?? null,
   };
 }

@@ -528,7 +528,7 @@ describe('phase 2 types', () => {
     ];
     h.created(1, SEND, { type: 'broadcast_failed', subjectKind: 'broadcast' });
     await settle();
-    expect(h.presented[0]).toMatchObject({ alert: { href: `/broadcasts/${SEND}` } });
+    expect(h.presented[0]).toMatchObject({ alert: { href: `/campaigns/earlier/${SEND}` } });
   });
 
   it('toasts and pings a team chat message, opening that channel', async () => {

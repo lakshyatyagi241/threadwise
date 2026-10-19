@@ -1,0 +1,191 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Görev",
+        "meeting": "Toplantı",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "reminder": "Hatırlatma",
+        "sms": "SMS",
+        "chat": "Sohbet"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Takip",
+          "call_reminder": "Arama hatırlatması"
+        },
+        "meeting": {
+          "interested": "İlgileniyor",
+          "not_interested": "İlgilenmiyor",
+          "needs_follow_up": "Takip gerekli",
+          "rescheduled": "Ertelendi",
+          "no_show": "Gelmedi"
+        },
+        "phone": {
+          "connected": "Bağlandı",
+          "no_answer": "Yanıt yok",
+          "busy": "Meşgul",
+          "left_voicemail": "Sesli mesaj bırakıldı",
+          "wrong_number": "Yanlış numara",
+          "declined": "Reddedildi",
+          "failed": "Başarısız"
+        }
+      }
+    },
+    "list": {
+      "back": "Veriler",
+      "title": "Satış Etkinlikleri",
+      "intro": "Ekibinizin kaydettiği etkinlikleri tek yerden yönetin: görevler, toplantılar, aramalar ve kendi etkinlikleriniz. Her birinin neler yapabileceğini, görev türlerini ve sonuçlarını seçin.",
+      "create": "Etkinlik oluştur",
+      "loading": "Etkinlikler yükleniyor…",
+      "loadFailed": "Etkinlikler yüklenemedi.",
+      "retry": "Tekrar dene",
+      "listLabel": "Etkinlikler",
+      "default": "Varsayılan",
+      "custom": "Özel",
+      "noEditor": "Ayarlanacak bir şeyi olmayan varsayılan etkinlik.",
+      "edit": "Etkinliği düzenle",
+      "editNamed": "{name} etkinliğini düzenle",
+      "chip": {
+        "completable": "Tamamlanabilir",
+        "notCompletable": "Tamamlanamaz",
+        "calendar": "Takvimde",
+        "taskTypes": "{count, plural, one {# görev türü} other {# görev türü}}",
+        "outcomes": "{count, plural, one {# sonuç} other {# sonuç}}"
+      }
+    },
+    "drawer": {
+      "title": "Etkinliği düzenle: {name}",
+      "close": "Kapat",
+      "done": "Bitti",
+      "cancel": "İptal",
+      "saved": "Kaydedildi.",
+      "autosave": "Değişiklikler yaptıkça kaydedilir.",
+      "readOnly": "Bu ayarları görebilirsiniz ama değiştiremezsiniz.",
+      "name": "Etkinlik adı",
+      "nameLocked": "Varsayılan bir etkinliğin adı değiştirilemez.",
+      "mobileCheckIn": "Kullanıcıların mobil uygulamadan giriş ve çıkış yapmasına izin ver",
+      "mobileCheckInPending": "Kaydedildi ama henüz etkisi yok: mobil uygulama toplantılarda girişi henüz desteklemiyor. Uygulama desteklediğinde çalışmaya başlar.",
+      "showInCalendar": "Bu etkinliği Etkinlik Panosundaki Takvimim’de göster",
+      "showInCalendarHint": "Kaydedildi ama henüz bir etkinlik takvimi yok. Eklendiğinde etkili olur.",
+      "allowComplete": "Kullanıcıların bu etkinliği tamamlandı olarak işaretlemesine izin ver",
+      "allowEditCompleted": "Kullanıcıların bu etkinliğin tamamlanma tarih ve saatini düzenlemesine izin ver",
+      "taskTypes": "Görev türleri",
+      "taskTypesHint": "Görev oluştururken birini seçin, örneğin Takip veya Arama hatırlatması.",
+      "addTaskType": "Görev türü ekle",
+      "taskTypePlaceholder": "Yeni görev türü",
+      "predictOutcomes": "Bu etkinlik için sonuçları tahmin et",
+      "predictOutcomesHint": "Etkinlik tamamlandığında bir sonuç sun.",
+      "outcomes": "Sonuçlar",
+      "taskOutcomesHint": "Tamamlanan bir görevin sonuçları, tüm çalışma alanı için tek bir listedir ve Görev sonuçları’nda tutulur.",
+      "taskOutcomesLink": "Görev sonuçları’nı aç",
+      "outcomesHint": "Kaldırılan bir sonuç, onu zaten taşıyan kayıtlarda kalır.",
+      "phoneOutcomesHint": "Her sonucun arama raporlarında nasıl sayılacağını seçin. Kaldırılan bir sonuç, onu zaten taşıyan aramalarda kalır.",
+      "addOutcome": "Sonuç ekle",
+      "outcomePlaceholder": "Yeni sonuç",
+      "listEmpty": "Henüz bir şey yok.",
+      "moveUp": "{name} öğesini yukarı taşı",
+      "moveDown": "{name} öğesini aşağı taşı",
+      "remove": "{name} öğesini kaldır",
+      "countsAsShort": "{as} olarak sayılır",
+      "countsAsLabel": "Şu olarak sayılır",
+      "countsAsOption": "{as} olarak sayılır",
+      "countsAs": {
+        "connected": "bağlandı",
+        "no_answer": "yanıt yok",
+        "busy": "meşgul",
+        "left_voicemail": "sesli mesaj bırakıldı",
+        "wrong_number": "yanlış numara",
+        "declined": "reddedildi",
+        "failed": "başarısız"
+      },
+      "removeActivity": "Etkinliği kaldır",
+      "removeConfirmTitle": "{name} kaldırılsın mı?",
+      "removeConfirmBody": "Listeden çıkar. Onu kullanan kayıtlar sonuçlarını korur.",
+      "removed": "Etkinlik kaldırıldı.",
+      "noSettings": "Bu etkinliğin ayarlanacak bir şeyi yok.",
+      "errors": {
+        "nameRequired": "Etkinliğe bir ad verin.",
+        "nameTaken": "Bu ad burada zaten kullanılıyor.",
+        "limit": "Bu listenin sınırına ulaştınız.",
+        "conflict": "Başka biri bu etkinliği değiştirdi. Yeniden yüklendi; tekrar deneyin.",
+        "forbidden": "Bunu değiştirme izniniz yok.",
+        "failed": "Kaydedilemedi. Tekrar deneyin."
+      }
+    },
+    "create": {
+      "title": "Etkinlik oluştur",
+      "close": "Kapat",
+      "cancel": "İptal",
+      "create": "Oluştur",
+      "intro": "İşinize özgü bir etkinlik ekleyin. Seçtiğiniz türün ayarlarıyla başlar.",
+      "name": "Ad",
+      "namePlaceholder": "Örneğin, Saha ziyareti",
+      "behavesAs": "Şunun gibi çalışır",
+      "behavesAsHint": {
+        "task": "Bir tarihe kadar yapılacak ve tamamlanabilen bir şey.",
+        "meeting": "Belirli bir saatte gerçekleşen ve tamamlanabilen bir şey.",
+        "phone": "Bir arama; aramanın sonuçlarıyla."
+      },
+      "behaves": {
+        "task": "Bir görev",
+        "meeting": "Bir toplantı",
+        "phone": "Bir telefon görüşmesi"
+      },
+      "icon": "Simge",
+      "icons": {
+        "task": "Görev",
+        "meeting": "Takvim",
+        "phone": "Telefon",
+        "email": "E-posta",
+        "reminder": "Zil",
+        "sms": "Mesaj",
+        "chat": "Sohbet",
+        "visit": "Yer",
+        "video": "Video",
+        "document": "Belge",
+        "flag": "Bayrak",
+        "star": "Yıldız"
+      },
+      "errors": {
+        "nameRequired": "Etkinliğe bir ad verin.",
+        "nameTaken": "Bu adla bir etkinlik zaten var.",
+        "limit": "Özel etkinlik sınırına ulaştınız.",
+        "failed": "Etkinlik oluşturulamadı. Tekrar deneyin."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(kaldırıldı)",
+      "taskType": "Görev türü",
+      "taskTypeNone": "Tür yok",
+      "outcome": "Sonuç",
+      "outcomeNone": "Sonuç yok",
+      "completeOff": "Görevleri tamamlama, Satış Etkinlikleri’nde kapalı."
+    },
+    "meeting": {
+      "saved": "Toplantı güncellendi.",
+      "reopened": "Toplantı yeniden açıldı.",
+      "errors": {
+        "disabled": "Toplantıları tamamlama, Satış Etkinlikleri’nde kapalı.",
+        "optionGone": "Bu sonuç kaldırıldı. Başka birini seçin.",
+        "failed": "Kaydedilemedi. Tekrar deneyin."
+      },
+      "outcome": "Sonuç",
+      "noOutcome": "Sonuç yok",
+      "removedSuffix": "(kaldırıldı)",
+      "notes": "Notlar",
+      "cancel": "İptal",
+      "save": "Kaydet",
+      "outcomeChip": "Sonuç: {name}",
+      "completed": "Tamamlandı",
+      "editAria": "{title} sonucunu düzenle",
+      "edit": "Düzenle",
+      "reopenAria": "{title} öğesini yeniden aç",
+      "reopen": "Yeniden aç",
+      "addAria": "{title} öğesine sonuç ekle",
+      "add": "Sonuç ekle",
+      "markCompleted": "Tamamlandı olarak işaretle"
+    }
+  }
+}

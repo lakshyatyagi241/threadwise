@@ -296,7 +296,8 @@
       "retry": "Reintentar",
       "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista.",
       "outcomeNameTaken": "Otro resultado ya tiene este nombre.",
-      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar."
+      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar.",
+      "completionDisabled": "Completar tareas está desactivado en Actividades de ventas."
     },
     "toast": {
       "completed": "Tarea completada.",

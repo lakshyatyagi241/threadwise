@@ -424,6 +424,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
+    case 'update_contact':
+      return (
+        <div className="flex items-center gap-2 px-3 pt-2 pb-1.5 text-[11.5px]">
+          <Mono cls="shrink-0">{str(d.field).trim() || '—'}</Mono>
+          <Muted>=</Muted>
+          <Mono cls="truncate">{str(d.value) || '—'}</Mono>
+        </div>
+      );
     case 'subflow': {
       const sub = d.flow ? ctx.flows.find((f) => f.id === str(d.flow)) : null;
       const lbl = d.flow ? (sub?.name ?? tp('flowNumber', { id: str(d.flow) })) : tp('pickFlow');

@@ -296,7 +296,8 @@
       "retry": "Coba lagi",
       "outcomeInvalid": "Hasil itu tidak tersedia. Pilih salah satu dari daftar.",
       "outcomeNameTaken": "Hasil lain sudah memakai nama ini.",
-      "outcomeInUse": "Masih ada tugas yang memakai hasil ini, jadi tidak dapat dihapus. Sembunyikan saja."
+      "outcomeInUse": "Masih ada tugas yang memakai hasil ini, jadi tidak dapat dihapus. Sembunyikan saja.",
+      "completionDisabled": "Menyelesaikan tugas dimatikan di Aktivitas Penjualan."
     },
     "toast": {
       "completed": "Tugas selesai.",

@@ -13,7 +13,7 @@ describe('uploadTemplateMedia', () => {
       previewUrl: 'https://cdn.test/template-media/7/1700000000_ab.png',
     };
     const fetchMock = vi.fn(
-      async (_url: string, _init?: RequestInit) =>
+      async (_url: RequestInfo | URL, _init?: RequestInit) =>
         new Response(JSON.stringify(reply), {
           status: 200,
           headers: { 'content-type': 'application/json' },

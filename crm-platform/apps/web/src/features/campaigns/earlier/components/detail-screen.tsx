@@ -19,7 +19,7 @@ import {
 } from '../api/detail';
 import { formatCreated, parseTab, pillTone, TABS, tiles, type Tab } from '../lib/detail-model';
 import { canDelete, providerLabel, providerTag, reference, statusLabel } from '../lib/list-model';
-import { ChevronLeftIcon, RefreshIcon, TrashIcon } from './icons';
+import { ChevronLeftIcon, RefreshIcon, TrashIcon } from '@/features/broadcasts/components/icons';
 import { EventsTab } from './events-tab';
 import { FailuresTab } from './failures-tab';
 import { OverviewTab } from './overview-tab';
@@ -81,10 +81,10 @@ function Tile({
 }
 
 /**
- * `/broadcasts/:id` (TW-BCAST-030): the header with the status, retry, resume and delete; the six live tiles; and the four tabs.
+ * `/campaigns/earlier/:id` (TW-BCAST-030): the header with the status, retry, resume and delete; the six live tiles; and the four tabs.
  * The tab is in the address (`?tab=`). The tiles follow the worker every 12 seconds while the broadcast is in flight.
  */
-export function BroadcastDetailScreen({ id }: { id: string }) {
+export function EarlierDetailScreen({ id }: { id: string }) {
   const t = useTranslations('broadcasts.detail');
   const unofficial = useUnofficialWhatsapp();
   const router = useRouter();
@@ -137,7 +137,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
           actions={
             gone ? (
               <Link
-                href="/campaigns/history/legacy"
+                href="/campaigns?source=earlier"
                 className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
               >
                 {t('backToList')}
@@ -193,7 +193,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
     run(async () => {
       await deleteBroadcast(id);
       toast(t('deleted'), 'success');
-      router.replace('/campaigns/history/legacy');
+      router.replace('/campaigns?source=earlier');
     });
   const doResume = () =>
     run(async () => {
@@ -226,7 +226,7 @@ export function BroadcastDetailScreen({ id }: { id: string }) {
         <div className="mx-auto flex max-w-none flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
           <div className="flex min-w-0 items-center gap-3">
             <Link
-              href="/campaigns/history/legacy"
+              href="/campaigns?source=earlier"
               title={t('back')}
               aria-label={t('back')}
               className="grid size-8 place-items-center rounded-full border border-border hover:bg-muted"

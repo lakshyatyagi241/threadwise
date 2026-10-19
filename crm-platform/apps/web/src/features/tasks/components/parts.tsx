@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Alert, Button, cn } from '@crm/ui';
 import type { TaskPriority, TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { useActivitySettings } from '@/features/sales-activities';
 import { isOverdue, relativeDay } from '../lib/dates';
 import { errorKind } from '../lib/errors';
 import { avatarColor, formatShortDate, formatTime, initials } from '../lib/format';
@@ -155,6 +156,8 @@ export function CompleteCheck({
   className?: string;
 }) {
   const t = useTranslations('tasks.row');
+  // "Allow users to mark this activity as completed" (Settings > Sales Activities): off means a task cannot be ticked, but one that is done can still be reopened.
+  const { allowComplete } = useActivitySettings('task');
   return (
     <button
       type="button"
@@ -162,7 +165,7 @@ export function CompleteCheck({
       aria-checked={done}
       aria-label={done ? t('reopenNamed', { title }) : t('completeNamed', { title })}
       title={done ? t('reopen') : t('complete')}
-      disabled={disabled}
+      disabled={disabled || (!done && !allowComplete)}
       onClick={(e) => {
         e.stopPropagation();
         onToggle();

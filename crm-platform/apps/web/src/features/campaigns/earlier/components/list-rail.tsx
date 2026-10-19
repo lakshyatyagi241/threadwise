@@ -5,7 +5,7 @@ import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
 import type { BroadcastListItem, BroadcastSummary } from '@crm/contracts';
 import { STATUS_VIEWS } from '../lib/list-model';
-import { ArrowRightIcon } from './icons';
+import { ArrowRightIcon } from '@/features/broadcasts/components/icons';
 
 const DOT: Record<(typeof STATUS_VIEWS)[number], string> = {
   all: 'bg-success',
@@ -15,7 +15,7 @@ const DOT: Record<(typeof STATUS_VIEWS)[number], string> = {
   failed: 'bg-danger',
 };
 
-/** Left rail of `/broadcasts`: the tip, the five status views with their counts, the recent five, and the "create" card. */
+/** Left rail of the earlier broadcasts view: the tip, the five status views with their counts, the recent five, and the "create" card. */
 export function ListRail({
   status,
   counts,
@@ -93,7 +93,7 @@ export function ListRail({
           recent.map((b) => (
             <Link
               key={b.id}
-              href={`/broadcasts/${b.id}`}
+              href={`/campaigns/earlier/${b.id}`}
               className="flex items-center justify-between rounded-xl px-3 py-2 text-sm hover:bg-muted"
             >
               <span className="flex min-w-0 items-center gap-2">

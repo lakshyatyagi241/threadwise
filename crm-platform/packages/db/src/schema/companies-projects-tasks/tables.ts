@@ -139,6 +139,8 @@ export const tasks = pgTable(
     source: text('source').notNull().default('manual'),
     /** BL-291: `follow_up` is a contact's next follow-up (at most one open per contact); every other task is `task`. */
     kind: text('kind').notNull().default('task'),
+    /** Sales activities settings: the task type (activity_type_options). The outcome is `outcomeId` above (task_outcomes). */
+    taskTypeId: idColumn('task_type_id'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),

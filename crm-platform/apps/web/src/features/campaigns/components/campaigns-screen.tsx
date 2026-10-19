@@ -9,7 +9,7 @@ import type { Campaign } from '@crm/contracts';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import { pageWindow } from '@/features/broadcasts/components/broadcasts-pagination';
-import { NewBroadcast } from '@/features/broadcasts/components/new-broadcast';
+import { NewCampaignButton } from './new-campaign-button';
 import {
   bulkDeleteCampaigns,
   cancelCampaign,
@@ -21,6 +21,7 @@ import {
   useCampaignList,
 } from '../api/campaigns';
 import { can, pageCount, parseState, stateToSearch, type ListState } from '../lib/list-model';
+import { EarlierLink } from '../history/components/parts';
 import { CampaignCard } from './campaign-card';
 import { CampaignTable } from './campaign-table';
 import { CampaignsRail } from './campaigns-rail';
@@ -232,7 +233,8 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              {canCreate && <NewBroadcast label={t('newCampaign')} />}
+              <EarlierLink />
+              {canCreate && <NewCampaignButton label={t('newCampaign')} />}
             </div>
           </div>
 
@@ -373,7 +375,7 @@ export function CampaignsScreen() {
                 >
                   {t('reset')}
                 </Button>
-                {canCreate && <NewBroadcast label={t('createCampaign')} />}
+                {canCreate && <NewCampaignButton label={t('createCampaign')} />}
               </div>
             </div>
           ) : view === 'list' ? (

@@ -2,7 +2,7 @@
 
 import { useTranslations } from 'next-intl';
 import { cn } from '@crm/ui';
-import { totalPages } from '../lib/list-model';
+import { totalPages } from '@/features/campaigns/earlier/lib/list-model';
 import { ChevronLeftIcon, ChevronRightIcon } from './icons';
 
 const btn =
