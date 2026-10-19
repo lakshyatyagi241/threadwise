@@ -4,9 +4,9 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Modal } from '@crm/ui';
-import { useBroadcastChannels } from '../api/channels';
-import { channelCards } from '../lib/channel-cards';
-import { PlusIcon } from './icons';
+import { useBroadcastChannels } from '@/features/broadcasts/api/channels';
+import { channelCards } from '@/features/broadcasts/lib/channel-cards';
+import { PlusIcon } from '@/features/broadcasts/components/icons';
 
 const BUTTON =
   'inline-flex h-10 items-center gap-2 rounded-full bg-brand px-4 text-xs font-semibold text-brand-foreground hover:opacity-90';
@@ -17,12 +17,12 @@ const CARD =
   'group block rounded-xl border border-border p-4 transition hover:border-brand hover:bg-muted/40';
 
 /**
- * "New campaign" / "New broadcast" (TW-BCAST-003). With only WhatsApp connected it goes straight to the campaign builder; when a Telegram
+  * "New campaign" (TW-BCAST-003). With only WhatsApp connected it goes straight to the campaign builder; when a Telegram
  * bot is on, a Facebook Page is connected, an Instagram account is linked, an SMS sender is on or a Viber channel is on it opens the channel chooser, one card
  * per available channel, as Reference does. `label` and `variant` let the Campaigns screen use it as its "New campaign" button (a
  * filled button) or as a text link in the side rail; the legacy broadcasts list keeps its own wording.
  */
-export function NewBroadcast({
+export function NewCampaignButton({
   label: custom,
   variant = 'button',
 }: {

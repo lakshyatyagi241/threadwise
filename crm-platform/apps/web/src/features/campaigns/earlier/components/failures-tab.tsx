@@ -4,7 +4,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Spinner } from '@crm/ui';
 import type { BroadcastDetail } from '@crm/contracts';
 import { useBroadcastRecipients } from '../api/detail';
-import { HBars } from './charts';
+import { HBars } from '@/features/broadcasts/components/charts';
 
 const KICKER = 'font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground';
 const TH = 'px-3 py-2.5 text-start font-mono text-[10px] font-normal uppercase tracking-[0.14em]';

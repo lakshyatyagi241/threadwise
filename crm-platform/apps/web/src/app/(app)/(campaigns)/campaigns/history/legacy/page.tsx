@@ -1,12 +1,6 @@
-import { Suspense } from 'react';
-import { BroadcastsScreen } from '@/features/broadcasts/components/broadcasts-screen';
+import { redirect } from 'next/navigation';
 
-/** Broadcasts sent before they became campaigns, still readable (the old list, kept for existing rows). */
-export default function LegacyBroadcastsPage() {
-  // The screen reads the URL's filters, which needs a Suspense boundary.
-  return (
-    <Suspense>
-      <BroadcastsScreen />
-    </Suspense>
-  );
+/** The old broadcast list address: the earlier broadcasts are a view of the Campaigns page now. */
+export default function LegacyBroadcastsPage(): never {
+  redirect('/campaigns?source=earlier');
 }

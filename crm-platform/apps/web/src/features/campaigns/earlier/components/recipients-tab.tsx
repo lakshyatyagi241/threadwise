@@ -8,7 +8,7 @@ import { exportBroadcast } from '../api/broadcasts';
 import { useBroadcastRecipients } from '../api/detail';
 import { RECIPIENT_STATUSES } from '../lib/detail-model';
 import { downloadBlob } from '../lib/download';
-import { DownloadIcon } from './icons';
+import { DownloadIcon } from '@/features/broadcasts/components/icons';
 import { RecipientsTable } from './recipients-table';
 
 /** Recipients tab (TW-BCAST-032): name/phone search and a status filter (both applied by the API), the export, and the rows. */

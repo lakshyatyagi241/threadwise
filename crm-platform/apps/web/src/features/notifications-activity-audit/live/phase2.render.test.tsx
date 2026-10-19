@@ -145,7 +145,7 @@ describe('the bell rows of the phase 2 types (en)', () => {
 
   it('opens each row at the right place', () => {
     expect(out).toContain(`href="/devices/${DEVICE}"`);
-    expect(out).toContain(`href="/broadcasts/${SEND}"`);
+    expect(out).toContain(`href="/campaigns/earlier/${SEND}"`);
     expect(out).toContain(`href="/campaigns/${SEND}"`);
     expect(out).toContain(`href="/scheduled/${SEND}"`);
     expect(out).toContain(`href="/team-chat?c=${CHANNEL}"`);

@@ -1,16 +1,7 @@
-import { notFound } from 'next/navigation';
-import { Suspense } from 'react';
-import { BroadcastDetailScreen } from '@/features/broadcasts/components/detail-screen';
+import { redirect } from 'next/navigation';
 
-const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-export default async function BroadcastPage({ params }: { params: Promise<{ id: string }> }) {
+/** Old broadcast detail address: the same broadcast opens under Campaigns. */
+export default async function OldBroadcastPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  if (!UUID.test(id)) notFound();
-  // The screen reads the selected tab from the address, which needs a Suspense boundary.
-  return (
-    <Suspense>
-      <BroadcastDetailScreen id={id} />
-    </Suspense>
-  );
+  redirect(`/campaigns/earlier/${encodeURIComponent(id)}`);
 }
