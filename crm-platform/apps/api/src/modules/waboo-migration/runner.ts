@@ -15,6 +15,8 @@ export interface RunArgs {
   sourceClient: string;
   sourceDb: string;
   mode: RunMode;
+  /** testing switch: the pipeline gets --no-whatsapp */
+  skipWhatsapp?: boolean;
 }
 
 export interface RunOutcome {
@@ -71,7 +73,16 @@ export function timeoutMs(env: NodeJS.ProcessEnv): number {
 
 /** `node <pipeline> --client <c> --db <d> --mode <m>`: an args array, never a shell string. */
 export function buildArgs(pipeline: string, a: RunArgs): string[] {
-  return [pipeline, '--client', a.sourceClient, '--db', a.sourceDb, '--mode', a.mode];
+  return [
+    pipeline,
+    '--client',
+    a.sourceClient,
+    '--db',
+    a.sourceDb,
+    '--mode',
+    a.mode,
+    ...(a.skipWhatsapp ? ['--no-whatsapp'] : []),
+  ];
 }
 
 export class ProcessRunner implements Runner {
