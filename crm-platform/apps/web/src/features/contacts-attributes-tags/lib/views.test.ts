@@ -130,6 +130,20 @@ describe('view columns and the editor filter', () => {
     expect(viewRulesOf(base)).toBe('{"old":1}');
     expect(viewRulesOf({})).toBe('');
   });
+  it('reads the rules of a view the Waboo migration loaded (filter.rules, no params)', () => {
+    const rules =
+      '{"type":"group","combinator":"and","children":[{"type":"condition","field":"ry26_pax","operator":"is_not_empty"}]}';
+    const migrated = { rules };
+    expect(viewRulesOf(migrated)).toBe(rules);
+    expect(filtersOfView(migrated).rules).toBe(rules);
+    // Saving it from the editor writes the shape the app keeps, and drops the top-level copy.
+    expect(composeViewFilter(migrated, rules, ['name'])).toEqual({
+      v: 1,
+      params: { rules },
+      columns: ['name'],
+    });
+    expect(viewRulesOf({ rules: 5 })).toBe('');
+  });
   it('flags a change in filters, and in columns only for a view that keeps columns', () => {
     const saved = viewFilterOf({ ...DEFAULT_FILTERS, q: 'a' }, ['name', 'phone']);
     const v = view({ filter: saved });
