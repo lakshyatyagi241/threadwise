@@ -8,7 +8,7 @@
 // A dedicated stack only.
 import http from 'k6/http';
 import { sleep } from 'k6';
-import { BASE, BUDGETS, EMAIL, PASSWORD, discover } from './lib/common.js';
+import { BASE, BUDGETS, PASSWORD, discover } from './lib/common.js';
 
 const USERS = (__ENV.USERS || '100,250,500,750').split(',').map(Number);
 const RAMP = Number(__ENV.RAMP || 60);
@@ -18,6 +18,8 @@ const [THINK_MIN, THINK_MAX] = (__ENV.THINK || '3,8').split(',').map(Number);
 const MIX = __ENV.MIX || 'full';
 const OUT = __ENV.OUT || `perf/results/load-${MIX}.json`;
 const MAX = Math.max(...USERS);
+// One real account per user: a person may hold only a few sessions at a time, so one shared login would be signed out by the next. See tools/perf/seed-users.sql.
+const USER_EMAIL = __ENV.LOAD_USER_EMAIL || 'loaduser{n}@perf.example.test';
 
 const scenarios = {};
 let at = 0;
@@ -65,7 +67,7 @@ export function setup() {
   for (let from = 1; from <= MAX; from += BATCH) {
     const reqs = [];
     for (let i = from; i < Math.min(from + BATCH, MAX + 1); i++) {
-      reqs.push(['POST', `${BASE}/v2/auth/login`, JSON.stringify({ email: EMAIL, password: PASSWORD }), { headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) }, tags: { setup: 'true' } }]);
+      reqs.push(['POST', `${BASE}/v2/auth/login`, JSON.stringify({ email: USER_EMAIL.replace('{n}', String(i)), password: PASSWORD }), { headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) }, tags: { setup: 'true' } }]);
     }
     for (const r of http.batch(reqs)) {
       const t = r.status === 200 || r.status === 201 ? r.json('tokens.accessToken') : null;
