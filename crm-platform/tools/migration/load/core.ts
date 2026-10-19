@@ -324,10 +324,10 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         await tx.execute(sql`SELECT set_config('app.rbac_preset_sync', 'on', true)`);
         const res = await tx.execute(sql`
           INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-          SELECT ${orgId}, r.id, k.key, 'deny', 'all'
-          FROM roles r CROSS JOIN unnest(${ceiling.keys}::text[]) AS k(key)
+          SELECT ${orgId}, r.id, k.key, 'deny'::perm_effect, 'all'::record_scope
+          FROM roles r CROSS JOIN jsonb_array_elements_text(${JSON.stringify(ceiling.keys)}::jsonb) AS k(key)
           WHERE r.org_id = ${orgId} AND r.system_key IN ('admin', 'workspace_admin', 'manager', 'agent', 'viewer')
-          ON CONFLICT (org_id, role_id, permission_key) DO UPDATE SET effect = 'deny'
+          ON CONFLICT (org_id, role_id, permission_key) DO UPDATE SET effect = 'deny'::perm_effect
             WHERE role_grants.effect::text <> 'deny'
           RETURNING 1`);
         await tx.execute(sql`SELECT set_config('app.rbac_preset_sync', 'off', true)`);
