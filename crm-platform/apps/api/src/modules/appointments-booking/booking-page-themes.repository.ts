@@ -171,7 +171,13 @@ export class BookingPageThemesRepository {
     orgId: number,
     themeIds?: number[],
   ): Promise<Map<number, Partial<Record<BookingPageAssetSlot, BookingPageAssetRef>>>> {
-    const filter = themeIds ? sql`AND theme_id = ANY(${themeIds}::bigint[])` : sql``;
+    // One placeholder per id: a JS array would be expanded by the driver into a tuple, not an array.
+    const filter = themeIds
+      ? sql`AND theme_id IN (${sql.join(
+          themeIds.map((id) => sql`${id}`),
+          sql`, `,
+        )})`
+      : sql``;
     const res = await tx.execute(
       sql`SELECT theme_id, slot, uuid, etag FROM booking_page_assets WHERE org_id = ${orgId} ${filter}`,
     );
