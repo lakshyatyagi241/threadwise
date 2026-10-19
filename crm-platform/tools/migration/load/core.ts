@@ -370,7 +370,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         )
       ).rows[0] as { counts?: Record<string, string[]> } | undefined;
       if (!rec?.counts) return;
-      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes']);
+      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes', 'workspace_settings']);
       await tx.execute(sql`
         UPDATE migration.run_log SET counts = ${JSON.stringify({ ...rec.counts, ...fresh })}::jsonb, updated_at = now()
         WHERE source_client = ${o.client} AND collection = '_org' AND step = 'baseline'`);

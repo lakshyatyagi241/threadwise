@@ -154,7 +154,8 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   // --- grants of the custom roles: the exact set, never above the ceiling, never admin-class without an approver ---------------------
   const gotGrants = new Map<string, Map<string, string>>();
   for (const g of grantRows) {
-    if (g.effect !== 'allow')
+    // a deny on a preset role is the closed-module ceiling core-load writes (held by the baseline digest); custom roles only ever get allow
+    if (g.effect !== 'allow' && g.system_key === null)
       alarm(
         `DENY_ROW: a role_grants row has effect ${String(g.effect)}; the migration writes allow only`,
       );
@@ -263,9 +264,12 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
       if (s.mfa_enabled !== false) sb.push('mfa_enabled');
       if (s.has_mfa_secret !== false) sb.push('mfa_secret_enc');
       if (s.mfa_recovery !== '[]') sb.push('mfa_recovery_hashes');
-      if (Number(s.row_version) !== 1) sb.push('row_version');
+      // a recorded last login (core-load) touches the row: version and update time move with it
+      if (recordedLogin(u.settings) === null) {
+        if (Number(s.row_version) !== 1) sb.push('row_version');
+        if (s.updated_at !== us(u.updated)) sb.push('updated_at');
+      }
       if (s.created_at !== us(u.created)) sb.push('created_at');
-      if (s.updated_at !== us(u.updated)) sb.push('updated_at');
     }
     if (sb.length > 0) alarm(`ORACLE_MISMATCH: user_security ${u.key}: ${sb.join(', ')}`);
     const want = expectedRoleRow(u);

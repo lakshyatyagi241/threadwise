@@ -645,7 +645,7 @@ async function cmdWaCredentials(srv, cfg, db) {
     });
     summary('wa-export', ex);
     if (ex !== 0) return 1;
-    const base = ['--client', cfg.client, '--org-slug', cfg.orgSlug, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres', '--dumps-dir', '/mig/dumps'];
+    const base = ['--client', cfg.client, '--org-slug', cfg.orgSlug, '--confirm-db-name', 'crm', '--allow-docker-host', 'postgres', '--dumps-dir', '/mig/dumps', ...(cfg.channelMap ? ['--channel-map', inMig(cfg, cfg.channelMap)] : [])];
     const inner = (extra) => `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/import-whatsapp-credentials.cjs ${[...base, ...extra].map(shq).join(' ')}`;
     const mounts = [`${srv.mig}/bundle/import-whatsapp-credentials.cjs:/app/import-whatsapp-credentials.cjs:ro`];
     const imp = await runShown(srv, containerRun(srv, inner(['--apply', '--confirm-org-slug', cfg.orgSlug]), { mounts }), 'wa-credentials import (APPLY)');
