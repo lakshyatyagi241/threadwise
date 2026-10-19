@@ -208,10 +208,20 @@ describe('MenuScreen', () => {
       expect(mockNavigate).toHaveBeenCalledWith('/auto-assignment');
     });
 
-    it('explains instead of opening Settings for a person who may not manage anything in it', async () => {
+    it('opens Team members for everyone: reading the list needs no right of its own', async () => {
       await show();
       await press('Settings');
-      expect(screen.queryByRole('button', { name: 'Saved replies' })).toBeNull();
+      await press('Team members');
+      expect(mockNavigate).toHaveBeenCalledWith('/members');
+    });
+
+    it('shows the Settings lines a person may not open faded, and explains instead of opening them', async () => {
+      await show();
+      await press('Settings');
+      expect(
+        screen.getByRole('button', { name: 'Saved replies' }).props.accessibilityState.disabled,
+      ).toBe(true);
+      await press('Saved replies');
       expect(mockNavigate).not.toHaveBeenCalled();
       expect(await screen.findByText(/You don't have access to this/)).toBeTruthy();
     });

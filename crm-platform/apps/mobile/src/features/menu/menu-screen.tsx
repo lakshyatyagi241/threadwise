@@ -23,7 +23,10 @@ import { useUpdateCheck, type UpdateState } from './use-update-check';
 
 const FADED = 0.4;
 
-/** A line under an expanded row: where it goes, and the permission that opens it. */
+/** The permission of a line every signed-in person may open (the team members list has no right of its own, as on the web). */
+const OPEN = '';
+
+/** A line under an expanded row: where it goes, and the permission that opens it (`OPEN`: everyone). */
 interface Child {
   key: string;
   label: string;
@@ -58,7 +61,7 @@ export function MenuScreen() {
   const name = user?.displayName ?? user?.fullName ?? '';
   const roles = session.data?.roles.map((r) => r.name).join(', ') ?? '';
   const version = Application.nativeApplicationVersion;
-  const allowed = (permission: string) => can(session.data, permission);
+  const allowed = (permission: string) => permission === OPEN || can(session.data, permission);
   // While the session loads nothing is faded: a row is not "locked" before the answer is known.
   const faded = (permission: string) => session.data !== undefined && !allowed(permission);
 
@@ -150,6 +153,12 @@ export function MenuScreen() {
       label: t('settings.routing.title'),
       href: '/auto-assignment',
       permission: 'inbox.settings.read',
+    },
+    {
+      key: 'members',
+      label: t('settings.members.title'),
+      href: '/members',
+      permission: OPEN,
     },
   ];
   const settingsOpen = settingsChildren.some((child) => allowed(child.permission));

@@ -1,0 +1,23 @@
+# A person opens the team from Menu > Settings > Team members, searches for a teammate and opens the invite form.
+# Needs an account in a workspace with at least two members; the invite button shows for a person who may invite (owner or admin).
+#   maestro test apps/mobile/.maestro/members.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Team members'
+- assertVisible: 'You'
+- tapOn: 'Invite teammate'
+- assertVisible: 'Full name'
+- assertVisible: 'Send invite'
+- tapOn: 'Send invite'
+- assertVisible: "Enter the person's name."

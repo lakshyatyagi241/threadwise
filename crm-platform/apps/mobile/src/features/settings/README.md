@@ -1,7 +1,7 @@
 # Settings
 
 The workspace's own setup, opened from the **Settings** row of the Menu tab (it expands like Dashboard and Contacts, and is faded only when
-the person may open nothing in it). Each line opens with the right that manages it, as on the web.
+the person may open nothing in it; Team members opens for everyone, as on the web). Each line opens with the right that manages it, as on the web.
 
 | Line            | Route                                 | Right                                                          | API                                                                                                      | Web                                                  |
 | --------------- | ------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
@@ -9,6 +9,7 @@ the person may open nothing in it). Each line opens with the right that manages 
 | Labels          | `/labels`, `/label-form`              | `inbox.tag.manage`                                             | `/v2/inbox/labels` (list, create, update, delete)                                                        | Settings, Conversation tags                          |
 | Business hours  | `/business-hours`                     | `inbox.settings.read` to see, `inbox.routing.manage` to save   | `GET`/`PUT /v2/inbox/routing/business-hours`                                                             | Auto-assignment, Business hours dialog (TW-TIB2-004) |
 | Auto-assignment | `/auto-assignment`                    | `inbox.settings.read` to see, `inbox.routing.manage` to change | `/v2/inbox/routing/rules` (list, reorder, one, switch, copy, delete), `/settings`, `/v2/inbox/assignees` | Auto-assignment (TW-TIB2-001; Geta: Chat assignment) |
+| Team members    | `/members`, `/member-invite`          | everyone may open; `wsp.member.*` rights decide what shows     | `/v2/workspace/members` (list, summary, invite, resend-invite, reset-password, role, remove)             | Settings, Users (members screen, invite dialog)      |
 
 ## Saved replies
 
@@ -100,6 +101,28 @@ with their agent (the web's Auto-assignment screen; the Geta app calls it "Chat 
 | Creating and editing a rule         | the web form is large (conditions, strategy, escalation, auto-reply, tags, flow): its own step (see below) |
 | The link to Record assignment rules | a different web screen (assigning contacts, companies and deals to sales owners), not built in the app     |
 
+## Team members
+
+Everyone in the workspace, with their role and state (the web's Users screen). Anyone signed in may read the list; the rights below decide
+what else shows, with the same rules as the web (`lib/roles.ts` is ported to `member-rules.ts`).
+
+- **The list**: a page at a time, searched by name or email after a short pause, filtered by role tier (Owners, Admins, Managers, Agents,
+  Viewers, and Custom roles only once someone has one; the counts come from the server). Each row shows the name, email, role, and whether the
+  person is online, away or still pending; "You" marks your own row.
+- **Seats**: "4 of 10 seats", or "all in use" when the plan's limit is reached (`/members/summary`).
+- **Invite** (`/member-invite`, needs the right to invite): full name, email and a role among those the person may grant. The server sends the
+  mail; when it cannot, the one-time link is shown once, to copy or share (`Share`). Plan limit, duplicates and the other refusals are said by
+  error code (`member-errors.ts`).
+- **Actions** on a row (the dots, only where allowed: never yourself or an owner): **Change role** (sent with the version that was read),
+  **Reset password** (asks first; mails a link, or shows it once), **Resend invite** (pending members), **Remove from workspace** (asks first).
+
+### In the web, not built here (recorded, not dropped)
+
+| What                                 | Why it waits                                                      |
+| ------------------------------------ | ----------------------------------------------------------------- |
+| Leave or hand over (delegate) dialog | a separate flow with its own routes; recorded in the backlog      |
+| Editing a member's name or avatar    | the web does it on the profile page, which has its own app screen |
+
 ## Not built yet
 
-Users and teams (`/v2/workspace/members`, `/v2/workspace/teams`), then the rule editor for Auto-assignment.
+Teams (`/v2/workspace/teams`), Notification preferences, then the rule editor for Auto-assignment.
