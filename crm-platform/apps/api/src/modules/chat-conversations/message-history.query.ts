@@ -28,6 +28,8 @@ export type RecordScopeLike = 'all' | 'team' | 'own';
 
 export interface HistoryContext {
   orgId: number;
+  /** Joins the visibility condition needs, placed right after `JOIN conversations c` (empty when the condition is TRUE). */
+  conversationJoins: SQL;
   /** A condition on `conversations c`: the inbox visibility rule of the caller, or TRUE for a caller who reads every conversation. */
   conversationVisible: SQL;
   /** The caller may see broadcast, campaign and scheduled recipient rows. */
@@ -406,6 +408,7 @@ function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOpti
   const joins = sql`
     FROM messages m
     JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+    ${ctx.conversationJoins}
     LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
     ${
       row
@@ -734,32 +737,47 @@ export function costSql(ctx: HistoryContext, sel: HistorySelection): SQL {
     GROUP BY u.currency ORDER BY u.currency NULLS FIRST`;
 }
 
-/** Average seconds from a conversation's first customer message to the first reply after it, over the visible conversations of the window. */
+/**
+ * Average seconds from a conversation's first customer message to the first reply after it, over the visible conversations of the window.
+ *
+ * One pass over the window's messages gives, per conversation, its first customer message and its first reply; only a conversation whose
+ * first reply came BEFORE (or with) its first customer message, an agent who wrote first, needs the second look for the first reply after
+ * it. The messages are aggregated before the conversation is joined, so the visibility rule runs on one row per conversation and the scan
+ * of the messages stays parallel.
+ */
 export function firstResponseSql(ctx: HistoryContext, sel: HistorySelection): SQL {
   const channel = sel.scoping.channelId
     ? sql`AND c.channel_id = (SELECT id FROM channels WHERE org_id = ${ctx.orgId} AND uuid = ${sel.scoping.channelId}::uuid)`
     : sql``;
+  const feed = (alias: string) =>
+    sql.join(
+      FEED_MESSAGES(alias).map((c) => sql`(${c})`),
+      sql` AND `,
+    );
   return sql`
-    WITH first_in AS (
-      SELECT m.conversation_id, min(m.created_at) AS at
-      FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE m.org_id = ${ctx.orgId} AND m.direction = 'in' AND ${sql.join(
-        FEED_MESSAGES('m').map((c) => sql`(${c})`),
-        sql` AND `,
-      )}
+    WITH per_conversation AS (
+      SELECT m.conversation_id,
+             min(m.created_at) FILTER (WHERE m.direction = 'in') AS at,
+             min(m.created_at) FILTER (WHERE m.direction = 'out') AS first_out
+      FROM messages m
+      WHERE m.org_id = ${ctx.orgId} AND ${feed('m')}
         AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
-        AND (${ctx.conversationVisible}) ${channel}
-      GROUP BY m.conversation_id)
+      GROUP BY m.conversation_id
+      HAVING bool_or(m.direction = 'in')),
+    first_in AS (
+      SELECT p.conversation_id, p.at, p.first_out
+      FROM per_conversation p
+      JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = p.conversation_id
+      ${ctx.conversationJoins}
+      WHERE (${ctx.conversationVisible}) ${channel})
     SELECT avg(EXTRACT(EPOCH FROM (o.at - f.at)))::int AS seconds
     FROM first_in f
     CROSS JOIN LATERAL (
-      SELECT min(m2.created_at) AS at FROM messages m2
-      WHERE m2.org_id = ${ctx.orgId} AND m2.conversation_id = f.conversation_id AND m2.direction = 'out'
-        AND ${sql.join(
-          FEED_MESSAGES('m2').map((c) => sql`(${c})`),
-          sql` AND `,
-        )}
-        AND m2.created_at > f.at AND m2.created_at < ${sel.window.to}) o
+      SELECT CASE WHEN f.first_out > f.at THEN f.first_out
+        ELSE (SELECT min(m2.created_at) FROM messages m2
+              WHERE m2.org_id = ${ctx.orgId} AND m2.conversation_id = f.conversation_id AND m2.direction = 'out'
+                AND ${feed('m2')}
+                AND m2.created_at > f.at AND m2.created_at < ${sel.window.to}) END AS at) o
     WHERE o.at IS NOT NULL`;
 }
 
@@ -795,7 +813,10 @@ export function typeMixSql(ctx: HistoryContext, sel: HistorySelection): SQL {
   return sql`SELECT r.type AS type, count(*)::int AS n FROM (${feedSql(ctx, sel, { level: 'slim' })}) r GROUP BY r.type`;
 }
 
-/** The most active conversations of the window, among the messages the caller may see. */
+/**
+ * The most active conversations of the window, among the messages the caller may see. The messages are counted per conversation first and
+ * only then joined to the conversation, so the sort and the visibility rule work on one row per conversation, not one per message.
+ */
 export function topConversationsSql(
   ctx: HistoryContext,
   sel: HistorySelection,
@@ -805,19 +826,22 @@ export function topConversationsSql(
     ? sql`AND c.channel_id = (SELECT id FROM channels WHERE org_id = ${ctx.orgId} AND uuid = ${sel.scoping.channelId}::uuid)`
     : sql``;
   return sql`
-    SELECT c.uuid AS conversation_uuid, count(*)::int AS n, max(m.created_at) AS last_at,
+    SELECT c.uuid AS conversation_uuid, a.n, a.last_at,
            COALESCE(${contactName('ct')}, NULLIF(c.peer_name, '')) AS name, c.peer_key AS phone,
-           bool_or(${contactOpen(ctx, 'ct')}) AS phone_open
-    FROM messages m
-    JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+           ${contactOpen(ctx, 'ct')} AS phone_open
+    FROM (
+      SELECT m.conversation_id, count(*)::int AS n, max(m.created_at) AS last_at
+      FROM messages m
+      WHERE m.org_id = ${ctx.orgId} AND ${sql.join(
+        FEED_MESSAGES('m').map((c) => sql`(${c})`),
+        sql` AND `,
+      )}
+        AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
+      GROUP BY m.conversation_id) a
+    JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = a.conversation_id
+    ${ctx.conversationJoins}
     LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
-    WHERE m.org_id = ${ctx.orgId} AND ${sql.join(
-      FEED_MESSAGES('m').map((c) => sql`(${c})`),
-      sql` AND `,
-    )}
-      AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
-      AND (${ctx.conversationVisible}) ${channel}
-    GROUP BY c.org_id, c.id, ct.org_id, ct.id
-    ORDER BY n DESC, last_at DESC, c.id DESC
+    WHERE (${ctx.conversationVisible}) ${channel}
+    ORDER BY a.n DESC, a.last_at DESC, c.id DESC
     LIMIT ${limit}`;
 }

@@ -6,7 +6,10 @@ import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { runMigrations } from '@crm/db';
 import { conversationVisible, type ConversationViewer } from '../../../src/realtime';
-import { visibleToSql } from '../../../src/modules/team-inbox-conversations/visibility-sql';
+import {
+  visibleToJoinedSql,
+  visibleToSql,
+} from '../../../src/modules/team-inbox-conversations/visibility-sql';
 
 /**
  * The storage the inbox adds (migrations 20261015090000 .. 090200) against a real Postgres, and the one thing a mock cannot prove: the SQL
@@ -461,6 +464,22 @@ describe('team inbox storage: isolation, constraints and the visibility rule', (
           rows.filter((r) => conversationVisible(viewer, r)).map((r) => r.id),
         );
         expect(fromSql, JSON.stringify(viewer)).toEqual(fromRule);
+
+        // The join form the message history uses (no correlated sub-select, so its scans can run in parallel) must give the same rows.
+        const joined = visibleToJoinedSql(viewer);
+        const qj = dialect.sqlToQuery(
+          sql`SELECT c.id FROM conversations c ${joined.joins} WHERE c.org_id = ${orgA} AND ${joined.where}`,
+        );
+        const fromJoined = (await owner.query(qj.sql, qj.params as unknown[])).rows.map((r) =>
+          Number(r.id),
+        );
+        expect(fromJoined.length, 'a join must not duplicate a conversation').toBe(
+          new Set(fromJoined).size,
+        );
+        expect(
+          new Set(fromJoined.filter((id) => mine.includes(id))),
+          JSON.stringify(viewer),
+        ).toEqual(fromRule);
       }
     });
   });
