@@ -16,6 +16,7 @@ import {
   type Facts,
   type FetchLike,
   type GraphDeps,
+  forwardedByPartner,
 } from '../load/cutover';
 
 const KEY = randomBytes(32).toString('base64');
@@ -418,12 +419,25 @@ describe('subscribeWaba', () => {
     );
     expect((await subscribeWaba(b.d, TOKEN, WABA, cb, true)).ok).toBe(true);
   });
+  it('makes no Meta override for a number the partner platform forwards (Pinnacle): the token check only, nothing to undo', () => {
+    expect(
+      metaPlan('1056012750933621', WABA, false, true).map((c) => `${c.method} ${c.path}`),
+    ).toEqual(['GET /1056012750933621']);
+    expect(metaPlan('1056012750933621', WABA, true, true)).toEqual([]);
+    expect(metaPlan('1056012750933621', WABA, false)).toHaveLength(5);
+    expect(forwardedByPartner('pinnacle')).toBe(true);
+    expect(forwardedByPartner('meta')).toBe(false);
+    expect(forwardedByPartner(null)).toBe(false);
+  });
   it('says what Meta answered when the override never takes', async () => {
     const { d } = fakeGraph((c) =>
       c.method === 'GET'
         ? { body: sub(undefined) }
         : c.body !== undefined
-          ? { status: 400, body: { error: { message: 'Callback URL is not allowed for this app', code: 100 } } }
+          ? {
+              status: 400,
+              body: { error: { message: 'Callback URL is not allowed for this app', code: 100 } },
+            }
           : { body: { success: true } },
     );
     const r = await subscribeWaba(d, TOKEN, WABA, cb, false);

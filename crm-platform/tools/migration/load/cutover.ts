@@ -306,7 +306,7 @@ export function buildChecklist(f: Facts): Item[] {
         : c.providerKey === 'meta'
           ? `${t} is on the direct Meta route with WABA id ...${(c.wabaId ?? '').slice(-4)}`
           : c.providerKey === 'pinnacle'
-            ? `${t} is on the Pinnacle partner route with WABA id ...${(c.wabaId ?? '').slice(-4)}: already onboarded there, so only the Meta webhook subscription and the database change are made`
+            ? `${t} is on the Pinnacle partner route with WABA id ...${(c.wabaId ?? '').slice(-4)}: already onboarded there; no webhook override is made at Meta (the partner platform forwards its events to this app), only the database changes`
             : `${t} is on the "${c.providerKey ?? 'unknown'}" route: this command does the direct Meta and the Pinnacle routes (the Interakt partner calls are not built; connect it in the app)`,
     );
     out.push(
@@ -366,6 +366,12 @@ export function buildChecklist(f: Facts): Item[] {
       ? 'operator confirmed (--i-switched-waboo-off): the Waboo bots/flows for this number are switched off'
       : 'MANUAL: this tool cannot see Waboo. Switch off its bots/flows for this number, then pass --i-switched-waboo-off',
   });
+  if (f.numbers.some((n) => forwardedByPartner(n.cfg?.providerKey)))
+    out.push({
+      id: 'partner-forwarding',
+      status: 'MANUAL',
+      text: "MANUAL: a number on the Pinnacle route reaches this app only if the partner platform (Geta) forwards its webhook events to this app's callback; the tool cannot see Geta and makes no Meta override for it",
+    });
   out.push({
     id: 'verify-token-same',
     status: 'MANUAL',
@@ -409,8 +415,31 @@ export interface PlannedCall {
   path: string;
   fields: string;
 }
-export function metaPlan(ext: string, wabaId: string, rolling: boolean): PlannedCall[] {
+/**
+ * A number on the Pinnacle partner route reaches this app through the partner platform's own webhook forwarding (Geta sends every event
+ * it receives to this app), so no per-number override is made at Meta and none has to be undone: the token is only checked (read-only).
+ */
+export const forwardedByPartner = (providerKey: string | null | undefined): boolean =>
+  providerKey === 'pinnacle';
+
+export function metaPlan(
+  ext: string,
+  wabaId: string,
+  rolling: boolean,
+  forwarded = false,
+): PlannedCall[] {
   const sub = `/${wabaId}/subscribed_apps`;
+  if (forwarded)
+    return rolling
+      ? []
+      : [
+          {
+            step: '1 verify the token (read-only); no webhook override: the partner forwards the events',
+            method: 'GET',
+            path: `/${ext}`,
+            fields: `query fields=${PHONE_FIELDS}`,
+          },
+        ];
   if (rolling)
     return [
       { step: 'read the subscription', method: 'GET', path: sub, fields: '(none)' },
@@ -883,7 +912,12 @@ export async function cutover(o: CutoverOptions): Promise<number> {
         ' (Authorization: Bearer <token of the number>, never shown):',
     );
     for (const n of numbers)
-      for (const c of metaPlan(n.ext, n.cfg?.wabaId ?? '<waba id>', rolling))
+      for (const c of metaPlan(
+        n.ext,
+        n.cfg?.wabaId ?? '<waba id>',
+        rolling,
+        forwardedByPartner(n.cfg?.providerKey),
+      ))
         say(`  ${tail(n.ext)}  ${c.method.padEnd(6)} ${c.path}  ${c.step}; ${c.fields}`);
 
     // ---- dry runs -----------------------------------------------------------------------------------------------------------------
@@ -955,8 +989,19 @@ export async function cutover(o: CutoverOptions): Promise<number> {
         });
         if (!v.ok) return fail('nothing was subscribed or changed');
       }
-      // 2. subscribe with the override
+      // 2. subscribe with the override (not for a number the partner platform forwards: its events already reach this app)
       for (const n of numbers) {
+        if (forwardedByPartner(n.cfg?.providerKey)) {
+          say(
+            `  DONE  2 no webhook override for ${tail(n.ext)}: the Pinnacle partner (Geta) forwards its events to this app`,
+          );
+          await logStep(worker.db, o.client, `subscribe:${n.ext}`, 'done', {
+            ok: true,
+            skipped: true,
+            forwardedByPartner: true,
+          });
+          continue;
+        }
         await logStep(worker.db, o.client, `subscribe:${n.ext}`, 'started', {});
         const s = await subscribeWaba(
           d,
@@ -1032,16 +1077,20 @@ export async function cutover(o: CutoverOptions): Promise<number> {
       say(`  DONE  flows back to draft (${ids.length} that flow-state had armed)`);
       for (const n of numbers) {
         const tok = tokens.get(n.ext);
-        if (!tok || !n.cfg?.wabaId) {
+        if (forwardedByPartner(n.cfg?.providerKey)) {
+          // no override was ever made at Meta for this number: only the database goes back
+        } else if (!tok || !n.cfg?.wabaId) {
           say(
             `  FAIL  override of ${tail(n.ext)} NOT removed: no token/WABA id; remove it in the Meta app by hand`,
           );
           failed = true;
           continue;
         }
-        const r = await removeOverride(d, tok, n.cfg.wabaId, cbk);
-        say(`  ${r.ok ? 'DONE' : 'FAIL'}  Meta ${tail(n.ext)}: ${r.text}`);
-        if (!r.ok) failed = true;
+        if (!forwardedByPartner(n.cfg?.providerKey)) {
+          const r = await removeOverride(d, tok!, n.cfg!.wabaId!, cbk);
+          say(`  ${r.ok ? 'DONE' : 'FAIL'}  Meta ${tail(n.ext)}: ${r.text}`);
+          if (!r.ok) failed = true;
+        }
         await withTenant(worker.db, { orgId }, async (tx) => {
           await tx.execute(
             sql`UPDATE channels SET status = 'disconnected', waba_config_id = NULL WHERE org_id = ${orgId} AND kind = 'whatsapp_cloud' AND external_id = ${n.ext}`,
