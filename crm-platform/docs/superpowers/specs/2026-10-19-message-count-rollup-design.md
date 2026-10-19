@@ -220,3 +220,48 @@ Each step is a flag flip that can be reverted without a migration.
 - Event volume: 2 to 4 events a message. At the design target that is 3M a day, 15 GB a month, within the approved plan; the 60-day hot window and archive apply unchanged.
 - Duplicated mapping tables (source, kind class) between SQL and TypeScript: covered by the mapping parity test.
 - A mistake in the bucket zone shows up as a small constant drift, as the prototype did. The shared bucket expression and the property test are the guard.
+
+## 14. As built (2026-10-19)
+
+D8 and D9 were accepted by the owner. Implemented in `packages/db/migrations/20270201090000_msg_feed_events.sql`,
+`apps/api/src/modules/analytics/query/message-feed.service.ts`, `.../team-inbox-conversations/message-history-rollup.ts`.
+
+**D8 as built differs from section 3's default.** The default was "a message counts in the bucket of the moment it changed status".
+Exclusive status cards (queued, sent, delivered, read, failed) cannot be computed from transition-time events: a message that moved
+on would leave `queued` in a later bucket than it entered, and a window ending in between would show a negative count. Built instead as
+**cohort deltas**: every event is stamped with the message's creation time (`occurred_at = created_at`) and a status change writes one
+paired event that enters the new status and leaves the old one (`MSG_STATE`, `status` / `k2`, rollup rule `paired: 'k2'`). A bucket
+therefore holds "messages created in this bucket, by the status they have now", which is what the live scan returns for the same window.
+
+**D9 as built:** the average first reply is the average over first replies _made_ in the window (`CONV_FIRST_REPLY` events, whole hours
+of the window), not over conversations that started in it. It is excluded from the shadow comparison because it is defined differently.
+
+### Pieces
+
+- Writer: triggers `trg_messages_feed_insert` / `trg_messages_feed_status`; every body is a guarded block that logs a warning and
+  returns, so a message is never refused because of analytics. First-reply state lives in `conversations.first_inbound_at` /
+  `first_replied_at`.
+- Two sources, two metrics, so they never mix in a bucket: `MSG_FEED` (messages created at or after `an_msg_feed_cutover()`, from events,
+  folded by the worker) and `MSG_FEED_BASE` / `CONV_REPLY_BASE` (older messages, rebuilt from `messages` by `an_msg_feed_rebuild_base`).
+- Read: `MessageFeedService` stitches day rows, hour rows, the unfolded event tail and the partial-hour edges from `messages`, in the
+  workspace timezone. The integration spec proves it equals a count of `messages` for random windows in UTC, Asia/Kolkata and
+  America/New_York, with and without a hidden channel, and unchanged by the worker folding the tail.
+- History: `ANALYTICS_SOURCES={"msg_feed":"shadow"}` serves the scan and logs any difference; `"rollup"` serves the rollup; default is
+  `legacy`. Used only when exact (`rollupApplies`): the viewer reads every conversation, no scoping filter, no text search, request
+  timezone equals the workspace's. Recipient rows of broadcasts / campaigns / scheduled sends and the top conversations stay live.
+
+### Rollout
+
+1. Deploy (migration sets the cut-over to its own run time).
+2. `pnpm --filter @crm/api backfill:message-feed` (all workspaces; `--org`, `--from`, `--to` narrow it). Repeatable.
+3. `ANALYTICS_SOURCES={"msg_feed":"shadow"}`; watch `AnalyticsShadow` logs for differences for a few days.
+4. Switch to `"rollup"`. The nightly job rebuilds the base of the last 7 days (a no-op once the cut-over is older than that).
+
+### Known limits
+
+- A message deleted by a person stays counted (D10); the live scan leaves it out. Shadow mode will log that difference.
+- Daylight-saving: a window boundary inside the repeated local hour cannot be answered exactly from hour buckets.
+- Messages older than the cut-over reflect later status changes only after the next base rebuild (nightly, last 7 days, or the backfill command).
+- History imported later with old `created_at` needs `backfill:message-feed --from/--to` for its range.
+- A channel's mailbox scope changing later is not applied retroactively to past rollup rows (section 7).
+- If the event write fails (it logs and continues), that message is missing from the rollup until the day is reconciled or rebuilt.

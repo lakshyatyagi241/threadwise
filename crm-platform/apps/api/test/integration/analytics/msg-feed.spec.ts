@@ -669,6 +669,10 @@ describe('message feed rollup', () => {
       ]);
       expect(await rows()).toEqual(first);
       expect(first.length).toBeGreaterThan(0);
+      // the nightly job's rebuild of the last days (every workspace) leaves the rows as they are, and refuses a bad range
+      expect(await rollup.rebuildMessageBase(40)).toBe(0);
+      expect(await rows()).toEqual(first);
+      await expect(rollup.rebuildMessageBase(0)).rejects.toThrow('bad days');
     });
   });
 
