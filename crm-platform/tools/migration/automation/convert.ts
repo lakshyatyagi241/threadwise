@@ -54,6 +54,12 @@ export const MAPPING: MappingRow[] = [
     note: 'the list through id_map (marketing_list); unresolved: kept as soft LIST_UNRESOLVED',
   },
   {
+    key: 'trigger|contact|added',
+    target: 'trigger kind contact_created',
+    status: 'mapped',
+    note: 'Waboo "Contact Created - Any Contact Created": the same event in WaDesk (a new contact is added)',
+  },
+  {
     key: 'trigger|google|google_sheet_events',
     target: 'trigger kind manual_enroll (placeholder)',
     status: 'unsupported',
@@ -241,8 +247,7 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
       data: obj(n.nodeObjectData),
     });
   }
-  if (nodes.length === 0)
-    return { ok: false, code: 'NO_NODES', reason: 'the automation has no nodes' };
+  // an empty draft (no nodes) is converted too: it becomes a flow with the manual_enroll trigger (NO_TRIGGER), so every automation of the old workspace exists
   if (nodes.length > MAX_NODES)
     return {
       ok: false,
@@ -463,6 +468,11 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
           },
           waboo,
         );
+        built.set(n.id, { entry: id, from: outOf(id) });
+        return;
+      }
+      case 'trigger|contact|added': {
+        addNode(id, 'trigger', p.x, p.y, { kind: 'contact_created' }, waboo);
         built.set(n.id, { entry: id, from: outOf(id) });
         return;
       }

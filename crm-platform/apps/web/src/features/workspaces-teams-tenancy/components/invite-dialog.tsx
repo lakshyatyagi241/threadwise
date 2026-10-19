@@ -4,20 +4,20 @@ import { Alert, Button, Field, Input, Modal, Select, Spinner, useToast } from '@
 import { useTranslations } from 'next-intl';
 import { useId, useState, type FormEvent } from 'react';
 import {
+  WSP_CHAT_LIMIT_MAX,
   WSP_MEMBER_NAME_MAX,
   type InviteWspMemberResponse,
   type WspMembersSummary,
 } from '@crm/contracts';
 import { wspApi } from '../api/service';
 import {
+  blankInvite,
   grantableRoles,
   validateInvite,
   type InviteErrors,
   type InviteForm,
 } from '../lib/invite-form';
 import { CopyField, ErrorNote, INVITE_DAYS } from './parts';
-
-const blank = (roleId: string): InviteForm => ({ fullName: '', email: '', roleId });
 
 /**
  * "Invite teammate" (TW-WSP-016). The role list is what the caller may grant (the summary's `grantable` roles). The
@@ -65,7 +65,7 @@ function InviteForm({
   const { toast } = useToast();
   const options = grantableRoles(roles);
   const ids = useId();
-  const [form, setForm] = useState<InviteForm>(blank(options[0]?.id ?? ''));
+  const [form, setForm] = useState<InviteForm>(blankInvite(options[0]?.id ?? ''));
   const [fieldErrors, setFieldErrors] = useState<InviteErrors>({});
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<unknown>(null);
@@ -96,7 +96,7 @@ function InviteForm({
     try {
       const res = await wspApi.invite(checked.input);
       setResult(res);
-      setForm((f) => ({ ...blank(f.roleId) }));
+      setForm((f) => ({ ...blankInvite(f.roleId) }));
       onInvited();
       toast(t('toast'));
     } catch (err) {
@@ -110,6 +110,10 @@ function InviteForm({
     ? fieldErrors.fullName === 'tooLong'
       ? t('nameTooLong', { max: WSP_MEMBER_NAME_MAX })
       : t('nameRequired')
+    : undefined;
+  const phoneError = fieldErrors.phone ? t('phoneInvalid') : undefined;
+  const chatLimitError = fieldErrors.chatLimit
+    ? t('chatLimitInvalid', { max: WSP_CHAT_LIMIT_MAX })
     : undefined;
   const emailError = fieldErrors.email
     ? fieldErrors.email === 'required'
@@ -164,6 +168,45 @@ function InviteForm({
             ))}
           </Select>
         </Field>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Field
+            label={t('phone')}
+            htmlFor={`${ids}-phone`}
+            hint={t('phoneHint')}
+            error={phoneError}
+          >
+            <Input
+              id={`${ids}-phone`}
+              name="phone"
+              type="tel"
+              dir="ltr"
+              value={form.phone}
+              onChange={(e) => set({ phone: e.target.value })}
+              placeholder={t('phonePlaceholder')}
+              maxLength={24}
+              autoComplete="off"
+              invalid={Boolean(phoneError)}
+            />
+          </Field>
+          <Field
+            label={t('chatLimit')}
+            htmlFor={`${ids}-chat-limit`}
+            hint={t('chatLimitHint')}
+            error={chatLimitError}
+          >
+            <Input
+              id={`${ids}-chat-limit`}
+              name="chatLimit"
+              inputMode="numeric"
+              value={form.chatLimit}
+              onChange={(e) => set({ chatLimit: e.target.value })}
+              maxLength={5}
+              autoComplete="off"
+              invalid={Boolean(chatLimitError)}
+            />
+          </Field>
+        </div>
 
         {result && (
           <Alert

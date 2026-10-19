@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Kết nối hộp thư",
-          "body": "Đăng nhập bằng Google hoặc Microsoft, hoặc nhập cài đặt máy chủ thư của bạn, rồi cho phép Threadwise đọc và gửi email cho địa chỉ đó."
+          "body": "Đăng nhập bằng Google hoặc Microsoft, hoặc nhập cài đặt máy chủ thư của bạn, rồi cho phép {app} đọc và gửi email cho địa chỉ đó."
         },
         "inbox": {
           "title": "Email đến hộp thư đến",

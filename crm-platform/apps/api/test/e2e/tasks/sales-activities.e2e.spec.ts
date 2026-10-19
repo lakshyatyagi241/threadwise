@@ -80,13 +80,8 @@ describe('defaults and permissions', () => {
     expect(all.every((a) => a.isDefault && a.name === null)).toBe(true);
     const task = byKey(all, 'task');
     expect(task.taskTypes.map((o) => o.key)).toEqual(['follow_up', 'call_reminder']);
-    expect(task.outcomes.map((o) => o.key)).toEqual([
-      'interested',
-      'left_message',
-      'no_response',
-      'not_interested',
-      'not_reachable',
-    ]);
+    // The outcomes of a task are the workspace's Task outcomes list, not a list of this registry.
+    expect(task.outcomes).toEqual([]);
     expect(byKey(all, 'phone').outcomes.map((o) => o.key)).toEqual([
       'connected',
       'no_answer',
@@ -273,56 +268,58 @@ describe('tasks', () => {
       id: string;
       rowVersion: number;
       taskType: { key: string } | null;
-      outcome: { key: string; removed: boolean } | null;
       status: string;
       doneAt: string | null;
     };
   };
 
-  it('creates with a task type, completes with an outcome, and reopening drops the outcome', async () => {
+  it('creates with a task type; the default task outcomes of a new workspace complete a task and reopening drops the outcome', async () => {
     const task = byKey(await activities(t.admin), 'task');
     const type = task.taskTypes.find((o) => o.key === 'call_reminder')!;
-    const out = task.outcomes.find((o) => o.key === 'interested')!;
     const a = await mk({ title: 'Ring Asha', taskTypeId: type.id });
     expect(a.taskType?.key).toBe('call_reminder');
-    const done = await as(t.admin).post(`/v2/tasks/${a.id}/complete`).send({ outcomeId: out.id });
+    // The outcomes of a task are the workspace's Task outcomes list; a new workspace starts with the five defaults.
+    const outcomes = await as(t.admin).get('/v2/task-outcomes');
+    expect(outcomes.body.map((o: { name: string }) => o.name)).toEqual([
+      'Interested',
+      'Left message',
+      'No response',
+      'Not interested',
+      'Not able to reach',
+    ]);
+    const done = await as(t.admin)
+      .post(`/v2/tasks/${a.id}/complete`)
+      .send({ outcomeId: outcomes.body[0].id });
     expect(done.status, JSON.stringify(done.body)).toBe(200);
-    expect(done.body.outcome.key).toBe('interested');
-    const reopened = await as(t.admin).post(`/v2/tasks/${a.id}/reopen`).send({});
-    expect(reopened.body.outcome).toBeNull();
-    expect(reopened.body.taskType.key).toBe('call_reminder');
+    expect(done.body.outcome.name).toBe('Interested');
+    expect(done.body.taskType.key).toBe('call_reminder');
   });
 
-  it('refuses an outcome in the task type slot, an outcome of another activity and a removed one; a removed one stays readable', async () => {
+  it('refuses a task type that is another activity item or an outcome, and a removed one; a removed one stays readable', async () => {
     const all = await activities(t.admin);
     const task = byKey(all, 'task');
     const phoneOutcome = byKey(all, 'phone').outcomes[0]!;
-    const a = await mk({ title: 'Wrong list' });
     const wrong = await as(t.admin)
-      .post(`/v2/tasks/${a.id}/complete`)
-      .send({ outcomeId: phoneOutcome.id });
+      .post('/v2/tasks')
+      .send({ title: 'x', taskTypeId: phoneOutcome.id });
     expect(wrong.status).toBe(422);
     expect(code(wrong)).toBe('ACTIVITY_OPTION_INVALID');
-    const asType = await as(t.admin)
-      .post('/v2/tasks')
-      .send({ title: 'x', taskTypeId: task.outcomes[0]!.id });
-    expect(asType.status).toBe(422);
+    const noOutcomesHere = await as(t.admin)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'outcome', name: 'Nope' });
+    expect(noOutcomesHere.status).toBe(422);
 
-    const left = task.outcomes.find((o) => o.key === 'left_message')!;
-    const b = await mk({ title: 'Keeps outcome' });
+    const callReminder = task.taskTypes.find((o) => o.key === 'call_reminder')!;
+    const b = await mk({ title: 'Keeps its type', taskTypeId: callReminder.id });
     expect(
-      (await as(t.admin).post(`/v2/tasks/${b.id}/complete`).send({ outcomeId: left.id })).status,
-    ).toBe(200);
-    expect(
-      (await as(t.admin).delete(`/v2/activity-types/${task.id}/options/${left.id}`)).status,
+      (await as(t.admin).delete(`/v2/activity-types/${task.id}/options/${callReminder.id}`)).status,
     ).toBe(200);
     const read = await as(t.admin).get(`/v2/tasks/${b.id}`);
-    expect(read.body.outcome.key).toBe('left_message');
-    expect(read.body.outcome.removed).toBe(true);
-    const c = await mk({ title: 'Cannot pick it now' });
+    expect(read.body.taskType.key).toBe('call_reminder');
+    expect(read.body.taskType.removed).toBe(true);
     const refused = await as(t.admin)
-      .post(`/v2/tasks/${c.id}/complete`)
-      .send({ outcomeId: left.id });
+      .post('/v2/tasks')
+      .send({ title: 'y', taskTypeId: callReminder.id });
     expect(refused.status).toBe(422);
   });
 
@@ -473,14 +470,12 @@ describe('calls', () => {
     expect(added.status, JSON.stringify(added.body)).toBe(201);
     const custom = (added.body as Activity).outcomes.find((o) => o.name === 'Asked for callback')!;
     expect(custom.countsAs).toBe('no_answer');
-    const res = await as(t.admin)
-      .post('/v2/calls/log')
-      .send({
-        contactId: contact,
-        direction: 'outbound',
-        outcomeOptionId: custom.id,
-        durationSec: 0,
-      });
+    const res = await as(t.admin).post('/v2/calls/log').send({
+      contactId: contact,
+      direction: 'outbound',
+      outcomeOptionId: custom.id,
+      durationSec: 0,
+    });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     expect(res.body.entry.outcome).toBe('no_answer');
     expect(res.body.entry.outcomeOption.name).toBe('Asked for callback');
@@ -507,10 +502,14 @@ describe('calls', () => {
   });
 
   it('refuses an outcome item of another activity', async () => {
-    const task = byKey(await activities(t.admin), 'task');
+    const meeting = byKey(await activities(t.admin), 'meeting');
     const res = await as(t.admin)
       .post('/v2/calls/log')
-      .send({ contactId: contact, direction: 'outbound', outcomeOptionId: task.outcomes[0]!.id });
+      .send({
+        contactId: contact,
+        direction: 'outbound',
+        outcomeOptionId: meeting.outcomes[0]!.id,
+      });
     expect(res.status).toBe(422);
     expect(code(res)).toBe('ACTIVITY_OPTION_INVALID');
   });

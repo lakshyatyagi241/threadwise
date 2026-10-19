@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, one {Afficher # limite illimitée} other {Afficher # limites illimitées}}",
       "hideUnlimited": "Masquer les limites illimitées",
       "groupCount": "{count, plural, one {# limite} other {# limites}}",
-      "groupHidden": "{count, plural, one {# autre limite est illimitée et masquée.} other {# autres limites sont illimitées et masquées.}}"
+      "groupHidden": "{count, plural, one {# autre limite est illimitée et masquée.} other {# autres limites sont illimitées et masquées.}}",
+      "activatedOn": "Activé le {date}",
+      "previousBilling": "Date de facturation précédente : {date}",
+      "subscriptionId": "ID d’abonnement : {id}"
     },
     "operator": {
       "title": "Forfaits des espaces de travail",

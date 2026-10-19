@@ -7,7 +7,7 @@ import type {
   MailScope,
   MailWorkspaceSettings,
 } from '@crm/contracts';
-import { MAIL_SEND_LIMIT_MAX } from '@crm/contracts';
+import { MAIL_SEND_LIMIT_MAX, isUnlimitedLimit } from '@crm/contracts';
 
 export type StatusTone = 'success' | 'warning' | 'danger' | 'neutral';
 
@@ -54,7 +54,7 @@ export interface Usage {
 export function usageOf(list: Pick<MailboxListResponse, 'used' | 'limit'> | undefined): Usage {
   const used = list?.used ?? 0;
   const limit = list?.limit ?? 0;
-  const unlimited = limit <= 0;
+  const unlimited = isUnlimitedLimit(limit);
   return { used, limit, unlimited, reached: !unlimited && used >= limit };
 }
 

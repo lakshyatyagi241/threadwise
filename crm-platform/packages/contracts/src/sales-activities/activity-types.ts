@@ -143,7 +143,8 @@ export function activityCapabilities(behavesAs: ActivityBehaviour): ActivityCapa
         allowEditCompleted: true,
         mobileCheckIn: false,
         taskTypes: true,
-        outcomes: true,
+        // The outcomes of a task are the workspace's Task outcomes list (its own screen), not a list kept here.
+        outcomes: false,
       };
     case 'meeting':
       return {

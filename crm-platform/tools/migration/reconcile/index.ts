@@ -29,6 +29,7 @@ import { resolveInbox, type InboxOptions, type InboxSettings } from '../inbox/co
 import { planFor } from '../load/inbox';
 import { STEPS, transformDoc } from '../transform';
 import { CONTACT_FIELDS, REJECT_MARKER } from '../transform/contacts';
+import { isBuiltInKey } from '../transform/fields';
 import { buildIndex } from '../transform/source-index';
 import type { HandlerSpec, Outcome, Row, TableSpec } from '../transform/types';
 import {
@@ -815,12 +816,14 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
         const have = new Set((found.rows as Array<{ key: string }>).map((r) => r.key));
         for (const [k, n] of fieldSeen) {
           if (Object.hasOwn(spec.fields, k) || REJECT_MARKER.test(k)) continue;
-          if (have.has(k)) {
+          if (have.has(k) || isBuiltInKey(k)) {
             fieldRows.push({
               step: spec.handler,
               field: shown(k),
               seen: n,
-              where: 'contacts.data (matching fields row)',
+              where: have.has(k)
+                ? 'contacts.data (matching fields row)'
+                : 'contacts.data (a built-in property of the app: no fields row)',
               verdict: 'stored-in-data',
             });
           } else if (!idx.contactKeys.has(k)) {
@@ -1790,6 +1793,63 @@ async function checkOrg(
       alarm(
         'ORG_STATE: org_plan_state was changed (billing cycle or trial differs from what the tool created)',
       );
+    // the settings core-load wrote (pipelines, lost reasons, consent keywords, the auto-assignment rule), held to what it recorded
+    const applied = (
+      await db.execute(
+        sql`SELECT counts FROM migration.run_log WHERE source_client = ${client} AND collection = ${ORG_COLLECTION} AND step = 'settings'`,
+      )
+    ).rows[0] as
+      | {
+          counts?: {
+            plan?: {
+              pipelines?: Array<{ name: string; stages: Array<{ name: string }> }>;
+              lostReasons?: string[];
+              consent?: { config: Record<string, Record<string, string[] | string>> } | null;
+              autoAssign?: boolean;
+            };
+            result?: { pipelinesKept?: string[]; routingRule?: string };
+          };
+        }
+      | undefined;
+    const sp = applied?.counts?.plan;
+    if (sp) {
+      const kept = new Set(applied?.counts?.result?.pipelinesKept ?? []);
+      for (const p of sp.pipelines ?? []) {
+        if (kept.has(p.name)) continue;
+        const got = (
+          await tx.execute(sql`
+            SELECT s.name FROM pipelines p JOIN pipeline_stages s ON s.org_id = p.org_id AND s.pipeline_id = p.id
+            WHERE p.org_id = ${orgId} AND lower(p.name) = lower(${p.name}) ORDER BY s.sort_order, s.id`)
+        ).rows as Array<{ name: string }>;
+        if (got.length === 0) alarm(`ORG_SETTINGS: pipeline "${p.name}" is missing`);
+        else if (got.map((x) => x.name).join('\u0000') !== p.stages.map((x) => x.name).join('\u0000'))
+          alarm(`ORG_SETTINGS: pipeline "${p.name}" has stages that differ from the Waboo pipeline (changed after the migration, or not written)`);
+      }
+      for (const r of sp.lostReasons ?? []) {
+        const n = (
+          await tx.execute(sql`SELECT count(*)::int AS n FROM deal_lost_reasons WHERE org_id = ${orgId} AND lower(btrim(name)) = lower(btrim(${r}))`)
+        ).rows[0] as { n: number };
+        if (n.n === 0) alarm(`ORG_SETTINGS: lost reason "${r}" is missing`);
+      }
+      if (sp.consent) {
+        const row = (
+          await tx.execute(sql`SELECT config FROM contact_consent_settings WHERE org_id = ${orgId}`)
+        ).rows[0] as { config: { optOutKeywords?: Record<string, string[]>; optInKeywords?: Record<string, string[]> } } | undefined;
+        if (!row) alarm('ORG_SETTINGS: the consent settings row is missing');
+        else {
+          const want = sp.consent.config;
+          for (const k of ['optOutKeywords', 'optInKeywords'] as const)
+            if (want[k] && JSON.stringify(row.config[k]) !== JSON.stringify(want[k]))
+              alarm(`ORG_SETTINGS: consent ${k} differ from the Waboo keywords (changed after the migration, or not written)`);
+        }
+      }
+      if (sp.autoAssign && applied?.counts?.result?.routingRule === 'created') {
+        const n = (
+          await tx.execute(sql`SELECT count(*)::int AS n FROM routing_rules WHERE org_id = ${orgId} AND is_fallback`)
+        ).rows[0] as { n: number };
+        if (n.n === 0) alarm('ORG_SETTINGS: the auto-assignment rule is missing');
+      }
+    }
     const ws = await tx.execute(
       sql`SELECT count(*)::int AS n FROM workspace_settings WHERE org_id = ${orgId}`,
     );

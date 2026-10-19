@@ -5,3 +5,4 @@
  */
 export { StoreShell } from './admin/components/store-shell';
 export { StoreSidebar } from './admin/components/sidebar';
+export { useOverview as useStoreOverview } from './admin/api/hooks';

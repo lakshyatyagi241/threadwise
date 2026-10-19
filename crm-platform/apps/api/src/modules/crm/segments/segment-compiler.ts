@@ -18,6 +18,7 @@ import {
   type SegmentOperator,
 } from '@crm/contracts';
 import {
+  contactLastActivity,
   contactPhoneDigits,
   minorCondition,
   searchCondition,
@@ -335,7 +336,7 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     case 'updatedAt':
       return { sql: datePredicate(sql`${contacts.updatedAt}`, op as DateOperator, c.value) };
     case 'lastActivityAt':
-      return { sql: datePredicate(sql`${contacts.lastActivityAt}`, op as DateOperator, c.value) };
+      return { sql: datePredicate(contactLastActivity, op as DateOperator, c.value) };
     default:
       return invalid('operator_unsupported', `Unknown field "${c.field}".`);
   }

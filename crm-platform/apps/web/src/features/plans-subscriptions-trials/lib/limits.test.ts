@@ -265,3 +265,15 @@ describe('compareSections', () => {
     expect(s.find((x) => x.id === 'addons')!.rows.map((r) => r.key)).toEqual(['x2']);
   });
 });
+
+describe('unlimited stand-in values', () => {
+  it('shows 1,000,000 and 100,000,000 as unlimited, with no bar', () => {
+    const rows = groupLimits([meter('contacts', 0, 1_000_000), meter('flows', 3, 100_000_000)], {
+      showAll: true,
+    }).flatMap((g) => g.rows);
+    for (const r of rows.filter((x) => x.key === 'contacts' || x.key === 'flows')) {
+      expect(r.unlimited).toBe(true);
+      expect(r.percent).toBeNull();
+    }
+  });
+});

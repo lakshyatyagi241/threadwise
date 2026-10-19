@@ -196,7 +196,8 @@
       "core-load": "التحميل الأساسي",
       "flow-state": "حالة التدفقات",
       "reconcile": "المطابقة",
-      "report": "التقرير"
+      "report": "التقرير",
+      "whatsapp": "رقم واتساب"
     },
     "stepStatus": {
       "running": "قيد التنفيذ",

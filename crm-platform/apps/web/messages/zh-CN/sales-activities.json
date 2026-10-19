@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "跟进",
-          "call_reminder": "回电提醒",
-          "interested": "有兴趣",
-          "left_message": "已留言",
-          "no_response": "无回应",
-          "not_interested": "没有兴趣",
-          "not_reachable": "无法联系"
+          "call_reminder": "回电提醒"
         },
         "meeting": {
           "interested": "有兴趣",
@@ -83,6 +78,8 @@
       "predictOutcomes": "预测此活动的结果",
       "predictOutcomesHint": "活动完成时提供结果选项。",
       "outcomes": "结果",
+      "taskOutcomesHint": "已完成任务的结果是整个工作区共用的一份列表，在“任务结果”中维护。",
+      "taskOutcomesLink": "打开“任务结果”",
       "outcomesHint": "删除结果后，已有该结果的记录仍会保留它。",
       "phoneOutcomesHint": "选择每个结果在通话报告中的计算方式。删除结果后，已有该结果的通话仍会保留它。",
       "addOutcome": "添加结果",

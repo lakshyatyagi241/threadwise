@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Ricontatto",
-          "call_reminder": "Promemoria di chiamata",
-          "interested": "Interessato",
-          "left_message": "Messaggio lasciato",
-          "no_response": "Nessuna risposta",
-          "not_interested": "Non interessato",
-          "not_reachable": "Impossibile da raggiungere"
+          "call_reminder": "Promemoria di chiamata"
         },
         "meeting": {
           "interested": "Interessato",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Prevedi gli esiti per questa attività",
       "predictOutcomesHint": "Proponi un esito quando l’attività viene completata.",
       "outcomes": "Esiti",
+      "taskOutcomesHint": "Gli esiti di un compito completato sono un unico elenco per tutto lo spazio di lavoro, gestito in Esiti dei compiti.",
+      "taskOutcomesLink": "Apri Esiti dei compiti",
       "outcomesHint": "Rimuovere un esito lo mantiene nei record che già lo hanno.",
       "phoneOutcomesHint": "Scegli come conta ogni esito nei report delle chiamate. Rimuovere un esito lo mantiene nelle chiamate che già lo hanno.",
       "addOutcome": "Aggiungi esito",

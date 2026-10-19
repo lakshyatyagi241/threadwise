@@ -116,7 +116,7 @@ describe('display helpers', () => {
 
   it('builds avatar initials from the first two words', () => {
     expect(initials('aarav sharma')).toBe('AS');
-    expect(initials('Madonna')).toBe('MA');
+    expect(initials('Madonna')).toBe('M');
     expect(initials('   ')).toBe('?');
   });
 

@@ -54,12 +54,12 @@ describe('publicApiOrigin', () => {
     delete process.env.APP_URL;
     delete process.env.API_URL;
     expect(publicApiOrigin()).toBe('http://localhost:3000');
-    process.env.API_URL = 'http://a';
-    expect(publicApiOrigin()).toBe('http://a');
-    process.env.APP_URL = 'http://b';
-    expect(publicApiOrigin()).toBe('http://b');
-    process.env.PUBLIC_API_URL = 'http://c';
-    expect(publicApiOrigin()).toBe('http://c');
+    process.env.API_URL = 'http://a.test';
+    expect(publicApiOrigin()).toBe('http://a.test');
+    process.env.APP_URL = 'http://b.test';
+    expect(publicApiOrigin()).toBe('http://b.test');
+    process.env.PUBLIC_API_URL = 'http://c.test';
+    expect(publicApiOrigin()).toBe('http://c.test');
     process.env = keep;
   });
 });

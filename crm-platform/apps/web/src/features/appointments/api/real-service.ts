@@ -12,6 +12,7 @@ import {
   previewSlotsResponseSchema,
   publicBookResponseSchema,
   publicBookingPageSchema,
+  publicBookingTypeViewSchema,
   publicManageViewSchema,
   slotsResponseSchema,
 } from '@crm/contracts';
@@ -317,12 +318,7 @@ export const realPublicApi = {
   },
   type(org: string, slug: string, signal?: AbortSignal): Promise<PublicTypePage> {
     return callPublic(`/booking/${enc(org)}/${enc(slug)}`, {
-      schema: z
-        .object({
-          organization: z.object({ name: z.string(), slug: z.string() }),
-          service: publicBookingPageSchema.shape.services.element,
-        })
-        .transform(toPublicTypePage),
+      schema: publicBookingTypeViewSchema.transform(toPublicTypePage),
       signal,
     });
   },

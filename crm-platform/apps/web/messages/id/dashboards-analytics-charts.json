@@ -317,7 +317,13 @@
         "delivered": "Terkirim",
         "queued": "Dalam antrean",
         "failed": "Gagal",
-        "replyRate": "Tingkat balasan"
+        "replyRate": "Tingkat balasan",
+        "received": "Pesan diterima",
+        "conversationsOpen": "Percakapan terbuka",
+        "conversationsClosed": "Percakapan ditutup",
+        "conversationsAssigned": "Ditugaskan",
+        "conversationsUnassigned": "Belum ditugaskan",
+        "conversationsTotal": "{count, plural, other {# percakapan}}"
       },
       "series": {
         "sent": "Dikirim",
@@ -443,7 +449,8 @@
             "unknown": "Tidak diketahui"
           }
         }
-      }
+      },
+      "moreKpis": "Pesan dan percakapan"
     },
     "health": {
       "nav": "Kesehatan sistem",

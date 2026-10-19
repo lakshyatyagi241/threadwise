@@ -19,12 +19,12 @@ export interface TaskDraft {
   assigneeId: string;
   contactId: string;
   dealId: string;
-  /** The company a new task was started from (the company page's tasks card); not editable in the form. */
-  companyId: string;
+  /** A task outcome id or empty for none. */
+  outcomeId: string;
   /** A current task type of the Task activity (Settings > Sales Activities) or empty. */
   taskTypeId: string;
-  /** The outcome of a done task or empty. */
-  outcomeId: string;
+  /** The company a new task was started from (the company page's tasks card); not editable in the form. */
+  companyId: string;
 }
 
 export const emptyDraft = (assigneeId: string): TaskDraft => ({
@@ -35,9 +35,9 @@ export const emptyDraft = (assigneeId: string): TaskDraft => ({
   assigneeId,
   contactId: '',
   dealId: '',
-  companyId: '',
-  taskTypeId: '',
   outcomeId: '',
+  taskTypeId: '',
+  companyId: '',
 });
 
 export const draftOf = (t: TaskResponse): TaskDraft => ({
@@ -48,9 +48,9 @@ export const draftOf = (t: TaskResponse): TaskDraft => ({
   assigneeId: t.assignee?.id ?? '',
   contactId: t.contact?.id ?? '',
   dealId: t.deal?.id ?? '',
-  companyId: t.company?.id ?? '',
-  taskTypeId: t.taskType?.id ?? '',
   outcomeId: t.outcome?.id ?? '',
+  taskTypeId: t.taskType?.id ?? '',
+  companyId: t.company?.id ?? '',
 });
 
 export type DraftProblem =
@@ -87,12 +87,13 @@ export function createBody(d: TaskDraft): CreateTaskInput {
     assigneeId: d.assigneeId || null,
     contactId: d.contactId || null,
     dealId: d.dealId || null,
-    ...(d.companyId ? { companyId: d.companyId } : {}),
+    ...(d.outcomeId ? { outcomeId: d.outcomeId } : {}),
     ...(d.taskTypeId ? { taskTypeId: d.taskTypeId } : {}),
+    ...(d.companyId ? { companyId: d.companyId } : {}),
   };
 }
 
-export type TaskPatch = Partial<Omit<CreateTaskInput, 'companyId'>> & { outcomeId?: string | null };
+export type TaskPatch = Partial<Omit<CreateTaskInput, 'companyId'>>;
 
 /** Only what changed against the task as it was read: an untouched form sends nothing. */
 export function patchBody(task: TaskResponse, d: TaskDraft): TaskPatch {
@@ -106,7 +107,7 @@ export function patchBody(task: TaskResponse, d: TaskDraft): TaskPatch {
   if (d.assigneeId !== was.assigneeId) out.assigneeId = next.assigneeId;
   if (d.contactId !== was.contactId) out.contactId = next.contactId;
   if (d.dealId !== was.dealId) out.dealId = next.dealId;
+  if (d.outcomeId !== was.outcomeId) out.outcomeId = d.outcomeId || null;
   if (d.taskTypeId !== was.taskTypeId) out.taskTypeId = d.taskTypeId || null;
-  if (task.status === 'done' && d.outcomeId !== was.outcomeId) out.outcomeId = d.outcomeId || null;
   return out;
 }

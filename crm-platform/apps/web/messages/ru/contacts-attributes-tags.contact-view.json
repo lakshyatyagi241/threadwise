@@ -136,7 +136,11 @@
         "previousStage": "Предыдущий этап",
         "previousStageSince": "Предыдущий этап с",
         "lostReason": "Причина потери",
-        "updatedAt": "Последнее обновление"
+        "updatedAt": "Последнее обновление",
+        "leadScore": "Оценка лида",
+        "originalStage": "Исходный этап жизненного цикла",
+        "createdBy": "Создал",
+        "updatedBy": "Обновил"
       },
       "company": {
         "title": "Компания",

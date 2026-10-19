@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Nachfassen",
-          "call_reminder": "Rückruferinnerung",
-          "interested": "Interessiert",
-          "left_message": "Nachricht hinterlassen",
-          "no_response": "Keine Antwort",
-          "not_interested": "Nicht interessiert",
-          "not_reachable": "Nicht erreichbar"
+          "call_reminder": "Rückruferinnerung"
         },
         "meeting": {
           "interested": "Interessiert",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Ergebnisse für diese Aktivität vorhersagen",
       "predictOutcomesHint": "Beim Abschließen der Aktivität ein Ergebnis anbieten.",
       "outcomes": "Ergebnisse",
+      "taskOutcomesHint": "Die Ergebnisse einer erledigten Aufgabe sind eine gemeinsame Liste für den ganzen Arbeitsbereich und stehen unter Aufgabenergebnisse.",
+      "taskOutcomesLink": "Aufgabenergebnisse öffnen",
       "outcomesHint": "Ein entferntes Ergebnis bleibt bei den Datensätzen erhalten, die es schon haben.",
       "phoneOutcomesHint": "Legen Sie fest, wie jedes Ergebnis in Anrufberichten zählt. Ein entferntes Ergebnis bleibt bei den Anrufen erhalten, die es schon haben.",
       "addOutcome": "Ergebnis hinzufügen",

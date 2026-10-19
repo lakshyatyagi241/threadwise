@@ -91,7 +91,14 @@
         "none": "Aucun pour l'instant",
         "atLeast": "{count}+",
         "footnote": "Les chiffres des messages couvrent les conversations trouvées pour ce contact (par numéro de téléphone, adresse e-mail ou nom). Les chiffres des appels couvrent la dernière année, selon le numéro de téléphone ou le nom.",
-        "callsPartial": "Plus d'appels correspondaient que ce qui a pu être lu ; les chiffres des appels peuvent donc être incomplets."
+        "callsPartial": "Plus d'appels correspondaient que ce qui a pu être lu ; les chiffres des appels peuvent donc être incomplets.",
+        "waSent": "WhatsApp envoyés",
+        "waDelivered": "WhatsApp délivrés",
+        "waSeen": "WhatsApp vus",
+        "waReceived": "WhatsApp reçus",
+        "waFailed": "WhatsApp en échec",
+        "waReplied": "WhatsApp avec réponse",
+        "waFootnote": "Les chiffres WhatsApp comptent tous les messages des conversations WhatsApp de ce contact. Un message envoyé compte comme ayant reçu une réponse lorsque le message suivant vient du contact."
       }
     }
   }

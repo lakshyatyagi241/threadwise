@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Connect a mailbox",
-          "body": "Sign in with Google or Microsoft, or enter your mail server settings, and allow Threadwise to read and send mail for that address."
+          "body": "Sign in with Google or Microsoft, or enter your mail server settings, and allow {app} to read and send mail for that address."
         },
         "inbox": {
           "title": "Mail arrives in the inbox",

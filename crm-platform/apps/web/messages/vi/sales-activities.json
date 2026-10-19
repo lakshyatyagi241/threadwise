@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Theo dõi",
-          "call_reminder": "Nhắc gọi lại",
-          "interested": "Quan tâm",
-          "left_message": "Đã để lại tin nhắn",
-          "no_response": "Không phản hồi",
-          "not_interested": "Không quan tâm",
-          "not_reachable": "Không liên lạc được"
+          "call_reminder": "Nhắc gọi lại"
         },
         "meeting": {
           "interested": "Quan tâm",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Dự đoán kết quả cho hoạt động này",
       "predictOutcomesHint": "Đề xuất một kết quả khi hoàn thành hoạt động.",
       "outcomes": "Kết quả",
+      "taskOutcomesHint": "Kết quả của một công việc đã hoàn thành là một danh sách chung cho cả không gian làm việc, được quản lý trong Kết quả công việc.",
+      "taskOutcomesLink": "Mở Kết quả công việc",
       "outcomesHint": "Xóa một kết quả vẫn giữ nó trên các bản ghi đã có.",
       "phoneOutcomesHint": "Chọn cách mỗi kết quả được tính trong báo cáo cuộc gọi. Xóa một kết quả vẫn giữ nó trên các cuộc gọi đã có.",
       "addOutcome": "Thêm kết quả",

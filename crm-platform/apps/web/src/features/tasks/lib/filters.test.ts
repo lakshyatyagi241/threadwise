@@ -6,6 +6,7 @@ import {
   hasActiveFilter,
   listQuery,
   parseFilters,
+  sharedQuery,
   tabCount,
   type TaskFilters,
 } from './filters';
@@ -35,6 +36,7 @@ describe('parseFilters', () => {
       contact: ID2,
       deal: '',
       company: '',
+      outcome: '',
       view: 'board',
       task: ID,
     });
@@ -45,6 +47,15 @@ describe('parseFilters', () => {
       `company=${ID}`,
     );
     expect(parseFilters(params('company=acme')).company).toBe('');
+  });
+  it('reads, writes and queries the outcome filter, and drops one that is not a uuid', () => {
+    const f = parseFilters(params(`tab=all&outcome=${ID}`));
+    expect(f.outcome).toBe(ID);
+    expect(filtersToSearch(f)).toContain(`outcome=${ID}`);
+    expect(sharedQuery(f).outcomeId).toBe(ID);
+    expect(sharedQuery(DEFAULT_FILTERS).outcomeId).toBeUndefined();
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, outcome: ID })).toBe(true);
+    expect(parseFilters(params('outcome=interested')).outcome).toBe('');
   });
   it('falls back instead of failing on unknown or malformed values', () => {
     const p = parseFilters(

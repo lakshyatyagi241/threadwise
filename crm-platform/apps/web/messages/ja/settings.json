@@ -245,6 +245,11 @@
         "description": "製品を基盤に開発するためのキーとドキュメントです。",
         "keywords": "api キー、開発者、トークン、ドキュメント、openapi"
       },
+      "api-keys": {
+        "label": "API キー",
+        "description": "他のシステムが API を呼び出すためのキーを作成・管理します。",
+        "keywords": "api キー、トークン、シークレット、開発者、アクセス、連携"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "イベントが発生するたびに、ご自身のシステムへ送信します。",

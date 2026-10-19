@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, other {Hiện # giới hạn không giới hạn}}",
       "hideUnlimited": "Ẩn giới hạn không giới hạn",
       "groupCount": "{count, plural, other {# giới hạn}}",
-      "groupHidden": "{count, plural, other {# giới hạn khác không giới hạn và đang bị ẩn.}}"
+      "groupHidden": "{count, plural, other {# giới hạn khác không giới hạn và đang bị ẩn.}}",
+      "activatedOn": "Kích hoạt vào {date}",
+      "previousBilling": "Ngày thanh toán trước đó: {date}",
+      "subscriptionId": "Mã đăng ký: {id}"
     },
     "operator": {
       "title": "Gói của không gian làm việc",

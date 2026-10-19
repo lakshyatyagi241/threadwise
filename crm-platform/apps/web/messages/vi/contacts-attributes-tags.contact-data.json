@@ -91,7 +91,14 @@
         "none": "Chưa có",
         "atLeast": "{count}+",
         "footnote": "Số liệu tin nhắn tính trên các hội thoại tìm được của liên hệ này (theo số điện thoại, địa chỉ email hoặc tên). Số liệu cuộc gọi tính trong một năm gần nhất, khớp theo số điện thoại hoặc tên.",
-        "callsPartial": "Có nhiều cuộc gọi khớp hơn mức có thể đọc, nên số liệu cuộc gọi có thể thiếu."
+        "callsPartial": "Có nhiều cuộc gọi khớp hơn mức có thể đọc, nên số liệu cuộc gọi có thể thiếu.",
+        "waSent": "WhatsApp đã gửi",
+        "waDelivered": "WhatsApp đã chuyển đến",
+        "waSeen": "WhatsApp đã xem",
+        "waReceived": "WhatsApp đã nhận",
+        "waFailed": "WhatsApp thất bại",
+        "waReplied": "WhatsApp đã được trả lời",
+        "waFootnote": "Số liệu WhatsApp đếm mọi tin nhắn trong các cuộc trò chuyện WhatsApp của liên hệ này. Tin nhắn đã gửi được tính là đã trả lời khi tin nhắn kế tiếp là của liên hệ."
       }
     }
   }

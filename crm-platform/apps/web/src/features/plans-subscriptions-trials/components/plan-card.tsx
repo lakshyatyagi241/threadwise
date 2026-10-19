@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useId, useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { BillingPlan } from '@crm/contracts';
+import { isUnlimitedLimit, type BillingPlan } from '@crm/contracts';
 import { Badge, Button, cn } from '@crm/ui';
 import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { checkoutPath, priceView, SALES_PATH, type Period } from '../lib/format';
@@ -146,12 +146,11 @@ export function PlanCard({
               <span>
                 {t('feature.limit', {
                   label: tl(row.key),
-                  value:
-                    row.value > 0
-                      ? new Intl.NumberFormat(locale).format(row.value)
-                      : row.key === PLATFORM_DEFAULT_KEY
-                        ? tc('platformDefault')
-                        : tc('unlimited'),
+                  value: !isUnlimitedLimit(row.value)
+                    ? new Intl.NumberFormat(locale).format(row.value)
+                    : row.key === PLATFORM_DEFAULT_KEY
+                      ? tc('platformDefault')
+                      : tc('unlimited'),
                 })}
               </span>
             ) : (

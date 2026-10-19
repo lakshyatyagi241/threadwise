@@ -136,7 +136,11 @@
         "previousStage": "আগের ধাপ",
         "previousStageSince": "আগের ধাপে ছিল যবে থেকে",
         "lostReason": "হারের কারণ",
-        "updatedAt": "সর্বশেষ আপডেট"
+        "updatedAt": "সর্বশেষ আপডেট",
+        "leadScore": "লিড স্কোর",
+        "originalStage": "মূল লাইফসাইকেল ধাপ",
+        "createdBy": "যিনি তৈরি করেছেন",
+        "updatedBy": "যিনি আপডেট করেছেন"
       },
       "company": {
         "title": "কোম্পানি",

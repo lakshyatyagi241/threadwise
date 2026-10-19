@@ -20,6 +20,7 @@ import {
 } from '../lib/settings-form';
 import { isUnavailable } from '../lib/errors';
 import { ErrorLine, LinkButton, useAppointmentsCan } from './parts';
+import { AppearanceLinkCard } from './appearance-link-card';
 import { CalendarCard } from './settings-calendar';
 import { CalendarsSection } from './settings-calendars';
 import { DefaultsCard, TemplatesCard, TimeZoneCard, type FormCtx } from './settings-fields';
@@ -63,6 +64,7 @@ export function SettingsScreen() {
               {/* The workspace has no booking defaults to edit, but its Google Calendar link is real and lives here. */}
               <CalendarCard />
               <CalendarsSection />
+              <AppearanceLinkCard />
               <ChannelsSection />
               <MessageLibrarySection />
             </>
@@ -271,6 +273,7 @@ function SettingsEditor({
         )}
       </SettingsCard>
       <DefaultsCard {...ctx} />
+      <AppearanceLinkCard />
       <ChannelsSection />
       <MessageLibrarySection />
       <ReminderRulesSection />

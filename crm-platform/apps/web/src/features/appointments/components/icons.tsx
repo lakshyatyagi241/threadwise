@@ -263,3 +263,10 @@ export const ChatIcon = (p: IconProps) => (
     <path d="M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v9a1.5 1.5 0 0 1-1.5 1.5H10l-4.5 4v-4h0A1.5 1.5 0 0 1 4 14.5v-9Z" />
   </Svg>
 );
+
+export const PaletteIcon = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1h2a3 3 0 0 0 3-3C20 8.1 16.4 3 12 3Z" />
+    <path d="M7.5 11.5h.01M10.5 7.5h.01M15 8h.01" />
+  </Svg>
+);

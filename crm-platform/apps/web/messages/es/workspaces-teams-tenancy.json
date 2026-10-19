@@ -58,7 +58,10 @@
         "role": "Rol",
         "status": "Estado",
         "joined": "Se unió",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "phone": "Teléfono",
+        "chatLimit": "Chats simultáneos",
+        "lastLogin": "Último inicio de sesión"
       },
       "pending": "pendiente",
       "you": "Tú",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "De ausencia hasta el {date}",
       "onLeaveOpen": "De ausencia",
       "leaveFrom": "Ausencia desde el {date}",
-      "leaveAction": "Ausencia y suplente"
+      "leaveAction": "Ausencia y suplente",
+      "noLimit": "Sin límite",
+      "neverSignedIn": "Nunca",
+      "editAction": "Cambiar teléfono y límite de chats"
     },
     "invite": {
       "eyebrow": "Espacio de trabajo",
@@ -129,7 +135,14 @@
       "nameTooLong": "El nombre puede tener como máximo {max} caracteres.",
       "emailInvalid": "Introduce un correo electrónico válido.",
       "upgrade": "Mejorar plan",
-      "emailRequired": "Introduce un correo electrónico."
+      "emailRequired": "Introduce un correo electrónico.",
+      "phone": "Número de teléfono (opcional)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con el prefijo del país.",
+      "phoneInvalid": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43210.",
+      "chatLimit": "Chats simultáneos",
+      "chatLimitHint": "Máximo de chats abiertos que se le asignan a la vez. Déjalo vacío para no poner límite.",
+      "chatLimitInvalid": "Introduce un número entero del 1 al {max}, o déjalo vacío para no poner límite."
     },
     "teams": {
       "eyebrow": "Espacio de trabajo",
@@ -320,6 +333,31 @@
       "undoTitle": "¿Deshacer esta reasignación?",
       "undoMessage": "Los contactos y negocios que nadie ha modificado desde entonces vuelven al propietario anterior. Los demás se quedan donde están.",
       "restored": "{count} devueltos, {skipped} se quedan donde están."
+    },
+    "details": {
+      "eyebrow": "Espacio de trabajo",
+      "title": "Cambiar miembro",
+      "intro": "Teléfono y límite de chats de {name}.",
+      "phone": "Número de teléfono",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con el prefijo del país. Déjalo vacío para quitarlo.",
+      "phoneInvalid": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43210.",
+      "chatLimit": "Chats simultáneos",
+      "chatLimitHint": "La asignación automática deja de darle chats cuando tiene tantos abiertos. Déjalo vacío para no poner límite.",
+      "chatLimitPlaceholder": "Sin límite",
+      "chatLimitInvalid": "Introduce un número entero del 1 al {max}, o déjalo vacío para no poner límite.",
+      "lastLogin": "Último inicio de sesión",
+      "lastLoginNever": "Aún no ha iniciado sesión",
+      "submit": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Miembro actualizado."
+    },
+    "availability": {
+      "label": "Disponibilidad",
+      "available": "Disponible",
+      "offline": "Desconectado",
+      "hint": "Mientras estés sin conexión, no se te asignan chats nuevos automáticamente. Los chats que ya tienes siguen siendo tuyos.",
+      "failed": "No se pudo cambiar"
     }
   }
 }

@@ -204,7 +204,7 @@ export function SlotPicker(p: SlotPickerProps) {
                           !cell.inMonth && 'invisible',
                           n > 0 &&
                             !selected &&
-                            'bg-brand/10 font-semibold text-brand hover:bg-brand/20 dark:text-primary',
+                            'bg-brand/10 font-semibold text-primary hover:bg-brand/20',
                           n === 0 && 'cursor-default text-muted-foreground/60',
                           selected && 'bg-brand font-semibold text-brand-foreground',
                           cell.day === today && !selected && 'ring-1 ring-border',
@@ -270,7 +270,7 @@ export function SlotPicker(p: SlotPickerProps) {
                         'focus-visible:ring-2 focus-visible:ring-primary',
                         selected
                           ? 'border-brand bg-brand text-brand-foreground'
-                          : 'border-brand/40 text-brand hover:bg-brand/10 dark:text-primary',
+                          : 'border-brand/40 text-primary hover:bg-brand/10',
                         blocked && 'cursor-not-allowed opacity-40',
                       )}
                     >

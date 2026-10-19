@@ -416,9 +416,11 @@ export class RoutingRulesRepository {
   }
 
   /**
-   * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody has set a
-   * status until the availability screen exists, and no row counts as available, as Reference's routing did), with the open and
-   * open conversations each holds right now.
+   * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody who never
+   * switched their status counts as available, as Reference's routing did), who are not on leave, and who have not reached their
+   * own chat limit (`user_profiles.chat_limit`, the Concurrent Chat setting; no limit when empty), with the open conversations each
+   * holds right now. An agent already holding that many open conversations is left out of every strategy, so round robin and least
+   * busy both skip them.
    */
   async available(
     tx: Tx,
@@ -428,21 +430,25 @@ export class RoutingRulesRepository {
   ): Promise<Array<{ id: number; uuid: string; open: number }>> {
     if (userIds.length === 0) return [];
     const res = await tx.execute(sql`
-      SELECT u.id, u.uuid,
-             (SELECT count(*)::int FROM conversations c
-               WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
-                 AND c.status = 'open') AS open
-      FROM users u
-      LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
-      WHERE u.org_id = ${orgId} AND u.status = 'active'
-        AND u.id IN (${sql.join(
-          userIds.map((i) => sql`${i}`),
-          sql`, `,
-        )})
-        AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
-        -- on leave today (the workspace's calendar): never picked by routing (BL-112)
-        AND NOT ${onLeaveOnSql('u', today)}
-      ORDER BY u.id`);
+      SELECT m.id, m.uuid, m.open FROM (
+        SELECT u.id, u.uuid, p.chat_limit,
+               (SELECT count(*)::int FROM conversations c
+                 WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
+                   AND c.status = 'open') AS open
+        FROM users u
+        LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
+        LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
+        WHERE u.org_id = ${orgId} AND u.status = 'active'
+          AND u.id IN (${sql.join(
+            userIds.map((i) => sql`${i}`),
+            sql`, `,
+          )})
+          AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
+          -- on leave today (the workspace's calendar): never picked by routing (BL-112)
+          AND NOT ${onLeaveOnSql('u', today)}
+      ) m
+      WHERE m.chat_limit IS NULL OR m.open < m.chat_limit
+      ORDER BY m.id`);
     return rowsOf(res).map((r) => ({
       id: Number(r.id),
       uuid: r.uuid as string,

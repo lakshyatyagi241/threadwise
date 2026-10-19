@@ -58,7 +58,10 @@
         "role": "ロール",
         "status": "ステータス",
         "joined": "参加日",
-        "actions": "操作"
+        "actions": "操作",
+        "phone": "電話番号",
+        "chatLimit": "同時チャット数",
+        "lastLogin": "最終ログイン"
       },
       "pending": "保留中",
       "you": "あなた",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "{date}まで休暇中",
       "onLeaveOpen": "休暇中",
       "leaveFrom": "{date}から休暇",
-      "leaveAction": "休暇と代理人"
+      "leaveAction": "休暇と代理人",
+      "noLimit": "制限なし",
+      "neverSignedIn": "なし",
+      "editAction": "電話番号とチャット上限を変更"
     },
     "invite": {
       "eyebrow": "ワークスペース",
@@ -129,7 +135,14 @@
       "nameTooLong": "名前は {max} 文字以内で入力してください。",
       "emailInvalid": "有効なメールアドレスを入力してください。",
       "upgrade": "プランをアップグレード",
-      "emailRequired": "メールアドレスを入力してください。"
+      "emailRequired": "メールアドレスを入力してください。",
+      "phone": "電話番号（任意）",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "国番号を付けてください。",
+      "phoneInvalid": "国番号付きで入力してください。例：+91 98765 43210",
+      "chatLimit": "同時チャット数",
+      "chatLimitHint": "この人に同時に割り当てる進行中チャットの最大数です。空欄にすると制限なしになります。",
+      "chatLimitInvalid": "1 から {max} までの整数を入力するか、制限なしの場合は空欄にしてください。"
     },
     "teams": {
       "eyebrow": "ワークスペース",
@@ -320,6 +333,31 @@
       "undoTitle": "この再割り当てを元に戻しますか？",
       "undoMessage": "それ以降に誰も変更していないコンタクトと商談は、以前の担当者に戻ります。その他はそのままです。",
       "restored": "{count}件を戻し、{skipped}件はそのままです。"
+    },
+    "details": {
+      "eyebrow": "ワークスペース",
+      "title": "メンバーを変更",
+      "intro": "{name} の電話番号とチャット上限です。",
+      "phone": "電話番号",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "国番号を付けてください。削除するには空欄にします。",
+      "phoneInvalid": "国番号付きで入力してください。例：+91 98765 43210",
+      "chatLimit": "同時チャット数",
+      "chatLimitHint": "進行中のチャットがこの数に達すると、自動割り当てはその人への割り当てを止めます。空欄にすると制限なしになります。",
+      "chatLimitPlaceholder": "制限なし",
+      "chatLimitInvalid": "1 から {max} までの整数を入力するか、制限なしの場合は空欄にしてください。",
+      "lastLogin": "最終ログイン",
+      "lastLoginNever": "まだサインインしていません",
+      "submit": "保存",
+      "saving": "保存中…",
+      "saved": "メンバーを更新しました。"
+    },
+    "availability": {
+      "label": "対応状況",
+      "available": "対応可能",
+      "offline": "オフライン",
+      "hint": "オフラインの間は、新しいチャットは自動で割り当てられません。すでに担当しているチャットはそのままです。",
+      "failed": "変更できませんでした"
     }
   }
 }

@@ -163,7 +163,8 @@ export const inbox: HandlerSpec = {
     const meta = jsonOnly(
       scrub(
         plain({
-          historySync: true,
+          // no `historySync`: the inbox marks a message with it as "Imported" (a personal number's phone history); a migrated
+          // conversation is the customer's own history and carries only the legacy marker below
           // the buttons under a bot message (Visit our website, Call now ...): the inbox draws them from meta.sentInteractive.
           // Not only for kind 'interactive': a button message with an image / video / document header is that file's message
           // (parseTurn), and it still carries its buttons.

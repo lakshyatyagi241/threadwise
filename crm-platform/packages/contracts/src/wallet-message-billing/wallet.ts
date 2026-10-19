@@ -10,11 +10,18 @@ export type WalletTxType = z.infer<typeof walletTxTypeSchema>;
 
 export const walletBillingModeSchema = z.enum(['wallet', 'plan']);
 
+/**
+ * An amount to the ledger's exact precision, as text ("192.999", "-0.958", "7.00"): at least two decimals, at most four. The
+ * `...Minor` integers beside it are hundredths and lose the third and fourth decimal; screens show this one when it is present.
+ */
+export const exactAmountSchema = z.string().regex(/^-?\d+\.\d{2,4}$/);
+
 // --- the wallet home (TW-WALLET-020, -023, -025) ---------------------------------------------------------------------------
 
 export const walletSummarySchema = z.object({
   currency: z.string(),
   balanceMinor: z.number().int(),
+  balanceExact: exactAmountSchema.optional(),
   /** `wallet` = every delivered message is charged; `plan` = the plan's monthly messages are free, the wallet pays beyond them. */
   billingMode: walletBillingModeSchema,
   perCountryEnabled: z.boolean(),
@@ -23,8 +30,10 @@ export const walletSummarySchema = z.object({
   /** About how many messages the balance buys at the flat price; null when per-country prices apply or the price is 0. */
   approxMessages: z.number().int().nullable(),
   spent30dMinor: z.number().int(),
+  spent30dExact: exactAmountSchema.optional(),
   /** Earnings only (referral payouts): Reference also counted top-ups and refunds here. */
   earned30dMinor: z.number().int(),
+  earned30dExact: exactAmountSchema.optional(),
   toppedUp30dMinor: z.number().int(),
   refunded30dMinor: z.number().int(),
   lowBalanceThresholdMinor: z.number().int(),
@@ -45,7 +54,9 @@ export const walletTransactionSchema = z.object({
   direction: walletDirectionSchema,
   /** Signed: money in is positive, money out is negative. */
   amountMinor: z.number().int(),
+  amountExact: exactAmountSchema.optional(),
   balanceAfterMinor: z.number().int(),
+  balanceAfterExact: exactAmountSchema.optional(),
   source: z.string().nullable(),
   description: z.string().nullable(),
   /** The reason an operator gave for a manual adjustment. */
@@ -108,7 +119,9 @@ export type MessageContext = z.infer<typeof messageContextSchema>;
 
 export const statementRowSchema = walletTransactionSchema.extend({
   moneyInMinor: z.number().int(),
+  moneyInExact: exactAmountSchema.optional(),
   moneyOutMinor: z.number().int(),
+  moneyOutExact: exactAmountSchema.optional(),
   context: messageContextSchema.nullable(),
 });
 export type StatementRow = z.infer<typeof statementRowSchema>;
@@ -118,9 +131,13 @@ export const statementResponseSchema = z.object({
   /** Over the WHOLE filtered set, not just this page. */
   summary: z.object({
     currentBalanceMinor: z.number().int(),
+    currentBalanceExact: exactAmountSchema.optional(),
     moneyInMinor: z.number().int(),
+    moneyInExact: exactAmountSchema.optional(),
     moneyOutMinor: z.number().int(),
+    moneyOutExact: exactAmountSchema.optional(),
     netMinor: z.number().int(),
+    netExact: exactAmountSchema.optional(),
     count: z.number().int(),
   }),
   data: z.array(statementRowSchema),

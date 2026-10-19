@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Seguimiento",
-          "call_reminder": "Recordatorio de llamada",
-          "interested": "Interesado",
-          "left_message": "Mensaje dejado",
-          "no_response": "Sin respuesta",
-          "not_interested": "No interesado",
-          "not_reachable": "No se pudo contactar"
+          "call_reminder": "Recordatorio de llamada"
         },
         "meeting": {
           "interested": "Interesado",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Predecir resultados de esta actividad",
       "predictOutcomesHint": "Ofrecer un resultado al completar la actividad.",
       "outcomes": "Resultados",
+      "taskOutcomesHint": "Los resultados de una tarea terminada son una sola lista para todo el espacio de trabajo, que se mantiene en Resultados de tareas.",
+      "taskOutcomesLink": "Abrir Resultados de tareas",
       "outcomesHint": "Quitar un resultado lo mantiene en los registros que ya lo tienen.",
       "phoneOutcomesHint": "Elija cómo cuenta cada resultado en los informes de llamadas. Quitar un resultado lo mantiene en las llamadas que ya lo tienen.",
       "addOutcome": "Añadir resultado",

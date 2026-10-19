@@ -16,7 +16,7 @@ for the `key` (the Meeting activity follows the workspace vocabulary); a custom 
 - The defaults are seeded for every workspace by the trigger `trg_organizations_seed_activity_types`, for existing workspaces by the migration, and again, idempotently, the first time a workspace
   without them reads the list (`seed_activity_types(org)` never touches a row an admin changed).
 
-Which switches and lists an activity offers follows its behaviour (`activityCapabilities` in the contracts): task: all four switches and both lists; meeting: all, plus mobile check-in, no task
+Which switches and lists an activity offers follows its behaviour (`activityCapabilities` in the contracts): task: the calendar, complete and edit-completed-time switches and the task types (its outcomes are the Task outcomes list); meeting: all, plus mobile check-in, no task
 types; phone: outcomes only; other: nothing. Turning on a switch the behaviour does not offer is `422 ACTIVITY_FEATURE_OFF`.
 
 ## Routes (`/v2/activity-types`)
@@ -37,11 +37,13 @@ item names the admin typed).
 
 ## Where the lists are used
 
-- **Tasks** (`/v2/tasks`): `taskTypeId` on create and edit; `outcomeId` on `POST /tasks/:id/complete` and on `PATCH` of a done task (`null` clears); `doneAt` on `PATCH` of a done task. The response
-  carries `taskType` and `outcome` references (`{ id, key, name, isSystem, activityKey, removed }`). Reopening drops the outcome. Rules: completing needs `allowComplete` on Task
+- **Tasks** (`/v2/tasks`): `taskTypeId` on create and edit; `doneAt` on `PATCH` of a done task. The response carries a `taskType` reference (`{ id, key, name, isSystem, activityKey, removed }`).
+  The OUTCOME of a task is not part of this registry: it is the workspace's Task outcomes list (`/v2/task-outcomes`, `tasks.outcome_id`, Settings > Task outcomes), which was built in parallel and
+  merged first. The Task activity's drawer links to it instead of keeping a second list, and `POST /v2/activity-types/:id/options` with `kind: outcome` on Task is 422 `ACTIVITY_FEATURE_OFF`. New
+  workspaces get the five default task outcomes (Interested, Left message, No response, Not interested, Not able to reach) from the organization trigger; existing workspaces are not touched. Rules: completing needs `allowComplete` on Task
   (409 `ACTIVITY_COMPLETION_DISABLED`; bulk complete lists it per task; work the system finishes itself, such as a follow-up that was contacted, is not a user completing); editing `doneAt` needs
   `allowEditCompleted` (409 `ACTIVITY_EDIT_COMPLETED_DISABLED`) and may not be in the future; a task type or outcome that was removed, belongs to another kind of activity, or is of the wrong kind is
-  422 `ACTIVITY_OPTION_INVALID`; an outcome on an activity with `outcomesEnabled: false` is 422 `ACTIVITY_FEATURE_OFF`. Follow-up tasks made by lead handling are given the `Follow up` task type; the
+  422 `ACTIVITY_OPTION_INVALID`. Follow-up tasks made by lead handling are given the `Follow up` task type; the
   migration typed the existing ones. The task `kind` column is unchanged.
 - **Meetings** (`/v2/contacts/:contactId/meeting-results`): `GET` lists the outcomes of the contact's completed meetings; `PUT /:meetingId` `{ outcomeId?, note?, completedAt? }` completes a meeting or edits
   the result (absent keeps, `null` clears; `completedAt` needs `allowEditCompleted` on Meeting); `DELETE /:meetingId` reopens it. Needs `record.contacts.read` / `update` with the contact's record scope. A meeting

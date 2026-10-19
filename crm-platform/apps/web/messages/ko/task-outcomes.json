@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "작업 결과",
+        "description": "작업을 완료하거나 기록할 때 선택하는 결과입니다.",
+        "keywords": "작업 결과, 통화 결과, 결과, 관심 있음, 메시지 남김, 응답 없음"
+      }
+    }
+  }
+}

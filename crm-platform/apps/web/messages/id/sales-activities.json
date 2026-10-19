@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Tindak lanjut",
-          "call_reminder": "Pengingat telepon",
-          "interested": "Tertarik",
-          "left_message": "Meninggalkan pesan",
-          "no_response": "Tidak ada respons",
-          "not_interested": "Tidak tertarik",
-          "not_reachable": "Tidak dapat dihubungi"
+          "call_reminder": "Pengingat telepon"
         },
         "meeting": {
           "interested": "Tertarik",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Prediksi hasil untuk aktivitas ini",
       "predictOutcomesHint": "Tawarkan hasil saat aktivitas diselesaikan.",
       "outcomes": "Hasil",
+      "taskOutcomesHint": "Hasil tugas yang selesai adalah satu daftar untuk seluruh ruang kerja, dikelola di Hasil tugas.",
+      "taskOutcomesLink": "Buka Hasil tugas",
       "outcomesHint": "Menghapus hasil tetap menyimpannya pada catatan yang sudah memilikinya.",
       "phoneOutcomesHint": "Pilih bagaimana setiap hasil dihitung dalam laporan panggilan. Menghapus hasil tetap menyimpannya pada panggilan yang sudah memilikinya.",
       "addOutcome": "Tambah hasil",

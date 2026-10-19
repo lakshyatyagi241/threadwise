@@ -154,10 +154,11 @@ function wire(r: Row): TaskResponse {
     contact: r.contactId ? { id: r.contactId, name: contactName(r.contactId) } : null,
     deal: r.dealId ? { id: r.dealId, title: dealTitle(r.dealId) } : null,
     company: null,
+    // The stand-in has no outcome list; the real API owns it.
+    outcome: null,
     source: 'manual',
     kind: 'task',
     taskType: null,
-    outcome: null,
     rowVersion: r.rowVersion,
     createdAt: r.createdAt,
     updatedAt: r.updatedAt,

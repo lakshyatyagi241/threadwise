@@ -245,6 +245,11 @@
         "description": "Kunci dan dokumentasi untuk membangun di atas produk ini.",
         "keywords": "api keys, developer, token, docs, openapi"
       },
+      "api-keys": {
+        "label": "Kunci API",
+        "description": "Buat dan kelola kunci yang digunakan sistem lain untuk memanggil API.",
+        "keywords": "kunci api, token, rahasia, pengembang, akses, integrasi"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "Kirim event ke sistem Anda sendiri saat terjadi.",

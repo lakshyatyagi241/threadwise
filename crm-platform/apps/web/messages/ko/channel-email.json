@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "사서함 연결",
-          "body": "Google 또는 Microsoft로 로그인하거나 메일 서버 설정을 입력한 다음, Threadwise가 해당 주소의 메일을 읽고 보내도록 허용하세요."
+          "body": "Google 또는 Microsoft로 로그인하거나 메일 서버 설정을 입력한 다음, {app}가 해당 주소의 메일을 읽고 보내도록 허용하세요."
         },
         "inbox": {
           "title": "메일이 수신함에 도착",

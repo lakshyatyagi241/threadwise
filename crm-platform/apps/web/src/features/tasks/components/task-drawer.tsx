@@ -4,11 +4,6 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, Textarea, cn } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
-import {
-  OptionSelect,
-  useActivitySettings,
-  useCompletionOffText,
-} from '@/features/sales-activities';
 import { useMembers, useTask } from '../api/hooks';
 import { PRIORITIES, type RecordRef } from '../api/schemas';
 import { fromLocalInput, presetDue, toLocalInput, type DuePreset } from '../lib/dates';
@@ -25,6 +20,12 @@ import {
   useWorkspaceZone,
   DueText,
 } from './parts';
+import {
+  OptionSelect,
+  useActivitySettings,
+  useCompletionOffText,
+} from '@/features/sales-activities';
+import { CompleteWithOutcome, OutcomeSelect } from './outcome-select';
 import { RecordPicker } from './record-picker';
 import { useTaskActions } from './use-task-actions';
 
@@ -72,8 +73,6 @@ function DrawerBody({
 }: TaskDrawerProps & { task: TaskResponse }) {
   const t = useTranslations('tasks.drawer');
   const tf = useTranslations('tasks.form');
-  const completeOff = useCompletionOffText();
-  const taskSettings = useActivitySettings('task');
   const locale = useLocale();
   const now = useNow();
   const zone = useWorkspaceZone();
@@ -83,6 +82,8 @@ function DrawerBody({
   const [busy, setBusy] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [dueError, setDueError] = useState(false);
+  const completeOff = useCompletionOffText();
+  const taskSettings = useActivitySettings('task');
   const done = task.status === 'done';
   const people = members.data ?? [];
 
@@ -156,6 +157,11 @@ function DrawerBody({
             {done ? t('statusDone') : t('statusOpen')}
           </span>
           <PriorityChip priority={task.priority} />
+          {task.outcome && (
+            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+              {t('outcomeChip', { name: task.outcome.name })}
+            </span>
+          )}
           <DueText task={task} now={now} zone={zone} className="text-sm" />
         </div>
         {canUpdate && (
@@ -168,6 +174,9 @@ function DrawerBody({
             >
               <CheckIcon /> {done ? t('reopen') : t('complete')}
             </Button>
+            {!done && taskSettings.allowComplete && (
+              <CompleteWithOutcome onComplete={(id) => void actions.toggle(task, id)} />
+            )}
             <Button variant="secondary" onClick={() => onEdit(task)}>
               <PencilIcon /> {t('edit')}
             </Button>
@@ -224,6 +233,14 @@ function DrawerBody({
                 ))}
               </Select>
             </Field>
+            <OutcomeSelect
+              id="task-drawer-outcome"
+              label={tf('outcome')}
+              disabled={!canUpdate}
+              value={task.outcome?.id ?? ''}
+              current={task.outcome}
+              onChange={(v) => void actions.save(task, { outcomeId: v || null })}
+            />
             <OptionSelect
               activity="task"
               kind="type"
@@ -233,17 +250,6 @@ function DrawerBody({
               current={task.taskType}
               onChange={(id) => void actions.save(task, { taskTypeId: id || null })}
             />
-            {done && (
-              <OptionSelect
-                activity="task"
-                kind="outcome"
-                id="task-drawer-outcome"
-                disabled={!canUpdate}
-                value={task.outcome?.id ?? ''}
-                current={task.outcome}
-                onChange={(id) => void actions.save(task, { outcomeId: id || null })}
-              />
-            )}
             <Field
               label={tf('due')}
               htmlFor="task-drawer-due"

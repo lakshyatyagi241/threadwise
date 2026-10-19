@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 import { describe, expect, it } from 'vitest';
-import { opensNodeOnDoubleClick } from './node-open';
+import { opensNodeOnDoubleClick, opensNodeOnEnter } from './node-open';
 
 function card(inner: string): HTMLElement {
   const el = document.createElement('div');
@@ -32,5 +32,20 @@ describe('opensNodeOnDoubleClick', () => {
 
   it('opens when the target is not an element', () => {
     expect(opensNodeOnDoubleClick(null)).toBe(true);
+  });
+});
+
+describe('opensNodeOnEnter', () => {
+  it('opens when the focus is on the canvas or the card itself', () => {
+    const el = card('<div class="preview">Hi</div>');
+    expect(opensNodeOnEnter(el.querySelector('.preview'))).toBe(true);
+    expect(opensNodeOnEnter(document.body)).toBe(true);
+  });
+
+  it('leaves a focused button (the toolbar Delete), a link and a connection dot to their own Enter', () => {
+    const el = card('<button><span class="ic">x</span></button><a href="#">x</a><div data-port="out:n_1"></div>');
+    expect(opensNodeOnEnter(el.querySelector('.ic'))).toBe(false);
+    expect(opensNodeOnEnter(el.querySelector('a'))).toBe(false);
+    expect(opensNodeOnEnter(el.querySelector('[data-port]'))).toBe(false);
   });
 });

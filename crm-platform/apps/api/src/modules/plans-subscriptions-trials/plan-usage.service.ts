@@ -385,6 +385,18 @@ export class PlanUsageService {
   }
 
   /**
+   * Messages the workspace sent this calendar month: the `monthly_messages` meter, counted from the messages table. The plan page, the
+   * analytics and the wallet's "used this month" all read this one number (the wallet's own settlement counter only counts messages
+   * that went through delivery-time billing, so it reads 0 for history that was imported).
+   */
+  async messagesThisMonth(orgId: number, now = new Date()): Promise<number> {
+    const meter = METERS.find((m) => m.key === 'monthly_messages')!;
+    return this.db.txAs({ orgId, userId: null }, (tx) =>
+      meter.count(tx, orgId, monthStart(now), nextMonthStart(now)),
+    );
+  }
+
+  /**
    * The one-line guard for a domain that creates a capped thing (devices, flows, templates, auto-replies, ...): counts what the workspace
    * holds with the SAME predicate the usage panel shows, then refuses row N+1 with 422 PLAN_LIMIT_REACHED. Call it before the insert, in the
    * creating request. Four keys are not live row counts and are refused here on purpose: `total_campaigns` is the delete-proof ledger

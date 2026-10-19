@@ -136,7 +136,11 @@
         "previousStage": "前のステージ",
         "previousStageSince": "前のステージだった日時",
         "lostReason": "失注理由",
-        "updatedAt": "最終更新"
+        "updatedAt": "最終更新",
+        "leadScore": "リードスコア",
+        "originalStage": "元のライフサイクルステージ",
+        "createdBy": "作成者",
+        "updatedBy": "更新者"
       },
       "company": {
         "title": "会社",

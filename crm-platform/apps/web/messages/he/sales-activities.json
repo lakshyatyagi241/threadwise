@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "מעקב",
-          "call_reminder": "תזכורת להתקשר",
-          "interested": "מעוניין",
-          "left_message": "הושארה הודעה",
-          "no_response": "אין מענה",
-          "not_interested": "לא מעוניין",
-          "not_reachable": "לא ניתן ליצור קשר"
+          "call_reminder": "תזכורת להתקשר"
         },
         "meeting": {
           "interested": "מעוניין",
@@ -83,6 +78,8 @@
       "predictOutcomes": "חיזוי תוצאות לפעילות זו",
       "predictOutcomesHint": "להציע תוצאה כשהפעילות מושלמת.",
       "outcomes": "תוצאות",
+      "taskOutcomesHint": "תוצאות של משימה שהושלמה הן רשימה אחת לכל סביבת העבודה, והיא מנוהלת ב״תוצאות משימות״.",
+      "taskOutcomesLink": "פתיחת ״תוצאות משימות״",
       "outcomesHint": "הסרת תוצאה משאירה אותה ברשומות שכבר כוללות אותה.",
       "phoneOutcomesHint": "בחרו איך כל תוצאה נספרת בדוחות שיחות. הסרת תוצאה משאירה אותה בשיחות שכבר כוללות אותה.",
       "addOutcome": "הוספת תוצאה",

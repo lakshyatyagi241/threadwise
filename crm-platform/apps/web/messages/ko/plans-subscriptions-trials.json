@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, other {무제한 한도 #개 보기}}",
       "hideUnlimited": "무제한 한도 숨기기",
       "groupCount": "{count, plural, other {한도 #개}}",
-      "groupHidden": "{count, plural, other {무제한인 한도 #개가 더 있으며 숨겨져 있습니다.}}"
+      "groupHidden": "{count, plural, other {무제한인 한도 #개가 더 있으며 숨겨져 있습니다.}}",
+      "activatedOn": "{date}에 활성화됨",
+      "previousBilling": "이전 결제일: {date}",
+      "subscriptionId": "구독 ID: {id}"
     },
     "operator": {
       "title": "워크스페이스 요금제",

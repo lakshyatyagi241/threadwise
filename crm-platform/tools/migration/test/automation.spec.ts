@@ -76,8 +76,8 @@ describe('registry and steps', () => {
       StepsError,
     );
     const s = await runClient(opts(dumps, db, { steps: ['groups', 'automations'] }));
-    expect(s.steps.automation_flows!.migrated).toBe(8);
-    expect(await one(db, `SELECT count(*)::int AS n FROM flows WHERE ${AUTO}`)).toBe(8);
+    expect(s.steps.automation_flows!.migrated).toBe(9);
+    expect(await one(db, `SELECT count(*)::int AS n FROM flows WHERE ${AUTO}`)).toBe(9);
     // the lists resolved because groups ran first
     const g = await rows(db, `SELECT g.id, g.uuid::text FROM contact_groups g`);
     const f = (
@@ -91,15 +91,15 @@ describe('registry and steps', () => {
 });
 
 describe('the load', () => {
-  it('counts: 8 flows, the journey rows adopted / excluded / quarantined with reasons, the equation holds', async () => {
+  it('counts: 9 flows, the journey rows adopted / excluded / quarantined with reasons, the equation holds', async () => {
     const r = await check(dumps, base);
     expect(r.alarms).toEqual([]);
     expect(r.ok).toBe(true);
     const row = (c: string) => r.collections.find((x) => x.collection === c)!;
     expect(row('automation_metadata')).toMatchObject({
       read: 13,
-      migrated: 8,
-      excluded: 3,
+      migrated: 9,
+      excluded: 2,
       quarantined: 2,
       unaccounted: 0,
     });
@@ -107,7 +107,7 @@ describe('the load', () => {
     const j = row('automation_journey');
     expect(j.read).toBe(j.migrated + j.excluded + j.quarantined);
     expect(j.migrated).toBe(13);
-    expect(r.excludedByCode['automation_metadata: NO_NODES']).toBe(1);
+    expect(r.excludedByCode['automation_metadata: NO_NODES']).toBeUndefined(); // an empty draft is loaded
     expect(r.excludedByCode['automation_metadata: OLDER_DUPLICATE']).toBe(1);
     expect(r.excludedByCode['automation_metadata: SOFT_DELETED']).toBe(1);
     expect(r.excludedByCode['automation_journey: DERIVED_EVENT_NODE']).toBe(3);
@@ -120,11 +120,11 @@ describe('the load', () => {
       NO_AUTOMATION_ID: 1,
       JOURNEY_DIVERGES: 1,
       NO_DEFINITION: 1,
-      NOT_IN_DEFINITION: 1,
+      NOT_IN_DEFINITION: 2, // incl. the runtime row of the empty draft (now a loaded flow)
       NO_NODE_ID: 1,
     });
     expect(r.notPresent.droppedFields.join('\n')).toMatch(
-      /NOT PRESENT \(automations\): 8 of 8 automation flows/,
+      /NOT PRESENT \(automations\): 9 of 9 automation flows/,
     );
   });
 
@@ -198,7 +198,7 @@ describe('the load', () => {
   it('a dry run writes nothing', async () => {
     const db = await clone('au-dry');
     const s = await runClient(opts(dumps, db, { dryRun: true }));
-    expect(s.steps.automation_flows!.migrated).toBe(8);
+    expect(s.steps.automation_flows!.migrated).toBe(9);
     expect(await one(db, `SELECT count(*)::int AS n FROM flows`)).toBe(0);
     expect(
       await one(

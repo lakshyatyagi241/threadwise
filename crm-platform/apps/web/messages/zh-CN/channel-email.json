@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "连接邮箱",
-          "body": "使用 Google 或 Microsoft 登录，或填写你的邮件服务器设置，并允许 Threadwise 读取和发送该地址的邮件。"
+          "body": "使用 Google 或 Microsoft 登录，或填写你的邮件服务器设置，并允许 {app} 读取和发送该地址的邮件。"
         },
         "inbox": {
           "title": "邮件进入收件箱",

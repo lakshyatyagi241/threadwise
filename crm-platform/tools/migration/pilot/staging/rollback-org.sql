@@ -61,6 +61,20 @@ BEGIN
     IF n > 0 THEN INSERT INTO rb_report VALUES (t.relname, n); END IF;
   END LOOP;
 
+  -- referral_codes names its organization owner_org_id (not org_id), so the loop above misses it
+  IF to_regclass('public.referral_codes') IS NOT NULL THEN
+    DELETE FROM referral_codes WHERE owner_org_id = org;
+    GET DIAGNOSTICS n = ROW_COUNT;
+    IF n > 0 THEN INSERT INTO rb_report VALUES ('referral_codes', n); END IF;
+  END IF;
+
+  -- impersonation_sessions names its organization target_workspace_id ("Login as owner" sessions opened on it)
+  IF to_regclass('public.impersonation_sessions') IS NOT NULL THEN
+    DELETE FROM impersonation_sessions WHERE target_workspace_id = org;
+    GET DIAGNOSTICS n = ROW_COUNT;
+    IF n > 0 THEN INSERT INTO rb_report VALUES ('impersonation_sessions', n); END IF;
+  END IF;
+
   DELETE FROM organizations WHERE id = org;
   GET DIAGNOSTICS n = ROW_COUNT;
   INSERT INTO rb_report VALUES ('organizations', n);

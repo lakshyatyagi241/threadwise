@@ -91,7 +91,14 @@
         "none": "Jeszcze brak",
         "atLeast": "{count}+",
         "footnote": "Dane o wiadomościach obejmują rozmowy znalezione dla tego kontaktu (według numeru telefonu, adresu e-mail lub nazwy). Dane o połączeniach obejmują ostatni rok i są dopasowane według numeru telefonu lub nazwy.",
-        "callsPartial": "Dopasowano więcej połączeń, niż udało się odczytać, więc dane o połączeniach mogą być zaniżone."
+        "callsPartial": "Dopasowano więcej połączeń, niż udało się odczytać, więc dane o połączeniach mogą być zaniżone.",
+        "waSent": "WhatsApp wysłane",
+        "waDelivered": "WhatsApp dostarczone",
+        "waSeen": "WhatsApp odczytane",
+        "waReceived": "WhatsApp odebrane",
+        "waFailed": "WhatsApp nieudane",
+        "waReplied": "WhatsApp z odpowiedzią",
+        "waFootnote": "Liczby WhatsApp obejmują wszystkie wiadomości w rozmowach WhatsApp tego kontaktu. Wysłana wiadomość liczy się jako z odpowiedzią, gdy następna wiadomość jest od kontaktu."
       }
     }
   }

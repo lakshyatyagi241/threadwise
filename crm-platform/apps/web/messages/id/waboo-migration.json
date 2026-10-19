@@ -196,7 +196,8 @@
       "core-load": "Pemuatan inti",
       "flow-state": "Status alur",
       "reconcile": "Rekonsiliasi",
-      "report": "Laporan"
+      "report": "Laporan",
+      "whatsapp": "Nomor WhatsApp"
     },
     "stepStatus": {
       "running": "Berjalan",

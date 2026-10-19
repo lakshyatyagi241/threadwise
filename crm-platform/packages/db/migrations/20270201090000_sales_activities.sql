@@ -12,7 +12,9 @@
 --                            `counts_as` (phone outcomes only) is the built-in call outcome a custom outcome counts as in the call log's reports.
 --   contact_meeting_outcomes the outcome and notes of a completed meeting, one row per meeting (a separate table so the meetings table stays as
 --                            it is for the booking mirror).
---   tasks.task_type_id / tasks.outcome_id and call_log_entries.outcome_option_id point at the options. The task `kind` column ('task' | 'follow_up',
+--   tasks.task_type_id and call_log_entries.outcome_option_id point at the options. The outcome of a TASK is not kept here: it is the workspace's
+--                            `task_outcomes` list (20270126090000, Settings > Task outcomes, `tasks.outcome_id`), which the Task activity links to
+--                            instead of keeping a second list. New workspaces get the five default task outcomes below; existing ones are not touched. The task `kind` column ('task' | 'follow_up',
 --                            lead handling) is untouched: existing follow-up tasks are given the seeded 'Follow up' type below.
 --
 -- The defaults are seeded for every existing workspace here and for every new one by a trigger on organizations (the same shape as the default
@@ -111,7 +113,7 @@ DECLARE
 BEGIN
   FOR a IN
     SELECT * FROM (VALUES
-      ('task',     0, 'task',    'task',     true,  true,  true),
+      ('task',     0, 'task',    'task',     true,  false, true),
       ('meeting',  1, 'meeting', 'meeting',  true,  true,  true),
       ('phone',    2, 'phone',   'phone',    false, true,  false),
       ('email',    3, 'other',   'email',    false, false, false),
@@ -129,11 +131,6 @@ BEGIN
     SELECT * FROM (VALUES
       ('task',    'type',    'follow_up',      0),
       ('task',    'type',    'call_reminder',  1),
-      ('task',    'outcome', 'interested',     0),
-      ('task',    'outcome', 'left_message',   1),
-      ('task',    'outcome', 'no_response',    2),
-      ('task',    'outcome', 'not_interested', 3),
-      ('task',    'outcome', 'not_reachable',  4),
       ('meeting', 'outcome', 'interested',     0),
       ('meeting', 'outcome', 'not_interested', 1),
       ('meeting', 'outcome', 'needs_follow_up',2),
@@ -164,6 +161,12 @@ BEGIN
   -- The organization's insert was already authorized by the caller; this lifts RLS only for its own seed and puts the setting back.
   PERFORM set_config('app.privileged', 'on', true);
   PERFORM seed_activity_types(NEW.id);
+  -- The default task outcomes of a NEW workspace (the shared `task_outcomes` list). Existing workspaces keep what they have: a migrated Waboo
+  -- workspace already owns its own list, and adding rows there would change what its pickers offer.
+  INSERT INTO task_outcomes (org_id, name, sort_order) VALUES
+    (NEW.id, 'Interested', 0), (NEW.id, 'Left message', 1), (NEW.id, 'No response', 2),
+    (NEW.id, 'Not interested', 3), (NEW.id, 'Not able to reach', 4)
+  ON CONFLICT DO NOTHING;
   PERFORM set_config('app.privileged', coalesce(prev, ''), true);
   RETURN NEW;
 END $$;
@@ -178,11 +181,8 @@ SELECT seed_activity_types(id) FROM organizations;
 
 ALTER TABLE tasks
   ADD COLUMN task_type_id bigint,
-  ADD COLUMN outcome_id   bigint,
   ADD CONSTRAINT fk_tasks_task_type FOREIGN KEY (org_id, task_type_id)
-    REFERENCES activity_type_options (org_id, id) ON DELETE SET NULL (task_type_id),
-  ADD CONSTRAINT fk_tasks_outcome FOREIGN KEY (org_id, outcome_id)
-    REFERENCES activity_type_options (org_id, id) ON DELETE SET NULL (outcome_id);
+    REFERENCES activity_type_options (org_id, id) ON DELETE SET NULL (task_type_id);
 
 -- A follow-up task (lead handling) is of the seeded 'Follow up' type. Nothing else is typed: an untyped task stays untyped.
 UPDATE tasks t SET task_type_id = o.id

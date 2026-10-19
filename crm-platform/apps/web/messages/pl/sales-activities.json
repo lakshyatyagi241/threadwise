@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Kontakt kontrolny",
-          "call_reminder": "Przypomnienie o telefonie",
-          "interested": "Zainteresowany",
-          "left_message": "Zostawiono wiadomość",
-          "no_response": "Brak odpowiedzi",
-          "not_interested": "Niezainteresowany",
-          "not_reachable": "Nie udało się skontaktować"
+          "call_reminder": "Przypomnienie o telefonie"
         },
         "meeting": {
           "interested": "Zainteresowany",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Przewiduj wyniki tej aktywności",
       "predictOutcomesHint": "Proponuj wynik po zakończeniu aktywności.",
       "outcomes": "Wyniki",
+      "taskOutcomesHint": "Wyniki zakończonego zadania to jedna lista dla całego obszaru roboczego, prowadzona w Wynikach zadań.",
+      "taskOutcomesLink": "Otwórz Wyniki zadań",
       "outcomesHint": "Usunięty wynik pozostaje przy rekordach, które już go mają.",
       "phoneOutcomesHint": "Wybierz, jak każdy wynik jest liczony w raportach rozmów. Usunięty wynik pozostaje przy rozmowach, które już go mają.",
       "addOutcome": "Dodaj wynik",

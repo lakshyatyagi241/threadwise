@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Follow up",
-          "call_reminder": "Call reminder",
-          "interested": "Interested",
-          "left_message": "Left message",
-          "no_response": "No response",
-          "not_interested": "Not interested",
-          "not_reachable": "Not able to reach"
+          "call_reminder": "Call reminder"
         },
         "meeting": {
           "interested": "Interested",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Predict outcomes for this activity",
       "predictOutcomesHint": "Offer an outcome when the activity is completed.",
       "outcomes": "Outcomes",
+      "taskOutcomesHint": "The outcomes a finished task can have are one list for the whole workspace, kept in Task outcomes.",
+      "taskOutcomesLink": "Open Task outcomes",
       "outcomesHint": "Removing an outcome keeps it on the records that already have it.",
       "phoneOutcomesHint": "Choose how each outcome counts in call reports. Removing an outcome keeps it on the calls that already have it.",
       "addOutcome": "Add outcome",

@@ -74,6 +74,12 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     prefixes: ['appointments.reminders', 'appointments.channels', 'appointments.templates'],
   },
   {
+    // The staff screens that style the customer's booking page (BL-355): written with the default nouns. The sample text of its preview
+    // names no noun, because the preview shows what a customer sees.
+    id: 'booking-page-appearance',
+    prefixes: ['appointments.appearance'],
+  },
+  {
     id: 'deals',
     prefixes: [
       'deals-pipelines.nav',

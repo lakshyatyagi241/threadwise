@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Opvolgen",
-          "call_reminder": "Belherinnering",
-          "interested": "Geïnteresseerd",
-          "left_message": "Bericht achtergelaten",
-          "no_response": "Geen reactie",
-          "not_interested": "Niet geïnteresseerd",
-          "not_reachable": "Niet bereikbaar"
+          "call_reminder": "Belherinnering"
         },
         "meeting": {
           "interested": "Geïnteresseerd",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Uitkomsten voor deze activiteit voorspellen",
       "predictOutcomesHint": "Een uitkomst aanbieden als de activiteit wordt voltooid.",
       "outcomes": "Uitkomsten",
+      "taskOutcomesHint": "De uitkomsten van een voltooide taak zijn één lijst voor de hele werkruimte, beheerd onder Taakuitkomsten.",
+      "taskOutcomesLink": "Taakuitkomsten openen",
       "outcomesHint": "Een verwijderde uitkomst blijft behouden bij de records die haar al hebben.",
       "phoneOutcomesHint": "Kies hoe elke uitkomst meetelt in gesprekrapporten. Een verwijderde uitkomst blijft behouden bij de gesprekken die haar al hebben.",
       "addOutcome": "Uitkomst toevoegen",

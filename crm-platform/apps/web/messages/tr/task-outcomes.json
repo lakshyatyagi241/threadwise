@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "task-outcomes": {
+        "label": "Görev sonuçları",
+        "description": "Bir görevi tamamlarken veya kaydederken seçilen sonuçlar.",
+        "keywords": "görev sonucu, arama sonucu, sonuç, ilgileniyor, mesaj bırakıldı, yanıt yok"
+      }
+    }
+  }
+}

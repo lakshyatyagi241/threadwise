@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "متابعة",
-          "call_reminder": "تذكير بالاتصال",
-          "interested": "مهتم",
-          "left_message": "ترك رسالة",
-          "no_response": "لا يوجد رد",
-          "not_interested": "غير مهتم",
-          "not_reachable": "تعذّر الوصول"
+          "call_reminder": "تذكير بالاتصال"
         },
         "meeting": {
           "interested": "مهتم",
@@ -83,6 +78,8 @@
       "predictOutcomes": "توقّع النتائج لهذا النشاط",
       "predictOutcomesHint": "اعرض خيار النتيجة عند إكمال النشاط.",
       "outcomes": "النتائج",
+      "taskOutcomesHint": "نتائج المهمة المكتملة قائمة واحدة لمساحة العمل كلها، وتُدار في نتائج المهام.",
+      "taskOutcomesLink": "فتح نتائج المهام",
       "outcomesHint": "حذف نتيجة يُبقيها في السجلات التي تحتويها بالفعل.",
       "phoneOutcomesHint": "اختر كيف تُحتسب كل نتيجة في تقارير المكالمات. حذف نتيجة يُبقيها في المكالمات التي تحتويها بالفعل.",
       "addOutcome": "إضافة نتيجة",

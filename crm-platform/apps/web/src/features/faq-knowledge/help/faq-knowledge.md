@@ -38,7 +38,7 @@ An FAQ is a question, the answer to give, and a list of **phrasings**: other way
 2. Select the **FAQs** tab, beside **Build**. A website chat bot also has **Customize** and **Install**.
 3. Inside the tab, the strip shows **FAQs**, **Test**, **Unanswered** and **Insights**. Each one has its own address (`?tab=faqs&view=...`), so you can reload, share a link or use the browser's back button. Switching between Build and FAQs does not lose changes to the flow.
 
-The Advanced builder has no FAQs tab. A flow built there still has FAQs: open it in the Simple builder to edit them. The FAQ step in the Advanced builder links there.
+The Advanced builder has the same **FAQs** tab beside **Build** for a saved flow, with the same screens, so a flow's FAQs are edited from whichever builder you opened it in. The FAQ step's form links to the tab.
 
 ## Add an FAQ
 
@@ -87,7 +87,7 @@ The platform's limits on FAQs and phrasings apply to each flow.
 
 ## If something looks wrong
 
-- There is no FAQs tab: the flow is not saved yet, you are in the Advanced builder, or your role lacks **faq.entries.read**.
+- There is no FAQs tab: the flow is not saved yet, or your role lacks **faq.entries.read**.
 - Nothing is answered: check the banner at the top of the FAQs tab. It says if answering is off for this flow or switched off by the platform.
 - An FAQ shows **Flow missing**: the flow it goes to was deleted. Pick another flow.
 - An FAQ shows **Step missing**: the flow is there but the step it goes to was deleted, so customers get no answer from it. Open the FAQ and pick another step, or select **Start at the flow's start**.

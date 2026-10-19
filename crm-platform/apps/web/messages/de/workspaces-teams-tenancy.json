@@ -58,7 +58,10 @@
         "role": "Rolle",
         "status": "Status",
         "joined": "Beigetreten",
-        "actions": "Aktionen"
+        "actions": "Aktionen",
+        "phone": "Telefon",
+        "chatLimit": "Gleichzeitige Chats",
+        "lastLogin": "Letzte Anmeldung"
       },
       "pending": "ausstehend",
       "you": "Sie",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "Abwesend bis {date}",
       "onLeaveOpen": "Abwesend",
       "leaveFrom": "Abwesend ab {date}",
-      "leaveAction": "Abwesenheit und Vertretung"
+      "leaveAction": "Abwesenheit und Vertretung",
+      "noLimit": "Kein Limit",
+      "neverSignedIn": "Nie",
+      "editAction": "Telefon und Chat-Limit ändern"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -129,7 +135,14 @@
       "nameTooLong": "Der Name darf höchstens {max} Zeichen lang sein.",
       "emailInvalid": "Geben Sie eine gültige E-Mail-Adresse ein.",
       "upgrade": "Tarif upgraden",
-      "emailRequired": "Geben Sie eine E-Mail-Adresse ein."
+      "emailRequired": "Geben Sie eine E-Mail-Adresse ein.",
+      "phone": "Telefonnummer (optional)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Mit Ländervorwahl.",
+      "phoneInvalid": "Gib die Nummer mit Ländervorwahl ein, zum Beispiel +91 98765 43210.",
+      "chatLimit": "Gleichzeitige Chats",
+      "chatLimitHint": "Höchstzahl offener Chats, die dieser Person gleichzeitig zugewiesen werden. Leer lassen für kein Limit.",
+      "chatLimitInvalid": "Gib eine ganze Zahl von 1 bis {max} ein oder lass das Feld leer für kein Limit."
     },
     "teams": {
       "eyebrow": "Workspace",
@@ -320,6 +333,31 @@
       "undoTitle": "Diese Neuzuweisung rückgängig machen?",
       "undoMessage": "Kontakte und Deals, die seitdem niemand geändert hat, gehen an den früheren Inhaber zurück. Die übrigen bleiben, wo sie sind.",
       "restored": "{count} zurückgegeben, {skipped} bleiben, wo sie sind."
+    },
+    "details": {
+      "eyebrow": "Workspace",
+      "title": "Mitglied ändern",
+      "intro": "Telefon und Chat-Limit von {name}.",
+      "phone": "Telefonnummer",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Mit Ländervorwahl. Leer lassen, um sie zu entfernen.",
+      "phoneInvalid": "Gib die Nummer mit Ländervorwahl ein, zum Beispiel +91 98765 43210.",
+      "chatLimit": "Gleichzeitige Chats",
+      "chatLimitHint": "Die automatische Zuweisung gibt dieser Person keine Chats mehr, sobald sie so viele offene hat. Leer lassen für kein Limit.",
+      "chatLimitPlaceholder": "Kein Limit",
+      "chatLimitInvalid": "Gib eine ganze Zahl von 1 bis {max} ein oder lass das Feld leer für kein Limit.",
+      "lastLogin": "Letzte Anmeldung",
+      "lastLoginNever": "Noch nicht angemeldet",
+      "submit": "Speichern",
+      "saving": "Wird gespeichert…",
+      "saved": "Mitglied aktualisiert."
+    },
+    "availability": {
+      "label": "Verfügbarkeit",
+      "available": "Verfügbar",
+      "offline": "Offline",
+      "hint": "Solange du offline bist, werden dir keine neuen Chats automatisch zugewiesen. Chats, die du schon hast, bleiben deine.",
+      "failed": "Änderung nicht möglich"
     }
   }
 }

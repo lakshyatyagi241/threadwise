@@ -164,7 +164,12 @@
       "change": "Ubah",
       "terms": "Dengan membayar, Anda menyetujui <terms>Syarat</terms> dan <privacy>Kebijakan privasi</privacy> kami.",
       "refundNote": "Tidak puas? Email kami dalam {days} hari pertama dan kami akan mengembalikan seluruh jumlahnya — tanpa pertanyaan, tanpa formulir.",
-      "autoRenewTitle": "Perpanjang paket ini otomatis"
+      "autoRenewTitle": "Perpanjang paket ini otomatis",
+      "amountSubtitle": "Masukkan jumlah yang ingin Anda tambahkan. Setelah itu Anda akan melihat harga akhir dan metode pembayaran.",
+      "amountLabel": "Jumlah yang ditambahkan",
+      "amountHint": "Hanya angka, misalnya 1000 atau 250,50.",
+      "amountInvalid": "Masukkan jumlah di atas nol, misalnya 500 atau 250,50.",
+      "amountContinue": "Lanjutkan"
     },
     "orders": {
       "title": "Riwayat pesanan",

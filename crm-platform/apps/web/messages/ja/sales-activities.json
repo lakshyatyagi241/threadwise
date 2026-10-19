@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "フォローアップ",
-          "call_reminder": "折り返し電話のリマインダー",
-          "interested": "関心あり",
-          "left_message": "伝言を残した",
-          "no_response": "応答なし",
-          "not_interested": "関心なし",
-          "not_reachable": "連絡がつかない"
+          "call_reminder": "折り返し電話のリマインダー"
         },
         "meeting": {
           "interested": "関心あり",
@@ -83,6 +78,8 @@
       "predictOutcomes": "このアクティビティの結果を予測する",
       "predictOutcomesHint": "アクティビティの完了時に結果の選択肢を表示します。",
       "outcomes": "結果",
+      "taskOutcomesHint": "完了したタスクの結果は、ワークスペース全体で共通の1つのリストで、「タスクの結果」で管理します。",
+      "taskOutcomesLink": "「タスクの結果」を開く",
       "outcomesHint": "結果を削除しても、すでにその結果を持つレコードには残ります。",
       "phoneOutcomesHint": "各結果を通話レポートでどう数えるかを選びます。結果を削除しても、すでにその結果を持つ通話には残ります。",
       "addOutcome": "結果を追加",

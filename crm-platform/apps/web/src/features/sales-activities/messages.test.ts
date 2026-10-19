@@ -102,15 +102,7 @@ describe('message keys used in code', () => {
   it('exist for the keys built at run time', () => {
     const dynamic = [
       ...DEFAULT_ACTIVITY_KEYS.map((k) => `defaults.activity.${k}`),
-      ...[
-        'follow_up',
-        'call_reminder',
-        'interested',
-        'left_message',
-        'no_response',
-        'not_interested',
-        'not_reachable',
-      ].map((k) => `defaults.option.task.${k}`),
+      ...['follow_up', 'call_reminder'].map((k) => `defaults.option.task.${k}`),
       ...['interested', 'not_interested', 'needs_follow_up', 'rescheduled', 'no_show'].map(
         (k) => `defaults.option.meeting.${k}`,
       ),

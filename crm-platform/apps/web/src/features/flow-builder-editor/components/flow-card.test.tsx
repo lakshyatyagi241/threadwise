@@ -53,12 +53,31 @@ describe('flow card (TW-FLB-001)', () => {
     expect(html).not.toContain('data-flow-enroll');
   });
 
-  it('QUIRK: a manual-enroll flow shows "Enroll contacts" in place of "Open builder"', () => {
-    const html = card({ triggerKind: 'manual_enroll' });
-    expect(html).toContain('data-flow-enroll');
-    expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
-    expect(html).not.toContain('openBuilder');
-    expect(html).not.toContain('href="/flows/builder/');
+  it('a manual-enroll flow (a never-published draft too) offers the builder beside "Enroll contacts"', () => {
+    for (const state of ['live', 'draft'] as const) {
+      const html = card({ triggerKind: 'manual_enroll', state, isPublished: state === 'live' });
+      expect(html).toContain('data-flow-enroll');
+      expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
+      expect(html).toContain('openBuilder');
+      expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    }
+  });
+
+  it('offers the flow\'s FAQs tab only to a person who can read FAQs, and never on a call flow', () => {
+    const withFaqs = (over: Partial<FlowSummary> = {}, faqs = true) =>
+      renderToStaticMarkup(
+        <FlowCard
+          flow={flow(over)}
+          actions={{ ...actions, can: { ...actions.can, faqs }, builderMode: 'simple' }}
+        />,
+      );
+    expect(withFaqs()).toContain(
+      'href="/flows/simple/11111111-1111-4111-8111-111111111111?tab=faqs"',
+    );
+    expect(withFaqs({ state: 'draft', isPublished: false })).toContain('data-flow-faqs');
+    expect(withFaqs({}, false)).not.toContain('data-flow-faqs');
+    expect(card()).not.toContain('data-flow-faqs');
+    expect(withFaqs({ flowType: 'call' })).not.toContain('data-flow-faqs');
   });
 
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {

@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "company": "Şirket",
       "companyHint": "Bu kişiyi bir kuruluşun altında gruplar.",
-      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
+      "searchOptions": "Seçeneklerde ara",
+      "searchOptionsFor": "{field} seçeneklerinde ara",
+      "noOptionsFound": "Aramanızla eşleşen seçenek yok."
     },
     "tags": {
       "title": "Etiketler",
@@ -1225,7 +1228,8 @@
             "duplicate": "İki seçenek aynı ada sahip."
           },
           "condition": "Her koşul için özelliği ve değeri seçin."
-        }
+        },
+        "optionsLazy": "Bu özellikte {count, plural, one {# seçenek} other {# seçenek}} var; burada düzenlemek için çok fazla. Olduğu gibi korunur; diğer ayarlar değiştirilebilir."
       },
       "builtinCard": {
         "title": "Yerleşik özellikler",

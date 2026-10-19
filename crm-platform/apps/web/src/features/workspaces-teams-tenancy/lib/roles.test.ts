@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { member, summary } from './fixtures';
 import {
   canChangeRole,
+  canEditDetails,
   canRemove,
   canReset,
   canResend,
@@ -57,6 +58,13 @@ describe('row permissions', () => {
   it('makes a row read-only for someone of a higher tier than the caller, an Owner row for anyone but an Owner', () => {
     expect(canChangeRole(member(4, 'owner'), admin)).toBe(false);
     expect(canChangeRole(member(5, 'agent'), admin)).toBe(true);
+  });
+
+  it('lets a caller with the invite permission change phone and chat limit of themselves and of lower tiers only', () => {
+    expect(canEditDetails(member(1, 'owner'), owner)).toBe(true);
+    expect(canEditDetails(member(9, 'agent'), admin)).toBe(true);
+    expect(canEditDetails(member(4, 'owner'), admin)).toBe(false);
+    expect(canEditDetails(member(9, 'agent'), manager)).toBe(false);
   });
 
   it('shows no actions at all to a caller without the permissions', () => {

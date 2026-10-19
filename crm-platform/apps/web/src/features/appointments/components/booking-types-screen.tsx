@@ -31,6 +31,7 @@ import {
   CopyIcon,
   ExternalIcon,
   LinkIcon,
+  PaletteIcon,
   PencilIcon,
   PlusIcon,
   SearchIcon,
@@ -57,6 +58,7 @@ const LOCATION_ICON = {
  */
 export function BookingTypesScreen() {
   const t = useTranslations('appointments.typesList');
+  const ta = useTranslations('appointments.appearance.typesList');
   const locale = useLocale();
   const router = useRouter();
   const qc = useQueryClient();
@@ -442,6 +444,16 @@ export function BookingTypesScreen() {
                                   }}
                                 >
                                   <ExternalIcon /> {t('openPage')}
+                                </MenuItem>
+                              )}
+                              {can.manageTypes && (
+                                <MenuItem
+                                  onSelect={() => {
+                                    close();
+                                    router.push(`/appointments/types/${type.id}/appearance`);
+                                  }}
+                                >
+                                  <PaletteIcon /> {ta('menu')}
                                 </MenuItem>
                               )}
                               {can.manageTypes && (

@@ -58,7 +58,10 @@
         "role": "Rôle",
         "status": "Statut",
         "joined": "Ajouté le",
-        "actions": "Actions"
+        "actions": "Actions",
+        "phone": "Téléphone",
+        "chatLimit": "Chats simultanés",
+        "lastLogin": "Dernière connexion"
       },
       "pending": "en attente",
       "you": "Vous",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "En congé jusqu’au {date}",
       "onLeaveOpen": "En congé",
       "leaveFrom": "Congé à partir du {date}",
-      "leaveAction": "Congés et suppléance"
+      "leaveAction": "Congés et suppléance",
+      "noLimit": "Aucune limite",
+      "neverSignedIn": "Jamais",
+      "editAction": "Modifier le téléphone et la limite de chats"
     },
     "invite": {
       "eyebrow": "Espace de travail",
@@ -129,7 +135,14 @@
       "nameTooLong": "Le nom peut comporter au maximum {max} caractères.",
       "emailInvalid": "Saisissez une adresse e-mail valide.",
       "upgrade": "Passer à un forfait supérieur",
-      "emailRequired": "Saisissez une adresse e-mail."
+      "emailRequired": "Saisissez une adresse e-mail.",
+      "phone": "Numéro de téléphone (facultatif)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Avec l'indicatif du pays.",
+      "phoneInvalid": "Saisissez le numéro avec l'indicatif du pays, par exemple +91 98765 43210.",
+      "chatLimit": "Chats simultanés",
+      "chatLimitHint": "Nombre maximal de chats ouverts attribués à cette personne en même temps. Laissez vide pour ne pas fixer de limite.",
+      "chatLimitInvalid": "Saisissez un nombre entier de 1 à {max}, ou laissez vide pour ne pas fixer de limite."
     },
     "teams": {
       "eyebrow": "Espace de travail",
@@ -320,6 +333,31 @@
       "undoTitle": "Annuler cette réattribution ?",
       "undoMessage": "Les contacts et affaires que personne n’a modifiés depuis reviennent à leur ancien propriétaire. Les autres restent en place.",
       "restored": "{count} rendus, {skipped} laissés en place."
+    },
+    "details": {
+      "eyebrow": "Espace de travail",
+      "title": "Modifier le membre",
+      "intro": "Téléphone et limite de chats de {name}.",
+      "phone": "Numéro de téléphone",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Avec l'indicatif du pays. Laissez vide pour le supprimer.",
+      "phoneInvalid": "Saisissez le numéro avec l'indicatif du pays, par exemple +91 98765 43210.",
+      "chatLimit": "Chats simultanés",
+      "chatLimitHint": "L'attribution automatique cesse de donner des chats à cette personne dès qu'elle en a autant d'ouverts. Laissez vide pour ne pas fixer de limite.",
+      "chatLimitPlaceholder": "Aucune limite",
+      "chatLimitInvalid": "Saisissez un nombre entier de 1 à {max}, ou laissez vide pour ne pas fixer de limite.",
+      "lastLogin": "Dernière connexion",
+      "lastLoginNever": "Ne s'est pas encore connecté",
+      "submit": "Enregistrer",
+      "saving": "Enregistrement…",
+      "saved": "Membre mis à jour."
+    },
+    "availability": {
+      "label": "Disponibilité",
+      "available": "Disponible",
+      "offline": "Hors ligne",
+      "hint": "Tant que vous êtes hors ligne, aucun nouveau chat ne vous est attribué automatiquement. Les chats que vous avez déjà restent à vous.",
+      "failed": "Modification impossible"
     }
   }
 }

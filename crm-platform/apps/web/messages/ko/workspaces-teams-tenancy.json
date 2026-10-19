@@ -58,7 +58,10 @@
         "role": "역할",
         "status": "상태",
         "joined": "가입일",
-        "actions": "작업"
+        "actions": "작업",
+        "phone": "전화번호",
+        "chatLimit": "동시 채팅 수",
+        "lastLogin": "마지막 로그인"
       },
       "pending": "대기 중",
       "you": "나",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "{date}까지 휴가 중",
       "onLeaveOpen": "휴가 중",
       "leaveFrom": "{date}부터 휴가",
-      "leaveAction": "휴가 및 대리인"
+      "leaveAction": "휴가 및 대리인",
+      "noLimit": "제한 없음",
+      "neverSignedIn": "없음",
+      "editAction": "전화번호 및 채팅 한도 변경"
     },
     "invite": {
       "eyebrow": "워크스페이스",
@@ -129,7 +135,14 @@
       "nameTooLong": "이름은 최대 {max}자까지 입력할 수 있습니다.",
       "emailInvalid": "올바른 이메일 주소를 입력하세요.",
       "upgrade": "요금제 업그레이드",
-      "emailRequired": "이메일 주소를 입력하세요."
+      "emailRequired": "이메일 주소를 입력하세요.",
+      "phone": "전화번호 (선택)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "국가 번호를 포함하세요.",
+      "phoneInvalid": "국가 번호를 포함해 입력하세요. 예: +91 98765 43210",
+      "chatLimit": "동시 채팅 수",
+      "chatLimitHint": "이 사람에게 동시에 배정되는 열린 채팅의 최대 개수입니다. 제한이 없으면 비워 두세요.",
+      "chatLimitInvalid": "1에서 {max} 사이의 정수를 입력하거나, 제한이 없으면 비워 두세요."
     },
     "teams": {
       "eyebrow": "워크스페이스",
@@ -320,6 +333,31 @@
       "undoTitle": "이 재배정을 되돌릴까요?",
       "undoMessage": "그 이후 아무도 변경하지 않은 연락처와 거래는 이전 담당자에게 돌아갑니다. 나머지는 그대로 유지됩니다.",
       "restored": "{count}개 되돌림, {skipped}개는 그대로 둠."
+    },
+    "details": {
+      "eyebrow": "워크스페이스",
+      "title": "멤버 변경",
+      "intro": "{name}의 전화번호와 채팅 한도입니다.",
+      "phone": "전화번호",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "국가 번호를 포함하세요. 삭제하려면 비워 두세요.",
+      "phoneInvalid": "국가 번호를 포함해 입력하세요. 예: +91 98765 43210",
+      "chatLimit": "동시 채팅 수",
+      "chatLimitHint": "열린 채팅이 이 수에 이르면 자동 배정이 더 이상 채팅을 주지 않습니다. 제한이 없으면 비워 두세요.",
+      "chatLimitPlaceholder": "제한 없음",
+      "chatLimitInvalid": "1에서 {max} 사이의 정수를 입력하거나, 제한이 없으면 비워 두세요.",
+      "lastLogin": "마지막 로그인",
+      "lastLoginNever": "아직 로그인하지 않음",
+      "submit": "저장",
+      "saving": "저장 중…",
+      "saved": "멤버를 업데이트했습니다."
+    },
+    "availability": {
+      "label": "응대 가능 여부",
+      "available": "응대 가능",
+      "offline": "오프라인",
+      "hint": "오프라인인 동안에는 새 채팅이 자동으로 배정되지 않습니다. 이미 맡고 있는 채팅은 그대로 유지됩니다.",
+      "failed": "변경하지 못했습니다"
     }
   }
 }

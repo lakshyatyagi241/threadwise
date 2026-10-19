@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "Takip",
-          "call_reminder": "Arama hatırlatması",
-          "interested": "İlgileniyor",
-          "left_message": "Mesaj bırakıldı",
-          "no_response": "Yanıt yok",
-          "not_interested": "İlgilenmiyor",
-          "not_reachable": "Ulaşılamadı"
+          "call_reminder": "Arama hatırlatması"
         },
         "meeting": {
           "interested": "İlgileniyor",
@@ -83,6 +78,8 @@
       "predictOutcomes": "Bu etkinlik için sonuçları tahmin et",
       "predictOutcomesHint": "Etkinlik tamamlandığında bir sonuç sun.",
       "outcomes": "Sonuçlar",
+      "taskOutcomesHint": "Tamamlanan bir görevin sonuçları, tüm çalışma alanı için tek bir listedir ve Görev sonuçları’nda tutulur.",
+      "taskOutcomesLink": "Görev sonuçları’nı aç",
       "outcomesHint": "Kaldırılan bir sonuç, onu zaten taşıyan kayıtlarda kalır.",
       "phoneOutcomesHint": "Her sonucun arama raporlarında nasıl sayılacağını seçin. Kaldırılan bir sonuç, onu zaten taşıyan aramalarda kalır.",
       "addOutcome": "Sonuç ekle",

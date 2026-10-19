@@ -304,7 +304,10 @@
       "showUnlimited": "{count, plural, other {แสดงขีดจำกัดที่ไม่จำกัด # รายการ}}",
       "hideUnlimited": "ซ่อนขีดจำกัดที่ไม่จำกัด",
       "groupCount": "{count, plural, other {# ขีดจำกัด}}",
-      "groupHidden": "{count, plural, other {ขีดจำกัดอีก # รายการไม่จำกัดและถูกซ่อนไว้}}"
+      "groupHidden": "{count, plural, other {ขีดจำกัดอีก # รายการไม่จำกัดและถูกซ่อนไว้}}",
+      "activatedOn": "เปิดใช้งานเมื่อ {date}",
+      "previousBilling": "วันที่เรียกเก็บเงินครั้งก่อน: {date}",
+      "subscriptionId": "รหัสการสมัครใช้บริการ: {id}"
     },
     "operator": {
       "title": "แพ็กเกจของเวิร์กสเปซ",

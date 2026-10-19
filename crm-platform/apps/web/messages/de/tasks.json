@@ -92,7 +92,8 @@
         "contact": "Kontakt",
         "deal": "Deal",
         "created": "Erstellt",
-        "completed": "Erledigt am"
+        "completed": "Erledigt am",
+        "outcome": "Ergebnis"
       },
       "refresh": "Aktualisieren",
       "shortcuts": "Tastenkürzel",
@@ -101,7 +102,9 @@
         "list": "Liste",
         "board": "Board nach Fälligkeitsdatum"
       },
-      "linkCompany": "Ein Unternehmen"
+      "linkCompany": "Ein Unternehmen",
+      "outcome": "Ergebnis",
+      "allOutcomes": "Alle Ergebnisse"
     },
     "table": {
       "scrollArea": "Aufgabentabelle",
@@ -115,7 +118,8 @@
         "contact": "Kontakt",
         "deal": "Deal",
         "created": "Erstellt",
-        "completed": "Erledigt am"
+        "completed": "Erledigt am",
+        "outcome": "Ergebnis"
       }
     },
     "row": {
@@ -205,9 +209,11 @@
         "titleTooLong": "Die Aufgabe ist zu lang (höchstens 255 Zeichen).",
         "notesTooLong": "Die Notizen sind zu lang (höchstens 5000 Zeichen).",
         "dueInvalid": "Dieses Datum ist ungültig.",
-        "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace."
+        "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace.",
+        "outcomeInvalid": "Dieses Ergebnis ist nicht verfügbar. Wählen Sie eines aus der Liste."
       },
-      "company": "Unternehmen"
+      "company": "Unternehmen",
+      "outcome": "Ergebnis"
     },
     "drawer": {
       "loading": "Aufgabe wird geladen",
@@ -236,7 +242,8 @@
       },
       "deleteTitle": "Diese Aufgabe löschen?",
       "deleteMessage": "„{title}“ wird für alle gelöscht. Dies kann nicht rückgängig gemacht werden.",
-      "cancel": "Behalten"
+      "cancel": "Behalten",
+      "outcomeChip": "Ergebnis: {name}"
     },
     "board": {
       "buckets": {
@@ -287,6 +294,9 @@
       "assigneeInvalid": "Diese Person ist kein aktives Mitglied dieses Workspace.",
       "unexpected": "Etwas ist schiefgelaufen. Versuchen Sie es gleich noch einmal.",
       "retry": "Erneut versuchen",
+      "outcomeInvalid": "Dieses Ergebnis ist nicht verfügbar. Wählen Sie eines aus der Liste.",
+      "outcomeNameTaken": "Ein anderes Ergebnis hat bereits diesen Namen.",
+      "outcomeInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus.",
       "completionDisabled": "Das Abschließen von Aufgaben ist in den Vertriebsaktivitäten ausgeschaltet."
     },
     "toast": {
@@ -343,6 +353,43 @@
       "save": "Aufgabe hinzufügen",
       "cancel": "Abbrechen",
       "failed": "Die Aufgabe konnte nicht gespeichert werden. Ihr Text steht wieder im Feld."
+    },
+    "outcomes": {
+      "title": "Aufgabenergebnisse",
+      "subtitle": "Die Ergebnisse, die man beim Abschließen oder Erfassen einer Aufgabe auswählt, etwa Interessiert oder Nachricht hinterlassen.",
+      "listTitle": "Ergebnisse",
+      "listHint": "Ausgeblendete Ergebnisse werden nicht mehr angeboten, bleiben aber bei Aufgaben erhalten, die sie schon haben. Ein Ergebnis, das Aufgaben verwenden, kann nicht gelöscht werden.",
+      "loading": "Ergebnisse werden geladen",
+      "empty": "Noch keine Ergebnisse. Fügen Sie unten das erste hinzu.",
+      "newName": "Neues Ergebnis",
+      "newNamePlaceholder": "z. B. Nachricht hinterlassen",
+      "add": "Ergebnis hinzufügen",
+      "readOnly": "Sie können diese Liste sehen, brauchen aber eine Berechtigung, um sie zu ändern.",
+      "failed": "Das hat nicht geklappt.",
+      "conflict": "Jemand anderes hat dieses Ergebnis geändert. Die Liste wurde neu geladen. Versuchen Sie es erneut.",
+      "added": "Ergebnis hinzugefügt.",
+      "saved": "Ergebnis gespeichert.",
+      "deleted": "Ergebnis gelöscht.",
+      "moveUp": "{name} nach oben verschieben",
+      "moveDown": "{name} nach unten verschieben",
+      "nameLabel": "Name des Ergebnisses",
+      "taskCount": "{count, plural, one {# Aufgabe} other {# Aufgaben}}",
+      "shownLabel": "{name} beim Abschließen einer Aufgabe anbieten",
+      "shown": "Sichtbar",
+      "hidden": "Ausgeblendet",
+      "deleteNamed": "{name} löschen",
+      "deleteInUse": "Aufgaben verwenden dieses Ergebnis noch, deshalb kann es nicht gelöscht werden. Blenden Sie es stattdessen aus.",
+      "deleteTitle": "{name} löschen?",
+      "deleteMessage": "Das Ergebnis wird aus der Liste entfernt. Keine Aufgabe verwendet es.",
+      "delete": "Löschen",
+      "cancel": "Behalten",
+      "problems": {
+        "nameRequired": "Geben Sie dem Ergebnis einen Namen.",
+        "nameTooLong": "Der Name ist zu lang (höchstens 191 Zeichen)."
+      },
+      "none": "Kein Ergebnis",
+      "hiddenName": "{name} (ausgeblendet)",
+      "completeWith": "Mit Ergebnis abschließen"
     }
   }
 }

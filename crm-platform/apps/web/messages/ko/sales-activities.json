@@ -13,12 +13,7 @@
       "option": {
         "task": {
           "follow_up": "후속 조치",
-          "call_reminder": "전화 알림",
-          "interested": "관심 있음",
-          "left_message": "메시지 남김",
-          "no_response": "응답 없음",
-          "not_interested": "관심 없음",
-          "not_reachable": "연락 불가"
+          "call_reminder": "전화 알림"
         },
         "meeting": {
           "interested": "관심 있음",
@@ -83,6 +78,8 @@
       "predictOutcomes": "이 활동의 결과 예측",
       "predictOutcomesHint": "활동이 완료될 때 결과를 선택하게 합니다.",
       "outcomes": "결과",
+      "taskOutcomesHint": "완료한 작업의 결과는 작업 공간 전체가 함께 쓰는 하나의 목록이며 작업 결과에서 관리합니다.",
+      "taskOutcomesLink": "작업 결과 열기",
       "outcomesHint": "결과를 삭제해도 이미 그 결과가 있는 기록에는 남습니다.",
       "phoneOutcomesHint": "각 결과가 통화 보고서에서 어떻게 집계되는지 선택하세요. 결과를 삭제해도 이미 그 결과가 있는 통화에는 남습니다.",
       "addOutcome": "결과 추가",

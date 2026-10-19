@@ -86,6 +86,21 @@ export function UsageSection() {
                   {t('validUntil', { date: date(u.validity.planEndsAt) })}
                 </p>
               )}
+              {u.subscription?.activatedAt && (
+                <p className="text-sm text-muted-foreground" data-testid="usage-activated">
+                  {t('activatedOn', { date: date(u.subscription.activatedAt) })}
+                </p>
+              )}
+              {u.subscription?.previousBillingAt && (
+                <p className="text-sm text-muted-foreground" data-testid="usage-previous-billing">
+                  {t('previousBilling', { date: date(u.subscription.previousBillingAt) })}
+                </p>
+              )}
+              {u.subscription?.subscriptionId && (
+                <p className="text-sm text-muted-foreground" data-testid="usage-subscription-id">
+                  {t('subscriptionId', { id: u.subscription.subscriptionId })}
+                </p>
+              )}
             </div>
             {/* The plans are further down this same page: scroll to them instead of linking to the page we are on. */}
             <a

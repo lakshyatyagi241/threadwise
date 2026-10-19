@@ -317,7 +317,13 @@
         "delivered": "Delivered",
         "queued": "Queued",
         "failed": "Failed",
-        "replyRate": "Reply rate"
+        "replyRate": "Reply rate",
+        "received": "Received messages",
+        "conversationsOpen": "Open conversations",
+        "conversationsClosed": "Closed conversations",
+        "conversationsAssigned": "Assigned",
+        "conversationsUnassigned": "Unassigned",
+        "conversationsTotal": "{count, plural, one {# conversation} other {# conversations}}"
       },
       "series": {
         "sent": "Sent",
@@ -443,7 +449,8 @@
             "unknown": "Unknown"
           }
         }
-      }
+      },
+      "moreKpis": "Messages and conversations"
     },
     "health": {
       "nav": "System health",

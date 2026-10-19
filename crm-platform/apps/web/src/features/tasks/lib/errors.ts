@@ -13,6 +13,9 @@ export const ERROR_KINDS = [
   'notFound',
   'planDisabled',
   'assigneeInvalid',
+  'outcomeInvalid',
+  'outcomeNameTaken',
+  'outcomeInUse',
   'completionDisabled',
   'unexpected',
 ] as const;
@@ -37,6 +40,12 @@ export function errorKind(error: unknown): ErrorKind {
       return 'planDisabled';
     case ERROR_CODES.TASK_ASSIGNEE_INVALID:
       return 'assigneeInvalid';
+    case ERROR_CODES.TASK_OUTCOME_INVALID:
+      return 'outcomeInvalid';
+    case ERROR_CODES.TASK_OUTCOME_NAME_TAKEN:
+      return 'outcomeNameTaken';
+    case ERROR_CODES.TASK_OUTCOME_IN_USE:
+      return 'outcomeInUse';
     case ERROR_CODES.ACTIVITY_COMPLETION_DISABLED:
       return 'completionDisabled';
   }

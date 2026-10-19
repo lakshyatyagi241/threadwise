@@ -1,7 +1,8 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { fieldTypeSchema, moduleKeySchema } from '../common/enums';
-import { paginationQuerySchema } from '../common/pagination';
+import { cursorSchema, paginationQuerySchema } from '../common/pagination';
+import { queryList } from '../contacts-attributes-tags/query-helpers';
 
 /**
  * Field metadata — the Tier-2 custom-field registry behind Settings > Data
@@ -84,7 +85,17 @@ export type ReorderFieldOptionsInput = z.infer<typeof reorderFieldOptionsSchema>
 
 // --- Fields ----------------------------------------------------------------
 
-/** select/multiselect/radio/lookup carry `options` inline — every other type omits it. */
+/**
+ * A field list carries a field's options inline only up to this many; a longer list (every City, State and Country of the world
+ * is one field each) is left out and read through `GET /v2/fields/:id/option-search`, a search that pages. Inline, those lists made
+ * the contact form's field list about 10 MB.
+ */
+export const FIELD_INLINE_OPTIONS_MAX = 300;
+
+/**
+ * select/multiselect/radio/lookup carry `options` inline — every other type omits it. `optionCount` is how many options the field
+ * has in all; `options` holds them all only while the count is within FIELD_INLINE_OPTIONS_MAX (or the list asked for `options=all`).
+ */
 export const fieldResponseSchema = z.object({
   id: uuidSchema,
   moduleKey: moduleKeySchema,
@@ -106,6 +117,7 @@ export const fieldResponseSchema = z.object({
   config: z.record(z.unknown()),
   replacesFieldId: uuidSchema.nullable(),
   options: z.array(fieldOptionResponseSchema).optional(),
+  optionCount: z.number().int().nonnegative().optional(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
@@ -162,8 +174,21 @@ export const listFieldsQuerySchema = paginationQuerySchema.extend({
   moduleKey: moduleKeySchema,
   sectionId: uuidSchema.optional(),
   includeInactive: z.coerce.boolean().default(false),
+  /** `inline` (default): options of a field with at most FIELD_INLINE_OPTIONS_MAX of them. `all`: every field's options. */
+  options: z.enum(['inline', 'all']).default('inline'),
 });
 export type ListFieldsQuery = z.infer<typeof listFieldsQuerySchema>;
+
+/** Search and page through one field's options (`GET /v2/fields/:id/option-search`). */
+export const searchFieldOptionsQuerySchema = z.object({
+  /** Words of the label (or the stored value) to look for. */
+  q: z.string().trim().max(100).optional(),
+  /** Exactly these stored values, hidden options included: how a form shows the label of a value it already holds. */
+  values: queryList(z.string().min(1).max(255)).pipe(z.array(z.string()).max(200)).optional(),
+  limit: z.coerce.number().int().min(1).max(200).default(50),
+  cursor: cursorSchema.optional(),
+});
+export type SearchFieldOptionsQuery = z.infer<typeof searchFieldOptionsQuerySchema>;
 
 export const reorderFieldsSchema = z.object({
   moduleKey: moduleKeySchema,

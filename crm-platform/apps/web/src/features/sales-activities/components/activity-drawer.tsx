@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, Drawer, Field, Input, Switch, useToast } from '@crm/ui';
@@ -233,6 +234,19 @@ export function ActivityDrawer({
               )
             }
           />
+        )}
+
+        {activity.behavesAs === 'task' && (
+          <section className="space-y-1">
+            <h3 className="text-sm font-semibold">{t('outcomes')}</h3>
+            <p className="text-xs text-muted-foreground">{t('taskOutcomesHint')}</p>
+            <Link
+              href="/tasks/outcomes"
+              className="text-sm text-primary underline underline-offset-2"
+            >
+              {t('taskOutcomesLink')}
+            </Link>
+          </section>
         )}
 
         {cap.outcomes && (

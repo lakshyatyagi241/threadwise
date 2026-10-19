@@ -47,6 +47,7 @@ describe('the converter', () => {
       'trigger|Datematch|date_match',
       'condition|contact|query',
       'trigger|contact|added_to_list',
+      'trigger|contact|added', // real in support+demo: "Contact Created - Any Contact Created"
       'condition|list|query',
       'action|google|save_contact_from_sheet',
       'action|contact|update',
@@ -57,6 +58,7 @@ describe('the converter', () => {
     ];
     const keys = new Set(MAPPING.map((m) => m.key));
     for (const k of real) expect(keys.has(k), k).toBe(true);
+    expect(MAPPING.find((m) => m.key === 'trigger|contact|added')).toMatchObject({ target: 'trigger kind contact_created', status: 'mapped' });
   });
 
   it('A1: every node is converted, edges follow the ports, delivered / failed are detached, sent fans out', () => {
@@ -239,9 +241,8 @@ describe('the converter', () => {
     const codes = [...plan.meta.values()].map((v) =>
       v.kind === 'load' ? 'load' : `${v.kind}:${v.code}`,
     );
-    expect(codes.filter((c) => c === 'load')).toHaveLength(8);
+    expect(codes.filter((c) => c === 'load')).toHaveLength(9); // the empty draft is loaded too
     for (const c of [
-      'exclude:NO_NODES',
       'exclude:OLDER_DUPLICATE',
       'exclude:SOFT_DELETED',
       'quarantine:NO_AUTOMATION_ID',
@@ -260,9 +261,9 @@ describe('the converter', () => {
     expect(t['journey:quarantine:JOURNEY_DIVERGES']).toBe(1);
     expect(t['journey:exclude:DUPLICATE_NODE']).toBe(1);
     expect(t['journey:quarantine:NO_DEFINITION']).toBe(1);
-    expect(t['journey:quarantine:NOT_IN_DEFINITION']).toBe(1);
+    expect(t['journey:quarantine:NOT_IN_DEFINITION']).toBe(2); // incl. the runtime row of the empty draft, which is now a loaded flow without that node
     expect(t['journey:quarantine:NO_NODE_ID']).toBe(1);
-    expect(t['journey:exclude:AUTOMATION_NOT_IMPORTED']).toBe(1);
+    expect(t['journey:exclude:AUTOMATION_NOT_IMPORTED']).toBeUndefined(); // no automation is left out any more except deleted / older duplicates
     for (const v of plan.journey.values())
       if (v.kind === 'adopt') expect(flowUuidOf('acme', v.metaKey)).toMatch(/^[0-9a-f-]{36}$/);
   });

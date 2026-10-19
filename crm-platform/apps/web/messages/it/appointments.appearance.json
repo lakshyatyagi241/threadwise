@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Aspetto della pagina di prenotazione",
+      "subtitle": "Fai in modo che la pagina usata dai clienti per prenotare un appuntamento rispecchi la tua attività.",
+      "backToSettings": "Impostazioni appuntamenti",
+      "loading": "Caricamento del tema della pagina di prenotazione",
+      "forbidden": "Non hai il permesso di visualizzare l'aspetto della pagina di prenotazione.",
+      "notAvailable": "L'aspetto della pagina di prenotazione non è ancora disponibile su questo server.",
+      "readOnly": "Puoi vedere l'aspetto ma non modificarlo. Per modificarlo serve il permesso di modificare i tipi di prenotazione.",
+      "fixFirst": "Correggi prima i campi evidenziati.",
+      "issues": "{count, plural, one {# campo richiede attenzione prima di poter salvare.} many {# di campi richiedono attenzione prima di poter salvare.} other {# campi richiedono attenzione prima di poter salvare.}}",
+      "saved": "Aspetto della pagina di prenotazione salvato",
+      "saving": "Salvataggio...",
+      "unsaved": "Modifiche non salvate",
+      "allSaved": "Tutte le modifiche sono salvate",
+      "discard": "Annulla modifiche",
+      "save": "Salva aspetto",
+      "conflict": {
+        "message": "L'aspetto è stato modificato da qualcun altro mentre lo stavi modificando.",
+        "reload": "Ricarica l'ultima versione"
+      },
+      "leave": {
+        "title": "Uscire senza salvare?",
+        "message": "Le modifiche all'aspetto della pagina di prenotazione non sono state salvate.",
+        "leave": "Esci",
+        "stay": "Continua a modificare"
+      },
+      "tile": {
+        "label": "Aspetto della pagina di prenotazione",
+        "description": "Logo, colori, caratteri e testo di benvenuto della pagina in cui i clienti prenotano",
+        "keywords": "branding, logo, colori, tema, pagina di prenotazione, aspetto, caratteri, white label"
+      },
+      "card": {
+        "title": "Aspetto della pagina di prenotazione",
+        "description": "Aggiungi il tuo logo e i tuoi colori, scrivi un messaggio di benvenuto e scegli caratteri e angoli per la pagina in cui i clienti prenotano. Mentre modifichi vedi un'anteprima in tempo reale.",
+        "open": "Apri l'aspetto della pagina di prenotazione"
+      },
+      "editorLink": {
+        "link": "Aspetto della pagina",
+        "saveFirst": "Salva prima il tipo di prenotazione, poi apri l'aspetto della sua pagina."
+      },
+      "typesList": {
+        "menu": "Aspetto della pagina"
+      },
+      "pictures": {
+        "title": "Logo e immagine di copertina",
+        "description": "Mostrati nella parte superiore della pagina. Lasciali vuoti per usare l'impostazione di livello superiore.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP o GIF, fino a {mb} MB. Un logo largo su sfondo trasparente funziona meglio.",
+        "cover": "Immagine di copertina",
+        "coverHint": "PNG, JPG, WebP o GIF, fino a {mb} MB. Mostrata come banner quando lo sfondo è impostato su immagine di copertina.",
+        "useBrand": "Usa il mio logo e i miei colori di Branding se vuoti",
+        "useBrandHint": "Tutto ciò che lasci vuoto qui viene preso da Impostazioni, Branding, così la pagina di prenotazione è coerente con il resto del tuo marchio."
+      },
+      "fields": {
+        "picker": "{name}: scegli un colore",
+        "clear": "Cancella",
+        "noPicture": "Nessuna immagine",
+        "upload": "Carica",
+        "replace": "Sostituisci",
+        "remove": "Rimuovi",
+        "inheritedPicture": "Viene usata quella impostata a un livello superiore.",
+        "inheritedColour": "Se vuoto usa {colour}.",
+        "productColour": "Se vuoto usa il colore predefinito.",
+        "pictureType": "Usa un'immagine PNG, JPG, WebP o GIF.",
+        "pictureSize": "L'immagine è troppo grande. Il limite è {mb} MB.",
+        "pictureRejected": "Questa immagine non è stata accettata. Usa un'immagine PNG, JPG, WebP o GIF entro il limite di dimensione."
+      },
+      "colours": {
+        "title": "Colori e sfondo",
+        "description": "I colori del testo vengono scelti per te in modo che tutto resti leggibile.",
+        "primary": "Colore principale",
+        "typeHint": "Se vuoto usa il colore dell'area di lavoro.",
+        "button": "Colore dei pulsanti",
+        "buttonHint": "Il colore dei pulsanti e degli orari selezionati. Se vuoto usa il colore principale.",
+        "background": "Sfondo della pagina",
+        "backgroundHint": "Tinta unita, una sfumatura tenue del colore principale, oppure l'immagine di copertina come banner.",
+        "sameAsWorkspace": "Uguale all'area di lavoro",
+        "backgrounds": {
+          "solid": "Tinta unita",
+          "tint": "Sfumatura tenue",
+          "image": "Immagine di copertina"
+        },
+        "backgroundColour": "Colore di sfondo",
+        "needCover": "Carica un'immagine di copertina per usare questo sfondo.",
+        "invalid": "Usa un colore come #1a73e8."
+      },
+      "checks": {
+        "title": "Controlli di leggibilità",
+        "autoText": "Il testo sui pulsanti è nero o bianco, a seconda di quale si legge meglio, e il colore principale viene scurito o schiarito dove è usato come testo.",
+        "primaryText": "Il colore principale ha un contrasto di {ratio}:1 sulla pagina, inferiore a {min}:1, quindi viene regolato dove è usato come testo.",
+        "button": "Il testo del pulsante ha un contrasto di {ratio}:1 sul colore del pulsante, inferiore a {min}:1.",
+        "buttonEdge": "Il colore del pulsante ha un contrasto di {ratio}:1 rispetto alla pagina, inferiore a {min}:1, quindi i pulsanti potrebbero essere difficili da vedere.",
+        "inDark": "(modalità scura)"
+      },
+      "wording": {
+        "title": "Testi",
+        "description": "Solo testo semplice. I clienti lo vedono nella lingua in cui lo scrivi.",
+        "pageTitle": "Titolo della pagina",
+        "pageTitleHint": "Mostrato nella parte superiore della pagina e nella scheda del browser. Se vuoto usa il nome della tua attività.",
+        "welcome": "Messaggio di benvenuto",
+        "welcomeHint": "{count} di {max} caratteri. Mostrato sopra il modulo di prenotazione.",
+        "button": "Etichetta del pulsante di conferma",
+        "buttonHint": "Il testo del pulsante finale, ad esempio Riserva il mio posto. Le richieste che necessitano di approvazione mantengono la propria etichetta.",
+        "buttonDefault": "Conferma prenotazione",
+        "tooLong": "Usa al massimo {max} caratteri."
+      },
+      "style": {
+        "title": "Caratteri e angoli",
+        "description": "Una piccola selezione di opzioni sicure che funzionano su ogni dispositivo.",
+        "font": "Carattere",
+        "fontHint": "Usano caratteri già presenti sul dispositivo del cliente, così la pagina si carica velocemente.",
+        "fonts": {
+          "default": "Predefinito del prodotto",
+          "system": "Di sistema",
+          "serif": "Serif",
+          "rounded": "Arrotondato",
+          "humanist": "Umanista"
+        },
+        "corners": "Angoli",
+        "cornerStyles": {
+          "square": "Squadrati",
+          "rounded": "Arrotondati",
+          "pill": "A pillola"
+        },
+        "mode": "Chiaro o scuro",
+        "modes": {
+          "light": "Chiaro",
+          "dark": "Scuro",
+          "auto": "Segui il dispositivo"
+        }
+      },
+      "options": {
+        "title": "Opzioni della pagina",
+        "description": "Cos'altro appare intorno al modulo di prenotazione.",
+        "language": "Mostra il selettore della lingua",
+        "languageHint": "Permette ai clienti di cambiare la lingua della pagina.",
+        "poweredBy": "Mostra \"Powered by\" in fondo",
+        "poweredByHint": "Disattivalo per mostrare solo il tuo marchio.",
+        "poweredByLocked": "Rimuovere \"Powered by\" fa parte del branding white label, che il tuo piano non include."
+      },
+      "links": {
+        "title": "Indirizzo della pagina",
+        "description": "Dove i clienti aprono la pagina. Le modifiche appaiono lì non appena salvi.",
+        "page": "Indirizzo della pagina di prenotazione",
+        "open": "Apri pagina",
+        "copy": "Copia",
+        "copied": "Copiato",
+        "later": "L'uso di un dominio personalizzato e l'inserimento della pagina in un altro sito web non sono ancora disponibili."
+      },
+      "type": {
+        "title": "Aspetto della pagina: {name}",
+        "subtitle": "Dai a questo tipo di prenotazione un logo, colori o un messaggio di benvenuto propri. Tutto ciò che lasci vuoto usa l'aspetto dell'area di lavoro.",
+        "back": "Torna al tipo di prenotazione",
+        "notFoundTitle": "Tipo di prenotazione non trovato",
+        "notFound": "Questo tipo di prenotazione non esiste più.",
+        "resetTitle": "Usa l'aspetto dell'area di lavoro",
+        "resetDescription": "Rimuove tutto ciò che è impostato per questo tipo di prenotazione, comprese le immagini.",
+        "reset": "Usa l'aspetto dell'area di lavoro",
+        "resetConfirmTitle": "Usare l'aspetto dell'area di lavoro?",
+        "resetConfirmMessage": "Il logo, l'immagine di copertina, i colori e i testi impostati per questo tipo di prenotazione verranno rimossi.",
+        "resetDone": "Questo tipo di prenotazione ora usa l'aspetto dell'area di lavoro"
+      },
+      "preview": {
+        "title": "Anteprima in tempo reale",
+        "device": "Dispositivo",
+        "desktop": "Desktop",
+        "mobile": "Mobile",
+        "page": "Pagina",
+        "servicePage": "Pagina di prenotazione",
+        "serviceList": "Elenco dei servizi",
+        "scheme": "Modalità colore",
+        "asSet": "Come impostato",
+        "light": "Chiaro",
+        "dark": "Scuro",
+        "direction": "Direzione",
+        "ltr": "Da sinistra a destra",
+        "rtl": "Da destra a sinistra",
+        "frameTitle": "Anteprima della pagina di prenotazione",
+        "note": "Questa è la pagina reale con orari di esempio. Nulla di ciò che fai qui viene prenotato.",
+        "sampleName": "Chiamata introduttiva",
+        "sampleName2": "Sessione completa",
+        "sampleDescription": "Una breve chiamata per capire di cosa hai bisogno e rispondere alle tue domande.",
+        "sampleIntro": "Ti preghiamo di arrivare qualche minuto prima.",
+        "sampleQuestion": "C'è qualcosa che dovremmo sapere in anticipo?"
+      }
+    }
+  }
+}

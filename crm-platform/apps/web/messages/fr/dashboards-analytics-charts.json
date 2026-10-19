@@ -317,7 +317,13 @@
         "delivered": "Remis",
         "queued": "En file d’attente",
         "failed": "Échoués",
-        "replyRate": "Taux de réponse"
+        "replyRate": "Taux de réponse",
+        "received": "Messages reçus",
+        "conversationsOpen": "Conversations ouvertes",
+        "conversationsClosed": "Conversations fermées",
+        "conversationsAssigned": "Attribuées",
+        "conversationsUnassigned": "Non attribuées",
+        "conversationsTotal": "{count, plural, one {# conversation} other {# conversations}}"
       },
       "series": {
         "sent": "Envoyés",
@@ -443,7 +449,8 @@
             "unknown": "Inconnu"
           }
         }
-      }
+      },
+      "moreKpis": "Messages et conversations"
     },
     "health": {
       "nav": "État du système",

@@ -3,7 +3,12 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import type { PublicFaqListResponse, PublicPlanCard, PublicPricingResponse } from '@crm/contracts';
+import {
+  isUnlimitedLimit,
+  type PublicFaqListResponse,
+  type PublicPlanCard,
+  type PublicPricingResponse,
+} from '@crm/contracts';
 import { cn } from '@crm/ui';
 import { FaqList } from '../components/faq-list';
 import { PeriodSwitch } from '../components/period-switch';
@@ -71,7 +76,7 @@ function Card({ plan, period }: { plan: PublicPlanCard; period: Period }) {
   const locale = useLocale();
   const [allLimits, setAllLimits] = useState(false);
   const limitText = (k: string, v: number) =>
-    v > 0
+    !isUnlimitedLimit(v)
       ? `${new Intl.NumberFormat(locale).format(v)} ${tl(k)}`
       : k === PLATFORM_DEFAULT_KEY
         ? `${tl(k)}: ${tc('platformDefault')}`
