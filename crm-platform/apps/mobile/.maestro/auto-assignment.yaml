@@ -1,0 +1,22 @@
+# A person who manages auto-assignment opens the rules from Menu > Settings > Auto-assignment, switches the "keep returning contacts" setting
+# and sees the rules in order.
+# Needs an account with `inbox.routing.manage` (an owner or admin) on a plan with auto-assignment (`inbox_routing`).
+#   maestro test apps/mobile/.maestro/auto-assignment.yaml -e APP_ID=ai.geta.crm.dev -e E2E_EMAIL=<seeded email> -e E2E_PASSWORD=<its password>
+appId: ${APP_ID}
+---
+- launchApp:
+    clearState: true
+- tapOn: 'Email'
+- inputText: ${E2E_EMAIL}
+- tapOn: 'Password'
+- inputText: ${E2E_PASSWORD}
+- hideKeyboard
+- tapOn:
+    id: 'sign-in-submit'
+- tapOn: 'Menu'
+- tapOn: 'Settings'
+- tapOn: 'Auto-assignment'
+- assertVisible: 'Keep returning contacts with their agent'
+- assertVisible: 'Rules'
+- tapOn: 'Keep returning contacts with their agent'
+- assertNotVisible: 'Could not save the setting.'

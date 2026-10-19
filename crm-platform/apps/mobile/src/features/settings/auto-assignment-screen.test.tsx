@@ -142,9 +142,10 @@ describe('AutoAssignmentScreen: the setting', () => {
     await flip('Keep returning contacts with their agent', true);
     await waitFor(() => expect(saveSettingsCall).toHaveBeenCalledWith(true));
     await waitFor(() =>
-      expect(screen.getByLabelText('Keep returning contacts with their agent').props.value).toBe(
-        true,
-      ),
+      expect(
+        screen.getByRole('switch', { name: 'Keep returning contacts with their agent' }).props
+          .accessibilityState.checked,
+      ).toBe(true),
     );
   });
 

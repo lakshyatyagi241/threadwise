@@ -3,11 +3,12 @@
 The workspace's own setup, opened from the **Settings** row of the Menu tab (it expands like Dashboard and Contacts, and is faded only when
 the person may open nothing in it). Each line opens with the right that manages it, as on the web.
 
-| Line           | Route                                 | Right                                                        | API                                                                      | Web                                                  |
-| -------------- | ------------------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------------------ | ---------------------------------------------------- |
-| Saved replies  | `/quick-replies`, `/quick-reply-form` | `inbox.savedreply.manage`                                    | `/v2/inbox/saved-replies` (list, one, create, update, delete, duplicate) | TW-TIB1-024, Settings, Saved replies                 |
-| Labels         | `/labels`, `/label-form`              | `inbox.tag.manage`                                           | `/v2/inbox/labels` (list, create, update, delete)                        | Settings, Conversation tags                          |
-| Business hours | `/business-hours`                     | `inbox.settings.read` to see, `inbox.routing.manage` to save | `GET`/`PUT /v2/inbox/routing/business-hours`                             | Auto-assignment, Business hours dialog (TW-TIB2-004) |
+| Line            | Route                                 | Right                                                          | API                                                                                                      | Web                                                  |
+| --------------- | ------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| Saved replies   | `/quick-replies`, `/quick-reply-form` | `inbox.savedreply.manage`                                      | `/v2/inbox/saved-replies` (list, one, create, update, delete, duplicate)                                 | TW-TIB1-024, Settings, Saved replies                 |
+| Labels          | `/labels`, `/label-form`              | `inbox.tag.manage`                                             | `/v2/inbox/labels` (list, create, update, delete)                                                        | Settings, Conversation tags                          |
+| Business hours  | `/business-hours`                     | `inbox.settings.read` to see, `inbox.routing.manage` to save   | `GET`/`PUT /v2/inbox/routing/business-hours`                                                             | Auto-assignment, Business hours dialog (TW-TIB2-004) |
+| Auto-assignment | `/auto-assignment`                    | `inbox.settings.read` to see, `inbox.routing.manage` to change | `/v2/inbox/routing/rules` (list, reorder, one, switch, copy, delete), `/settings`, `/v2/inbox/assignees` | Auto-assignment (TW-TIB2-001; Geta: Chat assignment) |
 
 ## Saved replies
 
@@ -74,6 +75,31 @@ the Auto-assignment screen; the same screen the app will use for Chat assignment
 | Breaks, overnight windows, holidays (web: Settings > General > Working hours) | a different web screen (`updateWorkingHoursSchema`); the contract carries them, this screen does not edit them |
 | A search box in the time zone list                                            | `SelectField` has none; the owner can scroll the list                                                          |
 
-## Not built yet (the rest of Geta's Settings, all with API and web screens)
+## Auto-assignment
 
-Chat assignment (`/v2/inbox/routing/rules` and `settings`), Users and teams (`/v2/workspace/members`, `/v2/workspace/teams`).
+The rules that give each new conversation to the right agent, tried in order from the top, and the one setting that keeps a returning contact
+with their agent (the web's Auto-assignment screen; the Geta app calls it "Chat assignment"). The whole route family needs the plan feature
+`inbox_routing` (the screen says so on a plan without it) and the rights `inbox.settings.read` (see) and `inbox.routing.manage` (change).
+
+- **The setting**: "Keep returning contacts with their agent" (`keepContactAgent`), a switch.
+- **Business hours**: a button to the Business hours screen (the routing condition "outside business hours" and the SLA clock read it).
+- **The rule list**: a page of 50 at a time, searchable by name. Each card shows the rule's name and description, whether it is Active, the
+  Fallback, "Keeps checking" (`stopOnMatch` off), how many of its agents are unavailable, **When** (contact conditions counted, channels, words
+  with any/all, languages, inside/outside business hours, or "every conversation nobody matched"), **Assign** (the strategy and the agents and
+  teams by name, "an agent" for any the person may not read), and the other actions (spam, priority, auto-reply, escalation, tags, a flow, with a
+  note when the flow is off or deleted), then how often it fired and when it last did.
+- **Changing a rule**: a switch (if someone else changed the rule first, the new version is read and the switch is tried once more, as the web
+  does), two arrows that swap it with its neighbour (only on the full list, not while searching), **Duplicate** (the copy goes last, switched
+  off, and counts against the plan's limit) and **Delete** (asks first). The plan's limit is shown and said when reached.
+- The names come from `/v2/inbox/assignees` (needs `inbox.conversation.read`).
+
+### In the web, not built here (recorded, not dropped)
+
+| What                                | Why it waits                                                                                               |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| Creating and editing a rule         | the web form is large (conditions, strategy, escalation, auto-reply, tags, flow): its own step (see below) |
+| The link to Record assignment rules | a different web screen (assigning contacts, companies and deals to sales owners), not built in the app     |
+
+## Not built yet
+
+Users and teams (`/v2/workspace/members`, `/v2/workspace/teams`), then the rule editor for Auto-assignment.
