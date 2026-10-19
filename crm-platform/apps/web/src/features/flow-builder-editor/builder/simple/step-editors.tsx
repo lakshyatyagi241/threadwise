@@ -4,6 +4,7 @@ import { ButtonIcon } from '../button-icon';
 import { MessageField } from '../message-field';
 import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
+import { savePropertyOptions } from '../../lib/property-options';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
   buttonActionContinues,
@@ -844,7 +845,7 @@ function SavePropertyField({
             onChange={(e) => set({ propertyKey: e.target.value })}
           >
             <option value="">{t('choose')}</option>
-            {(feed.data?.custom ?? []).map((pr) => (
+            {savePropertyOptions(feed.data, str(step.data.propertyKey)).map((pr) => (
               <option key={pr.key} value={pr.key}>
                 {pr.name}
               </option>

@@ -810,6 +810,9 @@ export class ContactsService {
    * The flow "Ask for file / image" node's "save the response as property": writes one custom property value of the contact the run
    * belongs to (the file link). Only an active contact property of this workspace can be written, so a key typed by hand that names
    * nothing is refused (`false`). No `contact.updated` event: a flow that fills in its own contact must not start flows of its own.
+   * Exception: a built-in contact column (`email`, `name`, ...) is written by `setFieldFromFlow`, the same path as the "Update contact
+   * field" step, so "also save the answer on the contact property" works for them. That path emits `contact.updated` with `via: 'flow'`,
+   * which flow triggers skip and webhooks receive.
    */
   async setPropertyFromFlow(
     orgId: number,
@@ -819,6 +822,9 @@ export class ContactsService {
   ): Promise<boolean> {
     const clean = key.trim();
     if (clean === '') return false;
+    if (Object.hasOwn(FLOW_CONTACT_COLUMNS, clean)) {
+      return (await this.setFieldFromFlow(orgId, contactId, clean, value)) !== null;
+    }
     return this.db.txAs({ orgId }, async (tx) => {
       const field = await tx.execute(
         sql`SELECT 1 FROM fields WHERE org_id = ${orgId} AND module_key = ${MODULE_KEY} AND key = ${clean} AND is_active = true`,

@@ -88,7 +88,17 @@ services:
     image: redis:7-alpine
     restart: unless-stopped
     # noeviction: BullMQ job state is not a cache. Evicting it loses jobs.
-    command: ['redis-server', '--appendonly', 'yes', '--maxmemory-policy', 'noeviction']
+    # maxmemory matches deploy/hostinger (192mb in a 256m container). Keep noeviction: evicting a BullMQ key loses the job.
+    command:
+      [
+        'redis-server',
+        '--appendonly',
+        'yes',
+        '--maxmemory-policy',
+        'noeviction',
+        '--maxmemory',
+        '192mb',
+      ]
     volumes:
       - redisdata:/data
     healthcheck:

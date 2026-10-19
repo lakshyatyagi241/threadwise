@@ -19,6 +19,11 @@
     "reason": "alias is a fixed table alias chosen in code",
     "reviewedOn": "2026-10-11"
   },
+  "modules/crm/activity-types/activity-option-ref.ts": {
+    "status": "reviewed",
+    "reason": "the table aliases and the prefix are string literals at all three call sites (tasks.repository.ts, meeting-results.service.ts, call-log-entries.repository.ts), never request input",
+    "reviewedOn": "2026-10-19"
+  },
   "modules/crm/contact-dedupe/contact-dedupe.service.ts": {
     "status": "reviewed",
     "reason": "table and column come from the fixed reference list of the dedupe service, not from input",
