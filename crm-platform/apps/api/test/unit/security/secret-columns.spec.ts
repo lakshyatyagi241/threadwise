@@ -53,3 +53,24 @@ describe('every writer of a webhook routing token stores the hash and the sealed
     expect(src(service)).toContain('tokenOf(this.crypto, { enc: row.webhookTokenEnc');
   });
 });
+
+describe('the bearer-link writers store the hash (E8)', () => {
+  const src = (p: string) => readFileSync(resolve(__dirname, '../../../src/modules', p), 'utf8');
+  it('platform orders: the return token is hashed on insert, a manual order has none, and the return route matches the hash', () => {
+    expect(src('platform-payment-gateways/orders.repository.ts')).toContain('return_token_hash');
+    expect(src('platform-payment-gateways/orders.repository.ts')).toContain(
+      'o.return_token_hash = ${tokenHash(token)}',
+    );
+    expect(src('platform-payment-gateways/admin-billing.repository.ts')).toMatch(
+      /created_at, return_token\)/,
+    );
+  });
+  it('storefront orders: the tracking token is hashed and sealed on insert, and read back from the sealed copy', () => {
+    const gw = src('storefront-builder/_shims/sql-orders-gateway.ts');
+    expect(gw).toContain('tokenColumns(this.crypto, o.recoveryToken)');
+    expect(gw).toContain('recovery_token_hash = ${tokenHash(token)}');
+    expect(src('storefront-builder/admin/store-orders.service.ts')).toContain(
+      'order.recoveryTokenEnc',
+    );
+  });
+});

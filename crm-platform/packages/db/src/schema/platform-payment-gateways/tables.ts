@@ -18,6 +18,7 @@ import {
   text,
   timestamp,
   unique,
+  uniqueIndex,
   uuid,
 } from 'drizzle-orm/pg-core';
 import { sql } from 'drizzle-orm';
@@ -212,7 +213,11 @@ export const orders = pgTable(
     // 20261005100000_paygw_core.sql
     kind: text('kind').notNull().default('plan'),
     planSlug: text('plan_slug'),
-    returnToken: text('return_token').notNull(),
+    /** Legacy plaintext return-URL token; NULL once the audit backfill has run (encryption audit E8). Look up by `returnTokenHash`. */
+    returnToken: text('return_token'),
+    /** sha256 (hex) of the return token: what the return route matches. */
+    returnTokenHash: text('return_token_hash'),
+    returnTokenEnc: text('return_token_enc'),
     walletTopupMinor: bigint('wallet_topup_minor', { mode: 'number' }),
     /** The wallet a top-up credits, fixed when the order is placed; null = the platform currency (older orders). */
     walletUnit: text('wallet_unit'),
@@ -226,6 +231,9 @@ export const orders = pgTable(
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
     unique('uq_orders_return_token').on(t.returnToken),
+    uniqueIndex('uq_orders_return_token_hash')
+      .on(t.returnTokenHash)
+      .where(sql`${t.returnTokenHash} IS NOT NULL`),
     unique('uq_orders_idempotency_key').on(t.orgId, t.idempotencyKey),
     unique('uq_orders_org_id_uuid').on(t.orgId, t.uuid),
     foreignKey({

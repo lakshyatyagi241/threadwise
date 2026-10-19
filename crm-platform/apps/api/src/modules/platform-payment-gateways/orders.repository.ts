@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { tokenHash } from '../../common/crypto/secret-columns';
 import { decodeCursor } from '../../common/pagination/cursor';
 
 /** One `orders` row as the module reads it. `id` and `orgId` are internal and never leave the API (the mapper uses `uuid`). */
@@ -30,7 +31,8 @@ export interface OrderRow {
   walletTopupMinor: number | null;
   /** The wallet a top-up credits; null on an older order (the platform currency). */
   walletUnit: string | null;
-  returnToken: string;
+  /** The plaintext token; set by the writer of this row, NULL on a scrubbed row (a lookup uses the hash). */
+  returnToken: string | null;
   autoRenew: boolean;
   customerName: string | null;
   customerEmail: string | null;
@@ -78,7 +80,7 @@ function toRow(r: Raw): OrderRow {
     failureReason: (r.failure_reason as string | null) ?? null,
     walletTopupMinor: num(r.wallet_topup_minor),
     walletUnit: (r.wallet_unit as string | null) ?? null,
-    returnToken: r.return_token as string,
+    returnToken: (r.return_token as string | null) ?? null,
     autoRenew: r.auto_renew === true,
     customerName: (r.customer_name as string | null) ?? null,
     customerEmail: (r.customer_email as string | null) ?? null,
@@ -119,6 +121,8 @@ export interface NewOrder {
   idempotencyKey: string | null;
   couponId: number | null;
   couponCode: string | null;
+  /** The return-URL token as stored: plaintext mirror (null once the mirror is off) and its sha256. */
+  returnToken: { plain: string | null; hash: string };
 }
 
 /** All SQL for `orders`. Every method runs inside the transaction its caller opened (tenant `tx()` or the store's). */
@@ -128,11 +132,11 @@ export class OrdersRepository {
     const res = await tx.execute(sql`
       INSERT INTO orders AS o (org_id, user_id, order_number, kind, plan_slug, billing_period, auto_renew, gateway_id, gateway_slug,
         currency, amount, discount_amount, tax_rate, tax_amount, total_amount, customer_name, customer_email, billing_company,
-        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, wallet_unit, idempotency_key, coupon_id, coupon_code, status)
+        billing_address, billing_city, billing_postal, billing_country, billing_tax_id, wallet_topup_minor, wallet_unit, idempotency_key, coupon_id, coupon_code, return_token, return_token_hash, status)
       VALUES (${o.orgId}, ${o.userId}, ${o.orderNumber}, ${o.kind}, ${o.planSlug}, ${o.billingPeriod}, ${o.autoRenew}, ${o.gatewayId},
         ${o.gatewaySlug}, ${o.currency}, ${o.totalAmount}, ${o.discountAmount}, ${o.taxRate}, ${o.taxAmount}, ${o.totalAmount},
         ${o.customerName}, ${o.customerEmail}, ${o.billingCompany}, ${o.billingAddress}, ${o.billingCity}, ${o.billingPostal},
-        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.walletUnit}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, 'pending')
+        ${o.billingCountry}, ${o.billingTaxId}, ${o.walletTopupMinor}, ${o.walletUnit}, ${o.idempotencyKey}, ${o.couponId}, ${o.couponCode}, ${o.returnToken.plain}, ${o.returnToken.hash}, 'pending')
       RETURNING ${COLS}`);
     return toRow((res.rows as Raw[])[0]!);
   }
@@ -153,7 +157,9 @@ export class OrdersRepository {
   }
 
   async byReturnToken(tx: Tx, token: string): Promise<OrderRow | null> {
-    const res = await tx.execute(sql`SELECT ${COLS} FROM orders o WHERE o.return_token = ${token}`);
+    const res = await tx.execute(
+      sql`SELECT ${COLS} FROM orders o WHERE o.return_token_hash = ${tokenHash(token)} OR o.return_token = ${token}`,
+    );
     const r = (res.rows as Raw[])[0];
     return r ? toRow(r) : null;
   }

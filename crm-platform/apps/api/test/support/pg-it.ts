@@ -7,6 +7,8 @@ import { runMigrations } from '@crm/db';
 export const MIGRATIONS_DIR = resolve(__dirname, '../../../../packages/db/migrations');
 
 export interface TestPg {
+  /** The owner connection string of the migrated database. */
+  uri: string;
   /** A connection as the schema owner, with the privileged flag on so row-level security does not hide seed rows. */
   owner: Client;
   stop(): Promise<void>;
@@ -50,6 +52,7 @@ export async function startTestPg(): Promise<TestPg> {
   await runMigrations(uri, { dir: MIGRATIONS_DIR, log: () => undefined });
   await owner.query(`SELECT set_config('app.privileged', 'on', false)`);
   return {
+    uri,
     owner,
     async stop() {
       await owner.end().catch(() => undefined);

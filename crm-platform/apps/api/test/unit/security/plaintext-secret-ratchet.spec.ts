@@ -97,6 +97,14 @@ const ALLOW: Record<string, Reason> = {
   'viber_channels.webhook_token': 'hash',
   'wechat_channels.webhook_token': 'hash',
 
+  'orders.return_token': 'hash', // E8: return_token_hash is authoritative; the plaintext is the rollout mirror
+  'wa_orders.recovery_token': 'hash', // E8: recovery_token_hash / recovery_token_enc
+
+  // --- public: a correlation handle that is shown to the person it belongs to and opens nothing on its own ---
+  'web_form_submissions.receipt_token': 'public', // form-key.ts: "a handle for the thank-you page, not a credential"; shows a payment status only
+  'wa_form_submissions.flow_token': 'public', // 'form-<id>-<run uuid>', echoed back by WhatsApp to match a reply to a run
+  'wa_link_clicks.token': 'public', // the short link printed in the message to its recipient; resolves to a URL they already hold
+
   // --- hash: a digest, not the secret ---
   'webhook_forward_failures.signature_header': 'hash', // the HMAC the sender computed over the body, kept to replay the forward
 
@@ -104,12 +112,7 @@ const ALLOW: Record<string, Reason> = {
   'shopify_integrations.webhook_secret': 'E2', // the URL path secret and the lookup key; needs the hash + encrypted split
   'woocommerce_integrations.webhook_secret': 'E2', // as above, and the HMAC key given to the store plugin
   'incoming_webhooks.token': 'E3', // no service writes it yet: the writer must use tokenColumns() (hash + sealed copy)
-  'crm_briefs.public_token': 'E8', // bearer links shown to customers or recipients, kept in clear as the lookup key
-  'wa_link_clicks.token': 'E8',
-  'wa_orders.recovery_token': 'E8',
-  'orders.return_token': 'E8',
-  'web_form_submissions.receipt_token': 'E8',
-  'wa_form_submissions.flow_token': 'E8',
+  'crm_briefs.public_token': 'E8', // no service writes it yet: the writer must use tokenColumns() (hash + sealed copy)
 };
 
 function walk(dir: string): string[] {

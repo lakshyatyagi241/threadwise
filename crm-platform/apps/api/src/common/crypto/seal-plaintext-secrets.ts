@@ -42,6 +42,22 @@ export const SEAL_TARGETS: SealTarget[] = [
       enc: 'webhook_token_enc',
     }),
   ),
+  // E8: bearer links. The return URL is built when the order is created, so it needs no sealed copy; the tracking link is shown again.
+  {
+    name: 'orders.return_token',
+    table: 'orders',
+    pk: ['org_id', 'id'],
+    plain: 'return_token',
+    hash: 'return_token_hash',
+  },
+  {
+    name: 'wa_orders.recovery_token',
+    table: 'wa_orders',
+    pk: ['org_id', 'id'],
+    plain: 'recovery_token',
+    hash: 'recovery_token_hash',
+    enc: 'recovery_token_enc',
+  },
 ];
 
 export interface SealReport {
@@ -61,7 +77,11 @@ const q = (id: string): string => `"${id}"`;
 function pending(t: SealTarget): string {
   if (t.inPlace)
     return `${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> '' AND ${q(t.plain)} NOT LIKE 'v1:%'`;
-  return `${q(t.hash!)} IS NULL AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''`;
+  // A trigger may have filled the hash already (a row from the previous release), so a missing sealed copy counts as pending too.
+  const missing = t.enc
+    ? `(${q(t.hash!)} IS NULL OR ${q(t.enc)} IS NULL)`
+    : `${q(t.hash!)} IS NULL`;
+  return `${missing} AND ${q(t.plain)} IS NOT NULL AND ${q(t.plain)} <> ''`;
 }
 
 /**
