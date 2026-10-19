@@ -500,9 +500,7 @@
       "archivedChip": "Archivées"
     },
     "statusFilter": {
-      "default": "Ouvertes et en attente",
-      "open": "Ouvertes",
-      "pending": "En attente",
+      "default": "Ouvertes",
       "snoozed": "Mises en veille",
       "resolved": "Résolues",
       "closed": "Fermées",
@@ -510,7 +508,6 @@
     },
     "status": {
       "open": "Ouverte",
-      "pending": "En attente",
       "snoozed": "En veille",
       "resolved": "Résolue",
       "closed": "Fermée",
@@ -550,6 +547,7 @@
       "noAccessBody": "Votre rôle ne peut pas lire les conversations.",
       "resolve": "Résoudre",
       "reopen": "Rouvrir",
+      "notSpam": "Pas un spam",
       "call": "Appeler le {{phone}}",
       "pictureOpen": "Ouvrir la photo en plein écran",
       "pictureFull": "Photo",
@@ -567,7 +565,8 @@
         "assignToMe": "M’assigner",
         "details": "Voir les détails",
         "status": "Changer le statut",
-        "agent": "Assigner un agent"
+        "agent": "Assigner un agent",
+        "spam": "Marquer comme spam"
       },
       "bot": {
         "notice": "Il s’agit d’une conversation avec un bot.",
@@ -651,7 +650,9 @@
         "header_variable": "Comporte une variable dans son en-tête, que l’application ne peut pas encore renseigner.",
         "dynamic_button": "Comporte un bouton avec un lien contenant une variable, que l’application ne peut pas encore renseigner.",
         "authentication": "Les modèles de mot de passe à usage unique sont envoyés par le système.",
-        "named_variables": "Utilise des variables nommées, que l’application ne peut pas encore renseigner."
+        "named_variables": "Utilise des variables nommées, que l’application ne peut pas encore renseigner.",
+        "other_number": "Appartient à un autre numéro WhatsApp, il ne peut donc pas être envoyé depuis cette conversation.",
+        "not_linked": "Le canal de cette conversation n’est lié à aucun numéro WhatsApp : aucun modèle ne peut y être envoyé."
       }
     },
     "errors": {
@@ -780,6 +781,8 @@
       "note_added": "Note ajoutée",
       "snoozed": "Mise en veille",
       "auto_unsnoozed": "Réveillée à l’heure prévue",
+      "spam_flagged": "Marquée comme spam",
+      "escalated": "Escaladée",
       "priority_changed": "Priorité modifiée",
       "tag_added": "Étiquette ajoutée",
       "tag_removed": "Étiquette retirée",
@@ -812,6 +815,7 @@
       "label": "Étiquettes",
       "priority": "Priorité",
       "snooze": "Mettre en veille",
+      "spam": "Marquer comme spam",
       "statusTitle_one": "Changer le statut de {{count}} conversation",
       "statusTitle_many": "Changer le statut de {{count}} de conversations",
       "statusTitle_other": "Changer le statut de {{count}} conversations",
@@ -1770,6 +1774,12 @@
         "titleTeam": "{{name}} a été assigné à votre équipe",
         "titleTeamNoName": "Une conversation a été assignée à votre équipe",
         "body": "Assigné par {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} est de retour dans votre liste",
+        "titleNoName": "Une conversation reportée est de retour dans votre liste",
+        "titleTeam": "{{name}} est de retour pour votre équipe",
+        "titleTeamNoName": "Une conversation reportée est de retour pour votre équipe"
       },
       "mention": {
         "title": "{{actor}} vous a mentionné",

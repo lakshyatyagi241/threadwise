@@ -4,11 +4,11 @@ import {
   type ConversationStatus,
 } from '@crm/contracts';
 
-/** What the three dots of a thread offer, as in the reference app: the details, and the three sheets (status, labels, agent). */
-export type MenuAction = 'details' | 'status' | 'labels' | 'agent';
+/** What the three dots of a thread offer, as in the reference app: the details, and the three sheets (status, labels, agent) and Mark as spam. */
+export type MenuAction = 'details' | 'status' | 'labels' | 'agent' | 'spam';
 
 /** The statuses a person can move a conversation to by hand (`snoozed` and `spam` have their own routes). */
-export const STATUS_TARGETS = ['open', 'pending', 'resolved', 'closed'] as const;
+export const STATUS_TARGETS = ['open', 'resolved', 'closed'] as const;
 
 /** The conversation is being answered by an AI agent and no person has it. */
 export const isBotConversation = (assignment: ConversationAssignment): boolean =>
@@ -26,7 +26,7 @@ interface Input {
 
 /**
  * The lines of the three dots for this conversation and this person, in the order the reference app lists them: View details
- * (always), Change status (when another status is reachable), Assign labels, Assign agent. Priority, snooze and waking a snoozed
+ * (always), Change status (when another status is reachable), Assign labels, Assign agent, Mark as spam (not on one that is already spam: its way back is the header's Not spam). Priority, snooze and waking a snoozed
  * conversation are on the details screen.
  */
 export function menuActionsFor(input: Input): MenuAction[] {
@@ -37,6 +37,8 @@ export function menuActionsFor(input: Input): MenuAction[] {
   if (canResolve && moves) actions.push('status');
   if (canLabel) actions.push('labels');
   if (canAssign) actions.push('agent');
+  // Marking and un-marking spam take the same right (`inbox.conversation.resolve`), as on the web.
+  if (canResolve && status !== 'spam') actions.push('spam');
   return actions;
 }
 

@@ -12,6 +12,9 @@ export const SOURCE_ID = '91111111-1111-4111-8111-111111111111';
 export const CONTACT_ID = '92222222-2222-4222-8222-222222222222';
 export const DEAL_ID = '93333333-3333-4333-8333-333333333333';
 
+/** Where the workspace's lead hooks can be reached from outside: set, so the screens show no warning. */
+export const hookAddress = { baseUrl: 'https://crm.example.test', problem: null } as const;
+
 export const facebookForm: LeadSourceResponse = {
   id: SOURCE_ID,
   kind: 'webhook',
@@ -28,6 +31,15 @@ export const facebookForm: LeadSourceResponse = {
     owner: { mode: 'unassigned', userIds: [] },
     deal: { enabled: false, title: '{{name}} ({{source}})' },
     notify: { owner: true, userIds: [] },
+    speedToLead: {
+      enabled: false,
+      channel: 'whatsapp',
+      templateId: null,
+      senderId: null,
+      delayMinutes: 0,
+      businessHoursOnly: false,
+      maxLeadAgeMinutes: 60,
+    },
   },
   rawRetentionDays: 30,
   lastEventAt: '2026-10-15T09:30:00.000Z',
@@ -58,6 +70,7 @@ const baseEvent: LeadEventResponse = {
   isTest: false,
   contactId: CONTACT_ID,
   dealId: DEAL_ID,
+  firstReply: null,
   hasPayload: true,
   payloadExpiresAt: '2026-11-14T09:30:00.000Z',
   attempts: 1,

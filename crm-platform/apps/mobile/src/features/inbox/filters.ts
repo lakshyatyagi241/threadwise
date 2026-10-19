@@ -1,15 +1,7 @@
 import type { InboxTab } from '@crm/contracts';
 
-/** `default` is the list the web shows first: open and pending threads together (no status sent to the API). */
-export const STATUS_FILTERS = [
-  'default',
-  'open',
-  'pending',
-  'snoozed',
-  'resolved',
-  'closed',
-  'all',
-] as const;
+/** `default` is the list the web shows first: the open threads (no status sent to the API). */
+export const STATUS_FILTERS = ['default', 'snoozed', 'resolved', 'closed', 'all'] as const;
 export type StatusFilter = (typeof STATUS_FILTERS)[number];
 
 export const TABS: readonly InboxTab[] = ['all', 'mine', 'unassigned', 'unread'];

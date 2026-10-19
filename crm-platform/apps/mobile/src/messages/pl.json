@@ -510,9 +510,7 @@
       "archivedChip": "Zarchiwizowane"
     },
     "statusFilter": {
-      "default": "Otwarte i oczekujące",
-      "open": "Otwarte",
-      "pending": "Oczekujące",
+      "default": "Otwarte",
       "snoozed": "Odłożone",
       "resolved": "Rozwiązane",
       "closed": "Zamknięte",
@@ -520,7 +518,6 @@
     },
     "status": {
       "open": "Otwarta",
-      "pending": "Oczekująca",
       "snoozed": "Odłożona",
       "resolved": "Rozwiązana",
       "closed": "Zamknięta",
@@ -561,6 +558,7 @@
       "noAccessBody": "Twoja rola nie może czytać rozmów.",
       "resolve": "Rozwiąż",
       "reopen": "Otwórz ponownie",
+      "notSpam": "To nie spam",
       "call": "Zadzwoń: {{phone}}",
       "pictureOpen": "Otwórz zdjęcie na pełnym ekranie",
       "pictureFull": "Zdjęcie",
@@ -578,7 +576,8 @@
         "assignToMe": "Przypisz do mnie",
         "details": "Zobacz szczegóły",
         "status": "Zmień status",
-        "agent": "Przypisz agenta"
+        "agent": "Przypisz agenta",
+        "spam": "Oznacz jako spam"
       },
       "bot": {
         "notice": "To jest rozmowa z botem.",
@@ -662,7 +661,9 @@
         "header_variable": "Ma zmienną w nagłówku, której aplikacja nie potrafi jeszcze uzupełnić.",
         "dynamic_button": "Ma przycisk z linkiem ze zmienną, której aplikacja nie potrafi jeszcze uzupełnić.",
         "authentication": "Szablony z hasłem jednorazowym są wysyłane przez system.",
-        "named_variables": "Używa zmiennych nazwanych, których aplikacja nie potrafi jeszcze uzupełnić."
+        "named_variables": "Używa zmiennych nazwanych, których aplikacja nie potrafi jeszcze uzupełnić.",
+        "other_number": "Należy do innego numeru WhatsApp, więc nie można go wysłać z tej rozmowy.",
+        "not_linked": "Kanał tej rozmowy nie jest powiązany z numerem WhatsApp, więc nie można z niego wysłać szablonu."
       }
     },
     "errors": {
@@ -793,6 +794,8 @@
       "note_added": "Dodano notatkę",
       "snoozed": "Odłożono",
       "auto_unsnoozed": "Wznowiono o czasie",
+      "spam_flagged": "Oznaczono jako spam",
+      "escalated": "Eskalowano",
       "priority_changed": "Zmieniono priorytet",
       "tag_added": "Dodano etykietę",
       "tag_removed": "Usunięto etykietę",
@@ -826,6 +829,7 @@
       "label": "Etykiety",
       "priority": "Priorytet",
       "snooze": "Odłóż",
+      "spam": "Oznacz jako spam",
       "statusTitle_one": "Zmień status {{count}} rozmowy",
       "statusTitle_few": "Zmień status {{count}} rozmów",
       "statusTitle_many": "Zmień status {{count}} rozmów",
@@ -1791,6 +1795,12 @@
         "titleTeam": "Przypisano do Twojego zespołu: {{name}}",
         "titleTeamNoName": "Czat przypisano do Twojego zespołu",
         "body": "Przypisał: {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} wrócił na twoją listę",
+        "titleNoName": "Odłożony czat wrócił na twoją listę",
+        "titleTeam": "{{name}} wrócił dla twojego zespołu",
+        "titleTeamNoName": "Odłożony czat wrócił dla twojego zespołu"
       },
       "mention": {
         "title": "Wspomniano o Tobie: {{actor}}",

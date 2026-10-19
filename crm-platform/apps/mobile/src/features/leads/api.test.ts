@@ -1,6 +1,6 @@
 import { resetSessionForTests, startSession } from '@/lib/auth/session-manager';
 import { jsonResponse, mockFetch, TOKEN_PAIR } from '@/test/fetch-mock';
-import { SOURCE_ID, eventPage, facebookForm, reviewLead } from '@/test/leads-fixtures';
+import { SOURCE_ID, eventPage, facebookForm, hookAddress, reviewLead } from '@/test/leads-fixtures';
 import {
   getLeadSource,
   listLeadEvents,
@@ -19,7 +19,7 @@ const url = (call: { url: string } | undefined) => new URL((call as { url: strin
 describe('leads api', () => {
   it('lists the sources and reads one', async () => {
     const http = mockFetch(
-      jsonResponse(200, { data: [facebookForm] }),
+      jsonResponse(200, { data: [facebookForm], hookAddress }),
       jsonResponse(200, facebookForm),
     );
     await expect(listLeadSources()).resolves.toMatchObject({

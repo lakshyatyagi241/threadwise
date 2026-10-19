@@ -27,13 +27,14 @@ import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { BulkBar, type BulkKind } from './bulk-bar';
-import { BulkSheets, useBulkRead } from './bulk-sheets';
+import { BulkSheets, useBulkInstant } from './bulk-sheets';
 import { ConversationRow } from './conversation-row';
 import { ConversationSkeleton } from './conversation-skeleton';
 import { FilterStrip } from './filter-strip';
 import { hasActiveFilter, TABS, type InboxFilters, type StatusFilter } from './filters';
 import { FiltersSheet } from './filters-sheet';
 import { useChannels, useConversations } from './use-inbox';
+import { useInboxLive } from './use-live';
 import { useLabelLibrary } from './use-labels';
 import { useDebouncedValue } from './use-debounced-value';
 
@@ -74,6 +75,7 @@ export function InboxScreen() {
       ['label', 'inbox.conversation.tag'],
       ['priority', 'inbox.conversation.priority'],
       ['snooze', 'inbox.conversation.snooze'],
+      ['spam', 'inbox.conversation.resolve'],
     ] as const
   )
     .filter(([, permission]) => canBulk && can(session.data, permission))
@@ -107,7 +109,8 @@ export function InboxScreen() {
     }, []),
   );
 
-  const query = useConversations(filters, allowed, focused);
+  const live = useInboxLive();
+  const query = useConversations(filters, allowed, focused && !live);
   const rows = useMemo(() => query.data?.pages.flatMap((p) => p.data) ?? [], [query.data]);
   // The clock for "today" and "yesterday" moves only when the list does.
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -137,7 +140,7 @@ export function InboxScreen() {
     setSelected([]);
     setBulkSheet(null);
   }, []);
-  const bulkRead = useBulkRead(
+  const bulkInstant = useBulkInstant(
     (result) => {
       setBulkResult(result);
       stopSelecting();
@@ -364,10 +367,11 @@ export function InboxScreen() {
       {selecting ? (
         <BulkBar
           allowed={bulkAllowed}
-          busy={bulkRead.pending}
+          busy={bulkInstant.pending}
           onPick={(kind) => {
             setBulkError(null);
-            if (kind === 'read') bulkRead.run(selected);
+            if (kind === 'read') bulkInstant.run(selected, { type: 'mark_read' });
+            else if (kind === 'spam') bulkInstant.run(selected, { type: 'spam' });
             else setBulkSheet(kind);
           }}
         />

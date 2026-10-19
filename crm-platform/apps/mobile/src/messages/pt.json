@@ -500,9 +500,7 @@
       "archivedChip": "Arquivadas"
     },
     "statusFilter": {
-      "default": "Abertas e pendentes",
-      "open": "Abertas",
-      "pending": "Pendentes",
+      "default": "Abertas",
       "snoozed": "Adiadas",
       "resolved": "Resolvidas",
       "closed": "Fechadas",
@@ -510,7 +508,6 @@
     },
     "status": {
       "open": "Aberta",
-      "pending": "Pendente",
       "snoozed": "Adiada",
       "resolved": "Resolvida",
       "closed": "Fechada",
@@ -550,6 +547,7 @@
       "noAccessBody": "Seu perfil não pode ler conversas.",
       "resolve": "Resolver",
       "reopen": "Reabrir",
+      "notSpam": "Não é spam",
       "call": "Ligar para {{phone}}",
       "pictureOpen": "Abrir foto em tela cheia",
       "pictureFull": "Foto",
@@ -567,7 +565,8 @@
         "assignToMe": "Atribuir a mim",
         "details": "Ver detalhes",
         "status": "Alterar status",
-        "agent": "Atribuir agente"
+        "agent": "Atribuir agente",
+        "spam": "Marcar como spam"
       },
       "bot": {
         "notice": "Esta é uma conversa de bot.",
@@ -651,7 +650,9 @@
         "header_variable": "Tem uma variável no cabeçalho, que o app ainda não consegue preencher.",
         "dynamic_button": "Tem um botão com link e variável, que o app ainda não consegue preencher.",
         "authentication": "Os modelos de senha de uso único são enviados pelo sistema.",
-        "named_variables": "Usa variáveis nomeadas, que o app ainda não consegue preencher."
+        "named_variables": "Usa variáveis nomeadas, que o app ainda não consegue preencher.",
+        "other_number": "Pertence a outro número de WhatsApp, por isso não pode ser enviado a partir desta conversa.",
+        "not_linked": "O canal desta conversa não está vinculado a um número de WhatsApp, por isso nenhum modelo pode ser enviado a partir dele."
       }
     },
     "errors": {
@@ -780,6 +781,8 @@
       "note_added": "Nota adicionada",
       "snoozed": "Adiada",
       "auto_unsnoozed": "Reativada no horário",
+      "spam_flagged": "Marcada como spam",
+      "escalated": "Escalada",
       "priority_changed": "Prioridade alterada",
       "tag_added": "Rótulo adicionado",
       "tag_removed": "Rótulo removido",
@@ -812,6 +815,7 @@
       "label": "Rótulos",
       "priority": "Prioridade",
       "snooze": "Adiar",
+      "spam": "Marcar como spam",
       "statusTitle_one": "Alterar o status de {{count}} conversa",
       "statusTitle_many": "Alterar o status de {{count}} de conversas",
       "statusTitle_other": "Alterar o status de {{count}} conversas",
@@ -1770,6 +1774,12 @@
         "titleTeam": "{{name}} foi atribuído à sua equipe",
         "titleTeamNoName": "Um chat foi atribuído à sua equipe",
         "body": "Atribuído por {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} voltou para a sua lista",
+        "titleNoName": "Um chat adiado voltou para a sua lista",
+        "titleTeam": "{{name}} voltou para a sua equipe",
+        "titleTeamNoName": "Um chat adiado voltou para a sua equipe"
       },
       "mention": {
         "title": "{{actor}} mencionou você",

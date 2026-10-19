@@ -1,6 +1,7 @@
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { InfiniteData } from '@tanstack/react-query';
 import type {
+  MarkSpamConversationInput,
   MessageListResponse,
   SetConversationPriorityInput,
   SetConversationStatusInput,
@@ -16,6 +17,7 @@ import {
   fetchInboxTemplates,
   fetchMessages,
   markConversationRead,
+  markConversationSpam,
   retryMessage,
   sendTemplateMessage,
   sendTextMessage,
@@ -27,15 +29,15 @@ import type { AssignInput } from './api';
 import type { InboxFilters } from './filters';
 import { withMessage } from './thread-model';
 
-/** How often an open thread asks for news while it is on screen; realtime sockets replace this later. */
+/** How often an open thread asks for news while it is on screen and the live connection is not up (with it, events say when to read again). */
 export const THREAD_POLL_MS = 15_000;
 
-/** How often the conversation list asks for news while the Inbox tab is on screen (a new message, a taken or resolved thread, the tab counts). */
+/** How often the conversation list asks for news while the Inbox tab is on screen (a new message, a taken or resolved thread, the tab counts), while the live connection is not up. */
 export const INBOX_POLL_MS = 15_000;
 
 export const listKey = ['inbox', 'conversations'] as const;
 export const detailKey = (id: string) => ['inbox', 'conversation', id] as const;
-const messagesKey = (id: string) => ['inbox', 'messages', id] as const;
+export const messagesKey = (id: string) => ['inbox', 'messages', id] as const;
 
 /**
  * The conversation list, a page at a time. No request at all while `enabled` is false (the person may not read the inbox). While
@@ -102,6 +104,16 @@ export function useSetStatus(id: string) {
   return useMutation({
     mutationFn: (input: SetConversationStatusInput) => setConversationStatus(id, input),
     // Success and conflict both leave the screen holding a stale row version; reading again is right either way.
+    onSettled: refresh,
+  });
+}
+
+/** Marks the conversation as spam; it leaves the live lists. The lists and the thread read again either way. */
+export function useMarkSpam(id: string) {
+  const refresh = useRefreshInbox(id);
+  return useMutation({
+    mutationFn: (input: MarkSpamConversationInput) =>
+      markConversationSpam(id, input, Crypto.randomUUID()),
     onSettled: refresh,
   });
 }

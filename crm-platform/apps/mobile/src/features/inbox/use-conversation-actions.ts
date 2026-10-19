@@ -9,7 +9,7 @@ import { isApiError } from '@/lib/api';
 import type { AssignmentChange } from './assign-sheet';
 import { snoozeUntil, type SnoozeChoice } from './thread-actions';
 import { sendErrorMessage } from './thread-errors';
-import { useAssign, useSetPriority, useSetStatus, useSnooze } from './use-inbox';
+import { useAssign, useMarkSpam, useSetPriority, useSetStatus, useSnooze } from './use-inbox';
 
 /**
  * The changes a person makes to a conversation, shared by the thread and its details screen: each takes the row version the screen
@@ -25,6 +25,7 @@ export function useConversationActions(
   const assign = useAssign(id);
   const setPriority = useSetPriority(id);
   const snooze = useSnooze(id);
+  const spam = useMarkSpam(id);
 
   const run = async (action: () => Promise<unknown>): Promise<string | null> => {
     try {
@@ -39,12 +40,19 @@ export function useConversationActions(
 
   return {
     /** True while any of the changes is on its way. */
-    busy: setStatus.isPending || assign.isPending || setPriority.isPending || snooze.isPending,
+    busy:
+      setStatus.isPending ||
+      assign.isPending ||
+      setPriority.isPending ||
+      snooze.isPending ||
+      spam.isPending,
     assigning: assign.isPending,
     moveTo: async (status: SetConversationStatusInput['status']) =>
       conversation
         ? run(() => setStatus.mutateAsync({ rowVersion: conversation.rowVersion, status }))
         : null,
+    markSpam: async () =>
+      conversation ? run(() => spam.mutateAsync({ rowVersion: conversation.rowVersion })) : null,
     assignTo: async (change: AssignmentChange) =>
       conversation
         ? run(() => assign.mutateAsync({ rowVersion: conversation.rowVersion, ...change }))

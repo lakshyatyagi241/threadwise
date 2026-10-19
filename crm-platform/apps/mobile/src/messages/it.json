@@ -500,9 +500,7 @@
       "archivedChip": "Archiviate"
     },
     "statusFilter": {
-      "default": "Aperte e in attesa",
-      "open": "Aperte",
-      "pending": "In attesa",
+      "default": "Aperte",
       "snoozed": "Posticipate",
       "resolved": "Risolte",
       "closed": "Chiuse",
@@ -510,7 +508,6 @@
     },
     "status": {
       "open": "Aperta",
-      "pending": "In attesa",
       "snoozed": "Posticipata",
       "resolved": "Risolta",
       "closed": "Chiusa",
@@ -550,6 +547,7 @@
       "noAccessBody": "Il tuo ruolo non può leggere le conversazioni.",
       "resolve": "Risolvi",
       "reopen": "Riapri",
+      "notSpam": "Non è spam",
       "call": "Chiama {{phone}}",
       "pictureOpen": "Apri la foto a schermo intero",
       "pictureFull": "Foto",
@@ -567,7 +565,8 @@
         "assignToMe": "Assegna a me",
         "details": "Vedi dettagli",
         "status": "Cambia stato",
-        "agent": "Assegna agente"
+        "agent": "Assegna agente",
+        "spam": "Segna come spam"
       },
       "bot": {
         "notice": "Questa è una conversazione con un bot.",
@@ -651,7 +650,9 @@
         "header_variable": "Ha una variabile nell'intestazione, che l'app non può ancora compilare.",
         "dynamic_button": "Ha un pulsante con link con variabile, che l'app non può ancora compilare.",
         "authentication": "I template con password monouso vengono inviati dal sistema.",
-        "named_variables": "Usa variabili con nome, che l'app non può ancora compilare."
+        "named_variables": "Usa variabili con nome, che l'app non può ancora compilare.",
+        "other_number": "Appartiene a un altro numero WhatsApp, quindi non può essere inviato da questa conversazione.",
+        "not_linked": "Il canale di questa conversazione non è collegato a un numero WhatsApp, quindi non si può inviare nessun modello."
       }
     },
     "errors": {
@@ -780,6 +781,8 @@
       "note_added": "Nota aggiunta",
       "snoozed": "Posticipata",
       "auto_unsnoozed": "Riattivata in orario",
+      "spam_flagged": "Segnata come spam",
+      "escalated": "Escalata",
       "priority_changed": "Priorità modificata",
       "tag_added": "Etichetta aggiunta",
       "tag_removed": "Etichetta rimossa",
@@ -812,6 +815,7 @@
       "label": "Etichette",
       "priority": "Priorità",
       "snooze": "Posticipa",
+      "spam": "Segna come spam",
       "statusTitle_one": "Cambia lo stato di {{count}} conversazione",
       "statusTitle_many": "Cambia lo stato di {{count}} di conversazioni",
       "statusTitle_other": "Cambia lo stato di {{count}} conversazioni",
@@ -1770,6 +1774,12 @@
         "titleTeam": "{{name}} è stata assegnata al tuo team",
         "titleTeamNoName": "Una chat è stata assegnata al tuo team",
         "body": "Assegnata da {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} è tornata nella tua lista",
+        "titleNoName": "Una chat posticipata è tornata nella tua lista",
+        "titleTeam": "{{name}} è tornata per il tuo team",
+        "titleTeamNoName": "Una chat posticipata è tornata per il tuo team"
       },
       "mention": {
         "title": "{{actor}} ti ha menzionato",

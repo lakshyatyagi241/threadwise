@@ -16,7 +16,7 @@ import { useBulk } from './use-bulk';
 import { useLabelLibrary } from './use-labels';
 
 interface Props {
-  /** Which action's sheet is open (`read` has none: it runs at once); null: none. */
+  /** Which action's sheet is open (`read` and `spam` have none: they run at once); null: none. */
   kind: BulkKind | null;
   /** The chosen conversations. */
   ids: readonly string[];
@@ -158,8 +158,8 @@ export function BulkSheets({ kind, ids, onClose, onDone }: Props) {
   );
 }
 
-/** Runs a bulk action that has no sheet (mark as read) for the chosen conversations. */
-export function useBulkRead(
+/** Runs a bulk action that has no sheet (mark as read, mark as spam) for the chosen conversations. */
+export function useBulkInstant(
   onDone: (r: BulkConversationsResponse) => void,
   onFail: (message: string) => void,
 ) {
@@ -167,9 +167,9 @@ export function useBulkRead(
   const bulk = useBulk();
   return {
     pending: bulk.isPending,
-    run: (ids: readonly string[]) =>
+    run: (ids: readonly string[], action: BulkConversationAction) =>
       bulk.mutate(
-        { ids, action: { type: 'mark_read' } },
+        { ids, action },
         { onSuccess: onDone, onError: (e) => onFail(messageForError(e, t)) },
       ),
   };

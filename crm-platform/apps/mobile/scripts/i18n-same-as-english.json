@@ -686,7 +686,7 @@
     "inbox.row.media",
     "inbox.status.open",
     "inbox.status.spam",
-    "inbox.statusFilter.open",
+    "inbox.statusFilter.default",
     "inbox.thread.assignment.team",
     "inbox.time.am",
     "inbox.time.pm",

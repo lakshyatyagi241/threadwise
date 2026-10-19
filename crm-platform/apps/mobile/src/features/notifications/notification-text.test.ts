@@ -25,6 +25,21 @@ describe('what a notification says', () => {
     });
   });
 
+  it('words a snoozed chat coming back, for the person or for the team', () => {
+    const row = { type: 'snooze_wake', title: 'x', body: null, count: 1 };
+    expect(notificationText(t, { ...row, data: { contactName: 'Aarav Sharma' } })).toEqual({
+      title: 'Aarav Sharma is back in your list',
+      body: null,
+    });
+    expect(
+      notificationText(t, { ...row, data: { contactName: 'Aarav Sharma', teamAssigned: true } })
+        .title,
+    ).toBe('Aarav Sharma is back for your team');
+    expect(notificationText(t, { ...row, data: {} }).title).toBe(
+      'A snoozed chat is back in your list',
+    );
+  });
+
   it('uses the no-name wording when the contact has no name', () => {
     const row = { ...newMessage, data: { conversationId: 'x', preview: 'Hello' }, count: 1 };
     expect(notificationText(t, row).title).toBe('1 new message');

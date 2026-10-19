@@ -6,13 +6,24 @@ const nobody: ConversationAssignment = { user: null, team: null, aiAgent: null }
 const everything = { canResolve: true, canLabel: true, canAssign: true };
 
 describe('menuActionsFor', () => {
-  it('lists the four lines of the reference app, in its order, for a person who may do everything', () => {
+  it('lists the four lines of the reference app, in its order, then Mark as spam, for a person who may do everything', () => {
     expect(menuActionsFor({ ...everything, status: 'open' })).toEqual([
       'details',
       'status',
       'labels',
       'agent',
+      'spam',
     ]);
+  });
+
+  it('offers Mark as spam from every status but spam itself, and only with the resolve right', () => {
+    for (const status of ['open', 'snoozed', 'resolved', 'closed'] as const) {
+      expect(menuActionsFor({ ...everything, status })).toContain('spam');
+    }
+    expect(menuActionsFor({ ...everything, status: 'spam' })).not.toContain('spam');
+    expect(menuActionsFor({ ...everything, canResolve: false, status: 'open' })).not.toContain(
+      'spam',
+    );
   });
 
   it('always offers the details, and nothing else to a person with no other right', () => {
@@ -34,6 +45,7 @@ describe('menuActionsFor', () => {
       'details',
       'status',
       'agent',
+      'spam',
     ]);
   });
 
@@ -42,19 +54,20 @@ describe('menuActionsFor', () => {
       'details',
       'status',
       'labels',
+      'spam',
     ]);
   });
 
   it('offers a status change from every status (each has a way out)', () => {
-    for (const status of ['open', 'pending', 'snoozed', 'resolved', 'closed', 'spam'] as const) {
+    for (const status of ['open', 'snoozed', 'resolved', 'closed', 'spam'] as const) {
       expect(menuActionsFor({ ...everything, status })).toContain('status');
     }
   });
 });
 
 describe('STATUS_TARGETS', () => {
-  it('are the four a person can move a conversation to by hand', () => {
-    expect([...STATUS_TARGETS]).toEqual(['open', 'pending', 'resolved', 'closed']);
+  it('are the three a person can move a conversation to by hand', () => {
+    expect([...STATUS_TARGETS]).toEqual(['open', 'resolved', 'closed']);
   });
 });
 

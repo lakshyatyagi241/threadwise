@@ -480,9 +480,7 @@
       "archivedChip": "Đã lưu trữ"
     },
     "statusFilter": {
-      "default": "Mở và đang chờ",
-      "open": "Mở",
-      "pending": "Đang chờ",
+      "default": "Mở",
       "snoozed": "Tạm hoãn",
       "resolved": "Đã giải quyết",
       "closed": "Đã đóng",
@@ -490,7 +488,6 @@
     },
     "status": {
       "open": "Mở",
-      "pending": "Đang chờ",
       "snoozed": "Tạm hoãn",
       "resolved": "Đã giải quyết",
       "closed": "Đã đóng",
@@ -528,6 +525,7 @@
       "noAccessBody": "Vai trò của bạn không thể đọc cuộc trò chuyện.",
       "resolve": "Giải quyết",
       "reopen": "Mở lại",
+      "notSpam": "Không phải spam",
       "call": "Gọi {{phone}}",
       "pictureOpen": "Mở ảnh toàn màn hình",
       "pictureFull": "Ảnh",
@@ -545,7 +543,8 @@
         "assignToMe": "Giao cho tôi",
         "details": "Xem chi tiết",
         "status": "Đổi trạng thái",
-        "agent": "Phân công nhân viên"
+        "agent": "Phân công nhân viên",
+        "spam": "Đánh dấu là spam"
       },
       "bot": {
         "notice": "Đây là cuộc trò chuyện với bot.",
@@ -629,7 +628,9 @@
         "header_variable": "Có biến trong tiêu đề mà ứng dụng chưa thể điền.",
         "dynamic_button": "Có nút liên kết chứa biến mà ứng dụng chưa thể điền.",
         "authentication": "Các mẫu mật khẩu dùng một lần do hệ thống gửi.",
-        "named_variables": "Dùng biến có tên mà ứng dụng chưa thể điền."
+        "named_variables": "Dùng biến có tên mà ứng dụng chưa thể điền.",
+        "other_number": "Thuộc số WhatsApp khác, nên không gửi được từ cuộc trò chuyện này.",
+        "not_linked": "Kênh của cuộc trò chuyện này chưa được liên kết với số WhatsApp nào, nên không gửi được mẫu tin nào từ đây."
       }
     },
     "errors": {
@@ -754,6 +755,8 @@
       "note_added": "Đã thêm ghi chú",
       "snoozed": "Đã tạm hoãn",
       "auto_unsnoozed": "Đã tự đánh thức đúng giờ",
+      "spam_flagged": "Đã đánh dấu là spam",
+      "escalated": "Đã leo thang",
       "priority_changed": "Đã đổi mức ưu tiên",
       "tag_added": "Đã thêm nhãn",
       "tag_removed": "Đã gỡ nhãn",
@@ -784,6 +787,7 @@
       "label": "Nhãn",
       "priority": "Ưu tiên",
       "snooze": "Tạm hoãn",
+      "spam": "Đánh dấu là spam",
       "statusTitle_other": "Đổi trạng thái của {{count}} cuộc trò chuyện",
       "labelTitle_other": "Nhãn cho {{count}} cuộc trò chuyện",
       "labelMode": "Thao tác",
@@ -1728,6 +1732,12 @@
         "titleTeam": "{{name}} đã được giao cho nhóm của bạn",
         "titleTeamNoName": "Một chat đã được giao cho nhóm của bạn",
         "body": "Được giao bởi {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} đã quay lại danh sách của bạn",
+        "titleNoName": "Cuộc trò chuyện hoãn đã quay lại danh sách của bạn",
+        "titleTeam": "{{name}} đã quay lại cho nhóm của bạn",
+        "titleTeamNoName": "Cuộc trò chuyện hoãn đã quay lại cho nhóm của bạn"
       },
       "mention": {
         "title": "{{actor}} đã nhắc đến bạn",

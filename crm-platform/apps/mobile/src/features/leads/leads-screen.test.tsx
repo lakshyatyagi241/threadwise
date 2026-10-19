@@ -11,6 +11,7 @@ import {
   sessionLeadsManager,
   sessionLeadsReadOnly,
   sessionNoLeads,
+  hookAddress,
 } from '@/test/leads-fixtures';
 import { renderApp } from '@/test/render';
 import * as api from './api';
@@ -40,7 +41,7 @@ beforeEach(() => {
   jest.mocked(useRouter).mockReturnValue(router as unknown as ReturnType<typeof useRouter>);
   router.canGoBack.mockReturnValue(true);
   sessionCall.mockResolvedValue(sessionLeadsManager);
-  listCall.mockResolvedValue({ data: [facebookForm, pausedLanding] });
+  listCall.mockResolvedValue({ data: [facebookForm, pausedLanding], hookAddress });
 });
 afterEach(async () => {
   if (client) {
@@ -71,7 +72,7 @@ describe('LeadsScreen', () => {
   });
 
   it('says so when there are no sources, and points a manager to create one', async () => {
-    listCall.mockResolvedValue({ data: [] });
+    listCall.mockResolvedValue({ data: [], hookAddress });
     await show();
     expect(await screen.findByText('No sources yet')).toBeTruthy();
     expect(screen.getByText(/Create a webhook source/)).toBeTruthy();
@@ -79,7 +80,7 @@ describe('LeadsScreen', () => {
 
   it('tells a person who cannot manage to ask someone who can', async () => {
     sessionCall.mockResolvedValue(sessionLeadsReadOnly);
-    listCall.mockResolvedValue({ data: [] });
+    listCall.mockResolvedValue({ data: [], hookAddress });
     await show();
     expect(await screen.findByText(/Ask someone who can manage lead sources/)).toBeTruthy();
   });
@@ -101,7 +102,7 @@ describe('LeadsScreen', () => {
     listCall.mockRejectedValueOnce(new ApiError(500, 'INTERNAL', 'boom'));
     await show();
     expect(await screen.findByRole('alert')).toBeTruthy();
-    listCall.mockResolvedValue({ data: [facebookForm] });
+    listCall.mockResolvedValue({ data: [facebookForm], hookAddress });
     await fireEvent.press(screen.getByText('Try again'));
     expect(await screen.findByText('Facebook lead form')).toBeTruthy();
   });

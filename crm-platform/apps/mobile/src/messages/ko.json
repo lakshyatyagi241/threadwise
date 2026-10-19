@@ -480,9 +480,7 @@
       "archivedChip": "보관됨"
     },
     "statusFilter": {
-      "default": "열림 및 대기 중",
-      "open": "열림",
-      "pending": "대기 중",
+      "default": "열림",
       "snoozed": "다시 알림",
       "resolved": "해결됨",
       "closed": "종료됨",
@@ -490,7 +488,6 @@
     },
     "status": {
       "open": "열림",
-      "pending": "대기 중",
       "snoozed": "다시 알림",
       "resolved": "해결됨",
       "closed": "종료됨",
@@ -528,6 +525,7 @@
       "noAccessBody": "현재 역할은 대화를 볼 수 없습니다.",
       "resolve": "해결",
       "reopen": "다시 열기",
+      "notSpam": "스팸 아님",
       "call": "{{phone}}에 전화",
       "pictureOpen": "사진을 전체 화면으로 열기",
       "pictureFull": "사진",
@@ -545,7 +543,8 @@
         "assignToMe": "나에게 배정",
         "details": "상세 보기",
         "status": "상태 변경",
-        "agent": "상담원 배정"
+        "agent": "상담원 배정",
+        "spam": "스팸으로 표시"
       },
       "bot": {
         "notice": "봇 대화입니다.",
@@ -629,7 +628,9 @@
         "header_variable": "헤더에 변수가 있어 앱에서 아직 입력할 수 없습니다.",
         "dynamic_button": "변수가 포함된 버튼 링크가 있어 앱에서 아직 입력할 수 없습니다.",
         "authentication": "일회용 비밀번호 템플릿은 시스템이 보냅니다.",
-        "named_variables": "이름이 있는 변수를 사용해 앱에서 아직 입력할 수 없습니다."
+        "named_variables": "이름이 있는 변수를 사용해 앱에서 아직 입력할 수 없습니다.",
+        "other_number": "다른 WhatsApp 번호의 템플릿이므로 이 대화에서는 보낼 수 없습니다.",
+        "not_linked": "이 대화의 채널이 WhatsApp 번호에 연결되어 있지 않아 템플릿을 보낼 수 없습니다."
       }
     },
     "errors": {
@@ -754,6 +755,8 @@
       "note_added": "메모 추가됨",
       "snoozed": "다시 알림 설정됨",
       "auto_unsnoozed": "예정 시간에 다시 열림",
+      "spam_flagged": "스팸으로 표시됨",
+      "escalated": "에스컬레이션됨",
       "priority_changed": "우선순위 변경됨",
       "tag_added": "라벨 추가됨",
       "tag_removed": "라벨 제거됨",
@@ -784,6 +787,7 @@
       "label": "라벨",
       "priority": "우선순위",
       "snooze": "다시 알림",
+      "spam": "스팸으로 표시",
       "statusTitle_other": "대화 {{count}}개의 상태 변경",
       "labelTitle_other": "대화 {{count}}개의 라벨",
       "labelMode": "작업",
@@ -1728,6 +1732,12 @@
         "titleTeam": "{{name}}님이 내 팀에 할당되었습니다",
         "titleTeamNoName": "채팅이 내 팀에 할당되었습니다",
         "body": "{{actor}}님이 할당함"
+      },
+      "snooze_wake": {
+        "title": "{{name}}이(가) 목록에 돌아왔습니다",
+        "titleNoName": "스누즈한 채팅이 목록에 돌아왔습니다",
+        "titleTeam": "{{name}}이(가) 팀에 돌아왔습니다",
+        "titleTeamNoName": "스누즈한 채팅이 팀에 돌아왔습니다"
       },
       "mention": {
         "title": "{{actor}}님이 나를 멘션했습니다",

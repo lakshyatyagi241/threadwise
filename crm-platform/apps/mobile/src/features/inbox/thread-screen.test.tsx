@@ -17,6 +17,8 @@ import {
   withPermissions,
 } from '@/test/inbox-fixtures';
 import { renderApp } from '@/test/render';
+import { RealtimeProvider } from '@/lib/realtime';
+import { fakeSocketFactory } from '@/test/fake-socket';
 import { reachEnd } from '@/test/scroll';
 import * as api from './api';
 import * as labels from './labels-api';
@@ -48,6 +50,7 @@ const templatesCall = jest.mocked(api.fetchInboxTemplates);
 const sendTemplateCall = jest.mocked(api.sendTemplateMessage);
 const readCall = jest.mocked(api.markConversationRead);
 const statusCall = jest.mocked(api.setConversationStatus);
+const spamCall = jest.mocked(api.markConversationSpam);
 const retryCall = jest.mocked(api.retryMessage);
 const assignCall = jest.mocked(api.assignConversation);
 const assigneesCall = jest.mocked(api.fetchAssignees);
@@ -630,10 +633,51 @@ describe('ThreadScreen: the header', () => {
   });
 
   it('says so in the header when the conversation is not open', async () => {
-    arrange({ detail: detail({ status: 'pending' }) });
+    arrange({ detail: detail({ status: 'closed' }) });
     await show();
     await loaded();
-    expect(screen.getByText('Pending')).toBeTruthy();
+    expect(screen.getByText('Closed')).toBeTruthy();
+  });
+});
+
+describe('ThreadScreen: live', () => {
+  it('shows a message that arrives over the live connection at once, without waiting for the timer', async () => {
+    arrange();
+    const { factory, sockets, last } = fakeSocketFactory();
+    const view = await renderApp(
+      <RealtimeProvider
+        url="http://api.test/realtime"
+        mintTicket={async () => 'rtk_ticket-1234567890'}
+        createSocket={factory}
+      >
+        <ThreadScreen />
+      </RealtimeProvider>,
+    );
+    client = view.queryClient;
+    await loaded();
+    await waitFor(() => expect(sockets).toHaveLength(1));
+    await act(async () => last().accept());
+    await waitFor(() => expect(last().joins()).toEqual([{ kind: 'conv', id: CONVERSATION_ID }]));
+    await act(async () => last().answer({ ok: true, room: `conv:${CONVERSATION_ID}`, seq: 0 }));
+    expect(screen.queryByText('Are you still there?')).toBeNull();
+
+    messagesCall.mockResolvedValue(
+      thread([
+        message(1),
+        message(2, { body: 'Hello there' }),
+        outgoing(3, { body: 'Hi Rohan' }),
+        message(4, { body: 'Are you still there?' }),
+      ]),
+    );
+    await act(async () =>
+      last().push({
+        type: 'inbox.message.new',
+        room: `conv:${CONVERSATION_ID}`,
+        seq: 1,
+        payload: { conversationId: CONVERSATION_ID, message: { id: message(4).id, seq: 4 } },
+      }),
+    );
+    expect(await screen.findByText('Are you still there?')).toBeTruthy();
   });
 });
 
@@ -641,7 +685,7 @@ describe('ThreadScreen: the three dots', () => {
   const dots = () => screen.findByRole('button', { name: 'More actions' });
   const choose = async (name: string) =>
     await fireEvent.press(await screen.findByRole('menuitem', { name }));
-  const FOUR = ['View details', 'Change status', 'Assign labels', 'Assign agent'];
+  const FOUR = ['View details', 'Change status', 'Assign labels', 'Assign agent', 'Mark as spam'];
 
   beforeEach(() => {
     libraryCall.mockResolvedValue([]);
@@ -650,7 +694,7 @@ describe('ThreadScreen: the three dots', () => {
       .mockReturnValue({ back, push: jest.fn() } as unknown as ReturnType<typeof useRouter>);
   });
 
-  it('lists the four lines the reference app has, and no others, for a person who may do everything', async () => {
+  it('lists the four lines the reference app has, and Mark as spam, and no others, for a person who may do everything', async () => {
     as('inbox.conversation.assign', 'inbox.conversation.tag');
     arrange();
     await show();
@@ -679,13 +723,13 @@ describe('ThreadScreen: the three dots', () => {
     await loaded();
     await fireEvent.press(await dots());
     const lines = (await screen.findAllByRole('menuitem')).map((n) => n.props.accessibilityLabel);
-    expect(lines).toEqual(['View details', 'Change status', 'Assign labels']);
+    expect(lines).toEqual(['View details', 'Change status', 'Assign labels', 'Mark as spam']);
   });
 
   it('changes the status from the ones the current status allows, with the row version it read', async () => {
     as();
     arrange();
-    statusCall.mockResolvedValue(summary({ status: 'pending', rowVersion: 5 }));
+    statusCall.mockResolvedValue(summary({ status: 'resolved', rowVersion: 5 }));
     await show();
     await loaded();
     await fireEvent.press(await dots());
@@ -697,12 +741,12 @@ describe('ThreadScreen: the three dots', () => {
     expect(
       screen.getByRole('button', { name: 'Save changes' }).props.accessibilityState.disabled,
     ).toBe(true);
-    await fireEvent.press(screen.getByRole('radio', { name: 'Pending' }));
+    await fireEvent.press(screen.getByRole('radio', { name: 'Resolved' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     await waitFor(() =>
       expect(statusCall).toHaveBeenCalledWith(CONVERSATION_ID, {
         rowVersion: 4,
-        status: 'pending',
+        status: 'resolved',
       }),
     );
     await waitFor(() => expect(screen.queryByRole('button', { name: 'Save changes' })).toBeNull());
@@ -731,7 +775,6 @@ describe('ThreadScreen: the three dots', () => {
     await fireEvent.press(await dots());
     await choose('Change status');
     await screen.findByRole('radio', { name: 'Open' });
-    expect(screen.queryByRole('radio', { name: 'Pending' })).toBeNull();
     expect(screen.getByRole('radio', { name: 'Resolved' })).toBeTruthy();
   });
 
@@ -747,6 +790,45 @@ describe('ThreadScreen: the three dots', () => {
     await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     expect(await screen.findByText(/Someone else changed this conversation/)).toBeTruthy();
     expect(screen.getByRole('button', { name: 'Save changes' })).toBeTruthy();
+  });
+
+  it('marks the conversation as spam with the row version it read', async () => {
+    as();
+    arrange();
+    spamCall.mockResolvedValue(summary({ status: 'spam', rowVersion: 5 }));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    await choose('Mark as spam');
+    await waitFor(() =>
+      expect(spamCall).toHaveBeenCalledWith(CONVERSATION_ID, { rowVersion: 4 }, expect.any(String)),
+    );
+  });
+
+  it('says so when someone else changed the conversation before it was marked as spam', async () => {
+    as();
+    arrange();
+    spamCall.mockRejectedValue(new ApiError(409, 'ROW_VERSION_CONFLICT', 'stale'));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    await choose('Mark as spam');
+    expect(await screen.findByText(/Someone else changed this conversation/)).toBeTruthy();
+  });
+
+  it('offers no Mark as spam on a spam conversation, and takes it off spam from the header', async () => {
+    as();
+    arrange({ detail: detail({ status: 'spam' }) });
+    statusCall.mockResolvedValue(summary({ status: 'open', rowVersion: 5 }));
+    await show();
+    await loaded();
+    await fireEvent.press(await dots());
+    expect(screen.queryByRole('menuitem', { name: 'Mark as spam' })).toBeNull();
+    await fireEvent.press(await screen.findByRole('button', { name: 'Close menu' }));
+    await fireEvent.press(await screen.findByRole('button', { name: 'Not spam' }));
+    await waitFor(() =>
+      expect(statusCall).toHaveBeenCalledWith(CONVERSATION_ID, { rowVersion: 4, status: 'open' }),
+    );
   });
 
   it('opens the labels from the menu, as from the button under the header', async () => {

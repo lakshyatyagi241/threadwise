@@ -44,6 +44,7 @@ const CHAT_WORDED: readonly string[] = [
   'new_message',
   'chat_waiting',
   'conversation_assigned',
+  'snooze_wake',
   'mention',
 ];
 
@@ -122,6 +123,10 @@ function conversationText(t: Translator, n: Wording, base: string): Notification
         title: name ? t(key, { name }) : t(key),
         body: actor ? t(`${base}.body`, { actor }) : preview || null,
       };
+    }
+    case 'snooze_wake': {
+      const key = `${base}.${d.teamAssigned === true ? 'titleTeam' : 'title'}${name ? '' : 'NoName'}`;
+      return { title: name ? t(key, { name }) : t(key), body: null };
     }
     case 'mention': {
       const actor = text(d.authorName).trim();

@@ -247,7 +247,8 @@ describe('ConversationDetailsScreen: actions', () => {
     expect(
       (await screen.findByRole('radio', { name: 'Open' })).props.accessibilityState.checked,
     ).toBe(true);
-    expect(screen.getByRole('radio', { name: 'Pending' })).toBeTruthy();
+    expect(screen.getByRole('radio', { name: 'Closed' })).toBeTruthy();
+    expect(screen.queryByRole('radio', { name: 'Pending' })).toBeNull();
     await fireEvent.press(screen.getByRole('radio', { name: 'Resolved' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Save changes' }));
     await waitFor(() =>
@@ -258,7 +259,7 @@ describe('ConversationDetailsScreen: actions', () => {
     );
   });
 
-  it('offers only the moves the status allows: a snoozed conversation cannot become pending', async () => {
+  it('offers only the moves the status allows: a snoozed conversation can be woken, resolved or closed', async () => {
     as('inbox.conversation.resolve');
     arrange({ status: 'snoozed' });
     await show();

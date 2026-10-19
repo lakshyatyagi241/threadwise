@@ -480,9 +480,7 @@
       "archivedChip": "アーカイブ済み"
     },
     "statusFilter": {
-      "default": "未解決と保留中",
-      "open": "未解決",
-      "pending": "保留中",
+      "default": "未解決",
       "snoozed": "スヌーズ中",
       "resolved": "解決済み",
       "closed": "クローズ",
@@ -490,7 +488,6 @@
     },
     "status": {
       "open": "未解決",
-      "pending": "保留中",
       "snoozed": "スヌーズ中",
       "resolved": "解決済み",
       "closed": "クローズ",
@@ -528,6 +525,7 @@
       "noAccessBody": "お客様のロールでは会話を閲覧できません。",
       "resolve": "解決",
       "reopen": "再開",
+      "notSpam": "スパムではない",
       "call": "{{phone}} に電話",
       "pictureOpen": "写真を全画面で開く",
       "pictureFull": "写真",
@@ -545,7 +543,8 @@
         "assignToMe": "自分に割り当て",
         "details": "詳細を表示",
         "status": "ステータスを変更",
-        "agent": "担当者を割り当て"
+        "agent": "担当者を割り当て",
+        "spam": "スパムとしてマーク"
       },
       "bot": {
         "notice": "これはボットとの会話です。",
@@ -629,7 +628,9 @@
         "header_variable": "ヘッダーに変数があり、アプリではまだ入力できません。",
         "dynamic_button": "変数を含むボタンリンクがあり、アプリではまだ入力できません。",
         "authentication": "ワンタイムパスワードのテンプレートはシステムが送信します。",
-        "named_variables": "名前付き変数を使用しており、アプリではまだ入力できません。"
+        "named_variables": "名前付き変数を使用しており、アプリではまだ入力できません。",
+        "other_number": "別のWhatsApp番号のテンプレートのため、この会話からは送信できません。",
+        "not_linked": "この会話のチャネルはWhatsApp番号に接続されていないため、テンプレートを送信できません。"
       }
     },
     "errors": {
@@ -754,6 +755,8 @@
       "note_added": "メモを追加しました",
       "snoozed": "スヌーズしました",
       "auto_unsnoozed": "予定どおり再開しました",
+      "spam_flagged": "スパムとしてマーク",
+      "escalated": "エスカレートしました",
       "priority_changed": "優先度を変更しました",
       "tag_added": "ラベルを追加しました",
       "tag_removed": "ラベルを削除しました",
@@ -784,6 +787,7 @@
       "label": "ラベル",
       "priority": "優先度",
       "snooze": "スヌーズ",
+      "spam": "スパムとしてマーク",
       "statusTitle_other": "{{count}} 件の会話のステータスを変更",
       "labelTitle_other": "{{count}} 件の会話のラベル",
       "labelMode": "操作",
@@ -1728,6 +1732,12 @@
         "titleTeam": "{{name}}があなたのチームに割り当てられました",
         "titleTeamNoName": "チャットがあなたのチームに割り当てられました",
         "body": "{{actor}}が割り当て"
+      },
+      "snooze_wake": {
+        "title": "{{name}} がリストに戻りました",
+        "titleNoName": "スヌーズしたチャットがリストに戻りました",
+        "titleTeam": "{{name}} がチームに戻りました",
+        "titleTeamNoName": "スヌーズしたチャットがチームに戻りました"
       },
       "mention": {
         "title": "{{actor}}があなたをメンションしました",

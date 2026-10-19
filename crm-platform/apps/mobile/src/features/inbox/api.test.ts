@@ -18,6 +18,7 @@ import {
   fetchConversations,
   fetchMessages,
   markConversationRead,
+  markConversationSpam,
   retryMessage,
   sendTextMessage,
   setConversationPriority,
@@ -105,6 +106,16 @@ describe('inbox api', () => {
       ],
       ['POST', '/inbox/messages/aaaaaaaa-aaaa-4aaa-8aaa-000000000004/retry', undefined],
     ]);
+  });
+
+  it('marks a conversation as spam with the version that was read and an idempotency key', async () => {
+    const http = mockFetch(jsonResponse(200, summary({ status: 'spam', rowVersion: 5 })));
+    const result = await markConversationSpam(CONVERSATION_ID, { rowVersion: 4 }, 'key-spam');
+    expect(result.status).toBe('spam');
+    expect(http.calls[0].init.method).toBe('POST');
+    expect(http.calls[0].url).toContain(`/v2/inbox/conversations/${CONVERSATION_ID}/spam`);
+    expect(http.calls[0].body).toEqual({ rowVersion: 4 });
+    expect(http.calls[0].headers['Idempotency-Key']).toBe('key-spam');
   });
 
   it('reads the people and teams a conversation can be given to', async () => {

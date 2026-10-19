@@ -2,10 +2,10 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Crypto from 'expo-crypto';
 import { addNote, deleteNote, fetchEvents, fetchNotes } from './notes-api';
 
-const notesKey = (id: string) => ['inbox', 'notes', id] as const;
-const eventsKey = (id: string) => ['inbox', 'events', id] as const;
+export const notesKey = (id: string) => ['inbox', 'notes', id] as const;
+export const eventsKey = (id: string) => ['inbox', 'events', id] as const;
 
-/** How often an open thread asks for new notes while it is on screen, with its messages. */
+/** How often an open thread asks for new notes while it is on screen and the live connection is not up, with its messages. */
 const NOTES_POLL_MS = 15_000;
 
 /**

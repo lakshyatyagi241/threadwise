@@ -214,7 +214,7 @@ export function ConversationDetailsScreen() {
             value={t(`inbox.priority.${conversation.priority}`)}
             onPress={canPriority ? () => open('priority') : undefined}
           />
-          {canSnooze && (conversation.status === 'open' || conversation.status === 'pending') ? (
+          {canSnooze && conversation.status === 'open' ? (
             <ActionRow
               label={t('inbox.details.snooze')}
               value={t('inbox.status.snoozed')}

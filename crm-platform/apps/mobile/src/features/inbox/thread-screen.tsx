@@ -54,6 +54,7 @@ import {
   type ThreadItem,
 } from './thread-model';
 import { useConversationActions } from './use-conversation-actions';
+import { useThreadLive } from './use-live';
 import { useNotes, useChangeNotes } from './use-notes';
 import { useNow } from './use-now';
 import {
@@ -74,7 +75,7 @@ const nextStatus = (from: ConversationStatus): 'resolved' | 'open' =>
  * One conversation (route /conversation/[id]): the header (who, which channel, the reply-window timer, resolve or reopen, and the
  * three dots), the labels button, the messages, and a box to answer. While an AI agent has the conversation the box is replaced by
  * a bar that offers to take it over. Opening the thread marks it read. While the screen is in front it asks for news every 15
- * seconds (realtime replaces that later).
+ * seconds (only while the live connection is not up: with it, events say when to read again).
  */
 export function ThreadScreen() {
   const { t } = useTranslation();
@@ -104,12 +105,14 @@ export function ThreadScreen() {
     }, []),
   );
 
-  const detail = useConversationDetail(id, focused, canRead);
-  const thread = useThreadMessages(id, focused, canRead);
+  const live = useThreadLive(id, canRead);
+  const polling = focused && !live;
+  const detail = useConversationDetail(id, polling, canRead);
+  const thread = useThreadMessages(id, polling, canRead);
   const send = useSendMessage(id);
   const retry = useRetryMessage(id);
   const markRead = useMarkRead(id);
-  const notes = useNotes(id, canRead, focused);
+  const notes = useNotes(id, canRead, polling);
   const changeNotes = useChangeNotes(id);
 
   const [draft, setDraft] = useState('');
@@ -265,6 +268,11 @@ export function ThreadScreen() {
       icon: 'people-outline',
       onPress: () => openSheet('agent'),
     },
+    spam: {
+      label: t('inbox.thread.menu.spam'),
+      icon: 'ban-outline',
+      onPress: () => report(actions.markSpam()),
+    },
   };
   const menuItems: ThreadMenuItem[] = conversation
     ? menuActionsFor({
@@ -285,7 +293,14 @@ export function ThreadScreen() {
         showStatusAction && target
           ? {
               icon: target === 'resolved' ? 'checkmark-circle-outline' : 'refresh-outline',
-              label: target === 'resolved' ? t('inbox.thread.resolve') : t('inbox.thread.reopen'),
+              label:
+                target === 'resolved'
+                  ? t('inbox.thread.resolve')
+                  : t(
+                      conversation?.status === 'spam'
+                        ? 'inbox.thread.notSpam'
+                        : 'inbox.thread.reopen',
+                    ),
               onPress: () => moveTo(target),
             }
           : null

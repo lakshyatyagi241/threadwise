@@ -480,9 +480,7 @@
       "archivedChip": "已归档"
     },
     "statusFilter": {
-      "default": "进行中和待处理",
-      "open": "进行中",
-      "pending": "待处理",
+      "default": "进行中",
       "snoozed": "已搁置",
       "resolved": "已解决",
       "closed": "已关闭",
@@ -490,7 +488,6 @@
     },
     "status": {
       "open": "进行中",
-      "pending": "待处理",
       "snoozed": "已搁置",
       "resolved": "已解决",
       "closed": "已关闭",
@@ -528,6 +525,7 @@
       "noAccessBody": "您的角色无法查看会话。",
       "resolve": "标记为已解决",
       "reopen": "重新打开",
+      "notSpam": "不是垃圾信息",
       "call": "拨打 {{phone}}",
       "pictureOpen": "全屏查看照片",
       "pictureFull": "照片",
@@ -545,7 +543,8 @@
         "assignToMe": "分配给我",
         "details": "查看详情",
         "status": "更改状态",
-        "agent": "分配客服"
+        "agent": "分配客服",
+        "spam": "标记为垃圾信息"
       },
       "bot": {
         "notice": "这是一个机器人会话。",
@@ -629,7 +628,9 @@
         "header_variable": "页眉中含有变量，应用暂不支持填写。",
         "dynamic_button": "按钮链接中含有变量，应用暂不支持填写。",
         "authentication": "一次性密码模板由系统发送。",
-        "named_variables": "使用了命名变量，应用暂不支持填写。"
+        "named_variables": "使用了命名变量，应用暂不支持填写。",
+        "other_number": "属于另一个 WhatsApp 号码，因此无法从此会话发送。",
+        "not_linked": "此会话的渠道未关联 WhatsApp 号码，因此无法从此发送任何模板。"
       }
     },
     "errors": {
@@ -754,6 +755,8 @@
       "note_added": "已添加备注",
       "snoozed": "已搁置",
       "auto_unsnoozed": "已按时唤醒",
+      "spam_flagged": "已标记为垃圾信息",
+      "escalated": "已升级",
       "priority_changed": "优先级已更改",
       "tag_added": "已添加标签",
       "tag_removed": "已移除标签",
@@ -784,6 +787,7 @@
       "label": "标签",
       "priority": "优先级",
       "snooze": "搁置",
+      "spam": "标记为垃圾信息",
       "statusTitle_other": "更改 {{count}} 个会话的状态",
       "labelTitle_other": "{{count}} 个会话的标签",
       "labelMode": "操作",
@@ -1728,6 +1732,12 @@
         "titleTeam": "{{name}} 已分配给你的团队",
         "titleTeamNoName": "有一个聊天已分配给你的团队",
         "body": "由 {{actor}} 分配"
+      },
+      "snooze_wake": {
+        "title": "{{name}} 已回到你的列表",
+        "titleNoName": "已暂停的会话回到了你的列表",
+        "titleTeam": "{{name}} 已回到你的团队",
+        "titleTeamNoName": "已暂停的会话回到了你的团队"
       },
       "mention": {
         "title": "{{actor}} 提到了你",

@@ -9,6 +9,7 @@ import {
   markConversationReadResponseSchema,
   messageListResponseSchema,
   messageResponseSchema,
+  type MarkSpamConversationInput,
   type SetConversationPriorityInput,
   type SetConversationStatusInput,
   type SnoozeConversationInput,
@@ -148,6 +149,22 @@ export const snoozeConversation = (id: string, input: SnoozeConversationInput) =
   apiFetch(`/v2/inbox/conversations/${id}/snooze`, {
     method: 'POST',
     body: input,
+    schema: conversationSummarySchema,
+  });
+
+/**
+ * Marks the conversation as spam from any status (`inbox.conversation.resolve`); it leaves the live lists. Taking it off spam is the
+ * status route (spam to open). A stale `rowVersion` is 409 ROW_VERSION_CONFLICT.
+ */
+export const markConversationSpam = (
+  id: string,
+  input: MarkSpamConversationInput,
+  idempotencyKey?: string,
+) =>
+  apiFetch(`/v2/inbox/conversations/${id}/spam`, {
+    method: 'POST',
+    body: input,
+    idempotencyKey,
     schema: conversationSummarySchema,
   });
 

@@ -11,6 +11,7 @@ import { session as baseSession } from './dashboard-fixtures';
 
 const base: TaskResponse = {
   id: '51111111-1111-4111-8111-111111111111',
+  kind: 'task',
   title: 'Call Aarav about the quote',
   notes: 'Ask whether the quote for 40 seats is approved.',
   priority: 'medium',

@@ -480,9 +480,7 @@
       "archivedChip": "Diarsipkan"
     },
     "statusFilter": {
-      "default": "Terbuka & tertunda",
-      "open": "Terbuka",
-      "pending": "Tertunda",
+      "default": "Terbuka",
       "snoozed": "Ditunda",
       "resolved": "Selesai",
       "closed": "Ditutup",
@@ -490,7 +488,6 @@
     },
     "status": {
       "open": "Terbuka",
-      "pending": "Tertunda",
       "snoozed": "Ditunda",
       "resolved": "Selesai",
       "closed": "Ditutup",
@@ -528,6 +525,7 @@
       "noAccessBody": "Peran Anda tidak dapat membaca percakapan.",
       "resolve": "Selesaikan",
       "reopen": "Buka kembali",
+      "notSpam": "Bukan spam",
       "call": "Telepon {{phone}}",
       "pictureOpen": "Buka foto layar penuh",
       "pictureFull": "Foto",
@@ -545,7 +543,8 @@
         "assignToMe": "Tugaskan ke saya",
         "details": "Lihat detail",
         "status": "Ubah status",
-        "agent": "Tugaskan agen"
+        "agent": "Tugaskan agen",
+        "spam": "Tandai sebagai spam"
       },
       "bot": {
         "notice": "Ini adalah percakapan bot.",
@@ -629,7 +628,9 @@
         "header_variable": "Memiliki variabel di header, yang belum dapat diisi oleh aplikasi.",
         "dynamic_button": "Memiliki tautan tombol dengan variabel, yang belum dapat diisi oleh aplikasi.",
         "authentication": "Template kata sandi sekali pakai dikirim oleh sistem.",
-        "named_variables": "Menggunakan variabel bernama, yang belum dapat diisi oleh aplikasi."
+        "named_variables": "Menggunakan variabel bernama, yang belum dapat diisi oleh aplikasi.",
+        "other_number": "Milik nomor WhatsApp lain, jadi tidak bisa dikirim dari percakapan ini.",
+        "not_linked": "Saluran percakapan ini belum tertaut ke nomor WhatsApp, jadi tidak ada templat yang bisa dikirim darinya."
       }
     },
     "errors": {
@@ -754,6 +755,8 @@
       "note_added": "Catatan ditambahkan",
       "snoozed": "Ditunda",
       "auto_unsnoozed": "Aktif kembali tepat waktu",
+      "spam_flagged": "Ditandai sebagai spam",
+      "escalated": "Dieskalasi",
       "priority_changed": "Prioritas diubah",
       "tag_added": "Label ditambahkan",
       "tag_removed": "Label dihapus",
@@ -784,6 +787,7 @@
       "label": "Label",
       "priority": "Prioritas",
       "snooze": "Tunda",
+      "spam": "Tandai sebagai spam",
       "statusTitle_other": "Ubah status {{count}} percakapan",
       "labelTitle_other": "Label untuk {{count}} percakapan",
       "labelMode": "Tindakan",
@@ -1728,6 +1732,12 @@
         "titleTeam": "{{name}} ditugaskan kepada tim Anda",
         "titleTeamNoName": "Sebuah chat ditugaskan kepada tim Anda",
         "body": "Ditugaskan oleh {{actor}}"
+      },
+      "snooze_wake": {
+        "title": "{{name}} kembali ke daftar Anda",
+        "titleNoName": "Chat yang ditunda kembali ke daftar Anda",
+        "titleTeam": "{{name}} kembali untuk tim Anda",
+        "titleTeamNoName": "Chat yang ditunda kembali untuk tim Anda"
       },
       "mention": {
         "title": "{{actor}} menyebut Anda",

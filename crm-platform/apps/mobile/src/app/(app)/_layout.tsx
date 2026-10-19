@@ -1,6 +1,7 @@
 import { Stack } from 'expo-router';
 import { useCallReturn } from '@/features/contacts/use-call-return';
 import { ThemeSync } from '@/features/menu/theme-sync';
+import { RealtimeProvider } from '@/lib/realtime';
 
 /**
  * A screen opened directly (a link, a notification, a reload) is placed on top of the tabs, not alone in the stack. Alone, it has
@@ -8,11 +9,11 @@ import { ThemeSync } from '@/features/menu/theme-sync';
  */
 export const unstable_settings = { anchor: '(tabs)' };
 
-/** The signed-in app: the four tabs, with the thread and contact screens on top of them. */
+/** The signed-in app: the four tabs, with the thread and contact screens on top of them, over one live connection. */
 export default function AppLayout() {
   useCallReturn();
   return (
-    <>
+    <RealtimeProvider>
       <ThemeSync />
       <Stack screenOptions={{ headerShown: false }}>
         {/* Listed first: the first screen declared here is the one the stack starts on, and it must be the tabs. */}
@@ -20,6 +21,6 @@ export default function AppLayout() {
         {/* The "Add call" page slides up over whatever is on screen; Back (or the app's Back) returns to it. */}
         <Stack.Screen name="call-summary" options={{ animation: 'slide_from_bottom' }} />
       </Stack>
-    </>
+    </RealtimeProvider>
   );
 }

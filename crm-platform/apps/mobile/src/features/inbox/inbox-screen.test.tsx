@@ -48,7 +48,7 @@ const meera = summary({
   id: '44444444-4444-4444-8444-444444444444',
   title: 'Meera Joshi',
   preview: null,
-  status: 'pending',
+  status: 'snoozed',
   lastMessageAt: null,
 });
 
@@ -89,9 +89,9 @@ describe('InboxScreen', () => {
     expect(row).toBeTruthy();
     expect(screen.getAllByTestId('unread-dot')).toHaveLength(1);
     expect(screen.getAllByTestId('channel-badge', HIDDEN)).toHaveLength(2);
-    // The second row has no message yet and is pending.
+    // The second row has no message yet and is snoozed.
     expect(screen.getByRole('button', { name: 'Meera Joshi, No messages yet' })).toBeTruthy();
-    expect(screen.getByText('Pending')).toBeTruthy();
+    expect(screen.getByText('Snoozed')).toBeTruthy();
     expect(screen.getByText('No more conversations')).toBeTruthy();
   });
 
@@ -183,10 +183,10 @@ describe('InboxScreen', () => {
     await show();
     await screen.findByText('Rohan Mehta');
     await fireEvent.press(screen.getByRole('button', { name: 'Filters' }));
-    await fireEvent.press(await screen.findByRole('radio', { name: 'Pending' }));
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Snoozed' }));
     await fireEvent.press(screen.getByRole('button', { name: 'Apply' }));
-    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'pending' }));
-    const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Pending' });
+    await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'snoozed' }));
+    const chip = await screen.findByRole('button', { name: 'Remove filter: Status: Snoozed' });
     await fireEvent.press(chip);
     await waitFor(() => expect(lastFilters()).toMatchObject({ status: 'default' }));
     await waitFor(() =>
@@ -366,7 +366,7 @@ describe('InboxScreen', () => {
     it('has no channel or label category when the workspace has neither', async () => {
       channelsCall.mockResolvedValue({ data: [] });
       await open();
-      await screen.findByRole('radio', { name: 'Pending' });
+      await screen.findByRole('radio', { name: 'Snoozed' });
       expect(screen.getByRole('tab', { name: 'Conversation status' })).toBeTruthy();
       expect(screen.getByRole('tab', { name: 'View' })).toBeTruthy();
       expect(screen.queryByRole('tab', { name: 'Channel' })).toBeNull();
@@ -380,9 +380,9 @@ describe('InboxScreen', () => {
       expect(screen.getByRole('radio', { name: 'Resolved' }).props.accessibilityState.checked).toBe(
         false,
       );
-      expect(
-        screen.getByRole('radio', { name: 'Open & pending' }).props.accessibilityState.checked,
-      ).toBe(true);
+      expect(screen.getByRole('radio', { name: 'Open' }).props.accessibilityState.checked).toBe(
+        true,
+      );
       await fireEvent.press(screen.getByRole('button', { name: 'Back' }));
       expect(lastFilters()).toMatchObject({ status: 'default' });
     });
@@ -391,7 +391,7 @@ describe('InboxScreen', () => {
       channelsCall.mockRejectedValue(new ApiError(0, 'CLIENT_NETWORK', 'offline'));
       await open();
       expect(await screen.findByText(/Can't reach the server/)).toBeTruthy();
-      expect(screen.getByRole('radio', { name: 'Pending' })).toBeTruthy();
+      expect(screen.getByRole('radio', { name: 'Snoozed' })).toBeTruthy();
     });
   });
 
@@ -483,6 +483,7 @@ describe('InboxScreen', () => {
       await screen.findByText('2 selected');
       expect(screen.getByRole('button', { name: 'Mark as read' })).toBeTruthy();
       expect(screen.getByRole('button', { name: 'Status' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Mark as spam' })).toBeTruthy();
       for (const name of ['Assign', 'Labels', 'Priority', 'Snooze']) {
         expect(screen.queryByRole('button', { name })).toBeNull();
       }
@@ -502,6 +503,29 @@ describe('InboxScreen', () => {
       expect(await screen.findByText('2 updated, 0 unchanged, 0 failed')).toBeTruthy();
       // The choosing is over and the list was read again.
       expect(screen.queryByText('2 selected')).toBeNull();
+    });
+
+    it('marks every chosen conversation as spam at once, with the resolve right', async () => {
+      bulkCall.mockResolvedValue(result());
+      await chooseBoth();
+      await fireEvent.press(await screen.findByRole('button', { name: 'Mark as spam' }));
+      await waitFor(() =>
+        expect(bulkCall).toHaveBeenCalledWith(
+          [rohan.id, meera.id],
+          { type: 'spam' },
+          expect.any(String),
+        ),
+      );
+      expect(await screen.findByText('2 updated, 0 unchanged, 0 failed')).toBeTruthy();
+    });
+
+    it('does not offer Mark as spam without the resolve right', async () => {
+      sessionCall.mockResolvedValue(
+        withPermissions(['inbox.conversation.read', 'inbox.conversation.bulk']),
+      );
+      await chooseBoth();
+      await screen.findByText('2 selected');
+      expect(screen.queryByRole('button', { name: 'Mark as spam' })).toBeNull();
     });
 
     it('changes the status of all of them: pick, then Save', async () => {

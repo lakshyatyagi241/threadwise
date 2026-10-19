@@ -316,6 +316,7 @@ export const teamPanel: AnalyticsPanels = {
   devices: { total: 0, online: 0, rows: [] },
   templates: [],
   contacts: [],
+  loginDevices: { active: 0, total: 0, byBrowser: [], byOs: [], byKind: [] },
   team: [
     {
       userUuid: 'b1111111-1111-4111-8111-111111111111',

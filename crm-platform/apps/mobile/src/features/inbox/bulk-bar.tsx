@@ -6,7 +6,7 @@ import { Text } from '@/components/ui/text';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
-export type BulkKind = 'read' | 'status' | 'assign' | 'label' | 'priority' | 'snooze';
+export type BulkKind = 'read' | 'status' | 'assign' | 'label' | 'priority' | 'snooze' | 'spam';
 
 const ITEMS: readonly { kind: BulkKind; icon: IconName }[] = [
   { kind: 'read', icon: 'mail-open-outline' },
@@ -15,6 +15,7 @@ const ITEMS: readonly { kind: BulkKind; icon: IconName }[] = [
   { kind: 'label', icon: 'pricetag-outline' },
   { kind: 'priority', icon: 'flag-outline' },
   { kind: 'snooze', icon: 'alarm-outline' },
+  { kind: 'spam', icon: 'ban-outline' },
 ];
 
 interface Props {

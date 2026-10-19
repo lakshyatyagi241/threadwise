@@ -36,6 +36,15 @@ describe('where a notification opens', () => {
     ).toEqual({ pathname: '/conversation/[id]', params: { id: CONVERSATION_ID } });
   });
 
+  it('opens the thread of a snoozed chat that woke up', () => {
+    expect(
+      notificationTarget({ type: 'snooze_wake', data: { conversationId: CONVERSATION_ID } }),
+    ).toEqual({
+      pathname: '/conversation/[id]',
+      params: { id: CONVERSATION_ID },
+    });
+  });
+
   it('opens the task of a task notification, ignoring the web path the server sent', () => {
     expect(notificationTarget(taskAssigned)).toEqual({
       pathname: '/task/[id]',
