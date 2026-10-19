@@ -18,10 +18,12 @@ function useSummary() {
   return (a: SalesActivityType): string[] => {
     const cap = activityCapabilities(a.behavesAs);
     const out: string[] = [];
-    if (cap.allowComplete) out.push(a.allowComplete ? t('chip.completable') : t('chip.notCompletable'));
+    if (cap.allowComplete)
+      out.push(a.allowComplete ? t('chip.completable') : t('chip.notCompletable'));
     if (cap.showInCalendar && a.showInCalendar) out.push(t('chip.calendar'));
     if (cap.taskTypes) out.push(t('chip.taskTypes', { count: a.taskTypes.length }));
-    if (cap.outcomes && a.outcomesEnabled) out.push(t('chip.outcomes', { count: a.outcomes.length }));
+    if (cap.outcomes && a.outcomesEnabled)
+      out.push(t('chip.outcomes', { count: a.outcomes.length }));
     return out;
   };
 }
@@ -75,7 +77,10 @@ export function SalesActivitiesScreen() {
       )}
 
       {q.isSuccess && (
-        <ul aria-label={t('listLabel')} className="divide-y divide-border rounded-lg border border-border">
+        <ul
+          aria-label={t('listLabel')}
+          className="divide-y divide-border rounded-lg border border-border"
+        >
           {q.data.map((a) => {
             const hasEditor = a.behavesAs !== 'other';
             const name = labels.activity(a);

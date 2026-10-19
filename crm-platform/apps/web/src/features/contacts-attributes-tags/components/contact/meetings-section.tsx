@@ -435,7 +435,14 @@ export function MeetingsPanel({
             </div>
           )}
         </div>
-        {!waiting && <MeetingOutcome contactId={contact.id} meetingId={m.id} title={m.title} canUpdate={canUpdate} />}
+        {!waiting && (
+          <MeetingOutcome
+            contactId={contact.id}
+            meetingId={m.id}
+            title={m.title}
+            canUpdate={canUpdate}
+          />
+        )}
       </li>
     );
   };

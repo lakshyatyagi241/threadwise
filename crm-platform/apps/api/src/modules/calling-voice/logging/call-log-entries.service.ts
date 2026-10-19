@@ -497,12 +497,7 @@ export class CallLogEntriesService {
     return { contact: hit, matchedByPhone: true, hidden: false };
   }
 
-  private async nudgeFor(
-    tx: Tx,
-    orgId: number,
-    contactId: number,
-    outcome: CallOutcome,
-  ) {
+  private async nudgeFor(tx: Tx, orgId: number, contactId: number, outcome: CallOutcome) {
     const current = await this.repo.contactStage(tx, orgId, contactId);
     if (!current) return null;
     return stageNudge(outcome, current, await this.repo.lifecycleStages(tx, orgId));
@@ -519,7 +514,13 @@ export class CallLogEntriesService {
     outcome: CallOutcome | undefined,
   ): Promise<{ outcome: CallOutcome; optionId: number | null; optionKey: string | null }> {
     if (optionUuid === undefined) return { outcome: outcome!, optionId: null, optionKey: null };
-    const option = await this.activityTypes.resolveOption(tx, orgId, optionUuid, 'outcome', 'phone');
+    const option = await this.activityTypes.resolveOption(
+      tx,
+      orgId,
+      optionUuid,
+      'outcome',
+      'phone',
+    );
     const builtIn =
       option.countsAs ??
       ((PHONE_COUNTS_AS as readonly string[]).includes(option.key) ? option.key : 'connected');

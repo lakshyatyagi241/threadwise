@@ -1,4 +1,8 @@
-import { activityCapabilities, type ActivityBehaviour, type UpdateActivityTypeInput } from '@crm/contracts';
+import {
+  activityCapabilities,
+  type ActivityBehaviour,
+  type UpdateActivityTypeInput,
+} from '@crm/contracts';
 
 /** Pure rules of the sales activities settings, kept out of the repository so a unit test can pin them without a database. */
 
@@ -20,7 +24,8 @@ export const customKeyOf = (name: string, attempt = 0): string =>
   `custom_${slugOf(name, 40)}${attempt > 0 ? `_${attempt + 1}` : ''}`;
 
 /** The case- and space-insensitive form two names are compared on. */
-export const nameKeyOf = (name: string): string => name.trim().replace(/\s+/g, ' ').toLocaleLowerCase('en');
+export const nameKeyOf = (name: string): string =>
+  name.trim().replace(/\s+/g, ' ').toLocaleLowerCase('en');
 
 export interface ActivitySwitches {
   showInCalendar: boolean;

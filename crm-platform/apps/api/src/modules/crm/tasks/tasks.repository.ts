@@ -414,7 +414,13 @@ export class TasksRepository {
   }
 
   /** Done stamps and the status move together (the table has a CHECK that they agree). Reopening re-arms the reminder. */
-  async setDone(tx: Tx, orgId: number, id: number, done: boolean, outcomeId: number | null = null): Promise<void> {
+  async setDone(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    done: boolean,
+    outcomeId: number | null = null,
+  ): Promise<void> {
     await tx.execute(
       done
         ? sql`UPDATE tasks SET status = 'done', done_at = now(), outcome_id = ${outcomeId} WHERE org_id = ${orgId} AND id = ${id}`

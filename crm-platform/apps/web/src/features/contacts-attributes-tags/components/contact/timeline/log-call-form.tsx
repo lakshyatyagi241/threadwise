@@ -176,7 +176,9 @@ export function LogCallForm({
   );
   const chosen =
     items.length > 0
-      ? (items.find((o) => o.id === draft.optionId) ?? items.find((o) => o.key === 'connected') ?? items[0])
+      ? (items.find((o) => o.id === draft.optionId) ??
+        items.find((o) => o.key === 'connected') ??
+        items[0])
       : undefined;
   const buildNow = () =>
     buildLogCallInput({

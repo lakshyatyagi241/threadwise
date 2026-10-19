@@ -68,7 +68,15 @@ describe('defaults and permissions', () => {
 
   it('seeds the seven default activities with their lists, unnamed (the client shows its own words)', async () => {
     const all = await activities(t.admin);
-    expect(all.map((a) => a.key)).toEqual(['task', 'meeting', 'phone', 'email', 'reminder', 'sms', 'chat']);
+    expect(all.map((a) => a.key)).toEqual([
+      'task',
+      'meeting',
+      'phone',
+      'email',
+      'reminder',
+      'sms',
+      'chat',
+    ]);
     expect(all.every((a) => a.isDefault && a.name === null)).toBe(true);
     const task = byKey(all, 'task');
     expect(task.taskTypes.map((o) => o.key)).toEqual(['follow_up', 'call_reminder']);
@@ -101,7 +109,10 @@ describe('defaults and permissions', () => {
     const theirs = await activities(other.admin);
     const ids = new Set(mine.flatMap((a) => [a.id, ...a.outcomes.map((o) => o.id)]));
     expect(theirs.some((a) => ids.has(a.id))).toBe(false);
-    const rows = await h.owner.query(`SELECT count(*)::int AS c FROM activity_types WHERE org_id = $1`, [other.orgId]);
+    const rows = await h.owner.query(
+      `SELECT count(*)::int AS c FROM activity_types WHERE org_id = $1`,
+      [other.orgId],
+    );
     expect(rows.rows[0].c).toBe(7);
   });
 
@@ -111,9 +122,13 @@ describe('defaults and permissions', () => {
     const all = await activities(reader.token);
     expect(all.length).toBe(7);
     const task = byKey(all, 'task');
-    const patch = await as(reader.token).patch(`/v2/activity-types/${task.id}`).send({ allowComplete: false, rowVersion: task.rowVersion });
+    const patch = await as(reader.token)
+      .patch(`/v2/activity-types/${task.id}`)
+      .send({ allowComplete: false, rowVersion: task.rowVersion });
     expect(patch.status).toBe(403);
-    const add = await as(reader.token).post(`/v2/activity-types/${task.id}/options`).send({ kind: 'type', name: 'X' });
+    const add = await as(reader.token)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'type', name: 'X' });
     expect(add.status).toBe(403);
     expect((await as(nobody.token).get('/v2/activity-types')).status).toBe(403);
   });
@@ -153,11 +168,15 @@ describe('the switches and the lists', () => {
   it('locks a default activity name and refuses a switch the activity does not offer', async () => {
     const all = await activities(t.admin);
     const task = byKey(all, 'task');
-    const rename = await as(t.admin).patch(`/v2/activity-types/${task.id}`).send({ name: 'Todo', rowVersion: task.rowVersion });
+    const rename = await as(t.admin)
+      .patch(`/v2/activity-types/${task.id}`)
+      .send({ name: 'Todo', rowVersion: task.rowVersion });
     expect(rename.status).toBe(409);
     expect(code(rename)).toBe('ACTIVITY_DEFAULT_LOCKED');
     const email = byKey(all, 'email');
-    const bad = await as(t.admin).patch(`/v2/activity-types/${email.id}`).send({ outcomesEnabled: true, rowVersion: email.rowVersion });
+    const bad = await as(t.admin)
+      .patch(`/v2/activity-types/${email.id}`)
+      .send({ outcomesEnabled: true, rowVersion: email.rowVersion });
     expect(bad.status).toBe(422);
     expect(code(bad)).toBe('ACTIVITY_FEATURE_OFF');
     expect((await as(t.admin).delete(`/v2/activity-types/${task.id}`)).status).toBe(409);
@@ -165,24 +184,34 @@ describe('the switches and the lists', () => {
 
   it('adds, refuses a duplicate, reorders, removes and revives a task type', async () => {
     const task = byKey(await activities(t.admin), 'task');
-    const added = await as(t.admin).post(`/v2/activity-types/${task.id}/options`).send({ kind: 'type', name: 'Send proposal' });
+    const added = await as(t.admin)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'type', name: 'Send proposal' });
     expect(added.status, JSON.stringify(added.body)).toBe(201);
     const types = (added.body as Activity).taskTypes;
     expect(types.map((o) => o.key)).toEqual(['follow_up', 'call_reminder', 'send_proposal']);
     expect(types[2]!.name).toBe('Send proposal');
 
-    const dup = await as(t.admin).post(`/v2/activity-types/${task.id}/options`).send({ kind: 'type', name: 'send  proposal' });
+    const dup = await as(t.admin)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'type', name: 'send  proposal' });
     expect(dup.status === 409 || dup.status === 201).toBe(true);
-    const seededDup = await as(t.admin).post(`/v2/activity-types/${task.id}/options`).send({ kind: 'type', name: 'Follow up' });
+    const seededDup = await as(t.admin)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'type', name: 'Follow up' });
     expect(seededDup.status).toBe(409);
     expect(code(seededDup)).toBe('ACTIVITY_NAME_TAKEN');
 
     const now = (await activities(t.admin)).find((a) => a.key === 'task')!.taskTypes;
     const reversed = [...now].reverse().map((o) => o.id);
-    const order = await as(t.admin).put(`/v2/activity-types/${task.id}/options/order`).send({ kind: 'type', ids: reversed });
+    const order = await as(t.admin)
+      .put(`/v2/activity-types/${task.id}/options/order`)
+      .send({ kind: 'type', ids: reversed });
     expect(order.status, JSON.stringify(order.body)).toBe(200);
     expect((order.body as Activity).taskTypes.map((o) => o.id)).toEqual(reversed);
-    const partial = await as(t.admin).put(`/v2/activity-types/${task.id}/options/order`).send({ kind: 'type', ids: reversed.slice(1) });
+    const partial = await as(t.admin)
+      .put(`/v2/activity-types/${task.id}/options/order`)
+      .send({ kind: 'type', ids: reversed.slice(1) });
     expect(partial.status).toBe(422);
 
     const gone = (order.body as Activity).taskTypes.find((o) => o.key === 'call_reminder')!;
@@ -190,7 +219,9 @@ describe('the switches and the lists', () => {
     expect(removed.status).toBe(200);
     expect((removed.body as Activity).taskTypes.some((o) => o.key === 'call_reminder')).toBe(false);
 
-    const back = await as(t.admin).post(`/v2/activity-types/${task.id}/options`).send({ kind: 'type', name: 'Call reminder' });
+    const back = await as(t.admin)
+      .post(`/v2/activity-types/${task.id}/options`)
+      .send({ kind: 'type', name: 'Call reminder' });
     expect(back.status).toBe(201);
     const revived = (back.body as Activity).taskTypes.find((o) => o.key === 'call_reminder')!;
     expect(revived.id).toBe(gone.id);
@@ -198,21 +229,31 @@ describe('the switches and the lists', () => {
   });
 
   it('creates a custom activity, refuses its name twice, edits it and removes it', async () => {
-    const created = await as(t.admin).post('/v2/activity-types').send({ name: 'Site visit', icon: 'visit', behavesAs: 'meeting' });
+    const created = await as(t.admin)
+      .post('/v2/activity-types')
+      .send({ name: 'Site visit', icon: 'visit', behavesAs: 'meeting' });
     expect(created.status, JSON.stringify(created.body)).toBe(201);
     const a = created.body as Activity;
     expect(a.isDefault).toBe(false);
     expect(a.key).toBe('custom_site_visit');
     expect(a.allowComplete).toBe(true);
-    const twice = await as(t.admin).post('/v2/activity-types').send({ name: ' site VISIT', icon: 'visit', behavesAs: 'task' });
+    const twice = await as(t.admin)
+      .post('/v2/activity-types')
+      .send({ name: ' site VISIT', icon: 'visit', behavesAs: 'task' });
     expect(twice.status).toBe(409);
     expect(code(twice)).toBe('ACTIVITY_NAME_TAKEN');
-    const renamed = await as(t.admin).patch(`/v2/activity-types/${a.id}`).send({ name: 'Property visit', rowVersion: a.rowVersion });
+    const renamed = await as(t.admin)
+      .patch(`/v2/activity-types/${a.id}`)
+      .send({ name: 'Property visit', rowVersion: a.rowVersion });
     expect(renamed.status).toBe(200);
     expect(renamed.body.name).toBe('Property visit');
-    const withOutcome = await as(t.admin).post(`/v2/activity-types/${a.id}/options`).send({ kind: 'outcome', name: 'Liked it' });
+    const withOutcome = await as(t.admin)
+      .post(`/v2/activity-types/${a.id}/options`)
+      .send({ kind: 'outcome', name: 'Liked it' });
     expect(withOutcome.status).toBe(201);
-    const noTypes = await as(t.admin).post(`/v2/activity-types/${a.id}/options`).send({ kind: 'type', name: 'Nope' });
+    const noTypes = await as(t.admin)
+      .post(`/v2/activity-types/${a.id}/options`)
+      .send({ kind: 'type', name: 'Nope' });
     expect(noTypes.status).toBe(422);
     expect((await as(t.admin).delete(`/v2/activity-types/${a.id}`)).status).toBe(204);
     expect((await activities(t.admin)).some((x) => x.id === a.id)).toBe(false);
@@ -228,7 +269,14 @@ describe('tasks', () => {
   const mk = async (body: Record<string, unknown>) => {
     const res = await as(t.admin).post('/v2/tasks').send(body);
     expect(res.status, JSON.stringify(res.body)).toBe(201);
-    return res.body as { id: string; rowVersion: number; taskType: { key: string } | null; outcome: { key: string; removed: boolean } | null; status: string; doneAt: string | null };
+    return res.body as {
+      id: string;
+      rowVersion: number;
+      taskType: { key: string } | null;
+      outcome: { key: string; removed: boolean } | null;
+      status: string;
+      doneAt: string | null;
+    };
   };
 
   it('creates with a task type, completes with an outcome, and reopening drops the outcome', async () => {
@@ -250,50 +298,74 @@ describe('tasks', () => {
     const task = byKey(all, 'task');
     const phoneOutcome = byKey(all, 'phone').outcomes[0]!;
     const a = await mk({ title: 'Wrong list' });
-    const wrong = await as(t.admin).post(`/v2/tasks/${a.id}/complete`).send({ outcomeId: phoneOutcome.id });
+    const wrong = await as(t.admin)
+      .post(`/v2/tasks/${a.id}/complete`)
+      .send({ outcomeId: phoneOutcome.id });
     expect(wrong.status).toBe(422);
     expect(code(wrong)).toBe('ACTIVITY_OPTION_INVALID');
-    const asType = await as(t.admin).post('/v2/tasks').send({ title: 'x', taskTypeId: task.outcomes[0]!.id });
+    const asType = await as(t.admin)
+      .post('/v2/tasks')
+      .send({ title: 'x', taskTypeId: task.outcomes[0]!.id });
     expect(asType.status).toBe(422);
 
     const left = task.outcomes.find((o) => o.key === 'left_message')!;
     const b = await mk({ title: 'Keeps outcome' });
-    expect((await as(t.admin).post(`/v2/tasks/${b.id}/complete`).send({ outcomeId: left.id })).status).toBe(200);
-    expect((await as(t.admin).delete(`/v2/activity-types/${task.id}/options/${left.id}`)).status).toBe(200);
+    expect(
+      (await as(t.admin).post(`/v2/tasks/${b.id}/complete`).send({ outcomeId: left.id })).status,
+    ).toBe(200);
+    expect(
+      (await as(t.admin).delete(`/v2/activity-types/${task.id}/options/${left.id}`)).status,
+    ).toBe(200);
     const read = await as(t.admin).get(`/v2/tasks/${b.id}`);
     expect(read.body.outcome.key).toBe('left_message');
     expect(read.body.outcome.removed).toBe(true);
     const c = await mk({ title: 'Cannot pick it now' });
-    const refused = await as(t.admin).post(`/v2/tasks/${c.id}/complete`).send({ outcomeId: left.id });
+    const refused = await as(t.admin)
+      .post(`/v2/tasks/${c.id}/complete`)
+      .send({ outcomeId: left.id });
     expect(refused.status).toBe(422);
   });
 
   it('follows the Allow-complete and Edit-completed-time switches', async () => {
     const task = byKey(await activities(t.admin), 'task');
     const a = await mk({ title: 'Switches' });
-    const off = await as(t.admin).patch(`/v2/activity-types/${task.id}`).send({ allowComplete: false, rowVersion: task.rowVersion });
+    const off = await as(t.admin)
+      .patch(`/v2/activity-types/${task.id}`)
+      .send({ allowComplete: false, rowVersion: task.rowVersion });
     expect(off.status).toBe(200);
     const blocked = await as(t.admin).post(`/v2/tasks/${a.id}/complete`).send({});
     expect(blocked.status).toBe(409);
     expect(code(blocked)).toBe('ACTIVITY_COMPLETION_DISABLED');
-    const bulk = await as(t.admin).post('/v2/tasks/bulk/complete').send({ ids: [a.id] });
+    const bulk = await as(t.admin)
+      .post('/v2/tasks/bulk/complete')
+      .send({ ids: [a.id] });
     expect(bulk.body.failed?.[0]?.code).toBe('ACTIVITY_COMPLETION_DISABLED');
-    const on = await as(t.admin).patch(`/v2/activity-types/${task.id}`).send({ allowComplete: true, rowVersion: off.body.rowVersion });
+    const on = await as(t.admin)
+      .patch(`/v2/activity-types/${task.id}`)
+      .send({ allowComplete: true, rowVersion: off.body.rowVersion });
     expect(on.status).toBe(200);
     const done = await as(t.admin).post(`/v2/tasks/${a.id}/complete`).send({});
     expect(done.status).toBe(200);
 
     const early = new Date(Date.now() - 3 * 3_600_000).toISOString();
-    const denied = await as(t.admin).patch(`/v2/tasks/${a.id}`).send({ doneAt: early, rowVersion: done.body.rowVersion });
+    const denied = await as(t.admin)
+      .patch(`/v2/tasks/${a.id}`)
+      .send({ doneAt: early, rowVersion: done.body.rowVersion });
     expect(denied.status).toBe(409);
     expect(code(denied)).toBe('ACTIVITY_EDIT_COMPLETED_DISABLED');
-    const allow = await as(t.admin).patch(`/v2/activity-types/${task.id}`).send({ allowEditCompleted: true, rowVersion: on.body.rowVersion });
+    const allow = await as(t.admin)
+      .patch(`/v2/activity-types/${task.id}`)
+      .send({ allowEditCompleted: true, rowVersion: on.body.rowVersion });
     expect(allow.status).toBe(200);
-    const edited = await as(t.admin).patch(`/v2/tasks/${a.id}`).send({ doneAt: early, rowVersion: done.body.rowVersion });
+    const edited = await as(t.admin)
+      .patch(`/v2/tasks/${a.id}`)
+      .send({ doneAt: early, rowVersion: done.body.rowVersion });
     expect(edited.status, JSON.stringify(edited.body)).toBe(200);
     expect(new Date(edited.body.doneAt).toISOString()).toBe(early);
     const open = await mk({ title: 'Open one' });
-    const notDone = await as(t.admin).patch(`/v2/tasks/${open.id}`).send({ doneAt: early, rowVersion: open.rowVersion });
+    const notDone = await as(t.admin)
+      .patch(`/v2/tasks/${open.id}`)
+      .send({ doneAt: early, rowVersion: open.rowVersion });
     expect(notDone.status).toBe(422);
   });
 
@@ -301,7 +373,9 @@ describe('tasks', () => {
     const task = byKey(await activities(t.admin), 'task');
     const followUp = task.taskTypes.find((o) => o.key === 'follow_up')!;
     const [contact] = await api.seedContacts(t, [{ name: 'Lead One', phone: '+919811000111' }]);
-    const set = await as(t.admin).put(`/v2/contacts/${contact}/follow-up`).send({ dueAt: new Date(Date.now() + 86_400_000).toISOString() });
+    const set = await as(t.admin)
+      .put(`/v2/contacts/${contact}/follow-up`)
+      .send({ dueAt: new Date(Date.now() + 86_400_000).toISOString() });
     if (set.status === 200 || set.status === 201) {
       const rows = await h.owner.query(
         `SELECT t.task_type_id, o.key FROM tasks t LEFT JOIN activity_type_options o ON o.org_id = t.org_id AND o.id = t.task_type_id
@@ -324,39 +398,61 @@ describe('meetings', () => {
   it('completes a meeting with an outcome and notes, edits them, and reopens it', async () => {
     const meetings = byKey(await activities(t.admin), 'meeting');
     const out = meetings.outcomes.find((o) => o.key === 'interested')!;
-    const m = await as(t.admin).post(`/v2/contacts/${contact}/meetings`).send({ title: 'Intro call' });
+    const m = await as(t.admin)
+      .post(`/v2/contacts/${contact}/meetings`)
+      .send({ title: 'Intro call' });
     expect(m.status, JSON.stringify(m.body)).toBe(201);
-    const set = await as(t.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({ outcomeId: out.id, note: 'Wants a demo' });
+    const set = await as(t.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({ outcomeId: out.id, note: 'Wants a demo' });
     expect(set.status, JSON.stringify(set.body)).toBe(200);
     expect(set.body.outcome.key).toBe('interested');
     expect(set.body.note).toBe('Wants a demo');
     const list = await as(t.admin).get(`/v2/contacts/${contact}/meeting-results`);
     expect(list.body.data.map((r: { meetingId: string }) => r.meetingId)).toEqual([m.body.id]);
-    const keep = await as(t.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({ note: null });
+    const keep = await as(t.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({ note: null });
     expect(keep.body.note).toBeNull();
     expect(keep.body.outcome.key).toBe('interested');
     const phoneOutcome = byKey(await activities(t.admin), 'phone').outcomes[0]!;
-    const wrong = await as(t.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({ outcomeId: phoneOutcome.id });
+    const wrong = await as(t.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({ outcomeId: phoneOutcome.id });
     expect(wrong.status).toBe(422);
-    expect((await as(t.admin).delete(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)).status).toBe(204);
-    expect((await as(t.admin).get(`/v2/contacts/${contact}/meeting-results`)).body.data).toEqual([]);
+    expect(
+      (await as(t.admin).delete(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)).status,
+    ).toBe(204);
+    expect((await as(t.admin).get(`/v2/contacts/${contact}/meeting-results`)).body.data).toEqual(
+      [],
+    );
   });
 
   it('follows the Meeting switches and stays inside the workspace', async () => {
     const meetings = byKey(await activities(t.admin), 'meeting');
     const m = await as(t.admin).post(`/v2/contacts/${contact}/meetings`).send({ title: 'Second' });
-    const off = await as(t.admin).patch(`/v2/activity-types/${meetings.id}`).send({ allowComplete: false, rowVersion: meetings.rowVersion });
+    const off = await as(t.admin)
+      .patch(`/v2/activity-types/${meetings.id}`)
+      .send({ allowComplete: false, rowVersion: meetings.rowVersion });
     expect(off.status).toBe(200);
-    const blocked = await as(t.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({});
+    const blocked = await as(t.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({});
     expect(blocked.status).toBe(409);
     expect(code(blocked)).toBe('ACTIVITY_COMPLETION_DISABLED');
-    await as(t.admin).patch(`/v2/activity-types/${meetings.id}`).send({ allowComplete: true, rowVersion: off.body.rowVersion });
-    const late = await as(t.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({ completedAt: new Date(Date.now() - 3_600_000).toISOString() });
+    await as(t.admin)
+      .patch(`/v2/activity-types/${meetings.id}`)
+      .send({ allowComplete: true, rowVersion: off.body.rowVersion });
+    const late = await as(t.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({ completedAt: new Date(Date.now() - 3_600_000).toISOString() });
     expect(late.status).toBe(409);
     expect(code(late)).toBe('ACTIVITY_EDIT_COMPLETED_DISABLED');
 
     const other = await api.signup('sact6');
-    const foreign = await as(other.admin).put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`).send({});
+    const foreign = await as(other.admin)
+      .put(`/v2/contacts/${contact}/meeting-results/${m.body.id}`)
+      .send({});
     expect(foreign.status).toBe(404);
   });
 });
@@ -371,33 +467,50 @@ describe('calls', () => {
 
   it('logs a call with a custom phone outcome that counts as a built-in one, and reads it back', async () => {
     const phone = byKey(await activities(t.admin), 'phone');
-    const added = await as(t.admin).post(`/v2/activity-types/${phone.id}/options`).send({ kind: 'outcome', name: 'Asked for callback', countsAs: 'no_answer' });
+    const added = await as(t.admin)
+      .post(`/v2/activity-types/${phone.id}/options`)
+      .send({ kind: 'outcome', name: 'Asked for callback', countsAs: 'no_answer' });
     expect(added.status, JSON.stringify(added.body)).toBe(201);
     const custom = (added.body as Activity).outcomes.find((o) => o.name === 'Asked for callback')!;
     expect(custom.countsAs).toBe('no_answer');
-    const res = await as(t.admin).post('/v2/calls/log').send({ contactId: contact, direction: 'outbound', outcomeOptionId: custom.id, durationSec: 0 });
+    const res = await as(t.admin)
+      .post('/v2/calls/log')
+      .send({
+        contactId: contact,
+        direction: 'outbound',
+        outcomeOptionId: custom.id,
+        durationSec: 0,
+      });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     expect(res.body.entry.outcome).toBe('no_answer');
     expect(res.body.entry.outcomeOption.name).toBe('Asked for callback');
     const builtIn = phone.outcomes.find((o) => o.key === 'busy')!;
-    const edited = await as(t.admin).patch(`/v2/calls/log/${res.body.entry.id}`).send({ outcomeOptionId: builtIn.id, rowVersion: res.body.entry.rowVersion });
+    const edited = await as(t.admin)
+      .patch(`/v2/calls/log/${res.body.entry.id}`)
+      .send({ outcomeOptionId: builtIn.id, rowVersion: res.body.entry.rowVersion });
     expect(edited.status, JSON.stringify(edited.body)).toBe(200);
     expect(edited.body.outcome).toBe('busy');
     expect(edited.body.outcomeOption.key).toBe('busy');
   });
 
   it('still logs with only the built-in outcome (nothing changes for a workspace that never opens the settings)', async () => {
-    const res = await as(t.admin).post('/v2/calls/log').send({ contactId: contact, direction: 'inbound', outcome: 'connected', durationSec: 30 });
+    const res = await as(t.admin)
+      .post('/v2/calls/log')
+      .send({ contactId: contact, direction: 'inbound', outcome: 'connected', durationSec: 30 });
     expect(res.status, JSON.stringify(res.body)).toBe(201);
     expect(res.body.entry.outcome).toBe('connected');
     expect(res.body.entry.outcomeOption).toBeNull();
-    const neither = await as(t.admin).post('/v2/calls/log').send({ contactId: contact, direction: 'inbound', durationSec: 30 });
+    const neither = await as(t.admin)
+      .post('/v2/calls/log')
+      .send({ contactId: contact, direction: 'inbound', durationSec: 30 });
     expect(neither.status).toBe(422);
   });
 
   it('refuses an outcome item of another activity', async () => {
     const task = byKey(await activities(t.admin), 'task');
-    const res = await as(t.admin).post('/v2/calls/log').send({ contactId: contact, direction: 'outbound', outcomeOptionId: task.outcomes[0]!.id });
+    const res = await as(t.admin)
+      .post('/v2/calls/log')
+      .send({ contactId: contact, direction: 'outbound', outcomeOptionId: task.outcomes[0]!.id });
     expect(res.status).toBe(422);
     expect(code(res)).toBe('ACTIVITY_OPTION_INVALID');
   });

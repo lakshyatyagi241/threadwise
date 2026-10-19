@@ -7,7 +7,10 @@ import { useVocabulary } from '@/features/persona-vocabulary';
 
 /** "follow_up" -> "Follow up": what a seeded item with no translation yet is drawn as, so nothing shows a raw key twice. */
 export function humanKey(key: string): string {
-  const s = key.replace(/^custom_/, '').replace(/_/g, ' ').trim();
+  const s = key
+    .replace(/^custom_/, '')
+    .replace(/_/g, ' ')
+    .trim();
   return s ? s.charAt(0).toUpperCase() + s.slice(1) : key;
 }
 

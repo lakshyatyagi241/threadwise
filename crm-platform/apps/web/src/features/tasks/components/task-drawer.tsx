@@ -4,7 +4,11 @@ import { useLocale, useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Button, ConfirmDialog, Field, Input, Select, Textarea, cn } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
-import { OptionSelect, useActivitySettings, useCompletionOffText } from '@/features/sales-activities';
+import {
+  OptionSelect,
+  useActivitySettings,
+  useCompletionOffText,
+} from '@/features/sales-activities';
 import { useMembers, useTask } from '../api/hooks';
 import { PRIORITIES, type RecordRef } from '../api/schemas';
 import { fromLocalInput, presetDue, toLocalInput, type DuePreset } from '../lib/dates';

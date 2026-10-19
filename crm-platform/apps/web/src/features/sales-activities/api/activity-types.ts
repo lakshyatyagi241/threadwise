@@ -19,7 +19,8 @@ import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 export const ACTIVITY_KEYS = {
   all: ['sales-activities'] as const,
   list: ['sales-activities', 'list'] as const,
-  meetingResults: (contactId: string) => ['sales-activities', 'meeting-results', contactId] as const,
+  meetingResults: (contactId: string) =>
+    ['sales-activities', 'meeting-results', contactId] as const,
 };
 
 /** Every call of Settings > Sales Activities. Activities and their items are named by uuid. */
@@ -43,10 +44,10 @@ export const activityTypesApi = {
       schema: salesActivityTypeSchema,
     }),
   removeOption: (id: string, optionId: string) =>
-    apiFetch(
-      `/activity-types/${encodeURIComponent(id)}/options/${encodeURIComponent(optionId)}`,
-      { method: 'DELETE', schema: salesActivityTypeSchema },
-    ),
+    apiFetch(`/activity-types/${encodeURIComponent(id)}/options/${encodeURIComponent(optionId)}`, {
+      method: 'DELETE',
+      schema: salesActivityTypeSchema,
+    }),
   reorder: (id: string, input: ReorderActivityOptionsInput) =>
     apiFetch(`/activity-types/${encodeURIComponent(id)}/options/order`, {
       method: 'PUT',

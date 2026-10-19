@@ -304,29 +304,41 @@ export class TasksService {
       this.applyLinks(patch, row, links);
       if (input.taskTypeId !== undefined) {
         const next = input.taskTypeId
-          ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task')).id
+          ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task'))
+              .id
           : null;
         if (next !== row.taskTypeId) {
           patch.task_type_id = next;
-          delta.taskType = { old: row.taskType?.key ?? null, new: next === null ? null : input.taskTypeId };
+          delta.taskType = {
+            old: row.taskType?.key ?? null,
+            new: next === null ? null : input.taskTypeId,
+          };
         }
       }
       if (input.outcomeId !== undefined) {
         if (row.status !== 'done') {
-          throw AppError.validation('Only a completed task has an outcome.', [{ path: 'outcomeId', message: 'Task is not done' }]);
+          throw AppError.validation('Only a completed task has an outcome.', [
+            { path: 'outcomeId', message: 'Task is not done' },
+          ]);
         }
         const next = input.outcomeId
-          ? (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task')).id
+          ? (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task'))
+              .id
           : null;
         if (next !== row.outcomeId) {
           patch.outcome_id = next;
-          delta.outcome = { old: row.outcome?.key ?? null, new: next === null ? null : input.outcomeId };
+          delta.outcome = {
+            old: row.outcome?.key ?? null,
+            new: next === null ? null : input.outcomeId,
+          };
         }
       }
       if (input.doneAt !== undefined) {
         const next = new Date(input.doneAt);
         if (row.status !== 'done') {
-          throw AppError.validation('Only a completed task has a completed date.', [{ path: 'doneAt', message: 'Task is not done' }]);
+          throw AppError.validation('Only a completed task has a completed date.', [
+            { path: 'doneAt', message: 'Task is not done' },
+          ]);
         }
         if (next.getTime() !== row.doneAt?.getTime()) {
           if (!(await this.activities.settingsOf(tx, ctx.orgId, 'task')).allowEditCompleted) {
@@ -337,7 +349,9 @@ export class TasksService {
             );
           }
           if (next.getTime() > Date.now() + 5 * 60_000) {
-            throw AppError.validation('A task cannot be completed in the future.', [{ path: 'doneAt', message: 'In the future' }]);
+            throw AppError.validation('A task cannot be completed in the future.', [
+              { path: 'doneAt', message: 'In the future' },
+            ]);
           }
           patch.done_at = next;
           delta.doneAt = { old: row.doneAt?.toISOString() ?? null, new: next.toISOString() };
@@ -892,7 +906,9 @@ export class TasksService {
         const ctx = RequestContextStore.require();
         await this.assertCompletable(tx, ctx.orgId);
         if (input.outcomeId) {
-          outcomeId = (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task')).id;
+          outcomeId = (
+            await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'task')
+          ).id;
         }
       }
       return this.toResponse(await this.transition(tx, row, done, { outcomeId }));

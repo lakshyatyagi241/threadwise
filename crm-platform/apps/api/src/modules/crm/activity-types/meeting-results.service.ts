@@ -66,10 +66,19 @@ export class MeetingResultsService {
     });
   }
 
-  async set(contactUuid: string, meetingUuid: string, input: SetMeetingResultInput): Promise<MeetingResult> {
+  async set(
+    contactUuid: string,
+    meetingUuid: string,
+    input: SetMeetingResultInput,
+  ): Promise<MeetingResult> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
-      const contact = await this.requireContact(tx, ctx.orgId, contactUuid, 'record.contacts.update');
+      const contact = await this.requireContact(
+        tx,
+        ctx.orgId,
+        contactUuid,
+        'record.contacts.update',
+      );
       const meeting = await this.requireMeeting(tx, ctx.orgId, contact.id, meetingUuid);
       const settings = await this.activities.settingsOf(tx, ctx.orgId, 'meeting');
       if (!settings.allowComplete) {
@@ -89,13 +98,17 @@ export class MeetingResultsService {
       let outcomeId: number | null | undefined;
       if (input.outcomeId === null) outcomeId = null;
       else if (input.outcomeId !== undefined) {
-        outcomeId = (await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'meeting')).id;
+        outcomeId = (
+          await this.activities.resolveOption(tx, ctx.orgId, input.outcomeId, 'outcome', 'meeting')
+        ).id;
       }
       const noteGiven = input.note !== undefined;
       const note = input.note ? input.note : null;
       const completedAt = input.completedAt ? new Date(input.completedAt) : null;
       if (completedAt && completedAt.getTime() > Date.now() + 5 * 60_000) {
-        throw AppError.validation('A meeting cannot be completed in the future.', [{ path: 'completedAt', message: 'In the future' }]);
+        throw AppError.validation('A meeting cannot be completed in the future.', [
+          { path: 'completedAt', message: 'In the future' },
+        ]);
       }
 
       // One row per meeting. A field that is absent keeps what is stored; `null` clears it.
@@ -121,7 +134,9 @@ export class MeetingResultsService {
           ...(noteGiven ? { note: { old: null, new: note !== null } } : {}),
         },
       });
-      const out = await tx.execute(sql`${RESULT_SELECT} WHERE r.org_id = ${ctx.orgId} AND r.id = ${resultId}`);
+      const out = await tx.execute(
+        sql`${RESULT_SELECT} WHERE r.org_id = ${ctx.orgId} AND r.id = ${resultId}`,
+      );
       return toResult(out.rows[0] as Raw);
     });
   }
@@ -130,7 +145,12 @@ export class MeetingResultsService {
   async clear(contactUuid: string, meetingUuid: string): Promise<void> {
     const ctx = RequestContextStore.require();
     await this.db.tx(async (tx) => {
-      const contact = await this.requireContact(tx, ctx.orgId, contactUuid, 'record.contacts.update');
+      const contact = await this.requireContact(
+        tx,
+        ctx.orgId,
+        contactUuid,
+        'record.contacts.update',
+      );
       const meeting = await this.requireMeeting(tx, ctx.orgId, contact.id, meetingUuid);
       const res = await tx.execute(sql`
         DELETE FROM contact_meeting_outcomes WHERE org_id = ${ctx.orgId} AND meeting_id = ${meeting.id} RETURNING id
@@ -154,7 +174,12 @@ export class MeetingResultsService {
     return ref;
   }
 
-  private async requireMeeting(tx: Tx, orgId: number, contactId: number, uuid: string): Promise<{ id: number }> {
+  private async requireMeeting(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    uuid: string,
+  ): Promise<{ id: number }> {
     const res = await tx.execute(sql`
       SELECT id FROM contact_meetings WHERE org_id = ${orgId} AND contact_id = ${contactId} AND uuid = ${uuid}
     `);

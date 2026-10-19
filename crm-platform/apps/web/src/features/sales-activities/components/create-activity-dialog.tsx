@@ -96,7 +96,11 @@ export function CreateActivityDialog({
             onChange={(e) => setName(e.target.value)}
           />
         </Field>
-        <Field label={t('behavesAs')} htmlFor="new-activity-behaves" hint={t(`behavesAsHint.${behavesAs}`)}>
+        <Field
+          label={t('behavesAs')}
+          htmlFor="new-activity-behaves"
+          hint={t(`behavesAsHint.${behavesAs}`)}
+        >
           <Select
             id="new-activity-behaves"
             value={behavesAs}
@@ -122,7 +126,9 @@ export function CreateActivityDialog({
                 title={t(`icons.${i}`)}
                 onClick={() => setIcon(i)}
                 className={`inline-flex size-9 items-center justify-center rounded-md border outline-none focus-visible:ring-2 focus-visible:ring-primary ${
-                  icon === i ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:bg-muted'
+                  icon === i
+                    ? 'border-primary bg-primary/10 text-primary'
+                    : 'border-border text-muted-foreground hover:bg-muted'
                 }`}
               >
                 <ActivityIcon name={i} />

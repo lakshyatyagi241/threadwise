@@ -5,7 +5,12 @@ import { useTranslations } from 'next-intl';
 import { Button, Field, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { ERROR_CODES, MEETING_RESULT_NOTE_MAX, type MeetingResult } from '@crm/contracts';
 import { ApiError } from '@/lib/api/errors';
-import { ACTIVITY_KEYS, activityTypesApi, useActivitySettings, useMeetingResults } from '../api/activity-types';
+import {
+  ACTIVITY_KEYS,
+  activityTypesApi,
+  useActivitySettings,
+  useMeetingResults,
+} from '../api/activity-types';
 import { useQueryClient } from '@tanstack/react-query';
 import { useVocabulary } from '@/features/persona-vocabulary';
 import { useActivityLabels } from '../lib/labels';
@@ -91,14 +96,23 @@ export function MeetingOutcome({
 
   if (open) {
     const list = settings.activity?.outcomes ?? [];
-    const gone = result?.outcome && !list.some((o) => o.id === result.outcome!.id) ? result.outcome : null;
+    const gone =
+      result?.outcome && !list.some((o) => o.id === result.outcome!.id) ? result.outcome : null;
     return (
       <div className="mt-2 space-y-2 rounded-md border border-border bg-muted/40 p-3">
         {settings.outcomesEnabled && (
           <Field label={t('outcome')} htmlFor={`${id}-outcome`}>
-            <Select id={`${id}-outcome`} value={outcomeId} onChange={(e) => setOutcomeId(e.target.value)}>
+            <Select
+              id={`${id}-outcome`}
+              value={outcomeId}
+              onChange={(e) => setOutcomeId(e.target.value)}
+            >
               <option value="">{t('noOutcome')}</option>
-              {gone && <option value={gone.id}>{labels.ref(gone)} {t('removedSuffix')}</option>}
+              {gone && (
+                <option value={gone.id}>
+                  {labels.ref(gone)} {t('removedSuffix')}
+                </option>
+              )}
               {list.map((o) => (
                 <option key={o.id} value={o.id}>
                   {labels.option('meeting', o)}
@@ -135,14 +149,28 @@ export function MeetingOutcome({
       <div className="mt-2 space-y-1 text-xs">
         <p className="flex flex-wrap items-center gap-2">
           <span className="inline-flex items-center rounded-full border border-success/40 bg-success/10 px-2 py-0.5 font-medium text-success">
-            {result.outcome ? t('outcomeChip', { name: labels.ref(result.outcome) }) : t('completed')}
+            {result.outcome
+              ? t('outcomeChip', { name: labels.ref(result.outcome) })
+              : t('completed')}
           </span>
           {canUpdate && (
             <>
-              <Button size="sm" variant="ghost" aria-label={t('editAria', { title })} onClick={begin} disabled={busy}>
+              <Button
+                size="sm"
+                variant="ghost"
+                aria-label={t('editAria', { title })}
+                onClick={begin}
+                disabled={busy}
+              >
                 {t('edit')}
               </Button>
-              <Button size="sm" variant="ghost" aria-label={t('reopenAria', { title })} onClick={() => void reopen()} disabled={busy}>
+              <Button
+                size="sm"
+                variant="ghost"
+                aria-label={t('reopenAria', { title })}
+                onClick={() => void reopen()}
+                disabled={busy}
+              >
                 {t('reopen')}
               </Button>
             </>

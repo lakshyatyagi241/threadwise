@@ -3,10 +3,6 @@ export { SalesActivitiesScreen } from './components/sales-activities-screen';
 export { OptionSelect } from './components/option-select';
 export { MeetingOutcome } from './components/meeting-outcome';
 export { ActivityIcon } from './components/activity-icon';
-export {
-  FALLBACK_SETTINGS,
-  useActivitySettings,
-  useActivityTypes,
-} from './api/activity-types';
+export { FALLBACK_SETTINGS, useActivitySettings, useActivityTypes } from './api/activity-types';
 export { useActivityLabels, humanKey } from './lib/labels';
 export { useCompletionOffText } from './lib/use-text';

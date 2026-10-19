@@ -51,7 +51,10 @@ export const activityTypes = pgTable(
     index('idx_activity_types_order')
       .on(t.orgId, t.position, t.id)
       .where(sql`${t.archivedAt} is null`),
-    check('ck_activity_types_behaves', sql`${t.behavesAs} in ('task', 'meeting', 'phone', 'other')`),
+    check(
+      'ck_activity_types_behaves',
+      sql`${t.behavesAs} in ('task', 'meeting', 'phone', 'other')`,
+    ),
   ],
 );
 

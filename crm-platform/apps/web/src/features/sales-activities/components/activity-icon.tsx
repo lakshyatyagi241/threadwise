@@ -9,7 +9,9 @@ const PATHS: Record<(typeof ACTIVITY_ICONS)[number], ReactNode> = {
       <path d="M3 10h18M8 3v4M16 3v4" />
     </>
   ),
-  phone: <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" />,
+  phone: (
+    <path d="M5 4h4l2 5-2.5 1.5a11 11 0 005 5L15 13l5 2v4a2 2 0 01-2 2A16 16 0 013 6a2 2 0 012-2z" />
+  ),
   email: (
     <>
       <rect x="3" y="5" width="18" height="14" rx="2" />

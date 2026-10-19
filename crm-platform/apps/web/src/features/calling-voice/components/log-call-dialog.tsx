@@ -66,7 +66,8 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
   const activityLabels = useActivityLabels();
   const items = phoneActivity?.outcomes ?? [];
   const [optionId, setOptionId] = useState('');
-  const chosen = items.find((o) => o.id === optionId) ?? items.find((o) => o.key === 'connected') ?? items[0];
+  const chosen =
+    items.find((o) => o.id === optionId) ?? items.find((o) => o.key === 'connected') ?? items[0];
   const [when, setWhen] = useState(
     localDateTimeValue(prefill?.startedAt ? new Date(prefill.startedAt) : new Date()),
   );
@@ -95,7 +96,9 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
       return;
     }
     try {
-      const input: LogCallInput = chosen ? { ...built.input, outcomeOptionId: chosen.id } : built.input;
+      const input: LogCallInput = chosen
+        ? { ...built.input, outcomeOptionId: chosen.id }
+        : built.input;
       const result = await save.mutateAsync(input);
       toast(result.entry.contactId ? t('saved') : t('savedNoContact'), 'success');
       onLogged?.(result);

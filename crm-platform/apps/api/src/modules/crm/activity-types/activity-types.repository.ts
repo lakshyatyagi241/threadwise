@@ -1,10 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type {
-  ActivityBehaviour,
-  ActivityOptionKind,
-  PhoneCountsAs,
-} from '@crm/contracts';
+import type { ActivityBehaviour, ActivityOptionKind, PhoneCountsAs } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 export interface ActivityTypeRow {
@@ -119,7 +115,12 @@ export class ActivityTypesRepository {
     return res.rows.map((r) => toOption(r as Raw));
   }
 
-  async findTypeByUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<ActivityTypeRow | undefined> {
+  async findTypeByUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+    lock = false,
+  ): Promise<ActivityTypeRow | undefined> {
     const res = await tx.execute(sql`
       SELECT ${TYPE_COLS} FROM activity_types
       WHERE org_id = ${orgId} AND uuid = ${uuid} AND archived_at IS NULL
@@ -140,7 +141,10 @@ export class ActivityTypesRepository {
   }
 
   /** Names and keys of the live custom activities, to keep a new one unique. */
-  async customNamesAndKeys(tx: Tx, orgId: number): Promise<{ key: string; name: string | null; archived: boolean }[]> {
+  async customNamesAndKeys(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ key: string; name: string | null; archived: boolean }[]> {
     const res = await tx.execute(sql`
       SELECT key, name, archived_at IS NOT NULL AS archived FROM activity_types WHERE org_id = ${orgId}
     `);
@@ -183,17 +187,26 @@ export class ActivityTypesRepository {
   }
 
   async nextTypePosition(tx: Tx, orgId: number): Promise<number> {
-    const res = await tx.execute(sql`SELECT coalesce(max(position), -1) + 1 AS p FROM activity_types WHERE org_id = ${orgId}`);
+    const res = await tx.execute(
+      sql`SELECT coalesce(max(position), -1) + 1 AS p FROM activity_types WHERE org_id = ${orgId}`,
+    );
     return n((res.rows[0] as Raw).p);
   }
 
-  async updateType(tx: Tx, orgId: number, id: number, expectedVersion: number, p: TypePatch): Promise<boolean> {
+  async updateType(
+    tx: Tx,
+    orgId: number,
+    id: number,
+    expectedVersion: number,
+    p: TypePatch,
+  ): Promise<boolean> {
     const sets = [sql`updated_at = now()`];
     if (p.name !== undefined) sets.push(sql`name = ${p.name}`);
     if (p.icon !== undefined) sets.push(sql`icon = ${p.icon}`);
     if (p.showInCalendar !== undefined) sets.push(sql`show_in_calendar = ${p.showInCalendar}`);
     if (p.allowComplete !== undefined) sets.push(sql`allow_complete = ${p.allowComplete}`);
-    if (p.allowEditCompleted !== undefined) sets.push(sql`allow_edit_completed = ${p.allowEditCompleted}`);
+    if (p.allowEditCompleted !== undefined)
+      sets.push(sql`allow_edit_completed = ${p.allowEditCompleted}`);
     if (p.mobileCheckIn !== undefined) sets.push(sql`mobile_check_in = ${p.mobileCheckIn}`);
     if (p.outcomesEnabled !== undefined) sets.push(sql`outcomes_enabled = ${p.outcomesEnabled}`);
     const res = await tx.execute(sql`
@@ -205,13 +218,20 @@ export class ActivityTypesRepository {
   }
 
   async archiveType(tx: Tx, orgId: number, id: number): Promise<void> {
-    await tx.execute(sql`UPDATE activity_types SET archived_at = now() WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`UPDATE activity_types SET archived_at = now() WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   // --- options ------------------------------------------------------------------------------------------------------------
 
   /** Every option of one list, removed ones included (a re-added name brings its row back). */
-  async allOptionsOf(tx: Tx, orgId: number, typeId: number, kind: ActivityOptionKind): Promise<ActivityOptionRow[]> {
+  async allOptionsOf(
+    tx: Tx,
+    orgId: number,
+    typeId: number,
+    kind: ActivityOptionKind,
+  ): Promise<ActivityOptionRow[]> {
     const res = await tx.execute(sql`
       SELECT ${OPTION_COLS} FROM activity_type_options
       WHERE org_id = ${orgId} AND activity_type_id = ${typeId} AND kind = ${kind}
@@ -224,7 +244,14 @@ export class ActivityTypesRepository {
   async insertOption(
     tx: Tx,
     orgId: number,
-    v: { typeId: number; kind: ActivityOptionKind; key: string; name: string; countsAs: PhoneCountsAs | null; position: number },
+    v: {
+      typeId: number;
+      kind: ActivityOptionKind;
+      key: string;
+      name: string;
+      countsAs: PhoneCountsAs | null;
+      position: number;
+    },
   ): Promise<number> {
     const res = await tx.execute(sql`
       INSERT INTO activity_type_options (org_id, activity_type_id, kind, key, name, is_system, counts_as, position)
@@ -250,7 +277,12 @@ export class ActivityTypesRepository {
     `);
   }
 
-  async findOptionByUuid(tx: Tx, orgId: number, activityId: number, optionUuid: string): Promise<ActivityOptionRow | undefined> {
+  async findOptionByUuid(
+    tx: Tx,
+    orgId: number,
+    activityId: number,
+    optionUuid: string,
+  ): Promise<ActivityOptionRow | undefined> {
     const res = await tx.execute(sql`
       SELECT ${OPTION_COLS} FROM activity_type_options
       WHERE org_id = ${orgId} AND activity_type_id = ${activityId} AND uuid = ${optionUuid} AND deleted_at IS NULL
@@ -261,13 +293,18 @@ export class ActivityTypesRepository {
   }
 
   async softDeleteOption(tx: Tx, orgId: number, id: number): Promise<void> {
-    await tx.execute(sql`UPDATE activity_type_options SET deleted_at = now() WHERE org_id = ${orgId} AND id = ${id}`);
+    await tx.execute(
+      sql`UPDATE activity_type_options SET deleted_at = now() WHERE org_id = ${orgId} AND id = ${id}`,
+    );
   }
 
   /** Re-numbers a list 0..n-1 in the given order. */
   async setPositions(tx: Tx, orgId: number, orderedIds: number[]): Promise<void> {
     if (orderedIds.length === 0) return;
-    const list = sql.join(orderedIds.map((i) => sql`${i}`), sql`, `);
+    const list = sql.join(
+      orderedIds.map((i) => sql`${i}`),
+      sql`, `,
+    );
     await tx.execute(sql`
       UPDATE activity_type_options o SET position = (v.ord - 1)::int
       FROM unnest(ARRAY[${list}]::bigint[]) WITH ORDINALITY AS v(id, ord)
@@ -275,7 +312,12 @@ export class ActivityTypesRepository {
     `);
   }
 
-  async countActive(tx: Tx, orgId: number, typeId: number, kind: ActivityOptionKind): Promise<number> {
+  async countActive(
+    tx: Tx,
+    orgId: number,
+    typeId: number,
+    kind: ActivityOptionKind,
+  ): Promise<number> {
     const res = await tx.execute(sql`
       SELECT count(*)::int AS c FROM activity_type_options
       WHERE org_id = ${orgId} AND activity_type_id = ${typeId} AND kind = ${kind} AND deleted_at IS NULL
@@ -285,7 +327,11 @@ export class ActivityTypesRepository {
 
   // --- what the consumers (tasks, meetings, calls) read ----------------------------------------------------------------------
 
-  async optionWithOwner(tx: Tx, orgId: number, optionUuid: string): Promise<ActivityOptionWithOwner | undefined> {
+  async optionWithOwner(
+    tx: Tx,
+    orgId: number,
+    optionUuid: string,
+  ): Promise<ActivityOptionWithOwner | undefined> {
     const res = await tx.execute(sql`
       SELECT o.id, o.uuid, o.activity_type_id, o.kind, o.key, o.name, o.is_system, o.counts_as, o.position, o.deleted_at,
              a.key AS activity_key, a.behaves_as AS activity_behaves_as, a.outcomes_enabled AS activity_outcomes_enabled,
@@ -306,7 +352,13 @@ export class ActivityTypesRepository {
   }
 
   /** The id of a seeded option (for the follow-up task type). */
-  async systemOptionId(tx: Tx, orgId: number, activityKey: string, kind: ActivityOptionKind, key: string): Promise<number | null> {
+  async systemOptionId(
+    tx: Tx,
+    orgId: number,
+    activityKey: string,
+    kind: ActivityOptionKind,
+    key: string,
+  ): Promise<number | null> {
     const res = await tx.execute(sql`
       SELECT o.id FROM activity_type_options o
       JOIN activity_types a ON a.org_id = o.org_id AND a.id = o.activity_type_id

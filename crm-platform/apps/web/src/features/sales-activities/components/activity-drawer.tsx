@@ -73,17 +73,26 @@ export function ActivityDrawer({
     return t('errors.failed');
   };
 
-  const update = useActivityMutation((v: UpdateActivityTypeInput) => activityTypesApi.update(activity.id, v));
-  const add = useActivityMutation((v: { kind: 'type' | 'outcome'; name: string; countsAs?: PhoneCountsAs }) =>
-    activityTypesApi.addOption(activity.id, v),
+  const update = useActivityMutation((v: UpdateActivityTypeInput) =>
+    activityTypesApi.update(activity.id, v),
   );
-  const removeOption = useActivityMutation((o: ActivityOption) => activityTypesApi.removeOption(activity.id, o.id));
+  const add = useActivityMutation(
+    (v: { kind: 'type' | 'outcome'; name: string; countsAs?: PhoneCountsAs }) =>
+      activityTypesApi.addOption(activity.id, v),
+  );
+  const removeOption = useActivityMutation((o: ActivityOption) =>
+    activityTypesApi.removeOption(activity.id, o.id),
+  );
   const reorder = useActivityMutation((v: { kind: 'type' | 'outcome'; ids: string[] }) =>
     activityTypesApi.reorder(activity.id, v),
   );
   const removeActivity = useActivityMutation(() => activityTypesApi.remove(activity.id));
   const busy =
-    update.isPending || add.isPending || removeOption.isPending || reorder.isPending || removeActivity.isPending;
+    update.isPending ||
+    add.isPending ||
+    removeOption.isPending ||
+    reorder.isPending ||
+    removeActivity.isPending;
   const locked = !canManage;
 
   const setSwitch = (patch: Omit<UpdateActivityTypeInput, 'rowVersion'>) =>
@@ -173,9 +182,7 @@ export function ActivityDrawer({
                 disabled={locked || busy}
                 onChange={(v) => setSwitch({ mobileCheckIn: v })}
               />
-              {activity.mobileCheckIn && (
-                <Alert tone="info">{t('mobileCheckInPending')}</Alert>
-              )}
+              {activity.mobileCheckIn && <Alert tone="info">{t('mobileCheckInPending')}</Alert>}
             </>
           )}
           {cap.showInCalendar && (
@@ -216,8 +223,15 @@ export function ActivityDrawer({
             addLabel={t('addTaskType')}
             placeholder={t('taskTypePlaceholder')}
             onAdd={addOption('type')}
-            onRemove={(o) => removeOption.mutate(o, { onError: (e) => toast(errorText(e), 'danger') })}
-            onReorder={(ids) => reorder.mutate({ kind: 'type', ids }, { onError: (e) => toast(errorText(e), 'danger') })}
+            onRemove={(o) =>
+              removeOption.mutate(o, { onError: (e) => toast(errorText(e), 'danger') })
+            }
+            onReorder={(ids) =>
+              reorder.mutate(
+                { kind: 'type', ids },
+                { onError: (e) => toast(errorText(e), 'danger') },
+              )
+            }
           />
         )}
 
@@ -244,9 +258,14 @@ export function ActivityDrawer({
                 addLabel={t('addOutcome')}
                 placeholder={t('outcomePlaceholder')}
                 onAdd={addOption('outcome')}
-                onRemove={(o) => removeOption.mutate(o, { onError: (e) => toast(errorText(e), 'danger') })}
+                onRemove={(o) =>
+                  removeOption.mutate(o, { onError: (e) => toast(errorText(e), 'danger') })
+                }
                 onReorder={(ids) =>
-                  reorder.mutate({ kind: 'outcome', ids }, { onError: (e) => toast(errorText(e), 'danger') })
+                  reorder.mutate(
+                    { kind: 'outcome', ids },
+                    { onError: (e) => toast(errorText(e), 'danger') },
+                  )
                 }
               />
             )}

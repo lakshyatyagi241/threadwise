@@ -50,7 +50,10 @@ import { ContactActivitiesService } from './contact-activities/contact-activitie
 import { ContactFilesController } from './contact-files/contact-files.controller';
 import { ContactFilesRepository } from './contact-files/contact-files.repository';
 import { ContactFilesService } from './contact-files/contact-files.service';
-import { ActivityTypesController, MeetingResultsController } from './activity-types/activity-types.controller';
+import {
+  ActivityTypesController,
+  MeetingResultsController,
+} from './activity-types/activity-types.controller';
 import { ActivityTypesRepository } from './activity-types/activity-types.repository';
 import { ActivityTypesService } from './activity-types/activity-types.service';
 import { MeetingResultsService } from './activity-types/meeting-results.service';

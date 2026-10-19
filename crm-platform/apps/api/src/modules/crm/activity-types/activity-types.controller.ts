@@ -60,7 +60,9 @@ export class ActivityTypesController {
   @Post()
   @Idempotent()
   @RequirePermission('crm.activity_types.manage')
-  @ApiOperation({ summary: 'Create a custom activity (behaves like a task, a meeting or a phone call)' })
+  @ApiOperation({
+    summary: 'Create a custom activity (behaves like a task, a meeting or a phone call)',
+  })
   async create(@Body(zodPipe(createActivityTypeSchema)) body: CreateActivityTypeInput) {
     return this.activities.create(body);
   }
@@ -92,7 +94,8 @@ export class ActivityTypesController {
   @RequirePermission('crm.activity_types.manage')
   @ApiOperation({
     summary: 'Add a task type or an outcome at the end of its list',
-    description: 'The same name as a removed one brings that one back. 409 ACTIVITY_NAME_TAKEN when the name is in the list.',
+    description:
+      'The same name as a removed one brings that one back. 409 ACTIVITY_NAME_TAKEN when the name is in the list.',
   })
   async addOption(
     @Param('id', ParseUUIDPipe) id: string,
@@ -115,7 +118,8 @@ export class ActivityTypesController {
   @RequirePermission('crm.activity_types.manage')
   @ApiOperation({
     summary: 'Remove a task type or an outcome from its list',
-    description: 'Soft delete: records that hold it still read it (`removed: true`); the pickers stop offering it.',
+    description:
+      'Soft delete: records that hold it still read it (`removed: true`); the pickers stop offering it.',
   })
   async removeOption(
     @Param('id', ParseUUIDPipe) id: string,

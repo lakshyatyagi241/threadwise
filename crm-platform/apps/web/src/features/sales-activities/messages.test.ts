@@ -80,10 +80,14 @@ describe('message keys used in code', () => {
   it('exist in the English messages', () => {
     const missing: string[] = [];
     let checked = 0;
-    for (const file of sourceFiles(join(WEB, 'src', 'features', 'sales-activities', 'components'))) {
+    for (const file of sourceFiles(
+      join(WEB, 'src', 'features', 'sales-activities', 'components'),
+    )) {
       const src = readFileSync(file, 'utf8');
       // A file may bind more than one namespace; check each call against the namespaces that file binds.
-      const spaces = [...src.matchAll(/useTranslations\('(sales-activities[^']*)'\)/g)].map((m) => m[1]!);
+      const spaces = [...src.matchAll(/useTranslations\('(sales-activities[^']*)'\)/g)].map(
+        (m) => m[1]!,
+      );
       for (const m of src.matchAll(/\b(?:t|tv|tRaw)\(\s*'([^'$]+)'/g)) {
         checked++;
         const key = m[1]!;
@@ -98,15 +102,24 @@ describe('message keys used in code', () => {
   it('exist for the keys built at run time', () => {
     const dynamic = [
       ...DEFAULT_ACTIVITY_KEYS.map((k) => `defaults.activity.${k}`),
-      ...['follow_up', 'call_reminder', 'interested', 'left_message', 'no_response', 'not_interested', 'not_reachable'].map(
-        (k) => `defaults.option.task.${k}`,
-      ),
+      ...[
+        'follow_up',
+        'call_reminder',
+        'interested',
+        'left_message',
+        'no_response',
+        'not_interested',
+        'not_reachable',
+      ].map((k) => `defaults.option.task.${k}`),
       ...['interested', 'not_interested', 'needs_follow_up', 'rescheduled', 'no_show'].map(
         (k) => `defaults.option.meeting.${k}`,
       ),
       ...PHONE_COUNTS_AS.map((k) => `defaults.option.phone.${k}`),
       ...PHONE_COUNTS_AS.map((k) => `drawer.countsAs.${k}`),
-      ...CUSTOM_ACTIVITY_BEHAVIOURS.flatMap((b) => [`create.behaves.${b}`, `create.behavesAsHint.${b}`]),
+      ...CUSTOM_ACTIVITY_BEHAVIOURS.flatMap((b) => [
+        `create.behaves.${b}`,
+        `create.behavesAsHint.${b}`,
+      ]),
       ...ACTIVITY_ICONS.map((i) => `create.icons.${i}`),
     ];
     expect(dynamic.filter((k) => !(`${ROOT}.${k}` in en))).toEqual([]);

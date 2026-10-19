@@ -162,7 +162,12 @@ export function OptionList(p: OptionListProps) {
               ))}
             </Select>
           )}
-          <Button type="submit" size="sm" variant="secondary" disabled={!name.trim() || adding || p.busy}>
+          <Button
+            type="submit"
+            size="sm"
+            variant="secondary"
+            disabled={!name.trim() || adding || p.busy}
+          >
             {adding && <Spinner />}
             {p.addLabel}
           </Button>

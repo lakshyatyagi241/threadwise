@@ -23,15 +23,31 @@ describe('activity type rules', () => {
   });
 
   it('starts a custom activity with its behaviour defaults', () => {
-    expect(initialSwitches('task')).toMatchObject({ showInCalendar: true, allowComplete: true, mobileCheckIn: false, outcomesEnabled: true });
-    expect(initialSwitches('phone')).toMatchObject({ showInCalendar: false, allowComplete: false, outcomesEnabled: true });
+    expect(initialSwitches('task')).toMatchObject({
+      showInCalendar: true,
+      allowComplete: true,
+      mobileCheckIn: false,
+      outcomesEnabled: true,
+    });
+    expect(initialSwitches('phone')).toMatchObject({
+      showInCalendar: false,
+      allowComplete: false,
+      outcomesEnabled: true,
+    });
   });
 
   it('refuses to turn on a switch the behaviour does not offer, but allows turning it off', () => {
     expect(unsupportedSwitches('task', { mobileCheckIn: true })).toEqual(['mobileCheckIn']);
-    expect(unsupportedSwitches('meeting', { mobileCheckIn: true, allowComplete: true })).toEqual([]);
-    expect(unsupportedSwitches('phone', { allowComplete: true, showInCalendar: true })).toEqual(['showInCalendar', 'allowComplete']);
-    expect(unsupportedSwitches('other', { outcomesEnabled: false, allowComplete: false })).toEqual([]);
+    expect(unsupportedSwitches('meeting', { mobileCheckIn: true, allowComplete: true })).toEqual(
+      [],
+    );
+    expect(unsupportedSwitches('phone', { allowComplete: true, showInCalendar: true })).toEqual([
+      'showInCalendar',
+      'allowComplete',
+    ]);
+    expect(unsupportedSwitches('other', { outcomesEnabled: false, allowComplete: false })).toEqual(
+      [],
+    );
   });
 
   it('accepts a reorder only when it names the whole list once', () => {
