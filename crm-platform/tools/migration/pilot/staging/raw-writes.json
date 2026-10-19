@@ -114,6 +114,7 @@
       "renewals_count",
       "status"
     ],
+    "task_outcomes": ["is_active", "name", "org_id", "sort_order"],
     "usage_charge_keys": [
       "charge_created_at",
       "charge_id",

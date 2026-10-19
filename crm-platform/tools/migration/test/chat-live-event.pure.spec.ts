@@ -12,9 +12,9 @@ describe('parseTurn: live-chat hand-over events', () => {
     const t = parseTurn(handover('Connected to Aashish', true));
     expect(t).toMatchObject({ direction: 'out', senderKind: 'system', kind: 'system', body: 'Connected to Aashish' });
   });
-  it('"You are now Connected to WABO DEMO" (the customer-side line) is kept, as a system notice too', () => {
+  it('"You are now Connected to WABO DEMO" (agent-side twin, isUser false) is not a message: the old thread does not show it', () => {
     const t = parseTurn(handover('You are now Connected to WABO DEMO', false));
-    expect(t).toMatchObject({ senderKind: 'system', kind: 'system', body: 'You are now Connected to WABO DEMO' });
+    expect(t).toMatchObject({ empty: true });
   });
   it('an agent typing in a live chat stays an agent message', () => {
     const t = parseTurn({ ctype: 'livechat', bot_response: { input: true, input_type: 'LIVECHAT', response: [{ type: 'text', value: 'hi' }] } });

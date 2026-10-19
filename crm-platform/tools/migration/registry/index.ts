@@ -452,7 +452,7 @@ export const REGISTRY: RegistryEntry[] = [
   // --- real data with no table in crm-platform --------------------------------------------------------------------------------------
   gap(
     'contact_task_config',
-    'task/reminder action configuration; no matching table. no team decision: ask manager',
+    'task configuration: the task_outcomes document is carried by core-load into task_outcomes (core-opening.cjs reads it from the tenant database); the priority, type and reminder documents have no table in crm-platform',
   ),
 ];
 

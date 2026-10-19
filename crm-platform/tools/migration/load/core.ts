@@ -222,7 +222,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
     // --- workspace settings: pipelines, lost reasons, consent keywords, auto-assignment -------------------------------------------
     const settingsPlan = planSettings(core.settings, core.workspace.autoAssignment);
     o.log(
-      `  core  settings: ${settingsPlan.pipelines.length} pipeline(s) [${settingsPlan.pipelines.map((p) => `${p.name}: ${p.stages.map((x) => x.name).join(' > ')}`).join(' | ')}]; ${settingsPlan.lostReasons.length} lost reason(s); consent ${settingsPlan.consent ? 'keywords from Waboo' : 'not stated (the app defaults stay)'}; auto-assignment ${settingsPlan.autoAssign ? 'on' : 'off'}`,
+      `  core  settings: ${settingsPlan.pipelines.length} pipeline(s) [${settingsPlan.pipelines.map((p) => `${p.name}: ${p.stages.map((x) => x.name).join(' > ')}`).join(' | ')}]; ${settingsPlan.lostReasons.length} lost reason(s); consent ${settingsPlan.consent ? 'keywords from Waboo' : 'not stated (the app defaults stay)'}; ${settingsPlan.taskOutcomes.length} task outcome(s); last login for ${settingsPlan.lastLogins.length} user(s); auto-assignment ${settingsPlan.autoAssign ? 'on' : 'off'}`,
     );
     if (settingsPlan.consent?.note) o.log(`  core  consent: ${settingsPlan.consent.note}`);
     if (!core.settings) o.log('  core  settings: core.json has none (re-run core-opening.cjs): nothing of the above is written');
@@ -351,7 +351,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
       else {
         const r = await applySettings(owner.db, orgId, settingsPlan);
         o.log(
-          `  core  settings applied: pipelines created [${r.pipelinesCreated.join(', ')}], stages replaced in [${r.pipelinesReplaced.join(', ')}], kept (deals in them) [${r.pipelinesKept.join(', ')}]; lost reasons ${r.lostReasons}; consent ${r.consent ? 'written' : 'left'}; auto-assignment rule ${r.routingRule}`,
+          `  core  settings applied: pipelines created [${r.pipelinesCreated.join(', ')}], stages replaced in [${r.pipelinesReplaced.join(', ')}], kept (deals in them) [${r.pipelinesKept.join(', ')}]; lost reasons ${r.lostReasons}; task outcomes ${r.taskOutcomes}; last logins ${r.lastLogins}; consent ${r.consent ? 'written' : 'left'}; auto-assignment rule ${r.routingRule}`,
         );
         await withPrivileged(owner.db, (tx) =>
           tx.execute(sql`
@@ -370,7 +370,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         )
       ).rows[0] as { counts?: Record<string, string[]> } | undefined;
       if (!rec?.counts) return;
-      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules']);
+      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes']);
       await tx.execute(sql`
         UPDATE migration.run_log SET counts = ${JSON.stringify({ ...rec.counts, ...fresh })}::jsonb, updated_at = now()
         WHERE source_client = ${o.client} AND collection = '_org' AND step = 'baseline'`);

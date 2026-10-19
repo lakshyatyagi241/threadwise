@@ -32,7 +32,8 @@ const USER_FIELDS: Record<string, string> = {
   first_name: 'col:full_name',
   last_name: 'col:full_name',
   is_active: 'col:status (false = inactive)',
-  workspace_enabled: 'settings.legacy.waboo.workspace_enabled (history only: NOT a disable switch, false is normal for an active user)',
+  workspace_enabled:
+    'settings.legacy.waboo.workspace_enabled (history only: NOT a disable switch, false is normal for an active user)',
   is_staff:
     'settings.legacy.waboo.is_staff (kept as history; NEVER read for privilege, a role comes from role-map only)',
   date_joined: 'col:created_at (earliest) and col:joined_at',
@@ -49,17 +50,25 @@ const USER_FIELDS: Record<string, string> = {
   module_id: 'settings.legacy.waboo.module_id',
   workspace_id: 'drop:one organization per client (a second distinct value is reported)',
   gender: 'settings.legacy.waboo.gender',
-  chat_limit: 'settings.legacy.waboo.chat_limit (there is no team data to hang a capacity on)',
+  chat_limit:
+    'user_profiles.chat_limit (1..1000, empty or 0 = no limit) and settings.legacy.waboo.chat_limit (history)',
   contact_list_config: 'settings.legacy.waboo.listConfigs (column_sequence and columns only)',
   marketing_list_config: 'settings.legacy.waboo.listConfigs (column_sequence and columns only)',
   segment_contact_config: 'settings.legacy.waboo.listConfigs (column_sequence and columns only)',
   deal_list_config: 'settings.legacy.waboo.listConfigs (column_sequence and columns only)',
   company_list_config: 'settings.legacy.waboo.listConfigs (column_sequence and columns only)',
   password: 'drop:credential. Never read, copied, logged or quarantined',
-  whatsapp_action_preference: 'drop:no column in WaDesk (a per-user WhatsApp action preference); logged in missing-in-wadesk-log.md',
+  whatsapp_action_preference:
+    'drop:no column in WaDesk (a per-user WhatsApp action preference); logged in missing-in-wadesk-log.md',
 };
 
 const present = (v: unknown): boolean => v !== undefined && v !== null && v !== '';
+
+/** Waboo "Concurrent Chat": a whole number from 1; missing, empty, 0 or not a number = no limit; above 1000 is 1000 (the column's cap). */
+export const chatLimitOf = (v: unknown): number | null => {
+  const n = typeof v === 'string' ? Number(v.trim()) : typeof v === 'number' ? v : NaN;
+  return Number.isFinite(n) && n >= 1 ? Math.min(1000, Math.floor(n)) : null;
+};
 
 /** Waboo users, invited-style: no password, no token, no mail. The role comes from role-map or is Viewer; Owner only for the owner. */
 export const users: HandlerSpec = {
@@ -91,6 +100,7 @@ export const users: HandlerSpec = {
         c('display_name', 'text'),
         c('phone_e164', 'text'),
         c('phone_verified_at', 'timestamptz'),
+        c('chat_limit', 'integer'),
         c('locale', 'text'),
         c('theme', 'text'),
         ...TS_COLS,
@@ -290,6 +300,7 @@ export const users: HandlerSpec = {
             display_name: null,
             phone_e164: phone,
             phone_verified_at: phone && bool(doc.is_phone_verified) ? iso(updated) : null,
+            chat_limit: chatLimitOf(doc.chat_limit),
             locale: null,
             theme: 'paper',
             created_at: iso(created),

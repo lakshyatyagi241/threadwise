@@ -49,7 +49,7 @@ export function resolveFlows(o: FlowOptions = {}): FlowSettings {
   };
   return {
     flowVersion,
-    widgetsForWhatsappBots: o.widgetsForWhatsappBots ?? false,
+    widgetsForWhatsappBots: o.widgetsForWhatsappBots ?? true,
     flowLimit: lim(o.flowLimit, 'the flow limit'),
     widgetLimit: lim(o.widgetLimit, 'the widget limit'),
   };

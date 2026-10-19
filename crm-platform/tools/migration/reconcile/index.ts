@@ -1804,6 +1804,7 @@ async function checkOrg(
             plan?: {
               pipelines?: Array<{ name: string; stages: Array<{ name: string }> }>;
               lostReasons?: string[];
+              taskOutcomes?: Array<{ name: string; sortOrder: number; isActive: boolean }>;
               consent?: { config: Record<string, Record<string, string[] | string>> } | null;
               autoAssign?: boolean;
             };
@@ -1822,30 +1823,59 @@ async function checkOrg(
             WHERE p.org_id = ${orgId} AND lower(p.name) = lower(${p.name}) ORDER BY s.sort_order, s.id`)
         ).rows as Array<{ name: string }>;
         if (got.length === 0) alarm(`ORG_SETTINGS: pipeline "${p.name}" is missing`);
-        else if (got.map((x) => x.name).join('\u0000') !== p.stages.map((x) => x.name).join('\u0000'))
-          alarm(`ORG_SETTINGS: pipeline "${p.name}" has stages that differ from the Waboo pipeline (changed after the migration, or not written)`);
+        else if (
+          got.map((x) => x.name).join('\u0000') !== p.stages.map((x) => x.name).join('\u0000')
+        )
+          alarm(
+            `ORG_SETTINGS: pipeline "${p.name}" has stages that differ from the Waboo pipeline (changed after the migration, or not written)`,
+          );
       }
       for (const r of sp.lostReasons ?? []) {
         const n = (
-          await tx.execute(sql`SELECT count(*)::int AS n FROM deal_lost_reasons WHERE org_id = ${orgId} AND lower(btrim(name)) = lower(btrim(${r}))`)
+          await tx.execute(
+            sql`SELECT count(*)::int AS n FROM deal_lost_reasons WHERE org_id = ${orgId} AND lower(btrim(name)) = lower(btrim(${r}))`,
+          )
         ).rows[0] as { n: number };
         if (n.n === 0) alarm(`ORG_SETTINGS: lost reason "${r}" is missing`);
+      }
+      for (const o of sp.taskOutcomes ?? []) {
+        const row = (
+          await tx.execute(
+            sql`SELECT is_active, sort_order FROM task_outcomes WHERE org_id = ${orgId} AND lower(btrim(name)) = lower(btrim(${o.name}))`,
+          )
+        ).rows[0] as { is_active: boolean; sort_order: number } | undefined;
+        if (!row) alarm(`ORG_SETTINGS: task outcome "${o.name}" is missing`);
+        else if (row.is_active !== o.isActive || Number(row.sort_order) !== o.sortOrder)
+          alarm(
+            `ORG_SETTINGS: task outcome "${o.name}" differs from the Waboo entry (visibility or position)`,
+          );
       }
       if (sp.consent) {
         const row = (
           await tx.execute(sql`SELECT config FROM contact_consent_settings WHERE org_id = ${orgId}`)
-        ).rows[0] as { config: { optOutKeywords?: Record<string, string[]>; optInKeywords?: Record<string, string[]> } } | undefined;
+        ).rows[0] as
+          | {
+              config: {
+                optOutKeywords?: Record<string, string[]>;
+                optInKeywords?: Record<string, string[]>;
+              };
+            }
+          | undefined;
         if (!row) alarm('ORG_SETTINGS: the consent settings row is missing');
         else {
           const want = sp.consent.config;
           for (const k of ['optOutKeywords', 'optInKeywords'] as const)
             if (want[k] && JSON.stringify(row.config[k]) !== JSON.stringify(want[k]))
-              alarm(`ORG_SETTINGS: consent ${k} differ from the Waboo keywords (changed after the migration, or not written)`);
+              alarm(
+                `ORG_SETTINGS: consent ${k} differ from the Waboo keywords (changed after the migration, or not written)`,
+              );
         }
       }
       if (sp.autoAssign && applied?.counts?.result?.routingRule === 'created') {
         const n = (
-          await tx.execute(sql`SELECT count(*)::int AS n FROM routing_rules WHERE org_id = ${orgId} AND is_fallback`)
+          await tx.execute(
+            sql`SELECT count(*)::int AS n FROM routing_rules WHERE org_id = ${orgId} AND is_fallback`,
+          )
         ).rows[0] as { n: number };
         if (n.n === 0) alarm('ORG_SETTINGS: the auto-assignment rule is missing');
       }

@@ -122,6 +122,9 @@ export function buildFaqPlan(a: {
 const HEX = /^#[0-9a-fA-F]{3,8}$/;
 const hex = (v: unknown): string | null =>
   typeof v === 'string' && HEX.test(v.trim()) && v.trim().length <= 16 ? v.trim() : null;
+/** The launcher colour the app accepts: exactly 3 or 6 hex digits (anything else makes parseLauncher drop the whole saved look). */
+const launcherHex = (v: string | null): string | null =>
+  v !== null && /^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/.test(v) ? v : null;
 const url = (v: unknown): string | null =>
   typeof v === 'string' && /^https?:\/\/[^\s'"<>\\]{1,1000}$/i.test(v.trim()) ? v.trim() : null;
 const text = (v: unknown, max: number): string | null => {
@@ -558,7 +561,17 @@ export function buildWidgetPlan(a: {
       return Object.keys(out).length > 0 ? out : null;
     };
     const launcher: Record<string, unknown> = {};
-    const intro = text(c.subheader_text ?? c.whatsapp_subheader_text, 500);
+    // the bot's own look texts: name (24), sub-header (36), call-to-action (20) and the longer intro (500); an empty one is left out
+    const botName = text(bot.name, 24);
+    if (botName) launcher.botName = botName;
+    const sub = text(c.subheader_text ?? c.whatsapp_subheader_text, 36);
+    if (sub) launcher.subHeader = sub;
+    const cta = text(
+      c.cta_button_text ?? c.whatsapp_cta_button_text ?? obj(t.button).button_text,
+      20,
+    );
+    if (cta) launcher.ctaText = cta;
+    const intro = text(c.welcome_message_text ?? c.whatsapp_welcome_message_text, 500);
     if (intro) launcher.introMessage = intro;
     const dk = placement(
       c.desktop_display_position ?? c.display_position,
@@ -572,7 +585,7 @@ export function buildWidgetPlan(a: {
     );
     if (dk) launcher.desktop = dk;
     if (mb) launcher.mobile = mb;
-    if (primary) launcher.colour = primary;
+    if (launcherHex(primary)) launcher.colour = launcherHex(primary);
     wp.fallback = fallbackOf(c, bot, soft);
     const look = launcherLook(c, t, soft);
     if (look.buttonType) launcher.buttonType = look.buttonType;
@@ -662,7 +675,7 @@ export function buildWidgetPlan(a: {
       position,
       button_color: primary ?? WIDGET_DEFAULTS.button_color,
       button_image_url: logoUrl,
-      header_title: WIDGET_DEFAULTS.header_title,
+      header_title: text(bot.name, 120) ?? WIDGET_DEFAULTS.header_title,
       header_bg: primary ?? WIDGET_DEFAULTS.header_bg,
       header_text_color: WIDGET_DEFAULTS.header_text_color,
       welcome_message: welcome,
