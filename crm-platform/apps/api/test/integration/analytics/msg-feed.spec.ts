@@ -1,4 +1,5 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { sql } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/node-postgres';
 import { Client } from 'pg';
 import { resolve } from 'node:path';
@@ -16,6 +17,16 @@ import {
   MessageFeedService,
   orgTimezone,
 } from '../../../src/modules/analytics/query/message-feed.service';
+import {
+  MessageHistoryRepository,
+  type HistoryContext,
+  type HistorySelection,
+} from '../../../src/modules/chat-conversations';
+import {
+  feedRollup,
+  hiddenChannelIds,
+} from '../../../src/modules/team-inbox-conversations/message-history-rollup';
+import { visibleToJoinedSql } from '../../../src/modules/team-inbox-conversations/visibility-sql';
 import { RollupService } from '../../../src/modules/analytics/rollup/rollup.service';
 
 /**
@@ -246,6 +257,8 @@ describe('message feed rollup', () => {
       await q(`UPDATE messages SET status = status WHERE id = $1`, [live]);
       await q(`UPDATE messages SET deleted_at = now() WHERE id = $1`, [live]); // deleting is not a status change (decision D10)
       expect(await events(conv)).toHaveLength(1); // only the one live message's creation
+      // the History's scan leaves a deleted message out and the rollup keeps it (D10): undo it so the parity tests compare like with like
+      await q(`UPDATE messages SET deleted_at = NULL WHERE id = $1`, [live]);
     });
 
     it('never fails the message when the event cannot be written', async () => {
@@ -689,6 +702,90 @@ describe('message feed rollup', () => {
       expect(await feed.averageFirstReplySeconds(tx, w)).toBe(avg);
       expect(await feed.averageFirstReplySeconds(tx, { ...w, from: hour(5) })).toBeNull();
       expect(await feed.averageFirstReplySeconds(tx, w, { hidden: [o.wa] })).toBeNull();
+    });
+  });
+
+  describe('the History on the rollup equals the History on the scan', () => {
+    const repo = new MessageHistoryRepository();
+
+    // a second member in each workspace, who owns nothing: another person's personal mailbox is hidden from them
+    const members = new Map<number, number>();
+    const viewers = async (o: Org) => {
+      let other = members.get(o.id);
+      if (other === undefined) {
+        other = await scalar(
+          `INSERT INTO users (org_id, email, full_name, password_hash) VALUES ($1, $2, 'V', 'x') RETURNING id`,
+          [o.id, `v-${o.id}@t.test`],
+        );
+        members.set(o.id, other);
+      }
+      return [
+        { userId: other, scope: 'all' as const, teamIds: [], readsPersonalMail: false },
+        { userId: o.user, scope: 'all' as const, teamIds: [], readsPersonalMail: false },
+        { userId: other, scope: 'all' as const, teamIds: [], readsPersonalMail: true },
+      ];
+    };
+
+    it('the hidden channels are exactly the channels whose conversations the visibility rule hides', async () => {
+      for (const o of orgs) {
+        for (const v of await viewers(o)) {
+          const joined = visibleToJoinedSql(v, 'c');
+          const byRule = (
+            await tx.execute(sql`
+              SELECT DISTINCT c.channel_id AS id FROM conversations c ${joined.joins}
+               WHERE c.org_id = ${o.id} AND NOT (${joined.where})`)
+          ).rows.map((r) => Number((r as { id: string }).id));
+          const hidden = await hiddenChannelIds(tx, o.id, v);
+          expect(hidden.sort(), `${o.tz} ${JSON.stringify(v)}`).toEqual(byRule.sort());
+        }
+      }
+      expect((await hiddenChannelIds(tx, orgs[0]!.id, (await viewers(orgs[0]!))[0]!)).length).toBe(
+        1,
+      );
+    });
+
+    it('summary and charts from the rollup equal the scan for the cards, the volume, the type mix and the top conversations', async () => {
+      for (const o of orgs) {
+        for (const v of await viewers(o)) {
+          const joined = visibleToJoinedSql(v, 'c');
+          const hc: HistoryContext = {
+            orgId: o.id,
+            conversationJoins: joined.joins,
+            conversationVisible: joined.where,
+            bulk: true,
+            contacts: { scope: 'all', userId: v.userId, teamIds: [] },
+            cost: false,
+            hiddenChannelIds: await hiddenChannelIds(tx, o.id, v),
+          };
+          const window = { from: after(-9 * 86_400_000), to: after(6 * 86_400_000) };
+          const sel: HistorySelection = { window, scoping: {}, narrow: {} };
+          const prev: HistorySelection = {
+            ...sel,
+            window: { from: after(-24 * 86_400_000), to: window.from },
+          };
+          const rollup = feedRollup(tx, feed, hc, sel, o.tz);
+          const slow = await repo.summary(tx, hc, sel, prev);
+          const fast = await repo.summary(tx, hc, sel, prev, rollup);
+          // the average first reply is defined differently on the rollup (decision D9) and is compared in its own test
+          expect({ ...fast, avgFirstResponseSeconds: null }, `${o.tz} summary`).toEqual({
+            ...slow,
+            avgFirstResponseSeconds: null,
+          });
+          for (const [bucket, unit] of [
+            ['daily', 'day'],
+            ['hourly', 'hour'],
+            ['weekly', 'week'],
+          ] as const) {
+            const seriesFrom =
+              bucket === 'hourly' ? new Date(window.to.getTime() - 86_400_000) : window.from;
+            const opts = { bucket, tz: o.tz, seriesFrom };
+            const a = await repo.insightsLegacy(tx, hc, sel, opts);
+            const b = await repo.insights(tx, hc, sel, opts, rollup);
+            expect(b, `${o.tz} ${unit} ${JSON.stringify(v)}`).toEqual(a);
+            expect(a.topConversations.length).toBeGreaterThan(0);
+          }
+        }
+      }
     });
   });
 });

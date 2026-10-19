@@ -3,6 +3,7 @@ import { ChatChannelProvidersModule } from '../../infra/providers/chat-conversat
 import { FLOW_AI_PORT } from '../../infra/providers/flow-builder-editor/flow-ai.port';
 import { HttpFlowAiAdapter } from '../../infra/providers/flow-builder-editor/http-flow-ai.adapter';
 import { AiKeysUsageAdminModule } from '../ai-keys-usage-admin';
+import { AnalyticsModule } from '../analytics';
 import { ChatConversationsModule } from '../chat-conversations';
 import { CrmModule } from '../crm';
 import { EmailTemplatesModule } from '../email-templates';
@@ -50,6 +51,7 @@ import { SavedRepliesService } from './saved-replies/saved-replies.service';
 @Module({
   imports: [
     AiKeysUsageAdminModule,
+    AnalyticsModule,
     ChatConversationsModule,
     ChatChannelProvidersModule,
     CrmModule,
