@@ -1,9 +1,10 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import type { FieldDependencyResponse, FieldResponse, FieldSectionResponse } from '@crm/contracts';
 import { Badge, Checkbox, Field, Input, Select, Textarea } from '@crm/ui';
+import { hasLazyOptions, useFieldOptionSearch, useLazyOptionLabels } from '../api/properties';
 import { emptyInput, inputKind, isFieldApplicable, type InputValue } from '../lib/field-values';
 import { groupBySection } from '../lib/property-model';
 
@@ -132,6 +133,15 @@ export function PropertyInput({
           placeholder={placeholder}
           onChange={(e) => onChange(e.target.value)}
         />
+      ) : kind === 'select' && hasLazyOptions(field) ? (
+        <LazySelect
+          field={field}
+          id={id}
+          value={text}
+          disabled={readOnly}
+          invalid={Boolean(error)}
+          onChange={onChange}
+        />
       ) : kind === 'select' ? (
         <Select
           id={id}
@@ -214,5 +224,66 @@ export function PropertyInput({
         />
       )}
     </Field>
+  );
+}
+
+/**
+ * A dropdown whose option list is too long to ship with the property list (every City of the world): a search box above the
+ * dropdown fills it with the first matches, a page at a time from the API. The stored value stays selectable with its label.
+ */
+function LazySelect({
+  field,
+  id,
+  value,
+  disabled,
+  invalid,
+  onChange,
+}: {
+  field: FieldResponse;
+  id: string;
+  value: string;
+  disabled: boolean;
+  invalid: boolean;
+  onChange: (v: string) => void;
+}) {
+  const t = useTranslations('contacts-attributes-tags.form');
+  const [q, setQ] = useState('');
+  const found = useFieldOptionSearch(field.id, q);
+  const labels = useLazyOptionLabels([field], { [field.key]: value });
+  const options = found.data ?? [];
+  const heldLabel = value === '' ? '' : (labels.get(field.key)?.get(value) ?? value);
+  return (
+    <div className="space-y-1.5">
+      <Input
+        type="search"
+        dir="auto"
+        value={q}
+        disabled={disabled}
+        maxLength={100}
+        placeholder={t('searchOptions')}
+        aria-label={t('searchOptionsFor', { field: field.label })}
+        onChange={(e) => setQ(e.target.value)}
+      />
+      <Select
+        id={id}
+        value={value}
+        disabled={disabled}
+        invalid={invalid}
+        onChange={(e) => onChange(e.target.value)}
+      >
+        <option value="">{t('optionPlaceholder')}</option>
+        {value !== '' && !options.some((o) => o.value === value) && (
+          <option value={value}>{heldLabel}</option>
+        )}
+        {options.map((o) => (
+          <option key={o.id} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </Select>
+      {q.trim() !== '' && found.isSuccess && options.length === 0 && (
+        <p className="text-xs text-muted-foreground">{t('noOptionsFound')}</p>
+      )}
+    </div>
   );
 }

@@ -104,6 +104,7 @@
       "failed": "com falha",
       "edited": "Editado {when}",
       "openBuilder": "Abrir construtor",
+      "faqs": "Perguntas frequentes",
       "pause": "Pausar",
       "resume": "Retomar",
       "rename": "Renomear",
@@ -565,7 +566,7 @@
           "startPinned": "Este é o ponto de partida (clique para desafixar)",
           "startMake": "Tornar este o ponto de partida",
           "startPoint": "Ponto de partida",
-          "editTitle": "Editar (abrir inspetor)",
+          "editTitle": "Editar (abrir o inspetor, ou clicar duas vezes no nó, ou pressionar Enter)",
           "edit": "Editar",
           "duplicateTitle": "Duplicar (Ctrl+D)",
           "duplicate": "Duplicar",
@@ -581,7 +582,9 @@
           "nothingHint": "Clique em um nó no canvas para editar suas propriedades,<br/>ou arraste um cartão da esquerda para adicionar um novo nó.",
           "nodeFallback": "Nó",
           "id": "id",
-          "noSettings": "Este nó não tem configurações."
+          "noSettings": "Este nó não tem configurações.",
+          "confirmDeleteTitle": "Excluir este nó?",
+          "confirmDeleteMessage": "O nó e as suas conexões serão removidos. Pressione Ctrl+Z para desfazer enquanto não sair do construtor."
         },
         "palette": {
           "modeCall": "Ligar",

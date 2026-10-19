@@ -196,7 +196,8 @@
       "core-load": "코어 로드",
       "flow-state": "플로우 상태",
       "reconcile": "대조",
-      "report": "보고서"
+      "report": "보고서",
+      "whatsapp": "WhatsApp 번호"
     },
     "stepStatus": {
       "running": "실행 중",

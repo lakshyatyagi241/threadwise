@@ -131,7 +131,11 @@
         "previousStage": "Giai đoạn trước",
         "previousStageSince": "Giai đoạn trước từ",
         "lostReason": "Lý do thất bại",
-        "updatedAt": "Cập nhật lần cuối"
+        "updatedAt": "Cập nhật lần cuối",
+        "leadScore": "Điểm khách hàng tiềm năng",
+        "originalStage": "Giai đoạn vòng đời ban đầu",
+        "createdBy": "Người tạo",
+        "updatedBy": "Người cập nhật"
       },
       "company": {
         "title": "Công ty",

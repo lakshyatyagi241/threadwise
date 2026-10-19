@@ -38,8 +38,13 @@ export const contactFilterShape = {
   tagMode: z.enum(['any', 'all']).default('any'),
   /** Created by a CSV import (Reference's "Imported" quick filter, which never matched anything). */
   imported: queryBoolean().optional(),
-  /** true: opted out. false: subscribed. */
+  /** true: opted out. false: not opted out. */
   unsubscribed: queryBoolean().optional(),
+  /**
+   * true: subscribed as the list's WhatsApp opt-in column says it (the WhatsApp subscription label is "subscribed" and the contact has
+   * not opted out). false: everyone else, including a contact with no label recorded.
+   */
+  subscribed: queryBoolean().optional(),
   /** true: flagged as a minor. false: not flagged (BL-190). */
   minor: queryBoolean().optional(),
   /** true: uncontacted (BL-290). false: contacted. */

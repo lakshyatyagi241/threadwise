@@ -164,7 +164,12 @@
       "change": "Zmień",
       "terms": "Płacąc, akceptujesz nasze <terms>Warunki</terms> oraz <privacy>Politykę prywatności</privacy>.",
       "refundNote": "Nie jesteś zadowolony? Napisz do nas w ciągu {days} dni, a zwrócimy pełną kwotę — bez pytań i formularzy.",
-      "autoRenewTitle": "Automatycznie odnawiaj ten plan"
+      "autoRenewTitle": "Automatycznie odnawiaj ten plan",
+      "amountSubtitle": "Wpisz kwotę, którą chcesz dodać. Następnie zobaczysz cenę końcową i metody płatności.",
+      "amountLabel": "Kwota do dodania",
+      "amountHint": "Tylko cyfry, na przykład 1000 lub 250,50.",
+      "amountInvalid": "Wpisz kwotę większą od zera, na przykład 500 lub 250,50.",
+      "amountContinue": "Dalej"
     },
     "orders": {
       "title": "Historia zamówień",

@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Connecter une boîte e-mail",
-          "body": "Connectez-vous avec Google ou Microsoft, ou saisissez les paramètres de votre serveur de messagerie, et autorisez Threadwise à lire et envoyer des e-mails pour cette adresse."
+          "body": "Connectez-vous avec Google ou Microsoft, ou saisissez les paramètres de votre serveur de messagerie, et autorisez {app} à lire et envoyer des e-mails pour cette adresse."
         },
         "inbox": {
           "title": "Les e-mails arrivent dans la boîte de réception",

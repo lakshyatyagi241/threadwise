@@ -317,7 +317,13 @@
         "delivered": "Đã gửi đến",
         "queued": "Đang chờ gửi",
         "failed": "Thất bại",
-        "replyRate": "Tỷ lệ phản hồi"
+        "replyRate": "Tỷ lệ phản hồi",
+        "received": "Tin nhắn đã nhận",
+        "conversationsOpen": "Cuộc trò chuyện đang mở",
+        "conversationsClosed": "Cuộc trò chuyện đã đóng",
+        "conversationsAssigned": "Đã phân công",
+        "conversationsUnassigned": "Chưa phân công",
+        "conversationsTotal": "{count, plural, other {# cuộc trò chuyện}}"
       },
       "series": {
         "sent": "Đã gửi",
@@ -443,7 +449,8 @@
             "unknown": "Không xác định"
           }
         }
-      }
+      },
+      "moreKpis": "Tin nhắn và cuộc trò chuyện"
     },
     "health": {
       "nav": "Tình trạng hệ thống",

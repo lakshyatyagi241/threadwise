@@ -295,7 +295,7 @@ export const REGISTRY: RegistryEntry[] = [
   m(
     'automation_metadata',
     ['flows'],
-    'advanced flows (one document per automation, node map + UI layout): one flows row per automation (category "Waboo automation"), converted by automation/convert.ts. Nodes WaDesk has no equivalent for become inert placeholders that keep their type and scrubbed config; every loss is a counted soft issue. is_published false AND is_active false, always (nothing is armed). Latest document per automationId; empty drafts excluded NO_NODES. Manager to confirm automations are in scope (spec C Q4)',
+    'advanced flows (one document per automation, node map + UI layout): one flows row per automation (category "Waboo automation"), converted by automation/convert.ts. Nodes WaDesk has no equivalent for become inert placeholders that keep their type and scrubbed config; every loss is a counted soft issue. is_published false AND is_active false, always (nothing is armed). Latest document per automationId; an empty draft (no nodes) is loaded as an empty flow with a manual_enroll trigger. Manager to confirm automations are in scope (spec C Q4)',
     'automation_flows',
   ),
   m(

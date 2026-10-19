@@ -131,7 +131,11 @@
         "previousStage": "Previous stage",
         "previousStageSince": "Previous stage since",
         "lostReason": "Lost reason",
-        "updatedAt": "Last updated"
+        "updatedAt": "Last updated",
+        "leadScore": "Lead score",
+        "originalStage": "Original lifecycle stage",
+        "createdBy": "Created by",
+        "updatedBy": "Updated by"
       },
       "company": {
         "title": "Company",

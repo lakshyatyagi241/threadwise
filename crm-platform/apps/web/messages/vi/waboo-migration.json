@@ -196,7 +196,8 @@
       "core-load": "Nạp lõi",
       "flow-state": "Trạng thái luồng",
       "reconcile": "Đối soát",
-      "report": "Báo cáo"
+      "report": "Báo cáo",
+      "whatsapp": "Số WhatsApp"
     },
     "stepStatus": {
       "running": "Đang chạy",

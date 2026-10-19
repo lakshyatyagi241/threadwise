@@ -131,7 +131,11 @@
         "previousStage": "이전 단계",
         "previousStageSince": "이전 단계 시작일",
         "lostReason": "실패 사유",
-        "updatedAt": "마지막 업데이트"
+        "updatedAt": "마지막 업데이트",
+        "leadScore": "리드 점수",
+        "originalStage": "최초 라이프사이클 단계",
+        "createdBy": "생성자",
+        "updatedBy": "수정자"
       },
       "company": {
         "title": "회사",

@@ -104,6 +104,7 @@
       "failed": "失敗",
       "edited": "{when}に編集",
       "openBuilder": "ビルダーを開く",
+      "faqs": "よくある質問",
       "pause": "一時停止",
       "resume": "再開",
       "rename": "名前を変更",
@@ -565,7 +566,7 @@
           "startPinned": "これが開始点です(クリックで固定を解除)",
           "startMake": "これを開始点にする",
           "startPoint": "開始点",
-          "editTitle": "編集(インスペクターを開く)",
+          "editTitle": "編集（インスペクターを開く。ノードのダブルクリックまたは Enter でも開きます）",
           "edit": "編集",
           "duplicateTitle": "複製(Ctrl+D)",
           "duplicate": "複製",
@@ -581,7 +582,9 @@
           "nothingHint": "キャンバス上のノードをクリックしてプロパティを編集するか、<br/>左のカードをドラッグして新しいノードを追加します。",
           "nodeFallback": "ノード",
           "id": "ID",
-          "noSettings": "このノードには設定がありません。"
+          "noSettings": "このノードには設定がありません。",
+          "confirmDeleteTitle": "このノードを削除しますか？",
+          "confirmDeleteMessage": "ノードとその接続が削除されます。ビルダーを閉じるまでは Ctrl+Z で元に戻せます。"
         },
         "palette": {
           "modeCall": "通話",

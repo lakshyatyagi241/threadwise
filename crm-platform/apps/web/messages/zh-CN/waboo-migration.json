@@ -196,7 +196,8 @@
       "core-load": "核心加载",
       "flow-state": "流程状态",
       "reconcile": "核对",
-      "report": "报告"
+      "report": "报告",
+      "whatsapp": "WhatsApp 号码"
     },
     "stepStatus": {
       "running": "运行中",

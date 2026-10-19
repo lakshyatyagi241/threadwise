@@ -6,7 +6,7 @@ import { Spinner } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
 import { useContactConversations } from '../../api/conversations';
-import { useContactCalls, useContactOpenTaskCount } from '../../api/stats';
+import { useContactCalls, useContactMessageStats, useContactOpenTaskCount } from '../../api/stats';
 import { callFigures, conversationFigures } from '../../lib/contact-data';
 import { formatDateTime } from '../../lib/format';
 import { Panel, type SectionProps } from './shared';
@@ -33,8 +33,8 @@ function Tile({ label, children, wide }: { label: string; children: ReactNode; w
  * "Communication stats": only figures the API really has per contact, each tile shown only when its source is allowed and has
  * loaded.
  *
- * Limits, on purpose: there are no per-contact sent / delivered / read message counts in the API. Conversation and message
- * figures come from the inbox conversations found for this contact (`useContactConversations`: searched by phone, e-mail or
+ * The WhatsApp counters (sent, delivered, seen, received, failed, replied) are the API's own count over the contact's WhatsApp
+ * conversations. The other conversation and message figures come from the inbox conversations found for this contact (`useContactConversations`: searched by phone, e-mail or
  * name, then filtered to this contact id, archived threads left out). Call figures come from the call log filtered the same
  * way over the last year (`useContactCalls`). Open tasks is the contact's own task list. Lead score, last activity and the
  * created date come from the contact itself. A source that is forbidden, off the plan or failing hides its tiles.
@@ -52,6 +52,7 @@ export function StatsSection({ contact, variant }: SectionProps) {
   const conversations = useContactConversations(contact, canConversations);
   const calls = useContactCalls(contact, canCalls);
   const tasks = useContactOpenTaskCount(contact.id, canTasks);
+  const whatsapp = useContactMessageStats(contact.id, canConversations);
 
   const when = (iso: string | null) => formatDateTime(iso, locale, timeZone) || t('none');
 
@@ -64,6 +65,7 @@ export function StatsSection({ contact, variant }: SectionProps) {
   // A source that is refused or fails just shows no tiles (an error leaves `isSuccess` false); only the first load shows the spinner.
   const loading =
     (canConversations && conversations.isPending) ||
+    whatsapp.isPending ||
     (canCalls && calls.isPending) ||
     (canTasks && tasks.isPending);
 
@@ -86,6 +88,16 @@ export function StatsSection({ contact, variant }: SectionProps) {
             <Tile label={t('lastOutbound')} wide>
               {when(figures.lastOutboundAt)}
             </Tile>
+          </>
+        )}
+        {whatsapp.stats && (
+          <>
+            <Tile label={t('waSent')}>{format.number(whatsapp.stats.sent)}</Tile>
+            <Tile label={t('waDelivered')}>{format.number(whatsapp.stats.delivered)}</Tile>
+            <Tile label={t('waSeen')}>{format.number(whatsapp.stats.seen)}</Tile>
+            <Tile label={t('waReceived')}>{format.number(whatsapp.stats.received)}</Tile>
+            <Tile label={t('waFailed')}>{format.number(whatsapp.stats.failed)}</Tile>
+            <Tile label={t('waReplied')}>{format.number(whatsapp.stats.replied)}</Tile>
           </>
         )}
         {showCalls && (
@@ -117,6 +129,9 @@ export function StatsSection({ contact, variant }: SectionProps) {
         <div role="status" className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
           <Spinner /> {t('loading')}
         </div>
+      )}
+      {whatsapp.stats && (
+        <p className="mt-3 text-xs text-muted-foreground">{t('waFootnote')}</p>
       )}
       <p className="mt-3 text-xs text-muted-foreground">{t('footnote')}</p>
       {showCalls && calls.partial && (

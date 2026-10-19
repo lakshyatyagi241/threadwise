@@ -91,7 +91,14 @@
         "none": "まだありません",
         "atLeast": "{count}件以上",
         "footnote": "メッセージの数値は、この連絡先で見つかった会話（電話番号、メールアドレス、名前による照合）が対象です。通話の数値は過去1年間で、電話番号または名前で照合しています。",
-        "callsPartial": "読み取れる件数を超える通話が一致したため、通話の数値が実際より少ない可能性があります。"
+        "callsPartial": "読み取れる件数を超える通話が一致したため、通話の数値が実際より少ない可能性があります。",
+        "waSent": "WhatsApp送信数",
+        "waDelivered": "WhatsApp配信数",
+        "waSeen": "WhatsApp既読数",
+        "waReceived": "WhatsApp受信数",
+        "waFailed": "WhatsApp失敗数",
+        "waReplied": "WhatsApp返信数",
+        "waFootnote": "WhatsAppの数値は、この連絡先とのWhatsApp会話にあるすべてのメッセージを数えます。送信したメッセージの次が連絡先のメッセージだった場合、返信ありとして数えます。"
       }
     }
   }

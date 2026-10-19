@@ -19,6 +19,9 @@ export function toTaskResponse(row: TaskRow, notes: string | null): TaskResponse
     contact: row.contactUuid ? { id: row.contactUuid, name: row.contactName } : null,
     deal: row.dealUuid ? { id: row.dealUuid, title: row.dealTitle ?? '' } : null,
     company: row.companyUuid ? { id: row.companyUuid, name: row.companyName ?? '' } : null,
+    outcome: row.outcomeUuid
+      ? { id: row.outcomeUuid, name: row.outcomeName ?? '', isActive: row.outcomeActive ?? true }
+      : null,
     source: row.source,
     rowVersion: row.rowVersion,
     createdAt: row.createdAt.toISOString(),
@@ -39,6 +42,7 @@ export function taskEventPayload(row: TaskRow): Record<string, unknown> {
     contactId: row.contactUuid,
     dealId: row.dealUuid,
     companyId: row.companyUuid,
+    outcomeId: row.outcomeUuid,
     source: row.source,
   };
 }

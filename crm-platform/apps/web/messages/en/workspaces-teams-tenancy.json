@@ -58,7 +58,10 @@
         "role": "Role",
         "status": "Status",
         "joined": "Joined",
-        "actions": "Actions"
+        "actions": "Actions",
+        "phone": "Phone",
+        "chatLimit": "Concurrent chats",
+        "lastLogin": "Last login"
       },
       "pending": "pending",
       "you": "You",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "On leave until {date}",
       "onLeaveOpen": "On leave",
       "leaveFrom": "Leave from {date}",
-      "leaveAction": "Leave and delegate"
+      "leaveAction": "Leave and delegate",
+      "noLimit": "No limit",
+      "neverSignedIn": "Never",
+      "editAction": "Change phone and chat limit"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -129,7 +135,14 @@
       "nameTooLong": "The name can be at most {max} characters.",
       "emailInvalid": "Enter a valid email address.",
       "upgrade": "Upgrade plan",
-      "emailRequired": "Enter an email address."
+      "emailRequired": "Enter an email address.",
+      "phone": "Phone number (optional)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "With the country code.",
+      "phoneInvalid": "Enter the number with its country code, for example +91 98765 43210.",
+      "chatLimit": "Concurrent chats",
+      "chatLimitHint": "Most open chats this person is given at once. Leave empty for no limit.",
+      "chatLimitInvalid": "Enter a whole number from 1 to {max}, or leave it empty for no limit."
     },
     "teams": {
       "eyebrow": "Workspace",
@@ -320,6 +333,31 @@
       "undoTitle": "Undo this reassignment?",
       "undoMessage": "Contacts and deals nobody has changed since go back to the previous owner. The others stay where they are.",
       "restored": "{count} returned, {skipped} left where they are."
+    },
+    "details": {
+      "eyebrow": "Workspace",
+      "title": "Change member",
+      "intro": "Phone number and chat limit of {name}.",
+      "phone": "Phone number",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "With the country code. Leave empty to remove it.",
+      "phoneInvalid": "Enter the number with its country code, for example +91 98765 43210.",
+      "chatLimit": "Concurrent chats",
+      "chatLimitHint": "Automatic assignment stops giving this person chats once they hold this many open ones. Leave empty for no limit.",
+      "chatLimitPlaceholder": "No limit",
+      "chatLimitInvalid": "Enter a whole number from 1 to {max}, or leave it empty for no limit.",
+      "lastLogin": "Last login",
+      "lastLoginNever": "Has not signed in yet",
+      "submit": "Save",
+      "saving": "Saving…",
+      "saved": "Member updated."
+    },
+    "availability": {
+      "label": "Availability",
+      "available": "Available",
+      "offline": "Offline",
+      "hint": "While you are offline, no new chats are assigned to you automatically. Chats you already have stay yours.",
+      "failed": "Could not change"
     }
   }
 }

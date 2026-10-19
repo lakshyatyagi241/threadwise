@@ -10,7 +10,7 @@ import {
 import type { TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
 import { configureMock, mockEnabled } from './http';
-import { tasksApi, type TaskPageResult, type TaskSource } from './service';
+import { taskOutcomesApi, tasksApi, type TaskPageResult, type TaskSource } from './service';
 import type { Member, RecordRef } from './schemas';
 import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
@@ -20,6 +20,7 @@ export const KEYS = {
   counts: ['tasks', 'counts'] as const,
   task: (id: string) => ['tasks', 'task', id] as const,
   members: ['tasks', 'members'] as const,
+  outcomes: ['tasks', 'outcomes'] as const,
   ref: (kind: 'contact' | 'deal' | 'company', id: string) => ['tasks', 'ref', kind, id] as const,
 };
 
@@ -76,6 +77,26 @@ export function useTask(id: string | null) {
     retry: transientRetry,
     retryDelay: transientRetryDelay,
   });
+}
+
+/**
+ * The task outcomes. `activeOnly` is what a picker offers; the settings screen lists all. A failure (no permission, an older server)
+ * leaves the pickers empty rather than breaking the task form: they are optional.
+ */
+export function useTaskOutcomes(activeOnly: boolean, opts: { enabled?: boolean } = {}) {
+  return useQuery({
+    queryKey: [...KEYS.outcomes, activeOnly],
+    queryFn: ({ signal }) => taskOutcomesApi.list(activeOnly, signal),
+    enabled: opts.enabled ?? true,
+    staleTime: 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** After the list changed: every picker and the settings screen refetch, and so do the task lists (names and counts move). */
+export function invalidateTaskOutcomes(qc: QueryClient) {
+  return Promise.all([qc.invalidateQueries({ queryKey: KEYS.outcomes }), invalidateTasks(qc)]);
 }
 
 /**

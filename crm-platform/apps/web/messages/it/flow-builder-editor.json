@@ -104,6 +104,7 @@
       "failed": "fallito",
       "edited": "Modificato {when}",
       "openBuilder": "Apri builder",
+      "faqs": "Domande frequenti",
       "pause": "Metti in pausa",
       "resume": "Riprendi",
       "rename": "Rinomina",
@@ -948,7 +949,7 @@
           "startPinned": "Questo è il punto di partenza (clicca per rimuoverlo)",
           "startMake": "Imposta come punto di partenza",
           "startPoint": "Punto di partenza",
-          "editTitle": "Modifica (apri l’ispettore)",
+          "editTitle": "Modifica (apri l'ispettore, o doppio clic sul nodo, o premi Invio)",
           "edit": "Modifica",
           "duplicateTitle": "Duplica (Ctrl+D)",
           "duplicate": "Duplica",
@@ -964,7 +965,9 @@
           "nothingHint": "Clicca un nodo sulla tela per modificarne le proprietà,<br/>oppure trascina una card da sinistra per aggiungere un nuovo nodo.",
           "nodeFallback": "Nodo",
           "id": "id",
-          "noSettings": "Questo nodo non ha impostazioni."
+          "noSettings": "Questo nodo non ha impostazioni.",
+          "confirmDeleteTitle": "Eliminare questo nodo?",
+          "confirmDeleteMessage": "Il nodo e le sue connessioni vengono rimossi. Premi Ctrl+Z per annullare finché non esci dall'editor."
         },
         "palette": {
           "modeCall": "Chiamata",

@@ -131,7 +131,11 @@
         "previousStage": "المرحلة السابقة",
         "previousStageSince": "المرحلة السابقة منذ",
         "lostReason": "سبب الخسارة",
-        "updatedAt": "آخر تحديث"
+        "updatedAt": "آخر تحديث",
+        "leadScore": "درجة العميل المحتمل",
+        "originalStage": "مرحلة دورة الحياة الأصلية",
+        "createdBy": "أنشأه",
+        "updatedBy": "حدّثه"
       },
       "company": {
         "title": "الشركة",

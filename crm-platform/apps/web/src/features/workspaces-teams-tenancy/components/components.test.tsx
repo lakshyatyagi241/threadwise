@@ -37,6 +37,8 @@ const actions: RowActions = {
   onResend: noop,
   onRemove: noop,
   onLeave: noop,
+  onEdit: noop,
+  timeZone: 'Asia/Kolkata',
   leaves: { items: [], today: '2026-10-13' },
 };
 
@@ -128,6 +130,43 @@ describe('MembersTable', () => {
     expect(out).toContain('bg-danger');
   });
 
+  it('shows phone, concurrent chats and last login for each member', () => {
+    const out = table({
+      meTier: 'admin',
+      members: [
+        member(2, 'agent', {
+          phone: '+919876543210',
+          chatLimit: 5,
+          lastLoginAt: '2026-10-02T12:00:00.000Z',
+        }),
+        member(3, 'agent'),
+      ],
+    });
+    expect(out).toContain('>Phone<');
+    expect(out).toContain('>Concurrent chats<');
+    expect(out).toContain('>Last login<');
+    expect(out).toContain('+919876543210');
+    expect(out).toMatch(/data-testid="chat-limit-person2@example.test"[^>]*>5</);
+    // 12:00 UTC is 5:30 PM in the workspace time zone (Asia/Kolkata), not 12:00 PM.
+    expect(out).toContain('Oct 2, 2026, 5:30 PM');
+    // A member with no limit, no phone and no sign-in yet.
+    expect(out).toMatch(/data-testid="chat-limit-person3@example.test"[^>]*><span[^>]*>No limit</);
+    expect(out).toMatch(/data-testid="last-login-person3@example.test"[^>]*><span[^>]*>Never</);
+  });
+
+  it('offers the Change member pencil to the invite permission, for oneself too, but not on a higher rank', () => {
+    const out = table({
+      meTier: 'admin',
+      members: [member(1, 'admin'), member(2, 'agent'), member(4, 'owner')],
+    });
+    expect(out).toContain('data-testid="edit-person2@example.test"');
+    expect(out).toContain('data-testid="edit-person1@example.test"');
+    expect(out).not.toContain('data-testid="edit-person4@example.test"');
+    expect(table({ meTier: 'manager', members: [member(2, 'agent')] })).not.toContain(
+      'data-testid="edit-',
+    );
+  });
+
   it('shows skeleton rows while loading', () => {
     const out = table({ meTier: 'admin', members: [], loading: true });
     expect(out).toContain('aria-busy="true"');
@@ -160,6 +199,15 @@ describe('InviteDialog', () => {
       'Manager — sees all teams, can assign + resolve',
       'Viewer — read-only',
     ]);
+  });
+
+  it('asks for a phone number and Concurrent chats, starting at 4', () => {
+    const out = html(
+      <InviteDialog open roles={summary('admin').roles} onClose={noop} onInvited={noop} />,
+    );
+    expect(out).toContain('Phone number (optional)');
+    expect(out).toContain('Concurrent chats');
+    expect(out).toMatch(/name="chatLimit"[^>]*value="4"/);
   });
 
   it('offers Admin and Owner to an owner', () => {

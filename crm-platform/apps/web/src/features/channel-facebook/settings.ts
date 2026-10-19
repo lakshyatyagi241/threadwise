@@ -8,6 +8,6 @@ export const settings = [
     href: '/facebook',
     icon: 'facebook',
     order: 20,
-    gates: { permission: 'fb.pages.read' },
+    gates: { permission: 'fb.pages.read', planFeature: 'extra_channels' },
   }),
 ];

@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {সীমাহীন # টি সীমা দেখান} other {সীমাহীন # টি সীমা দেখান}}",
       "hideUnlimited": "সীমাহীন সীমাগুলো লুকান",
       "groupCount": "{count, plural, one {# টি সীমা} other {# টি সীমা}}",
-      "groupHidden": "{count, plural, one {আরও # টি সীমা সীমাহীন এবং লুকানো আছে।} other {আরও # টি সীমা সীমাহীন এবং লুকানো আছে।}}"
+      "groupHidden": "{count, plural, one {আরও # টি সীমা সীমাহীন এবং লুকানো আছে।} other {আরও # টি সীমা সীমাহীন এবং লুকানো আছে।}}",
+      "activatedOn": "{date} তারিখে সক্রিয় হয়েছে",
+      "previousBilling": "আগের বিলিংয়ের তারিখ: {date}",
+      "subscriptionId": "সাবস্ক্রিপশন আইডি: {id}"
     },
     "operator": {
       "title": "ওয়ার্কস্পেস প্ল্যান",

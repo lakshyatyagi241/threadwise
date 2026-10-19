@@ -731,9 +731,9 @@ function PropertyRow({
       </td>
       <td className="px-3 py-3">
         <span>{t(`types.${f.fieldType}`)}</span>
-        {f.options && f.options.length > 0 && (
+        {(f.optionCount ?? f.options?.length ?? 0) > 0 && (
           <span className="block text-xs text-muted-foreground">
-            {t('row.optionCount', { count: f.options.length })}
+            {t('row.optionCount', { count: f.optionCount ?? f.options?.length ?? 0 })}
           </span>
         )}
       </td>

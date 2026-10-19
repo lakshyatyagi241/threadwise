@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {Mostra # limite illimitato} other {Mostra # limiti illimitati}}",
       "hideUnlimited": "Nascondi i limiti illimitati",
       "groupCount": "{count, plural, one {# limite} other {# limiti}}",
-      "groupHidden": "{count, plural, one {# altro limite è illimitato e nascosto.} other {# altri limiti sono illimitati e nascosti.}}"
+      "groupHidden": "{count, plural, one {# altro limite è illimitato e nascosto.} other {# altri limiti sono illimitati e nascosti.}}",
+      "activatedOn": "Attivato il {date}",
+      "previousBilling": "Data di fatturazione precedente: {date}",
+      "subscriptionId": "ID abbonamento: {id}"
     },
     "operator": {
       "title": "Piani del workspace",

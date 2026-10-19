@@ -1,19 +1,32 @@
 import {
+  WSP_CHAT_LIMIT_DEFAULT,
   WSP_MEMBER_NAME_MAX,
   inviteWspMemberSchema,
   type InviteWspMemberInput,
   type WspMembersSummary,
   type WspRoleTier,
 } from '@crm/contracts';
+import { parseChatLimit, parsePhone } from './details-form';
 
 export interface InviteForm {
   fullName: string;
   email: string;
   roleId: string;
+  phone: string;
+  /** Digits as typed; Waboo's Add User form starts at 4, empty = no limit. */
+  chatLimit: string;
 }
 
+export const blankInvite = (roleId: string): InviteForm => ({
+  fullName: '',
+  email: '',
+  roleId,
+  phone: '',
+  chatLimit: String(WSP_CHAT_LIMIT_DEFAULT),
+});
+
 export type InviteErrors = Partial<
-  Record<'fullName' | 'email', 'required' | 'tooLong' | 'invalid'>
+  Record<'fullName' | 'email' | 'phone' | 'chatLimit', 'required' | 'tooLong' | 'invalid'>
 >;
 
 /** Reference's dropdown order: Agent first (the default), then Manager, Admin, Viewer, Owner. Custom roles last. */
@@ -36,14 +49,20 @@ export function grantableRoles(roles: WspMembersSummary['roles']): WspMembersSum
 export function validateInvite(
   form: InviteForm,
 ): { input: InviteWspMemberInput } | { errors: InviteErrors } {
+  const phone = parsePhone(form.phone);
+  const chatLimit = parseChatLimit(form.chatLimit);
   const parsed = inviteWspMemberSchema.safeParse({
     fullName: form.fullName,
     email: form.email.trim(),
     roleId: form.roleId,
+    ...(phone !== undefined ? { phone } : {}),
+    ...(chatLimit !== undefined ? { chatLimit } : {}),
   });
-  if (parsed.success) return { input: parsed.data };
   const errors: InviteErrors = {};
-  for (const issue of parsed.error.issues) {
+  if (phone === undefined) errors.phone = 'invalid';
+  if (chatLimit === undefined) errors.chatLimit = 'invalid';
+  if (parsed.success && Object.keys(errors).length === 0) return { input: parsed.data };
+  for (const issue of parsed.success ? [] : parsed.error.issues) {
     const field = issue.path[0];
     if (field !== 'fullName' && field !== 'email') continue;
     if (errors[field]) continue;

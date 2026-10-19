@@ -139,11 +139,12 @@ describe('contactFilterBody / listQuery', () => {
     expect(b.groupId).toBeUndefined();
   });
 
-  it('leaves unset filters out, so "subscribed" is false and "all" is absent', () => {
+  it('leaves unset filters out, so "all" is absent', () => {
     expect(contactFilterBody(DEFAULT_FILTERS).unsubscribed).toBeUndefined();
-    expect(contactFilterBody({ ...DEFAULT_FILTERS, consent: 'subscribed' }).unsubscribed).toBe(
-      false,
-    );
+    const subscribed = contactFilterBody({ ...DEFAULT_FILTERS, consent: 'subscribed' });
+    // "Subscribed" is the WhatsApp opt-in column (label subscribed, not opted out), not just "has not opted out".
+    expect(subscribed.subscribed).toBe(true);
+    expect(subscribed.unsubscribed).toBeUndefined();
     expect(contactFilterBody({ ...DEFAULT_FILTERS, q: '  ' }).q).toBeUndefined();
   });
 

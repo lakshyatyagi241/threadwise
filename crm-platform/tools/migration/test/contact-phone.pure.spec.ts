@@ -51,3 +51,16 @@ describe('sortForDisplayId', () => {
     expect(rows[0]!.legacy_id).toBe('69cf6533e56b94f618025e65');
   });
 });
+
+describe('phoneOf: full international digits without a plus', () => {
+  it('reads another country\'s full number when the default country does not fit', async () => {
+    const { phoneOf } = await import('../transform/contacts');
+    expect(phoneOf('5521987654321', null, '91')).toBe('+5521987654321'); // Brazil
+    expect(phoneOf('447911123456', null, '91')).toBe('+447911123456'); // UK
+    expect(phoneOf('919876543210', null, '91')).toBe('+919876543210'); // the default country is untouched
+  });
+  it('does not guess when the contact states its own country code', async () => {
+    const { phoneOf } = await import('../transform/contacts');
+    expect(phoneOf('5521987654321', '91', '91')).toBeNull();
+  });
+});

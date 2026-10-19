@@ -196,7 +196,8 @@
       "core-load": "मुख्य लोड",
       "flow-state": "फ़्लो की स्थिति",
       "reconcile": "मिलान",
-      "report": "रिपोर्ट"
+      "report": "रिपोर्ट",
+      "whatsapp": "WhatsApp नंबर"
     },
     "stepStatus": {
       "running": "चल रहा है",

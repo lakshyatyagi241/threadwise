@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {# unbegrenztes Limit anzeigen} other {# unbegrenzte Limits anzeigen}}",
       "hideUnlimited": "Unbegrenzte Limits ausblenden",
       "groupCount": "{count, plural, one {# Limit} other {# Limits}}",
-      "groupHidden": "{count, plural, one {# weiteres Limit ist unbegrenzt und ausgeblendet.} other {# weitere Limits sind unbegrenzt und ausgeblendet.}}"
+      "groupHidden": "{count, plural, one {# weiteres Limit ist unbegrenzt und ausgeblendet.} other {# weitere Limits sind unbegrenzt und ausgeblendet.}}",
+      "activatedOn": "Aktiviert am {date}",
+      "previousBilling": "Vorheriges Abrechnungsdatum: {date}",
+      "subscriptionId": "Abonnement-ID: {id}"
     },
     "operator": {
       "title": "Workspace-Tarife",

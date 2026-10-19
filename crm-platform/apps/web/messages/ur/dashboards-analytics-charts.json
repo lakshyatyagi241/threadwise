@@ -317,7 +317,13 @@
         "delivered": "پہنچ گئے",
         "queued": "قطار میں",
         "failed": "ناکام",
-        "replyRate": "جواب کی شرح"
+        "replyRate": "جواب کی شرح",
+        "received": "موصول شدہ پیغامات",
+        "conversationsOpen": "کھلی گفتگو",
+        "conversationsClosed": "بند گفتگو",
+        "conversationsAssigned": "تفویض شدہ",
+        "conversationsUnassigned": "غیر تفویض شدہ",
+        "conversationsTotal": "{count, plural, one {# گفتگو} other {# گفتگوئیں}}"
       },
       "series": {
         "sent": "بھیجے گئے",
@@ -443,7 +449,8 @@
             "unknown": "نامعلوم"
           }
         }
-      }
+      },
+      "moreKpis": "پیغامات اور گفتگو"
     },
     "health": {
       "nav": "سسٹم کی صحت",

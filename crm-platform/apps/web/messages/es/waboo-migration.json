@@ -196,7 +196,8 @@
       "core-load": "Carga principal",
       "flow-state": "Estado de flujos",
       "reconcile": "Conciliación",
-      "report": "Informe"
+      "report": "Informe",
+      "whatsapp": "Número de WhatsApp"
     },
     "stepStatus": {
       "running": "En curso",

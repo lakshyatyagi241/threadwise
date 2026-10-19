@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Collega una casella",
-          "body": "Accedi con Google o Microsoft, oppure inserisci le impostazioni del tuo server di posta, e consenti a Threadwise di leggere e inviare email per quell'indirizzo."
+          "body": "Accedi con Google o Microsoft, oppure inserisci le impostazioni del tuo server di posta, e consenti a {app} di leggere e inviare email per quell'indirizzo."
         },
         "inbox": {
           "title": "Le email arrivano nell’inbox",

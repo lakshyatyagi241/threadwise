@@ -131,7 +131,11 @@
         "previousStage": "Poprzedni etap",
         "previousStageSince": "Poprzedni etap od",
         "lostReason": "Powód przegranej",
-        "updatedAt": "Ostatnia aktualizacja"
+        "updatedAt": "Ostatnia aktualizacja",
+        "leadScore": "Wynik leada",
+        "originalStage": "Pierwotny etap cyklu życia",
+        "createdBy": "Utworzył(a)",
+        "updatedBy": "Zaktualizował(a)"
       },
       "company": {
         "title": "Firma",

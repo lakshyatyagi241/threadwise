@@ -317,7 +317,13 @@
         "delivered": "تم التسليم",
         "queued": "في الانتظار",
         "failed": "فاشلة",
-        "replyRate": "معدل الرد"
+        "replyRate": "معدل الرد",
+        "received": "الرسائل المستلمة",
+        "conversationsOpen": "المحادثات المفتوحة",
+        "conversationsClosed": "المحادثات المغلقة",
+        "conversationsAssigned": "المعيّنة",
+        "conversationsUnassigned": "غير المعيّنة",
+        "conversationsTotal": "{count, plural, zero {لا محادثات} one {محادثة واحدة} two {محادثتان} few {# محادثات} many {# محادثة} other {# محادثة}}"
       },
       "series": {
         "sent": "مرسلة",
@@ -443,7 +449,8 @@
             "unknown": "غير معروف"
           }
         }
-      }
+      },
+      "moreKpis": "الرسائل والمحادثات"
     },
     "health": {
       "nav": "سلامة النظام",

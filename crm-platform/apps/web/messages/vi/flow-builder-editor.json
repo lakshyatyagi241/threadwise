@@ -104,6 +104,7 @@
       "failed": "thất bại",
       "edited": "Đã sửa {when}",
       "openBuilder": "Mở trình tạo",
+      "faqs": "Câu hỏi thường gặp",
       "pause": "Tạm dừng",
       "resume": "Tiếp tục",
       "rename": "Đổi tên",
@@ -565,7 +566,7 @@
           "startPinned": "Đây là điểm bắt đầu (nhấn để bỏ ghim)",
           "startMake": "Đặt làm điểm bắt đầu",
           "startPoint": "Điểm bắt đầu",
-          "editTitle": "Sửa (mở bảng thuộc tính)",
+          "editTitle": "Chỉnh sửa (mở bảng kiểm tra, hoặc nhấp đúp vào nút, hoặc nhấn Enter)",
           "edit": "Sửa",
           "duplicateTitle": "Nhân bản (Ctrl+D)",
           "duplicate": "Nhân bản",
@@ -581,7 +582,9 @@
           "nothingHint": "Nhấn một nút trên canvas để sửa thuộc tính,<br/>hoặc kéo một thẻ từ bên trái để thêm nút mới.",
           "nodeFallback": "Nút",
           "id": "id",
-          "noSettings": "Nút này không có cài đặt."
+          "noSettings": "Nút này không có cài đặt.",
+          "confirmDeleteTitle": "Xóa nút này?",
+          "confirmDeleteMessage": "Nút và các kết nối của nó sẽ bị xóa. Nhấn Ctrl+Z để hoàn tác khi bạn chưa rời trình dựng."
         },
         "palette": {
           "modeCall": "Gọi",

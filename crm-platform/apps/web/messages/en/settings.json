@@ -255,6 +255,11 @@
         "description": "Keys and documentation for building on top of the product.",
         "keywords": "api keys, developers, tokens, docs, openapi"
       },
+      "api-keys": {
+        "label": "API keys",
+        "description": "Create and manage the keys other systems use to call the API.",
+        "keywords": "api key, token, secret, developers, access, integration"
+      },
       "webhooks": {
         "label": "Webhooks",
         "description": "Send events to your own systems as they happen.",

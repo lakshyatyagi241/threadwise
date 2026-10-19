@@ -23,6 +23,7 @@ export * from './crm/contact-assignment';
 export * from './crm/crm-dashboard';
 export * from './crm/revenue-report';
 export * from './crm/contact-activity';
+export * from './crm/contact-message-stats';
 export * from './crm/contact-file';
 export * from './crm/contact-meeting';
 export * from './crm/contact-note';

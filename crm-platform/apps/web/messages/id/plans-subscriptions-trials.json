@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, other {Tampilkan # batas tanpa batas}}",
       "hideUnlimited": "Sembunyikan batas tanpa batas",
       "groupCount": "{count, plural, other {# batas}}",
-      "groupHidden": "{count, plural, other {# batas lagi tanpa batas dan disembunyikan.}}"
+      "groupHidden": "{count, plural, other {# batas lagi tanpa batas dan disembunyikan.}}",
+      "activatedOn": "Diaktifkan pada {date}",
+      "previousBilling": "Tanggal penagihan sebelumnya: {date}",
+      "subscriptionId": "ID langganan: {id}"
     },
     "operator": {
       "title": "Paket workspace",

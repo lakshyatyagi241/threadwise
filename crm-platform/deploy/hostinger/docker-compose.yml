@@ -139,6 +139,8 @@ x-web-env: &web-env
   NODE_OPTIONS: --max-old-space-size=512
   SENTRY_DSN: ${SENTRY_DSN-https://7a686f169d4a7b804e5eb7b6fdd9e806@o4507446172188672.ingest.us.sentry.io/4512202246324224}
   REALTIME_URL: https://${DOMAIN}/realtime
+  # What the Developers page shows customers as the API address. API_URL (per slot, below) is the internal container name and must never be shown.
+  PUBLIC_API_URL: https://${DOMAIN}
 
 services:
   postgres:

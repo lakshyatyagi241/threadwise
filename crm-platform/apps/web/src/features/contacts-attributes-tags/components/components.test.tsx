@@ -135,7 +135,7 @@ describe('ContactsTable', () => {
       'English',
       'Order Id',
       'A12',
-      '05 Mar 2026, 12:00 PM',
+      'Mar 5, 2026, 12:00 PM',
       'VIP',
       'Hot lead',
       'aarav@example.com',
@@ -416,7 +416,7 @@ describe('ContactsTable', () => {
     const cols = visibleColumns(['name', 'source', 'lastActivity'], ATTRS);
     const out = table([row()], {}, 'none', cols);
     expect(out).toContain('Meta lead ads');
-    expect(out).toContain('06 Mar 2026, 08:30 AM');
+    expect(out).toContain('Mar 6, 2026, 8:30 AM');
     const empty = table([row({ source: '', lastActivityAt: null })], {}, 'none', cols);
     expect(empty.match(/>-<\/span>/g)?.length).toBeGreaterThanOrEqual(2);
   });

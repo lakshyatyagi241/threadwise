@@ -8,7 +8,9 @@ import { PageHelpTip } from '@/features/help-center';
 import { SettingsTilesProvider } from '@/features/settings-hub/settings-context';
 import { SettingsBack } from '@/features/settings-hub/settings-back';
 import { PageSettingsShortcut } from '@/features/settings-hub/page-settings-shortcut';
+import { CommandPalette } from './command-palette';
 import { NavDrawer, NavRail } from './nav-rail';
+import { PageTitle } from './page-title';
 import { SETTINGS_NAV_ID, activeNavId, helpItems, menuItems, toSections } from './nav-model';
 import { TopBar, type WalletChipData } from './top-bar';
 import type { ShellUser } from './user-menu';
@@ -73,6 +75,9 @@ export function AppShell({
 
   return (
     <div className="app-shell flex min-h-dvh">
+      <PageTitle nav={nav} tiles={settings} />
+      {/* Ctrl/Cmd+K on every page: jump to any menu entry or Settings tile this person may open (nav and tiles are already gated). */}
+      <CommandPalette nav={nav} tiles={settings} />
       <NavRail sections={sections} activeId={activeId} footer={navFooter} />
       <NavDrawer
         open={drawer}

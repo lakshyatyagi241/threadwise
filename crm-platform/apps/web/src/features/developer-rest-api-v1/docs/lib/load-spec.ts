@@ -1,5 +1,6 @@
 import 'server-only';
 import { apiBase } from '@/lib/auth/server';
+import { publicApiOrigin } from '@/lib/public-api-origin';
 import { buildReference, type ReferenceView } from './spec-model';
 
 /** The page's data: the reference, or the reason there is none. The page renders every one of these, never a blank screen. */
@@ -8,12 +9,7 @@ export type DocsData =
   | { status: 'empty'; reference: ReferenceView }
   | { status: 'unavailable' };
 
-/** The public address of the customer API (shown in the base URL and the cURL examples): PUBLIC_API_URL, else APP_URL, else the proxy target. */
-export const publicApiOrigin = (): string =>
-  process.env.PUBLIC_API_URL ??
-  process.env.APP_URL ??
-  process.env.API_URL ??
-  'http://localhost:3000';
+export { publicApiOrigin };
 
 const REVALIDATE_SECONDS = 60;
 const TIMEOUT_MS = 5000;

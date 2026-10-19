@@ -58,6 +58,8 @@ export const userProfiles = pgTable(
     phoneVerifiedAt: ts('phone_verified_at'),
     locale: text('locale'),
     theme: text('theme').notNull().default('paper'),
+    /** Most open chats routing gives this agent at once; null = no limit. */
+    chatLimit: integer('chat_limit'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),

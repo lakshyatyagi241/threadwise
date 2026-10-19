@@ -196,7 +196,8 @@
       "core-load": "Ładowanie rdzenia",
       "flow-state": "Stan przepływów",
       "reconcile": "Uzgodnienie",
-      "report": "Raport"
+      "report": "Raport",
+      "whatsapp": "Numer WhatsApp"
     },
     "stepStatus": {
       "running": "W toku",

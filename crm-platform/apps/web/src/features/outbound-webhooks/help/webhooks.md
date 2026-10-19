@@ -4,7 +4,7 @@ title: Webhooks
 summary: Send events from your workspace to your own systems as they happen, signed and retried, with a log of every delivery.
 area: settings
 order: 40
-documents: [tile:webhooks]
+documents: [tile:webhooks, tile:webhooks-endpoints]
 keywords:
   [
     webhook,
@@ -27,7 +27,7 @@ A webhook sends a message to a web address of yours each time something happens 
 
 ## How to use it
 
-1. Open **Marketplace**, select the **Add-ons** tab and open **Webhooks**.
+1. Open **Settings**, then **Data and security**, and select **Webhooks**, or open **Marketplace**, select the **Add-ons** tab and open **Webhooks**.
 2. Select **Add webhook**. Enter the **Endpoint URL**: an https address that is reachable from the internet.
 3. Choose the **Events** you want, or leave **All events** on.
 4. Optionally type a **Signing secret**. When it is set, every delivery carries a signature your server can check.

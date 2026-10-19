@@ -13,6 +13,9 @@ export const ERROR_KINDS = [
   'notFound',
   'planDisabled',
   'assigneeInvalid',
+  'outcomeInvalid',
+  'outcomeNameTaken',
+  'outcomeInUse',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -36,6 +39,12 @@ export function errorKind(error: unknown): ErrorKind {
       return 'planDisabled';
     case ERROR_CODES.TASK_ASSIGNEE_INVALID:
       return 'assigneeInvalid';
+    case ERROR_CODES.TASK_OUTCOME_INVALID:
+      return 'outcomeInvalid';
+    case ERROR_CODES.TASK_OUTCOME_NAME_TAKEN:
+      return 'outcomeNameTaken';
+    case ERROR_CODES.TASK_OUTCOME_IN_USE:
+      return 'outcomeInUse';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';

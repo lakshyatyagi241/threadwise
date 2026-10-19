@@ -35,6 +35,7 @@ const task = (over: Partial<TaskResponse> = {}): TaskResponse => ({
   contact: { id: CONTACT, name: 'Aarav' },
   deal: null,
   company: null,
+  outcome: null,
   source: 'manual',
   rowVersion: 1,
   createdAt: '2026-10-16T08:00:00.000Z',

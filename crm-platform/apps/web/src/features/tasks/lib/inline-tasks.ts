@@ -180,6 +180,7 @@ export function pendingTask(
     contact: who.contact ?? null,
     deal: null,
     company: null,
+    outcome: null,
     source: 'manual',
     rowVersion: 1,
     createdAt: at,

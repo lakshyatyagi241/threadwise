@@ -92,7 +92,8 @@
         "contact": "Contact",
         "deal": "Opportunité",
         "created": "Créée le",
-        "completed": "Terminée le"
+        "completed": "Terminée le",
+        "outcome": "Résultat"
       },
       "refresh": "Actualiser",
       "shortcuts": "Raccourcis clavier",
@@ -101,7 +102,9 @@
         "list": "Liste",
         "board": "Tableau par échéance"
       },
-      "linkCompany": "Une entreprise"
+      "linkCompany": "Une entreprise",
+      "outcome": "Résultat",
+      "allOutcomes": "Tous les résultats"
     },
     "table": {
       "scrollArea": "Tableau des tâches",
@@ -115,7 +118,8 @@
         "contact": "Contact",
         "deal": "Opportunité",
         "created": "Créée le",
-        "completed": "Terminée le"
+        "completed": "Terminée le",
+        "outcome": "Résultat"
       }
     },
     "row": {
@@ -204,9 +208,11 @@
         "titleTooLong": "La tâche est trop longue (255 caractères maximum).",
         "notesTooLong": "Les notes sont trop longues (5 000 caractères maximum).",
         "dueInvalid": "Cette date n’est pas valide.",
-        "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail."
+        "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail.",
+        "outcomeInvalid": "Ce résultat n'est pas disponible. Choisissez-en un dans la liste."
       },
-      "company": "Entreprise"
+      "company": "Entreprise",
+      "outcome": "Résultat"
     },
     "drawer": {
       "loading": "Chargement de la tâche",
@@ -235,7 +241,8 @@
       },
       "deleteTitle": "Supprimer cette tâche ?",
       "deleteMessage": "« {title} » sera supprimée pour tout le monde. Cette action est irréversible.",
-      "cancel": "Conserver"
+      "cancel": "Conserver",
+      "outcomeChip": "Résultat : {name}"
     },
     "board": {
       "buckets": {
@@ -285,7 +292,10 @@
       "planDisabled": "Votre offre ne comprend pas les tâches. Mettez à niveau votre offre pour y accéder.",
       "assigneeInvalid": "Cette personne n’est pas un membre actif de cet espace de travail.",
       "unexpected": "Une erreur s’est produite. Réessayez dans un instant.",
-      "retry": "Réessayer"
+      "retry": "Réessayer",
+      "outcomeInvalid": "Ce résultat n'est pas disponible. Choisissez-en un dans la liste.",
+      "outcomeNameTaken": "Un autre résultat porte déjà ce nom.",
+      "outcomeInUse": "Des tâches utilisent encore ce résultat, il ne peut donc pas être supprimé. Masquez-le plutôt."
     },
     "toast": {
       "completed": "Tâche terminée.",
@@ -341,6 +351,43 @@
       "save": "Ajouter une tâche",
       "cancel": "Annuler",
       "failed": "Impossible d’enregistrer la tâche. Votre texte est de retour dans le champ."
+    },
+    "outcomes": {
+      "title": "Résultats des tâches",
+      "subtitle": "Les résultats qu'une personne choisit en terminant ou en consignant une tâche, comme Intéressé ou Message laissé.",
+      "listTitle": "Résultats",
+      "listHint": "Les résultats masqués ne sont plus proposés, mais les tâches qui en ont déjà un le conservent. Un résultat utilisé par des tâches ne peut pas être supprimé.",
+      "loading": "Chargement des résultats",
+      "empty": "Aucun résultat pour l'instant. Ajoutez le premier ci-dessous.",
+      "newName": "Nouveau résultat",
+      "newNamePlaceholder": "p. ex. Message laissé",
+      "add": "Ajouter un résultat",
+      "readOnly": "Vous pouvez voir cette liste, mais vous avez besoin d'une autorisation pour la modifier.",
+      "failed": "L'opération a échoué.",
+      "conflict": "Quelqu'un d'autre a modifié ce résultat. La liste a été rechargée. Réessayez.",
+      "added": "Résultat ajouté.",
+      "saved": "Résultat enregistré.",
+      "deleted": "Résultat supprimé.",
+      "moveUp": "Monter {name}",
+      "moveDown": "Descendre {name}",
+      "nameLabel": "Nom du résultat",
+      "taskCount": "{count, plural, one {# tâche} other {# tâches}}",
+      "shownLabel": "Proposer {name} à la fin d'une tâche",
+      "shown": "Affiché",
+      "hidden": "Masqué",
+      "deleteNamed": "Supprimer {name}",
+      "deleteInUse": "Des tâches utilisent encore ce résultat, il ne peut donc pas être supprimé. Masquez-le plutôt.",
+      "deleteTitle": "Supprimer {name} ?",
+      "deleteMessage": "Le résultat est retiré de la liste. Aucune tâche ne l'utilise.",
+      "delete": "Supprimer",
+      "cancel": "Conserver",
+      "problems": {
+        "nameRequired": "Saisissez un nom pour le résultat.",
+        "nameTooLong": "Le nom est trop long (191 caractères au maximum)."
+      },
+      "none": "Aucun résultat",
+      "hiddenName": "{name} (masqué)",
+      "completeWith": "Terminer avec un résultat"
     }
   }
 }

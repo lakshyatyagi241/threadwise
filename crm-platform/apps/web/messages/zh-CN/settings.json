@@ -245,6 +245,11 @@
         "description": "用于基于本产品进行开发的密钥和文档。",
         "keywords": "api 密钥, 开发者, token, 文档, openapi"
       },
+      "api-keys": {
+        "label": "API 密钥",
+        "description": "创建并管理其他系统调用 API 所用的密钥。",
+        "keywords": "api 密钥, 令牌, 机密, 开发者, 访问, 集成"
+      },
       "webhooks": {
         "label": "Webhook",
         "description": "事件发生时实时推送至您自己的系统。",

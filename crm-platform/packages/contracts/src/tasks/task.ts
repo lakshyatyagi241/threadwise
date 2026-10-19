@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { pageInfoSchema } from '../common/pagination';
 import { queryBoolean, queryList } from '../contacts-attributes-tags/query-helpers';
+import { taskOutcomeRefSchema } from './task-outcome';
 
 /**
  * Tasks (TW-TASK-001..014). A task is open or done. `status` and `doneAt` always agree (a CHECK in the database), and
@@ -55,6 +56,8 @@ export const taskResponseSchema = z.object({
   contact: taskContactRefSchema.nullable(),
   deal: taskDealRefSchema.nullable(),
   company: taskCompanyRefSchema.nullable(),
+  /** What the task ended with (Settings > Task outcomes), or null. */
+  outcome: taskOutcomeRefSchema.nullable(),
   source: taskSourceSchema,
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
@@ -82,6 +85,8 @@ export const createTaskSchema = z.object({
   contactId: uuidSchema.nullish(),
   dealId: uuidSchema.nullish(),
   companyId: uuidSchema.nullish(),
+  /** One of this workspace's active task outcomes, or null/absent for none. */
+  outcomeId: uuidSchema.nullish(),
 });
 export type CreateTaskInput = z.infer<typeof createTaskSchema>;
 
@@ -95,6 +100,8 @@ export const updateTaskSchema = z.object({
   contactId: uuidSchema.nullish(),
   dealId: uuidSchema.nullish(),
   companyId: uuidSchema.nullish(),
+  /** An active outcome to set (or the one the task already has), or `null` to clear it. */
+  outcomeId: uuidSchema.nullish(),
   rowVersion: z.number().int().positive(),
 });
 export type UpdateTaskInput = z.infer<typeof updateTaskSchema>;
@@ -113,6 +120,8 @@ export type TaskLinksInput = z.infer<typeof taskLinksSchema>;
 /** Complete and reopen are idempotent; `rowVersion` is optional (last write wins without it). */
 export const taskTransitionSchema = z.object({
   rowVersion: z.number().int().positive().optional(),
+  /** Completing only: the outcome to record with it (an active one). Absent keeps what the task has; ignored when reopening. */
+  outcomeId: uuidSchema.nullish(),
 });
 export type TaskTransitionInput = z.infer<typeof taskTransitionSchema>;
 
@@ -136,6 +145,8 @@ const taskFilterShape = {
   contactId: uuidSchema.optional(),
   dealId: uuidSchema.optional(),
   companyId: uuidSchema.optional(),
+  /** Tasks that carry this outcome. */
+  outcomeId: uuidSchema.optional(),
 };
 
 export const listTasksQuerySchema = z.object({

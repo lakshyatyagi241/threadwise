@@ -9,14 +9,19 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   changeWspMemberRoleSchema,
   listWspMembersQuerySchema,
+  setWspAvailabilitySchema,
+  updateWspMemberDetailsSchema,
   type ChangeWspMemberRoleInput,
   type ListWspMembersQuery,
+  type SetWspAvailabilityInput,
+  type UpdateWspMemberDetailsInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -50,6 +55,25 @@ export class MembersController {
   })
   async summary() {
     return this.members.summary();
+  }
+
+  @Get('me/availability')
+  @ApiOperation({
+    summary:
+      "The caller's own availability (Available / Offline), as automatic assignment reads it",
+  })
+  async myAvailability() {
+    return this.members.myAvailability();
+  }
+
+  @Put('me/availability')
+  @ApiOperation({
+    summary:
+      "Set the caller's own availability: offline agents are skipped by automatic assignment",
+    description: 'Only the caller can change it. Chats the agent already holds stay with them.',
+  })
+  async setMyAvailability(@Body(zodPipe(setWspAvailabilitySchema)) body: SetWspAvailabilityInput) {
+    return this.members.setMyAvailability(body);
   }
 
   @Post('invite')
@@ -86,6 +110,20 @@ export class MembersController {
     @Body(zodPipe(changeWspMemberRoleSchema)) body: ChangeWspMemberRoleInput,
   ) {
     return this.members.changeRole(id, body);
+  }
+
+  @Patch(':id/details')
+  @RequirePermission('org.member.invite')
+  @ApiOperation({
+    summary: "Change a member's phone number and maximum concurrent chats",
+    description:
+      'Requires the rowVersion you read. A null value clears the field, a missing key keeps it. The last login cannot be set.',
+  })
+  async updateDetails(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body(zodPipe(updateWspMemberDetailsSchema)) body: UpdateWspMemberDetailsInput,
+  ) {
+    return this.members.updateDetails(id, body);
   }
 
   @Post(':id/reset-password')

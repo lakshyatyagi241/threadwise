@@ -22,6 +22,7 @@ export const CATEGORY = 'Waboo automation';
 const NODE_TYPE: Record<string, string> = {
   'trigger|contact|field_match': 'trigger',
   'trigger|Datematch|date_match': 'trigger',
+  'trigger|contact|added': 'trigger',
   'trigger|contact|added_to_list': 'trigger',
   'condition|contact|query': 'condition',
   'condition|google|google_sheet_query': 'condition',
@@ -137,10 +138,6 @@ export function oracleAutomations(
     }
     const nodes = rec(d.nodes);
     const ids = Object.keys(nodes);
-    if (ids.length === 0) {
-      out({ kind: 'exclude', code: 'NO_NODES' });
-      continue;
-    }
     if (ids.length > MAX_NODES) {
       out({ kind: 'quarantine', code: 'GRAPH_TOO_LARGE' });
       continue;
@@ -224,6 +221,7 @@ export function oracleAutomations(
           time: clock(txt(n.data.execution_time)) ?? '09:00',
         };
       }
+      if (key3 === 'trigger|contact|added') triggerKind = 'contact_created';
       if (key3 === 'trigger|contact|added_to_list') {
         triggerKind = 'group_join';
         listKey = txt(n.data.marketing_list_id) || null;

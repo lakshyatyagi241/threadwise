@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {הצג # מגבלה ללא הגבלה} two {הצג שתי מגבלות ללא הגבלה} other {הצג # מגבלות ללא הגבלה}}",
       "hideUnlimited": "הסתר מגבלות ללא הגבלה",
       "groupCount": "{count, plural, one {# מגבלה} two {שתי מגבלות} other {# מגבלות}}",
-      "groupHidden": "{count, plural, one {עוד מגבלה אחת היא ללא הגבלה ומוסתרת.} two {עוד שתי מגבלות הן ללא הגבלה ומוסתרות.} other {עוד # מגבלות הן ללא הגבלה ומוסתרות.}}"
+      "groupHidden": "{count, plural, one {עוד מגבלה אחת היא ללא הגבלה ומוסתרת.} two {עוד שתי מגבלות הן ללא הגבלה ומוסתרות.} other {עוד # מגבלות הן ללא הגבלה ומוסתרות.}}",
+      "activatedOn": "הופעל ב-{date}",
+      "previousBilling": "תאריך החיוב הקודם: {date}",
+      "subscriptionId": "מזהה מנוי: {id}"
     },
     "operator": {
       "title": "תוכניות סביבות העבודה",

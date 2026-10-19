@@ -91,7 +91,14 @@
         "none": "아직 없음",
         "atLeast": "{count}개 이상",
         "footnote": "메시지 수치는 이 연락처에 대해 찾은 대화(전화번호, 이메일 주소 또는 이름 기준)를 집계한 것입니다. 통화 수치는 최근 1년간 전화번호 또는 이름으로 일치한 통화를 집계한 것입니다.",
-        "callsPartial": "읽을 수 있는 범위보다 많은 통화가 일치하여 통화 수치가 실제보다 적을 수 있습니다."
+        "callsPartial": "읽을 수 있는 범위보다 많은 통화가 일치하여 통화 수치가 실제보다 적을 수 있습니다.",
+        "waSent": "WhatsApp 발송",
+        "waDelivered": "WhatsApp 전달",
+        "waSeen": "WhatsApp 읽음",
+        "waReceived": "WhatsApp 수신",
+        "waFailed": "WhatsApp 실패",
+        "waReplied": "WhatsApp 답장",
+        "waFootnote": "WhatsApp 수치는 이 연락처의 WhatsApp 대화에 있는 모든 메시지를 집계합니다. 보낸 메시지 다음에 연락처의 메시지가 오면 답장으로 집계합니다."
       }
     }
   }

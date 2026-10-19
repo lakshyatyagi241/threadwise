@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
 import {
+  hasLazyOptions,
   isUsableProperty,
   stageChoices,
   statusChoices,
@@ -106,7 +107,8 @@ export function useSegmentCatalog(): SegmentCatalog {
       properties: (fields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
         label: f.label,
-        fieldType: f.fieldType,
+        // A list too long to send with the properties (every City) is typed in the rule instead of picked from a menu.
+        fieldType: hasLazyOptions(f) ? 'text' : f.fieldType,
         options: (f.options ?? [])
           .filter((o) => !o.isHidden)
           .sort((a, b) => a.position - b.position)
@@ -116,7 +118,7 @@ export function useSegmentCatalog(): SegmentCatalog {
       companyProperties: (companyFields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
         label: f.label,
-        fieldType: f.fieldType,
+        fieldType: hasLazyOptions(f) ? 'text' : f.fieldType,
         options: (f.options ?? [])
           .filter((o) => !o.isHidden)
           .sort((a, b) => a.position - b.position)

@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Conecte uma caixa de e-mail",
-          "body": "Entre com Google ou Microsoft, ou informe as configurações do seu servidor de e-mail, e permita que o Threadwise leia e envie e-mails desse endereço."
+          "body": "Entre com Google ou Microsoft, ou informe as configurações do seu servidor de e-mail, e permita que o {app} leia e envie e-mails desse endereço."
         },
         "inbox": {
           "title": "O e-mail chega à caixa de entrada",

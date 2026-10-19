@@ -92,7 +92,8 @@
         "contact": "Contacto",
         "deal": "Negocio",
         "created": "Creada",
-        "completed": "Completada el"
+        "completed": "Completada el",
+        "outcome": "Resultado"
       },
       "refresh": "Actualizar",
       "shortcuts": "Atajos de teclado",
@@ -101,7 +102,9 @@
         "list": "Lista",
         "board": "Tablero por fecha límite"
       },
-      "linkCompany": "Una empresa"
+      "linkCompany": "Una empresa",
+      "outcome": "Resultado",
+      "allOutcomes": "Todos los resultados"
     },
     "table": {
       "scrollArea": "Tabla de tareas",
@@ -115,7 +118,8 @@
         "contact": "Contacto",
         "deal": "Negocio",
         "created": "Creada",
-        "completed": "Completada el"
+        "completed": "Completada el",
+        "outcome": "Resultado"
       }
     },
     "row": {
@@ -204,9 +208,11 @@
         "titleTooLong": "La tarea es demasiado larga (255 caracteres como máximo).",
         "notesTooLong": "Las notas son demasiado largas (5000 caracteres como máximo).",
         "dueInvalid": "Esa fecha no es válida.",
-        "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo."
+        "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo.",
+        "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista."
       },
-      "company": "Empresa"
+      "company": "Empresa",
+      "outcome": "Resultado"
     },
     "drawer": {
       "loading": "Cargando tarea",
@@ -235,7 +241,8 @@
       },
       "deleteTitle": "¿Eliminar esta tarea?",
       "deleteMessage": "\"{title}\" se eliminará para todos. Esta acción no se puede deshacer.",
-      "cancel": "Conservar"
+      "cancel": "Conservar",
+      "outcomeChip": "Resultado: {name}"
     },
     "board": {
       "buckets": {
@@ -285,7 +292,10 @@
       "planDisabled": "Tu plan no incluye tareas. Mejora el plan para desbloquearlas.",
       "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista.",
+      "outcomeNameTaken": "Otro resultado ya tiene este nombre.",
+      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar."
     },
     "toast": {
       "completed": "Tarea completada.",
@@ -341,6 +351,43 @@
       "save": "Añadir tarea",
       "cancel": "Cancelar",
       "failed": "No se pudo guardar la tarea. Tu texto vuelve a estar en el cuadro."
+    },
+    "outcomes": {
+      "title": "Resultados de tareas",
+      "subtitle": "Los resultados que una persona elige al completar o registrar una tarea, como Interesado o Dejó mensaje.",
+      "listTitle": "Resultados",
+      "listHint": "Los resultados ocultos ya no se ofrecen, pero las tareas que ya tienen uno lo conservan. Un resultado que usan tareas no se puede eliminar.",
+      "loading": "Cargando resultados",
+      "empty": "Aún no hay resultados. Añade el primero abajo.",
+      "newName": "Nuevo resultado",
+      "newNamePlaceholder": "p. ej. Dejó mensaje",
+      "add": "Añadir resultado",
+      "readOnly": "Puedes ver esta lista, pero necesitas permiso para cambiarla.",
+      "failed": "No se pudo completar la acción.",
+      "conflict": "Otra persona cambió este resultado. Se recargó la lista. Inténtalo de nuevo.",
+      "added": "Resultado añadido.",
+      "saved": "Resultado guardado.",
+      "deleted": "Resultado eliminado.",
+      "moveUp": "Subir {name}",
+      "moveDown": "Bajar {name}",
+      "nameLabel": "Nombre del resultado",
+      "taskCount": "{count, plural, one {# tarea} other {# tareas}}",
+      "shownLabel": "Ofrecer {name} al completar una tarea",
+      "shown": "Visible",
+      "hidden": "Oculto",
+      "deleteNamed": "Eliminar {name}",
+      "deleteInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar.",
+      "deleteTitle": "¿Eliminar {name}?",
+      "deleteMessage": "El resultado se quita de la lista. Ninguna tarea lo usa.",
+      "delete": "Eliminar",
+      "cancel": "Conservar",
+      "problems": {
+        "nameRequired": "Escribe un nombre para el resultado.",
+        "nameTooLong": "El nombre es demasiado largo (191 caracteres como máximo)."
+      },
+      "none": "Sin resultado",
+      "hiddenName": "{name} (oculto)",
+      "completeWith": "Completar con resultado"
     }
   }
 }

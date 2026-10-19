@@ -92,7 +92,8 @@
         "contact": "連絡先",
         "deal": "案件",
         "created": "作成日",
-        "completed": "完了日"
+        "completed": "完了日",
+        "outcome": "結果"
       },
       "refresh": "更新",
       "shortcuts": "キーボードショートカット",
@@ -101,7 +102,9 @@
         "list": "リスト",
         "board": "期限日別のボード"
       },
-      "linkCompany": "会社"
+      "linkCompany": "会社",
+      "outcome": "結果",
+      "allOutcomes": "すべての結果"
     },
     "table": {
       "scrollArea": "タスクの表",
@@ -115,7 +118,8 @@
         "contact": "連絡先",
         "deal": "案件",
         "created": "作成日",
-        "completed": "完了日"
+        "completed": "完了日",
+        "outcome": "結果"
       }
     },
     "row": {
@@ -204,9 +208,11 @@
         "titleTooLong": "タスクが長すぎます（255 文字以内）。",
         "notesTooLong": "メモが長すぎます（5000 文字以内）。",
         "dueInvalid": "その日付は無効です。",
-        "assigneeInvalid": "その担当者は、このワークスペースの有効なメンバーではありません。"
+        "assigneeInvalid": "その担当者は、このワークスペースの有効なメンバーではありません。",
+        "outcomeInvalid": "その結果は利用できません。一覧から選んでください。"
       },
-      "company": "会社"
+      "company": "会社",
+      "outcome": "結果"
     },
     "drawer": {
       "loading": "タスクを読み込んでいます",
@@ -235,7 +241,8 @@
       },
       "deleteTitle": "このタスクを削除しますか？",
       "deleteMessage": "「{title}」は全員から削除されます。この操作は元に戻せません。",
-      "cancel": "残す"
+      "cancel": "残す",
+      "outcomeChip": "結果：{name}"
     },
     "board": {
       "buckets": {
@@ -285,7 +292,10 @@
       "planDisabled": "ご利用のプランにはタスク機能が含まれていません。アップグレードするとご利用いただけます。",
       "assigneeInvalid": "その人はこのワークスペースの有効なメンバーではありません。",
       "unexpected": "問題が発生しました。しばらくしてから、もう一度お試しください。",
-      "retry": "再試行"
+      "retry": "再試行",
+      "outcomeInvalid": "その結果は利用できません。一覧から選んでください。",
+      "outcomeNameTaken": "同じ名前の結果がすでにあります。",
+      "outcomeInUse": "この結果をまだタスクが使っているため、削除できません。代わりに非表示にしてください。"
     },
     "toast": {
       "completed": "タスクを完了しました。",
@@ -341,6 +351,43 @@
       "save": "タスクを追加",
       "cancel": "キャンセル",
       "failed": "タスクを保存できませんでした。入力した内容は入力欄に戻してあります。"
+    },
+    "outcomes": {
+      "title": "タスクの結果",
+      "subtitle": "タスクを完了または記録するときに選ぶ結果です。例：関心あり、伝言を残した。",
+      "listTitle": "結果",
+      "listHint": "非表示の結果は選択肢に出なくなりますが、すでにその結果を持つタスクには残ります。タスクが使っている結果は削除できません。",
+      "loading": "結果を読み込み中",
+      "empty": "結果はまだありません。下から最初の結果を追加してください。",
+      "newName": "新しい結果",
+      "newNamePlaceholder": "例：伝言を残した",
+      "add": "結果を追加",
+      "readOnly": "この一覧は表示できますが、変更するには権限が必要です。",
+      "failed": "処理できませんでした。",
+      "conflict": "他のユーザーがこの結果を変更しました。一覧を再読み込みしました。もう一度お試しください。",
+      "added": "結果を追加しました。",
+      "saved": "結果を保存しました。",
+      "deleted": "結果を削除しました。",
+      "moveUp": "{name} を上へ移動",
+      "moveDown": "{name} を下へ移動",
+      "nameLabel": "結果の名前",
+      "taskCount": "{count, plural, other {#件のタスク}}",
+      "shownLabel": "タスクの完了時に {name} を表示する",
+      "shown": "表示中",
+      "hidden": "非表示",
+      "deleteNamed": "{name} を削除",
+      "deleteInUse": "この結果をまだタスクが使っているため、削除できません。代わりに非表示にしてください。",
+      "deleteTitle": "{name} を削除しますか？",
+      "deleteMessage": "この結果は一覧から削除されます。使っているタスクはありません。",
+      "delete": "削除",
+      "cancel": "残す",
+      "problems": {
+        "nameRequired": "結果の名前を入力してください。",
+        "nameTooLong": "名前が長すぎます（最大191文字）。"
+      },
+      "none": "結果なし",
+      "hiddenName": "{name}（非表示）",
+      "completeWith": "結果を付けて完了"
     }
   }
 }

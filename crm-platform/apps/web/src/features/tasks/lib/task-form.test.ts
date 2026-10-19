@@ -3,6 +3,7 @@ import { createTaskSchema, updateTaskSchema, type TaskResponse } from '@crm/cont
 import { createBody, draftOf, emptyDraft, patchBody, validateDraft } from './task-form';
 
 const ME = '3f1c2b7a-5d4e-4a90-8b21-0c9d7e6f5a43';
+const OUTCOME = '7b6a5f4e-3d2c-4b1a-8f9e-0a1b2c3d4e5f';
 const CONTACT = '9a8b7c6d-1e2f-4a3b-9c4d-5e6f7a8b9c0d';
 
 const task: TaskResponse = {
@@ -18,6 +19,7 @@ const task: TaskResponse = {
   overdue: false,
   assignee: { id: ME, name: 'Me' },
   createdBy: { id: ME, name: 'Me' },
+  outcome: null,
   contact: { id: CONTACT, name: 'Acme' },
   deal: null,
   company: null,
@@ -83,6 +85,12 @@ describe('createBody', () => {
     expect(createTaskSchema.safeParse(body).success).toBe(true);
     expect(createBody({ ...emptyDraft(ME), title: 'a' })).not.toHaveProperty('companyId');
   });
+  it('carries the outcome when one is picked, and leaves the key out when there is none', () => {
+    const body = createBody({ ...emptyDraft(ME), title: 'a', outcomeId: OUTCOME });
+    expect(body.outcomeId).toBe(OUTCOME);
+    expect(createTaskSchema.safeParse(body).success).toBe(true);
+    expect(createBody({ ...emptyDraft(ME), title: 'a' })).not.toHaveProperty('outcomeId');
+  });
   it('defaults the assignee to the person given', () => {
     expect(createBody({ ...emptyDraft(ME), title: 'a' }).assigneeId).toBe(ME);
   });
@@ -104,6 +112,18 @@ describe('patchBody', () => {
       contactId: null,
       notes: null,
     });
+  });
+  it('sends the outcome picked, and null to clear the one the task has', () => {
+    expect(patchBody(task, { ...draftOf(task), outcomeId: OUTCOME })).toEqual({
+      outcomeId: OUTCOME,
+    });
+    const done: TaskResponse = {
+      ...task,
+      outcome: { id: OUTCOME, name: 'Interested', isActive: true },
+    };
+    expect(draftOf(done).outcomeId).toBe(OUTCOME);
+    expect(patchBody(done, draftOf(done))).toEqual({});
+    expect(patchBody(done, { ...draftOf(done), outcomeId: '' })).toEqual({ outcomeId: null });
   });
   it('produces a body the update contract accepts once the row version is added', () => {
     const patch = patchBody(task, { ...draftOf(task), dealId: ME });

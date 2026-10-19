@@ -10,6 +10,7 @@ import {
   relativeSpan,
   throughputCsv,
   barLength,
+  sparkBar,
   compact,
   directionOf,
   greetingKey,
@@ -124,5 +125,21 @@ describe('isForbidden', () => {
     expect(isForbidden(new ApiError(500, 'INTERNAL', 'boom'))).toBe(false);
     expect(isForbidden(new Error('x'))).toBe(false);
     expect(isForbidden(null)).toBe(false);
+  });
+});
+
+describe('sparkBar', () => {
+  it('never gives a bar a negative width, however many points a long range has', () => {
+    for (const count of [1, 7, 30, 99, 100, 101, 233, 366, 1000]) {
+      for (let i = 0; i < count; i += Math.max(1, Math.floor(count / 7))) {
+        const b = sparkBar(i, count);
+        expect(b.width).toBeGreaterThan(0);
+        expect(b.x).toBeGreaterThanOrEqual(0);
+        expect(b.x + b.width).toBeLessThanOrEqual(100.0001);
+      }
+    }
+  });
+  it('keeps the one-unit gap on a short range', () => {
+    expect(sparkBar(0, 10)).toEqual({ x: 0.5, width: 9 });
   });
 });

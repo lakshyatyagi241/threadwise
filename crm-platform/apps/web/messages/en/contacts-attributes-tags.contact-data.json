@@ -91,7 +91,14 @@
         "none": "None yet",
         "atLeast": "{count}+",
         "footnote": "Message figures cover the conversations found for this contact (by phone number, e-mail address or name). Call figures cover the last year, matched by phone number or name.",
-        "callsPartial": "More calls matched than could be read, so the call figures may be short."
+        "callsPartial": "More calls matched than could be read, so the call figures may be short.",
+        "waSent": "WhatsApp sent",
+        "waDelivered": "WhatsApp delivered",
+        "waSeen": "WhatsApp seen",
+        "waReceived": "WhatsApp received",
+        "waFailed": "WhatsApp failed",
+        "waReplied": "WhatsApp replied",
+        "waFootnote": "WhatsApp figures count every message in this contact's WhatsApp conversations. A sent message counts as replied when the contact's message came next."
       }
     }
   }

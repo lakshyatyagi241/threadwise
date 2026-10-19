@@ -19,6 +19,33 @@ export function formatMinor(minor: number, currency: string, locale: string): st
   }
 }
 
+/**
+ * An amount at the ledger's exact precision: the decimal text from the API ("192.999") is formatted as it is, at least two and at
+ * most four decimals, so 0.958 reads 0.958 and 7 reads 7.00. With no exact text it falls back to the hundredths.
+ */
+export function formatAmount(
+  minor: number,
+  exact: string | undefined,
+  currency: string,
+  locale: string,
+): string {
+  if (!exact) return formatMinor(minor, currency, locale);
+  const negative = exact.startsWith('-');
+  const digits = negative ? exact.slice(1) : exact;
+  let out: string;
+  try {
+    out = new Intl.NumberFormat(locale, {
+      style: 'currency',
+      currency,
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 4,
+    }).format(digits as unknown as number);
+  } catch {
+    out = `${currency} ${digits}`;
+  }
+  return negative && /[1-9]/.test(digits) ? `-${out}` : out;
+}
+
 /** An amount typed by a person ("250", "250.5") to hundredths; null when it is not a plain non-negative amount. */
 export function parseAmount(text: string): number | null {
   return walletMajorToMinor(text.trim());
@@ -48,8 +75,10 @@ export function formatMovement(
   direction: WalletDirection,
   currency: string,
   locale: string,
+  amountExact?: string,
 ): string {
-  return `${directionSign(direction)}${formatMinor(Math.abs(amountMinor), currency, locale)}`;
+  const exact = amountExact?.startsWith('-') ? amountExact.slice(1) : amountExact;
+  return `${directionSign(direction)}${formatAmount(Math.abs(amountMinor), exact, currency, locale)}`;
 }
 
 /** Tailwind text colour for a tone, from the design tokens. */
@@ -60,10 +89,18 @@ export const TONE_CLASS: Record<Tone, string> = {
 };
 
 /** The sign of a net figure for the "Net movement" card. */
-export function formatNet(netMinor: number, currency: string, locale: string): string {
-  const abs = formatMinor(Math.abs(netMinor), currency, locale);
-  if (netMinor > 0) return `+${abs}`;
-  if (netMinor < 0) return `-${abs}`;
+export function formatNet(
+  netMinor: number,
+  currency: string,
+  locale: string,
+  netExact?: string,
+): string {
+  const negative = netExact ? netExact.startsWith('-') : netMinor < 0;
+  const positive = netExact ? !negative && /[1-9]/.test(netExact) : netMinor > 0;
+  const absExact = netExact?.startsWith('-') ? netExact.slice(1) : netExact;
+  const abs = formatAmount(Math.abs(netMinor), absExact, currency, locale);
+  if (positive) return `+${abs}`;
+  if (negative) return `-${abs}`;
   return abs;
 }
 

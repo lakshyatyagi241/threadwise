@@ -29,6 +29,8 @@ export interface ConversationRowProps {
   active: boolean;
   nowMs: number;
   showChannel: boolean;
+  /** The row's channel has a reply-window rule (24 hours): a customer who never wrote then shows "Window closed", like the header. */
+  hasWindowRule?: boolean;
   onOpen: (id: string) => void;
   /** Selection mode: a click picks the row (shift picks the run up to it) instead of opening it. */
   selecting?: boolean;
@@ -58,6 +60,7 @@ export const ConversationRow = memo(function ConversationRow({
   active,
   nowMs,
   showChannel,
+  hasWindowRule = false,
   onOpen,
   selecting = false,
   selected = false,
@@ -71,7 +74,7 @@ export const ConversationRow = memo(function ConversationRow({
   const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
   const outbound = lastWasOutbound(row);
-  const chip = rowWindowChip(row.windowExpiresAt, nowMs);
+  const chip = rowWindowChip(row.windowExpiresAt, nowMs, hasWindowRule);
   const left = chip?.msLeft != null ? formatWindowLeft(chip.msLeft) : null;
   const assignee = row.assignment.user?.name ?? row.assignment.team?.name ?? null;
 

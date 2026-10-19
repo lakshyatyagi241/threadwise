@@ -230,6 +230,11 @@ function certainBody(doc: Doc): {
       else sure = false; // a body is only certain for a plain string or a non-blank `text` / `value` of a text element
     }
     if (!present) return { dir: 'out', empty: true };
+    // a live-chat hand-over event: {type: 'info', value} elements of a turn flagged live_chat_connected, read as a system notice
+    if (br.live_chat_connected === true) {
+      const info = list.filter((el) => isObj(el) && el.type === 'info' && typeof el.value === 'string' && el.value.trim() !== '').map((el) => (el as { value: string }).value);
+      return info.length > 0 ? { dir: 'out', body: info.join('\n'), system: true, kind: 'system' } : { dir: 'out', system: true, kind: 'system' };
+    }
     return parts.length > 0 && sure ? { dir: 'out', body: parts.join('\n') } : { dir: 'out' };
   }
   const uqText = typeof uq === 'string' && uq.trim() !== '' ? uq.trim() : null;

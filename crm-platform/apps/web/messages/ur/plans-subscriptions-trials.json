@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {# غیر محدود حد دکھائیں} other {# غیر محدود حدیں دکھائیں}}",
       "hideUnlimited": "غیر محدود حدیں چھپائیں",
       "groupCount": "{count, plural, one {# حد} other {# حدیں}}",
-      "groupHidden": "{count, plural, one {# مزید حد غیر محدود ہے اور چھپی ہوئی ہے۔} other {# مزید حدیں غیر محدود ہیں اور چھپی ہوئی ہیں۔}}"
+      "groupHidden": "{count, plural, one {# مزید حد غیر محدود ہے اور چھپی ہوئی ہے۔} other {# مزید حدیں غیر محدود ہیں اور چھپی ہوئی ہیں۔}}",
+      "activatedOn": "{date} کو فعال کیا گیا",
+      "previousBilling": "پچھلی بلنگ کی تاریخ: {date}",
+      "subscriptionId": "سبسکرپشن آئی ڈی: {id}"
     },
     "operator": {
       "title": "ورک اسپیس پلانز",

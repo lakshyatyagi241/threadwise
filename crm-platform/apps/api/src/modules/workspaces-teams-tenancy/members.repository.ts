@@ -34,6 +34,9 @@ export interface MemberRow {
   tier: WspRoleTier;
   presence: string | null;
   lastSeenAt: Date | null;
+  phone: string | null;
+  chatLimit: number | null;
+  lastLoginAt: Date | null;
 }
 
 export interface MemberRoleRow {
@@ -121,15 +124,21 @@ export class MembersRepository {
       tier: SCORE_TIER[Number(r.tier_score)] ?? 'custom',
       presence: (r.presence_status as string | null) ?? null,
       lastSeenAt: toDate(r.last_seen_at),
+      phone: (r.phone_e164 as string | null) ?? null,
+      chatLimit: r.chat_limit == null ? null : Number(r.chat_limit),
+      lastLoginAt: toDate(r.last_login_at),
     };
   }
 
   private select(orgId: number, where: SQL): SQL {
     return sql`
       SELECT u.id, u.uuid, u.email::text AS email, u.full_name, u.status, u.invited_at, u.joined_at, u.row_version,
-             ${this.tierScore()} AS tier_score, a.status AS presence_status, a.last_seen_at
+             ${this.tierScore()} AS tier_score, a.status AS presence_status, a.last_seen_at,
+             p.phone_e164, p.chat_limit, sec.last_login_at
       FROM users u
       LEFT JOIN agent_statuses a ON a.org_id = u.org_id AND a.user_id = u.id
+      LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
+      LEFT JOIN user_security sec ON sec.org_id = u.org_id AND sec.user_id = u.id
       WHERE u.org_id = ${orgId} AND ${where}`;
   }
 
@@ -308,6 +317,49 @@ export class MembersRepository {
       UPDATE users SET full_name = ${v.fullName}, password_hash = ${v.passwordHash}, status = 'active',
                        invited_at = now(), joined_at = NULL
       WHERE org_id = ${orgId} AND id = ${id}`);
+  }
+
+  /**
+   * The member's phone and chat limit, written to the profile row (created when the member has none yet). A key left out
+   * keeps what is stored, `null` clears it; the display name and theme of an existing profile are never touched.
+   */
+  async upsertDetails(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    v: { phone?: string | null; chatLimit?: number | null },
+  ): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO user_profiles (org_id, user_id, phone_e164, chat_limit)
+      VALUES (${orgId}, ${userId}, ${v.phone ?? null}, ${v.chatLimit ?? null})
+      ON CONFLICT (org_id, user_id) DO UPDATE SET
+        phone_e164 = ${v.phone === undefined ? sql`user_profiles.phone_e164` : sql`${v.phone}`},
+        phone_verified_at = ${v.phone === undefined ? sql`user_profiles.phone_verified_at` : sql`CASE WHEN ${v.phone}::text IS NOT DISTINCT FROM user_profiles.phone_e164 THEN user_profiles.phone_verified_at END`},
+        chat_limit = ${v.chatLimit === undefined ? sql`user_profiles.chat_limit` : sql`${v.chatLimit}::integer`}`);
+  }
+
+  /**
+   * Availability of one agent: the stored status, upserted. Only `status` and the heartbeat are written; the counters and the
+   * round-robin clock of the row stay as the inbox keeps them.
+   */
+  async setAvailability(
+    tx: Tx,
+    orgId: number,
+    userId: number,
+    status: 'online' | 'offline',
+  ): Promise<void> {
+    await tx.execute(sql`
+      INSERT INTO agent_statuses (org_id, user_id, status, last_seen_at)
+      VALUES (${orgId}, ${userId}, ${status}, now())
+      ON CONFLICT (org_id, user_id) DO UPDATE SET status = EXCLUDED.status, last_seen_at = now()`);
+  }
+
+  /** What routing reads: the stored status, and `online` when nobody has ever switched this member. */
+  async availabilityOf(tx: Tx, orgId: number, userId: number): Promise<string> {
+    const res = await tx.execute(
+      sql`SELECT status FROM agent_statuses WHERE org_id = ${orgId} AND user_id = ${userId}`,
+    );
+    return ((res.rows[0] as Raw | undefined)?.status as string | undefined) ?? 'online';
   }
 
   async ensureSecurity(tx: Tx, orgId: number, userId: number): Promise<void> {

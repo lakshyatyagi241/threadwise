@@ -103,46 +103,13 @@ describe('runner agent: naming and reporting', () => {
   });
 });
 
-describe('owner mailbox of a new client (pipeline.cjs)', () => {
+describe('owner of a new client (pipeline.cjs)', () => {
   const src = readFileSync(join(STAGING, 'pipeline.cjs'), 'utf8');
-  const guard = /[A-Za-z0-9+/_=-]{32,}/; // cycle.cjs LONGBLOB: what new-client refuses as a possible secret
-  const ownerLocal = new Function(
-    'require',
-    `${/const ownerLocal = [\s\S]*?;\n/.exec(src)![0]}; return ownerLocal;`,
-  )(require) as (s: string) => string;
-  it('is used for the placeholder owner address', () => {
-    expect(src).toContain('`owner-${ownerLocal(slug)}@desk.wabo.ai`');
-  });
-  it('never trips the secret guard for any real client key, and stays distinct per client', () => {
-    const keys = [
-      'dhanashreehospital_com_8pMgiumk',
-      'www_fitboxx_in_LVF8jTrp',
-      'www_skyblue_in_Y2e7ECDx',
-      'www_ontimeholidays_com_cXBtnqf9',
-      'www_tirupatibank_com_MdHYpHig',
-      'tattvavit_das_GJdvpcDL_CWDi',
-      'www_smhospitalnagpur_com_DmQpi87r',
-      'mlckiranrsarnaik_nUS6qEGL_71GE',
-      'a'.repeat(60),
-    ];
-    const seen = new Set<string>();
-    for (const k of keys) {
-      const slug = k.toLowerCase().replace(/_/g, '-').slice(0, 60);
-      const email = `owner-${ownerLocal(slug)}@desk.wabo.ai`;
-      expect(guard.test(email), email).toBe(false);
-      expect(email).toMatch(/^[a-z0-9-]+@desk\.wabo\.ai$/);
-      seen.add(email);
-    }
-    expect(seen.size).toBe(keys.length);
-  });
-  it('gives two long keys that share their first and last characters different mailboxes', () => {
-    const a = 'www-same-prefix-x-one-middle-abcdef';
-    const b = 'www-same-prefix-x-two-middle-abcdef';
-    expect(ownerLocal(a)).not.toBe(ownerLocal(b));
-  });
-  it('leaves a short key whole', () => {
-    expect(ownerLocal('iskm')).toBe('iskm');
-    expect(ownerLocal('rhythm-watches')).toBe('rhythm-watches');
+  it('makes no placeholder owner: the workspace Owner is the additional owner (load/org.ts)', () => {
+    expect(src).not.toContain('@desk.wabo.ai');
+    const call = /\[\s*CYCLE,\s*'new-client'[\s\S]*?\]/.exec(src)![0];
+    expect(call).not.toContain('--owner-email');
+    expect(call).not.toContain('--owner-name');
   });
 });
 

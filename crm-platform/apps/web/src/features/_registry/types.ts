@@ -29,6 +29,11 @@ export interface NavGates {
   planFeature?: string;
   channel?: string;
   /**
+   * With `planFeature`: the route is not mounted while the plan lacks the feature. The paywall sheet explains and the screen's own
+   * requests never fire (the API would refuse them with `PLAN_FEATURE_LOCKED`). Without it the sheet is drawn over a mounted page.
+   */
+  closeWhenLocked?: boolean;
+  /**
    * The plan feature key a Marketplace app owns (a first-party listing's `grantsPlanFeatures`, for example Appointments grants
    * `appointment_booking`). Unlike `planFeature`, a missing app REMOVES the entry and closes its route: an app the workspace has not
    * bought or been given is found in the Marketplace, not in the menu. The entitlement set already merges what a plan, an

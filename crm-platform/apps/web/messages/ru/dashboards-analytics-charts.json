@@ -317,7 +317,13 @@
         "delivered": "Доставлено",
         "queued": "В очереди",
         "failed": "Ошибки",
-        "replyRate": "Доля ответов"
+        "replyRate": "Доля ответов",
+        "received": "Полученные сообщения",
+        "conversationsOpen": "Открытые диалоги",
+        "conversationsClosed": "Закрытые диалоги",
+        "conversationsAssigned": "Назначенные",
+        "conversationsUnassigned": "Не назначенные",
+        "conversationsTotal": "{count, plural, one {# диалог} few {# диалога} many {# диалогов} other {# диалога}}"
       },
       "series": {
         "sent": "Отправлено",
@@ -443,7 +449,8 @@
             "unknown": "Неизвестно"
           }
         }
-      }
+      },
+      "moreKpis": "Сообщения и диалоги"
     },
     "health": {
       "nav": "Состояние системы",

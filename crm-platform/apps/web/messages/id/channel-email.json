@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Hubungkan kotak surat",
-          "body": "Masuk dengan Google atau Microsoft, atau isi pengaturan server email Anda, lalu izinkan Threadwise membaca dan mengirim email untuk alamat itu."
+          "body": "Masuk dengan Google atau Microsoft, atau isi pengaturan server email Anda, lalu izinkan {app} membaca dan mengirim email untuk alamat itu."
         },
         "inbox": {
           "title": "Email masuk ke inbox",

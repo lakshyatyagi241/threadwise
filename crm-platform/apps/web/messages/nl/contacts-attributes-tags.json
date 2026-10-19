@@ -439,7 +439,10 @@
       "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "company": "Bedrijf",
       "companyHint": "Plaatst dit contact onder een organisatie.",
-      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
+      "searchOptions": "Opties zoeken",
+      "searchOptionsFor": "Zoeken in de opties van {field}",
+      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht."
     },
     "tags": {
       "title": "Tags",
@@ -1225,7 +1228,8 @@
             "duplicate": "Twee opties hebben dezelfde naam."
           },
           "condition": "Kies de eigenschap en de waarde voor elke voorwaarde."
-        }
+        },
+        "optionsLazy": "Deze eigenschap heeft {count, plural, one {# optie} other {# opties}}, te veel om hier te bewerken. Ze blijven ongewijzigd; de overige instellingen kun je wel aanpassen."
       },
       "builtinCard": {
         "title": "Ingebouwde eigenschappen",

@@ -4,11 +4,12 @@ import { Badge, Button, EmptyState, Select, Spinner, cn } from '@crm/ui';
 import { useLocale, useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { MemberLeave, WspMember, WspMembersSummary } from '@crm/contracts';
-import { joinedDate } from '../lib/format';
+import { dateTime, joinedDate } from '../lib/format';
 import { formatDay, leaveBadge } from '../lib/leave';
 import {
   PRESENCE_DOT,
   canChangeRole,
+  canEditDetails,
   canRemove,
   canReset,
   canResend,
@@ -16,7 +17,7 @@ import {
   roleOptions,
 } from '../lib/roles';
 import { Avatar } from './parts';
-import { CalendarIcon, LockIcon, MailIcon, TrashIcon } from './icons';
+import { CalendarIcon, LockIcon, MailIcon, PencilIcon, TrashIcon } from './icons';
 
 export interface RowActions {
   onRole: (member: WspMember, roleId: string) => void;
@@ -25,6 +26,10 @@ export interface RowActions {
   onRemove: (member: WspMember) => void;
   /** Opens the leave and delegate dialog of this member (BL-112). */
   onLeave: (member: WspMember) => void;
+  /** Opens the Change member dialog (phone number and chat limit). */
+  onEdit: (member: WspMember) => void;
+  /** The workspace's time zone, in which the last login is shown. */
+  timeZone: string | null;
   /** Open leaves of the workspace and its calendar day, for the badge beside a name. */
   leaves: { items: readonly MemberLeave[]; today: string };
   /** The member a call is in flight for: its controls are disabled. */
@@ -80,6 +85,7 @@ function MemberRow({
   const locale = useLocale();
   const current = primaryRole(member);
   const joined = joinedDate(member.joinedAt, locale);
+  const lastLogin = dateTime(member.lastLoginAt, locale, actions.timeZone);
   const busy = actions.busyId === member.id;
   const isMe = member.id === me.id;
   const badge = leaveBadge(actions.leaves.items, member.id, actions.leaves.today);
@@ -155,6 +161,34 @@ function MemberRow({
           </span>
         </span>
       </td>
+      <td
+        className="hidden px-3 py-3 text-[11.5px] lg:table-cell"
+        data-testid={`phone-${member.email}`}
+      >
+        {member.phone ? (
+          <span dir="ltr" className="font-mono">
+            {member.phone}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">–</span>
+        )}
+      </td>
+      <td
+        className="hidden px-3 py-3 text-[11.5px] tabular-nums lg:table-cell"
+        data-testid={`chat-limit-${member.email}`}
+      >
+        {member.chatLimit === null ? (
+          <span className="text-muted-foreground">{t('noLimit')}</span>
+        ) : (
+          member.chatLimit
+        )}
+      </td>
+      <td
+        className="hidden px-3 py-3 text-[11.5px] lg:table-cell"
+        data-testid={`last-login-${member.email}`}
+      >
+        {lastLogin ?? <span className="italic text-muted-foreground">{t('neverSignedIn')}</span>}
+      </td>
       <td className="hidden px-3 py-3 text-[11.5px] md:table-cell">
         {joined ??
           (member.status === 'pending' ? (
@@ -165,6 +199,17 @@ function MemberRow({
       </td>
       <td className="py-3 pe-2 ps-1 text-end sm:pe-5 sm:ps-3">
         <div className="inline-flex items-center gap-1">
+          {member.status !== 'inactive' && canEditDetails(member, me) && (
+            <IconAction
+              label={t('editAction')}
+              tone="primary"
+              disabled={busy}
+              testId={`edit-${member.email}`}
+              onClick={() => actions.onEdit(member)}
+            >
+              <PencilIcon />
+            </IconAction>
+          )}
           {member.status === 'active' && (
             <IconAction
               label={t('leaveAction')}
@@ -230,13 +275,14 @@ function SkeletonRows() {
               </div>
             </div>
           </td>
-          {[16, 12, 20, 8].map((w, j) => (
+          {[16, 12, 14, 8, 14, 20, 8].map((w, j) => (
             <td
               key={j}
               className={cn(
                 'px-3 py-3',
                 j === 1 && 'hidden sm:table-cell',
-                j === 2 && 'hidden md:table-cell',
+                (j === 2 || j === 3 || j === 4) && 'hidden lg:table-cell',
+                j === 5 && 'hidden md:table-cell',
               )}
             >
               <div className="h-3 animate-pulse rounded bg-muted" style={{ width: `${w * 4}px` }} />
@@ -302,13 +348,31 @@ export function MembersTable({
               </th>
               <th
                 scope="col"
+                className="hidden w-[150px] px-3 py-2.5 text-start font-medium lg:table-cell"
+              >
+                {t('members.columns.phone')}
+              </th>
+              <th
+                scope="col"
+                className="hidden w-[110px] px-3 py-2.5 text-start font-medium lg:table-cell"
+              >
+                {t('members.columns.chatLimit')}
+              </th>
+              <th
+                scope="col"
+                className="hidden w-[170px] px-3 py-2.5 text-start font-medium lg:table-cell"
+              >
+                {t('members.columns.lastLogin')}
+              </th>
+              <th
+                scope="col"
                 className="hidden w-[140px] px-3 py-2.5 text-start font-medium md:table-cell"
               >
                 {t('members.columns.joined')}
               </th>
               <th
                 scope="col"
-                className="w-[110px] py-2.5 pe-2 ps-1 text-end font-medium sm:pe-5 sm:ps-3"
+                className="w-[140px] py-2.5 pe-2 ps-1 text-end font-medium sm:pe-5 sm:ps-3"
               >
                 <span className="sr-only">{t('members.columns.actions')}</span>
               </th>

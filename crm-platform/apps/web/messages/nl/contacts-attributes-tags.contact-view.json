@@ -131,7 +131,11 @@
         "previousStage": "Vorige fase",
         "previousStageSince": "Vorige fase sinds",
         "lostReason": "Reden van verlies",
-        "updatedAt": "Laatst bijgewerkt"
+        "updatedAt": "Laatst bijgewerkt",
+        "leadScore": "Leadscore",
+        "originalStage": "Oorspronkelijke levenscyclusfase",
+        "createdBy": "Aangemaakt door",
+        "updatedBy": "Bijgewerkt door"
       },
       "company": {
         "title": "Bedrijf",

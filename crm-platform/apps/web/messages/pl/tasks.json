@@ -92,7 +92,8 @@
         "contact": "Kontakt",
         "deal": "Szansa sprzedaży",
         "created": "Utworzono",
-        "completed": "Ukończono"
+        "completed": "Ukończono",
+        "outcome": "Wynik"
       },
       "refresh": "Odśwież",
       "shortcuts": "Skróty klawiaturowe",
@@ -101,7 +102,9 @@
         "list": "Lista",
         "board": "Tablica wg terminu"
       },
-      "linkCompany": "Firma"
+      "linkCompany": "Firma",
+      "outcome": "Wynik",
+      "allOutcomes": "Wszystkie wyniki"
     },
     "table": {
       "scrollArea": "Tabela zadań",
@@ -115,7 +118,8 @@
         "contact": "Kontakt",
         "deal": "Szansa sprzedaży",
         "created": "Utworzono",
-        "completed": "Ukończono"
+        "completed": "Ukończono",
+        "outcome": "Wynik"
       }
     },
     "row": {
@@ -204,9 +208,11 @@
         "titleTooLong": "Zadanie jest za długie (maksymalnie 255 znaków).",
         "notesTooLong": "Notatki są za długie (maksymalnie 5000 znaków).",
         "dueInvalid": "Ta data jest nieprawidłowa.",
-        "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej."
+        "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
+        "outcomeInvalid": "Ten wynik jest niedostępny. Wybierz jeden z listy."
       },
-      "company": "Firma"
+      "company": "Firma",
+      "outcome": "Wynik"
     },
     "drawer": {
       "loading": "Wczytywanie zadania",
@@ -235,7 +241,8 @@
       },
       "deleteTitle": "Usunąć to zadanie?",
       "deleteMessage": "„{title}” zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.",
-      "cancel": "Zachowaj"
+      "cancel": "Zachowaj",
+      "outcomeChip": "Wynik: {name}"
     },
     "board": {
       "buckets": {
@@ -285,7 +292,10 @@
       "planDisabled": "Twój plan nie obejmuje zadań. Ulepsz plan, aby je odblokować.",
       "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "outcomeInvalid": "Ten wynik jest niedostępny. Wybierz jeden z listy.",
+      "outcomeNameTaken": "Inny wynik ma już tę nazwę.",
+      "outcomeInUse": "Zadania nadal używają tego wyniku, więc nie można go usunąć. Ukryj go zamiast tego."
     },
     "toast": {
       "completed": "Zadanie ukończone.",
@@ -341,6 +351,43 @@
       "save": "Dodaj zadanie",
       "cancel": "Anuluj",
       "failed": "Nie udało się zapisać zadania. Wpisany tekst został przywrócony w polu."
+    },
+    "outcomes": {
+      "title": "Wyniki zadań",
+      "subtitle": "Wyniki wybierane podczas kończenia lub rejestrowania zadania, na przykład Zainteresowany lub Zostawiono wiadomość.",
+      "listTitle": "Wyniki",
+      "listHint": "Ukryte wyniki nie są już proponowane, ale zadania, które je mają, zachowują je. Wyniku używanego przez zadania nie można usunąć.",
+      "loading": "Wczytywanie wyników",
+      "empty": "Brak wyników. Dodaj pierwszy poniżej.",
+      "newName": "Nowy wynik",
+      "newNamePlaceholder": "np. Zostawiono wiadomość",
+      "add": "Dodaj wynik",
+      "readOnly": "Możesz zobaczyć tę listę, ale do jej zmiany potrzebujesz uprawnienia.",
+      "failed": "To się nie udało.",
+      "conflict": "Ktoś inny zmienił ten wynik. Listę wczytano ponownie. Spróbuj jeszcze raz.",
+      "added": "Dodano wynik.",
+      "saved": "Zapisano wynik.",
+      "deleted": "Usunięto wynik.",
+      "moveUp": "Przesuń {name} w górę",
+      "moveDown": "Przesuń {name} w dół",
+      "nameLabel": "Nazwa wyniku",
+      "taskCount": "{count, plural, one {# zadanie} few {# zadania} many {# zadań} other {# zadania}}",
+      "shownLabel": "Proponuj {name} przy kończeniu zadania",
+      "shown": "Widoczny",
+      "hidden": "Ukryty",
+      "deleteNamed": "Usuń {name}",
+      "deleteInUse": "Zadania nadal używają tego wyniku, więc nie można go usunąć. Ukryj go zamiast tego.",
+      "deleteTitle": "Usunąć {name}?",
+      "deleteMessage": "Wynik zostanie usunięty z listy. Żadne zadanie go nie używa.",
+      "delete": "Usuń",
+      "cancel": "Zachowaj",
+      "problems": {
+        "nameRequired": "Wpisz nazwę wyniku.",
+        "nameTooLong": "Nazwa jest za długa (maksymalnie 191 znaków)."
+      },
+      "none": "Brak wyniku",
+      "hiddenName": "{name} (ukryty)",
+      "completeWith": "Zakończ z wynikiem"
     }
   }
 }

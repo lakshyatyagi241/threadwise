@@ -91,7 +91,14 @@
         "none": "Ancora nessuno",
         "atLeast": "{count}+",
         "footnote": "I dati sui messaggi riguardano le conversazioni trovate per questo contatto (per telefono, e-mail o nome). I dati sulle chiamate riguardano l'ultimo anno, in base a telefono o nome.",
-        "callsPartial": "Le chiamate corrispondenti erano più di quelle leggibili, quindi i dati sulle chiamate potrebbero essere parziali."
+        "callsPartial": "Le chiamate corrispondenti erano più di quelle leggibili, quindi i dati sulle chiamate potrebbero essere parziali.",
+        "waSent": "WhatsApp inviati",
+        "waDelivered": "WhatsApp consegnati",
+        "waSeen": "WhatsApp letti",
+        "waReceived": "WhatsApp ricevuti",
+        "waFailed": "WhatsApp falliti",
+        "waReplied": "WhatsApp con risposta",
+        "waFootnote": "I numeri di WhatsApp contano tutti i messaggi nelle conversazioni WhatsApp di questo contatto. Un messaggio inviato conta come risposto quando il messaggio successivo è del contatto."
       }
     }
   }

@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, other {無制限の上限を#件表示}}",
       "hideUnlimited": "無制限の上限を非表示",
       "groupCount": "{count, plural, other {上限#件}}",
-      "groupHidden": "{count, plural, other {無制限の上限をあと#件非表示にしています。}}"
+      "groupHidden": "{count, plural, other {無制限の上限をあと#件非表示にしています。}}",
+      "activatedOn": "{date} に有効化",
+      "previousBilling": "前回の請求日: {date}",
+      "subscriptionId": "サブスクリプション ID: {id}"
     },
     "operator": {
       "title": "ワークスペースのプラン",

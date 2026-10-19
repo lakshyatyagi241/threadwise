@@ -58,7 +58,10 @@
         "role": "Vai trò",
         "status": "Trạng thái",
         "joined": "Tham gia",
-        "actions": "Thao tác"
+        "actions": "Thao tác",
+        "phone": "Điện thoại",
+        "chatLimit": "Số cuộc trò chuyện đồng thời",
+        "lastLogin": "Lần đăng nhập gần nhất"
       },
       "pending": "đang chờ",
       "you": "Bạn",
@@ -100,7 +103,10 @@
       "onLeaveUntil": "Nghỉ phép đến {date}",
       "onLeaveOpen": "Đang nghỉ phép",
       "leaveFrom": "Nghỉ phép từ {date}",
-      "leaveAction": "Nghỉ phép và người đại diện"
+      "leaveAction": "Nghỉ phép và người đại diện",
+      "noLimit": "Không giới hạn",
+      "neverSignedIn": "Chưa bao giờ",
+      "editAction": "Đổi điện thoại và giới hạn trò chuyện"
     },
     "invite": {
       "eyebrow": "Không gian làm việc",
@@ -129,7 +135,14 @@
       "nameTooLong": "Tên tối đa {max} ký tự.",
       "emailInvalid": "Nhập địa chỉ email hợp lệ.",
       "upgrade": "Nâng cấp gói",
-      "emailRequired": "Nhập địa chỉ email."
+      "emailRequired": "Nhập địa chỉ email.",
+      "phone": "Số điện thoại (không bắt buộc)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Kèm mã quốc gia.",
+      "phoneInvalid": "Nhập số kèm mã quốc gia, ví dụ +91 98765 43210.",
+      "chatLimit": "Số cuộc trò chuyện đồng thời",
+      "chatLimitHint": "Số cuộc trò chuyện đang mở tối đa được giao cho người này cùng lúc. Để trống nếu không giới hạn.",
+      "chatLimitInvalid": "Nhập một số nguyên từ 1 đến {max}, hoặc để trống nếu không giới hạn."
     },
     "teams": {
       "eyebrow": "Không gian làm việc",
@@ -320,6 +333,31 @@
       "undoTitle": "Hoàn tác lần phân công lại này?",
       "undoMessage": "Liên hệ và deal chưa ai thay đổi kể từ đó sẽ quay về người phụ trách trước. Các mục còn lại giữ nguyên.",
       "restored": "{count} đã trả lại, {skipped} giữ nguyên."
+    },
+    "details": {
+      "eyebrow": "Không gian làm việc",
+      "title": "Đổi thành viên",
+      "intro": "Điện thoại và giới hạn trò chuyện của {name}.",
+      "phone": "Số điện thoại",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Kèm mã quốc gia. Để trống để xóa.",
+      "phoneInvalid": "Nhập số kèm mã quốc gia, ví dụ +91 98765 43210.",
+      "chatLimit": "Số cuộc trò chuyện đồng thời",
+      "chatLimitHint": "Phân công tự động sẽ ngừng giao thêm cuộc trò chuyện cho người này khi họ đang có chừng đó cuộc mở. Để trống nếu không giới hạn.",
+      "chatLimitPlaceholder": "Không giới hạn",
+      "chatLimitInvalid": "Nhập một số nguyên từ 1 đến {max}, hoặc để trống nếu không giới hạn.",
+      "lastLogin": "Lần đăng nhập gần nhất",
+      "lastLoginNever": "Chưa đăng nhập",
+      "submit": "Lưu",
+      "saving": "Đang lưu…",
+      "saved": "Đã cập nhật thành viên."
+    },
+    "availability": {
+      "label": "Trạng thái sẵn sàng",
+      "available": "Sẵn sàng",
+      "offline": "Ngoại tuyến",
+      "hint": "Khi bạn ngoại tuyến, hệ thống không tự động giao cuộc trò chuyện mới cho bạn. Các cuộc trò chuyện bạn đang có vẫn của bạn.",
+      "failed": "Không thể thay đổi"
     }
   }
 }

@@ -170,7 +170,10 @@
       "unlocked": "مشمولة",
       "locked": "ليست في خطتك",
       "moreOnHigher": "{count, plural, zero {لا ميزات إضافية} one {تُفتح ميزة إضافية واحدة} two {تُفتح ميزتان إضافيتان} few {تُفتح # ميزات إضافية} many {تُفتح # ميزة إضافية} other {تُفتح # ميزة إضافية}} في خطة أعلى.",
-      "comparePlans": "مقارنة الخطط"
+      "comparePlans": "مقارنة الخطط",
+      "activatedOn": "تم التفعيل في {date}",
+      "previousBilling": "تاريخ الفوترة السابق: {date}",
+      "subscriptionId": "معرّف الاشتراك: {id}"
     },
     "plans": {
       "pickerTitle": "اختر باقة",

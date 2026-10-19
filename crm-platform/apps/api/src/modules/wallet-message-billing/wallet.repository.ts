@@ -1,11 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
+import { walletExactAmount } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 
 export interface WalletRow {
   id: number;
   unit: string;
   balanceMinor: number;
+  /** The balance to the ledger's four decimals, trimmed ("192.999"). */
+  balanceExact: string;
   lowBalanceAlertedAt: Date | null;
 }
 
@@ -15,7 +18,10 @@ export interface LedgerRow {
   type: string;
   direction: 'in' | 'out';
   amountMinor: number;
+  /** Signed, to the ledger's four decimals, trimmed ("-0.958"). */
+  amountExact: string;
   balanceAfterMinor: number;
+  balanceAfterExact: string;
   source: string | null;
   description: string | null;
   note: string | null;
@@ -84,6 +90,7 @@ export class WalletRepository {
       id: Number(r.id),
       unit: r.unit,
       balanceMinor: decimalToMinor(r.balance),
+      balanceExact: walletExactAmount(r.balance),
       lowBalanceAlertedAt: r.low_balance_alerted_at ? new Date(r.low_balance_alerted_at) : null,
     };
   }
@@ -101,6 +108,7 @@ export class WalletRepository {
       id: Number(r.id),
       unit: r.unit,
       balanceMinor: decimalToMinor(r.balance),
+      balanceExact: walletExactAmount(r.balance),
       lowBalanceAlertedAt: r.low_balance_alerted_at ? new Date(r.low_balance_alerted_at) : null,
     };
   }
@@ -121,6 +129,7 @@ export class WalletRepository {
       id: Number(r.id),
       unit: r.unit,
       balanceMinor: decimalToMinor(r.balance),
+      balanceExact: walletExactAmount(r.balance),
       lowBalanceAlertedAt: r.low_balance_alerted_at ? new Date(r.low_balance_alerted_at) : null,
     }));
   }
@@ -224,7 +233,9 @@ export function toLedger(r: RawLedger): LedgerRow {
     type: r.type,
     direction: r.direction,
     amountMinor: decimalToMinor(r.amount),
+    amountExact: walletExactAmount(r.amount),
     balanceAfterMinor: decimalToMinor(r.balance_after),
+    balanceAfterExact: walletExactAmount(r.balance_after),
     source: r.source,
     description: r.description,
     note: r.note,

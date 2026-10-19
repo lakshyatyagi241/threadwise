@@ -333,7 +333,7 @@ export function ContactsScreen() {
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).

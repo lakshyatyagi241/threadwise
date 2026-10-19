@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {Pokaż # limit bez ograniczeń} few {Pokaż # limity bez ograniczeń} many {Pokaż # limitów bez ograniczeń} other {Pokaż # limitu bez ograniczeń}}",
       "hideUnlimited": "Ukryj limity bez ograniczeń",
       "groupCount": "{count, plural, one {# limit} few {# limity} many {# limitów} other {# limitu}}",
-      "groupHidden": "{count, plural, one {# kolejny limit jest bez ograniczeń i ukryty.} few {# kolejne limity są bez ograniczeń i ukryte.} many {# kolejnych limitów jest bez ograniczeń i ukrytych.} other {# kolejnego limitu jest bez ograniczeń i ukryty.}}"
+      "groupHidden": "{count, plural, one {# kolejny limit jest bez ograniczeń i ukryty.} few {# kolejne limity są bez ograniczeń i ukryte.} many {# kolejnych limitów jest bez ograniczeń i ukrytych.} other {# kolejnego limitu jest bez ograniczeń i ukryty.}}",
+      "activatedOn": "Aktywowano: {date}",
+      "previousBilling": "Poprzednia data rozliczenia: {date}",
+      "subscriptionId": "ID subskrypcji: {id}"
     },
     "operator": {
       "title": "Plany przestrzeni roboczych",

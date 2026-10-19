@@ -302,6 +302,8 @@ export interface MessageBubbleProps {
   onOpenLog?: (messageId: string) => void;
   /** On a stage change line: a later "undone" line of the same change is in the thread, so the Undo is gone. */
   stageUndone?: boolean;
+  /** The customer's name, shown above their bubbles like the old inbox did (a group message shows its own author instead). */
+  customerName?: string;
 }
 
 /**
@@ -318,6 +320,7 @@ export const MessageBubble = memo(function MessageBubble({
   canManageChannel = false,
   onOpenLog,
   stageUndone = false,
+  customerName,
 }: MessageBubbleProps) {
   const t = useTranslations('team-inbox-conversations.bubble');
   const tConsent = useTranslations('contact-consent.systemLine');
@@ -404,6 +407,15 @@ export const MessageBubble = memo(function MessageBubble({
           >
             {out && sender && (
               <p className="mb-0.5 text-[11px] font-medium text-muted-foreground">{sender}</p>
+            )}
+            {!out && !m.group && customerName && (
+              <p
+                dir="auto"
+                data-testid="inbox-customer-name"
+                className="mb-0.5 text-[11px] font-medium text-muted-foreground"
+              >
+                {customerName}
+              </p>
             )}
             {!out && m.group && (
               <p

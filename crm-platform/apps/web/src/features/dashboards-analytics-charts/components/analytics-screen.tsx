@@ -142,6 +142,35 @@ export function AnalyticsScreen() {
             />
           </section>
 
+          <section aria-label={t('moreKpis')} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+            <StatTile
+              label={t('kpi.received')}
+              value={a.current.replies.toLocaleString(locale)}
+              hint={<Trend delta={a.trends.repliesPct} />}
+            />
+            {a.conversations && (
+              <>
+                <StatTile
+                  label={t('kpi.conversationsOpen')}
+                  value={a.conversations.open.toLocaleString(locale)}
+                  hint={t('kpi.conversationsTotal', { count: a.conversations.total })}
+                />
+                <StatTile
+                  label={t('kpi.conversationsClosed')}
+                  value={a.conversations.closed.toLocaleString(locale)}
+                />
+                <StatTile
+                  label={t('kpi.conversationsAssigned')}
+                  value={a.conversations.assigned.toLocaleString(locale)}
+                />
+                <StatTile
+                  label={t('kpi.conversationsUnassigned')}
+                  value={a.conversations.unassigned.toLocaleString(locale)}
+                />
+              </>
+            )}
+          </section>
+
           {ig && <InstagramAnalytics data={ig} />}
 
           <div className="grid gap-4 lg:grid-cols-3">

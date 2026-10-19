@@ -104,6 +104,7 @@
       "failed": "failed",
       "edited": "Edited {when}",
       "openBuilder": "Open builder",
+      "faqs": "FAQs",
       "pause": "Pause",
       "resume": "Resume",
       "rename": "Rename",
@@ -565,7 +566,7 @@
           "startPinned": "This is the start point (click to unpin)",
           "startMake": "Make this the start point",
           "startPoint": "Start point",
-          "editTitle": "Edit (open inspector)",
+          "editTitle": "Edit (open inspector, or double-click the node, or press Enter)",
           "edit": "Edit",
           "duplicateTitle": "Duplicate (Ctrl+D)",
           "duplicate": "Duplicate",
@@ -581,7 +582,9 @@
           "nothingHint": "Click a node on the canvas to edit its properties,<br/>or drag a card from the left to add a new node.",
           "nodeFallback": "Node",
           "id": "id",
-          "noSettings": "This node has no settings."
+          "noSettings": "This node has no settings.",
+          "confirmDeleteTitle": "Delete this node?",
+          "confirmDeleteMessage": "The node and its connections are removed. Press Ctrl+Z to undo it until you leave the builder."
         },
         "palette": {
           "modeCall": "Call",

@@ -47,12 +47,15 @@ export function formatWindowLeft(ms: number): { hours: number; minutes: number }
 
 /**
  * The row chip of the list: a window is only worth a chip when it matters (closing soon, or closed). Returns null for none/open.
+ * `hasRule` says the row's channel has a window rule: then a customer who never wrote (no expiry) is closed, exactly as the header
+ * says, so the list and the header never disagree. A channel without a rule (or one not known yet) never gets a chip.
  */
 export function rowWindowChip(
   expiresAt: string | null,
   nowMs: number,
+  hasRule = false,
 ): { state: 'soon' | 'closed'; msLeft: number | null } | null {
-  if (!expiresAt) return null;
+  if (!expiresAt) return hasRule ? { state: 'closed', msLeft: null } : null;
   const at = Date.parse(expiresAt);
   if (Number.isNaN(at)) return null;
   if (at <= nowMs) return { state: 'closed', msLeft: null };

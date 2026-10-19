@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {Toon # onbeperkte limiet} other {Toon # onbeperkte limieten}}",
       "hideUnlimited": "Onbeperkte limieten verbergen",
       "groupCount": "{count, plural, one {# limiet} other {# limieten}}",
-      "groupHidden": "{count, plural, one {# limiet meer is onbeperkt en verborgen.} other {# limieten meer zijn onbeperkt en verborgen.}}"
+      "groupHidden": "{count, plural, one {# limiet meer is onbeperkt en verborgen.} other {# limieten meer zijn onbeperkt en verborgen.}}",
+      "activatedOn": "Geactiveerd op {date}",
+      "previousBilling": "Vorige factuurdatum: {date}",
+      "subscriptionId": "Abonnements-ID: {id}"
     },
     "operator": {
       "title": "Workspace-abonnementen",

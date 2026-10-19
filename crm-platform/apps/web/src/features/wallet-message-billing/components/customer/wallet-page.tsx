@@ -13,6 +13,7 @@ import { billingVariant } from '../../lib/billing-variant';
 import {
   QUICK_ADD_UNITS,
   currencySymbol,
+  formatAmount,
   formatMinor,
   parseTopupUnits,
   topupHref,
@@ -68,7 +69,8 @@ export function WalletBody({
 }) {
   const t = useTranslations('wallet-message-billing.wallet');
   const locale = useLocale();
-  const money = (minor: number) => formatMinor(minor, summary.currency, locale);
+  const money = (minor: number, exact?: string) =>
+    formatAmount(minor, exact, summary.currency, locale);
   return (
     <>
       {summary.lowBalance && (
@@ -80,7 +82,7 @@ export function WalletBody({
       <div className="grid gap-4 sm:grid-cols-3">
         <StatTile
           label={t('kpi.balance')}
-          value={money(summary.balanceMinor)}
+          value={money(summary.balanceMinor, summary.balanceExact)}
           tone={summary.lowBalance ? 'warning' : 'accent'}
           hint={
             summary.approxMessages !== null
@@ -90,12 +92,12 @@ export function WalletBody({
         />
         <StatTile
           label={t('kpi.spent')}
-          value={money(summary.spent30dMinor)}
+          value={money(summary.spent30dMinor, summary.spent30dExact)}
           hint={t('kpi.last30')}
         />
         <StatTile
           label={t('kpi.earned')}
-          value={`+${money(summary.earned30dMinor)}`}
+          value={`+${money(summary.earned30dMinor, summary.earned30dExact)}`}
           hint={t('kpi.last30')}
         />
       </div>

@@ -131,7 +131,11 @@
         "previousStage": "Önceki aşama",
         "previousStageSince": "Önceki aşama başlangıcı",
         "lostReason": "Kayıp nedeni",
-        "updatedAt": "Son güncelleme"
+        "updatedAt": "Son güncelleme",
+        "leadScore": "Potansiyel müşteri puanı",
+        "originalStage": "Özgün yaşam döngüsü aşaması",
+        "createdBy": "Oluşturan",
+        "updatedBy": "Güncelleyen"
       },
       "company": {
         "title": "Şirket",

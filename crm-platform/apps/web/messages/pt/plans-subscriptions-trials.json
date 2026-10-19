@@ -303,7 +303,10 @@
       "showUnlimited": "{count, plural, one {Mostrar # limite ilimitado} other {Mostrar # limites ilimitados}}",
       "hideUnlimited": "Ocultar limites ilimitados",
       "groupCount": "{count, plural, one {# limite} other {# limites}}",
-      "groupHidden": "{count, plural, one {# limite a mais é ilimitado e está oculto.} other {# limites a mais são ilimitados e estão ocultos.}}"
+      "groupHidden": "{count, plural, one {# limite a mais é ilimitado e está oculto.} other {# limites a mais são ilimitados e estão ocultos.}}",
+      "activatedOn": "Ativada em {date}",
+      "previousBilling": "Data da cobrança anterior: {date}",
+      "subscriptionId": "ID da assinatura: {id}"
     },
     "operator": {
       "title": "Planos dos espaços de trabalho",

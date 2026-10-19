@@ -33,7 +33,7 @@ import { assertOwnerWithinScope } from '../owner-scope';
 import { DealsRepository, type DealRow } from '../deals/deals.repository';
 import { DealsService } from '../deals/deals.service';
 import { resolveTimezone } from '../deals/deal-calendar';
-import { defaultSort, encodeTaskCursor, titleFromBody } from './task-rules';
+import { defaultSort, encodeTaskCursor, outcomeUsable, titleFromBody } from './task-rules';
 import { taskEventPayload, toTaskResponse } from './tasks.mapper';
 import {
   sortKeyOf,
@@ -61,6 +61,7 @@ interface FilterInput {
   contactId?: string;
   dealId?: string;
   companyId?: string;
+  outcomeId?: string;
 }
 
 /**
@@ -215,6 +216,7 @@ export class TasksService {
       ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
     );
     const links = await this.resolveLinks(tx, ctx.orgId, input, true);
+    const outcomeId = await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, null);
     const id = await this.repo.insert(tx, ctx.orgId, {
       title: input.title,
       notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
@@ -225,6 +227,7 @@ export class TasksService {
       contactId: links.contactId ?? null,
       dealId: links.dealId ?? null,
       companyId: links.companyId ?? null,
+      outcomeId: outcomeId ?? null,
       source,
     });
     return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
@@ -275,6 +278,8 @@ export class TasksService {
       }
       const links = await this.resolveLinks(tx, ctx.orgId, input, false);
       this.applyLinks(patch, row, links);
+      const outcomeId = await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, row.outcomeId);
+      if (outcomeId !== undefined && outcomeId !== row.outcomeId) patch.outcome_id = outcomeId;
 
       if (Object.keys(patch).length > 0) {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
@@ -512,6 +517,11 @@ export class TasksService {
       dealId: fixed.dealId,
       companyId: fixed.companyId,
     };
+    if (f.outcomeId) {
+      const o = await this.repo.resolveOutcome(tx, orgId, f.outcomeId);
+      if (!o) return null;
+      out.outcomeId = o.id;
+    }
     if (f.mine) {
       if (!ctx.userId) return null;
       out.assigneeId = ctx.userId;
@@ -574,6 +584,30 @@ export class TasksService {
       );
     }
     return user.id;
+  }
+
+  /**
+   * The outcome a body names, as an internal id (`undefined` = not named, `null` = clear). One that is not an active outcome of this
+   * workspace (and not the one the task already has) is 422 TASK_OUTCOME_INVALID.
+   */
+  private async resolveOutcome(
+    tx: Tx,
+    orgId: number,
+    uuid: string | null | undefined,
+    currentId: number | null,
+  ): Promise<number | null | undefined> {
+    if (uuid === undefined) return undefined;
+    if (uuid === null) return null;
+    const outcome = await this.repo.resolveOutcome(tx, orgId, uuid);
+    if (!outcomeUsable(outcome, currentId)) {
+      throw new AppError(
+        ERROR_CODES.TASK_OUTCOME_INVALID,
+        'The outcome is not an active task outcome of this workspace.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'outcomeId', message: 'must be an active task outcome' }],
+      );
+    }
+    return outcome!.id;
   }
 
   /**
@@ -648,6 +682,7 @@ export class TasksService {
         priority: { old: null, new: row.priority },
         dueAt: { old: null, new: row.dueAt ? row.dueAt.toISOString() : null },
         assignee: { old: null, new: row.assigneeUuid },
+        ...(row.outcomeUuid ? { outcome: { old: null, new: row.outcomeUuid } } : {}),
       },
     });
     await this.outbox.emit(tx, {
@@ -677,6 +712,7 @@ export class TasksService {
       ['contact', row.contactUuid, after.contactUuid],
       ['deal', row.dealUuid, after.dealUuid],
       ['company', row.companyUuid, after.companyUuid],
+      ['outcome', row.outcomeUuid, after.outcomeUuid],
     ];
     for (const [key, before, now] of named)
       if (before !== now) delta[key] = { old: before, new: now };
@@ -720,12 +756,17 @@ export class TasksService {
     input: TaskTransitionInput,
     scope: RecordScope,
   ): Promise<TaskResponse> {
+    const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (input.rowVersion !== undefined && input.rowVersion !== row.rowVersion) {
         throw AppError.rowVersionConflict('Task');
       }
-      return this.toResponse(await this.transition(tx, row, done));
+      // The outcome is recorded with a completion; a reopen keeps whatever the task has.
+      const outcomeId = done
+        ? await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, row.outcomeId)
+        : undefined;
+      return this.toResponse(await this.transition(tx, row, done, { outcomeId }));
     });
   }
 
@@ -733,20 +774,25 @@ export class TasksService {
     tx: Tx,
     row: TaskRow,
     done: boolean,
-    opts: { syncActivity?: boolean } = {},
+    opts: { syncActivity?: boolean; outcomeId?: number | null } = {},
   ): Promise<TaskRow> {
     const ctx = RequestContextStore.require();
     const tz = await this.zone(tx, ctx.orgId);
     if ((row.status === 'done') === done) return row;
-    await this.repo.setDone(tx, ctx.orgId, row.id, done);
+    await this.repo.setDone(tx, ctx.orgId, row.id, done, opts.outcomeId);
     if (opts.syncActivity !== false) await this.repo.syncActivity(tx, ctx.orgId, row.id, { done });
+    const after = (await this.repo.findById(tx, ctx.orgId, row.id, tz))!;
+    const delta: Record<string, { old: unknown; new: unknown }> = {
+      status: { old: row.status, new: done ? 'done' : 'open' },
+    };
+    if (row.outcomeUuid !== after.outcomeUuid)
+      delta.outcome = { old: row.outcomeUuid, new: after.outcomeUuid };
     await this.audit.record(tx, {
       module: TASK_MODULE,
       recordId: row.id,
       action: 'update',
-      delta: { status: { old: row.status, new: done ? 'done' : 'open' } },
+      delta,
     });
-    const after = (await this.repo.findById(tx, ctx.orgId, row.id, tz))!;
     await this.outbox.emit(tx, {
       aggregateModule: TASK_MODULE,
       aggregateId: row.id,
