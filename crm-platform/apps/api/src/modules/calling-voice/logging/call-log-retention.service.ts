@@ -5,9 +5,6 @@ import { CALL_RECORDING_RETENTION_DEFAULT_DAYS } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { liveDaysFor, recordSweep } from '../../data-retention';
 
-/** A click-to-call whose finished call never came back is forgotten after this many days. */
-const PLACEMENT_DAYS = 2;
-
 /**
  * The daily sweep of the call logging framework (worker only). A reference to a recording on a provider is held as long as the
  * workspace's recording window says (default 90 days, 7 to 365; the same setting as a WhatsApp recording): after it the reference is
@@ -41,7 +38,7 @@ export class CallLogRetentionService {
         'call_recordings',
         CALL_RECORDING_RETENTION_DEFAULT_DAYS,
       );
-      const placementDays = await liveDaysFor(tx, 'click_calls', PLACEMENT_DAYS);
+      const placementDays = await liveDaysFor(tx, 'click_calls');
       const cleared = await tx.execute(sql`
         UPDATE call_log_entries e
         SET recording_ref = NULL, recording_deleted_at = now()

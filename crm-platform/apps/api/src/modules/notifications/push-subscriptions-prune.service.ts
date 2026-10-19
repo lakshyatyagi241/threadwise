@@ -4,9 +4,6 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { liveDaysFor, recordSweep } from '../data-retention';
 import { PushSubscriptionsRepository } from './push-subscriptions.repository';
 
-/** A revoked device is kept this long (so a browser that comes back after a hiccup can re-enable) and then deleted. */
-const REVOKED_KEEP_DAYS = 30;
-
 /**
  * Deletes browser devices revoked more than 30 days ago (the push service said 404 / 410, or the keys stopped matching). Daily, in the
  * worker. Spans every workspace like the outbox drain, so it runs privileged; it reads nothing, it deletes by age. Safe on several pods
@@ -31,9 +28,8 @@ export class PushSubscriptionsPruneService {
   }
 
   async runOnce(now: Date = new Date()): Promise<number> {
-    const days = await this.db.privileged((tx) =>
-      liveDaysFor(tx, 'push_devices_revoked', REVOKED_KEEP_DAYS),
-    );
+    // A revoked device is kept briefly (so a browser that comes back after a hiccup can re-enable), then deleted: the item's default.
+    const days = await this.db.privileged((tx) => liveDaysFor(tx, 'push_devices_revoked'));
     const cutoff = new Date(now.getTime() - days * 86_400_000);
     const deleted = await this.db.privileged((tx) => this.repo.pruneRevoked(tx, cutoff));
     await recordSweep(this.db, this.logger, 'push_devices_revoked', { deletedRows: deleted }, now);

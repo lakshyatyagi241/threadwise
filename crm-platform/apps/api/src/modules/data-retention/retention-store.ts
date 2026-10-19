@@ -2,6 +2,7 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import {
   retentionProblem,
+  retentionSpecOf,
   type RetentionItemId,
   type RetentionRun,
   type RetentionValues,
@@ -318,14 +319,14 @@ export async function countArchiveDaysOlderThan(tx: Tx, days: number): Promise<n
 }
 
 /**
- * The live days a sweep must use for `item`: the policy a super admin saved, else the sweep's own built-in number. Read at the start of
+ * The live days a sweep must use for `item`: the policy a super admin saved, else the sweep's own built-in number (by default the item's registry default, so the page and the job cannot disagree). Read at the start of
  * every run, so a save takes effect at the next run without a restart. A stored number outside the item's range (a row edited by hand)
  * is ignored in favour of the built-in one, never trusted to delete data.
  */
 export async function liveDaysFor(
   tx: Tx,
   item: RetentionItemId,
-  fallback: number,
+  fallback: number = retentionSpecOf(item).defaults.liveDays,
 ): Promise<number> {
   const saved = await loadPolicy(tx, item);
   if (!saved) return fallback;
