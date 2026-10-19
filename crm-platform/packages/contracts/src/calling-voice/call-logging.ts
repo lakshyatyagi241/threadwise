@@ -7,6 +7,7 @@
 import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { cursorSchema } from '../common/pagination';
+import { activityOptionRefSchema } from '../sales-activities/activity-types';
 
 // --- vocabulary --------------------------------------------------------------------------------------------------------------
 
@@ -60,6 +61,8 @@ export const callLogEntrySchema = z.object({
   source: z.enum(CALL_ENTRY_SOURCES),
   direction: z.enum(CALL_ENTRY_DIRECTIONS),
   outcome: callOutcomeSchema,
+  /** The outcome as the workspace's Phone activity lists it (a custom outcome counts as `outcome` in reports); null on an older entry. */
+  outcomeOption: activityOptionRefSchema.nullable().optional(),
   startedAt: z.string(),
   durationSec: z.number().int().nonnegative(),
   contactId: uuidSchema.nullable(),
@@ -106,6 +109,8 @@ export const logCallInputSchema = z
     customerPhone: phoneText.optional(),
     direction: z.enum(CALL_ENTRY_DIRECTIONS),
     outcome: callOutcomeSchema,
+    /** A current outcome of the Phone activity; when given, `outcome` is what that option counts as. */
+    outcomeOptionId: uuidSchema.optional(),
     startedAt: startedAt.optional(),
     durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).default(0),
     notes: z.string().trim().max(CALL_NOTES_MAX).optional(),
@@ -146,6 +151,7 @@ export type LogCallResult = z.infer<typeof logCallResultSchema>;
 
 export const updateCallLogEntryInputSchema = z.object({
   outcome: callOutcomeSchema.optional(),
+  outcomeOptionId: uuidSchema.optional(),
   direction: z.enum(CALL_ENTRY_DIRECTIONS).optional(),
   startedAt: startedAt.optional(),
   durationSec: z.number().int().min(0).max(CALL_MAX_DURATION_SEC).optional(),

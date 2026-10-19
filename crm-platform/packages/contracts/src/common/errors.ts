@@ -17,6 +17,7 @@ import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
+import { ACTIVITY_ERROR_CODES } from '../sales-activities/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 import { MKT_ERROR_CODES } from '../marketplace/errors';
@@ -71,6 +72,7 @@ export const ERROR_CODES = {
   ...WAP_ERROR_CODES,
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
+  ...ACTIVITY_ERROR_CODES,
   ...FLR_ERROR_CODES,
   ...MKT_ERROR_CODES,
   ...LEAD_ERROR_CODES,
