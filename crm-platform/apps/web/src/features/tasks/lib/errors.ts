@@ -16,6 +16,7 @@ export const ERROR_KINDS = [
   'outcomeInvalid',
   'outcomeNameTaken',
   'outcomeInUse',
+  'completionDisabled',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -45,6 +46,8 @@ export function errorKind(error: unknown): ErrorKind {
       return 'outcomeNameTaken';
     case ERROR_CODES.TASK_OUTCOME_IN_USE:
       return 'outcomeInUse';
+    case ERROR_CODES.ACTIVITY_COMPLETION_DISABLED:
+      return 'completionDisabled';
   }
   // A route that is not deployed answers 404 or 501 without one of our codes for it.
   if (error.status === 404 || error.status === 501) return 'unavailable';

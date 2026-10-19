@@ -296,7 +296,8 @@
       "retry": "Thử lại",
       "outcomeInvalid": "Kết quả đó không khả dụng. Hãy chọn một kết quả trong danh sách.",
       "outcomeNameTaken": "Một kết quả khác đã có tên này.",
-      "outcomeInUse": "Vẫn còn công việc dùng kết quả này nên không thể xóa. Hãy ẩn nó thay thế."
+      "outcomeInUse": "Vẫn còn công việc dùng kết quả này nên không thể xóa. Hãy ẩn nó thay thế.",
+      "completionDisabled": "Việc hoàn thành công việc đang tắt trong Hoạt động bán hàng."
     },
     "toast": {
       "completed": "Đã hoàn thành tác vụ.",

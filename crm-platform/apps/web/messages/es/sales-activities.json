@@ -1,0 +1,191 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Tarea",
+        "meeting": "Reunión",
+        "phone": "Teléfono",
+        "email": "Correo electrónico",
+        "reminder": "Recordatorio",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Seguimiento",
+          "call_reminder": "Recordatorio de llamada"
+        },
+        "meeting": {
+          "interested": "Interesado",
+          "not_interested": "No interesado",
+          "needs_follow_up": "Necesita seguimiento",
+          "rescheduled": "Reprogramada",
+          "no_show": "No se presentó"
+        },
+        "phone": {
+          "connected": "Conectada",
+          "no_answer": "Sin respuesta",
+          "busy": "Ocupado",
+          "left_voicemail": "Buzón de voz dejado",
+          "wrong_number": "Número equivocado",
+          "declined": "Rechazada",
+          "failed": "Fallida"
+        }
+      }
+    },
+    "list": {
+      "back": "Datos",
+      "title": "Actividades de ventas",
+      "intro": "Gestione en un solo lugar las actividades de su equipo: tareas, reuniones, llamadas y actividades propias. Elija qué puede hacer cada una, sus tipos de tarea y sus resultados.",
+      "create": "Crear actividad",
+      "loading": "Cargando actividades…",
+      "loadFailed": "No se pudieron cargar las actividades.",
+      "retry": "Reintentar",
+      "listLabel": "Actividades",
+      "default": "Predeterminada",
+      "custom": "Personalizada",
+      "noEditor": "Una actividad predeterminada sin nada que configurar.",
+      "edit": "Editar actividad",
+      "editNamed": "Editar actividad {name}",
+      "chip": {
+        "completable": "Se puede completar",
+        "notCompletable": "No se puede completar",
+        "calendar": "En el calendario",
+        "taskTypes": "{count, plural, one {# tipo de tarea} other {# tipos de tarea}}",
+        "outcomes": "{count, plural, one {# resultado} other {# resultados}}"
+      }
+    },
+    "drawer": {
+      "title": "Editar actividad: {name}",
+      "close": "Cerrar",
+      "done": "Listo",
+      "cancel": "Cancelar",
+      "saved": "Guardado.",
+      "autosave": "Los cambios se guardan al hacerlos.",
+      "readOnly": "Puede ver estos ajustes pero no cambiarlos.",
+      "name": "Nombre de la actividad",
+      "nameLocked": "No se puede cambiar el nombre de una actividad predeterminada.",
+      "mobileCheckIn": "Permitir que los usuarios registren entrada y salida desde la aplicación móvil",
+      "mobileCheckInPending": "Guardado, pero aún sin efecto: la aplicación móvil todavía no admite el registro de entrada en reuniones. Funcionará cuando la aplicación lo admita.",
+      "showInCalendar": "Mostrar esta actividad en Mi calendario del panel de actividades",
+      "showInCalendarHint": "Guardado, pero todavía no hay un calendario de actividades. Tendrá efecto cuando se añada uno.",
+      "allowComplete": "Permitir que los usuarios marquen esta actividad como completada",
+      "allowEditCompleted": "Permitir que los usuarios editen la fecha y hora de finalización de esta actividad",
+      "taskTypes": "Tipos de tarea",
+      "taskTypesHint": "Elija uno al crear una tarea, por ejemplo Seguimiento o Recordatorio de llamada.",
+      "addTaskType": "Añadir tipo de tarea",
+      "taskTypePlaceholder": "Nuevo tipo de tarea",
+      "predictOutcomes": "Predecir resultados de esta actividad",
+      "predictOutcomesHint": "Ofrecer un resultado al completar la actividad.",
+      "outcomes": "Resultados",
+      "taskOutcomesHint": "Los resultados de una tarea terminada son una sola lista para todo el espacio de trabajo, que se mantiene en Resultados de tareas.",
+      "taskOutcomesLink": "Abrir Resultados de tareas",
+      "outcomesHint": "Quitar un resultado lo mantiene en los registros que ya lo tienen.",
+      "phoneOutcomesHint": "Elija cómo cuenta cada resultado en los informes de llamadas. Quitar un resultado lo mantiene en las llamadas que ya lo tienen.",
+      "addOutcome": "Añadir resultado",
+      "outcomePlaceholder": "Nuevo resultado",
+      "listEmpty": "Todavía no hay nada.",
+      "moveUp": "Subir {name}",
+      "moveDown": "Bajar {name}",
+      "remove": "Quitar {name}",
+      "countsAsShort": "cuenta como {as}",
+      "countsAsLabel": "Cuenta como",
+      "countsAsOption": "Cuenta como {as}",
+      "countsAs": {
+        "connected": "conectada",
+        "no_answer": "sin respuesta",
+        "busy": "ocupado",
+        "left_voicemail": "buzón de voz dejado",
+        "wrong_number": "número equivocado",
+        "declined": "rechazada",
+        "failed": "fallida"
+      },
+      "removeActivity": "Quitar actividad",
+      "removeConfirmTitle": "¿Quitar {name}?",
+      "removeConfirmBody": "Sale de la lista. Los registros que la usaron conservan sus resultados.",
+      "removed": "Actividad quitada.",
+      "noSettings": "Esta actividad no tiene nada que configurar.",
+      "errors": {
+        "nameRequired": "Ponga un nombre a la actividad.",
+        "nameTaken": "Ese nombre ya se usa aquí.",
+        "limit": "Ha llegado al límite de esta lista.",
+        "conflict": "Otra persona cambió esta actividad. Se volvió a cargar; inténtelo de nuevo.",
+        "forbidden": "No tiene permiso para cambiar esto.",
+        "failed": "No se pudo guardar. Inténtelo de nuevo."
+      }
+    },
+    "create": {
+      "title": "Crear actividad",
+      "close": "Cerrar",
+      "cancel": "Cancelar",
+      "create": "Crear",
+      "intro": "Añada una actividad específica de su negocio. Empieza con los ajustes del tipo que elija.",
+      "name": "Nombre",
+      "namePlaceholder": "Por ejemplo, Visita al sitio",
+      "behavesAs": "Funciona como",
+      "behavesAsHint": {
+        "task": "Algo que hacer antes de una fecha y que se puede completar.",
+        "meeting": "Algo que ocurre a una hora y que se puede completar.",
+        "phone": "Una llamada, con los resultados de una llamada."
+      },
+      "behaves": {
+        "task": "Una tarea",
+        "meeting": "Una reunión",
+        "phone": "Una llamada telefónica"
+      },
+      "icon": "Icono",
+      "icons": {
+        "task": "Tarea",
+        "meeting": "Calendario",
+        "phone": "Teléfono",
+        "email": "Correo electrónico",
+        "reminder": "Campana",
+        "sms": "Mensaje",
+        "chat": "Chat",
+        "visit": "Lugar",
+        "video": "Vídeo",
+        "document": "Documento",
+        "flag": "Bandera",
+        "star": "Estrella"
+      },
+      "errors": {
+        "nameRequired": "Ponga un nombre a la actividad.",
+        "nameTaken": "Ya existe una actividad con ese nombre.",
+        "limit": "Ha llegado al límite de actividades personalizadas.",
+        "failed": "No se pudo crear la actividad. Inténtelo de nuevo."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(quitado)",
+      "taskType": "Tipo de tarea",
+      "taskTypeNone": "Sin tipo",
+      "outcome": "Resultado",
+      "outcomeNone": "Sin resultado",
+      "completeOff": "Completar tareas está desactivado en Actividades de ventas."
+    },
+    "meeting": {
+      "saved": "Reunión actualizada.",
+      "reopened": "Reunión reabierta.",
+      "errors": {
+        "disabled": "Completar reuniones está desactivado en Actividades de ventas.",
+        "optionGone": "Ese resultado se quitó. Elija otro.",
+        "failed": "No se pudo guardar. Inténtelo de nuevo."
+      },
+      "outcome": "Resultado",
+      "noOutcome": "Sin resultado",
+      "removedSuffix": "(quitado)",
+      "notes": "Notas",
+      "cancel": "Cancelar",
+      "save": "Guardar",
+      "outcomeChip": "Resultado: {name}",
+      "completed": "Completada",
+      "editAria": "Editar el resultado de {title}",
+      "edit": "Editar",
+      "reopenAria": "Reabrir {title}",
+      "reopen": "Reabrir",
+      "addAria": "Añadir un resultado a {title}",
+      "add": "Añadir resultado",
+      "markCompleted": "Marcar como completada"
+    }
+  }
+}

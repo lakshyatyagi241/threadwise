@@ -296,7 +296,8 @@
       "retry": "重试",
       "outcomeInvalid": "该结果不可用。请从列表中选择。",
       "outcomeNameTaken": "已有另一个结果使用此名称。",
-      "outcomeInUse": "仍有任务在使用此结果，因此无法删除。请改为隐藏。"
+      "outcomeInUse": "仍有任务在使用此结果，因此无法删除。请改为隐藏。",
+      "completionDisabled": "“销售活动”中已关闭完成任务。"
     },
     "toast": {
       "completed": "任务已完成。",

@@ -394,6 +394,11 @@
         "label": "Zduplikowane leady",
         "description": "Wybierz, czy nowy lead pasujący do kontaktu ma zostać z nim scalony, czy stać się nowym kontaktem.",
         "keywords": "duplikat, scalanie, lead, ten sam telefon, ten sam e-mail, nowy kontakt, źródło leadów"
+      },
+      "sales-activities": {
+        "label": "Aktywności sprzedażowe",
+        "description": "Zarządzaj zadaniami, spotkaniami, rozmowami i własnymi aktywnościami: co może każda, jakie ma typy zadań i wyniki.",
+        "keywords": "aktywności, typy zadań, wyniki, wynik spotkania, wynik rozmowy, kontakt kontrolny, zameldowanie, własna aktywność, kalendarz, zakończ"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

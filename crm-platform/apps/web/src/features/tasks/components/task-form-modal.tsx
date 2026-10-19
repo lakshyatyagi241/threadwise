@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Field, Input, Modal, Select, Spinner, Textarea, useToast } from '@crm/ui';
 import { TASK_NOTES_MAX, TASK_TITLE_MAX, type TaskResponse } from '@crm/contracts';
 import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { OptionSelect } from '@/features/sales-activities';
 import { useMembers } from '../api/hooks';
 import { PRIORITIES, type RecordRef } from '../api/schemas';
 import { tasksApi } from '../api/service';
@@ -210,6 +211,14 @@ export function TaskFormModal({ task, link, initialTitle, onClose, onSaved }: Ta
             ))}
           </Select>
         </Field>
+        <OptionSelect
+          activity="task"
+          kind="type"
+          id="task-type"
+          value={draft.taskTypeId}
+          current={task?.taskType}
+          onChange={(id) => set('taskTypeId', id)}
+        />
         <Field
           label={`${t('due')} *`}
           htmlFor="task-due"

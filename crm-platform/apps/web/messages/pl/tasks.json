@@ -296,7 +296,8 @@
       "retry": "Spróbuj ponownie",
       "outcomeInvalid": "Ten wynik jest niedostępny. Wybierz jeden z listy.",
       "outcomeNameTaken": "Inny wynik ma już tę nazwę.",
-      "outcomeInUse": "Zadania nadal używają tego wyniku, więc nie można go usunąć. Ukryj go zamiast tego."
+      "outcomeInUse": "Zadania nadal używają tego wyniku, więc nie można go usunąć. Ukryj go zamiast tego.",
+      "completionDisabled": "Kończenie zadań jest wyłączone w Aktywnościach sprzedażowych."
     },
     "toast": {
       "completed": "Zadanie ukończone.",

@@ -394,6 +394,11 @@
         "label": "Lead duplicati",
         "description": "Scegli se un nuovo lead che corrisponde a un contatto viene unito a esso o diventa un nuovo contatto.",
         "keywords": "duplicato, unire, lead, stesso telefono, stessa e-mail, nuovo contatto, fonte di lead"
+      },
+      "sales-activities": {
+        "label": "Attività di vendita",
+        "description": "Gestisci compiti, riunioni, chiamate e attività personalizzate: cosa può fare ciascuna, i suoi tipi di compito e i suoi esiti.",
+        "keywords": "attività, tipi di compito, esiti, esito riunione, esito chiamata, ricontatto, check-in, attività personalizzata, calendario, completare"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

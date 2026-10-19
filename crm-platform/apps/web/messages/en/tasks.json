@@ -292,6 +292,7 @@
       "notFound": "That task could not be found. It may have been deleted.",
       "planDisabled": "Your plan does not include tasks. Upgrade to unlock them.",
       "assigneeInvalid": "That person is not an active member of this workspace.",
+      "completionDisabled": "Completing tasks is switched off in Sales Activities.",
       "unexpected": "Something went wrong. Try again in a moment.",
       "retry": "Try again",
       "outcomeInvalid": "That outcome is not available. Pick one from the list.",
