@@ -67,7 +67,15 @@ export function setup() {
   for (let from = 1; from <= MAX; from += BATCH) {
     const reqs = [];
     for (let i = from; i < Math.min(from + BATCH, MAX + 1); i++) {
-      reqs.push(['POST', `${BASE}/v2/auth/login`, JSON.stringify({ email: USER_EMAIL.replace('{n}', String(i)), password: PASSWORD }), { headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) }, tags: { setup: 'true' } }]);
+      reqs.push([
+        'POST',
+        `${BASE}/v2/auth/login`,
+        JSON.stringify({ email: USER_EMAIL.replace('{n}', String(i)), password: PASSWORD }),
+        {
+          headers: { 'content-type': 'application/json', 'x-forwarded-for': ipOf(i) },
+          tags: { setup: 'true' },
+        },
+      ]);
     }
     for (const r of http.batch(reqs)) {
       const t = r.status === 200 || r.status === 201 ? r.json('tokens.accessToken') : null;

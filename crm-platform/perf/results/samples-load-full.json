@@ -1,0 +1,5752 @@
+[
+  {
+    "t": 0,
+    "at": 1792415957277,
+    "uptime": 7,
+    "rssMb": 457,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": null,
+    "apiCpuPct": null
+  },
+  {
+    "t": 2,
+    "at": 1792415959497,
+    "uptime": 10,
+    "rssMb": 515,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 116
+  },
+  {
+    "t": 4,
+    "at": 1792415961647,
+    "uptime": 12,
+    "rssMb": 600,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 135
+  },
+  {
+    "t": 6,
+    "at": 1792415963718,
+    "uptime": 14,
+    "rssMb": 680,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 121
+  },
+  {
+    "t": 9,
+    "at": 1792415965822,
+    "uptime": 16,
+    "rssMb": 767,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 122
+  },
+  {
+    "t": 11,
+    "at": 1792415967901,
+    "uptime": 18,
+    "rssMb": 867,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 124
+  },
+  {
+    "t": 13,
+    "at": 1792415969996,
+    "uptime": 20,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 146
+  },
+  {
+    "t": 15,
+    "at": 1792415972086,
+    "uptime": 22,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 123
+  },
+  {
+    "t": 17,
+    "at": 1792415974149,
+    "uptime": 24,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 120
+  },
+  {
+    "t": 19,
+    "at": 1792415976231,
+    "uptime": 26,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 124
+  },
+  {
+    "t": 21,
+    "at": 1792415978314,
+    "uptime": 28,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 121
+  },
+  {
+    "t": 23,
+    "at": 1792415980388,
+    "uptime": 30,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 119
+  },
+  {
+    "t": 25,
+    "at": 1792415982463,
+    "uptime": 32,
+    "rssMb": 825,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 118
+  },
+  {
+    "t": 27,
+    "at": 1792415984522,
+    "uptime": 35,
+    "rssMb": 826,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 137
+  },
+  {
+    "t": 29,
+    "at": 1792415986600,
+    "uptime": 37,
+    "rssMb": 858,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 128
+  },
+  {
+    "t": 31,
+    "at": 1792415988685,
+    "uptime": 39,
+    "rssMb": 917,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 123
+  },
+  {
+    "t": 33,
+    "at": 1792415990765,
+    "uptime": 41,
+    "rssMb": 953,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 122
+  },
+  {
+    "t": 36,
+    "at": 1792415992860,
+    "uptime": 43,
+    "rssMb": 1003,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 119
+  },
+  {
+    "t": 38,
+    "at": 1792415994946,
+    "uptime": 45,
+    "rssMb": 1053,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 35,
+    "apiCpuPct": 115
+  },
+  {
+    "t": 40,
+    "at": 1792415997042,
+    "uptime": 47,
+    "rssMb": 1106,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 122
+  },
+  {
+    "t": 42,
+    "at": 1792415999128,
+    "uptime": 49,
+    "rssMb": 1146,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 140
+  },
+  {
+    "t": 44,
+    "at": 1792416001186,
+    "uptime": 51,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 132
+  },
+  {
+    "t": 46,
+    "at": 1792416003261,
+    "uptime": 53,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 120
+  },
+  {
+    "t": 48,
+    "at": 1792416005345,
+    "uptime": 55,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 121
+  },
+  {
+    "t": 50,
+    "at": 1792416007433,
+    "uptime": 57,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 119
+  },
+  {
+    "t": 52,
+    "at": 1792416009517,
+    "uptime": 60,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 123
+  },
+  {
+    "t": 54,
+    "at": 1792416011620,
+    "uptime": 62,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 127
+  },
+  {
+    "t": 56,
+    "at": 1792416013734,
+    "uptime": 64,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 129
+  },
+  {
+    "t": 59,
+    "at": 1792416015839,
+    "uptime": 66,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 126
+  },
+  {
+    "t": 61,
+    "at": 1792416017938,
+    "uptime": 68,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 121
+  },
+  {
+    "t": 63,
+    "at": 1792416020015,
+    "uptime": 70,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 129
+  },
+  {
+    "t": 65,
+    "at": 1792416022159,
+    "uptime": 72,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 130
+  },
+  {
+    "t": 67,
+    "at": 1792416024258,
+    "uptime": 74,
+    "rssMb": 1188,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 129
+  },
+  {
+    "t": 69,
+    "at": 1792416026337,
+    "uptime": 76,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 122
+  },
+  {
+    "t": 71,
+    "at": 1792416028405,
+    "uptime": 78,
+    "rssMb": 1155,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 128
+  },
+  {
+    "t": 73,
+    "at": 1792416030508,
+    "uptime": 81,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 148
+  },
+  {
+    "t": 75,
+    "at": 1792416032607,
+    "uptime": 83,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 118
+  },
+  {
+    "t": 77,
+    "at": 1792416034717,
+    "uptime": 85,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 127
+  },
+  {
+    "t": 80,
+    "at": 1792416036829,
+    "uptime": 87,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 136
+  },
+  {
+    "t": 82,
+    "at": 1792416038956,
+    "uptime": 89,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 131
+  },
+  {
+    "t": 84,
+    "at": 1792416041038,
+    "uptime": 91,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 130
+  },
+  {
+    "t": 86,
+    "at": 1792416043164,
+    "uptime": 93,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 134
+  },
+  {
+    "t": 88,
+    "at": 1792416045259,
+    "uptime": 95,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 115
+  },
+  {
+    "t": 90,
+    "at": 1792416047342,
+    "uptime": 97,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 6,
+    "apiCpuPct": 3
+  },
+  {
+    "t": 92,
+    "at": 1792416049441,
+    "uptime": 99,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 8,
+    "apiCpuPct": 10
+  },
+  {
+    "t": 94,
+    "at": 1792416051534,
+    "uptime": 102,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 7,
+    "apiCpuPct": 11
+  },
+  {
+    "t": 96,
+    "at": 1792416053613,
+    "uptime": 104,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 8,
+    "apiCpuPct": 5
+  },
+  {
+    "t": 98,
+    "at": 1792416055705,
+    "uptime": 106,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 5,
+    "apiCpuPct": 10
+  },
+  {
+    "t": 101,
+    "at": 1792416057798,
+    "uptime": 108,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 15,
+    "apiCpuPct": 12
+  },
+  {
+    "t": 103,
+    "at": 1792416059870,
+    "uptime": 110,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 10,
+    "apiCpuPct": 14
+  },
+  {
+    "t": 105,
+    "at": 1792416061946,
+    "uptime": 112,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 10,
+    "apiCpuPct": 8
+  },
+  {
+    "t": 107,
+    "at": 1792416064032,
+    "uptime": 114,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 17,
+    "apiCpuPct": 12
+  },
+  {
+    "t": 109,
+    "at": 1792416066102,
+    "uptime": 116,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 18,
+    "apiCpuPct": 21
+  },
+  {
+    "t": 111,
+    "at": 1792416068182,
+    "uptime": 118,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 22,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 113,
+    "at": 1792416070272,
+    "uptime": 120,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 16,
+    "apiCpuPct": 11
+  },
+  {
+    "t": 115,
+    "at": 1792416072373,
+    "uptime": 122,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 30
+  },
+  {
+    "t": 117,
+    "at": 1792416074450,
+    "uptime": 124,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 18,
+    "apiCpuPct": 14
+  },
+  {
+    "t": 119,
+    "at": 1792416076530,
+    "uptime": 127,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 18
+  },
+  {
+    "t": 121,
+    "at": 1792416078605,
+    "uptime": 129,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 30,
+    "apiCpuPct": 22
+  },
+  {
+    "t": 123,
+    "at": 1792416080690,
+    "uptime": 131,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 26,
+    "apiCpuPct": 24
+  },
+  {
+    "t": 125,
+    "at": 1792416082765,
+    "uptime": 133,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 30
+  },
+  {
+    "t": 128,
+    "at": 1792416084857,
+    "uptime": 135,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 22,
+    "apiCpuPct": 19
+  },
+  {
+    "t": 130,
+    "at": 1792416086932,
+    "uptime": 137,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 132,
+    "at": 1792416089026,
+    "uptime": 139,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 134,
+    "at": 1792416091121,
+    "uptime": 141,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 136,
+    "at": 1792416093212,
+    "uptime": 143,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 138,
+    "at": 1792416095288,
+    "uptime": 145,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 140,
+    "at": 1792416097387,
+    "uptime": 147,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 142,
+    "at": 1792416099498,
+    "uptime": 150,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 26,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 144,
+    "at": 1792416101575,
+    "uptime": 152,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 35,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 146,
+    "at": 1792416103668,
+    "uptime": 154,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 148,
+    "at": 1792416105762,
+    "uptime": 156,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 23,
+    "apiCpuPct": 23
+  },
+  {
+    "t": 151,
+    "at": 1792416107834,
+    "uptime": 158,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 153,
+    "at": 1792416109896,
+    "uptime": 160,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 24
+  },
+  {
+    "t": 155,
+    "at": 1792416111964,
+    "uptime": 162,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 28
+  },
+  {
+    "t": 157,
+    "at": 1792416114106,
+    "uptime": 164,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 35
+  },
+  {
+    "t": 159,
+    "at": 1792416116266,
+    "uptime": 166,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 48,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 161,
+    "at": 1792416118353,
+    "uptime": 168,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 28,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 163,
+    "at": 1792416120426,
+    "uptime": 170,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 48
+  },
+  {
+    "t": 165,
+    "at": 1792416122498,
+    "uptime": 173,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 50,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 167,
+    "at": 1792416124580,
+    "uptime": 175,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 169,
+    "at": 1792416126665,
+    "uptime": 177,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 28
+  },
+  {
+    "t": 171,
+    "at": 1792416128750,
+    "uptime": 179,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 41
+  },
+  {
+    "t": 174,
+    "at": 1792416130836,
+    "uptime": 181,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 30,
+    "apiCpuPct": 37
+  },
+  {
+    "t": 176,
+    "at": 1792416132914,
+    "uptime": 183,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 178,
+    "at": 1792416135017,
+    "uptime": 185,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 180,
+    "at": 1792416137114,
+    "uptime": 187,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 35
+  },
+  {
+    "t": 182,
+    "at": 1792416139202,
+    "uptime": 189,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 40
+  },
+  {
+    "t": 184,
+    "at": 1792416141303,
+    "uptime": 191,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 31
+  },
+  {
+    "t": 186,
+    "at": 1792416143399,
+    "uptime": 193,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 30
+  },
+  {
+    "t": 188,
+    "at": 1792416145479,
+    "uptime": 196,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 42
+  },
+  {
+    "t": 190,
+    "at": 1792416147556,
+    "uptime": 198,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 40
+  },
+  {
+    "t": 192,
+    "at": 1792416149633,
+    "uptime": 200,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 26,
+    "apiCpuPct": 27
+  },
+  {
+    "t": 194,
+    "at": 1792416151719,
+    "uptime": 202,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 30,
+    "apiCpuPct": 22
+  },
+  {
+    "t": 197,
+    "at": 1792416153797,
+    "uptime": 204,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 41
+  },
+  {
+    "t": 199,
+    "at": 1792416155927,
+    "uptime": 206,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 31
+  },
+  {
+    "t": 201,
+    "at": 1792416158038,
+    "uptime": 208,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 203,
+    "at": 1792416160111,
+    "uptime": 210,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 34
+  },
+  {
+    "t": 205,
+    "at": 1792416162190,
+    "uptime": 212,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 207,
+    "at": 1792416164361,
+    "uptime": 214,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 36
+  },
+  {
+    "t": 209,
+    "at": 1792416166442,
+    "uptime": 216,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 30
+  },
+  {
+    "t": 211,
+    "at": 1792416168522,
+    "uptime": 219,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 50,
+    "apiCpuPct": 68
+  },
+  {
+    "t": 213,
+    "at": 1792416170581,
+    "uptime": 221,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 38
+  },
+  {
+    "t": 215,
+    "at": 1792416172663,
+    "uptime": 223,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 217,
+    "at": 1792416174749,
+    "uptime": 225,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 220,
+    "at": 1792416176842,
+    "uptime": 227,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 222,
+    "at": 1792416178930,
+    "uptime": 229,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 28
+  },
+  {
+    "t": 224,
+    "at": 1792416181033,
+    "uptime": 231,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 226,
+    "at": 1792416183127,
+    "uptime": 233,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 228,
+    "at": 1792416185189,
+    "uptime": 235,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 32,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 230,
+    "at": 1792416187287,
+    "uptime": 237,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 232,
+    "at": 1792416189374,
+    "uptime": 239,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 31,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 234,
+    "at": 1792416191449,
+    "uptime": 241,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 28
+  },
+  {
+    "t": 236,
+    "at": 1792416193506,
+    "uptime": 244,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 49,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 238,
+    "at": 1792416195589,
+    "uptime": 246,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 27
+  },
+  {
+    "t": 240,
+    "at": 1792416197667,
+    "uptime": 248,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 35
+  },
+  {
+    "t": 242,
+    "at": 1792416199738,
+    "uptime": 250,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 38
+  },
+  {
+    "t": 245,
+    "at": 1792416201862,
+    "uptime": 252,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 27
+  },
+  {
+    "t": 247,
+    "at": 1792416203956,
+    "uptime": 254,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 37
+  },
+  {
+    "t": 249,
+    "at": 1792416206030,
+    "uptime": 256,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 251,
+    "at": 1792416208108,
+    "uptime": 258,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 30,
+    "apiCpuPct": 26
+  },
+  {
+    "t": 253,
+    "at": 1792416210188,
+    "uptime": 260,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 38
+  },
+  {
+    "t": 255,
+    "at": 1792416212261,
+    "uptime": 262,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 61,
+    "apiCpuPct": 39
+  },
+  {
+    "t": 257,
+    "at": 1792416214355,
+    "uptime": 264,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 31
+  },
+  {
+    "t": 259,
+    "at": 1792416216443,
+    "uptime": 266,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 261,
+    "at": 1792416218514,
+    "uptime": 269,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 38
+  },
+  {
+    "t": 263,
+    "at": 1792416220592,
+    "uptime": 271,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 29,
+    "apiCpuPct": 22
+  },
+  {
+    "t": 265,
+    "at": 1792416222671,
+    "uptime": 273,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 54,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 267,
+    "at": 1792416224762,
+    "uptime": 275,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 270,
+    "at": 1792416226838,
+    "uptime": 277,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 17,
+    "apiCpuPct": 11
+  },
+  {
+    "t": 272,
+    "at": 1792416228918,
+    "uptime": 279,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 2,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 274,
+    "at": 1792416231001,
+    "uptime": 281,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 2,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 276,
+    "at": 1792416233097,
+    "uptime": 283,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 278,
+    "at": 1792416235189,
+    "uptime": 285,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 2,
+    "apiCpuPct": 2
+  },
+  {
+    "t": 280,
+    "at": 1792416237267,
+    "uptime": 287,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 11,
+    "apiCpuPct": 10
+  },
+  {
+    "t": 282,
+    "at": 1792416239351,
+    "uptime": 289,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 11,
+    "apiCpuPct": 10
+  },
+  {
+    "t": 284,
+    "at": 1792416241429,
+    "uptime": 291,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 13,
+    "apiCpuPct": 17
+  },
+  {
+    "t": 286,
+    "at": 1792416243524,
+    "uptime": 294,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 18,
+    "apiCpuPct": 12
+  },
+  {
+    "t": 288,
+    "at": 1792416245617,
+    "uptime": 296,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 19,
+    "apiCpuPct": 21
+  },
+  {
+    "t": 290,
+    "at": 1792416247692,
+    "uptime": 298,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 293,
+    "at": 1792416249794,
+    "uptime": 300,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 13,
+    "apiCpuPct": 11
+  },
+  {
+    "t": 295,
+    "at": 1792416251858,
+    "uptime": 302,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 31
+  },
+  {
+    "t": 297,
+    "at": 1792416253940,
+    "uptime": 304,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 16,
+    "apiCpuPct": 15
+  },
+  {
+    "t": 299,
+    "at": 1792416256037,
+    "uptime": 306,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 33,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 301,
+    "at": 1792416258131,
+    "uptime": 308,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 32
+  },
+  {
+    "t": 303,
+    "at": 1792416260219,
+    "uptime": 310,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 34
+  },
+  {
+    "t": 305,
+    "at": 1792416262301,
+    "uptime": 312,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 27,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 307,
+    "at": 1792416264385,
+    "uptime": 314,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 41
+  },
+  {
+    "t": 309,
+    "at": 1792416266454,
+    "uptime": 316,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 311,
+    "at": 1792416268525,
+    "uptime": 319,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 42
+  },
+  {
+    "t": 313,
+    "at": 1792416270602,
+    "uptime": 321,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 38
+  },
+  {
+    "t": 315,
+    "at": 1792416272688,
+    "uptime": 323,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 318,
+    "at": 1792416274785,
+    "uptime": 325,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 49,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 320,
+    "at": 1792416276933,
+    "uptime": 327,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 96
+  },
+  {
+    "t": 322,
+    "at": 1792416279068,
+    "uptime": 329,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 63,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 324,
+    "at": 1792416281174,
+    "uptime": 331,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 326,
+    "at": 1792416283345,
+    "uptime": 333,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 328,
+    "at": 1792416285421,
+    "uptime": 335,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 59,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 330,
+    "at": 1792416287498,
+    "uptime": 338,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 332,
+    "at": 1792416289582,
+    "uptime": 340,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 57,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 334,
+    "at": 1792416291678,
+    "uptime": 342,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 336,
+    "at": 1792416293764,
+    "uptime": 344,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 339,
+    "at": 1792416295832,
+    "uptime": 346,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 341,
+    "at": 1792416297952,
+    "uptime": 348,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 343,
+    "at": 1792416300019,
+    "uptime": 350,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 54,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 345,
+    "at": 1792416302098,
+    "uptime": 352,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 347,
+    "at": 1792416304346,
+    "uptime": 354,
+    "rssMb": 1129,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 349,
+    "at": 1792416306539,
+    "uptime": 357,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 351,
+    "at": 1792416308722,
+    "uptime": 359,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 354,
+    "at": 1792416310812,
+    "uptime": 361,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 356,
+    "at": 1792416312894,
+    "uptime": 363,
+    "rssMb": 1130,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 358,
+    "at": 1792416315504,
+    "uptime": 366,
+    "rssMb": 1131,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 360,
+    "at": 1792416317768,
+    "uptime": 368,
+    "rssMb": 1132,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 363,
+    "at": 1792416319863,
+    "uptime": 370,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 365,
+    "at": 1792416321973,
+    "uptime": 372,
+    "rssMb": 1133,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 367,
+    "at": 1792416324070,
+    "uptime": 374,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 369,
+    "at": 1792416326357,
+    "uptime": 377,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 80,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 371,
+    "at": 1792416328570,
+    "uptime": 379,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 373,
+    "at": 1792416330662,
+    "uptime": 381,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 63,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 375,
+    "at": 1792416332744,
+    "uptime": 383,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 378,
+    "at": 1792416334878,
+    "uptime": 385,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 380,
+    "at": 1792416336990,
+    "uptime": 387,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 382,
+    "at": 1792416339056,
+    "uptime": 389,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 384,
+    "at": 1792416341130,
+    "uptime": 391,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 386,
+    "at": 1792416343196,
+    "uptime": 393,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 388,
+    "at": 1792416345294,
+    "uptime": 395,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 60,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 390,
+    "at": 1792416347384,
+    "uptime": 397,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 392,
+    "at": 1792416349472,
+    "uptime": 400,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 394,
+    "at": 1792416351606,
+    "uptime": 402,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 396,
+    "at": 1792416353683,
+    "uptime": 404,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 399,
+    "at": 1792416355898,
+    "uptime": 406,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 401,
+    "at": 1792416358038,
+    "uptime": 408,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 403,
+    "at": 1792416360274,
+    "uptime": 410,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 405,
+    "at": 1792416362412,
+    "uptime": 412,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 407,
+    "at": 1792416364594,
+    "uptime": 415,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 409,
+    "at": 1792416366708,
+    "uptime": 417,
+    "rssMb": 1134,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 412,
+    "at": 1792416368874,
+    "uptime": 419,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 414,
+    "at": 1792416370990,
+    "uptime": 421,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 90
+  },
+  {
+    "t": 416,
+    "at": 1792416373137,
+    "uptime": 423,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 418,
+    "at": 1792416375257,
+    "uptime": 425,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 420,
+    "at": 1792416377392,
+    "uptime": 428,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 422,
+    "at": 1792416379597,
+    "uptime": 430,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 63
+  },
+  {
+    "t": 425,
+    "at": 1792416381790,
+    "uptime": 432,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 427,
+    "at": 1792416384125,
+    "uptime": 434,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 429,
+    "at": 1792416386267,
+    "uptime": 436,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 431,
+    "at": 1792416388370,
+    "uptime": 438,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 63,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 433,
+    "at": 1792416390473,
+    "uptime": 441,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 435,
+    "at": 1792416392609,
+    "uptime": 443,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 74,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 438,
+    "at": 1792416394830,
+    "uptime": 445,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 74
+  },
+  {
+    "t": 440,
+    "at": 1792416397017,
+    "uptime": 447,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 442,
+    "at": 1792416399102,
+    "uptime": 449,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 68,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 444,
+    "at": 1792416401209,
+    "uptime": 451,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 446,
+    "at": 1792416403438,
+    "uptime": 453,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 448,
+    "at": 1792416405622,
+    "uptime": 456,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 74,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 450,
+    "at": 1792416407712,
+    "uptime": 458,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 453,
+    "at": 1792416409833,
+    "uptime": 460,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 455,
+    "at": 1792416411914,
+    "uptime": 462,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 457,
+    "at": 1792416414022,
+    "uptime": 464,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 95
+  },
+  {
+    "t": 459,
+    "at": 1792416416160,
+    "uptime": 466,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 42
+  },
+  {
+    "t": 461,
+    "at": 1792416418259,
+    "uptime": 468,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 463,
+    "at": 1792416420332,
+    "uptime": 470,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 2,
+    "apiCpuPct": 2
+  },
+  {
+    "t": 465,
+    "at": 1792416422418,
+    "uptime": 472,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 467,
+    "at": 1792416424517,
+    "uptime": 475,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 1
+  },
+  {
+    "t": 469,
+    "at": 1792416426606,
+    "uptime": 477,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 9,
+    "apiCpuPct": 12
+  },
+  {
+    "t": 471,
+    "at": 1792416428696,
+    "uptime": 479,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 12,
+    "apiCpuPct": 16
+  },
+  {
+    "t": 474,
+    "at": 1792416430804,
+    "uptime": 481,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 24,
+    "apiCpuPct": 21
+  },
+  {
+    "t": 476,
+    "at": 1792416432909,
+    "uptime": 483,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 29
+  },
+  {
+    "t": 478,
+    "at": 1792416434993,
+    "uptime": 485,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 25
+  },
+  {
+    "t": 480,
+    "at": 1792416437084,
+    "uptime": 487,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 35
+  },
+  {
+    "t": 482,
+    "at": 1792416439158,
+    "uptime": 489,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 52,
+    "apiCpuPct": 34
+  },
+  {
+    "t": 484,
+    "at": 1792416441249,
+    "uptime": 491,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 50,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 486,
+    "at": 1792416443416,
+    "uptime": 493,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 60,
+    "apiCpuPct": 39
+  },
+  {
+    "t": 488,
+    "at": 1792416445478,
+    "uptime": 496,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 39
+  },
+  {
+    "t": 490,
+    "at": 1792416447594,
+    "uptime": 498,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 492,
+    "at": 1792416449717,
+    "uptime": 500,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 51
+  },
+  {
+    "t": 495,
+    "at": 1792416451834,
+    "uptime": 502,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 68
+  },
+  {
+    "t": 497,
+    "at": 1792416453932,
+    "uptime": 504,
+    "rssMb": 1135,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 499,
+    "at": 1792416456045,
+    "uptime": 506,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 501,
+    "at": 1792416458186,
+    "uptime": 508,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 68
+  },
+  {
+    "t": 503,
+    "at": 1792416460312,
+    "uptime": 510,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 505,
+    "at": 1792416462417,
+    "uptime": 513,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 507,
+    "at": 1792416464598,
+    "uptime": 515,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 510,
+    "at": 1792416466838,
+    "uptime": 517,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 512,
+    "at": 1792416469110,
+    "uptime": 519,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 514,
+    "at": 1792416471336,
+    "uptime": 521,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 80,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 516,
+    "at": 1792416473530,
+    "uptime": 524,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 110
+  },
+  {
+    "t": 518,
+    "at": 1792416475762,
+    "uptime": 526,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 521,
+    "at": 1792416478153,
+    "uptime": 528,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 523,
+    "at": 1792416480338,
+    "uptime": 531,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 525,
+    "at": 1792416482766,
+    "uptime": 533,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 528,
+    "at": 1792416485196,
+    "uptime": 535,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 530,
+    "at": 1792416487482,
+    "uptime": 538,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 75
+  },
+  {
+    "t": 532,
+    "at": 1792416489754,
+    "uptime": 540,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 535,
+    "at": 1792416491908,
+    "uptime": 542,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 537,
+    "at": 1792416494158,
+    "uptime": 544,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 539,
+    "at": 1792416496448,
+    "uptime": 547,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 74,
+    "apiCpuPct": 83
+  },
+  {
+    "t": 541,
+    "at": 1792416498734,
+    "uptime": 549,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 544,
+    "at": 1792416500953,
+    "uptime": 551,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 80,
+    "apiCpuPct": 74
+  },
+  {
+    "t": 546,
+    "at": 1792416503153,
+    "uptime": 553,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 90
+  },
+  {
+    "t": 548,
+    "at": 1792416505574,
+    "uptime": 556,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 551,
+    "at": 1792416508086,
+    "uptime": 558,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 553,
+    "at": 1792416510194,
+    "uptime": 560,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 555,
+    "at": 1792416512434,
+    "uptime": 563,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 86
+  },
+  {
+    "t": 557,
+    "at": 1792416514638,
+    "uptime": 565,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 560,
+    "at": 1792416516986,
+    "uptime": 567,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 562,
+    "at": 1792416519135,
+    "uptime": 569,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 78,
+    "apiCpuPct": 74
+  },
+  {
+    "t": 564,
+    "at": 1792416521348,
+    "uptime": 571,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 566,
+    "at": 1792416523485,
+    "uptime": 574,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 568,
+    "at": 1792416525677,
+    "uptime": 576,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 60,
+    "apiCpuPct": 97
+  },
+  {
+    "t": 571,
+    "at": 1792416527954,
+    "uptime": 578,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 573,
+    "at": 1792416530276,
+    "uptime": 580,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 57
+  },
+  {
+    "t": 575,
+    "at": 1792416532438,
+    "uptime": 583,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 68,
+    "apiCpuPct": 84
+  },
+  {
+    "t": 577,
+    "at": 1792416534574,
+    "uptime": 585,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 580,
+    "at": 1792416536900,
+    "uptime": 587,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 582,
+    "at": 1792416539082,
+    "uptime": 589,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 92
+  },
+  {
+    "t": 584,
+    "at": 1792416541229,
+    "uptime": 591,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 63,
+    "apiCpuPct": 92
+  },
+  {
+    "t": 586,
+    "at": 1792416543398,
+    "uptime": 594,
+    "rssMb": 1136,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 63
+  },
+  {
+    "t": 589,
+    "at": 1792416545872,
+    "uptime": 596,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 591,
+    "at": 1792416548054,
+    "uptime": 598,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 81
+  },
+  {
+    "t": 593,
+    "at": 1792416550233,
+    "uptime": 600,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 78,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 595,
+    "at": 1792416552426,
+    "uptime": 603,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 597,
+    "at": 1792416554606,
+    "uptime": 605,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 90
+  },
+  {
+    "t": 599,
+    "at": 1792416556734,
+    "uptime": 607,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 90
+  },
+  {
+    "t": 602,
+    "at": 1792416559112,
+    "uptime": 609,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 604,
+    "at": 1792416561286,
+    "uptime": 611,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 67,
+    "apiCpuPct": 96
+  },
+  {
+    "t": 606,
+    "at": 1792416563494,
+    "uptime": 614,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 609,
+    "at": 1792416565880,
+    "uptime": 616,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 611,
+    "at": 1792416568093,
+    "uptime": 618,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 613,
+    "at": 1792416570206,
+    "uptime": 621,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 616,
+    "at": 1792416572802,
+    "uptime": 623,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 618,
+    "at": 1792416575045,
+    "uptime": 625,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 52,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 620,
+    "at": 1792416577190,
+    "uptime": 627,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 622,
+    "at": 1792416579460,
+    "uptime": 630,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 624,
+    "at": 1792416581692,
+    "uptime": 632,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 627,
+    "at": 1792416584043,
+    "uptime": 634,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 629,
+    "at": 1792416586142,
+    "uptime": 636,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 80,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 631,
+    "at": 1792416588346,
+    "uptime": 638,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 78,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 633,
+    "at": 1792416590546,
+    "uptime": 641,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 97
+  },
+  {
+    "t": 635,
+    "at": 1792416592722,
+    "uptime": 643,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 638,
+    "at": 1792416594982,
+    "uptime": 645,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 640,
+    "at": 1792416597288,
+    "uptime": 647,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 642,
+    "at": 1792416599545,
+    "uptime": 650,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 644,
+    "at": 1792416601686,
+    "uptime": 652,
+    "rssMb": 1137,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 647,
+    "at": 1792416603941,
+    "uptime": 654,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 649,
+    "at": 1792416606485,
+    "uptime": 657,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 652,
+    "at": 1792416608786,
+    "uptime": 659,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 654,
+    "at": 1792416611189,
+    "uptime": 661,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 656,
+    "at": 1792416613472,
+    "uptime": 664,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 44,
+    "apiCpuPct": 24
+  },
+  {
+    "t": 658,
+    "at": 1792416615552,
+    "uptime": 666,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 3
+  },
+  {
+    "t": 660,
+    "at": 1792416617642,
+    "uptime": 668,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 39
+  },
+  {
+    "t": 662,
+    "at": 1792416619713,
+    "uptime": 670,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 665,
+    "at": 1792416621802,
+    "uptime": 672,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 30,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 667,
+    "at": 1792416623881,
+    "uptime": 674,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 669,
+    "at": 1792416625953,
+    "uptime": 676,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 51
+  },
+  {
+    "t": 671,
+    "at": 1792416628025,
+    "uptime": 678,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 673,
+    "at": 1792416630138,
+    "uptime": 680,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 675,
+    "at": 1792416632230,
+    "uptime": 682,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 677,
+    "at": 1792416634504,
+    "uptime": 685,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 78,
+    "apiCpuPct": 86
+  },
+  {
+    "t": 679,
+    "at": 1792416636712,
+    "uptime": 687,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 682,
+    "at": 1792416638900,
+    "uptime": 689,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 684,
+    "at": 1792416641062,
+    "uptime": 691,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 686,
+    "at": 1792416643309,
+    "uptime": 694,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 688,
+    "at": 1792416645646,
+    "uptime": 696,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 691,
+    "at": 1792416647822,
+    "uptime": 698,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 103
+  },
+  {
+    "t": 693,
+    "at": 1792416649991,
+    "uptime": 700,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 695,
+    "at": 1792416652265,
+    "uptime": 702,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 697,
+    "at": 1792416654385,
+    "uptime": 705,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 75
+  },
+  {
+    "t": 699,
+    "at": 1792416656694,
+    "uptime": 707,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 702,
+    "at": 1792416658866,
+    "uptime": 709,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 91
+  },
+  {
+    "t": 704,
+    "at": 1792416661053,
+    "uptime": 711,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 706,
+    "at": 1792416663309,
+    "uptime": 713,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 81
+  },
+  {
+    "t": 708,
+    "at": 1792416665522,
+    "uptime": 716,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 99
+  },
+  {
+    "t": 710,
+    "at": 1792416667706,
+    "uptime": 718,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 57,
+    "apiCpuPct": 103
+  },
+  {
+    "t": 713,
+    "at": 1792416669850,
+    "uptime": 720,
+    "rssMb": 1138,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 715,
+    "at": 1792416672022,
+    "uptime": 722,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 717,
+    "at": 1792416674201,
+    "uptime": 724,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 75
+  },
+  {
+    "t": 719,
+    "at": 1792416676500,
+    "uptime": 727,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 722,
+    "at": 1792416678910,
+    "uptime": 729,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 127
+  },
+  {
+    "t": 724,
+    "at": 1792416681107,
+    "uptime": 731,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 74,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 726,
+    "at": 1792416683314,
+    "uptime": 733,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 728,
+    "at": 1792416685501,
+    "uptime": 736,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 731,
+    "at": 1792416687857,
+    "uptime": 738,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 733,
+    "at": 1792416690047,
+    "uptime": 740,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 66,
+    "apiCpuPct": 93
+  },
+  {
+    "t": 735,
+    "at": 1792416692210,
+    "uptime": 742,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 96
+  },
+  {
+    "t": 737,
+    "at": 1792416694750,
+    "uptime": 745,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 740,
+    "at": 1792416696969,
+    "uptime": 747,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 742,
+    "at": 1792416699153,
+    "uptime": 749,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 744,
+    "at": 1792416701321,
+    "uptime": 751,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 75
+  },
+  {
+    "t": 746,
+    "at": 1792416703477,
+    "uptime": 754,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 53,
+    "apiCpuPct": 92
+  },
+  {
+    "t": 748,
+    "at": 1792416705694,
+    "uptime": 756,
+    "rssMb": 1139,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 50,
+    "apiCpuPct": 100
+  },
+  {
+    "t": 751,
+    "at": 1792416707865,
+    "uptime": 758,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 83
+  },
+  {
+    "t": 753,
+    "at": 1792416710218,
+    "uptime": 760,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 755,
+    "at": 1792416712606,
+    "uptime": 763,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 758,
+    "at": 1792416714795,
+    "uptime": 765,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 102
+  },
+  {
+    "t": 760,
+    "at": 1792416716976,
+    "uptime": 767,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 48,
+    "apiCpuPct": 99
+  },
+  {
+    "t": 762,
+    "at": 1792416719130,
+    "uptime": 769,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 75
+  },
+  {
+    "t": 764,
+    "at": 1792416721390,
+    "uptime": 772,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 766,
+    "at": 1792416723714,
+    "uptime": 774,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 769,
+    "at": 1792416726001,
+    "uptime": 776,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 771,
+    "at": 1792416728142,
+    "uptime": 778,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 96
+  },
+  {
+    "t": 773,
+    "at": 1792416730295,
+    "uptime": 780,
+    "rssMb": 1157,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 775,
+    "at": 1792416732565,
+    "uptime": 783,
+    "rssMb": 1158,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 777,
+    "at": 1792416734725,
+    "uptime": 785,
+    "rssMb": 1158,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 48
+  },
+  {
+    "t": 780,
+    "at": 1792416737070,
+    "uptime": 787,
+    "rssMb": 1158,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 43
+  },
+  {
+    "t": 782,
+    "at": 1792416739406,
+    "uptime": 790,
+    "rssMb": 1158,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 57
+  },
+  {
+    "t": 784,
+    "at": 1792416741670,
+    "uptime": 792,
+    "rssMb": 1172,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 57,
+    "apiCpuPct": 91
+  },
+  {
+    "t": 787,
+    "at": 1792416743862,
+    "uptime": 794,
+    "rssMb": 1178,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 133
+  },
+  {
+    "t": 789,
+    "at": 1792416746082,
+    "uptime": 796,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 791,
+    "at": 1792416748388,
+    "uptime": 798,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 793,
+    "at": 1792416750693,
+    "uptime": 801,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 796,
+    "at": 1792416752984,
+    "uptime": 803,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 798,
+    "at": 1792416755336,
+    "uptime": 806,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 800,
+    "at": 1792416757553,
+    "uptime": 808,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 802,
+    "at": 1792416759744,
+    "uptime": 810,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 97
+  },
+  {
+    "t": 805,
+    "at": 1792416761917,
+    "uptime": 812,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 84,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 807,
+    "at": 1792416764234,
+    "uptime": 814,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 809,
+    "at": 1792416766404,
+    "uptime": 817,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 811,
+    "at": 1792416768694,
+    "uptime": 819,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 814,
+    "at": 1792416770942,
+    "uptime": 821,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 84
+  },
+  {
+    "t": 816,
+    "at": 1792416773068,
+    "uptime": 823,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 818,
+    "at": 1792416775226,
+    "uptime": 825,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 63
+  },
+  {
+    "t": 820,
+    "at": 1792416777444,
+    "uptime": 828,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 822,
+    "at": 1792416779586,
+    "uptime": 830,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 825,
+    "at": 1792416781810,
+    "uptime": 832,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 827,
+    "at": 1792416784105,
+    "uptime": 834,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 78,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 829,
+    "at": 1792416786278,
+    "uptime": 836,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 107
+  },
+  {
+    "t": 831,
+    "at": 1792416788461,
+    "uptime": 839,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 103
+  },
+  {
+    "t": 833,
+    "at": 1792416790682,
+    "uptime": 841,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 836,
+    "at": 1792416792936,
+    "uptime": 843,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 838,
+    "at": 1792416795217,
+    "uptime": 845,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 840,
+    "at": 1792416797361,
+    "uptime": 847,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 842,
+    "at": 1792416799476,
+    "uptime": 850,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 102
+  },
+  {
+    "t": 844,
+    "at": 1792416801682,
+    "uptime": 852,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 847,
+    "at": 1792416803822,
+    "uptime": 854,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 44
+  },
+  {
+    "t": 849,
+    "at": 1792416806066,
+    "uptime": 856,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 851,
+    "at": 1792416808170,
+    "uptime": 858,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 853,
+    "at": 1792416810328,
+    "uptime": 860,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 55,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 855,
+    "at": 1792416812422,
+    "uptime": 862,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 857,
+    "at": 1792416814514,
+    "uptime": 865,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 860,
+    "at": 1792416816777,
+    "uptime": 867,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 92
+  },
+  {
+    "t": 862,
+    "at": 1792416818884,
+    "uptime": 869,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 83
+  },
+  {
+    "t": 864,
+    "at": 1792416820962,
+    "uptime": 871,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 866,
+    "at": 1792416823123,
+    "uptime": 873,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 77
+  },
+  {
+    "t": 868,
+    "at": 1792416825394,
+    "uptime": 875,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 870,
+    "at": 1792416827630,
+    "uptime": 878,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 873,
+    "at": 1792416829802,
+    "uptime": 880,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 875,
+    "at": 1792416832050,
+    "uptime": 882,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 877,
+    "at": 1792416834270,
+    "uptime": 884,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 879,
+    "at": 1792416836446,
+    "uptime": 887,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 75,
+    "apiCpuPct": 87
+  },
+  {
+    "t": 881,
+    "at": 1792416838654,
+    "uptime": 889,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 884,
+    "at": 1792416841040,
+    "uptime": 891,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 57
+  },
+  {
+    "t": 886,
+    "at": 1792416843176,
+    "uptime": 893,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 67,
+    "apiCpuPct": 123
+  },
+  {
+    "t": 888,
+    "at": 1792416845360,
+    "uptime": 896,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 890,
+    "at": 1792416847565,
+    "uptime": 898,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 892,
+    "at": 1792416849749,
+    "uptime": 900,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 895,
+    "at": 1792416852154,
+    "uptime": 902,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 50
+  },
+  {
+    "t": 897,
+    "at": 1792416854337,
+    "uptime": 904,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 899,
+    "at": 1792416856631,
+    "uptime": 907,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 98
+  },
+  {
+    "t": 901,
+    "at": 1792416858766,
+    "uptime": 909,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 103
+  },
+  {
+    "t": 904,
+    "at": 1792416860958,
+    "uptime": 911,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 74,
+    "apiCpuPct": 88
+  },
+  {
+    "t": 906,
+    "at": 1792416863182,
+    "uptime": 913,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 908,
+    "at": 1792416865512,
+    "uptime": 916,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 910,
+    "at": 1792416867734,
+    "uptime": 918,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 913,
+    "at": 1792416870068,
+    "uptime": 920,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 915,
+    "at": 1792416872211,
+    "uptime": 922,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 103
+  },
+  {
+    "t": 917,
+    "at": 1792416874432,
+    "uptime": 925,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 131
+  },
+  {
+    "t": 919,
+    "at": 1792416876630,
+    "uptime": 927,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 91
+  },
+  {
+    "t": 922,
+    "at": 1792416878798,
+    "uptime": 929,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 924,
+    "at": 1792416881090,
+    "uptime": 931,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 926,
+    "at": 1792416883333,
+    "uptime": 933,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 928,
+    "at": 1792416885666,
+    "uptime": 936,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 931,
+    "at": 1792416887810,
+    "uptime": 938,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 61,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 933,
+    "at": 1792416890026,
+    "uptime": 940,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 54
+  },
+  {
+    "t": 935,
+    "at": 1792416892421,
+    "uptime": 943,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 41
+  },
+  {
+    "t": 937,
+    "at": 1792416894673,
+    "uptime": 945,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 57
+  },
+  {
+    "t": 940,
+    "at": 1792416896878,
+    "uptime": 947,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 942,
+    "at": 1792416899053,
+    "uptime": 949,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 70,
+    "apiCpuPct": 80
+  },
+  {
+    "t": 944,
+    "at": 1792416901273,
+    "uptime": 951,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 85
+  },
+  {
+    "t": 946,
+    "at": 1792416903444,
+    "uptime": 954,
+    "rssMb": 1179,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 35,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 948,
+    "at": 1792416905546,
+    "uptime": 956,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 129
+  },
+  {
+    "t": 950,
+    "at": 1792416907646,
+    "uptime": 958,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 953,
+    "at": 1792416909824,
+    "uptime": 960,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 955,
+    "at": 1792416912029,
+    "uptime": 962,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 957,
+    "at": 1792416914174,
+    "uptime": 964,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 959,
+    "at": 1792416916544,
+    "uptime": 967,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 97
+  },
+  {
+    "t": 961,
+    "at": 1792416918701,
+    "uptime": 969,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 964,
+    "at": 1792416920812,
+    "uptime": 971,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 70,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 966,
+    "at": 1792416923006,
+    "uptime": 973,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 968,
+    "at": 1792416925201,
+    "uptime": 975,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 970,
+    "at": 1792416927314,
+    "uptime": 977,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 972,
+    "at": 1792416929518,
+    "uptime": 980,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 975,
+    "at": 1792416932030,
+    "uptime": 982,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 49,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 977,
+    "at": 1792416934222,
+    "uptime": 984,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 979,
+    "at": 1792416936446,
+    "uptime": 987,
+    "rssMb": 1214,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 87
+  },
+  {
+    "t": 981,
+    "at": 1792416938550,
+    "uptime": 989,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 70,
+    "apiCpuPct": 108
+  },
+  {
+    "t": 983,
+    "at": 1792416940715,
+    "uptime": 991,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 986,
+    "at": 1792416942876,
+    "uptime": 993,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 35,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 988,
+    "at": 1792416945112,
+    "uptime": 995,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 35,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 990,
+    "at": 1792416947256,
+    "uptime": 997,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 50,
+    "apiCpuPct": 101
+  },
+  {
+    "t": 992,
+    "at": 1792416949338,
+    "uptime": 1000,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 45,
+    "apiCpuPct": 95
+  },
+  {
+    "t": 994,
+    "at": 1792416951774,
+    "uptime": 1002,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 49
+  },
+  {
+    "t": 997,
+    "at": 1792416954006,
+    "uptime": 1004,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 45
+  },
+  {
+    "t": 999,
+    "at": 1792416956195,
+    "uptime": 1006,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 47
+  },
+  {
+    "t": 1001,
+    "at": 1792416958498,
+    "uptime": 1009,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 46
+  },
+  {
+    "t": 1004,
+    "at": 1792416960826,
+    "uptime": 1011,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 100
+  },
+  {
+    "t": 1006,
+    "at": 1792416962979,
+    "uptime": 1013,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 72,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 1008,
+    "at": 1792416965150,
+    "uptime": 1015,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 1010,
+    "at": 1792416967504,
+    "uptime": 1018,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 1012,
+    "at": 1792416969653,
+    "uptime": 1020,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 40,
+    "apiCpuPct": 131
+  },
+  {
+    "t": 1015,
+    "at": 1792416971784,
+    "uptime": 1022,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 113
+  },
+  {
+    "t": 1017,
+    "at": 1792416973932,
+    "uptime": 1024,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 1019,
+    "at": 1792416976106,
+    "uptime": 1026,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 1021,
+    "at": 1792416978226,
+    "uptime": 1028,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 65,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 1023,
+    "at": 1792416980469,
+    "uptime": 1031,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 96,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 1025,
+    "at": 1792416982629,
+    "uptime": 1033,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 51
+  },
+  {
+    "t": 1028,
+    "at": 1792416984865,
+    "uptime": 1035,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 1030,
+    "at": 1792416987045,
+    "uptime": 1037,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 1032,
+    "at": 1792416989180,
+    "uptime": 1039,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 58,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 1034,
+    "at": 1792416991354,
+    "uptime": 1042,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 61,
+    "apiCpuPct": 85
+  },
+  {
+    "t": 1037,
+    "at": 1792416993802,
+    "uptime": 1044,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 51
+  },
+  {
+    "t": 1039,
+    "at": 1792416995982,
+    "uptime": 1046,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 1041,
+    "at": 1792416998218,
+    "uptime": 1048,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 1043,
+    "at": 1792417000318,
+    "uptime": 1050,
+    "rssMb": 1229,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 96
+  },
+  {
+    "t": 1045,
+    "at": 1792417002506,
+    "uptime": 1053,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 1048,
+    "at": 1792417004803,
+    "uptime": 1055,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 81
+  },
+  {
+    "t": 1050,
+    "at": 1792417006978,
+    "uptime": 1057,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 81
+  },
+  {
+    "t": 1052,
+    "at": 1792417009262,
+    "uptime": 1059,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 1054,
+    "at": 1792417011502,
+    "uptime": 1062,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 1056,
+    "at": 1792417013698,
+    "uptime": 1064,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 85
+  },
+  {
+    "t": 1059,
+    "at": 1792417016020,
+    "uptime": 1066,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 1061,
+    "at": 1792417018198,
+    "uptime": 1068,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 79,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 1063,
+    "at": 1792417020612,
+    "uptime": 1071,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 1066,
+    "at": 1792417022818,
+    "uptime": 1073,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 64,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 1068,
+    "at": 1792417025060,
+    "uptime": 1075,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 1070,
+    "at": 1792417027365,
+    "uptime": 1077,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 69,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 1072,
+    "at": 1792417029532,
+    "uptime": 1080,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 112
+  },
+  {
+    "t": 1074,
+    "at": 1792417031726,
+    "uptime": 1082,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 66
+  },
+  {
+    "t": 1077,
+    "at": 1792417033997,
+    "uptime": 1084,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 1079,
+    "at": 1792417036245,
+    "uptime": 1086,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 1081,
+    "at": 1792417038390,
+    "uptime": 1089,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 1083,
+    "at": 1792417040598,
+    "uptime": 1091,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1086,
+    "at": 1792417042782,
+    "uptime": 1093,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 93
+  },
+  {
+    "t": 1088,
+    "at": 1792417044998,
+    "uptime": 1095,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 82,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 1090,
+    "at": 1792417047272,
+    "uptime": 1097,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 71
+  },
+  {
+    "t": 1092,
+    "at": 1792417049595,
+    "uptime": 1100,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 53
+  },
+  {
+    "t": 1095,
+    "at": 1792417051945,
+    "uptime": 1102,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 1097,
+    "at": 1792417054141,
+    "uptime": 1104,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 41,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1099,
+    "at": 1792417056336,
+    "uptime": 1106,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 1101,
+    "at": 1792417058530,
+    "uptime": 1109,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 42,
+    "apiCpuPct": 97
+  },
+  {
+    "t": 1103,
+    "at": 1792417060734,
+    "uptime": 1111,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 89,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 1106,
+    "at": 1792417062916,
+    "uptime": 1113,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 85,
+    "apiCpuPct": 65
+  },
+  {
+    "t": 1108,
+    "at": 1792417065018,
+    "uptime": 1115,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 61
+  },
+  {
+    "t": 1110,
+    "at": 1792417067269,
+    "uptime": 1117,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 95,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 1112,
+    "at": 1792417069534,
+    "uptime": 1120,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 47,
+    "apiCpuPct": 101
+  },
+  {
+    "t": 1114,
+    "at": 1792417071674,
+    "uptime": 1122,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 48,
+    "apiCpuPct": 100
+  },
+  {
+    "t": 1117,
+    "at": 1792417073937,
+    "uptime": 1124,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 69
+  },
+  {
+    "t": 1119,
+    "at": 1792417076045,
+    "uptime": 1126,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 52
+  },
+  {
+    "t": 1121,
+    "at": 1792417078506,
+    "uptime": 1129,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 41
+  },
+  {
+    "t": 1123,
+    "at": 1792417080740,
+    "uptime": 1131,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 60
+  },
+  {
+    "t": 1126,
+    "at": 1792417082936,
+    "uptime": 1133,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 71,
+    "apiCpuPct": 91
+  },
+  {
+    "t": 1128,
+    "at": 1792417085113,
+    "uptime": 1135,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1130,
+    "at": 1792417087380,
+    "uptime": 1137,
+    "rssMb": 1230,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1132,
+    "at": 1792417089557,
+    "uptime": 1140,
+    "rssMb": 1231,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 56,
+    "apiCpuPct": 115
+  },
+  {
+    "t": 1134,
+    "at": 1792417091662,
+    "uptime": 1142,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 113
+  },
+  {
+    "t": 1137,
+    "at": 1792417093800,
+    "uptime": 1144,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 34,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1139,
+    "at": 1792417095980,
+    "uptime": 1146,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 86,
+    "apiCpuPct": 48
+  },
+  {
+    "t": 1141,
+    "at": 1792417098138,
+    "uptime": 1148,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 57
+  },
+  {
+    "t": 1143,
+    "at": 1792417100363,
+    "uptime": 1151,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 81,
+    "apiCpuPct": 76
+  },
+  {
+    "t": 1145,
+    "at": 1792417102630,
+    "uptime": 1153,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 36,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1148,
+    "at": 1792417104825,
+    "uptime": 1155,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 38,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1150,
+    "at": 1792417107034,
+    "uptime": 1157,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 73,
+    "apiCpuPct": 79
+  },
+  {
+    "t": 1152,
+    "at": 1792417109353,
+    "uptime": 1160,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 72
+  },
+  {
+    "t": 1154,
+    "at": 1792417111715,
+    "uptime": 1162,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 67
+  },
+  {
+    "t": 1157,
+    "at": 1792417113949,
+    "uptime": 1164,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 78
+  },
+  {
+    "t": 1159,
+    "at": 1792417116118,
+    "uptime": 1166,
+    "rssMb": 1232,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 59,
+    "apiCpuPct": 99
+  },
+  {
+    "t": 1161,
+    "at": 1792417118366,
+    "uptime": 1169,
+    "rssMb": 1245,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 1163,
+    "at": 1792417120561,
+    "uptime": 1171,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 59,
+    "apiCpuPct": 112
+  },
+  {
+    "t": 1165,
+    "at": 1792417122702,
+    "uptime": 1173,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 46,
+    "apiCpuPct": 100
+  },
+  {
+    "t": 1168,
+    "at": 1792417125154,
+    "uptime": 1175,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 97,
+    "apiCpuPct": 39
+  },
+  {
+    "t": 1170,
+    "at": 1792417127270,
+    "uptime": 1177,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 63
+  },
+  {
+    "t": 1172,
+    "at": 1792417129566,
+    "uptime": 1180,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 91,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 1174,
+    "at": 1792417131734,
+    "uptime": 1182,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 61,
+    "apiCpuPct": 89
+  },
+  {
+    "t": 1177,
+    "at": 1792417133929,
+    "uptime": 1184,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 1179,
+    "at": 1792417136096,
+    "uptime": 1186,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 94
+  },
+  {
+    "t": 1181,
+    "at": 1792417138302,
+    "uptime": 1188,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 63
+  },
+  {
+    "t": 1183,
+    "at": 1792417140734,
+    "uptime": 1191,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 1186,
+    "at": 1792417142982,
+    "uptime": 1193,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 83,
+    "apiCpuPct": 73
+  },
+  {
+    "t": 1188,
+    "at": 1792417145178,
+    "uptime": 1195,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 76,
+    "apiCpuPct": 86
+  },
+  {
+    "t": 1190,
+    "at": 1792417147326,
+    "uptime": 1197,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1192,
+    "at": 1792417149472,
+    "uptime": 1200,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 57,
+    "apiCpuPct": 86
+  },
+  {
+    "t": 1194,
+    "at": 1792417151615,
+    "uptime": 1202,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 43,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 1197,
+    "at": 1792417153806,
+    "uptime": 1204,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 77,
+    "apiCpuPct": 90
+  },
+  {
+    "t": 1199,
+    "at": 1792417155958,
+    "uptime": 1206,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 88,
+    "apiCpuPct": 82
+  },
+  {
+    "t": 1201,
+    "at": 1792417158170,
+    "uptime": 1208,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 70
+  },
+  {
+    "t": 1203,
+    "at": 1792417160385,
+    "uptime": 1211,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 64
+  },
+  {
+    "t": 1205,
+    "at": 1792417162581,
+    "uptime": 1213,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 37,
+    "apiCpuPct": 106
+  },
+  {
+    "t": 1207,
+    "at": 1792417164738,
+    "uptime": 1215,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 105
+  },
+  {
+    "t": 1210,
+    "at": 1792417166937,
+    "uptime": 1217,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 59,
+    "apiCpuPct": 87
+  },
+  {
+    "t": 1212,
+    "at": 1792417169358,
+    "uptime": 1220,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 99,
+    "apiCpuPct": 33
+  },
+  {
+    "t": 1214,
+    "at": 1792417171666,
+    "uptime": 1222,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 1217,
+    "at": 1792417174014,
+    "uptime": 1224,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 90,
+    "apiCpuPct": 68
+  },
+  {
+    "t": 1219,
+    "at": 1792417176266,
+    "uptime": 1226,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 62,
+    "apiCpuPct": 93
+  },
+  {
+    "t": 1221,
+    "at": 1792417178448,
+    "uptime": 1229,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 39,
+    "apiCpuPct": 104
+  },
+  {
+    "t": 1223,
+    "at": 1792417180618,
+    "uptime": 1231,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 51,
+    "apiCpuPct": 93
+  },
+  {
+    "t": 1226,
+    "at": 1792417182790,
+    "uptime": 1233,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 93,
+    "apiCpuPct": 56
+  },
+  {
+    "t": 1228,
+    "at": 1792417185136,
+    "uptime": 1235,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 98,
+    "apiCpuPct": 42
+  },
+  {
+    "t": 1230,
+    "at": 1792417187230,
+    "uptime": 1237,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 92,
+    "apiCpuPct": 55
+  },
+  {
+    "t": 1232,
+    "at": 1792417189521,
+    "uptime": 1240,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 94,
+    "apiCpuPct": 68
+  },
+  {
+    "t": 1235,
+    "at": 1792417191779,
+    "uptime": 1242,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 66,
+    "apiCpuPct": 95
+  },
+  {
+    "t": 1237,
+    "at": 1792417193914,
+    "uptime": 1244,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 80,
+    "apiCpuPct": 62
+  },
+  {
+    "t": 1239,
+    "at": 1792417196288,
+    "uptime": 1246,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 58
+  },
+  {
+    "t": 1241,
+    "at": 1792417198469,
+    "uptime": 1249,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 87,
+    "apiCpuPct": 59
+  },
+  {
+    "t": 1243,
+    "at": 1792417200568,
+    "uptime": 1251,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 7,
+    "apiCpuPct": 4
+  },
+  {
+    "t": 1245,
+    "at": 1792417202657,
+    "uptime": 1253,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 4,
+    "apiCpuPct": 2
+  },
+  {
+    "t": 1247,
+    "at": 1792417204756,
+    "uptime": 1255,
+    "rssMb": 1286,
+    "pgConns": null,
+    "queueDepth": 0,
+    "systemCpuPct": 3,
+    "apiCpuPct": 2
+  }
+]
