@@ -18,6 +18,9 @@ import {
   visibleToSql,
 } from '../../../src/modules/team-inbox-conversations/visibility-sql';
 import { MessageHistoryRepository } from '../../../src/modules/chat-conversations/message-history.repository';
+import { ContactsRepository } from '../../../src/modules/crm/contacts/contacts.repository';
+import { PlanAnalyticsService } from '../../../src/modules/plans-subscriptions-trials/plan-analytics.service';
+import { PlatformWorkspacesRepository } from '../../../src/modules/workspaces-teams-tenancy/platform-workspaces.repository';
 import { DashRepository } from '../../../src/modules/dashboards-analytics-charts/dash.repository';
 
 /**
@@ -376,5 +379,110 @@ describe('rewritten history and dashboard queries equal the statements they repl
       }
     }
     expect(withTop, 'the data must give top conversations').toBeGreaterThan(0);
+  });
+
+  // --- the other rewrites of the timing report: same numbers, cheaper statements ---------------------------------------------------
+
+  it('contacts stats: the follow-up and no-group tests as lists equal one probe per contact', async () => {
+    const contactIds = (
+      await q(`SELECT id FROM contacts WHERE org_id = $1 ORDER BY id`, [orgId])
+    ).map((r) => Number(r.id));
+    const g1 = await scalar(
+      `INSERT INTO contact_groups (org_id, name) VALUES ($1,'g1') RETURNING id`,
+      [orgId],
+    );
+    const g2 = await scalar(
+      `INSERT INTO contact_groups (org_id, name) VALUES ($1,'g2') RETURNING id`,
+      [orgId],
+    );
+    for (const [g, from, to] of [
+      [g1, 0, 6],
+      [g2, 3, 8],
+    ] as const) {
+      for (const c of contactIds.slice(from, to)) {
+        await q(
+          `INSERT INTO contact_group_members (org_id, contact_id, group_id) VALUES ($1,$2,$3)`,
+          [orgId, c, g],
+        );
+      }
+    }
+    const task = (contact: number | null, kind: string, status: string) =>
+      q(
+        `INSERT INTO tasks (org_id, title, kind, status, contact_id, done_at) VALUES ($1,'t',$2,$3,$4,$5)`,
+        [orgId, kind, status, contact, status === 'done' ? new Date() : null],
+      );
+    for (const c of contactIds.slice(0, 4)) await task(c, 'follow_up', 'open');
+    await task(contactIds[4]!, 'follow_up', 'done'); // not open
+    await task(contactIds[5]!, 'task', 'open'); // not a follow-up
+    await task(null, 'follow_up', 'open'); // no contact: a NULL in the list must not hide anyone
+    const old = (
+      await rows(
+        sql`SELECT count(*) FILTER (WHERE EXISTS (SELECT 1 FROM tasks t WHERE t.org_id = ${orgId} AND t.contact_id = contacts.id AND t.kind = 'follow_up' AND t.status = 'open'))::int AS with_follow_up,
+                   count(*) FILTER (WHERE NOT EXISTS (SELECT 1 FROM contact_group_members m WHERE m.org_id = ${orgId} AND m.contact_id = contacts.id))::int AS no_group
+            FROM contacts WHERE org_id = ${orgId} AND is_archived = false`,
+      )
+    )[0]!;
+    const got = await new ContactsRepository().stats(tx, orgId, 'all', null);
+    expect(got.withFollowUp).toBe(old.with_follow_up);
+    expect(got.noGroup).toBe(old.no_group);
+    expect(old.with_follow_up, 'some contact has an open follow-up').toBe(4);
+    expect(old.no_group, 'some contact is in no group').toBeGreaterThan(0);
+  });
+
+  it('plan analytics: workspaces using a feature, as one probe per workspace, equal the DISTINCT join', async () => {
+    await q(
+      `INSERT INTO plans (id, slug, name, is_free, amount) VALUES (9001,'paidx','Paid',false,500),(9002,'freex','Free',true,0)`,
+    );
+    const paid2 = await scalar(
+      `INSERT INTO organizations (slug,name,plan) VALUES ('p2','p2','paidx') RETURNING id`,
+    );
+    const free = await scalar(
+      `INSERT INTO organizations (slug,name,plan) VALUES ('fr','fr','freex') RETURNING id`,
+    );
+    await q(`UPDATE organizations SET plan = 'paidx' WHERE id = $1`, [orgId]);
+    for (const o of [orgId, paid2, free])
+      await q(`INSERT INTO org_plan_state (org_id) VALUES ($1)`, [o]);
+    await q(`INSERT INTO broadcasts (org_id, name) VALUES ($1,'fb')`, [free]); // a free workspace's rows must not count
+    await q(`INSERT INTO broadcasts (org_id, name) VALUES ($1,'bb')`, [paid2]);
+    const tables: Array<[string, string]> = [
+      ['messages', 'messages'],
+      ['broadcasts', 'broadcasts'],
+      ['templates', 'wa_templates'],
+      ['flows', 'flows'],
+      ['deals', 'deals'],
+    ];
+    const svc = Object.create(PlanAnalyticsService.prototype) as {
+      adoption(tx: Tx, paid: number): Promise<Array<{ feature: string; workspaces: number }>>;
+    };
+    const got = await svc.adoption(tx, 2);
+    for (const [feature, table] of tables) {
+      const old = (
+        await rows(
+          sql`SELECT count(DISTINCT t.org_id)::int AS n FROM ${sql.identifier(table)} t JOIN org_plan_state s ON s.org_id = t.org_id JOIN organizations o ON o.id = t.org_id JOIN plans p ON p.slug = o.plan WHERE NOT p.is_free AND p.amount > 0`,
+        )
+      )[0]!.n;
+      expect(got.find((g) => g.feature === feature)?.workspaces, feature).toBe(old);
+    }
+    expect(got.find((g) => g.feature === 'messages')?.workspaces).toBe(1);
+    expect(got.find((g) => g.feature === 'broadcasts')?.workspaces).toBe(2);
+  });
+
+  it('platform workspace list: the newest message per workspace by probe equals the GROUP BY', async () => {
+    const empty = await scalar(
+      `INSERT INTO organizations (slug,name,plan) VALUES ('em','em','freex') RETURNING id`,
+    );
+    const facts = await new PlatformWorkspacesRepository().pageFacts(
+      tx,
+      [orgId, empty],
+      new Date(),
+    );
+    const old = await rows(
+      sql`SELECT org_id, max(created_at) AS at FROM messages WHERE org_id IN (${orgId}::bigint, ${empty}::bigint) GROUP BY org_id`,
+    );
+    expect(old).toHaveLength(1); // the workspace without messages has no row
+    expect(new Date(facts.lastActive.get(orgId) as unknown as string).getTime()).toBe(
+      new Date(old[0]!.at as string).getTime(),
+    );
+    expect(facts.lastActive.has(empty)).toBe(false);
   });
 });
