@@ -324,10 +324,10 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         await tx.execute(sql`SELECT set_config('app.rbac_preset_sync', 'on', true)`);
         const res = await tx.execute(sql`
           INSERT INTO role_grants (org_id, role_id, permission_key, effect, record_scope)
-          SELECT ${orgId}, r.id, k.key, 'deny', 'all'
-          FROM roles r CROSS JOIN unnest(${ceiling.keys}::text[]) AS k(key)
+          SELECT ${orgId}, r.id, k.key, 'deny'::perm_effect, 'all'::record_scope
+          FROM roles r CROSS JOIN jsonb_array_elements_text(${JSON.stringify(ceiling.keys)}::jsonb) AS k(key)
           WHERE r.org_id = ${orgId} AND r.system_key IN ('admin', 'workspace_admin', 'manager', 'agent', 'viewer')
-          ON CONFLICT (org_id, role_id, permission_key) DO UPDATE SET effect = 'deny'
+          ON CONFLICT (org_id, role_id, permission_key) DO UPDATE SET effect = 'deny'::perm_effect
             WHERE role_grants.effect::text <> 'deny'
           RETURNING 1`);
         await tx.execute(sql`SELECT set_config('app.rbac_preset_sync', 'off', true)`);
@@ -370,7 +370,7 @@ export async function coreLoad(o: CoreLoadOptions): Promise<void> {
         )
       ).rows[0] as { counts?: Record<string, string[]> } | undefined;
       if (!rec?.counts) return;
-      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes']);
+      const fresh = await digest(tx, orgId, ['org_plan_state', 'subscriptions', 'role_grants', 'pipelines', 'pipeline_stages', 'deal_lost_reasons', 'contact_consent_settings', 'routing_rules', 'task_outcomes', 'workspace_settings']);
       await tx.execute(sql`
         UPDATE migration.run_log SET counts = ${JSON.stringify({ ...rec.counts, ...fresh })}::jsonb, updated_at = now()
         WHERE source_client = ${o.client} AND collection = '_org' AND step = 'baseline'`);

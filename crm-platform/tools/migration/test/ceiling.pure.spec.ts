@@ -57,6 +57,22 @@ describe('module ceiling', () => {
     expect(r.keys).not.toContain('inbox.conversation.read');
   });
 
+  it('never keeps the website chat, and closes the AI agents unless a Waboo permission maps into them', () => {
+    const t = [...target, 'wgt.widgets.read', 'wgt.widgets.create', 'aiag.training.read', 'aiag.training.create'];
+    // even a Waboo bot permission that maps across the website part leaves the website chat closed
+    const r = closedKeys(loadModuleCeiling(), new Set(['wgt.widgets.read', 'record.deals.read']), t);
+    expect(r.closed).toContain('website-chat');
+    expect(r.keys).toEqual(expect.arrayContaining(['wgt.widgets.read', 'wgt.widgets.create']));
+    expect(r.closed).toContain('ai-agents');
+    expect(r.keys).toEqual(expect.arrayContaining(['aiag.training.read', 'aiag.training.create']));
+    expect(closedKeys(loadModuleCeiling(), new Set(['aiag.training.read']), t).closed).not.toContain('ai-agents');
+    // the AI Studio page has its own key and is never kept, whatever the old roles held
+    const s = closedKeys(loadModuleCeiling(), new Set(['flb.ai_studio.read']), [...t, 'flb.ai_studio.read', 'flb.flows.read']);
+    expect(s.closed).toContain('ai-studio');
+    expect(s.keys).toContain('flb.ai_studio.read');
+    expect(s.keys).not.toContain('flb.flows.read');
+  });
+
   it('keeps a module when the old workspace held any key in it', () => {
     const old = new Set(['record.companies.read']);
     expect(closedKeys(loadModuleCeiling(), old, target).closed).not.toContain('companies');

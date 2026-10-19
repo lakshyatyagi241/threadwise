@@ -1045,7 +1045,7 @@
         "loadFailed": "Impossibile caricare le statistiche.",
         "rates": {
           "delivered": "Tasso di consegna",
-          "deliveredHint": "del pubblico",
+          "deliveredHint": "degli inviati",
           "read": "Tasso di lettura",
           "readHint": "dei consegnati",
           "replies": "Tasso di risposta",

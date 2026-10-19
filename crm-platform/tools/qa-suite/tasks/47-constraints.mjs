@@ -81,7 +81,7 @@ export default {
       expectNone(
         'con-enum',
         'Enum-like text columns (status/type/kind...) are constrained',
-        f.enumLike,
+        unreviewed(47, f.enumLike),
         { level: 'warn' },
       ),
       expectNone(

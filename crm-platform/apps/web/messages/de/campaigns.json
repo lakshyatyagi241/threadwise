@@ -1045,7 +1045,7 @@
         "loadFailed": "Die Statistik konnte nicht geladen werden.",
         "rates": {
           "delivered": "Zustellrate",
-          "deliveredHint": "der Zielgruppe",
+          "deliveredHint": "der gesendeten Nachrichten",
           "read": "Leserate",
           "readHint": "der Zugestellten",
           "replies": "Antwortrate",

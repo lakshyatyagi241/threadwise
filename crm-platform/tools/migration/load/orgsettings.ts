@@ -297,10 +297,19 @@ export async function applySettings(
       res.lostReasons += r.rows.length;
     }
 
+    if (plan.taskOutcomes.length > 0) {
+      // a new workspace is seeded with default outcomes (Interested ... Not interested ...): the Waboo list replaces them, but an outcome a task uses stays
+      await tx.execute(sql`
+        DELETE FROM task_outcomes o
+        WHERE o.org_id = ${orgId}
+          AND lower(btrim(o.name)) NOT IN (SELECT lower(btrim(x)) FROM jsonb_array_elements_text(${JSON.stringify(plan.taskOutcomes.map((t) => t.name))}::jsonb) AS x)
+          AND NOT EXISTS (SELECT 1 FROM tasks t WHERE t.org_id = o.org_id AND t.outcome_id = o.id)`);
+    }
     for (const o of plan.taskOutcomes) {
       const r = await tx.execute(sql`
         INSERT INTO task_outcomes (org_id, name, sort_order, is_active) VALUES (${orgId}, ${o.name}, ${o.sortOrder}, ${o.isActive})
-        ON CONFLICT (org_id, lower(btrim(name))) DO NOTHING RETURNING 1`);
+        ON CONFLICT (org_id, lower(btrim(name))) DO UPDATE SET sort_order = EXCLUDED.sort_order, is_active = EXCLUDED.is_active
+        RETURNING 1`);
       res.taskOutcomes += r.rows.length;
     }
 

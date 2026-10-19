@@ -36,13 +36,14 @@ export function Popover({ open, onClose, label, children, className }: PopoverPr
   }, [open, onClose]);
 
   if (!open) return null;
+  // z-40 clears the frozen table header cells (z-30) that a panel inside a sticky table would otherwise sit under.
   return (
     <div
       ref={ref}
       role="group"
       aria-label={label}
       className={cn(
-        'absolute end-0 top-full z-30 mt-1 w-72 space-y-3 rounded-md border border-border bg-background p-3 text-start shadow-lg',
+        'absolute end-0 top-full z-40 mt-1 w-72 space-y-3 rounded-md border border-border bg-background p-3 text-start shadow-lg',
         className,
       )}
     >

@@ -56,7 +56,7 @@ export default {
       expectNone(
         'ret-tables',
         `Every high-volume table has a retention/archival rule (${candidates.length} candidates)`,
-        unhandled,
+        unreviewed(49, unhandled),
         { level: 'warn' },
       ),
       expectNone(

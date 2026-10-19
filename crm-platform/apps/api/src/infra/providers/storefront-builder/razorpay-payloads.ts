@@ -41,8 +41,11 @@ export function verifyRazorpaySignature(
   if (!secret || !signature) return false;
   const expected = createHmac('sha256', secret).update(rawBody).digest('hex');
   const given = signature.trim().toLowerCase();
-  if (given.length !== expected.length) return false;
-  return timingSafeEqual(Buffer.from(expected), Buffer.from(given));
+  // Byte lengths: a header of 64 fullwidth characters is 64 characters long and 192 bytes, and timingSafeEqual throws on unequal byte lengths.
+  const g = Buffer.from(given);
+  const e = Buffer.from(expected);
+  if (g.length !== e.length) return false;
+  return timingSafeEqual(e, g);
 }
 
 export const signRazorpayBody = (rawBody: Buffer | string, secret: string): string =>

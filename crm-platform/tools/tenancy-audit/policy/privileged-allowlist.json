@@ -425,6 +425,11 @@
     "reason": "operator consumers + worker; one tenant-request use: BillingService.change runs a privileged tx (statements all keyed by ctx.orgId). Design decision TI-011",
     "reviewedOn": "2026-10-11"
   },
+  "modules/platform-deployments/deployments.store.ts": {
+    "status": "reviewed",
+    "reason": "platform operator data behind OperatorGuard (GET /v2/platform/deployments, any operator); read-only join of Geta publish syncs, flows and organizations across tenants by design; no tenant route reaches it; the only caller input is the status enum and a limit both validated by zod; returns mapped fields only, the Geta error cut to 300 characters",
+    "reviewedOn": "2026-10-19"
+  },
   "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": {
     "status": "reviewed",
     "reason": "read-only count and lag on event_outbox; GET /ready exposes the platform-wide aggregate (no per-tenant data)",
@@ -548,5 +553,50 @@
     "status": "reviewed",
     "reason": "worker only (PrivacyWorkerModule is imported by WorkersModule alone). privileged() lists (org_id, uuid) of confirmed erasure requests that no hold covers any more, with a fixed statement and a constant limit, no caller input; each request is then re-read under a row lock and executed inside a tenant transaction for its own org (txAs), which re-checks the legal hold before anything is erased",
     "reviewedOn": "2026-10-18"
+  },
+  "modules/appointments-booking/meeting-mirror-backfill.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker backfill of meeting mirrors in batches; the cursor is an internal id, not request input; writes go through the repository per row",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/calling-voice/logging/call-log-retention.service.ts": {
+    "status": "reviewed",
+    "reason": "retention sweep clears expired call recording references across workspaces by age; no caller input reaches the statement; runs from a scheduler only",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/channel-email/mail-graph-push.service.ts": {
+    "status": "reviewed",
+    "reason": "Graph push notifications are trusted only after clientState verifies (HMAC naming workspace and mailbox); the lookup then uses that verified org and mailbox",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/crm/contact-assignment/assignment-run-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "scheduled prune of old assignment run rows by age; a constant retention window; no request input",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/data-retention/retention.worker.ts": {
+    "status": "reviewed",
+    "reason": "retention worker: policies and run records of the platform's own retention streams; runs from the worker only",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts": {
+    "status": "reviewed",
+    "reason": "poll of waiting flow runs by a fixed handler name; each run is then acted on in its own workspace context",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/platform-data-retention/retention-dashboard.service.ts": {
+    "status": "reviewed",
+    "reason": "platform operator console only (OperatorGuard, super_admin for writes); writes need the rowVersion read; the item id is one of the fixed retention streams",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/storage-quota/storage-quota.scheduler.ts": {
+    "status": "reviewed",
+    "reason": "scheduled reaper and backfill pickup over all workspaces; batch sizes are constants; the per-workspace work runs in each workspace's own context",
+    "reviewedOn": "2026-10-19"
+  },
+  "modules/team-inbox-routing-sla/routing-escalation-sweep.service.ts": {
+    "status": "reviewed",
+    "reason": "due-escalation sweep; each due row runs inside RequestContextStore for its own workspace, so the audit rows name it",
+    "reviewedOn": "2026-10-19"
   }
 }

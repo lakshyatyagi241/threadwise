@@ -4,6 +4,8 @@ import { InjectQueue } from '@nestjs/bullmq';
 import type { Queue } from 'bullmq';
 import { sql } from 'drizzle-orm';
 import type { Redis } from 'ioredis';
+import { CryptoService } from '../../common/crypto/crypto.service';
+import { tokenOf } from '../../common/crypto/secret-columns';
 import { DatabaseService } from '../../infra/db/database.service';
 import { INBOUND_RETRY, QUEUES } from '../../infra/queue/queues';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -53,6 +55,7 @@ export class WebhookService {
     private readonly settings: EcomSettingsService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     @InjectQueue(QUEUES.ECOM_WEBHOOK) private readonly queue: Queue<WebhookJob>,
+    private readonly crypto: CryptoService,
   ) {}
 
   async receive(
@@ -71,7 +74,9 @@ export class WebhookService {
     if (!store) return { status: 404, body: 'not found' };
 
     const key =
-      kind === 'shopify' ? (await this.settings.shopify()).clientSecret : store.webhookSecret;
+      kind === 'shopify'
+        ? (await this.settings.shopify()).clientSecret
+        : tokenOf(this.crypto, { enc: store.webhookSecretEnc, plain: store.webhookSecret });
     const holds =
       kind === 'shopify'
         ? verifyShopifyWebhook(raw, h.signature, key)

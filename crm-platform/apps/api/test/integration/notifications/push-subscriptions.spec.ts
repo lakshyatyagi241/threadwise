@@ -8,6 +8,7 @@ import {
   RequestContextStore,
   type RequestContext,
 } from '../../../src/common/context/request-context';
+import { CryptoService } from '../../../src/common/crypto/crypto.service';
 import { DatabaseService } from '../../../src/infra/db/database.service';
 import { NotificationFanout } from '../../../src/modules/notifications/notification-fanout';
 import { NotificationPublisher } from '../../../src/modules/notifications/notification.publisher';
@@ -34,6 +35,10 @@ describe('push_subscriptions', () => {
   let clients: DbClientPair;
   let db: DatabaseService;
   let restoreEnv: () => void;
+  const crypto = new CryptoService({
+    get: (n: string) =>
+      n === 'CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS' ? '' : Buffer.alloc(32, 7).toString('base64'),
+  } as never);
   const repo = new PushSubscriptionsRepository();
   const provider = new FakeWebPushProvider();
   let service: PushSubscriptionsService;
@@ -92,7 +97,7 @@ describe('push_subscriptions', () => {
       poolMax: 6,
     });
     db = new DatabaseService(clients);
-    const sender = new WebPushSender(provider, db, repo);
+    const sender = new WebPushSender(provider, db, repo, crypto);
     const redisKeys = new Set<string>();
     const redis = {
       set: vi.fn(async (key: string) => {
@@ -119,7 +124,7 @@ describe('push_subscriptions', () => {
       { inappAllowed: async () => true } as never,
       publisher,
     );
-    service = new PushSubscriptionsService(db, repo, sender, redis as never, fanout);
+    service = new PushSubscriptionsService(db, repo, sender, redis as never, fanout, crypto);
     delivery = new WebPushDeliveryService(db, new NotificationsRepository(), repo, sender, {
       isVisible: async () => visible.value,
     } as never);
@@ -181,7 +186,7 @@ describe('push_subscriptions', () => {
       expect(again.id).toBe(first.id);
       const rows = await stored();
       expect(rows).toHaveLength(1);
-      expect(rows[0].auth).toBe('c'.repeat(22));
+      expect(crypto.decrypt(rows[0].auth)).toBe('c'.repeat(22));
     });
 
     it('brings a revoked device back to life when the browser subscribes again', async () => {

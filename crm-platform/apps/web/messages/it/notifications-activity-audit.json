@@ -513,6 +513,11 @@
           "watch": "Dovresti vedere un popup, e il numero della campanella e il titolo della scheda dovrebbero cambiare.",
           "notConnected": "Gli aggiornamenti in tempo reale non sono connessi in questa pagina, quindi il popup non può comparire qui. Ricarica la pagina e riprova.",
           "off": "Nessuna notifica è stata creata nella campanella: la campanella è disattivata per «Notifica di prova» nella tabella sottostante, oppure dal proprietario del tuo spazio di lavoro."
+        },
+        "prompt": {
+          "message": "Attiva le notifiche del browser per ricevere un avviso sugli eventi che scegli, anche con il CRM chiuso.",
+          "enable": "Consenti notifiche",
+          "enabling": "Attivazione..."
         }
       }
     },

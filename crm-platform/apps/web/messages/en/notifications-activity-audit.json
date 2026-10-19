@@ -513,6 +513,11 @@
           "watch": "You should see a pop-up, the bell number and the tab title change.",
           "notConnected": "Live updates are not connected on this page, so the pop-up cannot appear here. Reload the page and try again.",
           "off": "No bell notification was created: the bell is turned off for \"Test notification\" in the table below, or by your workspace owner."
+        },
+        "prompt": {
+          "message": "Turn on browser notifications to get an alert for the events you choose, even when the CRM is closed.",
+          "enable": "Allow notifications",
+          "enabling": "Enabling..."
         }
       }
     },

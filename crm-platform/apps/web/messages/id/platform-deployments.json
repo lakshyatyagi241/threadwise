@@ -1,0 +1,51 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "Deployment" },
+    "eyebrow": "Operasi",
+    "title": "Deployment",
+    "description": "Setiap flow yang dipublikasikan ke konsol Geta: apa yang antre, apa yang sedang berjalan, dan apa yang gagal beserta alasannya. Diperbarui setiap beberapa detik.",
+    "updated": "Langsung. Diperbarui {time}",
+    "stale": "Pembaruan terakhir gagal. Menampilkan deployment sebelumnya.",
+    "stalledAlert": "{count} deployment tidak berubah selama {minutes} menit. Worker-nya mungkin berhenti.",
+    "truncated": "Menampilkan {limit} deployment pertama. Pilih status untuk melihat sisanya.",
+    "kpi": {
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung",
+      "stalled": "Macet"
+    },
+    "filter": {
+      "label": "Filter berdasarkan status",
+      "all": "Semua",
+      "running": "Berjalan",
+      "queued": "Antre",
+      "failed": "Gagal",
+      "live": "Langsung"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Langkah",
+      "attempted": "Percobaan terakhir",
+      "updated": "Perubahan terakhir",
+      "error": "Galat"
+    },
+    "status": { "running": "Berjalan", "queued": "Antre", "failed": "Gagal", "live": "Langsung" },
+    "steps": { "configuration_update": "Pembaruan konfigurasi", "publish_bot": "Publikasikan bot" },
+    "stalledBadge": "Macet",
+    "version": "Versi {version}",
+    "notStarted": "Belum dimulai",
+    "failedAt": "Gagal di {step}",
+    "noDetail": "Tidak ada teks galat yang tersimpan.",
+    "empty": {
+      "title": "Tidak ada yang ditampilkan",
+      "all": "Belum ada flow yang dipublikasikan ke konsol Geta.",
+      "running": "Tidak ada publikasi yang sedang berjalan.",
+      "queued": "Tidak ada yang menunggu di antrean.",
+      "failed": "Tidak ada publikasi yang gagal.",
+      "live": "Belum ada flow yang langsung di konsol Geta."
+    }
+  }
+}

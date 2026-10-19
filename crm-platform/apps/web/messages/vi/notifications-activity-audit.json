@@ -513,6 +513,11 @@
           "watch": "Bạn sẽ thấy một cửa sổ bật lên, số trên chuông và tiêu đề tab thay đổi.",
           "notConnected": "Cập nhật trực tiếp chưa được kết nối trên trang này nên cửa sổ bật lên không thể hiện ở đây. Hãy tải lại trang và thử lại.",
           "off": "Không có thông báo nào được tạo trong chuông: chuông đang tắt cho \"Thông báo thử\" trong bảng bên dưới, hoặc do chủ không gian làm việc của bạn tắt."
+        },
+        "prompt": {
+          "message": "Bật thông báo trình duyệt để nhận cảnh báo cho các sự kiện bạn chọn, ngay cả khi CRM đã đóng.",
+          "enable": "Cho phép thông báo",
+          "enabling": "Đang bật..."
         }
       }
     },

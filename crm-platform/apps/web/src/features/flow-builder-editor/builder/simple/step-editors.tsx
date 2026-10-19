@@ -4,6 +4,7 @@ import { ButtonIcon } from '../button-icon';
 import { MessageField } from '../message-field';
 import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
+import { savePropertyOptions } from '../../lib/property-options';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
   buttonActionContinues,
@@ -470,7 +471,7 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
               const ri = replyIndex(ci, bi);
               return (
                 <div key={bi} className="rounded-lg border border-border bg-background p-2">
-                  <div className="grid gap-2 sm:grid-cols-[9rem_1fr_1fr_auto]">
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-2">
                     <Select
                       value={kind}
                       onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
@@ -481,27 +482,27 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                         </option>
                       ))}
                     </Select>
-                    <Input
-                      value={str(b.label)}
-                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
-                      placeholder={t('carousel.label')}
-                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
-                    />
-                    {kind === 'reply' || kind === 'agent' ? (
-                      <span />
-                    ) : (
-                      <Input
-                        value={str(b.value)}
-                        placeholder={holder(kind)}
-                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
-                      />
-                    )}
                     <RemoveBtn
                       label={t('carousel.removeButton')}
                       onClick={() =>
                         patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
                       }
                     />
+                    <Input
+                      className="col-span-2"
+                      value={str(b.label)}
+                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
+                      placeholder={t('carousel.label')}
+                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
+                    />
+                    {kind === 'reply' || kind === 'agent' ? null : (
+                      <Input
+                        className="col-span-2"
+                        value={str(b.value)}
+                        placeholder={holder(kind)}
+                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
+                      />
+                    )}
                   </div>
                   {kind === 'reply' ? (
                     <div className="mt-2">
@@ -844,7 +845,7 @@ function SavePropertyField({
             onChange={(e) => set({ propertyKey: e.target.value })}
           >
             <option value="">{t('choose')}</option>
-            {(feed.data?.custom ?? []).map((pr) => (
+            {savePropertyOptions(feed.data, str(step.data.propertyKey)).map((pr) => (
               <option key={pr.key} value={pr.key}>
                 {pr.name}
               </option>

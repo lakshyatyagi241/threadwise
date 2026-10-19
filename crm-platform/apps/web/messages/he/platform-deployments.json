@@ -1,0 +1,51 @@
+{
+  "platform-deployments": {
+    "nav": { "item": "פריסות" },
+    "eyebrow": "תפעול",
+    "title": "פריסות",
+    "description": "כל זרימה שפורסמה לקונסולת Geta: מה ממתין בתור, מה רץ עכשיו, ומה נכשל ולמה. מתעדכן כל כמה שניות.",
+    "updated": "חי. עודכן {time}",
+    "stale": "הרענון האחרון נכשל. מוצגות הפריסות הקודמות.",
+    "stalledAlert": "{count} פריסות לא השתנו במשך {minutes} דקות. ייתכן שהעובד שלהן נעצר.",
+    "truncated": "מוצגות {limit} הפריסות הראשונות. בחרו סטטוס כדי לראות את היתר.",
+    "kpi": {
+      "running": "רצות",
+      "queued": "בתור",
+      "failed": "נכשלו",
+      "live": "חיות",
+      "stalled": "תקועות"
+    },
+    "filter": {
+      "label": "סינון לפי סטטוס",
+      "all": "הכול",
+      "running": "רצות",
+      "queued": "בתור",
+      "failed": "נכשלו",
+      "live": "חיות"
+    },
+    "cols": {
+      "workspace": "סביבת עבודה",
+      "flow": "זרימה",
+      "status": "סטטוס",
+      "step": "שלב",
+      "attempted": "ניסיון אחרון",
+      "updated": "שינוי אחרון",
+      "error": "שגיאה"
+    },
+    "status": { "running": "רצה", "queued": "בתור", "failed": "נכשלה", "live": "חיה" },
+    "steps": { "configuration_update": "עדכון תצורה", "publish_bot": "פרסום הבוט" },
+    "stalledBadge": "תקועה",
+    "version": "גרסה {version}",
+    "notStarted": "טרם התחילה",
+    "failedAt": "נכשלה בשלב {step}",
+    "noDetail": "לא נשמר טקסט שגיאה.",
+    "empty": {
+      "title": "אין מה להציג",
+      "all": "עדיין לא פורסמה זרימה לקונסולת Geta.",
+      "running": "אין כרגע פרסום בריצה.",
+      "queued": "אין דבר הממתין בתור.",
+      "failed": "אף פרסום לא נכשל.",
+      "live": "עדיין אין זרימה חיה בקונסולת Geta."
+    }
+  }
+}

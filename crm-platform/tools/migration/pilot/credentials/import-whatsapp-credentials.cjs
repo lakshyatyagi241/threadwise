@@ -51,7 +51,8 @@ const refuse = (m) => {
 // ---- defaults of the key-name mapping (override with --mapping FILE; the file holds names and a pattern, never a value) ----------
 const DEFAULT_MAPPING = {
   // documents of chatbot_misc_config that carry a WhatsApp number (anything else is ignored: Google OAuth, OpenAI, SMS, webhooks)
-  configKeys: ['META_WHATSAPP_CONFIG'],
+  // the second is a test-number config some workspaces keep next to the live one (a pending number, no bot): read, but only numbers the channel map lists are ever imported
+  configKeys: ['META_WHATSAPP_CONFIG', 'META_WHATSAPP_CONFIG----test'],
   // our field -> the name inside config_value
   fields: {
     access_token: 'access_token',
@@ -65,6 +66,10 @@ const DEFAULT_MAPPING = {
     'whatsapp_no', 'display_number', 'display_name', 'display_name_status', 'quality_rating', 'quality', 'limit',
     'messaging_limit', 'status', 'is_mm_lite_onboarded', 'business_id', 'meta_business_name', 'business_verified',
     'business_info', 'business_compliance_info', 'status_history', 'username', 'user_password',
+    // the reseller's partner key is one platform-level value (the same in every workspace's document); Desk keeps it once in the platform settings
+    'partner_auth_key',
+    // Pinnacle's own gateway token for the number: Desk calls the Meta Cloud API with the access token and never reads it, so it is not copied
+    'api_token',
   ],
   tokenPattern: '^EA[A-Za-z0-9]{20,}$',
   providers: ['interakt', 'meta', 'pinnacle'],

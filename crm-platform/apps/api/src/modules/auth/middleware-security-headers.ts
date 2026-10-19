@@ -40,6 +40,10 @@ export class SecurityHeadersMiddleware implements NestMiddleware {
       // `private` as well, so a shared cache that ignores no-store still may not keep it.
       res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private, max-age=0');
       res.setHeader('Pragma', 'no-cache');
+    } else if (req.headers?.authorization !== undefined || req.headers?.cookie !== undefined) {
+      // Any request that carries a credential is a tenant request: its JSON is for that user only. A controller that sets its own
+      // Cache-Control (flow media is a public capability URL, cached for a year on purpose) overrides this default.
+      res.setHeader('Cache-Control', 'private, no-store');
     }
     next();
   }

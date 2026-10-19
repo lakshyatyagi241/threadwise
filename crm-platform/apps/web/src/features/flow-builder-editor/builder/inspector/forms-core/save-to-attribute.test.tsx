@@ -22,7 +22,10 @@ vi.mock('@/lib/use-unofficial-whatsapp', () => ({ useUnofficialWhatsapp: () => f
 vi.mock('@/features/contacts-attributes-tags', () => ({
   usePickerFeed: () => ({
     data: {
-      system: [{ key: 'name', name: 'Name', description: '' }],
+      system: [
+        { key: 'name', name: 'Name', description: '' },
+        { key: 'email', name: 'Email', description: '' },
+      ],
       custom: [{ key: 'plan', name: 'Plan', description: null, value: null }],
     },
   }),
@@ -76,12 +79,13 @@ describe('save the choice to a variable and a contact attribute', () => {
     ['list', ListForm],
     ['buttons', ButtonsForm],
   ] as const)(
-    '%s: turning it on lists the custom contact properties and flags no choice',
+    '%s: turning it on lists the writable contact columns and the custom properties, and flags no choice',
     (type, Form) => {
       const out = html(Form, type, { saveProperty: true, propertyKey: '' });
       expect(out).toContain('propertyLabel');
       expect(out).toContain('>Plan<');
-      expect(out).not.toContain('>Name<');
+      expect(out).toContain('>Name<');
+      expect(out).toContain('>Email<');
       expect(out).toContain('propertyRequired');
       expect(out).toContain('choicePropertyHint');
     },
@@ -91,6 +95,12 @@ describe('save the choice to a variable and a contact attribute', () => {
     const out = html(ListForm, 'list', { saveProperty: true, propertyKey: 'plan' });
     expect(out).not.toContain('propertyRequired');
     expect(out).toContain('selected');
+  });
+
+  it('a stored built-in key stays selected in the select instead of going blank', () => {
+    const out = html(ListForm, 'list', { saveProperty: true, propertyKey: 'name' });
+    expect(out).not.toContain('propertyRequired');
+    expect(out).toMatch(/<option value="name"[^>]*selected=""[^>]*>Name<\/option>/);
   });
 
   it('Ask question has it for free text too, not only for a checked answer', () => {

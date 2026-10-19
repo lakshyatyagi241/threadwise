@@ -41,13 +41,6 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
     icon: 'campaign',
   },
   {
-    key: 'broadcasts',
-    label: 'Broadcasts',
-    desc: 'Send one message to many contacts',
-    url: '/broadcasts',
-    icon: 'broadcast',
-  },
-  {
     key: 'templates',
     label: 'Templates',
     desc: 'Approved message templates',
@@ -143,12 +136,11 @@ export const QUICK_ACCESS_CATALOG: readonly QuickAccessCatalogEntry[] = [
   { key: 'more', label: 'More apps', desc: 'Every tool in one page', url: '/more', icon: 'grid' },
 ];
 
-/** What a person who never customised sees (Reference's ten). */
+/** What a person who never customised sees. Broadcasts live under Campaigns now, so no separate tile. */
 export const QUICK_ACCESS_DEFAULT_KEYS: readonly string[] = [
   'inbox',
   'contacts',
   'campaigns',
-  'broadcasts',
   'templates',
   'flows',
   'scheduled',
@@ -167,7 +159,8 @@ const CATALOG_KEYS = new Set(QUICK_ACCESS_CATALOG.map((c) => c.key));
  */
 export function isSafeShortcutUrl(url: string): boolean {
   if (/^https?:\/\/\S/i.test(url)) return true;
-  return url.startsWith('/') && !url.startsWith('//') && !url.startsWith('/\\');
+  // A browser drops tab, CR and LF from a URL before parsing it, so "/\n/evil.com" is "//evil.com".
+  return url.startsWith('/') && !/^\/[\t\r\n]*[\\/]/.test(url);
 }
 
 /** Reference's sanitiser: anything that is not an array is empty; unknown keys and unsafe or blank links are dropped; ten at most. */

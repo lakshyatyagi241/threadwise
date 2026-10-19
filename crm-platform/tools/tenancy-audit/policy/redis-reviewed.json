@@ -178,5 +178,13 @@
   "modules/channel-wechat/wechat-token.service.ts": {
     "status": "reviewed",
     "reason": "per-channel lock key carries the org id and the channel id; guards one account's access-token refresh"
+  },
+  "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": {
+    "status": "reviewed",
+    "reason": "governance keys are per Meta phone number id (Meta enforces its rate limits per number, and phone number ids are unique at Meta), so one shared key per number is the intended scope; the sync lock is one per process fleet"
+  },
+  "modules/marketplace/subscription-notifications.consumer.ts": {
+    "status": "reviewed",
+    "reason": "idempotency key for one provider event and one recipient (hash of the email); the event id is the provider's unique id, so the key cannot collide across workspaces in a way that drops a mail for another one"
   }
 }

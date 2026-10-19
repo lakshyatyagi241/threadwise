@@ -266,7 +266,7 @@ export class CampaignsReadService {
         campaign,
         senders: await this.shares.breakdown(tx, orgId, [c.id]),
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),
@@ -352,7 +352,7 @@ export class CampaignsReadService {
         held: await this.repo.heldCount(tx, orgId, c.id),
         processing: held.pending ?? 0,
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),
@@ -394,7 +394,7 @@ export class CampaignsReadService {
         })),
         counts: n,
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),

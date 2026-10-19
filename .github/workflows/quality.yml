@@ -59,7 +59,7 @@ jobs:
         run: node --test tools/qa-suite/qa-suite.test.mjs
       - name: QA suite, static checks (the report lists every finding; add --fail to make findings block)
         run: node tools/qa-suite/run.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: quality-reports
           path: |
@@ -109,7 +109,7 @@ jobs:
         run: node tools/event-loop-audit/dashboards/build.mjs --check
       - name: Regression gate, its decision rules (no Docker)
         run: node tools/event-loop-audit/regression-check.mjs --self-test
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: event-loop-hotspots
@@ -164,7 +164,7 @@ jobs:
         run: bash tools/event-loop-audit/ci-regression.sh
         env:
           PROVE: ${{ inputs.event_loop_regression_prove && '1' || '' }}
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: event-loop-regression
@@ -198,7 +198,7 @@ jobs:
         run: |
           node tools/quality/collect-metrics.mjs --suite api-unit=apps/api/api-unit.json --suite web-unit=apps/web/web-unit.json \
             --coverage apps/api/coverage/coverage-summary.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: unit-metrics
           path: |

@@ -29,7 +29,12 @@ export function HeaderSection({
   headerError?: string;
   onKind: (k: HeaderKind) => void;
   onText: (v: string) => void;
-  onUploaded: (r: { handle: string; fileName: string }) => void;
+  onUploaded: (r: {
+    handle: string;
+    fileName: string;
+    mediaKey: string;
+    previewUrl: string;
+  }) => void;
 }) {
   const t = useTranslations('message-templates.form.header');
   const errorText = useErrorText();
@@ -38,7 +43,13 @@ export function HeaderSection({
   const [problem, setProblem] = useState<string | null>(null);
   const upload = useMutation({
     mutationFn: (file: File) => uploadTemplateMedia(file, state.connectionId),
-    onSuccess: (r) => onUploaded({ handle: r.handle, fileName: r.fileName }),
+    onSuccess: (r) =>
+      onUploaded({
+        handle: r.handle,
+        fileName: r.fileName,
+        mediaKey: r.mediaKey,
+        previewUrl: r.previewUrl,
+      }),
   });
   const kind = state.headerKind;
 
@@ -117,7 +128,7 @@ export function HeaderSection({
                 </span>
               ) : state.headerFileName ? (
                 <span className="break-all">{state.headerFileName}</span>
-              ) : state.headerSampleUrl ? (
+              ) : state.headerSampleUrl || state.headerPreviewUrl ? (
                 <span className="text-muted-foreground">{t('keptSample')}</span>
               ) : (
                 <span className="text-muted-foreground">{t('noFile')}</span>
@@ -142,7 +153,9 @@ export function HeaderSection({
               disabled={upload.isPending || !state.connectionId}
               onClick={() => input.current?.click()}
             >
-              {state.headerFileName || state.headerSampleUrl ? t('replace') : t('choose')}
+              {state.headerFileName || state.headerSampleUrl || state.headerPreviewUrl
+                ? t('replace')
+                : t('choose')}
             </Button>
           </div>
           {problem && <Alert tone="danger">{problem}</Alert>}

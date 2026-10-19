@@ -81,6 +81,13 @@ describe('secret path segments', () => {
     ['/v2/woocommerce/webhook/s3cr3t?x=1', '/v2/woocommerce/webhook/[secret]?x=1'],
     ['/v2/public/lead-hooks/tok_abc123', '/v2/public/lead-hooks/[secret]'],
     ['/public/lead-hooks/tok_abc123?a=b', '/public/lead-hooks/[secret]?a=b'],
+    // Bearer links sent to customers: whoever holds the link can read the document or manage the booking (encryption audit E7).
+    ['/v2/payments/return/razorpay?o=abc123def&x=1', '/v2/payments/return/razorpay?o=[secret]&x=1'],
+    ['/v2/payments/return/stripe?x=1&o=abc123def', '/v2/payments/return/stripe?x=1&o=[secret]'],
+    ['/v2/public/invoices/Ab-9_xTok', '/v2/public/invoices/[secret]'],
+    ['/v2/public/invoices/Ab-9_xTok/pay?x=1', '/v2/public/invoices/[secret]/pay?x=1'],
+    ['/v2/public/sales-docs/Ab-9_xTok/accept', '/v2/public/sales-docs/[secret]/accept'],
+    ['/v2/public/booking-manage/Ab-9_xTok/cancel', '/v2/public/booking-manage/[secret]/cancel'],
   ])('%s is masked', (url, masked) => {
     expect(maskSecretUrl(url)).toBe(masked);
   });
@@ -90,6 +97,7 @@ describe('secret path segments', () => {
       '/v2/contacts/5',
       '/v2/shopify/compliance',
       '/v2/facebook/webhook',
+      '/v2/public/booking/acme/intro/slots',
       '/health',
     ]) {
       expect(maskSecretUrl(url)).toBe(url);

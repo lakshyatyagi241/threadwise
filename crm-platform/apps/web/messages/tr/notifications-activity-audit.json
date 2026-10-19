@@ -513,6 +513,11 @@
           "watch": "Bir açılır pencere görmeniz, zil sayısının ve sekme başlığının değişmesi gerekir.",
           "notConnected": "Bu sayfada canlı güncellemeler bağlı değil, bu yüzden açılır pencere burada görünemez. Sayfayı yenileyip tekrar deneyin.",
           "off": "Zilde bildirim oluşturulmadı: aşağıdaki tabloda \"Test bildirimi\" için zil kapalı ya da çalışma alanı sahibiniz tarafından kapatılmış."
+        },
+        "prompt": {
+          "message": "Tarayıcı bildirimlerini açın; CRM kapalıyken bile seçtiğiniz olaylar için uyarı alın.",
+          "enable": "Bildirimlere izin ver",
+          "enabling": "Etkinleştiriliyor..."
         }
       }
     },
