@@ -73,13 +73,11 @@
       "allowEditCompleted": "Izinkan pengguna mengedit tanggal dan waktu penyelesaian aktivitas ini",
       "taskTypes": "Jenis tugas",
       "taskTypesHint": "Pilih salah satu saat membuat tugas, misalnya Tindak lanjut atau Pengingat telepon.",
-      "addTaskType": "Tambah jenis tugas",
+      "addTaskType": "Tambah jenis",
       "taskTypePlaceholder": "Jenis tugas baru",
       "predictOutcomes": "Prediksi hasil untuk aktivitas ini",
       "predictOutcomesHint": "Tawarkan hasil saat aktivitas diselesaikan.",
       "outcomes": "Hasil",
-      "taskOutcomesHint": "Hasil tugas yang selesai adalah satu daftar untuk seluruh ruang kerja, dikelola di Hasil tugas.",
-      "taskOutcomesLink": "Buka Hasil tugas",
       "outcomesHint": "Menghapus hasil tetap menyimpannya pada catatan yang sudah memilikinya.",
       "phoneOutcomesHint": "Pilih bagaimana setiap hasil dihitung dalam laporan panggilan. Menghapus hasil tetap menyimpannya pada panggilan yang sudah memilikinya.",
       "addOutcome": "Tambah hasil",
@@ -112,7 +110,12 @@
         "conflict": "Orang lain mengubah aktivitas ini. Aktivitas dimuat ulang; coba lagi.",
         "forbidden": "Anda tidak memiliki izin untuk mengubah ini.",
         "failed": "Tidak dapat disimpan. Coba lagi."
-      }
+      },
+      "itemName": "Nama",
+      "hiddenInstead": "Tugas masih memakainya, jadi disembunyikan. Tugas tetap menampilkannya.",
+      "loadingOutcomes": "Memuat hasil…",
+      "outcomesLoadFailed": "Hasil tidak dapat dimuat.",
+      "retry": "Coba lagi"
     },
     "create": {
       "title": "Buat aktivitas",

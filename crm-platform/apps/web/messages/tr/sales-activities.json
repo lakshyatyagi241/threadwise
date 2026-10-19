@@ -73,13 +73,11 @@
       "allowEditCompleted": "Kullanıcıların bu etkinliğin tamamlanma tarih ve saatini düzenlemesine izin ver",
       "taskTypes": "Görev türleri",
       "taskTypesHint": "Görev oluştururken birini seçin, örneğin Takip veya Arama hatırlatması.",
-      "addTaskType": "Görev türü ekle",
+      "addTaskType": "Tür ekle",
       "taskTypePlaceholder": "Yeni görev türü",
       "predictOutcomes": "Bu etkinlik için sonuçları tahmin et",
       "predictOutcomesHint": "Etkinlik tamamlandığında bir sonuç sun.",
       "outcomes": "Sonuçlar",
-      "taskOutcomesHint": "Tamamlanan bir görevin sonuçları, tüm çalışma alanı için tek bir listedir ve Görev sonuçları’nda tutulur.",
-      "taskOutcomesLink": "Görev sonuçları’nı aç",
       "outcomesHint": "Kaldırılan bir sonuç, onu zaten taşıyan kayıtlarda kalır.",
       "phoneOutcomesHint": "Her sonucun arama raporlarında nasıl sayılacağını seçin. Kaldırılan bir sonuç, onu zaten taşıyan aramalarda kalır.",
       "addOutcome": "Sonuç ekle",
@@ -112,7 +110,12 @@
         "conflict": "Başka biri bu etkinliği değiştirdi. Yeniden yüklendi; tekrar deneyin.",
         "forbidden": "Bunu değiştirme izniniz yok.",
         "failed": "Kaydedilemedi. Tekrar deneyin."
-      }
+      },
+      "itemName": "Ad",
+      "hiddenInstead": "Görevler hâlâ kullandığı için bunun yerine gizlendi. Görevler onu göstermeye devam eder.",
+      "loadingOutcomes": "Sonuçlar yükleniyor…",
+      "outcomesLoadFailed": "Sonuçlar yüklenemedi.",
+      "retry": "Tekrar dene"
     },
     "create": {
       "title": "Etkinlik oluştur",

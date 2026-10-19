@@ -38,8 +38,12 @@ item names the admin typed).
 ## Where the lists are used
 
 - **Tasks** (`/v2/tasks`): `taskTypeId` on create and edit; `doneAt` on `PATCH` of a done task. The response carries a `taskType` reference (`{ id, key, name, isSystem, activityKey, removed }`).
-  The OUTCOME of a task is not part of this registry: it is the workspace's Task outcomes list (`/v2/task-outcomes`, `tasks.outcome_id`, Settings > Task outcomes), which was built in parallel and
-  merged first. The Task activity's drawer links to it instead of keeping a second list, and `POST /v2/activity-types/:id/options` with `kind: outcome` on Task is 422 `ACTIVITY_FEATURE_OFF`. New
+  The OUTCOME of a task is not a row of this registry: it is the workspace's task outcomes (`/v2/task-outcomes`, `tasks.outcome_id`, built in parallel and merged first). The Task activity's drawer
+  edits that list inline (add, rename, drag to reorder, remove) through those routes and their permission `settings.task_outcomes.manage`; the standalone Settings > Task outcomes tile is retired and
+  `/tasks/outcomes` redirects to Sales Activities. Remove keeps the tasks' outcomes: an outcome that tasks carry is hidden (`isActive: false`), an unused one is deleted, and adding a hidden name again
+  shows it again. `POST /v2/activity-types/:id/options` with `kind: outcome` on the default Task activity stays 422 `ACTIVITY_FEATURE_OFF` (use `/v2/task-outcomes`). The Task activity's
+  `outcomesEnabled` ("Predict outcomes for this activity") starts ON for every workspace (migration `20270210090000`) and, when turned off, hides the outcome pickers on tasks (form, panel, complete-with-outcome,
+  the list filter); the routes themselves stay open, so the Waboo loaders and reports are unaffected. New
   workspaces get the five default task outcomes (Interested, Left message, No response, Not interested, Not able to reach) from the organization trigger; existing workspaces are not touched. Rules: completing needs `allowComplete` on Task
   (409 `ACTIVITY_COMPLETION_DISABLED`; bulk complete lists it per task; work the system finishes itself, such as a follow-up that was contacted, is not a user completing); editing `doneAt` needs
   `allowEditCompleted` (409 `ACTIVITY_EDIT_COMPLETED_DISABLED`) and may not be in the future; a task type or outcome that was removed, belongs to another kind of activity, or is of the wrong kind is

@@ -73,13 +73,11 @@
       "allowEditCompleted": "このアクティビティの完了日時の編集を許可する",
       "taskTypes": "タスクの種類",
       "taskTypesHint": "タスクの作成時に1つ選びます。例: フォローアップ、折り返し電話のリマインダー。",
-      "addTaskType": "タスクの種類を追加",
+      "addTaskType": "種類を追加",
       "taskTypePlaceholder": "新しいタスクの種類",
       "predictOutcomes": "このアクティビティの結果を予測する",
       "predictOutcomesHint": "アクティビティの完了時に結果の選択肢を表示します。",
       "outcomes": "結果",
-      "taskOutcomesHint": "完了したタスクの結果は、ワークスペース全体で共通の1つのリストで、「タスクの結果」で管理します。",
-      "taskOutcomesLink": "「タスクの結果」を開く",
       "outcomesHint": "結果を削除しても、すでにその結果を持つレコードには残ります。",
       "phoneOutcomesHint": "各結果を通話レポートでどう数えるかを選びます。結果を削除しても、すでにその結果を持つ通話には残ります。",
       "addOutcome": "結果を追加",
@@ -112,7 +110,12 @@
         "conflict": "他のユーザーがこのアクティビティを変更しました。再読み込みしたので、もう一度お試しください。",
         "forbidden": "これを変更する権限がありません。",
         "failed": "保存できませんでした。もう一度お試しください。"
-      }
+      },
+      "itemName": "名前",
+      "hiddenInstead": "まだタスクが使っているため、代わりに非表示にしました。タスクには引き続き表示されます。",
+      "loadingOutcomes": "結果を読み込んでいます…",
+      "outcomesLoadFailed": "結果を読み込めませんでした。",
+      "retry": "再試行"
     },
     "create": {
       "title": "アクティビティを作成",

@@ -73,13 +73,11 @@
       "allowEditCompleted": "Nutzern erlauben, Datum und Uhrzeit der Erledigung dieser Aktivität zu bearbeiten",
       "taskTypes": "Aufgabentypen",
       "taskTypesHint": "Wählen Sie beim Anlegen einer Aufgabe einen aus, zum Beispiel Nachfassen oder Rückruferinnerung.",
-      "addTaskType": "Aufgabentyp hinzufügen",
+      "addTaskType": "Typ hinzufügen",
       "taskTypePlaceholder": "Neuer Aufgabentyp",
       "predictOutcomes": "Ergebnisse für diese Aktivität vorhersagen",
       "predictOutcomesHint": "Beim Abschließen der Aktivität ein Ergebnis anbieten.",
       "outcomes": "Ergebnisse",
-      "taskOutcomesHint": "Die Ergebnisse einer erledigten Aufgabe sind eine gemeinsame Liste für den ganzen Arbeitsbereich und stehen unter Aufgabenergebnisse.",
-      "taskOutcomesLink": "Aufgabenergebnisse öffnen",
       "outcomesHint": "Ein entferntes Ergebnis bleibt bei den Datensätzen erhalten, die es schon haben.",
       "phoneOutcomesHint": "Legen Sie fest, wie jedes Ergebnis in Anrufberichten zählt. Ein entferntes Ergebnis bleibt bei den Anrufen erhalten, die es schon haben.",
       "addOutcome": "Ergebnis hinzufügen",
@@ -112,7 +110,12 @@
         "conflict": "Jemand anderes hat diese Aktivität geändert. Sie wurde neu geladen, bitte versuchen Sie es erneut.",
         "forbidden": "Sie haben keine Berechtigung, dies zu ändern.",
         "failed": "Das konnte nicht gespeichert werden. Bitte erneut versuchen."
-      }
+      },
+      "itemName": "Name",
+      "hiddenInstead": "Aufgaben verwenden es noch, deshalb wurde es stattdessen ausgeblendet. Sie zeigen es weiter an.",
+      "loadingOutcomes": "Ergebnisse werden geladen …",
+      "outcomesLoadFailed": "Die Ergebnisse konnten nicht geladen werden.",
+      "retry": "Erneut versuchen"
     },
     "create": {
       "title": "Aktivität erstellen",
