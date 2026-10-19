@@ -590,7 +590,7 @@ describe('the list of flows (groups)', () => {
   });
 });
 
-describe('the Answer from FAQ step in the Simple builder', () => {
+describe('the retired Answer from FAQ step in the Simple builder', () => {
   const faqGraph = () =>
     graph(
       [
@@ -614,10 +614,9 @@ describe('the Answer from FAQ step in the Simple builder', () => {
       [edge('t', 'out', 'f'), edge('f', 'matched', 'yes'), edge('f', 'no_match', 'no')],
     );
 
-  it('is a step of the menu, in its own Answer group', () => {
-    const kind = STEP_KINDS.find((k) => k.type === 'faq')!;
-    expect(kind.group).toBe('answer');
-    expect(en(kind.label)).toBe('Answer from FAQ');
+  it('is no longer a step of the menu, but an existing one still has its name on the card', () => {
+    expect(STEP_KINDS.some((k) => k.type === 'faq')).toBe(false);
+    expect(stepKindsFor('chat').some((k) => k.type === 'faq')).toBe(false);
     expect(en(stepLabel({ type: 'faq', data: {} }))).toBe('Answer from FAQ');
   });
 
@@ -695,25 +694,6 @@ describe('the Answer from FAQ step in the Simple builder', () => {
     // both exits leading into the other part count as reaching it
     d = updateStep(d, f.id, { links: [null, target.id] });
     expect(unreachable(d)).toEqual([]);
-  });
-
-  it('blocks publishing a minimum score outside 0.05 to 0.99, and nothing else about it', () => {
-    const make = (data: Record<string, unknown>) => {
-      const d = emptyDoc();
-      const f = { ...newStep('faq', []), data: { ...newStep('faq', []).data, ...data } };
-      d.journeys[0]!.steps = [f];
-      // The trigger's own problems (no keyword yet) are not what is under test.
-      return problems(d, { senderRequired: false })
-        .filter((p) => p.stepId !== null)
-        .map((p) => en(p.message));
-    };
-    expect(make({ minScore: 1.4 })).toEqual([
-      "Step 1.1: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
-    ]);
-    expect(make({ minScore: 0.01 })).toHaveLength(1);
-    expect(make({ minScore: 0.5 })).toEqual([]);
-    expect(make({ minScore: null })).toEqual([]);
-    expect(make({ query: '', category: 'x' })).toEqual([]);
   });
 });
 

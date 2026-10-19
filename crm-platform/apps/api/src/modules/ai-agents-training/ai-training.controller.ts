@@ -128,7 +128,7 @@ export class AiTrainingController {
   @Get('assistants/:id/sources')
   @RequirePermission('aiag.training.read')
   @ApiOperation({
-    summary: "The assistant's knowledge entries, plus the workspace-wide ones (newest first)",
+    summary: "The assistant's own knowledge entries (newest first)",
   })
   listSources(@Param('id', ParseUUIDPipe) id: string) {
     return this.sources.list(id);

@@ -1,3 +1,4 @@
+import { GROUNDED_NOTE } from '../knowledge-base';
 import type { AssistantProfile, InboxLine, KnowledgeSource } from './_shims/tokens';
 
 /**
@@ -62,11 +63,15 @@ export function fullSystemPrompt(
   a: AssistantProfile,
   sources: readonly KnowledgeSource[],
   replyLanguage: string | null,
+  /** The sources are the best matches for this message, not the whole base: the agent must stay inside them. */
+  grounded = false,
 ): string {
   let system = systemPrompt(a);
   const context = knowledgeContext(sources);
-  if (context !== '')
-    system += `\n\n--- Knowledge base ---\n${context}\n--- End knowledge base ---`;
+  if (context !== '' || grounded) {
+    system += `\n\n--- Knowledge base ---\n${context || '(no matching excerpts)'}\n--- End knowledge base ---`;
+  }
+  if (grounded) system += `\n\n${GROUNDED_NOTE}`;
   if (replyLanguage) {
     system += `\n\nThe visitor is writing in language code "${replyLanguage}". Reply ENTIRELY in that same language, naturally.`;
   }

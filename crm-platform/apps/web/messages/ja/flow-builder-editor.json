@@ -104,7 +104,6 @@
       "failed": "失敗",
       "edited": "{when}に編集",
       "openBuilder": "ビルダーを開く",
-      "faqs": "よくある質問",
       "pause": "一時停止",
       "resume": "再開",
       "rename": "名前を変更",
@@ -556,11 +555,7 @@
           "cardCount": "カード{count}枚",
           "payLink": "支払いリンク",
           "invoice": "請求書",
-          "faqAllFaqs": "すべてのFAQ",
-          "faqCategory": "FAQ: {name}",
-          "faqScore": "最小スコア {score}",
-          "faqNotSent": "送信しない",
-          "faqWorkspaceScore": "フロースコア"
+          "faqRetired": "廃止 · 「一致なし」から出ます"
         },
         "overlays": {
           "startPinned": "これが開始点です(クリックで固定を解除)",
@@ -724,8 +719,7 @@
             "answer": "回答",
             "action": "アクション"
           },
-          "blockedTitle": "このステップはこのパートを終了するため、最後にのみ配置できます。",
-          "blockedTitleFaq": "「FAQから回答」には出口が2つあるため、最後にのみ配置できます。"
+          "blockedTitle": "このステップはこのパートを終了するため、最後にのみ配置できます。"
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -914,18 +908,12 @@
             "hint": "訪問者はメモ付きでこのチームに引き継がれます。このボタンの後に何かを接続する必要はありません。"
           },
           "faq": {
-            "exits": {
-              "matched": "FAQが回答した場合の移動先",
-              "no_match": "どのFAQも回答しなかった場合の移動先"
-            },
-            "exitsHint": {
-              "matched": "この時点でテキストの回答は送信済みです。フローを開始するFAQは、そのフローで続行されます。",
-              "no_match": "十分に近いFAQがなかったか、FAQの自動回答がオフになっています。"
-            }
+            "exit": "次に進む先",
+            "exitHint": "フローは常にここから続きます。"
           }
         },
         "branchAdd": "「{title}」のステップを追加",
-        "faqEnds": "このステップでこの部分は終了します。次に送信される内容は、FAQが回答したかどうかで変わります。"
+        "faqEnds": "この廃止されたステップはここで分岐を終えます。フローは常に「一致なし」の出口から進みます。"
       },
       "formsCore": {
         "helpers": {
@@ -1873,43 +1861,7 @@
           "waitUntilPaid": "支払い完了まで待ってから続行"
         },
         "faq": {
-          "intro": {
-            "body": "メッセージを意味でこのフローのFAQと照合して回答します。FAQが回答した場合は<mono>回答済み</mono>から、それ以外は<mono>一致なし</mono>から出ます。",
-            "sub": "このフローのFAQ自動回答をオンにしなくても動作します。<link>このフローのFAQを管理</link>"
-          },
-          "exitsLabel": "出口",
-          "exitMatchedName": "回答済み",
-          "exitMatched": "FAQが回答しました。そのテキストが送信されたか(送信がオフの場合を除く)、そのフローが引き継がれ、元には戻りません。",
-          "exitNoMatchName": "一致なし",
-          "exitNoMatch": "十分に近いFAQがない、プラットフォームでFAQの自動回答がオフ、リンク先のフローまたはステップが存在しない、またはメッセージが空でした。",
-          "query": "照合するメッセージ",
-          "queryHint": "既定ではお客様の最後のメッセージです。質問ステップで保存した変数(例: <mono>{variable}</mono>)も使えます。/ を入力すると挿入できます。",
-          "category": "これらのFAQのみ",
-          "allFaqs": "すべてのFAQ",
-          "loadingCategories": "カテゴリを読み込み中…",
-          "categoryGone": "{name}(使用しているFAQなし)",
-          "retry": "再試行",
-          "minScore": "最小スコア",
-          "sendAnswer": "お客様に回答を送信",
-          "sendAnswerToggle": "一致したテキスト回答をメッセージとして送信",
-          "sendAnswerOnHint": "一致したテキストFAQがお客様に送信されます。フローを開始するFAQは、そのフローで続行されます。",
-          "sendAnswerOffHint": "何も送信されません。回答は下の変数に保存されるだけなので、後のステップで返信文を自由に作成できます。フローを開始するFAQは、引き続きそのフローで続行されます。",
-          "save": "結果の保存名",
-          "saveHint": "結果を保存する名前です。後のステップでは下の形式で参照します。",
-          "variables": {
-            "answer": "回答テキスト",
-            "matched": "はい または いいえ",
-            "question": "一致したFAQの質問",
-            "score": "一致の近さ",
-            "id": "一致したFAQのID"
-          },
-          "noFaqs": "このフローにはまだFAQがないため、このステップは常に一致なしから出ます。<link>このフローの最初のFAQを追加</link>",
-          "useWorkspaceScore": "このフローの設定を使用",
-          "minScoreInvalid": "{min}から{max}の数値を入力するか、このフローの設定を使用してください。",
-          "saveFlowFirst": "先にフローを保存してください。FAQはシンプルビルダーのFAQタブで編集し、このステップはそこから回答します。",
-          "categoryHint": "このカテゴリのFAQのみが回答できます。カテゴリはこのフローのFAQから取得されます。",
-          "categoriesFailed": "このフローのFAQカテゴリを読み込めませんでした。",
-          "minScoreHint": "このステップに限り、このフローのスコアを{min}から{max}の範囲で置き換えます。スコアはプラットフォームの埋め込みモデルによって異なるため、数値を選ぶ前にこのフローの<link>FAQテスト</link>でメッセージを試してください。"
+          "retired": "このステップは廃止され、何も検索しなくなりました。フローは常に「一致なし」から先へ進みます。自分のナレッジで回答するには、AIアシスタントのステップを使い、AIエージェントを選んでください。"
         }
       },
       "attrPicker": {
@@ -1980,7 +1932,6 @@
         "customizeFirst": "公開する前に、チャットウィジェットをカスタマイズして一度保存してください。",
         "deploy": "デプロイ",
         "customizeFirstWhatsapp": "公開する前に、WhatsAppボタンをカスタマイズして一度保存してください。",
-        "faqs": "FAQ",
         "install": "インストール"
       },
       "buttonIcon": {
@@ -2502,7 +2453,6 @@
         "noSenderInstagram": "トリガーノードにInstagramアカウントが選択されていません。トリガーの手順で選択してください。",
         "noSenderFacebook": "トリガーノードにFacebookページが選択されていません。トリガーの手順で選択してください。",
         "noSenderNumber": "トリガーノードに番号が選択されていません。トリガーの手順で選択してください。",
-        "faqMinScore": "「{node}」の最小スコアが0.05~0.99の範囲外です。修正するか、空欄にしてフローの設定を使用してください。",
         "locationInvalid": "「{node}」に有効な位置情報がありません。Google マップのリンクを貼り付けるか、緯度（-90～90）と経度（-180～180）を入力してください。",
         "aiNoAgent": "「{node}」にはAIエージェントもプロンプトもありません。AIエージェントを選ぶか、カスタム設定を選んで指示を書いてください。"
       }
@@ -2592,10 +2542,6 @@
           "label": "条件",
           "help": "お客様の発言や保存した内容で分岐します（AND / OR ルール）"
         },
-        "faq": {
-          "label": "FAQから回答",
-          "help": "お客様のメッセージをFAQと照合します。このフローを終了します。FAQが回答した場合と回答しなかった場合で出口が分かれます"
-        },
         "apiLibrary": {
           "label": "API呼び出し",
           "help": "API ライブラリの API を呼び出します"
@@ -2664,7 +2610,6 @@
         "carouselCards": "ステップ {stage}: カードを1枚以上追加し、すべてのカードにタイトルを付けてください。",
         "carouselButtons": "ステップ {stage}: すべてのボタンに名前を付け、何かを開くボタンにはリンク、番号、またはアドレスを入力してください。",
         "conditionIncomplete": "ステップ {stage}: 条件のルールを完成させてください（各ルールに変数と値）。",
-        "faqMinScore": "ステップ {stage}: 最小スコアは0.05~0.99にするか、フローの設定を使用してください。",
         "optionNotConnected": "ステップ {stage}: {kind, select, row {行} other {ボタン}}「{label}」の行き先がありません。ステップを追加するか、アクションを設定してください。",
         "tooManyOptions": "ステップ {stage}: {kind, select, row {リストの行は最大 {max} 件までです} other {ボタンは最大 {max} 個までです}}。",
         "chooseFlow": "ステップ {stage}: ボタンが開始するフローを選んでください。",
@@ -2673,8 +2618,7 @@
         "webhookUrl": "ステップ {stage}: 呼び出すアドレス(URL)を追加してください。",
         "chooseAiAgent": "ステップ {stage}: 回答するAIエージェントを選ぶか、ステップをカスタム設定に切り替えてください。",
         "writeAiPrompt": "ステップ {stage}: AIへの指示を書くか、AIエージェントを選んでください。"
-      },
-      "faqSummary": "{hasCategory, select, true {FAQから · {category}} other {FAQから}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2786,9 +2730,8 @@
       "buttonNotConnected": "ボタン「{label}」が接続されていません。終了します。",
       "simPurchase": "購入をシミュレート: {name} → 「purchased」ポート",
       "simAbandon": "カゴ落ちをシミュレート → 「abandoned」ポート",
-      "faqAnswered": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索しないため、何も送信されず、{ref} は空のままです。「回答済み」の出口に進みます。",
-      "faqNoMatch": "(シミュレーション) 「{query}」のFAQから回答: テストチャットではFAQを検索せず、「回答済み」の出口も接続されていないため、「一致なし」に進みます。{ref} は空のままです。",
-      "locationSkipped": "（位置情報）スキップ：有効な座標がありません"
+      "locationSkipped": "（位置情報）スキップ：有効な座標がありません",
+      "faqRetired": "(シミュレーション) FAQから回答するステップは廃止されました。「一致なし」へ進みます。"
     }
   }
 }

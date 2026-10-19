@@ -3,7 +3,7 @@ import { ApiLibraryRetentionService } from '../../../src/modules/api-library/api
 import { CallLogRetentionService } from '../../../src/modules/calling-voice/logging/call-log-retention.service';
 import { CallRecordingRetentionService } from '../../../src/modules/calling-voice/call-recording-retention.service';
 import { AssignmentRunSweepService } from '../../../src/modules/crm/contact-assignment/assignment-run-sweep.service';
-import { FaqRetentionService } from '../../../src/modules/faq-knowledge/faq-retention.service';
+import { FaqRetentionService } from '../../../src/modules/knowledge-base/faq-retention.service';
 import { FlowRunRetentionService } from '../../../src/modules/flow-runtime-engine/runtime/flow-run-retention.service';
 import { FormRetentionSweepService } from '../../../src/modules/forms-builder/form-retention-sweep.service';
 import { LeadRetentionSweepService } from '../../../src/modules/leads/lead-retention-sweep.service';

@@ -35,38 +35,32 @@ export function whatsappDefaultsFrom(
 /** The channels whose bots have a widget and so the Customize and Deploy tabs: website chat and WhatsApp. */
 export type WidgetChannel = 'web' | 'chat';
 
-/** The pages of a builder: Build always, FAQs for every saved flow in the Simple builder, Customize and Deploy for a website bot. */
-export type BuilderTab = 'build' | 'faqs' | 'customize' | 'deploy';
+/** The pages of a builder: Build always, Customize and Deploy for a website or WhatsApp bot. */
+export type BuilderTab = 'build' | 'customize' | 'deploy';
 
-const ORDER: readonly BuilderTab[] = ['build', 'faqs', 'customize', 'deploy'];
+const ORDER: readonly BuilderTab[] = ['build', 'customize', 'deploy'];
 
 /** Which tabs a builder offers. */
 export interface TabSet {
-  /** The FAQs tab (the Simple builder, for a person who may read FAQs). */
-  faqs: boolean;
   /** Customize and Deploy (the bot is built for website chat). */
   web: boolean;
 }
 
 /** The tabs a builder shows, in order. */
-export const tabsOf = (set: TabSet): BuilderTab[] =>
-  ORDER.filter((k) => k === 'build' || (k === 'faqs' ? set.faqs : set.web));
+export const tabsOf = (set: TabSet): BuilderTab[] => ORDER.filter((k) => k === 'build' || set.web);
 
 /**
- * The tab a link asks for (`?tab=faqs`, `?tab=customize` from the Web channel list); anything else, and a tab this builder does not
+ * The tab a link asks for (`?tab=customize` from the Web channel list); anything else, and a tab this builder does not
  * offer, opens on Build.
  */
-export function tabFromParam(
-  value: string | null,
-  set: TabSet = { faqs: true, web: true },
-): BuilderTab {
+export function tabFromParam(value: string | null, set: TabSet = { web: true }): BuilderTab {
   // `install` is the old name of Deploy.
   const wanted = value === 'install' ? 'deploy' : value;
   return ORDER.find((k) => k === wanted && tabsOf(set).includes(k)) ?? 'build';
 }
 
 /**
- * The tab in state, mirrored in the address (`?tab=`, and `view` for the FAQs panel) so a reload, a shared link and the back
+ * The tab in state, mirrored in the address (`?tab=`) so a reload, a shared link and the back
  * button land on the same tab. Changing the tab never touches the flow being edited: the Build page stays mounted underneath.
  */
 export function useBuilderTab(
@@ -91,7 +85,6 @@ export function useBuilderTab(
       const q = new URLSearchParams(window.location.search);
       if (next === 'build') q.delete('tab');
       else q.set('tab', next);
-      if (next !== 'faqs') q.delete('view');
       const search = q.toString();
       window.history.replaceState(
         window.history.state,
@@ -105,7 +98,7 @@ export function useBuilderTab(
 }
 
 /**
- * Build · FAQs · Customize · Deploy, under the header of a builder. FAQs, Customize and Deploy need the flow to exist (a
+ * Build · Customize · Deploy, under the header of a builder. Customize and Deploy need the flow to exist (a
  * "save first" tooltip says so), and an amber dot stays on Customize until the widget has been saved once. A builder with
  * nothing but Build shows no bar.
  */
@@ -114,7 +107,6 @@ export function BuilderTabs({
   onTab,
   saved,
   needsCustomizing,
-  faqs,
   web,
 }: {
   tab: BuilderTab;
@@ -122,11 +114,10 @@ export function BuilderTabs({
   /** The flow has been saved at least once (it has an id). */
   saved: boolean;
   needsCustomizing: boolean;
-  faqs: boolean;
   web: boolean;
 }) {
   const t = useTranslations('flb.builder.webBot');
-  const tabs = tabsOf({ faqs, web });
+  const tabs = tabsOf({ web });
   if (tabs.length < 2) return null;
   return (
     <div

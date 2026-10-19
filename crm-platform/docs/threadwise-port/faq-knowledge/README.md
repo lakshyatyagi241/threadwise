@@ -1,5 +1,7 @@
 # FAQ knowledge base: domain notes
 
+> **Retired (2026-10-19).** FAQs are now entries of an AI agent's knowledge base, searched by meaning for every reader; this FAQ engine's screens, settings and routes are gone. See [ADR-0021 addendum 3](../../adr/0021-faq-semantic-matching-pgvector.md) and [knowledge-base/README.md](../knowledge-base/README.md). The text below is kept as history.
+
 What it is, how it fits together, how to run and test it, and what is deliberately not done. API reference:
 [docs/api/faq-knowledge.md](../../api/faq-knowledge.md). Decision: [ADR-0021](../../adr/0021-faq-semantic-matching-pgvector.md).
 Model evaluation: [embedding-eval.md](embedding-eval.md).

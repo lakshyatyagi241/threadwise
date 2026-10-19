@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { DatabaseService } from '../../infra/db/database.service';
+import { KbIndexService } from '../knowledge-base';
 import {
   TRAINING_URL_FETCHER,
   type TrainingUrlFetcher,
@@ -33,6 +34,7 @@ export class SourceIngestConsumer implements OutboxSubscriber, OnModuleInit {
     private readonly registry: OutboxSubscriberRegistry,
     private readonly db: DatabaseService,
     private readonly repo: SourcesRepository,
+    private readonly kb: KbIndexService,
     @Inject(TRAINING_URL_FETCHER) private readonly fetcher: TrainingUrlFetcher,
   ) {}
 
@@ -76,9 +78,12 @@ export class SourceIngestConsumer implements OutboxSubscriber, OnModuleInit {
               error: null,
             };
     }
-    const settled = await this.db.txAs({ orgId }, (tx) =>
-      this.repo.finish(tx, orgId, sourceId, outcome),
-    );
+    // The page's passages are queued in the commit that makes the entry ready.
+    const settled = await this.db.txAs({ orgId }, async (tx) => {
+      const done = await this.repo.finish(tx, orgId, sourceId, outcome);
+      if (done && outcome.status === 'ready') await this.kb.indexSource(tx, orgId, sourceId);
+      return done;
+    });
     if (settled) this.logger.log({ orgId, status: outcome.status }, 'knowledge page read');
   }
 }

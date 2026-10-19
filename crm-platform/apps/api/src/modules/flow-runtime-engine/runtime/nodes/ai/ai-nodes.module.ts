@@ -14,7 +14,7 @@ import {
 import { AiKeysUsageAdminModule } from '../../../../ai-keys-usage-admin';
 import { CatalogProductsModule } from '../../../../catalog-products';
 import { CrmModule } from '../../../../crm';
-import { FaqKnowledgeModule } from '../../../../faq-knowledge';
+import { KnowledgeBaseModule } from '../../../../knowledge-base';
 import { LocalizationTranslationModule } from '../../../../localization-translation';
 import { AiCallService } from './ai-call.service';
 import { AiNodes } from './ai-nodes';
@@ -27,7 +27,7 @@ import { OrderingFlowService } from './ordering.service';
     AiKeysUsageAdminModule,
     CatalogProductsModule,
     CrmModule,
-    FaqKnowledgeModule,
+    KnowledgeBaseModule,
     LocalizationTranslationModule,
   ],
   providers: [

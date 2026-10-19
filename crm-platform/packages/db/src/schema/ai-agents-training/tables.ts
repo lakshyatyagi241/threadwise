@@ -5,6 +5,7 @@
 import {
   bigint,
   boolean,
+  check,
   foreignKey,
   index,
   integer,
@@ -14,11 +15,14 @@ import {
   primaryKey,
   smallint,
   text,
+  timestamp,
   unique,
   uuid,
 } from 'drizzle-orm/pg-core';
+import { sql } from 'drizzle-orm';
 import { createdAt, idColumn, orgIdColumn, rowVersion, updatedAt } from '../columns';
 import { organizations, users } from '../foundation';
+import { halfvec } from '../faq-knowledge/tables';
 
 export const aiChatAssistants = pgTable(
   'ai_chat_assistants',
@@ -115,6 +119,62 @@ export const aiTrainingSources = pgTable(
 
 export type AiTrainingSourcesRow = typeof aiTrainingSources.$inferSelect;
 export type NewAiTrainingSourcesRow = typeof aiTrainingSources.$inferInsert;
+
+/**
+ * The passages of a knowledge entry with their embeddings (the agent's search index). Mirrors migrations/20270205090000_*.sql.
+ * `uq_ai_training_chunks_position` and the partial pending index are declared by the SQL migration.
+ */
+export const aiTrainingChunks = pgTable(
+  'ai_training_chunks',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    sourceId: idColumn('source_id').notNull(),
+    assistantId: idColumn('assistant_id').notNull(),
+    position: integer('position').notNull(),
+    text: text('text').notNull(),
+    embedState: text('embed_state').notNull().default('pending'),
+    embedding: halfvec('embedding'),
+    embeddingModel: text('embedding_model'),
+    embeddedAt: timestamp('embedded_at', { withTimezone: true }),
+    embedAttempts: smallint('embed_attempts').notNull().default(0),
+    embedError: text('embed_error'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_ai_training_chunks_position').on(t.orgId, t.sourceId, t.position),
+    foreignKey({
+      name: 'ai_training_chunks_org_id_fkey',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_ai_training_chunks_source',
+      columns: [t.orgId, t.sourceId],
+      foreignColumns: [aiTrainingSources.orgId, aiTrainingSources.id],
+    }).onDelete('cascade'),
+    foreignKey({
+      name: 'fk_ai_training_chunks_assistant',
+      columns: [t.orgId, t.assistantId],
+      foreignColumns: [aiChatAssistants.orgId, aiChatAssistants.id],
+    }).onDelete('cascade'),
+    check('ck_ai_training_chunks_state', sql`${t.embedState} in ('pending', 'ready', 'failed')`),
+    check(
+      'ck_ai_training_chunks_ready',
+      sql`${t.embedState} <> 'ready' or (${t.embedding} is not null and ${t.embeddingModel} is not null)`,
+    ),
+    index('idx_ai_training_chunks_assistant').on(t.orgId, t.assistantId, t.embedState),
+    index('idx_ai_training_chunks_pending')
+      .on(t.orgId, t.id)
+      .where(sql`${t.embedState} = 'pending'`),
+  ],
+);
+
+export type AiTrainingChunksRow = typeof aiTrainingChunks.$inferSelect;
+export type NewAiTrainingChunksRow = typeof aiTrainingChunks.$inferInsert;
 
 export const aiAgents = pgTable(
   'ai_agents',

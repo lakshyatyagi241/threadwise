@@ -9,7 +9,7 @@ import {
   retentionSpecOf,
   type RetentionItemId,
 } from '@crm/contracts';
-import { LOG_RETENTION_DAYS } from '../../../src/modules/faq-knowledge/faq.rules';
+import { LOG_RETENTION_DAYS } from '../../../src/modules/knowledge-base/faq-retention.service';
 import { FORM_EVENT_RETENTION_DAYS } from '../../../src/modules/forms-builder/form-retention-sweep.service';
 import { SYNC_RUN_RETENTION_DAYS } from '../../../src/modules/leads/lead-retention-sweep.service';
 import { FAILURE_RETENTION_DAYS } from '../../../src/modules/webhook-fanout/webhook-forward-retention.service';

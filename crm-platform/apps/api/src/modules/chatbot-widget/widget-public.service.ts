@@ -19,6 +19,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { noticeGrantChannels, type ConsentChannel } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { ChannelIngestPublisher } from '../chat-conversations';
+import { KbRetrievalService } from '../knowledge-base';
 import {
   ConsentIntakeService,
   ConsentNoticeService,
@@ -32,7 +33,6 @@ import {
   type AssistantProfile,
   type InboxGateway,
   type InboxLine,
-  type KnowledgeSource,
   type VisitorForInbox,
   type WidgetForInbox,
 } from './_shims/tokens';
@@ -122,6 +122,7 @@ export class WidgetPublicService {
     private readonly media: ChatMediaStore,
     @Inject(INBOX_GATEWAY) private readonly inbox: InboxGateway,
     @Inject(ASSISTANT_DIRECTORY) private readonly assistants: AssistantDirectory,
+    private readonly kb: KbRetrievalService,
     private readonly ingest: ChannelIngestPublisher,
     private readonly notices: ConsentNoticeService,
     private readonly consentIntake: ConsentIntakeService,
@@ -405,10 +406,8 @@ export class WidgetPublicService {
       const history = await this.inbox.recent(tx, orgId, conversation.id, HISTORY_TURNS);
       const humanTookOver = await this.inbox.humanHasTakenOver(tx, orgId, conversation.id);
       let assistant: AssistantProfile | undefined;
-      let knowledge: KnowledgeSource[] = [];
       if (!humanTookOver && usesAi(widget) && widget.assistantId !== null) {
         assistant = await this.assistants.profile(tx, orgId, widget.assistantId);
-        if (assistant) knowledge = await this.assistants.knowledge(tx, orgId, widget.assistantId);
       }
       if (humanTookOver) {
         this.logger.log(
@@ -416,16 +415,26 @@ export class WidgetPublicService {
           '[WGT] bot silenced: a person has taken over',
         );
       }
-      return { visitor, conversation, history, inbound, assistant, knowledge };
+      return { visitor, conversation, history, inbound, assistant };
     });
 
     // 2. The vendor call, with no transaction open.
     let replyText: string | null = null;
     if (stored.assistant) {
+      // What the agent knows about THIS message: the few best passages of its own knowledge base (it reads the whole base only when
+      // the search cannot run). Read here, with no transaction open: the search may call the embedding vendor.
+      const found = await this.kb.retrieve(orgId, stored.assistant.id, data.body);
       replyText = await this.aiReply.reply({
         orgId,
         assistant: stored.assistant,
-        knowledge: stored.knowledge,
+        knowledge: found.passages.map((p) => ({
+          label: p.label,
+          kind: 'text',
+          content: p.text,
+          question: null,
+          answer: null,
+        })),
+        grounded: found.grounded,
         history: stored.history,
         visitorMessage: data.body,
       });

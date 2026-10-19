@@ -17,18 +17,14 @@ import { TrashIcon } from './icons';
 
 const INPUT =
   'w-full rounded-md border border-border bg-background px-2.5 py-1.5 text-[12.5px] outline-none focus-visible:border-brand focus-visible:ring-4 focus-visible:ring-brand/10 disabled:opacity-60';
-const KINDS = ['url', 'text', 'qa', 'file'] as const;
+const KINDS = ['url', 'text', 'faq', 'file'] as const;
 type AddKind = (typeof KINDS)[number];
 
-const STATE_PILL: Record<AiagSource['status'], { box: string; dot: string }> = {
-  ready: { box: 'bg-emerald-100 text-emerald-900', dot: 'bg-emerald-500' },
-  failed: { box: 'bg-danger/10 text-danger', dot: 'bg-danger' },
-  processing: { box: 'bg-muted text-muted-foreground', dot: 'bg-border' },
-};
-
 /**
- * Step 5, "Train the agent" (TW-AIAG-005..010): the four ways to add knowledge (a live URL, free text, a Q&A pair, a file) and the
- * list of entries with their state. A URL is read in the background, so the list asks again while one is `processing`.
+ * Step 5, "Train the agent" (TW-AIAG-005..010): the four ways to add knowledge (a web page, free text, FAQs, a file) and the list
+ * of this agent's entries. The knowledge belongs to this one agent. Only what a person must act on is shown: a page that is still
+ * being read, and one that failed (with its reason and a way to remove it). A page is read in the background, so the list asks
+ * again while one is being read.
  */
 export function KnowledgeStep({
   assistantId,
@@ -74,6 +70,8 @@ export function KnowledgeStep({
         <span className="flex-1 text-lg leading-none">{t('title')}</span>
         <span className="font-mono text-[10px] text-muted-foreground">{t('tag')}</span>
       </div>
+
+      <p className="mb-3 text-[12.5px] text-muted-foreground">{t('ownedNote')}</p>
 
       {assistantId === null ? (
         <p className="rounded-xl border border-border bg-muted/40 p-4 text-sm text-muted-foreground">
@@ -124,12 +122,6 @@ export function KnowledgeStep({
           )}
 
           <div className="overflow-hidden rounded-xl border border-border">
-            <div className="grid grid-cols-[80px_1fr_130px_44px] items-center gap-3 border-b border-border bg-muted/60 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
-              <div>{t('col.kind')}</div>
-              <div>{t('col.label')}</div>
-              <div>{t('col.state')}</div>
-              <div className="sr-only">{t('col.actions')}</div>
-            </div>
             {sources.isPending ? (
               <div className="flex justify-center p-6">
                 <Spinner label={t('loading')} />
@@ -186,49 +178,25 @@ function SourceRow({
   onDelete: () => void;
 }) {
   const t = useTranslations('aiTraining.knowledge');
-  const pill = STATE_PILL[s.status];
   return (
-    <li className="grid grid-cols-[80px_1fr_130px_44px] items-center gap-3 border-b border-border px-3 py-2 last:border-0 hover:bg-muted/40">
-      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-        {t(`kind.${s.kind}`)}
-      </div>
+    <li className="grid grid-cols-[1fr_44px] items-center gap-3 border-b border-border px-3 py-2 last:border-0 hover:bg-muted/40">
       <div className="min-w-0">
-        <div className="truncate text-[13px]">
-          {s.label}
-          {s.assistantId === null && (
-            <span className="ms-2 rounded bg-muted px-1.5 py-0.5 font-mono text-[9.5px] uppercase text-muted-foreground">
-              {t('workspaceWide')}
-            </span>
-          )}
-        </div>
+        <div className="truncate text-[13px]">{s.label}</div>
         {s.url && (
           <div className="truncate font-mono text-[11px] text-muted-foreground" dir="ltr">
             {s.url}
           </div>
         )}
-        {s.tokensEstimate !== null && s.status === 'ready' && (
-          <div className="font-mono text-[10px] text-muted-foreground">
-            {t('tokens', { count: s.tokensEstimate })}
+        {s.status === 'processing' && (
+          <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+            <Spinner />
+            {t('reading')}
           </div>
         )}
-      </div>
-      <div>
-        <span
-          className={cn(
-            'inline-flex items-center gap-1 rounded px-1.5 py-0.5 font-mono text-[10.5px] uppercase tracking-[0.14em]',
-            pill.box,
-          )}
-        >
-          {s.status === 'processing' ? (
-            <Spinner />
-          ) : (
-            <span className={cn('size-1.5 rounded-full', pill.dot)} aria-hidden="true" />
-          )}
-          {t(`state.${s.status}`)}
-        </span>
-        {s.error && (
-          <div className="mt-0.5 break-words text-[10px] text-danger" role="note">
-            {s.error}
+        {s.status === 'failed' && (
+          <div className="mt-0.5 break-words text-[11.5px] text-danger" role="note">
+            {t('failed')}
+            {s.error ? ` ${s.error}` : ''}
           </div>
         )}
       </div>
@@ -265,8 +233,8 @@ function AddPanel({
   const [label, setLabel] = useState('');
   const [url, setUrl] = useState('');
   const [content, setContent] = useState('');
-  const [question, setQuestion] = useState('');
-  const [answer, setAnswer] = useState('');
+  // FAQs: any number of question and answer rows, each saved as its own plain Q&A entry.
+  const [rows, setRows] = useState([{ question: '', answer: '' }]);
   const [file, setFile] = useState<File | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
   const [busy, setBusy] = useState(false);
@@ -281,12 +249,18 @@ function AddPanel({
   };
 
   const validate = (): boolean => {
-    if (label.trim() === '') return problem('label', 'label');
+    if (kind !== 'faq' && label.trim() === '') return problem('label', 'label');
     if (kind === 'url' && url.trim() === '') return problem('url', 'url');
     if (kind === 'text' && content.trim() === '') return problem('content', 'content');
-    if (kind === 'qa') {
-      if (question.trim() === '') return problem('question', 'question');
-      if (answer.trim() === '') return problem('answer', 'answer');
+    if (kind === 'faq') {
+      const filled = rows
+        .map((r, i) => ({ r, i }))
+        .filter(({ r }) => r.question.trim() || r.answer.trim());
+      if (filled.length === 0) return problem('question', 'question-0');
+      for (const { r, i } of filled) {
+        if (r.question.trim() === '') return problem('question', `question-${i}`);
+        if (r.answer.trim() === '') return problem('answer', `answer-${i}`);
+      }
     }
     if (kind === 'file') {
       if (!file) return problem('file', 'file');
@@ -306,13 +280,20 @@ function AddPanel({
         abort.current = new AbortController();
         setProgress(0);
         await uploadSource(assistantId, file!, label.trim(), setProgress, abort.current.signal);
+      } else if (kind === 'faq') {
+        // One entry per row, in order; a blank row is skipped. The entry's label is its question.
+        for (const r of rows.filter((x) => x.question.trim() || x.answer.trim()))
+          await addSource(assistantId, {
+            kind: 'qa',
+            label: r.question.trim().slice(0, AIAG_SOURCE_LIMITS.label),
+            question: r.question,
+            answer: r.answer,
+          });
       } else {
         const body: AddAiagSourceInput =
           kind === 'url'
             ? { kind, label: label.trim(), url: url.trim() }
-            : kind === 'text'
-              ? { kind, label: label.trim(), content }
-              : { kind: 'qa', label: label.trim(), question, answer };
+            : { kind: 'text', label: label.trim(), content };
         await addSource(assistantId, body);
       }
       onDone();
@@ -345,20 +326,22 @@ function AddPanel({
       <div className="font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
         {t(`panel.${kind}`)}
       </div>
-      <div>
-        <label htmlFor={f('label')} className="sr-only">
-          {t('label')}
-        </label>
-        <input
-          id={f('label')}
-          value={label}
-          maxLength={AIAG_SOURCE_LIMITS.label}
-          disabled={busy}
-          placeholder={t(`placeholder.label.${kind}`)}
-          onChange={(e) => setLabel(e.target.value)}
-          className={cn(INPUT, ring('label'))}
-        />
-      </div>
+      {kind !== 'faq' && (
+        <div>
+          <label htmlFor={f('label')} className="sr-only">
+            {t('label')}
+          </label>
+          <input
+            id={f('label')}
+            value={label}
+            maxLength={AIAG_SOURCE_LIMITS.label}
+            disabled={busy}
+            placeholder={t(`placeholder.label.${kind}`)}
+            onChange={(e) => setLabel(e.target.value)}
+            className={cn(INPUT, ring('label'))}
+          />
+        </div>
+      )}
       {kind === 'url' && (
         <div>
           <label htmlFor={f('url')} className="sr-only">
@@ -394,37 +377,59 @@ function AddPanel({
           />
         </div>
       )}
-      {kind === 'qa' && (
+      {kind === 'faq' && (
         <>
-          <div>
-            <label htmlFor={f('question')} className="sr-only">
-              {t('question')}
-            </label>
-            <input
-              id={f('question')}
-              value={question}
-              maxLength={AIAG_SOURCE_LIMITS.question}
-              disabled={busy}
-              placeholder={t('placeholder.question')}
-              onChange={(e) => setQuestion(e.target.value)}
-              className={cn(INPUT, ring('question'))}
-            />
-          </div>
-          <div>
-            <label htmlFor={f('answer')} className="sr-only">
-              {t('answer')}
-            </label>
-            <textarea
-              id={f('answer')}
-              rows={3}
-              value={answer}
-              maxLength={AIAG_SOURCE_LIMITS.answer}
-              disabled={busy}
-              placeholder={t('placeholder.answer')}
-              onChange={(e) => setAnswer(e.target.value)}
-              className={cn(INPUT, ring('answer'))}
-            />
-          </div>
+          {rows.map((r, i) => (
+            <div key={i} className="space-y-2 rounded-lg border border-border bg-background p-2">
+              <label htmlFor={f(`question-${i}`)} className="sr-only">
+                {t('question')}
+              </label>
+              <input
+                id={f(`question-${i}`)}
+                value={r.question}
+                maxLength={AIAG_SOURCE_LIMITS.question}
+                disabled={busy}
+                placeholder={t('placeholder.question')}
+                onChange={(e) =>
+                  setRows(rows.map((x, j) => (j === i ? { ...x, question: e.target.value } : x)))
+                }
+                className={cn(INPUT, ring(`question-${i}`))}
+              />
+              <label htmlFor={f(`answer-${i}`)} className="sr-only">
+                {t('answer')}
+              </label>
+              <textarea
+                id={f(`answer-${i}`)}
+                rows={3}
+                value={r.answer}
+                maxLength={AIAG_SOURCE_LIMITS.answer}
+                disabled={busy}
+                placeholder={t('placeholder.answer')}
+                onChange={(e) =>
+                  setRows(rows.map((x, j) => (j === i ? { ...x, answer: e.target.value } : x)))
+                }
+                className={cn(INPUT, ring(`answer-${i}`))}
+              />
+              {rows.length > 1 && (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => setRows(rows.filter((_, j) => j !== i))}
+                  className="text-[11.5px] text-danger underline"
+                >
+                  {t('faq.removeRow')}
+                </button>
+              )}
+            </div>
+          ))}
+          <Button
+            variant="secondary"
+            type="button"
+            disabled={busy}
+            onClick={() => setRows([...rows, { question: '', answer: '' }])}
+          >
+            {t('faq.addAnother')}
+          </Button>
         </>
       )}
       {kind === 'file' && (

@@ -130,7 +130,7 @@ export const aiagStatsSchema = z.object({
   /** Assistants of the workspace. */
   all: z.number().int(),
   active: z.number().int(),
-  /** Knowledge entries of the workspace, including workspace-wide ones. */
+  /** Knowledge entries of the whole workspace (every agent's). */
   sources: z.number().int(),
   /** Entries in the `ready` state (the "indexed" count). */
   ready: z.number().int(),
@@ -148,7 +148,7 @@ export const aiagPickerItemSchema = z.object({
   name: z.string(),
   aiProvider: z.string(),
   aiModel: z.string(),
-  /** Ready entries the assistant would answer from (its own plus workspace-wide ones), as the flow picker counts them. */
+  /** Ready entries the assistant answers from (its own), as the flow picker counts them. */
   sources: z.number().int(),
 });
 export type AiagPickerItem = z.infer<typeof aiagPickerItemSchema>;
