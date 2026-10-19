@@ -20,14 +20,11 @@ export function FaqFlowProvider({
   flowId,
   flowName,
   onDirtyChange,
-  builder = 'simple',
   children,
 }: {
   flowId: string;
   flowName: string;
   onDirtyChange?: (dirty: boolean) => void;
-  /** The builder hosting the tab, so a link between the FAQ screens stays in it. */
-  builder?: 'simple' | 'advanced';
   children: ReactNode;
 }) {
   const value = useMemo<FaqFlowValue>(
@@ -35,9 +32,9 @@ export function FaqFlowProvider({
       flowId,
       flowName,
       onDirtyChange,
-      href: (target) => faqHref(flowId, target, builder),
+      href: (target) => faqHref(flowId, target),
     }),
-    [flowId, flowName, onDirtyChange, builder],
+    [flowId, flowName, onDirtyChange],
   );
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

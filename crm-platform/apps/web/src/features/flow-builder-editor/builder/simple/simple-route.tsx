@@ -23,17 +23,21 @@ export function SimpleRoute({ flowId }: { flowId?: string }) {
   });
   const mode = overview.data?.builderMode;
   // A bot (WhatsApp or website chat) stays here whatever the workspace uses; a saved flow's type decides, and a new one is a bot.
+  // Only an Advanced workspace needs the type, and the Simple screen loads the same flow with the same options.
   const flow = useQuery({
     queryKey: FLB_KEYS.flow(flowId ?? ''),
     queryFn: ({ signal }) => flowsApi.get(flowId!, signal),
-    enabled: !!flowId,
+    enabled: !!flowId && mode === 'advanced',
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
     retry: false,
   });
   const isBot = flowId ? flow.data?.flowType === 'chat' || flow.data?.flowType === 'web' : true;
   // The FAQs of a flow are edited here only: a link to them opens this screen even where the workspace builds in Advanced.
   const wantsFaqs = !!flowId && params.get('tab') === 'faqs';
-  // Until a saved flow's type is known, an Advanced workspace waits rather than guessing where it belongs.
-  const deciding = mode === 'advanced' && !!flowId && flow.isPending;
+  // Until the workspace mode and a saved flow's type are known, wait rather than mount the Simple screen for a flow that may belong on the canvas.
+  const deciding = !!flowId && (overview.isPending || (mode === 'advanced' && flow.isPending));
   const redirectToAdvanced = mode === 'advanced' && !wantsFaqs && !isBot && !deciding;
   useEffect(() => {
     if (!allowed) router.replace('/inbox');

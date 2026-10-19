@@ -63,10 +63,7 @@ describe('flow card (TW-FLB-001)', () => {
   it('offers the FAQs link only on a simple (chat or web) flow, and only to a person who can read FAQs', () => {
     const withFaqs = (over: Partial<FlowSummary> = {}, faqs = true) =>
       renderToStaticMarkup(
-        <FlowCard
-          flow={flow(over)}
-          actions={{ ...actions, can: { ...actions.can, faqs }, builderMode: 'simple' }}
-        />,
+        <FlowCard flow={flow(over)} actions={{ ...actions, can: { ...actions.can, faqs } }} />,
       );
     expect(withFaqs()).toContain(
       'href="/flows/simple/11111111-1111-4111-8111-111111111111?tab=faqs"',
