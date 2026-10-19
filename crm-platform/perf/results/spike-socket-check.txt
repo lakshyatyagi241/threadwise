@@ -1,0 +1,13 @@
+Spike socket: 20 -> 60 per second
+
+PASS  errors during ramp stay under 5.00%  [0.00%]
+PASS  errors during hold stay under 5.00%  [0.00%]
+PASS  errors in drop stay under 1.00%  [0.00%]
+PASS  errors in recovery stay under 1.00%  [0.00%]
+PASS  canary healthy in normal  [0.00%]
+PASS  canary healthy in ramp  [0.00%]
+PASS  canary healthy in hold  [0.00%]
+PASS  canary healthy in drop  [0.00%]
+PASS  canary healthy in recovery  [0.00%]
+PASS  recovery p95 is back within twice normal (or +50 ms)  [normal 5 ms, recovery 5 ms]
+PASS  no iterations dropped in recovery  [0]

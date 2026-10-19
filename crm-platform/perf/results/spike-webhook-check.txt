@@ -1,0 +1,16 @@
+Spike webhook: 50 -> 150 per second
+
+PASS  errors during ramp stay under 5.00%  [0.00%]
+PASS  errors during hold stay under 5.00%  [0.00%]
+PASS  errors in drop stay under 1.00%  [0.00%]
+PASS  errors in recovery stay under 1.00%  [0.00%]
+PASS  canary healthy in normal  [0.00%]
+PASS  canary healthy in ramp  [0.00%]
+PASS  canary healthy in hold  [0.00%]
+PASS  canary healthy in drop  [0.00%]
+PASS  canary healthy in recovery  [0.00%]
+PASS  recovery p95 is back within twice normal (or +50 ms)  [normal 19 ms, recovery 15 ms]
+PASS  no iterations dropped in recovery  [0]
+PASS  the API did not restart  [0 restart(s)]
+FAIL  queues are empty at the end of recovery  [peak 13503, last 13503]
+PASS  memory did not grow without bound (end under 1.5x the peak of the first quarter)  [start 455 MB, peak 677 MB, end 371 MB]
