@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "自动化与 AI",
-      "title": "自动分配",
+      "title": "会话自动分配",
       "subtitle": "自动将每个新会话分配给合适的客服。规则按从上到下的顺序依次匹配。",
       "noAccess": "您没有查看自动分配设置的权限。",
       "create": "创建规则",
@@ -100,7 +100,7 @@
       "autoReplySummary": "发送回复：{body}"
     },
     "form": {
-      "back": "自动分配",
+      "back": "会话自动分配",
       "noAccess": "您没有更改自动分配规则的权限。",
       "loading": "正在加载规则",
       "notFound": "该规则已不存在。",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "自动分配",
+      "eyebrow": "会话自动分配",
       "title": "营业时间",
       "subtitle": "使用营业时间的规则和 SLA 目标只计算这些时段内的时间。",
       "close": "关闭",

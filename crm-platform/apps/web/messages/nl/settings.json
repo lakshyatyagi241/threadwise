@@ -285,7 +285,7 @@
         "keywords": "geta, publiceren, bot, console, live zetten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatisch toewijzen",
+        "label": "Automatische toewijzing van gesprekken",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
       },

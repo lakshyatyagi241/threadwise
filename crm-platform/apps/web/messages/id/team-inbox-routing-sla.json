@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Otomatisasi dan AI",
-      "title": "Penugasan otomatis",
+      "title": "Penugasan otomatis percakapan",
       "subtitle": "Berikan setiap percakapan baru ke agen yang tepat secara otomatis. Aturan dicoba berurutan, dari atas.",
       "noAccess": "Anda tidak memiliki izin untuk melihat pengaturan penugasan otomatis.",
       "create": "Buat aturan",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Mengirim balasan: {body}"
     },
     "form": {
-      "back": "Penugasan otomatis",
+      "back": "Penugasan otomatis percakapan",
       "noAccess": "Anda tidak memiliki izin untuk mengubah aturan penugasan otomatis.",
       "loading": "Memuat aturan",
       "notFound": "Aturan ini sudah tidak ada.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Penugasan otomatis",
+      "eyebrow": "Penugasan otomatis percakapan",
       "title": "Jam kerja",
       "subtitle": "Aturan dan target SLA yang memakai jam kerja hanya menghitung waktu di dalam jam ini.",
       "close": "Tutup",

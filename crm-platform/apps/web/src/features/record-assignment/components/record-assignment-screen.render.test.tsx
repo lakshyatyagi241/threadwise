@@ -283,7 +283,7 @@ const setSelect = (el: Element, value: string) =>
   });
 
 describe('the record assignment rules screen', () => {
-  it('names the tabs and sentences with the workspace words, and links both ways to Auto-assignment', async () => {
+  it('names the tabs and sentences with the workspace words, and links both ways to Conversation auto-assignment', async () => {
     await render();
     const tabs = [...host.querySelector('[role="tablist"]')!.querySelectorAll('[role="tab"]')].map(
       (t) => t.textContent,
@@ -292,6 +292,9 @@ describe('the record assignment rules screen', () => {
     expect(host.querySelector('[data-testid="ra-cross-note"]')!.textContent).toContain('patients');
     expect(host.querySelector('[data-testid="ra-cross-note"] a')!.getAttribute('href')).toBe(
       '/auto-assignment',
+    );
+    expect(host.querySelector('[data-testid="ra-cross-note"] a')!.textContent).toBe(
+      'Conversation auto-assignment',
     );
   });
 

@@ -301,7 +301,7 @@
         "keywords": "geta, publikacja, bot, konsola, uruchom, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatyczne przydzielanie",
+        "label": "Automatyczne przypisywanie rozmów",
         "description": "Automatycznie przydzielaj nowe rozmowy właściwemu agentowi, po kolei lub według reguł.",
         "keywords": "routing, round robin, przydział, agenci, reguły skrzynki, rozdziel, właściciel"
       },

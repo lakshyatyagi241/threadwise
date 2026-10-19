@@ -53,7 +53,13 @@ export interface BookingType {
     body: string | null;
     waTemplateId: string | null;
   }>;
-  templates: Array<{ event: string; channel: string; plainBody: string | null }>;
+  templates: Array<{
+    event: string;
+    channel: string;
+    plainBody: string | null;
+    waTemplateId?: string | null;
+    libraryTemplateId?: string | null;
+  }>;
   payment: {
     fee: string;
     total: string;
@@ -121,6 +127,25 @@ export interface Slot {
 
 /** Appointments helpers on top of the contacts harness (same app, same database, organizations of their own). */
 export class AppointmentsApi extends Api {
+  /**
+   * A new workspace whose owner has switched email, WhatsApp and SMS on for appointment messages (BL-350): a workspace created now
+   * starts with no channel chosen, and a booking type can name only chosen channels. `signupUndecided` is the workspace as it is born.
+   */
+  async signup(label = 'con'): Promise<Tenant> {
+    const t = await super.signup(label);
+    await this.h.owner.query(
+      `INSERT INTO appointment_channel_settings (org_id, channel, enabled, source)
+       SELECT $1, c, true, 'owner' FROM unnest(ARRAY['email', 'whatsapp', 'sms']) AS c
+       ON CONFLICT (org_id, channel) DO UPDATE SET enabled = true`,
+      [t.orgId],
+    );
+    return t;
+  }
+
+  signupUndecided(label = 'con'): Promise<Tenant> {
+    return super.signup(label);
+  }
+
   /** Idempotent POSTs need a key; a fresh one per call. */
   post(token: string, path: string, body: unknown = {}) {
     return this.http()

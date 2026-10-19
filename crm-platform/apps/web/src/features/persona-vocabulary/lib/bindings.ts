@@ -71,7 +71,7 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     // Reminders and follow-ups of a booking type (BL-283): the card on Appointment settings, the editor's Messaging step and the drawer's
     // list. Written with the default nouns (appointment, contact) so a workspace that says Visit or Patient reads its own words.
     id: 'reminders',
-    prefixes: ['appointments.reminders'],
+    prefixes: ['appointments.reminders', 'appointments.channels', 'appointments.templates'],
   },
   {
     id: 'deals',

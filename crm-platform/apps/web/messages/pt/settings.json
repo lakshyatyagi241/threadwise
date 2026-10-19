@@ -301,7 +301,7 @@
         "keywords": "geta, publicar, bot, console, colocar no ar, chatbot"
       },
       "auto-assignment": {
-        "label": "Atribuição automática",
+        "label": "Atribuição automática de conversas",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
       },

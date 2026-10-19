@@ -1,0 +1,42 @@
+{
+  "_": "QA #63. api: bytes per response for the endpoints a screen loads first (uncompressed body), and whether a large response is compressed. web: gzip bytes of the JavaScript a route loads, from the next build manifest. Raise a budget only with a reason in the pull request.",
+  "api": {
+    "requireCompression": true,
+    "compressAboveBytes": 1024,
+    "default": {
+      "maxBytes": 60000
+    },
+    "endpoints": {},
+    "measure": [
+      "GET /v2/auth/session",
+      "GET /v2/contacts?limit=20",
+      "GET /v2/contacts?limit=50",
+      "GET /v2/companies?limit=20",
+      "GET /v2/tags",
+      "GET /v2/tasks?limit=20",
+      "GET /v2/inbox/conversations?limit=20",
+      "GET /v2/crm/dashboard"
+    ]
+  },
+  "web": {
+    "defaultRouteGzipBytes": 1050000,
+    "routes": {
+      "/campaigns/create": 1110000,
+      "/chatbot-widgets/[id]/edit": 1130000,
+      "/chatbot-widgets/create": 1130000,
+      "/contacts": 1280000,
+      "/contacts/[id]/[[...section]]": 1240000,
+      "/deals": 1170000,
+      "/estimates": 1140000,
+      "/estimates/[id]": 1140000,
+      "/estimates/new": 1140000,
+      "/flows/builder": 1260000,
+      "/flows/builder/[id]": 1260000,
+      "/flows/simple": 1240000,
+      "/flows/simple/[id]": 1240000,
+      "/proposals": 1140000,
+      "/proposals/[id]": 1140000,
+      "/proposals/new": 1140000
+    }
+  }
+}

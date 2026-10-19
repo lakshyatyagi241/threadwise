@@ -93,6 +93,7 @@ export function toBookingTypeResponse(
       event: t.event,
       channel: t.channel,
       waTemplateId: t.waTemplateUuid,
+      libraryTemplateId: t.libraryTemplateUuid,
       plainBody: t.plainBody,
       variableMap: t.variableMap,
     })),

@@ -4,7 +4,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { Alert, Button, Spinner, useToast } from '@crm/ui';
-import { KEYS, useBookingTypes, useWaTemplates } from '../api/hooks';
+import {
+  KEYS,
+  useAppointmentChannels,
+  useBookingTypes,
+  useMessageLibrary,
+  useWaTemplates,
+} from '../api/hooks';
 import type { BookingType } from '../api/schemas';
 import { appointmentsApi } from '../api/service';
 import { errorKind } from '../lib/errors';
@@ -60,6 +66,8 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
   const { toast } = useToast();
   const qc = useQueryClient();
   const templates = useWaTemplates();
+  const channelStates = useAppointmentChannels().data;
+  const library = useMessageLibrary().data;
 
   const saved = useMemo(() => remindersFromType(type.reminders), [type.reminders]);
   const [rules, setRules] = useState<ReminderDraft[]>(saved);
@@ -165,6 +173,8 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             errorOf={errorOf}
             typeName={type.name}
             templates={templates.data ?? []}
+            channelStates={channelStates}
+            library={library}
             idPrefix={`rem-${type.id}`}
           />
           {canEdit ? (

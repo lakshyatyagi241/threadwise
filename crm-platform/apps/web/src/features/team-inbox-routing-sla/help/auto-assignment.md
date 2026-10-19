@@ -1,6 +1,6 @@
 ---
 id: auto-assignment
-title: Auto-assignment
+title: Conversation auto-assignment
 summary: Give each new conversation to the right agent automatically, with rules that go in turn, pick the least busy agent or name one person.
 area: settings
 order: 60
@@ -27,7 +27,7 @@ keywords:
 
 ## What it is for
 
-Auto-assignment decides who gets a new conversation, so nobody has to claim it by hand. You write rules; when a customer starts a new conversation, or writes again after a finished one was reopened and nobody holds it, the rules are tried from the top and the first one that matches and finds an available agent takes it.
+Conversation auto-assignment decides who gets a new conversation, so nobody has to claim it by hand. You write rules; when a customer starts a new conversation, or writes again after a finished one was reopened and nobody holds it, the rules are tried from the top and the first one that matches and finds an available agent takes it.
 
 People on leave are never chosen. If a rule names someone who is on leave, their delegate (set in Team members) takes their place when available; otherwise the rule's team decides, and if nobody can take the conversation the managers are told.
 
@@ -35,7 +35,7 @@ Rules never take a conversation away from someone. A conversation that already h
 
 ## How to use it
 
-1. Open **Settings**, go to **Automation** and select **Auto-assignment**.
+1. Open **Settings**, go to **Automation** and select **Conversation auto-assignment**.
 2. Select **Create rule**. Give it a **Rule name** and, if you like, a **Description** for your team.
 3. Under **When a new conversation arrives**, set the conditions. Every part you fill in must match; a part you leave empty is ignored.
 4. Under **What the rule does**, tick what it should do: **Assign to agents or teams** (then choose **How to choose** and tick the agents or teams), **Mark the conversation as spam**, a priority, tags to add, an automatic reply, or an escalation (after the minutes you choose with no reply from us, it is reassigned to this rule's agents and/or its priority is raised). A rule must do at least one of these.

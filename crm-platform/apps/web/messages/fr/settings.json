@@ -301,7 +301,7 @@
         "keywords": "geta, publier, bot, console, mise en ligne, chatbot"
       },
       "auto-assignment": {
-        "label": "Attribution automatique",
+        "label": "Attribution automatique des conversations",
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
       },
