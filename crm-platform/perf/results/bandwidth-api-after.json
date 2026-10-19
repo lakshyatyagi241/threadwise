@@ -1,0 +1,110 @@
+{
+  "generatedAt": "2026-10-18T18:14:24.278Z",
+  "mode": "api",
+  "result": [
+    {
+      "route": "GET /v2/auth/session",
+      "status": 200,
+      "identityBytes": 11528,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.21790423317140875
+      },
+      "gzipIfCompressedBytes": 2512,
+      "cacheControl": "no-store, no-cache, must-revalidate, private, max-age=0",
+      "etag": true
+    },
+    {
+      "route": "GET /v2/contacts?limit=20",
+      "status": 200,
+      "identityBytes": 20891,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.08956009764970561
+      },
+      "gzipIfCompressedBytes": 1871,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/contacts?limit=50",
+      "status": 200,
+      "identityBytes": 52061,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.07408616814890225
+      },
+      "gzipIfCompressedBytes": 3857,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/companies?limit=20",
+      "status": 200,
+      "identityBytes": 11356,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.11967241986615006
+      },
+      "gzipIfCompressedBytes": 1359,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/tags",
+      "status": 200,
+      "identityBytes": 9347,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.23162512035947364
+      },
+      "gzipIfCompressedBytes": 2165,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/tasks?limit=20",
+      "status": 200,
+      "identityBytes": 10395,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.11534391534391535
+      },
+      "gzipIfCompressedBytes": 1199,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/inbox/conversations?limit=20",
+      "status": 200,
+      "identityBytes": 15928,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.12556504269211452
+      },
+      "gzipIfCompressedBytes": 2000,
+      "cacheControl": null,
+      "etag": true
+    },
+    {
+      "route": "GET /v2/crm/dashboard",
+      "status": 200,
+      "identityBytes": 3898,
+      "gzip": {
+        "compressed": true,
+        "encoding": "br",
+        "ratio": 0.24756285274499742
+      },
+      "gzipIfCompressedBytes": 965,
+      "cacheControl": null,
+      "etag": true
+    }
+  ]
+}
