@@ -1034,9 +1034,6 @@ const SCRIPT = `
     t.className = 'title';
     t.textContent = tx('intakeTitle', 'Tell us a bit about you');
     box.appendChild(t);
-    if (cfg.collect_name) field(box, tx('name', 'Name'), 'i-name', 'text');
-    if (cfg.collect_email) field(box, tx('email', 'Email'), 'i-email', 'email');
-    if (cfg.collect_phone) field(box, tx('phone', 'Phone'), 'i-phone', 'tel');
     if (cfg.age_gate && cfg.age_gate.pending) {
       if (cfg.age_gate.mode === 'dob') {
         field(box, tx('ageDobLabel', 'Date of birth'), 'i-dob', 'date');
@@ -1133,7 +1130,7 @@ const SCRIPT = `
         settled = true;
         if (cfg.whatsapp_url && cfg.mode !== 'ai') addWaCta();
         var ageAsk = !!(cfg.age_gate && cfg.age_gate.pending);
-        if (((cfg.collect_name || cfg.collect_email || cfg.collect_phone) && !(vis.name || vis.email || vis.phone)) || ageAsk) {
+        if (ageAsk) {
           renderIntake();
         } else {
           intakeDone = true;

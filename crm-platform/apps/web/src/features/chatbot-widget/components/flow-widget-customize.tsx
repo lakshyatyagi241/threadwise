@@ -203,9 +203,18 @@ function Panel({
               active === sec.id ? 'bg-brand/10 text-brand' : 'text-muted-foreground hover:bg-muted',
             )}
           >
-            <span aria-hidden="true" className="text-[18px] leading-none">
-              {sec.icon}
-            </span>
+            <svg
+              aria-hidden="true"
+              viewBox="0 0 24 24"
+              className="size-5"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.75}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              {RAIL_ICONS[sec.id]}
+            </svg>
             {t(`rail.${sec.id}`)}
           </button>
         ))}
@@ -365,12 +374,44 @@ function Panel({
 type SectionId = 'look' | 'window' | 'launcher' | 'behave' | 'launch';
 
 /** The rail's entries, in the order the sections appear in the panel. */
-const SECTIONS: { id: SectionId; icon: string }[] = [
-  { id: 'look', icon: '🎨' },
-  { id: 'window', icon: '💬' },
-  { id: 'launcher', icon: '🔘' },
-  { id: 'behave', icon: '⚙️' },
-  { id: 'launch', icon: '🚀' },
+const RAIL_ICONS: Record<SectionId, ReactNode> = {
+  look: (
+    <>
+      <path d="M12 3a9 9 0 1 0 0 18c1.1 0 1.8-.9 1.5-1.9-.3-1 .4-2.1 1.5-2.1H17a4 4 0 0 0 4-4c0-5-4-10-9-10Z" />
+      <circle cx="7.5" cy="12" r="1" />
+      <circle cx="10" cy="7.5" r="1" />
+      <circle cx="15" cy="7.5" r="1" />
+    </>
+  ),
+  window: <path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" />,
+  launcher: (
+    <>
+      <circle cx="12" cy="12" r="9" />
+      <circle cx="12" cy="12" r="3.5" />
+    </>
+  ),
+  behave: (
+    <>
+      <path d="M4 7h10M18 7h2M4 17h2M10 17h10" />
+      <circle cx="16" cy="7" r="2" />
+      <circle cx="8" cy="17" r="2" />
+    </>
+  ),
+  launch: (
+    <>
+      <path d="M5 15c-1.5 1.3-2 4-2 6 2 0 4.7-.5 6-2M14 5c2.5-2 5.5-2 7-2 0 1.5 0 4.5-2 7l-5 5-5-5 5-5Z" />
+      <path d="M9 11l-4-1 2-3 4 0M13 15l1 4 3-2 0-4" />
+      <circle cx="15" cy="9" r="1" />
+    </>
+  ),
+};
+
+const SECTIONS: { id: SectionId }[] = [
+  { id: 'look' },
+  { id: 'window' },
+  { id: 'launcher' },
+  { id: 'behave' },
+  { id: 'launch' },
 ];
 
 /** One section of the settings panel: a heading, a line of lead and its controls. */
