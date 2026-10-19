@@ -1043,6 +1043,390 @@
     {
       "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
       "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/infra/providers/node-bridge-runtime/device-auth-store.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/admin-console-shell/workspace-settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/ai-agents-training/assistants.service.ts await this.files.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/booking-types.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/audit-log/audit-log.service.ts await this.repo.recordUuids(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/flows/login.service.ts await this.attack.recordFailure(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/flows/login.service.ts await this.audit.recordStandalone(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/impersonation.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/operator-auth.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/tenant-directory.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/broadcast-dispatch.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/broadcast-due.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/call-events.service.ts await this.permissions.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/call-recording-retention.service.ts await this.media.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/calling-readiness.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-dispatch.service.ts await this.repo.markSent(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-broadcasts.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-retry.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/mail-outbound-attachments.service.ts await this.store.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-facebook/backfill.service.ts await this.inbox.recordInbound(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-viber/vib-broadcast-sender.service.ts await this.repo.markRecipient(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-wechat/broadcasts.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies-csv.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-dedupe/contact-dedupe.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-dedupe/contact-dedupe.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contacts.service.ts await tx.execute",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contacts.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/credit-notes.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoices.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/sales-orders.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/sales-docs/sales-doc-expiry-sweep.service.ts await this.repo.insertEvent(",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/data-retention/retention.worker.ts await this.storage.deletePrefix(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/faq-knowledge/faq-embed.worker.ts await this.repo.markReady(",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/flow-runtime-engine/triggers/schedule.sweeper.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/forms-builder/form-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/forms-links-groups/wa-chat-links.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth-automation.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth-automation.service.ts await this.repo.markSuggestion(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/leads/lead-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/localization-translation/translation.service.ts await this.usage.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketing-site-cms/legal.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/cli/seed-app.runner.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.repo.insertImported(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.repo.update(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/conversation-notification.consumer.ts await this.publisher.created(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/conversation-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/notification-fanout.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/notification-fanout.ts await this.publisher.created(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/salesdoc-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/plans-subscriptions-trials/plan-retention.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/billing-settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/gateway.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-settings-branding-storage/settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-support-desk/sla.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/privacy/requests/privacy-requests.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-run.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/automations.service.ts await this.events.upsert(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/cart.service.ts await this.queue.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/compliance.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-routing-sla/sla-sweep.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/waboo-migration/waboo-migration.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/credit-packages.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/meta-rate-card.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-margins.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-rates.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/wallet-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-forward.processor.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-orders.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave-sweep.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/storage-purge.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/workers/outbox-drain.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/workers/partition-maintenance.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/_shims/sql-sender-directory.ts await tx.execute",
+      "reason": "one mailbox lookup per distinct sender key of one broadcast/send request (the keys are the senders the user picked, a handful); reads, not writes; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/tracking/link-tracker.ts await tx.execute",
+      "reason": "retry on a short-code collision with a fixed list of five lengths; at most five attempts, and it stops at the first free code; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/email-delivery.service.ts await tx.execute",
+      "reason": "candidate ids of ONE bounce, sliced to MAX_CANDIDATES before the loop (find()), and each id is a LIMIT 1 lookup that returns on the first hit; bounded by a constant; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/contact-consent/consent-intake.service.ts await this.ledger.recordInTx(",
+      "reason": "one ledger entry per consent channel of one intake (the channel list is the closed set of channels, at most a handful) and the ledger API records one entry per call; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.groupsRepo.insertIfAbsent(",
+      "reason": "creates only the group names of the file that did not already exist (existing ones come from one findByNames read), so it is one insert per NEW distinct group name, bounded by the distinct group column values of the file; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segments.service.ts await tx.execute",
+      "reason": "one count per segment the user selected to refresh; each segment has its own compiled filter, so the count queries cannot share a statement; capped by the number of selected segments; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/operator-pricing.service.ts await tx.execute",
+      "reason": "operator-run pricing summary (platform staff, not tenant traffic): probe/page loops over the workspaces that hold a price override, executed on demand; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/subscription-lifecycle.service.ts await tx.execute",
+      "reason": "cron reminder sweep: each due subscription takes its own advisory lock before it is reminded, so the lock and the write are per row by design; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/plans-subscriptions-trials/plan-analytics.service.ts await tx.execute",
+      "reason": "loop over the fixed FEATURE_TABLES list (a dozen in-code entries) probing whether each table exists; platform dashboard, not request data; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/schedule-create.service.ts await tx.execute",
+      "reason": "one row per planned slot of ONE schedule being created (the plan is built from the user's schedule settings and capped by the schedule size limits); the recipients, the large part, are inserted in PIVOT_CHUNK multi-row statements; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts await tx.execute",
+      "reason": "one row per variant of ONE mirrored store product (a product has a handful of variants); the sync handles one product at a time; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups.service.ts await tx.execute",
+      "reason": "one subject lookup per entry of one request's group list, read-only and bounded by the groups returned for one page; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sync.service.ts await this.repo.markLeft(",
+      "reason": "one markLeft per group that disappeared from a device in this sync; the repo method returns the row for the audit/outbox, so it is per row by design; bounded by the groups one device left; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/message-log-archive.service.ts await this.repo.deleteArchived(",
+      "reason": "nightly archive: the loop is over the workspaces that had events on one UTC day (archiveDay); each workspace's archive write and its delete of the same rows run in one transaction so the archive and the live table cannot disagree (the code throws if deleted != archived), so the delete is per workspace by design; the events inside it are read in BATCH-sized pages; reviewed 2026-10-19"
     }
   ],
   "47": [
@@ -1383,6 +1767,38 @@
     {
       "key": "api_library_logs: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
       "reason": "verified: api-library-logs.repository.ts builds every query from this.where(orgId, filters) and api-library-retention.service.ts deletes by (id, created_at); no query looks a row up by uuid. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_cart_recoveries_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_shopify_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_woocommerce_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_wa_pending_orders_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_ai_training_sources_kind is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_ai_training_sources_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_users_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20261229090100_con_enum_checks_closed_sets.sql: chk_event_outbox_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20261229090100_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     }
   ],
   "49": [
