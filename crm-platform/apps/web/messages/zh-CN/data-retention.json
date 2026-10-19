@@ -101,7 +101,8 @@
       "liveDaysHint": "数据保留在数据库中的天数。允许范围：{min} 至 {max}。",
       "keepForever": "永久保留归档",
       "archiveDays": "归档天数",
-      "archiveDaysHint": "归档再保留的天数，之后将被删除。允许范围：{min} 至 {max}。"
+      "archiveDaysHint": "归档再保留的天数，之后将被删除。允许范围：{min} 至 {max}。",
+      "keepForeverShort": "永久保留"
     },
     "summary": {
       "noArchive": "写入后 {live, plural, other {# 天}}永久删除。",
@@ -143,7 +144,8 @@
       "confirmSave": "保存并应用",
       "resetTitle": "将 {item} 恢复为当前行为？",
       "resetBody": "已保存的数值将被移除。每晚任务会回到此项目的内置规则。已归档的数据仍保留在归档中。",
-      "confirmReset": "恢复当前行为"
+      "confirmReset": "恢复当前行为",
+      "resetShort": "重置"
     },
     "preview": {
       "title": "保存 {item} 的保留设置？",
@@ -199,7 +201,9 @@
         "daily_archive": "数据库，然后是数据库归档",
         "table": "仅数据库",
         "file": "文件"
-      }
+      },
+      "actions": "操作",
+      "about": "这是什么？"
     }
   }
 }

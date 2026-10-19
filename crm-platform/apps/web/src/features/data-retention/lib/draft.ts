@@ -55,6 +55,13 @@ export function isChanged(item: RetentionItemView, draft: ItemDraft): boolean {
   return r.values.liveDays !== item.liveDays || r.values.archiveDays !== item.archiveDays;
 }
 
+/** True when the fields differ from what the row shows now (a row on its default is not "edited" until a number changes). */
+export function isEdited(item: RetentionItemView, draft: ItemDraft): boolean {
+  const r = valuesOf(item, draft);
+  if (!('values' in r)) return true;
+  return r.values.liveDays !== item.liveDays || r.values.archiveDays !== item.archiveDays;
+}
+
 export interface Summary {
   kind: 'noArchive' | 'archiveForever' | 'archiveThenDelete';
   live: number;

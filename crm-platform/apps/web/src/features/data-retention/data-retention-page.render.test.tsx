@@ -78,7 +78,7 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
     // Items that can be archived have an archive field and the "for ever" switch; the others do not.
     const archivable = RETENTION_ITEMS.filter((i) => i.canArchive).length;
     expect(html.match(/type="number"/g)).toHaveLength(RETENTION_ITEMS.length + archivable);
-    expect(html).toContain('data-testid="retention-summary-an_events"');
+    expect(html).toContain('data-testid="retention-deleted-an_events"');
   });
 
   it('covers every item the platform deletes on a schedule, in both kinds of retention', () => {
@@ -110,7 +110,7 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
     expect(RETENTION_ITEMS.some((i) => i.canArchive && i.kind === 'daily_archive')).toBe(true);
   });
 
-  it('puts every number in one table that links to the cards', () => {
+  it('shows every item as one editable row of a single table', () => {
     const html = page(
       overview({}, [
         item('an_events', { source: 'custom', liveDays: 30, archiveDays: 120, rowVersion: 1 }),
@@ -119,14 +119,16 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
       ]),
       locale,
     );
-    expect(html).toContain('data-testid="retention-table"');
-    expect(html).toContain('data-testid="retention-row-live-an_events"');
-    expect(html).toContain('href="#retention-faq_match_log"');
+    expect(html.match(/<table/g)).toHaveLength(1);
+    expect(html).toContain('data-testid="retention-input-live-an_events"');
+    expect(html).toContain('data-testid="retention-input-archive-an_events"');
+    // A table that cannot be archived has no archive field.
+    expect(html).not.toContain('data-testid="retention-input-archive-faq_match_log"');
     // 30 days live + 120 archived = deleted for good after 150 days; a database-only item is deleted after its live days.
-    expect(html).toMatch(/retention-row-deleted-an_events"[^>]*>[^<]*150/);
-    expect(html).toMatch(/retention-row-deleted-faq_match_log"[^>]*>[^<]*90/);
+    expect(html).toMatch(/retention-deleted-an_events"[^>]*>[^<]*150/);
+    expect(html).toMatch(/retention-deleted-faq_match_log"[^>]*>[^<]*90/);
     // An archive kept for ever is never deleted.
-    expect(html).toContain('data-testid="retention-row-deleted-audit_log"');
+    expect(html).toMatch(/retention-deleted-audit_log"[^>]*>(?!\s*\d)/);
   });
 
   it('shows the archive job state above the items', () => {
@@ -187,11 +189,11 @@ describe.each(['en', 'ar'] as const)('Data retention page (%s)', (locale) => {
 
   it('leaves the numbers read-only for an operator who is not a super admin, and says why', () => {
     const html = page(overview(), locale, 'admin');
-    expect(html).not.toMatch(/<button[^>]*type="submit"/);
+    expect(html).not.toContain('data-testid="retention-save-');
     expect(html.match(/disabled=""/g)?.length).toBeGreaterThanOrEqual(6);
   });
 
   it('offers save to a super admin', () => {
-    expect(page(overview(), locale)).toMatch(/<button[^>]*type="submit"/);
+    expect(page(overview(), locale)).toContain('data-testid="retention-save-an_events"');
   });
 });

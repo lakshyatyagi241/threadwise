@@ -101,7 +101,8 @@
       "liveDaysHint": "Giorni in cui i dati restano nel database. Consentiti: da {min} a {max}.",
       "keepForever": "Conserva l'archivio per sempre",
       "archiveDays": "Giorni di archivio",
-      "archiveDaysHint": "Giorni aggiuntivi in cui l'archivio lo conserva, poi viene eliminato. Consentiti: da {min} a {max}."
+      "archiveDaysHint": "Giorni aggiuntivi in cui l'archivio lo conserva, poi viene eliminato. Consentiti: da {min} a {max}.",
+      "keepForeverShort": "Conserva per sempre"
     },
     "summary": {
       "noArchive": "Eliminato definitivamente {live, plural, one {# giorno} other {# giorni}} dopo la scrittura.",
@@ -143,7 +144,8 @@
       "confirmSave": "Salva e applica",
       "resetTitle": "Riportare {item} al comportamento attuale?",
       "resetBody": "I valori salvati vengono rimossi. I job notturni tornano alle regole integrate per questo elemento. I dati già archiviati restano nell'archivio.",
-      "confirmReset": "Torna al comportamento attuale"
+      "confirmReset": "Torna al comportamento attuale",
+      "resetShort": "Ripristina"
     },
     "preview": {
       "title": "Salvare la conservazione per {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Database, poi archivio nel database",
         "table": "Solo database",
         "file": "File"
-      }
+      },
+      "actions": "Azioni",
+      "about": "Che cos’è?"
     }
   }
 }

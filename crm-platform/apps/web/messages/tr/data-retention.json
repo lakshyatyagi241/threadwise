@@ -101,7 +101,8 @@
       "liveDaysHint": "Verinin veritabanında kaldığı gün sayısı. İzin verilen: {min} - {max}.",
       "keepForever": "Arşivi süresiz tut",
       "archiveDays": "Arşiv günü",
-      "archiveDaysHint": "Arşivin veriyi tuttuğu ek gün sayısı; sonra silinir. İzin verilen: {min} - {max}."
+      "archiveDaysHint": "Arşivin veriyi tuttuğu ek gün sayısı; sonra silinir. İzin verilen: {min} - {max}.",
+      "keepForeverShort": "Süresiz sakla"
     },
     "summary": {
       "noArchive": "Yazıldıktan {live, plural, one {# gün} other {# gün}} sonra kalıcı olarak silinir.",
@@ -143,7 +144,8 @@
       "confirmSave": "Kaydet ve uygula",
       "resetTitle": "{item} mevcut davranışına döndürülsün mü?",
       "resetBody": "Kaydedilen değerler kaldırılır. Gece işleri bu öğe için yerleşik kurallara geri döner. Zaten arşivlenmiş veriler arşivde kalır.",
-      "confirmReset": "Mevcut davranışa dön"
+      "confirmReset": "Mevcut davranışa dön",
+      "resetShort": "Sıfırla"
     },
     "preview": {
       "title": "{item} için saklama kaydedilsin mi?",
@@ -199,7 +201,9 @@
         "daily_archive": "Veritabanı, ardından veritabanı arşivi",
         "table": "Yalnızca veritabanı",
         "file": "Dosyalar"
-      }
+      },
+      "actions": "İşlemler",
+      "about": "Bu nedir?"
     }
   }
 }

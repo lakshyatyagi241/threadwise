@@ -101,7 +101,8 @@
       "liveDaysHint": "Days the data stays in the database. Allowed: {min} to {max}.",
       "keepForever": "Keep the archive for ever",
       "archiveDays": "Archive days",
-      "archiveDaysHint": "Further days the archive keeps it, then it is deleted. Allowed: {min} to {max}."
+      "archiveDaysHint": "Further days the archive keeps it, then it is deleted. Allowed: {min} to {max}.",
+      "keepForeverShort": "Keep for ever"
     },
     "summary": {
       "noArchive": "Deleted for good {live, plural, one {# day} other {# days}} after it is written.",
@@ -143,7 +144,8 @@
       "confirmSave": "Save and apply",
       "resetTitle": "Return {item} to its current behaviour?",
       "resetBody": "The saved values are removed. The nightly jobs go back to the built-in rules for this item. Data already archived stays in the archive.",
-      "confirmReset": "Return to current behaviour"
+      "confirmReset": "Return to current behaviour",
+      "resetShort": "Reset"
     },
     "preview": {
       "title": "Save retention for {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Database, then database archive",
         "table": "Database only",
         "file": "Files"
-      }
+      },
+      "actions": "Actions",
+      "about": "What is this?"
     }
   }
 }

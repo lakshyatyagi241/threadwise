@@ -101,7 +101,8 @@
       "liveDaysHint": "Días que los datos permanecen en la base de datos. Permitido: de {min} a {max}.",
       "keepForever": "Conservar el archivo para siempre",
       "archiveDays": "Días de archivo",
-      "archiveDaysHint": "Días adicionales que el archivo lo conserva antes de eliminarlo. Permitido: de {min} a {max}."
+      "archiveDaysHint": "Días adicionales que el archivo lo conserva antes de eliminarlo. Permitido: de {min} a {max}.",
+      "keepForeverShort": "Conservar siempre"
     },
     "summary": {
       "noArchive": "Se elimina definitivamente {live, plural, one {# día} many {# de días} other {# días}} después de escribirse.",
@@ -143,7 +144,8 @@
       "confirmSave": "Guardar y aplicar",
       "resetTitle": "¿Devolver {item} a su comportamiento actual?",
       "resetBody": "Se eliminan los valores guardados. Los trabajos nocturnos vuelven a las reglas integradas para este elemento. Los datos ya archivados permanecen en el archivo.",
-      "confirmReset": "Volver al comportamiento actual"
+      "confirmReset": "Volver al comportamiento actual",
+      "resetShort": "Restablecer"
     },
     "preview": {
       "title": "¿Guardar la retención de {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Base de datos y luego archivo en base de datos",
         "table": "Solo base de datos",
         "file": "Archivos"
-      }
+      },
+      "actions": "Acciones",
+      "about": "¿Qué es esto?"
     }
   }
 }

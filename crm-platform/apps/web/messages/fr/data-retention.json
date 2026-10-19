@@ -101,7 +101,8 @@
       "liveDaysHint": "Jours pendant lesquels les données restent dans la base de données. Valeurs autorisées : de {min} à {max}.",
       "keepForever": "Conserver l'archive indéfiniment",
       "archiveDays": "Jours d'archive",
-      "archiveDaysHint": "Jours supplémentaires pendant lesquels l'archive les conserve avant leur suppression. Valeurs autorisées : de {min} à {max}."
+      "archiveDaysHint": "Jours supplémentaires pendant lesquels l'archive les conserve avant leur suppression. Valeurs autorisées : de {min} à {max}.",
+      "keepForeverShort": "Conserver indéfiniment"
     },
     "summary": {
       "noArchive": "Supprimé définitivement {live, plural, one {# jour} many {# de jours} other {# jours}} après son écriture.",
@@ -143,7 +144,8 @@
       "confirmSave": "Enregistrer et appliquer",
       "resetTitle": "Rétablir le comportement actuel pour {item} ?",
       "resetBody": "Les valeurs enregistrées sont supprimées. Les tâches nocturnes reviennent aux règles intégrées pour cet élément. Les données déjà archivées restent dans l'archive.",
-      "confirmReset": "Revenir au comportement actuel"
+      "confirmReset": "Revenir au comportement actuel",
+      "resetShort": "Réinitialiser"
     },
     "preview": {
       "title": "Enregistrer la conservation pour {item} ?",
@@ -199,7 +201,9 @@
         "daily_archive": "Base de données, puis archive en base de données",
         "table": "Base de données uniquement",
         "file": "Fichiers"
-      }
+      },
+      "actions": "Actions",
+      "about": "De quoi s’agit-il ?"
     }
   }
 }

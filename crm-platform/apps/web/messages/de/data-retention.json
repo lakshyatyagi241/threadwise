@@ -101,7 +101,8 @@
       "liveDaysHint": "Tage, die die Daten in der Datenbank bleiben. Zulässig: {min} bis {max}.",
       "keepForever": "Archiv unbegrenzt aufbewahren",
       "archiveDays": "Archivtage",
-      "archiveDaysHint": "Weitere Tage, die das Archiv sie aufbewahrt, bevor sie gelöscht werden. Zulässig: {min} bis {max}."
+      "archiveDaysHint": "Weitere Tage, die das Archiv sie aufbewahrt, bevor sie gelöscht werden. Zulässig: {min} bis {max}.",
+      "keepForeverShort": "Für immer behalten"
     },
     "summary": {
       "noArchive": "Endgültig gelöscht {live, plural, one {# Tag} other {# Tage}} nach dem Schreiben.",
@@ -143,7 +144,8 @@
       "confirmSave": "Speichern und anwenden",
       "resetTitle": "{item} auf das aktuelle Verhalten zurücksetzen?",
       "resetBody": "Die gespeicherten Werte werden entfernt. Die nächtlichen Jobs verwenden für diesen Eintrag wieder die integrierten Regeln. Bereits archivierte Daten bleiben im Archiv.",
-      "confirmReset": "Auf aktuelles Verhalten zurücksetzen"
+      "confirmReset": "Auf aktuelles Verhalten zurücksetzen",
+      "resetShort": "Zurücksetzen"
     },
     "preview": {
       "title": "Aufbewahrung für {item} speichern?",
@@ -199,7 +201,9 @@
         "daily_archive": "Datenbank, danach Datenbankarchiv",
         "table": "Nur Datenbank",
         "file": "Dateien"
-      }
+      },
+      "actions": "Aktionen",
+      "about": "Was ist das?"
     }
   }
 }

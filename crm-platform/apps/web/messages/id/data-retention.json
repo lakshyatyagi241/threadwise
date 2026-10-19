@@ -101,7 +101,8 @@
       "liveDaysHint": "Jumlah hari data tetap berada di database. Diizinkan: {min} sampai {max}.",
       "keepForever": "Simpan arsip selamanya",
       "archiveDays": "Hari arsip",
-      "archiveDaysHint": "Jumlah hari tambahan arsip menyimpannya, lalu dihapus. Diizinkan: {min} sampai {max}."
+      "archiveDaysHint": "Jumlah hari tambahan arsip menyimpannya, lalu dihapus. Diizinkan: {min} sampai {max}.",
+      "keepForeverShort": "Simpan selamanya"
     },
     "summary": {
       "noArchive": "Dihapus permanen {live, plural, other {# hari}} setelah ditulis.",
@@ -143,7 +144,8 @@
       "confirmSave": "Simpan dan terapkan",
       "resetTitle": "Kembalikan {item} ke perilaku saat ini?",
       "resetBody": "Nilai yang disimpan dihapus. Job malam kembali ke aturan bawaan untuk item ini. Data yang sudah diarsipkan tetap berada di arsip.",
-      "confirmReset": "Kembali ke perilaku saat ini"
+      "confirmReset": "Kembali ke perilaku saat ini",
+      "resetShort": "Atur ulang"
     },
     "preview": {
       "title": "Simpan retensi untuk {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Database, lalu arsip database",
         "table": "Hanya database",
         "file": "File"
-      }
+      },
+      "actions": "Tindakan",
+      "about": "Apa ini?"
     }
   }
 }

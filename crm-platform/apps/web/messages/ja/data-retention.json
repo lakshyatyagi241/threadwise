@@ -101,7 +101,8 @@
       "liveDaysHint": "データがデータベースに残る日数です。指定可能: {min} ～ {max}。",
       "keepForever": "アーカイブを無期限に保持",
       "archiveDays": "アーカイブ日数",
-      "archiveDaysHint": "アーカイブがさらに保持する日数です。その後削除されます。指定可能: {min} ～ {max}。"
+      "archiveDaysHint": "アーカイブがさらに保持する日数です。その後削除されます。指定可能: {min} ～ {max}。",
+      "keepForeverShort": "無期限で保持"
     },
     "summary": {
       "noArchive": "書き込みから {live, plural, other {# 日}}後に完全に削除されます。",
@@ -143,7 +144,8 @@
       "confirmSave": "保存して適用",
       "resetTitle": "{item} を現在の動作に戻しますか?",
       "resetBody": "保存した値は削除されます。夜間ジョブはこの項目の組み込みルールに戻ります。すでにアーカイブされたデータはアーカイブに残ります。",
-      "confirmReset": "現在の動作に戻す"
+      "confirmReset": "現在の動作に戻す",
+      "resetShort": "リセット"
     },
     "preview": {
       "title": "{item} の保持設定を保存しますか?",
@@ -199,7 +201,9 @@
         "daily_archive": "データベース、その後データベースアーカイブ",
         "table": "データベースのみ",
         "file": "ファイル"
-      }
+      },
+      "actions": "操作",
+      "about": "これは何?"
     }
   }
 }

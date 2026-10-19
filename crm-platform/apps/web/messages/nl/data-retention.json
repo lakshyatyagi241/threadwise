@@ -101,7 +101,8 @@
       "liveDaysHint": "Dagen dat de gegevens in de database blijven. Toegestaan: {min} tot {max}.",
       "keepForever": "Archief eeuwig bewaren",
       "archiveDays": "Archiefdagen",
-      "archiveDaysHint": "Extra dagen dat het archief ze bewaart, daarna worden ze verwijderd. Toegestaan: {min} tot {max}."
+      "archiveDaysHint": "Extra dagen dat het archief ze bewaart, daarna worden ze verwijderd. Toegestaan: {min} tot {max}.",
+      "keepForeverShort": "Voor altijd bewaren"
     },
     "summary": {
       "noArchive": "Definitief verwijderd {live, plural, one {# dag} other {# dagen}} nadat ze zijn vastgelegd.",
@@ -143,7 +144,8 @@
       "confirmSave": "Opslaan en toepassen",
       "resetTitle": "{item} terugzetten naar het huidige gedrag?",
       "resetBody": "De opgeslagen waarden worden verwijderd. De nachtelijke taken gaan voor dit item terug naar de ingebouwde regels. Gegevens die al zijn gearchiveerd, blijven in het archief.",
-      "confirmReset": "Terugzetten naar huidig gedrag"
+      "confirmReset": "Terugzetten naar huidig gedrag",
+      "resetShort": "Herstellen"
     },
     "preview": {
       "title": "Retentie voor {item} opslaan?",
@@ -199,7 +201,9 @@
         "daily_archive": "Database, daarna databasearchief",
         "table": "Alleen database",
         "file": "Bestanden"
-      }
+      },
+      "actions": "Acties",
+      "about": "Wat is dit?"
     }
   }
 }

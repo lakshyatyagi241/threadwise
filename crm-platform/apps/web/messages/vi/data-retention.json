@@ -101,7 +101,8 @@
       "liveDaysHint": "Số ngày dữ liệu nằm trong cơ sở dữ liệu. Cho phép: từ {min} đến {max}.",
       "keepForever": "Giữ kho lưu trữ vĩnh viễn",
       "archiveDays": "Ngày lưu trữ",
-      "archiveDaysHint": "Số ngày kho lưu trữ giữ thêm, sau đó bị xóa. Cho phép: từ {min} đến {max}."
+      "archiveDaysHint": "Số ngày kho lưu trữ giữ thêm, sau đó bị xóa. Cho phép: từ {min} đến {max}.",
+      "keepForeverShort": "Giữ vĩnh viễn"
     },
     "summary": {
       "noArchive": "Xóa vĩnh viễn sau {live, plural, other {# ngày}} kể từ khi được ghi.",
@@ -143,7 +144,8 @@
       "confirmSave": "Lưu và áp dụng",
       "resetTitle": "Đưa {item} về hành vi hiện tại?",
       "resetBody": "Các giá trị đã lưu sẽ bị xóa. Các tác vụ hằng đêm quay về quy tắc tích hợp sẵn cho mục này. Dữ liệu đã lưu trữ vẫn nằm trong kho lưu trữ.",
-      "confirmReset": "Quay về hành vi hiện tại"
+      "confirmReset": "Quay về hành vi hiện tại",
+      "resetShort": "Đặt lại"
     },
     "preview": {
       "title": "Lưu chính sách lưu giữ cho {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Cơ sở dữ liệu, sau đó là kho lưu trữ trong cơ sở dữ liệu",
         "table": "Chỉ cơ sở dữ liệu",
         "file": "Tệp"
-      }
+      },
+      "actions": "Thao tác",
+      "about": "Đây là gì?"
     }
   }
 }

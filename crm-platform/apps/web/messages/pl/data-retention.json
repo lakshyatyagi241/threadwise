@@ -101,7 +101,8 @@
       "liveDaysHint": "Liczba dni, przez które dane pozostają w bazie danych. Dozwolone: od {min} do {max}.",
       "keepForever": "Przechowuj archiwum bezterminowo",
       "archiveDays": "Dni w archiwum",
-      "archiveDaysHint": "Liczba dodatkowych dni, przez które archiwum je przechowuje, po czym są usuwane. Dozwolone: od {min} do {max}."
+      "archiveDaysHint": "Liczba dodatkowych dni, przez które archiwum je przechowuje, po czym są usuwane. Dozwolone: od {min} do {max}.",
+      "keepForeverShort": "Zachowaj bezterminowo"
     },
     "summary": {
       "noArchive": "Trwale usuwane po upływie {live, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}} od zapisania.",
@@ -143,7 +144,8 @@
       "confirmSave": "Zapisz i zastosuj",
       "resetTitle": "Przywrócić dotychczasowe działanie dla: {item}?",
       "resetBody": "Zapisane wartości zostaną usunięte. Nocne zadania wrócą do wbudowanych reguł dla tego elementu. Dane już zarchiwizowane pozostaną w archiwum.",
-      "confirmReset": "Przywróć dotychczasowe działanie"
+      "confirmReset": "Przywróć dotychczasowe działanie",
+      "resetShort": "Resetuj"
     },
     "preview": {
       "title": "Zapisać retencję dla: {item}?",
@@ -199,7 +201,9 @@
         "daily_archive": "Baza danych, potem archiwum w bazie danych",
         "table": "Tylko baza danych",
         "file": "Pliki"
-      }
+      },
+      "actions": "Akcje",
+      "about": "Co to jest?"
     }
   }
 }
