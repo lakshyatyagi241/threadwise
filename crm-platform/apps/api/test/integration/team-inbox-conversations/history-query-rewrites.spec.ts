@@ -21,6 +21,7 @@ import { MessageHistoryRepository } from '../../../src/modules/chat-conversation
 import { ContactsRepository } from '../../../src/modules/crm/contacts/contacts.repository';
 import { PlanAnalyticsService } from '../../../src/modules/plans-subscriptions-trials/plan-analytics.service';
 import { PlatformWorkspacesRepository } from '../../../src/modules/workspaces-teams-tenancy/platform-workspaces.repository';
+import { messageFiguresSql } from '../../../src/modules/admin-console-shell/overview-stats.service';
 import { DashRepository } from '../../../src/modules/dashboards-analytics-charts/dash.repository';
 
 /**
@@ -484,5 +485,54 @@ describe('rewritten history and dashboard queries equal the statements they repl
       new Date(old[0]!.at as string).getTime(),
     );
     expect(facts.lastActive.has(empty)).toBe(false);
+  });
+
+  it('overview stats: the three message figures from one pass equal the three statements', async () => {
+    // the 31st: the month began 30 days and a few hours ago, before the 30-day window, so the pass must start at the month
+    const clock = new Date('2026-12-31T12:00:00Z');
+    const conv = await scalar(
+      `SELECT id FROM conversations WHERE org_id = $1 ORDER BY id LIMIT 1`,
+      [orgId],
+    );
+    const hours = (h: number) => new Date(clock.getTime() - h * 3_600_000);
+    const monthStart = (await q(`SELECT date_trunc('month', $1::timestamptz) AS d`, [clock]))[0]
+      .d as Date;
+    let seq = 9000;
+    for (const [dir, status, at] of [
+      ['out', 'delivered', hours(1)],
+      ['out', 'read', hours(5 * 24)],
+      ['out', 'failed', hours(6 * 24 + 23)],
+      ['out', 'queued', hours(7 * 24 + 1)],
+      ['out', 'delivered', hours(29 * 24 + 23)],
+      ['out', 'sent', hours(30 * 24 + 6)], // before the 30-day window, inside the month
+      ['out', 'sent', hours(32 * 24)], // before both
+      ['in', 'received', hours(2 * 24)],
+      ['out', 'sent', monthStart], // exactly the first instant of the month: in
+      ['out', 'sent', new Date(monthStart.getTime() - 60_000)], // a minute before: out
+    ] as const) {
+      await q(
+        `INSERT INTO messages (org_id, conversation_id, seq, direction, kind, sender_kind, status, created_at) VALUES ($1,$2,$3,$4,'text',$5,$6,$7)`,
+        [orgId, conv, (seq += 1), dir, dir === 'in' ? 'customer' : 'agent', status, at],
+      );
+    }
+    const c = `'${clock.toISOString()}'::timestamptz`;
+    const base = `org_id = ${orgId} AND direction = 'out' AND kind <> 'reaction'`;
+    const old = (
+      await rows(
+        sql.raw(`SELECT
+          (SELECT CASE WHEN count(*) = 0 THEN NULL ELSE round(100.0 * count(*) FILTER (WHERE status IN ('delivered', 'read')) / count(*)) END
+             FROM messages WHERE ${base} AND created_at >= ${c} - interval '30 days') AS delivered_pct,
+          (SELECT count(*) FROM messages WHERE ${base} AND created_at >= ${c} - interval '7 days') AS outbound_7d,
+          (SELECT count(*) FROM messages WHERE ${base} AND created_at >= date_trunc('month', ${c})) AS messages_this_month`),
+      )
+    )[0]!;
+    const got = (await rows(messageFiguresSql(orgId, clock)))[0]!;
+    expect(Number(got.delivered_pct)).toBe(Number(old.delivered_pct));
+    expect(Number(got.outbound_7d)).toBe(Number(old.outbound_7d));
+    expect(Number(got.messages_this_month)).toBe(Number(old.messages_this_month));
+    expect(
+      Number(old.messages_this_month),
+      'the month holds a message the 30-day window does not',
+    ).toBeGreaterThan(Number(old.outbound_7d) + 1);
   });
 });
