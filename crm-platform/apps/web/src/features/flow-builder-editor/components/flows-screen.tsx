@@ -85,7 +85,6 @@ export function FlowsScreen() {
   const orgName = useSession().org.name;
   const canRead = useCan('flb.flows.read');
   const canCreate = useCan('flb.flows.create');
-  const canFaqs = useCan('faq.entries.read');
   const canUpdate = useCan('flb.flows.update');
   const canDelete = useCan('flb.flows.delete');
 
@@ -133,7 +132,7 @@ export function FlowsScreen() {
   const fail = (e: unknown) => toast(t('actionFailed', { message: reason(e) }), 'danger');
 
   const actions: CardActions = {
-    can: { update: canUpdate, create: canCreate, remove: canDelete, faqs: canFaqs },
+    can: { update: canUpdate, create: canCreate, remove: canDelete },
     onToggle: async (f) => {
       try {
         const r = await flowsApi.toggle(f.id);

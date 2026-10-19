@@ -248,7 +248,7 @@ export class BuilderContextService {
         tx.execute(sql`
             SELECT a.uuid, a.name, a.status, a.ai_model,
               (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status) = 'ready'
-                 AND (src.assistant_id IS NULL OR src.assistant_id = a.id)) AS sources
+                 AND src.assistant_id = a.id) AS sources
             FROM ai_chat_assistants a WHERE a.org_id = ${o} ORDER BY a.name`),
         tx.execute(
           sql`SELECT uuid, name FROM ai_call_assistants WHERE org_id = ${o} ORDER BY name`,

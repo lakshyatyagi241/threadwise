@@ -83,15 +83,10 @@ const reviews = {
     LOOKUP +
       ' (unique key prefix, constant-time hash compare, status/expiry/owner checks, failure throttle)',
   ],
-  'modules/faq-knowledge/faq-embed.worker.ts': [
+  'modules/knowledge-base/kb-embed.worker.ts': [
     'reviewed',
     SWEEP + '; markStale is an intentional platform-wide model-change heal',
   ],
-  'modules/faq-knowledge/faq-platform.service.ts': [
-    'reviewed',
-    PLATFORM + ' (FaqPlatformService is not exported from its module)',
-  ],
-  'modules/faq-knowledge/faq-retention.service.ts': ['reviewed', SWEEP],
   'modules/flow-builder-editor/flow-templates-admin.service.ts': [
     'reviewed',
     PLATFORM +

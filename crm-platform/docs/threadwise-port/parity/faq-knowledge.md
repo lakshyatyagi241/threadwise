@@ -1,5 +1,7 @@
 # FAQ knowledge base (FAQ): parity evidence
 
+> **Retired (2026-10-19).** FAQs are now entries of an AI agent's knowledge base, searched by meaning for every reader; this FAQ engine's screens, settings and routes are gone. See [ADR-0021 addendum 3](../../adr/0021-faq-semantic-matching-pgvector.md) and [knowledge-base/README.md](../knowledge-base/README.md). The text below is kept as history.
+
 **There is no Reference twin.** Reference has no FAQ feature: its keyword auto-replies and flow keyword triggers match words, not meaning, and are
 unchanged by this domain (it is off for every workspace until its owner switches it on, and it runs after the flow runtime has had its turn).
 The feature was built at the project owner's request to replace the FAQ matching of the previous product (Geta's NLU service), so
