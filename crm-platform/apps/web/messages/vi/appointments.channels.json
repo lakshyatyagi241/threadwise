@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Kênh tin nhắn",
+      "description": "Chọn kênh nào được gửi tin nhắn lịch hẹn tới liên hệ của bạn: xác nhận, nhắc nhở, thông báo đổi lịch và hủy, và theo dõi sau buổi hẹn. Một loại đặt chỗ chỉ dùng được kênh khi kênh đó được bật ở đây và đã kết nối.",
+      "loading": "Đang tải các kênh...",
+      "undecidedOwner": "Chưa có kênh nào được bật nên không có tin nhắn lịch hẹn nào được gửi. Hãy bật các kênh mà nhóm của bạn được dùng.",
+      "undecidedMember": "Chưa có kênh nào được bật nên không có tin nhắn lịch hẹn nào được gửi. Hãy nhờ chủ không gian làm việc chọn kênh.",
+      "readOnly": "Chỉ chủ không gian làm việc và quản trị viên mới thay đổi được mục này.",
+      "enableLabel": "Dùng {channel} cho tin nhắn lịch hẹn",
+      "switchedOn": "{channel} đã bật cho tin nhắn lịch hẹn.",
+      "switchedOff": "{channel} đã tắt cho tin nhắn lịch hẹn.",
+      "senderSaved": "Đã lưu người gửi mặc định của {channel}.",
+      "defaultSender": "Người gửi mặc định",
+      "defaultSenderOf": "Người gửi mặc định cho {channel}",
+      "firstConnected": "Kênh đầu tiên đã kết nối",
+      "sendsFrom": "Gửi từ {sender}",
+      "notConnected": "Chưa kết nối gì cho kênh này.",
+      "connect": "Kết nối trong Cài đặt",
+      "voiceSoon": "Sắp có cùng bot giọng nói: cuộc gọi nhắc nhở đi mà bạn có thể bật cho từng loại đặt chỗ. Chưa thể bật.",
+      "names": {
+        "email": "Email",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Cuộc gọi nhắc nhở"
+      },
+      "about": {
+        "email": "Từ hộp thư dùng chung của không gian làm việc. Không bao giờ từ hộp thư cá nhân.",
+        "whatsapp": "Văn bản tự do trong khung 24 giờ; ngoài khung chỉ dùng mẫu đã duyệt.",
+        "sms": "Văn bản thuần từ người gửi SMS đã kết nối.",
+        "voice": "Cuộc gọi đi tự động nhắc nhở liên hệ."
+      },
+      "status": {
+        "usable": "Đã bật và kết nối",
+        "off": "Tắt",
+        "notChosen": "Chưa chọn",
+        "not_connected": "Đã bật, chưa kết nối",
+        "coming_soon": "Sắp có cùng bot giọng nói"
+      },
+      "editorTitle": "Kênh cho loại đặt chỗ này",
+      "editorHint": "Chỉ dùng được các kênh mà chủ đã bật và đã kết nối. Các kênh còn lại được hiển thị để bạn biết lý do.",
+      "noneUsable": "Chưa có kênh nào khả dụng nên không thể gửi tin nhắn nào của loại đặt chỗ này.",
+      "openSettings": "Mở cài đặt kênh",
+      "offByOwner": "Chủ không gian làm việc chưa bật kênh này.",
+      "sendOn": "Gửi qua",
+      "sendOnAuto": "Chưa chọn kênh: dùng kênh khả dụng đầu tiên với văn bản chuẩn.",
+      "sendOnEach": "Tin nhắn được gửi qua mọi kênh được đánh dấu ở đây.",
+      "attachedButUnusable": "Kênh này hiện không khả dụng nên tin nhắn bị bỏ qua trên kênh đó. Bỏ đánh dấu hoặc nhờ chủ bật."
+    },
+    "templates": {
+      "title": "Mẫu tin nhắn",
+      "description": "Tin nhắn có sẵn cho xác nhận, nhắc nhở, đổi lịch, hủy và theo dõi sau buổi hẹn. Thêm bằng một cú nhấp rồi chỉnh sửa. Tin nhắn email nằm ở đây; tin nhắn WhatsApp được gửi tới Meta để duyệt và chỉ tin đã duyệt mới dùng được.",
+      "loading": "Đang tải tin nhắn...",
+      "readOnly": "Chỉ người quản lý mẫu lịch hẹn mới thay đổi được mục này.",
+      "empty": "Chưa thêm tin nhắn nào. Hãy thêm từ bộ có sẵn bên dưới.",
+      "yours": "Tin nhắn của bạn",
+      "status": {
+        "draft": "Bản nháp",
+        "pending": "Đang được Meta xem xét",
+        "approved": "Đã duyệt",
+        "rejected": "Bị từ chối"
+      },
+      "kinds": {
+        "confirmation": "Xác nhận đặt chỗ",
+        "reminder": "Nhắc nhở",
+        "reschedule": "Đã đổi lịch",
+        "cancellation": "Đã hủy",
+        "follow_up": "Theo dõi sau buổi hẹn"
+      },
+      "channels": {
+        "email": "Email",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {được # loại đặt chỗ sử dụng}}",
+      "inactive": "đã tắt",
+      "submit": "Gửi tới Meta để duyệt",
+      "submitting": "Đang gửi...",
+      "submitted": "Đã gửi tới Meta. Hiện đang được xem xét.",
+      "metaRefused": "Đã lưu nhưng Meta từ chối. Mở tin nhắn để xem lý do.",
+      "refresh": "Kiểm tra trạng thái",
+      "refreshing": "Đang kiểm tra...",
+      "refreshed": "Đã cập nhật trạng thái.",
+      "edit": "Sửa",
+      "view": "Xem",
+      "close": "Đóng",
+      "delete": "Gỡ bỏ",
+      "deleteTitle": "Gỡ bỏ \"{name}\"?",
+      "deleteWhatsapp": "Tin nhắn bị gỡ khỏi danh sách này. Mẫu WhatsApp vẫn nằm trong các mẫu WhatsApp của bạn; hãy xóa ở đó nếu không cần nữa.",
+      "deleteBody": "Tin nhắn bị gỡ khỏi thư viện. Loại đặt chỗ đang dùng nó phải chọn tin nhắn khác trước.",
+      "deleted": "Đã gỡ tin nhắn.",
+      "cancel": "Hủy",
+      "rejectedBecause": "Meta đã từ chối: {reason}",
+      "pendingNote": "Meta đang xem xét mẫu này. Khi chưa được duyệt, không thể chọn hoặc gửi.",
+      "nameLabel": "Tên",
+      "subjectLabel": "Tiêu đề",
+      "bodyLabel": "Tin nhắn",
+      "textLocked": "Mẫu đang được xem xét hoặc đã duyệt không thể sửa ở đây.",
+      "placeholders": "Bạn có thể dùng:",
+      "whatsappPlaceholders": "WhatsApp chỉ điền được các mục này, dùng theo thứ tự này và không bỏ sót:",
+      "activeLabel": "Có thể chọn",
+      "save": "Lưu",
+      "saving": "Đang lưu...",
+      "saveAndSubmit": "Lưu và gửi tới Meta",
+      "saved": "Đã lưu tin nhắn.",
+      "predefinedTitle": "Tin nhắn có sẵn",
+      "predefinedHint": "Chọn một tin nhắn để sao chép vào thư viện rồi chỉnh sửa. Tin nhắn WhatsApp được tạo trước dưới dạng bản nháp; bạn quyết định khi nào gửi tới Meta.",
+      "machineNote": "Các văn bản có sẵn bằng tiếng Anh. Hãy sửa sang ngôn ngữ của bạn sau khi thêm.",
+      "category": {
+        "UTILITY": "Tiện ích",
+        "MARKETING": "Tiếp thị"
+      },
+      "preview": "Xem trước",
+      "hidePreview": "Ẩn xem trước",
+      "inLibrary": "Trong thư viện của bạn: {status}",
+      "adopt": "Thêm vào tin nhắn của tôi",
+      "adopting": "Đang thêm...",
+      "adoptDraft": "Thêm làm bản nháp",
+      "adoptSubmit": "Thêm và gửi tới Meta",
+      "adopted": "Đã thêm vào tin nhắn của bạn.",
+      "newEmail": "Tin nhắn email mới",
+      "kindLabel": "Loại",
+      "create": "Tạo",
+      "created": "Đã tạo tin nhắn.",
+      "chooseLabel": "Tin nhắn sẽ dùng",
+      "useText": "Văn bản ở trên",
+      "unknownMessage": "Một tin nhắn không còn khả dụng",
+      "noneYet": "Chưa có tin nhắn loại này.",
+      "openLibrary": "Thêm trong cài đặt",
+      "whatsappApprovedOnly": "Chỉ chọn được mẫu đã được Meta duyệt. Ngoài khung 24 giờ WhatsApp không gửi gì khác."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Cuộc gọi nhắc nhở"
+      },
+      "voiceSoon": "Sắp có cùng bot giọng nói: cuộc gọi nhắc nhở đi. Chưa thể thêm.",
+      "voiceSoonShort": "sắp có cùng bot giọng nói",
+      "channelUnusable": "hiện không khả dụng",
+      "noUsableChannel": "Không kênh nào của quy tắc này khả dụng nên không thể bật.",
+      "openChannels": "Mở cài đặt kênh",
+      "fromLibrary": "Dùng tin nhắn từ thư viện",
+      "openLibrary": "Thêm tin nhắn trong cài đặt",
+      "reasons": {
+        "channel_disabled": "Không gian làm việc đã tắt kênh này cho tin nhắn lịch hẹn."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Chọn ít nhất một kênh cho tin nhắn này hoặc xóa văn bản."
+      }
+    }
+  }
+}

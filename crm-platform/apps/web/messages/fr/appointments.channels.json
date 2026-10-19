@@ -1,0 +1,152 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Canaux de messages",
+      "description": "Choisissez les canaux qui peuvent envoyer des messages de rendez-vous à vos contacts : confirmations, rappels, avis de report et d'annulation, suivis après la visite. Un type de réservation ne peut utiliser un canal que s'il est activé ici et connecté.",
+      "loading": "Chargement des canaux...",
+      "undecidedOwner": "Aucun canal n'est encore activé, donc aucun message de rendez-vous n'est envoyé. Activez les canaux que votre équipe peut utiliser.",
+      "undecidedMember": "Aucun canal n'est encore activé, donc aucun message de rendez-vous n'est envoyé. Demandez au propriétaire de l'espace de choisir les canaux.",
+      "readOnly": "Seuls le propriétaire de l'espace et les administrateurs peuvent modifier cela.",
+      "enableLabel": "Utiliser {channel} pour les messages de rendez-vous",
+      "switchedOn": "{channel} est activé pour les messages de rendez-vous.",
+      "switchedOff": "{channel} est désactivé pour les messages de rendez-vous.",
+      "senderSaved": "L'expéditeur par défaut de {channel} est enregistré.",
+      "defaultSender": "Expéditeur par défaut",
+      "defaultSenderOf": "Expéditeur par défaut pour {channel}",
+      "firstConnected": "Le premier connecté",
+      "sendsFrom": "Envoie depuis {sender}",
+      "notConnected": "Rien n'est encore connecté pour ce canal.",
+      "connect": "Connectez-le dans les paramètres",
+      "voiceSoon": "Bientôt avec le bot vocal : un appel de rappel sortant que vous pourrez activer pour chaque type de réservation. Il ne peut pas encore être activé.",
+      "names": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp",
+        "sms": "SMS",
+        "voice": "Appel de rappel"
+      },
+      "about": {
+        "email": "Depuis une boîte partagée de votre espace. Jamais depuis une boîte personnelle.",
+        "whatsapp": "Texte libre dans la fenêtre de 24 heures ; en dehors, seulement un modèle approuvé.",
+        "sms": "Texte brut depuis votre expéditeur SMS connecté.",
+        "voice": "Un appel sortant automatique qui rappelle le contact."
+      },
+      "status": {
+        "usable": "Activé et connecté",
+        "off": "Désactivé",
+        "notChosen": "Pas encore choisi",
+        "not_connected": "Activé, non connecté",
+        "coming_soon": "Bientôt avec le bot vocal"
+      },
+      "editorTitle": "Canaux de ce type de réservation",
+      "editorHint": "Seuls les canaux activés par le propriétaire et connectés peuvent être utilisés. Les autres sont affichés pour que vous sachiez pourquoi.",
+      "noneUsable": "Aucun canal n'est encore disponible, donc aucun message de ce type de réservation ne peut être envoyé.",
+      "openSettings": "Ouvrir les paramètres des canaux",
+      "offByOwner": "Le propriétaire de l'espace n'a pas activé ce canal.",
+      "sendOn": "Envoyer sur",
+      "sendOnAuto": "Aucun canal choisi : le premier canal disponible est utilisé, avec le texte standard.",
+      "sendOnEach": "Le message part sur chaque canal coché ici.",
+      "attachedButUnusable": "Ce canal n'est pas disponible actuellement, donc ce message est ignoré sur celui-ci. Décochez-le ou demandez au propriétaire de l'activer."
+    },
+    "templates": {
+      "title": "Modèles de messages",
+      "description": "Messages prédéfinis pour les confirmations, rappels, reports, annulations et suivis après la visite. Ajoutez-en un en un clic et modifiez-le. Les messages e-mail restent ici ; les messages WhatsApp sont envoyés à Meta pour approbation et seul un message approuvé peut être utilisé.",
+      "loading": "Chargement des messages...",
+      "readOnly": "Seuls les utilisateurs qui gèrent les modèles de rendez-vous peuvent modifier cela.",
+      "empty": "Aucun message ajouté pour l'instant. Ajoutez-en un depuis l'ensemble prédéfini ci-dessous.",
+      "yours": "Vos messages",
+      "status": {
+        "draft": "Brouillon",
+        "pending": "En cours de revue chez Meta",
+        "approved": "Approuvé",
+        "rejected": "Refusé"
+      },
+      "kinds": {
+        "confirmation": "Confirmation de réservation",
+        "reminder": "Rappel",
+        "reschedule": "Reporté",
+        "cancellation": "Annulé",
+        "follow_up": "Suivi après la visite"
+      },
+      "channels": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {utilisé par # types de réservation}}",
+      "inactive": "désactivé",
+      "submit": "Envoyer à Meta pour approbation",
+      "submitting": "Envoi...",
+      "submitted": "Envoyé à Meta. Il est maintenant en revue.",
+      "metaRefused": "Enregistré, mais Meta l'a refusé. Ouvrez le message pour voir la raison.",
+      "refresh": "Vérifier l'état",
+      "refreshing": "Vérification...",
+      "refreshed": "État mis à jour.",
+      "edit": "Modifier",
+      "view": "Voir",
+      "close": "Fermer",
+      "delete": "Retirer",
+      "deleteTitle": "Retirer « {name} » ?",
+      "deleteWhatsapp": "Il est retiré de cette liste. Le modèle WhatsApp reste dans vos modèles WhatsApp ; supprimez-le là-bas si vous n'en avez plus besoin.",
+      "deleteBody": "Il est retiré de votre bibliothèque. Un type de réservation qui l'utilise doit d'abord choisir un autre message.",
+      "deleted": "Message retiré.",
+      "cancel": "Annuler",
+      "rejectedBecause": "Meta l'a refusé : {reason}",
+      "pendingNote": "Meta examine ce modèle. Tant qu'il n'est pas approuvé, il ne peut pas être choisi ni envoyé.",
+      "nameLabel": "Nom",
+      "subjectLabel": "Objet",
+      "bodyLabel": "Message",
+      "textLocked": "Un modèle en revue ou approuvé ne peut pas être modifié ici.",
+      "placeholders": "Vous pouvez utiliser :",
+      "whatsappPlaceholders": "WhatsApp ne peut remplir que ceux-ci, utilisés dans cet ordre sans en sauter :",
+      "activeLabel": "Disponible au choix",
+      "save": "Enregistrer",
+      "saving": "Enregistrement...",
+      "saveAndSubmit": "Enregistrer et envoyer à Meta",
+      "saved": "Message enregistré.",
+      "predefinedTitle": "Messages prédéfinis",
+      "predefinedHint": "Adoptez un message pour le copier dans votre bibliothèque, puis modifiez-le. Un message WhatsApp est d'abord créé en brouillon ; vous décidez quand l'envoyer à Meta.",
+      "machineNote": "Les textes prédéfinis sont en anglais. Modifiez-les dans votre langue après les avoir ajoutés.",
+      "category": {
+        "UTILITY": "Utilitaire",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Aperçu",
+      "hidePreview": "Masquer l'aperçu",
+      "inLibrary": "Dans votre bibliothèque : {status}",
+      "adopt": "Ajouter à mes messages",
+      "adopting": "Ajout...",
+      "adoptDraft": "Ajouter en brouillon",
+      "adoptSubmit": "Ajouter et envoyer à Meta",
+      "adopted": "Ajouté à vos messages.",
+      "newEmail": "Nouveau message e-mail",
+      "kindLabel": "Type",
+      "create": "Créer",
+      "created": "Message créé.",
+      "chooseLabel": "Message à utiliser",
+      "useText": "Le texte ci-dessus",
+      "unknownMessage": "Un message qui n'est plus disponible",
+      "noneYet": "Aucun message de ce type pour l'instant.",
+      "openLibrary": "Ajoutez-en un dans les paramètres",
+      "whatsappApprovedOnly": "Seuls les modèles approuvés par Meta peuvent être choisis. En dehors de la fenêtre de 24 heures, WhatsApp n'envoie rien d'autre."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Appel de rappel"
+      },
+      "voiceSoon": "Bientôt avec le bot vocal : un appel de rappel sortant. Il ne peut pas encore être ajouté.",
+      "voiceSoonShort": "bientôt avec le bot vocal",
+      "channelUnusable": "indisponible actuellement",
+      "noUsableChannel": "Aucun canal de cette règle n'est disponible, elle ne peut donc pas être activée.",
+      "openChannels": "Ouvrir les paramètres des canaux",
+      "fromLibrary": "Utiliser un message de la bibliothèque",
+      "openLibrary": "Ajoutez des messages dans les paramètres",
+      "reasons": {
+        "channel_disabled": "L'espace a désactivé ce canal pour les messages de rendez-vous."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Choisissez au moins un canal pour ce message, ou effacez son texte."
+      }
+    }
+  }
+}

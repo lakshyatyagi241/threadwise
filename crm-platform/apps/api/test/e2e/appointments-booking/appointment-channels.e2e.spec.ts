@@ -103,8 +103,8 @@ async function seedWaba(t: Tenant): Promise<{ id: number; uuid: string }> {
 async function seedSms(t: Tenant, label = 'Sales SMS'): Promise<{ id: number; uuid: string }> {
   const res = await h.owner.query(
     `INSERT INTO wa_provider_configs (org_id, provider, status, phone_number, display_label, is_primary, connected_at)
-     VALUES ($1, 'sms', 'connected', '+14155550100', $2, false, now()) RETURNING id, uuid`,
-    [t.orgId, label],
+     VALUES ($1, 'sms', 'connected', $3, $2, false, now()) RETURNING id, uuid`,
+    [t.orgId, label, `+1415555${String(1000 + ++seq)}`],
   );
   return { id: Number(res.rows[0].id), uuid: res.rows[0].uuid as string };
 }
