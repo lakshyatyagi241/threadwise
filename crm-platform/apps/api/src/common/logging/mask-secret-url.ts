@@ -13,6 +13,8 @@ const PATH_SECRETS = [
   /(\/(?:telegram|line|viber|wechat)\/inbound\/)[^/?#\s]+/i,
   /(\/(?:shopify|woocommerce)\/webhook\/)[^/?#\s]+/i,
   /(\/public\/lead-hooks\/)[^/?#\s]+/i,
+  // Bearer links sent to customers (invoice, proposal, booking management): the token in the path is the only credential.
+  /(\/public\/(?:invoices|sales-docs|booking-manage)\/)[^/?#\s]+/i,
 ];
 
 export function maskSecretUrl(url: string): string;
