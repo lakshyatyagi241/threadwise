@@ -23,7 +23,7 @@ jobs:
         working-directory: crm-platform
     steps:
       - uses: actions/checkout@v7
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -51,7 +51,7 @@ jobs:
           for p in chromium firefox webkit; do
             CROSS_BROWSER=1 HEADLESS=1 QA_MATRIX_SCOPE=public pnpm --filter @crm/web exec playwright test e2e/_matrix --project=$p
           done
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         if: always()
         with:
           name: playwright-report
