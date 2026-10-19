@@ -35,6 +35,7 @@ export class ContactQuotaService {
   async assertCanAddOne(tx: Tx, orgId: number): Promise<void> {
     const limit = await this.entitlements.limit(orgId, 'contacts');
     if (limit === 0) return;
+    await this.entitlements.lockLimit(tx, orgId, 'contacts');
     await this.entitlements.assertWithinLimit(orgId, 'contacts', await this.count(tx, orgId));
   }
 

@@ -342,6 +342,7 @@ export class SocialAuthService {
       },
       {
         phoneVerified: false,
+        exclusiveIdentity: true,
         emailVerified: profile.emailVerified,
         socialLink: { provider, subject: profile.subject, email },
         remember: securityPolicy.rememberMeEnabled,
