@@ -9,7 +9,7 @@ export const nav: NavItem[] = [
     href: '/ai-studio',
     order: -1,
     icon: 'bot',
-    // the hub starts AI agents, chatbots and workflows; it shows only on a plan with AI assistants (a WhatsApp-only plan keeps Flows)
-    gates: { permission: 'flb.flows.read', planFeature: 'ai_assistants' },
+    // its own key (a migrated Waboo workspace never had this page and is denied it); Flows keeps `flb.flows.read`
+    gates: { permission: 'flb.ai_studio.read', planFeature: 'automation' },
   },
 ];

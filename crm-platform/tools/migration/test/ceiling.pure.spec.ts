@@ -66,6 +66,11 @@ describe('module ceiling', () => {
     expect(r.closed).toContain('ai-agents');
     expect(r.keys).toEqual(expect.arrayContaining(['aiag.training.read', 'aiag.training.create']));
     expect(closedKeys(loadModuleCeiling(), new Set(['aiag.training.read']), t).closed).not.toContain('ai-agents');
+    // the AI Studio page has its own key and is never kept, whatever the old roles held
+    const s = closedKeys(loadModuleCeiling(), new Set(['flb.ai_studio.read']), [...t, 'flb.ai_studio.read', 'flb.flows.read']);
+    expect(s.closed).toContain('ai-studio');
+    expect(s.keys).toContain('flb.ai_studio.read');
+    expect(s.keys).not.toContain('flb.flows.read');
   });
 
   it('keeps a module when the old workspace held any key in it', () => {

@@ -30,4 +30,6 @@ export const MODULE_CEILING: Record<string, string[]> = {
   warmer: ['sched.'],
   'team-chat': ['tchat.'],
   'website-chat': ['wgt.'],
+  // the AI Studio start page: a Desk page that Waboo never had (always closed for a migrated workspace, see NEVER_KEPT)
+  'ai-studio': ['flb.ai_studio.'],
 };

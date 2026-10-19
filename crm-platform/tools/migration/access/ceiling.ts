@@ -45,7 +45,7 @@ export function oldWorkspaceKeys(rows: CatalogueRow[], map: AccessConfig['permis
  * Modules a Waboo workspace never gets, whatever its roles held: Waboo sells WhatsApp, not the website chat, so a migrated workspace has no
  * website-chat permission even when a Waboo bot permission maps across the website part too.
  */
-export const NEVER_KEPT: readonly string[] = ['website-chat'];
+export const NEVER_KEPT: readonly string[] = ['website-chat', 'ai-studio'];
 
 export function closedKeys(
   ceiling: ModuleCeiling,
