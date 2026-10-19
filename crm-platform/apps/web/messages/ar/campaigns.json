@@ -1771,7 +1771,7 @@
         "loadFailed": "تعذّر تحميل الإحصائيات.",
         "rates": {
           "delivered": "معدل التسليم",
-          "deliveredHint": "من الجمهور",
+          "deliveredHint": "من المُرسَل",
           "read": "معدل القراءة",
           "readHint": "من الرسائل المسلَّمة",
           "replies": "معدل الرد",

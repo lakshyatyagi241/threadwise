@@ -1045,7 +1045,7 @@
         "loadFailed": "לא ניתן היה לטעון את הסטטיסטיקה.",
         "rates": {
           "delivered": "שיעור מסירה",
-          "deliveredHint": "מהקהל",
+          "deliveredHint": "מהנשלחים",
           "read": "שיעור קריאה",
           "readHint": "מההודעות שנמסרו",
           "replies": "שיעור תגובה",

@@ -1045,7 +1045,7 @@
         "loadFailed": "无法加载统计数据。",
         "rates": {
           "delivered": "送达率",
-          "deliveredHint": "占目标受众",
+          "deliveredHint": "占已发送量",
           "read": "阅读率",
           "readHint": "占已送达",
           "replies": "回复率",

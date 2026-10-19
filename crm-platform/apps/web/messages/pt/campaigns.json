@@ -1045,7 +1045,7 @@
         "loadFailed": "Não foi possível carregar as estatísticas.",
         "rates": {
           "delivered": "Taxa de entrega",
-          "deliveredHint": "do público",
+          "deliveredHint": "dos enviados",
           "read": "Taxa de leitura",
           "readHint": "das entregues",
           "replies": "Taxa de resposta",

@@ -1045,7 +1045,7 @@
         "loadFailed": "Impossible de charger les statistiques.",
         "rates": {
           "delivered": "Taux de livraison",
-          "deliveredHint": "de l’audience",
+          "deliveredHint": "des envois",
           "read": "Taux de lecture",
           "readHint": "des messages livrés",
           "replies": "Taux de réponse",

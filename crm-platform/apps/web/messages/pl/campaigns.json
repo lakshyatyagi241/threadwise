@@ -1045,7 +1045,7 @@
         "loadFailed": "Nie udało się wczytać statystyk.",
         "rates": {
           "delivered": "Wskaźnik dostarczenia",
-          "deliveredHint": "grupy docelowej",
+          "deliveredHint": "z wysłanych",
           "read": "Wskaźnik odczytu",
           "readHint": "dostarczonych",
           "replies": "Wskaźnik odpowiedzi",

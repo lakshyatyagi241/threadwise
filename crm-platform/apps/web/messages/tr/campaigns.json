@@ -1045,7 +1045,7 @@
         "loadFailed": "İstatistikler yüklenemedi.",
         "rates": {
           "delivered": "Teslim oranı",
-          "deliveredHint": "hedef kitlenin",
+          "deliveredHint": "gönderilenlerin",
           "read": "Okunma oranı",
           "readHint": "teslim edilenlerin",
           "replies": "Yanıt oranı",

@@ -1045,7 +1045,7 @@
         "loadFailed": "De statistieken konden niet worden geladen.",
         "rates": {
           "delivered": "Afleverpercentage",
-          "deliveredHint": "van het publiek",
+          "deliveredHint": "van de verzonden",
           "read": "Leespercentage",
           "readHint": "van de afgeleverde",
           "replies": "Antwoordpercentage",
