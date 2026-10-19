@@ -297,19 +297,19 @@ function MembersScreen() {
                   <th scope="col" className="px-4 py-2.5 text-start font-medium">
                     {t('table.member')}
                   </th>
-                  <th scope="col" className="w-44 px-3 py-2.5 text-start font-medium">
+                  <th scope="col" className="w-36 px-3 py-2.5 text-start font-medium">
                     {t('table.roles')}
                   </th>
-                  <th scope="col" className="w-48 px-3 py-2.5 text-start font-medium">
+                  <th scope="col" className="w-44 px-3 py-2.5 text-start font-medium">
                     {t('table.teams')}
                   </th>
-                  <th scope="col" className="w-36 px-3 py-2.5 text-start font-medium">
+                  <th scope="col" className="w-32 px-3 py-2.5 text-start font-medium">
                     {t('table.manager')}
                   </th>
                   <th scope="col" className="w-24 px-3 py-2.5 text-start font-medium">
                     {t('table.status')}
                   </th>
-                  <th scope="col" className="w-64 px-3 py-2.5 text-end font-medium">
+                  <th scope="col" className="w-[19rem] px-3 py-2.5 text-end font-medium">
                     {t('table.actions')}
                   </th>
                 </tr>
