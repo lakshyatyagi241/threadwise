@@ -45,10 +45,15 @@ export const MEETING_CALENDAR_PROVIDERS = ['google', 'microsoft'] as const;
 export const meetingCalendarProviderSchema = z.enum(MEETING_CALENDAR_PROVIDERS);
 export type MeetingCalendarProvider = z.infer<typeof meetingCalendarProviderSchema>;
 
+/** `app`: a Zoom or Teams account the person connected. `calendar`: the room is part of the calendar event (Meet; Teams made by the Microsoft 365 calendar). */
+export const VIDEO_VIAS = ['app', 'calendar'] as const;
+export const videoViaSchema = z.enum(VIDEO_VIAS);
+export type VideoVia = z.infer<typeof videoViaSchema>;
+
 /** What the Add meeting form may offer THIS person right now. Nothing here is a guess: each option is installed AND connected. */
 export const conferencingCapabilitiesSchema = z.object({
   /** The video options to show, in a stable order (zoom, teams, meet). Empty: the form shows no video row at all. */
-  video: z.array(z.object({ provider: videoProviderSchema })),
+  video: z.array(z.object({ provider: videoProviderSchema, via: videoViaSchema })),
   /** The calendar a meeting can be put on (the workspace's connected one), or null. */
   calendar: z
     .object({
@@ -127,6 +132,8 @@ export const meetingConferencingInputSchema = z
     videoProvider: videoProviderSchema.nullable().optional(),
     addToCalendar: z.boolean().optional(),
     sendInvitation: z.boolean().optional(),
+    /** The IANA zone the times were entered in (the browser's); calendar events and Zoom want one. Left out: UTC. */
+    timeZone: z.string().min(1).max(64).optional(),
   })
   .strict();
 export type MeetingConferencingInput = z.infer<typeof meetingConferencingInputSchema>;

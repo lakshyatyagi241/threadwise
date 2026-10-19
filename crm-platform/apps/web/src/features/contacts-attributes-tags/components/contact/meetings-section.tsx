@@ -7,6 +7,7 @@ import type { ContactMeetingResponse } from '@crm/contracts';
 import Link from 'next/link';
 import { Button, ConfirmDialog, Input, Select, Spinner, useToast } from '@crm/ui';
 import { AppointmentStatusChip } from '@/features/appointments';
+import { MeetingConferencingFields, MeetingVideoStatus } from '@/features/meeting-conferencing';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
   MEETING_KEYS,
@@ -195,6 +196,12 @@ export function MeetingRow({
           </p>
         )}
       </div>
+      <MeetingConferencingFields
+        value={draft.conferencing}
+        onChange={(conferencing) => set({ conferencing })}
+        hasStart={draft.startsAt !== ''}
+        disabled={pending}
+      />
       {timeZone && (
         <p className="text-xs text-muted-foreground">{td('zoneHint', { zone: timeZone })}</p>
       )}
@@ -375,7 +382,7 @@ export function MeetingsPanel({
               </p>
             )}
             <p className="text-xs text-muted-foreground">{whenOf(m)}</p>
-            {link && (
+            {link && !m.conferencing?.videoProvider && (
               <p className="break-all text-xs" dir="ltr">
                 <a
                   href={link.href}
@@ -387,6 +394,11 @@ export function MeetingsPanel({
                 </a>
               </p>
             )}
+            <MeetingVideoStatus
+              meeting={m}
+              contactId={contact.id}
+              listKey={MEETING_KEYS.list(contact.id)}
+            />
             {place && (
               <p dir="auto" className="break-words text-xs text-muted-foreground">
                 {t('atLocation', { location: place })}

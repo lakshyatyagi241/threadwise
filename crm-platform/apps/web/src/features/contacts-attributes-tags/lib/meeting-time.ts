@@ -1,4 +1,8 @@
-import type { CreateContactMeetingInput, UpdateContactMeetingInput } from '@crm/contracts';
+import type {
+  CreateContactMeetingInput,
+  MeetingConferencingInput,
+  UpdateContactMeetingInput,
+} from '@crm/contracts';
 
 /**
  * Meeting times. The form uses `<input type="datetime-local">`, whose value is a wall-clock "2026-10-16T14:30" with no zone;
@@ -98,7 +102,15 @@ export interface MeetingFormValues {
   startsAt: string;
   endsAt: string;
   location: string;
+  /** The video link and calendar entry asked for (BL-360); left out, the request says nothing about them. */
+  conferencing?: MeetingConferencingInput;
 }
+
+/** The request part for video and calendar: the browser's zone goes with it, because a calendar event and a Zoom meeting need one. */
+const conferencingPart = (v: MeetingFormValues, timeZone?: string) =>
+  v.conferencing
+    ? { conferencing: { ...v.conferencing, ...(timeZone ? { timeZone } : {}) } }
+    : {};
 
 export const MEETING_TITLE_MAX = 255;
 export const MEETING_LOCATION_MAX = 255;
@@ -152,6 +164,7 @@ export function toCreateMeeting(
     ...(startsAt ? { startsAt } : {}),
     ...(endsAt ? { endsAt } : {}),
     ...(location ? { location } : {}),
+    ...conferencingPart(v, timeZone),
   };
 }
 
@@ -166,6 +179,7 @@ export function toUpdateMeeting(
     startsAt: v.startsAt ? zonedLocalToIso(v.startsAt, timeZone) : null,
     endsAt: v.endsAt ? zonedLocalToIso(v.endsAt, timeZone) : null,
     location: v.location.trim() || null,
+    ...conferencingPart(v, timeZone),
     rowVersion,
   };
 }

@@ -135,6 +135,7 @@ Bound surfaces (`lib/bindings.ts`; every prefix is checked against the English m
 | contact-record | `contacts-attributes-tags.detail`, `.contact.quick`, `.contact.header`, `.contact.record`, `.contact.nav`, `.contact.actions`, `.contact.tabs`, `.contact.details`, `.contact.meetings`, `.contact.deals`, `.contact.notes` |
 | appointments   | `appointments.nav`, `.hub`, `.tabs`, `.toolbar`, `.table`, `.row`, `.calendar`, `.status`, `.drawer`, `.toast`, `.reschedule`                                                                                               |
 | reminders      | `appointments.reminders` (reminders and follow-ups: the settings card, the editor step, the drawer list)                                                                                                                    |
+| meeting-conferencing | `meeting-conferencing.form`, `.row`, `.page` (the video and calendar fields of the Add meeting form, the status line of a meeting, the Video meetings page) |
 | deals          | `deals-pipelines.nav`, `.board`, `.toolbar`, `.list`, `.card`, `.form`, `.drawer`                                                                                                                                           |
 
 TODO, surfaces still saying the product's word (`NOT_YET_BOUND` in `lib/bindings.ts`, kept in step with this list by a test):

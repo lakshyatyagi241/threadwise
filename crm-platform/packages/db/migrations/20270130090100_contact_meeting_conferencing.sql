@@ -8,6 +8,9 @@
 --   video_provider     'zoom' | 'teams' | 'meet', null when no link was asked for.
 --   video_meeting_id   the provider's id of the room (Zoom meeting id, Graph online meeting id); null for 'meet' (the room is part of the
 --                      calendar event) and until the provider answers.
+--   video_via          'app' (a Zoom or Teams account the host connected) or 'calendar' (the room is part of the calendar event: Meet, or
+--                      Teams made by the Microsoft 365 calendar). Fixed when the room is made, so a later change of connections never
+--                      sends an update to the wrong place.
 --   video_status       'pending' (asked, not answered), 'ready', 'failed' (see video_error).
 --   host_user_id       whose connected account made the room: the person who scheduled the meeting. A change of provider or a delete is
 --                      done in THEIR account, even when someone else edits the meeting.
@@ -24,6 +27,7 @@ CREATE TABLE contact_meeting_conferencing (
   host_user_id bigint,
   video_provider text,
   video_meeting_id text,
+  video_via text,
   video_status text,
   video_error text,
   add_to_calendar boolean NOT NULL DEFAULT false,
@@ -33,7 +37,8 @@ CREATE TABLE contact_meeting_conferencing (
   calendar_event_id text,
   calendar_status text,
   calendar_error text,
-  synced_at timestamptz,
+  -- IANA zone the times were entered in (the browser's): calendar events and Zoom want one with the start time.
+  time_zone text,
   created_at timestamptz NOT NULL DEFAULT now(),
   updated_at timestamptz NOT NULL DEFAULT now(),
   row_version integer NOT NULL DEFAULT 1,
@@ -41,6 +46,7 @@ CREATE TABLE contact_meeting_conferencing (
   UNIQUE (org_id, uuid),
   CONSTRAINT uq_contact_meeting_conferencing_meeting UNIQUE (org_id, meeting_id),
   CONSTRAINT chk_contact_meeting_conferencing_video_provider CHECK (video_provider IS NULL OR video_provider IN ('zoom', 'teams', 'meet')),
+  CONSTRAINT chk_contact_meeting_conferencing_video_via CHECK (video_via IS NULL OR video_via IN ('app', 'calendar')),
   CONSTRAINT chk_contact_meeting_conferencing_video_status CHECK (video_status IS NULL OR video_status IN ('pending', 'ready', 'failed')),
   CONSTRAINT chk_contact_meeting_conferencing_calendar_provider CHECK (calendar_provider IS NULL OR calendar_provider IN ('google', 'microsoft')),
   CONSTRAINT chk_contact_meeting_conferencing_calendar_status CHECK (calendar_status IS NULL OR calendar_status IN ('synced', 'failed')),

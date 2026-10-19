@@ -82,6 +82,7 @@ export const contactMeetingConferencing = pgTable(
     hostUserId: idColumn('host_user_id'),
     videoProvider: text('video_provider'),
     videoMeetingId: text('video_meeting_id'),
+    videoVia: text('video_via'),
     videoStatus: text('video_status'),
     videoError: text('video_error'),
     addToCalendar: boolean('add_to_calendar').notNull().default(false),
@@ -91,7 +92,7 @@ export const contactMeetingConferencing = pgTable(
     calendarEventId: text('calendar_event_id'),
     calendarStatus: text('calendar_status'),
     calendarError: text('calendar_error'),
-    syncedAt: timestamp('synced_at', { withTimezone: true }),
+    timeZone: text('time_zone'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -108,6 +109,10 @@ export const contactMeetingConferencing = pgTable(
     check(
       'chk_contact_meeting_conferencing_video_provider',
       sql`${t.videoProvider} is null or ${t.videoProvider} in ('zoom', 'teams', 'meet')`,
+    ),
+    check(
+      'chk_contact_meeting_conferencing_video_via',
+      sql`${t.videoVia} is null or ${t.videoVia} in ('app', 'calendar')`,
     ),
     check(
       'chk_contact_meeting_conferencing_video_status',
