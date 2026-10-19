@@ -1404,7 +1404,7 @@ export async function reconcile(opts: ReconcileOptions): Promise<Report> {
       'wp_campaign_contacts',
       'flows',
       'keyword_replies',
-      'faqs',
+      'ai_training_sources',
       'chatbot_widgets',
       'ai_chat_assistants',
       'lead_sources',
