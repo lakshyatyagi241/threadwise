@@ -44,6 +44,11 @@
         "editJobTitle": "Jobtitel bearbeiten",
         "jobTitleConflict": "Jemand anderes hat diesen Kontakt zuerst geändert. Er wurde neu geladen; versuchen Sie es erneut.",
         "jobTitleFailed": "Der Jobtitel konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+        "jobTitleRequired": "Die Position darf nicht leer bleiben: Dieser Arbeitsbereich verlangt sie.",
+        "jobTitleOtherRequired": "Weitere Pflichteigenschaften dieses Kontakts sind leer. Öffnen Sie Kontakt bearbeiten, um sie auszufüllen.",
+        "jobTitleNotEditable": "Die Position ist in diesem Arbeitsbereich schreibgeschützt oder ausgeblendet und kann hier nicht bearbeitet werden.",
+        "jobTitleForbidden": "Sie haben keine Berechtigung, diesen Kontakt zu bearbeiten.",
+        "jobTitleGone": "Dieser Kontakt ist für Sie nicht mehr verfügbar: Er wurde gelöscht oder jemand anderem zugewiesen.",
         "owner": "Verantwortlicher"
       },
       "social": {

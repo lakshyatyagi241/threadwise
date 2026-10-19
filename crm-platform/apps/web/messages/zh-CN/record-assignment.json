@@ -3,7 +3,7 @@
     "back": "自动化",
     "title": "记录分配规则",
     "intro": "自动将新的{contacts}、公司和{deals}分配给合适的销售负责人。",
-    "crossNote": "此功能分配{contacts}、公司和{deals}。如需将会话分配给客服，请参阅<link>自动分配</link>。",
+    "crossNote": "此功能分配{contacts}、公司和{deals}。如需将会话分配给客服，请参阅<link>会话自动分配</link>。",
     "master": {
       "title": "开启记录分配",
       "hint": "开启前默认关闭。开启后，下方规则会把没有负责人的新{contact}、公司或{deal}分配给团队成员。",
@@ -296,6 +296,7 @@
       "message": "规则 {name} 将停止分配。其已分配的记录保留原负责人。",
       "confirm": "删除",
       "cancel": "取消"
-    }
+    },
+    "dismiss": "忽略"
   }
 }

@@ -44,6 +44,11 @@
         "editJobTitle": "İş unvanını düzenle",
         "jobTitleConflict": "Başka biri bu kişiyi önce değiştirdi. Kişi yeniden yüklendi; tekrar deneyin.",
         "jobTitleFailed": "İş unvanı kaydedilemedi. Tekrar deneyin.",
+        "jobTitleRequired": "Unvan boş bırakılamaz: bu çalışma alanı unvanı zorunlu tutuyor.",
+        "jobTitleOtherRequired": "Bu kişinin diğer zorunlu özellikleri boş. Doldurmak için Kişiyi düzenle'yi açın.",
+        "jobTitleNotEditable": "Bu çalışma alanında unvan salt okunur veya gizli olduğu için burada düzenlenemez.",
+        "jobTitleForbidden": "Bu kişiyi düzenleme izniniz yok.",
+        "jobTitleGone": "Bu kişi artık sizin için kullanılamıyor: silindi veya başka birine atandı.",
         "owner": "Sahip"
       },
       "social": {

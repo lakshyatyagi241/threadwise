@@ -3,7 +3,7 @@
     "back": "Automatización",
     "title": "Reglas de asignación de registros",
     "intro": "Asigna automáticamente los nuevos {contacts}, empresas y {deals} al responsable de ventas adecuado.",
-    "crossNote": "Esto asigna {contacts}, empresas y {deals}. Para asignar conversaciones a agentes, consulta <link>Asignación automática</link>.",
+    "crossNote": "Esto asigna {contacts}, empresas y {deals}. Para asignar conversaciones a agentes, consulta <link>Asignación automática de conversaciones</link>.",
     "master": {
       "title": "Activar la asignación de registros",
       "hint": "Desactivada hasta que la actives. Cuando está activa, las reglas de abajo asignan a alguien de tu equipo cada nuevo {contact}, empresa o {deal} que no tenga responsable.",
@@ -296,6 +296,7 @@
       "message": "La regla {name} dejará de asignar. Los registros que ya asignó conservan su responsable.",
       "confirm": "Eliminar",
       "cancel": "Cancelar"
-    }
+    },
+    "dismiss": "Descartar"
   }
 }

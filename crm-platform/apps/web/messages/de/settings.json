@@ -301,7 +301,7 @@
         "keywords": "geta, veröffentlichen, bot, konsole, live schalten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatische Zuweisung",
+        "label": "Automatische Zuweisung von Unterhaltungen",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
       },

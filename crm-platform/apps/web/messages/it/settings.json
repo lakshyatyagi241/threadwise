@@ -301,7 +301,7 @@
         "keywords": "geta, pubblica, bot, console, vai online, chatbot"
       },
       "auto-assignment": {
-        "label": "Assegnazione automatica",
+        "label": "Assegnazione automatica delle conversazioni",
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
       },

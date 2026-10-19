@@ -3,7 +3,7 @@
     "back": "Automatisering",
     "title": "Regels voor recordtoewijzing",
     "intro": "Wijs nieuwe {contacts}, bedrijven en {deals} automatisch toe aan de juiste verkoopeigenaar.",
-    "crossNote": "Dit wijst {contacts}, bedrijven en {deals} toe. Om gesprekken aan medewerkers toe te wijzen, zie <link>Automatische toewijzing</link>.",
+    "crossNote": "Dit wijst {contacts}, bedrijven en {deals} toe. Om gesprekken aan medewerkers toe te wijzen, zie <link>Automatische toewijzing van gesprekken</link>.",
     "master": {
       "title": "Recordtoewijzing inschakelen",
       "hint": "Uit totdat u het inschakelt. Als het aan staat, geven de onderstaande regels een nieuwe {contact}, nieuw bedrijf of nieuwe {deal} zonder eigenaar aan iemand in uw team.",
@@ -296,6 +296,7 @@
       "message": "De regel {name} stopt met toewijzen. Records die al zijn toegewezen behouden hun eigenaar.",
       "confirm": "Verwijderen",
       "cancel": "Annuleren"
-    }
+    },
+    "dismiss": "Sluiten"
   }
 }

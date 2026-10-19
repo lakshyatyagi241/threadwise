@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automação e IA",
-      "title": "Atribuição automática",
+      "title": "Atribuição automática de conversas",
       "subtitle": "Atribua cada nova conversa ao agente certo automaticamente. As regras são testadas em ordem, de cima para baixo.",
       "noAccess": "Você não tem permissão para ver as configurações de atribuição automática.",
       "create": "Criar regra",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Envia a resposta: {body}"
     },
     "form": {
-      "back": "Atribuição automática",
+      "back": "Atribuição automática de conversas",
       "noAccess": "Você não tem permissão para alterar as regras de atribuição automática.",
       "loading": "Carregando a regra",
       "notFound": "Esta regra não existe mais.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Atribuição automática",
+      "eyebrow": "Atribuição automática de conversas",
       "title": "Horário comercial",
       "subtitle": "As regras e metas de SLA que usam o horário comercial contam o tempo apenas dentro destas horas.",
       "close": "Fechar",
