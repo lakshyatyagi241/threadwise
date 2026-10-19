@@ -22,14 +22,11 @@ export function FaqPanel({
   flowId,
   flowName,
   onDirtyChange,
-  builder,
 }: {
   flowId: string;
   flowName: string;
   /** Called with true while a screen holds unsaved edits (an FAQ being edited). */
   onDirtyChange?: (dirty: boolean) => void;
-  /** The builder hosting the tab; the screens link within it. */
-  builder?: 'simple' | 'advanced';
 }) {
   const params = useSearchParams();
   const location = parseFaqLocation(params.get('view'));
@@ -39,12 +36,7 @@ export function FaqPanel({
     void qc.invalidateQueries({ queryKey: KEYS.flowNodes(flowId) });
   }, [qc, flowId]);
   return (
-    <FaqFlowProvider
-      flowId={flowId}
-      flowName={flowName}
-      onDirtyChange={onDirtyChange}
-      builder={builder}
-    >
+    <FaqFlowProvider flowId={flowId} flowName={flowName} onDirtyChange={onDirtyChange}>
       <FaqShell location={location}>
         <FaqScreen location={location} />
       </FaqShell>

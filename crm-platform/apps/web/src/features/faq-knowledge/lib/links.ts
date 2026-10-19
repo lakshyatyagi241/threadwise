@@ -26,16 +26,11 @@ export function faqTabOf(loc: FaqLocation): FaqTabId {
 }
 
 /**
- * `/flows/simple/<flow>?tab=faqs&view=...` (or `/flows/builder/<flow>?...` from the Advanced builder, which has the same tab): the link to one screen of a flow's FAQs. The list is the tab's own page, so it has no
+ * `/flows/simple/<flow>?tab=faqs&view=...`: the link to one screen of a flow's FAQs. The list is the tab's own page, so it has no
  * `view`.
  */
-export function faqHref(
-  flowId: string,
-  target: FaqView | { faqId: string } = 'list',
-  builder: 'simple' | 'advanced' = 'simple',
-): string {
-  const root = builder === 'advanced' ? '/flows/builder' : '/flows/simple';
-  const base = `${root}/${encodeURIComponent(flowId)}?tab=faqs`;
+export function faqHref(flowId: string, target: FaqView | { faqId: string } = 'list'): string {
+  const base = `/flows/simple/${encodeURIComponent(flowId)}?tab=faqs`;
   if (target === 'list') return base;
   const view = typeof target === 'string' ? target : target.faqId;
   return `${base}&view=${encodeURIComponent(view)}`;
