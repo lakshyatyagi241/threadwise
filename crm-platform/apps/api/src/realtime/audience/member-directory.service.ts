@@ -9,7 +9,7 @@ import {
   viewerReadsUnassigned,
   type ConversationViewer,
 } from './conversation-visibility';
-import { cacheMetrics } from '@crm/observability';
+import { cacheMetrics, cacheSize } from '@crm/observability';
 
 const cache = cacheMetrics('member_directory');
 
@@ -37,6 +37,7 @@ interface Entry {
 @Injectable()
 export class MemberDirectory {
   private readonly cache = new Map<string, Entry>();
+  private readonly sizeGauge = cacheSize('member_directory', () => this.cache.size);
 
   constructor(
     private readonly db: DatabaseService,

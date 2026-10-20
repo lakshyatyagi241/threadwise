@@ -17,7 +17,7 @@ import { MetaRateCardService } from './meta-rate-card.service';
 import { WalletSettingsService } from './wallet-settings.service';
 import { cacheMetrics } from '@crm/observability';
 
-const cacheStat = cacheMetrics('meta_rate_card');
+const cacheStat = cacheMetrics('rate_card');
 
 const CACHE_MS = 30_000;
 

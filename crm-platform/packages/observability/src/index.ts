@@ -26,9 +26,6 @@ export {
   cacheMetrics,
   cacheSize,
   MAX_CACHES,
-  setCacheSink,
-  cacheSeriesCount,
-  readCacheCounts,
   type CacheMetrics,
   type CacheSink,
 } from './cache-metrics';

@@ -1,18 +1,11 @@
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Logger } from '@nestjs/common';
+import { cacheSeriesCount, readCacheCounts, setCacheSink } from '@crm/observability/testing';
 import type { CallHandler, ExecutionContext } from '@nestjs/common';
 import type { Reflector } from '@nestjs/core';
 import { Redis } from 'ioredis';
 import { lastValueFrom, of } from 'rxjs';
-import {
-  MAX_CACHES,
-  RuntimeMonitor,
-  cacheMetrics,
-  cacheSeriesCount,
-  readCacheCounts,
-  setCacheSink,
-  startMetricsServer,
-} from '@crm/observability';
+import { MAX_CACHES, RuntimeMonitor, cacheMetrics, startMetricsServer } from '@crm/observability';
 import { RbacService } from '../../../src/kernel/rbac/rbac.service';
 import { AccountGateService } from '../../../src/modules/auth/security/account-gate.service';
 import { OrgSuspensionService } from '../../../src/modules/auth/security/org-suspension.service';
@@ -256,7 +249,7 @@ describe('RBAC grants on a private real Redis', () => {
       const v0 = snap('rbac_version');
       await svc.grantsForUser(A, 7);
       expect(delta('rbac_grants', g0)).toEqual({ hit: 0, miss: 1, error: 0 });
-      expect(delta('rbac_version', v0)).toEqual({ hit: 0, miss: 2, error: 0 }); // the Lua fast read, then the separate version read
+      expect(delta('rbac_version', v0)).toEqual({ hit: 0, miss: 1, error: 0 }); // one logical lookup: the fast read finds nothing, the separate read counts the miss
       const g1 = snap('rbac_grants');
       const v1 = snap('rbac_version');
       await svc.grantsForUser(A, 7);

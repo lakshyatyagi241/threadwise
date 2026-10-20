@@ -13,7 +13,7 @@ import { ProviderCredentials } from './provider-credentials';
 import { buildChain, type ProviderRow, type RoutePolicy } from './translation-policy';
 import { cacheMetrics } from '@crm/observability';
 
-const cache = cacheMetrics('provider_snapshots');
+const cache = cacheMetrics('translation_providers');
 
 export const OFFICIAL_ONLY_KEY = 'i18n.official_only';
 const SNAPSHOT_MS = 5_000;

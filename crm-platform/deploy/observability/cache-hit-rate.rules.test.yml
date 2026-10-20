@@ -51,7 +51,7 @@ tests:
             exp_annotations:
               summary: 'Cache account_gate on api: hit ratio 10% over 1 h with real traffic'
               description: 'Most lookups go to the source (Postgres, Redis, or a provider) instead of the cache. See docs/runbooks/cache-hit-rate.md.'
-  # Error ratio: 20% of lookups fail in the backend (and fall back to the source) fires; 1% does not.
+  # Error ratio: 20 errors in 120 lookups fires; 1% does not; a total outage (errors only) fires.
   - interval: 1m
     input_series:
       - series: 'crm_cache_hits_total{service="api",instance="a",cache="idempotency"}'
@@ -66,13 +66,20 @@ tests:
         values: '0+1x30'
       - series: 'crm_cache_errors_total{service="api",instance="a",cache="rbac_grants"}'
         values: '0+1x30'
+      # total outage: hits and misses stop, only errors move; the alert must still fire
+      - series: 'crm_cache_errors_total{service="api",instance="a",cache="mail_bounced_flag"}'
+        values: '0+10x30'
     alert_rule_test:
       - eval_time: 25m
         alertname: CacheErrorRatioHigh
         exp_alerts:
           - exp_labels: { severity: warning, service: api, cache: idempotency }
             exp_annotations:
-              summary: 'Cache idempotency on api: 20% of lookups failed in the backend'
+              summary: 'Cache idempotency on api: 16.67% of lookups failed in the backend'
+              description: 'The cache backend (normally Redis) is failing and every lookup falls back to the source. See docs/runbooks/cache-hit-rate.md.'
+          - exp_labels: { severity: warning, service: api, cache: mail_bounced_flag }
+            exp_annotations:
+              summary: 'Cache mail_bounced_flag on api: 100% of lookups failed in the backend'
               description: 'The cache backend (normally Redis) is failing and every lookup falls back to the source. See docs/runbooks/cache-hit-rate.md.'
   # Instrumentation vanished: the series exist for 5 minutes, then stop.
   - interval: 1m

@@ -3,8 +3,11 @@
 **Where the numbers come from:** every cache in `docs/performance/cache/register.json` that has a lookup (52 of 69) counts
 `crm_cache_hits_total`, `crm_cache_misses_total` and `crm_cache_errors_total` with one label, `cache` (the metric name in the register).
 `crm_cache_entries{cache}` shows the size of a bounded in-process cache where one is wired. The series are on the same `/metrics`
-listener as the event-loop and queue series (API and worker). A backend failure is counted as an error and also as a miss, because
-the request went to the source. So: hit ratio = hits / (hits + misses); error ratio = errors / (hits + misses).
+listener as the event-loop and queue series (API and worker). A backend failure is counted as an error; most sites also count the
+miss, because the request went to the source. So lookups = hits + misses + errors, hit ratio = hits / lookups, error ratio = errors / lookups
+(a site that counts both makes the ratios slightly conservative during an outage). For flag-style caches (revocation tombstones,
+idempotency replays, bounce flags, read state, `trial_verdict`, `wallet_send_ok`) a hit means "the flag or verdict was found"; their ratio
+is recorded but does not page, and a low value is normal, not a defect.
 
 Rules: `deploy/observability/cache-hit-rate.rules.yml` (tested by `cache-hit-rate.rules.test.yml` with promtool). Recorded series:
 `crm:cache_hit_ratio:5m`, `crm:cache_hit_ratio:1h`, `crm:cache_error_ratio:5m`, `crm:cache_lookups:rate5m`. Thresholds are initial

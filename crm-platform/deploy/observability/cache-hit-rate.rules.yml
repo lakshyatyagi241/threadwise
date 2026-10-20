@@ -1,8 +1,10 @@
 # Prometheus recording and alert rules for cache hit ratio and cache failures (Sheet3 #65).
 # Signals: crm_cache_hits_total / crm_cache_misses_total / crm_cache_errors_total{cache}, exported by the API and the worker
 # (cacheMetrics in packages/observability/src/cache-metrics.ts). One lookup is one hit or one miss; a backend failure (Redis down) is
-# counted as an error AND as a miss, because the request went to the source. So hit ratio = hits / (hits + misses) and
-# error ratio = errors / (hits + misses). Register of caches and their metric names: docs/performance/cache/register.json.
+# counted as an error, and most sites also count the miss because the request went to the source. A few (idempotency, mail bounce
+# flags, read state, checkout idempotency, chat dispatch) count the error alone. So lookups = hits + misses + errors, which keeps the
+# error ratio alive in a total outage where hits and misses stop; a site that counts both makes the ratios slightly conservative.
+# Register of caches and their metric names: docs/performance/cache/register.json.
 #
 # CacheHitRatioLow covers the P0 caches whose hit ratio is a signal (register `hitRatioAlert: true`); the list in the selector is kept
 # equal to the register by apps/api/test/unit/cache-audit/instrumentation.spec.ts. P1 ratios are recorded but do not page.
@@ -12,17 +14,17 @@ groups:
   - name: cache-hit-rate
     rules:
       - record: crm:cache_lookups:rate5m
-        expr: sum by (service, cache) (rate(crm_cache_hits_total[5m]) + rate(crm_cache_misses_total[5m]))
+        expr: sum by (service, cache) (rate({__name__=~"crm_cache_(hits|misses|errors)_total"}[5m]))
       - record: crm:cache_hit_ratio:5m
         expr: sum by (service, cache) (rate(crm_cache_hits_total[5m])) / (crm:cache_lookups:rate5m > 0)
       - record: crm:cache_hit_ratio:1h
-        expr: sum by (service, cache) (rate(crm_cache_hits_total[1h])) / (sum by (service, cache) (rate(crm_cache_hits_total[1h]) + rate(crm_cache_misses_total[1h])) > 0)
+        expr: sum by (service, cache) (rate(crm_cache_hits_total[1h])) / (sum by (service, cache) (rate({__name__=~"crm_cache_(hits|misses|errors)_total"}[1h])) > 0)
       - record: crm:cache_error_ratio:5m
         expr: sum by (service, cache) (rate(crm_cache_errors_total[5m])) / (crm:cache_lookups:rate5m > 0)
 
       - alert: CacheHitRatioLow
         expr: |
-          crm:cache_hit_ratio:1h{cache=~"account_gate|billing_grace_days|currency|emergency_halt|epoch_local|epoch_redis|gateway_plan|google_calendar_connection|google_oidc_keys|impersonation_open|member_directory|meta_rate_card|org_suspension|partner_agent_status|platform_rbac|platform_settings|rbac_grants|rbac_version|trial_verdict|wallet_send_ok"} < 0.5
+          crm:cache_hit_ratio:1h{cache=~"account_gate|billing_grace_days|currency|emergency_halt|epoch_local|epoch_redis|gateway_plan|google_calendar_connection|google_oidc_keys|impersonation_open|member_directory|meta_rate_card|org_suspension|partner_agent_status|platform_rbac|platform_settings|rate_card|rbac_grants|rbac_version"} < 0.5
           and on (service, cache) crm:cache_lookups:rate5m > 0.2
         for: 15m
         labels: { severity: warning }

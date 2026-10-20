@@ -12,7 +12,7 @@ import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
 import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
-import { cacheMetrics } from '@crm/observability';
+import { cacheMetrics, cacheSize } from '@crm/observability';
 
 const cache = cacheMetrics('wallet_send_ok');
 
@@ -73,6 +73,7 @@ export class WalletGateService {
   ) {}
 
   private readonly sendOk = new Map<string, number>();
+  private readonly sizeGauge = cacheSize('wallet_send_ok', () => this.sendOk.size);
 
   /**
    * The per-message check of a bulk run, called before EVERY recipient (the launch gate alone lets a long run, or several campaigns

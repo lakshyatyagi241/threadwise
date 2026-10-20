@@ -1541,7 +1541,7 @@
     "metrics": [
      "trial_verdict"
     ],
-    "hitRatioAlert": true
+    "hitRatioAlert": false
    }
   },
   {
@@ -2066,7 +2066,7 @@
     "metrics": [
      "wallet_send_ok"
     ],
-    "hitRatioAlert": true
+    "hitRatioAlert": false
    }
   },
   {
@@ -2110,7 +2110,8 @@
    "instrumentation": {
     "instrumented": true,
     "metrics": [
-     "meta_rate_card"
+     "meta_rate_card",
+     "rate_card"
     ],
     "hitRatioAlert": true,
     "alsoIn": [
@@ -2250,7 +2251,8 @@
    "instrumentation": {
     "instrumented": true,
     "metrics": [
-     "provider_snapshots"
+     "translation_providers",
+     "whatsapp_providers"
     ],
     "hitRatioAlert": false,
     "alsoIn": [

@@ -207,14 +207,10 @@ export class RbacService {
         String(userId),
       )) as [string | null, string | null] | null;
       const version = res?.[0] ? Number(res[0]) : NaN;
-      if (!Number.isFinite(version)) {
-        versionCache.miss();
-        return null;
-      }
+      if (!Number.isFinite(version)) return null; // rolesVersion() makes the separate read and counts it
       versionCache.hit();
       return { version, grants: res?.[1] ?? null };
     } catch (err) {
-      versionCache.error();
       this.logger.warn({ err }, 'rbac cache read failed; reading the version separately');
       return null;
     }

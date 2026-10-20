@@ -87,5 +87,5 @@ describe('cost per cache call', () => {
     if (process.env.CACHE_BENCH_OUT)
       writeFileSync(process.env.CACHE_BENCH_OUT, JSON.stringify(out));
     for (const [, v] of rows) expect(v).toBeGreaterThan(0);
-  }, 300_000);
+  }, 60_000);
 });

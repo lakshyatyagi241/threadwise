@@ -18,7 +18,7 @@ import { chooseNewNumberProvider, type ProviderSecrets, type RouteSource } from 
 import { ProviderStore, type ProviderRow } from './provider-store';
 import { cacheMetrics } from '@crm/observability';
 
-const cache = cacheMetrics('provider_snapshots');
+const cache = cacheMetrics('whatsapp_providers');
 
 /** How often each process re-reads the registry, so a change made through the operator API reaches the worker without a restart. */
 const REFRESH_MS = 15_000;
@@ -141,7 +141,8 @@ export class WhatsAppProviderResolver implements OnModuleInit, OnModuleDestroy {
 
   /** Makes sure `key` is in memory when it exists: a provider created or a number switched moments ago may not be in this process yet. */
   async ensureKnown(key: string): Promise<void> {
-    if (isBuiltinWhatsappProviderKey(key) || this.routes.get(key)) {
+    if (isBuiltinWhatsappProviderKey(key)) return; // built-in keys are never looked up
+    if (this.routes.get(key)) {
       cache.hit();
       return;
     }

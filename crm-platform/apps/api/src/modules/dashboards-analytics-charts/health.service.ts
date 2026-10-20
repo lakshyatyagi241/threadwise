@@ -66,7 +66,7 @@ export class HealthService {
       cache.hit();
       return this.cached.value;
     }
-    cache.miss();
+    if (!fresh) cache.miss();
     this.inflight ??= this.run().finally(() => {
       this.inflight = null;
     });
