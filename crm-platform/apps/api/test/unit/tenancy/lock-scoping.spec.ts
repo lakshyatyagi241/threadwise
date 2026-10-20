@@ -78,6 +78,10 @@ const PLATFORM_LOCKS: Record<string, string> = {
     'serialises the one platform-wide analytics rollup: a single watermark covers every workspace, so the pass and the nightly reconcile share one lock',
   'modules/auth/platform/impersonation.service.ts': 'keyed by the platform operator id',
   'modules/auth/platform/operator-auth.service.ts': 'keyed by the platform operator id',
+  'modules/auth/platform/tenant-directory.ts':
+    'sign-up happens before a workspace exists: the lock is keyed by the e-mail and the number being claimed (one identity, one account)',
+  'modules/platform-payment-gateways/checkout.service.ts':
+    'a coupon belongs to the platform and is shared by every workspace: the lock is keyed by the coupon so its last uses are not handed out twice',
   'modules/platform-payment-gateways/billing-settings.service.ts':
     'serialises the one platform billing-settings row',
   'modules/platform-settings-branding-storage/vapid.service.ts':
