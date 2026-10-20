@@ -1030,6 +1030,7 @@ export class FormSubmitService {
         // A submission is not refused over a label: past the plan's tag cap the tag is simply not made.
         cap ??= await this.entitlements.limit(orgId, 'tags');
         if (cap > 0) {
+          await this.entitlements.lockLimit(tx, orgId, 'tags');
           total ??= await this.tags.countAll(tx, orgId);
           if (total >= cap) continue;
         }
