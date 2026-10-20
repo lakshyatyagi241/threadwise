@@ -178,7 +178,11 @@ describe('deleting a team: the preview and the cleanup (gap 14)', () => {
     t = await api.signup('tz14');
     await features(t);
     const mk = async (name: string) => {
-      const m = await api.member(t, name, []);
+      // Routing targets must be able to open the inbox.
+      const m = await api.member(t, name, [
+        ['inbox.conversation.read', 'all'],
+        ['inbox.conversation.reply', 'all'],
+      ]);
       return { ...m, uuid: await uuidOf(m.userId) };
     };
     a = await mk('tza');
@@ -210,12 +214,14 @@ describe('deleting a team: the preview and the cleanup (gap 14)', () => {
         .send(body);
     const both = await rr({
       name: 'Refunds',
+      isActive: true,
       conditions: { keywords: { words: ['refund'] } },
       assign: { strategy: 'round_robin', userIds: [c.uuid], teamIds: [team.id] },
     });
     expect(both.status, JSON.stringify(both.body)).toBe(201);
     const only = await rr({
       name: 'Team only',
+      isActive: true,
       conditions: { keywords: { words: ['sales'] } },
       assign: { strategy: 'round_robin', teamIds: [team.id] },
     });
