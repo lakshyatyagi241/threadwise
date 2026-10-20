@@ -34,6 +34,8 @@ interface Resource {
   schema: z.ZodTypeAny;
   create: (n: number) => Record<string, unknown>;
   update: (n: number) => Record<string, unknown>;
+  /** The API has no `GET /:id` for this resource (tags are read through the list). */
+  noReadOne?: boolean;
 }
 
 const phone = (n: number) => `+9198${String(60000000 + n).padStart(8, '0')}`;
@@ -44,6 +46,7 @@ const RESOURCES: Resource[] = [
     schema: tagResponseSchema,
     create: (n) => ({ name: `Contract tag ${n}` }),
     update: (n) => ({ name: `Renamed tag ${n}` }),
+    noReadOne: true,
   },
   {
     name: 'company',
@@ -63,13 +66,15 @@ const RESOURCES: Resource[] = [
 
 describe.each(RESOURCES)('$name responses match @crm/contracts', (r) => {
   let id: string;
+  let created: { rowVersion?: number };
   it('create answers 201 with the declared shape', async () => {
     const res = await api.as(t.admin).post(r.path).send(r.create(1));
     const body = expectContract(res, r.schema, { status: 201, label: `POST ${r.path}` });
     id = (body as { id: string }).id;
+    created = body as { rowVersion?: number };
     expect(id).toBeTruthy();
   });
-  it('read one answers 200 with the same shape', async () => {
+  it.skipIf(r.noReadOne)('read one answers 200 with the same shape', async () => {
     expectContract(await api.as(t.admin).get(`${r.path}/${id}`), r.schema, {
       status: 200,
       label: `GET ${r.path}/:id`,
@@ -84,11 +89,13 @@ describe.each(RESOURCES)('$name responses match @crm/contracts', (r) => {
     expect(body.data.length).toBeGreaterThanOrEqual(6);
   });
   it('update answers 200 with the declared shape', async () => {
-    const current = await api.as(t.admin).get(`${r.path}/${id}`);
+    const rowVersion = r.noReadOne
+      ? created.rowVersion
+      : (await api.as(t.admin).get(`${r.path}/${id}`)).body.rowVersion;
     const res = await api
       .as(t.admin)
       .patch(`${r.path}/${id}`)
-      .send({ ...r.update(1), rowVersion: current.body.rowVersion });
+      .send({ ...r.update(1), rowVersion });
     expectContract(res, r.schema, { status: 200, label: `PATCH ${r.path}/:id` });
   });
 });
