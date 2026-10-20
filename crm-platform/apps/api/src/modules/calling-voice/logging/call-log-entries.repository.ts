@@ -231,9 +231,14 @@ export class CallLogEntriesRepository {
     orgId: number,
     e164: string,
     digits: string,
-  ): Promise<{ id: number; uuid: string; ownerId: number | null } | null> {
+  ): Promise<{
+    id: number;
+    uuid: string;
+    ownerId: number | null;
+    createdBy: number | null;
+  } | null> {
     const res = await tx.execute(sql`
-      SELECT c.id, c.uuid, c.owner_id
+      SELECT c.id, c.uuid, c.owner_id, c.created_by
       FROM contacts c
       WHERE c.org_id = ${orgId}
         AND (c.id IN (SELECT i.contact_id FROM contact_identities i WHERE i.org_id = ${orgId} AND i.kind = 'phone' AND i.value = ${e164})
@@ -241,7 +246,14 @@ export class CallLogEntriesRepository {
       ORDER BY c.id
       LIMIT 1`);
     const r = rowsOf(res)[0];
-    return r ? { id: Number(r.id), uuid: String(r.uuid), ownerId: num(r.owner_id) } : null;
+    return r
+      ? {
+          id: Number(r.id),
+          uuid: String(r.uuid),
+          ownerId: num(r.owner_id),
+          createdBy: num(r.created_by),
+        }
+      : null;
   }
 
   /** A contact's own phone as stored, for an entry logged against a contact with no number typed. */

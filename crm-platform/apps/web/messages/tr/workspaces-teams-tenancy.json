@@ -179,7 +179,7 @@
       "updateFailed": "Güncelleme başarısız: {reason}",
       "deleteFailed": "Silme başarısız: {reason}",
       "deleteTitle": "Bu ekip silinsin mi?",
-      "deleteMessage": "\"{name}\" ekibi silinsin mi? Bu ekibe atanmış görüşmelerin ataması kaldırılacak.",
+      "deleteMessage": "\"{name}\" ekibi silinsin mi? Ekipteki kişiler çalışma alanında kalır. Ekip, şu anda kullanıldığı her yerden kaldırılır.",
       "deleteConfirm": "Ekibi sil",
       "delete": "Ekibi sil",
       "subtitle": "Ekipler, kişileri görüşmeler, atamalar ve raporlar için gruplar.",
@@ -207,6 +207,18 @@
         "businessHours": "Çalışma saatleri: kaydedildi",
         "timezone": "Saat dilimi: {value}",
         "defaultAssignee": "Varsayılan atanan: {name}"
+      },
+      "deleteUsage": {
+        "title": "Neler değişecek",
+        "loading": "Bu ekibin nerelerde kullanıldığı kontrol ediliyor...",
+        "failed": "Bu ekibin nerelerde kullanıldığı kontrol edilemedi. Yine de silebilirsiniz.",
+        "nothing": "Başka hiçbir yerde bu ekip kullanılmıyor.",
+        "members": "{count, plural, one {# kişi ekipten ayrılır} other {# kişi ekipten ayrılır}}",
+        "routingRules": "{count, plural, one {# yönlendirme kuralı bu ekibi hedef olarak kaybeder; yapacak işi kalmayan kural kapatılır} other {# yönlendirme kuralı bu ekibi hedef olarak kaybeder; yapacak işi kalmayan kurallar kapatılır}}",
+        "assignmentRules": "{count, plural, one {# kayıt atama kuralı bu ekibi havuzundan kaybeder} other {# kayıt atama kuralı bu ekibi havuzlarından kaybeder}}",
+        "segmentShares": "{count, plural, one {# segment artık bu ekiple paylaşılmaz} other {# segment artık bu ekiple paylaşılmaz}}",
+        "conversationsAssigned": "{count, plural, one {Bu ekibe atanmış # konuşma yerinde kalır ve ekipsiz olur} other {Bu ekibe atanmış # konuşma yerinde kalır ve ekipsiz olur}}",
+        "peopleWithReachChange": "{count, plural, one {# kişi, ekip erişimi kapsamında meslektaşlarının daha az kaydını görecek} other {# kişi, ekip erişimi kapsamında meslektaşlarının daha az kaydını görecek}}"
       }
     },
     "teamDialog": {

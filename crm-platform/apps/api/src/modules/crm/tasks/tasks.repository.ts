@@ -14,6 +14,7 @@ import type {
 import type { Tx } from '@crm/db';
 import { optionRefColumns, optionRefFrom } from '../activity-types/activity-option-ref';
 import { decodeTaskCursor } from './task-rules';
+import { isTeamPeer, scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 /** One task as the SQL returns it, with the people and the linked records already joined (names only, never ids). */
 export interface TaskRow {
@@ -160,14 +161,10 @@ export function taskScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(t.assignee_id = ${actorUserId} OR t.created_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR t.assignee_id IN ${peers} OR t.created_by IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`t.assignee_id`,
+    sql`t.created_by`,
+  ]);
 }
 
 /** A filter with every uuid already resolved to the internal id the SQL needs. */
@@ -566,13 +563,7 @@ export class TasksRepository {
     actorUserId: number,
     userId: number,
   ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${userId}
-      LIMIT 1
-    `);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, userId);
   }
 
   /** The workspace's time zone for the day buckets (UTC when it has none). */

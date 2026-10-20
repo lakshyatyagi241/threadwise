@@ -233,7 +233,14 @@
         "nobody": "Coincidió, pero no había nadie disponible",
         "broken": "Tiene una condición rota"
       },
-      "skipped": "Omitida porque no había nadie disponible: {names}"
+      "skipped": "Omitida porque no había nadie disponible: {names}",
+      "excluded": {
+        "label": "Excluidos",
+        "no_access": "{name}: no puede abrir este tipo de registro",
+        "inactive": "{name}: ya no está activo",
+        "on_leave": "{name}: de permiso hoy",
+        "offline": "{name}: sin conexión"
+      }
     },
     "log": {
       "title": "Registro de ejecución",

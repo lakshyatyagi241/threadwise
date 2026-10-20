@@ -179,7 +179,7 @@
       "updateFailed": "Cập nhật thất bại: {reason}",
       "deleteFailed": "Xóa thất bại: {reason}",
       "deleteTitle": "Xóa nhóm này?",
-      "deleteMessage": "Xóa nhóm \"{name}\"? Các cuộc trò chuyện được phân công cho nhóm này sẽ trở thành chưa được phân công.",
+      "deleteMessage": "Xóa nhóm \"{name}\"? Các thành viên trong nhóm vẫn ở lại không gian làm việc. Nhóm sẽ bị gỡ khỏi mọi nơi đang sử dụng.",
       "deleteConfirm": "Xóa nhóm",
       "delete": "Xóa nhóm",
       "subtitle": "Nhóm gom mọi người lại cho hội thoại, phân công và báo cáo.",
@@ -207,6 +207,18 @@
         "businessHours": "Giờ làm việc: đã lưu",
         "timezone": "Múi giờ: {value}",
         "defaultAssignee": "Người nhận mặc định: {name}"
+      },
+      "deleteUsage": {
+        "title": "Những gì sẽ thay đổi",
+        "loading": "Đang kiểm tra nơi nhóm này được sử dụng...",
+        "failed": "Không thể kiểm tra nơi nhóm này được sử dụng. Bạn vẫn có thể xóa nhóm.",
+        "nothing": "Không có gì khác đang sử dụng nhóm này.",
+        "members": "{count, plural, one {# người rời khỏi nhóm} other {# người rời khỏi nhóm}}",
+        "routingRules": "{count, plural, one {# quy tắc định tuyến mất nhóm này khỏi đích đến; quy tắc không còn việc gì để làm sẽ bị tắt} other {# quy tắc định tuyến mất nhóm này khỏi đích đến; quy tắc không còn việc gì để làm sẽ bị tắt}}",
+        "assignmentRules": "{count, plural, one {# quy tắc phân công bản ghi mất nhóm này khỏi danh sách phân công} other {# quy tắc phân công bản ghi mất nhóm này khỏi danh sách phân công}}",
+        "segmentShares": "{count, plural, one {# phân khúc không còn được chia sẻ với nhóm này} other {# phân khúc không còn được chia sẻ với nhóm này}}",
+        "conversationsAssigned": "{count, plural, one {# cuộc trò chuyện được giao cho nhóm này vẫn giữ nguyên vị trí và không thuộc nhóm nào} other {# cuộc trò chuyện được giao cho nhóm này vẫn giữ nguyên vị trí và không thuộc nhóm nào}}",
+        "peopleWithReachChange": "{count, plural, one {# người sẽ thấy ít bản ghi của đồng nghiệp hơn theo quyền truy cập nhóm} other {# người sẽ thấy ít bản ghi của đồng nghiệp hơn theo quyền truy cập nhóm}}"
       }
     },
     "teamDialog": {

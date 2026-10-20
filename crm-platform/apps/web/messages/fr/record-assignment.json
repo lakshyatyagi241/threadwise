@@ -233,7 +233,14 @@
         "nobody": "Correspond, mais personne n'était disponible",
         "broken": "A une condition cassée"
       },
-      "skipped": "Ignorée car personne n'était disponible : {names}"
+      "skipped": "Ignorée car personne n'était disponible : {names}",
+      "excluded": {
+        "label": "Exclus",
+        "no_access": "{name} : ne peut pas ouvrir ce type d'enregistrement",
+        "inactive": "{name} : n'est plus actif",
+        "on_leave": "{name} : en congé aujourd'hui",
+        "offline": "{name} : hors ligne"
+      }
     },
     "log": {
       "title": "Journal d'exécution",

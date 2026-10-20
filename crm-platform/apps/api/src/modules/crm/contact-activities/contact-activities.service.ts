@@ -39,14 +39,7 @@ export class ContactActivitiesService {
     return this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id, {
         limit: query.limit,
         cursor: query.cursor,
@@ -79,14 +72,7 @@ export class ContactActivitiesService {
     return this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const contactId = contact.id;
 
       const created = await this.repo.insert(tx, ctx.orgId, {

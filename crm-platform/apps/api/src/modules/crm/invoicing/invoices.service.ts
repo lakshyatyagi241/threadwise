@@ -70,6 +70,7 @@ import {
 import { PlanUsageService } from '../../plans-subscriptions-trials';
 import { SalesOrdersRepository } from './sales-orders.repository';
 import { TaxRatesRepository, type TaxRateRow } from './tax-rates.repository';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 export const INVOICE_MODULE = 'invoices';
 
@@ -241,14 +242,7 @@ export class InvoicesService {
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(
-        tx,
-        this.contacts,
-        ctx.orgId,
-        read.scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, contact);
       return this.linked(tx, { contactId: contact.id, contactUuid }, query, scope);
     });
   }
@@ -265,7 +259,7 @@ export class InvoicesService {
       if (!deal) throw AppError.notFound('Deal', dealUuid);
       const read = this.rbac.can(ctx.grants!, 'record.deals.read');
       if (!read.allowed) throw AppError.forbidden('record.deals.read');
-      await this.deals.assertScope(tx, read.scope, deal.ownerId);
+      await this.deals.assertScope(tx, read.scope, deal);
       return this.linked(tx, { dealId: deal.id, dealUuid }, query, scope);
     });
   }
@@ -1519,16 +1513,15 @@ export class InvoicesService {
   /** Not-found, never forbidden: an invoice outside the caller's scope is not revealed to exist. */
   async assertScope(tx: Tx, scope: RecordScope, row: InvoiceRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Invoice');
-    if (row.ownerId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.ownerId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.ownerId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Invoice');
     }
-    throw AppError.notFound('Invoice');
   }
 
   async zone(tx: Tx, orgId: number): Promise<string> {

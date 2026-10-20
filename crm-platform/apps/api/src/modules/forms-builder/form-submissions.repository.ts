@@ -3,6 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { FormSubmissionStatus, RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../common/pagination/cursor';
+import { scopeOwnerCondition } from '../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
@@ -96,13 +97,10 @@ export function submissionScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  if (scope === 'own') return sql`(f.created_by = ${actorUserId} OR c.owner_id = ${actorUserId})`;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(f.created_by = ${actorUserId} OR c.owner_id = ${actorUserId} OR f.created_by IN ${peers} OR c.owner_id IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`f.created_by`,
+    sql`c.owner_id`,
+  ]);
 }
 
 export interface ClaimInput {

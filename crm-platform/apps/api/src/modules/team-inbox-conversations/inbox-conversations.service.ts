@@ -51,6 +51,7 @@ import {
 import { NotificationsService } from '../notifications';
 import { InboxAccess, PERM, conversationNotFound } from './inbox-access.service';
 import { InboxRealtimePublisher } from './inbox-realtime.publisher';
+import { canActOn } from '../../kernel/rbac/scope';
 
 const MODULE_KEY = 'conversations';
 
@@ -395,10 +396,18 @@ export class InboxConversationsService {
     };
   }
 
-  /** The linked contact, read through the contacts barrel. Callers who may not read contacts get none: the thread's name is all they need. */
+  /**
+   * The linked contact, read through the contacts barrel. Callers who may not read contacts get none: the thread's name is all they
+   * need. A caller whose contact scope does not cover this contact gets none either (BL-380, gap 10): the panel used to show a contact
+   * owned by someone else to an `own`-scoped agent, while the message history and the contacts list already hid it.
+   */
   private async contactSummary(
     tx: Tx,
-    ctx: { orgId: number; grants?: Map<string, { effect: 'allow' | 'deny'; scope: string }> },
+    ctx: {
+      orgId: number;
+      userId?: number | null;
+      grants?: Map<string, { effect: 'allow' | 'deny'; scope: string }>;
+    },
     row: InboxConversationRow,
   ) {
     if (row.contactId === null) return null;
@@ -409,6 +418,14 @@ export class InboxConversationsService {
     if (!can.allowed) return null;
     const contact = await this.contacts.findById(tx, ctx.orgId, row.contactId);
     if (!contact) return null;
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, can.scope, [
+        contact.ownerId,
+        contact.createdBy,
+      ]))
+    ) {
+      return null;
+    }
     let ownerName: string | null = null;
     if (contact.ownerId !== null) {
       const res = await tx.execute(

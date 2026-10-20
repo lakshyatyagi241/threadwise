@@ -4,6 +4,7 @@ import { and, asc, desc, eq, gt, inArray, lt, or, sql, type SQL } from 'drizzle-
 import { schema, type Tx } from '@crm/db';
 import { ERROR_CODES, type ContactSort, type RecordScope } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
+import { isTeamPeer, teamPeersSql } from '../../../kernel/rbac/scope';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { NO_STAGE_FLAGS, type StageFlags } from './contact-stage';
 import type { StatusScopeOption } from './contact-status-stage';
@@ -18,16 +19,8 @@ import {
   type ResolvedContactFilter,
 } from './contact-conditions';
 
-const {
-  companies,
-  contacts,
-  fieldDependencies,
-  fieldOptions,
-  fields,
-  statusOptions,
-  teamMembers,
-  users,
-} = schema;
+const { companies, contacts, fieldDependencies, fieldOptions, fields, statusOptions, users } =
+  schema;
 
 export interface ContactRow {
   /** Only on a list ordered by a column: the lower-cased value it was ordered by (null = blank). */
@@ -45,6 +38,8 @@ export interface ContactRow {
   companyId: number | null;
   companyUuid: string | null;
   ownerId: number | null;
+  /** Who created the contact: with the owner, the people record scope looks at (D1). */
+  createdBy: number | null;
   ownerUuid: string | null;
   lifecycleState: 'draft' | 'active' | 'archived' | 'deleted';
   lifecycleStage: string;
@@ -174,6 +169,7 @@ export class ContactsRepository {
       companyId: contacts.companyId,
       companyUuid: companies.uuid,
       ownerId: contacts.ownerId,
+      createdBy: contacts.createdBy,
       ownerUuid: users.uuid,
       lifecycleState: contacts.lifecycleState,
       lifecycleStage: contacts.lifecycleStage,
@@ -995,11 +991,7 @@ export class ContactsRepository {
           ? sql<boolean>`false`
           : scope === 'own'
             ? sql<boolean>`${users.id} = ${actorUserId}`
-            : sql<boolean>`(${users.id} = ${actorUserId} OR EXISTS (
-                SELECT 1 FROM ${teamMembers} tm1
-                JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-                WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${users.id}
-              ))`;
+            : sql<boolean>`(${users.id} = ${actorUserId} OR ${users.id} IN ${teamPeersSql(orgId, actorUserId)})`;
     const rows = await tx
       .select({ id: users.uuid, fullName: users.fullName, email: users.email, canAssign })
       .from(users)
@@ -1034,9 +1026,9 @@ export class ContactsRepository {
     tx: Tx,
     orgId: number,
     uuid: string,
-  ): Promise<{ id: number; ownerId: number | null } | undefined> {
+  ): Promise<{ id: number; ownerId: number | null; createdBy: number | null } | undefined> {
     const rows = await tx
-      .select({ id: contacts.id, ownerId: contacts.ownerId })
+      .select({ id: contacts.id, ownerId: contacts.ownerId, createdBy: contacts.createdBy })
       .from(contacts)
       .where(and(eq(contacts.orgId, orgId), eq(contacts.uuid, uuid)));
     return rows[0];
@@ -1049,13 +1041,6 @@ export class ContactsRepository {
     actorUserId: number,
     ownerId: number,
   ): Promise<boolean> {
-    const rows = await tx.execute(sql`
-      SELECT 1
-      FROM ${teamMembers} tm1
-      JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${ownerId}
-      LIMIT 1
-    `);
-    return rows.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, ownerId);
   }
 }

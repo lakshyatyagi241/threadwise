@@ -9,6 +9,7 @@ import type {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 export interface RecurringRow {
   id: number;
@@ -100,14 +101,10 @@ export function recurringScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(r.owner_id = ${actorUserId} OR r.created_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR r.owner_id IN ${peers} OR r.created_by IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`r.owner_id`,
+    sql`r.created_by`,
+  ]);
 }
 
 @Injectable()

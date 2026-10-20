@@ -373,6 +373,43 @@ export class ContactAssignmentRepository {
     }));
   }
 
+  /**
+   * Who these people are and what keeps each from taking work today (inactive, on leave, offline). Read only to explain why somebody
+   * the pool dropped was dropped; the pool itself is `candidates`.
+   */
+  async describePeople(
+    tx: Tx,
+    orgId: number,
+    ids: readonly number[],
+    today: string,
+  ): Promise<
+    Map<number, { uuid: string; name: string; active: boolean; onLeave: boolean; offline: boolean }>
+  > {
+    if (ids.length === 0) return new Map();
+    const res = await tx.execute(sql`
+      SELECT u.id, u.uuid, u.full_name, (u.status = 'active') AS active,
+             ${onLeaveOnSql('u', today)} AS on_leave,
+             (COALESCE(s.status, 'online') = 'offline') AS offline
+      FROM users u LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
+      WHERE u.org_id = ${orgId}
+        AND u.id IN (${sql.join(
+          ids.map((i) => sql`${i}`),
+          sql`, `,
+        )})`);
+    return new Map(
+      (res.rows as Raw[]).map((r) => [
+        Number(r.id),
+        {
+          uuid: String(r.uuid),
+          name: String(r.full_name),
+          active: r.active === true,
+          onLeave: r.on_leave === true,
+          offline: r.offline === true,
+        },
+      ]),
+    );
+  }
+
   /** Delegates of these people (internal ids): used for a fixed rule whose person is away. */
   async delegatesOf(tx: Tx, orgId: number, ids: readonly number[]): Promise<Map<number, number>> {
     if (ids.length === 0) return new Map();

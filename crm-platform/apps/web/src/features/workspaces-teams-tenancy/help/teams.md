@@ -32,7 +32,9 @@ Teams group people for conversations, assignments and reports. The same team can
 2. The list shows teams as a tree: a sub-team sits indented under its parent. Each row shows the manager, how many members the team has and how many are online, what the team can receive, and where it is used (routing rules, assignment rules, shared segments, conversations and sub-teams).
 3. To create a team, select **Create team**. Enter a name (up to 64 characters), pick a colour and optionally add a description, a **Manager**, a **Parent team** and its members, then select **Create team**.
 4. To change a team, select the pencil on its row, change what you need and select **Save changes**.
-5. To delete a team, open it and select **Delete team**, then confirm. Conversations assigned to it become unassigned, and its sub-teams move up one level.
+5. To delete a team, open it and select **Delete team**. The confirmation lists what will change: the people who leave the team, the routing rules and record assignment rules that name it, the segments shared with it, the conversations assigned to it and the people who would stop seeing each other's records under **Team records**. Then confirm. The team is removed from those rules (a routing rule left with nothing to do is switched off), conversations assigned to it keep their place with no team, and its sub-teams move up one level.
+
+For what "Team records" means, see [How team access works](help:team-access).
 
 > Open **How teams work** at the top of the page for a short summary.
 

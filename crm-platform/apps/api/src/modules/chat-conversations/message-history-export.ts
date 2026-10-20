@@ -50,7 +50,7 @@ export const exportContext = (orgId: number): HistoryContext => ({
   conversationJoins: sql``,
   conversationVisible: sql`TRUE`,
   bulk: true,
-  contacts: { scope: 'all', userId: 0, teamIds: [] },
+  contacts: { scope: 'all', userId: 0 },
   cost: false,
 });
 

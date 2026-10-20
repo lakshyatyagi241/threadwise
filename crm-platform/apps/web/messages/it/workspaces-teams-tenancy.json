@@ -179,7 +179,7 @@
       "updateFailed": "Aggiornamento non riuscito: {reason}",
       "deleteFailed": "Eliminazione non riuscita: {reason}",
       "deleteTitle": "Eliminare questo team?",
-      "deleteMessage": "Eliminare il team «{name}»? Le conversazioni assegnate a questo team torneranno non assegnate.",
+      "deleteMessage": "Eliminare il team \"{name}\"? Le persone al suo interno restano nello spazio di lavoro. Il team verrà rimosso ovunque sia usato attualmente.",
       "deleteConfirm": "Elimina team",
       "delete": "Elimina team",
       "subtitle": "I team raggruppano le persone per conversazioni, assegnazioni e report.",
@@ -207,6 +207,18 @@
         "businessHours": "Orari di lavoro: salvati",
         "timezone": "Fuso orario: {value}",
         "defaultAssignee": "Assegnatario predefinito: {name}"
+      },
+      "deleteUsage": {
+        "title": "Cosa cambierà",
+        "loading": "Verifica di dove viene usato questo team...",
+        "failed": "Impossibile verificare dove viene usato questo team. Puoi comunque eliminarlo.",
+        "nothing": "Nient'altro usa questo team.",
+        "members": "{count, plural, one {# persona lascia il team} other {# persone lasciano il team}}",
+        "routingRules": "{count, plural, one {# regola di instradamento perde questo team come destinazione; una regola rimasta senza azioni viene disattivata} other {# regole di instradamento perdono questo team come destinazione; una regola rimasta senza azioni viene disattivata}}",
+        "assignmentRules": "{count, plural, one {# regola di assegnazione dei record perde questo team dal suo gruppo} other {# regole di assegnazione dei record perdono questo team dal loro gruppo}}",
+        "segmentShares": "{count, plural, one {# segmento smette di essere condiviso con questo team} other {# segmenti smettono di essere condivisi con questo team}}",
+        "conversationsAssigned": "{count, plural, one {# conversazione assegnata a questo team resta al suo posto e rimane senza team} other {# conversazioni assegnate a questo team restano al loro posto e rimangono senza team}}",
+        "peopleWithReachChange": "{count, plural, one {# persona vedrà meno record dei colleghi con l'accesso di team} other {# persone vedranno meno record dei colleghi con l'accesso di team}}"
       }
     },
     "teamDialog": {

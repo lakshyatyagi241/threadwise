@@ -513,6 +513,58 @@ describe('the conversation header', () => {
     expect(res.body.contact.id).toBe(contactUuid);
   });
 
+  it('applies the caller contact scope to the contact panel, like the message history does (BL-380, gap 10)', async () => {
+    // An agent who reads only the contacts they own or created: the thread is theirs, the contact is somebody else's.
+    const scoped = await api.member(t, 'scoped', [...AGENT, ['record.contacts.read', 'own']]);
+    const mine = await inbox.conversation(t, ch.id, {
+      contactId: Number(
+        (await h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [contactUuid])).rows[0].id,
+      ),
+      assigneeUserId: scoped.userId,
+    });
+    const panel = async () =>
+      (await api.as(scoped.token).get(`/v2/inbox/conversations/${mine.uuid}`)).body;
+    const before = (
+      await h.owner.query(`SELECT owner_id, created_by FROM contacts WHERE uuid = $1`, [
+        contactUuid,
+      ])
+    ).rows[0] as { owner_id: number | null; created_by: number | null };
+
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $2 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+    ]);
+    const hidden = await panel();
+    expect(hidden.contactSummary).toBeNull();
+    // The thread itself still opens, and still names the contact: only the contact's own details are held back.
+    expect(hidden.contact.id).toBe(contactUuid);
+
+    // Owned by the agent: the panel shows.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE uuid = $1`, [
+      contactUuid,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    // Created by the agent but owned by a colleague: D1, the creator still sees it.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    await h.owner.query(`UPDATE contacts SET owner_id = NULL, created_by = NULL WHERE uuid = $1`, [
+      contactUuid,
+    ]);
+    expect((await panel()).contactSummary).toBeNull();
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      before.owner_id,
+      before.created_by,
+    ]);
+  });
+
   it('shows a closed window and when it closed, for a customer who last wrote two days ago', async () => {
     const old = await inbox.conversation(t, ch.id, {
       lastInboundAt: new Date(Date.now() - 48 * 3600_000).toISOString(),
