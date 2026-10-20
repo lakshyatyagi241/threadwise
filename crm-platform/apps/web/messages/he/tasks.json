@@ -104,7 +104,9 @@
       },
       "linkCompany": "חברה",
       "outcome": "תוצאה",
-      "allOutcomes": "כל התוצאות"
+      "allOutcomes": "כל התוצאות",
+      "team": "צוות",
+      "allTeams": "כל הצוותים"
     },
     "table": {
       "scrollArea": "טבלת משימות",

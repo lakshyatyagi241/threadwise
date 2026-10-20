@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { Button, Input, Select, cn } from '@crm/ui';
 import { DEAL_SOURCES, type Member, type Pipeline } from '../api/schemas';
 import { hasActiveFilter, type DealFilters, type DealsView } from '../lib/filters';
+import { useTeamFilterOptions } from '@/features/segments';
 import { useSourceLabel } from './parts';
 import { BoardIcon, ChartIcon, GearIcon, ListIcon, SearchIcon } from './icons';
 
@@ -25,6 +26,7 @@ export interface DealsToolbarProps {
 export function DealsToolbar(p: DealsToolbarProps) {
   const t = useTranslations('deals-pipelines.toolbar');
   const sourceLabel = useSourceLabel();
+  const teamFilter = useTeamFilterOptions();
   const active = hasActiveFilter({ ...p.filters, q: p.q, status: p.filters.status });
   const views: Array<{ id: DealsView; icon: typeof BoardIcon }> = [
     { id: 'board', icon: BoardIcon },
@@ -75,6 +77,22 @@ export function DealsToolbar(p: DealsToolbarProps) {
         ))}
       </Select>
 
+      {(teamFilter.show || p.filters.team !== '') && (
+        <Select
+          aria-label={t('team')}
+          className="w-auto min-w-36 max-w-52"
+          value={p.filters.team}
+          onChange={(e) => p.onChange({ team: e.target.value })}
+        >
+          <option value="">{t('allTeams')}</option>
+          {teamFilter.teams.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.name}
+            </option>
+          ))}
+        </Select>
+      )}
+
       <Select
         aria-label={t('source')}
         className="w-auto min-w-36 max-w-48"
@@ -108,7 +126,7 @@ export function DealsToolbar(p: DealsToolbarProps) {
           variant="ghost"
           onClick={() => {
             p.onQ('');
-            p.onChange({ q: '', owner: '', source: '', status: '' });
+            p.onChange({ q: '', owner: '', team: '', source: '', status: '' });
           }}
         >
           {t('clear')}

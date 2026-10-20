@@ -104,7 +104,9 @@
       },
       "linkCompany": "Bir şirket",
       "outcome": "Sonuç",
-      "allOutcomes": "Tüm sonuçlar"
+      "allOutcomes": "Tüm sonuçlar",
+      "team": "Ekip",
+      "allTeams": "Tüm ekipler"
     },
     "table": {
       "scrollArea": "Görev tablosu",

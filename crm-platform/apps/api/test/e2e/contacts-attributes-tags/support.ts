@@ -22,7 +22,7 @@ export interface Tenant {
   adminUserId: number;
 }
 
-export type Grant = [key: string, scope?: 'all' | 'team' | 'own'];
+export type Grant = [key: string, scope?: 'all' | 'team' | 'team_and_below' | 'own'];
 
 export class Api {
   constructor(readonly h: Harness) {}

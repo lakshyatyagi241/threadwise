@@ -10,10 +10,11 @@ import type { RecordScope } from '@crm/contracts';
  *
  * The meaning, for every module:
  *
- *   all   no condition
- *   own   a record whose owner, assignee, host or CREATOR (decision D1) is me
- *   team  `own`, plus a record whose owner, assignee, host or creator is a member of at least one team I am in
- *   none  (no signed-in person, e.g. a system actor handed a scoped permission) nothing
+ *   all             no condition
+ *   own             a record whose owner, assignee, host or CREATOR (decision D1) is me
+ *   team            `own`, plus a record whose owner, assignee, host or creator is a member of at least one team I am in
+ *   team_and_below  `team`, plus the members of every team below those teams (parent_team_id), BL-382
+ *   none            (no signed-in person, e.g. a system actor handed a scoped permission) nothing
  *
  * A record with no person on any of the columns is never visible below `all`. A person who is in no team still sees their own
  * records at `team` scope: `team` is `own` plus the teammates, never less than `own`.
@@ -42,6 +43,36 @@ export function teamPeersSql(orgId: number, userId: number): SQL {
 }
 
 /**
+ * How many levels below a team `team_and_below` reaches. The Teams service refuses a deeper chain (5) and a trigger refuses a cycle, so
+ * this bound is never the thing that stops a healthy tree; it only keeps a corrupt chain from looping the database.
+ */
+export const MAX_TEAM_DEPTH = 10;
+
+/**
+ * The ids of the teams `userId` is in plus every team below them, as a sub-select over `team_id`. Cycle-safe (the walk is
+ * depth-bounded by `MAX_TEAM_DEPTH`, and `UNION` drops a team met twice) and read inside the caller's transaction, so a re-parented team
+ * takes effect at once.
+ */
+export function teamTreeIdsSql(orgId: number, userId: number): SQL {
+  return sql`(WITH RECURSIVE team_tree(team_id, depth) AS (
+      SELECT tm.team_id, 0 FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.user_id = ${userId}
+      UNION
+      SELECT t.id, team_tree.depth + 1 FROM team_tree
+        JOIN teams t ON t.org_id = ${orgId} AND t.parent_team_id = team_tree.team_id
+      WHERE team_tree.depth < ${MAX_TEAM_DEPTH}
+    ) SELECT team_id FROM team_tree)`;
+}
+
+/**
+ * The user ids in a team of `userId` or in a team below one (`userId` included when they are in any team), as a sub-select. The
+ * `team_and_below` counterpart of `teamPeersSql`.
+ */
+export function teamPeersBelowSql(orgId: number, userId: number): SQL {
+  return sql`(SELECT tm2.user_id FROM team_members tm2
+      WHERE tm2.org_id = ${orgId} AND tm2.team_id IN ${teamTreeIdsSql(orgId, userId)})`;
+}
+
+/**
  * The ids of the teams `userId` is in, as a sub-select: for things shared with a team (a segment) rather than owned by a person.
  * `orgId` and `userId` are values or SQL (a column of the row being filtered, `current_actor_id()`).
  */
@@ -66,7 +97,8 @@ export function scopeOwnerCondition(
   const me = actor.userId;
   const mine = cols.map((c) => sql`${c} = ${me}`);
   if (scope === 'own') return mine.length === 1 ? mine[0]! : sql`(${sql.join(mine, sql` OR `)})`;
-  const peers = teamPeersSql(actor.orgId, me);
+  const peers =
+    scope === 'team_and_below' ? teamPeersBelowSql(actor.orgId, me) : teamPeersSql(actor.orgId, me);
   const theirs = cols.map((c) => sql`${c} IN ${peers}`);
   return sql`(${sql.join([...mine, ...theirs], sql` OR `)})`;
 }

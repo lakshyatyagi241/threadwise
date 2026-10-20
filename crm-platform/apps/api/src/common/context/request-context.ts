@@ -39,7 +39,7 @@ export interface RequestContext {
   /** Redis reads started early for the guards that follow; set by JwtAuthGuard, consumed once each. */
   prefetch?: AuthPrefetch;
   /** Resolved capability keys, populated by the permissions guard. */
-  grants?: Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'own' }>;
+  grants?: Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'team_and_below' | 'own' }>;
   ip?: string;
   userAgent?: string;
   /** The auth_sessions / platform_sessions uuid behind this request, when there is one. */

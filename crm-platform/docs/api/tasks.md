@@ -113,6 +113,7 @@ An edit that moves `dueAt`, and a reopen, clear `remindedAt`, so the task can be
 | `dueFrom`, `dueTo`                 | due in `[dueFrom, dueTo)`; full timestamps with offset                                                                                     |
 | `priority`                         | one or several, comma separated                                                                                                            |
 | `mine`, `assigneeId`, `unassigned` | assigned to the caller / to that member / to nobody (a member who has left is still filterable)                                            |
+| `teamId`                           | tasks whose owning team (the assignee's primary team when the assignee was set, BL-382) is that team; list and counts                    |
 | `contactId`, `dealId`, `companyId` | linked to that record; an id that is not in the workspace gives an empty page                                                              |
 | `q`                                | case-insensitive substring of the title (notes are encrypted, so not searched)                                                             |
 | `sort`                             | `due` (soonest first, undated last; the default), `created` (newest first), `completed` (latest done first; the default for `status=done`) |

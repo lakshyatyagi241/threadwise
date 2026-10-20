@@ -143,7 +143,7 @@
       },
       "total": "Total",
       "truncated": "Solo se listan las {count} filas más grandes. El resumen en CSV tiene las mismas filas.",
-      "teamNote": "Una persona en dos equipos cuenta en ambos, así que las filas de equipo pueden sumar más que el total.",
+      "teamNote": "Cada persona cuenta solo para su equipo principal, así que las filas por equipo suman el total. Las personas sin equipo principal aparecen en «Sin equipo».",
       "productNote": "Los descuentos sobre toda la factura, el envío y el redondeo se reparten entre las líneas en proporción a su valor."
     },
     "aging": {

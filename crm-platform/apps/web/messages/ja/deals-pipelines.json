@@ -128,7 +128,9 @@
         "list": "リスト"
       },
       "reports": "レポート",
-      "settings": "パイプライン設定"
+      "settings": "パイプライン設定",
+      "team": "チーム",
+      "allTeams": "すべてのチーム"
     },
     "kpi": {
       "openPipeline": "進行中のパイプライン",

@@ -220,10 +220,10 @@ describe('rewritten history and dashboard queries equal the statements they repl
   });
 
   const viewers = (): ConversationViewer[] => [
-    { userId: me, scope: 'all', teamIds: [], readsPersonalMail: false },
-    { userId: me, scope: 'all', teamIds: [], readsPersonalMail: true },
-    { userId: me, scope: 'own', teamIds: [], readsPersonalMail: false },
-    { userId: other, scope: 'team', teamIds: [], readsPersonalMail: false },
+    { userId: me, scope: 'all', teamIds: [], readsUnassigned: true, readsPersonalMail: false },
+    { userId: me, scope: 'all', teamIds: [], readsUnassigned: true, readsPersonalMail: true },
+    { userId: me, scope: 'own', teamIds: [], readsUnassigned: true, readsPersonalMail: false },
+    { userId: other, scope: 'team', teamIds: [], readsUnassigned: true, readsPersonalMail: false },
   ];
   const ctxOf = (viewer: ConversationViewer, joined: boolean): HistoryContext => {
     const v = joined

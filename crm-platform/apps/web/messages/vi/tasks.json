@@ -104,7 +104,9 @@
       },
       "linkCompany": "Một công ty",
       "outcome": "Kết quả",
-      "allOutcomes": "Tất cả kết quả"
+      "allOutcomes": "Tất cả kết quả",
+      "team": "Nhóm",
+      "allTeams": "Tất cả nhóm"
     },
     "table": {
       "scrollArea": "Bảng công việc",

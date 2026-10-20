@@ -19,7 +19,7 @@ keywords: [opportunities, pipeline, kanban, board, sales, won, lost, forecast, w
 3. Move a deal by dragging its card to another column, or use **Move to** in its "..." menu.
 4. Moving a deal to a lost stage asks why it was lost.
 5. Select a card to open its panel. Fields save when you leave them. Add a contact, change the company, add notes, calls and tasks, or use **Mark won**, **Mark lost** or **Reopen deal**.
-6. Narrow the board with the search box, **Owner** and **Source**. Select **Clear** to remove filters.
+6. Narrow the board with the search box, **Owner**, **Team** and **Source**. **Team** shows only when your role can see teams and the workspace has at least one; it lists the deals whose owning team is the one you pick (the owner's primary team when the owner was set; deals without an owner or whose owner has no primary team are in no team). Select **Clear** to remove filters.
 
 ## Options and settings
 

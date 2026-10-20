@@ -681,3 +681,26 @@ is one package that fuses chat and CRM, so one team entity serves conversations,
   screen as "Stored, not used yet"; the primary team and `is_scope_boundary` are stored for reports and for the `team_and_below` scope (T2).
 - **Not verified / open:** a run against a real mobile client; the Roles matrix label "My team's records" in the 20 non-English locales is a machine draft (the same for every new Teams string);
   the delete preview with usage (T0, BL-380) merges into the same dialog.
+
+## Scope semantics: My team and sub-teams, the unassigned queue as a permission, the owning team of a record (BL-382): beyond Reference
+
+Reference has the record scopes own, team and all behind one dropdown, with "team" meaning one thing for contacts and another for conversations, no way to say "my team and the teams
+under it", and no team on a record. Owner direction (2026-10-19, [specs/teams-unification.md](../../specs/teams-unification.md), decisions D1, D2 and D8 approved). Wiring:
+[wiring/teams-t2.md](../wiring/teams-t2.md). API: [api/teams-scope.md](../../api/teams-scope.md).
+
+- **New:** the scope **My team and sub-teams** (`team_and_below`) in the Roles matrix, for managers: their team's records plus every team below. It is offered only on plans with the
+  hierarchy feature `team_hierarchy`; a role that already holds it when the plan lacks it keeps working as "My team's records". The permission **See conversations that nobody has taken yet**
+  (`inbox.conversation.read_unassigned`). A **Team** filter on the contacts, deals and tasks lists. A warning in the role editor when a role grants at a team scope and members are in no team.
+- **Owning team (`owning_team_id`):** contacts, companies, deals and tasks remember the owner's primary team from the moment the owner was set. It feeds reports and the Team filter, never
+  access. A person on two teams is counted once, for their primary team; the CRM dashboard and the revenue report by team changed to match, so old team totals that counted that person
+  twice differ from the day this ships. `deals.owner_team_id` (an orphan column) is replaced by it and dropped in a later release.
+- **Intended differences from Reference and from the product before this change:** the Roles matrix labels are "My records / My team's records / My team and sub-teams / All records"
+  ("Own records" and "Team records" before). A role that read conversations at the team scope used to see the unassigned queue by that scope alone; it is now a separate permission that the
+  migration gave to every such role, so nobody sees less on the day it ships and an administrator can now take it away. The permission widens the team scopes only: a role that reads at
+  "My records" does not see the queue even if it holds it.
+- **Safety:** the migration changes nobody's visibility. `pnpm --filter @crm/api report:unassigned-visibility` lists, per workspace, the roles whose visible conversations would change
+  (empty right after the migration; afterwards it shows what an administrator narrowed). Existing records get their owning team from a background job in small batches (and every night for
+  people who only now got a primary team), not from the migration.
+- **Stored, not used yet:** `teams.is_scope_boundary`. Not built here: a Team filter on companies; stamps on invoices, sales documents and appointments (their reports read the owner's primary team).
+- **Not verified / open:** the 20 non-English locales are machine drafts (matrix labels, the warning, the Team filter, the permission help text, the help guides); a run with a real mobile client;
+  the downgrade fallback (`team_and_below` resolves as `team` without the plan feature) is covered by unit tests, not by a browser run.

@@ -879,7 +879,7 @@ export class CompaniesService {
       scope: scope ?? this.rbac.can(ctx.grants!, permission).scope,
       actorUserId: ctx.userId,
       nextOwnerId,
-      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }

@@ -104,7 +104,9 @@
       },
       "linkCompany": "شركة",
       "outcome": "النتيجة",
-      "allOutcomes": "كل النتائج"
+      "allOutcomes": "كل النتائج",
+      "team": "الفريق",
+      "allTeams": "كل الفرق"
     },
     "table": {
       "scrollArea": "جدول المهام",

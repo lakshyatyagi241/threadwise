@@ -1,4 +1,4 @@
-import type { RecordScope } from '@crm/contracts';
+import { isTeamScope, type RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import type { ContactsRepository } from './contacts.repository';
@@ -35,8 +35,14 @@ export async function assertContactScope(
     if (person === null) continue;
     if (scope === 'all' || person === actorUserId) return;
     if (
-      scope === 'team' &&
-      (await contactsRepo.isOwnerInActorTeam(tx, orgId, actorUserId, person))
+      isTeamScope(scope) &&
+      (await contactsRepo.isOwnerInActorTeam(
+        tx,
+        orgId,
+        actorUserId,
+        person,
+        scope === 'team_and_below',
+      ))
     ) {
       return;
     }

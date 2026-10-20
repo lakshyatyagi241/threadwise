@@ -8,7 +8,9 @@ import {
   filterDefs,
   grantsFromDraft,
   groupByCategory,
+  needsTeamWarning,
   sameDraft,
+  scopeOptions,
   setEffect,
   setMany,
   setScope,
@@ -98,5 +100,37 @@ describe('draft helpers', () => {
     expect(sameDraft(a, toggleKey(new Map(), 'a'))).toBe(true);
     expect(sameDraft(a, setEffect(a, 'a', 'deny'))).toBe(false);
     expect(sameDraft(a, new Map())).toBe(false);
+  });
+});
+
+describe('scopeOptions', () => {
+  it('lists the four scopes widest first, with team_and_below between all and team', () => {
+    expect(scopeOptions(true)).toEqual(['all', 'team_and_below', 'team', 'own']);
+  });
+  it('leaves team_and_below out when the hierarchy feature is off', () => {
+    expect(scopeOptions(false)).toEqual(['all', 'team', 'own']);
+    expect(scopeOptions(false, 'team')).toEqual(['all', 'team', 'own']);
+  });
+  it('keeps a team_and_below value the plan no longer offers', () => {
+    expect(scopeOptions(false, 'team_and_below')).toEqual(['all', 'team_and_below', 'team', 'own']);
+  });
+});
+
+describe('needsTeamWarning', () => {
+  const scoped = [{ key: 'contact.read', supportsScope: true }];
+  const draftOf = (effect: 'allow' | 'deny', recordScope: 'all' | 'team' | 'team_and_below' | 'own') =>
+    new Map([['contact.read', { effect, recordScope }]]);
+
+  it('warns for an allow at team or team_and_below when members have no team', () => {
+    expect(needsTeamWarning(draftOf('allow', 'team'), 2, scoped)).toBe(true);
+    expect(needsTeamWarning(draftOf('allow', 'team_and_below'), 1, scoped)).toBe(true);
+  });
+  it('stays quiet for all, own, a deny, no members without a team, or a key without scope', () => {
+    expect(needsTeamWarning(draftOf('allow', 'all'), 2, scoped)).toBe(false);
+    expect(needsTeamWarning(draftOf('allow', 'own'), 2, scoped)).toBe(false);
+    expect(needsTeamWarning(draftOf('deny', 'team'), 2, scoped)).toBe(false);
+    expect(needsTeamWarning(draftOf('allow', 'team'), 0, scoped)).toBe(false);
+    expect(needsTeamWarning(draftOf('allow', 'team'), undefined, scoped)).toBe(false);
+    expect(needsTeamWarning(draftOf('allow', 'team'), 2, [{ key: 'contact.read', supportsScope: false }])).toBe(false);
   });
 });

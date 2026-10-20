@@ -342,7 +342,11 @@ describe('scope: all, team and own see the same conversations in the list, the c
     t = await api.signup('ibs');
     ch = await inbox.channel(t.admin);
     all = await api.member(t, 'all', [['inbox.conversation.read', 'all']]);
-    teamer = await api.member(t, 'teamer', [['inbox.conversation.read', 'team']]);
+    // The migration of BL-382 gives every role that read at `team` the unassigned queue as a permission; this member is such a role.
+    teamer = await api.member(t, 'teamer', [
+      ['inbox.conversation.read', 'team'],
+      ['inbox.conversation.read_unassigned'],
+    ]);
     own = await api.member(t, 'own', [['inbox.conversation.read', 'own']]);
     none = await api.member(t, 'none', []);
     const mk = async (name: string) =>

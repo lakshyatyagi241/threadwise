@@ -7,6 +7,11 @@ import {
   type Pipeline,
   type Tenant,
 } from '../deals-pipelines/support';
+import { DatabaseService } from '../../../src/infra/db/database.service';
+import {
+  OWNING_TEAM_TABLES,
+  OwningTeamBackfillService,
+} from '../../../src/modules/workspaces-teams-tenancy/owning-team-backfill.jobs';
 
 /**
  * The CRM dashboard (`GET /v2/crm/dashboard`) end to end against a real Postgres: every figure is checked against seeded rows to the
@@ -543,16 +548,18 @@ describe('the CRM dashboard against seeded data', () => {
     await api.as(t.admin).delete(`/v2/pipelines/${other.id}`);
   });
 
-  it('a team filter keeps the members of that team', async () => {
+  it('a team filter keeps the records whose owning team (the owner primary team when the owner was set) is that team', async () => {
     const team = await h.owner.query(
       `INSERT INTO teams (org_id, name) VALUES ($1,'Closers') RETURNING id, uuid`,
       [t.orgId],
     );
-    await h.owner.query(`INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`, [
-      t.orgId,
-      team.rows[0].id,
-      bob.userId,
-    ]);
+    await h.owner.query(
+      `INSERT INTO team_members (org_id, team_id, user_id, is_primary) VALUES ($1,$2,$3,true)`,
+      [t.orgId, team.rows[0].id, bob.userId],
+    );
+    // bob's deals and tasks were written before he had a team, so they carry none; the nightly pass (BL-382) stamps them now that he has one.
+    const db = h.app.get(DatabaseService, { strict: false });
+    for (const { table } of OWNING_TEAM_TABLES) await new OwningTeamBackfillService(db).run(table);
     const d = await get(t.admin, `range=30d&teamId=${team.rows[0].uuid}`);
     expect(d.deals!.open.count).toBe(1);
     expect(d.deals!.leaderboard.map((r) => r.owner!.name)).toEqual(['bob']);

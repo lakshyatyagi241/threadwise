@@ -32,9 +32,9 @@ Teams group people for conversations, assignments and reports. The same team can
 2. The list shows teams as a tree: a sub-team sits indented under its parent. Each row shows the manager, how many members the team has and how many are online, what the team can receive, and where it is used (routing rules, assignment rules, shared segments, conversations and sub-teams).
 3. To create a team, select **Create team**. Enter a name (up to 64 characters), pick a colour and optionally add a description, a **Manager**, a **Parent team** and its members, then select **Create team**.
 4. To change a team, select the pencil on its row, change what you need and select **Save changes**.
-5. To delete a team, open it and select **Delete team**. The confirmation lists what will change: the people who leave the team, the routing rules and record assignment rules that name it, the segments shared with it, the conversations assigned to it and the people who would stop seeing each other's records under **Team records**. Then confirm. The team is removed from those rules (a routing rule left with nothing to do is switched off), conversations assigned to it keep their place with no team, and its sub-teams move up one level.
+5. To delete a team, open it and select **Delete team**. The confirmation lists what will change: the people who leave the team, the routing rules and record assignment rules that name it, the segments shared with it, the conversations assigned to it and the people who would stop seeing each other's records under **My team's records**. Then confirm. The team is removed from those rules (a routing rule left with nothing to do is switched off), conversations assigned to it keep their place with no team, and its sub-teams move up one level.
 
-For what "Team records" means, see [How team access works](help:team-access).
+For what the team scopes (including **My team and sub-teams**) and the owning team mean, see [How team access works](help:team-access).
 
 > Open **How teams work** at the top of the page for a short summary.
 
@@ -44,7 +44,7 @@ For what "Team records" means, see [How team access works](help:team-access).
 - **Parent team**: puts the team under another team so you can build a tree such as Sales and Sales West, up to 5 levels. A team cannot sit under itself or under one of its own sub-teams.
 - **Can receive**: **Conversations** lets the team be picked in routing rules, in the inbox assign list and in the Assign step of a flow. **Records** lets it be picked as a pool in contact assignment rules and when you reassign a person's work to a team. Turn one off to keep the team out of those lists; a team that is off is also skipped by rules that already point at it.
 - **Members**: tick the people on the team. Mark the ones who are **Lead**, and choose each person's **Primary** team. A person on exactly one team always has it as their primary team.
-- **Primary team**: a person's main team, kept for reports. Routing, assignment and visibility use every team a person is on, so nobody drops out of anything because of it.
+- **Primary team**: a person's main team, kept for reports. It decides the **owning team** of the records they own (used for reports by team and the Team filter in the contacts, deals and tasks lists). Routing, assignment and visibility use every team a person is on, so nobody drops out of anything because of it. A person with no primary team belongs to no team in reports.
 - **Stored, not used yet**: the auto-assignment strategy, a device limit, business hours, a time zone and a default assignee are kept on the team, but nothing reads them yet. They are listed at the bottom of the team's dialog so nothing is hidden.
 
 ## Plan and access

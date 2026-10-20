@@ -127,6 +127,8 @@ export const tasks = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     createdBy: idColumn('created_by'),
     assigneeId: idColumn('assignee_id'),
+    /** The assignee's primary team when the assignee was set (BL-382). Stamped by a trigger, for reports and filters only, never access. */
+    owningTeamId: idColumn('owning_team_id'),
     title: text('title').notNull(),
     notes: text('notes'),
     priority: text('priority').notNull().default('medium'),

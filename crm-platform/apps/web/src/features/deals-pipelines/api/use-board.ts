@@ -33,7 +33,7 @@ export function useBoard(pipeline: Pipeline | undefined, filters: DealFilters) {
     () => filterQuery(filters),
     // the filters that reach the server
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [filters.q, filters.owner, filters.source],
+    [filters.q, filters.owner, filters.team, filters.source],
   );
   const key = useMemo(
     () => ['deals', 'board', pipelineId, currency, stageSig, query, nonce] as const,

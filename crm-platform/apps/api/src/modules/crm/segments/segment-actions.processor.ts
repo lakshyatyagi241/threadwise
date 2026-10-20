@@ -26,7 +26,7 @@ export class SegmentActionsProcessor extends WorkerHost {
     // A worker has no HTTP request: the context carries the tenant and the person who started the
     // action (for audit), and explicit grants, because the segment-visibility check fails closed
     // without them. The request that queued the job already checked what this person may do.
-    const grants = new Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'own' }>([
+    const grants = new Map<string, { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'team_and_below' | 'own' }>([
       ['record.segments.read', { effect: 'allow', scope: 'all' }],
       ['record.segments.update', { effect: 'allow', scope: 'all' }],
     ]);

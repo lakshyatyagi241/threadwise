@@ -140,7 +140,8 @@
         "keptRole": "{name} được giữ nguyên: bạn không thể cấp hoặc gỡ vai trò này.",
         "atLeastOne": "Chọn ít nhất một vai trò.",
         "save": "Lưu vai trò",
-        "reload": "Tải lại"
+        "reload": "Tải lại",
+        "noTeamWarning": "{name} không thuộc nhóm nào, nên ở nơi vai trò được đặt phạm vi theo nhóm, họ chỉ thấy bản ghi của chính mình. Hãy thêm họ vào một nhóm trong Cài đặt > Nhóm."
       },
       "teamFilter": {
         "label": "Lọc thành viên theo nhóm",
@@ -250,8 +251,20 @@
       "lockedHint": "Quyền này chưa khả dụng cho không gian làm việc này. Quyền sẽ mở khi tính năng của gói được bật hoặc ứng dụng được cài.",
       "scope": {
         "all": "Tất cả bản ghi",
-        "own": "Bản ghi của riêng tôi",
-        "team": "Bản ghi của nhóm tôi"
+        "own": "Bản ghi của tôi",
+        "team": "Bản ghi của nhóm tôi",
+        "team_and_below": "Nhóm của tôi và nhóm con"
+      },
+      "scopeLegend": "Mỗi phạm vi bản ghi bao gồm những gì",
+      "scopeHelp": {
+        "all": "Mọi bản ghi trong không gian làm việc.",
+        "team_and_below": "Bản ghi của nhóm bạn và mọi nhóm bên dưới.",
+        "team": "Bản ghi của những người trong nhóm bạn.",
+        "own": "Chỉ các bản ghi bạn sở hữu hoặc được giao."
+      },
+      "noTeamWarning": "{count, plural, other {# thành viên có vai trò này không thuộc nhóm nào, nên chỉ thấy bản ghi của chính mình ở những nơi vai trò này đặt phạm vi nhóm.}} Hãy thêm họ vào một nhóm tại <link>Cài đặt > Nhóm</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Nếu không có quyền này, nhân viên có quyền truy cập nhóm chỉ thấy các cuộc trò chuyện được giao cho họ hoặc nhóm của họ. Khi có quyền này, họ còn thấy hàng đợi mở gồm các cuộc trò chuyện chưa giao cho ai."
       }
     },
     "delete": {
