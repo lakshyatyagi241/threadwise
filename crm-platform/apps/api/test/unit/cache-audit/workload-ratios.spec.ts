@@ -1,7 +1,6 @@
 import { writeFileSync } from 'node:fs';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { Logger } from '@nestjs/common';
-import { cacheSeriesCount, readCacheCounts, setCacheSink } from '@crm/observability/testing';
 import { RuntimeMonitor } from '@crm/observability';
 import { OrgSuspensionService } from '../../../src/modules/auth/security/org-suspension.service';
 import { BookingPageThemesCache } from '../../../src/modules/appointments-booking/booking-page-themes.cache';
