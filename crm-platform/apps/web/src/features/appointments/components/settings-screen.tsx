@@ -67,6 +67,7 @@ export function SettingsScreen() {
               <AppearanceLinkCard />
               <ChannelsSection />
               <MessageLibrarySection />
+              <ReminderRulesSection />
             </>
           ) : (
             <ErrorLine error={query.error} onRetry={() => void query.refetch()} />

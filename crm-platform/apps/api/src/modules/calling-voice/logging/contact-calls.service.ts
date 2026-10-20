@@ -36,7 +36,7 @@ export class ContactCallsService {
       if (!ref) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, ref.ownerId);
+      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, ref);
       const rows = await this.logs.forContact(
         tx,
         { orgId: ctx.orgId, userId: ctx.userId, scope: logScope },

@@ -179,7 +179,7 @@
       "updateFailed": "Aktualizacja nie powiodła się: {reason}",
       "deleteFailed": "Usunięcie nie powiodło się: {reason}",
       "deleteTitle": "Usunąć ten zespół?",
-      "deleteMessage": "Usunąć zespół „{name}”? Rozmowy przypisane do tego zespołu staną się nieprzypisane.",
+      "deleteMessage": "Usunąć zespół \"{name}\"? Osoby z zespołu pozostaną w przestrzeni roboczej. Zespół zostanie usunięty wszędzie, gdzie jest teraz używany.",
       "deleteConfirm": "Usuń zespół",
       "delete": "Usuń zespół",
       "subtitle": "Zespoły grupują osoby na potrzeby rozmów, przypisań i raportów.",
@@ -207,6 +207,18 @@
         "businessHours": "Godziny pracy: zapisane",
         "timezone": "Strefa czasowa: {value}",
         "defaultAssignee": "Domyślna osoba przypisana: {name}"
+      },
+      "deleteUsage": {
+        "title": "Co się zmieni",
+        "loading": "Sprawdzanie, gdzie jest używany ten zespół...",
+        "failed": "Nie udało się sprawdzić, gdzie jest używany ten zespół. Nadal możesz go usunąć.",
+        "nothing": "Nic innego nie korzysta z tego zespołu.",
+        "members": "{count, plural, one {# osoba opuszcza zespół} other {Osoby opuszczające zespół: #}}",
+        "routingRules": "{count, plural, one {# reguła routingu traci ten zespół jako cel; reguła bez żadnego celu zostanie wyłączona} other {Reguły routingu tracące ten zespół jako cel: #; reguła bez żadnego celu zostanie wyłączona}}",
+        "assignmentRules": "{count, plural, one {# reguła przypisywania rekordów traci ten zespół ze swojej puli} other {Reguły przypisywania rekordów tracące ten zespół ze swojej puli: #}}",
+        "segmentShares": "{count, plural, one {# segment przestaje być udostępniany temu zespołowi} other {Segmenty, które przestają być udostępniane temu zespołowi: #}}",
+        "conversationsAssigned": "{count, plural, one {# rozmowa przypisana do tego zespołu zostaje na swoim miejscu i nie ma zespołu} other {Rozmowy przypisane do tego zespołu, które zostają na swoim miejscu i nie mają zespołu: #}}",
+        "peopleWithReachChange": "{count, plural, one {# osoba zobaczy mniej rekordów współpracowników w ramach dostępu zespołowego} other {Osoby, które zobaczą mniej rekordów współpracowników w ramach dostępu zespołowego: #}}"
       }
     },
     "teamDialog": {

@@ -9,6 +9,7 @@ import {
   phoneDigits,
   tagsPredicate,
 } from './contact-predicates';
+import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 export { escapeLike };
 
@@ -40,7 +41,7 @@ export function minorCondition(isMinor: boolean): SQL {
   return isMinor ? exists : sql`NOT ${exists}`;
 }
 
-const { contacts, teamMembers } = schema;
+const { contacts } = schema;
 
 /**
  * The digits of a contact's phone, written exactly as idx_contacts_phone_digits is (and as the broadcast CSV match writes it), so
@@ -114,26 +115,17 @@ export interface ResolvedContactFilter {
   excludeUuids?: string[];
 }
 
-/** Record scope as a WHERE condition on `contacts.owner_id`. 'all' adds nothing. */
+/** Record scope as a WHERE condition on the contact's owner and creator (D1). 'all' adds nothing. */
 export function contactScopeCondition(
   orgId: number,
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (scope === 'own') {
-    return actorUserId ? eq(contacts.ownerId, actorUserId) : sql`false`;
-  }
-  if (!actorUserId) return sql`false`;
-  return sql`
-    ${contacts.ownerId} IN (
-      SELECT tm2.user_id
-      FROM ${teamMembers} tm1
-      JOIN ${teamMembers} tm2
-        ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-    )
-  `;
+  // D1 (BL-380): the person who created the contact counts like its owner, in `own` and in `team`.
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`${contacts.ownerId}`,
+    sql`${contacts.createdBy}`,
+  ]);
 }
 
 /** Words of the search box. */

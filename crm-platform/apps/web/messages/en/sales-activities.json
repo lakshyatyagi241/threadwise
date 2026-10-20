@@ -73,13 +73,11 @@
       "allowEditCompleted": "Allow users to edit the completed date and time of this activity",
       "taskTypes": "Task types",
       "taskTypesHint": "Pick one when you create a task, for example Follow up or Call reminder.",
-      "addTaskType": "Add task type",
+      "addTaskType": "Add type",
       "taskTypePlaceholder": "New task type",
       "predictOutcomes": "Predict outcomes for this activity",
       "predictOutcomesHint": "Offer an outcome when the activity is completed.",
       "outcomes": "Outcomes",
-      "taskOutcomesHint": "The outcomes a finished task can have are one list for the whole workspace, kept in Task outcomes.",
-      "taskOutcomesLink": "Open Task outcomes",
       "outcomesHint": "Removing an outcome keeps it on the records that already have it.",
       "phoneOutcomesHint": "Choose how each outcome counts in call reports. Removing an outcome keeps it on the calls that already have it.",
       "addOutcome": "Add outcome",
@@ -112,7 +110,12 @@
         "conflict": "Someone else changed this activity. It was reloaded; try again.",
         "forbidden": "You do not have permission to change this.",
         "failed": "That could not be saved. Try again."
-      }
+      },
+      "itemName": "Name",
+      "hiddenInstead": "Tasks still use it, so it was hidden instead. They keep showing it.",
+      "loadingOutcomes": "Loading outcomes…",
+      "outcomesLoadFailed": "The outcomes could not be loaded.",
+      "retry": "Try again"
     },
     "create": {
       "title": "Create activity",

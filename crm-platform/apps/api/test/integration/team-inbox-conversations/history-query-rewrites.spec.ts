@@ -234,7 +234,7 @@ describe('rewritten history and dashboard queries equal the statements they repl
       conversationJoins: v.joins,
       conversationVisible: v.where,
       bulk: false,
-      contacts: { scope: 'all', userId: viewer.userId, teamIds: [] },
+      contacts: { scope: 'all', userId: viewer.userId },
       cost: false,
     };
   };

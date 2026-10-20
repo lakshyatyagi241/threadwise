@@ -8,6 +8,7 @@ import {
   type HistoryCursor,
   type HistoryWindow,
 } from './message-history-rules';
+import { scopeOwnerPredicate } from '../../kernel/rbac/scope';
 
 /**
  * The SQL of Message History: ONE feed over the message stream and the recipient rows of broadcasts, campaigns and scheduled messages.
@@ -35,7 +36,7 @@ export interface HistoryContext {
   /** The caller may see broadcast, campaign and scheduled recipient rows. */
   bulk: boolean;
   /** The caller's `record.contacts.read`: its scope (null: not held), who they are and their teams. */
-  contacts: { scope: RecordScopeLike | null; userId: number; teamIds: number[] };
+  contacts: { scope: RecordScopeLike | null; userId: number };
   /** The caller may read the wallet statement: charges are joined to the rows. */
   cost: boolean;
   /** Channels whose conversations this caller may not see (others' personal mailboxes); the rollup path subtracts them. Only set when `bulk`. */
@@ -120,27 +121,15 @@ const utcText = (col: SQL): SQL =>
 const digitsOf = (col: SQL): SQL => sql`NULLIF(regexp_replace(${col}, '\\D', '', 'g'), '')`;
 
 /** May the caller read this contact? The contact row is `ct` (possibly NULL: a number with no saved contact). */
-function contactOpen(ctx: HistoryContext, ct: string): SQL {
+export function contactOpen(ctx: HistoryContext, ct: string): SQL {
+  if (ctx.contacts.scope === null) return sql`FALSE`;
   const c = rawIdentifier(ct);
-  switch (ctx.contacts.scope) {
-    case null:
-      return sql`FALSE`;
-    case 'all':
-      return sql`TRUE`;
-    case 'own':
-      return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId}, FALSE)`;
-    case 'team': {
-      if (ctx.contacts.teamIds.length === 0) {
-        return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId}, FALSE)`;
-      }
-      const teams = sql.join(
-        ctx.contacts.teamIds.map((id) => sql`${id}`),
-        sql`, `,
-      );
-      return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId} OR ${c}.owner_id IN (
-        SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${ctx.orgId} AND tm.team_id IN (${teams})), FALSE)`;
-    }
-  }
+  // The same rule the contacts list applies (contactScopeCondition: owner or creator, D1), through the one resolver.
+  return scopeOwnerPredicate(
+    { orgId: ctx.orgId, userId: ctx.contacts.userId },
+    ctx.contacts.scope,
+    [sql`${c}.owner_id`, sql`${c}.created_by`],
+  );
 }
 
 /** A saved contact's name: the contact's own, else first and last name. */

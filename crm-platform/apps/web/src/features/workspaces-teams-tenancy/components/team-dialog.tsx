@@ -7,6 +7,7 @@ import type { WspTeam } from '@crm/contracts';
 import { useRefreshWorkspace } from '../api/hooks';
 import { wspApi } from '../api/service';
 import { useErrorText } from './parts';
+import { TeamUsageSummary } from './team-usage-summary';
 import { TeamEditorForm, showsDevicePicker, type TeamDevice } from './team-editor-form';
 
 export { showsDevicePicker, type TeamDevice };
@@ -78,7 +79,12 @@ export function TeamDialog({
       <ConfirmDialog
         open={open && confirmDelete}
         title={tt('deleteTitle')}
-        message={tt('deleteMessage', { name: team?.name ?? '' })}
+        message={
+          <>
+            <p>{tt('deleteMessage', { name: team?.name ?? '' })}</p>
+            {team && <TeamUsageSummary teamId={team.id} open={open && confirmDelete} />}
+          </>
+        }
         confirmLabel={tt('deleteConfirm')}
         cancelLabel={tc('cancel')}
         tone="danger"

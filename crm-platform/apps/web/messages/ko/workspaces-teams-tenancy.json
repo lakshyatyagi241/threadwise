@@ -179,7 +179,7 @@
       "updateFailed": "변경 실패: {reason}",
       "deleteFailed": "삭제 실패: {reason}",
       "deleteTitle": "이 팀을 삭제하시겠습니까?",
-      "deleteMessage": "팀 “{name}”을(를) 삭제하시겠습니까? 이 팀에 할당된 대화는 할당 해제됩니다.",
+      "deleteMessage": "팀 \"{name}\"을(를) 삭제할까요? 팀에 속한 사람들은 워크스페이스에 그대로 남습니다. 이 팀은 현재 사용 중인 모든 곳에서 제거됩니다.",
       "deleteConfirm": "팀 삭제",
       "delete": "팀 삭제",
       "subtitle": "팀은 대화, 배정, 보고서를 위해 사람들을 그룹으로 묶습니다.",
@@ -207,6 +207,18 @@
         "businessHours": "업무 시간: 저장됨",
         "timezone": "시간대: {value}",
         "defaultAssignee": "기본 담당자: {name}"
+      },
+      "deleteUsage": {
+        "title": "변경되는 내용",
+        "loading": "이 팀이 사용되는 곳을 확인하는 중...",
+        "failed": "이 팀이 사용되는 곳을 확인하지 못했습니다. 그래도 삭제할 수 있습니다.",
+        "nothing": "이 팀을 사용하는 곳이 없습니다.",
+        "members": "{count, plural, one {#명이 팀에서 나갑니다} other {#명이 팀에서 나갑니다}}",
+        "routingRules": "{count, plural, one {라우팅 규칙 #개에서 이 팀이 대상에서 제외되며, 처리할 대상이 없어진 규칙은 꺼집니다} other {라우팅 규칙 #개에서 이 팀이 대상에서 제외되며, 처리할 대상이 없어진 규칙은 꺼집니다}}",
+        "assignmentRules": "{count, plural, one {레코드 배정 규칙 #개의 대상 풀에서 이 팀이 제외됩니다} other {레코드 배정 규칙 #개의 대상 풀에서 이 팀이 제외됩니다}}",
+        "segmentShares": "{count, plural, one {세그먼트 #개가 더 이상 이 팀과 공유되지 않습니다} other {세그먼트 #개가 더 이상 이 팀과 공유되지 않습니다}}",
+        "conversationsAssigned": "{count, plural, one {이 팀에 배정된 대화 #개는 그대로 유지되며 팀이 지정되지 않습니다} other {이 팀에 배정된 대화 #개는 그대로 유지되며 팀이 지정되지 않습니다}}",
+        "peopleWithReachChange": "{count, plural, one {#명은 팀 접근 권한에서 볼 수 있는 동료의 레코드가 줄어듭니다} other {#명은 팀 접근 권한에서 볼 수 있는 동료의 레코드가 줄어듭니다}}"
       }
     },
     "teamDialog": {

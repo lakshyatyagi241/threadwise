@@ -40,14 +40,7 @@ export class ContactNotesService {
     return this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id, {
         limit: query.limit,
         cursor: query.cursor,
@@ -62,14 +55,7 @@ export class ContactNotesService {
     return this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const contactId = contact.id;
 
       const created = await this.repo.insert(tx, ctx.orgId, {
@@ -107,7 +93,7 @@ export class ContactNotesService {
         ctx.orgId,
         scope,
         ctx.userId!,
-        parent?.ownerId ?? null,
+        parent ?? { ownerId: null, createdBy: null },
       );
 
       const updated = await this.repo.updateWithVersion(
@@ -153,7 +139,7 @@ export class ContactNotesService {
         ctx.orgId,
         scope,
         ctx.userId!,
-        parent?.ownerId ?? null,
+        parent ?? { ownerId: null, createdBy: null },
       );
 
       await this.audit.record(tx, { module: MODULE_KEY, recordId: existing.id, action: 'delete' });

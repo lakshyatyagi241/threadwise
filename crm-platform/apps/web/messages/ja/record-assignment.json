@@ -233,7 +233,14 @@
         "nobody": "一致したが、対応できる人がいなかった",
         "broken": "壊れた条件あり"
       },
-      "skipped": "対応できる人がいないためスキップ：{names}"
+      "skipped": "対応できる人がいないためスキップ：{names}",
+      "excluded": {
+        "label": "対象外",
+        "no_access": "{name}：この種類のレコードを開けません",
+        "inactive": "{name}：すでに無効です",
+        "on_leave": "{name}：本日休暇中です",
+        "offline": "{name}：オフラインです"
+      }
     },
     "log": {
       "title": "実行ログ",

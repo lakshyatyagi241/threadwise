@@ -22,6 +22,9 @@ import { PlatformWorkspaceLifecycleController } from './platform-workspace-lifec
 import { PlatformWorkspacesController } from './platform-workspaces.controller';
 import { PlatformWorkspacesRepository } from './platform-workspaces.repository';
 import { PlatformWorkspacesService } from './platform-workspaces.service';
+import { TeamUsageController } from './team-usage.controller';
+import { TeamUsageRepository } from './team-usage.repository';
+import { TeamUsageService } from './team-usage.service';
 import { TeamsController } from './teams.controller';
 import { TeamsPlanService } from './teams-plan.service';
 import { TeamsRepository } from './teams.repository';
@@ -48,6 +51,7 @@ import { TeamsService } from './teams.service';
     MemberHandoverController,
     LeaveController,
     TeamsController,
+    TeamUsageController,
     InvitationsController,
     PlatformWorkspacesController,
     PlatformWorkspaceLifecycleController,
@@ -61,6 +65,8 @@ import { TeamsService } from './teams.service';
     TeamsRepository,
     TeamsPlanService,
     TeamsService,
+    TeamUsageRepository,
+    TeamUsageService,
     InvitationsService,
     PlatformWorkspacesRepository,
     PlatformWorkspacesService,

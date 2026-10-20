@@ -659,7 +659,7 @@ describe('AUTHZ-088 fail-closed when an authorization store is unavailable', () 
     expect((await call(sAdmin, 'get', '/v2/contacts')).status).toBe(200);
     expect((await call(sUser.token, 'get', '/v2/contacts')).status).toBe(200);
 
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [sUser.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [sUser.userId]);
     await flushAuthCaches();
     await withRedisDown(async () => {
       const u = await call(sUser.token, 'get', '/v2/contacts');
@@ -1331,7 +1331,7 @@ describe('AUTHZ-089 entitlement, suspension and session changes take effect with
       await h.redis.get(`auth:gate:${C.orgId}:${m.userId}`),
       'gate state cached',
     ).not.toBeNull();
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [m.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [m.userId]);
     const t0 = now();
     let status = 200;
     while (now() - t0 < 40_000) {

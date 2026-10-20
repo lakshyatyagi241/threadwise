@@ -1,4 +1,5 @@
 import type { RecordScope } from '@crm/contracts';
+import { conversationScopeAllows } from '../../kernel/rbac/scope';
 
 /** The permission that decides who may see a conversation. */
 export const PERM_CONVERSATION_READ = 'inbox.conversation.read';
@@ -60,15 +61,6 @@ export function conversationVisible(
     if (record.channelOwnerUserId === viewer.userId) return true;
     if (viewer.readsPersonalMail !== true) return false;
   }
-  switch (viewer.scope) {
-    case 'all':
-      return true;
-    case 'team':
-      if (record.assigneeUserId === viewer.userId) return true;
-      if (record.assigneeTeamId !== null && viewer.teamIds.includes(record.assigneeTeamId))
-        return true;
-      return record.assigneeUserId === null && record.assigneeTeamId === null;
-    case 'own':
-      return record.assigneeUserId === viewer.userId;
-  }
+  // The assignment rule lives with the other scope rules (kernel/rbac/scope, 'conversation' mode).
+  return conversationScopeAllows(viewer, record);
 }

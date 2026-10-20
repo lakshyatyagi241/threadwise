@@ -170,7 +170,7 @@ export class MeetingResultsService {
     const ref = await this.contactsRepo.resolveContactRef(tx, orgId, uuid);
     if (!ref) throw AppError.notFound('Contact', uuid);
     const scope = this.rbac.can(ctx.grants!, permission).scope;
-    await assertContactScope(tx, this.contactsRepo, orgId, scope, ctx.userId!, ref.ownerId);
+    await assertContactScope(tx, this.contactsRepo, orgId, scope, ctx.userId!, ref);
     return ref;
   }
 

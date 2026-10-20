@@ -179,7 +179,7 @@
       "updateFailed": "Falha na atualização: {reason}",
       "deleteFailed": "Falha ao excluir: {reason}",
       "deleteTitle": "Excluir esta equipe?",
-      "deleteMessage": "Excluir a equipe “{name}”? As conversas atribuídas a esta equipe ficarão sem atribuição.",
+      "deleteMessage": "Excluir a equipe \"{name}\"? As pessoas dela continuam no espaço de trabalho. A equipe será removida de todos os lugares onde é usada hoje.",
       "deleteConfirm": "Excluir equipe",
       "delete": "Excluir equipe",
       "subtitle": "As equipes agrupam pessoas para conversas, atribuições e relatórios.",
@@ -207,6 +207,18 @@
         "businessHours": "Horário comercial: salvo",
         "timezone": "Fuso horário: {value}",
         "defaultAssignee": "Responsável padrão: {name}"
+      },
+      "deleteUsage": {
+        "title": "O que vai mudar",
+        "loading": "Verificando onde esta equipe é usada...",
+        "failed": "Não foi possível verificar onde esta equipe é usada. Você ainda pode excluí-la.",
+        "nothing": "Nada mais usa esta equipe.",
+        "members": "{count, plural, one {# pessoa sai da equipe} other {# pessoas saem da equipe}}",
+        "routingRules": "{count, plural, one {# regra de roteamento perde esta equipe como destino; uma regra sem nenhum destino é desativada} other {# regras de roteamento perdem esta equipe como destino; uma regra sem nenhum destino é desativada}}",
+        "assignmentRules": "{count, plural, one {# regra de atribuição de registros perde esta equipe do seu grupo} other {# regras de atribuição de registros perdem esta equipe do seu grupo}}",
+        "segmentShares": "{count, plural, one {# segmento deixa de ser compartilhado com esta equipe} other {# segmentos deixam de ser compartilhados com esta equipe}}",
+        "conversationsAssigned": "{count, plural, one {# conversa atribuída a esta equipe mantém seu lugar e fica sem equipe} other {# conversas atribuídas a esta equipe mantêm seu lugar e ficam sem equipe}}",
+        "peopleWithReachChange": "{count, plural, one {# pessoa verá menos registros de colegas com o acesso por equipe} other {# pessoas verão menos registros de colegas com o acesso por equipe}}"
       }
     },
     "teamDialog": {

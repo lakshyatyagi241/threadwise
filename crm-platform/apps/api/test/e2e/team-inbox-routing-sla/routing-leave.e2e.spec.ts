@@ -231,7 +231,7 @@ describe('routing skips people on leave', () => {
     expect(blocked.at(-1)).toMatchObject({ conversationId: none.conv.uuid });
 
     await setStatus(a3.userId, null);
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [a3.userId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [a3.userId]);
     expect((await customer(t, ch, 'namedword help')).assignee).toBeNull();
     await p.h.owner.query(`UPDATE users SET status = 'active' WHERE id = $1`, [a3.userId]);
 

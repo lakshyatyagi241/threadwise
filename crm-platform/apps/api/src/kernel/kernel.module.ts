@@ -6,6 +6,7 @@ import { DisplayIdService } from './identifiers/display-id.service';
 import { OutboxSubscriberRegistry } from './outbox/outbox-subscribers';
 import { OutboxService } from './outbox/outbox.service';
 import { RbacService } from './rbac/rbac.service';
+import { ScopeResolver } from './rbac/scope';
 
 /**
  * The platform kernel.
@@ -31,6 +32,7 @@ import { RbacService } from './rbac/rbac.service';
     OutboxSubscriberRegistry,
     AuditService,
     RbacService,
+    ScopeResolver,
     DisplayIdService,
   ],
   exports: [
@@ -40,6 +42,7 @@ import { RbacService } from './rbac/rbac.service';
     OutboxSubscriberRegistry,
     AuditService,
     RbacService,
+    ScopeResolver,
     DisplayIdService,
   ],
 })

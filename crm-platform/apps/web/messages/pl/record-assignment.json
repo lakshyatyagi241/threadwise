@@ -233,7 +233,14 @@
         "nobody": "Pasuje, ale nikt nie był dostępny",
         "broken": "Ma uszkodzony warunek"
       },
-      "skipped": "Pominięto, bo nikt nie był dostępny: {names}"
+      "skipped": "Pominięto, bo nikt nie był dostępny: {names}",
+      "excluded": {
+        "label": "Pominięci",
+        "no_access": "{name}: nie może otworzyć tego typu rekordu",
+        "inactive": "{name}: już nieaktywny",
+        "on_leave": "{name}: dziś na urlopie",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Dziennik uruchomień",

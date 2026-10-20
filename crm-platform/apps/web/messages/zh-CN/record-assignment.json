@@ -233,7 +233,14 @@
         "nobody": "匹配，但无人可用",
         "broken": "存在失效条件"
       },
-      "skipped": "因无人可用而跳过：{names}"
+      "skipped": "因无人可用而跳过：{names}",
+      "excluded": {
+        "label": "已排除",
+        "no_access": "{name}：无法打开此类记录",
+        "inactive": "{name}：已不再活跃",
+        "on_leave": "{name}：今天休假",
+        "offline": "{name}：离线"
+      }
     },
     "log": {
       "title": "运行日志",

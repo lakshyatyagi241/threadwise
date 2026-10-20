@@ -197,14 +197,7 @@ export class ContactGroupsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const rows = await this.repo.groupsOfContact(tx, ctx.orgId, contact.id);
       return rows.map((r) => ({ id: r.uuid, name: r.name, color: r.color }));
     });
@@ -220,14 +213,7 @@ export class ContactGroupsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
 
       const uniqueUuids = [...new Set(input.groupIds)];
       const idByUuid = await this.repo.resolveIds(tx, ctx.orgId, uniqueUuids);
