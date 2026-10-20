@@ -73,13 +73,11 @@
       "allowEditCompleted": "允许用户编辑此活动的完成日期和时间",
       "taskTypes": "任务类型",
       "taskTypesHint": "创建任务时选择一个，例如“跟进”或“回电提醒”。",
-      "addTaskType": "添加任务类型",
+      "addTaskType": "添加类型",
       "taskTypePlaceholder": "新任务类型",
       "predictOutcomes": "预测此活动的结果",
       "predictOutcomesHint": "活动完成时提供结果选项。",
       "outcomes": "结果",
-      "taskOutcomesHint": "已完成任务的结果是整个工作区共用的一份列表，在“任务结果”中维护。",
-      "taskOutcomesLink": "打开“任务结果”",
       "outcomesHint": "删除结果后，已有该结果的记录仍会保留它。",
       "phoneOutcomesHint": "选择每个结果在通话报告中的计算方式。删除结果后，已有该结果的通话仍会保留它。",
       "addOutcome": "添加结果",
@@ -112,7 +110,12 @@
         "conflict": "其他人更改了此活动。已重新加载，请重试。",
         "forbidden": "您无权更改此项。",
         "failed": "无法保存，请重试。"
-      }
+      },
+      "itemName": "名称",
+      "hiddenInstead": "仍有任务在使用它，因此改为隐藏。这些任务会继续显示它。",
+      "loadingOutcomes": "正在加载结果…",
+      "outcomesLoadFailed": "无法加载结果。",
+      "retry": "重试"
     },
     "create": {
       "title": "创建活动",

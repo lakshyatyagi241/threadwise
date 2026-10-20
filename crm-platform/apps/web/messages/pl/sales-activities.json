@@ -73,13 +73,11 @@
       "allowEditCompleted": "Zezwalaj użytkownikom na edycję daty i godziny zakończenia tej aktywności",
       "taskTypes": "Typy zadań",
       "taskTypesHint": "Wybierz jeden przy tworzeniu zadania, na przykład Kontakt kontrolny lub Przypomnienie o telefonie.",
-      "addTaskType": "Dodaj typ zadania",
+      "addTaskType": "Dodaj typ",
       "taskTypePlaceholder": "Nowy typ zadania",
       "predictOutcomes": "Przewiduj wyniki tej aktywności",
       "predictOutcomesHint": "Proponuj wynik po zakończeniu aktywności.",
       "outcomes": "Wyniki",
-      "taskOutcomesHint": "Wyniki zakończonego zadania to jedna lista dla całego obszaru roboczego, prowadzona w Wynikach zadań.",
-      "taskOutcomesLink": "Otwórz Wyniki zadań",
       "outcomesHint": "Usunięty wynik pozostaje przy rekordach, które już go mają.",
       "phoneOutcomesHint": "Wybierz, jak każdy wynik jest liczony w raportach rozmów. Usunięty wynik pozostaje przy rozmowach, które już go mają.",
       "addOutcome": "Dodaj wynik",
@@ -112,7 +110,12 @@
         "conflict": "Ktoś inny zmienił tę aktywność. Wczytano ją ponownie, spróbuj jeszcze raz.",
         "forbidden": "Nie masz uprawnień do zmiany tego.",
         "failed": "Nie udało się zapisać. Spróbuj ponownie."
-      }
+      },
+      "itemName": "Nazwa",
+      "hiddenInstead": "Zadania nadal go używają, więc został ukryty. Nadal go pokazują.",
+      "loadingOutcomes": "Wczytywanie wyników…",
+      "outcomesLoadFailed": "Nie udało się wczytać wyników.",
+      "retry": "Spróbuj ponownie"
     },
     "create": {
       "title": "Utwórz aktywność",

@@ -73,13 +73,11 @@
       "allowEditCompleted": "Cho phép người dùng sửa ngày và giờ hoàn thành của hoạt động này",
       "taskTypes": "Loại công việc",
       "taskTypesHint": "Chọn một loại khi tạo công việc, ví dụ Theo dõi hoặc Nhắc gọi lại.",
-      "addTaskType": "Thêm loại công việc",
+      "addTaskType": "Thêm loại",
       "taskTypePlaceholder": "Loại công việc mới",
       "predictOutcomes": "Dự đoán kết quả cho hoạt động này",
       "predictOutcomesHint": "Đề xuất một kết quả khi hoàn thành hoạt động.",
       "outcomes": "Kết quả",
-      "taskOutcomesHint": "Kết quả của một công việc đã hoàn thành là một danh sách chung cho cả không gian làm việc, được quản lý trong Kết quả công việc.",
-      "taskOutcomesLink": "Mở Kết quả công việc",
       "outcomesHint": "Xóa một kết quả vẫn giữ nó trên các bản ghi đã có.",
       "phoneOutcomesHint": "Chọn cách mỗi kết quả được tính trong báo cáo cuộc gọi. Xóa một kết quả vẫn giữ nó trên các cuộc gọi đã có.",
       "addOutcome": "Thêm kết quả",
@@ -112,7 +110,12 @@
         "conflict": "Người khác đã thay đổi hoạt động này. Đã tải lại, hãy thử lại.",
         "forbidden": "Bạn không có quyền thay đổi mục này.",
         "failed": "Không thể lưu. Hãy thử lại."
-      }
+      },
+      "itemName": "Tên",
+      "hiddenInstead": "Vẫn còn công việc dùng nó nên nó được ẩn đi. Các công việc đó vẫn hiển thị nó.",
+      "loadingOutcomes": "Đang tải kết quả…",
+      "outcomesLoadFailed": "Không thể tải các kết quả.",
+      "retry": "Thử lại"
     },
     "create": {
       "title": "Tạo hoạt động",
