@@ -6,10 +6,12 @@ import {
   ConversationEventsRepository,
   ConversationsRepository,
 } from '../../../../team-inbox-conversations';
-import { AssignmentService } from '../../../../team-inbox-routing-sla';
+import { AssignmentService, HandoffService } from '../../../../team-inbox-routing-sla';
+import { HANDOFF_PORTS, HANDOFF_REASONS, conversationPrioritySchema, type HandoffDestination, type HandoffReason } from '@crm/contracts';
 import type { NodeContext, NodeExecutor, NodeResult, RunState } from '../../types';
 import {
   assignConfig,
+  handoffConfig,
   dealConfig,
   instagramMessage,
   notifyPlan,
@@ -50,6 +52,7 @@ export class ActionNodes implements NodeExecutor {
     private readonly tags: TagsService,
     private readonly deals: DealsService,
     private readonly assignment: AssignmentService,
+    private readonly handoff: HandoffService,
     private readonly numbers: NumberSender,
     private readonly conversationsRepo: ConversationsRepository,
     private readonly events: ConversationEventsRepository,
@@ -106,6 +109,8 @@ export class ActionNodes implements NodeExecutor {
 
   /** TW-FLR-036. Hands the conversation to a member and/or a team, with an optional note for them. */
   private async assign(ctx: NodeContext): Promise<NodeResult> {
+    // The Human handoff (BL-398) saves `handoff: 2`; a node saved before it is the old Assign agent and runs exactly as it did.
+    if (data(ctx).handoff === 2) return this.humanHandoff(ctx);
     const cfg = assignConfig(data(ctx), ctx.render);
     if (!cfg.teamId && !cfg.userId) {
       ctx.note('no team or agent chosen: skipped');
@@ -135,6 +140,67 @@ export class ActionNodes implements NodeExecutor {
       ctx.note(`assignment failed: ${reasonOf(err)}`);
     }
     return advance;
+  }
+
+  /**
+   * The Human handoff node (BL-398): the same action an AI agent or a person uses (`HandoffService`). It leaves by `assigned` (1) when a
+   * person has the conversation, `waiting` (2) when it waits in a queue, `unavailable` (3) when it is out of hours or nobody could take it.
+   * From here the conversation is muted for the bot; the flow goes on along the wired path but a later customer message is not delivered
+   * to the run until the conversation is given back to the bot.
+   */
+  private async humanHandoff(ctx: NodeContext): Promise<NodeResult> {
+    const cfg = handoffConfig(data(ctx), ctx.render);
+    const run = ctx.run;
+    const bad = (u: string) => u !== '' && !UUID_RE.test(u);
+    if (bad(cfg.userId) || bad(cfg.teamId)) {
+      ctx.note('handoff failed: that member or team is not part of this workspace: no agent port');
+      return { kind: 'advance', port: HANDOFF_PORTS.unavailable };
+    }
+    let destination: HandoffDestination;
+    if (cfg.destination === 'person' && cfg.userId !== '') {
+      destination = { kind: 'person', userId: cfg.userId, ...(cfg.teamId ? { teamId: cfg.teamId } : {}) };
+    } else if (cfg.destination === 'team' && cfg.teamId !== '') {
+      destination = { kind: 'team', teamId: cfg.teamId };
+    } else destination = { kind: 'rules' };
+    try {
+      const thread = run.channelUuid
+        ? await this.conversations.findThread(run.channelUuid, run.peerKey)
+        : null;
+      if (!thread) {
+        ctx.note('handoff failed: the customer has no conversation yet: no agent port');
+        return { kind: 'advance', port: HANDOFF_PORTS.unavailable };
+      }
+      const priority = conversationPrioritySchema.safeParse(cfg.priority);
+      const out = await this.handoff.handoff({
+        orgId: run.orgId,
+        conversationUuid: thread.id,
+        source: 'flow',
+        reason: (HANDOFF_REASONS as readonly string[]).includes(cfg.reason) ? (cfg.reason as HandoffReason) : 'other',
+        reasonText: cfg.note || null,
+        summary: cfg.summary || null,
+        answers: run.vars,
+        destination,
+        priority: priority.success ? priority.data : null,
+        customerMessage: cfg.customerMessage || null,
+        offHoursMessage: cfg.offHoursMessage || null,
+        messageText: typeof run.vars.user_message === 'string' ? run.vars.user_message : null,
+        idempotencyKey: `flow:${ctx.stepKey}`,
+        flow: { runId: run.id, nodeId: ctx.node.id },
+        actor: { kind: 'flow' },
+      });
+      if (out.refused) ctx.note(`handoff refused: ${out.refused}`);
+      else
+        ctx.note(
+          `handoff ${out.outcome}${out.duplicate ? ' (already done)' : ''}: ${out.trace
+            .filter((t) => t.result === 'chosen')
+            .map((t) => t.why ?? t.step)
+            .join(', ') || 'queued'}`,
+        );
+      return { kind: 'advance', port: HANDOFF_PORTS[out.outcome] };
+    } catch (err) {
+      ctx.note(`handoff failed: ${reasonOf(err)}`);
+      return { kind: 'advance', port: HANDOFF_PORTS.unavailable };
+    }
   }
 
   /** TW-FLR-037. Creates a deal (or moves the contact's open one) in a stage: `created` (1) on success, `error` (2) otherwise. */

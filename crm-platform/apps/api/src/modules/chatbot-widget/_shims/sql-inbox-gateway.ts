@@ -401,10 +401,14 @@ export class SqlInboxGateway implements InboxGateway {
     // reply included) counts as "a person took over" and the assistant answers only the first message of a conversation.
     // Since the message tables were folded the opening line lives in this same table; it was never part of that check in
     // Reference (it sat in a table the check did not read), so it is excluded here to keep the first answer.
+    // A conversation a handoff put in a queue, or in front of a person, is theirs: the assistant stays silent (BL-400).
     const res = await tx.execute(sql`
       SELECT 1 FROM messages
       WHERE org_id = ${orgId} AND conversation_id = ${conversationId} AND direction = 'out'
         AND COALESCE(meta->>'source', '') <> 'welcome'
+      UNION ALL
+      SELECT 1 FROM conversations
+      WHERE org_id = ${orgId} AND id = ${conversationId} AND handling IN ('waiting', 'with_person')
       LIMIT 1`);
     return res.rows.length > 0;
   }

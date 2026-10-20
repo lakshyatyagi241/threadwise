@@ -583,7 +583,6 @@ export function flbDefaultNodeData(type: string): FlbNodeData {
         summary: '',
         customerMessage: '',
         offHoursMessage: '',
-        muteBot: true,
       };
     case 'subflow':
       return { flow: '' };

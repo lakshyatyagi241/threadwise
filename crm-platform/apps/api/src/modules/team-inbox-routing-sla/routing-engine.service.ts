@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  HANDOFF_GATES,
   hasRoutingConditions,
   ROUTING_BLOCKED_BY_LEAVE,
   ROUTING_FLOW_REQUESTED,
@@ -182,12 +183,27 @@ export class RoutingEngine {
           : c;
       };
 
-      // 2. the contact's own agent
-      if (facts.contactId !== null && (await this.repo.keepContactAgent(tx, orgId))) {
-        const mine = await this.contactAgent(tx, orgId, facts.contactId, locked, canOpen, cal);
+      // The workspace's switch (BL-404): automatic assignment off means no rule and no sticky agent at arrival either; default on = before.
+      const arrival = await this.repo.arrivalSettings(tx, orgId);
+      if (!arrival.autoAssign) return { result: { outcome: 'skipped', reason: 'plan' } };
+      // 2. the contact's own agent: the legacy switch (owner, else last handler), and/or the owner modes (owner first), which need the
+      //    sticky plan feature (BL-402). The window limits the last handler only under the sticky feature.
+      const sticky = await this.entitlements.featureEnabled(orgId, HANDOFF_GATES.ownerFirst);
+      const ownerMode = sticky && arrival.ownerMode !== 'independent';
+      if (facts.contactId !== null && (arrival.keep || ownerMode)) {
+        const mine = await this.contactAgent(tx, orgId, facts.contactId, locked, canOpen, cal, {
+          last: arrival.keep,
+          days: sticky ? arrival.days : null,
+        });
         if (mine) {
           await apply(
-            { ...mine, teamId: null, teamUuid: null, how: 'contact_agent', cursor: null },
+            {
+              ...mine,
+              teamId: null,
+              teamUuid: null,
+              how: arrival.keep ? 'contact_agent' : 'owner',
+              cursor: null,
+            },
             {},
           );
           return { result: { outcome: 'assigned', via: 'contact_agent', ruleIds: [] }, change };
@@ -875,10 +891,11 @@ export class RoutingEngine {
     locked: LockedConversation,
     canOpen: ReadonlySet<number>,
     cal: Calendar,
+    opts: { last: boolean; days: number | null } = { last: true, days: null },
   ): Promise<Pick | null> {
     const candidates = [
       await this.repo.contactOwner(tx, orgId, contactId),
-      await this.repo.lastAgentOf(tx, orgId, contactId, locked.id),
+      opts.last ? await this.repo.lastAgentOf(tx, orgId, contactId, locked.id, opts.days) : null,
     ];
     for (const original of candidates) {
       let id = original;

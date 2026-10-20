@@ -44,6 +44,7 @@ const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 @Injectable()
 export class CommerceResume implements InboundMessageListener, EcomOrderListener, OnModuleInit {
   readonly name = 'commerce-resume';
+  readonly bot = true as const;
   private readonly logger = new Logger(CommerceResume.name);
 
   constructor(
@@ -329,6 +330,7 @@ export function privacyActionFor(
 @Injectable()
 export class CatalogCartResume implements OutboxSubscriber, OnModuleInit {
   readonly name = 'commerce-cart-resume';
+  readonly bot = true as const;
   readonly eventTypes = ['whatsapp.order.received'] as const;
 
   constructor(

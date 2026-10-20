@@ -224,6 +224,23 @@ export class RoutingRulesRepository {
     return rowsOf(res)[0]?.v === true;
   }
 
+  /** The switches arrival routing reads (BL-402, BL-404): automatic assignment on/off, the owner mode, the last-handler window. */
+  async arrivalSettings(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ keep: boolean; autoAssign: boolean; ownerMode: string; days: number | null }> {
+    const res = await tx.execute(sql`
+      SELECT routing_keep_contact_agent AS keep, handoff_auto_assign AS auto, handoff_owner_mode AS mode, handoff_continuity_days AS days
+      FROM workspace_settings WHERE org_id = ${orgId}`);
+    const r = rowsOf(res)[0];
+    return {
+      keep: r?.keep === true,
+      autoAssign: r ? r.auto !== false : true,
+      ownerMode: (r?.mode as string | undefined) ?? 'independent',
+      days: r?.days === null || r?.days === undefined ? null : Number(r.days),
+    };
+  }
+
   /** A workspace has no settings row until something writes one: upsert (every other column has a default). */
   async setKeepContactAgent(tx: Tx, orgId: number, value: boolean): Promise<void> {
     await tx.execute(sql`
@@ -354,11 +371,13 @@ export class RoutingRulesRepository {
     orgId: number,
     contactId: number,
     exceptConversationId: number,
+    days: number | null = null,
   ): Promise<number | null> {
     const res = await tx.execute(sql`
       SELECT assignee_user_id FROM conversations
       WHERE org_id = ${orgId} AND contact_id = ${contactId} AND id <> ${exceptConversationId}
         AND assignee_user_id IS NOT NULL
+        ${days === null ? sql`` : sql`AND COALESCE(last_message_at, created_at) >= now() - (${days} * interval '1 day')`}
       ORDER BY COALESCE(last_message_at, created_at) DESC, id DESC LIMIT 1`);
     const v = rowsOf(res)[0]?.assignee_user_id;
     return v === null || v === undefined ? null : Number(v);
