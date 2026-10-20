@@ -101,7 +101,7 @@
         "keywords": "pesan teks, sender id, dlt, twilio, seluler"
       },
       "email": {
-        "label": "Email",
+        "label": "Email dukungan",
         "description": "Hubungkan kotak surat Gmail atau Google Workspace agar tim Anda dapat membaca dan menjawab email pelanggan di inbox bersama.",
         "keywords": "kotak surat, gmail, google workspace, inbox bersama, email dukungan, outlook, imap"
       },
