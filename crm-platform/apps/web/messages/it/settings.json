@@ -101,7 +101,7 @@
         "keywords": "messaggio di testo, ID mittente, dlt, twilio, cellulare"
       },
       "email": {
-        "label": "Email",
+        "label": "Email di supporto",
         "description": "Collega caselle Gmail o Google Workspace così il tuo team può leggere e rispondere alle email dei clienti nell’inbox condivisa.",
         "keywords": "casella di posta, gmail, google workspace, inbox condivisa, email di supporto, outlook, imap"
       },

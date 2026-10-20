@@ -101,7 +101,7 @@
         "keywords": "textnachricht, absender-id, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-Mail",
+        "label": "Support-E-Mail",
         "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
         "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },

@@ -101,7 +101,7 @@
         "keywords": "ข้อความ sms, sender id, dlt, twilio, มือถือ"
       },
       "email": {
-        "label": "อีเมล",
+        "label": "อีเมลฝ่ายสนับสนุน",
         "description": "เชื่อมต่อกล่องอีเมล Gmail หรือ Google Workspace เพื่อให้ทีมของคุณอ่านและตอบอีเมลลูกค้าในกล่องข้อความที่ใช้ร่วมกัน",
         "keywords": "กล่องอีเมล, gmail, google workspace, กล่องข้อความร่วม, อีเมลซัพพอร์ต, outlook, imap"
       },
