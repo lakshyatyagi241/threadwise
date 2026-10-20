@@ -41,7 +41,8 @@ export function snapshotOf(payload: Record<string, unknown>): ReleaseSnapshot | 
 /**
  * Removes a video room and a calendar event that a meeting no longer holds (BL-361, BL-362): the meeting was deleted, or its provider
  * changed, or it was taken off the calendar. The ids were captured in the same transaction as the change, so they survive the row. A failure
- * throws, so the drain retries it with backoff; removing something already gone is success, so a retry is safe.
+ * throws, so the drain retries it with backoff. Idempotent: removing something already gone is success (Zoom and Teams answer not-found,
+ * Google and Microsoft answer not-found or gone, and each adapter treats that as deleted), so a redelivered event or a retry is harmless.
  * Runs in the worker process under the event's own tenant.
  */
 @Injectable()

@@ -3,13 +3,13 @@
   "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
   "totals": {
     "sourceFilesUsingRedis": 112,
-    "commandCallSites": 394,
+    "commandCallSites": 372,
     "keyFamilies": 149,
-    "familiesInFilesWhereEveryWriteHasATtl": 139,
+    "familiesInFilesWhereEveryWriteHasATtl": 131,
     "familiesInFilesToReview": 1,
-    "familiesInReadOnlyFiles": 4,
+    "familiesInReadOnlyFiles": 12,
     "orgScopedFamilies": 70,
-    "queues": 51,
+    "queues": 52,
     "luaScripts": 13,
     "clientConstructionSites": 5,
     "redisCallsInsideLoops": 16,
@@ -983,6 +983,26 @@
       "concurrencyPerWorker": 1
     },
     {
+      "queue": "owning-team-backfill",
+      "constant": "OWNING_TEAM_BACKFILL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": null,
+      "concurrencyPerWorker": null
+    },
+    {
       "queue": "calendar-ics-refresh",
       "constant": "CALENDAR_ICS_REFRESH",
       "removeOnComplete": {
@@ -1648,7 +1668,7 @@
         "apps/api/src/modules/crm/invoicing/invoice-public.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "kb:embed:lock:*",
@@ -1688,7 +1708,7 @@
         "apps/api/src/modules/channel-line/inbound.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "link_click_ip:*:*",
@@ -1808,7 +1828,7 @@
         "apps/api/src/modules/channel-line/inbound.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "prbac:v*:op*",
@@ -1952,7 +1972,7 @@
         "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts"
       ],
       "scope": "ip",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "tchat:online:*:*",
@@ -1984,7 +2004,7 @@
         "apps/api/src/modules/channel-telegram/inbound.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "v1:*",
@@ -2000,7 +2020,7 @@
         "apps/api/src/modules/channel-viber/inbound.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "wa:attempt:*:*",
@@ -2234,7 +2254,7 @@
         "apps/api/src/modules/channel-wechat/inbound.service.ts"
       ],
       "scope": "other",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "wechat:bcast:*:*",
@@ -2266,7 +2286,7 @@
         "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts"
       ],
       "scope": "ip",
-      "ttlStatus": "ttl"
+      "ttlStatus": "read-only"
     },
     {
       "template": "wsp:lifecycle-mail:*:*",
@@ -2316,7 +2336,7 @@
       ],
       "writes": [
         {
-          "line": 29,
+          "line": 30,
           "cmd": "set",
           "ttl": "EX ttlSeconds"
         }
@@ -2332,7 +2352,7 @@
       ],
       "writes": [
         {
-          "line": 38,
+          "line": 39,
           "cmd": "set",
           "ttl": "EX ttlSeconds"
         }
@@ -2523,7 +2543,7 @@
       ],
       "writes": [
         {
-          "line": 84,
+          "line": 114,
           "cmd": "setex",
           "ttl": "EX CACHE_TTL_SECONDS"
         }
@@ -2672,31 +2692,19 @@
       "file": "apps/api/src/modules/auth/flows/login.service.ts",
       "commands": [
         "del",
-        "expire",
         "get",
-        "incr",
         "setex"
       ],
       "writes": [
         {
-          "line": 259,
+          "line": 260,
           "cmd": "setex",
           "ttl": "EX Ttl.workspaceChoiceSeconds"
         },
         {
-          "line": 402,
+          "line": 403,
           "cmd": "setex",
           "ttl": "EX Ttl.mfaChallengeSeconds"
-        },
-        {
-          "line": 453,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 454,
-          "cmd": "expire",
-          "ttl": "EXPIRE Ttl.mfaChallengeSeconds"
         }
       ],
       "ttlStatus": "ttl"
@@ -2803,7 +2811,7 @@
       ],
       "writes": [
         {
-          "line": 420,
+          "line": 421,
           "cmd": "set",
           "ttl": "EX (IMPERSONATION_MAX_MINUTES + 5) * 60"
         }
@@ -2814,27 +2822,15 @@
       "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
       "commands": [
         "del",
-        "expire",
         "get",
-        "incr",
         "set",
         "setex"
       ],
       "writes": [
         {
-          "line": 227,
+          "line": 228,
           "cmd": "setex",
           "ttl": "EX Ttl.mfaChallengeSeconds"
-        },
-        {
-          "line": 261,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 262,
-          "cmd": "expire",
-          "ttl": "EXPIRE Ttl.mfaChallengeSeconds"
         },
         {
           "line": 375,
@@ -3101,30 +3097,18 @@
       "file": "apps/api/src/modules/broadcasts/send-safety.ts",
       "commands": [
         "del",
-        "expire",
         "get",
-        "incr",
         "pexpire",
         "set"
       ],
       "writes": [
         {
-          "line": 70,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 70,
-          "cmd": "expire",
-          "ttl": "EXPIRE 2 * 86_400"
-        },
-        {
-          "line": 96,
+          "line": 97,
           "cmd": "set",
           "ttl": "PX LEASE_MS"
         },
         {
-          "line": 104,
+          "line": 105,
           "cmd": "pexpire",
           "ttl": "PEXPIRE LEASE_MS"
         }
@@ -3134,21 +3118,9 @@
     {
       "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts",
       "commands": [
-        "expire",
-        "incr",
         "set"
       ],
       "writes": [
-        {
-          "line": 68,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 69,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        },
         {
           "line": 86,
           "cmd": "set",
@@ -3244,23 +3216,9 @@
     },
     {
       "file": "apps/api/src/modules/channel-line/inbound.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 256,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 257,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/channel-sms/sms-senders.service.ts",
@@ -3279,43 +3237,15 @@
     },
     {
       "file": "apps/api/src/modules/channel-telegram/inbound.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 288,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 289,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/channel-viber/inbound.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 172,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 173,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts",
@@ -3334,23 +3264,9 @@
     },
     {
       "file": "apps/api/src/modules/channel-wechat/inbound.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 215,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 216,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/channel-wechat/wechat-token.service.ts",
@@ -3399,43 +3315,15 @@
     },
     {
       "file": "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 24,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 25,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/crm/invoicing/invoice-public.service.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 60,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 61,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts",
@@ -3708,17 +3596,17 @@
       ],
       "writes": [
         {
-          "line": 108,
+          "line": 109,
           "cmd": "set",
           "ttl": "EX SENT_MARKER_TTL_S"
         },
         {
-          "line": 151,
+          "line": 152,
           "cmd": "set",
           "ttl": "EX SENT_MARKER_TTL_S"
         },
         {
-          "line": 260,
+          "line": 261,
           "cmd": "set",
           "ttl": "EX INBOUND_MEDIA_TTL_S"
         }
@@ -4112,23 +4000,9 @@
     },
     {
       "file": "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts",
-      "commands": [
-        "expire",
-        "incr"
-      ],
-      "writes": [
-        {
-          "line": 30,
-          "cmd": "incr",
-          "ttl": null
-        },
-        {
-          "line": 31,
-          "cmd": "expire",
-          "ttl": "EXPIRE 120"
-        }
-      ],
-      "ttlStatus": "ttl"
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
     },
     {
       "file": "apps/api/src/modules/team-chat/presence.service.ts",
@@ -4287,22 +4161,22 @@
       ],
       "writes": [
         {
-          "line": 146,
+          "line": 147,
           "cmd": "sadd",
           "ttl": null
         },
         {
-          "line": 199,
+          "line": 200,
           "cmd": "hincrby",
           "ttl": null
         },
         {
-          "line": 247,
+          "line": 248,
           "cmd": "expire",
           "ttl": "EXPIRE TALLY_TTL_S"
         },
         {
-          "line": 248,
+          "line": 249,
           "cmd": "expire",
           "ttl": "EXPIRE TALLY_TTL_S"
         }
@@ -4560,7 +4434,7 @@
     "SMEMBERS": [
       {
         "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
-        "line": 259,
+        "line": 260,
         "cmd": "smembers"
       }
     ],
@@ -4597,67 +4471,11 @@
       },
       {
         "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
-        "line": 258,
+        "line": 259,
         "cmd": "hgetall"
       }
     ],
-    "INCR_THEN_SEPARATE_EXPIRE": [
-      {
-        "file": "apps/api/src/modules/auth/flows/login.service.ts",
-        "line": 453,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
-        "line": 261,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/broadcasts/send-safety.ts",
-        "line": 70,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts",
-        "line": 68,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/channel-line/inbound.service.ts",
-        "line": 256,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/channel-telegram/inbound.service.ts",
-        "line": 288,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/channel-viber/inbound.service.ts",
-        "line": 172,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/channel-wechat/inbound.service.ts",
-        "line": 215,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts",
-        "line": 24,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/crm/invoicing/invoice-public.service.ts",
-        "line": 60,
-        "cmd": "incr"
-      },
-      {
-        "file": "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts",
-        "line": 30,
-        "cmd": "incr"
-      }
-    ]
+    "INCR_THEN_SEPARATE_EXPIRE": []
   },
   "pipelinesAndMulti": [
     {
@@ -4776,7 +4594,7 @@
   "redisCallInsideLoop": [
     {
       "file": "apps/api/src/kernel/rbac/rbac.service.ts",
-      "line": 121,
+      "line": 151,
       "cmd": "del"
     },
     {
@@ -4846,7 +4664,7 @@
     },
     {
       "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
-      "line": 140,
+      "line": 141,
       "cmd": "sadd"
     },
     {
