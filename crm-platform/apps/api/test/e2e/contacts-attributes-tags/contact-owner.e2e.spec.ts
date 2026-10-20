@@ -418,7 +418,7 @@ describe('reassigning a selection, or everything a filter matches', () => {
   it('refuses a person who is not an active member of this workspace, and one of another (tenant isolation)', async () => {
     const stranger = await api.signup('re-other');
     const strangerUuid = await uuidOf(stranger.adminUserId);
-    await h.owner.query(`UPDATE users SET status = 'disabled' WHERE id = $1`, [to.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [to.userId]);
     for (const ownerId of [strangerUuid, toU, randomUUID()]) {
       const res = await api
         .as(boss.token)

@@ -440,7 +440,7 @@ describe('the engine: a new conversation is given to an agent', () => {
   });
 
   it('an agent who is suspended, or marked busy, is skipped; with nobody left a team queue or nothing', async () => {
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [a2.userId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [a2.userId]);
     const g1 = await customer(t, ch, 'refund');
     const g2 = await customer(t, ch, 'refund');
     expect([g1.assignee, g2.assignee]).toEqual([a1.userId, a1.userId]);
@@ -572,7 +572,7 @@ describe('the engine: a new conversation is given to an agent', () => {
     expect(Number((await ruleRow(refunds.id)).fired_count)).toBe(firedBefore);
 
     // the owner is suspended: the rules run as usual
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [a1.userId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [a1.userId]);
     const gone = phone();
     await p.api.seedContacts(t, [{ name: 'Orphaned', phone: `+${gone}`, ownerId: a1.userId }]);
     const fallThrough = await customer(t, ch, 'refund', gone);
