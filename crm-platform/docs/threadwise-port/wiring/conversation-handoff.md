@@ -1,0 +1,21 @@
+# Wiring: conversation handoff and the waiting queue (BL-396 to BL-404)
+
+Spec [../../specs/conversation-handoff-and-assignment.md](../../specs/conversation-handoff-and-assignment.md), API [../../api/conversation-handoff.md](../../api/conversation-handoff.md).
+Not a WaDesk feature: a net addition on top of the inbox, routing and flows (see [parity/product-extensions.md](../parity/product-extensions.md)).
+
+| Piece | Where |
+| --- | --- |
+| Tables / columns | migrations `20270301090000` (conversations `handling`, `handling_since`, `assigned_source`; table `conversation_handoffs`; `workspace_settings.handoff_*`; `teams.assignment_cursor`), `...090100` (validate), `...090200` (queue index) |
+| Contracts | `packages/contracts/src/team-inbox-routing-sla/handoff.ts`; `INBOX_TABS += waiting`, `handling` on the summary (`chat-conversations`); plan key `inbox_assignment_sticky` (`plans-subscriptions-trials/catalogue.ts`); node ports `flow-builder-editor/node-catalogue.ts` |
+| Action | `modules/team-inbox-routing-sla/handoff.service.ts` (+ `handoff.repository.ts`, `handoff.controller.ts`, `owner-alignment.service.ts`) |
+| Only assignment writer | `assignment.service.ts` `assignInTx` (+ `AssignExtra`: source, handling, releaseAi); the live card follows it |
+| Rules at handoff | `routing-engine.service.ts` `rulesForHandoff`, `pickForHandoff` (trace of skipped people); arrival switch + owner mode + window in `route()` |
+| Mute | `chat-conversations/inbound-hooks.ts` (`bot` listeners skipped; `consumed` true so no auto reply); `FlowInboundService`, catalog concierge and commerce resume are `bot`; widget AI via `humanHasTakenOver` |
+| Flow node | builder `assign` ("Human handoff", `data.handoff = 2`, ports assigned / waiting / unavailable); runtime `actions-nodes.ts` `humanHandoff`; the old `AssignAgent` path is untouched |
+| AI / widget | `chatbot-widget/ai-prompt.ts` `readHandoff` (keyword + `[[handoff: reason]]`), `widget-public.service.ts` |
+| Owner sync | `owner-sync.consumer.ts` (worker) on `contact.updated`; first touch in `owner-alignment.service.ts` |
+| Resolve / reopen | `team-inbox-conversations/conversations.repository.ts` `setStatus` clears the state and closes the card |
+| Tests | `test/e2e/team-inbox-routing-sla/handoff.e2e.spec.ts`; node compatibility in `test/unit/flow-builder-editor` |
+| Web | inbox tab and card, node editors, settings screen under `apps/web/src/features/team-inbox-conversations` and `flow-builder-editor` |
+
+Consumers of the assignee columns that keep working unchanged: kanban, inbox filters, notifications (`conversation.assigned`), SLA, escalation, bulk actions, the waiting nudge.
