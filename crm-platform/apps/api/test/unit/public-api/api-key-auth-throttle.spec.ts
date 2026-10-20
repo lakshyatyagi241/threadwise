@@ -22,6 +22,26 @@ function fakeRedis(down = false) {
       expiries.set(k, s);
       return guard(1);
     },
+    // INCR + EXPIRE NX in one MULTI (infra/redis/counter.ts): the window starts at the first hit and is not moved by later ones
+    multi: () => {
+      const ops: Array<['incr' | 'expire', string, number?]> = [];
+      const tx = {
+        incr: (k: string) => (ops.push(['incr', k]), tx),
+        expire: (k: string, s: number) => (ops.push(['expire', k, s]), tx),
+        exec: () => {
+          const out: Array<[null, number]> = [];
+          for (const [op, k, s] of ops) {
+            if (op === 'incr') out.push([null, store.set(k, (store.get(k) ?? 0) + 1).get(k)!]);
+            else {
+              if (!expiries.has(k)) expiries.set(k, s!);
+              out.push([null, 1]);
+            }
+          }
+          return guard(out);
+        },
+      };
+      return tx;
+    },
   };
 }
 
