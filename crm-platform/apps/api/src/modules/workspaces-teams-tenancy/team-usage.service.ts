@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import type { WspTeamUsage } from '@crm/contracts';
+import type { WspTeamDeletePreview } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -15,7 +15,7 @@ export class TeamUsageService {
     private readonly usage: TeamUsageRepository,
   ) {}
 
-  async forTeam(uuid: string): Promise<WspTeamUsage> {
+  async forTeam(uuid: string): Promise<WspTeamDeletePreview> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const team = await this.teams.byUuid(tx, ctx.orgId, uuid);

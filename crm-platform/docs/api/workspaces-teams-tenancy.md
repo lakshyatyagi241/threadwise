@@ -319,7 +319,7 @@ Removes the team and its member places; conversations assigned to it lose the te
 **its sub-teams move up to the deleted team's parent** (trigger `trg_teams_reparent_children`), and the `team.deleted` event lets routing
 drop its references: the worker consumer `team-deleted-references` takes the team out of every routing rule's targets and every record assignment pool (BL-380, `docs/api/teams-scope.md`).
 
-### `GET /workspace/teams/:id/usage` (User, `team.manage`) → 200 `WspTeamUsage`
+### `GET /workspace/teams/:id/usage` (User, `team.manage`) → 200 `WspTeamDeletePreview`
 
 What the delete would change, as counts: `members`, `routingRules`, `assignmentRules`, `segmentShares`, `conversationsAssigned`,
 `peopleWithReachChange`. Read-only; the delete confirmation shows it. A team of another workspace is `404`. Details in `docs/api/teams-scope.md`.

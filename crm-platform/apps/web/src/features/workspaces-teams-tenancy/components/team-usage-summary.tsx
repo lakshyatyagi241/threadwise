@@ -2,7 +2,7 @@
 
 import { Spinner } from '@crm/ui';
 import { useTranslations } from 'next-intl';
-import type { WspTeamUsage } from '@crm/contracts';
+import type { WspTeamDeletePreview } from '@crm/contracts';
 import { useTeamUsage } from '../api/team-usage';
 
 /** The lines of the "what will change" list, in the order a person weighs them; a zero count is left out. */
@@ -13,10 +13,10 @@ const LINES = [
   'segmentShares',
   'conversationsAssigned',
   'peopleWithReachChange',
-] as const satisfies ReadonlyArray<keyof WspTeamUsage>;
+] as const satisfies ReadonlyArray<keyof WspTeamDeletePreview>;
 
 export function usageLines(
-  usage: WspTeamUsage,
+  usage: WspTeamDeletePreview,
 ): Array<{ key: (typeof LINES)[number]; count: number }> {
   return LINES.map((key) => ({ key, count: usage[key] })).filter((l) => l.count > 0);
 }

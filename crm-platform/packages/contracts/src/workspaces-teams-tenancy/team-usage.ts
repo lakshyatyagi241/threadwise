@@ -5,7 +5,7 @@ import { z } from 'zod';
  * the click instead of after. Neutral on purpose: a team is used by conversation routing AND by record scope, assignment rules and
  * shared segments, so the answer lists all of them and not the inbox alone.
  */
-export const wspTeamUsageSchema = z.object({
+export const wspTeamDeletePreviewSchema = z.object({
   /** People in the team now. */
   members: z.number().int().nonnegative(),
   /** Routing rules that name the team as a target: the team is removed from them (a rule left with nothing to do is switched off). */
@@ -19,4 +19,4 @@ export const wspTeamUsageSchema = z.object({
   /** Team members who would no longer share a team with a colleague they share one with now, so what they see through "team records" shrinks. */
   peopleWithReachChange: z.number().int().nonnegative(),
 });
-export type WspTeamUsage = z.infer<typeof wspTeamUsageSchema>;
+export type WspTeamDeletePreview = z.infer<typeof wspTeamDeletePreviewSchema>;

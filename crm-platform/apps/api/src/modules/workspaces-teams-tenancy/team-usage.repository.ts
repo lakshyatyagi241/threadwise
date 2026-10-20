@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
-import type { WspTeamUsage } from '@crm/contracts';
+import type { WspTeamDeletePreview } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { routingActionsNameTeam, withoutTeam } from './team-references';
 
@@ -18,7 +18,7 @@ const namesTeam = (uuid: string): SQL => sql`EXISTS (
  */
 @Injectable()
 export class TeamUsageRepository {
-  async usage(tx: Tx, orgId: number, team: { id: number; uuid: string }): Promise<WspTeamUsage> {
+  async usage(tx: Tx, orgId: number, team: { id: number; uuid: string }): Promise<WspTeamDeletePreview> {
     const res = await tx.execute(sql`
       SELECT
         (SELECT count(*)::int FROM team_members WHERE org_id = ${orgId} AND team_id = ${team.id}) AS members,
