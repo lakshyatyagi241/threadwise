@@ -130,8 +130,6 @@ describe('Redis hygiene: commands that must not be in application code', () => {
 describe('Redis hygiene: every key has a lifetime or a reason', () => {
   // `SET` with no EX/PX/KEEPTTL. Each one is a single fixed key (not a family that can grow).
   const SET_WITHOUT_TTL_ALLOWED: Record<string, string> = {
-    'apps/api/src/modules/auth/sessions/epoch.service.ts':
-      'auth:epoch: ONE key, the cached copy of platform_settings auth.epoch. An expiring epoch would read back as 0 and re-validate revoked tokens (the file explains), so it is durable on purpose and the database is the source of truth',
   };
   it('has a TTL on every SET/SETEX that can grow (or is a listed single key)', () => {
     const bad: string[] = [];
@@ -156,7 +154,6 @@ describe('Redis hygiene: every key has a lifetime or a reason', () => {
 
   // Growth commands (INCR, HSET, SADD, ZADD, LPUSH, PFADD, HINCRBY ...) in a file with no EXPIRE/PEXPIRE/TTL'd SET/EVAL at all.
   const GROWTH_WITHOUT_LIFETIME_ALLOWED: Record<string, string> = {
-    'apps/api/src/modules/auth/sessions/epoch.service.ts': 'see SET_WITHOUT_TTL_ALLOWED',
   };
   it('has a lifetime command beside every counter / hash / set / list / sorted-set write', () => {
     const review = inv.fileRows.filter((r) => r.ttlStatus === 'review').map((r) => r.file);

@@ -23,7 +23,7 @@ const grantsCache = cacheMetrics('rbac_grants');
 const versionCache = cacheMetrics('rbac_version');
 
 /** Sets the cached roles version only if the key is empty or holds a lower one, so a slow reader cannot put an old version back. */
-const RAISE_VERSION_LUA = `
+export const RAISE_VERSION_LUA = `
 local c = redis.call('GET', KEYS[1])
 if (not c) or (tonumber(c) < tonumber(ARGV[1])) then
   redis.call('SET', KEYS[1], ARGV[1], 'EX', tonumber(ARGV[2]))
