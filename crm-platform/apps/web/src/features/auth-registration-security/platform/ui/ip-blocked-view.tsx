@@ -1,13 +1,13 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useSyncExternalStore, useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button, Card, Spinner } from '@crm/ui';
 import { ALLOWLIST_TAB, ipBlockStore } from '../lib/ip-blocked';
 import { securityTabHref } from '../lib/links';
 import { OPERATOR_LOGIN_PATH } from '../operator-fetch';
+import { signOut as doSignOut } from '../../shared/sign-out';
 import { CopyButton } from './copy-button';
 
 const NS = 'auth-registration-security.platform.ipBlocked';
@@ -26,23 +26,14 @@ export function useIpBlock(): { ip: string | null } | null {
  */
 export function IpBlockedView({ ip }: { ip: string | null }) {
   const t = useTranslations(NS);
-  const router = useRouter();
   const [signingOut, setSigningOut] = useState(false);
 
   const signOut = async () => {
     setSigningOut(true);
-    try {
-      // The sign-out call is itself an operator route and may be refused too; the cookies are cleared either way.
-      await fetch('/api/platform-auth/logout', {
-        signal: AbortSignal.timeout(5000),
-        method: 'POST',
-        credentials: 'same-origin',
-      });
-    } finally {
-      ipBlockStore.clear();
-      router.replace(OPERATOR_LOGIN_PATH);
-      router.refresh();
-    }
+    ipBlockStore.clear();
+    // The sign-out call is itself an operator route and may be refused too; the helper navigates either way, and fully, so no
+    // query cache of this operator outlives the sign-out.
+    await doSignOut(OPERATOR_LOGIN_PATH, '/api/platform-auth/logout');
   };
 
   return (

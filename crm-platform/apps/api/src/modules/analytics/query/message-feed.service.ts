@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import { METRIC, MESSAGE_STATUS_CODE, feedType, type MessageStatusName } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { CappedMap } from '../../../common/cache/capped-map';
 
 /**
  * The Message History's message counts from the rollups (docs/superpowers/specs/2026-10-19-message-count-rollup-design.md).
@@ -17,7 +18,7 @@ import type { Tx } from '@crm/db';
 
 // `pg_timezone_names` is a view that reads the zone files: 30 ms a call, and the zone of a workspace almost never changes.
 const TZ_TTL_MS = 60_000;
-const tzCache = new Map<number, { tz: string; until: number }>();
+const tzCache = new CappedMap<number, { tz: string; until: number }>(2000);
 
 /** The workspace's timezone as the rollup worker resolves it: its setting if Postgres knows the zone, else UTC. */
 export async function orgTimezone(tx: Tx, orgId: number): Promise<string> {

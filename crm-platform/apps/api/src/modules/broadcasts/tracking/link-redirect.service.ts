@@ -5,6 +5,7 @@ import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { BroadcastProgressService } from '../broadcast-progress.service';
 import { clickWebhook } from '../webhook-events';
@@ -65,8 +66,7 @@ export class LinkRedirectService {
   private async rateLimit(ip: string): Promise<void> {
     try {
       const key = `link_hits:${ip}:${Math.floor(Date.now() / 60_000)}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 120);
+      const n = await incrWithTtl(this.redis, key, 120);
       if (n > HITS_PER_MINUTE)
         throw new AppError(
           ERROR_CODES.RATE_LIMITED,

@@ -17,6 +17,7 @@ import {
   groupNav,
 } from './operator-nav';
 import { ipBlockStore } from './lib/ip-blocked';
+import { signOut as doSignOut } from '../shared/sign-out';
 import { CloseIcon, MenuIcon, MoonIcon, SunIcon } from './ui/icons';
 import { IpBlockedView, useIpBlock } from './ui/ip-blocked-view';
 import { ToastProvider } from './ui/toast';
@@ -97,16 +98,7 @@ export function OperatorShell({
 
   const signOut = async () => {
     setSigningOut(true);
-    try {
-      await fetch('/api/platform-auth/logout', {
-        signal: AbortSignal.timeout(5000),
-        method: 'POST',
-        credentials: 'same-origin',
-      });
-    } finally {
-      router.replace('/admin/login');
-      router.refresh();
-    }
+    await doSignOut('/admin/login', '/api/platform-auth/logout');
   };
 
   const signOutButton = (className: string) => (

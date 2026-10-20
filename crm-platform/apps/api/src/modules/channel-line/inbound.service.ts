@@ -12,6 +12,7 @@ import {
   type LineApiFactory,
 } from '../../infra/providers/channel-line/line.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { WebhookRetryService } from '../webhook-retry';
 import {
   INBOUND_HOOKS,
@@ -253,8 +254,7 @@ export class InboundService implements OnModuleInit {
   private async rateLimit(token: string): Promise<void> {
     try {
       const key = `line_hits:${token}:${Math.floor(Date.now() / 60_000)}`;
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 120);
+      const n = await incrWithTtl(this.redis, key, 120);
       if (n > HITS_PER_MINUTE) {
         throw new AppError(
           ERROR_CODES.RATE_LIMITED,

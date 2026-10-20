@@ -24,6 +24,7 @@ import {
   grantCovers,
 } from './google-calendar-tokens.service';
 import type { CalendarConnectionRow } from './google-calendar-connection.repository';
+import { CappedMap } from '../../common/cache/capped-map';
 
 /** Meet rooms are made by Google a moment after the event: one more look, then the booking goes ahead without a link. */
 const MEET_RECHECK_MS = 600;
@@ -52,7 +53,7 @@ export class GoogleCalendarAdapter implements CalendarSyncPort {
   readonly provider = 'google';
   private readonly logger = new Logger(GoogleCalendarAdapter.name);
   private readonly busyCache = new Map<string, { at: number; busy: CalendarBusyInterval[] }>();
-  private readonly failedAt = new Map<number, number>();
+  private readonly failedAt = new CappedMap<number, number>(2000);
 
   constructor(
     private readonly tokens: GoogleCalendarTokens,

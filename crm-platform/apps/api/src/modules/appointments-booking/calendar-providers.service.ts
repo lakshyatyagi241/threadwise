@@ -6,9 +6,12 @@ import { DatabaseService } from '../../infra/db/database.service';
 import type { CalendarStatus, CalendarSyncPort } from '../../infra/providers/appointments-booking';
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
 import { MicrosoftCalendarAdapter } from './microsoft-calendar.adapter';
+import { setCapped } from '../../common/cache/capped-map';
 
 /** How long a process keeps a workspace's choice before asking again (a change made in this process drops it at once). */
 const PREFERENCE_TTL_MS = 10_000;
+/** At most this many workspaces' preferences are remembered per process; the oldest goes first. */
+export const CALENDAR_PREFERENCE_CACHE_MAX = 2_000;
 
 /** A provider adapter that can be told its cached view of a workspace is stale. */
 export type ProviderAdapter = CalendarSyncPort & { forget(orgId: number): void };
@@ -57,7 +60,7 @@ export class CalendarProviders {
     const provider = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.readPreference(tx, orgId),
     );
-    this.preferences.set(orgId, { at: Date.now(), provider });
+    setCapped(this.preferences, orgId, { at: Date.now(), provider }, CALENDAR_PREFERENCE_CACHE_MAX);
     return provider;
   }
 

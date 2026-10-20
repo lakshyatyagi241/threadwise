@@ -19,6 +19,7 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { LoginAlertService } from '../flows/login-alert.service';
 import { EpochService } from '../sessions/epoch.service';
 import { idleTimeoutError } from '../sessions/session.service';
@@ -258,8 +259,7 @@ export class OperatorAuthService {
     if (typeof challenge.operatorId !== 'number') throw expired();
 
     const attemptsKey = AuthKeys.mfaAttempts(req.challengeToken);
-    const attempts = await this.redis.incr(attemptsKey);
-    if (attempts === 1) await this.redis.expire(attemptsKey, Ttl.mfaChallengeSeconds);
+    const attempts = await incrWithTtl(this.redis, attemptsKey, Ttl.mfaChallengeSeconds);
     if (attempts > Ttl.mfaMaxAttempts) {
       await this.redis.del(key);
       throw expired();
