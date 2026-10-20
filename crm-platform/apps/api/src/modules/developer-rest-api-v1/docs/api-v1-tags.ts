@@ -50,6 +50,10 @@ export const API_V1_TAGS: ReadonlyArray<{ name: string; description: string }> =
     description:
       'The sales pipeline: list, read, create, change (including moving a stage) and delete deals.',
   },
+  {
+    name: 'Company',
+    description: 'List, read, create, change and delete companies and the contacts linked to them.',
+  },
   { name: 'Conversation', description: 'Read conversations and the messages inside them.' },
   {
     name: 'Account',

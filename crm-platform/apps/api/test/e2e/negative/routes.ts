@@ -44,7 +44,10 @@ export async function negativeRoutes(app: INestApplication): Promise<NegRoute[]>
       if (!type || Reflect.getMetadata(PATH_METADATA, type) === undefined) continue;
       const base = Reflect.getMetadata(PATH_METADATA, type) as string | string[];
       const version = Reflect.getMetadata(VERSION_METADATA, type) as
-        string | string[] | symbol | undefined;
+        | string
+        | string[]
+        | symbol
+        | undefined;
       const prefix =
         typeof version === 'string'
           ? `v${version}`

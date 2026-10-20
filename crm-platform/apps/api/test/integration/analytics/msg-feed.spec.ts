@@ -27,6 +27,7 @@ import {
   hiddenChannelIds,
 } from '../../../src/modules/team-inbox-conversations/message-history-rollup';
 import { visibleToJoinedSql } from '../../../src/modules/team-inbox-conversations/visibility-sql';
+import { figuresFromRollup } from '../../../src/modules/admin-console-shell/overview-stats.service';
 import { RollupService } from '../../../src/modules/analytics/rollup/rollup.service';
 
 /**
@@ -806,6 +807,44 @@ describe('message feed rollup', () => {
             expect(b, `${o.tz} ${unit} ${JSON.stringify(v)}`).toEqual(a);
             expect(a.topConversations.length).toBeGreaterThan(0);
           }
+        }
+      }
+    });
+  });
+
+  describe('the More hub figures on the rollup', () => {
+    it('equal a count of the messages the feed counts, at several clocks, in two zones', async () => {
+      for (const o of [orgs[0]!, orgs[1]!]) {
+        for (const days of [-2, 1, 4, 8]) {
+          const now = after(days * 86_400_000);
+          const iso = now.toISOString();
+          const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+          const got = await figuresFromRollup(tx, feed, o.id, now, monthStart);
+          const n = async (cond: string) =>
+            Number(
+              (
+                await q(
+                  `SELECT count(*) AS n FROM messages m WHERE m.org_id = $1 AND an_msg_feed_counted(m.kind, m.meta, m.provider_message_id) AND m.created_at < $2 ${cond}`,
+                  [o.id, iso],
+                )
+              )[0].n,
+            );
+          const out = `AND m.direction = 'out'`;
+          const d30 = await n(`${out} AND m.created_at >= $2::timestamptz - interval '30 days'`);
+          const del = await n(
+            `${out} AND m.status IN ('delivered','read') AND m.created_at >= $2::timestamptz - interval '30 days'`,
+          );
+          expect(got.outbound7d, `${o.tz} ${days} 7d`).toBe(
+            await n(`${out} AND m.created_at >= $2::timestamptz - interval '7 days'`),
+          );
+          expect(got.messagesThisMonth).toBe(
+            await n(
+              `${out} AND m.created_at >= date_trunc('month', $2::timestamptz AT TIME ZONE 'UTC') AT TIME ZONE 'UTC'`,
+            ),
+          );
+          expect(got.deliveredPct).toBe(d30 === 0 ? null : Math.round((100 * del) / d30));
+          expect(got.messageHistory).toBe(await n(''));
+          expect(d30).toBeGreaterThan(0);
         }
       }
     });

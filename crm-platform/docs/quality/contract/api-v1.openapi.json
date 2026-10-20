@@ -1,0 +1,2049 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/v1/me": {
+      "get": {
+        "operationId": "V1AccountController_me",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "The workspace, plan, limits and unlocked features of the key",
+        "tags": ["Account"]
+      }
+    },
+    "/api/v1/usage": {
+      "get": {
+        "operationId": "V1AccountController_usage",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Message cycle, plan validity, meters and wallet credits",
+        "tags": ["Account"]
+      }
+    },
+    "/api/v1/contacts": {
+      "get": {
+        "operationId": "V1ContactsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List contacts, newest first, with an optional search",
+        "tags": ["Contact"]
+      },
+      "post": {
+        "operationId": "V1ContactsController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a contact; a phone or email that already belongs to a contact returns that contact",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/contacts/{id}": {
+      "get": {
+        "operationId": "V1ContactsController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One contact",
+        "tags": ["Contact"]
+      },
+      "put": {
+        "operationId": "V1ContactsController_update",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Change only the fields sent",
+        "tags": ["Contact"]
+      },
+      "patch": {
+        "operationId": "V1ContactsController_patch",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Alias of PUT: the verb is a partial update either way",
+        "tags": ["Contact"]
+      },
+      "delete": {
+        "operationId": "V1ContactsController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a contact",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/contacts/{id}/consent": {
+      "get": {
+        "operationId": "V1ContactConsentController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "A contact's consent: the roll-up, the state per channel and the history",
+        "tags": ["Contact"]
+      },
+      "post": {
+        "description": "A grant needs a note (422 CONSENT_NOTE_REQUIRED). A repeat with the same Idempotency-Key records nothing. The source is stored as \"api\".",
+        "operationId": "V1ContactConsentController_record",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Record that a contact granted or withdrew consent",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/contacts/{id}/privacy": {
+      "get": {
+        "operationId": "V1ContactConsentController_privacyOf",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "A contact's privacy flags: minor, guardian consent, Do Not Sell or Share, and the history",
+        "tags": ["Contact"]
+      },
+      "post": {
+        "description": "Guardian consent needs a note (422 CONSENT_NOTE_REQUIRED) and a contact that is flagged as a minor (422 CONSENT_PRIVACY_NOT_MINOR). It never creates a marketing grant. A repeat with the same Idempotency-Key records nothing. The source is stored as \"api\".",
+        "operationId": "V1ContactConsentController_recordPrivacy",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "idempotency-key",
+            "required": true,
+            "in": "header",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Turn a privacy flag on or off: minor, guardian consent, or Do Not Sell or Share",
+        "tags": ["Contact"]
+      }
+    },
+    "/api/v1/contact-groups": {
+      "get": {
+        "operationId": "V1ContactGroupsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Every group with its member count, newest first",
+        "tags": ["ContactGroup"]
+      },
+      "post": {
+        "operationId": "V1ContactGroupsController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a group",
+        "tags": ["ContactGroup"]
+      }
+    },
+    "/api/v1/contact-groups/{id}": {
+      "delete": {
+        "operationId": "V1ContactGroupsController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a group; its contacts are detached and kept",
+        "tags": ["ContactGroup"]
+      }
+    },
+    "/api/v1/deals": {
+      "get": {
+        "operationId": "V1DealsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List deals, newest first, filtered by pipeline, stage or status",
+        "tags": ["Deal"]
+      },
+      "post": {
+        "operationId": "V1DealsController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a deal; an unknown pipeline, stage or contact falls back instead of failing",
+        "tags": ["Deal"]
+      }
+    },
+    "/api/v1/deals/{id}": {
+      "get": {
+        "operationId": "V1DealsController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One deal",
+        "tags": ["Deal"]
+      },
+      "put": {
+        "operationId": "V1DealsController_update",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Change only the fields sent; a new `stage_id` moves the deal and runs the stage engine",
+        "tags": ["Deal"]
+      },
+      "patch": {
+        "operationId": "V1DealsController_patch",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Alias of PUT",
+        "tags": ["Deal"]
+      },
+      "delete": {
+        "operationId": "V1DealsController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a deal and its timeline",
+        "tags": ["Deal"]
+      }
+    },
+    "/api/v1/companies": {
+      "get": {
+        "operationId": "V1CompaniesController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List companies, newest first, filtered by name, industry or owner",
+        "tags": ["Company"]
+      },
+      "post": {
+        "operationId": "V1CompaniesController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a company; custom_fields are checked against the company properties",
+        "tags": ["Company"]
+      }
+    },
+    "/api/v1/companies/{id}": {
+      "get": {
+        "operationId": "V1CompaniesController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One company, with its custom_fields (the workspace company properties)",
+        "tags": ["Company"]
+      },
+      "put": {
+        "operationId": "V1CompaniesController_update",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Change only the fields sent; custom_fields merge, null clears a key",
+        "tags": ["Company"]
+      },
+      "patch": {
+        "operationId": "V1CompaniesController_patch",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Alias of PUT",
+        "tags": ["Company"]
+      },
+      "delete": {
+        "operationId": "V1CompaniesController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a company; its contacts, deals and tasks are kept and unlinked",
+        "tags": ["Company"]
+      }
+    },
+    "/api/v1/templates": {
+      "get": {
+        "operationId": "V1TemplatesController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Sendable templates, newest first (cursor paginated)",
+        "tags": ["Template"]
+      },
+      "post": {
+        "operationId": "V1TemplatesController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a template (saved as a draft, never sent to Meta)",
+        "tags": ["Template"]
+      }
+    },
+    "/api/v1/templates/categories": {
+      "get": {
+        "operationId": "V1TemplatesController_categories",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "The Meta template categories `category` understands",
+        "tags": ["Template"]
+      }
+    },
+    "/api/v1/templates/{id}": {
+      "get": {
+        "operationId": "V1TemplatesController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One template, whatever its approval state",
+        "tags": ["Template"]
+      },
+      "put": {
+        "operationId": "V1TemplatesController_update",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Replace the text of a template that Meta has not approved",
+        "tags": ["Template"]
+      },
+      "delete": {
+        "operationId": "V1TemplatesController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a template",
+        "tags": ["Template"]
+      }
+    },
+    "/api/v1/templates/{id}/send": {
+      "post": {
+        "operationId": "V1TemplatesController_send",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Send a template to one number (queued like an inbox send)",
+        "tags": ["Template"]
+      }
+    },
+    "/api/v1/flows": {
+      "get": {
+        "operationId": "V1FlowsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Flows, most recently updated first (cursor paginated)",
+        "tags": ["Flow"]
+      }
+    },
+    "/api/v1/flows/{id}": {
+      "get": {
+        "operationId": "V1FlowsController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One flow",
+        "tags": ["Flow"]
+      }
+    },
+    "/api/v1/flows/{id}/enroll": {
+      "post": {
+        "operationId": "V1FlowsController_enroll",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Enrol a contact by id or phone",
+        "tags": ["Flow"]
+      }
+    },
+    "/api/v1/flows/{id}/subscribers": {
+      "get": {
+        "operationId": "V1FlowsController_subscribers",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "A flow's subscribers, newest first, with counts over all of them",
+        "tags": ["Flow"]
+      }
+    },
+    "/api/v1/broadcasts": {
+      "post": {
+        "operationId": "V1BroadcastsController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create a broadcast",
+        "tags": ["Broadcast"]
+      },
+      "get": {
+        "operationId": "V1BroadcastsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List broadcasts, newest first",
+        "tags": ["Broadcast"]
+      }
+    },
+    "/api/v1/broadcasts/{id}": {
+      "get": {
+        "operationId": "V1BroadcastsController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One broadcast with live status counts",
+        "tags": ["Broadcast"]
+      }
+    },
+    "/api/v1/broadcasts/{id}/recipients": {
+      "get": {
+        "operationId": "V1BroadcastsController_recipients",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "A broadcast's recipients and delivery stats",
+        "tags": ["Broadcast"]
+      }
+    },
+    "/api/v1/broadcasts/{id}/stop": {
+      "post": {
+        "operationId": "V1BroadcastsController_stop",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Stop a scheduled or in-flight broadcast",
+        "tags": ["Broadcast"]
+      }
+    },
+    "/api/v1/campaigns/statistics": {
+      "get": {
+        "operationId": "V1CampaignsController_statistics",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Workspace campaign statistics",
+        "tags": ["Campaign"]
+      }
+    },
+    "/api/v1/campaigns": {
+      "get": {
+        "operationId": "V1CampaignsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List campaigns, newest first",
+        "tags": ["Campaign"]
+      },
+      "post": {
+        "operationId": "V1CampaignsController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Create and dispatch a campaign",
+        "tags": ["Campaign"]
+      }
+    },
+    "/api/v1/campaigns/{id}": {
+      "get": {
+        "operationId": "V1CampaignsController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One campaign with live counts",
+        "tags": ["Campaign"]
+      },
+      "delete": {
+        "operationId": "V1CampaignsController_remove",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Delete a finished or scheduled campaign",
+        "tags": ["Campaign"]
+      }
+    },
+    "/api/v1/campaigns/{id}/stop": {
+      "post": {
+        "operationId": "V1CampaignsController_stop",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Stop a running, scheduled or paused campaign",
+        "tags": ["Campaign"]
+      }
+    },
+    "/api/v1/scheduled": {
+      "post": {
+        "operationId": "V1ScheduledController_create",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Schedule a one-off message",
+        "tags": ["Scheduled"]
+      },
+      "get": {
+        "operationId": "V1ScheduledController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "List scheduled messages",
+        "tags": ["Scheduled"]
+      }
+    },
+    "/api/v1/scheduled/{id}": {
+      "get": {
+        "operationId": "V1ScheduledController_show",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One scheduled message",
+        "tags": ["Scheduled"]
+      },
+      "delete": {
+        "operationId": "V1ScheduledController_cancel",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Cancel a scheduled message",
+        "tags": ["Scheduled"]
+      }
+    },
+    "/api/v1/messages": {
+      "post": {
+        "description": "JSON, or multipart to attach a file in `media`. Answers 201 with the message and its status; the id is the one to poll with `GET /messages/{id}`.",
+        "operationId": "V1MessagesController_send",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Send one WhatsApp message (text, image, video, document, audio or location)",
+        "tags": ["Message"]
+      },
+      "get": {
+        "operationId": "V1MessagesController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "The most recent messages of the workspace, newest first",
+        "tags": ["Message"]
+      }
+    },
+    "/api/v1/messages/{id}": {
+      "get": {
+        "operationId": "V1MessagesController_get",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One message with its delivery status (pending, sent, delivered, read or failed)",
+        "tags": ["Message"]
+      }
+    },
+    "/api/v1/media": {
+      "post": {
+        "description": "Multipart field `file`, up to 16 MB, of an allowed type (images, video, audio, PDF and Office documents, text, CSV, ZIP). The answer's `url` is read with the same API key and can be passed as `media_url` when sending.",
+        "operationId": "V1MediaController_upload",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Upload a file to reuse in a message",
+        "tags": ["Media"]
+      }
+    },
+    "/api/v1/conversations": {
+      "get": {
+        "operationId": "V1ConversationsController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "The workspace's chat threads, most recently active first",
+        "tags": ["Conversation"]
+      }
+    },
+    "/api/v1/conversations/{id}/messages": {
+      "get": {
+        "operationId": "V1ConversationsController_messages",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "The messages of one conversation, newest first",
+        "tags": ["Conversation"]
+      }
+    },
+    "/api/v1/devices": {
+      "get": {
+        "operationId": "V1DevicesController_list",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "Unofficial numbers, then Cloud API and Twilio connections",
+        "tags": ["Device"]
+      }
+    },
+    "/api/v1/devices/{id}": {
+      "get": {
+        "operationId": "V1DevicesController_get",
+        "parameters": [
+          {
+            "name": "X-Api-Key",
+            "in": "header",
+            "description": "The key, when not sent as a bearer token.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": ""
+          }
+        },
+        "security": [
+          {
+            "api-key": []
+          }
+        ],
+        "summary": "One number, by the id the list gives",
+        "tags": ["Device"]
+      }
+    }
+  },
+  "info": {
+    "title": "Test CRM API",
+    "description": "Test CRM REST API. Authenticate with a workspace API key: send it as `Authorization: Bearer <key>` (or in an `X-Api-Key` header). Generate keys in the dashboard under Developers / API.\n\n**Answers.** Success is `{ \"data\": ..., \"meta\": ... }`; a failure is `{ \"error\": { \"code\", \"message\", \"details\"? } }` with a stable snake_case `code`. Validation failures are always HTTP 422 with `details` listing the messages per field.\n\n**Lists** are paged with a cursor: pass `limit` (1 to 100, default 25; `per_page` is accepted as an alias) and the `cursor` from `meta.next_cursor` of the previous page. Page numbers are not supported. Identifiers are UUIDs.\n\n**Rate limit.** Each key is held to a number of requests per minute set by the workspace plan (the platform default applies when the plan sets none). Every answer carries `X-RateLimit-Limit` and `X-RateLimit-Remaining`; over the limit the answer is HTTP 429 with `Retry-After`.",
+    "version": "v1",
+    "contact": {}
+  },
+  "tags": [
+    {
+      "name": "Message",
+      "description": "Send a WhatsApp message to one number and read the history and delivery status of messages sent through the API."
+    },
+    {
+      "name": "Template",
+      "description": "List, create, change and delete message templates, and send one to a single number."
+    },
+    {
+      "name": "Media",
+      "description": "Upload a file once and reuse it in messages and templates."
+    },
+    {
+      "name": "Contact",
+      "description": "The workspace address book: list, read, create, change and delete contacts, with free-form attributes."
+    },
+    {
+      "name": "ContactGroup",
+      "description": "Named lists that contacts belong to: list, create and delete groups."
+    },
+    {
+      "name": "Broadcast",
+      "description": "One-off bulk sends of a template: create, list, read, see per-recipient status and stop."
+    },
+    {
+      "name": "Campaign",
+      "description": "Managed campaigns: create and dispatch, list, read live counts, read statistics, stop and delete."
+    },
+    {
+      "name": "Scheduled",
+      "description": "Queue a message for a future time and manage the queue."
+    },
+    {
+      "name": "AutoReply",
+      "description": "Keyword and automatic reply rules."
+    },
+    {
+      "name": "Flow",
+      "description": "Read automation flows and enroll a contact into one by id or phone number."
+    },
+    {
+      "name": "Device",
+      "description": "The connected sending numbers and their status."
+    },
+    {
+      "name": "Webhook",
+      "description": "Register endpoints to receive Test CRM events (inbound messages, delivery status, contact and campaign changes) as signed JSON posts."
+    },
+    {
+      "name": "Deal",
+      "description": "The sales pipeline: list, read, create, change (including moving a stage) and delete deals."
+    },
+    {
+      "name": "Conversation",
+      "description": "Read conversations and the messages inside them."
+    },
+    {
+      "name": "Account",
+      "description": "The workspace behind the key: plan, limits, features, usage and credits."
+    }
+  ],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "api-key": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {}
+  },
+  "security": [
+    {
+      "api-key": []
+    }
+  ]
+}
