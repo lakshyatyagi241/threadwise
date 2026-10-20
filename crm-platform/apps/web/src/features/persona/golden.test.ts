@@ -290,7 +290,7 @@ describe('edition presets are data and change nothing for generic or persona-les
       expect(t, kept).toContain(kept);
 
     const p = personaVisibility(view('chat_team'));
-    const sections = visibleSections(() => true, (s) => p.isSectionHidden(s));
+    const sections = Object.values(visibleSections(() => true, (s) => p.isSectionHidden(s))).flat();
     for (const gone of ['deals', 'tasks', 'sales', 'lead-source', 'company', 'appointments'])
       expect(sections, gone).not.toContain(gone);
     for (const kept of ['overview', 'conversations', 'notes', 'details', 'files', 'consent', 'history'])
@@ -313,7 +313,7 @@ describe('edition presets are data and change nothing for generic or persona-les
       expect(t, kept).toContain(kept);
 
     const p = personaVisibility(view('sales_team'));
-    const sections = visibleSections(() => true, (s) => p.isSectionHidden(s));
+    const sections = Object.values(visibleSections(() => true, (s) => p.isSectionHidden(s))).flat();
     expect(sections).not.toContain('conversations');
     for (const kept of ['overview', 'deals', 'tasks', 'notes', 'company'])
       expect(sections, kept).toContain(kept);
