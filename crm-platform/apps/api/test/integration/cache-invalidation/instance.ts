@@ -42,7 +42,11 @@ export interface Instance {
 }
 
 /** One instance of the application's cache-owning classes. `redisUrl` lets a test route this instance through a fault proxy. */
-export function buildInstance(env: { appUrl: string; redis: { url: string } }, name: string, redisUrl = env.redis.url): Instance {
+export function buildInstance(
+  env: { appUrl: string; redis: { url: string } },
+  name: string,
+  redisUrl = env.redis.url,
+): Instance {
   const clients: DbClientPair = createDbClientPair({ url: env.appUrl, poolMax: 4 });
   const db = new DatabaseService(clients);
   // Same options the application's RedisModule uses, so a fault shows up the way it does in production.
@@ -78,4 +82,3 @@ export function buildInstance(env: { appUrl: string; redis: { url: string } }, n
     },
   };
 }
-

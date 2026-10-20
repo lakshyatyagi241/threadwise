@@ -36,18 +36,51 @@ describe('impersonation session end is seen by every instance', () => {
 
   async function session() {
     const tag = `${Date.now().toString(36)}${n++}`;
-    const orgId = Number((await env.pg.owner.query(`INSERT INTO organizations (slug,name) VALUES ($1,$1) RETURNING id`, [`im-${tag}`])).rows[0].id);
-    const userId = Number((await env.pg.owner.query(`INSERT INTO users (org_id,email,full_name) VALUES ($1,$2,'T') RETURNING id`, [orgId, `t-${tag}@x.test`])).rows[0].id);
-    const op = Number((await env.pg.owner.query(`INSERT INTO platform_operators (email,full_name,password_hash,role) VALUES ($1,'O','x','super_admin') RETURNING id`, [`o-${tag}@x.test`])).rows[0].id);
-    const uuid = String((await env.pg.owner.query(
-      `INSERT INTO impersonation_sessions (target_workspace_id, reason, operator_id, target_user_id, expires_at, handoff_expires_at)
+    const orgId = Number(
+      (
+        await env.pg.owner.query(
+          `INSERT INTO organizations (slug,name) VALUES ($1,$1) RETURNING id`,
+          [`im-${tag}`],
+        )
+      ).rows[0].id,
+    );
+    const userId = Number(
+      (
+        await env.pg.owner.query(
+          `INSERT INTO users (org_id,email,full_name) VALUES ($1,$2,'T') RETURNING id`,
+          [orgId, `t-${tag}@x.test`],
+        )
+      ).rows[0].id,
+    );
+    const op = Number(
+      (
+        await env.pg.owner.query(
+          `INSERT INTO platform_operators (email,full_name,password_hash,role) VALUES ($1,'O','x','super_admin') RETURNING id`,
+          [`o-${tag}@x.test`],
+        )
+      ).rows[0].id,
+    );
+    const uuid = String(
+      (
+        await env.pg.owner.query(
+          `INSERT INTO impersonation_sessions (target_workspace_id, reason, operator_id, target_user_id, expires_at, handoff_expires_at)
        VALUES ($1,'cache invalidation test session for item 66',$2,$3, now() + interval '30 minutes', now() + interval '1 minute') RETURNING uuid`,
-      [orgId, op, userId],
-    )).rows[0].uuid);
-    const claims = { org: orgId, sub: userId, imp: { sid: uuid, oid: op, ro: false, exp: Math.floor(Date.now() / 1000) + 1800 } };
+          [orgId, op, userId],
+        )
+      ).rows[0].uuid,
+    );
+    const claims = {
+      org: orgId,
+      sub: userId,
+      imp: { sid: uuid, oid: op, ro: false, exp: Math.floor(Date.now() / 1000) + 1800 },
+    };
     return { uuid, claims: claims as never };
   }
-  const open = (svc: ImpersonationService, claims: never) => svc.assertOpen(claims).then(() => true, () => false);
+  const open = (svc: ImpersonationService, claims: never) =>
+    svc.assertOpen(claims).then(
+      () => true,
+      () => false,
+    );
 
   beforeAll(async () => {
     env = await startEnv();
@@ -88,6 +121,9 @@ describe('impersonation session end is seen by every instance', () => {
     expect(await env.admin.exists(`auth:imp-end:${s.uuid}`)).toBe(0);
     const sec = await secondsUntil(() => open(svcB, s.claims), false, 8, 100);
     expect(sec).toBeLessThanOrEqual(5.5);
-    record('R10/M05 impersonation end, tombstone lost', { measuredStaleSeconds: sec, documentedSeconds: 5 });
+    record('R10/M05 impersonation end, tombstone lost', {
+      measuredStaleSeconds: sec,
+      documentedSeconds: 5,
+    });
   }, 40_000);
 });

@@ -33,7 +33,8 @@ const ops: Record<string, (...a: any[]) => Promise<unknown>> = {
   ping: async () => process.pid,
 };
 
-process.on('message', async (m: { id: number; op: string; args?: unknown[] }) => {
+process.on('message', (m: { id: number; op: string; args?: unknown[] }) => void handle(m));
+async function handle(m: { id: number; op: string; args?: unknown[] }): Promise<void> {
   try {
     const fn = ops[m.op];
     if (!fn) throw new Error(`unknown op ${m.op}`);
@@ -42,5 +43,5 @@ process.on('message', async (m: { id: number; op: string; args?: unknown[] }) =>
   } catch (e) {
     process.send!({ id: m.id, ok: false, error: String((e as Error).message ?? e) });
   }
-});
+}
 process.send!({ id: 0, ok: true, value: 'ready' });

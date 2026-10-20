@@ -156,8 +156,20 @@ export class FakeRedis {
   async eval(script: string, _n: number, ...a: string[]): Promise<number> {
     await this.enter('eval');
     if (script !== SET_UNLESS_INVALIDATED_LUA) throw new Error('fake redis: Lua is not emulated');
-    const [key, genKey, allKey, seenUser, seenAll, ttl, json] = a as [string, string, string, string, string, string, string];
-    if ((this.live(genKey)?.value ?? '') !== seenUser || (this.live(allKey)?.value ?? '') !== seenAll) return 0;
+    const [key, genKey, allKey, seenUser, seenAll, ttl, json] = a as [
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+      string,
+    ];
+    if (
+      (this.live(genKey)?.value ?? '') !== seenUser ||
+      (this.live(allKey)?.value ?? '') !== seenAll
+    )
+      return 0;
     this.setSync(key, json, ['EX', Number(ttl)]);
     return 1;
   }

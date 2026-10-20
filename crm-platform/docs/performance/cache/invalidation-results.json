@@ -1,0 +1,1264 @@
+{
+  "measured": {
+    "R05 set-after-invalidate (reader 0.3 s late)": {
+      "measuredStaleSeconds": 1.5406740110000028,
+      "documentedSeconds": 5
+    },
+    "R04 account gate, invalidation lost": {
+      "measuredStaleSeconds": 29.926198758999995,
+      "documentedSeconds": 30
+    },
+    "R05 workspace suspension, invalidation lost": {
+      "measuredStaleSeconds": 4.763978209999994,
+      "documentedSeconds": 5
+    },
+    "R02 RBAC version, invalidation lost": {
+      "boundSeconds": 600,
+      "how": "TTL read from Redis, expiry brought forward with EXPIRE (a full 600 s run is in the slow spec)"
+    },
+    "R04 account gate, 50 parallel readers": {
+      "reads": 12512,
+      "readersSeeingOldValueAfterWrite": 0
+    },
+    "R01/R02 RBAC, 50 parallel readers": {
+      "reads": 7803,
+      "readersSeeingOldValueAfterWrite": 0
+    },
+    "R05 workspace suspension, 50 parallel readers": {
+      "reads": 10881,
+      "readersSeeingOldValueAfterWrite": 0
+    },
+    "R09 session tombstone, write lost": {
+      "measuredSecondsAfterRedisBack": 5.059655148000005,
+      "retryEverySeconds": 5,
+      "accessTokenLifeSeconds": 900
+    },
+    "R04 account gate, writer without invalidate": {
+      "measuredStaleSeconds": 30.026627033,
+      "documentedSeconds": 30
+    },
+    "R05 workspace suspension verdict, writer without invalidate": {
+      "measuredStaleSeconds": 5.06600896,
+      "documentedSeconds": 5
+    },
+    "R06 partner agent flag, writer without invalidate": {
+      "measuredStaleSeconds": 30.143927053000006,
+      "documentedSeconds": 30
+    },
+    "M19 currency table, other instance": {
+      "measuredStaleSeconds": 60.143983127000006,
+      "documentedSeconds": 60
+    },
+    "M08 consent settings, other instance": {
+      "measuredStaleSeconds": 60.102994730999995,
+      "documentedSeconds": 60
+    },
+    "M01 realtime audience, no invalidate()": {
+      "measuredStaleSeconds": 30.087235532999998,
+      "documentedSeconds": 30
+    },
+    "M16 webhook-forward target, no forget()": {
+      "measuredStaleSeconds": 10.041116165000014,
+      "documentedSeconds": 10
+    },
+    "R17 booking page theme, drop lost": {
+      "boundSeconds": 120,
+      "how": "TTL read from Redis"
+    },
+    "plan expiry (entitlements)": {
+      "secondsAfterPlanEndsAt": 0.07,
+      "polledForSeconds": 3.02,
+      "documentedSeconds": 0
+    },
+    "M06 trial gate": {
+      "measuredStaleSecondsAfterTrialEnd": 3.06,
+      "documentedSeconds": 5
+    },
+    "M04 grace days, other process": {
+      "measuredStaleSeconds": 21.841463748999995,
+      "documentedSeconds": 30
+    },
+    "M10 notification preferences, no forget()": {
+      "measuredStaleSeconds": 5.042696877000002,
+      "documentedSeconds": 5
+    },
+    "R03 platform operator permissions, invalidation lost": {
+      "boundSeconds": 600,
+      "how": "TTL read from Redis, expiry brought forward with EXPIRE"
+    },
+    "M03 settings snapshot": {
+      "writer": "other process",
+      "measuredStaleSeconds": 5.03519616,
+      "documentedSeconds": 5
+    },
+    "R07/M02 token epoch": {
+      "writer": "other process",
+      "measuredStaleSeconds": 5.016852859000003,
+      "documentedSeconds": 5
+    },
+    "R08 send-halt mirror, write lost": {
+      "measuredStaleSeconds": 22.913690958,
+      "documentedSeconds": 30
+    },
+    "R07 token epoch mirror, write lost": {
+      "measuredStaleSeconds": 29.837576675999998,
+      "documentedSeconds": 35
+    },
+    "R10/M05 impersonation end, tombstone lost": {
+      "measuredStaleSeconds": 4.682257514000001,
+      "documentedSeconds": 5
+    },
+    "R-64-04 seed command without the bump": {
+      "staleUntilCachedVersionExpiresSeconds": 600,
+      "documentedSeconds": 600
+    }
+  },
+  "item": 66,
+  "matrix": [
+    {
+      "id": "R01",
+      "name": "RBAC grant set per user",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "version bump (cache key contains roles_version)",
+      "documentedStaleSeconds": 0,
+      "tests": "access-control.spec.ts; races-and-failure.spec.ts; offline-writers.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R02",
+      "name": "RBAC roles version per workspace",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "DEL then raise-only Lua SET of the version",
+      "documentedStaleSeconds": 0,
+      "tests": "access-control.spec.ts; races-and-failure.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R03",
+      "name": "Platform operator permission names",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "version bump in the writer transaction, then DEL + raise-only SET (D6 fix)",
+      "documentedStaleSeconds": 0,
+      "tests": "platform-staff.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R04",
+      "name": "Account gate state per user",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "DEL + generation counter, compare-and-set on fill (D4 fix)",
+      "documentedStaleSeconds": 0,
+      "tests": "access-control.spec.ts; races-and-failure.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R05",
+      "name": "Workspace suspended verdict",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "DEL now and again after 1.5 s",
+      "documentedStaleSeconds": 0,
+      "tests": "access-control.spec.ts; races-and-failure.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R06",
+      "name": "Partner agent active flag",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-partial",
+      "mechanism": "TTL only; invalidate() exists, no API writer of partner_agents.status exists",
+      "documentedStaleSeconds": 30,
+      "tests": "access-control.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R07",
+      "name": "Platform token epoch (mirror)",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "atomic SQL increment (D1 fix) + SET with 30 s expiry (D2 fix)",
+      "documentedStaleSeconds": 5,
+      "tests": "platform-state.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R08",
+      "name": "Emergency send-halt mirror",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "SET of the mirror with 30 s expiry; writer reads Postgres until the write works",
+      "documentedStaleSeconds": 30,
+      "tests": "platform-state.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R09",
+      "name": "Session revocation and activity state",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "tombstone SET before the revoke call returns; in-process pending list + retry",
+      "documentedStaleSeconds": 0,
+      "tests": "races-and-failure.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R10",
+      "name": "Impersonation ended tombstone",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "tested-real-writer",
+      "mechanism": "tombstone SET at end(); 5 s open-check copy is the fallback",
+      "documentedStaleSeconds": 5,
+      "tests": "impersonation.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R11",
+      "name": "Analytics series result",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "time-based analytics result"
+    },
+    {
+      "id": "R12",
+      "name": "Campaign / broadcast summary",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "time-based summary"
+    },
+    {
+      "id": "R13",
+      "name": "SMS number lookup verdict",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "lookup verdict, time-based"
+    },
+    {
+      "id": "R14",
+      "name": "Knowledge-base query embedding",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "content-addressed embedding"
+    },
+    {
+      "id": "R15",
+      "name": "Translation result",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "content-addressed translation (key holds the scope)"
+    },
+    {
+      "id": "R16",
+      "name": "Active UI languages",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "static-ratchet-only",
+      "mechanism": "DEL of the key by every LanguagesService writer (4 sites, ratchet)",
+      "documentedStaleSeconds": 600,
+      "tests": "writers-ratchet.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R17",
+      "name": "Booking page theme",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "tested-partial",
+      "mechanism": "DEL by BookingPageThemesService after commit (5 sites, ratchet)",
+      "documentedStaleSeconds": 120,
+      "tests": "process-caches.spec.ts; writers-ratchet.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "R18",
+      "name": "WABA groups eligibility",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "time-based eligibility"
+    },
+    {
+      "id": "R19",
+      "name": "WhatsApp uploaded media id",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "external ids, time-based"
+    },
+    {
+      "id": "R20",
+      "name": "Idempotent response replay",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "idempotency record: immutable by design"
+    },
+    {
+      "id": "R21",
+      "name": "Storefront checkout idempotency",
+      "priority": "P0",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "idempotency key, freed on failure"
+    },
+    {
+      "id": "R22",
+      "name": "Channel dispatch result",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "dispatch result, time-based"
+    },
+    {
+      "id": "R23",
+      "name": "Conversation \"seen\" marker",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "read marker, time-based"
+    },
+    {
+      "id": "R24",
+      "name": "Notification and AI copilot short state",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "chat state is the data itself, not a copy"
+    },
+    {
+      "id": "R25",
+      "name": "Mail bounced-address flag",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "not-tested",
+      "mechanism": "DEL on recovery; the bounce handler is the writer",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "not tested: needs the mail bounce pipeline"
+    },
+    {
+      "id": "R26",
+      "name": "Active-worker and platform health probes",
+      "priority": "P1",
+      "layer": "redis",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "health probes, time-based"
+    },
+    {
+      "id": "D01",
+      "name": "Payment-gateway plan cache table",
+      "priority": "P0",
+      "layer": "database",
+      "status": "exempt",
+      "mechanism": null,
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "immutable mapping"
+    },
+    {
+      "id": "M01",
+      "name": "Realtime audience (who may receive an event)",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-partial",
+      "mechanism": "TTL only for role/team changes (invalidate() is called only by mail settings)",
+      "documentedStaleSeconds": 30,
+      "tests": "process-caches.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M02",
+      "name": "Platform epoch local copy",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "bumping process refreshes its copy; others by 5 s TTL",
+      "documentedStaleSeconds": 5,
+      "tests": "platform-state.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M03",
+      "name": "Platform settings snapshot",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "snapshot dropped by every write through PlatformSettingsService; others by 5 s TTL",
+      "documentedStaleSeconds": 5,
+      "tests": "platform-state.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M04",
+      "name": "Plan grace days",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "forgetGrace() after the billing save (D5 fix); others by 30 s TTL",
+      "documentedStaleSeconds": 30,
+      "tests": "plans-and-settings.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M05",
+      "name": "Impersonation \"still open\" check",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "Map delete on end(); Redis tombstone covers other instances",
+      "documentedStaleSeconds": 5,
+      "tests": "impersonation.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M06",
+      "name": "Trial gate \"not expired\" verdict",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "TTL only; an expired verdict is never cached",
+      "documentedStaleSeconds": 5,
+      "tests": "plans-and-settings.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M07",
+      "name": "Pending session revocations",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "Map delete when the Redis tombstone is confirmed",
+      "documentedStaleSeconds": 0,
+      "tests": "races-and-failure.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M08",
+      "name": "Consent settings per workspace",
+      "priority": "P1",
+      "layer": "process",
+      "status": "tested-partial",
+      "mechanism": "invalidate(orgId) after the save; other processes by 60 s TTL",
+      "documentedStaleSeconds": 60,
+      "tests": "process-caches.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M09",
+      "name": "Minor-contact rule per workspace",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "invalidateMinorRule(orgId) by the Compliance center",
+      "documentedStaleSeconds": 60,
+      "tests": "",
+      "reason": "not tested: needs the compliance service graph"
+    },
+    {
+      "id": "M10",
+      "name": "Notification preferences per workspace",
+      "priority": "P1",
+      "layer": "process",
+      "status": "tested-partial",
+      "mechanism": "TTL only for the owner save (forget() is called by the screen read, not by the writer)",
+      "documentedStaleSeconds": 5,
+      "tests": "plans-and-settings.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M11",
+      "name": "Mail branding footer",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "Redis version counter bump by bustFooterCache",
+      "documentedStaleSeconds": 60,
+      "tests": "",
+      "reason": "not tested: footer pipeline not built on the bench"
+    },
+    {
+      "id": "M12",
+      "name": "Persona view and definition",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "key contains the row revision (content-addressed)"
+    },
+    {
+      "id": "M13",
+      "name": "Calendar connection row (Google, Microsoft)",
+      "priority": "P0",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "Map delete by invalidate(orgId)",
+      "documentedStaleSeconds": 15,
+      "tests": "",
+      "reason": "not tested: OAuth connect flow"
+    },
+    {
+      "id": "M14",
+      "name": "Calendar free/busy answer",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "Map delete by prefix after our own write",
+      "documentedStaleSeconds": 60,
+      "tests": "",
+      "reason": "not tested: Google Calendar is an external source"
+    },
+    {
+      "id": "M15",
+      "name": "Calendar provider preference",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "forgetPreference(orgId) by the two callers after commit",
+      "documentedStaleSeconds": 10,
+      "tests": "",
+      "reason": "not tested: calendar services graph"
+    },
+    {
+      "id": "M16",
+      "name": "Webhook-forward target",
+      "priority": "P1",
+      "layer": "process",
+      "status": "tested-partial",
+      "mechanism": "TTL only; deliveryTarget cache has forget(), writer service calls fanout.invalidate()",
+      "documentedStaleSeconds": 10,
+      "tests": "process-caches.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M17",
+      "name": "Wallet \"send ok\" short-cut",
+      "priority": "P0",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "TTL only (3 s ok-verdict)",
+      "documentedStaleSeconds": 3,
+      "tests": "",
+      "reason": "not tested: WalletGateService needs 8 collaborators"
+    },
+    {
+      "id": "M18",
+      "name": "Message price cards",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "invalidate() inside the import transaction and again after commit (D7 fix)",
+      "documentedStaleSeconds": 30,
+      "tests": "process-caches.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M19",
+      "name": "Currency table",
+      "priority": "P0",
+      "layer": "process",
+      "status": "tested-real-writer",
+      "mechanism": "flush() after every CurrencyAdminService write (5 sites)",
+      "documentedStaleSeconds": 60,
+      "tests": "process-caches.spec.ts",
+      "reason": ""
+    },
+    {
+      "id": "M20",
+      "name": "Module registry snapshot",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "invalidate()",
+      "documentedStaleSeconds": 30,
+      "tests": "",
+      "reason": "not tested: not reached in the time box"
+    },
+    {
+      "id": "M21",
+      "name": "Provider router and WhatsApp provider resolver snapshots",
+      "priority": "P1",
+      "layer": "process",
+      "status": "not-tested",
+      "mechanism": "invalidate()",
+      "documentedStaleSeconds": 15,
+      "tests": "",
+      "reason": "not tested: not reached in the time box"
+    },
+    {
+      "id": "M22",
+      "name": "API docs and health snapshots",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "static docs snapshot"
+    },
+    {
+      "id": "M23",
+      "name": "Inbox channel and subject lookups",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "lookup, time-based"
+    },
+    {
+      "id": "M24",
+      "name": "Display-id reservations",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "id reservations"
+    },
+    {
+      "id": "M25",
+      "name": "Time-zone helpers",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "pure function memo"
+    },
+    {
+      "id": "M26",
+      "name": "Throttle markers",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "throttle markers"
+    },
+    {
+      "id": "M27",
+      "name": "In-flight sharing and token refresh",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "in-flight sharing"
+    },
+    {
+      "id": "M28",
+      "name": "Memory fallbacks of Redis caches",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "fallback of a Redis cache"
+    },
+    {
+      "id": "M29",
+      "name": "Google OIDC signing keys",
+      "priority": "P0",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "external Google keys, unknown kid forces a re-read"
+    },
+    {
+      "id": "Q01",
+      "name": "Auth prefetch",
+      "priority": "P0",
+      "layer": "request",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "per request"
+    },
+    {
+      "id": "Q02",
+      "name": "React cache() in the web app",
+      "priority": "P0",
+      "layer": "request",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "per request"
+    },
+    {
+      "id": "N01",
+      "name": "Next.js data cache for platform pages",
+      "priority": "P1",
+      "layer": "next",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "revalidate, time-based"
+    },
+    {
+      "id": "N02",
+      "name": "Next.js response headers",
+      "priority": "P0",
+      "layer": "next",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "static headers"
+    },
+    {
+      "id": "N03",
+      "name": "Web frame-policy memo",
+      "priority": "P1",
+      "layer": "process",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "static memo"
+    },
+    {
+      "id": "H01",
+      "name": "Default response cache header for credentialed requests",
+      "priority": "P0",
+      "layer": "http",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "headers"
+    },
+    {
+      "id": "H02",
+      "name": "Private browser cache for media",
+      "priority": "P1",
+      "layer": "http",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "private browser cache, time-based"
+    },
+    {
+      "id": "H03",
+      "name": "Private immutable images with a version in the URL",
+      "priority": "P1",
+      "layer": "http",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "URL carries the version"
+    },
+    {
+      "id": "H04",
+      "name": "Public immutable assets (capability URLs)",
+      "priority": "P1",
+      "layer": "http",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "URL carries the version"
+    },
+    {
+      "id": "H05",
+      "name": "Public short-lived JSON and ETag",
+      "priority": "P1",
+      "layer": "http",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "time-based"
+    },
+    {
+      "id": "C01",
+      "name": "TanStack Query defaults (staff web app)",
+      "priority": "P0",
+      "layer": "client",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "browser query cache, outside the API"
+    },
+    {
+      "id": "C02",
+      "name": "Per-screen staleTime / gcTime overrides",
+      "priority": "P1",
+      "layer": "client",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "browser query cache"
+    },
+    {
+      "id": "C03",
+      "name": "Browser storage preferences",
+      "priority": "P1",
+      "layer": "browser",
+      "status": "exempt",
+      "mechanism": "none: no mutable source",
+      "documentedStaleSeconds": null,
+      "tests": "",
+      "reason": "browser storage"
+    }
+  ],
+  "ratchet": [
+    {
+      "id": "W-rbac",
+      "table": "user_roles",
+      "cache": "R01/R02",
+      "writers": {
+        "modules/admin/users/users.repository.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersion",
+          "via": "modules/admin/users/users.service.ts"
+        },
+        "modules/workspaces-teams-tenancy/members.repository.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersion",
+          "via": "modules/workspaces-teams-tenancy/members.service.ts"
+        },
+        "modules/auth/cli/seed-auth.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersionOffline"
+        },
+        "modules/team-chat/cli/demo-members.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersionOffline"
+        },
+        "modules/auth/platform/tenant-directory.ts": {
+          "d": "exempt",
+          "reason": "first admin of a brand-new workspace: no grant set can be cached yet"
+        }
+      }
+    },
+    {
+      "id": "W-grants",
+      "table": "role_grants",
+      "cache": "R01/R02",
+      "writers": {
+        "modules/admin/roles/roles.repository.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersion",
+          "via": "modules/admin/roles/roles.service.ts"
+        }
+      }
+    },
+    {
+      "id": "W-roles",
+      "table": "roles",
+      "cache": "R01/R02",
+      "writers": {
+        "modules/admin/roles/roles.repository.ts": {
+          "d": "invalidates",
+          "call": "bumpRolesVersion",
+          "via": "modules/admin/roles/roles.service.ts"
+        }
+      }
+    },
+    {
+      "id": "W-org-status",
+      "table": "organizations",
+      "column": "status",
+      "cache": "R05",
+      "writers": {
+        "modules/platform-support-desk/platform-inbox.service.ts": {
+          "d": "invalidates",
+          "call": "suspension?.invalidate"
+        },
+        "modules/admin-console-shell/workspace-settings.service.ts": {
+          "d": "exempt",
+          "reason": "'deleted' is not 'suspended'; sessions are tombstoned in the same method"
+        },
+        "modules/workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts": {
+          "d": "exempt",
+          "reason": "'archived' is not 'suspended'; the verdict stays false"
+        },
+        "kernel/activity/activity.service.ts": {
+          "d": "exempt",
+          "reason": "sets 'active' on activity; only from 'archived'"
+        },
+        "modules/auth/account/account.service.ts": {
+          "d": "exempt",
+          "reason": "workspace profile edit; the word status only appears near the statement"
+        },
+        "modules/auth/flows/onboarding.service.ts": {
+          "d": "exempt",
+          "reason": "new workspace: no verdict cached yet"
+        }
+      }
+    },
+    {
+      "id": "W-user-security",
+      "table": "user_security",
+      "cache": "R04",
+      "writers": {
+        "modules/auth/account/account.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/auth/flows/login.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/auth/flows/recovery.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/auth/security/mfa.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/workspaces-teams-tenancy/members.repository.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate",
+          "via": "modules/workspaces-teams-tenancy/members.service.ts"
+        },
+        "modules/auth/flows/social-auth.service.ts": {
+          "d": "ttl-only",
+          "reason": "OPEN F-66-03 (low): marks email verified without dropping the gate entry; fresh within 30 s"
+        },
+        "modules/auth/cli/seed-auth.ts": {
+          "d": "exempt",
+          "reason": "offline CLI; running API catches up within 30 s (measured)"
+        },
+        "modules/team-chat/cli/demo-members.ts": {
+          "d": "exempt",
+          "reason": "offline CLI; within 30 s"
+        },
+        "modules/auth/maintenance/reencrypt-secrets.ts": {
+          "d": "exempt",
+          "reason": "rewrites encrypted MFA secrets only; no gate input changes"
+        },
+        "modules/auth/platform/tenant-directory.ts": {
+          "d": "exempt",
+          "reason": "creates the first user of a new workspace"
+        }
+      }
+    },
+    {
+      "id": "W-users-status",
+      "table": "users",
+      "column": "status",
+      "cache": "R04",
+      "writers": {
+        "modules/admin/users/users.repository.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate",
+          "via": "modules/admin/users/users.service.ts"
+        },
+        "modules/workspaces-teams-tenancy/members.repository.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate",
+          "via": "modules/workspaces-teams-tenancy/members.service.ts"
+        },
+        "modules/auth/account/account.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/auth/flows/login.service.ts": {
+          "d": "invalidates",
+          "call": "gates.invalidate"
+        },
+        "modules/auth/auth.service.ts": {
+          "d": "exempt",
+          "reason": "login stamp; not a status change (word status near the statement)"
+        }
+      }
+    },
+    {
+      "id": "W-partner",
+      "table": "partner_agents",
+      "cache": "R06",
+      "writers": {
+        "modules/auth/auth.service.ts": {
+          "d": "exempt",
+          "reason": "only last_login_at; no API code changes partner_agents.status (R-64-02). The day one does, it must call PartnerAgentStatusService.invalidate()."
+        }
+      }
+    },
+    {
+      "id": "W-sessions",
+      "table": "auth_sessions",
+      "column": "revoked_at",
+      "cache": "R09",
+      "writers": {
+        "modules/auth/sessions/session.service.ts": {
+          "d": "invalidates",
+          "call": "tombstone"
+        },
+        "modules/admin-console-shell/workspace-settings.service.ts": {
+          "d": "invalidates",
+          "call": "tombstone"
+        },
+        "modules/auth/maintenance/auth-maintenance.service.ts": {
+          "d": "ttl-only",
+          "reason": "OPEN F-66-04 (low, not verified): no tombstone; the access token expires within 16 min"
+        },
+        "modules/auth/platform/tenant-directory.ts": {
+          "d": "ttl-only",
+          "reason": "OPEN F-66-04 (low, not verified): no tombstone; 16 min"
+        },
+        "modules/workspaces-teams-tenancy/lifecycle/lifecycle.repository.ts": {
+          "d": "ttl-only",
+          "reason": "OPEN F-66-04 (low, not verified): no tombstone in this file; 16 min"
+        }
+      }
+    },
+    {
+      "id": "W-prbac",
+      "table": "platform_operator_roles",
+      "cache": "R03",
+      "writers": {
+        "modules/roles-permissions/platform-roles.service.ts": {
+          "d": "invalidates",
+          "call": "dropVersionCache"
+        },
+        "modules/roles-permissions/platform-staff.service.ts": {
+          "d": "invalidates",
+          "call": "dropVersionCache"
+        }
+      }
+    },
+    {
+      "id": "W-languages",
+      "table": "languages",
+      "cache": "R16",
+      "writers": {
+        "modules/localization-translation/languages.service.ts": {
+          "d": "invalidates",
+          "call": "this.flush()"
+        }
+      }
+    },
+    {
+      "id": "W-themes",
+      "table": "booking_page_themes",
+      "cache": "R17",
+      "writers": {
+        "modules/appointments-booking/booking-page-themes.repository.ts": {
+          "d": "invalidates",
+          "call": "cache.drop",
+          "via": "modules/appointments-booking/booking-page-themes.service.ts"
+        }
+      }
+    },
+    {
+      "id": "W-metacards",
+      "table": "meta_rate_cards",
+      "cache": "M18",
+      "writers": {
+        "modules/wallet-message-billing/meta-rate-card.service.ts": {
+          "d": "invalidates",
+          "call": "cards.invalidate()",
+          "via": "modules/wallet-message-billing/platform-rates.service.ts"
+        }
+      }
+    },
+    {
+      "id": "W-currencies",
+      "table": "currencies",
+      "cache": "M19",
+      "writers": {
+        "modules/coupons-credits-referral-currency/currency-admin.service.ts": {
+          "d": "invalidates",
+          "call": "display.flush()"
+        }
+      }
+    },
+    {
+      "id": "W-teams",
+      "table": "team_members",
+      "cache": "M01",
+      "writers": {
+        "modules/workspaces-teams-tenancy/teams.repository.ts": {
+          "d": "ttl-only",
+          "reason": "OPEN F-66-05 (low): realtime audience copy is not dropped after a team change; 30 s, a signal only (REST re-checks)"
+        }
+      }
+    }
+  ],
+  "defects": [
+    {
+      "id": "D1",
+      "sev": "Medium",
+      "title": "Token epoch bump read the 5 s settings snapshot",
+      "fixed": true,
+      "file": "modules/auth/sessions/epoch.service.ts",
+      "test": "platform-state.spec.ts"
+    },
+    {
+      "id": "D2",
+      "sev": "High",
+      "title": "Lost epoch mirror write left the old epoch in Redis for ever (no TTL)",
+      "fixed": true,
+      "file": "modules/auth/sessions/epoch.service.ts",
+      "test": "platform-state.spec.ts"
+    },
+    {
+      "id": "D3",
+      "sev": "Low",
+      "title": "Re-activated member kept the \"suspended\" gate entry for 30 s",
+      "fixed": true,
+      "file": "modules/admin/users/users.service.ts",
+      "test": "access-control.spec.ts"
+    },
+    {
+      "id": "D4",
+      "sev": "Medium",
+      "title": "Slow reader re-cached the old account gate state after an invalidation",
+      "fixed": true,
+      "file": "modules/auth/security/account-gate.service.ts",
+      "test": "races-and-failure.spec.ts"
+    },
+    {
+      "id": "D5",
+      "sev": "Low",
+      "title": "Billing grace days not dropped after the billing save (same process, 30 s)",
+      "fixed": true,
+      "file": "modules/platform-payment-gateways/billing-settings.service.ts",
+      "test": "plans-and-settings.spec.ts"
+    },
+    {
+      "id": "D6",
+      "sev": "Medium",
+      "title": "Operator permission version could be re-cached old for 600 s",
+      "fixed": true,
+      "file": "modules/roles-permissions/platform-rbac.service.ts",
+      "test": "platform-staff.spec.ts"
+    },
+    {
+      "id": "D7",
+      "sev": "Low",
+      "title": "Meta rate card import invalidated before commit only (old price 30 s)",
+      "fixed": true,
+      "file": "modules/wallet-message-billing/platform-rates.service.ts",
+      "test": "process-caches.spec.ts"
+    },
+    {
+      "id": "D8",
+      "sev": "Low",
+      "title": "Seed/demo commands left role links unseen for up to 600 s (R-64-04)",
+      "fixed": true,
+      "file": "kernel/rbac/roles-version-offline.ts",
+      "test": "offline-writers.spec.ts"
+    }
+  ],
+  "open": [
+    {
+      "id": "O-1",
+      "sev": "Low",
+      "title": "Migrations that insert or delete role_grants leave cached grant sets for up to 600 s",
+      "rec": "Add a post-deploy step that deletes rbac:version:* (or have the migration runner do it)."
+    },
+    {
+      "id": "F-66-03",
+      "sev": "Low",
+      "title": "social-auth marks email verified without dropping the gate entry (30 s)",
+      "rec": "Call AccountGateService.invalidate after the write."
+    },
+    {
+      "id": "F-66-04",
+      "sev": "Low",
+      "title": "Three session-revoking writers have no tombstone in their file (16 min)",
+      "rec": "Verify and add SessionService.tombstone."
+    },
+    {
+      "id": "F-66-05",
+      "sev": "Low",
+      "title": "Realtime audience (30 s) not dropped after team or role changes",
+      "rec": "Call MemberDirectory.invalidate from the teams and roles services, or accept 30 s."
+    },
+    {
+      "id": "F-66-06",
+      "sev": "Info",
+      "title": "Owner-saved notification toggles are not forgotten by the resolver (5 s)",
+      "rec": "Accept (bounded 5 s) or call NotificationPrefsResolver.forget."
+    },
+    {
+      "id": "F-66-07",
+      "sev": "Info",
+      "title": "register.json still says the epoch mirror has no TTL on purpose and that forgetGrace is test-only; update after #720 merges",
+      "rec": "Owner of register.json."
+    },
+    {
+      "id": "F-66-08",
+      "sev": "Info",
+      "title": "Pre-existing: cache-audit ratchet fails on a stale no-TTL allowance for branding-footer.service.ts",
+      "rec": "Remove the allowance in register.json."
+    }
+  ]
+}

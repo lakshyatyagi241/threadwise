@@ -33,7 +33,11 @@ describe('platform settings, token epoch and send halt across two processes', ()
     await b.call('settings.set', 'ci66.k', 1);
     const s = await secondsUntil(() => a.settings.get<number>('ci66.k').then((v) => v ?? 0), 1, 8);
     expect(s).toBeLessThanOrEqual(5.5);
-    record('M03 settings snapshot', { writer: 'other process', measuredStaleSeconds: s, documentedSeconds: 5 });
+    record('M03 settings snapshot', {
+      writer: 'other process',
+      measuredStaleSeconds: s,
+      documentedSeconds: 5,
+    });
     await a.settings.set('ci66.k', 2, null);
     expect(await a.settings.get('ci66.k')).toBe(2);
   });
@@ -45,7 +49,11 @@ describe('platform settings, token epoch and send halt across two processes', ()
     expect(await b.call('epoch.current')).toBe(1);
     const s = await secondsUntil(() => a.epoch.current(), 1, 8);
     expect(s).toBeLessThanOrEqual(5.5);
-    record('R07/M02 token epoch', { writer: 'other process', measuredStaleSeconds: s, documentedSeconds: 5 });
+    record('R07/M02 token epoch', {
+      writer: 'other process',
+      measuredStaleSeconds: s,
+      documentedSeconds: 5,
+    });
   });
 
   it('two processes bump the epoch one after the other: the epoch advances twice (defect D1: the second read a stale snapshot)', async () => {
@@ -56,7 +64,9 @@ describe('platform settings, token epoch and send halt across two processes', ()
     expect(first).toBe(before + 1);
     const second = await b.call<number>('epoch.bump', 1); // B's snapshot is up to 5 s old
     expect(second).toBe(before + 2);
-    const stored = await env.pg.owner.query(`SELECT value FROM platform_settings WHERE key = 'auth.epoch'`);
+    const stored = await env.pg.owner.query(
+      `SELECT value FROM platform_settings WHERE key = 'auth.epoch'`,
+    );
     expect(Number(stored.rows[0].value)).toBe(before + 2);
   });
 
@@ -80,7 +90,10 @@ describe('platform settings, token epoch and send halt across two processes', ()
       expect(await env.admin.get('auth:send-halt')).toBe('0');
       const s = await secondsUntil(() => a.halt.isHalted(), true, 40, 250);
       expect(s).toBeLessThanOrEqual(30.5);
-      record('R08 send-halt mirror, write lost', { measuredStaleSeconds: s, documentedSeconds: 30 });
+      record('R08 send-halt mirror, write lost', {
+        measuredStaleSeconds: s,
+        documentedSeconds: 30,
+      });
     } finally {
       c.kill();
     }
@@ -102,7 +115,10 @@ describe('platform settings, token epoch and send halt across two processes', ()
       const s = await secondsUntil(() => reader.epoch.current(), now + 1, 45, 250);
       expect(s).toBeLessThanOrEqual(35.5);
       await reader.close();
-      record('R07 token epoch mirror, write lost', { measuredStaleSeconds: s, documentedSeconds: 35 });
+      record('R07 token epoch mirror, write lost', {
+        measuredStaleSeconds: s,
+        documentedSeconds: 35,
+      });
     } finally {
       c.kill();
     }

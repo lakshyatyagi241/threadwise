@@ -109,7 +109,13 @@ export class PlatformRbacService {
   }
 
   private cacheVersion(version: number): Promise<unknown> {
-    return this.redis.eval(RAISE_VERSION_LUA, 1, VERSION_KEY, String(version), String(CACHE_TTL_SECONDS));
+    return this.redis.eval(
+      RAISE_VERSION_LUA,
+      1,
+      VERSION_KEY,
+      String(version),
+      String(CACHE_TTL_SECONDS),
+    );
   }
 
   private readVersion(): Promise<number> {

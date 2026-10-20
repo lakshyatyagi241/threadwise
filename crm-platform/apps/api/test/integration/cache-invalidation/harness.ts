@@ -65,8 +65,12 @@ export interface Workspace {
 }
 
 /** One workspace with an active user holding one role (no grants yet) and one partner agent. */
-export async function seedWorkspace(env: Env, tag = randomBytes(3).toString('hex')): Promise<Workspace> {
-  const q = async (sql: string, p: unknown[] = []) => (await env.pg.owner.query(sql, p)).rows[0] as { id: number };
+export async function seedWorkspace(
+  env: Env,
+  tag = randomBytes(3).toString('hex'),
+): Promise<Workspace> {
+  const q = async (sql: string, p: unknown[] = []) =>
+    (await env.pg.owner.query(sql, p)).rows[0] as { id: number };
   const org = await q(
     `INSERT INTO organizations (slug, name, plan) VALUES ($1,$2,'starter') RETURNING id`,
     [`ci-${tag}`, `Cache ${tag}`],
@@ -77,10 +81,19 @@ export async function seedWorkspace(env: Env, tag = randomBytes(3).toString('hex
     [orgId, `u-${tag}@ci.test`],
   );
   const userId = Number(user.id);
-  const role = await q(`INSERT INTO roles (org_id, name) VALUES ($1,'Sales') RETURNING id`, [orgId]);
+  const role = await q(`INSERT INTO roles (org_id, name) VALUES ($1,'Sales') RETURNING id`, [
+    orgId,
+  ]);
   const roleId = Number(role.id);
-  await env.pg.owner.query(`INSERT INTO user_roles (org_id, user_id, role_id) VALUES ($1,$2,$3)`, [orgId, userId, roleId]);
-  await env.pg.owner.query(`INSERT INTO user_security (org_id, user_id, email_verified_at) VALUES ($1,$2,now())`, [orgId, userId]);
+  await env.pg.owner.query(`INSERT INTO user_roles (org_id, user_id, role_id) VALUES ($1,$2,$3)`, [
+    orgId,
+    userId,
+    roleId,
+  ]);
+  await env.pg.owner.query(
+    `INSERT INTO user_security (org_id, user_id, email_verified_at) VALUES ($1,$2,now())`,
+    [orgId, userId],
+  );
   const agent = await q(
     `INSERT INTO partner_agents (org_id, code, name, email) VALUES ($1,$2,'A',$3) RETURNING id`,
     [orgId, `c${tag}`, `a-${tag}@ci.test`],
