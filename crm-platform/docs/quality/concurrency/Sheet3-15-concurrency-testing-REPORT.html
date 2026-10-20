@@ -1,0 +1,2308 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sheet3 #15 - Concurrency testing - report</title>
+    <style>
+      :root {
+        --bg: #ffffff;
+        --fg: #1b1f24;
+        --muted: #59636e;
+        --line: #d0d7de;
+        --card: #f6f8fa;
+        --c1: #0072b2;
+        --c2: #e69f00;
+        --c3: #009e73;
+        --c4: #cc79a7;
+        --c6: #d55e00;
+        --ok: #1a7f37;
+        --warn: #9a6700;
+        --bad: #cf222e;
+        --hi: #cf222e;
+        --med: #9a6700;
+        --low: #0969da;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0d1117;
+          --fg: #e6edf3;
+          --muted: #9aa4b0;
+          --line: #30363d;
+          --card: #161b22;
+          --c1: #56b4e9;
+          --c2: #f0b429;
+          --c3: #2fcf9f;
+          --c4: #e8a3c8;
+          --c6: #f0883e;
+          --ok: #3fb950;
+          --warn: #d29922;
+          --bad: #f85149;
+          --hi: #ff7b72;
+          --med: #e3b341;
+          --low: #79c0ff;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--fg);
+        font:
+          16px/1.6 system-ui,
+          -apple-system,
+          'Segoe UI',
+          Roboto,
+          sans-serif;
+      }
+      main {
+        max-width: 1040px;
+        margin: 0 auto;
+        padding: 24px 16px 72px;
+      }
+      h1 {
+        font-size: 28px;
+        margin: 0 0 6px;
+        line-height: 1.25;
+      }
+      h2 {
+        font-size: 21px;
+        margin: 40px 0 10px;
+        padding-bottom: 5px;
+        border-bottom: 2px solid var(--line);
+      }
+      h3 {
+        font-size: 17px;
+        margin: 22px 0 6px;
+      }
+      p,
+      li {
+        max-width: 78ch;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      code {
+        background: var(--card);
+        padding: 1px 5px;
+        border-radius: 4px;
+        font-size: 13px;
+        word-break: break-word;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+        margin: 10px 0;
+      }
+      .scroll {
+        overflow-x: auto;
+      }
+      th,
+      td {
+        border: 1px solid var(--line);
+        padding: 6px 9px;
+        text-align: left;
+        vertical-align: top;
+      }
+      th {
+        background: var(--card);
+      }
+      tr,
+      figure,
+      .tile,
+      .box {
+        break-inside: avoid;
+        page-break-inside: avoid;
+      }
+      .badge {
+        display: inline-block;
+        padding: 2px 11px;
+        border-radius: 99px;
+        font-size: 13px;
+        font-weight: 700;
+        border: 1.5px solid currentColor;
+        vertical-align: middle;
+      }
+      .chip {
+        display: inline-block;
+        padding: 0 8px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1.5px solid currentColor;
+        white-space: nowrap;
+      }
+      .chip.high {
+        color: var(--hi);
+      }
+      .chip.med {
+        color: var(--med);
+      }
+      .chip.low {
+        color: var(--low);
+      }
+      .chip.fixed {
+        color: var(--ok);
+      }
+      .chip.open {
+        color: var(--warn);
+      }
+      .tiles {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        gap: 10px;
+        margin: 14px 0;
+      }
+      .tile {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+      }
+      .tile b {
+        font-size: 28px;
+        display: block;
+        line-height: 1.15;
+      }
+      .tile span {
+        font-size: 13px;
+        color: var(--muted);
+      }
+      .box {
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-left: 5px solid var(--c1);
+        border-radius: 8px;
+        padding: 10px 16px;
+        margin: 14px 0;
+      }
+      .verdict {
+        border-left-color: var(--c2);
+        font-size: 17px;
+      }
+      figure {
+        margin: 18px 0;
+        padding: 12px;
+        border: 1px solid var(--line);
+        border-radius: 10px;
+      }
+      figcaption {
+        font-size: 13px;
+        color: var(--muted);
+        margin-top: 6px;
+        max-width: 90ch;
+      }
+      figure h4 {
+        margin: 0 0 6px;
+        font-size: 16px;
+      }
+      svg {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+      svg text {
+        fill: var(--fg);
+        font-family: inherit;
+      }
+      svg .m {
+        fill: var(--muted);
+      }
+      .card {
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin: 12px 0;
+        break-inside: avoid;
+      }
+      .card h3 {
+        margin-top: 0;
+      }
+      .card dl {
+        margin: 6px 0 0;
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        gap: 4px 12px;
+        font-size: 14px;
+      }
+      .card dt {
+        color: var(--muted);
+        font-weight: 600;
+      }
+      .card dd {
+        margin: 0;
+      }
+      .sw {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        vertical-align: middle;
+        margin: 0 4px 0 10px;
+      }
+      @media (max-width: 600px) {
+        figure {
+          overflow-x: auto;
+        }
+        figure svg {
+          min-width: 640px;
+        }
+        .scroll table {
+          min-width: 640px;
+        }
+        .card dl {
+          grid-template-columns: 1fr;
+        }
+        h1 {
+          font-size: 23px;
+        }
+      }
+      @media print {
+        @page {
+          size: A4;
+          margin: 14mm;
+        }
+        body {
+          font-size: 11pt;
+        }
+        main {
+          max-width: none;
+          padding: 0;
+        }
+        h2 {
+          break-after: avoid;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Sheet3 #15 - Concurrency testing</h1>
+      <p>
+        <span class="badge" style="color: var(--warn)">In process</span>
+        <span class="muted"
+          >&nbsp;All 17 money, login and tenant scenarios are covered and every defect found is
+          handled; the 95% overall number is not reached.</span
+        >
+      </p>
+      <table class="scroll" aria-label="Report header">
+        <tr>
+          <th scope="row">Sheet item</th>
+          <td>QA sheet 3, item 15 &middot; priority P1 &middot; effort 4 points</td>
+        </tr>
+        <tr>
+          <th scope="row">Owner</th>
+          <td>Vedant</td>
+        </tr>
+        <tr>
+          <th scope="row">Date</th>
+          <td>2026-10-20</td>
+        </tr>
+        <tr>
+          <th scope="row">Branch</th>
+          <td>
+            <code>vedant/qa/concurrency</code>, merged with <code>origin/main</code> (second merge
+            commit in the log)
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Commit</th>
+          <td>
+            fixes and tests: <code>25e270ac5</code>, <code>00d1e490c</code>, <code>90fe27e65</code>,
+            <code>2ef909ba1</code>, <code>ca3aed550</code>, <code>50e5ea788</code>,
+            <code>d0273b68f</code>, <code>d9de88083</code>; inventory <code>28ca2bf2e</code>; this
+            report in its own docs commit
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Pull request</th>
+          <td>none (nothing was pushed)</td>
+        </tr>
+        <tr>
+          <th scope="row">Sheet target, word for word</th>
+          <td>"Automated suite with &gt;=95% P0/P1 scenario coverage and zero flaky P0 tests"</td>
+        </tr>
+      </table>
+
+      <h2 id="s60">In 60 seconds</h2>
+      <div class="tiles">
+        <div class="tile">
+          <b>87.3%</b
+          ><span>scenario coverage: 55 of 63 P0/P1 scenarios have a passing test (target 95%)</span>
+        </div>
+        <div class="tile">
+          <b>52</b
+          ><span>new test cases in 6 files, each file run 5 times with a new random seed</span>
+        </div>
+        <div class="tile">
+          <b>7 of 7</b
+          ><span
+            >findings handled: 6 fixed, 1 left as intended (D-07); D-04 is an account-creation
+            bug</span
+          >
+        </div>
+        <div class="tile">
+          <b>30 of 30</b><span>runs of the new files fully green (0 flaky)</span>
+        </div>
+      </div>
+      <div class="box verdict">
+        <b>Verdict against the sheet target: partly met.</b> Zero flaky P0 tests is met (30 of 30
+        runs green). All 17 P0 scenarios have a passing test. Overall coverage is 55 of 63 = 87.3%,
+        below 95%: the 8 scenarios without a test need several machines, a stopped Redis, a worker
+        crash, or a storage refusal that is not built yet (listed with the reason in the appendix).
+      </div>
+      <h3>Decisions needed from you</h3>
+      <ol>
+        <li>
+          <b>D-06, coupons owner:</b> confirm the deliberate deviation from the Reference product.
+          An open order now holds a coupon use for 30 minutes. Keep it, change the hold time, or go
+          back to Reference behaviour.
+        </li>
+        <li>
+          <b>D-07, contacts owner:</b> left as the Reference app has it (edit may use a taken
+          e-mail). Say if you want edit to refuse duplicates like a product decision.
+        </li>
+        <li>
+          Accept "partly met" on coverage, or fund a staging run (several nodes, Redis outage,
+          worker crash) for the remaining scenarios.
+        </li>
+      </ol>
+
+      <h2 id="plain">What is this, in plain words</h2>
+      <p>
+        A <b>race</b> is two things happening at the same moment on the same data. Picture one cash
+        till and two cashiers who both look at the same "10 coins left" note, both hand out 8, and
+        now the till is 6 coins short. Software does this when it first reads a number and then
+        writes based on it, with a gap in between. This task proves that, for the places where the
+        CRM touches money, logins, plan limits, messages and queues, many requests at once end in
+        the right state, and fixes the places where they did not.
+      </p>
+      <div class="box">
+        <b>Why it matters.</b> A race loses money (wallet, coupons), gives away paid features (plan
+        limits), creates duplicate accounts, or double-sends messages. It does not show up in normal
+        testing, because a person clicks one thing at a time.
+      </div>
+      <h3>Glossary</h3>
+      <table class="scroll">
+        <tr>
+          <th scope="col">Term</th>
+          <th scope="col">Meaning</th>
+        </tr>
+        <tr>
+          <th scope="row">Optimistic locking</th>
+          <td>
+            Each row carries a version number. An update says "I read version 3". If someone changed
+            it meanwhile, the update is refused with 409 instead of overwriting.
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Idempotency key</th>
+          <td>A label a client puts on a request. Sending the same label twice must act once.</td>
+        </tr>
+        <tr>
+          <th scope="row">Advisory lock</th>
+          <td>
+            A named lock in Postgres. Requests with the same name wait their turn; others are not
+            held up. It is released when the transaction ends.
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Outbox</th>
+          <td>
+            A table of "things to tell other parts of the system", written in the same transaction
+            as the change. Workers read and deliver them.
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">SKIP LOCKED</th>
+          <td>A Postgres option so two workers reading the same queue never take the same row.</td>
+        </tr>
+        <tr>
+          <th scope="row">Refresh token rotation</th>
+          <td>
+            Each refresh swaps the login token for a new one; reusing an old one signals theft and
+            ends the session.
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Seed</th>
+          <td>
+            A number that fixes the random delays, so a failing run can be replayed
+            (<code>CONC_SEED=n</code>).
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">P0 / P1</th>
+          <td>P0 = money, login, tenant isolation, data loss. P1 = other core flows.</td>
+        </tr>
+      </table>
+
+      <h2 id="how">How we tested</h2>
+      <figure>
+        <h4>
+          Many requests start together, hit the real app and database, and only the final state is
+          judged
+        </h4>
+        <svg viewBox="0 0 1000 250" role="img" aria-labelledby="ht hd">
+          <title id="ht">Test setup</title>
+          <desc id="hd">
+            A test runner fires N parallel requests with random delays into the in-process Nest app,
+            backed by a throwaway Postgres and Redis container, and then reads the database to check
+            the end state.
+          </desc>
+          <defs>
+            <marker id="ar" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+              <path d="M0,0 L8,4 L0,8 z" fill="var(--muted)" />
+            </marker>
+          </defs>
+          <g font-size="13">
+            <rect
+              x="10"
+              y="70"
+              width="190"
+              height="110"
+              rx="10"
+              fill="var(--card)"
+              stroke="var(--c1)"
+              stroke-width="2"
+            />
+            <text x="105" y="100" text-anchor="middle" font-weight="700" font-size="15">
+              Test runner
+            </text>
+            <text x="105" y="122" text-anchor="middle" class="m">Promise.all of N calls</text>
+            <text x="105" y="140" text-anchor="middle" class="m">random 0-15 ms delays</text>
+            <text x="105" y="158" text-anchor="middle" class="m">seed printed</text>
+            <rect
+              x="260"
+              y="70"
+              width="210"
+              height="110"
+              rx="10"
+              fill="var(--card)"
+              stroke="var(--c3)"
+              stroke-width="2"
+            />
+            <text x="365" y="100" text-anchor="middle" font-weight="700" font-size="15">
+              Real Nest app
+            </text>
+            <text x="365" y="122" text-anchor="middle" class="m">HTTP routes, services,</text>
+            <text x="365" y="140" text-anchor="middle" class="m">BullMQ workers, drain loop</text>
+            <text x="365" y="158" text-anchor="middle" class="m">same process</text>
+            <rect
+              x="530"
+              y="20"
+              width="210"
+              height="80"
+              rx="10"
+              fill="var(--card)"
+              stroke="var(--c2)"
+              stroke-width="2"
+            />
+            <text x="635" y="52" text-anchor="middle" font-weight="700" font-size="15">
+              Postgres 16
+            </text>
+            <text x="635" y="74" text-anchor="middle" class="m">
+              real migrations, app role, RLS
+            </text>
+            <rect
+              x="530"
+              y="150"
+              width="210"
+              height="80"
+              rx="10"
+              fill="var(--card)"
+              stroke="var(--c4)"
+              stroke-width="2"
+            />
+            <text x="635" y="182" text-anchor="middle" font-weight="700" font-size="15">
+              Redis 7
+            </text>
+            <text x="635" y="204" text-anchor="middle" class="m">
+              idempotency, queues, sessions
+            </text>
+            <rect
+              x="800"
+              y="70"
+              width="190"
+              height="110"
+              rx="10"
+              fill="var(--card)"
+              stroke="var(--c6)"
+              stroke-width="2"
+            />
+            <text x="895" y="100" text-anchor="middle" font-weight="700" font-size="15">Judge</text>
+            <text x="895" y="122" text-anchor="middle" class="m">row counts, balances,</text>
+            <text x="895" y="140" text-anchor="middle" class="m">ledger sums, status codes,</text>
+            <text x="895" y="158" text-anchor="middle" class="m">never "who won"</text>
+          </g>
+          <path
+            d="M200,125 L257,125"
+            stroke="var(--muted)"
+            stroke-width="2"
+            marker-end="url(#ar)"
+          />
+          <path d="M470,110 L527,70" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)" />
+          <path
+            d="M470,140 L527,180"
+            stroke="var(--muted)"
+            stroke-width="2"
+            marker-end="url(#ar)"
+          />
+          <path d="M740,70 L797,110" stroke="var(--muted)" stroke-width="2" marker-end="url(#ar)" />
+        </svg>
+        <figcaption>
+          Each test file starts its own throwaway Postgres and Redis containers (testcontainers,
+          started by the test and removed with it). The shared development containers and their
+          databases were not touched, so no throwaway database on the shared server was needed.
+        </figcaption>
+      </figure>
+      <ol>
+        <li>
+          <b>Inventory first.</b> The code was searched for every critical write path. Each became a
+          scenario with an ID, a priority, the rule that must hold and the test that covers it
+          (<code>scenarios.json</code>, table in the appendix). That list is the denominator of the
+          coverage number.
+        </li>
+        <li>
+          <b>Parallel requests</b> (6 to 24 at once, 700 events for the outbox) with small random
+          delays, repeated for 5 rounds inside each test, so each round is a different interleaving.
+        </li>
+        <li>
+          <b>Assert the end state</b>: exactly one winner, the rest get 409, 422 or the replayed
+          answer; never a 5xx; no duplicate row; the wallet equals the sum of its ledger and never
+          goes below zero.
+        </li>
+        <li>
+          <b>Defects</b>: failing test first, then the smallest fix in shared code, test kept as the
+          regression.
+        </li>
+        <li>
+          <b>Teeth check</b>: the wallet row lock, the outbox <code>SKIP LOCKED</code> and the new
+          plan-limit lock were removed temporarily. The wallet tests, the outbox tests and the limit
+          tests for segments, forms, pipelines and saved replies went red; the code was restored. So
+          these tests can detect the bug they guard against.
+        </li>
+        <li>
+          <b>Five full runs</b> of every new file, a new seed each time, on the tree merged with the
+          latest <code>origin/main</code>.
+        </li>
+      </ol>
+
+      <h2 id="results">Results at a glance</h2>
+      <figure>
+        <h4>All 17 P0 scenarios are covered; 38 of 46 P1 scenarios are</h4>
+        <svg viewBox="0 0 900 68" role="img" aria-labelledby="c1t c1d">
+          <title id="c1t">Coverage by priority</title>
+          <desc id="c1d">P0: 17 of 17 tested. P1: 38 of 46 tested.</desc>
+          <text x="52" y="26" text-anchor="end" font-size="13">P0</text>
+          <rect x="60" y="10" width="258.7" height="20" fill="var(--c1)" />
+          <text x="324.7" y="25" font-size="12">17 of 17</text>
+          <text x="52" y="52" text-anchor="end" font-size="13">P1</text>
+          <rect x="60" y="36" width="578.3" height="20" fill="var(--c1)" />
+          <rect x="638.3" y="36" width="121.7" height="20" fill="var(--c6)" fill-opacity=".8" />
+          <text x="766.0" y="51" font-size="12">38 of 46</text>
+        </svg>
+        <figcaption>
+          <span class="sw" style="background: var(--c1)"></span>passing test
+          <span class="sw" style="background: var(--c6)"></span>not tested. Overall 55 of 63 =
+          87.3%. Five tested scenarios rely on tests that existed before; they were re-run
+          (appendix).
+        </figcaption>
+      </figure>
+      <figure>
+        <h4>Plan limits hold most of the gaps; most other areas are complete</h4>
+        <svg viewBox="0 0 900 380" role="img" aria-labelledby="c2t c2d">
+          <title id="c2t">Coverage by area</title>
+          <desc id="c2d">
+            Tested and total scenarios per area; the same numbers are in the inventory table in the
+            appendix.
+          </desc>
+          <text x="222" y="26" text-anchor="end" font-size="13">Plan limits</text>
+          <rect x="230" y="10" width="501.9" height="20" fill="var(--c1)" />
+          <rect x="731.9" y="10" width="118.1" height="20" fill="var(--c6)" fill-opacity=".8" />
+          <text x="856.0" y="25" font-size="12">17 of 21</text>
+          <text x="222" y="52" text-anchor="end" font-size="13">Queues and outbox</text>
+          <rect x="230" y="36" width="118.1" height="20" fill="var(--c1)" />
+          <rect x="348.1" y="36" width="59.0" height="20" fill="var(--c6)" fill-opacity=".8" />
+          <text x="413.1" y="51" font-size="12">4 of 6</text>
+          <text x="222" y="78" text-anchor="end" font-size="13">Coupons and referrals</text>
+          <rect x="230" y="62" width="147.6" height="20" fill="var(--c1)" />
+          <text x="383.6" y="77" font-size="12">5 of 5</text>
+          <text x="222" y="104" text-anchor="end" font-size="13">Conversations and messages</text>
+          <rect x="230" y="88" width="118.1" height="20" fill="var(--c1)" />
+          <text x="354.1" y="103" font-size="12">4 of 4</text>
+          <text x="222" y="130" text-anchor="end" font-size="13">Wallet</text>
+          <rect x="230" y="114" width="118.1" height="20" fill="var(--c1)" />
+          <text x="354.1" y="129" font-size="12">4 of 4</text>
+          <text x="222" y="156" text-anchor="end" font-size="13">Auth</text>
+          <rect x="230" y="140" width="88.6" height="20" fill="var(--c1)" />
+          <text x="324.6" y="155" font-size="12">3 of 3</text>
+          <text x="222" y="182" text-anchor="end" font-size="13">Idempotency</text>
+          <rect x="230" y="166" width="59.0" height="20" fill="var(--c1)" />
+          <rect x="289.0" y="166" width="29.5" height="20" fill="var(--c6)" fill-opacity=".8" />
+          <text x="324.6" y="181" font-size="12">2 of 3</text>
+          <text x="222" y="208" text-anchor="end" font-size="13">Invoices</text>
+          <rect x="230" y="192" width="88.6" height="20" fill="var(--c1)" />
+          <text x="324.6" y="207" font-size="12">3 of 3</text>
+          <text x="222" y="234" text-anchor="end" font-size="13">Records</text>
+          <rect x="230" y="218" width="88.6" height="20" fill="var(--c1)" />
+          <text x="324.6" y="233" font-size="12">3 of 3</text>
+          <text x="222" y="260" text-anchor="end" font-size="13">Sessions</text>
+          <rect x="230" y="244" width="88.6" height="20" fill="var(--c1)" />
+          <text x="324.6" y="259" font-size="12">3 of 3</text>
+          <text x="222" y="286" text-anchor="end" font-size="13">Optimistic locking</text>
+          <rect x="230" y="270" width="59.0" height="20" fill="var(--c1)" />
+          <text x="295.0" y="285" font-size="12">2 of 2</text>
+          <text x="222" y="312" text-anchor="end" font-size="13">Tenant isolation</text>
+          <rect x="230" y="296" width="59.0" height="20" fill="var(--c1)" />
+          <text x="295.0" y="311" font-size="12">2 of 2</text>
+          <text x="222" y="338" text-anchor="end" font-size="13">Unique constraints</text>
+          <rect x="230" y="322" width="59.0" height="20" fill="var(--c1)" />
+          <text x="295.0" y="337" font-size="12">2 of 2</text>
+          <text x="222" y="364" text-anchor="end" font-size="13">Webhooks</text>
+          <rect x="230" y="348" width="29.5" height="20" fill="var(--c1)" />
+          <rect x="259.5" y="348" width="29.5" height="20" fill="var(--c6)" fill-opacity=".8" />
+          <text x="295.0" y="363" font-size="12">1 of 2</text>
+        </svg>
+        <figcaption>The same numbers per scenario are in the appendix table.</figcaption>
+      </figure>
+      <figure>
+        <h4>All 7 findings handled: 6 fixed, 1 left as the Reference app has it</h4>
+        <svg viewBox="0 0 900 94" role="img" aria-labelledby="c3t c3d">
+          <title id="c3t">Findings by severity</title>
+          <desc id="c3d">
+            High 3 (D-01, D-02, D-04), Medium 3 (D-03, D-05, D-06), Low 1 (D-07).
+          </desc>
+          <text x="72" y="26" text-anchor="end" font-size="13">High</text>
+          <rect x="80" y="10" width="600.0" height="20" fill="var(--c2)" />
+          <text x="686.0" y="25" font-size="12">3</text>
+          <text x="72" y="52" text-anchor="end" font-size="13">Medium</text>
+          <rect x="80" y="36" width="600.0" height="20" fill="var(--c2)" />
+          <text x="686.0" y="51" font-size="12">3</text>
+          <text x="72" y="78" text-anchor="end" font-size="13">Low</text>
+          <rect x="80" y="62" width="200.0" height="20" fill="var(--c2)" />
+          <text x="286.0" y="77" font-size="12">1</text>
+        </svg>
+        <figcaption>
+          High: D-01, D-02, D-04, all fixed. Medium: D-03, D-05, D-06, all fixed. Low: D-07,
+          intentionally unchanged (Reference behaviour).
+        </figcaption>
+      </figure>
+      <figure>
+        <h4>Before and after the fixes: how far past the limit parallel requests got</h4>
+        <svg viewBox="0 0 900 434" role="img" aria-labelledby="c4t c4d">
+          <title id="c4t">Before and after</title>
+          <desc id="c4d">
+            Rows or accounts created by parallel requests before the fix and after it. Contacts cap
+            5: 12 then 5. Seats cap 3: 9 then 3. Tags cap 4: 10 then 4. Flows cap 3: 8 then 3. Six
+            sign-ups with one e-mail: 6 accounts then 1. Segments cap 4: 9 then 4. Forms cap 4: 9
+            then 4. Pipelines cap 3: 8 then 3. Saved replies cap 4: 9 then 4. Coupon with 3 uses
+            left, 8 buyers: 8 orders then 3.
+          </desc>
+          <text x="172" y="23" text-anchor="end" font-size="13">Contacts, cap 5</text>
+          <rect x="180" y="10" width="560" height="14" fill="var(--c6)" />
+          <text x="746" y="22" font-size="12">before: 12</text>
+          <rect x="180" y="27" width="233" height="14" fill="var(--c3)" />
+          <text x="419" y="39" font-size="12">after: 5</text>
+          <text x="172" y="65" text-anchor="end" font-size="13">Seats, cap 3</text>
+          <rect x="180" y="52" width="420" height="14" fill="var(--c6)" />
+          <text x="606" y="64" font-size="12">before: 9</text>
+          <rect x="180" y="69" width="140" height="14" fill="var(--c3)" />
+          <text x="326" y="81" font-size="12">after: 3</text>
+          <text x="172" y="107" text-anchor="end" font-size="13">Tags, cap 4</text>
+          <rect x="180" y="94" width="467" height="14" fill="var(--c6)" />
+          <text x="653" y="106" font-size="12">before: 10</text>
+          <rect x="180" y="111" width="187" height="14" fill="var(--c3)" />
+          <text x="373" y="123" font-size="12">after: 4</text>
+          <text x="172" y="149" text-anchor="end" font-size="13">Flows, cap 3</text>
+          <rect x="180" y="136" width="373" height="14" fill="var(--c6)" />
+          <text x="559" y="148" font-size="12">before: 8</text>
+          <rect x="180" y="153" width="140" height="14" fill="var(--c3)" />
+          <text x="326" y="165" font-size="12">after: 3</text>
+          <text x="172" y="191" text-anchor="end" font-size="13">Sign-ups, 1 e-mail</text>
+          <rect x="180" y="178" width="280" height="14" fill="var(--c6)" />
+          <text x="466" y="190" font-size="12">before: 6</text>
+          <rect x="180" y="195" width="47" height="14" fill="var(--c3)" />
+          <text x="233" y="207" font-size="12">after: 1</text>
+          <text x="172" y="233" text-anchor="end" font-size="13">Segments, cap 4</text>
+          <rect x="180" y="220" width="420" height="14" fill="var(--c6)" />
+          <text x="606" y="232" font-size="12">before: 9</text>
+          <rect x="180" y="237" width="187" height="14" fill="var(--c3)" />
+          <text x="373" y="249" font-size="12">after: 4</text>
+          <text x="172" y="275" text-anchor="end" font-size="13">Forms, cap 4</text>
+          <rect x="180" y="262" width="420" height="14" fill="var(--c6)" />
+          <text x="606" y="274" font-size="12">before: 9</text>
+          <rect x="180" y="279" width="187" height="14" fill="var(--c3)" />
+          <text x="373" y="291" font-size="12">after: 4</text>
+          <text x="172" y="317" text-anchor="end" font-size="13">Pipelines, cap 3</text>
+          <rect x="180" y="304" width="373" height="14" fill="var(--c6)" />
+          <text x="559" y="316" font-size="12">before: 8</text>
+          <rect x="180" y="321" width="140" height="14" fill="var(--c3)" />
+          <text x="326" y="333" font-size="12">after: 3</text>
+          <text x="172" y="359" text-anchor="end" font-size="13">Saved replies, cap 4</text>
+          <rect x="180" y="346" width="420" height="14" fill="var(--c6)" />
+          <text x="606" y="358" font-size="12">before: 9</text>
+          <rect x="180" y="363" width="187" height="14" fill="var(--c3)" />
+          <text x="373" y="375" font-size="12">after: 4</text>
+          <text x="172" y="401" text-anchor="end" font-size="13">Coupon, 3 uses left</text>
+          <rect x="180" y="388" width="373" height="14" fill="var(--c6)" />
+          <text x="559" y="400" font-size="12">before: 8</text>
+          <rect x="180" y="405" width="140" height="14" fill="var(--c3)" />
+          <text x="326" y="417" font-size="12">after: 3</text>
+        </svg>
+        <figcaption>
+          Measured on the first failing run of each regression test (before; for segments, forms,
+          pipelines and saved replies with the new lock switched off) and on the passing runs
+          (after). "Seats" counts all users including the owner.
+        </figcaption>
+      </figure>
+      <figure>
+        <h4>New scenario tests per area</h4>
+        <svg viewBox="0 0 900 354" role="img" aria-labelledby="c5t c5d">
+          <title id="c5t">Tests per area</title>
+          <desc id="c5d">Number of scenarios with a new test per area.</desc>
+          <text x="222" y="26" text-anchor="end" font-size="13">Plan limits</text>
+          <rect x="230" y="10" width="620.0" height="20" fill="var(--c3)" />
+          <text x="856.0" y="25" font-size="12">17</text>
+          <text x="222" y="52" text-anchor="end" font-size="13">Coupons and referrals</text>
+          <rect x="230" y="36" width="182.4" height="20" fill="var(--c3)" />
+          <text x="418.4" y="51" font-size="12">5</text>
+          <text x="222" y="78" text-anchor="end" font-size="13">Queues and outbox</text>
+          <rect x="230" y="62" width="145.9" height="20" fill="var(--c3)" />
+          <text x="381.9" y="77" font-size="12">4</text>
+          <text x="222" y="104" text-anchor="end" font-size="13">Wallet</text>
+          <rect x="230" y="88" width="145.9" height="20" fill="var(--c3)" />
+          <text x="381.9" y="103" font-size="12">4</text>
+          <text x="222" y="130" text-anchor="end" font-size="13">Auth</text>
+          <rect x="230" y="114" width="109.4" height="20" fill="var(--c3)" />
+          <text x="345.4" y="129" font-size="12">3</text>
+          <text x="222" y="156" text-anchor="end" font-size="13">Records</text>
+          <rect x="230" y="140" width="109.4" height="20" fill="var(--c3)" />
+          <text x="345.4" y="155" font-size="12">3</text>
+          <text x="222" y="182" text-anchor="end" font-size="13">Invoices</text>
+          <rect x="230" y="166" width="109.4" height="20" fill="var(--c3)" />
+          <text x="345.4" y="181" font-size="12">3</text>
+          <text x="222" y="208" text-anchor="end" font-size="13">Sessions</text>
+          <rect x="230" y="192" width="109.4" height="20" fill="var(--c3)" />
+          <text x="345.4" y="207" font-size="12">3</text>
+          <text x="222" y="234" text-anchor="end" font-size="13">Conversations and messages</text>
+          <rect x="230" y="218" width="72.9" height="20" fill="var(--c3)" />
+          <text x="308.9" y="233" font-size="12">2</text>
+          <text x="222" y="260" text-anchor="end" font-size="13">Idempotency</text>
+          <rect x="230" y="244" width="72.9" height="20" fill="var(--c3)" />
+          <text x="308.9" y="259" font-size="12">2</text>
+          <text x="222" y="286" text-anchor="end" font-size="13">Optimistic locking</text>
+          <rect x="230" y="270" width="72.9" height="20" fill="var(--c3)" />
+          <text x="308.9" y="285" font-size="12">2</text>
+          <text x="222" y="312" text-anchor="end" font-size="13">Unique constraints</text>
+          <rect x="230" y="296" width="36.5" height="20" fill="var(--c3)" />
+          <text x="272.5" y="311" font-size="12">1</text>
+          <text x="222" y="338" text-anchor="end" font-size="13">Tenant isolation</text>
+          <rect x="230" y="322" width="36.5" height="20" fill="var(--c3)" />
+          <text x="272.5" y="337" font-size="12">1</text>
+        </svg>
+        <figcaption>52 test cases in total; one case can check more than one scenario.</figcaption>
+      </figure>
+      <h3>Flakiness: 5 runs of each new file</h3>
+      <div class="scroll">
+        <table>
+          <tr>
+            <th scope="col">File</th>
+            <th scope="col">Tests</th>
+            <th scope="col">Result</th>
+            <th scope="col">Runs</th>
+          </tr>
+          <tr>
+            <th scope="row"><code>api-races.e2e.spec.ts</code></th>
+            <td>11</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>identity-races.e2e.spec.ts</code></th>
+            <td>6</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>state-races.e2e.spec.ts</code></th>
+            <td>17</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>pipeline-races.e2e.spec.ts</code></th>
+            <td>4</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>coupon-limit.e2e.spec.ts</code></th>
+            <td>3</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>limits-all.e2e.spec.ts</code></th>
+            <td>11</td>
+            <td>5 of 5 green</td>
+            <td>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span> <span class="chip fixed">pass</span>
+              <span class="chip fixed">pass</span>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <h2 id="findings">Findings</h2>
+      <div class="card">
+        <h3>
+          D-01 &middot; The contact limit of a plan could be passed by parallel creates
+          <span class="chip high">HIGH</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            Twelve people added contacts at the same moment on a workspace allowed 5. Every request
+            counted the same existing rows, saw room, and inserted. All 12 were created.
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            A workspace could hold more contacts than it pays for. Plan limits are what the business
+            charges for.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            One lock per workspace and limit (<code>PlanEntitlementService.lockLimit</code>, a
+            Postgres advisory lock held until the transaction ends) is taken before the count in
+            <code>ContactQuotaService.assertCanAddOne</code>. That one method serves the API, the
+            inbound capture and the import. Commit <code>25e270ac5</code>.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>
+            api-races.e2e.spec.ts, CC-LIM-01 (failed before the fix: 12 created; passes after:
+            exactly 5)
+          </dd>
+          <dt>Not verified</dt>
+          <dd>
+            The contact import running at the same time as the API was not tested (CC-LIM-07).
+          </dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-02 &middot; The seat (user) limit could be passed by parallel invites
+          <span class="chip high">HIGH</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            Eight invites sent at once on a plan with 3 seats all passed the seat check; the
+            workspace ended with 9 users.
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            Free seats for the customer, lost revenue, and a plan page that shows more users than
+            the plan allows.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            Same lock, taken at the start of the invite transaction in
+            <code>MembersService.invite</code>. Commit <code>25e270ac5</code>.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>api-races.e2e.spec.ts, CC-LIM-02 (failed before: 9 users; passes after: 3)</dd>
+          <dt>Not verified</dt>
+          <dd>Invitation acceptance and re-activation of an inactive member were not raced.</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-04 &middot; Parallel sign-ups with one e-mail made several accounts
+          <span class="chip high">HIGH</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            The rule "one e-mail, one account" was checked by a read before the account was written.
+            Six sign-ups sent at once all passed the check and all returned 201 with six separate
+            workspaces for one address.
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            Account confusion at login, duplicate trials, and a way around the sign-up rules. It is
+            an authentication problem, so it is rated High.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            The check is repeated inside the provisioning transaction under a lock on the e-mail and
+            the phone number (<code>TenantDirectory.provisionOrganization</code>, switched on by
+            <code>exclusiveIdentity</code> from the three public sign-up paths). Paths that open an
+            extra workspace for an existing person do not set it. Commit <code>25e270ac5</code>.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>
+            identity-races.e2e.spec.ts, CC-AUTH-01 (failed before: six 201; passes after: one 201,
+            five 409)
+          </dd>
+          <dt>Not verified</dt>
+          <dd>
+            The social sign-up and the one-step OTP route use the same flag but were not raced
+            separately.
+          </dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-03 &middot; The tag and flow limits could be passed by parallel creates
+          <span class="chip med">MEDIUM</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            Ten tag creates on a cap of 4 made 10 tags. Eight flow creates on a cap of 3 made 8
+            flows.
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>Same as D-01 for two more capped things.</dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            Same lock added to <code>TagsService.assertUnderTagLimit</code> and
+            <code>FlowsService.assertRoom</code>. Commit <code>25e270ac5</code>.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>api-races.e2e.spec.ts, CC-LIM-03 and CC-LIM-05 (both failed before the fix)</dd>
+          <dt>Not verified</dt>
+          <dd>-</dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-05 &middot; Every other capped create had the same unlocked count-then-insert
+          <span class="chip med">MEDIUM</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            Segments, custom fields, saved replies, routing rules, team chat channels, pipelines,
+            forms, lead sources, booking types, invoices per month and chatbot widgets all counted
+            first and inserted later. Eight to nine parallel creates on a cap of 3 or 4 all
+            succeeded (measured with the lock switched off: 9 segments, 9 forms, 8 pipelines, 9
+            saved replies).
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            Each could pass its plan limit under parallel requests, the same way D-01 to D-03 did.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            One helper. <code>PlanUsageService.assertCanAddIn(tx, org, key)</code> takes the lock
+            and counts inside the inserting transaction; where a module counts for itself, a
+            one-line <code>lockLimit</code> comes first. Sites: segments, custom fields (attributes
+            and fields), saved replies (create, duplicate, import), routing rules (create,
+            duplicate), team chat channels, pipelines, forms (create, duplicate, resume), lead
+            sources (2), booking types, invoices, recurring invoices, chatbot widgets (3), devices,
+            templates, catalog products, SMS senders, broadcasts, campaigns (2), appointments,
+            scheduled messages. Commits <code>50e5ea788</code> and <code>d9de88083</code>. Files in
+            other owners' zones are listed in section 10.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>
+            limits-all.e2e.spec.ts, CC-LIM-08 to CC-LIM-18 (11 resources: the room is measured one
+            by one, then the same creates are sent at once). With the lock switched off, segments,
+            forms, pipelines and saved replies failed; the code was restored.
+          </dd>
+          <dt>Not verified</dt>
+          <dd>
+            Not raced one by one (fixed with the same lock, no own test): templates, recurring
+            invoices, catalog products, SMS senders, custom fields via the fields endpoint,
+            broadcasts, scheduled messages, campaigns, appointments, reply import (CC-LIM-06). Not
+            behind the lock at all: tags auto-created by the contact resolver and the form submit,
+            and the monthly invoice cap for store orders (CC-LIM-19, open, Low). The
+            'monthly_messages' allowance is billed, not blocked, and was left alone.
+          </dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-06 &middot; A coupon with few uses left could be given to more buyers than allowed
+          <span class="chip med">MEDIUM</span> <span class="chip fixed">FIXED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            The use limit was checked when the buyer previewed the price and counted only paid
+            orders. Eight buyers placing orders at the same moment for a coupon with 3 uses left all
+            got the discount (8 orders placed).
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            Discounts above what was planned. Money, bounded by how many buyers check out in the
+            same moment.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            <b
+              >Deliberate deviation from the Reference product: enforces the advertised limit under
+              concurrency. The coupons owner must confirm.</b
+            >
+            When an order is placed, a per-coupon lock is taken and the order is refused (422
+            PAYGW_COUPON_REJECTED, "This coupon is fully used.") if paid uses plus open orders
+            already reach <code>max_uses</code>. An open order (pending or awaiting approval) holds
+            a use for 30 minutes; a failed or cancelled order frees it. The same Idempotency-Key
+            replay is not counted against itself. Everything else about coupons is unchanged:
+            quotes, the paid counter, per-user and first-purchase rules. Commits
+            <code>2ef909ba1</code> and <code>ca3aed550</code>.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>
+            coupon-limit.e2e.spec.ts, CC-CPN-03 (failed before: 8 orders placed on 3 uses; passes
+            after: 3 placed, 5 refused), plus a failed order giving its use back and an unlimited
+            coupon never refused
+          </dd>
+          <dt>Not verified</dt>
+          <dd>
+            The 30-minute hold is a choice, not Reference behaviour. A buyer who pays after 30
+            minutes on an order whose use was released can still push the counter above the limit.
+            Free (zero-total) orders and add-on orders were not raced separately.
+          </dd>
+        </dl>
+      </div>
+      <div class="card">
+        <h3>
+          D-07 &middot; A contact can be edited to an e-mail another contact already holds
+          <span class="chip low">LOW</span> <span class="chip open">INTENTIONALLY UNCHANGED</span>
+        </h3>
+        <dl>
+          <dt>What went wrong</dt>
+          <dd>
+            Found while checking CC-DATA-01. A lone edit (no race) is accepted, while creating the
+            same contact returns the existing one.
+          </dd>
+          <dt>Why it matters</dt>
+          <dd>
+            Two contacts can share one address. This is not a race, so no concurrency test can close
+            it.
+          </dd>
+          <dt>How we fixed it</dt>
+          <dd>
+            <b>Intended, not changed.</b> The Reference app does the same: its contact edit
+            validates the e-mail as <code>nullable|email|max:191</code> and stores it with no
+            uniqueness check (reference
+            <code>app/Http/Controllers/ContactsController.php</code> around lines 551 and 575;
+            create at line 444 has the same rule). Our create returns the existing contact only
+            because of our identity merge, which the project rules say to keep. Making edit refuse
+            duplicates would change behaviour the port is meant to keep.
+          </dd>
+          <dt>Test that proves it</dt>
+          <dd>
+            identity-races.e2e.spec.ts, CC-DATA-01 only proves the race is no worse than the lone
+            edit
+          </dd>
+          <dt>Not verified</dt>
+          <dd>Whether the product owner wants edit to refuse duplicates was not asked.</dd>
+        </dl>
+      </div>
+
+      <h2 id="rollout">Rollout and rollback</h2>
+      <p>
+        No staged deploy is needed. There is no migration and no new dependency. Rollback of each
+        fix is a revert of its commit. User-visible changes: (1) a second sign-up for a taken e-mail
+        always answers 409 AUTH_IDENTITY_EXISTS, also when it races with the first; (2) at checkout
+        a coupon with no uses left is refused when the order is placed, not only at preview (D-06,
+        to be confirmed by the coupons owner); (3) a create at the plan cap that used to slip
+        through in a race now answers the normal 422 PLAN_LIMIT_REACHED. The lock is per workspace
+        and per limit and is held only for the length of the create, so other workspaces and other
+        limits are not slowed.
+      </p>
+
+      <h2 id="not">What this does NOT prove</h2>
+      <ul>
+        <li>
+          Several machines. All workers ran in one process; the SQL claim of the outbox is the same
+          on many nodes, but two real nodes were not run (CC-OBX-03).
+        </li>
+        <li>
+          Crash recovery: a worker killed mid-job (stalled job), a Redis outage during an idempotent
+          request (CC-JOB-03, CC-IDEM-03). The shared Redis was not stopped.
+        </li>
+        <li>
+          Storage quota refusal: the quota is in observe mode, so only the counters are checked, not
+          refusal (CC-STO-02).
+        </li>
+        <li>
+          Parallel tests for templates, recurring invoices, catalog products, SMS senders,
+          broadcasts, scheduled messages, campaigns, appointments and reply import: they take the
+          same lock, but no test raced them one by one (CC-LIM-06). Tags created automatically by
+          the contact resolver and form submit, and the monthly invoice cap for store orders, are
+          still not behind the lock (CC-LIM-19). A contact import racing the cap was not tested
+          (CC-LIM-07).
+        </li>
+        <li>
+          That the 30-minute coupon hold (D-06) is the right product rule. It is a choice made here,
+          and an order paid after the hold lapsed can still pass the limit.
+        </li>
+        <li>
+          Every channel's webhook signature layer under replay; only payment webhooks and the shared
+          ingest layer were checked.
+        </li>
+        <li>
+          Load. 6 to 24 requests at once is a race detector, not a load test; production has more
+          chances to hit a rare timing window.
+        </li>
+        <li>
+          CC-DATA-01 is weak by design: a lone edit already allows a shared e-mail (D-07), so the
+          test only proves the race is no worse.
+        </li>
+        <li>
+          Randomness: five runs per file with five random seeds is evidence, not proof of zero
+          flakiness.
+        </li>
+        <li>
+          The five re-run existing tests are counted as covering; others wrote them and they were
+          not reviewed here.
+        </li>
+      </ul>
+
+      <h2 id="next">Next steps and owners</h2>
+      <table class="scroll">
+        <tr>
+          <th scope="col">Step</th>
+          <th scope="col">Owner</th>
+        </tr>
+        <tr>
+          <td>Confirm or change the coupon hold (D-06)</td>
+          <td>Coupons owner (platform-payment-gateways)</td>
+        </tr>
+        <tr>
+          <td>Decide whether editing a contact to a taken e-mail should be refused (D-07)</td>
+          <td>Contacts owner</td>
+        </tr>
+        <tr>
+          <td>Write the parallel tests of CC-LIM-06 and bring CC-LIM-19 behind the lock</td>
+          <td>Vedant, with the module owners</td>
+        </tr>
+        <tr>
+          <td>
+            Run the outbox and queue scenarios on two real nodes in staging, and a Redis outage
+            drill
+          </td>
+          <td>Lakshya (async review)</td>
+        </tr>
+        <tr>
+          <td>When storage quota enforcement ships, extend CC-STO-01 to refusal</td>
+          <td>Storage owner</td>
+        </tr>
+      </table>
+
+      <h2 id="appendix">Appendix</h2>
+      <h3>
+        Scenario inventory (63 scenarios; machine copy:
+        <code>docs/quality/concurrency/scenarios.json</code>)
+      </h3>
+      <div class="scroll">
+        <table>
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Area</th>
+            <th scope="col">Pri.</th>
+            <th scope="col">Scenario and rule</th>
+            <th scope="col">Status</th>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-ASG-01</code></th>
+            <td>Conversations and messages</td>
+            <td>P1</td>
+            <td>
+              3 agents claim one conversation<br /><span class="muted"
+                >One wins, others 409, one event</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-AUTH-01</code></th>
+            <td>Auth</td>
+            <td>P0</td>
+            <td>
+              Same e-mail signing up x6<br /><span class="muted">One account, others 409</span>
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-04</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-AUTH-02</code></th>
+            <td>Auth</td>
+            <td>P0</td>
+            <td>
+              One reset link used x5<br /><span class="muted"
+                >One winner, only its password works</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-AUTH-03</code></th>
+            <td>Auth</td>
+            <td>P0</td>
+            <td>
+              12 wrong passwords at once<br /><span class="muted">Only 401/423/429, never 5xx</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-CON-01</code></th>
+            <td>Unique constraints</td>
+            <td>P1</td>
+            <td>
+              Contact create x10 same e-mail/phone<br /><span class="muted"
+                >One contact, every caller gets it</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted"
+                >existing test, re-run</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-CPN-01</code></th>
+            <td>Coupons and referrals</td>
+            <td>P0</td>
+            <td>One paid order finalised x8<br /><span class="muted">Counts one use</span></td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-CPN-02</code></th>
+            <td>Coupons and referrals</td>
+            <td>P1</td>
+            <td>
+              12 orders finalised at once<br /><span class="muted">12 uses, no lost increment</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-CPN-03</code></th>
+            <td>Coupons and referrals</td>
+            <td>P0</td>
+            <td>
+              Last coupon uses raced by 8 buyers at checkout<br /><span class="muted"
+                >Orders holding a use never exceed max_uses; a failed order gives its use back</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted"
+                >D-06 fixed. Deliberate deviation from Reference (enforces the advertised limit
+                under concurrency); coupons owner to confirm.</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-DATA-01</code></th>
+            <td>Records</td>
+            <td>P1</td>
+            <td>
+              Two contacts edited to one e-mail<br /><span class="muted"
+                >No 5xx, rows readable (weak: sequential edit allows it, D-07)</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-07 observation</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-DATA-02</code></th>
+            <td>Records</td>
+            <td>P1</td>
+            <td>
+              Edit and delete of one contact<br /><span class="muted"
+                >No 5xx, not half of each</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-DATA-03</code></th>
+            <td>Records</td>
+            <td>P1</td>
+            <td>Same new tag attached x8<br /><span class="muted">One tag, one link</span></td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-DUP-01</code></th>
+            <td>Unique constraints</td>
+            <td>P1</td>
+            <td>
+              Tag name x8 in parallel<br /><span class="muted">One 201, seven 409, one row</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-IDEM-01</code></th>
+            <td>Idempotency</td>
+            <td>P1</td>
+            <td>
+              Same Idempotency-Key x10 in parallel<br /><span class="muted"
+                >One row, replies are the same 201 or 409, never 5xx</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-IDEM-02</code></th>
+            <td>Idempotency</td>
+            <td>P1</td>
+            <td>
+              Same key, different bodies in parallel<br /><span class="muted"
+                >One body runs, the rest 409, one row</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-IDEM-03</code></th>
+            <td>Idempotency</td>
+            <td>P1</td>
+            <td>
+              Redis outage while an idempotent request runs<br /><span class="muted"
+                >Fails closed, nothing created</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted">Not tested: cannot stop the shared Redis.</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-INV-01</code></th>
+            <td>Invoices</td>
+            <td>P1</td>
+            <td>
+              10 invoices issued at once<br /><span class="muted">Distinct gap-free numbers</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-INV-02</code></th>
+            <td>Invoices</td>
+            <td>P1</td>
+            <td>
+              One invoice issued x6<br /><span class="muted">Issued once, one number used</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-INV-03</code></th>
+            <td>Invoices</td>
+            <td>P0</td>
+            <td>
+              6 payments on a 200.00 invoice<br /><span class="muted"
+                >Never more than the total recorded</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-JOB-01</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              Same message queued x10 (same and distinct job ids)<br /><span class="muted"
+                >Stored once</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-JOB-02</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              60 messages, parallel consumers<br /><span class="muted"
+                >Each stored once, gap-free seq</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-JOB-03</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              Stalled job recovery after a worker crash<br /><span class="muted"
+                >No lost, no double job</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted">Not tested: needs killing a worker process.</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-01</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Contacts cap, 12 parallel creates<br /><span class="muted"
+                >Never more rows than the cap</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-01</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-02</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Seat cap, 8 parallel invites<br /><span class="muted"
+                >Never more users than the cap</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-02</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-03</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Tags cap, 10 parallel creates<br /><span class="muted"
+                >Never more rows than the cap</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-03</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-04</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Devices cap and one number x5<br /><span class="muted"
+                >Cap holds, one number is one device</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-05</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Flows cap, 8 parallel creates<br /><span class="muted"
+                >Never more rows than the cap</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-03</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-06</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Capped creates fixed by the shared lock but without their own parallel test:
+              templates, recurring invoices, catalog products, SMS senders, custom fields (fields
+              endpoint), broadcasts, scheduled messages, campaigns, appointments, saved-reply
+              import<br /><span class="muted">Never more rows than the cap</span>
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted"
+                >D-05 fixed in code (same lock); parallel test not written: needs a gateway, a
+                connected sender or a worker to create one row.</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-07</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Contact import with the contact cap in parallel<br /><span class="muted"
+                >Cap holds for bulk imports</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted">Not tested: needs the import worker flow.</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-08</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Segments cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-09</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Custom fields cap (attributes): creates at the cap in parallel<br /><span
+                class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-10</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Saved replies cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-11</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Routing rules cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-12</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Team chat channels cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-13</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Pipelines cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-14</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Forms cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-15</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Lead sources cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-16</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Booking types cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-17</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Invoices per month cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-18</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Chatbot widgets cap: creates at the cap in parallel<br /><span class="muted"
+                >Exactly as many rows as one-by-one creates allow; the rest 422
+                PLAN_LIMIT_REACHED</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">D-05</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LIM-19</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Hand-rolled caps not behind the shared lock: tags auto-created by the contact resolver
+              and the form submit, invoices_monthly from a store order<br /><span class="muted"
+                >Never more rows than the cap</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted"
+                >D-05 residual, open (Low): these skip rather than refuse, or run outside a
+                transaction.</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LOCK-01</code></th>
+            <td>Optimistic locking</td>
+            <td>P1</td>
+            <td>
+              Contact: 8 writers, same row_version<br /><span class="muted"
+                >Exactly one update wins, 7 get 409 ROW_VERSION_CONFLICT, no lost update</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-LOCK-02</code></th>
+            <td>Optimistic locking</td>
+            <td>P1</td>
+            <td>
+              Company: 8 writers, same row_version<br /><span class="muted"
+                >Same as above on a second entity</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-MSG-01</code></th>
+            <td>Conversations and messages</td>
+            <td>P1</td>
+            <td>
+              Outbound send with one clientMessageId x6<br /><span class="muted"
+                >One message, one provider call</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted"
+                >existing test, re-run</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-MSG-02</code></th>
+            <td>Conversations and messages</td>
+            <td>P1</td>
+            <td>
+              Inbound: same provider id x20, 16 and 50 messages from a new sender<br /><span
+                class="muted"
+                >One message, one thread, gap-free seq</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted"
+                >existing test, re-run</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-OBX-01</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              Three drainers, 700 events<br /><span class="muted"
+                >Each handled once, none left</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-OBX-02</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              Subscriber fails for some events<br /><span class="muted"
+                >Failed rows kept for retry, others once</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-OBX-03</code></th>
+            <td>Queues and outbox</td>
+            <td>P1</td>
+            <td>
+              Drainers in separate processes and nodes<br /><span class="muted"
+                >Same as OBX-01 across nodes</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted"
+                >Not tested: needs several nodes; one process was used (the SQL claim is the
+                same).</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-REF-01</code></th>
+            <td>Coupons and referrals</td>
+            <td>P0</td>
+            <td>Referral reward triggered x8<br /><span class="muted">Paid once</span></td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-REF-02</code></th>
+            <td>Coupons and referrals</td>
+            <td>P1</td>
+            <td>
+              Referral code issuing in parallel<br /><span class="muted"
+                >One code per user, codes unique</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-RR-01</code></th>
+            <td>Conversations and messages</td>
+            <td>P1</td>
+            <td>
+              Round robin, 12 customers at once x5 rounds<br /><span class="muted"
+                >Even split, each routed once, rule counter exact</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-SES-01</code></th>
+            <td>Sessions</td>
+            <td>P0</td>
+            <td>
+              One refresh token x6 (double click)<br /><span class="muted"
+                >All succeed, session alive, one rotation, one session</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-SES-02</code></th>
+            <td>Sessions</td>
+            <td>P0</td>
+            <td>
+              Replay of a token two rotations old, parallel<br /><span class="muted"
+                >All refused, session revoked</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-SES-03</code></th>
+            <td>Sessions</td>
+            <td>P0</td>
+            <td>
+              8 sign-ins with a cap of 2<br /><span class="muted">At most 2 live sessions</span>
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-STO-01</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Storage counters, 20 uploads at once<br /><span class="muted"
+                >Counters add up, a key counts once, reservations settle</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted">new test</span
+              ><br /><span class="muted">Observe mode only; refusal is not built.</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-STO-02</code></th>
+            <td>Plan limits</td>
+            <td>P1</td>
+            <td>
+              Storage quota refusal under parallel uploads<br /><span class="muted"
+                >Quota refuses over-cap uploads</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted">Not testable: enforce mode (phase S2) is not built.</span>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-TEN-01</code></th>
+            <td>Tenant isolation</td>
+            <td>P0</td>
+            <td>
+              Two organizations writing and reading at once<br /><span class="muted"
+                >No cross-tenant rows, cross reads 404</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-TEN-02</code></th>
+            <td>Tenant isolation</td>
+            <td>P0</td>
+            <td>
+              Tenant context leaking between pooled connections under load<br /><span class="muted"
+                >No leak</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted"
+                >existing test, re-run</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WAL-01</code></th>
+            <td>Wallet</td>
+            <td>P0</td>
+            <td>
+              12 strict debits on a small balance<br /><span class="muted"
+                >Only what fits succeeds, 409 for the rest, no negative balance</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WAL-02</code></th>
+            <td>Wallet</td>
+            <td>P0</td>
+            <td>Same top-up key x10<br /><span class="muted">Credited once</span></td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WAL-03</code></th>
+            <td>Wallet</td>
+            <td>P0</td>
+            <td>
+              Top-ups and debits interleaved<br /><span class="muted"
+                >Balance equals ledger sum, never below zero</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WAL-04</code></th>
+            <td>Wallet</td>
+            <td>P0</td>
+            <td>
+              Delivery receipts: one message id x10, then 10 messages<br /><span class="muted"
+                >Charged once per id, never overdrawn</span
+              >
+            </td>
+            <td><span class="chip fixed">passes</span><br /><span class="muted">new test</span></td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WHK-01</code></th>
+            <td>Webhooks</td>
+            <td>P0</td>
+            <td>
+              Payment webhook delivered twice plus return page<br /><span class="muted"
+                >Wallet credited once</span
+              >
+            </td>
+            <td>
+              <span class="chip fixed">passes</span><br /><span class="muted"
+                >existing test, re-run</span
+              >
+            </td>
+          </tr>
+          <tr>
+            <th scope="row"><code>CC-WHK-02</code></th>
+            <td>Webhooks</td>
+            <td>P1</td>
+            <td>
+              Channel provider webhooks replayed in parallel (Meta, Telegram...)<br /><span
+                class="muted"
+                >One stored message per provider id</span
+              >
+            </td>
+            <td>
+              <span class="chip open">not tested</span><br /><span class="muted">no test</span
+              ><br /><span class="muted"
+                >Covered at the ingest layer by CC-MSG-02; the HTTP signature layer per channel is
+                not tested.</span
+              >
+            </td>
+          </tr>
+        </table>
+      </div>
+      <h3>Commands run</h3>
+      <div class="scroll">
+        <table>
+          <tr>
+            <th scope="col">Command</th>
+            <th scope="col">Result</th>
+            <th scope="col">Detail</th>
+          </tr>
+          <tr>
+            <td>
+              <code
+                >pnpm install --frozen-lockfile; pnpm --filter @crm/{tax,contracts,db,observability}
+                build</code
+              >
+            </td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>on the tree merged with origin/main e32f6a29c</td>
+          </tr>
+          <tr>
+            <td>
+              <code
+                >vitest run test/e2e/concurrency/&lt;file&gt;.e2e.spec.ts (6 files, 5 runs
+                each)</code
+              >
+            </td>
+            <td><span class="chip fixed">pass: 30 of 30 runs green</span></td>
+            <td>
+              52 test cases per full pass; seeds in the flakiness table runs; final single re-run
+              after the unit-fake fixes: 52 of 52
+            </td>
+          </tr>
+          <tr>
+            <td><code>vitest run --dir test/unit (full, to completion)</code></td>
+            <td><span class="chip high">10 files fail, same 10 as pristine main</span></td>
+            <td>
+              first run had 13 failing files: 3 were regressions from D-05 (lock-scoping,
+              templates-plan-limit, plan-limit-enforcement-b), fixed; second run 10 failed | 777
+              passed, 9 failed tests | 12509 passed
+            </td>
+          </tr>
+          <tr>
+            <td><code>unit baseline on pristine origin/main (e32f6a29c)</code></td>
+            <td><span class="chip open">pre-existing</span></td>
+            <td>
+              chatbot-widget/launcher, chatbot-widget/legacy-embed,
+              dashboards-analytics-charts/health, dashboards-analytics-charts/quick-access,
+              flow-builder-editor/editor-field-seam, google-account/google-capabilities,
+              infra/boundaries.matrix, infra/s3-sigv4, roles-permissions/route-permission-coverage,
+              storage-quota/storage-writes-guarded
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <code
+                >5 failing neighbouring e2e files run on a pristine origin/main worktree (removed
+                afterwards)</code
+              >
+            </td>
+            <td><span class="chip open">pre-existing: same counts</span></td>
+            <td>
+              members-teams 2 failed, flows 2, segments 1, invoicing 1, appointments-booking 1 on
+              both trees (7 failing tests, none caused by this branch)
+            </td>
+          </tr>
+          <tr>
+            <td><code>pnpm --filter @crm/api exec tsc --noEmit -p tsconfig.json</code></td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>no errors</td>
+          </tr>
+          <tr>
+            <td><code>tsc --noEmit -p tsconfig.spec.json</code></td>
+            <td><span class="chip open">pre-existing</span></td>
+            <td>27 errors in 14 files, none in files of this branch</td>
+          </tr>
+          <tr>
+            <td><code>eslint on changed source and tests; prettier --check</code></td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>after prettier --write on the changed files only</td>
+          </tr>
+          <tr>
+            <td><code>pnpm audit:tenancy</code></td>
+            <td><span class="chip open">pre-existing NO-GO</span></td>
+            <td>
+              2 new privileged() sites and 1 sql.raw come from main; this branch adds none (database
+              checks not run: no DB url set)
+            </td>
+          </tr>
+          <tr>
+            <td><code>pnpm audit:authz; pnpm audit:auth</code></td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>reports written</td>
+          </tr>
+          <tr>
+            <td><code>pnpm audit --prod --audit-level high</code></td>
+            <td><span class="chip open">pre-existing</span></td>
+            <td>
+              5 vulnerabilities (3 moderate, 2 high), dependency state of main, no dependency
+              changed here
+            </td>
+          </tr>
+          <tr>
+            <td><code>security-review skill on the diff</code></td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>no finding at confidence 8 or above</td>
+          </tr>
+          <tr>
+            <td>
+              <code
+                >git merge-tree --write-tree --name-only HEAD vedant/perf/redis-optimization; ...
+                vedant/qa/cache-strategy-audit</code
+              >
+            </td>
+            <td><span class="chip fixed">pass</span></td>
+            <td>no conflicts with either sibling branch</td>
+          </tr>
+        </table>
+      </div>
+      <h3>Existing and neighbouring specs run once on the merged result</h3>
+      <div class="scroll">
+        <table>
+          <tr>
+            <th scope="col">Spec</th>
+            <th scope="col">Result</th>
+          </tr>
+          <tr>
+            <td><code>contacts-attributes-tags/contact-create-concurrency</code></td>
+            <td>Tests 3 passed (3)</td>
+          </tr>
+          <tr>
+            <td><code>chat-conversations/message-send</code></td>
+            <td>Tests 19 passed (19)</td>
+          </tr>
+          <tr>
+            <td><code>chat-conversations/message-ingest</code></td>
+            <td>Tests 20 passed (20)</td>
+          </tr>
+          <tr>
+            <td><code>tenancy/tenancy-concurrency</code></td>
+            <td>Tests 4 passed (4)</td>
+          </tr>
+          <tr>
+            <td><code>platform-payment-gateways/paygw</code></td>
+            <td>Tests 27 passed (27)</td>
+          </tr>
+          <tr>
+            <td><code>workspaces-teams-tenancy/members-teams</code></td>
+            <td>Tests 2 failed | 58 passed (60)</td>
+          </tr>
+          <tr>
+            <td><code>contacts-attributes-tags/tags-and-attributes</code></td>
+            <td>Tests 47 passed (47)</td>
+          </tr>
+          <tr>
+            <td><code>flow-builder-editor/flows</code></td>
+            <td>Tests 2 failed | 98 passed (100)</td>
+          </tr>
+          <tr>
+            <td><code>forms-builder/forms-admin</code></td>
+            <td>Tests 21 passed (21)</td>
+          </tr>
+          <tr>
+            <td><code>leads/lead-sources</code></td>
+            <td>Tests 38 passed (38)</td>
+          </tr>
+          <tr>
+            <td><code>deals-pipelines/pipelines</code></td>
+            <td>Tests 32 passed (32)</td>
+          </tr>
+          <tr>
+            <td><code>team-inbox-conversations/saved-replies</code></td>
+            <td>Tests 16 passed (16)</td>
+          </tr>
+          <tr>
+            <td><code>team-inbox-routing-sla/routing-rules</code></td>
+            <td>Tests 31 passed (31)</td>
+          </tr>
+          <tr>
+            <td><code>segments/segments</code></td>
+            <td>Tests 1 failed | 73 passed (74)</td>
+          </tr>
+          <tr>
+            <td><code>invoicing/invoicing</code></td>
+            <td>Tests 1 failed | 88 passed (89)</td>
+          </tr>
+          <tr>
+            <td><code>chatbot-widget/widgets-admin</code></td>
+            <td>Tests 53 passed (53)</td>
+          </tr>
+          <tr>
+            <td><code>appointments-booking/appointments-booking</code></td>
+            <td>Tests 1 failed | 53 passed (54)</td>
+          </tr>
+          <tr>
+            <td><code>team-chat/team-chat</code></td>
+            <td>Tests 77 passed (77)</td>
+          </tr>
+          <tr>
+            <td><code>auth-registration-security/auth-flows</code></td>
+            <td>Tests 59 passed (59)</td>
+          </tr>
+          <tr>
+            <td><code>auth-registration-security/auth-signup-email-verify</code></td>
+            <td>Tests 21 passed (21)</td>
+          </tr>
+          <tr>
+            <td><code>auth-registration-security/auth-signup-social</code></td>
+            <td>Tests 55 passed (55)</td>
+          </tr>
+          <tr>
+            <td><code>whatsapp-devices-baileys/devices</code></td>
+            <td>Tests 23 passed (23)</td>
+          </tr>
+          <tr>
+            <td><code>unit</code></td>
+            <td>
+              Test Files 13 failed | 774 passed | 2 skipped (789) Tests 23 failed | 12495 passed |
+              14 skipped (12532)
+            </td>
+          </tr>
+        </table>
+      </div>
+      <h3>Files changed</h3>
+      <ul>
+        <li>
+          Unit fakes (3 files): <code>plan-limit-enforcement-b.spec.ts</code>,
+          <code>templates-plan-limit.spec.ts</code>, <code>lock-scoping.spec.ts</code> (details in
+          D-05 and the commands table)
+        </li>
+        <li>
+          Tests:
+          <code
+            >apps/api/test/e2e/concurrency/{support,api-races,state-races,pipeline-races,identity-races,coupon-limit,limits-all}.e2e.spec.ts</code
+          >
+          (support.ts is the seed and delay helper)
+        </li>
+        <li>
+          Shared fix: <code>plan-entitlement.service.ts</code> (<code>lockLimit</code>),
+          <code>plan-usage.service.ts</code> (<code>assertCanAddIn</code>)
+        </li>
+        <li>
+          Call sites (D-01 to D-05): contacts quota, members, tags, flows, segments, fields,
+          attributes, saved replies (service and import), routing rules, team chat channels,
+          pipelines (and <code>deals-plan.ts</code>), forms (and <code>form-plan.ts</code>), lead
+          sources (and <code>lead-plan.ts</code>), booking types, invoices, recurring invoices,
+          chatbot widgets, devices, templates, catalog products, SMS senders, broadcasts, campaigns
+          (and its plan gate), appointments, scheduled messages
+        </li>
+        <li>
+          Sign-up (D-04): <code>tenant-directory.ts</code>, <code>signup.service.ts</code>,
+          <code>social-auth.service.ts</code>
+        </li>
+        <li>
+          Coupons (D-06): <code>platform-payment-gateways/checkout.service.ts</code>,
+          <code>coupon.service.ts</code>
+        </li>
+        <li>Docs: <code>docs/quality/concurrency/scenarios.json</code> and this report</li>
+      </ul>
+      <p>
+        <b>Files in another owner's zone</b> (ownership guard, edits kept to a line or a few lines
+        each): punya: appointments-booking (3 files), catalog-products, channel-sms, crm/attributes,
+        crm/contacts quota, crm/deals-plan, crm/fields, crm/invoicing (2), crm/pipelines,
+        crm/segments, crm/tags; lakshya: auth (3 files), leads (3), plans-subscriptions-trials (2),
+        platform-payment-gateways (2), workspaces-teams-tenancy/members. Not in the guard's map:
+        forms-builder (2), the campaigns, broadcasts, scheduled-queue-warmer,
+        saved-replies-transfer, team-chat, chatbot-widget, routing-rules, templates and devices call
+        sites, and two test files.
+      </p>
+      <h3>Environment</h3>
+      <p>
+        Node 22, pnpm, Docker with testcontainers (<code>pgvector/pgvector:pg16</code>,
+        <code>redis:7-alpine</code>, removed after each file). Replay a run with
+        <code>CONC_SEED=&lt;seed&gt;</code>; rounds with <code>CONC_ROUNDS</code>. No new
+        dependency.
+      </p>
+    </main>
+  </body>
+</html>
