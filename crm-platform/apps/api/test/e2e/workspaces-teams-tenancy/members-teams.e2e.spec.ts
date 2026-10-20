@@ -1321,13 +1321,22 @@ describe('TW-WSP-020: the role model, the permission matrix and the role gates',
     expect(Object.keys(perms).length).toBeGreaterThan(0);
     // support.ticket.* and wallet.statement.export are baselines every preset holds by design (own tickets, own statement), not viewer writes.
     // inbox.conversation.read_unassigned (BL-382) is a read switch: it widens what the read permission shows, it lets nobody write.
-    for (const k of Object.keys(perms).filter(
+    // tchat.chat.use (migration 20270203090100_team_chat_use_permission) is a USE key, the menu entry of Team chat: every role holds it
+    // because any staff user is a chat member (the Viewer preset included, by that migration's own rule). It gates a menu entry, not a write
+    // to any record; the chat API gates its writes separately by plan feature and membership.
+    const notRead = Object.keys(perms).filter(
       (k) =>
         !k.startsWith('support.ticket.') &&
         k !== 'wallet.statement.export' &&
-        k !== 'inbox.conversation.read_unassigned',
-    ))
-      expect(k.endsWith('.read'), k).toBe(true);
+        k !== 'inbox.conversation.read_unassigned' &&
+        k !== 'tchat.chat.use' &&
+        k !== 'team.leave.manage' &&
+        !k.endsWith('.read'),
+    );
+    expect(notRead, 'keys a viewer holds that are not read keys').toEqual([]);
+    // team.leave.manage (migration 20261129090100_member_leave_permissions) is the "set my own leave" switch: the Viewer holds it at record
+    // scope `own` only, which lets them mark themselves away and nobody else. A wider scope would be a real write and must fail here.
+    expect(perms['team.leave.manage']).toBe('own');
     expect((await createTeam(viewer.token, { name: 'Nope20' })).status).toBe(403);
     expect(
       (
