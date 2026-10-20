@@ -1,9 +1,18 @@
 {
   "_": "Speed budgets from the QA sheet. p95 fails a run; p99 is reported and tracked but never fails it. Times are milliseconds, measured at the client.",
   "latency": {
-    "A": { "p95": 50, "p99": 120 },
-    "B": { "p95": 150, "p99": 400 },
-    "C": { "p95": 300, "p99": 800 }
+    "A": {
+      "p95": 50,
+      "p99": 120
+    },
+    "B": {
+      "p95": 150,
+      "p99": 400
+    },
+    "C": {
+      "p95": 300,
+      "p99": 800
+    }
   },
   "regression": {
     "_": "A run fails when an endpoint's p95 is more than this share worse than perf/baseline.json AND more than minMs slower.",
@@ -12,7 +21,11 @@
     "throughputDropShare": 0.1
   },
   "errorRate": 0.01,
-  "mix": { "A": 0.7, "B": 0.25, "C": 0.05 },
+  "mix": {
+    "A": 0.7,
+    "B": 0.25,
+    "C": 0.05
+  },
   "spike": {
     "_": "Pass rule for QA #55: no cascading failure.",
     "peakMultiplier": 3,
@@ -21,5 +34,10 @@
     "maxErrorRateAfter": 0.01,
     "maxRecoverySeconds": 120,
     "healthMustStayUp": true
+  },
+  "load": {
+    "_": "QA #53. baselineUsers is the sheet's concurrent-active-user baseline. A stage is inside the BUDGETS when errors stay under errorRate and every class stays inside its p95; it is merely USABLE when errors stay under errorRate and the p95 of all requests is under usableP95Ms.",
+    "baselineUsers": 500,
+    "usableP95Ms": 2000
   }
 }

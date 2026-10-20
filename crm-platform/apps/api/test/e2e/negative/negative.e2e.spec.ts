@@ -52,7 +52,10 @@ afterAll(async () => {
 const send = (r: NegRoute, token: string | null, body?: unknown) => {
   const req = api.http()[r.method.toLowerCase() as 'post'](concretePath(r.path));
   if (token) req.set('authorization', `Bearer ${token}`);
-  return body === undefined ? req : req.send(body as object);
+  // Always real JSON: supertest turns a bare string into a form body, which the server reads as {} and a schema of optional fields accepts.
+  return body === undefined
+    ? req
+    : req.set('content-type', 'application/json').send(JSON.stringify(body));
 };
 
 /** The checks every refusal must pass. Returns the reason it did not, or null. */
@@ -60,7 +63,9 @@ function badReply(res: { status: number; body: unknown; text: string }): string 
   if (res.status >= 500) return `5xx (${res.status})`;
   if (res.status >= 200 && res.status < 300) return `accepted (${res.status})`;
   if (/\bat\s+\S+\s+\(.*:\d+:\d+\)/.test(res.text)) return 'stack trace in the reply';
-  const code = (res.body as { code?: unknown } | null)?.code;
+  // Platform routes answer problem+json with a top-level `code`; the customer API (/api/v1) answers `{ error: { code, message } }`.
+  const b = res.body as { code?: unknown; error?: { code?: unknown } } | null;
+  const code = b?.code ?? b?.error?.code;
   if (res.status !== 404 && res.status !== 401 && typeof code !== 'string')
     return 'no error code in the reply';
   return null;

@@ -1,0 +1,1015 @@
+[
+  {
+    "file": "appointments-booking/appointments-booking.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 54,
+    "failed": [
+      {
+        "t": "the customer's booking page (EXT-APPT-01, TW-APPT-024..026) TW-APPT-024: the manage page shows the booking and what the customer may do, and",
+        "m": "AssertionError: expected [ 'bookingType', 'canCancel', …(10) ] to deeply equal [ 'bookingType', 'canCancel', …(9) ]"
+      }
+    ]
+  },
+  {
+    "file": "auth-registration-security/auth-signup-social.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 55,
+    "failed": [
+      {
+        "t": "sign-up code guessing two correct posts at once create one organization",
+        "m": "AssertionError: expected [ 201, 400, 409, 409 ] to deeply equal [ 201, 400, 400, 400 ]"
+      }
+    ]
+  },
+  {
+    "file": "auth-registration-security/send-guard.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 3,
+    "failed": [
+      {
+        "t": "outbound send guard at the provider boundary lets a send through to the provider when nothing is configured",
+        "m": "Error: promise rejected \"WabaApiError: Invalid OAuth access token … { …(10) }\" instead of resolving"
+      },
+      {
+        "t": "outbound send guard at the provider boundary stops every send at the provider while the emergency halt is on, and resumes after",
+        "m": "Error: promise rejected \"WabaApiError: Invalid OAuth access token … { …(10) }\" instead of resolving"
+      },
+      {
+        "t": "outbound send guard at the provider boundary screens content and per-minute rate in enforce mode, and bulk skips the rate cap",
+        "m": "Error: promise rejected \"WabaApiError: Invalid OAuth access token … { …(10) }\" instead of resolving"
+      }
+    ]
+  },
+  {
+    "file": "authz/lifecycle.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 59,
+    "failed": [
+      {
+        "t": "AUTHZ-016/017/027 workspace switch follows live membership AUTHZ-016 an unverified address in the target workspace cannot be used to enter i",
+        "m": "AssertionError: expected [ 'org-lc-sw-a-10', 'org-lc-sw-b-11' ] to deeply equal [ 'org-lc-sw-a-10' ]"
+      }
+    ]
+  },
+  {
+    "file": "authz/route-matrix.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 9,
+    "failed": [
+      {
+        "t": "generated authorization matrix only requires permission keys that exist in the catalog",
+        "m": "AssertionError: expected [ '$REVENUE_PERMISSIONS' ] to deeply equal []"
+      }
+    ]
+  },
+  {
+    "file": "authz/workers.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 110,
+    "failed": [
+      {
+        "t": "AUTHZ-083 outbound webhooks AUTHZ-083 and 093 positive: tenant A event goes to A endpoint only, signed with A secret, carrying A data; B is ",
+        "m": "Error: timed out waiting for: A delivery"
+      },
+      {
+        "t": "AUTHZ-083 outbound webhooks AUTHZ-083 and 093 positive: tenant B event goes to B endpoint only, with B secret",
+        "m": "Error: timed out waiting for: B delivery"
+      },
+      {
+        "t": "AUTHZ-083 outbound webhooks AUTHZ-085 replay: the same outbox event handled twice queues one delivery (job id = event id + endpoint)",
+        "m": "Error: timed out waiting for: first delivery"
+      },
+      {
+        "t": "AUTHZ-083 outbound webhooks AUTHZ-085 retry: a failed attempt is retried by the queue with the same org, endpoint, secret and envelope id, a",
+        "m": "Error: timed out waiting for: retry delivered"
+      }
+    ]
+  },
+  {
+    "file": "broadcasts/broadcasts-dispatch.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 14,
+    "failed": [
+      {
+        "t": "TW-BCAST-016: handing due broadcasts to the queue queues a due broadcast once, with the broadcast uuid as the job id, and never twice",
+        "m": "TypeError: queue.getJobState is not a function"
+      },
+      {
+        "t": "TW-BCAST-016: handing due broadcasts to the queue a scheduled broadcast waits for its time",
+        "m": "TypeError: queue.getJobState is not a function"
+      },
+      {
+        "t": "TW-BCAST-016: handing due broadcasts to the queue a queue failure leaves the broadcast due, so the next tick tries again",
+        "m": "AssertionError: expected [Function] to throw error including 'redis down' but got 'queue.getJobState is not a function'"
+      }
+    ]
+  },
+  {
+    "file": "broadcasts/broadcasts-pacing.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 14,
+    "failed": [
+      {
+        "t": "TW-BCAST-022: the gap between messages 3 recipients and a 3 s gap: a pause between each, none after the last",
+        "m": "AssertionError: expected [] to deeply equal [ 3000, 3000 ]"
+      },
+      {
+        "t": "TW-BCAST-022: the gap between messages the pause is the setting plus or minus 20%: 2.4 to 3.6 s",
+        "m": "AssertionError: expected [] to deeply equal [ 2400 ]"
+      },
+      {
+        "t": "TW-BCAST-022: the gap between messages a warming number uses its own range instead",
+        "m": "AssertionError: expected [] to deeply equal [ 10000, 10000 ]"
+      },
+      {
+        "t": "TW-BCAST-022: batches 5 recipients in batches of 2 with a 5 minute cooldown: a rest after each full batch, kept alive in short beats",
+        "m": "Error: Test timed out in 120000ms."
+      },
+      {
+        "t": "TW-BCAST-022: batches a small audience is not batched",
+        "m": "AssertionError: expected [] to deeply equal [ 3000, 3000 ]"
+      }
+    ]
+  },
+  {
+    "file": "broadcasts/broadcasts-read.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 21,
+    "failed": [
+      {
+        "t": "TW-BCAST-030, 031, 033, 034: the detail derives the header numbers from the recipient rows, with the cascade",
+        "m": "AssertionError: expected { total: 6, sent: 4, …(6) } to deeply equal { total: 6, sent: 4, …(5) }"
+      }
+    ]
+  },
+  {
+    "file": "bsp-billing-engine/billing-and-pnl.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 23,
+    "total": 23,
+    "failed": []
+  },
+  {
+    "file": "bsp-billing-engine/reseller-console.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 46,
+    "total": 46,
+    "failed": []
+  },
+  {
+    "file": "catalog-products/catalog-inbox-settings.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 19,
+    "failed": [
+      {
+        "t": "TW-CAT-030: operator catalog settings #1 saving v24.0 is what the catalog calls use next; a blank value clears it back to the default",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      },
+      {
+        "t": "TW-CAT-030: operator catalog settings #2 a version that is not vNN.N is refused 422 and nothing changes",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      },
+      {
+        "t": "TW-CAT-030: operator catalog settings #3 the app secret is stored sealed, never returned, and a blank save keeps it",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      },
+      {
+        "t": "TW-CAT-030: operator catalog settings a stale rowVersion is 409 ROW_VERSION_CONFLICT; only a super admin may save; a non-operator is refused",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      },
+      {
+        "t": "TW-CAT-030: operator catalog settings TW-CAT-034: the Baileys bridge address is the Node bridge page address, with the environment as fallba",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/validation_failed\",\"title\":\"Unprocessable Entity\",\"status\":422,\"detail\":\"Request payload failed validation\",\"instance\":\"/v2/platform/node-bridge\",\"code\":\"VALIDATION_FAILED\",\"requestId\":\"f"
+      }
+    ]
+  },
+  {
+    "file": "channel-email/imap-mail.e2e.spec.ts",
+    "status": "failed",
+    "msg": "native shim cannot start greenmail/standalone:2.1.3",
+    "skipped": 13,
+    "total": 13,
+    "failed": []
+  },
+  {
+    "file": "channel-sms/sms-send.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 30,
+    "failed": [
+      {
+        "t": "TW-SMS-016, 030: the SMS composer is empty while the platform switch is off, and a deactivated sender is not listed",
+        "m": "AssertionError: expected { templates: [], senders: [], …(2) } to deeply equal { templates: [], senders: [], …(1) }"
+      }
+    ]
+  },
+  {
+    "file": "chat-conversations/message-quiet-hours.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 4,
+    "failed": [
+      {
+        "t": "BL-177: the inbox holds a marketing template for the quiet hours keeps the message queued with the reason, delays its job, and sends it at t",
+        "m": "AssertionError: expected 285238744 to be less than 2000"
+      }
+    ]
+  },
+  {
+    "file": "chatbot-widget/widget-launcher.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 18,
+    "failed": [
+      {
+        "t": "the stored config a widget saved without a launcher starts from the defaults (pill, the original green, HI THERE!, 10/10 and 10/60)",
+        "m": "AssertionError: expected { buttonType: 'pill', …(13) } to deeply equal { buttonType: 'pill', …(13) }"
+      },
+      {
+        "t": "the stored config round-trips through create, read and update, and is stored as one object",
+        "m": "AssertionError: expected { buttonType: 'icon', …(13) } to deeply equal { buttonType: 'icon', …(13) }"
+      },
+      {
+        "t": "the stored config an update that does not send a launcher leaves the stored one alone",
+        "m": "AssertionError: expected { buttonType: 'pill', …(13) } to deeply equal { buttonType: 'pill', …(13) }"
+      },
+      {
+        "t": "the stored config an omitted key of a partial launcher takes its default",
+        "m": "AssertionError: expected { buttonType: 'pill', …(13) } to deeply equal { buttonType: 'pill', …(13) }"
+      },
+      {
+        "t": "the stored config a row whose stored launcher is partial reads the defaults for the missing keys (a key added later needs no migration)",
+        "m": "AssertionError: expected { buttonType: 'pill', …(13) } to deeply equal { buttonType: 'pill', …(13) }"
+      },
+      {
+        "t": "the stored config a duplicate carries the launcher",
+        "m": "AssertionError: expected { buttonType: 'pill', …(13) } to deeply equal { buttonType: 'pill', …(13) }"
+      }
+    ]
+  },
+  {
+    "file": "chatbot-widget/widget-public.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 66,
+    "failed": [
+      {
+        "t": "config and the visitor (TW-WGT-010, 011, 012, 013) TW-WGT-010: the config carries the appearance the iframe paints, and none of the secrets",
+        "m": "AssertionError: expected { name: 'Look', …(19) } to deeply equal { name: 'Look', …(18) }"
+      }
+    ]
+  },
+  {
+    "file": "companies/companies.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 46,
+    "failed": [
+      {
+        "t": "delete (TW-CTP-008) TW-CTP-008 #2: every table that points at companies unlinks (ON DELETE SET NULL) rather than blocking or deleting",
+        "m": "AssertionError: company_briefs.fk_company_briefs_company: expected 'c' to be 'n' // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "contacts-attributes-tags/contacts-list.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 36,
+    "failed": [
+      {
+        "t": "stat tiles (TW-CON-006) TW-CON-006 #1: 10 contacts with 2 unsubscribed read Total 10, Subscribed 8, Unsubscribed 2 whatever the search",
+        "m": "AssertionError: expected { total: 10, subscribed: +0, …(7) } to match object { total: 10, subscribed: 8, …(5) }"
+      },
+      {
+        "t": "marketing opt-out write path (TW-CON-017) create and edit set and clear the opt-out, and the stats and the consent filter follow",
+        "m": "AssertionError: expected { total: 2, subscribed: +0, …(7) } to match object { total: 2, unsubscribed: 1, …(1) }"
+      }
+    ]
+  },
+  {
+    "file": "dashboards-analytics-charts/dash.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 31,
+    "failed": [
+      {
+        "t": "summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018) TW-DASH-002 #1/#4: sent is the sum of both streams, other workspaces excluded",
+        "m": "AssertionError: expected 9 to be 11 // Object.is equality"
+      },
+      {
+        "t": "summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018) TW-DASH-002 #2: read_at counts as read while the status is still delivered; status ",
+        "m": "AssertionError: expected 60 to be 73.3 // Object.is equality"
+      },
+      {
+        "t": "summary: the KPI cards (TW-DASH-002, 003, 004, 005, 018) TW-DASH-018: replies are inbound rows, engaged is the distinct conversations that r",
+        "m": "AssertionError: expected [ [ 'sent', 15 ], …(3) ] to deeply equal [ [ 'sent', 15 ], …(3) ]"
+      }
+    ]
+  },
+  {
+    "file": "dashboards-analytics-charts/panels.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 9,
+    "failed": [
+      {
+        "t": "GET /v2/analytics/panels login devices: workspace sessions in the window by browser, system and kind; counts only, never another workspace",
+        "m": "error: insert or update on table \"auth_sessions\" violates foreign key constraint \"auth_sessions_org_id_user_id_fkey\""
+      }
+    ]
+  },
+  {
+    "file": "deals-pipelines/board-reports.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 29,
+    "failed": [
+      {
+        "t": "KPIs and column money (TW-DEAL-005, 006) TW-DEAL-005 / D-05: convertTo adds one converted figure when every rate is known, and names a curre",
+        "m": "AssertionError: expected { Object (byCurrency, converted, ...) } to match object { converted: null, …(1) }"
+      },
+      {
+        "t": "reports (TW-DEAL-019, 020, 040) TW-DEAL-019 / D-05: money in different currencies is never added up: each is its own total",
+        "m": "AssertionError: expected { Object (byCurrency, converted, ...) } to match object { converted: null, …(1) }"
+      }
+    ]
+  },
+  {
+    "file": "developer-rest-api-v1/auth.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 16,
+    "failed": [
+      {
+        "t": "customer API: key authentication, limits, envelope serves the OpenAPI document of the customer API only, branded, public (TW-API-150)",
+        "m": "AssertionError: expected [ 'Message', 'Template', …(14) ] to deeply equal [ 'Message', 'Template', …(13) ]"
+      }
+    ]
+  },
+  {
+    "file": "developer-rest-api-v1/automation.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 44,
+    "failed": [
+      {
+        "t": "customer API v1: automation templates: create, update, delete PUT /templates/{id} on an approved template is refused 409 and leaves it appro",
+        "m": "AssertionError: expected 200 to be 409 // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "faq-knowledge/faq.live.e2e.spec.ts",
+    "status": "passed",
+    "msg": "",
+    "skipped": 6,
+    "total": 6,
+    "failed": []
+  },
+  {
+    "file": "flow-builder-editor/flows.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 100,
+    "failed": [
+      {
+        "t": "acceptance: save, trigger columns, keyword matching, publish, gates, persistence (TW-FLB-019..022, 028, 029) TW-FLB-022 rule 2/5: publish do",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      }
+    ]
+  },
+  {
+    "file": "google-account/google-account.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 50,
+    "failed": [
+      {
+        "t": "the Google account page API adds a permission later without losing the first ones (incremental consent)",
+        "m": "AssertionError: expected 'openid email https://www.googleapis.c…' to be 'openid email https://www.googleapis.c…' // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "install-update-licensing/setup-run.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 22,
+    "failed": [
+      {
+        "t": "database step (TW-INST-005, -006) answers 422 with the server’s own message on a wrong password and stops there",
+        "m": "AssertionError: expected 200 to be 422 // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "install-update-licensing/setup.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 17,
+    "failed": [
+      {
+        "t": "a successful bootstrap (TW-INST-008, -013, -014, -015) gives the new owner a platform login that must enrol MFA, then reads the System page",
+        "m": "AssertionError: expected { status: 'authenticated', …(3) } to match object { status: 'authenticated', …(1) }"
+      }
+    ]
+  },
+  {
+    "file": "invoicing/invoicing.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 89,
+    "failed": [
+      {
+        "t": "tax rates (TW-INV \"tax rates\", D-04) one default per workspace: making another the default demotes the first; a default must be active; deac",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      }
+    ]
+  },
+  {
+    "file": "marketplace/client-listing-publish.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 1,
+    "failed": [
+      {
+        "t": "publishing a client listing approves and publishes the seeded Google Sheets add-on",
+        "m": "AssertionError: expected 'killed' to be 'draft' // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "marketplace/listings-audit.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 44,
+    "failed": [
+      {
+        "t": "the seed migrations sort after the latest one that existed, in the order they depend on each other",
+        "m": "AssertionError: expected [ …(4) ] to deeply equal [ …(3) ]"
+      }
+    ]
+  },
+  {
+    "file": "message-templates/message-templates.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 31,
+    "failed": [
+      {
+        "t": "header media (TW-TPL-009, 025) uploads the example to Meta and returns the handle",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/validation_failed\",\"title\":\"Unprocessable Entity\",\"status\":422,\"detail\":\"Header files for templates need cloud object storage: ask the platform admin to turn it on\",\"instance\":\"/v2/templa"
+      }
+    ]
+  },
+  {
+    "file": "node-bridge-runtime/unofficial-switch.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 22,
+    "failed": [
+      {
+        "t": "rows that already exist a due broadcast on baileys is not queued while off and is queued once on; nothing is deleted or failed",
+        "m": "TypeError: queue.getJobState is not a function"
+      },
+      {
+        "t": "the per-workspace allow-list: enforcement with two workspaces the due sweep decides per row: a baileys broadcast of the allowed workspace is",
+        "m": "TypeError: queue.getJobState is not a function"
+      }
+    ]
+  },
+  {
+    "file": "outbound-webhooks/webhooks.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 7,
+    "failed": [
+      {
+        "t": "webhooks CRUD creates, lists, changes and deletes, never returning the secret or the stored ciphertext",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/validation_failed\",\"title\":\"Unprocessable Entity\",\"status\":422,\"detail\":\"Host '192.0.2.10' is a private or reserved address.\",\"instance\":\"/v2/webhooks\",\"code\":\"VALIDATION_FAILED\",\"request"
+      },
+      {
+        "t": "webhooks CRUD no events given means every event; * wins over a list",
+        "m": "AssertionError: expected undefined to deeply equal [ '*' ]"
+      },
+      {
+        "t": "webhooks CRUD refuses addresses that are not public https",
+        "m": "AssertionError: expected 400 to be 422 // Object.is equality"
+      },
+      {
+        "t": "webhooks access and isolation another workspace sees and touches none of them",
+        "m": "AssertionError: expected 400 to be 404 // Object.is equality"
+      },
+      {
+        "t": "webhooks access and isolation records an audit row for create, change and delete",
+        "m": "AssertionError: expected +0 to be 1 // Object.is equality"
+      },
+      {
+        "t": "webhook test sends and the delivery log a test send is logged; an endpoint that resolves to a private address is refused and the refusal is ",
+        "m": "TypeError: Cannot read properties of undefined (reading 'webhook_url')"
+      }
+    ]
+  },
+  {
+    "file": "platform-infrastructure/readiness.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 4,
+    "failed": [
+      {
+        "t": "/ready goes back to ok once the due events are gone",
+        "m": "AssertionError: expected { status: 'dead_letters', …(4) } to match object { status: 'ok', ready: +0, …(1) }"
+      }
+    ]
+  },
+  {
+    "file": "roles-permissions/platform-rbac.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 37,
+    "failed": [
+      {
+        "t": "seed (TW-RBAC-001, 003) has the six Reference roles and 109 permissions, with the seeded matrix",
+        "m": "AssertionError: expected { Object (Super Admin, Admin, ...) } to match object { Object (Super Admin, Admin, ...) }"
+      },
+      {
+        "t": "edit role (TW-RBAC-007) protects Super Admin in the server: no rename, no stripped permission; adding is allowed",
+        "m": "AssertionError: expected 115 to be 109 // Object.is equality"
+      },
+      {
+        "t": "duplicate role (TW-RBAC-008) never copies the lock: a copy of Super Admin is an ordinary editable role",
+        "m": "AssertionError: expected 115 to be 109 // Object.is equality"
+      },
+      {
+        "t": "permission catalogue (TW-RBAC-011..013) groups by module with role counts and the KPI strip",
+        "m": "AssertionError: expected [ { …(6) }, { …(6) }, { …(6) }, …(27) ] to have a length of 26 but got 30"
+      },
+      {
+        "t": "permission catalogue (TW-RBAC-011..013) deletes a permission that the locked Super Admin role also holds",
+        "m": "AssertionError: expected 115 to be 109 // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "roles-permissions/workspace-roles.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 23,
+    "failed": [
+      {
+        "t": "presets (TW-RBAC-004, 024) Viewer reads the conversations of its own teams, plus the keys every member holds",
+        "m": "AssertionError: expected [ Array(9) ] to deeply equal [ Array(7) ]"
+      },
+      {
+        "t": "landing and the permission map (TW-RBAC-033, 035) tells the client exactly which keys the caller holds, with their scopes",
+        "m": "AssertionError: expected [ 'aiadm.models.read', …(8) ] to deeply equal [ 'aiadm.models.read', …(6) ]"
+      }
+    ]
+  },
+  {
+    "file": "scheduled-queue-warmer/scheduled-content.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 22,
+    "failed": [
+      {
+        "t": "the funnel over time and the filtered recipients (TW-SCHED-012) filters the recipients by status and by name or number, pages them, and coun",
+        "m": "AssertionError: expected { delivered: 1, failed: 2, …(4) } to deeply equal { Object (read, delivered, ...) }"
+      }
+    ]
+  },
+  {
+    "file": "scheduled-queue-warmer/scheduled-wallet.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 9,
+    "failed": [
+      {
+        "t": "a Cloud API schedule: charged when the provider says delivered, refunded when it says failed charges each delivered message once however man",
+        "m": "AssertionError: expected 3 to be +0 // Object.is equality"
+      },
+      {
+        "t": "a Cloud API schedule: charged when the provider says delivered, refunded when it says failed charges nothing for a message that failed befor",
+        "m": "AssertionError: expected [ { …(6) }, { …(6) } ] to have a length of +0 but got 2"
+      }
+    ]
+  },
+  {
+    "file": "segments/segments.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 74,
+    "failed": [
+      {
+        "t": "references to things that were deleted listing, counting, exporting, previewing and the contact filter all still answer",
+        "m": "TypeError: Cannot read properties of null (reading 'address')"
+      }
+    ]
+  },
+  {
+    "file": "team-inbox-conversations/saved-replies-transfer.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 8,
+    "failed": [
+      {
+        "t": "export writes the shared replies only, formula-safe, in the documented columns",
+        "m": "AssertionError: expected false to be true // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "team-inbox-routing-sla/business-hours.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 7,
+    "failed": [
+      {
+        "t": "business hours API refuses a closing time not after the opening one, a bad time and an unknown zone",
+        "m": "AssertionError: expected 200 to be 422 // Object.is equality"
+      }
+    ]
+  },
+  {
+    "file": "wallet-message-billing/console.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 39,
+    "total": 39,
+    "failed": []
+  },
+  {
+    "file": "wallet-message-billing/currency.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 20,
+    "total": 20,
+    "failed": []
+  },
+  {
+    "file": "wallet-message-billing/engine.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 35,
+    "failed": [
+      {
+        "t": "the ledger funnel (TW-WALLET-001) posts a top-up as one signed entry whose balance_after equals the wallet",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the ledger funnel (TW-WALLET-001) posts once per idempotency key: a gateway retry returns the first result and moves no money",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the ledger funnel (TW-WALLET-001) two debits of 8.00 racing on 10.00 take 10.00 in total, never overspend, and the ledger sums to the balanc",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the ledger funnel (TW-WALLET-001) refuses a strict debit above the balance with a stable code and leaves nothing behind",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the ledger funnel (TW-WALLET-001) rejects a manual adjustment without a note before touching the wallet",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) charges a US marketing message 12.00 once: wallet 100.00 -> 88.00, one spend entry, one charge row",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) charges nothing more when the same message id is reported again as read, or twice at once",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) charges what is there when the balance is short, records the shortfall and logs it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) records a message free when the wallet is empty, logs it as unbilled and raises the low-balance alert",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) records a service message free with its Meta cost known and no ledger entry",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) never bills a platform-owned workspace and records nothing for it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) ignores a blank message id and an unknown workspace",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) prices by the recipient country: India marketing 1.00, an unknown prefix at the default",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleDelivered (TW-WALLET-009) settles 20 different messages racing on 100.00 without overspending: every id once, wallet never negative",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "plan allowance (TW-WALLET-010) lets the first N messages of the month through free, then charges the wallet",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "plan allowance (TW-WALLET-010) gives an ended plan no allowance: the wallet pays from the first message",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "plan allowance (TW-WALLET-010) never touches the wallet of an unlimited plan",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "plan allowance (TW-WALLET-010) ignores the allowance for a pay-per-message workspace",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "plan allowance (TW-WALLET-010) counts concurrent deliveries at the boundary exactly: of 5 racing for 3 free places, 3 are free",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleFailed (TW-WALLET-011) gives back the exact charge once, as a compensating entry that leaves the original alone",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleFailed (TW-WALLET-011) refunds a partial charge partially, at the money actually taken",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleFailed (TW-WALLET-011) moves no money for a free message, an unknown id or a message never charged",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "settleFailed (TW-WALLET-011) a later delivery report of a refunded message does not charge it again",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "low-balance alert (TW-WALLET-015) fires once at or under the threshold, not again within six hours, and again after a top-up re-arms it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "low-balance alert (TW-WALLET-015) stays quiet while the balance is above the threshold",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the delivery subscriber (TW-WALLET-012) charges on delivered, ignores sent for the Cloud API, refunds on failed",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the delivery subscriber (TW-WALLET-012) charges a Baileys message already on sent, once, even when delivered follows",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the delivery subscriber (TW-WALLET-012) drops a malformed event instead of retrying it forever",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate (TW-WALLET-013) refuses a pay-per-message launch on an empty wallet with the Reference message and logs the refusal",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate (TW-WALLET-013) refuses a wallet that cannot cover the estimate, and lets the same launch through once it is funded",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate (TW-WALLET-013) prices the estimate by each recipient country when the numbers are given",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate (TW-WALLET-013) lets a classic workspace inside its free allowance launch with an empty wallet, but not past it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate (TW-WALLET-013) never blocks a platform-owned workspace",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "billing mode (TW-WALLET-008) a reseller workspace is wallet-billed with the global switch off; a direct one only while it is on",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      }
+    ]
+  },
+  {
+    "file": "wallet-message-billing/extras.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 7,
+    "total": 7,
+    "failed": []
+  },
+  {
+    "file": "wallet-message-billing/group-send.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 11,
+    "failed": [
+      {
+        "t": "the pre-send wallet check against the group size (D8) refuses a group of 8 on a wallet that covers one message, and lets it through once the",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the pre-send wallet check against the group size (D8) refuses an empty wallet whatever the group size, and moves no money on a refusal",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the pre-send wallet check against the group size (D8) prices a group the size is not known for (0 members) as one recipient",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the pre-send wallet check against the group size (D8) never blocks a platform-owned workspace",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the composer quote (never throws) gives the estimate for every member in the billing currency and says whether the wallet covers it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the per-member charge on delivery charges each billable member once: a repeated status, or a read after the delivery, moves no more money",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the per-member charge on delivery keys a member without a phone number (a BSUID) too, and passes no recipient country",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the per-member charge on delivery two messages to the same member are two charges (the key includes the message)",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the per-member charge on delivery a failed member refunds only that member",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "workspace isolation another workspace cannot read a workspace's group charges, and its own wallet is untouched",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      }
+    ]
+  },
+  {
+    "file": "wallet-message-billing/margins.e2e.spec.ts",
+    "status": "failed",
+    "msg": "{\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_FAILED\",\"request",
+    "skipped": 12,
+    "total": 12,
+    "failed": []
+  },
+  {
+    "file": "wallet-producers/producers.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 14,
+    "failed": [
+      {
+        "t": "broadcasts report delivery to the wallet a WABA receipt writes one event per real step and none for a repeat or a late older status",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "broadcasts report delivery to the wallet a failure after the send is reported once; a failure before any provider id is not (nothing was cha",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "broadcasts report delivery to the wallet the unofficial engine is charged on its send: `sent` reports once, a repeat does not; a Cloud engin",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "campaigns report delivery to the wallet a receipt reports one event per real step, with the campaign source, none on a repeat, and no failur",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "campaigns report delivery to the wallet a failed receipt after a send is reported once",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "campaigns report delivery to the wallet the Node bridge reports an unofficial send once; a repeat or an older report writes nothing",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "campaigns report delivery to the wallet the inline send reports only for the engine that cannot report delivery",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "conversation receipts report delivery to the wallet a WhatsApp Cloud receipt that moves the message reports once, as an inbox send; a late o",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "conversation receipts report delivery to the wallet a failure over a sent message is reported; nothing is reported for a channel that is not",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate on broadcasts and campaigns (TW-WALLET-013) an empty pay-per-message wallet refuses a broadcast with WALLET_EMPTY and create",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate on broadcasts and campaigns (TW-WALLET-013) an empty pay-per-message wallet refuses a campaign with WALLET_EMPTY and creates",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate on broadcasts and campaigns (TW-WALLET-013) a funded wallet launches a broadcast and a campaign",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate on broadcasts and campaigns (TW-WALLET-013) a draft campaign launches nothing, so an empty wallet does not refuse it",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      },
+      {
+        "t": "the launch gate on broadcasts and campaigns (TW-WALLET-013) a plan-quota workspace inside its free monthly messages launches with an empty w",
+        "m": "AssertionError: {\"type\":\"https://errors.crm.platform/auth_otp_send_failed\",\"title\":\"Service Unavailable\",\"status\":503,\"detail\":\"Sign-up is temporarily unavailable. Please try again later.\",\"instance\":\"/v2/auth/signup\",\"code\":\"AUTH_OTP_SEND_"
+      }
+    ]
+  },
+  {
+    "file": "whatsapp-cloud-api-waba/waba-group-send.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 11,
+    "failed": [
+      {
+        "t": "what a sent group message shows: the member count, the roll-up, the billing events stamps the group size on the message, rolls per-member st",
+        "m": "AssertionError: expected [ …(3) ] to deeply equal [ …(2) ]"
+      }
+    ]
+  },
+  {
+    "file": "workspaces-teams-tenancy/member-details.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 11,
+    "failed": [
+      {
+        "t": "my availability starts Available, goes Offline for the caller only, and the members list shows it",
+        "m": "AssertionError: expected [ { user_id: 14, status: 'offline' } ] to deeply equal [ Array(1) ]"
+      }
+    ]
+  },
+  {
+    "file": "workspaces-teams-tenancy/members-teams.e2e.spec.ts",
+    "status": "failed",
+    "msg": "",
+    "skipped": 0,
+    "total": 60,
+    "failed": [
+      {
+        "t": "TW-WSP-020: the role model, the permission matrix and the role gates 020 #3: a viewer can only read: every key they hold is a read key",
+        "m": "AssertionError: team.leave.manage: expected false to be true // Object.is equality"
+      }
+    ]
+  }
+]
