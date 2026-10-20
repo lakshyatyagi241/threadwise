@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Ekipler",
-        "description": "Yönlendirme ve raporlama için kişileri ekiplere ayırın.",
-        "keywords": "gruplar, departmanlar, atama, yönlendirme"
+        "description": "Kişileri görüşmeler, atamalar ve raporlar için gruplayın.",
+        "keywords": "gruplar, departmanlar, yöneticiler, hiyerarşi, atama, yönlendirme"
       },
       "ai-keys": {
         "label": "AI sağlayıcı anahtarları",

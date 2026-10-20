@@ -1,4 +1,5 @@
 import { PostgreSqlContainer, type StartedPostgreSqlContainer } from '@testcontainers/postgresql';
+import { sql } from 'drizzle-orm';
 import { Client } from 'pg';
 import { resolve } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -146,19 +147,13 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
       ).rejects.toThrow(/chk_user_tokens_kind/);
     });
 
-    it('uses the RBAC keys and registers none of its own', async () => {
+    it('uses the RBAC keys; the only team keys are the Teams v2 pair (team.read, team.manage), none from the old Reference names', async () => {
       const res = await owner.query(`SELECT key FROM permission_defs WHERE key = ANY($1)`, [
         RBAC_KEYS,
       ]);
       expect(res.rows.map((r) => r.key).sort()).toEqual([...RBAC_KEYS].sort());
       const stale = await owner.query(`SELECT key FROM permission_defs WHERE key = ANY($1)`, [
-        [
-          'member.invite',
-          'member.role.assign',
-          'team.manage',
-          'workspace.settings',
-          'workspace.export',
-        ],
+        ['member.invite', 'member.role.assign', 'workspace.settings', 'workspace.export'],
       ]);
       expect(stale.rowCount).toBe(0);
       const fn = await owner.query(`SELECT 1 FROM pg_proc WHERE proname = 'wsp_seed_role_presets'`);
@@ -323,7 +318,7 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
       });
     });
 
-    it('removes access in one step: inactive, no roles, no team places, no live tokens', async () => {
+    it('removes access in one step: inactive, no roles, no live tokens, and the team places are kept (hidden) for reactivation', async () => {
       const t = await one(
         `INSERT INTO teams (org_id, name, slug) VALUES ($1,'Gone team','gone-team') RETURNING id`,
         [orgA],
@@ -347,9 +342,16 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
       expect(
         (await owner.query(`SELECT 1 FROM user_roles WHERE user_id = $1`, [ids.custom])).rowCount,
       ).toBe(0);
+      // Teams v2 (D10): the membership row stays; the tenant policy hides it from the restricted role.
       expect(
         (await owner.query(`SELECT 1 FROM team_members WHERE user_id = $1`, [ids.custom])).rowCount,
-      ).toBe(0);
+      ).toBe(1);
+      await inA(async (tx) => {
+        const seen = await tx.execute(
+          sql`SELECT 1 FROM team_members WHERE user_id = ${ids.custom}`,
+        );
+        expect(seen.rows).toHaveLength(0);
+      });
       expect(
         (
           await owner.query(
@@ -371,21 +373,21 @@ describe('wsp members and teams: migration, role presets, isolation and the repo
   });
 
   describe('the teams repository and tenant isolation', () => {
-    it("keeps a kept member's lead flag and capacity when the member list is replaced, and drops the rest", async () => {
+    it("keeps a kept member's role and capacity when the member list is replaced, and drops the rest", async () => {
       const team = await one(
         `INSERT INTO teams (org_id, name, slug) VALUES ($1,'Sales','sales-1') RETURNING id`,
         [orgA],
       );
       await owner.query(
-        `INSERT INTO team_members (org_id, team_id, user_id, is_lead, capacity) VALUES ($1,$2,$3,true,7),($1,$2,$4,false,20)`,
+        `INSERT INTO team_members (org_id, team_id, user_id, role, capacity) VALUES ($1,$2,$3,'lead',7),($1,$2,$4,'member',20)`,
         [orgA, team, ids.agent, ids.viewer],
       );
       await inA(async (tx) => {
         await teams.syncMembers(tx, orgA, team, [ids.agent!, ids.manager!]);
         const rows = await teams.members(tx, orgA, [team]);
-        expect(rows.map((r) => [r.fullName, r.isLead, r.capacity])).toEqual([
-          ['Mo Manager', false, 20],
-          ['Riya Agent', true, 7],
+        expect(rows.map((r) => [r.fullName, r.role, r.capacity])).toEqual([
+          ['Mo Manager', 'member', 20],
+          ['Riya Agent', 'lead', 7],
         ]);
         await teams.syncMembers(tx, orgA, team, []);
         expect(await teams.members(tx, orgA, [team])).toHaveLength(0);

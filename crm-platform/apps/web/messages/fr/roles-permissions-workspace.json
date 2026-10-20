@@ -91,7 +91,9 @@
         "member": "Membre",
         "roles": "Rôles",
         "status": "Statut",
-        "actions": "Actions"
+        "actions": "Actions",
+        "teams": "Équipes",
+        "manager": "Responsable"
       },
       "empty": {
         "none": "Il n’y a pas encore de membres.",
@@ -139,7 +141,15 @@
         "atLeastOne": "Sélectionnez au moins un rôle.",
         "save": "Enregistrer les rôles",
         "reload": "Recharger"
-      }
+      },
+      "teamFilter": {
+        "label": "Filtrer les membres par équipe",
+        "all": "Toutes les équipes"
+      },
+      "noTeams": "Aucune équipe",
+      "primaryTeam": "Équipe principale",
+      "primaryMark": "principale",
+      "noManager": "Aucun responsable"
     },
     "list": {
       "crumb": "Rôles",
@@ -240,8 +250,8 @@
       "lockedHint": "Cette autorisation n’est pas encore disponible pour cet espace de travail. Elle se débloque lorsque la fonctionnalité du forfait est activée ou que l’application est installée.",
       "scope": {
         "all": "Tous les enregistrements",
-        "team": "Enregistrements de l’équipe",
-        "own": "Ses propres enregistrements"
+        "own": "Ses propres enregistrements",
+        "team": "Enregistrements de mon équipe"
       }
     },
     "delete": {

@@ -91,7 +91,9 @@
         "member": "Członek",
         "roles": "Role",
         "status": "Status",
-        "actions": "Działania"
+        "actions": "Działania",
+        "teams": "Zespoły",
+        "manager": "Menedżer"
       },
       "empty": {
         "none": "Nie ma jeszcze członków.",
@@ -139,7 +141,15 @@
         "atLeastOne": "Wybierz co najmniej jedną rolę.",
         "save": "Zapisz role",
         "reload": "Odśwież"
-      }
+      },
+      "teamFilter": {
+        "label": "Filtruj członków według zespołu",
+        "all": "Wszystkie zespoły"
+      },
+      "noTeams": "Brak zespołu",
+      "primaryTeam": "Zespół główny",
+      "primaryMark": "główny",
+      "noManager": "Brak menedżera"
     },
     "list": {
       "crumb": "Role",
@@ -240,8 +250,8 @@
       "lockedHint": "To uprawnienie nie jest jeszcze dostępne w tej przestrzeni roboczej. Odblokuje się po włączeniu funkcji w planie lub instalacji aplikacji.",
       "scope": {
         "all": "Wszystkie rekordy",
-        "team": "Rekordy zespołu",
-        "own": "Własne rekordy"
+        "own": "Własne rekordy",
+        "team": "Rekordy mojego zespołu"
       }
     },
     "delete": {

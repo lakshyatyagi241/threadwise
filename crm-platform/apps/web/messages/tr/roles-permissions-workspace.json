@@ -91,7 +91,9 @@
         "member": "Üye",
         "roles": "Roller",
         "status": "Durum",
-        "actions": "İşlemler"
+        "actions": "İşlemler",
+        "teams": "Ekipler",
+        "manager": "Yönetici"
       },
       "empty": {
         "none": "Henüz üye yok.",
@@ -139,7 +141,15 @@
         "atLeastOne": "En az bir rol seçin.",
         "save": "Rolleri kaydet",
         "reload": "Yeniden yükle"
-      }
+      },
+      "teamFilter": {
+        "label": "Üyeleri ekibe göre filtrele",
+        "all": "Tüm ekipler"
+      },
+      "noTeams": "Ekip yok",
+      "primaryTeam": "Ana ekip",
+      "primaryMark": "ana",
+      "noManager": "Yönetici yok"
     },
     "list": {
       "crumb": "Roller",
@@ -240,8 +250,8 @@
       "lockedHint": "Bu izin henüz bu çalışma alanında kullanılamıyor. Plan özelliği açıldığında veya uygulama kurulduğunda kullanılabilir olur.",
       "scope": {
         "all": "Tüm kayıtlar",
-        "team": "Ekip kayıtları",
-        "own": "Kendi kayıtları"
+        "own": "Kendi kayıtları",
+        "team": "Ekibimin kayıtları"
       }
     },
     "delete": {

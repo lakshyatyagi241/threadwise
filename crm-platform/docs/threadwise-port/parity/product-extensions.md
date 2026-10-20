@@ -660,3 +660,24 @@ Not a reference feature: Reference has no operator compliance page, so there is 
 - **Wording:** the page says what the platform does today. Nothing in it says the platform "is compliant", and the header says it is not a compliance certificate.
 - **Parity:** skipped on the owner's word. The owner answered "Yes, skip parity" on 2026-10-17 to the question whether the parity run could be stamped as skipped for this feature, which has no Reference twin. The stamp is `skipped` with `--user-approved`. What was checked instead: the API unit and e2e tests, the web tests, and a live run on a local stack (the live checks, attest then read, the auditor view, 400 px width, dark mode and the Arabic layout).
 - **Not verified / open:** that each baseline status is legally right (counsel questions in section 9 of the plan, including the citation for row 46); what a probe reads is configuration, not enforcement; the deployed hosting facts stay attested, never inferred.
+
+## Teams v2: managers, hierarchy, primary team, receive switches and a deactivation that keeps membership (BL-381): beyond Reference
+
+Reference (the licensed product) has teams as a flat group of agents with a colour and an assignment strategy, a lead flag and a capacity per member that nothing uses, and
+a Teams screen worded for the inbox. Owner direction (2026-10-19, [specs/teams-unification.md](../../specs/teams-unification.md), decisions D1 to D10 approved): the product
+is one package that fuses chat and CRM, so one team entity serves conversations, contact, company and deal assignment and reports. Wiring: [wiring/teams-v2.md](../wiring/teams-v2.md).
+
+- **New:** a **manager** per team, an optional **parent team** (5 levels, no loops: service check and database trigger), **Lead** members, a **primary team** per person (at most one,
+  automatic for a person on one team), and two **Can receive** switches (conversations, records). Keys `team.read` and `team.manage`; `inbox.team.manage` stays as an alias for one
+  release. The Team members screen gets **Teams** and **Manager** columns and a team filter; `/team-members` redirects into it and every action it had (details, leave and reassign,
+  resend invite, reset password, remove) moved to a **More** menu.
+- **Intended differences from Reference:** the Teams list needs `team.read` (Reference applied no check; a Viewer no longer sees it); Managers can edit teams (Reference: Owner and Admin);
+  the Teams copy no longer says "inbox"; a team switched off for conversations or records is not offered and is skipped by rules that already point at it; deleting a team moves its
+  sub-teams up a level.
+- **Deactivation (decision D10):** removing or deactivating a member **keeps their `team_members` rows** (Reference deleted them), and the `team_members` tenant policy hides the rows
+  of an inactive user, so an inactive person never grants peer visibility and reactivating them restores their teams. The dialog asks what happens to their contacts, open deals and
+  open conversations (team manager, a person, or leave) before it deactivates; records use the existing owner-reassign batch (undo for 14 days), chats use `AssignmentService`.
+- **Stored, not used yet (decision D7):** `business_hours`, `timezone`, `default_assignee_id`, `assignment_strategy` and `device_ids` stay on the team and are listed on the Teams
+  screen as "Stored, not used yet"; the primary team and `is_scope_boundary` are stored for reports and for the `team_and_below` scope (T2).
+- **Not verified / open:** a run against a real mobile client; the Roles matrix label "My team's records" in the 20 non-English locales is a machine draft (the same for every new Teams string);
+  the delete preview with usage (T0, BL-380) merges into the same dialog.

@@ -91,7 +91,9 @@
         "member": "成员",
         "roles": "角色",
         "status": "状态",
-        "actions": "操作"
+        "actions": "操作",
+        "teams": "团队",
+        "manager": "负责人"
       },
       "empty": {
         "none": "暂无成员。",
@@ -139,7 +141,15 @@
         "atLeastOne": "请至少选择一个角色。",
         "save": "保存角色",
         "reload": "重新加载"
-      }
+      },
+      "teamFilter": {
+        "label": "按团队筛选成员",
+        "all": "所有团队"
+      },
+      "noTeams": "无团队",
+      "primaryTeam": "主团队",
+      "primaryMark": "主团队",
+      "noManager": "无负责人"
     },
     "list": {
       "crumb": "角色",
@@ -240,8 +250,8 @@
       "lockedHint": "此工作区暂不可使用该权限。待套餐功能开启或应用安装后即可解锁。",
       "scope": {
         "all": "全部记录",
-        "team": "团队记录",
-        "own": "个人记录"
+        "own": "个人记录",
+        "team": "我团队的记录"
       }
     },
     "delete": {

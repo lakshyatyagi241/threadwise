@@ -408,7 +408,8 @@ export class ContactAssignmentService {
     const bad = userIds.find((u) => !users.has(u));
     if (bad) throw invalid('Only active members of this workspace can take work.', 'userIds');
     const teams = await this.repo.teamIdsByUuid(tx, orgId, teamIds);
-    if (teamIds.some((t) => !teams.has(t))) throw invalid('Unknown team.', 'teamIds');
+    if (teamIds.some((t) => !teams.has(t)))
+      throw invalid('Unknown team, or a team that is set not to receive records.', 'teamIds');
   }
 
   private async audit(

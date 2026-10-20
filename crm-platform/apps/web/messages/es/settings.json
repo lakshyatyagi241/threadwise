@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Equipos",
-        "description": "Agrupa personas en equipos para el enrutamiento y los informes.",
-        "keywords": "grupos, departamentos, asignación, enrutamiento"
+        "description": "Agrupa personas para conversaciones, asignaciones e informes.",
+        "keywords": "grupos, departamentos, responsables, jerarquía, asignación, enrutamiento"
       },
       "ai-keys": {
         "label": "Claves de proveedores de IA",
