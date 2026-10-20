@@ -74,6 +74,8 @@ export const whatsappSubscribedSql: SQL = sql`(lower(btrim(coalesce(${contacts.w
 export interface ResolvedContactFilter {
   q?: string;
   ownerId?: number;
+  /** The record's owning team (BL-382): the owner's primary team when the owner was set. */
+  teamId?: number;
   /** Owned by any of `ids`, or (with `unassigned`) by nobody: the owner multi-select of the Contact Hub. */
   ownerAny?: { ids: number[]; unassigned: boolean };
   lifecycleStage?: string;
@@ -181,6 +183,7 @@ export function contactConditions(
 
   if (!f.includeArchived) c.push(eq(contacts.isArchived, false));
   if (f.ownerId !== undefined) c.push(eq(contacts.ownerId, f.ownerId));
+  if (f.teamId !== undefined) c.push(eq(contacts.owningTeamId, f.teamId));
   if (f.ownerAny) {
     const parts: SQL[] = [];
     if (f.ownerAny.ids.length > 0) parts.push(inArray(contacts.ownerId, f.ownerAny.ids));

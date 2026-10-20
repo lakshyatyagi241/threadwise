@@ -1,6 +1,8 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
+  TEAM_HIERARCHY_FEATURE,
+  teamHierarchyGateExists,
   type CreateRoleInput,
   type PaginationQuery,
   type RoleResponse,
@@ -13,6 +15,7 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { AddonEntitlementService } from '../../addons-extension-registry';
 import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toRoleResponse, type RoleViewContext } from './roles.mapper';
 import { RolesRepository, type RoleRow } from './roles.repository';
@@ -39,7 +42,31 @@ export class RolesService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly roleRules: WorkspaceRoleRulesService,
+    private readonly entitlements: AddonEntitlementService,
   ) {}
+
+  /**
+   * `team_and_below` ("My team and sub-teams") needs the plan feature `team_hierarchy` (BL-382; the key is added by T3, BL-383, and until it
+   * is in the catalogue the gate is open: see contracts/common/team-hierarchy.ts). Granting it without the feature is 422
+   * PLAN_FEATURE_LOCKED; a role that already holds it keeps it when only its name changes.
+   */
+  private async assertScopesOffered(
+    orgId: number,
+    grants: ReadonlyArray<{ recordScope: string }>,
+  ): Promise<void> {
+    if (!grants.some((g) => g.recordScope === 'team_and_below')) return;
+    if (!teamHierarchyGateExists()) return;
+    if (await this.entitlements.featureEnabled(orgId, TEAM_HIERARCHY_FEATURE)) return;
+    throw new AppError(
+      ERROR_CODES.PLAN_FEATURE_LOCKED,
+      'My team and sub-teams is not part of this plan.',
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [
+        { path: 'grants', message: 'team_and_below' },
+        { path: 'feature', message: TEAM_HIERARCHY_FEATURE },
+      ],
+    );
+  }
 
   async list(query: PaginationQuery) {
     const ctx = RequestContextStore.require();
@@ -101,6 +128,7 @@ export class RolesService {
         ]);
       }
 
+      await this.assertScopesOffered(ctx.orgId, input.grants);
       // A new role cannot carry anything its creator does not hold (TW-RBAC-026: no handing out more than you have).
       await this.roleRules.assertCanEditGrants(
         tx,
@@ -149,6 +177,15 @@ export class RolesService {
       }
       if (input.grants !== undefined) {
         const current = await this.repo.grantsForRoles(tx, ctx.orgId, [existing.id]);
+        // Only a scope the role does not already hold is checked: a downgraded workspace can still save a role it had set up before.
+        const newScopes = input.grants.filter(
+          (g) =>
+            g.recordScope === 'team_and_below' &&
+            !current.some(
+              (c) => c.permissionKey === g.permissionKey && c.recordScope === 'team_and_below',
+            ),
+        );
+        await this.assertScopesOffered(ctx.orgId, newScopes);
         await this.roleRules.assertCanEditGrants(
           tx,
           ctx.orgId,
@@ -242,11 +279,17 @@ export class RolesService {
       orgId,
       rows.map((r) => r.id),
     );
+    const noTeam = await this.repo.membersWithoutTeam(
+      tx,
+      orgId,
+      rows.map((r) => r.id),
+    );
     const grantable = new Set(await this.roleRules.grantableRoleIds(tx, orgId, actorUserId));
     const out = new Map<number, RoleViewContext>();
     for (const r of rows) {
       out.set(r.id, {
         userCount: counts.get(r.id) ?? 0,
+        membersWithoutTeam: noTeam.get(r.id) ?? 0,
         grantable: grantable.has(r.id),
         editable: await this.roleRules.canEditRole(tx, orgId, actorUserId, r),
       });

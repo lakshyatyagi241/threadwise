@@ -437,8 +437,14 @@ export class FormsRepository {
   }
 
   /** True when `userId` is on a team `actorUserId` is also on: the `team` record-scope check for one form. */
-  async isTeammate(tx: Tx, orgId: number, actorUserId: number, userId: number): Promise<boolean> {
-    return isTeamPeer(tx, orgId, actorUserId, userId);
+  async isTeammate(
+    tx: Tx,
+    orgId: number,
+    actorUserId: number,
+    userId: number,
+    below = false,
+  ): Promise<boolean> {
+    return isTeamPeer(tx, orgId, actorUserId, userId, below);
   }
 
   async userUuid(tx: Tx, orgId: number, id: number): Promise<string | null> {

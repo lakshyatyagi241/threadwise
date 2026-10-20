@@ -43,6 +43,8 @@ export const companies = pgTable(
     address: text('address'),
     notes: text('notes'),
     ownerId: idColumn('owner_id'),
+    /** The owner's primary team when the owner was set (BL-382). Stamped by a trigger, for reports and filters only, never access. */
+    owningTeamId: idColumn('owning_team_id'),
     lifecycleState: recordLifecycleEnum('lifecycle_state').notNull().default('active'),
     status: text('status'),
     data: dataJsonb(),
@@ -74,6 +76,8 @@ export const contacts = pgTable(
     phone: text('phone'),
     companyId: idColumn('company_id'),
     ownerId: idColumn('owner_id'),
+    /** The owner's primary team when the owner was set (BL-382). Stamped by a trigger, for reports and filters only, never access. */
+    owningTeamId: idColumn('owning_team_id'),
 
     /** Trigger-maintained dedup keys. Never written by the application. */
     normalizedEmail: citext('normalized_email'),

@@ -30,15 +30,27 @@ const iso = (d: Date) => d.toISOString();
 const big = (v: unknown): bigint => (v == null ? 0n : BigInt(v as string));
 const int = (v: unknown): number => Number(v ?? 0);
 
-/** Members of a team, as a sub-select over `team_members`. */
-const teamMembers = (orgId: number, teamId: number) =>
-  sql`(SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.team_id = ${teamId})`;
+/** The people whose PRIMARY team is `teamId` (at most one primary team per person, so nobody is counted for two teams). */
+const primaryTeamMembers = (orgId: number, teamId: number) =>
+  sql`(SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.team_id = ${teamId} AND tm.is_primary)`;
 
-/** `col` is the owner/assignee column of the table in the query. The owner and the team filters, ANDed. */
-function whoConds(col: SQL, f: DashFilter): SQL[] {
+/**
+ * `col` is the owner/assignee column of the table in the query. The owner and the team filters, ANDed.
+ *
+ * The team filter reads the record's `owning_team_id` (BL-382, decision D8: the owner's primary team at the moment the owner was set)
+ * when the table has one (`owningTeamCol`: contacts, deals, tasks), so a person on two teams counts for one team only. A table with no
+ * stamp (invoices) uses the owner's CURRENT primary team, which counts once as well. People without a primary team belong to none.
+ */
+function whoConds(col: SQL, f: DashFilter, owningTeamCol?: SQL): SQL[] {
   const out: SQL[] = [];
   if (f.ownerId !== undefined) out.push(sql`${col} = ${f.ownerId}`);
-  if (f.teamId !== undefined) out.push(sql`${col} IN ${teamMembers(f.orgId, f.teamId)}`);
+  if (f.teamId !== undefined) {
+    out.push(
+      owningTeamCol
+        ? sql`${owningTeamCol} = ${f.teamId}`
+        : sql`${col} IN ${primaryTeamMembers(f.orgId, f.teamId)}`,
+    );
+  }
   return out;
 }
 
@@ -104,7 +116,7 @@ export class CrmDashboardRepository {
       sql`d.org_id = ${f.orgId}`,
       scope,
       f.pipelineId !== undefined ? sql`d.pipeline_id = ${f.pipelineId}` : undefined,
-      ...whoConds(sql`d.owner_user_id`, f),
+      ...whoConds(sql`d.owner_user_id`, f, sql`d.owning_team_id`),
       ...extra,
     ]);
   }
@@ -374,7 +386,7 @@ export class CrmDashboardRepository {
          WHERE ${where([
            sql`ca.org_id = ${f.orgId}`,
            scopes.contacts,
-           ...whoConds(sql`c.owner_id`, f),
+           ...whoConds(sql`c.owner_id`, f, sql`c.owning_team_id`),
          ])}
          ORDER BY ca.occurred_at DESC LIMIT ${limit})`
       : sql``;
@@ -412,7 +424,7 @@ export class CrmDashboardRepository {
       sql`c.lifecycle_state = 'active'`,
       sql`NOT c.is_archived`,
       scope,
-      ...whoConds(sql`c.owner_id`, f),
+      ...whoConds(sql`c.owner_id`, f, sql`c.owning_team_id`),
       ...extra,
     ]);
   }
@@ -536,7 +548,7 @@ export class CrmDashboardRepository {
       sql`t.org_id = ${f.orgId}`,
       sql`t.status = 'open'`,
       scope,
-      ...whoConds(sql`t.assignee_id`, f),
+      ...whoConds(sql`t.assignee_id`, f, sql`t.owning_team_id`),
       ...extra,
     ]);
   }

@@ -139,6 +139,8 @@ const dealFilterFields = {
   ownerId: uuidSchema.optional(),
   /** Deals with no owner. Not together with `ownerId`. */
   unassigned: queryBoolean().optional(),
+  /** Records whose owning team (the owner's primary team when the owner was set) is this team (BL-382). */
+  teamId: uuidSchema.optional(),
   contactId: uuidSchema.optional(),
   companyId: uuidSchema.optional(),
   source: dealSourceSchema.optional(),

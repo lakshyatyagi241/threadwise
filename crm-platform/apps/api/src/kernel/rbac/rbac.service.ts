@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
-import type { RecordScope } from '@crm/contracts';
+import { RECORD_SCOPE_RANK, type RecordScope } from '@crm/contracts';
 import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -41,7 +41,7 @@ return {v, g}`;
  *
  * Merge rules, in order:
  *   1. deny beats allow, always, regardless of which role it came from
- *   2. among allows, the widest scope wins (all > team > own)
+ *   2. among allows, the widest scope wins (all > team_and_below > team > own)
  *
  * Rule 1 is what makes a "revoke" role actually revoke. Rule 2 is what makes
  * "Counsellor + Manager" behave the way a human expects.
@@ -203,7 +203,6 @@ export class RbacService {
     );
 
     const grants: GrantSet = new Map();
-    const scopeRank: Record<RecordScope, number> = { own: 0, team: 1, all: 2 };
 
     for (const row of result.rows as Array<{
       permission_key: string;
@@ -218,7 +217,7 @@ export class RbacService {
         grants.set(row.permission_key, { effect: 'deny', scope: row.record_scope });
         continue;
       }
-      if (!existing || scopeRank[row.record_scope] > scopeRank[existing.scope]) {
+      if (!existing || RECORD_SCOPE_RANK[row.record_scope] > RECORD_SCOPE_RANK[existing.scope]) {
         grants.set(row.permission_key, { effect: 'allow', scope: row.record_scope });
       }
     }
