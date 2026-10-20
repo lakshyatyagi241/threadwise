@@ -86,13 +86,29 @@ pnpm infra:up / infra:down / infra:logs
 pnpm infra:nuke          # also deletes volumes — all local data gone
 ```
 
+## Running tests without Docker (the owner's machine rule)
+
+Docker Desktop makes the owner's machine hang and gets Claude sessions killed, so on this machine the API integration and e2e suites run
+without it. Set `TEST_NO_DOCKER=1` (the package scripts do it for you) and every spec that would start a Postgres or Redis container
+gets its own throwaway Postgres 16 cluster (pgvector included) or Redis inside the WSL distro `Ubuntu-24.04`, started and deleted per spec:
+
+```bash
+pnpm --filter @crm/api test:integration:nodocker              # all of test/integration
+pnpm --filter @crm/api test:e2e:nodocker                      # all of test/e2e
+cd apps/api && TEST_NO_DOCKER=1 npx vitest run test/integration/db-guards.spec.ts --testTimeout=120000   # one spec
+pnpm --filter @crm/api test:nodocker:clean                    # stop and delete leftovers after a killed run
+```
+
+Four spec files run in parallel by default (`TEST_NO_DOCKER_WORKERS=2` lowers it; WSL is capped at 2 GB). The shared dev database (port 55710) is never touched. The GreenMail mail spec is skipped in this mode. Requirements, limits and how it works:
+`apps/api/test/support/no-docker/README.md`. Without `TEST_NO_DOCKER` the specs use Docker as before.
+
 ## Local URLs
 
-| Service       | URL                                                |
-| ------------- | -------------------------------------------------- |
-| API           | http://localhost:3000                              |
-| Swagger       | http://localhost:3000/docs                         |
-| Mailpit       | http://localhost:8025 (or your `MAILPIT_UI_PORT`)  |
+| Service | URL                                               |
+| ------- | ------------------------------------------------- |
+| API     | http://localhost:3000                             |
+| Swagger | http://localhost:3000/docs                        |
+| Mailpit | http://localhost:8025 (or your `MAILPIT_UI_PORT`) |
 
 ## Try the API
 
