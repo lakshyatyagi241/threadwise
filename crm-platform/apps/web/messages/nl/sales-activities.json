@@ -73,13 +73,11 @@
       "allowEditCompleted": "Gebruikers toestaan om de voltooiingsdatum en -tijd van deze activiteit te bewerken",
       "taskTypes": "Taaktypen",
       "taskTypesHint": "Kies er een bij het maken van een taak, bijvoorbeeld Opvolgen of Belherinnering.",
-      "addTaskType": "Taaktype toevoegen",
+      "addTaskType": "Type toevoegen",
       "taskTypePlaceholder": "Nieuw taaktype",
       "predictOutcomes": "Uitkomsten voor deze activiteit voorspellen",
       "predictOutcomesHint": "Een uitkomst aanbieden als de activiteit wordt voltooid.",
       "outcomes": "Uitkomsten",
-      "taskOutcomesHint": "De uitkomsten van een voltooide taak zijn één lijst voor de hele werkruimte, beheerd onder Taakuitkomsten.",
-      "taskOutcomesLink": "Taakuitkomsten openen",
       "outcomesHint": "Een verwijderde uitkomst blijft behouden bij de records die haar al hebben.",
       "phoneOutcomesHint": "Kies hoe elke uitkomst meetelt in gesprekrapporten. Een verwijderde uitkomst blijft behouden bij de gesprekken die haar al hebben.",
       "addOutcome": "Uitkomst toevoegen",
@@ -112,7 +110,12 @@
         "conflict": "Iemand anders heeft deze activiteit gewijzigd. Ze is opnieuw geladen; probeer het opnieuw.",
         "forbidden": "Je hebt geen toestemming om dit te wijzigen.",
         "failed": "Dat kon niet worden opgeslagen. Probeer het opnieuw."
-      }
+      },
+      "itemName": "Naam",
+      "hiddenInstead": "Taken gebruiken het nog, dus het is verborgen. Ze blijven het tonen.",
+      "loadingOutcomes": "Uitkomsten laden…",
+      "outcomesLoadFailed": "De uitkomsten konden niet worden geladen.",
+      "retry": "Opnieuw proberen"
     },
     "create": {
       "title": "Activiteit maken",

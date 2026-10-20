@@ -73,13 +73,11 @@
       "allowEditCompleted": "사용자가 이 활동의 완료 날짜와 시간을 편집하도록 허용",
       "taskTypes": "작업 유형",
       "taskTypesHint": "작업을 만들 때 하나를 선택합니다. 예: 후속 조치, 전화 알림.",
-      "addTaskType": "작업 유형 추가",
+      "addTaskType": "유형 추가",
       "taskTypePlaceholder": "새 작업 유형",
       "predictOutcomes": "이 활동의 결과 예측",
       "predictOutcomesHint": "활동이 완료될 때 결과를 선택하게 합니다.",
       "outcomes": "결과",
-      "taskOutcomesHint": "완료한 작업의 결과는 작업 공간 전체가 함께 쓰는 하나의 목록이며 작업 결과에서 관리합니다.",
-      "taskOutcomesLink": "작업 결과 열기",
       "outcomesHint": "결과를 삭제해도 이미 그 결과가 있는 기록에는 남습니다.",
       "phoneOutcomesHint": "각 결과가 통화 보고서에서 어떻게 집계되는지 선택하세요. 결과를 삭제해도 이미 그 결과가 있는 통화에는 남습니다.",
       "addOutcome": "결과 추가",
@@ -112,7 +110,12 @@
         "conflict": "다른 사람이 이 활동을 변경했습니다. 다시 불러왔으니 다시 시도하세요.",
         "forbidden": "이 항목을 변경할 권한이 없습니다.",
         "failed": "저장할 수 없습니다. 다시 시도하세요."
-      }
+      },
+      "itemName": "이름",
+      "hiddenInstead": "아직 작업에서 사용 중이라 대신 숨겼습니다. 해당 작업에는 계속 표시됩니다.",
+      "loadingOutcomes": "결과를 불러오는 중…",
+      "outcomesLoadFailed": "결과를 불러올 수 없습니다.",
+      "retry": "다시 시도"
     },
     "create": {
       "title": "활동 만들기",

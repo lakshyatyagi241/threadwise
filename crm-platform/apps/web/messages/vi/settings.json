@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Đội nhóm",
-        "description": "Nhóm người vào đội để phân công và báo cáo.",
-        "keywords": "nhóm, phòng ban, phân công, định tuyến"
+        "description": "Gom mọi người lại cho hội thoại, phân công và báo cáo.",
+        "keywords": "nhóm, phòng ban, quản lý, phân cấp, phân công, định tuyến"
       },
       "ai-keys": {
         "label": "Khóa nhà cung cấp AI",

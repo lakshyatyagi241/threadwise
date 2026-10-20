@@ -233,7 +233,14 @@
         "nobody": "Eşleşti ama uygun kimse yoktu",
         "broken": "Bozuk bir koşulu var"
       },
-      "skipped": "Uygun kimse olmadığı için atlandı: {names}"
+      "skipped": "Uygun kimse olmadığı için atlandı: {names}",
+      "excluded": {
+        "label": "Hariç tutuldu",
+        "no_access": "{name}: bu tür kaydı açamıyor",
+        "inactive": "{name}: artık aktif değil",
+        "on_leave": "{name}: bugün izinli",
+        "offline": "{name}: çevrimdışı"
+      }
     },
     "log": {
       "title": "Çalıştırma günlüğü",

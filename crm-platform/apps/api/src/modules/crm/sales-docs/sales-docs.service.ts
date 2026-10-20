@@ -84,6 +84,7 @@ import {
   type SalesDocRow,
 } from './sales-docs.repository';
 import { SalesDocsSupport } from './sales-docs.support';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 const emptyPage = <T>(limit: number): PageResponse<T> => ({
   data: [],
@@ -163,14 +164,7 @@ export class SalesDocsService {
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(
-        tx,
-        this.contacts,
-        ctx.orgId,
-        read.scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, contact);
       return this.listIn(tx, query, scope, { contactId: contact.id });
     });
   }
@@ -183,7 +177,7 @@ export class SalesDocsService {
       if (!deal) throw AppError.notFound('Deal', dealUuid);
       const read = this.rbac.can(ctx.grants!, 'record.deals.read');
       if (!read.allowed) throw AppError.forbidden('record.deals.read');
-      await this.deals.assertScope(tx, read.scope, deal.ownerId);
+      await this.deals.assertScope(tx, read.scope, deal);
       return this.listIn(tx, query, scope, { dealId: deal.id });
     });
   }
@@ -1504,16 +1498,15 @@ export class SalesDocsService {
 
   private async assertScope(tx: Tx, scope: RecordScope, row: SalesDocRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Document');
-    if (row.ownerId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.ownerId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.ownerId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Document');
     }
-    throw AppError.notFound('Document');
   }
 }
 

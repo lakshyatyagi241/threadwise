@@ -174,6 +174,7 @@ vi.mock('../api/assignment', async () => {
                     matched: true,
                     nobody: false,
                     broken: false,
+                    excluded: [],
                   },
                 ],
                 createdAt: '2026-10-03T10:00:00.000Z',
@@ -209,8 +210,22 @@ vi.mock('../api/assignment', async () => {
           rule: { id: 'r-1', name: 'India leads' },
           owner: { id: U2, name: 'Ravi' },
           trace: [
-            { ruleId: 'r-2', name: 'Big accounts', matched: false, nobody: false, broken: false },
-            { ruleId: 'r-1', name: 'India leads', matched: true, nobody: false, broken: false },
+            {
+              ruleId: 'r-2',
+              name: 'Big accounts',
+              matched: false,
+              nobody: false,
+              broken: false,
+              excluded: [],
+            },
+            {
+              ruleId: 'r-1',
+              name: 'India leads',
+              matched: true,
+              nobody: false,
+              broken: false,
+              excluded: [{ id: U2, name: 'Asha', reason: 'no_access' }],
+            },
           ],
           skipped: [],
         };
@@ -442,6 +457,9 @@ describe('the record assignment rules screen', () => {
     );
     expect(trace[0]).toContain('Did not match');
     expect(trace[1]).toContain('Matched and takes the record');
+    // Who the rule could not use, and why (BL-380, gap 9).
+    expect(trace[0]).not.toContain('Left out');
+    expect(trace[1]).toContain('Left out: Asha: cannot open this kind of record');
   });
 
   it('shows the run log with a link to the record and the way it arrived', async () => {

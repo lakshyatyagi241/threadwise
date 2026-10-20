@@ -233,7 +233,14 @@
         "nobody": "Kwam overeen, maar niemand was beschikbaar",
         "broken": "Heeft een kapotte voorwaarde"
       },
-      "skipped": "Overgeslagen omdat niemand beschikbaar was: {names}"
+      "skipped": "Overgeslagen omdat niemand beschikbaar was: {names}",
+      "excluded": {
+        "label": "Uitgesloten",
+        "no_access": "{name}: kan dit soort record niet openen",
+        "inactive": "{name}: niet meer actief",
+        "on_leave": "{name}: vandaag met verlof",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Uitvoeringslogboek",

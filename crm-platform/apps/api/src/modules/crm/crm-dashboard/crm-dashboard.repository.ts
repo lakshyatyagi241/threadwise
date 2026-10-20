@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { sql, type SQL } from 'drizzle-orm';
 import type { RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 
@@ -41,21 +42,17 @@ function whoConds(col: SQL, f: DashFilter): SQL[] {
   return out;
 }
 
-/** The record scope of a table whose owner column is `col` (deals, contacts): all / team / own. */
+/**
+ * The record scope of a table whose people are `columns` (owner, and creator since D1): all / team / own. The dashboard's contact
+ * section passes `c.owner_id` and `c.created_by`, so a tile counts exactly the contacts the contacts list shows.
+ */
 export function ownerScope(
-  col: SQL,
+  columns: SQL | readonly SQL[],
   orgId: number,
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  if (scope === 'own') return sql`${col} = ${actorUserId}`;
-  return sql`${col} IN (
-    SELECT tm2.user_id FROM team_members tm1
-    JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-    WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-  )`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, columns);
 }
 
 /** Scopes by section; `undefined` is `all`. Each is written against the alias its section's queries use. */

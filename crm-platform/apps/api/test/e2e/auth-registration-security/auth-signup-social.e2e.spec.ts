@@ -807,7 +807,7 @@ describe('social sign-in', () => {
     const a = await signup();
     h.socialProfiles.set('sus-1', profile('g-sus', { email: a.email, emailVerified: true }));
     expect((await signIn(a.slug, 'sus-1')).status).toBe(201);
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE email = $1`, [a.email]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE email = $1`, [a.email]);
     await h.redis.eval(
       `for _,k in ipairs(redis.call('keys','auth:gate:*')) do redis.call('del',k) end`,
       0,

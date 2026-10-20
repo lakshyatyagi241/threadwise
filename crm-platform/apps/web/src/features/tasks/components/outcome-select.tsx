@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Field, Select } from '@crm/ui';
 import type { TaskOutcomeRef } from '../api/schemas';
+import { useActivitySettings } from '@/features/sales-activities';
 import { useTaskOutcomes } from '../api/hooks';
 import { outcomeChoices } from '../lib/outcomes';
 
@@ -35,8 +36,11 @@ export function OutcomeSelect({
 }) {
   const t = useTranslations('tasks.outcomes');
   const outcomes = useTaskOutcomes(true);
+  // "Predict outcomes for this activity" (Sales Activities, Task): off hides the picker unless the task already holds an outcome.
+  const settings = useActivitySettings('task');
+  const predicting = !settings.loaded || settings.outcomesEnabled;
   const choices = outcomeChoices(outcomes.data ?? [], current);
-  if (choices.length === 0) return null;
+  if (choices.length === 0 || (!predicting && !current)) return null;
   return (
     <Field label={label} htmlFor={id} error={error} className={className}>
       <Select
@@ -70,8 +74,9 @@ export function CompleteWithOutcome({
 }) {
   const t = useTranslations('tasks.outcomes');
   const outcomes = useTaskOutcomes(true);
+  const settings = useActivitySettings('task');
   const list = outcomes.data ?? [];
-  if (list.length === 0) return null;
+  if (list.length === 0 || (settings.loaded && !settings.outcomesEnabled)) return null;
   return (
     <Select
       aria-label={t('completeWith')}

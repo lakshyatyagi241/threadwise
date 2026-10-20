@@ -233,7 +233,14 @@
         "nobody": "일치했지만 배정 가능한 사람이 없음",
         "broken": "손상된 조건이 있음"
       },
-      "skipped": "배정 가능한 사람이 없어 건너뜀: {names}"
+      "skipped": "배정 가능한 사람이 없어 건너뜀: {names}",
+      "excluded": {
+        "label": "제외됨",
+        "no_access": "{name}: 이 유형의 레코드를 열 수 없음",
+        "inactive": "{name}: 더 이상 활성 상태가 아님",
+        "on_leave": "{name}: 오늘 휴가 중",
+        "offline": "{name}: 오프라인"
+      }
     },
     "log": {
       "title": "실행 로그",

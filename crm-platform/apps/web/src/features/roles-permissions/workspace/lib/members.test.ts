@@ -9,14 +9,29 @@ import {
   roleFilterCounts,
   rolesChanged,
   sortRoles,
+  teamFilterOptions,
 } from './members';
 
-const U = (id: string, name: string, roles: string[], email = `${name}@x.io`): UserResponse => ({
+const U = (
+  id: string,
+  name: string,
+  roles: string[],
+  email = `${name}@x.io`,
+  teams: string[] = [],
+): UserResponse => ({
   id,
   email,
   fullName: name,
   status: 'active',
   roles: roles.map((r) => ({ id: r, name: r })),
+  teams: teams.map((t, i) => ({
+    id: t,
+    name: `Team ${t}`,
+    color: '#075E54',
+    role: 'member' as const,
+    isPrimary: i === 0,
+  })),
+  managers: [],
   rowVersion: 1,
   createdAt: '2026-01-01T00:00:00.000Z',
   updatedAt: '2026-01-01T00:00:00.000Z',
@@ -99,5 +114,33 @@ describe('generatePassword', () => {
       expect(p).toMatch(/[0-9]/);
       expect(p).toMatch(/[^A-Za-z0-9]/);
     }
+  });
+});
+
+describe('team filter', () => {
+  const people = [
+    U('1', 'Ada', ['owner'], 'a@x.io', ['s']),
+    U('2', 'Bo', ['agent'], 'b@x.io', ['s', 'h']),
+    U('3', 'Cy', ['agent'], 'c@x.io', []),
+  ];
+
+  it('keeps only the people on the chosen team, together with the role and search filters', () => {
+    expect(
+      filterMembers(people, { roleId: null, search: '', teamId: 's' }).map((m) => m.id),
+    ).toEqual(['1', '2']);
+    expect(
+      filterMembers(people, { roleId: 'agent', search: '', teamId: 's' }).map((m) => m.id),
+    ).toEqual(['2']);
+    expect(filterMembers(people, { roleId: null, search: 'cy', teamId: 's' })).toEqual([]);
+    expect(filterMembers(people, { roleId: null, search: '', teamId: null })).toHaveLength(3);
+    expect(filterMembers(people, { roleId: null, search: '' })).toHaveLength(3);
+  });
+
+  it('offers the teams of the people shown, by name, with how many are on each', () => {
+    expect(teamFilterOptions(people)).toEqual([
+      { id: 'h', name: 'Team h', count: 1 },
+      { id: 's', name: 'Team s', count: 2 },
+    ]);
+    expect(teamFilterOptions([people[2]!])).toEqual([]);
   });
 });

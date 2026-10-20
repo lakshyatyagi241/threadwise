@@ -44,7 +44,8 @@
       "notDeletable": "Dit kan niet worden verwijderd zolang er nog komende boekingen zijn.",
       "notDrifted": "Deze boeking komt al overeen met het Google-event. De gegevens zijn opnieuw geladen.",
       "calendarNotConnected": "Google Calendar is niet gekoppeld. Koppel het opnieuw op de pagina Google-account en probeer het nog eens.",
-      "calendarFailed": "Google reageerde niet of heeft de wijziging geweigerd. Probeer het zo meteen opnieuw."
+      "calendarFailed": "Google reageerde niet of heeft de wijziging geweigerd. Probeer het zo meteen opnieuw.",
+      "whatsappNotConnected": "Koppel eerst een WhatsApp Cloud API-nummer in de instellingen: een WhatsApp-bericht wordt via zo’n nummer ingediend."
     },
     "picker": {
       "timeZone": "Tijdzone",

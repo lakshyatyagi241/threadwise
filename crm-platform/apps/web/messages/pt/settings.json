@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Equipes",
-        "description": "Agrupe pessoas em equipes para roteamento e relatórios.",
-        "keywords": "grupos, departamentos, atribuição, roteamento"
+        "description": "Agrupe pessoas para conversas, atribuições e relatórios.",
+        "keywords": "grupos, departamentos, gerentes, hierarquia, atribuição, roteamento"
       },
       "ai-keys": {
         "label": "Chaves de provedores de IA",

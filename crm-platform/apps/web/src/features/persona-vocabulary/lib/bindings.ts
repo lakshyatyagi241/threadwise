@@ -90,6 +90,16 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     ],
   },
   {
+    // The Teams screen, its dialog and the deactivate hand-over (BL-381): written with the default nouns (contact, deal) where they name
+    // records, so a workspace that says Patient or Client reads its own words in "Records (contacts, companies and deals)".
+    id: 'teams',
+    prefixes: [
+      'workspaces-teams-tenancy.teams',
+      'workspaces-teams-tenancy.teamDialog',
+      'workspaces-teams-tenancy.deactivate',
+    ],
+  },
+  {
     id: 'deals',
     prefixes: [
       'deals-pipelines.nav',

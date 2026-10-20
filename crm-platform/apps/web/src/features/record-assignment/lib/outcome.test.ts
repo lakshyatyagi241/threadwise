@@ -9,6 +9,7 @@ const e = (over: Partial<AssignmentTraceEntry>): AssignmentTraceEntry => ({
   matched: false,
   nobody: false,
   broken: false,
+  excluded: [],
   ...over,
 });
 

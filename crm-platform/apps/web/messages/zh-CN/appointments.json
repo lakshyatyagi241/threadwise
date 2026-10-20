@@ -44,7 +44,8 @@
       "notDeletable": "仍有未来的预订，无法删除。",
       "notDrifted": "此预约已与其 Google 日程一致，已为您重新加载。",
       "calendarNotConnected": "Google Calendar 未连接。请在 Google 账号页面重新连接后再试。",
-      "calendarFailed": "Google 没有响应或拒绝了此更改。请稍后再试。"
+      "calendarFailed": "Google 没有响应或拒绝了此更改。请稍后再试。",
+      "whatsappNotConnected": "请先在设置中连接一个 WhatsApp Cloud API 号码：WhatsApp 消息通过该号码提交。"
     },
     "picker": {
       "timeZone": "时区",

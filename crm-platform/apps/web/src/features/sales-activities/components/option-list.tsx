@@ -25,6 +25,8 @@ export interface OptionListProps {
   placeholder: string;
   onAdd: (name: string, countsAs?: PhoneCountsAs) => Promise<boolean>;
   onRemove: (o: ActivityOption) => void;
+  /** When given, a row's name is an input that saves when you leave it (the workspace's task outcomes can be renamed). */
+  onRename?: (o: ActivityOption, name: string) => void;
   onReorder: (ids: string[]) => void;
 }
 
@@ -94,14 +96,33 @@ export function OptionList(p: OptionListProps) {
               >
                 ⋮⋮
               </span>
-              <span dir="auto" className="min-w-0 flex-1 truncate text-sm">
-                {p.nameOf(o)}
-                {o.countsAs && (
-                  <span className="ms-2 text-xs text-muted-foreground">
-                    {t('countsAsShort', { as: t(`countsAs.${o.countsAs}`) })}
-                  </span>
-                )}
-              </span>
+              {p.onRename && !p.disabled ? (
+                <Input
+                  key={`${o.id}:${p.nameOf(o)}`}
+                  aria-label={t('itemName')}
+                  defaultValue={p.nameOf(o)}
+                  maxLength={ACTIVITY_OPTION_NAME_MAX}
+                  dir="auto"
+                  className="h-8 min-w-0 flex-1"
+                  onBlur={(e) => {
+                    const v = e.target.value.trim();
+                    if (v && v !== p.nameOf(o)) p.onRename?.(o, v);
+                    else e.target.value = p.nameOf(o);
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') e.currentTarget.blur();
+                  }}
+                />
+              ) : (
+                <span dir="auto" className="min-w-0 flex-1 truncate text-sm">
+                  {p.nameOf(o)}
+                  {o.countsAs && (
+                    <span className="ms-2 text-xs text-muted-foreground">
+                      {t('countsAsShort', { as: t(`countsAs.${o.countsAs}`) })}
+                    </span>
+                  )}
+                </span>
+              )}
               {!p.disabled && (
                 <span className="flex shrink-0 items-center">
                   <Button
@@ -126,6 +147,7 @@ export function OptionList(p: OptionListProps) {
                     variant="ghost"
                     size="sm"
                     aria-label={t('remove', { name: p.nameOf(o) })}
+                    className="text-danger hover:bg-danger/10"
                     disabled={p.busy}
                     onClick={() => p.onRemove(o)}
                   >

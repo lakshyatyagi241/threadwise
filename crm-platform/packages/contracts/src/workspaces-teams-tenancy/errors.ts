@@ -12,6 +12,12 @@ export const WSP_ERROR_CODES = {
   WSP_INVITE_NOT_PENDING: 'WSP_INVITE_NOT_PENDING',
   WSP_TEAM_NAME_TAKEN: 'WSP_TEAM_NAME_TAKEN',
   WSP_TEAM_MEMBER_UNKNOWN: 'WSP_TEAM_MEMBER_UNKNOWN',
+  /** Team parent: the chosen parent is a descendant of the team (or the team itself), so the tree would loop. */
+  WSP_TEAM_PARENT_CYCLE: 'WSP_TEAM_PARENT_CYCLE',
+  /** Team parent: unknown in this workspace, or the tree would go deeper than `WSP_TEAM_MAX_DEPTH` levels. */
+  WSP_TEAM_PARENT_INVALID: 'WSP_TEAM_PARENT_INVALID',
+  /** Team member change: the person is not an active member of the workspace, or not on this team. */
+  WSP_TEAM_MEMBER_NOT_ON_TEAM: 'WSP_TEAM_MEMBER_NOT_ON_TEAM',
   /** Leave: the new dates share a day with another leave of the same person that still counts. */
   WSP_LEAVE_OVERLAP: 'WSP_LEAVE_OVERLAP',
   /** Leave: the first day is before today in the workspace calendar, or the change is not allowed in this state. */
