@@ -39,6 +39,7 @@ import {
   type ConferencingPlan,
   type ConferencingState,
 } from './meeting-conferencing.rules';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 const MODULE_KEY = 'contact_meetings';
 
@@ -67,14 +68,7 @@ export class ContactMeetingsService {
     return this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id, {
         limit: query.limit,
         cursor: query.cursor,
@@ -113,14 +107,7 @@ export class ContactMeetingsService {
     const made = await this.db.tx(async (tx) => {
       const contact = await this.requireContact(tx, ctx.orgId, contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const contactId = contact.id;
       // A link or a calendar entry is judged BEFORE anything is written: a request the rules refuse saves nothing.
       const plan = this.conferencingPlan(null, input.conferencing, {
@@ -170,7 +157,7 @@ export class ContactMeetingsService {
         ctx.orgId,
         scope,
         ctx.userId!,
-        parent?.ownerId ?? null,
+        parent ?? { ownerId: null, createdBy: null },
       );
       this.assertNotBooked(existing);
 
@@ -240,7 +227,7 @@ export class ContactMeetingsService {
         ctx.orgId,
         scope,
         ctx.userId!,
-        parent?.ownerId ?? null,
+        parent ?? { ownerId: null, createdBy: null },
       );
       this.assertNotBooked(existing);
 
@@ -366,19 +353,20 @@ export class ContactMeetingsService {
     const ctx = RequestContextStore.require();
     const grant = this.rbac.can(ctx.grants!, 'record.appointments.update');
     if (!grant.allowed || !rows.some((r) => r.appointmentId !== null)) return () => false;
-    const me = ctx.userId;
-    const peers =
-      grant.scope === 'team' && me !== null
-        ? await this.repo.teamPeerIds(tx, orgId, me)
-        : new Set<number>();
-    return (row) => {
-      if (row.appointmentId === null) return false;
-      if (grant.scope === 'all') return true;
-      if (me === null) return false;
-      const people = [row.appointmentHostId, row.appointmentCreatedBy];
-      if (people.includes(me)) return true;
-      return grant.scope === 'team' && people.some((p) => p !== null && peers.has(p));
-    };
+    // The appointments module's own rule (host or booker, plus teammates at `team`), through the one scope resolver.
+    const allowed = new Set<ContactMeetingRow>();
+    for (const row of rows) {
+      if (row.appointmentId === null) continue;
+      if (
+        await canActOn(tx, { orgId, userId: ctx.userId }, grant.scope, [
+          row.appointmentHostId,
+          row.appointmentCreatedBy,
+        ])
+      ) {
+        allowed.add(row);
+      }
+    }
+    return (row) => allowed.has(row);
   }
 
   private async requireContact(

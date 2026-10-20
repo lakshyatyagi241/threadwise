@@ -233,7 +233,14 @@
         "nobody": "Cocok, tetapi tidak ada yang tersedia",
         "broken": "Memiliki kondisi rusak"
       },
-      "skipped": "Dilewati karena tidak ada yang tersedia: {names}"
+      "skipped": "Dilewati karena tidak ada yang tersedia: {names}",
+      "excluded": {
+        "label": "Dikecualikan",
+        "no_access": "{name}: tidak dapat membuka jenis data ini",
+        "inactive": "{name}: sudah tidak aktif",
+        "on_leave": "{name}: cuti hari ini",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Log eksekusi",

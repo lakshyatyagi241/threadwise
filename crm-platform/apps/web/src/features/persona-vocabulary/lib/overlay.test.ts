@@ -56,6 +56,7 @@ describe('the bindings registry', () => {
       'reminders',
       'booking-page-appearance',
       'meeting-conferencing',
+      'teams',
       'deals',
     ]);
   });

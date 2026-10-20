@@ -137,6 +137,7 @@ Bound surfaces (`lib/bindings.ts`; every prefix is checked against the English m
 | reminders               | `appointments.reminders` (reminders and follow-ups: the settings card, the editor step, the drawer list), `.channels` (message channels), `.templates` (message library)                                                    |
 | booking-page-appearance | `appointments.appearance` (the staff screens that style the customer's booking page and their preview controls)                                                                                                             |
 | meeting-conferencing    | `meeting-conferencing.form`, `.row`, `.page` (the video and calendar fields of the Add meeting form, the status line of a meeting, the Video meetings page)                                                                 |
+| teams                   | `workspaces-teams-tenancy.teams`, `.teamDialog`, `.deactivate` (the Teams screen and dialog, and the deactivate hand-over: "Records (contacts, companies and deals)", "owns 2 contacts")                                    |
 | deals                   | `deals-pipelines.nav`, `.board`, `.toolbar`, `.list`, `.card`, `.form`, `.drawer`                                                                                                                                           |
 
 TODO, surfaces still saying the product's word (`NOT_YET_BOUND` in `lib/bindings.ts`, kept in step with this list by a test):

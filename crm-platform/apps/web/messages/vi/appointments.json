@@ -44,7 +44,8 @@
       "notDeletable": "Không thể xóa khi còn các lịch đặt sắp tới.",
       "notDrifted": "Lịch hẹn này đã khớp với sự kiện trên Google. Dữ liệu đã được tải lại.",
       "calendarNotConnected": "Google Calendar chưa được kết nối. Hãy kết nối lại tại trang tài khoản Google rồi thử lại.",
-      "calendarFailed": "Google không phản hồi hoặc đã từ chối thay đổi. Vui lòng thử lại sau giây lát."
+      "calendarFailed": "Google không phản hồi hoặc đã từ chối thay đổi. Vui lòng thử lại sau giây lát.",
+      "whatsappNotConnected": "Hãy kết nối trước một số WhatsApp Cloud API trong Cài đặt: tin nhắn WhatsApp được gửi qua số đó."
     },
     "picker": {
       "timeZone": "Múi giờ",

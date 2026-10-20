@@ -45,6 +45,7 @@ import {
   type TaskPatch,
   type TaskRow,
 } from './tasks.repository';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 export const TASK_MODULE = 'tasks';
 
@@ -135,14 +136,7 @@ export class TasksService {
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(
-        tx,
-        this.contacts,
-        ctx.orgId,
-        read.scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, contact);
       return this.listIn(tx, query, scope, { contactId: contact.id });
     });
   }
@@ -159,7 +153,7 @@ export class TasksService {
       if (!deal) throw AppError.notFound('Deal', dealUuid);
       const read = this.rbac.can(ctx.grants!, 'record.deals.read');
       if (!read.allowed) throw AppError.forbidden('record.deals.read');
-      await this.deals.assertScope(tx, read.scope, deal.ownerId);
+      await this.deals.assertScope(tx, read.scope, deal);
       return this.listIn(tx, query, scope, { dealId: deal.id });
     });
   }
@@ -1004,16 +998,15 @@ export class TasksService {
   /** Not-found, never forbidden: a task outside the caller's scope is not revealed to exist. */
   private async assertScope(tx: Tx, scope: RecordScope, row: TaskRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Task');
-    if (row.assigneeId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.assigneeId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.assigneeId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Task');
     }
-    throw AppError.notFound('Task');
   }
 
   private async zone(tx: Tx, orgId: number): Promise<string> {

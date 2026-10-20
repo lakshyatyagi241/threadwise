@@ -90,7 +90,9 @@
         "member": "Member",
         "roles": "Roles",
         "status": "Status",
-        "actions": "Actions"
+        "actions": "Actions",
+        "teams": "Teams",
+        "manager": "Manager"
       },
       "empty": {
         "none": "There are no members yet.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Pick at least one role.",
         "save": "Save roles",
         "reload": "Reload"
-      }
+      },
+      "teamFilter": {
+        "label": "Filter members by team",
+        "all": "All teams"
+      },
+      "noTeams": "No team",
+      "primaryTeam": "Primary team",
+      "primaryMark": "primary",
+      "noManager": "No manager"
     },
     "list": {
       "crumb": "Roles",
@@ -235,7 +245,7 @@
       "lockedHint": "This permission is not available to this workspace yet. It unlocks when the plan feature is on or the app is installed.",
       "scope": {
         "all": "All records",
-        "team": "Team records",
+        "team": "My team's records",
         "own": "Own records"
       }
     },

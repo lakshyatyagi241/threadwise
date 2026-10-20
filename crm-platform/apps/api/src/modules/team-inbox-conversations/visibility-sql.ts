@@ -1,6 +1,7 @@
 import { sql, type SQL } from 'drizzle-orm';
 import { PERSONAL_OWNER_GONE, channelOwnerSql, type ConversationViewer } from '../../realtime';
 import { rawIdentifier } from '../../common/sql/identifier';
+import { conversationScopeCondition } from '../../kernel/rbac/scope';
 
 /**
  * `conversationVisible` (apps/api/src/realtime/audience) as a SQL condition on `conversations`, so a list, a count and a search can
@@ -58,24 +59,5 @@ export function visibleToJoinedSql(
   return { joins, where };
 }
 
-function byScopeSql(viewer: ConversationViewer, alias: string): SQL {
-  const c = rawIdentifier(alias);
-  switch (viewer.scope) {
-    case null:
-      return sql`FALSE`;
-    case 'all':
-      return sql`TRUE`;
-    case 'own':
-      return sql`${c}.assignee_user_id = ${viewer.userId}`;
-    case 'team': {
-      const mine = sql`${c}.assignee_user_id = ${viewer.userId}`;
-      const unassigned = sql`(${c}.assignee_user_id IS NULL AND ${c}.assignee_team_id IS NULL)`;
-      if (viewer.teamIds.length === 0) return sql`(${mine} OR ${unassigned})`;
-      const teams = sql.join(
-        viewer.teamIds.map((id) => sql`${id}`),
-        sql`, `,
-      );
-      return sql`(${mine} OR ${c}.assignee_team_id IN (${teams}) OR ${unassigned})`;
-    }
-  }
-}
+const byScopeSql = (viewer: ConversationViewer, alias: string): SQL =>
+  conversationScopeCondition(viewer, alias);

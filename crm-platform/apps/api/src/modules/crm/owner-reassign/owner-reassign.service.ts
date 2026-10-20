@@ -23,6 +23,7 @@ import { assertOwnerWithinScope } from '../owner-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { OwnerReassignRepository, type Actor, type BatchRow } from './owner-reassign.repository';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 const invalid = (message: string, path?: string) =>
   new AppError(
@@ -286,12 +287,12 @@ export class OwnerReassignService {
     scope: RecordScope,
     personId: number,
   ): Promise<void> {
-    if (scope === 'all' || !ctx.userId || personId === ctx.userId) return;
     if (
-      scope === 'team' &&
-      (await this.contacts.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId, personId))
-    )
+      scope === 'all' ||
+      (await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [personId]))
+    ) {
       return;
+    }
     throw AppError.forbidden('record.contacts.update');
   }
 

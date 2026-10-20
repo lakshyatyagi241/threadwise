@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import type { RequestContext } from '../../common/context/request-context';
@@ -13,6 +12,7 @@ import {
   type ConversationRecord,
   type ConversationViewer,
 } from '../../realtime';
+import { teamIdsOf } from '../../kernel/rbac/scope';
 
 export const PERM = {
   read: PERM_CONVERSATION_READ,
@@ -111,9 +111,6 @@ export class InboxAccess {
   }
 
   private async teamIds(tx: Tx, ctx: RequestContext): Promise<number[]> {
-    const res = await tx.execute(
-      sql`SELECT team_id FROM team_members WHERE org_id = ${ctx.orgId} AND user_id = ${ctx.userId}`,
-    );
-    return (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
+    return [...(await teamIdsOf(tx, { orgId: ctx.orgId, userId: ctx.userId! }))];
   }
 }

@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Gruppieren Sie Personen in Teams für Weiterleitung und Auswertung.",
-        "keywords": "gruppen, abteilungen, zuweisung, routing"
+        "description": "Personen für Unterhaltungen, Zuweisungen und Berichte gruppieren.",
+        "keywords": "Gruppen, Abteilungen, Manager, Hierarchie, Zuweisung, Routing"
       },
       "ai-keys": {
         "label": "KI-Anbieter-Schlüssel",

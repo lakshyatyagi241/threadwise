@@ -276,7 +276,7 @@ describe('create (TW-TASK-003, 004, 013)', () => {
     expect(code(res)).toBe('TASK_ASSIGNEE_INVALID');
 
     const gone = await api.member(t, 'tgone', TASK_WORKER);
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [gone.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [gone.userId]);
     const res2 = await api
       .as(t.admin)
       .post('/v2/tasks')

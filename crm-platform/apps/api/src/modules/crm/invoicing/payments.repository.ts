@@ -11,6 +11,7 @@ import type {
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
+import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 export interface PaymentRow {
   id: number;
@@ -106,14 +107,11 @@ export function paymentScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(i.owner_id = ${actorUserId} OR i.user_id = ${actorUserId} OR p.recorded_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR i.owner_id IN ${peers} OR i.user_id IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`i.owner_id`,
+    sql`i.user_id`,
+    sql`p.recorded_by`,
+  ]);
 }
 
 export interface PaymentInsert {

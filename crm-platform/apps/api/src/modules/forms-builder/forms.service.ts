@@ -44,6 +44,7 @@ import {
   type ShareBases,
 } from './forms.mapper';
 import { FormsRepository, formScopeCondition, type FormRow } from './forms.repository';
+import { canActOn } from '../../kernel/rbac/scope';
 
 export const FORM_MODULE = 'web_forms';
 const EVENT_MODULE = 'forms';
@@ -530,12 +531,9 @@ export class FormsService {
   }
 
   private async inScope(tx: Tx, orgId: number, row: FormRow, scope: RecordScope): Promise<boolean> {
-    if (scope === 'all') return true;
-    const actor = RequestContextStore.require().userId;
-    if (!actor) return false;
-    if (row.createdBy === actor) return true;
-    if (scope === 'own' || row.createdBy === null) return false;
-    return this.repo.isTeammate(tx, orgId, actor, row.createdBy);
+    return canActOn(tx, { orgId, userId: RequestContextStore.require().userId }, scope, [
+      row.createdBy,
+    ]);
   }
 
   private async nameInUse(

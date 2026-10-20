@@ -103,9 +103,10 @@ export class OwnerReassignRepository {
     return { contacts: Number(r.contacts), openDeals: Number(r.deals) };
   }
 
+  /** The active members of a team that may take records; null when the team is unknown or is set not to receive records. */
   async teamMemberIds(tx: Tx, orgId: number, teamUuid: string): Promise<number[] | null> {
     const t = await tx.execute(
-      sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${teamUuid}`,
+      sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${teamUuid} AND receives_records`,
     );
     if (!t.rows[0]) return null;
     const m = await tx.execute(sql`

@@ -44,7 +44,8 @@
       "notDeletable": "لا يمكن حذف هذا ما دامت له حجوزات قادمة.",
       "notDrifted": "هذا الحجز مطابق بالفعل لحدث Google الخاص به. تمت إعادة تحميله.",
       "calendarNotConnected": "Google Calendar غير متصل. أعد ربطه من صفحة حساب Google ثم حاول مرة أخرى.",
-      "calendarFailed": "لم يستجب Google أو رفض التغيير. حاول مرة أخرى بعد قليل."
+      "calendarFailed": "لم يستجب Google أو رفض التغيير. حاول مرة أخرى بعد قليل.",
+      "whatsappNotConnected": "اربط رقم WhatsApp Cloud API من الإعدادات أولًا: تُرسل رسالة واتساب عبر رقم مربوط."
     },
     "picker": {
       "timeZone": "المنطقة الزمنية",

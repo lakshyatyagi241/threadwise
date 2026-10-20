@@ -234,7 +234,7 @@ export class ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
-      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row);
       return this.sendWindow.contactWindow(ctx.orgId, row.id, { tx });
     });
   }
@@ -340,7 +340,7 @@ export class ContactsService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('Contact', uuid);
       const { scope } = this.rbac.can(ctx.grants!, 'record.contacts.read');
-      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, scope, ctx.userId!, row);
       // Restricted processing (BL-295): opening a contact under a legal hold is allowed (the business keeps serving the customer), and is
       // logged. The response is the same for everyone; whether a hold exists is shown only to readers of the register.
       const held = await tx.execute(
@@ -1286,14 +1286,7 @@ export class ContactsService {
       if (!existing) throw AppError.notFound('Contact', uuid);
       const canRevealPhone = this.rbac.can(ctx.grants!, 'contacts.phone.reveal').allowed;
       const updateScope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.repo,
-        ctx.orgId,
-        updateScope,
-        ctx.userId!,
-        existing.ownerId,
-      );
+      await assertContactScope(tx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
       const values: Record<string, unknown> = { updatedBy: ctx.userId };
       if (input.name !== undefined) values.name = input.name;
@@ -1549,14 +1542,7 @@ export class ContactsService {
       if (!existing) throw AppError.notFound('Contact', uuid);
       await this.repo.lockById(tx, ctx.orgId, existing.id);
       const deleteScope = this.rbac.can(ctx.grants!, 'record.contacts.delete').scope;
-      await assertContactScope(
-        tx,
-        this.repo,
-        ctx.orgId,
-        deleteScope,
-        ctx.userId!,
-        existing.ownerId,
-      );
+      await assertContactScope(tx, this.repo, ctx.orgId, deleteScope, ctx.userId!, existing);
 
       // The history first, in the same transaction: the conversations are found through the contact link, which the delete below
       // clears. A call that loses the race below rolls this back with it.
@@ -1689,7 +1675,7 @@ export class ContactsService {
       const contact = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!contact) throw AppError.notFound('Contact', uuid);
       const readScope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(tx, this.repo, ctx.orgId, readScope, ctx.userId!, contact.ownerId);
+      await assertContactScope(tx, this.repo, ctx.orgId, readScope, ctx.userId!, contact);
 
       const { items, nextCursor, hasMore } = await this.audit.listByRecord(
         tx,
@@ -1756,14 +1742,7 @@ export class ContactsService {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
-        await assertContactScope(
-          rowTx,
-          this.repo,
-          ctx.orgId,
-          updateScope,
-          ctx.userId!,
-          existing.ownerId,
-        );
+        await assertContactScope(rowTx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
         if (ownerId !== existing.ownerId) {
           await this.assertOwnerAllowed(rowTx, 'record.contacts.update', ownerId);
@@ -1832,14 +1811,7 @@ export class ContactsService {
       return this.forEachRowIsolated(tx, ctx.orgId, input.ids, async (rowTx, id, uuid) => {
         const existing = await this.repo.findById(rowTx, ctx.orgId, id);
         if (!existing) throw AppError.notFound('Contact');
-        await assertContactScope(
-          rowTx,
-          this.repo,
-          ctx.orgId,
-          updateScope,
-          ctx.userId!,
-          existing.ownerId,
-        );
+        await assertContactScope(rowTx, this.repo, ctx.orgId, updateScope, ctx.userId!, existing);
 
         const values: Record<string, unknown> = { updatedBy: ctx.userId };
         if (input.values.ownerId !== undefined) {

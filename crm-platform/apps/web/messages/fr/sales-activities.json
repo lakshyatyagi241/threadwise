@@ -73,13 +73,11 @@
       "allowEditCompleted": "Autoriser les utilisateurs à modifier la date et l’heure de fin de cette activité",
       "taskTypes": "Types de tâche",
       "taskTypesHint": "Choisissez-en un à la création d’une tâche, par exemple Relance ou Rappel d’appel.",
-      "addTaskType": "Ajouter un type de tâche",
+      "addTaskType": "Ajouter un type",
       "taskTypePlaceholder": "Nouveau type de tâche",
       "predictOutcomes": "Prévoir les résultats de cette activité",
       "predictOutcomesHint": "Proposer un résultat à la fin de l’activité.",
       "outcomes": "Résultats",
-      "taskOutcomesHint": "Les résultats d’une tâche terminée forment une seule liste pour tout l’espace de travail, tenue dans Résultats des tâches.",
-      "taskOutcomesLink": "Ouvrir Résultats des tâches",
       "outcomesHint": "Supprimer un résultat le conserve sur les éléments qui l’ont déjà.",
       "phoneOutcomesHint": "Choisissez comment chaque résultat compte dans les rapports d’appels. Supprimer un résultat le conserve sur les appels qui l’ont déjà.",
       "addOutcome": "Ajouter un résultat",
@@ -112,7 +110,12 @@
         "conflict": "Quelqu’un d’autre a modifié cette activité. Elle a été rechargée, réessayez.",
         "forbidden": "Vous n’avez pas l’autorisation de modifier ceci.",
         "failed": "Enregistrement impossible. Réessayez."
-      }
+      },
+      "itemName": "Nom",
+      "hiddenInstead": "Des tâches l’utilisent encore, il a donc été masqué à la place. Elles continuent de l’afficher.",
+      "loadingOutcomes": "Chargement des résultats…",
+      "outcomesLoadFailed": "Impossible de charger les résultats.",
+      "retry": "Réessayer"
     },
     "create": {
       "title": "Créer une activité",

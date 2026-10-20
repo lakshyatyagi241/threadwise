@@ -339,7 +339,7 @@ export class AttributesService {
         const ref = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, input.contactId);
         if (!ref) throw AppError.notFound('Contact', input.contactId);
         const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-        await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref.ownerId);
+        await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref);
         const columns = await this.repo.contactForMerge(tx, ctx.orgId, ref.id);
         const chips = await this.contactsRepo.groupChips(tx, ctx.orgId, [ref.id]);
         contact = { ...columns!, groups: chips.map((c) => c.name) };

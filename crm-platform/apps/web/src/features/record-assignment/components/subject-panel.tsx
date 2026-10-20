@@ -49,7 +49,10 @@ function PanelBody({
     [people.data],
   );
   const teamOptions = useMemo<PoolOption[]>(
-    () => (teams.data ?? []).map((x) => ({ value: x.id, label: x.name })),
+    () =>
+      (teams.data ?? [])
+        .filter((x) => x.receivesRecords !== false)
+        .map((x) => ({ value: x.id, label: x.name })),
     [teams.data],
   );
   const nameOfPerson = (id: string) =>

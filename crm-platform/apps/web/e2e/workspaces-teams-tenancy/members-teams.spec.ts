@@ -105,7 +105,11 @@ test.afterAll(async ({ browser }) => {
   }
 });
 
-test.describe('Team members', () => {
+// Teams v2 (BL-381) folded this screen into Settings > Team members (`/settings/team`): `/team-members` now redirects there, and the
+// invite dialog, the inline role select and the row icons of the old screen are gone (the roles screen has Add member, Change role,
+// Deactivate and a More menu). These specs drive the old screen, so they are skipped until they are rewritten against the new one;
+// the same flows are covered by apps/api/test/e2e/workspaces-teams-tenancy and the browser pass recorded in the Teams v2 PR.
+test.describe.skip('Team members (old /team-members screen)', () => {
   test.beforeEach(async ({ page }) => {
     await signIn(page, ADMIN);
   });
@@ -277,7 +281,7 @@ test.describe('Teams', () => {
     await signIn(page, ADMIN);
   });
 
-  test('creates a team with a colour, a strategy and a member', async ({ page }) => {
+  test('creates a team with a colour and a member', async ({ page }) => {
     await open(page, '/teams');
     await expect(page.getByRole('heading', { name: 'Teams', exact: true })).toBeVisible();
     await page.getByTestId('create-team').first().click();
@@ -290,13 +294,12 @@ test.describe('Teams', () => {
       'aria-pressed',
       'true',
     );
-    await dialog.getByLabel('Auto-assignment strategy').selectOption('round_robin');
     await dialog.getByTestId('team-members').getByRole('checkbox').first().check();
     await expect(dialog.getByTestId('team-devices')).toHaveCount(0);
     await dialog.getByTestId('save-team').click();
     await expect(page.getByText('Team created.')).toBeVisible();
     const card = page.getByTestId(`team-card-${TEAM.name}`);
-    await expect(card).toContainText('Round robin');
+    await expect(card).toContainText('No manager');
     await expect(card).toContainText('1 member');
   });
 
@@ -342,14 +345,8 @@ test.describe('Teams', () => {
 });
 
 test.describe('An agent', () => {
-  test('can read the members and the teams but has no way to change them', async ({ page }) => {
+  test('can read the teams but has no way to change them', async ({ page }) => {
     await signIn(page, AGENT);
-    await open(page, '/team-members');
-    await expect(page.getByRole('heading', { name: 'Team members' })).toBeVisible();
-    await expect(row(page, AGENT.email)).toBeVisible();
-    await expect(page.getByTestId('invite-button')).toHaveCount(0);
-    await expect(page.locator('[data-testid^="role-select-"]')).toHaveCount(0);
-    await expect(page.locator('[data-testid^="remove-"]')).toHaveCount(0);
     await open(page, '/teams');
     await expect(page.getByRole('heading', { name: 'Teams', exact: true })).toBeVisible();
     await expect(page.getByTestId('create-team')).toHaveCount(0);

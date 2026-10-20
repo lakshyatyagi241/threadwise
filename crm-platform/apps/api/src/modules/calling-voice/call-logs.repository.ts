@@ -3,6 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { CallLogDirection, CallLogSource, CallLogStatus, RecordScope } from '@crm/contracts';
 import { likePattern, phoneSearch } from './call-logs.rules';
+import { scopeOwnerCondition } from '../../kernel/rbac/scope';
 
 type Row = Record<string, unknown>;
 const rowsOf = (res: unknown): Row[] => (res as { rows: Row[] }).rows;
@@ -88,13 +89,10 @@ const FROM = sql`FROM wa_calls w
 
 /** Whose calls the viewer may read. `all`: every call of the workspace. `own`: the ones they handled. `team`: theirs and their teammates'. */
 export function scopeClause(v: Viewer): SQL | null {
-  if (v.scope === 'all') return null;
-  if (v.userId === null) return sql`false`;
-  if (v.scope === 'own') return sql`w.handler_user_id = ${v.userId}`;
-  return sql`(w.handler_user_id = ${v.userId} OR w.handler_user_id IN (
-    SELECT tm2.user_id FROM team_members tm1
-    JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-    WHERE tm1.org_id = ${v.orgId} AND tm1.user_id = ${v.userId}))`;
+  return (
+    scopeOwnerCondition({ orgId: v.orgId, userId: v.userId }, v.scope, sql`w.handler_user_id`) ??
+    null
+  );
 }
 
 const and = (parts: Array<SQL | null | undefined | false | ''>): SQL => {

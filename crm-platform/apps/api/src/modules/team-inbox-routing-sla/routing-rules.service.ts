@@ -461,11 +461,17 @@ export class RoutingRulesService {
         );
       }
     }
-    const teams = await this.repo.teams(tx, orgId, assign.teamIds);
+    const teams = await this.repo.teams(tx, orgId, assign.teamIds, { receivingOnly: true });
     if (assign.teamIds.some((t) => !teams.has(t))) {
-      throw AppError.validation('That team is not part of this workspace.', [
-        { path: 'assign.teamIds', message: 'That team is not part of this workspace.' },
-      ]);
+      throw AppError.validation(
+        'That team is not part of this workspace, or it is set not to receive conversations.',
+        [
+          {
+            path: 'assign.teamIds',
+            message: 'Unknown team, or one that does not receive conversations.',
+          },
+        ],
+      );
     }
   }
 }

@@ -143,7 +143,9 @@ export class MembersService {
           tier: me.tier,
           canInvite: this.rbac.can(grants, 'org.member.invite').allowed,
           canAssignRoles: this.rbac.can(grants, 'org.member.role_assign').allowed,
-          canManageTeams: this.rbac.can(grants, 'inbox.team.manage').allowed,
+          canManageTeams:
+            this.rbac.can(grants, 'team.manage').allowed ||
+            this.rbac.can(grants, 'inbox.team.manage').allowed,
         },
       };
     });

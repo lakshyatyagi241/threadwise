@@ -85,5 +85,7 @@ export const teamOptionSchema = z.object({
   id: z.string(),
   name: z.string(),
   members: z.array(z.unknown()).optional(),
+  /** Teams v2: false = the team is not a record assignment pool. Absent on older servers, which means it is. */
+  receivesRecords: z.boolean().optional(),
 });
 export type TeamOption = z.infer<typeof teamOptionSchema>;

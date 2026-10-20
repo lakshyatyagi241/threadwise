@@ -106,7 +106,9 @@
       "leaveAction": "Congés et suppléance",
       "noLimit": "Aucune limite",
       "neverSignedIn": "Jamais",
-      "editAction": "Modifier le téléphone et la limite de chats"
+      "editAction": "Modifier le téléphone et la limite de chats",
+      "moreAction": "Plus",
+      "moreLabel": "Plus d'actions pour {name}"
     },
     "invite": {
       "eyebrow": "Espace de travail",
@@ -148,12 +150,10 @@
       "eyebrow": "Espace de travail",
       "title": "Équipes",
       "pageTitle": "Équipes",
-      "subtitle": "Regroupez vos agents par service. Les conversations peuvent être assignées automatiquement par équipe grâce aux règles de routage.",
       "create": "Créer une équipe",
       "edit": "Modifier l’équipe",
       "loading": "Chargement des équipes",
       "emptyTitle": "Aucune équipe pour le moment",
-      "emptyMessage": "Créez une équipe, ajoutez-y vos agents et acheminez-lui les conversations.",
       "emptyAction": "Créer une équipe",
       "members": "{count, plural, =0 {Aucun membre} one {# membre} other {# membres}}",
       "online": "{count} en ligne",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Fonctionnement des équipes",
       "how": {
-        "one": "Nommez une équipe (par exemple Ventes), choisissez une couleur et ajoutez-y vos agents.",
-        "two": "Vous pouvez l’utiliser de trois façons : assigner une conversation à l’équipe manuellement, acheminer les nouvelles conversations vers elle grâce à une règle de routage, ou consulter ses performances dans les analyses.",
-        "three": "La couleur de l’équipe est celle de la pastille dans la file de la boîte de réception, pour distinguer d’un coup d’œil les conversations de chaque équipe."
+        "one": "Nommez une équipe (par exemple Ventes), choisissez une couleur et ajoutez les personnes qui travaillent ensemble.",
+        "two": "Utilisez-la pour les conversations (router les nouveaux chats vers elle, ou attribuer un chat manuellement), pour les enregistrements (attribuer contacts, entreprises et affaires à ses membres) et pour les rapports.",
+        "three": "Un responsable est la personne qui dirige l'équipe. Une équipe parente place l'équipe sous une autre, ce qui permet de construire une arborescence comme Ventes et Ventes Ouest.",
+        "four": "L'équipe principale d'une personne est son équipe de référence, conservée pour les rapports (les rapports l'utiliseront dans une prochaine version). Le routage, l'attribution et la visibilité utilisent toutes les équipes de la personne."
       },
       "created": "Équipe créée.",
       "updated": "Équipe mise à jour.",
@@ -178,9 +179,47 @@
       "updateFailed": "Échec de la mise à jour : {reason}",
       "deleteFailed": "Échec de la suppression : {reason}",
       "deleteTitle": "Supprimer cette équipe ?",
-      "deleteMessage": "Supprimer l’équipe « {name} » ? Les conversations assignées à cette équipe seront désassignées.",
+      "deleteMessage": "Supprimer l'équipe \"{name}\" ? Ses membres restent dans l'espace de travail. L'équipe sera retirée de tous les endroits où elle est utilisée actuellement.",
       "deleteConfirm": "Supprimer l’équipe",
-      "delete": "Supprimer l’équipe"
+      "delete": "Supprimer l’équipe",
+      "subtitle": "Les équipes regroupent des personnes pour les conversations, les attributions et les rapports.",
+      "emptyMessage": "Créez une équipe et ajoutez les personnes qui travaillent ensemble. Vous pouvez lui router des conversations et attribuer des contacts, des entreprises et des affaires à ses membres.",
+      "noAccess": "Vous n'avez pas l'autorisation de voir les équipes. Demandez la permission team.read à un propriétaire ou administrateur de l'espace de travail.",
+      "manager": "Responsable : {name}",
+      "noManager": "Aucun responsable",
+      "receivesConversations": "Conversations",
+      "receivesRecords": "Enregistrements",
+      "primaryCount": "{count, plural, one {# l'a comme équipe principale} other {# l'ont comme équipe principale}}",
+      "usedBy": "Utilisée par",
+      "usedByNone": "Pas encore utilisée par une règle",
+      "usage": {
+        "routingRules": "{count, plural, one {# règle de routage} other {# règles de routage}}",
+        "assignmentRules": "{count, plural, one {# règle d'attribution} other {# règles d'attribution}}",
+        "segmentShares": "{count, plural, one {# segment partagé} other {# segments partagés}}",
+        "conversations": "{count, plural, one {# conversation} other {# conversations}}",
+        "childTeams": "{count, plural, one {# sous-équipe} other {# sous-équipes}}"
+      },
+      "notUsed": {
+        "title": "Enregistré, pas encore utilisé",
+        "body": "Ces paramètres sont enregistrés sur l'équipe, mais rien ne les lit encore. Ils s'appliqueront avec la mise à jour du routage.",
+        "strategy": "Stratégie d'attribution automatique : {value}",
+        "devices": "{count, plural, one {Limité à # appareil} other {Limité à # appareils}}",
+        "businessHours": "Heures d'ouverture : enregistrées",
+        "timezone": "Fuseau horaire : {value}",
+        "defaultAssignee": "Responsable par défaut : {name}"
+      },
+      "deleteUsage": {
+        "title": "Ce qui va changer",
+        "loading": "Vérification des endroits où cette équipe est utilisée...",
+        "failed": "Impossible de vérifier où cette équipe est utilisée. Vous pouvez quand même la supprimer.",
+        "nothing": "Rien d'autre n'utilise cette équipe.",
+        "members": "{count, plural, one {# personne quitte l'équipe} other {# personnes quittent l'équipe}}",
+        "routingRules": "{count, plural, one {# règle de routage perd cette équipe comme cible ; une règle qui n'a plus rien à faire est désactivée} other {# règles de routage perdent cette équipe comme cible ; une règle qui n'a plus rien à faire est désactivée}}",
+        "assignmentRules": "{count, plural, one {# règle d'attribution d'enregistrements perd cette équipe de son groupe} other {# règles d'attribution d'enregistrements perdent cette équipe de leur groupe}}",
+        "segmentShares": "{count, plural, one {# segment n'est plus partagé avec cette équipe} other {# segments ne sont plus partagés avec cette équipe}}",
+        "conversationsAssigned": "{count, plural, one {# conversation attribuée à cette équipe garde sa place et n'a plus d'équipe} other {# conversations attribuées à cette équipe gardent leur place et n'ont plus d'équipe}}",
+        "peopleWithReachChange": "{count, plural, one {# personne verra moins d'enregistrements de ses collègues avec l'accès par équipe} other {# personnes verront moins d'enregistrements de leurs collègues avec l'accès par équipe}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Espace de travail",
@@ -192,13 +231,6 @@
       "nameTooLong": "Le nom peut comporter au maximum {max} caractères.",
       "color": "Couleur",
       "colorOption": "Couleur {color}",
-      "strategy": "Stratégie d’assignation automatique",
-      "strategyOptions": {
-        "manual": "Manuel — un responsable choisit le destinataire",
-        "round_robin": "Tour de rôle — répartition égale",
-        "least_loaded": "Charge la plus faible — le moins de conversations ouvertes d’abord",
-        "sticky": "Fidélisation — dernier agent ayant répondu à ce contact"
-      },
       "members": "Membres",
       "membersLoading": "Chargement des membres",
       "membersFailed": "Les membres n’ont pas pu être chargés.",
@@ -209,7 +241,28 @@
       "create": "Créer une équipe",
       "creating": "Création…",
       "save": "Enregistrer les modifications",
-      "saving": "Enregistrement…"
+      "saving": "Enregistrement…",
+      "hint": "Les équipes regroupent des personnes pour les conversations, les attributions et les rapports. Choisissez un responsable, une équipe parente facultative et ce que l'équipe peut recevoir.",
+      "description": "Description",
+      "descriptionPlaceholder": "Ce que fait cette équipe (facultatif)",
+      "lead": "Responsable",
+      "leadNone": "Aucun responsable",
+      "leadHint": "La personne qui dirige l'équipe. Elle y est ajoutée comme lead.",
+      "parent": "Équipe parente",
+      "parentNone": "Aucune (niveau supérieur)",
+      "parentHint": "Placez cette équipe sous une autre pour construire une arborescence, jusqu'à 5 niveaux de profondeur.",
+      "receive": "Peut recevoir",
+      "receiveHint": "Où cette équipe peut être choisie. Désactivez une option pour exclure l'équipe de ces sélecteurs.",
+      "receiveConversations": "Conversations (routage et attribution de la boîte de réception)",
+      "receiveRecords": "Enregistrements (contacts, entreprises et affaires)",
+      "membersHint": "Cochez les personnes de cette équipe. Indiquez les leads et choisissez l'équipe principale de chaque personne.",
+      "leadFlag": "Lead",
+      "leadToggle": "Définir comme lead de cette équipe",
+      "leadLocked": "Le responsable est toujours lead",
+      "primaryFlag": "Principale",
+      "primaryToggle": "Définir comme équipe principale de la personne",
+      "primaryLocked": "La seule équipe d'une personne est toujours son équipe principale",
+      "primaryHint": "L'équipe principale d'une personne est son équipe de référence, conservée pour les rapports (les rapports l'utiliseront dans une prochaine version). Le routage, l'attribution et la visibilité utilisent toutes ses équipes."
     },
     "errors": {
       "network": "La connexion a été interrompue. Vérifiez-la et réessayez.",
@@ -238,7 +291,10 @@
       "delegateInvalid": "Le suppléant doit être un autre membre actif de cet espace de travail.",
       "delegateCycle": "Cela créerait une boucle : la personne choisie a déjà cette personne comme suppléante.",
       "reassignInvalid": "Rien n’a pu être réattribué. Vérifiez que la personne possède des contacts ou des affaires ouvertes et que la cible peut les prendre.",
-      "reassignNotRestorable": "Cette réattribution ne peut plus être annulée."
+      "reassignNotRestorable": "Cette réattribution ne peut plus être annulée.",
+      "teamParentCycle": "Une équipe ne peut pas être placée sous elle-même ni sous l'une de ses propres sous-équipes.",
+      "teamParentInvalid": "Cette équipe parente n'est pas disponible, ou l'arborescence dépasserait 5 niveaux.",
+      "teamNotOnTeam": "Cette personne ne fait pas partie de cette équipe."
     },
     "accept": {
       "title": "Rejoignez votre espace de travail",
@@ -358,6 +414,26 @@
       "offline": "Hors ligne",
       "hint": "Tant que vous êtes hors ligne, aucun nouveau chat ne vous est attribué automatiquement. Les chats que vous avez déjà restent à vous.",
       "failed": "Modification impossible"
+    },
+    "deactivate": {
+      "eyebrow": "Membres de l'équipe",
+      "title": "Désactiver le membre",
+      "message": "{name} ne pourra plus se connecter. Vous pouvez le réactiver à tout moment.",
+      "loading": "Vérification de ce qu'il détient",
+      "previewFailed": "Impossible de vérifier ce que cette personne détient. Vous pouvez quand même la désactiver ; son travail lui reste attribué.",
+      "holds": "{name} possède {contacts, plural, one {# contact} other {# contacts}}, {deals, plural, one {# affaire ouverte} other {# affaires ouvertes}} et {chats, plural, one {# conversation ouverte} other {# conversations ouvertes}}. Que faire de ces éléments ?",
+      "optLead": "Les confier au responsable de l'équipe, {name} ({team})",
+      "optLeadNone": "Les confier au responsable de l'équipe (cette personne n'a pas de responsable d'équipe actif)",
+      "optPerson": "Les confier à une personne",
+      "pickPerson": "Personne",
+      "pickPlaceholder": "Choisir une personne",
+      "optLeave": "Les laisser à {name}",
+      "undoNote": "Les contacts et les affaires ouvertes peuvent être restaurés pendant 14 jours depuis l'historique de réattribution. Les conversations ouvertes sont réattribuées une par une.",
+      "nothing": "{name} ne possède aucun contact, aucune affaire ouverte ni aucune conversation ouverte.",
+      "membership": "Ses appartenances aux équipes sont conservées : réactiver {name} le replace dans ses équipes.",
+      "confirm": "Désactiver",
+      "moved": "{contacts, plural, one {# contact} other {# contacts}}, {deals, plural, one {# affaire} other {# affaires}} et {chats, plural, one {# conversation} other {# conversations}} transférés à {name}.",
+      "remaining": "{count} autres sont encore en attente. Relancez la passation pour les transférer."
     }
   }
 }
