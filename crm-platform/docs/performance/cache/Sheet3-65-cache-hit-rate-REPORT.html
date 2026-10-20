@@ -23,7 +23,7 @@ table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow
 th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
 figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
 svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
-.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
+.warn{color:var(--warn)}.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
 code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 @media print{body{font-size:11pt}main{max-width:none}table,figure,.box,.tile{break-inside:avoid}h2{break-after:avoid}}
 </style>
@@ -34,7 +34,7 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <header>
 <h1>Cache hit-rate monitoring</h1>
 <p><span class="badge partly">Partly met: In process</span> &nbsp; Sheet3 item #65 &middot; P2 &middot; effort 5</p>
-<p class="meta">Owner: Vedant &middot; Date: 2026-10-20 &middot; Branch: <code>vedant/perf/cache-hit-rate</code> &middot; Commit: <code>__COMMIT__</code> &middot; PR: none (local branch, not pushed)</p>
+<p class="meta">Owner: Vedant &middot; Date: 2026-10-20 &middot; Branch: <code>vedant/perf/cache-hit-rate</code> &middot; Commit: <code>ddf31ff29 (code; the report is committed after it)</code> &middot; PR: none (local branch, not pushed)</p>
 <blockquote>Sheet target, word for word: "100% critical async/cache paths instrumented, bounded and failure-tested"</blockquote>
 </header>
 
@@ -45,13 +45,13 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <div class="tile"><b>35</b><span>new automated tests, plus 4 promtool rule tests</span></div>
 <div class="tile"><b>17 ns</b><span>cost of one counter call; real cache calls differ by under 30 ns (inside the noise)</span></div>
 </div>
-<p><strong>Verdict: Partly met.</strong> Every cache that has a server-side lookup (52 of 52) is counted, bounded and failure-tested. Six caches (browser, Next.js internals, one proxy memo) cannot be counted from the server, and 11 are not caches in the counting sense. Of the 20 P0 caches whose hit ratio is a useful signal, all 20 are covered by the alert. The "async" half of the target (job queues) is not part of this task: queue depth and age already have their own metrics (<code>crm_queue_*</code>) and were not re-tested here.</p>
+<p><strong>Verdict: Partly met.</strong> Every cache that has a server-side lookup (52 of 52) is counted, bounded and failure-tested. Six caches (browser, Next.js internals, one proxy memo) cannot be counted from the server, and 11 are not caches in the counting sense. Of the P0 caches, 18 whose hit ratio is a useful signal (19 metric names) are covered by the hit-ratio alert; the other P0 and all P1 caches are counted and recorded but do not page, because a low ratio is normal for them (tombstones, idempotency replays, verdicts that are only cached when positive). The "async" half of the target (job queues) is not part of this task: queue depth and age already have their own metrics (<code>crm_queue_*</code>) and were not re-tested here.</p>
 <p>No production hit rate is known. This task proves the instrumentation works. It does not measure how well the caches work in production.</p>
 <div class="box"><strong>Decisions needed from you</strong>
 <ol>
 <li>Alert thresholds (hit ratio under 50 % for 15 min with more than 0.2 lookups/s; error ratio over 5 %) are first guesses. Agree to tune them after about two weeks of real data.</li>
 <li>Browser caches (TanStack Query, localStorage) would need a "beacon" endpoint to be counted. That is a new public surface: do you want it? Default: no.</li>
-<li>Edits touch 33 files owned by Lakshya or Punya (1 to 12 lines each, counter calls only). Tell them before merging.</li>
+<li>Edits touch 33 files owned by Lakshya (24) or Punya (9) (1 to 12 lines each, counter calls only). Tell them before merging.</li>
 </ol></div>
 
 <h2>3. What is this, in plain words</h2>
@@ -80,8 +80,8 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 </svg>
 <figcaption>The real classes are run, the real exposition text is read back, and the expected numbers come from a simulation that does not use the counters.</figcaption></figure>
 <ol>
-<li><strong>Instrument.</strong> One helper, <code>cacheMetrics('name')</code>, in <code>packages/observability</code>. It exposes <code>crm_cache_hits_total</code>, <code>crm_cache_misses_total</code>, <code>crm_cache_errors_total</code> and <code>crm_cache_entries</code> on the existing metrics listener (the one that already serves event-loop and queue series). Rule: an error is counted as an error and also as a miss, because the request went to the source.</li>
-<li><strong>Wire</strong> the helper at each hit/miss point named in the register (52 caches, 53 metric names).</li>
+<li><strong>Instrument.</strong> One helper, <code>cacheMetrics('name')</code>, in <code>packages/observability</code>. It exposes <code>crm_cache_hits_total</code>, <code>crm_cache_misses_total</code>, <code>crm_cache_errors_total</code> and <code>crm_cache_entries</code> on the existing metrics listener (the one that already serves event-loop and queue series). Rule: a backend failure is counted as an error, and most sites also count the miss (the request went to the source). Ratios use lookups = hits + misses + errors, so the error alert still works in a total outage when hits and misses stop.</li>
+<li><strong>Wire</strong> the helper at each hit/miss point named in the register (52 caches, 55 metric names).</li>
 <li><strong>Ratchet.</strong> A test reads the source and the register and fails if a cache has neither a counter call nor a written exemption, if a counter name is computed instead of a literal, or if the alert's cache list drifts from the register. Each rule was also run on deliberately bad input and fails there.</li>
 <li><strong>Behaviour tests</strong> on real classes: one count per lookup (fake Redis, and a private-scope real Redis for the RBAC Lua path), a throwing metrics sink, 10,000 workspaces, ratio workloads.</li>
 <li><strong>Overhead</strong>: the same benchmark file run alternately (5 rounds) on this branch and on its merge-base with <code>origin/main</code>.</li>
@@ -96,7 +96,7 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <desc>Stacked bar. Instrumented 52, exemption not-meaningful 11, exemption not-observable 6.</desc>
 <rect x="10" y="30" width="682" height="34" fill="var(--a)"/><rect x="694" y="30" width="144" height="34" fill="var(--c)"/><rect x="840" y="30" width="50" height="34" fill="var(--b)"/>
 <text x="20" y="52" style="fill:#fff;font-weight:700">Instrumented 52</text>
-<text x="766" y="85" text-anchor="middle">Not meaningful 11</text><text x="866" y="105" text-anchor="middle">Not observable 6</text>
+<text x="766" y="85" text-anchor="middle">Not meaningful 11</text><text x="890" y="105" text-anchor="end">Not observable 6</text>
 <text x="10" y="20" class="m">Share of the 69 registered caches</text>
 </svg>
 <figcaption>52 instrumented (75 %), 11 exempt because a counter would be wrong or empty by design, 6 exempt because a counter cannot be reached from the server. Data: register.json <code>instrumentation</code> fields.</figcaption></figure>
@@ -130,9 +130,10 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <tr><td>F3</td><td>Redis failures were invisible</td><td><span class="chip warn">LOW - closed</span></td><td>About 15 caches swallow Redis errors (<code>.catch(() =&gt; null)</code>) and carry on. That is right for the request but meant a sick Redis showed up only as slowness. They now count an error. RBAC grants had one such swallow without a counter in my first pass; found by the dead-Redis test and fixed.</td><td><code>cache-metrics.spec.ts</code> RBAC test</td></tr>
 <tr><td>F4</td><td>6 caches cannot be counted from the server</td><td><span class="chip warn">LIMIT - open</span></td><td>Q02 React <code>cache()</code>, N01 Next data cache, C01 and C02 TanStack Query, C03 browser storage, N03 frame-policy memo in <code>proxy.ts</code>. N03 could be counted in code but whether the Next proxy bundle shares memory with the bundle serving <code>/metrics</code> was not provable without a production Next build, so no counter was wired rather than claim one.</td><td>ratchet requires a written reason</td></tr>
 <tr><td>F5</td><td>11 caches where a hit ratio means nothing</td><td><span class="chip">INFO</span></td><td>Cache-Control headers (H01 to H05, N02), time-zone memos (M25), throttle markers (M26), in-flight sharing (M27), test-only fallbacks (M28), per-request hand-over (Q01). Reasons are in the register.</td><td>same</td></tr>
+<tr><td>F7</td><td>Independent code review of the diff (9 findings)</td><td><span class="chip warn">LOW to MEDIUM - 8 fixed, 1 noted</span></td><td>Read against the code: (1) CacheErrorRatioHigh would go silent in a total Redis outage because hits and misses stop; rules now use lookups = hits + misses + errors and a promtool case covers an errors-only cache. (2) <code>rbac_version</code> counted one lookup twice; now once. (3) <code>trial_verdict</code> and <code>wallet_send_ok</code> only cache the positive verdict, so their ratio follows traffic, not cache health; removed from the alert. (4) two caches shared one metric name each (rate card, provider snapshots); split into <code>rate_card</code> / <code>meta_rate_card</code> and <code>translation_providers</code> / <code>whatsapp_providers</code>. (5) a Google key lookup that needed a network fetch was counted as a hit; now a miss. (6) flag-style caches read as "low ratio"; documented in the runbook and kept off the alert; a deliberate <code>fresh</code> health bypass and built-in provider keys are no longer counted. (7) <code>crm_cache_entries</code> had no caller; wired for <code>member_directory</code> and <code>wallet_send_ok</code>. (8) test-only helpers moved out of the package index to <code>@crm/observability/testing</code>. (9) Not done: a second "metrics missing" alert for the worker, because whether the worker always loads a counted cache was not verified.</td><td>promtool tests; <code>instrumentation.spec.ts</code></td></tr>
 <tr><td>F6</td><td>Idempotency replays and tombstones have naturally low hit ratios</td><td><span class="chip">INFO</span></td><td>R09, R10, R20, R21, M07 and all P1 caches are counted and recorded but excluded from the hit-ratio alert (<code>hitRatioAlert:false</code>), otherwise it would page on normal traffic.</td><td><code>instrumentation.spec.ts</code> rules sync</td></tr>
 </tbody></table>
-<p class="meta">Counts: 6 findings; 2 fixed defects (F1, F2), 1 gap closed (F3), 3 documented limits or notes. Rule for double counting: R02 (<code>rbac_version</code>) counts each Redis read, so one cold request records 2 misses (fast read, then separate read).</p>
+<p class="meta">Counts: 7 findings; 2 fixed defects (F1, F2), 1 gap closed (F3), 1 review round with 8 fixes and 1 note (F7), 3 documented limits or notes (F4 to F6). Rule for double counting: R02 (<code>rbac_version</code>) counts each Redis read, so one cold request records 2 misses (fast read, then separate read).</p>
 
 <h2>7. Rollout and rollback</h2>
 <p>Metrics only; no behaviour changes in the request path. Steps: deploy the API and worker (counters appear at <code>/metrics</code>); mount <code>cache-hit-rate.rules.yml</code> (already added to <code>prometheus.yml</code> and the Hostinger observability compose file) and reload Prometheus; watch for two weeks; tune thresholds. Rollback: remove the rules file from <code>rule_files</code> and reload; the counters themselves cost about 17 ns per call and can stay.</p>
@@ -146,7 +147,7 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <li>Six browser/Next caches are not counted at all (F4). The web server's <code>/metrics</code> was not scraped; no web file changed.</li>
 <li>Job queues ("async paths") were not re-tested here.</li>
 <li>Real Redis was exercised only for the RBAC Lua path (shared dev Redis, db 13, random workspace ids, own keys removed). Other Redis classes ran against the fake.</li>
-<li>Counters are per process and reset on restart; Prometheus <code>rate()</code> handles resets but the ratio is not per workspace by design.</li>
+<li>The worker was not checked to export the counters (the alert watches the API job only). Counters are per process and reset on restart; Prometheus <code>rate()</code> handles resets but the ratio is not per workspace by design.</li>
 <li>The merged result was tested with the unit suite only; no integration or e2e suite was run (they need Docker databases).</li>
 </ul>
 
@@ -162,20 +163,23 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <h3>Commands run</h3>
 <table><thead><tr><th scope="col">Command</th><th scope="col">Result</th></tr></thead><tbody>
 <tr><td><code>tsc -p tsconfig.json --noEmit</code> (api, observability)</td><td>pass</td></tr>
-<tr><td><code>vitest run test/unit/cache-audit</code></td><td>__CA__</td></tr>
+<tr><td><code>vitest run test/unit/cache-audit</code> (9 files, on the merged result)</td><td>90 of 90 pass</td></tr>
 <tr><td><code>vitest run</code> in packages/observability</td><td>5 of 5 pass</td></tr>
 <tr><td>promtool check rules (4 files) and test rules</td><td>SUCCESS (cache-hit-rate: 7 rules; tests pass; one test first failed on a wrong expected label, fixed)</td></tr>
 <tr><td>eslint on changed files</td><td>0 errors (2 pre-existing warnings in <code>checks.ts</code>)</td></tr>
 <tr><td>prettier --check</td><td>changed code passes; <code>register.json</code> and <code>ai-crm-copilot.service.ts</code> were already unformatted before this change and were left as is</td></tr>
-<tr><td>Full API unit suite</td><td>__FULL__</td></tr>
-<tr><td>Flakiness: new specs 5 runs each</td><td>__FLAKY__</td></tr>
+<tr><td>Full API unit suite (before the review fixes, merged with main at that time)</td><td>12,668 tests: 12,643 pass, 11 fail, 14 skipped. The same 11 test names fail on a pristine <code>origin/main</code> worktree (launcher, legacy-embed, health, quick-access, editor-field-seam, google-capabilities, boundaries.matrix, s3-sigv4, redis-hygiene x2, route-permission-coverage, storage-writes-guarded); none is caused by this branch</td></tr>
+<tr><td>Neighbour folders of every touched module (30 folders, 4,728 tests), after the review fixes and the final merge</td><td>4,721 pass, 5 fail: health, quick-access, redis-hygiene x2, route-permission-coverage, all in the pre-existing list above</td></tr>
+<tr><td><code>pnpm audit:authz</code>, <code>audit:auth</code></td><td>ran; report written under <code>reports/</code>. <code>audit:tenancy</code> says NO-GO for new <code>privileged()</code> and <code>sql.raw</code> sites: this diff adds none (0 added lines match), so it comes from other work on main; not re-run on main. <code>pnpm audit --prod</code>: 5 vulnerabilities (3 moderate, 2 high), dependency files untouched by this branch. Secret scan of added lines: nothing found (manual grep; gitleaks not run)</td></tr>
+<tr><td>merge-tree against <code>origin/vedant/qa/concurrency</code></td><td>no conflicts</td></tr>
+<tr><td>Flakiness: the 4 new api spec files, 5 runs each (30 tests per run)</td><td>5 of 5 green; the observability spec ran green each time it was run</td></tr>
 </tbody></table>
 <h3>Files changed, by area</h3>
 <ul>
 <li>Helper: <code>packages/observability/src/cache-metrics.ts</code> (new), <code>index.ts</code>, <code>prometheus-text.ts</code> (export + <code>add()</code>), <code>runtime-monitor.ts</code> (2 lines).</li>
 <li>Rules and docs: <code>deploy/observability/cache-hit-rate.rules.yml</code> and <code>.test.yml</code>, <code>prometheus.yml</code>, <code>deploy/hostinger/observability.compose.yml</code>, <code>docs/runbooks/cache-hit-rate.md</code>, <code>docs/performance/cache/register.json</code>, <code>hit-rate-measurements.json</code>.</li>
 <li>Tests: five spec/check files in <code>apps/api/test/unit/cache-audit/</code> and one in the observability package.</li>
-<li>Counter calls in 56 API files. In Lakshya's zones (23): auth guard and services, plans, wallet billing, localization, payment gateways, health, api docs, addons registry, roles. In Punya's zones (9): appointments-booking, channel-email, channel-sms, ai-copilot, storefront checkout. In shared kernel or unowned areas (the rest): rbac, idempotency, display ids, member directory, analytics, consent, notifications, persona, webhook fan-out, knowledge base, provider registry.</li>
+<li>Counter calls in 56 API files. In Lakshya's zones (24): auth guard and services, plans, wallet billing, localization, payment gateways, health, api docs, addons registry, roles. In Punya's zones (9): appointments-booking, channel-email, channel-sms, ai-copilot, storefront checkout. In shared kernel or unowned areas (the rest): rbac, idempotency, display ids, member directory, analytics, consent, notifications, persona, webhook fan-out, knowledge base, provider registry.</li>
 </ul>
 <h3>Environment</h3>
 <p>Linux laptop, Node v22.22.2, vitest 2.1.9, promtool from <code>prom/prometheus:v2.55.0</code>. A private Redis container (random name) and the shared dev Redis db 13 were used; both left clean. No shared container was stopped or reconfigured. Not pushed; no PR; no sheet edited.</p>
