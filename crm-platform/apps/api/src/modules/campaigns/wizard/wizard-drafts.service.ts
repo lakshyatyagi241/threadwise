@@ -77,6 +77,8 @@ export class WizardDraftsService {
     const draft = wizardDraftSchema.parse(input);
 
     const row = await this.db.tx(async (tx) => {
+      await this.plan.lockCap(tx, orgId);
+      await this.plan.assertWithinCap(orgId, await this.campaigns.count(tx, orgId));
       const templateId = await this.checked(tx, orgId, draft);
       const provider = await this.senders.defaultEngine(tx, orgId);
       const id = await this.campaigns.insert(

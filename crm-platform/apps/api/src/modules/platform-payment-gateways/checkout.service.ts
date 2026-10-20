@@ -746,6 +746,21 @@ export class CheckoutService {
     };
   }
 
+  private async assertCouponUseFree(tx: Tx, couponId: number, key: string | null): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`coupon-use:${couponId}`}, 0))`,
+    );
+    const { maxUses, taken } = await this.coupons.usesTaken(couponId, key);
+    if (maxUses === null || taken < maxUses) return;
+    const message = 'This coupon is fully used.';
+    throw new AppError(
+      ERROR_CODES.PAYGW_COUPON_REJECTED,
+      message,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [{ path: 'coupon', message }],
+    );
+  }
+
   private async insertOrder(
     orgId: number,
     userId: number,
@@ -769,6 +784,9 @@ export class CheckoutService {
       const returnToken = randomUUID().replace(/-/g, '');
       try {
         return await this.db.tx(async (tx) => {
+          // One buyer at a time per coupon from here to the commit, so the last uses cannot be handed out twice (QA Sheet3 #15, D-06).
+          if (coupon?.ok && coupon.couponId !== null)
+            await this.assertCouponUseFree(tx, coupon.couponId, idempotencyKey ?? null);
           const order = await this.orders.insert(tx, {
             orgId,
             userId,

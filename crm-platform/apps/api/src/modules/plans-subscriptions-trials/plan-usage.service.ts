@@ -425,6 +425,23 @@ export class PlanUsageService {
   }
 
   /**
+   * `assertCanAdd` for a creator that has its own transaction: takes the per-workspace, per-limit lock FIRST and counts inside that
+   * transaction, so N parallel creates at the cap minus one cannot all pass (QA Sheet3 #15, D-05). Call it as the first statement of
+   * the transaction that inserts the row; the lock lasts until that transaction ends.
+   */
+  async assertCanAddIn(tx: Tx, orgId: number, key: PlanLimitKey, now = new Date()): Promise<void> {
+    if (NOT_A_ROW_COUNT.has(key)) {
+      throw new Error(`assertCanAddIn does not apply to ${key}`);
+    }
+    const cap = await this.entitlements.limit(orgId, key);
+    if (cap === 0) return;
+    await this.entitlements.lockLimit(tx, orgId, key);
+    const meter = METERS.find((m) => m.key === key)!;
+    const used = await meter.count(tx, orgId, monthStart(now), nextMonthStart(now));
+    await this.entitlements.assertWithinLimit(orgId, key, used);
+  }
+
+  /**
    * `broadcast_recipients`: the audience of ONE broadcast may not be bigger than the cap (0 = unlimited, override -1 = unlimited). Same 422
    * shape as the row caps; `used` is the audience size that was asked for.
    */

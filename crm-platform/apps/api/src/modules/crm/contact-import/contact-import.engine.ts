@@ -370,6 +370,7 @@ export class ContactImportEngine {
       else reject(r.line, r.reason, r.values);
     }
     if (valid.length === 0) return;
+    if (state.remaining !== null) state.remaining = await this.quota.remainingLocked(tx, orgId);
 
     // 2. who already exists
     const keys = [...new Set(valid.map((r) => r.phone))].filter((k) => !state.fileMap.has(k));

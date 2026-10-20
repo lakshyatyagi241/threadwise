@@ -569,6 +569,7 @@ export class BookingService {
   private async assertPlanCap(tx: Tx, orgId: number, startMs: number): Promise<void> {
     const cap = await this.plan.cap(orgId);
     if (cap === 0) return;
+    await this.plan.lockCap(tx, orgId);
     const tz = await this.slots.orgTimezone(tx, orgId);
     const { startMs: from, endMs: to } = monthBounds(localMonthOf(startMs, tz), tz);
     await this.plan.assertWithinCap(orgId, await this.appts.countInRange(tx, orgId, from, to));

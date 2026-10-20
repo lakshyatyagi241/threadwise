@@ -1,5 +1,6 @@
 import { CanActivate, HttpStatus, Injectable } from '@nestjs/common';
 import { ERROR_CODES, type PlanFeatureKey, type PlanLimitKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import {
@@ -51,6 +52,11 @@ export class AppointmentPlan {
   async assertOffered(orgId: number): Promise<void> {
     if (await this.isEnabled(orgId)) return;
     throw unavailable();
+  }
+
+  /** Serialises bookings per workspace until the caller's transaction ends (QA Sheet3 #15, D-05). */
+  lockCap(tx: Tx, orgId: number): Promise<void> {
+    return this.entitlements.lockLimit(tx, orgId, APPOINTMENT_LIMIT_KEY);
   }
 
   /** 422 PLAN_LIMIT_REACHED when one more booking in that month would pass the plan's cap (0 = unlimited). */

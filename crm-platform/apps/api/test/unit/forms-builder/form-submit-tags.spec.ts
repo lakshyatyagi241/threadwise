@@ -39,7 +39,7 @@ function harness(opts: { existing?: Tag[]; cap?: number; total?: number; raceWin
   const service = Object.create(FormSubmitService.prototype) as FormSubmitService;
   Object.assign(service, {
     tags: { findByNames, insertIfAbsent, countAll, attach },
-    entitlements: { limit },
+    entitlements: { limit, lockLimit: vi.fn(async () => undefined) },
   });
   const run = (names: string[]) =>
     (

@@ -50,6 +50,7 @@ export class LeadSourceDirectoryService implements LeadSourceDirectoryPort {
       const existing = await this.sources.findByExternalRef(tx, orgId, input.externalRef);
       if (existing) return { sourceId: existing.id, sourceUuid: existing.uuid };
 
+      await this.plan.lockSources(tx, orgId);
       await this.plan.assertCanAddSource(orgId, await this.sources.count(tx, orgId));
       // Two installations of one portal in a workspace get distinct names ("IndiaMART", "IndiaMART (2)").
       let name = input.name.slice(0, 120);

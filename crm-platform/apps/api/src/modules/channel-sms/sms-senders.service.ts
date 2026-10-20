@@ -177,6 +177,7 @@ export class SmsSendersService {
       const existing = await this.repo.findByFrom(tx, ctx.orgId, input.fromNumber);
       // The cap is checked only for a NEW sender: updating one never needs a place (TW-SMS-002 rule 6).
       if (!existing) {
+        await this.entitlements.lockLimit(tx, ctx.orgId, 'devices');
         await this.entitlements.assertWithinLimit(
           ctx.orgId,
           'devices',
