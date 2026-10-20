@@ -225,10 +225,26 @@ const PROBES: Probe[] = [
   },
 ];
 
-const USERS = ['A', 'B', 'C', 'D', 'E', 'F'] as const;
+const USERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G'] as const;
 type U = (typeof USERS)[number];
-/** Team membership of the fixture: A,B team 1; C team 2; D teams 1+2; E none; F team 3. */
-const TEAMS: Record<U, number[]> = { A: [1], B: [1], C: [2], D: [1, 2], E: [], F: [3] };
+/** Team membership of the fixture: A,B team 1; C team 2; D teams 1+2; E none; F team 3; G team 4. */
+const TEAMS: Record<U, number[]> = { A: [1], B: [1], C: [2], D: [1, 2], E: [], F: [3], G: [4] };
+/** The hierarchy of the fixture (BL-382): team 3 sits under team 1, team 4 under team 3. Teams 1 and 2 are tops. */
+const PARENT: Record<number, number | null> = { 1: null, 2: null, 3: 1, 4: 3 };
+/** Teams a person reaches at `team_and_below`: their own and every team below, by walking PARENT. */
+const reach = (teams: number[]): Set<number> => {
+  const out = new Set(teams);
+  for (let grew = true; grew;) {
+    grew = false;
+    for (const [t, p] of Object.entries(PARENT)) {
+      if (p !== null && out.has(p) && !out.has(Number(t))) {
+        out.add(Number(t));
+        grew = true;
+      }
+    }
+  }
+  return out;
+};
 
 describe('BL-380 scope characterization (every module, real Postgres)', () => {
   let pg: TestPg;
@@ -252,11 +268,20 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
       idToName.set(ids[u], u);
     }
     const teamIds: Record<number, number> = {};
-    for (const t of [1, 2, 3]) {
+    for (const t of [1, 2, 3, 4]) {
       teamIds[t] = await one(`INSERT INTO teams (org_id, name) VALUES ($1,$2) RETURNING id`, [
         orgId,
         `T${t}`,
       ]);
+    }
+    for (const [t, p] of Object.entries(PARENT)) {
+      if (p !== null) {
+        await pg.owner.query(`UPDATE teams SET parent_team_id = $1 WHERE org_id = $2 AND id = $3`, [
+          teamIds[p],
+          orgId,
+          teamIds[Number(t)],
+        ]);
+      }
     }
     for (const u of USERS) {
       for (const t of TEAMS[u]) {
@@ -277,9 +302,8 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
     if (scope === 'all') return true;
     if (actor === null) return false;
     if (scope === 'own') return values.includes(actor);
-    return values.some(
-      (v) => v !== null && (v === actor || TEAMS[v].some((t) => TEAMS[actor].includes(t))),
-    );
+    const mine = scope === 'team_and_below' ? reach(TEAMS[actor]) : new Set(TEAMS[actor]);
+    return values.some((v) => v !== null && (v === actor || TEAMS[v].some((t) => mine.has(t))));
   };
 
   async function rowsOf(
@@ -348,7 +372,7 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
         cols.map((c, i) => (probe.creatorColumns?.includes(c.c) ? i : -1)).filter((i) => i >= 0),
       );
 
-      for (const scope of ['own', 'team', 'all'] as RecordScope[]) {
+      for (const scope of ['own', 'team', 'team_and_below', 'all'] as RecordScope[]) {
         for (const actor of [...USERS, null] as Array<U | null>) {
           const actorId = actor === null ? null : ids[actor];
           const live = await rowsOf(probe, tableNames, probe.live(orgId, scope, actorId));
@@ -360,7 +384,8 @@ describe('BL-380 scope characterization (every module, real Postgres)', () => {
             `${probe.name} ${scope} as ${actor}: live vs model`,
           ).toEqual([...model].sort((a, b) => a - b));
 
-          if (!probe.legacy) continue;
+          // `team_and_below` is new (BL-382): there is no old SQL to compare it with, only the model above.
+          if (!probe.legacy || scope === 'team_and_below') continue;
           const old = await rowsOf(probe, tableNames, probe.legacy(orgId, scope, actorId));
           if (probe.unchanged) {
             expect(

@@ -232,7 +232,8 @@ export class ContactBulkService {
           scope,
           actorUserId: ctx.userId,
           nextOwnerId: owner.id,
-          inActorTeam: (id) => this.contactsRepo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+          inActorTeam: (id, below) =>
+            this.contactsRepo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
           path: 'ownerId',
         });
       }

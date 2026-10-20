@@ -725,9 +725,27 @@ describe('message feed rollup', () => {
         members.set(o.id, other);
       }
       return [
-        { userId: other, scope: 'all' as const, teamIds: [], readsPersonalMail: false },
-        { userId: o.user, scope: 'all' as const, teamIds: [], readsPersonalMail: false },
-        { userId: other, scope: 'all' as const, teamIds: [], readsPersonalMail: true },
+        {
+          userId: other,
+          scope: 'all' as const,
+          teamIds: [],
+          readsUnassigned: true,
+          readsPersonalMail: false,
+        },
+        {
+          userId: o.user,
+          scope: 'all' as const,
+          teamIds: [],
+          readsUnassigned: true,
+          readsPersonalMail: false,
+        },
+        {
+          userId: other,
+          scope: 'all' as const,
+          teamIds: [],
+          readsUnassigned: true,
+          readsPersonalMail: true,
+        },
       ];
     };
 
@@ -758,7 +776,7 @@ describe('message feed rollup', () => {
             conversationJoins: joined.joins,
             conversationVisible: joined.where,
             bulk: true,
-            contacts: { scope: 'all', userId: v.userId, teamIds: [] },
+            contacts: { scope: 'all', userId: v.userId },
             cost: false,
             hiddenChannelIds: await hiddenChannelIds(tx, o.id, v),
           };

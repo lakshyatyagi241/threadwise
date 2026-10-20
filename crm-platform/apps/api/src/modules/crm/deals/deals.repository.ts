@@ -155,6 +155,8 @@ export interface DealFilter {
   q?: string;
   ownerId?: number;
   unassigned?: boolean;
+  /** The deal's owning team (BL-382). */
+  teamId?: number;
   contactId?: number;
   companyId?: number;
   source?: string;
@@ -190,6 +192,7 @@ export function dealConditions(orgId: number, f: DealFilter, scope?: SQL): SQL[]
   if (f.source) conds.push(sql`d.source = ${f.source}`);
   if (f.ownerId !== undefined) conds.push(sql`d.owner_user_id = ${f.ownerId}`);
   if (f.unassigned) conds.push(sql`d.owner_user_id IS NULL`);
+  if (f.teamId !== undefined) conds.push(sql`d.owning_team_id = ${f.teamId}`);
   if (f.contactId !== undefined) conds.push(sql`d.contact_id = ${f.contactId}`);
   if (f.companyId !== undefined) conds.push(sql`d.company_id = ${f.companyId}`);
   if (f.q) {
@@ -645,8 +648,10 @@ export class DealsRepository {
     orgId: number,
     actorUserId: number,
     ownerId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    return isTeamPeer(tx, orgId, actorUserId, ownerId);
+    return isTeamPeer(tx, orgId, actorUserId, ownerId, below);
   }
 
   /** The workspace's own currency for a pipeline that does not say, and its time zone for reports. */

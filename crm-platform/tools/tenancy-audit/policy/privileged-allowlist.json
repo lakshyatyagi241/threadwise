@@ -588,5 +588,10 @@
     "status": "reviewed",
     "reason": "worker/cron only (no controller reaches it); the privileged step selects or retires rows across tenants, per-row work is scoped by org_id and id or runs under that row's own txAs; markStale is an intentional platform-wide model-change heal",
     "reviewedOn": "2026-10-11"
+  },
+  "modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts": {
+    "status": "reviewed",
+    "reason": "worker only (WorkspacesTeamsTenancyWorkerModule is imported by WorkersModule alone; no controller reaches it); it stamps owning_team_id on contacts, companies, deals and tasks that predate the column, across workspaces by design (BL-382). Every row receives a team of its OWN workspace (owner_primary_team(org_id, owner) filters on the row's org_id), the statements are fixed in code, 500 rows per transaction, and the only job input is a table name looked up in a closed list and an (org_id, id) cursor of integers",
+    "reviewedOn": "2026-10-20"
   }
 }

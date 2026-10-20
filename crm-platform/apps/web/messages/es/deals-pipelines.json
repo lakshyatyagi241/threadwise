@@ -128,7 +128,9 @@
         "list": "Lista"
       },
       "reports": "Informes",
-      "settings": "Ajustes del embudo"
+      "settings": "Ajustes del embudo",
+      "team": "Equipo",
+      "allTeams": "Todos los equipos"
     },
     "kpi": {
       "openPipeline": "Embudo abierto",

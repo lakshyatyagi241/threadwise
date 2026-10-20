@@ -143,7 +143,7 @@
       },
       "total": "Toplam",
       "truncated": "Yalnızca en büyük {count} satır listelenir. CSV özeti aynı satırları içerir.",
-      "teamNote": "İki ekipte olan kişi her ikisinde de sayılır, bu yüzden ekip satırlarının toplamı genel toplamı aşabilir.",
+      "teamNote": "Her kişi yalnızca ana takımı için sayılır, bu yüzden takım satırlarının toplamı genel toplama eşittir. Ana takımı olmayan kişiler “Takım yok” altında listelenir.",
       "productNote": "Faturanın tamamına uygulanan indirimler, kargo ve yuvarlama, satırlara değerleriyle orantılı olarak dağıtılır."
     },
     "aging": {

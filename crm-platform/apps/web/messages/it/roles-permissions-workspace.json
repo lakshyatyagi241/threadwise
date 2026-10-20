@@ -140,7 +140,8 @@
         "keptRole": "{name} resta: non puoi assegnarlo né rimuoverlo.",
         "atLeastOne": "Scegli almeno un ruolo.",
         "save": "Salva ruoli",
-        "reload": "Ricarica"
+        "reload": "Ricarica",
+        "noTeamWarning": "{name} non fa parte di nessun team, quindi dove un ruolo è impostato sull'ambito team vede solo i propri record. Aggiungilo a un team in Impostazioni > Team."
       },
       "teamFilter": {
         "label": "Filtra i membri per team",
@@ -250,8 +251,20 @@
       "lockedHint": "Questo permesso non è ancora disponibile per questo workspace. Si sblocca quando la funzione del piano è attiva o l’app è installata.",
       "scope": {
         "all": "Tutti i record",
-        "own": "Record propri",
-        "team": "Record del mio team"
+        "own": "I miei record",
+        "team": "Record del mio team",
+        "team_and_below": "Il mio team e i sottoteam"
+      },
+      "scopeLegend": "Cosa copre ogni ambito dei record",
+      "scopeHelp": {
+        "all": "Tutti i record dello spazio di lavoro.",
+        "team_and_below": "Record del tuo team e di tutti i team sotto di esso.",
+        "team": "Record delle persone del tuo team.",
+        "own": "Solo i record che ti appartengono o ti sono assegnati."
+      },
+      "noTeamWarning": "{count, plural, one {# membro con questo ruolo non è in nessun team, quindi vede solo i propri record dove questo ruolo ha un ambito di team.} many {# di membri con questo ruolo non sono in nessun team, quindi vedono solo i propri record dove questo ruolo ha un ambito di team.} other {# membri con questo ruolo non sono in nessun team, quindi vedono solo i propri record dove questo ruolo ha un ambito di team.}} Aggiungili a un team in <link>Impostazioni > Team</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Senza questo permesso, gli agenti con accesso di team vedono solo le conversazioni assegnate a loro o al loro team. Con il permesso vedono anche la coda aperta delle conversazioni non assegnate a nessuno."
       }
     },
     "delete": {

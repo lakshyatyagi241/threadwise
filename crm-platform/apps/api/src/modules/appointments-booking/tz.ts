@@ -1,3 +1,5 @@
+import { CappedMap } from '../../common/cache/capped-map';
+
 /**
  * Time-zone arithmetic for the slot engine (TW-APPT-017, D-01). No library: the platform's own tz database through `Intl`.
  *
@@ -11,7 +13,7 @@
 const MINUTE = 60_000;
 const DAY = 24 * 60 * MINUTE;
 
-const formatters = new Map<string, Intl.DateTimeFormat>();
+const formatters = new CappedMap<string, Intl.DateTimeFormat>(500);
 function parts(tz: string): Intl.DateTimeFormat {
   let f = formatters.get(tz);
   if (!f) {

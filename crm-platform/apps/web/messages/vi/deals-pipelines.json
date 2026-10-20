@@ -128,7 +128,9 @@
         "list": "Danh sách"
       },
       "reports": "Báo cáo",
-      "settings": "Cài đặt quy trình"
+      "settings": "Cài đặt quy trình",
+      "team": "Nhóm",
+      "allTeams": "Tất cả nhóm"
     },
     "kpi": {
       "openPipeline": "Quy trình đang mở",

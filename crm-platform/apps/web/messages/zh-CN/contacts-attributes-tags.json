@@ -290,7 +290,11 @@
         "importBody": "上传电子表格，并将其列匹配到联系人字段。",
         "connect": "连接 WhatsApp",
         "connectBody": "连接您的号码，联系人即可回复，您也可以向他们发送消息。"
-      }
+      },
+      "teamLabel": "团队",
+      "teamFilter": "按团队筛选",
+      "allTeams": "所有团队",
+      "teamFormer": "原团队"
     },
     "bulk": {
       "label": "所选联系人的操作",

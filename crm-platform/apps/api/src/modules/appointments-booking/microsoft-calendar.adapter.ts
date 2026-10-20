@@ -23,6 +23,7 @@ import {
   MicrosoftCalendarTokens,
   MicrosoftNotConnectedError,
 } from './microsoft-calendar-tokens.service';
+import { CappedMap } from '../../common/cache/capped-map';
 
 /** A Teams room is made by Graph a moment after the event: one more look, then the booking goes ahead without a link. */
 const MEETING_RECHECK_MS = 600;
@@ -52,7 +53,7 @@ export class MicrosoftCalendarAdapter implements CalendarSyncPort {
   readonly provider = 'microsoft';
   private readonly logger = new Logger(MicrosoftCalendarAdapter.name);
   private readonly busyCache = new Map<string, { at: number; busy: CalendarBusyInterval[] }>();
-  private readonly failedAt = new Map<number, number>();
+  private readonly failedAt = new CappedMap<number, number>(2000);
 
   constructor(
     private readonly tokens: MicrosoftCalendarTokens,

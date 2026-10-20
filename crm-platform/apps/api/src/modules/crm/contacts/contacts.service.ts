@@ -1588,7 +1588,8 @@ export class ContactsService {
       scope: this.rbac.can(ctx.grants, permission).scope,
       actorUserId: ctx.userId,
       nextOwnerId,
-      inActorTeam: (id) => this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) =>
+        this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }

@@ -200,9 +200,14 @@ describe('presets (TW-RBAC-004, 024)', () => {
     const v = await grantsOf(org.orgId, 'Viewer');
     expect([...v.entries()].sort()).toEqual([
       ['aiadm.models.read', 'all'],
+      ['chn.tiktok.read', 'all'],
       ['inbox.conversation.read', 'team'],
+      ['inbox.conversation.read_unassigned', 'all'],
       ['support.ticket.create', 'all'],
       ['support.ticket.read', 'all'],
+      ['tchat.chat.use', 'all'],
+      ['team.leave.manage', 'own'],
+      ['team.leave.read', 'all'],
       ['wallet.balance.read', 'all'],
       ['wallet.statement.export', 'all'],
       ['wallet.statement.read', 'all'],
@@ -441,9 +446,14 @@ describe('landing and the permission map (TW-RBAC-033, 035)', () => {
     const vs = await api().get('/v2/auth/session').set(bearer(viewer.token));
     expect(Object.keys(vs.body.permissions).sort()).toEqual([
       'aiadm.models.read',
+      'chn.tiktok.read',
       'inbox.conversation.read',
+      'inbox.conversation.read_unassigned',
       'support.ticket.create',
       'support.ticket.read',
+      'tchat.chat.use',
+      'team.leave.manage',
+      'team.leave.read',
       'wallet.balance.read',
       'wallet.statement.export',
       'wallet.statement.read',

@@ -104,7 +104,9 @@
       },
       "linkCompany": "ایک کمپنی",
       "outcome": "نتیجہ",
-      "allOutcomes": "تمام نتائج"
+      "allOutcomes": "تمام نتائج",
+      "team": "ٹیم",
+      "allTeams": "تمام ٹیمیں"
     },
     "table": {
       "scrollArea": "ٹاسکس ٹیبل",

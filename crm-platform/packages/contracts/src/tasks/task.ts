@@ -153,6 +153,8 @@ const taskFilterShape = {
   mine: queryBoolean().optional(),
   assigneeId: uuidSchema.optional(),
   unassigned: queryBoolean().optional(),
+  /** Records whose owning team (the owner's primary team when the owner was set) is this team (BL-382). */
+  teamId: uuidSchema.optional(),
   contactId: uuidSchema.optional(),
   dealId: uuidSchema.optional(),
   companyId: uuidSchema.optional(),

@@ -43,6 +43,11 @@ export const roleResponseSchema = z.object({
   grants: z.array(roleGrantSchema),
   /** Members holding the role. */
   userCount: z.number().int(),
+  /**
+   * Active members holding the role who are in no team. A role that grants a permission at `team` or `team_and_below` shows these people
+   * only their own records, so the role editor warns when this is above zero (BL-382).
+   */
+  membersWithoutTeam: z.number().int().optional(),
   /** One of the five Reference presets (Owner, Admin, Manager, Agent, Viewer): never deleted, never renamed. */
   isPreset: z.boolean(),
   /** The caller may hand this role to a member (the member-role picker offers only these). */

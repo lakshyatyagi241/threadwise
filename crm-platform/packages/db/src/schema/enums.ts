@@ -9,7 +9,7 @@ export const recordLifecycleEnum = pgEnum('record_lifecycle', [
 
 export const permEffectEnum = pgEnum('perm_effect', ['allow', 'deny']);
 
-export const recordScopeEnum = pgEnum('record_scope', ['all', 'team', 'own']);
+export const recordScopeEnum = pgEnum('record_scope', ['all', 'team', 'own', 'team_and_below']);
 
 export const partnerAgentStatusEnum = pgEnum('partner_agent_status', ['active', 'suspended']);
 

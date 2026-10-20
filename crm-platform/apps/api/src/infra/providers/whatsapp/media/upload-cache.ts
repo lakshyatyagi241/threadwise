@@ -1,4 +1,5 @@
 import type { Redis } from 'ioredis';
+import { CappedMap } from '../../../../common/cache/capped-map';
 
 /**
  * Remembers which media id Meta gave a file, per (workspace, channel, phone number, sha256, mime), so the same file is not uploaded
@@ -52,7 +53,7 @@ export class RedisUploadedMediaCache implements UploadedMediaCache {
 
 /** Process-local cache: the fallback when no Redis is bound, and the one the unit tests use. */
 export class MemoryUploadedMediaCache implements UploadedMediaCache {
-  private readonly entries = new Map<string, { id: string; until: number }>();
+  private readonly entries = new CappedMap<string, { id: string; until: number }>(10000);
 
   get(key: string): Promise<string | null> {
     const hit = this.entries.get(key);

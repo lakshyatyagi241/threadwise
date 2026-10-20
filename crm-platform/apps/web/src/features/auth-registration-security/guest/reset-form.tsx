@@ -6,9 +6,9 @@ import {
   type PasswordPolicyHint,
 } from '@crm/contracts';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useRef, useState, type FormEvent, type ReactNode } from 'react';
+import { signOut } from '../shared/sign-out';
 import { callApi } from './bff';
 import { mapAuthError, type MappedError } from './errors';
 import { dropKey, focusFirstInvalid } from './focus';
@@ -62,7 +62,6 @@ export function ResetForm({
   const tl = useTranslations('auth-registration-security.guest.login');
   const tv = useTranslations('auth-registration-security.guest.validation');
   const tp = useTranslations('auth-registration-security.guest.policy');
-  const router = useRouter();
   const policy = policyHintParts(passwordPolicy);
   const passwordHint = [
     tp('minLength', { min: policy.min }),
@@ -116,10 +115,7 @@ export function ResetForm({
         schema: neutralAckSchema,
       });
       // The reset ended every session of this account; drop any cookies of this browser so /login shows the success note.
-      await fetch('/api/auth/logout', { signal: AbortSignal.timeout(5000), method: 'POST' }).catch(
-        () => undefined,
-      );
-      router.replace(`/login?reset=1&org=${encodeURIComponent(org)}`);
+      await signOut(`/login?reset=1&org=${encodeURIComponent(org)}`);
     } catch (err) {
       const mapped = mapAuthError(err);
       if (mapped.key === 'tokenInvalid') return setInvalid(true);

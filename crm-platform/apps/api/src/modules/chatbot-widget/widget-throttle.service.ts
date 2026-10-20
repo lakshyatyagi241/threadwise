@@ -1,6 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/counter';
 
 /** Reference's `throttle:60,1` on message and `throttle:120,1` on history; config, embed and chat have none. */
 export const WIDGET_LIMITS_PER_MINUTE = { message: 60, history: 120 } as const;
@@ -21,8 +22,7 @@ export class WidgetThrottleService {
   async allow(route: ThrottledRoute, ip: string): Promise<boolean> {
     const key = `wgt:hits:${ip}:${Math.floor(Date.now() / 60_000)}`;
     try {
-      const n = await this.redis.incr(key);
-      if (n === 1) await this.redis.expire(key, 120);
+      const n = await incrWithTtl(this.redis, key, 120);
       return n <= WIDGET_LIMITS_PER_MINUTE[route];
     } catch {
       return true;

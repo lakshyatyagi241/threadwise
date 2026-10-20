@@ -50,6 +50,7 @@ export class RoomAccessService {
       spec.scope.slice('team:'.length),
     );
     if (!team) return false;
-    return viewer.scope === 'all' || team.member;
+    // `team_and_below`: the viewer's teams already include every team below them.
+    return viewer.scope === 'all' || team.member || viewer.teamIds.includes(team.teamId);
   }
 }

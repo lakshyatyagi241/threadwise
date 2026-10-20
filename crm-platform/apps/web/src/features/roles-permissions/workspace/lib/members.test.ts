@@ -5,6 +5,7 @@ import {
   filterMembers,
   generatePassword,
   grantableRoles,
+  noTeamMeetsTeamScope,
   presetSlug,
   roleFilterCounts,
   rolesChanged,
@@ -142,5 +143,35 @@ describe('team filter', () => {
       { id: 's', name: 'Team s', count: 2 },
     ]);
     expect(teamFilterOptions([people[2]!])).toEqual([]);
+  });
+});
+
+describe('noTeamMeetsTeamScope (BL-382: a person in no team and a team-scoped role)', () => {
+  const role = (
+    id: string,
+    ...grants: Array<['allow' | 'deny', 'own' | 'team' | 'team_and_below' | 'all']>
+  ) => ({
+    id,
+    grants: grants.map(([effect, recordScope], i) => ({
+      permissionKey: `record.k${i}.read`,
+      effect,
+      recordScope,
+    })),
+  });
+  const roles = [
+    role('team', ['allow', 'team']),
+    role('below', ['allow', 'team_and_below']),
+    role('own', ['allow', 'own']),
+    role('all', ['allow', 'all']),
+    role('denied', ['deny', 'team']),
+  ];
+  it('warns for a team or team_and_below allow when the person is in no team', () => {
+    expect(noTeamMeetsTeamScope(0, roles, ['team'])).toBe(true);
+    expect(noTeamMeetsTeamScope(0, roles, ['own', 'below'])).toBe(true);
+  });
+  it('is quiet for own, all, a deny, nothing selected, or a person who has a team', () => {
+    expect(noTeamMeetsTeamScope(0, roles, ['own', 'all', 'denied'])).toBe(false);
+    expect(noTeamMeetsTeamScope(0, roles, [])).toBe(false);
+    expect(noTeamMeetsTeamScope(2, roles, ['team', 'below'])).toBe(false);
   });
 });

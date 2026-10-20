@@ -11,6 +11,7 @@ export type FilterChipKind =
   | 'segment'
   | 'tag'
   | 'owner'
+  | 'team'
   | 'stage'
   | 'status'
   | 'minor'
@@ -36,6 +37,7 @@ export interface ChipNames {
     group: string;
     tag: string;
     owner: string;
+    team: string;
     stage: string;
     status: string;
     minor: string;
@@ -52,6 +54,7 @@ export interface ChipNames {
     unassigned: string;
     myContacts: string;
     formerMember: string;
+    formerTeam: string;
     subscribed: string;
     unsubscribed: string;
     /** "Conditions: {count}" */
@@ -61,6 +64,7 @@ export interface ChipNames {
   segment: (id: string) => string | undefined;
   tag: (id: string) => string | undefined;
   owner: (id: string) => string | undefined;
+  team: (id: string) => string | undefined;
   stage: (value: string) => string | undefined;
   status: (value: string) => string | undefined;
   /** How many conditions the rules hold. */
@@ -140,6 +144,17 @@ export function appliedFilterChips(f: ContactFilters, n: ChipNames): FilterChip[
       label: text(w.owner, value),
       value,
       clear: { owner: '' },
+    });
+  }
+
+  if (f.team) {
+    const name = n.team(f.team) ?? w.formerTeam;
+    out.push({
+      id: `team:${f.team}`,
+      kind: 'team',
+      label: text(w.team, name),
+      value: name,
+      clear: { team: '' },
     });
   }
 
@@ -225,6 +240,7 @@ export function clearAllPatch(): Partial<ContactFilters> {
     segment: '',
     tag: '',
     owner: '',
+    team: '',
     lifecycleStage: '',
     status: '',
     minor: '',
