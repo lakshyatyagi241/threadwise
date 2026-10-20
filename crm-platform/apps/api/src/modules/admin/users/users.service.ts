@@ -175,6 +175,7 @@ export class UsersService {
     const ctx = RequestContextStore.require();
     let rolesChanged = false;
     let suspendedUserId = null as number | null;
+    let statusChangedUserId = null as number | null;
 
     const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
@@ -208,6 +209,9 @@ export class UsersService {
 
       if (input.status === 'inactive' && existing.status !== 'inactive') {
         suspendedUserId = existing.id;
+      }
+      if (input.status !== undefined && input.status !== existing.status) {
+        statusChangedUserId = existing.id;
       }
 
       if (input.roleIds !== undefined) {
@@ -253,8 +257,9 @@ export class UsersService {
     if (suspendedUserId !== null) {
       // Suspension ends access now, not when the access token or the 30 s gate cache runs out.
       await this.sessions.revokeAllForUser(ctx.orgId, suspendedUserId, 'member_suspended');
-      await this.gates.invalidate(ctx.orgId, suspendedUserId);
     }
+    // Any status change, not only a suspension: a re-activated person must not be refused for the rest of the 30 s the gate copy lives.
+    if (statusChangedUserId !== null) await this.gates.invalidate(ctx.orgId, statusChangedUserId);
     return result;
   }
 }
