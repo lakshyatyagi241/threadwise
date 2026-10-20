@@ -91,7 +91,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
-import { FaqKnowledgeModule } from './modules/faq-knowledge';
+import { KnowledgeBaseModule } from './modules/knowledge-base';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
@@ -269,7 +269,7 @@ import { HealthModule } from './health/health.module';
     WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
-    FaqKnowledgeModule,
+    KnowledgeBaseModule,
     LeadScoringModule,
     GrowthPilotModule,
     ContactConsentModule,

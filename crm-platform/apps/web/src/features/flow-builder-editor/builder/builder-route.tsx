@@ -34,9 +34,7 @@ export function BuilderRoute({ flowId }: { flowId?: string }) {
     if (!allowed) router.replace('/inbox');
     else if (toSimple)
       router.replace(
-        flowId
-          ? `/flows/simple/${flowId}`
-          : newHref('simple', params.get('type') === 'web' ? 'web' : 'chat'),
+        flowId ? `/flows/simple/${flowId}` : newHref(params.get('type') === 'web' ? 'web' : 'chat'),
       );
   }, [allowed, toSimple, flowId, router, params]);
   useEffect(() => {

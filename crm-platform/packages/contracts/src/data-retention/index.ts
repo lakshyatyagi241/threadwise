@@ -17,20 +17,46 @@ export const RETENTION_ITEM_IDS = [
   'audit_log',
   'security_events',
   'audit_log_exports',
+  'message_log',
+  'notifications_read',
+  'notifications_unread',
+  'push_devices_revoked',
+  'assignment_runs',
+  'form_events',
+  'lead_sync_runs',
+  'lead_scoring_runs',
+  'api_library_logs',
+  'flow_run_logs',
+  'webhook_forward_failures',
+  'click_calls',
+  'call_recordings',
 ] as const;
 export const retentionItemIdSchema = z.enum(RETENTION_ITEM_IDS);
 export type RetentionItemId = z.infer<typeof retentionItemIdSchema>;
 
 /**
- * partitioned  monthly partitions, exported to the archive and dropped (the data-retention worker)
- * table        one ordinary table, old rows deleted
- * file         generated files, deleted when they expire
+ * partitioned     monthly partitions, exported to the archive (S3 / R2) and dropped (the data-retention worker)
+ * daily_archive    rows moved day by day into the database's own archive table, deleted from there when the archive window ends
+ * table            one ordinary table, old rows deleted
+ * file             generated files, deleted when they expire
  */
-export type RetentionKind = 'partitioned' | 'table' | 'file';
+export type RetentionKind = 'partitioned' | 'daily_archive' | 'table' | 'file';
+
+/** Where an item shows on the page. The order here is the order on screen. */
+export const RETENTION_GROUPS = [
+  'analytics',
+  'security',
+  'messaging',
+  'crm',
+  'automation',
+  'calling',
+] as const;
+export type RetentionGroup = (typeof RETENTION_GROUPS)[number];
 
 export interface RetentionItemSpec {
   id: RetentionItemId;
   kind: RetentionKind;
+  group: RetentionGroup;
   /** Whether old data can be moved to the cold archive (and read back) instead of only deleted. */
   canArchive: boolean;
   /** What happens with no saved policy. Saving nothing changes nothing. */
@@ -48,6 +74,7 @@ export interface RetentionItemSpec {
 export const RETENTION_ITEMS: readonly RetentionItemSpec[] = [
   {
     id: 'an_events',
+    group: 'analytics',
     kind: 'partitioned',
     canArchive: true,
     defaults: { liveDays: 60, archiveDays: null },
@@ -57,6 +84,7 @@ export const RETENTION_ITEMS: readonly RetentionItemSpec[] = [
   },
   {
     id: 'audit_log',
+    group: 'security',
     kind: 'partitioned',
     canArchive: true,
     defaults: { liveDays: 365, archiveDays: null },
@@ -65,6 +93,7 @@ export const RETENTION_ITEMS: readonly RetentionItemSpec[] = [
   },
   {
     id: 'security_events',
+    group: 'security',
     kind: 'table',
     canArchive: false,
     defaults: { liveDays: 365, archiveDays: null },
@@ -74,10 +103,132 @@ export const RETENTION_ITEMS: readonly RetentionItemSpec[] = [
   },
   {
     id: 'audit_log_exports',
+    group: 'security',
     kind: 'file',
     canArchive: false,
     defaults: { liveDays: 7, archiveDays: null },
     live: { min: 1, max: 30 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    // Today the live part is 90 days and the archive keeps a total of 365 days after the event, so the archive part is 275.
+    id: 'message_log',
+    group: 'messaging',
+    kind: 'daily_archive',
+    canArchive: true,
+    defaults: { liveDays: 90, archiveDays: 275 },
+    live: { min: 7, max: 730 },
+    archive: { min: 1, max: 3650 },
+  },
+  {
+    id: 'notifications_read',
+    group: 'messaging',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 30, max: 3650 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    // Never below the read days (see `retentionCrossProblem`): an unread row cannot go before a read one.
+    id: 'notifications_unread',
+    group: 'messaging',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 180, archiveDays: null },
+    live: { min: 30, max: 3650 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'push_devices_revoked',
+    group: 'messaging',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 30, archiveDays: null },
+    live: { min: 1, max: 365 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'assignment_runs',
+    group: 'crm',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 7, max: 730 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'form_events',
+    group: 'crm',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 7, max: 730 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'lead_sync_runs',
+    group: 'crm',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 7, max: 730 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    // The default follows the AI lead scoring settings (90 when never saved); a value saved here replaces it.
+    id: 'lead_scoring_runs',
+    group: 'crm',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 7, max: 730 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'api_library_logs',
+    group: 'automation',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 30, archiveDays: null },
+    live: { min: 1, max: 365 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'flow_run_logs',
+    group: 'automation',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 30, archiveDays: null },
+    live: { min: 1, max: 365 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'webhook_forward_failures',
+    group: 'automation',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 14, archiveDays: null },
+    live: { min: 1, max: 90 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    id: 'click_calls',
+    group: 'calling',
+    kind: 'table',
+    canArchive: false,
+    defaults: { liveDays: 2, archiveDays: null },
+    live: { min: 1, max: 30 },
+    archive: { min: 1, max: 1 },
+  },
+  {
+    // Recording files. The default for workspaces that never set their own window; a workspace's own window still wins for it.
+    id: 'call_recordings',
+    group: 'calling',
+    kind: 'file',
+    canArchive: false,
+    defaults: { liveDays: 90, archiveDays: null },
+    live: { min: 7, max: 365 },
     archive: { min: 1, max: 1 },
   },
 ];
@@ -120,6 +271,24 @@ export function retentionProblem(
   return null;
 }
 
+/**
+ * Rules between two items. A row nobody opened may not be deleted before one that was read: `notifications_unread` is never shorter than
+ * `notifications_read`. `other` is the other item's value after this save (its saved value, or its default). Null when fine.
+ */
+export function retentionCrossProblem(
+  id: RetentionItemId,
+  values: RetentionValues,
+  other: { notificationsRead: number; notificationsUnread: number },
+): 'unread_before_read' | null {
+  if (id === 'notifications_unread' && values.liveDays < other.notificationsRead) {
+    return 'unread_before_read';
+  }
+  if (id === 'notifications_read' && values.liveDays > other.notificationsUnread) {
+    return 'unread_before_read';
+  }
+  return null;
+}
+
 /** Days after writing that the data is deleted for good; `null` when the archive keeps it for ever. */
 export const retentionDeleteAfterDays = (v: RetentionValues): number | null =>
   v.archiveDays === null ? null : v.liveDays + v.archiveDays;
@@ -157,7 +326,8 @@ export type RetentionRun = z.infer<typeof retentionRunSchema>;
 
 export const retentionItemViewSchema = z.object({
   id: retentionItemIdSchema,
-  kind: z.enum(['partitioned', 'table', 'file']),
+  kind: z.enum(['partitioned', 'daily_archive', 'table', 'file']),
+  group: z.enum(RETENTION_GROUPS),
   canArchive: z.boolean(),
   source: z.enum(['default', 'custom']),
   liveDays: z.number().int(),
@@ -207,8 +377,10 @@ export const retentionPreviewSchema = z.object({
   ),
   /** Archive months that would be deleted for good. */
   toDeleteFromArchive: z.array(z.string()),
-  /** Rows (tables) or files that would be deleted for good. */
+  /** Rows (tables, daily archive) or files that would be deleted for good. */
   rowsToDelete: z.number().nullable(),
+  /** Daily-archive items only: live rows that would move into the archive at the next run. */
+  rowsToArchive: z.number().nullable().optional(),
 });
 export type RetentionPreview = z.infer<typeof retentionPreviewSchema>;
 

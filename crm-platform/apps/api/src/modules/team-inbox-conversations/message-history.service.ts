@@ -16,6 +16,14 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import {
+  MessageFeedService,
+  deepEqual,
+  isolated,
+  orgTimezone,
+  serve,
+  sourceOf,
+} from '../analytics';
+import {
   ENTITY_OF_PREFIX,
   MESSAGE_LOG_FACADE,
   MessageHistoryRepository,
@@ -26,17 +34,31 @@ import {
   safeZone,
   toHistoryRow,
   type HistoryContext,
+  type FeedRollup,
   type HistorySelection,
   type HistoryWindow,
   type MessageLogFacade,
 } from '../chat-conversations';
 import { InboxAccess } from './inbox-access.service';
+import {
+  HISTORY_METRIC_KEY,
+  feedRollup,
+  hiddenChannelIds,
+  rollupApplies,
+} from './message-history-rollup';
 import { visibleToJoinedSql } from './visibility-sql';
 
 export const PERM_HISTORY_READ = 'msg.history.read';
 const PERM_CONTACTS_READ = 'record.contacts.read';
 const PERM_WALLET_STATEMENT = 'wallet.statement.read';
 const DAY_MS = 86_400_000;
+const isEmpty = (o: object): boolean => Object.keys(o).length === 0;
+
+/** Structural equality of two summaries, leaving out one key. */
+function deepEqualExcept(a: object, b: object, key: string): boolean {
+  const strip = (o: object) => Object.fromEntries(Object.entries(o).filter(([k]) => k !== key));
+  return deepEqual(strip(a), strip(b));
+}
 
 const WINDOW_TEXT = {
   order: 'The start date must not be after the end date.',
@@ -62,6 +84,7 @@ export class MessageHistoryService {
     private readonly access: InboxAccess,
     private readonly rbac: RbacService,
     private readonly repo: MessageHistoryRepository,
+    private readonly feed: MessageFeedService,
     @Inject(MESSAGE_LOG_FACADE) private readonly logs: MessageLogFacade,
   ) {}
 
@@ -94,7 +117,15 @@ export class MessageHistoryService {
     const prev: HistorySelection = { ...sel, window: previousWindow(window) };
     const out = await this.db.tx(async (tx) => {
       const hc = await this.context(tx, ctx);
-      return this.repo.summary(tx, hc, sel, prev);
+      const rollup = await this.rollupFor(tx, hc, sel);
+      if (!rollup) return this.repo.summary(tx, hc, sel, prev);
+      return serve(
+        HISTORY_METRIC_KEY,
+        () => this.repo.summary(tx, hc, sel, prev),
+        () => isolated(tx, (t) => this.repo.summary(t, hc, sel, prev, rollup)),
+        // the average first reply means something else on the rollup (decision D9: replies made in the window), so it is not compared
+        { equal: (a, b) => deepEqualExcept(a, b, 'avgFirstResponseSeconds') },
+      );
     });
     return { window: windowText(window), ...out };
   }
@@ -114,7 +145,14 @@ export class MessageHistoryService {
         : window.from;
     const out = await this.db.tx(async (tx) => {
       const hc = await this.context(tx, ctx);
-      return this.repo.insights(tx, hc, sel, { bucket: query.bucket, tz, seriesFrom });
+      const o = { bucket: query.bucket, tz, seriesFrom };
+      const rollup = await this.rollupFor(tx, hc, sel, tz);
+      if (!rollup || !isEmpty(sel.narrow)) return this.repo.insights(tx, hc, sel, o);
+      return serve(
+        HISTORY_METRIC_KEY,
+        () => this.repo.insights(tx, hc, sel, o),
+        () => isolated(tx, (t) => this.repo.insights(t, hc, sel, o, rollup)),
+      );
     });
     return { bucket: query.bucket, tz, ...out };
   }
@@ -203,6 +241,8 @@ export class MessageHistoryService {
     if (viewer.scope === null) throw AppError.forbidden('inbox.conversation.read');
     const contacts = this.rbac.can(grants, PERM_CONTACTS_READ);
     const visible = visibleToJoinedSql(viewer, 'c');
+    const hidden =
+      viewer.scope === 'all' ? await hiddenChannelIds(tx, ctx.orgId, viewer) : undefined;
     return {
       orgId: ctx.orgId,
       conversationJoins: visible.joins,
@@ -213,7 +253,21 @@ export class MessageHistoryService {
         userId: ctx.userId!,
       },
       cost: this.rbac.can(grants, PERM_WALLET_STATEMENT).allowed,
+      ...(hidden ? { hiddenChannelIds: hidden } : {}),
     };
+  }
+
+  /** The rollup that answers this request, or null when only a scan of `messages` can (`rollupApplies`) or the metric is still `legacy`. */
+  private async rollupFor(
+    tx: Tx,
+    hc: HistoryContext,
+    sel: HistorySelection,
+    requestedZone?: string,
+  ): Promise<FeedRollup | null> {
+    if (sourceOf(HISTORY_METRIC_KEY) === 'legacy') return null;
+    const workspace = await orgTimezone(tx, hc.orgId);
+    if (!rollupApplies(hc, sel, { requested: requestedZone, workspace })) return null;
+    return feedRollup(tx, this.feed, hc, sel, workspace);
   }
 
   private windowOf(

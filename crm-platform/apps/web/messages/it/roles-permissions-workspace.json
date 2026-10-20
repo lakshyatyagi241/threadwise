@@ -90,7 +90,9 @@
         "member": "Membro",
         "roles": "Ruoli",
         "status": "Stato",
-        "actions": "Azioni"
+        "actions": "Azioni",
+        "teams": "Team",
+        "manager": "Responsabile"
       },
       "empty": {
         "none": "Non ci sono ancora membri.",
@@ -138,7 +140,15 @@
         "atLeastOne": "Scegli almeno un ruolo.",
         "save": "Salva ruoli",
         "reload": "Ricarica"
-      }
+      },
+      "teamFilter": {
+        "label": "Filtra i membri per team",
+        "all": "Tutti i team"
+      },
+      "noTeams": "Nessun team",
+      "primaryTeam": "Team principale",
+      "primaryMark": "principale",
+      "noManager": "Nessun responsabile"
     },
     "list": {
       "crumb": "Ruoli",
@@ -235,8 +245,8 @@
       "lockedHint": "Questo permesso non è ancora disponibile per questo workspace. Si sblocca quando la funzione del piano è attiva o l’app è installata.",
       "scope": {
         "all": "Tutti i record",
-        "team": "Record del team",
-        "own": "Record propri"
+        "own": "Record propri",
+        "team": "Record del mio team"
       }
     },
     "delete": {

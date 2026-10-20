@@ -106,7 +106,9 @@
       "leaveAction": "Verlof en vervanging",
       "noLimit": "Geen limiet",
       "neverSignedIn": "Nooit",
-      "editAction": "Telefoon en chatlimiet wijzigen"
+      "editAction": "Telefoon en chatlimiet wijzigen",
+      "moreAction": "Meer",
+      "moreLabel": "Meer acties voor {name}"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -148,12 +150,10 @@
       "eyebrow": "Workspace",
       "title": "Teams",
       "pageTitle": "Teams",
-      "subtitle": "Groepeer je medewerkers per afdeling. Gesprekken kunnen per team automatisch worden toegewezen via routeringsregels.",
       "create": "Team aanmaken",
       "edit": "Team bewerken",
       "loading": "Teams laden",
       "emptyTitle": "Nog geen teams",
-      "emptyMessage": "Maak een team aan, voeg je medewerkers toe en stuur gesprekken ernaartoe.",
       "emptyAction": "Team aanmaken",
       "members": "{count, plural, =0 {Geen leden} one {# lid} other {# leden}}",
       "online": "{count} online",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Hoe teams werken",
       "how": {
-        "one": "Geef een team een naam (bijvoorbeeld Sales), kies een kleur en voeg je medewerkers toe.",
-        "two": "Je gebruikt het op drie manieren: wijs een chat handmatig aan het team toe, stuur nieuwe chats ernaartoe met een routeringsregel, of lees de prestaties ervan in de analyse.",
-        "three": "De teamkleur is de kleur van het label in de inbox-wachtrij, zodat je in één oogopslag de chats van elk team herkent."
+        "one": "Geef een team een naam (bijvoorbeeld Verkoop), kies een kleur en voeg de mensen toe die samenwerken.",
+        "two": "Gebruik het voor gesprekken (routeer nieuwe chats ernaartoe of wijs een chat handmatig toe), voor records (wijs contacten, bedrijven en deals toe aan de leden) en voor rapporten.",
+        "three": "Een manager is de persoon die het team leidt. Met een bovenliggend team plaats je het onder een ander team, zodat je een boomstructuur kunt bouwen, zoals Verkoop en Verkoop West.",
+        "four": "Het primaire team van een persoon is zijn of haar hoofdteam, bewaard voor rapporten (rapporten gaan het gebruiken in een komende release). Routering, toewijzing en zichtbaarheid gebruiken alle teams waarin een persoon zit."
       },
       "created": "Team aangemaakt.",
       "updated": "Team bijgewerkt.",
@@ -181,6 +182,32 @@
       "deleteMessage": "Team \"{name}\" verwijderen? De mensen in het team blijven in de werkruimte. Het team wordt overal verwijderd waar het nu wordt gebruikt.",
       "deleteConfirm": "Team verwijderen",
       "delete": "Team verwijderen",
+      "subtitle": "Teams groeperen mensen voor gesprekken, toewijzingen en rapporten.",
+      "emptyMessage": "Maak een team en voeg de mensen toe die samenwerken. Je kunt gesprekken naar het team routeren en contacten, bedrijven en deals aan de leden toewijzen.",
+      "noAccess": "Je hebt geen toestemming om teams te bekijken. Vraag een eigenaar of beheerder van de werkruimte om de machtiging team.read.",
+      "manager": "Manager: {name}",
+      "noManager": "Geen manager",
+      "receivesConversations": "Gesprekken",
+      "receivesRecords": "Records",
+      "primaryCount": "{count, plural, one {# heeft dit als primair team} other {# hebben dit als primair team}}",
+      "usedBy": "Gebruikt door",
+      "usedByNone": "Nog door geen enkele regel gebruikt",
+      "usage": {
+        "routingRules": "{count, plural, one {# routeringsregel} other {# routeringsregels}}",
+        "assignmentRules": "{count, plural, one {# toewijzingsregel} other {# toewijzingsregels}}",
+        "segmentShares": "{count, plural, one {# gedeeld segment} other {# gedeelde segmenten}}",
+        "conversations": "{count, plural, one {# gesprek} other {# gesprekken}}",
+        "childTeams": "{count, plural, one {# subteam} other {# subteams}}"
+      },
+      "notUsed": {
+        "title": "Opgeslagen, nog niet in gebruik",
+        "body": "Deze instellingen zijn op het team opgeslagen, maar er leest nog niets ze uit. Ze gaan gelden met de routeringsupdate.",
+        "strategy": "Strategie voor automatisch toewijzen: {value}",
+        "devices": "{count, plural, one {Beperkt tot # apparaat} other {Beperkt tot # apparaten}}",
+        "businessHours": "Openingstijden: opgeslagen",
+        "timezone": "Tijdzone: {value}",
+        "defaultAssignee": "Standaardbehandelaar: {name}"
+      },
       "deleteUsage": {
         "title": "Wat er verandert",
         "loading": "Controleren waar dit team wordt gebruikt...",
@@ -204,13 +231,6 @@
       "nameTooLong": "De naam mag maximaal {max} tekens bevatten.",
       "color": "Kleur",
       "colorOption": "Kleur {color}",
-      "strategy": "Strategie voor automatisch toewijzen",
-      "strategyOptions": {
-        "manual": "Handmatig: een manager kiest wie het krijgt",
-        "round_robin": "Om de beurt: gelijkmatig verdelen",
-        "least_loaded": "Minst belast: eerst degene met de minste open gesprekken",
-        "sticky": "Vast: de laatste medewerker die dit contact heeft geantwoord"
-      },
       "members": "Leden",
       "membersLoading": "Teamgenoten laden",
       "membersFailed": "Teamgenoten konden niet worden geladen.",
@@ -221,7 +241,28 @@
       "create": "Team aanmaken",
       "creating": "Aanmaken…",
       "save": "Wijzigingen opslaan",
-      "saving": "Opslaan…"
+      "saving": "Opslaan…",
+      "hint": "Teams groeperen mensen voor gesprekken, toewijzingen en rapporten. Kies een manager, een optioneel bovenliggend team en wat het team kan ontvangen.",
+      "description": "Beschrijving",
+      "descriptionPlaceholder": "Wat dit team doet (optioneel)",
+      "lead": "Manager",
+      "leadNone": "Geen manager",
+      "leadHint": "De persoon die het team leidt. Die wordt als leider aan het team toegevoegd.",
+      "parent": "Bovenliggend team",
+      "parentNone": "Geen (hoogste niveau)",
+      "parentHint": "Plaats dit team onder een ander team om een boomstructuur te bouwen, tot 5 niveaus diep.",
+      "receive": "Kan ontvangen",
+      "receiveHint": "Waar dit team gekozen kan worden. Zet er één uit om het team uit die keuzelijsten te houden.",
+      "receiveConversations": "Gesprekken (inboxroutering en toewijzing)",
+      "receiveRecords": "Records (contacten, bedrijven en deals)",
+      "membersHint": "Vink de mensen in dit team aan. Markeer leiders en kies het primaire team van elke persoon.",
+      "leadFlag": "Leider",
+      "leadToggle": "Markeren als leider van dit team",
+      "leadLocked": "De manager is altijd een leider",
+      "primaryFlag": "Primair",
+      "primaryToggle": "Maak dit het primaire team van de persoon",
+      "primaryLocked": "Het enige team van een persoon is altijd het primaire team",
+      "primaryHint": "Het primaire team van een persoon is zijn of haar hoofdteam, bewaard voor rapporten (rapporten gaan het gebruiken in een komende release). Routering, toewijzing en zichtbaarheid gebruiken al zijn of haar teams."
     },
     "errors": {
       "network": "De verbinding is weggevallen. Controleer die en probeer het opnieuw.",
@@ -250,7 +291,10 @@
       "delegateInvalid": "De vervanger moet een ander actief lid van deze werkruimte zijn.",
       "delegateCycle": "Dat zou een kring maken: de gekozen persoon heeft deze persoon al als vervanger.",
       "reassignInvalid": "Er kon niets opnieuw worden toegewezen. Controleer of de persoon contacten of open deals heeft en of de nieuwe eigenaar ze kan overnemen.",
-      "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt."
+      "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt.",
+      "teamParentCycle": "Een team kan niet onder zichzelf of onder een van zijn eigen subteams vallen.",
+      "teamParentInvalid": "Dat bovenliggende team is niet beschikbaar, of de boom zou dieper dan 5 niveaus worden.",
+      "teamNotOnTeam": "Die persoon zit niet in dit team."
     },
     "accept": {
       "title": "Word lid van je workspace",
@@ -370,6 +414,26 @@
       "offline": "Offline",
       "hint": "Zolang je offline bent, worden je geen nieuwe chats automatisch toegewezen. Chats die je al hebt, blijven van jou.",
       "failed": "Wijzigen is niet gelukt"
+    },
+    "deactivate": {
+      "eyebrow": "Teamleden",
+      "title": "Lid deactiveren",
+      "message": "{name} kan niet meer inloggen. Je kunt dit lid op elk moment weer activeren.",
+      "loading": "Controleren wat dit lid beheert",
+      "previewFailed": "We konden niet controleren wat deze persoon beheert. Je kunt het lid nog steeds deactiveren; het werk blijft bij de persoon.",
+      "holds": "{name} is eigenaar van {contacts, plural, one {# contact} other {# contacten}}, {deals, plural, one {# open deal} other {# open deals}} en {chats, plural, one {# open gesprek} other {# open gesprekken}}. Wat moet hiermee gebeuren?",
+      "optLead": "Geef ze aan de teammanager, {name} ({team})",
+      "optLeadNone": "Geef ze aan de teammanager (deze persoon heeft geen actieve teammanager)",
+      "optPerson": "Geef ze aan een persoon",
+      "pickPerson": "Persoon",
+      "pickPlaceholder": "Kies een persoon",
+      "optLeave": "Laat ze bij {name}",
+      "undoNote": "Contacten en open deals kunnen 14 dagen lang worden teruggedraaid via de toewijzingsgeschiedenis. Open gesprekken worden één voor één opnieuw toegewezen.",
+      "nothing": "{name} heeft geen contacten, open deals of open gesprekken.",
+      "membership": "Hun teamplaatsen blijven behouden, dus als je {name} opnieuw activeert, zit die weer in de eigen teams.",
+      "confirm": "Deactiveren",
+      "moved": "{contacts, plural, one {# contact} other {# contacten}}, {deals, plural, one {# deal} other {# deals}} en {chats, plural, one {# gesprek} other {# gesprekken}} verplaatst naar {name}.",
+      "remaining": "Nog {count} wachten. Voer de overdracht opnieuw uit om ze te verplaatsen."
     }
   }
 }

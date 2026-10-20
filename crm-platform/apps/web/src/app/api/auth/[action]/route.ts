@@ -19,6 +19,7 @@ import { loginPath, safeNextPath } from '@/lib/auth/next-path';
 import { isSameOrigin, problem, redirectTo } from '@/lib/auth/proxy';
 import { rememberForAction } from '@/lib/auth/remember';
 import { apiBase, refreshTokens } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * Session-issuing endpoints: the browser calls these, the server calls
@@ -111,7 +112,7 @@ export async function POST(req: Request, ctx: { params: Promise<{ action: string
       ? withReferralFallback(payload, store.get(REFERRAL_COOKIE)?.value)
       : payload;
 
-  const upstream = await fetch(`${apiBase()}${path}`, {
+  const upstream = await upstreamFetch(`${apiBase()}${path}`, {
     method: 'POST',
     headers: forwardHeaders(req, action === 'switch' ? store.get(ACCESS_COOKIE)?.value : undefined),
     body: JSON.stringify(outgoing),

@@ -224,20 +224,20 @@
           "title": "Văn bản tự do",
           "body": "Dán một đoạn trợ giúp hoặc chính sách."
         },
-        "qa": {
-          "title": "Cặp Hỏi & Đáp",
-          "body": "Một câu hỏi với câu trả lời chuẩn."
-        },
         "file": {
           "title": "PDF, DOCX, TXT & khác",
           "body": "Tải tệp lên. Văn bản được trích xuất cho bạn."
+        },
+        "faq": {
+          "title": "Thêm câu hỏi thường gặp",
+          "body": "Các câu hỏi và câu trả lời bạn muốn đưa ra."
         }
       },
       "panel": {
         "url": "Lấy một URL công khai",
         "text": "Dán văn bản thuần",
-        "qa": "Một cặp Hỏi & Đáp",
-        "file": "Tải lên tệp kiến thức"
+        "file": "Tải lên tệp kiến thức",
+        "faq": "Thêm câu hỏi và câu trả lời"
       },
       "label": "Nhãn",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Nhãn (ví dụ: Trang bảng giá)",
           "text": "Nhãn (ví dụ: Tóm tắt chính sách hoàn tiền)",
-          "qa": "Nhãn (ví dụ: Thời gian hoàn tiền)",
           "file": "Nhãn (ví dụ: Sổ tay sản phẩm)"
         },
         "content": "Dán bất kỳ văn bản nào agent cần biết…",
         "question": "Câu hỏi, ví dụ: Hoàn tiền mất bao lâu?",
         "answer": "Câu trả lời, ví dụ: Tiền được hoàn trong 3 đến 5 ngày làm việc."
       },
-      "urlHint": "Chỉ đọc các trang http và https công khai. Trang được lấy ở chế độ nền nên mục sẽ hiển thị Đang xử lý trong giây lát.",
+      "urlHint": "Chỉ đọc các trang công khai http và https. Trang được đọc ở chế độ nền nên có thể mất một lúc.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV hoặc HTML, tối đa 10 MB. Văn bản được trích xuất tự động.",
       "uploading": "Tiến trình tải lên",
       "submit": {
         "url": "Lấy & huấn luyện",
         "text": "Lưu văn bản",
-        "qa": "Lưu cặp",
-        "file": "Tải lên"
+        "file": "Tải lên",
+        "faq": "Lưu câu hỏi thường gặp"
       },
       "cancel": "Hủy",
       "added": "Đã thêm kiến thức.",
@@ -281,25 +280,6 @@
         "file_empty": "Tệp đó trống.",
         "tooLarge": "Văn bản quá nhiều cho một lần dán. Hãy tải lên dưới dạng tệp."
       },
-      "col": {
-        "kind": "Loại",
-        "label": "Nhãn",
-        "state": "Trạng thái",
-        "actions": "Thao tác"
-      },
-      "kind": {
-        "url": "url",
-        "text": "văn bản",
-        "qa": "hỏi đáp",
-        "file": "tệp"
-      },
-      "state": {
-        "ready": "sẵn sàng",
-        "processing": "đang xử lý",
-        "failed": "thất bại"
-      },
-      "tokens": "khoảng {count} token",
-      "workspaceWide": "toàn không gian làm việc",
       "loading": "Đang tải các mục",
       "loadError": "Không thể tải các mục.",
       "retry": "Thử lại",
@@ -310,7 +290,14 @@
       "removeBody": "Agent sẽ ngừng dùng nó cho các phản hồi mới. Các cuộc trò chuyện cũ không thay đổi.",
       "keep": "Giữ lại",
       "removed": "Đã gỡ bỏ.",
-      "removeFailed": "Gỡ bỏ thất bại."
+      "removeFailed": "Gỡ bỏ thất bại.",
+      "ownedNote": "Kiến thức này chỉ thuộc về tác nhân này. Không tác nhân nào khác dùng được.",
+      "faq": {
+        "addAnother": "Thêm câu hỏi khác",
+        "removeRow": "Xóa câu hỏi này"
+      },
+      "reading": "Đang đọc…",
+      "failed": "Không đọc được nội dung này."
     }
   }
 }

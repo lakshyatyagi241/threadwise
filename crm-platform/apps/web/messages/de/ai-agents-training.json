@@ -224,20 +224,20 @@
           "title": "Freitext",
           "body": "Einen Hilfetext oder eine Richtlinie einfügen."
         },
-        "qa": {
-          "title": "Frage-Antwort-Paar",
-          "body": "Eine Frage mit ihrer maßgeblichen Antwort."
-        },
         "file": {
           "title": "PDF, DOCX, TXT & mehr",
           "body": "Eine Datei hochladen. Der Text wird für Sie extrahiert."
+        },
+        "faq": {
+          "title": "FAQ hinzufügen",
+          "body": "Fragen und die Antworten, die gegeben werden sollen."
         }
       },
       "panel": {
         "url": "Öffentliche URL abrufen",
         "text": "Nur Text einfügen",
-        "qa": "Einzelnes Frage-Antwort-Paar",
-        "file": "Wissensdatei hochladen"
+        "file": "Wissensdatei hochladen",
+        "faq": "Fragen und Antworten hinzufügen"
       },
       "label": "Bezeichnung",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Bezeichnung (z. B. Preisseite)",
           "text": "Bezeichnung (z. B. Zusammenfassung der Rückerstattungsrichtlinie)",
-          "qa": "Bezeichnung (z. B. Dauer der Rückerstattung)",
           "file": "Bezeichnung (z. B. Produkthandbuch)"
         },
         "content": "Fügen Sie beliebigen Text ein, den der Agent kennen soll…",
         "question": "Frage, z. B. Wie lange dauern Rückerstattungen?",
         "answer": "Antwort, z. B. Rückerstattungen werden innerhalb von 3 bis 5 Werktagen abgewickelt."
       },
-      "urlHint": "Es werden nur öffentliche http- und https-Seiten gelesen. Die Seite wird im Hintergrund abgerufen, daher zeigt der Eintrag kurz „In Bearbeitung“.",
+      "urlHint": "Es werden nur öffentliche http- und https-Seiten gelesen. Die Seite wird im Hintergrund gelesen, das kann einen Moment dauern.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV oder HTML, bis zu 10 MB. Text wird automatisch extrahiert.",
       "uploading": "Upload-Fortschritt",
       "submit": {
         "url": "Abrufen & trainieren",
         "text": "Text speichern",
-        "qa": "Paar speichern",
-        "file": "Hochladen"
+        "file": "Hochladen",
+        "faq": "FAQ speichern"
       },
       "cancel": "Abbrechen",
       "added": "Wissen hinzugefügt.",
@@ -281,25 +280,6 @@
         "file_empty": "Diese Datei ist leer.",
         "tooLarge": "Das ist zu viel Text für einmaliges Einfügen. Laden Sie ihn stattdessen als Datei hoch."
       },
-      "col": {
-        "kind": "Art",
-        "label": "Bezeichnung",
-        "state": "Status",
-        "actions": "Aktionen"
-      },
-      "kind": {
-        "url": "URL",
-        "text": "Text",
-        "qa": "Q&A",
-        "file": "Datei"
-      },
-      "state": {
-        "ready": "bereit",
-        "processing": "in Bearbeitung",
-        "failed": "fehlgeschlagen"
-      },
-      "tokens": "etwa {count} Token",
-      "workspaceWide": "workspaceweit",
       "loading": "Einträge werden geladen",
       "loadError": "Die Einträge konnten nicht geladen werden.",
       "retry": "Erneut versuchen",
@@ -310,7 +290,14 @@
       "removeBody": "Der Agent verwendet ihn nicht mehr für neue Antworten. Ältere Unterhaltungen bleiben unverändert.",
       "keep": "Behalten",
       "removed": "Entfernt.",
-      "removeFailed": "Entfernen fehlgeschlagen."
+      "removeFailed": "Entfernen fehlgeschlagen.",
+      "ownedNote": "Dieses Wissen gehört nur zu diesem Agenten. Kein anderer Agent kann es nutzen.",
+      "faq": {
+        "addAnother": "Weitere Frage hinzufügen",
+        "removeRow": "Diese Frage entfernen"
+      },
+      "reading": "Wird gelesen…",
+      "failed": "Das konnte nicht gelesen werden."
     }
   }
 }

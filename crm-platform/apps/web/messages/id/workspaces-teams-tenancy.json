@@ -106,7 +106,9 @@
       "leaveAction": "Cuti dan delegasi",
       "noLimit": "Tanpa batas",
       "neverSignedIn": "Belum pernah",
-      "editAction": "Ubah telepon dan batas obrolan"
+      "editAction": "Ubah telepon dan batas obrolan",
+      "moreAction": "Lainnya",
+      "moreLabel": "Tindakan lainnya untuk {name}"
     },
     "invite": {
       "eyebrow": "Workspace",
@@ -148,12 +150,10 @@
       "eyebrow": "Workspace",
       "title": "Tim",
       "pageTitle": "Tim",
-      "subtitle": "Kelompokkan agen Anda berdasarkan departemen. Percakapan dapat ditugaskan otomatis ke tim melalui aturan perutean.",
       "create": "Buat tim",
       "edit": "Edit tim",
       "loading": "Memuat tim",
       "emptyTitle": "Belum ada tim",
-      "emptyMessage": "Buat tim, tambahkan agen Anda ke dalamnya, dan arahkan percakapan ke tim tersebut.",
       "emptyAction": "Buat tim",
       "members": "{count, plural, =0 {Tidak ada anggota} other {# anggota}}",
       "online": "{count} online",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Cara kerja tim",
       "how": {
-        "one": "Beri nama tim (misalnya Sales), pilih warna, dan tambahkan agen Anda ke dalamnya.",
-        "two": "Gunakan dengan tiga cara: tugaskan chat ke tim secara manual, arahkan chat baru ke tim dengan aturan perutean, atau lihat performanya di analitik.",
-        "three": "Warna tim adalah warna chip di antrean kotak masuk, sehingga Anda bisa membedakan chat tiap tim dengan sekilas."
+        "one": "Beri nama tim (misalnya Penjualan), pilih warna, dan tambahkan orang yang bekerja bersama.",
+        "two": "Gunakan untuk percakapan (rutekan chat baru ke tim ini, atau tugaskan chat secara manual), untuk catatan (tugaskan kontak, perusahaan, dan deal kepada anggotanya) dan untuk laporan.",
+        "three": "Manajer adalah orang yang memimpin tim. Tim induk menempatkan tim di bawah tim lain, sehingga Anda dapat membuat pohon seperti Penjualan dan Penjualan Barat.",
+        "four": "Tim utama seseorang adalah tim pokoknya, disimpan untuk laporan (laporan akan mulai memakainya di rilis mendatang). Perutean, penugasan, dan visibilitas memakai semua tim yang diikuti seseorang."
       },
       "created": "Tim dibuat.",
       "updated": "Tim diperbarui.",
@@ -181,6 +182,32 @@
       "deleteMessage": "Hapus tim \"{name}\"? Anggotanya tetap berada di ruang kerja. Tim akan dihapus dari semua tempat yang saat ini menggunakannya.",
       "deleteConfirm": "Hapus tim",
       "delete": "Hapus tim",
+      "subtitle": "Tim mengelompokkan orang untuk percakapan, penugasan, dan laporan.",
+      "emptyMessage": "Buat tim dan tambahkan orang yang bekerja bersama. Anda dapat merutekan percakapan ke tim ini dan menugaskan kontak, perusahaan, dan deal kepada anggotanya.",
+      "noAccess": "Anda tidak memiliki izin untuk melihat tim. Minta izin team.read kepada Pemilik atau Admin ruang kerja.",
+      "manager": "Manajer: {name}",
+      "noManager": "Tanpa manajer",
+      "receivesConversations": "Percakapan",
+      "receivesRecords": "Catatan",
+      "primaryCount": "{count, plural, one {# orang menjadikannya tim utama} other {# orang menjadikannya tim utama}}",
+      "usedBy": "Digunakan oleh",
+      "usedByNone": "Belum digunakan oleh aturan apa pun",
+      "usage": {
+        "routingRules": "{count, plural, one {# aturan perutean} other {# aturan perutean}}",
+        "assignmentRules": "{count, plural, one {# aturan penugasan} other {# aturan penugasan}}",
+        "segmentShares": "{count, plural, one {# segmen bersama} other {# segmen bersama}}",
+        "conversations": "{count, plural, one {# percakapan} other {# percakapan}}",
+        "childTeams": "{count, plural, one {# sub-tim} other {# sub-tim}}"
+      },
+      "notUsed": {
+        "title": "Disimpan, belum digunakan",
+        "body": "Pengaturan ini disimpan pada tim, tetapi belum ada yang membacanya. Pengaturan mulai berlaku dengan pembaruan perutean.",
+        "strategy": "Strategi penugasan otomatis: {value}",
+        "devices": "{count, plural, one {Dibatasi # perangkat} other {Dibatasi # perangkat}}",
+        "businessHours": "Jam kerja: tersimpan",
+        "timezone": "Zona waktu: {value}",
+        "defaultAssignee": "Penerima tugas default: {name}"
+      },
       "deleteUsage": {
         "title": "Apa yang akan berubah",
         "loading": "Memeriksa di mana tim ini digunakan...",
@@ -204,13 +231,6 @@
       "nameTooLong": "Nama maksimal {max} karakter.",
       "color": "Warna",
       "colorOption": "Warna {color}",
-      "strategy": "Strategi penugasan otomatis",
-      "strategyOptions": {
-        "manual": "Manual — manajer memilih siapa yang menerimanya",
-        "round_robin": "Round robin — dibagi rata",
-        "least_loaded": "Paling sedikit beban — yang paling sedikit terbuka lebih dulu",
-        "sticky": "Lengket — agen terakhir yang membalas kontak ini"
-      },
       "members": "Anggota",
       "membersLoading": "Memuat rekan tim",
       "membersFailed": "Rekan tim tidak dapat dimuat.",
@@ -221,7 +241,28 @@
       "create": "Buat tim",
       "creating": "Membuat…",
       "save": "Simpan perubahan",
-      "saving": "Menyimpan…"
+      "saving": "Menyimpan…",
+      "hint": "Tim mengelompokkan orang untuk percakapan, penugasan, dan laporan. Pilih manajer, tim induk opsional, dan apa yang dapat diterima tim.",
+      "description": "Deskripsi",
+      "descriptionPlaceholder": "Apa yang dikerjakan tim ini (opsional)",
+      "lead": "Manajer",
+      "leadNone": "Tanpa manajer",
+      "leadHint": "Orang yang memimpin tim. Ia ditambahkan ke tim sebagai pemimpin.",
+      "parent": "Tim induk",
+      "parentNone": "Tidak ada (tingkat teratas)",
+      "parentHint": "Tempatkan tim ini di bawah tim lain untuk membuat pohon, hingga 5 tingkat.",
+      "receive": "Dapat menerima",
+      "receiveHint": "Di mana tim ini dapat dipilih. Matikan salah satunya agar tim tidak muncul di pilihan tersebut.",
+      "receiveConversations": "Percakapan (perutean dan penugasan kotak masuk)",
+      "receiveRecords": "Catatan (kontak, perusahaan, dan deal)",
+      "membersHint": "Centang orang di tim ini. Tandai pemimpin, dan pilih tim utama tiap orang.",
+      "leadFlag": "Pemimpin",
+      "leadToggle": "Tandai sebagai pemimpin tim ini",
+      "leadLocked": "Manajer selalu menjadi pemimpin",
+      "primaryFlag": "Utama",
+      "primaryToggle": "Jadikan ini tim utama orang tersebut",
+      "primaryLocked": "Satu-satunya tim seseorang selalu menjadi tim utamanya",
+      "primaryHint": "Tim utama seseorang adalah tim pokoknya, disimpan untuk laporan (laporan akan mulai memakainya di rilis mendatang). Perutean, penugasan, dan visibilitas memakai semua timnya."
     },
     "errors": {
       "network": "Koneksi terputus. Periksa lalu coba lagi.",
@@ -250,7 +291,10 @@
       "delegateInvalid": "Delegasi harus anggota aktif lain di workspace ini.",
       "delegateCycle": "Itu akan membentuk lingkaran: orang yang dipilih sudah menjadikan orang ini sebagai delegasinya.",
       "reassignInvalid": "Tidak ada yang dapat ditugaskan ulang. Pastikan orang tersebut memegang kontak atau deal terbuka dan target dapat menerimanya.",
-      "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan."
+      "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan.",
+      "teamParentCycle": "Tim tidak dapat berada di bawah dirinya sendiri atau salah satu sub-timnya.",
+      "teamParentInvalid": "Tim induk itu tidak tersedia, atau pohon akan lebih dalam dari 5 tingkat.",
+      "teamNotOnTeam": "Orang itu tidak ada di tim ini."
     },
     "accept": {
       "title": "Bergabung dengan workspace Anda",
@@ -370,6 +414,26 @@
       "offline": "Offline",
       "hint": "Selama Anda offline, obrolan baru tidak ditugaskan kepada Anda secara otomatis. Obrolan yang sudah Anda pegang tetap milik Anda.",
       "failed": "Tidak dapat mengubah"
+    },
+    "deactivate": {
+      "eyebrow": "Anggota tim",
+      "title": "Nonaktifkan anggota",
+      "message": "{name} tidak akan bisa masuk lagi. Anda dapat mengaktifkannya kembali kapan saja.",
+      "loading": "Memeriksa apa yang mereka pegang",
+      "previewFailed": "Kami tidak dapat memeriksa apa yang dipegang orang ini. Anda tetap dapat menonaktifkannya; pekerjaannya tetap bersamanya.",
+      "holds": "{name} memiliki {contacts, plural, one {# kontak} other {# kontak}}, {deals, plural, one {# deal terbuka} other {# deal terbuka}}, dan {chats, plural, one {# percakapan terbuka} other {# percakapan terbuka}}. Bagaimana menanganinya?",
+      "optLead": "Serahkan ke manajer tim, {name} ({team})",
+      "optLeadNone": "Serahkan ke manajer tim (orang ini tidak punya manajer tim aktif)",
+      "optPerson": "Serahkan ke seseorang",
+      "pickPerson": "Orang",
+      "pickPlaceholder": "Pilih orang",
+      "optLeave": "Biarkan bersama {name}",
+      "undoNote": "Kontak dan deal terbuka dapat dibatalkan selama 14 hari dari riwayat penugasan ulang. Percakapan terbuka ditugaskan ulang satu per satu.",
+      "nothing": "{name} tidak memiliki kontak, deal terbuka, maupun percakapan terbuka.",
+      "membership": "Keanggotaan timnya dipertahankan, jadi mengaktifkan kembali {name} akan mengembalikannya ke tim-timnya.",
+      "confirm": "Nonaktifkan",
+      "moved": "{contacts, plural, one {# kontak} other {# kontak}}, {deals, plural, one {# deal} other {# deal}}, dan {chats, plural, one {# percakapan} other {# percakapan}} dipindahkan ke {name}.",
+      "remaining": "{count} lagi masih menunggu. Jalankan serah terima lagi untuk memindahkannya."
     }
   }
 }

@@ -8,10 +8,19 @@
  */
 export const MODULE_CEILING: Record<string, string[]> = {
   companies: ['record.companies.', 'record.company-properties.'],
-  'sales-docs': ['record.sales-docs.', 'record.sales-orders.', 'record.invoices.', 'record.recurring-invoices.', 'record.credit-notes.', 'record.payments.', 'record.tax-rates.'],
+  'sales-docs': [
+    'record.sales-docs.',
+    'record.sales-orders.',
+    'record.invoices.',
+    'record.recurring-invoices.',
+    'record.credit-notes.',
+    'record.payments.',
+    'record.tax-rates.',
+  ],
   deals: ['record.deals.', 'record.pipelines.'],
-  tasks: ['record.tasks.'],
-  appointments: ['record.appointments.', 'record.booking-types.'],
+  // Task outcomes and the Sales Activities page are part of tasks: they close with it
+  tasks: ['record.tasks.', 'settings.task_outcomes.', 'crm.activity_types.'],
+  appointments: ['record.appointments.', 'record.booking-types.', 'appointments.'],
   forms: ['record.forms.', 'record.form-submissions.', 'wfl.', 'exam.'],
   'ai-crm': ['aicrm.', 'lsc.'],
   // AI agents (trained assistants and their knowledge): Waboo had no such area, so a migrated workspace only has it when a Waboo permission maps into it
@@ -30,6 +39,10 @@ export const MODULE_CEILING: Record<string, string[]> = {
   warmer: ['sched.'],
   'team-chat': ['tchat.'],
   'website-chat': ['wgt.'],
+  // the unofficial engine (QR / pairing code numbers, their groups): Waboo never had it, so a migrated workspace never gets it
+  'unofficial-whatsapp': ['wa.devices.', 'wa.groups.'],
+  // the TikTok channel (a "coming soon" tile today): not part of what a Waboo workspace had
+  tiktok: ['chn.tiktok.'],
   // the AI Studio start page: a Desk page that Waboo never had (always closed for a migrated workspace, see NEVER_KEPT)
   'ai-studio': ['flb.ai_studio.'],
 };

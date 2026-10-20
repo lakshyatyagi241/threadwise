@@ -2,6 +2,7 @@ import 'server-only';
 import { cookies } from 'next/headers';
 import { apiBase } from '@/lib/auth/server';
 import { cookieNames } from '@/lib/auth/cookies';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -15,7 +16,7 @@ export async function couponIsMissing(id: string): Promise<boolean> {
   try {
     const at = (await cookies()).get(cookieNames('operator').access)?.value;
     if (!at) return false;
-    const res = await fetch(`${apiBase()}/v2/platform/coupons/${id}`, {
+    const res = await upstreamFetch(`${apiBase()}/v2/platform/coupons/${id}`, {
       headers: { Authorization: `Bearer ${at}` },
       cache: 'no-store',
     });

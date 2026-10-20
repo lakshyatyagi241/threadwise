@@ -36,6 +36,14 @@ fi
 
 status() { printf '{"at":"%s","sha":"%s","state":"%s","log":"%s"}\n' "$(date -Is)" "${TAG:-}" "$1" "${LOG:-}" > "$STATE/status.json"; }
 
+# Tells production about a build-side step, so the operator console's release history shows it (see `event` in ci-entry.sh). The
+# message goes on stdin. Reporting never stops the deploy: if production cannot be reached the release still runs or fails as it would.
+report() {  # report <state> <step> [message]
+  [ -n "${TAG:-}" ] && [ -n "${ATTEMPT:-}" ] || return 0
+  printf '%s' "${3:-}" | ssh_prod "event $ATTEMPT $TAG $1 $2" >/dev/null 2>&1 \
+    || echo "$(date -Is) could not report $1 for $TAG to production; the deploy goes on" >> "$LOGS/webhook.log"
+}
+
 run_once() {
   TAG=""; LOG="$LOGS/$(date +%Y%m%dT%H%M%S).log"
   exec > >(tee -a "$LOG") 2>&1
@@ -69,18 +77,20 @@ run_once() {
     echo "== cannot find the last released commit $last in the clone; not releasing (check the clone's history)"; return 1
   fi
   status building
+  report building build
   echo "== building $TAG"
   docker build -f crm-platform/apps/api/Dockerfile -t "desk-api:$TAG" --build-arg "GIT_SHA=$TAG" crm-platform || return 1
   docker build -f crm-platform/apps/web/Dockerfile -t "desk-web:$TAG" \
     --build-arg "NEXT_PUBLIC_SENTRY_DSN=$SENTRY_DSN" --build-arg "NEXT_PUBLIC_GIT_SHA=$TAG" crm-platform || return 1
   status shipping
+  report shipping ship
   echo "== syncing deploy files"
   tar -C crm-platform/deploy/hostinger -c docker-compose.yml init-roles.sh seed.js set-secrets.sh .env.example traefik-desk.yml.template | ssh_prod sync || return 1
   echo "== shipping images"
   docker save "desk-api:$TAG" "desk-web:$TAG" | gzip -1 | ssh_prod load || return 1
   status releasing
   echo "== releasing $TAG on production"
-  ssh_prod "release $TAG" || return 1
+  ssh_prod "release $TAG $ATTEMPT" || return 1
   echo "== smoke test $SMOKE_URL"
   for _ in $(seq 1 12); do
     [ "$(curl -s -o /dev/null -w '%{http_code}' --max-time 10 "$SMOKE_URL")" = 200 ] && { echo "== $TAG is live"; echo "$TAG" > "$STATE/deployed"; return 0; }
@@ -92,9 +102,19 @@ run_once() {
 
 while true; do
   rm -f "$STATE/pending"
+  # One id per run; production records the release history under it (the build's steps and the release's steps share it).
+  ATTEMPT=$(cat /proc/sys/kernel/random/uuid)
   ( run_once ); rc=$?
   TAG=$(git -C "$CI_DIR/repo" rev-parse --short=9 HEAD 2>/dev/null || true); LOG=$(ls -1t "$LOGS"/20*.log 2>/dev/null | head -1)
-  if [ "$rc" = 0 ]; then status ok; else status failed; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"; fi
+  if [ "$rc" = 0 ]; then status ok; else
+    status failed; echo "$(date -Is) deploy of $TAG failed (rc=$rc), see $LOG" >> "$LOGS/webhook.log"
+    # A failure before production was asked to release is recorded here; a failure during the release is recorded by the release itself.
+    cur=$(sed -n 's/.*"state":"\([a-z]*\)".*/\1/p' "$STATE/status.json" 2>/dev/null)
+    case "$cur" in building|shipping)
+      [ -n "$TAG" ] && printf '%s' "the build or the ship stopped; see the build log on the build server" \
+        | ssh_prod "event $ATTEMPT $TAG failed $cur" >/dev/null 2>&1 || true ;;
+    esac
+  fi
   # keep the last two local builds and trim the build cache so the disk does not fill
   docker image ls --format '{{.Repository}}:{{.Tag}}' | grep -E '^desk-(api|web):' | grep -vE ":($TAG|$(cat "$STATE/deployed" 2>/dev/null || echo none))$" | xargs -r docker rmi >/dev/null 2>&1 || true
   docker builder prune -f --filter until=96h >/dev/null 2>&1 || true

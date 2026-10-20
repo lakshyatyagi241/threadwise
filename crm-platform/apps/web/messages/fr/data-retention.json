@@ -38,6 +38,58 @@
       "audit_log_exports": {
         "title": "Fichiers d'export d'audit",
         "description": "Le CSV qu'un espace de travail demande à partir de son journal d'audit. Le demandeur reçoit un e-mail avec un lien pour se connecter et le télécharger ; le fichier est supprimé après les jours actifs."
+      },
+      "message_log": {
+        "title": "Journal de livraison des messages",
+        "description": "Le journal de livraison de chaque message : envoyé, remis, échoué, retenté. Les événements quittent la table active après les jours actifs et passent, compressés, dans l'archive ; les jours d'archive comptent alors à partir de ce jour. Le journal d'un message et les exports du journal peuvent toujours lire l'archive."
+      },
+      "notifications_read": {
+        "title": "Notifications (lues)",
+        "description": "Notifications de la cloche qu'un utilisateur a déjà lues. Elles sont supprimées dès qu'elles atteignent ce nombre de jours. La valeur intégrée provient des paramètres du serveur (NOTIFY_RETENTION_READ_DAYS)."
+      },
+      "notifications_unread": {
+        "title": "Notifications (jamais lues)",
+        "description": "Notifications de la cloche que personne n'a ouvertes. Elles sont supprimées dès qu'elles atteignent ce nombre de jours, et jamais avant les notifications lues (l'enregistrement est refusé dans ce cas). La valeur intégrée provient des paramètres du serveur (NOTIFY_RETENTION_UNREAD_DAYS)."
+      },
+      "push_devices_revoked": {
+        "title": "Appareils push révoqués",
+        "description": "Navigateurs et téléphones qui n'acceptent plus les notifications push. Conservés brièvement pour qu'un appareil qui revient puisse réactiver les notifications, puis supprimés."
+      },
+      "assignment_runs": {
+        "title": "Journal des exécutions d'attribution",
+        "description": "L'historique de chaque exécution d'attribution automatique des contacts, avec qui a reçu quoi et pourquoi. Supprimé après les jours actifs."
+      },
+      "form_events": {
+        "title": "Événements d'analyse des formulaires",
+        "description": "Vues, débuts et envois des formulaires web, utilisés pour les graphiques de conversion des formulaires. Ils ne contiennent aucune réponse. Supprimés après les jours actifs. Les réponses suivent la rétention propre à chaque formulaire."
+      },
+      "lead_sync_runs": {
+        "title": "Exécutions de synchronisation des leads",
+        "description": "L'historique de chaque synchronisation ou rattrapage de leads depuis une plateforme publicitaire : qui a récupéré quoi et quand. Supprimé après les jours actifs. Les données brutes des leads suivent la rétention propre à chaque source."
+      },
+      "lead_scoring_runs": {
+        "title": "Journal du scoring de leads par IA",
+        "description": "Chaque score de lead par IA avec ses raisons, ainsi que les lectures de conversation et suggestions d'étape qui le fondent. Tant que vous n'enregistrez pas de valeur ici, le nombre défini dans les paramètres du scoring de leads par IA est utilisé. Une personne sous conservation légale garde ses données."
+      },
+      "api_library_logs": {
+        "title": "Journal d'exécution de la bibliothèque d'API",
+        "description": "Le journal des requêtes et réponses de chaque appel à la bibliothèque d'API. Supprimé après les jours actifs."
+      },
+      "flow_run_logs": {
+        "title": "Journal d'exécution des automatisations",
+        "description": "Chaque exécution terminée d'un flux d'automatisation avec ses étapes, et les versions de flux auxquelles plus aucune exécution ne se réfère. Les exécutions en cours ne sont jamais touchées."
+      },
+      "webhook_forward_failures": {
+        "title": "Livraisons de webhook échouées",
+        "description": "Livraisons de webhook qui ont échoué et peuvent encore être rejouées. Après les jours actifs, elles ne peuvent plus être rejouées et sont supprimées."
+      },
+      "click_calls": {
+        "title": "Appels en un clic non rapportés",
+        "description": "Un appel en un clic dont l'appel terminé n'est jamais revenu du fournisseur. Oublié après les jours actifs."
+      },
+      "call_recordings": {
+        "title": "Enregistrements d'appels",
+        "description": "Le nombre de jours par défaut de conservation d'un enregistrement d'appel, pour les espaces de travail qui n'ont jamais choisi leur propre durée ; la durée propre à un espace de travail reste prioritaire. Passé ce délai, le fichier d'enregistrement est supprimé et l'appel reste. Un enregistrement sous conservation légale est gardé."
       }
     },
     "fields": {
@@ -45,7 +97,8 @@
       "liveDaysHint": "Jours pendant lesquels les données restent dans la base de données. Valeurs autorisées : de {min} à {max}.",
       "keepForever": "Conserver l'archive indéfiniment",
       "archiveDays": "Jours d'archive",
-      "archiveDaysHint": "Jours supplémentaires pendant lesquels l'archive les conserve avant leur suppression. Valeurs autorisées : de {min} à {max}."
+      "archiveDaysHint": "Jours supplémentaires pendant lesquels l'archive les conserve avant leur suppression. Valeurs autorisées : de {min} à {max}.",
+      "keepForeverShort": "Conserver indéfiniment"
     },
     "summary": {
       "noArchive": "Supprimé définitivement {live, plural, one {# jour} many {# de jours} other {# jours}} après son écriture.",
@@ -73,7 +126,9 @@
       "neverRun": "Pas encore exécuté",
       "runLive": "{when} : {months, plural, one {# mois archivé} many {# de mois archivés} other {# mois archivés}} ({rows} lignes, {size}), {expired} supprimés de l'archive, {deleted} lignes ou fichiers supprimés",
       "runDry": "{when} : simulation, rien n'a été modifié",
-      "runFailed": "La dernière exécution a rencontré un problème : {error}"
+      "runFailed": "La dernière exécution a rencontré un problème : {error}",
+      "runDeleted": "{when} : {deleted, plural, one {# ligne ou fichier supprimé} other {# lignes ou fichiers supprimés}}",
+      "runDaily": "{when} : {rows} événements déplacés vers l'archive, {expired} jours archivés supprimés"
     },
     "actions": {
       "save": "Enregistrer",
@@ -85,7 +140,8 @@
       "confirmSave": "Enregistrer et appliquer",
       "resetTitle": "Rétablir le comportement actuel pour {item} ?",
       "resetBody": "Les valeurs enregistrées sont supprimées. Les tâches nocturnes reviennent aux règles intégrées pour cet élément. Les données déjà archivées restent dans l'archive.",
-      "confirmReset": "Revenir au comportement actuel"
+      "confirmReset": "Revenir au comportement actuel",
+      "resetShort": "Réinitialiser"
     },
     "preview": {
       "title": "Enregistrer la conservation pour {item} ?",
@@ -94,7 +150,8 @@
       "toDeleteFromArchive": "{count, plural, one {# mois archivé} many {# de mois archivés} other {# mois archivés}} seront supprimés définitivement de l'archive.",
       "rowsToDelete": "{count, plural, one {# ligne ou fichier} many {# de lignes ou fichiers} other {# lignes ou fichiers}} seront supprimés définitivement.",
       "notApplied": "La tâche d'archivage n'applique pas encore les valeurs enregistrées, donc rien de tout cela n'a lieu tant qu'elle n'est pas activée.",
-      "permanent": "La suppression est définitive et ne peut pas être annulée."
+      "permanent": "La suppression est définitive et ne peut pas être annulée.",
+      "rowsToArchive": "{count, plural, one {# événement va être déplacé} other {# événements vont être déplacés}} de la table active vers l'archive."
     },
     "saved": "Conservation enregistrée.",
     "resetDone": "Retour au comportement actuel.",
@@ -103,7 +160,8 @@
       "archive_out_of_range": "Les jours d'archive doivent être un nombre entier de {min} à {max}.",
       "archive_not_supported": "Cet élément ne peut pas être archivé.",
       "delete_before_archive": "Les données ne peuvent pas être supprimées avant d'être archivées.",
-      "not_a_number": "Saisissez un nombre entier de jours."
+      "not_a_number": "Saisissez un nombre entier de jours.",
+      "unread_before_read": "Les notifications non lues ne peuvent pas être supprimées avant les lues. Définissez les jours des non lues sur au moins ceux des lues."
     },
     "errors": {
       "forbidden": "Vous n'êtes pas autorisé à effectuer cette action.",
@@ -112,6 +170,36 @@
       "request": "La requête a été refusée.",
       "unexpected": "Une erreur s'est produite sur le serveur. Réessayez.",
       "network": "Impossible de joindre le serveur. Vérifiez votre connexion et réessayez."
+    },
+    "groups": {
+      "analytics": "Analytique",
+      "security": "Sécurité et audit",
+      "messaging": "Messagerie et notifications",
+      "crm": "CRM et leads",
+      "automation": "Automatisation et intégrations",
+      "calling": "Appels"
+    },
+    "table": {
+      "title": "Rétention en un coup d'œil",
+      "description": "Ce que conserve chaque type de donnée, et pendant combien de temps. Sélectionnez un élément pour modifier ses valeurs ci-dessous.",
+      "item": "Données",
+      "storedIn": "Stocké dans",
+      "live": "Actif (base de données)",
+      "archive": "Archive",
+      "deleted": "Supprimé définitivement après",
+      "setting": "Paramètre",
+      "days": "{count, plural, one {# jour} other {# jours}}",
+      "noArchive": "Pas d'archive",
+      "forever": "Indéfiniment",
+      "never": "Jamais",
+      "where": {
+        "partitioned": "Base de données, puis archive {driver}",
+        "daily_archive": "Base de données, puis archive en base de données",
+        "table": "Base de données uniquement",
+        "file": "Fichiers"
+      },
+      "actions": "Actions",
+      "about": "De quoi s’agit-il ?"
     }
   }
 }

@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { FLOW_RUN_LOG_RETENTION_DAYS } from '@crm/contracts';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { liveDaysFor, recordSweep } from '../../data-retention';
 import { RunRepository } from './run.repository';
 
 const BATCH = 1000;
@@ -39,11 +40,15 @@ export class FlowRunRetentionService {
 
   /** Public for tests. */
   async sweep(now: Date = new Date()): Promise<{ runs: number; versions: number }> {
-    const cutoff = new Date(now.getTime() - FLOW_RUN_LOG_RETENTION_DAYS * DAY_MS);
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'flow_run_logs', FLOW_RUN_LOG_RETENTION_DAYS),
+    );
+    const cutoff = new Date(now.getTime() - days * DAY_MS);
     const runs = await this.drain((tx) => this.runs.purgeEndedBefore(tx, cutoff, BATCH));
     const versions = await this.drain((tx) =>
       this.runs.purgeUnusedGraphVersions(tx, cutoff, BATCH),
     );
+    await recordSweep(this.db, this.logger, 'flow_run_logs', { deletedRows: runs + versions }, now);
     return { runs, versions };
   }
 

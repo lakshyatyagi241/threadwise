@@ -1,6 +1,8 @@
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { NextIntlClientProvider } from 'next-intl';
 import type { ReactNode } from 'react';
+import { resolveTimezone } from '@crm/contracts';
 import { getConsoleCounts } from '@/features/admin-console-shell/console-counts';
 import { ConsoleShell } from '@/features/admin-console-shell/console-shell';
 import {
@@ -12,6 +14,7 @@ import {
   safeConsolePath,
 } from '@/features/auth-registration-security/platform/lib/next-path';
 import { IpBlockedView } from '@/features/auth-registration-security/platform/ui/ip-blocked-view';
+import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
 import { getOperatorSession, requestPath } from '@/lib/auth/server';
 
 const OPERATOR_HOME = '/admin';
@@ -43,17 +46,21 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   }
 
   // A gated super admin may only open the enrolment page, so there is nothing to count for them.
-  const [counts, store] = await Promise.all([
+  const [counts, store, site] = await Promise.all([
     session.mfaEnrolmentRequired ? Promise.resolve({}) : getConsoleCounts(),
     cookies(),
+    getSiteConfig(),
   ]);
   return (
-    <ConsoleShell
-      operator={session}
-      counts={counts}
-      initialSidebar={parseSidebarState(store.get(CONSOLE_SIDEBAR_COOKIE)?.value)}
-    >
-      {children}
-    </ConsoleShell>
+    // Every date and time in the console is shown in the zone the super admin set in Settings, not the server's (UTC).
+    <NextIntlClientProvider timeZone={resolveTimezone([site?.defaults.timezone])}>
+      <ConsoleShell
+        operator={session}
+        counts={counts}
+        initialSidebar={parseSidebarState(store.get(CONSOLE_SIDEBAR_COOKIE)?.value)}
+      >
+        {children}
+      </ConsoleShell>
+    </NextIntlClientProvider>
   );
 }

@@ -17,6 +17,7 @@ export const settings = [
     href: '/channels/web',
     icon: 'globe',
     order: 25,
-    gates: { permission: 'flb.flows.read' },
+    // its own permission (a Waboo workspace never has website chat and is denied wgt.*): flows access alone does not show it
+    gates: { permission: 'wgt.widgets.read' },
   }),
 ];

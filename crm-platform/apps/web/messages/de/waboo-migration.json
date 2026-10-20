@@ -46,7 +46,9 @@
       "catchUp": "Nachholen",
       "migrateHint": "Die Migration beginnt mit einer vollständigen Probe und lädt nichts, wenn diese nicht sauber ist. Ein separater Testlauf ist optional.",
       "queued": "Lauf eingereiht.",
-      "scheduled": "Lauf geplant."
+      "scheduled": "Lauf geplant.",
+      "skipWhatsapp": "WhatsApp-Nummer nicht migrieren (zum Testen)",
+      "skipWhatsappHint": "Der Arbeitsbereich wird vollständig migriert, seine WhatsApp-Nummer wird jedoch weder importiert noch verbunden."
     },
     "confirm": {
       "title": "{org} migrieren",
@@ -76,7 +78,9 @@
       "migrateAll": "Alle migrieren",
       "migrateHint": "Jede Organisation beginnt mit einer eigenen vollständigen Probe und lädt nichts, wenn diese nicht sauber ist. Ein separater Testlauf ist optional.",
       "queued": "Batch eingereiht.",
-      "scheduled": "Batch geplant."
+      "scheduled": "Batch geplant.",
+      "skipWhatsapp": "WhatsApp-Nummern nicht migrieren (zum Testen)",
+      "skipWhatsappHint": "Bei keinem dieser Arbeitsbereiche wird die WhatsApp-Nummer importiert oder verbunden."
     },
     "bulkConfirm": {
       "title": "{count} Organisationen migrieren",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Testlauf",
       "load": "Migration",
-      "catchup": "Nachholen"
+      "catchup": "Nachholen",
+      "skipWhatsapp": "Keine WhatsApp-Nummer"
     },
     "status": {
       "queued": "Eingereiht",

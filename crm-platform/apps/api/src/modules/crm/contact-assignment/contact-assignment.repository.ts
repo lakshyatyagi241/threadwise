@@ -311,6 +311,7 @@ export class ContactAssignmentRepository {
     return new Map((res.rows as Raw[]).map((r) => [String(r.uuid), Number(r.id)]));
   }
 
+  /** Teams by uuid that may be a record pool: a team switched to "does not receive records" (Teams v2) is left out. */
   async teamIdsByUuid(
     tx: Tx,
     orgId: number,
@@ -318,7 +319,7 @@ export class ContactAssignmentRepository {
   ): Promise<Map<string, number>> {
     if (uuids.length === 0) return new Map();
     const res = await tx.execute(sql`
-      SELECT uuid, id FROM teams WHERE org_id = ${orgId}
+      SELECT uuid, id FROM teams WHERE org_id = ${orgId} AND receives_records
         AND uuid IN (${sql.join(
           uuids.map((u) => sql`${u}::uuid`),
           sql`, `,

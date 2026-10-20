@@ -13,6 +13,8 @@ interface Setup {
   vendor?: FlowAiResult | Error;
   sources?: Array<Record<string, unknown>>;
   assistantExists?: boolean;
+  /** The search found passages for the message (true) or fell back to the whole base (false/absent). */
+  grounded?: boolean;
   /** The AI agent's row as the profile query returns it; null = no such agent. */
   agent?: Record<string, unknown> | null;
 }
@@ -56,7 +58,25 @@ function build(s: Setup = {}) {
         },
       }),
   };
-  const svc = new AiCallService(db as never, keys as never, meter as never, port);
+  const retrieval = {
+    retrieve: async () => ({
+      grounded: s.grounded === true,
+      passages: (s.sources ?? []).map((r) => ({
+        label: String(r.label),
+        text:
+          r.kind === 'qa'
+            ? `Q: ${String(r.question)}\nA: ${String(r.answer)}`
+            : String(r.content ?? ''),
+      })),
+    }),
+  };
+  const svc = new AiCallService(
+    db as never,
+    keys as never,
+    meter as never,
+    port,
+    retrieval as never,
+  );
   return { svc, sent, recorded };
 }
 

@@ -57,7 +57,27 @@ interface Team {
   color: string;
   assignmentStrategy: string;
   deviceIds: string[];
-  members: Array<{ id: string; fullName: string; isLead: boolean; capacity: number }>;
+  members: Array<{
+    id: string;
+    fullName: string;
+    isLead: boolean;
+    role: 'member' | 'lead';
+    isPrimary: boolean;
+    capacity: number;
+  }>;
+  parentId: string | null;
+  depth: number;
+  lead: { id: string; fullName: string } | null;
+  receivesConversations: boolean;
+  receivesRecords: boolean;
+  memberCount: number;
+  usage: {
+    routingRules: number;
+    assignmentRules: number;
+    segmentShares: number;
+    childTeams: number;
+    conversations: number;
+  };
   rowVersion: number;
 }
 
@@ -971,7 +991,7 @@ describe('TW-WSP-018 and TW-WSP-047: remove a member (soft), and invite the addr
     t = await api.signup('wsp18');
   });
 
-  it('018 #1: removing an agent who is in two teams deletes the roles and both team places, ends their sessions at once, and leaves audit and outbox rows', async () => {
+  it('018 #1: removing an agent who is in two teams deletes the roles, keeps both team places (hidden), ends their sessions at once, and leaves audit and outbox rows', async () => {
     const agent = await addMember(t, 'Team Agent', 'Agent');
     const teamA = await createTeam(t.admin, { name: 'Sales18', memberIds: [agent.uuid] });
     const teamB = await createTeam(t.admin, { name: 'Support18', memberIds: [agent.uuid] });
@@ -981,12 +1001,17 @@ describe('TW-WSP-018 and TW-WSP-047: remove a member (soft), and invite the addr
 
     const res = await api.as(t.admin).delete(`/v2/workspace/members/${agent.uuid}`);
     expect(res.status).toBe(204);
+    // Team places are kept (Teams v2, D10) so that reactivating the person restores them; the tenant policy hides them meanwhile.
     expect(
       await count(`SELECT count(*) n FROM team_members WHERE org_id = $1 AND user_id = $2`, [
         t.orgId,
         agent.userId,
       ]),
-    ).toBe(0);
+    ).toBe(2);
+    const listed = await api.as(t.admin).get('/v2/workspace/teams');
+    for (const team of listed.body.data as Team[]) {
+      expect(team.members.some((m) => m.id === agent.uuid)).toBe(false);
+    }
     expect(
       await count(`SELECT count(*) n FROM user_roles WHERE org_id = $1 AND user_id = $2`, [
         t.orgId,
@@ -1383,7 +1408,9 @@ describe('TW-WSP-022: teams', () => {
     });
     expect(team.id).toMatch(uuidRe);
     expect(team.members.map((m) => m.fullName).sort()).toEqual(['Ava Team', 'Ben Team']);
-    expect(team.members.every((m) => m.isLead === false && m.capacity === 20)).toBe(true);
+    expect(
+      team.members.every((m) => m.isLead === false && m.role === 'member' && m.capacity === 20),
+    ).toBe(true);
     expect(
       await count(
         `SELECT count(*) n FROM team_members tm JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id WHERE tm.org_id = $1 AND t.uuid = $2`,
@@ -1409,25 +1436,32 @@ describe('TW-WSP-022: teams', () => {
     expect(plain.body.color).toBe('#075E54');
   });
 
-  it('022 #2: a manager (no inbox.team.manage) cannot create, edit or delete a team: 403; any signed-in member can list', async () => {
-    const manager = await addMember(t, 'Mgr22', 'Manager');
-    expect((await createTeam(manager.token, { name: 'Denied' })).status).toBe(403);
+  it('022 #2: an agent (team.read only) can list but not create, edit or delete a team: 403; a manager (team.manage) can', async () => {
+    const agent = await addMember(t, 'Agt22', 'Agent');
+    expect((await createTeam(agent.token, { name: 'Denied' })).status).toBe(403);
     const list = await api.as(t.admin).get('/v2/workspace/teams');
     const id = (list.body.data as Team[])[0]!.id;
     const rv = (list.body.data as Team[])[0]!.rowVersion;
     expect(
       (
         await api
-          .as(manager.token)
+          .as(agent.token)
           .patch(`/v2/workspace/teams/${id}`)
           .send({ name: 'x', rowVersion: rv })
       ).status,
     ).toBe(403);
-    expect((await api.as(manager.token).delete(`/v2/workspace/teams/${id}`)).status).toBe(403);
-    expect((await api.as(ava.token).get('/v2/workspace/teams')).status).toBe(200);
+    expect((await api.as(agent.token).delete(`/v2/workspace/teams/${id}`)).status).toBe(403);
+    expect((await api.as(agent.token).get('/v2/workspace/teams')).status).toBe(200);
     expect(
       await count(`SELECT count(*) n FROM teams WHERE org_id = $1 AND name = 'Denied'`, [t.orgId]),
     ).toBe(0);
+    // Teams v2: the Manager preset holds team.manage.
+    const manager = await addMember(t, 'Mgr22', 'Manager');
+    const made = await createTeam(manager.token, { name: 'ByManager' });
+    expect(made.status, JSON.stringify(made.body)).toBe(201);
+    expect((await api.as(manager.token).delete(`/v2/workspace/teams/${made.body.id}`)).status).toBe(
+      204,
+    );
   });
 
   it('022 #3: deviceIds of another workspace, or that do not exist, are dropped from the saved list; none left means every device', async () => {
@@ -1480,7 +1514,7 @@ describe('TW-WSP-022: teams', () => {
       await createTeam(t.admin, { name: 'Replace', memberIds: [ava.uuid, ben.uuid] })
     ).body as Team;
     await h.owner.query(
-      `UPDATE team_members SET is_lead = true, capacity = 5 WHERE org_id = $1 AND user_id = $2 AND team_id = (SELECT id FROM teams WHERE org_id = $1 AND uuid = $3)`,
+      `UPDATE team_members SET role = 'lead', capacity = 5 WHERE org_id = $1 AND user_id = $2 AND team_id = (SELECT id FROM teams WHERE org_id = $1 AND uuid = $3)`,
       [t.orgId, ava.userId, created.id],
     );
     const one = await api

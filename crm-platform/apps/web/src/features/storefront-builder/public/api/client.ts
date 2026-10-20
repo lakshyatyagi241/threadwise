@@ -40,6 +40,7 @@ async function call<T>(
   let res: Response;
   try {
     res = await fetch(url, {
+      signal: AbortSignal.timeout(30000),
       ...init,
       credentials: 'same-origin',
       headers: { Accept: 'application/json', ...init.headers },

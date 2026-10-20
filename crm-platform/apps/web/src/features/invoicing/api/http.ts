@@ -40,6 +40,7 @@ export async function callPublic<T>(
   const res = await fetch(
     `/api/public/invoices/${encodeURIComponent(token)}${req.action ? `/${req.action}` : ''}`,
     {
+      signal: AbortSignal.timeout(30000),
       method,
       headers,
       body: req.body === undefined ? undefined : JSON.stringify(req.body),

@@ -5,6 +5,7 @@ import { consolePathFrom } from '@/features/workspaces-teams-tenancy/lib/imperso
 import { clientIpFrom } from '@/lib/auth/client-ip';
 import { isSameOrigin, problem } from '@/lib/auth/proxy';
 import { apiBase } from '@/lib/auth/server';
+import { upstreamFetch } from '@/lib/auth/upstream';
 
 /**
  * POST /api/auth/impersonation/stop: ends the act-as session on the API, then removes the act-as cookie from this browser (page code
@@ -19,7 +20,7 @@ export async function POST(req: Request) {
   const headers = new Headers({ authorization: `Bearer ${token}`, accept: 'application/json' });
   const ip = clientIpFrom(req.headers);
   if (ip) headers.set('x-forwarded-for', ip);
-  const upstream = await fetch(`${apiBase()}/v2/auth/impersonation/stop`, {
+  const upstream = await upstreamFetch(`${apiBase()}/v2/auth/impersonation/stop`, {
     method: 'POST',
     headers,
     cache: 'no-store',
