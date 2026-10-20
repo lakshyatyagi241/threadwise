@@ -13,6 +13,7 @@ import {
   cn,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useActivitySettings } from '@/features/sales-activities';
 import { useRecordRef, useTaskOutcomes } from '../api/hooks';
 import { outcomeChoices } from '../lib/outcomes';
 import { PRIORITIES, type Member } from '../api/schemas';
@@ -73,10 +74,12 @@ export function TasksToolbar(p: TasksToolbarProps) {
           ? f.company
           : '';
   const outcomes = useTaskOutcomes(false);
+  const outcomeSettings = useActivitySettings('task');
   const outcomeOptions = outcomeChoices(
     outcomes.data ?? [],
     f.outcome ? { id: f.outcome, name: '…', isActive: true } : null,
   );
+  const showOutcomeFilter = !(outcomeSettings.loaded && !outcomeSettings.outcomesEnabled);
   const ref = useRecordRef(linkKind === '' ? 'contact' : linkKind, linkId);
   const views: Array<{ id: TasksView; icon: typeof ListIcon }> = [
     { id: 'list', icon: ListIcon },
@@ -126,7 +129,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
         ))}
       </Select>
 
-      {outcomeOptions.length > 0 && (
+      {outcomeOptions.length > 0 && showOutcomeFilter && (
         <Select
           aria-label={t('outcome')}
           className="h-9 w-auto min-w-36 max-w-52"

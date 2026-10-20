@@ -3,6 +3,7 @@ import { and, eq, sql, type SQL } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { escapeLike } from '../contacts/contact-conditions';
+import { memberTeamIdsSql } from '../../../kernel/rbac/scope';
 
 const { segments, segmentShares } = schema;
 
@@ -104,8 +105,7 @@ export class SegmentsRepository {
       SELECT 1 FROM segment_shares sh
       WHERE sh.org_id = s.org_id AND sh.segment_id = s.id
         AND (sh.user_id = current_actor_id()
-             OR sh.team_id IN (SELECT tm.team_id FROM team_members tm
-                               WHERE tm.org_id = s.org_id AND tm.user_id = current_actor_id()))
+             OR sh.team_id IN ${memberTeamIdsSql(sql`s.org_id`, sql`current_actor_id()`)})
     ))`;
 
   private readonly selectSql = sql`

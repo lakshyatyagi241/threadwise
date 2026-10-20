@@ -1102,7 +1102,7 @@ describe('the query plan', () => {
       conversationJoins: sql``,
       conversationVisible: sql`TRUE`,
       bulk: true,
-      contacts: { scope: 'all' as const, userId: t.adminUserId, teamIds: [] },
+      contacts: { scope: 'all' as const, userId: t.adminUserId },
       cost: false,
     };
     const sel = {

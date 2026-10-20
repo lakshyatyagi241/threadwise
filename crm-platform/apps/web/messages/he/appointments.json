@@ -44,7 +44,8 @@
       "notDeletable": "אי אפשר למחוק את זה כל עוד יש הזמנות עתידיות.",
       "notDrifted": "ההזמנה הזו כבר תואמת לאירוע שלה ב-Google. הנתונים נטענו מחדש.",
       "calendarNotConnected": "Google Calendar אינו מחובר. חברו אותו מחדש בעמוד חשבון Google ונסו שוב.",
-      "calendarFailed": "Google לא הגיב או סירב לשינוי. נסו שוב בעוד רגע."
+      "calendarFailed": "Google לא הגיב או סירב לשינוי. נסו שוב בעוד רגע.",
+      "whatsappNotConnected": "חברו קודם מספר WhatsApp Cloud API בהגדרות: הודעת WhatsApp מוגשת דרך מספר כזה."
     },
     "picker": {
       "timeZone": "אזור זמן",

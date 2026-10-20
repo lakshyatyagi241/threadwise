@@ -233,7 +233,14 @@
         "nobody": "Khớp, nhưng không có ai sẵn sàng",
         "broken": "Có điều kiện bị lỗi"
       },
-      "skipped": "Bị bỏ qua vì không có ai sẵn sàng: {names}"
+      "skipped": "Bị bỏ qua vì không có ai sẵn sàng: {names}",
+      "excluded": {
+        "label": "Bị loại",
+        "no_access": "{name}: không thể mở loại bản ghi này",
+        "inactive": "{name}: không còn hoạt động",
+        "on_leave": "{name}: nghỉ phép hôm nay",
+        "offline": "{name}: ngoại tuyến"
+      }
     },
     "log": {
       "title": "Nhật ký chạy",

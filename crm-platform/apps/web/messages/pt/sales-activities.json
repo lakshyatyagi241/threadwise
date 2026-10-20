@@ -73,13 +73,11 @@
       "allowEditCompleted": "Permitir que os usuários editem a data e a hora de conclusão desta atividade",
       "taskTypes": "Tipos de tarefa",
       "taskTypesHint": "Escolha um ao criar uma tarefa, por exemplo Acompanhamento ou Lembrete de ligação.",
-      "addTaskType": "Adicionar tipo de tarefa",
+      "addTaskType": "Adicionar tipo",
       "taskTypePlaceholder": "Novo tipo de tarefa",
       "predictOutcomes": "Prever resultados desta atividade",
       "predictOutcomesHint": "Oferecer um resultado quando a atividade for concluída.",
       "outcomes": "Resultados",
-      "taskOutcomesHint": "Os resultados de uma tarefa concluída são uma única lista para todo o espaço de trabalho, mantida em Resultados de tarefas.",
-      "taskOutcomesLink": "Abrir Resultados de tarefas",
       "outcomesHint": "Remover um resultado o mantém nos registros que já o têm.",
       "phoneOutcomesHint": "Escolha como cada resultado conta nos relatórios de ligações. Remover um resultado o mantém nas ligações que já o têm.",
       "addOutcome": "Adicionar resultado",
@@ -112,7 +110,12 @@
         "conflict": "Outra pessoa alterou esta atividade. Ela foi recarregada; tente novamente.",
         "forbidden": "Você não tem permissão para alterar isto.",
         "failed": "Não foi possível salvar. Tente novamente."
-      }
+      },
+      "itemName": "Nome",
+      "hiddenInstead": "Ainda há tarefas que o usam, então ele foi ocultado. Elas continuam a mostrá-lo.",
+      "loadingOutcomes": "Carregando resultados…",
+      "outcomesLoadFailed": "Não foi possível carregar os resultados.",
+      "retry": "Tentar novamente"
     },
     "create": {
       "title": "Criar atividade",

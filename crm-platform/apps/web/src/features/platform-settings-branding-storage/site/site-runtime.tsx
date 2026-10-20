@@ -166,7 +166,7 @@ export function SiteRuntime({
           data-testid="cookie-bar"
           className={`fixed inset-x-3 z-50 mx-auto flex max-w-3xl flex-wrap items-center gap-3 rounded-lg border border-border bg-background p-4 shadow-xl ${banner.style === 'top-bar' ? 'top-3' : 'bottom-3'}`}
         >
-          <div className="min-w-0 flex-1 text-sm">
+          <div className="min-w-0 flex-1 basis-64 text-sm">
             <p className="font-semibold">{t('title')}</p>
             <p className="text-muted-foreground">
               {banner.message}{' '}

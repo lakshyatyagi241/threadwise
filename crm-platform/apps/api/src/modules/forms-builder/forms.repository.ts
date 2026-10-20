@@ -3,6 +3,7 @@ import { sql, type SQL } from 'drizzle-orm';
 import type { FormStatus, RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../common/pagination/cursor';
+import { isTeamPeer, scopeOwnerCondition } from '../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
@@ -103,12 +104,7 @@ export function formScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  if (scope === 'own') return sql`f.created_by = ${actorUserId}`;
-  return sql`(f.created_by = ${actorUserId} OR f.created_by IN (SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}))`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, sql`f.created_by`);
 }
 
 const escapeLike = (v: string): string => v.replace(/[\\%_]/g, (c) => `\\${c}`);
@@ -442,12 +438,7 @@ export class FormsRepository {
 
   /** True when `userId` is on a team `actorUserId` is also on: the `team` record-scope check for one form. */
   async isTeammate(tx: Tx, orgId: number, actorUserId: number, userId: number): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${userId}
-      LIMIT 1`);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, userId);
   }
 
   async userUuid(tx: Tx, orgId: number, id: number): Promise<string | null> {

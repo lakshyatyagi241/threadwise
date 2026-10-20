@@ -1,10 +1,29 @@
 import { and, eq, inArray } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
-import { fieldTypeSchema, type FieldType } from '@crm/contracts';
+import { fieldTypeSchema, lifecycleStageSchema, type FieldType } from '@crm/contracts';
 import { stagesInUse, statusesInUse } from '../contacts/contact-values-in-use';
 import { emptyRuleContext, type RuleContext, type RuleRefs } from './segment-compiler';
 
 const { fields, statusOptions, tags, contactGroups, users } = schema;
+
+/** Contact statuses a workspace that configured none is offered (the web screens show the same four). */
+const FALLBACK_STATUSES: readonly string[] = ['active', 'prospect', 'customer', 'vip'];
+
+/** Whether the workspace configured any option of these groups for contacts. One that has not is on the platform's built-in lists. */
+async function hasConfiguredOptions(tx: Tx, orgId: number, groups: string[]): Promise<boolean> {
+  const rows = await tx
+    .select({ id: statusOptions.id })
+    .from(statusOptions)
+    .where(
+      and(
+        eq(statusOptions.orgId, orgId),
+        eq(statusOptions.moduleKey, 'contacts'),
+        inArray(statusOptions.optionGroup, groups),
+      ),
+    )
+    .limit(1);
+  return rows.length > 0;
+}
 
 /**
  * Looks up, in one batch, everything a set of rule trees points at. A uuid or value missing from the
@@ -50,6 +69,10 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
         ),
       );
     for (const r of rows) rc.stages.add(r.value);
+    // No stage list configured: the built-in stages are what the screens offer, so they are not deleted references.
+    if (!(await hasConfiguredOptions(tx, orgId, ['lifecycle_stage']))) {
+      for (const v of lifecycleStageSchema.options) rc.stages.add(v);
+    }
     // A stage no option lists but contacts hold (the default `new`, a stage removed from the list) is not a deleted reference.
     const unlisted = [...refs.stageValues].filter((v) => !rc.stages.has(v));
     for (const v of await stagesInUse(tx, orgId, unlisted)) rc.stages.add(v);
@@ -67,6 +90,10 @@ export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Pr
         ),
       );
     for (const r of rows) rc.statuses.add(r.value);
+    // No status list configured: the platform's four are what the screens offer, so they are not deleted references.
+    if (!(await hasConfiguredOptions(tx, orgId, ['status', 'contact_status']))) {
+      for (const v of FALLBACK_STATUSES) rc.statuses.add(v);
+    }
     // Same for a status contacts hold that the workspace's configured list does not include.
     const unlisted = [...refs.statusValues].filter((v) => !rc.statuses.has(v));
     for (const v of await statusesInUse(tx, orgId, unlisted)) rc.statuses.add(v);

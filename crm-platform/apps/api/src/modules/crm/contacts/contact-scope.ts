@@ -15,23 +15,32 @@ import type { ContactsRepository } from './contacts.repository';
  * RLS treats a tenant-scope miss: never reveal that a record exists to a
  * caller whose grant doesn't cover it.
  */
+/** The people on a contact that record scope looks at: who owns it and who created it (BL-380, decision D1). */
+export interface ContactPeople {
+  ownerId: number | null;
+  createdBy: number | null;
+}
+
 export async function assertContactScope(
   tx: Tx,
   contactsRepo: ContactsRepository,
   orgId: number,
   scope: RecordScope,
   actorUserId: number,
-  ownerId: number | null,
+  contact: ContactPeople,
 ): Promise<void> {
+  // The same rule `contactScopeCondition` applies to a list (D1: the creator counts like the owner), so a row that is in the
+  // list can always be opened and a row that is not cannot.
+  for (const person of [contact.ownerId, contact.createdBy]) {
+    if (person === null) continue;
+    if (scope === 'all' || person === actorUserId) return;
+    if (
+      scope === 'team' &&
+      (await contactsRepo.isOwnerInActorTeam(tx, orgId, actorUserId, person))
+    ) {
+      return;
+    }
+  }
   if (scope === 'all') return;
-  if (scope === 'own') {
-    if (ownerId !== actorUserId) throw AppError.notFound('Contact');
-    return;
-  }
-  if (
-    ownerId === null ||
-    !(await contactsRepo.isOwnerInActorTeam(tx, orgId, actorUserId, ownerId))
-  ) {
-    throw AppError.notFound('Contact');
-  }
+  throw AppError.notFound('Contact');
 }

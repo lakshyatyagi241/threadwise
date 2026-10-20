@@ -317,7 +317,7 @@ describe('defaults and mapping are validated against the workspace (L-05, L-07, 
     );
     const member = await api.member(a, 'gone', []);
     const gone = await api.userUuidById(member.userId);
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [member.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [member.userId]);
     expect((await post({ defaults: { owner: { mode: 'fixed', userIds: [gone] } } })).status).toBe(
       422,
     );

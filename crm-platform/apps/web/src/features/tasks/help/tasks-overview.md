@@ -24,7 +24,7 @@ keywords: [to-do, follow-up, reminder, due date, priority, assign, overdue, chec
 
 ## Options and settings
 
-- **Outcome** is a result you can record when you complete a task, such as Interested or Left message. It shows as a field on the task, a column and a filter once your workspace has outcomes; the list is set up in **Settings > Task outcomes** (see [Task outcomes](help:task-outcomes)).
+- **Outcome** is a result you can record when you complete a task, such as Interested or Left message. It shows as a field on the task, a column and a filter once your workspace has outcomes; the list is edited in the **Task** drawer of **Settings > Data > Sales Activities** (see [Sales Activities](help:sales-activities)).
 - **Board by due date** groups open tasks into Overdue, Today, Upcoming and No date.
 - **Modify columns** chooses which optional columns show. Your choice is remembered in your browser.
 - Keyboard shortcuts work outside text fields: j and k move between tasks, Enter opens one, e completes or reopens it, x selects it, n starts a new task, / goes to search and ? lists all shortcuts.

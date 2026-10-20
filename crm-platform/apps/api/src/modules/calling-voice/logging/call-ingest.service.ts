@@ -114,7 +114,7 @@ export class CallIngestService {
           });
           if (made.outcome === 'quota_reached') return skip('ignored', 'contact_limit');
           if (made.outcome === 'unusable') return skip('rejected', 'unusable_phone');
-          contact = { id: made.contactId, uuid: made.uuid, ownerId: ctx.userId };
+          contact = { id: made.contactId, uuid: made.uuid, ownerId: ctx.userId, createdBy: null };
         }
         // Nobody to attach it to, and the workspace did not ask for strangers: the call is not stored.
         if (!contact && !found.hidden) return skip('ignored', 'unknown_number');
