@@ -82,6 +82,8 @@ describe('defaults and permissions', () => {
     expect(task.taskTypes.map((o) => o.key)).toEqual(['follow_up', 'call_reminder']);
     // The outcomes of a task are the workspace's Task outcomes list, not a list of this registry.
     expect(task.outcomes).toEqual([]);
+    // "Predict outcomes" starts on for Task: the outcome picker on a task shows whenever the workspace has outcomes, as it always did.
+    expect(task.outcomesEnabled).toBe(true);
     expect(byKey(all, 'phone').outcomes.map((o) => o.key)).toEqual([
       'connected',
       'no_answer',
@@ -503,13 +505,11 @@ describe('calls', () => {
 
   it('refuses an outcome item of another activity', async () => {
     const meeting = byKey(await activities(t.admin), 'meeting');
-    const res = await as(t.admin)
-      .post('/v2/calls/log')
-      .send({
-        contactId: contact,
-        direction: 'outbound',
-        outcomeOptionId: meeting.outcomes[0]!.id,
-      });
+    const res = await as(t.admin).post('/v2/calls/log').send({
+      contactId: contact,
+      direction: 'outbound',
+      outcomeOptionId: meeting.outcomes[0]!.id,
+    });
     expect(res.status).toBe(422);
     expect(code(res)).toBe('ACTIVITY_OPTION_INVALID');
   });

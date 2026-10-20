@@ -44,7 +44,8 @@
       "notDeletable": "Nie można tego usunąć, gdy ma nadchodzące rezerwacje.",
       "notDrifted": "Ta rezerwacja jest już zgodna z wydarzeniem w Google. Dane zostały odświeżone.",
       "calendarNotConnected": "Google Calendar nie jest połączony. Połącz go ponownie na stronie konta Google i spróbuj jeszcze raz.",
-      "calendarFailed": "Google nie odpowiedział lub odrzucił zmianę. Spróbuj ponownie za chwilę."
+      "calendarFailed": "Google nie odpowiedział lub odrzucił zmianę. Spróbuj ponownie za chwilę.",
+      "whatsappNotConnected": "Najpierw połącz numer WhatsApp Cloud API w ustawieniach: wiadomość WhatsApp jest przesyłana przez taki numer."
     },
     "picker": {
       "timeZone": "Strefa czasowa",

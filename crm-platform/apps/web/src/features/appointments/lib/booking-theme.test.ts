@@ -166,6 +166,8 @@ describe('contrast findings', () => {
       ),
     ).toContain('primaryText');
     expect(warningsOf(buildPalette(view(), 'light').checks)).toEqual([]);
+    expect(warningsOf(buildPalette(view(), 'dark').checks)).toEqual([]);
+    expect(warningsOf(buildPalette(view(), 'dark').checks)).toEqual([]);
   });
 
   it('never reports button text as a problem: it is picked to read', () => {

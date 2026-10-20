@@ -22,7 +22,8 @@ function useSummary() {
       out.push(a.allowComplete ? t('chip.completable') : t('chip.notCompletable'));
     if (cap.showInCalendar && a.showInCalendar) out.push(t('chip.calendar'));
     if (cap.taskTypes) out.push(t('chip.taskTypes', { count: a.taskTypes.length }));
-    if (cap.outcomes && a.outcomesEnabled)
+    // The default Task activity's outcomes are the workspace's task outcomes, not counted in the registry.
+    if (cap.outcomes && a.outcomesEnabled && !(a.isDefault && a.key === 'task'))
       out.push(t('chip.outcomes', { count: a.outcomes.length }));
     return out;
   };

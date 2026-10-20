@@ -25,6 +25,8 @@ export const ERROR_KINDS = [
   'calendarNotConnected',
   /** Google could not be reached or refused the write. */
   'calendarFailed',
+  /** A WhatsApp message cannot be created or sent until a WhatsApp Cloud API number is connected. */
+  'whatsappNotConnected',
   'unexpected',
 ] as const;
 export type ErrorKind = (typeof ERROR_KINDS)[number];
@@ -59,6 +61,8 @@ export function errorKind(error: unknown): ErrorKind {
       return 'calendarNotConnected';
     case ERROR_CODES.APPT_CALENDAR_PROVIDER_FAILED:
       return 'calendarFailed';
+    case ERROR_CODES.TPL_NO_CONNECTION:
+      return 'whatsappNotConnected';
     case ERROR_CODES.APPT_ANSWERS_INVALID:
     case ERROR_CODES.APPT_HOST_INVALID:
     case ERROR_CODES.APPT_AMOUNT_INVALID:

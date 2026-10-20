@@ -443,7 +443,7 @@ describe('the platform and the workspace', () => {
     await enableRecording(p, t);
     expect(codes((await check(t, number)).body).recording_consent).toBe('recording_configured');
 
-    await p.h.owner.query(`UPDATE users SET status = 'suspended' WHERE org_id = $1`, [t.orgId]);
+    await p.h.owner.query(`UPDATE users SET status = 'inactive' WHERE org_id = $1`, [t.orgId]);
     const none = await check(t, number);
     expect(codes(none.body).dialler_permissions).toBe('dialler_none');
     expect(none.body.status).toBe('blocked');

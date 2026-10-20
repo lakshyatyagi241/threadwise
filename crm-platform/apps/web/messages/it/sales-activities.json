@@ -73,13 +73,11 @@
       "allowEditCompleted": "Consenti agli utenti di modificare data e ora di completamento di questa attività",
       "taskTypes": "Tipi di compito",
       "taskTypesHint": "Scegline uno quando crei un compito, ad esempio Ricontatto o Promemoria di chiamata.",
-      "addTaskType": "Aggiungi tipo di compito",
+      "addTaskType": "Aggiungi tipo",
       "taskTypePlaceholder": "Nuovo tipo di compito",
       "predictOutcomes": "Prevedi gli esiti per questa attività",
       "predictOutcomesHint": "Proponi un esito quando l’attività viene completata.",
       "outcomes": "Esiti",
-      "taskOutcomesHint": "Gli esiti di un compito completato sono un unico elenco per tutto lo spazio di lavoro, gestito in Esiti dei compiti.",
-      "taskOutcomesLink": "Apri Esiti dei compiti",
       "outcomesHint": "Rimuovere un esito lo mantiene nei record che già lo hanno.",
       "phoneOutcomesHint": "Scegli come conta ogni esito nei report delle chiamate. Rimuovere un esito lo mantiene nelle chiamate che già lo hanno.",
       "addOutcome": "Aggiungi esito",
@@ -112,7 +110,12 @@
         "conflict": "Qualcun altro ha modificato questa attività. È stata ricaricata; riprova.",
         "forbidden": "Non hai il permesso di modificarlo.",
         "failed": "Impossibile salvare. Riprova."
-      }
+      },
+      "itemName": "Nome",
+      "hiddenInstead": "Ci sono ancora compiti che lo usano, quindi è stato nascosto. Continuano a mostrarlo.",
+      "loadingOutcomes": "Caricamento degli esiti…",
+      "outcomesLoadFailed": "Impossibile caricare gli esiti.",
+      "retry": "Riprova"
     },
     "create": {
       "title": "Crea attività",
