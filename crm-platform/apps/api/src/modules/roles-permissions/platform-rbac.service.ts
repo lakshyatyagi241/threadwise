@@ -4,6 +4,7 @@ import { Redis } from 'ioredis';
 import type { Tx } from '@crm/db';
 import { PLATFORM_PERMISSION_KEYS, type PlatformMyPermissions } from '@crm/contracts';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { RAISE_VERSION_LUA } from '../../kernel/rbac/rbac.service';
 import { PlatformRbacStore } from './platform-rbac.store';
 
 const CACHE_TTL_SECONDS = 600;
@@ -93,21 +94,38 @@ export class PlatformRbacService {
     `);
   }
 
-  /** Call after that transaction committed, so the next read does not see the old version from cache. */
+  /**
+   * Call after that transaction committed. Drops the cached version and puts the committed one in its place, raise-only (the same
+   * script the workspace RBAC uses): a reader that read the OLD version from Postgres before the commit may still be about to
+   * cache it, and without this it could leave the old permissions in force for the whole 600 s.
+   */
   async dropVersionCache(): Promise<void> {
     await this.redis.del(VERSION_KEY).catch(() => undefined);
+    try {
+      await this.cacheVersion(await this.readVersion());
+    } catch {
+      /* the next reader reads it from Postgres */
+    }
   }
 
-  private async version(): Promise<number> {
-    const cached = await this.redis.get(VERSION_KEY).catch(() => null);
-    if (cached) return Number(cached);
-    const version = await this.store.tx(async (tx) => {
+  private cacheVersion(version: number): Promise<unknown> {
+    return this.redis.eval(RAISE_VERSION_LUA, 1, VERSION_KEY, String(version), String(CACHE_TTL_SECONDS));
+  }
+
+  private readVersion(): Promise<number> {
+    return this.store.tx(async (tx) => {
       const res = await tx.execute(
         sql`SELECT value #>> '{}' AS v FROM platform_settings WHERE key = 'rbac.version'`,
       );
       return Number((res.rows[0] as { v?: string } | undefined)?.v ?? 1);
     });
-    await this.redis.setex(VERSION_KEY, CACHE_TTL_SECONDS, String(version)).catch(() => undefined);
+  }
+
+  private async version(): Promise<number> {
+    const cached = await this.redis.get(VERSION_KEY).catch(() => null);
+    if (cached) return Number(cached);
+    const version = await this.readVersion();
+    await this.cacheVersion(version).catch(() => undefined);
     return version;
   }
 }
