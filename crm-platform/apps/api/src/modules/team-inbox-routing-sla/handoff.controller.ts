@@ -104,7 +104,9 @@ export class HandoffController {
 
   @Get('conversations/:id/handoff')
   @RequirePermission('inbox.conversation.read')
-  @ApiOperation({ summary: 'The latest handoff of a conversation (reason, summary, answers, trace)' })
+  @ApiOperation({
+    summary: 'The latest handoff of a conversation (reason, summary, answers, trace)',
+  })
   async card(@Param('id', ParseUUIDPipe) id: string) {
     return { handoff: await this.handoff.card(id) };
   }

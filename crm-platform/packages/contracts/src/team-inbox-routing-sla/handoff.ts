@@ -36,7 +36,11 @@ export const ASSIGNED_SOURCES = [
 export const assignedSourceSchema = z.enum(ASSIGNED_SOURCES);
 export type AssignedSource = z.infer<typeof assignedSourceSchema>;
 /** Sources a person (or an author who named the person) decided: never moved by an automatic rule or by the owner sync. */
-export const HUMAN_ASSIGNED_SOURCES: readonly AssignedSource[] = ['manual', 'claim', 'handoff_named'];
+export const HUMAN_ASSIGNED_SOURCES: readonly AssignedSource[] = [
+  'manual',
+  'claim',
+  'handoff_named',
+];
 
 // --- the request ----------------------------------------------------------------------------------------------------------
 
@@ -106,7 +110,13 @@ export const handoffTraceLineSchema = z.object({
 });
 export type HandoffTraceLine = z.infer<typeof handoffTraceLineSchema>;
 
-export const HANDOFF_STATUSES = ['waiting', 'assigned', 'returned', 'resolved', 'cancelled'] as const;
+export const HANDOFF_STATUSES = [
+  'waiting',
+  'assigned',
+  'returned',
+  'resolved',
+  'cancelled',
+] as const;
 
 export const handoffCardSchema = z.object({
   id: uuidSchema,
@@ -136,7 +146,9 @@ export const handoffCardSchema = z.object({
 export type HandoffCard = z.infer<typeof handoffCardSchema>;
 
 /** `GET /v2/inbox/conversations/:id/handoff`: the latest handoff of the thread (live first), or null. */
-export const conversationHandoffResponseSchema = z.object({ handoff: handoffCardSchema.nullable() });
+export const conversationHandoffResponseSchema = z.object({
+  handoff: handoffCardSchema.nullable(),
+});
 export type ConversationHandoffResponse = z.infer<typeof conversationHandoffResponseSchema>;
 
 /** What a handoff, claim or return answers: the conversation as the list shows it, and the outcome. */

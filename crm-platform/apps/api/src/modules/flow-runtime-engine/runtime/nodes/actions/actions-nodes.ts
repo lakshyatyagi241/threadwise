@@ -7,7 +7,13 @@ import {
   ConversationsRepository,
 } from '../../../../team-inbox-conversations';
 import { AssignmentService, HandoffService } from '../../../../team-inbox-routing-sla';
-import { HANDOFF_PORTS, HANDOFF_REASONS, conversationPrioritySchema, type HandoffDestination, type HandoffReason } from '@crm/contracts';
+import {
+  HANDOFF_PORTS,
+  HANDOFF_REASONS,
+  conversationPrioritySchema,
+  type HandoffDestination,
+  type HandoffReason,
+} from '@crm/contracts';
 import type { NodeContext, NodeExecutor, NodeResult, RunState } from '../../types';
 import {
   assignConfig,
@@ -158,7 +164,11 @@ export class ActionNodes implements NodeExecutor {
     }
     let destination: HandoffDestination;
     if (cfg.destination === 'person' && cfg.userId !== '') {
-      destination = { kind: 'person', userId: cfg.userId, ...(cfg.teamId ? { teamId: cfg.teamId } : {}) };
+      destination = {
+        kind: 'person',
+        userId: cfg.userId,
+        ...(cfg.teamId ? { teamId: cfg.teamId } : {}),
+      };
     } else if (cfg.destination === 'team' && cfg.teamId !== '') {
       destination = { kind: 'team', teamId: cfg.teamId };
     } else destination = { kind: 'rules' };
@@ -175,7 +185,9 @@ export class ActionNodes implements NodeExecutor {
         orgId: run.orgId,
         conversationUuid: thread.id,
         source: 'flow',
-        reason: (HANDOFF_REASONS as readonly string[]).includes(cfg.reason) ? (cfg.reason as HandoffReason) : 'other',
+        reason: (HANDOFF_REASONS as readonly string[]).includes(cfg.reason)
+          ? (cfg.reason as HandoffReason)
+          : 'other',
         reasonText: cfg.note || null,
         summary: cfg.summary || null,
         answers: run.vars,
@@ -191,10 +203,12 @@ export class ActionNodes implements NodeExecutor {
       if (out.refused) ctx.note(`handoff refused: ${out.refused}`);
       else
         ctx.note(
-          `handoff ${out.outcome}${out.duplicate ? ' (already done)' : ''}: ${out.trace
-            .filter((t) => t.result === 'chosen')
-            .map((t) => t.why ?? t.step)
-            .join(', ') || 'queued'}`,
+          `handoff ${out.outcome}${out.duplicate ? ' (already done)' : ''}: ${
+            out.trace
+              .filter((t) => t.result === 'chosen')
+              .map((t) => t.why ?? t.step)
+              .join(', ') || 'queued'
+          }`,
         );
       return { kind: 'advance', port: HANDOFF_PORTS[out.outcome] };
     } catch (err) {

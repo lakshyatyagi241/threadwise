@@ -40,7 +40,8 @@ export class OwnerAlignmentService {
     const res = await tx.execute(sql`
       SELECT c.uuid AS contact_uuid, u.uuid AS user_uuid FROM contacts c, users u
       WHERE c.org_id = ${orgId} AND c.id = ${contactId} AND u.org_id = ${orgId} AND u.id = ${userId}`);
-    const r = (res as unknown as { rows: Array<{ contact_uuid: string; user_uuid: string }> }).rows[0];
+    const r = (res as unknown as { rows: Array<{ contact_uuid: string; user_uuid: string }> })
+      .rows[0];
     await this.audit.record(tx, {
       module: 'contacts',
       recordId: contactId,

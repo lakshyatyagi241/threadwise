@@ -1,6 +1,10 @@
 import { Injectable, Logger, type OnModuleInit } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { judgeAgeAnswer, WA_FORM_PRIVACY_MAP_KIND, type WaFormPrivacyMapField } from '@crm/contracts';
+import {
+  judgeAgeAnswer,
+  WA_FORM_PRIVACY_MAP_KIND,
+  type WaFormPrivacyMapField,
+} from '@crm/contracts';
 import { DatabaseService } from '../../../../../infra/db/database.service';
 import {
   InboundMessageHooks,
@@ -191,7 +195,9 @@ export class CommerceResume implements InboundMessageListener, EcomOrderListener
     kind: string,
     value: string,
   ): Promise<void> {
-    const minAge = await this.db.txAs({ orgId, userId: null }, (tx) => this.privacy.minorAge(tx, orgId));
+    const minAge = await this.db.txAs({ orgId, userId: null }, (tx) =>
+      this.privacy.minorAge(tx, orgId),
+    );
     const action = privacyActionFor(mapsTo, kind, value, minAge, new Date());
     if (action.kind === 'kind_mismatch') {
       this.logger.warn(
@@ -278,7 +284,13 @@ export function writesFor(
   mappings: Record<string, FieldMapping>,
   answers: Record<string, unknown>,
 ): Array<{ fieldId: string; mapsTo: string; kind: string; label: string; value: string }> {
-  const out: Array<{ fieldId: string; mapsTo: string; kind: string; label: string; value: string }> = [];
+  const out: Array<{
+    fieldId: string;
+    mapsTo: string;
+    kind: string;
+    label: string;
+    value: string;
+  }> = [];
   for (const [fieldId, { mapsTo, kind, label }] of Object.entries(mappings)) {
     if (!(fieldId in answers)) continue;
     const value = flattenAnswer(answers[fieldId]);

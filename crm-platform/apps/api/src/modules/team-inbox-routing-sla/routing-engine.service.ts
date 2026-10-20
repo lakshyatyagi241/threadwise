@@ -547,7 +547,14 @@ export class RoutingEngine {
       const isFallback = rule.is_fallback === true;
       const name = rule.name as string;
       if (
-        !(await this.matches(tx, orgId, decodeConditions(rule.conditions), isFallback, rf, facts.contactId))
+        !(await this.matches(
+          tx,
+          orgId,
+          decodeConditions(rule.conditions),
+          isFallback,
+          rf,
+          facts.contactId,
+        ))
       ) {
         continue;
       }
@@ -564,7 +571,14 @@ export class RoutingEngine {
           why: 'flow_reply_spam_and_escalation_actions_are_not_run_at_handoff',
         });
       }
-      await this.decorateByRule(tx, orgId, locked, rule.uuid as string, turn.priority, turn.addTags);
+      await this.decorateByRule(
+        tx,
+        orgId,
+        locked,
+        rule.uuid as string,
+        turn.priority,
+        turn.addTags,
+      );
       trace.push({ step: 'rule', who: name, result: 'chosen', why: `strategy ${turn.pick.how}` });
       return { pick: turn.pick, rule: { id: rule.uuid as string, name } };
     }
@@ -818,7 +832,12 @@ export class RoutingEngine {
       // Why somebody was not picked (BL-401): the run log must be able to show it.
       const names = await this.repo.userUuids(tx, orgId, [...away.keys(), ...considered]);
       for (const id of away.keys()) {
-        trace.push({ step: 'candidate', who: names.get(id) ?? null, result: 'skipped', why: 'on_leave' });
+        trace.push({
+          step: 'candidate',
+          who: names.get(id) ?? null,
+          result: 'skipped',
+          why: 'on_leave',
+        });
       }
       const inPool = new Set(pool.map((p) => p.id));
       for (const id of considered) {
@@ -831,7 +850,12 @@ export class RoutingEngine {
         });
       }
       for (const [d, absent] of delegateFor) {
-        trace.push({ step: 'delegate', who: names.get(d) ?? null, result: 'info', why: `covers ${absent}` });
+        trace.push({
+          step: 'delegate',
+          who: names.get(d) ?? null,
+          result: 'info',
+          why: `covers ${absent}`,
+        });
       }
     }
     if (namedAway) {

@@ -111,7 +111,8 @@ export function cleanAnswers(raw: Record<string, unknown> | undefined): Record<s
   const out: Record<string, string> = {};
   for (const [k, v] of Object.entries(raw ?? {})) {
     if (Object.keys(out).length >= HANDOFF_ANSWERS_MAX_KEYS) break;
-    if (SYSTEM_ANSWER_KEYS.test(k) || v === null || v === undefined || typeof v === 'object') continue;
+    if (SYSTEM_ANSWER_KEYS.test(k) || v === null || v === undefined || typeof v === 'object')
+      continue;
     const text = String(v).trim();
     if (text === '') continue;
     out[k.slice(0, 64)] = text.slice(0, HANDOFF_ANSWER_MAX_CHARS);
@@ -284,9 +285,24 @@ export class HandoffService {
       if (decision.cursor) {
         await this.repo.setTeamCursor(tx, orgId, decision.cursor.teamId, decision.cursor.userId);
       }
-      if (decision.userId !== null && gates.keepInSync && settings.ownerMode === 'keep_in_sync' && facts.contactId !== null) {
-        const touch = await this.alignment.firstTouch(tx, orgId, facts.contactId, decision.userId, 'chat_claim');
-        trace.push({ step: 'contact_owner', result: touch === 'set' ? 'chosen' : 'info', why: touch === 'set' ? 'first_touch_owner_set' : `owner_not_set_${touch}` });
+      if (
+        decision.userId !== null &&
+        gates.keepInSync &&
+        settings.ownerMode === 'keep_in_sync' &&
+        facts.contactId !== null
+      ) {
+        const touch = await this.alignment.firstTouch(
+          tx,
+          orgId,
+          facts.contactId,
+          decision.userId,
+          'chat_claim',
+        );
+        trace.push({
+          step: 'contact_owner',
+          result: touch === 'set' ? 'chosen' : 'info',
+          why: touch === 'set' ? 'first_touch_owner_set' : `owner_not_set_${touch}`,
+        });
       }
 
       await this.repo.finish(tx, orgId, handoff.id, {
@@ -354,7 +370,12 @@ export class HandoffService {
         } satisfies HandoffResultInternal,
         change,
         message: message?.trim() ? message.trim() : null,
-        conversation: { uuid: locked.uuid, rowVersion: locked.rowVersion + (change ? 1 : 0), after: decision, channelOwnerUserId: locked.channelOwnerUserId },
+        conversation: {
+          uuid: locked.uuid,
+          rowVersion: locked.rowVersion + (change ? 1 : 0),
+          after: decision,
+          channelOwnerUserId: locked.channelOwnerUserId,
+        },
         notify: settings.notifyQueue,
       };
     });
@@ -411,7 +432,11 @@ export class HandoffService {
       if (input.ownerMode === 'owner_first' && !available.ownerFirst) locked.push('ownerMode');
       if (input.ownerMode === 'keep_in_sync' && !available.keepInSync) locked.push('ownerMode');
     }
-    if (input.continuityDays !== undefined && input.continuityDays !== null && !available.continuityWindow)
+    if (
+      input.continuityDays !== undefined &&
+      input.continuityDays !== null &&
+      !available.continuityWindow
+    )
       locked.push('continuityDays');
     if (input.promptOwnerOnReassign === true && !available.promptOwnerOnReassign)
       locked.push('promptOwnerOnReassign');
@@ -429,14 +454,19 @@ export class HandoffService {
         module: 'workspace_settings',
         recordId: ctx.orgId,
         action: 'update',
-        delta: Object.fromEntries(Object.entries(input).map(([k, v]) => [k, { old: undefined, new: v }])),
+        delta: Object.fromEntries(
+          Object.entries(input).map(([k, v]) => [k, { old: undefined, new: v }]),
+        ),
       });
       return this.repo.settings(tx, ctx.orgId);
     });
     return this.shape(stored, available);
   }
 
-  private shape(s: StoredHandoffSettings, available: HandoffSettings['available']): HandoffSettings {
+  private shape(
+    s: StoredHandoffSettings,
+    available: HandoffSettings['available'],
+  ): HandoffSettings {
     return {
       autoAssign: s.autoAssign,
       claimSetsOwner: s.claimSetsOwner,
@@ -477,7 +507,13 @@ export class HandoffService {
    * When the workspace says so (`claimSetsOwner`, every plan; or the keep-in-sync mode, with the plan), the claimer becomes the contact's owner
    * if the contact has none and nobody ever decided it.
    */
-  async claim(uuid: string, rowVersion: number): Promise<{ summary: Awaited<ReturnType<InboxConversationsService['summaryInTx']>>; ownerSet: boolean }> {
+  async claim(
+    uuid: string,
+    rowVersion: number,
+  ): Promise<{
+    summary: Awaited<ReturnType<InboxConversationsService['summaryInTx']>>;
+    ownerSet: boolean;
+  }> {
     const ctx = RequestContextStore.require();
     const gates = await this.gates(ctx.orgId);
     const done = await this.db.tx(async (tx) => {
@@ -487,7 +523,11 @@ export class HandoffService {
       await this.access.assertCan(tx, ctx, PERM.assignSelf, locked);
       if (locked.assigneeUserId !== null) {
         if (locked.assigneeUserId === ctx.userId) {
-          return { change: null, summary: (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))!, ownerSet: false };
+          return {
+            change: null,
+            summary: (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))!,
+            ownerSet: false,
+          };
         }
         throw new AppError(
           ERROR_CODES.CONFLICT,
@@ -514,12 +554,23 @@ export class HandoffService {
         facts?.contactId != null &&
         (settings.claimSetsOwner || (gates.keepInSync && settings.ownerMode === 'keep_in_sync'))
       ) {
-        ownerSet = (await this.alignment.firstTouch(tx, ctx.orgId, facts.contactId, ctx.userId!, 'chat_claim')) === 'set';
+        ownerSet =
+          (await this.alignment.firstTouch(
+            tx,
+            ctx.orgId,
+            facts.contactId,
+            ctx.userId!,
+            'chat_claim',
+          )) === 'set';
         const live = await this.repo.liveFor(tx, ctx.orgId, locked.id);
         if (live)
           await this.repo.appendTrace(tx, ctx.orgId, live.id, [
             { step: 'claim', who: me!.uuid, result: 'chosen' },
-            { step: 'contact_owner', result: ownerSet ? 'chosen' : 'info', why: ownerSet ? 'first_touch_owner_set' : 'owner_already_decided' },
+            {
+              step: 'contact_owner',
+              result: ownerSet ? 'chosen' : 'info',
+              why: ownerSet ? 'first_touch_owner_set' : 'owner_already_decided',
+            },
           ]);
       }
       const summary = (await this.inbox.summaryInTx(tx, ctx.orgId, uuid))!;
@@ -584,11 +635,19 @@ export class HandoffService {
   ): Promise<Decision> {
     const { trace } = c;
     const dest = input.destination;
-    let team = dest.kind === 'team' ? await this.repo.teamByUuid(tx, orgId, dest.teamId, true) : null;
+    let team =
+      dest.kind === 'team' ? await this.repo.teamByUuid(tx, orgId, dest.teamId, true) : null;
     if (dest.kind === 'person' && dest.teamId)
       team = await this.repo.teamByUuid(tx, orgId, dest.teamId, true);
-    if ((dest.kind === 'team' || (dest.kind === 'person' && dest.teamId)) && (!team || !team.receives)) {
-      trace.push({ step: 'team', result: 'skipped', why: team ? 'team_does_not_receive_conversations' : 'team_not_found' });
+    if (
+      (dest.kind === 'team' || (dest.kind === 'person' && dest.teamId)) &&
+      (!team || !team.receives)
+    ) {
+      trace.push({
+        step: 'team',
+        result: 'skipped',
+        why: team ? 'team_does_not_receive_conversations' : 'team_not_found',
+      });
       team = null;
     }
 
@@ -606,13 +665,30 @@ export class HandoffService {
     // 1. a named person
     if (dest.kind === 'person') {
       const user = await this.repo.activeUserUuid(tx, orgId, dest.userId);
-      if (!user) trace.push({ step: 'person', who: dest.userId, result: 'skipped', why: 'not_an_active_member' });
+      if (!user)
+        trace.push({
+          step: 'person',
+          who: dest.userId,
+          result: 'skipped',
+          why: 'not_an_active_member',
+        });
       else {
         const cover = await this.coverFor(tx, orgId, user.id, c.canOpen, c.cal);
-        if (cover === null) trace.push({ step: 'person', who: user.uuid, result: 'skipped', why: 'cannot_read_or_on_leave_without_delegate' });
+        if (cover === null)
+          trace.push({
+            step: 'person',
+            who: user.uuid,
+            result: 'skipped',
+            why: 'cannot_read_or_on_leave_without_delegate',
+          });
         else {
           const who = await this.repo.userBrief(tx, orgId, cover.id);
-          trace.push({ step: 'person', who: who!.uuid, result: 'chosen', why: cover.delegateOf ? `delegate of ${user.uuid}` : 'named_by_the_sender' });
+          trace.push({
+            step: 'person',
+            who: who!.uuid,
+            result: 'chosen',
+            why: cover.delegateOf ? `delegate of ${user.uuid}` : 'named_by_the_sender',
+          });
           return {
             userId: cover.id,
             userUuid: who!.uuid,
@@ -640,7 +716,12 @@ export class HandoffService {
 
     // 3. the team's own method
     if (team) {
-      const method = team.strategy === 'round_robin' ? 'round_robin' : team.strategy === 'least_loaded' ? 'least_busy' : null;
+      const method =
+        team.strategy === 'round_robin'
+          ? 'round_robin'
+          : team.strategy === 'least_loaded'
+            ? 'least_busy'
+            : null;
       if (method && c.gates.autoAssign && c.settings.autoAssign) {
         const pick = await this.engine.pickForHandoff(
           tx,
@@ -661,11 +742,19 @@ export class HandoffService {
             how: method,
             source: 'rule',
             outcome: 'assigned',
-            meta: { teamMethod: method, ...(pick.delegateFor ? { delegateFor: pick.delegateFor } : {}) },
+            meta: {
+              teamMethod: method,
+              ...(pick.delegateFor ? { delegateFor: pick.delegateFor } : {}),
+            },
             cursor: { teamId: team.id, userId: pick.userId },
           };
         }
-        trace.push({ step: 'team_method', who: team.uuid, result: 'skipped', why: 'nobody_available' });
+        trace.push({
+          step: 'team_method',
+          who: team.uuid,
+          result: 'skipped',
+          why: 'nobody_available',
+        });
         if (team.defaultAssigneeId !== null) {
           const cover = await this.coverFor(tx, orgId, team.defaultAssigneeId, c.canOpen, c.cal);
           const who = cover ? await this.repo.userBrief(tx, orgId, cover.id) : null;
@@ -691,14 +780,17 @@ export class HandoffService {
           result: 'skipped',
           why: c.gates.autoAssign ? 'auto_assign_off' : 'not_in_plan',
         });
-      } else trace.push({ step: 'team_method', who: team.uuid, result: 'info', why: 'manual_queue' });
+      } else
+        trace.push({ step: 'team_method', who: team.uuid, result: 'info', why: 'manual_queue' });
       return this.finishQueue(tx, orgId, team, c, queue);
     }
 
     // 4. the workspace's rules
     if (dest.kind === 'rules') {
-      if (!c.gates.autoAssign) trace.push({ step: 'rules', result: 'skipped', why: 'rules_not_in_plan' });
-      else if (!c.settings.autoAssign) trace.push({ step: 'rules', result: 'skipped', why: 'auto_assign_off' });
+      if (!c.gates.autoAssign)
+        trace.push({ step: 'rules', result: 'skipped', why: 'rules_not_in_plan' });
+      else if (!c.settings.autoAssign)
+        trace.push({ step: 'rules', result: 'skipped', why: 'auto_assign_off' });
       else {
         const hit = await this.engine.rulesForHandoff(
           tx,
@@ -720,7 +812,11 @@ export class HandoffService {
             how: hit.pick.how,
             source: 'rule',
             outcome: hit.pick.userId !== null ? 'assigned' : 'waiting',
-            meta: { ruleId: hit.rule.id, ruleName: hit.rule.name, ...(hit.pick.delegateFor ? { delegateFor: hit.pick.delegateFor } : {}) },
+            meta: {
+              ruleId: hit.rule.id,
+              ruleName: hit.rule.name,
+              ...(hit.pick.delegateFor ? { delegateFor: hit.pick.delegateFor } : {}),
+            },
           };
         }
       }
@@ -738,7 +834,9 @@ export class HandoffService {
   ): Promise<Decision> {
     let claimers = c.canOpen.size;
     if (team) {
-      const members = (await this.repo.memberIdsOfTeams(tx, orgId, [team.id])).filter((id) => c.canOpen.has(id));
+      const members = (await this.repo.memberIdsOfTeams(tx, orgId, [team.id])).filter((id) =>
+        c.canOpen.has(id),
+      );
       const away = await onLeaveMap(tx, orgId, members, c.cal.today);
       claimers = members.filter((id) => !away.has(id)).length;
     }
@@ -774,7 +872,12 @@ export class HandoffService {
     const modern = c.gates.ownerFirst && c.settings.ownerMode !== 'independent';
     if (!legacy && !modern) return null;
     const strict = modern;
-    const candidates: Array<{ id: number | null; how: AssignmentHow; source: AssignedSource; step: string }> = [];
+    const candidates: Array<{
+      id: number | null;
+      how: AssignmentHow;
+      source: AssignedSource;
+      step: string;
+    }> = [];
     if (legacy || modern) {
       const head = await this.repo.contactOwnerHead(tx, orgId, contactId);
       candidates.push({ id: head?.ownerId ?? null, how: 'owner', source: 'owner', step: 'owner' });
@@ -790,15 +893,27 @@ export class HandoffService {
     }
     for (const cand of candidates) {
       if (cand.id === null) {
-        c.trace.push({ step: cand.step, result: 'skipped', why: cand.step === 'owner' ? 'no_owner' : 'no_previous_handler_in_window' });
+        c.trace.push({
+          step: cand.step,
+          result: 'skipped',
+          why: cand.step === 'owner' ? 'no_owner' : 'no_previous_handler_in_window',
+        });
         continue;
       }
       const cover = await this.coverFor(tx, orgId, cand.id, c.canOpen, c.cal);
       if (!cover) {
-        c.trace.push({ step: cand.step, result: 'skipped', why: 'ineligible_or_on_leave_without_delegate' });
+        c.trace.push({
+          step: cand.step,
+          result: 'skipped',
+          why: 'ineligible_or_on_leave_without_delegate',
+        });
         continue;
       }
-      if (strict && teamId !== null && !(await this.repo.isMemberOfTeam(tx, orgId, teamId, cover.id))) {
+      if (
+        strict &&
+        teamId !== null &&
+        !(await this.repo.isMemberOfTeam(tx, orgId, teamId, cover.id))
+      ) {
         c.trace.push({ step: cand.step, result: 'skipped', why: 'not_in_destination_team' });
         continue;
       }
@@ -810,7 +925,12 @@ export class HandoffService {
         }
       }
       const who = await this.repo.userBrief(tx, orgId, cover.id);
-      c.trace.push({ step: cand.step, who: who!.uuid, result: 'chosen', why: cover.delegateOf ? 'delegate' : cand.step });
+      c.trace.push({
+        step: cand.step,
+        who: who!.uuid,
+        result: 'chosen',
+        why: cover.delegateOf ? 'delegate' : cand.step,
+      });
       return {
         userId: cover.id,
         userUuid: who!.uuid,
@@ -838,7 +958,12 @@ export class HandoffService {
     if ((await onLeaveMap(tx, orgId, [id], cal.today)).has(id)) {
       const d = (await this.routingRepo.delegatesOf(tx, orgId, [id])).get(id);
       const dAway = d ? await onLeaveMap(tx, orgId, [d.id], cal.today) : new Map();
-      const next = pickDelegate(new Map(d ? [[id, d.id]] : []), id, (x) => dAway.has(x), (x) => canOpen.has(x));
+      const next = pickDelegate(
+        new Map(d ? [[id, d.id]] : []),
+        id,
+        (x) => dAway.has(x),
+        (x) => canOpen.has(x),
+      );
       if (next === null) {
         cal.blocked.add(id);
         return null;
@@ -877,12 +1002,20 @@ export class HandoffService {
   }
 
   private eventActor(input: HandoffInput) {
-    return input.source === 'flow' ? 'flow' : input.source === 'ai_agent' ? 'ai' : input.source === 'manual' ? 'user' : 'bot';
+    return input.source === 'flow'
+      ? 'flow'
+      : input.source === 'ai_agent'
+        ? 'ai'
+        : input.source === 'manual'
+          ? 'user'
+          : 'bot';
   }
 
   private async priorityOf(tx: Tx, orgId: number, id: number): Promise<string | null> {
-    const res = await tx.execute(sql`SELECT priority FROM conversations WHERE org_id = ${orgId} AND id = ${id}`);
-    return ((res as unknown as { rows: Array<{ priority: string }> }).rows[0]?.priority) ?? null;
+    const res = await tx.execute(
+      sql`SELECT priority FROM conversations WHERE org_id = ${orgId} AND id = ${id}`,
+    );
+    return (res as unknown as { rows: Array<{ priority: string }> }).rows[0]?.priority ?? null;
   }
 
   private async setPriority(tx: Tx, orgId: number, id: number, priority: ConversationPriority) {

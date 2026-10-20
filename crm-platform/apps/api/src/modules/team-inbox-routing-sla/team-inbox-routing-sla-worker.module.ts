@@ -20,6 +20,12 @@ import { TeamInboxRoutingSlaModule } from './team-inbox-routing-sla.module';
     TeamInboxConversationsModule,
     PlansCoreModule,
   ],
-  providers: [OwnerSyncConsumer, RoutingInboundListener, SlaInboundListener, SlaSweepService, RoutingEscalationSweep],
+  providers: [
+    OwnerSyncConsumer,
+    RoutingInboundListener,
+    SlaInboundListener,
+    SlaSweepService,
+    RoutingEscalationSweep,
+  ],
 })
 export class TeamInboxRoutingSlaWorkerModule {}

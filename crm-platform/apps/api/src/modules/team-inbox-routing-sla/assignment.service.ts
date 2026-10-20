@@ -552,7 +552,10 @@ export class AssignmentService {
   ): Handling | null {
     if (want !== 'auto') return want;
     if (current === null) return null;
-    if (userId !== null) return current === 'with_bot' || current === 'waiting' ? 'with_person' : (current as Handling);
+    if (userId !== null)
+      return current === 'with_bot' || current === 'waiting'
+        ? 'with_person'
+        : (current as Handling);
     return current === 'with_person' ? 'waiting' : (current as Handling);
   }
 

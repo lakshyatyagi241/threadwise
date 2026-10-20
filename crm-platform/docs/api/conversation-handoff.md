@@ -11,27 +11,27 @@ service and reported as `available` in the settings.
 `conversations.handling` (expand-only column, `null` = not tracked, behaves as before). The list and detail carry it as `handling`
 (`with_bot | waiting | with_person | null`) with `handlingSince`. `status` and every existing filter are untouched.
 
-| Value | Meaning | Bot |
-| --- | --- | --- |
-| `waiting` | in a queue (a team's, or the workspace's); nobody holds it | muted |
-| `with_person` | a person holds it | muted |
-| `with_bot` | a person gave it back | answers |
-| `null` | no handoff ever touched it, or it was resolved | as before |
+| Value         | Meaning                                                    | Bot       |
+| ------------- | ---------------------------------------------------------- | --------- |
+| `waiting`     | in a queue (a team's, or the workspace's); nobody holds it | muted     |
+| `with_person` | a person holds it                                          | muted     |
+| `with_bot`    | a person gave it back                                      | answers   |
+| `null`        | no handoff ever touched it, or it was resolved             | as before |
 
 Resolving, closing or marking spam clears it. A person assigning a `waiting` or `with_bot` thread makes it `with_person`; unassigning a `with_person`
 thread puts it back in the queue.
 
 ## Routes
 
-| Method and path | Permission | What |
-| --- | --- | --- |
-| `GET /conversations?tab=waiting` | `inbox.conversation.read` | the queue, in the caller's ordinary visibility; `GET /counts` carries `waiting` |
+| Method and path                                  | Permission                       | What                                                                                                   |
+| ------------------------------------------------ | -------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `GET /conversations?tab=waiting`                 | `inbox.conversation.read`        | the queue, in the caller's ordinary visibility; `GET /counts` carries `waiting`                        |
 | `POST /conversations/:id/claim` `{ rowVersion }` | `inbox.conversation.assign_self` | take a conversation nobody holds; `409 CONFLICT` when somebody did first; `{ conversation, ownerSet }` |
-| `POST /conversations/:id/handoff` | `inbox.conversation.assign` | send to a person, a team queue or the rules; same action a flow, an AI agent or a keyword uses |
-| `POST /conversations/:id/return-to-bot` | `inbox.conversation.reply` | unassign and unmute the bot |
-| `GET /conversations/:id/handoff` | `inbox.conversation.read` | the latest handoff card: reason, summary, answers, destination, outcome, trace |
-| `GET /handoff-settings` | `inbox.settings.read` | settings with `available` per capability |
-| `PUT /handoff-settings` | `inbox.routing.manage` | change settings; `422 PLAN_FEATURE_LOCKED` names the locked fields |
+| `POST /conversations/:id/handoff`                | `inbox.conversation.assign`      | send to a person, a team queue or the rules; same action a flow, an AI agent or a keyword uses         |
+| `POST /conversations/:id/return-to-bot`          | `inbox.conversation.reply`       | unassign and unmute the bot                                                                            |
+| `GET /conversations/:id/handoff`                 | `inbox.conversation.read`        | the latest handoff card: reason, summary, answers, destination, outcome, trace                         |
+| `GET /handoff-settings`                          | `inbox.settings.read`            | settings with `available` per capability                                                               |
+| `PUT /handoff-settings`                          | `inbox.routing.manage`           | change settings; `422 PLAN_FEATURE_LOCKED` names the locked fields                                     |
 
 `POST .../handoff` body: `{ reason, reasonText?, summary?, destination, priority? }`, destination `{ kind: 'person', userId, teamId? } | { kind: 'team', teamId } | { kind: 'rules' }`.
 It answers `{ outcome, handoffId, refused, conversation, handoff }`; `outcome` is `assigned`, `waiting` or `unavailable` (out of hours, or nobody could ever take it:
@@ -49,14 +49,14 @@ A team whose business hours are closed gets no person picked: the conversation w
 
 ## Settings
 
-| Field | Default | Needs |
-| --- | --- | --- |
-| `autoAssign` | `true` | `inbox_routing`. Off stops rules and team methods at handoff AND at arrival. Default on keeps today's behaviour |
-| `claimSetsOwner` | `false` | nothing: a claim makes the claimer the contact owner when nobody ever decided it |
-| `ownerMode` | `independent` | `owner_first` / `keep_in_sync` need `inbox_routing` and `inbox_assignment_sticky` |
-| `continuityDays` | `null` | same; limits the "last handler" sticky to N days |
-| `promptOwnerOnReassign` | `false` | same (stored; the prompt is a follow-up) |
-| `notifyQueue` | `true` | nothing |
+| Field                   | Default       | Needs                                                                                                           |
+| ----------------------- | ------------- | --------------------------------------------------------------------------------------------------------------- |
+| `autoAssign`            | `true`        | `inbox_routing`. Off stops rules and team methods at handoff AND at arrival. Default on keeps today's behaviour |
+| `claimSetsOwner`        | `false`       | nothing: a claim makes the claimer the contact owner when nobody ever decided it                                |
+| `ownerMode`             | `independent` | `owner_first` / `keep_in_sync` need `inbox_routing` and `inbox_assignment_sticky`                               |
+| `continuityDays`        | `null`        | same; limits the "last handler" sticky to N days                                                                |
+| `promptOwnerOnReassign` | `false`       | same (stored; the prompt is a follow-up)                                                                        |
+| `notifyQueue`           | `true`        | nothing                                                                                                         |
 
 `inbox_assignment_sticky` is a plan feature (default on for plan rows that predate it, effective only with `inbox_routing`): the owner moves it between plans in plan management.
 

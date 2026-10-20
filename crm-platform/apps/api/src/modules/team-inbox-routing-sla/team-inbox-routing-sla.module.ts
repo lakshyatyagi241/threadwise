@@ -54,6 +54,13 @@ import { RoutingRulesService } from './routing-rules.service';
     SlaClockService,
     TeamAnalyticsService,
   ],
-  exports: [AssignmentService, HandoffService, HandoffRepository, RoutingEngine, RoutingRulesRepository, SlaClockService],
+  exports: [
+    AssignmentService,
+    HandoffService,
+    HandoffRepository,
+    RoutingEngine,
+    RoutingRulesRepository,
+    SlaClockService,
+  ],
 })
 export class TeamInboxRoutingSlaModule {}

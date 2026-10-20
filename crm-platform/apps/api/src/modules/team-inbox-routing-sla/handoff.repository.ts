@@ -86,7 +86,9 @@ export class HandoffRepository {
     orgId: number,
     v: Partial<Omit<StoredHandoffSettings, 'keepContactAgent'>>,
   ): Promise<void> {
-    await tx.execute(sql`INSERT INTO workspace_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`);
+    await tx.execute(
+      sql`INSERT INTO workspace_settings (org_id) VALUES (${orgId}) ON CONFLICT (org_id) DO NOTHING`,
+    );
     const sets = [
       v.autoAssign !== undefined ? sql`handoff_auto_assign = ${v.autoAssign}` : null,
       v.claimSetsOwner !== undefined ? sql`handoff_claim_sets_owner = ${v.claimSetsOwner}` : null,
@@ -125,8 +127,14 @@ export class HandoffRepository {
     };
   }
 
-  async teamById(tx: Tx, orgId: number, id: number): Promise<{ uuid: string; name: string } | null> {
-    const res = await tx.execute(sql`SELECT uuid, name FROM teams WHERE org_id = ${orgId} AND id = ${id}`);
+  async teamById(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ uuid: string; name: string } | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid, name FROM teams WHERE org_id = ${orgId} AND id = ${id}`,
+    );
     const r = rowsOf(res)[0];
     return r ? { uuid: String(r.uuid), name: String(r.name) } : null;
   }
@@ -141,7 +149,10 @@ export class HandoffRepository {
     if (teamIds.length === 0) return [];
     const res = await tx.execute(sql`
       SELECT DISTINCT tm.user_id FROM team_members tm JOIN users u ON u.org_id = tm.org_id AND u.id = tm.user_id AND u.status = 'active'
-      WHERE tm.org_id = ${orgId} AND tm.team_id IN (${sql.join(teamIds.map((i) => sql`${i}`), sql`, `)})`);
+      WHERE tm.org_id = ${orgId} AND tm.team_id IN (${sql.join(
+        teamIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})`);
     return rowsOf(res).map((r) => Number(r.user_id));
   }
 
@@ -164,7 +175,10 @@ export class HandoffRepository {
              (SELECT count(*)::int FROM conversations c
                WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived AND c.status = 'open') AS open
       FROM users u LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
-      WHERE u.org_id = ${orgId} AND u.id IN (${sql.join(userIds.map((i) => sql`${i}`), sql`, `)})`);
+      WHERE u.org_id = ${orgId} AND u.id IN (${sql.join(
+        userIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})`);
     return new Map(
       rowsOf(res).map((r) => [Number(r.id), { open: Number(r.open), limit: num(r.chat_limit) }]),
     );
@@ -190,7 +204,12 @@ export class HandoffRepository {
    * (`owner_id IS NULL AND owner_changed_at IS NULL`). Under the row lock exactly one of the two wins; the loser matches no row. The
    * database trigger stamps `owner_changed_at`, so afterwards the engine reads this as a person's decision and never moves it.
    */
-  async setOwnerIfUndecided(tx: Tx, orgId: number, contactId: number, userId: number): Promise<boolean> {
+  async setOwnerIfUndecided(
+    tx: Tx,
+    orgId: number,
+    contactId: number,
+    userId: number,
+  ): Promise<boolean> {
     const res = await tx.execute(sql`
       UPDATE contacts SET owner_id = ${userId}
       WHERE org_id = ${orgId} AND id = ${contactId} AND owner_id IS NULL AND owner_changed_at IS NULL
@@ -226,7 +245,10 @@ export class HandoffRepository {
       WHERE org_id = ${orgId} AND contact_id = ${contactId} AND NOT archived AND status = 'open'
         AND (assignee_user_id IS NULL OR assigned_source IN ('rule', 'owner', 'sticky', 'sync', 'system'))
       ORDER BY id`);
-    return rowsOf(res).map((r) => ({ uuid: String(r.uuid), assigneeUserId: num(r.assignee_user_id) }));
+    return rowsOf(res).map((r) => ({
+      uuid: String(r.uuid),
+      assigneeUserId: num(r.assignee_user_id),
+    }));
   }
 
   // --- the card and the run log ----------------------------------------------------------------------------------------------
@@ -379,7 +401,13 @@ export class HandoffRepository {
     tx: Tx,
     orgId: number,
     id: number,
-  ): Promise<{ contactId: number | null; language: string | null; archived: boolean; channelKind: string; status: string } | null> {
+  ): Promise<{
+    contactId: number | null;
+    language: string | null;
+    archived: boolean;
+    channelKind: string;
+    status: string;
+  } | null> {
     const res = await tx.execute(sql`
       SELECT c.contact_id, c.customer_language, c.archived, c.status, ch.kind AS channel_kind
       FROM conversations c JOIN channels ch ON ch.org_id = c.org_id AND ch.id = c.channel_id
@@ -396,7 +424,11 @@ export class HandoffRepository {
       : null;
   }
 
-  async activeUserUuid(tx: Tx, orgId: number, uuid: string): Promise<{ id: number; uuid: string; name: string | null } | null> {
+  async activeUserUuid(
+    tx: Tx,
+    orgId: number,
+    uuid: string,
+  ): Promise<{ id: number; uuid: string; name: string | null } | null> {
     const res = await tx.execute(
       sql`SELECT id, uuid, full_name FROM users WHERE org_id = ${orgId} AND uuid = ${uuid} AND status = 'active'`,
     );
@@ -404,8 +436,14 @@ export class HandoffRepository {
     return r ? { id: Number(r.id), uuid: String(r.uuid), name: str(r.full_name) } : null;
   }
 
-  async userBrief(tx: Tx, orgId: number, id: number): Promise<{ uuid: string; name: string | null } | null> {
-    const res = await tx.execute(sql`SELECT uuid, full_name FROM users WHERE org_id = ${orgId} AND id = ${id}`);
+  async userBrief(
+    tx: Tx,
+    orgId: number,
+    id: number,
+  ): Promise<{ uuid: string; name: string | null } | null> {
+    const res = await tx.execute(
+      sql`SELECT uuid, full_name FROM users WHERE org_id = ${orgId} AND id = ${id}`,
+    );
     const r = rowsOf(res)[0];
     return r ? { uuid: String(r.uuid), name: str(r.full_name) } : null;
   }
