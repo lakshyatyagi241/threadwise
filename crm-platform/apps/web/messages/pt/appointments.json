@@ -44,7 +44,8 @@
       "notDeletable": "Isto não pode ser excluído enquanto houver reservas futuras.",
       "notDrifted": "Este agendamento já corresponde ao evento no Google. Ele foi recarregado.",
       "calendarNotConnected": "O Google Calendar não está conectado. Reconecte-o na página da conta Google e tente novamente.",
-      "calendarFailed": "O Google não respondeu ou recusou a alteração. Tente novamente em instantes."
+      "calendarFailed": "O Google não respondeu ou recusou a alteração. Tente novamente em instantes.",
+      "whatsappNotConnected": "Conecte primeiro um número do WhatsApp Cloud API nas configurações: uma mensagem do WhatsApp é enviada por meio de um desses números."
     },
     "picker": {
       "timeZone": "Fuso horário",
