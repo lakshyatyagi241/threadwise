@@ -2307,12 +2307,12 @@
       ],
       "writes": [
         {
-          "line": 110,
+          "line": 113,
           "cmd": "set",
           "ttl": "EX IN_FLIGHT_TTL_SECONDS"
         },
         {
-          "line": 117,
+          "line": 122,
           "cmd": "set",
           "ttl": "EX TTL_SECONDS"
         }
@@ -2352,7 +2352,7 @@
       ],
       "writes": [
         {
-          "line": 39,
+          "line": 47,
           "cmd": "set",
           "ttl": "EX ttlSeconds"
         }
@@ -2543,7 +2543,7 @@
       ],
       "writes": [
         {
-          "line": 114,
+          "line": 124,
           "cmd": "setex",
           "ttl": "EX CACHE_TTL_SECONDS"
         }
@@ -2559,12 +2559,12 @@
       ],
       "writes": [
         {
-          "line": 309,
+          "line": 315,
           "cmd": "setex",
           "ttl": "EX HISTORY_TTL_SECONDS"
         },
         {
-          "line": 329,
+          "line": 337,
           "cmd": "setex",
           "ttl": "EX PENDING_TTL_SECONDS"
         }
@@ -2579,7 +2579,7 @@
       ],
       "writes": [
         {
-          "line": 205,
+          "line": 213,
           "cmd": "set",
           "ttl": "EX ttlSeconds"
         }
@@ -2595,7 +2595,7 @@
       ],
       "writes": [
         {
-          "line": 33,
+          "line": 41,
           "cmd": "set",
           "ttl": "EX TTL_SECONDS"
         }
@@ -2722,37 +2722,37 @@
       ],
       "writes": [
         {
-          "line": 246,
+          "line": 248,
           "cmd": "set",
           "ttl": "EX EMAIL_STAGE_TTL_SECONDS"
         },
         {
-          "line": 364,
+          "line": 366,
           "cmd": "set",
           "ttl": "EX EMAIL_CODE_RESEND_COOLDOWN_SECONDS"
         },
         {
-          "line": 621,
+          "line": 625,
           "cmd": "setex",
           "ttl": "EX STAGE_TTL_SECONDS"
         },
         {
-          "line": 751,
+          "line": 756,
           "cmd": "setex",
           "ttl": "EX STAGE_TTL_SECONDS"
         },
         {
-          "line": 1055,
+          "line": 1061,
           "cmd": "incr",
           "ttl": null
         },
         {
-          "line": 1055,
+          "line": 1061,
           "cmd": "expire",
           "ttl": "EXPIRE STAGE_TTL_SECONDS"
         },
         {
-          "line": 1101,
+          "line": 1107,
           "cmd": "set",
           "ttl": null
         }
@@ -2811,7 +2811,7 @@
       ],
       "writes": [
         {
-          "line": 421,
+          "line": 427,
           "cmd": "set",
           "ttl": "EX (IMPERSONATION_MAX_MINUTES + 5) * 60"
         }
@@ -2914,7 +2914,7 @@
       ],
       "writes": [
         {
-          "line": 82,
+          "line": 92,
           "cmd": "setex",
           "ttl": "EX Ttl.gateSeconds"
         }
@@ -2937,7 +2937,7 @@
       ],
       "writes": [
         {
-          "line": 72,
+          "line": 81,
           "cmd": "set",
           "ttl": "EX HALT_MIRROR_TTL_SECONDS"
         }
@@ -2969,7 +2969,7 @@
       ],
       "writes": [
         {
-          "line": 56,
+          "line": 65,
           "cmd": "setex",
           "ttl": "EX Ttl.orgSuspendedSeconds"
         }
@@ -3035,12 +3035,12 @@
       ],
       "writes": [
         {
-          "line": 43,
+          "line": 56,
           "cmd": "set",
           "ttl": null
         },
         {
-          "line": 54,
+          "line": 67,
           "cmd": "set",
           "ttl": null
         }
@@ -3056,7 +3056,7 @@
       ],
       "writes": [
         {
-          "line": 48,
+          "line": 56,
           "cmd": "set",
           "ttl": "EX Ttl.partnerStatusSeconds"
         }
@@ -3071,22 +3071,22 @@
       ],
       "writes": [
         {
-          "line": 511,
+          "line": 514,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 610,
+          "line": 613,
           "cmd": "set",
           "ttl": "EX 31 * 24 * 3600"
         },
         {
-          "line": 637,
+          "line": 645,
           "cmd": "set",
           "ttl": "EX Ttl.accessRevocationSeconds"
         },
         {
-          "line": 663,
+          "line": 671,
           "cmd": "set",
           "ttl": "EX 7 * 24 * 3600"
         }
@@ -3152,7 +3152,7 @@
       ],
       "writes": [
         {
-          "line": 107,
+          "line": 117,
           "cmd": "set",
           "ttl": "EX SUMMARY_CACHE_SECONDS"
         }
@@ -3187,27 +3187,27 @@
       ],
       "writes": [
         {
-          "line": 42,
+          "line": 45,
           "cmd": "zadd",
           "ttl": null
         },
         {
-          "line": 43,
+          "line": 46,
           "cmd": "pexpire",
           "ttl": "PEXPIRE windowMs + 1_000"
         },
         {
-          "line": 57,
+          "line": 60,
           "cmd": "zadd",
           "ttl": null
         },
         {
-          "line": 59,
+          "line": 62,
           "cmd": "pexpire",
           "ttl": "PEXPIRE windowMs + 1_000"
         },
         {
-          "line": 70,
+          "line": 73,
           "cmd": "set",
           "ttl": "EX ttlSeconds"
         }
@@ -3228,7 +3228,7 @@
       ],
       "writes": [
         {
-          "line": 292,
+          "line": 302,
           "cmd": "set",
           "ttl": "EX LOOKUP_TTL_SECONDS"
         }
@@ -3293,12 +3293,12 @@
       ],
       "writes": [
         {
-          "line": 197,
+          "line": 200,
           "cmd": "set",
           "ttl": "EX LOCK_TTL_SECONDS"
         },
         {
-          "line": 220,
+          "line": 223,
           "cmd": "set",
           "ttl": "EX RESULT_TTL_SECONDS"
         }
@@ -3375,7 +3375,7 @@
       ],
       "writes": [
         {
-          "line": 227,
+          "line": 234,
           "cmd": "set",
           "ttl": "EX 10"
         }
@@ -3503,7 +3503,7 @@
       ],
       "writes": [
         {
-          "line": 80,
+          "line": 86,
           "cmd": "set",
           "ttl": "EX QUERY_CACHE_TTL_S"
         }
@@ -3540,7 +3540,7 @@
       ],
       "writes": [
         {
-          "line": 119,
+          "line": 128,
           "cmd": "set",
           "ttl": "EX ACTIVE_CACHE_TTL"
         }
@@ -3596,17 +3596,17 @@
       ],
       "writes": [
         {
-          "line": 109,
+          "line": 112,
           "cmd": "set",
           "ttl": "EX SENT_MARKER_TTL_S"
         },
         {
-          "line": 152,
+          "line": 155,
           "cmd": "set",
           "ttl": "EX SENT_MARKER_TTL_S"
         },
         {
-          "line": 261,
+          "line": 264,
           "cmd": "set",
           "ttl": "EX INBOUND_MEDIA_TTL_S"
         }
@@ -3774,7 +3774,7 @@
       ],
       "writes": [
         {
-          "line": 26,
+          "line": 29,
           "cmd": "set",
           "ttl": "PX SEEN_TTL_MS"
         }
@@ -3920,12 +3920,12 @@
       ],
       "writes": [
         {
-          "line": 48,
+          "line": 58,
           "cmd": "setex",
           "ttl": "EX CACHE_TTL_SECONDS"
         },
         {
-          "line": 110,
+          "line": 120,
           "cmd": "setex",
           "ttl": "EX CACHE_TTL_SECONDS"
         }
@@ -3986,12 +3986,12 @@
       ],
       "writes": [
         {
-          "line": 266,
+          "line": 269,
           "cmd": "set",
           "ttl": "EX IDEM_TTL_SECONDS"
         },
         {
-          "line": 287,
+          "line": 295,
           "cmd": "set",
           "ttl": "EX IDEM_TTL_SECONDS"
         }
@@ -4035,22 +4035,22 @@
       ],
       "writes": [
         {
-          "line": 117,
+          "line": 126,
           "cmd": "set",
           "ttl": "EX ELIGIBLE_TTL_SECONDS"
         },
         {
-          "line": 502,
+          "line": 511,
           "cmd": "incr",
           "ttl": null
         },
         {
-          "line": 502,
+          "line": 511,
           "cmd": "expire",
           "ttl": "EXPIRE 60"
         },
         {
-          "line": 551,
+          "line": 560,
           "cmd": "set",
           "ttl": "EX ELIGIBLE_TTL_SECONDS"
         }
@@ -4413,7 +4413,7 @@
     "SCAN": [
       {
         "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
-        "line": 100,
+        "line": 110,
         "cmd": "scan",
         "args": "cursor, 'MATCH', 'auth:gate:*', 'COUNT', 500"
       },
@@ -4594,7 +4594,7 @@
   "redisCallInsideLoop": [
     {
       "file": "apps/api/src/kernel/rbac/rbac.service.ts",
-      "line": 151,
+      "line": 161,
       "cmd": "del"
     },
     {
@@ -4604,12 +4604,12 @@
     },
     {
       "file": "apps/api/src/modules/auth/security/emergency-halt.service.ts",
-      "line": 70,
+      "line": 79,
       "cmd": "set"
     },
     {
       "file": "apps/api/src/modules/auth/sessions/session.service.ts",
-      "line": 635,
+      "line": 643,
       "cmd": "set"
     },
     {
