@@ -265,3 +265,10 @@ of the window), not over conversations that started in it. It is excluded from t
 - History imported later with old `created_at` needs `backfill:message-feed --from/--to` for its range.
 - A channel's mailbox scope changing later is not applied retroactively to past rollup rows (section 7).
 - If the event write fails (it logs and continues), that message is missing from the rollup until the day is reconciled or rebuilt.
+
+### More hub (`/v2/shell/overview-stats`)
+
+`ANALYTICS_SOURCES={"msg_feed_overview":"shadow"|"rollup"}` (default legacy) serves the hub's four message figures (delivered share of 30 days,
+sent in 7 days, sent this month, all-time total) from the rollups: 260 ms to ~65 ms on 1M messages, no shadow diffs on that data. The rollup counts
+what History counts, so it leaves out system lines and mirrored broadcast/campaign bubbles, which the scan includes; the month starts at the
+database session zone's midnight, read from the database, exactly as the scan does.
