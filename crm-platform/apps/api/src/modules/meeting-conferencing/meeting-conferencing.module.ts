@@ -10,8 +10,11 @@ import {
 } from '../../infra/providers/meeting-conferencing';
 import { AppointmentsBookingModule } from '../appointments-booking';
 import { CrmModule, MEETING_CONFERENCING } from '../crm';
+import { RolesPermissionsModule } from '../roles-permissions';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { ConferencingCallbackController } from './conferencing-callback.controller';
+import { ConferencingOperatorController } from './conferencing-operator.controller';
+import { ConferencingOperatorService } from './conferencing-operator.service';
 import { ConferencingConnectionRepository } from './conferencing-connection.repository';
 import { ConferencingConnectService } from './conferencing-connect.service';
 import { TeamsCredentialsSource, ZoomCredentialsSource } from './conferencing-config.service';
@@ -34,8 +37,12 @@ import { MeetingConferencingService } from './meeting-conferencing.service';
  */
 @Global()
 @Module({
-  imports: [AppointmentsBookingModule, CrmModule, PlatformSettingsModule],
-  controllers: [MeetingConferencingController, ConferencingCallbackController],
+  imports: [AppointmentsBookingModule, CrmModule, PlatformSettingsModule, RolesPermissionsModule],
+  controllers: [
+    MeetingConferencingController,
+    ConferencingCallbackController,
+    ConferencingOperatorController,
+  ],
   providers: [
     CryptoService,
     ZoomCredentialsSource,
@@ -54,6 +61,7 @@ import { MeetingConferencingService } from './meeting-conferencing.service';
     ConferencingConnectionRepository,
     ConferencingTokens,
     ConferencingConnectService,
+    ConferencingOperatorService,
     MeetingConferencingService,
     { provide: MEETING_CONFERENCING, useExisting: MeetingConferencingService },
   ],

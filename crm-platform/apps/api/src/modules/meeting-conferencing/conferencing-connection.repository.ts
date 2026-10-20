@@ -190,10 +190,14 @@ export class ConferencingConnectionRepository {
     return new Set((res.rows as Raw[]).map((r) => r.slug as string));
   }
 
-  /** Whether the app listing exists and is published at all (so "install it" is something a person can do). */
+  /**
+   * The listings a workspace can see and install: published, with a version to install. Both listings are free, and a free app is never
+   * narrowed by a plan (marketplace/plan-visibility.ts), so published is also "visible to this workspace".
+   */
   async publishedApps(tx: Tx, slugs: string[]): Promise<Set<string>> {
     const res = await tx.execute(sql`
-      SELECT slug FROM marketplace_apps WHERE slug IN (${inList(slugs)}) AND status = 'published'`);
+      SELECT slug FROM marketplace_apps
+       WHERE slug IN (${inList(slugs)}) AND status = 'published' AND current_version_id IS NOT NULL`);
     return new Set((res.rows as Raw[]).map((r) => r.slug as string));
   }
 }

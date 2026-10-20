@@ -25,6 +25,24 @@ has connected Google Calendar.
 3. Set `ZOOM_CLIENT_ID` and `ZOOM_CLIENT_SECRET` in the API environment. The base addresses (`ZOOM_OAUTH_AUTH_URL`, `ZOOM_OAUTH_TOKEN_URL`, `ZOOM_API_URL`) default to Zoom's and exist so a test can
    aim them at a stand-in.
 
+## Why do I see nothing in the Marketplace?
+
+The Zoom and Microsoft Teams listings are seeded as **drafts** on purpose, so a workspace never sees an integration that cannot connect. Until the operator finishes the steps below, Marketplace shows no Zoom or Teams card, and Settings, Integrations, **Video meetings** says **Not available yet** on each card, with no install button (a person who can install is told to ask the platform operator, not sent to an empty list).
+
+A card changes state as the platform gets ready:
+
+| What a person sees                  | Why                                                                               |
+| ----------------------------------- | --------------------------------------------------------------------------------- |
+| **Not available yet**               | the listing is not published, or the platform has no OAuth app for the provider   |
+| **Not installed** + button          | published and set up: the button opens that listing's own Marketplace page        |
+| **Installed**, connect your account | the workspace installed it; each person connects their own account                |
+| **Connected as ana@example.com**    | the person's own account is connected                                             |
+| **Switched off**                    | it was installed, then the operator removed or switched off the provider's set-up |
+
+The operator sees what is missing without reading this page: open the operator console, **Marketplace**, the **Zoom** or **Microsoft Teams** listing. A read-only **Video meetings setup** checklist sits under the listing's actions. It shows, per provider, whether the client id and secret are set and where they come from (values are never shown), whether the Microsoft Calendar integration is switched off (that switches Teams off), whether the listing is published, and the **exact redirect address to register** at the provider (built from `APP_URL`, or the `ZOOM_REDIRECT_URI` / `TEAMS_REDIRECT_URI` override). The same answer is `GET /v2/platform/conferencing/status` (permission `platform.market.manage` or `platform.market.review`).
+
+Fix, in the order the checklist shows: set the credentials above, register the redirect address, then approve and publish the listing's version (next section).
+
 ## Publish the listings
 
 The migration `20270130090200_mkt_video_conferencing_apps` seeds `zoom` and `microsoft-teams` as **draft** listings (category Calendar and meetings, free, connector type `client`). When the

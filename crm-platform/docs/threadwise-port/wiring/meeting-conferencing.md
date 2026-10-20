@@ -28,6 +28,11 @@ the inventory and the wiring map in one.
 | Persona vocabulary                                                 | the three UI prefixes `meeting-conferencing.form                                                                                                                     | row | page` are bound surfaces (default nouns meeting, contact) |
 | Help                                                               | guide `video-meetings`; `contact-meetings` gains a section                                                                                                           |
 
+## Card states and the operator checklist (BL-370)
+
+A person's Video meetings card is one of: **not available yet** (not installed, and the listing is a draft or the platform has no OAuth app: no button), **not installed** (published and configured: the button deep-links to `/marketplace/app/<slug>`), **installed** (connect your own account), **connected as <account>**, plus **switched off** (installed, set-up removed since). The API carries `listingPublished`, `configured` and `listingPath` on each card and `installable` + `installPath` on the capabilities, so the web decides nothing by guessing. "Visible to this workspace" is "published with a version": both listings are free, and a free listing is never narrowed by a plan.
+The operator console shows a read-only checklist on the two listings' pages from `GET /v2/platform/conferencing/status` (same credential sources as the connect flow, values never returned, exact redirect address).
+
 ## Decisions
 
 1. **Install first, then connect.** The Marketplace installation is the workspace's consent and availability switch; the connection is per person because the room is hosted by the scheduler.

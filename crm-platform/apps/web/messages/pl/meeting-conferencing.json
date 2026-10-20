@@ -90,11 +90,12 @@
       "status": {
         "connected": "Połączono",
         "needs_reconnect": "Wymaga ponownego połączenia",
-        "disconnected": "Nie połączono",
+        "disconnected": "Zainstalowano",
         "not_installed": "Nie zainstalowano",
-        "unavailable": "Niedostępne"
+        "unavailable": "Wyłączone",
+        "not_available": "Jeszcze niedostępne"
       },
-      "account": "Konto: {account}",
+      "account": "Połączono jako {account}",
       "connectedOn": "Połączono {when}",
       "lastError": {
         "forbidden": "Dostawca odrzucił ostatnie żądanie. Twoje konto może nie mieć uprawnień do tworzenia spotkań.",
@@ -111,7 +112,7 @@
         "canInstall": "Twój obszar roboczy nie ma jeszcze zainstalowanego {provider}. Zainstaluj go w Marketplace, a potem połącz tutaj swoje konto.",
         "cannotInstall": "Twój obszar roboczy nie ma jeszcze zainstalowanego {provider}. Poproś administratora obszaru roboczego o zainstalowanie go w Marketplace."
       },
-      "unavailable": "{provider} nie został jeszcze skonfigurowany dla tej platformy. Skontaktuj się z administratorem platformy.",
+      "unavailable": "{provider} jest zainstalowany, ale operator Twojej platformy wyłączył jego konfigurację, więc nie można go teraz połączyć. Zapytaj operatora platformy.",
       "outcome": {
         "connected": "{provider} jest połączony.",
         "denied": "{provider} nie został połączony, ponieważ logowanie zostało anulowane.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Spotkania, które mają już link {provider}, zachowują go, ale przenoszenie lub usuwanie tych spotkań nie będzie już zmieniać pokoju. Możesz połączyć się ponownie w dowolnej chwili.",
       "disconnectConfirm": "Rozłącz",
       "keep": "Pozostaw połączone",
-      "calendarNote": "Linki Google Meet i Teams tworzone przez kalendarz nie wymagają tutaj połączenia: korzystają z kalendarza, który Twój obszar roboczy już połączył."
+      "calendarNote": "Linki Google Meet i Teams tworzone przez kalendarz nie wymagają tutaj połączenia: korzystają z kalendarza, który Twój obszar roboczy już połączył.",
+      "notAvailable": "Operator Twojej platformy nie udostępnił jeszcze {provider}: trzeba go jeszcze skonfigurować i opublikować w Marketplace. Na razie nie ma czego instalować, więc poproś operatora platformy o jego włączenie.",
+      "installedHint": "{provider} jest zainstalowany w Twoim obszarze roboczym. Połącz własne konto, aby dodawać linki {provider} do swoich spotkań."
+    },
+    "operator": {
+      "title": "Konfiguracja spotkań wideo",
+      "ready": "Gotowe",
+      "missing": "{count, plural, one {Brakuje # kroku} few {Brakuje # kroków} many {Brakuje # kroków} other {Brakuje # kroku}}",
+      "loadFailed": "Nie udało się wczytać listy kontrolnej konfiguracji.",
+      "fake": "Tryb deweloperski: podłączone są atrapy adapterów Zoom i Microsoft Teams, więc można się połączyć bez prawdziwego konta. Lista poniżej pokazuje, czego prawdziwa platforma jeszcze potrzebuje.",
+      "intro": {
+        "zoom": "Obszary robocze nie widzą ani nie mogą używać Zoom, dopóki nie zostaną ustawione dane uwierzytelniające aplikacji Zoom i ta oferta nie zostanie opublikowana.",
+        "teams": "Obszary robocze nie widzą ani nie mogą używać Microsoft Teams, dopóki nie będzie dostępna aplikacja Microsoft i ta oferta nie zostanie opublikowana."
+      },
+      "set": "ustawiono",
+      "notSet": "nie ustawiono",
+      "credentials": {
+        "zoom": {
+          "label": "Dane uwierzytelniające aplikacji Zoom (wartości środowiskowe)"
+        },
+        "teams": {
+          "label": "Dane uwierzytelniające aplikacji Microsoft"
+        }
+      },
+      "teamsFallback": "Teams używa własnych wartości powyżej, gdy obie są ustawione, a w przeciwnym razie aplikacji Microsoft Calendar zapisanej w konsoli.",
+      "source": {
+        "environment": "Wartości pochodzą ze środowiska.",
+        "console": "Wartości pochodzą z konsoli, ze strony Microsoft Calendar."
+      },
+      "switchedOff": "Integracja Microsoft Calendar jest wyłączona w konsoli, co wyłącza również Teams.",
+      "redirect": {
+        "label": "Adres przekierowania do zarejestrowania u dostawcy",
+        "hint": {
+          "zoom": "Dodaj dokładnie ten adres jako adres URL przekierowania aplikacji Zoom.",
+          "teams": "Dodaj dokładnie ten adres jako identyfikator URI przekierowania aplikacji Microsoft, obok adresu kalendarza, oraz dodaj uprawnienie delegowane OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Oferta w Marketplace opublikowana",
+        "missing": "Oferty nie ma w katalogu.",
+        "notPublished": "Oferta nie jest opublikowana (stan: {status}). Zatwierdź i opublikuj wersję poniżej, a wtedy obszary robocze będą mogły ją zainstalować.",
+        "published": "Opublikowana: obszary robocze mogą ją znaleźć i zainstalować."
+      }
     }
   }
 }

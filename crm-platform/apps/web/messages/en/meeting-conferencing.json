@@ -90,11 +90,12 @@
       "status": {
         "connected": "Connected",
         "needs_reconnect": "Needs reconnecting",
-        "disconnected": "Not connected",
+        "disconnected": "Installed",
         "not_installed": "Not installed",
-        "unavailable": "Not available"
+        "unavailable": "Switched off",
+        "not_available": "Not available yet"
       },
-      "account": "Account: {account}",
+      "account": "Connected as {account}",
       "connectedOn": "Connected {when}",
       "lastError": {
         "forbidden": "The provider refused the last request. Your account may not be allowed to create meetings.",
@@ -111,7 +112,7 @@
         "canInstall": "Your workspace has not installed {provider} yet. Install it from the Marketplace, then connect your account here.",
         "cannotInstall": "Your workspace has not installed {provider} yet. Ask a workspace admin to install it from the Marketplace."
       },
-      "unavailable": "{provider} has not been set up for this platform yet. Ask your platform administrator.",
+      "unavailable": "{provider} is installed, but your platform operator has switched its set-up off, so it cannot be connected right now. Ask your platform operator.",
       "outcome": {
         "connected": "{provider} is connected.",
         "denied": "{provider} was not connected because the sign-in was cancelled.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Meetings that already have a {provider} link keep it, but moving or deleting those meetings can no longer change the room. You can connect again at any time.",
       "disconnectConfirm": "Disconnect",
       "keep": "Keep connected",
-      "calendarNote": "Google Meet and Teams links made through your calendar need no connection here: they use the calendar your workspace has already connected."
+      "calendarNote": "Google Meet and Teams links made through your calendar need no connection here: they use the calendar your workspace has already connected.",
+      "notAvailable": "Your platform operator has not made {provider} available yet: it still has to be set up and published in the Marketplace. There is nothing to install yet, so ask your platform operator to switch it on.",
+      "installedHint": "{provider} is installed for your workspace. Connect your own account to add {provider} links to your meetings."
+    },
+    "operator": {
+      "title": "Video meetings setup",
+      "ready": "Ready",
+      "missing": "{count, plural, one {1 step missing} other {# steps missing}}",
+      "loadFailed": "The setup checklist could not be loaded.",
+      "fake": "Development mode: the fake Zoom and Teams adapters are bound, so people can connect without a real account. The checklist below shows what a real platform still needs.",
+      "intro": {
+        "zoom": "Workspaces cannot see or use Zoom until the Zoom app credentials are set and this listing is published.",
+        "teams": "Workspaces cannot see or use Microsoft Teams until a Microsoft app is available and this listing is published."
+      },
+      "set": "set",
+      "notSet": "not set",
+      "credentials": {
+        "zoom": {
+          "label": "Zoom app credentials (environment values)"
+        },
+        "teams": {
+          "label": "Microsoft app credentials"
+        }
+      },
+      "teamsFallback": "Teams uses its own values above when both are set, otherwise the Microsoft Calendar app saved in the console.",
+      "source": {
+        "environment": "The values come from the environment.",
+        "console": "The values come from the console, Microsoft Calendar page."
+      },
+      "switchedOff": "The Microsoft Calendar integration is switched off in the console, which switches Teams off with it.",
+      "redirect": {
+        "label": "Redirect address to register at the provider",
+        "hint": {
+          "zoom": "Add this exact address as the redirect URL of the Zoom app.",
+          "teams": "Add this exact address as a redirect URI of the Microsoft app, next to the calendar one, and add the delegated permission OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Marketplace listing published",
+        "missing": "The listing does not exist in the catalogue.",
+        "notPublished": "The listing is not published (status: {status}). Approve and publish a version below, then workspaces can install it.",
+        "published": "Published: workspaces can find and install it."
+      }
     }
   }
 }

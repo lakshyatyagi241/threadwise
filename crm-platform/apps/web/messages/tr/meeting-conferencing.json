@@ -90,11 +90,12 @@
       "status": {
         "connected": "Bağlı",
         "needs_reconnect": "Yeniden bağlanması gerekiyor",
-        "disconnected": "Bağlı değil",
+        "disconnected": "Yüklü",
         "not_installed": "Yüklü değil",
-        "unavailable": "Kullanılamıyor"
+        "unavailable": "Kapalı",
+        "not_available": "Henüz kullanılamıyor"
       },
-      "account": "Hesap: {account}",
+      "account": "{account} olarak bağlı",
       "connectedOn": "Bağlandı: {when}",
       "lastError": {
         "forbidden": "Sağlayıcı son isteği reddetti. Hesabınızın toplantı oluşturma izni olmayabilir.",
@@ -111,7 +112,7 @@
         "canInstall": "Çalışma alanınız henüz {provider} uygulamasını yüklemedi. Pazar yerinden yükleyin, ardından hesabınızı burada bağlayın.",
         "cannotInstall": "Çalışma alanınız henüz {provider} uygulamasını yüklemedi. Bir çalışma alanı yöneticisinden Pazar yerinden yüklemesini isteyin."
       },
-      "unavailable": "{provider} bu platform için henüz kurulmadı. Platform yöneticinize danışın.",
+      "unavailable": "{provider} yüklü, ancak platform operatörünüz kurulumunu kapattığı için şu anda bağlanamıyor. Platform operatörünüze danışın.",
       "outcome": {
         "connected": "{provider} bağlandı.",
         "denied": "Oturum açma iptal edildiği için {provider} bağlanmadı.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Zaten bir {provider} bağlantısı olan toplantılar onu korur, ancak bu toplantıları taşımak veya silmek artık odayı değiştiremez. İstediğiniz zaman yeniden bağlanabilirsiniz.",
       "disconnectConfirm": "Bağlantıyı kes",
       "keep": "Bağlı kalsın",
-      "calendarNote": "Takvim üzerinden oluşturulan Google Meet ve Teams bağlantıları burada bağlantı gerektirmez: çalışma alanınızın zaten bağladığı takvimi kullanırlar."
+      "calendarNote": "Takvim üzerinden oluşturulan Google Meet ve Teams bağlantıları burada bağlantı gerektirmez: çalışma alanınızın zaten bağladığı takvimi kullanırlar.",
+      "notAvailable": "Platform operatörünüz {provider} uygulamasını henüz kullanıma açmadı: önce kurulması ve Pazar yerinde yayımlanması gerekiyor. Henüz yüklenecek bir şey yok, bu yüzden platform operatörünüzden açmasını isteyin.",
+      "installedHint": "{provider} çalışma alanınız için yüklü. Toplantılarınıza {provider} bağlantıları eklemek için kendi hesabınızı bağlayın."
+    },
+    "operator": {
+      "title": "Görüntülü toplantı kurulumu",
+      "ready": "Hazır",
+      "missing": "{count, plural, one {# adım eksik} other {# adım eksik}}",
+      "loadFailed": "Kurulum kontrol listesi yüklenemedi.",
+      "fake": "Geliştirme modu: sahte Zoom ve Microsoft Teams bağdaştırıcıları bağlı, bu yüzden gerçek hesap olmadan bağlanılabilir. Aşağıdaki kontrol listesi, gerçek bir platformun hâlâ nelere ihtiyaç duyduğunu gösterir.",
+      "intro": {
+        "zoom": "Zoom uygulama kimlik bilgileri ayarlanıp bu liste yayımlanana kadar çalışma alanları Zoom hizmetini göremez ve kullanamaz.",
+        "teams": "Microsoft uygulaması kullanıma açılıp bu liste yayımlanana kadar çalışma alanları Microsoft Teams hizmetini göremez ve kullanamaz."
+      },
+      "set": "ayarlı",
+      "notSet": "ayarlı değil",
+      "credentials": {
+        "zoom": {
+          "label": "Zoom uygulama kimlik bilgileri (ortam değerleri)"
+        },
+        "teams": {
+          "label": "Microsoft uygulama kimlik bilgileri"
+        }
+      },
+      "teamsFallback": "İkisi de ayarlıysa Teams yukarıdaki kendi değerlerini kullanır, değilse konsolda kayıtlı Microsoft Takvim uygulamasını kullanır.",
+      "source": {
+        "environment": "Değerler ortamdan geliyor.",
+        "console": "Değerler konsoldaki Microsoft Takvim sayfasından geliyor."
+      },
+      "switchedOff": "Microsoft Takvim entegrasyonu konsolda kapalı; bu durum Teams hizmetini de kapatır.",
+      "redirect": {
+        "label": "Sağlayıcıda kaydedilecek yönlendirme adresi",
+        "hint": {
+          "zoom": "Bu adresi olduğu gibi Zoom uygulamasının yönlendirme URL adresi olarak ekleyin.",
+          "teams": "Bu adresi olduğu gibi Microsoft uygulamasının yönlendirme URI adresi olarak, takvim olanın yanına ekleyin ve OnlineMeetings.ReadWrite yetkilendirilmiş iznini ekleyin."
+        }
+      },
+      "listing": {
+        "label": "Pazar yeri listesi yayımlandı",
+        "missing": "Liste katalogda yok.",
+        "notPublished": "Liste yayımlanmamış (durum: {status}). Aşağıdan bir sürümü onaylayıp yayımlayın; ardından çalışma alanları yükleyebilir.",
+        "published": "Yayımlandı: çalışma alanları bulup yükleyebilir."
+      }
     }
   }
 }

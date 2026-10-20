@@ -90,11 +90,12 @@
       "status": {
         "connected": "Terhubung",
         "needs_reconnect": "Perlu dihubungkan ulang",
-        "disconnected": "Tidak terhubung",
+        "disconnected": "Terpasang",
         "not_installed": "Belum dipasang",
-        "unavailable": "Tidak tersedia"
+        "unavailable": "Dimatikan",
+        "not_available": "Belum tersedia"
       },
-      "account": "Akun: {account}",
+      "account": "Terhubung sebagai {account}",
       "connectedOn": "Terhubung {when}",
       "lastError": {
         "forbidden": "Penyedia menolak permintaan terakhir. Akun Anda mungkin tidak diizinkan membuat rapat.",
@@ -111,7 +112,7 @@
         "canInstall": "Ruang kerja Anda belum memasang {provider}. Pasang dari Marketplace, lalu hubungkan akun Anda di sini.",
         "cannotInstall": "Ruang kerja Anda belum memasang {provider}. Minta admin ruang kerja untuk memasangnya dari Marketplace."
       },
-      "unavailable": "{provider} belum disiapkan untuk platform ini. Hubungi administrator platform Anda.",
+      "unavailable": "{provider} sudah terpasang, tetapi operator platform Anda telah mematikan pengaturannya, sehingga belum bisa dihubungkan saat ini. Tanyakan kepada operator platform Anda.",
       "outcome": {
         "connected": "{provider} terhubung.",
         "denied": "{provider} tidak terhubung karena proses masuk dibatalkan.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Rapat yang sudah memiliki tautan {provider} tetap menyimpannya, tetapi memindahkan atau menghapus rapat tersebut tidak lagi dapat mengubah ruangannya. Anda dapat menghubungkan lagi kapan saja.",
       "disconnectConfirm": "Putuskan",
       "keep": "Tetap terhubung",
-      "calendarNote": "Tautan Google Meet dan Teams yang dibuat melalui kalender Anda tidak memerlukan koneksi di sini: tautan itu memakai kalender yang sudah dihubungkan oleh ruang kerja Anda."
+      "calendarNote": "Tautan Google Meet dan Teams yang dibuat melalui kalender Anda tidak memerlukan koneksi di sini: tautan itu memakai kalender yang sudah dihubungkan oleh ruang kerja Anda.",
+      "notAvailable": "Operator platform Anda belum menyediakan {provider}: layanan ini masih harus disiapkan dan dipublikasikan di Marketplace. Belum ada yang bisa dipasang, jadi minta operator platform Anda untuk mengaktifkannya.",
+      "installedHint": "{provider} sudah terpasang untuk ruang kerja Anda. Hubungkan akun Anda sendiri untuk menambahkan tautan {provider} ke rapat Anda."
+    },
+    "operator": {
+      "title": "Penyiapan rapat video",
+      "ready": "Siap",
+      "missing": "{count, plural, other {# langkah belum selesai}}",
+      "loadFailed": "Daftar periksa penyiapan tidak dapat dimuat.",
+      "fake": "Mode pengembangan: adaptor Zoom dan Microsoft Teams palsu dipasang, sehingga orang bisa terhubung tanpa akun asli. Daftar periksa di bawah menunjukkan apa yang masih dibutuhkan platform sebenarnya.",
+      "intro": {
+        "zoom": "Ruang kerja tidak dapat melihat atau memakai Zoom sampai kredensial aplikasi Zoom diatur dan listing ini dipublikasikan.",
+        "teams": "Ruang kerja tidak dapat melihat atau memakai Microsoft Teams sampai aplikasi Microsoft tersedia dan listing ini dipublikasikan."
+      },
+      "set": "sudah diatur",
+      "notSet": "belum diatur",
+      "credentials": {
+        "zoom": {
+          "label": "Kredensial aplikasi Zoom (nilai lingkungan)"
+        },
+        "teams": {
+          "label": "Kredensial aplikasi Microsoft"
+        }
+      },
+      "teamsFallback": "Teams memakai nilainya sendiri di atas jika keduanya diatur, jika tidak memakai aplikasi Microsoft Calendar yang tersimpan di konsol.",
+      "source": {
+        "environment": "Nilai berasal dari lingkungan.",
+        "console": "Nilai berasal dari konsol, halaman Microsoft Calendar."
+      },
+      "switchedOff": "Integrasi Microsoft Calendar dimatikan di konsol, yang juga mematikan Teams.",
+      "redirect": {
+        "label": "Alamat pengalihan untuk didaftarkan di penyedia",
+        "hint": {
+          "zoom": "Tambahkan alamat ini persis seperti adanya sebagai redirect URL aplikasi Zoom.",
+          "teams": "Tambahkan alamat ini persis seperti adanya sebagai redirect URI aplikasi Microsoft, di samping alamat kalender, lalu tambahkan izin delegasi OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Listing Marketplace dipublikasikan",
+        "missing": "Listing tidak ada di katalog.",
+        "notPublished": "Listing belum dipublikasikan (status: {status}). Setujui dan publikasikan versi di bawah, lalu ruang kerja dapat memasangnya.",
+        "published": "Dipublikasikan: ruang kerja dapat menemukan dan memasangnya."
+      }
     }
   }
 }
