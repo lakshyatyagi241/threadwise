@@ -433,7 +433,7 @@ describe('create (TW-CTP-003)', () => {
       .send({ name: 'x', ownerId: '11111111-1111-4111-8111-111111111111' });
     expect(ghost.status).toBe(422);
     expect(code(ghost)).toBe('COMPANY_OWNER_INVALID');
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [m.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [m.userId]);
     const suspended = await api
       .as(t.admin)
       .post('/v2/companies')

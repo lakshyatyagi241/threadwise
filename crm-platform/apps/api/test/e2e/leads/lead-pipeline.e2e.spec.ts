@@ -750,7 +750,7 @@ describe('owner, deal and notification (L-07, L-08, L-09)', () => {
     });
     expect(await owners(s, 4)).toEqual([ana.userId, ben.userId, ana.userId, ben.userId]);
 
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [ben.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [ben.userId]);
     const next = await api.hook(s.hookPath, { name: 'RR solo', phone: '98200 22222' });
     expect(next.status).toBe(200);
     const [solo] = await api.contactsWithPhone(t.orgId, '+919820022222');

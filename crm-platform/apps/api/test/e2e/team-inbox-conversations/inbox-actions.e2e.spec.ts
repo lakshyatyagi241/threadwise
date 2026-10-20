@@ -232,7 +232,7 @@ describe('assign, claim and unassign', () => {
     });
     expect(unknown.body.code).toBe('CONVERSATION_ASSIGNEE_INVALID');
     const idle = await api.member(t, 'suspended', AGENT);
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [idle.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [idle.userId]);
     const inactive = await assign(manager.token, c.uuid, {
       rowVersion: await version(),
       userId: await userUuid(idle.userId),
@@ -650,7 +650,7 @@ describe('internal notes', () => {
     expect(foreign.status).toBe(422);
     expect(foreign.body.code).toBe('VALIDATION_FAILED');
     const away = await api.member(t, 'away', AGENT);
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [away.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [away.userId]);
     expect(
       (await add(agent.token, conv.uuid, { body: 'x', mentions: [await userUuid(away.userId)] }))
         .status,

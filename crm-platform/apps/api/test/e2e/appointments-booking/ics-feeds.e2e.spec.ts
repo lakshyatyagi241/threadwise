@@ -529,7 +529,7 @@ describe('my bookings in my calendar app', () => {
     expect(lost.status).toBe(200);
     expect(lost.text).not.toContain('BEGIN:VEVENT');
     // A deactivated person's link is the same 404 as an unknown one.
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE org_id = $1 AND id = $2`, [
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE org_id = $1 AND id = $2`, [
       a.orgId,
       agent.userId,
     ]);
