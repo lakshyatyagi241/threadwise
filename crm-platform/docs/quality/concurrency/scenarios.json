@@ -2,18 +2,18 @@
   "item": "Sheet3 #15",
   "target": ">=95% P0/P1 scenario coverage and zero flaky P0 tests",
   "totals": {
-    "scenarios": 63,
-    "tested": 55,
-    "notTested": 8,
-    "coveragePercent": 87.3,
+    "scenarios": 74,
+    "tested": 73,
+    "notTested": 1,
+    "coveragePercent": 98.6,
     "byPriority": {
       "P0": {
         "total": 17,
         "tested": 17
       },
       "P1": {
-        "total": 46,
-        "tested": 38
+        "total": 57,
+        "tested": 56
       }
     },
     "byArea": {
@@ -39,7 +39,7 @@
       },
       "Idempotency": {
         "total": 3,
-        "tested": 2
+        "tested": 3
       },
       "Invoices": {
         "total": 3,
@@ -47,11 +47,11 @@
       },
       "Queues and outbox": {
         "total": 6,
-        "tested": 4
+        "tested": 6
       },
       "Plan limits": {
-        "total": 21,
-        "tested": 17
+        "total": 32,
+        "tested": 31
       },
       "Optimistic locking": {
         "total": 2,
@@ -71,7 +71,7 @@
       },
       "Webhooks": {
         "total": 2,
-        "tested": 1
+        "tested": 2
       }
     }
   },
@@ -104,19 +104,25 @@
       "id": "D-05",
       "severity": "Medium",
       "status": "fixed",
-      "title": "Every other capped create had the same unlocked count-then-insert; fixed through one helper (residual in CC-LIM-19)"
+      "title": "Every other capped create had the same unlocked count-then-insert (about 30 sites, including appointments across booking types and tags made by store buyers and forms)"
     },
     {
       "id": "D-06",
       "severity": "Medium",
       "status": "fixed",
-      "title": "Coupon last uses could be handed out twice; fixed with a deliberate deviation from Reference, coupons owner to confirm"
+      "title": "Coupon last uses could be handed out twice; deliberate deviation from Reference, coupons owner to confirm"
     },
     {
       "id": "D-07",
       "severity": "Low",
       "status": "intentionally unchanged",
       "title": "Contact edited to an e-mail another contact holds: Reference allows it on edit"
+    },
+    {
+      "id": "D-08",
+      "severity": "Medium",
+      "status": "fixed",
+      "title": "A contact import running next to API creates (or a second import) passed the contact cap: it read the room once at the start"
     }
   ],
   "scenarios": [
@@ -278,12 +284,12 @@
       "id": "CC-IDEM-03",
       "area": "Idempotency",
       "priority": "P1",
-      "scenario": "Redis outage while an idempotent request runs",
-      "invariant": "Fails closed, nothing created",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: cannot stop the shared Redis."
+      "scenario": "Redis outage during parallel idempotent creates",
+      "invariant": "Fail closed (no 2xx, no row); recovery without restart; the same keys make one row each",
+      "test": "apps/api/test/e2e/concurrency/redis-outage.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "A relay in front of a private Redis is cut and restored; the shared Redis is not touched."
     },
     {
       "id": "CC-INV-01",
@@ -344,12 +350,12 @@
       "id": "CC-JOB-03",
       "area": "Queues and outbox",
       "priority": "P1",
-      "scenario": "Stalled job recovery after a worker crash",
-      "invariant": "No lost, no double job",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: needs killing a worker process."
+      "scenario": "BullMQ workers in two processes; a worker killed mid-job",
+      "invariant": "Every job once; the stalled job is taken over once and finishes once",
+      "test": "apps/api/test/e2e/concurrency/stalled-jobs.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "Private Redis container; short lock and stall timers for speed, other BullMQ defaults."
     },
     {
       "id": "CC-LIM-01",
@@ -407,26 +413,125 @@
       "notes": "D-03"
     },
     {
-      "id": "CC-LIM-06",
+      "id": "CC-LIM-06a",
       "area": "Plan limits",
       "priority": "P1",
-      "scenario": "Capped creates fixed by the shared lock but without their own parallel test: templates, recurring invoices, catalog products, SMS senders, custom fields (fields endpoint), broadcasts, scheduled messages, campaigns, appointments, saved-reply import",
-      "invariant": "Never more rows than the cap",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "D-05 fixed in code (same lock); parallel test not written: needs a gateway, a connected sender or a worker to create one row."
+      "scenario": "Catalog products: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06b",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Recurring invoices: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06c",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "SMS senders (device cap): parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06d",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Saved reply import: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06e",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Message templates: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06f",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Scheduled messages: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06g",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Broadcasts: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06h",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Campaigns: parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06i",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Custom fields (fields endpoint): parallel creates at the cap",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-more.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05; with the lock switched off this test fails."
+    },
+    {
+      "id": "CC-LIM-06j",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Appointments: 8 bookings across 2 booking types on a monthly cap of 3 (staff and public page)",
+      "invariant": "Exactly 3 booked",
+      "test": "apps/api/test/e2e/concurrency/appointments-cap.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05: one type has its own lock, the cap spans types; with the cap lock off 4 were booked."
     },
     {
       "id": "CC-LIM-07",
       "area": "Plan limits",
       "priority": "P1",
-      "scenario": "Contact import with the contact cap in parallel",
-      "invariant": "Cap holds for bulk imports",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: needs the import worker flow."
+      "scenario": "Contact import and API creates at the contact cap",
+      "invariant": "Never more contacts than the cap",
+      "test": "apps/api/test/e2e/concurrency/import-cap.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-08 fixed: the import re-reads the room under the lock for every batch."
     },
     {
       "id": "CC-LIM-08",
@@ -550,15 +655,37 @@
       "notes": "D-05"
     },
     {
-      "id": "CC-LIM-19",
+      "id": "CC-LIM-19a",
       "area": "Plan limits",
       "priority": "P1",
-      "scenario": "Hand-rolled caps not behind the shared lock: tags auto-created by the contact resolver and the form submit, invoices_monthly from a store order",
-      "invariant": "Never more rows than the cap",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "D-05 residual, open (Low): these skip rather than refuse, or run outside a transaction."
+      "scenario": "Tags made by a store buyer: 8 at once on a tag cap of 3",
+      "invariant": "Never more tags than the cap, every buyer still gets a contact",
+      "test": "apps/api/test/e2e/concurrency/limits-hand-rolled.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05 (hand-rolled cap): failed before the fix (5 tags)."
+    },
+    {
+      "id": "CC-LIM-19b",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Tags made by form submissions: 6 at once on a tag cap of 3",
+      "invariant": "Never more tags than the cap, every submission accepted",
+      "test": "apps/api/test/e2e/concurrency/limits-hand-rolled.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05 (hand-rolled cap): failed before the fix (5 tags)."
+    },
+    {
+      "id": "CC-LIM-19c",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Store orders invoiced at once on a monthly invoice cap",
+      "invariant": "Cap held; the rest skipped for the plan",
+      "test": "apps/api/test/e2e/concurrency/limits-hand-rolled.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "No defect: the cap held with and without an extra lock (the draft insert is already locked)."
     },
     {
       "id": "CC-LOCK-01",
@@ -630,12 +757,12 @@
       "id": "CC-OBX-03",
       "area": "Queues and outbox",
       "priority": "P1",
-      "scenario": "Drainers in separate processes and nodes",
-      "invariant": "Same as OBX-01 across nodes",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: needs several nodes; one process was used (the SQL claim is the same)."
+      "scenario": "Two real drain processes on one backlog, one killed mid-batch",
+      "invariant": "Each event delivered once; after a kill none lost, at most the killed batch twice",
+      "test": "apps/api/test/e2e/concurrency/multi-node.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "Two OS processes (tsx), own pools, same Postgres. Not tested: separate machines."
     },
     {
       "id": "CC-REF-01",
@@ -723,7 +850,7 @@
       "test": null,
       "testKind": "none",
       "status": "not tested",
-      "notes": "Not testable: enforce mode (phase S2) is not built."
+      "notes": "Not testable on any machine: enforce mode (phase S2) is not built, so uploads are never refused (the meter only observes). Needed: build enforce mode, then a parallel-upload test at the quota edge."
     },
     {
       "id": "CC-TEN-01",
@@ -806,12 +933,12 @@
       "id": "CC-WHK-02",
       "area": "Webhooks",
       "priority": "P1",
-      "scenario": "Channel provider webhooks replayed in parallel (Meta, Telegram...)",
-      "invariant": "One stored message per provider id",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Covered at the ingest layer by CC-MSG-02; the HTTP signature layer per channel is not tested."
+      "scenario": "Inbound webhooks of LINE, WeChat, Viber, Telegram: one delivery x8 and a forged one x8",
+      "invariant": "One stored message, one thread; forged writes nothing",
+      "test": "apps/api/test/e2e/concurrency/webhook-duplicates.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "Not covered: Facebook, Instagram, SMS and e-mail inbound routes; the WhatsApp Cloud route has its own replay tests."
     }
   ]
 }
