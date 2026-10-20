@@ -106,7 +106,9 @@
       "leaveAction": "Urlop i zastępstwo",
       "noLimit": "Bez limitu",
       "neverSignedIn": "Nigdy",
-      "editAction": "Zmień telefon i limit czatów"
+      "editAction": "Zmień telefon i limit czatów",
+      "moreAction": "Więcej",
+      "moreLabel": "Więcej działań dla: {name}"
     },
     "invite": {
       "eyebrow": "Przestrzeń robocza",
@@ -148,12 +150,10 @@
       "eyebrow": "Przestrzeń robocza",
       "title": "Zespoły",
       "pageTitle": "Zespoły",
-      "subtitle": "Grupuj agentów według działów. Rozmowy mogą być przypisywane automatycznie według zespołu za pomocą reguł routingu.",
       "create": "Utwórz zespół",
       "edit": "Edytuj zespół",
       "loading": "Wczytywanie zespołów",
       "emptyTitle": "Brak zespołów",
-      "emptyMessage": "Utwórz zespół, dodaj do niego agentów i kieruj do niego rozmowy.",
       "emptyAction": "Utwórz zespół",
       "members": "{count, plural, =0 {Brak członków} one {# członek} few {# członkowie} many {# członków} other {# członka}}",
       "online": "{count} online",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Jak działają zespoły",
       "how": {
-        "one": "Nazwij zespół (na przykład Sprzedaż), wybierz kolor i dodaj do niego agentów.",
-        "two": "Używaj go na trzy sposoby: przypisuj czat do zespołu ręcznie, kieruj nowe czaty do niego regułą routingu albo sprawdzaj jego wyniki w analityce.",
-        "three": "Kolor zespołu to kolor etykiety w kolejce Skrzynki, dzięki czemu od razu widzisz czaty każdego zespołu."
+        "one": "Nazwij zespół (na przykład Sprzedaż), wybierz kolor i dodaj osoby, które razem pracują.",
+        "two": "Użyj go do rozmów (kieruj do niego nowe czaty lub przypisuj czat ręcznie), do rekordów (przypisuj jego członkom kontakty, firmy i transakcje) oraz do raportów.",
+        "three": "Menedżer to osoba, która kieruje zespołem. Zespół nadrzędny umieszcza go pod innym zespołem, dzięki czemu możesz zbudować drzewo, np. Sprzedaż i Sprzedaż Zachód.",
+        "four": "Zespół główny osoby to jej podstawowy zespół, używany w raportach (raporty zaczną go wykorzystywać w nadchodzącej wersji). Routing, przypisywanie i widoczność uwzględniają wszystkie zespoły osoby."
       },
       "created": "Zespół utworzony.",
       "updated": "Zespół zaktualizowany.",
@@ -180,7 +181,33 @@
       "deleteTitle": "Usunąć ten zespół?",
       "deleteMessage": "Usunąć zespół „{name}”? Rozmowy przypisane do tego zespołu staną się nieprzypisane.",
       "deleteConfirm": "Usuń zespół",
-      "delete": "Usuń zespół"
+      "delete": "Usuń zespół",
+      "subtitle": "Zespoły grupują osoby na potrzeby rozmów, przypisań i raportów.",
+      "emptyMessage": "Utwórz zespół i dodaj osoby, które razem pracują. Możesz kierować do niego rozmowy oraz przypisywać jego członkom kontakty, firmy i transakcje.",
+      "noAccess": "Nie masz uprawnień do wyświetlania zespołów. Poproś właściciela lub administratora przestrzeni roboczej o uprawnienie team.read.",
+      "manager": "Menedżer: {name}",
+      "noManager": "Brak menedżera",
+      "receivesConversations": "Rozmowy",
+      "receivesRecords": "Rekordy",
+      "primaryCount": "{count, plural, one {# osoba ma go jako zespół główny} few {# osoby mają go jako zespół główny} many {# osób ma go jako zespół główny} other {# osoby mają go jako zespół główny}}",
+      "usedBy": "Używany przez",
+      "usedByNone": "Nie jest jeszcze używany przez żadną regułę",
+      "usage": {
+        "routingRules": "{count, plural, one {# reguła routingu} few {# reguły routingu} many {# reguł routingu} other {# reguły routingu}}",
+        "assignmentRules": "{count, plural, one {# reguła przypisania} few {# reguły przypisania} many {# reguł przypisania} other {# reguły przypisania}}",
+        "segmentShares": "{count, plural, one {# udostępniony segment} few {# udostępnione segmenty} many {# udostępnionych segmentów} other {# udostępnionego segmentu}}",
+        "conversations": "{count, plural, one {# rozmowa} few {# rozmowy} many {# rozmów} other {# rozmowy}}",
+        "childTeams": "{count, plural, one {# podzespół} few {# podzespoły} many {# podzespołów} other {# podzespołu}}"
+      },
+      "notUsed": {
+        "title": "Zapisane, jeszcze nieużywane",
+        "body": "Te ustawienia są zapisane w zespole, ale nic jeszcze ich nie odczytuje. Zaczną działać wraz z aktualizacją routingu.",
+        "strategy": "Strategia automatycznego przypisywania: {value}",
+        "devices": "{count, plural, one {Ograniczone do # urządzenia} few {Ograniczone do # urządzeń} many {Ograniczone do # urządzeń} other {Ograniczone do # urządzenia}}",
+        "businessHours": "Godziny pracy: zapisane",
+        "timezone": "Strefa czasowa: {value}",
+        "defaultAssignee": "Domyślna osoba przypisana: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Przestrzeń robocza",
@@ -192,13 +219,6 @@
       "nameTooLong": "Nazwa może mieć maksymalnie {max} znaków.",
       "color": "Kolor",
       "colorOption": "Kolor {color}",
-      "strategy": "Strategia automatycznego przypisywania",
-      "strategyOptions": {
-        "manual": "Ręczna — manager wybiera, kto dostaje rozmowę",
-        "round_robin": "Round robin — równomiernie po kolei",
-        "least_loaded": "Najmniej obciążony — najpierw ten z najmniejszą liczbą otwartych",
-        "sticky": "Przypięty — ostatni agent, który odpisał temu kontaktowi"
-      },
       "members": "Członkowie",
       "membersLoading": "Wczytywanie współpracowników",
       "membersFailed": "Nie udało się wczytać współpracowników.",
@@ -209,7 +229,28 @@
       "create": "Utwórz zespół",
       "creating": "Przetwarzanie…",
       "save": "Zapisz zmiany",
-      "saving": "Przetwarzanie…"
+      "saving": "Przetwarzanie…",
+      "hint": "Zespoły grupują osoby na potrzeby rozmów, przypisań i raportów. Wybierz menedżera, opcjonalny zespół nadrzędny i to, co zespół może otrzymywać.",
+      "description": "Opis",
+      "descriptionPlaceholder": "Czym zajmuje się ten zespół (opcjonalnie)",
+      "lead": "Menedżer",
+      "leadNone": "Brak menedżera",
+      "leadHint": "Osoba, która kieruje zespołem. Zostaje do niego dodana jako lider.",
+      "parent": "Zespół nadrzędny",
+      "parentNone": "Brak (najwyższy poziom)",
+      "parentHint": "Umieść ten zespół pod innym zespołem, aby zbudować drzewo o głębokości do 5 poziomów.",
+      "receive": "Może otrzymywać",
+      "receiveHint": "Gdzie można wybrać ten zespół. Wyłącz jedną z opcji, aby ukryć zespół w tych selektorach.",
+      "receiveConversations": "Rozmowy (routing i przypisywanie w skrzynce)",
+      "receiveRecords": "Rekordy (kontakty, firmy i transakcje)",
+      "membersHint": "Zaznacz osoby w tym zespole. Oznacz liderów i wybierz zespół główny każdej osoby.",
+      "leadFlag": "Lider",
+      "leadToggle": "Oznacz jako lidera tego zespołu",
+      "leadLocked": "Menedżer jest zawsze liderem",
+      "primaryFlag": "Główny",
+      "primaryToggle": "Ustaw jako zespół główny tej osoby",
+      "primaryLocked": "Jedyny zespół osoby jest zawsze jej zespołem głównym",
+      "primaryHint": "Zespół główny osoby to jej podstawowy zespół, używany w raportach (raporty zaczną go wykorzystywać w nadchodzącej wersji). Routing, przypisywanie i widoczność uwzględniają wszystkie jej zespoły."
     },
     "errors": {
       "network": "Połączenie zostało przerwane. Sprawdź je i spróbuj ponownie.",
@@ -238,7 +279,10 @@
       "delegateInvalid": "Zastępca musi być innym aktywnym członkiem tego obszaru roboczego.",
       "delegateCycle": "Powstałoby koło zależności: wybrana osoba ma już tę osobę jako swojego zastępcę.",
       "reassignInvalid": "Nie udało się nic przypisać ponownie. Sprawdź, czy ta osoba ma kontakty lub otwarte transakcje i czy docelowy właściciel może je przejąć.",
-      "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć."
+      "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć.",
+      "teamParentCycle": "Zespół nie może znajdować się pod samym sobą ani pod własnym podzespołem.",
+      "teamParentInvalid": "Ten zespół nadrzędny jest niedostępny albo drzewo miałoby więcej niż 5 poziomów.",
+      "teamNotOnTeam": "Ta osoba nie należy do tego zespołu."
     },
     "accept": {
       "title": "Dołącz do swojej przestrzeni roboczej",
@@ -358,6 +402,26 @@
       "offline": "Offline",
       "hint": "Gdy jesteś offline, nowe czaty nie są Ci przydzielane automatycznie. Czaty, które już masz, zostają Twoje.",
       "failed": "Nie udało się zmienić"
+    },
+    "deactivate": {
+      "eyebrow": "Członkowie zespołu",
+      "title": "Dezaktywuj członka",
+      "message": "{name} nie będzie już mógł się zalogować. Możesz go ponownie aktywować w dowolnej chwili.",
+      "loading": "Sprawdzanie, co posiada",
+      "previewFailed": "Nie udało się sprawdzić, co posiada ta osoba. Nadal możesz ją dezaktywować; jej zadania pozostaną przy niej.",
+      "holds": "{name} jest właścicielem: {contacts, plural, one {# kontaktu} other {# kontaktów}}, {deals, plural, one {# otwartej transakcji} other {# otwartych transakcji}} i {chats, plural, one {# otwartej rozmowy} other {# otwartych rozmów}}. Co powinno się z nimi stać?",
+      "optLead": "Przekaż je menedżerowi zespołu: {name} ({team})",
+      "optLeadNone": "Przekaż je menedżerowi zespołu (ta osoba nie ma aktywnego menedżera zespołu)",
+      "optPerson": "Przekaż je osobie",
+      "pickPerson": "Osoba",
+      "pickPlaceholder": "Wybierz osobę",
+      "optLeave": "Zostaw je przy: {name}",
+      "undoNote": "Kontakty i otwarte transakcje można cofnąć w ciągu 14 dni z historii zmian przypisań. Otwarte rozmowy są przypisywane ponownie jedna po drugiej.",
+      "nothing": "{name} nie ma żadnych kontaktów, otwartych transakcji ani otwartych rozmów.",
+      "membership": "Przynależność do zespołów zostaje zachowana, więc ponowna aktywacja {name} przywróci ją do zespołów.",
+      "confirm": "Dezaktywuj",
+      "moved": "Przeniesiono do {name}: {contacts, plural, one {# kontakt} other {# kontaktów}}, {deals, plural, one {# transakcję} other {# transakcji}} i {chats, plural, one {# rozmowę} other {# rozmów}}.",
+      "remaining": "Wciąż czeka: {count}. Uruchom przekazanie ponownie, aby je przenieść."
     }
   }
 }

@@ -106,7 +106,9 @@
       "leaveAction": "Licença e substituto",
       "noLimit": "Sem limite",
       "neverSignedIn": "Nunca",
-      "editAction": "Alterar telefone e limite de chats"
+      "editAction": "Alterar telefone e limite de chats",
+      "moreAction": "Mais",
+      "moreLabel": "Mais ações para {name}"
     },
     "invite": {
       "eyebrow": "Espaço de trabalho",
@@ -148,12 +150,10 @@
       "eyebrow": "Espaço de trabalho",
       "title": "Equipes",
       "pageTitle": "Equipes",
-      "subtitle": "Agrupe seus agentes por departamento. As conversas podem ser atribuídas automaticamente por equipe usando regras de roteamento.",
       "create": "Criar equipe",
       "edit": "Editar equipe",
       "loading": "Carregando equipes",
       "emptyTitle": "Nenhuma equipe ainda",
-      "emptyMessage": "Crie uma equipe, adicione seus agentes a ela e roteie conversas para ela.",
       "emptyAction": "Criar equipe",
       "members": "{count, plural, =0 {Sem membros} one {# membro} other {# membros}}",
       "online": "{count} online",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Como funcionam as equipes",
       "how": {
-        "one": "Dê um nome à equipe (por exemplo, Vendas), escolha uma cor e adicione seus agentes a ela.",
-        "two": "Use de três formas: atribuir uma conversa à equipe manualmente, direcionar novas conversas para ela com uma regra de roteamento ou acompanhar o desempenho dela na análise.",
-        "three": "A cor da equipe é a cor da etiqueta na fila da caixa de entrada, para que você identifique as conversas de cada equipe de relance."
+        "one": "Dê um nome à equipe (por exemplo Vendas), escolha uma cor e adicione as pessoas que trabalham juntas.",
+        "two": "Use-a para conversas (roteie novos chats para ela ou atribua um chat manualmente), para registros (atribua contatos, empresas e negócios aos seus membros) e para relatórios.",
+        "three": "O gerente é a pessoa que lidera a equipe. Uma equipe superior coloca a equipe abaixo de outra, para você montar uma árvore como Vendas e Vendas Oeste.",
+        "four": "A equipe principal de uma pessoa é a sua equipe de referência, usada nos relatórios (os relatórios passarão a usá-la em uma próxima versão). Roteamento, atribuição e visibilidade usam todas as equipes de uma pessoa."
       },
       "created": "Equipe criada.",
       "updated": "Equipe atualizada.",
@@ -180,7 +181,33 @@
       "deleteTitle": "Excluir esta equipe?",
       "deleteMessage": "Excluir a equipe “{name}”? As conversas atribuídas a esta equipe ficarão sem atribuição.",
       "deleteConfirm": "Excluir equipe",
-      "delete": "Excluir equipe"
+      "delete": "Excluir equipe",
+      "subtitle": "As equipes agrupam pessoas para conversas, atribuições e relatórios.",
+      "emptyMessage": "Crie uma equipe e adicione as pessoas que trabalham juntas. Você pode rotear conversas para ela e atribuir contatos, empresas e negócios aos seus membros.",
+      "noAccess": "Você não tem permissão para ver equipes. Peça a um Owner ou Admin do espaço de trabalho a permissão team.read.",
+      "manager": "Gerente: {name}",
+      "noManager": "Sem gerente",
+      "receivesConversations": "Conversas",
+      "receivesRecords": "Registros",
+      "primaryCount": "{count, plural, one {# tem como equipe principal} other {# têm como equipe principal}}",
+      "usedBy": "Usada por",
+      "usedByNone": "Ainda não é usada por nenhuma regra",
+      "usage": {
+        "routingRules": "{count, plural, one {# regra de roteamento} other {# regras de roteamento}}",
+        "assignmentRules": "{count, plural, one {# regra de atribuição} other {# regras de atribuição}}",
+        "segmentShares": "{count, plural, one {# segmento compartilhado} other {# segmentos compartilhados}}",
+        "conversations": "{count, plural, one {# conversa} other {# conversas}}",
+        "childTeams": "{count, plural, one {# subequipe} other {# subequipes}}"
+      },
+      "notUsed": {
+        "title": "Salvo, ainda não usado",
+        "body": "Estas configurações ficam salvas na equipe, mas nada as lê ainda. Elas passam a valer com a atualização de roteamento.",
+        "strategy": "Estratégia de atribuição automática: {value}",
+        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}",
+        "businessHours": "Horário comercial: salvo",
+        "timezone": "Fuso horário: {value}",
+        "defaultAssignee": "Responsável padrão: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Espaço de trabalho",
@@ -192,13 +219,6 @@
       "nameTooLong": "O nome pode ter no máximo {max} caracteres.",
       "color": "Cor",
       "colorOption": "Cor {color}",
-      "strategy": "Estratégia de atribuição automática",
-      "strategyOptions": {
-        "manual": "Manual: um gerente escolhe quem atende",
-        "round_robin": "Rodízio: distribuição igual",
-        "least_loaded": "Menor carga: menos abertas primeiro",
-        "sticky": "Fixo: o último agente que respondeu a este contato"
-      },
       "members": "Membros",
       "membersLoading": "Carregando membros da equipe",
       "membersFailed": "Não foi possível carregar os membros da equipe.",
@@ -209,7 +229,28 @@
       "create": "Criar equipe",
       "creating": "Criando…",
       "save": "Salvar alterações",
-      "saving": "Salvando…"
+      "saving": "Salvando…",
+      "hint": "As equipes agrupam pessoas para conversas, atribuições e relatórios. Escolha um gerente, uma equipe superior opcional e o que a equipe pode receber.",
+      "description": "Descrição",
+      "descriptionPlaceholder": "O que esta equipe faz (opcional)",
+      "lead": "Gerente",
+      "leadNone": "Sem gerente",
+      "leadHint": "A pessoa que lidera a equipe. Ela é adicionada à equipe como líder.",
+      "parent": "Equipe superior",
+      "parentNone": "Nenhuma (nível superior)",
+      "parentHint": "Coloque esta equipe abaixo de outra para montar uma árvore, com até 5 níveis de profundidade.",
+      "receive": "Pode receber",
+      "receiveHint": "Onde esta equipe pode ser escolhida. Desative uma opção para tirar a equipe desses seletores.",
+      "receiveConversations": "Conversas (roteamento e atribuição da caixa de entrada)",
+      "receiveRecords": "Registros (contatos, empresas e negócios)",
+      "membersHint": "Marque as pessoas desta equipe. Indique os líderes e escolha a equipe principal de cada pessoa.",
+      "leadFlag": "Líder",
+      "leadToggle": "Marcar como líder desta equipe",
+      "leadLocked": "O gerente é sempre líder",
+      "primaryFlag": "Principal",
+      "primaryToggle": "Definir como equipe principal da pessoa",
+      "primaryLocked": "A única equipe de uma pessoa é sempre a sua equipe principal",
+      "primaryHint": "A equipe principal de uma pessoa é a sua equipe de referência, usada nos relatórios (os relatórios passarão a usá-la em uma próxima versão). Roteamento, atribuição e visibilidade usam todas as suas equipes."
     },
     "errors": {
       "network": "A conexão caiu. Verifique-a e tente novamente.",
@@ -238,7 +279,10 @@
       "delegateInvalid": "O substituto deve ser outro membro ativo deste espaço de trabalho.",
       "delegateCycle": "Isso criaria um ciclo: a pessoa escolhida já tem esta pessoa como substituta.",
       "reassignInvalid": "Nada pôde ser reatribuído. Verifique se a pessoa tem contatos ou negócios em aberto e se o destino pode recebê-los.",
-      "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita."
+      "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita.",
+      "teamParentCycle": "Uma equipe não pode ficar abaixo de si mesma nem de uma de suas próprias subequipes.",
+      "teamParentInvalid": "Essa equipe superior não está disponível, ou a árvore ficaria com mais de 5 níveis de profundidade.",
+      "teamNotOnTeam": "Essa pessoa não está nesta equipe."
     },
     "accept": {
       "title": "Entre no seu espaço de trabalho",
@@ -358,6 +402,26 @@
       "offline": "Offline",
       "hint": "Enquanto você estiver offline, nenhum chat novo é atribuído a você automaticamente. Os chats que você já tem continuam seus.",
       "failed": "Não foi possível alterar"
+    },
+    "deactivate": {
+      "eyebrow": "Membros da equipe",
+      "title": "Desativar membro",
+      "message": "{name} não poderá mais entrar. Você pode reativar essa pessoa a qualquer momento.",
+      "loading": "Verificando o que ela possui",
+      "previewFailed": "Não foi possível verificar o que esta pessoa possui. Você ainda pode desativá-la; o trabalho dela continua com ela.",
+      "holds": "{name} é responsável por {contacts, plural, one {# contato} other {# contatos}}, {deals, plural, one {# negócio aberto} other {# negócios abertos}} e {chats, plural, one {# conversa aberta} other {# conversas abertas}}. O que deve acontecer com eles?",
+      "optLead": "Passar para o gerente da equipe, {name} ({team})",
+      "optLeadNone": "Passar para o gerente da equipe (esta pessoa não tem um gerente de equipe ativo)",
+      "optPerson": "Passar para uma pessoa",
+      "pickPerson": "Pessoa",
+      "pickPlaceholder": "Escolha uma pessoa",
+      "optLeave": "Deixar com {name}",
+      "undoNote": "Contatos e negócios abertos podem ser desfeitos por 14 dias no histórico de reatribuições. As conversas abertas são reatribuídas uma a uma.",
+      "nothing": "{name} não tem contatos, negócios abertos nem conversas abertas.",
+      "membership": "As vagas dela nas equipes são mantidas, então reativar {name} a coloca de volta nas suas equipes.",
+      "confirm": "Desativar",
+      "moved": "{contacts, plural, one {# contato movido} other {# contatos movidos}}, {deals, plural, one {# negócio movido} other {# negócios movidos}} e {chats, plural, one {# conversa movida} other {# conversas movidas}} para {name}.",
+      "remaining": "Ainda faltam {count}. Execute a transferência de novo para movê-los."
     }
   }
 }

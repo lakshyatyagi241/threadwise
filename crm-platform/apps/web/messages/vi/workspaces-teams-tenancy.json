@@ -106,7 +106,9 @@
       "leaveAction": "Nghỉ phép và người đại diện",
       "noLimit": "Không giới hạn",
       "neverSignedIn": "Chưa bao giờ",
-      "editAction": "Đổi điện thoại và giới hạn trò chuyện"
+      "editAction": "Đổi điện thoại và giới hạn trò chuyện",
+      "moreAction": "Thêm",
+      "moreLabel": "Thêm thao tác cho {name}"
     },
     "invite": {
       "eyebrow": "Không gian làm việc",
@@ -148,12 +150,10 @@
       "eyebrow": "Không gian làm việc",
       "title": "Nhóm",
       "pageTitle": "Nhóm",
-      "subtitle": "Nhóm nhân viên theo phòng ban. Cuộc trò chuyện có thể được tự động phân công theo nhóm qua quy tắc định tuyến.",
       "create": "Tạo nhóm",
       "edit": "Chỉnh sửa nhóm",
       "loading": "Đang tải nhóm",
       "emptyTitle": "Chưa có nhóm nào",
-      "emptyMessage": "Tạo nhóm, thêm nhân viên vào nhóm và định tuyến cuộc trò chuyện tới nhóm.",
       "emptyAction": "Tạo nhóm",
       "members": "{count, plural, =0 {Không có thành viên} other {# thành viên}}",
       "online": "{count} trực tuyến",
@@ -167,9 +167,10 @@
       },
       "howTitle": "Cách nhóm hoạt động",
       "how": {
-        "one": "Đặt tên nhóm (ví dụ Kinh doanh), chọn màu và thêm nhân viên vào nhóm.",
-        "two": "Có ba cách dùng: phân công trò chuyện cho nhóm thủ công, định tuyến trò chuyện mới tới nhóm bằng quy tắc, hoặc xem hiệu suất của nhóm trong phân tích.",
-        "three": "Màu nhóm là màu nhãn trong hàng đợi hộp thư, giúp bạn phân biệt cuộc trò chuyện của từng nhóm chỉ bằng một cái nhìn."
+        "one": "Đặt tên nhóm (ví dụ Kinh doanh), chọn màu và thêm những người làm việc cùng nhau.",
+        "two": "Dùng cho hội thoại (định tuyến cuộc trò chuyện mới đến nhóm, hoặc phân công thủ công), cho bản ghi (phân công liên hệ, công ty và giao dịch cho các thành viên) và cho báo cáo.",
+        "three": "Quản lý là người dẫn dắt nhóm. Nhóm cha đặt nhóm dưới một nhóm khác, giúp bạn xây dựng cây như Kinh doanh và Kinh doanh miền Tây.",
+        "four": "Nhóm chính của một người là nhóm chủ yếu của họ, được giữ cho báo cáo (báo cáo sẽ bắt đầu dùng ở bản phát hành sắp tới). Định tuyến, phân công và quyền hiển thị dùng mọi nhóm mà người đó tham gia."
       },
       "created": "Đã tạo nhóm.",
       "updated": "Đã cập nhật nhóm.",
@@ -180,7 +181,33 @@
       "deleteTitle": "Xóa nhóm này?",
       "deleteMessage": "Xóa nhóm \"{name}\"? Các cuộc trò chuyện được phân công cho nhóm này sẽ trở thành chưa được phân công.",
       "deleteConfirm": "Xóa nhóm",
-      "delete": "Xóa nhóm"
+      "delete": "Xóa nhóm",
+      "subtitle": "Nhóm gom mọi người lại cho hội thoại, phân công và báo cáo.",
+      "emptyMessage": "Tạo nhóm và thêm những người làm việc cùng nhau. Bạn có thể định tuyến hội thoại đến nhóm và phân công liên hệ, công ty và giao dịch cho các thành viên.",
+      "noAccess": "Bạn không có quyền xem nhóm. Hãy nhờ Chủ sở hữu hoặc Quản trị viên không gian làm việc cấp quyền team.read.",
+      "manager": "Quản lý: {name}",
+      "noManager": "Không có quản lý",
+      "receivesConversations": "Hội thoại",
+      "receivesRecords": "Bản ghi",
+      "primaryCount": "{count, plural, one {# người dùng làm nhóm chính} other {# người dùng làm nhóm chính}}",
+      "usedBy": "Được dùng bởi",
+      "usedByNone": "Chưa được quy tắc nào dùng",
+      "usage": {
+        "routingRules": "{count, plural, one {# quy tắc định tuyến} other {# quy tắc định tuyến}}",
+        "assignmentRules": "{count, plural, one {# quy tắc phân công} other {# quy tắc phân công}}",
+        "segmentShares": "{count, plural, one {# phân khúc chia sẻ} other {# phân khúc chia sẻ}}",
+        "conversations": "{count, plural, one {# hội thoại} other {# hội thoại}}",
+        "childTeams": "{count, plural, one {# nhóm con} other {# nhóm con}}"
+      },
+      "notUsed": {
+        "title": "Đã lưu, chưa được dùng",
+        "body": "Các cài đặt này được lưu trên nhóm nhưng chưa có gì đọc chúng. Chúng sẽ bắt đầu áp dụng cùng bản cập nhật định tuyến.",
+        "strategy": "Chiến lược tự động phân công: {value}",
+        "devices": "{count, plural, one {Giới hạn # thiết bị} other {Giới hạn # thiết bị}}",
+        "businessHours": "Giờ làm việc: đã lưu",
+        "timezone": "Múi giờ: {value}",
+        "defaultAssignee": "Người nhận mặc định: {name}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Không gian làm việc",
@@ -192,13 +219,6 @@
       "nameTooLong": "Tên tối đa {max} ký tự.",
       "color": "Màu",
       "colorOption": "Màu {color}",
-      "strategy": "Chiến lược tự động phân công",
-      "strategyOptions": {
-        "manual": "Thủ công — quản lý chọn người nhận",
-        "round_robin": "Luân phiên — chia đều",
-        "least_loaded": "Ít việc nhất — ưu tiên người có ít việc đang mở nhất",
-        "sticky": "Gắn bó — nhân viên trả lời liên hệ này gần nhất"
-      },
       "members": "Thành viên",
       "membersLoading": "Đang tải thành viên nhóm",
       "membersFailed": "Không thể tải thành viên.",
@@ -209,7 +229,28 @@
       "create": "Tạo nhóm",
       "creating": "Đang tạo…",
       "save": "Lưu thay đổi",
-      "saving": "Đang lưu…"
+      "saving": "Đang lưu…",
+      "hint": "Nhóm gom mọi người lại cho hội thoại, phân công và báo cáo. Chọn quản lý, nhóm cha tùy chọn và những gì nhóm có thể nhận.",
+      "description": "Mô tả",
+      "descriptionPlaceholder": "Nhóm này làm gì (tùy chọn)",
+      "lead": "Quản lý",
+      "leadNone": "Không có quản lý",
+      "leadHint": "Người dẫn dắt nhóm. Họ được thêm vào nhóm với vai trò trưởng nhóm.",
+      "parent": "Nhóm cha",
+      "parentNone": "Không (cấp cao nhất)",
+      "parentHint": "Đặt nhóm này dưới nhóm khác để xây dựng cây, tối đa 5 cấp.",
+      "receive": "Có thể nhận",
+      "receiveHint": "Nơi có thể chọn nhóm này. Tắt một mục để nhóm không xuất hiện ở các danh sách chọn đó.",
+      "receiveConversations": "Hội thoại (định tuyến và phân công hộp thư)",
+      "receiveRecords": "Bản ghi (liên hệ, công ty và giao dịch)",
+      "membersHint": "Chọn những người trong nhóm này. Đánh dấu trưởng nhóm và chọn nhóm chính của từng người.",
+      "leadFlag": "Trưởng nhóm",
+      "leadToggle": "Đánh dấu là trưởng nhóm này",
+      "leadLocked": "Quản lý luôn là trưởng nhóm",
+      "primaryFlag": "Chính",
+      "primaryToggle": "Đặt làm nhóm chính của người này",
+      "primaryLocked": "Nhóm duy nhất của một người luôn là nhóm chính",
+      "primaryHint": "Nhóm chính của một người là nhóm chủ yếu của họ, được giữ cho báo cáo (báo cáo sẽ bắt đầu dùng ở bản phát hành sắp tới). Định tuyến, phân công và quyền hiển thị dùng tất cả nhóm của họ."
     },
     "errors": {
       "network": "Kết nối bị gián đoạn. Kiểm tra lại và thử lại.",
@@ -238,7 +279,10 @@
       "delegateInvalid": "Người đại diện phải là một thành viên đang hoạt động khác trong không gian làm việc này.",
       "delegateCycle": "Điều đó sẽ tạo vòng lặp: người được chọn đã đặt người này làm người đại diện.",
       "reassignInvalid": "Không thể phân công lại gì cả. Hãy kiểm tra người này có liên hệ hoặc deal đang mở và người nhận có thể tiếp nhận.",
-      "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa."
+      "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa.",
+      "teamParentCycle": "Nhóm không thể nằm dưới chính nó hoặc dưới một nhóm con của nó.",
+      "teamParentInvalid": "Nhóm cha đó không khả dụng, hoặc cây sẽ sâu hơn 5 cấp.",
+      "teamNotOnTeam": "Người đó không thuộc nhóm này."
     },
     "accept": {
       "title": "Tham gia không gian làm việc của bạn",
@@ -358,6 +402,26 @@
       "offline": "Ngoại tuyến",
       "hint": "Khi bạn ngoại tuyến, hệ thống không tự động giao cuộc trò chuyện mới cho bạn. Các cuộc trò chuyện bạn đang có vẫn của bạn.",
       "failed": "Không thể thay đổi"
+    },
+    "deactivate": {
+      "eyebrow": "Thành viên nhóm",
+      "title": "Vô hiệu hóa thành viên",
+      "message": "{name} sẽ không thể đăng nhập nữa. Bạn có thể kích hoạt lại bất cứ lúc nào.",
+      "loading": "Đang kiểm tra những gì họ nắm giữ",
+      "previewFailed": "Chúng tôi không thể kiểm tra những gì người này nắm giữ. Bạn vẫn có thể vô hiệu hóa họ; công việc vẫn ở lại với họ.",
+      "holds": "{name} sở hữu {contacts, plural, one {# liên hệ} other {# liên hệ}}, {deals, plural, one {# giao dịch đang mở} other {# giao dịch đang mở}} và {chats, plural, one {# hội thoại đang mở} other {# hội thoại đang mở}}. Nên xử lý thế nào?",
+      "optLead": "Giao cho quản lý nhóm, {name} ({team})",
+      "optLeadNone": "Giao cho quản lý nhóm (người này chưa có quản lý nhóm đang hoạt động)",
+      "optPerson": "Giao cho một người",
+      "pickPerson": "Người",
+      "pickPlaceholder": "Chọn một người",
+      "optLeave": "Giữ lại cho {name}",
+      "undoNote": "Liên hệ và giao dịch đang mở có thể hoàn tác trong 14 ngày từ lịch sử phân công lại. Hội thoại đang mở được phân công lại từng cái một.",
+      "nothing": "{name} không sở hữu liên hệ, giao dịch đang mở hay hội thoại đang mở nào.",
+      "membership": "Vị trí trong nhóm của họ được giữ lại, nên kích hoạt lại {name} sẽ đưa họ về các nhóm cũ.",
+      "confirm": "Vô hiệu hóa",
+      "moved": "Đã chuyển {contacts, plural, one {# liên hệ} other {# liên hệ}}, {deals, plural, one {# giao dịch} other {# giao dịch}} và {chats, plural, one {# hội thoại} other {# hội thoại}} cho {name}.",
+      "remaining": "Còn {count} mục đang chờ. Hãy chạy lại bàn giao để chuyển tiếp."
     }
   }
 }

@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSupportDeskModule } from '../platform-support-desk';
 import { RolesPermissionsModule } from '../roles-permissions';
+import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
 import { InvitationsController } from './invitations.controller';
 import { InvitationsService } from './invitations.service';
+import { MemberHandoverController } from './member-handover.controller';
+import { MemberHandoverService } from './member-handover.service';
 import { MembersController } from './members.controller';
 import { MembersRepository } from './members.repository';
 import { MembersService } from './members.service';
@@ -30,6 +34,8 @@ import { TeamsService } from './teams.service';
  */
 @Module({
   imports: [
+    CrmModule,
+    TeamInboxRoutingSlaModule,
     PlansCoreModule,
     RolesPermissionsModule,
     PlatformSupportDeskModule,
@@ -38,6 +44,7 @@ import { TeamsService } from './teams.service';
   ],
   controllers: [
     MembersController,
+    MemberHandoverController,
     LeaveController,
     TeamsController,
     InvitationsController,
@@ -47,6 +54,7 @@ import { TeamsService } from './teams.service';
   providers: [
     MembersRepository,
     MembersService,
+    MemberHandoverService,
     LeaveRepository,
     LeaveService,
     TeamsRepository,

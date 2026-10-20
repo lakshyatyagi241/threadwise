@@ -237,13 +237,38 @@ describe('TeamDialog', () => {
     expect(two).toContain('Line 2');
   });
 
-  it('creates with the six swatches, the strategy list and no Delete button', () => {
+  it('creates with the six swatches, the manager, parent and receive fields, and no Delete button or stored-settings note', () => {
     const out = html(<TeamDialog open team={null} devices={[]} canDelete onClose={noop} />);
     expect(out).toContain('Create a team');
-    expect(out).toContain('Auto-assignment strategy');
-    expect(out).toContain('Round robin — spread evenly');
+    expect(out).toContain('Teams group people for conversations, assignments and reports.');
+    expect(out).toContain('Manager');
+    expect(out).toContain('Parent team');
+    expect(out).toContain('Can receive');
+    expect(out).toContain('Conversations (inbox routing and assignment)');
+    expect(out).toContain('Records (contacts, companies and deals)');
     expect(out.match(/aria-label="Colour #/g)).toHaveLength(6);
     expect(out).not.toContain('data-testid="delete-team"');
+    expect(out).not.toContain('data-testid="team-not-used"');
+  });
+
+  it('shows what the team stores but nothing reads yet, instead of hiding it', () => {
+    const t = team(1, {
+      assignmentStrategy: 'round_robin',
+      deviceIds: ['d1', 'd2'],
+      unusedSettings: {
+        businessHours: { mon: ['09:00', '17:00'] },
+        timezone: 'Asia/Kolkata',
+        defaultAssignee: { id: 'u1', fullName: 'Asha Rao' },
+      },
+    });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-not-used"');
+    expect(out).toContain('Stored, not used yet');
+    expect(out).toContain('Auto-assignment strategy: Round robin');
+    expect(out).toContain('Limited to 2 devices');
+    expect(out).toContain('Business hours: saved');
+    expect(out).toContain('Time zone: Asia/Kolkata');
+    expect(out).toContain('Default assignee: Asha Rao');
   });
 
   it('edits with Delete when the caller may manage teams', () => {
