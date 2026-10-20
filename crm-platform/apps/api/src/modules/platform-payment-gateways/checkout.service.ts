@@ -785,7 +785,7 @@ export class CheckoutService {
       try {
         return await this.db.tx(async (tx) => {
           // One buyer at a time per coupon from here to the commit, so the last uses cannot be handed out twice (QA Sheet3 #15, D-06).
-          if (coupon?.ok)
+          if (coupon?.ok && coupon.couponId !== null)
             await this.assertCouponUseFree(tx, coupon.couponId, idempotencyKey ?? null);
           const order = await this.orders.insert(tx, {
             orgId,
