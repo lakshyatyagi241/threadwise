@@ -143,5 +143,10 @@
     "status": "reviewed",
     "reason": "table, column and where fragments come from the closed OWNER_SOURCES and the size/category maps in code; org, ids and limit are Number()-coerced",
     "reviewedOn": "2026-10-19"
+  },
+  "modules/workspaces-teams-tenancy/owning-team-backfill.jobs.ts": {
+    "status": "reviewed",
+    "reason": "the table and owner column identifiers come from the closed OWNING_TEAM_TABLES list in the same file (a job payload carries only a table NAME, looked up in that list and refused when absent), quoted, never from a request; the cursor values are bound parameters",
+    "reviewedOn": "2026-10-20"
   }
 }

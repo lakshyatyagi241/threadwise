@@ -290,7 +290,11 @@
         "importBody": "Unggah spreadsheet dan cocokkan kolomnya dengan kolom kontak.",
         "connect": "Hubungkan WhatsApp",
         "connectBody": "Hubungkan nomor Anda agar kontak bisa membalas dan Anda bisa mengirim pesan kepada mereka."
-      }
+      },
+      "teamLabel": "Tim",
+      "teamFilter": "Filter menurut tim",
+      "allTeams": "Semua tim",
+      "teamFormer": "Tim sebelumnya"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",

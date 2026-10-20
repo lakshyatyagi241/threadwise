@@ -104,7 +104,9 @@
       },
       "linkCompany": "Uma empresa",
       "outcome": "Resultado",
-      "allOutcomes": "Todos os resultados"
+      "allOutcomes": "Todos os resultados",
+      "team": "Equipe",
+      "allTeams": "Todas as equipes"
     },
     "table": {
       "scrollArea": "Tabela de tarefas",

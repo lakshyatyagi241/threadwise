@@ -76,6 +76,8 @@
       },
       "assignee": "Assignee",
       "allAssignees": "All assignees",
+      "team": "Team",
+      "allTeams": "All teams",
       "unassigned": "Unassigned",
       "linked": "Linked to",
       "anyLink": "Any record",

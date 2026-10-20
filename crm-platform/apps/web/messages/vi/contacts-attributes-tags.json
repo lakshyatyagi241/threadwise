@@ -290,7 +290,11 @@
         "importBody": "Tải lên bảng tính và ghép các cột với trường liên hệ.",
         "connect": "Kết nối WhatsApp",
         "connectBody": "Kết nối số của bạn để liên hệ có thể trả lời và bạn có thể nhắn tin cho họ."
-      }
+      },
+      "teamLabel": "Nhóm",
+      "teamFilter": "Lọc theo nhóm",
+      "allTeams": "Tất cả nhóm",
+      "teamFormer": "Nhóm cũ"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",

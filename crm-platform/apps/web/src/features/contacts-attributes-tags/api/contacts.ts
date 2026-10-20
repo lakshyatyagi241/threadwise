@@ -65,6 +65,8 @@ export interface ContactFilters {
    * Several mean "any of them".
    */
   owner: string;
+  /** The owning team (a team uuid); empty for every team. */
+  team: string;
   /** Ad-hoc conditions (a segment's rule tree as JSON text) from the Hub's "Add condition"; empty for none. */
   rules: string;
   order: 'asc' | 'desc';
@@ -88,6 +90,7 @@ export const DEFAULT_FILTERS: ContactFilters = {
   source: '',
   segment: '',
   owner: '',
+  team: '',
   rules: '',
   order: 'desc',
   sort: 'createdAt',
@@ -103,6 +106,7 @@ export function contactFilterBody(
   > & {
     rules?: string;
     owner?: string;
+    team?: string;
     status?: string;
     source?: string;
     minor?: MinorFilter;
@@ -129,6 +133,7 @@ export function contactFilterBody(
     rules: f.rules || undefined,
     ownerIds: ownerIds.length > 0 ? ownerIds : undefined,
     unassigned: owners.includes(UNASSIGNED_OWNER) ? true : undefined,
+    teamId: f.team || undefined,
   };
 }
 
@@ -167,6 +172,7 @@ export function listQuery(f: ContactFilters) {
     rules: b.rules,
     ownerIds: b.ownerIds?.join(','),
     unassigned: b.unassigned,
+    teamId: b.teamId,
     order: f.order,
     sort: f.sort === 'createdAt' ? undefined : f.sort,
     limit: f.limit,

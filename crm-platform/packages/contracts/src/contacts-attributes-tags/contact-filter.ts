@@ -27,6 +27,8 @@ export const contactFilterShape = {
   ownerIds: queryList(uuidSchema).optional(),
   /** Contacts with no owner. Alone it is exactly those; with `ownerIds` it widens them. */
   unassigned: queryBoolean().optional(),
+  /** Records whose owning team (the owner's primary team when the owner was set) is this team (BL-382). */
+  teamId: uuidSchema.optional(),
   lifecycleStage: z.string().optional(),
   includeArchived: queryBoolean().default(false),
   /** Members of one group. */

@@ -29,7 +29,7 @@ Response: `period`, `comparison` (null with `compare=none`), `convertedTo`, `cur
 
 Money is a `{ byCurrency: [{ currency, amount }], converted?, unconverted? }` total: exact per currency, decimal strings in major units, never added across currencies.
 
-Splits. `source` reads `contacts.source` through the invoice's contact (a payment with no invoice uses its own contact); `origin` is `invoices.source`; `owner` is `invoices.owner_id`; `team` joins the owner's teams (a person on two teams counts in both, no team is its own row); `product` spreads each invoice over its lines in proportion to their value (line subtotal less line discount plus added tax), so a document discount, shipping and rounding follow the lines and the rows add up to the invoice to within a minor unit. A line's product is its SKU, else its lower-cased description (lines have no catalog link).
+Splits. `source` reads `contacts.source` through the invoice's contact (a payment with no invoice uses its own contact); `origin` is `invoices.source`; `owner` is `invoices.owner_id`; `team` is the owner's PRIMARY team (`team_members.is_primary`), so a person on two teams counts once and a person with no primary team falls in the empty row; the `teamId` filter keeps the people whose primary team it is (BL-382); `product` spreads each invoice over its lines in proportion to their value (line subtotal less line discount plus added tax), so a document discount, shipping and rounding follow the lines and the rows add up to the invoice to within a minor unit. A line's product is its SKU, else its lower-cased description (lines have no catalog link).
 
 Errors: 404 unknown owner or team, 422 a period over 366 days, 400 bad query, 403 without payments read, 401 unauthenticated.
 

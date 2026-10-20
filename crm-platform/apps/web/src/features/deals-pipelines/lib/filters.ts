@@ -8,6 +8,8 @@ export interface DealFilters {
   q: string;
   /** A member id, `none` for unassigned, or empty for everyone. */
   owner: string;
+  /** The owning team (a team uuid) or empty for every team. */
+  team: string;
   source: DealSource | '';
   status: StatusFilter;
   view: DealsView;
@@ -21,6 +23,7 @@ export const DEFAULT_FILTERS: DealFilters = {
   pipeline: '',
   q: '',
   owner: '',
+  team: '',
   source: '',
   status: '',
   view: 'board',
@@ -32,6 +35,7 @@ interface SearchLike {
   get(name: string): string | null;
 }
 
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const isSource = (v: string): v is DealSource => (DEAL_SOURCES as readonly string[]).includes(v);
 
 /** Reads the board's state from the address; unknown values fall back to the defaults instead of failing. */
@@ -43,6 +47,7 @@ export function parseFilters(search: SearchLike): DealFilters {
     pipeline: search.get('pipeline') ?? '',
     q: (search.get('q') ?? '').slice(0, 200),
     owner: search.get('owner') ?? '',
+    team: UUID.test(search.get('team') ?? '') ? search.get('team')! : '',
     source: isSource(source) ? source : '',
     status: status === 'open' || status === 'won' || status === 'lost' ? status : '',
     view: view === 'list' ? 'list' : 'board',
@@ -57,6 +62,7 @@ export function filtersToSearch(f: DealFilters): string {
   if (f.pipeline) p.set('pipeline', f.pipeline);
   if (f.q.trim()) p.set('q', f.q.trim());
   if (f.owner) p.set('owner', f.owner);
+  if (f.team) p.set('team', f.team);
   if (f.source) p.set('source', f.source);
   if (f.status && f.view === 'list') p.set('status', f.status);
   if (f.stage && f.view === 'list') p.set('stage', f.stage);
@@ -66,11 +72,17 @@ export function filtersToSearch(f: DealFilters): string {
   return s ? `?${s}` : '';
 }
 
-/** Search, owner and source narrow the cards; the pipeline and the view do not count as a filter. */
+/** Search, owner, team and source narrow the cards; the pipeline and the view do not count as a filter. */
 export function hasActiveFilter(
-  f: Pick<DealFilters, 'q' | 'owner' | 'source' | 'status'>,
+  f: Pick<DealFilters, 'q' | 'owner' | 'source' | 'status'> & { team?: string },
 ): boolean {
-  return f.q.trim() !== '' || f.owner !== '' || f.source !== '' || f.status !== '';
+  return (
+    f.q.trim() !== '' ||
+    f.owner !== '' ||
+    (f.team ?? '') !== '' ||
+    f.source !== '' ||
+    f.status !== ''
+  );
 }
 
 /** The same test the server applies, for a deal created or edited on this screen. */
@@ -93,6 +105,7 @@ export function filterQuery(f: DealFilters): Record<string, string | undefined> 
     q: f.q.trim() || undefined,
     ownerId: f.owner && f.owner !== 'none' ? f.owner : undefined,
     unassigned: f.owner === 'none' ? 'true' : undefined,
+    teamId: f.team || undefined,
     source: f.source || undefined,
   };
 }

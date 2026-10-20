@@ -140,7 +140,8 @@
         "keptRole": "{name} bleibt bestehen. Sie können diese Rolle weder vergeben noch entziehen.",
         "atLeastOne": "Wählen Sie mindestens eine Rolle aus.",
         "save": "Rollen speichern",
-        "reload": "Neu laden"
+        "reload": "Neu laden",
+        "noTeamWarning": "{name} gehört keinem Team an, sieht daher dort, wo eine Rolle auf den Teambereich eingestellt ist, nur die eigenen Datensätze. Fügen Sie die Person unter Einstellungen > Teams zu einem Team hinzu."
       },
       "teamFilter": {
         "label": "Mitglieder nach Team filtern",
@@ -250,8 +251,20 @@
       "lockedHint": "Diese Berechtigung ist für diesen Workspace noch nicht verfügbar. Sie wird freigeschaltet, wenn die Tariffunktion aktiv oder die App installiert ist.",
       "scope": {
         "all": "Alle Datensätze",
-        "own": "Eigene Datensätze",
-        "team": "Datensätze meines Teams"
+        "own": "Meine Datensätze",
+        "team": "Datensätze meines Teams",
+        "team_and_below": "Mein Team und Unterteams"
+      },
+      "scopeLegend": "Was jeder Datensatzbereich umfasst",
+      "scopeHelp": {
+        "all": "Alle Datensätze im Arbeitsbereich.",
+        "team_and_below": "Datensätze Ihres Teams und aller Teams darunter.",
+        "team": "Datensätze der Personen in Ihrem Team.",
+        "own": "Nur Datensätze, die Ihnen gehören oder Ihnen zugewiesen sind."
+      },
+      "noTeamWarning": "{count, plural, one {# Mitglied mit dieser Rolle gehört keinem Team an und sieht daher nur die eigenen Datensätze, wo diese Rolle auf einen Teambereich gesetzt ist.} other {# Mitglieder mit dieser Rolle gehören keinem Team an und sehen daher nur die eigenen Datensätze, wo diese Rolle auf einen Teambereich gesetzt ist.}} Fügen Sie sie unter <link>Einstellungen > Teams</link> einem Team hinzu.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Ohne diese Berechtigung sehen Agenten mit Teamzugriff nur Unterhaltungen, die ihnen oder ihrem Team zugewiesen sind. Mit ihr sehen sie auch die offene Warteschlange von Unterhaltungen, die niemandem zugewiesen sind."
       }
     },
     "delete": {

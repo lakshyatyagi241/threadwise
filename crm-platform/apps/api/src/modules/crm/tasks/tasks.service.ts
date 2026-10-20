@@ -37,6 +37,7 @@ import { DealsService } from '../deals/deals.service';
 import { resolveTimezone } from '../deals/deal-calendar';
 import { defaultSort, encodeTaskCursor, outcomeUsable, titleFromBody } from './task-rules';
 import { taskEventPayload, toTaskResponse } from './tasks.mapper';
+import { resolveTeamId } from '../owning-team';
 import {
   sortKeyOf,
   TasksRepository,
@@ -81,6 +82,7 @@ interface FilterInput {
   mine?: boolean;
   assigneeId?: string;
   unassigned?: boolean;
+  teamId?: string;
   contactId?: string;
   dealId?: string;
   companyId?: string;
@@ -683,6 +685,11 @@ export class TasksService {
       if (id === undefined || (out.assigneeId !== undefined && out.assigneeId !== id)) return null;
       out.assigneeId = id;
     }
+    if (f.teamId) {
+      const id = await resolveTeamId(tx, orgId, f.teamId);
+      if (id === undefined) return null;
+      out.teamId = id;
+    }
     if (f.contactId) {
       const c = await this.repo.resolveContact(tx, orgId, f.contactId);
       if (!c) return null;
@@ -712,7 +719,7 @@ export class TasksService {
       scope,
       actorUserId: ctx.userId,
       nextOwnerId: assignee,
-      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'assigneeId',
     });
   }

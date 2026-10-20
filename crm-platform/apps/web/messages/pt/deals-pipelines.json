@@ -128,7 +128,9 @@
         "list": "Lista"
       },
       "reports": "Relatórios",
-      "settings": "Configurações do funil"
+      "settings": "Configurações do funil",
+      "team": "Equipe",
+      "allTeams": "Todas as equipes"
     },
     "kpi": {
       "openPipeline": "Funil em aberto",

@@ -20,7 +20,7 @@ keywords: [to-do, follow-up, reminder, due date, priority, assign, overdue, chec
 4. Tick the circle at the start of a row to complete a task. On a completed task the same control reopens it.
 5. Select a task to open its panel, where you can edit, add notes, complete, reopen or delete it.
 6. Tick several rows to complete, assign or delete them together.
-7. Narrow the list with the search box, **Priority**, **Assignee** and **Linked to**. **Linked to** can point at a contact, a deal or a company (the company choice needs permission to read companies). A company's page has its own **Tasks** card; **View all** there opens this screen filtered to that company.
+7. Narrow the list with the search box, **Priority**, **Assignee**, **Team** and **Linked to**. **Team** shows only when your role can see teams and the workspace has at least one; it lists the tasks whose owning team is the one you pick (the assignee's primary team when the assignee was set). The counts on the tabs follow it. **Linked to** can point at a contact, a deal or a company (the company choice needs permission to read companies). A company's page has its own **Tasks** card; **View all** there opens this screen filtered to that company.
 
 ## Options and settings
 

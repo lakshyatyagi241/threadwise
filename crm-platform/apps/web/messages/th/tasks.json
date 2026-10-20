@@ -104,7 +104,9 @@
       },
       "linkCompany": "บริษัท",
       "outcome": "ผลลัพธ์",
-      "allOutcomes": "ผลลัพธ์ทั้งหมด"
+      "allOutcomes": "ผลลัพธ์ทั้งหมด",
+      "team": "ทีม",
+      "allTeams": "ทุกทีม"
     },
     "table": {
       "scrollArea": "ตารางงาน",

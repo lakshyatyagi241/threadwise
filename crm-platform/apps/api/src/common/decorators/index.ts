@@ -49,7 +49,7 @@ export const CurrentActor = createParamDecorator(
   (_data: unknown, _ctx: ExecutionContext): RequestContext => RequestContextStore.require(),
 );
 
-/** The record scope granted for this route: 'all' | 'team' | 'own'. */
+/** The record scope granted for this route: 'all' | 'team' | 'team_and_below' | 'own'. */
 export const GrantedScope = createParamDecorator(
   (data: string, _ctx: ExecutionContext): RecordScope => {
     const ctx = RequestContextStore.require();

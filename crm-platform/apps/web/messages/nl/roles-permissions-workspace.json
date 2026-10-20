@@ -140,7 +140,8 @@
         "keptRole": "{name} blijft: je kunt deze niet toekennen of intrekken.",
         "atLeastOne": "Kies minstens één rol.",
         "save": "Rollen opslaan",
-        "reload": "Opnieuw laden"
+        "reload": "Opnieuw laden",
+        "noTeamWarning": "{name} zit in geen enkel team, dus waar een rol op teambereik staat, ziet die persoon alleen de eigen records. Voeg de persoon toe aan een team via Instellingen > Teams."
       },
       "teamFilter": {
         "label": "Leden filteren op team",
@@ -250,8 +251,20 @@
       "lockedHint": "Deze machtiging is nog niet beschikbaar voor deze workspace. Ze wordt vrijgegeven zodra de abonnementsfunctie is ingeschakeld of de app is geïnstalleerd.",
       "scope": {
         "all": "Alle records",
-        "own": "Eigen records",
-        "team": "Records van mijn team"
+        "own": "Mijn records",
+        "team": "Records van mijn team",
+        "team_and_below": "Mijn team en subteams"
+      },
+      "scopeLegend": "Wat elk recordbereik omvat",
+      "scopeHelp": {
+        "all": "Alle records in de werkruimte.",
+        "team_and_below": "Records van je team en van alle teams daaronder.",
+        "team": "Records van de mensen in je team.",
+        "own": "Alleen records die van jou zijn of aan jou zijn toegewezen."
+      },
+      "noTeamWarning": "{count, plural, one {# lid met deze rol zit in geen enkel team en ziet daarom alleen eigen records waar deze rol op een teambereik staat.} other {# leden met deze rol zitten in geen enkel team en zien daarom alleen eigen records waar deze rol op een teambereik staat.}} Voeg ze toe aan een team via <link>Instellingen > Teams</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Zonder deze toestemming zien agenten met teamtoegang alleen gesprekken die aan hen of hun team zijn toegewezen. Met deze toestemming zien ze ook de open wachtrij met gesprekken die aan niemand zijn toegewezen."
       }
     },
     "delete": {

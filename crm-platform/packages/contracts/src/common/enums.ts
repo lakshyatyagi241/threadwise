@@ -39,8 +39,23 @@ export const campaignStatusSchema = z.enum([
 
 export const consentStatusSchema = z.enum(['opted_in', 'opted_out']);
 export const permEffectSchema = z.enum(['allow', 'deny']);
-export const recordScopeSchema = z.enum(['all', 'team', 'own']);
+export const recordScopeSchema = z.enum(['all', 'team', 'team_and_below', 'own']);
 export type RecordScope = z.infer<typeof recordScopeSchema>;
+
+/**
+ * How wide a scope reaches, narrowest first (BL-382). Merging roles keeps the widest allow; editing a role may not grant wider than
+ * the editor holds. `team_and_below` is `team` plus every descendant team, so it sits between `team` and `all`.
+ */
+export const RECORD_SCOPE_RANK: Readonly<Record<RecordScope, number>> = {
+  own: 0,
+  team: 1,
+  team_and_below: 2,
+  all: 3,
+};
+
+/** True for the two scopes that reach people through team membership. */
+export const isTeamScope = (scope: RecordScope | null | undefined): boolean =>
+  scope === 'team' || scope === 'team_and_below';
 
 export const applicationStatusSchema = z.enum([
   'draft',

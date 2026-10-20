@@ -1136,9 +1136,10 @@ describe('TW-WSP-018 and TW-WSP-047: remove a member (soft), and invite the addr
 
   it('018: a member removed while an access token is still unexpired cannot use it, even for reads', async () => {
     const m = await addMember(t, 'Token18', 'Viewer');
-    expect((await api.as(m.token).get('/v2/workspace/teams')).status).toBe(200);
+    // A route a Viewer holds the permission for (the Teams list needs team.read since Teams v2, which a Viewer does not hold).
+    expect((await api.as(m.token).get('/v2/inbox/conversations')).status).toBe(200);
     await api.as(t.admin).delete(`/v2/workspace/members/${m.uuid}`);
-    expect((await api.as(m.token).get('/v2/workspace/teams')).status).toBe(401);
+    expect((await api.as(m.token).get('/v2/inbox/conversations')).status).toBe(401);
   });
 });
 
@@ -1319,8 +1320,12 @@ describe('TW-WSP-020: the role model, the permission matrix and the role gates',
     const perms = await permissionsOf(viewer.token);
     expect(Object.keys(perms).length).toBeGreaterThan(0);
     // support.ticket.* and wallet.statement.export are baselines every preset holds by design (own tickets, own statement), not viewer writes.
+    // inbox.conversation.read_unassigned (BL-382) is a read switch: it widens what the read permission shows, it lets nobody write.
     for (const k of Object.keys(perms).filter(
-      (k) => !k.startsWith('support.ticket.') && k !== 'wallet.statement.export',
+      (k) =>
+        !k.startsWith('support.ticket.') &&
+        k !== 'wallet.statement.export' &&
+        k !== 'inbox.conversation.read_unassigned',
     ))
       expect(k.endsWith('.read'), k).toBe(true);
     expect((await createTeam(viewer.token, { name: 'Nope20' })).status).toBe(403);

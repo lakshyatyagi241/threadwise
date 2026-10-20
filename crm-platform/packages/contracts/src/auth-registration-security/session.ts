@@ -41,7 +41,7 @@ export const sessionOrgSchema = z.object({
   persona: personaViewSchema.optional(),
 });
 
-export const grantScopeSchema = z.enum(['all', 'team', 'own']);
+export const grantScopeSchema = z.enum(['all', 'team', 'team_and_below', 'own']);
 
 export const sessionResponseSchema = z.object({
   user: sessionUserSchema,

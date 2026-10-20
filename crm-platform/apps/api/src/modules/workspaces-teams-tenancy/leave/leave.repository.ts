@@ -86,9 +86,9 @@ export class LeaveRepository {
     return res.rows[0] ? toMember(res.rows[0] as Raw) : null;
   }
 
-  /** Whether `a` and `b` share at least one team (the `team` record scope of `team.leave.manage`). */
-  async shareTeam(tx: Tx, orgId: number, a: number, b: number): Promise<boolean> {
-    return isTeamPeer(tx, orgId, a, b);
+  /** Whether `a` and `b` share at least one team (the `team` record scope of `team.leave.manage`); `below`: a team under one of a's counts too. */
+  async shareTeam(tx: Tx, orgId: number, a: number, b: number, below = false): Promise<boolean> {
+    return isTeamPeer(tx, orgId, a, b, below);
   }
 
   async byUuid(tx: Tx, orgId: number, uuid: string, lock = false): Promise<LeaveRow | null> {

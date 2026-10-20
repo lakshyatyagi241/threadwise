@@ -1,7 +1,7 @@
 ---
 id: teams-managers-access
 title: Teams, managers and who sees what
-summary: How teams, managers, the primary team and the own, team and all record scopes fit together for chat, the CRM, or both.
+summary: How teams, managers, the primary and owning team and the own, team, team and sub-teams and all record scopes fit together for chat, the CRM, or both.
 area: getting-started
 order: 85
 documents: []
@@ -53,11 +53,18 @@ Both are on for every team until you change them, so nothing changes by itself. 
 
 In **Roles and permissions**, a permission that supports it has a record scope:
 
-- **Own records**: the records assigned to you. In a few areas, such as tasks and appointments, things you created count as yours too.
-- **My team's records**: records owned by you or by anyone who shares at least one team with you. For conversations it also includes chats assigned to one of your teams and chats nobody has picked up yet.
+- **My records**: the records assigned to you. In a few areas, such as tasks and appointments, things you created count as yours too.
+- **My team's records**: records owned by you or by anyone who shares at least one team with you. For conversations it also includes chats assigned to one of your teams.
+- **My team and sub-teams**: My team's records plus the records of the people on every team below yours. It needs the team hierarchy feature on your plan.
 - **All records**: everything.
 
-Being on a team is what makes "My team's records" useful, so a role with that scope should belong to someone who is on at least one team.
+Chats that nobody has picked up yet are shown to roles with team access only when the role also has the permission **See conversations that nobody has taken yet**. Roles that could see them before this release keep it.
+
+Being on a team is what makes the team scopes useful, so a role with one of them should belong to someone who is on at least one team. The role editor warns you when members with such a role are in no team.
+
+### The owning team of a record
+
+Contacts, companies, deals and tasks carry an **owning team**: the owner's primary team at the time the owner was set. It feeds reports by team and the **Team** filter in the contacts, deals and tasks lists. It does not give or remove access. A person on two teams counts once, for their primary team, and a person with no primary team belongs to no team in reports.
 
 ## When someone is deactivated
 

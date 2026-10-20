@@ -104,7 +104,9 @@
       },
       "linkCompany": "একটি কোম্পানি",
       "outcome": "ফলাফল",
-      "allOutcomes": "সব ফলাফল"
+      "allOutcomes": "সব ফলাফল",
+      "team": "দল",
+      "allTeams": "সব দল"
     },
     "table": {
       "scrollArea": "টাস্কের টেবিল",

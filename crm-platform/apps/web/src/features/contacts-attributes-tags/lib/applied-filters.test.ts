@@ -3,6 +3,7 @@ import { DEFAULT_FILTERS } from '../api/contacts';
 import { appliedFilterChips, clearAllPatch, type ChipNames } from './applied-filters';
 
 const ME = '11111111-1111-4111-8111-111111111111';
+const SALES = '55555555-5555-4555-8555-555555555555';
 const RAVI = '22222222-2222-4222-8222-222222222222';
 const names: ChipNames = {
   words: {
@@ -10,6 +11,7 @@ const names: ChipNames = {
     group: 'Group',
     tag: 'Tag',
     owner: 'Owner',
+    team: 'Team',
     stage: 'Stage',
     status: 'Status',
     minor: 'Minor',
@@ -31,6 +33,7 @@ const names: ChipNames = {
     unassigned: 'Unassigned',
     myContacts: 'My contacts',
     formerMember: 'Former member',
+    formerTeam: 'Former team',
     subscribed: 'Subscribed',
     unsubscribed: 'Opted out',
     conditionsValue: (n) => `Conditions: ${n}`,
@@ -39,6 +42,7 @@ const names: ChipNames = {
   segment: (id) => (id === 's1' ? 'Hot leads' : undefined),
   tag: (id) => (id === 't1' ? 'customer' : undefined),
   owner: (id) => (id === RAVI ? 'Ravi' : undefined),
+  team: (id) => (id === SALES ? 'Sales' : undefined),
   stage: (v) => (v === 'new' ? 'New' : undefined),
   status: (v) => (v === 'active' ? 'Active' : undefined),
   conditionCount: () => 2,
@@ -127,6 +131,19 @@ describe('appliedFilterChips', () => {
     ).toBe('Owner: Former member');
   });
 
+  it('makes a chip for the team filter, and names a team that no longer exists', () => {
+    expect(appliedFilterChips({ ...DEFAULT_FILTERS, team: SALES }, names)[0]).toMatchObject({
+      label: 'Team: Sales',
+      clear: { team: '' },
+    });
+    expect(
+      appliedFilterChips(
+        { ...DEFAULT_FILTERS, team: '66666666-6666-4666-8666-666666666666' },
+        names,
+      )[0]!.label,
+    ).toBe('Team: Former team');
+  });
+
   it('shows what the AI understood in place of the condition count', () => {
     const chips = appliedFilterChips(
       { ...DEFAULT_FILTERS, rules: '{}' },
@@ -148,6 +165,7 @@ describe('appliedFilterChips', () => {
         'owner',
         'rules',
         'segment',
+        'team',
         'source',
         'status',
         'tag',

@@ -104,7 +104,9 @@
       },
       "linkCompany": "회사",
       "outcome": "결과",
-      "allOutcomes": "모든 결과"
+      "allOutcomes": "모든 결과",
+      "team": "팀",
+      "allTeams": "모든 팀"
     },
     "table": {
       "scrollArea": "작업 표",

@@ -74,7 +74,8 @@ const person = async (
   name: string,
   grants: Array<[string, 'all']> = [],
 ): Promise<Person> => {
-  const m = await api.member(t, name, [...READS, ...grants]);
+  const extra = grants.filter(([key]) => !READS.some(([read]) => read === key));
+  const m = await api.member(t, name, [...READS, ...extra]);
   const uuid = (await h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [m.userId])).rows[0]
     .uuid as string;
   return { ...m, uuid };

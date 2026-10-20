@@ -1,4 +1,4 @@
-import type { RoleResponse, UserResponse } from '@crm/contracts';
+import { isTeamScope, type RoleResponse, type UserResponse } from '@crm/contracts';
 
 /** The five Reference presets, by the `systemKey` the API sends (the Owner row keeps the historical key `admin`). */
 export type PresetSlug = 'owner' | 'admin' | 'manager' | 'agent' | 'viewer';
@@ -11,6 +11,21 @@ const PRESET_BY_KEY: Record<string, PresetSlug> = {
   viewer: 'viewer',
 };
 const LADDER: readonly PresetSlug[] = ['owner', 'admin', 'manager', 'agent', 'viewer'];
+
+/**
+ * True when a person in no team is about to hold a role that grants something at a team scope: they would see only their own records
+ * there (BL-382). `selectedIds` are the roles ticked in the change-role dialog.
+ */
+export function noTeamMeetsTeamScope(
+  teamCount: number,
+  roles: ReadonlyArray<Pick<RoleResponse, 'id' | 'grants'>>,
+  selectedIds: readonly string[],
+): boolean {
+  if (teamCount > 0) return false;
+  return roles
+    .filter((r) => selectedIds.includes(r.id))
+    .some((r) => r.grants.some((g) => g.effect === 'allow' && isTeamScope(g.recordScope)));
+}
 
 export const presetSlug = (systemKey: string | null): PresetSlug | null =>
   systemKey ? (PRESET_BY_KEY[systemKey] ?? null) : null;

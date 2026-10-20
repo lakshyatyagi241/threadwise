@@ -104,7 +104,9 @@
       },
       "linkCompany": "会社",
       "outcome": "結果",
-      "allOutcomes": "すべての結果"
+      "allOutcomes": "すべての結果",
+      "team": "チーム",
+      "allTeams": "すべてのチーム"
     },
     "table": {
       "scrollArea": "タスクの表",

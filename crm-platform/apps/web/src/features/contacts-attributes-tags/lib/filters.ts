@@ -91,6 +91,7 @@ export function parseFilters(
     source: cleanText(params.get('source')),
     segment: cleanId(params.get('segment'), false),
     owner: ownerTokens(params.get('owner') ?? '').join(','),
+    team: cleanId(params.get('team'), false),
     rules: cleanRules(params.get('rules')),
     order: params.get('order') === 'asc' ? 'asc' : 'desc',
     sort: cleanSort(params.get('sort')),
@@ -117,6 +118,7 @@ export function filtersToSearch(
   if (f.source.trim()) p.set('source', f.source.trim());
   if (f.segment) p.set('segment', f.segment);
   if (f.owner) p.set('owner', f.owner);
+  if (f.team) p.set('team', f.team);
   if (f.rules) p.set('rules', f.rules);
   if (f.sort !== DEFAULT_FILTERS.sort) p.set('sort', f.sort);
   if (f.order !== DEFAULT_FILTERS.order) p.set('order', f.order);
@@ -141,6 +143,7 @@ export function hasActiveFilter(f: ContactFilters): boolean {
     f.source.trim() ||
     f.segment ||
     f.owner ||
+    f.team ||
     f.rules,
   );
 }
