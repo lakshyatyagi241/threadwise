@@ -27,6 +27,7 @@ const ops: Record<string, (...a: any[]) => Promise<unknown>> = {
   'partner.active': (org: number, agent: number) => inst.partner.isActive(org, agent),
   'prefs.stored': (org: number) => inst.prefs.stored(org),
   'prefs.forget': async (org: number) => inst.prefs.forget(org),
+  'redis.exists': (key: string) => inst.redis.exists(key),
   ping: async () => process.pid,
 };
 

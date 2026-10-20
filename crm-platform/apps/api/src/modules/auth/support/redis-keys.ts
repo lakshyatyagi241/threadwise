@@ -13,6 +13,10 @@ export const AuthKeys = {
   epoch: 'auth:epoch',
   /** Cached account-gate state for one user. */
   gate: (orgId: number, userId: number) => `auth:gate:${orgId}:${userId}`,
+  /** Bumped by every invalidation of one user's gate entry, so a slow reader cannot cache a state older than the invalidation. */
+  gateGeneration: (orgId: number, userId: number) => `auth:gate-gen:${orgId}:${userId}`,
+  /** The same for invalidateAll(). */
+  gateGenerationAll: 'auth:gate-gen:all',
   /** Failed-login counter, scoped to org + email + ip. */
   lockout: (orgId: number, email: string, ip: string) =>
     `auth:lock:${orgId}:${sha256Hex(`${email.toLowerCase()}|${ip}`).slice(0, 32)}`,
