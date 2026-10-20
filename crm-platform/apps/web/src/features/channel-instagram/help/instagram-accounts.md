@@ -4,7 +4,7 @@ title: Instagram accounts
 summary: Link your Instagram Business or Creator account so its messages reach your team inbox, and refresh or unlink it.
 area: settings
 order: 30
-documents: [tile:instagram]
+documents: [tile:instagram, nav:instagram]
 keywords:
   [instagram, business account, creator account, link, unlink, direct messages, inbox, dm, connect]
 ---
