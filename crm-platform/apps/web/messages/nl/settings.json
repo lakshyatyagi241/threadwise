@@ -181,8 +181,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Groepeer mensen in teams voor routering en rapportage.",
-        "keywords": "groepen, afdelingen, toewijzing, routering"
+        "description": "Groepeer mensen voor gesprekken, toewijzingen en rapporten.",
+        "keywords": "groepen, afdelingen, managers, hiërarchie, toewijzing, routering"
       },
       "ai-keys": {
         "label": "AI-providersleutels",

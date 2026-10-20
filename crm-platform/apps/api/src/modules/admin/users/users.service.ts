@@ -59,6 +59,7 @@ export class UsersService {
         order: query.order,
         q: query.q,
         status: query.status,
+        teamId: query.teamId,
       });
 
       const { items, page } = buildPage(rows, query.limit);
@@ -72,8 +73,13 @@ export class UsersService {
         rolesByUser.set(r.userId, [...(rolesByUser.get(r.userId) ?? []), r]);
       }
 
+      const teamRows = await this.repo.teamsForUsers(
+        tx,
+        ctx.orgId,
+        items.map((u) => u.id),
+      );
       return {
-        data: items.map((row) => toUserResponse(row, rolesByUser.get(row.id) ?? [])),
+        data: items.map((row) => toUserResponse(row, rolesByUser.get(row.id) ?? [], teamRows)),
         page,
       };
     });
@@ -85,7 +91,7 @@ export class UsersService {
       const row = await this.repo.findByUuid(tx, ctx.orgId, uuid);
       if (!row) throw AppError.notFound('User', uuid);
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [row.id]);
-      return toUserResponse(row, roleRows);
+      return toUserResponse(row, roleRows, await this.repo.teamsForUsers(tx, ctx.orgId, [row.id]));
     });
   }
 
@@ -97,7 +103,7 @@ export class UsersService {
       const row = await this.repo.findById(tx, ctx.orgId, ctx.userId!);
       if (!row) throw AppError.notFound('User');
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [row.id]);
-      return toUserResponse(row, roleRows);
+      return toUserResponse(row, roleRows, await this.repo.teamsForUsers(tx, ctx.orgId, [row.id]));
     });
   }
 
@@ -235,7 +241,11 @@ export class UsersService {
 
       const after = await this.repo.findById(tx, ctx.orgId, existing.id);
       const roleRows = await this.repo.rolesForUsers(tx, ctx.orgId, [existing.id]);
-      return toUserResponse(after!, roleRows);
+      return toUserResponse(
+        after!,
+        roleRows,
+        await this.repo.teamsForUsers(tx, ctx.orgId, [existing.id]),
+      );
     });
 
     // Both run only once the change is committed, so a request racing the edit cannot cache the old state again.

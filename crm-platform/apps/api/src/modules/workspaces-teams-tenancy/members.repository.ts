@@ -396,13 +396,16 @@ export class MembersRepository {
     return res.rows.length > 0;
   }
 
-  /** Soft removal: the account, its history and its references stay; access, roles and team places go. */
+  /**
+   * Soft removal: the account, its history and its references stay; access and roles go. Team places STAY (decision D10): the
+   * `team_members` tenant policy hides the rows of an inactive user from every scope and routing query, and reactivating the user
+   * brings them back, so nothing here deletes them.
+   */
   async deactivate(tx: Tx, orgId: number, id: number): Promise<void> {
     await tx.execute(
       sql`UPDATE users SET status = 'inactive' WHERE org_id = ${orgId} AND id = ${id}`,
     );
     await tx.execute(sql`DELETE FROM user_roles WHERE org_id = ${orgId} AND user_id = ${id}`);
-    await tx.execute(sql`DELETE FROM team_members WHERE org_id = ${orgId} AND user_id = ${id}`);
   }
 
   /** Burns every live one-time token of the user (invite, reset, verify, email change). */

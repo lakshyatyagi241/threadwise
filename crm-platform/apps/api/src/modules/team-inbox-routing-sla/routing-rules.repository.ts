@@ -180,10 +180,21 @@ export class RoutingRulesRepository {
     return new Map(rowsOf(res).map((r) => [r.uuid as string, Number(r.id)]));
   }
 
-  async teams(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Map<string, number>> {
+  /**
+   * Teams by uuid. `receivingOnly` keeps out the teams switched to "does not receive conversations" (Teams v2): the engine and
+   * the save check use it, so such a team is neither chosen nor given work; the rules list does not, so it can still count a
+   * rule that points at one.
+   */
+  async teams(
+    tx: Tx,
+    orgId: number,
+    uuids: readonly string[],
+    opts: { receivingOnly?: boolean } = {},
+  ): Promise<Map<string, number>> {
     if (uuids.length === 0) return new Map();
     const res = await tx.execute(sql`
-      SELECT uuid, id FROM teams WHERE org_id = ${orgId} AND uuid IN (${uuidList(uuids)})`);
+      SELECT uuid, id FROM teams WHERE org_id = ${orgId} AND uuid IN (${uuidList(uuids)})
+        ${opts.receivingOnly ? sql`AND receives_conversations` : sql``}`);
     return new Map(rowsOf(res).map((r) => [r.uuid as string, Number(r.id)]));
   }
 
