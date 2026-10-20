@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { CappedMap } from '../../common/cache/capped-map';
 
 const BATCH_SIZE = 100;
 
@@ -23,7 +24,7 @@ interface Reservation {
  */
 @Injectable()
 export class DisplayIdService {
-  private readonly reservations = new Map<string, Reservation>();
+  private readonly reservations = new CappedMap<string, Reservation>(5000);
 
   async next(tx: Tx, orgId: number, moduleKey: string, prefix: string): Promise<string> {
     const cacheKey = `${orgId}:${moduleKey}`;

@@ -47,7 +47,8 @@
       "nameTaken": "已存在同名角色。",
       "nameRequired": "角色名称为必填项。",
       "nameTooLong": "角色名称最多 {max} 个字符。",
-      "notFound": "此项目已不存在，可能已被删除。"
+      "notFound": "此项目已不存在，可能已被删除。",
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。"
     },
     "team": {
       "crumb": "团队成员",
@@ -181,7 +182,9 @@
       },
       "toasts": {
         "deleted": "已删除角色“{name}”。"
-      }
+      },
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。",
+      "addRoleLocked": "添加角色(升级)"
     },
     "editor": {
       "crumbRoles": "角色",
@@ -222,7 +225,9 @@
         "created": "已创建角色“{name}”。",
         "updated": "已更新角色“{name}”。",
         "deleted": "已删除角色“{name}”。"
-      }
+      },
+      "customRolesLocked": "您的套餐不包含自定义角色和带范围的权限。您可以查看角色,但无法创建或更改。",
+      "upgrade": "查看套餐"
     },
     "matrix": {
       "title": "权限",

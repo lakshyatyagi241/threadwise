@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan.",
       "teamParentCycle": "Tim tidak dapat berada di bawah dirinya sendiri atau salah satu sub-timnya.",
       "teamParentInvalid": "Tim induk itu tidak tersedia, atau pohon akan lebih dalam dari 5 tingkat.",
-      "teamNotOnTeam": "Orang itu tidak ada di tim ini."
+      "teamNotOnTeam": "Orang itu tidak ada di tim ini.",
+      "teamsNotIncluded": "Paket Anda tidak menyertakan tim. Tingkatkan paket, atau minta add-on Tim dan izin, untuk mengelompokkan orang ke dalam tim.",
+      "teamsLimit": "Anda telah mencapai batas {limit} tim pada paket Anda. Tingkatkan paket atau hapus satu tim untuk menambah lagi.",
+      "teamsLimitUnknown": "Batas tim pada paket Anda telah tercapai. Tingkatkan paket atau hapus satu tim untuk menambah lagi."
     },
     "accept": {
       "title": "Bergabung dengan workspace Anda",

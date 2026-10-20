@@ -1,4 +1,5 @@
 import type { SlaTimer } from '@crm/contracts';
+import { CappedMap } from '../../common/cache/capped-map';
 
 /**
  * The helpdesk SLA engine (TW-SUPP-029): pure functions, no database and no clock (the caller passes `now`).
@@ -98,7 +99,7 @@ interface Zoned {
   weekday: DayKey;
 }
 
-const formatters = new Map<string, Intl.DateTimeFormat>();
+const formatters = new CappedMap<string, Intl.DateTimeFormat>(500);
 function zonedParts(at: Date, tz: string): Zoned {
   let f = formatters.get(tz);
   if (!f) {

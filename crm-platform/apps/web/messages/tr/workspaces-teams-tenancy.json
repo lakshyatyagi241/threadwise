@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz.",
       "teamParentCycle": "Bir ekip kendi altına veya kendi alt ekiplerinden birinin altına yerleştirilemez.",
       "teamParentInvalid": "Bu üst ekip kullanılamıyor veya ağaç 5 seviyeden daha derin olurdu.",
-      "teamNotOnTeam": "Bu kişi bu ekipte değil."
+      "teamNotOnTeam": "Bu kişi bu ekipte değil.",
+      "teamsNotIncluded": "Planınız ekipleri içermiyor. Kişileri ekiplerde toplamak için planınızı yükseltin veya Ekipler ve izinler eklentisini isteyin.",
+      "teamsLimit": "Planınızın {limit} ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin.",
+      "teamsLimitUnknown": "Planınızın ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin."
     },
     "accept": {
       "title": "Çalışma alanınıza katılın",

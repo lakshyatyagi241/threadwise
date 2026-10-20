@@ -47,7 +47,8 @@
       "sms_monthly": "SMS miesięcznie",
       "email_mailboxes": "Skrzynki e-mail",
       "email_monthly": "E-maile miesięcznie",
-      "storage_gb": "Miejsce na dane (GB)"
+      "storage_gb": "Miejsce na dane (GB)",
+      "teams": "Zespoły"
     },
     "features": {
       "automation": "Automatyzacja",
@@ -85,7 +86,9 @@
       "personal_history_full": "Import pełnej historii (osobisty WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Ocenianie leadów przez AI",
-      "record_assignment": "Reguły przypisywania rekordów"
+      "record_assignment": "Reguły przypisywania rekordów",
+      "team_hierarchy": "Hierarchia zespołów i menedżerowie",
+      "custom_roles": "Własne role i zakresy"
     },
     "limitGroups": {
       "messaging": "Wiadomości",
@@ -139,7 +142,8 @@
       "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
       "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
       "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
-      "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane."
+      "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
+      "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
     },
     "planAddons": {
       "title": "Dodatki dostępne w Twoim planie",

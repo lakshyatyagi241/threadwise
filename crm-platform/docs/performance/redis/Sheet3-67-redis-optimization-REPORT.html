@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #67 Redis optimization report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#5b6572;--card:#f4f6f9;--line:#d5dae1;--ok:#1a7f4b;--warn:#a15c00;--bad:#b3261e;--blue:#1f5fbf;--teal:#0e7c86;--grey:#8a93a0}
+@media (prefers-color-scheme:dark){:root{--bg:#12161b;--fg:#e8ecf1;--mut:#9aa5b3;--card:#1b2129;--line:#2f3844;--ok:#4cc38a;--warn:#e0a03a;--bad:#ff8a80;--blue:#7aa7ff;--teal:#4cc6d0;--grey:#7b8594}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,Segoe UI,Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:2rem 0 .6rem;border-bottom:1px solid var(--line);padding-bottom:.3rem}h3{font-size:1.05rem;margin:1.2rem 0 .3rem}
+.mut{color:var(--mut)}.badge{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.bad{color:var(--bad)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 12px}.tile b{display:block;font-size:1.7rem;line-height:1.1}
+.box{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:10px 14px;margin:10px 0}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin:8px 0}th,td{border:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+.scroll{overflow-x:auto}
+figure{margin:14px 0;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--card);break-inside:avoid}figcaption{font-size:.88rem;color:var(--mut)}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
+.chip{display:inline-block;padding:1px 8px;border-radius:6px;font-size:.8rem;font-weight:700;border:1px solid currentColor}
+code{background:var(--card);padding:1px 5px;border-radius:4px;font-size:.88em;word-break:break-word}
+.card{border:1px solid var(--line);border-left-width:5px;border-radius:8px;padding:8px 12px;margin:10px 0;break-inside:avoid}
+.card.s-med{border-left-color:var(--warn)}.card.s-low{border-left-color:var(--blue)}.card.s-hi{border-left-color:var(--bad)}
+.card dl{margin:4px 0;display:grid;grid-template-columns:150px 1fr;gap:2px 10px}.card dt{color:var(--mut)}.card dd{margin:0}
+@media (max-width:560px){.card dl{grid-template-columns:1fr}.card dt{margin-top:4px}}
+@media print{body{font-size:11pt}main{max-width:none}tr,figure,.card,.box{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body><main>
+
+<header>
+<h1>Redis optimization: what we use, what is bounded, what breaks</h1>
+<p><span class="badge ok">Complete</span> <span class="badge warn">Partly met (see verdict)</span></p>
+<table><tbody>
+<tr><th scope="row">Sheet item</th><td>#67, Redis optimization, P2, effort 4</td></tr>
+<tr><th scope="row">Owner</th><td>Vedant</td></tr>
+<tr><th scope="row">Date</th><td>2026-10-20</td></tr>
+<tr><th scope="row">Branch</th><td><code>vedant/perf/redis-optimization</code> (local, not pushed)</td></tr>
+<tr><th scope="row">Commit</th><td>code <code>40afec0a6</code>, merged with <code>origin/main</code> after PRs #663, #666, #667, #706 and the queue guard; this report is its own commit after it</td></tr>
+<tr><th scope="row">PR</th><td>none opened (by instruction). Related: #663 (item 18 part 2, silent or refused Redis)</td></tr>
+<tr><th scope="row">Sheet target</th><td>"100% critical async/cache paths instrumented, bounded and failure-tested"</td></tr>
+</tbody></table>
+</header>
+
+<h2 id="s2">2. In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>149</b>key families listed, 112 files, 394 Redis calls, 51 queues</div>
+<div class="tile"><b>3 / 1 / 8</b>findings fixed / partly mitigated / open (section 6)</div>
+<div class="tile"><b>53</b>new tests (27 static, 26 on a real Redis), 3 of 3 runs green</div>
+<div class="tile"><b>0</b>keys left without a lifetime after 26,000 keys of load</div>
+<div class="tile"><b>2,641 to 0</b>error lines in 3 s from one worker on a full Redis, before and after the fix</div>
+</div>
+<p><strong>Verdict: Partly met.</strong> Every critical cache path now has a lifetime or a written reason, every queue has bounded retention and retries, and all of it is checked by a test that fails on a regression. Memory under load, a full server, a slow server and a restart were measured on real Redis servers. Not met yet: BullMQ opens one connection per queue (51 per process), retention can still add up to more than the production memory cap, and a full Redis stops all queue processing until memory is freed. Those need decisions, listed below.</p>
+<div class="box"><strong>Decisions needed from you</strong>
+<ol>
+<li>Raise <code>maxmemory</code> above 192 MB, or lower retention further. Worst case retained jobs are about 260 MB (section 5). The queue guard merged from another branch trims at 75% and 90%, but it is a safety net, not a budget.</li>
+<li>Allow one shared connection for all 51 queue handles in <code>queue.module.ts</code> (saves 50 connections per process). Not done here because that file was being rewritten by other pull requests.</li>
+<li>Add <code>--maxmemory 192mb</code> to the dev <code>docker-compose.yml</code> so developers meet the production limit before production does.</li>
+<li>Add the alert in section 9 on <code>crm_redis_memory_used_bytes / crm_redis_memory_max_bytes</code>.</li>
+</ol></div>
+
+<h2 id="s3">3. What is this, in plain words</h2>
+<p>Redis is a very fast notebook that sits next to the database. The app writes short-lived notes in it (who is rate limited, which permissions a user has, a lock saying "I am sending this campaign") and it keeps the to-do list of background jobs in it (BullMQ queues). Think of a kitchen order rail: tickets go on, cooks take them off. If tickets are never taken down, or the rail is full, the kitchen stops.</p>
+<p>In production the notebook has a fixed size (192 MB) and a rule: when it is full, refuse new notes and never throw old ones away (<code>noeviction</code>). That protects jobs from being lost, but it also means a full Redis refuses every new write.</p>
+<div class="box"><strong>Glossary</strong><br>
+<b>TTL</b>: a lifetime on a key; after it Redis deletes the key. <b>Key family</b>: all keys with the same pattern, e.g. <code>form:pub:ip:*</code>. <b>maxmemory / noeviction</b>: the size cap and the "refuse, never delete" rule. <b>OOM</b>: the error "command not allowed when used memory &gt; maxmemory". <b>BullMQ</b>: the job queue library. <b>Retention</b>: how many finished jobs are kept. <b>MULTI</b>: send several commands as one unit. <b>Fail open</b>: if the check cannot run, let the request through. <b>Worker</b>: a loop that takes jobs from one queue. <b>AOF</b>: Redis's on-disk log that survives restarts.</div>
+
+<h2 id="s4">4. How we tested</h2>
+<figure>
+<svg role="img" aria-label="Test setup: static scanner and ratchet, plus private Redis servers" viewBox="0 0 900 230" width="900">
+<title>Test setup</title><desc>Application source feeds a static scanner that produces the inventory and the ratchet tests. Real Redis tests run the application classes against private throwaway Redis servers that are filled, slowed and restarted.</desc>
+<g fill="none" stroke="var(--grey)" stroke-width="1.5">
+<rect x="10" y="20" width="170" height="60" rx="8"/><rect x="250" y="20" width="200" height="60" rx="8"/><rect x="520" y="20" width="170" height="60" rx="8"/><rect x="740" y="20" width="150" height="60" rx="8"/>
+<rect x="10" y="130" width="170" height="70" rx="8"/><rect x="250" y="130" width="200" height="70" rx="8"/><rect x="520" y="130" width="370" height="70" rx="8"/>
+</g>
+<g stroke="var(--blue)" stroke-width="2"><path d="M180 50H250M450 50H520M690 50H740M180 165H250M450 165H520"/></g>
+<g><text x="95" y="45" text-anchor="middle">apps/api/src</text><text x="95" y="63" text-anchor="middle" class="m">394 Redis calls</text>
+<text x="350" y="45" text-anchor="middle">scanner</text><text x="350" y="63" text-anchor="middle" class="m">reads calls, TTLs, Lua</text>
+<text x="605" y="45" text-anchor="middle">inventory.json</text><text x="605" y="63" text-anchor="middle" class="m">kept current by a check</text>
+<text x="815" y="45" text-anchor="middle">ratchet tests</text><text x="815" y="63" text-anchor="middle" class="m">fail on regression</text>
+<text x="95" y="160" text-anchor="middle">real app classes</text><text x="95" y="178" text-anchor="middle" class="m">throttles, locks, queues</text>
+<text x="350" y="160" text-anchor="middle">load, fill, stall, restart</text><text x="350" y="178" text-anchor="middle" class="m">driven by the tests</text>
+<text x="705" y="160" text-anchor="middle">private Redis in a throwaway container</text><text x="705" y="178" text-anchor="middle" class="m">random name, free port, removed after</text></g>
+</svg>
+<figcaption>Top row: static checks, no Redis needed, about 6 s. Bottom row: real servers that are never the shared one.</figcaption></figure>
+<ol>
+<li>Wrote a scanner (<code>tools/redis-audit/scan.mjs</code>) that finds every Redis call, its TTL argument, every Lua script, every client, and every queue option.</li>
+<li>Generated <code>inventory.json</code>; a test fails if it is out of date.</li>
+<li>Wrote ratchet tests: no <code>KEYS</code> or <code>FLUSH*</code>, every SET has a TTL or a written reason, writes have a lifetime, Lua writes have a lifetime, keys have a prefix, queues have bounded retention and retries, no hand-made BullMQ objects, clients have a command timeout, no unbounded reads. Each has a commented allowlist that may only shrink.</li>
+<li>Started private Redis servers and ran the real classes: retention, 26,000 keys from 2,000 distinct callers in 12 families, a full server (12 MB cap), a 3 s server stall, a graceful restart and a SIGKILL.</li>
+<li>For each defect: wrote the failing test first, then the fix in shared code.</li>
+<li>Added only the missing metrics (<code>crm_redis_*</code>) with a test.</li>
+</ol>
+
+<h2 id="s5">5. Results at a glance</h2>
+<h3>Inventory</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Item</th><th scope="col">Count</th><th scope="col">Notes</th></tr></thead><tbody>
+<tr><td>Source files using Redis</td><td>112</td><td>394 command call sites</td></tr>
+<tr><td>Redis clients built in code</td><td>3 constructions + 2 duplicates</td><td>shared client (1 per process), socket.io adapter (publisher + subscriber), device runtime subscriber, health probe</td></tr>
+<tr><td>Key families</td><td>149</td><td>70 per workspace, 15 per IP, 2 per user, 12 global, 50 other</td></tr>
+<tr><td>Queues</td><td>51</td><td>45 have a consumer; all keep bounded history</td></tr>
+<tr><td>Lua scripts</td><td>13</td><td>every one that writes sets a lifetime (or KEEPTTL)</td></tr>
+<tr><td>KEYS / FLUSH</td><td>0 / 0</td><td>SCAN: 3 sites, all with MATCH and COUNT</td></tr>
+<tr><td>Whole-structure reads</td><td>1 SMEMBERS, 7 HGETALL</td><td>all on small or capped structures (allowlisted with the bound)</td></tr>
+<tr><td>Redis call awaited in a loop</td><td>16</td><td>per-message dedupe claims; 28 uses of MULTI/pipeline elsewhere</td></tr>
+<tr><td>Server settings</td><td>prod: 192 MB, noeviction, AOF</td><td>dev compose: noeviction and AOF but <b>no maxmemory</b></td></tr>
+</tbody></table></div>
+
+<figure>
+<svg role="img" aria-label="Key families by lifetime status: 139 every write has a TTL, 5 used through a helper, 4 read only, 1 durable by design" viewBox="0 0 900 190" width="900">
+<title>149 key families by lifetime status</title><desc>139 in files where every write has a lifetime, 5 used through another service, 4 in read-only files, 1 durable single key (auth epoch).</desc>
+<g><rect x="150" y="14" width="695" height="26" fill="var(--ok)"/><text x="10" y="32">TTL on every write</text><text x="855" y="32" class="m">139</text>
+<rect x="150" y="54" width="25" height="26" fill="var(--blue)"/><text x="10" y="72">via helper service</text><text x="185" y="72">5</text>
+<rect x="150" y="94" width="20" height="26" fill="var(--grey)"/><text x="10" y="112">read only here</text><text x="180" y="112">4</text>
+<rect x="150" y="134" width="5" height="26" fill="var(--warn)"/><text x="10" y="152">no TTL (reviewed)</text><text x="165" y="152">1</text></g>
+<text x="10" y="182" class="m">The one reviewed key is auth:epoch: a single durable key; an expiring epoch would re-validate revoked tokens.</text></svg>
+<figcaption>149 key families by lifetime status. Status is per file (the scanner knows which file writes, not which key); exact TTL arguments per write are in <code>inventory.json</code> under <code>files</code>.</figcaption></figure>
+
+<figure>
+<svg role="img" aria-label="Memory in kilobytes: baseline 1037, after 26000 keys 4083, after expiry 1313" viewBox="0 0 900 170" width="900">
+<title>Memory under load, 26,000 keys</title><desc>Used memory was 1.06 MB at the start, 4.18 MB with 26,000 short-lived keys alive, and 1.34 MB after they expired.</desc>
+<g><rect x="190" y="14" width="75" height="26" fill="var(--teal)"/><text x="10" y="32">before load</text><text x="275" y="32">1.06 MB</text>
+<rect x="190" y="54" width="296" height="26" fill="var(--blue)"/><text x="10" y="72">26,000 keys alive</text><text x="496" y="72">4.18 MB</text>
+<rect x="190" y="94" width="95" height="26" fill="var(--teal)"/><text x="10" y="112">after expiry</text><text x="295" y="112">1.34 MB</text></g>
+<text x="10" y="150" class="m">About 130 bytes per key (MEMORY USAGE: 56 to 104 bytes by family). 1,000,000 distinct callers in one family is roughly 70 to 100 MB.</text></svg>
+<figcaption>Measured with <code>INFO memory</code> on a private Redis. Expiry was brought forward to 1 ms by the test; the lifetimes themselves (at most 60 s, 120 s, or 3,600 s for the media-id cache) were asserted first. Numbers: 1,061,944 / 4,180,776 / 1,344,792 bytes.</figcaption></figure>
+
+<figure>
+<svg role="img" aria-label="One idle worker on a full Redis for 3 seconds: error lines 2641 unguarded and 0 guarded; CPU 2003 ms and 172 ms" viewBox="0 0 900 200" width="900">
+<title>A worker on a full Redis, before and after the guard</title><desc>Unguarded: 2,641 error lines and 2,003 ms CPU in 3 seconds. Guarded: 0 error lines, 3 pause notices and 172 ms CPU.</desc>
+<g><text x="10" y="22" class="m">Error lines printed in 3 s</text>
+<rect x="190" y="30" width="600" height="24" fill="var(--bad)"/><text x="10" y="47">unguarded</text><text x="800" y="47">2,641</text>
+<rect x="190" y="62" width="2" height="24" fill="var(--ok)"/><text x="10" y="79">with guard</text><text x="200" y="79">0 (3 pause notices)</text>
+<text x="10" y="112" class="m">CPU used in the same 3 s (ms)</text>
+<rect x="190" y="120" width="456" height="24" fill="var(--bad)"/><text x="10" y="137">unguarded</text><text x="656" y="137">2,003</text>
+<rect x="190" y="152" width="39" height="24" fill="var(--ok)"/><text x="10" y="169">with guard</text><text x="239" y="169">172</text></g></svg>
+<figcaption>One idle worker, 5 jobs waiting, server at its cap. The process runs one worker per queue, so the unguarded cost is multiplied by up to 45 workers. The earlier run of the same test printed 5,435 lines; the order of magnitude is stable, the exact count varies.</figcaption></figure>
+
+<h3>Bounded retention (real job options, 0.5 KB payload)</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Case</th><th scope="col">Ran</th><th scope="col">Kept</th><th scope="col">Configured</th><th scope="col">Bytes per kept job</th></tr></thead><tbody>
+<tr><td>completed, default options</td><td>1,400</td><td>1,000</td><td>1,000</td><td>2,967</td></tr>
+<tr><td>failed, default options</td><td>800</td><td>500</td><td>500</td><td>4,260</td></tr>
+<tr><td>completed on personal-data queues (<code>removeOnComplete: true</code>)</td><td>300</td><td>0</td><td>0</td><td>none left</td></tr>
+</tbody></table></div>
+<p>Worst case if every one of 51 queues were full: 51 x (1,000 x 2,967 B + 500 x 4,260 B) = about <b>260 MB</b>, against 192 MB of production memory. Real failures have longer stack traces than the test's, so the true figure is higher. Lowering the failed-job cap from 2,000 to 500 (already on main) cut the worst case from about 525 MB; it is still more than the cap.</p>
+
+<h3>Connections</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Process</th><th scope="col">Measured</th><th scope="col">Total</th></tr></thead><tbody>
+<tr><td>API</td><td>51 queue handles (1 each) + 1 shared client + 2 socket.io adapter</td><td>54</td></tr>
+<tr><td>Worker</td><td>51 queue handles + 1 shared client + 2 per BullMQ worker (45 consumers) + 1 device-runtime subscriber</td><td>about 143 (computed from the measured per-item numbers)</td></tr>
+</tbody></table></div>
+<p>Redis allows 10,000 clients by default, so this is not near a limit; it is wasted connections and sockets.</p>
+
+<h3>Failure behaviour on real servers</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Situation</th><th scope="col">What happened (measured)</th></tr></thead><tbody>
+<tr><td>Full server (12 MB cap, noeviction)</td><td>8,468 keys stored, then SET, INCR and MULTI refused with OOM. 0 keys evicted. GET, TTL, EXPIRE, DEL and SCAN still work.</td></tr>
+<tr><td>Rate limiter, form throttle, login throttle, API-key failure counter</td><td>All fail open: the request goes through and the counter is not recorded. Brute-force protection lapses while Redis is full.</td></tr>
+<tr><td>Lock with policy <code>skip</code> / <code>proceed</code></td><td>no lease (work does not run) / degraded lease (runs unprotected)</td></tr>
+<tr><td><code>queue.add</code> on a full server</td><td>rejects with the OOM error; nothing half-written</td></tr>
+<tr><td>Worker started on a full server</td><td>takes no job (5 of 5 stay waiting), prints about 880 error lines a second; with the guard it pauses and finishes all 5 jobs 1.0 s after memory returned</td></tr>
+<tr><td>Job already running when the server fills</td><td>kept active; it finished once memory returned (whether the finishing step is refused at the exact limit varies by a few KB, so that is not asserted)</td></tr>
+<tr><td>3 s server stall</td><td>request released at the 2 s command deadline (2,003 ms) and the limiter failed open</td></tr>
+<tr><td>Graceful restart (AOF everysec)</td><td>500 of 500 queued jobs kept, TTL kept (3,597 s left of 3,600), producer blocked about 1.0 s, workers resumed: 100 of 100 jobs done</td></tr>
+<tr><td>SIGKILL right after adding 300 jobs</td><td>0 of 300 lost. A killed process keeps what it already wrote; power loss could drop up to about 1 s and was not tested.</td></tr>
+</tbody></table></div>
+
+<h3>Defects by status</h3>
+<figure>
+<svg role="img" aria-label="12 findings: 3 fixed, 1 partly mitigated, 8 open" viewBox="0 0 900 120" width="900">
+<title>12 findings: 3 fixed, 1 partly mitigated, 8 open</title><desc>Fixed 3 (D1, D2, D3). Partly mitigated 1 (D5). Open 8 (D4, D6 to D12).</desc>
+<g><rect x="10" y="20" width="225" height="34" fill="var(--ok)"/><text x="20" y="42" style="fill:#fff;font-weight:700">Fixed 3</text>
+<rect x="235" y="20" width="75" height="34" fill="var(--warn)"/><text x="245" y="42" style="fill:#fff;font-weight:700">1</text>
+<rect x="310" y="20" width="580" height="34" fill="var(--grey)"/><text x="320" y="42" style="fill:#fff;font-weight:700">Open 8</text></g>
+<text x="10" y="90" class="m">Severity: Medium 3 (D1, D3, D5), Low 5, Info 4. Each count is in the table below.</text></svg>
+<figcaption>Status of the 12 findings: fixed D1 to D3, partly mitigated D5, open D4 and D6 to D12 (D6 and D7 need a decision).</figcaption></figure>
+
+<h2 id="s6">6. Findings</h2>
+<div class="card s-med"><b>D1 <span class="chip warn">Medium</span> <span class="chip ok">Fixed</span> A lost EXPIRE could lock an address out for ever</b>
+<dl><dt>What went wrong</dt><dd>The failed-API-key counters did <code>INCR</code>, then <code>EXPIRE</code> as a second command. If the second never arrived (dropped connection, timeout), the counter lived for ever. After 30 failures the address got 429 permanently.</dd>
+<dt>Why it matters</dt><dd>A customer behind a shared address (an office) could be blocked from the API until someone deleted the key.</dd>
+<dt>How we fixed it</dt><dd>New <code>incrWithTtl</code> (INCR + EXPIRE NX in one MULTI, also heals old keys with no TTL). Used at the 3 sites where a lost EXPIRE blocks someone: partner key failures, bearer key failures, the per-minute API rate counter.</dd>
+<dt>Test that proves it</dt><dd><code>test/integration/redis/counter-ttl.spec.ts</code> (failed before the fix: TTL was -1)</dd></dl></div>
+<div class="card s-low"><b>D2 <span class="chip">Low</span> <span class="chip ok">Fixed</span> Footer version counters never expired</b>
+<dl><dt>What went wrong</dt><dd><code>auth:footer-v:&lt;org&gt;</code> was INCR-ed with no lifetime: one key per workspace that ever saved a footer, forever.</dd>
+<dt>Why it matters</dt><dd>Small (tens of bytes) but unbounded, and never freed when a workspace is deleted.</dd>
+<dt>How we fixed it</dt><dd>30-day lifetime, longer than the 60 s the cache trusts a version, so an expired counter cannot match a cached entry.</dd>
+<dt>Test</dt><dd><code>counter-ttl.spec.ts</code></dd></dl></div>
+<div class="card s-med"><b>D3 <span class="chip warn">Medium</span> <span class="chip ok">Fixed</span> Workers spin on a full Redis</b>
+<dl><dt>What went wrong</dt><dd>When Redis is at its cap, BullMQ's "take next job" script is refused. BullMQ treats that as a script error and asks again at once, forever: about 900 to 1,800 error lines and 0.7 of a CPU core a second for one idle worker (2,641 lines and 2,003 ms CPU in 3 s, measured). Nothing frees memory, because trimming finished jobs needs a worker to finish a job.</dd>
+<dt>Why it matters</dt><dd>One worker process runs up to 45 workers: log flood, CPU starvation of the other work in the process, no way to recover without an operator.</dd>
+<dt>How we fixed it</dt><dd><code>guardWorkerAgainstOom</code> on every worker (one place, same discovery as the job metrics): on the OOM error pause the worker 5 s, resume, pause again if still full. Other worker errors are still logged. Worker process only.</dd>
+<dt>Test</dt><dd><code>test/unit/redis/redis-pressure.spec.ts</code> (4 guard tests, written first) and <code>oom-slow-restart.spec.ts</code> (real BullMQ: 0 lines, 172 ms CPU, jobs finish 1.0 s after memory returns)</dd></dl></div>
+<div class="card s-low"><b>D4 <span class="chip">Low</span> <span class="chip warn">Open</span> 11 older INCR-then-EXPIRE sites</b>
+<dl><dt>What</dt><dd>Same pattern as D1 on keys that carry a time bucket in the name (per-minute hit counters for channels, widgets, shop, FAQ-style limits) and two MFA attempt counters keyed by a random token.</dd>
+<dt>Why open</dt><dd>A lost EXPIRE leaks one small key; it blocks nobody. They sit in other developers' modules and each has mocks to adapt. A ratchet stops new ones and lists these 11 so the list can only shrink.</dd></dl></div>
+<div class="card s-med"><b>D5 <span class="chip warn">Medium</span> <span class="chip warn">Partly mitigated</span> Retention can outgrow the memory cap</b>
+<dl><dt>What</dt><dd>Section 5: up to about 260 MB of retained jobs against a 192 MB cap. A full Redis stops every queue and every producer (D3, section 5).</dd>
+<dt>Mitigation on main</dt><dd>Failed-job cap lowered 2,000 to 500, and a queue guard trims at 75% and 90% of the cap.</dd>
+<dt>Still open</dt><dd>The budget itself. Decision 1. The new <code>crm_redis_memory_*</code> series let you alert before the guard has to act.</dd></dl></div>
+<div class="card s-low"><b>D6 <span class="chip">Low</span> <span class="chip warn">Open</span> One Redis connection per queue</b>
+<dl><dt>What</dt><dd>51 queue handles = 51 connections in every process (measured). BullMQ can share one connection for producers.</dd>
+<dt>Why open</dt><dd>The change is in <code>queue.module.ts</code>, which had just been rewritten by #663. Suggested patch: build one <code>Redis</code> with the producer options and pass it as <code>connection</code> to every <code>registerQueueAsync</code> entry.</dd></dl></div>
+<div class="card s-low"><b>D7 <span class="chip">Low</span> <span class="chip warn">Open</span> Dev compose has no maxmemory</b>
+<dl><dt>What</dt><dd><code>docker-compose.yml</code> runs <code>noeviction</code> with no size cap; production caps at 192 MB. Memory problems are not seen until production.</dd>
+<dt>Recommendation</dt><dd>Add <code>'--maxmemory', '192mb'</code> to the <code>redis</code> command in <code>docker-compose.yml</code>. Not edited here (deploy file).</dd></dl></div>
+<div class="card s-low"><b>D8 <span class="chip">Low</span> <span class="chip warn">Open</span> socket.io adapter clients have no command deadline</b>
+<dl><dt>What</dt><dd><code>redis-io.adapter.ts</code> builds publisher and subscriber with <code>maxRetriesPerRequest: null</code> and no <code>commandTimeout</code>. A silent Redis can hold a publish. The subscriber must not get a deadline.</dd>
+<dt>Why open</dt><dd>Needs a decision on the publisher only; allowlisted in the ratchet with this reason.</dd></dl></div>
+<div class="card s-low"><b>D9 <span class="chip">Info</span> <span class="chip warn">Open</span> Security throttles fail open when Redis is full</b>
+<dl><dt>What</dt><dd>Login rate limit, API-key failure counter, public form throttles let everything through while Redis refuses writes (measured). The code comments choose this on purpose.</dd>
+<dt>Why it matters</dt><dd>A full Redis also removes brute-force protection. Another reason for the memory alert.</dd></dl></div>
+<div class="card s-low"><b>D10 <span class="chip">Info</span> <span class="chip warn">Open</span> History-import tally is read in full per batch</b>
+<dl><dt>What</dt><dd><code>SMEMBERS</code> and <code>HGETALL</code> of a run's chat tally every batch: O(chats). Bounded by the run's <code>max_chats</code> and a 3-day TTL, and its expire is set after each batch (a crash between leaves it until the next batch).</dd></dl></div>
+<div class="card s-low"><b>D11 <span class="chip">Info</span> <span class="chip warn">Open</span> One durable key</b>
+<dl><dt>What</dt><dd><code>auth:epoch</code> has no TTL by design (explained in code); allowlisted.</dd></dl></div>
+<div class="card s-low"><b>D12 <span class="chip">Info</span> <span class="chip warn">Open</span> Queue producers may answer an OOM as a plain error</b>
+<dl><dt>What</dt><dd><code>queue.add</code> on a full server rejects with the raw OOM error. Whether the HTTP layer maps it to a 503 (the dependency-outage handling from #663) was not verified here.</dd></dl></div>
+
+<h3>Instrumentation added</h3>
+<p>Before: queue depth and oldest waiting age existed; nothing about Redis itself. Added (worker process, one <code>INFO</code> every 15 s, no key scans, no tenant labels): <code>crm_redis_up</code>, <code>crm_redis_memory_used_bytes</code>, <code>crm_redis_memory_max_bytes</code>, <code>crm_redis_connected_clients</code>, <code>crm_redis_blocked_clients</code>, <code>crm_redis_keys</code>, <code>crm_redis_ops_per_second</code>, <code>crm_redis_evicted_keys_total</code>, <code>crm_redis_rejected_connections_total</code>. Cache hit rate is item #65 and was not duplicated. Test: <code>redis-pressure.spec.ts</code> (parsing, restart-safe counters, failure keeps last values).</p>
+
+<h2 id="s7">7. Rollout and rollback</h2>
+<p>Not a staged deploy: no schema change, no new dependency. The one behaviour change is that counters now use MULTI/EXEC (needs Redis 7 for <code>EXPIRE ... NX</code>, which the compose files pin and the existing code already used). Rollback: revert the commit; leftover keys are harmless and expire.</p>
+
+<h2 id="s8">8. What this does NOT prove</h2>
+<ul>
+<li>The scan is textual. Key families are templates found in files that use Redis; which key a write touches is known per file, not per key. Value sizes are heuristics except where measured.</li>
+<li>Only classes that need nothing but a Redis client were driven under load (12 families, 26,000 keys). The other families are checked statically.</li>
+<li>Servers were Redis 7 on a laptop, 12 MB and 64 MB caps. Production is 192 MB on a shared host; absolute numbers (error rate, CPU) will differ.</li>
+<li>Power loss or host crash with <code>appendfsync everysec</code> (up to about 1 s of writes) was not tested.</li>
+<li>Whether a running job's completion is refused at the exact cap varies by a few KB and is not asserted.</li>
+<li>Per-job bytes use a 0.5 KB payload and a short error; real jobs and stack traces are bigger.</li>
+<li>Connection count for the worker process is computed from measured per-item numbers, not measured on a booted worker.</li>
+<li>Redis Cluster / Sentinel behaviour, TLS, and network faults (silent, refused, reset) are not covered; the last is item 18 part 2.</li>
+<li>Item #65 cache hit rate is not covered. The hit and miss path of each cache was not load-tested for latency.</li>
+<li>The HTTP status an API client sees on a full Redis (D12) was not tested.</li>
+</ul>
+
+<h2 id="s9">9. Next steps and owners</h2>
+<div class="scroll"><table><thead><tr><th scope="col">Step</th><th scope="col">Owner</th></tr></thead><tbody>
+<tr><td>Decide the memory budget (raise maxmemory or lower retention)</td><td>Project owner, Vedant to size</td></tr>
+<tr><td>Share one producer connection in <code>queue.module.ts</code> (D6)</td><td>Queue module owner</td></tr>
+<tr><td>Alert: <code>crm_redis_memory_used_bytes / crm_redis_memory_max_bytes &gt; 0.8</code> for 5 m (warn) and <code>&gt; 0.9</code> (page); also <code>crm_redis_up == 0</code></td><td>Whoever owns <code>deploy/observability</code></td></tr>
+<tr><td>Add <code>--maxmemory 192mb</code> to the dev compose (D7)</td><td>Vedant</td></tr>
+<tr><td>Convert the 11 older INCR-then-EXPIRE sites to <code>incrWithTtl</code> (D4)</td><td>Module owners, when they touch the file</td></tr>
+<tr><td>Decide a deadline for the socket.io publisher (D8); check the 503 mapping of an OOM from <code>queue.add</code> (D12)</td><td>Realtime owner / Vedant</td></tr>
+</tbody></table></div>
+
+<h2 id="s10">10. Appendix</h2>
+<h3>Tests added</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Area</th><th scope="col">File</th><th scope="col">Tests</th></tr></thead><tbody>
+<tr><td>Ratchet (static)</td><td><code>apps/api/test/unit/redis/redis-hygiene.spec.ts</code></td><td>19</td></tr>
+<tr><td>Metrics and OOM guard (unit)</td><td><code>apps/api/test/unit/redis/redis-pressure.spec.ts</code></td><td>8</td></tr>
+<tr><td>Counter lifetime (defects D1, D2)</td><td><code>apps/api/test/integration/redis/counter-ttl.spec.ts</code></td><td>7</td></tr>
+<tr><td>Full, slow, restarted server</td><td><code>apps/api/test/integration/redis/oom-slow-restart.spec.ts</code></td><td>10</td></tr>
+<tr><td>Key hygiene under load</td><td><code>apps/api/test/integration/redis/key-hygiene-load.spec.ts</code></td><td>2</td></tr>
+<tr><td>Queue retention</td><td><code>apps/api/test/integration/redis/queue-retention.spec.ts</code></td><td>4</td></tr>
+<tr><td>Connection footprint</td><td><code>apps/api/test/integration/redis/connection-footprint.spec.ts</code></td><td>3</td></tr>
+</tbody></table></div>
+<h3>Files changed</h3>
+<ul>
+<li>Fixes: <code>src/infra/redis/counter.ts</code> (new), <code>modules/public-api/api-key-access.service.ts</code>, <code>modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts</code>, <code>modules/auth/security/branding-footer.service.ts</code>; two unit fakes adapted to MULTI.</li>
+<li>Instrumentation and guard: <code>modules/platform-infrastructure/observability/event-loop/{redis-pressure,redis-pressure.module,worker-oom-guard}.ts</code>, two barrel files, <code>worker.module.ts</code> (one import).</li>
+<li>Tooling and data: <code>tools/redis-audit/{scan,keys,inventory}.mjs</code>, <code>docs/performance/redis/{inventory.json,measurements.json}</code>, this report.</li>
+<li>Not edited: <code>queue.module.ts</code>, <code>redis.module.ts</code>, any deploy file.</li>
+</ul>
+<h3>Commands and results</h3>
+<div class="scroll"><table><thead><tr><th scope="col">Command</th><th scope="col">Result</th></tr></thead><tbody>
+<tr><td><code>vitest run --dir test/unit/redis</code> (3 runs)</td><td>27 of 27 passed, 3 of 3 runs</td></tr>
+<tr><td><code>vitest run --dir test/integration/redis</code> (full suite, own containers)</td><td>26 of 26 passed in the final run; earlier runs failed 2 tests intermittently (OOM tests that assumed the server stays exactly at its cap). Fixed by holding the server at the limit and removing two over-strict assertions; then 5 of 5 runs of that file and the full suite green</td></tr>
+<tr><td><code>node tools/redis-audit/inventory.mjs --check</code></td><td>current</td></tr>
+<tr><td>neighbouring unit specs (public-api, auth-registration-security, developer-rest-api-v1, platform-infrastructure)</td><td>931 passed, 2 skipped</td></tr>
+<tr><td>security specs (security, net, crypto, jwt, token)</td><td>1,062 passed, 2 skipped</td></tr>
+<tr><td>ESLint, Prettier on changed files; <code>tsc -p tsconfig.json</code></td><td>clean</td></tr>
+<tr><td><code>tsc -p tsconfig.spec.json</code> on changed files</td><td>no errors in changed files (other files not compared)</td></tr>
+<tr><td><code>pnpm audit:authz</code></td><td>ran (report written); no finding reported for changed files</td></tr>
+</tbody></table></div>
+<h3>Environment</h3>
+<p>Node 22, Redis 7 alpine in throwaway containers named <code>nf-redis-67-*</code> (random host port, removed after each file; the one started by hand was removed too). The shared <code>crm-platform-redis</code>, postgres and mailpit were never touched and no key was written to them. Machine: single laptop, not production sized.</p>
+</main></body></html>

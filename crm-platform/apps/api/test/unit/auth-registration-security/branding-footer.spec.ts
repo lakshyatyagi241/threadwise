@@ -100,6 +100,20 @@ function makeService(state: {
       versions[k] = String(Number(versions[k] ?? 0) + 1);
       return Number(versions[k]);
     },
+    // the version counter is bumped with INCR + EXPIRE NX in one MULTI (infra/redis/counter.ts)
+    multi: () => {
+      const queued: string[] = [];
+      const tx = {
+        incr: (k: string) => {
+          queued.push(k);
+          return tx;
+        },
+        expire: () => tx,
+        exec: async () =>
+          queued.map((k) => [null, Number((versions[k] = String(Number(versions[k] ?? 0) + 1)))]),
+      };
+      return tx;
+    },
   };
   const service = new BrandingFooterService(
     db as never,

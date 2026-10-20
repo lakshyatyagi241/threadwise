@@ -561,7 +561,9 @@
             "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
-            "record_assignment": "Kayıt atama kuralları"
+            "record_assignment": "Kayıt atama kuralları",
+            "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
+            "custom_roles": "Özel roller ve kapsamlar"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

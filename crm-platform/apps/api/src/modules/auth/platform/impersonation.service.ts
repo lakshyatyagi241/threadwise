@@ -27,6 +27,7 @@ import { normalizeIp } from '../support/ip';
 import { AuthKeys } from '../support/redis-keys';
 import { TokenService, type TokenClaims } from '../token.service';
 import { PlatformStore } from './platform-store';
+import { CappedMap } from '../../../common/cache/capped-map';
 
 export type ImpersonationEndedBy = 'operator' | 'expiry' | 'new_session' | 'access_revoked';
 
@@ -71,7 +72,7 @@ interface CachedOpen {
 @Injectable()
 export class ImpersonationService {
   private readonly logger = new Logger(ImpersonationService.name);
-  private readonly open = new Map<string, CachedOpen>();
+  private readonly open = new CappedMap<string, CachedOpen>(1000);
 
   constructor(
     private readonly store: PlatformStore,

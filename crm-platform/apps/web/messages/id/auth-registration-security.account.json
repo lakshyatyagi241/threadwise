@@ -561,7 +561,9 @@
             "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Penilaian prospek dengan AI",
-            "record_assignment": "Aturan penugasan data"
+            "record_assignment": "Aturan penugasan data",
+            "team_hierarchy": "Hierarki tim dan manajer",
+            "custom_roles": "Peran kustom dan cakupan"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

@@ -561,7 +561,9 @@
             "personal_history_full": "นำเข้าประวัติทั้งหมด (WhatsApp ส่วนตัว)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "การให้คะแนนลีดด้วย AI",
-            "record_assignment": "กฎการมอบหมายระเบียน"
+            "record_assignment": "กฎการมอบหมายระเบียน",
+            "team_hierarchy": "ลำดับชั้นทีมและผู้จัดการ",
+            "custom_roles": "บทบาทที่กำหนดเองและขอบเขต"
           },
           "cta": {
             "continueFree": "ใช้ฟรีต่อ",
