@@ -1,4 +1,4 @@
-import type { BookingTemplateEvent } from '@crm/contracts';
+import type { BookingReminderStepKind, BookingTemplateEvent } from '@crm/contracts';
 import { formatClock, formatDateLong, formatSlotLabel } from './tz';
 
 /**
@@ -101,4 +101,39 @@ export function reminderBody(
   const text =
     own ?? inherited ?? (kind === 'before' ? DEFAULT_TEXTS.reminder : DEFAULT_FOLLOW_UP_TEXT);
   return renderTemplate(text, vars);
+}
+
+/**
+ * The built-in text of each step of a reminder sequence, used when a step has no message of its own. Neutral on purpose: "your {{type}}"
+ * carries the workspace's own noun, and nothing here says what the visit is for.
+ */
+export const DEFAULT_STEP_TEXT: Record<BookingReminderStepKind, string> = {
+  confirmation: 'Booked: {{type}} on {{slot}}.{{manage_hint}}',
+  reminder_24h: DEFAULT_TEXTS.reminder,
+  reminder_2h: DEFAULT_TEXTS.reminder,
+  reminder_15m: DEFAULT_TEXTS.reminder,
+  reminder: DEFAULT_TEXTS.reminder,
+  after_visit: DEFAULT_FOLLOW_UP_TEXT,
+  no_show:
+    'We missed you for {{type}} on {{slot}}. Reply to this message and we will help you find a new time.',
+  rebook:
+    'It has been a while since your {{type}}. Reply to this message when you would like to book again.',
+};
+
+/**
+ * The text of one step: its own body, else (for a reminder) the type's reminder message, else the step's built-in text. The same
+ * placeholders as the other booking messages.
+ */
+export function stepBody(
+  step: BookingReminderStepKind,
+  ruleBody: string | null | undefined,
+  typeReminderBody: string | null | undefined,
+  facts: MessageFacts,
+): string {
+  const own = ruleBody && ruleBody.trim() !== '' ? ruleBody : null;
+  const isReminder =
+    step === 'reminder' || step === 'reminder_24h' || step === 'reminder_2h' || step === 'reminder_15m';
+  const inherited =
+    isReminder && typeReminderBody && typeReminderBody.trim() !== '' ? typeReminderBody : null;
+  return renderTemplate(own ?? inherited ?? DEFAULT_STEP_TEXT[step], variablesFor(facts));
 }

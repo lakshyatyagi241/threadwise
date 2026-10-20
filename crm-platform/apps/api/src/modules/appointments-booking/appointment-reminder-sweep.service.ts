@@ -18,9 +18,10 @@ const DELIVER_BATCH = 50;
  * workers run, a retry or a restart cannot claim the same reminder twice. A reschedule moves the booking's `armed_at`, which makes the
  * rules claimable again for the new time, and the old runs stop (`cancelled / rescheduled`).
  *
- * A before-rule fires only for a confirmed booking that has not started and whose moment is later than the booking was made or last
- * moved; an after-rule (the follow-up) only for a booking that ended and was not cancelled, declined or marked no-show. A rule that is
- * switched off never fires. Delivery re-checks all of this at send time (`AppointmentReminderService`).
+ * A before-step fires only for a confirmed booking that has not started and whose moment is later than the booking was made or last
+ * moved; an after-visit step only for a booking that ended and was not cancelled, declined or marked no-show; a rebook step only for a
+ * completed visit. The event steps (the confirmation, the no-show message) are not claimed here: they are taken when the event
+ * happens. A step that is switched off never fires. Delivery re-checks all of this at send time (`AppointmentReminderService`).
  *
  * Runs privileged: it spans every workspace by definition (one of the sanctioned uses). Imported by WorkersModule only.
  */
@@ -79,8 +80,14 @@ export class AppointmentReminderSweepService {
     });
   }
 
-  /** The delivery half. Returns how many runs were worked on. */
+  /**
+   * The delivery half: works on the runs that are waiting, then looks at the WhatsApp messages that were handed over (a message that
+   * failed afterwards, or was not delivered in time when the step asks for that, goes out on the next channel). Returns how many runs
+   * were worked on.
+   */
   async deliver(limit = DELIVER_BATCH): Promise<number> {
-    return this.reminders.processDue(limit);
+    const delivered = await this.reminders.processDue(limit);
+    const watched = await this.reminders.watchDelivery(limit);
+    return delivered + watched;
   }
 }

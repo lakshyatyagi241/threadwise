@@ -69,6 +69,8 @@ export interface AppointmentRow {
   feeRecordedMinor: bigint;
   holdExpiresAt: Date | null;
   armedAt: Date;
+  /** When the customer tapped Confirm on a reminder; null until they do. */
+  customerConfirmedAt: Date | null;
   rowVersion: number;
   createdAt: Date;
   updatedAt: Date;
@@ -138,6 +140,7 @@ const toRow = (r: Raw): AppointmentRow => ({
   feeRecordedMinor: big(r.fee_recorded_minor),
   holdExpiresAt: d(r.hold_expires_at),
   armedAt: new Date(r.armed_at as string),
+  customerConfirmedAt: r.customer_confirmed_at ? new Date(r.customer_confirmed_at as string) : null,
   rowVersion: Number(r.row_version),
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),

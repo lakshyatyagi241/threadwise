@@ -182,15 +182,82 @@ export const bookingQuestionInputSchema = z
   });
 export type BookingQuestionInput = z.infer<typeof bookingQuestionInputSchema>;
 
-/** `before`: this many minutes before the start. `after`: this many minutes after the end (the after-visit follow-up). */
-export const BOOKING_REMINDER_KINDS = ['before', 'after'] as const;
+/**
+ * `before`: this many minutes before the start. `after`: this many minutes after the end (the after-visit step; a rebook step is
+ * `after` too, counted up to a year). `event`: sent when something happens (the booking is made, a visit is marked no-show), not at a time.
+ */
+export const BOOKING_REMINDER_KINDS = ['before', 'after', 'event'] as const;
 export const bookingReminderKindSchema = z.enum(BOOKING_REMINDER_KINDS);
 export type BookingReminderKind = z.infer<typeof bookingReminderKindSchema>;
 
-/** The channels a reminder can go out on, in the order a rule tries them by default. */
-export const BOOKING_REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+/**
+ * The steps of a reminder SEQUENCE. `confirmation` (right after the booking) and `no_show` (when a visit is marked no-show) are event
+ * steps. `reminder_24h`, `reminder_2h` and `reminder_15m` are the usual before-the-start steps (the 15 minute one only goes for an
+ * online visit that has a join link); `reminder` is any other time before the start. `after_visit` goes after the end, `rebook` goes
+ * N days after a completed visit (a recall).
+ */
+export const BOOKING_REMINDER_STEP_KINDS = [
+  'confirmation',
+  'reminder_24h',
+  'reminder_2h',
+  'reminder_15m',
+  'reminder',
+  'after_visit',
+  'no_show',
+  'rebook',
+] as const;
+export const bookingReminderStepKindSchema = z.enum(BOOKING_REMINDER_STEP_KINDS);
+export type BookingReminderStepKind = z.infer<typeof bookingReminderStepKindSchema>;
+
+/** The steps that are sent when something happens; they have no time of their own. */
+export const BOOKING_EVENT_STEP_KINDS = ['confirmation', 'no_show'] as const;
+/**
+ * An event step has no time. It takes a fixed offset (0 for the confirmation, 1 for the no-show message) so that the (kind, offset) key
+ * of a rule still tells every step apart; no timed step uses an offset below 1 of the `event` kind.
+ */
+export const EVENT_STEP_OFFSET = { confirmation: 0, no_show: 1 } as const;
+/** At most this many steps with a time (before the start, after the end, a rebook); the event steps come on top. */
+export const BOOKING_TIMED_STEPS_MAX = 5;
+/** A rebook step can wait up to a year after the visit. */
+export const BOOKING_REBOOK_MAX_MINUTES = 525_600;
+
+export const isEventStep = (k: BookingReminderStepKind): boolean =>
+  (BOOKING_EVENT_STEP_KINDS as readonly string[]).includes(k);
+
+/** The kind a step has in storage. */
+export function reminderKindOfStep(step: BookingReminderStepKind): BookingReminderKind {
+  if (isEventStep(step)) return 'event';
+  return step === 'after_visit' || step === 'rebook' ? 'after' : 'before';
+}
+
+/** The step a rule without an explicit step is read as: the usual offsets get their name. */
+export function defaultStepKind(
+  kind: BookingReminderKind,
+  offsetMinutes: number,
+): BookingReminderStepKind {
+  if (kind === 'after') return 'after_visit';
+  if (kind === 'event') return 'confirmation';
+  if (offsetMinutes === 1440) return 'reminder_24h';
+  if (offsetMinutes === 120) return 'reminder_2h';
+  if (offsetMinutes === 15) return 'reminder_15m';
+  return 'reminder';
+}
+
+/**
+ * The channels a step can go out on, in the order a step tries them by default. SMS was removed from appointment messages (DLT and
+ * per-country rules make it unreliable); `voice` is reserved for the outbound reminder call and cannot be chosen yet.
+ */
+export const BOOKING_REMINDER_CHANNELS = ['whatsapp', 'email'] as const;
 export const bookingReminderChannelSchema = z.enum(BOOKING_REMINDER_CHANNELS);
 export type BookingReminderChannel = z.infer<typeof bookingReminderChannelSchema>;
+
+/**
+ * Every channel a delivery record can name when it is READ: the removed `sms` stays here because old runs carry it as history, `voice`
+ * because it is reserved. Never accepted as input.
+ */
+export const BOOKING_REMINDER_RECORD_CHANNELS = ['whatsapp', 'email', 'sms', 'voice'] as const;
+export const bookingReminderRecordChannelSchema = z.enum(BOOKING_REMINDER_RECORD_CHANNELS);
+export type BookingReminderRecordChannel = z.infer<typeof bookingReminderRecordChannelSchema>;
 
 /** The placeholders a reminder text may use (the same ones the booking messages use). */
 export const BOOKING_REMINDER_PLACEHOLDERS = [
@@ -207,29 +274,77 @@ export const BOOKING_REMINDER_PLACEHOLDERS = [
 
 export const BOOKING_REMINDER_BODY_MAX = 2000;
 export const BOOKING_REMINDER_SUBJECT_MAX = 191;
+/** "If it was not delivered after N minutes, use the next channel": the range of N and its default. */
+export const BOOKING_UNDELIVERED_MIN = 5;
+export const BOOKING_UNDELIVERED_MAX = 720;
+export const BOOKING_UNDELIVERED_DEFAULT = 30;
 
-export const bookingReminderInputSchema = z.object({
-  id: uuidSchema.optional(),
-  /** Minutes before the start (`before`) or after the end (`after`). */
-  offsetMinutes: z.number().int().min(1).max(BOOKING_REMINDER_MAX_MINUTES),
-  label: z.string().trim().max(40).nullish(),
-  /** A rule is OFF unless it is switched on: a new rule never sends by surprise. */
-  isActive: z.boolean().default(false),
-  kind: bookingReminderKindSchema.default('before'),
-  /** Ordered preference: the first channel the contact can be reached on, with a connected sender, wins. */
-  channels: z
-    .array(bookingReminderChannelSchema)
-    .min(1)
-    .max(BOOKING_REMINDER_CHANNELS.length)
-    .refine((c) => new Set(c).size === c.length, 'a channel is listed once')
-    .default(['whatsapp', 'sms', 'email']),
-  /** An email's subject line; blank = a default one. */
-  subject: z.string().trim().max(BOOKING_REMINDER_SUBJECT_MAX).nullish(),
-  /** The text, with placeholders; blank = the type's reminder message (before) or the built-in follow-up text (after). */
-  body: z.string().trim().max(BOOKING_REMINDER_BODY_MAX).nullish(),
-  /** An approved WhatsApp template of the workspace. Needed to reach a contact on WhatsApp outside the 24 hour window. */
-  waTemplateId: uuidSchema.nullish(),
-});
+export const bookingReminderInputSchema = z
+  .object({
+    id: uuidSchema.optional(),
+    /** Minutes before the start (`before`), after the end (`after`; a rebook may reach a year), or the fixed offset of an event step. */
+    offsetMinutes: z.number().int().min(0).max(BOOKING_REBOOK_MAX_MINUTES),
+    label: z.string().trim().max(40).nullish(),
+    /** A rule is OFF unless it is switched on: a new rule never sends by surprise. */
+    isActive: z.boolean().default(false),
+    kind: bookingReminderKindSchema.default('before'),
+    /** Which step of the sequence this is. Left out = read from the kind and the offset (1440 minutes before is the 24 hour reminder). */
+    stepKind: bookingReminderStepKindSchema.optional(),
+    /** Ordered preference: the first channel the contact can be reached on, with a connected sender, wins; the rest are fallbacks. */
+    channels: z
+      .array(bookingReminderChannelSchema)
+      .min(1)
+      .max(BOOKING_REMINDER_CHANNELS.length)
+      .refine((c) => new Set(c).size === c.length, 'a channel is listed once')
+      .default(['whatsapp', 'email']),
+    /** An email's subject line; blank = a default one. */
+    subject: z.string().trim().max(BOOKING_REMINDER_SUBJECT_MAX).nullish(),
+    /** The text, with placeholders; blank = the type's reminder message (before) or the built-in follow-up text (after). */
+    body: z.string().trim().max(BOOKING_REMINDER_BODY_MAX).nullish(),
+    /** An approved WhatsApp template of the workspace. Needed to reach a contact on WhatsApp outside the 24 hour window. */
+    waTemplateId: uuidSchema.nullish(),
+    /** An email message of the appointment library; it is read when the message is sent, so editing it changes what goes out. */
+    libraryTemplateId: uuidSchema.nullish(),
+    /** The reminder carries Confirm, Reschedule and Cancel buttons (WhatsApp quick replies). */
+    buttonsEnabled: z.boolean().default(false),
+    /** Skip this step when the customer has already confirmed (used on the 2 hour reminder). */
+    skipIfConfirmed: z.boolean().default(false),
+    /** Use the next channel when the message was not delivered after this many minutes. Null = off. */
+    undeliveredFallbackMinutes: z
+      .number()
+      .int()
+      .min(BOOKING_UNDELIVERED_MIN)
+      .max(BOOKING_UNDELIVERED_MAX)
+      .nullish(),
+  })
+  .superRefine((r, ctx) => {
+    const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+    if (reminderKindOfStep(step) !== r.kind) {
+      ctx.addIssue({
+        code: 'custom',
+        message: 'this step does not go with that kind',
+        path: ['stepKind'],
+      });
+    }
+    if (r.kind === 'event') {
+      if (r.offsetMinutes !== EVENT_STEP_OFFSET[step as 'confirmation' | 'no_show']) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'an event step has no time',
+          path: ['offsetMinutes'],
+        });
+      }
+      return;
+    }
+    const max = step === 'rebook' ? BOOKING_REBOOK_MAX_MINUTES : BOOKING_REMINDER_MAX_MINUTES;
+    if (r.offsetMinutes < 1 || r.offsetMinutes > max) {
+      ctx.addIssue({
+        code: 'custom',
+        message: `a time between 1 minute and ${step === 'rebook' ? '365 days' : '30 days'}`,
+        path: ['offsetMinutes'],
+      });
+    }
+  });
 export type BookingReminderInput = z.infer<typeof bookingReminderInputSchema>;
 
 export const bookingTemplateInputSchema = z.object({
@@ -274,8 +389,14 @@ export type BookingCalendarInput = z.infer<typeof bookingCalendarInputSchema>;
 
 const hexColor = z.string().regex(/^#[0-9a-fA-F]{6}$/, 'colour must be #RRGGBB');
 
+const stepOf = (r: BookingReminderInput): BookingReminderStepKind =>
+  r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+
 const distinctOffsets = (r: BookingReminderInput[]) =>
-  new Set(r.map((x) => `${x.kind}:${x.offsetMinutes}`)).size === r.length;
+  new Set(r.map((x) => `${stepOf(x)}:${x.kind}:${x.offsetMinutes}`)).size === r.length;
+
+const withinTimedCap = (r: BookingReminderInput[]) =>
+  r.filter((x) => x.kind !== 'event').length <= BOOKING_TIMED_STEPS_MAX;
 
 const childShape = {
   availability: availabilityListSchema.optional(),
@@ -285,6 +406,7 @@ const childShape = {
     .array(bookingReminderInputSchema)
     .max(BOOKING_REMINDERS_MAX)
     .refine(distinctOffsets, 'reminder times must be distinct')
+    .refine(withinTimedCap, `at most ${BOOKING_TIMED_STEPS_MAX} steps with a time`)
     .optional(),
   templates: z.array(bookingTemplateInputSchema).max(20).optional(),
   payment: bookingPaymentInputSchema.optional(),
@@ -375,16 +497,29 @@ export const bookingQuestionSchema = z.object({
 });
 export type BookingQuestion = z.infer<typeof bookingQuestionSchema>;
 
+/** What a step's WhatsApp message is: read live from the template, never copied, so it cannot say approved after Meta paused it. */
+export const BOOKING_REMINDER_WA_STATUSES = ['draft', 'pending', 'approved', 'rejected'] as const;
+
 export const bookingReminderSchema = z.object({
   id: uuidSchema,
   offsetMinutes: z.number().int(),
   label: z.string().nullable(),
   isActive: z.boolean(),
   kind: bookingReminderKindSchema,
+  stepKind: bookingReminderStepKindSchema,
   channels: z.array(bookingReminderChannelSchema),
   subject: z.string().nullable(),
   body: z.string().nullable(),
   waTemplateId: uuidSchema.nullable(),
+  /** The WhatsApp message's own status and name (for the chip next to the step). Null when the step has no WhatsApp template. */
+  waTemplateStatus: z.enum(BOOKING_REMINDER_WA_STATUSES).nullable(),
+  waTemplateName: z.string().nullable(),
+  libraryTemplateId: uuidSchema.nullable(),
+  buttonsEnabled: z.boolean(),
+  skipIfConfirmed: z.boolean(),
+  undeliveredFallbackMinutes: z.number().int().nullable(),
+  /** `sms_removed`: SMS reminders were removed; the step was moved to email or switched off, and the owner chooses WhatsApp or email. */
+  notice: z.enum(['sms_removed']).nullable(),
 });
 export type BookingReminder = z.infer<typeof bookingReminderSchema>;
 

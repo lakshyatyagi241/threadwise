@@ -2,6 +2,9 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
+  defaultStepKind,
+  type AppointmentMessageKind,
+  type BookingReminderStepKind,
   type BookingTypeListResponse,
   type BookingTypeOption,
   type BookingTypeResponse,
@@ -42,6 +45,18 @@ import { resolveZone, SlotsService } from './slots.service';
 import { addDays, startOfLocalDay } from './tz';
 
 const MAX_SLUG_TRIES = 50;
+
+/** The library message kind each step of a reminder sequence sends. */
+const LIBRARY_KIND_OF_STEP: Record<BookingReminderStepKind, AppointmentMessageKind> = {
+  confirmation: 'confirmation',
+  reminder_24h: 'reminder',
+  reminder_2h: 'reminder',
+  reminder_15m: 'reminder',
+  reminder: 'reminder',
+  after_visit: 'follow_up',
+  no_show: 'no_show',
+  rebook: 'rebook',
+};
 
 /** The child lists a create or an update body may carry (the same shapes in both). */
 type ChildLists = Pick<
@@ -435,6 +450,12 @@ export class BookingTypesService {
         orgId,
         input.reminders.flatMap((r) => (r.waTemplateId ? [r.waTemplateId] : [])),
       );
+      // An email message of the library: it must exist, be an email, and be of the kind the step sends.
+      const libs = await this.library.findLibraryMany(
+        tx,
+        orgId,
+        input.reminders.flatMap((r) => (r.libraryTemplateId ? [r.libraryTemplateId] : [])),
+      );
       await this.repo.syncReminders(
         tx,
         orgId,
@@ -445,16 +466,40 @@ export class BookingTypesService {
               { path: `reminders.${i}.waTemplateId`, message: r.waTemplateId },
             ]);
           }
+          const stepKind: BookingReminderStepKind =
+            r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+          let libraryId: number | null = null;
+          if (r.libraryTemplateId) {
+            const lib = libs.find((m) => m.uuid === r.libraryTemplateId);
+            const path = `reminders.${i}.libraryTemplateId`;
+            if (!lib) {
+              throw AppError.validation('That message is not in the library of this workspace.', [
+                { path, message: r.libraryTemplateId },
+              ]);
+            }
+            if (lib.channel !== 'email' || lib.kind !== LIBRARY_KIND_OF_STEP[stepKind]) {
+              throw AppError.validation('That message does not fit this step.', [
+                { path, message: r.libraryTemplateId },
+              ]);
+            }
+            libraryId = lib.id;
+          }
           return {
             uuid: r.id,
             offsetMinutes: r.offsetMinutes,
             label: r.label && r.label.trim() !== '' ? r.label : null,
             isActive: r.isActive,
             kind: r.kind,
+            stepKind,
             channels: r.channels,
             subject: r.subject && r.subject.trim() !== '' ? r.subject : null,
             body: r.body && r.body.trim() !== '' ? r.body : null,
             waTemplateId: r.waTemplateId ? waIds.get(r.waTemplateId)! : null,
+            libraryTemplateId: libraryId,
+            // Buttons belong on a reminder before the start; they mean nothing on the other steps.
+            buttonsEnabled: r.buttonsEnabled && r.kind === 'before',
+            skipIfConfirmed: r.skipIfConfirmed && r.kind === 'before',
+            undeliveredFallbackMinutes: r.undeliveredFallbackMinutes ?? null,
           };
         }),
       );
@@ -565,10 +610,7 @@ export class BookingTypesService {
       orgId,
       added.filter(
         (a) =>
-          a.channel === 'whatsapp' ||
-          a.channel === 'email' ||
-          a.channel === 'sms' ||
-          a.channel === 'voice',
+          a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'voice',
       ),
     );
 

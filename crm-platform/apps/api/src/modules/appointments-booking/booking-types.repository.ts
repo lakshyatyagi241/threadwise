@@ -1,14 +1,19 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import type {
-  BookingLocationType,
-  BookingReminderChannel,
-  BookingReminderKind,
-  BookingQuestionType,
-  BookingTemplateChannel,
-  BookingTemplateEvent,
+import {
+  defaultStepKind,
+  type AppointmentTemplateStatus,
+  type BookingLocationType,
+  type BookingReminderChannel,
+  type BookingReminderKind,
+  type BookingReminderStepKind,
+  type BookingQuestionType,
+  type BookingTemplateChannel,
+  type BookingTemplateEvent,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import { libraryStatusOfWa } from './appointment-template.rules';
+import { liveChannels } from './appointment-reminders.repository';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
@@ -77,13 +82,24 @@ export interface ReminderRow {
   offsetMinutes: number;
   label: string | null;
   isActive: boolean;
-  /** `before` the start or `after` the end (the follow-up). */
+  /** `before` the start, `after` the end (the follow-up, the rebook) or an `event` step (the confirmation, the no-show message). */
   kind: BookingReminderKind;
+  stepKind: BookingReminderStepKind;
   channels: BookingReminderChannel[];
   subject: string | null;
   body: string | null;
   waTemplateId: number | null;
   waTemplateUuid: string | null;
+  /** The step's WhatsApp template as it is on Meta now (never copied): the status chip next to the step. */
+  waTemplateStatus: AppointmentTemplateStatus | null;
+  waTemplateName: string | null;
+  libraryTemplateId: number | null;
+  libraryTemplateUuid: string | null;
+  buttonsEnabled: boolean;
+  skipIfConfirmed: boolean;
+  undeliveredFallbackMinutes: number | null;
+  /** `sms_removed`: the step only had SMS, which was removed. */
+  notice: 'sms_removed' | null;
 }
 export interface TemplateRow {
   event: BookingTemplateEvent;
@@ -338,10 +354,13 @@ export class BookingTypesRepository {
 
     for (const r of (
       await tx.execute(
-        sql`SELECT br.*, w.uuid AS wa_uuid FROM booking_reminders br
+        sql`SELECT br.*, w.uuid AS wa_uuid, w.template_name AS wa_name, w.status AS wa_status, w.meta_status AS wa_meta_status,
+            w.paused_until AS wa_paused_until, w.rejection_reason AS wa_rejection_reason, lt.uuid AS lib_uuid
+          FROM booking_reminders br
           LEFT JOIN wa_templates w ON w.org_id = br.org_id AND w.id = br.wa_template_id
+          LEFT JOIN appointment_message_templates lt ON lt.org_id = br.org_id AND lt.id = br.library_template_id
           WHERE br.org_id = ${orgId} AND br.booking_type_id IN ${ids}
-          ORDER BY br.kind, br.offset_minutes DESC`,
+          ORDER BY CASE br.kind WHEN 'event' THEN 0 WHEN 'before' THEN 1 ELSE 2 END, br.offset_minutes DESC`,
       )
     ).rows as Raw[])
       get(r.booking_type_id).reminders.push({
@@ -352,11 +371,30 @@ export class BookingTypesRepository {
         label: s(r.label),
         isActive: r.is_active as boolean,
         kind: r.kind as BookingReminderKind,
-        channels: (r.channels as BookingReminderChannel[] | null) ?? ['whatsapp', 'sms', 'email'],
+        stepKind:
+          (r.step_kind as BookingReminderStepKind | null) ??
+          defaultStepKind(r.kind as BookingReminderKind, Number(r.offset_minutes)),
+        channels: liveChannels(r.channels),
         subject: s(r.subject),
         body: s(r.body),
         waTemplateId: n(r.wa_template_id),
         waTemplateUuid: s(r.wa_uuid),
+        waTemplateStatus:
+          r.wa_template_id === null || r.wa_template_id === undefined
+            ? null
+            : libraryStatusOfWa({
+                status: (r.wa_status as string | null) ?? 'draft',
+                metaStatus: s(r.wa_meta_status),
+                pausedUntil: r.wa_paused_until ? new Date(r.wa_paused_until as string) : null,
+                rejectionReason: s(r.wa_rejection_reason),
+              }).status,
+        waTemplateName: s(r.wa_name),
+        libraryTemplateId: n(r.library_template_id),
+        libraryTemplateUuid: s(r.lib_uuid),
+        buttonsEnabled: (r.buttons_enabled as boolean | null) ?? false,
+        skipIfConfirmed: (r.skip_if_confirmed as boolean | null) ?? false,
+        undeliveredFallbackMinutes: n(r.undelivered_fallback_minutes),
+        notice: r.notice_code === 'sms_removed' ? 'sms_removed' : null,
       });
 
     for (const r of (
@@ -499,10 +537,15 @@ export class BookingTypesRepository {
       label: string | null;
       isActive: boolean;
       kind: BookingReminderKind;
+      stepKind: BookingReminderStepKind;
       channels: BookingReminderChannel[];
       subject: string | null;
       body: string | null;
       waTemplateId: number | null;
+      libraryTemplateId: number | null;
+      buttonsEnabled: boolean;
+      skipIfConfirmed: boolean;
+      undeliveredFallbackMinutes: number | null;
     }>,
   ): Promise<void> {
     const keep = list.filter((r) => r.uuid).map((r) => r.uuid!);
@@ -519,15 +562,22 @@ export class BookingTypesRepository {
     let i = 0;
     for (const r of list) {
       if (r.uuid) {
+        // A step that is saved switched on, or with other channels, has been looked at by the owner: the SMS notice goes.
         await tx.execute(sql`UPDATE booking_reminders SET offset_minutes = ${r.offsetMinutes}, offset_index = ${i},
-          label = ${r.label}, is_active = ${r.isActive}, kind = ${r.kind}, channels = ${channelsArray(r.channels)},
-          subject = ${r.subject}, body = ${r.body}, wa_template_id = ${r.waTemplateId}
+          label = ${r.label}, is_active = ${r.isActive}, kind = ${r.kind}, step_kind = ${r.stepKind},
+          channels = ${channelsArray(r.channels)},
+          subject = ${r.subject}, body = ${r.body}, wa_template_id = ${r.waTemplateId}, library_template_id = ${r.libraryTemplateId},
+          buttons_enabled = ${r.buttonsEnabled}, skip_if_confirmed = ${r.skipIfConfirmed},
+          undelivered_fallback_minutes = ${r.undeliveredFallbackMinutes},
+          notice_code = CASE WHEN ${r.isActive} OR channels IS DISTINCT FROM ${channelsArray(r.channels)} THEN NULL ELSE notice_code END
           WHERE org_id = ${orgId} AND booking_type_id = ${typeId} AND uuid = ${r.uuid}::uuid`);
       } else {
         await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active,
-            kind, channels, subject, body, wa_template_id)
-          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive}, ${r.kind},
-            ${channelsArray(r.channels)}, ${r.subject}, ${r.body}, ${r.waTemplateId})`);
+            kind, step_kind, channels, subject, body, wa_template_id, library_template_id, buttons_enabled, skip_if_confirmed,
+            undelivered_fallback_minutes)
+          VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive}, ${r.kind}, ${r.stepKind},
+            ${channelsArray(r.channels)}, ${r.subject}, ${r.body}, ${r.waTemplateId}, ${r.libraryTemplateId}, ${r.buttonsEnabled},
+            ${r.skipIfConfirmed}, ${r.undeliveredFallbackMinutes})`);
       }
       i++;
     }

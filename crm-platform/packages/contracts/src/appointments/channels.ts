@@ -12,14 +12,14 @@ import { uuidSchema } from '../common/ids';
  */
 
 /** Every channel id a booking message can name. `voice` is reserved for the outbound reminder call. */
-export const APPOINTMENT_CHANNELS = ['email', 'whatsapp', 'sms', 'voice'] as const;
+export const APPOINTMENT_CHANNELS = ['email', 'whatsapp', 'voice'] as const;
 export const appointmentChannelSchema = z.enum(APPOINTMENT_CHANNELS);
 export type AppointmentChannel = z.infer<typeof appointmentChannelSchema>;
 
 /** The channels that can be used today. */
-export const APPOINTMENT_LIVE_CHANNELS = ['email', 'whatsapp', 'sms'] as const;
+export const APPOINTMENT_LIVE_CHANNELS = ['email', 'whatsapp'] as const;
 
-/** Channels the library can hold a message for (an SMS uses the plain text of the booking type or rule, not a library entry). */
+/** Channels the library can hold a message for. */
 export const APPOINTMENT_TEMPLATE_CHANNELS = ['email', 'whatsapp'] as const;
 export const appointmentTemplateChannelSchema = z.enum(APPOINTMENT_TEMPLATE_CHANNELS);
 export type AppointmentTemplateChannel = z.infer<typeof appointmentTemplateChannelSchema>;
@@ -30,6 +30,10 @@ export const APPOINTMENT_MESSAGE_KINDS = [
   'reschedule',
   'cancellation',
   'follow_up',
+  /** The message of a reminder sequence's no-show step. */
+  'no_show',
+  /** The message of a reminder sequence's rebook (recall) step. */
+  'rebook',
 ] as const;
 export const appointmentMessageKindSchema = z.enum(APPOINTMENT_MESSAGE_KINDS);
 export type AppointmentMessageKind = z.infer<typeof appointmentMessageKindSchema>;
