@@ -26,6 +26,7 @@ function build(
     {} as never,
     {} as never,
     {} as never,
+    {} as never,
   );
   const tx = { execute: vi.fn(async () => ({ rows: row ? [row] : [] })) };
   const run = (peer: string, runtime = cloud) =>

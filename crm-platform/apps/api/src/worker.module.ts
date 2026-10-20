@@ -7,6 +7,7 @@ import { DbModule } from './infra/db/db.module';
 import { RedisModule } from './infra/redis/redis.module';
 import { QueueModule } from './infra/queue/queue.module';
 import { QueueGuardModule } from './infra/queue/queue-guard.module';
+import { FAILURE_POLICIES } from './modules/failed-operations';
 import { WorkerDrainModule } from './infra/queue/worker-drain.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
@@ -51,7 +52,7 @@ import { WorkersModule } from './workers/workers.module';
     RedisModule,
     QueueModule,
     // Trims finished-job history before a full Redis stops every queue.
-    QueueGuardModule,
+    QueueGuardModule.forRoot({ capturedQueues: FAILURE_POLICIES.map((p) => p.queue) }),
     // Closes the workers (waiting for running jobs) before the database pools close.
     WorkerDrainModule,
     ProvidersModule,

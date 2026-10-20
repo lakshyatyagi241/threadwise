@@ -8,9 +8,13 @@ import {
 } from './queue-guard';
 import { QUEUES } from './queues';
 
+// what the worker module passes: the queues the dead-letter sweep copies (a stand-in for the real list, which the domain owns)
+const CAPTURED = new Set<string>([QUEUES.WABA_INGEST, QUEUES.WEBHOOK_INGEST]);
+
 describe('queue guard', () => {
   it('reads used_memory and maxmemory from INFO memory', () => {
-    const info = '# Memory\r\nused_memory:1048576\r\nused_memory_human:1.00M\r\nmaxmemory:201326592\r\n';
+    const info =
+      '# Memory\r\nused_memory:1048576\r\nused_memory_human:1.00M\r\nmaxmemory:201326592\r\n';
     expect(parseMemoryInfo(info)).toEqual({ used: 1048576, max: 201326592 });
     expect(parseMemoryInfo('')).toEqual({ used: 0, max: 0 });
   });
@@ -24,11 +28,11 @@ describe('queue guard', () => {
   });
 
   it('does nothing when memory is fine', () => {
-    expect(trimPlan(0)).toEqual([]);
+    expect(trimPlan(0, CAPTURED)).toEqual([]);
   });
 
   it('tier 1 keeps the failures that the dead-letter sweep copies for longer than the others', () => {
-    const plan = trimPlan(1);
+    const plan = trimPlan(1, CAPTURED);
     const failed = (q: string) => plan.find((s) => s.queue === q && s.type === 'failed');
     expect(failed(QUEUES.WABA_INGEST)).toBeUndefined();
     expect(failed(QUEUES.CAMPAIGN)?.graceMs).toBe(UNCAPTURED_FAILURE_GRACE_MS);
@@ -36,7 +40,7 @@ describe('queue guard', () => {
   });
 
   it('tier 2 trims failures of every queue but leaves the capture sweep time to copy them', () => {
-    const failed = trimPlan(2).filter((s) => s.type === 'failed');
+    const failed = trimPlan(2, CAPTURED).filter((s) => s.type === 'failed');
     expect(failed).toHaveLength(Object.values(QUEUES).length);
     expect(failed.every((s) => s.graceMs === CAPTURED_FAILURE_GRACE_MS)).toBe(true);
   });
