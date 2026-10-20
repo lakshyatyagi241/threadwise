@@ -17,6 +17,7 @@ const caps = (over: Partial<ConferencingCapabilities> = {}): ConferencingCapabil
   canInstall: false,
   connectable: [],
   installable: false,
+  installPath: null,
   ...over,
 });
 
