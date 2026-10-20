@@ -136,8 +136,8 @@ export class BookingTypesService {
   async create(input: CreateBookingTypeInput): Promise<BookingTypeResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `booking_types` cap (a live count: deleting a type frees the slot).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'booking_types');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'booking_types');
       const hostId = await this.resolveHost(tx, ctx.orgId, input.hostId, ctx.userId);
       const slug = await this.uniqueSlug(tx, ctx.orgId, input.slug || input.name);
       const id = await this.repo.insert(tx, ctx.orgId, {

@@ -231,7 +231,7 @@ export class WidgetsService {
     input: CreateWidgetInput,
   ): Promise<WidgetRow> {
     // The plan's `chatbot_widgets` cap: every path that adds a widget (create, and the update-with-a-stale-id quirk) passes here.
-    await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
+    await this.planUsage.assertCanAddIn(tx, orgId, 'chatbot_widgets');
     const assistantId = await this.resolveAssistant(tx, orgId, input);
     const base = slugBase(input.name);
     await this.repo.lockSlugs(tx, orgId);
@@ -286,7 +286,7 @@ export class WidgetsService {
     const row = await this.db.tx(async (tx) => {
       const src = await this.repo.findByUuid(tx, orgId, uuid);
       if (!src) throw AppError.notFound('Widget', uuid);
-      await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
+      await this.planUsage.assertCanAddIn(tx, orgId, 'chatbot_widgets');
       // Reference replicated the row: the copy keeps the ORIGINAL author (`user_id`), and a name at the 120-character limit
       // grows past it (the column here is unbounded text; Reference answered a database error).
       const id = await this.repo.insert(
@@ -589,7 +589,7 @@ export class WidgetsService {
       const flow = await this.requireWidgetFlow(tx, orgId, flowUuid);
       const current = await this.repo.findByFlowId(tx, orgId, flow.id);
       if (!current) {
-        await this.planUsage.assertCanAdd(orgId, 'chatbot_widgets');
+        await this.planUsage.assertCanAddIn(tx, orgId, 'chatbot_widgets');
         const base = slugBase(flow.name);
         await this.repo.lockSlugs(tx, orgId);
         const slug = uniqueSlug(base, await this.repo.slugsLike(tx, orgId, base, null));

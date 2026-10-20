@@ -1,5 +1,8 @@
 import type { Redis } from 'ioredis';
 import { CappedMap } from '../../../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('whatsapp_uploaded_media');
 
 /**
  * Remembers which media id Meta gave a file, per (workspace, channel, phone number, sha256, mime), so the same file is not uploaded
@@ -27,8 +30,13 @@ export class RedisUploadedMediaCache implements UploadedMediaCache {
 
   async get(key: string): Promise<string | null> {
     try {
-      return await this.redis.get(key);
+      const id = await this.redis.get(key);
+      if (id !== null) cache.hit();
+      else cache.miss();
+      return id;
     } catch {
+      cache.error();
+      cache.miss();
       return null;
     }
   }

@@ -106,6 +106,13 @@ export class BroadcastsService {
     }
 
     return this.db.tx(async (tx) => {
+      // The check above keeps Reference's order of refusals; this one is under the lock, in the inserting transaction (QA Sheet3 #15, D-05).
+      await this.entitlements.lockLimit(tx, orgId, 'broadcasts');
+      await this.entitlements.assertWithinLimit(
+        orgId,
+        'broadcasts',
+        await this.repo.count(tx, orgId),
+      );
       const resolved = await this.senders.resolve(tx, orgId, input.senderKeys);
       // A mailbox sends campaigns (a typed message), never a template broadcast.
       if (resolved.some((s) => s.engine === 'email')) {

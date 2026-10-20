@@ -193,8 +193,8 @@ export class SegmentsService {
   async create(input: CreateSegmentInput): Promise<SegmentResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `segments` cap (live count; also covers "save this filter as a segment", which calls create).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'segments');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'segments');
       const rules = input.rules as unknown as SegmentGroup;
       await this.assertRulesValid(tx, ctx.orgId, rules);
 

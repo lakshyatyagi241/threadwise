@@ -32,6 +32,12 @@ export interface ProvisionInput {
   orgSettings: Record<string, unknown>;
   /** The registration policy: the plan slug it names (null = none) and the free-trial length in days. */
   signupPlan: { defaultPlanSlug: string | null; trialDays: number };
+  /**
+   * Public sign-up: one identity, one account. The e-mail and the number are checked again INSIDE the transaction, under a lock, because
+   * the check the route made earlier and this insert are two steps (QA Sheet3 #15, CC-AUTH-01: six sign-ups at once made six accounts).
+   * Left off by the paths that open an extra workspace for an existing person.
+   */
+  exclusiveIdentity?: boolean;
 }
 
 export interface ProvisionResult {
@@ -167,23 +173,54 @@ export class TenantDirectory {
    * goes through `activeOrgsForEmail` instead.
    */
   async identityExists(email: string, phoneE164: string | null): Promise<boolean> {
-    return this.db.privileged(async (tx) => {
-      // Two independent EXISTS probes, each on its own indexed column (idx_users_email,
-      // idx_user_profiles_phone_e164), instead of one LEFT JOIN with OR: a join across two tables
-      // can't use either index for the OR, so it fell back to a full scan on this public,
-      // unauthenticated, privileged() query.
-      const res = await tx.execute(
-        phoneE164
-          ? sql`
-              SELECT
-                EXISTS(SELECT 1 FROM users WHERE email = ${email})
-                OR EXISTS(SELECT 1 FROM user_profiles WHERE phone_e164 = ${phoneE164})
-                AS found
-            `
-          : sql`SELECT EXISTS(SELECT 1 FROM users WHERE email = ${email}) AS found`,
+    return this.db.privileged((tx) => this.identityExistsIn(tx, email, phoneE164));
+  }
+
+  /** Takes the e-mail lock (then the number's, always in that order), then 409s when either already has an account. */
+  private async assertIdentityFree(tx: Tx, email: string, phoneE164: string | null): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`signup-identity:${email}`}, 0))`,
+    );
+    if (phoneE164) {
+      await tx.execute(
+        sql`SELECT pg_advisory_xact_lock(hashtextextended(${`signup-identity:${phoneE164}`}, 0))`,
       );
-      return (res.rows[0] as { found: boolean } | undefined)?.found === true;
-    });
+    }
+    if (!(await this.identityExistsIn(tx, email, phoneE164))) return;
+    throw new AppError(
+      ERROR_CODES.AUTH_IDENTITY_EXISTS,
+      'An account with this email already exists.',
+      HttpStatus.CONFLICT,
+      [
+        {
+          path: 'email',
+          message:
+            'An account with this email already exists. Sign in, or ask a workspace admin to invite you.',
+        },
+      ],
+    );
+  }
+
+  private async identityExistsIn(
+    tx: Tx,
+    email: string,
+    phoneE164: string | null,
+  ): Promise<boolean> {
+    // Two independent EXISTS probes, each on its own indexed column (idx_users_email,
+    // idx_user_profiles_phone_e164), instead of one LEFT JOIN with OR: a join across two tables
+    // can't use either index for the OR, so it fell back to a full scan on this public,
+    // unauthenticated, privileged() query.
+    const res = await tx.execute(
+      phoneE164
+        ? sql`
+            SELECT
+              EXISTS(SELECT 1 FROM users WHERE email = ${email})
+              OR EXISTS(SELECT 1 FROM user_profiles WHERE phone_e164 = ${phoneE164})
+              AS found
+          `
+        : sql`SELECT EXISTS(SELECT 1 FROM users WHERE email = ${email}) AS found`,
+    );
+    return (res.rows[0] as { found: boolean } | undefined)?.found === true;
   }
 
   /**
@@ -199,6 +236,7 @@ export class TenantDirectory {
     inTx: (tx: Tx, result: ProvisionResult) => Promise<void>,
   ): Promise<ProvisionResult> {
     return this.db.privileged(async (tx) => {
+      if (input.exclusiveIdentity) await this.assertIdentityFree(tx, input.email, input.phoneE164);
       // The PLAN domain decides the plan (4-step resolution) and the trial; this
       // domain only stores the answer, in the same transaction as the org.
       const plan = await this.plans.resolveInitialPlan(tx, {

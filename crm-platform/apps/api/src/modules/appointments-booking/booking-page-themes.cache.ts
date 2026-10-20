@@ -1,6 +1,9 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('booking_page_theme');
 
 /**
  * The booking page's look, cached per workspace (BL-355). Every visit to a booking page needs it, and it changes a few times a year:
@@ -21,8 +24,13 @@ export class BookingPageThemesCache {
   async get<T>(orgId: number): Promise<T | null> {
     try {
       const raw = await this.redis.get(key(orgId));
-      return raw ? (JSON.parse(raw) as T) : null;
+      const value = raw ? (JSON.parse(raw) as T) : null;
+      if (value) cache.hit();
+      else cache.miss();
+      return value;
     } catch (err) {
+      cache.error();
+      cache.miss();
       this.logger.warn({ err: String(err) }, 'booking page theme cache read failed');
       return null;
     }

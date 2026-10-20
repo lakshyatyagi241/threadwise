@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { PlanFeatureKey, PlanLimitKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 
 /**
@@ -20,6 +21,11 @@ export class FormsPlan {
 
   isEnabled(orgId: number): Promise<boolean> {
     return this.entitlements.featureEnabled(orgId, FORMS_FEATURE);
+  }
+
+  /** Serialises form creation per workspace until the caller's transaction ends (QA Sheet3 #15, D-05). */
+  lockForms(tx: Tx, orgId: number): Promise<void> {
+    return this.entitlements.lockLimit(tx, orgId, FORMS_LIMIT);
   }
 
   /** 422 PLAN_LIMIT_REACHED when one more active form would pass the plan's cap (0 = unlimited). */

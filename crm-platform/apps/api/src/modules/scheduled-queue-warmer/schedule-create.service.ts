@@ -152,6 +152,8 @@ export class ScheduleCreateService {
       .filter((p) => p.recipients.length > 0);
     const ids: string[] = [];
     const created = await this.db.tx(async (tx) => {
+      // The check above is the early, cheap refusal; this one is under the lock, in the inserting transaction (QA Sheet3 #15, D-05).
+      await this.usage.assertCanAddIn(tx, orgId, 'scheduled_messages');
       if (input.scheduleType === 'once') {
         const reasons = await this.warmer.hold(
           tx,

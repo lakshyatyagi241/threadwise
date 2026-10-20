@@ -116,8 +116,8 @@ export class SavedRepliesService {
     const ctx = RequestContextStore.require();
     const caller = this.caller(ctx);
     // The plan's cap counts every reply of the workspace, personal ones too, and is checked before anything else (422 PLAN_LIMIT_REACHED).
-    await this.usage.assertCanAdd(ctx.orgId, 'saved_replies');
     return this.db.tx(async (tx) => {
+      await this.usage.assertCanAddIn(tx, ctx.orgId, 'saved_replies');
       const ownerId = input.scope === 'mine' ? caller.userId : null;
       return this.insertCopy(tx, ctx, caller, {
         ownerId,
@@ -220,8 +220,8 @@ export class SavedRepliesService {
   async duplicate(uuid: string): Promise<SavedReply> {
     const ctx = RequestContextStore.require();
     const caller = this.caller(ctx);
-    await this.usage.assertCanAdd(ctx.orgId, 'saved_replies');
     return this.db.tx(async (tx) => {
+      await this.usage.assertCanAddIn(tx, ctx.orgId, 'saved_replies');
       const src = await this.repo.byUuid(tx, ctx.orgId, caller.userId, uuid);
       if (!src) throw notFound();
       const ownerId = ownership(src).userId;

@@ -4,6 +4,7 @@ import { dirname, join } from 'node:path';
 import { PerformanceObserver, constants as perfConstants } from 'node:perf_hooks';
 import { getHeapStatistics } from 'node:v8';
 import { EventLoopSampler, classifySnapshot, type EventLoopSnapshot } from './event-loop-sampler';
+import { cacheFamilies } from './cache-metrics';
 import { Registry, type Counter, type Gauge, type Histogram } from './prometheus-text';
 
 /** The process kinds that report. `api` and `worker` are the names Sentry uses, so a worker is the same worker in both. */
@@ -115,6 +116,7 @@ export class RuntimeMonitor {
       instance,
       ...(opts.release ? { release: opts.release } : {}),
     });
+    for (const f of cacheFamilies) this.registry.add(f);
     this.intervalMs = opts.intervalMs ?? 10_000;
     this.sampler = new EventLoopSampler({ windowHintMs: this.intervalMs });
     this.blockedLogThresholdMs = opts.blockedLogThresholdMs ?? 250;

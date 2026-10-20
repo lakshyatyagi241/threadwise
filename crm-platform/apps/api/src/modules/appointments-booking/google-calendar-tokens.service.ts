@@ -17,6 +17,9 @@ import {
   type CalendarConnectionRow,
 } from './google-calendar-connection.repository';
 import { CappedMap, setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('google_calendar_connection');
 
 export const CALENDAR_AUDIT_MODULE = 'appointment_calendar';
 
@@ -89,7 +92,11 @@ export class GoogleCalendarTokens {
     opts: { fresh?: boolean } = {},
   ): Promise<CalendarConnectionRow | null> {
     const hit = this.rows.get(orgId);
-    if (!opts.fresh && hit && Date.now() - hit.at < CONNECTION_TTL_MS) return hit.row;
+    if (!opts.fresh && hit && Date.now() - hit.at < CONNECTION_TTL_MS) {
+      cache.hit();
+      return hit.row;
+    }
+    cache.miss();
     const row =
       (await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.find(tx, orgId))) ?? null;
     setCapped(this.rows, orgId, { at: Date.now(), row }, CALENDAR_CONNECTION_CACHE_MAX);

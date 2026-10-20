@@ -160,6 +160,7 @@ export class MembersService {
   async invite(raw: unknown): Promise<InviteWspMemberResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
+      await this.entitlements.lockLimit(tx, ctx.orgId, 'users');
       await this.entitlements.assertWithinLimit(
         ctx.orgId,
         'users',

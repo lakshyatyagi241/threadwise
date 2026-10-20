@@ -1,0 +1,94 @@
+{
+  "item": "Sheet3 #65 cache hit-rate monitoring",
+  "generated": "2026-10-20",
+  "how": {
+    "ratios": "apps/api/test/unit/cache-audit/workload-ratios.spec.ts (CACHE_RATIO_OUT=...)",
+    "overhead": "apps/api/test/unit/cache-audit/overhead.bench.spec.ts run alternately (5 rounds) on this branch and on its merge-base with origin/main (same file, same machine), median of 9 repeats x 200,000 calls per round; bare helper: node microbenchmark"
+  },
+  "workloadRatios": {
+    "steady": {
+      "cache": "notification_prefs",
+      "requests": 5000,
+      "workspaces": 50,
+      "hits": 4950,
+      "misses": 50,
+      "errors": 0,
+      "ratio": 0.99
+    },
+    "ttlChurn": {
+      "cache": "booking_page_theme",
+      "requests": 3000,
+      "workspaces": 100,
+      "minutes": 30,
+      "ttlSeconds": 120,
+      "hits": 1986,
+      "misses": 1014,
+      "errors": 0,
+      "ratio": 0.662
+    },
+    "outage": {
+      "cache": "org_suspension",
+      "requests": 1000,
+      "redisDownRequests": 200,
+      "hits": 799,
+      "misses": 201,
+      "errors": 200,
+      "ratio": 0.799,
+      "errorRatio": 0.2
+    },
+    "known": {
+      "cache": "notification_prefs",
+      "requests": 100,
+      "hits": 80,
+      "misses": 20,
+      "errors": 0,
+      "ratio": 0.8
+    }
+  },
+  "overhead": {
+    "bareCounterCall": {
+      "n": 20000000,
+      "medianNsPerCall": 17.41,
+      "minNs": 16.36,
+      "maxNs": 17.98,
+      "note": "cacheMetrics(...).hit()/.miss() alone, node v22.22.2, 9 runs"
+    },
+    "perCacheCall": {
+      "in-process: notification prefs hit": {
+        "withCountersNs": 107,
+        "withoutCountersNs": 98,
+        "differenceNs": 9,
+        "withRunsNs": [108, 204, 107, 91, 81],
+        "withoutRunsNs": [123, 97, 99, 93, 98]
+      },
+      "in-process: token epoch hit": {
+        "withCountersNs": 107,
+        "withoutCountersNs": 84,
+        "differenceNs": 23,
+        "withRunsNs": [107, 111, 108, 85, 75],
+        "withoutRunsNs": [84, 91, 83, 78, 139]
+      },
+      "redis class: booking theme hit (fake redis)": {
+        "withCountersNs": 494,
+        "withoutCountersNs": 497,
+        "differenceNs": -3,
+        "withRunsNs": [574, 494, 546, 434, 396],
+        "withoutRunsNs": [495, 534, 497, 502, 483]
+      },
+      "redis class: workspace suspension hit (fake redis)": {
+        "withCountersNs": 464,
+        "withoutCountersNs": 486,
+        "differenceNs": -22,
+        "withRunsNs": [551, 464, 470, 396, 369],
+        "withoutRunsNs": [544, 486, 427, 536, 413]
+      },
+      "redis class: account gate hit (fake redis)": {
+        "withCountersNs": 754,
+        "withoutCountersNs": 726,
+        "differenceNs": 28,
+        "withRunsNs": [843, 897, 754, 578, 559],
+        "withoutRunsNs": [806, 754, 708, 726, 614]
+      }
+    }
+  }
+}

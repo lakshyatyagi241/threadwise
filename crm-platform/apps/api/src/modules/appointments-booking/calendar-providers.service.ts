@@ -7,6 +7,9 @@ import type { CalendarStatus, CalendarSyncPort } from '../../infra/providers/app
 import { GoogleCalendarAdapter } from './google-calendar.adapter';
 import { MicrosoftCalendarAdapter } from './microsoft-calendar.adapter';
 import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('calendar_provider_preference');
 
 /** How long a process keeps a workspace's choice before asking again (a change made in this process drops it at once). */
 const PREFERENCE_TTL_MS = 10_000;
@@ -56,7 +59,11 @@ export class CalendarProviders {
 
   async preference(orgId: number): Promise<CalendarProvider | null> {
     const hit = this.preferences.get(orgId);
-    if (hit && Date.now() - hit.at < PREFERENCE_TTL_MS) return hit.provider;
+    if (hit && Date.now() - hit.at < PREFERENCE_TTL_MS) {
+      cache.hit();
+      return hit.provider;
+    }
+    cache.miss();
     const provider = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.readPreference(tx, orgId),
     );

@@ -1,6 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('conversation_read_state');
 
 /** How long "I just read this chat" is remembered. It only has to outlive the outbox drain's latency (about 2 seconds) with margin. */
 const SEEN_TTL_MS = 60_000;
@@ -46,10 +49,13 @@ export class ConversationReadState {
     try {
       const values = await this.redis.mget(userIds.map((u) => key(orgId, u, conversationUuid)));
       values.forEach((v, i) => {
+        if (v === null) cache.miss();
+        else cache.hit();
         // A read a moment BEFORE the message cannot have been about it; allow one second for the two clocks.
         if (v !== null && Number(v) >= sinceMs - 1000) seen.add(userIds[i]!);
       });
     } catch {
+      cache.error();
       /* best effort */
     }
     return seen;

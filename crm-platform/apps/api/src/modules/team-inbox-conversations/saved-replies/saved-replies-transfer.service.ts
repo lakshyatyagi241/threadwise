@@ -156,6 +156,7 @@ export class SavedRepliesTransferService {
         ctx.orgId,
         valid.map((r) => r.row.shortcut),
       );
+      await this.entitlements.lockLimit(tx, ctx.orgId, 'saved_replies');
       const used = await this.repo.total(tx, ctx.orgId);
       let held = used;
 

@@ -48,7 +48,14 @@
     "rbac-real-redis.spec.ts",
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "rbac_grants"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R02",
@@ -88,7 +95,14 @@
    "status": "ok",
    "tests": [
     "rbac-real-redis.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "rbac_version"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R03",
@@ -128,7 +142,14 @@
    "status": "ok",
    "tests": [
     "redis-failure.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "platform_rbac"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R04",
@@ -170,7 +191,14 @@
     "redis-failure.spec.ts",
     "stale-windows.spec.ts",
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "account_gate"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R05",
@@ -211,7 +239,14 @@
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts",
     "stale-windows.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "org_suspension"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R06",
@@ -252,7 +287,14 @@
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts",
     "stale-windows.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "partner_agent_status"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R07",
@@ -295,7 +337,14 @@
     "redis-failure.spec.ts",
     "stale-windows.spec.ts"
    ],
-   "ttlException": "Deliberately has no TTL: it is the mirror of a durable setting."
+   "ttlException": "Deliberately has no TTL: it is the mirror of a durable setting.",
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "epoch_redis"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R08",
@@ -333,7 +382,14 @@
    },
    "hitMissPoint": "emergency-halt.service.ts read path.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "emergency_halt"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "R09",
@@ -373,7 +429,17 @@
    "status": "ok",
    "tests": [
     "(existing) jwt-guard-partner-and-redis.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "session_revocation"
+    ],
+    "hitRatioAlert": false,
+    "alsoIn": [
+     "apps/api/src/modules/auth/guards/jwt-auth.guard.ts"
+    ]
+   }
   },
   {
    "id": "R10",
@@ -411,7 +477,14 @@
    },
    "hitMissPoint": "impersonation.service.ts tombstoned().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "impersonation_tombstone"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R11",
@@ -451,7 +524,14 @@
    "tests": [
     "tenant-leak.spec.ts",
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "analytics_query"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R12",
@@ -490,7 +570,14 @@
    "status": "ok",
    "tests": [
     "tenant-leak.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "campaign_summary"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R13",
@@ -529,7 +616,14 @@
    "status": "ok",
    "tests": [
     "tenant-leak.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "sms_lookup"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R14",
@@ -567,7 +661,14 @@
    },
    "hitMissPoint": "kb-embedding.service.ts getBuffer(key).",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "kb_query_embedding"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R15",
@@ -605,7 +706,14 @@
    },
    "hitMissPoint": "translation.service.ts: cache.get(key).",
    "status": "open:R-64-03",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "translation"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R16",
@@ -643,7 +751,14 @@
    },
    "hitMissPoint": "languages.service.ts around redis.get.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "active_languages"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R17",
@@ -684,7 +799,14 @@
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts",
     "stale-windows.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "booking_page_theme"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R18",
@@ -721,7 +843,14 @@
    },
    "hitMissPoint": "waba-groups-admin.service.ts around line 107.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "waba_groups_eligibility"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R19",
@@ -761,7 +890,14 @@
    "tests": [
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "whatsapp_uploaded_media"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R20",
@@ -801,7 +937,14 @@
    "tests": [
     "tenant-leak.spec.ts",
     "redis-failure.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "idempotency"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R21",
@@ -838,7 +981,14 @@
    },
    "hitMissPoint": "checkout.service.ts reserve().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "storefront_checkout_idempotency"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R22",
@@ -875,7 +1025,14 @@
    },
    "hitMissPoint": "channel-dispatcher.service.ts readStored().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "chat_dispatch_result"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R23",
@@ -912,7 +1069,14 @@
    },
    "hitMissPoint": "conversation-read-state.ts seenSince().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "conversation_read_state"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R24",
@@ -949,7 +1113,15 @@
    },
    "hitMissPoint": "ai-crm-copilot.service.ts around line 290.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "copilot_history",
+     "copilot_pending"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R25",
@@ -986,7 +1158,14 @@
    },
    "hitMissPoint": "mail-limits.ts mget.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "mail_bounced_flag"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "R26",
@@ -1026,7 +1205,14 @@
    "status": "ok",
    "tests": [
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "health_snapshot"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "D01",
@@ -1065,7 +1251,14 @@
    },
    "hitMissPoint": "gateway.service.ts planCache.find().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "gateway_plan"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M01",
@@ -1108,7 +1301,14 @@
     "tenant-leak.spec.ts",
     "stale-windows.spec.ts",
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "member_directory"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M02",
@@ -1148,7 +1348,14 @@
    "status": "ok",
    "tests": [
     "stale-windows.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "epoch_local"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M03",
@@ -1186,7 +1393,14 @@
    },
    "hitMissPoint": "platform-settings.service.ts snapshot read.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "platform_settings"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M04",
@@ -1224,7 +1438,14 @@
    },
    "hitMissPoint": "plan-store.ts graceDays().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "billing_grace_days"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M05",
@@ -1266,7 +1487,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "impersonation_open"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M06",
@@ -1307,7 +1535,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "trial_verdict"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M07",
@@ -1346,7 +1581,14 @@
    },
    "hitMissPoint": "session.service.ts isRevocationPending().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "session_revocation_pending"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M08",
@@ -1389,7 +1631,14 @@
     "bounded-caches.spec.ts",
     "tenant-leak.spec.ts",
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "consent_settings"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M09",
@@ -1430,7 +1679,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "consent_minor_rule"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M10",
@@ -1472,7 +1728,14 @@
    "tests": [
     "tenant-leak.spec.ts",
     "stale-windows.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "notification_prefs"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M11",
@@ -1511,7 +1774,14 @@
    },
    "hitMissPoint": "branding-footer.service.ts resolve().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "branding_footer"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M12",
@@ -1551,7 +1821,14 @@
    },
    "hitMissPoint": "persona.service.ts view().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "persona_view"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M13",
@@ -1592,7 +1869,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "google_calendar_connection"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M14",
@@ -1633,7 +1917,14 @@
    "status": "ok",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "google_calendar_busy"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M15",
@@ -1674,7 +1965,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "calendar_provider_preference"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M16",
@@ -1716,7 +2014,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "webhook_delivery_target"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M17",
@@ -1755,7 +2060,14 @@
    },
    "hitMissPoint": "wallet-gate.service.ts sendOk.get().",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "wallet_send_ok"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M18",
@@ -1794,7 +2106,18 @@
    },
    "hitMissPoint": "meta-rate-card.service.ts costs.get(); rate-card.service.ts cache.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "meta_rate_card",
+     "rate_card"
+    ],
+    "hitRatioAlert": true,
+    "alsoIn": [
+     "apps/api/src/modules/wallet-message-billing/rate-card.service.ts"
+    ]
+   }
   },
   {
    "id": "M19",
@@ -1832,7 +2155,14 @@
    },
    "hitMissPoint": "currency.service.ts.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "currency"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "M20",
@@ -1872,7 +2202,14 @@
    "status": "ok",
    "tests": [
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "module_registry"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M21",
@@ -1910,7 +2247,18 @@
    },
    "hitMissPoint": "provider-router.service.ts, whatsapp-provider-resolver.ts.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "translation_providers",
+     "whatsapp_providers"
+    ],
+    "hitRatioAlert": false,
+    "alsoIn": [
+     "apps/api/src/modules/whatsapp-provider-registry/whatsapp-provider-resolver.ts"
+    ]
+   }
   },
   {
    "id": "M22",
@@ -1950,7 +2298,14 @@
    "status": "ok",
    "tests": [
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "api_v1_docs"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M23",
@@ -1992,7 +2347,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "inbox_bridge_channel"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M24",
@@ -2034,7 +2396,14 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "display_id_batch"
+    ],
+    "hitRatioAlert": false
+   }
   },
   {
    "id": "M25",
@@ -2077,7 +2446,12 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Memo of immutable Intl.DateTimeFormat objects and zone-name answers: it can only be wrong by being absent, it holds no tenant data and costs microseconds on a miss, so a hit ratio is not an operational signal."
+   }
   },
   {
    "id": "M26",
@@ -2117,7 +2491,12 @@
    },
    "hitMissPoint": "n/a",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Throttle markers (last touch, last publish): a lookup that answers \"skip this write\" is rate limiting, not a cache of a source value, so hit and miss have no meaning for a dashboard."
+   }
   },
   {
    "id": "M27",
@@ -2158,7 +2537,12 @@
    "status": "ok",
    "tests": [
     "stampede.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "In-flight sharing maps (promise coalescing) and token-refresh locks: entries live only while a call runs, they are a de-duplication device and not a cache of results."
+   }
   },
   {
    "id": "M28",
@@ -2199,7 +2583,12 @@
    "status": "fixed:D-64-02",
    "tests": [
     "bounded-caches.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Memory fallbacks used only in tests or when no Redis is bound; production traffic goes through the Redis classes, which are instrumented (R19, R15)."
+   }
   },
   {
    "id": "M29",
@@ -2238,7 +2627,14 @@
    },
    "hitMissPoint": "google-oidc.verifier.ts.",
    "status": "ok",
-   "tests": []
+   "tests": [],
+   "instrumentation": {
+    "instrumented": true,
+    "metrics": [
+     "google_oidc_keys"
+    ],
+    "hitRatioAlert": true
+   }
   },
   {
    "id": "Q01",
@@ -2278,7 +2674,12 @@
    "status": "ok",
    "tests": [
     "(existing) auth-prefetch.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Per-request hand-over of Redis reads the guard started early. The underlying reads are counted at their own caches (R01 to R05); counting them again here would double every number."
+   }
   },
   {
    "id": "Q02",
@@ -2318,7 +2719,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "React's per-request cache() in the Next server: the framework memoises internally and exposes no hit or miss hook; wrapping every cached function would change call signatures in many features files."
+   }
   },
   {
    "id": "N01",
@@ -2358,7 +2764,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "Next.js data cache (fetch with revalidate): hits and misses are decided inside Next and are not exposed to application code; only an x-nextjs-cache response header carries them, which is not scraped."
+   }
   },
   {
    "id": "N02",
@@ -2398,7 +2809,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "A response header table in next.config.ts: it states a policy and has no lookup, so there is nothing to count."
+   }
   },
   {
    "id": "N03",
@@ -2440,7 +2856,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "Frame-policy memo runs in proxy.ts. Whether the Next proxy bundle shares module state with the instrumentation.ts bundle that serves /metrics was not provable without a production Next build and scrape, so no counter was wired rather than claim one that may never be scraped."
+   }
   },
   {
    "id": "H01",
@@ -2480,7 +2901,12 @@
    "status": "ok",
    "tests": [
     "ratchet.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "A response header (Cache-Control) set by middleware: the cache that obeys it is the browser or a CDN, which the server cannot observe; the header itself has no hit or miss."
+   }
   },
   {
    "id": "H02",
@@ -2520,7 +2946,12 @@
    "status": "ok",
    "tests": [
     "ratchet.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Cache-Control header on media: the cache is the browser, invisible to the server. A server-side counter would only count requests, which the HTTP metrics already do."
+   }
   },
   {
    "id": "H03",
@@ -2560,7 +2991,12 @@
    "status": "ok",
    "tests": [
     "ratchet.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Cache-Control and ETag on avatars and brand assets: hits happen in the browser and never reach the server, so a server counter would be wrong by construction."
+   }
   },
   {
    "id": "H04",
@@ -2600,7 +3036,12 @@
    "status": "ok",
    "tests": [
     "ratchet.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Public immutable assets behind capability URLs: served from browser or CDN caches that the server cannot see."
+   }
   },
   {
    "id": "H05",
@@ -2640,7 +3081,12 @@
    "status": "ok",
    "tests": [
     "ratchet.spec.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-meaningful",
+    "reason": "Public short-lived JSON with ETag: only a 304 reaches the server, and it is already visible in the HTTP status-class metric; a cache-hit ratio from it would hide every browser-local hit."
+   }
   },
   {
    "id": "C01",
@@ -2681,7 +3127,12 @@
    "tests": [
     "user-menu.logout-cache.render.test.tsx",
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "TanStack Query in the browser: there is no scrape target in a user's browser. Counting would need a beacon endpoint (a new unauthenticated or tenant-bearing surface), which is a product decision, not an instrumentation edit."
+   }
   },
   {
    "id": "C02",
@@ -2720,7 +3171,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "Per-screen staleTime and gcTime overrides of the browser cache C01: same reason as C01."
+   }
   },
   {
    "id": "C03",
@@ -2759,7 +3215,12 @@
    "status": "ok",
    "tests": [
     "web cache-audit.test.ts"
-   ]
+   ],
+   "instrumentation": {
+    "instrumented": false,
+    "exemption": "not-observable",
+    "reason": "localStorage and sessionStorage preferences in the browser: no server can see them and they hold no source-of-truth data to be hit or missed."
+   }
   }
  ],
  "redisFamilies": [
@@ -3099,7 +3560,6 @@
  },
  "redisNoTtlAllowed": {
   "modules/auth/sessions/epoch.service.ts": "Durable mirror of a Postgres setting (R07): a flushed Redis is refilled from Postgres; an expiring epoch would silently re-validate revoked tokens.",
-  "modules/auth/security/branding-footer.service.ts": "Version counter (S10): INCR only; a counter that expires would reset to 1 and make old cached footers look current.",
   "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": "govKeys.global hash is the governor's durable platform config; every other key in the file expires.",
   "modules/node-bridge-runtime/runtime/group-limiter.ts": "DECR undoes an INCR on a key that was created with an expiry in the same MULTI.",
   "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": "Sorted set of live workers; members older than the window are removed on every write and the set holds one member per worker.",
@@ -3317,5 +3777,12 @@
   "apps/web/src/app/robots.txt/route.ts": "Platform robots.txt, 300 s; no credentials, same for everyone.",
   "apps/web/src/features/platform-settings-branding-storage/site/site-config.ts": "Public site settings (brand, SEO, theme, banner), 30 s, plus React cache() per request; the fetch sends only an Accept header, same for everyone.",
   "apps/web/src/features/developer-rest-api-v1/docs/lib/load-spec.ts": "Public API reference page (GET /docs/api.json, no key), 60 s; the fetch sends only an Accept header, same for everyone."
+ },
+ "instrumentationLegend": {
+  "instrumented": "true: crm_cache_{hits,misses,errors}_total{cache=<metric>} are counted at the hit/miss point (cacheMetrics in @crm/observability).",
+  "metrics": "The cache label value(s). Lowercase letters, digits and underscore, at most 48 characters, at most 128 names per process.",
+  "hitRatioAlert": "true: P0 cache whose hit ratio is a signal (a source value is being re-used), so CacheHitRatioLow may fire for it. false: P1, or hits are rare by design (tombstones, idempotency replays, a pending set) and a low ratio is normal. P1 ratios are still recorded.",
+  "alsoIn": "Files other than `location` that hold a counter call for this cache.",
+  "exemption": "not-meaningful: a counter would be wrong or empty by design. not-observable: a counter is meaningful but cannot be reached from the server process. Both need a written reason."
  }
 }
