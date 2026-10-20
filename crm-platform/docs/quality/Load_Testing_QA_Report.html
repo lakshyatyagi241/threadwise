@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Load Testing QA Report</title>
+    <style>
+      :root {
+        --bg: #f4f6f9;
+        --surface: #fff;
+        --ink: #141a26;
+        --muted: #586275;
+        --line: #dde2ea;
+        --accent: #2a49c9;
+        --pass: #17613a;
+        --pass-soft: #dff3e7;
+        --part: #8a4a00;
+        --part-soft: #fdeccf;
+        --fail: #8a2b1f;
+        --fail-soft: #fbe4df;
+        --info: #3d4f7a;
+        --info-soft: #e6ebf5;
+        --code-bg: #eef1f6;
+        --font: system-ui, -apple-system, 'Segoe UI', sans-serif;
+        --mono: ui-monospace, Menlo, monospace;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme='light']) {
+          --bg: #0f131b;
+          --surface: #171c27;
+          --ink: #e8ecf4;
+          --muted: #9aa5b8;
+          --line: #2a3242;
+          --accent: #8ea3f5;
+          --pass: #7fd6a2;
+          --pass-soft: #14301f;
+          --part: #f4c37a;
+          --part-soft: #3a2c14;
+          --fail: #f2a99c;
+          --fail-soft: #3a1d19;
+          --info: #aebbe0;
+          --info-soft: #232b40;
+          --code-bg: #0f1420;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        background: var(--bg);
+        color: var(--ink);
+        font: 14px/1.55 var(--font);
+        margin: 0;
+        padding: 28px 16px 80px;
+      }
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 34px;
+      }
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+      code,
+      pre {
+        font-family: var(--mono);
+      }
+      code {
+        background: var(--code-bg);
+        border-radius: 4px;
+        padding: 1px 5px;
+        font-size: 12.5px;
+        overflow-wrap: anywhere;
+      }
+      a {
+        color: var(--accent);
+      }
+      .eyebrow {
+        font-size: 11px;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+      }
+      h1 {
+        font-size: clamp(26px, 4.2vw, 36px);
+        line-height: 1.12;
+        font-weight: 600;
+      }
+      .lede {
+        color: var(--muted);
+        max-width: 70ch;
+        margin-top: 10px;
+      }
+      h2.sec {
+        font-size: 19px;
+        font-weight: 600;
+      }
+      .meta {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 18px;
+        margin-top: 14px;
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .meta b {
+        color: var(--ink);
+      }
+      .chip {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 600;
+        padding: 2px 9px;
+        border-radius: 999px;
+        white-space: nowrap;
+      }
+      .pass {
+        background: var(--pass-soft);
+        color: var(--pass);
+      }
+      .part {
+        background: var(--part-soft);
+        color: var(--part);
+      }
+      .fail {
+        background: var(--fail-soft);
+        color: var(--fail);
+      }
+      .info {
+        background: var(--info-soft);
+        color: var(--info);
+      }
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 12px;
+      }
+      .stat {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        padding: 14px 16px;
+      }
+      .stat b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 26px;
+        font-weight: 500;
+      }
+      .stat span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      .board {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+      th {
+        text-align: left;
+        font-size: 11px;
+        letter-spacing: 0.07em;
+        text-transform: uppercase;
+        color: var(--muted);
+        padding: 10px 14px;
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      td {
+        padding: 11px 14px;
+        border-top: 1px solid var(--line);
+        vertical-align: top;
+      }
+      tr:first-child td {
+        border-top: 0;
+      }
+      td.n {
+        font-family: var(--mono);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      .board table {
+        min-width: 720px;
+      }
+      .toc {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .toc a {
+        text-decoration: none;
+        font-size: 12.5px;
+        border: 1px solid var(--line);
+        background: var(--surface);
+        color: var(--ink);
+        border-radius: 999px;
+        padding: 4px 11px;
+      }
+      article.report {
+        background: var(--surface);
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        padding: 20px 22px 22px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      article.report > header {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--line);
+      }
+      .rt {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px 12px;
+        align-items: baseline;
+      }
+      .rt h2 {
+        font-size: 20px;
+        font-weight: 600;
+        flex: 1;
+        min-width: 200px;
+      }
+      .rt .id {
+        font-family: var(--mono);
+        color: var(--muted);
+        font-size: 12.5px;
+      }
+      dl.facts {
+        display: grid;
+        grid-template-columns: 150px 1fr;
+        margin: 0;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      dl.facts dt,
+      dl.facts dd {
+        margin: 0;
+        padding: 9px 12px;
+        border-top: 1px solid var(--line);
+      }
+      dl.facts dt:first-of-type,
+      dl.facts dd:first-of-type {
+        border-top: 0;
+      }
+      dl.facts dt {
+        background: var(--code-bg);
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      @media (max-width: 560px) {
+        dl.facts {
+          grid-template-columns: 1fr;
+        }
+      }
+      .blk h3 {
+        font-size: 11.5px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--muted);
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .blk ul,
+      .blk ol {
+        margin: 0;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .cases {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+      }
+      .cases table {
+        min-width: 640px;
+        font-size: 13px;
+      }
+      .cases td,
+      .cases th {
+        padding: 8px 12px;
+      }
+      .res {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 10px;
+      }
+      .res div {
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .res b {
+        display: block;
+        font-family: var(--mono);
+        font-size: 20px;
+        font-weight: 500;
+      }
+      .res span {
+        color: var(--muted);
+        font-size: 12px;
+      }
+      pre {
+        margin: 0;
+        background: var(--code-bg);
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+      }
+      .note {
+        font-size: 12.5px;
+        color: var(--muted);
+      }
+      .warn {
+        font-size: 12.5px;
+        background: var(--part-soft);
+        color: var(--part);
+        border-radius: 6px;
+        padding: 8px 10px;
+      }
+      footer {
+        color: var(--muted);
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <header>
+        <div class="eyebrow">QA, security and performance backlog · Load testing (task #53)</div>
+        <h1>Load Testing QA Report</h1>
+        <p class="lede">
+          One task from the team sheet, handed over from Vedant: load testing, with 500 concurrent
+          active users as the baseline. <b>The baseline is not met on this machine.</b> At 500
+          active users 20.9% of requests failed and the median took 17.8 seconds; the highest stage
+          that stays usable is 100 users. The cause is specific and fixable: one inbox query takes
+          68% of all database time, and once it holds the pool of database connections every other
+          request waits and times out.
+        </p>
+        <div class="meta">
+          <span><b>Prepared by</b> Vishal</span><span><b>Date</b> 19 Oct 2026</span
+          ><span
+            ><b>Branch</b> <code>vishal/qa-load-testing</code> (from <code>main</code> at
+            <code>28fcc71c</code>)</span
+          ><span><b>Task owner on the sheet</b> Vedant</span>
+        </div>
+      </header>
+
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec">Summary</h2>
+        <div class="stats">
+          <div class="stat">
+            <b>500</b><span>concurrent active users asked; 20.9% of requests failed</span>
+          </div>
+          <div class="stat"><b>100</b><span>highest stage that stays usable (p95 1.6 s)</span></div>
+          <div class="stat">
+            <b>16 to 23</b
+            ><span
+              >requests per second the system gives, flat from 200 users up (about 90 are needed for
+              500)</span
+            >
+          </div>
+          <div class="stat">
+            <b>68%</b><span>of all database time is one query (inbox counts)</span>
+          </div>
+          <div class="stat">
+            <b>2,118</b><span>requests answered 503 because the 20-connection pool was full</span>
+          </div>
+          <div class="stat"><b>0</b><span>stages inside the sheet's p95 budgets</span></div>
+        </div>
+        <p>
+          <b>How it was run.</b> Six stages (50, 100, 200, 350, 500, 750 users), each ramped for 60
+          s and held for 120 s, on a database with 100,000 contacts, 50,000 conversations and
+          1,000,000 messages. Each user is a signed-in staff member doing what staff do, with 3 to 8
+          seconds between actions. The first attempt signed everyone in as one user and every
+          request was refused: a user may hold only a few sessions at a time. 800 separate staff
+          accounts were seeded and the run repeated.
+        </p>
+        <p class="warn">
+          One machine with four cores shared by the load generator, the API, Postgres and Redis, one
+          API process and a pool of 20 database connections. Production likely has more of each, so
+          the number of users it carries will be higher; the shape of the failure is what carries
+          over. The sheet's second half, "raise from observed production demand", could not be done:
+          there are no production figures here, so the load was raised in fixed steps.
+        </p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Result against the sheet's target</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Task</th>
+                <th>Sheet target</th>
+                <th>Result</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="n">#53</td>
+                <td><a href="#qa-53">Load testing</a></td>
+                <td>
+                  500 concurrent active users baseline; then raise from observed production demand
+                </td>
+                <td>
+                  Baseline run and failed: 20.9% errors, p95 33 s. Usable up to 100 users on this
+                  machine. Raised to 750; no production figures to raise from.
+                </td>
+                <td><span class="chip fail">Not met</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <nav class="toc">
+          <a href="#qa-53">#53 Load testing</a><a href="#def-h">Defect register</a>
+        </nav>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec">Test environment and tools</h2>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Machine</td>
+                <td>
+                  Cloud Linux container, 4 cores, 15 GB. No Docker. Everything on this one machine.
+                </td>
+              </tr>
+              <tr>
+                <td>Stack</td>
+                <td>
+                  Postgres 16 (pgvector 0.8, <code>pg_stat_statements</code>), Redis 7, the API
+                  built from <code>main</code> and run with <code>NODE_ENV=production</code> as one
+                  process, <code>DB_POOL_MAX=20</code>, 546 migrations applied
+                </td>
+              </tr>
+              <tr>
+                <td>Data</td>
+                <td>
+                  One organisation: 100,000 contacts, 5,000 companies, 20,000 tasks, 50,000
+                  conversations, 1,000,000 messages, 801 staff users (copies of the first admin, so
+                  full permissions). Synthetic only
+                </td>
+              </tr>
+              <tr>
+                <td>Load tool</td>
+                <td>
+                  k6 1.4.0, stages of <code>ramping-vus</code>; sampler for CPU and memory every 2 s
+                </td>
+              </tr>
+              <tr>
+                <td>What did not run</td>
+                <td>
+                  A production-like stack, several API instances, a soak run, the light variant
+                  without the inbox aggregates, websocket and provider traffic
+                </td>
+              </tr>
+              <tr>
+                <td>Severity scale</td>
+                <td>
+                  <b>High</b> real harm possible or a release blocker · <b>Medium</b> wrong
+                  behaviour or a gap the team can hit · <b>Low</b> cosmetic or a limit worth knowing
+                  · <b>Info</b> recorded for awareness
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div id="reports" style="display: flex; flex-direction: column; gap: 22px"></div>
+
+      <section style="display: flex; flex-direction: column; gap: 12px">
+        <h2 class="sec" id="def-h">Defect and finding register</h2>
+        <p class="note">Numbered L-xx. "Recorded" means written down, not changed.</p>
+        <div class="board">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Task</th>
+                <th>Finding</th>
+                <th>Severity</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="defects"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="blk" style="display: flex; flex-direction: column; gap: 10px">
+        <h2 class="sec">What is still open</h2>
+        <ul id="open"></ul>
+      </section>
+      <footer>
+        Sources: the team sheet "Action items" tab (load testing row), the repository, and the k6
+        run of 19 Oct 2026 kept in
+        <code>perf/results/load-full.json</code>. Nothing was measured on GitHub.
+      </footer>
+    </div>
+
+    <script>
+      const esc = (s) =>
+        String(s).replace(
+          /[&<>"]/g,
+          (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c],
+        );
+      const li = (a) => a.map((x) => `<li>${x}</li>`).join('');
+      const chip = (s) =>
+        ({
+          pass: '<span class="chip pass">Met</span>',
+          part: '<span class="chip part">Partly met</span>',
+          fail: '<span class="chip fail">Not met</span>',
+        })[s];
+      const R = [
+        {
+          id: 'qa-53',
+          n: 53,
+          t: 'Load testing',
+          status: 'fail',
+          type: 'Performance testing · many concurrent active users doing realistic work, stage by stage, until the system gives',
+          target:
+            '500 concurrent active users baseline; then raise from observed production demand',
+          summary:
+            'Six stages of concurrent active users (50, 100, 200, 350, 500, 750) were run against the API with a realistic mix of what staff do, 3 to 8 seconds between actions, on a database with 100,000 contacts, 50,000 conversations and 1,000,000 messages. <b>The 500-user baseline is not met on this machine</b>: 20.9% of requests failed and the median request took 17.8 seconds. The highest stage that stays usable is <b>100 users</b> (p95 1.6 s). The cause is clear: one query, the inbox counts, uses 68% of all database time, and once the connection pool of 20 is held by it, every other request waits and times out.',
+          what: 'Load testing asks how many people can use the product at the same time before it slows or fails. An "active" user is one who keeps working: opens the inbox, reads a conversation, searches contacts, glances at the dashboard, adds a task.',
+          objective:
+            'Run the 500-user baseline, then raise the load until the system fails, and say what gives out first.',
+          coverage:
+            'The 500-user baseline was run and fails. The sheet says to raise from observed production demand; no production figures were available in this environment, so the load was raised in fixed steps to 750 and the limit was found at about 100 users. Not done: a run on a production-like stack, the "light" variant without the inbox aggregates, a soak (long) run, and a run with more than one API instance.',
+          defects: 'L-01 (high), L-02 (high), L-03 (medium), L-04 (medium), L-05 (info).',
+          scope: [
+            'In: <code>perf/load.js</code> (staged users, think time, realistic action mix), the user seed, the stage report, the sampler with CPU readings, one full run of six stages.',
+            'Out: a production-like stack (several API instances, a separate database host), browser and websocket load, message sending to providers, a long soak run.',
+          ],
+          tools: [
+            'k6 1.4.0: stages of <code>ramping-vus</code> (60 s up, 120 s held), each with fresh users; 800 separate staff accounts signed in beforehand.',
+            '<code>tools/perf/load-report.mjs</code> (7 tests) for the verdicts and the markdown; <code>tools/perf/sample.mjs</code> for machine and API CPU, memory and queue depth.',
+            "<code>pg_stat_statements</code> for the database side; the API's own error log.",
+          ],
+          approach: [
+            "Defined an active user: 11 kinds of action with weights (inbox list 30%, one conversation's messages 15%, contacts list 15%, contacts search 10%, dashboard 10%, tasks, session and a task write 5% each, inbox counts 5%), 3 to 8 seconds of think time, so 500 users make about 90 requests per second.",
+            'First attempt: all users signed in as one account. Every result was a 401 within 7 ms. A user may hold only a few sessions at a time (a sixth sign-in signs the oldest out), so one shared login cannot be used. Seeded 800 staff users in the benchmark organisation instead (<code>tools/perf/seed-users.sql</code>).',
+            'Ran the six stages in one go, with the sampler beside it, against the API in production mode (one process, a pool of 20 database connections, the default).',
+            "Read <code>pg_stat_statements</code> and the API's error log to attribute the time and the errors.",
+          ],
+          cases: [
+            [
+              'C1',
+              '50 concurrent active users',
+              'Inside the p95 budgets',
+              'Errors 0%, 7.5 req/s. Class A p95 355 ms (budget 50), B 370 ms, C 491 ms. Usable, outside the budgets',
+              'Defect L-01',
+            ],
+            [
+              'C2',
+              '100 users',
+              'Inside the budgets',
+              'Errors 0.04%, 14.1 req/s. A p95 1,323 ms, B 1,237 ms, C 3,052 ms; all requests p95 1.56 s. Machine CPU 96%',
+              'Defect L-01',
+            ],
+            [
+              'C3',
+              '200 users',
+              'Inside the budgets',
+              'Errors 0.17%, 16.0 req/s (throughput stops growing). All requests p50 5.4 s, p95 12 s',
+              'Defect L-01',
+            ],
+            [
+              'C4',
+              '350 users',
+              'Inside the budgets',
+              'Errors 0.83%, 16.6 req/s. p95 27 s',
+              'Defect L-01',
+            ],
+            [
+              'C5',
+              '500 users (the sheet baseline)',
+              'Errors under 1%, p95 inside the budgets',
+              'Errors 20.9%, 20.2 req/s. p50 17.8 s, p95 33 s, p99 40 s',
+              'Defect L-01',
+            ],
+            ['C6', '750 users', 'Recorded', 'Errors 32.0%, 23.4 req/s, p95 44 s', 'Recorded'],
+            [
+              'C7',
+              'Memory and restarts',
+              'No restart, bounded memory',
+              'No restart; memory 1,139 MB to 1,286 MB over the run',
+              'Pass',
+            ],
+            [
+              'C8',
+              'Raise from observed production demand',
+              'Production figures',
+              'Not available here; stages raised to 750',
+              'Not run',
+            ],
+          ],
+          counts: [
+            ['6', 'stages run'],
+            ['0', 'stages inside the budgets'],
+            ['100', 'highest usable stage (users)'],
+            ['20.9%', 'errors at the 500-user baseline'],
+          ],
+          evidence: [
+            '<pre>Users  Req/s   Errors   A p95    B p95    C p95    All p50   All p95   Machine CPU\n   50    7.5    0.00%    355      370      491      188       375       65%\n  100   14.1    0.04%    1323     1237     3052     329       1557      96%\n  200   16.0    0.17%    10771    9698     14122    5376      12027     99%\n  350   16.6    0.83%    25740    23306    30124    13745     27174     99%\n  500   20.2    20.91%   31779    28585    40991    17823     33210     99%\n  750   23.4    31.96%   42882    39332    52463    24909     44332     99%   (ms)</pre>',
+            '<pre>Database time in this run, by statement (pg_stat_statements):\n  inbox counts (one aggregate over all conversations)   2,486 s of 3,674 s   68%   mean 355 ms   6,999 calls\n  contacts list                                           635 s              17%   mean 318 ms\n  dashboard (three queries)                               420 s              11%\n\nServer errors: 2,118 x 503 "A service this request depends on is temporarily unavailable",\nall from "timeout exceeded when trying to connect" (the pool of 20 connections was held by slow queries).</pre>',
+            'Files: <code>perf/results/load-full.json</code>, <code>load-full.md</code> and the sampler readings in <code>samples-load-full.json</code>.',
+          ],
+          limits: [
+            'One machine with four cores shared by k6, the API, Postgres and Redis; one API process; a pool of 20 database connections (the default). Production very likely has more of each, so the absolute number of users it carries will be higher. The shape (one query dominating, the pool filling, errors starting once it is full) is what carries over.',
+            "The sampler's database-connection reading did not work, so the pool-full diagnosis comes from the error log, not from a connection count.",
+            'The users are copies of the first admin, so they all have full permissions; ordinary agents may see less data and be cheaper.',
+            'The test is closed: each user waits for its answer. That is why throughput flattens at 16 to 23 requests per second while latency grows, instead of requests being refused.',
+            'Think time (3 to 8 s) and the action mix are assumptions; the real mix is not known without production data.',
+          ],
+          recs: [
+            'Fix the inbox counts first (a maintained counter, or counts that stop scanning all 50,000 conversations): it is 68% of database time. Then repeat this test; I expect the limit to move several times higher but have not measured it.',
+            'Make the contacts list cheaper (17% of database time) and cache the dashboard for a few seconds.',
+            'Give the pool and the statement timeout a deliberate setting for production, and return a quick 503 with Retry-After when the pool is full instead of letting every request wait 30 seconds.',
+            'Re-run on a production-like stack with several API instances and a separate database, at 500 users and then upward in steps, and replace the assumed action mix with the real one from production logs.',
+          ],
+          rerun:
+            '<pre>psql "$MIGRATION_DATABASE_URL" -f tools/perf/seed.sql\npsql "$MIGRATION_DATABASE_URL" -v users=800 -f tools/perf/seed-users.sql\nAPI_PID=&lt;pid&gt; node tools/perf/sample.mjs perf/results/samples-load-full.json --seconds 1800 &amp;\nk6 run perf/load.js -e USERS=50,100,200,350,500,750 -e RAMP=60 -e HOLD=120 -e MIX=full\nnode tools/perf/load-report.mjs perf/results/load-full.json --samples perf/results/samples-load-full.json</pre>',
+          files:
+            '<code>perf/load.js</code>, <code>perf/budgets.json</code> (load section), <code>tools/perf/load-report.mjs</code> and test, <code>tools/perf/seed-users.sql</code>, <code>tools/perf/sample.mjs</code> (CPU readings), <code>perf/results/load-full.*</code>, <code>docs/quality/load-testing.md</code>, <code>.github/workflows/perf.yml</code>',
+        },
+      ];
+      const DEFECTS = [
+        [
+          'L-01',
+          '53',
+          'The inbox counts query scans every conversation of the organisation and uses 68% of all database time under load (mean 355 ms, 2.4 s under contention). The inbox list calls it too. It limits the whole product to about 16 requests per second here.',
+          'High',
+          'Open: inbox owner (same as P5-01)',
+        ],
+        [
+          'L-02',
+          '53',
+          'With the pool of 20 connections held by slow queries, every other request waits for a connection and then fails: 2,118 503 answers in one run, and 21% of requests failed at 500 users. A full pool should answer fast with a 503 and Retry-After, not make every user wait about 30 seconds.',
+          'High',
+          'Open',
+        ],
+        [
+          'L-03',
+          '53',
+          'The contacts list takes 318 ms on average and 17% of database time with 100,000 contacts.',
+          'Medium',
+          'Open (same as P5-02)',
+        ],
+        [
+          'L-04',
+          '53',
+          'The 500-user baseline cannot be met by one API instance on this hardware: about 90 requests per second are needed and the system gives 16 to 23.',
+          'Medium',
+          'Open: repeat on a production-like stack after L-01',
+        ],
+        [
+          'L-05',
+          '53',
+          'A user may hold only about five sessions: the sixth sign-in signs the oldest out (seen with six sign-ins as one user). Fine for people; a load test or an integration that shares one login will be signed out.',
+          'Info',
+          'Recorded',
+        ],
+      ];
+      const OPEN = [
+        'Fix the inbox counts (L-01) and the contacts list (L-03), then repeat the load test at 500 users and upward.',
+        'Decide the production pool size and statement timeout, and make a full pool answer 503 with Retry-After at once (L-02).',
+        'Repeat on a production-like stack (several API instances, a separate database host, k6 on its own machine) and compare with these figures.',
+        'Get the real action mix and daily peak from production logs (Sentry or Vercel analytics) to replace the assumed mix and to set the stages above 500 from observed demand, as the sheet asks.',
+        "Fix the sampler's database-connection reading so the next run records pool use directly.",
+        'Run a soak: the baseline for one to two hours, watching memory and the slow-query log.',
+        'Review: the load-testing pull request.',
+      ];
+      const caseStatus = (s) =>
+        /^Pass/.test(s)
+          ? `<span class="chip pass">${esc(s)}</span>`
+          : /^Defect|^Open/.test(s)
+            ? `<span class="chip fail">${esc(s)}</span>`
+            : `<span class="chip info">${esc(s)}</span>`;
+      document.getElementById('reports').innerHTML = R.map(
+        (
+          r,
+        ) => `<article class="report" id="${r.id}"><header><div class="rt"><span class="id">QA task #${r.n}</span><h2>${esc(r.t)}</h2>${chip(r.status)}</div><p>${r.summary}</p></header>
+<dl class="facts"><dt>Type of testing</dt><dd>${esc(r.type)}</dd><dt>What it is</dt><dd>${r.what}</dd><dt>Objective</dt><dd>${r.objective}</dd><dt>Sheet target</dt><dd>${esc(r.target)}</dd><dt>Result against target</dt><dd>${r.coverage}</dd><dt>Defects</dt><dd>${r.defects}</dd></dl>
+<div class="blk"><h3>Scope</h3><ul>${li(r.scope)}</ul></div><div class="blk"><h3>Tools used</h3><ul>${li(r.tools)}</ul></div><div class="blk"><h3>Approach</h3><ol>${li(r.approach)}</ol></div>
+<div class="blk"><h3>Test cases and results</h3><div class="cases"><table><thead><tr><th>ID</th><th>Scenario</th><th>Expected</th><th>Actual</th><th>Status</th></tr></thead><tbody>${r.cases.map((c) => `<tr><td class="n">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td><td>${c[3]}</td><td>${caseStatus(c[4])}</td></tr>`).join('')}</tbody></table></div></div>
+<div class="blk"><h3>Execution summary</h3><div class="res">${r.counts.map((c) => `<div><b>${esc(c[0])}</b><span>${esc(c[1])}</span></div>`).join('')}</div></div>
+<div class="blk"><h3>Evidence</h3><div style="display:flex;flex-direction:column;gap:10px">${r.evidence.map((e) => (e.startsWith('<pre>') ? e : `<p class="note">${e}</p>`)).join('')}</div></div>
+<div class="blk"><h3>Limitations and risks</h3><ul>${li(r.limits)}</ul></div><div class="blk"><h3>Recommendations</h3><ul>${li(r.recs)}</ul></div>
+<div class="blk"><h3>How to re-run</h3>${r.rerun}</div><div class="blk"><h3>Files changed</h3><p class="note">${r.files}</p></div></article>`,
+      ).join('');
+      document.getElementById('defects').innerHTML = DEFECTS.map((d) => {
+        const sev = d[3] === 'High' ? 'fail' : d[3] === 'Medium' ? 'part' : 'info';
+        return `<tr><td class="n">${d[0]}</td><td class="n">${d[1] === 'all' ? 'all' : '#' + d[1]}</td><td>${d[2]}</td><td><span class="chip ${sev}">${d[3]}</span></td><td>${d[4]}</td></tr>`;
+      }).join('');
+      document.getElementById('open').innerHTML = li(OPEN);
+    </script>
+  </body>
+</html>
