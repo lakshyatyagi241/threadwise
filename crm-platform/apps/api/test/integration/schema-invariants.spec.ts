@@ -28,6 +28,13 @@ const PLATFORM_OWNED_ORG_POINTER_TABLES: ReadonlySet<string> = new Set([
   'failed_operations',
 ]);
 
+/**
+ * Children of a platform-owned table that carry no `org_id` of their own: they hang off one operator record by a plain foreign key
+ * (failed_operation_events -> failed_operations, ON DELETE CASCADE, migration 20261229090000_failed_operations). The parent's `org_id`
+ * is nullable and only a pointer, so a composite (org_id, id) key is impossible, and the child is privileged-only like the parent.
+ */
+const PLATFORM_OWNED_CHILD_TABLES: ReadonlySet<string> = new Set(['failed_operation_events']);
+
 describe('schema invariants', () => {
   let container: StartedPostgreSqlContainer;
   let owner: Client;
@@ -123,7 +130,14 @@ describe('schema invariants', () => {
       .map((r) => r.table)
       .sort();
     // workspace_preset_baseline: the global list of grants every organization's preset roles receive (select-only, migration-written)
-    expect(unprotected).toEqual(['_migrations', 'permission_defs', 'workspace_preset_baseline']);
+    // platform_releases: the product's own release history (migration 20270204090000_platform_releases): platform data with no tenant,
+    // written only by the deploy scripts as the database owner and read-only for the application roles (same class as permission_defs)
+    expect(unprotected).toEqual([
+      '_migrations',
+      'permission_defs',
+      'platform_releases',
+      'workspace_preset_baseline',
+    ]);
   });
 
   it('every foreign key into a tenant table carries org_id (a cross-tenant reference is structurally impossible)', async () => {
@@ -154,6 +168,14 @@ describe('schema invariants', () => {
     // (impersonation_sessions keeps the workspace it acts in as target_workspace_id, referencing users (org_id, id)).
     const offenders = rows
       .filter((r) => !r.parent_cols.includes('org_id'))
+      // a platform-owned child of a platform-owned parent (see PLATFORM_OWNED_CHILD_TABLES): not tenant data, no tenant to leak across
+      .filter(
+        (r) =>
+          !(
+            PLATFORM_OWNED_CHILD_TABLES.has(r.child) &&
+            PLATFORM_OWNED_ORG_POINTER_TABLES.has(r.parent)
+          ),
+      )
       .map((r) => `${r.child}.${r.conname} -> ${r.parent}`);
     expect(offenders).toEqual([]);
   });
