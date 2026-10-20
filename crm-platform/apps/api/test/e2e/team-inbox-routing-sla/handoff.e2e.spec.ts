@@ -184,7 +184,7 @@ describe('handoff: queue, claim, named person (every plan)', () => {
     expect(r.assignee_user_id).toBeNull();
     const c2 = await thread(t, ch);
     await handoff(t.admin, c2.uuid, { destination: { kind: 'team', teamId: team.uuid } });
-    const v = ((await p.api.as(t.admin).get(`/v2/inbox/conversations/${c2.uuid}`)).body.conversation ?? {}).rowVersion as number;
+    const v = Number((await row(c2.id)).row_version);
     const st = await p.api.as(t.admin).post(`/v2/inbox/conversations/${c2.uuid}/status`).set('idempotency-key', randomUUID()).send({ status: 'resolved', rowVersion: v });
     expect(st.status, JSON.stringify(st.body)).toBe(200);
     r = await row(c2.id);
@@ -204,19 +204,35 @@ describe('handoff: queue, claim, named person (every plan)', () => {
       },
     });
     const c = await thread(t, ch);
-    expect(calls).toContain(c.uuid);
+    const event = {
+      orgId: t.orgId,
+      channelId: ch.internalId,
+      conversationId: c.id,
+      contactId: null,
+      channelUuid: ch.id,
+      channelKind: 'simulator',
+      conversationUuid: c.uuid,
+      messageUuid: randomUUID(),
+      peerKey: c.from,
+      peerName: null,
+      createdConversation: false,
+      message: { kind: 'text' as const, body: 'hi', meta: {}, location: null, mediaKey: null },
+    };
+    // the simulator's own inbound message runs the hooks in the background too: let it finish before counting
+    await new Promise((r) => setTimeout(r, 1500));
+    calls.length = 0;
+    expect((await hooks.run(event)).consumed).toBe(false);
+    expect(calls).toEqual([c.uuid]);
+
     calls.length = 0;
     await handoff(t.admin, c.uuid, { destination: { kind: 'team', teamId: team.uuid } });
-    await simInbound(p, t, ch, { from: c.from, text: 'anyone there?' });
-    await until('second message stored', async () => {
-      const n = Number((await p.h.owner.query(`SELECT msg_seq FROM conversations WHERE id = $1`, [c.id])).rows[0].msg_seq);
-      return n >= 2 ? n : null;
-    });
-    await new Promise((r) => setTimeout(r, 500));
+    // muted: the bot is skipped and the auto reply that runs after the listeners is told the message is taken
+    expect((await hooks.run(event)).consumed).toBe(true);
     expect(calls).toEqual([]);
+
     await p.api.as(t.admin).post(`/v2/inbox/conversations/${c.uuid}/return-to-bot`).set('idempotency-key', randomUUID()).send({});
-    await simInbound(p, t, ch, { from: c.from, text: 'hello again' });
-    await until('bot answers again', async () => (calls.length > 0 ? calls : null));
+    expect((await hooks.run(event)).consumed).toBe(false);
+    expect(calls).toEqual([c.uuid]);
   });
 
   it('settings: a Basic plan can set what it has and is refused, with a reason, what it does not', async () => {
@@ -243,7 +259,7 @@ describe('handoff: queue, claim, named person (every plan)', () => {
     await p.h.owner.query(`UPDATE contacts SET owner_id = NULL WHERE id = $1`, [await contactOf(decided.id)]);
     for (const c of [free, decided]) {
       await handoff(t.admin, c.uuid, { destination: { kind: 'team', teamId: team.uuid } });
-      const v = ((await p.api.as(a1.token).get(`/v2/inbox/conversations/${c.uuid}`)).body.conversation ?? {}).rowVersion as number;
+      const v = Number((await row(c.id)).row_version);
       const res = await p.api.as(a1.token).post(`/v2/inbox/conversations/${c.uuid}/claim`).set('idempotency-key', randomUUID()).send({ rowVersion: v });
       expect(res.status, JSON.stringify(res.body)).toBe(200);
     }
@@ -380,11 +396,11 @@ describe('handoff on a plan with routing: rules, team method, owner modes, sync'
     await p.h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE id = $1`, [contactId, a2.userId]);
     const contactUuid = (await p.h.owner.query(`SELECT uuid FROM contacts WHERE id = $1`, [contactId])).rows[0].uuid as string;
     const sync = get(OwnerSyncConsumer);
-    expect(await sync.sync(t.orgId, contactUuid)).toBe(1);
+    expect(await asUser(t.orgId, a1.userId, () => sync.sync(t.orgId, contactUuid))).toBe(1);
     expect(Number((await row(auto.id)).assignee_user_id)).toBe(a2.userId);
     expect((await row(auto.id)).assigned_source).toBe('sync');
     expect(Number((await row(taken.id)).assignee_user_id)).toBe(a1.userId);
-    expect(await sync.sync(t.orgId, contactUuid)).toBe(0);
+    expect(await asUser(t.orgId, a1.userId, () => sync.sync(t.orgId, contactUuid))).toBe(0);
     expect((await setSettings({ ownerMode: 'independent' })).status).toBe(200);
   });
 
