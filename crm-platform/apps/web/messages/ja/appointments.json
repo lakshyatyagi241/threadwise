@@ -44,7 +44,8 @@
       "notDeletable": "今後の予約が残っている間は削除できません。",
       "notDrifted": "この予約はすでにGoogleのイベントと一致しています。最新の状態に更新しました。",
       "calendarNotConnected": "Google Calendarが接続されていません。Googleアカウントのページで再接続してから、もう一度お試しください。",
-      "calendarFailed": "Googleから応答がないか、変更が拒否されました。しばらくしてからもう一度お試しください。"
+      "calendarFailed": "Googleから応答がないか、変更が拒否されました。しばらくしてからもう一度お試しください。",
+      "whatsappNotConnected": "先に設定で WhatsApp Cloud API の番号を接続してください。WhatsApp メッセージはその番号を通じて送信されます。"
     },
     "picker": {
       "timeZone": "タイムゾーン",

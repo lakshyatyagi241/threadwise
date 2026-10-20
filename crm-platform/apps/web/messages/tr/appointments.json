@@ -44,7 +44,8 @@
       "notDeletable": "Gelecek rezervasyonları olduğu sürece bu silinemez.",
       "notDrifted": "Bu randevu zaten Google etkinliğiyle eşleşiyor. Sayfa yeniden yüklendi.",
       "calendarNotConnected": "Google Calendar bağlı değil. Google hesabı sayfasından yeniden bağlayıp tekrar deneyin.",
-      "calendarFailed": "Google yanıt vermedi veya değişikliği reddetti. Lütfen birazdan tekrar deneyin."
+      "calendarFailed": "Google yanıt vermedi veya değişikliği reddetti. Lütfen birazdan tekrar deneyin.",
+      "whatsappNotConnected": "Önce Ayarlar’dan bir WhatsApp Cloud API numarası bağlayın: WhatsApp mesajı böyle bir numara üzerinden gönderilir."
     },
     "picker": {
       "timeZone": "Saat dilimi",
