@@ -106,7 +106,7 @@ describe('teams v2 migrations: backfills, guards and the permission rollout', ()
     if (before) rmSync(before, { recursive: true, force: true });
   });
 
-  it('turns the lead flag into a role, picks the single flagged lead as manager, and drops is_lead', async () => {
+  it('turns the lead flag into a role, picks the single flagged lead as manager, and keeps is_lead in sync', async () => {
     const roles = (
       await owner.query(`SELECT team_id, user_id, role FROM team_members WHERE org_id = $1`, [
         ids.org,
@@ -122,10 +122,29 @@ describe('teams v2 migrations: backfills, guards and the permission rollout', ()
     ).rows;
     expect(Number(teams.find((t) => Number(t.id) === ids.tA)!.lead_user_id)).toBe(ids.solo);
     expect(teams.find((t) => Number(t.id) === ids.tB)!.lead_user_id).toBeNull();
-    const col = await owner.query(
-      `SELECT 1 FROM information_schema.columns WHERE table_name = 'team_members' AND column_name = 'is_lead'`,
+    // is_lead stays for the live slot (blue-green) and follows the role through a trigger.
+    await owner.query(
+      `UPDATE team_members SET is_lead = true WHERE org_id = $1 AND team_id = $2 AND user_id = $3`,
+      [ids.org, ids.tC, ids.multi],
     );
-    expect(col.rowCount).toBe(0);
+    let r = (
+      await owner.query(
+        `SELECT role, is_lead FROM team_members WHERE team_id = $1 AND user_id = $2`,
+        [ids.tC, ids.multi],
+      )
+    ).rows[0];
+    expect([r.role, r.is_lead]).toEqual(['lead', true]);
+    await owner.query(
+      `UPDATE team_members SET role = 'member' WHERE org_id = $1 AND team_id = $2 AND user_id = $3`,
+      [ids.org, ids.tC, ids.multi],
+    );
+    r = (
+      await owner.query(
+        `SELECT role, is_lead FROM team_members WHERE team_id = $1 AND user_id = $2`,
+        [ids.tC, ids.multi],
+      )
+    ).rows[0];
+    expect([r.role, r.is_lead]).toEqual(['member', false]);
   });
 
   it('gives a person on exactly one team that team as primary and a person on several none; the index allows one', async () => {

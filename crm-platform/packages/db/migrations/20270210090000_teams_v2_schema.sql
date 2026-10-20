@@ -11,11 +11,11 @@
 --   teams.receives_conversations  the team may be chosen as an inbox routing / assignment target (default true: nothing changes)
 --   teams.receives_records        the team may be chosen as a contact / company / deal assignment pool (default true)
 --   teams.is_scope_boundary       reserved for the `team_and_below` scope of phase T2 (default true; stored, not read yet)
---   team_members.role             'member' | 'lead' (replaces the unused is_lead)
+--   team_members.role             'member' | 'lead' (replaces the unused is_lead, which stays one release for the live slot, kept in sync by a trigger)
 --   team_members.is_primary       the person's main team for reporting; at most one per person (partial unique index)
 --
 -- Membership of a deactivated person is KEPT (decision D10) and invisible: the tenant policy of `team_members` now only shows rows whose
--- user is not inactive. Every scope query that joins `team_members` (contacts, companies, deals, tasks, invoices, appointments, forms,
+-- user is not inactive (a restrictive policy, added next to `tenant_isolation`). Every scope query that joins `team_members` (contacts, companies, deals, tasks, invoices, appointments, forms,
 -- call logs, the inbox visibility, routing) therefore ignores an inactive person on both sides of a peer join without a single
 -- repository changing, and reactivating the user (users.status) brings the memberships back. The privileged role still sees every row.
 --
@@ -91,7 +91,23 @@ FROM (
 ) one
 WHERE t.org_id = one.org_id AND t.id = one.team_id AND t.lead_user_id IS NULL;
 
-ALTER TABLE team_members DROP COLUMN is_lead;
+-- Expand-only (blue-green): `is_lead` stays for the slot still running the old code, which reads and writes it. New code reads `role`.
+-- This trigger keeps the two in step whichever one a writer sets. A follow-up migration drops the column one release later (BL-381).
+CREATE OR REPLACE FUNCTION team_members_sync_lead() RETURNS trigger
+  LANGUAGE plpgsql AS $$
+BEGIN
+  IF TG_OP = 'INSERT' THEN
+    IF NEW.role = 'member' AND NEW.is_lead THEN NEW.role := 'lead'; END IF;
+  ELSIF NEW.role IS DISTINCT FROM OLD.role THEN
+    NULL; -- the role was set: is_lead follows below
+  ELSIF NEW.is_lead IS DISTINCT FROM OLD.is_lead THEN
+    NEW.role := CASE WHEN NEW.is_lead THEN 'lead' ELSE 'member' END;
+  END IF;
+  NEW.is_lead := (NEW.role = 'lead');
+  RETURN NEW;
+END $$;
+CREATE TRIGGER trg_team_members_sync_lead BEFORE INSERT OR UPDATE ON team_members
+  FOR EACH ROW EXECUTE FUNCTION team_members_sync_lead();
 
 -- Primary team: a person on exactly one team has it as primary; a person on several has none until somebody chooses.
 UPDATE team_members tm SET is_primary = true
@@ -104,15 +120,10 @@ CREATE UNIQUE INDEX uq_team_members_one_primary ON team_members (org_id, user_id
 CREATE INDEX idx_team_members_team ON team_members (org_id, team_id);
 
 -- --- membership of a deactivated person stays, and is invisible ---------------------------------------------------------------------
-DROP POLICY tenant_isolation ON team_members;
-CREATE POLICY tenant_isolation ON team_members FOR ALL
+-- A RESTRICTIVE policy is ANDed with the existing permissive `tenant_isolation`, so nothing is dropped or replaced (expand-only): the old
+-- code keeps working and only gains the inactive-user filter.
+CREATE POLICY team_members_hide_inactive ON team_members AS RESTRICTIVE FOR ALL
   USING (
-    app_is_privileged()
-    OR (org_id = current_org_id() AND EXISTS (
-      SELECT 1 FROM users u
-      WHERE u.org_id = team_members.org_id AND u.id = team_members.user_id AND u.status <> 'inactive'))
-  )
-  WITH CHECK (
     app_is_privileged()
     OR (org_id = current_org_id() AND EXISTS (
       SELECT 1 FROM users u
