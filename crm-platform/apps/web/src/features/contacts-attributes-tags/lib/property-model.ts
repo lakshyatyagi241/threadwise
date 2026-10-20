@@ -10,7 +10,7 @@ import {
   type UpdateFieldInput,
 } from '@crm/contracts';
 import { ATTRIBUTE_KEY, ATTRIBUTE_KEY_MAX } from './attribute-model';
-import { displayValue, type DisplayContext } from './field-values';
+import { displayValue, ISO_INSTANT, type DisplayContext } from './field-values';
 import { moveItem, valueFromLabel } from './stage-model';
 
 /**
@@ -387,7 +387,10 @@ export function detailGroups(
   words: { yes: string; no: string },
   keyLabel: (key: string) => string,
   /** Dates in the workspace zone and the labels of lazy option lists, by property key. */
-  ctx: { dateTime?: DisplayContext['dateTime']; optionLabels?: ReadonlyMap<string, ReadonlyMap<string, string>> } = {},
+  ctx: {
+    dateTime?: DisplayContext['dateTime'];
+    optionLabels?: ReadonlyMap<string, ReadonlyMap<string, string>>;
+  } = {},
 ): DetailGroup[] {
   const groups: DetailGroup[] = [];
   for (const g of groupBySection(
@@ -408,10 +411,34 @@ export function detailGroups(
   for (const [key, raw] of Object.entries(customFields)) {
     if (known.has(key) || skipKeys.has(key.toLowerCase())) continue;
     if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean') {
-      const value = String(raw);
+      const text = String(raw);
+      // An imported ISO instant reads as a date here too, like the value of a defined property.
+      const value =
+        typeof raw === 'string' && ctx.dateTime && ISO_INSTANT.test(raw)
+          ? ctx.dateTime(raw) || text
+          : text;
       if (value !== '') rest.push({ key, label: keyLabel(key), value });
     }
   }
   if (rest.length) groups.push({ title: null, rows: rest });
   return groups;
+}
+
+/** Imported properties that hold an agent's user id; the detail page shows the agent's name instead (the stored id is untouched). */
+const AGENT_ID_KEYS: ReadonlySet<string> = new Set(['last_chat_assigned_to']);
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+/** Swaps the agent id of an agent-id property for the agent's name; an id nobody answers for stays as it is. */
+export function withAgentNames(
+  groups: readonly DetailGroup[],
+  nameOf: (id: string) => string | undefined,
+): DetailGroup[] {
+  return groups.map((g) => ({
+    ...g,
+    rows: g.rows.map((r) =>
+      AGENT_ID_KEYS.has(r.key.toLowerCase()) && typeof r.value === 'string' && UUID.test(r.value)
+        ? { ...r, value: nameOf(r.value) ?? nameOf(r.value.toLowerCase()) ?? r.value }
+        : r,
+    ),
+  }));
 }

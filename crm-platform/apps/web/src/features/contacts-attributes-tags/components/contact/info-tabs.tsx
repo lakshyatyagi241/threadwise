@@ -14,7 +14,8 @@ import {
 } from '../../lib/contact-model';
 import { jobTitleField, jobTitleOf, socialLinks } from '../../lib/contact-overview';
 import { formatDateTime } from '../../lib/format';
-import { detailGroups } from '../../lib/property-model';
+import { detailGroups, withAgentNames } from '../../lib/property-model';
+import { useOwnerNames } from '../../api/owners';
 import { EmptyLine, KeyValueList, type KeyValueRow } from './shared';
 
 const text = (c: Pick<ContactRow, 'customFields'>, key: string): string =>
@@ -107,10 +108,11 @@ export function useCustomGroups(contact: ContactRow) {
   const timeZone = useTimeZone();
   const registry = useContactFields();
   const sections = useFieldSections();
+  const { nameOf } = useOwnerNames();
   const fields = (registry.data ?? []).filter((f) => !DETAIL_ROW_KEYS.has(f.key));
   // Lists too long to send with the properties (every City) are read for the values this contact holds only.
   const optionLabels = useLazyOptionLabels(fields, contact.customFields);
-  return detailGroups(
+  const groups = detailGroups(
     fields,
     sections.data ?? [],
     contact.customFields,
@@ -119,6 +121,7 @@ export function useCustomGroups(contact: ContactRow) {
     titleCaseKey,
     { dateTime: (iso) => formatDateTime(iso, locale, timeZone), optionLabels },
   );
+  return withAgentNames(groups, nameOf);
 }
 
 export function CustomFields({ contact }: { contact: ContactRow }) {

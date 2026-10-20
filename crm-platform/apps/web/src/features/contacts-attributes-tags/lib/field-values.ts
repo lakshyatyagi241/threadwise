@@ -155,7 +155,7 @@ export interface DisplayContext {
 }
 
 /** "2026-03-16T11:34:31.714Z": a full instant with a zone, as a date/time property or an import wrote it. */
-const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})$/;
+export const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})$/;
 
 /** Readable text of a stored value for the detail page: option labels for choices, Yes/No for a checkbox, dates in the workspace zone. */
 export function displayValue(
