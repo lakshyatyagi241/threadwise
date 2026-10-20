@@ -97,6 +97,7 @@ export class PipelinesService {
   async create(input: CreatePipelineInput): Promise<PipelineResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      await this.plan.lockPipelines(tx, ctx.orgId);
       await this.plan.assertCanAddPipeline(
         ctx.orgId,
         await this.repo.countPipelines(tx, ctx.orgId),

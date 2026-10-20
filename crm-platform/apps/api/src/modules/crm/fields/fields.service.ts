@@ -171,8 +171,8 @@ export class FieldsService {
       );
     }
     // The plan's `custom_fields` cap: this endpoint only ever creates non-system fields (the meter excludes the built-in ones).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'custom_fields');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'custom_fields');
       const sectionId = await this.repo.resolveSectionId(tx, ctx.orgId, input.sectionId);
       if (sectionId === undefined) throw AppError.notFound('FieldSection', input.sectionId);
 

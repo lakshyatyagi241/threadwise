@@ -4,6 +4,9 @@ import { CryptoService } from '../../common/crypto/crypto.service';
 import { PlatformStore } from '../auth';
 import type { DeliveryTarget } from './deliver';
 import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('webhook_delivery_target');
 
 export interface TargetRow {
   id: number;
@@ -48,7 +51,11 @@ export class WebhookTargetsRepository {
   /** `null` when the target was deleted or switched off since the job was queued. */
   async deliveryTarget(id: number, ttlMs = 10_000): Promise<DeliveryTarget | null> {
     const hit = this.cache.get(id);
-    if (hit && Date.now() - hit.at < ttlMs) return hit.target;
+    if (hit && Date.now() - hit.at < ttlMs) {
+      cache.hit();
+      return hit.target;
+    }
+    cache.miss();
     const row = await this.store.tx(async (tx) => {
       const res = await tx.execute(
         sql`SELECT ${TARGET_COLUMNS} FROM webhook_forward_targets WHERE id = ${id}`,

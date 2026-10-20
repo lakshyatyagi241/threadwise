@@ -6,6 +6,9 @@ import { PLATFORM_PERMISSION_KEYS, type PlatformMyPermissions } from '@crm/contr
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { RAISE_VERSION_LUA } from '../../kernel/rbac/rbac.service';
 import { PlatformRbacStore } from './platform-rbac.store';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('platform_rbac');
 
 const CACHE_TTL_SECONDS = 600;
 const VERSION_KEY = 'prbac:version';
@@ -33,8 +36,15 @@ export class PlatformRbacService {
   async permissionsOf(operatorId: number): Promise<ReadonlySet<string>> {
     const version = await this.version();
     const key = `prbac:v${version}:op${operatorId}`;
-    const cached = await this.redis.get(key).catch(() => null);
-    if (cached) return new Set(JSON.parse(cached) as string[]);
+    const cached = await this.redis.get(key).catch(() => {
+      cache.error();
+      return null;
+    });
+    if (cached) {
+      cache.hit();
+      return new Set(JSON.parse(cached) as string[]);
+    }
+    cache.miss();
 
     const names = await this.store.tx(async (tx) => {
       const res = await tx.execute(sql`

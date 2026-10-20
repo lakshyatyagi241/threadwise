@@ -14,6 +14,9 @@ import { AuthKeys, Ttl } from '../support/redis-keys';
 import { describeAgent } from '../support/user-agent';
 import { TokenService } from '../token.service';
 import { EpochService } from './epoch.service';
+import { cacheMetrics } from '@crm/observability';
+
+const pending = cacheMetrics('session_revocation_pending');
 
 export interface CreateSessionInput {
   orgId: number;
@@ -623,11 +626,16 @@ export class SessionService {
   /** True when the session was revoked but its Redis tombstone is still unwritten. */
   isRevocationPending(sid: string): boolean {
     const until = this.unconfirmedTombstones.get(sid);
-    if (until === undefined) return false;
-    if (until <= Date.now()) {
-      this.unconfirmedTombstones.delete(sid);
+    if (until === undefined) {
+      pending.miss();
       return false;
     }
+    if (until <= Date.now()) {
+      this.unconfirmedTombstones.delete(sid);
+      pending.miss();
+      return false;
+    }
+    pending.hit();
     return true;
   }
 

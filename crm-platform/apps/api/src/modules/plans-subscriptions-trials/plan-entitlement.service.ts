@@ -332,6 +332,17 @@ export class PlanEntitlementService {
   }
 
   /**
+   * Takes the per-organization, per-limit lock for the rest of the caller's transaction. Count-then-insert is two statements: without
+   * this, N requests at the cap minus one all count the same rows and all insert (QA Sheet3 #15, CC-LIM). Call it first, before the
+   * count that feeds `assertWithinLimit`, in the same transaction as the insert.
+   */
+  async lockLimit(tx: Tx, orgId: number, key: PlanLimitKey): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`plan-limit:${orgId}:${key}`}, 0))`,
+    );
+  }
+
+  /**
    * Throws 422 PLAN_LIMIT_REACHED when creating one more would exceed the cap.
    * `used` is the CURRENT count, before the insert (Reference blocks row N+1).
    */

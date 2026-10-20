@@ -28,6 +28,9 @@ import {
 import { AuthAuditService } from '../auth';
 import { mergeCredentials, missingRequired, type Credentials } from './gateway-rules';
 import { PaygwStore } from './paygw.store';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('gateway_plan');
 
 export interface GatewayRow {
   id: string;
@@ -101,7 +104,11 @@ export class GatewayService {
           const res = await tx.execute(
             sql`SELECT gateway_plan_id FROM gateway_plan_cache WHERE ${where(k)}`,
           );
-          return (res.rows[0] as { gateway_plan_id: string } | undefined)?.gateway_plan_id ?? null;
+          const id =
+            (res.rows[0] as { gateway_plan_id: string } | undefined)?.gateway_plan_id ?? null;
+          if (id === null) cache.miss();
+          else cache.hit();
+          return id;
         }),
       save: (k, id) =>
         this.store.tx(async (tx) => {

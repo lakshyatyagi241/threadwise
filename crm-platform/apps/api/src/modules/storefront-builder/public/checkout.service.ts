@@ -31,6 +31,9 @@ import { ShopUrlService } from '../shops/shop-url.service';
 import { ShopsRepository } from '../shops/shops.repository';
 import { CartPricingService } from './cart-pricing.service';
 import { PublicShopLoader } from './public-shop.loader';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('storefront_checkout_idempotency');
 
 const ITEMS_UNAVAILABLE = 'Those items are no longer available. Please refresh and try again.';
 const IDEM_TTL_SECONDS = 24 * 3600;
@@ -264,7 +267,10 @@ export class CheckoutService {
   private async reserve(key: string): Promise<CheckoutResponse | null> {
     try {
       const reserved = await this.redis.set(key, IN_FLIGHT, 'EX', IDEM_TTL_SECONDS, 'NX');
-      if (reserved === 'OK') return null;
+      if (reserved === 'OK') {
+        cache.miss();
+        return null;
+      }
       const stored = await this.redis.get(key);
       if (stored === IN_FLIGHT || stored === null) {
         throw new AppError(
@@ -273,9 +279,11 @@ export class CheckoutService {
           HttpStatus.CONFLICT,
         );
       }
+      cache.hit();
       return JSON.parse(stored) as CheckoutResponse;
     } catch (err) {
       if (err instanceof AppError) throw err;
+      cache.error();
       // Redis down: the checkout still works, without replay protection.
       this.logger.warn({ err: String(err) }, '[STORE] idempotency store unavailable');
       return null;

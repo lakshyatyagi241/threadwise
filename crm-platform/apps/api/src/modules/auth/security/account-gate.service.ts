@@ -11,6 +11,9 @@ import { toDate, type DateLike } from '../support/dates';
 import { isPasswordStale } from '../support/password-policy';
 import { AuthKeys, Ttl } from '../support/redis-keys';
 import { OrgSuspensionService, isOperatorImpersonation } from './org-suspension.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('account_gate');
 
 export interface AccountGateState {
   /** This person's own account is not active. */
@@ -91,9 +94,16 @@ export class AccountGateService {
     const early = await takeAuthPrefetch('gate', orgId, userId);
     const cached =
       early === undefined || typeof early === 'symbol'
-        ? await this.redis.get(key).catch(() => null)
+        ? await this.redis.get(key).catch(() => {
+            cache.error();
+            return null;
+          })
         : early;
-    if (cached) return JSON.parse(cached) as AccountGateState;
+    if (cached) {
+      cache.hit();
+      return JSON.parse(cached) as AccountGateState;
+    }
+    cache.miss();
 
     const genKey = AuthKeys.gateGeneration(orgId, userId);
     const seen = await this.redis.mget(genKey, AuthKeys.gateGenerationAll).catch(() => null);

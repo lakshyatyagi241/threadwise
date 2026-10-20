@@ -9,6 +9,9 @@ import {
   viewerReadsUnassigned,
   type ConversationViewer,
 } from './conversation-visibility';
+import { cacheMetrics, cacheSize } from '@crm/observability';
+
+const cache = cacheMetrics('member_directory');
 
 /** How long a workspace's member list is reused. A grant changed inside this window reaches the live signals this much late. */
 const PERM_CONVERSATION_READ_KEY = 'inbox.conversation.read';
@@ -34,6 +37,7 @@ interface Entry {
 @Injectable()
 export class MemberDirectory {
   private readonly cache = new Map<string, Entry>();
+  private readonly sizeGauge = cacheSize('member_directory', () => this.cache.size);
 
   constructor(
     private readonly db: DatabaseService,
@@ -63,7 +67,11 @@ export class MemberDirectory {
     const key = `${orgId}:${permission}`;
     const now = Date.now();
     const hit = this.cache.get(key);
-    if (hit && now - hit.at < CACHE_TTL_MS) return hit.viewers;
+    if (hit && now - hit.at < CACHE_TTL_MS) {
+      cache.hit();
+      return hit.viewers;
+    }
+    cache.miss();
 
     const viewers = this.load(orgId, permission);
     // A failed load must not be remembered for 30 seconds.
@@ -149,7 +157,10 @@ export class MemberDirectory {
     }
 
     const parentOf = new Map<number, number | null>(
-      parents.map((r) => [Number(r.id), r.parent_team_id === null ? null : Number(r.parent_team_id)]),
+      parents.map((r) => [
+        Number(r.id),
+        r.parent_team_id === null ? null : Number(r.parent_team_id),
+      ]),
     );
 
     return Promise.all(

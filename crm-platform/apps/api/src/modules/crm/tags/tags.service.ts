@@ -188,6 +188,7 @@ export class TagsService {
   private async assertUnderTagLimit(tx: Tx, orgId: number): Promise<void> {
     const cap = await this.entitlements.limit(orgId, 'tags');
     if (cap === 0) return;
+    await this.entitlements.lockLimit(tx, orgId, 'tags');
     await this.entitlements.assertWithinLimit(orgId, 'tags', await this.repo.countAll(tx, orgId));
   }
 

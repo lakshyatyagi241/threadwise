@@ -4,6 +4,10 @@ import { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
 import { AuthKeys } from '../support/redis-keys';
+import { cacheMetrics } from '@crm/observability';
+
+const local = cacheMetrics('epoch_local');
+const shared = cacheMetrics('epoch_redis');
 
 const SETTING_KEY = 'auth.epoch';
 const LOCAL_CACHE_MS = 5_000;
@@ -35,13 +39,22 @@ export class EpochService {
 
   async current(): Promise<number> {
     const now = Date.now();
-    if (this.cached && now - this.cached.at < LOCAL_CACHE_MS) return this.cached.value;
+    if (this.cached && now - this.cached.at < LOCAL_CACHE_MS) {
+      local.hit();
+      return this.cached.value;
+    }
+    local.miss();
 
     let value: number | null = null;
     try {
       const raw = await this.redis.get(AuthKeys.epoch);
-      if (raw !== null) value = Number(raw);
+      if (raw !== null) {
+        value = Number(raw);
+        shared.hit();
+      } else shared.miss();
     } catch (err) {
+      shared.error();
+      shared.miss();
       this.logger.warn({ err }, 'epoch read from redis failed; using database value');
     }
 

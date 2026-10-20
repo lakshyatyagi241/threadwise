@@ -9,6 +9,9 @@ import {
   type PersonaView,
 } from '@crm/contracts';
 import { PersonaRepository } from './persona.repository';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('persona_view');
 
 /** A resolved view is memoised per (workspace, rev, version) for this long. Any write bumps `rev`, so a stale entry is never asked for. */
 const VIEW_TTL_MS = 30_000;
@@ -63,7 +66,11 @@ export class PersonaService {
     const now = Date.now();
     const viewKey = `${orgId}:${row.epoch}:${row.rev}:${row.personaKey}@${version}`;
     const hit = this.views.get(viewKey);
-    if (hit && hit.until > now) return hit.value;
+    if (hit && hit.until > now) {
+      cache.hit();
+      return hit.value;
+    }
+    cache.miss();
 
     const definition = await this.definition(orgId, row.personaKey, version);
     if (!definition) return null;
