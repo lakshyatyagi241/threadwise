@@ -52,7 +52,7 @@ const WRITERS: Record<string, Writer> = {
   [MEDIA_DOOR]: {
     role: 'door',
     reason:
-      'MediaStorageService.put: marketing/, scheduled/, telegram/, ai-training/ keys (chat/ is metered by ChatMediaStore)',
+      'MediaStorageService.put: marketing/, template-media/, scheduled/, telegram/, ai-training/ keys (chat/ is metered by ChatMediaStore)',
   },
   [TRAINING_DOOR]: {
     role: 'door',
@@ -67,6 +67,12 @@ const WRITERS: Record<string, Writer> = {
   'modules/broadcasts/marketing-media.service.ts': {
     role: 'delegates',
     reason: 'MediaStorageService.put with a marketing/<org>/ key (campaign_media)',
+    via: MEDIA_DOOR,
+  },
+  'modules/message-templates/templates.service.ts': {
+    role: 'delegates',
+    reason:
+      'MediaStorageService.put with a template-media/<org>/ key (campaign_media): the header example file of a message template; releaseHeaderCopy removes it through the door',
     via: MEDIA_DOOR,
   },
   'modules/scheduled-queue-warmer/schedule-media.service.ts': {

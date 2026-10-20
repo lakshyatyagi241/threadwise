@@ -4,7 +4,7 @@ title: Viber
 summary: Connect a Viber Public Account with its auth token, manage it, message your subscribers in broadcasts and read its insights.
 area: settings
 order: 90
-documents: [tile:viber]
+documents: [tile:viber, nav:viber]
 keywords:
   [
     viber,

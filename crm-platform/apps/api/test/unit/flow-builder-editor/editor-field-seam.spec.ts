@@ -185,9 +185,11 @@ describe('editor fields the runtime reads under another name (mapped by flbToRun
   it('location: the form saves `lat` / `lng`, the runtime reads `latitude` / `longitude`', () => {
     const p = compiled('location', { lat: '12.97', lng: '77.59' }).props;
     expect([p.latitude, p.longitude]).toEqual([12.97, 77.59]);
+    // A blank or bad coordinate is no coordinate (null), no longer a pin at 0,0: the Location step is validated on Save/Publish and the
+    // runtime skips a step without valid coordinates (flbParseCoordinate, Location step change #580).
     expect(compiled('location', { lat: '', lng: '' }).props).toMatchObject({
-      latitude: 0,
-      longitude: 0,
+      latitude: null,
+      longitude: null,
     });
   });
 

@@ -180,22 +180,11 @@ describe('Redis hygiene: every key has a lifetime or a reason', () => {
     expect(bad).toEqual([]);
   });
 
-  // `INCR key` then a separate `EXPIRE key` when the answer was 1: a lost second command leaves a counter that never expires. New code
-  // uses incrWithTtl (infra/redis/counter.ts: one MULTI). These are the older sites, all on time-bucketed or one-shot keys, so a lost
-  // EXPIRE leaks one small key rather than blocking anyone; the sites where it blocked someone (API-key failure counters) are fixed.
-  const SEPARATE_EXPIRE_ALLOWED: Record<string, number> = {
-    'apps/api/src/modules/auth/flows/login.service.ts': 1,
-    'apps/api/src/modules/auth/platform/operator-auth.service.ts': 1,
-    'apps/api/src/modules/broadcasts/send-safety.ts': 1,
-    'apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts': 1,
-    'apps/api/src/modules/channel-line/inbound.service.ts': 1,
-    'apps/api/src/modules/channel-telegram/inbound.service.ts': 1,
-    'apps/api/src/modules/channel-viber/inbound.service.ts': 1,
-    'apps/api/src/modules/channel-wechat/inbound.service.ts': 1,
-    'apps/api/src/modules/chatbot-widget/widget-throttle.service.ts': 1,
-    'apps/api/src/modules/crm/invoicing/invoice-public.service.ts': 1,
-    'apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts': 1,
-  };
+  // `INCR key` then a separate `EXPIRE key` when the answer was 1: a lost second command leaves a counter that never expires. Every
+  // counter uses incrWithTtl (infra/redis/counter.ts: INCR + EXPIRE NX in one MULTI); the older sites were all converted (login, operator
+  // sign-in, send safety, link redirect, the Line/Telegram/Viber/WeChat inbound services, the widget throttle, the public invoice page and
+  // the storefront limiter), so nothing is allowed any more. The map stays so a future exception has to be listed here with its count.
+  const SEPARATE_EXPIRE_ALLOWED: Record<string, number> = {};
   it('does not add a counter that is INCR-ed and given its lifetime by a separate command', () => {
     const per: Record<string, number> = {};
     for (const r of inv.forbidden.directIncr!) per[r.file] = (per[r.file] ?? 0) + 1;

@@ -64,6 +64,9 @@ describe('the config shape', () => {
         soundVolume: 70,
         speak: false,
         pip: false,
+        // thumbs on by default, no custom thank-you line; no language set means the visitor's browser language (the behaviour before the setting)
+        feedback: { enabled: true, message: '' },
+        languages: { primary: '', additional: [] },
         devices: { desktop: true, tablet: true, mobile: true },
       },
       desktop: { side: 'right', sideSpacing: 10, bottomSpacing: 10 },

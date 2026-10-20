@@ -84,6 +84,7 @@ export {
   startMetricsServer,
   startRuntimeMonitor,
   stopRuntimeMonitor,
+  type DepthQueue,
   type EventLoopSnapshot,
   type GuardableWorker,
   type ListenerDecision,

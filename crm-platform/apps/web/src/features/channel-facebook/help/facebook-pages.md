@@ -4,7 +4,7 @@ title: Facebook Pages
 summary: Connect your Facebook account or a single Page, so its Messenger messages and comments reach your team inbox.
 area: settings
 order: 20
-documents: [tile:facebook]
+documents: [tile:facebook, nav:facebook]
 keywords: [facebook, messenger, page, connect, login, access token, webhook, comments, meta]
 ---
 

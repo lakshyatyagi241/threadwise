@@ -1227,9 +1227,18 @@ describe('delete (TW-CTP-008)', () => {
        FROM pg_constraint c WHERE c.confrelid = 'companies'::regclass AND c.contype = 'f'`,
     );
     expect(res.rows.length).toBeGreaterThanOrEqual(8);
+    // company_briefs is the one documented exception: it is a derived copy (per-person AI brief cache, see
+    // privacy/manifests/derived.ts and migration company_briefs), so it is deleted WITH the company (ON DELETE CASCADE)
+    // instead of being unlinked. A cascaded brief has no meaning without its company. Any other table must still unlink.
+    const CASCADE_BY_DESIGN = new Set(['company_briefs.fk_company_briefs_company']);
     for (const r of res.rows) {
-      expect(r.confdeltype, `${r.tbl}.${r.conname}`).toBe('n');
-      expect(r.def, `${r.tbl}.${r.conname}`).toMatch(/ON DELETE SET NULL \(company_id\)/);
+      const key = `${r.tbl}.${r.conname}`;
+      if (CASCADE_BY_DESIGN.has(key)) {
+        expect(r.confdeltype, key).toBe('c');
+        continue;
+      }
+      expect(r.confdeltype, key).toBe('n');
+      expect(r.def, key).toMatch(/ON DELETE SET NULL \(company_id\)/);
     }
   });
 

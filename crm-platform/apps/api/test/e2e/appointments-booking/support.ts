@@ -131,7 +131,7 @@ export class AppointmentsApi extends Api {
    * A new workspace whose owner has switched email, WhatsApp and SMS on for appointment messages (BL-350): a workspace created now
    * starts with no channel chosen, and a booking type can name only chosen channels. `signupUndecided` is the workspace as it is born.
    */
-  async signup(label = 'con'): Promise<Tenant> {
+  override async signup(label = 'con'): Promise<Tenant> {
     const t = await super.signup(label);
     await this.h.owner.query(
       `INSERT INTO appointment_channel_settings (org_id, channel, enabled, source)

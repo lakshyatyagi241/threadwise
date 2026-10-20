@@ -62,6 +62,7 @@ describe('storage quota rules', () => {
   it('keys written straight through MediaStorageService.put get their category by area; chat/ and platform areas get none', () => {
     expect(categoryForAreaKey('marketing/7/x.png')).toBe('campaign_media');
     expect(categoryForAreaKey('scheduled/7/x.png')).toBe('scheduled_media');
+    expect(categoryForAreaKey('template-media/7/x.png')).toBe('campaign_media');
     expect(categoryForAreaKey('telegram/7/1_ab.jpg')).toBe('channel_profile_media');
     expect(categoryForAreaKey('ai-training/7/ab.txt')).toBe('ai_training_file');
     expect(categoryForAreaKey('chat/7/2027/01/x.png')).toBeNull();

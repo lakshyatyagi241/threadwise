@@ -107,6 +107,8 @@ export class Api {
       email?: string | null;
       ownerId?: number | null;
       isUnsubscribed?: boolean;
+      /** The WhatsApp subscription label (`subscribed`): what the Subscribed tile and filter count. Unset: no label recorded. */
+      whatsappSubscriptionStatus?: string | null;
       countryCode?: string | null;
       data?: Record<string, unknown>;
       source?: string | null;
@@ -117,8 +119,8 @@ export class Api {
     let n = 0;
     for (const r of rows) {
       const res = await this.h.owner.query(
-        `INSERT INTO contacts (org_id, name, phone, email, owner_id, is_unsubscribed, country_code, data, source, created_at)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9, COALESCE($10::timestamptz, now() + ($11 || ' seconds')::interval))
+        `INSERT INTO contacts (org_id, name, phone, email, owner_id, is_unsubscribed, country_code, data, source, created_at, whatsapp_subscription_status)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8::jsonb,$9, COALESCE($10::timestamptz, now() + ($11 || ' seconds')::interval), $12)
          RETURNING uuid`,
         [
           t.orgId,
@@ -132,6 +134,7 @@ export class Api {
           r.source ?? null,
           r.createdAt ?? null,
           String(n++),
+          r.whatsappSubscriptionStatus ?? null,
         ],
       );
       ids.push(res.rows[0].uuid as string);

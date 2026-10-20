@@ -9,6 +9,12 @@ import { TRIM_BATCH, parseMemoryInfo, pressureTier, trimPlan } from './queue-gua
 
 const TICK_MS = 60_000;
 
+export const QUEUE_GUARD_OPTIONS = Symbol('QUEUE_GUARD_OPTIONS');
+export interface QueueGuardOptions {
+  /** Queues whose failed jobs the dead-letter sweep copies to the database: they are trimmed later than the rest. */
+  capturedQueues: readonly string[];
+}
+
 /**
  * Keeps Redis from filling up. Redis runs `noeviction` (evicting a BullMQ key loses a job), so once `maxmemory` is reached every
  * write fails: every queue stops, the API cannot enqueue and the health card goes Down. The usual cause is not live work but
@@ -22,10 +28,15 @@ export class QueueGuardService {
   private readonly logger = new Logger(QueueGuardService.name);
   private running = false;
 
+  private readonly captured: ReadonlySet<string>;
+
   constructor(
     private readonly moduleRef: ModuleRef,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
-  ) {}
+    @Inject(QUEUE_GUARD_OPTIONS) options: QueueGuardOptions,
+  ) {
+    this.captured = new Set(options.capturedQueues);
+  }
 
   @Interval(TICK_MS)
   async tick(): Promise<void> {
@@ -36,7 +47,7 @@ export class QueueGuardService {
       const tier = pressureTier(used, max);
       if (tier === 0) return;
       let removed = 0;
-      for (const step of trimPlan(tier)) {
+      for (const step of trimPlan(tier, this.captured)) {
         try {
           const queue = this.moduleRef.get<Queue>(getQueueToken(step.queue), { strict: false });
           removed += (await queue.clean(step.graceMs, TRIM_BATCH, step.type)).length;
@@ -45,7 +56,12 @@ export class QueueGuardService {
         }
       }
       this.logger.warn(
-        { tier, usedMb: Math.round(used / 1024 / 1024), maxMb: Math.round(max / 1024 / 1024), removed },
+        {
+          tier,
+          usedMb: Math.round(used / 1024 / 1024),
+          maxMb: Math.round(max / 1024 / 1024),
+          removed,
+        },
         'redis memory is high: trimmed finished-job history',
       );
     } catch (err) {

@@ -5,7 +5,7 @@
 // bound from it, including chains such as `this.redis.multi().incr(k).expire(k, 60).exec()`. The scan is textual, not a type check:
 // it is exact for this codebase's one naming convention (`private readonly redis: Redis`) and the ratchet test pins that convention.
 import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, relative, resolve, dirname } from 'node:path';
+import { join, relative, resolve, dirname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 export const root = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -125,7 +125,11 @@ export function callsIn(src) {
 }
 
 export function sourceFiles() {
-  return walk(SRC).map((p) => ({ path: relative(root, p), abs: p, src: readFileSync(p, 'utf8') }));
+  return walk(SRC).map((p) => ({
+    path: relative(root, p).split(sep).join('/'),
+    abs: p,
+    src: readFileSync(p, 'utf8'),
+  }));
 }
 
 /** First string-literal prefix of a key expression: `auth:gate:${x}` -> `auth:gate:`; a bare identifier -> null. */

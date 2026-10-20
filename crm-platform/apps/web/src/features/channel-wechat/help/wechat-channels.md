@@ -4,7 +4,7 @@ title: WeChat
 summary: Connect a WeChat Official Account, paste its address and Token into WeChat, answer followers from the inbox and mass-send messages.
 area: settings
 order: 100
-documents: [tile:wechat]
+documents: [tile:wechat, nav:wechat]
 keywords:
   [
     wechat,
