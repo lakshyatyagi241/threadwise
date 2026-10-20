@@ -5,9 +5,12 @@ import { minorRuleOf, type MinorRule } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentSettingsService } from './consent-settings.service';
 import { ContactPrivacyRepository } from './contact-privacy.repository';
+import { setCapped } from '../../common/cache/capped-map';
 
 /** How long a process keeps a workspace's minor rule. A save in the Compliance center invalidates the saving process at once. */
 export const MINOR_RULE_CACHE_MS = 60_000;
+/** At most this many workspaces are remembered per process; the oldest goes first. */
+export const MINOR_RULE_CACHE_MAX = 2_000;
 
 /**
  * The marketing send policy for broadcasts and campaigns (spec section 7). A withdrawn contact is ALWAYS skipped (the existing
@@ -40,7 +43,7 @@ export class ConsentPolicyService {
       this.privacy.complianceFacts(tx, orgId),
     );
     const v = minorRuleOf(facts.childrenPolicy, facts.parentalConsentRequired);
-    this.minorRules.set(orgId, { at: Date.now(), v });
+    setCapped(this.minorRules, orgId, { at: Date.now(), v }, MINOR_RULE_CACHE_MAX);
     return v;
   }
 

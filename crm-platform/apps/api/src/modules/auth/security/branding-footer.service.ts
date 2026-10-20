@@ -5,6 +5,7 @@ import { Redis } from 'ioredis';
 import { BRANDING_FOOTER_MAX } from '@crm/contracts';
 import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
@@ -18,6 +19,9 @@ export const FooterKeys = {
   platform: 'auth:footer-v:platform',
 } as const;
 
+/** Longer than any cache entry trusts a version (`CACHE_MS`), so an expired counter can never match a still-cached entry. */
+const FOOTER_VERSION_TTL_S = 30 * 86_400;
+
 /**
  * Drops cached footers across every process: one workspace's, or (with no
  * `orgId`) all of them because the platform default changed. Callers run it
@@ -26,7 +30,11 @@ export const FooterKeys = {
  */
 export async function bustFooterCache(redis: Redis, orgId?: number): Promise<void> {
   try {
-    await redis.incr(orgId === undefined ? FooterKeys.platform : FooterKeys.org(orgId));
+    await incrWithTtl(
+      redis,
+      orgId === undefined ? FooterKeys.platform : FooterKeys.org(orgId),
+      FOOTER_VERSION_TTL_S,
+    );
   } catch {
     // the entry expires by itself
   }

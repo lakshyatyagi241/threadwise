@@ -18,11 +18,14 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConsentRepository, type SettingsRow } from './consent.repository';
+import { setCapped } from '../../common/cache/capped-map';
 
 const MODULE_KEY = 'contact_consent_settings';
 
 /** How long a process keeps a workspace's compiled keyword set. A save invalidates the saving process at once; others within this time. */
 export const CONSENT_CACHE_MS = 60_000;
+/** At most this many workspaces are remembered per process; the oldest goes first. */
+export const CONSENT_SETTINGS_CACHE_MAX = 2_000;
 
 export interface EffectiveConsentSettings extends ConsentSettingsValues {
   compiled: CompiledKeywords;
@@ -78,7 +81,7 @@ export class ConsentSettingsService {
         optIn: values.optInKeywords,
       }),
     };
-    this.cache.set(orgId, { at: Date.now(), v });
+    setCapped(this.cache, orgId, { at: Date.now(), v }, CONSENT_SETTINGS_CACHE_MAX);
     return v;
   }
 

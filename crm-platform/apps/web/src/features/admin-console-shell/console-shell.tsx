@@ -32,6 +32,7 @@ import {
   CONSOLE_NAV_ITEMS,
   hubOf,
 } from './console-nav';
+import { signOut as doSignOut } from '@/features/auth-registration-security/shared/sign-out';
 import { CONSOLE_LAYOUT } from './console-layout';
 import { pageVisibleTo } from './console-access';
 import { AreaLinks, HubMenu } from './hub-menu';
@@ -210,16 +211,7 @@ export function ConsoleShell({
 
   const signOut = async () => {
     setSigningOut(true);
-    try {
-      await fetch('/api/platform-auth/logout', {
-        signal: AbortSignal.timeout(5000),
-        method: 'POST',
-        credentials: 'same-origin',
-      });
-    } finally {
-      router.replace('/admin/login');
-      router.refresh();
-    }
+    await doSignOut('/admin/login', '/api/platform-auth/logout');
   };
 
   const signOutButton = (className: string) => (

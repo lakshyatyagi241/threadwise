@@ -13,6 +13,7 @@ import { InboundRouter, type HistoryBatch, type InboundSink } from '../node-brid
 import { HistoryImportRepository, type HistoryRunRow } from './history-import.repository';
 import { HistoryImportService } from './history-import.service';
 import { isFinalBatch, planBatch, toIngest, type RunUsage } from './history-import-rules';
+import { CappedMap } from '../../common/cache/capped-map';
 
 const TALLY_TTL_S = 3 * 24 * 3600;
 /** While a long batch is being stored, the run is marked alive at least this often. */
@@ -42,7 +43,7 @@ const digits = (s: string | null | undefined) => (s ?? '').replace(/\D+/g, '');
 @Injectable()
 export class HistoryImportSink implements InboundSink, OnModuleInit {
   private readonly logger = new Logger(HistoryImportSink.name);
-  private readonly channels = new Map<string, { uuid: string; at: number }>();
+  private readonly channels = new CappedMap<string, { uuid: string; at: number }>(5000);
 
   constructor(
     private readonly router: InboundRouter,
