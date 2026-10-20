@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import { RECORD_SCOPE_RANK, type RecordScope } from '@crm/contracts';
+import { cacheMetrics } from '@crm/observability';
 import { TEAM_HIERARCHY_GATE, type TeamHierarchyGate } from './team-hierarchy-gate';
 import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -18,6 +19,8 @@ export type GrantSet = Map<string, Grant>;
 export type CachedRead = { version: number; grants: string | null };
 
 const CACHE_TTL_SECONDS = 600;
+const grantsCache = cacheMetrics('rbac_grants');
+const versionCache = cacheMetrics('rbac_version');
 
 /** Sets the cached roles version only if the key is empty or holds a lower one, so a slow reader cannot put an old version back. */
 const RAISE_VERSION_LUA = `
@@ -103,10 +106,17 @@ export class RbacService {
     const version = fast ? fast.version : await this.rolesVersion(orgId);
     const cacheKey = `rbac:${orgId}:v${version}:u${userId}`;
 
-    const cached = fast ? fast.grants : await this.redis.get(cacheKey).catch(() => null);
+    const cached = fast
+      ? fast.grants
+      : await this.redis.get(cacheKey).catch(() => {
+          grantsCache.error();
+          return null;
+        });
     if (cached) {
+      grantsCache.hit();
       return new Map(Object.entries(JSON.parse(cached) as Record<string, Grant>));
     }
+    grantsCache.miss();
 
     const grants = await this.loadGrants(orgId, userId);
 
@@ -197,7 +207,8 @@ export class RbacService {
         String(userId),
       )) as [string | null, string | null] | null;
       const version = res?.[0] ? Number(res[0]) : NaN;
-      if (!Number.isFinite(version)) return null;
+      if (!Number.isFinite(version)) return null; // rolesVersion() makes the separate read and counts it
+      versionCache.hit();
       return { version, grants: res?.[1] ?? null };
     } catch (err) {
       this.logger.warn({ err }, 'rbac cache read failed; reading the version separately');
@@ -207,8 +218,15 @@ export class RbacService {
 
   private async rolesVersion(orgId: number): Promise<number> {
     const cacheKey = `rbac:version:${orgId}`;
-    const cached = await this.redis.get(cacheKey).catch(() => null);
-    if (cached) return Number(cached);
+    const cached = await this.redis.get(cacheKey).catch(() => {
+      versionCache.error();
+      return null;
+    });
+    if (cached) {
+      versionCache.hit();
+      return Number(cached);
+    }
+    versionCache.miss();
 
     const result = await this.db.privileged(async (tx) =>
       tx.execute(sql`SELECT roles_version FROM organizations WHERE id = ${orgId}`),

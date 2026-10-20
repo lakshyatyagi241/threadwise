@@ -11,6 +11,9 @@ import type {
 import { PlatformSettingsService, PlatformStore } from '../auth';
 import { ProviderCredentials } from './provider-credentials';
 import { buildChain, type ProviderRow, type RoutePolicy } from './translation-policy';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('translation_providers');
 
 export const OFFICIAL_ONLY_KEY = 'i18n.official_only';
 const SNAPSHOT_MS = 5_000;
@@ -57,7 +60,11 @@ export class ProviderRouterService {
   }
 
   private async rows(): Promise<ProviderRow[]> {
-    if (this.snapshot && Date.now() - this.snapshot.at < SNAPSHOT_MS) return this.snapshot.rows;
+    if (this.snapshot && Date.now() - this.snapshot.at < SNAPSHOT_MS) {
+      cache.hit();
+      return this.snapshot.rows;
+    }
+    cache.miss();
     const res = await this.store.tx((tx) =>
       tx.execute(
         sql`SELECT id, slug, is_active, is_default, sort_order, credentials FROM translation_providers`,

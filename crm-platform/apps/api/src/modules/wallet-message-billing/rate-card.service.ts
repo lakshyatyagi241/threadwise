@@ -15,6 +15,9 @@ import { CurrencyService } from '../platform-settings-branding-storage';
 import { BillingCurrencyService } from './billing-currency.service';
 import { MetaRateCardService } from './meta-rate-card.service';
 import { WalletSettingsService } from './wallet-settings.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cacheStat = cacheMetrics('rate_card');
 
 const CACHE_MS = 30_000;
 
@@ -90,7 +93,11 @@ export class RateCardService {
   }
 
   async rows(tx: Tx): Promise<RateCardRow[]> {
-    if (this.cache && Date.now() - this.cache.at < CACHE_MS) return this.cache.rows;
+    if (this.cache && Date.now() - this.cache.at < CACHE_MS) {
+      cacheStat.hit();
+      return this.cache.rows;
+    }
+    cacheStat.miss();
     const res = await tx.execute(sql`
       SELECT country_code, category, credits, meta_cost_micros::text AS micros, meta_cost_minor::text AS minor
       FROM message_rates WHERE is_active`);

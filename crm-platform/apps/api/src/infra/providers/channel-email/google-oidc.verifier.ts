@@ -1,6 +1,9 @@
 import { createPublicKey, verify as cryptoVerify, type KeyObject } from 'node:crypto';
 import { Injectable, Logger } from '@nestjs/common';
 import { channelEmailEnv } from '../../../config/domains/channel-email.env';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('google_oidc_keys');
 
 interface Jwk {
   kty?: string;
@@ -140,13 +143,20 @@ export class GoogleOidcVerifier {
 
   private async keyFor(kid: string, nowMs: number): Promise<KeyObject | 'unavailable' | null> {
     const stale = nowMs >= this.expiresAtMs;
+    let fetched = stale;
     if (stale) await this.refresh(nowMs);
     let key = this.keys.get(kid);
     if (!key && !stale && nowMs - this.lastFetchMs >= MIN_REFETCH_MS) {
       // A key we have not seen: Google may have rotated since we read the set.
+      fetched = true;
       await this.refresh(nowMs);
       key = this.keys.get(kid);
     }
+    if (key && !fetched) {
+      cache.hit();
+      return key;
+    }
+    cache.miss(); // a lookup that needed a network fetch is a miss even when the fetch found the key
     if (key) return key;
     return this.keys.size === 0 ? 'unavailable' : null;
   }

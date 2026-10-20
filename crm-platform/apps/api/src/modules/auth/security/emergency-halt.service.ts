@@ -5,6 +5,9 @@ import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
 import { AuthKeys } from '../support/redis-keys';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('emergency_halt');
 
 const SETTING = 'platform.emergency_send_halt';
 
@@ -46,8 +49,14 @@ export class EmergencyHaltService {
     if (!this.mirrorSuspect) {
       try {
         const cached = await this.redis.get(AuthKeys.halt);
-        if (cached !== null) return cached === '1';
+        if (cached !== null) {
+          cache.hit();
+          return cached === '1';
+        }
+        cache.miss();
       } catch (err) {
+        cache.error();
+        cache.miss();
         this.logger.warn({ err }, 'halt flag read from redis failed; using database value');
       }
     }

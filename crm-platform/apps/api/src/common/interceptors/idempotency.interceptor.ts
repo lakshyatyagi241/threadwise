@@ -16,6 +16,9 @@ import { IDEMPOTENT_KEY } from '../decorators';
 import { RequestContextStore } from '../context/request-context';
 import { AppError } from '../errors/app-error';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('idempotency');
 
 const TTL_SECONDS = 24 * 3600;
 /** How long a key stays reserved while its request runs. A crash mid-request frees it after this, not after a day (ADR 0029). */
@@ -108,8 +111,10 @@ export class IdempotencyInterceptor implements NestInterceptor {
   ): Observable<RunResult> {
     const inFlight = JSON.stringify({ slot, fp: fingerprint, state: IN_FLIGHT });
     return from(this.redis.set(cacheKey, inFlight, 'EX', IN_FLIGHT_TTL_SECONDS, 'NX')).pipe(
+      tap({ error: () => cache.error() }),
       switchMap((reserved): Observable<RunResult> => {
         if (reserved === 'OK') {
+          cache.miss();
           return next.handle().pipe(
             tap({
               next: (body) => {
@@ -156,6 +161,7 @@ export class IdempotencyInterceptor implements NestInterceptor {
                 409,
               );
             }
+            cache.hit();
             this.logger.log({ key: providedKey }, 'replaying idempotent response');
             return of({ kind: 'value', value: entry.body ?? null });
           }),
