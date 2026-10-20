@@ -10,7 +10,6 @@ import { sleep } from './support';
  */
 let h: Harness;
 const API = resolve(__dirname, '../../..');
-const TSX = resolve(API, 'node_modules/.bin/tsx');
 const SCRIPT = resolve(__dirname, 'node/drain-node.ts');
 const children: ChildProcess[] = [];
 
@@ -56,7 +55,7 @@ function startNode(
   handleMs: number,
 ): { proc: ChildProcess; done: Promise<number | null>; out: string[] } {
   const out: string[] = [];
-  const proc = spawn(TSX, [SCRIPT], {
+  const proc = spawn(process.execPath, ['--import', 'tsx', SCRIPT], {
     cwd: API,
     env: {
       ...process.env,
