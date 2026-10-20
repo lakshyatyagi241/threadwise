@@ -505,13 +505,11 @@ describe('calls', () => {
 
   it('refuses an outcome item of another activity', async () => {
     const meeting = byKey(await activities(t.admin), 'meeting');
-    const res = await as(t.admin)
-      .post('/v2/calls/log')
-      .send({
-        contactId: contact,
-        direction: 'outbound',
-        outcomeOptionId: meeting.outcomes[0]!.id,
-      });
+    const res = await as(t.admin).post('/v2/calls/log').send({
+      contactId: contact,
+      direction: 'outbound',
+      outcomeOptionId: meeting.outcomes[0]!.id,
+    });
     expect(res.status).toBe(422);
     expect(code(res)).toBe('ACTIVITY_OPTION_INVALID');
   });
