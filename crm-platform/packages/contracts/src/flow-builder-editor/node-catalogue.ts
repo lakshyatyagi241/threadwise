@@ -1013,6 +1013,8 @@ export const flbIsMultiPort = (
 
 const HANDLE_PORT: Record<string, Record<string, number>> = {
   condition: { yes: 1, no: 2 },
+  // Human handoff (BL-398): the old single exit (`out`) stays port 1.
+  assign: { assigned: 1, waiting: 2, unavailable: 3 },
   book_appointment: { booked: 1, no_slots: 2 },
   whatsapp_shop: { purchased: 1, abandoned: 2 },
   woocommerce: { purchased: 1, abandoned: 2 },
