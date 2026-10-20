@@ -7,6 +7,7 @@ import {
   type ConversationSummary,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import type { AssignedSource, Handling } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -56,7 +57,41 @@ export interface AssignmentChange {
  * How the person was chosen, for the timeline: `manual` is a human's choice; the others are the routing engine's (a rule's strategy,
  * or `contact_agent` for "keep returning contacts with their agent").
  */
-export type AssignmentHow = 'manual' | 'round_robin' | 'least_busy' | 'specific' | 'contact_agent';
+export type AssignmentHow =
+  | 'manual'
+  | 'round_robin'
+  | 'least_busy'
+  | 'specific'
+  | 'contact_agent'
+  | 'handoff'
+  | 'owner'
+  | 'claim';
+
+/** What the handoff model adds to a write (BL-396): who decided, and the handling state the thread moves to. */
+export interface AssignExtra {
+  /** Who set the assignee; default: derived from the actor and strategy. */
+  source?: AssignedSource;
+  /**
+   * `'auto'` (default): a person taking a `waiting`/`with_bot` thread makes it `with_person`, a person letting go of a `with_person` thread
+   * makes it `waiting`; a thread that is not tracked (null) stays not tracked. A value sets it; `null` clears it.
+   */
+  handling?: Handling | null | 'auto';
+  /** Take the thread from an AI agent even when no person or team is given (a handoff to the queue). */
+  releaseAi?: boolean;
+}
+
+const sourceFor = (actor: AssignmentActor, how: AssignmentHow): AssignedSource =>
+  actor.kind === 'user'
+    ? how === 'claim'
+      ? 'claim'
+      : 'manual'
+    : actor.kind === 'flow'
+      ? 'handoff_named'
+      : how === 'contact_agent'
+        ? 'sticky'
+        : how === 'owner'
+          ? 'owner'
+          : 'rule';
 
 /** Who is assigning, for the timeline and the audit: a person, or the system (routing rules, escalation, flows, later). */
 export type AssignmentActor =
@@ -290,17 +325,27 @@ export class AssignmentService {
     strategy: AssignmentHow = 'manual',
     /** More facts for the timeline event and the outbox event (the routing rule that decided). Uuids only. */
     meta: Record<string, unknown> = {},
+    extra: AssignExtra = {},
   ): Promise<AssignmentChange> {
     const before = await this.summaryIds(tx, orgId, locked);
     const humanAssigned = next.userId !== null || next.teamId !== null;
-    const takesFromAi = humanAssigned && locked.assigneeAgentId !== null;
+    const takesFromAi =
+      (humanAssigned || extra.releaseAi === true) && locked.assigneeAgentId !== null;
     const reopens = locked.status === 'closed';
+    const handlingNext = this.nextHandling(locked.handling, next.userId, extra.handling ?? 'auto');
+    const handlingChanged = handlingNext !== locked.handling;
+    const source: AssignedSource | null = humanAssigned
+      ? (extra.source ?? sourceFor(actor, strategy))
+      : null;
 
     await tx.execute(sql`
       UPDATE conversations SET
         assignee_user_id = ${next.userId},
         assignee_team_id = ${next.teamId},
         assignee_agent_id = ${takesFromAi ? null : sql`assignee_agent_id`},
+        assigned_source = ${source},
+        handling = ${handlingNext},
+        handling_since = ${handlingChanged ? (handlingNext === null ? null : sql`now()`) : sql`handling_since`},
         status = ${reopens ? 'open' : sql`status`},
         resolved_at = ${reopens ? null : sql`resolved_at`},
         resolved_by = ${reopens ? null : sql`resolved_by`}
@@ -347,6 +392,16 @@ export class AssignmentService {
         actorUserId,
         payload: { from: 'closed', to: 'open', reason: 'assigned' },
       });
+    }
+
+    // The live handoff card follows the thread: held by a person = assigned; back in the queue = waiting.
+    if (locked.handling !== null || handlingNext !== null) {
+      await tx.execute(sql`
+        UPDATE conversation_handoffs SET
+          status = ${next.userId !== null ? 'assigned' : 'waiting'},
+          assigned_user_id = ${next.userId}, assigned_team_id = ${next.teamId},
+          completed_at = ${next.userId !== null ? sql`COALESCE(completed_at, now())` : null}
+        WHERE org_id = ${orgId} AND conversation_id = ${locked.id} AND status IN ('waiting', 'assigned')`);
     }
 
     const byUuid = actorUserId === null ? null : await this.repo.userUuid(tx, orgId, actorUserId);
@@ -487,6 +542,21 @@ export class AssignmentService {
       teamUuid = input.teamId;
     }
     return { userId, userUuid, teamId, teamUuid };
+  }
+
+  /** The handling state after a write (see `AssignExtra.handling`). */
+  private nextHandling(
+    current: string | null,
+    userId: number | null,
+    want: Handling | null | 'auto',
+  ): Handling | null {
+    if (want !== 'auto') return want;
+    if (current === null) return null;
+    if (userId !== null)
+      return current === 'with_bot' || current === 'waiting'
+        ? 'with_person'
+        : (current as Handling);
+    return current === 'with_person' ? 'waiting' : (current as Handling);
   }
 
   /** Wire ids of what the conversation is assigned to right now, for the timeline's "from". */

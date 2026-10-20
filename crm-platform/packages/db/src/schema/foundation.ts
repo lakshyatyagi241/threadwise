@@ -126,6 +126,8 @@ export const teams = pgTable(
     color: text('color').notNull().default('#075E54'),
     description: text('description'),
     defaultAssigneeId: idColumn('default_assignee_id'),
+    /** Round robin cursor of the team's own method (migration 20270301090000): the person who took the last turn. */
+    assignmentCursor: idColumn('assignment_cursor'),
     assignmentStrategy: text('assignment_strategy').notNull().default('manual'),
     businessHours: jsonb('business_hours'),
     timezone: text('timezone'),

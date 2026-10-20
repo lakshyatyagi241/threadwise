@@ -254,7 +254,9 @@ export function flbPreviewLabel(node: { type: string; data?: Record<string, unkn
     case 'tag':
       return `Tag: ${orElse(d.action, 'add')} ${orElse(d.tag, '')}`;
     case 'assign':
-      return `Assign to ${orElse(d.team, 'team')}`;
+      return d.handoff === 2
+        ? `Hand off to ${d.destination === 'rules' ? 'assignment rules' : d.destination === 'person' ? 'a person' : orElse(d.team, 'a team')}`
+        : `Assign to ${orElse(d.team, 'team')}`;
     case 'end':
       return 'End flow';
     default:

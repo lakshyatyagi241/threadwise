@@ -372,6 +372,18 @@ export const workspaceSettings = pgTable(
     inboxAway: boolean('inbox_away').notNull().default(false),
     /** TIB2: a new or reopened conversation of a contact who already has an agent goes to that agent first (routing rules run otherwise). */
     routingKeepContactAgent: boolean('routing_keep_contact_agent').notNull().default(false),
+    /** Handoff and assignment settings (BL-404, migration 20270301090000); every default is the behaviour of before. */
+    handoffAutoAssign: boolean('handoff_auto_assign').notNull().default(true),
+    handoffClaimSetsOwner: boolean('handoff_claim_sets_owner').notNull().default(false),
+    handoffOwnerMode: text('handoff_owner_mode')
+      .$type<'independent' | 'owner_first' | 'keep_in_sync'>()
+      .notNull()
+      .default('independent'),
+    handoffContinuityDays: integer('handoff_continuity_days'),
+    handoffPromptOwnerOnReassign: boolean('handoff_prompt_owner_on_reassign')
+      .notNull()
+      .default(false),
+    handoffNotifyQueue: boolean('handoff_notify_queue').notNull().default(true),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
