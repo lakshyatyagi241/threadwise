@@ -2,36 +2,68 @@
   "item": "Sheet3 #15",
   "target": ">=95% P0/P1 scenario coverage and zero flaky P0 tests",
   "totals": {
-    "scenarios": 51,
-    "tested": 44,
-    "notTested": 7,
-    "coveragePercent": 86.3,
+    "scenarios": 63,
+    "tested": 55,
+    "notTested": 8,
+    "coveragePercent": 87.3,
     "byPriority": {
       "P0": {
         "total": 17,
         "tested": 17
       },
       "P1": {
-        "total": 34,
-        "tested": 27
+        "total": 46,
+        "tested": 38
       }
     },
     "byArea": {
-      "Optimistic locking": {
-        "total": 2,
-        "tested": 2
+      "Conversations and messages": {
+        "total": 4,
+        "tested": 4
       },
-      "Idempotency": {
+      "Auth": {
         "total": 3,
-        "tested": 2
+        "tested": 3
       },
       "Unique constraints": {
         "total": 2,
         "tested": 2
       },
+      "Coupons and referrals": {
+        "total": 5,
+        "tested": 5
+      },
+      "Records": {
+        "total": 3,
+        "tested": 3
+      },
+      "Idempotency": {
+        "total": 3,
+        "tested": 2
+      },
+      "Invoices": {
+        "total": 3,
+        "tested": 3
+      },
+      "Queues and outbox": {
+        "total": 6,
+        "tested": 4
+      },
       "Plan limits": {
-        "total": 9,
-        "tested": 6
+        "total": 21,
+        "tested": 17
+      },
+      "Optimistic locking": {
+        "total": 2,
+        "tested": 2
+      },
+      "Sessions": {
+        "total": 3,
+        "tested": 3
+      },
+      "Tenant isolation": {
+        "total": 2,
+        "tested": 2
       },
       "Wallet": {
         "total": 4,
@@ -40,38 +72,6 @@
       "Webhooks": {
         "total": 2,
         "tested": 1
-      },
-      "Coupons and referrals": {
-        "total": 5,
-        "tested": 5
-      },
-      "Invoices": {
-        "total": 3,
-        "tested": 3
-      },
-      "Conversations and messages": {
-        "total": 4,
-        "tested": 4
-      },
-      "Queues and outbox": {
-        "total": 6,
-        "tested": 4
-      },
-      "Sessions": {
-        "total": 3,
-        "tested": 3
-      },
-      "Auth": {
-        "total": 3,
-        "tested": 3
-      },
-      "Tenant isolation": {
-        "total": 2,
-        "tested": 2
-      },
-      "Records": {
-        "total": 3,
-        "tested": 3
       }
     }
   },
@@ -103,40 +103,150 @@
     {
       "id": "D-05",
       "severity": "Medium",
-      "status": "open",
-      "title": "Other capped things use the same unlocked count-then-insert pattern"
+      "status": "fixed",
+      "title": "Every other capped create had the same unlocked count-then-insert; fixed through one helper (residual in CC-LIM-19)"
     },
     {
       "id": "D-06",
       "severity": "Medium",
-      "status": "open",
-      "title": "Coupon last use can be exceeded (limit checked at preview only; documented Reference gap)"
+      "status": "fixed",
+      "title": "Coupon last uses could be handed out twice; fixed with a deliberate deviation from Reference, coupons owner to confirm"
     },
     {
       "id": "D-07",
       "severity": "Low",
-      "status": "open",
-      "title": "Editing a contact to an e-mail another contact holds is allowed (not a race)"
+      "status": "intentionally unchanged",
+      "title": "Contact edited to an e-mail another contact holds: Reference allows it on edit"
     }
   ],
   "scenarios": [
     {
-      "id": "CC-LOCK-01",
-      "area": "Optimistic locking",
+      "id": "CC-ASG-01",
+      "area": "Conversations and messages",
       "priority": "P1",
-      "scenario": "Contact: 8 writers, same row_version",
-      "invariant": "Exactly one update wins, 7 get 409 ROW_VERSION_CONFLICT, no lost update",
-      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
+      "scenario": "3 agents claim one conversation",
+      "invariant": "One wins, others 409, one event",
+      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
       "testKind": "new",
       "status": "tested",
       "notes": ""
     },
     {
-      "id": "CC-LOCK-02",
-      "area": "Optimistic locking",
+      "id": "CC-AUTH-01",
+      "area": "Auth",
+      "priority": "P0",
+      "scenario": "Same e-mail signing up x6",
+      "invariant": "One account, others 409",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-04"
+    },
+    {
+      "id": "CC-AUTH-02",
+      "area": "Auth",
+      "priority": "P0",
+      "scenario": "One reset link used x5",
+      "invariant": "One winner, only its password works",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-AUTH-03",
+      "area": "Auth",
+      "priority": "P0",
+      "scenario": "12 wrong passwords at once",
+      "invariant": "Only 401/423/429, never 5xx",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-CON-01",
+      "area": "Unique constraints",
       "priority": "P1",
-      "scenario": "Company: 8 writers, same row_version",
-      "invariant": "Same as above on a second entity",
+      "scenario": "Contact create x10 same e-mail/phone",
+      "invariant": "One contact, every caller gets it",
+      "test": "apps/api/test/e2e/contacts-attributes-tags/contact-create-concurrency.e2e.spec.ts",
+      "testKind": "existing",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-CPN-01",
+      "area": "Coupons and referrals",
+      "priority": "P0",
+      "scenario": "One paid order finalised x8",
+      "invariant": "Counts one use",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-CPN-02",
+      "area": "Coupons and referrals",
+      "priority": "P1",
+      "scenario": "12 orders finalised at once",
+      "invariant": "12 uses, no lost increment",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-CPN-03",
+      "area": "Coupons and referrals",
+      "priority": "P0",
+      "scenario": "Last coupon uses raced by 8 buyers at checkout",
+      "invariant": "Orders holding a use never exceed max_uses; a failed order gives its use back",
+      "test": "apps/api/test/e2e/concurrency/coupon-limit.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-06 fixed. Deliberate deviation from Reference (enforces the advertised limit under concurrency); coupons owner to confirm."
+    },
+    {
+      "id": "CC-DATA-01",
+      "area": "Records",
+      "priority": "P1",
+      "scenario": "Two contacts edited to one e-mail",
+      "invariant": "No 5xx, rows readable (weak: sequential edit allows it, D-07)",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-07 observation"
+    },
+    {
+      "id": "CC-DATA-02",
+      "area": "Records",
+      "priority": "P1",
+      "scenario": "Edit and delete of one contact",
+      "invariant": "No 5xx, not half of each",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-DATA-03",
+      "area": "Records",
+      "priority": "P1",
+      "scenario": "Same new tag attached x8",
+      "invariant": "One tag, one link",
+      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-DUP-01",
+      "area": "Unique constraints",
+      "priority": "P1",
+      "scenario": "Tag name x8 in parallel",
+      "invariant": "One 201, seven 409, one row",
       "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
       "testKind": "new",
       "status": "tested",
@@ -165,26 +275,81 @@
       "notes": ""
     },
     {
-      "id": "CC-DUP-01",
-      "area": "Unique constraints",
+      "id": "CC-IDEM-03",
+      "area": "Idempotency",
       "priority": "P1",
-      "scenario": "Tag name x8 in parallel",
-      "invariant": "One 201, seven 409, one row",
-      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
+      "scenario": "Redis outage while an idempotent request runs",
+      "invariant": "Fails closed, nothing created",
+      "test": null,
+      "testKind": "none",
+      "status": "not tested",
+      "notes": "Not tested: cannot stop the shared Redis."
+    },
+    {
+      "id": "CC-INV-01",
+      "area": "Invoices",
+      "priority": "P1",
+      "scenario": "10 invoices issued at once",
+      "invariant": "Distinct gap-free numbers",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
       "testKind": "new",
       "status": "tested",
       "notes": ""
     },
     {
-      "id": "CC-CON-01",
-      "area": "Unique constraints",
+      "id": "CC-INV-02",
+      "area": "Invoices",
       "priority": "P1",
-      "scenario": "Contact create x10 same e-mail/phone",
-      "invariant": "One contact, every caller gets it",
-      "test": "apps/api/test/e2e/contacts-attributes-tags/contact-create-concurrency.e2e.spec.ts",
-      "testKind": "existing",
+      "scenario": "One invoice issued x6",
+      "invariant": "Issued once, one number used",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
       "status": "tested",
       "notes": ""
+    },
+    {
+      "id": "CC-INV-03",
+      "area": "Invoices",
+      "priority": "P0",
+      "scenario": "6 payments on a 200.00 invoice",
+      "invariant": "Never more than the total recorded",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-JOB-01",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "Same message queued x10 (same and distinct job ids)",
+      "invariant": "Stored once",
+      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-JOB-02",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "60 messages, parallel consumers",
+      "invariant": "Each stored once, gap-free seq",
+      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-JOB-03",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "Stalled job recovery after a worker crash",
+      "invariant": "No lost, no double job",
+      "test": null,
+      "testKind": "none",
+      "status": "not tested",
+      "notes": "Not tested: needs killing a worker process."
     },
     {
       "id": "CC-LIM-01",
@@ -245,12 +410,12 @@
       "id": "CC-LIM-06",
       "area": "Plan limits",
       "priority": "P1",
-      "scenario": "Other capped things (pipelines, forms, lead sources, broadcasts, SMS senders, mailboxes, appointments)",
+      "scenario": "Capped creates fixed by the shared lock but without their own parallel test: templates, recurring invoices, catalog products, SMS senders, custom fields (fields endpoint), broadcasts, scheduled messages, campaigns, appointments, saved-reply import",
       "invariant": "Never more rows than the cap",
       "test": null,
       "testKind": "none",
       "status": "not tested",
-      "notes": "Not tested. Same count-then-insert pattern, D-05 open."
+      "notes": "D-05 fixed in code (same lock); parallel test not written: needs a gateway, a connected sender or a worker to create one row."
     },
     {
       "id": "CC-LIM-07",
@@ -262,6 +427,281 @@
       "testKind": "none",
       "status": "not tested",
       "notes": "Not tested: needs the import worker flow."
+    },
+    {
+      "id": "CC-LIM-08",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Segments cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-09",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Custom fields cap (attributes): creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-10",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Saved replies cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-11",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Routing rules cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-12",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Team chat channels cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-13",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Pipelines cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-14",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Forms cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-15",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Lead sources cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-16",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Booking types cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-17",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Invoices per month cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-18",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Chatbot widgets cap: creates at the cap in parallel",
+      "invariant": "Exactly as many rows as one-by-one creates allow; the rest 422 PLAN_LIMIT_REACHED",
+      "test": "apps/api/test/e2e/concurrency/limits-all.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": "D-05"
+    },
+    {
+      "id": "CC-LIM-19",
+      "area": "Plan limits",
+      "priority": "P1",
+      "scenario": "Hand-rolled caps not behind the shared lock: tags auto-created by the contact resolver and the form submit, invoices_monthly from a store order",
+      "invariant": "Never more rows than the cap",
+      "test": null,
+      "testKind": "none",
+      "status": "not tested",
+      "notes": "D-05 residual, open (Low): these skip rather than refuse, or run outside a transaction."
+    },
+    {
+      "id": "CC-LOCK-01",
+      "area": "Optimistic locking",
+      "priority": "P1",
+      "scenario": "Contact: 8 writers, same row_version",
+      "invariant": "Exactly one update wins, 7 get 409 ROW_VERSION_CONFLICT, no lost update",
+      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-LOCK-02",
+      "area": "Optimistic locking",
+      "priority": "P1",
+      "scenario": "Company: 8 writers, same row_version",
+      "invariant": "Same as above on a second entity",
+      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-MSG-01",
+      "area": "Conversations and messages",
+      "priority": "P1",
+      "scenario": "Outbound send with one clientMessageId x6",
+      "invariant": "One message, one provider call",
+      "test": "apps/api/test/e2e/chat-conversations/message-send.e2e.spec.ts",
+      "testKind": "existing",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-MSG-02",
+      "area": "Conversations and messages",
+      "priority": "P1",
+      "scenario": "Inbound: same provider id x20, 16 and 50 messages from a new sender",
+      "invariant": "One message, one thread, gap-free seq",
+      "test": "apps/api/test/e2e/chat-conversations/message-ingest.e2e.spec.ts",
+      "testKind": "existing",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-OBX-01",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "Three drainers, 700 events",
+      "invariant": "Each handled once, none left",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-OBX-02",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "Subscriber fails for some events",
+      "invariant": "Failed rows kept for retry, others once",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-OBX-03",
+      "area": "Queues and outbox",
+      "priority": "P1",
+      "scenario": "Drainers in separate processes and nodes",
+      "invariant": "Same as OBX-01 across nodes",
+      "test": null,
+      "testKind": "none",
+      "status": "not tested",
+      "notes": "Not tested: needs several nodes; one process was used (the SQL claim is the same)."
+    },
+    {
+      "id": "CC-REF-01",
+      "area": "Coupons and referrals",
+      "priority": "P0",
+      "scenario": "Referral reward triggered x8",
+      "invariant": "Paid once",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-REF-02",
+      "area": "Coupons and referrals",
+      "priority": "P1",
+      "scenario": "Referral code issuing in parallel",
+      "invariant": "One code per user, codes unique",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-RR-01",
+      "area": "Conversations and messages",
+      "priority": "P1",
+      "scenario": "Round robin, 12 customers at once x5 rounds",
+      "invariant": "Even split, each routed once, rule counter exact",
+      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-SES-01",
+      "area": "Sessions",
+      "priority": "P0",
+      "scenario": "One refresh token x6 (double click)",
+      "invariant": "All succeed, session alive, one rotation, one session",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-SES-02",
+      "area": "Sessions",
+      "priority": "P0",
+      "scenario": "Replay of a token two rotations old, parallel",
+      "invariant": "All refused, session revoked",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-SES-03",
+      "area": "Sessions",
+      "priority": "P0",
+      "scenario": "8 sign-ins with a cap of 2",
+      "invariant": "At most 2 live sessions",
+      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
     },
     {
       "id": "CC-STO-01",
@@ -284,6 +724,28 @@
       "testKind": "none",
       "status": "not tested",
       "notes": "Not testable: enforce mode (phase S2) is not built."
+    },
+    {
+      "id": "CC-TEN-01",
+      "area": "Tenant isolation",
+      "priority": "P0",
+      "scenario": "Two organizations writing and reading at once",
+      "invariant": "No cross-tenant rows, cross reads 404",
+      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
+      "testKind": "new",
+      "status": "tested",
+      "notes": ""
+    },
+    {
+      "id": "CC-TEN-02",
+      "area": "Tenant isolation",
+      "priority": "P0",
+      "scenario": "Tenant context leaking between pooled connections under load",
+      "invariant": "No leak",
+      "test": "apps/api/test/e2e/tenancy/tenancy-concurrency.e2e.spec.ts",
+      "testKind": "existing",
+      "status": "tested",
+      "notes": ""
     },
     {
       "id": "CC-WAL-01",
@@ -350,336 +812,6 @@
       "testKind": "none",
       "status": "not tested",
       "notes": "Covered at the ingest layer by CC-MSG-02; the HTTP signature layer per channel is not tested."
-    },
-    {
-      "id": "CC-CPN-01",
-      "area": "Coupons and referrals",
-      "priority": "P0",
-      "scenario": "One paid order finalised x8",
-      "invariant": "Counts one use",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-CPN-02",
-      "area": "Coupons and referrals",
-      "priority": "P1",
-      "scenario": "12 orders finalised at once",
-      "invariant": "12 uses, no lost increment",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-CPN-03",
-      "area": "Coupons and referrals",
-      "priority": "P0",
-      "scenario": "Last coupon uses raced by 8 buyers",
-      "invariant": "uses never exceed max_uses",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": "D-06 OPEN: the test is it.fails and passes while the gap exists."
-    },
-    {
-      "id": "CC-REF-01",
-      "area": "Coupons and referrals",
-      "priority": "P0",
-      "scenario": "Referral reward triggered x8",
-      "invariant": "Paid once",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-REF-02",
-      "area": "Coupons and referrals",
-      "priority": "P1",
-      "scenario": "Referral code issuing in parallel",
-      "invariant": "One code per user, codes unique",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-INV-01",
-      "area": "Invoices",
-      "priority": "P1",
-      "scenario": "10 invoices issued at once",
-      "invariant": "Distinct gap-free numbers",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-INV-02",
-      "area": "Invoices",
-      "priority": "P1",
-      "scenario": "One invoice issued x6",
-      "invariant": "Issued once, one number used",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-INV-03",
-      "area": "Invoices",
-      "priority": "P0",
-      "scenario": "6 payments on a 200.00 invoice",
-      "invariant": "Never more than the total recorded",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-RR-01",
-      "area": "Conversations and messages",
-      "priority": "P1",
-      "scenario": "Round robin, 12 customers at once x5 rounds",
-      "invariant": "Even split, each routed once, rule counter exact",
-      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-ASG-01",
-      "area": "Conversations and messages",
-      "priority": "P1",
-      "scenario": "3 agents claim one conversation",
-      "invariant": "One wins, others 409, one event",
-      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-MSG-01",
-      "area": "Conversations and messages",
-      "priority": "P1",
-      "scenario": "Outbound send with one clientMessageId x6",
-      "invariant": "One message, one provider call",
-      "test": "apps/api/test/e2e/chat-conversations/message-send.e2e.spec.ts",
-      "testKind": "existing",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-MSG-02",
-      "area": "Conversations and messages",
-      "priority": "P1",
-      "scenario": "Inbound: same provider id x20, 16 and 50 messages from a new sender",
-      "invariant": "One message, one thread, gap-free seq",
-      "test": "apps/api/test/e2e/chat-conversations/message-ingest.e2e.spec.ts",
-      "testKind": "existing",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-JOB-01",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "Same message queued x10 (same and distinct job ids)",
-      "invariant": "Stored once",
-      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-JOB-02",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "60 messages, parallel consumers",
-      "invariant": "Each stored once, gap-free seq",
-      "test": "apps/api/test/e2e/concurrency/pipeline-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-OBX-01",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "Three drainers, 700 events",
-      "invariant": "Each handled once, none left",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-OBX-02",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "Subscriber fails for some events",
-      "invariant": "Failed rows kept for retry, others once",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-OBX-03",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "Drainers in separate processes and nodes",
-      "invariant": "Same as OBX-01 across nodes",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: needs several nodes; one process was used (the SQL claim is the same)."
-    },
-    {
-      "id": "CC-JOB-03",
-      "area": "Queues and outbox",
-      "priority": "P1",
-      "scenario": "Stalled job recovery after a worker crash",
-      "invariant": "No lost, no double job",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: needs killing a worker process."
-    },
-    {
-      "id": "CC-IDEM-03",
-      "area": "Idempotency",
-      "priority": "P1",
-      "scenario": "Redis outage while an idempotent request runs",
-      "invariant": "Fails closed, nothing created",
-      "test": null,
-      "testKind": "none",
-      "status": "not tested",
-      "notes": "Not tested: cannot stop the shared Redis."
-    },
-    {
-      "id": "CC-SES-01",
-      "area": "Sessions",
-      "priority": "P0",
-      "scenario": "One refresh token x6 (double click)",
-      "invariant": "All succeed, session alive, one rotation, one session",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-SES-02",
-      "area": "Sessions",
-      "priority": "P0",
-      "scenario": "Replay of a token two rotations old, parallel",
-      "invariant": "All refused, session revoked",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-SES-03",
-      "area": "Sessions",
-      "priority": "P0",
-      "scenario": "8 sign-ins with a cap of 2",
-      "invariant": "At most 2 live sessions",
-      "test": "apps/api/test/e2e/concurrency/state-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-AUTH-01",
-      "area": "Auth",
-      "priority": "P0",
-      "scenario": "Same e-mail signing up x6",
-      "invariant": "One account, others 409",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": "D-04"
-    },
-    {
-      "id": "CC-AUTH-02",
-      "area": "Auth",
-      "priority": "P0",
-      "scenario": "One reset link used x5",
-      "invariant": "One winner, only its password works",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-AUTH-03",
-      "area": "Auth",
-      "priority": "P0",
-      "scenario": "12 wrong passwords at once",
-      "invariant": "Only 401/423/429, never 5xx",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-TEN-01",
-      "area": "Tenant isolation",
-      "priority": "P0",
-      "scenario": "Two organizations writing and reading at once",
-      "invariant": "No cross-tenant rows, cross reads 404",
-      "test": "apps/api/test/e2e/concurrency/api-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-TEN-02",
-      "area": "Tenant isolation",
-      "priority": "P0",
-      "scenario": "Tenant context leaking between pooled connections under load",
-      "invariant": "No leak",
-      "test": "apps/api/test/e2e/tenancy/tenancy-concurrency.e2e.spec.ts",
-      "testKind": "existing",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-DATA-01",
-      "area": "Records",
-      "priority": "P1",
-      "scenario": "Two contacts edited to one e-mail",
-      "invariant": "No 5xx, rows readable (weak: sequential edit allows it, D-07)",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": "D-07 observation"
-    },
-    {
-      "id": "CC-DATA-02",
-      "area": "Records",
-      "priority": "P1",
-      "scenario": "Edit and delete of one contact",
-      "invariant": "No 5xx, not half of each",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
-    },
-    {
-      "id": "CC-DATA-03",
-      "area": "Records",
-      "priority": "P1",
-      "scenario": "Same new tag attached x8",
-      "invariant": "One tag, one link",
-      "test": "apps/api/test/e2e/concurrency/identity-races.e2e.spec.ts",
-      "testKind": "new",
-      "status": "tested",
-      "notes": ""
     }
   ]
 }
