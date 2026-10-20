@@ -82,6 +82,8 @@ describe('defaults and permissions', () => {
     expect(task.taskTypes.map((o) => o.key)).toEqual(['follow_up', 'call_reminder']);
     // The outcomes of a task are the workspace's Task outcomes list, not a list of this registry.
     expect(task.outcomes).toEqual([]);
+    // "Predict outcomes" starts on for Task: the outcome picker on a task shows whenever the workspace has outcomes, as it always did.
+    expect(task.outcomesEnabled).toBe(true);
     expect(byKey(all, 'phone').outcomes.map((o) => o.key)).toEqual([
       'connected',
       'no_answer',
