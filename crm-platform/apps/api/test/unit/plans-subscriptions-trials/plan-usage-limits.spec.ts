@@ -68,6 +68,8 @@ const OTHER_ENFORCEMENT: PlanLimitKey[] = [
   'sms_monthly',
   // Mails sent this month: the email campaign sender counts the month's outbound email messages before each run.
   'email_monthly',
+  // 0 is "solo", not unlimited: the Teams module's own guard (TeamsPlanService) enforces it, see teams-packaging.spec.ts.
+  'teams',
 ];
 // The request-rate cap is read by the API-key guard, it counts nothing in the database.
 // `storage_gb` is bytes held, counted by the storage meter (modules/storage-quota). Its usage-panel entry arrives with enforcement (storage quota S2).

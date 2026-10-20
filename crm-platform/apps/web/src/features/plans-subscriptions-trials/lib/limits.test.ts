@@ -32,9 +32,11 @@ const meter = (
   window,
 });
 
-/** One meter per registry key, all unlimited, then `over` replaces some. */
+/** One meter per registry key, all unlimited, then `over` replaces some. (`teams` is the cap whose 0 is solo: its unlimited is the stand-in value.) */
 const meters = (over: Record<string, [number, number]> = {}): UsageMeter[] =>
-  PLAN_LIMIT_KEYS.map((k) => meter(k, over[k]?.[0] ?? 0, over[k]?.[1] ?? 0));
+  PLAN_LIMIT_KEYS.map((k) =>
+    meter(k, over[k]?.[0] ?? 0, over[k]?.[1] ?? (k === 'teams' ? 1_000_000 : 0)),
+  );
 
 describe('limitTone (normal / warning from 80% / danger at 100%)', () => {
   it('reads the real counts', () => {

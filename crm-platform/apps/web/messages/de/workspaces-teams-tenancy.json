@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden.",
       "teamParentCycle": "Ein Team kann nicht unter sich selbst oder unter einem seiner eigenen Unterteams stehen.",
       "teamParentInvalid": "Dieses übergeordnete Team ist nicht verfügbar, oder die Hierarchie wäre tiefer als 5 Ebenen.",
-      "teamNotOnTeam": "Diese Person gehört nicht zu diesem Team."
+      "teamNotOnTeam": "Diese Person gehört nicht zu diesem Team.",
+      "teamsNotIncluded": "Ihr Tarif enthält keine Teams. Wechseln Sie zu einem höheren Tarif oder fragen Sie das Add-on „Teams und Berechtigungen“ an, um Personen in Teams zu gruppieren.",
+      "teamsLimit": "Sie haben das Limit von {limit} Teams Ihres Tarifs erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen.",
+      "teamsLimitUnknown": "Das Teamlimit Ihres Tarifs ist erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen."
     },
     "accept": {
       "title": "Treten Sie Ihrem Workspace bei",

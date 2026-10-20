@@ -561,7 +561,9 @@
             "personal_history_full": "पूरी हिस्ट्री इंपोर्ट (व्यक्तिगत WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI लीड स्कोरिंग",
-            "record_assignment": "रिकॉर्ड असाइनमेंट नियम"
+            "record_assignment": "रिकॉर्ड असाइनमेंट नियम",
+            "team_hierarchy": "टीम पदानुक्रम और प्रबंधक",
+            "custom_roles": "कस्टम भूमिकाएँ और दायरे"
           },
           "cta": {
             "continueFree": "फ़्री जारी रखें",

@@ -24,6 +24,10 @@ export function useErrorText() {
       const limit = planLimitOf(error);
       return limit === undefined ? t('planLimitUnknown') : t('planLimit', { limit });
     }
+    if (kind === 'teamsLimit') {
+      const limit = planLimitOf(error);
+      return limit === undefined ? t('teamsLimitUnknown') : t('teamsLimit', { limit });
+    }
     return t(kind);
   };
 }
@@ -36,7 +40,7 @@ export function ErrorNote({ error }: { error: unknown }) {
   return (
     <Alert tone="danger" className="space-y-1.5">
       <p>{text(error)}</p>
-      {kind === 'planLimit' && (
+      {(kind === 'planLimit' || kind === 'teamsLimit' || kind === 'teamsNotIncluded') && (
         <p>
           <Link href="/account/plans" className="font-semibold underline underline-offset-2">
             {t('invite.upgrade')}

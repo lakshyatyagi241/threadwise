@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Esta reasignación ya no se puede deshacer.",
       "teamParentCycle": "Un equipo no puede estar bajo sí mismo ni bajo uno de sus propios subequipos.",
       "teamParentInvalid": "Ese equipo superior no está disponible, o el árbol superaría los 5 niveles de profundidad.",
-      "teamNotOnTeam": "Esa persona no está en este equipo."
+      "teamNotOnTeam": "Esa persona no está en este equipo.",
+      "teamsNotIncluded": "Tu plan no incluye equipos. Mejora tu plan, o pide el complemento Equipos y permisos, para agrupar personas en equipos.",
+      "teamsLimit": "Has alcanzado el límite de {limit} equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más.",
+      "teamsLimitUnknown": "Has alcanzado el límite de equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más."
     },
     "accept": {
       "title": "Únete a tu espacio de trabajo",

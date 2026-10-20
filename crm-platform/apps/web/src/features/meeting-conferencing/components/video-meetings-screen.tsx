@@ -24,6 +24,7 @@ const TONE = {
   unavailable: 'warning',
   disconnected: 'neutral',
   not_installed: 'neutral',
+  not_available: 'neutral',
 } as const;
 
 /**
@@ -219,6 +220,12 @@ function ProviderCard({
       </div>
       <p className="text-sm text-muted-foreground">{t(`providers.${card.provider}.about`)}</p>
 
+      {card.status === 'not_available' && (
+        <p className="text-sm text-muted-foreground">{t('notAvailable', { provider: name })}</p>
+      )}
+      {card.status === 'disconnected' && (
+        <p className="text-sm text-muted-foreground">{t('installedHint', { provider: name })}</p>
+      )}
       {card.status === 'not_installed' && (
         <>
           <p className="text-sm">
@@ -228,7 +235,7 @@ function ProviderCard({
           </p>
           {canInstall && (
             <Link
-              href={MARKETPLACE_INTEGRATIONS}
+              href={card.listingPath ?? MARKETPLACE_INTEGRATIONS}
               className="inline-flex h-9 w-fit items-center rounded-md border border-border px-3 text-sm font-medium outline-none hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary"
             >
               {t('actions.install')}

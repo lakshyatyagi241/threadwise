@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita.",
       "teamParentCycle": "Uma equipe não pode ficar abaixo de si mesma nem de uma de suas próprias subequipes.",
       "teamParentInvalid": "Essa equipe superior não está disponível, ou a árvore ficaria com mais de 5 níveis de profundidade.",
-      "teamNotOnTeam": "Essa pessoa não está nesta equipe."
+      "teamNotOnTeam": "Essa pessoa não está nesta equipe.",
+      "teamsNotIncluded": "Seu plano não inclui equipes. Faça upgrade do plano, ou peça o complemento Equipes e permissões, para agrupar pessoas em equipes.",
+      "teamsLimit": "Você atingiu o limite de {limit} equipes do seu plano. Faça upgrade do plano ou exclua uma equipe para adicionar mais.",
+      "teamsLimitUnknown": "O limite de equipes do seu plano foi atingido. Faça upgrade do plano ou exclua uma equipe para adicionar mais."
     },
     "accept": {
       "title": "Entre no seu espaço de trabalho",

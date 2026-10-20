@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { RolesPermissionsModule } from '../roles-permissions';
 import { AddonsExtensionRegistryModule } from '../addons-extension-registry';
 import { PermissionsController } from './permissions/permissions.controller';
@@ -14,7 +15,7 @@ import { UsersService } from './users/users.service';
  * registry. Settings > Users & Permissions on the frontend.
  */
 @Module({
-  imports: [RolesPermissionsModule, AddonsExtensionRegistryModule],
+  imports: [RolesPermissionsModule, AddonsExtensionRegistryModule, PlansCoreModule],
   controllers: [UsersController, RolesController, PermissionsController],
   providers: [UsersService, UsersRepository, RolesService, RolesRepository],
   exports: [UsersService, RolesService],

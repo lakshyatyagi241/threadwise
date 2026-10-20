@@ -76,7 +76,7 @@ export function LimitsTab({ state }: { state: EditorState }) {
             </h4>
             <div className="grid gap-3 sm:grid-cols-2">
               {shown.map((key) => {
-                const unlimited = limitIsUnlimited(draft.limits[key]);
+                const unlimited = limitIsUnlimited(draft.limits[key], key);
                 const error = err(`limits.${key}`);
                 const id = fieldId(`limits.${key}`);
                 const platformOff = limitDisabledByPlatform(key, unofficialSwitch);

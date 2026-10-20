@@ -1442,7 +1442,9 @@
             "personal_history_full": "개인 WhatsApp 번호를 처음 연결할 때 전체 채팅 기록을 가져올 수 있습니다. 최근 채팅 가져오기는 개인 번호를 지원하는 모든 요금제에서 사용할 수 있습니다.",
             "ai_crm_copilot": "연락처에서 AI로 잠재 고객을 찾고 점수를 매깁니다.",
             "lead_scoring": "AI로 연락처에 점수를 매기고 성장 파일럿을 구동합니다. 이 스위치는 AI 리드 스코어링 앱이 관리합니다.",
-            "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다."
+            "record_assignment": "우선순위 규칙에 따라 새 연락처, 회사, 거래를 알맞은 영업 담당자에게 배정합니다.",
+            "team_hierarchy": "상위 팀, 팀 리더, 그리고 자기 팀과 하위 팀을 볼 수 있는 매니저입니다.",
+            "custom_roles": "역할을 만들고 수정하며, 권한마다 범위(내 기록, 팀 기록 또는 전체 기록)를 선택합니다."
           },
           "units": {
             "days": "일",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "월간 SMS",
             "email_mailboxes": "이메일 메일함",
             "email_monthly": "월간 이메일",
-            "storage_gb": "저장 공간 (GB)"
+            "storage_gb": "저장 공간 (GB)",
+            "teams": "팀"
           },
           "featureGroups": {
             "messaging": "메시징",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "전체 채팅 기록 가져오기 (개인 WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 리드 스코어링",
-            "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)"
+            "record_assignment": "레코드 배정 규칙 (연락처, 회사, 거래 자동 배정)",
+            "team_hierarchy": "팀 계층 및 매니저",
+            "custom_roles": "사용자 지정 역할 및 범위"
           },
           "problems": {
             "required": "필수 입력 항목입니다.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "달력 기준 한 달 동안 발송된 SMS 메시지 수. 0 = 무제한.",
             "email_mailboxes": "연결된 Gmail 메일함(연결을 해제하면 자리가 비워집니다). 0 = 무제한.",
             "email_monthly": "달력 기준 한 달 동안 발송된 이메일 수(답장과 캠페인 이메일 합산). 0 = 무제한.",
-            "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다."
+            "storage_gb": "워크스페이스가 보관할 수 있는 저장 공간(GB)입니다(통화 녹음, 채팅 미디어, 이메일 첨부 파일 및 파일). 0 = 무제한. 현재는 측정만 하며 아직 차단되는 것은 없습니다.",
+            "teams": "워크스페이스가 가질 수 있는 팀 수입니다. 비워 두면 무제한, 0은 단독 사용(팀 없음)입니다. 기존 팀은 삭제되지 않습니다."
+          },
+          "productLines": {
+            "chat": "채팅",
+            "crm": "영업 CRM",
+            "platform": "둘 다 공유"
           }
         }
       },

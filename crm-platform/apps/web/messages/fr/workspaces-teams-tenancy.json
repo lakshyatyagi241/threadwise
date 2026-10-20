@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Cette réattribution ne peut plus être annulée.",
       "teamParentCycle": "Une équipe ne peut pas être placée sous elle-même ni sous l'une de ses propres sous-équipes.",
       "teamParentInvalid": "Cette équipe parente n'est pas disponible, ou l'arborescence dépasserait 5 niveaux.",
-      "teamNotOnTeam": "Cette personne ne fait pas partie de cette équipe."
+      "teamNotOnTeam": "Cette personne ne fait pas partie de cette équipe.",
+      "teamsNotIncluded": "Votre offre n'inclut pas les équipes. Passez à une offre supérieure, ou demandez le module Équipes et autorisations, pour regrouper les personnes en équipes.",
+      "teamsLimit": "Vous avez atteint la limite de {limit} équipes de votre offre. Passez à une offre supérieure ou supprimez une équipe pour en ajouter.",
+      "teamsLimitUnknown": "La limite d'équipes de votre offre est atteinte. Passez à une offre supérieure ou supprimez une équipe pour en ajouter."
     },
     "accept": {
       "title": "Rejoignez votre espace de travail",

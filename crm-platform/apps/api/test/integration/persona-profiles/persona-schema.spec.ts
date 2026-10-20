@@ -16,6 +16,8 @@ import { GENERIC_PERSONA_DEFINITION, personaDefinitionSchema } from '@crm/contra
  */
 const MIGRATIONS = resolve(__dirname, '../../../../../packages/db/migrations');
 const PERSONA_FILES = /^20261230090[012]00_persona_/;
+// Later migrations that only insert into the persona tables (the edition presets, BL-383): they wait for phase 3 like the persona ones.
+const LATER_PERSONA_DATA = /_edition_personas\.sql$/;
 const BULK = 2_100; // more than two backfill batches of 1000
 
 describe('persona profiles: schema, backfill and access rules', () => {
@@ -44,7 +46,7 @@ describe('persona profiles: schema, backfill and access rules', () => {
     tmp = mkdtempSync(join(tmpdir(), 'persona-mig-'));
     mkdirSync(tmp, { recursive: true });
     for (const f of readdirSync(MIGRATIONS)) {
-      if (f.endsWith('.sql') && !PERSONA_FILES.test(f))
+      if (f.endsWith('.sql') && !PERSONA_FILES.test(f) && !LATER_PERSONA_DATA.test(f))
         copyFileSync(join(MIGRATIONS, f), join(tmp, f));
     }
     await runMigrations(container.getConnectionUri(), { dir: tmp, log: () => undefined });
@@ -107,10 +109,25 @@ describe('persona profiles: schema, backfill and access rules', () => {
 
   describe('seed and backfill', () => {
     it('seeds the generic persona and its version 1, equal to GENERIC_PERSONA_DEFINITION', async () => {
-      const p = await owner.query(`SELECT key, status, is_system, current_version FROM personas`);
+      const p = await owner.query(
+        `SELECT key, status, is_system, current_version FROM personas WHERE key NOT IN ('chat_team', 'sales_team', 'both')`,
+      );
       expect(p.rows).toEqual([
         { key: 'generic', status: 'active', is_system: true, current_version: 1 },
       ]);
+      // The edition presets (BL-383) are catalog data on top of it: published version 1, not system, no workspace moved onto them.
+      const editions = await owner.query(
+        `SELECT p.key, p.is_system, v.status FROM personas p JOIN persona_versions v ON v.persona_id = p.id WHERE p.key IN ('chat_team', 'sales_team', 'both') ORDER BY 1`,
+      );
+      expect(editions.rows).toEqual([
+        { key: 'both', is_system: false, status: 'published' },
+        { key: 'chat_team', is_system: false, status: 'published' },
+        { key: 'sales_team', is_system: false, status: 'published' },
+      ]);
+      const moved = await owner.query(
+        `SELECT count(*)::int AS n FROM workspace_persona WHERE persona_key <> 'generic'`,
+      );
+      expect(moved.rows[0].n).toBe(0);
       const v = await owner.query(
         `SELECT v.version, v.status, v.definition, v.published_at FROM persona_versions v JOIN personas p ON p.id = v.persona_id WHERE p.key = 'generic'`,
       );
@@ -240,7 +257,7 @@ describe('persona profiles: schema, backfill and access rules', () => {
       try {
         const seen = await tenant(orgA, () =>
           app.query(
-            `SELECT p.key, v.status FROM personas p LEFT JOIN persona_versions v ON v.persona_id = p.id ORDER BY 1, 2`,
+            `SELECT p.key, v.status FROM personas p LEFT JOIN persona_versions v ON v.persona_id = p.id WHERE p.key IN ('clinic', 'generic') ORDER BY 1, 2`,
           ),
         );
         expect(seen.rows).toEqual([

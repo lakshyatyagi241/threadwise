@@ -13,6 +13,7 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toRoleResponse, type RoleViewContext } from './roles.mapper';
 import { RolesRepository, type RoleRow } from './roles.repository';
@@ -39,6 +40,7 @@ export class RolesService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly roleRules: WorkspaceRoleRulesService,
+    private readonly plan: PlanEntitlementService,
   ) {}
 
   async list(query: PaginationQuery) {
@@ -86,12 +88,25 @@ export class RolesService {
     });
   }
 
+  /**
+   * Custom roles and per-key scopes are a plan feature (`custom_roles`, BL-383). Creating or editing a role needs it; reading and deleting do
+   * not, so a workspace that lost the feature still sees every role, and the roles people already hold keep working. Presets stay as shipped.
+   */
+  private assertCustomRoles(orgId: number): Promise<void> {
+    return this.plan.assertFeature(
+      orgId,
+      'custom_roles',
+      "Custom roles and scoped permissions aren't on your plan. Upgrade your plan, or ask for the Teams and permissions add-on, to create or change roles.",
+    );
+  }
+
   async create(input: CreateRoleInput): Promise<RoleResponse> {
     return this.roleRules.withDenialAudit('role.create', () => this.createInTx(input));
   }
 
   private async createInTx(input: CreateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByName(tx, ctx.orgId, input.name);
@@ -134,6 +149,7 @@ export class RolesService {
 
   private async updateInTx(uuid: string, input: UpdateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);
