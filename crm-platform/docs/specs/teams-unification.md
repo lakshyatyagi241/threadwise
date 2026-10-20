@@ -1,6 +1,6 @@
 # Teams, managers and access across chat and CRM: one model (design only)
 
-Status: **approved with the recommended defaults for D1 to D10 (owner, 2026-10-19); build starts with T0 and T1** (backlog BL-380 to BL-386). Written 2026-10-19 from a read-only pass over `origin/main` plus a vendor study. Docs only: no code,
+Status: **approved with the recommended defaults for D1 to D10 (owner, 2026-10-19); build starts with T0 and T1** (backlog BL-380 to BL-386). **T1 (BL-381) is built**: see [wiring/teams-v2.md](../threadwise-port/wiring/teams-v2.md) for what changed and [product-extensions.md](../threadwise-port/parity/product-extensions.md) for the intended differences. Written 2026-10-19 from a read-only pass over `origin/main` plus a vendor study. Docs only: no code,
 no migration, no behaviour change comes with this note. Every "today" statement names the file or table it was read in.
 
 Owner direction: the product is **one package that fuses a CRM and a conversation product** (Freshsales and Freshchat are two products; ours is one). What a

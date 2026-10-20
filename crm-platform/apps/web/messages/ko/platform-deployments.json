@@ -60,7 +60,8 @@
     "tabs": {
       "label": "표시할 항목 선택",
       "publishes": "플로우 게시",
-      "geta": "Geta 콘솔"
+      "geta": "Geta 콘솔",
+      "releases": "제품 릴리스"
     },
     "publishes": {
       "description": "모든 플로우 게시: 워커가 대기열에 넣은 것, 지금 처리 중인 것, 실패한 게시와 그 이유. 몇 초마다 새로 고쳐집니다.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "아직 게시된 플로우가 없습니다.",
         "done": "최근 30일 동안 완료된 게시가 없습니다."
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai에서 활성화된 것: 현재 릴리스, 진행 중인 릴리스, 각 시도의 단계와 오류. 몇 초마다 새로 고쳐집니다.",
+      "liveLabel": "현재 활성",
+      "live": "릴리스 {tag}, {time}부터 활성",
+      "noneLive": "아직 활성화된 릴리스가 없습니다.",
+      "inProgress": "릴리스가 진행 중입니다",
+      "stalledAlert": "릴리스 시도 {count}건이 {minutes}분 동안 변경되지 않았습니다. 빌드나 릴리스가 멈췄을 수 있습니다.",
+      "empty": "아직 기록된 릴리스가 없습니다. 다음 배포부터 여기에 표시됩니다.",
+      "cols": {
+        "tag": "태그",
+        "state": "상태",
+        "step": "단계",
+        "started": "시작",
+        "finished": "완료",
+        "error": "오류"
+      },
+      "state": {
+        "building": "빌드 중",
+        "shipping": "전송 중",
+        "releasing": "릴리스 중",
+        "ok": "활성",
+        "failed": "실패",
+        "rolled_back": "롤백됨"
       }
     }
   }

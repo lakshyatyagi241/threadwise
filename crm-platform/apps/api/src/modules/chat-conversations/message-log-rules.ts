@@ -65,13 +65,18 @@ export const addDays = (day: string, n: number): string =>
  * The first instant that is still in the live table: events older than this are archived. A whole UTC day is archived at once, so
  * the cut is the start of the day `MESSAGE_LOG_HOT_DAYS` before `now`.
  */
-export function hotCutoff(now: Date): Date {
-  return dayStart(addDays(dayOf(now), -MESSAGE_LOG_HOT_DAYS));
+export function hotCutoff(now: Date, hotDays: number = MESSAGE_LOG_HOT_DAYS): Date {
+  return dayStart(addDays(dayOf(now), -hotDays));
 }
 
 /** Events older than this are past the retention and gone: the archive purge deletes every day before it. */
-export function retentionCutoff(now: Date): Date {
-  return dayStart(addDays(dayOf(now), -MESSAGE_LOG_RETENTION_DAYS));
+export function retentionCutoff(
+  now: Date,
+  retentionDays: number | null = MESSAGE_LOG_RETENTION_DAYS,
+): Date {
+  // Kept for ever: nothing is older than the cut.
+  if (retentionDays === null) return new Date(0);
+  return dayStart(addDays(dayOf(now), -retentionDays));
 }
 
 /** Days from `from` to `to`, both included. */
@@ -84,10 +89,15 @@ export function daysBetween(from: string, to: string): string[] {
 export type ExportRangeProblem = 'order' | 'future' | 'too_old';
 
 /** What an export's dates are allowed to be: from <= to, not in the future, not older than the retention. Null when fine. */
-export function exportRangeProblem(from: string, to: string, now: Date): ExportRangeProblem | null {
+export function exportRangeProblem(
+  from: string,
+  to: string,
+  now: Date,
+  retentionDays: number | null = MESSAGE_LOG_RETENTION_DAYS,
+): ExportRangeProblem | null {
   if (from > to) return 'order';
   if (to > dayOf(now)) return 'future';
-  if (dayStart(from).getTime() < retentionCutoff(now).getTime()) return 'too_old';
+  if (dayStart(from).getTime() < retentionCutoff(now, retentionDays).getTime()) return 'too_old';
   return null;
 }
 

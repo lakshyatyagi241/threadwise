@@ -46,7 +46,9 @@
       "catchUp": "Bijwerken",
       "migrateHint": "Migreren begint met een volledige repetitie en laadt niets als die niet schoon is. Een aparte testrun is optioneel.",
       "queued": "Run in de wachtrij geplaatst.",
-      "scheduled": "Run gepland."
+      "scheduled": "Run gepland.",
+      "skipWhatsapp": "WhatsApp-nummer niet migreren (om te testen)",
+      "skipWhatsappHint": "De werkruimte wordt volledig gemigreerd, maar het WhatsApp-nummer wordt niet geïmporteerd of gekoppeld."
     },
     "confirm": {
       "title": "{org} migreren",
@@ -76,7 +78,9 @@
       "migrateAll": "Alles migreren",
       "migrateHint": "Elke organisatie begint met een eigen volledige repetitie en laadt niets als die niet schoon is. Een aparte testrun is optioneel.",
       "queued": "Batch in de wachtrij geplaatst.",
-      "scheduled": "Batch gepland."
+      "scheduled": "Batch gepland.",
+      "skipWhatsapp": "WhatsApp-nummers niet migreren (om te testen)",
+      "skipWhatsappHint": "Bij geen van deze werkruimten wordt het WhatsApp-nummer geïmporteerd of gekoppeld."
     },
     "bulkConfirm": {
       "title": "{count} organisaties migreren",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Testrun",
       "load": "Migratie",
-      "catchup": "Bijwerken"
+      "catchup": "Bijwerken",
+      "skipWhatsapp": "Geen WhatsApp-nummer"
     },
     "status": {
       "queued": "In wachtrij",

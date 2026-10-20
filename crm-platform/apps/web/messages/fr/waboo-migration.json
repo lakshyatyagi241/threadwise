@@ -46,7 +46,9 @@
       "catchUp": "Rattraper",
       "migrateHint": "La migration commence par une répétition complète et ne charge rien si elle n'est pas propre. Une simulation séparée est facultative.",
       "queued": "Exécution mise en file d'attente.",
-      "scheduled": "Exécution planifiée."
+      "scheduled": "Exécution planifiée.",
+      "skipWhatsapp": "Ne pas migrer le numéro WhatsApp (pour les tests)",
+      "skipWhatsappHint": "L'espace de travail est migré en entier, mais son numéro WhatsApp n'est ni importé ni connecté."
     },
     "confirm": {
       "title": "Migrer {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Tout migrer",
       "migrateHint": "Chaque organisation commence par sa propre répétition complète et ne charge rien si elle n'est pas propre. Une simulation séparée est facultative.",
       "queued": "Lot mis en file d'attente.",
-      "scheduled": "Lot planifié."
+      "scheduled": "Lot planifié.",
+      "skipWhatsapp": "Ne pas migrer les numéros WhatsApp (pour les tests)",
+      "skipWhatsappHint": "Aucun de ces espaces de travail n'a son numéro WhatsApp importé ni connecté."
     },
     "bulkConfirm": {
       "title": "Migrer {count} organisations",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Simulation",
       "load": "Migration",
-      "catchup": "Rattrapage"
+      "catchup": "Rattrapage",
+      "skipWhatsapp": "Sans numéro WhatsApp"
     },
     "status": {
       "queued": "En file d'attente",

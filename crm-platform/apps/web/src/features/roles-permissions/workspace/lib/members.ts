@@ -44,18 +44,40 @@ export interface MemberFilter {
   /** `null` = All. */
   roleId: string | null;
   search: string;
+  /** A team id, or `null` = every team. */
+  teamId?: string | null;
 }
 
 export function filterMembers(
   members: readonly UserResponse[],
-  { roleId, search }: MemberFilter,
+  { roleId, search, teamId = null }: MemberFilter,
 ): UserResponse[] {
   const q = search.trim().toLowerCase();
   return members.filter(
     (m) =>
       (roleId === null || m.roles.some((r) => r.id === roleId)) &&
+      (teamId === null || m.teams.some((t) => t.id === teamId)) &&
       (q === '' || m.fullName.toLowerCase().includes(q) || m.email.toLowerCase().includes(q)),
   );
+}
+
+export interface TeamFilterOption {
+  id: string;
+  name: string;
+  count: number;
+}
+
+/** The teams the people shown are on, by name, with how many of them are on each (the team filter's options). */
+export function teamFilterOptions(members: readonly UserResponse[]): TeamFilterOption[] {
+  const byTeam = new Map<string, TeamFilterOption>();
+  for (const m of members) {
+    for (const t of m.teams) {
+      const cur = byTeam.get(t.id) ?? { id: t.id, name: t.name, count: 0 };
+      cur.count += 1;
+      byTeam.set(t.id, cur);
+    }
+  }
+  return [...byTeam.values()].sort((a, b) => a.name.localeCompare(b.name));
 }
 
 /** Roles the caller may hand to a member: the server marks them, the picker never offers the rest. */

@@ -224,20 +224,20 @@
           "title": "Serbest metin",
           "body": "Bir yardım parçasını veya politikayı yapıştırın."
         },
-        "qa": {
-          "title": "Soru-yanıt çifti",
-          "body": "Bir soru ve onun asıl yanıtı."
-        },
         "file": {
           "title": "PDF, DOCX, TXT ve diğerleri",
           "body": "Bir dosya yükleyin. Metin sizin için ayıklanır."
+        },
+        "faq": {
+          "title": "SSS ekle",
+          "body": "Sorular ve verilmesini istediğiniz yanıtlar."
         }
       },
       "panel": {
         "url": "Herkese açık bir URL al",
         "text": "Düz metin yapıştır",
-        "qa": "Tekli soru-yanıt",
-        "file": "Bilgi dosyası yükle"
+        "file": "Bilgi dosyası yükle",
+        "faq": "Soru ve yanıt ekleyin"
       },
       "label": "Etiket",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Etiket (örn. Fiyatlandırma sayfası)",
           "text": "Etiket (örn. Geri ödeme politikası özeti)",
-          "qa": "Etiket (örn. Geri ödeme süresi)",
           "file": "Etiket (örn. Ürün el kitabı)"
         },
         "content": "Agent'ın bilmesi gereken herhangi bir metni yapıştırın…",
         "question": "Soru, örn. Geri ödemeler ne kadar sürer?",
         "answer": "Yanıt, örn. Geri ödemeler 3 ila 5 iş günü içinde tamamlanır."
       },
-      "urlHint": "Yalnızca herkese açık http ve https sayfaları okunur. Sayfa arka planda alınır, bu yüzden girdi bir süre İşleniyor olarak görünür.",
+      "urlHint": "Yalnızca herkese açık http ve https sayfaları okunur. Sayfa arka planda okunur, bu yüzden biraz zaman alabilir.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV veya HTML, en fazla 10 MB. Metin otomatik olarak ayıklanır.",
       "uploading": "Yükleme ilerlemesi",
       "submit": {
         "url": "Al ve eğit",
         "text": "Metni kaydet",
-        "qa": "Çifti kaydet",
-        "file": "Yükle"
+        "file": "Yükle",
+        "faq": "SSS'yi kaydet"
       },
       "cancel": "İptal",
       "added": "Bilgi eklendi.",
@@ -281,25 +280,6 @@
         "file_empty": "Bu dosya boş.",
         "tooLarge": "Tek seferde yapıştırmak için çok fazla metin. Bunun yerine dosya olarak yükleyin."
       },
-      "col": {
-        "kind": "Tür",
-        "label": "Etiket",
-        "state": "Durum",
-        "actions": "İşlemler"
-      },
-      "kind": {
-        "url": "url",
-        "text": "metin",
-        "qa": "s&c",
-        "file": "dosya"
-      },
-      "state": {
-        "ready": "hazır",
-        "processing": "işleniyor",
-        "failed": "başarısız"
-      },
-      "tokens": "yaklaşık {count} token",
-      "workspaceWide": "çalışma alanı genelinde",
       "loading": "Girdiler yükleniyor",
       "loadError": "Girdiler yüklenemedi.",
       "retry": "Tekrar dene",
@@ -310,7 +290,14 @@
       "removeBody": "Agent bunu yeni yanıtlarda kullanmayı bırakır. Eski konuşmalar değişmez.",
       "keep": "Koru",
       "removed": "Kaldırıldı.",
-      "removeFailed": "Kaldırma başarısız oldu."
+      "removeFailed": "Kaldırma başarısız oldu.",
+      "ownedNote": "Bu bilgi yalnızca bu temsilciye aittir. Başka hiçbir temsilci kullanamaz.",
+      "faq": {
+        "addAnother": "Başka bir soru ekle",
+        "removeRow": "Bu soruyu kaldır"
+      },
+      "reading": "Okunuyor…",
+      "failed": "Bu okunamadı."
     }
   }
 }

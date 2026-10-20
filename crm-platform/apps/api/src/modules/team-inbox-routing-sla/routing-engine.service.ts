@@ -670,7 +670,7 @@ export class RoutingEngine {
     cal: Calendar,
   ): Promise<Pick | null> {
     const users = await this.repo.activeUsers(tx, orgId, a.userIds);
-    const teams = await this.repo.teams(tx, orgId, a.teamIds);
+    const teams = await this.repo.teams(tx, orgId, a.teamIds, { receivingOnly: true });
     const teamIds = a.teamIds.filter((t) => teams.has(t)).map((t) => teams.get(t)!);
     const members = await this.repo.teamMembers(tx, orgId, teamIds);
 

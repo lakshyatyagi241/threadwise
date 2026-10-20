@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { useInfiniteQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
@@ -47,6 +47,7 @@ export function Announcements() {
   const t = useTranslations(`${NS}.announcements`);
   const tc = useTranslations(`${NS}.common`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const [term, setTerm] = useState('');
   const [status, setStatus] = useState<(typeof FILTERS)[number]>('all');
@@ -67,9 +68,15 @@ export function Announcements() {
   });
   const rows = useMemo(() => list.data?.pages.flatMap((p) => p.data) ?? [], [list.data]);
   const summary = list.data?.pages[0]?.summary;
-  const rel = useMemo(() => new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }), [locale]);
-  const day = useMemo(() => new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }), [locale]);
-  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale]);
+  const rel = useMemo(
+    () => new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }),
+    [locale, timeZone],
+  );
+  const day = useMemo(
+    () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }),
+    [locale, timeZone],
+  );
+  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale, timeZone]);
 
   const toggle = useMutation({
     mutationFn: (a: Announcement) =>

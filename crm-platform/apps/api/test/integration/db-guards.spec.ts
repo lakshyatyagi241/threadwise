@@ -164,11 +164,6 @@ describe('database guards', () => {
         'idx_appointments_status_starts',
         `SELECT * FROM appointments WHERE org_id = 1 AND status = 'pending' ORDER BY starts_at LIMIT 10`,
       ],
-      [
-        'idx_faq_variations_faq',
-        'uq_faq_variations_text',
-        `SELECT * FROM faq_variations WHERE org_id = 1 AND faq_id = 4`,
-      ],
     ];
 
     const present = async (name: string): Promise<boolean> =>

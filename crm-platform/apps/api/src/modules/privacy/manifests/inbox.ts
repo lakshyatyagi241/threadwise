@@ -107,16 +107,6 @@ export const inboxMessages = defineHolder({
       retention: 'Satisfaction answer of the thread.',
     },
     {
-      table: 'faq_match_logs',
-      link: CONVERSATION,
-      disposition: 'delete',
-      tier: 'history',
-      order: 30,
-      categories: ['content', 'ai_inference'],
-      pii: ['query', 'matched_text'],
-      retention: 'FAQ matching log of the thread.',
-    },
-    {
       table: 'platform_notes',
       link: CONVERSATION,
       disposition: 'delete',

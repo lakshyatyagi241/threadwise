@@ -15,10 +15,6 @@
     "status": "reviewed",
     "reason": "submissionId is a UUID (globally unique)"
   },
-  "modules/faq-knowledge/faq-embedding.service.ts": {
-    "status": "reviewed",
-    "reason": "shared cache of query-text embeddings keyed by model+sha256(text); deterministic function of the text, holds no tenant data"
-  },
   "modules/broadcasts/tracking/link-redirect.service.ts": {
     "status": "reviewed",
     "reason": "per-IP rate limit, global by policy"
@@ -107,10 +103,6 @@
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
   },
-  "modules/faq-knowledge/faq-embed.worker.ts": {
-    "status": "baseline-unreviewed",
-    "reason": "key template has no org token by heuristic; not read line by line yet"
-  },
   "modules/node-bridge-runtime/inbox/inbox-bridge.service.ts": {
     "status": "baseline-unreviewed",
     "reason": "key template has no org token by heuristic; not read line by line yet"
@@ -186,5 +178,13 @@
   "modules/marketplace/subscription-notifications.consumer.ts": {
     "status": "reviewed",
     "reason": "idempotency key for one provider event and one recipient (hash of the email); the event id is the provider's unique id, so the key cannot collide across workspaces in a way that drops a mail for another one"
+  },
+  "modules/knowledge-base/kb-embedding.service.ts": {
+    "status": "reviewed",
+    "reason": "shared cache of query-text embeddings keyed by model+sha256(text); deterministic function of the text, holds no tenant data"
+  },
+  "modules/knowledge-base/kb-embed.worker.ts": {
+    "status": "baseline-unreviewed",
+    "reason": "key template has no org token by heuristic; not read line by line yet"
   }
 }

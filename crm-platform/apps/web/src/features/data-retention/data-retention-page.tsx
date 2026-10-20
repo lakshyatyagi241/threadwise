@@ -2,11 +2,11 @@
 
 import { useTranslations } from 'next-intl';
 import { useQuery } from '@tanstack/react-query';
-import { retentionOverviewSchema, type RetentionOverview } from '@crm/contracts';
-import { Alert, Button, Spinner } from '@crm/ui';
+import { RETENTION_GROUPS, retentionOverviewSchema, type RetentionOverview } from '@crm/contracts';
+import { Alert, Button, Card, Spinner } from '@crm/ui';
 import { useOperator } from '@/features/auth-registration-security/platform/operator-context';
 import { operatorFetch } from '@/features/auth-registration-security/platform/operator-fetch';
-import { ItemCard } from './item-card';
+import { ItemRow } from './item-row';
 import { errorKind } from './lib/errors';
 import { DATA_RETENTION_QUERY_KEY } from './queries';
 
@@ -54,7 +54,7 @@ export function DataRetentionPage() {
 
   const banner = engineBanner(q.data.engine);
   return (
-    <div className="mx-auto max-w-5xl space-y-6">
+    <div className="mx-auto max-w-[96rem] space-y-6">
       <div className="space-y-1">
         <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {t('page.eyebrow')}
@@ -75,14 +75,65 @@ export function DataRetentionPage() {
           })}
         </p>
       </Alert>
-      {/* Remounted on every new version so a save, a reset or a conflict leaves the form showing what the server holds. */}
-      {q.data.items.map((item) => (
-        <ItemCard
-          key={`${item.id}:${item.rowVersion ?? 0}:${item.source}`}
-          item={item}
-          canEdit={canEdit}
-        />
-      ))}
+      <Card className="overflow-x-auto p-0" data-testid="retention-table">
+        <table className="w-full min-w-[66rem] border-collapse text-sm">
+          <caption className="sr-only">{t('table.title')}</caption>
+          <thead>
+            <tr className="border-b border-border text-xs text-muted-foreground">
+              <th scope="col" className="px-0 py-2 ps-4 pe-3 text-start font-medium">
+                {t('table.item')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('fields.liveDays')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('fields.archiveDays')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('table.deleted')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('stats.live')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('stats.lastRun')}
+              </th>
+              <th scope="col" className="py-2 pe-3 text-start font-medium">
+                {t('table.setting')}
+              </th>
+              <th scope="col" className="py-2 pe-4 text-start font-medium">
+                <span className="sr-only">{t('table.actions')}</span>
+              </th>
+            </tr>
+          </thead>
+          {RETENTION_GROUPS.map((group) => {
+            const items = q.data.items.filter((i) => i.group === group);
+            if (items.length === 0) return null;
+            return (
+              <tbody key={group} data-testid={`retention-table-group-${group}`}>
+                <tr>
+                  <th
+                    scope="colgroup"
+                    colSpan={8}
+                    className="bg-muted/40 px-4 py-1.5 text-start font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground"
+                  >
+                    {t(`groups.${group}`)}
+                  </th>
+                </tr>
+                {/* Remounted on every new version so a save, a reset or a conflict leaves the row showing what the server holds. */}
+                {items.map((item) => (
+                  <ItemRow
+                    key={`${item.id}:${item.rowVersion ?? 0}:${item.source}`}
+                    item={item}
+                    canEdit={canEdit}
+                    archiveDriver={q.data.engine.archiveDriver}
+                  />
+                ))}
+              </tbody>
+            );
+          })}
+        </table>
+      </Card>
     </div>
   );
 }

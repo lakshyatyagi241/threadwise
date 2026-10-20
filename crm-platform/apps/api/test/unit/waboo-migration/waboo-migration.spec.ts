@@ -2,7 +2,7 @@ import { mkdtempSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { createWabooMigrationRunSchema } from '@crm/contracts';
+import { createWabooMigrationBatchSchema, createWabooMigrationRunSchema } from '@crm/contracts';
 import {
   CHILD_ENV_BASE,
   PipelineNotConfiguredError,
@@ -224,6 +224,36 @@ describe('process runner safety', () => {
     expect(
       buildArgs('/p/run.js', { sourceClient: 'acme', sourceDb: 'waboo_acme', mode: 'dry' }),
     ).toEqual(['/p/run.js', '--client', 'acme', '--db', 'waboo_acme', '--mode', 'dry']);
+  });
+  it('adds --no-whatsapp only when the run asks to leave the WhatsApp number out', () => {
+    const a = { sourceClient: 'acme', sourceDb: 'waboo_acme', mode: 'load' as const };
+    expect(buildArgs('/p/run.js', { ...a, skipWhatsapp: true })).toEqual([
+      '/p/run.js',
+      '--client',
+      'acme',
+      '--db',
+      'waboo_acme',
+      '--mode',
+      'load',
+      '--no-whatsapp',
+    ]);
+    expect(buildArgs('/p/run.js', { ...a, skipWhatsapp: false })).not.toContain('--no-whatsapp');
+    expect(buildArgs('/p/run.js', a)).not.toContain('--no-whatsapp');
+  });
+  it('the create schemas default the switch to off and take a boolean', () => {
+    const one = createWabooMigrationRunSchema.parse({ organizationId: 'acme_db' });
+    expect(one.skipWhatsapp).toBe(false);
+    expect(
+      createWabooMigrationRunSchema.parse({ organizationId: 'acme_db', skipWhatsapp: true })
+        .skipWhatsapp,
+    ).toBe(true);
+    expect(
+      createWabooMigrationRunSchema.safeParse({ organizationId: 'acme_db', skipWhatsapp: 'yes' })
+        .success,
+    ).toBe(false);
+    expect(createWabooMigrationBatchSchema.parse({ organizationIds: ['a_b'] }).skipWhatsapp).toBe(
+      false,
+    );
   });
   it('gives the child only allow-listed environment names', () => {
     const env = {

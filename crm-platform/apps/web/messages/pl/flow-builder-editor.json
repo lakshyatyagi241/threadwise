@@ -104,7 +104,6 @@
       "failed": "nieudany",
       "edited": "Edytowano {when}",
       "openBuilder": "Otwórz kreator",
-      "faqs": "Najczęstsze pytania",
       "pause": "Wstrzymaj",
       "resume": "Wznów",
       "rename": "Zmień nazwę",
@@ -556,11 +555,7 @@
           "cardCount": "{count, plural, one {# karta} few {# karty} many {# kart} other {# karty}}",
           "payLink": "Link do płatności",
           "invoice": "Faktura",
-          "faqAllFaqs": "Wszystkie FAQ",
-          "faqCategory": "FAQ: {name}",
-          "faqScore": "min. wynik {score}",
-          "faqNotSent": "nie wysłano",
-          "faqWorkspaceScore": "wynik przepływu"
+          "faqRetired": "Wycofany · wychodzi przez brak dopasowania"
         },
         "overlays": {
           "startPinned": "To jest punkt startowy (kliknij, aby odpiąć)",
@@ -724,8 +719,7 @@
             "answer": "Odpowiedź",
             "action": "Akcje"
           },
-          "blockedTitle": "Ten krok kończy tę część, więc może być tylko ostatni.",
-          "blockedTitleFaq": "Odpowiedz z FAQ ma dwa wyjścia, więc może być tylko ostatnim krokiem."
+          "blockedTitle": "Ten krok kończy tę część, więc może być tylko ostatni."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -914,18 +908,12 @@
             "hint": "Odwiedzający trafia do tego zespołu z Twoją notatką. Po tym przycisku nie trzeba niczego łączyć."
           },
           "faq": {
-            "exits": {
-              "matched": "Jeśli FAQ odpowiedziało, przejdź do",
-              "no_match": "Jeśli żadne FAQ nie odpowiedziało, przejdź do"
-            },
-            "exitsHint": {
-              "matched": "Do tego czasu odpowiedź tekstowa została już wysłana. FAQ uruchamiające przepływ kontynuuje w tym przepływie.",
-              "no_match": "Nic nie było wystarczająco zbliżone albo automatyczne odpowiadanie z FAQ jest wyłączone."
-            }
+            "exit": "Kontynuuj w",
+            "exitHint": "Przepływ zawsze idzie dalej tutaj."
           }
         },
         "branchAdd": "Dodaj krok dla „{title}”",
-        "faqEnds": "Ten krok kończy tę część: to, co zostanie wysłane dalej, zależy od tego, czy FAQ odpowiedziało."
+        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania."
       },
       "formsCore": {
         "helpers": {
@@ -1873,43 +1861,7 @@
           "waitUntilPaid": "Czekaj na płatność, a następnie kontynuuj"
         },
         "faq": {
-          "intro": {
-            "body": "Dopasowuje wiadomość do FAQ tego przepływu według znaczenia i odpowiada. Wychodzi przez <mono>answered</mono>, gdy FAQ odpowiedziało, a w przeciwnym razie przez <mono>no match</mono>.",
-            "sub": "Działa bez włączania automatycznego odpowiadania na FAQ w tym przepływie. <link>Zarządzaj FAQ tego przepływu</link>"
-          },
-          "exitsLabel": "Wyjścia",
-          "exitMatchedName": "Odpowiedziano",
-          "exitMatched": "FAQ odpowiedziało: jego tekst został wysłany (chyba że wysyłanie jest wyłączone) albo jego przepływ przejął obsługę i nie wraca.",
-          "exitNoMatchName": "Brak dopasowania",
-          "exitNoMatch": "nic nie było wystarczająco zbliżone, automatyczne odpowiadanie z FAQ jest wyłączone dla platformy, powiązany przepływ lub krok nie istnieje albo wiadomość była pusta.",
-          "query": "Wiadomość do dopasowania",
-          "queryHint": "Domyślnie ostatnia wiadomość klienta. Działa też zmienna zapisana przez krok Pytanie, na przykład <mono>{variable}</mono>. Wpisz /, aby ją wstawić.",
-          "category": "Tylko te FAQ",
-          "allFaqs": "Wszystkie FAQ",
-          "loadingCategories": "Ładowanie kategorii…",
-          "categoryGone": "{name} (żadne FAQ jej nie używa)",
-          "retry": "Spróbuj ponownie",
-          "minScore": "Minimalny wynik",
-          "sendAnswer": "Wyślij odpowiedź klientowi",
-          "sendAnswerToggle": "Wyślij pasującą odpowiedź tekstową jako wiadomość",
-          "sendAnswerOnHint": "Pasujące FAQ z tekstem jest wysyłane klientowi. FAQ uruchamiające przepływ kontynuuje w tym przepływie.",
-          "sendAnswerOffHint": "Nic nie jest wysyłane: odpowiedź jest tylko zapisywana w zmiennych poniżej, aby późniejszy krok mógł sam sformułować odpowiedź. FAQ uruchamiające przepływ nadal kontynuuje w tym przepływie.",
-          "save": "Zapisz wynik jako",
-          "saveHint": "Nazwa, pod którą zapisywany jest wynik. Kolejne kroki odczytują go tak, jak pokazano poniżej.",
-          "variables": {
-            "answer": "tekst odpowiedzi",
-            "matched": "tak lub nie",
-            "question": "pytanie dopasowanego FAQ",
-            "score": "jak bliskie było dopasowanie",
-            "id": "id dopasowanego FAQ"
-          },
-          "noFaqs": "Ten przepływ nie ma jeszcze FAQ, więc ten krok zawsze kończy się wyjściem no match. <link>Dodaj pierwsze FAQ tego przepływu</link>",
-          "useWorkspaceScore": "Użyj ustawienia tego przepływu",
-          "minScoreInvalid": "Wpisz liczbę od {min} do {max} lub użyj ustawienia tego przepływu.",
-          "saveFlowFirst": "Najpierw zapisz przepływ. Jego FAQ edytuje się na karcie FAQ w prostym kreatorze, a ten krok odpowiada na ich podstawie.",
-          "categoryHint": "Odpowiadać mogą tylko FAQ z tej kategorii. Kategorie pochodzą z FAQ tego przepływu.",
-          "categoriesFailed": "Nie udało się wczytać kategorii FAQ tego przepływu.",
-          "minScoreHint": "Zastępuje wynik tego przepływu tylko dla tego kroku, od {min} do {max}. Wyniki zależą od modelu embeddingów platformy, więc przed wybraniem liczby wypróbuj wiadomość w <link>teście FAQ</link> tego przepływu."
+          "retired": "Ten krok został wycofany i niczego już nie wyszukuje. Przepływ zawsze idzie dalej przez Brak dopasowania. Aby odpowiadać na podstawie własnej wiedzy, użyj kroku asystenta AI i wybierz agenta AI."
         }
       },
       "attrPicker": {
@@ -1980,7 +1932,6 @@
         "customizeFirst": "Dostosuj widżet czatu i zapisz go raz przed publikacją.",
         "deploy": "Wdróż",
         "customizeFirstWhatsapp": "Spersonalizuj przycisk WhatsApp i zapisz go raz przed publikacją.",
-        "faqs": "FAQ",
         "install": "Zainstaluj"
       },
       "buttonIcon": {
@@ -2502,7 +2453,6 @@
         "noSenderInstagram": "Węzeł Wyzwalacz nie ma wybranego konta Instagram — wybierz je w kroku Wyzwalacz.",
         "noSenderFacebook": "Węzeł Wyzwalacz nie ma wybranej strony Facebook — wybierz ją w kroku Wyzwalacz.",
         "noSenderNumber": "Węzeł Wyzwalacz nie ma wybranego numeru — wybierz go w kroku Wyzwalacz.",
-        "faqMinScore": "\"{node}\" ma minimalny wynik spoza zakresu od 0.05 do 0.99 — popraw go lub zostaw puste, aby użyć ustawienia przepływu.",
         "locationInvalid": "„{node}” nie ma poprawnej lokalizacji — wklej link do Map Google lub wpisz szerokość (-90 do 90) i długość (-180 do 180) geograficzną.",
         "aiNoAgent": "„{node}” nie ma ani agenta AI, ani promptu — wybierz agenta AI albo Ustawienia własne i napisz instrukcje."
       }
@@ -2592,10 +2542,6 @@
           "label": "Warunek",
           "help": "Rozgałęzienie według tego, co klient powiedział lub zapisał, z regułami AND / OR"
         },
-        "faq": {
-          "label": "Odpowiedz z FAQ",
-          "help": "Dopasuj wiadomość klienta do Twoich FAQ. Kończy ten przepływ: jedno wyjście, gdy FAQ odpowiedziało, drugie, gdy nie"
-        },
         "apiLibrary": {
           "label": "Wywołanie API",
           "help": "Wywołaj API z biblioteki API"
@@ -2664,7 +2610,6 @@
         "carouselCards": "Krok {stage}: dodaj co najmniej jedną kartę i nadaj każdej karcie tytuł.",
         "carouselButtons": "Krok {stage}: nadaj każdemu przyciskowi nazwę oraz link, numer lub adres tam, gdzie coś otwiera.",
         "conditionIncomplete": "Krok {stage}: dokończ reguły warunku (w każdej zmienna i wartość).",
-        "faqMinScore": "Krok {stage}: minimalny wynik musi mieścić się w zakresie od 0.05 do 0.99 albo użyj ustawienia przepływu.",
         "optionNotConnected": "Krok {stage}: {kind, select, row {wiersz} other {przycisk}} „{label}\" nigdzie nie prowadzi. Dodaj dla niego krok lub przypisz mu działanie.",
         "tooManyOptions": "Krok {stage}: {kind, select, row {lista może mieć najwyżej {max} wierszy} other {zestaw przycisków może mieć najwyżej {max} przycisków}}.",
         "chooseFlow": "Krok {stage}: wybierz przepływ uruchamiany przez przycisk.",
@@ -2673,8 +2618,7 @@
         "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania.",
         "chooseAiAgent": "Krok {stage}: wybierz agenta AI, który odpowiada, albo przełącz krok na ustawienia własne.",
         "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI."
-      },
-      "faqSummary": "{hasCategory, select, true {Z Twoich FAQ · {category}} other {Z Twoich FAQ}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2786,9 +2730,8 @@
       "buttonNotConnected": "Przycisk „{label}” nie jest połączony — zatrzymano.",
       "simPurchase": "Symulowany zakup: {name} → wyjście „kupiono”",
       "simAbandon": "Symulowane porzucenie → wyjście „porzucono”",
-      "faqAnswered": "(symulacja) Odpowiedz z FAQ dla \"{query}\": czat testowy nie przeszukuje Twoich FAQ, więc nic nie jest wysyłane, a {ref} pozostaje puste. Wybieram wyjście \"odpowiedziano\".",
-      "faqNoMatch": "(symulacja) Odpowiedz z FAQ dla \"{query}\": czat testowy nie przeszukuje Twoich FAQ, a wyjście \"odpowiedziano\" nie jest połączone, więc wybieram \"brak dopasowania\". {ref} pozostaje puste.",
-      "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych"
+      "locationSkipped": "(lokalizacja) pominięta: brak poprawnych współrzędnych",
+      "faqRetired": "(symulacja) Odpowiedź z FAQ jest wycofana: wybierane jest „brak dopasowania”."
     }
   }
 }

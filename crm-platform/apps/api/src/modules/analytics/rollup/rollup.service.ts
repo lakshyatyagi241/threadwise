@@ -168,6 +168,32 @@ export class RollupService {
     });
   }
 
+  /**
+   * Rebuilds the base message rollups of the last `days` days for every workspace (`an_msg_feed_rebuild_base`). Only the part before the
+   * cut-over is rebuilt, so it picks up the later status changes of messages that pre-date the event writer, and is a no-op once the
+   * cut-over is more than `days` old. One workspace per transaction; a failing workspace is logged and skipped. Returns how many failed.
+   */
+  async rebuildMessageBase(days: number): Promise<number> {
+    if (!Number.isInteger(days) || days < 1)
+      throw new Error(`rebuildMessageBase: bad days ${days}`);
+    const orgs = await this.db.privileged(
+      async (tx) => (await tx.execute(sql`SELECT id FROM organizations ORDER BY id`)).rows,
+    );
+    let failed = 0;
+    for (const row of orgs as Array<{ id: string | number }>) {
+      try {
+        await this.db.privileged((tx) =>
+          tx.execute(sql`SELECT an_msg_feed_rebuild_base(
+            ${Number(row.id)}, now() - interval '1 day' * ${days}, now())`),
+        );
+      } catch (err) {
+        failed++;
+        this.logger.error({ err, orgId: row.id }, 'message base rebuild failed');
+      }
+    }
+    return failed;
+  }
+
   /** Deletes hour rows older than `retentionDays` in batches of 10,000 (day rows are kept forever). Returns how many it deleted. */
   async trimHourRows(retentionDays: number): Promise<number> {
     if (!Number.isInteger(retentionDays) || retentionDays < 1) {

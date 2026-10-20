@@ -12,8 +12,9 @@ Conventions: **User** = staff bearer token. **Public** = no token. Every id on t
 A "workspace" is an organization. There is one role model, the RBAC domain's (`docs/threadwise-port/parity/roles-permissions.md`, decisions
 D-RBAC-05 and D-RBAC-06): five preset roles per organization created by `provision_workspace_presets(org_id)`, plus any custom role the
 organization makes. Reference's five roles are shown as a **tier** read from a role's preset `system_key`. Permissions are the usual
-capability keys, all RBAC's: `org.member.invite` (invite, resend, remove, reset password), `org.member.role_assign` (change a role) and
-`inbox.team.manage` (teams writes), granted to the Owner and Admin presets.
+capability keys, all RBAC's: `org.member.invite` (invite, resend, remove, reset password), `org.member.role_assign` (change a role),
+`team.read` (see the Teams screen) and `team.manage` (teams writes). `inbox.team.manage`, the key that gated teams writes before Teams v2,
+is a deprecated **alias for one release**: any route that needs `team.manage` also accepts it.
 
 | Tier      | Rank | Role (preset `system_key`)                                                                                  |
 | --------- | ---- | ----------------------------------------------------------------------------------------------------------- |
@@ -110,7 +111,7 @@ The header numbers and what the caller may do.
 ```
 
 `roles` is every role of the organization, highest tier first; `grantable` is RBAC's `grantableRoleIds` for the caller (empty without `org.member.role_assign`). `me.canInvite`, `me.canAssignRoles` and
-`me.canManageTeams` are the caller's `org.member.invite`, `org.member.role_assign` and `inbox.team.manage`. `seats.used` counts every
+`me.canManageTeams` are the caller's `org.member.invite`, `org.member.role_assign` and `team.manage` (or the alias `inbox.team.manage`). `seats.used` counts every
 member who is not removed, pending invitations included; `limit` is the plan's `users` cap (`null` = unlimited).
 
 ### `POST /workspace/members/invite` (User, `org.member.invite`, idempotent) → 201
@@ -196,64 +197,157 @@ There is no second-factor step: a new account cannot have one.
 
 ## Teams
 
-A team is a named group of members the inbox routes conversations to. Any signed-in member may list; writes need `inbox.team.manage`.
+A team is a named group of people used for conversations (routing and assignment), for records (contact, company and deal assignment)
+and for reports: **one entity for chat, CRM and workspaces that have both** (Teams v2, BL-381, T1 of
+[specs/teams-unification.md](../specs/teams-unification.md)).
+
+| Right         | Who holds it by default                     | What it opens                                                                                         |
+| ------------- | ------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `team.read`   | Owner, Admin, Manager, Agent                | the Teams list and one team; custom roles that grant anything were given it by the migration          |
+| `team.manage` | Owner, Admin, Manager                       | create, edit, delete, members, roles, primary team; `inbox.team.manage` holders keep the same ability |
+| neither       | Viewer, a custom role created after the key | `403` on every route below                                                                            |
+
+Writes also accept `inbox.team.manage` (alias). A list or read needs `team.read`, `team.manage` or the alias.
 
 ```json
 {
   "id": "0c78f94d-…",
-  "name": "Sales",
+  "name": "Sales West",
   "color": "#075E54",
   "description": null,
   "assignmentStrategy": "manual",
   "isDefault": false,
   "sort": 0,
   "deviceIds": [],
+  "parentId": "5d1c…",
+  "depth": 2,
+  "lead": { "id": "97e03962-…", "fullName": "Demo Manager" },
+  "receivesConversations": true,
+  "receivesRecords": true,
+  "isScopeBoundary": true,
   "members": [
     {
       "id": "97e03962-…",
-      "fullName": "Demo Agent",
+      "fullName": "Demo Manager",
       "presence": "offline",
-      "isLead": false,
+      "isLead": true,
+      "role": "lead",
+      "isPrimary": true,
       "capacity": 20
     }
   ],
+  "memberCount": 1,
+  "usage": {
+    "routingRules": 1,
+    "assignmentRules": 0,
+    "segmentShares": 0,
+    "childTeams": 0,
+    "conversations": 3
+  },
+  "unusedSettings": { "businessHours": null, "timezone": null, "defaultAssignee": null },
   "rowVersion": 1,
   "createdAt": "2026-10-02T13:25:20.195Z"
 }
 ```
 
-### `GET /workspace/teams` (User)
+- `parentId` / `depth`: the optional parent team and the level in the tree (1 = top). At most **5 levels** (`WSP_TEAM_MAX_DEPTH`).
+- `lead`: the team's manager; `null` when none is set **or the manager is deactivated** (the choice is kept for their return).
+- `members[].role` is `member` or `lead`; `isLead` stays for older clients. `isPrimary` is the person's main team: **at most one per
+  person** (a partial unique index), a person on exactly one team always has it, and routing, assignment and visibility use every team.
+- `receivesConversations` and `receivesRecords` (default true) decide where the team can be **chosen**: the inbox assign list, manual
+  assignment and routing rules (conversations); contact assignment rules and reassign-to-a-team (records). A rule that already points at a
+  team that does not receive is skipped by the engine. `isScopeBoundary` is stored for the `team_and_below` scope of phase T2 and not read yet.
+- `usage`: where the team is used (routing rule actions and assignment rule pools by uuid, shared segments, sub-teams, conversations
+  assigned to it).
+- `unusedSettings`, `assignmentStrategy` and `deviceIds` are stored and **not read by anything yet** (decision D7, phase T4); the Teams
+  screen lists them as "not used yet".
+
+### `GET /workspace/teams` (User, `team.read`)
 
 Query: `limit`, `cursor`, `order` (`asc` = creation order; default `desc`), `q` (name contains). → `PageResponse<WspTeam>`.
+`GET /workspace/teams/:id` answers one team.
 
-### `POST /workspace/teams` (User, `inbox.team.manage`, idempotent) → 201
+### `POST /workspace/teams` (User, `team.manage`, idempotent) → 201
 
 ```json
 {
-  "name": "Sales",
+  "name": "Sales West",
   "color": "#ff0000",
   "description": "Inbound",
-  "assignmentStrategy": "round_robin",
   "memberIds": ["97e03962-…"],
-  "deviceIds": []
+  "parentId": "5d1c…",
+  "leadId": "97e03962-…",
+  "receivesConversations": true,
+  "receivesRecords": true
 }
 ```
 
 `name` 1..64 and unique per workspace (`409 WSP_TEAM_NAME_TAKEN`); `color` matches `^#?[0-9A-Za-z_-]{1,16}$` (default `#075E54`);
-`assignmentStrategy` is `manual | round_robin | least_loaded | sticky` (default `manual`). `memberIds` must be **active members of this
-workspace** (`422 WSP_TEAM_MEMBER_UNKNOWN`, nothing is created); members join with `isLead = false`, `capacity = 20`. `deviceIds` are
-intersected with this workspace's devices and unknown ones are dropped silently; none left (or none given) means **every device**.
+`assignmentStrategy` is `manual | round_robin | least_loaded | sticky` (default `manual`). `memberIds` and `leadId` must be **active
+members of this workspace** (`422 WSP_TEAM_MEMBER_UNKNOWN`, nothing is created); members join with `role = member`, `capacity = 20`, and
+the manager joins as a `lead`. `parentId` must be a team of this workspace and keep the tree within 5 levels
+(`422 WSP_TEAM_PARENT_INVALID`). `deviceIds` are intersected with this workspace's devices and unknown ones are dropped silently; none
+left (or none given) means **every device**.
 
-### `PATCH /workspace/teams/:id` (User, `inbox.team.manage`) → 200 `WspTeam`
+### `PATCH /workspace/teams/:id` (User, `team.manage`) → 200 `WspTeam`
 
 Every field optional, plus the required `rowVersion` (`409 ROW_VERSION_CONFLICT` when stale). `memberIds`, when present, replaces the
-member list (an empty list removes everyone; members who stay keep their lead flag and capacity). `deviceIds: []` resets to every device.
-A team of another workspace is `404`.
+member list (an empty list removes everyone; members who stay keep their role, capacity and primary mark; somebody taken off the list
+stops being the manager). `parentId: null` makes the team top-level, `leadId: null` removes the manager, and a new `leadId` demotes the
+previous manager to `member` and makes the new one a `lead`. A parent that is the team itself or one of its descendants is
+`422 WSP_TEAM_PARENT_CYCLE` (also enforced by the trigger `trg_teams_guard_parent`, which reports the constraint
+`chk_teams_parent_cycle`); a move that would make the team plus its sub-tree deeper than 5 levels is `422 WSP_TEAM_PARENT_INVALID`.
+`deviceIds: []` resets to every device. A team of another workspace is `404`.
 
-### `DELETE /workspace/teams/:id` (User, `inbox.team.manage`) → 204
+### `POST /workspace/teams/:id/members` (User, `team.manage`) → 200 `WspTeam`
 
-Removes the team and its member places; conversations assigned to it lose the team (the foreign key sets `assignee_team_id` null) and
-the `team.deleted` event lets routing drop its references.
+Body `{ "userId": "…", "role": "member" | "lead", "isPrimary"?: boolean }`. Adds the person, or changes their role and primary mark when
+they are on the team. `isPrimary: true` clears the person's mark on every other team first.
+
+### `PATCH /workspace/teams/:id/members/:userId` (User, `team.manage`) → 200 `WspTeam`
+
+Body `{ "role"?: …, "isPrimary"?: … }` (one at least). Not on the team: `422 WSP_TEAM_MEMBER_NOT_ON_TEAM`. Making the manager a plain
+`member` removes them as manager.
+
+### `DELETE /workspace/teams/:id/members/:userId` (User, `team.manage`) → 200 `WspTeam`
+
+Takes the person off the team. If it was the manager, the team has no manager; a person left on exactly one team gets it as primary.
+
+### `DELETE /workspace/teams/:id` (User, `team.manage`) → 204
+
+Removes the team and its member places; conversations assigned to it lose the team (the foreign key sets `assignee_team_id` null),
+**its sub-teams move up to the deleted team's parent** (trigger `trg_teams_reparent_children`), and the `team.deleted` event lets routing
+drop its references.
+
+### Deactivating a person: membership is kept (D10)
+
+Removing a member (`DELETE /workspace/members/:id`) and the Users status change to `inactive` **keep their `team_members` rows**. The
+`tenant_isolation` policy of `team_members` shows tenant sessions only the rows whose user is not inactive, so every query that joins
+`team_members` (the team record scope of contacts, companies, deals, tasks, invoices, appointments and forms, the inbox visibility,
+routing and assignment pools, the leave and reassign pickers) ignores an inactive person on both sides of a peer join without any of
+those queries changing. Setting the user `active` again brings the places back. The privileged role (migrations, platform jobs) sees every
+row, which is how the history stays readable.
+
+### `GET /workspace/members/:id/handover` (User, `admin.user.manage`) → `WspHandoverPreview`
+
+What the person holds, for the deactivate dialog: `{ contacts, openDeals, openConversations, teamLeads: [{ id, fullName, teamName }] }`.
+`teamLeads` are the active managers of the person's teams, the primary team first, then up the parent chain; never the person themself.
+
+### `POST /workspace/members/:id/handover` (User, `admin.user.manage`, idempotent) → `WspHandoverResult`
+
+Body `{ "mode": "person", "userId": "…" }`, `{ "mode": "team_lead" }` or `{ "mode": "leave" }`. Call it **before** deactivating. Contacts and
+open deals move through the existing owner-reassign batch (`POST /owner-reassignments`: the caller's record scope, one audit row and
+event per record, undo for 14 days); open, non-archived conversations of the person are reassigned through `AssignmentService` one by
+one (the target must be able to open the inbox; one that cannot is skipped and counted). Needs `record.contacts.update` for records.
+At most 50,000 records and 200 conversations per call; `remaining` says what is left. `leave` changes nothing. `team_lead` with no active
+manager is `422 WSP_REASSIGN_INVALID`; a target who is not an active member is `422`.
+
+### Members and users
+
+`GET /users` (and `/users/:id`) now carry `teams` (`[{ id, name, color, role, isPrimary }]`, primary first, empty for an inactive person)
+and `managers` (`[{ id, fullName }]`: the manager of the person's primary team, else of all their teams, never the person themself).
+`GET /users?teamId=<uuid>` lists only the people on that team. `GET /workspace/members/summary` reports `me.canManageTeams` true for
+`team.manage` or the alias.
 
 ## Operator Workspaces hub (TW-WSP-023, 025)
 

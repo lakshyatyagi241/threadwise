@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Zespoły",
-        "description": "Grupuj osoby w zespoły do przydzielania i raportowania.",
-        "keywords": "grupy, działy, przydział, routing"
+        "description": "Grupuj osoby na potrzeby rozmów, przypisań i raportów.",
+        "keywords": "grupy, działy, menedżerowie, hierarchia, przypisanie, routing"
       },
       "ai-keys": {
         "label": "Klucze dostawców AI",

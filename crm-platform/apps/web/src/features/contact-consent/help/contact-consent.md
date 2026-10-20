@@ -33,7 +33,7 @@ A contact with no history shows **No consent recorded**. We never assume consent
 
 Open **Settings**, then **Consent and STOP replies** under Security. When a contact sends **only** one of the STOP words (STOP, STOPALL, UNSUBSCRIBE, CANCEL, END, QUIT or OPT OUT, plus the Arabic words), they are opted out of marketing on that channel. This works for WhatsApp, Telegram and every other channel that receives messages, and for numbers connected the official way or with a QR code.
 
-The message must be the keyword and nothing else. Capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored, so `Stop.` and `STOP!!` work. A sentence such as "please stop sending me invoices" or "don't stop" does **not** match, so nobody is opted out by accident. A STOP is never passed to a flow, an FAQ answer or an AI agent.
+The message must be the keyword and nothing else. Capital letters, spaces, punctuation, emoji and Arabic diacritics are ignored, so `Stop.` and `STOP!!` work. A sentence such as "please stop sending me invoices" or "don't stop" does **not** match, so nobody is opted out by accident. A STOP is never passed to a flow or an AI agent.
 
 The same screen lists the START words (START, SUBSCRIBE, UNSTOP and the Arabic words). A contact who sends one is subscribed again.
 

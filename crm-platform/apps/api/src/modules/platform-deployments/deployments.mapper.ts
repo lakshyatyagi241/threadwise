@@ -2,6 +2,10 @@ import {
   DEPLOYMENT_ERROR_MAX_CHARS,
   deploymentRowSchema,
   publishRowSchema,
+  releaseRowSchema,
+  releasesResponseSchema,
+  type ReleaseRow,
+  type ReleasesResponse,
   type DeploymentCounts,
   type DeploymentRow,
   type PublishCounts,
@@ -66,4 +70,39 @@ export function toPublishCounts(r: Raw): PublishCounts {
     done: Number(r.done ?? 0),
     stalled: Number(r.stalled ?? 0),
   };
+}
+
+/** One release attempt to the wire shape. */
+export function toReleaseRow(r: Raw): ReleaseRow {
+  return releaseRowSchema.parse({
+    id: String(r.attempt),
+    tag: String(r.tag),
+    state: r.state,
+    step: r.step ?? null,
+    error: cut(r.error),
+    startedAt: new Date(r.started_at as string).toISOString(),
+    updatedAt: new Date(r.updated_at as string).toISOString(),
+    finishedAt: iso(r.finished_at),
+    stalled: r.stalled === true,
+  });
+}
+
+export function toReleasesResponse(
+  generatedAt: string,
+  data: { rows: Raw[]; live: Raw | null },
+): ReleasesResponse {
+  const rows = data.rows.map(toReleaseRow);
+  return releasesResponseSchema.parse({
+    generatedAt,
+    live: data.live
+      ? {
+          tag: String(data.live.tag),
+          finishedAt: new Date(data.live.finished_at as string).toISOString(),
+        }
+      : null,
+    inProgress: rows.some(
+      (r) => r.state === 'building' || r.state === 'shipping' || r.state === 'releasing',
+    ),
+    rows,
+  });
 }

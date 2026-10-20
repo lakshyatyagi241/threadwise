@@ -168,7 +168,7 @@ export const envSchema = z.object({
    */
   CHANNEL_SIMULATOR_ENABLED: booleanish.default(false),
   /**
-   * The FAQ engine's AI vendor (ADR-0021): `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
+   * The knowledge base search's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline
    * stand-in for tests and demos that embeds by shared words and needs no key or network. Declared here because only declared
    * keys of a `.env` file reach `process.env`. A production process that sets `fixture` does not boot.
    */
@@ -206,9 +206,9 @@ export const envSchema = z.object({
   /** The directory for `ARCHIVE_DRIVER=local`. Empty means `.archive` under the working directory. */
   ARCHIVE_LOCAL_DIR: z.string().optional(),
   S3_BUCKET_ARCHIVE: z.string().default('crm-archive'),
-  FAQ_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
-  /** Overrides OpenRouter's base URL for the FAQ engine (a gateway, a local stub). */
-  FAQ_OPENROUTER_BASE_URL: optionalUrl,
+  KB_AI_DRIVER: z.enum(['openrouter', 'fixture']).optional(),
+  /** Overrides OpenRouter's base URL for the knowledge base search (a gateway, a local stub). */
+  KB_OPENROUTER_BASE_URL: optionalUrl,
   /**
    * AI lead scoring's AI vendor: `openrouter` (the default, with a key from the AI keys screens) or `fixture`, an offline stand-in for
    * tests and demos that needs no key or network. A production process that sets `fixture` does not boot.
@@ -259,9 +259,9 @@ export function validateEnv(raw: Record<string, unknown>): Env {
     if (parsed.data.JWT_REFRESH_SECRET.startsWith('dev-only')) {
       throw new Error('JWT_REFRESH_SECRET is still the development placeholder.');
     }
-    if (parsed.data.FAQ_AI_DRIVER === 'fixture') {
+    if (parsed.data.KB_AI_DRIVER === 'fixture') {
       throw new Error(
-        'FAQ_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
+        'KB_AI_DRIVER=fixture must not be set in production: the fixture is an offline stand-in, not the AI vendor.',
       );
     }
     if (parsed.data.JWT_ACCESS_SECRET === parsed.data.JWT_REFRESH_SECRET) {

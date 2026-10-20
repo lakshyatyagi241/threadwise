@@ -232,7 +232,7 @@ export class BuilderContextService {
             FROM teams t
             LEFT JOIN team_members tm ON tm.org_id = t.org_id AND tm.team_id = t.id
             LEFT JOIN users u ON u.org_id = tm.org_id AND u.id = tm.user_id
-            WHERE t.org_id = ${o} ORDER BY t.sort, lower(t.name), t.id, lower(u.full_name)`),
+            WHERE t.org_id = ${o} AND t.receives_conversations ORDER BY t.sort, lower(t.name), t.id, lower(u.full_name)`),
         tx.execute(
           sql`SELECT uuid, name, provider, model FROM ai_agents WHERE org_id = ${o} ORDER BY id`,
         ),
@@ -248,7 +248,7 @@ export class BuilderContextService {
         tx.execute(sql`
             SELECT a.uuid, a.name, a.status, a.ai_model,
               (SELECT count(*) FROM ai_training_sources src WHERE src.org_id = a.org_id AND lower(src.status) = 'ready'
-                 AND (src.assistant_id IS NULL OR src.assistant_id = a.id)) AS sources
+                 AND src.assistant_id = a.id) AS sources
             FROM ai_chat_assistants a WHERE a.org_id = ${o} ORDER BY a.name`),
         tx.execute(
           sql`SELECT uuid, name FROM ai_call_assistants WHERE org_id = ${o} ORDER BY name`,

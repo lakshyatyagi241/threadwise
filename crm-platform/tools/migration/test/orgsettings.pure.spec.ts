@@ -176,6 +176,12 @@ describe('derivePlan: the Waboo Pro-Whatsapp plan', () => {
       whatsapp_warmer: true,
     },
   };
+  it('keeps remove_branding open: Waboo never added a "Sent via" line, so the plan must not make Desk add one', () => {
+    const p = derivePlan(core, { ...base, features: { ...base.features, remove_branding: false } });
+    expect(p.features.remove_branding).toBe(true);
+    // a base plan without the key is not given one
+    expect('remove_branding' in derivePlan(core, base).features).toBe(false);
+  });
   it('opens only what Waboo had and limits only what Waboo limited', () => {
     const p = derivePlan(core, base);
     expect(p.limits).toMatchObject({

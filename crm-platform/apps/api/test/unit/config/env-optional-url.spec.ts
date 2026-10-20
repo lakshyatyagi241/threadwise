@@ -13,7 +13,7 @@ const base = {
 const OPTIONAL_URLS = [
   'S3_ENDPOINT',
   'S3_PUBLIC_ENDPOINT',
-  'FAQ_OPENROUTER_BASE_URL',
+  'KB_OPENROUTER_BASE_URL',
   'LEAD_SCORING_OPENROUTER_BASE_URL',
 ] as const;
 
@@ -29,10 +29,10 @@ describe('optional URL settings in the environment schema', () => {
   );
 
   it.each(OPTIONAL_URLS)('%s: a real URL is kept', (name) => {
-    const env = validateEnv({ ...base, [name]: 'https://example.r2.cloudflarestorage.com' }) as Record<
-      string,
-      unknown
-    >;
+    const env = validateEnv({
+      ...base,
+      [name]: 'https://example.r2.cloudflarestorage.com',
+    }) as Record<string, unknown>;
     expect(env[name]).toBe('https://example.r2.cloudflarestorage.com');
   });
 

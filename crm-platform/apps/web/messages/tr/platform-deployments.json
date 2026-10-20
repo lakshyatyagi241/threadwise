@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Gösterilecekleri seçin",
       "publishes": "Akış yayımları",
-      "geta": "Geta konsolu"
+      "geta": "Geta konsolu",
+      "releases": "Ürün sürümleri"
     },
     "publishes": {
       "description": "Her akış yayımı: işçinin kuyruğa aldıkları, şu an işlediği ve hangi yayımların neden başarısız olduğu. Birkaç saniyede bir yenilenir.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Henüz hiçbir akış yayımlanmadı.",
         "done": "Son 30 günde tamamlanan bir yayım yok."
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai üzerinde çalışan şey: geçerli sürüm, devam eden bir sürüm ve her denemenin adımları ve hataları. Birkaç saniyede bir yenilenir.",
+      "liveLabel": "Şu an canlı",
+      "live": "Sürüm {tag}, {time} tarihinden beri canlı",
+      "noneLive": "Henüz canlıya geçen bir sürüm yok.",
+      "inProgress": "Bir sürüm devam ediyor",
+      "stalledAlert": "{count} sürüm denemesi {minutes} dakikadır ilerlemedi. Derleme ya da sürüm durmuş olabilir.",
+      "empty": "Henüz kayıtlı bir sürüm yok. Sürümler bir sonraki dağıtımdan itibaren burada görünür.",
+      "cols": {
+        "tag": "Etiket",
+        "state": "Durum",
+        "step": "Adım",
+        "started": "Başlangıç",
+        "finished": "Bitiş",
+        "error": "Hata"
+      },
+      "state": {
+        "building": "Derleniyor",
+        "shipping": "Gönderiliyor",
+        "releasing": "Yayımlanıyor",
+        "ok": "Canlı",
+        "failed": "Başarısız",
+        "rolled_back": "Geri alındı"
       }
     }
   }

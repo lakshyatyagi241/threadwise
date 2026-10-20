@@ -3,7 +3,9 @@ import { Cron } from '@nestjs/schedule';
 import { gzipAsync } from '../../common/async-zlib';
 import { DatabaseService } from '../../infra/db/database.service';
 import { MessageLogRepository } from './message-log.repository';
+import { recordSweep } from '../data-retention';
 import { addDays, dayOf, dayStart, hotCutoff, retentionCutoff } from './message-log-rules';
+import { messageLogWindows } from './message-log-windows';
 
 /** Events read, and written as one gzip member, per round trip. */
 const BATCH = 20_000;
@@ -60,7 +62,9 @@ export class MessageLogArchiveService {
 
   /** Public for tests. */
   async sweep(now: Date = new Date()): Promise<ArchiveSweepResult> {
-    const cutoff = hotCutoff(now);
+    // The windows saved on the retention dashboard, read at every run; the built-in ones when nothing is saved.
+    const windows = await this.db.privileged((tx) => messageLogWindows(tx));
+    const cutoff = hotCutoff(now, windows.hotDays);
     let days = 0;
     let events = 0;
     let previous = '';
@@ -76,18 +80,28 @@ export class MessageLogArchiveService {
     }
 
     let purgedDays = 0;
-    const retention = dayOf(retentionCutoff(now));
-    for (let i = 0; i < MAX_PURGE_BATCHES; i++) {
-      const n = await this.db.privileged((tx) =>
-        this.repo.purgeArchives(tx, retention, PURGE_BATCH),
-      );
-      purgedDays += n;
-      if (n < PURGE_BATCH) break;
+    // An archive kept for ever (`retentionDays` null) is never purged.
+    if (windows.retentionDays !== null) {
+      const retention = dayOf(retentionCutoff(now, windows.retentionDays));
+      for (let i = 0; i < MAX_PURGE_BATCHES; i++) {
+        const n = await this.db.privileged((tx) =>
+          this.repo.purgeArchives(tx, retention, PURGE_BATCH),
+        );
+        purgedDays += n;
+        if (n < PURGE_BATCH) break;
+      }
     }
 
     const expiredExports = await this.db.privileged((tx) => this.repo.expireExports(tx, now));
     const failedExports = await this.db.privileged((tx) =>
       this.repo.failStuckExports(tx, now, STUCK_EXPORT_MS),
+    );
+    await recordSweep(
+      this.db,
+      this.logger,
+      'message_log',
+      { deletedRows: events, expiredItems: purgedDays },
+      now,
     );
     return { days, events, purgedDays, expiredExports, failedExports };
   }

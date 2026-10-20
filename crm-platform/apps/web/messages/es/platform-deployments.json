@@ -60,7 +60,8 @@
     "tabs": {
       "label": "Elija qué mostrar",
       "publishes": "Publicaciones de flujos",
-      "geta": "Consola de Geta"
+      "geta": "Consola de Geta",
+      "releases": "Versiones del producto"
     },
     "publishes": {
       "description": "Cada publicación de flujo: lo que el worker tiene en cola, lo que está procesando ahora y qué publicaciones fallaron y por qué. Se actualiza cada pocos segundos.",
@@ -78,6 +79,31 @@
       "empty": {
         "all": "Ningún flujo se ha publicado todavía.",
         "done": "Ninguna publicación ha terminado en los últimos 30 días."
+      }
+    },
+    "releases": {
+      "description": "Lo que está activo en desk.wabo.ai: la versión actual, cualquier versión en curso y cada intento con sus pasos y errores. Se actualiza cada pocos segundos.",
+      "liveLabel": "Activo ahora",
+      "live": "Versión {tag}, activa desde {time}",
+      "noneLive": "Ninguna versión se ha activado todavía.",
+      "inProgress": "Hay una versión en curso",
+      "stalledAlert": "{count} intento(s) de versión no se han movido durante {minutes} minutos. Puede que la compilación o la versión se hayan detenido.",
+      "empty": "Todavía no se ha registrado ninguna versión. Las versiones aparecen aquí desde el siguiente despliegue.",
+      "cols": {
+        "tag": "Etiqueta",
+        "state": "Estado",
+        "step": "Paso",
+        "started": "Inicio",
+        "finished": "Fin",
+        "error": "Error"
+      },
+      "state": {
+        "building": "Compilando",
+        "shipping": "Enviando",
+        "releasing": "Publicando",
+        "ok": "Activa",
+        "failed": "Fallida",
+        "rolled_back": "Revertida"
       }
     }
   }
