@@ -17,18 +17,21 @@ afterAll(async () => {
 });
 
 describe('CC-LIM-06j monthly appointment cap', () => {
-  it('staff: 8 bookings at once on a cap of 3 a month book exactly 3', async () => {
+  it('staff: 8 bookings at once across 2 booking types on a cap of 3 a month book exactly 3 (one type has its own lock, the cap spans both)', async () => {
     const t = await api.signup('apcc');
-    const type = await api.type(t.admin, { name: 'Capped' });
+    const types = [
+      await api.type(t.admin, { name: 'Capped A' }),
+      await api.type(t.admin, { name: 'Capped B' }),
+    ];
     await h.owner.query(
       `UPDATE org_plan_state SET overrides = '{"limits":{"appointments":3}}' WHERE org_id = $1`,
       [t.orgId],
     );
-    const slots = await api.slots(t.admin, type.id);
+    const slots = await Promise.all(types.map((ty) => api.slots(t.admin, ty.id)));
     const res = await race(8, (i) =>
       api.post(t.admin, '/v2/appointments', {
-        bookingTypeId: type.id,
-        startsAt: slots[i]!.start,
+        bookingTypeId: types[i % 2]!.id,
+        startsAt: slots[i % 2]![Math.floor(i / 2)]!.start,
         invitee: { name: `C${i}`, phone: `+91981110${String(1000 + i)}` },
       }),
     );
@@ -53,14 +56,15 @@ describe('CC-LIM-06j monthly appointment cap', () => {
   it('public page: 8 visitors at once on a cap of 3 a month book exactly 3, the rest are told "not available"', async () => {
     const t = await api.signup('apcp');
     const type = await api.type(t.admin, { name: 'Capped public' });
+    const type2 = await api.type(t.admin, { name: 'Capped public two' });
     await h.owner.query(
       `UPDATE org_plan_state SET overrides = '{"limits":{"appointments":3}}' WHERE org_id = $1`,
       [t.orgId],
     );
-    const slots = await api.slots(t.admin, type.id);
+    const slots = [await api.slots(t.admin, type.id), await api.slots(t.admin, type2.id)];
     const res = await race(8, (i) =>
-      api.publicBook(t.slug, type.slug, {
-        startsAt: slots[i]!.start,
+      api.publicBook(t.slug, (i % 2 ? type2 : type).slug, {
+        startsAt: slots[i % 2]![Math.floor(i / 2)]!.start,
         name: `V${i}`,
         email: `v${i}-cap@example.com`,
       }),
