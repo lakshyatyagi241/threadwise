@@ -10,6 +10,7 @@ import type {
 import type { Tx } from '@crm/db';
 import type { AnswerSnapshot } from './appointment-rules';
 import type { EngineBooking, EngineHold } from './slot-engine';
+import { isTeamPeer, scopeOwnerCondition } from '../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
@@ -177,14 +178,10 @@ export function appointmentScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(a.user_id = ${actorUserId} OR a.created_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR a.user_id IN ${peers} OR a.created_by IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`a.user_id`,
+    sql`a.created_by`,
+  ]);
 }
 
 /** A filter with every uuid already resolved to the internal id the SQL needs. */
@@ -636,6 +633,7 @@ export class AppointmentsRepository {
     | {
         id: number;
         ownerId: number | null;
+        createdBy: number | null;
         name: string | null;
         email: string | null;
         phone: string | null;
@@ -643,13 +641,14 @@ export class AppointmentsRepository {
     | undefined
   > {
     const res = await tx.execute(
-      sql`SELECT id, owner_id, name, email, phone FROM contacts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+      sql`SELECT id, owner_id, created_by, name, email, phone FROM contacts WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
     );
     const r = res.rows[0] as Raw | undefined;
     return r
       ? {
           id: Number(r.id),
           ownerId: n(r.owner_id),
+          createdBy: n(r.created_by),
           name: s(r.name),
           email: s(r.email),
           phone: s(r.phone),
@@ -686,10 +685,6 @@ export class AppointmentsRepository {
     actorUserId: number,
     userId: number,
   ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${userId} LIMIT 1`);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, userId);
   }
 }

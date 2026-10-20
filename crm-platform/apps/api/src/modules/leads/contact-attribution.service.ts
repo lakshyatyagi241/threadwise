@@ -30,7 +30,7 @@ export class ContactAttributionService {
       const contact = await this.contacts.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, contact.ownerId);
+      await assertContactScope(tx, this.contacts, ctx.orgId, scope, ctx.userId!, contact);
 
       const [touches, first, total] = await Promise.all([
         this.attributions.listForContact(tx, ctx.orgId, contact.id, MAX_TOUCHES),

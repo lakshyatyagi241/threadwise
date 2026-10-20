@@ -3,6 +3,7 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import type { WizardFollowUpStepSummary } from '@crm/contracts';
 import type { CampaignOptionColumns } from './wizard-blank';
+import { memberTeamIdsSql } from '../../../kernel/rbac/scope';
 
 /** The SQL of the broadcast wizard: templates, audience sources, the wizard columns of a campaign, series, retries and test sends. */
 
@@ -353,8 +354,7 @@ export class WizardRepository {
           SELECT 1 FROM segment_shares sh
           WHERE sh.org_id = segments.org_id AND sh.segment_id = segments.id
             AND (sh.user_id = ${userId}::bigint
-                 OR sh.team_id IN (SELECT tm.team_id FROM team_members tm
-                                   WHERE tm.org_id = segments.org_id AND tm.user_id = ${userId}::bigint)))))
+                 OR sh.team_id IN ${memberTeamIdsSql(sql`segments.org_id`, sql`${userId}::bigint`)}))))
       ORDER BY lower(name), id`);
     return (res.rows as Raw[]).map((r) => ({
       id: String(r.uuid),

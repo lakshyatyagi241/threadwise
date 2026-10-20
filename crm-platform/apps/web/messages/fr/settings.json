@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Équipes",
-        "description": "Regroupez les personnes en équipes pour le routage et les rapports.",
-        "keywords": "groupes, services, attribution, routage"
+        "description": "Regroupez des personnes pour les conversations, les attributions et les rapports.",
+        "keywords": "groupes, départements, responsables, hiérarchie, attribution, routage"
       },
       "ai-keys": {
         "label": "Clés de fournisseurs d’IA",

@@ -465,7 +465,7 @@ export class CallLogEntriesService {
     grants: GrantSet,
     by: { contactUuid?: string; phone: string | null },
   ): Promise<{
-    contact: { id: number; uuid: string; ownerId: number | null } | null;
+    contact: { id: number; uuid: string; ownerId: number | null; createdBy: number | null } | null;
     matchedByPhone: boolean;
     /** A contact owns the number but the person may not read it: the call is logged by its number alone and no contact is made. */
     hidden: boolean;
@@ -475,9 +475,14 @@ export class CallLogEntriesService {
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
       const ref = await this.contacts.resolveContactRef(tx, orgId, by.contactUuid);
       if (!ref) throw AppError.notFound('Contact', by.contactUuid);
-      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, ref.ownerId);
+      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, ref);
       return {
-        contact: { id: ref.id, uuid: by.contactUuid, ownerId: ref.ownerId },
+        contact: {
+          id: ref.id,
+          uuid: by.contactUuid,
+          ownerId: ref.ownerId,
+          createdBy: ref.createdBy,
+        },
         matchedByPhone: false,
         hidden: false,
       };
@@ -487,7 +492,7 @@ export class CallLogEntriesService {
     if (!hit) return { contact: null, matchedByPhone: false, hidden: false };
     if (!read.allowed) return { contact: null, matchedByPhone: false, hidden: true };
     try {
-      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, hit.ownerId);
+      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, hit);
     } catch (err) {
       if (err instanceof AppError && err.code === ERROR_CODES.NOT_FOUND) {
         return { contact: null, matchedByPhone: false, hidden: true };

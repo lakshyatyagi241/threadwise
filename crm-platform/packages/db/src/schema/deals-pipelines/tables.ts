@@ -107,6 +107,8 @@ export const deals = pgTable(
     currency: text('currency').notNull().default('INR'),
     ownerUserId: idColumn('owner_user_id'),
     ownerTeamId: idColumn('owner_team_id'),
+    // Who created the deal (migration 20270210090000): the record scope `own` counts it like the owner. NULL for older deals.
+    createdBy: idColumn('created_by'),
     expectedCloseDate: date('expected_close_date'),
     status: text('status').notNull().default('open'),
     lostReason: text('lost_reason'),
@@ -167,7 +169,13 @@ export const deals = pgTable(
     }).onDelete('set null'),
     index('idx_deals_company_id').on(t.orgId, t.companyId),
     index('idx_deals_contact_id').on(t.orgId, t.contactId),
+    foreignKey({
+      name: 'fk_deals_created_by',
+      columns: [t.orgId, t.createdBy],
+      foreignColumns: [users.orgId, users.id],
+    }).onDelete('set null'),
     index('idx_deals_owner_user_id').on(t.orgId, t.ownerUserId),
+    index('idx_deals_created_by').on(t.orgId, t.createdBy),
     index('idx_deals_pipeline_id_stage_id').on(t.orgId, t.pipelineId, t.stageId),
     index('idx_deals_status').on(t.orgId, t.status),
     index('idx_deals_board').on(t.orgId, t.stageId, t.sortOrder, t.id),

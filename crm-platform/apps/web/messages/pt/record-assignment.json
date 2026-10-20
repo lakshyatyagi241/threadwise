@@ -233,7 +233,14 @@
         "nobody": "Correspondeu, mas ninguém estava disponível",
         "broken": "Tem uma condição quebrada"
       },
-      "skipped": "Ignorada porque ninguém estava disponível: {names}"
+      "skipped": "Ignorada porque ninguém estava disponível: {names}",
+      "excluded": {
+        "label": "Excluídos",
+        "no_access": "{name}: não pode abrir este tipo de registro",
+        "inactive": "{name}: não está mais ativo",
+        "on_leave": "{name}: de licença hoje",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Log de execução",

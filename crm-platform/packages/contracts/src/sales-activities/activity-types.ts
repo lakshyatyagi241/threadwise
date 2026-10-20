@@ -143,8 +143,8 @@ export function activityCapabilities(behavesAs: ActivityBehaviour): ActivityCapa
         allowEditCompleted: true,
         mobileCheckIn: false,
         taskTypes: true,
-        // The outcomes of a task are the workspace's Task outcomes list (its own screen), not a list kept here.
-        outcomes: false,
+        // Shown in the drawer like the others; the DEFAULT Task activity's list is the workspace's `task_outcomes` (edited through its own routes).
+        outcomes: true,
       };
     case 'meeting':
       return {

@@ -158,7 +158,12 @@ export class CrmDashboardService {
 
       const scopes: DashScopes = {
         deals: dealScopeCondition(ctx.orgId, dealsScope, ctx.userId),
-        contacts: ownerScope(sql`c.owner_id`, ctx.orgId, contactsCan.scope, ctx.userId),
+        contacts: ownerScope(
+          [sql`c.owner_id`, sql`c.created_by`],
+          ctx.orgId,
+          contactsCan.scope,
+          ctx.userId,
+        ),
         tasks: taskScopeCondition(ctx.orgId, tasksCan.scope, ctx.userId),
         invoices: invoiceScopeCondition(ctx.orgId, paymentsCan.scope, ctx.userId),
         payments: paymentScopeCondition(ctx.orgId, paymentsCan.scope, ctx.userId),

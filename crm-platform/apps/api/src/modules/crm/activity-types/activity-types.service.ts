@@ -212,7 +212,7 @@ export class ActivityTypesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
-      this.assertListOffered(row.behavesAs, input.kind);
+      this.assertListOffered(row, input.kind);
       const all = await this.repo.allOptionsOf(tx, ctx.orgId, row.id, input.kind);
       const active = all.filter((o) => o.deletedAt === null);
       if (active.length >= MAX_OPTIONS_PER_LIST) {
@@ -299,7 +299,7 @@ export class ActivityTypesService {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.requireType(tx, ctx.orgId, uuid, true);
-      this.assertListOffered(row.behavesAs, input.kind);
+      this.assertListOffered(row, input.kind);
       const active = (await this.repo.allOptionsOf(tx, ctx.orgId, row.id, input.kind)).filter(
         (o) => o.deletedAt === null,
       );
@@ -424,8 +424,16 @@ export class ActivityTypesService {
     return row;
   }
 
-  private assertListOffered(behavesAs: ActivityBehaviour, kind: ActivityOptionKind): void {
-    const cap = activityCapabilities(behavesAs);
+  private assertListOffered(row: ActivityTypeRow, kind: ActivityOptionKind): void {
+    const cap = activityCapabilities(row.behavesAs);
+    // The default Task activity's outcomes are the workspace's task outcomes (`/v2/task-outcomes`), not rows of this registry.
+    if (kind === 'outcome' && row.key === 'task' && row.isDefault) {
+      throw new AppError(
+        ERROR_CODES.ACTIVITY_FEATURE_OFF,
+        'Task outcomes are edited through /v2/task-outcomes.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     if ((kind === 'type' && !cap.taskTypes) || (kind === 'outcome' && !cap.outcomes)) {
       throw new AppError(
         ERROR_CODES.ACTIVITY_FEATURE_OFF,

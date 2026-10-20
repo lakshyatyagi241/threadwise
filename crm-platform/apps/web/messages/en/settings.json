@@ -207,8 +207,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Group people into teams for routing and reporting.",
-        "keywords": "groups, departments, assignment, routing"
+        "description": "Group people for conversations, assignments and reports.",
+        "keywords": "groups, departments, managers, hierarchy, assignment, routing"
       },
       "ai-keys": {
         "label": "AI provider keys",

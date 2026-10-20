@@ -233,7 +233,14 @@
         "nobody": "Corrisponde, ma nessuno era disponibile",
         "broken": "Ha una condizione non valida"
       },
-      "skipped": "Saltata perché nessuno era disponibile: {names}"
+      "skipped": "Saltata perché nessuno era disponibile: {names}",
+      "excluded": {
+        "label": "Escluse",
+        "no_access": "{name}: non può aprire questo tipo di record",
+        "inactive": "{name}: non più attivo",
+        "on_leave": "{name}: in ferie oggi",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Registro esecuzioni",

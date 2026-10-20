@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useState } from 'react';
 import { useTranslations } from 'next-intl';
 import { Alert, Button, ConfirmDialog, Drawer, Field, Input, Switch, useToast } from '@crm/ui';
@@ -18,6 +17,7 @@ import { useCan } from '@/features/auth-registration-security/shared/session-con
 import { activityTypesApi, useActivityMutation } from '../api/activity-types';
 import { useActivityLabels } from '../lib/labels';
 import { OptionList } from './option-list';
+import { TaskOutcomesList } from './task-outcomes-list';
 
 function Toggle({
   label,
@@ -61,6 +61,8 @@ export function ActivityDrawer({
   const t = useTranslations('sales-activities.drawer');
   // the outcomes screen needs its own key: no link to a screen the person cannot use
   const canOutcomes = useCan('settings.task_outcomes.manage');
+  // The default Task activity's outcomes are the workspace's task outcomes (their own routes and permission); every other list is the registry's.
+  const isTaskActivity = activity.key === 'task' && activity.isDefault;
   const { toast } = useToast();
   const labels = useActivityLabels();
   const cap = activityCapabilities(activity.behavesAs);
@@ -239,21 +241,6 @@ export function ActivityDrawer({
           />
         )}
 
-        {activity.behavesAs === 'task' && (
-          <section className="space-y-1">
-            <h3 className="text-sm font-semibold">{t('outcomes')}</h3>
-            <p className="text-xs text-muted-foreground">{t('taskOutcomesHint')}</p>
-            {canOutcomes ? (
-              <Link
-                href="/tasks/outcomes"
-                className="text-sm text-primary underline underline-offset-2"
-              >
-                {t('taskOutcomesLink')}
-              </Link>
-            ) : null}
-          </section>
-        )}
-
         {cap.outcomes && (
           <div className="space-y-3">
             {activity.behavesAs !== 'phone' && (
@@ -265,7 +252,10 @@ export function ActivityDrawer({
                 onChange={(v) => setSwitch({ outcomesEnabled: v })}
               />
             )}
-            {activity.outcomesEnabled && (
+            {activity.outcomesEnabled && isTaskActivity && (
+              <TaskOutcomesList canManage={canOutcomes} />
+            )}
+            {activity.outcomesEnabled && !isTaskActivity && (
               <OptionList
                 title={t('outcomes')}
                 hint={activity.behavesAs === 'phone' ? t('phoneOutcomesHint') : t('outcomesHint')}

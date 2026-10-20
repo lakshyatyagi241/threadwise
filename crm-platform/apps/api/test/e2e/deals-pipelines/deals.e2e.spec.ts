@@ -258,7 +258,7 @@ describe('creating a deal (TW-DEAL-009)', () => {
       expect(bad.status).toBe(422);
       expect(problem(bad)).toBe('DEAL_OWNER_INVALID');
     }
-    await h.owner.query(`UPDATE users SET status = 'suspended' WHERE id = $1`, [mate.userId]);
+    await h.owner.query(`UPDATE users SET status = 'inactive' WHERE id = $1`, [mate.userId]);
     const suspended = await api
       .as(t.admin)
       .post('/v2/deals')

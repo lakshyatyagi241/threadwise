@@ -233,7 +233,14 @@
         "nobody": "Trifft zu, aber niemand war verfügbar",
         "broken": "Hat eine fehlerhafte Bedingung"
       },
-      "skipped": "Übersprungen, weil niemand verfügbar war: {names}"
+      "skipped": "Übersprungen, weil niemand verfügbar war: {names}",
+      "excluded": {
+        "label": "Ausgeschlossen",
+        "no_access": "{name}: kann diese Art von Datensatz nicht öffnen",
+        "inactive": "{name}: nicht mehr aktiv",
+        "on_leave": "{name}: heute abwesend",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Ausführungsprotokoll",

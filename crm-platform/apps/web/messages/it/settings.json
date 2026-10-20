@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Team",
-        "description": "Raggruppa le persone in team per instradamento e report.",
-        "keywords": "gruppi, reparti, assegnazione, instradamento"
+        "description": "Raggruppa le persone per conversazioni, assegnazioni e report.",
+        "keywords": "gruppi, reparti, responsabili, gerarchia, assegnazione, instradamento"
       },
       "ai-keys": {
         "label": "Chiavi dei provider IA",

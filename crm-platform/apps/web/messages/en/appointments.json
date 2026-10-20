@@ -44,7 +44,8 @@
       "notDeletable": "This cannot be deleted while it has bookings to come.",
       "notDrifted": "This booking already matches its Google event. It has been reloaded.",
       "calendarNotConnected": "Google Calendar is not connected. Reconnect it on the Google account page and try again.",
-      "calendarFailed": "Google did not answer or refused the change. Try again in a moment."
+      "calendarFailed": "Google did not answer or refused the change. Try again in a moment.",
+      "whatsappNotConnected": "Connect a WhatsApp Cloud API number in Settings first: a WhatsApp message is submitted through one."
     },
     "picker": {
       "timeZone": "Time zone",

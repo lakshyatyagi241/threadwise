@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Tim",
-        "description": "Kelompokkan orang ke dalam tim untuk routing dan pelaporan.",
-        "keywords": "grup, departemen, penugasan, routing"
+        "description": "Kelompokkan orang untuk percakapan, penugasan, dan laporan.",
+        "keywords": "grup, departemen, manajer, hierarki, penugasan, perutean"
       },
       "ai-keys": {
         "label": "Kunci penyedia AI",

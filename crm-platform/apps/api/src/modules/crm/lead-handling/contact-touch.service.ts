@@ -131,7 +131,7 @@ export class ContactTouchService {
     return this.db.tx(async (tx) => {
       const ref = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, uuid);
       if (!ref) throw AppError.notFound('Contact', uuid);
-      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref.ownerId);
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref);
       await this.touch(tx, ctx.orgId, ref.id, 'contact_button');
       return { uncontacted: await this.isUncontacted(tx, ctx.orgId, ref.id) };
     });
@@ -147,7 +147,7 @@ export class ContactTouchService {
     return this.db.tx(async (tx) => {
       const ref = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, uuid);
       if (!ref) throw AppError.notFound('Contact', uuid);
-      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref.ownerId);
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, ref);
       if (uncontacted) await this.markManualIn(tx, ctx.orgId, ref.id);
       else await this.clearIn(tx, ctx.orgId, ref.id, 'manual');
       return { uncontacted: await this.isUncontacted(tx, ctx.orgId, ref.id) };

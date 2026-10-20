@@ -73,13 +73,11 @@
       "allowEditCompleted": "Permitir que los usuarios editen la fecha y hora de finalización de esta actividad",
       "taskTypes": "Tipos de tarea",
       "taskTypesHint": "Elija uno al crear una tarea, por ejemplo Seguimiento o Recordatorio de llamada.",
-      "addTaskType": "Añadir tipo de tarea",
+      "addTaskType": "Añadir tipo",
       "taskTypePlaceholder": "Nuevo tipo de tarea",
       "predictOutcomes": "Predecir resultados de esta actividad",
       "predictOutcomesHint": "Ofrecer un resultado al completar la actividad.",
       "outcomes": "Resultados",
-      "taskOutcomesHint": "Los resultados de una tarea terminada son una sola lista para todo el espacio de trabajo, que se mantiene en Resultados de tareas.",
-      "taskOutcomesLink": "Abrir Resultados de tareas",
       "outcomesHint": "Quitar un resultado lo mantiene en los registros que ya lo tienen.",
       "phoneOutcomesHint": "Elija cómo cuenta cada resultado en los informes de llamadas. Quitar un resultado lo mantiene en las llamadas que ya lo tienen.",
       "addOutcome": "Añadir resultado",
@@ -112,7 +110,12 @@
         "conflict": "Otra persona cambió esta actividad. Se volvió a cargar; inténtelo de nuevo.",
         "forbidden": "No tiene permiso para cambiar esto.",
         "failed": "No se pudo guardar. Inténtelo de nuevo."
-      }
+      },
+      "itemName": "Nombre",
+      "hiddenInstead": "Aún hay tareas que lo usan, así que se ocultó en su lugar. Siguen mostrándolo.",
+      "loadingOutcomes": "Cargando resultados…",
+      "outcomesLoadFailed": "No se pudieron cargar los resultados.",
+      "retry": "Reintentar"
     },
     "create": {
       "title": "Crear actividad",

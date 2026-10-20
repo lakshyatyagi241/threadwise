@@ -38,7 +38,7 @@ Nothing changes for your team until you edit something here. The starting values
 
 ## What you can set
 
-**Task.** The switches are: show in the calendar, allow people to mark tasks completed, and allow people to edit the completed date and time of a task. Task types are the labels a task can carry, such as Follow up or Call reminder. The outcomes a finished task can have, such as Interested or Not able to reach, are the workspace's **Task outcomes** list, which the Task screen links to (see [Task outcomes](help:task-outcomes)).
+**Task.** The switches are: show in the calendar, allow people to mark tasks completed, and allow people to edit the completed date and time of a task. Task types are the labels a task can carry, such as Follow up or Call reminder. The outcomes a finished task can have, such as Interested or Not able to reach, are listed under them. **Predict outcomes for this activity** switches the outcome pickers on tasks on or off. You can add, rename, drag to reorder and remove outcomes right in the drawer; this needs the permission to manage task outcomes, which owners and admins have. A removed outcome that tasks already carry is hidden rather than deleted, so those tasks keep showing it, and adding the same name again brings it back. An outcome no task uses is deleted. The old Task outcomes screen is gone; its address now opens this page.
 
 **Meeting.** The same switches, plus allow check-in and check-out from the mobile app, and its own list of outcomes. A meeting gets an **Add outcome** button on the contact's Meetings tab once the Meeting activity allows completing.
 
@@ -50,7 +50,7 @@ Adding a name you removed earlier brings the old item back, so its history stays
 
 ## Where the choices show up
 
-- **Tasks.** The task form and the task panel offer the task types. Outcomes come from Task outcomes. When completing is switched off, the tick box on a task is disabled, but a task that is already done can still be reopened.
+- **Tasks.** The task form and the task panel offer the task types. Outcomes come from the Task outcomes list in the drawer. When completing is switched off, the tick box on a task is disabled, but a task that is already done can still be reopened.
 - **Meetings.** The contact's Meetings tab shows **Add outcome**, then the outcome and notes, with **Edit** and **Reopen**.
 - **Calls.** The Log a call form lists your Phone outcomes.
 

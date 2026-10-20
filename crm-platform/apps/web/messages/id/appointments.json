@@ -44,7 +44,8 @@
       "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang.",
       "notDrifted": "Pemesanan ini sudah sesuai dengan acaranya di Google. Data telah dimuat ulang.",
       "calendarNotConnected": "Google Calendar belum terhubung. Hubungkan kembali di halaman akun Google, lalu coba lagi.",
-      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi."
+      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi.",
+      "whatsappNotConnected": "Hubungkan dulu nomor WhatsApp Cloud API di Pengaturan: pesan WhatsApp diajukan melalui nomor tersebut."
     },
     "picker": {
       "timeZone": "Zona waktu",

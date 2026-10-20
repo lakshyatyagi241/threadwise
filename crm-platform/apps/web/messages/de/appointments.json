@@ -44,7 +44,8 @@
       "notDeletable": "Dies kann nicht gelöscht werden, solange noch Buchungen anstehen.",
       "notDrifted": "Diese Buchung stimmt bereits mit ihrem Google-Termin überein. Sie wurde neu geladen.",
       "calendarNotConnected": "Google Calendar ist nicht verbunden. Verbinden Sie es auf der Seite „Google-Konto“ erneut und versuchen Sie es noch einmal.",
-      "calendarFailed": "Google hat nicht geantwortet oder die Änderung abgelehnt. Versuchen Sie es gleich noch einmal."
+      "calendarFailed": "Google hat nicht geantwortet oder die Änderung abgelehnt. Versuchen Sie es gleich noch einmal.",
+      "whatsappNotConnected": "Verbinden Sie zuerst in den Einstellungen eine WhatsApp-Cloud-API-Nummer: Eine WhatsApp-Nachricht wird über eine solche Nummer eingereicht."
     },
     "picker": {
       "timeZone": "Zeitzone",
