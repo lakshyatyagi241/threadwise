@@ -1,4 +1,5 @@
 import { CanActivate, HttpStatus, Injectable } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 import {
   ERROR_CODES,
   PLAN_UPGRADE_PATH,
@@ -46,6 +47,11 @@ export class DealsPlan {
         { path: 'upgradeUrl', message: PLAN_UPGRADE_PATH },
       ],
     );
+  }
+
+  /** Serialises pipeline creation per workspace until the caller's transaction ends (QA Sheet3 #15, D-05). */
+  lockPipelines(tx: Tx, orgId: number): Promise<void> {
+    return this.entitlements.lockLimit(tx, orgId, PIPELINES_LIMIT_KEY);
   }
 
   /** 422 PLAN_LIMIT_REACHED when one more pipeline would pass the plan's cap (0 = unlimited). */

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import type { PlanFeatureKey, PlanLimitKey } from '@crm/contracts';
+import type { Tx } from '@crm/db';
 import { PlanEntitlementService } from '../plans-subscriptions-trials';
 
 /**
@@ -31,6 +32,11 @@ export class LeadsPlan {
   async tagCapReached(orgId: number, used: number): Promise<boolean> {
     const cap = await this.entitlements.limit(orgId, 'tags');
     return cap > 0 && used >= cap;
+  }
+
+  /** Serialises source creation per workspace until the caller's transaction ends (QA Sheet3 #15, D-05). */
+  lockSources(tx: Tx, orgId: number): Promise<void> {
+    return this.entitlements.lockLimit(tx, orgId, LEAD_SOURCES_LIMIT);
   }
 
   /** 422 PLAN_LIMIT_REACHED when one more source would pass the plan's cap (0 = unlimited). */

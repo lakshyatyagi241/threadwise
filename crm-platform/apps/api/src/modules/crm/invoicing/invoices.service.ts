@@ -336,7 +336,7 @@ export class InvoicesService {
   ): Promise<InvoiceRow> {
     // The plan's `invoices_monthly` allowance. Every new invoice row passes here: manual create, duplicate, order/quote conversion and the
     // recurring runner (which records a refusal as a failed run instead of throwing).
-    await this.planUsage.assertCanAdd(orgId, 'invoices_monthly');
+    await this.planUsage.assertCanAddIn(tx, orgId, 'invoices_monthly');
     const profile = await this.settings.load(tx, orgId);
     const priced = priceInvoice({
       currency: spec.currency,

@@ -178,8 +178,8 @@ export class RecurringInvoicesService {
   ): Promise<RecurringInvoiceResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `recurring_invoices` cap (live count of schedules).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'recurring_invoices');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'recurring_invoices');
       const profile = await this.settings.load(tx, ctx.orgId);
       const today = todayIn(resolveTimezone(profile.timezone));
       const template = await this.templateOf(tx, input, scope);

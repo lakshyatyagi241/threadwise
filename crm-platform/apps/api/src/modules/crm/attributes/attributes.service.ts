@@ -96,8 +96,8 @@ export class AttributesService {
       );
     }
     // The plan's `custom_fields` cap: a contact attribute is a non-system row of `fields`.
-    await this.planUsage.assertCanAdd(ctx.orgId, 'custom_fields');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'custom_fields');
       if (await this.repo.keyTaken(tx, ctx.orgId, input.key)) {
         throw new AppError(
           ERROR_CODES.FIELD_KEY_TAKEN,

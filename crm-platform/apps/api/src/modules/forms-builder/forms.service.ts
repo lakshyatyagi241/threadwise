@@ -139,6 +139,7 @@ export class FormsService {
   async create(input: CreateFormInput): Promise<FormDetail> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      await this.plan.lockForms(tx, ctx.orgId);
       await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
       if (await this.nameInUse(tx, ctx.orgId, input.name)) throw nameTaken();
 
@@ -335,8 +336,10 @@ export class FormsService {
       },
       async (tx, f) => {
         // An archived form freed its place under the plan's cap; coming back takes one again.
-        if (f.status === 'archived')
+        if (f.status === 'archived') {
+          await this.plan.lockForms(tx, ctx.orgId);
           await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
+        }
         if (f.status === 'archived' && (await this.nameInUse(tx, ctx.orgId, f.name, f.id)))
           throw nameTaken();
       },
@@ -359,6 +362,7 @@ export class FormsService {
     return this.db.tx(async (tx) => {
       const source = await this.mustFind(tx, ctx.orgId, uuid, scope);
       if (source.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Form');
+      await this.plan.lockForms(tx, ctx.orgId);
       await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
       const name = await this.freeName(tx, ctx.orgId, input.name ?? `Copy of ${source.name}`);
 

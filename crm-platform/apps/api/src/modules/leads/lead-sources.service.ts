@@ -163,6 +163,7 @@ export class LeadSourcesService {
   async create(input: CreateLeadSourceInput): Promise<CreateLeadSourceResponse> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      await this.plan.lockSources(tx, ctx.orgId);
       await this.plan.assertCanAddSource(ctx.orgId, await this.repo.count(tx, ctx.orgId));
       if (await this.repo.nameTaken(tx, ctx.orgId, input.name)) throw nameTaken();
       await this.validateMapping(tx, ctx.orgId, input.mapping);
