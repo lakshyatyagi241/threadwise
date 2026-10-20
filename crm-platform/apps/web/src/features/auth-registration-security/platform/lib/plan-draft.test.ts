@@ -88,6 +88,7 @@ const stored: PlanAdminItem = {
     email_mailboxes: 0,
     email_monthly: 0,
     storage_gb: 0,
+    teams: 1_000_000,
   },
   features: {
     automation: true,
@@ -126,6 +127,8 @@ const stored: PlanAdminItem = {
     ai_crm_copilot: false,
     lead_scoring: false,
     record_assignment: false,
+    team_hierarchy: true,
+    custom_roles: true,
   },
   moduleFeatures: {},
   moduleLimits: {},
@@ -512,5 +515,32 @@ describe('module-contributed plan keys (TW-ADD-013)', () => {
     expect(
       buildPlanRequest({ ...d, limits: { ...d.limits, x_cap: 'abc' } }).problems,
     ).toHaveProperty(['limits.x_cap']);
+  });
+});
+
+describe('the teams cap (0 is solo, blank is unlimited)', () => {
+  const withTeams = (n: number) => ({ ...stored, limits: { ...stored.limits, teams: n } });
+
+  it('shows the unlimited stand-in as blank and a real 0 as 0', () => {
+    expect(planToDraft(withTeams(1_000_000)).limits.teams).toBe('');
+    expect(planToDraft(withTeams(0)).limits.teams).toBe('0');
+    expect(planToDraft(withTeams(5)).limits.teams).toBe('5');
+  });
+
+  it('saves blank as unlimited, 0 as solo and a number as itself; other caps keep blank = 0', () => {
+    const d = planToDraft(stored);
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '' } }).body?.limits).toMatchObject({
+      teams: 1_000_000,
+      users: 0,
+    });
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits.teams).toBe(0);
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits.teams).toBe(7);
+  });
+
+  it('only a blank teams box counts as unlimited; a typed 0 is a cap', () => {
+    expect(limitIsUnlimited('', 'teams')).toBe(true);
+    expect(limitIsUnlimited('0', 'teams')).toBe(false);
+    expect(limitIsUnlimited('0', 'users')).toBe(true);
+    expect(countLimitsSet({ teams: '0', users: '' }, ['teams', 'users'])).toBe(1);
   });
 });

@@ -238,7 +238,10 @@
       "delegateInvalid": "Il delegato deve essere un altro membro attivo di questo spazio di lavoro.",
       "delegateCycle": "Si creerebbe un cerchio: la persona scelta ha già questa persona come delegato.",
       "reassignInvalid": "Non è stato possibile riassegnare nulla. Verifica che la persona abbia contatti o trattative aperte e che il destinatario possa riceverli.",
-      "reassignNotRestorable": "Questa riassegnazione non può più essere annullata."
+      "reassignNotRestorable": "Questa riassegnazione non può più essere annullata.",
+      "teamsNotIncluded": "Il tuo piano non include i team. Passa a un piano superiore, o richiedi il componente aggiuntivo Team e permessi, per raggruppare le persone in team.",
+      "teamsLimit": "Hai raggiunto il limite di {limit} team del tuo piano. Passa a un piano superiore o elimina un team per aggiungerne altri.",
+      "teamsLimitUnknown": "Hai raggiunto il limite di team del tuo piano. Passa a un piano superiore o elimina un team per aggiungerne altri."
     },
     "accept": {
       "title": "Unisciti al tuo workspace",

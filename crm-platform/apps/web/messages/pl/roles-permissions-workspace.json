@@ -47,7 +47,8 @@
       "nameTaken": "Rola o tej nazwie już istnieje.",
       "nameRequired": "Nazwa roli jest wymagana.",
       "nameTooLong": "Nazwa roli może mieć najwyżej {max} znaków.",
-      "notFound": "Ten element już nie istnieje. Mógł zostać usunięty."
+      "notFound": "Ten element już nie istnieje. Mógł zostać usunięty.",
+      "customRolesLocked": "Własne role i uprawnienia z zakresem nie są w Twoim planie. Możesz przeglądać role, ale nie możesz ich tworzyć ani zmieniać."
     },
     "team": {
       "crumb": "Członkowie zespołu",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Usunięto rolę „{name}”."
-      }
+      },
+      "customRolesLocked": "Własne role i uprawnienia z zakresem nie są w Twoim planie. Możesz przeglądać role, ale nie możesz ich tworzyć ani zmieniać.",
+      "addRoleLocked": "Dodaj rolę (ulepsz plan)"
     },
     "editor": {
       "crumbRoles": "Role",
@@ -212,7 +215,9 @@
         "created": "Utworzono rolę „{name}”.",
         "updated": "Zaktualizowano rolę „{name}”.",
         "deleted": "Usunięto rolę „{name}”."
-      }
+      },
+      "customRolesLocked": "Własne role i uprawnienia z zakresem nie są w Twoim planie. Możesz przeglądać role, ale nie możesz ich tworzyć ani zmieniać.",
+      "upgrade": "Zobacz plany"
     },
     "matrix": {
       "title": "Uprawnienia",

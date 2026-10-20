@@ -238,7 +238,10 @@
       "delegateInvalid": "The delegate must be another active member of this workspace.",
       "delegateCycle": "That would make a circle: the chosen person already has this person as their delegate.",
       "reassignInvalid": "Nothing could be reassigned. Check that the person holds contacts or open deals and that the target can take them.",
-      "reassignNotRestorable": "This reassignment can no longer be undone."
+      "reassignNotRestorable": "This reassignment can no longer be undone.",
+      "teamsNotIncluded": "Your plan doesn't include teams. Upgrade your plan, or ask for the Teams and permissions add-on, to group people into teams.",
+      "teamsLimit": "You've reached your plan's limit of {limit} teams. Upgrade your plan or delete a team to add more.",
+      "teamsLimitUnknown": "Your plan's team limit is reached. Upgrade your plan or delete a team to add more."
     },
     "accept": {
       "title": "Join your workspace",

@@ -19,6 +19,7 @@ import { PlatformWorkspacesController } from './platform-workspaces.controller';
 import { PlatformWorkspacesRepository } from './platform-workspaces.repository';
 import { PlatformWorkspacesService } from './platform-workspaces.service';
 import { TeamsController } from './teams.controller';
+import { TeamsPlanService } from './teams-plan.service';
 import { TeamsRepository } from './teams.repository';
 import { TeamsService } from './teams.service';
 
@@ -50,6 +51,7 @@ import { TeamsService } from './teams.service';
     LeaveRepository,
     LeaveService,
     TeamsRepository,
+    TeamsPlanService,
     TeamsService,
     InvitationsService,
     PlatformWorkspacesRepository,
@@ -57,6 +59,6 @@ import { TeamsService } from './teams.service';
     LifecycleRepository,
     LifecycleService,
   ],
-  exports: [MembersService, TeamsService, PlatformWorkspacesService, LifecycleService],
+  exports: [MembersService, TeamsService, TeamsPlanService, PlatformWorkspacesService, LifecycleService],
 })
 export class WorkspacesTeamsTenancyModule {}

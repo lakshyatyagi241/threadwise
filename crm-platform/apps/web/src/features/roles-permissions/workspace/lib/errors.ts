@@ -60,6 +60,9 @@ export function wsError(err: unknown): WsError {
         policy: err.fieldErrors.map((e) => e.message),
         requestId,
       };
+    case ERROR_CODES.PLAN_FEATURE_LOCKED:
+      // `custom_roles` is off for the plan (or the add-on is not bought): the Roles screen already says so before a save is tried.
+      return { kind: 'general', key: 'customRolesLocked', requestId };
     case ERROR_CODES.NOT_FOUND:
       return { kind: 'general', key: 'notFound', requestId };
     case ERROR_CODES.VALIDATION_FAILED: {

@@ -17,6 +17,7 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { MembersRepository } from './members.repository';
 import { toTeamResponse } from './teams.mapper';
+import { TeamsPlanService } from './teams-plan.service';
 import { TeamsRepository, type TeamRow } from './teams.repository';
 
 const SLUG_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -56,6 +57,7 @@ export class TeamsService {
     private readonly repo: TeamsRepository,
     private readonly members: MembersRepository,
     private readonly outbox: OutboxService,
+    private readonly plan: TeamsPlanService,
   ) {}
 
   async list(query: ListWspTeamsQuery): Promise<PageResponse<WspTeam>> {
@@ -88,6 +90,7 @@ export class TeamsService {
   async create(input: CreateWspTeamInput): Promise<WspTeam> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      await this.plan.assertCanCreate(tx, ctx.orgId);
       if (await this.repo.nameTaken(tx, ctx.orgId, input.name)) throw this.nameTaken(input.name);
       const memberIds = await this.resolveMembers(tx, ctx.orgId, input.memberIds);
       const deviceIds = await this.resolveDevices(tx, ctx.orgId, input.deviceIds);

@@ -561,7 +561,9 @@
             "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI 线索评分",
-            "record_assignment": "记录分配规则"
+            "record_assignment": "记录分配规则",
+            "team_hierarchy": "团队层级与经理",
+            "custom_roles": "自定义角色与范围"
           },
           "cta": {
             "continueFree": "继续免费使用",

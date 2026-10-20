@@ -1,7 +1,10 @@
 import {
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
+  PLAN_UNLIMITED_FROM,
   checkPlanRules,
+  isUnlimitedFor,
+  limitZeroIsNone,
   isMoney,
   moneyCents,
   normaliseMoney,
@@ -131,7 +134,17 @@ export function planToDraft(p: PlanAdminItem): PlanDraft {
     dataRetentionDays: String(p.dataRetentionDays),
     // Registry keys first, then the caps an installed module contributed (TW-ADD-013).
     limits: Object.fromEntries([
-      ...PLAN_LIMIT_KEYS.map((k) => [k, p.limits[k] > 0 ? String(p.limits[k]) : '']),
+      ...PLAN_LIMIT_KEYS.map((k) => [
+        k,
+        // `teams`: 0 is a real cap (solo) and a huge value is the unlimited stand-in, shown blank.
+        limitZeroIsNone(k)
+          ? isUnlimitedFor(k, p.limits[k])
+            ? ''
+            : String(p.limits[k])
+          : p.limits[k] > 0
+            ? String(p.limits[k])
+            : '',
+      ]),
       ...Object.entries(p.moduleLimits).map(([k, v]) => [k, v > 0 ? String(v) : '']),
     ]),
     features: { ...p.moduleFeatures, ...p.features },
@@ -235,7 +248,7 @@ export function buildPlanRequest(
     // Registry caps and the caps installed modules add travel apart (TW-ADD-013).
     const target = isRegistryLimit(key) ? limits : moduleLimits;
     if (!raw) {
-      target[key] = 0;
+      target[key] = limitZeroIsNone(key) ? PLAN_UNLIMITED_FROM : 0;
       continue;
     }
     const n = wholeNumber(raw);
@@ -347,13 +360,18 @@ export function problemsFromServer(
 }
 
 /** A limit input left blank or at 0 means unlimited (0 is what is stored; for the API rate it means "platform default"). */
-export function limitIsUnlimited(raw: string): boolean {
+export function limitIsUnlimited(raw: string, key?: string): boolean {
   const v = raw.trim();
+  // `teams`: a typed 0 means solo (no teams), only a blank box is unlimited.
+  if (key !== undefined && limitZeroIsNone(key)) return v === '';
   return v === '' || /^0+$/.test(v);
 }
 
 /** What a limit shows right after "Unlimited" is unticked: a small real cap to edit (blank would mean unlimited again). */
-const LIMITED_START: Partial<Record<PlanLimitKey, string>> = { api_rate_limit_per_minute: '60' };
+const LIMITED_START: Partial<Record<PlanLimitKey, string>> = {
+  api_rate_limit_per_minute: '60',
+  teams: '5',
+};
 
 export function setLimitUnlimited(
   draft: PlanDraft,
@@ -371,7 +389,7 @@ export function countLimitsSet(
   limits: PlanDraft['limits'],
   keys: readonly string[] = PLAN_LIMIT_KEYS,
 ): number {
-  return keys.filter((k) => !limitIsUnlimited(limits[k] ?? '')).length;
+  return keys.filter((k) => !limitIsUnlimited(limits[k] ?? '', k)).length;
 }
 
 /** How many of the given features (default: all) are on. */

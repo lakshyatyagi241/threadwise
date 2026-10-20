@@ -11,6 +11,8 @@ export const ERROR_KINDS = [
   'conflict',
   'rateLimited',
   'planLimit',
+  'teamsNotIncluded',
+  'teamsLimit',
   'alreadyMember',
   'cannotGrant',
   'higherRank',
@@ -40,6 +42,7 @@ const BY_CODE: Record<string, ErrorKind> = {
   [ERROR_CODES.ROW_VERSION_CONFLICT]: 'conflict',
   [ERROR_CODES.RATE_LIMITED]: 'rateLimited',
   [ERROR_CODES.PLAN_LIMIT_REACHED]: 'planLimit',
+  [ERROR_CODES.PLAN_TEAMS_NOT_INCLUDED]: 'teamsNotIncluded',
   [ERROR_CODES.WSP_ALREADY_MEMBER]: 'alreadyMember',
   // Handing out a role, changing your own and the last Owner are the RBAC domain's rules, so its codes.
   [ERROR_CODES.RBAC_ROLE_GRANT_FORBIDDEN]: 'cannotGrant',
@@ -64,6 +67,13 @@ export function errorKind(error: unknown): ErrorKind {
   // `fetch` rejects with a TypeError when no response arrived at all.
   if (error instanceof TypeError) return 'network';
   if (!(error instanceof ApiError)) return 'unexpected';
+  // The same code answers a full seat count and a full team count: the `limit` detail says which cap it was.
+  if (
+    error.code === ERROR_CODES.PLAN_LIMIT_REACHED &&
+    error.fieldErrors.some((f) => f.path === 'limit' && f.message === 'teams')
+  ) {
+    return 'teamsLimit';
+  }
   return BY_CODE[error.code] ?? 'unexpected';
 }
 

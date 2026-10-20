@@ -238,7 +238,10 @@
       "delegateInvalid": "El suplente debe ser otro miembro activo de este espacio de trabajo.",
       "delegateCycle": "Eso crearía un círculo: la persona elegida ya tiene a esta persona como suplente.",
       "reassignInvalid": "No se pudo reasignar nada. Comprueba que la persona tenga contactos o negocios abiertos y que el destino pueda recibirlos.",
-      "reassignNotRestorable": "Esta reasignación ya no se puede deshacer."
+      "reassignNotRestorable": "Esta reasignación ya no se puede deshacer.",
+      "teamsNotIncluded": "Tu plan no incluye equipos. Mejora tu plan, o pide el complemento Equipos y permisos, para agrupar personas en equipos.",
+      "teamsLimit": "Has alcanzado el límite de {limit} equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más.",
+      "teamsLimitUnknown": "Has alcanzado el límite de equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más."
     },
     "accept": {
       "title": "Únete a tu espacio de trabajo",

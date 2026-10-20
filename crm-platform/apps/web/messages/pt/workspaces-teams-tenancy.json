@@ -238,7 +238,10 @@
       "delegateInvalid": "O substituto deve ser outro membro ativo deste espaço de trabalho.",
       "delegateCycle": "Isso criaria um ciclo: a pessoa escolhida já tem esta pessoa como substituta.",
       "reassignInvalid": "Nada pôde ser reatribuído. Verifique se a pessoa tem contatos ou negócios em aberto e se o destino pode recebê-los.",
-      "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita."
+      "reassignNotRestorable": "Esta reatribuição não pode mais ser desfeita.",
+      "teamsNotIncluded": "Seu plano não inclui equipes. Faça upgrade do plano, ou peça o complemento Equipes e permissões, para agrupar pessoas em equipes.",
+      "teamsLimit": "Você atingiu o limite de {limit} equipes do seu plano. Faça upgrade do plano ou exclua uma equipe para adicionar mais.",
+      "teamsLimitUnknown": "O limite de equipes do seu plano foi atingido. Faça upgrade do plano ou exclua uma equipe para adicionar mais."
     },
     "accept": {
       "title": "Entre no seu espaço de trabalho",

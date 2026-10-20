@@ -47,7 +47,8 @@
       "nameTaken": "Un rôle portant ce nom existe déjà.",
       "nameRequired": "Le nom du rôle est obligatoire.",
       "nameTooLong": "Le nom du rôle ne peut pas dépasser {max} caractères.",
-      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé."
+      "notFound": "Cet élément n’existe plus. Il a peut-être été supprimé.",
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier."
     },
     "team": {
       "crumb": "Membres de l’équipe",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Rôle « {name} » supprimé."
-      }
+      },
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier.",
+      "addRoleLocked": "Ajouter un rôle (mise à niveau)"
     },
     "editor": {
       "crumbRoles": "Rôles",
@@ -212,7 +215,9 @@
         "created": "Rôle « {name} » créé.",
         "updated": "Rôle « {name} » mis à jour.",
         "deleted": "Rôle « {name} » supprimé."
-      }
+      },
+      "customRolesLocked": "Les rôles personnalisés et les autorisations par périmètre ne sont pas dans votre offre. Vous pouvez consulter les rôles, mais pas les créer ni les modifier.",
+      "upgrade": "Voir les offres"
     },
     "matrix": {
       "title": "Autorisations",

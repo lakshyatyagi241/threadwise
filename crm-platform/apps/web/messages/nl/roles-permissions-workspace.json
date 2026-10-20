@@ -47,7 +47,8 @@
       "nameTaken": "Er bestaat al een rol met deze naam.",
       "nameRequired": "De rolnaam is verplicht.",
       "nameTooLong": "De rolnaam mag maximaal {max} tekens bevatten.",
-      "notFound": "Dit item bestaat niet meer. Het is mogelijk verwijderd."
+      "notFound": "Dit item bestaat niet meer. Het is mogelijk verwijderd.",
+      "customRolesLocked": "Eigen rollen en rechten met bereik zitten niet in je abonnement. Je kunt rollen bekijken, maar niet maken of wijzigen."
     },
     "team": {
       "crumb": "Teamleden",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Rol “{name}” verwijderd."
-      }
+      },
+      "customRolesLocked": "Eigen rollen en rechten met bereik zitten niet in je abonnement. Je kunt rollen bekijken, maar niet maken of wijzigen.",
+      "addRoleLocked": "Rol toevoegen (upgrade)"
     },
     "editor": {
       "crumbRoles": "Rollen",
@@ -212,7 +215,9 @@
         "created": "Rol “{name}” aangemaakt.",
         "updated": "Rol “{name}” bijgewerkt.",
         "deleted": "Rol “{name}” verwijderd."
-      }
+      },
+      "customRolesLocked": "Eigen rollen en rechten met bereik zitten niet in je abonnement. Je kunt rollen bekijken, maar niet maken of wijzigen.",
+      "upgrade": "Abonnementen bekijken"
     },
     "matrix": {
       "title": "Machtigingen",

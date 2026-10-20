@@ -238,7 +238,10 @@
       "delegateInvalid": "Vekil, bu çalışma alanının etkin başka bir üyesi olmalıdır.",
       "delegateCycle": "Bu bir döngü oluşturur: seçilen kişinin vekili zaten bu kişi.",
       "reassignInvalid": "Hiçbir şey yeniden atanamadı. Kişinin kişileri veya açık fırsatları olduğunu ve hedefin bunları alabildiğini kontrol edin.",
-      "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz."
+      "reassignNotRestorable": "Bu yeniden atama artık geri alınamaz.",
+      "teamsNotIncluded": "Planınız ekipleri içermiyor. Kişileri ekiplerde toplamak için planınızı yükseltin veya Ekipler ve izinler eklentisini isteyin.",
+      "teamsLimit": "Planınızın {limit} ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin.",
+      "teamsLimitUnknown": "Planınızın ekip sınırına ulaştınız. Daha fazla eklemek için planınızı yükseltin veya bir ekibi silin."
     },
     "accept": {
       "title": "Çalışma alanınıza katılın",

@@ -238,7 +238,10 @@
       "delegateInvalid": "代理人必须是此工作区中另一位活跃成员。",
       "delegateCycle": "这会形成循环：所选的人已经把此人设为其代理人。",
       "reassignInvalid": "无法重新分配任何内容。请确认此人名下有联系人或未结商机，且目标对象可以接收。",
-      "reassignNotRestorable": "此次重新分配已无法撤销。"
+      "reassignNotRestorable": "此次重新分配已无法撤销。",
+      "teamsNotIncluded": "您的套餐不包含团队。请升级套餐,或申请“团队与权限”附加包,以便将成员分组为团队。",
+      "teamsLimit": "已达到套餐的 {limit} 个团队上限。请升级套餐或删除一个团队后再添加。",
+      "teamsLimitUnknown": "已达到套餐的团队上限。请升级套餐或删除一个团队后再添加。"
     },
     "accept": {
       "title": "加入您的工作区",

@@ -45,6 +45,7 @@ export function ToggleRow({
   onChange,
   disabled,
   error,
+  badge,
 }: {
   id: string;
   label: string;
@@ -53,12 +54,15 @@ export function ToggleRow({
   onChange: (v: boolean) => void;
   disabled?: boolean;
   error?: string;
+  /** A small tag beside the label (the product line of a plan feature). */
+  badge?: ReactNode;
 }) {
   return (
     <div className="flex items-start justify-between gap-3 rounded-md border border-border p-3">
       <div className="min-w-0 space-y-0.5">
         <label htmlFor={id} className="block cursor-pointer text-sm font-medium">
           {label}
+          {badge && <span className="ms-2 align-middle">{badge}</span>}
         </label>
         {hint && <p className="text-xs text-muted-foreground">{hint}</p>}
         {error && (

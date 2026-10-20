@@ -238,7 +238,10 @@
       "delegateInvalid": "Người đại diện phải là một thành viên đang hoạt động khác trong không gian làm việc này.",
       "delegateCycle": "Điều đó sẽ tạo vòng lặp: người được chọn đã đặt người này làm người đại diện.",
       "reassignInvalid": "Không thể phân công lại gì cả. Hãy kiểm tra người này có liên hệ hoặc deal đang mở và người nhận có thể tiếp nhận.",
-      "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa."
+      "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa.",
+      "teamsNotIncluded": "Gói của bạn không bao gồm nhóm. Hãy nâng cấp gói, hoặc yêu cầu tiện ích Nhóm và quyền, để gom mọi người vào nhóm.",
+      "teamsLimit": "Bạn đã đạt giới hạn {limit} nhóm của gói. Hãy nâng cấp gói hoặc xóa một nhóm để thêm nhóm mới.",
+      "teamsLimitUnknown": "Bạn đã đạt giới hạn nhóm của gói. Hãy nâng cấp gói hoặc xóa một nhóm để thêm nhóm mới."
     },
     "accept": {
       "title": "Tham gia không gian làm việc của bạn",

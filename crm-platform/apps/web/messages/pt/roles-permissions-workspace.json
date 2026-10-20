@@ -47,7 +47,8 @@
       "nameTaken": "Já existe uma função com este nome.",
       "nameRequired": "O nome da função é obrigatório.",
       "nameTooLong": "O nome da função pode ter no máximo {max} caracteres.",
-      "notFound": "Este item não existe mais. Pode ter sido excluído."
+      "notFound": "Este item não existe mais. Pode ter sido excluído.",
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las."
     },
     "team": {
       "crumb": "Membros da equipe",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Função “{name}” excluída."
-      }
+      },
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las.",
+      "addRoleLocked": "Adicionar função (upgrade)"
     },
     "editor": {
       "crumbRoles": "Funções",
@@ -212,7 +215,9 @@
         "created": "Função “{name}” criada.",
         "updated": "Função “{name}” atualizada.",
         "deleted": "Função “{name}” excluída."
-      }
+      },
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las.",
+      "upgrade": "Ver planos"
     },
     "matrix": {
       "title": "Permissões",

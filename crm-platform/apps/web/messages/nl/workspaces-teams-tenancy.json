@@ -238,7 +238,10 @@
       "delegateInvalid": "De vervanger moet een ander actief lid van deze werkruimte zijn.",
       "delegateCycle": "Dat zou een kring maken: de gekozen persoon heeft deze persoon al als vervanger.",
       "reassignInvalid": "Er kon niets opnieuw worden toegewezen. Controleer of de persoon contacten of open deals heeft en of de nieuwe eigenaar ze kan overnemen.",
-      "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt."
+      "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt.",
+      "teamsNotIncluded": "Je abonnement bevat geen teams. Upgrade je abonnement of vraag de add-on Teams en rechten aan om mensen in teams te groeperen.",
+      "teamsLimit": "Je hebt de limiet van {limit} teams van je abonnement bereikt. Upgrade je abonnement of verwijder een team om er meer toe te voegen.",
+      "teamsLimitUnknown": "De teamlimiet van je abonnement is bereikt. Upgrade je abonnement of verwijder een team om er meer toe te voegen."
     },
     "accept": {
       "title": "Word lid van je workspace",

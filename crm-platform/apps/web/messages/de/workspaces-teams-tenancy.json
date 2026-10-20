@@ -238,7 +238,10 @@
       "delegateInvalid": "Die Vertretung muss ein anderes aktives Mitglied dieses Workspace sein.",
       "delegateCycle": "Das würde einen Kreis ergeben: Die gewählte Person hat diese Person bereits als Vertretung.",
       "reassignInvalid": "Es konnte nichts neu zugewiesen werden. Prüfen Sie, ob die Person Kontakte oder offene Deals hat und ob das Ziel sie übernehmen kann.",
-      "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden."
+      "reassignNotRestorable": "Diese Neuzuweisung kann nicht mehr rückgängig gemacht werden.",
+      "teamsNotIncluded": "Ihr Tarif enthält keine Teams. Wechseln Sie zu einem höheren Tarif oder fragen Sie das Add-on „Teams und Berechtigungen“ an, um Personen in Teams zu gruppieren.",
+      "teamsLimit": "Sie haben das Limit von {limit} Teams Ihres Tarifs erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen.",
+      "teamsLimitUnknown": "Das Teamlimit Ihres Tarifs ist erreicht. Wechseln Sie zu einem höheren Tarif oder löschen Sie ein Team, um weitere hinzuzufügen."
     },
     "accept": {
       "title": "Treten Sie Ihrem Workspace bei",

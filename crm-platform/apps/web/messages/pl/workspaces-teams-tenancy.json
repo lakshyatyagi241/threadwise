@@ -238,7 +238,10 @@
       "delegateInvalid": "Zastępca musi być innym aktywnym członkiem tego obszaru roboczego.",
       "delegateCycle": "Powstałoby koło zależności: wybrana osoba ma już tę osobę jako swojego zastępcę.",
       "reassignInvalid": "Nie udało się nic przypisać ponownie. Sprawdź, czy ta osoba ma kontakty lub otwarte transakcje i czy docelowy właściciel może je przejąć.",
-      "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć."
+      "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć.",
+      "teamsNotIncluded": "Twój plan nie obejmuje zespołów. Zmień plan na wyższy lub poproś o dodatek Zespoły i uprawnienia, aby grupować osoby w zespoły.",
+      "teamsLimit": "Osiągnięto limit {limit} zespołów w Twoim planie. Zmień plan na wyższy lub usuń zespół, aby dodać kolejny.",
+      "teamsLimitUnknown": "Osiągnięto limit zespołów w Twoim planie. Zmień plan na wyższy lub usuń zespół, aby dodać kolejny."
     },
     "accept": {
       "title": "Dołącz do swojej przestrzeni roboczej",

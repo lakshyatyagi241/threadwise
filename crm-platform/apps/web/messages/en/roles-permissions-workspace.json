@@ -47,7 +47,8 @@
       "nameTaken": "A role with this name already exists.",
       "nameRequired": "The role name is required.",
       "nameTooLong": "The role name can have at most {max} characters.",
-      "notFound": "This item no longer exists. It may have been deleted."
+      "notFound": "This item no longer exists. It may have been deleted.",
+      "customRolesLocked": "Custom roles and scoped permissions aren't on your plan. You can read the roles but not create or change them."
     },
     "team": {
       "crumb": "Team members",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Role \"{name}\" deleted."
-      }
+      },
+      "customRolesLocked": "Custom roles and scoped permissions aren't on your plan. You can read the roles but not create or change them.",
+      "addRoleLocked": "Add role (upgrade)"
     },
     "editor": {
       "crumbRoles": "Roles",
@@ -212,7 +215,9 @@
         "created": "Role \"{name}\" created.",
         "updated": "Role \"{name}\" updated.",
         "deleted": "Role \"{name}\" deleted."
-      }
+      },
+      "customRolesLocked": "Custom roles and scoped permissions aren't on your plan. You can read the roles but not create or change them.",
+      "upgrade": "See plans"
     },
     "matrix": {
       "title": "Permissions",

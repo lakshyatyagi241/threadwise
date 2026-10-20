@@ -1442,7 +1442,9 @@
             "personal_history_full": "Laat een persoonlijk WhatsApp-nummer de volledige chatgeschiedenis importeren bij de eerste koppeling. Het importeren van recente chats is beschikbaar voor elk abonnement met persoonlijke nummers.",
             "ai_crm_copilot": "Vindt en scoort leads met AI uit je contacten.",
             "lead_scoring": "Scoort contacten met AI en voedt de groeipilot. De app AI-leadscoring beheert deze schakelaar.",
-            "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar."
+            "record_assignment": "Wijst nieuwe contacten, bedrijven en deals via prioriteitsregels toe aan de juiste verkoopeigenaar.",
+            "team_hierarchy": "Bovenliggende teams, teamleiders en managers die hun team en de teams eronder zien.",
+            "custom_roles": "Maak en bewerk rollen en kies per recht een bereik (eigen, team of alle records)."
           },
           "units": {
             "days": "Dagen",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "SMS per maand",
             "email_mailboxes": "E-mailpostvakken",
             "email_monthly": "E-mails per maand",
-            "storage_gb": "Opslag (GB)"
+            "storage_gb": "Opslag (GB)",
+            "teams": "Teams"
           },
           "featureGroups": {
             "messaging": "Berichten",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "Volledige chatgeschiedenis importeren (persoonlijke WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI-leadscoring",
-            "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)"
+            "record_assignment": "Regels voor recordtoewijzing (contacten, bedrijven en deals automatisch toewijzen)",
+            "team_hierarchy": "Teamhiërarchie en managers",
+            "custom_roles": "Eigen rollen en bereiken"
           },
           "problems": {
             "required": "Dit veld is verplicht.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
             "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
             "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
-            "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
+            "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
+            "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "Verkoop-CRM",
+            "platform": "Gedeeld door beide"
           }
         }
       },

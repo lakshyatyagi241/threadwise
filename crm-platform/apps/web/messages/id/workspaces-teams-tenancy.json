@@ -238,7 +238,10 @@
       "delegateInvalid": "Delegasi harus anggota aktif lain di workspace ini.",
       "delegateCycle": "Itu akan membentuk lingkaran: orang yang dipilih sudah menjadikan orang ini sebagai delegasinya.",
       "reassignInvalid": "Tidak ada yang dapat ditugaskan ulang. Pastikan orang tersebut memegang kontak atau deal terbuka dan target dapat menerimanya.",
-      "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan."
+      "reassignNotRestorable": "Penugasan ulang ini tidak dapat lagi dibatalkan.",
+      "teamsNotIncluded": "Paket Anda tidak menyertakan tim. Tingkatkan paket, atau minta add-on Tim dan izin, untuk mengelompokkan orang ke dalam tim.",
+      "teamsLimit": "Anda telah mencapai batas {limit} tim pada paket Anda. Tingkatkan paket atau hapus satu tim untuk menambah lagi.",
+      "teamsLimitUnknown": "Batas tim pada paket Anda telah tercapai. Tingkatkan paket atau hapus satu tim untuk menambah lagi."
     },
     "accept": {
       "title": "Bergabung dengan workspace Anda",

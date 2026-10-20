@@ -238,7 +238,10 @@
       "delegateInvalid": "Le suppléant doit être un autre membre actif de cet espace de travail.",
       "delegateCycle": "Cela créerait une boucle : la personne choisie a déjà cette personne comme suppléante.",
       "reassignInvalid": "Rien n’a pu être réattribué. Vérifiez que la personne possède des contacts ou des affaires ouvertes et que la cible peut les prendre.",
-      "reassignNotRestorable": "Cette réattribution ne peut plus être annulée."
+      "reassignNotRestorable": "Cette réattribution ne peut plus être annulée.",
+      "teamsNotIncluded": "Votre offre n'inclut pas les équipes. Passez à une offre supérieure, ou demandez le module Équipes et autorisations, pour regrouper les personnes en équipes.",
+      "teamsLimit": "Vous avez atteint la limite de {limit} équipes de votre offre. Passez à une offre supérieure ou supprimez une équipe pour en ajouter.",
+      "teamsLimitUnknown": "La limite d'équipes de votre offre est atteinte. Passez à une offre supérieure ou supprimez une équipe pour en ajouter."
     },
     "accept": {
       "title": "Rejoignez votre espace de travail",

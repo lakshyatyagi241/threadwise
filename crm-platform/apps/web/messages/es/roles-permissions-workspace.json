@@ -47,7 +47,8 @@
       "nameTaken": "Ya existe un rol con este nombre.",
       "nameRequired": "El nombre del rol es obligatorio.",
       "nameTooLong": "El nombre del rol puede tener como máximo {max} caracteres.",
-      "notFound": "Este elemento ya no existe. Puede que se haya eliminado."
+      "notFound": "Este elemento ya no existe. Puede que se haya eliminado.",
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos."
     },
     "team": {
       "crumb": "Miembros del equipo",
@@ -171,7 +172,9 @@
       },
       "toasts": {
         "deleted": "Rol \"{name}\" eliminado."
-      }
+      },
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos.",
+      "addRoleLocked": "Añadir rol (mejorar plan)"
     },
     "editor": {
       "crumbRoles": "Roles",
@@ -212,7 +215,9 @@
         "created": "Rol \"{name}\" creado.",
         "updated": "Rol \"{name}\" actualizado.",
         "deleted": "Rol \"{name}\" eliminado."
-      }
+      },
+      "customRolesLocked": "Los roles personalizados y los permisos con alcance no están en tu plan. Puedes ver los roles, pero no crearlos ni cambiarlos.",
+      "upgrade": "Ver planes"
     },
     "matrix": {
       "title": "Permisos",
