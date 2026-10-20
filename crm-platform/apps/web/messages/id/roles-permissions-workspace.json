@@ -245,8 +245,20 @@
       "lockedHint": "Izin ini belum tersedia untuk workspace ini. Akan aktif saat fitur paket diaktifkan atau aplikasi dipasang.",
       "scope": {
         "all": "Semua data",
-        "own": "Data sendiri",
-        "team": "Catatan tim saya"
+        "own": "Data saya",
+        "team": "Catatan tim saya",
+        "team_and_below": "Tim saya dan sub-tim"
+      },
+      "scopeLegend": "Apa yang dicakup setiap lingkup data",
+      "scopeHelp": {
+        "all": "Semua data di ruang kerja.",
+        "team_and_below": "Data tim Anda dan semua tim di bawahnya.",
+        "team": "Data orang-orang di tim Anda.",
+        "own": "Hanya data yang Anda miliki atau yang ditugaskan kepada Anda."
+      },
+      "noTeamWarning": "{count, plural, other {# anggota dengan peran ini tidak berada di tim mana pun, sehingga mereka hanya melihat data mereka sendiri di tempat peran ini diatur ke lingkup tim.}} Tambahkan mereka ke tim di <link>Pengaturan > Tim</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Tanpa izin ini, agen dengan akses tim hanya melihat percakapan yang ditugaskan kepada mereka atau tim mereka. Dengan izin ini, mereka juga melihat antrean terbuka percakapan yang tidak ditugaskan ke siapa pun."
       }
     },
     "delete": {

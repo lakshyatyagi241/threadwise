@@ -128,7 +128,9 @@
         "list": "Daftar"
       },
       "reports": "Laporan",
-      "settings": "Pengaturan pipeline"
+      "settings": "Pengaturan pipeline",
+      "team": "Tim",
+      "allTeams": "Semua tim"
     },
     "kpi": {
       "openPipeline": "Pipeline terbuka",

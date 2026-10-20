@@ -104,7 +104,9 @@
       },
       "linkCompany": "Компания",
       "outcome": "Результат",
-      "allOutcomes": "Все результаты"
+      "allOutcomes": "Все результаты",
+      "team": "Команда",
+      "allTeams": "Все команды"
     },
     "table": {
       "scrollArea": "Таблица задач",

@@ -245,8 +245,20 @@
       "lockedHint": "To uprawnienie nie jest jeszcze dostępne w tej przestrzeni roboczej. Odblokuje się po włączeniu funkcji w planie lub instalacji aplikacji.",
       "scope": {
         "all": "Wszystkie rekordy",
-        "own": "Własne rekordy",
-        "team": "Rekordy mojego zespołu"
+        "own": "Moje rekordy",
+        "team": "Rekordy mojego zespołu",
+        "team_and_below": "Mój zespół i podzespoły"
+      },
+      "scopeLegend": "Co obejmuje każdy zakres rekordów",
+      "scopeHelp": {
+        "all": "Wszystkie rekordy w przestrzeni roboczej.",
+        "team_and_below": "Rekordy Twojego zespołu i wszystkich zespołów poniżej.",
+        "team": "Rekordy osób z Twojego zespołu.",
+        "own": "Tylko rekordy, które należą do Ciebie lub zostały Ci przypisane."
+      },
+      "noTeamWarning": "{count, plural, one {# członek z tą rolą nie należy do żadnego zespołu, więc widzi tylko własne rekordy tam, gdzie rola ma zakres zespołu.} few {# członków z tą rolą nie należy do żadnego zespołu, więc widzą tylko własne rekordy tam, gdzie rola ma zakres zespołu.} many {# członków z tą rolą nie należy do żadnego zespołu, więc widzą tylko własne rekordy tam, gdzie rola ma zakres zespołu.} other {# członka z tą rolą nie należy do żadnego zespołu, więc widzą tylko własne rekordy tam, gdzie rola ma zakres zespołu.}} Dodaj ich do zespołu w <link>Ustawienia > Zespoły</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Bez tego uprawnienia agenci z dostępem zespołowym widzą tylko rozmowy przypisane do nich lub do ich zespołu. Z nim widzą też otwartą kolejkę rozmów nieprzypisanych nikomu."
       }
     },
     "delete": {

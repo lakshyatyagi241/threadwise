@@ -245,8 +245,20 @@
       "lockedHint": "Bu izin henüz bu çalışma alanında kullanılamıyor. Plan özelliği açıldığında veya uygulama kurulduğunda kullanılabilir olur.",
       "scope": {
         "all": "Tüm kayıtlar",
-        "own": "Kendi kayıtları",
-        "team": "Ekibimin kayıtları"
+        "own": "Kayıtlarım",
+        "team": "Ekibimin kayıtları",
+        "team_and_below": "Ekibim ve alt ekipler"
+      },
+      "scopeLegend": "Her kayıt kapsamının neleri içerdiği",
+      "scopeHelp": {
+        "all": "Çalışma alanındaki tüm kayıtlar.",
+        "team_and_below": "Ekibinizin ve altındaki tüm ekiplerin kayıtları.",
+        "team": "Ekibinizdeki kişilerin kayıtları.",
+        "own": "Yalnızca size ait veya size atanmış kayıtlar."
+      },
+      "noTeamWarning": "{count, plural, one {Bu role sahip # üye hiçbir ekipte değil, bu yüzden bu rolün ekip kapsamında olduğu yerlerde yalnızca kendi kayıtlarını görür.} other {Bu role sahip # üye hiçbir ekipte değil, bu yüzden bu rolün ekip kapsamında olduğu yerlerde yalnızca kendi kayıtlarını görürler.}} Onları <link>Ayarlar > Ekipler</link> bölümünden bir ekibe ekleyin.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Bu izin olmadan, ekip erişimi olan temsilciler yalnızca kendilerine veya ekiplerine atanmış görüşmeleri görür. İzinle birlikte kimseye atanmamış görüşmelerin açık kuyruğunu da görürler."
       }
     },
     "delete": {

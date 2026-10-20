@@ -362,7 +362,11 @@ describe('room:join', () => {
     other = await api.signup('rto');
     owner = await api.member(t, 'owner', READ('own'));
     allReader = await api.member(t, 'allreader', READ('all'));
-    teamReader = await api.member(t, 'teamreader', READ('team'));
+    // `team` readers keep the shared queue through the permission the BL-382 migration gives them.
+    teamReader = await api.member(t, 'teamreader', [
+      ...READ('team'),
+      ['inbox.conversation.read_unassigned'],
+    ]);
     colleague = await api.member(t, 'colleague', READ('own'));
     plain = await api.member(t, 'plain', []);
     ops = await team(t, 'Ops', [teamReader.userId]);

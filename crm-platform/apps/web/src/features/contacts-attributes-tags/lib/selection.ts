@@ -76,6 +76,8 @@ export interface ContactFilterSnapshot {
   segment: string;
   /** Owner filter tokens (person ids and/or `none`, comma-separated), or empty / absent. */
   owner?: string;
+  /** The owning team (a team uuid), or empty / absent. */
+  team?: string;
   /** The Hub's ad-hoc conditions (JSON text), or empty / absent. */
   rules?: string;
 }

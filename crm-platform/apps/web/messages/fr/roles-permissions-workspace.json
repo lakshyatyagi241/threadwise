@@ -245,8 +245,20 @@
       "lockedHint": "Cette autorisation n’est pas encore disponible pour cet espace de travail. Elle se débloque lorsque la fonctionnalité du forfait est activée ou que l’application est installée.",
       "scope": {
         "all": "Tous les enregistrements",
-        "own": "Ses propres enregistrements",
-        "team": "Enregistrements de mon équipe"
+        "own": "Mes enregistrements",
+        "team": "Enregistrements de mon équipe",
+        "team_and_below": "Mon équipe et sous-équipes"
+      },
+      "scopeLegend": "Ce que couvre chaque portée des enregistrements",
+      "scopeHelp": {
+        "all": "Tous les enregistrements de l’espace de travail.",
+        "team_and_below": "Enregistrements de votre équipe et de toutes les équipes en dessous.",
+        "team": "Enregistrements des personnes de votre équipe.",
+        "own": "Uniquement les enregistrements qui vous appartiennent ou vous sont attribués."
+      },
+      "noTeamWarning": "{count, plural, one {# membre ayant ce rôle n’est dans aucune équipe, il ne voit donc que ses propres enregistrements là où ce rôle a une portée d’équipe.} many {# de membres ayant ce rôle ne sont dans aucune équipe, ils ne voient donc que leurs propres enregistrements là où ce rôle a une portée d’équipe.} other {# membres ayant ce rôle ne sont dans aucune équipe, ils ne voient donc que leurs propres enregistrements là où ce rôle a une portée d’équipe.}} Ajoutez-les à une équipe dans <link>Paramètres > Équipes</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Sans cette autorisation, les agents ayant un accès d’équipe ne voient que les conversations qui leur sont attribuées ou attribuées à leur équipe. Avec elle, ils voient aussi la file ouverte des conversations attribuées à personne."
       }
     },
     "delete": {

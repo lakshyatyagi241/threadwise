@@ -10,6 +10,8 @@ import {
 
 const params = (s: string) => new URLSearchParams(s);
 
+const TEAM = '44444444-4444-4444-8444-444444444444';
+
 describe('deal filters', () => {
   it('reads the address and ignores unknown values', () => {
     const f = parseFilters(
@@ -19,6 +21,7 @@ describe('deal filters', () => {
       pipeline: 'p1',
       q: 'acme',
       owner: 'u1',
+      team: '',
       source: 'api',
       stage: '',
       status: 'won',
@@ -65,6 +68,16 @@ describe('deal filters', () => {
     expect(hasActiveFilter(DEFAULT_FILTERS)).toBe(false);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, q: '  ' })).toBe(false);
     expect(hasActiveFilter({ ...DEFAULT_FILTERS, owner: 'none' })).toBe(true);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, team: TEAM })).toBe(true);
+  });
+
+  it('carries the Team filter in the address and sends it as teamId', () => {
+    const f = parseFilters(params(`team=${TEAM}`));
+    expect(f.team).toBe(TEAM);
+    expect(filtersToSearch(f)).toBe(`?team=${TEAM}`);
+    expect(filterQuery(f)).toMatchObject({ teamId: TEAM });
+    expect(parseFilters(params('team=not-a-uuid')).team).toBe('');
+    expect(filterQuery(DEFAULT_FILTERS).teamId).toBeUndefined();
   });
 
   it('matches deals the way the server does', () => {

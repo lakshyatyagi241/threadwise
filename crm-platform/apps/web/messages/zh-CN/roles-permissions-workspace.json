@@ -245,8 +245,20 @@
       "lockedHint": "此工作区暂不可使用该权限。待套餐功能开启或应用安装后即可解锁。",
       "scope": {
         "all": "全部记录",
-        "own": "个人记录",
-        "team": "我团队的记录"
+        "own": "我的记录",
+        "team": "我团队的记录",
+        "team_and_below": "我的团队及下级团队"
+      },
+      "scopeLegend": "每种记录范围涵盖的内容",
+      "scopeHelp": {
+        "all": "工作区中的所有记录。",
+        "team_and_below": "你所在团队及其下所有团队的记录。",
+        "team": "你团队成员的记录。",
+        "own": "仅限你拥有或分配给你的记录。"
+      },
+      "noTeamWarning": "{count, plural, other {拥有此角色的 # 名成员不在任何团队中，因此在此角色设为团队范围的地方，他们只能看到自己的记录。}} 请在<link>设置 > 团队</link>中将他们加入团队。",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "没有此权限时，拥有团队访问权限的客服只能看到分配给自己或所在团队的对话。有此权限时，还能看到未分配给任何人的待处理对话队列。"
       }
     },
     "delete": {

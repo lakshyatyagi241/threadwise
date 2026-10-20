@@ -1,9 +1,12 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
+import { TEAM_HIERARCHY_FEATURE, teamHierarchyOffered } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope } from '@crm/contracts';
-import { Input, Select, cn } from '@crm/ui';
+import { Alert, Input, Select, cn } from '@crm/ui';
+import { usePlanFeature } from '@/lib/plan-features';
 import { SearchIcon } from '../../ui/icons';
 import { SectionBadge } from '../../ui/chrome';
 import { TriCheckbox } from '../../ui/tri-checkbox';
@@ -18,6 +21,8 @@ import {
   countSelected,
   filterDefs,
   groupByCategory,
+  needsTeamWarning,
+  scopeOptions,
   setEffect,
   setMany,
   setScope,
@@ -27,23 +32,25 @@ import {
 } from '../lib/matrix';
 
 const NS = 'roles-permissions-workspace.matrix';
-const SCOPES: readonly RecordScope[] = ['all', 'team', 'own'];
 
 /**
  * The permission matrix of the role editor: every key of `GET /v2/permissions`, grouped by category. A key is granted
  * with its checkbox; a granted key can be flipped to Deny (deny beats allow) and, when it supports a record scope,
- * limited to all, team or own records.
+ * limited to all records, the team and its sub-teams, the team or own records.
  */
 export function PermissionMatrix({
   defs,
   draft,
   onChange,
   readOnly,
+  membersWithoutTeam,
 }: {
   defs: readonly PermissionDefResponse[];
   draft: GrantDraft;
   onChange: (next: GrantDraft) => void;
   readOnly: boolean;
+  /** Active members holding the edited role who are in no team (`RoleResponse.membersWithoutTeam`). */
+  membersWithoutTeam?: number;
 }) {
   const t = useTranslations(NS);
   const tf = useTranslations('plans-subscriptions-trials.features');
@@ -53,6 +60,9 @@ export function PermissionMatrix({
   const groups = useMemo(() => groupByCategory(visible), [visible]);
   const visibleKeys = useMemo(() => selectableKeys(visible), [visible]);
   const denied = countDenied(draft);
+  // TODO(BL-383, T3): the plan feature key does not exist until teams T3 merges; teamHierarchyOffered treats a missing key as ON.
+  const hierarchyOffered = teamHierarchyOffered(usePlanFeature(TEAM_HIERARCHY_FEATURE));
+  const legend = scopeOptions(hierarchyOffered);
 
   return (
     <section
@@ -99,6 +109,31 @@ export function PermissionMatrix({
           </div>
           <p className="min-w-0 flex-1 text-xs text-muted-foreground">{t('denyHint')}</p>
         </div>
+        {needsTeamWarning(draft, membersWithoutTeam, defs) && (
+          <Alert tone="warning" data-testid="no-team-warning">
+            {t.rich('noTeamWarning', {
+              count: membersWithoutTeam ?? 0,
+              link: (chunks) => (
+                <Link href="/teams" className="font-medium underline">
+                  {chunks}
+                </Link>
+              ),
+            })}
+          </Alert>
+        )}
+        <ul
+          aria-label={t('scopeLegend')}
+          data-testid="scope-legend"
+          className="grid gap-x-6 gap-y-1 text-xs text-muted-foreground sm:grid-cols-2"
+        >
+          {[...legend].reverse().map((s) => (
+            <li key={s}>
+              <span className="font-medium text-foreground">{t(`scope.${s}`)}</span>
+              {': '}
+              {t(`scopeHelp.${s}`)}
+            </li>
+          ))}
+        </ul>
       </div>
 
       {groups.length === 0 ? (
@@ -185,6 +220,14 @@ export function PermissionMatrix({
                                 </span>
                               )}
                             </span>
+                            {t.has(`permissionHelp.${d.key.replaceAll('.', '_')}`) && (
+                              <span
+                                data-testid={`perm-help-${d.key}`}
+                                className="mt-0.5 block text-xs text-muted-foreground"
+                              >
+                                {t(`permissionHelp.${d.key.replaceAll('.', '_')}`)}
+                              </span>
+                            )}
                             <span
                               className="block break-all font-mono text-[11px] text-muted-foreground"
                               dir="ltr"
@@ -232,7 +275,7 @@ export function PermissionMatrix({
                                 }
                                 className="h-8 w-auto px-2 text-xs"
                               >
-                                {SCOPES.map((s) => (
+                                {scopeOptions(hierarchyOffered, grant.recordScope).map((s) => (
                                   <option key={s} value={s}>
                                     {t(`scope.${s}`)}
                                   </option>

@@ -1,5 +1,6 @@
 import { Injectable, Logger, type OnApplicationBootstrap } from '@nestjs/common';
 import { InjectQueue, Processor, WorkerHost } from '@nestjs/bullmq';
+import { Cron } from '@nestjs/schedule';
 import type { Job, Queue } from 'bullmq';
 import { sql, type SQL } from 'drizzle-orm';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -22,6 +23,8 @@ export type OwningTeamTable = (typeof OWNING_TEAM_TABLES)[number]['table'];
 
 export interface OwningTeamBackfillJob {
   table: OwningTeamTable;
+  /** Set on the nightly pass: its first job has an id of its own, so a finished one does not stop tomorrow's. */
+  day?: string;
   /** Resume after this (org_id, id); (0, 0) is the start of the table. */
   afterOrg: number;
   afterId: number;
@@ -127,6 +130,10 @@ export class OwningTeamBackfillService {
  * Queues the back-fill when the worker starts: one job per table. The job ids are fixed and a finished job is kept, so it runs once per
  * Redis (several workers starting together queue one, a later start finds the finished jobs and queues nothing). A flushed Redis queues
  * it again, which finds nothing left to stamp.
+ *
+ * It also queues the same pass every night. A record keeps the team its owner had WHEN the owner was set, and nothing moves it later;
+ * but a record stamped NULL because its owner had no primary team yet (teams built after the people and their records, or a person who
+ * only now got a primary team) deserves the team once there is one. The nightly pass stamps exactly those, never one that already has a team.
  */
 @Injectable()
 export class OwningTeamBackfillScheduler implements OnApplicationBootstrap {
@@ -147,10 +154,23 @@ export class OwningTeamBackfillScheduler implements OnApplicationBootstrap {
     }
   }
 
+  /** Every night, after the workspace day has turned over almost everywhere: stamp what has a primary team now. */
+  @Cron('23 3 * * *')
+  async nightly(): Promise<void> {
+    try {
+      const day = new Date().toISOString().slice(0, 10);
+      for (const { table } of OWNING_TEAM_TABLES) {
+        await this.enqueue({ table, afterOrg: 0, afterId: 0, day });
+      }
+    } catch (err) {
+      this.logger.error({ err: String(err) }, '[BL-382] nightly owning team pass not queued');
+    }
+  }
+
   async enqueue(job: OwningTeamBackfillJob, delayMs = 0): Promise<void> {
     const start = job.afterOrg === 0 && job.afterId === 0;
     const jobId = start
-      ? `owning-team-backfill-${job.table}`
+      ? `owning-team-backfill-${job.table}${job.day ? `-${job.day}` : ''}`
       : `owning-team-backfill-${job.table}-after-${job.afterOrg}-${job.afterId}`;
     // A job that failed is kept for days under its id, which would make BullMQ ignore every later start: clear it first.
     if ((await this.queue.getJobState(jobId)) === 'failed') {
@@ -159,8 +179,9 @@ export class OwningTeamBackfillScheduler implements OnApplicationBootstrap {
     await this.queue.add('backfill', job, {
       attempts: 3,
       backoff: { type: 'exponential', delay: 30_000 },
-      // The first job of a table is kept when it finishes, so a restart does not scan the table again; continuations are not.
-      removeOnComplete: !start,
+      // The first job of a table (the one-off from the worker start) is kept when it finishes, so a restart does not scan the table
+      // again; continuations and the nightly pass are not.
+      removeOnComplete: !start || job.day !== undefined,
       removeOnFail: { age: 7 * 24 * 3600 },
       delay: delayMs,
       jobId,
@@ -181,13 +202,13 @@ export class OwningTeamBackfillProcessor extends WorkerHost {
   }
 
   async process(job: Job<OwningTeamBackfillJob>): Promise<OwningTeamBackfillReport> {
-    const { table, afterOrg, afterId } = job.data;
+    const { table, afterOrg, afterId, day } = job.data;
     const report = await this.backfill.run(table, afterOrg ?? 0, afterId ?? 0, BATCHES_PER_JOB);
     if (report.stamped > 0 || report.next !== null) {
       this.logger.log({ table, ...report }, '[BL-382] owning team back-fill');
     }
     if (report.next !== null) {
-      await this.scheduler.enqueue({ table, ...report.next }, CONTINUE_DELAY_MS);
+      await this.scheduler.enqueue({ table, day, ...report.next }, CONTINUE_DELAY_MS);
     }
     return report;
   }

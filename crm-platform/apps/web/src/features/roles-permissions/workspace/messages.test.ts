@@ -87,7 +87,11 @@ describe('roles-permissions-workspace messages', () => {
       ]),
       ...['active', 'inactive'].map((s) => `${ROOT}.team.status.${s}`),
       ...['allow', 'deny'].map((e) => `${ROOT}.matrix.${e}`),
-      ...['all', 'team', 'own'].map((s) => `${ROOT}.matrix.scope.${s}`),
+      ...['all', 'team_and_below', 'team', 'own'].flatMap((s) => [
+        `${ROOT}.matrix.scope.${s}`,
+        `${ROOT}.matrix.scopeHelp.${s}`,
+      ]),
+      `${ROOT}.matrix.permissionHelp.inbox_conversation_read_unassigned`,
       ...[
         'unexpected',
         'request',

@@ -33,6 +33,7 @@ describe('parseFilters', () => {
       q: 'call',
       priority: 'high',
       assignee: ID,
+      team: '',
       contact: ID2,
       deal: '',
       company: '',
@@ -179,5 +180,19 @@ describe('countsQuery and tabCount', () => {
   });
   it('is unknown until counts arrive', () => {
     expect(tabCount('all', undefined)).toBeUndefined();
+  });
+});
+
+describe('team filter', () => {
+  it('is read from the address, kept in the link and sent to the list and the counts', () => {
+    const f = parseFilters(params(`tab=all&team=${ID}`));
+    expect(f.team).toBe(ID);
+    expect(filtersToSearch(f)).toContain(`team=${ID}`);
+    expect(sharedQuery(f).teamId).toBe(ID);
+    expect(listQuery(f).teamId).toBe(ID);
+    expect(countsQuery(f).teamId).toBe(ID);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, team: ID })).toBe(true);
+    expect(parseFilters(params('team=nope')).team).toBe('');
+    expect(sharedQuery(DEFAULT_FILTERS).teamId).toBeUndefined();
   });
 });

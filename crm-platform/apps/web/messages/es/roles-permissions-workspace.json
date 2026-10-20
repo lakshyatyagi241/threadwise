@@ -245,8 +245,20 @@
       "lockedHint": "Este permiso todavía no está disponible para este espacio de trabajo. Se activa cuando se habilita la función del plan o se instala la app.",
       "scope": {
         "all": "Todos los registros",
-        "own": "Registros propios",
-        "team": "Registros de mi equipo"
+        "own": "Mis registros",
+        "team": "Registros de mi equipo",
+        "team_and_below": "Mi equipo y subequipos"
+      },
+      "scopeLegend": "Qué abarca cada alcance de registros",
+      "scopeHelp": {
+        "all": "Todos los registros del espacio de trabajo.",
+        "team_and_below": "Registros de tu equipo y de todos los equipos inferiores.",
+        "team": "Registros de las personas de tu equipo.",
+        "own": "Solo los registros que son tuyos o te han asignado."
+      },
+      "noTeamWarning": "{count, plural, one {# miembro con este rol no está en ningún equipo, así que solo ve sus propios registros donde este rol tiene un alcance de equipo.} other {# miembros con este rol no están en ningún equipo, así que solo ven sus propios registros donde este rol tiene un alcance de equipo.}} Añádelos a un equipo en <link>Ajustes > Equipos</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Sin este permiso, los agentes con acceso de equipo solo ven las conversaciones asignadas a ellos o a su equipo. Con él también ven la cola abierta de conversaciones sin asignar."
       }
     },
     "delete": {

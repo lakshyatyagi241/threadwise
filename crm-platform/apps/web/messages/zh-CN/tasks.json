@@ -104,7 +104,9 @@
       },
       "linkCompany": "某个公司",
       "outcome": "结果",
-      "allOutcomes": "所有结果"
+      "allOutcomes": "所有结果",
+      "team": "团队",
+      "allTeams": "所有团队"
     },
     "table": {
       "scrollArea": "任务表格",

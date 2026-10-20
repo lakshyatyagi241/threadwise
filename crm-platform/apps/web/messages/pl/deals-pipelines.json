@@ -128,7 +128,9 @@
         "list": "Lista"
       },
       "reports": "Raporty",
-      "settings": "Ustawienia lejka"
+      "settings": "Ustawienia lejka",
+      "team": "Zespół",
+      "allTeams": "Wszystkie zespoły"
     },
     "kpi": {
       "openPipeline": "Otwarty lejek",

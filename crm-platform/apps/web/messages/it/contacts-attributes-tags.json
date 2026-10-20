@@ -290,7 +290,11 @@
         "importBody": "Carica un foglio di calcolo e abbina le sue colonne ai campi del contatto.",
         "connect": "Collega WhatsApp",
         "connectBody": "Collega il tuo numero, così i contatti possono rispondere e tu puoi scrivere loro."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filtra per team",
+      "allTeams": "Tutti i team",
+      "teamFormer": "Team precedente"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",

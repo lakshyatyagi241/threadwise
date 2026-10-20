@@ -338,7 +338,13 @@ function RoleForm({
           </div>
         </section>
 
-        <PermissionMatrix defs={catalogue} draft={draft} onChange={setDraft} readOnly={readOnly} />
+        <PermissionMatrix
+          defs={catalogue}
+          draft={draft}
+          onChange={setDraft}
+          readOnly={readOnly}
+          membersWithoutTeam={initial?.membersWithoutTeam}
+        />
       </form>
 
       {canDelete && (

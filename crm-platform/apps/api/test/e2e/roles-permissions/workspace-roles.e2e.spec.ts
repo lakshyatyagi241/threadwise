@@ -201,6 +201,7 @@ describe('presets (TW-RBAC-004, 024)', () => {
     expect([...v.entries()].sort()).toEqual([
       ['aiadm.models.read', 'all'],
       ['inbox.conversation.read', 'team'],
+      ['inbox.conversation.read_unassigned', 'all'],
       ['support.ticket.create', 'all'],
       ['support.ticket.read', 'all'],
       ['wallet.balance.read', 'all'],
