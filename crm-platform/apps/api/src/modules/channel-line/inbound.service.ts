@@ -12,7 +12,7 @@ import {
   type LineApiFactory,
 } from '../../infra/providers/channel-line/line.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { WebhookRetryService } from '../webhook-retry';
 import {
   INBOUND_HOOKS,

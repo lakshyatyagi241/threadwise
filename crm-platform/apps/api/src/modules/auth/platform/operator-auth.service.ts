@@ -19,7 +19,7 @@ import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import type { Env } from '../../../config/env.schema';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
-import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { LoginAlertService } from '../flows/login-alert.service';
 import { EpochService } from '../sessions/epoch.service';
 import { idleTimeoutError } from '../sessions/session.service';

@@ -22,22 +22,23 @@ function fakeRedis(down = false) {
       expiries.set(k, s);
       return guard(1);
     },
-    // The counter is bumped and given its expiry in one MULTI (incrWithTtl); EXPIRE ... NX only sets the first one.
+    // INCR + EXPIRE NX in one MULTI (infra/redis/counter.ts): the window starts at the first hit and is not moved by later ones
     multi: () => {
-      const ops: Array<() => unknown> = [];
+      const ops: Array<['incr' | 'expire', string, number?]> = [];
       const tx = {
-        incr: (k: string) => {
-          ops.push(() => {
-            store.set(k, (store.get(k) ?? 0) + 1);
-            return store.get(k)!;
-          });
-          return tx;
+        incr: (k: string) => (ops.push(['incr', k]), tx),
+        expire: (k: string, s: number) => (ops.push(['expire', k, s]), tx),
+        exec: () => {
+          const out: Array<[null, number]> = [];
+          for (const [op, k, s] of ops) {
+            if (op === 'incr') out.push([null, store.set(k, (store.get(k) ?? 0) + 1).get(k)!]);
+            else {
+              if (!expiries.has(k)) expiries.set(k, s!);
+              out.push([null, 1]);
+            }
+          }
+          return guard(out);
         },
-        expire: (k: string, s: number) => {
-          ops.push(() => (expiries.has(k) ? 0 : (expiries.set(k, s), 1)));
-          return tx;
-        },
-        exec: () => guard(ops.map((op) => [null, op()])),
       };
       return tx;
     },

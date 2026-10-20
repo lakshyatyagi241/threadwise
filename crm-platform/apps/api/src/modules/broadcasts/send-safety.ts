@@ -3,7 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import type { Tx } from '@crm/db';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { NodeBridgeSettingsService } from '../node-bridge-runtime';
 import { DEFAULT_PACING, utcDayKey, type PacingSettings, type Random } from './pacing';
 

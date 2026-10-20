@@ -11,7 +11,7 @@ import {
   type TelegramApiFactory,
 } from '../../infra/providers/channel-telegram/telegram.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { WebhookRetryService } from '../webhook-retry';
 import {
   INBOUND_HOOKS,

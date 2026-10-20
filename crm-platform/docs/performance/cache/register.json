@@ -2833,7 +2833,7 @@
     "modules/node-bridge-runtime/runtime/group-limiter.ts",
     "modules/whatsapp-devices-baileys/device-groups.service.ts",
     "modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
-    "infra/redis/incr-with-ttl.ts"
+    "infra/redis/counter.ts"
    ],
    "keys": "per IP / per public token / per workspace counters with a time bucket or an EXPIRE (apikey:authfail:*, ratelimit:apikey:*, link_hits:*, store_rl:*, ...)",
    "tenant": {
@@ -3007,7 +3007,7 @@
   "infra/providers/localization-translation/redis-stores.ts": "R15",
   "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": "S09",
   "infra/providers/whatsapp/media/upload-cache.ts": "R19",
-  "infra/redis/incr-with-ttl.ts": "S03",
+  "infra/redis/counter.ts": "S03",
   "kernel/rbac/rbac.service.ts": "R01",
   "modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts": "R24",
   "modules/analytics/query/analytics-query.service.ts": "R11",

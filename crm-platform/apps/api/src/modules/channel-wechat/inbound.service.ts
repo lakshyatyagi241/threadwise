@@ -7,7 +7,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { WECHAT_API, type WechatApi } from '../../infra/providers/channel-wechat/wechat.port';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { ChannelsRepository, type ChannelRow } from './channels.repository';
 import { ChatInboxIngest } from './chat-inbox-ingest';
 import { WechatTokenService } from './wechat-token.service';

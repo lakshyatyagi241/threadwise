@@ -3,7 +3,7 @@ import type { Redis } from 'ioredis';
 import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
-import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../../infra/redis/counter';
 
 /** The per-client limits of the public routes (Reference's `throttle:N,1`), per minute. */
 export const PUBLIC_LIMITS = {

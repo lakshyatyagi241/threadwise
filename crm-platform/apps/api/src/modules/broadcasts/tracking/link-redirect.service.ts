@@ -5,7 +5,7 @@ import { ERROR_CODES } from '@crm/contracts';
 import { AppError } from '../../../common/errors/app-error';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
-import { incrWithTtl } from '../../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { BroadcastProgressService } from '../broadcast-progress.service';
 import { clickWebhook } from '../webhook-events';

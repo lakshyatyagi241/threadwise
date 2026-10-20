@@ -6,8 +6,8 @@ import { ERROR_CODES, type PlanFeatureKey } from '@crm/contracts';
 import type { Response } from 'express';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
 import { SecurityPolicyService } from '../auth';
 import {
   PlanEntitlementService,

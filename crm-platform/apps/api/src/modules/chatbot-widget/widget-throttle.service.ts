@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 
 /** Reference's `throttle:60,1` on message and `throttle:120,1` on history; config, embed and chat have none. */
 export const WIDGET_LIMITS_PER_MINUTE = { message: 60, history: 120 } as const;

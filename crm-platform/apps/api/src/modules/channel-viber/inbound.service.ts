@@ -7,7 +7,7 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { tryParseViberJson } from '../../infra/providers/channel-viber/viber-json';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
-import { incrWithTtl } from '../../infra/redis/incr-with-ttl';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { WebhookRetryService } from '../webhook-retry';
 import { ChatInboxIngest } from './_shims/chat-inbox-ingest';
 import { signatureMatches } from './channel-rules';
