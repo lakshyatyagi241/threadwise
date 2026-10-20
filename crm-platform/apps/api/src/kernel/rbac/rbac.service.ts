@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
 import type { RecordScope } from '@crm/contracts';
+import { cacheMetrics } from '@crm/observability';
 import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -17,6 +18,8 @@ export type GrantSet = Map<string, Grant>;
 export type CachedRead = { version: number; grants: string | null };
 
 const CACHE_TTL_SECONDS = 600;
+const grantsCache = cacheMetrics('rbac_grants');
+const versionCache = cacheMetrics('rbac_version');
 
 /** Sets the cached roles version only if the key is empty or holds a lower one, so a slow reader cannot put an old version back. */
 const RAISE_VERSION_LUA = `
@@ -75,8 +78,10 @@ export class RbacService {
 
     const cached = fast ? fast.grants : await this.redis.get(cacheKey).catch(() => null);
     if (cached) {
+      grantsCache.hit();
       return new Map(Object.entries(JSON.parse(cached) as Record<string, Grant>));
     }
+    grantsCache.miss();
 
     const grants = await this.loadGrants(orgId, userId);
 
@@ -167,9 +172,14 @@ export class RbacService {
         String(userId),
       )) as [string | null, string | null] | null;
       const version = res?.[0] ? Number(res[0]) : NaN;
-      if (!Number.isFinite(version)) return null;
+      if (!Number.isFinite(version)) {
+        versionCache.miss();
+        return null;
+      }
+      versionCache.hit();
       return { version, grants: res?.[1] ?? null };
     } catch (err) {
+      versionCache.error();
       this.logger.warn({ err }, 'rbac cache read failed; reading the version separately');
       return null;
     }
@@ -177,8 +187,15 @@ export class RbacService {
 
   private async rolesVersion(orgId: number): Promise<number> {
     const cacheKey = `rbac:version:${orgId}`;
-    const cached = await this.redis.get(cacheKey).catch(() => null);
-    if (cached) return Number(cached);
+    const cached = await this.redis.get(cacheKey).catch(() => {
+      versionCache.error();
+      return null;
+    });
+    if (cached) {
+      versionCache.hit();
+      return Number(cached);
+    }
+    versionCache.miss();
 
     const result = await this.db.privileged(async (tx) =>
       tx.execute(sql`SELECT roles_version FROM organizations WHERE id = ${orgId}`),

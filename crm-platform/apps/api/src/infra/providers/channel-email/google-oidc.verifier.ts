@@ -1,6 +1,9 @@
 import { createPublicKey, verify as cryptoVerify, type KeyObject } from 'node:crypto';
 import { Injectable, Logger } from '@nestjs/common';
 import { channelEmailEnv } from '../../../config/domains/channel-email.env';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('google_oidc_keys');
 
 interface Jwk {
   kty?: string;
@@ -147,7 +150,11 @@ export class GoogleOidcVerifier {
       await this.refresh(nowMs);
       key = this.keys.get(kid);
     }
-    if (key) return key;
+    if (key) {
+      cache.hit();
+      return key;
+    }
+    cache.miss();
     return this.keys.size === 0 ? 'unavailable' : null;
   }
 

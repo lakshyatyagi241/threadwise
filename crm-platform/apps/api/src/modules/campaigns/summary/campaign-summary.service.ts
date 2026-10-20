@@ -29,6 +29,9 @@ import {
   secondsToHours,
   windowBounds,
 } from './campaign-summary-rules';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('campaign_summary');
 
 const PERM_FORMS_READ = 'record.forms.read';
 const PERM_SUBMISSIONS_READ = 'record.form-submissions.read';
@@ -93,10 +96,17 @@ export class CampaignSummaryService {
   private async cached(key: string): Promise<CampaignSummary | null> {
     try {
       const raw = await this.redis.get(key);
-      if (!raw) return null;
+      if (!raw) {
+        cache.miss();
+        return null;
+      }
       const parsed = campaignSummarySchema.safeParse(JSON.parse(raw));
+      if (parsed.success) cache.hit();
+      else cache.miss();
       return parsed.success ? parsed.data : null;
     } catch {
+      cache.error();
+      cache.miss();
       // Redis down or a stale shape: compute it again.
       return null;
     }

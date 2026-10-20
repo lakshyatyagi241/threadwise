@@ -7,6 +7,9 @@ import type { Tx } from '@crm/db';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { RULE_BY_METRIC } from '../rollup/rollup-rules';
 import { rollupSelect, type Grain, type Scope } from '../rollup/rollup-sql';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('analytics_query');
 
 export type SeriesDim = 'bucket' | 'd1' | 'd2' | 'd3';
 
@@ -192,8 +195,12 @@ export class AnalyticsQueryService {
     if (!this.redis) return null;
     try {
       const raw = await this.redis.get(key);
+      if (raw) cache.hit();
+      else cache.miss();
       return raw ? (JSON.parse(raw) as SeriesRow[]) : null;
     } catch (err) {
+      cache.error();
+      cache.miss();
       this.logger.warn({ err }, 'analytics cache read failed');
       return null;
     }

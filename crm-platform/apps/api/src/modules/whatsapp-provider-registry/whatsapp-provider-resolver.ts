@@ -16,6 +16,9 @@ import {
 } from '../../infra/providers/whatsapp-cloud-api-waba/waba-registry-routes';
 import { chooseNewNumberProvider, type ProviderSecrets, type RouteSource } from './provider-rules';
 import { ProviderStore, type ProviderRow } from './provider-store';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('provider_snapshots');
 
 /** How often each process re-reads the registry, so a change made through the operator API reaches the worker without a restart. */
 const REFRESH_MS = 15_000;
@@ -138,7 +141,11 @@ export class WhatsAppProviderResolver implements OnModuleInit, OnModuleDestroy {
 
   /** Makes sure `key` is in memory when it exists: a provider created or a number switched moments ago may not be in this process yet. */
   async ensureKnown(key: string): Promise<void> {
-    if (isBuiltinWhatsappProviderKey(key) || this.routes.get(key)) return;
+    if (isBuiltinWhatsappProviderKey(key) || this.routes.get(key)) {
+      cache.hit();
+      return;
+    }
+    cache.miss();
     if (Date.now() - this.lastLoadAt < UNKNOWN_KEY_RELOAD_MS) return;
     await this.refresh();
   }

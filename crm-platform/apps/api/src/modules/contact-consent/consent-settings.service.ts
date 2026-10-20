@@ -19,6 +19,9 @@ import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ConsentRepository, type SettingsRow } from './consent.repository';
 import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('consent_settings');
 
 const MODULE_KEY = 'contact_consent_settings';
 
@@ -69,7 +72,11 @@ export class ConsentSettingsService {
   /** For the listener and the send paths: cached, no query for a hot message. Works with or without a request context. */
   async effective(orgId: number): Promise<EffectiveConsentSettings> {
     const hit = this.cache.get(orgId);
-    if (hit && Date.now() - hit.at < CONSENT_CACHE_MS) return hit.v;
+    if (hit && Date.now() - hit.at < CONSENT_CACHE_MS) {
+      cache.hit();
+      return hit.v;
+    }
+    cache.miss();
     const row = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.getSettings(tx, orgId),
     );

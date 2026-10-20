@@ -23,6 +23,9 @@ import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { AuthAuditService, PlatformStore } from '../auth';
 import { NodeBridgeSettingsService, NodeWorkerStatus } from '../node-bridge-runtime';
 import { failureLine, overallState, queueState, shortError } from './health-rules';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('health_snapshot');
 
 /** A poll storm (several consoles at 20 s) shares one run of the probes. */
 const CACHE_MS = 3_000;
@@ -59,7 +62,11 @@ export class HealthService {
   }
 
   async snapshot(fresh = false): Promise<HealthResponse> {
-    if (!fresh && this.cached && Date.now() - this.cached.at < CACHE_MS) return this.cached.value;
+    if (!fresh && this.cached && Date.now() - this.cached.at < CACHE_MS) {
+      cache.hit();
+      return this.cached.value;
+    }
+    cache.miss();
     this.inflight ??= this.run().finally(() => {
       this.inflight = null;
     });

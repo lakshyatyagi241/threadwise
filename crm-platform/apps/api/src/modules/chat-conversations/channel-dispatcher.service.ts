@@ -38,6 +38,9 @@ import { ChannelAdapterRegistry } from './channel-adapter.registry';
 import { effectiveCapabilitiesOf } from './channel-capabilities';
 import { ChannelIngestPublisher } from './channel-ingest.publisher';
 import { SendHeldError } from './send-held.error';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('chat_dispatch_result');
 
 /**
  * What the send IS, for the ConsentGate (BL-141). Required on every request, so a new caller cannot forget it: free-form replies and
@@ -476,9 +479,16 @@ export class ChannelDispatcher {
   }
 
   private async readStored(key: string): Promise<Omit<DispatchResult, 'replayed'> | null> {
-    const raw = await this.redisCall(() => this.redis.get(key));
-    if (!raw) return null;
+    const raw = await this.redisCall(() => this.redis.get(key)).catch((err: unknown) => {
+      cache.error();
+      throw err;
+    });
+    if (!raw) {
+      cache.miss();
+      return null;
+    }
     try {
+      cache.hit();
       const v = JSON.parse(raw) as {
         providerMessageId: string;
         acceptedAt: string;

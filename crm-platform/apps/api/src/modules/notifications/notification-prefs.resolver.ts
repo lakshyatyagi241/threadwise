@@ -7,6 +7,9 @@ import {
   type StoredNotificationPrefs,
 } from '@crm/contracts';
 import { DatabaseService } from '../../infra/db/database.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('notification_prefs');
 
 /**
  * Whether the workspace owner's notification toggles (Settings, Notifications; stored in `organizations.settings.notificationPrefs`)
@@ -41,7 +44,11 @@ export class NotificationPrefsResolver {
   /** The owner's stored document for this workspace (undefined when they never saved the page). */
   async stored(orgId: number): Promise<StoredNotificationPrefs | undefined> {
     const hit = this.cache.get(orgId);
-    if (hit && Date.now() - hit.at < this.ttlMs) return hit.prefs;
+    if (hit && Date.now() - hit.at < this.ttlMs) {
+      cache.hit();
+      return hit.prefs;
+    }
+    cache.miss();
     const prefs = await this.load(orgId);
     if (this.cache.size > 500) this.cache.clear();
     this.cache.set(orgId, { at: Date.now(), prefs });

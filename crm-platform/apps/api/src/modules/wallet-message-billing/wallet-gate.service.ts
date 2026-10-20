@@ -12,6 +12,9 @@ import { WalletLogService } from './wallet-log.service';
 import { WalletRepository } from './wallet.repository';
 import { WalletSettingsService } from './wallet-settings.service';
 import { launchVerdict, monthStart, planIsActive } from './wallet-rules';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('wallet_send_ok');
 
 export interface LaunchRequest {
   orgId: number;
@@ -81,7 +84,11 @@ export class WalletGateService {
     const country = req.to ? countryOfPhone(req.to) : null;
     const key = `${req.orgId}|${country ?? ''}|${req.category ?? ''}`;
     const until = this.sendOk.get(key);
-    if (until !== undefined && until > Date.now()) return;
+    if (until !== undefined && until > Date.now()) {
+      cache.hit();
+      return;
+    }
+    cache.miss();
     try {
       await this.assertCanLaunch({
         orgId: req.orgId,

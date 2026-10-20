@@ -4,6 +4,9 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import { PERM_MAIL_SETTINGS_MANAGE, adminsCanReadPersonal } from './channel-owner';
 import type { ConversationViewer } from './conversation-visibility';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('member_directory');
 
 /** How long a workspace's member list is reused. A grant changed inside this window reaches the live signals this much late. */
 const PERM_CONVERSATION_READ_KEY = 'inbox.conversation.read';
@@ -58,7 +61,11 @@ export class MemberDirectory {
     const key = `${orgId}:${permission}`;
     const now = Date.now();
     const hit = this.cache.get(key);
-    if (hit && now - hit.at < CACHE_TTL_MS) return hit.viewers;
+    if (hit && now - hit.at < CACHE_TTL_MS) {
+      cache.hit();
+      return hit.viewers;
+    }
+    cache.miss();
 
     const viewers = this.load(orgId, permission);
     // A failed load must not be remembered for 30 seconds.

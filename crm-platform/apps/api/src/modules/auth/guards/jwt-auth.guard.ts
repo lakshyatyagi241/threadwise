@@ -29,6 +29,9 @@ import { SessionService, idleTimeoutError } from '../sessions/session.service';
 import { AuthKeys } from '../support/redis-keys';
 import { onRedisFailure } from '../support/resilience';
 import { TokenService } from '../token.service';
+import { cacheMetrics } from '@crm/observability';
+
+const sessionCache = cacheMetrics('session_revocation');
 
 /**
  * Global authentication guard.
@@ -196,11 +199,16 @@ export class JwtAuthGuard implements CanActivate {
       );
     } catch (err) {
       // Closed mode throws the 503 here; open mode logs and lets the (short-lived) token through.
+      sessionCache.error();
       onRedisFailure('session-check', err);
       this.logger.warn({ err }, 'session check skipped: redis unavailable');
       return;
     }
-    if (revoked) throw AppError.unauthenticated('Invalid or expired token');
+    if (revoked) {
+      sessionCache.hit();
+      throw AppError.unauthenticated('Invalid or expired token');
+    }
+    sessionCache.miss();
 
     const policy = await this.policy.policy();
     // Remembered staff sessions are exempt, as in Reference; operators have no

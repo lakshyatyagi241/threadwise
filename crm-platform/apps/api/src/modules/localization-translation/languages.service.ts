@@ -20,6 +20,9 @@ import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { AuthAuditService, PlatformSettingsService, PlatformStore } from '../auth';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('active_languages');
 
 export const DEFAULT_LANGUAGE_KEY = 'i18n.default_language';
 const ACTIVE_CACHE_KEY = 'locale:active_languages';
@@ -103,10 +106,15 @@ export class LanguagesService {
   async active(): Promise<ActiveLanguage[]> {
     try {
       const cached = await this.redis.get(ACTIVE_CACHE_KEY);
-      if (cached) return JSON.parse(cached) as ActiveLanguage[];
+      if (cached) {
+        cache.hit();
+        return JSON.parse(cached) as ActiveLanguage[];
+      }
     } catch {
+      cache.error();
       /* a cache miss is always safe */
     }
+    cache.miss();
     const rows = await this.store.tx(async (tx) =>
       rowsOf<LanguageRow>(
         await tx.execute(

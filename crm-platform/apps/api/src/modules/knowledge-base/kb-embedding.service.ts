@@ -10,6 +10,9 @@ import {
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { KbConfigService } from './kb-config.service';
 import { normalise } from './kb.rules';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('kb_query_embedding');
 
 /** Why an embedding could not be made, in terms a screen can show without leaking the vendor's answer. */
 export class KbUnavailableError extends Error {
@@ -69,11 +72,14 @@ export class KbEmbeddingService {
       const hit = await this.redis.getBuffer(key);
       if (hit && hit.length > 0 && hit.length % 4 === 0) {
         const f = new Float32Array(hit.buffer.slice(hit.byteOffset, hit.byteOffset + hit.length));
+        cache.hit();
         return { vector: Array.from(f), model, cached: true };
       }
     } catch {
+      cache.error();
       // A cache that is down is a cache miss.
     }
+    cache.miss();
     const [vector] = await this.call(orgId, model, [query]);
     try {
       const buf = Buffer.from(new Float32Array(vector!).buffer);
