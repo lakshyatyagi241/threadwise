@@ -1,6 +1,13 @@
 import { resolve } from 'node:path';
 import swc from 'unplugin-swc';
-import { defineConfig } from 'vitest/config';
+import { configDefaults, defineConfig } from 'vitest/config';
+
+// TEST_NO_DOCKER=1: run the suites without Docker. The two testcontainers packages are aliased to shims that start a throwaway
+// Postgres cluster / Redis in WSL (test/support/no-docker/README.md). Unset, nothing changes and the specs use Docker as before.
+const NO_DOCKER = process.env.TEST_NO_DOCKER === '1';
+const NO_DOCKER_DIR = resolve(__dirname, 'test/support/no-docker');
+// Each spec owns a cluster of about 50 MB inside a 2 GB WSL VM: cap the parallel files (default 4).
+const NO_DOCKER_WORKERS = Math.max(1, Number(process.env.TEST_NO_DOCKER_WORKERS ?? 4) || 4);
 
 export default defineConfig({
   test: {
@@ -9,7 +16,16 @@ export default defineConfig({
     include: ['**/*.spec.ts', '**/*.test.ts'],
     // Integration tests each own a Postgres container; running suites in
     // parallel would multiply containers and starve a laptop.
-    fileParallelism: false,
+    fileParallelism: NO_DOCKER,
+    ...(NO_DOCKER
+      ? {
+          globalSetup: [resolve(NO_DOCKER_DIR, 'global-setup.ts')],
+          pool: 'forks' as const,
+          poolOptions: { forks: { maxForks: NO_DOCKER_WORKERS, minForks: 1 } },
+          // The only spec that needs a non-Redis image (GreenMail, a Java mail server): no Docker-free stand-in.
+          exclude: [...configDefaults.exclude, '**/channel-email/imap-mail.e2e.spec.ts'],
+        }
+      : {}),
     // Coverage of the business logic that unit tests can reach without a database: the *-rules, mappers, parsers and the
     // shared helpers. Services and repositories need Postgres and are measured by the e2e and integration suites, so they are
     // listed in the report (`tools/quality/coverage-metrics.mjs`) but not gated here. `pnpm --filter @crm/api test:coverage`.
@@ -43,9 +59,19 @@ export default defineConfig({
     },
   },
   resolve: {
-    alias: {
-      '@': resolve(__dirname, 'src'),
-    },
+    alias: NO_DOCKER
+      ? [
+          {
+            find: /^@testcontainers\/postgresql$/,
+            replacement: resolve(NO_DOCKER_DIR, 'postgresql-shim.ts'),
+          },
+          {
+            find: /^testcontainers$/,
+            replacement: resolve(NO_DOCKER_DIR, 'testcontainers-shim.ts'),
+          },
+          { find: '@', replacement: resolve(__dirname, 'src') },
+        ]
+      : { '@': resolve(__dirname, 'src') },
   },
   plugins: [
     // Nest's DI needs emitted decorator metadata, which esbuild (vitest's
