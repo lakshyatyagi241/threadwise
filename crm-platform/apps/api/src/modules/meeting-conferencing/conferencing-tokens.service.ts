@@ -16,6 +16,7 @@ import {
   ConferencingConnectionRepository,
   type ConferencingConnectionRow,
 } from './conferencing-connection.repository';
+import { CappedMap } from '../../common/cache/capped-map';
 
 /** Audit module and outbox aggregate of a person's video connection. */
 export const CONFERENCING_AUDIT_MODULE = 'conferencing_connection';
@@ -60,7 +61,7 @@ export function healthCodeOf(err: ConferencingError): string | null {
 export class ConferencingTokens {
   private readonly logger = new Logger(ConferencingTokens.name);
   private readonly refreshing = new Map<string, Promise<string>>();
-  private readonly health = new Map<number, string | null>();
+  private readonly health = new CappedMap<number, string | null>(2000);
 
   constructor(
     private readonly db: DatabaseService,

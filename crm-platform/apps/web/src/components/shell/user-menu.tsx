@@ -1,7 +1,6 @@
 'use client';
 
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useState, useTransition, type ReactNode } from 'react';
 import { Popover, cn } from '@crm/ui';
@@ -12,6 +11,7 @@ import { NavIcon } from './nav-icons';
 import { setTheme } from './actions';
 import { AvailabilityRow } from '@/features/workspaces-teams-tenancy/components/availability-row';
 import { TOUR_START_EVENT } from '@/features/admin-console-shell/tour/tour-model';
+import { signOut } from '@/features/auth-registration-security/shared/sign-out';
 
 export interface ShellUser {
   fullName: string;
@@ -155,14 +155,11 @@ export function UserMenu({
   const brand = useBrandName();
   const shellData = useOptionalShellData();
   const profile = profileProp ?? shellData?.profile;
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
-  const logout = async () => {
-    await fetch('/api/auth/logout', { signal: AbortSignal.timeout(5000), method: 'POST' });
-    router.replace('/login');
-  };
+  // A full page navigation, so the browser's query cache of this account does not outlive the sign-out.
+  const logout = () => signOut('/login');
   const support = helpItems.find((i) => i.id === 'support' && !i.comingSoon);
 
   return (

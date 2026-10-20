@@ -3,6 +3,7 @@ import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import type { Tx } from '@crm/db';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
+import { incrWithTtl } from '../../infra/redis/counter';
 import { NodeBridgeSettingsService } from '../node-bridge-runtime';
 import { DEFAULT_PACING, utcDayKey, type PacingSettings, type Random } from './pacing';
 
@@ -67,7 +68,7 @@ export class CapTally {
   async bump(orgId: number, engine: string, senderId: number): Promise<void> {
     try {
       const key = this.key(orgId, engine, senderId);
-      if ((await this.redis.incr(key)) === 1) await this.redis.expire(key, 2 * 86_400);
+      await incrWithTtl(this.redis, key, 2 * 86_400);
     } catch {
       /* the next send simply counts from here */
     }

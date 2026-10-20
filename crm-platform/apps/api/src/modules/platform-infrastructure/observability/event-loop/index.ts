@@ -29,6 +29,13 @@ export {
 export { JobMetricsModule, JobMetricsService } from './job-metrics.module';
 export { QueueDepthModule, QueueDepthService } from './queue-depth.module';
 export { sampleQueueDepth, type DepthQueue, type QueueDepth } from './queue-depth';
+export { createRedisSampler, parseRedisInfo, type RedisInfoSnapshot } from './redis-pressure';
+export { guardWorkerAgainstOom, type GuardableWorker } from './worker-oom-guard';
+export {
+  RedisPressureModule,
+  RedisPressureService,
+  WorkerOomGuardService,
+} from './redis-pressure.module';
 export {
   Prober,
   parseProbeTargets,
