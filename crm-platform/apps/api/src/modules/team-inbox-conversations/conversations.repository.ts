@@ -50,6 +50,8 @@ export interface InboxConversationRow {
   lastOutboundAt: string | null;
   msgSeq: number;
   windowExpiresAt: string | null;
+  handling: string | null;
+  handlingSince: string | null;
   createdAt: string;
   updatedAt: string;
   rowVersion: number;
@@ -77,6 +79,10 @@ export interface LockedConversation {
   channelOwnerUserId: number | null;
   resolvedAt: string | null;
   rowVersion: number;
+  /** Handoff state (BL-396): null = not tracked. */
+  handling: string | null;
+  assignedSource: string | null;
+  contactId: number | null;
 }
 
 export interface ListFilter {
@@ -146,7 +152,7 @@ const SELECT_COLUMNS = sql.raw(`
   aa.uuid AS assignee_agent_uuid, aa.name AS assignee_agent_name,
   ${ts('c.snoozed_until')} AS snoozed_until, ${ts('c.last_message_at')} AS last_message_at,
   ${ts('c.last_inbound_at')} AS last_inbound_at, ${ts('c.last_outbound_at')} AS last_outbound_at,
-  c.msg_seq, ${ts('c.window_expires_at')} AS window_expires_at,
+  c.msg_seq, ${ts('c.window_expires_at')} AS window_expires_at, c.handling, ${ts('c.handling_since')} AS handling_since,
   ${ts('c.created_at')} AS created_at, ${ts('c.updated_at')} AS updated_at, c.row_version,
   c.customer_language, ${ts('c.waiting_since')} AS waiting_since, ${ts('c.first_response_at')} AS first_response_at,
   ${ts('c.resolved_at')} AS resolved_at, ${ts('c.sla_first_response_due')} AS sla_first_response_due,
@@ -207,6 +213,8 @@ function toRow(r: Raw): InboxConversationRow {
     lastOutboundAt: str(r.last_outbound_at),
     msgSeq: Number(r.msg_seq),
     windowExpiresAt: str(r.window_expires_at),
+    handling: str(r.handling),
+    handlingSince: str(r.handling_since),
     createdAt: r.created_at as string,
     updatedAt: r.updated_at as string,
     rowVersion: Number(r.row_version),
@@ -354,6 +362,7 @@ export class ConversationsRepository {
         count(*) FILTER (WHERE ${active} AND c.assignee_user_id = ${viewer.userId})::int AS mine,
         count(*) FILTER (WHERE ${active} AND c.assignee_user_id IS NULL)::int AS unassigned,
         count(*) FILTER (WHERE ${active} AND c.unread_count > 0)::int AS unread,
+        count(*) FILTER (WHERE ${active} AND c.handling = 'waiting')::int AS waiting,
         count(*) FILTER (WHERE c.archived)::int AS archived
       FROM conversations c
       WHERE c.org_id = ${orgId} AND c.last_message_at IS NOT NULL AND ${visibleToSql(viewer)} AND ${channel}`);
@@ -363,6 +372,7 @@ export class ConversationsRepository {
       mine: Number(r.mine ?? 0),
       unassigned: Number(r.unassigned ?? 0),
       unread: Number(r.unread ?? 0),
+      waiting: Number(r.waiting ?? 0),
       archived: Number(r.archived ?? 0),
     };
   }
@@ -383,7 +393,8 @@ export class ConversationsRepository {
     const res = await tx.execute(sql`
       SELECT c.id, c.uuid, c.channel_id, c.status, c.assignee_user_id, c.assignee_team_id, c.assignee_agent_id,
              ${channelOwnerSql('c')} AS channel_owner_user_id,
-             ${sql.raw(ts('c.resolved_at'))} AS resolved_at, c.row_version
+             ${sql.raw(ts('c.resolved_at'))} AS resolved_at, c.row_version,
+             c.handling, c.assigned_source, c.contact_id
       FROM conversations c WHERE c.org_id = ${orgId} AND c.uuid = ${uuid} FOR UPDATE OF c`);
     const r = rowsOf(res)[0];
     if (!r) return null;
@@ -398,6 +409,9 @@ export class ConversationsRepository {
       channelOwnerUserId: int(r.channel_owner_user_id),
       resolvedAt: str(r.resolved_at),
       rowVersion: Number(r.row_version),
+      handling: str(r.handling),
+      assignedSource: str(r.assigned_source),
+      contactId: int(r.contact_id),
     };
   }
 
@@ -455,8 +469,16 @@ export class ConversationsRepository {
         resolved_at = ${patch.resolvedAt === 'keep' ? sql`resolved_at` : patch.resolvedAt === 'now' ? sql`now()` : sql`NULL`},
         resolved_by = ${patch.resolvedBy === 'keep' ? sql`resolved_by` : patch.resolvedBy},
         resolved_by_agent_id = ${patch.resolvedAt === null ? sql`NULL` : sql`resolved_by_agent_id`},
-        snoozed_until = ${patch.clearSnooze ? sql`NULL` : sql`snoozed_until`}
+        snoozed_until = ${patch.clearSnooze ? sql`NULL` : sql`snoozed_until`},
+        -- A finished thread is nobody's to answer: the handling state (BL-396) goes back to "not tracked", and a reopened one starts there.
+        handling = ${['resolved', 'closed', 'spam'].includes(patch.status) ? sql`NULL` : sql`handling`},
+        handling_since = ${['resolved', 'closed', 'spam'].includes(patch.status) ? sql`NULL` : sql`handling_since`}
       WHERE org_id = ${orgId} AND id = ${id}`);
+    if (['resolved', 'closed', 'spam'].includes(patch.status)) {
+      await tx.execute(sql`
+        UPDATE conversation_handoffs SET status = 'resolved', completed_at = now()
+        WHERE org_id = ${orgId} AND conversation_id = ${id} AND status IN ('waiting', 'assigned')`);
+    }
   }
 
   /**
@@ -577,6 +599,9 @@ export class ConversationsRepository {
         return sql`c.assignee_user_id IS NULL`;
       case 'unread':
         return sql`c.unread_count > 0`;
+      // The queue a handoff put in front of a person (BL-397): who may see it is the ordinary visibility, applied before the tab.
+      case 'waiting':
+        return sql`c.handling = 'waiting'`;
       case 'all':
         return null;
     }

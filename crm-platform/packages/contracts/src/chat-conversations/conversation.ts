@@ -188,6 +188,7 @@ export const inboxCountsSchema = z.object({
   all: z.number().int().nonnegative(),
   mine: z.number().int().nonnegative(),
   unassigned: z.number().int().nonnegative(),
+  waiting: z.number().int().nonnegative().optional(),
   unread: z.number().int().nonnegative(),
   archived: z.number().int().nonnegative(),
 });

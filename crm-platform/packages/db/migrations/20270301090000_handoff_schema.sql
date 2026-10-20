@@ -119,3 +119,9 @@ ALTER TABLE workspace_settings
     CHECK (handoff_owner_mode IN ('independent', 'owner_first', 'keep_in_sync')),
   ADD CONSTRAINT chk_workspace_settings_handoff_continuity
     CHECK (handoff_continuity_days IS NULL OR handoff_continuity_days BETWEEN 1 AND 365);
+
+-- --- teams -----------------------------------------------------------------------------------------------------------------------
+
+-- The round robin cursor of a team's own method (the id of the person who took the last turn), read and moved under a row lock on the
+-- team, as a routing rule's cursor is. Nullable: no team has taken a turn yet.
+ALTER TABLE teams ADD COLUMN assignment_cursor bigint;

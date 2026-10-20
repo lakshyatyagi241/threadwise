@@ -7,6 +7,10 @@ import { TeamInboxConversationsModule } from '../team-inbox-conversations';
 import { AssigneesService } from './assignees.service';
 import { BusinessHoursService } from './business-hours.service';
 import { AssignmentController } from './assignment.controller';
+import { HandoffController } from './handoff.controller';
+import { HandoffRepository } from './handoff.repository';
+import { HandoffService } from './handoff.service';
+import { OwnerAlignmentService } from './owner-alignment.service';
 import { AssignmentService } from './assignment.service';
 import { BulkActionsService } from './bulk-actions.service';
 import { RoutingEngine } from './routing-engine.service';
@@ -29,12 +33,16 @@ import { RoutingRulesService } from './routing-rules.service';
   imports: [TeamInboxConversationsModule, ChatConversationsModule, PlansCoreModule],
   controllers: [
     AssignmentController,
+    HandoffController,
     RoutingRulesController,
     SlaPoliciesController,
     TeamAnalyticsController,
   ],
   providers: [
     AssignmentService,
+    HandoffRepository,
+    HandoffService,
+    OwnerAlignmentService,
     BulkActionsService,
     AssigneesService,
     BusinessHoursService,
@@ -46,6 +54,6 @@ import { RoutingRulesService } from './routing-rules.service';
     SlaClockService,
     TeamAnalyticsService,
   ],
-  exports: [AssignmentService, RoutingEngine, RoutingRulesRepository, SlaClockService],
+  exports: [AssignmentService, HandoffService, RoutingEngine, RoutingRulesRepository, SlaClockService],
 })
 export class TeamInboxRoutingSlaModule {}
