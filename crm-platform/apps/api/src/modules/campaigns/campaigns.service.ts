@@ -112,6 +112,9 @@ export class CampaignsService {
     const status = input.status ?? (input.scheduleType === 'now' ? 'running' : 'scheduled');
 
     const created = await this.db.tx(async (tx) => {
+      // The check above is the early refusal; this one is under the lock, in the inserting transaction (QA Sheet3 #15, D-05).
+      await this.plan.lockCap(tx, orgId);
+      await this.plan.assertWithinCap(orgId, await this.repo.count(tx, orgId));
       const contactIds = await this.audience.resolve(tx, orgId, ctx.userId, input);
       if (contactIds.length === 0 && status !== 'draft') {
         throw refuse(
