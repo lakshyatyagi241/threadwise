@@ -252,7 +252,9 @@ export function ActivityDrawer({
                 onChange={(v) => setSwitch({ outcomesEnabled: v })}
               />
             )}
-            {activity.outcomesEnabled && isTaskActivity && <TaskOutcomesList canManage={canOutcomes} />}
+            {activity.outcomesEnabled && isTaskActivity && (
+              <TaskOutcomesList canManage={canOutcomes} />
+            )}
             {activity.outcomesEnabled && !isTaskActivity && (
               <OptionList
                 title={t('outcomes')}
