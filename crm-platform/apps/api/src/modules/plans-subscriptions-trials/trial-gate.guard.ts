@@ -14,6 +14,9 @@ import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { PlanEntitlementService } from './plan-entitlement.service';
 import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('trial_verdict');
 
 export const ALLOW_WHEN_TRIAL_EXPIRED_KEY = 'plan:allow-when-trial-expired';
 
@@ -110,7 +113,11 @@ export class TrialGateGuard implements CanActivate {
 
   private async trialExpired(orgId: number): Promise<boolean> {
     const now = Date.now();
-    if ((this.openUntil.get(orgId) ?? 0) > now) return false;
+    if ((this.openUntil.get(orgId) ?? 0) > now) {
+      cache.hit();
+      return false;
+    }
+    cache.miss();
     try {
       const e = await this.entitlements.forOrg(orgId);
       // Organizations the platform owns are never limited; a missing organization has nothing to gate.

@@ -6,6 +6,9 @@ import { DatabaseService } from '../../infra/db/database.service';
 import { ConsentSettingsService } from './consent-settings.service';
 import { ContactPrivacyRepository } from './contact-privacy.repository';
 import { setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('consent_minor_rule');
 
 /** How long a process keeps a workspace's minor rule. A save in the Compliance center invalidates the saving process at once. */
 export const MINOR_RULE_CACHE_MS = 60_000;
@@ -38,7 +41,11 @@ export class ConsentPolicyService {
    */
   async minorRule(orgId: number): Promise<MinorRule> {
     const hit = this.minorRules.get(orgId);
-    if (hit && Date.now() - hit.at < MINOR_RULE_CACHE_MS) return hit.v;
+    if (hit && Date.now() - hit.at < MINOR_RULE_CACHE_MS) {
+      cache.hit();
+      return hit.v;
+    }
+    cache.miss();
     const facts = await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.privacy.complianceFacts(tx, orgId),
     );

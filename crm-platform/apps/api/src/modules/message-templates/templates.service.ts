@@ -238,9 +238,8 @@ export class TemplatesService {
     if (input.submit) this.requireUsable(target);
 
     // Plan cap on templates (live count of wa_templates): refuse before anything is written, 422 PLAN_LIMIT_REACHED.
-    await this.planUsage.assertCanAdd(ctx.orgId, 'templates');
-
     const row = await this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'templates');
       if (await this.repo.nameTaken(tx, ctx.orgId, target.id, prepared.name, prepared.language))
         throw this.nameTaken();
       const saved = await this.repo.insert(tx, ctx.orgId, {

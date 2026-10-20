@@ -3,6 +3,9 @@ import { sql } from 'drizzle-orm';
 import { convertCurrency, formatMoney, type CurrencyRow } from '@crm/contracts';
 import { PlatformStore } from '../auth';
 import { SettingsService } from './settings.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cacheStat = cacheMetrics('currency');
 
 const CACHE_MS = 60_000;
 
@@ -25,7 +28,11 @@ export class CurrencyService {
   }
 
   private async rows(): Promise<Map<string, CurrencyRow>> {
-    if (this.cache && Date.now() - this.cache.at < CACHE_MS) return this.cache.rows;
+    if (this.cache && Date.now() - this.cache.at < CACHE_MS) {
+      cacheStat.hit();
+      return this.cache.rows;
+    }
+    cacheStat.miss();
     const res = await this.platform.tx((tx) =>
       tx.execute(
         sql`SELECT code, symbol, "precision", exchange_rate::text AS rate FROM currencies WHERE is_active`,

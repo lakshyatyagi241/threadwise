@@ -519,6 +519,7 @@ export class FlowsService {
 
   /** 422 PLAN_LIMIT_REACHED when one more flow would pass the plan's cap (0 = unlimited). A live count, so a delete frees a slot. */
   private async assertRoom(tx: Tx, orgId: number): Promise<void> {
+    await this.plans.lockLimit(tx, orgId, 'flows');
     await this.plans.assertWithinLimit(orgId, 'flows', await this.repo.countAll(tx, orgId));
   }
 

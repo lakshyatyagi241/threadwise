@@ -12,6 +12,7 @@ rule_files:
   - /etc/prometheus/event-loop.rules.yml
   - /etc/prometheus/queue-capacity.rules.yml
   - /etc/prometheus/resource-limits.rules.yml
+  - /etc/prometheus/cache-hit-rate.rules.yml
 
 alerting:
   alertmanagers:

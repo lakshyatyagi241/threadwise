@@ -15,6 +15,8 @@ export interface CampaignPlanGate {
    * does not reopen it. Throws PLAN_LIMIT_REACHED. `live` is the number that exist now, for a ledger that is not there yet.
    */
   assertWithinCap(orgId: number, live: number): Promise<void>;
+  /** Serialises campaign creation per workspace until the caller's transaction ends (QA Sheet3 #15, D-05). */
+  lockCap(tx: Tx, orgId: number): Promise<void>;
 }
 export const CAMPAIGN_PLAN_GATE = Symbol('CAMPAIGN_PLAN_GATE');
 
