@@ -137,7 +137,7 @@ starts there.
 
 Cursor pagination over `(created_at, id)` at microsecond precision, newest first (`order=asc` for oldest first). Filters, all
 combined with AND: `q` (title, contact name or company name; `%` and `_` are text), `pipelineId`, `stageId`, `status`
-(`open|won|lost`), `ownerId` / `unassigned=true` (not together), `contactId`, `companyId`, `source`, `currency`, `limit` (1-200).
+(`open|won|lost`), `ownerId` / `unassigned=true` (not together), `teamId` (the deal's owning team: the owner's primary team when the owner was set; BL-382), `contactId`, `companyId`, `source`, `currency`, `limit` (1-200).
 An id that is not in this workspace matches nothing.
 
 ### `GET /deals/:id` [`record.deals.read`, scope] · `PATCH /deals/:id` [`record.deals.update`, scope] · `DELETE /deals/:id` [`record.deals.delete`, scope]
@@ -172,7 +172,7 @@ midpoint of its neighbours, and a column whose gap closed is renumbered in the s
 
 ### `GET /deals/board` [`record.deals.read`, scope]
 
-Query: `pipelineId` (default pipeline; an unknown one is 404), the filters `q`, `ownerId`, `unassigned`, `contactId`, `companyId`,
+Query: `pipelineId` (default pipeline; an unknown one is 404), the filters `q`, `ownerId`, `unassigned`, `teamId`, `contactId`, `companyId`,
 `source`, `limit` (cards per column, 1-100, default 25), `convertTo`.
 
 ```json

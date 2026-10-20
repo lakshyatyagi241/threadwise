@@ -104,7 +104,9 @@
       },
       "linkCompany": "Sebuah perusahaan",
       "outcome": "Hasil",
-      "allOutcomes": "Semua hasil"
+      "allOutcomes": "Semua hasil",
+      "team": "Tim",
+      "allTeams": "Semua tim"
     },
     "table": {
       "scrollArea": "Tabel tugas",

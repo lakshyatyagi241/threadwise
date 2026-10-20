@@ -143,7 +143,7 @@
       },
       "total": "Tổng cộng",
       "truncated": "Chỉ liệt kê {count} dòng lớn nhất. Bản tóm tắt CSV có cùng các dòng này.",
-      "teamNote": "Một người thuộc hai nhóm sẽ được tính ở cả hai nhóm, nên tổng các dòng nhóm có thể lớn hơn tổng chung.",
+      "teamNote": "Mỗi người chỉ được tính cho nhóm chính của mình, nên các dòng theo nhóm cộng lại bằng tổng. Người không có nhóm chính nằm ở mục “Không có nhóm”.",
       "productNote": "Chiết khấu trên toàn hóa đơn, phí vận chuyển và chênh lệch làm tròn được phân bổ cho các dòng hàng theo tỷ lệ giá trị."
     },
     "aging": {

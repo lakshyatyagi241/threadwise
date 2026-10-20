@@ -290,7 +290,11 @@
         "importBody": "Envie uma planilha e associe as colunas aos campos do contato.",
         "connect": "Conectar WhatsApp",
         "connectBody": "Conecte seu número para que os contatos possam responder e você possa enviar mensagens."
-      }
+      },
+      "teamLabel": "Equipe",
+      "teamFilter": "Filtrar por equipe",
+      "allTeams": "Todas as equipes",
+      "teamFormer": "Equipe anterior"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",

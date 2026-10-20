@@ -19,8 +19,9 @@ Backlog: `docs/backlog.md` BL-380.
 
 Meaning, in every module (decision D1 applied): `own` = any person column is me, creator included. `team` = `own`, or any person column is
 a member of a team I am in (a person in no team still sees their own). `all` = no condition. No signed-in person = nothing below `all`.
-Conversation mode keeps its rule: `own` = assigned to me; `team` = assigned to me, or to one of my teams, or not assigned to anybody;
-`all` = everything (the unassigned rule becomes the permission `inbox.conversation.read_unassigned` in T2).
+Conversation mode: `own` = assigned to me; `team` = assigned to me or to one of my teams, plus the unassigned queue for a viewer who holds the permission
+`inbox.conversation.read_unassigned` (T2, BL-382); `team_and_below` = the same with the teams below mine; `all` = everything. T2 added `team_and_below` to `scopeOwnerCondition`, `canActOn`
+and the conversation mode: see [teams-t2.md](teams-t2.md).
 
 ## Record scope, module by module
 
@@ -75,7 +76,7 @@ The parity test of `conversationVisible` against `visibleToSql` (`inbox-schema.s
 | `team-inbox-routing-sla/routing-engine.service.ts`, `routing-rules.repository.ts` (`teamMembers`), `assignees.service.ts` | Routing pool: expands a rule's teams into people who can take work.                                                        |
 | `crm/contact-assignment/*` (`teamMembers`)                                                                                | Record-assignment pool. Gap 9 now filters it by the right to open the record.                                              |
 | `notifications/sla-notification.consumer.ts`, `conversation-notification-rules.ts`                                        | Who to notify about a team's conversation.                                                                                 |
-| `crm/crm-dashboard`, `crm/revenue-report` team filter / group-by                                                          | A team chosen in a report is a filter, not an access rule. A person on two teams still counts twice (T2 `owning_team_id`). |
+| `crm/crm-dashboard`, `crm/revenue-report` team filter / group-by                                                          | A team chosen in a report is a filter, not an access rule. Since T2 it reads `owning_team_id` (contacts, deals, tasks) or the owner's primary team (invoices, payments), so a person on two teams counts once. |
 | `flow-builder-editor/builder-context.service.ts`                                                                          | Lists teams for the editor.                                                                                                |
 | `workspaces-teams-tenancy/teams.repository.ts`, `members.repository.ts`                                                   | The membership tables themselves.                                                                                          |
 | `crm/owner-reassign/owner-reassign.repository.ts` `teamMemberIds`                                                         | Expands a chosen team into the people whose book moves.                                                                    |
@@ -92,4 +93,4 @@ The parity test of `conversationVisible` against `visibleToSql` (`inbox-schema.s
 ## Known gaps not in T0
 
 - Flow Assign nodes keep a team uuid in their definition; deleting a team does not clean them (the preview does not count them).
-- A person on two teams is counted twice in team reports until `owning_team_id` (T2).
+- A person on two teams used to be counted twice in team reports; fixed in T2 (BL-382): reports by team read `owning_team_id` or the owner's primary team, see [teams-t2.md](teams-t2.md).

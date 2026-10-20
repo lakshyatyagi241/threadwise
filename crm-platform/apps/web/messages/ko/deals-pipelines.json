@@ -128,7 +128,9 @@
         "list": "목록"
       },
       "reports": "리포트",
-      "settings": "파이프라인 설정"
+      "settings": "파이프라인 설정",
+      "team": "팀",
+      "allTeams": "모든 팀"
     },
     "kpi": {
       "openPipeline": "진행 중인 파이프라인",

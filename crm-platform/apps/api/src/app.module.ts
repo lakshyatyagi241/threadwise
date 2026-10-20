@@ -18,6 +18,7 @@ import { RedisModule } from './infra/redis/redis.module';
 import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
+import { TeamHierarchyGateModule } from './modules/plans-subscriptions-trials/team-hierarchy-gate.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
@@ -191,6 +192,7 @@ import { HealthModule } from './health/health.module';
 
     // Platform
     KernelModule,
+    TeamHierarchyGateModule,
     AuthModule,
     PlatformInfrastructureModule,
     PlansModule,

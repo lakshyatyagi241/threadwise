@@ -36,6 +36,7 @@ import { stampsForKind } from './deal-rules';
 import { DEAL_MODULE, DealEngine, type LostReasonValue } from './deal-engine.service';
 import { addTo, moneyList, type CurrencySums } from './deal-money';
 import { dealEventPayload, toDealResponse } from './deals.mapper';
+import { resolveTeamId } from '../owning-team';
 import {
   DealsRepository,
   dealScopeCondition,
@@ -51,6 +52,7 @@ export interface DealFilterInput {
   q?: string;
   ownerId?: string;
   unassigned?: boolean;
+  teamId?: string;
   contactId?: string;
   companyId?: string;
   source?: string;
@@ -598,6 +600,11 @@ export class DealsService {
       if (id === undefined) return null;
       out.ownerId = id;
     }
+    if (f.teamId) {
+      const id = await resolveTeamId(tx, orgId, f.teamId);
+      if (id === undefined) return null;
+      out.teamId = id;
+    }
     if (f.contactId) {
       const id = await this.repo.resolveContactId(tx, orgId, f.contactId);
       if (id === undefined) return null;
@@ -622,7 +629,8 @@ export class DealsService {
       scope,
       actorUserId: ctx.userId,
       nextOwnerId,
-      inActorTeam: (id) => this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) =>
+        this.repo.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }

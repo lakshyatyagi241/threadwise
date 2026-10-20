@@ -290,7 +290,11 @@
         "importBody": "Upload een spreadsheet en koppel de kolommen aan contactvelden.",
         "connect": "WhatsApp koppelen",
         "connectBody": "Koppel je nummer zodat contacten kunnen antwoorden en je ze kunt berichten."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filteren op team",
+      "allTeams": "Alle teams",
+      "teamFormer": "Voormalig team"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",

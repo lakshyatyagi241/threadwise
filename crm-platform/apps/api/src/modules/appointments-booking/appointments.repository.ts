@@ -684,7 +684,9 @@ export class AppointmentsRepository {
     orgId: number,
     actorUserId: number,
     userId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    return isTeamPeer(tx, orgId, actorUserId, userId);
+    return isTeamPeer(tx, orgId, actorUserId, userId, below);
   }
 }

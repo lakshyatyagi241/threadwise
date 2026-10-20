@@ -9,7 +9,9 @@ export { VisibilityPresence } from './visibility-presence.service';
 export { MemberDirectory } from './audience/member-directory.service';
 export {
   PERM_CONVERSATION_READ,
+  PERM_CONVERSATION_READ_UNASSIGNED,
   conversationVisible,
+  viewerReadsUnassigned,
   PERSONAL_OWNER_GONE,
   type ConversationRecord,
   type ConversationViewer,

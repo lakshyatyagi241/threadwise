@@ -290,7 +290,11 @@
         "importBody": "Téléversez un tableur et associez ses colonnes aux champs du contact.",
         "connect": "Connecter WhatsApp",
         "connectBody": "Connectez votre numéro pour que vos contacts puissent répondre et que vous puissiez leur écrire."
-      }
+      },
+      "teamLabel": "Équipe",
+      "teamFilter": "Filtrer par équipe",
+      "allTeams": "Toutes les équipes",
+      "teamFormer": "Ancienne équipe"
     },
     "bulk": {
       "label": "Actions pour les contacts sélectionnés",

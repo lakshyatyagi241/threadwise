@@ -290,7 +290,11 @@
         "importBody": "Laden Sie eine Tabelle hoch und ordnen Sie ihre Spalten den Kontaktfeldern zu.",
         "connect": "WhatsApp verbinden",
         "connectBody": "Verbinden Sie Ihre Nummer, damit Kontakte antworten können und Sie ihnen schreiben können."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Nach Team filtern",
+      "allTeams": "Alle Teams",
+      "teamFormer": "Früheres Team"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",

@@ -25,7 +25,7 @@ import { scopeOwnerPredicate } from '../../kernel/rbac/scope';
  */
 
 export type Level = 'slim' | 'row' | 'detail';
-export type RecordScopeLike = 'all' | 'team' | 'own';
+export type RecordScopeLike = 'all' | 'team' | 'team_and_below' | 'own';
 
 export interface HistoryContext {
   orgId: number;

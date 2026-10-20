@@ -290,7 +290,11 @@
         "importBody": "Sube una hoja de cálculo y relaciona sus columnas con los campos de contacto.",
         "connect": "Conectar WhatsApp",
         "connectBody": "Conecta tu número para que los contactos puedan responder y tú puedas escribirles."
-      }
+      },
+      "teamLabel": "Equipo",
+      "teamFilter": "Filtrar por equipo",
+      "allTeams": "Todos los equipos",
+      "teamFormer": "Equipo anterior"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",

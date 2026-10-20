@@ -128,7 +128,9 @@
         "list": "Liste"
       },
       "reports": "Raporlar",
-      "settings": "Hat ayarları"
+      "settings": "Hat ayarları",
+      "team": "Ekip",
+      "allTeams": "Tüm ekipler"
     },
     "kpi": {
       "openPipeline": "Açık hat",

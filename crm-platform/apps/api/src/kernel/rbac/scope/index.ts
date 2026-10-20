@@ -1,8 +1,11 @@
 export {
+  MAX_TEAM_DEPTH,
   memberTeamIdsSql,
   scopeOwnerCondition,
   scopeOwnerPredicate,
+  teamPeersBelowSql,
   teamPeersSql,
+  teamTreeIdsSql,
   type ScopeActor,
   type ScopeColumns,
 } from './scope-sql';
@@ -12,4 +15,14 @@ export {
   type ConversationAssignment,
   type ConversationScopeViewer,
 } from './conversation-scope';
-export { canActOn, isTeamPeer, ScopeResolver, teamIdsOf, teamPeers } from './scope-resolver';
+export { withDescendants } from './team-tree';
+export {
+  canActOn,
+  isTeamPeer,
+  ScopeResolver,
+  teamIdsForScope,
+  teamIdsOf,
+  teamPeers,
+  teamPeersBelow,
+  teamTreeIdsOf,
+} from './scope-resolver';

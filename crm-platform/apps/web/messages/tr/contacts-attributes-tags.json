@@ -290,7 +290,11 @@
         "importBody": "Bir elektronik tablo yükleyin ve sütunlarını kişi alanlarıyla eşleştirin.",
         "connect": "WhatsApp'ı bağla",
         "connectBody": "Numaranızı bağlayın; böylece kişiler yanıt verebilir ve onlara mesaj gönderebilirsiniz."
-      }
+      },
+      "teamLabel": "Ekip",
+      "teamFilter": "Ekibe göre filtrele",
+      "allTeams": "Tüm ekipler",
+      "teamFormer": "Eski ekip"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",

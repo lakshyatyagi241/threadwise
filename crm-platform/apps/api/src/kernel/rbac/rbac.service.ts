@@ -1,8 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
-import type { RecordScope } from '@crm/contracts';
+import { RECORD_SCOPE_RANK, type RecordScope } from '@crm/contracts';
 import { cacheMetrics } from '@crm/observability';
+import { TEAM_HIERARCHY_GATE, type TeamHierarchyGate } from './team-hierarchy-gate';
 import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -44,7 +45,7 @@ return {v, g}`;
  *
  * Merge rules, in order:
  *   1. deny beats allow, always, regardless of which role it came from
- *   2. among allows, the widest scope wins (all > team > own)
+ *   2. among allows, the widest scope wins (all > team_and_below > team > own)
  *
  * Rule 1 is what makes a "revoke" role actually revoke. Rule 2 is what makes
  * "Counsellor + Manager" behave the way a human expects.
@@ -65,9 +66,38 @@ export class RbacService {
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    @Optional() @Inject(TEAM_HIERARCHY_GATE) private readonly hierarchy?: TeamHierarchyGate,
   ) {}
 
+  /**
+   * A stored `team_and_below` only reaches sub-teams while the workspace has the plan feature `team_hierarchy` (BL-382, BL-383). Without it
+   * (a downgrade) the grant stays in the role and resolves as `team`, so nobody loses access outright and nobody gains reach the plan does not
+   * pay for. Applied after the cache, so the cached set stays the raw union of the roles. No port (a unit test) leaves grants as stored.
+   */
+  private async withPlanScopes(orgId: number, grants: GrantSet): Promise<GrantSet> {
+    let any = false;
+    for (const g of grants.values()) {
+      if (g.scope === 'team_and_below') {
+        any = true;
+        break;
+      }
+    }
+    if (!any || !this.hierarchy) return grants;
+    const on = await this.hierarchy.enabled(orgId).catch(() => false);
+    if (on) return grants;
+    return new Map(
+      [...grants].map(([key, g]) => [
+        key,
+        g.scope === 'team_and_below' ? { ...g, scope: 'team' as const } : g,
+      ]),
+    );
+  }
+
   async grantsForUser(orgId: number, userId: number): Promise<GrantSet> {
+    return this.withPlanScopes(orgId, await this.rawGrantsForUser(orgId, userId));
+  }
+
+  private async rawGrantsForUser(orgId: number, userId: number): Promise<GrantSet> {
     // The usual case is a hit on both keys: one round trip for the version and the grant set together (see READ_CACHED_LUA).
     // JwtAuthGuard may already have started this read (auth-prefetch.ts); `readCached` never rejects, so the result is final.
     const early = await takeAuthPrefetch('grants', orgId, userId);
@@ -225,7 +255,6 @@ export class RbacService {
     );
 
     const grants: GrantSet = new Map();
-    const scopeRank: Record<RecordScope, number> = { own: 0, team: 1, all: 2 };
 
     for (const row of result.rows as Array<{
       permission_key: string;
@@ -240,7 +269,7 @@ export class RbacService {
         grants.set(row.permission_key, { effect: 'deny', scope: row.record_scope });
         continue;
       }
-      if (!existing || scopeRank[row.record_scope] > scopeRank[existing.scope]) {
+      if (!existing || RECORD_SCOPE_RANK[row.record_scope] > RECORD_SCOPE_RANK[existing.scope]) {
         grants.set(row.permission_key, { effect: 'allow', scope: row.record_scope });
       }
     }

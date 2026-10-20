@@ -104,7 +104,9 @@
       },
       "linkCompany": "एक कंपनी",
       "outcome": "परिणाम",
-      "allOutcomes": "सभी परिणाम"
+      "allOutcomes": "सभी परिणाम",
+      "team": "टीम",
+      "allTeams": "सभी टीमें"
     },
     "table": {
       "scrollArea": "टास्क तालिका",

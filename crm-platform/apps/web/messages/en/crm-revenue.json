@@ -143,7 +143,7 @@
       },
       "total": "Total",
       "truncated": "Only the {count} biggest rows are listed. The CSV summary has the same rows.",
-      "teamNote": "A person on two teams counts in both, so team rows can add up to more than the total.",
+      "teamNote": "Each person counts for their primary team only, so team rows add up to the total. People with no primary team are listed under no team.",
       "productNote": "Discounts on the whole invoice, shipping and rounding are spread over the lines in proportion to their value."
     },
     "aging": {

@@ -13,6 +13,7 @@ import {
   cn,
 } from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useTeamFilterOptions } from '@/features/segments';
 import { useActivitySettings } from '@/features/sales-activities';
 import { useRecordRef, useTaskOutcomes } from '../api/hooks';
 import { outcomeChoices } from '../lib/outcomes';
@@ -54,6 +55,7 @@ export interface TasksToolbarProps {
 export function TasksToolbar(p: TasksToolbarProps) {
   const t = useTranslations('tasks.toolbar');
   const f = p.filters;
+  const teamFilter = useTeamFilterOptions();
   const active = hasActiveFilter({ ...f, q: p.q });
   // "Linked to" first picks a kind, then the record; only the record filters the list.
   const canPickCompany = useCan('record.companies.read');
@@ -162,6 +164,22 @@ export function TasksToolbar(p: TasksToolbarProps) {
         </Select>
       )}
 
+      {(teamFilter.show || f.team !== '') && (
+        <Select
+          aria-label={t('team')}
+          className="h-9 w-auto min-w-36 max-w-52"
+          value={f.team}
+          onChange={(e) => p.onChange({ team: e.target.value })}
+        >
+          <option value="">{t('allTeams')}</option>
+          {teamFilter.teams.map((x) => (
+            <option key={x.id} value={x.id}>
+              {x.name}
+            </option>
+          ))}
+        </Select>
+      )}
+
       <Select
         aria-label={t('linked')}
         className="h-9 w-auto min-w-36"
@@ -202,6 +220,7 @@ export function TasksToolbar(p: TasksToolbarProps) {
               status: 'open',
               priority: '',
               assignee: '',
+              team: '',
               contact: '',
               deal: '',
               company: '',

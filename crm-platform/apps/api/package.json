@@ -31,6 +31,7 @@
     "seed:store-demo": "swc src -d dist-cli --strip-leading-paths --ignore \"**/*.spec.ts\" -q && node dist-cli/modules/storefront-builder/cli/seed-store-demo.js",
     "backfill:store-orders": "swc src -d dist-cli --strip-leading-paths --ignore \"**/*.spec.ts\" -q && node dist-cli/modules/store-orders-sales/cli/backfill-store-orders.js",
     "backfill:message-feed": "tsx src/modules/analytics/cli/backfill-message-feed.ts",
+    "report:unassigned-visibility": "tsx src/modules/team-inbox-conversations/cli/unassigned-visibility-report.ts",
     "operator:create": "tsx src/modules/auth/cli/create-operator.ts",
     "auto-reply:translate-existing": "node dist/src/modules/localization-translation/cli/translate-existing.js",
     "seed:appointments": "node dist/src/modules/marketplace/cli/seed-appointments.js",

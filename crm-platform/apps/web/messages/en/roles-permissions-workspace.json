@@ -140,7 +140,8 @@
         "keptRole": "{name} stays: you cannot hand it out or take it away.",
         "atLeastOne": "Pick at least one role.",
         "save": "Save roles",
-        "reload": "Reload"
+        "reload": "Reload",
+        "noTeamWarning": "{name} is in no team, so where a role is set to a team scope they see only their own records. Add them to a team in Settings > Teams."
       },
       "teamFilter": {
         "label": "Filter members by team",
@@ -250,8 +251,20 @@
       "lockedHint": "This permission is not available to this workspace yet. It unlocks when the plan feature is on or the app is installed.",
       "scope": {
         "all": "All records",
+        "team_and_below": "My team and sub-teams",
         "team": "My team's records",
-        "own": "Own records"
+        "own": "My records"
+      },
+      "scopeLegend": "What each record scope covers",
+      "scopeHelp": {
+        "all": "Every record in the workspace.",
+        "team_and_below": "Records of your team and of every team below it.",
+        "team": "Records of the people in your team.",
+        "own": "Only records you own or are assigned."
+      },
+      "noTeamWarning": "{count, plural, one {# member with this role is in no team, so they see only their own records where this role is set to a team scope.} other {# members with this role are in no team, so they see only their own records where this role is set to a team scope.}} Add them to a team in <link>Settings > Teams</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Without this, agents with team access see only conversations assigned to them or to their team. With it they also see the open queue of conversations assigned to nobody."
       }
     },
     "delete": {

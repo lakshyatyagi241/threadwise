@@ -173,6 +173,8 @@ export interface TaskFilter {
   priority?: TaskPriority[];
   assigneeId?: number;
   unassigned?: boolean;
+  /** The task's owning team (BL-382). */
+  teamId?: number;
   contactId?: number;
   dealId?: number;
   companyId?: number;
@@ -205,6 +207,7 @@ function filterConds(orgId: number, f: TaskFilter, scope?: SQL): SQL[] {
     );
   if (f.assigneeId !== undefined) conds.push(sql`t.assignee_id = ${f.assigneeId}`);
   if (f.unassigned) conds.push(sql`t.assignee_id IS NULL`);
+  if (f.teamId !== undefined) conds.push(sql`t.owning_team_id = ${f.teamId}`);
   if (f.contactId !== undefined) conds.push(sql`t.contact_id = ${f.contactId}`);
   if (f.dealId !== undefined) conds.push(sql`t.deal_id = ${f.dealId}`);
   if (f.companyId !== undefined) conds.push(sql`t.company_id = ${f.companyId}`);
@@ -562,8 +565,10 @@ export class TasksRepository {
     orgId: number,
     actorUserId: number,
     userId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    return isTeamPeer(tx, orgId, actorUserId, userId);
+    return isTeamPeer(tx, orgId, actorUserId, userId, below);
   }
 
   /** The workspace's time zone for the day buckets (UTC when it has none). */

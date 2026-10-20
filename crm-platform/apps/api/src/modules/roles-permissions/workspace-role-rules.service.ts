@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
-import { ERROR_CODES, type RecordScope } from '@crm/contracts';
+import { ERROR_CODES, RECORD_SCOPE_RANK, type RecordScope } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 import { RbacService, type GrantSet } from '../../kernel/rbac/rbac.service';
 import { AuthAuditService } from '../auth';
@@ -21,7 +21,7 @@ const OWNER_GRANTED = new Set(['admin', 'workspace_admin']);
 /** First key of the per-workspace advisory lock that serializes owner/role changes. */
 const OWNER_LOCK_NAMESPACE = 7301;
 
-const SCOPE_RANK: Record<RecordScope, number> = { own: 0, team: 1, all: 2 };
+const SCOPE_RANK = RECORD_SCOPE_RANK;
 
 interface RoleInfo {
   id: number;

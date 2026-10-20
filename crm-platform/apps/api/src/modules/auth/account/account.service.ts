@@ -181,7 +181,7 @@ export class AccountService {
       this.platformCurrency(),
     ]);
 
-    const permissions: Record<string, 'all' | 'team' | 'own'> = {};
+    const permissions: Record<string, 'all' | 'team' | 'team_and_below' | 'own'> = {};
     for (const [key, grant] of grants) {
       if (grant.effect === 'allow') permissions[key] = grant.scope;
     }

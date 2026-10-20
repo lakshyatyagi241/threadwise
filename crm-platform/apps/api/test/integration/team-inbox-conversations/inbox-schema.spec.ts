@@ -442,14 +442,16 @@ describe('team inbox storage: isolation, constraints and the visibility rule', (
       const viewers: ConversationViewer[] = [];
       for (const userId of [userA, userA2, 999999]) {
         for (const teamIds of [[], [team1], [team2], [team1, team2]]) {
-          for (const scope of [null, 'all', 'team', 'own'] as const) {
+          for (const scope of [null, 'all', 'team', 'team_and_below', 'own'] as const) {
             for (const readsPersonalMail of [false, true]) {
-              viewers.push({ userId, scope, teamIds, readsPersonalMail });
+              for (const readsUnassigned of [false, true]) {
+                viewers.push({ userId, scope, teamIds, readsUnassigned, readsPersonalMail });
+              }
             }
           }
         }
       }
-      expect(viewers.length).toBe(96);
+      expect(viewers.length).toBe(240);
 
       for (const viewer of viewers) {
         const q = dialect.sqlToQuery(

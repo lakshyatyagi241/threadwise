@@ -104,7 +104,9 @@
       },
       "linkCompany": "Een bedrijf",
       "outcome": "Resultaat",
-      "allOutcomes": "Alle resultaten"
+      "allOutcomes": "Alle resultaten",
+      "team": "Team",
+      "allTeams": "Alle teams"
     },
     "table": {
       "scrollArea": "Takentabel",

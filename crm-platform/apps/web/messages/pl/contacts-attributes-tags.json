@@ -290,7 +290,11 @@
         "importBody": "Prześlij arkusz kalkulacyjny i dopasuj jego kolumny do pól kontaktu.",
         "connect": "Połącz WhatsApp",
         "connectBody": "Połącz swój numer, aby kontakty mogły odpowiadać i aby można było do nich pisać."
-      }
+      },
+      "teamLabel": "Zespół",
+      "teamFilter": "Filtruj według zespołu",
+      "allTeams": "Wszystkie zespoły",
+      "teamFormer": "Dawny zespół"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",

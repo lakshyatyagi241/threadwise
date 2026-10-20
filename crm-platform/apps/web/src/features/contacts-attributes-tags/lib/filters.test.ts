@@ -123,6 +123,18 @@ describe('contactFilterBody / listQuery', () => {
     });
   });
 
+  it('carries the Team filter in the address, the list query and the saved filter of a bulk action', () => {
+    const TEAM = '44444444-4444-4444-8444-444444444444';
+    const f = parseFilters(new URLSearchParams(`team=${TEAM}`));
+    expect(f.team).toBe(TEAM);
+    expect(filtersToSearch(f)).toBe(`?team=${TEAM}`);
+    expect(hasActiveFilter(f)).toBe(true);
+    expect(listQuery(f)).toMatchObject({ teamId: TEAM });
+    expect(contactFilterBody(f)).toMatchObject({ teamId: TEAM });
+    expect(parseFilters(new URLSearchParams('team=nope')).team).toBe('');
+    expect(contactFilterBody(DEFAULT_FILTERS).teamId).toBeUndefined();
+  });
+
   it('sends the status and the source when they are set, and leaves them out otherwise', () => {
     const b = contactFilterBody({ ...DEFAULT_FILTERS, status: 'active', source: ' api ' });
     expect(b).toMatchObject({ status: 'active', source: 'api' });

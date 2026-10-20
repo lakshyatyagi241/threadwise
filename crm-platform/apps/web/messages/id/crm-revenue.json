@@ -143,7 +143,7 @@
       },
       "total": "Total",
       "truncated": "Hanya {count} baris terbesar yang ditampilkan. Ringkasan CSV memuat baris yang sama.",
-      "teamNote": "Orang yang berada di dua tim dihitung di keduanya, sehingga jumlah baris tim bisa melebihi total.",
+      "teamNote": "Setiap orang hanya dihitung untuk tim utamanya, sehingga baris per tim berjumlah sama dengan total. Orang tanpa tim utama ditampilkan di bawah “Tanpa tim”.",
       "productNote": "Diskon pada seluruh faktur, ongkos kirim, dan pembulatan dibagi ke setiap baris sebanding dengan nilainya."
     },
     "aging": {

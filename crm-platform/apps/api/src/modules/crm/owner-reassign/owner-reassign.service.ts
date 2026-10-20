@@ -306,7 +306,8 @@ export class OwnerReassignService {
       scope,
       actorUserId: ctx.userId,
       nextOwnerId: targetId,
-      inActorTeam: (id) => this.contacts.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) =>
+        this.contacts.isOwnerInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }
