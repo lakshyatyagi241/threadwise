@@ -488,13 +488,13 @@ export class ChannelDispatcher {
       return null;
     }
     try {
-      cache.hit();
       const v = JSON.parse(raw) as {
         providerMessageId: string;
         acceptedAt: string;
         plannedReceipts?: PlannedReceipt[];
         meta?: Record<string, unknown>;
       };
+      cache.hit();
       return {
         providerMessageId: v.providerMessageId,
         acceptedAt: new Date(v.acceptedAt),
@@ -502,6 +502,8 @@ export class ChannelDispatcher {
         ...(v.meta ? { meta: v.meta } : {}),
       };
     } catch {
+      cache.error(); // an unreadable stored answer counts as a failed lookup that fell through to the source
+      cache.miss();
       return null;
     }
   }

@@ -41,24 +41,30 @@ export function checkInstrumentation(reg: Register, files: SourceFile[]): string
         }
       | undefined;
     if (!ins || typeof ins.instrumented !== 'boolean') {
-      out.push(`${c.id}: no instrumentation entry (instrument it, or write an exemption with a reason)`);
+      out.push(
+        `${c.id}: no instrumentation entry (instrument it, or write an exemption with a reason)`,
+      );
       continue;
     }
     if (!ins.instrumented) {
       if (!ins.exemption || !EXEMPTIONS.has(ins.exemption))
         out.push(`${c.id}: exemption must be one of ${[...EXEMPTIONS].join(' / ')}`);
       if ((ins.reason ?? '').length < MIN_REASON)
-        out.push(`${c.id}: the exemption reason is missing or shorter than ${MIN_REASON} characters`);
+        out.push(
+          `${c.id}: the exemption reason is missing or shorter than ${MIN_REASON} characters`,
+        );
       continue;
     }
-    if (typeof ins.hitRatioAlert !== 'boolean') out.push(`${c.id}: hitRatioAlert must be true or false`);
+    if (typeof ins.hitRatioAlert !== 'boolean')
+      out.push(`${c.id}: hitRatioAlert must be true or false`);
     if (!ins.metrics || ins.metrics.length === 0) {
       out.push(`${c.id}: instrumented but names no metric`);
       continue;
     }
     const where = [c.location as string, ...(ins.alsoIn ?? [])];
     for (const m of ins.metrics) {
-      if (!METRIC_NAME.test(m)) out.push(`${c.id}: metric name "${m}" does not match ${METRIC_NAME}`);
+      if (!METRIC_NAME.test(m))
+        out.push(`${c.id}: metric name "${m}" does not match ${METRIC_NAME}`);
       const owner = claimed.get(m);
       if (owner && owner !== c.id) out.push(`${c.id}: metric "${m}" is already used by ${owner}`);
       claimed.set(m, c.id);
@@ -72,7 +78,9 @@ export function checkInstrumentation(reg: Register, files: SourceFile[]): string
     const literal = callsIn(f.text);
     const all = (f.text.match(ANY_CALL) ?? []).length;
     if (all !== literal.length)
-      out.push(`${f.file}: cacheMetrics() must take a string literal (a computed name could carry an id)`);
+      out.push(
+        `${f.file}: cacheMetrics() must take a string literal (a computed name could carry an id)`,
+      );
     for (const m of literal)
       if (!claimed.has(m)) out.push(`${f.file}: cacheMetrics('${m}') is not in register.json`);
   }
@@ -91,7 +99,11 @@ export function checkRulesSync(reg: Register, rulesText: string): string[] {
   if (!m) return ['cache-hit-rate.rules.yml: CacheHitRatioLow has no cache=~"..." selector'];
   const have = m[1]!.split('|').sort();
   const out: string[] = [];
-  for (const n of want) if (!have.includes(n)) out.push(`rules: ${n} has hitRatioAlert in the register but is not in CacheHitRatioLow`);
-  for (const n of have) if (!want.includes(n)) out.push(`rules: ${n} is in CacheHitRatioLow but the register does not ask for it`);
+  for (const n of want)
+    if (!have.includes(n))
+      out.push(`rules: ${n} has hitRatioAlert in the register but is not in CacheHitRatioLow`);
+  for (const n of have)
+    if (!want.includes(n))
+      out.push(`rules: ${n} is in CacheHitRatioLow but the register does not ask for it`);
   return out;
 }

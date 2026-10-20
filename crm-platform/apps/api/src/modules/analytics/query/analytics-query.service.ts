@@ -195,9 +195,10 @@ export class AnalyticsQueryService {
     if (!this.redis) return null;
     try {
       const raw = await this.redis.get(key);
-      if (raw) cache.hit();
+      const rows = raw ? (JSON.parse(raw) as SeriesRow[]) : null;
+      if (rows) cache.hit();
       else cache.miss();
-      return raw ? (JSON.parse(raw) as SeriesRow[]) : null;
+      return rows;
     } catch (err) {
       cache.error();
       cache.miss();

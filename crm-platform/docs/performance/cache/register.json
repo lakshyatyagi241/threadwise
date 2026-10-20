@@ -3558,7 +3558,6 @@
  },
  "redisNoTtlAllowed": {
   "modules/auth/sessions/epoch.service.ts": "Durable mirror of a Postgres setting (R07): a flushed Redis is refilled from Postgres; an expiring epoch would silently re-validate revoked tokens.",
-  "modules/auth/security/branding-footer.service.ts": "Version counter (S10): INCR only; a counter that expires would reset to 1 and make old cached footers look current.",
   "infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts": "govKeys.global hash is the governor's durable platform config; every other key in the file expires.",
   "modules/node-bridge-runtime/runtime/group-limiter.ts": "DECR undoes an INCR on a key that was created with an expiry in the same MULTI.",
   "modules/platform-infrastructure/observability/worker-heartbeat.service.ts": "Sorted set of live workers; members older than the window are removed on every write and the set holds one member per worker.",

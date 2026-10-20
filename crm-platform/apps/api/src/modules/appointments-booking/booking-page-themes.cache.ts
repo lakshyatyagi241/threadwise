@@ -24,9 +24,10 @@ export class BookingPageThemesCache {
   async get<T>(orgId: number): Promise<T | null> {
     try {
       const raw = await this.redis.get(key(orgId));
-      if (raw) cache.hit();
+      const value = raw ? (JSON.parse(raw) as T) : null;
+      if (value) cache.hit();
       else cache.miss();
-      return raw ? (JSON.parse(raw) as T) : null;
+      return value;
     } catch (err) {
       cache.error();
       cache.miss();

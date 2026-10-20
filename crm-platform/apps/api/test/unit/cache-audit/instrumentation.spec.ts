@@ -35,9 +35,9 @@ describe('part 1: the real code passes every rule', () => {
     expect(exempt.filter((c) => c.instrumentation.exemption === 'not-meaningful').length).toBe(11);
     expect(exempt.filter((c) => c.instrumentation.exemption === 'not-observable').length).toBe(6);
     expect(ins.flatMap((c) => c.instrumentation.metrics).length).toBe(53);
-    expect(
-      ins.filter((c) => c.priority === 'P0' && c.instrumentation.hitRatioAlert).length,
-    ).toBe(20);
+    expect(ins.filter((c) => c.priority === 'P0' && c.instrumentation.hitRatioAlert).length).toBe(
+      20,
+    );
   });
 });
 
@@ -88,7 +88,9 @@ describe('part 2: each rule fails on bad input', () => {
       ...real,
       { file: 'apps/api/src/modules/x/bad.ts', text: "const m = cacheMetrics('mystery');" },
     ];
-    expect(checkInstrumentation(reg, bad).join('\n')).toContain("cacheMetrics('mystery') is not in register.json");
+    expect(checkInstrumentation(reg, bad).join('\n')).toContain(
+      "cacheMetrics('mystery') is not in register.json",
+    );
     const r = clone();
     r.caches.find((x) => x.id === 'R01')!.instrumentation.metrics = ['Workspace-42'];
     expect(checkInstrumentation(r, real).join('\n')).toContain('does not match');

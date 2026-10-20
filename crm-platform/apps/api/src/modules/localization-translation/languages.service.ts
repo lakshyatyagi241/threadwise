@@ -107,8 +107,9 @@ export class LanguagesService {
     try {
       const cached = await this.redis.get(ACTIVE_CACHE_KEY);
       if (cached) {
+        const list = JSON.parse(cached) as ActiveLanguage[];
         cache.hit();
-        return JSON.parse(cached) as ActiveLanguage[];
+        return list;
       }
     } catch {
       cache.error();

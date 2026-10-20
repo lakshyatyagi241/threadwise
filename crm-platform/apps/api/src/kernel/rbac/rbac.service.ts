@@ -76,7 +76,12 @@ export class RbacService {
     const version = fast ? fast.version : await this.rolesVersion(orgId);
     const cacheKey = `rbac:${orgId}:v${version}:u${userId}`;
 
-    const cached = fast ? fast.grants : await this.redis.get(cacheKey).catch(() => null);
+    const cached = fast
+      ? fast.grants
+      : await this.redis.get(cacheKey).catch(() => {
+          grantsCache.error();
+          return null;
+        });
     if (cached) {
       grantsCache.hit();
       return new Map(Object.entries(JSON.parse(cached) as Record<string, Grant>));
