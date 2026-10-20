@@ -47,7 +47,8 @@
       "sms_monthly": "SMS per bulan",
       "email_mailboxes": "Kotak surat email",
       "email_monthly": "Email per bulan",
-      "storage_gb": "Penyimpanan (GB)"
+      "storage_gb": "Penyimpanan (GB)",
+      "teams": "Tim"
     },
     "features": {
       "automation": "Otomatisasi",
@@ -85,7 +86,9 @@
       "personal_history_full": "Impor riwayat lengkap (WhatsApp pribadi)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Penilaian prospek dengan AI",
-      "record_assignment": "Aturan penugasan data"
+      "record_assignment": "Aturan penugasan data",
+      "team_hierarchy": "Hierarki tim dan manajer",
+      "custom_roles": "Peran kustom dan cakupan"
     },
     "limitGroups": {
       "messaging": "Pesan",
@@ -139,7 +142,8 @@
       "sms_monthly": "Pesan SMS keluar yang dikirim dalam bulan kalender. 0 = tanpa batas.",
       "email_mailboxes": "Kotak surat Gmail yang terhubung (yang diputus membebaskan tempatnya). 0 = tanpa batas.",
       "email_monthly": "Email yang dikirim dalam bulan kalender, balasan dan email kampanye digabung. 0 = tanpa batas.",
-      "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir."
+      "storage_gb": "Penyimpanan yang boleh dipakai ruang kerja, dalam GB (rekaman panggilan, media obrolan, lampiran email, dan file). 0 = tanpa batas. Saat ini hanya diukur: belum ada yang diblokir.",
+      "teams": "Jumlah tim yang boleh dimiliki ruang kerja. Kosong berarti tanpa batas, 0 berarti sendiri (tanpa tim). Tim yang ada tidak pernah dihapus."
     },
     "planAddons": {
       "title": "Add-on yang tersedia di paket Anda",

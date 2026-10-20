@@ -47,7 +47,8 @@
       "sms_monthly": "Aylık SMS",
       "email_mailboxes": "E-posta kutuları",
       "email_monthly": "Aylık e-posta",
-      "storage_gb": "Depolama (GB)"
+      "storage_gb": "Depolama (GB)",
+      "teams": "Ekipler"
     },
     "features": {
       "automation": "Otomasyon",
@@ -85,7 +86,9 @@
       "personal_history_full": "Tam geçmişi içe aktarma (kişisel WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
-      "record_assignment": "Kayıt atama kuralları"
+      "record_assignment": "Kayıt atama kuralları",
+      "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
+      "custom_roles": "Özel roller ve kapsamlar"
     },
     "limitGroups": {
       "messaging": "Mesajlaşma",
@@ -139,7 +142,8 @@
       "sms_monthly": "Takvim ayında gönderilen giden SMS mesajları. 0 = sınırsız.",
       "email_mailboxes": "Bağlı Gmail posta kutuları (bağlantısı kesilen kutu yerini boşaltır). 0 = sınırsız.",
       "email_monthly": "Takvim ayında gönderilen e-postalar; yanıtlar ve kampanya e-postaları birlikte. 0 = sınırsız.",
-      "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez."
+      "storage_gb": "Çalışma alanının tutabileceği depolama alanı, GB cinsinden (çağrı kayıtları, sohbet medyası, e-posta ekleri ve dosyalar). 0 = sınırsız. Şimdilik yalnızca ölçülür: henüz hiçbir şey engellenmez.",
+      "teams": "Çalışma alanının sahip olabileceği ekip sayısı. Boş sınırsızdır, 0 tek kişilik (ekip yok) demektir. Mevcut ekipler asla silinmez."
     },
     "planAddons": {
       "title": "Planınızda kullanılabilir eklentiler",

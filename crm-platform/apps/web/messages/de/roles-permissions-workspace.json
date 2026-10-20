@@ -47,7 +47,8 @@
       "nameTaken": "Eine Rolle mit diesem Namen existiert bereits.",
       "nameRequired": "Der Rollenname ist erforderlich.",
       "nameTooLong": "Der Rollenname darf höchstens {max} Zeichen lang sein.",
-      "notFound": "Dieses Element existiert nicht mehr. Es wurde möglicherweise gelöscht."
+      "notFound": "Dieses Element existiert nicht mehr. Es wurde möglicherweise gelöscht.",
+      "customRolesLocked": "Eigene Rollen und Berechtigungen mit Bereich sind nicht in Ihrem Tarif enthalten. Sie können Rollen ansehen, aber nicht erstellen oder ändern."
     },
     "team": {
       "crumb": "Teammitglieder",
@@ -182,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Rolle „{name}“ gelöscht."
-      }
+      },
+      "customRolesLocked": "Eigene Rollen und Berechtigungen mit Bereich sind nicht in Ihrem Tarif enthalten. Sie können Rollen ansehen, aber nicht erstellen oder ändern.",
+      "addRoleLocked": "Rolle hinzufügen (Upgrade)"
     },
     "editor": {
       "crumbRoles": "Rollen",
@@ -223,7 +226,9 @@
         "created": "Rolle „{name}“ erstellt.",
         "updated": "Rolle „{name}“ aktualisiert.",
         "deleted": "Rolle „{name}“ gelöscht."
-      }
+      },
+      "customRolesLocked": "Eigene Rollen und Berechtigungen mit Bereich sind nicht in Ihrem Tarif enthalten. Sie können Rollen ansehen, aber nicht erstellen oder ändern.",
+      "upgrade": "Tarife ansehen"
     },
     "matrix": {
       "title": "Berechtigungen",

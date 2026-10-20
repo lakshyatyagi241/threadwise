@@ -66,8 +66,14 @@ export const conferencingCapabilitiesSchema = z.object({
   canInstall: z.boolean(),
   /** Installed by the workspace but not connected by this person: the link goes to their connection page. */
   connectable: z.array(connectedVideoProviderSchema),
-  /** At least one of the video integrations is still to be installed. */
+  /**
+   * At least one of the video integrations can be installed RIGHT NOW: its listing is published (visible to this workspace) and the
+   * platform has the provider's OAuth app. A listing that is still a draft, or a provider the operator has not set up, is not installable,
+   * so the quiet "Connect video conferencing" link is never a dead end.
+   */
   installable: z.boolean(),
+  /** Where that link goes: the listing page when exactly one integration is installable, the Integrations tab when several are, else null. */
+  installPath: z.string().nullable(),
 });
 export type ConferencingCapabilities = z.infer<typeof conferencingCapabilitiesSchema>;
 
@@ -76,6 +82,7 @@ export const CONNECTION_STATUSES = [
   'needs_reconnect',
   'disconnected',
   'not_installed',
+  'not_available',
   'unavailable',
 ] as const;
 export const connectionStatusSchema = z.enum(CONNECTION_STATUSES);
@@ -84,8 +91,18 @@ export type ConnectionStatus = z.infer<typeof connectionStatusSchema>;
 /** One card of Settings, Video meetings: the state of a provider for the signed-in person. */
 export const conferencingConnectionSchema = z.object({
   provider: connectedVideoProviderSchema,
-  /** `not_installed`: the workspace has not installed the app. `unavailable`: the platform has no OAuth app for it. */
+  /**
+   * `not_available`: the workspace has not installed it and cannot yet (the listing is not published, or the platform has no OAuth app for
+   * it): ask the platform operator, no install button. `not_installed`: it can be installed now. `disconnected`: installed, the person has
+   * not connected. `unavailable`: installed, but the platform's OAuth app was switched off or removed since.
+   */
   status: connectionStatusSchema,
+  /** Published and visible to this workspace (a free listing is shown to every workspace once published). */
+  listingPublished: z.boolean(),
+  /** The platform has the provider's OAuth app (Zoom environment values; the Microsoft Calendar app or Teams values for Teams). */
+  configured: z.boolean(),
+  /** The listing page to install it from when it can be installed now (a deep link, never the empty list), else null. */
+  listingPath: z.string().nullable(),
   account: z.string().nullable(),
   connectedAt: z.string().datetime().nullable(),
   lastErrorCode: z.string().nullable(),
@@ -155,3 +172,48 @@ export const meetingConferencingSchema = z.object({
   invited: z.boolean(),
 });
 export type MeetingConferencing = z.infer<typeof meetingConferencingSchema>;
+
+/**
+ * The operator's read-only view of what each video provider still needs (Operator console, Marketplace listing page of Zoom and Microsoft
+ * Teams). Nothing here is a secret: only whether a value is set, never the value.
+ */
+export const CONFERENCING_GAPS = [
+  'client_id',
+  'client_secret',
+  'switched_off',
+  'listing_missing',
+  'listing_not_published',
+] as const;
+export const conferencingGapSchema = z.enum(CONFERENCING_GAPS);
+export type ConferencingGap = z.infer<typeof conferencingGapSchema>;
+
+export const conferencingOperatorProviderSchema = z.object({
+  provider: connectedVideoProviderSchema,
+  /** The Marketplace listing slug. */
+  slug: z.string(),
+  /** Where the OAuth app's values come from today: the environment, the console's Microsoft Calendar page, or nowhere. */
+  credentialsSource: z.enum(['environment', 'console', 'none']),
+  hasClientId: z.boolean(),
+  hasClientSecret: z.boolean(),
+  /** The operator switched the Microsoft Calendar integration off in the console (Teams only): Teams is off with it. */
+  switchedOff: z.boolean(),
+  /** The exact address to register as the redirect URI at the provider (built from APP_URL, or the override). */
+  redirectUri: z.string(),
+  listing: z.object({
+    exists: z.boolean(),
+    /** `draft`, `published`, `hidden`, `killed` ... as the catalogue calls it; null when the listing does not exist. */
+    status: z.string().nullable(),
+    published: z.boolean(),
+  }),
+  /** What is still missing, in the order to fix it. Empty = ready. */
+  gaps: z.array(conferencingGapSchema),
+  ready: z.boolean(),
+});
+export type ConferencingOperatorProvider = z.infer<typeof conferencingOperatorProviderSchema>;
+
+export const conferencingOperatorStatusSchema = z.object({
+  providers: z.array(conferencingOperatorProviderSchema),
+  /** The in-memory fake adapters are bound (`CONFERENCING_FAKE=1`, development only): every provider answers as set up. */
+  fakeAdapters: z.boolean(),
+});
+export type ConferencingOperatorStatus = z.infer<typeof conferencingOperatorStatusSchema>;

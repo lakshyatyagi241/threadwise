@@ -26,6 +26,7 @@ import { TeamUsageController } from './team-usage.controller';
 import { TeamUsageRepository } from './team-usage.repository';
 import { TeamUsageService } from './team-usage.service';
 import { TeamsController } from './teams.controller';
+import { TeamsPlanService } from './teams-plan.service';
 import { TeamsRepository } from './teams.repository';
 import { TeamsService } from './teams.service';
 
@@ -62,6 +63,7 @@ import { TeamsService } from './teams.service';
     LeaveRepository,
     LeaveService,
     TeamsRepository,
+    TeamsPlanService,
     TeamsService,
     TeamUsageRepository,
     TeamUsageService,
@@ -71,6 +73,6 @@ import { TeamsService } from './teams.service';
     LifecycleRepository,
     LifecycleService,
   ],
-  exports: [MembersService, TeamsService, PlatformWorkspacesService, LifecycleService],
+  exports: [MembersService, TeamsService, TeamsPlanService, PlatformWorkspacesService, LifecycleService],
 })
 export class WorkspacesTeamsTenancyModule {}

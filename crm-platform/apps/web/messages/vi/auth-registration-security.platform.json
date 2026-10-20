@@ -1442,7 +1442,9 @@
             "personal_history_full": "Cho phép số WhatsApp cá nhân nhập toàn bộ lịch sử trò chuyện khi liên kết lần đầu. Tính năng nhập các cuộc trò chuyện gần đây có sẵn cho mọi gói có số cá nhân.",
             "ai_crm_copilot": "Tìm và chấm điểm khách hàng tiềm năng bằng AI từ danh bạ của bạn.",
             "lead_scoring": "Chấm điểm liên hệ bằng AI và vận hành chương trình thử nghiệm tăng trưởng. Ứng dụng Chấm điểm khách hàng tiềm năng bằng AI quản lý công tắc này.",
-            "record_assignment": "Giao liên hệ, công ty và giao dịch mới cho đúng người phụ trách bán hàng theo các quy tắc ưu tiên."
+            "record_assignment": "Giao liên hệ, công ty và giao dịch mới cho đúng người phụ trách bán hàng theo các quy tắc ưu tiên.",
+            "team_hierarchy": "Nhóm cha, trưởng nhóm và quản lý, những người xem được nhóm của mình và các nhóm bên dưới.",
+            "custom_roles": "Tạo và sửa vai trò, rồi chọn phạm vi (của mình, của nhóm hoặc tất cả bản ghi) cho từng quyền."
           },
           "units": {
             "days": "Ngày",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "SMS mỗi tháng",
             "email_mailboxes": "Hộp thư email",
             "email_monthly": "Email mỗi tháng",
-            "storage_gb": "Dung lượng lưu trữ (GB)"
+            "storage_gb": "Dung lượng lưu trữ (GB)",
+            "teams": "Nhóm"
           },
           "featureGroups": {
             "messaging": "Nhắn tin",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "Nhập toàn bộ lịch sử trò chuyện (WhatsApp cá nhân)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
-            "record_assignment": "Quy tắc phân công bản ghi (tự động phân công liên hệ, công ty và giao dịch)"
+            "record_assignment": "Quy tắc phân công bản ghi (tự động phân công liên hệ, công ty và giao dịch)",
+            "team_hierarchy": "Phân cấp nhóm và quản lý",
+            "custom_roles": "Vai trò tùy chỉnh và phạm vi"
           },
           "problems": {
             "required": "Trường này là bắt buộc.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
             "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
             "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
-            "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả."
+            "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả.",
+            "teams": "Số nhóm mà không gian làm việc được phép có. Để trống là không giới hạn, 0 là dùng một mình (không có nhóm). Các nhóm hiện có không bao giờ bị xóa."
+          },
+          "productLines": {
+            "chat": "Trò chuyện",
+            "crm": "CRM bán hàng",
+            "platform": "Dùng chung cho cả hai"
           }
         }
       },

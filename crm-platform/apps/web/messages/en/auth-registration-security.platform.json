@@ -1442,7 +1442,9 @@
             "personal_history_full": "Lets a personal WhatsApp number import its full chat history when it is first linked. The recent-chats import is open to every plan that has personal numbers.",
             "ai_crm_copilot": "Finds and scores leads with AI, from the contacts in your workspace.",
             "lead_scoring": "Scores contacts with AI and powers the growth pilot. The Lead scoring app owns this switch.",
-            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules."
+            "record_assignment": "Gives new contacts, companies and deals to the right sales owner by priority rules.",
+            "team_hierarchy": "Parent teams, team leads and managers who see their team and the teams below it.",
+            "custom_roles": "Create and edit roles, and choose a scope (own, team or all records) for each permission."
           },
           "units": {
             "days": "Days",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "SMS per month",
             "email_mailboxes": "Email mailboxes",
             "email_monthly": "Emails per month",
-            "storage_gb": "Storage (GB)"
+            "storage_gb": "Storage (GB)",
+            "teams": "Teams"
           },
           "featureGroups": {
             "messaging": "Messaging",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "Full chat-history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI lead scoring",
-            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)"
+            "record_assignment": "Record assignment rules (auto-assign contacts, companies and deals)",
+            "team_hierarchy": "Team hierarchy and managers",
+            "custom_roles": "Custom roles and scopes"
           },
           "problems": {
             "required": "This field is required.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
             "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
             "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
-            "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet."
+            "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
+            "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "Sales CRM",
+            "platform": "Shared by both"
           }
         }
       },

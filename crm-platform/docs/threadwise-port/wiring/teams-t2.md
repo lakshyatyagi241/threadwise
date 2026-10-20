@@ -16,7 +16,7 @@ This file lists **every place the new scope, the new permission and the new colu
 
 Drizzle mirror: `packages/db/src/schema/enums.ts` (enum), `crm.ts` (`companies.owningTeamId`, `contacts.owningTeamId`), `deals-pipelines/tables.ts` (`deals.owningTeamId`; `ownerTeamId` marked retired),
 `companies-projects-tasks/tables.ts` (`tasks.owningTeamId`). Contracts: `common/enums.ts` (`recordScopeSchema`, `RECORD_SCOPE_RANK`, `isTeamScope`), `auth-registration-security/session.ts`
-(`grantScopeSchema`), `common/team-hierarchy.ts` (gate helper), `admin/role.ts` (`membersWithoutTeam`).
+(`grantScopeSchema`), `admin/role.ts` (`membersWithoutTeam`).
 
 ## The resolver (`apps/api/src/kernel/rbac/scope/`)
 
@@ -82,4 +82,4 @@ Drizzle mirror: `packages/db/src/schema/enums.ts` (enum), `crm.ts` (`companies.o
 - Dropping `deals.owner_team_id` and `team_members.is_lead` (kept for the release still serving traffic): a contract migration in a later release (BL-382 follow-up).
 - Companies have the column and the API filter is not added (the spec lists contacts, deals and tasks lists); a companies Team filter is a small follow-up.
 - Invoices, sales documents and appointments carry no stamp: their reports by team read the owner's primary team.
-- Plan gate key `team_hierarchy`, the `teams` limit and `custom_roles`: T3 (BL-383). The matrix helper treats a missing key as on until that merges.
+- The plan gate: `team_and_below` needs `team_hierarchy` (T3, BL-383): the matrix reads `usePlanFeature('team_hierarchy')`, `RolesService` refuses to save the scope without it, and `RbacService` narrows a stored `team_and_below` to `team` through the port `TEAM_HIERARCHY_GATE` (kernel/rbac/team-hierarchy-gate.ts, provided by `TeamHierarchyGateModule` in the plans module) when the plan lacks the feature.

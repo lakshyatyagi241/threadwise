@@ -90,11 +90,12 @@
       "status": {
         "connected": "Connecté",
         "needs_reconnect": "Reconnexion nécessaire",
-        "disconnected": "Non connecté",
+        "disconnected": "Installé",
         "not_installed": "Non installé",
-        "unavailable": "Non disponible"
+        "unavailable": "Désactivé",
+        "not_available": "Pas encore disponible"
       },
-      "account": "Compte : {account}",
+      "account": "Connecté en tant que {account}",
       "connectedOn": "Connecté {when}",
       "lastError": {
         "forbidden": "Le fournisseur a refusé la dernière requête. Votre compte n'est peut-être pas autorisé à créer des réunions.",
@@ -111,7 +112,7 @@
         "canInstall": "Votre espace de travail n'a pas encore installé {provider}. Installez-le depuis le Marketplace, puis connectez votre compte ici.",
         "cannotInstall": "Votre espace de travail n'a pas encore installé {provider}. Demandez à un administrateur de l'espace de travail de l'installer depuis le Marketplace."
       },
-      "unavailable": "{provider} n'a pas encore été configuré pour cette plateforme. Contactez l'administrateur de la plateforme.",
+      "unavailable": "{provider} est installé, mais l'opérateur de votre plateforme a désactivé sa configuration, il ne peut donc pas être connecté pour le moment. Contactez l'opérateur de votre plateforme.",
       "outcome": {
         "connected": "{provider} est connecté.",
         "denied": "{provider} n'a pas été connecté car la connexion a été annulée.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Les réunions qui ont déjà un lien {provider} le conservent, mais déplacer ou supprimer ces réunions ne pourra plus modifier la salle. Vous pouvez vous reconnecter à tout moment.",
       "disconnectConfirm": "Déconnecter",
       "keep": "Rester connecté",
-      "calendarNote": "Les liens Google Meet et Teams créés via votre agenda n'ont pas besoin de connexion ici : ils utilisent l'agenda que votre espace de travail a déjà connecté."
+      "calendarNote": "Les liens Google Meet et Teams créés via votre agenda n'ont pas besoin de connexion ici : ils utilisent l'agenda que votre espace de travail a déjà connecté.",
+      "notAvailable": "L'opérateur de votre plateforme n'a pas encore rendu {provider} disponible : il doit encore être configuré et publié dans le Marketplace. Il n'y a rien à installer pour l'instant, demandez donc à l'opérateur de votre plateforme de l'activer.",
+      "installedHint": "{provider} est installé pour votre espace de travail. Connectez votre propre compte pour ajouter des liens {provider} à vos réunions."
+    },
+    "operator": {
+      "title": "Configuration des réunions vidéo",
+      "ready": "Prêt",
+      "missing": "{count, plural, one {# étape manquante} other {# étapes manquantes}}",
+      "loadFailed": "La liste de configuration n'a pas pu être chargée.",
+      "fake": "Mode développement : les faux adaptateurs Zoom et Microsoft Teams sont actifs, donc chacun peut se connecter sans compte réel. La liste ci-dessous montre ce dont une vraie plateforme a encore besoin.",
+      "intro": {
+        "zoom": "Les espaces de travail ne peuvent ni voir ni utiliser Zoom tant que les identifiants de l'application Zoom ne sont pas définis et que cette fiche n'est pas publiée.",
+        "teams": "Les espaces de travail ne peuvent ni voir ni utiliser Microsoft Teams tant qu'une application Microsoft n'est pas disponible et que cette fiche n'est pas publiée."
+      },
+      "set": "défini",
+      "notSet": "non défini",
+      "credentials": {
+        "zoom": {
+          "label": "Identifiants de l'application Zoom (valeurs d'environnement)"
+        },
+        "teams": {
+          "label": "Identifiants de l'application Microsoft"
+        }
+      },
+      "teamsFallback": "Teams utilise ses propres valeurs ci-dessus lorsque les deux sont définies, sinon l'application Microsoft Calendar enregistrée dans la console.",
+      "source": {
+        "environment": "Les valeurs proviennent de l'environnement.",
+        "console": "Les valeurs proviennent de la console, page Microsoft Calendar."
+      },
+      "switchedOff": "L'intégration Microsoft Calendar est désactivée dans la console, ce qui désactive aussi Teams.",
+      "redirect": {
+        "label": "Adresse de redirection à enregistrer chez le fournisseur",
+        "hint": {
+          "zoom": "Ajoutez exactement cette adresse comme URL de redirection de l'application Zoom.",
+          "teams": "Ajoutez exactement cette adresse comme URI de redirection de l'application Microsoft, à côté de celle du calendrier, et ajoutez l'autorisation déléguée OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Fiche Marketplace publiée",
+        "missing": "La fiche n'existe pas dans le catalogue.",
+        "notPublished": "La fiche n'est pas publiée (statut : {status}). Approuvez et publiez une version ci-dessous, puis les espaces de travail pourront l'installer.",
+        "published": "Publiée : les espaces de travail peuvent la trouver et l'installer."
+      }
     }
   }
 }

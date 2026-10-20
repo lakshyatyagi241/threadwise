@@ -47,7 +47,8 @@
       "sms_monthly": "每月短信数",
       "email_mailboxes": "邮箱数量",
       "email_monthly": "每月邮件数",
-      "storage_gb": "存储空间 (GB)"
+      "storage_gb": "存储空间 (GB)",
+      "teams": "团队"
     },
     "features": {
       "automation": "自动化",
@@ -85,7 +86,9 @@
       "personal_history_full": "完整历史记录导入（个人 WhatsApp）",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AI 线索评分",
-      "record_assignment": "记录分配规则"
+      "record_assignment": "记录分配规则",
+      "team_hierarchy": "团队层级与经理",
+      "custom_roles": "自定义角色与范围"
     },
     "limitGroups": {
       "messaging": "消息",
@@ -139,7 +142,8 @@
       "sms_monthly": "自然月内发出的短信条数。0 = 不限。",
       "email_mailboxes": "已连接的 Gmail 邮箱(断开连接的邮箱会释放名额)。0 = 不限。",
       "email_monthly": "自然月内发出的邮件数(回复和营销活动邮件合计)。0 = 不限。",
-      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。"
+      "storage_gb": "工作区可使用的存储空间,单位 GB(通话录音、聊天媒体、邮件附件和文件)。0 = 无限制。目前仅做统计,尚不会阻止任何操作。",
+      "teams": "工作区可拥有的团队数量。留空为不限,0 为单人(无团队)。现有团队不会被删除。"
     },
     "planAddons": {
       "title": "您的套餐可用的附加包",

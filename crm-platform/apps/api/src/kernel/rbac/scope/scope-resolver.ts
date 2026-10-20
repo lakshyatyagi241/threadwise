@@ -96,7 +96,9 @@ export function teamPeersBelow(
   actor: { orgId: number; userId: number },
 ): Promise<ReadonlySet<number>> {
   return memo(peersBelowCache, tx, `${actor.orgId}:${actor.userId}`, async () => {
-    const res = await tx.execute(sql`SELECT DISTINCT p.user_id FROM ${teamPeersBelowSql(actor.orgId, actor.userId)} p`);
+    const res = await tx.execute(
+      sql`SELECT DISTINCT p.user_id FROM ${teamPeersBelowSql(actor.orgId, actor.userId)} p`,
+    );
     return new Set((res.rows as Array<{ user_id: string | number }>).map((r) => Number(r.user_id)));
   });
 }
@@ -109,7 +111,9 @@ export function teamTreeIdsOf(
   actor: { orgId: number; userId: number },
 ): Promise<readonly number[]> {
   return memo(teamTreeCache, tx, `${actor.orgId}:${actor.userId}`, async () => {
-    const res = await tx.execute(sql`SELECT t.team_id FROM ${teamTreeIdsSql(actor.orgId, actor.userId)} t`);
+    const res = await tx.execute(
+      sql`SELECT t.team_id FROM ${teamTreeIdsSql(actor.orgId, actor.userId)} t`,
+    );
     return (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
   });
 }

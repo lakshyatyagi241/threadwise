@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
+import { TeamHierarchyGateModule } from '../modules/plans-subscriptions-trials/team-hierarchy-gate.module';
 import { AuthMaintenanceService, AuthModule, OtpTemplateRefreshService } from '../modules/auth';
 import { BspBillingEngineWorkerModule } from '../modules/bsp-billing-engine';
 import { WalletMessageBillingWorkerModule } from '../modules/wallet-message-billing';
@@ -86,6 +87,7 @@ import { PartitionMaintenanceService } from './partition-maintenance.service';
 @Module({
   // AuthModule: the OTP template poll reuses the sender registry and the Meta template client.
   imports: [
+    TeamHierarchyGateModule,
     ScheduleModule.forRoot(),
     AuthModule,
     AnalyticsWorkerModule,

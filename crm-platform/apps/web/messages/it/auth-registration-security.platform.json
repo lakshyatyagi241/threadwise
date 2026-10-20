@@ -1442,7 +1442,9 @@
             "personal_history_full": "Consente a un numero WhatsApp personale di importare l'intera cronologia delle chat al primo collegamento. L'importazione delle chat recenti è disponibile in tutti i piani che includono numeri personali.",
             "ai_crm_copilot": "Trova e valuta i lead con l'IA dai tuoi contatti.",
             "lead_scoring": "Assegna un punteggio ai contatti con l’IA e alimenta il pilota di crescita. L’app Lead scoring con IA controlla questo interruttore.",
-            "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità."
+            "record_assignment": "Assegna nuovi contatti, aziende e trattative al responsabile vendite giusto tramite regole di priorità.",
+            "team_hierarchy": "Team padre, responsabili di team e manager che vedono il proprio team e quelli sottostanti.",
+            "custom_roles": "Crea e modifica i ruoli e scegli un ambito (propri, del team o tutti i record) per ogni permesso."
           },
           "units": {
             "days": "Giorni",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "SMS al mese",
             "email_mailboxes": "Caselle e-mail",
             "email_monthly": "E-mail al mese",
-            "storage_gb": "Archiviazione (GB)"
+            "storage_gb": "Archiviazione (GB)",
+            "teams": "Team"
           },
           "featureGroups": {
             "messaging": "Messaggistica",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "Importazione completa della cronologia chat (WhatsApp personale)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Lead scoring con IA",
-            "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)"
+            "record_assignment": "Regole di assegnazione dei record (assegna automaticamente contatti, aziende e trattative)",
+            "team_hierarchy": "Gerarchia dei team e manager",
+            "custom_roles": "Ruoli personalizzati e ambiti"
           },
           "problems": {
             "required": "Questo campo è obbligatorio.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
             "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
             "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
-            "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
+            "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
+            "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM vendite",
+            "platform": "Condiviso da entrambi"
           }
         }
       },

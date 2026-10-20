@@ -561,7 +561,9 @@
             "personal_history_full": "مکمل ہسٹری امپورٹ (ذاتی WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI لیڈ اسکورنگ",
-            "record_assignment": "ریکارڈ تفویض کے اصول"
+            "record_assignment": "ریکارڈ تفویض کے اصول",
+            "team_hierarchy": "ٹیم کا درجہ بندی اور مینیجرز",
+            "custom_roles": "حسبِ ضرورت کردار اور دائرہ کار"
           },
           "cta": {
             "continueFree": "مفت جاری رکھیں",

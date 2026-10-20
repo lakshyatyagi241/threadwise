@@ -600,7 +600,9 @@
             "personal_history_full": "Full history import (personal WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI lead scoring",
-            "record_assignment": "Record assignment rules"
+            "record_assignment": "Record assignment rules",
+            "team_hierarchy": "Team hierarchy and managers",
+            "custom_roles": "Custom roles and scopes"
           },
           "cta": {
             "continueFree": "Continue free",

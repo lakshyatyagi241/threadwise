@@ -47,7 +47,8 @@
       "nameTaken": "Đã có vai trò với tên này.",
       "nameRequired": "Tên vai trò là bắt buộc.",
       "nameTooLong": "Tên vai trò tối đa {max} ký tự.",
-      "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa."
+      "notFound": "Mục này không còn tồn tại. Có thể đã bị xóa.",
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi."
     },
     "team": {
       "crumb": "Thành viên nhóm",
@@ -182,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Đã xóa vai trò “{name}”."
-      }
+      },
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi.",
+      "addRoleLocked": "Thêm vai trò (nâng cấp)"
     },
     "editor": {
       "crumbRoles": "Vai trò",
@@ -223,7 +226,9 @@
         "created": "Đã tạo vai trò “{name}”.",
         "updated": "Đã cập nhật vai trò “{name}”.",
         "deleted": "Đã xóa vai trò “{name}”."
-      }
+      },
+      "customRolesLocked": "Vai trò tùy chỉnh và quyền theo phạm vi không có trong gói của bạn. Bạn có thể xem các vai trò nhưng không thể tạo hoặc thay đổi.",
+      "upgrade": "Xem các gói"
     },
     "matrix": {
       "title": "Quyền",

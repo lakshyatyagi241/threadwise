@@ -38,9 +38,10 @@ A role that reads at `team_and_below` reaches the members of the caller's teams 
 - A deactivated person grants nothing (their `team_members` rows are hidden from tenant sessions, teams v2), also as a member of a sub-team.
 - The hand-over bound (a record may only be given to someone inside the giver's scope) follows the same reach: `team_and_below` may hand a record to a person in a sub-team,
   `team` may not.
-- The Roles matrix offers it only when the plan feature `team_hierarchy` is on. The key is added by teams T3 (BL-383); until it is in the catalogue the scope is offered to every
-  workspace (`teamHierarchyOffered` in `packages/contracts/src/common/team-hierarchy.ts`, with a TODO to drop the note when T3 merges). Saving a role with the scope while the feature is
-  off is `422 PLAN_FEATURE_LOCKED` (`details`: `grants` = `team_and_below`, `feature` = `team_hierarchy`); a role that already holds it keeps it.
+- The Roles matrix offers it only when the workspace has the plan feature `team_hierarchy` (teams T3, BL-383; an entitlement the workspace does not have means the scope is not
+  offered). Saving a role with the scope while the feature is off is `422 PLAN_FEATURE_LOCKED`. **Fallback:** a role that already holds `team_and_below` when the plan lacks the
+  feature (a downgrade) keeps its grant and keeps working, but **resolves as `team`** (`RbacService.grantsForUser` narrows the scope through the `TEAM_HIERARCHY_GATE` port, so lists,
+  single records, hand-over, conversations and live audiences all agree); the matrix still shows the stored value. Turning the feature back on restores the wider reach with no edit.
 - Nobody grants a wider scope than they hold (`403 RBAC_ROLE_GRANT_FORBIDDEN`): `all` > `team_and_below` > `team` > `own`.
 - `teams.is_scope_boundary` (teams v2) is still stored and not read: a team with the flag off still counts for `team` and `team_and_below`.
 

@@ -90,11 +90,12 @@
       "status": {
         "connected": "Đã kết nối",
         "needs_reconnect": "Cần kết nối lại",
-        "disconnected": "Chưa kết nối",
+        "disconnected": "Đã cài đặt",
         "not_installed": "Chưa cài đặt",
-        "unavailable": "Không khả dụng"
+        "unavailable": "Đã tắt",
+        "not_available": "Chưa khả dụng"
       },
-      "account": "Tài khoản: {account}",
+      "account": "Đã kết nối với tư cách {account}",
       "connectedOn": "Đã kết nối {when}",
       "lastError": {
         "forbidden": "Nhà cung cấp đã từ chối yêu cầu gần nhất. Tài khoản của bạn có thể không được phép tạo cuộc họp.",
@@ -111,7 +112,7 @@
         "canInstall": "Không gian làm việc của bạn chưa cài đặt {provider}. Hãy cài đặt từ Marketplace, rồi kết nối tài khoản của bạn tại đây.",
         "cannotInstall": "Không gian làm việc của bạn chưa cài đặt {provider}. Hãy nhờ quản trị viên không gian làm việc cài đặt từ Marketplace."
       },
-      "unavailable": "{provider} chưa được thiết lập cho nền tảng này. Hãy hỏi quản trị viên nền tảng.",
+      "unavailable": "{provider} đã được cài đặt, nhưng nhà vận hành nền tảng của bạn đã tắt phần thiết lập của nó, nên hiện chưa thể kết nối. Hãy hỏi nhà vận hành nền tảng.",
       "outcome": {
         "connected": "{provider} đã được kết nối.",
         "denied": "{provider} chưa được kết nối vì đã hủy đăng nhập.",
@@ -126,7 +127,49 @@
       "disconnectBody": "Các cuộc họp đã có liên kết {provider} vẫn giữ liên kết đó, nhưng việc dời hoặc xóa các cuộc họp này sẽ không còn thay đổi được phòng họp. Bạn có thể kết nối lại bất cứ lúc nào.",
       "disconnectConfirm": "Ngắt kết nối",
       "keep": "Giữ kết nối",
-      "calendarNote": "Liên kết Google Meet và Teams tạo qua lịch của bạn không cần kết nối tại đây: chúng dùng lịch mà không gian làm việc của bạn đã kết nối."
+      "calendarNote": "Liên kết Google Meet và Teams tạo qua lịch của bạn không cần kết nối tại đây: chúng dùng lịch mà không gian làm việc của bạn đã kết nối.",
+      "notAvailable": "Nhà vận hành nền tảng của bạn chưa cung cấp {provider}: vẫn cần thiết lập và xuất bản trong Marketplace. Hiện chưa có gì để cài đặt, vì vậy hãy nhờ nhà vận hành nền tảng bật nó lên.",
+      "installedHint": "{provider} đã được cài đặt cho không gian làm việc của bạn. Hãy kết nối tài khoản của riêng bạn để thêm liên kết {provider} vào các cuộc họp."
+    },
+    "operator": {
+      "title": "Thiết lập họp video",
+      "ready": "Sẵn sàng",
+      "missing": "{count, plural, other {Còn thiếu # bước}}",
+      "loadFailed": "Không thể tải danh sách kiểm tra thiết lập.",
+      "fake": "Chế độ phát triển: các bộ điều hợp Zoom và Microsoft Teams giả đang được dùng, nên mọi người có thể kết nối mà không cần tài khoản thật. Danh sách kiểm tra bên dưới cho biết nền tảng thật còn cần gì.",
+      "intro": {
+        "zoom": "Không gian làm việc không thể thấy hoặc dùng Zoom cho đến khi thông tin xác thực của ứng dụng Zoom được đặt và mục này được xuất bản.",
+        "teams": "Không gian làm việc không thể thấy hoặc dùng Microsoft Teams cho đến khi có ứng dụng Microsoft và mục này được xuất bản."
+      },
+      "set": "đã đặt",
+      "notSet": "chưa đặt",
+      "credentials": {
+        "zoom": {
+          "label": "Thông tin xác thực ứng dụng Zoom (giá trị môi trường)"
+        },
+        "teams": {
+          "label": "Thông tin xác thực ứng dụng Microsoft"
+        }
+      },
+      "teamsFallback": "Teams dùng giá trị riêng ở trên khi cả hai đều được đặt, nếu không sẽ dùng ứng dụng Microsoft Calendar đã lưu trong bảng điều khiển.",
+      "source": {
+        "environment": "Các giá trị lấy từ môi trường.",
+        "console": "Các giá trị lấy từ bảng điều khiển, trang Microsoft Calendar."
+      },
+      "switchedOff": "Tích hợp Microsoft Calendar đang tắt trong bảng điều khiển, nên Teams cũng bị tắt theo.",
+      "redirect": {
+        "label": "Địa chỉ chuyển hướng cần đăng ký tại nhà cung cấp",
+        "hint": {
+          "zoom": "Thêm đúng địa chỉ này làm URL chuyển hướng của ứng dụng Zoom.",
+          "teams": "Thêm đúng địa chỉ này làm URI chuyển hướng của ứng dụng Microsoft, bên cạnh địa chỉ của lịch, và thêm quyền được ủy quyền OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Mục Marketplace đã xuất bản",
+        "missing": "Mục này không có trong danh mục.",
+        "notPublished": "Mục này chưa được xuất bản (trạng thái: {status}). Hãy phê duyệt và xuất bản một phiên bản bên dưới, sau đó các không gian làm việc có thể cài đặt.",
+        "published": "Đã xuất bản: các không gian làm việc có thể tìm và cài đặt."
+      }
     }
   }
 }

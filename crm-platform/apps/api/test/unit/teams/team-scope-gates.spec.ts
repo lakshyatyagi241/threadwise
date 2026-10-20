@@ -1,12 +1,6 @@
-import { describe, expect, it } from 'vitest';
-import {
-  PLAN_FEATURE_KEYS,
-  RECORD_SCOPE_RANK,
-  TEAM_HIERARCHY_FEATURE,
-  isTeamScope,
-  teamHierarchyGateExists,
-  teamHierarchyOffered,
-} from '@crm/contracts';
+import { describe, expect, it, vi } from 'vitest';
+import { RbacService } from '../../../src/kernel/rbac/rbac.service';
+import { RECORD_SCOPE_RANK, isTeamScope } from '@crm/contracts';
 import { viewerReadsUnassigned } from '../../../src/realtime/audience/conversation-visibility';
 
 /**
@@ -41,21 +35,48 @@ describe('viewerReadsUnassigned: the read permission decides, acting rights keep
   });
 });
 
-describe('teamHierarchyOffered (the gate for "My team and sub-teams")', () => {
-  it('is open while the plan feature does not exist in the catalogue (teams T3 not merged yet)', () => {
-    // On this branch the catalogue has no `team_hierarchy` key, so every workspace is offered the scope, whatever it has.
-    expect(teamHierarchyOffered(false)).toBe(true);
-    expect(teamHierarchyOffered(true)).toBe(true);
-    expect(teamHierarchyOffered(null)).toBe(true);
-  });
-});
+describe('RbacService: team_and_below needs the plan feature team_hierarchy (BL-383 fallback)', () => {
+  const stored = new Map<
+    string,
+    { effect: 'allow' | 'deny'; scope: 'all' | 'team' | 'team_and_below' | 'own' }
+  >([
+    ['record.contacts.read', { effect: 'allow', scope: 'team_and_below' }],
+    ['record.deals.read', { effect: 'allow', scope: 'team' }],
+    ['record.tasks.read', { effect: 'deny', scope: 'team_and_below' }],
+  ]);
+  const make = (gate?: { enabled: (org: number) => Promise<boolean> }) => {
+    const svc = new RbacService({} as never, {} as never, gate);
+    vi.spyOn(svc as never, 'rawGrantsForUser').mockResolvedValue(stored as never);
+    return svc;
+  };
 
-describe('teamHierarchyOffered once the plan feature exists', () => {
-  const catalogue = [...PLAN_FEATURE_KEYS, TEAM_HIERARCHY_FEATURE];
-  it('follows the workspace, and an unknown answer removes nothing', () => {
-    expect(teamHierarchyGateExists(catalogue)).toBe(true);
-    expect(teamHierarchyOffered(false, catalogue)).toBe(false);
-    expect(teamHierarchyOffered(true, catalogue)).toBe(true);
-    expect(teamHierarchyOffered(null, catalogue)).toBe(true);
+  it('keeps the scope when the workspace has the feature', async () => {
+    const g = await make({ enabled: async () => true }).grantsForUser(1, 1);
+    expect(g.get('record.contacts.read')?.scope).toBe('team_and_below');
+  });
+
+  it('resolves it as team when the plan lacks the feature, and touches nothing else', async () => {
+    const g = await make({ enabled: async () => false }).grantsForUser(1, 1);
+    expect(g.get('record.contacts.read')).toEqual({ effect: 'allow', scope: 'team' });
+    expect(g.get('record.deals.read')?.scope).toBe('team');
+    expect(g.get('record.tasks.read')?.effect).toBe('deny');
+  });
+
+  it('an entitlement that cannot be read narrows too (fail closed)', async () => {
+    const g = await make({ enabled: async () => Promise.reject(new Error('down')) }).grantsForUser(
+      1,
+      1,
+    );
+    expect(g.get('record.contacts.read')?.scope).toBe('team');
+  });
+
+  it('asks nothing when no grant holds the scope', async () => {
+    const enabled = vi.fn(async () => false);
+    const svc = new RbacService({} as never, {} as never, { enabled });
+    vi.spyOn(svc as never, 'rawGrantsForUser').mockResolvedValue(
+      new Map([['x', { effect: 'allow', scope: 'team' }]]) as never,
+    );
+    await svc.grantsForUser(1, 1);
+    expect(enabled).not.toHaveBeenCalled();
   });
 });

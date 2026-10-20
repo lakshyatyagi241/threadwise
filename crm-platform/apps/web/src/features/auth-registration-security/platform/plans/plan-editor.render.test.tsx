@@ -197,7 +197,7 @@ function plan(over: Partial<PlanAdminItem> = {}): PlanAdminItem {
     ctaLabel: 'Get started',
     dataRetentionDays: 0,
     limits: Object.fromEntries(
-      PLAN_LIMIT_KEYS.map((k) => [k, k === 'users' ? 5 : 0]),
+      PLAN_LIMIT_KEYS.map((k) => [k, k === 'users' ? 5 : k === 'teams' ? 1_000_000 : 0]),
     ) as PlanAdminItem['limits'],
     features: Object.fromEntries(
       PLAN_FEATURE_KEYS.map((k) => [k, k !== 'calling']),

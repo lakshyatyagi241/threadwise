@@ -47,7 +47,8 @@
       "nameTaken": "Peran dengan nama ini sudah ada.",
       "nameRequired": "Nama peran wajib diisi.",
       "nameTooLong": "Nama peran maksimal {max} karakter.",
-      "notFound": "Item ini tidak ada lagi. Mungkin sudah dihapus."
+      "notFound": "Item ini tidak ada lagi. Mungkin sudah dihapus.",
+      "customRolesLocked": "Peran kustom dan izin bercakupan tidak ada di paket Anda. Anda dapat melihat peran, tetapi tidak dapat membuat atau mengubahnya."
     },
     "team": {
       "crumb": "Anggota tim",
@@ -182,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Peran \"{name}\" dihapus."
-      }
+      },
+      "customRolesLocked": "Peran kustom dan izin bercakupan tidak ada di paket Anda. Anda dapat melihat peran, tetapi tidak dapat membuat atau mengubahnya.",
+      "addRoleLocked": "Tambah peran (tingkatkan)"
     },
     "editor": {
       "crumbRoles": "Peran",
@@ -223,7 +226,9 @@
         "created": "Peran \"{name}\" dibuat.",
         "updated": "Peran \"{name}\" diperbarui.",
         "deleted": "Peran \"{name}\" dihapus."
-      }
+      },
+      "customRolesLocked": "Peran kustom dan izin bercakupan tidak ada di paket Anda. Anda dapat melihat peran, tetapi tidak dapat membuat atau mengubahnya.",
+      "upgrade": "Lihat paket"
     },
     "matrix": {
       "title": "Izin",

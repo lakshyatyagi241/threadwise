@@ -17,7 +17,6 @@ export * from './common/ids';
 export * from './common/pagination';
 export * from './common/errors';
 export * from './common/enums';
-export * from './common/team-hierarchy';
 export * from './common/dates';
 export * from './crm/contact';
 export * from './crm/contact-timezone';

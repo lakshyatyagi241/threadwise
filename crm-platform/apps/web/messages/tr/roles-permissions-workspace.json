@@ -47,7 +47,8 @@
       "nameTaken": "Bu adda bir rol zaten var.",
       "nameRequired": "Rol adı zorunludur.",
       "nameTooLong": "Rol adı en fazla {max} karakter olabilir.",
-      "notFound": "Bu öğe artık mevcut değil. Silinmiş olabilir."
+      "notFound": "Bu öğe artık mevcut değil. Silinmiş olabilir.",
+      "customRolesLocked": "Özel roller ve kapsamlı izinler planınızda yok. Rolleri görebilirsiniz ancak oluşturamaz veya değiştiremezsiniz."
     },
     "team": {
       "crumb": "Ekip üyeleri",
@@ -182,7 +183,9 @@
       },
       "toasts": {
         "deleted": "“{name}” rolü silindi."
-      }
+      },
+      "customRolesLocked": "Özel roller ve kapsamlı izinler planınızda yok. Rolleri görebilirsiniz ancak oluşturamaz veya değiştiremezsiniz.",
+      "addRoleLocked": "Rol ekle (yükselt)"
     },
     "editor": {
       "crumbRoles": "Roller",
@@ -223,7 +226,9 @@
         "created": "“{name}” rolü oluşturuldu.",
         "updated": "“{name}” rolü güncellendi.",
         "deleted": "“{name}” rolü silindi."
-      }
+      },
+      "customRolesLocked": "Özel roller ve kapsamlı izinler planınızda yok. Rolleri görebilirsiniz ancak oluşturamaz veya değiştiremezsiniz.",
+      "upgrade": "Planları gör"
     },
     "matrix": {
       "title": "İzinler",

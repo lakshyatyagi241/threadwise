@@ -3,7 +3,6 @@
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
-import { TEAM_HIERARCHY_FEATURE, teamHierarchyOffered } from '@crm/contracts';
 import type { PermissionDefResponse, RecordScope } from '@crm/contracts';
 import { Alert, Input, Select, cn } from '@crm/ui';
 import { usePlanFeature } from '@/lib/plan-features';
@@ -60,8 +59,8 @@ export function PermissionMatrix({
   const groups = useMemo(() => groupByCategory(visible), [visible]);
   const visibleKeys = useMemo(() => selectableKeys(visible), [visible]);
   const denied = countDenied(draft);
-  // TODO(BL-383, T3): the plan feature key does not exist until teams T3 merges; teamHierarchyOffered treats a missing key as ON.
-  const hierarchyOffered = teamHierarchyOffered(usePlanFeature(TEAM_HIERARCHY_FEATURE));
+  // Offered only when the workspace has the plan feature `team_hierarchy` (BL-383); a role that already holds it keeps the option.
+  const hierarchyOffered = usePlanFeature('team_hierarchy');
   const legend = scopeOptions(hierarchyOffered);
 
   return (

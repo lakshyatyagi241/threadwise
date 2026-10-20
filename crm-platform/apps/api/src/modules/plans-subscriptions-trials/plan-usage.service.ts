@@ -206,6 +206,12 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // Teams the workspace holds. The create guard (TeamsPlanService) reads the cap with solo = 0, so assertCanAdd refuses this key.
+    key: 'teams',
+    window: 'total',
+    count: (tx, orgId) => n(tx, sql`SELECT count(*)::int AS n FROM teams WHERE org_id = ${orgId}`),
+  },
+  {
     key: 'sla_policies',
     window: 'total',
     count: (tx, orgId) =>
@@ -352,6 +358,8 @@ const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'ai_token_limit_monthly',
   // Bytes held, counted by the storage meter (modules/storage-quota), not rows; the cap is read there. No panel entry until phase S2.
   'storage_gb',
+  // 0 is "solo", not unlimited: the create guard of the Teams module (TeamsPlanService) enforces it.
+  'teams',
 ]);
 
 async function n(tx: Tx, query: ReturnType<typeof sql>): Promise<number> {

@@ -1,8 +1,6 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   ERROR_CODES,
-  TEAM_HIERARCHY_FEATURE,
-  teamHierarchyGateExists,
   type CreateRoleInput,
   type PaginationQuery,
   type RoleResponse,
@@ -15,7 +13,7 @@ import { buildPage } from '../../../common/pagination/cursor';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
-import { AddonEntitlementService } from '../../addons-extension-registry';
+import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { WorkspaceRoleRulesService } from '../../roles-permissions';
 import { toRoleResponse, type RoleViewContext } from './roles.mapper';
 import { RolesRepository, type RoleRow } from './roles.repository';
@@ -42,29 +40,23 @@ export class RolesService {
     private readonly audit: AuditService,
     private readonly rbac: RbacService,
     private readonly roleRules: WorkspaceRoleRulesService,
-    private readonly entitlements: AddonEntitlementService,
+    private readonly plan: PlanEntitlementService,
   ) {}
 
   /**
-   * `team_and_below` ("My team and sub-teams") needs the plan feature `team_hierarchy` (BL-382; the key is added by T3, BL-383, and until it
-   * is in the catalogue the gate is open: see contracts/common/team-hierarchy.ts). Granting it without the feature is 422
-   * PLAN_FEATURE_LOCKED; a role that already holds it keeps it when only its name changes.
+   * `team_and_below` ("My team and sub-teams") needs the plan feature `team_hierarchy` (BL-382, BL-383). Granting it without the feature is
+   * 422 PLAN_FEATURE_LOCKED. Only the scopes a role did not already hold are checked, so a workspace that lost the feature can still save a
+   * role it had set up before; such a role keeps resolving as `team` (see ScopeResolver and docs/api/teams-scope.md).
    */
   private async assertScopesOffered(
     orgId: number,
     grants: ReadonlyArray<{ recordScope: string }>,
   ): Promise<void> {
     if (!grants.some((g) => g.recordScope === 'team_and_below')) return;
-    if (!teamHierarchyGateExists()) return;
-    if (await this.entitlements.featureEnabled(orgId, TEAM_HIERARCHY_FEATURE)) return;
-    throw new AppError(
-      ERROR_CODES.PLAN_FEATURE_LOCKED,
-      'My team and sub-teams is not part of this plan.',
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      [
-        { path: 'grants', message: 'team_and_below' },
-        { path: 'feature', message: TEAM_HIERARCHY_FEATURE },
-      ],
+    await this.plan.assertFeature(
+      orgId,
+      'team_hierarchy',
+      "My team and sub-teams isn't on your plan. Upgrade your plan, or ask for the Teams and permissions add-on, to use it.",
     );
   }
 
@@ -113,12 +105,25 @@ export class RolesService {
     });
   }
 
+  /**
+   * Custom roles and per-key scopes are a plan feature (`custom_roles`, BL-383). Creating or editing a role needs it; reading and deleting do
+   * not, so a workspace that lost the feature still sees every role, and the roles people already hold keep working. Presets stay as shipped.
+   */
+  private assertCustomRoles(orgId: number): Promise<void> {
+    return this.plan.assertFeature(
+      orgId,
+      'custom_roles',
+      "Custom roles and scoped permissions aren't on your plan. Upgrade your plan, or ask for the Teams and permissions add-on, to create or change roles.",
+    );
+  }
+
   async create(input: CreateRoleInput): Promise<RoleResponse> {
     return this.roleRules.withDenialAudit('role.create', () => this.createInTx(input));
   }
 
   private async createInTx(input: CreateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     return this.db.tx(async (tx) => {
       const existing = await this.repo.findByName(tx, ctx.orgId, input.name);
@@ -162,6 +167,7 @@ export class RolesService {
 
   private async updateInTx(uuid: string, input: UpdateRoleInput): Promise<RoleResponse> {
     const ctx = RequestContextStore.require();
+    await this.assertCustomRoles(ctx.orgId);
 
     const result = await this.db.tx(async (tx) => {
       const existing = await this.repo.findByUuid(tx, ctx.orgId, uuid);

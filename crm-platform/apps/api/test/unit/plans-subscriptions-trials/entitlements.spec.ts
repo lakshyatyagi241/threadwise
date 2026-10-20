@@ -89,6 +89,8 @@ describe('registry', () => {
       'ai_crm_copilot',
       'lead_scoring',
       'record_assignment',
+      'team_hierarchy',
+      'custom_roles',
     ]);
     expect(PLAN_CHIP_MAX).toBe(3);
   });
@@ -262,7 +264,9 @@ describe('resolveLimit', () => {
 
   it('an organization whose plan has no catalogue row has every limit at 0 (unlimited)', () => {
     const e = ent({ planKnown: false, planLimits: {} });
-    for (const key of PLAN_LIMIT_KEYS) expect(resolveLimit(e, key), key).toBe(0);
+    // `teams` is the one cap where 0 means solo, so its "unlimited" is the stand-in value (see teams-packaging.spec.ts).
+    for (const key of PLAN_LIMIT_KEYS.filter((k) => k !== 'teams'))
+      expect(resolveLimit(e, key), key).toBe(0);
   });
 
   it('an override still applies to an unknown plan', () => {
