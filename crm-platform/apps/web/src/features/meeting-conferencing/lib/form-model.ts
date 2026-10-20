@@ -37,7 +37,8 @@ export function optionsFor(
 export function connectLinkOf(caps: ConferencingCapabilities): string | null {
   if (caps.video.length > 0) return null;
   if (caps.connectable.length > 0) return VIDEO_MEETINGS_PATH;
-  if (caps.canInstall && caps.installable) return MARKETPLACE_INTEGRATIONS;
+  // The server says where: the listing page when exactly one integration can be installed now, the Integrations tab when several can.
+  if (caps.canInstall && caps.installable) return caps.installPath ?? MARKETPLACE_INTEGRATIONS;
   return null;
 }
 

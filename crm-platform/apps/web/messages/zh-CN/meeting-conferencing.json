@@ -90,11 +90,12 @@
       "status": {
         "connected": "已连接",
         "needs_reconnect": "需要重新连接",
-        "disconnected": "未连接",
+        "disconnected": "已安装",
         "not_installed": "未安装",
-        "unavailable": "不可用"
+        "unavailable": "已关闭",
+        "not_available": "暂不可用"
       },
-      "account": "账户：{account}",
+      "account": "已作为 {account} 连接",
       "connectedOn": "连接时间：{when}",
       "lastError": {
         "forbidden": "服务提供方拒绝了最近一次请求。您的账户可能无权创建会议。",
@@ -111,7 +112,7 @@
         "canInstall": "您的工作区尚未安装 {provider}。请从应用市场安装，然后在此连接您的账户。",
         "cannotInstall": "您的工作区尚未安装 {provider}。请让工作区管理员从应用市场安装。"
       },
-      "unavailable": "{provider} 尚未为此平台配置。请联系平台管理员。",
+      "unavailable": "{provider} 已安装，但平台运营方关闭了它的配置，因此目前无法连接。请联系平台运营方。",
       "outcome": {
         "connected": "{provider} 已连接。",
         "denied": "由于登录已取消，{provider} 未连接。",
@@ -126,7 +127,49 @@
       "disconnectBody": "已有 {provider} 链接的会议会保留该链接，但移动或删除这些会议将不再更改会议室。您可以随时重新连接。",
       "disconnectConfirm": "断开连接",
       "keep": "保持连接",
-      "calendarNote": "通过您的日历生成的 Google Meet 和 Teams 链接无需在此连接：它们使用您的工作区已连接的日历。"
+      "calendarNote": "通过您的日历生成的 Google Meet 和 Teams 链接无需在此连接：它们使用您的工作区已连接的日历。",
+      "notAvailable": "您的平台运营方尚未提供 {provider}：它还需要配置并在应用市场中发布。目前没有可安装的内容，请让平台运营方将其开启。",
+      "installedHint": "您的工作区已安装 {provider}。连接您自己的账户，即可为会议添加 {provider} 链接。"
+    },
+    "operator": {
+      "title": "视频会议设置",
+      "ready": "就绪",
+      "missing": "{count, plural, other {缺少 # 个步骤}}",
+      "loadFailed": "无法加载设置清单。",
+      "fake": "开发模式：已绑定模拟的 Zoom 和 Microsoft Teams 适配器，因此无需真实账户也能连接。下方清单显示真实平台还需要什么。",
+      "intro": {
+        "zoom": "在设置 Zoom 应用凭据并发布此上架信息之前，工作区无法看到或使用 Zoom。",
+        "teams": "在 Microsoft 应用可用并发布此上架信息之前，工作区无法看到或使用 Microsoft Teams。"
+      },
+      "set": "已设置",
+      "notSet": "未设置",
+      "credentials": {
+        "zoom": {
+          "label": "Zoom 应用凭据（环境值）"
+        },
+        "teams": {
+          "label": "Microsoft 应用凭据"
+        }
+      },
+      "teamsFallback": "两者都已设置时，Teams 使用上方自己的值，否则使用控制台中保存的 Microsoft 日历应用。",
+      "source": {
+        "environment": "这些值来自环境。",
+        "console": "这些值来自控制台的 Microsoft 日历页面。"
+      },
+      "switchedOff": "控制台中已关闭 Microsoft 日历集成，Teams 也会随之关闭。",
+      "redirect": {
+        "label": "需要在提供方处注册的重定向地址",
+        "hint": {
+          "zoom": "请将此地址原样添加为 Zoom 应用的重定向 URL。",
+          "teams": "请将此地址原样添加为 Microsoft 应用的重定向 URI，与日历的重定向 URI 并列，并添加委托权限 OnlineMeetings.ReadWrite。"
+        }
+      },
+      "listing": {
+        "label": "应用市场上架信息已发布",
+        "missing": "目录中不存在该上架信息。",
+        "notPublished": "该上架信息尚未发布（状态：{status}）。请在下方批准并发布一个版本，之后工作区即可安装。",
+        "published": "已发布：工作区可以找到并安装。"
+      }
     }
   }
 }

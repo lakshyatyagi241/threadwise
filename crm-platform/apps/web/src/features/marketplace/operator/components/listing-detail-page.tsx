@@ -6,6 +6,7 @@ import { useFormatter, useTranslations } from 'next-intl';
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import type { MarketOperatorAppDetail } from '@crm/contracts';
 import { Alert, Badge, Button, StatTile, Tabs } from '@crm/ui';
+import { ConferencingSetupPanel } from '@/features/meeting-conferencing/components/operator-setup-panel';
 import { PageHeader } from '@/features/auth-registration-security/platform/ui/page-header';
 import { fetchApp, marketKeys } from '../api';
 import { lackedPermissions } from '../lib/lifecycle';
@@ -160,6 +161,9 @@ function Detail({
       </dl>
 
       <Operate app={app} access={access} onNotice={setNotice} />
+
+      {/* Zoom and Microsoft Teams only: what the platform still needs before a workspace can use the listing (read-only). */}
+      <ConferencingSetupPanel slug={app.slug} />
 
       <PricingPanel app={app} access={access} />
 
