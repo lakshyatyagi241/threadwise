@@ -36,7 +36,6 @@ export const CRM_SIDE_MODULES = [
   'tile:lead-sources',
   'tile:lead-scoring',
   'tile:sales-activities',
-  'tile:task-outcomes',
   'tile:tax-rates',
   'tile:uncontacted-leads',
   'tile:follow-ups',

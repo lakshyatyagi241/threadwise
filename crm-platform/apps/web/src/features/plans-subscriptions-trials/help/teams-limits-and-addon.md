@@ -2,7 +2,7 @@
 id: teams-limits-and-addon
 title: Teams limits and the Teams and permissions add-on
 summary: How many teams a plan allows, which plans have parent teams and custom roles, and the add-on that adds them.
-area: settings
+area: getting-started
 order: 85
 features: [team_hierarchy, custom_roles]
 keywords: [teams, limit, solo, hierarchy, manager, custom roles, add-on, plan, scope]

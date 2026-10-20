@@ -66,11 +66,11 @@ describe('edition personas (BL-383)', () => {
 
   it('are seeded by the migration with exactly these documents', () => {
     const sql = readFileSync(MIGRATION, 'utf8');
+    const blocks = sql.split('INSERT INTO personas ').slice(1);
     for (const [key, def] of Object.entries(EDITION_PERSONAS)) {
-      expect(sql).toContain(`VALUES ('${key}', 'active', false,`);
-      const m = new RegExp(
-        `\\$json\\$([\\s\\S]*?)\\$json\\$::jsonb,[\\s\\S]*?WHERE p\\.key = '${key}'`,
-      ).exec(sql);
+      const block = blocks.find((b) => b.includes(`VALUES ('${key}', 'active', false,`));
+      expect(block, key).toBeDefined();
+      const m = /\$json\$([\s\S]*?)\$json\$::jsonb/.exec(block!);
       expect(m, key).not.toBeNull();
       expect(JSON.parse(m![1]!)).toEqual(def);
     }

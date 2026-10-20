@@ -2,7 +2,7 @@
 id: editions
 title: 'Editions: Chat, Sales CRM and Both'
 summary: One product with a conversation side and a sales side. Your plan and your business type decide which side you see.
-area: settings
+area: getting-started
 order: 84
 keywords: [edition, chat, sales crm, crm, inbox, plan, business type, persona]
 ---
