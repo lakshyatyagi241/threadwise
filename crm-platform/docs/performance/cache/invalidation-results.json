@@ -1,15 +1,15 @@
 {
   "measured": {
     "R05 set-after-invalidate (reader 0.3 s late)": {
-      "measuredStaleSeconds": 1.5406740110000028,
+      "measuredStaleSeconds": 1.546693269999996,
       "documentedSeconds": 5
     },
     "R04 account gate, invalidation lost": {
-      "measuredStaleSeconds": 29.926198758999995,
+      "measuredStaleSeconds": 29.909873783000002,
       "documentedSeconds": 30
     },
     "R05 workspace suspension, invalidation lost": {
-      "measuredStaleSeconds": 4.763978209999994,
+      "measuredStaleSeconds": 4.7729171510000015,
       "documentedSeconds": 5
     },
     "R02 RBAC version, invalidation lost": {
@@ -17,48 +17,48 @@
       "how": "TTL read from Redis, expiry brought forward with EXPIRE (a full 600 s run is in the slow spec)"
     },
     "R04 account gate, 50 parallel readers": {
-      "reads": 12512,
+      "reads": 46946,
       "readersSeeingOldValueAfterWrite": 0
     },
     "R01/R02 RBAC, 50 parallel readers": {
-      "reads": 7803,
+      "reads": 37540,
       "readersSeeingOldValueAfterWrite": 0
     },
     "R05 workspace suspension, 50 parallel readers": {
-      "reads": 10881,
+      "reads": 122223,
       "readersSeeingOldValueAfterWrite": 0
     },
     "R09 session tombstone, write lost": {
-      "measuredSecondsAfterRedisBack": 5.059655148000005,
+      "measuredSecondsAfterRedisBack": 5.062389507999993,
       "retryEverySeconds": 5,
       "accessTokenLifeSeconds": 900
     },
     "R04 account gate, writer without invalidate": {
-      "measuredStaleSeconds": 30.026627033,
+      "measuredStaleSeconds": 30.268776324999997,
       "documentedSeconds": 30
     },
     "R05 workspace suspension verdict, writer without invalidate": {
-      "measuredStaleSeconds": 5.06600896,
+      "measuredStaleSeconds": 5.061011494999999,
       "documentedSeconds": 5
     },
     "R06 partner agent flag, writer without invalidate": {
-      "measuredStaleSeconds": 30.143927053000006,
+      "measuredStaleSeconds": 30.14425927499999,
       "documentedSeconds": 30
     },
     "M19 currency table, other instance": {
-      "measuredStaleSeconds": 60.143983127000006,
+      "measuredStaleSeconds": 60.11011671000001,
       "documentedSeconds": 60
     },
     "M08 consent settings, other instance": {
-      "measuredStaleSeconds": 60.102994730999995,
+      "measuredStaleSeconds": 60.08686281700002,
       "documentedSeconds": 60
     },
     "M01 realtime audience, no invalidate()": {
-      "measuredStaleSeconds": 30.087235532999998,
+      "measuredStaleSeconds": 30.06138422800001,
       "documentedSeconds": 30
     },
     "M16 webhook-forward target, no forget()": {
-      "measuredStaleSeconds": 10.041116165000014,
+      "measuredStaleSeconds": 10.028642747999983,
       "documentedSeconds": 10
     },
     "R17 booking page theme, drop lost": {
@@ -66,20 +66,20 @@
       "how": "TTL read from Redis"
     },
     "plan expiry (entitlements)": {
-      "secondsAfterPlanEndsAt": 0.07,
-      "polledForSeconds": 3.02,
+      "secondsAfterPlanEndsAt": 0.003,
+      "polledForSeconds": 2.95,
       "documentedSeconds": 0
     },
     "M06 trial gate": {
-      "measuredStaleSecondsAfterTrialEnd": 3.06,
+      "measuredStaleSecondsAfterTrialEnd": 3.04,
       "documentedSeconds": 5
     },
     "M04 grace days, other process": {
-      "measuredStaleSeconds": 21.841463748999995,
+      "measuredStaleSeconds": 21.851231546999994,
       "documentedSeconds": 30
     },
     "M10 notification preferences, no forget()": {
-      "measuredStaleSeconds": 5.042696877000002,
+      "measuredStaleSeconds": 5.022436994999996,
       "documentedSeconds": 5
     },
     "R03 platform operator permissions, invalidation lost": {
@@ -88,24 +88,24 @@
     },
     "M03 settings snapshot": {
       "writer": "other process",
-      "measuredStaleSeconds": 5.03519616,
+      "measuredStaleSeconds": 4.9486622420000055,
       "documentedSeconds": 5
     },
     "R07/M02 token epoch": {
       "writer": "other process",
-      "measuredStaleSeconds": 5.016852859000003,
+      "measuredStaleSeconds": 5.014097361,
       "documentedSeconds": 5
     },
     "R08 send-halt mirror, write lost": {
-      "measuredStaleSeconds": 22.913690958,
+      "measuredStaleSeconds": 25.421459775999995,
       "documentedSeconds": 30
     },
     "R07 token epoch mirror, write lost": {
-      "measuredStaleSeconds": 29.837576675999998,
+      "measuredStaleSeconds": 29.825191994000008,
       "documentedSeconds": 35
     },
     "R10/M05 impersonation end, tombstone lost": {
-      "measuredStaleSeconds": 4.682257514000001,
+      "measuredStaleSeconds": 4.621990344999999,
       "documentedSeconds": 5
     },
     "R-64-04 seed command without the bump": {
@@ -1015,11 +1015,6 @@
       "column": "status",
       "cache": "R04",
       "writers": {
-        "modules/admin/users/users.repository.ts": {
-          "d": "invalidates",
-          "call": "gates.invalidate",
-          "via": "modules/admin/users/users.service.ts"
-        },
         "modules/workspaces-teams-tenancy/members.repository.ts": {
           "d": "invalidates",
           "call": "gates.invalidate",
