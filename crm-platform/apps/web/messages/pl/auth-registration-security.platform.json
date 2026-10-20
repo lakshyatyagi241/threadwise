@@ -1442,7 +1442,9 @@
             "personal_history_full": "Pozwala osobistemu numerowi WhatsApp zaimportować pełną historię czatów przy pierwszym połączeniu. Import ostatnich czatów jest dostępny w każdym planie z numerami osobistymi.",
             "ai_crm_copilot": "Znajduje i ocenia leady za pomocą AI z Twoich kontaktów.",
             "lead_scoring": "Ocenia kontakty za pomocą AI i zasila pilotaż wzrostu. Tym przełącznikiem zarządza aplikacja Ocenianie leadów przez AI.",
-            "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu."
+            "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu.",
+            "team_hierarchy": "Zespoły nadrzędne, liderzy zespołów i menedżerowie, którzy widzą swój zespół i zespoły poniżej.",
+            "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia."
           },
           "units": {
             "days": "Dni",
@@ -1587,7 +1589,8 @@
             "sms_monthly": "SMS miesięcznie",
             "email_mailboxes": "Skrzynki e-mail",
             "email_monthly": "E-maile miesięcznie",
-            "storage_gb": "Miejsce na dane (GB)"
+            "storage_gb": "Miejsce na dane (GB)",
+            "teams": "Zespoły"
           },
           "featureGroups": {
             "messaging": "Wiadomości",
@@ -1631,7 +1634,9 @@
             "personal_history_full": "Import pełnej historii czatów (osobisty WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Ocenianie leadów przez AI",
-            "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)"
+            "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)",
+            "team_hierarchy": "Hierarchia zespołów i menedżerowie",
+            "custom_roles": "Własne role i zakresy"
           },
           "problems": {
             "required": "To pole jest wymagane.",
@@ -1687,7 +1692,13 @@
             "sms_monthly": "Wychodzące wiadomości SMS wysłane w miesiącu kalendarzowym. 0 = bez limitu.",
             "email_mailboxes": "Połączone skrzynki Gmail (odłączona zwalnia miejsce). 0 = bez limitu.",
             "email_monthly": "E-maile wysłane w miesiącu kalendarzowym, odpowiedzi i e-maile kampanii razem. 0 = bez limitu.",
-            "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane."
+            "storage_gb": "Ilość miejsca, którą może zająć przestrzeń robocza, w GB (nagrania rozmów, multimedia czatu, załączniki e-mail i pliki). 0 = bez limitu. Na razie tylko mierzone: nic nie jest jeszcze blokowane.",
+            "teams": "Ile zespołów może mieć przestrzeń robocza. Puste oznacza bez limitu, 0 oznacza tryb solo (bez zespołów). Istniejące zespoły nigdy nie są usuwane."
+          },
+          "productLines": {
+            "chat": "Czat",
+            "crm": "CRM sprzedaży",
+            "platform": "Wspólne dla obu"
           }
         }
       },

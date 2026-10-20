@@ -294,7 +294,10 @@
       "reassignNotRestorable": "此次重新分配已无法撤销。",
       "teamParentCycle": "团队不能置于自身或其子团队之下。",
       "teamParentInvalid": "该上级团队不可用,或层级将超过 5 层。",
-      "teamNotOnTeam": "此人不在该团队中。"
+      "teamNotOnTeam": "此人不在该团队中。",
+      "teamsNotIncluded": "您的套餐不包含团队。请升级套餐,或申请“团队与权限”附加包,以便将成员分组为团队。",
+      "teamsLimit": "已达到套餐的 {limit} 个团队上限。请升级套餐或删除一个团队后再添加。",
+      "teamsLimitUnknown": "已达到套餐的团队上限。请升级套餐或删除一个团队后再添加。"
     },
     "accept": {
       "title": "加入您的工作区",

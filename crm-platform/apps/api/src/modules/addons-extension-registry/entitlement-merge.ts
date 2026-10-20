@@ -1,4 +1,11 @@
-import { storedFeature, storedLimit, isPlanFeatureKey, isPlanLimitKey } from '@crm/contracts';
+import {
+  PLAN_UNLIMITED_FROM,
+  isPlanFeatureKey,
+  isPlanLimitKey,
+  limitZeroIsNone,
+  storedFeature,
+  storedLimit,
+} from '@crm/contracts';
 import type { AddonGrants } from '@crm/contracts';
 
 /**
@@ -48,6 +55,7 @@ export function mergeLimit(
   addons: readonly AddonGrants[],
   moduleDefault: number | null = null,
 ): number {
+  if (limitZeroIsNone(key)) return mergeZeroIsNoneLimit(plan, key, addons);
   if (plan.platformOwned) return 0;
   const override = plan.overrides.limits?.[key];
   if (typeof override === 'number' && Number.isInteger(override))
@@ -66,5 +74,27 @@ export function mergeLimit(
 
   const deltas = addons.map((a) => a.limits[key]).filter((v): v is number => v !== undefined);
   if (deltas.includes(-1)) return 0;
+  return base + deltas.reduce((sum, d) => sum + d, 0);
+}
+
+/**
+ * A cap where 0 is a real value ("none", `teams` = solo): unlimited is PLAN_UNLIMITED_FROM and absorbs, a pack granting -1 makes it
+ * unlimited, and any other pack number raises the cap (a solo plan plus a pack of 5 allows 5 teams). The workspace's own override wins
+ * outright, -1 meaning unlimited.
+ */
+function mergeZeroIsNoneLimit(
+  plan: PlanFacts,
+  key: string,
+  addons: readonly AddonGrants[],
+): number {
+  if (plan.platformOwned) return PLAN_UNLIMITED_FROM;
+  const override = plan.overrides.limits?.[key];
+  if (typeof override === 'number' && Number.isInteger(override))
+    return override < 0 ? PLAN_UNLIMITED_FROM : override;
+  if (!plan.planKnown) return PLAN_UNLIMITED_FROM;
+  const base = isPlanLimitKey(key) ? storedLimit(plan.planLimits, key) : PLAN_UNLIMITED_FROM;
+  if (base >= PLAN_UNLIMITED_FROM) return base;
+  const deltas = addons.map((a) => a.limits[key]).filter((v): v is number => v !== undefined);
+  if (deltas.includes(-1)) return PLAN_UNLIMITED_FROM;
   return base + deltas.reduce((sum, d) => sum + d, 0);
 }

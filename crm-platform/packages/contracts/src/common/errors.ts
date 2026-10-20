@@ -197,6 +197,8 @@ export const ERROR_CODES = {
   // plans, entitlements and the plan catalogue (TW-PLAN-005, 017)
   PLAN_FEATURE_LOCKED: 'PLAN_FEATURE_LOCKED',
   PLAN_LIMIT_REACHED: 'PLAN_LIMIT_REACHED',
+  // The plan is "solo": its `teams` cap is 0, so no team can be created (BL-383). A cap above 0 that is full is PLAN_LIMIT_REACHED.
+  PLAN_TEAMS_NOT_INCLUDED: 'PLAN_TEAMS_NOT_INCLUDED',
   PLAN_IN_USE: 'PLAN_IN_USE',
   PLAN_DEFAULT_PROTECTED: 'PLAN_DEFAULT_PROTECTED',
   PLAN_TRIAL_EXPIRED: 'PLAN_TRIAL_EXPIRED',

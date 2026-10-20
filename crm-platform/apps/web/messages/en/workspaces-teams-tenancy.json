@@ -294,7 +294,10 @@
       "reassignNotRestorable": "This reassignment can no longer be undone.",
       "teamParentCycle": "A team cannot sit under itself or under one of its own sub-teams.",
       "teamParentInvalid": "That parent team is not available, or the tree would be deeper than 5 levels.",
-      "teamNotOnTeam": "That person is not on this team."
+      "teamNotOnTeam": "That person is not on this team.",
+      "teamsNotIncluded": "Your plan doesn't include teams. Upgrade your plan, or ask for the Teams and permissions add-on, to group people into teams.",
+      "teamsLimit": "You've reached your plan's limit of {limit} teams. Upgrade your plan or delete a team to add more.",
+      "teamsLimitUnknown": "Your plan's team limit is reached. Upgrade your plan or delete a team to add more."
     },
     "accept": {
       "title": "Join your workspace",

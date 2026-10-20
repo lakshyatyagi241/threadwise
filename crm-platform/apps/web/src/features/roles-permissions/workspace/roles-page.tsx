@@ -9,6 +9,7 @@ import type { RoleResponse } from '@crm/contracts';
 import { Menu, MenuItem, MenuSeparator, cn, useToast } from '@crm/ui';
 import { RbacHeader, pillLink } from '../ui/chrome';
 import { DotsIcon, EditIcon, LockIcon, PlusIcon, ShieldIcon, TrashIcon } from '../ui/icons';
+import { usePlanFeature } from '@/lib/plan-features';
 import { fetchRoles, wsKeys } from './lib/api';
 import { sortRoles } from './lib/members';
 import { DeleteRoleDialog } from './ui/delete-role-dialog';
@@ -29,6 +30,7 @@ function RolesList() {
   const t = useTranslations(NS);
   const tc = useTranslations('roles-permissions-workspace.common');
   const toast = useToast();
+  const customRolesOn = usePlanFeature('custom_roles');
   const [deleting, setDeleting] = useState<RoleResponse | null>(null);
   const q = useQuery({
     queryKey: wsKeys.roles,
@@ -49,10 +51,22 @@ function RolesList() {
           <Link href="/settings/team" className={pillLink('secondary')}>
             {t('teamLink')}
           </Link>
-          <Link href="/settings/roles/new" className={pillLink('primary')} data-testid="add-role">
-            <PlusIcon />
-            {t('addRole')}
-          </Link>
+          {customRolesOn ? (
+            <Link href="/settings/roles/new" className={pillLink('primary')} data-testid="add-role">
+              <PlusIcon />
+              {t('addRole')}
+            </Link>
+          ) : (
+            <Link
+              href="/account/plans"
+              className={pillLink('secondary')}
+              data-testid="add-role-locked"
+              title={t('customRolesLocked')}
+            >
+              <LockIcon className="size-3.5" />
+              {t('addRoleLocked')}
+            </Link>
+          )}
         </>
       }
     />

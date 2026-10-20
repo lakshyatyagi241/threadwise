@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Deze hertoewijzing kan niet meer ongedaan worden gemaakt.",
       "teamParentCycle": "Een team kan niet onder zichzelf of onder een van zijn eigen subteams vallen.",
       "teamParentInvalid": "Dat bovenliggende team is niet beschikbaar, of de boom zou dieper dan 5 niveaus worden.",
-      "teamNotOnTeam": "Die persoon zit niet in dit team."
+      "teamNotOnTeam": "Die persoon zit niet in dit team.",
+      "teamsNotIncluded": "Je abonnement bevat geen teams. Upgrade je abonnement of vraag de add-on Teams en rechten aan om mensen in teams te groeperen.",
+      "teamsLimit": "Je hebt de limiet van {limit} teams van je abonnement bereikt. Upgrade je abonnement of verwijder een team om er meer toe te voegen.",
+      "teamsLimitUnknown": "De teamlimiet van je abonnement is bereikt. Upgrade je abonnement of verwijder een team om er meer toe te voegen."
     },
     "accept": {
       "title": "Word lid van je workspace",

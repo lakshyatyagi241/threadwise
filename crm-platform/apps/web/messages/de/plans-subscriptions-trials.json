@@ -47,7 +47,8 @@
       "sms_monthly": "SMS pro Monat",
       "email_mailboxes": "E-Mail-Postfächer",
       "email_monthly": "E-Mails pro Monat",
-      "storage_gb": "Speicher (GB)"
+      "storage_gb": "Speicher (GB)",
+      "teams": "Teams"
     },
     "features": {
       "automation": "Automatisierung",
@@ -85,7 +86,9 @@
       "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "KI-Lead-Scoring",
-      "record_assignment": "Regeln zur Datensatzzuweisung"
+      "record_assignment": "Regeln zur Datensatzzuweisung",
+      "team_hierarchy": "Teamhierarchie und Manager",
+      "custom_roles": "Eigene Rollen und Bereiche"
     },
     "limitGroups": {
       "messaging": "Nachrichten",
@@ -139,7 +142,8 @@
       "sms_monthly": "Im Kalendermonat gesendete ausgehende SMS-Nachrichten. 0 = unbegrenzt.",
       "email_mailboxes": "Verbundene Gmail-Postfächer (ein getrenntes gibt seinen Platz frei). 0 = unbegrenzt.",
       "email_monthly": "Im Kalendermonat gesendete E-Mails, Antworten und Kampagnen-E-Mails zusammen. 0 = unbegrenzt.",
-      "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert."
+      "storage_gb": "Speicherplatz, den der Arbeitsbereich belegen darf, in GB (Anrufaufzeichnungen, Chat-Medien, E-Mail-Anhänge und Dateien). 0 = unbegrenzt. Vorerst nur gemessen: Es wird noch nichts blockiert.",
+      "teams": "Wie viele Teams der Arbeitsbereich haben darf. Leer ist unbegrenzt, 0 ist Einzelnutzung (keine Teams). Bestehende Teams werden nie entfernt."
     },
     "planAddons": {
       "title": "Add-ons in Ihrem Tarif verfügbar",

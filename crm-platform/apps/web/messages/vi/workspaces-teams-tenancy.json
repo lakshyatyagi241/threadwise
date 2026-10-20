@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Việc phân công lại này không thể hoàn tác nữa.",
       "teamParentCycle": "Nhóm không thể nằm dưới chính nó hoặc dưới một nhóm con của nó.",
       "teamParentInvalid": "Nhóm cha đó không khả dụng, hoặc cây sẽ sâu hơn 5 cấp.",
-      "teamNotOnTeam": "Người đó không thuộc nhóm này."
+      "teamNotOnTeam": "Người đó không thuộc nhóm này.",
+      "teamsNotIncluded": "Gói của bạn không bao gồm nhóm. Hãy nâng cấp gói, hoặc yêu cầu tiện ích Nhóm và quyền, để gom mọi người vào nhóm.",
+      "teamsLimit": "Bạn đã đạt giới hạn {limit} nhóm của gói. Hãy nâng cấp gói hoặc xóa một nhóm để thêm nhóm mới.",
+      "teamsLimitUnknown": "Bạn đã đạt giới hạn nhóm của gói. Hãy nâng cấp gói hoặc xóa một nhóm để thêm nhóm mới."
     },
     "accept": {
       "title": "Tham gia không gian làm việc của bạn",

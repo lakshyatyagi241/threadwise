@@ -47,7 +47,8 @@
       "sms_monthly": "SMS per month",
       "email_mailboxes": "Email mailboxes",
       "email_monthly": "Emails per month",
-      "storage_gb": "Storage (GB)"
+      "storage_gb": "Storage (GB)",
+      "teams": "Teams"
     },
     "features": {
       "automation": "Automation",
@@ -85,7 +86,9 @@
       "personal_history_full": "Full history import (personal WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AI lead scoring",
-      "record_assignment": "Record assignment rules"
+      "record_assignment": "Record assignment rules",
+      "team_hierarchy": "Team hierarchy and managers",
+      "custom_roles": "Custom roles and scopes"
     },
     "limitGroups": {
       "messaging": "Messaging",
@@ -139,7 +142,8 @@
       "sms_monthly": "Outbound SMS messages sent in the calendar month. 0 = unlimited.",
       "email_mailboxes": "Connected Gmail mailboxes (a disconnected one frees its place). 0 = unlimited.",
       "email_monthly": "Emails sent in the calendar month, replies and campaign emails together. 0 = unlimited.",
-      "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet."
+      "storage_gb": "Storage the workspace may hold, in GB (call recordings, chat media, mail attachments and files). 0 = unlimited. Measured only for now: nothing is blocked yet.",
+      "teams": "Teams the workspace may hold. Blank is unlimited, 0 is solo (no teams). Existing teams are never removed."
     },
     "planAddons": {
       "title": "Add-ons available on your plan",

@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Questa riassegnazione non può più essere annullata.",
       "teamParentCycle": "Un team non può trovarsi sotto se stesso o sotto uno dei propri sotto-team.",
       "teamParentInvalid": "Quel team padre non è disponibile, oppure l'albero supererebbe i 5 livelli.",
-      "teamNotOnTeam": "Quella persona non fa parte di questo team."
+      "teamNotOnTeam": "Quella persona non fa parte di questo team.",
+      "teamsNotIncluded": "Il tuo piano non include i team. Passa a un piano superiore, o richiedi il componente aggiuntivo Team e permessi, per raggruppare le persone in team.",
+      "teamsLimit": "Hai raggiunto il limite di {limit} team del tuo piano. Passa a un piano superiore o elimina un team per aggiungerne altri.",
+      "teamsLimitUnknown": "Hai raggiunto il limite di team del tuo piano. Passa a un piano superiore o elimina un team per aggiungerne altri."
     },
     "accept": {
       "title": "Unisciti al tuo workspace",

@@ -294,7 +294,10 @@
       "reassignNotRestorable": "Tego ponownego przypisania nie można już cofnąć.",
       "teamParentCycle": "Zespół nie może znajdować się pod samym sobą ani pod własnym podzespołem.",
       "teamParentInvalid": "Ten zespół nadrzędny jest niedostępny albo drzewo miałoby więcej niż 5 poziomów.",
-      "teamNotOnTeam": "Ta osoba nie należy do tego zespołu."
+      "teamNotOnTeam": "Ta osoba nie należy do tego zespołu.",
+      "teamsNotIncluded": "Twój plan nie obejmuje zespołów. Zmień plan na wyższy lub poproś o dodatek Zespoły i uprawnienia, aby grupować osoby w zespoły.",
+      "teamsLimit": "Osiągnięto limit {limit} zespołów w Twoim planie. Zmień plan na wyższy lub usuń zespół, aby dodać kolejny.",
+      "teamsLimitUnknown": "Osiągnięto limit zespołów w Twoim planie. Zmień plan na wyższy lub usuń zespół, aby dodać kolejny."
     },
     "accept": {
       "title": "Dołącz do swojej przestrzeni roboczej",

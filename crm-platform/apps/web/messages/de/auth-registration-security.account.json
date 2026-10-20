@@ -561,7 +561,9 @@
             "personal_history_full": "Vollständiger Verlaufsimport (privates WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "KI-Lead-Scoring",
-            "record_assignment": "Regeln zur Datensatzzuweisung"
+            "record_assignment": "Regeln zur Datensatzzuweisung",
+            "team_hierarchy": "Teamhierarchie und Manager",
+            "custom_roles": "Eigene Rollen und Bereiche"
           },
           "cta": {
             "continueFree": "Kostenlos fortfahren",

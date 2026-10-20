@@ -15,6 +15,8 @@ export {
   PlanEntitlementService,
   resolveFeature,
   resolveLimit,
+  withPackLimit,
+  packGrants,
   appVisibleOnPlan,
   featureLocked,
   type Entitlements,

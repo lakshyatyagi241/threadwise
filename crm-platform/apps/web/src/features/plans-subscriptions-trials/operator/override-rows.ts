@@ -1,6 +1,8 @@
 import {
   PLAN_LIMIT_DEFS,
   PLAN_LIMIT_GROUPS,
+  isUnlimitedFor,
+  limitZeroIsNone,
   type PlanLimitGroup,
   type PlanLimitKey,
   type WorkspaceAddons,
@@ -36,7 +38,8 @@ export function limitRowState(key: string, raw: string): LimitRowState {
   const isDefaultKey = key === PLATFORM_DEFAULT_KEY;
   return {
     overridden: true,
-    unlimited: n < 0 || (n === 0 && !isDefaultKey),
+    // `teams`: an override of 0 is "solo", not unlimited.
+    unlimited: n < 0 || (n === 0 && !isDefaultKey && !limitZeroIsNone(key)),
     platformDefault: n === 0 && isDefaultKey,
   };
 }
@@ -49,6 +52,9 @@ export type PlanValueView =
 
 /** The plan's own cap, for reference next to the override. */
 export function planValueView(key: string, planValue: number): PlanValueView {
+  if (limitZeroIsNone(key)) {
+    return isUnlimitedFor(key, planValue) ? { kind: 'unlimited' } : { kind: 'value', value: planValue };
+  }
   if (planValue === 0) {
     return key === PLATFORM_DEFAULT_KEY ? { kind: 'platformDefault' } : { kind: 'unlimited' };
   }
