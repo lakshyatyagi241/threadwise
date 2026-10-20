@@ -158,6 +158,10 @@ export const PLAN_FEATURE_DEFS = [
   // Team inbox gates (plan-inbox-chat.md decision 11), with Reference's column defaults: SLA policies off, the other three on.
   { key: 'inbox_sla', group: 'messaging', productLine: 'chat', default: false },
   { key: 'inbox_routing', group: 'messaging', productLine: 'chat', default: true },
+  // Owner first, keep in sync and the continuity window for the last handler (BL-402, docs/specs/conversation-handoff-and-assignment.md 7).
+  // Effective only together with `inbox_routing`. Default true: a plan row that predates the key and has routing gets it, so Standard keeps one
+  // switch; the owner can switch it off for one plan in plan management without a code change.
+  { key: 'inbox_assignment_sticky', group: 'messaging', productLine: 'chat', default: true },
   // WhatsApp calling from the inbox (TW-CALL-003). Default true: no plan row held it here before, so every one that predates it keeps calling.
   { key: 'waba_calling', group: 'messaging', productLine: 'chat', default: true },
   { key: 'inbox_kanban', group: 'messaging', productLine: 'chat', default: true },
@@ -235,6 +239,7 @@ export const PLAN_FEATURE_LABELS: Record<PlanFeatureKey, string> = {
   wa_storefront: 'WhatsApp catalog',
   inbox_sla: 'SLA policies',
   inbox_routing: 'Routing rules',
+  inbox_assignment_sticky: 'Contact owner and sticky agent for conversations',
   waba_calling: 'WhatsApp calling',
   inbox_kanban: 'Kanban view',
   team_performance: 'Team performance',
@@ -292,6 +297,7 @@ export const PLAN_CHIP_ORDER: readonly PlanFeatureKey[] = [
   'wa_storefront',
   'inbox_sla',
   'inbox_routing',
+  'inbox_assignment_sticky',
   'waba_calling',
   'inbox_kanban',
   'team_performance',

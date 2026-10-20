@@ -85,6 +85,13 @@ export const conversationSummarySchema = z.object({
   imported: z.boolean().optional(),
   contact: conversationContactSchema.nullable(),
   assignment: conversationAssignmentSchema,
+  /**
+   * Who handles the thread (BL-396): `waiting` = in the queue for a person, `with_person`, `with_bot`; null = not tracked (behaves as
+   * before). Optional so a client built before it ignores it.
+   */
+  handling: z.enum(['with_bot', 'waiting', 'with_person']).nullable().optional(),
+  /** When the thread entered its current handling (the queue's age). */
+  handlingSince: z.string().datetime().nullable().optional(),
   snoozedUntil: z.string().datetime().nullable(),
   /** Tags on the thread, by name. The JSON field keeps its original name `labels` so existing clients keep working: it holds tags. */
   labels: z.array(conversationTagSchema),
