@@ -113,7 +113,8 @@ export class ConferencingConnectService {
       listingPublished: published,
       configured,
       // A deep link to the listing page: the Integrations list may not show it, and a person must not land on an empty list.
-      listingPath: !installed && installable ? `/marketplace/app/${CONFERENCING_APP_SLUG[provider]}` : null,
+      listingPath:
+        !installed && installable ? `/marketplace/app/${CONFERENCING_APP_SLUG[provider]}` : null,
       account: conn?.accountEmail ?? null,
       connectedAt: conn?.connectedAt.toISOString() ?? null,
       lastErrorCode: conn?.lastErrorCode ?? null,

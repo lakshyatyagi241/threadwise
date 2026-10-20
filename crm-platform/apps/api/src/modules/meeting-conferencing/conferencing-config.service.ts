@@ -139,7 +139,12 @@ export class TeamsCredentialsSource implements InspectableCredentialsSource {
   }
 
   async describe(): Promise<CredentialsReport> {
-    const { clientId: _id, clientSecret: _secret, tenant: _tenant, ...report } = await this.resolve();
+    const {
+      clientId: _id,
+      clientSecret: _secret,
+      tenant: _tenant,
+      ...report
+    } = await this.resolve();
     return report;
   }
 

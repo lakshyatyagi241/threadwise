@@ -19,7 +19,8 @@ export class ConferencingOperatorController {
   @Get('status')
   @PlatformPermission('platform.market.manage', 'platform.market.review')
   @ApiOperation({
-    summary: 'What each video provider still needs: credentials set, listing published, the redirect address to register',
+    summary:
+      'What each video provider still needs: credentials set, listing published, the redirect address to register',
     description:
       'Per provider: whether the client id and secret are set and where they come from, whether the Microsoft Calendar integration is switched off (Teams), the listing status, the exact redirect URI built from APP_URL (or its override), and the list of gaps. Values are never returned.',
   })
