@@ -31,6 +31,16 @@ export class ContactQuotaService {
     return { limit, used, remaining: Math.max(0, limit - used) };
   }
 
+  /**
+   * The room left, read under the contacts lock in the caller's transaction (null = unlimited). An import re-reads it for every batch:
+   * the figure it took when it started is stale as soon as an API create or a second import commits (QA Sheet3 #15, CC-LIM-07).
+   */
+  async remainingLocked(tx: Tx, orgId: number): Promise<number | null> {
+    if ((await this.entitlements.limit(orgId, 'contacts')) === 0) return null;
+    await this.entitlements.lockLimit(tx, orgId, 'contacts');
+    return (await this.usage(tx, orgId)).remaining;
+  }
+
   /** Throws 422 PLAN_LIMIT_REACHED when one more contact would exceed the cap. */
   async assertCanAddOne(tx: Tx, orgId: number): Promise<void> {
     const limit = await this.entitlements.limit(orgId, 'contacts');
