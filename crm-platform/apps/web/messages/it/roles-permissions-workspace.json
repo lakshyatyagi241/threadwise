@@ -139,7 +139,8 @@
         "keptRole": "{name} resta: non puoi assegnarlo né rimuoverlo.",
         "atLeastOne": "Scegli almeno un ruolo.",
         "save": "Salva ruoli",
-        "reload": "Ricarica"
+        "reload": "Ricarica",
+        "noTeamWarning": "{name} non fa parte di nessun team, quindi dove un ruolo è impostato sull'ambito team vede solo i propri record. Aggiungilo a un team in Impostazioni > Team."
       },
       "teamFilter": {
         "label": "Filtra i membri per team",

@@ -7,7 +7,7 @@ import type { RoleResponse, UserResponse } from '@crm/contracts';
 import { Alert, Button, Modal, Spinner } from '@crm/ui';
 import { updateUser, wsKeys } from '../lib/api';
 import { wsError, type WsError } from '../lib/errors';
-import { presetSlug, rolesChanged } from '../lib/members';
+import { noTeamMeetsTeamScope, presetSlug, rolesChanged } from '../lib/members';
 
 const NS = 'roles-permissions-workspace.team.changeRole';
 
@@ -52,6 +52,8 @@ export function ChangeRoleModal({
   const changed = rolesChanged(member.roles, selected);
   // Roles the member holds that the caller cannot hand out would be dropped by a replacement: keep them visible, locked.
   const lockedRoles = member.roles.filter((r) => !roles.some((x) => x.id === r.id));
+  // A role set to a team scope shows a person in no team only their own records (BL-382): say so before the roles are handed out.
+  const teamScoped = noTeamMeetsTeamScope(member.teams.length, roles, selected);
 
   return (
     <Modal
@@ -96,6 +98,11 @@ export function ChangeRoleModal({
           ))}
         </fieldset>
         {selected.length === 0 && <p className="text-xs text-danger">{t('atLeastOne')}</p>}
+        {teamScoped && (
+          <Alert tone="warning" data-testid="change-role-no-team">
+            <p>{t('noTeamWarning', { name: member.fullName })}</p>
+          </Alert>
+        )}
         {error && (
           <Alert
             tone={error.kind === 'conflict' ? 'warning' : 'danger'}

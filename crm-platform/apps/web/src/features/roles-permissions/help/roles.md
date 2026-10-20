@@ -27,7 +27,7 @@ To delete a custom role, open its editor and select **Delete role**. A role that
 
 ## Options and settings
 
-- **Team scope warning**: when a role allows a permission at a team scope and some active members with the role are in no team, a warning under the matrix header says how many. Those members see only their own records for that permission. The warning does not stop you saving; select the link to add them to a team in **Teams**.
+- **Team scope warning**: when a role allows a permission at a team scope and some active members with the role are in no team, a warning under the matrix header says how many. Those members see only their own records for that permission. The warning does not stop you saving; select the link to add them to a team in **Teams**. The Change roles dialog on the Team members screen shows the same kind of warning when you give a team-scoped role to a person who is in no team.
 - **See conversations that nobody has taken yet**: lets a role with team-level conversation access also see conversations assigned to nobody. See [How team access works](help:team-access).
 
 - **Role name**: required for a custom role, up to 120 characters. Preset role names cannot be changed.

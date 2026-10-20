@@ -143,7 +143,7 @@
       },
       "total": "Gesamt",
       "truncated": "Es werden nur die {count} größten Zeilen aufgeführt. Die CSV-Zusammenfassung enthält dieselben Zeilen.",
-      "teamNote": "Eine Person in zwei Teams zählt in beiden, daher können die Teamzeilen zusammen mehr als die Gesamtsumme ergeben.",
+      "teamNote": "Jede Person zählt nur für ihr Hauptteam, daher ergeben die Teamzeilen zusammen die Gesamtsumme. Personen ohne Hauptteam stehen unter „Kein Team“.",
       "productNote": "Rabatte auf die gesamte Rechnung, Versand und Rundung werden im Verhältnis zu ihrem Wert auf die Positionen verteilt."
     },
     "aging": {

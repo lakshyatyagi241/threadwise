@@ -139,7 +139,8 @@
         "keptRole": "{name} reste attribué : vous ne pouvez ni l’accorder ni le retirer.",
         "atLeastOne": "Sélectionnez au moins un rôle.",
         "save": "Enregistrer les rôles",
-        "reload": "Recharger"
+        "reload": "Recharger",
+        "noTeamWarning": "{name} ne fait partie d'aucune équipe : là où un rôle est réglé sur la portée équipe, la personne ne voit que ses propres fiches. Ajoutez-la à une équipe dans Paramètres > Équipes."
       },
       "teamFilter": {
         "label": "Filtrer les membres par équipe",

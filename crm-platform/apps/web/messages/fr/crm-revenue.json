@@ -143,7 +143,7 @@
       },
       "total": "Total",
       "truncated": "Seules les {count} lignes les plus élevées sont listées. Le récapitulatif CSV contient les mêmes lignes.",
-      "teamNote": "Une personne appartenant à deux équipes est comptée dans les deux, donc les lignes d'équipe peuvent dépasser le total.",
+      "teamNote": "Chaque personne n'est comptée que pour son équipe principale : les lignes par équipe s'additionnent donc au total. Les personnes sans équipe principale apparaissent sous « Sans équipe ».",
       "productNote": "Les remises sur l'ensemble de la facture, les frais de port et les arrondis sont répartis sur les lignes au prorata de leur valeur."
     },
     "aging": {

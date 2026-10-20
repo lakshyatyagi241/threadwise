@@ -139,7 +139,8 @@
         "keptRole": "{name} se mantiene: no puedes asignarlo ni quitarlo.",
         "atLeastOne": "Elige al menos un rol.",
         "save": "Guardar roles",
-        "reload": "Recargar"
+        "reload": "Recargar",
+        "noTeamWarning": "{name} no está en ningún equipo, así que donde un rol tiene alcance de equipo solo ve sus propios registros. Añádelo a un equipo en Ajustes > Equipos."
       },
       "teamFilter": {
         "label": "Filtrar miembros por equipo",

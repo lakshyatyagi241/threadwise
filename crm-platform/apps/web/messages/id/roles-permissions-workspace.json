@@ -139,7 +139,8 @@
         "keptRole": "{name} tetap: Anda tidak dapat memberikan atau mencabutnya.",
         "atLeastOne": "Pilih minimal satu peran.",
         "save": "Simpan peran",
-        "reload": "Muat ulang"
+        "reload": "Muat ulang",
+        "noTeamWarning": "{name} tidak berada di tim mana pun, sehingga di bagian yang cakupan perannya diatur ke tim, ia hanya melihat catatannya sendiri. Tambahkan ke sebuah tim di Pengaturan > Tim."
       },
       "teamFilter": {
         "label": "Filter anggota berdasarkan tim",

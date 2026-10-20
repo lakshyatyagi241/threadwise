@@ -1,5 +1,12 @@
-import { describe, expect, it, vi } from 'vitest';
-import { RECORD_SCOPE_RANK, isTeamScope, teamHierarchyOffered } from '@crm/contracts';
+import { describe, expect, it } from 'vitest';
+import {
+  PLAN_FEATURE_KEYS,
+  RECORD_SCOPE_RANK,
+  TEAM_HIERARCHY_FEATURE,
+  isTeamScope,
+  teamHierarchyGateExists,
+  teamHierarchyOffered,
+} from '@crm/contracts';
 import { viewerReadsUnassigned } from '../../../src/realtime/audience/conversation-visibility';
 
 /**
@@ -44,23 +51,11 @@ describe('teamHierarchyOffered (the gate for "My team and sub-teams")', () => {
 });
 
 describe('teamHierarchyOffered once the plan feature exists', () => {
-  it('follows the workspace, and an unknown answer removes nothing', async () => {
-    vi.resetModules();
-    vi.doMock(
-      '../../../../../packages/contracts/src/plans-subscriptions-trials/catalogue',
-      async (orig) => {
-        const actual = await orig<Record<string, unknown>>();
-        return {
-          ...actual,
-          PLAN_FEATURE_KEYS: [...(actual.PLAN_FEATURE_KEYS as string[]), 'team_hierarchy'],
-        };
-      },
-    );
-    const mod = await import('../../../../../packages/contracts/src/common/team-hierarchy');
-    expect(mod.teamHierarchyGateExists()).toBe(true);
-    expect(mod.teamHierarchyOffered(false)).toBe(false);
-    expect(mod.teamHierarchyOffered(true)).toBe(true);
-    expect(mod.teamHierarchyOffered(null)).toBe(true);
-    vi.doUnmock('../../../../../packages/contracts/src/plans-subscriptions-trials/catalogue');
+  const catalogue = [...PLAN_FEATURE_KEYS, TEAM_HIERARCHY_FEATURE];
+  it('follows the workspace, and an unknown answer removes nothing', () => {
+    expect(teamHierarchyGateExists(catalogue)).toBe(true);
+    expect(teamHierarchyOffered(false, catalogue)).toBe(false);
+    expect(teamHierarchyOffered(true, catalogue)).toBe(true);
+    expect(teamHierarchyOffered(null, catalogue)).toBe(true);
   });
 });

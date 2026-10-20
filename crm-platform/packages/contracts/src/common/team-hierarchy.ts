@@ -10,13 +10,15 @@ import { PLAN_FEATURE_KEYS } from '../plans-subscriptions-trials/catalogue';
  */
 export const TEAM_HIERARCHY_FEATURE = 'team_hierarchy';
 
-/** True when the catalogue defines the gate (T3 merged). */
-export const teamHierarchyGateExists = (): boolean =>
-  (PLAN_FEATURE_KEYS as string[]).includes(TEAM_HIERARCHY_FEATURE);
+/** True when the catalogue defines the gate (T3 merged). `keys` is the catalogue; a test passes its own. */
+export const teamHierarchyGateExists = (keys: readonly string[] = PLAN_FEATURE_KEYS): boolean =>
+  keys.includes(TEAM_HIERARCHY_FEATURE);
 
 /**
  * Is `team_and_below` offered to a workspace? `enabled` says whether the workspace has the plan feature, `null` when that is unknown (the
  * caller then removes nothing). A catalogue without the key offers it to everybody (see the note above).
  */
-export const teamHierarchyOffered = (enabled: boolean | null): boolean =>
-  !teamHierarchyGateExists() || enabled === null || enabled;
+export const teamHierarchyOffered = (
+  enabled: boolean | null,
+  keys: readonly string[] = PLAN_FEATURE_KEYS,
+): boolean => !teamHierarchyGateExists(keys) || enabled === null || enabled;

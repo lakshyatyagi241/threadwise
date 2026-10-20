@@ -139,7 +139,8 @@
         "keptRole": "{name} blijft: je kunt deze niet toekennen of intrekken.",
         "atLeastOne": "Kies minstens één rol.",
         "save": "Rollen opslaan",
-        "reload": "Opnieuw laden"
+        "reload": "Opnieuw laden",
+        "noTeamWarning": "{name} zit in geen enkel team, dus waar een rol op teambereik staat, ziet die persoon alleen de eigen records. Voeg de persoon toe aan een team via Instellingen > Teams."
       },
       "teamFilter": {
         "label": "Leden filteren op team",

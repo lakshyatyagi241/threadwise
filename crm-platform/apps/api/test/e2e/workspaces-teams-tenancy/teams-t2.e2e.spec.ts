@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { DealsApi, startHarness, type Harness, type Tenant } from '../deals-pipelines/support';
 import { Inbox } from '../team-inbox-conversations/support';
+import { RbacService } from '../../../src/kernel/rbac/rbac.service';
 
 /**
  * Teams T2 (BL-382, docs/specs/teams-unification.md) through HTTP on real Postgres:
@@ -184,7 +185,8 @@ describe('team_and_below on records', () => {
       await h.owner.query(`SELECT id FROM teams WHERE org_id = $1 AND name = 'HQ'`, [t.orgId])
     ).rows[0].id;
     await join(t, Number(hq), both.userId, true);
-    // roles_version is read per request; a fresh login is the simple way to pick the new role up
+    // The grants are cached per roles version: a role written straight into the tables bumps it, like the API does.
+    await h.app.get(RbacService, { strict: false }).bumpRolesVersion(t.orgId);
     const login = await api
       .http()
       .post('/v2/auth/login')

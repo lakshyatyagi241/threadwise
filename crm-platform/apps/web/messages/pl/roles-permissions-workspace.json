@@ -139,7 +139,8 @@
         "keptRole": "Rola {name} pozostaje: nie możesz jej nadawać ani odbierać.",
         "atLeastOne": "Wybierz co najmniej jedną rolę.",
         "save": "Zapisz role",
-        "reload": "Odśwież"
+        "reload": "Odśwież",
+        "noTeamWarning": "{name} nie należy do żadnego zespołu, więc tam, gdzie rola ma zakres zespołu, widzi tylko własne rekordy. Dodaj tę osobę do zespołu w Ustawieniach > Zespoły."
       },
       "teamFilter": {
         "label": "Filtruj członków według zespołu",

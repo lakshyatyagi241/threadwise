@@ -139,7 +139,8 @@
         "keptRole": "{name} permanece: você não pode concedê-la nem removê-la.",
         "atLeastOne": "Escolha pelo menos uma função.",
         "save": "Salvar funções",
-        "reload": "Recarregar"
+        "reload": "Recarregar",
+        "noTeamWarning": "{name} não está em nenhuma equipe, então, onde uma função está definida com escopo de equipe, vê apenas os próprios registros. Adicione-o a uma equipe em Configurações > Equipes."
       },
       "teamFilter": {
         "label": "Filtrar membros por equipe",

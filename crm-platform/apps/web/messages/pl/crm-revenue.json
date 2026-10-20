@@ -143,7 +143,7 @@
       },
       "total": "Razem",
       "truncated": "Wypisano tylko {count} największych wierszy. Podsumowanie CSV zawiera te same wiersze.",
-      "teamNote": "Osoba w dwóch zespołach liczy się w obu, więc wiersze zespołów mogą w sumie dać więcej niż wartość łączna.",
+      "teamNote": "Każda osoba jest liczona tylko dla swojego głównego zespołu, więc wiersze zespołów sumują się do całości. Osoby bez głównego zespołu są pokazane w wierszu „Bez zespołu”.",
       "productNote": "Rabaty na całą fakturę, koszty wysyłki i zaokrąglenia są rozłożone na pozycje proporcjonalnie do ich wartości."
     },
     "aging": {

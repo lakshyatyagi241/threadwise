@@ -139,7 +139,8 @@
         "keptRole": "{name} được giữ nguyên: bạn không thể cấp hoặc gỡ vai trò này.",
         "atLeastOne": "Chọn ít nhất một vai trò.",
         "save": "Lưu vai trò",
-        "reload": "Tải lại"
+        "reload": "Tải lại",
+        "noTeamWarning": "{name} không thuộc nhóm nào, nên ở nơi vai trò được đặt phạm vi theo nhóm, họ chỉ thấy bản ghi của chính mình. Hãy thêm họ vào một nhóm trong Cài đặt > Nhóm."
       },
       "teamFilter": {
         "label": "Lọc thành viên theo nhóm",

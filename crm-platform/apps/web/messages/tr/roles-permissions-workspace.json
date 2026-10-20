@@ -139,7 +139,8 @@
         "keptRole": "{name} kalır: bunu veremez veya geri alamazsınız.",
         "atLeastOne": "En az bir rol seçin.",
         "save": "Rolleri kaydet",
-        "reload": "Yeniden yükle"
+        "reload": "Yeniden yükle",
+        "noTeamWarning": "{name} hiçbir takımda değil, bu yüzden bir rolün kapsamı takım olarak ayarlandığında yalnızca kendi kayıtlarını görür. Ayarlar > Takımlar bölümünden bir takıma ekleyin."
       },
       "teamFilter": {
         "label": "Üyeleri ekibe göre filtrele",

@@ -139,7 +139,8 @@
         "keptRole": "{name} stays: you cannot hand it out or take it away.",
         "atLeastOne": "Pick at least one role.",
         "save": "Save roles",
-        "reload": "Reload"
+        "reload": "Reload",
+        "noTeamWarning": "{name} is in no team, so where a role is set to a team scope they see only their own records. Add them to a team in Settings > Teams."
       },
       "teamFilter": {
         "label": "Filter members by team",
