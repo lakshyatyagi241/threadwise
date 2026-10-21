@@ -1,0 +1,720 @@
+{
+ "schema": 1,
+ "generatedAt": "2026-10-21T07:20:21.418Z",
+ "node": "v22.22.2",
+ "nodeEnv": "production",
+ "options": {
+  "minutes": 5,
+  "warmup": 2,
+  "interval": 5,
+  "gcEvery": 6,
+  "rate": 15,
+  "calls": 100
+ },
+ "machine": {
+  "loadavg": [
+   24.6,
+   20.79,
+   13.67
+  ],
+  "cpus": 12
+ },
+ "requests": {
+  "ok": 2288,
+  "err": 0
+ },
+ "bootMb": {
+  "api": {
+   "rssMb": 411.9,
+   "heapUsedMb": 239.9,
+   "heapTotalMb": 308.2,
+   "externalMb": 4.1,
+   "arrayBuffersMb": 0.5,
+   "mallocedMemoryMb": 4
+  },
+  "worker": {
+   "rssMb": 411.2,
+   "heapUsedMb": 232.2,
+   "heapTotalMb": 309.3,
+   "externalMb": 4.2,
+   "arrayBuffersMb": 0.5,
+   "mallocedMemoryMb": 4
+  }
+ },
+ "loadWindow": {
+  "api": {
+   "rssMb": {
+    "n": 36,
+    "min": 400.1,
+    "p50": 432.6,
+    "p95": 437.9,
+    "p99": 452.5,
+    "max": 452.5
+   },
+   "heapUsedMb": {
+    "n": 30,
+    "min": 230.8,
+    "p50": 264.2,
+    "p95": 304.5,
+    "p99": 324.8,
+    "max": 324.8
+   },
+   "heapTotalMb": {
+    "n": 36,
+    "min": 293.7,
+    "p50": 328.2,
+    "p95": 348.7,
+    "p99": 364.2,
+    "max": 364.2
+   },
+   "externalMb": {
+    "n": 36,
+    "min": 4.2,
+    "p50": 4.9,
+    "p95": 5.5,
+    "p99": 5.7,
+    "max": 5.7
+   },
+   "arrayBuffersMb": {
+    "n": 36,
+    "min": 0.5,
+    "p50": 1.1,
+    "p95": 1.8,
+    "p99": 2.1,
+    "max": 2.1
+   },
+   "heapUsedAfterGcMb": {
+    "n": 6,
+    "min": 224.6,
+    "p50": 225,
+    "p95": 226.2,
+    "p99": 226.2,
+    "max": 226.2
+   }
+  },
+  "worker": {
+   "rssMb": {
+    "n": 36,
+    "min": 375.9,
+    "p50": 416.6,
+    "p95": 424.3,
+    "p99": 424.4,
+    "max": 424.4
+   },
+   "heapUsedMb": {
+    "n": 30,
+    "min": 224.7,
+    "p50": 252.4,
+    "p95": 282.1,
+    "p99": 288.8,
+    "max": 288.8
+   },
+   "heapTotalMb": {
+    "n": 36,
+    "min": 285.5,
+    "p50": 303.5,
+    "p95": 318.5,
+    "p99": 326.1,
+    "max": 326.1
+   },
+   "externalMb": {
+    "n": 36,
+    "min": 4.1,
+    "p50": 4.2,
+    "p95": 4.2,
+    "p99": 4.3,
+    "max": 4.3
+   },
+   "arrayBuffersMb": {
+    "n": 36,
+    "min": 0.5,
+    "p50": 0.5,
+    "p95": 0.6,
+    "p99": 0.6,
+    "max": 0.6
+   },
+   "heapUsedAfterGcMb": {
+    "n": 6,
+    "min": 211.8,
+    "p50": 212.2,
+    "p95": 230.1,
+    "p99": 230.1,
+    "max": 230.1
+   }
+  }
+ },
+ "heapSpacesMb": {
+  "api": [
+   {
+    "space": "read_only_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "new_space",
+    "usedMb": 0,
+    "sizeMb": 32
+   },
+   {
+    "space": "old_space",
+    "usedMb": 198.2,
+    "sizeMb": 255.3
+   },
+   {
+    "space": "code_space",
+    "usedMb": 8.1,
+    "sizeMb": 10.3
+   },
+   {
+    "space": "shared_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "trusted_space",
+    "usedMb": 4,
+    "sizeMb": 5.5
+   },
+   {
+    "space": "new_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "large_object_space",
+    "usedMb": 15.7,
+    "sizeMb": 15.9
+   },
+   {
+    "space": "code_large_object_space",
+    "usedMb": 0.1,
+    "sizeMb": 0.1
+   },
+   {
+    "space": "shared_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "trusted_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   }
+  ],
+  "worker": [
+   {
+    "space": "read_only_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "new_space",
+    "usedMb": 0,
+    "sizeMb": 32
+   },
+   {
+    "space": "old_space",
+    "usedMb": 188.7,
+    "sizeMb": 244.3
+   },
+   {
+    "space": "code_space",
+    "usedMb": 5,
+    "sizeMb": 6.5
+   },
+   {
+    "space": "shared_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "trusted_space",
+    "usedMb": 3.3,
+    "sizeMb": 5
+   },
+   {
+    "space": "new_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "large_object_space",
+    "usedMb": 15.3,
+    "sizeMb": 15.5
+   },
+   {
+    "space": "code_large_object_space",
+    "usedMb": 0.1,
+    "sizeMb": 0.1
+   },
+   {
+    "space": "shared_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   },
+   {
+    "space": "trusted_large_object_space",
+    "usedMb": 0,
+    "sizeMb": 0
+   }
+  ]
+ },
+ "endpoints": {
+  "GET /v2/contacts?limit=100 (large page)": {
+   "calls": 100,
+   "statuses": {
+    "200": 100
+   },
+   "heapUsedDeltaMb": -0.23,
+   "rssDeltaMb": 1.25,
+   "heapUsedKbPerCall": -2.36
+  },
+  "GET /v2/contacts?search=a (search)": {
+   "calls": 100,
+   "statuses": {
+    "200": 100
+   },
+   "heapUsedDeltaMb": 0.02,
+   "rssDeltaMb": -0.25,
+   "heapUsedKbPerCall": 0.18
+  },
+  "GET /v2/companies/export (CSV export)": {
+   "calls": 100,
+   "statuses": {
+    "200": 100
+   },
+   "heapUsedDeltaMb": 0.04,
+   "rssDeltaMb": 1.88,
+   "heapUsedKbPerCall": 0.43
+  },
+  "POST /v2/contacts/import/preview (200 rows)": {
+   "calls": 100,
+   "statuses": {
+    "200": 100
+   },
+   "heapUsedDeltaMb": 0.52,
+   "rssDeltaMb": 6.25,
+   "heapUsedKbPerCall": 5.3
+  }
+ },
+ "snapshots": {
+  "api-boot": {
+   "totalMb": 230.06,
+   "byTypeMb": {
+    "synthetic": 0.03,
+    "hidden": 4.01,
+    "string": 70.94,
+    "code": 32.52,
+    "array": 23.9,
+    "object shape": 12.86,
+    "number": 0.07,
+    "symbol": 0.02,
+    "object": 32.34,
+    "closure": 45.65,
+    "concatenated string": 3.52,
+    "bigint": 0,
+    "regexp": 0.29,
+    "native": 1.89,
+    "sliced string": 2.03
+   },
+   "groupsMb": {
+    "metrics registries (prom-client)": 0.14,
+    "caches / maps": 1.02,
+    "Nest providers/DI": 1.41
+   },
+   "topConstructors": [
+    {
+     "name": "closure:native_bind",
+     "count": 788469,
+     "mb": 36.09
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", {\n  ",
+     "count": 2648,
+     "mb": 21.64
+    },
+    {
+     "name": "array:",
+     "count": 55874,
+     "mb": 10.02
+    },
+    {
+     "name": "code:(script line ends)",
+     "count": 6723,
+     "mb": 9.62
+    },
+    {
+     "name": "Object",
+     "count": 181189,
+     "mb": 9.02
+    },
+    {
+     "name": "string:/home/getaweblpwinubt26/wadesk-vedant/threadwise/.claude/worktr",
+     "count": 46986,
+     "mb": 8.59
+    },
+    {
+     "name": "string:/*eslint-disable block-scoped-var, id-length, no-control-regex,",
+     "count": 2,
+     "mb": 7.9
+    },
+    {
+     "name": "array:(object elements)",
+     "count": 77129,
+     "mb": 7.32
+    },
+    {
+     "name": "object shape:system / Map",
+     "count": 103640,
+     "mb": 7.12
+    },
+    {
+     "name": "array:(object properties)",
+     "count": 15692,
+     "mb": 6.56
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { va",
+     "count": 979,
+     "mb": 6.1
+    },
+    {
+     "name": "system / Context",
+     "count": 114071,
+     "mb": 5.69
+    }
+   ]
+  },
+  "worker-boot": {
+   "totalMb": 223.51,
+   "byTypeMb": {
+    "synthetic": 0.07,
+    "hidden": 4.15,
+    "string": 67.21,
+    "code": 33.07,
+    "array": 21.52,
+    "object shape": 14.16,
+    "number": 0.09,
+    "symbol": 0.02,
+    "object": 30.71,
+    "closure": 45.4,
+    "concatenated string": 3.3,
+    "bigint": 0,
+    "regexp": 0.06,
+    "native": 1.83,
+    "sliced string": 1.93
+   },
+   "groupsMb": {
+    "caches / maps": 0.79,
+    "metrics registries (prom-client)": 0.2,
+    "Nest providers/DI": 1.36
+   },
+   "topConstructors": [
+    {
+     "name": "closure:native_bind",
+     "count": 786764,
+     "mb": 36.02
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", {\n  ",
+     "count": 2416,
+     "mb": 19.68
+    },
+    {
+     "name": "code:(script line ends)",
+     "count": 6374,
+     "mb": 9.19
+    },
+    {
+     "name": "Object",
+     "count": 176950,
+     "mb": 8.79
+    },
+    {
+     "name": "string:/home/getaweblpwinubt26/wadesk-vedant/threadwise/.claude/worktr",
+     "count": 44113,
+     "mb": 8.07
+    },
+    {
+     "name": "array:",
+     "count": 49345,
+     "mb": 7.96
+    },
+    {
+     "name": "string:/*eslint-disable block-scoped-var, id-length, no-control-regex,",
+     "count": 2,
+     "mb": 7.9
+    },
+    {
+     "name": "object shape:system / Map",
+     "count": 112613,
+     "mb": 7.73
+    },
+    {
+     "name": "array:(object properties)",
+     "count": 12565,
+     "mb": 6.94
+    },
+    {
+     "name": "array:(object elements)",
+     "count": 61465,
+     "mb": 6.61
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { va",
+     "count": 969,
+     "mb": 6.04
+    },
+    {
+     "name": "object shape:system / DescriptorArray",
+     "count": 38643,
+     "mb": 5.58
+    }
+   ]
+  },
+  "api-warm": {
+   "totalMb": 235.59,
+   "byTypeMb": {
+    "synthetic": 0.03,
+    "hidden": 4.04,
+    "string": 71.02,
+    "code": 37.01,
+    "array": 24.03,
+    "object shape": 12.99,
+    "number": 0.08,
+    "symbol": 0.02,
+    "object": 32.92,
+    "closure": 45.69,
+    "concatenated string": 3.53,
+    "regexp": 0.29,
+    "sliced string": 2.03,
+    "bigint": 0,
+    "native": 1.9
+   },
+   "groupsMb": {
+    "metrics registries (prom-client)": 0.15,
+    "caches / maps": 1.03,
+    "Nest providers/DI": 1.41
+   },
+   "topConstructors": [
+    {
+     "name": "closure:native_bind",
+     "count": 788586,
+     "mb": 36.1
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", {\n  ",
+     "count": 2648,
+     "mb": 21.64
+    },
+    {
+     "name": "code:(script line ends)",
+     "count": 6730,
+     "mb": 9.64
+    },
+    {
+     "name": "array:",
+     "count": 55014,
+     "mb": 9.54
+    },
+    {
+     "name": "Object",
+     "count": 188225,
+     "mb": 9.35
+    },
+    {
+     "name": "string:/home/getaweblpwinubt26/wadesk-vedant/threadwise/.claude/worktr",
+     "count": 47030,
+     "mb": 8.6
+    },
+    {
+     "name": "string:/*eslint-disable block-scoped-var, id-length, no-control-regex,",
+     "count": 2,
+     "mb": 7.9
+    },
+    {
+     "name": "array:(object elements)",
+     "count": 82713,
+     "mb": 7.66
+    },
+    {
+     "name": "object shape:system / Map",
+     "count": 104857,
+     "mb": 7.2
+    },
+    {
+     "name": "array:(object properties)",
+     "count": 15739,
+     "mb": 6.82
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { va",
+     "count": 979,
+     "mb": 6.1
+    },
+    {
+     "name": "system / Context",
+     "count": 114364,
+     "mb": 5.71
+    }
+   ]
+  },
+  "worker-warm": {
+   "totalMb": 222.32,
+   "byTypeMb": {
+    "synthetic": 0.07,
+    "hidden": 4.03,
+    "string": 67.15,
+    "code": 31.85,
+    "array": 21.55,
+    "object shape": 14.16,
+    "number": 0.09,
+    "symbol": 0.02,
+    "object": 30.85,
+    "closure": 45.42,
+    "concatenated string": 3.29,
+    "sliced string": 1.93,
+    "regexp": 0.06,
+    "bigint": 0,
+    "native": 1.83
+   },
+   "groupsMb": {
+    "caches / maps": 0.79,
+    "metrics registries (prom-client)": 0.2,
+    "Nest providers/DI": 1.36
+   },
+   "topConstructors": [
+    {
+     "name": "closure:native_bind",
+     "count": 786932,
+     "mb": 36.02
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", {\n  ",
+     "count": 2416,
+     "mb": 19.68
+    },
+    {
+     "name": "code:(script line ends)",
+     "count": 6374,
+     "mb": 9.19
+    },
+    {
+     "name": "Object",
+     "count": 178808,
+     "mb": 8.88
+    },
+    {
+     "name": "string:/home/getaweblpwinubt26/wadesk-vedant/threadwise/.claude/worktr",
+     "count": 44113,
+     "mb": 8.07
+    },
+    {
+     "name": "array:",
+     "count": 49279,
+     "mb": 8.01
+    },
+    {
+     "name": "string:/*eslint-disable block-scoped-var, id-length, no-control-regex,",
+     "count": 2,
+     "mb": 7.9
+    },
+    {
+     "name": "object shape:system / Map",
+     "count": 112729,
+     "mb": 7.74
+    },
+    {
+     "name": "array:(object properties)",
+     "count": 12567,
+     "mb": 6.88
+    },
+    {
+     "name": "array:(object elements)",
+     "count": 65183,
+     "mb": 6.65
+    },
+    {
+     "name": "string:\"use strict\";\nObject.defineProperty(exports, \"__esModule\", { va",
+     "count": 969,
+     "mb": 6.04
+    },
+    {
+     "name": "object shape:system / DescriptorArray",
+     "count": 38568,
+     "mb": 5.57
+    }
+   ]
+  }
+ },
+ "snapshotRun": {
+  "options": {
+   "minutes": 7,
+   "warmup": 2,
+   "interval": 5,
+   "gcEvery": 6,
+   "rate": 15,
+   "calls": 100
+  },
+  "rssBootMb": {
+   "api": {
+    "rssMb": 407.4,
+    "heapUsedMb": 240,
+    "heapTotalMb": 307.5,
+    "externalMb": 4.2,
+    "arrayBuffersMb": 0.5,
+    "mallocedMemoryMb": 2
+   },
+   "worker": {
+    "rssMb": 441,
+    "heapUsedMb": 232.6,
+    "heapTotalMb": 330.6,
+    "externalMb": 4.2,
+    "arrayBuffersMb": 0.5,
+    "mallocedMemoryMb": 4
+   }
+  },
+  "rssWithSnapshotsP50": {
+   "api": 1278.3,
+   "worker": 1374
+  },
+  "endpointsRun3": {
+   "GET /v2/contacts?limit=100 (large page)": {
+    "calls": 100,
+    "statuses": {
+     "200": 100
+    },
+    "heapUsedDeltaMb": -0.2,
+    "rssDeltaMb": 0.25,
+    "heapUsedKbPerCall": -2.06
+   },
+   "GET /v2/contacts?search=a (search)": {
+    "calls": 100,
+    "statuses": {
+     "200": 100
+    },
+    "heapUsedDeltaMb": 0.24,
+    "rssDeltaMb": 0,
+    "heapUsedKbPerCall": 2.44
+   },
+   "GET /v2/companies/export (CSV export)": {
+    "calls": 100,
+    "statuses": {
+     "200": 100
+    },
+    "heapUsedDeltaMb": 0.02,
+    "rssDeltaMb": 0.25,
+    "heapUsedKbPerCall": 0.16
+   },
+   "POST /v2/contacts/import/preview (200 rows)": {
+    "calls": 100,
+    "statuses": {
+     "200": 100
+    },
+    "heapUsedDeltaMb": 0.4,
+    "rssDeltaMb": 0.5,
+    "heapUsedKbPerCall": 4.11
+   }
+  }
+ }
+}
