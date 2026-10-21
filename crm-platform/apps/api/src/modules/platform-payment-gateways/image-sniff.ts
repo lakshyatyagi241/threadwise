@@ -1,3 +1,4 @@
+import { imageProblem } from '../auth/security/image-integrity';
 import { isSafeSvg } from '../chatbot-widget/svg-safe';
 /**
  * The file's real type from its first bytes (the client's claimed type and file name are never trusted). Used for the invoice
@@ -11,6 +12,7 @@ export const INVOICE_LOGO_MIMES = [
 ] as const;
 
 export function sniffImage(buf: Buffer): string | null {
+  if (imageProblem(buf)) return null; // pixel size, trailing data, markup inside (SEC-UPLOAD-3/5)
   if (buf.length >= 8 && buf.subarray(0, 8).equals(Buffer.from('89504e470d0a1a0a', 'hex')))
     return 'image/png';
   if (buf.length >= 3 && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) return 'image/jpeg';

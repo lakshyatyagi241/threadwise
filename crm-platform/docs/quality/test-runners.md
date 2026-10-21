@@ -16,7 +16,7 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 | ssrf | PASS | 9 | |
 | session-token-security | PASS | 9 | |
 | csrf-cors-headers | PASS | 37 | |
-| file-upload-security | PASS | 31 | new (Sheet3 #34); `--quick`: 45 in-process tests plus 40 unauthenticated multipart operations refused live |
+| file-upload-security | PASS | 35 | Last verified 2026-10-21 (`--quick`, round 2): 70 in-process tests plus 40 unauthenticated upload operations refused live. The 24 e2e specs with signature-only fake images were NOT re-run (see its report) |
 | security-fuzz | PASS | 54 | |
 | cache-audit | PASS | 46 | |
 | cache-hit-rate | PASS | 101 | |

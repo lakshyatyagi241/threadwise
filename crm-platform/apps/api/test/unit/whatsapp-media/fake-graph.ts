@@ -7,6 +7,7 @@ import {
   type ServerResponse,
 } from 'node:http';
 import type { AddressInfo } from 'node:net';
+import { pngOfSize } from '../../support/images';
 
 /**
  * A stand-in for the Graph API and for the host that serves WhatsApp media, both on 127.0.0.1 (two ports), for the unit and end-to-end
@@ -344,11 +345,7 @@ export class FakeGraph {
 }
 
 /** A real, minimal PNG: signature plus padding. Enough for the content sniffer and the upload policy. */
-export const pngBytes = (size = 2048, fill = 1): Buffer =>
-  Buffer.concat([
-    Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-    Buffer.alloc(Math.max(0, size - 8), fill),
-  ]);
+export const pngBytes = (size = 2048): Buffer => pngOfSize(size);
 
 export const pdfBytes = (size = 4096, fill = 2): Buffer =>
   Buffer.concat([Buffer.from('%PDF-1.7\n'), Buffer.alloc(Math.max(0, size - 9), fill)]);

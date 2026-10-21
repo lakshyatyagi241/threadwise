@@ -35,7 +35,7 @@ export class FlowMediaService {
     type: FlowMediaType,
     orgKey: string,
   ): Promise<{ url: string; filename: string; type: FlowMediaType; mimeType: string }> {
-    const v = this.policy.validate({
+    const v = await this.policy.validateScanned({
       filename: file.originalname,
       buffer: file.buffer,
       allow: ['image', 'media', 'document'],

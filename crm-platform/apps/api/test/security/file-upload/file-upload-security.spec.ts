@@ -240,3 +240,32 @@ describe('ratchet: upload routes', () => {
     expect(Object.keys(REVIEWED).filter((f) => !have.has(f))).toEqual([]);
   });
 });
+
+describe('ratchet: shared policy and scanner', () => {
+  const files = walk(SRC);
+  const calls = files.flatMap((f) => {
+    const t = readFileSync(f, 'utf8');
+    return /\b(uploads|policy|upload)\.validate\(\{/.test(t) ? [f.slice(SRC.length + 1)] : [];
+  });
+  // header-upload.guard is synchronous (inline template header media): structure checks yes, antivirus scan not yet (open item)
+  const SYNC_ALLOWED = [
+    'modules/developer-rest-api-v1/resources/automation/templates/header-upload.guard.ts',
+  ];
+  it('services call validateScanned so the antivirus hook applies; plain validate only where listed', () => {
+    expect(calls.filter((c) => !SYNC_ALLOWED.includes(c))).toEqual([]);
+  });
+  it('every route reviewed as UploadPolicyService has a service in its module that calls validateScanned', () => {
+    const missing = Object.entries(REVIEWED)
+      .filter(([, how]) => how.startsWith('UploadPolicyService'))
+      .map(([f]) => f)
+      .filter((f) => {
+        const dir = join(SRC, f.split('/').slice(0, 2).join('/'));
+        return !walk(dir).some((p) =>
+          /validateScanned\(|ChatMediaStore|ChatMediaService|MediaIntake|scanUpload\(/.test(
+            readFileSync(p, 'utf8'),
+          ),
+        );
+      });
+    expect(missing).toEqual([]);
+  });
+});

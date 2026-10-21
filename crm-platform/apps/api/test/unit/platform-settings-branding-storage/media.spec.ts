@@ -13,14 +13,15 @@ import {
 } from '../../../src/modules/platform-settings-branding-storage/media-storage.service';
 import { generateVapidKeyPair } from '../../../src/modules/platform-settings-branding-storage/vapid.service';
 import { presignS3Get } from '../../../src/infra/providers/platform-settings-branding-storage/object-storage.probe';
+import { jpegOfSize, pngOfSize, webpOfSize } from '../../support/images';
 
-const PNG = Buffer.concat([Buffer.from('89504e470d0a1a0a', 'hex'), Buffer.alloc(32)]);
+const PNG = pngOfSize();
 
 describe('image sniffing (TW-SET-010)', () => {
   it('reads the type from the bytes', () => {
     expect(sniffImage(PNG)).toBe('image/png');
-    expect(sniffImage(Buffer.from([0xff, 0xd8, 0xff, 0xe0, 0]))).toBe('image/jpeg');
-    expect(sniffImage(Buffer.from('RIFF....WEBPVP8 ', 'latin1'))).toBe('image/webp');
+    expect(sniffImage(jpegOfSize())).toBe('image/jpeg');
+    expect(sniffImage(webpOfSize())).toBe('image/webp');
     expect(sniffImage(Buffer.from('00000100010001', 'hex'))).toBe('image/x-icon');
     expect(sniffImage(Buffer.from('<?xml version="1.0"?>\n<svg xmlns="x"></svg>'))).toBe(
       'image/svg+xml',
@@ -47,10 +48,10 @@ describe('brand asset limits (TW-SET-010 rule 1)', () => {
   });
 
   it('a 600 KB favicon is refused (limit 512 KB) but a 900 KB logo is accepted by the size rule', async () => {
-    const big = Buffer.concat([PNG, Buffer.alloc(600 * 1024)]);
+    const big = pngOfSize(600 * 1024);
     await reject('favicon', big);
     // The logo passes validation and reaches the (absent) store: a TypeError here, not a validation error.
-    const logo = Buffer.concat([PNG, Buffer.alloc(900 * 1024)]);
+    const logo = pngOfSize(900 * 1024);
     await expect(svc.upload('logo-paper', logo, 1)).rejects.not.toMatchObject({ status: 422 });
   });
 
