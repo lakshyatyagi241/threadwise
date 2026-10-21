@@ -309,7 +309,7 @@ export function makeProbes({ api, db, direct, redisPrefix, redisDb = '9' }) {
         let longest = 0;
         for (const k of keys.slice(0, 400)) {
           const ttl = Number(redis('ttl', k));
-          if (ttl < 0) noTtl++;
+          if (ttl === -1) noTtl++; // -2 means the key expired between the scan and this call
           longest = Math.max(longest, ttl);
         }
         return {

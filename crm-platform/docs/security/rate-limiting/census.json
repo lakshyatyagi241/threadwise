@@ -2,7 +2,7 @@
   "generatedBy": "tools/rate-limit/census.mjs",
   "api": "local",
   "routes": 158,
-  "seconds": 97,
+  "seconds": 92,
   "results": [
     {
       "key": "GET /api/whatsapp-message-settings",
@@ -26,7 +26,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3421
+      "ms": 2661
     },
     {
       "key": "GET /docs/api.json",
@@ -50,7 +50,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 7381
+      "ms": 6353
     },
     {
       "key": "GET /form-embed/:publicKey/embed.js",
@@ -74,7 +74,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3392
+      "ms": 2640
     },
     {
       "key": "GET /health",
@@ -98,7 +98,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3372
+      "ms": 2620
     },
     {
       "key": "GET /l/:slug",
@@ -123,7 +123,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1222
+      "ms": 971
     },
     {
       "key": "GET /r/:token",
@@ -147,7 +147,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2623
+      "ms": 2246
     },
     {
       "key": "GET /ready",
@@ -171,7 +171,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4014
+      "ms": 3680
     },
     {
       "key": "GET /v2/auth/password-policy",
@@ -195,7 +195,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2327
+      "ms": 2162
     },
     {
       "key": "GET /v2/auth/registration-config",
@@ -219,7 +219,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3982
+      "ms": 3881
     },
     {
       "key": "GET /v2/auth/social/:provider/start",
@@ -243,7 +243,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2048
+      "ms": 1947
     },
     {
       "key": "GET /v2/facebook/callback",
@@ -267,7 +267,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2000
+      "ms": 1943
     },
     {
       "key": "GET /v2/facebook/webhook",
@@ -291,7 +291,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 401
+      "ms": 311
     },
     {
       "key": "GET /v2/flow-media/:org/:name",
@@ -315,7 +315,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1911
+      "ms": 1995
     },
     {
       "key": "GET /v2/i18n/languages",
@@ -339,7 +339,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 7144
+      "ms": 8831
     },
     {
       "key": "GET /v2/public/appointments/calendar/google/callback",
@@ -363,7 +363,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2338
+      "ms": 2929
     },
     {
       "key": "GET /v2/public/appointments/calendar/microsoft/callback",
@@ -387,7 +387,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2587
+      "ms": 3235
     },
     {
       "key": "GET /v2/public/appointments/feed/:file",
@@ -412,7 +412,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 106
+      "ms": 123
     },
     {
       "key": "GET /v2/public/booking-assets/:orgSlug/:assetId",
@@ -426,7 +426,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 600,
-      "retryAfter": "58",
+      "retryAfter": "57",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -437,17 +437,17 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1880
+      "ms": 2545
     },
     {
       "key": "GET /v2/public/booking-manage/:token",
       "class": "public-read",
       "declared": "none",
       "bodyKind": "empty",
-      "sent": 57,
+      "sent": 46,
       "cap": 700,
-      "first429": 57,
-      "allowedBeforeBlock": 56,
+      "first429": 46,
+      "allowedBeforeBlock": 45,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -456,23 +456,23 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 56,
+        "404": 45,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 293
+      "ms": 339
     },
     {
       "key": "GET /v2/public/booking-manage/:token/ics",
       "class": "public-read",
       "declared": "none",
       "bodyKind": "empty",
-      "sent": 5,
+      "sent": 16,
       "cap": 700,
-      "first429": 5,
-      "allowedBeforeBlock": 4,
+      "first429": 16,
+      "allowedBeforeBlock": 15,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -481,13 +481,13 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 4,
+        "404": 15,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 20
+      "ms": 99
     },
     {
       "key": "GET /v2/public/booking-manage/:token/slots",
@@ -511,7 +511,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 9
+      "ms": 12
     },
     {
       "key": "GET /v2/public/booking/:orgSlug",
@@ -525,7 +525,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "55",
+      "retryAfter": "54",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -536,7 +536,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2966
+      "ms": 3457
     },
     {
       "key": "GET /v2/public/booking/:orgSlug/:typeSlug",
@@ -550,7 +550,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "57",
+      "retryAfter": "56",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -561,7 +561,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3005
+      "ms": 3574
     },
     {
       "key": "GET /v2/public/booking/:orgSlug/:typeSlug/slots",
@@ -575,7 +575,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "57",
+      "retryAfter": "56",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -586,7 +586,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2983
+      "ms": 3503
     },
     {
       "key": "GET /v2/public/brand/:slot",
@@ -610,7 +610,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2220
+      "ms": 2673
     },
     {
       "key": "GET /v2/public/cms/announcements",
@@ -634,7 +634,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4096
+      "ms": 4644
     },
     {
       "key": "GET /v2/public/cms/blog",
@@ -658,7 +658,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4041
+      "ms": 4554
     },
     {
       "key": "GET /v2/public/cms/blog/:slug",
@@ -682,7 +682,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3929
+      "ms": 4323
     },
     {
       "key": "GET /v2/public/cms/content",
@@ -706,7 +706,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3927
+      "ms": 4106
     },
     {
       "key": "GET /v2/public/cms/legal",
@@ -730,7 +730,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3998
+      "ms": 4489
     },
     {
       "key": "GET /v2/public/cms/legal/:slug",
@@ -754,7 +754,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2222
+      "ms": 2393
     },
     {
       "key": "GET /v2/public/cms/pricing",
@@ -778,7 +778,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4544
+      "ms": 4825
     },
     {
       "key": "GET /v2/public/cms/site-info",
@@ -802,7 +802,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2621
+      "ms": 2854
     },
     {
       "key": "GET /v2/public/cms/sitemap",
@@ -826,7 +826,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4410
+      "ms": 4762
     },
     {
       "key": "GET /v2/public/compliance/trust/:slug",
@@ -851,7 +851,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1265
+      "ms": 1138
     },
     {
       "key": "GET /v2/public/conferencing/:provider/callback",
@@ -876,7 +876,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1729
+      "ms": 1890
     },
     {
       "key": "GET /v2/public/consent/unsubscribe/:token",
@@ -901,7 +901,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 312
+      "ms": 314
     },
     {
       "key": "GET /v2/public/email/google/callback",
@@ -925,7 +925,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2140
+      "ms": 2296
     },
     {
       "key": "GET /v2/public/email/microsoft/callback",
@@ -949,7 +949,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2139
+      "ms": 2306
     },
     {
       "key": "GET /v2/public/forms/:publicKey",
@@ -974,7 +974,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 659
+      "ms": 768
     },
     {
       "key": "GET /v2/public/forms/:publicKey/submissions/:token",
@@ -999,7 +999,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 426
+      "ms": 423
     },
     {
       "key": "GET /v2/public/invoices/:token",
@@ -1024,7 +1024,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 531
+      "ms": 530
     },
     {
       "key": "GET /v2/public/invoices/:token/pdf",
@@ -1049,7 +1049,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 528
+      "ms": 537
     },
     {
       "key": "GET /v2/public/invoices/:token/print",
@@ -1074,7 +1074,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 560
+      "ms": 597
     },
     {
       "key": "GET /v2/public/manifest.webmanifest",
@@ -1098,7 +1098,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2333
+      "ms": 2242
     },
     {
       "key": "GET /v2/public/marketplace/hooks/:publicKey",
@@ -1112,7 +1112,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "56",
+      "retryAfter": "57",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1123,7 +1123,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3556
+      "ms": 3414
     },
     {
       "key": "GET /v2/public/robots.txt",
@@ -1147,7 +1147,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2341
+      "ms": 2218
     },
     {
       "key": "GET /v2/public/sales-docs/:token",
@@ -1172,7 +1172,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 274
+      "ms": 290
     },
     {
       "key": "GET /v2/public/sales-docs/:token/print",
@@ -1196,7 +1196,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4
+      "ms": 5
     },
     {
       "key": "GET /v2/public/site-config",
@@ -1220,7 +1220,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 5212
+      "ms": 4986
     },
     {
       "key": "GET /v2/public/team-inbox-manifest.webmanifest",
@@ -1244,7 +1244,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2353
+      "ms": 2275
     },
     {
       "key": "GET /v2/public/webhooks/wa-calling",
@@ -1268,7 +1268,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2386
+      "ms": 2294
     },
     {
       "key": "GET /v2/public/webhooks/whatsapp",
@@ -1292,7 +1292,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2536
+      "ms": 2515
     },
     {
       "key": "GET /v2/setup/status",
@@ -1306,7 +1306,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 30,
-      "retryAfter": "25",
+      "retryAfter": "26",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1317,7 +1317,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 684
+      "ms": 758
     },
     {
       "key": "GET /v2/shopify/embedded/config",
@@ -1342,7 +1342,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 146
+      "ms": 156
     },
     {
       "key": "GET /v2/shopify/oauth/callback",
@@ -1366,7 +1366,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2722
+      "ms": 2675
     },
     {
       "key": "GET /v2/store-public/:slug/home",
@@ -1390,7 +1390,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 5538
+      "ms": 5281
     },
     {
       "key": "GET /v2/store-public/:slug/orders/:token",
@@ -1414,7 +1414,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2643
+      "ms": 2361
     },
     {
       "key": "GET /v2/store-public/:slug/products/:productSlug",
@@ -1438,7 +1438,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 5385
+      "ms": 5115
     },
     {
       "key": "GET /v2/store-public/host",
@@ -1462,7 +1462,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3154
+      "ms": 3039
     },
     {
       "key": "GET /v2/webhooks/channels/:channelUuid",
@@ -1487,7 +1487,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 6594
+      "ms": 6256
     },
     {
       "key": "GET /v2/wechat/inbound/:token",
@@ -1511,7 +1511,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 420
+      "ms": 411
     },
     {
       "key": "GET /v2/workspace/invitations/preview",
@@ -1536,7 +1536,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 72
+      "ms": 52
     },
     {
       "key": "GET /widget-assets/:flowId/:slot",
@@ -1560,7 +1560,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2545
+      "ms": 2361
     },
     {
       "key": "GET /widget-legacy/:id/output.js",
@@ -1584,7 +1584,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4846
+      "ms": 4401
     },
     {
       "key": "GET /widget-legacy/output.js",
@@ -1608,7 +1608,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2564
+      "ms": 2311
     },
     {
       "key": "GET /widget/:token/api/config",
@@ -1632,7 +1632,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2664
+      "ms": 2775
     },
     {
       "key": "GET /widget/:token/api/history",
@@ -1657,7 +1657,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 861
+      "ms": 779
     },
     {
       "key": "GET /widget/:token/api/media/:id",
@@ -1682,7 +1682,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 883
+      "ms": 867
     },
     {
       "key": "GET /widget/:token/chat",
@@ -1706,7 +1706,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3218
+      "ms": 3322
     },
     {
       "key": "GET /widget/:token/embed",
@@ -1730,7 +1730,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3989
+      "ms": 3856
     },
     {
       "key": "POST /v2/account/email-change/confirm",
@@ -1754,7 +1754,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 8834
+      "ms": 8925
     },
     {
       "key": "POST /v2/auth/clerk/session",
@@ -1778,7 +1778,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2063
+      "ms": 2011
     },
     {
       "key": "POST /v2/auth/find-workspaces",
@@ -1792,7 +1792,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "12",
+      "retryAfter": "13",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1803,7 +1803,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 151
+      "ms": 172
     },
     {
       "key": "POST /v2/auth/forgot-password",
@@ -1827,7 +1827,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1308
+      "ms": 1355
     },
     {
       "key": "POST /v2/auth/impersonation/redeem",
@@ -1852,7 +1852,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 806
+      "ms": 780
     },
     {
       "key": "POST /v2/auth/login",
@@ -1866,7 +1866,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "297",
+      "retryAfter": "298",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1877,7 +1877,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2777
+      "ms": 2512
     },
     {
       "key": "POST /v2/auth/login/mfa",
@@ -1891,7 +1891,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "11",
+      "retryAfter": "12",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1902,7 +1902,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 124
+      "ms": 144
     },
     {
       "key": "POST /v2/auth/login/mfa/webauthn-options",
@@ -1916,7 +1916,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "11",
+      "retryAfter": "12",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1927,7 +1927,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 105
+      "ms": 128
     },
     {
       "key": "POST /v2/auth/login/workspace",
@@ -1941,7 +1941,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "11",
+      "retryAfter": "12",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -1952,7 +1952,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 113
+      "ms": 164
     },
     {
       "key": "POST /v2/auth/logout",
@@ -1976,7 +1976,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2777
+      "ms": 2724
     },
     {
       "key": "POST /v2/auth/partner/login",
@@ -1990,7 +1990,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "10",
+      "retryAfter": "11",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2001,7 +2001,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 298
+      "ms": 319
     },
     {
       "key": "POST /v2/auth/refresh",
@@ -2015,7 +2015,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 60,
-      "retryAfter": "10",
+      "retryAfter": "11",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2026,7 +2026,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 565
+      "ms": 546
     },
     {
       "key": "POST /v2/auth/reset-password",
@@ -2040,7 +2040,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "9",
+      "retryAfter": "10",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2051,7 +2051,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 293
+      "ms": 294
     },
     {
       "key": "POST /v2/auth/signup",
@@ -2065,7 +2065,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "9",
+      "retryAfter": "10",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2076,7 +2076,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 835
+      "ms": 558
     },
     {
       "key": "POST /v2/auth/signup/resend-email-code",
@@ -2126,7 +2126,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 86
+      "ms": 66
     },
     {
       "key": "POST /v2/auth/signup/set-password",
@@ -2140,7 +2140,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "8",
+      "retryAfter": "10",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2151,33 +2151,32 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 125
+      "ms": 119
     },
     {
       "key": "POST /v2/auth/signup/start",
       "class": "credential",
       "declared": "throttle",
       "bodyKind": "valid",
-      "sent": 12,
+      "sent": 11,
       "cap": 120,
-      "first429": 12,
-      "allowedBeforeBlock": 11,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "58",
+      "retryAfter": "9",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "201": 2,
-        "422": 9,
+        "422": 10,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 10993
+      "ms": 814
     },
     {
       "key": "POST /v2/auth/signup/verify-email-code",
@@ -2202,7 +2201,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 124
+      "ms": 165
     },
     {
       "key": "POST /v2/auth/signup/verify-otp",
@@ -2227,7 +2226,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 119
+      "ms": 168
     },
     {
       "key": "POST /v2/auth/social/:provider/callback",
@@ -2251,7 +2250,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3819
+      "ms": 3878
     },
     {
       "key": "POST /v2/auth/staff/login",
@@ -2265,7 +2264,7 @@
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
-      "retryAfter": "298",
+      "retryAfter": "297",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2276,7 +2275,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2456
+      "ms": 2639
     },
     {
       "key": "POST /v2/auth/verify-email",
@@ -2290,7 +2289,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "5",
+      "retryAfter": "9",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2301,7 +2300,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 247
+      "ms": 334
     },
     {
       "key": "POST /v2/campaigns/node/drain",
@@ -2325,7 +2324,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1436
+      "ms": 2442
     },
     {
       "key": "POST /v2/campaigns/node/track-response",
@@ -2349,7 +2348,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1416
+      "ms": 1663
     },
     {
       "key": "POST /v2/campaigns/node/unsubscribe",
@@ -2373,7 +2372,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1416
+      "ms": 1604
     },
     {
       "key": "POST /v2/campaigns/node/update-contact-status",
@@ -2397,7 +2396,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1400
+      "ms": 1612
     },
     {
       "key": "POST /v2/campaigns/node/update-status",
@@ -2421,7 +2420,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1396
+      "ms": 1713
     },
     {
       "key": "POST /v2/campaigns/node/update-status-by-id",
@@ -2445,7 +2444,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1353
+      "ms": 1696
     },
     {
       "key": "POST /v2/facebook/webhook",
@@ -2469,7 +2468,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2493
+      "ms": 3669
     },
     {
       "key": "POST /v2/instaflow/inbound",
@@ -2493,17 +2492,17 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2509
+      "ms": 3814
     },
     {
       "key": "POST /v2/line/inbound/:token",
       "class": "webhook",
       "declared": "none",
       "bodyKind": "empty",
-      "sent": 388,
+      "sent": 241,
       "cap": 700,
-      "first429": 388,
-      "allowedBeforeBlock": 387,
+      "first429": 241,
+      "allowedBeforeBlock": 240,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -2512,13 +2511,13 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "200": 387,
+        "200": 240,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4734
+      "ms": 3219
     },
     {
       "key": "POST /v2/payments/webhook/:slug",
@@ -2542,7 +2541,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 14018
+      "ms": 13598
     },
     {
       "key": "POST /v2/platform/auth/login",
@@ -2567,7 +2566,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 432
+      "ms": 366
     },
     {
       "key": "POST /v2/platform/auth/login/mfa",
@@ -2581,7 +2580,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "59",
+      "retryAfter": "1",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2592,7 +2591,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 125
+      "ms": 86
     },
     {
       "key": "POST /v2/platform/auth/login/mfa/webauthn-options",
@@ -2606,7 +2605,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 10,
-      "retryAfter": "59",
+      "retryAfter": "1",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2617,7 +2616,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 152
+      "ms": 123
     },
     {
       "key": "POST /v2/platform/auth/logout",
@@ -2641,57 +2640,57 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2820
+      "ms": 2437
     },
     {
       "key": "POST /v2/platform/auth/refresh",
       "class": "credential",
       "declared": "throttle",
       "bodyKind": "valid",
-      "sent": 61,
+      "sent": 62,
       "cap": 120,
-      "first429": 61,
-      "allowedBeforeBlock": 60,
+      "first429": 62,
+      "allowedBeforeBlock": 61,
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 60,
-      "retryAfter": "57",
+      "retryAfter": "60",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "401": 60,
+        "401": 61,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 598
+      "ms": 517
     },
     {
       "key": "POST /v2/platform/waboo-migration/runner/claim",
       "class": "credential",
       "declared": "throttle",
       "bodyKind": "valid",
-      "sent": 241,
+      "sent": 242,
       "cap": 265,
-      "first429": 241,
-      "allowedBeforeBlock": 240,
+      "first429": 242,
+      "allowedBeforeBlock": 241,
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 240,
-      "retryAfter": "54",
+      "retryAfter": "58",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "401": 240,
+        "401": 241,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2917
+      "ms": 2377
     },
     {
       "key": "POST /v2/platform/waboo-migration/runner/jobs/:id/finish",
@@ -2705,7 +2704,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 240,
-      "retryAfter": "54",
+      "retryAfter": "57",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2716,7 +2715,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2913
+      "ms": 2609
     },
     {
       "key": "POST /v2/platform/waboo-migration/runner/jobs/:id/report",
@@ -2730,7 +2729,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 240,
-      "retryAfter": "54",
+      "retryAfter": "56",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2741,17 +2740,17 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2997
+      "ms": 2334
     },
     {
       "key": "POST /v2/public/booking-manage/:token/cancel",
       "class": "public-write",
       "declared": "none",
       "bodyKind": "valid",
-      "sent": 8,
+      "sent": 11,
       "cap": 400,
-      "first429": 8,
-      "allowedBeforeBlock": 7,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -2760,23 +2759,23 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 7,
+        "404": 10,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 109
+      "ms": 79
     },
     {
       "key": "POST /v2/public/booking-manage/:token/reschedule",
       "class": "public-write",
       "declared": "none",
       "bodyKind": "valid",
-      "sent": 4,
+      "sent": 1,
       "cap": 400,
-      "first429": 4,
-      "allowedBeforeBlock": 3,
+      "first429": 1,
+      "allowedBeforeBlock": 0,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -2785,13 +2784,12 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 3,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 61
+      "ms": 17
     },
     {
       "key": "POST /v2/public/booking/:orgSlug/:typeSlug/book",
@@ -2816,7 +2814,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 325
+      "ms": 299
     },
     {
       "key": "POST /v2/public/cms/contact",
@@ -2841,7 +2839,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 93
+      "ms": 130
     },
     {
       "key": "POST /v2/public/consent/unsubscribe/:token",
@@ -2855,7 +2853,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 20,
-      "retryAfter": "54",
+      "retryAfter": "57",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -2866,7 +2864,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 242
+      "ms": 215
     },
     {
       "key": "POST /v2/public/email/google/push",
@@ -2890,7 +2888,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4468
+      "ms": 3976
     },
     {
       "key": "POST /v2/public/email/microsoft/push",
@@ -2914,7 +2912,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4430
+      "ms": 3970
     },
     {
       "key": "POST /v2/public/forms/:publicKey/events",
@@ -2939,7 +2937,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1452
+      "ms": 1248
     },
     {
       "key": "POST /v2/public/forms/:publicKey/submit",
@@ -2964,7 +2962,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1442
+      "ms": 1194
     },
     {
       "key": "POST /v2/public/invoices/:token/pay",
@@ -2989,7 +2987,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 200
+      "ms": 286
     },
     {
       "key": "POST /v2/public/lead-hooks/:token",
@@ -3014,7 +3012,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1144
+      "ms": 1428
     },
     {
       "key": "POST /v2/public/marketplace/hooks/:publicKey",
@@ -3038,17 +3036,17 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 4205
+      "ms": 4591
     },
     {
       "key": "POST /v2/public/sales-docs/:token/accept",
       "class": "credential",
       "declared": "none",
       "bodyKind": "valid",
-      "sent": 7,
+      "sent": 11,
       "cap": 120,
-      "first429": 7,
-      "allowedBeforeBlock": 6,
+      "first429": 11,
+      "allowedBeforeBlock": 10,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -3057,23 +3055,23 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 6,
+        "404": 10,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 88
+      "ms": 112
     },
     {
       "key": "POST /v2/public/sales-docs/:token/decline",
       "class": "public-write",
       "declared": "none",
       "bodyKind": "valid",
-      "sent": 5,
+      "sent": 1,
       "cap": 400,
-      "first429": 5,
-      "allowedBeforeBlock": 4,
+      "first429": 1,
+      "allowedBeforeBlock": 0,
       "limited": true,
       "mechanism": "bespoke",
       "declaredLimit": null,
@@ -3082,13 +3080,12 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "404": 4,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 94
+      "ms": 15
     },
     {
       "key": "POST /v2/public/webhooks/invoice-payments/:endpointId",
@@ -3113,7 +3110,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3988
+      "ms": 4213
     },
     {
       "key": "POST /v2/public/webhooks/telephony/:connectionId",
@@ -3127,7 +3124,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 240,
-      "retryAfter": "46",
+      "retryAfter": "49",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -3138,7 +3135,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2907
+      "ms": 3434
     },
     {
       "key": "POST /v2/public/webhooks/wa-calling",
@@ -3162,7 +3159,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 15589
+      "ms": 15502
     },
     {
       "key": "POST /v2/public/webhooks/whatsapp",
@@ -3186,7 +3183,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 15579
+      "ms": 15383
     },
     {
       "key": "POST /v2/setup/bootstrap",
@@ -3200,7 +3197,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 30,
-      "retryAfter": "45",
+      "retryAfter": "48",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -3211,7 +3208,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 451
+      "ms": 430
     },
     {
       "key": "POST /v2/setup/database-defaults",
@@ -3220,6 +3217,131 @@
       "bodyKind": "valid",
       "sent": 31,
       "cap": 400,
+      "first429": 31,
+      "allowedBeforeBlock": 30,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 30,
+      "retryAfter": "47",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "403": 30,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 1565
+    },
+    {
+      "key": "POST /v2/setup/requirements",
+      "class": "public-write",
+      "declared": "throttle",
+      "bodyKind": "valid",
+      "sent": 31,
+      "cap": 400,
+      "first429": 31,
+      "allowedBeforeBlock": 30,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 30,
+      "retryAfter": "47",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "403": 30,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 1541
+    },
+    {
+      "key": "POST /v2/setup/run",
+      "class": "public-write",
+      "declared": "throttle",
+      "bodyKind": "empty",
+      "sent": 31,
+      "cap": 400,
+      "first429": 31,
+      "allowedBeforeBlock": 30,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 30,
+      "retryAfter": "47",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "422": 30,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 436
+    },
+    {
+      "key": "POST /v2/setup/test-database",
+      "class": "public-write",
+      "declared": "throttle",
+      "bodyKind": "valid",
+      "sent": 31,
+      "cap": 400,
+      "first429": 31,
+      "allowedBeforeBlock": 30,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 30,
+      "retryAfter": "45",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "403": 30,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 1728
+    },
+    {
+      "key": "POST /v2/setup/verify-licence",
+      "class": "credential",
+      "declared": "throttle",
+      "bodyKind": "valid",
+      "sent": 31,
+      "cap": 120,
+      "first429": 31,
+      "allowedBeforeBlock": 30,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 30,
+      "retryAfter": "45",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "403": 30,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 1799
+    },
+    {
+      "key": "POST /v2/setup/verify-token",
+      "class": "credential",
+      "declared": "throttle",
+      "bodyKind": "valid",
+      "sent": 31,
+      "cap": 120,
       "first429": 31,
       "allowedBeforeBlock": 30,
       "limited": true,
@@ -3236,132 +3358,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1451
-    },
-    {
-      "key": "POST /v2/setup/requirements",
-      "class": "public-write",
-      "declared": "throttle",
-      "bodyKind": "valid",
-      "sent": 31,
-      "cap": 400,
-      "first429": 31,
-      "allowedBeforeBlock": 30,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 30,
-      "retryAfter": "43",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
-        "403": 30,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 1410
-    },
-    {
-      "key": "POST /v2/setup/run",
-      "class": "public-write",
-      "declared": "throttle",
-      "bodyKind": "empty",
-      "sent": 31,
-      "cap": 400,
-      "first429": 31,
-      "allowedBeforeBlock": 30,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 30,
-      "retryAfter": "43",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
-        "422": 30,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 377
-    },
-    {
-      "key": "POST /v2/setup/test-database",
-      "class": "public-write",
-      "declared": "throttle",
-      "bodyKind": "valid",
-      "sent": 31,
-      "cap": 400,
-      "first429": 31,
-      "allowedBeforeBlock": 30,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 30,
-      "retryAfter": "42",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
-        "403": 30,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 1575
-    },
-    {
-      "key": "POST /v2/setup/verify-licence",
-      "class": "credential",
-      "declared": "throttle",
-      "bodyKind": "valid",
-      "sent": 31,
-      "cap": 120,
-      "first429": 31,
-      "allowedBeforeBlock": 30,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 30,
-      "retryAfter": "42",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
-        "403": 30,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 1569
-    },
-    {
-      "key": "POST /v2/setup/verify-token",
-      "class": "credential",
-      "declared": "throttle",
-      "bodyKind": "valid",
-      "sent": 31,
-      "cap": 120,
-      "first429": 31,
-      "allowedBeforeBlock": 30,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 30,
-      "retryAfter": "40",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
-        "403": 30,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 1373
+      "ms": 1627
     },
     {
       "key": "POST /v2/shopify/compliance",
@@ -3385,7 +3382,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 6201
+      "ms": 6690
     },
     {
       "key": "POST /v2/shopify/embedded/session",
@@ -3399,7 +3396,7 @@
       "limited": true,
       "mechanism": "guard",
       "declaredLimit": 60,
-      "retryAfter": "40",
+      "retryAfter": "43",
       "retryAfterOk": true,
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
@@ -3410,7 +3407,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 696
+      "ms": 756
     },
     {
       "key": "POST /v2/shopify/webhook/:secret",
@@ -3434,10 +3431,35 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 9791
+      "ms": 9681
     },
     {
       "key": "POST /v2/sms/status",
+      "class": "public-write",
+      "declared": "throttle",
+      "bodyKind": "empty",
+      "sent": 241,
+      "cap": 400,
+      "first429": 241,
+      "allowedBeforeBlock": 240,
+      "limited": true,
+      "mechanism": "guard",
+      "declaredLimit": 240,
+      "retryAfter": "35",
+      "retryAfterOk": true,
+      "code": "RATE_LIMITED",
+      "contentType": "application/problem+json; charset=utf-8",
+      "statuses": {
+        "204": 240,
+        "429": 1
+      },
+      "fiveXX": 0,
+      "firstFiveXX": null,
+      "timeouts": 0,
+      "ms": 3258
+    },
+    {
+      "key": "POST /v2/sms/status/:secret",
       "class": "public-write",
       "declared": "throttle",
       "bodyKind": "empty",
@@ -3453,38 +3475,13 @@
       "code": "RATE_LIMITED",
       "contentType": "application/problem+json; charset=utf-8",
       "statuses": {
-        "204": 240,
-        "429": 1
-      },
-      "fiveXX": 0,
-      "firstFiveXX": null,
-      "timeouts": 0,
-      "ms": 3340
-    },
-    {
-      "key": "POST /v2/sms/status/:secret",
-      "class": "public-write",
-      "declared": "throttle",
-      "bodyKind": "empty",
-      "sent": 241,
-      "cap": 400,
-      "first429": 241,
-      "allowedBeforeBlock": 240,
-      "limited": true,
-      "mechanism": "guard",
-      "declaredLimit": 240,
-      "retryAfter": "29",
-      "retryAfterOk": true,
-      "code": "RATE_LIMITED",
-      "contentType": "application/problem+json; charset=utf-8",
-      "statuses": {
         "401": 240,
         "429": 1
       },
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3042
+      "ms": 2488
     },
     {
       "key": "POST /v2/store-public/:slug/abandon",
@@ -3509,7 +3506,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 211
+      "ms": 287
     },
     {
       "key": "POST /v2/store-public/:slug/checkout",
@@ -3534,7 +3531,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 134
+      "ms": 196
     },
     {
       "key": "POST /v2/store-public/:slug/coupon",
@@ -3559,7 +3556,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 272
+      "ms": 359
     },
     {
       "key": "POST /v2/store-public/:slug/review",
@@ -3584,7 +3581,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 91
+      "ms": 104
     },
     {
       "key": "POST /v2/store-public/webhooks/gateway/:gatewayId",
@@ -3608,7 +3605,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 5665
+      "ms": 4038
     },
     {
       "key": "POST /v2/store-public/webhooks/razorpay",
@@ -3633,7 +3630,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2266
+      "ms": 1639
     },
     {
       "key": "POST /v2/telegram/inbound/:token",
@@ -3658,7 +3655,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 1075
+      "ms": 837
     },
     {
       "key": "POST /v2/viber/inbound/:token",
@@ -3683,7 +3680,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 2588
+      "ms": 1799
     },
     {
       "key": "POST /v2/webhooks/channels/:channelUuid",
@@ -3708,7 +3705,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 7220
+      "ms": 4437
     },
     {
       "key": "POST /v2/wechat/inbound/:token",
@@ -3732,7 +3729,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 3196
+      "ms": 2464
     },
     {
       "key": "POST /v2/woocommerce/webhook/:secret",
@@ -3756,7 +3753,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 5798
+      "ms": 3500
     },
     {
       "key": "POST /v2/workspace/invitations/accept",
@@ -3781,7 +3778,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 496
+      "ms": 373
     },
     {
       "key": "POST /widget/:token/api/feedback",
@@ -3806,7 +3803,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 598
+      "ms": 373
     },
     {
       "key": "POST /widget/:token/api/message",
@@ -3831,7 +3828,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 610
+      "ms": 342
     },
     {
       "key": "POST /widget/:token/api/restart",
@@ -3856,7 +3853,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 584
+      "ms": 323
     },
     {
       "key": "POST /widget/:token/api/upload",
@@ -3881,7 +3878,7 @@
       "fiveXX": 0,
       "firstFiveXX": null,
       "timeouts": 0,
-      "ms": 511
+      "ms": 336
     }
   ]
 }
