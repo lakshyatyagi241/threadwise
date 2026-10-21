@@ -65,6 +65,11 @@
         "description": "Connect your WhatsApp Business number to chat with customers.",
         "keywords": "wa, whatsapp business, cloud api, number, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp business profile",
+        "description": "Your logo, about text, contact details and the compliance information Meta asks for.",
+        "keywords": "business profile, logo, profile picture, about, contact, compliance, legal name, customer care, grievance officer"
+      },
       "unofficial-whatsapp": {
         "label": "Unofficial WhatsApp API",
         "description": "Link a personal WhatsApp number by QR code and warm it up for safe sending.",

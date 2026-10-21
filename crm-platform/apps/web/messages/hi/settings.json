@@ -65,6 +65,11 @@
         "description": "ग्राहकों से चैट करने के लिए अपना WhatsApp Business नंबर कनेक्ट करें।",
         "keywords": "wa, whatsapp business, cloud api, नंबर, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp बिज़नेस प्रोफ़ाइल",
+        "description": "आपका लोगो, परिचय, संपर्क विवरण और Meta द्वारा माँगी गई अनुपालन जानकारी।",
+        "keywords": "बिज़नेस प्रोफ़ाइल, लोगो, प्रोफ़ाइल फ़ोटो, परिचय, संपर्क, अनुपालन, कानूनी नाम, ग्राहक सेवा, शिकायत अधिकारी"
+      },
       "unofficial-whatsapp": {
         "label": "अनऑफ़िशियल WhatsApp API",
         "description": "QR कोड से निजी WhatsApp नंबर लिंक करें और सुरक्षित भेजने के लिए उसे वार्म अप करें।",

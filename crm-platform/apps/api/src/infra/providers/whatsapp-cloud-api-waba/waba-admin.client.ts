@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { WABA_ENV, type WabaEnv } from '../../../config/domains/whatsapp-cloud-api-waba.env';
 import {
   authOf,
+  type BusinessComplianceInfo,
   type BusinessProfile,
   type AppSubscriptionState,
   type QrCodeInfo,
@@ -17,6 +18,8 @@ import {
 } from './waba-admin.port';
 import { WabaApiError } from './waba-errors';
 import { WabaHttp, type WabaAuth, type WabaRequest } from './waba-http';
+import { uploadMediaHandle } from './waba-media-upload';
+import type { MediaUpload } from './waba-template.port';
 
 /** Every field the connect screens and the health page read, in one request (union of Reference's and Geta's lists). */
 export const PHONE_FIELDS = [
@@ -808,6 +811,98 @@ export class WabaAdminClient implements WabaAdminPort {
       json: body,
     });
   }
+
+  async uploadProfilePicture(conn: WabaConnection, media: MediaUpload): Promise<string> {
+    return uploadMediaHandle(this.http, this.env, conn, media, 'a profile picture');
+  }
+
+  async getBusinessComplianceInfo(conn: WabaConnection): Promise<BusinessComplianceInfo> {
+    const res = await this.http.call<{ data?: RawCompliance[] }>(authOf(conn), {
+      method: 'GET',
+      path: `/${conn.phoneNumberId}/business_compliance_info`,
+    });
+    return toCompliance(res.data?.[0] ?? {});
+  }
+
+  async updateBusinessComplianceInfo(
+    conn: WabaConnection,
+    info: BusinessComplianceInfo,
+  ): Promise<void> {
+    await this.http.call(authOf(conn), {
+      method: 'POST',
+      path: `/${conn.phoneNumberId}/business_compliance_info`,
+      json: toMetaCompliance(info),
+    });
+  }
+}
+
+/** Meta's compliance record as Geta stores it (`business_compliance_info`); every field may be absent. */
+interface RawCompliance {
+  entity_name?: string;
+  entity_type?: string;
+  entity_type_custom?: string;
+  is_registered?: boolean;
+  customer_care_details?: { email?: string; mobile_number?: string; landline_number?: string };
+  grievance_officer_details?: {
+    name?: string;
+    email?: string;
+    mobile_number?: string;
+    landline_number?: string;
+  };
+}
+
+/** The form's wording for each entity type (Geta's labels). Read back when a record holds the label, not Meta's value. */
+const ENTITY_TYPE_BY_LABEL: Record<string, string> = {
+  'Limited liability partnership': 'LIMITED_LIABILITY_PARTNERSHIP',
+  'Sole proprietorship': 'SOLE_PROPRIETORSHIP',
+  Partnership: 'PARTNERSHIP',
+  'Public Company': 'PUBLIC_COMPANY',
+  'Private Company': 'PRIVATE_COMPANY',
+  Other: 'OTHER',
+};
+
+function toCompliance(raw: RawCompliance): BusinessComplianceInfo {
+  const care = raw.customer_care_details ?? {};
+  const officer = raw.grievance_officer_details ?? {};
+  return {
+    entityName: raw.entity_name ?? null,
+    entityType: raw.entity_type ? (ENTITY_TYPE_BY_LABEL[raw.entity_type] ?? raw.entity_type) : null,
+    entityTypeCustom: raw.entity_type_custom ?? null,
+    isRegistered: raw.is_registered ?? null,
+    customerCare: {
+      email: care.email ?? null,
+      mobileNumber: care.mobile_number ?? null,
+      landlineNumber: care.landline_number ?? null,
+    },
+    grievanceOfficer: {
+      name: officer.name ?? null,
+      email: officer.email ?? null,
+      mobileNumber: officer.mobile_number ?? null,
+      landlineNumber: officer.landline_number ?? null,
+    },
+  };
+}
+
+/** The POST body Geta sends: the custom type only for `OTHER`, the registration answer only where Meta asks for it. */
+function toMetaCompliance(info: BusinessComplianceInfo): Record<string, unknown> {
+  return {
+    messaging_product: 'whatsapp',
+    entity_name: info.entityName,
+    entity_type: info.entityType,
+    ...(info.entityType === 'OTHER' ? { entity_type_custom: info.entityTypeCustom } : {}),
+    ...(info.isRegistered !== null ? { is_registered: info.isRegistered } : {}),
+    customer_care_details: {
+      email: info.customerCare.email ?? '',
+      mobile_number: info.customerCare.mobileNumber ?? '',
+      landline_number: info.customerCare.landlineNumber ?? '',
+    },
+    grievance_officer_details: {
+      name: info.grievanceOfficer.name ?? '',
+      email: info.grievanceOfficer.email ?? '',
+      mobile_number: info.grievanceOfficer.mobileNumber ?? '',
+      landline_number: info.grievanceOfficer.landlineNumber ?? '',
+    },
+  };
 }
 
 interface QrCodeRaw {

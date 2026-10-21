@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { invalidateSenderLists } from '@/lib/sender-lists';
+import { uploadProfileLogo } from './logo';
 import { wabaApi } from './service';
 
 export const KEYS = {
@@ -10,6 +11,7 @@ export const KEYS = {
   list: ['waba', 'numbers'] as const,
   health: (id: string) => ['waba', 'health', id] as const,
   profile: (id: string) => ['waba', 'profile', id] as const,
+  compliance: (id: string) => ['waba', 'compliance', id] as const,
   username: (id: string) => ['waba', 'username', id] as const,
   qr: (id: string) => ['waba', 'qr', id] as const,
 };
@@ -90,6 +92,31 @@ export function useUpdateProfile(id: string) {
     mutationFn: (patch: Parameters<typeof wabaApi.updateProfile>[1]) =>
       wabaApi.updateProfile(id, patch),
     onSuccess: (data) => qc.setQueryData(KEYS.profile(id), data),
+  });
+}
+
+export function useUploadLogo(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (file: File) => uploadProfileLogo(id, file),
+    onSuccess: (data) => qc.setQueryData(KEYS.profile(id), data),
+  });
+}
+
+export function useCompliance(id: string) {
+  return useQuery({
+    queryKey: KEYS.compliance(id),
+    queryFn: ({ signal }) => wabaApi.compliance(id, signal),
+    retry: false,
+  });
+}
+
+export function useUpdateCompliance(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (input: Parameters<typeof wabaApi.updateCompliance>[1]) =>
+      wabaApi.updateCompliance(id, input),
+    onSuccess: (data) => qc.setQueryData(KEYS.compliance(id), data),
   });
 }
 

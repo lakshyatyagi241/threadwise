@@ -65,6 +65,11 @@
         "description": "Collega il tuo numero WhatsApp Business per chattare con i clienti.",
         "keywords": "wa, whatsapp business, cloud api, numero, qr"
       },
+      "whatsapp-profile": {
+        "label": "Profilo business WhatsApp",
+        "description": "Il tuo logo, il testo informativo, i dati di contatto e le informazioni di conformità richieste da Meta.",
+        "keywords": "profilo business, logo, foto profilo, info, contatto, conformità, ragione sociale, assistenza clienti, responsabile dei reclami"
+      },
       "unofficial-whatsapp": {
         "label": "API non ufficiale di WhatsApp",
         "description": "Collega un numero WhatsApp personale tramite codice QR e attivalo gradualmente per invii sicuri.",
