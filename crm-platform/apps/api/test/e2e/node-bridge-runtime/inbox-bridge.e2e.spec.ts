@@ -358,6 +358,12 @@ const groupMsg = (
   },
 });
 
+/** A `messages` row as this spec reads it: the uuid a reply quotes, and the bridge's `meta` JSON (`group`, `source`). */
+type MessageRow = Record<string, unknown> & {
+  uuid: string;
+  meta: { group?: unknown; source?: unknown };
+};
+
 const groupThread = (x: Awaited<ReturnType<typeof linked>>, groupId = GROUP_ID) =>
   threadOf(x, `g:${groupId}`);
 
@@ -422,8 +428,7 @@ describe('a group message is a thread message (TW-WAGRP-015, 016, 017)', () => {
       contact_id: null,
     });
     expect(conv.peer_name ?? null).toBeNull();
-    const byId = (id: string) =>
-      msgs.find((m) => m.provider_message_id === id) as Record<string, any>;
+    const byId = (id: string) => msgs.find((m) => m.provider_message_id === id) as MessageRow;
     expect(byId('wamid.g.1').meta.group).toMatchObject({
       participant: '919000000001',
       senderName: 'Asha',
@@ -511,7 +516,7 @@ describe('a group message is a thread message (TW-WAGRP-015, 016, 017)', () => {
     const msgs = (await until('four messages', async () => {
       const m = await messagesOf(p, conv.id as number);
       return m.length >= 4 ? m : undefined;
-    })) as Array<Record<string, any>>;
+    })) as MessageRow[];
     const kind = (id: string) => msgs.find((m) => m.provider_message_id === id)!;
     expect(kind('wamid.k.img')).toMatchObject({ kind: 'image', body: 'stock photo' });
     expect(String(kind('wamid.k.img').media_key)).toMatch(/^chat\//);
@@ -543,7 +548,7 @@ describe('a group message is a thread message (TW-WAGRP-015, 016, 017)', () => {
     await new Promise((res) => setTimeout(res, 300));
     expect(await messagesOf(p, conv.id as number)).toHaveLength(1);
     expect(msgs[0]).toMatchObject({ direction: 'out', body: 'typed on the phone' });
-    expect((msgs[0] as Record<string, any>).meta.source).toBe('phone');
+    expect((msgs[0] as MessageRow).meta.source).toBe('phone');
 
     // Our own send leaves its id in the sent marker; the same message echoed back by WhatsApp is not a second bubble.
     await p.h.app
@@ -571,7 +576,7 @@ describe('replying into a group from the inbox (TW-WAGRP-019, 020, 034)', () => 
     const first = (await until('the message', async () => {
       const m = await messagesOf(p, conv.id as number);
       return m[0];
-    })) as Record<string, any>;
+    })) as MessageRow;
 
     const sent = await sendText(
       x,
@@ -616,7 +621,7 @@ describe('replying into a group from the inbox (TW-WAGRP-019, 020, 034)', () => 
     const first = (await until(
       'the message',
       async () => (await messagesOf(p, conv.id as number))[0],
-    )) as Record<string, any>;
+    )) as MessageRow;
     const go = async (content: Parameters<typeof sendText>[2], extra = {}) => {
       const s = await sendText(x, conv.uuid as string, content, extra);
       await until('sent', async () =>
