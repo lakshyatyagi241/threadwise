@@ -1,6 +1,6 @@
 # Automated VAPT (Sheet3 #25): audits + ZAP API scan + own DAST walker + live security tests against a local instance.
 # MANUAL TRIGGER ONLY. GitHub Actions cannot start runs on this account right now, so the `schedule:` block below is kept commented out;
-# until it can run, "recurring" is NOT achieved: someone has to run `bash tools/security/vapt.sh` (or this workflow) before each release.
+# until it can run, "recurring" is NOT achieved: someone has to run `bash script-testing/vapt/run.sh` (or this workflow) before each release.
 # When Actions works again: uncomment `schedule:` (weekly) and add this workflow as a required check on the release branch.
 name: vapt
 on:
@@ -39,7 +39,7 @@ jobs:
       - name: VAPT
         run: |
           docker pull ghcr.io/zaproxy/zaproxy:stable
-          VAPT_ZAP=1 bash tools/security/vapt.sh
+          bash script-testing/vapt/run.sh --zap-cap 15
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: vapt-reports, path: 'crm-platform/reports/vapt/**' }
+        with: { name: vapt-reports, path: 'crm-platform/qa-results/vapt/**' }

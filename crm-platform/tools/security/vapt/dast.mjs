@@ -64,7 +64,7 @@ const fill = (p) => p.replace(/\{[^}]+\}/g, '00000000-0000-0000-0000-00000000000
 const SKIP = /\/auth\/(logout|login|refresh)|\/realtime|\/stream|\/events$/;
 // Intentionally public surfaces (signature/token-verified webhooks, public pages, auth bootstrap, docs, health).
 const PUBLIC =
-  /^\/(health|ready|live|metrics|docs|v2\/auth|v2\/platform\/auth|v2\/public|public|p\/|webhooks?|v2\/webhooks?|hooks?|api\/v1)|\/(webhooks?|callback|oauth|public|unsubscribe|receipt|track|verify|lookup|widget|embed|submit|booking|return)(\/|$)/i;
+  /^\/(health|ready|live|metrics|docs|v2\/auth|v2\/platform\/auth|v2\/public|public|p\/|webhooks?|v2\/webhooks?|hooks?|api\/v1|v2\/i18n\/languages|v2\/setup\/status|v2\/shopify\/embedded\/config)|\/(webhooks?|callback|oauth|public|unsubscribe|receipt|track|verify|lookup|widget|embed|submit|booking|return)(\/|$)/i;
 
 const tokens = {};
 for (const [k, e] of Object.entries(USERS)) tokens[k] = await login(e);
