@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #58 Memory-leak testing - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--b:#b4540a;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--b:#f0a05a;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.bad{color:var(--bad)}.warn{color:var(--warn)}
+.meta{color:var(--mut);font-size:.92rem}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.6rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}
+code,pre{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}pre{padding:8px;overflow-x:auto}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Memory-leak testing</h1>
+<p><span class="badge bad">Not met: no 24 h run</span> &nbsp; Sheet3 item #58 &middot; P2 &middot; effort 6</p>
+<p class="meta">Owner: Vedant &middot; Date: 2026-10-21 &middot; Branch: <code>vedant/qa/memory-leak</code> &middot; PR: none (local branch, not pushed)</p>
+<blockquote>Sheet target, word for word: "24h pre-release profile; no sustained unexplained heap/RSS growth"</blockquote>
+</header>
+
+<h2>1. In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>0 of 24 h</b><span>the target run was not done; it cannot fit in a 40 minute box or on a shared laptop</span></div>
+<div class="tile"><b>12 min</b><span>real short profile (API + worker), 8,440 requests, 0 server errors</span></div>
+<div class="tile"><b>+1.0 MB</b><span>API heap after forced GC, minute 4 to 12 (233.4 to 234.4 MB)</span></div>
+<div class="tile"><b>+1.5 MB</b><span>API RSS over the same 8 minutes (906.0 to 907.5 MB)</span></div>
+</div>
+<p><strong>Verdict: target NOT met.</strong> The reusable harness that can run 24 hours exists and works (<code>tools/perf/soak.mjs</code>). The 12 minute profile shows no visible leak: RSS is flat after warm-up and post-GC heap rose about 1 MB in 8 minutes. The harness exit code, with its strict rule, flagged growth (see below). With 9 minutes of data that flag is not conclusive either way, so no fix was made and nothing is claimed as fixed.</p>
+<div class="box"><strong>To close this item</strong>: run <code>node tools/perf/soak.mjs --minutes 1440</code> on a quiet machine for 24 hours (or the manual workflow <code>.github/workflows/soak.yml</code>, input 1440) before a release, and read <code>soak.json</code>.</div>
+
+<h2>2. What this is, in plain words</h2>
+<p>A memory leak is a server that slowly eats more memory the longer it runs, until it is killed. You only see it by running for a long time under steady traffic and watching the line. The harness starts the API and the worker, sends a steady mix of requests, and every 10 seconds writes down memory. Every minute it forces a garbage collection, so what remains is memory that is really held, not memory that is just not yet cleaned. It then draws a straight line through the samples after warm-up and says how many MB per hour that line climbs, with a 95% confidence range.</p>
+
+<h2>3. How we tested</h2>
+<ul>
+<li>API (<code>dist/src/main.js</code>) and worker (<code>dist/src/worker.js</code>) as built on this branch, each as its own Node process started with <code>--expose-gc</code>, inspector off. A small preload, <code>tools/perf/soak-probe.cjs</code>, answers the harness over IPC (memory, GC, handles, event loop lag, optional heap snapshot). It is script-only and is not imported by any production code.</li>
+<li>Own throwaway database <code>crm_soak_mem</code> (migrated and seeded, dropped at the end), Redis db index 13 on the shared container.</li>
+<li>Workload, about 15 requests/s: contact and company list reads, a search, contact create (POST with idempotency key), a webhook-like public POST, a login, and a socket.io connect/disconnect on <code>/realtime</code>. Contact creates also feed the outbox and queue jobs the worker handles.</li>
+<li>Sampled every 10 s; GC forced every 60 s; warm-up 3 minutes excluded from the fit. Fitted: RSS (all samples), heap used, external, handles, Redis clients, Postgres connections (post-GC samples).</li>
+</ul>
+<p class="warn"><strong>Noise:</strong> three other agents were running on the same machine and Postgres/Redis are shared. Absolute numbers (RSS around 906 MB for the API is large because of dev build, 3,000 source files loaded) are not meaningful; the slope after warm-up is the signal.</p>
+
+<h2>4. Results</h2>
+<figure>
+<svg viewBox="0 0 640 220" role="img" aria-label="API heap used after forced GC, MB, against time">
+<line x1="50" y1="180" x2="620" y2="180" stroke="currentColor" opacity=".3"/>
+<text x="4" y="20">MB</text><text x="4" y="52">254</text><text x="4" y="170">232</text>
+<polyline fill="none" stroke="var(--a)" stroke-width="2" points="60,40 120,31 180,150 240,160 300,150 360,148 420,142 480,150 540,141 600,138"/>
+<text x="60" y="200">1 min</text><text x="300" y="200">5 min</text><text x="560" y="200">12 min</text>
+<text x="140" y="30">warm-up (excluded from the fit)</text>
+</svg>
+<figcaption>API heap after forced GC, one point per minute (real values: 254.1, 254.7, 231.7, 233.4, 233.4, 233.5, 233.7, 233.4, 233.7, 234.1, 234.4, 234.4 MB; the chart shows the 10 minute-spaced values from minute 1; scale 232 to 254 MB).</figcaption>
+</figure>
+<table>
+<tr><th>Series (after 3 min warm-up)</th><th>Slope</th><th>95% range</th><th>Points</th><th>Flag</th></tr>
+<tr><td>API RSS</td><td>10.55 MB/h</td><td>8.72 to 12.39</td><td>55</td><td>flagged</td></tr>
+<tr><td>API heap used (post GC)</td><td>12.92 MB/h</td><td>6.62 to 19.23</td><td>10</td><td>flagged</td></tr>
+<tr><td>API external</td><td>3.47 MB/h</td><td>0.65 to 6.29</td><td>10</td><td>no</td></tr>
+<tr><td>API open handles</td><td>2.55 per h</td><td>-8.10 to 13.19</td><td>10</td><td>no</td></tr>
+<tr><td>Worker RSS</td><td>4.77 MB/h</td><td>3.72 to 5.82</td><td>55</td><td>no</td></tr>
+<tr><td>Worker heap used (post GC)</td><td>11.02 MB/h</td><td>6.09 to 15.95</td><td>10</td><td>flagged</td></tr>
+<tr><td>Redis clients (db 13), Postgres connections</td><td>0 / -1.4 per h</td><td>no trend</td><td>10</td><td>no</td></tr>
+</table>
+<p>Flag rule: slope above 10 MB/h and the whole 95% range above zero. Readings: the slopes are extrapolations from 9 minutes, so 1 MB of drift becomes 8 to 13 MB/h. RSS went from about 906.0 to 907.5 MB across 8 minutes. The worker held 713 MB heap-plus-process flat (RSS 713.0 to 713.4 MB). Redis clients and Postgres connection counts did not grow, so the usual causes (a client per request, a pool leak) are not present in this window. Raw data: <code>soak.csv</code>, <code>soak.json</code> in this folder.</p>
+
+<h2>5. Findings</h2>
+<table>
+<tr><th>#</th><th>Finding</th><th>Status</th></tr>
+<tr><td>1</td><td>A small post-GC heap rise (about 1 MB in 8 minutes) on API and worker. Could be real slow growth or caches filling (contact create adds rows, idempotency keys, rate-limit buckets). Not distinguished in this window.</td><td>Open, needs the 1 h or 24 h run</td></tr>
+<tr><td>2</td><td>No growth in Redis clients, Postgres connections, open handles, event loop lag within the window.</td><td>No issue seen</td></tr>
+<tr><td>3</td><td>First attempt (17 min, heap snapshots on) lost the API process around minute 4.5, when the first snapshot was requested, and the harness crashed. Cause not investigated (probably the snapshot of a ~900 MB RSS process under memory pressure). Fixed in the harness: snapshots are now opt-in (<code>--snapshots</code>), workload errors are caught, and a process exit now fails the run. The snapshot-diff code is unit-tested but was never run on a real heap, so no "top growing constructors" are reported.</td><td>Harness fixed; snapshot path unproven</td></tr>
+<tr><td>4</td><td>No code fix and no regression test: no leak was identified, and none was invented.</td><td>None</td></tr>
+</table>
+
+<h2>6. What this does NOT prove</h2>
+<ul>
+<li>It does not meet the sheet target: no 24 hour run was done, so slow leaks (a few MB per hour) and daily cycles (cron jobs, token expiry, log rotation) are untested.</li>
+<li>12 minutes and a shared, noisy machine. The "flagged" slopes come from tiny absolute changes and are inconclusive in both directions.</li>
+<li>Only a dev-mode build against an empty seeded database; production data volumes, real provider webhooks, long-lived realtime sockets and the web app (Next.js) were not exercised. Only the paths in the workload list ran; most of the 600 source files that use in-process Maps and Sets were not hit.</li>
+<li>Heap snapshots/constructor diff not run on a real heap. The workflow file was not run (GitHub Actions cannot start here) and its CI service setup (the <code>crm_app_user</code> role) is untested.</li>
+<li>A leak of the kind "grows only under a particular endpoint" needs that endpoint added to the workload (<code>ops</code> list in <code>soak.mjs</code>).</li>
+</ul>
+
+<h2>7. How to run</h2>
+<pre>pnpm --filter @crm/api build
+# own database, migrated and seeded (never the shared dev database)
+docker exec crm-platform-postgres psql -U crm -d postgres -c "CREATE DATABASE crm_soak_mem OWNER crm"
+MIGRATION_DATABASE_URL=postgres://crm:crm@localhost:5432/crm_soak_mem pnpm db:migrate
+MIGRATION_DATABASE_URL=postgres://crm:crm@localhost:5432/crm_soak_mem pnpm db:seed
+node tools/perf/soak.mjs --minutes 60              # 1 h
+node tools/perf/soak.mjs --minutes 1440 --warmup 30 # 24 h, quiet machine
+# options: --interval 10 --gc-every 6 --rate 15 --threshold-mb-h 10 --no-worker --snapshots --out DIR</pre>
+<p>Environment: <code>SOAK_DATABASE</code> (default <code>crm_soak_mem</code>), <code>SOAK_REDIS_DB</code> (default 13). Output: <code>soak.csv</code>, <code>soak.json</code> in <code>--out</code> (default <code>perf/results/soak</code>). Exit 0 = no sustained growth, 1 = growth or a process died, 2 = harness error. For a 24 h run use a threshold you can defend (the default 10 MB/h over 24 h is 240 MB) and look at the CSV, not only the verdict.</p>
+
+<h2>8. Appendix</h2>
+<table>
+<tr><th>Command</th><th>Result</th></tr>
+<tr><td><code>node --test tools/perf/soak.test.mjs</code></td><td>2 pass, 0 fail</td></tr>
+<tr><td><code>soak.mjs --minutes 2 --warmup 1 --interval 5</code> (smoke)</td><td>ran; exit 1 (2 minutes is too short to mean anything)</td></tr>
+<tr><td><code>soak.mjs --minutes 17 --warmup 4</code> (snapshots on)</td><td>failed at minute 4.5, API process died, see finding 3</td></tr>
+<tr><td><code>soak.mjs --minutes 12 --warmup 3</code></td><td>completed, 8,440 requests, 0 errors, verdict GROWTH (flag rule), data above. A stray worker from the smoke run was killed about a minute into this run.</td></tr>
+</table>
+<p>Files: <code>tools/perf/soak.mjs</code>, <code>soak-probe.cjs</code>, <code>soak.test.mjs</code>, <code>.github/workflows/soak.yml</code>, this folder. Commits: 0bbe746bc, aeac1b37d, then the report commit. tsc, ESLint and Prettier on the new files were not run in the time box.</p>
+</main>
+</body>
+</html>

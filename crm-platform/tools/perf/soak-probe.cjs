@@ -12,9 +12,18 @@ if (typeof process.send === 'function') {
     const mu = process.memoryUsage();
     const hs = v8.getHeapStatistics();
     process.send({
-      soak: 'sample', id: m.id, rss: mu.rss, heapUsed: mu.heapUsed, heapTotal: mu.heapTotal, external: mu.external,
-      arrayBuffers: mu.arrayBuffers, mallocedMemory: hs.malloced_memory, handles: process._getActiveHandles().length,
-      requests: process._getActiveRequests().length, lagP99Ms: h.percentile(99) / 1e6, lagMaxMs: h.max / 1e6,
+      soak: 'sample',
+      id: m.id,
+      rss: mu.rss,
+      heapUsed: mu.heapUsed,
+      heapTotal: mu.heapTotal,
+      external: mu.external,
+      arrayBuffers: mu.arrayBuffers,
+      mallocedMemory: hs.malloced_memory,
+      handles: process._getActiveHandles().length,
+      requests: process._getActiveRequests().length,
+      lagP99Ms: h.percentile(99) / 1e6,
+      lagMaxMs: h.max / 1e6,
     });
     h.reset();
   });
