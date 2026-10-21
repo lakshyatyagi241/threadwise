@@ -1,0 +1,45 @@
+{
+  "module": "platform-settings-branding-storage",
+  "tier": "P2",
+  "schemas": [
+    {
+      "schema": "mailTestRequestSchema",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/settings.controller.ts",
+      "coercedFields": 0,
+      "scenarios": [
+        {
+          "field": "to",
+          "rule": "required",
+          "kind": "refuse",
+          "label": "field omitted",
+          "value": "(omitted)",
+          "priority": "P2"
+        },
+        {
+          "field": "to",
+          "rule": "type",
+          "kind": "refuse",
+          "label": "number instead of text",
+          "value": "12345",
+          "priority": "P2"
+        },
+        {
+          "field": "to",
+          "rule": "format",
+          "kind": "refuse",
+          "label": "not an email",
+          "value": "\"not-an-email\"",
+          "priority": "P2"
+        }
+      ],
+      "uncovered": [
+        {
+          "field": "to",
+          "reason": "maximum on a formatted text: the boundary value must also match the format, not generated",
+          "priority": "P2"
+        }
+      ],
+      "drop": 0
+    }
+  ]
+}
