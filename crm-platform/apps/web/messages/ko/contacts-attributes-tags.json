@@ -130,6 +130,7 @@
       "colLeadScore": "리드 점수",
       "colLanguage": "언어",
       "colCreatedOn": "생성일",
+      "colModifiedOn": "수정일",
       "pagination": "페이지 이동",
       "prevPage": "이전 페이지",
       "nextPage": "다음 페이지",
@@ -282,6 +283,7 @@
       "shortStage": "단계",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "생성일",
+      "shortModified": "수정일",
       "firstRun": {
         "title": "첫 연락처를 추가하세요",
         "message": "대화하는 사람들을 가져오세요. 연락처는 메시지, 캠페인, 작업, 거래에 사용됩니다.",

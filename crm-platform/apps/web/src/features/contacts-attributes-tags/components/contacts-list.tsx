@@ -15,7 +15,7 @@ import {
   type ColumnId,
 } from '../lib/columns';
 import type { OptIn } from '../lib/subscription';
-import { formatDate, formatDateTime } from '../lib/format';
+import { formatDateTime } from '../lib/format';
 import type { Choice } from '../lib/option-sets';
 import {
   isMaskedPhone,
@@ -148,7 +148,8 @@ const WIDTH: Record<string, number> = {
   memo: 220,
   dateOfBirth: 150,
   minor: 110,
-  createdOn: 170,
+  createdOn: 190,
+  modifiedOn: 190,
   whatsapp: 140,
   sms: 130,
   emailOptIn: 130,
@@ -192,6 +193,7 @@ function HeaderIcon({ id }: { id: ColumnId }) {
       return <NoteIcon className={cls} />;
     case 'dateOfBirth':
     case 'createdOn':
+    case 'modifiedOn':
       return <CalendarIcon className={cls} />;
     case 'whatsapp':
       return <WhatsAppIcon className={cls} />;
@@ -867,14 +869,9 @@ function Cell({
     case 'minor':
       return row.isMinor ? <MinorCell /> : <Dash />;
     case 'createdOn':
-      // The day only (the column is narrow); the time is the tooltip.
-      return (
-        <Clip
-          value={formatDate(row.createdAt, locale, timeZone)}
-          tip={formatDateTime(row.createdAt, locale, timeZone)}
-          mono
-        />
-      );
+      return <Clip value={formatDateTime(row.createdAt, locale, timeZone)} mono />;
+    case 'modifiedOn':
+      return <Clip value={formatDateTime(row.updatedAt, locale, timeZone)} mono />;
     case 'whatsapp':
       return <OptInChip value={row.whatsappOptIn} channel={t('colWhatsapp')} />;
     case 'sms':

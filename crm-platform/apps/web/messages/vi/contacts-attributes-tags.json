@@ -130,6 +130,7 @@
       "colLeadScore": "Điểm khách hàng tiềm năng",
       "colLanguage": "Ngôn ngữ",
       "colCreatedOn": "Ngày tạo",
+      "colModifiedOn": "Ngày sửa",
       "pagination": "Phân trang",
       "prevPage": "Trang trước",
       "nextPage": "Trang sau",
@@ -282,6 +283,7 @@
       "shortStage": "Giai đoạn",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Ngày tạo",
+      "shortModified": "Đã sửa",
       "firstRun": {
         "title": "Thêm liên hệ đầu tiên của bạn",
         "message": "Đưa những người bạn trò chuyện vào đây. Liên hệ được dùng cho tin nhắn, chiến dịch, công việc và giao dịch.",
