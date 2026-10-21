@@ -130,7 +130,13 @@ describe('rules API', () => {
       firedCount: 0,
       position: 1,
     });
-    expect(res.body.assign).toEqual({ strategy: 'round_robin', userIds: [u1, u2], teamIds: [] });
+    expect(res.body.assign).toEqual({
+      strategy: 'round_robin',
+      userIds: [u1, u2],
+      teamIds: [],
+      everyone: false,
+    });
+    expect(res.body.appliesToAll).toBe(false);
     expect(JSON.stringify(res.body)).not.toMatch(/rrCursor/);
     expect(await p.api.auditCount(t.orgId, 'routing_rules', 'insert')).toBeGreaterThan(0);
     expect((await p.api.events(t.orgId, 'routing_rule.created')).length).toBeGreaterThan(0);
@@ -148,14 +154,14 @@ describe('rules API', () => {
     expect(n.rows[0].n).toBe(1);
   });
 
-  it('refuses a rule that catches everything unless it is the fallback, and targets outside the workspace', async () => {
+  it('refuses a rule with no condition unless it is the fallback or applies to every conversation, and targets outside the workspace', async () => {
     const t2 = await p.api.signup('rrc');
     const none = await rulesApi(t2.admin).create({
       name: 'All',
       assign: { strategy: 'round_robin', userIds: [u1] },
     });
     expect(none.status).toBe(422);
-    expect(JSON.stringify(none.body)).toContain('fallback');
+    expect(JSON.stringify(none.body)).toContain('every conversation');
 
     // an agent of ANOTHER workspace: the friendly 422, nothing created
     const foreign = await rulesApi(t2.admin).create(body());
