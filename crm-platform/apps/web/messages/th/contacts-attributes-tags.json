@@ -130,6 +130,7 @@
       "colLeadScore": "คะแนนลีด",
       "colLanguage": "ภาษา",
       "colCreatedOn": "สร้างเมื่อ",
+      "colModifiedOn": "แก้ไขเมื่อ",
       "pagination": "การแบ่งหน้า",
       "prevPage": "หน้าก่อนหน้า",
       "nextPage": "หน้าถัดไป",
@@ -282,6 +283,7 @@
       "shortStage": "ขั้น",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "สร้างเมื่อ",
+      "shortModified": "แก้ไขเมื่อ",
       "firstRun": {
         "title": "เพิ่มผู้ติดต่อแรกของคุณ",
         "message": "นำคนที่คุณติดต่อด้วยเข้ามา ผู้ติดต่อใช้สำหรับข้อความ แคมเปญ งาน และดีล",

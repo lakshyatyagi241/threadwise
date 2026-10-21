@@ -130,6 +130,7 @@
       "colLeadScore": "Оценка лида",
       "colLanguage": "Язык",
       "colCreatedOn": "Дата создания",
+      "colModifiedOn": "Дата изменения",
       "pagination": "Постраничная навигация",
       "prevPage": "Предыдущая страница",
       "nextPage": "Следующая страница",
@@ -282,6 +283,7 @@
       "shortStage": "Этап",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Создан",
+      "shortModified": "Изменён",
       "firstRun": {
         "title": "Добавьте первые контакты",
         "message": "Добавьте людей, с которыми вы общаетесь. Контакты используются в сообщениях, кампаниях, задачах и сделках.",

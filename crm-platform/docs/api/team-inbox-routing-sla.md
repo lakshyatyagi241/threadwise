@@ -30,6 +30,7 @@ Contracts: `packages/contracts/src/team-inbox-routing-sla/routing-rules.ts`. Cod
 | `POST rules/:id/duplicate` | `inbox.routing.manage` | copy, last, off, not fallback, counters 0; counts against the limit                                                                         |
 | `POST rules/reorder`       | `inbox.routing.manage` | `{ids}`: the listed rules take the priority slots they hold now, in that order                                                              |
 | `GET/PUT settings`         | read / manage          | `{keepContactAgent}`                                                                                                                        |
+| `POST test`                | `inbox.settings.read`  | "Try it": `{contactId?, channelKind, messageText, language?, outsideHours?}` -> which step decides and why. Read-only (see the engine below)    |
 
 Mutations accept `Idempotency-Key`; errors are problem+json; every write is audited (module `routing_rules`, `routing_settings`) and emits
 `routing_rule.created|updated|deleted|reordered` / `routing_settings.updated` in the same transaction.
@@ -37,8 +38,13 @@ Mutations accept `Idempotency-Key`; errors are problem+json; every write is audi
 ### Where things are stored (no new table)
 
 - `routing_rules.conditions` = `RoutingConditions`: `contact` (the segments rule tree, evaluated with the segments compiler against the contact),
-  `channelKinds`, `keywords {mode, words}`, `languages`, `businessHours`. A set part must hold (AND); no condition is a catch-all and only the fallback may be one.
-- `routing_rules.actions` = list of action dicts: `{type:'assign', strategy, userIds, teamIds, rrCursor}` (optional: a rule may only mark spam, set a
+  `contactKind` (`any|new|returning`), `channelKinds`, `keywords {mode, words}`, `languages`, `businessHours`. A set part must hold (AND). A rule with no condition matches
+  only when it is the fallback or `routing_rules.applies_to_all` is true (the editor's "Only for conversations that match..." switch is off); when `applies_to_all` is true the
+  stored conditions are kept but ignored. The API refuses a non-fallback rule that has neither a condition nor `appliesToAll` (422). `contact` matches what is already saved on
+  the contact (a contact created by the arriving message has stage `new`, no tags, no owner); `contactKind` is known at arrival (returning = another conversation, or saved more
+  than 10 minutes ago).
+- `routing_rules.actions` = list of action dicts: `{type:'assign', strategy, userIds, teamIds, everyone, rrCursor}` (`everyone: true` = every active member who can open the inbox, available now; only
+  round robin / least busy; the lists must then be empty; optional: a rule may only mark spam, set a
   priority, add tags, schedule an escalation, auto-reply or start a flow), optionally `{type:'mark_spam'}` (the conversation becomes spam when the rule fires:
   the same state as the bulk "Mark as spam", a `spam_flagged` event with `by: routing` and the rule id, and an audit row; the rule's other actions still run),
   `{type:'set_priority', priority}` (one-shot: a new conversation only; a `priority_changed` event with `by: routing`), `{type:'add_tag', name, color}` per
@@ -52,7 +58,15 @@ Mutations accept `Idempotency-Key`; errors are problem+json; every write is audi
   took the last turn, saved under a row lock on the rule when it fires; never sent to clients; kept through an edit that leaves the same people and teams.
 - **Priority** is `routing_rules.sort` (list shows `position`, 1 = first); new rules take `max(sort)+1`.
 - `fired_count` / `last_fired_at` are bumped by the engine.
-- One migration: `workspace_settings.routing_keep_contact_agent boolean default false` (the "keep returning contacts with their agent" switch).
+- Migrations: `workspace_settings.routing_keep_contact_agent boolean default false` (the "keep returning contacts with their agent" switch), and
+  `20270321090000_routing_rules_applies_to_all`: `routing_rules.applies_to_all boolean NOT NULL DEFAULT false` (expand-only; no rule is created or changed).
+
+### "Try it" (`POST /v2/inbox/routing/test`)
+
+`RoutingEngine.dryRun` runs `decideArrival`, the same method `route()` uses, with no hooks and inside a `SET TRANSACTION READ ONLY` transaction: no assignment, no `fired_count`, no
+round robin cursor move, no event, no outbox row, no audit row. Answer: `outcome` (`sticky|rule|everyone_else|queue|off`), the rule, the assignee (person or team uuid), `steps[]` (each
+with `why` and the conditions that matched or not), `trace[]` (who was left out: `on_leave`, `offline_busy_or_at_capacity`, ...), the contact summary and whether it counted as outside
+business hours. Covered by `routing-redesign.e2e.spec.ts` (snapshots the tables before and after).
 
 ### The engine (`RoutingEngine`)
 

@@ -1,6 +1,7 @@
 import {
   CAMPAIGN_RANGES,
   CAMPAIGN_TYPE_FILTERS,
+  calendarDaySchema,
   type Campaign,
   type CampaignRange,
   type CampaignStatus,
@@ -25,6 +26,9 @@ export interface ListState {
   status: StatusView;
   type: CampaignTypeFilter;
   range: CampaignRange;
+  /** The custom range's first and last day (`YYYY-MM-DD`); empty when that side is open. Kept only for `range=custom`. */
+  from: string;
+  to: string;
   q: string;
   page: number;
 }
@@ -33,6 +37,8 @@ export const DEFAULT_STATE: ListState = {
   status: 'all',
   type: 'all',
   range: 'all',
+  from: '',
+  to: '',
   q: '',
   page: 1,
 };
@@ -40,13 +46,21 @@ export const DEFAULT_STATE: ListState = {
 const oneOf = <T extends string>(list: readonly T[], v: string | null, fallback: T): T =>
   v !== null && (list as readonly string[]).includes(v) ? (v as T) : fallback;
 
+/** A day from the address when it names a real day, else empty (an open side). */
+const dayOf = (v: string | null): string =>
+  v !== null && calendarDaySchema.safeParse(v).success ? v : '';
+
 /** The address is the single source of truth for the filters: a bad value falls back to its default. */
 export function parseState(p: URLSearchParams): ListState {
   const page = Number(p.get('page'));
+  const range = oneOf(CAMPAIGN_RANGES, p.get('range'), 'all');
+  const custom = range === 'custom';
   return {
     status: oneOf(STATUS_VIEWS, p.get('status'), 'all'),
     type: oneOf(CAMPAIGN_TYPE_FILTERS, p.get('type'), 'all'),
-    range: oneOf(CAMPAIGN_RANGES, p.get('range'), 'all'),
+    range,
+    from: custom ? dayOf(p.get('from')) : '',
+    to: custom ? dayOf(p.get('to')) : '',
     q: (p.get('q') ?? '').trim(),
     page: Number.isInteger(page) && page >= 1 ? page : 1,
   };
@@ -58,16 +72,21 @@ export function stateToSearch(s: ListState): string {
   if (s.status !== 'all') p.set('status', s.status);
   if (s.type !== 'all') p.set('type', s.type);
   if (s.range !== 'all') p.set('range', s.range);
+  if (s.range === 'custom' && s.from !== '') p.set('from', s.from);
+  if (s.range === 'custom' && s.to !== '') p.set('to', s.to);
   if (s.q !== '') p.set('q', s.q);
   if (s.page > 1) p.set('page', String(s.page));
   const text = p.toString();
   return text === '' ? '' : `?${text}`;
 }
 
+/** The request's filters; an empty `from` or `to` is left out of the query string. */
 export const stateToQuery = (s: ListState) => ({
   status: s.status,
   type: s.type,
   range: s.range,
+  from: s.range === 'custom' ? s.from : '',
+  to: s.range === 'custom' ? s.to : '',
   q: s.q,
   page: s.page,
 });

@@ -4,10 +4,12 @@ import {
   assignVariants,
   buttonRows,
   cleanNumbers,
+  createdWindow,
   engagement,
   csvSafe,
   dueAtUtc,
   expiresBeforeSend,
+  inCreatedWindow,
   isNewer,
   localDateTimeToUtc,
   mediaColumnFor,
@@ -320,5 +322,67 @@ describe('detail: engagement and top buttons', () => {
       { label: 'Plain link', count: 0, trackable: true, pct: 0 },
       { label: 'Button 4', count: null, trackable: false, pct: 0 },
     ]);
+  });
+});
+
+describe('the list date filter', () => {
+  const NOW = Date.parse('2026-10-21T06:00:00Z');
+  const DAY = 86_400_000;
+
+  it('all keeps everything, a preset is the last N days up to now', () => {
+    expect(createdWindow({ range: 'all' }, NOW, 'Asia/Kolkata')).toEqual({ from: null, to: null });
+    expect(createdWindow({ range: '7d' }, NOW, 'Asia/Kolkata')).toEqual({
+      from: NOW - 7 * DAY,
+      to: null,
+    });
+  });
+
+  it('a custom range is whole days in the workspace zone, both ends included', () => {
+    const w = createdWindow(
+      { range: 'custom', from: '2026-10-01', to: '2026-10-19' },
+      NOW,
+      'Asia/Kolkata',
+    );
+    // IST is 5 h 30 min ahead of UTC: 1 Oct 00:00 IST is 30 Sep 18:30 UTC, and 20 Oct 00:00 IST ends the 19th.
+    expect(w).toEqual({
+      from: Date.parse('2026-09-30T18:30:00Z'),
+      to: Date.parse('2026-10-19T18:30:00Z'),
+    });
+    expect(
+      createdWindow({ range: 'custom', from: '2026-10-01', to: '2026-10-01' }, NOW, 'UTC'),
+    ).toEqual({
+      from: Date.parse('2026-10-01T00:00:00Z'),
+      to: Date.parse('2026-10-02T00:00:00Z'),
+    });
+  });
+
+  it('a missing side of a custom range is open, and a reversed pair is swapped', () => {
+    expect(createdWindow({ range: 'custom' }, NOW, 'UTC')).toEqual({ from: null, to: null });
+    expect(createdWindow({ range: 'custom', from: '2026-10-05' }, NOW, 'UTC')).toEqual({
+      from: Date.parse('2026-10-05T00:00:00Z'),
+      to: null,
+    });
+    expect(createdWindow({ range: 'custom', to: '2026-10-05' }, NOW, 'UTC')).toEqual({
+      from: null,
+      to: Date.parse('2026-10-06T00:00:00Z'),
+    });
+    expect(
+      createdWindow({ range: 'custom', from: '2026-10-19', to: '2026-10-01' }, NOW, 'UTC'),
+    ).toEqual(createdWindow({ range: 'custom', from: '2026-10-01', to: '2026-10-19' }, NOW, 'UTC'));
+  });
+
+  it('the window takes a campaign created inside the days, from the first instant to the last', () => {
+    const w = createdWindow(
+      { range: 'custom', from: '2026-10-01', to: '2026-10-19' },
+      NOW,
+      'Asia/Kolkata',
+    );
+    expect(inCreatedWindow(Date.parse('2026-09-30T18:29:59.999Z'), w)).toBe(false);
+    expect(inCreatedWindow(Date.parse('2026-09-30T18:30:00Z'), w)).toBe(true);
+    expect(inCreatedWindow(Date.parse('2026-10-19T18:29:59.999Z'), w)).toBe(true);
+    expect(inCreatedWindow(Date.parse('2026-10-19T18:30:00Z'), w)).toBe(false);
+    expect(inCreatedWindow(Date.parse('2020-01-01T00:00:00Z'), { from: null, to: null })).toBe(
+      true,
+    );
   });
 });

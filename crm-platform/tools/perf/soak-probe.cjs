@@ -20,6 +20,11 @@ if (typeof process.send === 'function') {
       external: mu.external,
       arrayBuffers: mu.arrayBuffers,
       mallocedMemory: hs.malloced_memory,
+      spaces: m.spaces
+        ? v8
+            .getHeapSpaceStatistics()
+            .map((x) => ({ n: x.space_name, used: x.space_used_size, size: x.space_size }))
+        : undefined,
       handles: process._getActiveHandles().length,
       requests: process._getActiveRequests().length,
       lagP99Ms: h.percentile(99) / 1e6,

@@ -83,7 +83,11 @@ export interface SealReport {
 }
 
 const PAGE = 500;
-const q = (id: string): string => `"${id}"`;
+/** Quotes a table or column name. Every name comes from SEAL_TARGETS, but a typo must never become SQL: only plain identifiers pass. */
+const q = (id: string): string => {
+  if (!/^[a-z_][a-z0-9_]*$/i.test(id)) throw new Error(`seal: not a plain identifier: ${id}`);
+  return `"${id}"`;
+};
 
 const long = (t: SealTarget): string =>
   t.minLength ? ` AND length(${q(t.plain)}) >= ${t.minLength}` : '';

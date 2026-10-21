@@ -48,7 +48,7 @@ Generated from the controllers, repositories and web routes on branch `punya/pun
 ## Web screens
 
 - `/campaigns/wizard`, `/campaigns/wizard/:id`, `/campaigns/wizard/broadcasts/:id` (ADDITION: the Create broadcast wizard and its status page)
-- `/campaigns?source=earlier` and `/campaigns/earlier/:id`: the broadcasts sent before Campaigns absorbed Broadcast (`features/campaigns/earlier/`, reads `/v2/broadcasts` unchanged); reached from the "Legacy broadcasts" link in the Campaigns header, shown only when the workspace has old rows
+- `/campaigns/earlier/:id`: a broadcast sent before Campaigns absorbed Broadcast (`features/campaigns/earlier/`, reads `/v2/broadcasts` unchanged); reached from its notification and the old `/broadcasts/:id` address. The list of old broadcasts (`/campaigns?source=earlier`, "Legacy broadcasts") was removed on request.
 - `/campaigns/:id/edit`
 - `/campaigns/:id`
 - `/campaigns/create`

@@ -32,6 +32,7 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   attributes: [],
   custom: {},
   createdAt: '2026-03-05T12:00:00.000Z',
+  updatedAt: '2026-03-05T12:00:00.000Z',
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,

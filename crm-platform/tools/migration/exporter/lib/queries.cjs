@@ -27,6 +27,14 @@ business:{id:b.id,name:b.name,domain:b.domain,schemaName:b.schema_name},subscrip
       '"@@WA@@"+JSON.stringify({botids:db.chathistory.distinct("botid"),docs:db.chatbot_misc_config.find({config_key:"META_WHATSAPP_CONFIG"},' +
       '{_id:0,chatbot_id:1,is_active:1,deleted_time:1,"config_value.phoneID":1,"config_value.display_number":1,"config_value.whatsapp_no":1,"config_value.display_name":1}).toArray()})',
   }),
+  // the WhatsApp config documents, whole, for the template-quality step (pilot/templates/quality.cjs): the runner reads the access token
+  // and the WABA id into memory to ask Meta for the templates' ratings; they are never printed or written. Read-only, fixed, like the others.
+  waba: (ws) => ({
+    db: ws,
+    expr:
+      '"@@WABA@@"+JSON.stringify({docs:db.chatbot_misc_config.find({config_key:"META_WHATSAPP_CONFIG"},' +
+      '{_id:0,is_active:1,deleted_time:1,is_json:1,config_value:1}).toArray()})',
+  }),
 };
 
 module.exports = { QUERIES };

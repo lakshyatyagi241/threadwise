@@ -46,6 +46,8 @@ const { contacts } = schema;
  * becomes "invalid".
  */
 export interface RuleContext {
+  /** The workspace's own zone: a day in a date rule is a day here (a Waboo date is midnight in India, which is the day before in UTC). */
+  timezone: string;
   tags: Map<string, number>;
   groups: Map<string, number>;
   users: Map<string, number>;
@@ -58,6 +60,7 @@ export interface RuleContext {
 }
 
 export const emptyRuleContext = (): RuleContext => ({
+  timezone: 'UTC',
   tags: new Map(),
   groups: new Map(),
   users: new Map(),
@@ -214,7 +217,7 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     const data = onCompany
       ? sql`(SELECT co.data FROM companies co WHERE co.org_id = ${contacts.orgId} AND co.id = ${contacts.companyId})`
       : sql`${contacts.data}`;
-    const predicate = propertyPredicate(data, key, kind, op, c.value);
+    const predicate = propertyPredicate(data, key, kind, op, c.value, rc.timezone);
     return predicate
       ? { sql: predicate }
       : invalid('operator_unsupported', `A ${kind} value cannot be used on a property.`);
@@ -318,7 +321,7 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
       };
     case 'dateOfBirth':
       return {
-        sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value),
+        sql: datePredicate(sql`${contacts.dateOfBirth}::timestamptz`, op as DateOperator, c.value, rc.timezone),
       };
     case 'age':
       // Whole years on the earliest calendar date on Earth (UTC minus 12 hours), like the minor flag; no date, no age.
@@ -332,11 +335,11 @@ function condition(c: SegmentCondition, rc: RuleContext, orgId: number): Verdict
     case 'search':
       return { sql: searchCondition(String(c.value)) };
     case 'createdAt':
-      return { sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value) };
+      return { sql: datePredicate(sql`${contacts.createdAt}`, op as DateOperator, c.value, rc.timezone) };
     case 'updatedAt':
-      return { sql: datePredicate(sql`${contacts.updatedAt}`, op as DateOperator, c.value) };
+      return { sql: datePredicate(sql`${contacts.updatedAt}`, op as DateOperator, c.value, rc.timezone) };
     case 'lastActivityAt':
-      return { sql: datePredicate(contactLastActivity, op as DateOperator, c.value) };
+      return { sql: datePredicate(contactLastActivity, op as DateOperator, c.value, rc.timezone) };
     default:
       return invalid('operator_unsupported', `Unknown field "${c.field}".`);
   }

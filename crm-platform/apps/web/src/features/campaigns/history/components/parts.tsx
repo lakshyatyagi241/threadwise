@@ -5,33 +5,12 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode } from 'react';
 import type { WizardScheduleMode } from '@crm/contracts';
 import { Button, EmptyState, cn } from '@crm/ui';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useBroadcastSummary } from '@/features/campaigns/earlier/api/broadcasts';
 import { statusTone } from '../../wizard/lib/broadcast';
 import { Chip, ErrorBlock, Skeleton } from '../../wizard/components/parts';
 import { typeTone } from '../lib';
 
 /** The one create entry, the target of every "Create campaign" button. */
 export const CREATE_PATH = '/campaigns/create';
-/** Broadcasts sent before they became campaigns. */
-export const LEGACY_PATH = '/campaigns?source=earlier';
-
-/** The "Earlier broadcasts" view of the Campaigns page: only for a workspace that still has old broadcast rows (and may read them). */
-export function EarlierLink() {
-  const t = useTranslations('campaigns.history');
-  const canRead = useCan('bcast.broadcasts.read');
-  const summary = useBroadcastSummary();
-  if (!canRead || !summary.data || summary.data.stats.total === 0) return null;
-  return (
-    <Link
-      href={LEGACY_PATH}
-      className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
-    >
-      {t('legacy', { count: summary.data.stats.total })}
-    </Link>
-  );
-}
-
 /**
  * A history page: a title, optional filters, and a table region that takes the rest of the screen and scrolls on its own, so the page
  * itself does not scroll on a laptop.
@@ -42,12 +21,9 @@ export function HistoryFrame({
   filters,
   children,
   footer,
-  legacy,
 }: {
   title: string;
   hint: string;
-  /** Offer the link to the old broadcasts (the history page only). */
-  legacy?: boolean;
   filters?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
@@ -61,7 +37,6 @@ export function HistoryFrame({
           <p className="mt-0.5 text-sm text-muted-foreground">{hint}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {legacy && <EarlierLink />}
           <Link
             href={CREATE_PATH}
             className="inline-flex h-10 items-center rounded-md bg-brand px-4 text-sm font-medium text-brand-foreground hover:opacity-90"

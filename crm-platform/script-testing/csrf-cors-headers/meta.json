@@ -1,0 +1,22 @@
+{
+  "id": "csrf-cors-headers",
+  "sheetItem": 32,
+  "title": "CSRF, CORS and security headers",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 3,
+    "full": 3
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm",
+    "docker",
+    "curl",
+    "postgres",
+    "redis"
+  ],
+  "proves": "The real booted API sends the security headers, echoes only the allowed origin with credentials, refuses look-alike and null origins, and answers preflights correctly; the unit specs for the policy and the web CSRF helper pass.",
+  "doesNotProve": "No browser, no Next.js response headers, no reverse proxy in front of the API. It notes that X-Powered-By: Express is still sent.",
+  "report": "docs/security/csrf-cors-headers/REPORT.html"
+}

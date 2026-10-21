@@ -34,7 +34,10 @@
         "all": "Tüm zamanlar",
         "7d": "7 gün",
         "30d": "30 gün",
-        "90d": "90 gün"
+        "90d": "90 gün",
+        "custom": "Özel aralık",
+        "from": "Başlangıç tarihi",
+        "to": "Bitiş tarihi"
       },
       "search": "Kampanyalarda ara",
       "selectPage": "Bu sayfayı seç",
@@ -1873,8 +1876,7 @@
         "list": "Liste",
         "blocks": "Bloklar"
       },
-      "showing": "{count} kampanya gösteriliyor",
-      "legacy": "Eski yayınlar ({count})"
+      "showing": "{count} kampanya gösteriliyor"
     },
     "senderEmpty": {
       "loading": "Numaralarınız yükleniyor…",

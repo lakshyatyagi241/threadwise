@@ -134,7 +134,7 @@ const LIVE = {
             http('POST', '/v2/auth/refresh', { body: { refreshToken: t } }),
           ),
         )
-      ).every((r) => [400, 401].includes(r.status)),
+      ).every((r) => [400, 401, 422].includes(r.status)), // 422 is the API's validation error (an empty token)
   ],
   SE12: [
     'P0',

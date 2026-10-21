@@ -20,13 +20,37 @@ const STATUS_TONE: Record<string, string> = {
   skipped: 'bg-muted text-muted-foreground',
 };
 
-const when = (iso: string | null) => (iso ? new Date(iso).toLocaleString() : '—');
+/**
+ * A moment in the campaign's zone, the same zone the CSV export writes, so the table and the file agree. A zone the browser does
+ * not know falls back to the browser's own.
+ */
+const when = (iso: string | null, zone: string): string => {
+  if (!iso) return '—';
+  try {
+    return new Intl.DateTimeFormat(undefined, {
+      dateStyle: 'medium',
+      timeStyle: 'medium',
+      timeZone: zone,
+    }).format(new Date(iso));
+  } catch {
+    return new Date(iso).toLocaleString();
+  }
+};
 
 /**
  * The recipient log of a campaign (TW-CAMP-019, "Messages" and "Opt-outs" tabs): who, which variant, how far each got and when,
  * 50 a page, with a status filter and a search by name or number. `fixedStatus` pins the filter (the opt-outs tab).
  */
-export function RecipientsTab({ id, fixedStatus }: { id: string; fixedStatus?: string }) {
+export function RecipientsTab({
+  id,
+  fixedStatus,
+  timezone,
+}: {
+  id: string;
+  fixedStatus?: string;
+  /** The campaign's zone (its own, else the workspace's): the times in the table are in it. */
+  timezone: string;
+}) {
   const t = useTranslations('campaigns.detail.recipients');
   const [status, setStatus] = useState(fixedStatus ?? 'all');
   const [q, setQ] = useState('');
@@ -134,7 +158,7 @@ export function RecipientsTab({ id, fixedStatus }: { id: string; fixedStatus?: s
                     </span>
                     {r.heldUntil && (
                       <div className="mt-1 text-[10.5px] text-warning" data-testid="recipient-held">
-                        {t('heldUntil', { when: when(r.heldUntil) })}
+                        {t('heldUntil', { when: when(r.heldUntil, timezone) })}
                       </div>
                     )}
                     {r.clicked && (
@@ -142,16 +166,16 @@ export function RecipientsTab({ id, fixedStatus }: { id: string; fixedStatus?: s
                     )}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-xs text-muted-foreground">
-                    {when(r.sentAt)}
+                    {when(r.sentAt, timezone)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-xs text-muted-foreground">
-                    {when(r.deliveredAt)}
+                    {when(r.deliveredAt, timezone)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-xs text-muted-foreground">
-                    {when(r.readAt)}
+                    {when(r.readAt, timezone)}
                   </td>
                   <td className="whitespace-nowrap px-3 py-2 text-xs text-muted-foreground">
-                    {when(r.respondedAt)}
+                    {when(r.respondedAt, timezone)}
                   </td>
                   <td
                     className="max-w-[240px] truncate px-3 py-2 text-xs text-danger"

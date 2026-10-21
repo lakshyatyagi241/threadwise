@@ -19,25 +19,12 @@
     "page": {
       "back": "Automazione e AI",
       "title": "Assegnazione automatica delle conversazioni",
-      "subtitle": "Assegna automaticamente ogni nuova conversazione all’agente giusto. Le regole vengono applicate in ordine, dall’alto.",
       "noAccess": "Non hai l’autorizzazione per visualizzare le impostazioni di assegnazione automatica.",
-      "create": "Crea regola",
       "limitUsed": "{used} regole utilizzate su {limit}",
       "limitReached": "Hai utilizzato tutte le {limit} regole consentite dal tuo piano.",
-      "keepTitle": "Mantieni i contatti ricorrenti con il loro agente",
-      "keepBody": "Quando un contatto che ha già un agente scrive di nuovo, la nuova conversazione va prima a quell’agente: il responsabile del contatto, oppure chi ha gestito la sua ultima conversazione, purché sia ancora un agente attivo. Altrimenti decidono le regole sottostanti.",
-      "settingsFailed": "Impossibile salvare l’impostazione.",
-      "rulesTitle": "Regole",
-      "searchPlaceholder": "Cerca regole",
-      "searchLabel": "Cerca regole per nome",
-      "howItWorks": "La prima regola che corrisponde e trova un agente disponibile assegna la conversazione. La regola di riserva viene usata quando nessun’altra regola corrisponde. Se nulla corrisponde, la conversazione resta non assegnata.",
       "loading": "Caricamento regole in corso",
       "loadFailed": "Impossibile caricare le regole.",
       "retry": "Riprova",
-      "noMatchTitle": "Nessuna regola trovata",
-      "noMatch": "Nessuna regola ha un nome simile a «{q}».",
-      "emptyTitle": "Nessuna regola ancora",
-      "empty": "Crea una regola per assegnare a turno le nuove conversazioni ai tuoi agenti, in base a parola chiave, canale, lingua o dati di contatto.",
       "list": "Regole di assegnazione automatica in ordine di priorità",
       "loadMore": "Carica altre",
       "toggleFailed": "Impossibile attivare o disattivare la regola.",
@@ -51,16 +38,14 @@
       "deleted": "Regola eliminata.",
       "deleteFailed": "Impossibile eliminare la regola.",
       "businessHours": "Orario di lavoro",
-      "recordNote": "Questa funzione assegna le conversazioni. Per assegnare i nuovi {contacts}, le aziende e le {deals} ai responsabili vendite, vedi <link>Regole di assegnazione dei record</link>."
+      "recordNote": "Questa funzione assegna le conversazioni. Per assegnare i nuovi {contacts}, le aziende e le {deals} ai responsabili vendite, vedi <link>Regole di assegnazione dei record</link>.",
+      "subtitle": "Scegli chi riceve ogni nuova conversazione. Gli interruttori bastano per la maggior parte degli spazi di lavoro; aggiungi regole solo se ti serve più controllo."
     },
     "rules": {
       "someone": "un agente",
       "moveUp": "Sposta {name} su",
       "moveDown": "Sposta {name} giù",
       "priority": "Priorità",
-      "active": "Attiva",
-      "off": "Disattivata",
-      "fallback": "Riserva",
       "continues": "Continua a controllare",
       "unavailable": "{count, plural, one {# agente non disponibile} other {# agenti non disponibili}}",
       "activeFor": "La regola «{name}» è attiva",
@@ -74,7 +59,9 @@
         "languages": "Lingua: {list}",
         "inside": "Durante l’orario di lavoro",
         "outside": "Fuori dall’orario di lavoro",
-        "always": "Ogni conversazione non corrispondente a nessun’altra regola"
+        "always": "Ogni nuova conversazione",
+        "contactNew": "Contatto nuovo",
+        "contactReturning": "Contatto già noto"
       },
       "strategy": {
         "round_robin": "A rotazione",
@@ -122,7 +109,6 @@
         "name": "Inserisci un nome per la regola.",
         "nameLong": "Il nome è troppo lungo.",
         "descriptionLong": "La descrizione è troppo lunga.",
-        "conditions": "Aggiungi almeno una condizione oppure imposta questa regola come riserva.",
         "contactIncomplete": "Completa o rimuovi le condizioni sul contatto incomplete.",
         "keywordsMany": "Usa al massimo 20 parole.",
         "targets": "Scegli almeno un agente o un team.",
@@ -133,20 +119,17 @@
         "escalationAction": "Riassegnare, impostare una priorità o entrambe.",
         "escalationAgents": "Riassegnare richiede agenti in questa regola: sceglili sopra.",
         "autoReplyEmpty": "Scrivi la risposta o deseleziona l'opzione.",
-        "autoReplyLong": "La risposta è troppo lunga (massimo 1024 caratteri)."
+        "autoReplyLong": "La risposta è troppo lunga (massimo 1024 caratteri).",
+        "conditions": "Aggiungi almeno una condizione, oppure disattiva “Solo per le conversazioni che corrispondono”."
       },
       "whenTitle": "Quando arriva una nuova conversazione",
-      "whenHint": "Devono corrispondere tutte le condizioni impostate. Lascia vuota una parte per ignorarla.",
       "contact": {
-        "title": "Il contatto corrisponde",
-        "hint": "Tag, responsabile, fase del ciclo di vita e altri dati del contatto, come nei segmenti.",
         "loading": "Caricamento campi del contatto in corso",
         "partial": "Alcuni elenchi di contatti non sono stati caricati, quindi alcune scelte potrebbero mancare.",
         "summary": "Condizioni",
         "none": "Nessuna condizione sul contatto."
       },
       "channel": {
-        "title": "Canale",
         "hint": "Solo le conversazioni che arrivano su questi canali. Se non ne selezioni nessuno, vale per qualsiasi canale."
       },
       "keywords": {
@@ -164,7 +147,6 @@
       "hours": {
         "title": "Orario di lavoro",
         "hint": "Usa l’orario di lavoro del tuo Workspace.",
-        "any": "In qualsiasi momento",
         "inside": "Solo durante l’orario di lavoro",
         "outside": "Solo fuori dall’orario di lavoro"
       },
@@ -188,8 +170,6 @@
       "optionsTitle": "Opzioni",
       "stopOnMatch": "Interrompi quando questa regola corrisponde",
       "stopOnMatchHint": "Attivo: le regole successive non vengono controllate. Disattivo: una regola successiva che corrisponde può prendere in carico la conversazione.",
-      "fallback": "Regola di riserva",
-      "fallbackHint": "Usata quando nessun’altra regola corrisponde. Esiste una sola regola di riserva; sceglierne una nuova sostituisce la precedente.",
       "cancel": "Annulla",
       "save": "Salva",
       "saveActivate": "Salva e attiva",
@@ -219,7 +199,8 @@
       "escalatePriority": "Poi imposta la priorità",
       "autoReply": "Invia una risposta automatica",
       "autoReplyBody": "Testo della risposta",
-      "autoReplyHint": "Inviata come l'azienda al cliente. Fuori dalla finestra di 24 ore non viene inviata una risposta libera."
+      "autoReplyHint": "Inviata come l'azienda al cliente. Fuori dalla finestra di 24 ore non viene inviata una risposta libera.",
+      "whenHint": "Ogni condizione che aggiungi deve essere soddisfatta."
     },
     "sla": {
       "back": "Torna alle impostazioni",

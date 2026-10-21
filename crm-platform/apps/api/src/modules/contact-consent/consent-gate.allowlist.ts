@@ -41,6 +41,12 @@ export interface AllowlistEntry {
 export const KNOWN_GAP_PREFIX = 'KNOWN GAP (BL-141 follow-up):';
 
 export const CONSENT_GATE_ALLOWLIST: readonly AllowlistEntry[] = [
+  // --- a message to the person who is signed in, never to a customer --------------------------------------------------------------
+  {
+    path: 'modules/appointments-booking/reminder-test-send.ts',
+    reason:
+      "The test email of a reminder step goes to the signed-in editor's OWN user address with sample values (BL-425); it is never sent to a contact, so there is no customer consent to ask. There is deliberately no WhatsApp test.",
+  },
   // --- the dispatcher itself and the layers beneath it -------------------------------------------------------------------------
   {
     path: 'modules/channel-email/email-channel.adapter.ts',

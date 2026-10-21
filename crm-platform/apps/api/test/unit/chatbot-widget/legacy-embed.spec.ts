@@ -2,7 +2,11 @@ import { describe, expect, it, vi } from 'vitest';
 
 // The service injects ChannelIngestPublisher from this module (its class is read for Nest's constructor metadata when the file loads),
 // so the stub has to export it. Nothing in this spec calls it.
-vi.mock('../../../src/modules/chat-conversations', () => ({ ChannelIngestPublisher: class {} }));
+// The real module with only the publisher replaced: a hand-written list of its exports goes stale each time the module gains one.
+vi.mock('../../../src/modules/chat-conversations', async (importOriginal) => ({
+  ...(await importOriginal<Record<string, unknown>>()),
+  ChannelIngestPublisher: class {},
+}));
 
 import { WidgetPublicService } from '../../../src/modules/chatbot-widget/widget-public.service';
 

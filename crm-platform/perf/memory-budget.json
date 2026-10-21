@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "note": "Memory regression budget (Sheet3 #57). Checked by tools/perf/memory-budget-check.mjs against memory-profile.json.",
+  "derivedFrom": {
+    "file": "docs/performance/memory/profile-baseline.json",
+    "generatedAt": "2026-10-21T07:20:21.418Z",
+    "nodeEnv": "production",
+    "window": "5 min, 2 min warm-up, 5 s samples"
+  },
+  "headroom": {
+    "boot": 1.3,
+    "loadWindow": 1.25
+  },
+  "reasoning": "limit = baseline value x headroom, rounded up to 10 MB. Boot is tighter-measured (forced GC, one sample) but the dev machine is shared and noisy, so boot gets x1.3 and the load-window p95/p99 get x1.25: wide enough that machine noise alone does not fail a run, narrow enough that a +25% regression (about 100+ MB on the API) does. The baseline came from one short run on a noisy shared laptop, so re-derive on the first quiet CI run and then tighten.",
+  "limits": [
+    {
+      "id": "api boot RSS",
+      "path": "bootMb.api.rssMb",
+      "max": 540
+    },
+    {
+      "id": "api boot heapUsed",
+      "path": "bootMb.api.heapUsedMb",
+      "max": 320
+    },
+    {
+      "id": "api warm RSS p95",
+      "path": "loadWindow.api.rssMb.p95",
+      "max": 550
+    },
+    {
+      "id": "api warm RSS p99",
+      "path": "loadWindow.api.rssMb.p99",
+      "max": 570
+    },
+    {
+      "id": "api heapUsed p95",
+      "path": "loadWindow.api.heapUsedMb.p95",
+      "max": 390
+    },
+    {
+      "id": "api heapUsed p99",
+      "path": "loadWindow.api.heapUsedMb.p99",
+      "max": 410
+    },
+    {
+      "id": "worker boot RSS",
+      "path": "bootMb.worker.rssMb",
+      "max": 540
+    },
+    {
+      "id": "worker boot heapUsed",
+      "path": "bootMb.worker.heapUsedMb",
+      "max": 310
+    },
+    {
+      "id": "worker warm RSS p95",
+      "path": "loadWindow.worker.rssMb.p95",
+      "max": 540
+    },
+    {
+      "id": "worker warm RSS p99",
+      "path": "loadWindow.worker.rssMb.p99",
+      "max": 540
+    },
+    {
+      "id": "worker heapUsed p95",
+      "path": "loadWindow.worker.heapUsedMb.p95",
+      "max": 360
+    },
+    {
+      "id": "worker heapUsed p99",
+      "path": "loadWindow.worker.heapUsedMb.p99",
+      "max": 370
+    }
+  ]
+}

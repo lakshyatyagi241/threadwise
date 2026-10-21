@@ -2,7 +2,7 @@
  * Stand-in for `@testcontainers/postgresql` when TEST_NO_DOCKER=1 (vitest alias, see apps/api/vitest.config.ts). Same surface the
  * specs use; every start() gets its own throwaway Postgres 16 cluster in WSL (own roles, own data dir), like a container did.
  */
-import { startPostgres, stop, type Handle } from './wsl-runtime';
+import { startPostgres, stop, type Handle } from './runtime';
 
 /** `withCommand(['postgres','-c','k=v', ...])` -> ['k=v', ...] (everything else is ignored). */
 function settingsFromCommand(cmd: string[]): string[] {

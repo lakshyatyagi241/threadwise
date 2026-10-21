@@ -33,6 +33,7 @@ export function propertyPredicate(
   kind: SegmentFieldKind,
   op: SegmentOperator,
   value: unknown,
+  tz = 'UTC',
 ): SQL | undefined {
   const asText = sql`(${data} ->> ${key}::text)`;
   switch (kind) {
@@ -43,7 +44,7 @@ export function propertyPredicate(
     case 'number':
       return numberPredicate(sql`segment_safe_numeric(${asText})`, op as NumberOperator, value);
     case 'date':
-      return datePredicate(sql`segment_safe_timestamptz(${asText})`, op as DateOperator, value);
+      return datePredicate(sql`segment_safe_timestamptz(${asText})`, op as DateOperator, value, tz);
     case 'boolean':
       return booleanTextPredicate(asText, op === 'is_true');
     case 'multi':
