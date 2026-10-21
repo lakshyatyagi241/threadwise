@@ -1,4 +1,5 @@
 import { BOOKING_TIMED_STEPS_MAX } from '@crm/contracts';
+import type { Tone } from './status';
 import {
   UNDELIVERED_MIN,
   minutesOf,
@@ -185,3 +186,13 @@ export function fallbackNote(
   if (wa === 'na' || wa === 'approved') return 'ok';
   return r.channels.includes('email') ? 'email' : 'window';
 }
+
+/** The tone of the badge of a WhatsApp template state. */
+export const WA_TONE: Record<WhatsappState, Tone> = {
+  approved: 'success',
+  pending: 'warning',
+  draft: 'neutral',
+  rejected: 'danger',
+  none: 'neutral',
+  na: 'neutral',
+};

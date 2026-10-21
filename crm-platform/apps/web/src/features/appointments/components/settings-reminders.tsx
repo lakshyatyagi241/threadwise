@@ -27,6 +27,7 @@ import {
 } from '../lib/reminder-rules';
 import { ChevronDownIcon } from './icons';
 import { ErrorLine, TypeDot, useAppointmentsCan } from './parts';
+import { ReminderPackDialog } from './reminder-pack-dialog';
 import { ReminderTimeline } from './reminder-timeline';
 import { SettingsCard } from './settings-parts';
 
@@ -80,6 +81,7 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
   const [tried, setTried] = useState(false);
   const [error, setError] = useState<unknown>(null);
   const [conflict, setConflict] = useState(false);
+  const [packOpen, setPackOpen] = useState(false);
 
   const dirty = remindersChanged(saved, rules);
   // A newer copy of the type arrives (another tab saved, a refetch): take it when nothing here is being edited.
@@ -185,6 +187,28 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             channelStates={channelStates}
             library={library}
             idPrefix={`rem-${type.id}`}
+            toolbar={
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!canEdit}
+                onClick={() => setPackOpen(true)}
+              >
+                {t('packs.open')}
+              </Button>
+            }
+          />
+          <ReminderPackDialog
+            open={packOpen}
+            onClose={() => setPackOpen(false)}
+            type={{ id: type.id, name: type.name }}
+            dirty={dirty}
+            canEdit={canEdit}
+            onApplied={() => {
+              setTried(false);
+              setError(null);
+              setConflict(false);
+            }}
           />
           {canEdit ? (
             <div className="flex flex-wrap items-center justify-end gap-2">

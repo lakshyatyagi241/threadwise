@@ -24,25 +24,15 @@ import {
   offsetParts,
   timedSteps,
   whatsappState,
+  WA_TONE,
   type StepChoice,
   type TimelineLane,
-  type WhatsappState,
 } from '../lib/reminder-timeline';
 import { chipClass, iconButtonClass } from './editor-shared';
 import { ChevronDownIcon, MinusIcon, PlusIcon } from './icons';
 import { ToneChip } from './parts';
 import type { ReminderRulesEditorProps } from './reminder-rules-editor';
 import { StepDetails, StepOptions, UpgradeHint, useSequencePlan } from './reminder-step-parts';
-import type { Tone } from '../lib/status';
-
-const WA_TONE: Record<WhatsappState, Tone> = {
-  approved: 'success',
-  pending: 'warning',
-  draft: 'neutral',
-  rejected: 'danger',
-  none: 'neutral',
-  na: 'neutral',
-};
 
 export interface ReminderTimelineProps extends ReminderRulesEditorProps {
   /**

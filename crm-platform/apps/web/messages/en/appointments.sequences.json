@@ -77,6 +77,15 @@
         "fallback": {
           "email": "Until the WhatsApp template is approved, this step goes out by email.",
           "window": "WhatsApp is the only channel here, so outside the 24 hour window nothing is sent until a template is approved. Add email as a fallback."
+        },
+        "when": {
+          "before": "{amount} before it starts",
+          "after": "{amount} after it ends"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# hour} other {# hours}}",
+          "days": "{count, plural, one {# day} other {# days}}"
         }
       },
       "reasons": {
@@ -87,6 +96,92 @@
         "plan_feature_locked": "Your plan does not include this step.",
         "not_delivered": "WhatsApp did not deliver it in time, so the next channel was used.",
         "send_failed": "The send failed, so the next channel was used."
+      },
+      "packs": {
+        "open": "Ready-made sequences",
+        "eyebrow": "For {name}",
+        "title": "Ready-made reminder sequences",
+        "close": "Close",
+        "intro": "Pick a sequence for your kind of business. It sets up the confirmation, the reminders, the follow-up and the rebook message in one go. WhatsApp messages need Meta's approval before they can be sent; until then each step goes out by email.",
+        "loading": "Loading the sequences",
+        "choose": "Choose a sequence",
+        "stepsCount": "{count, plural, one {# step} other {# steps}}",
+        "language": "Language of the messages",
+        "machineDraft": "The Hindi text is a machine-made draft. Have someone who reads Hindi check it before you switch the steps on.",
+        "previewLoading": "Loading the preview",
+        "previewTitle": "What will change",
+        "summary": "{add} to add, {replace} to replace, {unchanged} already the same",
+        "timedOf": "{count} of {max} steps with a time",
+        "blocked": "Applying this sequence would pass the limit of {max} steps with a time. Remove a step first.",
+        "confirmTitle": "This replaces steps you already have",
+        "confirmBody": "{count, plural, one {# step of this booking type} other {# steps of this booking type}} will be replaced by the sequence's version, including any text you wrote.",
+        "confirmCheck": "Replace them",
+        "action": {
+          "add": "New",
+          "replace": "Replaces yours",
+          "unchanged": "Already the same"
+        },
+        "starts": {
+          "on": "Starts on",
+          "off": "Starts off"
+        },
+        "category": {
+          "UTILITY": "Service message",
+          "MARKETING": "Marketing message"
+        },
+        "onlineOnly": "Online appointments only",
+        "hasButtons": "Confirm, Reschedule, Cancel buttons",
+        "wa": {
+          "new": "Will be sent to Meta"
+        },
+        "replaceOwnText": "You wrote your own text for this step. It will be replaced.",
+        "planNotes": {
+          "rebook": "Your plan does not include rebook messages, so this step is saved switched off.",
+          "buttons": "Your plan does not include the reply buttons, so they are left out."
+        },
+        "showMessages": "Show messages",
+        "hideMessages": "Hide messages",
+        "kept": "{count, plural, one {# step you already have is not touched.} other {# steps you already have are not touched.}}",
+        "sample": {
+          "title": "Sample values",
+          "hint": "The messages are shown with these made-up values. Change them to see how a longer name or another place reads.",
+          "reset": "Reset the values",
+          "labels": {
+            "name": "Contact name",
+            "service": "Service",
+            "date": "Date",
+            "time": "Time",
+            "place": "Place",
+            "join_link": "Join link",
+            "manage_link": "Manage link"
+          }
+        },
+        "submitToMeta": "Send the WhatsApp messages to Meta for approval now",
+        "submitHint": "{count, plural, one {# new WhatsApp message is created.} other {# new WhatsApp messages are created.}} Meta decides when to approve; until then the step goes out by email. Leave this off to keep them as drafts.",
+        "submitHintNone": "The WhatsApp messages already exist in your workspace, so nothing new is created.",
+        "apply": "Apply sequence",
+        "applying": "Applying",
+        "cancel": "Cancel",
+        "block": {
+          "readOnly": "You can look at the sequences but not apply them.",
+          "unsaved": "Save or discard your changes to this booking type's steps first.",
+          "cap": "Remove a step first: the limit of steps with a time would be passed.",
+          "confirm": "Tick Replace them to continue."
+        },
+        "errors": {
+          "needsConfirm": "Applying would replace a step, so it needs your confirmation. The preview has been reloaded.",
+          "cap": "The sequence would pass the limit of steps with a time for this booking type."
+        },
+        "result": {
+          "title": "The sequence is applied",
+          "summary": "{added} added, {replaced} replaced. The steps start as the sequence sets them.",
+          "templatesTitle": "WhatsApp messages",
+          "templatesNone": "No WhatsApp message was created. Connect a WhatsApp Cloud API number to use WhatsApp; email is used meanwhile.",
+          "waiting": "Until Meta approves a message, that step goes out by email.",
+          "metaError": "Meta refused it: {error}",
+          "refresh": "Refresh status",
+          "refreshing": "Refreshing"
+        }
       }
     }
   }
