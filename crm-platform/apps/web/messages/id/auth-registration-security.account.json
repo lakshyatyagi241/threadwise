@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Pipeline penjualan",
             "appointment_booking": "Janji temu",
+            "appointment_confirm_buttons": "Tombol pengingat",
+            "appointment_rebook_steps": "Langkah pemesanan ulang",
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Katalog WhatsApp",
             "inbox_sla": "SLA kotak masuk",

@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Tingkatkan paket Anda",
+      "buttonsLocked": "Tombol Konfirmasi, Jadwalkan ulang, dan Batalkan tidak termasuk dalam paket Anda.",
+      "timeline": {
+        "label": "Linimasa pengingat",
+        "addMenu": "Tambahkan langkah",
+        "addStep": "Tambah langkah",
+        "count": "{count} dari {max} langkah dengan waktu. Konfirmasi pemesanan dan pesan tidak hadir tidak dihitung.",
+        "capReached": "Anda sudah mencapai {max} langkah dengan waktu. Hapus satu untuk menambah yang lain.",
+        "rebookLocked": "Pesan pemesanan ulang tidak termasuk dalam paket Anda. Anda bisa mengatur langkah ini, tetapi langkah ini tetap nonaktif sampai Anda meningkatkan paket.",
+        "rebookLockedStep": "Langkah ini tidak bisa diaktifkan dengan paket Anda saat ini.",
+        "empty": "Belum ada langkah. Tambahkan langkah pertama, atau mulai dari urutan siap pakai.",
+        "lane": {
+          "booked": "Saat pemesanan dibuat",
+          "before": "Sebelum janji temu",
+          "after": "Setelah janji temu"
+        },
+        "laneHint": {
+          "booked": "Dikirim segera setelah pemesanan dibuat.",
+          "before": "Dikirim sebelum janji temu dimulai, tidak pernah setelahnya.",
+          "after": "Dikirim setelah janji temu berakhir, atau saat ditandai sebagai tidak hadir."
+        },
+        "laneEmpty": "Belum ada apa pun di sini.",
+        "step": {
+          "confirmation": "Konfirmasi pemesanan",
+          "reminder_24h": "Pengingat 24 jam",
+          "reminder_2h": "Pengingat 2 jam",
+          "reminder_15m": "Pengingat 15 menit",
+          "reminder": "Pengingat",
+          "after_visit": "Pesan setelah janji temu",
+          "no_show": "Pesan tidak hadir",
+          "rebook": "Pesan pemesanan ulang"
+        },
+        "stepHint": {
+          "confirmation": "Dikirim tepat setelah pemesanan dikonfirmasi.",
+          "reminder_24h": "Sehari sebelumnya. Dapat memuat tombol Konfirmasi, Jadwalkan ulang, dan Batalkan.",
+          "reminder_2h": "Pengingat singkat beberapa jam sebelumnya.",
+          "reminder_15m": "Hanya untuk janji temu online dengan tautan bergabung.",
+          "reminder": "Pengingat pada waktu yang Anda pilih.",
+          "after_visit": "Ucapan terima kasih atau tindak lanjut setelah janji temu berakhir.",
+          "no_show": "Dikirim saat Anda menandai janji temu sebagai tidak hadir.",
+          "rebook": "Meminta kontak untuk memesan lagi beberapa hari setelah janji temu selesai. Dihitung sebagai pemasaran."
+        },
+        "choice": {
+          "confirmation": "Konfirmasi pemesanan",
+          "reminder_24h": "24 jam sebelumnya",
+          "reminder_2h": "2 jam sebelumnya",
+          "reminder_15m": "15 menit sebelumnya",
+          "custom": "Pengingat di waktu lain",
+          "after_visit": "Pesan setelah janji temu",
+          "no_show": "Pesan tidak hadir",
+          "rebook": "Pesan pemesanan ulang, beberapa hari kemudian"
+        },
+        "choiceHint": {
+          "present": "Sudah ditambahkan",
+          "cap": "Batas tercapai",
+          "locked": "Perlu meningkatkan paket untuk mengaktifkan",
+          "online": "Janji temu online"
+        },
+        "enabledOf": "Kirim: {step}",
+        "remove": "Hapus: {step}",
+        "offsetOf": "Waktu dari: {step}",
+        "unitOf": "Satuan waktu dari: {step}",
+        "beforeStart": "sebelum janji temu dimulai",
+        "afterEnd": "setelah janji temu berakhir",
+        "setTime": "Masukkan waktu",
+        "templateName": "Templat WhatsApp: {name}",
+        "wa": {
+          "none": "Tanpa templat",
+          "draft": "Templat belum dikirim ke Meta",
+          "pending": "Menunggu persetujuan Meta",
+          "approved": "Templat disetujui",
+          "rejected": "Ditolak oleh Meta"
+        },
+        "fallback": {
+          "email": "Sampai templat WhatsApp disetujui, langkah ini dikirim melalui email.",
+          "window": "WhatsApp adalah satu-satunya saluran di sini, jadi di luar jendela 24 jam tidak ada yang dikirim sampai templat disetujui. Tambahkan email sebagai cadangan."
+        },
+        "when": {
+          "before": "{amount} sebelum dimulai",
+          "after": "{amount} setelah berakhir"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# menit} other {# menit}}",
+          "hours": "{count, plural, one {# jam} other {# jam}}",
+          "days": "{count, plural, one {# hari} other {# hari}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "Kontak sudah mengonfirmasi.",
+        "no_join_link": "Janji temu tidak punya tautan bergabung.",
+        "already_rebooked": "Kontak sudah memesan lagi.",
+        "visit_not_completed": "Janji temu tidak selesai.",
+        "plan_feature_locked": "Paket Anda tidak mencakup langkah ini.",
+        "not_delivered": "WhatsApp tidak mengirimkannya tepat waktu, jadi saluran berikutnya digunakan.",
+        "send_failed": "Pengiriman gagal, jadi saluran berikutnya digunakan."
+      },
+      "packs": {
+        "open": "Urutan siap pakai",
+        "eyebrow": "Untuk {name}",
+        "title": "Urutan pengingat siap pakai",
+        "close": "Tutup",
+        "intro": "Pilih urutan untuk jenis bisnis Anda. Sekali jalan, urutan ini mengatur konfirmasi, pengingat, tindak lanjut, dan pesan pemesanan ulang. Pesan WhatsApp memerlukan persetujuan Meta sebelum bisa dikirim; sampai saat itu setiap langkah dikirim melalui email.",
+        "loading": "Memuat urutan",
+        "choose": "Pilih urutan",
+        "stepsCount": "{count, plural, one {# langkah} other {# langkah}}",
+        "language": "Bahasa pesan",
+        "machineDraft": "Teks bahasa Hindi adalah draf buatan mesin. Minta seseorang yang membaca bahasa Hindi untuk memeriksanya sebelum Anda mengaktifkan langkah-langkah.",
+        "previewLoading": "Memuat pratinjau",
+        "previewTitle": "Yang akan berubah",
+        "summary": "{add} akan ditambahkan, {replace} akan diganti, {unchanged} sudah sama",
+        "timedOf": "{count} dari {max} langkah dengan waktu",
+        "blocked": "Menerapkan urutan ini akan melewati batas {max} langkah dengan waktu. Hapus satu langkah terlebih dahulu.",
+        "confirmTitle": "Ini akan mengganti langkah yang sudah Anda miliki",
+        "confirmBody": "{count, plural, one {# langkah untuk jenis pemesanan ini} other {# langkah untuk jenis pemesanan ini}} akan diganti dengan versi dari urutan, termasuk teks yang Anda tulis.",
+        "confirmCheck": "Ganti",
+        "action": {
+          "add": "Baru",
+          "replace": "Menggantikan milik Anda",
+          "unchanged": "Sudah sama"
+        },
+        "starts": {
+          "on": "Mulai dalam keadaan aktif",
+          "off": "Mulai dalam keadaan nonaktif"
+        },
+        "category": {
+          "UTILITY": "Pesan layanan",
+          "MARKETING": "Pesan pemasaran"
+        },
+        "onlineOnly": "Hanya janji temu online",
+        "hasButtons": "Tombol Konfirmasi, Jadwalkan ulang, Batalkan",
+        "wa": {
+          "new": "Akan dikirim ke Meta"
+        },
+        "replaceOwnText": "Anda menulis teks sendiri untuk langkah ini. Teks itu akan diganti.",
+        "planNotes": {
+          "rebook": "Paket Anda tidak mencakup pesan pemesanan ulang, jadi langkah ini disimpan dalam keadaan nonaktif.",
+          "buttons": "Paket Anda tidak mencakup tombol balasan, jadi tombol tersebut dilewati."
+        },
+        "showMessages": "Tampilkan pesan",
+        "hideMessages": "Sembunyikan pesan",
+        "kept": "{count, plural, one {# langkah yang sudah Anda miliki tidak akan diubah.} other {# langkah yang sudah Anda miliki tidak akan diubah.}}",
+        "sample": {
+          "title": "Contoh nilai",
+          "hint": "Pesan ditampilkan dengan nilai contoh ini. Ubah nilainya untuk melihat tampilan nama yang lebih panjang atau tempat lain.",
+          "reset": "Atur ulang nilai",
+          "labels": {
+            "name": "Nama kontak",
+            "service": "Layanan",
+            "date": "Tanggal",
+            "time": "Waktu",
+            "place": "Tempat",
+            "join_link": "Tautan bergabung",
+            "manage_link": "Tautan kelola"
+          }
+        },
+        "submitToMeta": "Kirim pesan WhatsApp ke Meta untuk persetujuan sekarang",
+        "submitHint": "{count, plural, one {# pesan WhatsApp baru akan dibuat.} other {# pesan WhatsApp baru akan dibuat.}} Meta memutuskan kapan menyetujui; sampai saat itu langkah dikirim melalui email. Biarkan nonaktif untuk menyimpannya sebagai draf.",
+        "submitHintNone": "Pesan WhatsApp sudah ada di ruang kerja Anda, jadi tidak ada yang baru dibuat.",
+        "apply": "Terapkan urutan",
+        "applying": "Menerapkan",
+        "cancel": "Batal",
+        "block": {
+          "readOnly": "Anda bisa melihat urutan, tetapi tidak bisa menerapkannya.",
+          "unsaved": "Simpan atau buang dulu perubahan Anda pada langkah jenis pemesanan ini.",
+          "cap": "Hapus satu langkah terlebih dahulu: batas langkah dengan waktu akan terlampaui.",
+          "confirm": "Centang Ganti untuk melanjutkan."
+        },
+        "errors": {
+          "needsConfirm": "Penerapan akan mengganti satu langkah, jadi perlu konfirmasi Anda. Pratinjau telah dimuat ulang.",
+          "cap": "Urutan ini akan melewati batas langkah dengan waktu untuk jenis pemesanan ini."
+        },
+        "result": {
+          "title": "Urutan telah diterapkan",
+          "summary": "{added} ditambahkan, {replaced} diganti. Langkah dimulai sesuai pengaturan urutan.",
+          "templatesTitle": "Pesan WhatsApp",
+          "templatesNone": "Tidak ada pesan WhatsApp yang dibuat. Hubungkan nomor WhatsApp Cloud API untuk memakai WhatsApp; sementara itu email yang digunakan.",
+          "waiting": "Sampai Meta menyetujui pesan, langkah tersebut dikirim melalui email.",
+          "metaError": "Meta menolaknya: {error}",
+          "refresh": "Segarkan status",
+          "refreshing": "Menyegarkan"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,4 @@
-import { createHmac } from 'node:crypto';
+import { createHmac, timingSafeEqual } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
 import { WabaWebhookService } from './waba-webhook.service';
 
@@ -37,8 +37,12 @@ function build(redisOver: Record<string, unknown> = {}) {
   const db = { privileged: vi.fn(), primary: { execute: vi.fn() }, txAs: vi.fn() };
   const fanout = { forward: vi.fn(async () => 0) };
   const provider = {
-    verifyWebhookSignature: (raw: Buffer, header: string, secret: string) =>
-      header === `sha256=${createHmac('sha256', secret).update(raw).digest('hex')}`,
+    // Compares in constant time, as the real provider does.
+    verifyWebhookSignature: (raw: Buffer, header: string, secret: string) => {
+      const want = Buffer.from(`sha256=${createHmac('sha256', secret).update(raw).digest('hex')}`);
+      const got = Buffer.from(header);
+      return got.length === want.length && timingSafeEqual(got, want);
+    },
   };
   const svc = new WabaWebhookService(
     db as never,

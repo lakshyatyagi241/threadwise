@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Tutup"
     },
+    "list": {
+      "unofficialDisabled": "Tidak resmi (dinonaktifkan)"
+    },
     "detail": {
       "back": "Kembali",
       "crumb": "Broadcast / Analitik / #{ref}",

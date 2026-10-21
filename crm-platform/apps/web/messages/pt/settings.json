@@ -65,6 +65,11 @@
         "description": "Conecte seu número do WhatsApp Business para conversar com clientes.",
         "keywords": "wa, whatsapp business, cloud api, número, qr"
       },
+      "whatsapp-profile": {
+        "label": "Perfil comercial do WhatsApp",
+        "description": "Seu logotipo, texto sobre a empresa, dados de contato e as informações de conformidade exigidas pela Meta.",
+        "keywords": "perfil comercial, logotipo, foto de perfil, sobre, contato, conformidade, razão social, atendimento ao cliente, responsável por reclamações"
+      },
       "unofficial-whatsapp": {
         "label": "API não oficial do WhatsApp",
         "description": "Vincule um número pessoal do WhatsApp por QR code e aqueça-o para envios seguros.",
@@ -341,7 +346,7 @@
         "keywords": "consentimento, cancelar inscrição, reativar inscrição, descadastrar, stop, start, lgpd, gdpr, conformidade, privacidade, marketing"
       },
       "inbox-tags": {
-        "label": "Tags da conversa",
+        "label": "Tags",
         "description": "Crie as tags que sua equipe aplica às conversas e usa para filtrar a caixa de entrada. São as mesmas tags usadas nos contatos.",
         "keywords": "tags, tag, categorias, organizar, filtrar, tags da conversa"
       },

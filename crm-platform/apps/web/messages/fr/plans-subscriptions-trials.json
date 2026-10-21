@@ -60,6 +60,8 @@
       "remove_branding": "Supprimer la marque",
       "sales_pipeline": "Pipeline commercial",
       "appointment_booking": "Prise de rendez-vous",
+      "appointment_confirm_buttons": "Boutons du rappel (Confirmer / Reporter / Annuler)",
+      "appointment_rebook_steps": "Étapes de relance pour reprendre rendez-vous",
       "chatbot_widgets": "Widgets chatbot",
       "wa_storefront": "Catalogue WhatsApp",
       "inbox_sla": "Politiques SLA",

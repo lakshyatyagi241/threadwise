@@ -60,6 +60,8 @@
       "remove_branding": "Gỡ thương hiệu",
       "sales_pipeline": "Pipeline bán hàng",
       "appointment_booking": "Đặt lịch hẹn",
+      "appointment_confirm_buttons": "Nút nhắc hẹn (Xác nhận / Đổi lịch / Hủy)",
+      "appointment_rebook_steps": "Bước đặt lại lịch (gợi nhớ)",
       "chatbot_widgets": "Tiện ích chatbot",
       "wa_storefront": "Danh mục WhatsApp",
       "inbox_sla": "Chính sách SLA",

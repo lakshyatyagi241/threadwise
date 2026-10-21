@@ -37,6 +37,8 @@ import { personaVisibility } from './visibility';
 const gatesOf = (): NavGates[] => [
   ...NAV.map((n) => n.gates ?? {}),
   ...SETTINGS.map((t) => t.gates ?? {}),
+  // "Soon" entries (Channels, TikTok, Privacy) are drawn for a person who holds their permission, so the fixtures grant it too.
+  ...PLANNED_SETTINGS.map((t) => t.gates ?? {}),
   ...HELP_DOCS.map((d) => d.gates),
 ];
 const collect = (pick: (g: NavGates) => (string | undefined)[]): string[] => [
@@ -255,10 +257,20 @@ describe('edition presets are data and change nothing for generic or persona-les
   const tiles = (hidden: Hidden) =>
     ids(resolveSettings(SETTINGS, { ...FULL(), hidden }, { planned: PLANNED_SETTINGS }));
 
-  it('every id the presets name is in the generated module catalog', () => {
+  // Ids the presets keep on purpose. Their tile was removed from Settings (commit 2974d99df), but the seed migration that holds the
+  // id is already applied and must not change, so the presets keep naming it. Each must really be gone from the catalog.
+  const RETIRED_TILE_IDS = new Set(['tile:team-performance']);
+
+  it('every id the presets name is in the generated module catalog, unless it is a retired one', () => {
     const catalog = new Set(MODULE_CATALOG.map((e) => e.id));
     for (const def of Object.values(EDITION_PERSONAS))
-      for (const id of Object.keys(def.modules.ids)) expect(catalog.has(id), id).toBe(true);
+      for (const id of Object.keys(def.modules.ids))
+        if (!RETIRED_TILE_IDS.has(id)) expect(catalog.has(id), id).toBe(true);
+  });
+
+  it('a retired id is really gone from the catalog', () => {
+    const catalog = new Set(MODULE_CATALOG.map((e) => e.id));
+    for (const id of RETIRED_TILE_IDS) expect(catalog.has(id), id).toBe(false);
   });
 
   it('"Both" shows exactly what generic and a workspace without a persona show', () => {
@@ -290,10 +302,23 @@ describe('edition presets are data and change nothing for generic or persona-les
       expect(t, kept).toContain(kept);
 
     const p = personaVisibility(view('chat_team'));
-    const sections = Object.values(visibleSections(() => true, (s) => p.isSectionHidden(s))).flat();
+    const sections = Object.values(
+      visibleSections(
+        () => true,
+        (s) => p.isSectionHidden(s),
+      ),
+    ).flat();
     for (const gone of ['deals', 'tasks', 'sales', 'lead-source', 'company', 'appointments'])
       expect(sections, gone).not.toContain(gone);
-    for (const kept of ['overview', 'conversations', 'notes', 'details', 'files', 'consent', 'history'])
+    for (const kept of [
+      'overview',
+      'conversations',
+      'notes',
+      'details',
+      'files',
+      'consent',
+      'history',
+    ])
       expect(sections, kept).toContain(kept);
     expect(p.isActionHidden('task')).toBe(true);
     expect(p.isActionHidden('note')).toBe(false);
@@ -302,7 +327,14 @@ describe('edition presets are data and change nothing for generic or persona-les
   it('Sales team: the inbox and chat channels leave; contacts, deals and tasks stay', () => {
     const hidden = hiddenOf('sales_team');
     const m = menu(hidden);
-    for (const gone of ['inbox', 'inbox-saved-replies', 'team-chat', 'campaigns', 'telegram', 'facebook'])
+    for (const gone of [
+      'inbox',
+      'inbox-saved-replies',
+      'team-chat',
+      'campaigns',
+      'telegram',
+      'facebook',
+    ])
       expect(m, gone).not.toContain(gone);
     for (const kept of ['contacts', 'deals', 'companies', 'tasks', 'dashboard'])
       expect(m, kept).toContain(kept);
@@ -313,7 +345,12 @@ describe('edition presets are data and change nothing for generic or persona-les
       expect(t, kept).toContain(kept);
 
     const p = personaVisibility(view('sales_team'));
-    const sections = Object.values(visibleSections(() => true, (s) => p.isSectionHidden(s))).flat();
+    const sections = Object.values(
+      visibleSections(
+        () => true,
+        (s) => p.isSectionHidden(s),
+      ),
+    ).flat();
     expect(sections).not.toContain('conversations');
     for (const kept of ['overview', 'deals', 'tasks', 'notes', 'company'])
       expect(sections, kept).toContain(kept);
@@ -323,7 +360,8 @@ describe('edition presets are data and change nothing for generic or persona-les
   it('entitlement still wins over visibility, in both directions', () => {
     // visible but not in the plan: the entry shows with today's lock
     const planGated = NAV.find(
-      (n) => n.gates?.planFeature && !n.gates.app && !CRM_SIDE_MODULES.includes(`nav:${n.id}` as never),
+      (n) =>
+        n.gates?.planFeature && !n.gates.app && !CRM_SIDE_MODULES.includes(`nav:${n.id}` as never),
     )!;
     const noPlan = caps(PERMISSIONS, [], CHANNELS);
     const shown = resolveNav(NAV, { ...noPlan, hidden: hiddenOf('chat_team') }).find(

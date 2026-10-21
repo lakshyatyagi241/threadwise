@@ -535,6 +535,8 @@
             "remove_branding": "ไวต์เลเบล",
             "sales_pipeline": "ไปป์ไลน์การขาย",
             "appointment_booking": "การนัดหมาย",
+            "appointment_confirm_buttons": "ปุ่มแจ้งเตือนนัดหมาย",
+            "appointment_rebook_steps": "ขั้นตอนการนัดซ้ำ",
             "chatbot_widgets": "วิดเจ็ตแชทบอต",
             "wa_storefront": "แคตตาล็อก WhatsApp",
             "inbox_sla": "SLA ของกล่องข้อความ",

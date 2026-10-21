@@ -8,7 +8,7 @@ import {
   servableMime,
   sniffMediaType,
 } from '../../../src/infra/providers/chat-conversations/media/media-types';
-import { isSafeSvg } from '../../../src/modules/chatbot-widget/svg-safe';
+import { isSafeSvg } from '../../../src/common/svg-safe';
 import { sniffImage as sniffBrand } from '../../../src/modules/platform-settings-branding-storage/brand-assets.service';
 import { sniffImage as sniffLogo } from '../../../src/modules/platform-payment-gateways/image-sniff';
 import { readZipEntry } from '../../../src/modules/ai-agents-training/file-extract';

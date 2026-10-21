@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Torna alla posta in arrivo",
-        "title": "Tag della conversazione",
+        "title": "Tag",
         "intro": "I tag della conversazione contrassegnano una discussione (fatturazione, rimborso, urgente) così il tuo team può ordinare e filtrare la posta in arrivo. Provengono dalla stessa libreria dei tag del contatto, che descrivono la persona.",
         "newTitle": "Nuovo tag",
         "editTitle": "Modifica tag",

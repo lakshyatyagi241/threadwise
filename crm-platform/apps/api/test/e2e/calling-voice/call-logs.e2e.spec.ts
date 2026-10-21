@@ -633,7 +633,6 @@ describe('the query plan on a few thousand calls', () => {
 
     const all = await explain('all');
     const own = await explain('own');
-    // eslint-disable-next-line no-console
     console.log('PLAN all\n' + all + '\nPLAN own\n' + own);
     expect(all).toContain('idx_wa_calls_org_started_at');
     expect(all).not.toMatch(/Seq Scan on wa_calls/);

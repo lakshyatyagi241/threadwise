@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Ulepsz swój plan",
+      "buttonsLocked": "Przyciski Potwierdź, Przełóż i Anuluj nie są objęte Twoim planem.",
+      "timeline": {
+        "label": "Oś czasu przypomnień",
+        "addMenu": "Dodaj krok",
+        "addStep": "Dodaj krok",
+        "count": "{count} z {max} kroków z godziną. Potwierdzenie rezerwacji i wiadomość o nieobecności się nie liczą.",
+        "capReached": "Osiągnięto limit {max} kroków z godziną. Usuń jeden, aby dodać kolejny.",
+        "rebookLocked": "Wiadomości o ponownej rezerwacji nie są objęte Twoim planem. Krok możesz ustawić, ale pozostanie wyłączony, dopóki nie ulepszysz planu.",
+        "rebookLockedStep": "Przy obecnym planie nie można włączyć tego kroku.",
+        "empty": "Brak kroków. Dodaj pierwszy krok lub zacznij od gotowej sekwencji.",
+        "lane": {
+          "booked": "Gdy wizyta zostanie zarezerwowana",
+          "before": "Przed wizytą",
+          "after": "Po wizycie"
+        },
+        "laneHint": {
+          "booked": "Wysyłane zaraz po dokonaniu rezerwacji.",
+          "before": "Wysyłane przed rozpoczęciem wizyty, nigdy po niej.",
+          "after": "Wysyłane po zakończeniu wizyty lub gdy zostanie oznaczona jako nieobecność."
+        },
+        "laneEmpty": "Na razie nic tu nie ma.",
+        "step": {
+          "confirmation": "Potwierdzenie rezerwacji",
+          "reminder_24h": "Przypomnienie 24-godzinne",
+          "reminder_2h": "Przypomnienie 2-godzinne",
+          "reminder_15m": "Przypomnienie 15-minutowe",
+          "reminder": "Przypomnienie",
+          "after_visit": "Wiadomość po wizycie",
+          "no_show": "Wiadomość o nieobecności",
+          "rebook": "Wiadomość o ponownej rezerwacji"
+        },
+        "stepHint": {
+          "confirmation": "Wysyłane zaraz po potwierdzeniu rezerwacji.",
+          "reminder_24h": "Dzień wcześniej. Może zawierać przyciski Potwierdź, Przełóż i Anuluj.",
+          "reminder_2h": "Krótkie przypomnienie na kilka godzin przed wizytą.",
+          "reminder_15m": "Tylko dla wizyt online z linkiem do dołączenia.",
+          "reminder": "Przypomnienie o wybranej przez Ciebie godzinie.",
+          "after_visit": "Podziękowanie lub wiadomość kontrolna po zakończeniu wizyty.",
+          "no_show": "Wysyłane, gdy oznaczysz wizytę jako nieobecność.",
+          "rebook": "Prosi kontakt o ponowną rezerwację kilka dni po zakończonej wizycie. Liczy się jako marketing."
+        },
+        "choice": {
+          "confirmation": "Potwierdzenie rezerwacji",
+          "reminder_24h": "24 godziny przed",
+          "reminder_2h": "2 godziny przed",
+          "reminder_15m": "15 minut przed",
+          "custom": "Przypomnienie o innej godzinie",
+          "after_visit": "Wiadomość po wizycie",
+          "no_show": "Wiadomość o nieobecności",
+          "rebook": "Wiadomość o ponownej rezerwacji, kilka dni później"
+        },
+        "choiceHint": {
+          "present": "Już dodano",
+          "cap": "Osiągnięto limit",
+          "locked": "Do włączenia potrzebne ulepszenie planu",
+          "online": "Wizyty online"
+        },
+        "enabledOf": "Wyślij: {step}",
+        "remove": "Usuń: {step}",
+        "offsetOf": "Czas: {step}",
+        "unitOf": "Jednostka czasu: {step}",
+        "beforeStart": "przed rozpoczęciem wizyty",
+        "afterEnd": "po zakończeniu wizyty",
+        "setTime": "Wpisz czas",
+        "templateName": "Szablon WhatsApp: {name}",
+        "wa": {
+          "none": "Brak szablonu",
+          "draft": "Szablon nie został wysłany do Meta",
+          "pending": "Oczekuje na zatwierdzenie przez Meta",
+          "approved": "Szablon zatwierdzony",
+          "rejected": "Odrzucony przez Meta"
+        },
+        "fallback": {
+          "email": "Dopóki szablon WhatsApp nie zostanie zatwierdzony, ten krok jest wysyłany przez Email.",
+          "window": "WhatsApp to tutaj jedyny kanał, więc poza 24-godzinnym oknem nic nie zostanie wysłane, dopóki szablon nie zostanie zatwierdzony. Dodaj Email jako kanał zapasowy."
+        },
+        "when": {
+          "before": "{amount} przed rozpoczęciem",
+          "after": "{amount} po zakończeniu"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minuta} few {# minuty} many {# minut} other {# minuty}}",
+          "hours": "{count, plural, one {# godzina} few {# godziny} many {# godzin} other {# godziny}}",
+          "days": "{count, plural, one {# dzień} few {# dni} many {# dni} other {# dnia}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "Kontakt już potwierdził.",
+        "no_join_link": "Wizyta nie ma linku do dołączenia.",
+        "already_rebooked": "Kontakt ponownie zarezerwował wizytę.",
+        "visit_not_completed": "Wizyta nie została zrealizowana.",
+        "plan_feature_locked": "Twój plan nie obejmuje tego kroku.",
+        "not_delivered": "WhatsApp nie dostarczył wiadomości na czas, więc użyto następnego kanału.",
+        "send_failed": "Wysyłka się nie powiodła, więc użyto następnego kanału."
+      },
+      "packs": {
+        "open": "Gotowe sekwencje",
+        "eyebrow": "Dla: {name}",
+        "title": "Gotowe sekwencje przypomnień",
+        "close": "Zamknij",
+        "intro": "Wybierz sekwencję dla swojego rodzaju działalności. Jednym krokiem konfiguruje potwierdzenie, przypomnienia, wiadomość kontrolną i wiadomość o ponownej rezerwacji. Wiadomości WhatsApp wymagają zgody Meta, zanim będzie można je wysłać; do tego czasu każdy krok jest wysyłany przez Email.",
+        "loading": "Wczytywanie sekwencji",
+        "choose": "Wybierz sekwencję",
+        "stepsCount": "{count, plural, one {# krok} few {# kroki} many {# kroków} other {# kroku}}",
+        "language": "Język wiadomości",
+        "machineDraft": "Tekst w języku hindi to szkic wygenerowany maszynowo. Zanim włączysz kroki, poproś kogoś, kto czyta po hindi, o sprawdzenie.",
+        "previewLoading": "Wczytywanie podglądu",
+        "previewTitle": "Co się zmieni",
+        "summary": "Dodanie: {add}, zastąpienie: {replace}, bez zmian: {unchanged}",
+        "timedOf": "{count} z {max} kroków z godziną",
+        "blocked": "Zastosowanie tej sekwencji przekroczyłoby limit {max} kroków z godziną. Najpierw usuń krok.",
+        "confirmTitle": "To zastąpi kroki, które już masz",
+        "confirmBody": "{count, plural, one {# krok tego typu wizyty zostanie zastąpiony} few {# kroki tego typu wizyty zostaną zastąpione} many {# kroków tego typu wizyty zostanie zastąpionych} other {# kroku tego typu wizyty zostanie zastąpione}} wersją z sekwencji, razem z każdym tekstem, który sam napisałeś.",
+        "confirmCheck": "Zastąp je",
+        "action": {
+          "add": "Nowy",
+          "replace": "Zastąpi Twój",
+          "unchanged": "Już taki sam"
+        },
+        "starts": {
+          "on": "Startuje włączony",
+          "off": "Startuje wyłączony"
+        },
+        "category": {
+          "UTILITY": "Wiadomość serwisowa",
+          "MARKETING": "Wiadomość marketingowa"
+        },
+        "onlineOnly": "Tylko wizyty online",
+        "hasButtons": "Przyciski Potwierdź, Przełóż, Anuluj",
+        "wa": {
+          "new": "Zostanie wysłany do Meta"
+        },
+        "replaceOwnText": "Dla tego kroku napisałeś własny tekst. Zostanie zastąpiony.",
+        "planNotes": {
+          "rebook": "Twój plan nie obejmuje wiadomości o ponownej rezerwacji, więc ten krok zostanie zapisany jako wyłączony.",
+          "buttons": "Twój plan nie obejmuje przycisków odpowiedzi, więc zostaną pominięte."
+        },
+        "showMessages": "Pokaż wiadomości",
+        "hideMessages": "Ukryj wiadomości",
+        "kept": "{count, plural, one {# krok, który już masz, nie zostanie zmieniony.} few {# kroki, które już masz, nie zostaną zmienione.} many {# kroków, które już masz, nie zostaną zmienione.} other {# kroku, który już masz, nie zostanie zmieniony.}}",
+        "sample": {
+          "title": "Przykładowe wartości",
+          "hint": "Wiadomości są pokazywane z tymi zmyślonymi wartościami. Zmień je, aby zobaczyć, jak wygląda dłuższe imię lub inne miejsce.",
+          "reset": "Przywróć wartości",
+          "labels": {
+            "name": "Imię kontaktu",
+            "service": "Usługa",
+            "date": "Data",
+            "time": "Godzina",
+            "place": "Miejsce",
+            "join_link": "Link do dołączenia",
+            "manage_link": "Link do zarządzania"
+          }
+        },
+        "submitToMeta": "Wyślij teraz wiadomości WhatsApp do zatwierdzenia przez Meta",
+        "submitHint": "{count, plural, one {Tworzona jest # nowa wiadomość WhatsApp.} few {Tworzone są # nowe wiadomości WhatsApp.} many {Tworzonych jest # nowych wiadomości WhatsApp.} other {Tworzonej jest # nowej wiadomości WhatsApp.}} Meta decyduje, kiedy zatwierdzić; do tego czasu krok jest wysyłany przez Email. Wyłącz tę opcję, aby zachować je jako szkice.",
+        "submitHintNone": "Wiadomości WhatsApp już istnieją w Twoim obszarze roboczym, więc nic nowego nie zostanie utworzone.",
+        "apply": "Zastosuj sekwencję",
+        "applying": "Stosowanie",
+        "cancel": "Anuluj",
+        "block": {
+          "readOnly": "Sekwencje możesz przeglądać, ale nie zastosujesz ich.",
+          "unsaved": "Najpierw zapisz lub odrzuć zmiany w krokach tego typu wizyty.",
+          "cap": "Najpierw usuń krok: przekroczony zostałby limit kroków z godziną.",
+          "confirm": "Zaznacz Zastąp je, aby kontynuować."
+        },
+        "errors": {
+          "needsConfirm": "Zastosowanie zastąpiłoby krok, dlatego wymaga Twojego potwierdzenia. Podgląd został odświeżony.",
+          "cap": "Sekwencja przekroczyłaby limit kroków z godziną dla tego typu wizyty."
+        },
+        "result": {
+          "title": "Sekwencja została zastosowana",
+          "summary": "Dodano: {added}, zastąpiono: {replaced}. Kroki startują tak, jak ustawia je sekwencja.",
+          "templatesTitle": "Wiadomości WhatsApp",
+          "templatesNone": "Nie utworzono żadnej wiadomości WhatsApp. Połącz numer WhatsApp Cloud API, aby używać WhatsApp; do tego czasu używany jest Email.",
+          "waiting": "Dopóki Meta nie zatwierdzi wiadomości, ten krok jest wysyłany przez Email.",
+          "metaError": "Meta ją odrzuciła: {error}",
+          "refresh": "Odśwież status",
+          "refreshing": "Odświeżanie"
+        }
+      }
+    }
+  }
+}

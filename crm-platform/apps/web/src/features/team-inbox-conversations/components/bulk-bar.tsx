@@ -26,7 +26,7 @@ export interface BulkBarProps {
     tag: boolean;
   };
   meId: string;
-  onSelectAll: () => void;
+  onToggleAll: () => void;
   onClear: () => void;
   onRun: (action: BulkConversationAction) => void;
 }
@@ -63,8 +63,9 @@ export function BulkBar(props: BulkBarProps) {
         </p>
         <button
           type="button"
-          onClick={props.onSelectAll}
-          disabled={props.allInViewSelected || props.busy}
+          onClick={props.onToggleAll}
+          aria-pressed={props.allInViewSelected}
+          disabled={props.busy}
           data-testid="inbox-bulk-all"
           className="text-xs text-primary underline-offset-2 hover:underline focus-visible:ring-2 focus-visible:ring-primary disabled:text-muted-foreground disabled:no-underline"
         >

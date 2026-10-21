@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "닫기"
     },
+    "list": {
+      "unofficialDisabled": "비공식 (비활성화됨)"
+    },
     "detail": {
       "back": "뒤로",
       "crumb": "브로드캐스트 / 분석 / #{ref}",

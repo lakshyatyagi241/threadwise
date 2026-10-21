@@ -410,6 +410,14 @@
           "label": "Appointment out of sync with Google Calendar",
           "hint": "An upcoming appointment's Google Calendar event was deleted, moved or had its guests changed. The appointment is not changed; you choose what to do."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Appointment cancelled by the customer",
+          "hint": "A customer cancelled their appointment by tapping Cancel on a reminder. The appointment's host is told."
+        },
+        "appointment_reminder_test": {
+          "label": "Reminder email test result",
+          "hint": "The result of the test email you send for a reminder step: sent, or not sent and why."
+        },
         "test": {
           "label": "Test notification",
           "hint": "The test you send from Browser notifications, so you can see the bell, the pop-up and the tab title work."

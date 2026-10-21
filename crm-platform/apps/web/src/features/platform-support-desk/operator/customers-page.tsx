@@ -19,7 +19,6 @@ const NS = 'platform-support-desk';
 export function CustomersPage() {
   const t = useTranslations(`${NS}.customers`);
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const [search, setSearch] = useState('');
   const [q, setQ] = useState('');
   useEffect(() => {
