@@ -1539,6 +1539,7 @@
       "tabsLabel": "אזורי איש הקשר",
       "tabs": {
         "about": "פרטי איש הקשר",
+        "stats": "סטטיסטיקה",
         "activity": "פעילויות",
         "files": "עוד"
       },
@@ -1565,6 +1566,16 @@
         "message": "למחוק את {{name}}? אי אפשר לבטל פעולה זו.",
         "confirm": "מחיקה",
         "cancel": "ביטול"
+      },
+      "stats": {
+        "title": "סיכום WhatsApp",
+        "sent": "נשלחו",
+        "delivered": "נמסרו",
+        "replied": "נענו",
+        "seen": "נקראו",
+        "received": "התקבלו",
+        "failed": "נכשלו",
+        "footnote": "נתוני WhatsApp סופרים כל הודעה בשיחות ה-WhatsApp של איש הקשר הזה. הודעה שנשלחה נספרת כנענתה כשההודעה הבאה היא של איש הקשר."
       }
     },
     "tags": {
@@ -1640,6 +1651,12 @@
       "close": "סגירת החיפוש",
       "label": "חיפוש",
       "placeholder": "חיפוש לפי כותרת"
+    },
+    "tabs": {
+      "label": "תאריך יעד",
+      "all": "הכול",
+      "tomorrow": "מחר",
+      "week": "השבוע"
     },
     "filter": {
       "open": "סינון משימות",
@@ -2108,6 +2125,10 @@
     "search": "חיפוש שדות",
     "showEmpty": "הצגת שדות ריקים",
     "footer": "אפשר להתאים את המאפיינים שמוצגים כאן מאפליקציית האינטרנט.",
+    "viewAll": "הצגת כל המאפיינים",
+    "allTitle": "כל הקטעים",
+    "otherSection": "מאפיינים נוספים",
+    "noProperties": "אין מאפיינים להצגה.",
     "close": "סגירה",
     "save": "שמירה",
     "clear": "ניקוי",
@@ -2124,9 +2145,12 @@
       "name": "שם",
       "source": "מקור",
       "whatsapp": "מנוי WhatsApp",
+      "emailSubscription": "מנוי Email",
+      "smsSubscription": "מנוי SMS",
       "marketing": "ביטול הסכמה לשיווק",
       "leadScore": "דירוג ליד",
       "created": "נוצר",
+      "modified": "שונה",
       "lastActivity": "פעילות אחרונה"
     },
     "subscription": {

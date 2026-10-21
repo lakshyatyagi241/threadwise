@@ -3,6 +3,7 @@ import {
   activeChoiceCount,
   cleanChoices,
   defaultOwner,
+  dueRangeOf,
   listRequest,
   type TaskChoices,
 } from './filters';
@@ -83,5 +84,59 @@ describe('listRequest', () => {
     expect(listRequest('', NO_CHOICES, '  quote ').filters.q).toBe('quote');
     expect(listRequest('', NO_CHOICES, '   ').filters.q).toBeUndefined();
     expect(listRequest('', NO_CHOICES, 'x'.repeat(150)).filters.q).toHaveLength(100);
+  });
+});
+
+describe('the due tabs', () => {
+  // Wednesday 21 Oct 2026, mid-afternoon on the phone's clock.
+  const wed = new Date(2026, 9, 21, 15, 30);
+  const at = (y: number, m: number, d: number) => new Date(y, m, d).toISOString();
+
+  it('reads tomorrow as that one day, from midnight to midnight', () => {
+    expect(dueRangeOf('tomorrow', wed)).toEqual({
+      dueFrom: at(2026, 9, 22),
+      dueTo: at(2026, 9, 23),
+    });
+  });
+
+  it('reads this week as today to the end of Sunday', () => {
+    expect(dueRangeOf('week', wed)).toEqual({ dueFrom: at(2026, 9, 21), dueTo: at(2026, 9, 26) });
+    // A Monday has the whole week ahead; a Sunday has only itself.
+    expect(dueRangeOf('week', new Date(2026, 9, 19, 9, 0)).dueTo).toBe(at(2026, 9, 26));
+    expect(dueRangeOf('week', new Date(2026, 9, 25, 9, 0))).toEqual({
+      dueFrom: at(2026, 9, 25),
+      dueTo: at(2026, 9, 26),
+    });
+  });
+
+  it('sends the API its own words for Overdue and Today, and a range for the other two', () => {
+    expect(listRequest('', NO_CHOICES, '', 'overdue', wed).filters).toEqual({
+      status: 'open',
+      due: 'overdue',
+    });
+    expect(listRequest('', NO_CHOICES, '', 'today', wed).filters).toEqual({
+      status: 'open',
+      due: 'today',
+    });
+    expect(listRequest('', NO_CHOICES, '', 'tomorrow', wed).filters).toEqual({
+      status: 'open',
+      dueFrom: at(2026, 9, 22),
+      dueTo: at(2026, 9, 23),
+    });
+    expect(listRequest(CONTACT, NO_CHOICES, '', 'week', wed).filters).toMatchObject({
+      dueFrom: at(2026, 9, 21),
+    });
+  });
+
+  it('leaves the list unnarrowed on All, and lets a tab win over the sheet’s due choice', () => {
+    expect(listRequest('', NO_CHOICES, '', 'all', wed).filters).toEqual({ status: 'open' });
+    expect(listRequest('', { due: 'upcoming' }, '', 'all', wed).filters).toEqual({
+      status: 'open',
+      due: 'upcoming',
+    });
+    expect(listRequest('', { due: 'upcoming' }, '', 'today', wed).filters).toEqual({
+      status: 'open',
+      due: 'today',
+    });
   });
 });

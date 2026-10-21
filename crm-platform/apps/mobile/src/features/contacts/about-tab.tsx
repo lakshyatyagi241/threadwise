@@ -1,4 +1,5 @@
 import type { ContactResponse, TagResponse } from '@crm/contracts';
+import { useRouter } from 'expo-router';
 import { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Pressable, StyleSheet, Switch, View } from 'react-native';
@@ -15,9 +16,8 @@ import { useTheme } from '@/lib/theme/use-theme';
 import { ContactTags } from './contact-tags';
 import { FieldEditor } from './field-editor';
 import { OwnerPicker } from './owner-picker';
+import { PropertyRowView } from './property-row';
 import {
-  MASKED,
-  NO_VALUE,
   buildRows,
   groupRows,
   searchRows,
@@ -29,56 +29,6 @@ import { isDenied, useAssignees, useContactFields, useFieldSections } from './us
 
 /** How long "You can't edit X" stays on screen. */
 const NOTICE_MS = 4000;
-
-function RowView({
-  row,
-  tappable,
-  onPress,
-}: {
-  row: PropertyRow;
-  tappable: boolean;
-  onPress: () => void;
-}) {
-  const { t } = useTranslation();
-  const { colors } = useTheme();
-  const value = row.text ?? NO_VALUE;
-  // Dots are not words: a screen reader says that the value is hidden instead of reading six bullets.
-  const spoken = `${row.label}: ${row.text === MASKED ? t('contactProps.masked') : value}`;
-  const editable = row.edit.kind !== 'locked';
-  const content = (
-    <>
-      <View style={styles.rowText}>
-        <Text variant="caption" muted>
-          {row.label}
-        </Text>
-        <Text muted={row.text === null}>{value}</Text>
-      </View>
-      {tappable && editable ? <Icon name="create-outline" size={20} color="primary" /> : null}
-    </>
-  );
-  if (!tappable) {
-    return (
-      <View
-        accessible
-        accessibilityLabel={spoken}
-        style={[styles.row, { borderBottomColor: colors.border }]}
-      >
-        {content}
-      </View>
-    );
-  }
-  return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={spoken}
-      accessibilityHint={editable ? t('contactProps.rowHint') : undefined}
-      onPress={onPress}
-      style={[styles.row, { borderBottomColor: colors.border }]}
-    >
-      {content}
-    </Pressable>
-  );
-}
 
 /**
  * The About tab: one card, "Contact information", with the contact's email, phone, owner and name, what the system knows about
@@ -96,6 +46,7 @@ export function AboutTab({
 }) {
   const { t, i18n } = useTranslation();
   const { colors } = useTheme();
+  const router = useRouter();
   const session = useSession();
   const canUpdate = can(session.data, 'record.contacts.update');
   const canReadFields = can(session.data, 'record.contact-properties.read');
@@ -214,7 +165,12 @@ export function AboutTab({
                   </Text>
                 ) : null}
                 {group.rows.map((row) => (
-                  <RowView key={row.id} row={row} tappable={canUpdate} onPress={() => press(row)} />
+                  <PropertyRowView
+                    key={row.id}
+                    row={row}
+                    tappable={canUpdate}
+                    onPress={() => press(row)}
+                  />
                 ))}
               </View>
             ))}
@@ -227,9 +183,22 @@ export function AboutTab({
 
       <ContactTags contactId={contact.id} tags={tags} editable={canUpdate} />
 
-      <Text variant="caption" muted style={styles.footer}>
-        {t('contactProps.footer')}
-      </Text>
+      <View style={styles.footerBlock}>
+        <Text variant="caption" muted style={styles.footer}>
+          {t('contactProps.footer')}
+        </Text>
+        {/* Every property of the workspace in its section, empty ones too: the Geta app's "View all properties". */}
+        {canReadFields ? (
+          <Button
+            variant="link"
+            align="center"
+            label={t('contactProps.viewAll')}
+            onPress={() =>
+              router.push({ pathname: '/contact-properties', params: { id: contact.id } })
+            }
+          />
+        ) : null}
+      </View>
 
       {editing === 'owner' ? (
         <OwnerPicker contact={contact} onClose={() => setEditing(null)} />
@@ -255,15 +224,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: spacing.md,
   },
-  row: {
-    minHeight: MIN_TOUCH_TARGET,
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  rowText: { flex: 1, gap: spacing.xs },
-  footer: { paddingHorizontal: spacing.xs },
+  footerBlock: { gap: spacing.xs },
+  footer: { paddingHorizontal: spacing.xs, textAlign: 'center' },
   sectionTitle: { paddingTop: spacing.md, paddingBottom: spacing.xs },
 });

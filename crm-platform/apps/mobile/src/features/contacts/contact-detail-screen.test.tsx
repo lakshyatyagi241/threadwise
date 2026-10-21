@@ -43,6 +43,7 @@ jest.mock('./about-tab', () => ({
 }));
 jest.mock('./activity-tab', () => ({ ActivityTab: () => mockMarker('activity tab') }));
 jest.mock('./more-tab', () => ({ MoreTab: () => mockMarker('more tab') }));
+jest.mock('./stats-tab', () => ({ StatsTab: () => mockMarker('stats tab') }));
 jest.mock('./lifecycle-card', () => ({ LifecycleCard: () => mockMarker('lifecycle card') }));
 jest.mock('./activity-summary', () => ({ ActivitySummary: () => mockMarker('activity summary') }));
 jest.mock('@/lib/session/api');
@@ -116,6 +117,18 @@ describe('ContactDetailScreen', () => {
     await openDetails();
     expect(await screen.findByText('VIP')).toBeTruthy();
     expect(screen.getByText('about tab')).toBeTruthy();
+  });
+
+  it('adds the Stats tab for a person who may read conversations, and leaves it out for one who may not', async () => {
+    sessionCall.mockResolvedValue(sessionAll);
+    const { unmount } = await show();
+    await fireEvent.press(await screen.findByRole('radio', { name: 'Stats' }));
+    expect(screen.getByText('stats tab')).toBeTruthy();
+    await unmount();
+    sessionCall.mockResolvedValue(sessionFull);
+    await show();
+    await screen.findByText('activity summary');
+    expect(screen.queryByRole('radio', { name: 'Stats' })).toBeNull();
   });
 
   it('switches between the Activities, Contact details and More tabs', async () => {

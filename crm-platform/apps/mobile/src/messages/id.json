@@ -1481,6 +1481,7 @@
       "tabsLabel": "Bagian kontak",
       "tabs": {
         "about": "Detail kontak",
+        "stats": "Statistik",
         "activity": "Aktivitas",
         "files": "Lainnya"
       },
@@ -1507,6 +1508,16 @@
         "message": "Hapus {{name}}? Tindakan ini tidak dapat dibatalkan.",
         "confirm": "Hapus",
         "cancel": "Batal"
+      },
+      "stats": {
+        "title": "Ringkasan WhatsApp",
+        "sent": "Terkirim",
+        "delivered": "Tersampaikan",
+        "replied": "Dibalas",
+        "seen": "Dibaca",
+        "received": "Diterima",
+        "failed": "Gagal",
+        "footnote": "Angka WhatsApp menghitung setiap pesan dalam percakapan WhatsApp kontak ini. Pesan terkirim dihitung dibalas jika pesan berikutnya berasal dari kontak."
       }
     },
     "tags": {
@@ -1582,6 +1593,12 @@
       "close": "Tutup pencarian",
       "label": "Cari",
       "placeholder": "Cari berdasarkan judul"
+    },
+    "tabs": {
+      "label": "Tenggat",
+      "all": "Semua",
+      "tomorrow": "Besok",
+      "week": "Minggu ini"
     },
     "filter": {
       "open": "Filter tugas",
@@ -2050,6 +2067,10 @@
     "search": "Cari kolom",
     "showEmpty": "Tampilkan kolom kosong",
     "footer": "Anda dapat menyesuaikan properti yang ditampilkan di sini dari aplikasi web Anda.",
+    "viewAll": "Lihat semua properti",
+    "allTitle": "Semua bagian",
+    "otherSection": "Properti lainnya",
+    "noProperties": "Tidak ada properti untuk ditampilkan.",
     "close": "Tutup",
     "save": "Simpan",
     "clear": "Hapus",
@@ -2066,9 +2087,12 @@
       "name": "Nama",
       "source": "Sumber",
       "whatsapp": "Langganan WhatsApp",
+      "emailSubscription": "Langganan Email",
+      "smsSubscription": "Langganan SMS",
       "marketing": "Berhenti menerima pemasaran",
       "leadScore": "Skor prospek",
       "created": "Dibuat",
+      "modified": "Diubah",
       "lastActivity": "Aktivitas terakhir"
     },
     "subscription": {

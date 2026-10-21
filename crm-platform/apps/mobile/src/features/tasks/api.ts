@@ -21,6 +21,9 @@ export type TaskListFilters = {
   status: 'open' | 'done' | 'all';
   priority?: TaskPriority;
   due?: TaskDueFilter;
+  /** Due between two instants (inclusive start, exclusive end): the Tomorrow and This week tabs. */
+  dueFrom?: string;
+  dueTo?: string;
   mine?: boolean;
   unassigned?: boolean;
   q?: string;

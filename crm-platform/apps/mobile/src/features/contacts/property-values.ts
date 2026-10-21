@@ -485,6 +485,13 @@ export interface PropertyRow {
   edit: RowEdit;
 }
 
+/** What the All sections screen adds so a standard property shows the contact's own value: how to name a built-in stage. */
+export interface StandardValues {
+  stageLabel: (value: string) => string;
+  /** The workspace's words for a lost-reason value. */
+  lostReasonLabel: (value: string) => string;
+}
+
 export interface RowContext {
   contact: ContactResponse;
   /** The workspace's properties; undefined while loading or when the person may not read them. */
@@ -493,17 +500,116 @@ export interface RowContext {
   ownerName: string | null;
   locale: string;
   t: TFunction;
+  /**
+   * Set where every property of the workspace is listed (the All sections screen): a standard property (email, mobile phone number,
+   * lifecycle stage, the subscription statuses...) whose own value is empty then shows what the contact holds in its own column. The
+   * About tab leaves it out: it already has a fixed row for each of those.
+   */
+  standard?: StandardValues;
+}
+
+/** The property keys that are really columns of the contact, and the column each one reads. */
+const COLUMN_KEYS = [
+  'email',
+  'mobile_phone_number',
+  'phone_number',
+  'phone',
+  'first_name',
+  'last_name',
+  'lifecycle_stage',
+  'lifecycle_stage_status',
+  'lifecycle_stage_date',
+  'previous_lifecycle_stage',
+  'previous_lifecycle_stage_date',
+  'lost_reason',
+  'other_lost_reason',
+  'contact_owner',
+  'created_time',
+  'modified_time',
+  'status',
+  'source',
+  'whatsapp_subscription_status',
+  'email_subscription_status',
+  'sms_subscription_status',
+] as const;
+
+/** The contact's own value for a standard property key, as words; null when it has none or the key is not a standard one. */
+export function columnTextOf(
+  contact: ContactResponse,
+  key: string,
+  { t, standard, ownerName, locale }: Pick<RowContext, 't' | 'standard' | 'ownerName' | 'locale'>,
+): string | null {
+  if (!standard || !(COLUMN_KEYS as readonly string[]).includes(key)) return null;
+  const subscription = (status: string | null) =>
+    status
+      ? t(`contactProps.subscription.${status}`, { defaultValue: titleCaseKey(status) })
+      : null;
+  switch (key) {
+    case 'email':
+      return textOrNull(contact.email);
+    case 'mobile_phone_number':
+    case 'phone_number':
+    case 'phone':
+      return textOrNull(contact.phone);
+    case 'first_name':
+      return textOrNull(contact.firstName);
+    case 'last_name':
+      return textOrNull(contact.lastName);
+    case 'lifecycle_stage':
+      return contact.lifecycleStage ? standard.stageLabel(contact.lifecycleStage) : null;
+    case 'status':
+    case 'lifecycle_stage_status':
+      return textOrNull(contact.status);
+    case 'lifecycle_stage_date':
+      return contact.lifecycleStageDate ? formatMoment(contact.lifecycleStageDate, locale) : null;
+    case 'previous_lifecycle_stage':
+      return contact.previousLifecycleStage
+        ? standard.stageLabel(contact.previousLifecycleStage)
+        : null;
+    case 'previous_lifecycle_stage_date':
+      return contact.previousLifecycleStageDate
+        ? formatMoment(contact.previousLifecycleStageDate, locale)
+        : null;
+    case 'lost_reason':
+      return contact.lostReason ? standard.lostReasonLabel(contact.lostReason) : null;
+    case 'other_lost_reason':
+      return textOrNull(contact.otherLostReason);
+    case 'contact_owner':
+      return textOrNull(ownerName);
+    case 'created_time':
+      return formatMoment(contact.createdAt, locale);
+    case 'modified_time':
+      return formatMoment(contact.updatedAt, locale);
+    case 'source':
+      return textOrNull(contact.source);
+    case 'whatsapp_subscription_status':
+      return subscription(contact.whatsappSubscriptionStatus);
+    case 'email_subscription_status':
+      return subscription(contact.emailSubscriptionStatus);
+    default:
+      return subscription(contact.smsSubscriptionStatus);
+  }
 }
 
 /**
  * The rows of the About tab: the fixed ones first, then the workspace's custom properties. A property that is switched off or
  * hidden has no row. A value whose key has no definition at all is shown read-only under its key.
  */
-export function buildRows({ contact, fields, ownerName, locale, t }: RowContext): PropertyRow[] {
+export function buildRows({
+  contact,
+  fields,
+  ownerName,
+  locale,
+  t,
+  standard,
+}: RowContext): PropertyRow[] {
   const yes = t('contactProps.yes');
   const no = t('contactProps.no');
   const readonly: RowEdit = { kind: 'locked', reason: 'readonly' };
-  const whatsapp = contact.whatsappSubscriptionStatus;
+  const subscription = (status: string | null) =>
+    status
+      ? t(`contactProps.subscription.${status}`, { defaultValue: titleCaseKey(status) })
+      : null;
   const rows: PropertyRow[] = [
     {
       id: 'email',
@@ -538,9 +644,19 @@ export function buildRows({ contact, fields, ownerName, locale, t }: RowContext)
     {
       id: 'whatsapp',
       label: t('contactProps.fields.whatsapp'),
-      text: whatsapp
-        ? t(`contactProps.subscription.${whatsapp}`, { defaultValue: titleCaseKey(whatsapp) })
-        : null,
+      text: subscription(contact.whatsappSubscriptionStatus),
+      edit: readonly,
+    },
+    {
+      id: 'emailSubscription',
+      label: t('contactProps.fields.emailSubscription'),
+      text: subscription(contact.emailSubscriptionStatus),
+      edit: readonly,
+    },
+    {
+      id: 'smsSubscription',
+      label: t('contactProps.fields.smsSubscription'),
+      text: subscription(contact.smsSubscriptionStatus),
       edit: readonly,
     },
     {
@@ -562,6 +678,12 @@ export function buildRows({ contact, fields, ownerName, locale, t }: RowContext)
       edit: readonly,
     },
     {
+      id: 'modified',
+      label: t('contactProps.fields.modified'),
+      text: formatMoment(contact.updatedAt, locale),
+      edit: readonly,
+    },
+    {
       id: 'lastActivity',
       label: t('contactProps.fields.lastActivity'),
       text: formatMoment(contact.lastActivityAt, locale),
@@ -579,7 +701,10 @@ export function buildRows({ contact, fields, ownerName, locale, t }: RowContext)
     rows.push({
       id: `field:${field.key}`,
       label: field.label,
-      text: formatPropertyValue(field, values[field.key], fmt),
+      text:
+        (isEmptyValue(values[field.key])
+          ? columnTextOf(contact, field.key, { t, standard, ownerName, locale })
+          : null) ?? formatPropertyValue(field, values[field.key], fmt),
       edit: lock ? { kind: 'locked', reason: lock } : { kind: 'custom', field },
     });
   }

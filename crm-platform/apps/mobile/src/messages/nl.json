@@ -1510,6 +1510,7 @@
       "tabsLabel": "Contactsecties",
       "tabs": {
         "about": "Contactgegevens",
+        "stats": "Statistieken",
         "activity": "Activiteiten",
         "files": "Meer"
       },
@@ -1536,6 +1537,16 @@
         "message": "{{name}} verwijderen? Dit kan niet ongedaan worden gemaakt.",
         "confirm": "Verwijderen",
         "cancel": "Annuleren"
+      },
+      "stats": {
+        "title": "WhatsApp-overzicht",
+        "sent": "Verzonden",
+        "delivered": "Afgeleverd",
+        "replied": "Beantwoord",
+        "seen": "Gelezen",
+        "received": "Ontvangen",
+        "failed": "Mislukt",
+        "footnote": "De WhatsApp-cijfers tellen elk bericht in de WhatsApp-gesprekken van dit contact. Een verzonden bericht telt als beantwoord wanneer het volgende bericht van het contact is."
       }
     },
     "tags": {
@@ -1611,6 +1622,12 @@
       "close": "Zoeken sluiten",
       "label": "Zoeken",
       "placeholder": "Zoeken op titel"
+    },
+    "tabs": {
+      "label": "Deadline",
+      "all": "Alle",
+      "tomorrow": "Morgen",
+      "week": "Deze week"
     },
     "filter": {
       "open": "Taken filteren",
@@ -2079,6 +2096,10 @@
     "search": "Velden zoeken",
     "showEmpty": "Lege velden tonen",
     "footer": "Je kunt de eigenschappen die je hier ziet aanpassen in je webapp.",
+    "viewAll": "Alle eigenschappen bekijken",
+    "allTitle": "Alle secties",
+    "otherSection": "Overige eigenschappen",
+    "noProperties": "Geen eigenschappen om te tonen.",
     "close": "Sluiten",
     "save": "Opslaan",
     "clear": "Wissen",
@@ -2095,9 +2116,12 @@
       "name": "Naam",
       "source": "Bron",
       "whatsapp": "WhatsApp-abonnement",
+      "emailSubscription": "Email-abonnement",
+      "smsSubscription": "SMS-abonnement",
       "marketing": "Afmelding voor marketing",
       "leadScore": "Leadscore",
       "created": "Aangemaakt",
+      "modified": "Gewijzigd",
       "lastActivity": "Laatste activiteit"
     },
     "subscription": {

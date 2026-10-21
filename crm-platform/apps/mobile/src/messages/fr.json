@@ -1539,6 +1539,7 @@
       "tabsLabel": "Sections du contact",
       "tabs": {
         "about": "Détails du contact",
+        "stats": "Statistiques",
         "activity": "Activités",
         "files": "Plus"
       },
@@ -1565,6 +1566,16 @@
         "message": "Supprimer {{name}} ? Cette action est irréversible.",
         "confirm": "Supprimer",
         "cancel": "Annuler"
+      },
+      "stats": {
+        "title": "Résumé WhatsApp",
+        "sent": "Envoyés",
+        "delivered": "Remis",
+        "replied": "Répondus",
+        "seen": "Lus",
+        "received": "Reçus",
+        "failed": "Échoués",
+        "footnote": "Les chiffres WhatsApp comptent tous les messages des conversations WhatsApp de ce contact. Un message envoyé compte comme ayant reçu une réponse lorsque le message suivant vient du contact."
       }
     },
     "tags": {
@@ -1640,6 +1651,12 @@
       "close": "Fermer la recherche",
       "label": "Recherche",
       "placeholder": "Rechercher par titre"
+    },
+    "tabs": {
+      "label": "Échéance",
+      "all": "Toutes",
+      "tomorrow": "Demain",
+      "week": "Cette semaine"
     },
     "filter": {
       "open": "Filtrer les tâches",
@@ -2108,6 +2125,10 @@
     "search": "Rechercher des champs",
     "showEmpty": "Afficher les champs vides",
     "footer": "Vous pouvez personnaliser les propriétés affichées ici depuis votre application web.",
+    "viewAll": "Voir toutes les propriétés",
+    "allTitle": "Toutes les sections",
+    "otherSection": "Autres propriétés",
+    "noProperties": "Aucune propriété à afficher.",
     "close": "Fermer",
     "save": "Enregistrer",
     "clear": "Effacer",
@@ -2124,9 +2145,12 @@
       "name": "Nom",
       "source": "Source",
       "whatsapp": "Abonnement WhatsApp",
+      "emailSubscription": "Abonnement Email",
+      "smsSubscription": "Abonnement SMS",
       "marketing": "Désinscription marketing",
       "leadScore": "Score du lead",
       "created": "Création",
+      "modified": "Modification",
       "lastActivity": "Dernière activité"
     },
     "subscription": {

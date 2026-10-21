@@ -1481,6 +1481,7 @@
       "tabsLabel": "Các phần của liên hệ",
       "tabs": {
         "about": "Chi tiết liên hệ",
+        "stats": "Thống kê",
         "activity": "Hoạt động",
         "files": "Thêm"
       },
@@ -1507,6 +1508,16 @@
         "message": "Xóa {{name}}? Không thể hoàn tác.",
         "confirm": "Xóa",
         "cancel": "Hủy"
+      },
+      "stats": {
+        "title": "Tóm tắt WhatsApp",
+        "sent": "Đã gửi",
+        "delivered": "Đã chuyển đến",
+        "replied": "Đã phản hồi",
+        "seen": "Đã xem",
+        "received": "Đã nhận",
+        "failed": "Thất bại",
+        "footnote": "Số liệu WhatsApp đếm mọi tin nhắn trong các cuộc trò chuyện WhatsApp của liên hệ này. Tin nhắn đã gửi được tính là đã trả lời khi tin nhắn kế tiếp là của liên hệ."
       }
     },
     "tags": {
@@ -1582,6 +1593,12 @@
       "close": "Đóng tìm kiếm",
       "label": "Tìm kiếm",
       "placeholder": "Tìm theo tiêu đề"
+    },
+    "tabs": {
+      "label": "Hạn chót",
+      "all": "Tất cả",
+      "tomorrow": "Ngày mai",
+      "week": "Tuần này"
     },
     "filter": {
       "open": "Lọc công việc",
@@ -2050,6 +2067,10 @@
     "search": "Tìm trường",
     "showEmpty": "Hiện các trường trống",
     "footer": "Bạn có thể tùy chỉnh các thuộc tính hiển thị tại đây từ ứng dụng web.",
+    "viewAll": "Xem tất cả thuộc tính",
+    "allTitle": "Tất cả các phần",
+    "otherSection": "Thuộc tính khác",
+    "noProperties": "Không có thuộc tính để hiển thị.",
     "close": "Đóng",
     "save": "Lưu",
     "clear": "Xóa",
@@ -2066,9 +2087,12 @@
       "name": "Tên",
       "source": "Nguồn",
       "whatsapp": "Đăng ký WhatsApp",
+      "emailSubscription": "Đăng ký Email",
+      "smsSubscription": "Đăng ký SMS",
       "marketing": "Từ chối tin tiếp thị",
       "leadScore": "Điểm khách hàng tiềm năng",
       "created": "Ngày tạo",
+      "modified": "Ngày sửa",
       "lastActivity": "Hoạt động gần nhất"
     },
     "subscription": {

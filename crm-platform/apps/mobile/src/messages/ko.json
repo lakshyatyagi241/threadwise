@@ -1481,6 +1481,7 @@
       "tabsLabel": "연락처 섹션",
       "tabs": {
         "about": "연락처 정보",
+        "stats": "통계",
         "activity": "활동",
         "files": "더 보기"
       },
@@ -1507,6 +1508,16 @@
         "message": "{{name}}을(를) 삭제할까요? 이 작업은 되돌릴 수 없습니다.",
         "confirm": "삭제",
         "cancel": "취소"
+      },
+      "stats": {
+        "title": "WhatsApp 요약",
+        "sent": "발송",
+        "delivered": "전달됨",
+        "replied": "답장함",
+        "seen": "읽음",
+        "received": "수신",
+        "failed": "실패",
+        "footnote": "WhatsApp 수치는 이 연락처의 WhatsApp 대화에 있는 모든 메시지를 집계합니다. 보낸 메시지 다음에 연락처의 메시지가 오면 답장으로 집계합니다."
       }
     },
     "tags": {
@@ -1582,6 +1593,12 @@
       "close": "검색 닫기",
       "label": "검색",
       "placeholder": "제목으로 검색"
+    },
+    "tabs": {
+      "label": "마감일",
+      "all": "전체",
+      "tomorrow": "내일",
+      "week": "이번 주"
     },
     "filter": {
       "open": "작업 필터",
@@ -2050,6 +2067,10 @@
     "search": "필드 검색",
     "showEmpty": "빈 필드 표시",
     "footer": "여기에 표시되는 속성은 웹 앱에서 사용자 지정할 수 있습니다.",
+    "viewAll": "모든 속성 보기",
+    "allTitle": "모든 섹션",
+    "otherSection": "기타 속성",
+    "noProperties": "표시할 속성이 없습니다.",
     "close": "닫기",
     "save": "저장",
     "clear": "지우기",
@@ -2066,9 +2087,12 @@
       "name": "이름",
       "source": "출처",
       "whatsapp": "WhatsApp 구독",
+      "emailSubscription": "Email 구독",
+      "smsSubscription": "SMS 구독",
       "marketing": "마케팅 수신 거부",
       "leadScore": "리드 점수",
       "created": "생성일",
+      "modified": "수정일",
       "lastActivity": "마지막 활동"
     },
     "subscription": {

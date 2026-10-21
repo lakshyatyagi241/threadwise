@@ -19,6 +19,8 @@ const base: TaskResponse = {
   dueAt: '2026-10-20T10:00:00.000Z',
   doneAt: null,
   remindedAt: null,
+  outcome: null,
+  taskType: null,
   bucket: 'upcoming',
   overdue: false,
   assignee: { id: baseSession.user.id, name: 'Asha Verma' },

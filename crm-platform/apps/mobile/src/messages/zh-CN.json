@@ -1481,6 +1481,7 @@
       "tabsLabel": "联系人分区",
       "tabs": {
         "about": "联系人详情",
+        "stats": "统计",
         "activity": "活动",
         "files": "更多"
       },
@@ -1507,6 +1508,16 @@
         "message": "删除 {{name}}？此操作无法撤销。",
         "confirm": "删除",
         "cancel": "取消"
+      },
+      "stats": {
+        "title": "WhatsApp 摘要",
+        "sent": "已发送",
+        "delivered": "已送达",
+        "replied": "已回复",
+        "seen": "已读",
+        "received": "已接收",
+        "failed": "失败",
+        "footnote": "WhatsApp 数据统计该联系人所有 WhatsApp 会话中的每条消息。已发送的消息，如果下一条是联系人发来的，则计为已回复。"
       }
     },
     "tags": {
@@ -1582,6 +1593,12 @@
       "close": "关闭搜索",
       "label": "搜索",
       "placeholder": "按标题搜索"
+    },
+    "tabs": {
+      "label": "截止日期",
+      "all": "全部",
+      "tomorrow": "明天",
+      "week": "本周"
     },
     "filter": {
       "open": "筛选任务",
@@ -2050,6 +2067,10 @@
     "search": "搜索字段",
     "showEmpty": "显示空字段",
     "footer": "您可以在网页端自定义此处显示的属性。",
+    "viewAll": "查看所有属性",
+    "allTitle": "所有分区",
+    "otherSection": "其他属性",
+    "noProperties": "没有可显示的属性。",
     "close": "关闭",
     "save": "保存",
     "clear": "清除",
@@ -2066,9 +2087,12 @@
       "name": "姓名",
       "source": "来源",
       "whatsapp": "WhatsApp 订阅",
+      "emailSubscription": "Email 订阅",
+      "smsSubscription": "SMS 订阅",
       "marketing": "营销退订",
       "leadScore": "线索评分",
       "created": "创建时间",
+      "modified": "修改时间",
       "lastActivity": "最近活动"
     },
     "subscription": {

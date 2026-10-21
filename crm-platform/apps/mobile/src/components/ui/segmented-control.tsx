@@ -16,10 +16,18 @@ interface Props<T extends string> {
   options: readonly Option<T>[];
   value: T;
   onChange: (value: T) => void;
+  /** `equal` (the default) gives every segment the same width; `content` shares the width by the length of each label, so one long label is not cut off beside short ones. */
+  fit?: 'equal' | 'content';
 }
 
 /** One choice out of a few, always visible: the range picker of the dashboard. Each segment is a radio button. */
-export function SegmentedControl<T extends string>({ label, options, value, onChange }: Props<T>) {
+export function SegmentedControl<T extends string>({
+  label,
+  options,
+  value,
+  onChange,
+  fit = 'equal',
+}: Props<T>) {
   const { colors } = useTheme();
   return (
     <View
@@ -36,7 +44,12 @@ export function SegmentedControl<T extends string>({ label, options, value, onCh
             accessibilityLabel={option.accessibilityLabel ?? option.label}
             accessibilityState={{ checked: selected }}
             onPress={() => onChange(option.value)}
-            style={[styles.segment, selected && { backgroundColor: colors.primary }]}
+            style={[
+              styles.segment,
+              fit === 'content' && styles.content,
+              fit === 'content' && { flexGrow: option.label.length + 3 },
+              selected && { backgroundColor: colors.primary },
+            ]}
           >
             <Text variant="label" color={selected ? 'onPrimary' : 'textMuted'} numberOfLines={1}>
               {option.label}
@@ -64,4 +77,6 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     paddingHorizontal: spacing.sm,
   },
+  // No equal share: each segment's share grows with its text (set where it is drawn), and the padding is tighter, so a long label is not cut off.
+  content: { flexBasis: 0, paddingHorizontal: spacing.xs },
 });

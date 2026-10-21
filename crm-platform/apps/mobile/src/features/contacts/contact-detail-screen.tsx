@@ -32,6 +32,7 @@ import { ContactHero } from './contact-hero';
 import { normalisePhone, type ContactFormValues } from './contact-validation';
 import { LifecycleCard } from './lifecycle-card';
 import { MoreTab } from './more-tab';
+import { StatsTab } from './stats-tab';
 import { useContactActions } from './use-contact-actions';
 import { StackHeader } from '@/components/ui/stack-header';
 import {
@@ -78,7 +79,9 @@ export function ContactDetailScreen() {
   const update = useUpdateContact(id);
   const remove = useDeleteContact(id);
   const canDelete = can(session.data, 'record.contacts.delete');
-  const [tab, setTab] = useState<'about' | 'activity' | 'files'>('activity');
+  // The WhatsApp summary is counted from the contact's conversations, so it needs the same permission as the inbox.
+  const canStats = can(session.data, 'inbox.conversation.read');
+  const [tab, setTab] = useState<'about' | 'activity' | 'stats' | 'files'>('activity');
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [removeError, setRemoveError] = useState<string | null>(null);
   const [editing, setEditing] = useState(params.edit === '1');
@@ -197,9 +200,13 @@ export function ContactDetailScreen() {
 
         <SegmentedControl
           label={t('contacts.detail.tabsLabel')}
+          fit="content"
           options={[
             { value: 'activity', label: t('contacts.detail.tabs.activity') },
             { value: 'about', label: t('contacts.detail.tabs.about') },
+            ...(canStats
+              ? [{ value: 'stats' as const, label: t('contacts.detail.tabs.stats') }]
+              : []),
             { value: 'files', label: t('contacts.detail.tabs.files') },
           ]}
           value={tab}
@@ -209,6 +216,7 @@ export function ContactDetailScreen() {
           <ActivitiesTab contactId={data.id} canUpdate={canUpdate} actions={actions} />
         ) : null}
         {tab === 'about' ? <AboutTab contact={data} tags={tags.data ?? []} /> : null}
+        {tab === 'stats' && canStats ? <StatsTab contactId={data.id} /> : null}
         {tab === 'files' ? <MoreTab contact={data} canUpdate={canUpdate} /> : null}
       </ScrollView>
     );

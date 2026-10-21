@@ -40,6 +40,7 @@ import {
   NO_VALUE,
   OTHER_REASON,
   buildRows,
+  columnTextOf,
   currentValueOf,
   draftOf,
   editorKindOf,
@@ -429,19 +430,37 @@ describe('buildRows', () => {
 
   it('lists the fixed rows first, in order, then the properties', () => {
     const ids = rows().map((r) => r.id);
-    expect(ids.slice(0, 10)).toEqual([
+    expect(ids.slice(0, 13)).toEqual([
       'email',
       'phone',
       'owner',
       'name',
       'source',
       'whatsapp',
+      'emailSubscription',
+      'smsSubscription',
       'marketing',
       'leadScore',
       'created',
+      'modified',
       'lastActivity',
     ]);
-    expect(ids[10]).toBe('field:city');
+    expect(ids[13]).toBe('field:city');
+  });
+
+  it('shows the email and SMS subscription and the modified time beside the WhatsApp one', () => {
+    const contact = {
+      ...profile,
+      emailSubscriptionStatus: 'subscribed',
+      smsSubscriptionStatus: 'unsubscribed',
+      updatedAt: '2026-10-18T15:16:00.000Z',
+    };
+    const byId = (id: string) => rows({ contact }).find((r) => r.id === id);
+    expect(byId('emailSubscription')?.text).toBe('Subscribed');
+    expect(byId('smsSubscription')?.text).toBe('Unsubscribed');
+    expect(byId('modified')?.text).toBe(formatMoment('2026-10-18T15:16:00.000Z', 'en'));
+    expect(byId('emailSubscription')?.edit.kind).toBe('locked');
+    expect(rows({ contact: bare }).find((r) => r.id === 'smsSubscription')?.text).toBeNull();
   });
 
   it('shows the owner by name, and by nothing when the name cannot be found', () => {
@@ -528,6 +547,7 @@ describe('buildRows', () => {
       'name',
       'marketing',
       'created',
+      'modified',
     ]);
     const shown = visibleRows(all, true);
     expect(shown).toHaveLength(all.length);
@@ -754,5 +774,71 @@ describe('stageChoices and statusChoices', () => {
         { value: 'b', label: 'B' },
       ]),
     ).toBe('a');
+  });
+});
+
+describe('standard properties read from the contact', () => {
+  const standard = {
+    stageLabel: (value: string) => `<${value}>`,
+    lostReasonLabel: (value: string) => `[${value}]`,
+  };
+  const contact = {
+    ...profile,
+    email: 'a@example.test',
+    phone: '+919812345678',
+    firstName: 'Aarav',
+    lastName: null,
+    lifecycleStage: 'qualified',
+    previousLifecycleStage: 'new',
+    status: 'Open',
+    lostReason: 'too_expensive',
+    otherLostReason: 'Moved abroad',
+    lifecycleStageDate: '2026-10-01T09:00:00.000Z',
+    previousLifecycleStageDate: null,
+    whatsappSubscriptionStatus: 'subscribed',
+    emailSubscriptionStatus: null,
+    smsSubscriptionStatus: 'unsubscribed',
+    source: 'import',
+    createdAt: '2026-09-01T08:00:00.000Z',
+    updatedAt: '2026-10-02T08:00:00.000Z',
+  };
+  const ctx = { t, standard, ownerName: 'Priya Nair', locale: 'en' };
+  const text = (key: string) => columnTextOf(contact, key, ctx);
+
+  it('reads each standard key from its column', () => {
+    expect(text('email')).toBe('a@example.test');
+    expect(text('mobile_phone_number')).toBe('+919812345678');
+    expect(text('first_name')).toBe('Aarav');
+    expect(text('lifecycle_stage')).toBe('<qualified>');
+    expect(text('previous_lifecycle_stage')).toBe('<new>');
+    expect(text('lifecycle_stage_status')).toBe('Open');
+    expect(text('lost_reason')).toBe('[too_expensive]');
+    expect(text('other_lost_reason')).toBe('Moved abroad');
+    expect(text('contact_owner')).toBe('Priya Nair');
+    expect(text('source')).toBe('import');
+    expect(text('whatsapp_subscription_status')).toBe('Subscribed');
+    expect(text('sms_subscription_status')).toBe('Unsubscribed');
+    expect(text('lifecycle_stage_date')).toBe(formatMoment('2026-10-01T09:00:00.000Z', 'en'));
+    expect(text('modified_time')).toBe(formatMoment('2026-10-02T08:00:00.000Z', 'en'));
+  });
+
+  it('has nothing for an empty column, an unknown key, or when the screen did not ask', () => {
+    expect(text('last_name')).toBeNull();
+    expect(text('email_subscription_status')).toBeNull();
+    expect(text('previous_lifecycle_stage_date')).toBeNull();
+    expect(text('city')).toBeNull();
+    expect(columnTextOf(contact, 'email', { ...ctx, standard: undefined })).toBeNull();
+  });
+
+  it('lets a custom value win and leaves the About tab alone unless asked', () => {
+    const email = field({ key: 'email', label: 'Email', fieldType: 'email', isSystem: true });
+    const base = { contact, fields: [email], ownerName: null, locale: 'en', t };
+    const row = (extra: object) =>
+      buildRows({ ...base, ...extra }).find((r) => r.id === 'field:email')?.text;
+    expect(row({})).toBeNull();
+    expect(row({ standard })).toBe('a@example.test');
+    expect(
+      row({ standard, contact: { ...contact, customFields: { email: 'x@example.test' } } }),
+    ).toBe('x@example.test');
   });
 });

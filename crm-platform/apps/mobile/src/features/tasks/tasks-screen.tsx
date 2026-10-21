@@ -26,10 +26,17 @@ import { isApiError } from '@/lib/api';
 import { can, useSession } from '@/lib/session/use-session';
 import { spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
-import { NO_CHOICES, activeChoiceCount, listRequest, type TaskChoices } from './filters';
+import {
+  NO_CHOICES,
+  activeChoiceCount,
+  listRequest,
+  type DueTab,
+  type TaskChoices,
+} from './filters';
 import { firstParam } from './route-params';
 import { isNotFound, isPlanLocked } from './task-errors';
 import { TaskActionsSheet } from './task-actions-sheet';
+import { TaskDueTabs } from './task-due-tabs';
 import { TaskFilterModal } from './task-filter-modal';
 import { TaskRow } from './task-row';
 import { TaskSkeleton } from './task-skeleton';
@@ -63,6 +70,7 @@ export function TasksScreen() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [choices, setChoices] = useState<TaskChoices>(NO_CHOICES);
+  const [tab, setTab] = useState<DueTab>('all');
   const [filterOpen, setFilterOpen] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
   const [menuFor, setMenuFor] = useState<TaskResponse | null>(null);
@@ -70,10 +78,14 @@ export function TasksScreen() {
   const [notice, setNotice] = useState<string | null>(null);
 
   const q = useDebounced(searchText.trim(), SEARCH_DEBOUNCE_MS);
-  const request = useMemo(() => listRequest(contactId, choices, q), [contactId, choices, q]);
+  const request = useMemo(
+    () => listRequest(contactId, choices, q, tab),
+    [contactId, choices, q, tab],
+  );
   const list = useTaskList(request.source, request.filters, allowed);
   const tasks = useMemo(() => list.data?.pages.flatMap((page) => page.data) ?? [], [list.data]);
-  const narrowed = activeChoiceCount(choices, contactId) > 0 || request.filters.q !== undefined;
+  const narrowed =
+    activeChoiceCount(choices, contactId) > 0 || tab !== 'all' || request.filters.q !== undefined;
   const locked = list.isError && isPlanLocked(list.error);
 
   const toggle = useToggleTask();
@@ -225,6 +237,17 @@ export function TasksScreen() {
         }
       />
 
+      {allowed && !locked ? (
+        <TaskDueTabs
+          value={tab}
+          onChange={(next) => {
+            setTab(next);
+            // A tab and the filter sheet's due choice are the same narrowing: the later pick wins.
+            if (next !== 'all') setChoices((current) => ({ ...current, due: undefined }));
+          }}
+        />
+      ) : null}
+
       {searchOpen ? (
         <View style={styles.search}>
           <TextField
@@ -266,6 +289,7 @@ export function TasksScreen() {
           onClose={() => setFilterOpen(false)}
           onApply={(next) => {
             setChoices(next);
+            if (next.due) setTab('all');
             setFilterOpen(false);
           }}
         />

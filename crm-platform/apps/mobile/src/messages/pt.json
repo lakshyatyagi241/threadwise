@@ -1539,6 +1539,7 @@
       "tabsLabel": "Seções do contato",
       "tabs": {
         "about": "Detalhes do contato",
+        "stats": "Estatísticas",
         "activity": "Atividades",
         "files": "Mais"
       },
@@ -1565,6 +1566,16 @@
         "message": "Excluir {{name}}? Esta ação não pode ser desfeita.",
         "confirm": "Excluir",
         "cancel": "Cancelar"
+      },
+      "stats": {
+        "title": "Resumo do WhatsApp",
+        "sent": "Enviadas",
+        "delivered": "Entregues",
+        "replied": "Respondidas",
+        "seen": "Vistas",
+        "received": "Recebidas",
+        "failed": "Com falha",
+        "footnote": "Os números do WhatsApp contam todas as mensagens das conversas de WhatsApp deste contato. Uma mensagem enviada conta como respondida quando a mensagem seguinte é do contato."
       }
     },
     "tags": {
@@ -1640,6 +1651,12 @@
       "close": "Fechar busca",
       "label": "Buscar",
       "placeholder": "Buscar por título"
+    },
+    "tabs": {
+      "label": "Vencimento",
+      "all": "Todas",
+      "tomorrow": "Amanhã",
+      "week": "Esta semana"
     },
     "filter": {
       "open": "Filtrar tarefas",
@@ -2108,6 +2125,10 @@
     "search": "Buscar campos",
     "showEmpty": "Mostrar campos vazios",
     "footer": "Você pode personalizar as propriedades exibidas aqui no app web.",
+    "viewAll": "Ver todas as propriedades",
+    "allTitle": "Todas as seções",
+    "otherSection": "Outras propriedades",
+    "noProperties": "Nenhuma propriedade para mostrar.",
     "close": "Fechar",
     "save": "Salvar",
     "clear": "Limpar",
@@ -2124,9 +2145,12 @@
       "name": "Nome",
       "source": "Origem",
       "whatsapp": "Inscrição no WhatsApp",
+      "emailSubscription": "Inscrição no Email",
+      "smsSubscription": "Inscrição no SMS",
       "marketing": "Saída do marketing",
       "leadScore": "Pontuação do lead",
       "created": "Criado em",
+      "modified": "Modificado em",
       "lastActivity": "Última atividade"
     },
     "subscription": {

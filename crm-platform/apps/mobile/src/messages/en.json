@@ -1510,6 +1510,7 @@
       "tabsLabel": "Contact sections",
       "tabs": {
         "about": "Contact details",
+        "stats": "Stats",
         "activity": "Activities",
         "files": "More"
       },
@@ -1536,6 +1537,16 @@
         "message": "Delete {{name}}? This cannot be undone.",
         "confirm": "Delete",
         "cancel": "Cancel"
+      },
+      "stats": {
+        "title": "WhatsApp summary",
+        "sent": "Sent",
+        "delivered": "Delivered",
+        "replied": "Replied",
+        "seen": "Seen",
+        "received": "Received",
+        "failed": "Failed",
+        "footnote": "WhatsApp figures count every message in this contact's WhatsApp conversations. A sent message counts as replied when the contact's message came next."
       }
     },
     "tags": {
@@ -1611,6 +1622,12 @@
       "close": "Close search",
       "label": "Search",
       "placeholder": "Search by title"
+    },
+    "tabs": {
+      "label": "Due date",
+      "all": "All",
+      "tomorrow": "Tomorrow",
+      "week": "This week"
     },
     "filter": {
       "open": "Filter tasks",
@@ -2079,6 +2096,10 @@
     "search": "Search fields",
     "showEmpty": "Show empty fields",
     "footer": "You can customize the properties you see here from your web app.",
+    "viewAll": "View all properties",
+    "allTitle": "All sections",
+    "otherSection": "Other properties",
+    "noProperties": "No properties to show.",
     "close": "Close",
     "save": "Save",
     "clear": "Clear",
@@ -2095,9 +2116,12 @@
       "name": "Name",
       "source": "Source",
       "whatsapp": "WhatsApp subscription",
+      "emailSubscription": "Email subscription",
+      "smsSubscription": "SMS subscription",
       "marketing": "Marketing opt-out",
       "leadScore": "Lead score",
       "created": "Created",
+      "modified": "Modified",
       "lastActivity": "Last activity"
     },
     "subscription": {

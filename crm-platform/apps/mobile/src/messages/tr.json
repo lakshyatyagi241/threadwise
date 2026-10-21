@@ -1510,6 +1510,7 @@
       "tabsLabel": "Kişi bölümleri",
       "tabs": {
         "about": "Kişi bilgileri",
+        "stats": "İstatistikler",
         "activity": "Etkinlikler",
         "files": "Daha fazla"
       },
@@ -1536,6 +1537,16 @@
         "message": "{{name}} silinsin mi? Bu işlem geri alınamaz.",
         "confirm": "Sil",
         "cancel": "İptal"
+      },
+      "stats": {
+        "title": "WhatsApp özeti",
+        "sent": "Gönderilen",
+        "delivered": "İletilen",
+        "replied": "Yanıtlanan",
+        "seen": "Görülen",
+        "received": "Alınan",
+        "failed": "Başarısız",
+        "footnote": "WhatsApp rakamları bu kişinin WhatsApp görüşmelerindeki her mesajı sayar. Gönderilen bir mesajdan sonra kişinin mesajı geldiyse mesaj yanıtlanmış sayılır."
       }
     },
     "tags": {
@@ -1611,6 +1622,12 @@
       "close": "Aramayı kapat",
       "label": "Ara",
       "placeholder": "Başlığa göre ara"
+    },
+    "tabs": {
+      "label": "Bitiş tarihi",
+      "all": "Tümü",
+      "tomorrow": "Yarın",
+      "week": "Bu hafta"
     },
     "filter": {
       "open": "Görevleri filtrele",
@@ -2079,6 +2096,10 @@
     "search": "Alanlarda ara",
     "showEmpty": "Boş alanları göster",
     "footer": "Burada gördüğünüz özellikleri web uygulamanızdan özelleştirebilirsiniz.",
+    "viewAll": "Tüm özellikleri gör",
+    "allTitle": "Tüm bölümler",
+    "otherSection": "Diğer özellikler",
+    "noProperties": "Gösterilecek özellik yok.",
     "close": "Kapat",
     "save": "Kaydet",
     "clear": "Temizle",
@@ -2095,9 +2116,12 @@
       "name": "Ad",
       "source": "Kaynak",
       "whatsapp": "WhatsApp aboneliği",
+      "emailSubscription": "Email aboneliği",
+      "smsSubscription": "SMS aboneliği",
       "marketing": "Pazarlamadan çıkma",
       "leadScore": "Potansiyel puanı",
       "created": "Oluşturulma",
+      "modified": "Değiştirilme",
       "lastActivity": "Son etkinlik"
     },
     "subscription": {

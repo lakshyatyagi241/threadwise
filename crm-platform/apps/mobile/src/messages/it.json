@@ -1539,6 +1539,7 @@
       "tabsLabel": "Sezioni del contatto",
       "tabs": {
         "about": "Dati del contatto",
+        "stats": "Statistiche",
         "activity": "Attività",
         "files": "Altro"
       },
@@ -1565,6 +1566,16 @@
         "message": "Eliminare {{name}}? L'operazione non può essere annullata.",
         "confirm": "Elimina",
         "cancel": "Annulla"
+      },
+      "stats": {
+        "title": "Riepilogo WhatsApp",
+        "sent": "Inviati",
+        "delivered": "Consegnati",
+        "replied": "Con risposta",
+        "seen": "Letti",
+        "received": "Ricevuti",
+        "failed": "Non riusciti",
+        "footnote": "I numeri di WhatsApp contano tutti i messaggi nelle conversazioni WhatsApp di questo contatto. Un messaggio inviato conta come risposto quando il messaggio successivo è del contatto."
       }
     },
     "tags": {
@@ -1640,6 +1651,12 @@
       "close": "Chiudi ricerca",
       "label": "Cerca",
       "placeholder": "Cerca per titolo"
+    },
+    "tabs": {
+      "label": "Scadenza",
+      "all": "Tutte",
+      "tomorrow": "Domani",
+      "week": "Questa settimana"
     },
     "filter": {
       "open": "Filtra task",
@@ -2108,6 +2125,10 @@
     "search": "Cerca campi",
     "showEmpty": "Mostra campi vuoti",
     "footer": "Puoi personalizzare le proprietà visualizzate qui dalla tua web app.",
+    "viewAll": "Mostra tutte le proprietà",
+    "allTitle": "Tutte le sezioni",
+    "otherSection": "Altre proprietà",
+    "noProperties": "Nessuna proprietà da mostrare.",
     "close": "Chiudi",
     "save": "Salva",
     "clear": "Cancella",
@@ -2124,9 +2145,12 @@
       "name": "Nome",
       "source": "Origine",
       "whatsapp": "Iscrizione WhatsApp",
+      "emailSubscription": "Iscrizione Email",
+      "smsSubscription": "Iscrizione SMS",
       "marketing": "Disiscrizione dal marketing",
       "leadScore": "Punteggio lead",
       "created": "Creato",
+      "modified": "Modificato",
       "lastActivity": "Ultima attività"
     },
     "subscription": {

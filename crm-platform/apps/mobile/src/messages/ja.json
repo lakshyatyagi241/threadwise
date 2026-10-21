@@ -1481,6 +1481,7 @@
       "tabsLabel": "連絡先のセクション",
       "tabs": {
         "about": "連絡先の詳細",
+        "stats": "統計",
         "activity": "アクティビティ",
         "files": "その他"
       },
@@ -1507,6 +1508,16 @@
         "message": "{{name}} を削除しますか? この操作は元に戻せません。",
         "confirm": "削除",
         "cancel": "キャンセル"
+      },
+      "stats": {
+        "title": "WhatsAppサマリー",
+        "sent": "送信",
+        "delivered": "配信済み",
+        "replied": "返信あり",
+        "seen": "既読",
+        "received": "受信",
+        "failed": "失敗",
+        "footnote": "WhatsAppの数値は、この連絡先とのWhatsApp会話にあるすべてのメッセージを数えます。送信したメッセージの次が連絡先のメッセージだった場合、返信ありとして数えます。"
       }
     },
     "tags": {
@@ -1582,6 +1593,12 @@
       "close": "検索を閉じる",
       "label": "検索",
       "placeholder": "タイトルで検索"
+    },
+    "tabs": {
+      "label": "期限",
+      "all": "すべて",
+      "tomorrow": "明日",
+      "week": "今週"
     },
     "filter": {
       "open": "タスクをフィルター",
@@ -2050,6 +2067,10 @@
     "search": "フィールドを検索",
     "showEmpty": "空のフィールドを表示",
     "footer": "ここに表示されるプロパティは、ウェブアプリからカスタマイズできます。",
+    "viewAll": "すべてのプロパティを表示",
+    "allTitle": "すべてのセクション",
+    "otherSection": "その他のプロパティ",
+    "noProperties": "表示するプロパティがありません。",
     "close": "閉じる",
     "save": "保存",
     "clear": "クリア",
@@ -2066,9 +2087,12 @@
       "name": "名前",
       "source": "ソース",
       "whatsapp": "WhatsAppの購読",
+      "emailSubscription": "Emailの購読",
+      "smsSubscription": "SMSの購読",
       "marketing": "マーケティング配信停止",
       "leadScore": "リードスコア",
       "created": "作成日",
+      "modified": "更新日",
       "lastActivity": "最終アクティビティ"
     },
     "subscription": {

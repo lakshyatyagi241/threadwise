@@ -377,6 +377,55 @@ describe('TasksScreen', () => {
     });
   });
 
+  describe('due tabs', () => {
+    const tab = (name: string) => screen.getByRole('radio', { name });
+
+    it('starts on All, and asks the API for what each tab means', async () => {
+      await show();
+      await screen.findByRole('button', { name: 'Call Aarav about the quote' });
+      expect(tab('All').props.accessibilityState.checked).toBe(true);
+      expect(listCall).toHaveBeenLastCalledWith(MINE, OPEN, expect.anything());
+
+      await fireEvent.press(tab('Overdue'));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          MINE,
+          { ...OPEN, due: 'overdue' },
+          expect.anything(),
+        ),
+      );
+      await fireEvent.press(tab('Today'));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          MINE,
+          { ...OPEN, due: 'today' },
+          expect.anything(),
+        ),
+      );
+      await fireEvent.press(tab('Tomorrow'));
+      await waitFor(() =>
+        expect(listCall).toHaveBeenLastCalledWith(
+          MINE,
+          { ...OPEN, dueFrom: expect.any(String), dueTo: expect.any(String) },
+          expect.anything(),
+        ),
+      );
+      expect(tab('Tomorrow').props.accessibilityState.checked).toBe(true);
+      await fireEvent.press(tab('This week'));
+      await waitFor(() => expect(tab('This week').props.accessibilityState.checked).toBe(true));
+      await fireEvent.press(tab('All'));
+      await waitFor(() => expect(listCall).toHaveBeenLastCalledWith(MINE, OPEN, expect.anything()));
+    });
+
+    it('says a tab has no tasks, in the same words as a filter that finds none', async () => {
+      await show();
+      await screen.findByRole('button', { name: 'Call Aarav about the quote' });
+      listCall.mockResolvedValue(taskPage([]));
+      await fireEvent.press(tab('Tomorrow'));
+      expect(await screen.findByText('Try a different filter or search.')).toBeTruthy();
+    });
+  });
+
   describe('filters', () => {
     const group = (name: string) => within(screen.getByTestId(`task-filter-${name.toLowerCase()}`));
     const openSheet = async () =>

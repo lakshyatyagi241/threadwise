@@ -1568,6 +1568,7 @@
       "tabsLabel": "Sekcje kontaktu",
       "tabs": {
         "about": "Dane kontaktu",
+        "stats": "Statystyki",
         "activity": "Aktywności",
         "files": "Więcej"
       },
@@ -1594,6 +1595,16 @@
         "message": "Usunąć kontakt {{name}}? Tej operacji nie można cofnąć.",
         "confirm": "Usuń",
         "cancel": "Anuluj"
+      },
+      "stats": {
+        "title": "Podsumowanie WhatsApp",
+        "sent": "Wysłane",
+        "delivered": "Dostarczone",
+        "replied": "Z odpowiedzią",
+        "seen": "Odczytane",
+        "received": "Odebrane",
+        "failed": "Nieudane",
+        "footnote": "Liczby WhatsApp obejmują wszystkie wiadomości w rozmowach WhatsApp tego kontaktu. Wysłana wiadomość liczy się jako z odpowiedzią, gdy następna wiadomość jest od kontaktu."
       }
     },
     "tags": {
@@ -1669,6 +1680,12 @@
       "close": "Zamknij wyszukiwanie",
       "label": "Szukaj",
       "placeholder": "Szukaj według tytułu"
+    },
+    "tabs": {
+      "label": "Termin",
+      "all": "Wszystkie",
+      "tomorrow": "Jutro",
+      "week": "Ten tydzień"
     },
     "filter": {
       "open": "Filtruj zadania",
@@ -2137,6 +2154,10 @@
     "search": "Szukaj pól",
     "showEmpty": "Pokaż puste pola",
     "footer": "Właściwości widoczne tutaj możesz dostosować w aplikacji internetowej.",
+    "viewAll": "Pokaż wszystkie właściwości",
+    "allTitle": "Wszystkie sekcje",
+    "otherSection": "Pozostałe właściwości",
+    "noProperties": "Brak właściwości do wyświetlenia.",
     "close": "Zamknij",
     "save": "Zapisz",
     "clear": "Wyczyść",
@@ -2153,9 +2174,12 @@
       "name": "Imię i nazwisko",
       "source": "Źródło",
       "whatsapp": "Subskrypcja WhatsApp",
+      "emailSubscription": "Subskrypcja Email",
+      "smsSubscription": "Subskrypcja SMS",
       "marketing": "Rezygnacja z marketingu",
       "leadScore": "Ocena leada",
       "created": "Utworzono",
+      "modified": "Zmodyfikowano",
       "lastActivity": "Ostatnia aktywność"
     },
     "subscription": {
