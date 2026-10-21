@@ -14,7 +14,7 @@ const ROOT = path.resolve(import.meta.dirname, '../..');
 const API = path.join(ROOT, 'apps/api');
 const P = { api: 3921, apiM: 59521, workerM: 59525, probeM: 59526, prom: 59191, am: 59193, hook: 59194, redis: 59422, pg: 59424 };
 const FOR_S = 20;
-const DB = 'alerting76_t1';
+const DB = process.env.ALERT_DB ?? 'alerting76_t1';
 const sfx = Math.random().toString(36).slice(2, 7);
 const names = { redis: `al76-redis-${sfx}`, prom: `al76-prom-${sfx}`, am: `al76-am-${sfx}` };
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -166,7 +166,7 @@ async function induce(id, desc, expect, doIt, undo, waitMs = 120000) {
   });
   await undo();
   // let the alerts of this phase resolve (or time out) before the next phase
-  await waitFor(async () => (await firing()).length === 0, 90000, `quiet after ${id}`);
+  await waitFor(async () => (await firing()).length === 0, Number(process.env.QUIET_MS ?? 90000), `quiet after ${id}`);
   log('   result', JSON.stringify(results.at(-1)));
   return ok;
 }
@@ -225,6 +225,9 @@ async function main() {
   let stopHammer = () => {};
   await induce('pg-blackhole', 'Postgres accepts but never answers (TCP blackhole), pool max 2, 8 callers', { alert: 'DbPoolExhausted' },
     async () => { setPg('blackhole'); stopHammer = hammer(110, 8); }, async () => { stopHammer(); setPg('pass'); await sleep(8000); }, 100000);
+  // the API must survive a hanging database (it exited ~10 s in before the http-logger fix)
+  const hang = results.find((r) => r.id === 'pg-blackhole');
+  if (hang) hang.apiAliveAfterHang = procs.api.exitCode === null;
   await induce('pg-down', 'Postgres unreachable (proxy refuses), 5 callers hitting /ready', { alert: 'ApiHighErrorRate' },
     async () => { setPg('down'); stopHammer = hammer(150, 5); }, async () => { stopHammer(); setPg('pass'); await sleep(8000); }, 140000);
 
@@ -235,6 +238,11 @@ async function main() {
   }));
   fs.writeFileSync(outFile, JSON.stringify({ forSeconds: FOR_S, scrapeSeconds: 5, ports: P, results, tracked: [...seen.values()], delivered }, null, 2));
   log('written', outFile);
+  console.log('\ncase | alert | fired | pending s | firing s | also fired');
+  for (const r of results) if (r.expectedAlert) console.log(`${r.id} | ${r.expectedAlert} | ${r.fired} | ${r.secondsToPending} | ${r.secondsToFiring} | ${(r.alsoFired ?? []).join(',') || '-'}`);
+  const bad = results.filter((r) => (r.expectedAlert && !r.fired) || r.apiAliveAfterHang === false);
+  if (!ONLY?.length || bad.length) console.log(bad.length ? `FAILED: ${bad.map((b) => b.id).join(', ')}` : 'all selected cases passed');
+  if (bad.length) process.exitCode = 1;
 }
 
 async function cleanup() {
