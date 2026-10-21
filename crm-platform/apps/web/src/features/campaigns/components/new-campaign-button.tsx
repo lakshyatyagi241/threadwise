@@ -17,10 +17,10 @@ const CARD =
   'group block rounded-xl border border-border p-4 transition hover:border-brand hover:bg-muted/40';
 
 /**
-  * "New campaign" (TW-BCAST-003). With only WhatsApp connected it goes straight to the campaign builder; when a Telegram
+ * "New campaign" (TW-BCAST-003). With only WhatsApp connected it goes straight to the campaign builder; when a Telegram
  * bot is on, a Facebook Page is connected, an Instagram account is linked, an SMS sender is on or a Viber channel is on it opens the channel chooser, one card
  * per available channel, as Reference does. `label` and `variant` let the Campaigns screen use it as its "New campaign" button (a
- * filled button) or as a text link in the side rail; the legacy broadcasts list keeps its own wording.
+ * filled button) or as a text link in the side rail.
  */
 export function NewCampaignButton({
   label: custom,

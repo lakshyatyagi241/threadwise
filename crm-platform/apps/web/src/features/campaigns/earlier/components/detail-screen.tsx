@@ -86,6 +86,7 @@ function Tile({
  */
 export function EarlierDetailScreen({ id }: { id: string }) {
   const t = useTranslations('broadcasts.detail');
+  const tc = useTranslations('campaigns.detail');
   const unofficial = useUnofficialWhatsapp();
   const router = useRouter();
   const pathname = usePathname();
@@ -137,10 +138,10 @@ export function EarlierDetailScreen({ id }: { id: string }) {
           actions={
             gone ? (
               <Link
-                href="/campaigns?source=earlier"
+                href="/campaigns"
                 className="inline-flex h-10 items-center rounded-md border border-border px-4 text-sm font-medium hover:bg-muted"
               >
-                {t('backToList')}
+                {tc('back')}
               </Link>
             ) : (
               <Button variant="secondary" onClick={() => void detail.refetch()}>
@@ -193,7 +194,7 @@ export function EarlierDetailScreen({ id }: { id: string }) {
     run(async () => {
       await deleteBroadcast(id);
       toast(t('deleted'), 'success');
-      router.replace('/campaigns?source=earlier');
+      router.replace('/campaigns');
     });
   const doResume = () =>
     run(async () => {
@@ -226,7 +227,7 @@ export function EarlierDetailScreen({ id }: { id: string }) {
         <div className="mx-auto flex max-w-none flex-wrap items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-7">
           <div className="flex min-w-0 items-center gap-3">
             <Link
-              href="/campaigns?source=earlier"
+              href="/campaigns"
               title={t('back')}
               aria-label={t('back')}
               className="grid size-8 place-items-center rounded-full border border-border hover:bg-muted"

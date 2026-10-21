@@ -5,6 +5,7 @@ import {
   deliveryRate,
   pageCount,
   parseState,
+  stateToQuery,
   stateToSearch,
 } from './list-model';
 
@@ -13,7 +14,15 @@ describe('parseState and stateToSearch', () => {
     const s = parseState(
       new URLSearchParams('status=running&type=template&range=30d&q= promo &page=3'),
     );
-    expect(s).toEqual({ status: 'running', type: 'template', range: '30d', q: 'promo', page: 3 });
+    expect(s).toEqual({
+      status: 'running',
+      type: 'template',
+      range: '30d',
+      from: '',
+      to: '',
+      q: 'promo',
+      page: 3,
+    });
     expect(parseState(new URLSearchParams('status=nope&type=x&range=1y&page=-2'))).toEqual(
       DEFAULT_STATE,
     );
@@ -25,8 +34,65 @@ describe('parseState and stateToSearch', () => {
     expect(stateToSearch({ ...DEFAULT_STATE, status: 'failed', page: 2 })).toBe(
       '?status=failed&page=2',
     );
-    const s = { status: 'scheduled', type: 'flow', range: '7d', q: 'a b', page: 1 } as const;
+    const s = {
+      status: 'scheduled',
+      type: 'flow',
+      range: '7d',
+      from: '',
+      to: '',
+      q: 'a b',
+      page: 1,
+    } as const;
     expect(parseState(new URLSearchParams(stateToSearch(s)))).toEqual(s);
+  });
+});
+
+describe('the custom date range', () => {
+  it('reads and writes the two days, both optional, only for range=custom', () => {
+    expect(
+      parseState(new URLSearchParams('range=custom&from=2026-10-01&to=2026-10-19')),
+    ).toMatchObject({
+      range: 'custom',
+      from: '2026-10-01',
+      to: '2026-10-19',
+    });
+    expect(
+      stateToSearch({ ...DEFAULT_STATE, range: 'custom', from: '2026-10-01', to: '2026-10-19' }),
+    ).toBe('?range=custom&from=2026-10-01&to=2026-10-19');
+    expect(stateToSearch({ ...DEFAULT_STATE, range: 'custom', from: '2026-10-01', to: '' })).toBe(
+      '?range=custom&from=2026-10-01',
+    );
+  });
+
+  it('drops days that are not real days, and days outside the custom range', () => {
+    expect(parseState(new URLSearchParams('range=custom&from=2026-02-31&to=soon'))).toMatchObject({
+      from: '',
+      to: '',
+    });
+    expect(parseState(new URLSearchParams('range=7d&from=2026-10-01&to=2026-10-19'))).toMatchObject(
+      {
+        range: '7d',
+        from: '',
+        to: '',
+      },
+    );
+    expect(
+      stateToSearch({ ...DEFAULT_STATE, range: '30d', from: '2026-10-01', to: '2026-10-19' }),
+    ).toBe('?range=30d');
+  });
+
+  it('sends the days in the query only for range=custom, and leaves an open side out', () => {
+    expect(stateToQuery({ ...DEFAULT_STATE, range: 'custom', from: '2026-10-01' })).toMatchObject({
+      range: 'custom',
+      from: '2026-10-01',
+      to: '',
+    });
+    expect(
+      stateToQuery({ ...DEFAULT_STATE, range: '7d', from: '2026-10-01', to: '2026-10-19' }),
+    ).toMatchObject({
+      from: '',
+      to: '',
+    });
   });
 });
 

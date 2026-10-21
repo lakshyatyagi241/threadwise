@@ -21,7 +21,6 @@ import {
   useCampaignList,
 } from '../api/campaigns';
 import { can, pageCount, parseState, stateToSearch, type ListState } from '../lib/list-model';
-import { EarlierLink } from '../history/components/parts';
 import { CampaignCard } from './campaign-card';
 import { CampaignTable } from './campaign-table';
 import { CampaignsRail } from './campaigns-rail';
@@ -61,7 +60,7 @@ const BlockViewIcon = () => (
 );
 
 const message = (e: unknown, fallback: string) => (e instanceof ApiError ? e.message : fallback);
-const RANGES = ['all', '7d', '30d', '90d'] as const;
+const RANGES = ['all', '7d', '30d', '90d', 'custom'] as const;
 const n = (v: number | undefined) => (v === undefined ? '—' : v.toLocaleString());
 /** A share of `of` as a percentage with one decimal (0 when there is nothing to divide by). */
 const rate = (part: number | undefined, of: number | undefined) =>
@@ -233,7 +232,6 @@ export function CampaignsScreen() {
                 <RefreshIcon className="size-3.5" />
                 {t('refresh')}
               </Button>
-              <EarlierLink />
               {canCreate && <NewCampaignButton label={t('newCampaign')} />}
             </div>
           </div>
@@ -284,6 +282,32 @@ export function CampaignsScreen() {
                   {t(`range.${r}`)}
                 </button>
               ))}
+              {state.range === 'custom' && (
+                <>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.from')}
+                    <Input
+                      type="date"
+                      data-testid="campaigns-range-from"
+                      className="w-40"
+                      value={state.from}
+                      max={state.to || undefined}
+                      onChange={(e) => go({ from: e.target.value })}
+                    />
+                  </label>
+                  <label className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                    {t('range.to')}
+                    <Input
+                      type="date"
+                      data-testid="campaigns-range-to"
+                      className="w-40"
+                      value={state.to}
+                      min={state.from || undefined}
+                      onChange={(e) => go({ to: e.target.value })}
+                    />
+                  </label>
+                </>
+              )}
             </div>
             <div className="flex items-center gap-2">
               <div
