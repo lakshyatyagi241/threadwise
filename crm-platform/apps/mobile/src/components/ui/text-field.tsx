@@ -47,24 +47,30 @@ export function TextField({
         ref={inputRef}
         accessibilityLabel={label}
         accessibilityHint={error ?? hint}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={colors.placeholder}
         onFocus={onFocus}
         onBlur={onBlur}
         style={[styles.bare, { color: colors.text }]}
       />
     );
   }
+  const disabled = rest.editable === false;
   const borderColor = error ? colors.danger : focused ? colors.primary : colors.borderStrong;
   return (
     <View style={styles.wrap}>
       <Text variant="label">{label}</Text>
-      <View style={[styles.field, { backgroundColor: colors.surface, borderColor }]}>
+      <View
+        style={[
+          styles.field,
+          { backgroundColor: disabled ? colors.surfaceMuted : colors.surface, borderColor },
+        ]}
+      >
         <TextInput
           {...rest}
           ref={inputRef}
           accessibilityLabel={label}
           accessibilityHint={hint}
-          placeholderTextColor={colors.textMuted}
+          placeholderTextColor={colors.placeholder}
           onFocus={(e) => {
             setFocused(true);
             onFocus?.(e);
@@ -73,7 +79,11 @@ export function TextField({
             setFocused(false);
             onBlur?.(e);
           }}
-          style={[styles.input, code && styles.code, { color: colors.text }]}
+          style={[
+            styles.input,
+            code && styles.code,
+            { color: disabled ? colors.textMuted : colors.text },
+          ]}
         />
         {end}
       </View>
@@ -91,7 +101,7 @@ export function TextField({
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: spacing.xs },
+  wrap: { gap: spacing.sm },
   field: {
     minHeight: CONTROL_HEIGHT,
     flexDirection: 'row',

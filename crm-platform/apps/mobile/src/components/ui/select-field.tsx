@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 import { Icon } from './icon';
 import { Text } from './text';
@@ -33,6 +34,7 @@ export function SelectField({
   variant = 'box',
 }: Props) {
   const { colors } = useTheme();
+  const insets = useSafeAreaInsets();
   const [open, setOpen] = useState(false);
   const current = options.find((o) => o.value === value);
   return (
@@ -46,13 +48,19 @@ export function SelectField({
         style={
           variant === 'plain'
             ? styles.plain
-            : [styles.box, { backgroundColor: colors.surface, borderColor: colors.borderStrong }]
+            : [
+                styles.box,
+                {
+                  backgroundColor: colors.surface,
+                  borderColor: open ? colors.primary : colors.borderStrong,
+                },
+              ]
         }
       >
-        <Text muted={!current} numberOfLines={1} style={styles.value}>
+        <Text numberOfLines={1} style={[styles.value, !current && { color: colors.placeholder }]}>
           {current?.label ?? placeholder}
         </Text>
-        <Icon name="chevron-down" size={18} color="textMuted" />
+        <Icon name={open ? 'chevron-up' : 'chevron-down'} size={18} color="textMuted" />
       </Pressable>
       <Modal transparent visible={open} animationType="fade" onRequestClose={() => setOpen(false)}>
         <Pressable
@@ -63,9 +71,20 @@ export function SelectField({
         >
           <View
             accessibilityViewIsModal
-            style={[styles.sheet, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            style={[
+              styles.sheet,
+              {
+                backgroundColor: colors.surface,
+                borderColor: colors.border,
+                paddingBottom: insets.bottom + spacing.md,
+              },
+            ]}
           >
-            <ScrollView>
+            <View style={[styles.handle, { backgroundColor: colors.border }]} />
+            <Text variant="subheading" numberOfLines={1} style={styles.title}>
+              {label}
+            </Text>
+            <ScrollView bounces={false}>
               {options.map((o) => (
                 <Pressable
                   key={o.value}
@@ -76,7 +95,10 @@ export function SelectField({
                     setOpen(false);
                     onChange(o.value);
                   }}
-                  style={styles.option}
+                  style={[
+                    styles.option,
+                    o.value === value && { backgroundColor: colors.primarySoft },
+                  ]}
                 >
                   <Text
                     variant={o.value === value ? 'label' : 'body'}
@@ -98,13 +120,13 @@ export function SelectField({
 
 const styles = StyleSheet.create({
   box: {
-    minHeight: MIN_TOUCH_TARGET,
+    minHeight: CONTROL_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    borderWidth: StyleSheet.hairlineWidth,
+    borderWidth: 1.5,
     borderRadius: radius.md,
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.md,
   },
   plain: {
     minHeight: MIN_TOUCH_TARGET,
@@ -113,13 +135,22 @@ const styles = StyleSheet.create({
     gap: spacing.md,
   },
   value: { flex: 1 },
-  scrim: { flex: 1, justifyContent: 'center', padding: spacing.lg },
+  scrim: { flex: 1, justifyContent: 'flex-end' },
   sheet: {
     maxHeight: '70%',
-    borderRadius: radius.md,
+    borderTopLeftRadius: radius.lg,
+    borderTopRightRadius: radius.lg,
     borderWidth: StyleSheet.hairlineWidth,
-    paddingVertical: spacing.xs,
+    paddingTop: spacing.sm,
   },
+  handle: {
+    alignSelf: 'center',
+    width: 40,
+    height: 4,
+    borderRadius: radius.pill,
+    marginBottom: spacing.sm,
+  },
+  title: { paddingHorizontal: spacing.lg, paddingBottom: spacing.sm },
   option: {
     minHeight: MIN_TOUCH_TARGET,
     flexDirection: 'row',

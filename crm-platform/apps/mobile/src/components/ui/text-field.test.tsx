@@ -3,6 +3,18 @@ import { Text } from './text';
 import { TextField } from './text-field';
 
 describe('TextField', () => {
+  it('draws the placeholder lighter than typed text and greys out a read-only field', async () => {
+    const { rerender } = await render(
+      <TextField label="City" value="" placeholder="Pune" onChangeText={() => undefined} />,
+    );
+    const input = screen.getByLabelText('City');
+    expect(input.props.placeholderTextColor).not.toBe(input.props.style.at(-1).color);
+    await rerender(
+      <TextField label="City" value="Pune" editable={false} onChangeText={() => undefined} />,
+    );
+    expect(screen.getByLabelText('City').props.editable).toBe(false);
+  });
+
   it('names the input by its label and passes typing through', async () => {
     const onChangeText = jest.fn();
     await render(<TextField label="Work email" value="" onChangeText={onChangeText} />);

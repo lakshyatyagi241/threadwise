@@ -8,6 +8,21 @@ const OPTIONS = [
 ] as const;
 
 describe('SelectField', () => {
+  it('titles the list with the field name and ticks the chosen row', async () => {
+    await renderApp(
+      <SelectField
+        label="Agent"
+        placeholder="Pick one"
+        options={OPTIONS}
+        value="a"
+        onChange={jest.fn()}
+      />,
+    );
+    await fireEvent.press(screen.getByRole('button', { name: 'Agent' }));
+    expect(screen.getByText('Agent')).toBeTruthy();
+    expect(screen.getByRole('radio', { name: 'Asha' }).props.accessibilityState.checked).toBe(true);
+  });
+
   it('shows the placeholder until something is chosen, then the chosen label', async () => {
     const view = await renderApp(
       <SelectField

@@ -47,7 +47,7 @@ export function SearchField({
         accessibilityLabel={label}
         value={value}
         onChangeText={onChangeText}
-        placeholderTextColor={colors.textMuted}
+        placeholderTextColor={colors.placeholder}
         returnKeyType="search"
         autoCapitalize="none"
         autoCorrect={false}
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     borderWidth: 1.5,
-    borderRadius: radius.pill,
+    borderRadius: radius.md,
     paddingStart: spacing.md,
   },
   icon: { paddingEnd: spacing.sm },

@@ -1,7 +1,7 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
-import { MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
+import { CONTROL_HEIGHT, MIN_TOUCH_TARGET, radius, spacing } from '@/lib/theme/tokens';
 import { useTheme } from '@/lib/theme/use-theme';
 
 interface FieldProps {
@@ -77,9 +77,9 @@ export function PickerOption({ label, caption, selected, onPress }: OptionProps)
 }
 
 const styles = StyleSheet.create({
-  field: { gap: spacing.xs },
+  field: { gap: spacing.sm },
   box: {
-    minHeight: MIN_TOUCH_TARGET + spacing.xs,
+    minHeight: CONTROL_HEIGHT,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,

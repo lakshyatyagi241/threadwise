@@ -2,7 +2,7 @@
  * Design tokens. A screen never writes a hex colour, a font size or a magic spacing number: it asks the theme. Brand colours
  * here are placeholders until the design handover (docs/mobile/handover.md); change them here and the whole app follows.
  *
- * Reading guide: `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
+ * Reading guide: `placeholder` is the hint text inside an empty field: lighter than `textMuted` so it never reads as typed text, still 4.5:1 on a field's surface; `border` is for dividers, `borderStrong` for the edge of a control (a field, a checkbox: 3:1 against the page, as
  * WCAG asks of anything a person must find to use), `brand*` colours are the deep band behind the logo on the sign-in and sign-up screens, `*Soft` colours are the
  * quiet backgrounds of banners, badges and selected rows (always paired with the strong colour of the same name for the text on them),
  * `success` is a change for the better, a connected thing or a finished job, `instagram` and `whatsapp` are those channels' accents, `chartSent` and `chartDelivered` are two blues far enough apart in lightness to tell apart side by side (3:1 against the card).
@@ -17,6 +17,7 @@ export const palette = {
     shadow: '#0A1F44',
     text: '#121B2E',
     textMuted: '#4B5872',
+    placeholder: '#66738C',
     primary: '#1A56DB',
     onPrimary: '#FFFFFF',
     primarySoft: '#E3ECFC',
@@ -48,6 +49,7 @@ export const palette = {
     shadow: '#000000',
     text: '#E8EEF8',
     textMuted: '#A3B1C9',
+    placeholder: '#8E9CB6',
     primary: '#6C9CFF',
     onPrimary: '#06173A',
     primarySoft: '#16264A',
