@@ -19,6 +19,7 @@ export const FIXED_COLUMN_IDS = [
   'dateOfBirth',
   'minor',
   'createdOn',
+  'modifiedOn',
   'whatsapp',
   'sms',
   'emailOptIn',
@@ -89,6 +90,7 @@ const FIXED_LABEL: Record<FixedColumnId, string> = {
   dateOfBirth: 'colDateOfBirth',
   minor: 'colMinor',
   createdOn: 'colCreatedOn',
+  modifiedOn: 'colModifiedOn',
   whatsapp: 'colWhatsapp',
   sms: 'colSms',
   emailOptIn: 'colEmailOptIn',
@@ -105,6 +107,7 @@ const SHORT_LABEL: Partial<Record<FixedColumnId, string>> = {
   stage: 'shortStage',
   whatsapp: 'shortWhatsapp',
   createdOn: 'shortCreated',
+  modifiedOn: 'shortModified',
 };
 
 /**
@@ -148,6 +151,7 @@ export function allColumns(
       fixed('lastActivity'),
       fixed('nextFollowUp'),
       fixed('createdOn'),
+      fixed('modifiedOn'),
     ] as ColumnDef[]
   ).filter((c) => !omit.has(c.id));
 }
@@ -276,6 +280,7 @@ export function sortKeyOf(id: ColumnId): string | null {
     case 'dateOfBirth':
     case 'minor':
     case 'nextFollowUp':
+    case 'modifiedOn':
       return null;
     case 'createdOn':
       return 'createdAt';
@@ -331,6 +336,7 @@ export function columnGroup(id: ColumnId): ColumnGroup {
     case 'lastActivity':
     case 'nextFollowUp':
     case 'createdOn':
+    case 'modifiedOn':
       return 'activity';
   }
 }

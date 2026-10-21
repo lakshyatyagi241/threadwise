@@ -34,7 +34,10 @@
         "all": "Todo o período",
         "7d": "7 dias",
         "30d": "30 dias",
-        "90d": "90 dias"
+        "90d": "90 dias",
+        "custom": "Intervalo personalizado",
+        "from": "Data inicial",
+        "to": "Data final"
       },
       "search": "Pesquisar campanhas",
       "selectPage": "Selecionar esta página",
@@ -1873,8 +1876,7 @@
         "list": "Lista",
         "blocks": "Blocos"
       },
-      "showing": "Mostrando {count, plural, one {# campanha} other {# campanhas}}",
-      "legacy": "Envios antigos ({count})"
+      "showing": "Mostrando {count, plural, one {# campanha} other {# campanhas}}"
     },
     "senderEmpty": {
       "loading": "Carregando seus números…",

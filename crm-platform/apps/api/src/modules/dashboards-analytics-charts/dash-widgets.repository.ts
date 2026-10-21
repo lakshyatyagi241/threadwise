@@ -126,7 +126,7 @@ export class DashWidgetsRepository {
     const res = await tx.execute(sql`
       SELECT t.uuid, t.template_name, t.language, t.category, t.template_type, t.status,
              count(m.id)::int AS sent,
-             count(m.id) FILTER (WHERE m.status IN ('delivered', 'read') OR m.delivered_at IS NOT NULL OR m.read_at IS NOT NULL)::int AS delivered,
+             count(m.id) FILTER (WHERE m.status IN ('delivered', 'read', 'sent') OR m.delivered_at IS NOT NULL OR m.read_at IS NOT NULL)::int AS delivered,
              count(m.id) FILTER (WHERE m.read_at IS NOT NULL OR m.status = 'read')::int AS read
       FROM (SELECT * FROM wa_templates WHERE org_id = ${orgId} ORDER BY updated_at DESC LIMIT 5) t
       LEFT JOIN messages m ON m.org_id = t.org_id AND m.template_id = t.id AND m.direction = 'out'

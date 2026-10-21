@@ -40,5 +40,29 @@
     "file": "packages/db/src/outbox-dead-index.ts",
     "contains": "ALTER INDEX ${PARENT} ATTACH PARTITION ${child}",
     "reason": "PARENT is the module constant 'idx_outbox_dead' and child is client.escapeIdentifier() of a partition name from pg_inherits; DDL cannot take bind parameters; reviewed 2026-10-19"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/src/common/errors/sanitize-error.spec.ts",
+    "contains": "1234567890abcdef",
+    "reason": "fake key used as test input to the log sanitiser; not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/test/unit/logging/logging.spec.ts",
+    "contains": "SUPERSECRET0123",
+    "reason": "fake secret to prove log redaction; not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "SELECT count(*)::int AS n",
+    "reason": "identifiers come from the hard-coded sealed-column list and are double-quoted by q(); no request data; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "UPDATE ${q(t.table)}",
+    "reason": "same: identifiers from the static column list, quoted by q(); reviewed 2026-10-21"
   }
 ]

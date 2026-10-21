@@ -1,1 +1,12 @@
-{"id":"alerting","sheetItem":76,"title":"Alerting rules tests","status":"pending","note":"runner to be added from branch vedant/ops/alerting-tests"}
+{
+  "id": "alerting",
+  "sheetItem": 76,
+  "title": "Alerting (rules, runbooks, live failure injection, Alertmanager delivery)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 8, "full": 25 },
+  "heavy": true,
+  "needs": ["docker", "node22", "pnpm", "postgres", "built apps/api"],
+  "proves": "Every rules file passes promtool check and test; every alert has an existing runbook and a failure-modes.json entry; Alertmanager delivers a critical alert with its runbook annotation to a local webhook; on private processes a killed worker, a dead probe, a full Redis, a dead outbox row and a hanging Postgres each fire the expected alert, and the API survives the hang.",
+  "doesNotProve": "Delivery to real Slack or PagerDuty, production thresholds, disk, certificate, replica-lag or backup failures (no metric), or anything on staging or production.",
+  "report": "docs/performance/alerting/Sheet3-76-alerting-REPORT.html"
+}

@@ -18,7 +18,7 @@ import {
   useToast,
 } from '@crm/ui';
 import type { CampaignDetail } from '@crm/contracts';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
+import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
 import { ApiError } from '@/lib/api/errors';
 import {
   KEYS,
@@ -90,6 +90,7 @@ export function DetailScreen({ id }: { id: string }) {
   const canUpdate = useCan('camp.campaigns.update');
   const canDelete = useCan('camp.campaigns.delete');
   const canExport = useCan('camp.campaigns.export');
+  const session = useSession();
   const res = useCampaignDetail(id);
   // Live stats: the light read follows a campaign that is scheduled or running (every 12 s, visible tab only) and stops by itself once
   // the server says it is at rest. When it does, the heavy detail is read once more for the final figures.
@@ -128,6 +129,8 @@ export function DetailScreen({ id }: { id: string }) {
   }
   const d: CampaignDetail = res.data;
   const c = d.campaign;
+  // the zone the recipient times and the CSV export use: the campaign's own, else the workspace's (a migrated campaign may have none)
+  const zone = c.timezone ?? session.org.timezone ?? 'UTC';
   const f = freshest(d, res.dataUpdatedAt, live.data, live.dataUpdatedAt);
   const n = f.counts;
   const shownStatus = f.status as typeof c.status;
@@ -621,7 +624,7 @@ export function DetailScreen({ id }: { id: string }) {
           },
           { id: 'overview', label: t('tabs.overview'), content: overview },
           { id: 'statistics', label: t('tabs.statistics'), content: <StatisticsTab id={id} /> },
-          { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} /> },
+          { id: 'messages', label: t('tabs.messages'), content: <RecipientsTab id={id} timezone={zone} /> },
           { id: 'engagement', label: t('tabs.engagement'), content: <EngagementTab d={d} /> },
           { id: 'replies', label: t('tabs.replies', { count: n.replies }), content: replies },
           {
@@ -632,7 +635,7 @@ export function DetailScreen({ id }: { id: string }) {
           {
             id: 'optouts',
             label: t('tabs.optouts', { count: d.optOutCount }),
-            content: <RecipientsTab id={id} fixedStatus="unsubscribed" />,
+            content: <RecipientsTab id={id} fixedStatus="unsubscribed" timezone={zone} />,
           },
         ]}
       />

@@ -130,6 +130,7 @@
       "colLeadScore": "تقييم العميل المحتمل",
       "colLanguage": "اللغة",
       "colCreatedOn": "تاريخ الإنشاء",
+      "colModifiedOn": "تاريخ التعديل",
       "pagination": "ترقيم الصفحات",
       "prevPage": "الصفحة السابقة",
       "nextPage": "الصفحة التالية",
@@ -282,6 +283,7 @@
       "shortStage": "المرحلة",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "الإنشاء",
+      "shortModified": "التعديل",
       "firstRun": {
         "title": "أضف أول جهات اتصال لك",
         "message": "أضف الأشخاص الذين تتواصل معهم. تُستخدم جهات الاتصال في الرسائل والحملات والمهام والصفقات.",

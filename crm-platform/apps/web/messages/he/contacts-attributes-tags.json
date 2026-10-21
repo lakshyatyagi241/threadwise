@@ -130,6 +130,7 @@
       "colLeadScore": "דירוג ליד",
       "colLanguage": "שפה",
       "colCreatedOn": "נוצר ב",
+      "colModifiedOn": "עודכן ב",
       "pagination": "עימוד",
       "prevPage": "העמוד הקודם",
       "nextPage": "העמוד הבא",
@@ -282,6 +283,7 @@
       "shortStage": "שלב",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "נוצר",
+      "shortModified": "עודכן",
       "firstRun": {
         "title": "הוסף את אנשי הקשר הראשונים שלך",
         "message": "הכנס את האנשים שאתה מדבר איתם. אנשי הקשר משמשים להודעות, לקמפיינים, למשימות ולעסקאות.",

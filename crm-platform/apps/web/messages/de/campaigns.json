@@ -34,7 +34,10 @@
         "all": "Gesamte Zeit",
         "7d": "7 Tage",
         "30d": "30 Tage",
-        "90d": "90 Tage"
+        "90d": "90 Tage",
+        "custom": "Benutzerdefinierter Zeitraum",
+        "from": "Von-Datum",
+        "to": "Bis-Datum"
       },
       "search": "Kampagnen durchsuchen",
       "selectPage": "Diese Seite auswählen",
@@ -1873,8 +1876,7 @@
         "list": "Liste",
         "blocks": "Kacheln"
       },
-      "showing": "{count, plural, one {# Kampagne} other {# Kampagnen}} angezeigt",
-      "legacy": "Ältere Broadcasts ({count})"
+      "showing": "{count, plural, one {# Kampagne} other {# Kampagnen}} angezeigt"
     },
     "senderEmpty": {
       "loading": "Ihre Nummern werden geladen…",

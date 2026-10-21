@@ -1,3 +1,4 @@
+import type { ListCampaignsQuery } from '@crm/contracts';
 import { isKnownTimeZone, wallTimeToUtc } from '../broadcasts';
 
 /** The pure rules of a campaign (TW-CAMP-003 to 013, 021). Nothing here reads a database or a clock it was not given. */
@@ -492,3 +493,42 @@ export function buttonRows(
 
 /** A leading `=`, `+`, `-` or `@` would run as a formula in a spreadsheet. */
 export const csvSafe = (v: string): string => (/^[=+\-@]/.test(v) ? `'${v}` : v);
+
+// ---------------------------------------------------------------- date filter of the list (001)
+
+const DAY_MS = 86_400_000;
+const PRESET_DAYS = { '7d': 7, '30d': 30, '90d': 90 } as const;
+
+/** The creation window of the list's date filter: `from` inclusive, `to` exclusive, `null` open on that side. */
+export interface CreatedWindow {
+  from: number | null;
+  to: number | null;
+}
+
+/** The day after `day` (`YYYY-MM-DD`), on the proleptic calendar. */
+const nextDay = (day: string): string => {
+  const [y, m, d] = day.split('-').map(Number) as [number, number, number];
+  return new Date(Date.UTC(y, m - 1, d + 1)).toISOString().slice(0, 10);
+};
+
+/**
+ * What the list's date filter keeps, by creation time. `all` keeps everything; a preset is the last N days up to `now`. A custom range is
+ * whole days in the workspace's time zone, `from` and `to` included, open on a side that is missing; reversed days are swapped.
+ */
+export function createdWindow(
+  q: Pick<ListCampaignsQuery, 'range' | 'from' | 'to'>,
+  now: number,
+  timeZone: string,
+): CreatedWindow {
+  if (q.range === 'all') return { from: null, to: null };
+  if (q.range !== 'custom') return { from: now - PRESET_DAYS[q.range] * DAY_MS, to: null };
+  const [first, last] = q.from && q.to && q.from > q.to ? [q.to, q.from] : [q.from, q.to];
+  return {
+    from: first ? wallTimeToUtc(first, '00:00', timeZone).getTime() : null,
+    to: last ? wallTimeToUtc(nextDay(last), '00:00', timeZone).getTime() : null,
+  };
+}
+
+/** Whether a campaign created at `createdAt` (epoch ms) falls inside the window. */
+export const inCreatedWindow = (createdAt: number, w: CreatedWindow): boolean =>
+  (w.from === null || createdAt >= w.from) && (w.to === null || createdAt < w.to);
