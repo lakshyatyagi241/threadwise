@@ -1,9 +1,7 @@
 {
   "_comment": "Known open items that exist on main and are recorded in the VAPT report (docs/security/vapt/Sheet3-25-vapt-REPORT.html). run.sh PASSES when only these exist and FAILS on anything new. Remove an entry when it is fixed.",
   "highs": {
-    "TI-001": "RLS bypass flag app.privileged is a settable GUC; needs SQL injection first; ADR 0028 Proposed, owner decision",
-    "AZ-mass-assignment": "authz audit High, status needs-decision (contract fields naming tenant/privilege attributes); pre-existing, NOT triaged by VAPT; the live suite tests mass assignment on contacts only",
-    "AZ-api-key-scopes": "Empty API-key scope list means unrestricted; needs owner decision; e2e test exists"
+    "TI-001": "RLS bypass flag app.privileged is a settable GUC; needs SQL injection first; ADR 0028 Proposed, owner decision"
   },
   "acceptedByOwner": {
     "mfa-enforcement-defaults": "Owner decision 2026-10-10; verify production switch is ON before release",
@@ -28,5 +26,9 @@
   "tenancyProbeGapTables": {
     "team_members": "generated read-own scenario seeds 0 rows under team_members_hide_inactive; foreign rows 0, so no leak"
   },
-  "sastMax": { "critical": 3, "high": 4, "reason": "3 dev-only advisories (vitest, tinypool); 4 high = spec-file literals and quoted identifiers, all false positives" }
+  "sastMax": {
+    "critical": 3,
+    "high": 2,
+    "reason": "all remaining SAST criticals/highs are dev-dependency advisories (vitest, tinypool, vite, launch-editor; Windows/dev-server only, not in the production image). Fix = major vitest/vite upgrade, tracked as open"
+  }
 }

@@ -295,6 +295,16 @@ describe.skipIf(!local)('VAPT live checks', () => {
     });
   });
 
+  describe('login brute force (kept LAST: it trips the per-IP ceiling for 5 minutes)', () => {
+    it('spraying made-up addresses hits 429 at the per-IP ceiling', async () => {
+      let hit = false;
+      for (let i = 0; i < 45 && !hit; i++) {
+        hit = (await call('POST', '/v2/auth/login', undefined, { email: `nobody${i}@vapt.test`, password: `wrong-${i}` })).status === 429;
+      }
+      expect(hit).toBe(true);
+    });
+  });
+
   describe('response hygiene', () => {
     it('does not advertise the framework (X-Powered-By)', async () => {
       const r = await call('GET', '/v2/auth/password-policy');
