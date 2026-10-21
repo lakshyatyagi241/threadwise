@@ -136,7 +136,7 @@ export function TemplateAiModal({
       eyebrow={t('eyebrow')}
       title={
         <span>
-          {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+          {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
         </span>
       }
       closeLabel={t('close')}

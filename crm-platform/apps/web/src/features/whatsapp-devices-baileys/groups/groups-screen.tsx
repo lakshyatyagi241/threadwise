@@ -96,7 +96,7 @@ export function GroupsScreen({ deviceId }: { deviceId?: string }) {
               {t('eyebrow')}
             </p>
             <h1 className="mt-1 text-3xl font-semibold leading-none">
-              {t('headingA')} <span className="italic text-primary">{t('headingB')}</span>
+              {t('headingA')} <span className="not-italic text-primary">{t('headingB')}</span>
             </h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground">{t('intro')}</p>
           </header>

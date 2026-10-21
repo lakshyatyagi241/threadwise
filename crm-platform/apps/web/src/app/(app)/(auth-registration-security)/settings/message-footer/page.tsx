@@ -19,7 +19,7 @@ export default async function MessageFooterPage() {
       <SettingsBack always />
       <header className="space-y-2">
         <h1 className="text-3xl font-normal leading-none tracking-tight sm:text-[40px]">
-          {t('titleLead')} <span className="italic text-brand">{t('titleAccent')}</span>
+          {t('titleLead')} <span className="not-italic text-brand">{t('titleAccent')}</span>
         </h1>
         <p className="max-w-2xl text-sm text-muted-foreground">{t('description')}</p>
       </header>

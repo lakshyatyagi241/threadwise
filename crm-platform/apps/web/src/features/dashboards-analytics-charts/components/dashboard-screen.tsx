@@ -189,7 +189,7 @@ export function DashboardScreen() {
           </p>
           <h1 className="text-[32px] leading-tight">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
-            <em className="text-primary">
+            <em className="not-italic text-primary">
               {running > 0 ? t('running', { n: running }) : t('calm')}
             </em>
           </h1>

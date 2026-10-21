@@ -50,7 +50,7 @@ export function AdminAnalyticsScreen({ days }: { days: number }) {
             {t('kicker')}
           </p>
           <h1 className="font-serif text-3xl leading-tight sm:text-4xl">
-            {t('titleLead')} <em className="text-primary">{t('titleAccent')}</em>.
+            {t('titleLead')} <em className="not-italic text-primary">{t('titleAccent')}</em>.
           </h1>
           <p className="text-sm text-muted-foreground">{t('subtitle')}</p>
         </div>

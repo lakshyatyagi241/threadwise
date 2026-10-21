@@ -245,7 +245,7 @@ export function TemplatesScreen() {
                     stuck ? 'text-[22px]' : 'text-[32px] sm:text-[40px] lg:text-[44px]',
                   )}
                 >
-                  {t('titleA')} <span className="italic text-brand">{t('titleB')}</span>.
+                  {t('titleA')} <span className="not-italic text-brand">{t('titleB')}</span>.
                 </h1>
                 {!stuck && (
                   <p className="mt-2 max-w-2xl text-[13px] text-muted-foreground">

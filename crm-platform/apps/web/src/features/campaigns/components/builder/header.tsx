@@ -48,7 +48,7 @@ export function BuilderHeader({
             </div>
             <h1 className="truncate text-xl leading-tight">
               {editing ? t('titleEdit') : t('title')}{' '}
-              <span className="italic text-brand">{t('titleAccent')}</span>
+              <span className="not-italic text-brand">{t('titleAccent')}</span>
             </h1>
           </div>
         </div>
