@@ -49,7 +49,11 @@ Object.assign(env, {
   OBS_METRICS_TOKEN: token,
   WORKER_MODE: 'false',
 });
-const logFd = openSync(join(OUT_DIR, 'api.log'), 'w');
+for (const p of [API_PORT, METRICS_PORT]) {
+  const busy = await new Promise((ok) => net.connect(Number(p), '127.0.0.1').once('connect', () => ok(true)).once('error', () => ok(false)));
+  if (busy) { console.error(`port ${p} is already in use: free it or set API_PORT / METRICS_PORT`); process.exit(2); }
+}
+const logFd =openSync(join(OUT_DIR, 'api.log'), 'w');
 const api = spawn(process.execPath, ['dist/src/main.js'], { cwd: join(root, 'apps/api'), env, stdio: ['ignore', logFd, logFd] });
 let exited = false;
 api.on('exit', () => (exited = true));
@@ -119,6 +123,11 @@ scrape_configs:
   for (const r of g?.rules ?? []) check(`rule ${r.name} health=ok`, r.health === 'ok', `health=${r.health}${r.lastError ? ' error: ' + r.lastError : ''}`);
   const others = groups.flatMap((x) => x.rules.filter((r) => r.health !== 'ok').map((r) => `${x.name}/${r.name}`));
   console.log(`  other groups: ${others.length ? 'rules not ok: ' + others.join(', ') : 'all rules ok'} (informational)`);
+  const upS = await q('up{job="crm-api"}');
+  check('prometheus scrapes the API (up=1)', upS[0]?.value?.[1] === '1', JSON.stringify(upS.map((s) => s.value)));
+  const direct = await (await fetch(`http://127.0.0.1:${METRICS_PORT}/metrics`, { headers: { authorization: `Bearer ${token}` } })).text();
+  writeFileSync(join(OUT_DIR, 'metrics-sample.txt'), direct);
+  console.log(`  direct scrape: ${direct.split('\n').filter((l) => l.startsWith('crm_cache_')).length} crm_cache_* sample lines (metrics-sample.txt)`);
   const raw = await q('crm_cache_hits_total');
   check('raw series crm_cache_hits_total non-empty', raw.length > 0, `${raw.length} series`);
   const lookups = await q('crm:cache_lookups:rate5m');

@@ -25,5 +25,6 @@ ri_artifact "$RI_OUT/soak/soak.csv"; ri_artifact "$RI_OUT/soak/soak.json"
 echo; echo "---- soak output (slopes with 95% intervals and verdict) ----"
 tail -n 40 "$RI_OUT/logs/soak.log" || true
 echo "---- soak.csv / soak.json: $RI_OUT/soak/ ----"
+[ "$M" -le 10 ] && echo "NOTE: the soak ignores the first 3 minutes as warm-up, so with ${M} minutes only a few samples remain and most slopes print NaN. Use at least 20 minutes for usable slopes."
 echo "NOTE: a ${M}-minute run cannot settle a leak: PASS means no fast growth was seen, not that there is no leak. Run --minutes 1440 for the real answer."
 ri_finish

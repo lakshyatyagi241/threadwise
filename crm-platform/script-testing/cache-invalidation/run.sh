@@ -15,11 +15,5 @@ ri_try unit-writers-ratchet pnpm exec vitest run test/unit/cache-invalidation
 D=test/integration/cache-invalidation
 if [ "$RI_MODE" = quick ]; then specs=("$D/smoke.spec.ts" "$D/access-control.spec.ts"); else specs=("$D"/*.spec.ts); fi
 ri_try integration pnpm exec vitest run "${specs[@]}" --testTimeout=180000
-ri_try matrix-file-consistent node -e '
-const j=require(process.argv[1]);let bad=[],n=0;
-for(const [k,v] of Object.entries(j.measured||{})){ if(v.measuredStaleSeconds!=null&&v.documentedSeconds!=null){n++;
-  if(v.measuredStaleSeconds>v.documentedSeconds) bad.push(k+": "+v.measuredStaleSeconds+" > "+v.documentedSeconds);} }
-if(!j.ratchet||!j.matrix) bad.push("ratchet/matrix section missing");
-console.log("checked "+n+" measured bounds; open items: "+JSON.stringify(j.open).slice(0,200));
-if(bad.length){console.error(bad.join("\n"));process.exit(1)}' "$CRM_ROOT/docs/performance/cache/invalidation-results.json"
+ri_try matrix-file-consistent node "$CRM_ROOT/script-testing/cache-invalidation/check-matrix.mjs" "$CRM_ROOT/docs/performance/cache/invalidation-results.json"
 ri_finish
