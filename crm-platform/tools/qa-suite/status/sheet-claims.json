@@ -1,0 +1,153 @@
+{
+  "owner": "Punya",
+  "source": "QA tracking sheet, pasted 2026-10-21. Kept only to show where the sheet and the scripts disagree; the status of each item is computed from the repo, never read from here.",
+  "items": [
+    {
+      "item": "Regression suite",
+      "claimed": "Completed",
+      "task": 11,
+      "effortDays": 6,
+      "target": "≥10,000 automated checks; zero P0/P1 regression"
+    },
+    {
+      "item": "Session-expiry testing",
+      "claimed": "Completed",
+      "task": 17,
+      "effortDays": 2,
+      "target": "Automated suite with ≥95% P0/P1 scenario coverage and zero flaky P0 tests"
+    },
+    {
+      "item": "SAST",
+      "claimed": "Completed",
+      "task": 26,
+      "effortDays": 6,
+      "target": "Every PR; zero unresolved Critical/High"
+    },
+    {
+      "item": "Injection testing",
+      "claimed": "Completed",
+      "task": 30,
+      "effortDays": 3,
+      "target": "Automated on PR/daily/pre-release as applicable; zero Critical/High release blockers"
+    },
+    {
+      "item": "XSS testing",
+      "claimed": "Completed",
+      "task": 31,
+      "effortDays": 3,
+      "target": "Automated on PR/daily/pre-release as applicable; zero Critical/High release blockers"
+    },
+    {
+      "item": "Audit logging",
+      "claimed": "Completed",
+      "task": 36,
+      "effortDays": 3,
+      "target": "Automated on PR/daily/pre-release as applicable; zero Critical/High release blockers"
+    },
+    {
+      "item": "DB indexing audit",
+      "claimed": "Completed",
+      "task": 40,
+      "effortDays": 4,
+      "target": "100% critical query patterns reviewed; no redundant/unjustified critical indexes"
+    },
+    {
+      "item": "Slow-query analysis",
+      "claimed": "Completed",
+      "task": 41,
+      "effortDays": 2,
+      "target": "100% queries over threshold captured; critical p95 DB time <100ms where feasible"
+    },
+    {
+      "item": "Query execution plans",
+      "claimed": "Completed",
+      "task": 42,
+      "effortDays": 5,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "Connection-pool tuning",
+      "claimed": "Completed",
+      "task": 44,
+      "effortDays": 2,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "Transaction audit",
+      "claimed": "Completed",
+      "task": 46,
+      "effortDays": 3,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "Data integrity testing",
+      "claimed": "Completed",
+      "task": 48,
+      "effortDays": 4,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "Stress testing",
+      "claimed": "Completed",
+      "task": 54,
+      "effortDays": 8,
+      "target": "≥2× expected production peak until controlled degradation point is known"
+    },
+    {
+      "item": "Archival/retention strategy",
+      "claimed": "In Process",
+      "task": 49,
+      "effortDays": 2,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "CPU profiling",
+      "claimed": "In Process",
+      "task": 59,
+      "effortDays": 6,
+      "target": "Baseline + p50/p95/p99 + regression budget stored as CI artifact"
+    },
+    {
+      "item": "Soak testing",
+      "claimed": "Not Started",
+      "task": null,
+      "effortDays": 8,
+      "target": "12h regular and 24h pre-release; no leak or progressive degradation"
+    },
+    {
+      "item": "Payload optimization",
+      "claimed": "Not Started",
+      "task": null,
+      "effortDays": 8,
+      "target": "Baseline + p50/p95/p99 + regression budget stored as CI artifact"
+    },
+    {
+      "item": "Compression validation",
+      "claimed": "Not Started",
+      "task": null,
+      "effortDays": 8,
+      "target": "Baseline + p50/p95/p99 + regression budget stored as CI artifact"
+    },
+    {
+      "item": "Playwright UI automation",
+      "claimed": "Not Started",
+      "task": 10,
+      "effortDays": 6,
+      "target": "2,500 browser scenarios; 100% P0/P1 UI journeys"
+    },
+    {
+      "item": "N+1 query detection",
+      "claimed": "Not Started",
+      "task": 43,
+      "effortDays": 3,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    },
+    {
+      "item": "Constraint audit",
+      "claimed": "Not Started",
+      "task": 47,
+      "effortDays": 3,
+      "target": "100% critical data paths reviewed; measurable before/after evidence"
+    }
+  ]
+}
