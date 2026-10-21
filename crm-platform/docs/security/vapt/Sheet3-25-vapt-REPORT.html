@@ -33,25 +33,26 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 
 <header>
 <h1>VAPT baseline: scans, attacks and a repeatable runner</h1>
-<p><span class="badge partly">Partly met: baseline done, not yet recurring, 2 High design decisions still open</span> &nbsp; Sheet3 item #25 &middot; P0 &middot; owner Vedant &middot; effort 6</p>
+<p><span class="badge partly">Partly met: most findings fixed, not yet recurring, 3 High items open</span> &nbsp; Sheet3 item #25 &middot; P0 &middot; owner Vedant &middot; effort 6</p>
 <p class="meta">Branch <code>vedant/security/vapt-baseline</code> &middot; run 21 Oct 2026 on a local instance only (API :3922, throwaway database, Redis db 11) &middot; nothing else was scanned.</p>
 <blockquote>Target, word for word: "Automated recurring VAPT + pre-release deep scan; zero unresolved Critical/High release blockers"</blockquote>
 </header>
 
 <h2>1. Verdict</h2>
 <div class="box">
-<b>Met.</b> The VAPT is automated: <code>bash tools/security/vapt.sh</code> boots a local API on a throwaway database, runs the repo audits, an optional OWASP ZAP API scan and our own DAST walker, then 18 live attack tests, and exits non-zero on a Critical/High. Run piece by piece, it found <b>no exploitable Critical or High</b>. It found and fixed one Low (the framework name was advertised).<br>
-<b>Not met.</b> (a) <b>"Recurring" is not achieved</b>: GitHub Actions cannot start on this account, so <code>.github/workflows/vapt.yml</code> is manual-trigger only and its <code>schedule:</code> is commented out. (b) <b>"Zero unresolved Critical/High" is not literally true</b>: two High items from the repo's own audits are open design decisions (TI-001, AZ-api-key-scopes) and two are owner-accepted risks (MFA switches). None is a small fix, none has a known exploit path (section 6). (c) <b>The ZAP run did not finish</b>: it imported all 1880 URLs but hit my 15 minute cap with no report, so ZAP contributed no findings. The DAST evidence is from our own walker. (d) The pre-release deep scan against staging was not done (section 8). (e) The runner is now <code>script-testing/vapt/run.sh</code> (the old <code>tools/security/vapt.sh</code> forwards to it); its <code>--quick</code> profile was run end to end (section 11). Its full profile, with ZAP, was not.
+<b>Fixed in the fix round.</b> AZ-mass-assignment and AZ-api-key-scopes (authz Highs, resolved by a reviewed ratchet and owner-cap tests), the login per-IP ceiling bug found by DAST (Medium), 4 SAST false-positive highs (suppressed with reasons), and <code>X-Powered-By</code>. <code>bash script-testing/vapt/run.sh --quick</code> passes end to end (19 live tests, 188 s).<br>
+<b>Still open.</b> TI-001 (RLS bypass setting, needs ADR 0028 and a separate DB role), the two owner-accepted MFA switches (must be ON in production), 3 critical + 2 high dev-dependency advisories (vitest, tinypool, vite, launch-editor; fix is a major upgrade), plus the Medium items in section 6.<br>
+<b>Not met.</b> (a) <b>"Recurring" is not achieved</b>: GitHub Actions cannot start on this account, so <code>.github/workflows/vapt.yml</code> is manual-only with <code>schedule:</code> commented out. (b) <b>"Zero unresolved Critical/High" is not literally true</b>: the open items above remain; none has a known exploit path. (c) <b>The full ZAP profile did not complete</b> (earlier run timed out with no report) and was not re-run. (d) The pre-release deep scan against staging was not done (section 8).
 </div>
 
 <h2>2. In 60 seconds</h2>
 <div class="tiles">
 <div class="tile"><b>0</b><span>exploitable Critical or High found by the live attack tests and the DAST walker</span></div>
-<div class="tile"><b>2009</b><span>API operations walked by the DAST script (all operations in the live OpenAPI document)</span></div>
-<div class="tile"><b>18</b><span>new live attack tests, all passing; 17 passed first time, 1 failed first and was fixed</span></div>
-<div class="tile"><b>4</b><span>High items still on the books: 2 open decisions, 2 owner-accepted</span></div>
-<div class="tile"><b>1</b><span>fix: <code>X-Powered-By: Express</code> removed (Low)</span></div>
-<div class="tile"><b>0 of 1</b><span>ZAP API scans completed (ran 15 min, no report; see section 5)</span></div>
+<div class="tile"><b>2009</b><span>API operations walked by the DAST script</span></div>
+<div class="tile"><b>19</b><span>live attack tests, all passing; quick runner PASS in 188 s</span></div>
+<div class="tile"><b>7</b><span>items fixed or resolved: 2 authz Highs, 1 Medium bug, 4 SAST false-positive highs (suppressed), X-Powered-By</span></div>
+<div class="tile"><b>3</b><span>High items still open: TI-001 and 2 owner-accepted MFA switches (plus 3 critical / 2 high dev-dependency advisories)</span></div>
+<div class="tile"><b>0 of 1</b><span>full ZAP API scans completed</span></div>
 </div>
 
 <h2>3. What this is, in plain words</h2>
@@ -77,11 +78,11 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <h2>5. Results at a glance</h2>
 <figure>
 <svg viewBox="0 0 640 190" role="img" aria-label="Findings by severity">
-<text x="8" y="22" class="m">Findings by severity (after triage)</text>
-<text x="8" y="52">Critical</text><rect x="90" y="38" width="2" height="18" fill="var(--bad)"/><text x="100" y="52">0</text>
-<text x="8" y="82">High</text><rect x="90" y="68" width="160" height="18" fill="var(--bad)"/><text x="258" y="82">4  (2 open decisions, 2 owner-accepted)</text>
-<text x="8" y="112">Medium</text><rect x="90" y="98" width="160" height="18" fill="var(--warn)"/><text x="258" y="112">4  (all open)</text>
-<text x="8" y="142">Low</text><rect x="90" y="128" width="160" height="18" fill="var(--a)"/><text x="258" y="142">4  (1 fixed, 3 open)</text>
+<text x="8" y="22" class="m">Findings by severity (after the fix round)</text>
+<text x="8" y="52">Critical</text><rect x="90" y="38" width="2" height="18" fill="var(--bad)"/><text x="100" y="52">0 exploitable (3 dev-dependency advisories open)</text>
+<text x="8" y="82">High</text><rect x="90" y="68" width="120" height="18" fill="var(--bad)"/><text x="218" y="82">3 open (TI-001, 2 MFA accepted); 2 more dev-dependency advisories</text>
+<text x="8" y="112">Medium</text><rect x="90" y="98" width="120" height="18" fill="var(--warn)"/><text x="218" y="112">3 open, 1 fixed (login IP ceiling)</text>
+<text x="8" y="142">Low</text><rect x="90" y="128" width="120" height="18" fill="var(--a)"/><text x="218" y="142">4 (1 fixed, 3 open)</text>
 <text x="8" y="172">Info</text><rect x="90" y="158" width="120" height="18" fill="var(--c)"/><text x="218" y="172">3</text>
 </svg>
 <figcaption>Raw tool output was larger: SAST said 3 critical + 4 high, tenancy 2 failed scenarios, DAST 1 High. After reading the code none of those is an exploitable Critical/High (section 6).</figcaption>
