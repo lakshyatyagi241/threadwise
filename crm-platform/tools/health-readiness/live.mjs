@@ -70,7 +70,7 @@ try {
   const lat = burst.map((x) => x.ms).sort((a, b) => a - b);
   check('burst of 200 concurrent /ready all 200', burst.every((x) => x.status === 200), `p50 ${lat[100]} ms, p95 ${lat[189]} ms, total ${Date.now() - t0} ms`);
   const newConns = pg.accepted - before;
-  check('burst opens a bounded number of new database connections (<= 20)', newConns <= 20, `${newConns} new connections for 200 requests (no response cache: one SELECT 1 per replica+primary per request)`);
+  check('burst opens a bounded number of new database connections (<= 5, probes coalesce)', newConns <= 5, `${newConns} new connections for 200 requests (concurrent probes share one in-flight check)`);
 
   // --- per dependency fault matrix ---
   for (const [dep, proxy, key] of [['postgres', pg, 'primary'], ['redis', rd, 'redis']]) {

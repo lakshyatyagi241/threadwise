@@ -47,6 +47,8 @@ async function main(): Promise<void> {
     lazyConnect: true,
   });
   redis.on('error', () => undefined);
+  // A Redis that accepts the connection but never answers would hang connect(); fail on our own before docker's timeout kills us.
+  setTimeout(() => process.exit(1), 3000).unref();
   try {
     await redis.connect();
     const beating = await workerIsBeating(redis, hostname(), beatSeconds * ALIVE_FOR_BEATS * 1000);
