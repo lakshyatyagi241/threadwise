@@ -23,6 +23,10 @@ export const TIMED_REMINDER_KINDS = ['before', 'after'] as const;
 
 export type ReminderStepKind = BookingReminderStepKind;
 
+/** What Meta decided about a WhatsApp template (`draft` = not sent to Meta yet). */
+export const WA_TEMPLATE_STATUSES = ['draft', 'pending', 'approved', 'rejected'] as const;
+export type WaTemplateStatus = (typeof WA_TEMPLATE_STATUSES)[number];
+
 /** SMS was removed from appointment reminders: WhatsApp and email only (voice is reserved and cannot be chosen). */
 export const REMINDER_CHANNELS = ['whatsapp', 'email'] as const;
 export type ReminderChannel = (typeof REMINDER_CHANNELS)[number];
@@ -75,6 +79,13 @@ export const REMINDER_REASON_CODES = [
   'provider_error',
   'interrupted',
   'internal_error',
+  'already_confirmed',
+  'no_join_link',
+  'already_rebooked',
+  'visit_not_completed',
+  'plan_feature_locked',
+  'not_delivered',
+  'send_failed',
 ] as const;
 export type ReminderReasonCode = (typeof REMINDER_REASON_CODES)[number];
 
@@ -124,6 +135,9 @@ export interface ReminderDraft {
   undeliveredFallbackMinutes: string;
   /** An email message of the appointment library, or ''. */
   libraryTemplateId: string;
+  /** Read live from the chosen WhatsApp template by the server (never sent back); null = no template. */
+  waTemplateStatus: WaTemplateStatus | null;
+  waTemplateName: string | null;
   /** `sms_removed` when the server moved this step off SMS; the owner is asked to choose WhatsApp or email. */
   notice: 'sms_removed' | null;
   /** Kept as the server sent them and sent back unchanged. */
@@ -152,6 +166,8 @@ export const newReminder = (
   skipIfConfirmed: false,
   undeliveredFallbackMinutes: '',
   libraryTemplateId: '',
+  waTemplateStatus: null,
+  waTemplateName: null,
   notice: null,
   serviceLabel: null,
   packKey: null,
@@ -390,6 +406,8 @@ export function remindersFromType(
     body: string | null;
     waTemplateId: string | null;
     libraryTemplateId?: string | null | undefined;
+    waTemplateStatus?: WaTemplateStatus | null | undefined;
+    waTemplateName?: string | null | undefined;
     buttonsEnabled?: boolean | undefined;
     skipIfConfirmed?: boolean | undefined;
     undeliveredFallbackMinutes?: number | null | undefined;
@@ -416,6 +434,8 @@ export function remindersFromType(
     undeliveredFallbackMinutes:
       r.undeliveredFallbackMinutes == null ? '' : String(r.undeliveredFallbackMinutes),
     libraryTemplateId: r.libraryTemplateId ?? '',
+    waTemplateStatus: r.waTemplateStatus ?? null,
+    waTemplateName: r.waTemplateName ?? null,
     notice: r.notice ?? null,
     serviceLabel: r.serviceLabel ?? null,
     packKey: r.packKey ?? null,
