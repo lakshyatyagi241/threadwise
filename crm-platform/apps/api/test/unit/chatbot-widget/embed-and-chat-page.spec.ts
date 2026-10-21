@@ -131,14 +131,15 @@ describe('loader script (TW-WGT-008)', () => {
     expect(appended).toBe(1);
   });
 
-  it('TW-WGT-004 #4: without a launcher image the built-in chat glyph is used; with one the image is 36px round', () => {
+  it('TW-WGT-004 #4: without a launcher image the built-in chat glyph is used; with one the picture fills the button, round and with no ring', () => {
     expect(buildEmbedScript(widget, chat)).toContain('svg viewBox');
     const withImg = buildEmbedScript(
       { ...widget, buttonImageUrl: 'https://cdn.example/logo.png' },
       chat,
     );
     expect(withImg).toContain('https://cdn.example/logo.png');
-    expect(withImg).toContain('width:36px;height:36px;border-radius:50%');
+    expect(withImg).toContain('width:100%;height:100%;border-radius:50%;object-fit:cover');
+    expect(withImg).toContain("btn.style.background = 'transparent'");
     expect(withImg).not.toContain('svg viewBox');
   });
 
@@ -326,9 +327,12 @@ describe('the closed launcher of a flow bot: callout, animation and unread dot',
       }),
     );
     expect(off.created.map((e) => e.textContent)).not.toContain('Hi');
-    expect(off.created.map((e) => e.textContent)).toContain('1');
-    const noBadge = run(flow({ badge: false }));
-    expect(noBadge.created.map((e) => e.textContent)).not.toContain('1');
+    // The unread dot is a red dot with no number in it.
+    const dot = (created: Array<{ style: unknown }>) =>
+      created.some((e) => String((e.style as { cssText: string }).cssText).includes('#ff4d5e'));
+    expect(dot(off.created)).toBe(true);
+    expect(off.created.map((e) => e.textContent)).not.toContain('1');
+    expect(dot(run(flow({ badge: false })).created)).toBe(false);
   });
 
   it('adds the bounce or the ripple to the launcher button, and nothing for none', () => {
