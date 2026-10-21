@@ -60,7 +60,6 @@ import {
   type StepKind,
 } from '../../lib/simple-model';
 import { applyImport, importToSimple } from '../../lib/simple-import';
-import { marksToHtml } from '../../lib/rich-text';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
 import { TestPanel } from '../simulator/test-panel';
@@ -73,7 +72,7 @@ import {
   type BuilderTab,
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
-import { StepPreview } from './step-preview';
+import { StepPreview, StepText } from './step-preview';
 import { TemplatePreview } from '../inspector/forms-core/previews';
 import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
@@ -1713,16 +1712,8 @@ function StepCard(p: {
             p.ctx.templates.some((tp) => tp.name === String(s.data.tpl ?? '')) ? (
               // A closed template step still shows the template as the customer gets it, not just its name.
               <TemplatePreview d={s.data} templates={p.ctx.templates} />
-            ) : text.trim() ? (
-              // The text as the message box shows it: the marks as bold, italic and so on, and every line break kept.
-              <p
-                className="line-clamp-4 break-words text-[13px] text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-[12px]"
-                dangerouslySetInnerHTML={{ __html: marksToHtml(text.trimEnd()) }}
-              />
             ) : (
-              <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
-                {bodyText || t('empty')}
-              </p>
+              <StepText text={text} fallback={bodyText || t('empty')} />
             )}
             {exits.length > 0 ? (
               <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">

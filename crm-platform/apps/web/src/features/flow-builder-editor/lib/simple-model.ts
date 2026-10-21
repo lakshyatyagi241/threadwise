@@ -1134,36 +1134,35 @@ export function stepText(s: SimpleStep): string {
 export function stepSummary(s: SimpleStep, t: Translate): string {
   const d = s.data;
   const raw =
-    s.type === 'message' || s.type === 'ask' || s.type === 'buttons' || s.type === 'list'
-      ? stepText(s)
-      : s.type === 'media'
-        ? str(d.caption) || str(d.url)
-        : s.type === 'location'
-          ? str(d.title) || str(d.address) || coordsSummary(d)
-          : s.type === 'template'
-            ? str(d.tpl)
-            : s.type === 'condition'
-              ? conditionSummary(d)
-              : s.type === 'carousel'
-                ? arr(d.cards)
-                    .map((c) => str((c as Record<string, unknown>).title))
-                    .filter(Boolean)
-                    .join(' · ')
-                : s.type === 'cta'
-                  ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
-                  : s.type === 'delay'
-                    ? delaySummary(t, d)
-                    : s.type === 'assign'
-                      ? str(d.message)
-                      : s.type === 'api_library'
-                        ? str(d.apiName)
-                        : s.type === 'webhook'
-                          ? str(d.url)
-                          : s.type === 'code'
-                            ? str(d.save)
-                            : s.type === 'ai'
-                              ? str(d.prompt)
-                              : '';
+    stepText(s) ||
+    (s.type === 'media'
+      ? str(d.caption) || str(d.url)
+      : s.type === 'location'
+        ? str(d.title) || str(d.address) || coordsSummary(d)
+        : s.type === 'template'
+          ? str(d.tpl)
+          : s.type === 'condition'
+            ? conditionSummary(d)
+            : s.type === 'carousel'
+              ? arr(d.cards)
+                  .map((c) => str((c as Record<string, unknown>).title))
+                  .filter(Boolean)
+                  .join(' · ')
+              : s.type === 'cta'
+                ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                : s.type === 'delay'
+                  ? delaySummary(t, d)
+                  : s.type === 'assign'
+                    ? str(d.message)
+                    : s.type === 'api_library'
+                      ? str(d.apiName)
+                      : s.type === 'webhook'
+                        ? str(d.url)
+                        : s.type === 'code'
+                          ? str(d.save)
+                          : s.type === 'ai'
+                            ? str(d.prompt)
+                            : '');
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }

@@ -7,9 +7,14 @@
 const esc = (s: string): string =>
   s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-// A `{{variable}}` is taken whole first, so the underscore in `{{first_name}}` is never read as italic.
+// A `{{variable}}` is taken whole first, so the underscore in `{{first_name}}` is never read as italic. A mark opens and closes only at
+// a word edge, as WhatsApp's does: the underscores in `snake_case_name` are not italic.
 const TOKEN =
-  /(\{\{[^}\n]*\}\})|```([^\n]+?)```|\*(?=\S)([^*\n]*?\S)\*|_(?=\S)([^_\n]*?\S)_|~(?=\S)([^~\n]*?\S)~/g;
+  /(\{\{[^}\n]*\}\})|```([^\n]+?)```|(?<![\p{L}\p{N}])\*(?=\S)([^*\n]*?\S)\*(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])_(?=\S)([^_\n]*?\S)_(?![\p{L}\p{N}])|(?<![\p{L}\p{N}])~(?=\S)([^~\n]*?\S)~(?![\p{L}\p{N}])/gu;
+
+/** The code-span look inside the message box and on the closed step card. */
+export const RICH_TEXT_CLASS =
+  '[&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-[12px]';
 
 function inline(line: string): string {
   let out = '';
