@@ -50,6 +50,7 @@ import {
   duplicateGroup,
   stageIn,
   stepSummary,
+  stepText,
   toGraph,
   toSimple,
   unreachable,
@@ -59,6 +60,7 @@ import {
   type StepKind,
 } from '../../lib/simple-model';
 import { applyImport, importToSimple } from '../../lib/simple-import';
+import { marksToHtml } from '../../lib/rich-text';
 import { msg, useFlb, useMsg, type Msg } from '../../lib/msg';
 import { BuilderFonts } from '../builder-fonts';
 import { TestPanel } from '../simulator/test-panel';
@@ -1603,6 +1605,7 @@ function StepCard(p: {
   const property =
     s.data.saveProperty === true && str(s.data.propertyKey).trim() ? str(s.data.propertyKey) : '';
   const bodyText = stepSummary(s, tf);
+  const text = stepText(s);
   const tools = () => (
     <>
       {p.active ? (
@@ -1710,6 +1713,12 @@ function StepCard(p: {
             p.ctx.templates.some((tp) => tp.name === String(s.data.tpl ?? '')) ? (
               // A closed template step still shows the template as the customer gets it, not just its name.
               <TemplatePreview d={s.data} templates={p.ctx.templates} />
+            ) : text.trim() ? (
+              // The text as the message box shows it: the marks as bold, italic and so on, and every line break kept.
+              <p
+                className="line-clamp-4 break-words text-[13px] text-muted-foreground [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-[12px]"
+                dangerouslySetInnerHTML={{ __html: marksToHtml(text.trimEnd()) }}
+              />
             ) : (
               <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
                 {bodyText || t('empty')}

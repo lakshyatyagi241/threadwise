@@ -133,6 +133,8 @@ export function MessageField({
     if (text !== value) onChange(text);
   };
   const run = (command: string, arg?: string) => {
+    // A shortcut arrives while the words are still selected: take that selection, not the one the last mouse or key left behind.
+    remember();
     if (!focusBox()) return;
     document.execCommand(command, false, arg);
     sync();
@@ -256,6 +258,15 @@ export function MessageField({
                 e.preventDefault();
                 document.execCommand('insertLineBreak');
                 sync();
+              } else if (
+                (e.ctrlKey || e.metaKey) &&
+                !e.altKey &&
+                !e.shiftKey &&
+                /^[bi]$/i.test(e.key)
+              ) {
+                // Ctrl/Cmd+B and Ctrl/Cmd+I are the toolbar's bold and italic, run here so they do not depend on the browser's own command.
+                e.preventDefault();
+                format(e.key.toLowerCase() === 'b' ? 'bold' : 'italic');
               } else if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'x') {
                 e.preventDefault();
                 run('strikeThrough');
