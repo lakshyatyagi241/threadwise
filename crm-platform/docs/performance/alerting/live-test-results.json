@@ -1,0 +1,367 @@
+{
+  "forSeconds": 20,
+  "scrapeSeconds": 5,
+  "ports": {
+    "api": 3921,
+    "apiM": 59521,
+    "workerM": 59525,
+    "probeM": 59526,
+    "prom": 59191,
+    "am": 59193,
+    "hook": 59194,
+    "redis": 59422,
+    "pg": 59424
+  },
+  "results": [
+    {
+      "id": "baseline",
+      "desc": "healthy stack, 60 s",
+      "expectedAlert": null,
+      "fired": false,
+      "firingBefore": [],
+      "note": "nothing fired"
+    },
+    {
+      "id": "worker-kill",
+      "desc": "SIGKILL the worker",
+      "expectedAlert": "RuntimeMetricsTargetDown",
+      "fired": true,
+      "secondsToPending": 7.5,
+      "secondsToFiring": 27.5,
+      "inductionTookSeconds": 0.5,
+      "firingBefore": [],
+      "alsoFired": []
+    },
+    {
+      "id": "probe-dead-port",
+      "desc": "probe aimed at a dead port",
+      "expectedAlert": "ApiProbeFailing",
+      "fired": true,
+      "secondsToPending": 5,
+      "secondsToFiring": 25,
+      "inductionTookSeconds": 0.5,
+      "firingBefore": [],
+      "alsoFired": []
+    },
+    {
+      "id": "api-stop",
+      "desc": "SIGKILL the API",
+      "expectedAlert": "RuntimeMetricsTargetDown",
+      "fired": true,
+      "secondsToPending": 5,
+      "secondsToFiring": 25,
+      "inductionTookSeconds": 0.5,
+      "firingBefore": [],
+      "alsoFired": [
+        "CacheMetricsMissing{crm-api}"
+      ]
+    },
+    {
+      "id": "redis-full",
+      "desc": "fill the private Redis to maxmemory (8 MB, noeviction)",
+      "expectedAlert": "RedisMemoryNearMax",
+      "fired": true,
+      "secondsToPending": 4,
+      "secondsToFiring": 24,
+      "inductionTookSeconds": 3.2,
+      "firingBefore": [],
+      "alsoFired": []
+    },
+    {
+      "id": "redis-stop",
+      "desc": "stop the private Redis container",
+      "expectedAlert": "RedisDown",
+      "fired": true,
+      "secondsToPending": 14.8,
+      "secondsToFiring": 34.8,
+      "inductionTookSeconds": 0.3,
+      "firingBefore": [],
+      "alsoFired": [
+        "ApiProbeFailing{crm-probe}"
+      ]
+    },
+    {
+      "id": "outbox-dead",
+      "desc": "insert a dead outbox row",
+      "expectedAlert": "OutboxDeadRows",
+      "fired": true,
+      "secondsToPending": 6.3,
+      "secondsToFiring": 26.3,
+      "inductionTookSeconds": 0.2,
+      "firingBefore": [
+        "ApiCallerLatencyHigh"
+      ],
+      "alsoFired": [
+        "ApiCallerLatencyHigh"
+      ]
+    },
+    {
+      "id": "outbox-stuck",
+      "desc": "due outbox row 15 min old that the drain cannot take",
+      "expectedAlert": "OutboxNotDraining",
+      "fired": true,
+      "secondsToPending": 5.8,
+      "secondsToFiring": 25.8,
+      "inductionTookSeconds": 0,
+      "firingBefore": [
+        "ApiCallerLatencyHigh"
+      ],
+      "alsoFired": [
+        "ApiCallerLatencyHigh"
+      ]
+    },
+    {
+      "id": "dead-letter-old",
+      "desc": "open failed operation 2 h old",
+      "expectedAlert": "DeadLetterOpenTooLong",
+      "fired": true,
+      "secondsToPending": 59.6,
+      "secondsToFiring": 79.6,
+      "inductionTookSeconds": 0.2,
+      "firingBefore": [],
+      "alsoFired": [
+        "EventLoopDelayP95Warning{crm-worker}"
+      ]
+    },
+    {
+      "id": "pg-blackhole",
+      "desc": "Postgres accepts but never answers (TCP blackhole), pool max 2, 8 callers",
+      "expectedAlert": "DbPoolExhausted",
+      "fired": false,
+      "secondsToPending": 5.9,
+      "secondsToFiring": null,
+      "inductionTookSeconds": 0,
+      "firingBefore": [
+        "GcPauseHigh{crm-worker}"
+      ],
+      "alsoFired": [
+        "GcPauseHigh{crm-worker}",
+        "ApiHighErrorRate",
+        "ApiProbeFailing{crm-probe}",
+        "RuntimeMetricsTargetDown{crm-api}",
+        "CacheMetricsMissing{crm-api}",
+        "DbPoolExhausted"
+      ]
+    },
+    {
+      "id": "pg-down",
+      "desc": "Postgres unreachable (proxy refuses), 5 callers hitting /ready",
+      "expectedAlert": "ApiHighErrorRate",
+      "fired": true,
+      "secondsToPending": 8.2,
+      "secondsToFiring": 28.2,
+      "inductionTookSeconds": 0,
+      "firingBefore": [
+        "ApiProbeFailing{crm-probe}"
+      ],
+      "alsoFired": [
+        "ApiProbeFailing{crm-probe}",
+        "EventLoopDelayP95Warning{crm-worker}",
+        "EventLoopDelayP95Warning{crm-api}",
+        "EventLoopDelayP99Warning{crm-worker}",
+        "EventLoopDelayP99Warning{crm-api}",
+        "GcPauseHigh{crm-worker}"
+      ]
+    }
+  ],
+  "tracked": [
+    {
+      "phase": "init",
+      "alert": "CacheMetricsMissing",
+      "labels": {
+        "alertname": "CacheMetricsMissing",
+        "job": "crm-api",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566894550,
+      "firingAt": 1792566914641,
+      "resolvedAt": 1792566929701
+    },
+    {
+      "phase": "init",
+      "alert": "ApiProbeFailing",
+      "labels": {
+        "alertname": "ApiProbeFailing",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398877",
+        "instance": "localhost:59526",
+        "job": "crm-probe",
+        "service": "probe",
+        "severity": "critical",
+        "target": "ready"
+      },
+      "pendingAt": 1792566903617,
+      "firingAt": 1792566923681,
+      "resolvedAt": 1792566932708
+    },
+    {
+      "phase": "init",
+      "alert": "RuntimeMetricsTargetDown",
+      "labels": {
+        "alertname": "RuntimeMetricsTargetDown",
+        "instance": "localhost:59525",
+        "job": "crm-worker",
+        "severity": "critical"
+      },
+      "pendingAt": 1792566903617,
+      "firingAt": null,
+      "resolvedAt": null
+    },
+    {
+      "phase": "init",
+      "alert": "RuntimeMetricsTargetDown",
+      "labels": {
+        "alertname": "RuntimeMetricsTargetDown",
+        "instance": "localhost:59521",
+        "job": "crm-api",
+        "severity": "critical"
+      },
+      "pendingAt": 1792566903617,
+      "firingAt": 1792566923681,
+      "resolvedAt": 1792566928693
+    },
+    {
+      "phase": "pg-down",
+      "alert": "ApiProbeFailing",
+      "labels": {
+        "alertname": "ApiProbeFailing",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398877",
+        "instance": "localhost:59526",
+        "job": "crm-probe",
+        "service": "probe",
+        "severity": "critical",
+        "target": "ready"
+      },
+      "pendingAt": 1792566932708,
+      "firingAt": 1792566932708,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "EventLoopDelayP95Warning",
+      "labels": {
+        "alertname": "EventLoopDelayP95Warning",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398872",
+        "instance": "localhost:59525",
+        "job": "crm-worker",
+        "service": "worker",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": 1792566953744,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "EventLoopDelayP95Warning",
+      "labels": {
+        "alertname": "EventLoopDelayP95Warning",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398848",
+        "instance": "localhost:59521",
+        "job": "crm-api",
+        "service": "api",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": 1792566953744,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "EventLoopDelayP99Warning",
+      "labels": {
+        "alertname": "EventLoopDelayP99Warning",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398872",
+        "instance": "localhost:59525",
+        "job": "crm-worker",
+        "service": "worker",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": 1792566953744,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "EventLoopDelayP99Warning",
+      "labels": {
+        "alertname": "EventLoopDelayP99Warning",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398848",
+        "instance": "localhost:59521",
+        "job": "crm-api",
+        "service": "api",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": 1792566953744,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "EventLoopUtilizationHigh",
+      "labels": {
+        "alertname": "EventLoopUtilizationHigh",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398872",
+        "instance": "localhost:59525",
+        "job": "crm-worker",
+        "service": "worker",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": null,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "GcPauseHigh",
+      "labels": {
+        "alertname": "GcPauseHigh",
+        "exported_instance": "getaweblpubt26-HP-ProBook-440-14-inch-G10-Notebook-PC:398872",
+        "instance": "localhost:59525",
+        "job": "crm-worker",
+        "service": "worker",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566933708,
+      "firingAt": 1792566953744,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "ApiHighErrorRate",
+      "labels": {
+        "alertname": "ApiHighErrorRate",
+        "service": "api",
+        "severity": "critical"
+      },
+      "pendingAt": 1792566940722,
+      "firingAt": 1792566960748,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "RuntimeMetricsTargetDown",
+      "labels": {
+        "alertname": "RuntimeMetricsTargetDown",
+        "instance": "localhost:59521",
+        "job": "crm-api",
+        "severity": "critical"
+      },
+      "pendingAt": 1792566948737,
+      "firingAt": 1792566968757,
+      "resolvedAt": null
+    },
+    {
+      "phase": "pg-down",
+      "alert": "CacheMetricsMissing",
+      "labels": {
+        "alertname": "CacheMetricsMissing",
+        "job": "crm-api",
+        "severity": "warning"
+      },
+      "pendingAt": 1792566949740,
+      "firingAt": 1792566969763,
+      "resolvedAt": null
+    }
+  ],
+  "delivered": []
+}
