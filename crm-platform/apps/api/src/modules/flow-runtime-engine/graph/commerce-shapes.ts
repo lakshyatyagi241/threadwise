@@ -54,6 +54,16 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 const uuidOf = (v: unknown): string =>
   typeof v === 'string' && UUID_RE.test(v.trim()) ? v.trim().toLowerCase() : '';
 
+/** `{ 'body:1': 'Gold' }`: the placeholders the flow fills itself; a blank value means "as the template says". Capped like a template. */
+function overridesOf(v: unknown): Record<string, string> {
+  const out: Record<string, string> = {};
+  for (const [k, raw] of Object.entries(obj(v)).slice(0, 40)) {
+    const val = str(raw).trim().slice(0, 1024);
+    if (/^[a-z]+:\d{1,3}$/.test(k) && val !== '') out[k] = val;
+  }
+  return out;
+}
+
 export function shapeCommerceNode(
   type: string,
   data: Record<string, unknown>,
@@ -69,6 +79,9 @@ export function shapeCommerceNode(
           : {}),
         preview: str(data.preview),
         keepMenuOpen: data.keepMenuOpen !== false,
+        // What the author chose to fill each placeholder with (`header:1`, `body:2`), and a header picture / video / file of their own.
+        variableOverrides: overridesOf(data.tplVars),
+        ...(str(data.tplMedia).trim() ? { headerMediaUrl: str(data.tplMedia).trim() } : {}),
       };
     case 'wa_form':
       return {

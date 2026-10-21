@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulador (pruebas)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat del sitio web",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Correo electrónico",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulador (pruebas)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat del sitio web",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Correo electrónico",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contacto",
         "agent": "Tú",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Volver a la bandeja",
-        "title": "Etiquetas de conversación",
+        "title": "Etiquetas",
         "intro": "Las etiquetas de conversación marcan un hilo (facturación, reembolso, urgente) para que tu equipo pueda ordenar y filtrar la bandeja. Salen de la misma biblioteca de etiquetas que las etiquetas de contacto, que describen a la persona.",
         "newTitle": "Nueva etiqueta",
         "editTitle": "Editar etiqueta",

@@ -858,7 +858,13 @@
             "choose": "Bir şablon seçin…",
             "buttons": "Düğmeler",
             "variables": "Kişi bilgisinden doldurulur",
-            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin."
+            "variablesHint": "Her numara, mesaj gönderilirken burada belirtilen kişi bilgisiyle doldurulur. Bunu şablonda değiştirin.",
+            "fills": "Her numaranın neyle doldurulacağı",
+            "fillsHint": "Bir kişi bilgisi veya akış değişkeni seçin ya da kendi metninizi yazın. Şablondaki değeri kullanmak için boş bırakın.",
+            "fillPick": "Bilgi ekle…",
+            "headerMedia": "Üst bilgi dosyası",
+            "headerMediaHint": "Bu şablonun üst bilgisindeki resim, video veya dosya. Şablonun kendi dosyası yoksa gereklidir.",
+            "headerMediaMissing": "Üst bilgi dosyasını ekleyin: bu şablonda yok ve WhatsApp onsuz göndermez."
           },
           "cta": {
             "buttonText": "Düğme metni",
@@ -913,7 +919,9 @@
           }
         },
         "branchAdd": "“{title}” için adım ekle",
-        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder."
+        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder.",
+        "flowMenu": "{name} seçenekleri",
+        "renameFlow": "Akışı yeniden adlandır"
       },
       "formsCore": {
         "helpers": {
@@ -2502,30 +2510,6 @@
           "label": "Soru",
           "help": "Herhangi bir şey sorun ve yanıtı kaydedin"
         },
-        "askName": {
-          "label": "Ad",
-          "help": "Bir ad isteyin ve doğrulayın"
-        },
-        "askEmail": {
-          "label": "E-posta",
-          "help": "Bir e-posta adresi isteyin ve doğrulayın"
-        },
-        "askPhone": {
-          "label": "Telefon numarası",
-          "help": "Bir telefon numarası isteyin ve doğrulayın"
-        },
-        "askNumber": {
-          "label": "Sayı",
-          "help": "Bir sayı isteyin ve doğrulayın"
-        },
-        "askAlphanumeric": {
-          "label": "Harfler ve sayılar",
-          "help": "Boşluk veya sembol içermeyen bir kimlik veya kod"
-        },
-        "askDate": {
-          "label": "Tarih",
-          "help": "Seçtiğiniz biçimde bir tarih isteyin"
-        },
         "askFile": {
           "label": "Dosya veya görsel",
           "help": "Fotoğraf, belge, video veya ses bekle"
@@ -2617,7 +2601,8 @@
         "writeCode": "Adım {stage}: çalıştırılacak kodu yazın.",
         "webhookUrl": "Adım {stage}: Çağrılacak adresi (URL) ekleyin.",
         "chooseAiAgent": "Adım {stage}: Yanıt verecek yapay zekâ ajanını seçin ya da adımı özel kuruluma geçirin.",
-        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin."
+        "writeAiPrompt": "Adım {stage}: Yapay zekâ için talimatları yazın ya da bir yapay zekâ ajanı seçin.",
+        "templateFile": "Adım {stage}: şablonun üst bilgi dosyasını ekleyin."
       }
     },
     "waboImport": {

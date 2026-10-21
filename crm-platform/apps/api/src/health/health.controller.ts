@@ -14,6 +14,7 @@ import type { Response } from 'express';
 import { Public } from '../common/decorators';
 import { isDependencyOutage } from '../common/errors/dependency-outage';
 import { DatabaseService } from '../infra/db/database.service';
+import { HealthDb } from '../infra/db/side-pools';
 import { REDIS_CLIENT } from '../infra/redis/redis.module';
 import {
   SkipThrottle,
@@ -80,6 +81,7 @@ export class HealthController {
 
   constructor(
     private readonly db: DatabaseService,
+    private readonly healthDb: HealthDb,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
     private readonly workerStatus: WorkerStatusService,
   ) {}
@@ -118,7 +120,8 @@ export class HealthController {
   }
 
   private checkPrimary(): Promise<DependencyCheck> {
-    return check(() => this.db.primary.execute(sql`SELECT 1`));
+    // The reserved pool: the probe must say "down" only when the database is, not when the shared pool is busy with other work.
+    return check(() => this.healthDb.ping());
   }
 
   /**

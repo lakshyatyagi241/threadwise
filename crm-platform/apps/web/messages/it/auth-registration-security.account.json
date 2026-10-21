@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Pipeline di vendita",
             "appointment_booking": "Appuntamenti",
+            "appointment_confirm_buttons": "Pulsanti del promemoria",
+            "appointment_rebook_steps": "Passaggi di riprenotazione",
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Catalogo WhatsApp",
             "inbox_sla": "SLA della casella di posta",

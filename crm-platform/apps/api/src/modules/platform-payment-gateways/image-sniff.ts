@@ -1,5 +1,5 @@
 import { imageProblem } from '../auth/security/image-integrity';
-import { isSafeSvg } from '../chatbot-widget/svg-safe';
+import { isSafeSvg } from '../../common/svg-safe';
 /**
  * The file's real type from its first bytes (the client's claimed type and file name are never trusted). Used for the invoice
  * logo upload (TW-PAYGW-007): png, jpeg, webp and svg, the types Reference's form accepts.

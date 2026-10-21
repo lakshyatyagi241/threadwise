@@ -1,0 +1,44 @@
+name: rate-limit
+# Sheet3 #33. Pull request: the quick run (route audit, tool tests, limiter unit tests, gate on the committed census; no boot).
+# Daily and by hand (pre-release): the full run (real Redis, a booted API, the census of every public route, the probes, the gate).
+# The gate fails the job on any unresolved Critical or High finding.
+on:
+  pull_request:
+    paths:
+      - 'apps/api/src/**/*.controller.ts'
+      - 'apps/api/src/modules/platform-infrastructure/rate-limit/**'
+      - 'apps/api/src/modules/auth/**'
+      - 'apps/api/src/config/trust-proxy.ts'
+      - 'tools/rate-limit/**'
+      - 'docs/security/rate-limiting/**'
+      - 'script-testing/rate-limiting/**'
+      - 'deploy/**'
+      - '.github/workflows/rate-limit.yml'
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'quick or full (pre-release: full)'
+        default: 'full'
+jobs:
+  rate-limit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - run: cp .env.example .env
+      - run: pnpm --filter @crm/tax --filter @crm/contracts --filter @crm/db --filter @crm/observability --filter @crm/api build
+      - run: pnpm infra:up
+        if: github.event_name != 'pull_request' && github.event.inputs.mode != 'quick'
+      - name: Rate-limit test
+        run: |
+          mode="${{ github.event_name == 'pull_request' && 'quick' || github.event.inputs.mode || 'full' }}"
+          if [ "$mode" = quick ]; then bash script-testing/rate-limiting/run.sh --quick; else bash script-testing/rate-limiting/run.sh; fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: rate-limiting, path: qa-results/rate-limiting }

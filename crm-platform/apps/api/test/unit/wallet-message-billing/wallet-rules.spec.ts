@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
+  CSV_DETAIL_CELL,
+  CSV_DETAIL_HEADER,
   csvCell,
   csvSafe,
   decideSettlement,
@@ -334,6 +336,37 @@ describe('statement text (TW-WALLET-021, -022)', () => {
     expect(formatMinor(1250)).toBe('12.50');
     expect(formatMinor(-5)).toBe('-0.05');
     expect(formatMinor(0)).toBe('0.00');
+  });
+
+  it('writes an optional column as its header and its cell, blank when the row has no context', () => {
+    const context = {
+      channel: 'Campaign',
+      campaignName: 'Diwali sale',
+      recipient: '=+14155550100',
+      template: 'offer_v2',
+      country: 'IN',
+      category: 'marketing',
+      engine: 'WhatsApp Cloud',
+    };
+    expect(CSV_DETAIL_HEADER.channel).toBe('Channel');
+    expect(CSV_DETAIL_CELL.channel(context)).toBe('Campaign · Diwali sale');
+    expect(CSV_DETAIL_CELL.channel({ ...context, campaignName: null })).toBe('Campaign');
+    expect(CSV_DETAIL_CELL.recipient(context)).toBe(`'=+14155550100`);
+    expect(CSV_DETAIL_CELL.template(context)).toBe('offer_v2');
+    expect(CSV_DETAIL_CELL.country(context)).toBe('IN');
+    expect(CSV_DETAIL_CELL.category(context)).toBe('marketing');
+    expect(CSV_DETAIL_CELL.engine(context)).toBe('WhatsApp Cloud');
+    expect(CSV_DETAIL_CELL.engine({ ...context, engine: '=cmd' })).toBe("'=cmd");
+    for (const column of [
+      'channel',
+      'recipient',
+      'template',
+      'country',
+      'category',
+      'engine',
+    ] as const) {
+      expect(CSV_DETAIL_CELL[column](null)).toBe('');
+    }
   });
 });
 

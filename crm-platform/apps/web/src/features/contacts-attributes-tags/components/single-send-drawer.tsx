@@ -24,6 +24,7 @@ import {
 } from '../lib/single-send';
 import type { RowView } from '../lib/row-view';
 import { isMaskedPhone } from '../lib/row-actions';
+import { ErrorLine } from './error-line';
 import { MailIcon, PhoneIcon, SmsIcon, WhatsAppIcon } from './icons';
 
 const NS = 'contacts-attributes-tags.singleSend';
@@ -299,6 +300,10 @@ function WhatsAppForm({ row, onClose }: { row: RowView; onClose: () => void }) {
           </Select>
           {templates.data && templates.data.data.length === 0 && (
             <p className="text-xs text-muted-foreground">{t('noTemplates')}</p>
+          )}
+          {/* The list can be refused (no reply right, or the chat is another agent's): say so, instead of an empty list. */}
+          {templates.isError && (
+            <ErrorLine error={templates.error} onRetry={() => void templates.refetch()} />
           )}
         </div>
       )}

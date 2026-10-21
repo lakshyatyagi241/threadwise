@@ -164,12 +164,16 @@
         "in": "入金",
         "out": "出金",
         "balance": "残高",
-        "none": "なし"
+        "none": "なし",
+        "channel": "チャネル",
+        "recipient": "受信者",
+        "template": "テンプレート",
+        "country": "国",
+        "category": "カテゴリ",
+        "engine": "エンジン"
       },
       "context": {
-        "reason": "理由",
-        "to": "宛先",
-        "template": "テンプレート"
+        "reason": "理由"
       },
       "channels": {
         "campaign": "キャンペーン",

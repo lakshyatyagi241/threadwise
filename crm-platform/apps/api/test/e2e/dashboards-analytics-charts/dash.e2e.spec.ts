@@ -584,6 +584,61 @@ describe('analytics (TW-DASH-022..025, 027, 031, 032)', () => {
   });
 });
 
+describe('analytics conversation states: resolved and closed are separate', () => {
+  let t: Tenant;
+  let channelId: number;
+  beforeAll(async () => {
+    t = await api.signup('dconv');
+    await withAnalytics(t);
+    const channel = await h.owner.query(
+      `INSERT INTO channels (org_id, kind, name) VALUES ($1, 'simulator', 'sim') RETURNING id`,
+      [t.orgId],
+    );
+    channelId = Number(channel.rows[0].id);
+    // [status, last message ago, resolved ago, archived]: a null ago leaves the column empty
+    const threads: Array<[string, string | null, string | null, boolean]> = [
+      ['open', '1 day', null, false],
+      // resolved today, but the last message is older: the resolve must still count
+      ['resolved', '60 days', '1 day', false],
+      ['closed', '2 days', '2 days', false],
+      // resolved before the window and quiet since: not in the window
+      ['resolved', '40 days', '40 days', false],
+      // archived chats are left out, as the inbox does
+      ['resolved', '1 day', '1 day', true],
+    ];
+    for (const [status, lastAgo, resolvedAgo, archived] of threads) {
+      await h.owner.query(
+        `INSERT INTO conversations (org_id, channel_id, peer_key, title, status, archived, last_message_at, resolved_at)
+         VALUES ($1, $2, $3, 'chat', $4, $5,
+           CASE WHEN $6::text IS NULL THEN NULL ELSE now() - $6::interval END,
+           CASE WHEN $7::text IS NULL THEN NULL ELSE now() - $7::interval END)`,
+        [
+          t.orgId,
+          channelId,
+          `peer-${Math.random().toString(36).slice(2)}`,
+          status,
+          archived,
+          lastAgo,
+          resolvedAgo,
+        ],
+      );
+    }
+  });
+
+  it('counts open, resolved and closed separately, by activity or resolve in the window', async () => {
+    const res = await api.as(t.admin).get('/v2/analytics/overview?range=30d');
+    expect(res.status, JSON.stringify(res.body)).toBe(200);
+    expect(res.body.conversations).toEqual({
+      total: 3,
+      open: 1,
+      resolved: 1,
+      closed: 1,
+      assigned: 0,
+      unassigned: 3,
+    });
+  });
+});
+
 describe('the workspace zone (TW-DASH-053 / 031)', () => {
   it('days and heatmap hours are cut in the workspace time zone', async () => {
     const t = await api.signup('dtz');

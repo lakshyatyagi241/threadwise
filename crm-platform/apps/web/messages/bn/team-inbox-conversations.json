@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "সিমুলেটর (পরীক্ষা)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "ওয়েবসাইট চ্যাট",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "ইমেল",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "সিমুলেটর (পরীক্ষা)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "ওয়েবসাইট চ্যাট",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "ইমেল",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "কন্টাক্ট",
         "agent": "আপনি",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "ইনবক্সে ফিরে যান",
-        "title": "কথোপকথনের ট্যাগ",
+        "title": "ট্যাগ",
         "intro": "কথোপকথনের ট্যাগ একটি থ্রেডকে চিহ্নিত করে (বিলিং, রিফান্ড, জরুরি), যাতে আপনার টিম ইনবক্স সাজাতে ও ফিল্টার করতে পারে। এগুলো কন্টাক্টের ট্যাগের মতো একই ট্যাগ লাইব্রেরি থেকে আসে, যা ব্যক্তিটিকে বর্ণনা করে।",
         "newTitle": "নতুন ট্যাগ",
         "editTitle": "ট্যাগ সম্পাদনা",

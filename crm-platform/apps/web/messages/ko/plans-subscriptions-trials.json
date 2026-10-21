@@ -60,6 +60,8 @@
       "remove_branding": "브랜딩 제거",
       "sales_pipeline": "영업 파이프라인",
       "appointment_booking": "예약 접수",
+      "appointment_confirm_buttons": "리마인더 버튼 (확인 / 일정 변경 / 취소)",
+      "appointment_rebook_steps": "재예약(리콜) 단계",
       "chatbot_widgets": "챗봇 위젯",
       "wa_storefront": "WhatsApp 카탈로그",
       "inbox_sla": "SLA 정책",

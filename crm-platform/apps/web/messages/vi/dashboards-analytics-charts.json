@@ -320,6 +320,7 @@
         "replyRate": "Tỷ lệ phản hồi",
         "received": "Tin nhắn đã nhận",
         "conversationsOpen": "Cuộc trò chuyện đang mở",
+        "conversationsResolved": "Cuộc trò chuyện đã giải quyết",
         "conversationsClosed": "Cuộc trò chuyện đã đóng",
         "conversationsAssigned": "Đã phân công",
         "conversationsUnassigned": "Chưa phân công",

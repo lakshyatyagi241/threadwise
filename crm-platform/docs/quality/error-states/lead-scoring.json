@@ -1,0 +1,121 @@
+{
+  "feature": "lead-scoring",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-lead-scoring-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/insight-card.tsx",
+        "apps/web/src/features/lead-scoring/components/parts.tsx",
+        "apps/web/src/features/lead-scoring/components/runs-log.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/runs-log.test.tsx",
+          "match": "explains an empty log, a filtered empty log, and a failed load"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-scoring-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/insight-card.tsx",
+        "apps/web/src/features/lead-scoring/components/score-card.tsx",
+        "apps/web/src/features/lead-scoring/components/settings-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/settings-screen.test.tsx",
+          "match": "shows no access without lsc.runs.read"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-scoring-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/parts.tsx",
+        "apps/web/src/features/lead-scoring/components/score-card.tsx",
+        "apps/web/src/features/lead-scoring/components/settings-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-lead-scoring-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/lib/errors.ts",
+        "apps/web/src/features/lead-scoring/platform/logic.ts",
+        "apps/web/src/features/lead-scoring/platform/settings-card.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/platform/lead-scoring-page.test.tsx",
+          "match": "shows server field errors from errors[].path"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-scoring-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/components/settings-screen.tsx",
+        "apps/web/src/features/lead-scoring/lib/errors.ts",
+        "apps/web/src/features/lead-scoring/lib/settings-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/settings-screen.test.tsx",
+          "match": "reloads and tells the person when someone else saved first (409)"
+        }
+      ]
+    },
+    {
+      "id": "ES-lead-scoring-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/lead-scoring/lib/errors.ts",
+        "apps/web/src/features/lead-scoring/lib/runs-model.ts",
+        "apps/web/src/features/lead-scoring/platform/logic.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/lead-scoring/components/score-card.test.tsx",
+          "match": "reports an unreachable server as such"
+        }
+      ]
+    }
+  ]
+}

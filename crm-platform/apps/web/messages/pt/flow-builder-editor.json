@@ -858,7 +858,13 @@
             "choose": "Escolha um template…",
             "buttons": "Botões",
             "variables": "Preenchido com dados do contato",
-            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo."
+            "variablesHint": "Cada número é preenchido ao enviar a mensagem com o dado do contato indicado aqui. Altere isso no modelo.",
+            "fills": "O que preenche cada número",
+            "fillsHint": "Escolha um dado do contato ou uma variável do fluxo, ou escreva seu próprio texto. Deixe vazio para usar o que o modelo diz.",
+            "fillPick": "Inserir um dado…",
+            "headerMedia": "Arquivo do cabeçalho",
+            "headerMediaHint": "A imagem, o vídeo ou o arquivo do cabeçalho deste modelo. Necessário quando o modelo não tem arquivo próprio.",
+            "headerMediaMissing": "Adicione o arquivo do cabeçalho: este modelo não tem nenhum e o WhatsApp não o enviará sem ele."
           },
           "cta": {
             "buttonText": "Texto do botão",
@@ -913,7 +919,9 @@
           }
         },
         "branchAdd": "Adicionar um passo para “{title}”",
-        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência."
+        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência.",
+        "flowMenu": "Opções de {name}",
+        "renameFlow": "Renomear fluxo"
       },
       "formsCore": {
         "helpers": {
@@ -2502,30 +2510,6 @@
           "label": "Pergunta",
           "help": "Pergunte qualquer coisa e salve a resposta"
         },
-        "askName": {
-          "label": "Nome",
-          "help": "Pedir um nome e validá-lo"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Pedir um endereço de e-mail e validá-lo"
-        },
-        "askPhone": {
-          "label": "Número de telefone",
-          "help": "Pedir um número de telefone e validá-lo"
-        },
-        "askNumber": {
-          "label": "Número",
-          "help": "Pedir um número e validá-lo"
-        },
-        "askAlphanumeric": {
-          "label": "Letras e números",
-          "help": "Um ID ou código, sem espaços nem símbolos"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Pedir uma data no formato escolhido"
-        },
         "askFile": {
           "label": "Arquivo ou imagem",
           "help": "Aguardar uma foto, documento, vídeo ou áudio"
@@ -2617,7 +2601,8 @@
         "writeCode": "Passo {stage}: escreva o código a executar.",
         "webhookUrl": "Etapa {stage}: adicione o endereço (URL) a chamar.",
         "chooseAiAgent": "Passo {stage}: escolha o agente de IA que responde ou mude o passo para uma configuração personalizada.",
-        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA."
+        "writeAiPrompt": "Passo {stage}: escreva as instruções para a IA ou escolha um agente de IA.",
+        "templateFile": "Etapa {stage}: adicione o arquivo do cabeçalho do modelo."
       }
     },
     "waboImport": {

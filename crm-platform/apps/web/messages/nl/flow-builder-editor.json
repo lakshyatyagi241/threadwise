@@ -1205,7 +1205,13 @@
             "choose": "Kies een sjabloon…",
             "buttons": "Knoppen",
             "variables": "Ingevuld vanuit het contact",
-            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon.",
+            "fills": "Waarmee elk nummer wordt gevuld",
+            "fillsHint": "Kies een contactgegeven of een flowvariabele, of typ je eigen tekst. Laat leeg om te gebruiken wat de sjabloon zegt.",
+            "fillPick": "Gegeven invoegen…",
+            "headerMedia": "Koptekstbestand",
+            "headerMediaHint": "De afbeelding, video of het bestand in de koptekst van deze sjabloon. Nodig als de sjabloon geen eigen bestand heeft.",
+            "headerMediaMissing": "Voeg het koptekstbestand toe: deze sjabloon heeft er geen en WhatsApp verstuurt hem niet zonder."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -1260,7 +1266,9 @@
           }
         },
         "branchAdd": "Stap toevoegen voor “{title}”",
-        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst."
+        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst.",
+        "flowMenu": "Opties voor {name}",
+        "renameFlow": "Flow hernoemen"
       },
       "formsCore": {
         "helpers": {
@@ -2360,30 +2368,6 @@
           "label": "Vraag",
           "help": "Iets vragen en het antwoord opslaan"
         },
-        "askName": {
-          "label": "Naam",
-          "help": "Naar een naam vragen en die controleren"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Naar een e-mailadres vragen en dat controleren"
-        },
-        "askPhone": {
-          "label": "Telefoonnummer",
-          "help": "Naar een telefoonnummer vragen en dat controleren"
-        },
-        "askNumber": {
-          "label": "Getal",
-          "help": "Naar een getal vragen en dat controleren"
-        },
-        "askAlphanumeric": {
-          "label": "Letters en cijfers",
-          "help": "Een ID of code, zonder spaties of symbolen"
-        },
-        "askDate": {
-          "label": "Datum",
-          "help": "Vraag om een datum in het formaat dat je kiest"
-        },
         "askFile": {
           "label": "Bestand of afbeelding",
           "help": "Wacht op een foto, document, video of audio"
@@ -2475,7 +2459,8 @@
         "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
         "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
         "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
-        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent."
+        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent.",
+        "templateFile": "Stap {stage}: voeg het koptekstbestand van de sjabloon toe."
       }
     },
     "templates": {

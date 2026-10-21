@@ -144,6 +144,7 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
   const tf = useFlb();
   const m = useMsg();
   const tl = useTranslations('flb.list.state');
+  const tk = useTranslations('flb.list.create');
   const sty = STATE_STYLE[flow.state];
   const cat = categoryStyle(flow.category);
   const hasSubs =
@@ -224,7 +225,27 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
             <span className={cn('h-1.5 w-1.5 rounded-full', sty.dot)} />
             {tl(flow.state)}
           </span>
-          {flow.flowType === 'chat' ? (
+          {flow.flowType === 'chat' && flow.builder === 'advanced' ? (
+            <span
+              data-testid="flow-card-automation"
+              title={tk('messaging')}
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand text-brand-foreground"
+            >
+              {/* A messaging flow built on the canvas: connected steps. */}
+              <svg
+                viewBox="0 0 16 16"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2.5 2.5h3.5v3.5H2.5zM10 2.5h3.5v3.5H10zM6.2 10h3.6v3.5H6.2zM4.2 6v1.5a1 1 0 0 0 1 1h2.8M11.8 6v1.5a1 1 0 0 1-1 1H8v1.5" />
+              </svg>
+            </span>
+          ) : flow.flowType === 'chat' ? (
             <span
               title={flowTypeLabel(tf, 'chat')}
               className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-white"

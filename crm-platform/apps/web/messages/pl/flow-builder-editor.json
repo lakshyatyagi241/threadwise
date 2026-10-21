@@ -858,7 +858,13 @@
             "choose": "Wybierz szablon…",
             "buttons": "Przyciski",
             "variables": "Uzupełniane danymi kontaktu",
-            "variablesHint": "Każdy numer jest uzupełniany podczas wysyłania wiadomości danymi kontaktu wskazanymi tutaj. Zmienisz to w szablonie."
+            "variablesHint": "Każdy numer jest uzupełniany podczas wysyłania wiadomości danymi kontaktu wskazanymi tutaj. Zmienisz to w szablonie.",
+            "fills": "Czym jest wypełniany każdy numer",
+            "fillsHint": "Wybierz dane kontaktu lub zmienną przepływu albo wpisz własny tekst. Zostaw puste, aby użyć tego, co mówi szablon.",
+            "fillPick": "Wstaw dane…",
+            "headerMedia": "Plik nagłówka",
+            "headerMediaHint": "Obraz, wideo lub plik w nagłówku tego szablonu. Wymagany, gdy szablon nie ma własnego pliku.",
+            "headerMediaMissing": "Dodaj plik nagłówka: ten szablon go nie ma, a WhatsApp nie wyśle go bez niego."
           },
           "cta": {
             "buttonText": "Tekst przycisku",
@@ -913,7 +919,9 @@
           }
         },
         "branchAdd": "Dodaj krok dla „{title}”",
-        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania."
+        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania.",
+        "flowMenu": "Opcje: {name}",
+        "renameFlow": "Zmień nazwę przepływu"
       },
       "formsCore": {
         "helpers": {
@@ -2502,30 +2510,6 @@
           "label": "Pytanie",
           "help": "Zadaj dowolne pytanie i zapisz odpowiedź"
         },
-        "askName": {
-          "label": "Imię i nazwisko",
-          "help": "Poproś o imię i nazwisko i sprawdź je"
-        },
-        "askEmail": {
-          "label": "E-mail",
-          "help": "Poproś o adres e-mail i sprawdź go"
-        },
-        "askPhone": {
-          "label": "Numer telefonu",
-          "help": "Poproś o numer telefonu i sprawdź go"
-        },
-        "askNumber": {
-          "label": "Liczba",
-          "help": "Poproś o liczbę i sprawdź ją"
-        },
-        "askAlphanumeric": {
-          "label": "Litery i cyfry",
-          "help": "Identyfikator lub kod, bez spacji i symboli"
-        },
-        "askDate": {
-          "label": "Data",
-          "help": "Poproś o datę w wybranym formacie"
-        },
         "askFile": {
           "label": "Plik lub obraz",
           "help": "Czekaj na zdjęcie, dokument, wideo lub audio"
@@ -2617,7 +2601,8 @@
         "writeCode": "Krok {stage}: napisz kod do uruchomienia.",
         "webhookUrl": "Krok {stage}: dodaj adres (URL) do wywołania.",
         "chooseAiAgent": "Krok {stage}: wybierz agenta AI, który odpowiada, albo przełącz krok na ustawienia własne.",
-        "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI."
+        "writeAiPrompt": "Krok {stage}: napisz instrukcje dla AI albo wybierz agenta AI.",
+        "templateFile": "Krok {stage}: dodaj plik nagłówka szablonu."
       }
     },
     "waboImport": {

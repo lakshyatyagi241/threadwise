@@ -32,7 +32,7 @@ describe('routing rule actions as stored', () => {
 
   it('assign, mark_spam, flow and note round-trip together, with the round robin cursor on the assign only', () => {
     const stored = encodeActions({
-      assign: { strategy: 'round_robin', userIds: [U1], teamIds: [] },
+      assign: { strategy: 'round_robin', userIds: [U1], teamIds: [], everyone: false },
       markSpam: true,
       priority: null,
       addTags: [],
@@ -129,7 +129,7 @@ describe('priority and tags as stored', () => {
 describe('escalation as stored and validated', () => {
   it('the escalation round-trips through the stored actions', () => {
     const stored = encodeActions({
-      assign: { strategy: 'specific', userIds: [U1], teamIds: [] },
+      assign: { strategy: 'specific', userIds: [U1], teamIds: [], everyone: false },
       markSpam: false,
       priority: null,
       addTags: [],

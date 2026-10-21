@@ -161,15 +161,19 @@
         "date": "Date",
         "description": "Description",
         "type": "Type",
+        "channel": "Channel",
+        "recipient": "Recipient",
+        "template": "Template",
+        "country": "Country",
+        "category": "Category",
+        "engine": "Engine",
         "in": "Money in",
         "out": "Money out",
         "balance": "Balance",
         "none": "None"
       },
       "context": {
-        "reason": "Reason",
-        "to": "To",
-        "template": "Template"
+        "reason": "Reason"
       },
       "channels": {
         "campaign": "Campaign",

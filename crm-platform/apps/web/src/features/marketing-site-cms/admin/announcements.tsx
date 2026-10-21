@@ -68,15 +68,12 @@ export function Announcements() {
   });
   const rows = useMemo(() => list.data?.pages.flatMap((p) => p.data) ?? [], [list.data]);
   const summary = list.data?.pages[0]?.summary;
-  const rel = useMemo(
-    () => new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }),
-    [locale, timeZone],
-  );
+  const rel = useMemo(() => new Intl.RelativeTimeFormat(locale, { numeric: 'auto' }), [locale]);
   const day = useMemo(
     () => new Intl.DateTimeFormat(locale, { timeZone, dateStyle: 'medium' }),
     [locale, timeZone],
   );
-  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale, timeZone]);
+  const nf = useMemo(() => new Intl.NumberFormat(locale), [locale]);
 
   const toggle = useMutation({
     mutationFn: (a: Announcement) =>

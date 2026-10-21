@@ -1,18 +1,77 @@
 """Helpers for the security-review gate: which changed files need a security review, and whether a review stamp
-covers that exact state. Reuses the git helpers of the parity scripts. Standard library only (the Stop hook must
-start in milliseconds). State lives in <git-dir>/threadwise-security/ (per clone/worktree, never committed)."""
+covers that exact state. Standard library only (the Stop hook must start in milliseconds). State lives in
+<git-dir>/threadwise-security/ (per clone/worktree, never committed)."""
 import hashlib
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 
 sys.dont_write_bytecode = True
 
 HERE = os.path.dirname(os.path.realpath(__file__))
-sys.path.insert(0, os.path.join(HERE, "..", "..", "threadwise-playwright-parity", "scripts"))
-import parity_lib as P  # noqa: E402
+REPO = os.path.realpath(os.path.join(HERE, "..", "..", "..", ".."))
+
+
+def git(*args):
+    try:
+        out = subprocess.run(["git", "-C", REPO, *args], capture_output=True, text=True, timeout=20)
+    except Exception:
+        return ""
+    return out.stdout if out.returncode == 0 else ""
+
+
+def git_dir():
+    d = git("rev-parse", "--git-dir").strip()
+    if not d:
+        return None
+    return d if os.path.isabs(d) else os.path.join(REPO, d)
+
+
+def base_ref(explicit=None):
+    if explicit:
+        return explicit
+    for ref in ("origin/main", "main"):
+        if git("rev-parse", "--verify", "-q", ref).strip():
+            return ref
+    return None
+
+
+def changed_files(base=None):
+    """(path -> state) for everything differing from base: committed on the branch, staged/unstaged, untracked."""
+    base = base_ref(base)
+    out = {}
+    if base:
+        for line in git("diff", "--relative", "--name-status", f"{base}...HEAD").splitlines():
+            parts = line.split("\t")
+            if len(parts) >= 2:
+                out[parts[-1]] = "deleted" if parts[0].startswith("D") else "committed"
+    for line in git("diff", "--relative", "--name-status", "HEAD").splitlines():
+        parts = line.split("\t")
+        if len(parts) >= 2:
+            out[parts[-1]] = "deleted" if parts[0].startswith("D") else "modified"
+    for p in git("ls-files", "-o", "--exclude-standard").splitlines():
+        if p:
+            out[p] = "untracked"
+    return out
+
+
+def file_hashes(paths):
+    existing = [p for p in paths if os.path.isfile(os.path.join(REPO, p))]
+    res = {}
+    if existing:
+        try:
+            r = subprocess.run(["git", "-C", REPO, "hash-object", "--", *existing], capture_output=True, text=True, timeout=30)
+            hs = r.stdout.split()
+            if len(hs) == len(existing):
+                res = dict(zip(existing, hs))
+        except Exception:
+            pass
+    for p in paths:
+        res.setdefault(p, "deleted")
+    return res
 
 # Code that can carry a vulnerability: every app and package source, migrations, worker jobs, CI, dependency manifests.
 SCOPE_PATTERNS = [
@@ -42,15 +101,15 @@ def in_scope(path):
 
 
 def scope(base=None):
-    states = P.changed_files(base)
+    states = changed_files(base)
     files = {p: s for p, s in states.items() if in_scope(p)}
-    hashes = P.file_hashes(sorted(files))
+    hashes = file_hashes(sorted(files))
     fp = hashlib.sha1("\n".join(f"{p}\0{hashes[p]}" for p in sorted(files)).encode()).hexdigest()[:12] if files else ""
     return {"files": sorted(files), "fingerprint": fp}
 
 
 def state_dir(*parts):
-    base = P.git_dir() or os.path.join(os.environ.get("TMPDIR", "/tmp"), "threadwise-security-state")
+    base = git_dir() or os.path.join(os.environ.get("TMPDIR", "/tmp"), "threadwise-security-state")
     p = os.path.join(base, "threadwise-security", *parts)
     os.makedirs(p, exist_ok=True)
     return p

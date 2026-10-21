@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "सिम्युलेटर (परीक्षण)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "वेबसाइट चैट",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "ईमेल",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "सिम्युलेटर (परीक्षण)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "वेबसाइट चैट",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "ईमेल",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "संपर्क",
         "agent": "आप",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "इनबॉक्स पर वापस जाएँ",
-        "title": "बातचीत के टैग",
+        "title": "टैग",
         "intro": "बातचीत के टैग किसी थ्रेड (बिलिंग, रिफ़ंड, अर्जेंट) को चिह्नित करते हैं ताकि आपकी टीम इनबॉक्स को क्रमबद्ध और फ़िल्टर कर सके। ये उसी टैग लाइब्रेरी से आते हैं जिससे संपर्क के टैग आते हैं, जो व्यक्ति के बारे में बताते हैं।",
         "newTitle": "नया टैग",
         "editTitle": "टैग संपादित करें",

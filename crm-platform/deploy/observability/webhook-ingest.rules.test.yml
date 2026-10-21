@@ -1,0 +1,68 @@
+# Behaviour cases for webhook-ingest.rules.yml. Run: promtool test rules webhook-ingest.rules.test.yml
+# A must-fire and a must-not-fire case per alert. Synthetic series cannot catch a wrong metric name; the live check is the series list on Prometheus.
+rule_files:
+  - webhook-ingest.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      # api: webhooks at 100 req/s, slow (everything between 1 s and 5 s) -> rate and latency alerts fire
+      - series: 'crm_http_request_duration_seconds_count{service="api",route="/v2/public/webhooks/whatsapp",status="2xx"}'
+        values: '0+6000x24'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/public/webhooks/whatsapp",le="1"}'
+        values: '0+0x24'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/public/webhooks/whatsapp",le="5"}'
+        values: '0+6000x24'
+      - series: 'crm_http_request_duration_seconds_bucket{service="api",route="/v2/public/webhooks/whatsapp",le="+Inf"}'
+        values: '0+6000x24'
+      # web: dashboard traffic only, not a webhook route -> quiet
+      - series: 'crm_http_request_duration_seconds_count{service="web",route="/dashboard",status="2xx"}'
+        values: '0+6000x24'
+      # a full webhook pool (10 of 10, none idle) fires; a busy but not full primary pool does not
+      - series: 'crm_db_pool_connections{service="api",pool="webhook",state="total"}'
+        values: '6x24'
+      - series: 'crm_db_pool_connections{service="api",pool="webhook",state="idle"}'
+        values: '0x24'
+      - series: 'crm_db_pool_max{service="api",pool="webhook"}'
+        values: '6x24'
+      - series: 'crm_db_pool_connections{service="api",pool="primary",state="total"}'
+        values: '9x24'
+      - series: 'crm_db_pool_connections{service="api",pool="primary",state="idle"}'
+        values: '3x24'
+      - series: 'crm_db_pool_max{service="api",pool="primary"}'
+        values: '10x24'
+      - series: 'crm_queue_jobs_pending{queue="waba-ingest",state="waiting"}'
+        values: '6000x24'
+      - series: 'crm_queue_jobs_pending{queue="campaign",state="waiting"}'
+        values: '60000x24'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: WebhookRateHigh
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api }
+            exp_annotations:
+              summary: 'Public webhooks arrive at 100 requests/s on api'
+              description: 'Well above the normal rate. A provider or a migrating workspace may be replaying a backlog or retrying. Check the sender (x-real-ip in the API log) and the DB pools below before it slows the dashboard.'
+      - eval_time: 12m
+        alertname: WebhookLatencyHigh
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api }
+            exp_annotations:
+              summary: 'Webhook p95 is 4.8s on api'
+              description: 'A webhook should be authenticated, queued and answered in milliseconds. Slow answers make the provider retry, which adds load. Check DbPoolSaturated and the worker.'
+      - eval_time: 12m
+        alertname: DbPoolSaturated
+        exp_alerts:
+          - exp_labels: { severity: warning, service: api, pool: webhook }
+            exp_annotations:
+              summary: 'The webhook DB pool of api is at its maximum with no idle connection'
+              description: 'Early warning: DbPoolExhausted pages when callers are already waiting. Look for slow queries or a burst on one route (webhook rate above).'
+      - eval_time: 12m
+        alertname: WabaIngestBacklogGrowing
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: 'waba-ingest has 6000 jobs waiting'
+              description: 'Inbound WhatsApp payloads are queued faster than the worker drains them. The age alert (CriticalQueueOldestJobAge) pages when the oldest is over 30 s.'

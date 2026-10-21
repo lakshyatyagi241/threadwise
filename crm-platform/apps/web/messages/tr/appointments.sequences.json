@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Planınızı yükseltin",
+      "buttonsLocked": "Onayla, Yeniden planla ve İptal et düğmeleri planınıza dahil değil.",
+      "timeline": {
+        "label": "Hatırlatma zaman çizelgesi",
+        "addMenu": "Adım ekle",
+        "addStep": "Adım ekle",
+        "count": "Saatli {max} adımdan {count} tanesi var. Randevu onayı ve gelmedi mesajı bu sayıya dahil değil.",
+        "capReached": "Saatli {max} adım sınırına ulaştınız. Yenisini eklemek için birini kaldırın.",
+        "rebookLocked": "Yeniden randevu mesajları planınıza dahil değil. Adımı ayarlayabilirsiniz, ancak planınızı yükseltene kadar kapalı kalır.",
+        "rebookLockedStep": "Bu adım mevcut planınızla açılamaz.",
+        "empty": "Henüz adım yok. İlk adımı ekleyin veya hazır bir diziyle başlayın.",
+        "lane": {
+          "booked": "Randevu alındığında",
+          "before": "Randevudan önce",
+          "after": "Randevudan sonra"
+        },
+        "laneHint": {
+          "booked": "Randevu alınır alınmaz gönderilir.",
+          "before": "Randevu başlamadan önce gönderilir, asla sonrasında gönderilmez.",
+          "after": "Randevu bittikten sonra veya randevu gelmedi olarak işaretlendiğinde gönderilir."
+        },
+        "laneEmpty": "Burada henüz bir şey yok.",
+        "step": {
+          "confirmation": "Randevu onayı",
+          "reminder_24h": "24 saat önceki hatırlatma",
+          "reminder_2h": "2 saat önceki hatırlatma",
+          "reminder_15m": "15 dakika önceki hatırlatma",
+          "reminder": "Hatırlatma",
+          "after_visit": "Randevu sonrası mesaj",
+          "no_show": "Gelmedi mesajı",
+          "rebook": "Yeniden randevu mesajı"
+        },
+        "stepHint": {
+          "confirmation": "Randevu onaylandıktan hemen sonra gönderilir.",
+          "reminder_24h": "Bir gün önce. Onayla, Yeniden planla ve İptal et düğmelerini içerebilir.",
+          "reminder_2h": "Birkaç saat önce gönderilen kısa bir hatırlatma.",
+          "reminder_15m": "Yalnızca katılım bağlantısı olan online randevular için.",
+          "reminder": "Sizin seçtiğiniz bir zamanda gönderilen hatırlatma.",
+          "after_visit": "Randevu bittikten sonra gönderilen teşekkür veya takip mesajı.",
+          "no_show": "Randevuyu gelmedi olarak işaretlediğinizde gönderilir.",
+          "rebook": "Tamamlanan bir randevudan birkaç gün sonra kişiden yeniden randevu almasını ister. Pazarlama sayılır."
+        },
+        "choice": {
+          "confirmation": "Randevu onayı",
+          "reminder_24h": "24 saat önce",
+          "reminder_2h": "2 saat önce",
+          "reminder_15m": "15 dakika önce",
+          "custom": "Başka bir zamanda hatırlatma",
+          "after_visit": "Randevu sonrası mesaj",
+          "no_show": "Gelmedi mesajı",
+          "rebook": "Yeniden randevu mesajı, birkaç gün sonra"
+        },
+        "choiceHint": {
+          "present": "Zaten eklendi",
+          "cap": "Sınıra ulaşıldı",
+          "locked": "Açmak için plan yükseltmesi gerekli",
+          "online": "Online randevular"
+        },
+        "enabledOf": "Gönder: {step}",
+        "remove": "Kaldır: {step}",
+        "offsetOf": "Zamanı: {step}",
+        "unitOf": "Zaman birimi: {step}",
+        "beforeStart": "randevu başlamadan önce",
+        "afterEnd": "randevu bittikten sonra",
+        "setTime": "Bir zaman girin",
+        "templateName": "WhatsApp şablonu: {name}",
+        "wa": {
+          "none": "Şablon yok",
+          "draft": "Şablon Meta'ya gönderilmedi",
+          "pending": "Meta onayı bekleniyor",
+          "approved": "Şablon onaylandı",
+          "rejected": "Meta tarafından reddedildi"
+        },
+        "fallback": {
+          "email": "WhatsApp şablonu onaylanana kadar bu adım Email ile gönderilir.",
+          "window": "Burada WhatsApp tek kanal olduğu için 24 saatlik pencerenin dışında, bir şablon onaylanana kadar hiçbir şey gönderilmez. Yedek olarak Email ekleyin."
+        },
+        "when": {
+          "before": "Başlamadan {amount} önce",
+          "after": "Bittikten {amount} sonra"
+        },
+        "amount": {
+          "minutes": "{count, plural, other {# dakika}}",
+          "hours": "{count, plural, other {# saat}}",
+          "days": "{count, plural, other {# gün}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "Kişi zaten onaylamıştı.",
+        "no_join_link": "Randevunun katılım bağlantısı yok.",
+        "already_rebooked": "Kişi yeniden randevu aldı.",
+        "visit_not_completed": "Randevu tamamlanmadı.",
+        "plan_feature_locked": "Planınız bu adımı içermiyor.",
+        "not_delivered": "WhatsApp zamanında iletemedi, bu yüzden sonraki kanal kullanıldı.",
+        "send_failed": "Gönderim başarısız oldu, bu yüzden sonraki kanal kullanıldı."
+      },
+      "packs": {
+        "open": "Hazır diziler",
+        "eyebrow": "{name} için",
+        "title": "Hazır hatırlatma dizileri",
+        "close": "Kapat",
+        "intro": "İşletme türünüze uygun bir dizi seçin. Onay, hatırlatmalar, takip ve yeniden randevu mesajını tek seferde ayarlar. WhatsApp mesajlarının gönderilebilmesi için önce Meta onayı gerekir; o zamana kadar her adım Email ile gönderilir.",
+        "loading": "Diziler yükleniyor",
+        "choose": "Bir dizi seçin",
+        "stepsCount": "{count, plural, other {# adım}}",
+        "language": "Mesajların dili",
+        "machineDraft": "Hintçe metin makine tarafından hazırlanmış bir taslaktır. Adımları açmadan önce Hintçe okuyabilen biri kontrol etsin.",
+        "previewLoading": "Önizleme yükleniyor",
+        "previewTitle": "Neler değişecek",
+        "summary": "Eklenecek {add}, değiştirilecek {replace}, zaten aynı olan {unchanged}",
+        "timedOf": "Saatli {count} / {max} adım",
+        "blocked": "Bu diziyi uygulamak saatli adım sınırı olan {max} adımı aşar. Önce bir adımı kaldırın.",
+        "confirmTitle": "Bu, sahip olduğunuz adımların yerini alır",
+        "confirmBody": "Bu randevu türündeki {count, plural, other {# adım}} dizinin sürümüyle değiştirilecek. Yazdığınız metinler de dahil.",
+        "confirmCheck": "Değiştir",
+        "action": {
+          "add": "Yeni",
+          "replace": "Sizinkinin yerine",
+          "unchanged": "Zaten aynı"
+        },
+        "starts": {
+          "on": "Açık başlar",
+          "off": "Kapalı başlar"
+        },
+        "category": {
+          "UTILITY": "Hizmet mesajı",
+          "MARKETING": "Pazarlama mesajı"
+        },
+        "onlineOnly": "Yalnızca online randevular",
+        "hasButtons": "Onayla, Yeniden planla, İptal et düğmeleri",
+        "wa": {
+          "new": "Meta'ya gönderilecek"
+        },
+        "replaceOwnText": "Bu adım için kendi metninizi yazdınız. Değiştirilecek.",
+        "planNotes": {
+          "rebook": "Planınız yeniden randevu mesajlarını içermiyor, bu yüzden bu adım kapalı olarak kaydedilir.",
+          "buttons": "Planınız yanıt düğmelerini içermiyor, bu yüzden bunlar eklenmez."
+        },
+        "showMessages": "Mesajları göster",
+        "hideMessages": "Mesajları gizle",
+        "kept": "Sahip olduğunuz {count, plural, other {# adım}} değiştirilmeyecek.",
+        "sample": {
+          "title": "Örnek değerler",
+          "hint": "Mesajlar bu uydurma değerlerle gösterilir. Daha uzun bir ad ya da başka bir yerin nasıl göründüğünü görmek için değiştirin.",
+          "reset": "Değerleri sıfırla",
+          "labels": {
+            "name": "Kişi adı",
+            "service": "Hizmet",
+            "date": "Tarih",
+            "time": "Saat",
+            "place": "Yer",
+            "join_link": "Katılım bağlantısı",
+            "manage_link": "Yönetim bağlantısı"
+          }
+        },
+        "submitToMeta": "WhatsApp mesajlarını şimdi onay için Meta'ya gönder",
+        "submitHint": "{count, plural, other {# yeni WhatsApp mesajı oluşturulur.}} Onayı ne zaman vereceğine Meta karar verir; o zamana kadar adım Email ile gönderilir. Taslak olarak tutmak için bunu kapalı bırakın.",
+        "submitHintNone": "WhatsApp mesajları çalışma alanınızda zaten var, bu yüzden yeni bir şey oluşturulmaz.",
+        "apply": "Diziyi uygula",
+        "applying": "Uygulanıyor",
+        "cancel": "İptal",
+        "block": {
+          "readOnly": "Dizilere bakabilirsiniz ama uygulayamazsınız.",
+          "unsaved": "Önce bu randevu türünün adımlarındaki değişiklikleri kaydedin veya vazgeçin.",
+          "cap": "Önce bir adımı kaldırın: saatli adım sınırı aşılır.",
+          "confirm": "Devam etmek için Değiştir kutusunu işaretleyin."
+        },
+        "errors": {
+          "needsConfirm": "Uygulamak bir adımın yerini alacağı için onayınız gerekiyor. Önizleme yeniden yüklendi.",
+          "cap": "Dizi, bu randevu türü için saatli adım sınırını aşardı."
+        },
+        "result": {
+          "title": "Dizi uygulandı",
+          "summary": "{added} eklendi, {replaced} değiştirildi. Adımlar dizinin ayarladığı gibi başlar.",
+          "templatesTitle": "WhatsApp mesajları",
+          "templatesNone": "Hiçbir WhatsApp mesajı oluşturulmadı. WhatsApp'ı kullanmak için bir WhatsApp Cloud API numarası bağlayın; o zamana kadar Email kullanılır.",
+          "waiting": "Meta bir mesajı onaylayana kadar bu adım Email ile gönderilir.",
+          "metaError": "Meta reddetti: {error}",
+          "refresh": "Durumu yenile",
+          "refreshing": "Yenileniyor"
+        }
+      }
+    }
+  }
+}

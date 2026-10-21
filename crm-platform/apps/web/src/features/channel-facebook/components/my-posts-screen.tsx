@@ -36,7 +36,7 @@ export function MyPostsScreen() {
             {t('kicker')}
           </div>
           <h1 className="mt-0.5 text-[28px] leading-tight">
-            {t('title')} <span className="italic text-brand">{t('titleAccent')}</span>
+            {t('title')} <span className="not-italic text-brand">{t('titleAccent')}</span>
           </h1>
           <p className="mt-1 text-[12.5px] text-muted-foreground">{t('intro')}</p>
         </div>

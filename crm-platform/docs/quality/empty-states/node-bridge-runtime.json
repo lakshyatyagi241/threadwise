@@ -1,0 +1,53 @@
+{
+  "feature": "node-bridge-runtime",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-node-bridge-runtime-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/node-bridge-runtime/workspaces-panel.tsx",
+        "apps/web/src/features/node-bridge-runtime/workspaces-views.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/node-bridge-runtime/lib/workspaces.test.ts",
+          "match": "badge: Not supported while off, No workspaces when on with an empty list, none otherwise"
+        },
+        {
+          "file": "apps/web/src/features/node-bridge-runtime/workspaces-panel.render.test.tsx",
+          "match": "empty: explains the default, shows a zero count, the search and the empty state"
+        }
+      ]
+    },
+    {
+      "id": "EM-node-bridge-runtime-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "EM-node-bridge-runtime-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/node-bridge-runtime/bridge-card.tsx",
+        "apps/web/src/features/node-bridge-runtime/node-bridge-page.tsx",
+        "apps/web/src/features/node-bridge-runtime/pacing-card.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

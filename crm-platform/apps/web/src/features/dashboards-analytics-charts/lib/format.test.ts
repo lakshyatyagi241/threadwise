@@ -6,6 +6,7 @@ import {
   isForbidden,
   formatMoney,
   minutesLabel,
+  tzChip,
   pickOption,
   relativeSpan,
   throughputCsv,
@@ -141,5 +142,20 @@ describe('sparkBar', () => {
   });
   it('keeps the one-unit gap on a short range', () => {
     expect(sparkBar(0, 10)).toEqual({ x: 0.5, width: 9 });
+  });
+});
+
+describe('tzChip', () => {
+  const at = new Date('2026-10-21T12:00:00Z');
+  it('spells a zero offset one way, whatever the runtime calls it', () => {
+    expect(tzChip('UTC', at)).toBe('UTC');
+    expect(tzChip('Europe/London', new Date('2026-01-15T12:00:00Z'))).toBe('UTC');
+  });
+  it('shows a non-zero offset with the UTC prefix', () => {
+    expect(tzChip('Asia/Kolkata', at)).toBe('UTC+5:30');
+    expect(tzChip('America/New_York', at)).toBe('UTC-4');
+  });
+  it('falls back to UTC for a zone the runtime does not know', () => {
+    expect(tzChip('Not/AZone', at)).toBe('UTC');
   });
 });

@@ -37,6 +37,11 @@ export const envSchema = z.object({
   LOG_LEVEL: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']).default('info'),
   /** gzip/brotli on API responses over 1 KB (QA 63). Set false when the proxy in front of the API already compresses. */
   RESPONSE_COMPRESSION: booleanish.default(true),
+  /**
+   * Requests in flight at once before the API answers 503 + Retry-After instead of queueing (QA 54 load shedding). /health, /ready and
+   * /metrics are never shed. 0 turns it off. 256 is well above what one process serves at once on a healthy day (the database pool is 28).
+   */
+  API_MAX_INFLIGHT: z.coerce.number().int().min(0).max(100_000).default(256),
   /** A request that takes at least this long (ms) is logged at warn with its route, organisation and duration. 0 turns it off (QA 51). */
   SLOW_REQUEST_MS: z.coerce.number().int().min(0).max(600_000).default(500),
   CORS_ORIGINS: z
@@ -59,6 +64,13 @@ export const envSchema = z.object({
   /** Owner connection, used only by the migration/seed CLI. */
   MIGRATION_DATABASE_URL: z.string().min(1).optional(),
   DB_POOL_MAX: z.coerce.number().int().min(1).max(200).default(20),
+  /**
+   * Connections the public webhook receivers may hold, in a pool of their own: a delivery flood can fill this one and never the pool
+   * the dashboard and the readiness probe use.
+   */
+  WEBHOOK_DB_POOL_MAX: z.coerce.number().int().min(1).max(100).default(6),
+  /** A reserved pool for the readiness probe, so `/ready` answers truthfully while the main pool is busy. */
+  HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).default(2),
   DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(15_000),
 
   // --- redis ---------------------------------------------------------------

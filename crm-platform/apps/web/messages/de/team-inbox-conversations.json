@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulator (Test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Website-Chat",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-Mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulator (Test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Website-Chat",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-Mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kontakt",
         "agent": "Sie",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Zurück zum Posteingang",
-        "title": "Unterhaltungs-Tags",
+        "title": "Tags",
         "intro": "Unterhaltungs-Tags kennzeichnen einen Verlauf (Abrechnung, Erstattung, dringend), damit Ihr Team den Posteingang sortieren und filtern kann. Sie stammen aus derselben Tag-Bibliothek wie die Kontakt-Tags, die die Person beschreiben.",
         "newTitle": "Neuer Tag",
         "editTitle": "Tag bearbeiten",

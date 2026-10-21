@@ -4,8 +4,9 @@ import { addNumber, startCallPipeline, type CallPipeline, type Tenant } from './
 /**
  * BL-257 end to end: the Call logs list, cards, filters, detail and analytics need `call.logs.read`, not the plan feature
  * `waba_calling`. A workspace that only writes calls down (Log a call, the mobile app, a telephony provider) has them; what is
- * WhatsApp's (playing a recording, the filter by WhatsApp number, the calling numbers, readiness and recording settings) stays behind
- * the feature with the existing 422 PLAN_FEATURE_LOCKED. The record scope of `call.logs.read` and the tenant walls hold either way.
+ * WhatsApp's (the filter by WhatsApp number) stays behind
+ * the feature with the existing 422 PLAN_FEATURE_LOCKED. Playing a recording needs `call.recordings.play`, which no role holds any more.
+ * The record scope of `call.logs.read` and the tenant walls hold either way.
  * Real API, real Postgres (restricted role); the logged calls are written through the real routes.
  */
 let p: CallPipeline;
@@ -198,15 +199,12 @@ describe('what is WhatsApp’s stays behind the plan feature', () => {
     expect(res.body.code, what).toBe('PLAN_FEATURE_LOCKED');
   };
 
-  it('refuses the filter by WhatsApp number, playing a recording, the calling numbers and the recording settings', async () => {
+  it('refuses the filter by WhatsApp number and its analytics, and changes nothing the log shows', async () => {
     const { t, contactId } = await setup('wagate1');
     const number = await addNumber(p, t);
-    const made = await logCall(t.admin, contactId);
+    await logCall(t.admin, contactId);
     locked(await get(t.admin, `${LOGS}?numberId=${number.uuid}`), 'list by number');
     locked(await get(t.admin, `${LOGS}/analytics?numberId=${number.uuid}`), 'analytics by number');
-    locked(await post(t.admin, `${LOGS}/${made.body.entry.id}/playback`), 'playback');
-    locked(await get(t.admin, '/v2/calling/numbers'), 'calling numbers');
-    locked(await get(t.admin, '/v2/calling/recording-settings'), 'recording settings');
     // The refusal changes nothing the log shows.
     expect((await get(t.admin, LOGS)).status).toBe(200);
   });
@@ -214,7 +212,7 @@ describe('what is WhatsApp’s stays behind the plan feature', () => {
   it('opens them again when the feature is on, and the number filter then narrows the list', async () => {
     const { t, contactId } = await setup('wagate2', { whatsapp: true });
     const wa = await whatsappCall(t, contactId, t.adminUserId);
-    const made = await logCall(t.admin, contactId);
+    await logCall(t.admin, contactId);
     const all = await get(t.admin, LOGS);
     expect(all.body.total).toBe(2);
     const filters = await get(t.admin, `${LOGS}/filters`);
@@ -223,12 +221,9 @@ describe('what is WhatsApp’s stays behind the plan feature', () => {
     expect(byNumber.status, JSON.stringify(byNumber.body)).toBe(200);
     expect(ids(byNumber.body)).toEqual([wa.uuid]);
     expect((await get(t.admin, `${LOGS}/analytics?numberId=${wa.number.uuid}`)).status).toBe(200);
-    expect((await get(t.admin, '/v2/calling/numbers')).status).toBe(200);
-    // Playing is not refused by the plan: this call has no recording, so it is a plain 404.
-    expect((await post(t.admin, `${LOGS}/${made.body.entry.id}/playback`)).status).toBe(404);
   });
 
-  it('keeps the calls from the time the workspace had the feature readable, but cannot play their recordings', async () => {
+  it('keeps the calls from the time the workspace had the feature readable', async () => {
     const { t, contactId } = await setup('wagate3', { whatsapp: true });
     const wa = await whatsappCall(t, contactId, t.adminUserId);
     await logCall(t.admin, contactId);
@@ -240,7 +235,6 @@ describe('what is WhatsApp’s stays behind the plan feature', () => {
       'whatsapp',
     ]);
     expect((await get(t.admin, `${LOGS}/${wa.uuid}`)).status).toBe(200);
-    locked(await post(t.admin, `${LOGS}/${wa.uuid}/playback`), 'playback of an old call');
     // The contact’s calls read the same two tables, as they always did.
     const calls = await get(t.admin, `/v2/contacts/${contactId}/calls`);
     expect(calls.body.data).toHaveLength(2);
@@ -248,10 +242,10 @@ describe('what is WhatsApp’s stays behind the plan feature', () => {
 });
 
 describe('permissions, record scope and tenant walls hold without the feature', () => {
-  it('still needs call.logs.read: calling alone does not open the log, and the plan does not matter', async () => {
+  it('still needs call.logs.read: logging a call does not open the log, and the plan does not matter', async () => {
     const { t, contactId } = await setup('perm1');
     const made = await logCall(t.admin, contactId);
-    const none = await p.api.member(t, 'nokey', [['call.calls.use']]);
+    const none = await p.api.member(t, 'nokey', [['call.logs.create']]);
     for (const path of [
       LOGS,
       `${LOGS}/filters`,

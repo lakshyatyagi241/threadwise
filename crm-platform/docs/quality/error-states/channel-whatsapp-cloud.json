@@ -1,0 +1,37 @@
+{
+  "feature": "channel-whatsapp-cloud",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-channel-whatsapp-cloud-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-channel-whatsapp-cloud-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-whatsapp-cloud/lib/failure.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-channel-whatsapp-cloud-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

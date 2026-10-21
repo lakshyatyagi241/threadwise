@@ -414,6 +414,14 @@
           "label": "Afspraak niet gesynchroniseerd met Google Calendar",
           "hint": "Het Google Calendar-event van een aankomende afspraak is verwijderd, verplaatst of de gasten zijn gewijzigd. De afspraak zelf is niet gewijzigd; u kiest wat er gebeurt."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Afspraak geannuleerd door de klant",
+          "hint": "Een klant annuleerde de afspraak door op Annuleren te tikken in een herinnering. De eigenaar van de afspraak krijgt bericht."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultaat van de testmail van de herinnering",
+          "hint": "Het resultaat van de testmail die je voor een herinneringsstap stuurt: verzonden, of niet verzonden en waarom."
+        },
         "snooze_wake": {
           "label": "Gesnoozede chat komt terug",
           "hint": "Een gesnoozede chat wordt op het gekozen moment weer geopend en aan jou of je team toegewezen."

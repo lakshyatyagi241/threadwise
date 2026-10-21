@@ -1,0 +1,84 @@
+{
+  "feature": "ai-agents-training",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-ai-agents-training-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-agents-training/components/builder-screen.tsx",
+        "apps/web/src/features/ai-agents-training/components/builder-steps.tsx",
+        "apps/web/src/features/ai-agents-training/components/knowledge-step.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-ai-agents-training-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-agents-training/components/training-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-ai-agents-training-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-agents-training/components/builder-screen.tsx",
+        "apps/web/src/features/ai-agents-training/components/knowledge-step.tsx",
+        "apps/web/src/features/ai-agents-training/components/responder-card.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/ai-agents-training/components/components.test.tsx",
+          "match": "Brain: nothing is claimed about the models while they are still loading"
+        }
+      ]
+    },
+    {
+      "id": "EM-ai-agents-training-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-agents-training/settings.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-ai-agents-training-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-agents-training/components/training-screen.tsx",
+        "apps/web/src/features/ai-agents-training/lib/builder-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/ai-agents-training/lib/list-model.test.ts",
+          "match": "an empty workspace is \"empty\" with a zero average, not NaN"
+        }
+      ]
+    }
+  ]
+}

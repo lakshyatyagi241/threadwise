@@ -1,0 +1,115 @@
+{
+  "feature": "auth-registration-security",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-auth-registration-security-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/onboarding/plan-step.tsx",
+        "apps/web/src/features/auth-registration-security/account/security/policy-rules.ts",
+        "apps/web/src/features/auth-registration-security/account/security/sessions-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/account/security/session-page.test.ts",
+          "match": "an empty list is one empty page"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/list-text.test.ts",
+          "match": "turns an empty or blank textarea into an empty list"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/plan-draft.test.ts",
+          "match": "sends an empty list when the admin cleared everything (it replaces the stored one)"
+        }
+      ]
+    },
+    {
+      "id": "EM-auth-registration-security-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/platform/plans/addons-tab.tsx",
+        "apps/web/src/features/auth-registration-security/platform/plans/features-tab.tsx",
+        "apps/web/src/features/auth-registration-security/platform/plans/limits-tab.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-auth-registration-security-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/account-banners.tsx",
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx",
+        "apps/web/src/features/auth-registration-security/account/delete/delete-account-view.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/guest/signup-password-form.render.test.ts",
+          "match": "does not crash and shows a loading state when there is no pending stage"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/guest/signup-verify-email-form.render.test.ts",
+          "match": "does not crash and shows a loading state when there is no pending stage"
+        }
+      ]
+    },
+    {
+      "id": "EM-auth-registration-security-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx",
+        "apps/web/src/features/auth-registration-security/account/hub/account-frame.tsx",
+        "apps/web/src/features/auth-registration-security/account/hub/avatar-problem.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-auth-registration-security-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/security/sessions-panel.tsx",
+        "apps/web/src/features/auth-registration-security/guest/errors.ts",
+        "apps/web/src/features/auth-registration-security/platform/lib/api-errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/kpi.test.ts",
+          "match": "drops trailing zeros and keeps two decimals"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/otp-senders.test.ts",
+          "match": "returns nothing for another sender, an empty choice or no data"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/platform-footer.test.ts",
+          "match": "counts down to zero and stops there"
+        }
+      ]
+    }
+  ]
+}

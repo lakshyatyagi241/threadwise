@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Mettre à niveau votre forfait",
+      "buttonsLocked": "Les boutons Confirmer, Reprogrammer et Annuler ne font pas partie de votre forfait.",
+      "timeline": {
+        "label": "Calendrier des rappels",
+        "addMenu": "Ajouter une étape",
+        "addStep": "Ajouter une étape",
+        "count": "{count} sur {max} étapes avec une heure. La confirmation de réservation et le message d'absence ne sont pas comptés.",
+        "capReached": "Vous avez atteint {max} étapes avec une heure. Supprimez-en une pour en ajouter une autre.",
+        "rebookLocked": "Les messages de nouvelle réservation ne font pas partie de votre forfait. Vous pouvez configurer l'étape, mais elle restera désactivée tant que vous n'aurez pas mis à niveau votre forfait.",
+        "rebookLockedStep": "Cette étape ne peut pas être activée avec votre forfait actuel.",
+        "empty": "Aucune étape pour l'instant. Ajoutez la première étape ou partez d'une séquence prête à l'emploi.",
+        "lane": {
+          "booked": "Au moment de la réservation",
+          "before": "Avant le rendez-vous",
+          "after": "Après le rendez-vous"
+        },
+        "laneHint": {
+          "booked": "Envoyé dès que la réservation est faite.",
+          "before": "Envoyé avant le début du rendez-vous, jamais après.",
+          "after": "Envoyé après la fin du rendez-vous, ou lorsqu'il est marqué comme absence."
+        },
+        "laneEmpty": "Rien pour l'instant.",
+        "step": {
+          "confirmation": "Confirmation de réservation",
+          "reminder_24h": "Rappel 24 heures avant",
+          "reminder_2h": "Rappel 2 heures avant",
+          "reminder_15m": "Rappel 15 minutes avant",
+          "reminder": "Rappel",
+          "after_visit": "Message après le rendez-vous",
+          "no_show": "Message d’absence",
+          "rebook": "Message de nouvelle réservation"
+        },
+        "stepHint": {
+          "confirmation": "Envoyé juste après la confirmation de la réservation.",
+          "reminder_24h": "La veille. Il peut contenir les boutons Confirmer, Reprogrammer et Annuler.",
+          "reminder_2h": "Un court rappel quelques heures avant.",
+          "reminder_15m": "Uniquement pour les rendez-vous en ligne avec un lien de connexion.",
+          "reminder": "Un rappel à l'heure que vous choisissez.",
+          "after_visit": "Un remerciement ou un suivi après la fin du rendez-vous.",
+          "no_show": "Envoyé lorsque vous marquez le rendez-vous comme absence.",
+          "rebook": "Invite le contact à reprendre rendez-vous quelques jours après un rendez-vous terminé. Compte comme message marketing."
+        },
+        "choice": {
+          "confirmation": "Confirmation de réservation",
+          "reminder_24h": "24 heures avant",
+          "reminder_2h": "2 heures avant",
+          "reminder_15m": "15 minutes avant",
+          "custom": "Rappel à une autre heure",
+          "after_visit": "Message après le rendez-vous",
+          "no_show": "Message d’absence",
+          "rebook": "Message de nouvelle réservation, quelques jours plus tard"
+        },
+        "choiceHint": {
+          "present": "Déjà ajouté",
+          "cap": "Limite atteinte",
+          "locked": "Mise à niveau du forfait requise pour l'activer",
+          "online": "Rendez-vous en ligne"
+        },
+        "enabledOf": "Envoyer : {step}",
+        "remove": "Supprimer : {step}",
+        "offsetOf": "Heure de : {step}",
+        "unitOf": "Unité de temps de : {step}",
+        "beforeStart": "avant le début du rendez-vous",
+        "afterEnd": "après la fin du rendez-vous",
+        "setTime": "Saisir une heure",
+        "templateName": "Modèle WhatsApp : {name}",
+        "wa": {
+          "none": "Aucun modèle",
+          "draft": "Modèle non envoyé à Meta",
+          "pending": "En attente de l'approbation de Meta",
+          "approved": "Modèle approuvé",
+          "rejected": "Rejeté par Meta"
+        },
+        "fallback": {
+          "email": "Tant que le modèle WhatsApp n'est pas approuvé, cette étape part par email.",
+          "window": "WhatsApp est le seul canal ici : en dehors de la fenêtre de 24 heures, rien n'est envoyé tant qu'un modèle n'est pas approuvé. Ajoutez email comme solution de secours."
+        },
+        "when": {
+          "before": "{amount} avant le début",
+          "after": "{amount} après la fin"
+        },
+        "amount": {
+          "minutes": "{count, plural, one {# minute} other {# minutes}}",
+          "hours": "{count, plural, one {# heure} other {# heures}}",
+          "days": "{count, plural, one {# jour} other {# jours}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "Le contact avait déjà confirmé.",
+        "no_join_link": "Le rendez-vous n'a pas de lien de connexion.",
+        "already_rebooked": "Le contact a repris rendez-vous.",
+        "visit_not_completed": "Le rendez-vous n'a pas été terminé.",
+        "plan_feature_locked": "Votre forfait n'inclut pas cette étape.",
+        "not_delivered": "WhatsApp ne l'a pas livré à temps, le canal suivant a donc été utilisé.",
+        "send_failed": "L'envoi a échoué, le canal suivant a donc été utilisé."
+      },
+      "packs": {
+        "open": "Séquences prêtes à l'emploi",
+        "eyebrow": "Pour {name}",
+        "title": "Séquences de rappels prêtes à l'emploi",
+        "close": "Fermer",
+        "intro": "Choisissez une séquence adaptée à votre activité. Elle configure en une fois la confirmation, les rappels, le suivi et le message de nouvelle réservation. Les messages WhatsApp doivent être approuvés par Meta avant d'être envoyés ; en attendant, chaque étape part par email.",
+        "loading": "Chargement des séquences",
+        "choose": "Choisir une séquence",
+        "stepsCount": "{count, plural, one {# étape} other {# étapes}}",
+        "language": "Langue des messages",
+        "machineDraft": "Le texte en hindi est une ébauche générée par machine. Faites-le relire par une personne qui lit l'hindi avant d'activer les étapes.",
+        "previewLoading": "Chargement de l'aperçu",
+        "previewTitle": "Ce qui va changer",
+        "summary": "{add} à ajouter, {replace} à remplacer, {unchanged} déjà identiques",
+        "timedOf": "{count} sur {max} étapes avec une heure",
+        "blocked": "Appliquer cette séquence dépasserait la limite de {max} étapes avec une heure. Supprimez d'abord une étape.",
+        "confirmTitle": "Cela remplace des étapes que vous avez déjà",
+        "confirmBody": "{count, plural, one {# étape de ce type de réservation sera remplacée} other {# étapes de ce type de réservation seront remplacées}} par la version de la séquence, y compris tout texte que vous avez écrit.",
+        "confirmCheck": "Les remplacer",
+        "action": {
+          "add": "Nouvelle",
+          "replace": "Remplace la vôtre",
+          "unchanged": "Déjà identique"
+        },
+        "starts": {
+          "on": "Démarre activée",
+          "off": "Démarre désactivée"
+        },
+        "category": {
+          "UTILITY": "Message de service",
+          "MARKETING": "Message marketing"
+        },
+        "onlineOnly": "Rendez-vous en ligne uniquement",
+        "hasButtons": "Boutons Confirmer, Reprogrammer, Annuler",
+        "wa": {
+          "new": "Sera envoyé à Meta"
+        },
+        "replaceOwnText": "Vous avez écrit votre propre texte pour cette étape. Il sera remplacé.",
+        "planNotes": {
+          "rebook": "Votre forfait n'inclut pas les messages de nouvelle réservation : cette étape est donc enregistrée désactivée.",
+          "buttons": "Votre forfait n'inclut pas les boutons de réponse : ils sont donc omis."
+        },
+        "showMessages": "Afficher les messages",
+        "hideMessages": "Masquer les messages",
+        "kept": "{count, plural, one {# étape que vous avez déjà n'est pas modifiée.} other {# étapes que vous avez déjà ne sont pas modifiées.}}",
+        "sample": {
+          "title": "Valeurs d'exemple",
+          "hint": "Les messages sont affichés avec ces valeurs fictives. Modifiez-les pour voir comment un nom plus long ou un autre lieu s'affiche.",
+          "reset": "Réinitialiser les valeurs",
+          "labels": {
+            "name": "Nom du contact",
+            "service": "Prestation",
+            "date": "Date",
+            "time": "Heure",
+            "place": "Lieu",
+            "join_link": "Lien de connexion",
+            "manage_link": "Lien de gestion"
+          }
+        },
+        "submitToMeta": "Envoyer maintenant les messages WhatsApp à Meta pour approbation",
+        "submitHint": "{count, plural, one {# nouveau message WhatsApp sera créé.} other {# nouveaux messages WhatsApp seront créés.}} Meta décide quand les approuver ; en attendant, l'étape part par email. Laissez désactivé pour les garder en brouillons.",
+        "submitHintNone": "Les messages WhatsApp existent déjà dans votre espace de travail, rien de nouveau n'est donc créé.",
+        "apply": "Appliquer la séquence",
+        "applying": "Application en cours",
+        "cancel": "Annuler",
+        "block": {
+          "readOnly": "Vous pouvez consulter les séquences, mais pas les appliquer.",
+          "unsaved": "Enregistrez ou annulez d'abord vos modifications des étapes de ce type de réservation.",
+          "cap": "Supprimez d'abord une étape : la limite d'étapes avec une heure serait dépassée.",
+          "confirm": "Cochez « Les remplacer » pour continuer."
+        },
+        "errors": {
+          "needsConfirm": "L'application remplacerait une étape, elle nécessite donc votre confirmation. L'aperçu a été rechargé.",
+          "cap": "La séquence dépasserait la limite d'étapes avec une heure pour ce type de réservation."
+        },
+        "result": {
+          "title": "La séquence est appliquée",
+          "summary": "{added} ajoutées, {replaced} remplacées. Les étapes démarrent selon les réglages de la séquence.",
+          "templatesTitle": "Messages WhatsApp",
+          "templatesNone": "Aucun message WhatsApp n'a été créé. Connectez un numéro WhatsApp Cloud API pour utiliser WhatsApp ; en attendant, email est utilisé.",
+          "waiting": "Tant que Meta n'a pas approuvé un message, cette étape part par email.",
+          "metaError": "Meta l'a refusé : {error}",
+          "refresh": "Actualiser le statut",
+          "refreshing": "Actualisation"
+        }
+      }
+    }
+  }
+}

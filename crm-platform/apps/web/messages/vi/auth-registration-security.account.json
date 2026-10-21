@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Quy trình bán hàng",
             "appointment_booking": "Lịch hẹn",
+            "appointment_confirm_buttons": "Nút nhắc hẹn",
+            "appointment_rebook_steps": "Bước đặt lại lịch",
             "chatbot_widgets": "Widget chatbot",
             "wa_storefront": "Danh mục WhatsApp",
             "inbox_sla": "SLA hộp thư",

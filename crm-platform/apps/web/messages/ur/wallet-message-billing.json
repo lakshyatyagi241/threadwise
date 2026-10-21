@@ -164,12 +164,16 @@
         "in": "رقم آئی",
         "out": "رقم گئی",
         "balance": "بیلنس",
-        "none": "کوئی نہیں"
+        "none": "کوئی نہیں",
+        "channel": "چینل",
+        "recipient": "وصول کنندہ",
+        "template": "سانچہ",
+        "country": "ملک",
+        "category": "زمرہ",
+        "engine": "انجن"
       },
       "context": {
-        "reason": "وجہ",
-        "to": "تک",
-        "template": "ٹیمپلیٹ"
+        "reason": "وجہ"
       },
       "channels": {
         "campaign": "کیمپین",

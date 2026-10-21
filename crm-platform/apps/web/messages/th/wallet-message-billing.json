@@ -164,12 +164,16 @@
         "in": "เงินเข้า",
         "out": "เงินออก",
         "balance": "ยอดคงเหลือ",
-        "none": "ไม่มี"
+        "none": "ไม่มี",
+        "channel": "ช่อง",
+        "recipient": "ผู้รับ",
+        "template": "แม่แบบ",
+        "country": "ประเทศ",
+        "category": "หมวดหมู่",
+        "engine": "เครื่องยนต์"
       },
       "context": {
-        "reason": "เหตุผล",
-        "to": "ถึง",
-        "template": "เทมเพลต"
+        "reason": "เหตุผล"
       },
       "channels": {
         "campaign": "แคมเปญ",

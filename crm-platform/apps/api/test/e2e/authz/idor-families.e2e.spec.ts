@@ -447,7 +447,6 @@ afterAll(async () => {
     (s) =>
       `  ${s.spec.key.padEnd(22)} routes=${String(s.routes.length).padStart(3)} ${s.error ? `NOT COVERED: ${s.error}` : 'fixture ok'}`,
   );
-  // eslint-disable-next-line no-console -- the run summary is the evidence of what was and was not attacked
   console.log(`\nIDOR families summary\n${lines.join('\n')}\n${notes.join('\n')}`);
   await h?.stop();
 });

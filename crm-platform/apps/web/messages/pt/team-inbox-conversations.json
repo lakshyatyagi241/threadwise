@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simulador (testes)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Chat do site",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-mail",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simulador (testes)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Chat do site",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-mail",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Contato",
         "agent": "Você",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Voltar para a caixa de entrada",
-        "title": "Tags da conversa",
+        "title": "Tags",
         "intro": "As tags da conversa marcam um assunto (cobrança, reembolso, urgente) para que sua equipe possa organizar e filtrar a caixa de entrada. Elas vêm da mesma biblioteca de tags dos contatos, que descrevem a pessoa.",
         "newTitle": "Nova tag",
         "editTitle": "Editar tag",

@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Воронка продаж",
             "appointment_booking": "Записи",
+            "appointment_confirm_buttons": "Кнопки напоминания",
+            "appointment_rebook_steps": "Шаги повторной записи",
             "chatbot_widgets": "Виджеты чат-бота",
             "wa_storefront": "Каталог WhatsApp",
             "inbox_sla": "SLA входящих",

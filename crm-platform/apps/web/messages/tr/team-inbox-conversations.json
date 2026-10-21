@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Simülatör (test)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Web sitesi sohbeti",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "E-posta",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Simülatör (test)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Web sitesi sohbeti",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "E-posta",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Kişi",
         "agent": "Siz",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Gelen kutusuna dön",
-        "title": "Sohbet etiketleri",
+        "title": "Etiketler",
         "intro": "Sohbet etiketleri, ekibinizin gelen kutusunu sıralayıp filtreleyebilmesi için bir görüşmeyi (faturalama, iade, acil) işaretler. Kişiyi tanımlayan kişi etiketleriyle aynı etiket kitaplığından gelir.",
         "newTitle": "Yeni etiket",
         "editTitle": "Etiketi düzenle",

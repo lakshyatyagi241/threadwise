@@ -68,10 +68,11 @@ export const BRANCHING: ReadonlySet<string> = new Set([
  * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
  */
 /**
- * Buttons and list: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the step
- * that follows in the same chain (`LINK_NEXT`). The other branching steps end their chain: nothing follows them.
+ * Buttons, list and carousel: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the
+ * step that follows in the same chain (`LINK_NEXT`). A carousel with no reply button (only links) just carries on, by its `next`
+ * port. The other branching steps (condition, FAQ) end their chain: nothing follows them.
  */
-export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list']);
+export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel']);
 export const endsChain = (type: string): boolean => BRANCHING.has(type) && !OPTION_STEPS.has(type);
 /** A button / row link that means "carry on with the next step of this chain" (never a step id). */
 export const LINK_NEXT = '__next';
@@ -282,6 +283,9 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
         next.set(src.id, dst.id);
         feeders.set(dst.id, [...(feeders.get(dst.id) ?? []), src.id]);
       }
+    } else if (src.type === 'carousel' && e.sourceHandle === 'next') {
+      // A carousel with no reply button carries on by this wire; the step it reaches rides on the node (`carryOn`).
+      continue;
     } else if (!branching && e.sourceHandle === 'out') {
       if (next.has(src.id)) reasons.push(msg('simpleModel.reasons.multiNext'));
       next.set(src.id, dst.id);
@@ -448,6 +452,8 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       if (!BRANCHING.has(s.type) && nextStep) for (const h of exits) edge(s.id, h, nextStep.id);
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
         for (const h of exits) edge(s.id, h, s.goto);
+      if (s.type === 'carousel' && optionCount(s) === 0 && following)
+        edge(s.id, 'next', following.id);
       if (BRANCHING.has(s.type)) {
         s.links.forEach((link, i) => {
           const target = link === LINK_NEXT ? following?.id : link;
@@ -540,12 +546,6 @@ export const STEP_KINDS: readonly StepKind[] = [
   nodeKind('webhook', 'webhook', 'action'),
   kind('code', 'code', 'action'),
   kind('ask', 'ask', 'ask', 'text'),
-  kind('ask-name', 'ask', 'ask', 'name'),
-  kind('ask-email', 'ask', 'ask', 'email'),
-  kind('ask-phone', 'ask', 'ask', 'phone'),
-  kind('ask-number', 'ask', 'ask', 'number'),
-  kind('ask-alphanumeric', 'ask', 'ask', 'alphanumeric'),
-  kind('ask-date', 'ask', 'ask', 'date'),
   kind('ask-file', 'ask_file', 'ask'),
   kind('ask-location', 'ask_location', 'ask'),
 ];
@@ -562,6 +562,7 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'delay',
   'cta',
   'webhook',
+  'ai',
 ]);
 
 /** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */
@@ -920,7 +921,18 @@ export function deadOptions(
   return out;
 }
 
-export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): SimpleProblem[] {
+export function problems(
+  doc: SimpleDoc,
+  opts: {
+    senderRequired: boolean;
+    /** The workspace's templates: a picture / video / file header with no file of its own needs one on the step. */
+    templates?: ReadonlyArray<{
+      name: string;
+      attachmentType: string | null;
+      attachmentFile: string | null;
+    }>;
+  },
+): SimpleProblem[] {
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
   if (str(t.kind) === 'keyword' && str(t.keywordMode) !== 'any' && !str(t.keywords).trim())
@@ -952,6 +964,14 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       }
       if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
+      if (s.type === 'template' && str(d.tpl).trim()) {
+        const tp = opts.templates?.find((x) => x.name === str(d.tpl));
+        const kind = (tp?.attachmentType ?? '').toLowerCase();
+        const media =
+          kind === 'image' || kind === 'photo' || kind === 'video' || kind === 'document';
+        if (media && !/^https?:\/\//i.test(tp?.attachmentFile ?? '') && !str(d.tplMedia).trim())
+          bad('templateFile');
+      }
       if (s.type === 'assign') {
         const problem = handoffProblem(d);
         if (problem) bad(problem);
@@ -1101,43 +1121,48 @@ function conditionSummary(d: Record<string, unknown>): string {
   return first ? [str(first.variable), str(first.operator), str(first.value)].join(' ').trim() : '';
 }
 
+/**
+ * The text a step sends as WhatsApp text, as the message box holds it: its marks (`*bold*`) and its line breaks. '' for a step that
+ * sends none of its own text.
+ */
+export function stepText(s: SimpleStep): string {
+  if (s.type === 'message') return str(s.data.text);
+  if (s.type === 'ask' || s.type === 'buttons' || s.type === 'list') return str(s.data.prompt);
+  return '';
+}
+
 export function stepSummary(s: SimpleStep, t: Translate): string {
   const d = s.data;
   const raw =
-    s.type === 'message'
-      ? str(d.text)
-      : s.type === 'ask'
-        ? str(d.prompt)
-        : s.type === 'buttons' || s.type === 'list'
-          ? str(d.prompt)
-          : s.type === 'media'
-            ? str(d.caption) || str(d.url)
-            : s.type === 'location'
-              ? str(d.title) || str(d.address) || coordsSummary(d)
-              : s.type === 'template'
-                ? str(d.tpl)
-                : s.type === 'condition'
-                  ? conditionSummary(d)
-                  : s.type === 'carousel'
-                    ? arr(d.cards)
-                        .map((c) => str((c as Record<string, unknown>).title))
-                        .filter(Boolean)
-                        .join(' · ')
-                    : s.type === 'cta'
-                      ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
-                      : s.type === 'delay'
-                        ? delaySummary(t, d)
-                        : s.type === 'assign'
-                          ? str(d.message)
-                          : s.type === 'api_library'
-                            ? str(d.apiName)
-                            : s.type === 'webhook'
-                              ? str(d.url)
-                              : s.type === 'code'
-                                ? str(d.save)
-                                : s.type === 'ai'
-                                  ? str(d.prompt)
-                                  : '';
+    stepText(s) ||
+    (s.type === 'media'
+      ? str(d.caption) || str(d.url)
+      : s.type === 'location'
+        ? str(d.title) || str(d.address) || coordsSummary(d)
+        : s.type === 'template'
+          ? str(d.tpl)
+          : s.type === 'condition'
+            ? conditionSummary(d)
+            : s.type === 'carousel'
+              ? arr(d.cards)
+                  .map((c) => str((c as Record<string, unknown>).title))
+                  .filter(Boolean)
+                  .join(' · ')
+              : s.type === 'cta'
+                ? str((arr(d.actions)[0] as Record<string, unknown> | undefined)?.label)
+                : s.type === 'delay'
+                  ? delaySummary(t, d)
+                  : s.type === 'assign'
+                    ? str(d.message)
+                    : s.type === 'api_library'
+                      ? str(d.apiName)
+                      : s.type === 'webhook'
+                        ? str(d.url)
+                        : s.type === 'code'
+                          ? str(d.save)
+                          : s.type === 'ai'
+                            ? str(d.prompt)
+                            : '');
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }

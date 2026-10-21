@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "बंद करें"
     },
+    "list": {
+      "unofficialDisabled": "अनौपचारिक (अक्षम)"
+    },
     "detail": {
       "back": "वापस",
       "crumb": "ब्रॉडकास्ट / एनालिटिक्स / #{ref}",

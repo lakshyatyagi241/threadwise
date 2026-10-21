@@ -36,7 +36,7 @@ export function HubScreen() {
           </div>
           <h1 className="text-3xl font-normal leading-none tracking-tight sm:text-[38px]">
             {t('title')}{' '}
-            <span className="italic" style={{ color: WECHAT_GREEN }}>
+            <span className="not-italic" style={{ color: WECHAT_GREEN }}>
               {t('titleAccent')}
             </span>
           </h1>

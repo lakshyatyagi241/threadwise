@@ -60,6 +60,8 @@
       "remove_branding": "Usunięcie oznaczeń marki",
       "sales_pipeline": "Lejek sprzedaży",
       "appointment_booking": "Rezerwacja wizyt",
+      "appointment_confirm_buttons": "Przyciski przypomnienia (Potwierdź / Zmień termin / Anuluj)",
+      "appointment_rebook_steps": "Kroki ponownego umówienia (przypomnienia)",
       "chatbot_widgets": "Widżety chatbota",
       "wa_storefront": "Katalog WhatsApp",
       "inbox_sla": "Polityki SLA",

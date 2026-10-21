@@ -76,7 +76,7 @@ export function apiHttpLoggerOptions(level: string): Options {
     serializers: {
       req: (req) => {
         // `query` and `params` repeat the address unmasked, so they are left out: `url` carries the masked query string.
-        const { query: _q, params: _p, ...out } = stdSerializers.req(req) as Record<string, any>;
+        const { query: _q, params: _p, ...out } = stdSerializers.req(req);
         return {
           ...out,
           // A push portal's address carries its secret as the last path segment: never in a log line.

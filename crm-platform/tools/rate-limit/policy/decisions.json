@@ -1,0 +1,496 @@
+{
+  "note": "Routes the census could not limit within its cap. Medium and Low are accepted for the date shown; Critical and High can never be accepted (fix the route).",
+  "knownProbeFailures": [],
+  "decisions": [
+    {
+      "route": "GET /api/whatsapp-message-settings",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /docs/api.json",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /form-embed/:publicKey/embed.js",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /health",
+      "severity": "Low",
+      "rationale": "Static configuration or liveness answer with no per-caller work; probes and load balancers call it often.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /r/:token",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /ready",
+      "severity": "Low",
+      "rationale": "Static configuration or liveness answer with no per-caller work; probes and load balancers call it often.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/auth/password-policy",
+      "severity": "Low",
+      "rationale": "Static configuration or liveness answer with no per-caller work; probes and load balancers call it often.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/auth/registration-config",
+      "severity": "Low",
+      "rationale": "Static configuration or liveness answer with no per-caller work; probes and load balancers call it often.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/auth/social/:provider/start",
+      "severity": "Medium",
+      "rationale": "Provider sign-in start or callback; the census used an unsupported provider name and got 404/422, no work done.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/facebook/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/facebook/webhook",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/flow-media/:org/:name",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/i18n/languages",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/appointments/calendar/google/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/appointments/calendar/microsoft/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/brand/:slot",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/announcements",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/blog",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/blog/:slug",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/content",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/legal",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/legal/:slug",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/pricing",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/site-info",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/cms/sitemap",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/email/google/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/email/microsoft/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/manifest.webmanifest",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/robots.txt",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/site-config",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/team-inbox-manifest.webmanifest",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/webhooks/wa-calling",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/public/webhooks/whatsapp",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/shopify/oauth/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/store-public/:slug/home",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/store-public/:slug/orders/:token",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/store-public/:slug/products/:productSlug",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/store-public/host",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /v2/wechat/inbound/:token",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget-assets/:flowId/:slot",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget-legacy/:id/output.js",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget-legacy/output.js",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget/:token/api/config",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget/:token/chat",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "GET /widget/:token/embed",
+      "severity": "Low",
+      "rationale": "Cheap public read of published content or static assets (CDN-cacheable); no write, no secret, no per-caller cost beyond a cached query.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/account/email-change/confirm",
+      "severity": "Medium",
+      "rationale": "Single-use emailed token of high entropy; wrong tokens answer 400 and change nothing. Candidate for the auth policy in a later change.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/auth/clerk/session",
+      "severity": "Medium",
+      "rationale": "Verifies a signed Clerk token; a forged token fails signature verification. The route returns 404 when Clerk is not configured.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/auth/forgot-password",
+      "severity": "Medium",
+      "rationale": "Capped silently per address and per account in the service; the forgot-password-mail-flood probe sent 60 requests for one account from 31 addresses and exactly 1 mail was issued, with the same neutral reply every time.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/auth/logout",
+      "severity": "Low",
+      "rationale": "Ends a session from a token the caller already holds and always answers ok; nothing to guess and no side effect without a valid token.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/auth/social/:provider/callback",
+      "severity": "Medium",
+      "rationale": "OAuth return leg: does nothing without a valid single-use state value issued by the matching start call, so a flood only produces redirects.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/drain",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/track-response",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/unsubscribe",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/update-contact-status",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/update-status",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/campaigns/node/update-status-by-id",
+      "severity": "Medium",
+      "rationale": "Internal flow-node callback guarded by a shared secret; the census answered 403/422 to every unauthenticated call, so a flood does no work.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/facebook/webhook",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/instaflow/inbound",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/payments/webhook/:slug",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/platform/auth/logout",
+      "severity": "Low",
+      "rationale": "Ends a session from a token the caller already holds and always answers ok; nothing to guess and no side effect without a valid token.",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/public/email/google/push",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/public/email/microsoft/push",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/public/marketplace/hooks/:publicKey",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/public/webhooks/wa-calling",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/public/webhooks/whatsapp",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/shopify/compliance",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/shopify/webhook/:secret",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/store-public/webhooks/gateway/:gatewayId",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/wechat/inbound/:token",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    },
+    {
+      "route": "POST /v2/woocommerce/webhook/:secret",
+      "severity": "Medium",
+      "rationale": "Provider callback, deliberately not throttled so a burst of real provider traffic is never dropped. It is rejected cheaply before any work unless the provider signature or secret in the path checks out (401/403/404 in the census).",
+      "owner": "platform-security",
+      "expires": "2027-01-31"
+    }
+  ]
+}

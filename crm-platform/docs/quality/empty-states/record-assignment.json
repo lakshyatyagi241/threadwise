@@ -1,0 +1,60 @@
+{
+  "feature": "record-assignment",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-record-assignment-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/record-assignment/components/conditions-editor.tsx",
+        "apps/web/src/features/record-assignment/components/rule-list.tsx",
+        "apps/web/src/features/record-assignment/components/run-log.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-record-assignment-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/record-assignment/components/test-box.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-record-assignment-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/record-assignment/components/record-assignment-screen.tsx",
+        "apps/web/src/features/record-assignment/components/rule-editor.tsx",
+        "apps/web/src/features/record-assignment/components/run-log.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-record-assignment-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/record-assignment/components/run-log.tsx",
+        "apps/web/src/features/record-assignment/settings.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

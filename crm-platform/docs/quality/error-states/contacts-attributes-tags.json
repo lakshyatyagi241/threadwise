@@ -1,0 +1,157 @@
+{
+  "feature": "contacts-attributes-tags",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-contacts-attributes-tags-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/conversations.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/stats.ts",
+        "apps/web/src/features/contacts-attributes-tags/components/attribute-modal.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/lead-handling/uncontacted-settings-screen.dom.test.tsx",
+          "match": "a failed load offers a retry"
+        }
+      ]
+    },
+    {
+      "id": "ES-contacts-attributes-tags-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/call-log.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/deals.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/stats.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/components.test.tsx",
+          "match": "explains how to create the first tag, or that none exist when creating is not allowed"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/data-sections.test.tsx",
+          "match": "is the same line for a 403, and for a role without record.deals.read (which also asks for nothing)"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/record.render.test.tsx",
+          "match": "leaves out the cards a person has no access to"
+        }
+      ]
+    },
+    {
+      "id": "ES-contacts-attributes-tags-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/conversations.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/http.ts",
+        "apps/web/src/features/contacts-attributes-tags/components/contact-detail.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/lib/applied-filters.test.ts",
+          "match": "makes a chip for the team filter, and names a team that no longer exists"
+        }
+      ]
+    },
+    {
+      "id": "ES-contacts-attributes-tags-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/bulk.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/files.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/http.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-contacts-attributes-tags-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/deals.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/stats.ts",
+        "apps/web/src/features/contacts-attributes-tags/components/attribute-modal.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/contact/data-sections.test.tsx",
+          "match": "is a quiet \"not available\" line, not an error, when the plan has no sales pipeline (422 PLAN_FEATURE_LOCKED)"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/lib/contact-data.test.ts",
+          "match": "is a 403, a 402 or a 422 PLAN_FEATURE_LOCKED, and nothing else"
+        }
+      ]
+    },
+    {
+      "id": "ES-contacts-attributes-tags-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/api/http.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/meetings.ts",
+        "apps/web/src/features/contacts-attributes-tags/api/notes.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/lead-handling/uncontacted-settings-screen.dom.test.tsx",
+          "match": "a stale version shows the conflict notice instead of an error"
+        },
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/components/use-stage-move.dom.test.tsx",
+          "match": "says it was a conflict, and reloads, when someone else changed the contact"
+        }
+      ]
+    },
+    {
+      "id": "ES-contacts-attributes-tags-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/contacts-attributes-tags/components/contact/call-nudge.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/contact/info-tabs.tsx",
+        "apps/web/src/features/contacts-attributes-tags/components/contact/parts.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/contacts-attributes-tags/lib/misc.test.ts",
+          "match": "treats a missing route as \"not available yet\" and a network failure as a network problem"
+        }
+      ]
+    }
+  ]
+}

@@ -19,6 +19,8 @@ import {
   STEP_KINDS,
   stageIn,
   stepLabel,
+  stepSummary,
+  stepText,
   removeStep,
   stageLabel,
   LINK_END,
@@ -328,6 +330,24 @@ describe('checks', () => {
     ]);
   });
 
+  it('asks for a header file when the chosen template has a picture header with no file of its own', () => {
+    const templates = [
+      { name: 'promo', attachmentType: 'image', attachmentFile: 'meta-handle-123' },
+      { name: 'sample', attachmentType: 'IMAGE', attachmentFile: 'https://cdn.example/a.png' },
+      { name: 'plain', attachmentType: null, attachmentFile: null },
+    ];
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('template', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false, templates }).map((p) => en(p.message));
+    };
+    expect(run({ tpl: 'promo' })).toEqual(["Step 1.1: add the template's header file."]);
+    expect(run({ tpl: 'promo', tplMedia: 'https://a.b/c.png' })).toEqual([]);
+    expect(run({ tpl: 'sample' })).toEqual([]);
+    expect(run({ tpl: 'plain' })).toEqual([]);
+  });
+
   it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
     const run = (data: Record<string, unknown>) => {
       let d = emptyDoc();
@@ -414,7 +434,7 @@ describe('questions that check the answer', () => {
     expect(en(stepLabel(newStep('message', [])))).toBe('Message');
   });
 
-  it('the menu has an entry for every step type and one per question check', () => {
+  it('the menu has an entry for every step type and one Question (its answer type is chosen inside the step)', () => {
     const keys = STEP_KINDS.map((k) => k.key);
     expect(new Set(keys).size).toBe(keys.length);
     for (const t of ['message', 'media', 'buttons', 'list', 'ask_file', 'ask_location', 'delay']) {
@@ -423,15 +443,7 @@ describe('questions that check the answer', () => {
         t,
       ).toBe(true);
     }
-    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual([
-      'text',
-      'name',
-      'email',
-      'phone',
-      'number',
-      'alphanumeric',
-      'date',
-    ]);
+    expect(STEP_KINDS.filter((k) => k.type === 'ask').map((k) => k.preset)).toEqual(['text']);
   });
 
   it('a file and a location question continue into the next step like a message does', () => {
@@ -712,6 +724,7 @@ describe('steps per channel', () => {
         'delay',
         'cta',
         'webhook',
+        'ai',
       ]),
     );
   });
@@ -780,6 +793,54 @@ describe('the carousel step', () => {
       ['p0', a.id],
       ['p1', b.id],
     ]);
+  });
+
+  it('goes anywhere: a step may follow it, and a reply button can carry on with that step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const c = newStep('carousel', allSteps(d));
+    d = insertStep(d, 0, 1, c);
+    d = updateStep(d, c.id, { data: two() });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 2, after);
+    // Inserted at the end after the carousel: every reply that led nowhere carries on with it.
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', after.id],
+      ['p1', after.id],
+    ]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([first.id, c.id, after.id]);
+      expect(back.doc.journeys[0]!.steps[1]!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    }
+  });
+
+  it('a carousel with only link buttons carries on by its next wire', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }],
+      },
+    });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 1, after);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([['next', after.id]]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([c.id, after.id]);
   });
 
   it('asks for a card with a title, and for a name and an address on every button', () => {
@@ -1212,5 +1273,29 @@ describe('the AI assistant step: an agent, or a custom setup with a prompt', () 
     const saved = toGraph(back.doc).flowNodes.find((n) => n.id === 'ai1')!;
     expect(saved.data).toMatchObject(old);
     expect(saved.data.agentMode).toBeUndefined();
+  });
+});
+
+describe('the closed step card text', () => {
+  const withText = (type: 'message' | 'ask', data: Record<string, unknown>) => ({
+    ...newStep(type, []),
+    data,
+  });
+
+  it('keeps the marks and every line break for the message box to draw', () => {
+    expect(stepText(withText('message', { text: '*Welcome*\n\nHello _there_' }))).toBe(
+      '*Welcome*\n\nHello _there_',
+    );
+    expect(stepText(withText('ask', { prompt: '_Your name?_' }))).toBe('_Your name?_');
+  });
+
+  it('gives no text for a step that sends none of its own', () => {
+    expect(stepText(withText('ask', {}))).toBe('');
+    expect(stepText({ ...newStep('webhook', []), data: { url: 'https://x.test/a_b_c' } })).toBe('');
+  });
+
+  it('keeps the one-line summary: lines joined, cut at 40 characters', () => {
+    const s = withText('message', { text: '*Welcome to campaigns for geta.ai* _Hello\nthere_' });
+    expect(stepSummary(s, (key) => key)).toBe('*Welcome to campaigns for geta.ai* _Hell…');
   });
 });

@@ -41,12 +41,11 @@ status from `docs/threadwise-port/tracker/*.md`.
    of its domain file (search for the `## Data model` heading), then every feature it
    lists under **Depends on**. Do not start on a feature whose dependencies are not built
    or explicitly stubbed (say which in the PR).
-2. The **Source refs** are paths relative to the reference app (`reference/app/`).
-   Open them when the entry is ambiguous. Reference is read-only reference: describe and
-   rebuild the behavior, never copy code, views, assets or text into this repo.
+2. The **Source refs** are paths in the removed Laravel app (`reference/app/`), which is no longer in the repo.
+   Use the entry and its wiring map instead. Describe and rebuild the behavior, never copy code, views, assets
+   or text into this repo.
 3. If the entry is wrong or thin, fix the inventory entry in the same PR (you own your
    domain's file), and say so in the PR description. Do not patch around a bad spec in code.
-4. To build it, invoke the `threadwise-port-feature` skill. To see the reference behavior live,
-   invoke `threadwise-run-reference`.
+4. To build it, invoke the `threadwise-port-feature` skill.
 
 Ids are permanent: never renumber; new features continue from the highest number.

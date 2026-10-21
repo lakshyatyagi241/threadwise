@@ -535,6 +535,8 @@
             "remove_branding": "व्हाइट-लेबल",
             "sales_pipeline": "सेल्स पाइपलाइन",
             "appointment_booking": "अपॉइंटमेंट",
+            "appointment_confirm_buttons": "रिमाइंडर बटन",
+            "appointment_rebook_steps": "दोबारा बुकिंग चरण",
             "chatbot_widgets": "चैटबॉट विजेट",
             "wa_storefront": "WhatsApp कैटलॉग",
             "inbox_sla": "इनबॉक्स SLA",

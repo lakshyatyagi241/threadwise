@@ -208,7 +208,7 @@ export async function startPostgres(o: {
     const port = await pickPort();
     const opts = [
       `-p ${port}`,
-      '-c listen_addresses=127.0.0.1',
+      '-c listen_addresses=127.0.0.1,::1',
       `-c unix_socket_directories=${join(dir, 'sock')}`,
       '-c fsync=off',
       '-c synchronous_commit=off',
@@ -284,7 +284,7 @@ export async function startRedis(): Promise<Handle> {
       '--appendonly',
       'no',
       '--bind',
-      '127.0.0.1',
+      '127.0.0.1 -::1', // a spec that connects to `localhost` tries ::1 first
       '--daemonize',
       'yes',
       '--dir',

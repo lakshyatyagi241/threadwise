@@ -1,4 +1,4 @@
-// Re-runnable Playwright walk of the admin store screens on OUR app (the twin of the reference walk in ref-walk.mjs).
+// Re-runnable Playwright walk of the admin store screens on our app.
 //
 //   source ~/.nvm/nvm.sh && nvm use 22
 //   BASE=http://localhost:3109 EMAIL=... PASS=... node apps/web/e2e/storefront-builder/admin/walk.mjs
@@ -6,16 +6,8 @@
 // Needs: the web app, the API, an org admin (see the signup call in the parity notes) and one connected device row for
 // that org (the wizard refuses to create a shop without a sender). Screenshots land in OUT (default /tmp/sf-admin-shots).
 // The script creates its own shop ("E2E Walk Shop") and deletes it again, so it can be re-run.
-import { createRequire } from 'node:module';
 import { mkdirSync } from 'node:fs';
-
-// Playwright comes from the parity harness (`.claude/skills/threadwise-playwright-parity/harness`); PLAYWRIGHT_FROM overrides.
-const require = createRequire(
-  process.env.PLAYWRIGHT_FROM ??
-    new URL('../../../../../.claude/skills/threadwise-playwright-parity/harness/', import.meta.url)
-      .pathname,
-);
-const { chromium } = require('playwright');
+import { chromium } from '@playwright/test';
 
 const BASE = process.env.BASE ?? 'http://localhost:3109';
 const EMAIL = process.env.EMAIL ?? 'store-admin@example.com';

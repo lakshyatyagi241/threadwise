@@ -18,7 +18,7 @@ drafted.** Design: [docs/specs/help-center.md](../../../docs/specs/help-center.m
 
 ## When to run
 
-- After you build or change any screen, Settings tile or plan feature (run it for that unit, before parity and before the PR).
+- After you build or change any screen, Settings tile or plan feature (run it for that unit, before the PR).
 - After a pull or merge: the husky `post-merge` hook prints `N features have no help doc` and writes `docs/help-pending.md`; a
   session-start note says the same. Draft those guides without being asked, then tell the user what you wrote.
 - When asked about documentation coverage.
@@ -77,4 +77,4 @@ drafted.** Design: [docs/specs/help-center.md](../../../docs/specs/help-center.m
 
 ## Related
 
-[`threadwise-port-feature`](../threadwise-port-feature/SKILL.md) calls this skill before parity. The repo `CLAUDE.md` makes it automatic.
+[`threadwise-port-feature`](../threadwise-port-feature/SKILL.md) calls this skill before the PR. The repo `CLAUDE.md` makes it automatic.

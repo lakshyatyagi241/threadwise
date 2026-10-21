@@ -31,7 +31,7 @@ export function MembersRail({ members, meId, online, onMention, onDirect }: Memb
     <aside aria-label={t('label')} className="flex h-full min-h-0 flex-col bg-background">
       <div className="shrink-0 space-y-2 border-b border-border px-3 pb-2 pt-3">
         <h2 className="font-serif text-[18px] leading-tight">
-          {t('title')} <span className="italic text-primary">{t('titleAccent')}</span>
+          {t('title')} <span className="not-italic text-primary">{t('titleAccent')}</span>
         </h2>
         <p className="text-[11.5px] text-muted-foreground">
           {members ? t('count', { count: members.length }) : t('countUnknown')}

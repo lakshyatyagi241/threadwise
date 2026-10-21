@@ -1,4 +1,5 @@
-import { createHmac, hkdfSync, randomBytes, timingSafeEqual } from 'node:crypto';
+import { createHmac, hkdf, randomBytes, timingSafeEqual } from 'node:crypto';
+import { promisify } from 'node:util';
 import { CONNECTED_VIDEO_PROVIDERS, type ConnectedVideoProvider } from '@crm/contracts';
 
 /**
@@ -42,9 +43,21 @@ export interface ConferencingTicket {
 export type TokenCheck<T> =
   { ok: true; value: T } | { ok: false; reason: 'malformed' | 'signature' | 'expired' };
 
-export function deriveStateKey(credentialsKeyBase64: string): Buffer {
+const hkdfAsync = promisify(hkdf);
+
+/**
+ * Async because the first caller is a request (the connect and callback routes), and HKDF on the event loop would stall every other one.
+ * The output is unchanged (sha256, empty salt, the INFO label, 32 bytes), so a state signed before this change still verifies.
+ */
+export async function deriveStateKey(credentialsKeyBase64: string): Promise<Buffer> {
   return Buffer.from(
-    hkdfSync('sha256', Buffer.from(credentialsKeyBase64, 'base64'), Buffer.alloc(0), INFO, 32),
+    await hkdfAsync(
+      'sha256',
+      Buffer.from(credentialsKeyBase64, 'base64'),
+      Buffer.alloc(0),
+      INFO,
+      32,
+    ),
   );
 }
 

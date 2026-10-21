@@ -201,7 +201,7 @@ to `calling-meta-errors.ts`.
 
 - **Unit** (`apps/api/test/unit/calling-voice/`): `calling-readiness-rules.spec.ts` (every outcome of every row, the status, the schedule, TURN),
   `calling-meta-errors.spec.ts` (the code and wording mapping, the problem detail).
-- **End to end** (`apps/api/test/e2e/calling-voice/calling-readiness.e2e.spec.ts`): real API, worker side and Postgres (restricted role) and Redis; Meta is
+- **End to end** (`apps/api/test/e2e/calling-voice/calling-readiness.e2e.spec.ts`, deleted with WhatsApp calling, migration `20270324090000`): real API, worker side and Postgres (restricted role) and Redis; Meta is
   a fake behind the one HTTP client. Covers: a ready number and the stored result; calling off at Meta; each failing row; coexistence (local and from Meta);
   a disconnected number (no Meta request); a rejected token and a failed read as rows, not errors; the `calls` field: a request only reads it, the worker adds
   it keeping the others, the lock between workers, no callback, a customer's own app, a token that cannot be tied to the platform app; a page-open check

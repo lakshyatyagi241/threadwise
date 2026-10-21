@@ -1,0 +1,109 @@
+{
+  "feature": "tasks",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-tasks-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/components/linked-tasks.tsx",
+        "apps/web/src/features/tasks/components/record-picker.tsx",
+        "apps/web/src/features/tasks/components/task-drawer.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/tasks/lib/inline-tasks.test.ts",
+          "match": "puts the row back exactly as it was when the call fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-tasks-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/components/parts.tsx",
+        "apps/web/src/features/tasks/components/tasks-toolbar.tsx",
+        "apps/web/src/features/tasks/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-tasks-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/api/mock-server.ts",
+        "apps/web/src/features/tasks/components/linked-tasks.tsx",
+        "apps/web/src/features/tasks/components/parts.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/tasks/lib/inline-tasks.test.ts",
+          "match": "puts the cache back exactly as it was when the save fails"
+        }
+      ]
+    },
+    {
+      "id": "ES-tasks-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/api/mock-server.ts",
+        "apps/web/src/features/tasks/components/task-form-modal.tsx",
+        "apps/web/src/features/tasks/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-tasks-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/api/mock-server.ts",
+        "apps/web/src/features/tasks/api/service.ts",
+        "apps/web/src/features/tasks/components/use-task-actions.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/tasks/api/mock-server.test.ts",
+          "match": "answers 409 ROW_VERSION_CONFLICT for a stale version and applies a current one"
+        }
+      ]
+    },
+    {
+      "id": "ES-tasks-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/tasks/api/mock-server.ts",
+        "apps/web/src/features/tasks/components/record-picker.tsx",
+        "apps/web/src/features/tasks/components/tasks-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

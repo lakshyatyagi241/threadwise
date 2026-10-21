@@ -1,0 +1,62 @@
+{
+  "feature": "ai-copilot-lead-finder",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-ai-copilot-lead-finder-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-copilot-lead-finder/ai-crm-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-copilot-lead-finder-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-copilot-lead-finder-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-copilot-lead-finder/ai-crm-screen.tsx",
+        "apps/web/src/features/ai-copilot-lead-finder/components/use-error-text.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-copilot-lead-finder-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/ai-copilot-lead-finder/components/use-error-text.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-ai-copilot-lead-finder-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}

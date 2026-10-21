@@ -27,7 +27,7 @@ export function SetHeader({
         <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
           {accent ? (
             <>
-              {words.join(' ')} <em className="font-semibold italic text-primary">{accent}</em>
+              {words.join(' ')} <em className="font-semibold not-italic text-primary">{accent}</em>
             </>
           ) : (
             title

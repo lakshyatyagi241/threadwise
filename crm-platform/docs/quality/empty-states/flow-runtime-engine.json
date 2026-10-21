@@ -1,0 +1,93 @@
+{
+  "feature": "flow-runtime-engine",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-flow-runtime-engine-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-runtime-engine/components/analytics-screen.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/enroll-panel.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/errors-tab.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-runtime-engine/components/states.test.tsx",
+          "match": "shows the empty state when there are no failed runs yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-runtime-engine-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-runtime-engine/components/enroll-panel.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-runtime-engine/components/states.test.tsx",
+          "match": "shows no results with a way to clear the filters when the filters match nothing"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-runtime-engine-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-runtime-engine/components/analytics-screen.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/enroll-panel.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/errors-tab.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/flow-runtime-engine/components/states.test.tsx",
+          "match": "shows a spinner while loading, not the empty state"
+        }
+      ]
+    },
+    {
+      "id": "EM-flow-runtime-engine-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-runtime-engine/api/flow-runtime.ts",
+        "apps/web/src/features/flow-runtime-engine/components/analytics-screen.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/parts.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-flow-runtime-engine-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/flow-runtime-engine/components/analytics-screen.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/charts.tsx",
+        "apps/web/src/features/flow-runtime-engine/components/errors-tab.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

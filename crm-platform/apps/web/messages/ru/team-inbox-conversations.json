@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "Симулятор (тестирование)",
+      "whatsapp_cloud": "WhatsApp Cloud API",
+      "whatsapp_qr": "WhatsApp (QR)",
+      "webchat": "Чат на сайте",
+      "telegram": "Telegram",
+      "facebook": "Facebook Messenger",
+      "instagram": "Instagram",
+      "email": "Электронная почта",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "Симулятор (тестирование)",
-        "whatsapp_cloud": "WhatsApp Cloud API",
-        "whatsapp_qr": "WhatsApp (QR)",
-        "webchat": "Чат на сайте",
-        "telegram": "Telegram",
-        "facebook": "Facebook Messenger",
-        "instagram": "Instagram",
-        "email": "Электронная почта",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "Контакт",
         "agent": "Вы",
@@ -1086,7 +1086,7 @@
       },
       "screen": {
         "back": "Назад во входящие",
-        "title": "Теги диалога",
+        "title": "Теги",
         "intro": "Теги диалога помечают переписку (оплата, возврат, срочно), чтобы команда могла сортировать и фильтровать входящие. Они берутся из той же библиотеки тегов, что и теги контактов, которые описывают человека.",
         "newTitle": "Новый тег",
         "editTitle": "Редактирование тега",

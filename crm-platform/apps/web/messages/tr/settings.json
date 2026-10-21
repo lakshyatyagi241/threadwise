@@ -65,6 +65,11 @@
         "description": "Müşterilerle sohbet etmek için WhatsApp Business numaranızı bağlayın.",
         "keywords": "wa, whatsapp business, cloud api, numara, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp işletme profili",
+        "description": "Logonuz, hakkında metniniz, iletişim bilgileriniz ve Meta'nın istediği uyumluluk bilgileri.",
+        "keywords": "işletme profili, logo, profil resmi, hakkında, iletişim, uyumluluk, yasal ad, müşteri hizmetleri, şikayet sorumlusu"
+      },
       "unofficial-whatsapp": {
         "label": "Resmi olmayan WhatsApp API",
         "description": "Kişisel bir WhatsApp numarasını QR kodla bağlayın ve güvenli gönderim için ısıtın.",
@@ -341,7 +346,7 @@
         "keywords": "onay, abonelikten çıkma, abone olma, aboneliği iptal, stop, start, kvkk, gdpr, uyumluluk, gizlilik, pazarlama"
       },
       "inbox-tags": {
-        "label": "Sohbet etiketleri",
+        "label": "Etiketler",
         "description": "Ekibinizin sohbetlere eklediği ve gelen kutusunu filtrelediği etiketleri oluşturun. Kişilerde kullanılan etiketlerle aynıdır.",
         "keywords": "etiketler, sohbet etiketleri, kategoriler, düzenle, filtre"
       },
