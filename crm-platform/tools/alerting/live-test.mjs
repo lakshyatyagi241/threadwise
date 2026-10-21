@@ -46,7 +46,7 @@ scrape_configs:
 fs.writeFileSync(
   path.join(work, 'am.yml'),
   fs.readFileSync(path.join(ROOT, 'deploy/observability/alertmanager.yml'), 'utf8')
-    .replace('url_file: /run/secrets/alert_webhook_url', `url: http://localhost:${P.hook}/hook`)
+    .replaceAll('url_file: /run/secrets/alert_webhook_url', `url: http://localhost:${P.hook}/hook`)
     .replace(/group_interval: 5m/, 'group_interval: 10s'),
 );
 
@@ -141,8 +141,11 @@ const firing = async () => {
   return r.s === 200 ? JSON.parse(r.b).data.alerts.filter((a) => a.state === 'firing').map((a) => a.labels.alertname + (a.labels.job ? `{${a.labels.job}}` : '')) : [];
 };
 
-const results = [];
+const results = process.env.PRIOR ? JSON.parse(fs.readFileSync(process.env.PRIOR, 'utf8')).results : [];
+// ONLY=a,b runs just those cases; PRIOR=file.json keeps the results of an earlier (interrupted) run of the others.
+const ONLY = process.env.ONLY?.split(',');
 async function induce(id, desc, expect, doIt, undo, waitMs = 120000) {
+  if (ONLY && !ONLY.includes(id)) return;
   phase = id;
   const before = await firing();
   log('==', id, desc, '| firing before:', before.join(',') || 'none');
@@ -179,13 +182,13 @@ async function main() {
   startProbe();
   await waitFor(async () => (await get(`http://localhost:${P.api}/health`)).s === 200, 90000, 'api health');
   log('api healthy; ready =', (await get(`http://localhost:${P.api}/ready`)).s);
-  await sleep(20000);
+  await sleep(ONLY ? 5000 : 20000);
 
   // 0. must-not-fire: healthy stack for 40 s
   phase = 'baseline';
-  await sleep(40000);
+  if (!ONLY) await sleep(40000);
   const base = await firing();
-  results.push({ id: 'baseline', desc: 'healthy stack, 60 s', expectedAlert: null, fired: false, firingBefore: base, note: 'must be empty' });
+  if (!ONLY) results.push({ id: 'baseline', desc: 'healthy stack, 60 s', expectedAlert: null, fired: false, firingBefore: base, note: 'must be empty' });
   log('baseline firing:', base.join(',') || 'none');
 
   await induce('worker-kill', 'SIGKILL the worker', { alert: 'RuntimeMetricsTargetDown', job: 'crm-worker' }, () => kill('worker'), async () => { startWorker(); });
@@ -204,12 +207,12 @@ async function main() {
     async () => { psql(`INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload, status, attempts) VALUES (1,'alerttest',1,'alerttest.dead','{}','dead',9)`); },
     async () => { psql(`DELETE FROM event_outbox WHERE aggregate_module='alerttest'`); });
   // a due pending row held under a row lock: the drain (SKIP LOCKED) cannot take it, the sampler (plain read) still sees it due
-  psql(`INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload, status, available_at) VALUES (1,'alerttest',2,'alerttest.stuck','{}','pending', now() - interval '15 minutes')`);
-  const holder = spawn('docker', ['exec', '-i', 'crm-platform-postgres', 'psql', '-U', 'crm', '-d', DB], { stdio: ['pipe', 'ignore', 'ignore'] });
+  if (!ONLY || ONLY.includes('outbox-stuck')) psql(`INSERT INTO event_outbox (org_id, aggregate_module, aggregate_id, event_type, payload, status, available_at) VALUES (1,'alerttest',2,'alerttest.stuck','{}','pending', now() - interval '15 minutes')`);
+  const holder = ONLY && !ONLY.includes('outbox-stuck') ? { kill() {}, stdin: { write() {} } } : spawn('docker', ['exec', '-i', 'crm-platform-postgres', 'psql', '-U', 'crm', '-d', DB], { stdio: ['pipe', 'ignore', 'ignore'] });
   holder.stdin.write(`BEGIN; SELECT id FROM event_outbox WHERE aggregate_module='alerttest' FOR UPDATE;\n`);
   await induce('outbox-stuck', 'due outbox row 15 min old that the drain cannot take', { alert: 'OutboxNotDraining' }, async () => {}, async () => { holder.kill(); await sleep(1000); psql(`DELETE FROM event_outbox WHERE aggregate_module='alerttest'`); });
   await induce('dead-letter-old', 'open failed operation 2 h old', { alert: 'DeadLetterOpenTooLong' },
-    async () => { psql(`INSERT INTO failed_operations (source_queue, job_name, original_job_id, failure_category, error_code, policy_version, first_failed_at, last_failed_at, created_at) VALUES ('webhook-retry','alerttest','alerttest-1','provider','alerttest','test', now() - interval '2 hours', now() - interval '2 hours', now() - interval '2 hours')`); },
+    async () => { psql(`INSERT INTO failed_operations (source_queue, job_name, original_job_id, failure_category, error_code, policy_version, first_failed_at, last_failed_at, created_at) VALUES ('webhook-retry','alerttest','alerttest-1','INFRASTRUCTURE','alerttest','test', now() - interval '2 hours', now() - interval '2 hours', now() - interval '2 hours')`); },
     async () => { psql(`DELETE FROM failed_operations WHERE job_name='alerttest'`); });
 
   // postgres: hang (pool exhausted), then refuse (5xx)
