@@ -421,6 +421,7 @@ A dump with no `user` collection leaves `owner_id` empty and reports nothing.
 - **No admin.** Only the `--owner-email` user holds Owner. `preset:admin` is refused at startup, with or without an approver; `preset:workspace_admin` and every other preset need
   `approvedBy` and `evidence`. `is_staff` and role NAMES are never privilege (a role called "Admin" becomes a custom role "Admin (Waboo)"). A user with a missing, null, non-string,
   unknown, deleted or unloaded role gets **Viewer** (`ROLE_MISSING`, `ROLE_DELETED`, `ROLE_NOT_LOADED`).
+  A Waboo role named `admin` gets the **Owner** preset (`ADMIN_IS_OWNER`): the owner's decision of 2026-10-21 for every migrated admin. The role map still refuses `preset:admin`; this rule is the only route to Owner.
 - **Users** are created like an invited member: `status` active (inactive only when `is_active` is false; `workspace_enabled` is history only, see OQ-7), `invited_at` = created, `joined_at` only when the email
   was verified, **no password hash, no auth_subject, no token, no mail, no outbox row**. Waboo `password` is never read, copied, quarantined or logged; reconcile searches the target
   for the dump's password strings (`PASSWORD_LEAK`). Emails are trimmed and lower-cased; two documents with one email: the active, then newest one wins, the other is `DUPLICATE_EMAIL`.
@@ -1498,7 +1499,9 @@ One command per client, no hand-run repair: `node pilot/staging/pipeline.cjs --d
 
 **Config of a new client, derived (read-only), nothing typed:** `core-opening.cjs` reads `geta_core` (organization name, plan facts, the confirmed wallet balance); `wa-numbers.cjs` reads the tenant database through the read-only kit and writes the **channel map with the real WhatsApp phone number id, display number and name**, keyed by the botid of the chats (it selects `chatbot_id`, `phoneID`, `display_number` / `whatsapp_no`, `display_name` of the live `META_WHATSAPP_CONFIG` documents and `distinct botid` of `chathistory`; never the access token). A botid is paired by `chatbot_id`; a workspace with one botid and one number is paired without it; anything ambiguous is NOT guessed. Only when no live number exists does `new-client` fall back to the old PLACEHOLDER map, and the pipeline then puts a `WARNING:` line in the report summary (every chat of that botid is quarantined `NO_CHANNEL` until a person sets the real one). The map is written once, by `new-client`, which never overwrites; `cycle.cjs loaded-check` (read-only count of `migration.run_log`) refuses to create a config for a client that already has rows on staging, because its conversation keys were derived from the old map. The WhatsApp credential (token) is still imported separately with `pilot/credentials/import-whatsapp-credentials.cjs` (no tokens in the map or in any output).
 
-The chain (`MIG_STEPS`): `export, ship, preflight, dry, backup, load, files, core-load, wallet-sync, flow-state, reconcile, report, complete`.
+The chain (`MIG_STEPS`): `export, ship, preflight, dry, backup, load, template-quality, files, core-load, wallet-sync, flow-state, reconcile, report, complete`, then `wa-credentials` and `wa-cutover` only with `--activate-whatsapp`.
+
+The runner's copy of the tool must be rebuilt from the checkout before a run: `bash pilot/staging/refresh-runner.sh` builds the bundle, overlays the tool tree on the runner and checks the runner's `BUILD-INFO.json` names the same commit. Preflight check `a` now FAILs (it used to WARN) when the bundle's migrations differ from the deployed directory, so a stale runner stops the run.
 
 | Command | In a fresh-client chain? | Why |
 | --- | --- | --- |

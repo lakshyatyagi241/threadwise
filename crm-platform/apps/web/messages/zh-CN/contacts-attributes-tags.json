@@ -130,6 +130,7 @@
       "colLeadScore": "线索评分",
       "colLanguage": "语言",
       "colCreatedOn": "创建时间",
+      "colModifiedOn": "修改时间",
       "pagination": "分页",
       "prevPage": "上一页",
       "nextPage": "下一页",
@@ -282,6 +283,7 @@
       "shortStage": "阶段",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "创建时间",
+      "shortModified": "修改时间",
       "firstRun": {
         "title": "添加您的第一批联系人",
         "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",

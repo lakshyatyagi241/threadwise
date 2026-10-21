@@ -130,6 +130,7 @@
       "colLeadScore": "لیڈ اسکور",
       "colLanguage": "زبان",
       "colCreatedOn": "بنانے کی تاریخ",
+      "colModifiedOn": "ترمیم کی تاریخ",
       "pagination": "صفحہ بندی",
       "prevPage": "پچھلا صفحہ",
       "nextPage": "اگلا صفحہ",
@@ -282,6 +283,7 @@
       "shortStage": "مرحلہ",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "بنایا گیا",
+      "shortModified": "ترمیم شدہ",
       "firstRun": {
         "title": "اپنے پہلے رابطے شامل کریں",
         "message": "ان لوگوں کو لائیں جن سے آپ بات کرتے ہیں۔ رابطے پیغامات، مہمات، ٹاسکس اور ڈیلز کے لیے استعمال ہوتے ہیں۔",

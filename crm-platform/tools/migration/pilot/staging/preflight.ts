@@ -198,12 +198,12 @@ async function checkMigrations(o: PreflightOptions, owner: Client | null): Promi
       const a = new Set(emb.map((m) => m.id));
       const b = new Set(expected.map((m) => m.id));
       const d = [...a].filter((x) => !b.has(x)).concat([...b].filter((x) => !a.has(x)));
-      if (d.length) {
-        c.status = 'WARN';
-        c.details.push(
-          `WARN the bundle was built from a different checkout than this directory (differs: ${d.slice(0, 5).join(', ')}${d.length > 5 ? ' ...' : ''}); the directory wins`,
+      if (d.length)
+        // A stale bundle (the runner's copy, built before the last migrations) used to run against a schema it did not know: refuse it.
+        // Rebuild it from this checkout (pilot/staging/refresh-runner.sh), then run again.
+        fail(
+          `the bundle was built from a different checkout than this directory (differs: ${d.slice(0, 5).join(', ')}${d.length > 5 ? ' ...' : ''}); rebuild and ship the tool (pilot/staging/refresh-runner.sh) before migrating`,
         );
-      }
     }
   } else if (emb) {
     expected = emb;

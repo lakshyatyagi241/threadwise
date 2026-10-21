@@ -12,6 +12,7 @@ import {
 } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
+import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
@@ -259,9 +260,13 @@ export class CampaignsActionsService {
   /** The recipients as CSV, newest first, streamed in pages (TW-CAMP-020). */
   async export(uuid: string): Promise<{ stream: Readable; fileName: string }> {
     const { orgId } = RequestContextStore.require();
-    const c = await this.db.tx((tx) => this.repo.findByUuid(tx, orgId, uuid));
+    const { c, zone } = await this.db.tx(async (tx) => {
+      const c = await this.repo.findByUuid(tx, orgId, uuid);
+      // a campaign with no zone of its own (a migrated one) is written in the workspace's zone, the one the platform shows it in
+      return { c, zone: c?.timezone ?? (await loadWorkspaceCalendar(tx, orgId)).timezone };
+    });
     if (!c) throw AppError.notFound('Campaign', uuid);
-    return this.exportRuns([{ id: c.id, run: null }], c.timezone ?? 'UTC', `campaign-${c.uuid}`);
+    return this.exportRuns([{ id: c.id, run: null }], zone, `campaign-${c.uuid}`);
   }
 
   /**

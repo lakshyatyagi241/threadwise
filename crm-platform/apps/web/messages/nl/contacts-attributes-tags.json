@@ -130,6 +130,7 @@
       "colLeadScore": "Leadscore",
       "colLanguage": "Taal",
       "colCreatedOn": "Aangemaakt op",
+      "colModifiedOn": "Gewijzigd op",
       "pagination": "Paginering",
       "prevPage": "Vorige pagina",
       "nextPage": "Volgende pagina",
@@ -282,6 +283,7 @@
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Aangemaakt",
+      "shortModified": "Gewijzigd",
       "firstRun": {
         "title": "Voeg je eerste contacten toe",
         "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",

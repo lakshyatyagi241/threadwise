@@ -53,6 +53,7 @@ describe('columns', () => {
       'lastActivity',
       'nextFollowUp',
       'createdOn',
+      'modifiedOn',
     ]);
   });
 
@@ -76,6 +77,7 @@ describe('columns', () => {
     expect(columnGroup('company')).toBe('related');
     expect(columnGroup('whatsapp')).toBe('consent');
     expect(columnGroup('createdOn')).toBe('activity');
+    expect(columnGroup('modifiedOn')).toBe('activity');
     expect(columnGroup('attr:city')).toBe('custom');
     const groups = addableColumns(allColumns(attrs), defaultColumns(attrs));
     expect(groups.map((g) => g.group)).toEqual([
@@ -212,6 +214,7 @@ describe('sortKeyOf', () => {
   it('maps columns to the API sort and refuses the many-valued ones', () => {
     expect(sortKeyOf('name')).toBe('name');
     expect(sortKeyOf('createdOn')).toBe('createdAt');
+    expect(sortKeyOf('modifiedOn')).toBeNull();
     expect(sortKeyOf('attr:order_count')).toBe('attr:order_count');
     expect(sortKeyOf('tags')).toBeNull();
     expect(sortKeyOf('groups')).toBeNull();
