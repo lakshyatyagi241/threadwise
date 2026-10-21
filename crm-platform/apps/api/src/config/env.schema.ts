@@ -64,6 +64,13 @@ export const envSchema = z.object({
   /** Owner connection, used only by the migration/seed CLI. */
   MIGRATION_DATABASE_URL: z.string().min(1).optional(),
   DB_POOL_MAX: z.coerce.number().int().min(1).max(200).default(20),
+  /**
+   * Connections the public webhook receivers may hold, in a pool of their own: a delivery flood can fill this one and never the pool
+   * the dashboard and the readiness probe use.
+   */
+  WEBHOOK_DB_POOL_MAX: z.coerce.number().int().min(1).max(100).default(6),
+  /** A reserved pool for the readiness probe, so `/ready` answers truthfully while the main pool is busy. */
+  HEALTH_DB_POOL_MAX: z.coerce.number().int().min(1).max(10).default(2),
   DB_STATEMENT_TIMEOUT_MS: z.coerce.number().int().min(1000).default(15_000),
 
   // --- redis ---------------------------------------------------------------

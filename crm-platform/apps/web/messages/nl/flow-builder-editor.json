@@ -1205,7 +1205,13 @@
             "choose": "Kies een sjabloon…",
             "buttons": "Knoppen",
             "variables": "Ingevuld vanuit het contact",
-            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon."
+            "variablesHint": "Elk nummer wordt bij het verzenden van het bericht ingevuld met het hier genoemde contactgegeven. Wijzig dit in de sjabloon.",
+            "fills": "Waarmee elk nummer wordt gevuld",
+            "fillsHint": "Kies een contactgegeven of een flowvariabele, of typ je eigen tekst. Laat leeg om te gebruiken wat de sjabloon zegt.",
+            "fillPick": "Gegeven invoegen…",
+            "headerMedia": "Koptekstbestand",
+            "headerMediaHint": "De afbeelding, video of het bestand in de koptekst van deze sjabloon. Nodig als de sjabloon geen eigen bestand heeft.",
+            "headerMediaMissing": "Voeg het koptekstbestand toe: deze sjabloon heeft er geen en WhatsApp verstuurt hem niet zonder."
           },
           "cta": {
             "buttonText": "Knoptekst",
@@ -2451,7 +2457,8 @@
         "writeCode": "Stap {stage}: schrijf de code die wordt uitgevoerd.",
         "webhookUrl": "Stap {stage}: voeg het aan te roepen adres (URL) toe.",
         "chooseAiAgent": "Stap {stage}: kies de AI-agent die antwoordt of zet de stap op een eigen instelling.",
-        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent."
+        "writeAiPrompt": "Stap {stage}: schrijf de instructies voor de AI of kies een AI-agent.",
+        "templateFile": "Stap {stage}: voeg het koptekstbestand van de sjabloon toe."
       }
     },
     "templates": {

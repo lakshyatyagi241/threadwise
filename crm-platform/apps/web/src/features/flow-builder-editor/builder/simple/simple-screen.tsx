@@ -30,7 +30,6 @@ import {
   groupText,
   insertStep,
   moveStep,
-  LIMITS,
   newStep,
   problems,
   removeGroup,
@@ -61,6 +60,7 @@ import {
 } from '../web-bot-tabs';
 import { LinkSelect, NEW_JOURNEY, StepEditor } from './step-editors';
 import { StepPreview } from './step-preview';
+import { TemplatePreview } from '../inspector/forms-core/previews';
 import { variableNames } from '../../lib/stored-names';
 import '../builder.css';
 import { lookOf } from '../../lib/node-ui';
@@ -223,7 +223,6 @@ function Editor({
 }) {
   const t = useTranslations('flb.builder.simple');
   const tw = useTranslations('flb.builder.webBot');
-  const tEd = useTranslations('flb.builder.simple.editors');
   const tCommon = useTranslations('flb.common');
   const tTool = useTranslations('flb.builder.shell.toolbar');
   const m = useMsg();
@@ -276,7 +275,10 @@ function Editor({
 
   const senderRequired = channel === 'chat' && ctx.senders.chat.length > 0;
   // What stops a publish.
-  const found = useMemo(() => problems(doc, { senderRequired }), [doc, senderRequired]);
+  const found = useMemo(
+    () => problems(doc, { senderRequired, templates: ctx.templates }),
+    [doc, senderRequired, ctx.templates],
+  );
   // Parts nothing leads to: they would never run, but they harm nothing, so they only warn (an imported flow has many).
   const notReached = useMemo(
     () =>
@@ -358,36 +360,6 @@ function Editor({
       return;
     }
     linkTo(id, i, target);
-  };
-
-  /**
-   * The "+" under a set of buttons or a list: the chosen step starts a new part, tied to the first button that leads nowhere yet. When
-   * every button already leads somewhere, a new button (or row) is added for it, up to the limit.
-   */
-  const addBranch = (stepId: string, kind: StepKind) => {
-    const step = allSteps(doc).find((x) => x.id === stepId);
-    if (!step) return;
-    const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
-    let idx = options.findIndex((_, i) => !step.links[i] || step.links[i] === LINK_NEXT);
-    let data: Record<string, unknown> | undefined;
-    if (idx < 0) {
-      const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
-      if (options.length >= max) return;
-      idx = options.length;
-      const added =
-        step.type === 'list'
-          ? { title: `Item ${idx + 1}`, description: '', section: '' }
-          : tEd('buttons.placeholder', { n: idx + 1 });
-      data = { options: [...options, added] };
-    }
-    const first = newStep(kind.type, allSteps(doc), kind.preset);
-    let next = addJourney(doc, first);
-    const links = step.links.slice();
-    links[idx] = first.id;
-    next = updateStep(next, stepId, { ...(data ? { data } : {}), links });
-    change(next);
-    setGi(groupsOf(next).length - 1);
-    setActiveId(first.id);
   };
 
   /** Where the last step of a part carries on (a "node to node" connection). */
@@ -1022,47 +994,17 @@ function Editor({
                             setActiveId(null);
                           }}
                         />
-                        {BRANCHING.has(s.type) ? (
+                        {BRANCHING.has(s.type) && !OPTION_STEPS.has(s.type) ? (
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
                             {s.type === 'faq'
                               ? t('faqEnds')
-                              : OPTION_STEPS.has(s.type)
-                                ? t('optionsCarryOn', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })
-                                : t('branchingEnds', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })}
+                              : t('branchingEnds', {
+                                  kind: s.type === 'list' ? 'list' : 'buttons',
+                                })}
                           </p>
                         ) : null}
                         {s.type === 'buttons' || s.type === 'list' ? (
                           <>
-                            <div
-                              className="mb-3 flex flex-wrap justify-center gap-2"
-                              data-testid="branch-adders"
-                            >
-                              {(Array.isArray(s.data.options) ? s.data.options : []).map(
-                                (o: unknown, i: number) => {
-                                  // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                  if (s.links[i] && s.links[i] !== LINK_NEXT) return null;
-                                  const label =
-                                    typeof o === 'string'
-                                      ? o
-                                      : str((o as Record<string, unknown>).title);
-                                  return (
-                                    <button
-                                      key={i}
-                                      type="button"
-                                      onClick={() => link(s.id, i, NEW_JOURNEY)}
-                                      className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
-                                    >
-                                      + {t('branchAdd', { title: label || `#${i + 1}` })}
-                                    </button>
-                                  );
-                                },
-                              )}
-                            </div>
-                            <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
                             <AddMenu
                               channel={channel}
                               onPick={(k) => add(ci, si + 1, k)}
@@ -1382,7 +1324,8 @@ function AddMenu({
             />
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4">
-            {(['send', 'ask', 'logic', 'action', 'answer', 'handoff'] as const).map((group) => {
+            {/* Conditions and actions (wait, API call, webhook, JS function) are not listed here: they are added from the step's own shortcuts, so they land right under it. */}
+            {(['send', 'ask', 'answer', 'handoff'] as const).map((group) => {
               const kinds = stepKindsFor(channel).filter(
                 (k) =>
                   k.group === group &&
@@ -1623,9 +1566,15 @@ function StepCard(p: {
             title={t('clickToEdit')}
             className="block w-full border-t border-border px-4 pb-4 pt-3 text-start"
           >
-            <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
-              {bodyText || t('empty')}
-            </p>
+            {s.type === 'template' &&
+            p.ctx.templates.some((tp) => tp.name === String(s.data.tpl ?? '')) ? (
+              // A closed template step still shows the template as the customer gets it, not just its name.
+              <TemplatePreview d={s.data} templates={p.ctx.templates} />
+            ) : (
+              <p className="line-clamp-4 whitespace-pre-wrap break-words text-[13px] text-muted-foreground">
+                {bodyText || t('empty')}
+              </p>
+            )}
             {exits.length > 0 ? (
               <div className="mt-3 space-y-2 rounded-lg bg-muted/60 p-3">
                 {exits.map((e, i) => (

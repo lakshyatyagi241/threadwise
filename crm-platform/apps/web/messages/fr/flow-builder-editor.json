@@ -858,7 +858,13 @@
             "choose": "Choisir un modèle…",
             "buttons": "Boutons",
             "variables": "Rempli à partir du contact",
-            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle."
+            "variablesHint": "Chaque numéro est rempli à l'envoi du message avec l'information du contact indiquée ici. Modifiez-le dans le modèle.",
+            "fills": "Ce qui remplit chaque numéro",
+            "fillsHint": "Choisissez une information du contact ou une variable du flux, ou saisissez votre propre texte. Laissez vide pour utiliser ce que dit le modèle.",
+            "fillPick": "Insérer une information…",
+            "headerMedia": "Fichier d'en-tête",
+            "headerMediaHint": "L'image, la vidéo ou le fichier de l'en-tête de ce modèle. Nécessaire si le modèle n'a pas de fichier propre.",
+            "headerMediaMissing": "Ajoutez le fichier d'en-tête : ce modèle n'en a pas et WhatsApp ne l'enverra pas sans."
           },
           "cta": {
             "buttonText": "Texte du bouton",
@@ -2593,7 +2599,8 @@
         "writeCode": "Étape {stage} : écrivez le code à exécuter.",
         "webhookUrl": "Étape {stage} : ajoutez l'adresse (URL) à appeler.",
         "chooseAiAgent": "Étape {stage} : choisissez l’agent IA qui répond ou passez l’étape en configuration personnalisée.",
-        "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA."
+        "writeAiPrompt": "Étape {stage} : rédigez les instructions pour l’IA ou choisissez un agent IA.",
+        "templateFile": "Étape {stage} : ajoutez le fichier d'en-tête du modèle."
       }
     },
     "waboImport": {

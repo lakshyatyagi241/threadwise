@@ -858,7 +858,13 @@
             "choose": "템플릿 선택…",
             "buttons": "버튼",
             "variables": "연락처 정보로 채워집니다",
-            "variablesHint": "각 번호는 메시지를 보낼 때 여기에 표시된 연락처 정보로 채워집니다. 템플릿에서 변경하세요."
+            "variablesHint": "각 번호는 메시지를 보낼 때 여기에 표시된 연락처 정보로 채워집니다. 템플릿에서 변경하세요.",
+            "fills": "각 번호에 채울 내용",
+            "fillsHint": "연락처 정보나 플로 변수를 고르거나 직접 텍스트를 입력하세요. 비워 두면 템플릿에 정해진 값을 사용합니다.",
+            "fillPick": "정보 삽입…",
+            "headerMedia": "헤더 파일",
+            "headerMediaHint": "이 템플릿 헤더의 사진, 동영상 또는 파일입니다. 템플릿에 자체 파일이 없으면 필요합니다.",
+            "headerMediaMissing": "헤더 파일을 추가하세요. 이 템플릿에는 파일이 없고, 파일 없이는 WhatsApp이 보내지 않습니다."
           },
           "cta": {
             "buttonText": "버튼 텍스트",
@@ -2593,7 +2599,8 @@
         "writeCode": "단계 {stage}: 실행할 코드를 작성하세요.",
         "webhookUrl": "단계 {stage}: 호출할 주소(URL)를 추가하세요.",
         "chooseAiAgent": "단계 {stage}: 답변할 AI 에이전트를 선택하거나 이 단계를 직접 설정으로 전환하세요.",
-        "writeAiPrompt": "단계 {stage}: AI에 대한 지침을 작성하거나 AI 에이전트를 선택하세요."
+        "writeAiPrompt": "단계 {stage}: AI에 대한 지침을 작성하거나 AI 에이전트를 선택하세요.",
+        "templateFile": "{stage}단계: 템플릿의 헤더 파일을 추가하세요."
       }
     },
     "waboImport": {

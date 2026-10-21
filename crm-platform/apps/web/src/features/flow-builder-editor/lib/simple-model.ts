@@ -914,7 +914,18 @@ export function deadOptions(
   return out;
 }
 
-export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): SimpleProblem[] {
+export function problems(
+  doc: SimpleDoc,
+  opts: {
+    senderRequired: boolean;
+    /** The workspace's templates: a picture / video / file header with no file of its own needs one on the step. */
+    templates?: ReadonlyArray<{
+      name: string;
+      attachmentType: string | null;
+      attachmentFile: string | null;
+    }>;
+  },
+): SimpleProblem[] {
   const out: SimpleProblem[] = [];
   const t = doc.trigger.data;
   if (str(t.kind) === 'keyword' && str(t.keywordMode) !== 'any' && !str(t.keywords).trim())
@@ -946,6 +957,14 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       }
       if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
+      if (s.type === 'template' && str(d.tpl).trim()) {
+        const tp = opts.templates?.find((x) => x.name === str(d.tpl));
+        const kind = (tp?.attachmentType ?? '').toLowerCase();
+        const media =
+          kind === 'image' || kind === 'photo' || kind === 'video' || kind === 'document';
+        if (media && !/^https?:\/\//i.test(tp?.attachmentFile ?? '') && !str(d.tplMedia).trim())
+          bad('templateFile');
+      }
       if (s.type === 'assign') {
         const problem = handoffProblem(d);
         if (problem) bad(problem);

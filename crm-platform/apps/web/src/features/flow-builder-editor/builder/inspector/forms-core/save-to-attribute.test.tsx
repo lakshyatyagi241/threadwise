@@ -20,6 +20,7 @@ vi.mock('@crm/ui', async (orig) => ({
 }));
 vi.mock('@/lib/use-unofficial-whatsapp', () => ({ useUnofficialWhatsapp: () => false }));
 vi.mock('@/features/contacts-attributes-tags', () => ({
+  NewPropertyDialog: () => null,
   usePickerFeed: () => ({
     data: {
       system: [

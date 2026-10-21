@@ -13,6 +13,7 @@ import {
   templateComponents,
   templateText,
   templateValues,
+  withOverrides,
 } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-rules';
 import { TemplateNode } from '../../../src/modules/flow-runtime-engine/runtime/nodes/commerce/template-node';
 import { FlowRefResolver } from '../../../src/modules/flow-runtime-engine/runtime/nodes/flow-refs';
@@ -51,6 +52,52 @@ const render = (vars: Record<string, string>) => (t: string) =>
   t.replace(/\{\{\s*([^{}\s]+)\s*\}\}/g, (_m, k: string) => vars[k] ?? '');
 
 describe('template rules (TW-FLR-026)', () => {
+  it('lets the flow fill a placeholder itself, with merge tags, and set the header file', () => {
+    const mine = withOverrides(
+      tpl(),
+      { 'body:1': 'Order {{order_id}}', 'header:1': 'Gold' },
+      'https://cdn.example/pic.png',
+      render({ order_id: 'A12', name: 'Ann', ship_date: 'Mon' }),
+    );
+    expect(templateValues(mine.tpl, 'body', mine.render)).toEqual({
+      '1': 'Order A12',
+      '2': 'Mon',
+    });
+    expect(templateValues(mine.tpl, 'header', mine.render)).toEqual({ '1': 'Gold' });
+    expect(mine.tpl.headerMediaUrl).toBe('https://cdn.example/pic.png');
+    // Nothing set: the template maps as before.
+    const none = withOverrides(tpl(), {}, '', render({ order_id: 'A12' }));
+    expect(templateValues(none.tpl, 'body', none.render)).toEqual({
+      '1': 'A12',
+      '2': EMPTY_PARAMETER,
+    });
+  });
+
+  it('the node keeps only well-formed fills from the builder', () => {
+    const g = compileGraph(
+      {
+        flowNodes: [
+          {
+            id: 'a',
+            type: 'template',
+            data: {
+              tpl: 'x',
+              tplVars: { 'body:1': ' Gold ', bad: 'z', 'body:2': '' },
+              tplMedia: ' https://a.b/c.png ',
+            },
+          },
+        ],
+        flowEdges: [],
+      } as never,
+      'chat',
+    );
+    const node = Object.values(
+      (g as unknown as { nodes: Record<string, { props: Record<string, unknown> }> }).nodes,
+    )[0]!;
+    expect(node.props.variableOverrides).toEqual({ 'body:1': 'Gold' });
+    expect(node.props.headerMediaUrl).toBe('https://a.b/c.png');
+  });
+
   it('fills slots from the run variables and sends an empty one as a dash', () => {
     const v = templateValues(tpl(), 'body', render({ order_id: 'A12' }));
     expect(v).toEqual({ '1': 'A12', '2': EMPTY_PARAMETER });

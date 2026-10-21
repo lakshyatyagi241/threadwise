@@ -338,6 +338,20 @@
         "reason": "needs a service outside this stack",
         "canInduceOnLaptop": true
       }
+    },
+    {
+      "id": "webhook-flood",
+      "failureMode": "Public webhook flood or slow webhook path saturating the API's DB pools",
+      "severity": "critical",
+      "alerts": [
+        "WebhookRateHigh",
+        "WebhookLatencyHigh",
+        "DbPoolSaturated",
+        "WabaIngestBacklogGrowing"
+      ],
+      "runbook": "docs/runbooks/p0-failure-modes.md#webhookflood",
+      "status": "tested-promtool",
+      "note": "queue age is paged by CriticalQueueOldestJobAge; connections idle in a transaction are not alerted (no Postgres exporter is deployed)"
     }
   ]
 }

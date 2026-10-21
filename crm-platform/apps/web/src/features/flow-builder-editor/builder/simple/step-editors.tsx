@@ -4,6 +4,7 @@ import { ButtonIcon } from '../button-icon';
 import { MessageField } from '../message-field';
 import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
+import { attrEntries } from '../inspector/attr-picker';
 import { savePropertyOptions } from '../../lib/property-options';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
@@ -12,7 +13,7 @@ import {
   buttonActionPatch,
   buttonActionsWithout,
 } from '../../lib/button-actions';
-import { useContext, type ReactNode } from 'react';
+import { useContext, useMemo, type ReactNode } from 'react';
 import { useTranslations } from 'next-intl';
 import {
   FLB_AGE_END_TEXT,
@@ -1330,11 +1331,29 @@ function LocationEditor({ step, set }: EditorProps) {
 const buttonTarget = (b: Record<string, unknown>): string =>
   str(b.value ?? b.phone_number ?? b.phone ?? b.url ?? b.example);
 
-function TemplateEditor({ step, ctx, set }: EditorProps) {
+function TemplateEditor({ step, doc, ctx, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
   const chosen = ctx.templates.find((x) => x.name === str(step.data.tpl));
   const buttons = (chosen?.buttons ?? []) as Array<Record<string, unknown>>;
   const variables = chosen?.variables ?? [];
+  const feed = usePickerFeed();
+  const tf = useFlb();
+  const details = useMemo(() => attrEntries(feed.data, tf), [feed.data, tf]);
+  const flowVars = flowVariables(doc);
+  const fills = rec(step.data.tplVars) as Record<string, string>;
+  const setFill = (id: string, value: string) => {
+    const next = { ...fills, [id]: value };
+    if (value === '') delete next[id];
+    set({ tplVars: next });
+  };
+  // A header that is a picture, video or file needs a file to send: the template's own sample, or the one set here.
+  const kind = str(chosen?.attachmentType).toLowerCase();
+  const mediaKind = (kind === 'photo' ? 'image' : kind) as 'image' | 'video' | 'document';
+  const needsMedia =
+    kind === 'image' || kind === 'photo' || kind === 'video' || kind === 'document';
+  const ownFile = /^https?:\/\//i.test(str(chosen?.attachmentFile))
+    ? str(chosen?.attachmentFile)
+    : '';
   return (
     <div className="space-y-3">
       <Field label={t('template.label')} hint={t('template.hint')}>
@@ -1373,22 +1392,67 @@ function TemplateEditor({ step, ctx, set }: EditorProps) {
         </div>
       ) : null}
       {variables.length > 0 ? (
-        <div className="space-y-1">
-          <div className="text-[12px] font-medium text-muted-foreground">
-            {t('template.variables')}
-          </div>
-          {variables.map((v) => (
-            <div
-              key={`${v.section}-${v.slot}`}
-              className="flex items-baseline justify-between gap-3 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-[12.5px]"
-            >
-              <span className="font-mono">{`{{${v.slot}}}`}</span>
-              <span className="truncate font-mono text-[11px] text-muted-foreground">
-                {v.field}
-              </span>
-            </div>
-          ))}
-          <p className="text-[11.5px] text-muted-foreground">{t('template.variablesHint')}</p>
+        <div className="space-y-2">
+          <div className="text-[12px] font-medium text-muted-foreground">{t('template.fills')}</div>
+          {variables.map((v) => {
+            const id = `${v.section}:${v.slot}`;
+            return (
+              <div key={id} className="flex items-start gap-2">
+                <span className="mt-2 shrink-0 font-mono text-[12.5px]">{`{{${v.slot}}}`}</span>
+                <div className="min-w-0 flex-1 space-y-1">
+                  <Input
+                    value={fills[id] ?? ''}
+                    placeholder={v.field}
+                    aria-label={`{{${v.slot}}}`}
+                    onChange={(e) => setFill(id, e.target.value)}
+                  />
+                  <Select
+                    value=""
+                    aria-label={t('template.fillPick')}
+                    onChange={(e) => {
+                      if (e.target.value) setFill(id, `${fills[id] ?? ''}{{${e.target.value}}}`);
+                    }}
+                  >
+                    <option value="">{t('template.fillPick')}</option>
+                    {details.map((a) => (
+                      <option key={`${a.kind}-${a.key}`} value={a.key}>
+                        {a.name}
+                      </option>
+                    ))}
+                    {flowVars.map((n) => (
+                      <option key={`flow-${n}`} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+            );
+          })}
+          <p className="text-[11.5px] text-muted-foreground">{t('template.fillsHint')}</p>
+        </div>
+      ) : null}
+      {needsMedia ? (
+        <div className="space-y-2">
+          <Field label={t('template.headerMedia')} hint={t('template.headerMediaHint')}>
+            <Input
+              value={str(step.data.tplMedia)}
+              placeholder={ownFile || 'https://'}
+              onChange={(e) => set({ tplMedia: e.target.value })}
+            />
+          </Field>
+          <MediaUpload
+            kind={mediaKind}
+            url={str(step.data.tplMedia)}
+            filename={str(step.data.tplMediaName)}
+            compact
+            onDone={(res) => set({ tplMedia: res.url, tplMediaName: res.filename })}
+          />
+          {!ownFile && !str(step.data.tplMedia).trim() ? (
+            <p role="alert" className="text-[12px] font-medium text-danger">
+              {t('template.headerMediaMissing')}
+            </p>
+          ) : null}
         </div>
       ) : null}
     </div>
