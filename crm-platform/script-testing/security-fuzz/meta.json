@@ -1,0 +1,18 @@
+{
+  "id": "security-fuzz",
+  "sheetItem": 38,
+  "title": "Security fuzz testing",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 2,
+    "full": 6
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm"
+  ],
+  "proves": "Seeded fuzz of schemas and parsers (and, in full, HTTP routes) finds no crash, hang or 5xx; the printed seed replays any failure.",
+  "doesNotProve": "Fuzzing is not proof of absence; the HTTP part covers only the routes the harness knows.",
+  "report": "docs/security/fuzz/Sheet3-38-security-fuzz-testing-REPORT.html"
+}
