@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Thêm bước cho “{title}”",
-        "faqEnds": "Bước đã ngừng này kết thúc phần này: luồng luôn tiếp tục qua lối ra Không khớp."
+        "faqEnds": "Bước đã ngừng này kết thúc phần này: luồng luôn tiếp tục qua lối ra Không khớp.",
+        "flowMenu": "Tùy chọn cho {name}",
+        "renameFlow": "Đổi tên luồng"
       },
       "formsCore": {
         "helpers": {

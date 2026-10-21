@@ -1266,7 +1266,9 @@
           }
         },
         "branchAdd": "Aggiungi un passaggio per «{title}»",
-        "faqEnds": "Questo passaggio ritirato chiude questa parte: il flusso prosegue sempre dalla sua uscita Nessuna corrispondenza."
+        "faqEnds": "Questo passaggio ritirato chiude questa parte: il flusso prosegue sempre dalla sua uscita Nessuna corrispondenza.",
+        "flowMenu": "Opzioni per {name}",
+        "renameFlow": "Rinomina flusso"
       },
       "formsCore": {
         "helpers": {

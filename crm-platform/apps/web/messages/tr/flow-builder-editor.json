@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "“{title}” için adım ekle",
-        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder."
+        "faqEnds": "Kullanımdan kalkan bu adım bu bölümü bitirir: akış her zaman Eşleşme yok çıkışıyla devam eder.",
+        "flowMenu": "{name} seçenekleri",
+        "renameFlow": "Akışı yeniden adlandır"
       },
       "formsCore": {
         "helpers": {

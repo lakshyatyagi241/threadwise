@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Ajouter une étape pour « {title} »",
-        "faqEnds": "Cette étape retirée termine cette partie : le flux continue toujours par sa sortie Aucune correspondance."
+        "faqEnds": "Cette étape retirée termine cette partie : le flux continue toujours par sa sortie Aucune correspondance.",
+        "flowMenu": "Options pour {name}",
+        "renameFlow": "Renommer le flux"
       },
       "formsCore": {
         "helpers": {

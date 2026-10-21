@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Adicionar um passo para “{title}”",
-        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência."
+        "faqEnds": "Esta etapa descontinuada encerra esta parte: o fluxo sempre segue pela saída Sem correspondência.",
+        "flowMenu": "Opções de {name}",
+        "renameFlow": "Renomear fluxo"
       },
       "formsCore": {
         "helpers": {

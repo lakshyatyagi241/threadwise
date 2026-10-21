@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Añadir un paso para “{title}”",
-        "faqEnds": "Este paso retirado termina esta parte: el flujo siempre continúa por su salida Sin coincidencia."
+        "faqEnds": "Este paso retirado termina esta parte: el flujo siempre continúa por su salida Sin coincidencia.",
+        "flowMenu": "Opciones de {name}",
+        "renameFlow": "Renombrar flujo"
       },
       "formsCore": {
         "helpers": {

@@ -929,7 +929,9 @@
           }
         },
         "branchAdd": "Add a step for “{title}”",
-        "faqEnds": "This retired step ends this part: the flow always carries on by its No match exit."
+        "faqEnds": "This retired step ends this part: the flow always carries on by its No match exit.",
+        "flowMenu": "Options for {name}",
+        "renameFlow": "Rename flow"
       },
       "askAge": {
         "minAge": "Minimum age",
