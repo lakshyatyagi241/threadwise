@@ -1,0 +1,18 @@
+{
+  "id": "ssrf",
+  "sheetItem": 29,
+  "title": "SSRF protection",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 1,
+    "full": 3
+  },
+  "heavy": false,
+  "needs": [
+    "node22",
+    "pnpm"
+  ],
+  "proves": "Address and URL matrices (internal, mapped and encoded IPs, schemes, credentials, DNS answers), the outbound-call ratchet, the guarded request and the connect-time check behave as specified.",
+  "doesNotProve": "It is unit-level: no real DNS rebinding against a live network, and the open operator-only gaps S5 and S7 are not tested.",
+  "report": "docs/security/ssrf/REPORT.html"
+}

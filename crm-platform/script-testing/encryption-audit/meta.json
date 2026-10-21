@@ -1,0 +1,20 @@
+{
+  "id": "encryption-audit",
+  "sheetItem": 35,
+  "title": "Encryption audit",
+  "script": "run.sh",
+  "estMinutes": {
+    "quick": 4,
+    "full": 12
+  },
+  "heavy": true,
+  "needs": [
+    "node22",
+    "pnpm",
+    "docker",
+    "postgres"
+  ],
+  "proves": "AES-GCM properties, no plaintext secret columns beyond the allowlist, TLS transport options, and the seal CLI on a seeded plaintext row: dry-run changes nothing, seal adds hash and sealed copy, rerun is idempotent, scrub blanks the plaintext, and the lookup works before and after every step.",
+  "doesNotProve": "Only the Telegram bot token target is seeded live (the others are covered by the integration specs in full mode). A real rollout (mirror off, redeploy) is not exercised. Findings E2 to E4 remain open.",
+  "report": "docs/security/encryption-audit/Sheet3-35-encryption-audit-REPORT.html"
+}
