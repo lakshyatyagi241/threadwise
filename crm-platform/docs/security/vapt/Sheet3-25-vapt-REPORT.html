@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #25 VAPT baseline - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--b:#b4540a;--c:#6b7480;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--b:#f0a05a;--c:#8b949e;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{font-size:1.05rem;margin:1.2em 0 .3em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.partly{color:var(--warn)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.meta{color:var(--mut);font-size:.92rem}.meta code{word-break:break-all}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
+.warn{color:var(--warn)}.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
+code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
+@media print{body{font-size:11pt}main{max-width:none}table,figure,.box,.tile{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+<h1>VAPT baseline: scans, attacks and a repeatable runner</h1>
+<p><span class="badge partly">Partly met: baseline done, not yet recurring, 2 High design decisions still open</span> &nbsp; Sheet3 item #25 &middot; P0 &middot; owner Vedant &middot; effort 6</p>
+<p class="meta">Branch <code>vedant/security/vapt-baseline</code> &middot; run 21 Oct 2026 on a local instance only (API :3922, throwaway database, Redis db 11) &middot; nothing else was scanned.</p>
+<blockquote>Target, word for word: "Automated recurring VAPT + pre-release deep scan; zero unresolved Critical/High release blockers"</blockquote>
+</header>
+
+<h2>1. Verdict</h2>
+<div class="box">
+<b>Met.</b> The VAPT is automated: <code>bash tools/security/vapt.sh</code> boots a local API on a throwaway database, runs the repo audits, an optional OWASP ZAP API scan and our own DAST walker, then 18 live attack tests, and exits non-zero on a Critical/High. Run piece by piece, it found <b>no exploitable Critical or High</b>. It found and fixed one Low (the framework name was advertised).<br>
+<b>Not met.</b> (a) <b>"Recurring" is not achieved</b>: GitHub Actions cannot start on this account, so <code>.github/workflows/vapt.yml</code> is manual-trigger only and its <code>schedule:</code> is commented out. (b) <b>"Zero unresolved Critical/High" is not literally true</b>: two High items from the repo's own audits are open design decisions (TI-001, AZ-api-key-scopes) and two are owner-accepted risks (MFA switches). None is a small fix, none has a known exploit path (section 6). (c) <b>The ZAP run did not finish</b>: it imported all 1880 URLs but hit my 15 minute cap with no report, so ZAP contributed no findings. The DAST evidence is from our own walker. (d) The pre-release deep scan against staging was not done (section 8). (e) <code>vapt.sh</code> itself was not run end to end.
+</div>
+
+<h2>2. In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>0</b><span>exploitable Critical or High found by the live attack tests and the DAST walker</span></div>
+<div class="tile"><b>2009</b><span>API operations walked by the DAST script (all operations in the live OpenAPI document)</span></div>
+<div class="tile"><b>18</b><span>new live attack tests, all passing; 17 passed first time, 1 failed first and was fixed</span></div>
+<div class="tile"><b>4</b><span>High items still on the books: 2 open decisions, 2 owner-accepted</span></div>
+<div class="tile"><b>1</b><span>fix: <code>X-Powered-By: Express</code> removed (Low)</span></div>
+<div class="tile"><b>0 of 1</b><span>ZAP API scans completed (ran 15 min, no report; see section 5)</span></div>
+</div>
+
+<h2>3. What this is, in plain words</h2>
+<p>A VAPT (vulnerability assessment and penetration test) means "attack our own product the way a stranger would, then fix what works". On a copy of the product running on this laptop, with two fake companies (tenant A, tenant B) and users with different roles, we did four things:</p>
+<ol>
+<li><b>Ran the checks the repo already had</b> (auth, authorisation, tenant isolation, static code scan, dependency scan, secret scan) with a real database this time, and read the code behind every red item to see whether it is real.</li>
+<li><b>Scanned the running API from outside</b> with a small script of ours that tries the classic mistakes on every route: no login, a viewer calling admin routes, odd headers, redirects, brute-force login. OWASP ZAP was started as well but did not finish.</li>
+<li><b>Attacked the riskiest areas as automated tests</b>: company B reading company A's data, a viewer acting as admin, forged login tokens, replayed refresh tokens, guessing public invoice/booking links, faked payment webhooks, spreadsheet-formula injection in exports, a bad upload.</li>
+<li><b>Made it repeatable</b>: one script and one manual workflow run all of the above again.</li>
+</ol>
+
+<h2>4. How we tested</h2>
+<table>
+<tr><th>Layer</th><th>Tool</th><th>Against</th></tr>
+<tr><td>Existing audits</td><td><code>pnpm audit:auth</code>, <code>audit:authz</code>, <code>audit:tenancy</code> (with DB URLs), <code>audit:sast</code>, <code>pnpm audit --prod --audit-level high</code>, built-in secret scan</td><td>working tree + throwaway Postgres (435 tables, 2612 generated cross-tenant scenarios)</td></tr>
+<tr><td>DAST, tool</td><td>OWASP ZAP <code>zap-api-scan.py</code> from <code>ghcr.io/zaproxy/zaproxy:stable</code> (pulled fine), OpenAPI from <code>/docs-json</code>, host forced to localhost:3922, tenant A admin Bearer token injected, 2 threads, 10 minute active-scan cap</td><td>local API only</td></tr>
+<tr><td>DAST, own script</td><td><code>tools/security/vapt/dast.mjs</code>: every operation with no token, viewer token on platform/admin paths, headers, CORS, method override, open redirect, stack traces, login throttle; refuses non-local hosts</td><td>local API only</td></tr>
+<tr><td>Manual checks as tests</td><td><code>apps/api/test/security/vapt/vapt-live.spec.ts</code> (vitest; skipped unless <code>VAPT_BASE_URL</code> is set; refuses non-local hosts)</td><td>local API, tenant A admin/viewer, tenant B admin</td></tr>
+<tr><td>Runner</td><td><code>tools/security/vapt.sh</code> + <code>summarize.mjs</code>; <code>.github/workflows/vapt.yml</code> (manual)</td><td>creates and drops its own databases</td></tr>
+</table>
+<p><b>Already covered by earlier work and deliberately not repeated:</b> SSRF address and URL matrices (<code>test/unit/security/ssrf-*.spec.ts</code>, <code>test/unit/ssrf</code>), CSRF / CORS / security headers (<code>test/unit/security/headers-cors.spec.ts</code>), the fuzz suite (<code>test/fuzz</code>, <code>fuzz-*.spec.ts</code>), the tenancy audit's generated RLS scenarios, the JWT attack probes inside <code>audit:auth</code>, encryption and secret-column ratchets.</p>
+
+<h2>5. Results at a glance</h2>
+<figure>
+<svg viewBox="0 0 640 190" role="img" aria-label="Findings by severity">
+<text x="8" y="22" class="m">Findings by severity (after triage)</text>
+<text x="8" y="52">Critical</text><rect x="90" y="38" width="2" height="18" fill="var(--bad)"/><text x="100" y="52">0</text>
+<text x="8" y="82">High</text><rect x="90" y="68" width="160" height="18" fill="var(--bad)"/><text x="258" y="82">4  (2 open decisions, 2 owner-accepted)</text>
+<text x="8" y="112">Medium</text><rect x="90" y="98" width="160" height="18" fill="var(--warn)"/><text x="258" y="112">4  (all open)</text>
+<text x="8" y="142">Low</text><rect x="90" y="128" width="160" height="18" fill="var(--a)"/><text x="258" y="142">4  (1 fixed, 3 open)</text>
+<text x="8" y="172">Info</text><rect x="90" y="158" width="120" height="18" fill="var(--c)"/><text x="218" y="172">3</text>
+</svg>
+<figcaption>Raw tool output was larger: SAST said 3 critical + 4 high, tenancy 2 failed scenarios, DAST 1 High. After reading the code none of those is an exploitable Critical/High (section 6).</figcaption>
+</figure>
+<figure>
+<svg viewBox="0 0 640 150" role="img" aria-label="Generated tenant isolation scenarios">
+<text x="8" y="22" class="m">Tenancy audit: generated cross-tenant scenarios on a real database (2612)</text>
+<rect x="8" y="40" width="612" height="22" fill="var(--ok)"/><text x="14" y="56" style="fill:#fff">2574 passed</text>
+<rect x="8" y="70" width="9" height="22" fill="var(--warn)"/><text x="24" y="86">36 not applicable</text>
+<rect x="8" y="100" width="2" height="22" fill="var(--bad)"/><text x="24" y="116">2 failed: team_members "read own" returned 0 rows, foreign rows 0 (probe seeding gap, not a leak)</text>
+</svg>
+<figcaption>Source: <code>reports/tenancy-audit/latest/tenant-isolation-test-results.json</code> from this run.</figcaption>
+</figure>
+<h3>DAST and manual checks</h3>
+<table>
+<tr><th>Check</th><th>Result</th></tr>
+<tr><td>Routes answering 2xx with no token, outside the allow-list</td><td>3 of 2009: <code>/v2/i18n/languages</code>, <code>/v2/setup/status</code> (state + version 0.1.0), <code>/v2/shopify/embedded/config</code>: public by design (L2)</td></tr>
+<tr><td>Viewer on <code>/platform</code>, <code>/operator</code>, <code>/admin</code> paths</td><td>0 reachable</td></tr>
+<tr><td>Tenant B against tenant A's contact, company, deal, task (GET, PATCH, DELETE, list)</td><td>404 on every one; A still reads its own</td></tr>
+<tr><td>JWT: alg=none, forged signature, tampered tenant claim, expired claim, garbage; refresh token as access token</td><td>401 on all</td></tr>
+<tr><td>Refresh reuse</td><td>one step behind inside 30 s is the designed two-tabs grace; a token two rotations old is refused and revokes the session</td></tr>
+<tr><td>Password reset</td><td>unknown address answers like a known one; a made-up token is refused (4xx) every time. Reuse of a real emailed token needs the mailbox: not tested</td></tr>
+<tr><td>Public invoice / sales-doc / booking-manage / unsubscribe links</td><td>guessed and SQL-shaped tokens: 4xx, never 2xx or 5xx; accept/pay/cancel with a guessed token refused</td></tr>
+<tr><td>Payment and store webhooks, no or wrong signature</td><td>all 4xx</td></tr>
+<tr><td>CSV export of a company named <code>=HYPERLINK(...)</code></td><td>cell prefixed with <code>'</code>; formula neutralised</td></tr>
+<tr><td>Upload with executable content type, and a 60 MB body</td><td>both refused with 4xx</td></tr>
+<tr><td>Login brute force</td><td>429 after 5 bad tries on a real account (15 min lock); 429 at the IP ceiling (40 per 5 min) for made-up accounts</td></tr>
+<tr><td>CORS reflection, method override, open redirect, stack traces</td><td>none found</td></tr>
+</table>
+<h3>OWASP ZAP</h3>
+<div class="box">The ZAP image pulled and started (about 1.5 minutes to pull). It imported 1880 URLs from the OpenAPI document with the tenant A admin token injected, then ran until my 15 minute wall-clock cap killed it (exit 124). It wrote no report, so <b>there are no ZAP findings and ZAP coverage is not claimed</b>. Next time: run it with a smaller scope (one tag at a time), a longer cap, or the baseline mode first. The fallback walker and the live tests above are what this report's DAST evidence rests on.</div>
+
+<h2>6. Findings</h2>
+<h3>Fixed</h3>
+<table>
+<tr><th>ID</th><th>Sev</th><th>Finding</th><th>Fix and proof</th></tr>
+<tr><td>L1</td><td><span class="chip">Low</span></td><td>Every response carried <code>X-Powered-By: Express</code> (DAST-HDR-POWERED). Evidence: <code>GET /v2/auth/password-policy</code> returned the header.</td><td><code>app.disable('x-powered-by')</code> in <code>apps/api/src/main.ts</code>. The test "does not advertise the framework" failed first (<code>expected 'Express' to be null</code>), passes after rebuild (18/18).</td></tr>
+</table>
+<h3>Open or accepted (none is a known exploit)</h3>
+<table>
+<tr><th>ID</th><th>Sev</th><th>Finding</th><th>Triage and recommendation</th></tr>
+<tr><td>H1 = TI-001</td><td><span class="chip bad">High</span></td><td>RLS bypass flag <code>app.privileged</code> is a plain Postgres setting the app role can set (<code>packages/db/migrations/0007_rls_policies.sql</code>). The tenancy audit reproduces it as <code>crm_app_user</code>.</td><td>Needs attacker-controlled SQL first; none found. Owner decision: ADR 0028 (Proposed) recommends a separate DB role for privileged work. Pre-existing; the audit marks it not release-blocking. <b>Open.</b></td></tr>
+<tr><td>H2 = AZ-api-key-scopes</td><td><span class="chip bad">High</span></td><td>An empty API-key scope list historically means unrestricted.</td><td>Audit: needs-decision. A dynamic test exists (<code>test/e2e/authz/api-key-scopes.e2e.spec.ts</code>, needs Docker, not run here). Decide the default for empty scopes. <b>Open.</b></td></tr>
+<tr><td>H3, H4</td><td><span class="chip bad">High</span> accepted</td><td><code>mfa-enforcement-defaults</code>, <code>operator-mfa-ignored</code>: MFA is a Security Center switch, off on staging.</td><td>Owner decision of 10 Oct 2026, recorded in the auth audit. <b>Release gate: confirm the production switches are ON before each release.</b></td></tr>
+<tr><td>M1</td><td><span class="chip warn">Medium</span></td><td>Tenancy audit verdict NO-GO on this main: 2 files with a new <code>privileged()</code> call (<code>chat-conversations/message-log.service.ts</code>, <code>data-retention/sweep-record.ts</code>), 1 new <code>sql.raw()</code> (<code>analytics/query/message-feed.service.ts</code>), 7 unclassified tables (<code>data_retention_policies</code>, <code>data_retention_runs</code>, <code>failed_operation_events</code>, <code>financial_records_archive</code>, <code>waboo_migration_batches/runner_jobs/runners</code>).</td><td>Read the code: the privileged calls read the platform retention policy or write the platform run log (no tenant rows); the <code>sql.raw</code> inputs are internal literals and a typed union; all 7 tables have forced RLS with operator/platform-only policies. Baseline drift, not leaks. Add them to the allow-lists under <code>tools/tenancy-audit/policy</code>. <b>Open</b>, pre-existing on main.</td></tr>
+<tr><td>M2</td><td><span class="chip warn">Medium</span></td><td>112 authenticated routes have no <code>@RequirePermission</code>; the guard lets them through (authz audit).</td><td>Only a unit-test allow-list guards this. Recommend an explicit <code>@SelfService()</code> decorator and a fail-closed guard. <b>Open.</b></td></tr>
+<tr><td>M3</td><td><span class="chip warn">Medium</span></td><td>320 operator/partner routes need only <code>OperatorGuard</code>; 84 use a platform permission.</td><td>Any platform operator reaches them whatever their role. Decide which need keys. Tenant users cannot reach them (tested). <b>Open.</b></td></tr>
+<tr><td>M4</td><td><span class="chip warn">Medium</span></td><td>No automatic recurring run (auth audit control <code>ci-pipeline</code> is Partial; Actions cannot start here).</td><td>Run <code>vapt.sh</code> by hand before every release; enable the <code>schedule:</code> block when Actions works. <b>Open.</b></td></tr>
+<tr><td>L2</td><td><span class="chip">Low</span></td><td><code>GET /v2/setup/status</code> is public and returns <code>"version":"0.1.0"</code>.</td><td>Version disclosure only. Drop the field once setup is complete. <b>Open.</b></td></tr>
+<tr><td>L3</td><td><span class="chip">Low</span></td><td>SAST lists 3 critical advisories (vitest, tinypool) and the dependency audit 3 moderate (mobile build chain); <code>pnpm audit --prod</code> also has 2 high ignored via <code>auditConfig.ignoreGhsas</code> (GHSA-86w9-cpqp-85rv, GHSA-vfj7-8cjw-p6xm).</td><td>The criticals are dev-time test tooling, not in the production image (reclassified Low). I did not re-triage the two ignored GHSAs (a standing repo decision). Upgrade vitest/tinypool. <b>Open.</b></td></tr>
+<tr><td>L4</td><td><span class="chip">Low</span></td><td>Realtime gateway uses <code>cors: { origin: true, credentials: true }</code> (<code>realtime/realtime.gateway.ts:79</code>).</td><td>The handshake uses a ticket or bearer token, not cookies, so no cross-site socket hijack. Tighten to the staff origin list anyway. <b>Open.</b></td></tr>
+<tr><td>I1-I3</td><td><span class="chip">Info</span></td><td>HSTS absent over http (only set when <code>req.secure</code>); the secret scan's 2 candidates are env var names (<code>ZOOM_CLIENT_SECRET</code> as a string); SAST "secret literals" are in spec files; SQL-CONCAT in <code>seal-plaintext-secrets.ts</code> quotes identifiers from a static table list; <code>verifyAccessIgnoringExpiry</code> is used for sign-out only.</td><td>False positives or by design. Git history was not scanned (gitleaks, semgrep, trivy are not installed).</td></tr>
+</table>
+<p><b>Triage honesty:</b> I read the code behind the High/Critical items above and the DAST hits. Of the 7 SAST "redirect to request-derived target" hits I read 2 (<code>mail-callback</code>, <code>payments</code> return: both build the target from server config) and did not read the other 5.</p>
+
+<h2>7. Rollout and rollback</h2>
+<p>The only product change is one line (<code>app.disable('x-powered-by')</code>); rollback is reverting it. The runner, tests and workflow add no runtime code. The tests run only when <code>VAPT_BASE_URL</code> is set, so the normal <code>pnpm test</code> is unaffected.</p>
+
+<h2>8. What this does NOT prove</h2>
+<ul>
+<li><b>Not recurring.</b> No scheduler runs it. Treat "recurring" as not achieved until Actions (or another runner) can start the workflow.</li>
+<li><b>ZAP produced nothing</b> (section 5).</li>
+<li><b>Local, not staging or production.</b> A real pre-release deep scan still needs: the staging URL with a written scope and scan window; real TLS and the real proxy / WAF / CDN (HSTS, headers, rate limits, trust-proxy IP handling); production-like data volume; real provider callbacks (WhatsApp, Razorpay, Stripe, Shopify) with signed test events; MFA switches on; the mobile app's API traffic; the Next.js web app (XSS, CSP, cookies) with an authenticated browser crawl; the realtime socket under live traffic; a full-length authenticated ZAP active scan, split by API area.</li>
+<li><b>Not covered:</b> the web front end (29 <code>dangerouslySetInnerHTML</code> sites unread), workers, file parsing beyond content type and size (no malware or polyglot files), reset-token reuse through a real mailbox, 5 unread redirect hits, secrets in git history, business-logic abuse (coupon, wallet, billing races), denial of service (excluded on purpose), cross-tenant API checks on modules other than contacts, companies, deals, tasks (the generated tenancy scenarios cover all 373 tenant tables at database level).</li>
+<li>Most auth and authz e2e suites need Docker testcontainers and were not run (only the quick unit layer ran: 790 of 792 passed, 2 skipped).</li>
+<li>A passing DAST walker is a smoke test: it finds classic misconfigurations, not clever bugs.</li>
+</ul>
+
+<h2>9. Next steps and owners</h2>
+<ol>
+<li>Owner (Lakshya): decide H1 (ADR 0028) and H2 (empty API-key scopes); confirm the production MFA switches are on (H3, H4).</li>
+<li>Vedant: add the 3 call sites and 7 tables to the tenancy allow-lists (M1) and fix the <code>team_members</code> probe seeding; drop <code>version</code> from the public setup status (L2); re-run ZAP by area with a longer cap; run <code>vapt.sh</code> once end to end.</li>
+<li>Whoever restores Actions: enable the <code>schedule:</code> in <code>vapt.yml</code> and make it a release check (M4).</li>
+<li>Plan one authenticated ZAP active scan against staging before the next release (section 8).</li>
+</ol>
+
+<h2>10. Appendix: commands and results</h2>
+<table>
+<tr><th>Command</th><th>Result</th></tr>
+<tr><td><code>pnpm db:migrate</code>, <code>db:seed</code>, <code>seed:auth</code> on throwaway DB <code>vapt_a4</code></td><td>492 migrations; orgs Admin and test_tenent; admins and agent; viewers added with <code>seed-identities.sql</code></td></tr>
+<tr><td><code>pnpm audit:authz</code></td><td>exit 0; 14385 policy rows; High needs-decision AZ-api-key-scopes; M2/M3 notes</td></tr>
+<tr><td><code>pnpm audit:tenancy</code> (second throwaway DB, owner + app-role URLs)</td><td>exit 1, NO-GO: 435 tables, 2612 scenarios (2574 pass, 2 fail, 36 n/a); M1 items; TI-001 High open. A first run without DB URLs executed no DB checks.</td></tr>
+<tr><td><code>pnpm audit:auth</code></td><td>exit 0, CONDITIONAL: 0 critical, 0 high open (2 High accepted), 3 medium, 3 low; unit layer 790/792, web 110/110</td></tr>
+<tr><td><code>pnpm audit:sast</code></td><td>3 critical, 4 high, 18 medium, 5 low, 1 info by the tool; triaged in section 6</td></tr>
+<tr><td><code>pnpm audit --prod --audit-level high</code></td><td>exit 0; 3 moderate, 2 high ignored by repo config</td></tr>
+<tr><td><code>node tools/security/vapt/dast.mjs</code></td><td>2009 operations; first run: 1 High (3 public routes, triaged), 1 Medium (my login-throttle check used 12 tries against a 40-per-5-min IP ceiling; script now uses 45), 2 Low (X-Powered-By fixed; HSTS check dropped for http)</td></tr>
+<tr><td><code>VAPT_BASE_URL=http://localhost:3922 pnpm exec vitest run --dir test/security/vapt</code></td><td>before fix: 1 failed (X-Powered-By), 17 passed; after: 18 passed</td></tr>
+<tr><td>ZAP (<code>zap-api-scan.py</code> in docker, host network, localhost only)</td><td>did not finish in 15 min, no report</td></tr>
+<tr><td><code>bash tools/security/vapt.sh</code> end to end</td><td><b>Not run end to end</b> (time box). Each step was run by hand with the same commands.</td></tr>
+</table>
+</main>
+</body>
+</html>
