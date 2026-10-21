@@ -105,9 +105,9 @@ describe('the teams cap: 0 is solo, a missing value is unlimited', () => {
   it('a pack raises a solo plan, unlimited absorbs, and -1 from a pack is unlimited', () => {
     const solo = ent({ planLimits: { teams: 0 }, packLimits: { teams: 10 } });
     expect(resolveLimit(solo, 'teams')).toBe(10);
-    expect(resolveLimit(ent({ planLimits: { teams: 3 }, packLimits: { teams: 10 } }), 'teams')).toBe(
-      13,
-    );
+    expect(
+      resolveLimit(ent({ planLimits: { teams: 3 }, packLimits: { teams: 10 } }), 'teams'),
+    ).toBe(13);
     expect(unl(ent({ planLimits: {}, packLimits: { teams: 10 } }))).toBe(true);
     expect(unl(ent({ planLimits: { teams: 0 }, packLimits: { teams: -1 } }))).toBe(true);
     // an override still beats the pack
@@ -139,7 +139,10 @@ describe('the teams cap: 0 is solo, a missing value is unlimited', () => {
 describe('plain add-on packs grant only the packaging keys', () => {
   it('reads the two features and the teams number, nothing else', () => {
     const g = packGrants([
-      { features: { team_hierarchy: true, automation: true }, limits: { teams: 10, contacts: 500 } },
+      {
+        features: { team_hierarchy: true, automation: true },
+        limits: { teams: 10, contacts: 500 },
+      },
       { features: { custom_roles: true }, limits: { teams: 5 } },
     ]);
     expect(g.features.sort()).toEqual(['custom_roles', 'team_hierarchy']);
@@ -165,11 +168,7 @@ describe('TeamsPlanService', () => {
       featureEnabled: vi.fn(async () => feature),
       assertFeature: vi.fn(async () => {
         if (!feature)
-          throw new AppError(
-            ERROR_CODES.PLAN_FEATURE_LOCKED,
-            'x',
-            HttpStatus.UNPROCESSABLE_ENTITY,
-          );
+          throw new AppError(ERROR_CODES.PLAN_FEATURE_LOCKED, 'x', HttpStatus.UNPROCESSABLE_ENTITY);
       }),
     } as never);
   const run = (s: TeamsPlanService, used: number) =>
