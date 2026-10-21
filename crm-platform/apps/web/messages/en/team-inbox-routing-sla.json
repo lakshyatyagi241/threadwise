@@ -20,7 +20,7 @@
       "back": "Automation and AI",
       "title": "Conversation auto-assignment",
       "recordNote": "This assigns conversations. To give new {contacts}, companies and {deals} to sales owners, see <link>Record assignment rules</link>.",
-      "subtitle": "Give each new conversation to the right agent automatically. Rules are tried in order, from the top.",
+      "subtitle": "Choose who gets each new chat. The switches are enough for most workspaces; add rules only if you need more control.",
       "noAccess": "You do not have permission to view the conversation auto-assignment settings.",
       "create": "Create rule",
       "limitUsed": "{used} of {limit} rules used",
@@ -60,7 +60,7 @@
       "priority": "Priority",
       "active": "Active",
       "off": "Off",
-      "fallback": "Fallback",
+      "fallback": "Everyone else",
       "continues": "Keeps checking",
       "unavailable": "{count, plural, one {# agent unavailable} other {# agents unavailable}}",
       "activeFor": "Rule \"{name}\" is active",
@@ -74,7 +74,9 @@
         "languages": "Language: {list}",
         "inside": "Inside business hours",
         "outside": "Outside business hours",
-        "always": "Every conversation nobody matched"
+        "always": "Every new conversation",
+        "contactNew": "New contact",
+        "contactReturning": "Returning contact"
       },
       "strategy": {
         "round_robin": "Round robin",
@@ -122,7 +124,7 @@
         "name": "Enter a name for the rule.",
         "nameLong": "The name is too long.",
         "descriptionLong": "The description is too long.",
-        "conditions": "Add at least one condition, or mark this rule as the fallback.",
+        "conditions": "Add at least one condition, or turn off “Only for conversations that match”.",
         "contactIncomplete": "Finish or remove the contact conditions that are not complete.",
         "keywordsMany": "Use at most 20 words.",
         "targets": "Choose at least one agent or team.",

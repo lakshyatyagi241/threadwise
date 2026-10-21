@@ -4,6 +4,8 @@ import { collectConditions, type RoutingRule, type SegmentGroup } from '@crm/con
 export interface WhenChip {
   key:
     | 'contact'
+    | 'contactNew'
+    | 'contactReturning'
     | 'channels'
     | 'keywords'
     | 'keywordsAll'
@@ -14,10 +16,16 @@ export interface WhenChip {
   values: Record<string, string | number>;
 }
 
-/** The conditions of a rule as the short lines the list shows. A rule with none is a catch-all (only the fallback may be one). */
+/**
+ * The conditions of a rule as the short lines the list shows. A rule that applies to every conversation (its switch is off) shows
+ * "Every new conversation" whatever conditions are kept on file; so does a rule with none.
+ */
 export function whenChips(rule: RoutingRule, channelLabel: (kind: string) => string): WhenChip[] {
   const c = rule.conditions;
+  if (rule.appliesToAll) return [{ key: 'always', values: {} }];
   const out: WhenChip[] = [];
+  if (c.contactKind === 'new') out.push({ key: 'contactNew', values: {} });
+  if (c.contactKind === 'returning') out.push({ key: 'contactReturning', values: {} });
   if (c.contact) {
     out.push({
       key: 'contact',

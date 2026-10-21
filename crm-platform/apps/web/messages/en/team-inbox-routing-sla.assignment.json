@@ -1,0 +1,234 @@
+{
+  "team-inbox-routing-sla": {
+    "assign": {
+      "switches": {
+        "title": "Chat assignment",
+        "intro": "Four switches cover most workspaces: turn them on and you never have to create a rule.",
+        "order": "The order for a new chat: Contact Owner and Sticky Agent first, then your rules (if you add any), then Everyone else, then the waiting queue.",
+        "readOnly": "You can see these switches but not change them.",
+        "saved": "Saved.",
+        "saveFailed": "Could not save the change.",
+        "loading": "Loading the assignment settings",
+        "loadFailed": "The assignment settings could not be loaded.",
+        "retry": "Try again",
+        "notInPlan": "Not in your plan",
+        "upgradeHint": "Your plan does not include this. Ask the account owner to upgrade the plan.",
+        "stepFirst": "Checked first",
+        "stepMaster": "Master switch",
+        "stepAfter": "After a claim",
+        "needsAuto": "Used only while Auto Assignment is on.",
+        "auto": {
+          "title": "Auto Assignment",
+          "body": "New chats are shared evenly among agents who are accepting chats (not offline, busy or on leave). When every agent has reached their chat limit, new chats wait in the queue.",
+          "limitHint": "Set each agent's chat limit in their profile under <link>Team members</link>.",
+          "off": "Off: nothing is assigned automatically, not by a rule and not by the contact owner. Chats wait in the queue until someone claims them or a flow names a person."
+        },
+        "sticky": {
+          "title": "Sticky Agent",
+          "body": "A returning contact goes back to the agent who handled their last chat, as long as that agent is still an active member who can open the inbox (their online status is not checked). If the contact has an owner, the owner is tried first.",
+          "withWindow": "How many days back the last agent counts is set under Advanced."
+        },
+        "owner": {
+          "title": "Assign Chat to Contact Owner",
+          "body": "Chats from a known contact go to their contact owner first, so support stays consistent and personal. If the owner is on leave their delegate takes the chat; if there is no owner, the next step decides.",
+          "wins": "If Sticky Agent is also on, the contact owner still wins; the last agent is only the second choice."
+        },
+        "claim": {
+          "title": "Assign Agent as Contact Owner",
+          "body": "When an agent claims a chat from the waiting queue and the contact has no owner yet, that agent becomes the contact owner. An existing owner is never changed.",
+          "note": "A chat given to an agent by a rule does not set the owner. With Keep open chats with the owner (under Advanced) a handoff does too."
+        }
+      },
+      "advanced": {
+        "title": "Advanced",
+        "hint": "Keeping chats in sync with the contact owner, the sticky window, reassign prompt and queue alerts.",
+        "sync": {
+          "title": "Keep open chats with the owner",
+          "body": "When a contact's owner changes, their open chats that were assigned automatically follow the new owner. A chat a person took is never moved. A handoff that assigns a chat also sets the owner when the contact has none.",
+          "needsOwner": "Turn on Assign Chat to Contact Owner first."
+        }
+      },
+      "rules": {
+        "title": "Need more control? Add rules",
+        "intro": "Optional. Rules send particular chats (a channel, words in the message, a new contact...) to particular agents or teams. If the four switches are enough, you never have to create one.",
+        "locked": "Rules are not in your plan. You still have the waiting queue, claiming and manual assignment. Ask the account owner to upgrade the plan.",
+        "pipelineTitle": "How a new chat is assigned",
+        "pipeline": {
+          "agent": "1. Contact owner and Sticky Agent",
+          "rules": "2. Your rules, from the top",
+          "rulesBody": "The first rule that matches and finds an available agent takes the chat.",
+          "everyone": "3. Everyone else",
+          "everyoneBody": "Takes what no rule took.",
+          "queue": "4. Waiting queue",
+          "queueBody": "If nobody is found, the chat waits in the Waiting tab until an agent claims it.",
+          "agentBody": "Set by the switches above."
+        },
+        "never": "Anything already assigned by a flow, a person or a handoff is never changed by the rules.",
+        "add": "Add a rule",
+        "emptyTitle": "No rules",
+        "empty": "That is fine. Your switches above and Everyone else decide.",
+        "loading": "Loading the rules",
+        "loadFailed": "The rules could not be loaded.",
+        "sentence": "{when} → {how}",
+        "assignWho": "{strategy}: {who}",
+        "everyoneWho": "all agents",
+        "noAssign": "does not assign",
+        "drag": "Drag {name} to change the order",
+        "neverRuns": "Never runs",
+        "neverMatches": "Never matches",
+        "neverMatchesHint": "It has no condition and does not apply to every conversation. Edit it to fix that.",
+        "shadowed": "{count, plural, one {The rule below} other {The rules below}} “{blocker}” can never run unless nobody in “{blocker}” is available: {names}. “{blocker}” applies to every conversation and stops the check there. Move it down, or turn off “Stop when this rule matches” in it.",
+        "reordered": "Order saved."
+      },
+      "everyone": {
+        "title": "Everyone else",
+        "pinned": "Pinned last",
+        "body": "Takes every chat that no rule took. Choose who gets it.",
+        "notSet": "Not set up yet: chats that no rule takes wait in the queue.",
+        "mode": "What happens to those chats",
+        "evenly": "Distribute evenly among all agents",
+        "evenlyHint": "Round robin or least busy over everyone who can open the inbox and is available: not offline, busy, on leave or at their chat limit.",
+        "listed": "Choose agents or teams",
+        "listedNow": "Now: {who}.",
+        "listedEdit": "Change the agents or teams",
+        "queue": "Leave in the waiting queue",
+        "queueHint": "Nobody is assigned. The chat waits until an agent claims it.",
+        "strategy": "How to share",
+        "saved": "Saved.",
+        "failed": "Could not save the change.",
+        "confirmTitle": "Replace the chosen agents?",
+        "confirmBody": "Everyone else now gives chats to the agents or teams you chose. Distributing evenly replaces that choice.",
+        "confirm": "Replace",
+        "ruleName": "Everyone else"
+      },
+      "where": {
+        "title": "Where this applies",
+        "applied": "Applied",
+        "applied1": "When a new chat arrives (and when a customer reopens a finished one nobody holds).",
+        "applied2": "When a Human handoff step is set to “Assignment rules”: the same list is checked then, using the contact, the channel and the customer's latest message, then Everyone else, then the waiting queue.",
+        "not": "Not applied",
+        "not1": "A chat that a flow, a person or a handoff has already assigned.",
+        "not2": "Assigning or claiming by hand.",
+        "not3": "A Human handoff step that names a person (the rules are ignored) or a team (the team's own method is used)."
+      },
+      "try": {
+        "title": "Try it",
+        "body": "Pick a contact, a channel and a sample message to see who would get the chat and why. Nothing is assigned, counted or sent.",
+        "contact": "Contact (optional)",
+        "noContact": "No contact picked: the sample is a brand-new contact. Conditions on saved contact details cannot be checked without a real contact.",
+        "channel": "Channel",
+        "message": "Sample message",
+        "messagePlaceholder": "e.g. I would like a refund",
+        "run": "Show what would happen",
+        "running": "Checking",
+        "failed": "The test could not run.",
+        "result": "Result",
+        "outcome": {
+          "sticky": "Keep with their agent decides: {who}.",
+          "rule": "The rule “{rule}” decides: {who}.",
+          "everyone": "Everyone else decides: {who}.",
+          "queue": "Nobody is found: the chat waits in the queue.",
+          "off": "Auto Assignment is switched off: nothing is assigned automatically."
+        },
+        "who": {
+          "agent": "{name}",
+          "agentUnknown": "an agent",
+          "team": "the queue of {name}",
+          "teamUnknown": "a team queue"
+        },
+        "stepsTitle": "Step by step",
+        "step": {
+          "switch": "Auto Assignment",
+          "sticky": "Contact owner and Sticky Agent",
+          "rule": "Rule “{name}”",
+          "everyone": "Everyone else",
+          "queue": "Waiting queue"
+        },
+        "why": {
+          "auto_assign_off": "The switch is off.",
+          "sticky_off": "Both switches are off, so this step is skipped.",
+          "no_contact": "There is no contact to look up.",
+          "no_agent_found": "No contact owner or last agent could take it.",
+          "owner": "The contact owner takes it.",
+          "last_handler": "The agent of the contact's last chat takes it.",
+          "conditions_failed": "Did not match.",
+          "nobody_available": "Matched, but nobody it points at is available.",
+          "agent_picked": "Matched and picked an agent.",
+          "team_queue": "Matched; nobody was free, so it goes to the team's queue.",
+          "no_assignment_in_rule": "Matched; this rule does not assign (it only does its other actions).",
+          "not_set": "Not set up, so chats nobody takes wait in the queue."
+        },
+        "part": {
+          "contactKind": "New or returning contact",
+          "contact": "Contact details",
+          "channel": "Channel",
+          "keywords": "Message words",
+          "languages": "Language",
+          "businessHours": "Business hours"
+        },
+        "partOk": "matched",
+        "partWhy": {
+          "no_saved_value": "this contact does not have that saved, so it did not match",
+          "no_contact": "there is no contact",
+          "not_same_kind": "the contact is not of that kind",
+          "channel_differs": "this channel is not in the list",
+          "no_word": "none of the words are in the message",
+          "language_differs": "the language is different or unknown",
+          "hours_differ": "the time is not in that part of the day"
+        },
+        "contactLine": "This contact is {kind}. Stage: {stage}. {owner} {tags}",
+        "kind": {
+          "new": "new",
+          "returning": "returning"
+        },
+        "hasOwner": "It has an owner.",
+        "noOwner": "It has no owner.",
+        "tags": "{count, plural, =0 {No tags saved.} one {# tag saved.} other {# tags saved.}}",
+        "skippedTitle": "Left out",
+        "skip": {
+          "on_leave": "on leave",
+          "offline_busy_or_at_capacity": "offline, busy or at their chat limit",
+          "cannot_read": "cannot open the inbox",
+          "no_owner": "the contact has no owner",
+          "no_previous_handler_in_window": "no earlier agent for this contact",
+          "not_an_active_member": "not an active member"
+        },
+        "outside": "Pretend it is outside business hours",
+        "inside": "Pretend it is inside business hours",
+        "clock": "Business hours: use the clock now",
+        "skipStep": {
+          "owner": "Contact owner",
+          "last_handler": "Last agent"
+        }
+      },
+      "form": {
+        "whenSwitch": "Only for conversations that match...",
+        "whenSwitchHint": "Off: this rule applies to every new conversation.",
+        "everyConversation": "This rule applies to every new conversation.",
+        "kept": "Your conditions are kept but ignored while this is off.",
+        "add": "Add a condition",
+        "addNone": "All conditions are added",
+        "remove": "Remove {name}",
+        "name": {
+          "contactKind": "New or returning contact",
+          "channel": "Channel",
+          "keywords": "Message words",
+          "language": "Customer language",
+          "hours": "Business hours",
+          "contact": "Contact details"
+        },
+        "kind": {
+          "title": "New or returning contact",
+          "hint": "A contact is returning when it has an earlier chat, or was saved more than 10 minutes before this chat.",
+          "new": "New contact (first chat)",
+          "returning": "Returning contact"
+        },
+        "contactNote": "Only matches contacts that already have this saved. A brand-new contact arrives with nothing saved except the stage “New”, so use New or returning contact for first-time customers.",
+        "everyoneElseNote": "This is the Everyone else rule: it takes the chats no other rule took.",
+        "everyoneAgents": "Everyone who can open the inbox",
+        "everyoneAgentsHint": "Share the chats over all available agents instead of choosing them.",
+        "fallbackConditions": "This rule has conditions saved from before, so it only takes the chats that match them. Turn on the switch below to review them, or remove them."
+      }
+    }
+  }
+}

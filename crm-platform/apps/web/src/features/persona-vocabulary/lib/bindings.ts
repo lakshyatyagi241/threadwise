@@ -106,6 +106,11 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     prefixes: ['team-inbox-conversations.handoff', 'team-inbox-routing-sla.handoffSettings'],
   },
   {
+    // The Auto-assignment page (four switches, rules, Try it): written with the default noun (contact) like the handoff surface above.
+    id: 'auto-assignment',
+    prefixes: ['team-inbox-routing-sla.assign'],
+  },
+  {
     id: 'deals',
     prefixes: [
       'deals-pipelines.nav',
