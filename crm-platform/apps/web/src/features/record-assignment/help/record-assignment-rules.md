@@ -40,7 +40,7 @@ Only records without an owner are assigned. An owner a person set is never repla
 3. Choose the module tab, then select **Create rule**.
 4. Give the rule a name and add its conditions: pick a field, then how to compare it, then a value. Join conditions with **All (AND)** or **Any (OR)** and use **Add group** for more complex rules. Leave the conditions empty to make a fallback rule.
 5. Under **Assign to**, choose the method and the people or teams, then select **Save and activate**, or **Save as paused** to prepare it without using it yet.
-6. Use **Test with a record** to pick a real record and see which rule would take it and who would get it. Nothing is changed.
+6. Use **Test with a record** to pick a real record and see which rule would take it and who would get it. Nothing is changed. Under each rule, **Left out** names the people the rule could not use and why: they cannot open that kind of record, they are no longer active, they are on leave today, or they are offline.
 
 ## Priority and fallback
 
@@ -72,11 +72,11 @@ Each module has a **Run log** that shows what the engine did with every record, 
 
 ## Plan and access
 
-Seeing the rules needs the permission to view record assignment. Changing them and the switch need the permission to manage it. Managers and above have both by default. Your plan needs the Record assignment rules feature. This is separate from Auto-assignment, which assigns conversations in the inbox.
+Seeing the rules needs the permission to view record assignment. Changing them and the switch need the permission to manage it. Managers and above have both by default. Your plan needs the Record assignment rules feature. This is separate from Conversation auto-assignment, which assigns conversations in the inbox.
 
 ## If something looks wrong
 
 - **Nothing is assigned.** Check the switch is on, the rule is active, and the record had no owner when it arrived. Use **Test with a record** with the same record.
-- **A rule matches but nobody gets it.** Everyone it names is on leave or offline. Add a team or another person, name a delegate, or turn off **Skip people who are offline**.
+- **A rule matches but nobody gets it.** Everyone it names is on leave, offline, no longer active, or cannot open that kind of record (the role needs the permission to see contacts, companies or deals). **Test with a record** shows who was left out and why. Add a team or another person, give the role the permission, name a delegate, or turn off **Skip people who are offline**.
 - **Imported records are not assigned.** Turn on **Also assign imported records**.
 - **The rule list changed after I saved.** Someone else edited the rule. The latest version is loaded, so check it and apply your change again.

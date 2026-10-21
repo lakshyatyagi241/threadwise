@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Riunioni video",
+        "description": "Collega il tuo account Zoom o Microsoft Teams per aggiungere link video alle tue riunioni.",
+        "keywords": "zoom, teams, microsoft teams, video, videochiamata, link della riunione, link per partecipare, videoconferenza, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Chiudi"
+    },
+    "form": {
+      "label": "Videoconferenza",
+      "add": {
+        "zoom": "Aggiungi link Zoom",
+        "teams": "Aggiungi link Teams",
+        "meet": "Aggiungi link Google Meet"
+      },
+      "chosen": {
+        "zoom": "Link Zoom",
+        "teams": "Link Teams",
+        "meet": "Link Google Meet"
+      },
+      "remove": "Rimuovi il link video",
+      "needsStart": "Imposta un orario di inizio per aggiungere un link video o una voce di calendario.",
+      "meetNote": "Un link Google Meet fa parte di un evento del calendario, quindi questa riunione viene aggiunta anche al tuo calendario.",
+      "teamsViaCalendar": "Questo link Teams viene creato dal tuo calendario Microsoft 365, quindi questa riunione viene aggiunta anche lì.",
+      "calendar": "Aggiungi al mio calendario ({account})",
+      "calendarNamed": "Aggiungi al mio calendario ({account}, {calendar})",
+      "invite": "Invia un invito di calendario al contatto",
+      "inviteHint": "Il tuo calendario invia l'invito all'indirizzo e-mail del contatto. Il nostro invito via e-mail non viene modificato.",
+      "connectLink": "Collega la videoconferenza"
+    },
+    "row": {
+      "join": "Partecipa",
+      "joinAria": "Partecipa alla riunione {provider} {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Aggiunta del link video...",
+      "onCalendar": "Nel tuo calendario",
+      "invited": "Il calendario ha inviato un invito al contatto",
+      "retry": "Riprova",
+      "retrying": "Nuovo tentativo...",
+      "retried": "Il link video e la voce di calendario sono stati ricontrollati.",
+      "retryFailed": "Non ha funzionato. La riunione è salvata; puoi riprovare.",
+      "problem": {
+        "not_installed": "L'integrazione {provider} non è installata per questo spazio di lavoro.",
+        "not_connected": "Il tuo account {provider} non è collegato. Collegalo in Impostazioni, Riunioni video.",
+        "needs_reconnect": "La connessione a {provider} deve essere rinnovata. Ricollegala in Impostazioni, Riunioni video.",
+        "not_configured": "{provider} non è ancora stato configurato per questa piattaforma. Rivolgiti all'amministratore della piattaforma.",
+        "calendar_not_connected": "Il calendario non è collegato, quindi non è stato possibile aggiungervi la riunione.",
+        "provider_failed": "{provider} non ha risposto. La riunione è salvata; riprova.",
+        "no_start_time": "Un link video richiede un orario di inizio per la riunione."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Non è stato possibile aggiungere la riunione al calendario perché nessun calendario è collegato.",
+        "provider_failed": "Il calendario non ha risposto, quindi la riunione non è ancora presente. La riunione è salvata; riprova.",
+        "other": "Non è stato possibile aggiungere la riunione al calendario."
+      }
+    },
+    "page": {
+      "eyebrow": "Impostazioni",
+      "title": "Riunioni video",
+      "subtitle": "Collega il tuo account Zoom o Microsoft Teams. Il modulo Aggiungi riunione offrirà poi un link video, creato nel tuo account e mostrato nella riunione con un pulsante Partecipa.",
+      "loading": "Caricamento delle tue connessioni video...",
+      "forbidden": {
+        "title": "Non puoi usare questa pagina",
+        "body": "Chiedi a un amministratore dello spazio di lavoro di dare al tuo ruolo l'accesso per modificare i contatti."
+      },
+      "failure": {
+        "generic": "Non è stato possibile caricare le tue connessioni video."
+      },
+      "retry": "Riprova",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Crea una riunione Zoom nel tuo account Zoom per ogni riunione che pianifichi, la sposta quando sposti la riunione e la rimuove quando elimini la riunione."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Crea una riunione Teams nel tuo account Microsoft aziendale o scolastico per ogni riunione che pianifichi, e la aggiorna o la rimuove insieme alla riunione."
+        }
+      },
+      "status": {
+        "connected": "Collegato",
+        "needs_reconnect": "Richiede un nuovo collegamento",
+        "disconnected": "Installato",
+        "not_installed": "Non installato",
+        "unavailable": "Disattivato",
+        "not_available": "Non ancora disponibile"
+      },
+      "account": "Collegato come {account}",
+      "connectedOn": "Collegato {when}",
+      "lastError": {
+        "forbidden": "Il provider ha rifiutato l'ultima richiesta. Il tuo account potrebbe non essere autorizzato a creare riunioni.",
+        "rate_limited": "Il provider sta limitando le richieste in questo momento.",
+        "unavailable": "Il provider non ha risposto all'ultima richiesta."
+      },
+      "actions": {
+        "connect": "Collega",
+        "reconnect": "Ricollega",
+        "disconnect": "Disconnetti",
+        "install": "Installa dal Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Il tuo spazio di lavoro non ha ancora installato {provider}. Installalo dal Marketplace, poi collega qui il tuo account.",
+        "cannotInstall": "Il tuo spazio di lavoro non ha ancora installato {provider}. Chiedi a un amministratore dello spazio di lavoro di installarlo dal Marketplace."
+      },
+      "unavailable": "{provider} è installato, ma l'operatore della tua piattaforma ha disattivato la sua configurazione, quindi per ora non può essere collegato. Rivolgiti all'operatore della piattaforma.",
+      "outcome": {
+        "connected": "{provider} è collegato.",
+        "denied": "{provider} non è stato collegato perché l'accesso è stato annullato.",
+        "failed": "Non è stato possibile collegare {provider}. Riprova.",
+        "expired": "L'accesso ha richiesto troppo tempo. Premi di nuovo Collega.",
+        "not_configured": "{provider} non è ancora stato configurato per questa piattaforma.",
+        "notYours": "Quell'accesso è stato avviato da qualcun altro, quindi non è stato collegato nulla."
+      },
+      "confirming": "Completamento del collegamento...",
+      "disconnected": "{provider} disconnesso.",
+      "disconnectTitle": "Disconnettere {provider}?",
+      "disconnectBody": "Le riunioni che hanno già un link {provider} lo mantengono, ma spostare o eliminare quelle riunioni non potrà più modificare la stanza. Puoi collegarti di nuovo in qualsiasi momento.",
+      "disconnectConfirm": "Disconnetti",
+      "keep": "Mantieni collegato",
+      "calendarNote": "I link Google Meet e Teams creati tramite il tuo calendario non richiedono un collegamento qui: usano il calendario che il tuo spazio di lavoro ha già collegato.",
+      "notAvailable": "L'operatore della tua piattaforma non ha ancora reso disponibile {provider}: deve ancora essere configurato e pubblicato nel Marketplace. Per ora non c'è nulla da installare, quindi chiedi all'operatore della piattaforma di attivarlo.",
+      "installedHint": "{provider} è installato per il tuo spazio di lavoro. Collega il tuo account per aggiungere link {provider} alle tue riunioni."
+    },
+    "operator": {
+      "title": "Configurazione delle riunioni video",
+      "ready": "Pronto",
+      "missing": "{count, plural, one {# passaggio mancante} other {# passaggi mancanti}}",
+      "loadFailed": "Non è stato possibile caricare la checklist di configurazione.",
+      "fake": "Modalità sviluppo: sono attivi gli adattatori finti di Zoom e Microsoft Teams, quindi si può collegare senza un account reale. La checklist qui sotto mostra cosa serve ancora a una piattaforma reale.",
+      "intro": {
+        "zoom": "Gli spazi di lavoro non possono vedere né usare Zoom finché le credenziali dell'app Zoom non sono impostate e questa scheda non è pubblicata.",
+        "teams": "Gli spazi di lavoro non possono vedere né usare Microsoft Teams finché non è disponibile un'app Microsoft e questa scheda non è pubblicata."
+      },
+      "set": "impostato",
+      "notSet": "non impostato",
+      "credentials": {
+        "zoom": {
+          "label": "Credenziali dell'app Zoom (valori di ambiente)"
+        },
+        "teams": {
+          "label": "Credenziali dell'app Microsoft"
+        }
+      },
+      "teamsFallback": "Teams usa i propri valori qui sopra quando sono impostati entrambi, altrimenti l'app Microsoft Calendar salvata nella console.",
+      "source": {
+        "environment": "I valori provengono dall'ambiente.",
+        "console": "I valori provengono dalla console, pagina Microsoft Calendar."
+      },
+      "switchedOff": "L'integrazione Microsoft Calendar è disattivata nella console, il che disattiva anche Teams.",
+      "redirect": {
+        "label": "Indirizzo di reindirizzamento da registrare presso il fornitore",
+        "hint": {
+          "zoom": "Aggiungi esattamente questo indirizzo come URL di reindirizzamento dell'app Zoom.",
+          "teams": "Aggiungi esattamente questo indirizzo come URI di reindirizzamento dell'app Microsoft, accanto a quello del calendario, e aggiungi l'autorizzazione delegata OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Scheda Marketplace pubblicata",
+        "missing": "La scheda non esiste nel catalogo.",
+        "notPublished": "La scheda non è pubblicata (stato: {status}). Approva e pubblica una versione qui sotto, poi gli spazi di lavoro potranno installarla.",
+        "published": "Pubblicata: gli spazi di lavoro possono trovarla e installarla."
+      }
+    }
+  }
+}

@@ -7,6 +7,7 @@ import {
   type ConversationSummary,
 } from '@crm/contracts';
 import type { Tx } from '@crm/db';
+import type { AssignedSource, Handling } from '@crm/contracts';
 import { RequestContextStore } from '../../common/context/request-context';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
@@ -56,7 +57,41 @@ export interface AssignmentChange {
  * How the person was chosen, for the timeline: `manual` is a human's choice; the others are the routing engine's (a rule's strategy,
  * or `contact_agent` for "keep returning contacts with their agent").
  */
-export type AssignmentHow = 'manual' | 'round_robin' | 'least_busy' | 'specific' | 'contact_agent';
+export type AssignmentHow =
+  | 'manual'
+  | 'round_robin'
+  | 'least_busy'
+  | 'specific'
+  | 'contact_agent'
+  | 'handoff'
+  | 'owner'
+  | 'claim';
+
+/** What the handoff model adds to a write (BL-396): who decided, and the handling state the thread moves to. */
+export interface AssignExtra {
+  /** Who set the assignee; default: derived from the actor and strategy. */
+  source?: AssignedSource;
+  /**
+   * `'auto'` (default): a person taking a `waiting`/`with_bot` thread makes it `with_person`, a person letting go of a `with_person` thread
+   * makes it `waiting`; a thread that is not tracked (null) stays not tracked. A value sets it; `null` clears it.
+   */
+  handling?: Handling | null | 'auto';
+  /** Take the thread from an AI agent even when no person or team is given (a handoff to the queue). */
+  releaseAi?: boolean;
+}
+
+const sourceFor = (actor: AssignmentActor, how: AssignmentHow): AssignedSource =>
+  actor.kind === 'user'
+    ? how === 'claim'
+      ? 'claim'
+      : 'manual'
+    : actor.kind === 'flow'
+      ? 'handoff_named'
+      : how === 'contact_agent'
+        ? 'sticky'
+        : how === 'owner'
+          ? 'owner'
+          : 'rule';
 
 /** Who is assigning, for the timeline and the audit: a person, or the system (routing rules, escalation, flows, later). */
 export type AssignmentActor =
@@ -213,6 +248,63 @@ export class AssignmentService {
   }
 
   /**
+   * Hands the OPEN, non-archived conversations of one person to another active member (the deactivation hand-over). Each
+   * conversation is its own transaction with the manual route's target rules, so one the new person cannot open (a personal
+   * mailbox that is not theirs) is counted as `skipped` and left where it is, never half-moved. At most `limit` are moved per call;
+   * `remaining` says how many are still waiting. The caller decided who may do this (the hand-over route), as for flows.
+   */
+  async handOverOpen(
+    orgId: number,
+    input: { fromUserId: number; toUserUuid: string; actorUserId: number; limit: number },
+  ): Promise<{ moved: number; skipped: number; remaining: number }> {
+    const res = await this.db.tx((tx) =>
+      tx.execute(sql`
+        SELECT uuid FROM conversations
+        WHERE org_id = ${orgId} AND assignee_user_id = ${input.fromUserId} AND archived = FALSE AND status = 'open'
+        ORDER BY id LIMIT ${input.limit + 1}`),
+    );
+    const uuids = (res.rows as Array<{ uuid: string }>).map((r) => r.uuid);
+    const batch = uuids.slice(0, input.limit);
+    let moved = 0;
+    let skipped = 0;
+    for (const conversationUuid of batch) {
+      try {
+        const change = await this.db.tx(async (tx) => {
+          const locked = await this.repo.lockByUuid(tx, orgId, conversationUuid);
+          // Somebody already moved it between the list and the lock.
+          if (!locked || locked.assigneeUserId !== input.fromUserId) return null;
+          const target = await this.resolveTarget(
+            tx,
+            orgId,
+            { rowVersion: locked.rowVersion, strategy: 'manual', userId: input.toUserUuid },
+            locked,
+          );
+          return this.assignInTx(
+            tx,
+            orgId,
+            locked,
+            {
+              userId: target.userId === undefined ? locked.assigneeUserId : target.userId,
+              teamId: locked.assigneeTeamId,
+              userUuid: target.userUuid,
+              teamUuid: null,
+            },
+            { kind: 'user', userId: input.actorUserId },
+          );
+        });
+        if (change) {
+          moved += 1;
+          await this.afterCommit(orgId, change);
+        }
+      } catch (err) {
+        if (!(err instanceof AppError)) throw err;
+        skipped += 1;
+      }
+    }
+    return { moved, skipped, remaining: Math.max(0, uuids.length - batch.length) };
+  }
+
+  /**
    * Writes the assignee columns for a locked conversation, with the timeline event, the audit row and the outbox event, inside the
    * caller's transaction. `locked` must come from `ConversationsRepository.lockByUuid` in that same transaction. The caller decides
    * who may do this (the route does; routing rules are the system); this method only enforces what must hold for every caller.
@@ -233,17 +325,27 @@ export class AssignmentService {
     strategy: AssignmentHow = 'manual',
     /** More facts for the timeline event and the outbox event (the routing rule that decided). Uuids only. */
     meta: Record<string, unknown> = {},
+    extra: AssignExtra = {},
   ): Promise<AssignmentChange> {
     const before = await this.summaryIds(tx, orgId, locked);
     const humanAssigned = next.userId !== null || next.teamId !== null;
-    const takesFromAi = humanAssigned && locked.assigneeAgentId !== null;
+    const takesFromAi =
+      (humanAssigned || extra.releaseAi === true) && locked.assigneeAgentId !== null;
     const reopens = locked.status === 'closed';
+    const handlingNext = this.nextHandling(locked.handling, next.userId, extra.handling ?? 'auto');
+    const handlingChanged = handlingNext !== locked.handling;
+    const source: AssignedSource | null = humanAssigned
+      ? (extra.source ?? sourceFor(actor, strategy))
+      : null;
 
     await tx.execute(sql`
       UPDATE conversations SET
         assignee_user_id = ${next.userId},
         assignee_team_id = ${next.teamId},
         assignee_agent_id = ${takesFromAi ? null : sql`assignee_agent_id`},
+        assigned_source = ${source},
+        handling = ${handlingNext},
+        handling_since = ${handlingChanged ? (handlingNext === null ? null : sql`now()`) : sql`handling_since`},
         status = ${reopens ? 'open' : sql`status`},
         resolved_at = ${reopens ? null : sql`resolved_at`},
         resolved_by = ${reopens ? null : sql`resolved_by`}
@@ -290,6 +392,16 @@ export class AssignmentService {
         actorUserId,
         payload: { from: 'closed', to: 'open', reason: 'assigned' },
       });
+    }
+
+    // The live handoff card follows the thread: held by a person = assigned; back in the queue = waiting.
+    if (locked.handling !== null || handlingNext !== null) {
+      await tx.execute(sql`
+        UPDATE conversation_handoffs SET
+          status = ${next.userId !== null ? 'assigned' : 'waiting'},
+          assigned_user_id = ${next.userId}, assigned_team_id = ${next.teamId},
+          completed_at = ${next.userId !== null ? sql`COALESCE(completed_at, now())` : null}
+        WHERE org_id = ${orgId} AND conversation_id = ${locked.id} AND status IN ('waiting', 'assigned')`);
     }
 
     const byUuid = actorUserId === null ? null : await this.repo.userUuid(tx, orgId, actorUserId);
@@ -418,14 +530,33 @@ export class AssignmentService {
     if (input.teamId === null) teamId = null;
     else if (input.teamId !== undefined) {
       const res = await tx.execute(
-        sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${input.teamId}`,
+        sql`SELECT id FROM teams WHERE org_id = ${orgId} AND uuid = ${input.teamId} AND receives_conversations`,
       );
       const row = res.rows[0] as { id: string | number } | undefined;
-      if (!row) throw invalid('That team is not part of this workspace.', 'teamId');
+      if (!row)
+        throw invalid(
+          'That team is not part of this workspace, or it is set not to receive conversations.',
+          'teamId',
+        );
       teamId = Number(row.id);
       teamUuid = input.teamId;
     }
     return { userId, userUuid, teamId, teamUuid };
+  }
+
+  /** The handling state after a write (see `AssignExtra.handling`). */
+  private nextHandling(
+    current: string | null,
+    userId: number | null,
+    want: Handling | null | 'auto',
+  ): Handling | null {
+    if (want !== 'auto') return want;
+    if (current === null) return null;
+    if (userId !== null)
+      return current === 'with_bot' || current === 'waiting'
+        ? 'with_person'
+        : (current as Handling);
+    return current === 'with_person' ? 'waiting' : (current as Handling);
   }
 
   /** Wire ids of what the conversation is assigned to right now, for the timeline's "from". */

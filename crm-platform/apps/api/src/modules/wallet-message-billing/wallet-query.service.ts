@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
-import { WALLET_CATEGORIES } from '@crm/contracts';
+import { WALLET_CATEGORIES, walletExactAmount, walletExactSubtract } from '@crm/contracts';
 import type {
   MessagePricing,
   StatementQuery,
@@ -17,7 +17,11 @@ import type { Tx } from '@crm/db';
 import { RequestContextStore } from '../../common/context/request-context';
 import { DatabaseService } from '../../infra/db/database.service';
 import { BillingModeService } from '../bsp-billing-engine';
-import { PlanEntitlementService, resolveLimit } from '../plans-subscriptions-trials';
+import {
+  PlanEntitlementService,
+  PlanUsageService,
+  resolveLimit,
+} from '../plans-subscriptions-trials';
 import { pgArray } from './pg-array';
 import { BillingCurrencyService } from './billing-currency.service';
 import { RateCardService } from './rate-card.service';
@@ -57,11 +61,28 @@ export function toTransaction(r: LedgerRow): WalletTransaction {
     type: r.type as WalletTxType,
     direction: r.direction,
     amountMinor: r.amountMinor,
+    amountExact: r.amountExact,
     balanceAfterMinor: r.balanceAfterMinor,
+    balanceAfterExact: r.balanceAfterExact,
     source: r.source,
     description: r.description,
     note: r.note,
     createdAt: r.createdAt.toISOString(),
+  };
+}
+
+/** The money-in and money-out columns of one ledger row, in hundredths and to the ledger's exact precision. */
+export function splitExact(
+  r: LedgerRow,
+): Pick<StatementRow, 'moneyInMinor' | 'moneyInExact' | 'moneyOutMinor' | 'moneyOutExact'> {
+  const negative = r.amountExact.startsWith('-');
+  const abs = negative ? r.amountExact.slice(1) : r.amountExact;
+  const zero = walletExactAmount('0');
+  return {
+    moneyInMinor: r.amountMinor > 0 ? r.amountMinor : 0,
+    moneyInExact: !negative && abs !== zero ? abs : zero,
+    moneyOutMinor: r.amountMinor < 0 ? -r.amountMinor : 0,
+    moneyOutExact: negative ? abs : zero,
   };
 }
 
@@ -89,15 +110,18 @@ export class WalletQueryService {
     private readonly billing: BillingCurrencyService,
     private readonly plans: PlanEntitlementService,
     private readonly mode: BillingModeService,
+    private readonly usage: PlanUsageService,
   ) {}
 
   async summary(): Promise<WalletSummary> {
     const orgId = RequestContextStore.require().orgId;
-    const [s, entitlements] = await Promise.all([
+    const now = new Date();
+    const [s, entitlements, usedThisMonth] = await Promise.all([
       this.settings.effective(),
       this.plans.forOrg(orgId),
+      // The same count the plan page and the analytics show: one number for "messages used this month".
+      this.usage.messagesThisMonth(orgId, now),
     ]);
-    const now = new Date();
     const data = await this.db.tx(async (tx) => {
       // The workspace's wallet is the one in its billing currency (USD, INR, ...); everything below is read in that currency.
       const unit = await this.billing.forOrg(tx, orgId);
@@ -110,8 +134,6 @@ export class WalletQueryService {
           COALESCE(sum(amount) FILTER (WHERE type = 'refund'), 0)::text AS refunded
         FROM wallet_transactions
         WHERE org_id = ${orgId} AND ${inUnit(unit, s.currency)} AND created_at >= now() - interval '30 days'`);
-      const used = await tx.execute(sql`
-        SELECT messages FROM wallet_usage_months WHERE org_id = ${orgId} AND month = ${monthStart(now)}::date`);
       const t = totals.rows[0] as {
         spent: string;
         earned: string;
@@ -120,11 +142,14 @@ export class WalletQueryService {
       };
       return {
         balance: wallet?.balanceMinor ?? 0,
+        balanceExact: wallet?.balanceExact ?? '0.00',
+        spentExact: walletExactAmount(t.spent),
+        earnedExact: walletExactAmount(t.earned),
         spent: decimalToMinor(t.spent),
         earned: decimalToMinor(t.earned),
         topped: decimalToMinor(t.topped),
         refunded: decimalToMinor(t.refunded),
-        used: Number((used.rows[0] as { messages?: number } | undefined)?.messages ?? 0),
+        used: usedThisMonth,
         payPerMessage: await this.mode.isPayPerMessage(tx, orgId),
         unit,
         // The flat price and the low-balance threshold are set in the platform currency.
@@ -136,12 +161,15 @@ export class WalletQueryService {
     return {
       currency: data.unit,
       balanceMinor: data.balance,
+      balanceExact: data.balanceExact,
       billingMode: data.payPerMessage ? 'wallet' : 'plan',
       perCountryEnabled: s.perCountryEnabled,
       flatPriceMinor: flat,
       approxMessages: !s.perCountryEnabled && flat > 0 ? Math.floor(data.balance / flat) : null,
       spent30dMinor: data.spent,
+      spent30dExact: data.spentExact,
       earned30dMinor: data.earned,
+      earned30dExact: data.earnedExact,
       toppedUp30dMinor: data.topped,
       refunded30dMinor: data.refunded,
       lowBalanceThresholdMinor: data.threshold,
@@ -263,20 +291,26 @@ export class WalletQueryService {
       const contexts = await this.contexts(tx, orgId, pageRows);
       const moneyIn = decimalToMinor(t.money_in);
       const moneyOut = decimalToMinor(t.money_out);
+      const inExact = walletExactAmount(t.money_in);
+      const outExact = walletExactAmount(t.money_out);
       const last = pageRows[pageRows.length - 1];
       return {
         currency: unit,
         summary: {
           currentBalanceMinor: wallet?.balanceMinor ?? 0,
+          currentBalanceExact: wallet?.balanceExact ?? '0.00',
           moneyInMinor: moneyIn,
+          moneyInExact: inExact,
           moneyOutMinor: moneyOut,
-          netMinor: moneyIn - moneyOut,
+          moneyOutExact: outExact,
+          // From the exact figures, so the three always add up (hundredths of each side truncate separately).
+          netMinor: decimalToMinor(walletExactSubtract(inExact, outExact)),
+          netExact: walletExactSubtract(inExact, outExact),
           count: t.n,
         },
         data: pageRows.map<StatementRow>((r) => ({
           ...toTransaction(r),
-          moneyInMinor: r.amountMinor > 0 ? r.amountMinor : 0,
-          moneyOutMinor: r.amountMinor < 0 ? -r.amountMinor : 0,
+          ...splitExact(r),
           context: contexts.get(r.id) ?? null,
         })),
         page: {
@@ -309,8 +343,7 @@ export class WalletQueryService {
       const contexts = await this.db.tx((tx) => this.contexts(tx, orgId, rows));
       yield rows.map<StatementRow>((r) => ({
         ...toTransaction(r),
-        moneyInMinor: r.amountMinor > 0 ? r.amountMinor : 0,
-        moneyOutMinor: r.amountMinor < 0 ? -r.amountMinor : 0,
+        ...splitExact(r),
         context: contexts.get(r.id) ?? null,
       }));
       sent += rows.length;

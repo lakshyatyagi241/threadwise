@@ -513,6 +513,11 @@
           "watch": "Je zou een pop-up moeten zien, en het getal bij het belletje en de tabtitel veranderen.",
           "notConnected": "Live-updates zijn op deze pagina niet verbonden, dus de pop-up kan hier niet verschijnen. Laad de pagina opnieuw en probeer het nog eens.",
           "off": "Er is geen melding in het belletje gemaakt: het belletje staat uit voor “Testmelding” in de tabel hieronder, of is uitgezet door de eigenaar van je werkruimte."
+        },
+        "prompt": {
+          "message": "Schakel browsermeldingen in om een melding te krijgen voor de gebeurtenissen die u kiest, ook als de CRM gesloten is.",
+          "enable": "Meldingen toestaan",
+          "enabling": "Bezig met inschakelen..."
         }
       }
     },

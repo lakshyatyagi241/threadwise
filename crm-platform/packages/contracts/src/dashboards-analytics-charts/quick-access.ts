@@ -29,13 +29,6 @@ export const DASH_QUICK_ACCESS_CATALOG = [
     icon: 'megaphone',
   },
   {
-    key: 'broadcasts',
-    label: 'Broadcasts',
-    desc: 'Send one message to many contacts',
-    url: '/broadcasts',
-    icon: 'send',
-  },
-  {
     key: 'templates',
     label: 'Templates',
     desc: 'Approved WhatsApp message templates',
@@ -131,12 +124,11 @@ export const DASH_QUICK_ACCESS_CATALOG = [
   },
 ] as const;
 
-/** What a user who never customised sees. */
+/** What a user who never customised sees. Broadcasts live under Campaigns now, so no separate tile. */
 export const DASH_QUICK_ACCESS_DEFAULT_KEYS = [
   'inbox',
   'contacts',
   'campaigns',
-  'broadcasts',
   'templates',
   'flows',
   'scheduled',

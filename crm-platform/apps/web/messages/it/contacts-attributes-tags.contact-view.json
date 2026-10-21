@@ -44,6 +44,11 @@
         "editJobTitle": "Modifica qualifica",
         "jobTitleConflict": "Qualcun altro ha modificato prima questo contatto. È stato ricaricato; riprova.",
         "jobTitleFailed": "Impossibile salvare la qualifica. Riprova.",
+        "jobTitleRequired": "La mansione non può rimanere vuota: questo spazio di lavoro la richiede.",
+        "jobTitleOtherRequired": "Altre proprietà obbligatorie di questo contatto sono vuote. Apri Modifica contatto per compilarle.",
+        "jobTitleNotEditable": "La mansione è di sola lettura o nascosta in questo spazio di lavoro, quindi non può essere modificata qui.",
+        "jobTitleForbidden": "Non hai l'autorizzazione per modificare questo contatto.",
+        "jobTitleGone": "Questo contatto non è più disponibile per te: è stato eliminato o assegnato a qualcun altro.",
         "owner": "Responsabile"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "Fase precedente",
         "previousStageSince": "Fase precedente dal",
         "lostReason": "Motivo della perdita",
-        "updatedAt": "Ultimo aggiornamento"
+        "updatedAt": "Ultimo aggiornamento",
+        "leadScore": "Punteggio lead",
+        "originalStage": "Fase originale del ciclo di vita",
+        "createdBy": "Creato da",
+        "updatedBy": "Aggiornato da"
       },
       "company": {
         "title": "Azienda",

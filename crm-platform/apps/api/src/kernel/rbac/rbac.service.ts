@@ -1,7 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import { Redis } from 'ioredis';
-import type { RecordScope } from '@crm/contracts';
+import { RECORD_SCOPE_RANK, type RecordScope } from '@crm/contracts';
+import { cacheMetrics } from '@crm/observability';
+import { TEAM_HIERARCHY_GATE, type TeamHierarchyGate } from './team-hierarchy-gate';
 import { takeAuthPrefetch } from '../../common/context/auth-prefetch';
 import { DatabaseService } from '../../infra/db/database.service';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
@@ -17,9 +19,11 @@ export type GrantSet = Map<string, Grant>;
 export type CachedRead = { version: number; grants: string | null };
 
 const CACHE_TTL_SECONDS = 600;
+const grantsCache = cacheMetrics('rbac_grants');
+const versionCache = cacheMetrics('rbac_version');
 
 /** Sets the cached roles version only if the key is empty or holds a lower one, so a slow reader cannot put an old version back. */
-const RAISE_VERSION_LUA = `
+export const RAISE_VERSION_LUA = `
 local c = redis.call('GET', KEYS[1])
 if (not c) or (tonumber(c) < tonumber(ARGV[1])) then
   redis.call('SET', KEYS[1], ARGV[1], 'EX', tonumber(ARGV[2]))
@@ -41,7 +45,7 @@ return {v, g}`;
  *
  * Merge rules, in order:
  *   1. deny beats allow, always, regardless of which role it came from
- *   2. among allows, the widest scope wins (all > team > own)
+ *   2. among allows, the widest scope wins (all > team_and_below > team > own)
  *
  * Rule 1 is what makes a "revoke" role actually revoke. Rule 2 is what makes
  * "Counsellor + Manager" behave the way a human expects.
@@ -62,9 +66,38 @@ export class RbacService {
   constructor(
     private readonly db: DatabaseService,
     @Inject(REDIS_CLIENT) private readonly redis: Redis,
+    @Optional() @Inject(TEAM_HIERARCHY_GATE) private readonly hierarchy?: TeamHierarchyGate,
   ) {}
 
+  /**
+   * A stored `team_and_below` only reaches sub-teams while the workspace has the plan feature `team_hierarchy` (BL-382, BL-383). Without it
+   * (a downgrade) the grant stays in the role and resolves as `team`, so nobody loses access outright and nobody gains reach the plan does not
+   * pay for. Applied after the cache, so the cached set stays the raw union of the roles. No port (a unit test) leaves grants as stored.
+   */
+  private async withPlanScopes(orgId: number, grants: GrantSet): Promise<GrantSet> {
+    let any = false;
+    for (const g of grants.values()) {
+      if (g.scope === 'team_and_below') {
+        any = true;
+        break;
+      }
+    }
+    if (!any || !this.hierarchy) return grants;
+    const on = await this.hierarchy.enabled(orgId).catch(() => false);
+    if (on) return grants;
+    return new Map(
+      [...grants].map(([key, g]) => [
+        key,
+        g.scope === 'team_and_below' ? { ...g, scope: 'team' as const } : g,
+      ]),
+    );
+  }
+
   async grantsForUser(orgId: number, userId: number): Promise<GrantSet> {
+    return this.withPlanScopes(orgId, await this.rawGrantsForUser(orgId, userId));
+  }
+
+  private async rawGrantsForUser(orgId: number, userId: number): Promise<GrantSet> {
     // The usual case is a hit on both keys: one round trip for the version and the grant set together (see READ_CACHED_LUA).
     // JwtAuthGuard may already have started this read (auth-prefetch.ts); `readCached` never rejects, so the result is final.
     const early = await takeAuthPrefetch('grants', orgId, userId);
@@ -73,10 +106,17 @@ export class RbacService {
     const version = fast ? fast.version : await this.rolesVersion(orgId);
     const cacheKey = `rbac:${orgId}:v${version}:u${userId}`;
 
-    const cached = fast ? fast.grants : await this.redis.get(cacheKey).catch(() => null);
+    const cached = fast
+      ? fast.grants
+      : await this.redis.get(cacheKey).catch(() => {
+          grantsCache.error();
+          return null;
+        });
     if (cached) {
+      grantsCache.hit();
       return new Map(Object.entries(JSON.parse(cached) as Record<string, Grant>));
     }
+    grantsCache.miss();
 
     const grants = await this.loadGrants(orgId, userId);
 
@@ -167,7 +207,8 @@ export class RbacService {
         String(userId),
       )) as [string | null, string | null] | null;
       const version = res?.[0] ? Number(res[0]) : NaN;
-      if (!Number.isFinite(version)) return null;
+      if (!Number.isFinite(version)) return null; // rolesVersion() makes the separate read and counts it
+      versionCache.hit();
       return { version, grants: res?.[1] ?? null };
     } catch (err) {
       this.logger.warn({ err }, 'rbac cache read failed; reading the version separately');
@@ -177,8 +218,15 @@ export class RbacService {
 
   private async rolesVersion(orgId: number): Promise<number> {
     const cacheKey = `rbac:version:${orgId}`;
-    const cached = await this.redis.get(cacheKey).catch(() => null);
-    if (cached) return Number(cached);
+    const cached = await this.redis.get(cacheKey).catch(() => {
+      versionCache.error();
+      return null;
+    });
+    if (cached) {
+      versionCache.hit();
+      return Number(cached);
+    }
+    versionCache.miss();
 
     const result = await this.db.privileged(async (tx) =>
       tx.execute(sql`SELECT roles_version FROM organizations WHERE id = ${orgId}`),
@@ -203,7 +251,6 @@ export class RbacService {
     );
 
     const grants: GrantSet = new Map();
-    const scopeRank: Record<RecordScope, number> = { own: 0, team: 1, all: 2 };
 
     for (const row of result.rows as Array<{
       permission_key: string;
@@ -218,7 +265,7 @@ export class RbacService {
         grants.set(row.permission_key, { effect: 'deny', scope: row.record_scope });
         continue;
       }
-      if (!existing || scopeRank[row.record_scope] > scopeRank[existing.scope]) {
+      if (!existing || RECORD_SCOPE_RANK[row.record_scope] > RECORD_SCOPE_RANK[existing.scope]) {
         grants.set(row.permission_key, { effect: 'allow', scope: row.record_scope });
       }
     }

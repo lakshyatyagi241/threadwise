@@ -122,7 +122,7 @@ const manual = {
   75: 'live phone_number_id is globally unique (uq_wa_provider_configs_waba_phone); the waba_id fallback is not (TI-003).',
   80: 'inbound routing read (waba_route_lookup, ecom_store_lookup); signature verification not re-tested here.',
   84: 'room names derive from server-side identity.orgId; existing realtime e2e not run here.',
-  86: 'FAQ vector query filters org_id explicitly and under RLS (read).',
+  86: 'The knowledge base passage search filters org_id and assistant_id explicitly and under RLS (read).',
 };
 
 // MT control -> the authz dynamic specs (apps/api/test/e2e/authz/<name>.e2e.spec.ts) whose passing run is its evidence.
@@ -197,7 +197,7 @@ const e2e = {
   77: ['widgets-admin', 'widget-public'],
   78: ['flows::tenant isolation'],
   82: ['invoicing'],
-  86: ['faq', 'ai-training'],
+  86: ['ai-training'],
   80: ['tenancy-regressions'],
   33: ['impersonation'],
   22: ['tenancy-concurrency'],

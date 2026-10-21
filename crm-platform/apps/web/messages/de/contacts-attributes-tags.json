@@ -130,6 +130,7 @@
       "colLeadScore": "Lead-Score",
       "colLanguage": "Sprache",
       "colCreatedOn": "Erstellt am",
+      "colModifiedOn": "Geändert am",
       "pagination": "Seitennavigation",
       "prevPage": "Vorherige Seite",
       "nextPage": "Nächste Seite",
@@ -282,6 +283,7 @@
       "shortStage": "Phase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Erstellt",
+      "shortModified": "Geändert",
       "firstRun": {
         "title": "Fügen Sie Ihre ersten Kontakte hinzu",
         "message": "Holen Sie die Menschen herein, mit denen Sie sprechen. Kontakte werden für Nachrichten, Kampagnen, Aufgaben und Deals verwendet.",
@@ -290,7 +292,11 @@
         "importBody": "Laden Sie eine Tabelle hoch und ordnen Sie ihre Spalten den Kontaktfeldern zu.",
         "connect": "WhatsApp verbinden",
         "connectBody": "Verbinden Sie Ihre Nummer, damit Kontakte antworten können und Sie ihnen schreiben können."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Nach Team filtern",
+      "allTeams": "Alle Teams",
+      "teamFormer": "Früheres Team"
     },
     "bulk": {
       "label": "Aktionen für die ausgewählten Kontakte",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Dein Zugriff erlaubt es nicht, diesen Kontakt dieser Person zuzuweisen.",
       "company": "Unternehmen",
       "companyHint": "Ordnet diesen Kontakt einem Unternehmen zu.",
-      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld."
+      "companyRefused": "Dieses Unternehmen können Sie nicht verwenden. Wählen Sie ein anderes oder leeren Sie das Feld.",
+      "searchOptions": "Optionen durchsuchen",
+      "searchOptionsFor": "Optionen von {field} durchsuchen",
+      "noOptionsFound": "Keine Option passt zu Ihrer Suche."
     },
     "tags": {
       "title": "Tags",
@@ -1225,7 +1234,8 @@
             "duplicate": "Zwei Optionen haben denselben Namen."
           },
           "condition": "Wählen Sie für jede Bedingung die Eigenschaft und den Wert."
-        }
+        },
+        "optionsLazy": "Diese Eigenschaft hat {count, plural, one {# Option} other {# Optionen}}, zu viele, um sie hier zu bearbeiten. Sie bleiben unverändert; die übrigen Einstellungen lassen sich ändern."
       },
       "builtinCard": {
         "title": "Integrierte Eigenschaften",

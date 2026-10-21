@@ -76,6 +76,8 @@
       },
       "assignee": "Assignee",
       "allAssignees": "All assignees",
+      "team": "Team",
+      "allTeams": "All teams",
       "unassigned": "Unassigned",
       "linked": "Linked to",
       "anyLink": "Any record",
@@ -92,7 +94,8 @@
         "contact": "Contact",
         "deal": "Deal",
         "created": "Created",
-        "completed": "Completed on"
+        "completed": "Completed on",
+        "outcome": "Outcome"
       },
       "refresh": "Refresh",
       "shortcuts": "Keyboard shortcuts",
@@ -101,7 +104,9 @@
         "list": "List",
         "board": "Board by due date"
       },
-      "linkCompany": "A company"
+      "linkCompany": "A company",
+      "outcome": "Outcome",
+      "allOutcomes": "All outcomes"
     },
     "table": {
       "scrollArea": "Tasks table",
@@ -115,7 +120,8 @@
         "contact": "Contact",
         "deal": "Deal",
         "created": "Created",
-        "completed": "Completed on"
+        "completed": "Completed on",
+        "outcome": "Outcome"
       }
     },
     "row": {
@@ -205,9 +211,11 @@
         "titleTooLong": "The task is too long (255 characters at most).",
         "notesTooLong": "The notes are too long (5000 characters at most).",
         "dueInvalid": "That date is not valid.",
-        "assigneeInvalid": "That person is not an active member of this workspace."
+        "assigneeInvalid": "That person is not an active member of this workspace.",
+        "outcomeInvalid": "That outcome is not available. Pick one from the list."
       },
-      "company": "Company"
+      "company": "Company",
+      "outcome": "Outcome"
     },
     "drawer": {
       "loading": "Loading task",
@@ -236,7 +244,8 @@
       },
       "deleteTitle": "Delete this task?",
       "deleteMessage": "\"{title}\" will be deleted for everyone. This cannot be undone.",
-      "cancel": "Keep"
+      "cancel": "Keep",
+      "outcomeChip": "Outcome: {name}"
     },
     "board": {
       "buckets": {
@@ -285,8 +294,12 @@
       "notFound": "That task could not be found. It may have been deleted.",
       "planDisabled": "Your plan does not include tasks. Upgrade to unlock them.",
       "assigneeInvalid": "That person is not an active member of this workspace.",
+      "completionDisabled": "Completing tasks is switched off in Sales Activities.",
       "unexpected": "Something went wrong. Try again in a moment.",
-      "retry": "Try again"
+      "retry": "Try again",
+      "outcomeInvalid": "That outcome is not available. Pick one from the list.",
+      "outcomeNameTaken": "Another outcome already has this name.",
+      "outcomeInUse": "Tasks still use this outcome, so it cannot be deleted. Hide it instead."
     },
     "toast": {
       "completed": "Task completed.",
@@ -342,6 +355,28 @@
       "save": "Add task",
       "cancel": "Cancel",
       "failed": "The task could not be saved. Your text is back in the box."
+    },
+    "outcomes": {
+      "title": "Task outcomes",
+      "subtitle": "The results a person picks when they complete or log a task, such as Interested or Left message.",
+      "loading": "Loading outcomes",
+      "empty": "No outcomes yet. Add the first one below.",
+      "add": "Add outcome",
+      "failed": "That did not work.",
+      "conflict": "Someone else changed this outcome. The list was reloaded. Try again.",
+      "saved": "Outcome saved.",
+      "deleted": "Outcome deleted.",
+      "deleteTitle": "Delete {name}?",
+      "deleteMessage": "The outcome is removed from the list. No task uses it.",
+      "delete": "Delete",
+      "cancel": "Keep",
+      "problems": {
+        "nameRequired": "Type a name for the outcome.",
+        "nameTooLong": "The name is too long (191 characters at most)."
+      },
+      "none": "No outcome",
+      "hiddenName": "{name} (hidden)",
+      "completeWith": "Complete with outcome"
     }
   }
 }

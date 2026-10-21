@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { TokenColumns } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 
@@ -10,7 +11,9 @@ export interface BotRow {
   name: string | null;
   /** Encrypted. */
   botToken: string;
-  webhookToken: string;
+  webhookToken: string | null;
+  /** The token sealed with CryptoService (encryption audit E3); preferred over the legacy plaintext column. */
+  webhookTokenEnc: string | null;
   /** Encrypted. */
   secretToken: string | null;
   active: boolean;
@@ -30,7 +33,8 @@ interface Raw {
   bot_username: string | null;
   bot_name: string | null;
   bot_token: string;
-  webhook_token: string;
+  webhook_token: string | null;
+  webhook_token_enc: string | null;
   secret_token: string | null;
   active: boolean;
   connected_at: Date | string | null;
@@ -42,7 +46,7 @@ interface Raw {
 }
 
 const COLUMNS = sql.raw(
-  `id, uuid, bot_id, bot_username, bot_name, bot_token, webhook_token, secret_token, active, connected_at, last_inbound_at,
+  `id, uuid, bot_id, bot_username, bot_name, bot_token, webhook_token, webhook_token_enc, secret_token, active, connected_at, last_inbound_at,
    last_error, payment_provider_token, payment_provider, row_version`,
 );
 
@@ -56,6 +60,7 @@ const toRow = (r: Raw): BotRow => ({
   name: r.bot_name,
   botToken: r.bot_token,
   webhookToken: r.webhook_token,
+  webhookTokenEnc: r.webhook_token_enc,
   secretToken: r.secret_token,
   active: r.active,
   connectedAt: date(r.connected_at),
@@ -133,14 +138,15 @@ export class BotsRepository {
       botId: string;
       username: string;
       name: string;
-      webhookToken: string;
+      webhookToken: TokenColumns;
       secretToken: string;
     },
   ): Promise<BotRow> {
     const res = await tx.execute(sql`
-      INSERT INTO telegram_bots (org_id, connected_by, bot_token, bot_id, bot_username, bot_name, webhook_token, secret_token,
+      INSERT INTO telegram_bots (org_id, connected_by, bot_token, bot_id, bot_username, bot_name, webhook_token, webhook_token_hash, webhook_token_enc, secret_token,
                                  active, connected_at, last_error)
-      VALUES (${orgId}, ${v.connectedBy}, ${v.botToken}, ${v.botId}, ${v.username}, ${v.name}, ${v.webhookToken},
+      VALUES (${orgId}, ${v.connectedBy}, ${v.botToken}, ${v.botId}, ${v.username}, ${v.name}, ${v.webhookToken.plain},
+              ${v.webhookToken.hash}, ${v.webhookToken.enc},
               ${v.secretToken}, true, now(), NULL)
       RETURNING ${COLUMNS}`);
     return toRow((res.rows as unknown as Raw[])[0]!);

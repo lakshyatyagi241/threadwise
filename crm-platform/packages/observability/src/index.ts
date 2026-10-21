@@ -22,3 +22,11 @@ export {
 } from './start-runtime-monitor';
 export { instrumentHttpRequests, type RouteOf } from './http-server-instrumentation';
 export { releaseFromEnv } from './release';
+export {
+  cacheMetrics,
+  cacheSize,
+  MAX_CACHES,
+  type CacheMetrics,
+  type CacheSink,
+} from './cache-metrics';
+export { createDbSaturationMetrics, type PoolLike } from './db-saturation';

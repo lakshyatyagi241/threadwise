@@ -47,7 +47,8 @@
       "sms_monthly": "SMS par mois",
       "email_mailboxes": "Boîtes e-mail",
       "email_monthly": "E-mails par mois",
-      "storage_gb": "Stockage (Go)"
+      "storage_gb": "Stockage (Go)",
+      "teams": "Équipes"
     },
     "features": {
       "automation": "Automatisation",
@@ -85,7 +86,10 @@
       "personal_history_full": "Import complet de l'historique (WhatsApp personnel)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Scoring des leads par IA",
-      "record_assignment": "Règles d'attribution des enregistrements"
+      "record_assignment": "Règles d'attribution des enregistrements",
+      "team_hierarchy": "Hiérarchie des équipes et managers",
+      "custom_roles": "Rôles personnalisés et périmètres",
+      "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
     },
     "limitGroups": {
       "messaging": "Messagerie",
@@ -139,7 +143,8 @@
       "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
       "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
       "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
-      "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué."
+      "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
+      "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
     },
     "planAddons": {
       "title": "Modules complémentaires disponibles avec votre forfait",
@@ -304,7 +309,10 @@
       "showUnlimited": "{count, plural, one {Afficher # limite illimitée} other {Afficher # limites illimitées}}",
       "hideUnlimited": "Masquer les limites illimitées",
       "groupCount": "{count, plural, one {# limite} other {# limites}}",
-      "groupHidden": "{count, plural, one {# autre limite est illimitée et masquée.} other {# autres limites sont illimitées et masquées.}}"
+      "groupHidden": "{count, plural, one {# autre limite est illimitée et masquée.} other {# autres limites sont illimitées et masquées.}}",
+      "activatedOn": "Activé le {date}",
+      "previousBilling": "Date de facturation précédente : {date}",
+      "subscriptionId": "ID d’abonnement : {id}"
     },
     "operator": {
       "title": "Forfaits des espaces de travail",

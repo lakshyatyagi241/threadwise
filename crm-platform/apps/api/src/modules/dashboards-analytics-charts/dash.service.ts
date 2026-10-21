@@ -282,6 +282,7 @@ export class DashService {
           }))
           .sort((a, b) => b.count - a.count),
         heatmap: await this.repo.heatmap(tx, orgId, w.from, w.to, tz),
+        conversations: await this.repo.conversationStates(tx, orgId, w.from, w.to),
       };
     });
   }

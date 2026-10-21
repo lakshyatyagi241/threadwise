@@ -47,7 +47,8 @@
       "nameTaken": "Já existe uma função com este nome.",
       "nameRequired": "O nome da função é obrigatório.",
       "nameTooLong": "O nome da função pode ter no máximo {max} caracteres.",
-      "notFound": "Este item não existe mais. Pode ter sido excluído."
+      "notFound": "Este item não existe mais. Pode ter sido excluído.",
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las."
     },
     "team": {
       "crumb": "Membros da equipe",
@@ -90,7 +91,9 @@
         "member": "Membro",
         "roles": "Funções",
         "status": "Status",
-        "actions": "Ações"
+        "actions": "Ações",
+        "teams": "Equipes",
+        "manager": "Gerente"
       },
       "empty": {
         "none": "Ainda não há membros.",
@@ -137,8 +140,17 @@
         "keptRole": "{name} permanece: você não pode concedê-la nem removê-la.",
         "atLeastOne": "Escolha pelo menos uma função.",
         "save": "Salvar funções",
-        "reload": "Recarregar"
-      }
+        "reload": "Recarregar",
+        "noTeamWarning": "{name} não está em nenhuma equipe, então, onde uma função está definida com escopo de equipe, vê apenas os próprios registros. Adicione-o a uma equipe em Configurações > Equipes."
+      },
+      "teamFilter": {
+        "label": "Filtrar membros por equipe",
+        "all": "Todas as equipes"
+      },
+      "noTeams": "Sem equipe",
+      "primaryTeam": "Equipe principal",
+      "primaryMark": "principal",
+      "noManager": "Sem gerente"
     },
     "list": {
       "crumb": "Funções",
@@ -171,7 +183,9 @@
       },
       "toasts": {
         "deleted": "Função “{name}” excluída."
-      }
+      },
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las.",
+      "addRoleLocked": "Adicionar função (upgrade)"
     },
     "editor": {
       "crumbRoles": "Funções",
@@ -212,7 +226,9 @@
         "created": "Função “{name}” criada.",
         "updated": "Função “{name}” atualizada.",
         "deleted": "Função “{name}” excluída."
-      }
+      },
+      "customRolesLocked": "Funções personalizadas e permissões com escopo não estão no seu plano. Você pode ver as funções, mas não criá-las nem alterá-las.",
+      "upgrade": "Ver planos"
     },
     "matrix": {
       "title": "Permissões",
@@ -235,8 +251,20 @@
       "lockedHint": "Esta permissão ainda não está disponível para este espaço de trabalho. Ela é liberada quando o recurso do plano está ativo ou o app está instalado.",
       "scope": {
         "all": "Todos os registros",
-        "team": "Registros da equipe",
-        "own": "Registros próprios"
+        "own": "Meus registros",
+        "team": "Registros da minha equipe",
+        "team_and_below": "Minha equipe e subequipes"
+      },
+      "scopeLegend": "O que cada escopo de registros abrange",
+      "scopeHelp": {
+        "all": "Todos os registros do espaço de trabalho.",
+        "team_and_below": "Registros da sua equipe e de todas as equipes abaixo dela.",
+        "team": "Registros das pessoas da sua equipe.",
+        "own": "Apenas registros que são seus ou foram atribuídos a você."
+      },
+      "noTeamWarning": "{count, plural, one {# membro com este papel não está em nenhuma equipe, então vê apenas os próprios registros onde este papel tem escopo de equipe.} other {# membros com este papel não estão em nenhuma equipe, então veem apenas os próprios registros onde este papel tem escopo de equipe.}} Adicione-os a uma equipe em <link>Configurações > Equipes</link>.",
+      "permissionHelp": {
+        "inbox_conversation_read_unassigned": "Sem esta permissão, agentes com acesso de equipe veem apenas as conversas atribuídas a eles ou à equipe deles. Com ela, também veem a fila aberta de conversas sem responsável."
       }
     },
     "delete": {

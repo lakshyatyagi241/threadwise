@@ -34,7 +34,10 @@
         "all": "全部时间",
         "7d": "7 天",
         "30d": "30 天",
-        "90d": "90 天"
+        "90d": "90 天",
+        "custom": "自定义范围",
+        "from": "起始日期",
+        "to": "截止日期"
       },
       "search": "搜索营销活动",
       "selectPage": "选择本页",
@@ -1045,7 +1048,7 @@
         "loadFailed": "无法加载统计数据。",
         "rates": {
           "delivered": "送达率",
-          "deliveredHint": "占目标受众",
+          "deliveredHint": "占已发送量",
           "read": "阅读率",
           "readHint": "占已送达",
           "replies": "回复率",
@@ -1873,8 +1876,7 @@
         "list": "列表",
         "blocks": "区块"
       },
-      "showing": "显示 {count} 个活动",
-      "legacy": "旧版群发（{count}）"
+      "showing": "显示 {count} 个活动"
     },
     "senderEmpty": {
       "loading": "正在加载您的号码…",

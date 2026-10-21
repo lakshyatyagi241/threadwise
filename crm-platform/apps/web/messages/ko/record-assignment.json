@@ -3,7 +3,7 @@
     "back": "자동화",
     "title": "레코드 배정 규칙",
     "intro": "새 {contacts}, 회사, {deals}을(를) 알맞은 영업 담당자에게 자동으로 배정합니다.",
-    "crossNote": "이 기능은 {contacts}, 회사, {deals}을(를) 배정합니다. 대화를 상담원에게 배정하려면 <link>자동 배정</link>을 참고하세요.",
+    "crossNote": "이 기능은 {contacts}, 회사, {deals}을(를) 배정합니다. 대화를 상담원에게 배정하려면 <link>대화 자동 배정</link>을 참고하세요.",
     "master": {
       "title": "레코드 배정 켜기",
       "hint": "직접 켜기 전에는 꺼져 있습니다. 켜면 아래 규칙에 따라 담당자가 없는 새 {contact}, 회사 또는 {deal}이(가) 팀원에게 배정됩니다.",
@@ -233,7 +233,14 @@
         "nobody": "일치했지만 배정 가능한 사람이 없음",
         "broken": "손상된 조건이 있음"
       },
-      "skipped": "배정 가능한 사람이 없어 건너뜀: {names}"
+      "skipped": "배정 가능한 사람이 없어 건너뜀: {names}",
+      "excluded": {
+        "label": "제외됨",
+        "no_access": "{name}: 이 유형의 레코드를 열 수 없음",
+        "inactive": "{name}: 더 이상 활성 상태가 아님",
+        "on_leave": "{name}: 오늘 휴가 중",
+        "offline": "{name}: 오프라인"
+      }
     },
     "log": {
       "title": "실행 로그",
@@ -296,6 +303,7 @@
       "message": "{name} 규칙은 더 이상 배정하지 않습니다. 이미 배정된 레코드는 담당자를 유지합니다.",
       "confirm": "삭제",
       "cancel": "취소"
-    }
+    },
+    "dismiss": "닫기"
   }
 }

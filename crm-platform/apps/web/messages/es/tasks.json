@@ -92,7 +92,8 @@
         "contact": "Contacto",
         "deal": "Negocio",
         "created": "Creada",
-        "completed": "Completada el"
+        "completed": "Completada el",
+        "outcome": "Resultado"
       },
       "refresh": "Actualizar",
       "shortcuts": "Atajos de teclado",
@@ -101,7 +102,11 @@
         "list": "Lista",
         "board": "Tablero por fecha límite"
       },
-      "linkCompany": "Una empresa"
+      "linkCompany": "Una empresa",
+      "outcome": "Resultado",
+      "allOutcomes": "Todos los resultados",
+      "team": "Equipo",
+      "allTeams": "Todos los equipos"
     },
     "table": {
       "scrollArea": "Tabla de tareas",
@@ -115,7 +120,8 @@
         "contact": "Contacto",
         "deal": "Negocio",
         "created": "Creada",
-        "completed": "Completada el"
+        "completed": "Completada el",
+        "outcome": "Resultado"
       }
     },
     "row": {
@@ -205,9 +211,11 @@
         "titleTooLong": "La tarea es demasiado larga (255 caracteres como máximo).",
         "notesTooLong": "Las notas son demasiado largas (5000 caracteres como máximo).",
         "dueInvalid": "Esa fecha no es válida.",
-        "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo."
+        "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo.",
+        "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista."
       },
-      "company": "Empresa"
+      "company": "Empresa",
+      "outcome": "Resultado"
     },
     "drawer": {
       "loading": "Cargando tarea",
@@ -236,7 +244,8 @@
       },
       "deleteTitle": "¿Eliminar esta tarea?",
       "deleteMessage": "\"{title}\" se eliminará para todos. Esta acción no se puede deshacer.",
-      "cancel": "Conservar"
+      "cancel": "Conservar",
+      "outcomeChip": "Resultado: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +295,11 @@
       "planDisabled": "Tu plan no incluye tareas. Mejora el plan para desbloquearlas.",
       "assigneeInvalid": "Esa persona no es miembro activo de este espacio de trabajo.",
       "unexpected": "Algo salió mal. Inténtalo de nuevo en un momento.",
-      "retry": "Reintentar"
+      "retry": "Reintentar",
+      "outcomeInvalid": "Ese resultado no está disponible. Elige uno de la lista.",
+      "outcomeNameTaken": "Otro resultado ya tiene este nombre.",
+      "outcomeInUse": "Hay tareas que aún usan este resultado, así que no se puede eliminar. Ocúltalo en su lugar.",
+      "completionDisabled": "Completar tareas está desactivado en Actividades de ventas."
     },
     "toast": {
       "completed": "Tarea completada.",
@@ -342,6 +355,28 @@
       "save": "Añadir tarea",
       "cancel": "Cancelar",
       "failed": "No se pudo guardar la tarea. Tu texto vuelve a estar en el cuadro."
+    },
+    "outcomes": {
+      "title": "Resultados de tareas",
+      "subtitle": "Los resultados que una persona elige al completar o registrar una tarea, como Interesado o Dejó mensaje.",
+      "loading": "Cargando resultados",
+      "empty": "Aún no hay resultados. Añade el primero abajo.",
+      "add": "Añadir resultado",
+      "failed": "No se pudo completar la acción.",
+      "conflict": "Otra persona cambió este resultado. Se recargó la lista. Inténtalo de nuevo.",
+      "saved": "Resultado guardado.",
+      "deleted": "Resultado eliminado.",
+      "deleteTitle": "¿Eliminar {name}?",
+      "deleteMessage": "El resultado se quita de la lista. Ninguna tarea lo usa.",
+      "delete": "Eliminar",
+      "cancel": "Conservar",
+      "problems": {
+        "nameRequired": "Escribe un nombre para el resultado.",
+        "nameTooLong": "El nombre es demasiado largo (191 caracteres como máximo)."
+      },
+      "none": "Sin resultado",
+      "hiddenName": "{name} (oculto)",
+      "completeWith": "Completar con resultado"
     }
   }
 }

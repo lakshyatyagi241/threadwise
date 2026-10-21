@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "部署"
+    },
+    "eyebrow": "运维",
+    "title": "部署",
+    "description": "发布到 Geta 控制台的每个流程：哪些在排队、哪些正在运行，以及哪些失败及原因。每隔几秒刷新一次。",
+    "updated": "实时。更新于 {time}",
+    "stale": "上次刷新失败，正在显示之前的部署。",
+    "stalledAlert": "{count} 个部署 {minutes} 分钟未发生变化，其工作进程可能已停止。",
+    "truncated": "正在显示前 {limit} 个部署。选择状态以查看其余部署。",
+    "kpi": {
+      "running": "运行中",
+      "queued": "排队中",
+      "failed": "失败",
+      "live": "已上线",
+      "stalled": "停滞"
+    },
+    "filter": {
+      "label": "按状态筛选",
+      "all": "全部",
+      "running": "运行中",
+      "queued": "排队中",
+      "failed": "失败",
+      "live": "已上线"
+    },
+    "cols": {
+      "workspace": "工作区",
+      "flow": "流程",
+      "status": "状态",
+      "step": "步骤",
+      "attempted": "最近尝试",
+      "updated": "最近变更",
+      "error": "错误"
+    },
+    "status": {
+      "running": "运行中",
+      "queued": "排队中",
+      "failed": "失败",
+      "live": "已上线"
+    },
+    "steps": {
+      "configuration_update": "配置更新",
+      "publish_bot": "发布机器人"
+    },
+    "stalledBadge": "停滞",
+    "version": "版本 {version}",
+    "notStarted": "未开始",
+    "failedAt": "在{step}步骤失败",
+    "noDetail": "未保存错误信息。",
+    "empty": {
+      "title": "暂无内容",
+      "all": "尚无流程发布到 Geta 控制台。",
+      "running": "当前没有正在运行的发布。",
+      "queued": "队列中没有等待的任务。",
+      "failed": "没有失败的发布。",
+      "live": "Geta 控制台上尚无已上线的流程。"
+    },
+    "tabs": {
+      "label": "选择显示内容",
+      "publishes": "流程发布",
+      "geta": "Geta 控制台",
+      "releases": "产品发布"
+    },
+    "publishes": {
+      "description": "每个流程发布：工作进程已排队的、正在处理的，以及失败的发布及原因。每隔几秒刷新一次。",
+      "stalledAlert": "{count} 个流程发布 {minutes} 分钟未推进，工作进程可能已停止处理出站队列。",
+      "truncated": "正在显示前 {limit} 个发布。选择状态以查看其余发布。",
+      "notProcessed": "尚未",
+      "cols": {
+        "attempts": "尝试次数",
+        "queued": "排队时间",
+        "finished": "完成时间"
+      },
+      "status": {
+        "done": "已完成"
+      },
+      "empty": {
+        "all": "尚未发布任何流程。",
+        "done": "最近 30 天内没有完成的发布。"
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai 上正在运行的内容：当前发布、正在进行的发布，以及每次尝试的步骤和错误。每隔几秒刷新一次。",
+      "liveLabel": "当前上线",
+      "live": "发布 {tag}，{time} 起上线",
+      "noneLive": "尚无发布上线。",
+      "inProgress": "有一次发布正在进行",
+      "stalledAlert": "{count} 次发布尝试 {minutes} 分钟未发生变化，构建或发布可能已停止。",
+      "empty": "尚未记录任何发布。从下一次部署起，发布会显示在这里。",
+      "cols": {
+        "tag": "标签",
+        "state": "状态",
+        "step": "步骤",
+        "started": "开始",
+        "finished": "结束",
+        "error": "错误"
+      },
+      "state": {
+        "building": "构建中",
+        "shipping": "传输中",
+        "releasing": "发布中",
+        "ok": "已上线",
+        "failed": "失败",
+        "rolled_back": "已回滚"
+      }
+    }
+  }
+}

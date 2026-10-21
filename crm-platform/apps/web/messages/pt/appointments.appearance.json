@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Aparência da página de agendamento",
+      "subtitle": "Faça a página que seus clientes usam para marcar um horário ter a cara do seu negócio.",
+      "backToSettings": "Configurações de agendamentos",
+      "loading": "Carregando o tema da página de agendamento",
+      "forbidden": "Você não tem permissão para ver a aparência da página de agendamento.",
+      "notAvailable": "A aparência da página de agendamento ainda não está disponível neste servidor.",
+      "readOnly": "Você pode ver a aparência, mas não alterá-la. Para alterar, é preciso ter permissão para editar tipos de agendamento.",
+      "fixFirst": "Corrija primeiro os campos destacados.",
+      "issues": "{count, plural, one {# campo precisa de atenção antes de você poder salvar.} many {# de campos precisam de atenção antes de você poder salvar.} other {# campos precisam de atenção antes de você poder salvar.}}",
+      "saved": "Aparência da página de agendamento salva",
+      "saving": "Salvando...",
+      "unsaved": "Alterações não salvas",
+      "allSaved": "Todas as alterações salvas",
+      "discard": "Descartar alterações",
+      "save": "Salvar aparência",
+      "conflict": {
+        "message": "A aparência foi alterada por outra pessoa enquanto você editava.",
+        "reload": "Carregar a versão mais recente"
+      },
+      "leave": {
+        "title": "Sair sem salvar?",
+        "message": "Suas alterações na aparência da página de agendamento não foram salvas.",
+        "leave": "Sair",
+        "stay": "Continuar editando"
+      },
+      "tile": {
+        "label": "Aparência da página de agendamento",
+        "description": "Logotipo, cores, fontes e texto de boas-vindas da página em que os clientes agendam",
+        "keywords": "marca, logotipo, cores, tema, página de agendamento, visual, fontes, marca própria"
+      },
+      "card": {
+        "title": "Aparência da página de agendamento",
+        "description": "Adicione seu logotipo e suas cores, escreva uma mensagem de boas-vindas e escolha fontes e cantos para a página em que os clientes agendam. Você vê uma prévia ao vivo enquanto edita.",
+        "open": "Abrir a aparência da página de agendamento"
+      },
+      "editorLink": {
+        "link": "Aparência da página",
+        "saveFirst": "Salve primeiro o tipo de agendamento e depois abra a aparência da página dele."
+      },
+      "typesList": {
+        "menu": "Aparência da página"
+      },
+      "pictures": {
+        "title": "Logotipo e imagem de capa",
+        "description": "Exibidos no topo da página. Deixe vazios para usar o que está definido em um nível acima.",
+        "logo": "Logotipo",
+        "logoHint": "PNG, JPG, WebP ou GIF, até {mb} MB. Um logotipo largo com fundo transparente funciona melhor.",
+        "cover": "Imagem de capa",
+        "coverHint": "PNG, JPG, WebP ou GIF, até {mb} MB. Exibida como banner quando o fundo está definido como imagem de capa.",
+        "useBrand": "Usar o logotipo e as cores da Marca quando estiverem vazios",
+        "useBrandHint": "O que você deixar vazio aqui é obtido de Configurações, Marca, para que a página de agendamento combine com o resto da sua marca."
+      },
+      "fields": {
+        "picker": "{name}: escolher uma cor",
+        "clear": "Limpar",
+        "noPicture": "Sem imagem",
+        "upload": "Enviar",
+        "replace": "Substituir",
+        "remove": "Remover",
+        "inheritedPicture": "Usando a definida em um nível acima.",
+        "inheritedColour": "Se estiver vazio, usa {colour}.",
+        "productColour": "Se estiver vazio, usa a cor padrão.",
+        "pictureType": "Use uma imagem PNG, JPG, WebP ou GIF.",
+        "pictureSize": "A imagem é grande demais. O limite é {mb} MB.",
+        "pictureRejected": "Essa imagem não foi aceita. Use uma imagem PNG, JPG, WebP ou GIF dentro do limite de tamanho."
+      },
+      "colours": {
+        "title": "Cores e fundo",
+        "description": "As cores do texto são escolhidas para você, para que tudo continue legível.",
+        "primary": "Cor principal",
+        "typeHint": "Se estiver vazio, usa a cor do espaço de trabalho.",
+        "button": "Cor dos botões",
+        "buttonHint": "A cor dos botões e dos horários selecionados. Se estiver vazio, usa a cor principal.",
+        "background": "Fundo da página",
+        "backgroundHint": "Cor sólida, um tom suave da sua cor principal ou a imagem de capa como banner.",
+        "sameAsWorkspace": "Igual ao espaço de trabalho",
+        "backgrounds": {
+          "solid": "Cor sólida",
+          "tint": "Tom suave",
+          "image": "Imagem de capa"
+        },
+        "backgroundColour": "Cor de fundo",
+        "needCover": "Envie uma imagem de capa para usar este fundo.",
+        "invalid": "Use uma cor como #1a73e8."
+      },
+      "checks": {
+        "title": "Verificações de legibilidade",
+        "autoText": "O texto dos botões é preto ou branco, o que for mais legível, e sua cor principal é escurecida ou clareada onde é usada como texto.",
+        "primaryText": "Sua cor principal tem contraste de {ratio}:1 sobre a página, abaixo de {min}:1, por isso é ajustada onde é usada como texto.",
+        "button": "O texto dos botões tem contraste de {ratio}:1 sobre a cor do botão, abaixo de {min}:1.",
+        "buttonEdge": "A cor dos seus botões tem contraste de {ratio}:1 com a página, abaixo de {min}:1, então os botões podem ser difíceis de ver.",
+        "inDark": "(modo escuro)"
+      },
+      "wording": {
+        "title": "Textos",
+        "description": "Somente texto simples. Os clientes veem no idioma em que você escrever.",
+        "pageTitle": "Título da página",
+        "pageTitleHint": "Exibido no topo da página e na aba do navegador. Se estiver vazio, usa o nome do seu negócio.",
+        "welcome": "Mensagem de boas-vindas",
+        "welcomeHint": "{count} de {max} caracteres. Exibida acima do formulário de agendamento.",
+        "button": "Texto do botão de confirmação",
+        "buttonHint": "O texto do botão final, por exemplo Reservar minha vaga. Solicitações que precisam de aprovação mantêm o próprio rótulo.",
+        "buttonDefault": "Confirmar agendamento",
+        "tooLong": "Use no máximo {max} caracteres."
+      },
+      "style": {
+        "title": "Fontes e cantos",
+        "description": "Um pequeno conjunto de opções seguras que funcionam em qualquer dispositivo.",
+        "font": "Fonte",
+        "fontHint": "Elas usam fontes que já estão no dispositivo do cliente, então a página carrega rápido.",
+        "fonts": {
+          "default": "Padrão do produto",
+          "system": "Sistema",
+          "serif": "Com serifa",
+          "rounded": "Arredondada",
+          "humanist": "Humanista"
+        },
+        "corners": "Cantos",
+        "cornerStyles": {
+          "square": "Quadrados",
+          "rounded": "Arredondados",
+          "pill": "Pílula"
+        },
+        "mode": "Claro ou escuro",
+        "modes": {
+          "light": "Claro",
+          "dark": "Escuro",
+          "auto": "Seguir o dispositivo"
+        }
+      },
+      "options": {
+        "title": "Opções da página",
+        "description": "O que mais aparece ao redor do formulário de agendamento.",
+        "language": "Mostrar o seletor de idioma",
+        "languageHint": "Permite que os clientes mudem o idioma da página.",
+        "poweredBy": "Mostrar \"Powered by\" no rodapé",
+        "poweredByHint": "Desative para mostrar apenas a sua própria marca.",
+        "poweredByLocked": "Remover \"Powered by\" faz parte da marca própria (white-label), que o seu plano não inclui."
+      },
+      "links": {
+        "title": "Endereço da página",
+        "description": "Onde os clientes abrem a página. As alterações aparecem lá assim que você salvar.",
+        "page": "Endereço da página de agendamento",
+        "open": "Abrir página",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "later": "Usar o seu próprio domínio e incorporar a página em outro site ainda não estão disponíveis."
+      },
+      "type": {
+        "title": "Aparência da página: {name}",
+        "subtitle": "Dê a este tipo de agendamento o próprio logotipo, cores ou mensagem de boas-vindas. O que você deixar vazio usa a aparência do espaço de trabalho.",
+        "back": "Voltar ao tipo de agendamento",
+        "notFoundTitle": "Tipo de agendamento não encontrado",
+        "notFound": "Este tipo de agendamento não existe mais.",
+        "resetTitle": "Usar a aparência do espaço de trabalho",
+        "resetDescription": "Remove tudo o que foi definido para este tipo de agendamento, incluindo as imagens.",
+        "reset": "Usar a aparência do espaço de trabalho",
+        "resetConfirmTitle": "Usar a aparência do espaço de trabalho?",
+        "resetConfirmMessage": "O logotipo, a imagem de capa, as cores e os textos definidos para este tipo de agendamento serão removidos.",
+        "resetDone": "Este tipo de agendamento agora usa a aparência do espaço de trabalho"
+      },
+      "preview": {
+        "title": "Prévia ao vivo",
+        "device": "Dispositivo",
+        "desktop": "Computador",
+        "mobile": "Celular",
+        "page": "Página",
+        "servicePage": "Página de agendamento",
+        "serviceList": "Lista de serviços",
+        "scheme": "Modo de cor",
+        "asSet": "Conforme definido",
+        "light": "Claro",
+        "dark": "Escuro",
+        "direction": "Direção",
+        "ltr": "Da esquerda para a direita",
+        "rtl": "Da direita para a esquerda",
+        "frameTitle": "Prévia da página de agendamento",
+        "note": "Esta é a página real com horários de exemplo. Nada do que você fizer aqui será agendado.",
+        "sampleName": "Conversa introdutória",
+        "sampleName2": "Sessão completa",
+        "sampleDescription": "Uma conversa rápida para entender o que você precisa e responder às suas dúvidas.",
+        "sampleIntro": "Por favor, chegue alguns minutos antes.",
+        "sampleQuestion": "Há algo que devemos saber antes?"
+      }
+    }
+  }
+}

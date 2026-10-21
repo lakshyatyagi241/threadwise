@@ -1,0 +1,70 @@
+{
+  "id": "alerting",
+  "mode": "quick",
+  "status": "PASS",
+  "steps": [
+    {
+      "name": "promtool_check",
+      "pass": true
+    },
+    {
+      "name": "promtool_test",
+      "pass": true
+    },
+    {
+      "name": "ratchet",
+      "pass": true
+    },
+    {
+      "name": "ratchet_test",
+      "pass": true
+    },
+    {
+      "name": "webhook",
+      "pass": true
+    },
+    {
+      "name": "live",
+      "pass": true
+    }
+  ],
+  "webhookSeconds": 10,
+  "live": [
+    {
+      "id": "worker-kill",
+      "alert": "RuntimeMetricsTargetDown",
+      "fired": true,
+      "secondsToPending": 8.5,
+      "secondsToFiring": 28.5
+    },
+    {
+      "id": "probe-dead-port",
+      "alert": "ApiProbeFailing",
+      "fired": true,
+      "secondsToPending": 5,
+      "secondsToFiring": 25
+    },
+    {
+      "id": "redis-full",
+      "alert": "RedisMemoryNearMax",
+      "fired": true,
+      "secondsToPending": 9,
+      "secondsToFiring": 29
+    },
+    {
+      "id": "outbox-dead",
+      "alert": "OutboxDeadRows",
+      "fired": true,
+      "secondsToPending": 10.8,
+      "secondsToFiring": 30.9
+    },
+    {
+      "id": "pg-blackhole",
+      "alert": "DbPoolExhausted",
+      "fired": true,
+      "secondsToPending": 4.7,
+      "secondsToFiring": 24.7,
+      "apiAliveAfterHang": true
+    }
+  ]
+}

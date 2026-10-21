@@ -1,0 +1,34 @@
+{
+  "_comment": "Known open items that exist on main and are recorded in the VAPT report (docs/security/vapt/Sheet3-25-vapt-REPORT.html). run.sh PASSES when only these exist and FAILS on anything new. Remove an entry when it is fixed.",
+  "highs": {
+    "TI-001": "RLS bypass flag app.privileged is a settable GUC; needs SQL injection first; ADR 0028 Proposed, owner decision"
+  },
+  "acceptedByOwner": {
+    "mfa-enforcement-defaults": "Owner decision 2026-10-10; verify production switch is ON before release",
+    "operator-mfa-ignored": "Owner decision 2026-10-10; verify production switch is ON before release"
+  },
+  "tenancyUnclassifiedTables": {
+    "data_retention_policies": "platform-only, forced RLS, privileged_only policy",
+    "data_retention_runs": "platform-only, forced RLS, privileged_only policy",
+    "failed_operation_events": "operator-only policy, forced RLS",
+    "financial_records_archive": "platform-only policy, forced RLS",
+    "waboo_migration_batches": "operator_write policy, forced RLS",
+    "waboo_migration_runner_jobs": "operator_write policy, forced RLS",
+    "waboo_migration_runners": "operator_write policy, forced RLS"
+  },
+  "tenancyPrivilegedFiles": {
+    "modules/chat-conversations/message-log.service.ts": "reads platform retention policy only",
+    "modules/data-retention/sweep-record.ts": "writes platform run log only"
+  },
+  "tenancySqlRawFiles": {
+    "modules/analytics/query/message-feed.service.ts": "arguments are internal literals and a typed union"
+  },
+  "tenancyProbeGapTables": {
+    "team_members": "generated read-own scenario seeds 0 rows under team_members_hide_inactive; foreign rows 0, so no leak"
+  },
+  "sastMax": {
+    "critical": 3,
+    "high": 2,
+    "reason": "all remaining SAST criticals/highs are dev-dependency advisories (vitest, tinypool, vite, launch-editor; Windows/dev-server only, not in the production image). Fix = major vitest/vite upgrade, tracked as open"
+  }
+}

@@ -91,7 +91,14 @@
         "none": "暂无",
         "atLeast": "{count}+",
         "footnote": "消息数据涵盖为该联系人找到的会话（按电话号码、电子邮件地址或姓名匹配）。通话数据涵盖最近一年，按电话号码或姓名匹配。",
-        "callsPartial": "匹配的通话数量超出可读取范围，因此通话数据可能偏少。"
+        "callsPartial": "匹配的通话数量超出可读取范围，因此通话数据可能偏少。",
+        "waSent": "WhatsApp 已发送",
+        "waDelivered": "WhatsApp 已送达",
+        "waSeen": "WhatsApp 已读",
+        "waReceived": "WhatsApp 已接收",
+        "waFailed": "WhatsApp 失败",
+        "waReplied": "WhatsApp 已回复",
+        "waFootnote": "WhatsApp 数据统计该联系人所有 WhatsApp 会话中的每条消息。已发送的消息，如果下一条是联系人发来的，则计为已回复。"
       }
     }
   }

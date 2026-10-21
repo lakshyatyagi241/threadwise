@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_BOOKING_THEME, publicBookingThemeSchema } from '@crm/contracts';
 
 /**
  * Wire shapes of the appointments API, as this feature reads them. They follow Reference's data model (appointments, booking
@@ -44,8 +45,21 @@ export type PaymentStatus = (typeof PAYMENT_STATUSES)[number];
 export const BOOKING_SOURCES = ['chat', 'link', 'manual', 'api'] as const;
 export type BookingSource = (typeof BOOKING_SOURCES)[number];
 
-export const REMINDER_KINDS = ['before', 'after'] as const;
-export const REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+export const REMINDER_KINDS = ['before', 'after', 'event'] as const;
+/** The channels a reminder step can be set to (SMS was removed from appointment reminders; voice is reserved). */
+export const REMINDER_CHANNELS = ['whatsapp', 'email'] as const;
+/** The channels a recorded run can name when it is read: old runs keep `sms` as history, `voice` is reserved. */
+export const REMINDER_RECORD_CHANNELS = ['whatsapp', 'email', 'sms', 'voice'] as const;
+export const REMINDER_STEP_KINDS = [
+  'confirmation',
+  'reminder_24h',
+  'reminder_2h',
+  'reminder_15m',
+  'reminder',
+  'after_visit',
+  'no_show',
+  'rebook',
+] as const;
 
 const instant = z.string().refine((v) => !Number.isNaN(Date.parse(v)), 'not an ISO 8601 instant');
 const nullableText = z.string().nullable();
@@ -105,13 +119,26 @@ export type ReminderRunStatus = (typeof REMINDER_RUN_STATUSES)[number];
 /** One reminder or follow-up of a booking and what became of it. `reason` is a stable code, never a message or an address. */
 export const appointmentReminderSchema = z.object({
   kind: z.enum(REMINDER_KINDS),
+  stepKind: z.enum(REMINDER_STEP_KINDS).nullable().default(null),
   offsetMinutes: z.number().int(),
   label: nullableText,
   dueAt: instant,
   status: z.enum(REMINDER_RUN_STATUSES),
   reason: nullableText,
-  channel: z.enum(REMINDER_CHANNELS).nullable(),
+  channel: z.enum(REMINDER_RECORD_CHANNELS).nullable(),
   sentAt: instant.nullable(),
+  /** The channels tried, in order, with the reason each was used or skipped. */
+  attempts: z
+    .array(
+      z.object({
+        channel: z.enum(REMINDER_RECORD_CHANNELS),
+        status: z.enum(['sent', 'skipped', 'held', 'failed']),
+        reason: nullableText,
+      }),
+    )
+    .default([]),
+  /** What the provider reported afterwards (WhatsApp only). */
+  delivery: z.enum(['unknown', 'delivered', 'failed', 'undelivered']).default('unknown'),
 });
 export type AppointmentReminder = z.infer<typeof appointmentReminderSchema>;
 
@@ -212,6 +239,8 @@ export const bookingTemplateSchema = z.object({
   /** `whatsapp` unless the API says otherwise; sent back as it came. */
   channel: z.string().optional(),
   waTemplateId: nullableText,
+  /** The appointment-library message the type chose for this event and channel (BL-351). */
+  libraryTemplateId: nullableText.optional(),
   plainBody: nullableText,
 });
 
@@ -223,12 +252,24 @@ export const bookingReminderSchema = z.object({
   label: nullableText,
   isActive: z.boolean(),
   kind: z.enum(REMINDER_KINDS),
+  stepKind: z.enum(REMINDER_STEP_KINDS).optional(),
   /** In the order they are tried. */
   channels: z.array(z.enum(REMINDER_CHANNELS)),
   subject: nullableText,
   body: nullableText,
   /** An approved WhatsApp template of the workspace. */
   waTemplateId: nullableText,
+  libraryTemplateId: nullableText.optional(),
+  waTemplateStatus: z.enum(['draft', 'pending', 'approved', 'rejected']).nullable().optional(),
+  waTemplateName: nullableText.optional(),
+  buttonsEnabled: z.boolean().optional(),
+  skipIfConfirmed: z.boolean().optional(),
+  undeliveredFallbackMinutes: z.number().int().nullable().optional(),
+  serviceLabel: nullableText.optional(),
+  packKey: nullableText.optional(),
+  packVersion: z.number().int().nullable().optional(),
+  /** `sms_removed`: SMS reminders were removed; the step was moved to email or switched off. */
+  notice: z.enum(['sms_removed']).nullable().optional(),
 });
 
 export const bookingPriceSchema = z.object({
@@ -420,13 +461,21 @@ export const publicTypeSchema = z.object({
 });
 export type PublicType = z.infer<typeof publicTypeSchema>;
 
+/** How the page looks (BL-355): the workspace's theme, or a service's own over it. Missing on a server that predates themes. */
+export const publicThemeSchema = publicBookingThemeSchema.default(DEFAULT_BOOKING_THEME);
+
 export const publicDirectorySchema = z.object({
   org: publicOrgSchema,
   types: z.array(publicTypeSchema),
+  theme: publicThemeSchema,
 });
 export type PublicDirectory = z.infer<typeof publicDirectorySchema>;
 
-export const publicTypePageSchema = z.object({ org: publicOrgSchema, type: publicTypeSchema });
+export const publicTypePageSchema = z.object({
+  org: publicOrgSchema,
+  type: publicTypeSchema,
+  theme: publicThemeSchema,
+});
 export type PublicTypePage = z.infer<typeof publicTypePageSchema>;
 
 export const publicBookingSchema = z.object({
@@ -449,7 +498,11 @@ export const publicBookingSchema = z.object({
 });
 export type PublicBooking = z.infer<typeof publicBookingSchema>;
 
-export const publicManageSchema = z.object({ org: publicOrgSchema, booking: publicBookingSchema });
+export const publicManageSchema = z.object({
+  org: publicOrgSchema,
+  booking: publicBookingSchema,
+  theme: publicThemeSchema,
+});
 export type PublicManage = z.infer<typeof publicManageSchema>;
 
 export const publicBookedSchema = z.object({ org: publicOrgSchema, booking: publicBookingSchema });

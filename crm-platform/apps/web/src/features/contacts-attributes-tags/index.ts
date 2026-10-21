@@ -17,7 +17,7 @@ export {
 export { suggestKey as suggestAttributeKey } from './lib/attribute-model';
 export { useGroups } from './api/groups';
 export { useTags } from './api/tags';
-export { useContactFields, useModuleFields } from './api/properties';
+export { hasLazyOptions, useContactFields, useModuleFields } from './api/properties';
 export { contactFilterBody, type ContactFilters } from './api/contacts';
 export { stageChoices, statusChoices } from './lib/option-sets';
 export { frozenEdge, isScrolledSideways } from './lib/sticky';

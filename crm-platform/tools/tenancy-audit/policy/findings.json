@@ -226,7 +226,7 @@
   {
     "id": "TI-017",
     "severity": "Info",
-    "status": "decision-needed",
+    "status": "fixed",
     "releaseBlocking": false,
     "title": "docker-compose.prod.yml starts Redis with noeviction but no maxmemory",
     "resource": "Redis memory in the production compose file (deploy/hostinger sets maxmemory)",
@@ -234,7 +234,7 @@
     "affectedTenants": "all, if Redis memory is exhausted (writes then fail for everyone)",
     "exploitability": "needs unbounded key growth; most keys carry a TTL",
     "reproduction": "config read",
-    "fix": "Owner decision: set --maxmemory to the host's budget (deploy/hostinger uses 192mb in a 256m container). Not changed here: a value that is too low makes BullMQ writes fail for every workspace. Keep noeviction.",
+    "fix": "--maxmemory 192mb added to the production compose redis command, the same value deploy/hostinger runs; noeviction kept. The production host's memory budget was not checked here: if it is lower than 192mb, change the value to match it.",
     "regressionTest": "none"
   },
   {
@@ -262,7 +262,7 @@
     "affectedTenants": "none; the guard is right, the test data is stale",
     "exploitability": "n/a. The spec fails on creating a webhook (422), so its isolation tests cannot be used as evidence and are not counted for any control.",
     "reproduction": "vitest run test/e2e/outbound-webhooks/webhooks.e2e.spec.ts -t isolation -> \"expected 400 to be 404\" and \"expected +0 to be 1\"",
-    "fix": "Owner of the webhooks tests: use a fixture host the guard accepts (a public literal that is never contacted, or an injected resolver) instead of weakening the guard.",
+    "fix": "Owner of the webhooks tests: use a fixture host the guard accepts (a public literal that is never contacted, or an injected resolver) instead of weakening the guard. Tried: a public literal (93.184.216.34) was reverted, because the 'test send' case POSTs to the stored URL and the sender has no test seam, so CI would contact a real host. Needs a sender seam or a stub listener first.",
     "regressionTest": "that spec itself, once its fixture is fixed"
   },
   {
@@ -276,7 +276,7 @@
     "affectedTenants": "none shown: authenticated requests are not stored by shared caches by default (RFC 9111), and nothing tenant-private is marked public",
     "exploitability": "A misconfigured CDN or proxy that overrides that default could cache tenant JSON. Flow media is a capability URL (organization uuid plus 96 random bits) served public, immutable, 1 year on purpose, so deleting a file does not recall copies already cached.",
     "reproduction": "curl -i a tenant route with a bearer token: no Cache-Control header",
-    "fix": "Owner decision: send 'Cache-Control: private, no-store' (or at least 'private') on every authenticated route by default, which changes client revalidation behaviour. For flow media, accept the one-year cache or shorten it so deletion takes effect sooner.",
+    "fix": "Tenant part fixed: a request that carries an Authorization header or cookie now gets 'Cache-Control: private, no-store' from SecurityHeadersMiddleware unless its controller sets its own (unit: test/unit/auth-registration-security/security-headers.spec.ts). Still an owner decision: flow media stays a public one-year capability URL (flow-media.controller.ts); accept the one-year cache or shorten it so deletion takes effect sooner.",
     "regressionTest": "tenancy-concurrency.e2e.spec.ts (\"tenant responses stay out of shared caches\") asserts nothing authenticated is public or has s-maxage"
   },
   {

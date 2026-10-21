@@ -361,6 +361,406 @@
     {
       "key": "apps/api/src/modules/team-inbox-routing-sla/routing-engine.service.ts await this.repo.findOrCreateTag(",
       "reason": "one per tag in a single routing rule action (a few), each with its own attach and conversation event; reviewed 2026-10-18"
+    },
+    {
+      "key": "apps/api/src/modules/chrome-extension-sheets-addon/sheets-contacts.service.ts await this.repo.findByIdentity(",
+      "reason": "optimistic-lock retry loop: one lookup per attempt, not per item; reviewed 2026-10-15"
+    },
+    {
+      "key": "apps/api/src/infra/providers/node-bridge-runtime/device-auth-store.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/admin-console-shell/workspace-settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/ai-agents-training/assistants.service.ts await this.files.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/rollup/rollup.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/appointments-booking/booking-types.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/audit-log/audit-log.service.ts await this.repo.recordUuids(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/flows/login.service.ts await this.attack.recordFailure(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/flows/login.service.ts await this.audit.recordStandalone(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/impersonation.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/operator-auth.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/auth/platform/tenant-directory.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/broadcast-dispatch.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/broadcast-due.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/call-events.service.ts await this.permissions.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/call-recording-retention.service.ts await this.media.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/calling-voice/calling-readiness.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-dispatch.service.ts await this.repo.markSent(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/campaign-sweeper.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-broadcasts.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/campaigns/wizard/wizard-retry.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-email/mail-outbound-attachments.service.ts await this.store.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-facebook/backfill.service.ts await this.inbox.recordInbound(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-viber/vib-broadcast-sender.service.ts await this.repo.markRecipient(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/channel-wechat/broadcasts.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/coupons-credits-referral-currency/currency-admin.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/companies/companies-csv.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-dedupe/contact-dedupe.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-dedupe/contact-dedupe.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contacts.service.ts await tx.execute",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contacts/contacts.service.ts await tx.transaction(",
+      "reason": "deliberate per-item isolation: each item runs in its own sub-transaction/savepoint so one bad row does not roll back the rest (import, bulk update, merge set, retention wipe, slug/number retry); a single statement would lose that isolation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/credit-notes.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/invoices.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/invoicing/sales-orders.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/crm/sales-docs/sales-doc-expiry-sweep.service.ts await this.repo.insertEvent(",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/data-retention/retention.worker.ts await this.storage.deletePrefix(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/ai/ordering.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/flow-runtime-engine/triggers/schedule.sweeper.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/forms-builder/form-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/forms-links-groups/wa-chat-links.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth-automation.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/growth-pilot/growth-automation.service.ts await this.repo.markSuggestion(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/leads/lead-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/localization-translation/translation.service.ts await this.usage.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketing-site-cms/legal.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/cli/seed-app.runner.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.repo.insertImported(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/message-templates/template-sync.service.ts await this.repo.update(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/conversation-notification.consumer.ts await this.publisher.created(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/conversation-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/notification-fanout.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/notification-fanout.ts await this.publisher.created(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/notifications/salesdoc-notification.consumer.ts await this.repo.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/plans-subscriptions-trials/plan-retention.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/admin-billing.repository.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/billing-settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/gateway.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-settings-branding-storage/settings.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/platform-support-desk/sla.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/privacy/requests/privacy-requests.service.ts await this.audit.record(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-due.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/scheduled-run.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/automations.service.ts await this.events.upsert(",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/cart.service.ts await this.queue.remove(",
+      "reason": "the awaited call per item is an external side effect or a one-record audit/permission API (object-store delete, queue remove, realtime publish, push-failure record, audit.record), not a table the item list could be batched into; bounded by the batch or the rows of one operation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/compliance.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/team-inbox-routing-sla/sla-sweep.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/waboo-migration/waboo-migration.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/credit-packages.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/meta-rate-card.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-margins.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-rates.service.ts await tx.execute",
+      "reason": "seed/catalogue loop over a fixed in-code list (legal templates, gateway catalogue, rate seed, CLI seed), run at boot or by an operator, never over request data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/platform-wallet.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/wallet-message-billing/wallet-notifications.consumer.ts await this.notifications.insertReturning(",
+      "reason": "notification fan-out: one row per workspace user who must be told (owners/assignees of one workspace, a handful), each INSERT ... RETURNING feeds the realtime publish of that user's notification; bounded by the workspace's user count, not by request-sized data; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/webhook-fanout/webhook-forward.processor.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-orders.service.ts await tx.execute",
+      "reason": "loop over the lines/items/entries of ONE document or settings save (invoice lines, order items, branding fields, rate rows, a campaign's recipients page, a channel's groups), bounded by that document's size rather than the table; a multi-row INSERT is a possible later optimisation and has no user-visible latency today; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/workspaces-teams-tenancy/leave/leave-sweep.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/storage-purge.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/workers/outbox-drain.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/workers/partition-maintenance.service.ts await tx.execute",
+      "reason": "background sweep/worker: rows are claimed in a bounded batch (LIMIT or per-org page) and each row needs its own state transition, lock or external call, so one statement per row is the design; runs off the request path on a cron; moving to set-based SQL is a possible later optimisation; triaged 2026-10-19 from the loop header and enclosing function, not proven line by line"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/_shims/sql-sender-directory.ts await tx.execute",
+      "reason": "one mailbox lookup per distinct sender key of one broadcast/send request (the keys are the senders the user picked, a handful); reads, not writes; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/broadcasts/tracking/link-tracker.ts await tx.execute",
+      "reason": "retry on a short-code collision with a fixed list of five lengths; at most five attempts, and it stops at the first free code; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/email-delivery.service.ts await tx.execute",
+      "reason": "candidate ids of ONE bounce, sliced to MAX_CANDIDATES before the loop (find()), and each id is a LIMIT 1 lookup that returns on the first hit; bounded by a constant; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/contact-consent/consent-intake.service.ts await this.ledger.recordInTx(",
+      "reason": "one ledger entry per consent channel of one intake (the channel list is the closed set of channels, at most a handful) and the ledger API records one entry per call; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/crm/contact-import/contact-import.engine.ts await this.groupsRepo.insertIfAbsent(",
+      "reason": "creates only the group names of the file that did not already exist (existing ones come from one findByNames read), so it is one insert per NEW distinct group name, bounded by the distinct group column values of the file; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/crm/segments/segments.service.ts await tx.execute",
+      "reason": "one count per segment the user selected to refresh; each segment has its own compiled filter, so the count queries cannot share a statement; capped by the number of selected segments; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/operator-pricing.service.ts await tx.execute",
+      "reason": "operator-run pricing summary (platform staff, not tenant traffic): probe/page loops over the workspaces that hold a price override, executed on demand; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/marketplace/subscription-lifecycle.service.ts await tx.execute",
+      "reason": "cron reminder sweep: each due subscription takes its own advisory lock before it is reminded, so the lock and the write are per row by design; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/plans-subscriptions-trials/plan-analytics.service.ts await tx.execute",
+      "reason": "loop over the fixed FEATURE_TABLES list (a dozen in-code entries) probing whether each table exists; platform dashboard, not request data; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/scheduled-queue-warmer/schedule-create.service.ts await tx.execute",
+      "reason": "one row per planned slot of ONE schedule being created (the plan is built from the user's schedule settings and capped by the schedule size limits); the recipients, the large part, are inserted in PIVOT_CHUNK multi-row statements; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/shopify-woocommerce/_shims/sql-store-mirror.ts await tx.execute",
+      "reason": "one row per variant of ONE mirrored store product (a product has a handful of variants); the sync handles one product at a time; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups.service.ts await tx.execute",
+      "reason": "one subject lookup per entry of one request's group list, read-only and bounded by the groups returned for one page; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sync.service.ts await this.repo.markLeft(",
+      "reason": "one markLeft per group that disappeared from a device in this sync; the repo method returns the row for the audit/outbox, so it is per row by design; bounded by the groups one device left; reviewed 2026-10-19 (loop and its bound read)"
+    },
+    {
+      "key": "apps/api/src/modules/chat-conversations/message-log-archive.service.ts await this.repo.deleteArchived(",
+      "reason": "nightly archive: the loop is over the workspaces that had events on one UTC day (archiveDay); each workspace's archive write and its delete of the same rows run in one transaction so the archive and the live table cannot disagree (the code throws if deleted != archived), so the delete is per workspace by design; the events inside it are read in BATCH-sized pages; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/failed-operations/failure-capture.service.ts await this.recorder.record(",
+      "reason": "a sweep over the jobs in a queue's failed set (bounded by what BullMQ still holds); each job is its own durable record with its own identity and sealed payload, inside a per-job try so one bad job cannot stop the rest; the capture retry loop is a bounded retry; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/platform-async-ops/async-ops.service.ts await this.recorder.record(",
+      "reason": "operator-run replay of at most `limit` failed jobs; each job is recorded and replayed on its own inside a per-job try; platform staff action, not tenant traffic; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/privacy/requests/erasure-executor.ts await this.audit.record(",
+      "reason": "one audit row and one outbox event per erased contact, exactly as the CRM delete writes them (those APIs take one record); the loop is over the contacts erased by ONE privacy request, in the request's own transaction; a multi-row audit/outbox insert is a possible later optimisation for very large erasures, with no user-facing latency; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/modules/storage-quota/storage-quota.repository.ts await tx.execute",
+      "reason": "one upsert per storage category of ONE workspace's recount (the rows come from a GROUP BY category, a fixed handful of categories); an operator/cron recount, not request traffic; reviewed 2026-10-19"
     }
   ],
   "36": [
@@ -739,10 +1139,6 @@
     {
       "key": "waboo_migration_runs(org_id) -> organizations [packages/db/migrations/20261113100000_wmig_waboo_migration_runs.sql]",
       "reason": "platform_setup holds exactly one row and waboo_migration_runs is a handful of runs per workspace; an organization is deleted only by workspace erasure; reviewed 2026-10-18"
-    },
-    {
-      "key": "faqs(org_id,created_by) -> users [packages/db/migrations/20261114090000_faq_core.sql]",
-      "reason": "the column only records which user did it (audit/owner); the one delete that reaches it is self-service account deletion (auth/account/account.service.ts, one user at a time, behind a sole-admin guard), which costs one scan of this table per deleted user and is not a hot path; reviewed 2026-10-18"
     },
     {
       "key": "message_log_exports(org_id,requested_by) -> users [packages/db/migrations/20261116100000_message_log_archive.sql]",
@@ -1173,6 +1569,210 @@
     {
       "key": "waboo_migration_runs",
       "reason": "nullable on purpose: org_id is the workspace the load created, NULL for a dry run, and the FK is ON DELETE SET NULL; the table is platform-only (20261113100000_wmig_waboo_migration_runs.sql); reviewed 2026-10-18"
+    },
+    {
+      "key": "wa_provider_configs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_templates.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "flow_subscribers.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "shopify_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "woocommerce_cod_confirmations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "meta_campaigns.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_chat_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.channel is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.kind is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_crm_actions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "tiktok_shops.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "slack_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integrations.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_email_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "workspace_ig_accounts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "agent_statuses.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_chat_links.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_forms.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "conversation_participants.role is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_assistants.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.direction is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "ai_call_logs.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "projects.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_pages.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_posts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "facebook_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "telegram_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "line_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wechat_broadcast_recipients.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "viber_broadcasts.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_coupons.type is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "wa_orders.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "sales_doc_revisions.status is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: the owning feature is still under construction (owner decision 2026-10-19), so its value set is not final and a CHECK written now would have to be rewritten or would reject valid inserts. Add the CHECK, from SELECT DISTINCT on real data plus the code, when the feature ships"
+    },
+    {
+      "key": "user_settings.state is free text with no CHECK",
+      "reason": "deferred, not reviewed as safe: nothing writes user_settings.state yet (no INSERT or UPDATE sets it), so there is no value set to constrain; add the CHECK when the feature that uses it ships (owner decision 2026-10-19); reviewed 2026-10-19"
+    },
+    {
+      "key": "failed_operations pk(id)",
+      "reason": "platform DLQ table, not tenant data (20261229090000_failed_operations.sql header: same shape as waboo_migration_runs and org_lifecycle_log); every policy is privileged-only, so org_id is only a pointer to the owning workspace; reviewed 2026-10-19"
+    },
+    {
+      "key": "failed_operations",
+      "reason": "platform DLQ table: org_id is a plain nullable pointer (unknown when a webhook is captured, e.g. a WhatsApp payload routed by phone number later) with no FK so the record outlives the workspace; privileged-only policies (20261229090000_failed_operations.sql header); reviewed 2026-10-19"
     }
   ],
   "48": [
@@ -1183,12 +1783,84 @@
     {
       "key": "api_library_logs: uuid is not unique-constrained (partitioned/stream table); confirm lookups always include org_id and the time range",
       "reason": "verified: api-library-logs.repository.ts builds every query from this.where(orgId, filters) and api-library-retention.service.ts deletes by (id, created_at); no query looks a row up by uuid. A unique constraint on a partitioned table must include the partition key, so it would not be global anyway; reviewed 2026-10-18"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_cart_recoveries_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_shopify_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_woocommerce_waitlist_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_wa_pending_orders_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_ai_training_sources_kind is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_ai_training_sources_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_users_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
+    },
+    {
+      "key": "20270131090000_con_enum_checks_closed_sets.sql: chk_event_outbox_status is NOT VALID and no later migration validates it",
+      "reason": "added NOT VALID on purpose (20270131090000_con_enum_checks_closed_sets.sql): new rows are checked now, and old rows are not scanned because live data has not been inspected. Run ALTER TABLE ... VALIDATE CONSTRAINT once the table is known clean; the platform is still in development, so this is a follow-up, not a defect; reviewed 2026-10-19"
     }
   ],
   "49": [
     {
       "key": "api_library_logs",
       "reason": "old rows are removed by apps/api/src/modules/api-library/api-library-retention.service.ts (daily cron, DELETE in batches of 1000 older than API_LIBRARY_LOG_RETENTION_DAYS, up to 50 batches a night); it deletes rows rather than dropping partitions, which is fine at this volume (a stream of API-call runs) and needs no archivable_streams() approval; reviewed 2026-10-18"
+    },
+    {
+      "key": "shopify_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "woocommerce_integration_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "hubspot_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "trello_integration_logs (partitioned)",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "invoice_gateway_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "wallet_platform_log",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "contact_consent_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "privacy_request_events",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "translation_usage",
+      "reason": "deferred, not reviewed as safe: the table's feature is still under construction (owner decision 2026-10-19) and its retention window is not decided; a retention job written now would guess the policy. Decide the window (and legal hold for consent, privacy and wallet records) when the feature ships"
+    },
+    {
+      "key": "failed_operation_events",
+      "reason": "deferred, not reviewed as safe: the DLQ is new and its retention window for the append-only event history is not decided (docs/quality/dlq-strategy.md covers the Redis side); decide the window when the DLQ is in use (owner decision 2026-10-19: features still under construction)"
     }
   ]
 }

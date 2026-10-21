@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "In attesa"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Nessuno attende una persona",
+          "message": "Quando un bot, un flusso o un collega chiede una persona, la conversazione resta qui finché qualcuno la prende in carico."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Il bot sta rispondendo",
+        "waiting": "In attesa di una persona",
+        "with_person": "Con una persona"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}h",
+      "ageDays": "{count}g",
+      "row": {
+        "waiting": "In attesa",
+        "waitingFor": "In attesa da {age}",
+        "inTeam": "Nella coda di {team}"
+      },
+      "assignedTo": "ora con {name}",
+      "inTeamQueue": "coda di {team}",
+      "cardFailed": "Impossibile caricare i dettagli del passaggio.",
+      "claim": {
+        "button": "Prendi",
+        "done": "Hai preso in carico questa conversazione.",
+        "doneOwner": "Hai preso in carico questa conversazione e ora sei il proprietario del contatto.",
+        "failed": "Impossibile prendere in carico la conversazione.",
+        "taken": "Qualcun altro ha preso in carico prima questa conversazione."
+      },
+      "giveBack": {
+        "button": "Restituisci al bot",
+        "done": "Il bot risponde di nuovo a questa conversazione.",
+        "failed": "Impossibile restituire la conversazione al bot."
+      },
+      "send": {
+        "button": "Invia in coda",
+        "buttonAgain": "Invia di nuovo in coda",
+        "title": "Invia a una persona",
+        "close": "Chiudi",
+        "cancel": "Annulla",
+        "submit": "Invia",
+        "intro": "Il bot smette di rispondere a questo contatto. La conversazione va alla persona o al team che scegli, oppure resta in coda finché qualcuno la prende in carico.",
+        "where": "Invia a",
+        "whereRules": "Le regole di assegnazione, altrimenti la coda di attesa",
+        "whereQueueOnly": "La coda di attesa (le regole di assegnazione non sono nel tuo piano)",
+        "whereTeam": "Un team",
+        "wherePerson": "Una persona",
+        "team": "Team",
+        "pickTeam": "Scegli un team",
+        "person": "Persona",
+        "pickPerson": "Scegli una persona",
+        "reason": "Perché serve una persona",
+        "note": "Nota per la persona che la prende",
+        "noteHint": "Mostrata nella scheda del passaggio. Fino a 500 caratteri.",
+        "refused": "Questa conversazione non può essere passata (è archiviata, è spam o è una casella personale).",
+        "failed": "Impossibile inviare la conversazione.",
+        "done": {
+          "assigned": "Inviata: ora ce l’ha qualcuno.",
+          "waiting": "Inviata: resta in coda.",
+          "unavailable": "Inviata in coda: al momento nessuno è disponibile."
+        }
+      },
+      "details": {
+        "show": "Dettagli",
+        "hide": "Nascondi dettagli"
+      },
+      "card": {
+        "source": "Richiesto da",
+        "reason": "Motivo",
+        "priority": "Priorità",
+        "summary": "Riepilogo",
+        "answers": "Cosa ha detto il contatto al bot",
+        "trace": "Come è stata assegnata"
+      },
+      "source": {
+        "flow": "Un flusso",
+        "ai_agent": "Un agente IA",
+        "keyword": "Richiesta del contatto stesso",
+        "bot_failure": "Un bot che non ha potuto aiutare",
+        "manual": "Un collega"
+      },
+      "reason": {
+        "customer_asked": "Il contatto ha chiesto una persona",
+        "bot_could_not_help": "Il bot non ha potuto aiutare",
+        "sensitive_topic": "Argomento sensibile",
+        "sales_lead": "Lead di vendita",
+        "complaint": "Reclamo",
+        "other": "Altro"
+      },
+      "priority": {
+        "low": "Bassa",
+        "normal": "Normale",
+        "high": "Alta",
+        "urgent": "Urgente"
+      },
+      "trace": {
+        "chosen": "Scelto",
+        "skipped": "Saltato",
+        "info": "Nota"
+      }
+    }
+  }
+}

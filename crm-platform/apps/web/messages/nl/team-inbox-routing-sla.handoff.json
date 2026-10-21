@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Automatisering",
+      "title": "Overdracht en toewijzing",
+      "subtitle": "Hoe een gesprek bij een medewerker terechtkomt zodra een bot, een flow of een collega erom vraagt, en hoe de contacteigenaar en de gesprekseigenaar samenwerken.",
+      "noAccess": "Je hebt geen toestemming om deze instellingen te zien. Vraag een eigenaar of beheerder van de werkruimte om de machtiging voor de inbox-instellingen.",
+      "readOnly": "Je kunt deze instellingen zien maar niet wijzigen.",
+      "loading": "Instellingen laden",
+      "loadFailed": "De instellingen konden niet worden geladen.",
+      "retry": "Opnieuw proberen",
+      "saved": "Instellingen opgeslagen.",
+      "saveFailed": "De instellingen konden niet worden opgeslagen.",
+      "notInPlan": "Niet in je abonnement",
+      "upgradeHint": "Dit zit niet in je abonnement. Vraag de accounteigenaar om het abonnement te upgraden.",
+      "auto": {
+        "title": "Automatische toewijzing",
+        "body": "Wanneer een medewerker nodig is, kunnen de toewijzingsregels er een voor je kiezen. Zonder deze regels wacht het gesprek op het tabblad Wachtend tot een collega het overneemt.",
+        "switch": "Automatisch toewijzen",
+        "switchHint": "Zet uit om de toewijzingsregels te stoppen, zowel voor nieuwe gesprekken als voor overdrachten. Gesprekken wachten dan in de wachtrij of gaan naar de persoon of het team dat een flow noemt."
+      },
+      "owner": {
+        "title": "Contacteigenaar en gesprekseigenaar",
+        "body": "Een contact kan een eigenaar hebben, en elk gesprek heeft de persoon die het beantwoordt. Kies hoe die twee zich tot elkaar verhouden.",
+        "modeLabel": "Hoe de contacteigenaar en de gesprekseigenaar zich tot elkaar verhouden",
+        "modes": {
+          "independent": {
+            "title": "Onafhankelijk",
+            "body": "De gesprekseigenaar en de contacteigenaar staan los van elkaar. Een wijziging van de een verandert de ander niet."
+          },
+          "owner_first": {
+            "title": "Eigenaar eerst",
+            "body": "Een nieuw gesprek gaat eerst naar de eigenaar van het contact als die het kan overnemen; anders beslissen de gebruikelijke regels."
+          },
+          "keep_in_sync": {
+            "title": "Gelijk houden",
+            "body": "Zoals Eigenaar eerst, en als de eigenaar van een contact wijzigt, volgen de open gesprekken die automatisch zijn toegewezen. Een gesprek dat iemand zelf heeft overgenomen wordt nooit verplaatst."
+          }
+        },
+        "claimSets": "Overnemen maakt je contacteigenaar",
+        "claimSetsHint": "Als iemand een gesprek overneemt en het contact nog geen eigenaar heeft, wordt die persoon de eigenaar.",
+        "prompt": "Vragen naar de contacteigenaar bij hertoewijzing",
+        "promptHint": "Als een gesprek handmatig aan iemand anders wordt gegeven, bied dan aan die persoon ook contacteigenaar te maken.",
+        "window": "Terugkerend contact bij de laatste medewerker houden",
+        "windowHint": "Een contact dat opnieuw schrijft, gaat gedurende dit aantal dagen naar de persoon die het laatste gesprek behandelde. Uit betekent geen limiet.",
+        "windowDays": "Aantal dagen",
+        "days": "dagen"
+      },
+      "queue": {
+        "title": "Wachtrij",
+        "body": "Gesprekken die niemand kon overnemen wachten op het tabblad Wachtend van de inbox, met de reden en hoe lang ze al wachten.",
+        "notify": "Het team waarschuwen als een gesprek wacht",
+        "notifyHint": "Teamleden, of iedereen die niet-toegewezen gesprekken kan beantwoorden, krijgen een melding met de reden."
+      },
+      "teams": {
+        "title": "Teams",
+        "body": "Elk team heeft een eigen toewijzingsmethode, openingstijden, tijdzone en standaardontvanger. Ze worden gebruikt wanneer een gesprek aan dat team wordt overgedragen.",
+        "link": "Teams openen"
+      }
+    }
+  }
+}

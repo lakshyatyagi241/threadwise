@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Compito",
+        "meeting": "Riunione",
+        "phone": "Telefono",
+        "email": "E-mail",
+        "reminder": "Promemoria",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Ricontatto",
+          "call_reminder": "Promemoria di chiamata"
+        },
+        "meeting": {
+          "interested": "Interessato",
+          "not_interested": "Non interessato",
+          "needs_follow_up": "Serve un ricontatto",
+          "rescheduled": "Riprogrammata",
+          "no_show": "Assente"
+        },
+        "phone": {
+          "connected": "Connessa",
+          "no_answer": "Nessuna risposta",
+          "busy": "Occupato",
+          "left_voicemail": "Messaggio in segreteria lasciato",
+          "wrong_number": "Numero errato",
+          "declined": "Rifiutata",
+          "failed": "Non riuscita"
+        }
+      }
+    },
+    "list": {
+      "back": "Dati",
+      "title": "Attività di vendita",
+      "intro": "Gestisci in un unico posto le attività del tuo team: compiti, riunioni, chiamate e attività personalizzate. Scegli cosa può fare ciascuna, i suoi tipi di compito e i suoi esiti.",
+      "create": "Crea attività",
+      "loading": "Caricamento delle attività…",
+      "loadFailed": "Impossibile caricare le attività.",
+      "retry": "Riprova",
+      "listLabel": "Attività",
+      "default": "Predefinita",
+      "custom": "Personalizzata",
+      "noEditor": "Un’attività predefinita senza nulla da configurare.",
+      "edit": "Modifica attività",
+      "editNamed": "Modifica attività {name}",
+      "chip": {
+        "completable": "Può essere completata",
+        "notCompletable": "Non può essere completata",
+        "calendar": "Nel calendario",
+        "taskTypes": "{count, plural, one {# tipo di compito} other {# tipi di compito}}",
+        "outcomes": "{count, plural, one {# esito} other {# esiti}}"
+      }
+    },
+    "drawer": {
+      "title": "Modifica attività: {name}",
+      "close": "Chiudi",
+      "done": "Fatto",
+      "cancel": "Annulla",
+      "saved": "Salvato.",
+      "autosave": "Le modifiche si salvano man mano che le fai.",
+      "readOnly": "Puoi vedere queste impostazioni ma non modificarle.",
+      "name": "Nome dell’attività",
+      "nameLocked": "Il nome di un’attività predefinita non può essere modificato.",
+      "mobileCheckIn": "Consenti agli utenti di fare check-in e check-out dall’app mobile",
+      "mobileCheckInPending": "Salvato, ma senza effetto per ora: l’app mobile non supporta ancora il check-in alle riunioni. Funzionerà quando lo supporterà.",
+      "showInCalendar": "Mostra questa attività in Il mio calendario nella dashboard delle attività",
+      "showInCalendarHint": "Salvato, ma non esiste ancora un calendario delle attività. Avrà effetto quando ne verrà aggiunto uno.",
+      "allowComplete": "Consenti agli utenti di contrassegnare questa attività come completata",
+      "allowEditCompleted": "Consenti agli utenti di modificare data e ora di completamento di questa attività",
+      "taskTypes": "Tipi di compito",
+      "taskTypesHint": "Scegline uno quando crei un compito, ad esempio Ricontatto o Promemoria di chiamata.",
+      "addTaskType": "Aggiungi tipo",
+      "taskTypePlaceholder": "Nuovo tipo di compito",
+      "predictOutcomes": "Prevedi gli esiti per questa attività",
+      "predictOutcomesHint": "Proponi un esito quando l’attività viene completata.",
+      "outcomes": "Esiti",
+      "outcomesHint": "Rimuovere un esito lo mantiene nei record che già lo hanno.",
+      "phoneOutcomesHint": "Scegli come conta ogni esito nei report delle chiamate. Rimuovere un esito lo mantiene nelle chiamate che già lo hanno.",
+      "addOutcome": "Aggiungi esito",
+      "outcomePlaceholder": "Nuovo esito",
+      "listEmpty": "Ancora niente.",
+      "moveUp": "Sposta {name} su",
+      "moveDown": "Sposta {name} giù",
+      "remove": "Rimuovi {name}",
+      "countsAsShort": "conta come {as}",
+      "countsAsLabel": "Conta come",
+      "countsAsOption": "Conta come {as}",
+      "countsAs": {
+        "connected": "connessa",
+        "no_answer": "nessuna risposta",
+        "busy": "occupato",
+        "left_voicemail": "messaggio in segreteria lasciato",
+        "wrong_number": "numero errato",
+        "declined": "rifiutata",
+        "failed": "non riuscita"
+      },
+      "removeActivity": "Rimuovi attività",
+      "removeConfirmTitle": "Rimuovere {name}?",
+      "removeConfirmBody": "Esce dall’elenco. I record che l’hanno usata mantengono i loro esiti.",
+      "removed": "Attività rimossa.",
+      "noSettings": "Questa attività non ha nulla da configurare.",
+      "errors": {
+        "nameRequired": "Dai un nome all’attività.",
+        "nameTaken": "Questo nome è già in uso qui.",
+        "limit": "Hai raggiunto il limite di questo elenco.",
+        "conflict": "Qualcun altro ha modificato questa attività. È stata ricaricata; riprova.",
+        "forbidden": "Non hai il permesso di modificarlo.",
+        "failed": "Impossibile salvare. Riprova."
+      },
+      "itemName": "Nome",
+      "hiddenInstead": "Ci sono ancora compiti che lo usano, quindi è stato nascosto. Continuano a mostrarlo.",
+      "loadingOutcomes": "Caricamento degli esiti…",
+      "outcomesLoadFailed": "Impossibile caricare gli esiti.",
+      "retry": "Riprova"
+    },
+    "create": {
+      "title": "Crea attività",
+      "close": "Chiudi",
+      "cancel": "Annulla",
+      "create": "Crea",
+      "intro": "Aggiungi un’attività specifica per la tua azienda. Parte con le impostazioni del tipo scelto.",
+      "name": "Nome",
+      "namePlaceholder": "Ad esempio, Sopralluogo",
+      "behavesAs": "Funziona come",
+      "behavesAsHint": {
+        "task": "Qualcosa da fare entro una data, che può essere completato.",
+        "meeting": "Qualcosa che avviene a un orario, che può essere completato.",
+        "phone": "Una chiamata, con gli esiti di una chiamata."
+      },
+      "behaves": {
+        "task": "Un compito",
+        "meeting": "Una riunione",
+        "phone": "Una chiamata telefonica"
+      },
+      "icon": "Icona",
+      "icons": {
+        "task": "Compito",
+        "meeting": "Calendario",
+        "phone": "Telefono",
+        "email": "E-mail",
+        "reminder": "Campana",
+        "sms": "Messaggio",
+        "chat": "Chat",
+        "visit": "Luogo",
+        "video": "Video",
+        "document": "Documento",
+        "flag": "Bandiera",
+        "star": "Stella"
+      },
+      "errors": {
+        "nameRequired": "Dai un nome all’attività.",
+        "nameTaken": "Esiste già un’attività con questo nome.",
+        "limit": "Hai raggiunto il limite di attività personalizzate.",
+        "failed": "Impossibile creare l’attività. Riprova."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(rimosso)",
+      "taskType": "Tipo di compito",
+      "taskTypeNone": "Nessun tipo",
+      "outcome": "Esito",
+      "outcomeNone": "Nessun esito",
+      "completeOff": "Il completamento dei compiti è disattivato in Attività di vendita."
+    },
+    "meeting": {
+      "saved": "Riunione aggiornata.",
+      "reopened": "Riunione riaperta.",
+      "errors": {
+        "disabled": "Il completamento delle riunioni è disattivato in Attività di vendita.",
+        "optionGone": "Questo esito è stato rimosso. Scegline un altro.",
+        "failed": "Impossibile salvare. Riprova."
+      },
+      "outcome": "Esito",
+      "noOutcome": "Nessun esito",
+      "removedSuffix": "(rimosso)",
+      "notes": "Note",
+      "cancel": "Annulla",
+      "save": "Salva",
+      "outcomeChip": "Esito: {name}",
+      "completed": "Completata",
+      "editAria": "Modifica l’esito di {title}",
+      "edit": "Modifica",
+      "reopenAria": "Riapri {title}",
+      "reopen": "Riapri",
+      "addAria": "Aggiungi un esito a {title}",
+      "add": "Aggiungi esito",
+      "markCompleted": "Segna come completata"
+    }
+  }
+}

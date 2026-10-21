@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "대기 중"
+      },
+      "empty": {
+        "waiting": {
+          "title": "상담원을 기다리는 대화가 없습니다",
+          "message": "봇, 플로우 또는 팀원이 상담원을 요청하면 누군가 맡을 때까지 대화가 여기에서 대기합니다."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "봇이 응대 중",
+        "waiting": "상담원 대기 중",
+        "with_person": "상담원 응대 중"
+      },
+      "ageMinutes": "{count}분",
+      "ageHours": "{count}시간",
+      "ageDays": "{count}일",
+      "row": {
+        "waiting": "대기 중",
+        "waitingFor": "{age} 대기",
+        "inTeam": "{team} 팀 대기열"
+      },
+      "assignedTo": "현재 담당: {name}",
+      "inTeamQueue": "{team} 팀 대기열",
+      "cardFailed": "인계 상세 정보를 불러오지 못했습니다.",
+      "claim": {
+        "button": "맡기",
+        "done": "이 대화를 맡았습니다.",
+        "doneOwner": "이 대화를 맡았고 이제 연락처 담당자입니다.",
+        "failed": "대화를 맡지 못했습니다.",
+        "taken": "다른 사람이 먼저 이 대화를 맡았습니다."
+      },
+      "giveBack": {
+        "button": "봇에게 돌려주기",
+        "done": "이 대화는 다시 봇이 응대합니다.",
+        "failed": "대화를 봇에게 돌려주지 못했습니다."
+      },
+      "send": {
+        "button": "대기열로 보내기",
+        "buttonAgain": "대기열로 다시 보내기",
+        "title": "상담원에게 보내기",
+        "close": "닫기",
+        "cancel": "취소",
+        "submit": "보내기",
+        "intro": "봇이 이 연락처에 더 이상 응답하지 않습니다. 대화는 선택한 상담원이나 팀으로 전달되거나, 누군가 맡을 때까지 대기열에서 기다립니다.",
+        "where": "보낼 대상",
+        "whereRules": "배정 규칙, 없으면 대기열",
+        "whereQueueOnly": "대기열 (배정 규칙은 현재 요금제에 포함되어 있지 않습니다)",
+        "whereTeam": "팀",
+        "wherePerson": "한 명",
+        "team": "팀",
+        "pickTeam": "팀 선택",
+        "person": "담당자",
+        "pickPerson": "담당자 선택",
+        "reason": "상담원이 필요한 이유",
+        "note": "맡는 사람에게 남기는 메모",
+        "noteHint": "인계 카드에 표시됩니다. 최대 500자.",
+        "refused": "이 대화는 인계할 수 없습니다 (보관됨, 스팸 또는 개인 메일함).",
+        "failed": "대화를 보내지 못했습니다.",
+        "done": {
+          "assigned": "전송했습니다. 이제 담당자가 있습니다.",
+          "waiting": "전송했습니다. 대기열에서 기다립니다.",
+          "unavailable": "대기열로 전송했습니다. 지금은 응대 가능한 사람이 없습니다."
+        }
+      },
+      "details": {
+        "show": "상세",
+        "hide": "상세 숨기기"
+      },
+      "card": {
+        "source": "요청자",
+        "reason": "사유",
+        "priority": "우선순위",
+        "summary": "요약",
+        "answers": "연락처가 봇에게 말한 내용",
+        "trace": "배정 방식"
+      },
+      "source": {
+        "flow": "플로우",
+        "ai_agent": "AI 에이전트",
+        "keyword": "연락처의 직접 요청",
+        "bot_failure": "도움을 주지 못한 봇",
+        "manual": "팀원"
+      },
+      "reason": {
+        "customer_asked": "연락처가 상담원을 요청했습니다",
+        "bot_could_not_help": "봇이 도움을 주지 못했습니다",
+        "sensitive_topic": "민감한 주제",
+        "sales_lead": "영업 리드",
+        "complaint": "불만",
+        "other": "기타"
+      },
+      "priority": {
+        "low": "낮음",
+        "normal": "보통",
+        "high": "높음",
+        "urgent": "긴급"
+      },
+      "trace": {
+        "chosen": "선택됨",
+        "skipped": "건너뜀",
+        "info": "메모"
+      }
+    }
+  }
+}

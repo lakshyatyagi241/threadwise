@@ -75,6 +75,7 @@ function setup(
     } as never,
     {} as never,
     { enqueueOutbound } as never,
+    { previewLinker: async () => async () => null } as never,
   );
   const send = (input: Partial<Extract<SendMessageInput, { kind: 'template' }>> = {}) =>
     RequestContextStore.run(ctx, () =>

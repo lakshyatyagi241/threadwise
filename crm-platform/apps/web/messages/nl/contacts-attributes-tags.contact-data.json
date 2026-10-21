@@ -91,7 +91,14 @@
         "none": "Nog geen",
         "atLeast": "{count}+",
         "footnote": "De berichtcijfers hebben betrekking op de gesprekken die voor dit contact zijn gevonden (op telefoonnummer, e-mailadres of naam). De oproepcijfers hebben betrekking op het afgelopen jaar en worden gekoppeld op telefoonnummer of naam.",
-        "callsPartial": "Er zijn meer oproepen gevonden dan gelezen konden worden, dus de oproepcijfers kunnen te laag zijn."
+        "callsPartial": "Er zijn meer oproepen gevonden dan gelezen konden worden, dus de oproepcijfers kunnen te laag zijn.",
+        "waSent": "WhatsApp verzonden",
+        "waDelivered": "WhatsApp afgeleverd",
+        "waSeen": "WhatsApp gelezen",
+        "waReceived": "WhatsApp ontvangen",
+        "waFailed": "WhatsApp mislukt",
+        "waReplied": "WhatsApp beantwoord",
+        "waFootnote": "De WhatsApp-cijfers tellen elk bericht in de WhatsApp-gesprekken van dit contact. Een verzonden bericht telt als beantwoord wanneer het volgende bericht van het contact is."
       }
     }
   }

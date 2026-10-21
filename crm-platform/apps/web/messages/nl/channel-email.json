@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kanalen",
-      "title": "E-mail",
+      "title": "Support-e-mail",
       "titleAccent": "mailboxen",
       "intro": "Koppel je Gmail, Microsoft 365 of een andere IMAP-mailbox. E-mails van klanten komen binnen in de teaminbox, één gesprek per e-mailthread, en je antwoorden gaan vanaf hetzelfde adres uit.",
       "inbox": "Inbox openen",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Een mailbox verbinden",
-          "body": "Meld je aan met Google of Microsoft, of vul de instellingen van je mailserver in, en geef Threadwise toestemming om e-mail van dat adres te lezen en te versturen."
+          "body": "Meld je aan met Google of Microsoft, of vul de instellingen van je mailserver in, en geef {app} toestemming om e-mail van dat adres te lezen en te versturen."
         },
         "inbox": {
           "title": "E-mail komt binnen in de inbox",

@@ -42,6 +42,7 @@ export const waTemplates = pgTable(
     attachmentType: text('attachment_type'),
     attachmentFile: text('attachment_file'),
     headerSampleUrl: text('header_sample_url'),
+    headerMediaKey: text('header_media_key'),
     language: text('language').notNull().default('en_US'),
     parameterFormat: text('parameter_format').notNull().default('POSITIONAL'),
     status: text('status').notNull().default('pending'),

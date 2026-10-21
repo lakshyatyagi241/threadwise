@@ -29,6 +29,9 @@
     "audit:event-loop": "node tools/event-loop-audit/scan.mjs --check",
     "qa": "node tools/qa-suite/run.mjs",
     "qa:reports": "node tools/qa-suite/report/generate.mjs",
+    "qa:script-testing": "bash script-testing/run-all.sh",
+    "qa:script-testing:list": "bash script-testing/run-all.sh --list",
+    "qa:script-testing:quick": "bash script-testing/run-all.sh --quick",
     "infra:up": "docker compose up -d",
     "infra:down": "docker compose down",
     "infra:nuke": "docker compose down -v",
@@ -43,23 +46,25 @@
     "audit:resource-limits": "node tools/resource-limits/check.mjs --check && node --test tools/resource-limits/lib.test.mjs",
     "test:redis-pressure": "bash tools/resource-limits/redis-pressure.sh",
     "audit:queue-capacity": "node tools/queue-capacity/inventory.mjs --check && node --test tools/queue-capacity/model.test.mjs",
-    "bench:queues": "node tools/queue-capacity/bench.mjs"
+    "bench:queues": "node tools/queue-capacity/bench.mjs",
+    "fuzz": "node tools/quality/fuzz.mjs",
+    "fuzz:ci": "node tools/quality/fuzz.mjs --profile ci --no-http"
   },
   "devDependencies": {
     "@commitlint/cli": "^21.2.3",
     "@commitlint/config-conventional": "^21.2.3",
     "@eslint/js": "^9.18.0",
-    "dependency-cruiser": "^18.5.0",
+    "dependency-cruiser": "^18.6.0",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.6.0",
-    "prettier": "^3.9.9",
-    "turbo": "^2.11.7",
+    "prettier": "^3.9.10",
+    "turbo": "^2.11.8",
     "typescript": "^6.0.3",
-    "typescript-eslint": "^8.71.1"
+    "typescript-eslint": "^8.71.2"
   },
   "lint-staged": {
     "*.{ts,tsx,js,mjs,cjs}": [

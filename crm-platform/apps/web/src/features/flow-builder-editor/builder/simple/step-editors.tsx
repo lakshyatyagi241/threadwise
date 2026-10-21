@@ -4,6 +4,7 @@ import { ButtonIcon } from '../button-icon';
 import { MessageField } from '../message-field';
 import { ctaLinkProblem } from '../../lib/cta-link';
 import { flowVariables } from '../../lib/flow-variables';
+import { savePropertyOptions } from '../../lib/property-options';
 import { ButtonActionPicker } from '../button-action-picker';
 import {
   buttonActionContinues,
@@ -33,21 +34,22 @@ import {
   askInputWrongText,
   dateFormatLabel,
 } from '../../lib/contract-text';
-import {
-  FAQ_DEFAULT_QUERY,
-  FAQ_MIN_SCORE,
-  FAQ_MIN_SCORE_START,
-  FAQ_VARIABLES,
-  faqSaveName,
-  hasOwnMinScore,
-  minScoreOutOfRange,
-} from '../../lib/faq-node';
-import { useFaqSummary } from '../../api/hooks';
-import { faqHref } from '@/features/faq-knowledge/lib/links';
 import { renderMsg, useFlb } from '../../lib/msg';
 import { conditionTreeOf } from '../../lib/condition-tree';
 import { AiForm, CodeForm, ConditionGroupEditor, WebhookForm } from '../inspector/forms-core/logic';
 import { usePickerFeed } from '@/features/contacts-attributes-tags';
+import { usePlanFeature } from '@/lib/plan-features';
+import {
+  destinationOf,
+  HANDOFF_DESTINATIONS,
+  HANDOFF_MESSAGE_MAX,
+  HANDOFF_NOTE_MAX,
+  HANDOFF_PRIORITY_CHOICES,
+  HANDOFF_REASON_CHOICES,
+  isHandoffNode,
+  peopleOf,
+  upgradeLegacy,
+} from '../../lib/handoff-node';
 import { Field, Input, Select, Textarea, useToast } from '@crm/ui';
 import { NewPropertyInline } from '../new-property';
 import { ApiLibraryForm } from '../inspector/forms-channels/api-library';
@@ -470,7 +472,7 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
               const ri = replyIndex(ci, bi);
               return (
                 <div key={bi} className="rounded-lg border border-border bg-background p-2">
-                  <div className="grid gap-2 sm:grid-cols-[9rem_1fr_1fr_auto]">
+                  <div className="grid grid-cols-[1fr_auto] items-center gap-2">
                     <Select
                       value={kind}
                       onChange={(e) => patchBtn(ci, bi, { type: e.target.value })}
@@ -481,27 +483,27 @@ function CarouselEditor({ step, doc, ctx, set, link }: EditorProps) {
                         </option>
                       ))}
                     </Select>
-                    <Input
-                      value={str(b.label)}
-                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
-                      placeholder={t('carousel.label')}
-                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
-                    />
-                    {kind === 'reply' || kind === 'agent' ? (
-                      <span />
-                    ) : (
-                      <Input
-                        value={str(b.value)}
-                        placeholder={holder(kind)}
-                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
-                      />
-                    )}
                     <RemoveBtn
                       label={t('carousel.removeButton')}
                       onClick={() =>
                         patchCard(ci, { buttons: buttonsOf(c).filter((_, j) => j !== bi) })
                       }
                     />
+                    <Input
+                      className="col-span-2"
+                      value={str(b.label)}
+                      maxLength={FLB_CAROUSEL_LIMITS.label + 10}
+                      placeholder={t('carousel.label')}
+                      onChange={(e) => patchBtn(ci, bi, { label: e.target.value })}
+                    />
+                    {kind === 'reply' || kind === 'agent' ? null : (
+                      <Input
+                        className="col-span-2"
+                        value={str(b.value)}
+                        placeholder={holder(kind)}
+                        onChange={(e) => patchBtn(ci, bi, { value: e.target.value })}
+                      />
+                    )}
                   </div>
                   {kind === 'reply' ? (
                     <div className="mt-2">
@@ -844,7 +846,7 @@ function SavePropertyField({
             onChange={(e) => set({ propertyKey: e.target.value })}
           >
             <option value="">{t('choose')}</option>
-            {(feed.data?.custom ?? []).map((pr) => (
+            {savePropertyOptions(feed.data, str(step.data.propertyKey)).map((pr) => (
               <option key={pr.key} value={pr.key}>
                 {pr.name}
               </option>
@@ -1077,154 +1079,181 @@ function VarField({
 }
 
 /**
- * "Answer from FAQ": the same settings as the Advanced form, and one "where it leads" for each of its two exits (an FAQ answered / no
- * FAQ answered). Like buttons and lists it ends its part of the flow: a flow FAQ continues in its own flow and does not come back.
+ * "Answer from FAQ" is retired (FAQs are entries in an AI agent's knowledge now). A flow that still has the step keeps working: it
+ * always leaves by "no match", so only that exit can be changed here.
  */
-function FaqEditor({ step, doc, flowId, set, link }: EditorProps) {
-  // The settings read the Advanced form's texts (one translation each); only the two "where it leads" lines are Simple's own.
+function FaqEditor({ step, doc, link }: EditorProps) {
   const t = useTranslations('flb.builder.formsChannels.faq');
   const ts = useTranslations('flb.builder.simple.editors.faq');
-  const summary = useFaqSummary(flowId);
-  const categories = summary.data?.categories ?? [];
-  const category = str(step.data.category);
-  const own = hasOwnMinScore(step.data.minScore);
-  const outOfRange = minScoreOutOfRange(step.data.minScore);
-  const send = step.data.sendAnswer !== false;
-  const save = faqSaveName(step.data.save);
-  const code = (c: ReactNode) => <code className="font-mono">{c}</code>;
-  // Links into this flow's FAQs tab (a new tab, so the flow being edited stays open). Before the first save there is none.
-  const page = (view: 'new' | 'test') =>
-    function PageLink(c: ReactNode) {
-      return flowId ? (
-        <a
-          href={faqHref(flowId, view)}
-          target="_blank"
-          rel="noreferrer"
-          className="text-brand underline"
-        >
-          {c}
-        </a>
-      ) : (
-        <>{c}</>
-      );
-    };
   return (
     <div className="space-y-3">
-      <p className="text-[12px] text-muted-foreground">{t.rich('intro.body', { mono: code })}</p>
-      {flowId === null ? (
-        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
-          {t('saveFlowFirst')}
-        </p>
-      ) : summary.isSuccess && summary.data.total === 0 ? (
-        <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
-          {t.rich('noFaqs', { link: page('new') })}
-        </p>
-      ) : null}
-      <Field label={t('query')} hint={t.rich('queryHint', { mono: code, variable: '{{answer}}' })}>
-        <Input
-          className="font-mono"
-          value={str(step.data.query)}
-          placeholder={FAQ_DEFAULT_QUERY}
-          onChange={(e) => set({ query: e.target.value })}
+      <p role="note" className="rounded-xl bg-muted p-2.5 text-[12px]">
+        {t('retired')}
+      </p>
+      <Field label={ts('exit')} hint={ts('exitHint')}>
+        <LinkSelect
+          doc={doc}
+          stepId={step.id}
+          value={step.links[1] ?? null}
+          onChange={(target) => link(1, target)}
         />
       </Field>
-      <Field
-        label={t('category')}
-        hint={
-          <>
-            {summary.isError ? `${t('categoriesFailed')} ` : ''}
-            {t('categoryHint')}
-          </>
-        }
-      >
-        <Select value={category} onChange={(e) => set({ category: e.target.value })}>
-          <option value="">{summary.isPending ? t('loadingCategories') : t('allFaqs')}</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-          {category && !categories.includes(category) ? (
-            <option value={category}>{t('categoryGone', { name: category })}</option>
-          ) : null}
-        </Select>
-      </Field>
-      <Field
-        label={t('minScore')}
-        hint={t.rich('minScoreHint', { ...FAQ_MIN_SCORE, link: page('test') })}
-      >
-        <label className="flex items-center gap-2 text-[13px]">
-          <input
-            type="checkbox"
-            checked={!own}
-            onChange={(e) => set({ minScore: e.target.checked ? null : FAQ_MIN_SCORE_START })}
-          />
-          {t('useWorkspaceScore')}
-        </label>
-        {own ? (
-          <Input
-            className="mt-2"
-            type="number"
-            min={FAQ_MIN_SCORE.min}
-            max={FAQ_MIN_SCORE.max}
-            step={0.01}
-            aria-label={t('minScore')}
-            invalid={outOfRange}
-            value={step.data.minScore === '' ? '' : str(step.data.minScore)}
-            onChange={(e) => set({ minScore: e.target.value === '' ? '' : Number(e.target.value) })}
-          />
-        ) : null}
-        {outOfRange ? (
-          <p role="alert" className="mt-1.5 text-[11.5px] text-danger">
-            {t('minScoreInvalid', FAQ_MIN_SCORE)}
-          </p>
-        ) : null}
-      </Field>
-      <Field label={t('sendAnswer')} hint={send ? t('sendAnswerOnHint') : t('sendAnswerOffHint')}>
-        <label className="flex items-center gap-2 text-[13px]">
-          <input
-            type="checkbox"
-            checked={send}
-            onChange={(e) => set({ sendAnswer: e.target.checked })}
-          />
-          {t('sendAnswerToggle')}
-        </label>
-      </Field>
-      <Field label={t('save')} hint={t('saveHint')}>
-        <Input
-          className="font-mono"
-          value={str(step.data.save)}
-          placeholder="faq"
-          onChange={(e) => set({ save: slug(e.target.value) })}
-        />
-        <ul className="mt-2 space-y-1 text-[11.5px] text-muted-foreground">
-          {FAQ_VARIABLES.map((name) => (
-            <li key={name}>
-              <code className="font-mono">{`{{${save}.${name}}}`}</code> {t(`variables.${name}`)}
-            </li>
-          ))}
-        </ul>
-      </Field>
-      {(['matched', 'no_match'] as const).map((handle, i) => (
-        <Field key={handle} label={ts(`exits.${handle}`)} hint={ts(`exitsHint.${handle}`)}>
-          <LinkSelect
-            doc={doc}
-            stepId={step.id}
-            value={step.links[i] ?? null}
-            onChange={(target) => link(i, target)}
-          />
-        </Field>
-      ))}
     </div>
   );
 }
 
-function AssignEditor({ step, ctx, set }: EditorProps) {
+function AssignEditor(p: EditorProps) {
+  return isHandoffNode(p.step.data) ? <HandoffEditor {...p} /> : <LegacyAssignEditor {...p} />;
+}
+
+/** The Human handoff step (BL-398): where the chat goes, why, the note for the agent and the words the customer reads. */
+function HandoffEditor({ step, ctx, set }: EditorProps) {
+  const t = useTranslations('flb.builder.handoff');
+  const teams = ctx.teams;
+  const rulesInPlan = usePlanFeature('inbox_routing');
+  const d = step.data;
+  const kind = destinationOf(d);
+  const people = peopleOf(teams);
+  const team = teams.find((x) => x.id === str(d.team));
+  return (
+    <div className="space-y-3">
+      <Field label={t('destination')} hint={t(`destHint.${kind}`)}>
+        <Select
+          data-testid="flb-handoff-destination"
+          value={kind}
+          onChange={(e) => set({ destination: e.target.value })}
+        >
+          {HANDOFF_DESTINATIONS.map((k) => (
+            <option key={k} value={k}>
+              {k === 'rules' && !rulesInPlan ? t('dest.rulesLocked') : t(`dest.${k}`)}
+            </option>
+          ))}
+        </Select>
+      </Field>
+      {kind === 'rules' && !rulesInPlan && (
+        <p
+          role="note"
+          data-testid="flb-handoff-plan-lock"
+          className="rounded-xl bg-warning/10 p-2.5 text-[12px]"
+        >
+          {t('lockHint')}
+        </p>
+      )}
+      {kind === 'team' && (
+        <Field label={t('team')}>
+          <Select value={str(d.team)} onChange={(e) => set({ team: e.target.value, userId: '' })}>
+            <option value="">{teams.length ? t('teamPick') : t('teamNone')}</option>
+            {teams.map((tm) => (
+              <option key={tm.id} value={tm.id}>
+                {tm.members.length
+                  ? t('teamOption', { name: tm.name, count: tm.members.length })
+                  : tm.name}
+              </option>
+            ))}
+            {str(d.team) && !team ? (
+              <option value={str(d.team)}>{t('unknownMember', { value: str(d.team) })}</option>
+            ) : null}
+          </Select>
+        </Field>
+      )}
+      {kind === 'person' && (
+        <Field label={t('person')} hint={t('personHint')}>
+          <Select
+            value={str(d.userId)}
+            onChange={(e) => {
+              const owner = teams.find((tm) => tm.members.some((m) => m.id === e.target.value));
+              set({ userId: e.target.value, team: owner?.id ?? str(d.team) });
+            }}
+          >
+            <option value="">{t('personPick')}</option>
+            {people.map((m) => (
+              <option key={m.id} value={m.id}>
+                {m.name}
+              </option>
+            ))}
+            {str(d.userId) && !people.some((m) => m.id === str(d.userId)) ? (
+              <option value={str(d.userId)}>{t('unknownMember', { value: str(d.userId) })}</option>
+            ) : null}
+          </Select>
+        </Field>
+      )}
+      <div className="grid gap-3">
+        <Field label={t('reason')}>
+          <Select
+            value={str(d.reason) || 'other'}
+            onChange={(e) => set({ reason: e.target.value })}
+          >
+            {HANDOFF_REASON_CHOICES.map((r) => (
+              <option key={r} value={r}>
+                {t(`reasons.${r}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+        <Field label={t('priority')}>
+          <Select value={str(d.priority)} onChange={(e) => set({ priority: e.target.value })}>
+            {HANDOFF_PRIORITY_CHOICES.map((pr) => (
+              <option key={pr} value={pr}>
+                {pr === '' ? t('priorityKeep') : t(`priorities.${pr}`)}
+              </option>
+            ))}
+          </Select>
+        </Field>
+      </div>
+      <Field label={t('note')} hint={t('noteHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_NOTE_MAX}
+          value={str(d.message)}
+          onChange={(e) => set({ message: e.target.value })}
+        />
+      </Field>
+      <Field label={t('customerMessage')} hint={t('customerHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          value={str(d.customerMessage)}
+          onChange={(e) => set({ customerMessage: e.target.value })}
+        />
+      </Field>
+      <Field label={t('offHours')} hint={t('offHoursHint')}>
+        <Textarea
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          value={str(d.offHoursMessage)}
+          onChange={(e) => set({ offHoursMessage: e.target.value })}
+        />
+      </Field>
+      <p
+        role="note"
+        data-testid="flb-handoff-exits"
+        className="rounded-xl bg-muted p-2.5 text-[12px]"
+      >
+        {t('simpleExits')}
+      </p>
+    </div>
+  );
+}
+
+function LegacyAssignEditor({ step, ctx, set }: EditorProps) {
   const t = useTranslations('flb.builder.simple.editors');
+  const th = useTranslations('flb.builder.handoff');
   const teams = ctx.teams;
   const team = teams.find((x) => x.id === str(step.data.team));
   return (
     <div className="space-y-3">
+      <div className="rounded-xl border border-border bg-muted/40 p-2.5 text-[12px]">
+        <p className="font-semibold">{th('legacy')}</p>
+        <p className="mt-1 text-muted-foreground">{th('upgradeHint')}</p>
+        <button
+          type="button"
+          data-testid="flb-handoff-upgrade"
+          onClick={() => set(upgradeLegacy(step.data))}
+          className="mt-2 rounded-lg bg-brand px-3 py-1.5 text-[12px] font-semibold text-brand-foreground hover:opacity-90"
+        >
+          {th('upgrade')}
+        </button>
+      </div>
       <Field label={t('assign.team')} hint={t('assign.teamHint')}>
         <Select
           value={str(step.data.team)}

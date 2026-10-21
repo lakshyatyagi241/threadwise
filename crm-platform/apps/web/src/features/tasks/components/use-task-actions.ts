@@ -33,13 +33,19 @@ export function useTaskActions() {
       void invalidateTasks(qc);
     },
 
-    /** Completes an open task or reopens a done one. Resolves to the task as the server has it, or null on failure. */
+    /**
+     * Completes an open task or reopens a done one. `outcomeId` is recorded with a completion (ignored when reopening); leave it out to keep
+     * the outcome the task has. Resolves to the task as the server has it, or null on failure.
+     */
     async toggle(
       task: Pick<TaskResponse, 'id' | 'status' | 'title'>,
+      outcomeId?: string,
     ): Promise<TaskResponse | null> {
       const reopening = task.status === 'done';
       try {
-        const next = reopening ? await tasksApi.reopen(task.id) : await tasksApi.complete(task.id);
+        const next = reopening
+          ? await tasksApi.reopen(task.id)
+          : await tasksApi.complete(task.id, outcomeId);
         patchTaskInCache(qc, next);
         void invalidateTasks(qc);
         toast(reopening ? t('reopened') : t('completed'), 'success');

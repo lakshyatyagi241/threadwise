@@ -1442,7 +1442,10 @@
             "personal_history_full": "Permite que um número pessoal de WhatsApp importe todo o histórico de conversas ao ser vinculado pela primeira vez. A importação das conversas recentes está disponível em todos os planos que incluem números pessoais.",
             "ai_crm_copilot": "Encontra e pontua leads com IA a partir dos seus contatos.",
             "lead_scoring": "Pontua contatos com IA e alimenta o piloto de crescimento. O app Pontuação de leads com IA controla este botão.",
-            "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade."
+            "record_assignment": "Atribui novos contatos, empresas e negócios ao responsável de vendas certo por regras de prioridade.",
+            "team_hierarchy": "Equipes pai, líderes de equipe e gestores que veem sua equipe e as equipes abaixo dela.",
+            "custom_roles": "Crie e edite funções e escolha um escopo (próprios, da equipe ou todos os registros) para cada permissão.",
+            "inbox_assignment_sticky": "Atribuição com prioridade ao responsável e sincronizada entre o responsável pelo contato e o responsável pelo chat, a janela de contato recorrente e o aviso de reatribuição. Funciona junto com o roteamento da caixa de entrada."
           },
           "units": {
             "days": "Dias",
@@ -1587,7 +1590,8 @@
             "sms_monthly": "SMS por mês",
             "email_mailboxes": "Caixas de e-mail",
             "email_monthly": "E-mails por mês",
-            "storage_gb": "Armazenamento (GB)"
+            "storage_gb": "Armazenamento (GB)",
+            "teams": "Equipes"
           },
           "featureGroups": {
             "messaging": "Mensagens",
@@ -1631,7 +1635,10 @@
             "personal_history_full": "Importação do histórico completo de conversas (WhatsApp pessoal)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Pontuação de leads com IA",
-            "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)"
+            "record_assignment": "Regras de atribuição de registros (atribuir contatos, empresas e negócios automaticamente)",
+            "team_hierarchy": "Hierarquia de equipes e gestores",
+            "custom_roles": "Funções personalizadas e escopos",
+            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
           },
           "problems": {
             "required": "Este campo é obrigatório.",
@@ -1687,7 +1694,13 @@
             "sms_monthly": "Mensagens SMS enviadas no mês civil. 0 = ilimitado.",
             "email_mailboxes": "Caixas do Gmail conectadas (uma desconectada libera o lugar). 0 = ilimitado.",
             "email_monthly": "E-mails enviados no mês civil, respostas e e-mails de campanhas juntos. 0 = ilimitado.",
-            "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda."
+            "storage_gb": "Armazenamento que o espaço de trabalho pode manter, em GB (gravações de chamadas, mídia do chat, anexos de e-mail e arquivos). 0 = ilimitado. Por enquanto apenas medido: nada é bloqueado ainda.",
+            "teams": "Equipes que o espaço de trabalho pode ter. Em branco é ilimitado, 0 é individual (sem equipes). As equipes existentes nunca são removidas."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM de vendas",
+            "platform": "Compartilhado por ambos"
           }
         }
       },

@@ -1,0 +1,134 @@
+{
+  "options": {
+    "minutes": 12,
+    "warmup": 3,
+    "interval": 10,
+    "gcEvery": 6,
+    "rate": 15,
+    "port": 3999,
+    "thresholdMbH": 10,
+    "out": "/tmp/claude-1000/-home-getaweblpwinubt26-wadesk-vedant/055054a6-61a2-4b7e-a190-abfada12952e/scratchpad/mem-run2",
+    "email": "nachiket.challawar@geta.ai",
+    "password": "Passw0rd!",
+    "worker": true,
+    "snapshots": false
+  },
+  "samples": 144,
+  "requests": {
+    "ok": 8440,
+    "err": 0
+  },
+  "fits": {
+    "api.rssMb": {
+      "n": 55,
+      "slope": 10.550448696123317,
+      "lo": 8.715330519801862,
+      "hi": 12.385566872444771,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": true
+    },
+    "api.heapUsedMb": {
+      "n": 10,
+      "slope": 12.924930339436747,
+      "lo": 6.62025112871035,
+      "hi": 19.229609550163143,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": true
+    },
+    "api.externalMb": {
+      "n": 10,
+      "slope": 3.471240321471812,
+      "lo": 0.654759715920723,
+      "hi": 6.287720927022901,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": false
+    },
+    "api.handles": {
+      "n": 10,
+      "slope": 2.5452867451500127,
+      "lo": -8.095740066663808,
+      "hi": 13.186313556963832,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    },
+    "api.redisClients": {
+      "n": 10,
+      "slope": 0,
+      "lo": 0,
+      "hi": 0,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    },
+    "api.pgConns": {
+      "n": 10,
+      "slope": -1.4414082558659809,
+      "lo": -11.14727489853583,
+      "hi": 8.264458386803867,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    },
+    "worker.rssMb": {
+      "n": 55,
+      "slope": 4.768345751693671,
+      "lo": 3.717713526011986,
+      "hi": 5.818977977375356,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": false
+    },
+    "worker.heapUsedMb": {
+      "n": 10,
+      "slope": 11.023283163177771,
+      "lo": 6.091846274390833,
+      "hi": 15.95472005196471,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": true
+    },
+    "worker.externalMb": {
+      "n": 10,
+      "slope": -0.19513517297341887,
+      "lo": -0.40725741831930434,
+      "hi": 0.016987072372466605,
+      "unit": "MB/h",
+      "threshold": 10,
+      "sustained": false
+    },
+    "worker.handles": {
+      "n": 10,
+      "slope": 1.448615297145311,
+      "lo": -6.038220023198879,
+      "hi": 8.9354506174895,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    },
+    "worker.redisClients": {
+      "n": 10,
+      "slope": 0,
+      "lo": 0,
+      "hi": 0,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    },
+    "worker.pgConns": {
+      "n": 10,
+      "slope": -1.4414082558659809,
+      "lo": -11.14727489853583,
+      "hi": 8.264458386803867,
+      "unit": "per h",
+      "threshold": 1,
+      "sustained": false
+    }
+  },
+  "topGrowingConstructors": [],
+  "verdict": "GROWTH",
+  "note": "A run under 60 minutes is a short noisy profile. The slope after warm-up is the signal, absolute numbers are not (shared machine)."
+}

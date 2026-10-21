@@ -125,9 +125,9 @@ describe('where a notification opens', () => {
 
   it('opens a broadcast, a campaign and a scheduled message at their own detail', () => {
     expect(link('broadcast_completed', { kind: 'broadcast', id: ID(2) })).toBe(
-      `/broadcasts/${ID(2)}`,
+      `/campaigns/earlier/${ID(2)}`,
     );
-    expect(link('broadcast_failed', { kind: 'broadcast', id: ID(2) })).toBe(`/broadcasts/${ID(2)}`);
+    expect(link('broadcast_failed', { kind: 'broadcast', id: ID(2) })).toBe(`/campaigns/earlier/${ID(2)}`);
     expect(link('campaign_failed', { kind: 'campaign', id: ID(3) })).toBe(`/campaigns/${ID(3)}`);
     expect(link('scheduled_completed', { kind: 'scheduled_message', id: ID(4) })).toBe(
       `/scheduled/${ID(4)}`,

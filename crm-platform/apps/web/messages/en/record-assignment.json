@@ -3,7 +3,7 @@
     "back": "Automation",
     "title": "Record assignment rules",
     "intro": "Give new {contacts}, companies and {deals} to the right sales owner automatically.",
-    "crossNote": "This assigns {contacts}, companies and {deals}. To assign conversations to agents, see <link>Auto-assignment</link>.",
+    "crossNote": "This assigns {contacts}, companies and {deals}. To assign conversations to agents, see <link>Conversation auto-assignment</link>.",
     "master": {
       "title": "Turn on record assignment",
       "hint": "Off until you turn it on. When it is on, the rules below give a new {contact}, company or {deal} that has no owner to someone on your team.",
@@ -233,6 +233,13 @@
         "nobody": "Matched, but nobody was available",
         "broken": "Has a broken condition"
       },
+      "excluded": {
+        "label": "Left out",
+        "no_access": "{name}: cannot open this kind of record",
+        "inactive": "{name}: no longer active",
+        "on_leave": "{name}: on leave today",
+        "offline": "{name}: offline"
+      },
       "skipped": "Skipped because nobody was available: {names}"
     },
     "log": {
@@ -296,6 +303,7 @@
       "message": "The rule {name} will stop assigning. Records it already assigned keep their owner.",
       "confirm": "Delete",
       "cancel": "Cancel"
-    }
+    },
+    "dismiss": "Dismiss"
   }
 }

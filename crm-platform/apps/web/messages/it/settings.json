@@ -101,7 +101,7 @@
         "keywords": "messaggio di testo, ID mittente, dlt, twilio, cellulare"
       },
       "email": {
-        "label": "Email",
+        "label": "Email di supporto",
         "description": "Collega caselle Gmail o Google Workspace così il tuo team può leggere e rispondere alle email dei clienti nell’inbox condivisa.",
         "keywords": "casella di posta, gmail, google workspace, inbox condivisa, email di supporto, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Team",
-        "description": "Raggruppa le persone in team per instradamento e report.",
-        "keywords": "gruppi, reparti, assegnazione, instradamento"
+        "description": "Raggruppa le persone per conversazioni, assegnazioni e report.",
+        "keywords": "gruppi, reparti, responsabili, gerarchia, assegnazione, instradamento"
       },
       "ai-keys": {
         "label": "Chiavi dei provider IA",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "Chiavi e documentazione per sviluppare sul prodotto.",
         "keywords": "chiavi API, sviluppatori, token, docs, openapi"
+      },
+      "api-keys": {
+        "label": "Chiavi API",
+        "description": "Crea e gestisci le chiavi che altri sistemi usano per chiamare l'API.",
+        "keywords": "chiave api, token, segreto, sviluppatori, accesso, integrazione"
       },
       "webhooks": {
         "label": "Webhook",
@@ -301,7 +306,7 @@
         "keywords": "geta, pubblica, bot, console, vai online, chatbot"
       },
       "auto-assignment": {
-        "label": "Assegnazione automatica",
+        "label": "Assegnazione automatica delle conversazioni",
         "description": "Assegna automaticamente le nuove conversazioni all’agente giusto, a turno o secondo regole.",
         "keywords": "instradamento, round robin, assegna, agenti, regole inbox, distribuisci, proprietario"
       },
@@ -389,6 +394,11 @@
         "label": "Lead duplicati",
         "description": "Scegli se un nuovo lead che corrisponde a un contatto viene unito a esso o diventa un nuovo contatto.",
         "keywords": "duplicato, unire, lead, stesso telefono, stessa e-mail, nuovo contatto, fonte di lead"
+      },
+      "sales-activities": {
+        "label": "Attività di vendita",
+        "description": "Gestisci compiti, riunioni, chiamate e attività personalizzate: cosa può fare ciascuna, i suoi tipi di compito e i suoi esiti.",
+        "keywords": "attività, tipi di compito, esiti, esito riunione, esito chiamata, ricontatto, check-in, attività personalizzata, calendario, completare"
       }
     },
     "backToMarketplace": "Torna al Marketplace"

@@ -16,11 +16,17 @@ import {
   GoogleCalendarConnectionRepository,
   type CalendarConnectionRow,
 } from './google-calendar-connection.repository';
+import { CappedMap, setCapped } from '../../common/cache/capped-map';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('google_calendar_connection');
 
 export const CALENDAR_AUDIT_MODULE = 'appointment_calendar';
 
 /** How long a process keeps a workspace's connection row before reading it again (a connect or disconnect in this process drops it at once). */
 const CONNECTION_TTL_MS = 15_000;
+/** At most this many workspaces' connection rows are remembered per process; the oldest goes first. */
+export const CALENDAR_CONNECTION_CACHE_MAX = 1_000;
 /** A token that expires within this window is refreshed before it is used. */
 const EXPIRY_MARGIN_MS = 60_000;
 
@@ -65,10 +71,10 @@ export class GoogleCalendarTokens {
    * What this process last WROTE about the account's health (never what it intends to write), so a busy workspace does not write on every
    * call and a failed write is tried again by the next call.
    */
-  private readonly health = new Map<
+  private readonly health = new CappedMap<
     number,
     { code: string | null; capability: string | null; usedAt: number }
-  >();
+  >(2000);
 
   constructor(
     private readonly db: DatabaseService,
@@ -86,10 +92,14 @@ export class GoogleCalendarTokens {
     opts: { fresh?: boolean } = {},
   ): Promise<CalendarConnectionRow | null> {
     const hit = this.rows.get(orgId);
-    if (!opts.fresh && hit && Date.now() - hit.at < CONNECTION_TTL_MS) return hit.row;
+    if (!opts.fresh && hit && Date.now() - hit.at < CONNECTION_TTL_MS) {
+      cache.hit();
+      return hit.row;
+    }
+    cache.miss();
     const row =
       (await this.db.txAs({ orgId, userId: null }, (tx) => this.repo.find(tx, orgId))) ?? null;
-    this.rows.set(orgId, { at: Date.now(), row });
+    setCapped(this.rows, orgId, { at: Date.now(), row }, CALENDAR_CONNECTION_CACHE_MAX);
     return row;
   }
 
@@ -244,10 +254,15 @@ export class GoogleCalendarTokens {
     await this.db.txAs({ orgId, userId: null }, (tx) =>
       this.repo.saveAccessToken(tx, orgId, conn.id, sealed, expiresAt, conn.refreshTokenEnc),
     );
-    this.rows.set(orgId, {
-      at: Date.now(),
-      row: { ...conn, accessTokenEnc: sealed, accessTokenExpiresAt: expiresAt },
-    });
+    setCapped(
+      this.rows,
+      orgId,
+      {
+        at: Date.now(),
+        row: { ...conn, accessTokenEnc: sealed, accessTokenExpiresAt: expiresAt },
+      },
+      CALENDAR_CONNECTION_CACHE_MAX,
+    );
     return tokens.accessToken;
   }
 

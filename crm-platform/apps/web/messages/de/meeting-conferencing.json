@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Videomeetings",
+        "description": "Verbinden Sie Ihr eigenes Zoom- oder Microsoft-Teams-Konto, um Ihren Meetings Videolinks hinzuzufügen.",
+        "keywords": "zoom, teams, microsoft teams, video, videoanruf, meeting-link, beitrittslink, konferenz, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Schließen"
+    },
+    "form": {
+      "label": "Videokonferenz",
+      "add": {
+        "zoom": "Zoom-Link hinzufügen",
+        "teams": "Teams-Link hinzufügen",
+        "meet": "Google-Meet-Link hinzufügen"
+      },
+      "chosen": {
+        "zoom": "Zoom-Link",
+        "teams": "Teams-Link",
+        "meet": "Google-Meet-Link"
+      },
+      "remove": "Videolink entfernen",
+      "needsStart": "Legen Sie eine Startzeit fest, um einen Videolink oder einen Kalendereintrag hinzuzufügen.",
+      "meetNote": "Ein Google-Meet-Link gehört zu einem Kalendertermin, daher wird dieses Meeting auch Ihrem Kalender hinzugefügt.",
+      "teamsViaCalendar": "Dieser Teams-Link wird von Ihrem Microsoft-365-Kalender erstellt, daher wird dieses Meeting auch dort hinzugefügt.",
+      "calendar": "Zu meinem Kalender hinzufügen ({account})",
+      "calendarNamed": "Zu meinem Kalender hinzufügen ({account}, {calendar})",
+      "invite": "Kalendereinladung an den Kontakt senden",
+      "inviteHint": "Ihr Kalender sendet die Einladung an die E-Mail-Adresse des Kontakts. Unsere eigene E-Mail-Einladung bleibt davon unberührt.",
+      "connectLink": "Videokonferenz verbinden"
+    },
+    "row": {
+      "join": "Beitreten",
+      "joinAria": "Dem {provider}-Meeting {title} beitreten",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Videolink wird hinzugefügt...",
+      "onCalendar": "In Ihrem Kalender",
+      "invited": "Der Kalender hat dem Kontakt eine Einladung gesendet",
+      "retry": "Erneut versuchen",
+      "retrying": "Wird erneut versucht...",
+      "retried": "Videolink und Kalendereintrag wurden erneut geprüft.",
+      "retryFailed": "Das hat nicht funktioniert. Das Meeting ist gespeichert; Sie können es erneut versuchen.",
+      "problem": {
+        "not_installed": "Die Integration {provider} ist für diesen Arbeitsbereich nicht installiert.",
+        "not_connected": "Ihr {provider}-Konto ist nicht verbunden. Verbinden Sie es unter Einstellungen, Videomeetings.",
+        "needs_reconnect": "Ihre {provider}-Verbindung muss erneuert werden. Verbinden Sie sie unter Einstellungen, Videomeetings erneut.",
+        "not_configured": "{provider} wurde für diese Plattform noch nicht eingerichtet. Wenden Sie sich an Ihren Plattformadministrator.",
+        "calendar_not_connected": "Der Kalender ist nicht verbunden, daher konnte das Meeting nicht hinzugefügt werden.",
+        "provider_failed": "{provider} hat nicht geantwortet. Das Meeting ist gespeichert; versuchen Sie es erneut.",
+        "no_start_time": "Ein Videolink benötigt eine Startzeit für das Meeting."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Das Meeting konnte dem Kalender nicht hinzugefügt werden, weil kein Kalender verbunden ist.",
+        "provider_failed": "Der Kalender hat nicht geantwortet, daher ist das Meeting noch nicht darin. Das Meeting ist gespeichert; versuchen Sie es erneut.",
+        "other": "Das Meeting konnte dem Kalender nicht hinzugefügt werden."
+      }
+    },
+    "page": {
+      "eyebrow": "Einstellungen",
+      "title": "Videomeetings",
+      "subtitle": "Verbinden Sie Ihr eigenes Zoom- oder Microsoft-Teams-Konto. Das Formular „Meeting hinzufügen“ bietet dann einen Videolink an, der in Ihrem Konto erstellt und mit einer Schaltfläche „Beitreten“ am Meeting angezeigt wird.",
+      "loading": "Ihre Videoverbindungen werden geladen...",
+      "forbidden": {
+        "title": "Sie können diese Seite nicht verwenden",
+        "body": "Bitten Sie einen Arbeitsbereichs-Admin, Ihrer Rolle den Zugriff auf das Bearbeiten von Kontakten zu geben."
+      },
+      "failure": {
+        "generic": "Ihre Videoverbindungen konnten nicht geladen werden."
+      },
+      "retry": "Erneut versuchen",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Erstellt für jedes von Ihnen geplante Meeting ein Zoom-Meeting in Ihrem Zoom-Konto, verschiebt es, wenn Sie das Meeting verschieben, und entfernt es, wenn Sie das Meeting löschen."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Erstellt für jedes von Ihnen geplante Meeting ein Teams-Meeting in Ihrem Microsoft-Geschäfts- oder Schulkonto und aktualisiert oder entfernt es zusammen mit dem Meeting."
+        }
+      },
+      "status": {
+        "connected": "Verbunden",
+        "needs_reconnect": "Muss neu verbunden werden",
+        "disconnected": "Installiert",
+        "not_installed": "Nicht installiert",
+        "unavailable": "Ausgeschaltet",
+        "not_available": "Noch nicht verfügbar"
+      },
+      "account": "Verbunden als {account}",
+      "connectedOn": "Verbunden {when}",
+      "lastError": {
+        "forbidden": "Der Anbieter hat die letzte Anfrage abgelehnt. Ihr Konto darf möglicherweise keine Meetings erstellen.",
+        "rate_limited": "Der Anbieter begrenzt gerade die Anfragen.",
+        "unavailable": "Der Anbieter hat auf die letzte Anfrage nicht geantwortet."
+      },
+      "actions": {
+        "connect": "Verbinden",
+        "reconnect": "Erneut verbinden",
+        "disconnect": "Trennen",
+        "install": "Im Marketplace installieren"
+      },
+      "notInstalled": {
+        "canInstall": "Ihr Arbeitsbereich hat {provider} noch nicht installiert. Installieren Sie es über den Marketplace und verbinden Sie dann hier Ihr Konto.",
+        "cannotInstall": "Ihr Arbeitsbereich hat {provider} noch nicht installiert. Bitten Sie einen Arbeitsbereichs-Admin, es über den Marketplace zu installieren."
+      },
+      "unavailable": "{provider} ist installiert, aber Ihr Plattformbetreiber hat die Einrichtung ausgeschaltet, daher kann es derzeit nicht verbunden werden. Fragen Sie Ihren Plattformbetreiber.",
+      "outcome": {
+        "connected": "{provider} ist verbunden.",
+        "denied": "{provider} wurde nicht verbunden, weil die Anmeldung abgebrochen wurde.",
+        "failed": "{provider} konnte nicht verbunden werden. Versuchen Sie es erneut.",
+        "expired": "Die Anmeldung hat zu lange gedauert. Klicken Sie erneut auf Verbinden.",
+        "not_configured": "{provider} wurde für diese Plattform noch nicht eingerichtet.",
+        "notYours": "Diese Anmeldung wurde von jemand anderem gestartet, daher wurde nichts verbunden."
+      },
+      "confirming": "Verbindung wird abgeschlossen...",
+      "disconnected": "{provider} getrennt.",
+      "disconnectTitle": "{provider} trennen?",
+      "disconnectBody": "Meetings, die bereits einen {provider}-Link haben, behalten ihn, aber das Verschieben oder Löschen dieser Meetings kann den Raum nicht mehr ändern. Sie können sich jederzeit wieder verbinden.",
+      "disconnectConfirm": "Trennen",
+      "keep": "Verbunden lassen",
+      "calendarNote": "Google-Meet- und Teams-Links, die über Ihren Kalender erstellt werden, brauchen hier keine Verbindung: Sie nutzen den Kalender, den Ihr Arbeitsbereich bereits verbunden hat.",
+      "notAvailable": "Ihr Plattformbetreiber hat {provider} noch nicht verfügbar gemacht: Es muss noch eingerichtet und im Marketplace veröffentlicht werden. Es gibt noch nichts zu installieren. Bitten Sie Ihren Plattformbetreiber, es einzuschalten.",
+      "installedHint": "{provider} ist für Ihren Arbeitsbereich installiert. Verbinden Sie Ihr eigenes Konto, um Ihren Meetings {provider}-Links hinzuzufügen."
+    },
+    "operator": {
+      "title": "Einrichtung der Videomeetings",
+      "ready": "Bereit",
+      "missing": "{count, plural, one {# Schritt fehlt} other {# Schritte fehlen}}",
+      "loadFailed": "Die Einrichtungs-Checkliste konnte nicht geladen werden.",
+      "fake": "Entwicklungsmodus: Die Fake-Adapter für Zoom und Microsoft Teams sind eingebunden, daher können sich Personen ohne echtes Konto verbinden. Die Checkliste unten zeigt, was eine echte Plattform noch braucht.",
+      "intro": {
+        "zoom": "Arbeitsbereiche können Zoom erst sehen und nutzen, wenn die Zugangsdaten der Zoom-App gesetzt sind und dieser Eintrag veröffentlicht ist.",
+        "teams": "Arbeitsbereiche können Microsoft Teams erst sehen und nutzen, wenn eine Microsoft-App verfügbar ist und dieser Eintrag veröffentlicht ist."
+      },
+      "set": "gesetzt",
+      "notSet": "nicht gesetzt",
+      "credentials": {
+        "zoom": {
+          "label": "Zugangsdaten der Zoom-App (Umgebungswerte)"
+        },
+        "teams": {
+          "label": "Zugangsdaten der Microsoft-App"
+        }
+      },
+      "teamsFallback": "Teams verwendet seine eigenen Werte oben, wenn beide gesetzt sind, andernfalls die in der Konsole gespeicherte Microsoft-Calendar-App.",
+      "source": {
+        "environment": "Die Werte stammen aus der Umgebung.",
+        "console": "Die Werte stammen aus der Konsole, Seite Microsoft Calendar."
+      },
+      "switchedOff": "Die Integration Microsoft Calendar ist in der Konsole ausgeschaltet, wodurch auch Teams ausgeschaltet wird.",
+      "redirect": {
+        "label": "Weiterleitungsadresse, die beim Anbieter zu registrieren ist",
+        "hint": {
+          "zoom": "Fügen Sie genau diese Adresse als Redirect-URL der Zoom-App hinzu.",
+          "teams": "Fügen Sie genau diese Adresse als Redirect-URI der Microsoft-App neben der des Kalenders hinzu und ergänzen Sie die delegierte Berechtigung OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Marketplace-Eintrag veröffentlicht",
+        "missing": "Der Eintrag existiert nicht im Katalog.",
+        "notPublished": "Der Eintrag ist nicht veröffentlicht (Status: {status}). Genehmigen und veröffentlichen Sie unten eine Version, dann können Arbeitsbereiche ihn installieren.",
+        "published": "Veröffentlicht: Arbeitsbereiche können ihn finden und installieren."
+      }
+    }
+  }
+}

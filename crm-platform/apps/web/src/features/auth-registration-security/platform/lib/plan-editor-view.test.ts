@@ -173,6 +173,7 @@ describe('planCounts', () => {
       (typeof PLAN_LIMIT_KEYS)[number],
       number
     >;
+    limits.teams = 1_000_000; // unlimited stand-in: not a cap
     limits.users = 5;
     limits.contacts = 1000;
     const c = planCounts({ features, limits, visibleAddons: [A, B, GONE] });

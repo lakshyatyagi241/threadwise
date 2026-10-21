@@ -20,14 +20,19 @@ export function relativeTime(iso: string, locale: string, now = Date.now()): str
 }
 
 /** `Oct 5` and `14:05`, the two lines Reference stacks in the When column. */
-export function shortDate(iso: string, locale: string): { day: string; time: string } {
+export function shortDate(
+  iso: string,
+  locale: string,
+  timeZone?: string,
+): { day: string; time: string } {
   const d = new Date(iso);
   return {
-    day: new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric' }).format(d),
+    day: new Intl.DateTimeFormat(locale, { month: 'short', day: 'numeric', timeZone }).format(d),
     time: new Intl.DateTimeFormat(locale, {
       hour: '2-digit',
       minute: '2-digit',
       hourCycle: 'h23',
+      timeZone,
     }).format(d),
   };
 }

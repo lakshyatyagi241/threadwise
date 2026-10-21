@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Canales",
-      "title": "Correo electrónico",
+      "title": "Correo de soporte",
       "titleAccent": "buzones",
       "intro": "Conecta tu Gmail, Microsoft 365 o cualquier buzón IMAP. Los correos de clientes llegan a la bandeja del equipo, una conversación por hilo, y tus respuestas salen desde la misma dirección.",
       "inbox": "Abrir bandeja",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Conecta un buzón",
-          "body": "Inicia sesión con Google o Microsoft, o introduce los ajustes de tu servidor de correo, y permite que Threadwise lea y envíe correo de esa dirección."
+          "body": "Inicia sesión con Google o Microsoft, o introduce los ajustes de tu servidor de correo, y permite que {app} lea y envíe correo de esa dirección."
         },
         "inbox": {
           "title": "El correo llega a la bandeja",

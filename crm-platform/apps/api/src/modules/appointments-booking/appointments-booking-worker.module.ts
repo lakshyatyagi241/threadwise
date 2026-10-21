@@ -23,6 +23,10 @@ import { AppointmentMessageConsumer } from './appointment-message.consumer';
 import { AppointmentReminderService } from './appointment-reminder.service';
 import { AppointmentReminderSweepService } from './appointment-reminder-sweep.service';
 import { ChannelAppointmentMessenger } from './channel-appointment-messenger';
+import { ReminderReplyService } from './reminder-reply.service';
+import { ReminderTestSendConsumer } from './reminder-test-send';
+import { CryptoService } from '../../common/crypto/crypto.service';
+import { PlansCoreModule } from '../plans-subscriptions-trials';
 
 /**
  * The reminder and lifecycle sweeps, the reminder delivery, the outbox consumers that send booking messages and write calendar events, and the bounded reconcile
@@ -40,8 +44,13 @@ import { ChannelAppointmentMessenger } from './channel-appointment-messenger';
     ChatConversationsModule,
     BroadcastsModule,
     MessageTemplatesModule,
+    PlansCoreModule,
   ],
   providers: [
+    CryptoService,
+    // The customer's Confirm / Reschedule / Cancel taps on a reminder (BL-426): a listener of the inbound pipeline.
+    ReminderReplyService,
+    ReminderTestSendConsumer,
     AppointmentReminderSweepService,
     AppointmentReminderService,
     // The real customer messenger (BL-283): the booking code talks to the port, this is what sits behind it.

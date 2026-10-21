@@ -1,0 +1,4739 @@
+{
+  "generatedBy": "node tools/redis-audit/inventory.mjs",
+  "generatedFrom": "apps/api/src (static scan; see the header of tools/redis-audit/inventory.mjs for what is exact)",
+  "totals": {
+    "sourceFilesUsingRedis": 113,
+    "commandCallSites": 378,
+    "keyFamilies": 151,
+    "familiesInFilesWhereEveryWriteHasATtl": 134,
+    "familiesInFilesToReview": 0,
+    "familiesInReadOnlyFiles": 12,
+    "orgScopedFamilies": 71,
+    "queues": 52,
+    "luaScripts": 14,
+    "clientConstructionSites": 6,
+    "redisCallsInsideLoops": 16,
+    "pipelineOrMultiUses": 30
+  },
+  "clients": [
+    {
+      "file": "apps/api/src/infra/redis/redis.module.ts",
+      "line": 30,
+      "kind": "new",
+      "options": "config.get('REDIS_URL', { infer: true }), { maxRetriesPerRequest: 3, commandTimeout: REDIS_COMMAND_TIMEOUT_MS, // The default back-off grows to 2 s a try, and `maxRetriesPerRequest` counts tries, so during a long outage every command waited // 3 x 2 s before failing. Capped, a command on a dead connection fails in about a second and a half at most. retryStrategy: (times: number) => Math.min(times * 50, 500), enableReadyCheck: true, lazyConnect: false, }"
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
+      "line": 24,
+      "kind": "new",
+      "options": "redisUrl, { lazyConnect: true, maxRetriesPerRequest: 1, connectTimeout: 2_000, commandTimeout: 2_000, retryStrategy: () => null, }"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
+      "line": 629,
+      "kind": "duplicate",
+      "options": ""
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/worker-probe.ts",
+      "line": 44,
+      "kind": "new",
+      "options": "process.env.REDIS_URL ?? 'redis://localhost:6379', { maxRetriesPerRequest: 1, connectTimeout: 2000, lazyConnect: true, }"
+    },
+    {
+      "file": "apps/api/src/realtime/redis-io.adapter.ts",
+      "line": 17,
+      "kind": "new",
+      "options": "url, { maxRetriesPerRequest: null }"
+    },
+    {
+      "file": "apps/api/src/realtime/redis-io.adapter.ts",
+      "line": 18,
+      "kind": "duplicate",
+      "options": ""
+    }
+  ],
+  "serverConfig": [
+    {
+      "file": "docker-compose.yml",
+      "appendonly": true,
+      "maxmemory": null,
+      "policy": "noeviction"
+    },
+    {
+      "file": "docker-compose.prod.yml",
+      "appendonly": true,
+      "maxmemory": "192mb",
+      "policy": "noeviction"
+    },
+    {
+      "file": "deploy/hostinger/docker-compose.yml",
+      "appendonly": true,
+      "maxmemory": "192mb",
+      "policy": "noeviction"
+    }
+  ],
+  "queues": [
+    {
+      "queue": "outbox",
+      "constant": "OUTBOX",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "campaign",
+      "constant": "CAMPAIGN",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "message-dispatch",
+      "constant": "MESSAGE_DISPATCH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 8
+    },
+    {
+      "queue": "webhook-ingest",
+      "constant": "WEBHOOK_INGEST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 10,
+      "backoff": {
+        "type": "exponential",
+        "delay": 5000,
+        "jitter": 0.25
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 8
+    },
+    {
+      "queue": "billing-posting",
+      "constant": "BILLING_POSTING",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "sla-sweep",
+      "constant": "SLA_SWEEP",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "counter-flush",
+      "constant": "COUNTER_FLUSH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "partition-maintenance",
+      "constant": "PARTITION_MAINTENANCE",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "bulk-jobs",
+      "constant": "BULK_JOBS",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 0,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "con-import",
+      "constant": "CON_IMPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "bcast-dispatch",
+      "constant": "BCAST_DISPATCH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "waba-ingest",
+      "constant": "WABA_INGEST",
+      "removeOnComplete": true,
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 10,
+      "backoff": {
+        "type": "exponential",
+        "delay": 5000,
+        "jitter": 0.25
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 8
+    },
+    {
+      "queue": "pinnacle-credit-line",
+      "constant": "PINNACLE_CREDIT_LINE",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "webhook-forward",
+      "constant": "WEBHOOK_FORWARD",
+      "removeOnComplete": true,
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 16
+    },
+    {
+      "queue": "webhook-deliver",
+      "constant": "WEBHOOK_DELIVER",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 16
+    },
+    {
+      "queue": "tg-broadcast",
+      "constant": "TG_BROADCAST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "line-broadcast",
+      "constant": "LINE_BROADCAST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "viber-broadcast",
+      "constant": "VIBER_BROADCAST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "fb-backfill",
+      "constant": "FB_BACKFILL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "meta-leadgen",
+      "constant": "META_LEADGEN",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "meta-lead-sweep",
+      "constant": "META_LEAD_SWEEP",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "fb-broadcast",
+      "constant": "FB_BROADCAST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "ig-pull",
+      "constant": "IG_PULL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "ecom-import",
+      "constant": "ECOM_IMPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "ecom-webhook",
+      "constant": "ECOM_WEBHOOK",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 5
+    },
+    {
+      "queue": "sched-run",
+      "constant": "SCHED_RUN",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "segment-actions",
+      "constant": "SEGMENT_ACTIONS",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "media-fetch",
+      "constant": "MEDIA_FETCH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 3
+    },
+    {
+      "queue": "flow-run",
+      "constant": "FLOW_RUN",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 8
+    },
+    {
+      "queue": "tpl-sweep",
+      "constant": "TPL_SWEEP",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "mkt-pull",
+      "constant": "MKT_PULL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "mkt-inbound",
+      "constant": "MKT_INBOUND",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 6
+    },
+    {
+      "queue": "lead-sync",
+      "constant": "LEAD_SYNC",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "web-push",
+      "constant": "WEB_PUSH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 8
+    },
+    {
+      "queue": "mail-sync",
+      "constant": "MAIL_SYNC",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "msg-log-export",
+      "constant": "MSG_LOG_EXPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "lsc-score",
+      "constant": "LSC_SCORE",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 3
+    },
+    {
+      "queue": "consent-export",
+      "constant": "CONSENT_EXPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "audit-log-export",
+      "constant": "AUDIT_LOG_EXPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "revenue-report-export",
+      "constant": "REVENUE_EXPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "privacy-export",
+      "constant": "PRIVACY_EXPORT",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "wab-migrate",
+      "constant": "WAB_MIGRATE",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "calling-readiness",
+      "constant": "CALLING_READINESS",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "calendar-reconcile",
+      "constant": "CALENDAR_RECONCILE",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "calendar-backfill",
+      "constant": "CALENDAR_BACKFILL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "meeting-mirror-backfill",
+      "constant": "MEETING_MIRROR_BACKFILL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 1
+    },
+    {
+      "queue": "owning-team-backfill",
+      "constant": "OWNING_TEAM_BACKFILL",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": null,
+      "concurrencyPerWorker": null
+    },
+    {
+      "queue": "calendar-ics-refresh",
+      "constant": "CALENDAR_ICS_REFRESH",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "wechat-broadcast",
+      "constant": "WECHAT_BROADCAST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    },
+    {
+      "queue": "telephony-ingest",
+      "constant": "TELEPHONY_INGEST",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "webhook-retry",
+      "constant": "WEBHOOK_RETRY",
+      "removeOnComplete": true,
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 10,
+      "backoff": {
+        "type": "exponential",
+        "delay": 5000,
+        "jitter": 0.25
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 4
+    },
+    {
+      "queue": "storage-quota",
+      "constant": "STORAGE_QUOTA",
+      "removeOnComplete": {
+        "count": 1000,
+        "age": 3600
+      },
+      "removeOnFail": {
+        "count": 500,
+        "age": 259200
+      },
+      "attempts": 5,
+      "backoff": {
+        "type": "exponential",
+        "delay": 2000,
+        "jitter": 0.5
+      },
+      "consumers": 1,
+      "concurrencyPerWorker": 2
+    }
+  ],
+  "keyFamilies": [
+    {
+      "template": "aicrm:history:*:*",
+      "files": [
+        "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "aicrm:pending:*:*:dashboard",
+      "files": [
+        "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "an:v1:*:*:*:*",
+      "files": [
+        "apps/api/src/modules/analytics/query/analytics-query.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "apikey:authfail:*",
+      "files": [
+        "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "apikey:authfail:*:*",
+      "files": [
+        "apps/api/src/modules/public-api/api-key-access.service.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "apikey:touched:*:*",
+      "files": [
+        "apps/api/src/modules/public-api/api-key-access.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "appt:page-theme:v1:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "appt:pub:*:ip:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/public-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "appt:pub:*:target:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/public-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:acct-fail:*:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:act:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:alert:*:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:cap:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:epoch",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:footer-v:*",
+      "files": [
+        "apps/api/src/modules/auth/security/branding-footer.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "auth:footer-v:platform",
+      "files": [
+        "apps/api/src/modules/auth/security/branding-footer.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "auth:gate-gen:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:gate-gen:all",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:gate:*",
+      "files": [
+        "apps/api/src/modules/auth/security/account-gate.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:gate:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:imp-end:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:ip:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:ipfail:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:known-nets:*:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:lock-partner:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "indirect"
+    },
+    {
+      "template": "auth:lock:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:mail:*:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "indirect"
+    },
+    {
+      "template": "auth:mfa-fail:*:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "indirect"
+    },
+    {
+      "template": "auth:mfa-setup:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:mfa-try:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:mfa:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:org-susp:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:otp-phone:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:otp-template-refresh",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:otp-test:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "user",
+      "ttlStatus": "indirect"
+    },
+    {
+      "template": "auth:partner:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:rev:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:send-day:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:send-halt",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:send-min:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:signup-email-sends:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:signup-email-stage:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:signup:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:social:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:wa-login:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:wa-opts:*",
+      "files": [
+        "apps/api/src/modules/auth/flows/login.service.ts",
+        "apps/api/src/modules/auth/platform/operator-auth.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:wa-reg:*:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "auth:wschoice:*",
+      "files": [
+        "apps/api/src/modules/auth/support/redis-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "bcast:cap:*:*:*:*",
+      "files": [
+        "apps/api/src/modules/broadcasts/send-safety.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "bcast:sender:*:*:*",
+      "files": [
+        "apps/api/src/modules/broadcasts/send-safety.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "calendar-backfill:lock:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "calendar-reconcile:lock:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "calling:calls-field-write",
+      "files": [
+        "apps/api/src/modules/calling-voice/calling-readiness.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "catalog_concierge:*:*",
+      "files": [
+        "apps/api/src/modules/catalog-products/catalog-concierge.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "chat:dispatch:*:*:*",
+      "files": [
+        "apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "ecom:addr-edit:*:*",
+      "files": [
+        "apps/api/src/modules/shopify-woocommerce/concierge.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "ecom:delivery:*:*:*",
+      "files": [
+        "apps/api/src/modules/shopify-woocommerce/webhook.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "ecom:woo-status:*:*:*:*",
+      "files": [
+        "apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "flr:gform:*:*:*",
+      "files": [
+        "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form_cap:*:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form_review:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form_submission:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:mail:*:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:paymail:*:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:pub:ip:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:sub:contact:*:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:sub:form:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "form:sub:ip:*:*",
+      "files": [
+        "apps/api/src/modules/forms-builder/form-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "g:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "health:probe",
+      "files": [
+        "apps/api/src/modules/dashboards-analytics-charts/health.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "ics-feed:lock:*:*",
+      "files": [
+        "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "idem:*:*",
+      "files": [
+        "apps/api/src/common/interceptors/idempotency.interceptor.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "invoicing:rl:*:*:*",
+      "files": [
+        "apps/api/src/modules/crm/invoicing/invoice-public.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "kb:embed:lock:*",
+      "files": [
+        "apps/api/src/modules/knowledge-base/kb-embed.worker.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "kb:q:*:*",
+      "files": [
+        "apps/api/src/modules/knowledge-base/kb-embedding.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "lead:hook:ip:*",
+      "files": [
+        "apps/api/src/modules/leads/lead-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "lead:hook:token:*",
+      "files": [
+        "apps/api/src/modules/leads/lead-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "line_hits:*:*",
+      "files": [
+        "apps/api/src/modules/channel-line/inbound.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "link_click_ip:*:*",
+      "files": [
+        "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "link_hits:*:*",
+      "files": [
+        "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "locale:active_languages",
+      "files": [
+        "apps/api/src/modules/localization-translation/languages.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "m:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mail:bounced:*:*",
+      "files": [
+        "apps/api/src/modules/channel-email/mail-limits.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mail:fl:*:*:*",
+      "files": [
+        "apps/api/src/modules/channel-email/mail-limits.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mail:rl:*:*",
+      "files": [
+        "apps/api/src/modules/channel-email/mail-limits.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mail:rr:*:*:*",
+      "files": [
+        "apps/api/src/modules/channel-email/mail-limits.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mkt:hook:authfail:*",
+      "files": [
+        "apps/api/src/modules/marketplace/hook-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mkt:hook:conn:*",
+      "files": [
+        "apps/api/src/modules/marketplace/hook-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mkt:hook:ip:*",
+      "files": [
+        "apps/api/src/modules/marketplace/hook-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "mkt:sub-mail:*:*",
+      "files": [
+        "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "passkey:*:*",
+      "files": [
+        "apps/api/src/modules/auth/security/webauthn.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "paygw:sub-mail:*:*",
+      "files": [
+        "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "pb:*",
+      "files": [
+        "apps/api/src/modules/channel-line/inbound.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "prbac:v*:op*",
+      "files": [
+        "apps/api/src/modules/roles-permissions/platform-rbac.service.ts"
+      ],
+      "scope": "user",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "prbac:version",
+      "files": [
+        "apps/api/src/modules/roles-permissions/platform-rbac.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "push:test:*:*",
+      "files": [
+        "apps/api/src/modules/notifications/push-subscriptions.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "ratelimit:apikey:*:*",
+      "files": [
+        "apps/api/src/modules/public-api/api-key-access.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rbac:",
+      "files": [
+        "apps/api/src/kernel/rbac/rbac.service.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rbac:*:v*:u*",
+      "files": [
+        "apps/api/src/kernel/rbac/rbac.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rbac:version:*",
+      "files": [
+        "apps/api/src/kernel/rbac/rbac.service.ts",
+        "apps/api/src/kernel/rbac/roles-version-offline.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rt:nc:*:*:*",
+      "files": [
+        "apps/api/src/modules/notifications/notification.publisher.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rt:nc:seen:*:*:*",
+      "files": [
+        "apps/api/src/modules/notifications/conversation-read-state.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rt:seq:*",
+      "files": [
+        "apps/api/src/realtime/realtime-emitter.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rt:ticket:*",
+      "files": [
+        "apps/api/src/realtime/ticket/realtime-ticket.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "rt:vis:*:*",
+      "files": [
+        "apps/api/src/realtime/visibility-presence.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "salesdoc:pub:*:ip:*",
+      "files": [
+        "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "salesdoc:pub:*:link:*",
+      "files": [
+        "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "segments:rl:*:*:*",
+      "files": [
+        "apps/api/src/modules/crm/segments/segment-throttle.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "sms:lookup:*:*",
+      "files": [
+        "apps/api/src/modules/channel-sms/sms-senders.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "store_idem:*:*:*",
+      "files": [
+        "apps/api/src/modules/storefront-builder/public/checkout.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "store_rl:*:*:*",
+      "files": [
+        "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "tchat:online:*:*",
+      "files": [
+        "apps/api/src/modules/team-chat/presence.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "tchat:typing:*:*:*",
+      "files": [
+        "apps/api/src/modules/team-chat/presence.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "test:*",
+      "files": [
+        "apps/api/src/modules/notifications/push-subscriptions.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "tg_hits:*:*",
+      "files": [
+        "apps/api/src/modules/channel-telegram/inbound.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "v1:*",
+      "files": [
+        "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "viber_hits:*:*",
+      "files": [
+        "apps/api/src/modules/channel-viber/inbound.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "wa:attempt:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts",
+        "apps/api/src/modules/whatsapp-devices-baileys/device-pairing.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:cmd",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:cmd:res:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:code:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:device:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:gov",
+      "files": [
+        "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-keys.ts"
+      ],
+      "scope": "global",
+      "ttlStatus": "indirect"
+    },
+    {
+      "template": "wa:grp:*:*:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:grpcool:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:grpsweep:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:grpsync:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:hist:*:*:ch",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:hist:*:*:pc",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:in:*:*:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/routers.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:in:media:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:inbox:sent:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/inbox/inbox-keys.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:init:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:media-id:*:*:*:*:*",
+      "files": [
+        "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:out:*:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/device-control.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:qr:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:status:*:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wa:worker:*",
+      "files": [
+        "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts",
+        "apps/api/src/modules/node-bridge-runtime/runtime/worker-status.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "waba:echo:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "waba:groups:ops:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "waba:inbound:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "waba:payment:*:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wadev:create:org:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wadev:pair:dev:*:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wadev:pair:org:*",
+      "files": [
+        "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wechat_hits:*:*",
+      "files": [
+        "apps/api/src/modules/channel-wechat/inbound.service.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "wechat:bcast:*:*",
+      "files": [
+        "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wechat:token:*:*",
+      "files": [
+        "apps/api/src/modules/channel-wechat/wechat-token.service.ts"
+      ],
+      "scope": "org",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wfl:link:redirect:*",
+      "files": [
+        "apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "ttl"
+    },
+    {
+      "template": "wgt:hits:*:*",
+      "files": [
+        "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts"
+      ],
+      "scope": "ip",
+      "ttlStatus": "read-only"
+    },
+    {
+      "template": "wsp:lifecycle-mail:*:*",
+      "files": [
+        "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts"
+      ],
+      "scope": "other",
+      "ttlStatus": "ttl"
+    }
+  ],
+  "files": [
+    {
+      "file": "apps/api/src/common/interceptors/idempotency.interceptor.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 113,
+          "cmd": "set",
+          "ttl": "EX IN_FLIGHT_TTL_SECONDS"
+        },
+        {
+          "line": 122,
+          "cmd": "set",
+          "ttl": "EX TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/health/health.controller.ts",
+      "commands": [
+        "ping"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/infra/providers/localization-translation/redis-stores.ts",
+      "commands": [
+        "exists",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 30,
+          "cmd": "set",
+          "ttl": "EX ttlSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp/media/upload-cache.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 47,
+          "cmd": "set",
+          "ttl": "EX ttlSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp/media/whatsapp-outbound-media.uploader.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "commands": [
+        "expire",
+        "hget",
+        "hgetall",
+        "hincrby",
+        "hset",
+        "incr",
+        "lpush",
+        "lrange",
+        "ltrim",
+        "mget",
+        "pfadd",
+        "pfcount",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 151,
+          "cmd": "hset",
+          "ttl": null
+        },
+        {
+          "line": 194,
+          "cmd": "hset",
+          "ttl": null
+        },
+        {
+          "line": 204,
+          "cmd": "expire",
+          "ttl": "EXPIRE CFG_TTL_S"
+        },
+        {
+          "line": 257,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 258,
+          "cmd": "expire",
+          "ttl": "EXPIRE SECOND_TTL_S"
+        },
+        {
+          "line": 259,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 260,
+          "cmd": "expire",
+          "ttl": "EXPIRE MINUTE_TTL_S"
+        },
+        {
+          "line": 263,
+          "cmd": "pfadd",
+          "ttl": null
+        },
+        {
+          "line": 263,
+          "cmd": "expire",
+          "ttl": "EXPIRE TIER_BUCKET_TTL_S"
+        },
+        {
+          "line": 272,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 273,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 274,
+          "cmd": "expire",
+          "ttl": "EXPIRE MINUTE_TTL_S"
+        },
+        {
+          "line": 280,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 280,
+          "cmd": "expire",
+          "ttl": "EXPIRE MINUTE_TTL_S"
+        },
+        {
+          "line": 294,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 294,
+          "cmd": "expire",
+          "ttl": "EXPIRE MINUTE_TTL_S"
+        },
+        {
+          "line": 296,
+          "cmd": "set",
+          "ttl": "PX 120_000"
+        },
+        {
+          "line": 300,
+          "cmd": "hset",
+          "ttl": null
+        },
+        {
+          "line": 300,
+          "cmd": "expire",
+          "ttl": "EXPIRE 600"
+        },
+        {
+          "line": 349,
+          "cmd": "set",
+          "ttl": "PX gateMs"
+        },
+        {
+          "line": 355,
+          "cmd": "lpush",
+          "ttl": null
+        },
+        {
+          "line": 357,
+          "cmd": "expire",
+          "ttl": "EXPIRE EVENTS_TTL_S"
+        },
+        {
+          "line": 462,
+          "cmd": "set",
+          "ttl": "PX ttlMs"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/infra/queue/queue-guard.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/infra/redis/counter.ts",
+      "commands": [
+        "expire",
+        "incr"
+      ],
+      "writes": [
+        {
+          "line": 13,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 13,
+          "cmd": "expire",
+          "ttl": "EXPIRE seconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/infra/redis/redis.module.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/rbac.service.ts",
+      "commands": [
+        "del",
+        "eval",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 124,
+          "cmd": "setex",
+          "ttl": "EX CACHE_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/roles-version-offline.ts",
+      "commands": [
+        "del"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm-copilot.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 315,
+          "cmd": "setex",
+          "ttl": "EX HISTORY_TTL_SECONDS"
+        },
+        {
+          "line": 337,
+          "cmd": "setex",
+          "ttl": "EX PENDING_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/analytics/query/analytics-query.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 213,
+          "cmd": "set",
+          "ttl": "EX ttlSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/booking-page-themes.cache.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 41,
+          "cmd": "set",
+          "ttl": "EX TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 79,
+          "cmd": "set",
+          "ttl": "PX LOCK_TTL_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 54,
+          "cmd": "set",
+          "ttl": "PX LOCK_TTL_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 55,
+          "cmd": "set",
+          "ttl": "PX LOCK_TTL_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/public-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 68,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 69,
+          "cmd": "expire",
+          "ttl": "EXPIRE WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/account/account.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/login-alert.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 125,
+          "cmd": "set",
+          "ttl": "EX DEDUPE_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/login.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 260,
+          "cmd": "setex",
+          "ttl": "EX Ttl.workspaceChoiceSeconds"
+        },
+        {
+          "line": 403,
+          "cmd": "setex",
+          "ttl": "EX Ttl.mfaChallengeSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/signup.service.ts",
+      "commands": [
+        "del",
+        "eval",
+        "expire",
+        "get",
+        "incr",
+        "set",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 248,
+          "cmd": "set",
+          "ttl": "EX EMAIL_STAGE_TTL_SECONDS"
+        },
+        {
+          "line": 366,
+          "cmd": "set",
+          "ttl": "EX EMAIL_CODE_RESEND_COOLDOWN_SECONDS"
+        },
+        {
+          "line": 625,
+          "cmd": "setex",
+          "ttl": "EX STAGE_TTL_SECONDS"
+        },
+        {
+          "line": 756,
+          "cmd": "setex",
+          "ttl": "EX STAGE_TTL_SECONDS"
+        },
+        {
+          "line": 1061,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 1061,
+          "cmd": "expire",
+          "ttl": "EXPIRE STAGE_TTL_SECONDS"
+        },
+        {
+          "line": 1107,
+          "cmd": "set",
+          "ttl": null
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/social-auth.service.ts",
+      "commands": [
+        "getdel",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 140,
+          "cmd": "setex",
+          "ttl": "EX Ttl.socialStateSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/guards/jwt-auth.guard.ts",
+      "commands": [
+        "get",
+        "mget"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/auth/maintenance/otp-template-refresh.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 29,
+          "cmd": "set",
+          "ttl": "EX 240"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/platform/auth-settings.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/auth/platform/impersonation.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 427,
+          "cmd": "set",
+          "ttl": "EX (IMPERSONATION_MAX_MINUTES + 5) * 60"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 228,
+          "cmd": "setex",
+          "ttl": "EX Ttl.mfaChallengeSeconds"
+        },
+        {
+          "line": 375,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 389,
+          "cmd": "set",
+          "ttl": "EX 24 * 3600"
+        },
+        {
+          "line": 392,
+          "cmd": "set",
+          "ttl": "EX 24 * 3600"
+        },
+        {
+          "line": 473,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 488,
+          "cmd": "set",
+          "ttl": "EX 24 * 3600"
+        },
+        {
+          "line": 570,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 588,
+          "cmd": "set",
+          "ttl": "EX 24 * 3600"
+        },
+        {
+          "line": 642,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 836,
+          "cmd": "setex",
+          "ttl": "EX Ttl.mfaSetupSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-attack.service.ts",
+      "commands": [
+        "expire",
+        "sadd",
+        "scard",
+        "sismember",
+        "spop"
+      ],
+      "writes": [
+        {
+          "line": 120,
+          "cmd": "sadd",
+          "ttl": null
+        },
+        {
+          "line": 121,
+          "cmd": "expire",
+          "ttl": "EXPIRE Ttl.knownNetworkSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "commands": [
+        "del",
+        "eval",
+        "expire",
+        "get",
+        "incr",
+        "mget",
+        "scan",
+        "unlink"
+      ],
+      "writes": [
+        {
+          "line": 136,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 137,
+          "cmd": "expire",
+          "ttl": "EXPIRE GENERATION_TTL_SECONDS"
+        },
+        {
+          "line": 151,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 152,
+          "cmd": "expire",
+          "ttl": "EXPIRE GENERATION_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/branding-footer.service.ts",
+      "commands": [
+        "mget"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/emergency-halt.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 81,
+          "cmd": "set",
+          "ttl": "EX HALT_MIRROR_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/mfa.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 174,
+          "cmd": "setex",
+          "ttl": "EX Ttl.mfaSetupSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/org-suspension.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 65,
+          "cmd": "setex",
+          "ttl": "EX Ttl.orgSuspendedSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/rate-limit.service.ts",
+      "commands": [
+        "del",
+        "expire",
+        "get",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 31,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 32,
+          "cmd": "expire",
+          "ttl": "EXPIRE windowSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/send-policy.service.ts",
+      "commands": [
+        "eval"
+      ],
+      "writes": [],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/webauthn.service.ts",
+      "commands": [
+        "getdel",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 171,
+          "cmd": "setex",
+          "ttl": "EX Ttl.webauthnChallengeSeconds"
+        },
+        {
+          "line": 316,
+          "cmd": "setex",
+          "ttl": "EX Ttl.webauthnChallengeSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/sessions/epoch.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 66,
+          "cmd": "set",
+          "ttl": "EX EPOCH_MIRROR_TTL_SECONDS"
+        },
+        {
+          "line": 90,
+          "cmd": "set",
+          "ttl": "EX EPOCH_MIRROR_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/sessions/partner-agent-status.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 56,
+          "cmd": "set",
+          "ttl": "EX Ttl.partnerStatusSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/auth/sessions/session.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 514,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 613,
+          "cmd": "set",
+          "ttl": "EX 31 * 24 * 3600"
+        },
+        {
+          "line": 645,
+          "cmd": "set",
+          "ttl": "EX Ttl.accessRevocationSeconds"
+        },
+        {
+          "line": 671,
+          "cmd": "set",
+          "ttl": "EX 7 * 24 * 3600"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/send-safety.ts",
+      "commands": [
+        "del",
+        "get",
+        "pexpire",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 97,
+          "cmd": "set",
+          "ttl": "PX LEASE_MS"
+        },
+        {
+          "line": 105,
+          "cmd": "pexpire",
+          "ttl": "PEXPIRE LEASE_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 86,
+          "cmd": "set",
+          "ttl": "EX IP_UNIQUE_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/calling-readiness.service.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 400,
+          "cmd": "set",
+          "ttl": "EX CALLS_FIELD_LOCK_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/campaigns/summary/campaign-summary.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 117,
+          "cmd": "set",
+          "ttl": "EX SUMMARY_CACHE_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/catalog-products/catalog-concierge.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 75,
+          "cmd": "set",
+          "ttl": "EX CONCIERGE_COOLDOWN_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-limits.ts",
+      "commands": [
+        "del",
+        "mget",
+        "pexpire",
+        "set",
+        "zadd",
+        "zcard",
+        "zrangebyscore",
+        "zremrangebyscore"
+      ],
+      "writes": [
+        {
+          "line": 45,
+          "cmd": "zadd",
+          "ttl": null
+        },
+        {
+          "line": 46,
+          "cmd": "pexpire",
+          "ttl": "PEXPIRE windowMs + 1_000"
+        },
+        {
+          "line": 60,
+          "cmd": "zadd",
+          "ttl": null
+        },
+        {
+          "line": 62,
+          "cmd": "pexpire",
+          "ttl": "PEXPIRE windowMs + 1_000"
+        },
+        {
+          "line": 73,
+          "cmd": "set",
+          "ttl": "EX ttlSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/channel-line/inbound.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/channel-sms/sms-senders.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 302,
+          "cmd": "set",
+          "ttl": "EX LOOKUP_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/channel-telegram/inbound.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/channel-viber/inbound.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/channel-wechat/broadcast-sender.service.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 84,
+          "cmd": "set",
+          "ttl": "EX RUN_LOCK_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/channel-wechat/inbound.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/channel-wechat/wechat-token.service.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 146,
+          "cmd": "set",
+          "ttl": "PX LOCK_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/chat-conversations/channel-dispatcher.service.ts",
+      "commands": [
+        "del",
+        "eval",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 200,
+          "cmd": "set",
+          "ttl": "EX LOCK_TTL_SECONDS"
+        },
+        {
+          "line": 223,
+          "cmd": "set",
+          "ttl": "EX RESULT_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/chat-conversations/cloud-group-thread.reader.ts",
+      "commands": [
+        "get"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/chatbot-widget/widget-throttle.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/crm/invoicing/invoice-public.service.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 48,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 49,
+          "cmd": "expire",
+          "ttl": "EXPIRE WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/crm/segments/segment-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 30,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 30,
+          "cmd": "expire",
+          "ttl": "EXPIRE 60"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/dashboards-analytics-charts/health.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 234,
+          "cmd": "set",
+          "ttl": "EX 10"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts",
+      "commands": [
+        "get"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 122,
+          "cmd": "set",
+          "ttl": "EX CLAIM_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-notification.consumer.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 206,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        },
+        {
+          "line": 269,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 74,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 74,
+          "cmd": "expire",
+          "ttl": "EXPIRE window"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts",
+      "commands": [
+        "expire",
+        "incr"
+      ],
+      "writes": [
+        {
+          "line": 27,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 28,
+          "cmd": "expire",
+          "ttl": "EXPIRE WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/install-update-licensing/requirements.service.ts",
+      "commands": [
+        "ping"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/install-update-licensing/system.service.ts",
+      "commands": [
+        "ping"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/knowledge-base/kb-embed.worker.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 92,
+          "cmd": "set",
+          "ttl": "EX LOCK_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/knowledge-base/kb-embedding.service.ts",
+      "commands": [
+        "getbuffer",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 86,
+          "cmd": "set",
+          "ttl": "EX QUERY_CACHE_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 51,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 52,
+          "cmd": "expire",
+          "ttl": "EXPIRE WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/localization-translation/languages.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 128,
+          "cmd": "set",
+          "ttl": "EX ACTIVE_CACHE_TTL"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/localization-translation/localization-translation.module.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/hook-throttle.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 28,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 29,
+          "cmd": "expire",
+          "ttl": "EXPIRE WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 151,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/inbox/inbox-bridge.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 112,
+          "cmd": "set",
+          "ttl": "EX SENT_MARKER_TTL_S"
+        },
+        {
+          "line": 155,
+          "cmd": "set",
+          "ttl": "EX SENT_MARKER_TTL_S"
+        },
+        {
+          "line": 264,
+          "cmd": "set",
+          "ttl": "EX INBOUND_MEDIA_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/inbox/qr-channel.adapter.ts",
+      "commands": [
+        "getbuffer",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 288,
+          "cmd": "set",
+          "ttl": "EX SENT_MARKER_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-control.service.ts",
+      "commands": [
+        "exists",
+        "get",
+        "getdel",
+        "publish",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 99,
+          "cmd": "set",
+          "ttl": "EX 300"
+        },
+        {
+          "line": 172,
+          "cmd": "set",
+          "ttl": "EX 300"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/device-runtime.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "getdelbuffer",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 382,
+          "cmd": "set",
+          "ttl": "EX WORKER_ALIVE_S"
+        },
+        {
+          "line": 484,
+          "cmd": "set",
+          "ttl": "EX QR_TTL_S"
+        },
+        {
+          "line": 492,
+          "cmd": "set",
+          "ttl": "EX CODE_TTL_S"
+        },
+        {
+          "line": 500,
+          "cmd": "set",
+          "ttl": "EX 300"
+        },
+        {
+          "line": 648,
+          "cmd": "set",
+          "ttl": "EX 60"
+        },
+        {
+          "line": 651,
+          "cmd": "set",
+          "ttl": "EX 60"
+        },
+        {
+          "line": 740,
+          "cmd": "set",
+          "ttl": "EX 60"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/group-limiter.ts",
+      "commands": [
+        "decr",
+        "expire",
+        "get",
+        "incr",
+        "set",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 167,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 167,
+          "cmd": "expire",
+          "ttl": "EXPIRE step.ttl"
+        },
+        {
+          "line": 192,
+          "cmd": "set",
+          "ttl": "EX this.limits.cooldownSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/routers.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 79,
+          "cmd": "set",
+          "ttl": "EX DEDUP_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/wa-redis.ts",
+      "commands": [
+        "eval",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 67,
+          "cmd": "set",
+          "ttl": "PX LEASE_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/worker-status.ts",
+      "commands": [
+        "mget",
+        "scan"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/conversation-read-state.ts",
+      "commands": [
+        "mget",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 29,
+          "cmd": "set",
+          "ttl": "PX SEEN_TTL_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/notification.publisher.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 138,
+          "cmd": "set",
+          "ttl": "PX seconds * 1000"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/notifications/push-subscriptions.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 129,
+          "cmd": "set",
+          "ttl": "PX TEST_COOLDOWN_MS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
+      "commands": [
+        "eval",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 107,
+          "cmd": "set",
+          "ttl": "PX options.ttlMs"
+        },
+        {
+          "line": 185,
+          "cmd": "set",
+          "ttl": "PX ttlMs"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/event-loop/redis-pressure.module.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/worker-heartbeat.service.ts",
+      "commands": [
+        "set",
+        "zadd",
+        "zrem",
+        "zremrangebyscore"
+      ],
+      "writes": [
+        {
+          "line": 66,
+          "cmd": "zadd",
+          "ttl": null
+        },
+        {
+          "line": 75,
+          "cmd": "set",
+          "ttl": "PX window * 2"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/worker-probe.ts",
+      "commands": [
+        "zscan"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/worker-status.service.ts",
+      "commands": [
+        "get",
+        "zcount"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/rate-limit/rate-limiter.ts",
+      "commands": [
+        "eval"
+      ],
+      "writes": [],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 125,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/public-api/api-key-access.service.ts",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 154,
+          "cmd": "set",
+          "ttl": "EX minIntervalSeconds"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/roles-permissions/platform-rbac.service.ts",
+      "commands": [
+        "del",
+        "eval",
+        "get",
+        "setex"
+      ],
+      "writes": [
+        {
+          "line": 59,
+          "cmd": "setex",
+          "ttl": "EX CACHE_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/shopify-woocommerce/concierge.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 139,
+          "cmd": "set",
+          "ttl": "EX ADDRESS_WINDOW_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/shopify-woocommerce/webhook-pipeline.service.ts",
+      "commands": [
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 379,
+          "cmd": "set",
+          "ttl": "EX STATUS_MEMORY_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/shopify-woocommerce/webhook.service.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 92,
+          "cmd": "set",
+          "ttl": "EX REPLAY_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/public/checkout.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 269,
+          "cmd": "set",
+          "ttl": "EX IDEM_TTL_SECONDS"
+        },
+        {
+          "line": 295,
+          "cmd": "set",
+          "ttl": "EX IDEM_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/storefront-builder/public/public-rate-limiter.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/modules/team-chat/presence.service.ts",
+      "commands": [
+        "mget",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 38,
+          "cmd": "set",
+          "ttl": "EX TYPING_TTL_SECONDS"
+        },
+        {
+          "line": 44,
+          "cmd": "set",
+          "ttl": "EX ONLINE_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts",
+      "commands": [
+        "expire",
+        "get",
+        "incr",
+        "set",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 126,
+          "cmd": "set",
+          "ttl": "EX ELIGIBLE_TTL_SECONDS"
+        },
+        {
+          "line": 511,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 511,
+          "cmd": "expire",
+          "ttl": "EXPIRE 60"
+        },
+        {
+          "line": 560,
+          "cmd": "set",
+          "ttl": "EX ELIGIBLE_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 221,
+          "cmd": "set",
+          "ttl": "EX INBOUND_DEDUPE_TTL_S"
+        },
+        {
+          "line": 236,
+          "cmd": "set",
+          "ttl": "EX INBOUND_DEDUPE_TTL_S"
+        },
+        {
+          "line": 356,
+          "cmd": "set",
+          "ttl": "EX INBOUND_DEDUPE_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 83,
+          "cmd": "set",
+          "ttl": "EX Math.ceil(hours * 3600)"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups.service.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 271,
+          "cmd": "set",
+          "ttl": "EX SYNC_MIN_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts",
+      "commands": [
+        "expire",
+        "incr",
+        "ttl"
+      ],
+      "writes": [
+        {
+          "line": 62,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 62,
+          "cmd": "expire",
+          "ttl": "EXPIRE windowS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-pairing.service.ts",
+      "commands": [
+        "del",
+        "get",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 170,
+          "cmd": "set",
+          "ttl": "EX Math.ceil(deadlineMs(method) / 1000) + ATTEMPT_GRACE_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
+      "commands": [
+        "del",
+        "expire",
+        "hgetall",
+        "hincrby",
+        "sadd",
+        "smembers"
+      ],
+      "writes": [
+        {
+          "line": 147,
+          "cmd": "sadd",
+          "ttl": null
+        },
+        {
+          "line": 200,
+          "cmd": "hincrby",
+          "ttl": null
+        },
+        {
+          "line": 248,
+          "cmd": "expire",
+          "ttl": "EXPIRE TALLY_TTL_S"
+        },
+        {
+          "line": 249,
+          "cmd": "expire",
+          "ttl": "EXPIRE TALLY_TTL_S"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts",
+      "commands": [
+        "del",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 158,
+          "cmd": "set",
+          "ttl": "EX 7 * 86_400"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/realtime/realtime-auth.service.ts",
+      "commands": [
+        "mget"
+      ],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/realtime/realtime-emitter.service.ts",
+      "commands": [
+        "expire",
+        "get",
+        "incr"
+      ],
+      "writes": [
+        {
+          "line": 131,
+          "cmd": "incr",
+          "ttl": null
+        },
+        {
+          "line": 131,
+          "cmd": "expire",
+          "ttl": "EXPIRE SEQ_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/realtime/redis-io.adapter.ts",
+      "commands": [],
+      "writes": [],
+      "ttlStatus": "read-only"
+    },
+    {
+      "file": "apps/api/src/realtime/ticket/realtime-ticket.service.ts",
+      "commands": [
+        "getdel",
+        "set"
+      ],
+      "writes": [
+        {
+          "line": 35,
+          "cmd": "set",
+          "ttl": "EX REALTIME_TICKET_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    },
+    {
+      "file": "apps/api/src/realtime/visibility-presence.service.ts",
+      "commands": [
+        "expire",
+        "zadd",
+        "zcard",
+        "zrem",
+        "zremrangebyscore"
+      ],
+      "writes": [
+        {
+          "line": 33,
+          "cmd": "zadd",
+          "ttl": null
+        },
+        {
+          "line": 34,
+          "cmd": "expire",
+          "ttl": "EXPIRE SET_TTL_SECONDS"
+        }
+      ],
+      "ttlStatus": "ttl"
+    }
+  ],
+  "luaScripts": [
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "name": "RESERVE_LUA",
+      "commands": [
+        "get",
+        "hmget",
+        "set",
+        "time"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/rbac.service.ts",
+      "name": "RAISE_VERSION_LUA",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/kernel/rbac/rbac.service.ts",
+      "name": "READ_CACHED_LUA",
+      "commands": [
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/calendar-backfill.jobs.ts",
+      "name": "RELEASE",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/calendar-reconcile.jobs.ts",
+      "name": "RELEASE",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/ics-feeds.jobs.ts",
+      "name": "RELEASE",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/signup.service.ts",
+      "name": "CONSUME_STAGED",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/signup.service.ts",
+      "name": "MARK_EMAIL_STAGE_VERIFIED",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "name": "SET_UNLESS_INVALIDATED_LUA",
+      "commands": [
+        "get",
+        "set"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/send-policy.service.ts",
+      "name": "COUNT_UNLESS_AT_CAP",
+      "commands": [
+        "expire",
+        "get",
+        "incr"
+      ],
+      "writes": true,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/modules/calling-voice/calling-readiness.service.ts",
+      "name": "RELEASE_LOCK",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
+      "name": "RELEASE",
+      "commands": [
+        "del",
+        "get"
+      ],
+      "writes": false,
+      "setsTtl": false
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/coordination/redis-lock.service.ts",
+      "name": "RENEW",
+      "commands": [
+        "get",
+        "pexpire"
+      ],
+      "writes": false,
+      "setsTtl": true
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/rate-limit/rate-limiter.ts",
+      "name": "SLIDING_WINDOW",
+      "commands": [
+        "get",
+        "incr",
+        "pexpire"
+      ],
+      "writes": true,
+      "setsTtl": true
+    }
+  ],
+  "commandUse": {
+    "KEYS": [],
+    "FLUSH": [],
+    "SCAN": [
+      {
+        "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+        "line": 156,
+        "cmd": "scan",
+        "args": "cursor, 'MATCH', 'auth:gate:*', 'COUNT', 500"
+      },
+      {
+        "file": "apps/api/src/modules/node-bridge-runtime/runtime/worker-status.ts",
+        "line": 21,
+        "cmd": "scan",
+        "args": "cursor, 'MATCH', 'wa:worker:*', 'COUNT', 100"
+      },
+      {
+        "file": "apps/api/src/modules/platform-infrastructure/observability/worker-probe.ts",
+        "line": 26,
+        "cmd": "zscan",
+        "args": "WORKERS_KEY, cursor, 'MATCH', `${host}:*`, 'COUNT', 100"
+      }
+    ],
+    "LRANGE_0_MINUS_1": [],
+    "SMEMBERS": [
+      {
+        "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
+        "line": 260,
+        "cmd": "smembers"
+      }
+    ],
+    "HGETALL": [
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 169,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 210,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 306,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 386,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 387,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+        "line": 438,
+        "cmd": "hgetall"
+      },
+      {
+        "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
+        "line": 259,
+        "cmd": "hgetall"
+      }
+    ],
+    "INCR_THEN_SEPARATE_EXPIRE": []
+  },
+  "pipelinesAndMulti": [
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "pipeline"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "pipeline"
+    },
+    {
+      "file": "apps/api/src/infra/providers/whatsapp-cloud-api-waba/throughput/throughput-store.ts",
+      "kind": "pipeline"
+    },
+    {
+      "file": "apps/api/src/infra/redis/counter.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/appointments-booking/public-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/flows/signup.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/account-gate.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/rate-limit.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-limits.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/channel-email/mail-limits.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/crm/sales-docs/public-link-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/crm/segments/segment-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/forms-links-groups/wa-link-redirect-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/leads/lead-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/hook-throttle.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/group-limiter.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/platform-infrastructure/observability/worker-heartbeat.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-groups-admin.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-limits.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/realtime/realtime-emitter.service.ts",
+      "kind": "pipeline"
+    },
+    {
+      "file": "apps/api/src/realtime/visibility-presence.service.ts",
+      "kind": "multi"
+    },
+    {
+      "file": "apps/api/src/realtime/visibility-presence.service.ts",
+      "kind": "multi"
+    }
+  ],
+  "redisCallInsideLoop": [
+    {
+      "file": "apps/api/src/kernel/rbac/rbac.service.ts",
+      "line": 161,
+      "cmd": "del"
+    },
+    {
+      "file": "apps/api/src/modules/auth/platform/operator-auth.service.ts",
+      "line": 634,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/auth/security/emergency-halt.service.ts",
+      "line": 79,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/auth/sessions/session.service.ts",
+      "line": 643,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/channel-wechat/wechat-token.service.ts",
+      "line": 145,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/flow-runtime-engine/runtime/nodes/integrations/google-form-poll.service.ts",
+      "line": 117,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-notification.consumer.ts",
+      "line": 203,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/forms-builder/form-notification.consumer.ts",
+      "line": 265,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/marketplace/subscription-notifications.consumer.ts",
+      "line": 147,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/node-bridge-runtime/runtime/group-limiter.ts",
+      "line": 165,
+      "cmd": "decr"
+    },
+    {
+      "file": "apps/api/src/modules/platform-payment-gateways/subscription-notifications.consumer.ts",
+      "line": 121,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
+      "line": 233,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-ingest.service.ts",
+      "line": 346,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/device-groups-sweep.service.ts",
+      "line": 77,
+      "cmd": "set"
+    },
+    {
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/history-import.sink.ts",
+      "line": 141,
+      "cmd": "sadd"
+    },
+    {
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/lifecycle/lifecycle-notification.consumer.ts",
+      "line": 156,
+      "cmd": "set"
+    }
+  ]
+}

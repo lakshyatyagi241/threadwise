@@ -41,7 +41,11 @@ export interface DbClient {
   close(): Promise<void>;
 }
 
+/** How long past the server's statement timeout the client waits before it gives up on a silent connection. */
+export const QUERY_TIMEOUT_GRACE_MS = 2_500;
+
 export function createDbClient(options: DbClientOptions): DbClient {
+  const statementTimeoutMs = options.statementTimeoutMs ?? 15_000;
   const config: PoolConfig = {
     connectionString: options.url,
     max: options.poolMax ?? 20,
@@ -52,7 +56,11 @@ export function createDbClient(options: DbClientOptions): DbClient {
     application_name: options.applicationName ?? 'crm-api',
     // Server-side statement timeout: a runaway query dies at the database
     // rather than holding a pooled connection until the client gives up.
-    options: `-c statement_timeout=${options.statementTimeoutMs ?? 15_000}`,
+    options: `-c statement_timeout=${statementTimeoutMs}`,
+    // Client-side backstop for the case the server cannot help with: the connection is up but the other end stopped answering (a
+    // dropped route, a frozen host), so the server-side timeout above never fires and the query would wait for ever, holding a request
+    // or a worker tick. A little longer than the server's own timeout, so a slow-but-alive database still reports its own error.
+    query_timeout: statementTimeoutMs + QUERY_TIMEOUT_GRACE_MS,
   };
 
   const pool = new Pool(config);
@@ -109,4 +117,37 @@ export function createDbClientPair(
       if (replica !== primary) await replica.close();
     },
   };
+}
+
+/**
+ * Opens a top-level transaction on `db` and hands the connection back whatever happens.
+ *
+ * drizzle's own `db.transaction` runs `begin` BEFORE its try/finally, so when `begin` fails (the connection died or went silent between
+ * checkout and the first statement) the connection is never released: each such failure leaks one pool slot for good, and an outage
+ * that lasts long enough empties the pool, so the API cannot recover even after the database is back. Here the release is
+ * unconditional. A connection whose last query never got an answer (a client-side timeout) can never answer again, so it is closed
+ * instead of being pooled. The checked-out connection also gets an error listener: node-postgres reports a dead connection as an
+ * `error` event, and an unhandled one takes the whole process down.
+ */
+export async function runTransaction<T>(db: Database, fn: (tx: Tx) => Promise<T>): Promise<T> {
+  const pool = (db as unknown as { $client?: Pool }).$client;
+  // A stand-in database without a pool (a unit-test double) keeps the plain behaviour.
+  if (!pool || typeof pool.connect !== 'function') return db.transaction(fn);
+  const client = await pool.connect();
+  const ignore = (): void => undefined;
+  client.on('error', ignore);
+  try {
+    return await drizzle(client, { schema }).transaction(fn);
+  } finally {
+    client.off('error', ignore);
+    const raw = client as unknown as {
+      readyForQuery?: boolean;
+      connection?: { stream?: { destroy(): void } };
+    };
+    const unanswered = raw.readyForQuery === false;
+    if (unanswered) raw.connection?.stream?.destroy();
+    client.release(
+      unanswered ? new Error('connection discarded: a query got no answer') : undefined,
+    );
+  }
 }

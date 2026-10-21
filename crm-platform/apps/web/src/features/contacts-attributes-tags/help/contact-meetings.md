@@ -21,6 +21,10 @@ The separate **Appointments** section of the contact stays as it is. A booking c
 3. Add a link or a place if there is one. A web address becomes a **Join** link that opens in a new tab; anything else is shown as a place.
 4. Press Enter, or **Save meeting**. Escape closes the row without saving.
 
+### Add a video link and put it on the calendar
+
+When your workspace has installed Zoom or Microsoft Teams and you have connected your own account, or has a connected Google Calendar, the row also offers **Add Zoom link**, **Add Teams link** or **Add Google Meet link**, and **Add to my calendar**. The meeting then shows a **Join** button. Nothing is offered before the integration is ready. See [Video meetings](help:video-meetings).
+
 Times are shown in your time zone. You need permission to update contacts to schedule, edit or delete a meeting; without it the list is read-only.
 
 ## Upcoming, past and no date

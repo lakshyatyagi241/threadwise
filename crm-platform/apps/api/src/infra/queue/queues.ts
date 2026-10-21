@@ -100,6 +100,8 @@ export const QUEUES = {
   CALENDAR_BACKFILL: 'calendar-backfill',
   /** Writes the Meetings row of every existing booking that has a contact and none yet (BL-281). Runs once per worker start; a repeat finds nothing to do. */
   MEETING_MIRROR_BACKFILL: 'meeting-mirror-backfill',
+  /** Stamps `owning_team_id` (the owner's primary team) on the contacts, companies, deals and tasks that existed before the column did, in small batches (BL-382). Runs once per Redis; a repeat finds nothing to do. */
+  OWNING_TEAM_BACKFILL: 'owning-team-backfill',
   /** One job per iCal feed that is due: reads the subscribed calendar's busy time (BL-035). Own queue: somebody else's slow server must not hold a booking message. */
   CALENDAR_ICS_REFRESH: 'calendar-ics-refresh',
   /** One job per WeChat broadcast: makes its one mass-send call (all followers, a tag or the picked OpenIDs) and ends it done or failed (WECH). */
@@ -122,14 +124,14 @@ export type QueueName = (typeof QUEUES)[keyof typeof QUEUES];
  * answerable at 2am, without letting Redis grow without limit. Redis here is
  * a small `noeviction` instance and every queue keeps its own history, so the
  * numbers are per queue and small: a failed job keeps its data for three days,
- * enough to debug over a weekend.
+ * enough to debug over a weekend, and at most 500 per queue (about 60 queues share 192 MB; the queue guard trims further when Redis fills).
  */
 export const DEFAULT_JOB_OPTIONS = {
   attempts: 5,
   // `jitter` spreads each retry over the upper half of its delay, so jobs that failed together do not retry together.
   backoff: { type: 'exponential' as const, delay: 2_000, jitter: 0.5 },
   removeOnComplete: { count: 1_000, age: 3_600 },
-  removeOnFail: { count: 2_000, age: 3 * 24 * 3600 },
+  removeOnFail: { count: 500, age: 3 * 24 * 3600 },
 };
 
 /**

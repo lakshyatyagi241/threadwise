@@ -513,7 +513,8 @@
         "profileHint": "Your name, photo and contact details",
         "password": "Password and security",
         "passwordHint": "Password, two-factor sign-in and active sessions"
-      }
+      },
+      "searchPage": "Search this page for \"{query}\""
     },
     "strip": {
       "jump": "Search or jump to...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Inbox",
       "clearAll": "Clear all",
       "viewAll": "View all →"
+    },
+    "notFound": {
+      "title": "Page not found",
+      "body": "This page does not exist or has moved. Check the address, or go back to your dashboard.",
+      "home": "Go to dashboard"
     }
   }
 }

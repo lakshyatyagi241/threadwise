@@ -1,0 +1,150 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Mesaj kanalları",
+      "description": "Randevu mesajlarını kişilerinize hangi kanalların gönderebileceğini seçin: onaylar, hatırlatmalar, erteleme ve iptal bildirimleri ve ziyaret sonrası takipler. Bir rezervasyon türü bir kanalı yalnızca burada açıksa ve bağlıysa kullanabilir.",
+      "loading": "Kanallar yükleniyor...",
+      "undecidedOwner": "Henüz hiçbir kanal açık değil, bu yüzden randevu mesajı gönderilmiyor. Ekibinizin kullanabileceği kanalları açın.",
+      "undecidedMember": "Henüz hiçbir kanal açık değil, bu yüzden randevu mesajı gönderilmiyor. Çalışma alanı sahibinden kanalları seçmesini isteyin.",
+      "readOnly": "Bunu yalnızca çalışma alanı sahibi ve yöneticiler değiştirebilir.",
+      "enableLabel": "Randevu mesajları için {channel} kullan",
+      "switchedOn": "{channel} randevu mesajları için açık.",
+      "switchedOff": "{channel} randevu mesajları için kapalı.",
+      "senderSaved": "{channel} için varsayılan gönderen kaydedildi.",
+      "defaultSender": "Varsayılan gönderen",
+      "defaultSenderOf": "{channel} için varsayılan gönderen",
+      "firstConnected": "Bağlı olan ilki",
+      "sendsFrom": "{sender} üzerinden gönderir",
+      "notConnected": "Bu kanal için henüz hiçbir şey bağlı değil.",
+      "connect": "Ayarlar'dan bağlayın",
+      "voiceSoon": "Ses botuyla geliyor: her rezervasyon türü için açabileceğiniz giden hatırlatma araması. Henüz açılamaz.",
+      "names": {
+        "email": "E-posta",
+        "whatsapp": "WhatsApp",
+        "voice": "Hatırlatma araması"
+      },
+      "about": {
+        "email": "Çalışma alanınızın paylaşılan bir posta kutusundan. Asla kişisel posta kutusundan değil.",
+        "whatsapp": "24 saatlik pencere içinde serbest metin; dışında yalnızca onaylı şablon.",
+        "voice": "Kişiyi hatırlatan otomatik giden arama."
+      },
+      "status": {
+        "usable": "Açık ve bağlı",
+        "off": "Kapalı",
+        "notChosen": "Henüz seçilmedi",
+        "not_connected": "Açık, bağlı değil",
+        "coming_soon": "Ses botuyla geliyor"
+      },
+      "editorTitle": "Bu rezervasyon türü için kanallar",
+      "editorHint": "Yalnızca çalışma alanı sahibinin açtığı ve bağlı olan kanallar kullanılabilir. Diğerleri nedenini bilmeniz için gösterilir.",
+      "noneUsable": "Henüz kullanılabilir kanal yok, bu yüzden bu rezervasyon türünün hiçbir mesajı gönderilemez.",
+      "openSettings": "Kanal ayarlarını aç",
+      "offByOwner": "Çalışma alanı sahibi bu kanalı açmadı.",
+      "sendOn": "Şuradan gönder",
+      "sendOnAuto": "Kanal seçilmedi: ilk kullanılabilir kanal standart metinle kullanılır.",
+      "sendOnEach": "Mesaj burada işaretli her kanaldan gider.",
+      "attachedButUnusable": "Bu kanal şu an kullanılamıyor, bu yüzden mesaj bu kanalda atlanır. İşareti kaldırın veya sahibinden açmasını isteyin."
+    },
+    "templates": {
+      "title": "Mesaj şablonları",
+      "description": "Onaylar, hatırlatmalar, ertelemeler, iptaller ve ziyaret sonrası takipler için hazır mesajlar. Tek tıkla ekleyin ve düzenleyin. E-posta mesajları burada durur; WhatsApp mesajları onay için Meta'ya gönderilir ve yalnızca onaylı olan kullanılabilir.",
+      "loading": "Mesajlar yükleniyor...",
+      "readOnly": "Bunu yalnızca randevu şablonlarını yöneten kullanıcılar değiştirebilir.",
+      "empty": "Henüz mesaj eklenmedi. Aşağıdaki hazır kümeden ekleyin.",
+      "yours": "Mesajlarınız",
+      "status": {
+        "draft": "Taslak",
+        "pending": "Meta'da incelemede",
+        "approved": "Onaylandı",
+        "rejected": "Reddedildi"
+      },
+      "kinds": {
+        "confirmation": "Rezervasyon onayı",
+        "reminder": "Hatırlatma",
+        "reschedule": "Ertelendi",
+        "cancellation": "İptal edildi",
+        "follow_up": "Ziyaret sonrası takip"
+      },
+      "channels": {
+        "email": "E-posta",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {# rezervasyon türü tarafından kullanılıyor}}",
+      "inactive": "kapalı",
+      "submit": "Onay için Meta'ya gönder",
+      "submitting": "Gönderiliyor...",
+      "submitted": "Meta'ya gönderildi. Şimdi incelemede.",
+      "metaRefused": "Kaydedildi ama Meta reddetti. Nedenini görmek için mesajı açın.",
+      "refresh": "Durumu kontrol et",
+      "refreshing": "Kontrol ediliyor...",
+      "refreshed": "Durum güncellendi.",
+      "edit": "Düzenle",
+      "view": "Görüntüle",
+      "close": "Kapat",
+      "delete": "Kaldır",
+      "deleteTitle": "\"{name}\" kaldırılsın mı?",
+      "deleteWhatsapp": "Bu listeden kaldırılır. WhatsApp şablonu WhatsApp şablonlarınızda kalır; artık gerekmiyorsa orada silin.",
+      "deleteBody": "Kitaplığınızdan kaldırılır. Onu kullanan rezervasyon türü önce başka bir mesaj seçmelidir.",
+      "deleted": "Mesaj kaldırıldı.",
+      "cancel": "Vazgeç",
+      "rejectedBecause": "Meta reddetti: {reason}",
+      "pendingNote": "Meta bu şablonu inceliyor. Onaylanana kadar seçilemez veya gönderilemez.",
+      "nameLabel": "Ad",
+      "subjectLabel": "Konu",
+      "bodyLabel": "Mesaj",
+      "textLocked": "İncelemedeki veya onaylı bir şablon burada düzenlenemez.",
+      "placeholders": "Kullanabilirsiniz:",
+      "whatsappPlaceholders": "WhatsApp yalnızca bunları doldurabilir; bu sırayla, hiçbirini atlamadan kullanın:",
+      "activeLabel": "Seçilebilir",
+      "save": "Kaydet",
+      "saving": "Kaydediliyor...",
+      "saveAndSubmit": "Kaydet ve Meta'ya gönder",
+      "saved": "Mesaj kaydedildi.",
+      "predefinedTitle": "Hazır mesajlar",
+      "predefinedHint": "Bir mesajı kitaplığınıza kopyalamak için ekleyin, sonra düzenleyin. WhatsApp mesajı önce taslak olarak oluşturulur; Meta'ya ne zaman göndereceğinize siz karar verirsiniz.",
+      "machineNote": "Hazır metinler İngilizcedir. Ekledikten sonra kendi dilinize göre düzenleyin.",
+      "category": {
+        "UTILITY": "Hizmet",
+        "MARKETING": "Pazarlama"
+      },
+      "preview": "Önizleme",
+      "hidePreview": "Önizlemeyi gizle",
+      "inLibrary": "Kitaplığınızda: {status}",
+      "adopt": "Mesajlarıma ekle",
+      "adopting": "Ekleniyor...",
+      "adoptDraft": "Taslak olarak ekle",
+      "adoptSubmit": "Ekle ve Meta'ya gönder",
+      "adopted": "Mesajlarınıza eklendi.",
+      "newEmail": "Yeni e-posta mesajı",
+      "kindLabel": "Tür",
+      "create": "Oluştur",
+      "created": "Mesaj oluşturuldu.",
+      "chooseLabel": "Kullanılacak mesaj",
+      "useText": "Yukarıdaki metin",
+      "unknownMessage": "Artık mevcut olmayan bir mesaj",
+      "noneYet": "Bu türde henüz mesaj yok.",
+      "openLibrary": "Ayarlarda bir tane ekleyin",
+      "whatsappApprovedOnly": "Yalnızca Meta'nın onayladığı şablonlar seçilebilir. 24 saatlik pencerenin dışında WhatsApp başka bir şey göndermez."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Hatırlatma araması"
+      },
+      "voiceSoon": "Ses botuyla geliyor: giden hatırlatma araması. Henüz eklenemez.",
+      "voiceSoonShort": "ses botuyla geliyor",
+      "channelUnusable": "şu an kullanılamıyor",
+      "noUsableChannel": "Bu kuralın hiçbir kanalı kullanılamıyor, bu yüzden açılamaz.",
+      "openChannels": "Kanal ayarlarını aç",
+      "fromLibrary": "Kitaplıktan bir mesaj kullan",
+      "openLibrary": "Ayarlarda mesaj ekleyin",
+      "reasons": {
+        "channel_disabled": "Çalışma alanı bu kanalı randevu mesajları için kapattı."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Bu mesaj için en az bir kanal seçin veya metnini silin."
+      }
+    }
+  }
+}

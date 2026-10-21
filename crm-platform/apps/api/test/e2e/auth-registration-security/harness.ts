@@ -65,6 +65,11 @@ export interface HarnessOptions {
    * turned the platform switch on), and a spec then allows workspaces through the admin API. `false` leaves both off.
    */
   unofficialWhatsapp?: boolean | 'platform-only';
+  /**
+   * Lets a spec put its own relay in front of the Redis container (to cut and restore the connection without touching the container).
+   * Gets the real `redis://host:port` and returns the address the app should use.
+   */
+  redisUrl?: (realUrl: string) => string | Promise<string>;
 }
 
 /**
@@ -177,7 +182,9 @@ export async function startHarness(options: HarnessOptions = {}): Promise<Harnes
     TRUST_PROXY: 'loopback',
     DATABASE_URL: `postgres://crm_app_user:test@${pg.getHost()}:${pg.getPort()}/crm`,
     MIGRATION_DATABASE_URL: pg.getConnectionUri(),
-    REDIS_URL: `redis://${redis.getHost()}:${redis.getMappedPort(6379)}`,
+    REDIS_URL: await (options.redisUrl ?? ((u: string) => u))(
+      `redis://${redis.getHost()}:${redis.getMappedPort(6379)}`,
+    ),
     JWT_ACCESS_SECRET: 'access-secret-for-tests-0123456789abcdef',
     JWT_REFRESH_SECRET: 'refresh-secret-for-tests-0123456789abcdef',
     CLERK_SECRET_KEY: 'sk_test_unused',

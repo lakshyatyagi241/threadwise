@@ -128,7 +128,9 @@
         "list": "רשימה"
       },
       "reports": "דוחות",
-      "settings": "הגדרות צינור"
+      "settings": "הגדרות צינור",
+      "team": "צוות",
+      "allTeams": "כל הצוותים"
     },
     "kpi": {
       "openPipeline": "פתח צינור",

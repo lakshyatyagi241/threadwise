@@ -46,7 +46,9 @@
       "catchUp": "Catch up",
       "migrateHint": "Migrate starts with a full rehearsal and loads nothing if it is not clean. A separate dry run is optional.",
       "queued": "Run queued.",
-      "scheduled": "Run scheduled."
+      "scheduled": "Run scheduled.",
+      "skipWhatsapp": "Don't migrate the WhatsApp number (for testing)",
+      "skipWhatsappHint": "The workspace migrates fully, but its WhatsApp number is not imported or connected."
     },
     "confirm": {
       "title": "Migrate {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Migrate all",
       "migrateHint": "Each organization starts with its own full rehearsal and loads nothing if it is not clean. A separate dry run is optional.",
       "queued": "Batch queued.",
-      "scheduled": "Batch scheduled."
+      "scheduled": "Batch scheduled.",
+      "skipWhatsapp": "Don't migrate the WhatsApp numbers (for testing)",
+      "skipWhatsappHint": "None of these workspaces gets its WhatsApp number imported or connected."
     },
     "bulkConfirm": {
       "title": "Migrate {count} organizations",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Dry run",
       "load": "Migration",
-      "catchup": "Catch-up"
+      "catchup": "Catch-up",
+      "skipWhatsapp": "No WhatsApp number"
     },
     "status": {
       "queued": "Queued",
@@ -196,7 +201,8 @@
       "core-load": "Core load",
       "flow-state": "Flow state",
       "reconcile": "Reconcile",
-      "report": "Report"
+      "report": "Report",
+      "whatsapp": "WhatsApp number"
     },
     "stepStatus": {
       "running": "Running",

@@ -50,6 +50,7 @@ import {
   useDurationLabel,
 } from './public-parts';
 import { PublicShell } from './public-shell';
+import { useBookingTheme } from './public-theme';
 import { SlotPicker } from './slot-picker';
 
 /**
@@ -76,7 +77,7 @@ export function PublicBooking({ org, slug }: { org: string; slug: string }) {
   });
 
   return (
-    <PublicShell orgName={q.data?.org.name}>
+    <PublicShell orgName={q.data?.org.name} org={q.data?.org.slug ?? org} theme={q.data?.theme}>
       {q.isPending ? (
         <PublicSkeleton />
       ) : q.isError ? (
@@ -102,20 +103,28 @@ interface Attempt {
   key: string;
 }
 
-function Service({
+/** What the editor's preview swaps in so the real page runs without a server: its own times, and a confirm that books nothing. */
+export interface ServicePreview {
+  loadSlots: (range: { from: string; to: string }) => Promise<Slot[]>;
+}
+
+export function Service({
   org,
   slug,
   orgName,
   type,
+  preview,
 }: {
   org: string;
   slug: string;
   orgName: string;
   type: PublicType;
+  preview?: ServicePreview;
 }) {
   const t = useTranslations('appointments.public');
+  const theme = useBookingTheme();
   const qc = useQueryClient();
-  const scope = `public:${org}:${slug}`;
+  const scope = preview ? `preview:${slug}` : `public:${org}:${slug}`;
   const [zone, setZone] = useState(() => browserZone());
   const [step, setStep] = useState<Step>('time');
   const [slot, setSlot] = useState<Slot | null>(null);
@@ -170,6 +179,8 @@ function Service({
 
   async function submit(e: FormEvent) {
     e.preventDefault();
+    // The editor's preview shows the form and its validation, but never sends anything.
+    if (preview) return;
     if (busyRef.current || !slot) return;
     setSubmitted(true);
     const firstBad = (['name', 'email', 'phone'] as const).find((f) => detailProblems[f]);
@@ -230,185 +241,200 @@ function Service({
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:items-start">
-      <ServiceInfo org={org} type={type} price={price} />
+    <div className="space-y-4">
+      {theme.welcomeText && (
+        <p
+          className="whitespace-pre-line break-words rounded-xl border border-border bg-background p-4 text-sm shadow-sm"
+          dir="auto"
+          data-testid="booking-welcome"
+        >
+          {theme.welcomeText}
+        </p>
+      )}
+      <div className="grid gap-4 md:grid-cols-[minmax(0,17rem)_minmax(0,1fr)] md:items-start">
+        <ServiceInfo org={org} type={type} price={price} />
 
-      <section
-        className="min-w-0 rounded-xl border border-border bg-background p-4 shadow-sm sm:p-5"
-        aria-labelledby={`${base}-step`}
-      >
-        {step === 'time' ? (
-          <div className="space-y-4">
-            <h2 id={`${base}-step`} className="text-base font-semibold">
-              {t('step.time')}
-            </h2>
-            {notice === 'slotTaken' && (
-              <Banner
-                tone="warning"
-                icon={<AlertIcon className="size-5" />}
-                title={t('book.slotTaken')}
-              >
-                {t('book.slotTakenHint')}
-              </Banner>
-            )}
-            <SlotPicker
-              scope={scope}
-              load={async (range, signal) =>
-                (await publicApi.typeSlots(org, slug, range, signal)).slots
-              }
-              zone={zone}
-              onZoneChange={setZone}
-              value={slot?.start ?? null}
-              onChange={(s) => {
-                setSlot(s);
-                if (s) setNotice(null);
-              }}
-              horizonDays={type.maxAdvanceDays}
-              typeZone={type.timezone}
-            />
-            <div className="border-t border-border pt-4">
-              {slot ? (
-                <div className="space-y-3" aria-live="polite">
-                  <div className="space-y-2 rounded-lg bg-muted/60 p-3">
-                    <WhenRows
-                      startsAt={slot.start}
-                      endsAt={slot.end}
-                      visitorZone={zone}
-                      serviceZone={type.timezone}
-                    />
+        <section
+          className="min-w-0 rounded-xl border border-border bg-background p-4 shadow-sm sm:p-5"
+          aria-labelledby={`${base}-step`}
+        >
+          {step === 'time' ? (
+            <div className="space-y-4">
+              <h2 id={`${base}-step`} className="text-base font-semibold">
+                {t('step.time')}
+              </h2>
+              {notice === 'slotTaken' && (
+                <Banner
+                  tone="warning"
+                  icon={<AlertIcon className="size-5" />}
+                  title={t('book.slotTaken')}
+                >
+                  {t('book.slotTakenHint')}
+                </Banner>
+              )}
+              <SlotPicker
+                scope={scope}
+                load={async (range, signal) =>
+                  preview
+                    ? preview.loadSlots(range)
+                    : (await publicApi.typeSlots(org, slug, range, signal)).slots
+                }
+                zone={zone}
+                onZoneChange={setZone}
+                value={slot?.start ?? null}
+                onChange={(s) => {
+                  setSlot(s);
+                  if (s) setNotice(null);
+                }}
+                horizonDays={type.maxAdvanceDays}
+                typeZone={type.timezone}
+              />
+              <div className="border-t border-border pt-4">
+                {slot ? (
+                  <div className="space-y-3" aria-live="polite">
+                    <div className="space-y-2 rounded-lg bg-muted/60 p-3">
+                      <WhenRows
+                        startsAt={slot.start}
+                        endsAt={slot.end}
+                        visitorZone={zone}
+                        serviceZone={type.timezone}
+                      />
+                    </div>
+                    <Button
+                      className="h-11 w-full"
+                      variant="brand"
+                      onClick={() => setStep('details')}
+                    >
+                      {t('step.continue')}
+                    </Button>
                   </div>
-                  <Button
-                    className="h-11 w-full"
-                    variant="brand"
-                    onClick={() => setStep('details')}
-                  >
-                    {t('step.continue')}
-                  </Button>
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground" aria-live="polite">
-                  {t('step.pickHint')}
-                </p>
-              )}
-            </div>
-          </div>
-        ) : (
-          slot && (
-            <form
-              onSubmit={(e) => void submit(e)}
-              noValidate
-              className="space-y-5"
-              aria-busy={busy}
-            >
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={chooseAnotherTime}
-                  disabled={busy}
-                  aria-label={t('step.changeTime')}
-                  className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted disabled:opacity-50"
-                >
-                  <ChevronLeftIcon className={flip} />
-                </button>
-                <h2
-                  id={`${base}-step`}
-                  ref={headingRef}
-                  tabIndex={-1}
-                  className="text-base font-semibold outline-none"
-                >
-                  {t('step.details')}
-                </h2>
-              </div>
-
-              <div className="space-y-2 rounded-lg bg-muted/60 p-3">
-                <WhenRows
-                  startsAt={slot.start}
-                  endsAt={slot.end}
-                  visitorZone={zone}
-                  serviceZone={type.timezone}
-                />
-              </div>
-
-              {type.introMessage && (
-                <div className="flex gap-3 rounded-lg border border-border p-3 text-sm">
-                  <InfoIcon className="mt-0.5 size-4 text-muted-foreground" />
-                  <p className="min-w-0 whitespace-pre-line break-words" dir="auto">
-                    {type.introMessage}
+                ) : (
+                  <p className="text-sm text-muted-foreground" aria-live="polite">
+                    {t('step.pickHint')}
                   </p>
-                </div>
-              )}
-
-              <div className="space-y-4">
-                <DetailFields
-                  base={base}
-                  details={details}
-                  problems={detailProblems}
-                  server={server}
-                  show={show}
-                  touch={touch}
-                  onChange={changeDetail}
-                  phoneRequired={phoneRequired(type.questions)}
-                />
-                {asked.map((a) => (
-                  <QuestionField
-                    key={a.index}
-                    id={`${base}-q${a.index}`}
-                    asked={a}
-                    value={values[a.index] ?? ''}
-                    problem={show(`q${a.index}`) ? (answerProblems[a.index] ?? null) : null}
-                    serverFlagged={Boolean(server?.answers[a.index])}
-                    onBlur={() => touch(`q${a.index}`)}
-                    onChange={(v) => changeAnswer(a.index, v)}
-                  />
-                ))}
-                {type.consent && (
-                  <Checkbox
-                    id={`${base}-consent`}
-                    checked={consentTicked}
-                    onChange={(e) => setConsentTicked(e.target.checked)}
-                    disabled={busy}
-                    label={
-                      <span dir="auto" className="text-sm">
-                        {type.consent.text}
-                        {type.consent.url && (
-                          <>
-                            {' '}
-                            <a
-                              href={type.consent.url}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="underline"
-                            >
-                              {hostOf(type.consent.url)}
-                            </a>
-                          </>
-                        )}
-                      </span>
-                    }
-                  />
                 )}
               </div>
+            </div>
+          ) : (
+            slot && (
+              <form
+                onSubmit={(e) => void submit(e)}
+                noValidate
+                className="space-y-5"
+                aria-busy={busy}
+              >
+                <div className="flex items-center gap-2">
+                  <button
+                    type="button"
+                    onClick={chooseAnotherTime}
+                    disabled={busy}
+                    aria-label={t('step.changeTime')}
+                    className="flex size-10 shrink-0 items-center justify-center rounded-full border border-border hover:bg-muted disabled:opacity-50"
+                  >
+                    <ChevronLeftIcon className={flip} />
+                  </button>
+                  <h2
+                    id={`${base}-step`}
+                    ref={headingRef}
+                    tabIndex={-1}
+                    className="text-base font-semibold outline-none"
+                  >
+                    {t('step.details')}
+                  </h2>
+                </div>
 
-              {price && <PriceSummary lines={price} />}
+                <div className="space-y-2 rounded-lg bg-muted/60 p-3">
+                  <WhenRows
+                    startsAt={slot.start}
+                    endsAt={slot.end}
+                    visitorZone={zone}
+                    serviceZone={type.timezone}
+                  />
+                </div>
 
-              {type.requiresApproval && (
-                <InfoRow icon={<InfoIcon />} className="text-muted-foreground">
-                  {t('service.approvalNote')}
-                </InfoRow>
-              )}
+                {type.introMessage && (
+                  <div className="flex gap-3 rounded-lg border border-border p-3 text-sm">
+                    <InfoIcon className="mt-0.5 size-4 text-muted-foreground" />
+                    <p className="min-w-0 whitespace-pre-line break-words" dir="auto">
+                      {type.introMessage}
+                    </p>
+                  </div>
+                )}
 
-              <div aria-live="polite">
-                {notice && notice !== 'slotTaken' && <NoticeBanner notice={notice} />}
-              </div>
+                <div className="space-y-4">
+                  <DetailFields
+                    base={base}
+                    details={details}
+                    problems={detailProblems}
+                    server={server}
+                    show={show}
+                    touch={touch}
+                    onChange={changeDetail}
+                    phoneRequired={phoneRequired(type.questions)}
+                  />
+                  {asked.map((a) => (
+                    <QuestionField
+                      key={a.index}
+                      id={`${base}-q${a.index}`}
+                      asked={a}
+                      value={values[a.index] ?? ''}
+                      problem={show(`q${a.index}`) ? (answerProblems[a.index] ?? null) : null}
+                      serverFlagged={Boolean(server?.answers[a.index])}
+                      onBlur={() => touch(`q${a.index}`)}
+                      onChange={(v) => changeAnswer(a.index, v)}
+                    />
+                  ))}
+                  {type.consent && (
+                    <Checkbox
+                      id={`${base}-consent`}
+                      checked={consentTicked}
+                      onChange={(e) => setConsentTicked(e.target.checked)}
+                      disabled={busy}
+                      label={
+                        <span dir="auto" className="text-sm">
+                          {type.consent.text}
+                          {type.consent.url && (
+                            <>
+                              {' '}
+                              <a
+                                href={type.consent.url}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="underline"
+                              >
+                                {hostOf(type.consent.url)}
+                              </a>
+                            </>
+                          )}
+                        </span>
+                      }
+                    />
+                  )}
+                </div>
 
-              <Button type="submit" variant="brand" className="h-11 w-full" disabled={busy}>
-                {busy && <Spinner label={t('book.sending')} />}
-                {type.requiresApproval ? t('book.request') : t('book.confirm')}
-              </Button>
-            </form>
-          )
-        )}
-      </section>
+                {price && <PriceSummary lines={price} />}
+
+                {type.requiresApproval && (
+                  <InfoRow icon={<InfoIcon />} className="text-muted-foreground">
+                    {t('service.approvalNote')}
+                  </InfoRow>
+                )}
+
+                <div aria-live="polite">
+                  {notice && notice !== 'slotTaken' && <NoticeBanner notice={notice} />}
+                </div>
+
+                <Button type="submit" variant="brand" className="h-11 w-full" disabled={busy}>
+                  {busy && <Spinner label={t('book.sending')} />}
+                  {type.requiresApproval
+                    ? t('book.request')
+                    : theme.buttonLabel || t('book.confirm')}
+                </Button>
+              </form>
+            )
+          )}
+        </section>
+      </div>
     </div>
   );
 }

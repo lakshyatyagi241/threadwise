@@ -230,6 +230,27 @@ function certainBody(doc: Doc): {
       else sure = false; // a body is only certain for a plain string or a non-blank `text` / `value` of a text element
     }
     if (!present) return { dir: 'out', empty: true };
+    // a live-chat hand-over event: {type: 'info', value} elements of a turn flagged live_chat_connected, read as a system notice
+    if (br.live_chat_connected === true) {
+      // the agent-side twin ("You are now Connected to <agent>", isUser false) is not a message: the thread shows the customer-side line only
+      if (
+        list.length > 0 &&
+        list.every((el) => isObj(el) && el.type === 'info' && el.isUser === false)
+      )
+        return { dir: 'out', empty: true };
+      const info = list
+        .filter(
+          (el) =>
+            isObj(el) &&
+            el.type === 'info' &&
+            typeof el.value === 'string' &&
+            el.value.trim() !== '',
+        )
+        .map((el) => (el as { value: string }).value);
+      return info.length > 0
+        ? { dir: 'out', body: info.join('\n'), system: true, kind: 'system' }
+        : { dir: 'out', system: true, kind: 'system' };
+    }
     return parts.length > 0 && sure ? { dir: 'out', body: parts.join('\n') } : { dir: 'out' };
   }
   const uqText = typeof uq === 'string' && uq.trim() !== '' ? uq.trim() : null;
@@ -354,7 +375,13 @@ export async function oracleChat(
     }
     let cb = certainBody(doc);
     // a customer turn with a typed query object but no content is loaded as a placeholder (inbox/parse.ts CONTENT_UNAVAILABLE)
-    if (cb.empty && cb.dir === 'in' && !isObj(doc.bot_response) && isObj(doc.user_query_object) && Object.keys(doc.user_query_object).length > 0)
+    if (
+      cb.empty &&
+      cb.dir === 'in' &&
+      !isObj(doc.bot_response) &&
+      isObj(doc.user_query_object) &&
+      Object.keys(doc.user_query_object).length > 0
+    )
       cb = { dir: 'in', body: '(message content not available)', kind: 'text' };
     if (cb.dir === null || cb.empty) {
       q('EMPTY_MESSAGE');

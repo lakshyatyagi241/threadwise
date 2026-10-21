@@ -59,6 +59,7 @@ import {
   encodeIdCursor,
   foldActivity,
 } from './company-rules';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 export const COMPANY_MODULE = 'companies';
 
@@ -674,7 +675,7 @@ export class CompaniesService {
     const ctx = RequestContextStore.require();
     const ref = await this.contacts.resolveContactRef(tx, ctx.orgId, contactUuid);
     if (!ref) throw AppError.notFound('Contact', contactUuid);
-    await assertContactScope(tx, this.contacts, ctx.orgId, contactScope, ctx.userId!, ref.ownerId);
+    await assertContactScope(tx, this.contacts, ctx.orgId, contactScope, ctx.userId!, ref);
     const contact = (await this.contacts.findById(tx, ctx.orgId, ref.id))!;
     if (contact.companyId === toCompanyId) return;
 
@@ -878,7 +879,7 @@ export class CompaniesService {
       scope: scope ?? this.rbac.can(ctx.grants!, permission).scope,
       actorUserId: ctx.userId,
       nextOwnerId,
-      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'ownerId',
     });
   }
@@ -894,16 +895,15 @@ export class CompaniesService {
   /** Not-found, never forbidden: a company outside the caller's scope is not revealed to exist. */
   private async assertScope(tx: Tx, scope: RecordScope, row: CompanyRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Company');
-    if (row.ownerId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.ownerId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.ownerId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Company');
     }
-    throw AppError.notFound('Company');
   }
 
   private failure(id: string, err: unknown): CompanyBulkResult['failed'][number] {

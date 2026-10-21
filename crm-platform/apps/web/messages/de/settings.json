@@ -101,7 +101,7 @@
         "keywords": "textnachricht, absender-id, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-Mail",
+        "label": "Support-E-Mail",
         "description": "Verbinden Sie Gmail- oder Google-Workspace-Postfächer, damit Ihr Team Kunden-E-Mails im gemeinsamen Posteingang lesen und beantworten kann.",
         "keywords": "postfach, gmail, google workspace, gemeinsamer posteingang, support-e-mail, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Gruppieren Sie Personen in Teams für Weiterleitung und Auswertung.",
-        "keywords": "gruppen, abteilungen, zuweisung, routing"
+        "description": "Personen für Unterhaltungen, Zuweisungen und Berichte gruppieren.",
+        "keywords": "Gruppen, Abteilungen, Manager, Hierarchie, Zuweisung, Routing"
       },
       "ai-keys": {
         "label": "KI-Anbieter-Schlüssel",
@@ -244,6 +244,11 @@
         "label": "REST-API",
         "description": "Schlüssel und Dokumentation für die Entwicklung auf Basis des Produkts.",
         "keywords": "api-schlüssel, entwickler, tokens, docs, openapi"
+      },
+      "api-keys": {
+        "label": "API-Schlüssel",
+        "description": "Erstellen und verwalten Sie die Schlüssel, mit denen andere Systeme die API aufrufen.",
+        "keywords": "api-schlüssel, token, geheimnis, entwickler, zugriff, integration"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -301,7 +306,7 @@
         "keywords": "geta, veröffentlichen, bot, konsole, live schalten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatische Zuweisung",
+        "label": "Automatische Zuweisung von Unterhaltungen",
         "description": "Weisen Sie neue Unterhaltungen automatisch dem richtigen Agenten zu, reihum oder nach Regeln.",
         "keywords": "routing, round robin, zuweisen, agenten, posteingangsregeln, verteilen, eigentümer"
       },
@@ -389,6 +394,11 @@
         "label": "Doppelte Leads",
         "description": "Wählen Sie, ob ein neuer Lead, der zu einem Kontakt passt, dort zusammengeführt oder als neuer Kontakt angelegt wird.",
         "keywords": "Duplikat, zusammenführen, Lead, gleiche Telefonnummer, gleiche E-Mail, neuer Kontakt, Lead-Quelle"
+      },
+      "sales-activities": {
+        "label": "Vertriebsaktivitäten",
+        "description": "Verwalten Sie Aufgaben, Termine, Anrufe und eigene Aktivitäten: was jede kann, welche Aufgabentypen und Ergebnisse sie hat.",
+        "keywords": "Aktivitäten, Aufgabentypen, Ergebnisse, Terminergebnis, Anrufergebnis, Nachfassen, Einchecken, eigene Aktivität, Kalender, abschließen"
       }
     },
     "backToMarketplace": "Zurück zum Marketplace"

@@ -70,29 +70,29 @@ describe('validateReminders', () => {
     expect(p[`reminder:${c.id}`]).toBeUndefined();
   });
 
-  it('wants a channel and bounded texts, and at most eight', () => {
+  it('wants a channel and bounded texts, and at most five', () => {
     const noChannel = row({ channels: [] });
     const longBody = row({ offset: '5', body: 'x'.repeat(REMINDER_BODY_MAX + 1) });
     const p = validateReminders([noChannel, longBody]);
     expect(p[`reminder:${noChannel.id}`]).toBe('channelsNone');
     expect(p[`reminder:${longBody.id}`]).toBe('bodyTooLong');
-    const nine = Array.from({ length: 9 }, (_, i) => row({ offset: String(i + 1) }));
-    expect(validateReminders(nine).reminders).toBe('tooMany');
-    expect(validateReminders(nine.slice(0, 8)).reminders).toBeUndefined();
+    const six = Array.from({ length: 6 }, (_, i) => row({ offset: String(i + 1) }));
+    expect(validateReminders(six).reminders).toBe('tooMany');
+    expect(validateReminders(six.slice(0, 5)).reminders).toBeUndefined();
   });
 });
 
 describe('channels', () => {
   it('moves a channel in the preference and leaves it alone at the ends', () => {
-    expect(moveChannel(['whatsapp', 'sms', 'email'], 2, -1)).toEqual(['whatsapp', 'email', 'sms']);
-    expect(moveChannel(['whatsapp', 'sms'], 0, -1)).toEqual(['whatsapp', 'sms']);
-    expect(moveChannel(['whatsapp', 'sms'], 1, 1)).toEqual(['whatsapp', 'sms']);
+    expect(moveChannel(['whatsapp', 'email'], 1, -1)).toEqual(['email', 'whatsapp']);
+    expect(moveChannel(['whatsapp', 'email'], 0, -1)).toEqual(['whatsapp', 'email']);
+    expect(moveChannel(['whatsapp', 'email'], 1, 1)).toEqual(['whatsapp', 'email']);
   });
 
   it('adds a channel last and never removes the last one', () => {
-    expect(toggleChannel(['sms'], 'email')).toEqual(['sms', 'email']);
-    expect(toggleChannel(['sms', 'email'], 'sms')).toEqual(['email']);
-    expect(toggleChannel(['sms'], 'sms')).toEqual(['sms']);
+    expect(toggleChannel(['whatsapp'], 'email')).toEqual(['whatsapp', 'email']);
+    expect(toggleChannel(['whatsapp', 'email'], 'whatsapp')).toEqual(['email']);
+    expect(toggleChannel(['whatsapp'], 'whatsapp')).toEqual(['whatsapp']);
   });
 });
 
@@ -104,7 +104,7 @@ describe('to and from the API', () => {
       label: '1h',
       isActive: true,
       kind: 'before',
-      channels: ['sms', 'whatsapp'],
+      channels: ['email', 'whatsapp'],
       subject: null,
       body: null,
       waTemplateId: 'tpl-1',
@@ -143,7 +143,7 @@ describe('to and from the API', () => {
       ['c', 'after', 120, true],
     ]);
     expect(input[1]).toMatchObject({
-      channels: ['sms', 'whatsapp'],
+      channels: ['email', 'whatsapp'],
       waTemplateId: 'tpl-1',
       label: '1h',
     });
@@ -157,20 +157,28 @@ describe('to and from the API', () => {
       label: null,
       isActive: false,
       kind: 'before',
-      channels: ['whatsapp', 'sms', 'email'],
+      channels: ['whatsapp', 'email'],
       subject: null,
       body: null,
       waTemplateId: null,
+      stepKind: 'reminder',
+      libraryTemplateId: null,
+      buttonsEnabled: false,
+      skipIfConfirmed: false,
+      undeliveredFallbackMinutes: null,
+      serviceLabel: null,
+      packKey: null,
+      packVersion: null,
     });
     expect(r).not.toHaveProperty('id');
   });
 
-  it('drops an empty row and a repeated moment, and keeps at most eight', () => {
+  it('drops an empty row and a repeated moment, and keeps at most five', () => {
     expect(
       remindersToInput([newReminder(''), row(), row({ offset: '1', unit: 'hours' })]),
     ).toHaveLength(1);
     const many = Array.from({ length: 10 }, (_, i) => row({ offset: String(i + 1) }));
-    expect(remindersToInput(many)).toHaveLength(8);
+    expect(remindersToInput(many)).toHaveLength(5);
   });
 
   it('tells a real change from re-typing the same thing', () => {

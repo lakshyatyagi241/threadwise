@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "渠道",
-      "title": "电子邮件",
+      "title": "客服邮箱",
       "titleAccent": "邮箱",
       "intro": "连接你的 Gmail、Microsoft 365 或任何 IMAP 邮箱。客户邮件会进入团队收件箱，每个邮件线程对应一个会话，你的回复会从同一地址发出。",
       "inbox": "打开收件箱",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "连接邮箱",
-          "body": "使用 Google 或 Microsoft 登录，或填写你的邮件服务器设置，并允许 Threadwise 读取和发送该地址的邮件。"
+          "body": "使用 Google 或 Microsoft 登录，或填写你的邮件服务器设置，并允许 {app} 读取和发送该地址的邮件。"
         },
         "inbox": {
           "title": "邮件进入收件箱",

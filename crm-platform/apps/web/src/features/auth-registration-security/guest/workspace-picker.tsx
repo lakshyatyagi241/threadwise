@@ -80,7 +80,7 @@ export function WorkspacePicker({
                 disabled={pendingSlug !== null}
                 aria-busy={busy}
                 className={cn(
-                  'flex w-full min-w-0 items-center gap-3 rounded-xl border border-(--auth-border,#e5e7eb) bg-white p-3.5 text-start',
+                  'flex w-full min-w-0 items-center gap-3 rounded-xl border border-(--border) bg-(--auth-paper-0) p-3.5 text-start',
                   'transition hover:border-(--auth-link) hover:shadow-sm focus-visible:outline-2 focus-visible:outline-(--auth-link)',
                   'disabled:cursor-not-allowed disabled:opacity-60',
                 )}

@@ -44,6 +44,7 @@ import {
   type ShareBases,
 } from './forms.mapper';
 import { FormsRepository, formScopeCondition, type FormRow } from './forms.repository';
+import { canActOn } from '../../kernel/rbac/scope';
 
 export const FORM_MODULE = 'web_forms';
 const EVENT_MODULE = 'forms';
@@ -139,6 +140,7 @@ export class FormsService {
   async create(input: CreateFormInput): Promise<FormDetail> {
     const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
+      await this.plan.lockForms(tx, ctx.orgId);
       await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
       if (await this.nameInUse(tx, ctx.orgId, input.name)) throw nameTaken();
 
@@ -335,8 +337,10 @@ export class FormsService {
       },
       async (tx, f) => {
         // An archived form freed its place under the plan's cap; coming back takes one again.
-        if (f.status === 'archived')
+        if (f.status === 'archived') {
+          await this.plan.lockForms(tx, ctx.orgId);
           await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
+        }
         if (f.status === 'archived' && (await this.nameInUse(tx, ctx.orgId, f.name, f.id)))
           throw nameTaken();
       },
@@ -359,6 +363,7 @@ export class FormsService {
     return this.db.tx(async (tx) => {
       const source = await this.mustFind(tx, ctx.orgId, uuid, scope);
       if (source.rowVersion !== input.rowVersion) throw AppError.rowVersionConflict('Form');
+      await this.plan.lockForms(tx, ctx.orgId);
       await this.plan.assertCanAddForm(ctx.orgId, await this.repo.countActive(tx, ctx.orgId));
       const name = await this.freeName(tx, ctx.orgId, input.name ?? `Copy of ${source.name}`);
 
@@ -526,12 +531,9 @@ export class FormsService {
   }
 
   private async inScope(tx: Tx, orgId: number, row: FormRow, scope: RecordScope): Promise<boolean> {
-    if (scope === 'all') return true;
-    const actor = RequestContextStore.require().userId;
-    if (!actor) return false;
-    if (row.createdBy === actor) return true;
-    if (scope === 'own' || row.createdBy === null) return false;
-    return this.repo.isTeammate(tx, orgId, actor, row.createdBy);
+    return canActOn(tx, { orgId, userId: RequestContextStore.require().userId }, scope, [
+      row.createdBy,
+    ]);
   }
 
   private async nameInUse(

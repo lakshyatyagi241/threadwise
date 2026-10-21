@@ -28,6 +28,7 @@ const html = (el: ReactElement, locale: Locale = 'en') =>
 const noop = async () => undefined;
 const push = (state: PushUiState, over: Partial<BrowserPush> = {}): BrowserPush => ({
   state,
+  permission: null,
   devices: undefined,
   devicesFailed: false,
   thisDeviceId: null,

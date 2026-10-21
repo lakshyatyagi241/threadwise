@@ -3,7 +3,7 @@
     "back": "Automatisation",
     "title": "Règles d'attribution des enregistrements",
     "intro": "Attribuez automatiquement les nouveaux enregistrements ({contacts}, entreprises et {deals}) au bon responsable commercial.",
-    "crossNote": "Cette page attribue les {contacts}, entreprises et {deals}. Pour attribuer les conversations aux agents, consultez <link>Attribution automatique</link>.",
+    "crossNote": "Cette page attribue les {contacts}, entreprises et {deals}. Pour attribuer les conversations aux agents, consultez <link>Attribution automatique des conversations</link>.",
     "master": {
       "title": "Activer l'attribution des enregistrements",
       "hint": "Désactivée tant que vous ne l'activez pas. Une fois activée, les règles ci-dessous attribuent à un membre de votre équipe tout nouvel enregistrement ({contact}, entreprise ou {deal}) sans responsable.",
@@ -233,7 +233,14 @@
         "nobody": "Correspond, mais personne n'était disponible",
         "broken": "A une condition cassée"
       },
-      "skipped": "Ignorée car personne n'était disponible : {names}"
+      "skipped": "Ignorée car personne n'était disponible : {names}",
+      "excluded": {
+        "label": "Exclus",
+        "no_access": "{name} : ne peut pas ouvrir ce type d'enregistrement",
+        "inactive": "{name} : n'est plus actif",
+        "on_leave": "{name} : en congé aujourd'hui",
+        "offline": "{name} : hors ligne"
+      }
     },
     "log": {
       "title": "Journal d'exécution",
@@ -296,6 +303,7 @@
       "message": "La règle {name} cessera d'attribuer. Les enregistrements qu'elle a déjà attribués gardent leur responsable.",
       "confirm": "Supprimer",
       "cancel": "Annuler"
-    }
+    },
+    "dismiss": "Ignorer"
   }
 }

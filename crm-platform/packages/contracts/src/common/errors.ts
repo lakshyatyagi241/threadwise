@@ -17,6 +17,7 @@ import { INBOX_ERROR_CODES } from '../team-inbox-conversations/errors';
 import { WSP_ERROR_CODES } from '../workspaces-teams-tenancy/errors';
 import { WAP_ERROR_CODES } from '../whatsapp-providers/errors';
 import { WALLET_ERROR_CODES } from '../wallet-message-billing/errors';
+import { ACTIVITY_ERROR_CODES } from '../sales-activities/errors';
 import { CALL_ERROR_CODES } from '../calling-voice/errors';
 import { FLR_ERROR_CODES } from '../flow-runtime-engine/errors';
 import { MKT_ERROR_CODES } from '../marketplace/errors';
@@ -29,7 +30,6 @@ import { WADEV_ERROR_CODES } from '../whatsapp-devices-baileys/errors';
 import { AIAG_ERROR_CODES } from '../ai-agents-training/errors';
 import { GOOGLE_ERROR_CODES } from '../google-account/errors';
 import { ALIB_ERROR_CODES } from '../api-library/errors';
-import { FAQ_ERROR_CODES } from '../faq-knowledge/errors';
 import { LSC_ERROR_CODES } from '../lead-scoring/errors';
 import { CONSENT_ERROR_CODES } from '../contact-consent/errors';
 import { PRIVACY_ERROR_CODES } from '../privacy/errors';
@@ -41,10 +41,11 @@ import { PQL_ERROR_CODES } from '../contacts-attributes-tags/pql-errors';
 import { WFL_ERROR_CODES } from '../forms-links-groups/errors';
 import { AICRM_ERROR_CODES } from '../ai-copilot-lead-finder/errors';
 import { STORAGE_ERROR_CODES } from '../storage-quota/errors';
+import { CONF_ERROR_CODES } from '../meeting-conferencing/errors';
 
 export const ERROR_CODES = {
   ...STORAGE_ERROR_CODES,
-  ...FAQ_ERROR_CODES,
+  ...CONF_ERROR_CODES,
   ...LSC_ERROR_CODES,
   ...GROWTH_ERROR_CODES,
   ...CONSENT_ERROR_CODES,
@@ -71,6 +72,7 @@ export const ERROR_CODES = {
   ...WAP_ERROR_CODES,
   ...WALLET_ERROR_CODES,
   ...CALL_ERROR_CODES,
+  ...ACTIVITY_ERROR_CODES,
   ...FLR_ERROR_CODES,
   ...MKT_ERROR_CODES,
   ...LEAD_ERROR_CODES,
@@ -95,6 +97,8 @@ export const ERROR_CODES = {
   /** The request body is larger than the server accepts (body-parser limit). */
   PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   INTERNAL: 'INTERNAL',
+  /** A dependency (database, Redis, queue) could not be reached or stopped answering: 503, retry shortly. */
+  SERVICE_UNAVAILABLE: 'SERVICE_UNAVAILABLE',
 
   // platform invariants
   ROW_VERSION_CONFLICT: 'ROW_VERSION_CONFLICT',
@@ -193,6 +197,8 @@ export const ERROR_CODES = {
   // plans, entitlements and the plan catalogue (TW-PLAN-005, 017)
   PLAN_FEATURE_LOCKED: 'PLAN_FEATURE_LOCKED',
   PLAN_LIMIT_REACHED: 'PLAN_LIMIT_REACHED',
+  // The plan is "solo": its `teams` cap is 0, so no team can be created (BL-383). A cap above 0 that is full is PLAN_LIMIT_REACHED.
+  PLAN_TEAMS_NOT_INCLUDED: 'PLAN_TEAMS_NOT_INCLUDED',
   PLAN_IN_USE: 'PLAN_IN_USE',
   PLAN_DEFAULT_PROTECTED: 'PLAN_DEFAULT_PROTECTED',
   PLAN_TRIAL_EXPIRED: 'PLAN_TRIAL_EXPIRED',
@@ -487,6 +493,14 @@ export const ERROR_CODES = {
   // tasks (TW-TASK)
   /** The assignee is not an active member of this workspace (Reference silently replaced or dropped it). */
   TASK_ASSIGNEE_INVALID: 'TASK_ASSIGNEE_INVALID',
+  /** The outcome is not one of this workspace's active task outcomes (unknown, or hidden and not already on the task). */
+  TASK_OUTCOME_INVALID: 'TASK_OUTCOME_INVALID',
+  /** Another task outcome already has this name (compared without case). */
+  TASK_OUTCOME_NAME_TAKEN: 'TASK_OUTCOME_NAME_TAKEN',
+  /** Tasks still carry the outcome, so it cannot be deleted (Waboo refused too); hide it instead. */
+  TASK_OUTCOME_IN_USE: 'TASK_OUTCOME_IN_USE',
+  /** A reorder that does not list every outcome exactly once. */
+  TASK_OUTCOME_ORDER_INVALID: 'TASK_OUTCOME_ORDER_INVALID',
 
   // companies (TW-CTP)
   /** The owner is not an active member of this workspace (Reference never let the owner be set at all). */
@@ -714,6 +728,18 @@ export const ERROR_CODES = {
   APPT_ICS_FEED_DUPLICATE: 'APPT_ICS_FEED_DUPLICATE',
   /** The workspace is at its limit of iCal feeds. */
   APPT_ICS_FEED_LIMIT: 'APPT_ICS_FEED_LIMIT',
+  /** The workspace owner has not switched this channel on for appointment messages (BL-350). */
+  APPT_CHANNEL_NOT_ENABLED: 'APPT_CHANNEL_NOT_ENABLED',
+  /** The channel cannot be used yet (the outbound reminder call arrives with the Voice bot). */
+  APPT_CHANNEL_COMING_SOON: 'APPT_CHANNEL_COMING_SOON',
+  /** The chosen sender is not a connected sender of that channel in this workspace. */
+  APPT_CHANNEL_SENDER_INVALID: 'APPT_CHANNEL_SENDER_INVALID',
+  /** A WhatsApp message can be chosen only once Meta has approved it (BL-351). */
+  APPT_TEMPLATE_NOT_APPROVED: 'APPT_TEMPLATE_NOT_APPROVED',
+  /** The message is chosen by a booking type; unchoose it there first. */
+  APPT_TEMPLATE_IN_USE: 'APPT_TEMPLATE_IN_USE',
+  /** The text cannot be sent as that kind of message (a WhatsApp message may only use the placeholders WhatsApp can fill). */
+  APPT_TEMPLATE_INVALID: 'APPT_TEMPLATE_INVALID',
 
   // catalog and products (TW-CAT)
   /** The workspace has no Meta catalog connected (sync, import, commerce settings and sends need one). */

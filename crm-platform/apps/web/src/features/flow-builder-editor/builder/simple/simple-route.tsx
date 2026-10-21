@@ -6,12 +6,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { flowsApi } from '../../api/flows';
 import { FLB_KEYS } from '../../api/hooks';
-import { newHref } from '../../lib/builder-mode';
 import { SimpleScreen } from './simple-screen';
 
 /**
  * `/flows/simple` and `/flows/simple/<id>`: refuses people without the read key (as the Advanced route does) and, when the
- * platform admin switched the Simple builder off, sends the person to the Advanced one.
+ * workspace builds in Advanced, sends the person to the Advanced canvas. A website chat bot stays here whatever the workspace uses.
  */
 export function SimpleRoute({ flowId }: { flowId?: string }) {
   const allowed = useCan('flb.flows.read');
@@ -23,14 +22,25 @@ export function SimpleRoute({ flowId }: { flowId?: string }) {
     queryFn: ({ signal }) => flowsApi.overview(signal),
   });
   const mode = overview.data?.builderMode;
-  // The FAQs of a flow are edited here only: a link to them opens this screen even where the workspace builds in Advanced.
-  const wantsFaqs = !!flowId && params.get('tab') === 'faqs';
-  const redirectToAdvanced = mode === 'advanced' && !wantsFaqs;
+  // A bot (WhatsApp or website chat) stays here whatever the workspace uses; a saved flow's type decides, and a new one is a bot.
+  // Only an Advanced workspace needs the type, and the Simple screen loads the same flow with the same options.
+  const flow = useQuery({
+    queryKey: FLB_KEYS.flow(flowId ?? ''),
+    queryFn: ({ signal }) => flowsApi.get(flowId!, signal),
+    enabled: !!flowId && mode === 'advanced',
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+  const isBot = flowId ? flow.data?.flowType === 'chat' || flow.data?.flowType === 'web' : true;
+  // Until the workspace mode and a saved flow's type are known, wait rather than mount the Simple screen for a flow that may belong on the canvas.
+  const deciding = !!flowId && (overview.isPending || (mode === 'advanced' && flow.isPending));
+  const redirectToAdvanced = mode === 'advanced' && !isBot && !deciding;
   useEffect(() => {
     if (!allowed) router.replace('/inbox');
-    else if (redirectToAdvanced)
-      router.replace(flowId ? `/flows/builder/${flowId}` : newHref('advanced', channel));
-  }, [allowed, redirectToAdvanced, flowId, router, channel]);
-  if (!allowed || redirectToAdvanced) return null;
+    else if (redirectToAdvanced && flowId) router.replace(`/flows/builder/${flowId}`);
+  }, [allowed, redirectToAdvanced, flowId, router]);
+  if (!allowed || redirectToAdvanced || deciding) return null;
   return <SimpleScreen flowId={flowId} channel={channel} />;
 }

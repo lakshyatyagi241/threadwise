@@ -150,11 +150,22 @@ export class AccountService {
     return row;
   }
 
+  /** The platform's default currency (General settings), or null when none is saved. Never throws. */
+  private async platformCurrency(): Promise<string | null> {
+    try {
+      const general = await this.settings.get<{ defaultCurrency?: unknown }>('set.general');
+      const code = general?.defaultCurrency;
+      return typeof code === 'string' && /^[A-Za-z]{3}$/.test(code) ? code.toUpperCase() : null;
+    } catch {
+      return null;
+    }
+  }
+
   // --- session probe -------------------------------------------------------------------------------------------
 
   async sessionInfo(): Promise<SessionResponse> {
     const { orgId, userId, sessionId } = this.actor();
-    const [p, state, grants, rolesRes, personaView] = await Promise.all([
+    const [p, state, grants, rolesRes, personaView, platformCurrency] = await Promise.all([
       this.loadProfile(orgId, userId),
       this.gates.stateFor(orgId, userId),
       this.rbac.grantsForUser(orgId, userId),
@@ -167,9 +178,10 @@ export class AccountService {
       ),
       // Never throws: an unknown persona is `null`, and nothing is hidden on a guess.
       this.persona.resolve(orgId),
+      this.platformCurrency(),
     ]);
 
-    const permissions: Record<string, 'all' | 'team' | 'own'> = {};
+    const permissions: Record<string, 'all' | 'team' | 'team_and_below' | 'own'> = {};
     for (const [key, grant] of grants) {
       if (grant.effect === 'allow') permissions[key] = grant.scope;
     }
@@ -201,7 +213,8 @@ export class AccountService {
         name: p.org_name,
         plan: p.org_plan,
         timezone: settings.timezone ?? null,
-        currency: settings.currency ?? null,
+        // A workspace that never chose a currency is billed in the platform's, so every screen shows that one (never a made-up $).
+        currency: settings.currency ?? platformCurrency,
         messageFooter: settings.messageFooter ?? null,
         onboardingStep: settings.onboardingStep ?? 'done',
         ...(personaView ? { persona: personaView } : {}),

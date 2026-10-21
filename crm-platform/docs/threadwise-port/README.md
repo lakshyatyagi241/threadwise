@@ -150,6 +150,7 @@ Numbers are from the 26 finished domains only (42% of domains by count); the rem
 | D6  | Which Next.js app moves into `apps/web`, Next version, i18n library                           | Needed before the web skeleton                                                                                                                       |
 | D7  | GitHub settings: CODEOWNERS enforcement, up-to-date branches, merge queue                     | Turn on                                                                                                                                              |
 | E   | Channel strategy: keep the unofficial WhatsApp (Baileys/QR) engine or Cloud API only          | Reference's own docs list ban risk; needs a decision either way                                                                                      |
+| F   | Campaign follow-ups: does a "replied" step count a reply on any channel, or only the WhatsApp conversation of the campaign's number (TW-CAMP-036) | **Decided: WhatsApp Cloud API number only.** Enforced in `wizard-follow-up.service.ts` (`REPLY_ON_SENDER_NUMBER`), e2e test added |
 
 ## Next session, in order
 

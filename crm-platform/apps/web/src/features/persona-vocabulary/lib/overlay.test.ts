@@ -54,6 +54,10 @@ describe('the bindings registry', () => {
       'contact-record',
       'appointments',
       'reminders',
+      'booking-page-appearance',
+      'meeting-conferencing',
+      'teams',
+      'handoff',
       'deals',
     ]);
   });

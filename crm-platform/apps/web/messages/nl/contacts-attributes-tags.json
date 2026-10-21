@@ -130,6 +130,7 @@
       "colLeadScore": "Leadscore",
       "colLanguage": "Taal",
       "colCreatedOn": "Aangemaakt op",
+      "colModifiedOn": "Gewijzigd op",
       "pagination": "Paginering",
       "prevPage": "Vorige pagina",
       "nextPage": "Volgende pagina",
@@ -282,6 +283,7 @@
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Aangemaakt",
+      "shortModified": "Gewijzigd",
       "firstRun": {
         "title": "Voeg je eerste contacten toe",
         "message": "Haal de mensen binnen met wie je praat. Contacten gebruik je voor berichten, campagnes, taken en deals.",
@@ -290,7 +292,11 @@
         "importBody": "Upload een spreadsheet en koppel de kolommen aan contactvelden.",
         "connect": "WhatsApp koppelen",
         "connectBody": "Koppel je nummer zodat contacten kunnen antwoorden en je ze kunt berichten."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filteren op team",
+      "allTeams": "Alle teams",
+      "teamFormer": "Voormalig team"
     },
     "bulk": {
       "label": "Acties voor de geselecteerde contacten",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Met je toegang kun je dit contact niet aan die persoon toewijzen.",
       "company": "Bedrijf",
       "companyHint": "Plaatst dit contact onder een organisatie.",
-      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg."
+      "companyRefused": "U kunt dat bedrijf niet gebruiken. Kies een ander bedrijf of maak het veld leeg.",
+      "searchOptions": "Opties zoeken",
+      "searchOptionsFor": "Zoeken in de opties van {field}",
+      "noOptionsFound": "Geen optie komt overeen met je zoekopdracht."
     },
     "tags": {
       "title": "Tags",
@@ -1225,7 +1234,8 @@
             "duplicate": "Twee opties hebben dezelfde naam."
           },
           "condition": "Kies de eigenschap en de waarde voor elke voorwaarde."
-        }
+        },
+        "optionsLazy": "Deze eigenschap heeft {count, plural, one {# optie} other {# opties}}, te veel om hier te bewerken. Ze blijven ongewijzigd; de overige instellingen kun je wel aanpassen."
       },
       "builtinCard": {
         "title": "Ingebouwde eigenschappen",

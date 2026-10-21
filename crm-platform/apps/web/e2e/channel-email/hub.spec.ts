@@ -49,7 +49,7 @@ test.describe('Email hub', () => {
   });
 
   test('shows the hub with the Connect Gmail card and the usage meter', async ({ page }) => {
-    await expect(page.getByRole('heading', { level: 1 })).toContainText('Email');
+    await expect(page.getByRole('heading', { level: 1 })).toContainText('Support email');
     await expect(page.getByTestId('email-provider-google')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Connect Gmail' })).toBeVisible();
     await expect(page.getByTestId('email-usage')).toContainText(/mailbox/);

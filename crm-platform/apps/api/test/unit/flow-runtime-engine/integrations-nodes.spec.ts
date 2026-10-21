@@ -133,6 +133,7 @@ const failingGoogle = (): GoogleWorkspacePort => {
     readSheetRows: no,
     generateDoc: no,
     formResponderUrl: no,
+    formResponses: no,
     createMeet: no,
     listFiles: no,
   };
@@ -533,6 +534,8 @@ function fakeGoogle() {
     formResponderUrl: async (_o, id) => ({
       url: `https://docs.google.com/forms/d/e/${id}/viewform`,
     }),
+    // the Google Form node polls for responses (google-form-poll.service); these specs do not exercise it
+    formResponses: async () => [],
     createMeet: async (_o, r) => {
       log.meets.push(r);
       return { meetUrl: 'https://meet.google.com/abc-defg-hij', eventId: 'ev1' };

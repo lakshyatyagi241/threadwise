@@ -46,7 +46,9 @@
       "catchUp": "Güncelle",
       "migrateHint": "Taşıma tam bir provayla başlar ve prova temiz değilse hiçbir şey yüklemez. Ayrı bir deneme çalıştırması isteğe bağlıdır.",
       "queued": "Çalıştırma kuyruğa alındı.",
-      "scheduled": "Çalıştırma zamanlandı."
+      "scheduled": "Çalıştırma zamanlandı.",
+      "skipWhatsapp": "WhatsApp numarasını taşıma (test için)",
+      "skipWhatsappHint": "Çalışma alanı tamamen taşınır, ancak WhatsApp numarası içe aktarılmaz ve bağlanmaz."
     },
     "confirm": {
       "title": "{org} taşı",
@@ -76,7 +78,9 @@
       "migrateAll": "Tümünü taşı",
       "migrateHint": "Her kuruluş kendi tam provasıyla başlar ve prova temiz değilse hiçbir şey yüklemez. Ayrı bir deneme çalıştırması isteğe bağlıdır.",
       "queued": "Toplu iş kuyruğa alındı.",
-      "scheduled": "Toplu iş zamanlandı."
+      "scheduled": "Toplu iş zamanlandı.",
+      "skipWhatsapp": "WhatsApp numaralarını taşıma (test için)",
+      "skipWhatsappHint": "Bu çalışma alanlarının hiçbirinde WhatsApp numarası içe aktarılmaz veya bağlanmaz."
     },
     "bulkConfirm": {
       "title": "{count} kuruluşu taşı",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Deneme çalıştırması",
       "load": "Taşıma",
-      "catchup": "Güncelleme"
+      "catchup": "Güncelleme",
+      "skipWhatsapp": "WhatsApp numarası yok"
     },
     "status": {
       "queued": "Kuyrukta",
@@ -196,7 +201,8 @@
       "core-load": "Çekirdek yükleme",
       "flow-state": "Akış durumu",
       "reconcile": "Mutabakat",
-      "report": "Rapor"
+      "report": "Rapor",
+      "whatsapp": "WhatsApp numarası"
     },
     "stepStatus": {
       "running": "Çalışıyor",

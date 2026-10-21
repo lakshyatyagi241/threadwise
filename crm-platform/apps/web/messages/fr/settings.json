@@ -101,7 +101,7 @@
         "keywords": "SMS, identifiant d’expéditeur, dlt, twilio, mobile"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail d'assistance",
         "description": "Connectez des boîtes Gmail ou Google Workspace pour que votre équipe lise et réponde aux e-mails des clients dans la boîte de réception partagée.",
         "keywords": "boîte e-mail, gmail, google workspace, boîte de réception partagée, e-mail de support, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Équipes",
-        "description": "Regroupez les personnes en équipes pour le routage et les rapports.",
-        "keywords": "groupes, services, attribution, routage"
+        "description": "Regroupez des personnes pour les conversations, les attributions et les rapports.",
+        "keywords": "groupes, départements, responsables, hiérarchie, attribution, routage"
       },
       "ai-keys": {
         "label": "Clés de fournisseurs d’IA",
@@ -244,6 +244,11 @@
         "label": "API REST",
         "description": "Clés et documentation pour développer à partir du produit.",
         "keywords": "clés api, développeurs, jetons, docs, openapi"
+      },
+      "api-keys": {
+        "label": "Clés d'API",
+        "description": "Créez et gérez les clés que d'autres systèmes utilisent pour appeler l'API.",
+        "keywords": "clé api, jeton, secret, développeurs, accès, intégration"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -301,7 +306,7 @@
         "keywords": "geta, publier, bot, console, mise en ligne, chatbot"
       },
       "auto-assignment": {
-        "label": "Attribution automatique",
+        "label": "Attribution automatique des conversations",
         "description": "Attribuez automatiquement les nouvelles conversations au bon agent, à tour de rôle ou selon des règles.",
         "keywords": "routage, tourniquet, attribuer, agents, règles de boîte, répartir, propriétaire"
       },
@@ -389,6 +394,11 @@
         "label": "Leads en double",
         "description": "Choisissez si un nouveau lead qui correspond à un contact est fusionné avec lui ou devient un nouveau contact.",
         "keywords": "doublon, fusionner, lead, même téléphone, même e-mail, nouveau contact, source de leads"
+      },
+      "sales-activities": {
+        "label": "Activités commerciales",
+        "description": "Gérez les tâches, rendez-vous, appels et vos propres activités : ce que chacune peut faire, ses types de tâche et ses résultats.",
+        "keywords": "activités, types de tâche, résultats, résultat de rendez-vous, résultat d’appel, relance, pointage, activité personnalisée, calendrier, terminer"
       }
     },
     "backToMarketplace": "Retour au Marketplace"

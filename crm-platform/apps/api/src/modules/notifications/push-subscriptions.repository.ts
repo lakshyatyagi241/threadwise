@@ -15,12 +15,18 @@ export interface PushDeviceRow {
 /** What the sender needs. SECRETS: the endpoint and keys are read only to send, and never logged or returned. */
 export interface PushTarget {
   id: number;
+  orgId: number;
+  userId: number;
   uuid: string;
   endpoint: string;
   p256dh: string;
   auth: string;
   failureCount: number;
 }
+
+/** What the sealed auth secret of a device is bound to (encryption audit E4): the person it belongs to. */
+export const pushAuthContext = (orgId: number, userId: number): string =>
+  `push_subscriptions.auth:${orgId}:${userId}`;
 
 /** After this many failed pushes in a row (that are not "gone") a device is given up on. A success resets the count. */
 export const PUSH_MAX_FAILURES = 10;
@@ -195,6 +201,8 @@ export class PushSubscriptionsRepository {
     const rows = await tx
       .select({
         id: pushSubscriptions.id,
+        orgId: pushSubscriptions.orgId,
+        userId: pushSubscriptions.userId,
         uuid: pushSubscriptions.uuid,
         endpoint: pushSubscriptions.endpoint,
         p256dh: pushSubscriptions.p256dh,
@@ -211,7 +219,12 @@ export class PushSubscriptionsRepository {
         ),
       )
       .orderBy(asc(pushSubscriptions.id));
-    return rows.map((r) => ({ ...r, id: Number(r.id) }));
+    return rows.map((r) => ({
+      ...r,
+      id: Number(r.id),
+      orgId: Number(r.orgId),
+      userId: Number(r.userId),
+    }));
   }
 
   /** The push service accepted the push. */

@@ -35,6 +35,7 @@ function setup(status: string) {
     {} as never,
     {} as never,
     { enqueueOutbound, retryOutbound } as never,
+    { previewLinker: async () => async () => null } as never,
   );
   const run = <T>(fn: () => Promise<T>) => RequestContextStore.run(ctx, fn);
   return { service, run, enqueueOutbound, retryOutbound };

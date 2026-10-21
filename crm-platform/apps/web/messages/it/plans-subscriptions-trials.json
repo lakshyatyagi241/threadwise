@@ -47,7 +47,8 @@
       "sms_monthly": "SMS al mese",
       "email_mailboxes": "Caselle e-mail",
       "email_monthly": "E-mail al mese",
-      "storage_gb": "Archiviazione (GB)"
+      "storage_gb": "Archiviazione (GB)",
+      "teams": "Team"
     },
     "features": {
       "automation": "Automazione",
@@ -85,7 +86,10 @@
       "personal_history_full": "Importazione cronologia completa (WhatsApp personale)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Lead scoring con IA",
-      "record_assignment": "Regole di assegnazione dei record"
+      "record_assignment": "Regole di assegnazione dei record",
+      "team_hierarchy": "Gerarchia dei team e manager",
+      "custom_roles": "Ruoli personalizzati e ambiti",
+      "inbox_assignment_sticky": "Proprietario del contatto e agente persistente"
     },
     "limitGroups": {
       "messaging": "Messaggistica",
@@ -139,7 +143,8 @@
       "sms_monthly": "Messaggi SMS in uscita inviati nel mese di calendario. 0 = illimitato.",
       "email_mailboxes": "Caselle Gmail collegate (una scollegata libera il suo posto). 0 = illimitato.",
       "email_monthly": "E-mail inviate nel mese di calendario, risposte ed e-mail di campagna insieme. 0 = illimitato.",
-      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla."
+      "storage_gb": "Spazio di archiviazione che l'area di lavoro può occupare, in GB (registrazioni delle chiamate, media della chat, allegati e-mail e file). 0 = illimitato. Per ora solo misurato: non viene ancora bloccato nulla.",
+      "teams": "Quanti team può avere l'area di lavoro. Vuoto è illimitato, 0 è singolo (nessun team). I team esistenti non vengono mai rimossi."
     },
     "planAddons": {
       "title": "Add-on disponibili nel tuo piano",
@@ -304,7 +309,10 @@
       "showUnlimited": "{count, plural, one {Mostra # limite illimitato} other {Mostra # limiti illimitati}}",
       "hideUnlimited": "Nascondi i limiti illimitati",
       "groupCount": "{count, plural, one {# limite} other {# limiti}}",
-      "groupHidden": "{count, plural, one {# altro limite è illimitato e nascosto.} other {# altri limiti sono illimitati e nascosti.}}"
+      "groupHidden": "{count, plural, one {# altro limite è illimitato e nascosto.} other {# altri limiti sono illimitati e nascosti.}}",
+      "activatedOn": "Attivato il {date}",
+      "previousBilling": "Data di fatturazione precedente: {date}",
+      "subscriptionId": "ID abbonamento: {id}"
     },
     "operator": {
       "title": "Piani del workspace",

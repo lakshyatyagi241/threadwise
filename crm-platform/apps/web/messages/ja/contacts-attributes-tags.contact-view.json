@@ -44,6 +44,11 @@
         "editJobTitle": "役職を編集",
         "jobTitleConflict": "他のユーザーが先にこの連絡先を変更しました。再読み込みしたので、もう一度お試しください。",
         "jobTitleFailed": "役職を保存できませんでした。もう一度お試しください。",
+        "jobTitleRequired": "このワークスペースでは役職が必須のため、空にできません。",
+        "jobTitleOtherRequired": "この連絡先の他の必須プロパティが空です。「連絡先を編集」を開いて入力してください。",
+        "jobTitleNotEditable": "このワークスペースでは役職が読み取り専用または非表示のため、ここでは編集できません。",
+        "jobTitleForbidden": "この連絡先を編集する権限がありません。",
+        "jobTitleGone": "この連絡先はもう利用できません。削除されたか、他の担当者に割り当てられています。",
         "owner": "担当者"
       },
       "social": {
@@ -131,7 +136,11 @@
         "previousStage": "前のステージ",
         "previousStageSince": "前のステージだった日時",
         "lostReason": "失注理由",
-        "updatedAt": "最終更新"
+        "updatedAt": "最終更新",
+        "leadScore": "リードスコア",
+        "originalStage": "元のライフサイクルステージ",
+        "createdBy": "作成者",
+        "updatedBy": "更新者"
       },
       "company": {
         "title": "会社",

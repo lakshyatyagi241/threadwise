@@ -190,6 +190,16 @@ export const analyticsResponseSchema = z.object({
   ),
   /** 7 rows (Sunday = 0) of 24 hourly message counts, both directions, in the workspace zone. */
   heatmap: z.array(z.array(z.number().int()).length(24)).length(7),
+  /** Conversations with activity in the window, by state: the old analytics' "Conversation Status" tiles. */
+  conversations: z
+    .object({
+      total: z.number().int(),
+      open: z.number().int(),
+      closed: z.number().int(),
+      assigned: z.number().int(),
+      unassigned: z.number().int(),
+    })
+    .optional(),
 });
 export type AnalyticsResponse = z.infer<typeof analyticsResponseSchema>;
 export * from './health';

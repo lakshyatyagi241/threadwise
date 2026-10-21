@@ -2,7 +2,11 @@ import { HttpStatus, Injectable, Logger } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
+  PACK_GRANTABLE_FEATURES,
+  PACK_GRANTABLE_LIMITS,
+  PLAN_UNLIMITED_FROM,
   PLAN_UPGRADE_PATH,
+  limitZeroIsNone,
   storedFeature,
   storedLimit,
   type PlanFeatureKey,
@@ -53,6 +57,12 @@ export interface Entitlements {
    * workspace (see app-grants.ts). Not part of `planFeatures`: this only explains why a gate is closed (install the app, not upgrade).
    */
   appWithheld: Record<string, WithheldAppFeature>;
+  /**
+   * What the workspace's live plain add-on packs add to the caps in PACK_GRANTABLE_LIMITS (the "Teams and permissions" add-on raises `teams`):
+   * the sum of their numbers, or -1 when any pack grants unlimited. Absent = no pack. The features such a pack grants are already in
+   * `planFeatures`.
+   */
+  packLimits?: Record<string, number>;
 }
 
 /**
@@ -84,6 +94,8 @@ interface EntitlementRow {
   autopay: boolean | null;
   /** The live app add-ons the workspace owns, each with the state of its installation (see app-grants.ts). */
   app_packs: Array<{ slug: string; features: unknown; install: AppPack['install'] }> | null;
+  /** The live plain add-on packs (no Marketplace app): only the keys in PACK_GRANTABLE_* are read from them. */
+  generic_packs: Array<{ features: unknown; limits: unknown }> | null;
 }
 
 /**
@@ -166,7 +178,11 @@ export class PlanEntitlementService {
                   JOIN plans ap ON ap.id = wa.package_id AND ap.marketplace_app_id IS NOT NULL
                   JOIN marketplace_apps ma ON ma.id = ap.marketplace_app_id
                   LEFT JOIN workspace_app_installations wi ON wi.org_id = wa.org_id AND wi.app_id = ap.marketplace_app_id
-                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS app_packs
+                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS app_packs,
+               (SELECT coalesce(jsonb_agg(jsonb_build_object('features', ap.features, 'limits', ap.limits)), '[]'::jsonb)
+                  FROM workspace_addons wa
+                  JOIN plans ap ON ap.id = wa.package_id AND ap.kind = 'addon' AND ap.marketplace_app_id IS NULL
+                 WHERE wa.org_id = o.id AND wa.status = 'active' AND (wa.ends_at IS NULL OR wa.ends_at > now())) AS generic_packs
         FROM organizations o
         LEFT JOIN org_plan_state s ON s.org_id = o.id
         LEFT JOIN plans p ON p.slug = o.plan AND p.kind = 'plan'
@@ -225,6 +241,12 @@ export class PlanEntitlementService {
     }));
     const { granted, withheld } = splitAppPacks(packs);
     if (Object.keys(granted).length > 0) planFeatures = { ...planFeatures, ...granted };
+    // A plain add-on pack (the "Teams and permissions" add-on) grants only the few keys PACK_GRANTABLE_* names; every other key of such a pack
+    // is still resolved by the add-on registry's own resolver, as before.
+    const packed = packGrants(row.generic_packs ?? []);
+    if (packed.features.length > 0) {
+      planFeatures = { ...planFeatures, ...Object.fromEntries(packed.features.map((k) => [k, true])) };
+    }
     return {
       orgId,
       planSlug: row.plan_slug,
@@ -245,6 +267,7 @@ export class PlanEntitlementService {
         appIds: new Set(visibleIds),
       },
       appWithheld: withheld,
+      ...(Object.keys(packed.limits).length > 0 ? { packLimits: packed.limits } : {}),
     };
   }
 
@@ -306,6 +329,17 @@ export class PlanEntitlementService {
   async assertFeature(orgId: number, key: PlanFeatureKey, message?: string): Promise<void> {
     if (await this.featureEnabled(orgId, key)) return;
     throw featureLocked(await this.forOrg(orgId), key, message);
+  }
+
+  /**
+   * Takes the per-organization, per-limit lock for the rest of the caller's transaction. Count-then-insert is two statements: without
+   * this, N requests at the cap minus one all count the same rows and all insert (QA Sheet3 #15, CC-LIM). Call it first, before the
+   * count that feeds `assertWithinLimit`, in the same transaction as the insert.
+   */
+  async lockLimit(tx: Tx, orgId: number, key: PlanLimitKey): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`plan-limit:${orgId}:${key}`}, 0))`,
+    );
   }
 
   /**
@@ -379,12 +413,51 @@ export function resolveFeature(e: Entitlements, key: PlanFeatureKey): boolean {
 }
 
 export function resolveLimit(e: Entitlements, key: PlanLimitKey): number {
-  if (e.platformOwned) return 0;
+  // A zero-is-none cap (`teams`) returns PLAN_UNLIMITED_FROM for "no cap" and keeps 0 for "none allowed"; every other cap returns 0 for unlimited.
+  const none = limitZeroIsNone(key);
+  const unlimited = none ? PLAN_UNLIMITED_FROM : 0;
+  if (e.platformOwned) return unlimited;
   const override = e.overrides.limits?.[key];
-  if (typeof override === 'number' && Number.isInteger(override))
+  if (typeof override === 'number' && Number.isInteger(override)) {
+    if (none) return override < 0 ? PLAN_UNLIMITED_FROM : override;
     return override > 0 ? override : 0;
-  if (!e.planKnown) return 0;
-  return storedLimit(e.planLimits, key);
+  }
+  if (!e.planKnown) return unlimited;
+  const base = storedLimit(e.planLimits, key);
+  return withPackLimit(base, key, e.packLimits?.[key]);
+}
+
+/**
+ * A cap plus what the live add-on packs add to it. Unlimited absorbs (an unlimited plan stays unlimited); a pack granting -1 makes it
+ * unlimited. For a zero-is-none cap a base of 0 is a real cap that the pack raises (solo + 5 = 5 teams).
+ */
+export function withPackLimit(base: number, key: string, delta: number | undefined): number {
+  if (delta === undefined || !PACK_GRANTABLE_LIMITS.includes(key)) return base;
+  const none = limitZeroIsNone(key);
+  const unlimited = none ? PLAN_UNLIMITED_FROM : 0;
+  if (none ? base >= PLAN_UNLIMITED_FROM : base === 0) return base; // the plan is already unlimited
+  if (delta < 0) return unlimited;
+  return base + delta;
+}
+
+/** The plain add-on packs' grants, narrowed to the keys a pack may grant in the one resolver (PACK_GRANTABLE_*). */
+export function packGrants(packs: ReadonlyArray<{ features: unknown; limits: unknown }>): {
+  features: string[];
+  limits: Record<string, number>;
+} {
+  const features = new Set<string>();
+  const limits: Record<string, number> = {};
+  for (const p of packs) {
+    const f = p.features && typeof p.features === 'object' ? (p.features as Record<string, unknown>) : {};
+    for (const k of PACK_GRANTABLE_FEATURES) if (f[k] === true) features.add(k);
+    const l = p.limits && typeof p.limits === 'object' ? (p.limits as Record<string, unknown>) : {};
+    for (const k of PACK_GRANTABLE_LIMITS) {
+      const v = l[k];
+      if (typeof v !== 'number' || !Number.isInteger(v) || v === 0) continue;
+      limits[k] = v < 0 || limits[k] === -1 ? -1 : (limits[k] ?? 0) + v;
+    }
+  }
+  return { features: [...features], limits };
 }
 
 /** Whether the plan makes the paid Marketplace app visible to the workspace (visible is not usable: the workspace must still buy it). */

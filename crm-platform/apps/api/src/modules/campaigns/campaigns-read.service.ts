@@ -21,6 +21,7 @@ import {
 import { RequestContextStore } from '../../common/context/request-context';
 import { CryptoService } from '../../common/crypto/crypto.service';
 import { AppError } from '../../common/errors/app-error';
+import { loadWorkspaceCalendar } from '../../common/workspace-calendar';
 import { DatabaseService } from '../../infra/db/database.service';
 import {
   BroadcastsComposeService,
@@ -32,7 +33,9 @@ import {
 } from '../broadcasts';
 import {
   buttonRows,
+  createdWindow,
   engagement,
+  inCreatedWindow,
   pct,
   reconciledStatus,
   utcToLocalDateTime,
@@ -43,7 +46,6 @@ import { CampaignsRepository, type CampaignRow } from './campaigns.repository';
 import { WizardReadService } from './wizard/wizard-read.service';
 
 const DAY = 86_400_000;
-const RANGE_DAYS = { '7d': 7, '30d': 30, '90d': 90 } as const;
 
 /** A column that holds encrypted text, read back as plain text (null stays null; unreadable text is shown as empty). */
 function open(crypto: CryptoService, v: string | null): string | null {
@@ -82,6 +84,8 @@ export class CampaignsReadService {
       for (const c of all) await this.reconcile(tx, orgId, c);
 
       const now = Date.now();
+      const { timezone } = await loadWorkspaceCalendar(tx, orgId, new Date(now));
+      const span = createdWindow(q, now, timezone);
       const sevenDays = now - 7 * DAY;
       let rows = all;
       if (q.status === 'recently_created')
@@ -92,10 +96,7 @@ export class CampaignsReadService {
       if (q.type === 'text')
         rows = rows.filter((c) => (TEXT_FILTER_TYPES as readonly string[]).includes(c.type));
       else if (q.type !== 'all') rows = rows.filter((c) => c.type === q.type);
-      if (q.range !== 'all') {
-        const cutoff = now - RANGE_DAYS[q.range] * DAY;
-        rows = rows.filter((c) => c.createdAt.getTime() >= cutoff);
-      }
+      rows = rows.filter((c) => inCreatedWindow(c.createdAt.getTime(), span));
       if (q.q !== '') {
         const needle = q.q.toLowerCase();
         rows = rows.filter((c) => c.name.toLowerCase().includes(needle));
@@ -105,8 +106,7 @@ export class CampaignsReadService {
       const count = (status: string) => all.filter((c) => c.status === status).length;
       // The tiles above the list follow the date filter (campaigns created in the window), not the status, type or search: they
       // describe the period, while the list below narrows it further. Reference left them on all time whatever the period.
-      const cutoff = q.range === 'all' ? null : now - RANGE_DAYS[q.range] * DAY;
-      const period = cutoff === null ? all : all.filter((c) => c.createdAt.getTime() >= cutoff);
+      const period = all.filter((c) => inCreatedWindow(c.createdAt.getTime(), span));
       const inPeriod = (status: string) => period.filter((c) => c.status === status).length;
       const sentTotal = period.reduce((n, c) => n + c.counts.sent, 0);
       const deliveredTotal = period.reduce((n, c) => n + c.counts.delivered, 0);
@@ -266,7 +266,7 @@ export class CampaignsReadService {
         campaign,
         senders: await this.shares.breakdown(tx, orgId, [c.id]),
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),
@@ -352,7 +352,7 @@ export class CampaignsReadService {
         held: await this.repo.heldCount(tx, orgId, c.id),
         processing: held.pending ?? 0,
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),
@@ -394,7 +394,7 @@ export class CampaignsReadService {
         })),
         counts: n,
         rates: {
-          delivered: pct(n.delivered, n.recipients),
+          delivered: pct(n.delivered, n.sent),
           read: pct(n.read, n.delivered),
           replies: pct(n.replies, n.recipients),
           clicks: pct(n.clicks, n.recipients),

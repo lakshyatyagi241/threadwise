@@ -20,6 +20,12 @@ import {
   useWorkspaceZone,
   DueText,
 } from './parts';
+import {
+  OptionSelect,
+  useActivitySettings,
+  useCompletionOffText,
+} from '@/features/sales-activities';
+import { CompleteWithOutcome, OutcomeSelect } from './outcome-select';
 import { RecordPicker } from './record-picker';
 import { useTaskActions } from './use-task-actions';
 
@@ -76,6 +82,8 @@ function DrawerBody({
   const [busy, setBusy] = useState(false);
   const [titleError, setTitleError] = useState(false);
   const [dueError, setDueError] = useState(false);
+  const completeOff = useCompletionOffText();
+  const taskSettings = useActivitySettings('task');
   const done = task.status === 'done';
   const people = members.data ?? [];
 
@@ -149,16 +157,26 @@ function DrawerBody({
             {done ? t('statusDone') : t('statusOpen')}
           </span>
           <PriorityChip priority={task.priority} />
+          {task.outcome && (
+            <span className="inline-flex items-center rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+              {t('outcomeChip', { name: task.outcome.name })}
+            </span>
+          )}
           <DueText task={task} now={now} zone={zone} className="text-sm" />
         </div>
         {canUpdate && (
           <div className="flex flex-wrap items-center gap-2">
             <Button
               variant={done ? 'secondary' : 'brand'}
+              disabled={!done && !taskSettings.allowComplete}
+              title={!done && !taskSettings.allowComplete ? completeOff : undefined}
               onClick={() => void actions.toggle(task)}
             >
               <CheckIcon /> {done ? t('reopen') : t('complete')}
             </Button>
+            {!done && taskSettings.allowComplete && (
+              <CompleteWithOutcome onComplete={(id) => void actions.toggle(task, id)} />
+            )}
             <Button variant="secondary" onClick={() => onEdit(task)}>
               <PencilIcon /> {t('edit')}
             </Button>
@@ -215,6 +233,23 @@ function DrawerBody({
                 ))}
               </Select>
             </Field>
+            <OutcomeSelect
+              id="task-drawer-outcome"
+              label={tf('outcome')}
+              disabled={!canUpdate}
+              value={task.outcome?.id ?? ''}
+              current={task.outcome}
+              onChange={(v) => void actions.save(task, { outcomeId: v || null })}
+            />
+            <OptionSelect
+              activity="task"
+              kind="type"
+              id="task-drawer-type"
+              disabled={!canUpdate}
+              value={task.taskType?.id ?? ''}
+              current={task.taskType}
+              onChange={(id) => void actions.save(task, { taskTypeId: id || null })}
+            />
             <Field
               label={tf('due')}
               htmlFor="task-drawer-due"

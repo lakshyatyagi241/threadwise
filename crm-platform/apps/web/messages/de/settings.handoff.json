@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Übergabe und Zuweisung",
+        "description": "Lege fest, wie eine Unterhaltung nach der Anforderung durch einen Bot zu einem Mitarbeiter gelangt und wie Kontaktbesitzer und Chat-Besitzer zusammenarbeiten.",
+        "keywords": "Übergabe, übergeben, Warteschlange, übernehmen, Mensch, Agent, zuweisen, Zuweisung, Kontaktbesitzer, Chat-Besitzer, fester Agent, Kontinuität, an Bot zurückgeben"
+      }
+    }
+  }
+}

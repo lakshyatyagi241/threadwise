@@ -81,6 +81,7 @@ const row = (over: Partial<RowView> = {}): RowView => ({
   attributes: [{ key: 'order_id', label: 'Order Id', text: 'A12', full: 'Order Id: A12' }],
   custom: { order_id: 'A12' },
   createdAt: '2026-03-05T12:00:00.000Z',
+  updatedAt: '2026-03-05T12:00:00.000Z',
   leadScore: null,
   leadScoreSource: null,
   leadScoredAt: null,
@@ -136,7 +137,7 @@ describe('ContactsTable', () => {
       'English',
       'Order Id',
       'A12',
-      '05 Mar 2026, 12:00 PM',
+      'Mar 5, 2026, 12:00 PM',
       'VIP',
       'Hot lead',
       'aarav@example.com',
@@ -417,7 +418,7 @@ describe('ContactsTable', () => {
     const cols = visibleColumns(['name', 'source', 'lastActivity'], ATTRS);
     const out = table([row()], {}, 'none', cols);
     expect(out).toContain('Meta lead ads');
-    expect(out).toContain('06 Mar 2026, 08:30 AM');
+    expect(out).toContain('Mar 6, 2026, 8:30 AM');
     const empty = table([row({ source: '', lastActivityAt: null })], {}, 'none', cols);
     expect(empty.match(/>-<\/span>/g)?.length).toBeGreaterThanOrEqual(2);
   });
@@ -730,6 +731,7 @@ describe('ContactsToolbar', () => {
               segment: '',
               tag: '',
               owner: '',
+              team: '',
               lifecycleStage: '',
               status: '',
               minor: '',
@@ -748,6 +750,7 @@ describe('ContactsToolbar', () => {
             canCreateSegment: false,
             tags: [],
             owners: OWNERS,
+            teams: [],
             meId: OWNERS[0]!.id,
             stages: [],
             statuses: [],

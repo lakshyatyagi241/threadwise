@@ -44,7 +44,8 @@
       "notDeletable": "Ini tidak dapat dihapus selama masih ada pemesanan mendatang.",
       "notDrifted": "Pemesanan ini sudah sesuai dengan acaranya di Google. Data telah dimuat ulang.",
       "calendarNotConnected": "Google Calendar belum terhubung. Hubungkan kembali di halaman akun Google, lalu coba lagi.",
-      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi."
+      "calendarFailed": "Google tidak merespons atau menolak perubahan ini. Coba lagi sebentar lagi.",
+      "whatsappNotConnected": "Hubungkan dulu nomor WhatsApp Cloud API di Pengaturan: pesan WhatsApp diajukan melalui nomor tersebut."
     },
     "picker": {
       "timeZone": "Zona waktu",
@@ -1306,7 +1307,8 @@
       },
       "kind": {
         "before": "sebelum janji temu dimulai",
-        "after": "setelah janji temu selesai"
+        "after": "setelah janji temu selesai",
+        "event": "saat sesuatu terjadi"
       },
       "editMessage": "Pesan dan saluran",
       "hideMessage": "Sembunyikan",
@@ -1316,7 +1318,6 @@
       "channelsHint": "Saluran pertama yang bisa mengirim akan dipakai, saluran berikutnya sebagai cadangan. Tidak ada yang menerima pengingat yang sama dua kali.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Email"
       },
       "moveUp": "Coba {channel} lebih awal",
@@ -1375,7 +1376,8 @@
         "bodyTooLong": "Pesan terlalu panjang.",
         "subjectTooLong": "Subjek terlalu panjang.",
         "labelTooLong": "Label terlalu panjang.",
-        "tooMany": "Maksimal 8 pengingat dan tindak lanjut untuk satu jenis booking."
+        "tooMany": "Paling banyak {max} pengingat dan tindak lanjut dengan waktu untuk satu tipe pemesanan.",
+        "fallbackInvalid": "Masukkan bilangan bulat menit dari {min} hingga {maxMinutes}, atau biarkan kosong."
       },
       "noneOn": "Tidak ada pengingat atau tindak lanjut yang aktif untuk jenis booking ini.",
       "when": {
@@ -1422,7 +1424,18 @@
         "provider_error": "Penyedia menolaknya.",
         "interrupted": "Terhenti dan tidak dicoba lagi.",
         "internal_error": "Terjadi kesalahan."
-      }
+      },
+      "steps": {
+        "confirmation": "Konfirmasi pemesanan",
+        "no_show": "Pesan tidak hadir"
+      },
+      "notice": {
+        "smsRemoved": "Pengingat SMS telah dihapus. Langkah ini dipindahkan ke email (atau dimatikan); pilih WhatsApp atau Email."
+      },
+      "buttonsTitle": "Tambahkan tombol Konfirmasi, Jadwalkan Ulang, dan Batalkan (WhatsApp)",
+      "skipIfConfirmed": "Lewati jika pelanggan sudah mengonfirmasi",
+      "fallbackTitle": "Jika tidak terkirim, coba saluran berikutnya setelah (menit)",
+      "fallbackHint": "Kosongkan untuk mematikan. Dari {min} hingga {maxMinutes} menit."
     }
   }
 }

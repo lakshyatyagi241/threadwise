@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import sanitizeHtml from 'sanitize-html';
+import { cutAtTag } from '../../../common/html-limits';
 
 /**
  * Rich-text sanitiser (TW-AUTH-044). Reference's was a deny-list of tags that let
@@ -116,7 +117,7 @@ export class HtmlSanitizerService {
   sanitize(html: string | null | undefined): string {
     if (!html) return '';
     try {
-      return sanitizeHtml(html, OPTIONS);
+      return sanitizeHtml(cutAtTag(html), OPTIONS);
     } catch {
       // Fail closed: escape rather than risk passing markup through.
       return html.replace(

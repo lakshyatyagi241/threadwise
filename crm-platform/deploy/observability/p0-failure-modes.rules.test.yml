@@ -1,0 +1,136 @@
+# Behaviour cases for p0-failure-modes.rules.yml. Run: promtool test rules p0-failure-modes.rules.test.yml
+# A must-fire and a must-not-fire case per alert. Synthetic series cannot catch a wrong metric name; the live test in the report does.
+rule_files:
+  - p0-failure-modes.rules.yml
+
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    input_series:
+      - series: 'crm_redis_up{service="api",instance="a:1"}'
+        values: '1x4 0x20'
+      - series: 'crm_redis_up{service="worker",instance="w:1"}'
+        values: '1x24'
+      # api redis 95% full (fires), worker 50% (quiet), web maxmemory 0 = unlimited (quiet)
+      - series: 'crm_redis_memory_used_bytes{service="api"}'
+        values: '950x24'
+      - series: 'crm_redis_memory_max_bytes{service="api"}'
+        values: '1000x24'
+      - series: 'crm_redis_memory_used_bytes{service="worker"}'
+        values: '500x24'
+      - series: 'crm_redis_memory_max_bytes{service="worker"}'
+        values: '1000x24'
+      - series: 'crm_redis_memory_used_bytes{service="web"}'
+        values: '5000x24'
+      - series: 'crm_redis_memory_max_bytes{service="web"}'
+        values: '0x24'
+      - series: 'crm_db_pool_waiting{service="api",pool="primary"}'
+        values: '0x4 3x20'
+      - series: 'crm_db_pool_waiting{service="api",pool="replica"}'
+        values: '0x24'
+      - series: 'crm_outbox_oldest_due_seconds{service="worker"}'
+        values: '0x4 600x20'
+      - series: 'crm_outbox_dead{service="worker"}'
+        values: '0x4 2x20'
+      - series: 'crm_dead_letter_oldest_open_seconds{service="worker",queue="webhook-retry"}'
+        values: '7200x24'
+      - series: 'crm_dead_letter_oldest_open_seconds{service="worker",queue="media-fetch"}'
+        values: '60x24'
+      # api: 10% 5xx at 1 req/s (fires); web: 10% 5xx at 0.01 req/s (quiet, idle); worker none
+      - series: 'crm_http_request_duration_seconds_count{service="api",status="2xx"}'
+        values: '0+54x24'
+      - series: 'crm_http_request_duration_seconds_count{service="api",status="5xx"}'
+        values: '0+6x24'
+      - series: 'crm_http_request_duration_seconds_count{service="web",status="2xx"}'
+        values: '0+0.54x24'
+      - series: 'crm_http_request_duration_seconds_count{service="web",status="5xx"}'
+        values: '0+0.06x24'
+      # worker: capture failures grow from minute 4 (fires); api: counter flat (quiet)
+      - series: 'crm_dead_letter_capture_failures_total{service="worker"}'
+        values: '0x4 1+1x20'
+      - series: 'crm_dead_letter_capture_failures_total{service="api"}'
+        values: '5x24'
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: DeadLetterCaptureFailing
+        exp_alerts:
+          - exp_labels: { severity: critical, service: worker }
+            exp_annotations:
+              summary: 'Failed work on worker could not be written to the durable failure store'
+              description: 'A job or webhook failed and its record was lost: nobody can find or replay it later. Usually the database is down or the table is locked.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#deadlettercapturefailing'
+      - eval_time: 3m
+        alertname: DeadLetterCaptureFailing
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: RedisDown
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: RedisDown
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api, instance: 'a:1' }
+            exp_annotations:
+              summary: 'Redis INFO has failed for 2 minutes (seen by api)'
+              description: 'Queues, cache, sessions and rate limits depend on Redis. Jobs are not processed while it is down.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#redisdown'
+      - eval_time: 4m
+        alertname: RedisMemoryNearMax
+        exp_alerts: [] # under the 5 m hold
+      - eval_time: 12m
+        alertname: RedisMemoryNearMax
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api }
+            exp_annotations:
+              summary: 'Redis memory above 90% of maxmemory for 5 min'
+              description: 'At maxmemory Redis evicts or rejects writes; BullMQ jobs can be lost or enqueue can fail.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#redismemorynearmax'
+      - eval_time: 12m
+        alertname: DbPoolExhausted
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api, pool: primary }
+            exp_annotations:
+              summary: 'Callers have waited for a primary Postgres connection for 3 min on api'
+              description: 'The client pool is exhausted: requests queue behind it and time out. Either Postgres is slow or connections leak.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#dbpoolexhausted'
+      - eval_time: 3m
+        alertname: DbPoolExhausted
+        exp_alerts: []
+      - eval_time: 12m
+        alertname: OutboxNotDraining
+        exp_alerts:
+          - exp_labels: { severity: critical }
+            exp_annotations:
+              summary: 'The oldest due outbox event has waited 10m 0s'
+              description: 'Automations, notifications and counters are not being produced. Business data is still correct.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#outboxnotdraining'
+      - eval_time: 6m
+        alertname: OutboxNotDraining
+        exp_alerts: [] # 600 s only since minute 4, 5 m hold not met
+      - eval_time: 20m
+        alertname: OutboxDeadRows
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: '2 outbox events exhausted their retries'
+              description: 'Those side effects will never happen until someone replays them.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#outboxdeadrows'
+      - eval_time: 8m
+        alertname: OutboxDeadRows
+        exp_alerts: []
+      - eval_time: 20m
+        alertname: DeadLetterOpenTooLong
+        exp_alerts:
+          - exp_labels: { severity: warning, queue: webhook-retry }
+            exp_annotations:
+              summary: 'A failed operation on webhook-retry has been open for over an hour'
+              description: 'Failed webhook, provider-send and job operations are recorded here; nobody has replayed or closed them.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#deadletteropentoolong'
+      - eval_time: 12m
+        alertname: ApiHighErrorRate
+        exp_alerts:
+          - exp_labels: { severity: critical, service: api }
+            exp_annotations:
+              summary: 'More than 5% of api requests answer 5xx'
+              description: 'Ignored below 0.1 request/s so a single failure on an idle service does not page.'
+              runbook: 'docs/runbooks/p0-failure-modes.md#apihigherrorrate'

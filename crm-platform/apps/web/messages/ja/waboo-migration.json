@@ -46,7 +46,9 @@
       "catchUp": "差分同期",
       "migrateHint": "移行は完全なリハーサルから始まり、問題がある場合は何も読み込みません。別途ドライランを行うかどうかは任意です。",
       "queued": "実行をキューに追加しました。",
-      "scheduled": "実行をスケジュールしました。"
+      "scheduled": "実行をスケジュールしました。",
+      "skipWhatsapp": "WhatsApp番号を移行しない（テスト用）",
+      "skipWhatsappHint": "ワークスペースは完全に移行されますが、WhatsApp番号はインポートも接続もされません。"
     },
     "confirm": {
       "title": "{org}を移行",
@@ -76,7 +78,9 @@
       "migrateAll": "すべて移行",
       "migrateHint": "各組織は専用の完全なリハーサルから始まり、問題がある場合は何も読み込みません。別途ドライランを行うかどうかは任意です。",
       "queued": "バッチをキューに追加しました。",
-      "scheduled": "バッチをスケジュールしました。"
+      "scheduled": "バッチをスケジュールしました。",
+      "skipWhatsapp": "WhatsApp番号を移行しない（テスト用）",
+      "skipWhatsappHint": "これらのワークスペースのWhatsApp番号は、いずれもインポートも接続もされません。"
     },
     "bulkConfirm": {
       "title": "{count}件の組織を移行",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "ドライラン",
       "load": "移行",
-      "catchup": "差分同期"
+      "catchup": "差分同期",
+      "skipWhatsapp": "WhatsApp番号なし"
     },
     "status": {
       "queued": "キュー待ち",
@@ -196,7 +201,8 @@
       "core-load": "コアロード",
       "flow-state": "フロー状態",
       "reconcile": "照合",
-      "report": "レポート"
+      "report": "レポート",
+      "whatsapp": "WhatsApp 番号"
     },
     "stepStatus": {
       "running": "実行中",

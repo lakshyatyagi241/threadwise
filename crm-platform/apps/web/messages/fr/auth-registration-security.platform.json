@@ -1442,7 +1442,10 @@
             "personal_history_full": "Permet à un numéro WhatsApp personnel d'importer tout son historique de discussions lors de la première liaison. L'import des discussions récentes est ouvert à tous les forfaits avec numéros personnels.",
             "ai_crm_copilot": "Trouve et note des prospects avec l'IA à partir de vos contacts.",
             "lead_scoring": "Note les contacts avec l’IA et alimente le pilote de croissance. L’application Scoring des leads par IA gère ce commutateur.",
-            "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité."
+            "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
+            "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
+            "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
+            "inbox_assignment_sticky": "Assignation propriétaire d’abord et synchronisée entre le propriétaire du contact et le responsable du chat, fenêtre des contacts récurrents et invite de réassignation. Fonctionne avec le routage de la boîte de réception."
           },
           "units": {
             "days": "Jours",
@@ -1587,7 +1590,8 @@
             "sms_monthly": "SMS par mois",
             "email_mailboxes": "Boîtes e-mail",
             "email_monthly": "E-mails par mois",
-            "storage_gb": "Stockage (Go)"
+            "storage_gb": "Stockage (Go)",
+            "teams": "Équipes"
           },
           "featureGroups": {
             "messaging": "Messagerie",
@@ -1631,7 +1635,10 @@
             "personal_history_full": "Import complet de l'historique des discussions (WhatsApp personnel)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Scoring des leads par IA",
-            "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)"
+            "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
+            "team_hierarchy": "Hiérarchie des équipes et managers",
+            "custom_roles": "Rôles personnalisés et périmètres",
+            "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",
@@ -1687,7 +1694,13 @@
             "sms_monthly": "Messages SMS sortants envoyés sur le mois civil. 0 = illimité.",
             "email_mailboxes": "Boîtes Gmail connectées (une boîte déconnectée libère sa place). 0 = illimité.",
             "email_monthly": "E-mails envoyés sur le mois civil, réponses et e-mails de campagne confondus. 0 = illimité.",
-            "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué."
+            "storage_gb": "Espace de stockage que l'espace de travail peut occuper, en Go (enregistrements d'appels, médias du chat, pièces jointes d'e-mails et fichiers). 0 = illimité. Pour l'instant mesuré seulement : rien n'est encore bloqué.",
+            "teams": "Nombre d'équipes que l'espace de travail peut avoir. Vide : illimité, 0 : solo (aucune équipe). Les équipes existantes ne sont jamais supprimées."
+          },
+          "productLines": {
+            "chat": "Chat",
+            "crm": "CRM commercial",
+            "platform": "Partagé par les deux"
           }
         }
       },

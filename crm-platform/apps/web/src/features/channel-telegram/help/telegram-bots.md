@@ -4,7 +4,7 @@ title: Telegram bots
 summary: Connect a Telegram bot with its BotFather token, check its webhook, pause it, add a payment token or disconnect it.
 area: settings
 order: 40
-documents: [tile:telegram]
+documents: [tile:telegram, nav:telegram]
 keywords: [telegram, bot, botfather, token, webhook, payments, pause, disconnect, chat, broadcast]
 ---
 

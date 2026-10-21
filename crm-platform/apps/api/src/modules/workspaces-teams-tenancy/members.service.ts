@@ -7,6 +7,9 @@ import {
   type ChangeWspMemberRoleInput,
   type InviteWspMemberInput,
   type InviteWspMemberResponse,
+  type SetWspAvailabilityInput,
+  type UpdateWspMemberDetailsInput,
+  type WspAvailability,
   type ListWspMembersQuery,
   type PageResponse,
   type WspMember,
@@ -140,7 +143,9 @@ export class MembersService {
           tier: me.tier,
           canInvite: this.rbac.can(grants, 'org.member.invite').allowed,
           canAssignRoles: this.rbac.can(grants, 'org.member.role_assign').allowed,
-          canManageTeams: this.rbac.can(grants, 'inbox.team.manage').allowed,
+          canManageTeams:
+            this.rbac.can(grants, 'team.manage').allowed ||
+            this.rbac.can(grants, 'inbox.team.manage').allowed,
         },
       };
     });
@@ -155,6 +160,7 @@ export class MembersService {
   async invite(raw: unknown): Promise<InviteWspMemberResponse> {
     const ctx = RequestContextStore.require();
     const done = await this.db.tx(async (tx) => {
+      await this.entitlements.lockLimit(tx, ctx.orgId, 'users');
       await this.entitlements.assertWithinLimit(
         ctx.orgId,
         'users',
@@ -202,6 +208,13 @@ export class MembersService {
         // Two invitations for the same address racing: the unique (org, email) index decides, the loser is "already a member".
         if ((err as { code?: string }).code === '23505') throw this.alreadyMember(input.email);
         throw err;
+      }
+      // A reinvited member starts clean (the old number and limit do not come back); a new one gets what the form carried.
+      if (existing || input.phone !== undefined || input.chatLimit !== undefined) {
+        await this.repo.upsertDetails(tx, ctx.orgId, userId, {
+          phone: input.phone ?? null,
+          chatLimit: input.chatLimit ?? null,
+        });
       }
       await this.repo.setSingleRole(tx, ctx.orgId, userId, role.id);
       const token = await this.tokens.issue(tx, ctx.orgId, userId, 'invite', INVITE_TTL_SECONDS, {
@@ -321,6 +334,90 @@ export class MembersService {
     // Cached grant sets are keyed by the organization's roles version: bump it only once the change is visible.
     await this.rbac.bumpRolesVersion(ctx.orgId);
     return result;
+  }
+
+  // --- details (phone, chat limit) ---------------------------------------------------------------------------------------------
+
+  /**
+   * The Change member dialog: phone number and maximum concurrent chats. Same rank rule as the other member actions (nobody edits
+   * a member above them); optimistic by row version. The last login is read only and never accepted here.
+   */
+  async updateDetails(uuid: string, input: UpdateWspMemberDetailsInput): Promise<WspMember> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const actor = await this.actor(tx, ctx.orgId, ctx.userId!);
+      const target = await this.requireMember(tx, ctx.orgId, uuid);
+      assertCanActOn(actor, target);
+      if (!(await this.repo.touchWithVersion(tx, ctx.orgId, target.id, input.rowVersion))) {
+        throw AppError.rowVersionConflict('Member');
+      }
+      await this.repo.upsertDetails(tx, ctx.orgId, target.id, {
+        ...(input.phone !== undefined ? { phone: input.phone } : {}),
+        ...(input.chatLimit !== undefined ? { chatLimit: input.chatLimit } : {}),
+      });
+      const delta: Record<string, { old: unknown; new: unknown }> = {};
+      if (input.phone !== undefined && input.phone !== target.phone) {
+        delta.phone = { old: target.phone, new: input.phone };
+      }
+      if (input.chatLimit !== undefined && input.chatLimit !== target.chatLimit) {
+        delta.chatLimit = { old: target.chatLimit, new: input.chatLimit };
+      }
+      await this.repo.audit(tx, {
+        orgId: ctx.orgId,
+        actorId: ctx.actorId,
+        actorType: ctx.actorType,
+        module: 'members',
+        recordId: target.id,
+        action: 'member.details_changed',
+        delta,
+        requestId: ctx.requestId,
+      });
+      await this.outbox.emit(tx, {
+        aggregateModule: 'members',
+        aggregateId: target.id,
+        eventType: 'member.details_changed',
+        payload: { uuid: target.uuid, changed: Object.keys(delta) },
+      });
+      return this.load(tx, ctx.orgId, target.id);
+    });
+  }
+
+  // --- availability -------------------------------------------------------------------------------------------------------------
+
+  /** The caller's own switch, as routing reads it: no stored status counts as `online`. */
+  async myAvailability(): Promise<WspAvailability> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => ({
+      status:
+        (await this.repo.availabilityOf(tx, ctx.orgId, ctx.userId!)) === 'offline'
+          ? 'offline'
+          : 'online',
+    }));
+  }
+
+  /**
+   * Available / Offline for the caller only. `offline` takes the agent out of every automatic assignment (routing rules, round
+   * robin, least busy); conversations already theirs stay theirs. Anything other than offline reads available.
+   */
+  async setMyAvailability(input: SetWspAvailabilityInput): Promise<WspAvailability> {
+    const ctx = RequestContextStore.require();
+    return this.db.tx(async (tx) => {
+      const before = await this.repo.availabilityOf(tx, ctx.orgId, ctx.userId!);
+      await this.repo.setAvailability(tx, ctx.orgId, ctx.userId!, input.status);
+      if ((before === 'offline' ? 'offline' : 'online') !== input.status) {
+        await this.repo.audit(tx, {
+          orgId: ctx.orgId,
+          actorId: ctx.actorId,
+          actorType: ctx.actorType,
+          module: 'members',
+          recordId: ctx.userId!,
+          action: 'member.availability_changed',
+          delta: { availability: { old: before, new: input.status } },
+          requestId: ctx.requestId,
+        });
+      }
+      return { status: input.status };
+    });
   }
 
   // --- remove -------------------------------------------------------------------------------------------------------------------

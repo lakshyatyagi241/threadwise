@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { ASSIGNMENT_RUN_RETENTION_DAYS } from '@crm/contracts';
+import { liveDaysFor, recordSweep } from '../../data-retention';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { ContactAssignmentRepository } from './contact-assignment.repository';
 
@@ -36,14 +37,16 @@ export class AssignmentRunSweepService {
 
   /** Deletes runs past the retention a batch at a time; returns how many. */
   async sweep(): Promise<number> {
+    const days = await this.db.privileged((tx) =>
+      liveDaysFor(tx, 'assignment_runs', ASSIGNMENT_RUN_RETENTION_DAYS),
+    );
     let total = 0;
     for (let i = 0; i < MAX_BATCHES; i++) {
-      const n = await this.db.privileged((tx) =>
-        this.repo.pruneRuns(tx, ASSIGNMENT_RUN_RETENTION_DAYS),
-      );
+      const n = await this.db.privileged((tx) => this.repo.pruneRuns(tx, days));
       total += n;
       if (n < 5000) break;
     }
+    await recordSweep(this.db, this.logger, 'assignment_runs', { deletedRows: total });
     return total;
   }
 }

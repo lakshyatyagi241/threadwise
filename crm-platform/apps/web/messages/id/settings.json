@@ -101,7 +101,7 @@
         "keywords": "pesan teks, sender id, dlt, twilio, seluler"
       },
       "email": {
-        "label": "Email",
+        "label": "Email dukungan",
         "description": "Hubungkan kotak surat Gmail atau Google Workspace agar tim Anda dapat membaca dan menjawab email pelanggan di inbox bersama.",
         "keywords": "kotak surat, gmail, google workspace, inbox bersama, email dukungan, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Tim",
-        "description": "Kelompokkan orang ke dalam tim untuk routing dan pelaporan.",
-        "keywords": "grup, departemen, penugasan, routing"
+        "description": "Kelompokkan orang untuk percakapan, penugasan, dan laporan.",
+        "keywords": "grup, departemen, manajer, hierarki, penugasan, perutean"
       },
       "ai-keys": {
         "label": "Kunci penyedia AI",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "Kunci dan dokumentasi untuk membangun di atas produk ini.",
         "keywords": "api keys, developer, token, docs, openapi"
+      },
+      "api-keys": {
+        "label": "Kunci API",
+        "description": "Buat dan kelola kunci yang digunakan sistem lain untuk memanggil API.",
+        "keywords": "kunci api, token, rahasia, pengembang, akses, integrasi"
       },
       "webhooks": {
         "label": "Webhook",
@@ -301,7 +306,7 @@
         "keywords": "geta, publikasi, bot, konsol, tayang, chatbot"
       },
       "auto-assignment": {
-        "label": "Penugasan otomatis",
+        "label": "Penugasan otomatis percakapan",
         "description": "Berikan percakapan baru ke agen yang tepat secara otomatis, bergiliran atau berdasarkan aturan.",
         "keywords": "routing, round robin, tetapkan, agen, aturan inbox, distribusikan, pemilik"
       },
@@ -389,6 +394,11 @@
         "label": "Lead duplikat",
         "description": "Pilih apakah lead baru yang cocok dengan kontak digabungkan ke kontak itu atau menjadi kontak baru.",
         "keywords": "duplikat, gabung, lead, telepon sama, e-mail sama, kontak baru, sumber lead"
+      },
+      "sales-activities": {
+        "label": "Aktivitas Penjualan",
+        "description": "Kelola tugas, pertemuan, panggilan, dan aktivitas Anda sendiri: apa yang bisa dilakukan tiap aktivitas, jenis tugas, dan hasilnya.",
+        "keywords": "aktivitas, jenis tugas, hasil, hasil pertemuan, hasil panggilan, tindak lanjut, check-in, aktivitas kustom, kalender, selesaikan"
       }
     },
     "backToMarketplace": "Kembali ke Marketplace"

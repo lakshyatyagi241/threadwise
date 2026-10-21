@@ -26,6 +26,7 @@ export type FilterSection =
   | 'segment'
   | 'tag'
   | 'owner'
+  | 'team'
   | 'stage'
   | 'status'
   | 'minor'
@@ -44,6 +45,7 @@ type FilterValues = Pick<
   | 'segment'
   | 'tag'
   | 'owner'
+  | 'team'
   | 'lifecycleStage'
   | 'status'
   | 'minor'
@@ -66,6 +68,8 @@ export interface FilterPanelProps {
 
   tags: ReadonlyArray<{ id: string; name: string }>;
   owners: readonly Owner[];
+  /** The workspace's teams for the Team filter; empty when the viewer cannot read teams or there are none (the row is then left out). */
+  teams: ReadonlyArray<{ id: string; name: string }>;
   /** The signed-in person, for "My contacts". */
   meId: string;
   /**
@@ -94,6 +98,7 @@ export function quickFilterCount(f: FilterValues): number {
     Number(f.group !== '' || f.imported || f.segment !== '') +
     Number(f.tag !== '') +
     Number(ownerTokens(f.owner).length > 0) +
+    Number(f.team !== '') +
     Number(f.lifecycleStage !== '') +
     Number(f.status !== '') +
     Number(f.minor !== '') +
@@ -194,6 +199,10 @@ export function FilterPanel(p: FilterPanelProps) {
           : owners[0] === p.meId
             ? t('myContacts')
             : (p.owners.find((o) => o.id === owners[0])?.fullName ?? t('ownerFormer'));
+  const teamName =
+    f.team === ''
+      ? undefined
+      : (p.teams.find((x) => x.id === f.team)?.name ?? t('teamFormer'));
   const stageName = p.stages.find((s) => s.value === f.lifecycleStage)?.label;
   const statusName = p.statuses.find((s) => s.value === f.status)?.label;
   const minorName = f.minor === 'yes' ? t('minorYes') : f.minor === 'no' ? t('minorNo') : undefined;
@@ -313,6 +322,7 @@ export function FilterPanel(p: FilterPanelProps) {
             {entry('segment', t('segmentLabel'), segmentName)}
             {entry('tag', t('tagLabel'), tagName)}
             {entry('owner', t('ownerLabel'), ownerName)}
+            {(p.teams.length > 0 || f.team !== '') && entry('team', t('teamLabel'), teamName)}
             {entry('stage', t('stageLabel'), stageName)}
             {entry('status', t('statusLabel'), statusName)}
             {entry('minor', t('minorLabel'), minorName)}
@@ -474,6 +484,18 @@ export function FilterPanel(p: FilterPanelProps) {
                 })}
               </button>
             )}
+          </div>
+        )}
+
+        {view === 'team' && (
+          <div
+            role="radiogroup"
+            aria-label={t('teamFilter')}
+            className="thin-scrollbar max-h-72 space-y-0.5 overflow-y-auto p-1"
+          >
+            {back}
+            {choice('all', t('allTeams'), f.team === '', () => pick({ team: '' }))}
+            {p.teams.map((x) => choice(x.id, x.name, f.team === x.id, () => pick({ team: x.id })))}
           </div>
         )}
 

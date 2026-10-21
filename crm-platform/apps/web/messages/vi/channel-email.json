@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kênh",
-      "title": "Email",
+      "title": "Email hỗ trợ",
       "titleAccent": "hộp thư",
       "intro": "Kết nối Gmail, Microsoft 365 hoặc bất kỳ hộp thư IMAP nào. Email của khách hàng đến hộp thư đến của nhóm, mỗi chuỗi email là một cuộc trò chuyện, và câu trả lời của bạn được gửi từ cùng địa chỉ.",
       "inbox": "Mở hộp thư đến",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Kết nối hộp thư",
-          "body": "Đăng nhập bằng Google hoặc Microsoft, hoặc nhập cài đặt máy chủ thư của bạn, rồi cho phép Threadwise đọc và gửi email cho địa chỉ đó."
+          "body": "Đăng nhập bằng Google hoặc Microsoft, hoặc nhập cài đặt máy chủ thư của bạn, rồi cho phép {app} đọc và gửi email cho địa chỉ đó."
         },
         "inbox": {
           "title": "Email đến hộp thư đến",

@@ -1,0 +1,150 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Canais de mensagens",
+      "description": "Escolha quais canais podem enviar mensagens de agendamentos aos seus contatos: confirmações, lembretes, avisos de remarcação e cancelamento e acompanhamentos pós-visita. Um tipo de reserva só pode usar um canal se ele estiver ativado aqui e conectado.",
+      "loading": "Carregando os canais...",
+      "undecidedOwner": "Nenhum canal está ativado ainda, então nenhuma mensagem de agendamento é enviada. Ative os canais que sua equipe pode usar.",
+      "undecidedMember": "Nenhum canal está ativado ainda, então nenhuma mensagem de agendamento é enviada. Peça ao proprietário do espaço para escolher os canais.",
+      "readOnly": "Somente o proprietário do espaço e os administradores podem alterar isto.",
+      "enableLabel": "Usar {channel} para mensagens de agendamento",
+      "switchedOn": "{channel} está ativado para mensagens de agendamento.",
+      "switchedOff": "{channel} está desativado para mensagens de agendamento.",
+      "senderSaved": "O remetente padrão de {channel} foi salvo.",
+      "defaultSender": "Remetente padrão",
+      "defaultSenderOf": "Remetente padrão de {channel}",
+      "firstConnected": "O primeiro conectado",
+      "sendsFrom": "Envia de {sender}",
+      "notConnected": "Nada está conectado para este canal ainda.",
+      "connect": "Conecte nas Configurações",
+      "voiceSoon": "Em breve com o bot de voz: uma ligação de lembrete que você poderá ativar para cada tipo de reserva. Ainda não pode ser ativada.",
+      "names": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp",
+        "voice": "Ligação de lembrete"
+      },
+      "about": {
+        "email": "De uma caixa compartilhada do seu espaço. Nunca de uma caixa pessoal.",
+        "whatsapp": "Texto livre dentro da janela de 24 horas; fora dela, apenas um modelo aprovado.",
+        "voice": "Uma ligação automática que lembra o contato."
+      },
+      "status": {
+        "usable": "Ativado e conectado",
+        "off": "Desativado",
+        "notChosen": "Ainda não escolhido",
+        "not_connected": "Ativado, não conectado",
+        "coming_soon": "Em breve com o bot de voz"
+      },
+      "editorTitle": "Canais deste tipo de reserva",
+      "editorHint": "Só podem ser usados canais que o proprietário ativou e que estão conectados. Os demais aparecem para você saber o motivo.",
+      "noneUsable": "Nenhum canal está disponível ainda, então nenhuma mensagem deste tipo de reserva pode ser enviada.",
+      "openSettings": "Abrir as configurações de canais",
+      "offByOwner": "O proprietário do espaço não ativou este canal.",
+      "sendOn": "Enviar por",
+      "sendOnAuto": "Nenhum canal escolhido: usa-se o primeiro canal disponível, com o texto padrão.",
+      "sendOnEach": "A mensagem sai por cada canal marcado aqui.",
+      "attachedButUnusable": "Este canal não está disponível agora, então esta mensagem é ignorada nele. Desmarque ou peça ao proprietário para ativá-lo."
+    },
+    "templates": {
+      "title": "Modelos de mensagens",
+      "description": "Mensagens predefinidas para confirmações, lembretes, remarcações, cancelamentos e acompanhamentos pós-visita. Adicione uma com um clique e edite. As mensagens de e-mail ficam aqui; as de WhatsApp são enviadas à Meta para aprovação e só uma aprovada pode ser usada.",
+      "loading": "Carregando as mensagens...",
+      "readOnly": "Somente quem gerencia os modelos de agendamento pode alterar isto.",
+      "empty": "Nenhuma mensagem adicionada ainda. Adicione uma do conjunto predefinido abaixo.",
+      "yours": "Suas mensagens",
+      "status": {
+        "draft": "Rascunho",
+        "pending": "Em análise na Meta",
+        "approved": "Aprovado",
+        "rejected": "Rejeitado"
+      },
+      "kinds": {
+        "confirmation": "Confirmação de reserva",
+        "reminder": "Lembrete",
+        "reschedule": "Remarcado",
+        "cancellation": "Cancelado",
+        "follow_up": "Acompanhamento pós-visita"
+      },
+      "channels": {
+        "email": "E-mail",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {usada por # tipos de reserva}}",
+      "inactive": "desativado",
+      "submit": "Enviar à Meta para aprovação",
+      "submitting": "Enviando...",
+      "submitted": "Enviado à Meta. Está em análise agora.",
+      "metaRefused": "Salvo, mas a Meta recusou. Abra a mensagem para ver o motivo.",
+      "refresh": "Verificar status",
+      "refreshing": "Verificando...",
+      "refreshed": "Status atualizado.",
+      "edit": "Editar",
+      "view": "Ver",
+      "close": "Fechar",
+      "delete": "Remover",
+      "deleteTitle": "Remover \"{name}\"?",
+      "deleteWhatsapp": "É removida desta lista. O modelo de WhatsApp continua nos seus modelos de WhatsApp; exclua-o lá se não precisar mais.",
+      "deleteBody": "É removida da sua biblioteca. Um tipo de reserva que a usa precisa escolher outra mensagem antes.",
+      "deleted": "Mensagem removida.",
+      "cancel": "Cancelar",
+      "rejectedBecause": "A Meta rejeitou: {reason}",
+      "pendingNote": "A Meta está analisando este modelo. Até ser aprovado, ele não pode ser escolhido nem enviado.",
+      "nameLabel": "Nome",
+      "subjectLabel": "Assunto",
+      "bodyLabel": "Mensagem",
+      "textLocked": "Um modelo em análise ou aprovado não pode ser editado aqui.",
+      "placeholders": "Você pode usar:",
+      "whatsappPlaceholders": "O WhatsApp só pode preencher estes, usados nesta ordem sem pular nenhum:",
+      "activeLabel": "Disponível para escolha",
+      "save": "Salvar",
+      "saving": "Salvando...",
+      "saveAndSubmit": "Salvar e enviar à Meta",
+      "saved": "Mensagem salva.",
+      "predefinedTitle": "Mensagens predefinidas",
+      "predefinedHint": "Adote uma mensagem para copiá-la à sua biblioteca e depois edite. Uma mensagem de WhatsApp é criada primeiro como rascunho; você decide quando enviá-la à Meta.",
+      "machineNote": "Os textos predefinidos estão em inglês. Edite-os para o seu idioma depois de adicioná-los.",
+      "category": {
+        "UTILITY": "Utilidade",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Pré-visualização",
+      "hidePreview": "Ocultar pré-visualização",
+      "inLibrary": "Na sua biblioteca: {status}",
+      "adopt": "Adicionar às minhas mensagens",
+      "adopting": "Adicionando...",
+      "adoptDraft": "Adicionar como rascunho",
+      "adoptSubmit": "Adicionar e enviar à Meta",
+      "adopted": "Adicionada às suas mensagens.",
+      "newEmail": "Nova mensagem de e-mail",
+      "kindLabel": "Tipo",
+      "create": "Criar",
+      "created": "Mensagem criada.",
+      "chooseLabel": "Mensagem a usar",
+      "useText": "O texto acima",
+      "unknownMessage": "Uma mensagem que não está mais disponível",
+      "noneYet": "Nenhuma mensagem deste tipo ainda.",
+      "openLibrary": "Adicione uma nas configurações",
+      "whatsappApprovedOnly": "Só podem ser escolhidos modelos aprovados pela Meta. Fora da janela de 24 horas o WhatsApp não envia mais nada."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Ligação de lembrete"
+      },
+      "voiceSoon": "Em breve com o bot de voz: uma ligação de lembrete. Ainda não pode ser adicionada.",
+      "voiceSoonShort": "em breve com o bot de voz",
+      "channelUnusable": "indisponível agora",
+      "noUsableChannel": "Nenhum canal desta regra está disponível, então ela não pode ser ativada.",
+      "openChannels": "Abrir as configurações de canais",
+      "fromLibrary": "Usar uma mensagem da biblioteca",
+      "openLibrary": "Adicione mensagens nas configurações",
+      "reasons": {
+        "channel_disabled": "O espaço desativou este canal para mensagens de agendamento."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Escolha ao menos um canal para esta mensagem ou apague o texto."
+      }
+    }
+  }
+}

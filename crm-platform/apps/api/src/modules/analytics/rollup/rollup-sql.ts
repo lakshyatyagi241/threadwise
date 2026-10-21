@@ -34,9 +34,12 @@ function histCase(col: 'duration_ms'): SQL {
   );
 }
 
-function dimExpr(rule: RollupRule, i: 0 | 1 | 2): SQL {
+function dimExpr(rule: RollupRule, i: 0 | 1 | 2, leaving = false): SQL {
   if (rule.histOn && i === 2) return histCase(rule.histOn);
-  const col = rule.dims[i];
+  // the leaving half of a paired rule groups by the state the event left instead of the state it entered
+  const col = leaving && i === 0 ? rule.paired : rule.dims[i];
+  if (col === 'feed_class')
+    return sql`(coalesce(e.source_kind, 0) * 16 + coalesce(e.k1, 0))::bigint`;
   return col ? sql`coalesce(e.${sql.raw(col)}, 0)::bigint` : sql`0::bigint`;
 }
 
@@ -47,13 +50,20 @@ const total = (col?: string): SQL =>
  * The grouped aggregate of one rule over one window of events. Shared by the worker (INSERT ... SELECT) and the query tail so the two can
  * never disagree about what a bucket means.
  */
-export function rollupSelect(rule: RollupRule, grain: Grain, scope: Scope, window: SQL): SQL {
+function rollupSelectOnce(
+  rule: RollupRule,
+  grain: Grain,
+  scope: Scope,
+  window: SQL,
+  leaving: boolean,
+): SQL {
   const org = scope === 'org' ? sql`e.org_id` : sql`0::bigint`;
   const types = sql.join(
     rule.types.map((t) => int(t)),
     sql`, `,
   );
-  const extra = rule.where ? sql` AND ${sql.raw(rule.where)}` : sql``;
+  const where = rule.where ? sql` AND ${sql.raw(rule.where)}` : sql``;
+  const extra = leaving ? sql`${where} AND e.${sql.raw(rule.paired!)} IS NOT NULL` : where;
   const join =
     scope === 'org'
       ? sql`LEFT JOIN workspace_settings ws ON ws.org_id = e.org_id
@@ -61,12 +71,27 @@ export function rollupSelect(rule: RollupRule, grain: Grain, scope: Scope, windo
       : sql``;
   return sql`
     SELECT ${org} AS org_id, ${int(rule.metric)}::smallint AS metric, ${bucketExpr(grain, scope)} AS bucket,
-           ${dimExpr(rule, 0)} AS d1, ${dimExpr(rule, 1)} AS d2, ${dimExpr(rule, 2)} AS d3,
-           ${rule.n === 'qty' ? sql`coalesce(sum(e.qty), 0)` : sql`count(*)`}::bigint AS n,
+           ${dimExpr(rule, 0, leaving)} AS d1, ${dimExpr(rule, 1)} AS d2, ${dimExpr(rule, 2)} AS d3,
+           ${rule.n === 'qty' ? sql`${leaving ? sql`-` : sql``}coalesce(sum(e.qty), 0)` : sql`count(*)`}::bigint AS n,
            ${total(rule.s1)} AS s1, ${total(rule.s2)} AS s2
       FROM an_events e
       ${join}
      WHERE e.type IN (${types})${extra} AND ${window}
+     GROUP BY 1, 2, 3, 4, 5, 6`;
+}
+
+export function rollupSelect(rule: RollupRule, grain: Grain, scope: Scope, window: SQL): SQL {
+  if (!rule.paired) return rollupSelectOnce(rule, grain, scope, window, false);
+  if (rule.n !== 'qty' || rule.dims[0] !== 'status' || rule.histOn) {
+    throw new Error(
+      `rollup rule ${rule.metric}: a paired rule needs n: 'qty' and the entered state in dims[0]`,
+    );
+  }
+  return sql`
+    SELECT org_id, metric, bucket, d1, d2, d3, sum(n)::bigint AS n, sum(s1)::bigint AS s1, sum(s2)::bigint AS s2
+      FROM (${rollupSelectOnce(rule, grain, scope, window, false)}
+            UNION ALL
+            ${rollupSelectOnce(rule, grain, scope, window, true)}) u
      GROUP BY 1, 2, 3, 4, 5, 6`;
 }
 

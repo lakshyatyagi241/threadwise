@@ -3,6 +3,7 @@
  * See docs/api/team-inbox-routing-sla.md and docs/threadwise-port/plan-inbox-chat.md.
  */
 export * from './assignment';
+export * from './handoff';
 export * from './business-hours';
 export * from './routing-rules';
 export * from './sla';

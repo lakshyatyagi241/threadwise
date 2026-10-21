@@ -25,6 +25,7 @@ import { DatabaseService } from '../../../infra/db/database.service';
 import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService } from '../../../kernel/rbac/rbac.service';
+import { ActivityTypesService } from '../activity-types/activity-types.service';
 import { assertContactScope } from '../contacts/contact-scope';
 import { ContactsRepository } from '../contacts/contacts.repository';
 import { assertCompanyReadable } from '../companies/company-link';
@@ -34,8 +35,9 @@ import { assertOwnerWithinScope } from '../owner-scope';
 import { DealsRepository, type DealRow } from '../deals/deals.repository';
 import { DealsService } from '../deals/deals.service';
 import { resolveTimezone } from '../deals/deal-calendar';
-import { defaultSort, encodeTaskCursor, titleFromBody } from './task-rules';
+import { defaultSort, encodeTaskCursor, outcomeUsable, titleFromBody } from './task-rules';
 import { taskEventPayload, toTaskResponse } from './tasks.mapper';
+import { resolveTeamId } from '../owning-team';
 import {
   sortKeyOf,
   TasksRepository,
@@ -44,6 +46,7 @@ import {
   type TaskPatch,
   type TaskRow,
 } from './tasks.repository';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 export const TASK_MODULE = 'tasks';
 
@@ -79,9 +82,11 @@ interface FilterInput {
   mine?: boolean;
   assigneeId?: string;
   unassigned?: boolean;
+  teamId?: string;
   contactId?: string;
   dealId?: string;
   companyId?: string;
+  outcomeId?: string;
 }
 
 /**
@@ -107,6 +112,7 @@ export class TasksService {
     private readonly contacts: ContactsRepository,
     private readonly dealsRepo: DealsRepository,
     private readonly deals: DealsService,
+    private readonly activities: ActivityTypesService,
   ) {}
 
   // --- reads -----------------------------------------------------------------------------------------------------------
@@ -132,14 +138,7 @@ export class TasksService {
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-      await assertContactScope(
-        tx,
-        this.contacts,
-        ctx.orgId,
-        read.scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contacts, ctx.orgId, read.scope, ctx.userId!, contact);
       return this.listIn(tx, query, scope, { contactId: contact.id });
     });
   }
@@ -156,7 +155,7 @@ export class TasksService {
       if (!deal) throw AppError.notFound('Deal', dealUuid);
       const read = this.rbac.can(ctx.grants!, 'record.deals.read');
       if (!read.allowed) throw AppError.forbidden('record.deals.read');
-      await this.deals.assertScope(tx, read.scope, deal.ownerId);
+      await this.deals.assertScope(tx, read.scope, deal);
       return this.listIn(tx, query, scope, { dealId: deal.id });
     });
   }
@@ -236,6 +235,10 @@ export class TasksService {
       ctx.grants ? this.rbac.can(ctx.grants, 'record.tasks.create').scope : 'all',
     );
     const links = await this.resolveLinks(tx, ctx.orgId, input, true);
+    const outcomeId = await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, null);
+    const taskTypeId = input.taskTypeId
+      ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task')).id
+      : null;
     const id = await this.repo.insert(tx, ctx.orgId, {
       title: input.title,
       notesCipher: input.notes ? this.crypto.encrypt(input.notes) : null,
@@ -246,7 +249,9 @@ export class TasksService {
       contactId: links.contactId ?? null,
       dealId: links.dealId ?? null,
       companyId: links.companyId ?? null,
+      outcomeId: outcomeId ?? null,
       source,
+      taskTypeId,
     });
     return this.afterInsert(tx, ctx.orgId, ctx.userId, id);
   }
@@ -296,6 +301,45 @@ export class TasksService {
       }
       const links = await this.resolveLinks(tx, ctx.orgId, input, false);
       this.applyLinks(patch, row, links);
+      const outcomeId = await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, row.outcomeId);
+      if (outcomeId !== undefined && outcomeId !== row.outcomeId) patch.outcome_id = outcomeId;
+      if (input.taskTypeId !== undefined) {
+        const next = input.taskTypeId
+          ? (await this.activities.resolveOption(tx, ctx.orgId, input.taskTypeId, 'type', 'task'))
+              .id
+          : null;
+        if (next !== row.taskTypeId) {
+          patch.task_type_id = next;
+          delta.taskType = {
+            old: row.taskType?.key ?? null,
+            new: next === null ? null : input.taskTypeId,
+          };
+        }
+      }
+      if (input.doneAt !== undefined) {
+        const next = new Date(input.doneAt);
+        if (row.status !== 'done') {
+          throw AppError.validation('Only a completed task has a completed date.', [
+            { path: 'doneAt', message: 'Task is not done' },
+          ]);
+        }
+        if (next.getTime() !== row.doneAt?.getTime()) {
+          if (!(await this.activities.settingsOf(tx, ctx.orgId, 'task')).allowEditCompleted) {
+            throw new AppError(
+              ERROR_CODES.ACTIVITY_EDIT_COMPLETED_DISABLED,
+              'Editing the completed date and time of a task is switched off in Sales Activities.',
+              HttpStatus.CONFLICT,
+            );
+          }
+          if (next.getTime() > Date.now() + 5 * 60_000) {
+            throw AppError.validation('A task cannot be completed in the future.', [
+              { path: 'doneAt', message: 'In the future' },
+            ]);
+          }
+          patch.done_at = next;
+          delta.doneAt = { old: row.doneAt?.toISOString() ?? null, new: next.toISOString() };
+        }
+      }
 
       if (Object.keys(patch).length > 0) {
         const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, patch);
@@ -370,9 +414,11 @@ export class TasksService {
   // --- bulk ------------------------------------------------------------------------------------------------------------
 
   bulkComplete(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
-    return this.bulk(input.ids, scope, (tx, row) =>
-      this.transition(tx, row, true).then(() => undefined),
-    );
+    const ctx = RequestContextStore.require();
+    return this.bulk(input.ids, scope, async (tx, row) => {
+      await this.assertCompletable(tx, ctx.orgId);
+      await this.transition(tx, row, true);
+    });
   }
 
   bulkReopen(input: BulkTaskIdsInput, scope: RecordScope): Promise<TaskBulkResult> {
@@ -486,6 +532,8 @@ export class TasksService {
         companyId: null,
         source: v.source,
         kind: 'follow_up',
+        // Typed like the follow-ups that were backfilled: the seeded "Follow up" task type.
+        taskTypeId: await this.activities.followUpTypeId(tx, orgId),
       });
       await this.afterInsert(tx, orgId, ctx.userId, id);
       return openOf((await this.repo.findById(tx, orgId, id, tz))!);
@@ -623,6 +671,11 @@ export class TasksService {
       dealId: fixed.dealId,
       companyId: fixed.companyId,
     };
+    if (f.outcomeId) {
+      const o = await this.repo.resolveOutcome(tx, orgId, f.outcomeId);
+      if (!o) return null;
+      out.outcomeId = o.id;
+    }
     if (f.mine) {
       if (!ctx.userId) return null;
       out.assigneeId = ctx.userId;
@@ -631,6 +684,11 @@ export class TasksService {
       const id = await this.repo.resolveUserId(tx, orgId, f.assigneeId);
       if (id === undefined || (out.assigneeId !== undefined && out.assigneeId !== id)) return null;
       out.assigneeId = id;
+    }
+    if (f.teamId) {
+      const id = await resolveTeamId(tx, orgId, f.teamId);
+      if (id === undefined) return null;
+      out.teamId = id;
     }
     if (f.contactId) {
       const c = await this.repo.resolveContact(tx, orgId, f.contactId);
@@ -661,7 +719,7 @@ export class TasksService {
       scope,
       actorUserId: ctx.userId,
       nextOwnerId: assignee,
-      inActorTeam: (id) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id),
+      inActorTeam: (id, below) => this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId!, id, below),
       path: 'assigneeId',
     });
   }
@@ -685,6 +743,30 @@ export class TasksService {
       );
     }
     return user.id;
+  }
+
+  /**
+   * The outcome a body names, as an internal id (`undefined` = not named, `null` = clear). One that is not an active outcome of this
+   * workspace (and not the one the task already has) is 422 TASK_OUTCOME_INVALID.
+   */
+  private async resolveOutcome(
+    tx: Tx,
+    orgId: number,
+    uuid: string | null | undefined,
+    currentId: number | null,
+  ): Promise<number | null | undefined> {
+    if (uuid === undefined) return undefined;
+    if (uuid === null) return null;
+    const outcome = await this.repo.resolveOutcome(tx, orgId, uuid);
+    if (!outcomeUsable(outcome, currentId)) {
+      throw new AppError(
+        ERROR_CODES.TASK_OUTCOME_INVALID,
+        'The outcome is not an active task outcome of this workspace.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'outcomeId', message: 'must be an active task outcome' }],
+      );
+    }
+    return outcome!.id;
   }
 
   /**
@@ -759,6 +841,7 @@ export class TasksService {
         priority: { old: null, new: row.priority },
         dueAt: { old: null, new: row.dueAt ? row.dueAt.toISOString() : null },
         assignee: { old: null, new: row.assigneeUuid },
+        ...(row.outcomeUuid ? { outcome: { old: null, new: row.outcomeUuid } } : {}),
       },
     });
     await this.outbox.emit(tx, {
@@ -788,6 +871,7 @@ export class TasksService {
       ['contact', row.contactUuid, after.contactUuid],
       ['deal', row.dealUuid, after.dealUuid],
       ['company', row.companyUuid, after.companyUuid],
+      ['outcome', row.outcomeUuid, after.outcomeUuid],
     ];
     for (const [key, before, now] of named)
       if (before !== now) delta[key] = { old: before, new: now };
@@ -831,33 +915,55 @@ export class TasksService {
     input: TaskTransitionInput,
     scope: RecordScope,
   ): Promise<TaskResponse> {
+    const ctx = RequestContextStore.require();
     return this.db.tx(async (tx) => {
       const row = await this.lockForWrite(tx, uuid, scope);
       if (input.rowVersion !== undefined && input.rowVersion !== row.rowVersion) {
         throw AppError.rowVersionConflict('Task');
       }
-      return this.toResponse(await this.transition(tx, row, done));
+      if (done && row.status !== 'done') await this.assertCompletable(tx, ctx.orgId);
+      // The outcome is recorded with a completion; a reopen keeps whatever the task has.
+      const outcomeId = done
+        ? await this.resolveOutcome(tx, ctx.orgId, input.outcomeId, row.outcomeId)
+        : undefined;
+      return this.toResponse(await this.transition(tx, row, done, { outcomeId }));
     });
+  }
+
+  /** "Allow users to mark this activity as completed" (Sales Activities). Work the system finishes itself (a follow-up that was contacted) is not a user completing. */
+  private async assertCompletable(tx: Tx, orgId: number): Promise<void> {
+    if (!(await this.activities.settingsOf(tx, orgId, 'task')).allowComplete) {
+      throw new AppError(
+        ERROR_CODES.ACTIVITY_COMPLETION_DISABLED,
+        'Completing tasks is switched off in Sales Activities.',
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 
   private async transition(
     tx: Tx,
     row: TaskRow,
     done: boolean,
-    opts: { syncActivity?: boolean } = {},
+    opts: { syncActivity?: boolean; outcomeId?: number | null } = {},
   ): Promise<TaskRow> {
     const ctx = RequestContextStore.require();
     const tz = await this.zone(tx, ctx.orgId);
     if ((row.status === 'done') === done) return row;
-    await this.repo.setDone(tx, ctx.orgId, row.id, done);
+    await this.repo.setDone(tx, ctx.orgId, row.id, done, opts.outcomeId);
     if (opts.syncActivity !== false) await this.repo.syncActivity(tx, ctx.orgId, row.id, { done });
+    const after = (await this.repo.findById(tx, ctx.orgId, row.id, tz))!;
+    const delta: Record<string, { old: unknown; new: unknown }> = {
+      status: { old: row.status, new: done ? 'done' : 'open' },
+    };
+    if (row.outcomeUuid !== after.outcomeUuid)
+      delta.outcome = { old: row.outcomeUuid, new: after.outcomeUuid };
     await this.audit.record(tx, {
       module: TASK_MODULE,
       recordId: row.id,
       action: 'update',
-      delta: { status: { old: row.status, new: done ? 'done' : 'open' } },
+      delta,
     });
-    const after = (await this.repo.findById(tx, ctx.orgId, row.id, tz))!;
     await this.outbox.emit(tx, {
       aggregateModule: TASK_MODULE,
       aggregateId: row.id,
@@ -899,16 +1005,15 @@ export class TasksService {
   /** Not-found, never forbidden: a task outside the caller's scope is not revealed to exist. */
   private async assertScope(tx: Tx, scope: RecordScope, row: TaskRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Task');
-    if (row.assigneeId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.assigneeId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.assigneeId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Task');
     }
-    throw AppError.notFound('Task');
   }
 
   private async zone(tx: Tx, orgId: number): Promise<string> {

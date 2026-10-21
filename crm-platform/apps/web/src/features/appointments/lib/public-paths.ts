@@ -10,6 +10,10 @@ export const SLUG = /^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$/;
 /** A manage link's secret. */
 export const TOKEN = /^[A-Za-z0-9_-]{16,128}$/;
 
+/** The uuid of an uploaded booking page picture, or the workspace brand kit's logo. */
+export const ASSET_ID =
+  /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|brand-logo)$/;
+
 export type PublicPathMatch =
   | {
       ok: true;
@@ -18,6 +22,8 @@ export type PublicPathMatch =
       method: 'GET' | 'POST';
       /** Only these routes carry a query (`from`, `to`). */
       hasQuery: boolean;
+      /** A picture of the booking page (logo, cover): the one answer that may be cached, and that is not JSON. */
+      asset?: true;
     }
   | { ok: false; status: 404 | 405 };
 
@@ -26,6 +32,8 @@ interface Route {
   /** Segment checks: a RegExp for a variable segment, a string for a fixed one. */
   shape: ReadonlyArray<RegExp | string>;
   hasQuery?: boolean;
+  /** The API serves it under another name than the page's address (`assets` is `booking-assets` there). */
+  upstream?: readonly string[];
 }
 
 const ROUTES: readonly Route[] = [
@@ -37,6 +45,8 @@ const ROUTES: readonly Route[] = [
   { method: 'GET', shape: ['booking-manage', TOKEN, 'slots'], hasQuery: true },
   { method: 'POST', shape: ['booking-manage', TOKEN, 'reschedule'] },
   { method: 'POST', shape: ['booking-manage', TOKEN, 'cancel'] },
+  // The logo and cover of a booking page: `/api/public/appointments/assets/<workspace>/<picture id>?v=<version>`.
+  { method: 'GET', shape: ['assets', SLUG, ASSET_ID], upstream: ['booking-assets'] },
 ];
 
 const fits = (shape: Route['shape'], segments: readonly string[]): boolean =>
@@ -52,11 +62,13 @@ export function matchPublicPath(method: string, segments: readonly string[]): Pu
   if (shaped.length === 0) return { ok: false, status: 404 };
   const route = shaped.find((r) => r.method === verb);
   if (!route) return { ok: false, status: 405 };
+  const upstream = route.upstream ? [...route.upstream, ...segments.slice(1)] : segments;
   return {
     ok: true,
-    path: segments.map(encodeURIComponent).join('/'),
+    path: upstream.map(encodeURIComponent).join('/'),
     method: route.method,
     hasQuery: route.hasQuery === true,
+    ...(route.upstream ? { asset: true as const } : {}),
   };
 }
 

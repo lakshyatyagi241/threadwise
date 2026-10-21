@@ -24,6 +24,7 @@ import {
   templateCountsQuerySchema,
   templateGalleryQuerySchema,
   updateTemplateInputSchema,
+  uploadTemplateMediaInputSchema,
   type CreateTemplateInput,
   type LintTemplateInput,
   type ListTemplatesQuery,
@@ -32,6 +33,7 @@ import {
   type TemplateCountsQuery,
   type TemplateGalleryQuery,
   type UpdateTemplateInput,
+  type UploadTemplateMediaInput,
 } from '@crm/contracts';
 import { ActorKinds, Idempotent, RequirePermission } from '../../common/decorators';
 import { zodPipe } from '../../common/pipes/zod-validation.pipe';
@@ -92,7 +94,7 @@ export class TemplatesController {
     summary: 'Upload a header example (image, video or PDF) to Meta; returns its handle',
   })
   async uploadMedia(
-    @Body(zodPipe(syncTemplatesInputSchema)) body: SyncTemplatesInput,
+    @Body(zodPipe(uploadTemplateMediaInputSchema)) body: UploadTemplateMediaInput,
     @UploadedFile() file: { originalname: string; buffer: Buffer } | undefined,
   ) {
     return this.templates.uploadMedia(body.connectionId, file);

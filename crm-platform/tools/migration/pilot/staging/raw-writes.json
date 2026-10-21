@@ -1,5 +1,6 @@
 {
   "sql": {
+    "ai_chat_assistants": ["greeting", "name", "org_id", "slug"],
     "ai_token_usage": ["org_id"],
     "ai_training_sources": ["error", "status"],
     "channels": [
@@ -9,15 +10,35 @@
       "display_address",
       "external_id",
       "kind",
+      "last_error",
       "name",
       "org_id",
       "settings",
       "status",
       "uuid",
+      "waba_config_id",
       "webhook_token_hash"
     ],
+    "contact_consent_settings": ["auto_reply_enabled", "config", "org_id"],
+    "conversations": [
+      "assignee_user_id",
+      "contact_id",
+      "last_inbound_at",
+      "last_message_at",
+      "last_message_id",
+      "last_outbound_at",
+      "msg_seq",
+      "peer_name",
+      "preview",
+      "resolved_at",
+      "routing_meta",
+      "status",
+      "title",
+      "window_expires_at"
+    ],
+    "deal_lost_reasons": ["name", "org_id", "sort_order"],
     "event_outbox": ["aggregate_id", "aggregate_module", "event_type", "org_id", "payload"],
-    "faq_settings": ["enabled", "flow_id", "org_id"],
+    "flows": ["is_active", "is_published", "published_at", "row_version"],
     "message_ledger": [
       "channel_id",
       "conversation_id",
@@ -26,6 +47,16 @@
       "message_created_at",
       "message_id",
       "org_id"
+    ],
+    "messages": [
+      "body",
+      "delivered_at",
+      "failure_code",
+      "failure_reason",
+      "kind",
+      "meta",
+      "read_at",
+      "status"
     ],
     "org_plan_state": [
       "billing_cycle",
@@ -36,7 +67,62 @@
       "updated_at"
     ],
     "organizations": ["name", "plan", "roles_version", "settings", "slug", "updated_at", "uuid"],
+    "pipeline_stages": [
+      "color",
+      "is_lost",
+      "is_won",
+      "name",
+      "org_id",
+      "pipeline_id",
+      "probability",
+      "sort_order"
+    ],
+    "pipelines": ["currency", "is_default", "name", "org_id", "sort_order"],
+    "plans": [
+      "amount",
+      "billing_duration",
+      "billing_unit",
+      "currency",
+      "detail",
+      "features",
+      "is_active",
+      "is_default",
+      "kind",
+      "limits",
+      "name",
+      "slug",
+      "sort_order"
+    ],
+    "role_grants": ["effect", "org_id", "permission_key", "record_scope", "role_id"],
+    "routing_rules": [
+      "actions",
+      "conditions",
+      "is_active",
+      "is_fallback",
+      "name",
+      "org_id",
+      "sort",
+      "stop_on_match"
+    ],
     "sequence_counters": ["current_value", "module_key", "org_id"],
+    "subscriptions": [
+      "amount",
+      "billing_cycle",
+      "created_at",
+      "currency",
+      "current_period_end",
+      "gateway",
+      "gateway_customer_id",
+      "gateway_plan_id",
+      "gateway_subscription_id",
+      "kind",
+      "meta",
+      "org_id",
+      "plan_id",
+      "renewals_count",
+      "status"
+    ],
+    "task_outcomes": ["is_active", "name", "org_id", "sort_order"],
     "usage_charge_keys": [
       "charge_created_at",
       "charge_id",
@@ -48,8 +134,18 @@
     "usage_charges": ["org_id"],
     "user_profiles": ["org_id", "user_id"],
     "user_roles": ["org_id", "role_id", "user_id"],
-    "user_security": ["email_verified_at", "org_id", "user_id"],
-    "users": ["email", "full_name", "invited_at", "joined_at", "org_id", "password_hash", "status"],
+    "user_security": ["email_verified_at", "last_login_at", "org_id", "user_id"],
+    "users": [
+      "auth_subject",
+      "email",
+      "full_name",
+      "invited_at",
+      "joined_at",
+      "org_id",
+      "password_hash",
+      "status"
+    ],
+    "wa_provider_configs": ["connected_at", "last_health_at", "meta_json", "status"],
     "wallet_transactions": [
       "actor_label",
       "actor_type",
@@ -58,6 +154,7 @@
       "created_at",
       "description",
       "direction",
+      "id",
       "idempotency_key",
       "kind",
       "meta",
@@ -71,7 +168,9 @@
       "uuid"
     ],
     "wallets": ["balance", "org_id", "reserved", "row_version", "unit", "updated_at"],
-    "workspace_settings": ["org_id"]
+    "workspace_persona": ["onboarding", "org_id", "persona_key", "persona_version", "solo_ui"],
+    "workspace_settings": ["org_id", "row_version", "timezone", "updated_at"],
+    "wpcampaigns": ["template_id"]
   },
   "specs": {
     "conversations": "load/inbox:CONVERSATION_SPEC"

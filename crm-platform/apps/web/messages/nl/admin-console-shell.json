@@ -513,7 +513,8 @@
         "profileHint": "Je naam, foto en contactgegevens",
         "password": "Wachtwoord en beveiliging",
         "passwordHint": "Wachtwoord, tweestapsaanmelding en actieve sessies"
-      }
+      },
+      "searchPage": "Zoek op deze pagina naar \"{query}\""
     },
     "strip": {
       "jump": "Zoeken of springen naar...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Inbox",
       "clearAll": "Alles wissen",
       "viewAll": "Alles bekijken →"
+    },
+    "notFound": {
+      "title": "Pagina niet gevonden",
+      "body": "Deze pagina bestaat niet of is verplaatst. Controleer het adres of ga terug naar je dashboard.",
+      "home": "Naar dashboard"
     }
   }
 }

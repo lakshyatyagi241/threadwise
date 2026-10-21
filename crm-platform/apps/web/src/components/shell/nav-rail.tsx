@@ -7,6 +7,7 @@ import { useCallback, useEffect, useId, useRef, useState, type ReactNode } from 
 import { cn } from '@crm/ui';
 import { dirOf } from '@/i18n/locales';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useBrandName } from './brand';
 import { NavCollapsedContext } from './nav-context';
 import { BrandMark, CloseIcon, NavIcon } from './nav-icons';
 import { countBadge, groupCount, itemCount, useNavCounts } from './nav-badges';
@@ -161,18 +162,18 @@ export function NavPanel({
 
 /** Brand mark and wordmark at the top of the panel. */
 function PanelBrand({ collapsed, onNavigate }: { collapsed?: boolean; onNavigate?: () => void }) {
-  const t = useTranslations();
+  const brand = useBrandName();
   return (
     <Link
       href="/"
       onClick={onNavigate}
-      aria-label={collapsed ? t('common.appName') : undefined}
+      aria-label={collapsed ? brand : undefined}
       className="flex min-w-0 items-center gap-2.5 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-nav-ring"
     >
       <BrandMark className="size-8" />
       {!collapsed && (
         <span className="truncate text-base font-semibold tracking-tight text-nav-active-foreground">
-          {t('common.appName')}
+          {brand}
         </span>
       )}
     </Link>

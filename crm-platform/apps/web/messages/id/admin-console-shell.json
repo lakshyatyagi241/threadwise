@@ -513,7 +513,8 @@
         "profileHint": "Nama, foto, dan detail kontak Anda",
         "password": "Kata sandi dan keamanan",
         "passwordHint": "Kata sandi, masuk dua faktor, dan sesi aktif"
-      }
+      },
+      "searchPage": "Cari \"{query}\" di halaman ini"
     },
     "strip": {
       "jump": "Cari atau lompat ke...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Kotak Masuk",
       "clearAll": "Hapus semua",
       "viewAll": "Lihat semua →"
+    },
+    "notFound": {
+      "title": "Halaman tidak ditemukan",
+      "body": "Halaman ini tidak ada atau sudah dipindahkan. Periksa alamatnya atau kembali ke dasbor Anda.",
+      "home": "Buka dasbor"
     }
   }
 }

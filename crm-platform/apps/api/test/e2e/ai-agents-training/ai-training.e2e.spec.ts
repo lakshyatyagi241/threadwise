@@ -10,7 +10,7 @@ import type {
 import { SourceIngestConsumer } from '../../../src/modules/ai-agents-training/source-ingest.consumer';
 import { SOURCE_REQUESTED } from '../../../src/modules/ai-agents-training/source-events';
 import { SourcesRepository } from '../../../src/modules/ai-agents-training/sources.repository';
-import { SqlAssistantDirectory } from '../../../src/modules/chatbot-widget/_shims/sql-assistant-directory';
+import { KbIndexService, KbRetrievalService } from '../../../src/modules/knowledge-base';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { makeDocx, makePdf } from '../../unit/ai-agents-training/fixtures';
 import {
@@ -585,7 +585,7 @@ describe('knowledge entries: text, Q&A and URL (TW-AIAG-005..007)', () => {
     ).toBe(0);
   });
 
-  it("the list shows the assistant's entries newest first, plus workspace-wide ones", async () => {
+  it("the list shows only the assistant's own entries, newest first (a knowledge base belongs to one agent)", async () => {
     await h.owner.query(
       `INSERT INTO ai_training_sources (org_id, assistant_id, kind, label, content, status) VALUES ($1, NULL, 'text', 'Workspace wide', 'x', 'ready')`,
       [t.orgId],
@@ -595,11 +595,10 @@ describe('knowledge entries: text, Q&A and URL (TW-AIAG-005..007)', () => {
     const res = await api.as(t.admin).get(`${AS}/${a.id}/sources`);
     expect(res.status).toBe(200);
     const labels = res.body.data.map((s: SourceJson) => s.label);
-    expect(labels).toContain('Workspace wide');
     expect(labels).toContain('Policy');
     expect(labels).not.toContain('Only on other');
-    const ws = res.body.data.find((s: SourceJson) => s.label === 'Workspace wide');
-    expect(ws.assistantId).toBeNull();
+    // A leftover agent-less row (only ever imported from Reference) is read by nobody and listed nowhere.
+    expect(labels).not.toContain('Workspace wide');
     expect(JSON.stringify(res.body)).not.toMatch(/file_?path|content|"question"|"answer"/i);
   });
 
@@ -610,12 +609,6 @@ describe('knowledge entries: text, Q&A and URL (TW-AIAG-005..007)', () => {
     expect(await api.auditCount(t.orgId, 'ai_training_sources', 'delete')).toBeGreaterThanOrEqual(
       1,
     );
-  });
-
-  it('a workspace-wide entry can be deleted from the assistant screen (as in Reference)', async () => {
-    const list = await api.as(t.admin).get(`${AS}/${a.id}/sources`);
-    const ws = list.body.data.find((s: SourceJson) => s.label === 'Workspace wide');
-    expect((await api.as(t.admin).delete(`/v2/ai-training/sources/${ws.id}`)).status).toBe(204);
   });
 });
 
@@ -667,6 +660,7 @@ describe('the worker reads a URL entry (TW-AIAG-007)', () => {
       new OutboxSubscriberRegistry(),
       h.app.get(DatabaseService),
       new SourcesRepository(),
+      h.app.get(KbIndexService),
       fetcher,
     );
   });
@@ -1234,27 +1228,19 @@ describe('the readers see what is written (TW-AIAG-015)', () => {
       [t.orgId, await api.internalId(t.orgId, a.id)],
     );
 
-    const rows = await h.app
-      .get(DatabaseService)
-      .txAs({ orgId: t.orgId }, (tx) => new SqlAssistantDirectory().knowledge(tx, t.orgId, 0));
-    expect(rows).toEqual([expect.objectContaining({ label: 'Workspace wide' })]);
+    const kb = h.app.get(KbRetrievalService);
+    // An id that is no assistant's reads nothing: there is no pool of entries that every assistant shares.
+    expect((await kb.whole(t.orgId, 0)).passages).toEqual([]);
 
     const internal = await api.internalId(t.orgId, a.id);
-    const forReader = await h.app
-      .get(DatabaseService)
-      .txAs({ orgId: t.orgId }, (tx) =>
-        new SqlAssistantDirectory().knowledge(tx, t.orgId, internal),
-      );
-    expect(forReader.map((r) => r.label).sort()).toEqual(
-      ['Hours', 'A file', 'Refunds', 'Workspace wide'].sort(),
-    );
-    const qa = forReader.find((r) => r.label === 'Refunds')!;
-    expect(qa).toMatchObject({ kind: 'qa', question: 'How long?', answer: 'Five days.' });
+    const forReader = (await kb.whole(t.orgId, internal)).passages;
+    expect(forReader.map((r) => r.label).sort()).toEqual(['Hours', 'A file', 'Refunds'].sort());
+    expect(forReader.find((r) => r.label === 'Refunds')!.text).toBe('Q: How long?\nA: Five days.');
 
     const picker = (await api.as(t.admin).get(`${AS}/picker`)).body.data as Array<{
       name: string;
       sources: number;
     }>;
-    expect(picker.find((p) => p.name === 'Reader')!.sources).toBe(4);
+    expect(picker.find((p) => p.name === 'Reader')!.sources).toBe(3);
   });
 });

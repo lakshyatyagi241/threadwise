@@ -11,6 +11,9 @@ import {
 import { addonsConfig } from '../../config/domains/addons-extension-registry.env';
 import { ExtensionStore, type ExtensionRow } from './extension-store';
 import { scanModules, type DiskModule } from './module-loader';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('module_registry');
 
 export type ModuleSource = 'upload' | 'inplace';
 
@@ -85,7 +88,11 @@ export class ModuleRegistryService {
 
   async snapshot(): Promise<RegistrySnapshot> {
     const ttl = addonsConfig().ADDONS_REGISTRY_TTL_MS;
-    if (this.cached && Date.now() - this.cached.at < ttl) return this.cached;
+    if (this.cached && Date.now() - this.cached.at < ttl) {
+      cache.hit();
+      return this.cached;
+    }
+    cache.miss();
     if (this.inflight) return this.inflight;
     this.inflight = this.load().finally(() => {
       this.inflight = null;

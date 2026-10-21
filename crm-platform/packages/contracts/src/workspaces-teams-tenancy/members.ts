@@ -1,5 +1,6 @@
 import { z } from 'zod';
-import { emailSchema, uuidSchema } from '../common/ids';
+import { emailSchema, phoneSchema, uuidSchema } from '../common/ids';
+import { trimEdges } from '../common/trim-edges';
 import { paginationQuerySchema } from '../common/pagination';
 
 /**
@@ -28,6 +29,8 @@ export const WSP_TIER_RANK: Record<WspRoleTier, number> = {
 
 export const WSP_MEMBER_NAME_MAX = 191;
 
+const HIDDEN_EDGE = /^[\s\u200B-\u200D\u2060\uFEFF]$/;
+
 /**
  * A display name (member, team) with whitespace AND invisible formatting characters (zero-width space, joiners, word
  * joiner, byte-order mark) removed from both ends, so a name cannot hide behind characters nobody can see.
@@ -35,9 +38,7 @@ export const WSP_MEMBER_NAME_MAX = 191;
 export const wspDisplayName = (max: number) =>
   z
     .string()
-    .transform((v) =>
-      v.replace(/^[\s\u200B-\u200D\u2060\uFEFF]+|[\s\u200B-\u200D\u2060\uFEFF]+$/g, ''),
-    )
+    .transform((v) => trimEdges(v, (c) => HIDDEN_EDGE.test(c)))
     .pipe(z.string().min(1).max(max));
 export const WSP_INVITE_TTL_DAYS = 7;
 
@@ -46,6 +47,17 @@ export type WspMemberStatus = z.infer<typeof wspMemberStatusSchema>;
 
 export const wspPresenceSchema = z.enum(['online', 'away', 'busy', 'offline']);
 export type WspPresence = z.infer<typeof wspPresenceSchema>;
+
+/** Most open chats routing gives one agent at once. The Add member form starts at 4 (Waboo's default); no value = no limit. */
+export const WSP_CHAT_LIMIT_DEFAULT = 4;
+export const WSP_CHAT_LIMIT_MAX = 1000;
+export const wspChatLimitSchema = z.number().int().min(1).max(WSP_CHAT_LIMIT_MAX);
+
+/** A member's phone: E.164, or null/empty for none. Surrounding space is ignored; an empty string clears the number. */
+export const wspMemberPhoneSchema = z.preprocess(
+  (v) => (typeof v === 'string' ? (v.trim() === '' ? null : v.trim()) : v),
+  phoneSchema.nullable(),
+);
 
 export const wspRoleRefSchema = z.object({
   id: uuidSchema,
@@ -59,6 +71,10 @@ export const wspMemberSchema = z.object({
   fullName: z.string(),
   email: z.string(),
   avatarUrl: z.string().nullable(),
+  /** E.164; null when none is on file. */
+  phone: z.string().nullable(),
+  /** Most open chats routing gives this agent at once; null = no limit. */
+  chatLimit: z.number().int().nullable(),
   tier: wspRoleTierSchema,
   roles: z.array(wspRoleRefSchema),
   isOwner: z.boolean(),
@@ -66,6 +82,8 @@ export const wspMemberSchema = z.object({
   status: wspMemberStatusSchema,
   presence: wspPresenceSchema,
   lastSeenAt: z.string().datetime().nullable(),
+  /** The last time this member signed in (user_security.last_login_at); null = never. Read only. */
+  lastLoginAt: z.string().datetime().nullable(),
   invitedAt: z.string().datetime().nullable(),
   joinedAt: z.string().datetime().nullable(),
   teamIds: z.array(uuidSchema),
@@ -115,6 +133,8 @@ export const inviteWspMemberSchema = z.object({
   fullName: wspDisplayName(WSP_MEMBER_NAME_MAX),
   email: emailSchema,
   roleId: uuidSchema,
+  phone: wspMemberPhoneSchema.optional(),
+  chatLimit: wspChatLimitSchema.nullable().optional(),
 });
 export type InviteWspMemberInput = z.infer<typeof inviteWspMemberSchema>;
 
@@ -132,6 +152,28 @@ export const changeWspMemberRoleSchema = z.object({
   rowVersion: z.number().int().positive(),
 });
 export type ChangeWspMemberRoleInput = z.infer<typeof changeWspMemberRoleSchema>;
+
+/** The Change member dialog: phone and chat limit. `null` clears a value, leaving a key out keeps it. */
+export const updateWspMemberDetailsSchema = z
+  .object({
+    phone: wspMemberPhoneSchema.optional(),
+    chatLimit: wspChatLimitSchema.nullable().optional(),
+    rowVersion: z.number().int().positive(),
+  })
+  .refine((v) => v.phone !== undefined || v.chatLimit !== undefined, {
+    message: 'Nothing to change',
+  });
+export type UpdateWspMemberDetailsInput = z.infer<typeof updateWspMemberDetailsSchema>;
+
+/**
+ * The caller's own availability, the switch in the top bar. `online` = routing may give this agent chats, `offline` = it
+ * never does. A member nobody has switched yet counts as `online`, as routing always read them.
+ */
+export const WSP_AVAILABILITY = ['online', 'offline'] as const;
+export const wspAvailabilitySchema = z.object({ status: z.enum(WSP_AVAILABILITY) });
+export type WspAvailability = z.infer<typeof wspAvailabilitySchema>;
+export const setWspAvailabilitySchema = wspAvailabilitySchema;
+export type SetWspAvailabilityInput = z.infer<typeof setWspAvailabilitySchema>;
 
 export const wspMemberActionResponseSchema = z.object({
   member: wspMemberSchema,

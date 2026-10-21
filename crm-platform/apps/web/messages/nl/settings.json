@@ -85,7 +85,7 @@
         "keywords": "sms, afzender-id, dlt, twilio, mobiel"
       },
       "email": {
-        "label": "E-mail",
+        "label": "Support-e-mail",
         "description": "Verbind Gmail- of Google Workspace-mailboxen zodat je team klant-e-mail in de gedeelde inbox kan lezen en beantwoorden.",
         "keywords": "mailbox, gmail, google workspace, gedeelde inbox, support-e-mail, outlook, imap"
       },
@@ -181,8 +181,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Groepeer mensen in teams voor routering en rapportage.",
-        "keywords": "groepen, afdelingen, toewijzing, routering"
+        "description": "Groepeer mensen voor gesprekken, toewijzingen en rapporten.",
+        "keywords": "groepen, afdelingen, managers, hiërarchie, toewijzing, routering"
       },
       "ai-keys": {
         "label": "AI-providersleutels",
@@ -228,6 +228,11 @@
         "label": "REST API",
         "description": "Sleutels en documentatie om bovenop het product te bouwen.",
         "keywords": "api-sleutels, ontwikkelaars, tokens, documentatie, openapi"
+      },
+      "api-keys": {
+        "label": "API-sleutels",
+        "description": "Maak en beheer de sleutels waarmee andere systemen de API aanroepen.",
+        "keywords": "api-sleutel, token, geheim, ontwikkelaars, toegang, integratie"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -285,7 +290,7 @@
         "keywords": "geta, publiceren, bot, console, live zetten, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatisch toewijzen",
+        "label": "Automatische toewijzing van gesprekken",
         "description": "Wijs nieuwe gesprekken automatisch aan de juiste agent toe, op beurt of op basis van regels.",
         "keywords": "routering, round robin, toewijzen, agenten, inboxregels, verdelen, eigenaar"
       },
@@ -373,6 +378,11 @@
         "label": "Dubbele leads",
         "description": "Kies of een nieuwe lead die bij een contact past daarmee wordt samengevoegd of een nieuw contact wordt.",
         "keywords": "dubbel, samenvoegen, lead, zelfde telefoon, zelfde e-mail, nieuw contact, leadbron"
+      },
+      "sales-activities": {
+        "label": "Verkoopactiviteiten",
+        "description": "Beheer taken, afspraken, gesprekken en eigen activiteiten: wat elke activiteit kan, welke taaktypen en uitkomsten ze heeft.",
+        "keywords": "activiteiten, taaktypen, uitkomsten, afspraakuitkomst, gespreksuitkomst, opvolgen, inchecken, eigen activiteit, agenda, voltooien"
       }
     },
     "title": "Instellingen",

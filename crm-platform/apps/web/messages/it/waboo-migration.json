@@ -46,7 +46,9 @@
       "catchUp": "Recupera",
       "migrateHint": "La migrazione inizia con una prova generale completa e non carica nulla se non è pulita. Una prova separata è facoltativa.",
       "queued": "Esecuzione messa in coda.",
-      "scheduled": "Esecuzione pianificata."
+      "scheduled": "Esecuzione pianificata.",
+      "skipWhatsapp": "Non migrare il numero WhatsApp (per i test)",
+      "skipWhatsappHint": "L'area di lavoro viene migrata per intero, ma il suo numero WhatsApp non viene importato né collegato."
     },
     "confirm": {
       "title": "Migra {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Migra tutte",
       "migrateHint": "Ogni organizzazione inizia con una propria prova generale completa e non carica nulla se non è pulita. Una prova separata è facoltativa.",
       "queued": "Batch messo in coda.",
-      "scheduled": "Batch pianificato."
+      "scheduled": "Batch pianificato.",
+      "skipWhatsapp": "Non migrare i numeri WhatsApp (per i test)",
+      "skipWhatsappHint": "Per nessuna di queste aree di lavoro il numero WhatsApp viene importato o collegato."
     },
     "bulkConfirm": {
       "title": "Migra {count} organizzazioni",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Prova",
       "load": "Migrazione",
-      "catchup": "Recupero"
+      "catchup": "Recupero",
+      "skipWhatsapp": "Senza numero WhatsApp"
     },
     "status": {
       "queued": "In coda",
@@ -196,7 +201,8 @@
       "core-load": "Caricamento principale",
       "flow-state": "Stato dei flussi",
       "reconcile": "Riconciliazione",
-      "report": "Report"
+      "report": "Report",
+      "whatsapp": "Numero WhatsApp"
     },
     "stepStatus": {
       "running": "In corso",

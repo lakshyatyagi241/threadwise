@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Deployments"
+    },
+    "eyebrow": "Operations",
+    "title": "Deployments",
+    "description": "Every flow published to the Geta console: what is queued, what is running now, and what failed and why. Refreshes every few seconds.",
+    "updated": "Live. Updated {time}",
+    "stale": "The last refresh failed. Showing the previous deployments.",
+    "stalledAlert": "{count} deployment(s) have not changed for {minutes} minutes. Their worker may have stopped.",
+    "truncated": "Showing the first {limit} deployments. Pick a status to see the rest.",
+    "kpi": {
+      "running": "Running",
+      "queued": "Queued",
+      "failed": "Failed",
+      "live": "Live",
+      "stalled": "Stalled"
+    },
+    "filter": {
+      "label": "Filter by status",
+      "all": "All",
+      "running": "Running",
+      "queued": "Queued",
+      "failed": "Failed",
+      "live": "Live"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Step",
+      "attempted": "Last attempt",
+      "updated": "Last change",
+      "error": "Error"
+    },
+    "status": {
+      "running": "Running",
+      "queued": "Queued",
+      "failed": "Failed",
+      "live": "Live"
+    },
+    "steps": {
+      "configuration_update": "Configuration update",
+      "publish_bot": "Publish bot"
+    },
+    "stalledBadge": "Stalled",
+    "version": "Version {version}",
+    "notStarted": "Not started",
+    "failedAt": "Failed at {step}",
+    "noDetail": "No error text was stored.",
+    "empty": {
+      "title": "Nothing to show",
+      "all": "No flow has been published to the Geta console yet.",
+      "running": "No publish is running right now.",
+      "queued": "Nothing is waiting in the queue.",
+      "failed": "No publish has failed.",
+      "live": "No flow is live on the Geta console yet."
+    },
+    "tabs": {
+      "label": "Choose what to show",
+      "publishes": "Flow publishes",
+      "geta": "Geta console",
+      "releases": "Product releases"
+    },
+    "publishes": {
+      "description": "Every flow publish: what the worker has queued, what it is handling now, and which publishes failed and why. Refreshes every few seconds.",
+      "stalledAlert": "{count} flow publish(es) have not moved for {minutes} minutes. The worker may have stopped draining the outbox.",
+      "truncated": "Showing the first {limit} publishes. Pick a status to see the rest.",
+      "notProcessed": "Not yet",
+      "cols": {
+        "attempts": "Attempts",
+        "queued": "Queued at",
+        "finished": "Finished at"
+      },
+      "status": {
+        "done": "Done"
+      },
+      "empty": {
+        "all": "No flow has been published yet.",
+        "done": "No publish has finished in the last 30 days."
+      }
+    },
+    "releases": {
+      "description": "What is live on desk.wabo.ai: the current release, any release in progress, and each attempt with its steps and errors. Refreshes every few seconds.",
+      "liveLabel": "Live now",
+      "live": "Release {tag}, live since {time}",
+      "noneLive": "No release has gone live yet.",
+      "inProgress": "A release is in progress",
+      "stalledAlert": "{count} release attempt(s) have not moved for {minutes} minutes. The build or the release may have stopped.",
+      "empty": "No release has been recorded yet. Releases appear here from the next deploy on.",
+      "cols": {
+        "tag": "Tag",
+        "state": "State",
+        "step": "Step",
+        "started": "Started",
+        "finished": "Finished",
+        "error": "Error"
+      },
+      "state": {
+        "building": "Building",
+        "shipping": "Shipping",
+        "releasing": "Releasing",
+        "ok": "Live",
+        "failed": "Failed",
+        "rolled_back": "Rolled back"
+      }
+    }
+  }
+}

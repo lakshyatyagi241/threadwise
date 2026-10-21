@@ -101,7 +101,7 @@
         "keywords": "wiadomość tekstowa, identyfikator nadawcy, dlt, twilio, komórka"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail wsparcia",
         "description": "Połącz skrzynki Gmail lub Google Workspace, aby zespół mógł czytać i odpowiadać na e-maile klientów we wspólnej skrzynce odbiorczej.",
         "keywords": "skrzynka pocztowa, gmail, google workspace, wspólna skrzynka, e-mail do wsparcia, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Zespoły",
-        "description": "Grupuj osoby w zespoły do przydzielania i raportowania.",
-        "keywords": "grupy, działy, przydział, routing"
+        "description": "Grupuj osoby na potrzeby rozmów, przypisań i raportów.",
+        "keywords": "grupy, działy, menedżerowie, hierarchia, przypisanie, routing"
       },
       "ai-keys": {
         "label": "Klucze dostawców AI",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "Klucze i dokumentacja do tworzenia rozwiązań na bazie produktu.",
         "keywords": "klucze api, deweloperzy, tokeny, dokumentacja, openapi"
+      },
+      "api-keys": {
+        "label": "Klucze API",
+        "description": "Twórz klucze, których inne systemy używają do wywoływania API, i zarządzaj nimi.",
+        "keywords": "klucz api, token, sekret, programiści, dostęp, integracja"
       },
       "webhooks": {
         "label": "Webhooki",
@@ -301,7 +306,7 @@
         "keywords": "geta, publikacja, bot, konsola, uruchom, chatbot"
       },
       "auto-assignment": {
-        "label": "Automatyczne przydzielanie",
+        "label": "Automatyczne przypisywanie rozmów",
         "description": "Automatycznie przydzielaj nowe rozmowy właściwemu agentowi, po kolei lub według reguł.",
         "keywords": "routing, round robin, przydział, agenci, reguły skrzynki, rozdziel, właściciel"
       },
@@ -389,6 +394,11 @@
         "label": "Zduplikowane leady",
         "description": "Wybierz, czy nowy lead pasujący do kontaktu ma zostać z nim scalony, czy stać się nowym kontaktem.",
         "keywords": "duplikat, scalanie, lead, ten sam telefon, ten sam e-mail, nowy kontakt, źródło leadów"
+      },
+      "sales-activities": {
+        "label": "Aktywności sprzedażowe",
+        "description": "Zarządzaj zadaniami, spotkaniami, rozmowami i własnymi aktywnościami: co może każda, jakie ma typy zadań i wyniki.",
+        "keywords": "aktywności, typy zadań, wyniki, wynik spotkania, wynik rozmowy, kontakt kontrolny, zameldowanie, własna aktywność, kalendarz, zakończ"
       }
     },
     "backToMarketplace": "Wróć do Marketplace"

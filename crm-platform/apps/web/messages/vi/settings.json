@@ -101,7 +101,7 @@
         "keywords": "tin nhắn văn bản, sender id, dlt, twilio, di động"
       },
       "email": {
-        "label": "Email",
+        "label": "Email hỗ trợ",
         "description": "Kết nối hộp thư Gmail hoặc Google Workspace để nhóm của bạn đọc và trả lời email khách hàng trong hộp thư đến dùng chung.",
         "keywords": "hộp thư, gmail, google workspace, hộp thư đến dùng chung, email hỗ trợ, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Đội nhóm",
-        "description": "Nhóm người vào đội để phân công và báo cáo.",
-        "keywords": "nhóm, phòng ban, phân công, định tuyến"
+        "description": "Gom mọi người lại cho hội thoại, phân công và báo cáo.",
+        "keywords": "nhóm, phòng ban, quản lý, phân cấp, phân công, định tuyến"
       },
       "ai-keys": {
         "label": "Khóa nhà cung cấp AI",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "Khóa và tài liệu để phát triển trên sản phẩm.",
         "keywords": "khóa api, nhà phát triển, token, tài liệu, openapi"
+      },
+      "api-keys": {
+        "label": "Khóa API",
+        "description": "Tạo và quản lý các khóa mà hệ thống khác dùng để gọi API.",
+        "keywords": "khóa api, token, bí mật, nhà phát triển, truy cập, tích hợp"
       },
       "webhooks": {
         "label": "Webhook",
@@ -301,7 +306,7 @@
         "keywords": "geta, xuất bản, bot, bảng điều khiển, đưa lên, chatbot"
       },
       "auto-assignment": {
-        "label": "Tự động phân công",
+        "label": "Tự động phân công cuộc trò chuyện",
         "description": "Tự động giao cuộc trò chuyện mới cho đúng nhân viên, theo lượt hoặc theo quy tắc.",
         "keywords": "định tuyến, luân phiên, phân công, nhân viên, quy tắc hộp thư, phân phối, chủ sở hữu"
       },
@@ -389,6 +394,11 @@
         "label": "Khách hàng tiềm năng trùng lặp",
         "description": "Chọn việc khách hàng tiềm năng mới khớp với một liên hệ sẽ được gộp vào đó hay trở thành liên hệ mới.",
         "keywords": "trùng lặp, gộp, khách hàng tiềm năng, cùng số điện thoại, cùng e-mail, liên hệ mới, nguồn"
+      },
+      "sales-activities": {
+        "label": "Hoạt động bán hàng",
+        "description": "Quản lý công việc, cuộc họp, cuộc gọi và hoạt động riêng của bạn: mỗi hoạt động làm được gì, các loại công việc và kết quả.",
+        "keywords": "hoạt động, loại công việc, kết quả, kết quả cuộc họp, kết quả cuộc gọi, theo dõi, check-in, hoạt động tùy chỉnh, lịch, hoàn thành"
       }
     },
     "backToMarketplace": "Quay lại Marketplace"

@@ -19,6 +19,7 @@ import {
   type CursorKeyType,
 } from './company-rules';
 import type { CompanyPropertyDef } from './company-properties';
+import { isTeamPeer, scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 /** One company as the SQL returns it, with the owner and the creator already joined (names and uuids, never ids on the wire). */
 export interface CompanyRow {
@@ -163,14 +164,10 @@ export function companyScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(c.owner_id = ${actorUserId} OR c.created_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR c.owner_id IN ${peers} OR c.created_by IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`c.owner_id`,
+    sql`c.created_by`,
+  ]);
 }
 
 /** Contacts and deals are counted by their own columns; an archived contact is not a contact of the list (nor of the count). */
@@ -738,13 +735,9 @@ export class CompaniesRepository {
     orgId: number,
     actorUserId: number,
     userId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${userId}
-      LIMIT 1
-    `);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, userId, below);
   }
 }

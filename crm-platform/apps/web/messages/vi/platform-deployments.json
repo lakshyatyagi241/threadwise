@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Triển khai"
+    },
+    "eyebrow": "Vận hành",
+    "title": "Triển khai",
+    "description": "Mọi luồng đã xuất bản lên console Geta: cái gì đang chờ trong hàng đợi, cái gì đang chạy, và cái gì lỗi cùng lý do. Tự làm mới vài giây một lần.",
+    "updated": "Trực tiếp. Cập nhật lúc {time}",
+    "stale": "Lần làm mới gần nhất thất bại. Đang hiển thị các lần triển khai trước đó.",
+    "stalledAlert": "{count} lần triển khai không thay đổi trong {minutes} phút. Worker của chúng có thể đã dừng.",
+    "truncated": "Đang hiển thị {limit} lần triển khai đầu tiên. Chọn trạng thái để xem phần còn lại.",
+    "kpi": {
+      "running": "Đang chạy",
+      "queued": "Trong hàng đợi",
+      "failed": "Lỗi",
+      "live": "Đang hoạt động",
+      "stalled": "Bị treo"
+    },
+    "filter": {
+      "label": "Lọc theo trạng thái",
+      "all": "Tất cả",
+      "running": "Đang chạy",
+      "queued": "Trong hàng đợi",
+      "failed": "Lỗi",
+      "live": "Đang hoạt động"
+    },
+    "cols": {
+      "workspace": "Không gian làm việc",
+      "flow": "Luồng",
+      "status": "Trạng thái",
+      "step": "Bước",
+      "attempted": "Lần thử gần nhất",
+      "updated": "Thay đổi gần nhất",
+      "error": "Lỗi"
+    },
+    "status": {
+      "running": "Đang chạy",
+      "queued": "Trong hàng đợi",
+      "failed": "Lỗi",
+      "live": "Đang hoạt động"
+    },
+    "steps": {
+      "configuration_update": "Cập nhật cấu hình",
+      "publish_bot": "Xuất bản bot"
+    },
+    "stalledBadge": "Bị treo",
+    "version": "Phiên bản {version}",
+    "notStarted": "Chưa bắt đầu",
+    "failedAt": "Lỗi ở bước {step}",
+    "noDetail": "Không có nội dung lỗi nào được lưu.",
+    "empty": {
+      "title": "Không có gì để hiển thị",
+      "all": "Chưa có luồng nào được xuất bản lên console Geta.",
+      "running": "Hiện không có lần xuất bản nào đang chạy.",
+      "queued": "Không có gì đang chờ trong hàng đợi.",
+      "failed": "Không có lần xuất bản nào bị lỗi.",
+      "live": "Chưa có luồng nào đang hoạt động trên console Geta."
+    },
+    "tabs": {
+      "label": "Chọn nội dung hiển thị",
+      "publishes": "Xuất bản luồng",
+      "geta": "Console Geta",
+      "releases": "Bản phát hành sản phẩm"
+    },
+    "publishes": {
+      "description": "Mọi lần xuất bản luồng: những gì worker đã đưa vào hàng đợi, đang xử lý gì, và lần xuất bản nào lỗi cùng lý do. Tự làm mới vài giây một lần.",
+      "stalledAlert": "{count} lần xuất bản luồng không tiến triển trong {minutes} phút. Worker có thể đã ngừng xử lý hàng đợi.",
+      "truncated": "Đang hiển thị {limit} lần xuất bản đầu tiên. Chọn trạng thái để xem phần còn lại.",
+      "notProcessed": "Chưa",
+      "cols": {
+        "attempts": "Số lần thử",
+        "queued": "Vào hàng đợi lúc",
+        "finished": "Hoàn tất lúc"
+      },
+      "status": {
+        "done": "Hoàn tất"
+      },
+      "empty": {
+        "all": "Chưa có luồng nào được xuất bản.",
+        "done": "Không có lần xuất bản nào hoàn tất trong 30 ngày qua."
+      }
+    },
+    "releases": {
+      "description": "Những gì đang chạy trên desk.wabo.ai: bản phát hành hiện tại, bản đang triển khai và từng lần thử cùng các bước và lỗi. Tự làm mới vài giây một lần.",
+      "liveLabel": "Đang chạy",
+      "live": "Bản {tag}, chạy từ {time}",
+      "noneLive": "Chưa có bản phát hành nào đưa vào chạy.",
+      "inProgress": "Đang có một bản phát hành",
+      "stalledAlert": "{count} lần thử phát hành không thay đổi trong {minutes} phút. Bước build hoặc phát hành có thể đã dừng.",
+      "empty": "Chưa có bản phát hành nào được ghi lại. Các bản sẽ hiện ở đây từ lần triển khai tiếp theo.",
+      "cols": {
+        "tag": "Thẻ",
+        "state": "Trạng thái",
+        "step": "Bước",
+        "started": "Bắt đầu",
+        "finished": "Kết thúc",
+        "error": "Lỗi"
+      },
+      "state": {
+        "building": "Đang build",
+        "shipping": "Đang gửi",
+        "releasing": "Đang phát hành",
+        "ok": "Đang chạy",
+        "failed": "Lỗi",
+        "rolled_back": "Đã hoàn lại"
+      }
+    }
+  }
+}

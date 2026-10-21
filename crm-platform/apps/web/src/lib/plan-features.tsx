@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useMemo, type ReactNode } from 'react';
+import { planFeaturesOfLine, type PlanProductLine } from '@crm/contracts';
 
 /**
  * The plan features the workspace has right now (its plan, its overrides and the Marketplace apps it has installed), read once by the
@@ -27,4 +28,22 @@ export function PlanFeaturesProvider({
 export function usePlanFeature(key: string): boolean {
   const features = useContext(PlanFeaturesContext);
   return features === null || features.has(key);
+}
+
+/**
+ * True when the workspace has at least one plan feature of the product line (`chat`, `crm`, `platform`; each key's line is declared once in
+ * the contracts' feature registry), or when that is not known yet. A "Chat" edition is a plan with the `crm` keys off, so a screen asks this
+ * instead of a plan name. Hiding what an edition does not use is the persona's job; this only reports what the plan gives.
+ */
+export function usePlanProductLine(line: PlanProductLine): boolean {
+  const features = useContext(PlanFeaturesContext);
+  return features === null || planFeaturesOfLine(line).some((k) => features.has(k));
+}
+
+/**
+ * The two Teams packaging features (BL-383). Teams v2 asks `hierarchy` before it draws a parent team, a lead or manager picker or the
+ * "my team and sub-teams" scope; the Roles screens ask `customRoles`. Unknown plan: both true, like `usePlanFeature`.
+ */
+export function useTeamsPackaging(): { hierarchy: boolean; customRoles: boolean } {
+  return { hierarchy: usePlanFeature('team_hierarchy'), customRoles: usePlanFeature('custom_roles') };
 }

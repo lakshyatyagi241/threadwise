@@ -513,7 +513,8 @@
         "profileHint": "Ihr Name, Foto und Kontaktdaten",
         "password": "Passwort und Sicherheit",
         "passwordHint": "Passwort, Zwei-Faktor-Anmeldung und aktive Sitzungen"
-      }
+      },
+      "searchPage": "Auf dieser Seite nach \"{query}\" suchen"
     },
     "strip": {
       "jump": "Suchen oder springen zu...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Posteingang",
       "clearAll": "Alle löschen",
       "viewAll": "Alle anzeigen →"
+    },
+    "notFound": {
+      "title": "Seite nicht gefunden",
+      "body": "Diese Seite existiert nicht oder wurde verschoben. Prüfe die Adresse oder kehre zu deinem Dashboard zurück.",
+      "home": "Zum Dashboard"
     }
   }
 }

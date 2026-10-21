@@ -555,17 +555,13 @@
           "cardCount": "{count} thẻ",
           "payLink": "Liên kết thanh toán",
           "invoice": "Hóa đơn",
-          "faqAllFaqs": "Tất cả FAQ",
-          "faqCategory": "FAQ: {name}",
-          "faqScore": "điểm tối thiểu {score}",
-          "faqNotSent": "không gửi",
-          "faqWorkspaceScore": "điểm của luồng"
+          "faqRetired": "Đã ngừng · thoát qua không khớp"
         },
         "overlays": {
           "startPinned": "Đây là điểm bắt đầu (nhấn để bỏ ghim)",
           "startMake": "Đặt làm điểm bắt đầu",
           "startPoint": "Điểm bắt đầu",
-          "editTitle": "Sửa (mở bảng thuộc tính)",
+          "editTitle": "Chỉnh sửa (mở bảng kiểm tra, hoặc nhấp đúp vào nút, hoặc nhấn Enter)",
           "edit": "Sửa",
           "duplicateTitle": "Nhân bản (Ctrl+D)",
           "duplicate": "Nhân bản",
@@ -581,7 +577,9 @@
           "nothingHint": "Nhấn một nút trên canvas để sửa thuộc tính,<br/>hoặc kéo một thẻ từ bên trái để thêm nút mới.",
           "nodeFallback": "Nút",
           "id": "id",
-          "noSettings": "Nút này không có cài đặt."
+          "noSettings": "Nút này không có cài đặt.",
+          "confirmDeleteTitle": "Xóa nút này?",
+          "confirmDeleteMessage": "Nút và các kết nối của nó sẽ bị xóa. Nhấn Ctrl+Z để hoàn tác khi bạn chưa rời trình dựng."
         },
         "palette": {
           "modeCall": "Gọi",
@@ -721,8 +719,7 @@
             "answer": "Trả lời",
             "action": "Hành động"
           },
-          "blockedTitle": "Bước này kết thúc phần này nên chỉ có thể đặt ở cuối.",
-          "blockedTitleFaq": "Trả lời từ FAQ có hai lối ra nên chỉ có thể đặt ở cuối."
+          "blockedTitle": "Bước này kết thúc phần này nên chỉ có thể đặt ở cuối."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -911,18 +908,12 @@
             "hint": "Khách truy cập được chuyển cho nhóm này kèm ghi chú của bạn. Không cần nối gì sau nút này."
           },
           "faq": {
-            "exits": {
-              "matched": "Nếu có FAQ trả lời, chuyển đến",
-              "no_match": "Nếu không có FAQ nào trả lời, chuyển đến"
-            },
-            "exitsHint": {
-              "matched": "Lúc này câu trả lời dạng văn bản đã được gửi. FAQ bắt đầu một luồng sẽ tiếp tục trong luồng đó.",
-              "no_match": "Không có gì đủ gần, hoặc tính năng tự động trả lời bằng FAQ đang tắt."
-            }
+            "exit": "Tiếp tục với",
+            "exitHint": "Luồng luôn tiếp tục ở đây."
           }
         },
         "branchAdd": "Thêm bước cho “{title}”",
-        "faqEnds": "Bước này kết thúc phần này: nội dung được gửi tiếp theo phụ thuộc vào việc có FAQ trả lời hay không."
+        "faqEnds": "Bước đã ngừng này kết thúc phần này: luồng luôn tiếp tục qua lối ra Không khớp."
       },
       "formsCore": {
         "helpers": {
@@ -1870,43 +1861,7 @@
           "waitUntilPaid": "Chờ đến khi thanh toán, rồi tiếp tục"
         },
         "faq": {
-          "intro": {
-            "body": "So khớp tin nhắn với FAQ của luồng này theo ý nghĩa và trả lời. Thoát qua <mono>answered</mono> khi một FAQ đã trả lời, và qua <mono>no match</mono> trong các trường hợp còn lại.",
-            "sub": "Hoạt động mà không cần bật trả lời FAQ tự động của luồng này. <link>Quản lý FAQ của luồng này</link>"
-          },
-          "exitsLabel": "Lối ra",
-          "exitMatchedName": "Đã trả lời",
-          "exitMatched": "một FAQ đã trả lời: văn bản của nó đã được gửi (trừ khi tắt gửi), hoặc luồng của nó tiếp quản và không quay lại.",
-          "exitNoMatchName": "Không khớp",
-          "exitNoMatch": "không có gì đủ gần, tự động trả lời bằng FAQ bị tắt cho nền tảng, luồng hoặc bước được liên kết không còn, hoặc tin nhắn trống.",
-          "query": "Tin nhắn cần so khớp",
-          "queryHint": "Mặc định là tin nhắn cuối cùng của khách hàng. Biến do bước Câu hỏi lưu cũng dùng được, ví dụ <mono>{variable}</mono>. Nhập / để chèn.",
-          "category": "Chỉ các FAQ này",
-          "allFaqs": "Tất cả FAQ",
-          "loadingCategories": "Đang tải danh mục…",
-          "categoryGone": "{name} (không có FAQ nào dùng)",
-          "retry": "Thử lại",
-          "minScore": "Điểm tối thiểu",
-          "sendAnswer": "Gửi câu trả lời cho khách hàng",
-          "sendAnswerToggle": "Gửi câu trả lời văn bản khớp dưới dạng tin nhắn",
-          "sendAnswerOnHint": "FAQ văn bản khớp sẽ được gửi cho khách hàng. FAQ bắt đầu một luồng sẽ tiếp tục trong luồng đó.",
-          "sendAnswerOffHint": "Không gửi gì: câu trả lời chỉ được lưu vào các biến bên dưới để bước sau tự soạn phản hồi. FAQ bắt đầu một luồng vẫn tiếp tục trong luồng đó.",
-          "save": "Lưu kết quả với tên",
-          "saveHint": "Tên dùng để lưu kết quả. Các bước sau đọc nó như hiển thị bên dưới.",
-          "variables": {
-            "answer": "nội dung câu trả lời",
-            "matched": "có hoặc không",
-            "question": "câu hỏi của FAQ khớp",
-            "score": "mức độ khớp",
-            "id": "id của FAQ khớp"
-          },
-          "noFaqs": "Luồng này chưa có FAQ nào, nên bước này luôn thoát qua no match. <link>Thêm FAQ đầu tiên cho luồng này</link>",
-          "useWorkspaceScore": "Dùng cài đặt của luồng này",
-          "minScoreInvalid": "Nhập một số từ {min} đến {max}, hoặc dùng cài đặt của luồng này.",
-          "saveFlowFirst": "Hãy lưu luồng trước. FAQ của luồng được chỉnh sửa ở tab FAQ của trình tạo đơn giản, và bước này trả lời từ đó.",
-          "categoryHint": "Chỉ FAQ thuộc danh mục này mới có thể trả lời. Các danh mục lấy từ FAQ của luồng này.",
-          "categoriesFailed": "Không thể tải danh mục FAQ của luồng này.",
-          "minScoreHint": "Thay thế điểm của luồng này chỉ cho bước này, từ {min} đến {max}. Điểm phụ thuộc vào mô hình embedding của nền tảng, nên hãy thử một tin nhắn trong <link>kiểm tra FAQ</link> của luồng này trước khi chọn số."
+          "retired": "Bước này đã ngừng và không còn tìm gì nữa. Luồng luôn tiếp tục qua Không khớp. Để trả lời từ kiến thức của bạn, hãy dùng bước trợ lý AI và chọn một tác nhân AI."
         }
       },
       "attrPicker": {
@@ -1977,7 +1932,6 @@
         "customizeFirst": "Hãy tùy chỉnh widget chat và lưu một lần trước khi xuất bản.",
         "deploy": "Triển khai",
         "customizeFirstWhatsapp": "Hãy tùy chỉnh nút WhatsApp và lưu một lần trước khi xuất bản.",
-        "faqs": "FAQ",
         "install": "Cài đặt"
       },
       "buttonIcon": {
@@ -2148,8 +2102,8 @@
           "description": "Thêm hoặc xóa thẻ"
         },
         "assign": {
-          "label": "Gán nhân viên",
-          "description": "Chuyển cho nhân viên"
+          "label": "Chuyển giao cho người thật",
+          "description": "Chuyển chat cho một người hoặc hàng chờ"
         },
         "subflow": {
           "label": "Chạy luồng con",
@@ -2499,7 +2453,6 @@
         "noSenderInstagram": "Nút Kích hoạt chưa chọn tài khoản Instagram — hãy chọn ở bước Kích hoạt.",
         "noSenderFacebook": "Nút Kích hoạt chưa chọn Trang Facebook — hãy chọn ở bước Kích hoạt.",
         "noSenderNumber": "Nút Kích hoạt chưa chọn số — hãy chọn ở bước Kích hoạt.",
-        "faqMinScore": "\"{node}\" có điểm tối thiểu ngoài khoảng 0.05 đến 0.99 — hãy sửa hoặc để trống để dùng cài đặt của luồng.",
         "locationInvalid": "“{node}” chưa có vị trí hợp lệ — hãy dán liên kết Google Maps hoặc nhập vĩ độ (-90 đến 90) và kinh độ (-180 đến 180).",
         "aiNoAgent": "\"{node}\" không có tác nhân AI và cũng không có lời nhắc — hãy chọn tác nhân AI, hoặc chọn Thiết lập tùy chỉnh và viết hướng dẫn."
       }
@@ -2510,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Gán cho nhân viên",
-          "help": "Chuyển cuộc trò chuyện cho một nhóm hoặc nhân viên"
+          "label": "Chuyển giao cho người thật",
+          "help": "Chuyển cuộc trò chuyện cho một người, một nhóm hoặc quy tắc giao việc"
         },
         "message": {
           "label": "Tin nhắn",
@@ -2589,10 +2542,6 @@
           "label": "Điều kiện",
           "help": "Rẽ nhánh theo điều gì khách đã nói hoặc lưu, với quy tắc AND / OR"
         },
-        "faq": {
-          "label": "Trả lời từ FAQ",
-          "help": "So khớp tin nhắn của khách hàng với các FAQ của bạn. Kết thúc luồng này: một lối ra nếu có FAQ trả lời, một lối khác nếu không"
-        },
         "apiLibrary": {
           "label": "Gọi API",
           "help": "Gọi một API từ thư viện API của bạn"
@@ -2614,7 +2563,7 @@
         "location": "Vị trí",
         "template": "Mẫu",
         "cta": "Nút liên kết",
-        "assign": "Gán cho nhân viên",
+        "assign": "Chuyển giao cho người thật",
         "carousel": "Băng chuyền",
         "condition": "Điều kiện",
         "faq": "Trả lời từ FAQ",
@@ -2661,7 +2610,6 @@
         "carouselCards": "Bước {stage}: thêm ít nhất một thẻ và đặt tiêu đề cho mỗi thẻ.",
         "carouselButtons": "Bước {stage}: đặt tên cho mỗi nút, cùng liên kết, số hoặc địa chỉ ở nút mở ra điều gì đó.",
         "conditionIncomplete": "Bước {stage}: hoàn thành các quy tắc của điều kiện (mỗi quy tắc có một biến và một giá trị).",
-        "faqMinScore": "Bước {stage}: điểm tối thiểu phải từ 0.05 đến 0.99, hoặc dùng cài đặt của luồng.",
         "optionNotConnected": "Bước {stage}: {kind, select, row {hàng} other {nút}} \"{label}\" không dẫn đến đâu. Hãy thêm một bước cho nó hoặc gán một hành động.",
         "tooManyOptions": "Bước {stage}: {kind, select, row {danh sách có tối đa {max} hàng} other {một nhóm nút có tối đa {max} nút}}.",
         "chooseFlow": "Bước {stage}: chọn luồng mà nút sẽ bắt đầu.",
@@ -2670,8 +2618,7 @@
         "webhookUrl": "Bước {stage}: thêm địa chỉ (URL) cần gọi.",
         "chooseAiAgent": "Bước {stage}: chọn tác nhân AI sẽ trả lời, hoặc chuyển bước này sang thiết lập tùy chỉnh.",
         "writeAiPrompt": "Bước {stage}: viết hướng dẫn cho AI, hoặc chọn một tác nhân AI."
-      },
-      "faqSummary": "{hasCategory, select, true {Từ FAQ của bạn · {category}} other {Từ FAQ của bạn}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2783,9 +2730,8 @@
       "buttonNotConnected": "Nút \"{label}\" chưa được kết nối — dừng lại.",
       "simPurchase": "Mô phỏng giao dịch mua: {name} → cổng \"đã mua\"",
       "simAbandon": "Mô phỏng bỏ dở → cổng \"bỏ dở\"",
-      "faqAnswered": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, nên không gửi gì và {ref} vẫn trống. Đi theo lối \"đã trả lời\".",
-      "faqNoMatch": "(mô phỏng) Trả lời từ FAQ cho \"{query}\": chat thử không tra cứu FAQ của bạn, và lối \"đã trả lời\" chưa được nối, nên đi theo \"không khớp\". {ref} vẫn trống.",
-      "locationSkipped": "(vị trí) đã bỏ qua: không có tọa độ hợp lệ"
+      "locationSkipped": "(vị trí) đã bỏ qua: không có tọa độ hợp lệ",
+      "faqRetired": "(mô phỏng) Trả lời từ câu hỏi thường gặp đã ngừng: đi theo \"không khớp\"."
     }
   }
 }

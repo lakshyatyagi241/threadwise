@@ -3,7 +3,7 @@
     "back": "Automatisierung",
     "title": "Regeln zur Datensatzzuweisung",
     "intro": "Neue Datensätze ({contacts}, Firmen und {deals}) automatisch dem richtigen Vertriebsverantwortlichen zuweisen.",
-    "crossNote": "Hier werden {contacts}, Firmen und {deals} zugewiesen. Informationen zur Zuweisung von Unterhaltungen an Mitarbeitende finden Sie unter <link>Automatische Zuweisung</link>.",
+    "crossNote": "Hier werden {contacts}, Firmen und {deals} zugewiesen. Informationen zur Zuweisung von Unterhaltungen an Mitarbeitende finden Sie unter <link>Automatische Zuweisung von Unterhaltungen</link>.",
     "master": {
       "title": "Datensatzzuweisung aktivieren",
       "hint": "Aus, bis Sie sie einschalten. Wenn sie aktiv ist, weisen die folgenden Regeln einem neuen Datensatz ({contact}, Firma oder {deal}) ohne Verantwortlichen eine Person aus Ihrem Team zu.",
@@ -233,7 +233,14 @@
         "nobody": "Trifft zu, aber niemand war verfügbar",
         "broken": "Hat eine fehlerhafte Bedingung"
       },
-      "skipped": "Übersprungen, weil niemand verfügbar war: {names}"
+      "skipped": "Übersprungen, weil niemand verfügbar war: {names}",
+      "excluded": {
+        "label": "Ausgeschlossen",
+        "no_access": "{name}: kann diese Art von Datensatz nicht öffnen",
+        "inactive": "{name}: nicht mehr aktiv",
+        "on_leave": "{name}: heute abwesend",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Ausführungsprotokoll",
@@ -296,6 +303,7 @@
       "message": "Die Regel {name} weist nicht mehr zu. Datensätze, die sie bereits zugewiesen hat, behalten ihren Verantwortlichen.",
       "confirm": "Löschen",
       "cancel": "Abbrechen"
-    }
+    },
+    "dismiss": "Schließen"
   }
 }

@@ -206,6 +206,12 @@ const METERS: ReadonlyArray<{
       ),
   },
   {
+    // Teams the workspace holds. The create guard (TeamsPlanService) reads the cap with solo = 0, so assertCanAdd refuses this key.
+    key: 'teams',
+    window: 'total',
+    count: (tx, orgId) => n(tx, sql`SELECT count(*)::int AS n FROM teams WHERE org_id = ${orgId}`),
+  },
+  {
     key: 'sla_policies',
     window: 'total',
     count: (tx, orgId) =>
@@ -352,6 +358,8 @@ const NOT_A_ROW_COUNT: ReadonlySet<PlanLimitKey> = new Set<PlanLimitKey>([
   'ai_token_limit_monthly',
   // Bytes held, counted by the storage meter (modules/storage-quota), not rows; the cap is read there. No panel entry until phase S2.
   'storage_gb',
+  // 0 is "solo", not unlimited: the create guard of the Teams module (TeamsPlanService) enforces it.
+  'teams',
 ]);
 
 async function n(tx: Tx, query: ReturnType<typeof sql>): Promise<number> {
@@ -385,6 +393,18 @@ export class PlanUsageService {
   }
 
   /**
+   * Messages the workspace sent this calendar month: the `monthly_messages` meter, counted from the messages table. The plan page, the
+   * analytics and the wallet's "used this month" all read this one number (the wallet's own settlement counter only counts messages
+   * that went through delivery-time billing, so it reads 0 for history that was imported).
+   */
+  async messagesThisMonth(orgId: number, now = new Date()): Promise<number> {
+    const meter = METERS.find((m) => m.key === 'monthly_messages')!;
+    return this.db.txAs({ orgId, userId: null }, (tx) =>
+      meter.count(tx, orgId, monthStart(now), nextMonthStart(now)),
+    );
+  }
+
+  /**
    * The one-line guard for a domain that creates a capped thing (devices, flows, templates, auto-replies, ...): counts what the workspace
    * holds with the SAME predicate the usage panel shows, then refuses row N+1 with 422 PLAN_LIMIT_REACHED. Call it before the insert, in the
    * creating request. Four keys are not live row counts and are refused here on purpose: `total_campaigns` is the delete-proof ledger
@@ -401,6 +421,23 @@ export class PlanUsageService {
     const used = await this.db.txAs({ orgId, userId: null }, (tx) =>
       meter.count(tx, orgId, monthStart(now), nextMonthStart(now)),
     );
+    await this.entitlements.assertWithinLimit(orgId, key, used);
+  }
+
+  /**
+   * `assertCanAdd` for a creator that has its own transaction: takes the per-workspace, per-limit lock FIRST and counts inside that
+   * transaction, so N parallel creates at the cap minus one cannot all pass (QA Sheet3 #15, D-05). Call it as the first statement of
+   * the transaction that inserts the row; the lock lasts until that transaction ends.
+   */
+  async assertCanAddIn(tx: Tx, orgId: number, key: PlanLimitKey, now = new Date()): Promise<void> {
+    if (NOT_A_ROW_COUNT.has(key)) {
+      throw new Error(`assertCanAddIn does not apply to ${key}`);
+    }
+    const cap = await this.entitlements.limit(orgId, key);
+    if (cap === 0) return;
+    await this.entitlements.lockLimit(tx, orgId, key);
+    const meter = METERS.find((m) => m.key === key)!;
+    const used = await meter.count(tx, orgId, monthStart(now), nextMonthStart(now));
     await this.entitlements.assertWithinLimit(orgId, key, used);
   }
 

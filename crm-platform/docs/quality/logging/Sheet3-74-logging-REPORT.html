@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #74 Structured logging - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--b:#b4540a;--c:#6b7480;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--b:#f0a05a;--c:#8b949e;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}h3{font-size:1.05rem;margin:1.2em 0 .3em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.partly{color:var(--warn)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.meta{color:var(--mut);font-size:.92rem}.meta code{word-break:break-all}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+figure{margin:14px 0}figcaption{color:var(--mut);font-size:.88rem}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}svg .m{fill:var(--mut)}
+.warn{color:var(--warn)}.chip{font-size:.78rem;font-weight:700;padding:0 .45em;border:1px solid currentColor;border-radius:4px;white-space:nowrap}
+code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
+@media print{body{font-size:11pt}main{max-width:none}table,figure,.box,.tile{break-inside:avoid}h2{break-after:avoid}}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Centralized structured logging: tests and fixes</h1>
+<p><span class="badge partly">Partly met</span> &nbsp; Sheet3 item #74 &middot; this row belongs to <strong>Akshay</strong>; Vedant asked for the tests explicitly</p>
+<p class="meta">Date: 2026-10-21 &middot; Branch: <code>vedant/qa/logging-tests</code> &middot; Commit: <code>b7349f319</code> (code and tests; this report is committed after it) &middot; PR: none (local, not pushed). No Loki, no log shipping: this is about what the application writes.</p>
+<blockquote>Sheet target, word for word: "100% backend services; correlation/request/tenant IDs on applicable events"</blockquote>
+</header>
+
+<h2>In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>13</b><span>findings: 9 fixed, 4 open</span></div>
+<div class="tile"><b>30</b><span>new tests (10 end-to-end HTTP, 20 ratchet and masking), all green</span></div>
+<div class="tile"><b>2569 / 2569</b><span>lines of a real API boot were valid single-line JSON</span></div>
+<div class="tile"><b>2 of 5</b><span>backend processes covered (api, worker); node-bridge is inside the API; web has no server logger; partner app absent</span></div>
+</div>
+<p><strong>Verdict: Partly met.</strong> The API and the worker now write one JSON line per event with the same fields, one request id per request on every line, the tenant on authenticated lines, and no secrets from headers, URLs, query strings or error texts. The request id still does not travel onto outbound calls or queue jobs, and the Next.js web server has no structured log.</p>
+<div class="box"><strong>Decisions needed from you</strong><ol>
+<li>Should the request id be sent on every outbound call and stored in every queue job (O1)? It touches many modules, so it needs the owner (Akshay).</li>
+<li>Does the web server need its own JSON log, or is Sentry enough (O3)?</li>
+<li>The fixes edit shared code (app.module, main, worker, request middleware, outbox drain, process handlers) outside this row's owner: please have Akshay review the diff.</li></ol></div>
+
+<h2>What is this, in plain words</h2>
+<p>A log line is a note the program writes about what it just did. Structured means each note is one line of JSON with the same named fields, so a person or tool can filter &quot;everything request abc-123 did&quot; or &quot;everything workspace 7 did&quot;. Think of a ship's log where every entry has a date, a ship, a page number and a handwriting a machine can read. The danger is the other direction: a secret written into the log is readable by everyone who can read logs.</p>
+<div class="box"><strong>Glossary.</strong> <em>Request id</em>: a label given to one incoming call, repeated on every line it causes. <em>Tenant / org id</em>: the customer workspace. <em>Redaction</em>: removing secrets before writing. <em>Ratchet test</em>: a test that only lets a number get better (here: no new <code>console.log</code>). <em>Outbox</em>: the table where an event is saved so the worker can handle it later. <em>pino</em>: the JSON logger library.</div>
+
+<h2>How we tested</h2>
+<figure><svg role="img" aria-label="test setup: HTTP client to Nest app with the real logger options, error filter and request-context middleware, to a memory stream parsed line by line" viewBox="0 0 760 90" width="760">
+<rect x="4" y="20" width="130" height="50" rx="6" fill="none" stroke="var(--line)"/><text x="14" y="50">HTTP client</text>
+<rect x="190" y="10" width="300" height="70" rx="6" fill="none" stroke="var(--a)"/><text x="200" y="35">Nest app: real logger options,</text><text x="200" y="55">error filter, context middleware</text>
+<rect x="560" y="20" width="190" height="50" rx="6" fill="none" stroke="var(--line)"/><text x="570" y="50">memory stream, parsed</text>
+<path d="M134 45h56M490 45h70" stroke="var(--c)"/></svg><figcaption>Requests go to a small Nest app that uses the production logger options (<code>apps/api/src/common/logging/http-logger.ts</code>, now shared with <code>app.module.ts</code>). Each log line is read back and parsed.</figcaption></figure>
+<ol><li>Read the logger set-up, middleware, error filter, masking helper, outbox and worker; find the gaps.</li>
+<li>Boot the real API (<code>node dist/src/main.js</code>, port 3917, Redis db 14) and send 4 requests: health, a 404 with <code>?token=</code>, an unauthenticated 401, a public tokenised URL. Analyse every line.</li>
+<li>Write the HTTP test first, watch it fail on real output (3 failures, then 1), fix the shared code, repeat.</li>
+<li>Add the ratchet and masking tests; run the touched suites, <code>tsc</code>, ESLint, Prettier.</li></ol>
+
+<h2>Results at a glance</h2>
+<figure><svg role='img' aria-label='bar chart' viewBox='0 0 420 84' width='420'><text x='0' y='15'>High</text><rect x='150' y='0' width='125' height='20' fill='var(--bad)'/><text x='281' y='15'>3</text><text x='0' y='43'>Medium</text><rect x='150' y='28' width='250' height='20' fill='var(--warn)'/><text x='406' y='43'>6</text><text x='0' y='71'>Low</text><rect x='150' y='56' width='166' height='20' fill='var(--c)'/><text x='322' y='71'>4</text></svg><figcaption>Findings by severity: High 3, Medium 6, Low 4 (13 in total, fixed and open together).</figcaption></figure>
+<figure><svg role='img' aria-label='bar chart' viewBox='0 0 420 56' width='420'><text x='0' y='15'>Fixed</text><rect x='150' y='0' width='250' height='20' fill='var(--ok)'/><text x='406' y='15'>9</text><text x='0' y='43'>Open</text><rect x='150' y='28' width='111' height='20' fill='var(--bad)'/><text x='267' y='43'>4</text></svg><figcaption>9 findings fixed, 4 open.</figcaption></figure>
+<figure><svg role='img' aria-label='bar chart' viewBox='0 0 420 56' width='420'><text x='0' y='15'>logging.spec.ts</text><rect x='150' y='0' width='125' height='20' fill='var(--a)'/><text x='281' y='15'>10</text><text x='0' y='43'>logging-ratchet.spec.ts</text><rect x='150' y='28' width='250' height='20' fill='var(--b)'/><text x='406' y='43'>20</text></svg><figcaption>30 new tests: 10 in logging.spec.ts, 20 in logging-ratchet.spec.ts.</figcaption></figure>
+<p>Real boot, 4 requests: 2569 lines, 2569 valid JSON, every line has <code>time</code>, <code>level</code>, <code>msg</code>, <code>service</code>; the health probe left 0 lines; the secret strings in the URLs left 0 occurrences; largest line 1246 bytes. 2556 of the lines are Nest route-mapping notes written at boot (O2).</p>
+
+<h2>Service by requirement matrix</h2>
+<p>Same data as <code>docs/quality/logging/matrix.json</code>. Honest reading: only the API is deeply tested.</p>
+<table><tr><th scope='col'>Service</th><th scope='col'>One-line JSON</th><th scope='col'>Stable fields</th><th scope='col'>Request id</th><th scope='col'>Tenant id</th><th scope='col'>Redaction</th><th scope='col'>Level / volume</th><th scope='col'>Injection-safe</th><th scope='col'>Notes</th></tr><tr><th scope='row'>api</th><td class='ok'>pass</td><td class='ok'>pass</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='ok'>pass</td><td>request id: header, all lines of a request; NOT sent on outbound HTTP calls or put into queue jobs. tenant: tested with a simulated guard, not a real JWT. redaction: headers, URL, query, error text; free-text business logs not scanned. volume: 2556 Nest route-mapping lines at every boot.</td></tr><tr><th scope='row'>worker</th><td class='ok'>pass</td><td class='ok'>pass</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='meta'>untested</td><td class='ok'>pass</td><td>same base options (service=worker), asserted by unit test, worker process not booted here. Outbox lines now carry the id of the request that wrote the event. BullMQ jobs carry no request id.</td></tr><tr><th scope='row'>node_bridge</th><td class='ok'>pass</td><td class='ok'>pass</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='warn'>partial</td><td class='meta'>untested</td><td class='ok'>pass</td><td>a module inside the API process (apps/api/src/modules/node-bridge-runtime), not a separate service: it logs through the API logger. No outbound id propagation.</td></tr><tr><th scope='row'>web_nextjs</th><td class='bad'>fail</td><td class='bad'>fail</td><td class='warn'>partial</td><td class='meta'>na</td><td class='meta'>untested</td><td class='meta'>untested</td><td class='meta'>untested</td><td>no server logger; 6 files use console.* (mostly browser side). The auth route handlers forward or create x-request-id; the proxy does not. Open.</td></tr><tr><th scope='row'>partner_app</th><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td>apps/partner does not exist in this checkout.</td></tr><tr><th scope='row'>cli_tools</th><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>na</td><td class='meta'>untested</td><td class='meta'>na</td><td class='meta'>na</td><td>terminal tools (console.* allowed by the ratchet test). The fatal process handler writes the same JSON shape.</td></tr></table>
+
+<h2>Findings</h2>
+<table><tr><th scope="col">ID</th><th scope="col">Severity</th><th scope="col">Status</th><th scope="col">What went wrong, why it matters, how it was fixed</th><th scope="col">Fix</th><th scope="col">Test</th></tr><tr><td>F1</td><td><span class='chip bad'>High</span></td><td>fixed</td><td><strong>Nest <code>Logger</code> output was not JSON</strong><br><code>main.ts</code> and <code>worker.ts</code> never called <code>app.useLogger</code>, so every <code>new Logger()</code> line (error filter, outbox, bootstrap, 5xx stacks) used Nest's coloured text printer: no JSON, no redaction, no request id. Found by reading the code; not reproduced before the fix. After the fix a real boot wrote 2569 of 2569 lines as JSON.</td><td>Both entry points now call <code>app.useLogger(app.get(PinoLogger))</code>.</td><td><code>logging-ratchet.spec.ts (wiring) + real boot</code></td></tr><tr><td>F2</td><td><span class='chip bad'>High</span></td><td>fixed</td><td><strong>Query-string secrets in the request log line</strong><br>pino-http logged <code>req.query</code> and <code>req.params</code> raw: <code>?token=...</code>, <code>?api_key=...</code> and the bearer-link token appeared in clear (captured in the failing test run). The URL masker only knew path secrets.</td><td>Query and params are dropped from the request object (the masked <code>url</code> stays); <code>maskSecretUrl</code> now masks token/secret/password/signature/api key/auth/code/otp query values.</td><td><code>logging.spec.ts redaction test; logging-ratchet.spec.ts 13 URL cases</code></td></tr><tr><td>F3</td><td><span class='chip bad'>High</span></td><td>fixed</td><td><strong>Credentials inside error text</strong><br>An error message such as <code>connect postgres://crm:PW@db ... Authorization: Bearer X; token=Y</code> was written with its stack, twice (captured). Error texts come from drivers and client libraries.</td><td>A shared <code>err</code> serializer scrubs connection-string passwords, Bearer/Basic values, JWTs and key=value secrets, and caps size at 8 KB. Pattern based: best effort.</td><td><code>logging.spec.ts (5xx test), logging-ratchet.spec.ts (worker options)</code></td></tr><tr><td>F4</td><td><span class='chip warn'>Medium</span></td><td>fixed</td><td><strong>A 5xx was logged twice at error level</strong><br>The exception filter logs the real error; pino-http then logged <code>request errored</code> with a made-up stack (<code>failed with status code 500</code>). Captured in the test output.</td><td>The made-up error is dropped; the access line of a 5xx is a warn, a 4xx is info (pino-http default was warn).</td><td><code>logging.spec.ts &quot;logged once as an error&quot;</code></td></tr><tr><td>F5</td><td><span class='chip warn'>Medium</span></td><td>fixed</td><td><strong>Two different request ids for one request</strong><br>With a bad or long <code>x-request-id</code>, pino used one id (<code>req.id</code>) and the context middleware generated another (<code>requestId</code>); logs and the response header disagreed (captured).</td><td>One shared resolver (<code>resolveRequestId</code>, plain characters, max 128); both sides reuse whichever id exists first.</td><td><code>logging.spec.ts &quot;same request id&quot;, &quot;over-long id&quot;</code></td></tr><tr><td>F6</td><td><span class='chip warn'>Medium</span></td><td>fixed</td><td><strong>Unbounded header values in the log</strong><br>A 5000-character <code>x-request-id</code> header was written twice per request (about 10 KB of one caller-chosen value).</td><td>Every logged header value is cut at 256 characters.</td><td><code>logging.spec.ts (&lt; 2 KB per line)</code></td></tr><tr><td>F7</td><td><span class='chip warn'>Medium</span></td><td>fixed</td><td><strong>Handler lines had no request or tenant id</strong><br>Only the final access line carried <code>requestId</code>/<code>orgId</code>; lines written inside the handler did not.</td><td>A pino <code>mixin</code> adds request id, org, actor to every line written inside a request.</td><td><code>logging.spec.ts tenant test</code></td></tr><tr><td>F8</td><td><span class='chip meta'>Low</span></td><td>fixed</td><td><strong>Worker lines for an outbox event did not name the originating request</strong><br>The id is stored in the event payload but never logged.</td><td><code>outbox event dispatched</code> and <code>dead-lettered</code> lines now carry <code>requestId</code>.</td><td><code>logging-ratchet.spec.ts (wiring assertion only; the drain was not run)</code></td></tr><tr><td>F9</td><td><span class='chip meta'>Low</span></td><td>fixed</td><td><strong>Different field formats</strong><br>Level was a number, time epoch milliseconds, no <code>service</code> field; the fatal-exit line used yet another shape.</td><td>One base: <code>time</code> ISO 8601, <code>level</code> label, <code>msg</code>, <code>service</code> (api / worker). Existing fatal-handler test updated (1 line).</td><td><code>logging.spec.ts, observability.spec.ts</code></td></tr><tr><td>O1</td><td><span class='chip warn'>Medium</span></td><td>open</td><td><strong>Request id is not passed on</strong><br>No outbound HTTP call sets <code>x-request-id</code> and no BullMQ job carries the id (code search only, not exercised). Only outbox events keep it.</td><td>Open. Needs an outbound helper and a job-data field; touches many modules.</td><td><code>none</code></td></tr><tr><td>O2</td><td><span class='chip meta'>Low</span></td><td>open</td><td><strong>Boot writes 2556 Nest route-mapping lines at info</strong><br>Measured in the real boot (2556 of 2569 lines).</td><td>Open. Cheap fix: drop the RouterExplorer/RoutesResolver/InstanceLoader contexts below warn.</td><td><code>none</code></td></tr><tr><td>O3</td><td><span class='chip warn'>Medium</span></td><td>open</td><td><strong>Web (Next.js) has no structured server log</strong><br>No server logger; 6 files use <code>console.*</code>; the proxy does not forward <code>x-request-id</code>.</td><td>Open. Needs a decision (small JSON logger or Vercel/Sentry only).</td><td><code>none</code></td></tr><tr><td>O4</td><td><span class='chip meta'>Low</span></td><td>open</td><td><strong>Free-text business logs not scanned</strong><br>Phone or card numbers inside a message string a developer writes are not detected. The scrubber covers errors, URLs and headers only.</td><td>Open. A code review rule or a scan of <code>logger.*(`...${}`)</code> would help.</td><td><code>none</code></td></tr></table>
+<p class="meta">Edits in other owners' modules (a few lines each): app.module.ts, main.ts, worker.ts, worker.module.ts, request-context.middleware.ts, outbox-drain.service.ts, process-handlers.ts, observability.spec.ts (one expected value). Ownership guard not run.</p>
+
+<h2>What this does NOT prove</h2>
+<ul>
+<li>The tenant id test uses a simulated guard that sets the org on the context; a real JWT login, impersonation and a request that switches tenant were not run, so &quot;never another tenant's id&quot; is shown only for that path.</li>
+<li>The worker process and the BullMQ processors were not booted; the worker's fields are checked by a unit test of the shared options and the outbox change only by a source assertion.</li>
+<li>Scrubbing is pattern based. A secret in an unusual shape, or typed by a developer into a free-text message, is not caught (O4). Phone and card-like fields in free text were not tested.</li>
+<li>Request bodies are not logged by pino-http at all; a 5 MB body test shows no line over 8 KB. Business code that logs a body itself was not searched.</li>
+<li>Sentry scrubbing (separate code) was not re-tested here. Production shipping, retention and access to logs are out of scope.</li>
+<li>Production mode with pino-pretty (NODE_ENV=development) prints human text, not JSON, by design.</li>
+<li>The full API unit suite was not run (17 minutes); only the touched suites (293 tests in 15 files) plus tsc, ESLint and Prettier.</li></ul>
+
+<h2>Next steps and owners</h2>
+<ul><li>Akshay: review the shared-code diff; decide O1 (outbound and queue propagation) and O3 (web logging).</li><li>Anyone: O2 (quiet the boot noise), O4 (review rule for secrets in free text).</li></ul>
+
+<h2>Appendix</h2>
+<table><tr><th scope="col">Command</th><th scope="col">Result</th></tr>
+<tr><td><code>npx vitest run --dir test/unit test/unit/logging</code> (apps/api)</td><td>2 files, 30 tests pass</td></tr>
+<tr><td><code>npx vitest run ... test/unit/logging test/unit/platform-infrastructure/observability test/unit/common test/unit/workers</code></td><td>15 files, 293 tests pass</td></tr>
+<tr><td><code>npx tsc -p tsconfig.json --noEmit</code>; <code>nest build -b swc</code></td><td>0 errors</td></tr>
+<tr><td>ESLint on changed files</td><td>0 errors, 3 warnings (explicit any in the test helper and one serializer cast)</td></tr>
+<tr><td>Real boot: <code>PORT=3917 NODE_ENV=test REDIS_URL=redis://localhost:56379/14 node dist/src/main.js</code> + 4 curl requests</td><td>2569 lines valid JSON; 0 health lines; 0 secret leaks</td></tr></table>
+<p class="meta">Files: <code>apps/api/src/common/logging/http-logger.ts</code> (new), <code>mask-secret-url.ts</code>, <code>test/unit/logging/*.spec.ts</code> (new), <code>docs/quality/logging/matrix.json</code> (new). The log captured from the real boot was kept outside the repository.</p>
+</main>
+</body>
+</html>

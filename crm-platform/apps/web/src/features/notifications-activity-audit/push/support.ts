@@ -147,3 +147,17 @@ export function testOutcome(result: { sent: number; failed: number }): TestOutco
 
 /** Local storage key holding the server's id of this browser's device. */
 export const PUSH_DEVICE_KEY = 'crm.push.device';
+
+/** Session storage key: the automatic first ask already ran in this browser tab session (so an ignored prompt is not re-asked per page). */
+export const PUSH_ASKED_KEY = 'crm.push.asked';
+
+/**
+ * Whether the person still has to answer the browser's permission question: push is possible on this browser and the answer is
+ * `default` (never asked or dismissed). Only then the prompt asks, on sign-up and on every page until the person answers.
+ */
+export function isAwaitingAnswer(
+  state: PushUiState,
+  permission: PushEnv['permission'] | null,
+): boolean {
+  return state === 'off' && permission === 'default';
+}

@@ -17,9 +17,16 @@ import { withVocabulary, type Tree } from '@/features/persona-vocabulary/lib/ove
 import { HelpAgentRoot } from '@/features/help-agent/components/assistant-root';
 import { helpFor } from '@/features/help-center/view';
 import { AppGate, type AppRouteGate } from '@/components/shell/app-gate';
+import { BrandProvider } from '@/components/shell/brand';
+import { getSiteConfig } from '@/features/platform-settings-branding-storage/site/site-config';
+import { PlanClosedGate } from '@/components/shell/plan-closed-gate';
 import { InboxNavCounts } from '@/features/team-inbox-conversations';
 import { WalletAppShell } from '@/features/wallet-message-billing';
-import { LiveNotifications, NotificationBell } from '@/features/notifications-activity-audit';
+import {
+  LiveNotifications,
+  NotificationBell,
+  NotificationPermissionPrompt,
+} from '@/features/notifications-activity-audit';
 import { SessionProvider } from '@/features/auth-registration-security/shared/session-context';
 import { NAV } from '@/features/_registry/nav.generated';
 import { MENU_PLANNED_NAV } from '@/features/_registry/planned';
@@ -61,6 +68,8 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   };
   // The docs this person may see in Help (gated like the menu); the page-level tip and every HelpTip read this index.
   const locale = await getLocale();
+  // The product name from the platform settings (blank = the default name); every visible place reads it through `useBrandName`.
+  const brandName = (await getSiteConfig())?.brand.name ?? '';
   const help = helpFor(capabilities, locale);
   // Dynamic object naming (BL-310): the words this workspace uses for a contact, an appointment, a deal and a meeting, laid over the
   // messages of the bound surfaces. No words named (generic, no overrides, another language) returns the very same messages: no change.
@@ -74,6 +83,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     href: n.href,
     feature: n.gates!.planFeature!,
   }));
+  // Screens that must not even mount while the plan lacks the feature (`gates.closeWhenLocked`): the sheet explains, no request fires.
+  const closedGates = NAV.filter((n) => n.gates?.planFeature && n.gates.closeWhenLocked).map(
+    (n) => ({ href: n.href, feature: n.gates!.planFeature! }),
+  );
   // A Marketplace app's screens are closed (not paywalled) while the workspace does not have the app; see `gates.app`.
   const appGates: AppRouteGate[] = NAV.filter((n) => n.gates?.app).map((n) => ({
     href: n.href,
@@ -89,73 +102,82 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
 
   return (
     <SessionProvider session={session}>
-      {/* Every date and time below is shown in the person's zone: their own choice, else the workspace's, else UTC. */}
-      <NextIntlClientProvider
-        timeZone={session.effectiveTimezone}
-        {...(messages !== baseMessages ? { messages } : {})}
-      >
-        {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
-        <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
-          {/* The persona's view, for screens that decide what to draw inside another screen (contact tabs, Home cards). */}
-          <PersonaProvider view={session.org.persona}>
-            {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
+      <BrandProvider name={brandName}>
+        {/* Every date and time below is shown in the person's zone: their own choice, else the workspace's, else UTC. */}
+        <NextIntlClientProvider
+          timeZone={session.effectiveTimezone}
+          {...(messages !== baseMessages ? { messages } : {})}
+        >
+          {/* What the workspace has (plan, overrides, installed apps), for screens that sit inside other screens (a score on a contact). */}
+          <PlanFeaturesProvider features={enabledFeatures ? [...enabledFeatures] : null}>
+            {/* The persona's view, for screens that decide what to draw inside another screen (contact tabs, Home cards). */}
+            <PersonaProvider view={session.org.persona}>
+              {/* One socket per signed-in session; the key starts a fresh one (and a fresh ticket) when the person or workspace changes.
           The address is read here, on the server, so it can be set per deployment without rebuilding. */}
-            <RealtimeProvider
-              key={`${session.org.id}:${session.user.id}`}
-              url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
-            >
-              {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
-              <LiveNotifications />
-              <HelpProvider entries={help.entries}>
-                {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
-                <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
-                  <WalletAppShell
-                    user={{
-                      fullName: session.user.displayName ?? session.user.fullName,
-                      email: session.user.email,
-                      avatarUrl: session.user.avatarUrl,
-                    }}
-                    nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
-                    settings={resolveSettings(SETTINGS, capabilities, {
-                      planned: PLANNED_SETTINGS,
-                    })}
-                    theme={theme}
-                    navFooter={<WorkspaceSwitcher />}
-                    banners={
-                      <>
-                        {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
-                        <ImpersonationBanner key="impersonation" />
-                        <TrialBar />
-                        <BackgroundErrorBanner key="background-error" />
-                        <AccountBanners key="banners" />
-                      </>
-                    }
-                    bell={<NotificationBell key="bell" />}
-                  >
-                    <AccountGate>
-                      <AppGate
-                        gates={appGates}
+              <RealtimeProvider
+                key={`${session.org.id}:${session.user.id}`}
+                url={process.env.REALTIME_URL ?? process.env.NEXT_PUBLIC_REALTIME_URL}
+              >
+                {/* Bell, toast, ping, desktop alert and tab-title badge on every page, from the socket above (no second connection). */}
+                <LiveNotifications />
+                <HelpProvider entries={help.entries}>
+                  {/* The Inbox entry's unread number in the menu, on every page (read from the cache the Inbox and the live socket keep). */}
+                  <InboxNavCounts enabled={capabilities.permissions.has('inbox.conversation.read')}>
+                    <WalletAppShell
+                      user={{
+                        fullName: session.user.displayName ?? session.user.fullName,
+                        email: session.user.email,
+                        avatarUrl: session.user.avatarUrl,
+                      }}
+                      nav={resolveNav(NAV, capabilities, { planned: MENU_PLANNED_NAV })}
+                      settings={resolveSettings(SETTINGS, capabilities, {
+                        planned: PLANNED_SETTINGS,
+                      })}
+                      theme={theme}
+                      navFooter={<WorkspaceSwitcher />}
+                      banners={
+                        <>
+                          {/* An operator acting as the owner (TW-WSP-033): non-dismissible, first thing under the top bar. */}
+                          <ImpersonationBanner key="impersonation" />
+                          <TrialBar />
+                          <BackgroundErrorBanner key="background-error" />
+                          {/* Until the person answers the browser's notification permission: asked on arrival, then this banner. */}
+                          <NotificationPermissionPrompt key="notification-permission" />
+                          <AccountBanners key="banners" />
+                        </>
+                      }
+                      bell={<NotificationBell key="bell" />}
+                    >
+                      <AccountGate>
+                        <AppGate
+                          gates={appGates}
+                          enabled={enabledFeatures ? [...enabledFeatures] : null}
+                          marketplaceHref={marketplaceHref}
+                        >
+                          {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
+                          <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
+                            <PlanClosedGate
+                              gates={closedGates}
+                              enabled={enabledFeatures ? [...enabledFeatures] : null}
+                            >
+                              {children}
+                            </PlanClosedGate>
+                          </HelpAgentRoot>
+                        </AppGate>
+                      </AccountGate>
+                      <PlanPaywall
+                        gates={paywallGates}
                         enabled={enabledFeatures ? [...enabledFeatures] : null}
-                        marketplaceHref={marketplaceHref}
-                      >
-                        {/* The Help assistant (launcher, panel, shortcut): nothing renders unless the plan, the workspace and the role allow it. */}
-                        <HelpAgentRoot planEnabled={enabledFeatures?.has('help_agent') ?? false}>
-                          {children}
-                        </HelpAgentRoot>
-                      </AppGate>
-                    </AccountGate>
-                    <PlanPaywall
-                      gates={paywallGates}
-                      enabled={enabledFeatures ? [...enabledFeatures] : null}
-                      canBrowseApps={marketplaceHref !== null}
-                    />
-                  </WalletAppShell>
-                </InboxNavCounts>
-              </HelpProvider>
-            </RealtimeProvider>
-          </PersonaProvider>
-        </PlanFeaturesProvider>
-      </NextIntlClientProvider>
+                        canBrowseApps={marketplaceHref !== null}
+                      />
+                    </WalletAppShell>
+                  </InboxNavCounts>
+                </HelpProvider>
+              </RealtimeProvider>
+            </PersonaProvider>
+          </PlanFeaturesProvider>
+        </NextIntlClientProvider>
+      </BrandProvider>
     </SessionProvider>
   );
 }

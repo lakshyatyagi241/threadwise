@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { sql } from 'drizzle-orm';
 import { ERROR_CODES, type RecordScope } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import type { RequestContext } from '../../common/context/request-context';
@@ -7,12 +6,15 @@ import { AppError } from '../../common/errors/app-error';
 import { RbacService } from '../../kernel/rbac/rbac.service';
 import {
   PERM_CONVERSATION_READ,
+  PERM_CONVERSATION_READ_UNASSIGNED,
   PERM_MAIL_SETTINGS_MANAGE,
   adminsCanReadPersonal,
   conversationVisible,
+  viewerReadsUnassigned,
   type ConversationRecord,
   type ConversationViewer,
 } from '../../realtime';
+import { teamIdsForScope } from '../../kernel/rbac/scope';
 
 export const PERM = {
   read: PERM_CONVERSATION_READ,
@@ -53,7 +55,13 @@ export class InboxAccess {
     permission: string = PERM.read,
   ): Promise<ConversationViewer> {
     const can = this.rbac.can(ctx.grants ?? new Map(), permission);
-    const teamIds = can.allowed && can.scope === 'team' ? await this.teamIds(tx, ctx) : [];
+    const scope = can.allowed ? can.scope : null;
+    const teamIds = await teamIdsForScope(tx, { orgId: ctx.orgId, userId: ctx.userId! }, scope);
+    const readsUnassigned = viewerReadsUnassigned(
+      permission,
+      scope,
+      this.rbac.can(ctx.grants ?? new Map(), PERM_CONVERSATION_READ_UNASSIGNED).allowed,
+    );
     // An admin of a workspace whose policy lets admins read personal mailboxes (TW-MAIL-035); everyone else reads only their own.
     const readsPersonalMail =
       can.allowed && this.rbac.can(ctx.grants ?? new Map(), PERM_MAIL_SETTINGS_MANAGE).allowed
@@ -61,8 +69,9 @@ export class InboxAccess {
         : false;
     return {
       userId: ctx.userId!,
-      scope: can.allowed ? can.scope : null,
-      teamIds,
+      scope,
+      teamIds: [...teamIds],
+      readsUnassigned,
       readsPersonalMail,
     };
   }
@@ -108,12 +117,5 @@ export class InboxAccess {
         HttpStatus.FORBIDDEN,
       );
     }
-  }
-
-  private async teamIds(tx: Tx, ctx: RequestContext): Promise<number[]> {
-    const res = await tx.execute(
-      sql`SELECT team_id FROM team_members WHERE org_id = ${ctx.orgId} AND user_id = ${ctx.userId}`,
-    );
-    return (res.rows as Array<{ team_id: string | number }>).map((r) => Number(r.team_id));
   }
 }

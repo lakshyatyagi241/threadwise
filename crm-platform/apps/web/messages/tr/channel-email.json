@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kanallar",
-      "title": "E-posta",
+      "title": "Destek e-postası",
       "titleAccent": "posta kutuları",
       "intro": "Gmail, Microsoft 365 veya herhangi bir IMAP posta kutunuzu bağlayın. Müşteri e-postaları ekip gelen kutusuna düşer, her e-posta dizisi tek bir konuşmadır ve yanıtlarınız aynı adresten gider.",
       "inbox": "Gelen kutusunu aç",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Posta kutusu bağlayın",
-          "body": "Google veya Microsoft ile oturum açın ya da posta sunucunuzun ayarlarını girin ve Threadwise'ın bu adres için e-posta okumasına ve göndermesine izin verin."
+          "body": "Google veya Microsoft ile oturum açın ya da posta sunucunuzun ayarlarını girin ve {app}'ın bu adres için e-posta okumasına ve göndermesine izin verin."
         },
         "inbox": {
           "title": "E-postalar gelen kutusuna düşer",

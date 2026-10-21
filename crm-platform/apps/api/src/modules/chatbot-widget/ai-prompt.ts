@@ -1,3 +1,4 @@
+import { GROUNDED_NOTE } from '../knowledge-base';
 import type { AssistantProfile, InboxLine, KnowledgeSource } from './_shims/tokens';
 
 /**
@@ -10,6 +11,30 @@ export const HISTORY_TURNS = 20;
 export const HISTORY_BUDGET = 6_000;
 export const DEFAULT_PERSONA = 'You are a helpful website chatbot.';
 export const DEFAULT_HANDOFF = 'A team member will join shortly.';
+export const HANDOFF_MARKER_HINT = '[[handoff: <short reason>]]';
+const HANDOFF_MARKER = /\[\[\s*handoff(?:\s*:\s*([^\]]{0,200}))?\s*\]\]/i;
+
+/**
+ * Does this exchange ask for a person? Yes when the visitor typed the assistant's handoff keyword, or the model ended its reply with the
+ * handoff marker. Returns the reply without the marker and the reason the model gave. Pure.
+ */
+export function readHandoff(
+  a: Pick<AssistantProfile, 'handoffEnabled' | 'handoffKeyword'>,
+  visitorMessage: string,
+  reply: string,
+): { handoff: boolean; reply: string; reason: string | null; viaKeyword: boolean } {
+  const m = HANDOFF_MARKER.exec(reply);
+  const clean = m ? reply.replace(HANDOFF_MARKER, '').trim() : reply;
+  if (!a.handoffEnabled) return { handoff: false, reply: clean, reason: null, viaKeyword: false };
+  const keyword = (a.handoffKeyword ?? '').trim().toLowerCase();
+  const viaKeyword = keyword !== '' && visitorMessage.toLowerCase().includes(keyword);
+  return {
+    handoff: m !== null || viaKeyword,
+    reply: clean === '' ? reply : clean,
+    reason: m?.[1]?.trim() || null,
+    viaKeyword,
+  };
+}
 export const EMPTY_REPLY_FALLBACK =
   "Sorry, I couldn't generate a reply right now. A team member will follow up shortly.";
 export const ERROR_FALLBACK =
@@ -30,6 +55,12 @@ export function systemPrompt(a: AssistantProfile): string {
     out +=
       `\nIf the visitor asks to talk to a human, or says "${a.handoffKeyword}", reply with: ` +
       ((a.handoffMessage ?? '').trim() || DEFAULT_HANDOFF);
+  }
+  if (a.handoffEnabled) {
+    // The one structured way a model asks for a person (the port has no tool calling): the marker is stripped before the visitor
+    // sees the reply and starts the same handoff a flow node does (BL-399).
+    out += `
+When you decide a human must take over, end your reply with ${HANDOFF_MARKER_HINT}.`;
   }
   return out;
 }
@@ -62,11 +93,15 @@ export function fullSystemPrompt(
   a: AssistantProfile,
   sources: readonly KnowledgeSource[],
   replyLanguage: string | null,
+  /** The sources are the best matches for this message, not the whole base: the agent must stay inside them. */
+  grounded = false,
 ): string {
   let system = systemPrompt(a);
   const context = knowledgeContext(sources);
-  if (context !== '')
-    system += `\n\n--- Knowledge base ---\n${context}\n--- End knowledge base ---`;
+  if (context !== '' || grounded) {
+    system += `\n\n--- Knowledge base ---\n${context || '(no matching excerpts)'}\n--- End knowledge base ---`;
+  }
+  if (grounded) system += `\n\n${GROUNDED_NOTE}`;
   if (replyLanguage) {
     system += `\n\nThe visitor is writing in language code "${replyLanguage}". Reply ENTIRELY in that same language, naturally.`;
   }

@@ -18,7 +18,8 @@ export type BusinessHoursDay = (typeof BUSINESS_HOURS_DAY_KEYS)[number];
 export const BUSINESS_HOURS_MAX_EXTRA_WINDOWS = 2;
 export const BUSINESS_HOURS_MAX_HOLIDAYS = 100;
 
-function isIanaZone(zone: string): boolean {
+/** Whether the text names a time zone the runtime knows (`Europe/London`). */
+export function isIanaZone(zone: string): boolean {
   try {
     new Intl.DateTimeFormat('en', { timeZone: zone });
     return true;

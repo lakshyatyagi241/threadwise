@@ -561,7 +561,10 @@
             "personal_history_full": "Importazione cronologia completa (WhatsApp personale)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Lead scoring con IA",
-            "record_assignment": "Regole di assegnazione dei record"
+            "record_assignment": "Regole di assegnazione dei record",
+            "team_hierarchy": "Gerarchia dei team e manager",
+            "custom_roles": "Ruoli personalizzati e ambiti",
+            "inbox_assignment_sticky": "Proprietario del contatto e agente persistente"
           },
           "cta": {
             "continueFree": "Continua gratis",

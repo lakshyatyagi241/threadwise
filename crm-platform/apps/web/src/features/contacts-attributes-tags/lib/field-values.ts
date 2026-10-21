@@ -146,20 +146,38 @@ export function checkValue(
   }
 }
 
-/** Readable text of a stored value for the detail page: option labels for choices, Yes/No for a checkbox. */
+/** What the detail page knows beyond the stored value: the workspace's date format and the labels of a lazy property's options. */
+export interface DisplayContext {
+  /** A stored ISO instant as the workspace reads dates (its time zone and format). */
+  dateTime?: (iso: string) => string;
+  /** Stored value -> label, for a property whose options were not sent with the list (see `hasLazyOptions`). */
+  optionLabels?: ReadonlyMap<string, string>;
+}
+
+/** "2026-03-16T11:34:31.714Z": a full instant with a zone, as a date/time property or an import wrote it. */
+export const ISO_INSTANT = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:?\d{2})$/;
+
+/** Readable text of a stored value for the detail page: option labels for choices, Yes/No for a checkbox, dates in the workspace zone. */
 export function displayValue(
   field: Pick<FieldResponse, 'fieldType' | 'options' | 'isMasked'>,
   raw: unknown,
   words: { yes: string; no: string },
+  ctx: DisplayContext = {},
 ): string {
   if (raw === null || raw === undefined || raw === '') return '';
   if (field.isMasked) return '••••••';
   const label = (v: unknown) =>
-    field.options?.find((o) => o.value === String(v))?.label ?? String(v);
+    field.options?.find((o) => o.value === String(v))?.label ??
+    ctx.optionLabels?.get(String(v)) ??
+    String(v);
   const kind = inputKind(field);
   if (kind === 'checkbox') return raw === true || raw === 'true' ? words.yes : words.no;
   if (Array.isArray(raw)) return raw.map(label).join(', ');
   if (kind === 'select' || kind === 'multiselect') return label(raw);
+  if (typeof raw === 'string' && ctx.dateTime && ISO_INSTANT.test(raw)) {
+    const shown = ctx.dateTime(raw);
+    if (shown) return shown;
+  }
   if (typeof raw === 'string' || typeof raw === 'number' || typeof raw === 'boolean')
     return String(raw);
   return '';
@@ -183,6 +201,9 @@ export function isFieldApplicable(
     const heldList = Array.isArray(held) ? held : held === undefined || held === '' ? [] : [held];
     const wanted =
       d.dependsOnValue ?? parent.options?.find((o) => o.id === d.dependsOnOptionId)?.value ?? null;
+    // A parent with a very long option list comes without its options, so the option the rule names cannot be read here: such a
+    // field is offered rather than hidden for good.
+    if (wanted === null && (parent.optionCount ?? 0) > (parent.options?.length ?? 0)) return true;
     return wanted !== null && heldList.includes(wanted);
   });
 }

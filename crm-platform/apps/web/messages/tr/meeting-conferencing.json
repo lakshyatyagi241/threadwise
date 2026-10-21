@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Görüntülü toplantılar",
+        "description": "Toplantılarınıza görüntülü bağlantılar eklemek için kendi Zoom veya Microsoft Teams hesabınızı bağlayın.",
+        "keywords": "zoom, teams, microsoft teams, video, görüntülü arama, toplantı bağlantısı, katılma bağlantısı, video konferans, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Kapat"
+    },
+    "form": {
+      "label": "Video konferans",
+      "add": {
+        "zoom": "Zoom bağlantısı ekle",
+        "teams": "Teams bağlantısı ekle",
+        "meet": "Google Meet bağlantısı ekle"
+      },
+      "chosen": {
+        "zoom": "Zoom bağlantısı",
+        "teams": "Teams bağlantısı",
+        "meet": "Google Meet bağlantısı"
+      },
+      "remove": "Video bağlantısını kaldır",
+      "needsStart": "Video bağlantısı veya takvim girişi eklemek için bir başlangıç saati belirleyin.",
+      "meetNote": "Google Meet bağlantısı bir takvim etkinliğinin parçasıdır, bu yüzden bu toplantı takviminize de eklenir.",
+      "teamsViaCalendar": "Bu Teams bağlantısını Microsoft 365 takviminiz oluşturur, bu yüzden bu toplantı ona da eklenir.",
+      "calendar": "Takvimime ekle ({account})",
+      "calendarNamed": "Takvimime ekle ({account}, {calendar})",
+      "invite": "Kişiye takvim daveti gönder",
+      "inviteHint": "Takviminiz daveti kişinin e-posta adresine gönderir. Kendi e-posta davetimiz etkilenmez.",
+      "connectLink": "Video konferansı bağla"
+    },
+    "row": {
+      "join": "Katıl",
+      "joinAria": "{provider} toplantısına katıl: {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Video bağlantısı ekleniyor...",
+      "onCalendar": "Takviminizde",
+      "invited": "Takvim kişiye bir davet gönderdi",
+      "retry": "Tekrar dene",
+      "retrying": "Tekrar deneniyor...",
+      "retried": "Video bağlantısı ve takvim girişi yeniden kontrol edildi.",
+      "retryFailed": "Bu işe yaramadı. Toplantı kaydedildi; tekrar deneyebilirsiniz.",
+      "problem": {
+        "not_installed": "{provider} entegrasyonu bu çalışma alanı için yüklü değil.",
+        "not_connected": "{provider} hesabınız bağlı değil. Ayarlar, Görüntülü toplantılar bölümünden bağlayın.",
+        "needs_reconnect": "{provider} bağlantınızın yenilenmesi gerekiyor. Ayarlar, Görüntülü toplantılar bölümünden yeniden bağlayın.",
+        "not_configured": "{provider} bu platform için henüz kurulmadı. Platform yöneticinize danışın.",
+        "calendar_not_connected": "Takvim bağlı değil, bu yüzden toplantı ona eklenemedi.",
+        "provider_failed": "{provider} yanıt vermedi. Toplantı kaydedildi; tekrar deneyin.",
+        "no_start_time": "Video bağlantısı için toplantıda bir başlangıç saati olmalıdır."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "Hiçbir takvim bağlı olmadığı için toplantı takvime eklenemedi.",
+        "provider_failed": "Takvim yanıt vermedi, bu yüzden toplantı henüz içinde değil. Toplantı kaydedildi; tekrar deneyin.",
+        "other": "Toplantı takvime eklenemedi."
+      }
+    },
+    "page": {
+      "eyebrow": "Ayarlar",
+      "title": "Görüntülü toplantılar",
+      "subtitle": "Kendi Zoom veya Microsoft Teams hesabınızı bağlayın. Toplantı ekleme formu daha sonra hesabınızda oluşturulan ve toplantıda Katıl düğmesiyle gösterilen bir video bağlantısı sunar.",
+      "loading": "Video bağlantılarınız yükleniyor...",
+      "forbidden": {
+        "title": "Bu sayfayı kullanamazsınız",
+        "body": "Bir çalışma alanı yöneticisinden rolünüze kişileri düzenleme erişimi vermesini isteyin."
+      },
+      "failure": {
+        "generic": "Video bağlantılarınız yüklenemedi."
+      },
+      "retry": "Tekrar dene",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Planladığınız her toplantı için Zoom hesabınızda bir Zoom toplantısı oluşturur, toplantıyı taşıdığınızda onu da taşır ve toplantıyı sildiğinizde onu da siler."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Planladığınız her toplantı için Microsoft iş veya okul hesabınızda bir Teams toplantısı oluşturur ve toplantıyla birlikte günceller veya siler."
+        }
+      },
+      "status": {
+        "connected": "Bağlı",
+        "needs_reconnect": "Yeniden bağlanması gerekiyor",
+        "disconnected": "Yüklü",
+        "not_installed": "Yüklü değil",
+        "unavailable": "Kapalı",
+        "not_available": "Henüz kullanılamıyor"
+      },
+      "account": "{account} olarak bağlı",
+      "connectedOn": "Bağlandı: {when}",
+      "lastError": {
+        "forbidden": "Sağlayıcı son isteği reddetti. Hesabınızın toplantı oluşturma izni olmayabilir.",
+        "rate_limited": "Sağlayıcı şu anda istekleri sınırlıyor.",
+        "unavailable": "Sağlayıcı son isteğe yanıt vermedi."
+      },
+      "actions": {
+        "connect": "Bağla",
+        "reconnect": "Yeniden bağla",
+        "disconnect": "Bağlantıyı kes",
+        "install": "Pazar yerinde yükle"
+      },
+      "notInstalled": {
+        "canInstall": "Çalışma alanınız henüz {provider} uygulamasını yüklemedi. Pazar yerinden yükleyin, ardından hesabınızı burada bağlayın.",
+        "cannotInstall": "Çalışma alanınız henüz {provider} uygulamasını yüklemedi. Bir çalışma alanı yöneticisinden Pazar yerinden yüklemesini isteyin."
+      },
+      "unavailable": "{provider} yüklü, ancak platform operatörünüz kurulumunu kapattığı için şu anda bağlanamıyor. Platform operatörünüze danışın.",
+      "outcome": {
+        "connected": "{provider} bağlandı.",
+        "denied": "Oturum açma iptal edildiği için {provider} bağlanmadı.",
+        "failed": "{provider} bağlanamadı. Tekrar deneyin.",
+        "expired": "Bu oturum açma çok uzun sürdü. Bağla düğmesine yeniden basın.",
+        "not_configured": "{provider} bu platform için henüz kurulmadı.",
+        "notYours": "Bu oturum açma başka biri tarafından başlatıldı, bu yüzden hiçbir şey bağlanmadı."
+      },
+      "confirming": "Bağlantı tamamlanıyor...",
+      "disconnected": "{provider} bağlantısı kesildi.",
+      "disconnectTitle": "{provider} bağlantısı kesilsin mi?",
+      "disconnectBody": "Zaten bir {provider} bağlantısı olan toplantılar onu korur, ancak bu toplantıları taşımak veya silmek artık odayı değiştiremez. İstediğiniz zaman yeniden bağlanabilirsiniz.",
+      "disconnectConfirm": "Bağlantıyı kes",
+      "keep": "Bağlı kalsın",
+      "calendarNote": "Takvim üzerinden oluşturulan Google Meet ve Teams bağlantıları burada bağlantı gerektirmez: çalışma alanınızın zaten bağladığı takvimi kullanırlar.",
+      "notAvailable": "Platform operatörünüz {provider} uygulamasını henüz kullanıma açmadı: önce kurulması ve Pazar yerinde yayımlanması gerekiyor. Henüz yüklenecek bir şey yok, bu yüzden platform operatörünüzden açmasını isteyin.",
+      "installedHint": "{provider} çalışma alanınız için yüklü. Toplantılarınıza {provider} bağlantıları eklemek için kendi hesabınızı bağlayın."
+    },
+    "operator": {
+      "title": "Görüntülü toplantı kurulumu",
+      "ready": "Hazır",
+      "missing": "{count, plural, one {# adım eksik} other {# adım eksik}}",
+      "loadFailed": "Kurulum kontrol listesi yüklenemedi.",
+      "fake": "Geliştirme modu: sahte Zoom ve Microsoft Teams bağdaştırıcıları bağlı, bu yüzden gerçek hesap olmadan bağlanılabilir. Aşağıdaki kontrol listesi, gerçek bir platformun hâlâ nelere ihtiyaç duyduğunu gösterir.",
+      "intro": {
+        "zoom": "Zoom uygulama kimlik bilgileri ayarlanıp bu liste yayımlanana kadar çalışma alanları Zoom hizmetini göremez ve kullanamaz.",
+        "teams": "Microsoft uygulaması kullanıma açılıp bu liste yayımlanana kadar çalışma alanları Microsoft Teams hizmetini göremez ve kullanamaz."
+      },
+      "set": "ayarlı",
+      "notSet": "ayarlı değil",
+      "credentials": {
+        "zoom": {
+          "label": "Zoom uygulama kimlik bilgileri (ortam değerleri)"
+        },
+        "teams": {
+          "label": "Microsoft uygulama kimlik bilgileri"
+        }
+      },
+      "teamsFallback": "İkisi de ayarlıysa Teams yukarıdaki kendi değerlerini kullanır, değilse konsolda kayıtlı Microsoft Takvim uygulamasını kullanır.",
+      "source": {
+        "environment": "Değerler ortamdan geliyor.",
+        "console": "Değerler konsoldaki Microsoft Takvim sayfasından geliyor."
+      },
+      "switchedOff": "Microsoft Takvim entegrasyonu konsolda kapalı; bu durum Teams hizmetini de kapatır.",
+      "redirect": {
+        "label": "Sağlayıcıda kaydedilecek yönlendirme adresi",
+        "hint": {
+          "zoom": "Bu adresi olduğu gibi Zoom uygulamasının yönlendirme URL adresi olarak ekleyin.",
+          "teams": "Bu adresi olduğu gibi Microsoft uygulamasının yönlendirme URI adresi olarak, takvim olanın yanına ekleyin ve OnlineMeetings.ReadWrite yetkilendirilmiş iznini ekleyin."
+        }
+      },
+      "listing": {
+        "label": "Pazar yeri listesi yayımlandı",
+        "missing": "Liste katalogda yok.",
+        "notPublished": "Liste yayımlanmamış (durum: {status}). Aşağıdan bir sürümü onaylayıp yayımlayın; ardından çalışma alanları yükleyebilir.",
+        "published": "Yayımlandı: çalışma alanları bulup yükleyebilir."
+      }
+    }
+  }
+}

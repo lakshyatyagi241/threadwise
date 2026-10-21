@@ -8,7 +8,7 @@ import { cn } from '@crm/ui';
 import { purposeOf, relativeTime } from '../lib/list-model';
 import { useFlb, useMsg } from '../lib/msg';
 import { flowTypeLabel } from '../lib/contract-text';
-import { openHref, type BuilderMode } from '../lib/builder-mode';
+import { openHref } from '../lib/builder-mode';
 
 export const STATE_STYLE: Record<FlowState, { pill: string; dot: string }> = {
   live: { pill: 'bg-primary/10 text-brand border-primary/30', dot: 'bg-primary' },
@@ -127,8 +127,6 @@ export interface CardActions {
   onExport: (f: FlowSummary) => void | Promise<void>;
   onDelete: (f: FlowSummary) => void;
   can: { update: boolean; create: boolean; remove: boolean };
-  /** Which builder(s) the platform admin offers; absent means both. */
-  builderMode?: BuilderMode;
 }
 
 export function triggerLabelKey(
@@ -294,23 +292,12 @@ export function FlowCard({ flow, actions }: { flow: FlowSummary; actions: CardAc
       </ul>
 
       <div className="mt-4 flex items-center gap-2">
-        {flow.triggerKind === 'manual_enroll' ? (
-          // QUIRK kept: a manual-enroll flow has "Enroll contacts" in place of "Open builder" on its card.
-          <Link
-            href={`/flow-runtime/flows/${flow.id}`}
-            data-flow-enroll={flow.id}
-            className="min-w-0 flex-1 rounded-full bg-brand px-2 py-1.5 text-center text-[11.5px] font-semibold text-brand-foreground hover:opacity-90"
-          >
-            {t('enroll')}
-          </Link>
-        ) : (
-          <Link
-            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
-            className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
-          >
-            {t('openBuilder')}
-          </Link>
-        )}
+        <Link
+          href={openHref(flow.id, flow.flowType)}
+          className="min-w-0 flex-1 rounded-full border border-border px-2 py-1.5 text-center text-[11.5px] font-medium whitespace-nowrap hover:bg-muted"
+        >
+          {t('openBuilder')}
+        </Link>
         {flow.flowType !== 'instagram' ? (
           // Per-flow runs, errors and retries live in the runtime's analytics (FLR); an Instagram flow has no local runs.
           <Link
@@ -434,7 +421,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
           {t('eyebrow')}
         </div>
-        <h2 className="font-serif text-[26px] leading-[1.05] font-normal tracking-tight sm:text-[32px] lg:text-[36px]">
+        <h2 className="font-[family-name:var(--font-inter)] text-[32px] leading-[1.05] font-semibold tracking-tight">
           {flow.name}
         </h2>
         <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5 font-mono text-[12.5px] text-muted-foreground">
@@ -460,7 +447,7 @@ export function FeaturedCard({ flow, actions }: { flow: FlowFeatured; actions: C
         </p>
         <div className="mt-6 flex items-center gap-2">
           <Link
-            href={openHref(actions.builderMode ?? 'advanced', flow.id, flow.flowType)}
+            href={openHref(flow.id, flow.flowType)}
             className="rounded-full border border-border bg-background px-4 py-2 text-[12px] font-medium hover:bg-muted"
           >
             {t('open')}

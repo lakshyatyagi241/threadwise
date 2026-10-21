@@ -101,7 +101,7 @@
         "keywords": "mensaje de texto, id de remitente, dlt, twilio, móvil"
       },
       "email": {
-        "label": "Correo electrónico",
+        "label": "Correo de soporte",
         "description": "Conecta buzones de Gmail o Google Workspace para que tu equipo lea y responda los correos de clientes en la bandeja compartida.",
         "keywords": "buzón, gmail, google workspace, bandeja compartida, correo de soporte, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Equipos",
-        "description": "Agrupa personas en equipos para el enrutamiento y los informes.",
-        "keywords": "grupos, departamentos, asignación, enrutamiento"
+        "description": "Agrupa personas para conversaciones, asignaciones e informes.",
+        "keywords": "grupos, departamentos, responsables, jerarquía, asignación, enrutamiento"
       },
       "ai-keys": {
         "label": "Claves de proveedores de IA",
@@ -244,6 +244,11 @@
         "label": "API REST",
         "description": "Claves y documentación para crear sobre el producto.",
         "keywords": "claves de API, desarrolladores, tokens, documentación, openapi"
+      },
+      "api-keys": {
+        "label": "Claves de API",
+        "description": "Crea y gestiona las claves que otros sistemas usan para llamar a la API.",
+        "keywords": "clave api, token, secreto, desarrolladores, acceso, integración"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -301,7 +306,7 @@
         "keywords": "geta, publicar, bot, consola, poner en línea, chatbot"
       },
       "auto-assignment": {
-        "label": "Asignación automática",
+        "label": "Asignación automática de conversaciones",
         "description": "Asigna las conversaciones nuevas al agente adecuado automáticamente, por turnos o según reglas.",
         "keywords": "enrutamiento, round robin, asignar, agentes, reglas de la bandeja, distribuir, responsable"
       },
@@ -389,6 +394,11 @@
         "label": "Leads duplicados",
         "description": "Elige si un lead nuevo que coincide con un contacto se fusiona con él o se convierte en un contacto nuevo.",
         "keywords": "duplicado, fusionar, lead, mismo teléfono, mismo correo, contacto nuevo, fuente de leads"
+      },
+      "sales-activities": {
+        "label": "Actividades de ventas",
+        "description": "Gestione tareas, reuniones, llamadas y actividades propias: qué puede hacer cada una, sus tipos de tarea y sus resultados.",
+        "keywords": "actividades, tipos de tarea, resultados, resultado de reunión, resultado de llamada, seguimiento, registro de entrada, actividad personalizada, calendario, completar"
       }
     },
     "backToMarketplace": "Volver al Marketplace"

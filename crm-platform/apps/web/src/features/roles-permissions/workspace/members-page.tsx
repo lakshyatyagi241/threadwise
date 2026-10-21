@@ -5,8 +5,9 @@ import { useTranslations } from 'next-intl';
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { RoleResponse, UserResponse } from '@crm/contracts';
-import { Alert, Badge, Button, ConfirmDialog, Input, cn, useToast } from '@crm/ui';
+import { Alert, Badge, Button, Input, Select, cn, useToast } from '@crm/ui';
 import { useCan, useSession } from '@/features/auth-registration-security/shared/session-context';
+import { DeactivateDialog, SeatsNote, useMemberAccount } from '@/features/workspaces-teams-tenancy';
 import { RbacHeader } from '../ui/chrome';
 import { PlusIcon, SearchIcon } from '../ui/icons';
 import { fetchRoles, fetchUsers, updateUser, wsKeys } from './lib/api';
@@ -18,6 +19,7 @@ import {
   presetSlug,
   roleFilterCounts,
   sortRoles,
+  teamFilterOptions,
 } from './lib/members';
 import { AddMemberModal } from './ui/add-member-modal';
 import { ChangeRoleModal } from './ui/change-role-modal';
@@ -48,6 +50,7 @@ function MembersScreen() {
   const params = useSearchParams();
 
   const [roleId, setRoleId] = useState<string | null>(params.get('role'));
+  const [teamId, setTeamId] = useState<string | null>(params.get('team'));
   const [search, setSearch] = useState('');
   const [adding, setAdding] = useState(false);
   const [editing, setEditing] = useState<UserResponse | null>(null);
@@ -67,6 +70,14 @@ function MembersScreen() {
     retry: false,
   });
 
+  // `/team-members?member=<id>&reassign=1` (the "went on leave" notice) lands here and opens that person's leave dialog.
+  const account = useMemberAccount({
+    initialLeave: params.get('member')
+      ? { id: params.get('member')!, reassign: params.get('reassign') === '1' }
+      : null,
+    onChanged: () => void qc.invalidateQueries({ queryKey: wsKeys.users }),
+  });
+
   const members = users.data;
   const roleList: RoleResponse[] | null = roles.data ?? null;
   const chipRoles: ChipRole[] = useMemo(() => {
@@ -78,9 +89,10 @@ function MembersScreen() {
   }, [roleList, members]);
   const counts = useMemo(() => roleFilterCounts(members ?? []), [members]);
   const shown = useMemo(
-    () => filterMembers(members ?? [], { roleId, search }),
-    [members, roleId, search],
+    () => filterMembers(members ?? [], { roleId, search, teamId }),
+    [members, roleId, search, teamId],
   );
+  const teamOptions = useMemo(() => teamFilterOptions(members ?? []), [members]);
   const grantable = roleList ? grantableRoles(sortRoles(roleList)) : [];
 
   const status = useMutation({
@@ -113,10 +125,17 @@ function MembersScreen() {
       description={t('description')}
       actions={
         canInvite && grantable.length > 0 ? (
-          <Button className="rounded-full" onClick={() => setAdding(true)} data-testid="add-member">
-            <PlusIcon />
-            {t('addMember')}
-          </Button>
+          <div className="flex flex-col items-start gap-1.5 sm:items-end">
+            <Button
+              className="rounded-full"
+              onClick={() => setAdding(true)}
+              data-testid="add-member"
+            >
+              <PlusIcon />
+              {t('addMember')}
+            </Button>
+            <SeatsNote />
+          </div>
         ) : undefined
       }
     />
@@ -194,6 +213,8 @@ function MembersScreen() {
         </Alert>
       )}
 
+      {account.banners}
+
       <div className="flex flex-wrap items-center gap-1 rounded-2xl border border-border bg-background p-2 shadow-sm">
         <div role="group" aria-label={t('filter.label')} className="flex flex-wrap gap-1">
           {chips.map((c) => (
@@ -216,6 +237,22 @@ function MembersScreen() {
           ))}
         </div>
         <div className="flex-1" />
+        {teamOptions.length > 0 && (
+          <Select
+            aria-label={t('teamFilter.label')}
+            value={teamId ?? ''}
+            onChange={(e) => setTeamId(e.target.value || null)}
+            data-testid="team-filter"
+            className="h-9 w-full rounded-full text-xs sm:w-52"
+          >
+            <option value="">{t('teamFilter.all')}</option>
+            {teamOptions.map((o) => (
+              <option key={o.id} value={o.id}>
+                {`${o.name} (${o.count})`}
+              </option>
+            ))}
+          </Select>
+        )}
         <div className="relative w-full sm:w-72">
           <SearchIcon className="pointer-events-none absolute start-3 top-1/2 size-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
@@ -240,6 +277,7 @@ function MembersScreen() {
                 size="sm"
                 onClick={() => {
                   setRoleId(null);
+                  setTeamId(null);
                   setSearch('');
                 }}
               >
@@ -259,13 +297,19 @@ function MembersScreen() {
                   <th scope="col" className="px-4 py-2.5 text-start font-medium">
                     {t('table.member')}
                   </th>
-                  <th scope="col" className="w-64 px-3 py-2.5 text-start font-medium">
+                  <th scope="col" className="w-36 px-3 py-2.5 text-start font-medium">
                     {t('table.roles')}
                   </th>
-                  <th scope="col" className="w-28 px-3 py-2.5 text-start font-medium">
+                  <th scope="col" className="w-44 px-3 py-2.5 text-start font-medium">
+                    {t('table.teams')}
+                  </th>
+                  <th scope="col" className="w-32 px-3 py-2.5 text-start font-medium">
+                    {t('table.manager')}
+                  </th>
+                  <th scope="col" className="w-24 px-3 py-2.5 text-start font-medium">
                     {t('table.status')}
                   </th>
-                  <th scope="col" className="w-72 px-3 py-2.5 text-end font-medium">
+                  <th scope="col" className="w-[19rem] px-3 py-2.5 text-end font-medium">
                     {t('table.actions')}
                   </th>
                 </tr>
@@ -282,6 +326,12 @@ function MembersScreen() {
                     </td>
                     <td className="px-3 py-3">
                       <RoleChips member={m} />
+                    </td>
+                    <td className="px-3 py-3" data-testid={`teams-${m.email}`}>
+                      <TeamChips member={m} />
+                    </td>
+                    <td className="px-3 py-3 text-xs" data-testid={`manager-${m.email}`}>
+                      <Managers member={m} />
                     </td>
                     <td className="px-3 py-3">
                       <StatusBadge status={m.status} />
@@ -302,6 +352,7 @@ function MembersScreen() {
                         busy={status.isPending && status.variables?.user.id === m.id}
                         onRoles={() => setEditing(m)}
                         onStatus={() => toggleStatus(m)}
+                        more={account.menu(m.id)}
                       />
                     </td>
                   </tr>
@@ -321,6 +372,8 @@ function MembersScreen() {
                     <StatusBadge status={m.status} />
                   </div>
                   <RoleChips member={m} />
+                  <TeamChips member={m} />
+                  <Managers member={m} />
                   <Actions
                     member={m}
                     self={m.id === session.user.id}
@@ -336,6 +389,7 @@ function MembersScreen() {
                     busy={status.isPending && status.variables?.user.id === m.id}
                     onRoles={() => setEditing(m)}
                     onStatus={() => toggleStatus(m)}
+                    more={account.menu(m.id)}
                     start
                   />
                 </li>
@@ -379,21 +433,15 @@ function MembersScreen() {
           }}
         />
       )}
-      <ConfirmDialog
-        open={deactivating !== null}
-        title={t('deactivate.title')}
-        message={t('deactivate.message', { name: deactivating?.fullName ?? '' })}
-        confirmLabel={t('deactivate.confirm')}
-        cancelLabel={t('deactivate.cancel')}
-        tone="danger"
+      <DeactivateDialog
+        member={deactivating ? { id: deactivating.id, fullName: deactivating.fullName } : null}
         busy={status.isPending}
-        onConfirm={() =>
-          deactivating &&
-          !status.isPending &&
-          status.mutate({ user: deactivating, next: 'inactive' })
-        }
+        onConfirm={async () => {
+          if (deactivating) await status.mutateAsync({ user: deactivating, next: 'inactive' });
+        }}
         onClose={() => setDeactivating(null)}
       />
+      {account.dialogs}
     </div>
   );
 }
@@ -446,6 +494,40 @@ function RoleChips({ member }: { member: UserResponse }) {
   );
 }
 
+function TeamChips({ member }: { member: UserResponse }) {
+  const t = useTranslations(NS);
+  if (member.teams.length === 0)
+    return <span className="text-xs text-muted-foreground">{t('noTeams')}</span>;
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {member.teams.map((team) => (
+        <span
+          key={team.id}
+          title={team.isPrimary ? t('primaryTeam') : undefined}
+          className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-xs"
+        >
+          <span
+            aria-hidden="true"
+            className="size-2 rounded-full"
+            style={{ background: team.color }}
+          />
+          {team.name}
+          {team.isPrimary && (
+            <span className="text-[10px] font-semibold text-primary">{t('primaryMark')}</span>
+          )}
+        </span>
+      ))}
+    </div>
+  );
+}
+
+function Managers({ member }: { member: UserResponse }) {
+  const t = useTranslations(NS);
+  if (member.managers.length === 0)
+    return <span className="text-muted-foreground">{t('noManager')}</span>;
+  return <span>{member.managers.map((m) => m.fullName).join(', ')}</span>;
+}
+
 function StatusBadge({ status }: { status: UserResponse['status'] }) {
   const t = useTranslations(NS);
   return (
@@ -462,6 +544,7 @@ function Actions({
   busy,
   onRoles,
   onStatus,
+  more,
   start,
 }: {
   member: UserResponse;
@@ -470,6 +553,8 @@ function Actions({
   busy: boolean;
   onRoles: () => void;
   onStatus: () => void;
+  /** The "More" menu of the account actions (details, leave, invite, reset, remove), when the caller has any. */
+  more?: React.ReactNode;
   start?: boolean;
 }) {
   const t = useTranslations(NS);
@@ -500,6 +585,7 @@ function Actions({
       >
         {active ? t('deactivate.action') : t('reactivate')}
       </Button>
+      {more}
     </div>
   );
 }

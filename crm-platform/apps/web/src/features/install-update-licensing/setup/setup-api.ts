@@ -20,6 +20,7 @@ async function call<T>(
   init?: { method: 'POST'; body: unknown },
 ): Promise<T> {
   const res = await fetch(`/api/v2/setup/${path}`, {
+    signal: AbortSignal.timeout(30000),
     method: init?.method ?? 'GET',
     headers: {
       Accept: 'application/json',

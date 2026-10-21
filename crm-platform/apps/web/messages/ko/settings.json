@@ -101,7 +101,7 @@
         "keywords": "문자 메시지, 발신자 ID, dlt, twilio, 모바일"
       },
       "email": {
-        "label": "이메일",
+        "label": "지원 이메일",
         "description": "Gmail 또는 Google Workspace 사서함을 연결해 팀이 공유 수신함에서 고객 이메일을 읽고 답장할 수 있도록 하세요.",
         "keywords": "사서함, gmail, google workspace, 공유 수신함, 지원 이메일, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "팀",
-        "description": "라우팅과 보고를 위해 사람들을 팀으로 묶으세요.",
-        "keywords": "그룹, 부서, 배정, 라우팅"
+        "description": "대화, 배정, 보고서를 위해 사람들을 그룹으로 묶습니다.",
+        "keywords": "그룹, 부서, 매니저, 계층, 배정, 라우팅"
       },
       "ai-keys": {
         "label": "AI 제공업체 키",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "제품 위에 구축하기 위한 키와 문서.",
         "keywords": "API 키, 개발자, 토큰, 문서, openapi"
+      },
+      "api-keys": {
+        "label": "API 키",
+        "description": "다른 시스템이 API를 호출할 때 사용하는 키를 만들고 관리합니다.",
+        "keywords": "api 키, 토큰, 시크릿, 개발자, 접근, 연동"
       },
       "webhooks": {
         "label": "웹훅",
@@ -301,7 +306,7 @@
         "keywords": "geta, 게시, 봇, 콘솔, 라이브 전환, 챗봇"
       },
       "auto-assignment": {
-        "label": "자동 배정",
+        "label": "대화 자동 배정",
         "description": "새 대화를 순번 또는 규칙에 따라 적절한 상담원에게 자동으로 배정하세요.",
         "keywords": "라우팅, 라운드 로빈, 배정, 상담원, 수신함 규칙, 분배, 담당자"
       },
@@ -389,6 +394,11 @@
         "label": "중복 리드",
         "description": "연락처와 일치하는 새 리드를 병합할지 새 연락처로 만들지 선택합니다.",
         "keywords": "중복, 병합, 리드, 같은 전화번호, 같은 이메일, 새 연락처, 리드 소스"
+      },
+      "sales-activities": {
+        "label": "영업 활동",
+        "description": "작업, 미팅, 통화, 직접 만든 활동을 관리하세요. 각 활동으로 할 수 있는 일, 작업 유형, 결과를 설정합니다.",
+        "keywords": "활동, 작업 유형, 결과, 미팅 결과, 통화 결과, 후속 조치, 체크인, 사용자 지정 활동, 캘린더, 완료"
       }
     },
     "backToMarketplace": "마켓플레이스로 돌아가기"

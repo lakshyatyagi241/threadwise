@@ -561,7 +561,10 @@
             "personal_history_full": "استيراد السجل الكامل (WhatsApp الشخصي)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "تقييم العملاء المحتملين بالذكاء الاصطناعي",
-            "record_assignment": "قواعد تعيين السجلات"
+            "record_assignment": "قواعد تعيين السجلات",
+            "team_hierarchy": "التسلسل الهرمي للفرق والمديرون",
+            "custom_roles": "أدوار مخصصة ونطاقات",
+            "inbox_assignment_sticky": "مالك جهة الاتصال والوكيل الثابت"
           },
           "cta": {
             "continueFree": "المتابعة مجانًا",

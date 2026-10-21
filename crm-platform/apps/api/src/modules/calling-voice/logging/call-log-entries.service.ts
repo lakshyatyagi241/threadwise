@@ -2,8 +2,10 @@ import { randomUUID } from 'node:crypto';
 import { HttpStatus, Injectable } from '@nestjs/common';
 import {
   ERROR_CODES,
+  PHONE_COUNTS_AS,
   type CallLogEntry,
   type CallNudge,
+  type CallOutcome,
   type LogCallInput,
   type LogCallResult,
   type UpdateCallLogEntryInput,
@@ -16,6 +18,7 @@ import { AuditService } from '../../../kernel/audit/audit.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
 import { RbacService, type GrantSet } from '../../../kernel/rbac/rbac.service';
 import {
+  ActivityTypesService,
   assertContactScope,
   ContactActivitiesRepository,
   ContactResolverService,
@@ -114,6 +117,7 @@ export class CallLogEntriesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly leadHandling: ContactTouchService,
+    private readonly activityTypes: ActivityTypesService,
   ) {}
 
   // --- the one write -------------------------------------------------------------------------------------------------------------
@@ -239,10 +243,12 @@ export class CallLogEntriesService {
           ? e164Of(await this.repo.contactPhone(tx, ctx.orgId, found.contact.id), defaultCc)
           : null);
 
+      const picked = await this.pickOutcome(tx, ctx.orgId, input.outcomeOptionId, input.outcome);
       const { entry, created } = await this.write(tx, ctx.orgId, {
         source: input.source,
         direction: input.direction,
-        outcome: input.outcome,
+        outcome: picked.outcome,
+        outcomeOptionId: picked.optionId,
         startedAt,
         durationSec: input.durationSec,
         contactId: found.contact?.id ?? null,
@@ -280,7 +286,7 @@ export class CallLogEntriesService {
 
       const nudges: CallNudge[] = [];
       if (created && input.suggestStageNudge && found.contact) {
-        const nudge = await this.nudgeFor(tx, ctx.orgId, found.contact.id, input.outcome);
+        const nudge = await this.nudgeFor(tx, ctx.orgId, found.contact.id, picked.outcome);
         if (nudge) nudges.push(nudge);
       }
 
@@ -321,8 +327,15 @@ export class CallLogEntriesService {
             ? null
             : input.notes;
       const delta: Record<string, { old: unknown; new: unknown }> = {};
-      if (input.outcome !== undefined && input.outcome !== row.outcome) {
-        delta.outcome = { old: row.outcome, new: input.outcome };
+      const picked =
+        input.outcomeOptionId !== undefined || input.outcome !== undefined
+          ? await this.pickOutcome(tx, ctx.orgId, input.outcomeOptionId, input.outcome)
+          : undefined;
+      if (picked && picked.outcome !== row.outcome) {
+        delta.outcome = { old: row.outcome, new: picked.outcome };
+      }
+      if (picked && picked.optionId !== row.outcomeOptionId) {
+        delta.outcomeOption = { old: row.outcomeOption?.key ?? null, new: picked.optionKey };
       }
       if (input.direction !== undefined && input.direction !== row.direction) {
         delta.direction = { old: row.direction, new: input.direction };
@@ -340,7 +353,8 @@ export class CallLogEntriesService {
         return this.respond(row, ctx.userId, canManage, windowHours);
       }
       const ok = await this.repo.update(tx, ctx.orgId, row.id, input.rowVersion, {
-        outcome: input.outcome,
+        outcome: picked?.outcome,
+        outcomeOptionId: picked ? picked.optionId : undefined,
         direction: input.direction,
         startedAt,
         durationSec: input.durationSec,
@@ -451,7 +465,7 @@ export class CallLogEntriesService {
     grants: GrantSet,
     by: { contactUuid?: string; phone: string | null },
   ): Promise<{
-    contact: { id: number; uuid: string; ownerId: number | null } | null;
+    contact: { id: number; uuid: string; ownerId: number | null; createdBy: number | null } | null;
     matchedByPhone: boolean;
     /** A contact owns the number but the person may not read it: the call is logged by its number alone and no contact is made. */
     hidden: boolean;
@@ -461,9 +475,14 @@ export class CallLogEntriesService {
       if (!read.allowed) throw AppError.forbidden('record.contacts.read');
       const ref = await this.contacts.resolveContactRef(tx, orgId, by.contactUuid);
       if (!ref) throw AppError.notFound('Contact', by.contactUuid);
-      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, ref.ownerId);
+      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, ref);
       return {
-        contact: { id: ref.id, uuid: by.contactUuid, ownerId: ref.ownerId },
+        contact: {
+          id: ref.id,
+          uuid: by.contactUuid,
+          ownerId: ref.ownerId,
+          createdBy: ref.createdBy,
+        },
         matchedByPhone: false,
         hidden: false,
       };
@@ -473,7 +492,7 @@ export class CallLogEntriesService {
     if (!hit) return { contact: null, matchedByPhone: false, hidden: false };
     if (!read.allowed) return { contact: null, matchedByPhone: false, hidden: true };
     try {
-      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, hit.ownerId);
+      await assertContactScope(tx, this.contacts, orgId, read.scope, userId!, hit);
     } catch (err) {
       if (err instanceof AppError && err.code === ERROR_CODES.NOT_FOUND) {
         return { contact: null, matchedByPhone: false, hidden: true };
@@ -483,15 +502,34 @@ export class CallLogEntriesService {
     return { contact: hit, matchedByPhone: true, hidden: false };
   }
 
-  private async nudgeFor(
-    tx: Tx,
-    orgId: number,
-    contactId: number,
-    outcome: LogCallInput['outcome'],
-  ) {
+  private async nudgeFor(tx: Tx, orgId: number, contactId: number, outcome: CallOutcome) {
     const current = await this.repo.contactStage(tx, orgId, contactId);
     if (!current) return null;
     return stageNudge(outcome, current, await this.repo.lifecycleStages(tx, orgId));
+  }
+
+  /**
+   * The outcome a person chose. A list item of the Phone activity (Settings > Sales Activities) counts as one of the built-in outcomes
+   * (`countsAs`; a built-in item is its own); a bare built-in outcome names no list item.
+   */
+  private async pickOutcome(
+    tx: Tx,
+    orgId: number,
+    optionUuid: string | undefined,
+    outcome: CallOutcome | undefined,
+  ): Promise<{ outcome: CallOutcome; optionId: number | null; optionKey: string | null }> {
+    if (optionUuid === undefined) return { outcome: outcome!, optionId: null, optionKey: null };
+    const option = await this.activityTypes.resolveOption(
+      tx,
+      orgId,
+      optionUuid,
+      'outcome',
+      'phone',
+    );
+    const builtIn =
+      option.countsAs ??
+      ((PHONE_COUNTS_AS as readonly string[]).includes(option.key) ? option.key : 'connected');
+    return { outcome: builtIn as CallOutcome, optionId: option.id, optionKey: option.key };
   }
 
   /** The API shape of an entry for this viewer. */
@@ -507,6 +545,7 @@ export class CallLogEntriesService {
       source: r.source,
       direction: r.direction,
       outcome: r.outcome,
+      outcomeOption: r.outcomeOption,
       startedAt: r.startedAt.toISOString(),
       durationSec: r.durationSec,
       contactId: r.contactUuid,

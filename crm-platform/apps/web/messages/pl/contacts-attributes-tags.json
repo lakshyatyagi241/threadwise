@@ -130,6 +130,7 @@
       "colLeadScore": "Ocena leada",
       "colLanguage": "Język",
       "colCreatedOn": "Data utworzenia",
+      "colModifiedOn": "Data modyfikacji",
       "pagination": "Paginacja",
       "prevPage": "Poprzednia strona",
       "nextPage": "Następna strona",
@@ -282,6 +283,7 @@
       "shortStage": "Etap",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Utworzono",
+      "shortModified": "Zmodyfikowano",
       "firstRun": {
         "title": "Dodaj pierwsze kontakty",
         "message": "Dodaj osoby, z którymi rozmawiasz. Kontakty są używane w wiadomościach, kampaniach, zadaniach i transakcjach.",
@@ -290,7 +292,11 @@
         "importBody": "Prześlij arkusz kalkulacyjny i dopasuj jego kolumny do pól kontaktu.",
         "connect": "Połącz WhatsApp",
         "connectBody": "Połącz swój numer, aby kontakty mogły odpowiadać i aby można było do nich pisać."
-      }
+      },
+      "teamLabel": "Zespół",
+      "teamFilter": "Filtruj według zespołu",
+      "allTeams": "Wszystkie zespoły",
+      "teamFormer": "Dawny zespół"
     },
     "bulk": {
       "label": "Działania dla wybranych kontaktów",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Twój dostęp nie pozwala przypisać tego kontaktu do tej osoby.",
       "company": "Firma",
       "companyHint": "Przypisuje ten kontakt do organizacji.",
-      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole."
+      "companyRefused": "Nie możesz użyć tej firmy. Wybierz inną lub wyczyść pole.",
+      "searchOptions": "Szukaj opcji",
+      "searchOptionsFor": "Szukaj w opcjach pola {field}",
+      "noOptionsFound": "Żadna opcja nie pasuje do wyszukiwania."
     },
     "tags": {
       "title": "Tagi",
@@ -1225,7 +1234,8 @@
             "duplicate": "Dwie opcje mają tę samą nazwę."
           },
           "condition": "Wybierz właściwość i wartość dla każdego warunku."
-        }
+        },
+        "optionsLazy": "Ta właściwość ma {count, plural, one {# opcję} few {# opcje} many {# opcji} other {# opcji}}, zbyt wiele, by edytować je tutaj. Pozostają bez zmian; pozostałe ustawienia można zmienić."
       },
       "builtinCard": {
         "title": "Właściwości wbudowane",

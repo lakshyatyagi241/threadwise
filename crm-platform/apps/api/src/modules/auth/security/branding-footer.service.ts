@@ -5,9 +5,13 @@ import { Redis } from 'ioredis';
 import { BRANDING_FOOTER_MAX } from '@crm/contracts';
 import type { Env } from '../../../config/env.schema';
 import { DatabaseService } from '../../../infra/db/database.service';
+import { incrWithTtl } from '../../../infra/redis/counter';
 import { REDIS_CLIENT } from '../../../infra/redis/redis.module';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { PlatformSettingsService } from '../platform/platform-settings.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('branding_footer');
 
 /** The platform default footer setting (Reference: `platform_branding_footer`). */
 export const PLATFORM_FOOTER_SETTING = 'platform.branding_footer';
@@ -18,6 +22,9 @@ export const FooterKeys = {
   platform: 'auth:footer-v:platform',
 } as const;
 
+/** Longer than any cache entry trusts a version (`CACHE_MS`), so an expired counter can never match a still-cached entry. */
+const FOOTER_VERSION_TTL_S = 30 * 86_400;
+
 /**
  * Drops cached footers across every process: one workspace's, or (with no
  * `orgId`) all of them because the platform default changed. Callers run it
@@ -26,7 +33,11 @@ export const FooterKeys = {
  */
 export async function bustFooterCache(redis: Redis, orgId?: number): Promise<void> {
   try {
-    await redis.incr(orgId === undefined ? FooterKeys.platform : FooterKeys.org(orgId));
+    await incrWithTtl(
+      redis,
+      orgId === undefined ? FooterKeys.platform : FooterKeys.org(orgId),
+      FOOTER_VERSION_TTL_S,
+    );
   } catch {
     // the entry expires by itself
   }
@@ -124,7 +135,11 @@ export class BrandingFooterService {
     try {
       const version = await this.version(orgId);
       const hit = this.cache.get(orgId);
-      if (hit && hit.version === version && Date.now() - hit.at < CACHE_MS) return hit.footer;
+      if (hit && hit.version === version && Date.now() - hit.at < CACHE_MS) {
+        cache.hit();
+        return hit.footer;
+      }
+      cache.miss();
 
       const footer = await this.compute(orgId);
       if (this.cache.size >= CACHE_MAX_ENTRIES) this.cache.clear();

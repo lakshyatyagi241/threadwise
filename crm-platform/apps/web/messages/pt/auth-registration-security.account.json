@@ -561,7 +561,10 @@
             "personal_history_full": "Importação do histórico completo (WhatsApp pessoal)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "Pontuação de leads com IA",
-            "record_assignment": "Regras de atribuição de registros"
+            "record_assignment": "Regras de atribuição de registros",
+            "team_hierarchy": "Hierarquia de equipes e gestores",
+            "custom_roles": "Funções personalizadas e escopos",
+            "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
           },
           "cta": {
             "continueFree": "Continuar grátis",

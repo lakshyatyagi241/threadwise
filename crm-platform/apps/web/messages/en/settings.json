@@ -106,7 +106,7 @@
         "keywords": "text message, sender id, dlt, twilio, mobile"
       },
       "email": {
-        "label": "Email",
+        "label": "Support email",
         "description": "Connect Gmail or Google Workspace mailboxes so your team can read and answer customer email in the shared inbox.",
         "keywords": "mailbox, gmail, google workspace, shared inbox, support email, outlook, imap"
       },
@@ -207,8 +207,8 @@
       },
       "teams": {
         "label": "Teams",
-        "description": "Group people into teams for routing and reporting.",
-        "keywords": "groups, departments, assignment, routing"
+        "description": "Group people for conversations, assignments and reports.",
+        "keywords": "groups, departments, managers, hierarchy, assignment, routing"
       },
       "ai-keys": {
         "label": "AI provider keys",
@@ -254,6 +254,11 @@
         "label": "REST API",
         "description": "Keys and documentation for building on top of the product.",
         "keywords": "api keys, developers, tokens, docs, openapi"
+      },
+      "api-keys": {
+        "label": "API keys",
+        "description": "Create and manage the keys other systems use to call the API.",
+        "keywords": "api key, token, secret, developers, access, integration"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -311,9 +316,9 @@
         "keywords": "geta, publish, bot, console, go live, chatbot"
       },
       "auto-assignment": {
-        "label": "Auto-assignment",
+        "label": "Conversation auto-assignment",
         "description": "Give new conversations to the right agent automatically, in turn or by rules.",
-        "keywords": "routing, round robin, assign, agents, inbox rules, distribute, owner"
+        "keywords": "conversation auto-assignment, auto-assign, routing, round robin, assign, agents, inbox rules, distribute, owner"
       },
       "message-logs": {
         "label": "Message logs",
@@ -369,6 +374,11 @@
         "label": "Record assignment rules",
         "description": "Automatically give new contacts, companies and deals to your sales owners, by priority rules.",
         "keywords": "assign, owner, round robin, new contact, new deal, company, leave, lead routing, workload, territory"
+      },
+      "sales-activities": {
+        "label": "Sales Activities",
+        "description": "Manage tasks, meetings, calls and your own activities: what each can do, its task types and its outcomes.",
+        "keywords": "activities, task types, outcomes, meeting outcome, call outcome, follow up, check in, custom activity, calendar, complete"
       },
       "company-properties": {
         "label": "Company properties",

@@ -130,6 +130,7 @@
       "colLeadScore": "线索评分",
       "colLanguage": "语言",
       "colCreatedOn": "创建时间",
+      "colModifiedOn": "修改时间",
       "pagination": "分页",
       "prevPage": "上一页",
       "nextPage": "下一页",
@@ -282,6 +283,7 @@
       "shortStage": "阶段",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "创建时间",
+      "shortModified": "修改时间",
       "firstRun": {
         "title": "添加您的第一批联系人",
         "message": "导入您常联系的人。联系人可用于消息、营销活动、任务和交易。",
@@ -290,7 +292,11 @@
         "importBody": "上传电子表格，并将其列匹配到联系人字段。",
         "connect": "连接 WhatsApp",
         "connectBody": "连接您的号码，联系人即可回复，您也可以向他们发送消息。"
-      }
+      },
+      "teamLabel": "团队",
+      "teamFilter": "按团队筛选",
+      "allTeams": "所有团队",
+      "teamFormer": "原团队"
     },
     "bulk": {
       "label": "所选联系人的操作",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "您的权限不允许将此联系人分配给该人员。",
       "company": "公司",
       "companyHint": "将此联系人归入某个组织。",
-      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。"
+      "companyRefused": "你不能使用该公司。请选择其他公司或清空此字段。",
+      "searchOptions": "搜索选项",
+      "searchOptionsFor": "搜索{field}的选项",
+      "noOptionsFound": "没有与搜索匹配的选项。"
     },
     "tags": {
       "title": "标签",
@@ -1225,7 +1234,8 @@
             "duplicate": "有两个选项名称相同。"
           },
           "condition": "请为每个条件选择属性和值。"
-        }
+        },
+        "optionsLazy": "此属性有 {count, plural, other {# 个选项}}，数量太多，无法在此编辑。选项将保持不变，其他设置仍可修改。"
       },
       "builtinCard": {
         "title": "内置属性",

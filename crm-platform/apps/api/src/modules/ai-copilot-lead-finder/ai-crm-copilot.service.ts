@@ -16,6 +16,10 @@ import {
 import { AiKeyResolver, AiTokenMeter } from '../ai-keys-usage-admin';
 import { AiCrmActionsRepository } from './ai-crm-actions.repository';
 import { AiCrmToolkitService } from './ai-crm-toolkit.service';
+import { cacheMetrics } from '@crm/observability';
+
+const historyCache = cacheMetrics('copilot_history');
+const pendingCache = cacheMetrics('copilot_pending');
 
 const PROVIDER_PRIORITY_ORDER = ['anthropic', 'openai', 'gemini'] as const;
 const HISTORY_MAX_TURNS = 12;
@@ -288,6 +292,8 @@ export class AiCrmCopilotService {
 
   private async history(orgId: number, userId: number | null): Promise<AiCrmHistoryTurn[]> {
     const raw = await this.redis.get(this.historyKey(orgId, userId));
+    if (raw) historyCache.hit();
+    else historyCache.miss();
     if (!raw) return [];
     try {
       const parsed = JSON.parse(raw);
@@ -317,6 +323,8 @@ export class AiCrmCopilotService {
 
   private async pending(orgId: number, userId: number | null): Promise<PendingWrite | null> {
     const raw = await this.redis.get(this.pendingKey(orgId, userId));
+    if (raw) pendingCache.hit();
+    else pendingCache.miss();
     if (!raw) return null;
     try {
       return JSON.parse(raw) as PendingWrite;

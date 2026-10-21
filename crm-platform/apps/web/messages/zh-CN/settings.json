@@ -101,7 +101,7 @@
         "keywords": "短信, 发送方 ID, dlt, twilio, 手机"
       },
       "email": {
-        "label": "电子邮件",
+        "label": "客服邮箱",
         "description": "连接 Gmail 或 Google Workspace 邮箱，让团队在共享收件箱中阅读和回复客户邮件。",
         "keywords": "邮箱, gmail, google workspace, 共享收件箱, 客服邮件, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "团队",
-        "description": "将成员分组为团队，用于分配和报表。",
-        "keywords": "分组, 部门, 分配, 路由"
+        "description": "将人员分组,用于会话、分配和报表。",
+        "keywords": "分组、部门、负责人、层级、分配、路由"
       },
       "ai-keys": {
         "label": "AI 服务商密钥",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "用于基于本产品进行开发的密钥和文档。",
         "keywords": "api 密钥, 开发者, token, 文档, openapi"
+      },
+      "api-keys": {
+        "label": "API 密钥",
+        "description": "创建并管理其他系统调用 API 所用的密钥。",
+        "keywords": "api 密钥, 令牌, 机密, 开发者, 访问, 集成"
       },
       "webhooks": {
         "label": "Webhook",
@@ -301,7 +306,7 @@
         "keywords": "geta, 发布, 机器人, 控制台, 上线, 聊天机器人"
       },
       "auto-assignment": {
-        "label": "自动分配",
+        "label": "会话自动分配",
         "description": "按轮询或规则，自动将新对话分配给合适的坐席。",
         "keywords": "路由, 轮询, 分配, 坐席, 收件箱规则, 分发, 负责人"
       },
@@ -389,6 +394,11 @@
         "label": "重复线索",
         "description": "选择与联系人匹配的新线索是合并到该联系人，还是成为新联系人。",
         "keywords": "重复, 合并, 线索, 相同电话, 相同邮箱, 新联系人, 线索来源"
+      },
+      "sales-activities": {
+        "label": "销售活动",
+        "description": "管理任务、会议、通话和您自己的活动：每种活动能做什么、任务类型和结果。",
+        "keywords": "活动, 任务类型, 结果, 会议结果, 通话结果, 跟进, 签到, 自定义活动, 日历, 完成"
       }
     },
     "backToMarketplace": "返回应用市场"

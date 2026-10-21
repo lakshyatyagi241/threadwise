@@ -8,6 +8,9 @@ type Doc = Record<string, unknown>;
 
 /** Written from the README ("Contact properties"), not imported from the transform: the two timestamp properties shown as read-only fields. */
 const TIME_NAMES = ['created_time', 'modified_time'];
+/** the verifier's own copy: system properties the old contact page showed (README, "Contact properties"), and the three that hold a name or a label */
+const VISIBLE_SYSTEM_NAMES = ['original_lifecycle_stage', 'original_lifecycle_stage_date', 'created_by', 'updated_by', 'chatbot_language'];
+const NAME_VALUED_NAMES = ['original_lifecycle_stage', 'created_by', 'updated_by'];
 
 /** Written from the README ("Contact properties"), not imported from the transform: the Waboo web-analytics property names that become ordinary fields. */
 const WEB_ANALYTICS_NAMES = [
@@ -131,6 +134,8 @@ export function oraclePhone(
     if (lens.includes(national.length)) return internationalOk(cc + national);
     if (national.startsWith(cc) && lens.includes(national.length - cc.length))
       return internationalOk(national);
+    // full international digits without a plus ("5521...", "4478..."): another country's number when the contact states no country code
+    if (!text(countryCode)) return internationalOk(national);
     return null;
   }
   return internationalOk(
@@ -349,14 +354,14 @@ export class TableOracle {
           module_key: 'contacts',
           key,
           label: text(doc.label) || key,
-          field_type: FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text',
+          field_type: NAME_VALUED_NAMES.includes(key) ? 'text' : (FIELD_TYPE[text(doc.type).toLowerCase()] ?? 'text'),
           is_required: truthy(doc.required),
           is_hidden: !visible(doc.visible) || truthy(doc.hidden_from_ui),
           is_read_only: TIME_NAMES.includes(String(doc.name)) ? true : truthy(doc.read_only) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)),
           is_masked: truthy(doc.masked),
           is_unique: truthy(doc.unique),
           // the verifier's own copy of the rule (README, "Contact properties"): the 22 web-analytics names are never system fields
-          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)) && !TIME_NAMES.includes(String(doc.name)),
+          is_system: truthy(doc.system_default) && !WEB_ANALYTICS_NAMES.includes(String(doc.name)) && !TIME_NAMES.includes(String(doc.name)) && !VISIBLE_SYSTEM_NAMES.includes(String(doc.name)),
           is_active: true,
           position: Number(doc.position) || 0,
           ...this.dates(doc),

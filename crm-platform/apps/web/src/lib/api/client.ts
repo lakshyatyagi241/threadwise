@@ -23,6 +23,9 @@ function qs(query: ApiRequest<unknown>['query']): string {
   return s ? `?${s}` : '';
 }
 
+/** How long a browser call to the API may take before it is given up. */
+export const API_CALL_TIMEOUT_MS = 60_000;
+
 /** Calls the API through the same-origin proxy (`/api/v2/*`), which attaches the session token. */
 export async function apiFetch<T = void>(path: string, req: ApiRequest<T> = {}): Promise<T> {
   const method = req.method ?? 'GET';
@@ -37,7 +40,8 @@ export async function apiFetch<T = void>(path: string, req: ApiRequest<T> = {}):
     method,
     headers,
     body: req.body === undefined ? undefined : JSON.stringify(req.body),
-    signal: req.signal,
+    // A caller's own signal wins; otherwise a stalled API cannot leave the screen waiting for ever (the proxy answers 504 after 30 s).
+    signal: req.signal ?? AbortSignal.timeout(API_CALL_TIMEOUT_MS),
     credentials: 'same-origin',
   });
   const text = await res.text();

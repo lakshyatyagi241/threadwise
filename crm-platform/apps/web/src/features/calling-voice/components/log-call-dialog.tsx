@@ -12,6 +12,7 @@ import {
   type LogCallResult,
 } from '@crm/contracts';
 import { Alert, Button, Checkbox, Field, Input, Modal, Select, Textarea, useToast } from '@crm/ui';
+import { useActivityLabels, useActivitySettings } from '@/features/sales-activities';
 import { useLogCall } from '../api/call-logging';
 import { buildLogCallInput, localDateTimeValue, tomorrowMorning } from '../lib/log-call';
 import { useErrorText } from './use-error-text';
@@ -60,6 +61,13 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
     prefill?.direction ?? 'outbound',
   );
   const [outcome, setOutcome] = useState<(typeof CALL_OUTCOMES)[number]>('connected');
+  // The workspace's own Phone outcomes (Settings > Sales Activities); until they load, or if they cannot be read, the built-in seven.
+  const phoneActivity = useActivitySettings('phone').activity;
+  const activityLabels = useActivityLabels();
+  const items = phoneActivity?.outcomes ?? [];
+  const [optionId, setOptionId] = useState('');
+  const chosen =
+    items.find((o) => o.id === optionId) ?? items.find((o) => o.key === 'connected') ?? items[0];
   const [when, setWhen] = useState(
     localDateTimeValue(prefill?.startedAt ? new Date(prefill.startedAt) : new Date()),
   );
@@ -76,7 +84,7 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
       contactId: contactId ?? prefill?.contactId,
       phone,
       direction,
-      outcome,
+      outcome: chosen ? ((chosen.countsAs ?? chosen.key) as typeof outcome) : outcome,
       when,
       minutes,
       notes,
@@ -88,7 +96,10 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
       return;
     }
     try {
-      const result = await save.mutateAsync(built.input satisfies LogCallInput);
+      const input: LogCallInput = chosen
+        ? { ...built.input, outcomeOptionId: chosen.id }
+        : built.input;
+      const result = await save.mutateAsync(input);
       toast(result.entry.contactId ? t('saved') : t('savedNoContact'), 'success');
       onLogged?.(result);
       onClose();
@@ -135,17 +146,31 @@ function LogCallForm({ onClose, contactId, contactName, prefill, onLogged }: Log
           </Select>
         </Field>
         <Field label={t('outcome')} htmlFor={`${id}-outcome`}>
-          <Select
-            id={`${id}-outcome`}
-            value={outcome}
-            onChange={(e) => setOutcome(e.target.value as typeof outcome)}
-          >
-            {CALL_OUTCOMES.map((o) => (
-              <option key={o} value={o}>
-                {t(`outcomes.${o}`)}
-              </option>
-            ))}
-          </Select>
+          {chosen ? (
+            <Select
+              id={`${id}-outcome`}
+              value={chosen.id}
+              onChange={(e) => setOptionId(e.target.value)}
+            >
+              {items.map((o) => (
+                <option key={o.id} value={o.id}>
+                  {activityLabels.option('phone', o)}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Select
+              id={`${id}-outcome`}
+              value={outcome}
+              onChange={(e) => setOutcome(e.target.value as typeof outcome)}
+            >
+              {CALL_OUTCOMES.map((o) => (
+                <option key={o} value={o}>
+                  {t(`outcomes.${o}`)}
+                </option>
+              ))}
+            </Select>
+          )}
         </Field>
         <Field label={t('when')} htmlFor={`${id}-when`}>
           <Input

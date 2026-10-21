@@ -58,7 +58,10 @@
         "role": "Rol",
         "status": "Estado",
         "joined": "Se unió",
-        "actions": "Acciones"
+        "actions": "Acciones",
+        "phone": "Teléfono",
+        "chatLimit": "Chats simultáneos",
+        "lastLogin": "Último inicio de sesión"
       },
       "pending": "pendiente",
       "you": "Tú",
@@ -100,7 +103,12 @@
       "onLeaveUntil": "De ausencia hasta el {date}",
       "onLeaveOpen": "De ausencia",
       "leaveFrom": "Ausencia desde el {date}",
-      "leaveAction": "Ausencia y suplente"
+      "leaveAction": "Ausencia y suplente",
+      "noLimit": "Sin límite",
+      "neverSignedIn": "Nunca",
+      "editAction": "Cambiar teléfono y límite de chats",
+      "moreAction": "Más",
+      "moreLabel": "Más acciones para {name}"
     },
     "invite": {
       "eyebrow": "Espacio de trabajo",
@@ -129,18 +137,23 @@
       "nameTooLong": "El nombre puede tener como máximo {max} caracteres.",
       "emailInvalid": "Introduce un correo electrónico válido.",
       "upgrade": "Mejorar plan",
-      "emailRequired": "Introduce un correo electrónico."
+      "emailRequired": "Introduce un correo electrónico.",
+      "phone": "Número de teléfono (opcional)",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con el prefijo del país.",
+      "phoneInvalid": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43210.",
+      "chatLimit": "Chats simultáneos",
+      "chatLimitHint": "Máximo de chats abiertos que se le asignan a la vez. Déjalo vacío para no poner límite.",
+      "chatLimitInvalid": "Introduce un número entero del 1 al {max}, o déjalo vacío para no poner límite."
     },
     "teams": {
       "eyebrow": "Espacio de trabajo",
       "title": "Equipos",
       "pageTitle": "Equipos",
-      "subtitle": "Agrupa a tus agentes por departamento. Las conversaciones se pueden asignar automáticamente por equipo mediante reglas de enrutamiento.",
       "create": "Crear equipo",
       "edit": "Editar equipo",
       "loading": "Cargando equipos",
       "emptyTitle": "Todavía no hay equipos",
-      "emptyMessage": "Crea un equipo, añade a tus agentes y enruta las conversaciones hacia él.",
       "emptyAction": "Crear equipo",
       "members": "{count, plural, =0 {Sin miembros} one {# miembro} other {# miembros}}",
       "online": "{count} en línea",
@@ -154,9 +167,10 @@
       },
       "howTitle": "Cómo funcionan los equipos",
       "how": {
-        "one": "Ponle nombre a un equipo (por ejemplo, Ventas), elige un color y añade a tus agentes.",
-        "two": "Úsalo de tres formas: asignar un chat al equipo a mano, enrutar los chats nuevos hacia él con una regla de enrutamiento o consultar su rendimiento en analítica.",
-        "three": "El color del equipo es el color de la etiqueta en la cola de la bandeja, así puedes distinguir de un vistazo los chats de cada equipo."
+        "one": "Ponle nombre al equipo (por ejemplo Ventas), elige un color y añade a las personas que trabajan juntas.",
+        "two": "Úsalo para conversaciones (enruta nuevos chats hacia él o asigna un chat a mano), para registros (asigna contactos, empresas y negocios a sus miembros) y para informes.",
+        "three": "El responsable es la persona que lidera el equipo. Un equipo superior lo sitúa bajo otro equipo, así puedes crear un árbol como Ventas y Ventas Oeste.",
+        "four": "El equipo principal de una persona es su equipo de referencia, usado en los informes (los informes empezarán a usarlo en una próxima versión). El enrutamiento, la asignación y la visibilidad usan todos los equipos de una persona."
       },
       "created": "Equipo creado.",
       "updated": "Equipo actualizado.",
@@ -165,9 +179,43 @@
       "updateFailed": "Error al actualizar: {reason}",
       "deleteFailed": "Error al eliminar: {reason}",
       "deleteTitle": "¿Eliminar este equipo?",
-      "deleteMessage": "¿Eliminar el equipo \"{name}\"? Las conversaciones asignadas a este equipo quedarán sin asignar.",
+      "deleteMessage": "¿Eliminar el equipo \"{name}\"? Sus miembros siguen en el espacio de trabajo. El equipo se quitará de todos los lugares donde se usa actualmente.",
       "deleteConfirm": "Eliminar equipo",
-      "delete": "Eliminar equipo"
+      "delete": "Eliminar equipo",
+      "subtitle": "Los equipos agrupan personas para conversaciones, asignaciones e informes.",
+      "emptyMessage": "Crea un equipo y añade a las personas que trabajan juntas. Puedes enrutar conversaciones hacia él y asignar contactos, empresas y negocios a sus miembros.",
+      "noAccess": "No tienes permiso para ver los equipos. Pide a un Owner o Admin del espacio de trabajo el permiso team.read.",
+      "manager": "Responsable: {name}",
+      "noManager": "Sin responsable",
+      "receivesConversations": "Conversaciones",
+      "receivesRecords": "Registros",
+      "primaryCount": "{count, plural, one {# lo tiene como equipo principal} other {# lo tienen como equipo principal}}",
+      "usedBy": "Usado por",
+      "usedByNone": "Aún no lo usa ninguna regla",
+      "usage": {
+        "routingRules": "{count, plural, one {# regla de enrutamiento} other {# reglas de enrutamiento}}",
+        "assignmentRules": "{count, plural, one {# regla de asignación} other {# reglas de asignación}}",
+        "segmentShares": "{count, plural, one {# segmento compartido} other {# segmentos compartidos}}",
+        "conversations": "{count, plural, one {# conversación} other {# conversaciones}}",
+        "childTeams": "{count, plural, one {# subequipo} other {# subequipos}}"
+      },
+      "notUsed": {
+        "title": "Guardado, aún sin uso",
+        "body": "Este ajuste se guarda en el equipo, pero todavía nada lo utiliza.",
+        "devices": "{count, plural, one {Limitado a # dispositivo} other {Limitado a # dispositivos}}"
+      },
+      "deleteUsage": {
+        "title": "Qué cambiará",
+        "loading": "Comprobando dónde se usa este equipo...",
+        "failed": "No se pudo comprobar dónde se usa este equipo. Aún puedes eliminarlo.",
+        "nothing": "Nada más usa este equipo.",
+        "members": "{count, plural, one {# persona deja el equipo} other {# personas dejan el equipo}}",
+        "routingRules": "{count, plural, one {# regla de enrutamiento pierde este equipo como destino; una regla que se quede sin nada que hacer se desactiva} other {# reglas de enrutamiento pierden este equipo como destino; una regla que se quede sin nada que hacer se desactiva}}",
+        "assignmentRules": "{count, plural, one {# regla de asignación de registros pierde este equipo de su grupo} other {# reglas de asignación de registros pierden este equipo de su grupo}}",
+        "segmentShares": "{count, plural, one {# segmento deja de compartirse con este equipo} other {# segmentos dejan de compartirse con este equipo}}",
+        "conversationsAssigned": "{count, plural, one {# conversación asignada a este equipo conserva su lugar y se queda sin equipo} other {# conversaciones asignadas a este equipo conservan su lugar y se quedan sin equipo}}",
+        "peopleWithReachChange": "{count, plural, one {# persona verá menos registros de sus compañeros con el acceso por equipo} other {# personas verán menos registros de sus compañeros con el acceso por equipo}}"
+      }
     },
     "teamDialog": {
       "eyebrow": "Espacio de trabajo",
@@ -179,13 +227,6 @@
       "nameTooLong": "El nombre puede tener como máximo {max} caracteres.",
       "color": "Color",
       "colorOption": "Color {color}",
-      "strategy": "Estrategia de asignación automática",
-      "strategyOptions": {
-        "manual": "Manual: un responsable elige quién lo atiende",
-        "round_robin": "Por turnos: reparto equitativo",
-        "least_loaded": "Menos cargado: primero el que tiene menos abiertos",
-        "sticky": "Fijo: el último agente que respondió a este contacto"
-      },
       "members": "Miembros",
       "membersLoading": "Cargando compañeros",
       "membersFailed": "No se pudo cargar a los compañeros.",
@@ -196,7 +237,28 @@
       "create": "Crear equipo",
       "creating": "Creando…",
       "save": "Guardar cambios",
-      "saving": "Guardando…"
+      "saving": "Guardando…",
+      "hint": "Los equipos agrupan personas para conversaciones, asignaciones e informes. Elige un responsable, un equipo superior opcional y lo que el equipo puede recibir.",
+      "description": "Descripción",
+      "descriptionPlaceholder": "Qué hace este equipo (opcional)",
+      "lead": "Responsable",
+      "leadNone": "Sin responsable",
+      "leadHint": "La persona que lidera el equipo. Se añade al equipo como líder.",
+      "parent": "Equipo superior",
+      "parentNone": "Ninguno (nivel superior)",
+      "parentHint": "Coloca este equipo bajo otro equipo para crear un árbol, de hasta 5 niveles de profundidad.",
+      "receive": "Puede recibir",
+      "receiveHint": "Dónde se puede elegir este equipo. Desactiva una opción para excluir el equipo de esos selectores.",
+      "receiveConversations": "Conversaciones (enrutamiento y asignación de la bandeja)",
+      "receiveRecords": "Registros (contactos, empresas y negocios)",
+      "membersHint": "Marca a las personas de este equipo. Indica quiénes son líderes y elige el equipo principal de cada persona.",
+      "leadFlag": "Líder",
+      "leadToggle": "Marcar como líder de este equipo",
+      "leadLocked": "El responsable siempre es líder",
+      "primaryFlag": "Principal",
+      "primaryToggle": "Establecer como equipo principal de la persona",
+      "primaryLocked": "El único equipo de una persona es siempre su equipo principal",
+      "primaryHint": "El equipo principal de una persona es su equipo de referencia, usado en los informes (los informes empezarán a usarlo en una próxima versión). El enrutamiento, la asignación y la visibilidad usan todos sus equipos."
     },
     "errors": {
       "network": "Se perdió la conexión. Revísala e inténtalo de nuevo.",
@@ -225,7 +287,13 @@
       "delegateInvalid": "El suplente debe ser otro miembro activo de este espacio de trabajo.",
       "delegateCycle": "Eso crearía un círculo: la persona elegida ya tiene a esta persona como suplente.",
       "reassignInvalid": "No se pudo reasignar nada. Comprueba que la persona tenga contactos o negocios abiertos y que el destino pueda recibirlos.",
-      "reassignNotRestorable": "Esta reasignación ya no se puede deshacer."
+      "reassignNotRestorable": "Esta reasignación ya no se puede deshacer.",
+      "teamParentCycle": "Un equipo no puede estar bajo sí mismo ni bajo uno de sus propios subequipos.",
+      "teamParentInvalid": "Ese equipo superior no está disponible, o el árbol superaría los 5 niveles de profundidad.",
+      "teamNotOnTeam": "Esa persona no está en este equipo.",
+      "teamsNotIncluded": "Tu plan no incluye equipos. Mejora tu plan, o pide el complemento Equipos y permisos, para agrupar personas en equipos.",
+      "teamsLimit": "Has alcanzado el límite de {limit} equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más.",
+      "teamsLimitUnknown": "Has alcanzado el límite de equipos de tu plan. Mejora tu plan o elimina un equipo para añadir más."
     },
     "accept": {
       "title": "Únete a tu espacio de trabajo",
@@ -320,6 +388,51 @@
       "undoTitle": "¿Deshacer esta reasignación?",
       "undoMessage": "Los contactos y negocios que nadie ha modificado desde entonces vuelven al propietario anterior. Los demás se quedan donde están.",
       "restored": "{count} devueltos, {skipped} se quedan donde están."
+    },
+    "details": {
+      "eyebrow": "Espacio de trabajo",
+      "title": "Cambiar miembro",
+      "intro": "Teléfono y límite de chats de {name}.",
+      "phone": "Número de teléfono",
+      "phonePlaceholder": "+91 98765 43210",
+      "phoneHint": "Con el prefijo del país. Déjalo vacío para quitarlo.",
+      "phoneInvalid": "Introduce el número con su prefijo de país, por ejemplo +91 98765 43210.",
+      "chatLimit": "Chats simultáneos",
+      "chatLimitHint": "La asignación automática deja de darle chats cuando tiene tantos abiertos. Déjalo vacío para no poner límite.",
+      "chatLimitPlaceholder": "Sin límite",
+      "chatLimitInvalid": "Introduce un número entero del 1 al {max}, o déjalo vacío para no poner límite.",
+      "lastLogin": "Último inicio de sesión",
+      "lastLoginNever": "Aún no ha iniciado sesión",
+      "submit": "Guardar",
+      "saving": "Guardando…",
+      "saved": "Miembro actualizado."
+    },
+    "availability": {
+      "label": "Disponibilidad",
+      "available": "Disponible",
+      "offline": "Desconectado",
+      "hint": "Mientras estés sin conexión, no se te asignan chats nuevos automáticamente. Los chats que ya tienes siguen siendo tuyos.",
+      "failed": "No se pudo cambiar"
+    },
+    "deactivate": {
+      "eyebrow": "Miembros del equipo",
+      "title": "Desactivar miembro",
+      "message": "{name} ya no podrá iniciar sesión. Puedes reactivarlo en cualquier momento.",
+      "loading": "Comprobando lo que tiene asignado",
+      "previewFailed": "No pudimos comprobar lo que tiene asignado esta persona. Aun así puedes desactivarla; su trabajo se queda con ella.",
+      "holds": "{name} es propietario de {contacts, plural, one {# contacto} other {# contactos}}, {deals, plural, one {# negocio abierto} other {# negocios abiertos}} y {chats, plural, one {# conversación abierta} other {# conversaciones abiertas}}. ¿Qué debe pasar con ellos?",
+      "optLead": "Dárselos al responsable del equipo, {name} ({team})",
+      "optLeadNone": "Dárselos al responsable del equipo (esta persona no tiene un responsable de equipo activo)",
+      "optPerson": "Dárselos a una persona",
+      "pickPerson": "Persona",
+      "pickPlaceholder": "Elige una persona",
+      "optLeave": "Dejarlos con {name}",
+      "undoNote": "Los contactos y los negocios abiertos se pueden deshacer durante 14 días desde el historial de reasignaciones. Las conversaciones abiertas se reasignan una por una.",
+      "nothing": "{name} no tiene contactos, negocios abiertos ni conversaciones abiertas.",
+      "membership": "Se conservan sus puestos en los equipos, así que al reactivar a {name} vuelve a sus equipos.",
+      "confirm": "Desactivar",
+      "moved": "Se movieron {contacts, plural, one {# contacto} other {# contactos}}, {deals, plural, one {# negocio} other {# negocios}} y {chats, plural, one {# conversación} other {# conversaciones}} a {name}.",
+      "remaining": "Aún quedan {count} por mover. Ejecuta el traspaso de nuevo para moverlos."
     }
   }
 }

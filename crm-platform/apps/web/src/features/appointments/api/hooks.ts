@@ -10,8 +10,11 @@ import { useSession } from '@/features/auth-registration-security/shared/session
 import { safeZone } from '../lib/zone';
 import { configureMock, mockEnabled } from './http';
 import { calendarsApi } from './calendars-service';
+import { channelsApi } from './channels-service';
+import { sequencesApi } from './sequences-service';
 import { appointmentsApi, type AppointmentSource } from './service';
 import type { Appointment } from './schemas';
+import type { ReminderPackKey, ReminderPackLanguage, ReminderReportQuery } from '@crm/contracts';
 import { transientRetry, transientRetryDelay } from '@/lib/api/retry';
 
 export const KEYS = {
@@ -24,6 +27,9 @@ export const KEYS = {
   type: (id: string) => ['appointments', 'type', id] as const,
   settings: ['appointments', 'settings'] as const,
   waTemplates: ['appointments', 'wa-templates'] as const,
+  channels: ['appointments', 'channels'] as const,
+  library: ['appointments', 'library'] as const,
+  predefined: ['appointments', 'library', 'predefined'] as const,
   calendar: ['appointments', 'calendar'] as const,
   calendars: ['appointments', 'calendar', 'list'] as const,
   spreadsheets: ['appointments', 'calendar', 'spreadsheets'] as const,
@@ -31,6 +37,11 @@ export const KEYS = {
   outlookCalendars: ['appointments', 'calendar', 'outlook', 'list'] as const,
   icsFeeds: ['appointments', 'calendar', 'ics-feeds'] as const,
   bookingsFeed: ['appointments', 'calendar', 'bookings-feed'] as const,
+  packs: ['appointments', 'reminder-packs'] as const,
+  packPreview: (key: string, typeId: string, language: string) =>
+    ['appointments', 'reminder-packs', 'preview', key, typeId, language] as const,
+  reminderReport: (query: ReminderReportQuery) =>
+    ['appointments', 'reminder-report', query] as const,
 };
 
 /** Keeps the development stand-in (when it is on) in step with who is signed in. Call it once near the top of a screen. */
@@ -262,5 +273,80 @@ export function useBookingsFeed(enabled = true) {
     retry: transientRetry,
     retryDelay: transientRetryDelay,
     staleTime: 15_000,
+  });
+}
+
+/**
+ * Which channels the owner allows for appointment messages and which are connected (BL-350). Not worth failing a screen for: while it is
+ * missing the editor offers every channel and the API still refuses one that is not on.
+ */
+export function useAppointmentChannels() {
+  return useQuery({
+    queryKey: KEYS.channels,
+    queryFn: ({ signal }) => channelsApi.channels(signal),
+    staleTime: 30_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** The workspace's library of appointment messages with the live status of each WhatsApp one (BL-351). */
+export function useMessageLibrary() {
+  return useQuery({
+    queryKey: KEYS.library,
+    queryFn: ({ signal }) => channelsApi.library(signal),
+    staleTime: 15_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+export function usePredefinedMessages() {
+  return useQuery({
+    queryKey: KEYS.predefined,
+    queryFn: ({ signal }) => channelsApi.predefined(signal),
+    staleTime: 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** The seven reminder packs (BL-424). Fetched when the picker opens. */
+export function useReminderPacks(enabled: boolean) {
+  return useQuery({
+    queryKey: KEYS.packs,
+    queryFn: ({ signal }) => sequencesApi.packs(signal),
+    enabled,
+    staleTime: 5 * 60_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
+  });
+}
+
+/** What applying a pack to a booking type would do, with the live state of each WhatsApp template. Never cached for long: it is a status. */
+export function usePackPreview(
+  key: ReminderPackKey | null,
+  typeId: string,
+  language: ReminderPackLanguage,
+) {
+  return useQuery({
+    queryKey: KEYS.packPreview(key ?? '', typeId, language),
+    queryFn: ({ signal }) =>
+      sequencesApi.previewPack(key!, { bookingTypeId: typeId, language }, signal),
+    enabled: key !== null,
+    staleTime: 0,
+    gcTime: 0,
+    retry: false,
+  });
+}
+
+/** Sent, delivered, failed and skipped per step (BL-429). */
+export function useReminderReport(query: ReminderReportQuery) {
+  return useQuery({
+    queryKey: KEYS.reminderReport(query),
+    queryFn: ({ signal }) => sequencesApi.report(query, signal),
+    staleTime: 15_000,
+    retry: transientRetry,
+    retryDelay: transientRetryDelay,
   });
 }

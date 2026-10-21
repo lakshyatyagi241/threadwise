@@ -15,6 +15,7 @@ import { CatalogConciergeService } from '../../../../catalog-products';
 @Injectable()
 export class CatalogConciergeListener implements InboundMessageListener, OnModuleInit {
   readonly name = 'catalog-concierge';
+  readonly bot = true as const;
   readonly after = true as const;
 
   constructor(

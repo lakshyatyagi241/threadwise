@@ -130,6 +130,7 @@
       "colLeadScore": "Puntuación del lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Creado el",
+      "colModifiedOn": "Modificado el",
       "pagination": "Paginación",
       "prevPage": "Página anterior",
       "nextPage": "Página siguiente",
@@ -282,6 +283,7 @@
       "shortStage": "Etapa",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Creado",
+      "shortModified": "Modificado",
       "firstRun": {
         "title": "Añade tus primeros contactos",
         "message": "Trae a las personas con las que hablas. Los contactos se usan para mensajes, campañas, tareas y negocios.",
@@ -290,7 +292,11 @@
         "importBody": "Sube una hoja de cálculo y relaciona sus columnas con los campos de contacto.",
         "connect": "Conectar WhatsApp",
         "connectBody": "Conecta tu número para que los contactos puedan responder y tú puedas escribirles."
-      }
+      },
+      "teamLabel": "Equipo",
+      "teamFilter": "Filtrar por equipo",
+      "allTeams": "Todos los equipos",
+      "teamFormer": "Equipo anterior"
     },
     "bulk": {
       "label": "Acciones para los contactos seleccionados",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Tu acceso no te permite asignar este contacto a esa persona.",
       "company": "Empresa",
       "companyHint": "Agrupa este contacto bajo una organización.",
-      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo."
+      "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
+      "searchOptions": "Buscar opciones",
+      "searchOptionsFor": "Buscar entre las opciones de {field}",
+      "noOptionsFound": "Ninguna opción coincide con la búsqueda."
     },
     "tags": {
       "title": "Etiquetas",
@@ -1225,7 +1234,8 @@
             "duplicate": "Dos opciones tienen el mismo nombre."
           },
           "condition": "Elige la propiedad y el valor de cada condición."
-        }
+        },
+        "optionsLazy": "Esta propiedad tiene {count, plural, one {# opción} other {# opciones}}, demasiadas para editarlas aquí. Se conservan tal cual; el resto de ajustes se puede cambiar."
       },
       "builtinCard": {
         "title": "Propiedades integradas",

@@ -97,6 +97,16 @@ export const inboxMessages = defineHolder({
       retention: 'Internal notes on the thread.',
     },
     {
+      table: 'conversation_handoffs',
+      link: CONVERSATION,
+      disposition: 'delete',
+      tier: 'history',
+      order: 30,
+      categories: ['content'],
+      pii: ['reason_text', 'summary', 'answers'],
+      retention: 'The handoff card and run log of the thread (what the customer told the bot, why a person was asked for).',
+    },
+    {
       table: 'csat_responses',
       link: CONVERSATION,
       disposition: 'delete',
@@ -105,16 +115,6 @@ export const inboxMessages = defineHolder({
       categories: ['content'],
       pii: ['comment'],
       retention: 'Satisfaction answer of the thread.',
-    },
-    {
-      table: 'faq_match_logs',
-      link: CONVERSATION,
-      disposition: 'delete',
-      tier: 'history',
-      order: 30,
-      categories: ['content', 'ai_inference'],
-      pii: ['query', 'matched_text'],
-      retention: 'FAQ matching log of the thread.',
     },
     {
       table: 'platform_notes',

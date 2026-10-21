@@ -13,6 +13,16 @@ const IV_LENGTH = 12; // 96 bits — the size GCM is specified for
  * no key id and are tried against every key in the ring.
  */
 const VERSION = 'v1';
+/**
+ * Bound blob (encryption audit E4): `v2:<iv>:<tag>:<ct>:<key id>:<context label>`. The label is a hash of the context the value belongs to
+ * (for example `push_subscriptions.auth:<org>:<user>`), it is the GCM associated data, and a reader must name the same context, so a blob
+ * copied to another row or column no longer opens. The label sits in the blob on purpose: key rotation can then re-seal a bound blob
+ * without knowing its context. A release that predates v2 cannot parse it, so v2 is only WRITTEN when CREDENTIALS_AAD_WRITE=on (default
+ * off, switch it on after every instance runs a release that reads v2); every release from this one on reads both.
+ */
+const BOUND_VERSION = 'v2';
+const labelOf = (context: string): string =>
+  createHash('sha256').update(`aad:${context}`).digest('hex').slice(0, 32);
 
 interface RingKey {
   /** First 8 hex characters of SHA-256(key): names a key without revealing it. */
@@ -54,6 +64,7 @@ function toRingKey(base64: string, label: string): RingKey {
 export class CryptoService {
   private readonly current: RingKey;
   private readonly ring: RingKey[];
+  private readonly aadWrite: boolean;
 
   constructor(config: ConfigService<Env, true>) {
     this.current = toRingKey(
@@ -72,6 +83,8 @@ export class CryptoService {
       .map((k) => toRingKey(k, 'CREDENTIALS_ENCRYPTION_PREVIOUS_KEYS'))
       .filter((k) => k.id !== this.current.id);
     this.ring = [this.current, ...previous];
+    const flag = (config as unknown as ConfigService).get<string>('CREDENTIALS_AAD_WRITE');
+    this.aadWrite = (flag ?? '').trim().toLowerCase() === 'on';
   }
 
   /** The id of the key new blobs are sealed with. */
@@ -79,23 +92,57 @@ export class CryptoService {
     return this.current.id;
   }
 
-  encrypt(plaintext: string): string {
+  /**
+   * Seals a value. With a `context` (what the value belongs to, e.g. `table.column:orgId:rowId`) and CREDENTIALS_AAD_WRITE=on the blob is
+   * bound to that context (v2); otherwise it is the plain v1 format, which every release can read.
+   */
+  encrypt(plaintext: string, context?: string): string {
+    return this.seal(
+      plaintext,
+      this.current,
+      context !== undefined && this.aadWrite ? labelOf(context) : null,
+    );
+  }
+
+  private seal(plaintext: string, key: RingKey, label: string | null): string {
     const iv = randomBytes(IV_LENGTH);
-    const cipher = createCipheriv(ALGORITHM, this.current.key, iv);
+    const cipher = createCipheriv(ALGORITHM, key.key, iv);
+    if (label !== null) cipher.setAAD(Buffer.from(label, 'utf8'));
     const ciphertext = Buffer.concat([cipher.update(plaintext, 'utf8'), cipher.final()]);
     const tag = cipher.getAuthTag();
 
     return [
-      VERSION,
+      label === null ? VERSION : BOUND_VERSION,
       iv.toString('base64'),
       tag.toString('base64'),
       ciphertext.toString('base64'),
-      this.current.id,
+      key.id,
+      ...(label === null ? [] : [label]),
     ].join(':');
   }
 
-  decrypt(encoded: string): string {
+  /** True for a blob bound to a context (v2). */
+  isBound(encoded: string): boolean {
+    return this.parse(encoded).label !== null;
+  }
+
+  /**
+   * Opens a value. A bound (v2) blob needs the same `context` it was sealed with and refuses any other; a v1 blob has no binding and the
+   * context is ignored, so a call site can pass it before the value was ever re-sealed.
+   */
+  decrypt(encoded: string, context?: string): string {
     const parsed = this.parse(encoded);
+    if (parsed.label !== null) {
+      if (context === undefined)
+        throw new Error('ciphertext is bound to a context: pass it to decrypt');
+      if (labelOf(context) !== parsed.label) {
+        throw new Error('ciphertext was sealed for a different context');
+      }
+    }
+    return this.openParsed(parsed);
+  }
+
+  private openParsed(parsed: ReturnType<CryptoService['parse']>): string {
     // A blob with a key id names its key; one without does not, so every ring
     // key is a candidate. GCM's tag makes a wrong key fail loudly, never decrypt to garbage.
     const candidates =
@@ -108,7 +155,7 @@ export class CryptoService {
     let last: unknown;
     for (const candidate of candidates) {
       try {
-        return this.open(candidate.key, parsed.iv, parsed.tag, parsed.data);
+        return this.open(candidate.key, parsed.iv, parsed.tag, parsed.data, parsed.label);
       } catch (err) {
         last = err;
       }
@@ -130,27 +177,38 @@ export class CryptoService {
     return this.parse(encoded).keyId;
   }
 
-  /** The same plaintext sealed with the current key; a blob already under it is returned as is. */
+  /**
+   * The same plaintext sealed with the current key; a blob already under it is returned as is. A bound blob stays bound to the same context
+   * (its label travels in the blob), so key rotation needs no knowledge of where a value belongs.
+   */
   reencrypt(encoded: string): string {
-    return this.isCurrent(encoded) ? encoded : this.encrypt(this.decrypt(encoded));
+    if (this.isCurrent(encoded)) return encoded;
+    const parsed = this.parse(encoded);
+    return this.seal(this.openParsed(parsed), this.current, parsed.label);
   }
 
   private parse(encoded: string): {
+    label: string | null;
     keyId: string | null;
     iv: Buffer;
     tag: Buffer;
     data: Buffer;
   } {
     const parts = typeof encoded === 'string' ? encoded.split(':') : [];
-    if (parts[0] !== VERSION || (parts.length !== 4 && parts.length !== 5)) {
+    const bound = parts[0] === BOUND_VERSION && parts.length === 6;
+    if (!bound && (parts[0] !== VERSION || (parts.length !== 4 && parts.length !== 5))) {
       throw new Error('malformed ciphertext');
     }
-    const [, ivB64, tagB64, dataB64, keyId] = parts;
+    const [, ivB64, tagB64, dataB64, keyId, label] = parts;
+    if (bound && (!keyId || !label || !/^[0-9a-f]{32}$/.test(label))) {
+      throw new Error('malformed ciphertext');
+    }
     // An empty plaintext seals to an empty ciphertext (GCM still produces a tag), so the data segment may be empty; iv and tag may not.
     if (!ivB64 || !tagB64 || dataB64 === undefined || (parts.length === 5 && !keyId)) {
       throw new Error('malformed ciphertext');
     }
     return {
+      label: bound ? label! : null,
       keyId: keyId ?? null,
       iv: Buffer.from(ivB64, 'base64'),
       tag: Buffer.from(tagB64, 'base64'),
@@ -158,8 +216,9 @@ export class CryptoService {
     };
   }
 
-  private open(key: Buffer, iv: Buffer, tag: Buffer, data: Buffer): string {
+  private open(key: Buffer, iv: Buffer, tag: Buffer, data: Buffer, label: string | null): string {
     const decipher = createDecipheriv(ALGORITHM, key, iv);
+    if (label !== null) decipher.setAAD(Buffer.from(label, 'utf8'));
     // GCM authenticates as well as encrypts: a tampered ciphertext throws
     // here instead of silently decrypting to garbage.
     decipher.setAuthTag(tag);

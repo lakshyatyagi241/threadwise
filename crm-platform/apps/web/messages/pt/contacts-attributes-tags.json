@@ -130,6 +130,7 @@
       "colLeadScore": "Pontuação do lead",
       "colLanguage": "Idioma",
       "colCreatedOn": "Criado em",
+      "colModifiedOn": "Modificado em",
       "pagination": "Paginação",
       "prevPage": "Página anterior",
       "nextPage": "Próxima página",
@@ -282,6 +283,7 @@
       "shortStage": "Estágio",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Criado",
+      "shortModified": "Modificado",
       "firstRun": {
         "title": "Adicione seus primeiros contatos",
         "message": "Traga as pessoas com quem você conversa. Os contatos são usados em mensagens, campanhas, tarefas e negócios.",
@@ -290,7 +292,11 @@
         "importBody": "Envie uma planilha e associe as colunas aos campos do contato.",
         "connect": "Conectar WhatsApp",
         "connectBody": "Conecte seu número para que os contatos possam responder e você possa enviar mensagens."
-      }
+      },
+      "teamLabel": "Equipe",
+      "teamFilter": "Filtrar por equipe",
+      "allTeams": "Todas as equipes",
+      "teamFormer": "Equipe anterior"
     },
     "bulk": {
       "label": "Ações para os contatos selecionados",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Seu acesso não permite atribuir este contato a essa pessoa.",
       "company": "Empresa",
       "companyHint": "Agrupa este contato sob uma organização.",
-      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo."
+      "companyRefused": "Você não pode usar essa empresa. Escolha outra ou limpe o campo.",
+      "searchOptions": "Pesquisar opções",
+      "searchOptionsFor": "Pesquisar nas opções de {field}",
+      "noOptionsFound": "Nenhuma opção corresponde à pesquisa."
     },
     "tags": {
       "title": "Tags",
@@ -1225,7 +1234,8 @@
             "duplicate": "Duas opções têm o mesmo nome."
           },
           "condition": "Escolha a propriedade e o valor de cada condição."
-        }
+        },
+        "optionsLazy": "Esta propriedade tem {count, plural, one {# opção} other {# opções}}, demais para editar aqui. Elas são mantidas como estão; as outras configurações podem ser alteradas."
       },
       "builtinCard": {
         "title": "Propriedades nativas",

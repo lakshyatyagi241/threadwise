@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Apariencia de la página de reservas",
+      "subtitle": "Haz que la página con la que tus clientes reservan una cita se vea como tu negocio.",
+      "backToSettings": "Ajustes de citas",
+      "loading": "Cargando el tema de la página de reservas",
+      "forbidden": "No tienes permiso para ver la apariencia de la página de reservas.",
+      "notAvailable": "La apariencia de la página de reservas aún no está disponible en este servidor.",
+      "readOnly": "Puedes ver la apariencia, pero no cambiarla. Para cambiarla necesitas permiso para editar tipos de reserva.",
+      "fixFirst": "Corrige primero los campos resaltados.",
+      "issues": "{count, plural, one {# campo necesita atención antes de poder guardar.} many {# de campos necesitan atención antes de poder guardar.} other {# campos necesitan atención antes de poder guardar.}}",
+      "saved": "Apariencia de la página de reservas guardada",
+      "saving": "Guardando...",
+      "unsaved": "Cambios sin guardar",
+      "allSaved": "Todos los cambios guardados",
+      "discard": "Descartar cambios",
+      "save": "Guardar apariencia",
+      "conflict": {
+        "message": "Otra persona cambió la apariencia mientras la editabas.",
+        "reload": "Cargar la última versión"
+      },
+      "leave": {
+        "title": "¿Salir sin guardar?",
+        "message": "Tus cambios en la apariencia de la página de reservas no se han guardado.",
+        "leave": "Salir",
+        "stay": "Seguir editando"
+      },
+      "tile": {
+        "label": "Apariencia de la página de reservas",
+        "description": "Logotipo, colores, fuentes y texto de bienvenida de la página donde reservan los clientes",
+        "keywords": "marca, logotipo, colores, tema, página de reservas, aspecto, fuentes, marca blanca"
+      },
+      "card": {
+        "title": "Apariencia de la página de reservas",
+        "description": "Añade tu logotipo y tus colores, escribe un mensaje de bienvenida y elige fuentes y esquinas para la página donde reservan los clientes. Ves una vista previa en vivo mientras editas.",
+        "open": "Abrir la apariencia de la página de reservas"
+      },
+      "editorLink": {
+        "link": "Apariencia de la página",
+        "saveFirst": "Guarda primero el tipo de reserva y luego abre la apariencia de su página."
+      },
+      "typesList": {
+        "menu": "Apariencia de la página"
+      },
+      "pictures": {
+        "title": "Logotipo e imagen de portada",
+        "description": "Se muestran en la parte superior de la página. Déjalos vacíos para usar lo definido en un nivel superior.",
+        "logo": "Logotipo",
+        "logoHint": "PNG, JPG, WebP o GIF, hasta {mb} MB. Un logotipo ancho sobre fondo transparente funciona mejor.",
+        "cover": "Imagen de portada",
+        "coverHint": "PNG, JPG, WebP o GIF, hasta {mb} MB. Se muestra como banner cuando el fondo es la imagen de portada.",
+        "useBrand": "Usar el logotipo y los colores de Marca cuando estén vacíos",
+        "useBrandHint": "Lo que dejes vacío aquí se toma de Ajustes, Marca, para que la página de reservas coincida con el resto de tu marca."
+      },
+      "fields": {
+        "picker": "{name}: elegir un color",
+        "clear": "Borrar",
+        "noPicture": "Sin imagen",
+        "upload": "Subir",
+        "replace": "Reemplazar",
+        "remove": "Quitar",
+        "inheritedPicture": "Se usa la definida en un nivel superior.",
+        "inheritedColour": "Si está vacío, se usa {colour}.",
+        "productColour": "Si está vacío, se usa el color predeterminado.",
+        "pictureType": "Usa una imagen PNG, JPG, WebP o GIF.",
+        "pictureSize": "La imagen es demasiado grande. El límite es {mb} MB.",
+        "pictureRejected": "No se aceptó esa imagen. Usa una imagen PNG, JPG, WebP o GIF dentro del límite de tamaño."
+      },
+      "colours": {
+        "title": "Colores y fondo",
+        "description": "Los colores del texto se eligen por ti para que todo siga siendo legible.",
+        "primary": "Color principal",
+        "typeHint": "Si está vacío, se usa el color del espacio de trabajo.",
+        "button": "Color de los botones",
+        "buttonHint": "El color de los botones y de las horas seleccionadas. Si está vacío, se usa el color principal.",
+        "background": "Fondo de la página",
+        "backgroundHint": "Color sólido, un tono suave de tu color principal o tu imagen de portada como banner.",
+        "sameAsWorkspace": "Igual que el espacio de trabajo",
+        "backgrounds": {
+          "solid": "Color sólido",
+          "tint": "Tono suave",
+          "image": "Imagen de portada"
+        },
+        "backgroundColour": "Color de fondo",
+        "needCover": "Sube una imagen de portada para usar este fondo.",
+        "invalid": "Usa un color como #1a73e8."
+      },
+      "checks": {
+        "title": "Comprobaciones de legibilidad",
+        "autoText": "El texto de tus botones es negro o blanco, según lo que se lea mejor, y tu color principal se oscurece o se aclara donde se usa como texto.",
+        "primaryText": "Tu color principal tiene un contraste de {ratio}:1 sobre la página, por debajo de {min}:1, así que se ajusta donde se usa como texto.",
+        "button": "El texto de los botones tiene un contraste de {ratio}:1 sobre el color del botón, por debajo de {min}:1.",
+        "buttonEdge": "El color de tus botones tiene un contraste de {ratio}:1 con la página, por debajo de {min}:1, por lo que los botones pueden verse con dificultad.",
+        "inDark": "(modo oscuro)"
+      },
+      "wording": {
+        "title": "Textos",
+        "description": "Solo texto sin formato. Los clientes lo ven en el idioma en que lo escribas.",
+        "pageTitle": "Título de la página",
+        "pageTitleHint": "Se muestra en la parte superior de la página y en la pestaña del navegador. Si está vacío, se usa el nombre de tu negocio.",
+        "welcome": "Mensaje de bienvenida",
+        "welcomeHint": "{count} de {max} caracteres. Se muestra encima del formulario de reserva.",
+        "button": "Texto del botón de confirmación",
+        "buttonHint": "El texto del botón final, por ejemplo Reservar mi lugar. Las solicitudes que necesitan aprobación mantienen su propia etiqueta.",
+        "buttonDefault": "Confirmar reserva",
+        "tooLong": "Usa como máximo {max} caracteres."
+      },
+      "style": {
+        "title": "Fuentes y esquinas",
+        "description": "Un pequeño conjunto de opciones seguras que funcionan en todos los dispositivos.",
+        "font": "Fuente",
+        "fontHint": "Usan fuentes que ya están en el dispositivo del cliente, así que la página carga rápido.",
+        "fonts": {
+          "default": "Predeterminada del producto",
+          "system": "Sistema",
+          "serif": "Con serifa",
+          "rounded": "Redondeada",
+          "humanist": "Humanista"
+        },
+        "corners": "Esquinas",
+        "cornerStyles": {
+          "square": "Cuadradas",
+          "rounded": "Redondeadas",
+          "pill": "Píldora"
+        },
+        "mode": "Claro u oscuro",
+        "modes": {
+          "light": "Claro",
+          "dark": "Oscuro",
+          "auto": "Seguir el dispositivo"
+        }
+      },
+      "options": {
+        "title": "Opciones de la página",
+        "description": "Qué más aparece alrededor del formulario de reserva.",
+        "language": "Mostrar el selector de idioma",
+        "languageHint": "Permite a los clientes cambiar el idioma de la página.",
+        "poweredBy": "Mostrar \"Powered by\" al final",
+        "poweredByHint": "Desactívalo para mostrar solo tu propia marca.",
+        "poweredByLocked": "Quitar \"Powered by\" forma parte de la marca blanca, que tu plan no incluye."
+      },
+      "links": {
+        "title": "Dirección de la página",
+        "description": "Donde los clientes abren la página. Los cambios se ven allí en cuanto guardas.",
+        "page": "Dirección de la página de reservas",
+        "open": "Abrir página",
+        "copy": "Copiar",
+        "copied": "Copiado",
+        "later": "Usar tu propio dominio e insertar la página en otro sitio web aún no está disponible."
+      },
+      "type": {
+        "title": "Apariencia de la página: {name}",
+        "subtitle": "Da a este tipo de reserva su propio logotipo, colores o mensaje de bienvenida. Lo que dejes vacío usa la apariencia del espacio de trabajo.",
+        "back": "Volver al tipo de reserva",
+        "notFoundTitle": "Tipo de reserva no encontrado",
+        "notFound": "Este tipo de reserva ya no existe.",
+        "resetTitle": "Usar la apariencia del espacio de trabajo",
+        "resetDescription": "Elimina todo lo definido para este tipo de reserva, incluidas sus imágenes.",
+        "reset": "Usar la apariencia del espacio de trabajo",
+        "resetConfirmTitle": "¿Usar la apariencia del espacio de trabajo?",
+        "resetConfirmMessage": "Se quitarán el logotipo, la imagen de portada, los colores y los textos definidos para este tipo de reserva.",
+        "resetDone": "Este tipo de reserva ahora usa la apariencia del espacio de trabajo"
+      },
+      "preview": {
+        "title": "Vista previa en vivo",
+        "device": "Dispositivo",
+        "desktop": "Escritorio",
+        "mobile": "Móvil",
+        "page": "Página",
+        "servicePage": "Página de reservas",
+        "serviceList": "Lista de servicios",
+        "scheme": "Modo de color",
+        "asSet": "Según lo definido",
+        "light": "Claro",
+        "dark": "Oscuro",
+        "direction": "Dirección",
+        "ltr": "De izquierda a derecha",
+        "rtl": "De derecha a izquierda",
+        "frameTitle": "Vista previa de la página de reservas",
+        "note": "Esta es la página real con horas de ejemplo. Nada de lo que hagas aquí se reserva.",
+        "sampleName": "Llamada introductoria",
+        "sampleName2": "Sesión completa",
+        "sampleDescription": "Una llamada breve para entender lo que necesitas y responder tus preguntas.",
+        "sampleIntro": "Por favor, llega unos minutos antes.",
+        "sampleQuestion": "¿Hay algo que debamos saber de antemano?"
+      }
+    }
+  }
+}

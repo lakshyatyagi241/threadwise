@@ -4,6 +4,7 @@ import {
   CONTACT_AUTO_ASSIGNED,
   DEAL_AUTO_ASSIGNED,
   RECORD_ASSIGNMENT_FEATURE,
+  type AssignmentExcluded,
   type AssignmentReason,
   type AssignmentSubject,
   type AssignmentTraceEntry,
@@ -15,6 +16,7 @@ import { pickDelegate } from '../../../common/leave-delegate';
 import { loadWorkspaceCalendar, onLeaveMap } from '../../../common/workspace-calendar';
 import { DatabaseService } from '../../../infra/db/database.service';
 import { OutboxService } from '../../../kernel/outbox/outbox.service';
+import { RbacService } from '../../../kernel/rbac/rbac.service';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import { ContactTouchService } from '../lead-handling/contact-touch.service';
 import { compileAssignment, loadAssignmentContext } from './assignment-compiler';
@@ -107,6 +109,7 @@ export class ContactAssignmentEngine {
     private readonly outbox: OutboxService,
     private readonly entitlements: PlanEntitlementService,
     private readonly touch: ContactTouchService,
+    private readonly rbac: RbacService,
   ) {}
 
   async assign(
@@ -374,6 +377,7 @@ export class ContactAssignmentEngine {
         matched,
         nobody: false,
         broken: (c?.invalid.length ?? 0) > 0,
+        excluded: [],
       };
       decision.trace.push(entry);
       if (!matched) continue;
@@ -385,7 +389,8 @@ export class ContactAssignmentEngine {
       const rule = fire
         ? ((await this.repo.ruleById(tx, orgId, listed.id, true)) ?? listed)
         : listed;
-      const person = await this.choose(tx, orgId, subject, rule, today);
+      const { person, excluded } = await this.choose(tx, orgId, subject, rule, today);
+      entry.excluded = excluded;
       if (person) {
         decision.pick = { rule, person };
         return decision;
@@ -402,7 +407,7 @@ export class ContactAssignmentEngine {
     subject: AssignmentSubject,
     rule: RuleRow,
     today: string,
-  ): Promise<Candidate | null> {
+  ): Promise<{ person: Candidate | null; excluded: AssignmentExcluded[] }> {
     const users = await this.repo.userIdsByUuid(tx, orgId, rule.userIds);
     const named = rule.userIds.map((u) => users.get(u)).filter((x): x is number => x !== undefined);
     const teams = await this.repo.teamIdsByUuid(tx, orgId, rule.teamIds);
@@ -424,8 +429,19 @@ export class ContactAssignmentEngine {
         ids = d === null ? [] : [d];
       }
     }
-    const pool = await this.repo.candidates(tx, orgId, ids, subject, rule.skipOffline, today);
-    if (pool.length === 0) return null;
+    // A person who cannot open this kind of record is not a candidate (BL-380, gap 9): handing it over would put a record in front of
+    // somebody who has no screen for it. A record the candidate would own is always inside their own/team scope, so what decides it
+    // is the read permission for the subject, not the scope.
+    const key = READ_PERMISSION[subject];
+    const noAccess: number[] = [];
+    const openers: number[] = [];
+    for (const id of ids) {
+      const grants = await this.rbac.grantsForUser(orgId, id);
+      (this.rbac.can(grants, key).allowed ? openers : noAccess).push(id);
+    }
+    const pool = await this.repo.candidates(tx, orgId, openers, subject, rule.skipOffline, today);
+    const excluded = await this.explainExclusions(tx, orgId, noAccess, openers, pool, rule, today);
+    if (pool.length === 0) return { person: null, excluded };
     const chosen =
       rule.strategy === 'least_busy'
         ? pickLeastBusy(
@@ -438,9 +454,52 @@ export class ContactAssignmentEngine {
               rule.rrCursor,
             )
           : pool[0]!.id;
-    return pool.find((p) => p.id === chosen) ?? null;
+    return { person: pool.find((p) => p.id === chosen) ?? null, excluded };
+  }
+
+  /** The named people a rule could not use, each with the reason, so the test box can answer "why not them?". Capped: a big team is not listed in full. */
+  private async explainExclusions(
+    tx: Tx,
+    orgId: number,
+    noAccess: readonly number[],
+    openers: readonly number[],
+    pool: readonly Candidate[],
+    rule: RuleRow,
+    today: string,
+  ): Promise<AssignmentExcluded[]> {
+    const inPool = new Set(pool.map((p) => p.id));
+    const dropped = openers.filter((id) => !inPool.has(id));
+    const wanted = [...noAccess, ...dropped].slice(0, MAX_EXCLUDED);
+    if (wanted.length === 0) return [];
+    const people = await this.repo.describePeople(tx, orgId, wanted, today);
+    const out: AssignmentExcluded[] = [];
+    for (const id of wanted) {
+      const p = people.get(id);
+      if (!p) continue;
+      const reason = noAccess.includes(id)
+        ? 'no_access'
+        : !p.active
+          ? 'inactive'
+          : p.onLeave
+            ? 'on_leave'
+            : rule.skipOffline && p.offline
+              ? 'offline'
+              : null;
+      if (reason) out.push({ id: p.uuid, name: p.name, reason });
+    }
+    return out;
   }
 }
+
+/** The permission that opens each kind of record: a person without it is not offered that kind of record. */
+const READ_PERMISSION: Record<AssignmentSubject, string> = {
+  contact: 'record.contacts.read',
+  company: 'record.companies.read',
+  deal: 'record.deals.read',
+};
+
+/** The most people one trace entry names. */
+const MAX_EXCLUDED = 10;
 
 /** Adds the `isFallback` flag `orderRules` reads: a rule without a single condition matches everything. */
 export const withFlags = (rows: RuleRow[]): Array<RuleRow & { isFallback: boolean }> =>

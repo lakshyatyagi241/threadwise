@@ -2,9 +2,9 @@ import type { NextFunction, Request, Response } from 'express';
 import { describe, expect, it } from 'vitest';
 import { SecurityHeadersMiddleware } from '../../../src/modules/auth/middleware-security-headers';
 
-function run(path: string, secure = false) {
+function run(path: string, secure = false, requestHeaders: Record<string, string> = {}) {
   const headers = new Map<string, string>();
-  const req = { originalUrl: path, secure } as unknown as Request;
+  const req = { originalUrl: path, secure, headers: requestHeaders } as unknown as Request;
   const res = {
     setHeader: (k: string, v: string) => headers.set(k.toLowerCase(), v),
   } as unknown as Response;
@@ -33,6 +33,16 @@ describe('response hardening headers', () => {
     expect(cc).toContain('private');
     expect(h.get('pragma')).toBe('no-cache');
   });
+
+  it.each([{ authorization: 'Bearer t' }, { cookie: 'sid=1' }])(
+    'a request that carries a credential (%o) is private and not stored by a shared cache',
+    (rh) => {
+      const cc = run('/v2/contacts', false, rh as unknown as Record<string, string>).get(
+        'cache-control',
+      );
+      expect(cc).toBe('private, no-store');
+    },
+  );
 
   it('leaves unrelated routes cacheable', () => {
     expect(run('/health').get('cache-control')).toBeUndefined();

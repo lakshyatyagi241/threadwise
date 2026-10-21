@@ -6,6 +6,7 @@ import {
   hasActiveFilter,
   listQuery,
   parseFilters,
+  sharedQuery,
   tabCount,
   type TaskFilters,
 } from './filters';
@@ -32,9 +33,11 @@ describe('parseFilters', () => {
       q: 'call',
       priority: 'high',
       assignee: ID,
+      team: '',
       contact: ID2,
       deal: '',
       company: '',
+      outcome: '',
       view: 'board',
       task: ID,
     });
@@ -45,6 +48,15 @@ describe('parseFilters', () => {
       `company=${ID}`,
     );
     expect(parseFilters(params('company=acme')).company).toBe('');
+  });
+  it('reads, writes and queries the outcome filter, and drops one that is not a uuid', () => {
+    const f = parseFilters(params(`tab=all&outcome=${ID}`));
+    expect(f.outcome).toBe(ID);
+    expect(filtersToSearch(f)).toContain(`outcome=${ID}`);
+    expect(sharedQuery(f).outcomeId).toBe(ID);
+    expect(sharedQuery(DEFAULT_FILTERS).outcomeId).toBeUndefined();
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, outcome: ID })).toBe(true);
+    expect(parseFilters(params('outcome=interested')).outcome).toBe('');
   });
   it('falls back instead of failing on unknown or malformed values', () => {
     const p = parseFilters(
@@ -168,5 +180,19 @@ describe('countsQuery and tabCount', () => {
   });
   it('is unknown until counts arrive', () => {
     expect(tabCount('all', undefined)).toBeUndefined();
+  });
+});
+
+describe('team filter', () => {
+  it('is read from the address, kept in the link and sent to the list and the counts', () => {
+    const f = parseFilters(params(`tab=all&team=${ID}`));
+    expect(f.team).toBe(ID);
+    expect(filtersToSearch(f)).toContain(`team=${ID}`);
+    expect(sharedQuery(f).teamId).toBe(ID);
+    expect(listQuery(f).teamId).toBe(ID);
+    expect(countsQuery(f).teamId).toBe(ID);
+    expect(hasActiveFilter({ ...DEFAULT_FILTERS, team: ID })).toBe(true);
+    expect(parseFilters(params('team=nope')).team).toBe('');
+    expect(sharedQuery(DEFAULT_FILTERS).teamId).toBeUndefined();
   });
 });

@@ -561,7 +561,10 @@
             "personal_history_full": "全履歴インポート(個人用WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AIリードスコアリング",
-            "record_assignment": "レコード割り当てルール"
+            "record_assignment": "レコード割り当てルール",
+            "team_hierarchy": "チーム階層とマネージャー",
+            "custom_roles": "カスタムロールとスコープ",
+            "inbox_assignment_sticky": "連絡先の担当者と固定担当"
           },
           "cta": {
             "continueFree": "無料で続ける",

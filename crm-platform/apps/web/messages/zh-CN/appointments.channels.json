@@ -1,0 +1,150 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "消息渠道",
+      "description": "选择哪些渠道可以向联系人发送预约消息：确认、提醒、改期和取消通知，以及就诊后的跟进。预约类型只有在此处开启且已连接时才能使用某个渠道。",
+      "loading": "正在加载渠道...",
+      "undecidedOwner": "尚未开启任何渠道，因此不会发送预约消息。请开启团队可以使用的渠道。",
+      "undecidedMember": "尚未开启任何渠道，因此不会发送预约消息。请让工作区所有者选择渠道。",
+      "readOnly": "只有工作区所有者和管理员可以更改这些设置。",
+      "enableLabel": "将 {channel} 用于预约消息",
+      "switchedOn": "预约消息已开启 {channel}。",
+      "switchedOff": "预约消息已关闭 {channel}。",
+      "senderSaved": "已保存 {channel} 的默认发送方。",
+      "defaultSender": "默认发送方",
+      "defaultSenderOf": "{channel} 的默认发送方",
+      "firstConnected": "第一个已连接的",
+      "sendsFrom": "从 {sender} 发送",
+      "notConnected": "此渠道尚未连接任何内容。",
+      "connect": "在设置中连接",
+      "voiceSoon": "语音机器人即将推出：可按预约类型开启的外呼提醒电话。暂时无法开启。",
+      "names": {
+        "email": "电子邮件",
+        "whatsapp": "WhatsApp",
+        "voice": "提醒电话"
+      },
+      "about": {
+        "email": "通过工作区的共享邮箱发送，绝不使用个人邮箱。",
+        "whatsapp": "24 小时窗口内可发送自由文本；窗口外仅可使用已批准的模板。",
+        "voice": "自动外呼电话，提醒联系人。"
+      },
+      "status": {
+        "usable": "已开启且已连接",
+        "off": "已关闭",
+        "notChosen": "尚未选择",
+        "not_connected": "已开启，未连接",
+        "coming_soon": "语音机器人即将推出"
+      },
+      "editorTitle": "此预约类型的渠道",
+      "editorHint": "只能使用所有者已开启且已连接的渠道。其余渠道会显示出来，方便你了解原因。",
+      "noneUsable": "暂无可用渠道，因此无法发送此预约类型的任何消息。",
+      "openSettings": "打开渠道设置",
+      "offByOwner": "工作区所有者尚未开启此渠道。",
+      "sendOn": "发送渠道",
+      "sendOnAuto": "未选择渠道：使用第一个可用渠道和标准文本。",
+      "sendOnEach": "消息会通过此处勾选的每个渠道发送。",
+      "attachedButUnusable": "此渠道当前不可用，因此该消息在此渠道上会被跳过。请取消勾选，或请所有者开启它。"
+    },
+    "templates": {
+      "title": "消息模板",
+      "description": "用于确认、提醒、改期、取消和就诊后跟进的预设消息。一键添加并编辑。邮件消息保存在这里；WhatsApp 消息会提交给 Meta 审批，只有已批准的才能使用。",
+      "loading": "正在加载消息...",
+      "readOnly": "只有管理预约模板的用户可以更改这些设置。",
+      "empty": "尚未添加消息。请从下方预设中添加。",
+      "yours": "你的消息",
+      "status": {
+        "draft": "草稿",
+        "pending": "Meta 审核中",
+        "approved": "已批准",
+        "rejected": "已拒绝"
+      },
+      "kinds": {
+        "confirmation": "预订确认",
+        "reminder": "提醒",
+        "reschedule": "已改期",
+        "cancellation": "已取消",
+        "follow_up": "就诊后跟进"
+      },
+      "channels": {
+        "email": "电子邮件",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {被 # 个预约类型使用}}",
+      "inactive": "已关闭",
+      "submit": "提交给 Meta 审批",
+      "submitting": "正在提交...",
+      "submitted": "已提交给 Meta，目前审核中。",
+      "metaRefused": "已保存，但 Meta 拒绝了它。打开消息查看原因。",
+      "refresh": "检查状态",
+      "refreshing": "正在检查...",
+      "refreshed": "状态已更新。",
+      "edit": "编辑",
+      "view": "查看",
+      "close": "关闭",
+      "delete": "移除",
+      "deleteTitle": "移除“{name}”？",
+      "deleteWhatsapp": "它将从此列表中移除。WhatsApp 模板仍保留在你的 WhatsApp 模板中；如不再需要，请在那里删除。",
+      "deleteBody": "它将从你的库中移除。使用它的预约类型必须先选择其他消息。",
+      "deleted": "消息已移除。",
+      "cancel": "取消",
+      "rejectedBecause": "Meta 已拒绝：{reason}",
+      "pendingNote": "Meta 正在审核此模板。在批准之前无法选择或发送。",
+      "nameLabel": "名称",
+      "subjectLabel": "主题",
+      "bodyLabel": "消息",
+      "textLocked": "审核中或已批准的模板无法在此编辑。",
+      "placeholders": "可使用：",
+      "whatsappPlaceholders": "WhatsApp 只能填充以下内容，须按此顺序使用且不可跳过：",
+      "activeLabel": "可供选择",
+      "save": "保存",
+      "saving": "正在保存...",
+      "saveAndSubmit": "保存并提交给 Meta",
+      "saved": "消息已保存。",
+      "predefinedTitle": "预设消息",
+      "predefinedHint": "采用一条消息即可将其复制到你的库中，然后进行编辑。WhatsApp 消息先创建为草稿；何时提交给 Meta 由你决定。",
+      "machineNote": "预设文本为英文。添加后请改成你的语言。",
+      "category": {
+        "UTILITY": "服务类",
+        "MARKETING": "营销类"
+      },
+      "preview": "预览",
+      "hidePreview": "隐藏预览",
+      "inLibrary": "在你的库中：{status}",
+      "adopt": "添加到我的消息",
+      "adopting": "正在添加...",
+      "adoptDraft": "添加为草稿",
+      "adoptSubmit": "添加并提交给 Meta",
+      "adopted": "已添加到你的消息。",
+      "newEmail": "新建邮件消息",
+      "kindLabel": "类型",
+      "create": "创建",
+      "created": "消息已创建。",
+      "chooseLabel": "要使用的消息",
+      "useText": "上方的文本",
+      "unknownMessage": "已不可用的消息",
+      "noneYet": "此类型暂无消息。",
+      "openLibrary": "在设置中添加",
+      "whatsappApprovedOnly": "只能选择 Meta 已批准的模板。在 24 小时窗口之外，WhatsApp 不会发送其他内容。"
+    },
+    "reminders": {
+      "channels": {
+        "voice": "提醒电话"
+      },
+      "voiceSoon": "语音机器人即将推出：外呼提醒电话。暂时无法添加。",
+      "voiceSoonShort": "语音机器人即将推出",
+      "channelUnusable": "当前不可用",
+      "noUsableChannel": "此规则没有可用的渠道，因此无法开启。",
+      "openChannels": "打开渠道设置",
+      "fromLibrary": "使用库中的消息",
+      "openLibrary": "在设置中添加消息",
+      "reasons": {
+        "channel_disabled": "工作区已关闭此渠道的预约消息。"
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "请为此消息至少选择一个渠道，或清除其文本。"
+      }
+    }
+  }
+}

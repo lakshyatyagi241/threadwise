@@ -52,6 +52,7 @@ import { SegmentThrottle } from './segment-throttle';
 import { segmentsUsing } from './segment-usage';
 import { toSegmentResponse, type SegmentCountView, type SegmentShareView } from './segments.mapper';
 import { SegmentsRepository, type SegmentRow } from './segments.repository';
+import { canActOn } from '../../../kernel/rbac/scope';
 
 export const SEGMENT_MODULE = 'segments';
 
@@ -192,8 +193,8 @@ export class SegmentsService {
   async create(input: CreateSegmentInput): Promise<SegmentResponse> {
     const ctx = RequestContextStore.require();
     // The plan's `segments` cap (live count; also covers "save this filter as a segment", which calls create).
-    await this.planUsage.assertCanAdd(ctx.orgId, 'segments');
     return this.db.tx(async (tx) => {
+      await this.planUsage.assertCanAddIn(tx, ctx.orgId, 'segments');
       const rules = input.rules as unknown as SegmentGroup;
       await this.assertRulesValid(tx, ctx.orgId, rules);
 
@@ -692,10 +693,7 @@ export class SegmentsService {
     const ctx = RequestContextStore.require();
     const grant = this.rbac.can(ctx.grants!, `record.segments.${action}`);
     if (!grant.allowed) return false;
-    if (grant.scope === 'all') return true;
-    if (row.ownerId === null || ctx.userId === null) return false;
-    if (grant.scope === 'own') return row.ownerId === ctx.userId;
-    return this.contactsRepo.isOwnerInActorTeam(tx, orgId, ctx.userId, row.ownerId);
+    return canActOn(tx, { orgId, userId: ctx.userId }, grant.scope, [row.ownerId]);
   }
 
   private async assertCanEdit(

@@ -128,7 +128,9 @@
         "list": "Lijst"
       },
       "reports": "Rapporten",
-      "settings": "Pipeline-instellingen"
+      "settings": "Pipeline-instellingen",
+      "team": "Team",
+      "allTeams": "Alle teams"
     },
     "kpi": {
       "openPipeline": "Open pipeline",

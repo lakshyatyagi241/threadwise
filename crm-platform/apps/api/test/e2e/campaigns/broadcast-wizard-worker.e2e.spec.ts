@@ -936,7 +936,7 @@ describe('export and delete of a launched broadcast', () => {
     );
     const lines = res.text.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'Recipient,Phone,Variant,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
+      'Recipient,Phone,Version,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
     );
     expect(lines).toHaveLength(3);
     const same = await lab.api
@@ -1028,7 +1028,7 @@ describe('export and delete of a launched broadcast', () => {
     expect(res.headers['content-disposition']).toMatch(/filename="broadcast-.+-recipients-/);
     const lines = res.text.trim().split('\r\n');
     expect(lines[0]).toBe(
-      'Run,Recipient,Phone,Variant,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
+      'Run,Recipient,Phone,Version,Status,Clicked,Queued,Sent,Delivered,Read,Responded,Last event,Error',
     );
     expect(lines.slice(1).map((l) => l.split(',')[0])).toEqual(['1', '1', '2', '2']);
     // A run says which series it belongs to (the page behind its export and delete), and a one-off campaign says none.

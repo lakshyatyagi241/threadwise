@@ -2,7 +2,8 @@ import type { NavItem } from '../_registry/types';
 
 /**
  * One menu entry in Inbox & Chat (TW-TCHAT-030). Reference showed it to the manager tier and up; here any staff user is a chat
- * member, so it carries no permission gate (the tier was a menu rule only: the route itself had no role check).
+ * member, so every role holds `tchat.chat.use` (migration 20270203090100). The key exists so a workspace can be configured without the
+ * menu entry: a migrated Waboo workspace never had team chat and is denied it (tools/migration access/module-ceiling.ts, team-chat).
  */
 export const nav: NavItem[] = [
   {
@@ -12,5 +13,6 @@ export const nav: NavItem[] = [
     href: '/team-chat',
     order: 30,
     icon: 'team-chat',
+    gates: { permission: 'tchat.chat.use' },
   },
 ];

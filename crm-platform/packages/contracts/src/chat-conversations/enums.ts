@@ -19,8 +19,11 @@ export const CONVERSATION_PRIORITIES = ['low', 'normal', 'high', 'urgent'] as co
 export const conversationPrioritySchema = z.enum(CONVERSATION_PRIORITIES);
 export type ConversationPriority = z.infer<typeof conversationPrioritySchema>;
 
-/** The tabs of the list. `mine` is assigned to the caller, `unassigned` has no human assignee, `unread` has unread messages. */
-export const INBOX_TABS = ['all', 'mine', 'unassigned', 'unread'] as const;
+/**
+ * The tabs of the list. `mine` is assigned to the caller, `unassigned` has no human assignee, `unread` has unread messages, `waiting` is
+ * the queue of conversations a handoff put in front of a person (BL-397).
+ */
+export const INBOX_TABS = ['all', 'mine', 'unassigned', 'unread', 'waiting'] as const;
 export const inboxTabSchema = z.enum(INBOX_TABS);
 export type InboxTab = z.infer<typeof inboxTabSchema>;
 

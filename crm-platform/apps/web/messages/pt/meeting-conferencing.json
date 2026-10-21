@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "Reuniões por vídeo",
+        "description": "Conecte sua própria conta do Zoom ou do Microsoft Teams para adicionar links de vídeo às suas reuniões.",
+        "keywords": "zoom, teams, microsoft teams, vídeo, chamada de vídeo, link da reunião, link para entrar, videoconferência, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "Fechar"
+    },
+    "form": {
+      "label": "Videoconferência",
+      "add": {
+        "zoom": "Adicionar link do Zoom",
+        "teams": "Adicionar link do Teams",
+        "meet": "Adicionar link do Google Meet"
+      },
+      "chosen": {
+        "zoom": "Link do Zoom",
+        "teams": "Link do Teams",
+        "meet": "Link do Google Meet"
+      },
+      "remove": "Remover o link de vídeo",
+      "needsStart": "Defina um horário de início para adicionar um link de vídeo ou um item de agenda.",
+      "meetNote": "Um link do Google Meet faz parte de um evento da agenda, então esta reunião também é adicionada à sua agenda.",
+      "teamsViaCalendar": "Este link do Teams é criado pela sua agenda do Microsoft 365, então esta reunião também é adicionada a ela.",
+      "calendar": "Adicionar à minha agenda ({account})",
+      "calendarNamed": "Adicionar à minha agenda ({account}, {calendar})",
+      "invite": "Enviar um convite de agenda ao contato",
+      "inviteHint": "Sua agenda envia o convite por e-mail para o endereço do contato. Nosso próprio convite por e-mail não é afetado.",
+      "connectLink": "Conectar videoconferência"
+    },
+    "row": {
+      "join": "Entrar",
+      "joinAria": "Entrar na reunião {title} do {provider}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "Adicionando o link de vídeo...",
+      "onCalendar": "Na sua agenda",
+      "invited": "A agenda enviou um convite ao contato",
+      "retry": "Tentar novamente",
+      "retrying": "Tentando novamente...",
+      "retried": "O link de vídeo e o item de agenda foram verificados novamente.",
+      "retryFailed": "Isso não funcionou. A reunião está salva; você pode tentar novamente.",
+      "problem": {
+        "not_installed": "A integração com o {provider} não está instalada neste espaço de trabalho.",
+        "not_connected": "Sua conta do {provider} não está conectada. Conecte-a em Configurações, Reuniões por vídeo.",
+        "needs_reconnect": "Sua conexão com o {provider} precisa ser renovada. Reconecte-a em Configurações, Reuniões por vídeo.",
+        "not_configured": "O {provider} ainda não foi configurado para esta plataforma. Fale com o administrador da plataforma.",
+        "calendar_not_connected": "A agenda não está conectada, então a reunião não pôde ser adicionada a ela.",
+        "provider_failed": "O {provider} não respondeu. A reunião está salva; tente novamente.",
+        "no_start_time": "Um link de vídeo precisa de um horário de início na reunião."
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "A reunião não pôde ser adicionada à agenda porque nenhuma agenda está conectada.",
+        "provider_failed": "A agenda não respondeu, então a reunião ainda não está nela. A reunião está salva; tente novamente.",
+        "other": "A reunião não pôde ser adicionada à agenda."
+      }
+    },
+    "page": {
+      "eyebrow": "Configurações",
+      "title": "Reuniões por vídeo",
+      "subtitle": "Conecte sua própria conta do Zoom ou do Microsoft Teams. O formulário Adicionar reunião passa a oferecer um link de vídeo, criado na sua conta e exibido na reunião com um botão Entrar.",
+      "loading": "Carregando suas conexões de vídeo...",
+      "forbidden": {
+        "title": "Você não pode usar esta página",
+        "body": "Peça a um administrador do espaço de trabalho para dar ao seu perfil acesso para editar contatos."
+      },
+      "failure": {
+        "generic": "Não foi possível carregar suas conexões de vídeo."
+      },
+      "retry": "Tentar novamente",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "Cria uma reunião do Zoom na sua conta do Zoom para cada reunião que você agenda, move-a quando você move a reunião e a remove quando você exclui a reunião."
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "Cria uma reunião do Teams na sua conta Microsoft de trabalho ou escola para cada reunião que você agenda, e a atualiza ou remove junto com a reunião."
+        }
+      },
+      "status": {
+        "connected": "Conectado",
+        "needs_reconnect": "Precisa reconectar",
+        "disconnected": "Instalado",
+        "not_installed": "Não instalado",
+        "unavailable": "Desativado",
+        "not_available": "Ainda não disponível"
+      },
+      "account": "Conectado como {account}",
+      "connectedOn": "Conectado {when}",
+      "lastError": {
+        "forbidden": "O provedor recusou a última solicitação. Sua conta pode não ter permissão para criar reuniões.",
+        "rate_limited": "O provedor está limitando as solicitações no momento.",
+        "unavailable": "O provedor não respondeu à última solicitação."
+      },
+      "actions": {
+        "connect": "Conectar",
+        "reconnect": "Reconectar",
+        "disconnect": "Desconectar",
+        "install": "Instalar no Marketplace"
+      },
+      "notInstalled": {
+        "canInstall": "Seu espaço de trabalho ainda não instalou o {provider}. Instale-o pelo Marketplace e depois conecte sua conta aqui.",
+        "cannotInstall": "Seu espaço de trabalho ainda não instalou o {provider}. Peça a um administrador do espaço de trabalho para instalá-lo pelo Marketplace."
+      },
+      "unavailable": "O {provider} está instalado, mas o operador da sua plataforma desativou a configuração dele, então ele não pode ser conectado agora. Fale com o operador da plataforma.",
+      "outcome": {
+        "connected": "O {provider} está conectado.",
+        "denied": "O {provider} não foi conectado porque o login foi cancelado.",
+        "failed": "Não foi possível conectar o {provider}. Tente novamente.",
+        "expired": "Esse login demorou demais. Clique em Conectar novamente.",
+        "not_configured": "O {provider} ainda não foi configurado para esta plataforma.",
+        "notYours": "Esse login foi iniciado por outra pessoa, então nada foi conectado."
+      },
+      "confirming": "Concluindo a conexão...",
+      "disconnected": "{provider} desconectado.",
+      "disconnectTitle": "Desconectar o {provider}?",
+      "disconnectBody": "As reuniões que já têm um link do {provider} o mantêm, mas mover ou excluir essas reuniões não poderá mais alterar a sala. Você pode conectar novamente a qualquer momento.",
+      "disconnectConfirm": "Desconectar",
+      "keep": "Manter conectado",
+      "calendarNote": "Os links do Google Meet e do Teams criados pela sua agenda não precisam de conexão aqui: eles usam a agenda que seu espaço de trabalho já conectou.",
+      "notAvailable": "O operador da sua plataforma ainda não disponibilizou o {provider}: ele ainda precisa ser configurado e publicado no Marketplace. Ainda não há nada para instalar, então peça ao operador da plataforma para ativá-lo.",
+      "installedHint": "O {provider} está instalado no seu espaço de trabalho. Conecte sua própria conta para adicionar links do {provider} às suas reuniões."
+    },
+    "operator": {
+      "title": "Configuração de reuniões por vídeo",
+      "ready": "Pronto",
+      "missing": "{count, plural, one {Falta # etapa} other {Faltam # etapas}}",
+      "loadFailed": "Não foi possível carregar a lista de configuração.",
+      "fake": "Modo de desenvolvimento: os adaptadores falsos do Zoom e do Microsoft Teams estão ativos, então as pessoas podem se conectar sem uma conta real. A lista abaixo mostra o que uma plataforma real ainda precisa.",
+      "intro": {
+        "zoom": "Os espaços de trabalho não podem ver nem usar o Zoom até que as credenciais do app do Zoom sejam definidas e esta listagem seja publicada.",
+        "teams": "Os espaços de trabalho não podem ver nem usar o Microsoft Teams até que um app da Microsoft esteja disponível e esta listagem seja publicada."
+      },
+      "set": "definido",
+      "notSet": "não definido",
+      "credentials": {
+        "zoom": {
+          "label": "Credenciais do app do Zoom (valores de ambiente)"
+        },
+        "teams": {
+          "label": "Credenciais do app da Microsoft"
+        }
+      },
+      "teamsFallback": "O Teams usa os próprios valores acima quando ambos estão definidos; caso contrário, usa o app do Calendário Microsoft salvo no console.",
+      "source": {
+        "environment": "Os valores vêm do ambiente.",
+        "console": "Os valores vêm do console, na página Calendário Microsoft."
+      },
+      "switchedOff": "A integração do Calendário Microsoft está desativada no console, o que desativa o Teams também.",
+      "redirect": {
+        "label": "Endereço de redirecionamento a registrar no provedor",
+        "hint": {
+          "zoom": "Adicione exatamente este endereço como URL de redirecionamento do app do Zoom.",
+          "teams": "Adicione exatamente este endereço como URI de redirecionamento do app da Microsoft, ao lado do endereço do calendário, e adicione a permissão delegada OnlineMeetings.ReadWrite."
+        }
+      },
+      "listing": {
+        "label": "Listagem do Marketplace publicada",
+        "missing": "A listagem não existe no catálogo.",
+        "notPublished": "A listagem não está publicada (status: {status}). Aprove e publique uma versão abaixo para que os espaços de trabalho possam instalá-la.",
+        "published": "Publicada: os espaços de trabalho podem encontrá-la e instalá-la."
+      }
+    }
+  }
+}

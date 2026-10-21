@@ -7,6 +7,9 @@ import { V1BulkModule } from '../resources/bulk/bulk.module';
 import { V1CrmModule } from '../resources/crm/crm.module';
 import { V1MessagingModule } from '../resources/messaging/messaging.module';
 import { API_V1_TAGS } from './api-v1-tags';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('api_v1_docs');
 
 const BRAND_TOKEN = '{{brand}}';
 /** The spec is rebuilt at most this often; the brand is read from settings (a few seconds old at most) and re-applied each time. */
@@ -36,8 +39,9 @@ export class ApiV1DocsService {
     if (!this.app) throw new AppError('INTERNAL', 'The API reference is not available yet.', 503);
     const now = Date.now();
     if (!this.cached || now - this.cached.at > TTL_MS) {
+      cache.miss();
       this.cached = { at: now, doc: this.build(this.app) };
-    }
+    } else cache.hit();
     const brand = await this.branding.name();
     return withBrand(this.cached.doc, brand);
   }

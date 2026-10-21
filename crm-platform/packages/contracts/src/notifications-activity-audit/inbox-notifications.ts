@@ -100,6 +100,10 @@ export const NOTIFICATION_LEGACY_TYPES = [
   'assignment_blocked_by_leave',
   /** An appointment's Google Calendar event no longer matches it (moved, deleted or its guests changed). Told once, to the appointment's owner. */
   'appointment_calendar_drift',
+  /** A customer cancelled their appointment by tapping Cancel on a reminder (BL-426). Told to the appointment's host. */
+  'appointment_cancelled_by_customer',
+  /** The result of the email test of a reminder step, told to the person who asked for it (BL-425). */
+  'appointment_reminder_test',
 ] as const;
 
 /** Every type a person can set preferences for. */

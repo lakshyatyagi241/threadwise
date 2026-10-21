@@ -6,7 +6,9 @@ import type { HeaderKind, PreviewModel } from './form-model';
  * A saved template as the phone shows it: every part, with `{{variable}}` tokens left as typed (Reference's library card and
  * detail page show the pills, not sample values).
  */
-export function previewOfSummary(s: TemplateSummary): PreviewModel {
+export function previewOfSummary(
+  s: TemplateSummary & { headerMediaUrl?: string | null },
+): PreviewModel {
   const media = s.attachmentType !== 'none';
   const headerKind: HeaderKind = media ? s.attachmentType : s.header ? 'text' : 'none';
   return {
@@ -14,7 +16,7 @@ export function previewOfSummary(s: TemplateSummary): PreviewModel {
     language: s.language,
     headerKind,
     headerText: headerKind === 'text' ? (s.header ?? '') : '',
-    headerImageUrl: s.attachmentType === 'image' ? s.headerSampleUrl : null,
+    headerImageUrl: s.attachmentType === 'image' ? (s.headerMediaUrl ?? s.headerSampleUrl) : null,
     body: s.body,
     footer: s.footer ?? '',
     buttons: s.buttons.map((b) => {

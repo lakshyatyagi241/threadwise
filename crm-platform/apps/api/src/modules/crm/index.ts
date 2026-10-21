@@ -79,9 +79,21 @@ export type { ContactActivityRow } from './contact-activities';
 export {
   ContactMeetingsService,
   ContactMeetingsRepository,
+  ContactMeetingConferencingRepository,
+  CONFERENCING_RELEASE_EVENT,
+  MEETING_CONFERENCING,
+  releaseAll,
   toContactMeetingResponse,
 } from './contact-meetings';
-export type { BackfillBatch, BookedMeetingValues, ContactMeetingRow } from './contact-meetings';
+export type {
+  BackfillBatch,
+  BookedMeetingValues,
+  ContactMeetingRow,
+  MeetingConferencingPort,
+  MeetingConferencingRow,
+  MeetingConferencingValues,
+  ReleaseSnapshot,
+} from './contact-meetings';
 export {
   ContactGroupsService,
   ContactGroupsRepository,
@@ -130,6 +142,8 @@ export {
 } from './deals';
 export type { DealRow } from './deals';
 export { TasksService, TasksRepository, toTaskResponse } from './tasks';
+// Sales activities settings: the lists tasks, meetings and logged calls pick from (call logging reads them through here).
+export { ActivityTypesService, optionRefColumns, optionRefFrom } from './activity-types';
 export type { TaskRow } from './tasks';
 export { TasksWorkerModule } from './tasks/tasks-worker.module';
 export { SalesDocsService, SalesDocsRepository, SALES_DOC_INVOICE_PORT } from './sales-docs';
@@ -163,6 +177,7 @@ export type {
 export type { InvoiceRow } from './invoicing';
 export { InvoicingWorkerModule } from './invoicing/invoicing-worker.module';
 export { OwnerReassignWorkerModule } from './owner-reassign/owner-reassign-worker.module';
+export { OwnerReassignService } from './owner-reassign/owner-reassign.service';
 export { ContactAssignmentWorkerModule } from './contact-assignment/contact-assignment-worker.module';
 export { PipelinesService, PipelinesRepository, LostReasonsService } from './pipelines';
 export type { PipelineRow, StageRow } from './pipelines';

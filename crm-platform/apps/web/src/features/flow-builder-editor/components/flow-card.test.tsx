@@ -44,21 +44,25 @@ const card = (over: Partial<FlowSummary> = {}) =>
   renderToStaticMarkup(<FlowCard flow={flow(over)} actions={actions} />);
 
 describe('flow card (TW-FLB-001)', () => {
-  it('a keyword flow opens the builder and links its analytics to the runtime page of that flow', () => {
+  it('a keyword bot opens in the Simple builder and links its analytics to the runtime page of that flow', () => {
     const html = card();
-    expect(html).toContain('href="/flows/builder/11111111-1111-4111-8111-111111111111"');
+    expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
     expect(html).toContain(
       'href="/flow-runtime/analytics?flowId=11111111-1111-4111-8111-111111111111"',
     );
     expect(html).not.toContain('data-flow-enroll');
   });
 
-  it('QUIRK: a manual-enroll flow shows "Enroll contacts" in place of "Open builder"', () => {
+  it('a manual-enroll bot opens like any other bot, with no enroll button on the card', () => {
     const html = card({ triggerKind: 'manual_enroll' });
-    expect(html).toContain('data-flow-enroll');
-    expect(html).toContain('href="/flow-runtime/flows/11111111-1111-4111-8111-111111111111"');
-    expect(html).not.toContain('openBuilder');
-    expect(html).not.toContain('href="/flows/builder/');
+    expect(html).not.toContain('data-flow-enroll');
+    expect(html).toContain('href="/flows/simple/11111111-1111-4111-8111-111111111111"');
+    expect(html).not.toContain('href="/flow-runtime/flows/');
+  });
+
+  it('has no FAQs link: FAQs are entries in an AI agent now', () => {
+    expect(card()).not.toContain('data-flow-faqs');
+    expect(card({ flowType: 'web' })).not.toContain('tab=faqs');
   });
 
   it('an Instagram flow has no analytics link (it runs remotely) and carries the Instagram badge', () => {

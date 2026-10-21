@@ -113,6 +113,8 @@
       "search": "Search deals",
       "owner": "Owner",
       "allOwners": "All owners",
+      "team": "Team",
+      "allTeams": "All teams",
       "unassigned": "Unassigned",
       "source": "Source",
       "allSources": "All sources",

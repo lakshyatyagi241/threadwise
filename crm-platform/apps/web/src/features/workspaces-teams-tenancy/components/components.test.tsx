@@ -37,6 +37,8 @@ const actions: RowActions = {
   onResend: noop,
   onRemove: noop,
   onLeave: noop,
+  onEdit: noop,
+  timeZone: 'Asia/Kolkata',
   leaves: { items: [], today: '2026-10-13' },
 };
 
@@ -128,6 +130,43 @@ describe('MembersTable', () => {
     expect(out).toContain('bg-danger');
   });
 
+  it('shows phone, concurrent chats and last login for each member', () => {
+    const out = table({
+      meTier: 'admin',
+      members: [
+        member(2, 'agent', {
+          phone: '+919876543210',
+          chatLimit: 5,
+          lastLoginAt: '2026-10-02T12:00:00.000Z',
+        }),
+        member(3, 'agent'),
+      ],
+    });
+    expect(out).toContain('>Phone<');
+    expect(out).toContain('>Concurrent chats<');
+    expect(out).toContain('>Last login<');
+    expect(out).toContain('+919876543210');
+    expect(out).toMatch(/data-testid="chat-limit-person2@example.test"[^>]*>5</);
+    // 12:00 UTC is 5:30 PM in the workspace time zone (Asia/Kolkata), not 12:00 PM.
+    expect(out).toContain('Oct 2, 2026, 5:30 PM');
+    // A member with no limit, no phone and no sign-in yet.
+    expect(out).toMatch(/data-testid="chat-limit-person3@example.test"[^>]*><span[^>]*>No limit</);
+    expect(out).toMatch(/data-testid="last-login-person3@example.test"[^>]*><span[^>]*>Never</);
+  });
+
+  it('offers the Change member pencil to the invite permission, for oneself too, but not on a higher rank', () => {
+    const out = table({
+      meTier: 'admin',
+      members: [member(1, 'admin'), member(2, 'agent'), member(4, 'owner')],
+    });
+    expect(out).toContain('data-testid="edit-person2@example.test"');
+    expect(out).toContain('data-testid="edit-person1@example.test"');
+    expect(out).not.toContain('data-testid="edit-person4@example.test"');
+    expect(table({ meTier: 'manager', members: [member(2, 'agent')] })).not.toContain(
+      'data-testid="edit-',
+    );
+  });
+
   it('shows skeleton rows while loading', () => {
     const out = table({ meTier: 'admin', members: [], loading: true });
     expect(out).toContain('aria-busy="true"');
@@ -162,6 +201,15 @@ describe('InviteDialog', () => {
     ]);
   });
 
+  it('asks for a phone number and Concurrent chats, starting at 4', () => {
+    const out = html(
+      <InviteDialog open roles={summary('admin').roles} onClose={noop} onInvited={noop} />,
+    );
+    expect(out).toContain('Phone number (optional)');
+    expect(out).toContain('Concurrent chats');
+    expect(out).toMatch(/name="chatLimit"[^>]*value="4"/);
+  });
+
   it('offers Admin and Owner to an owner', () => {
     const out = html(
       <InviteDialog open roles={summary('owner').roles} onClose={noop} onInvited={noop} />,
@@ -189,13 +237,55 @@ describe('TeamDialog', () => {
     expect(two).toContain('Line 2');
   });
 
-  it('creates with the six swatches, the strategy list and no Delete button', () => {
+  it('creates with the six swatches, the manager, parent and receive fields, and no Delete button or stored-settings note', () => {
     const out = html(<TeamDialog open team={null} devices={[]} canDelete onClose={noop} />);
     expect(out).toContain('Create a team');
-    expect(out).toContain('Auto-assignment strategy');
-    expect(out).toContain('Round robin — spread evenly');
+    expect(out).toContain('Teams group people for conversations, assignments and reports.');
+    expect(out).toContain('Manager');
+    expect(out).toContain('Parent team');
+    expect(out).toContain('Can receive');
+    expect(out).toContain('Conversations (inbox routing and assignment)');
+    expect(out).toContain('Records (contacts, companies and deals)');
     expect(out.match(/aria-label="Colour #/g)).toHaveLength(6);
     expect(out).not.toContain('data-testid="delete-team"');
+    expect(out).not.toContain('data-testid="team-not-used"');
+  });
+
+  it('shows the devices a team is limited to as stored but not used yet, instead of hiding them', () => {
+    const t = team(1, { assignmentStrategy: 'round_robin', deviceIds: ['d1', 'd2'] });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-not-used"');
+    expect(out).toContain('Stored, not used yet');
+    expect(out).toContain('Limited to 2 devices');
+    expect(out).not.toContain('Auto-assignment strategy');
+  });
+
+  it('edits the handoff settings a team keeps: method, default assignee and opening hours', () => {
+    const t = team(1, {
+      assignmentStrategy: 'round_robin',
+      unusedSettings: {
+        businessHours: {
+          days: {
+            mon: { enabled: true, from: '09:00', to: '17:00' },
+            tue: { enabled: true, from: '09:00', to: '17:00' },
+            wed: { enabled: true, from: '09:00', to: '17:00' },
+            thu: { enabled: true, from: '09:00', to: '17:00' },
+            fri: { enabled: true, from: '09:00', to: '17:00' },
+            sat: { enabled: false, from: '09:00', to: '17:00' },
+            sun: { enabled: false, from: '09:00', to: '17:00' },
+          },
+        },
+        timezone: 'Asia/Kolkata',
+        defaultAssignee: { id: 'u1', fullName: 'Asha Rao' },
+      },
+    });
+    const out = html(<TeamDialog open team={t} devices={[]} canDelete onClose={noop} />);
+    expect(out).toContain('data-testid="team-handoff"');
+    expect(out).toContain('Handoff and assignment');
+    expect(out).toContain('How to pick a person');
+    expect(out).toContain('Default assignee');
+    expect(out).toContain('Opening hours');
+    expect(out).not.toContain('data-testid="team-not-used"');
   });
 
   it('edits with Delete when the caller may manage teams', () => {

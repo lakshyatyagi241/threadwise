@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kanały",
-      "title": "E-mail",
+      "title": "E-mail wsparcia",
       "titleAccent": "skrzynki pocztowe",
       "intro": "Połącz swój Gmail, Microsoft 365 lub dowolną skrzynkę IMAP. E-maile od klientów trafiają do skrzynki zespołu, jedna rozmowa na wątek, a Twoje odpowiedzi wychodzą z tego samego adresu.",
       "inbox": "Otwórz skrzynkę odbiorczą",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Połącz skrzynkę",
-          "body": "Zaloguj się przez Google lub Microsoft albo wpisz ustawienia swojego serwera poczty i pozwól Threadwise czytać i wysyłać pocztę z tego adresu."
+          "body": "Zaloguj się przez Google lub Microsoft albo wpisz ustawienia swojego serwera poczty i pozwól {app} czytać i wysyłać pocztę z tego adresu."
         },
         "inbox": {
           "title": "Poczta trafia do skrzynki odbiorczej",

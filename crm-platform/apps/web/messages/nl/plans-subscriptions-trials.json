@@ -47,7 +47,8 @@
       "sms_monthly": "SMS per maand",
       "email_mailboxes": "E-mailpostvakken",
       "email_monthly": "E-mails per maand",
-      "storage_gb": "Opslag (GB)"
+      "storage_gb": "Opslag (GB)",
+      "teams": "Teams"
     },
     "features": {
       "automation": "Automatisering",
@@ -85,7 +86,10 @@
       "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AI-leadscoring",
-      "record_assignment": "Regels voor recordtoewijzing"
+      "record_assignment": "Regels voor recordtoewijzing",
+      "team_hierarchy": "Teamhiërarchie en managers",
+      "custom_roles": "Eigen rollen en bereiken",
+      "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
     },
     "limitGroups": {
       "messaging": "Berichten",
@@ -139,7 +143,8 @@
       "sms_monthly": "Uitgaande SMS-berichten verzonden in de kalendermaand. 0 = onbeperkt.",
       "email_mailboxes": "Gekoppelde Gmail-postvakken (een losgekoppeld postvak geeft zijn plek vrij). 0 = onbeperkt.",
       "email_monthly": "E-mails verzonden in de kalendermaand, antwoorden en campagne-e-mails samen. 0 = onbeperkt.",
-      "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd."
+      "storage_gb": "Opslagruimte die de werkruimte mag gebruiken, in GB (gespreksopnames, chatmedia, e-mailbijlagen en bestanden). 0 = onbeperkt. Voorlopig alleen gemeten: er wordt nog niets geblokkeerd.",
+      "teams": "Hoeveel teams de werkruimte mag hebben. Leeg is onbeperkt, 0 is solo (geen teams). Bestaande teams worden nooit verwijderd."
     },
     "planAddons": {
       "title": "Add-ons beschikbaar in je abonnement",
@@ -304,7 +309,10 @@
       "showUnlimited": "{count, plural, one {Toon # onbeperkte limiet} other {Toon # onbeperkte limieten}}",
       "hideUnlimited": "Onbeperkte limieten verbergen",
       "groupCount": "{count, plural, one {# limiet} other {# limieten}}",
-      "groupHidden": "{count, plural, one {# limiet meer is onbeperkt en verborgen.} other {# limieten meer zijn onbeperkt en verborgen.}}"
+      "groupHidden": "{count, plural, one {# limiet meer is onbeperkt en verborgen.} other {# limieten meer zijn onbeperkt en verborgen.}}",
+      "activatedOn": "Geactiveerd op {date}",
+      "previousBilling": "Vorige factuurdatum: {date}",
+      "subscriptionId": "Abonnements-ID: {id}"
     },
     "operator": {
       "title": "Workspace-abonnementen",

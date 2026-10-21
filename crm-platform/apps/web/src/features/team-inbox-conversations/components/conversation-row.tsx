@@ -8,6 +8,7 @@ import {
   type ConversationPriority,
   type ConversationSummary,
 } from '@crm/contracts';
+import { AGE_KEY, waitAge } from '../lib/handoff';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
@@ -29,6 +30,8 @@ export interface ConversationRowProps {
   active: boolean;
   nowMs: number;
   showChannel: boolean;
+  /** The row's channel has a reply-window rule (24 hours): a customer who never wrote then shows "Window closed", like the header. */
+  hasWindowRule?: boolean;
   onOpen: (id: string) => void;
   /** Selection mode: a click picks the row (shift picks the run up to it) instead of opening it. */
   selecting?: boolean;
@@ -58,6 +61,7 @@ export const ConversationRow = memo(function ConversationRow({
   active,
   nowMs,
   showChannel,
+  hasWindowRule = false,
   onOpen,
   selecting = false,
   selected = false,
@@ -67,13 +71,19 @@ export const ConversationRow = memo(function ConversationRow({
 }: ConversationRowProps) {
   const [menu, setMenu] = useState(false);
   const t = useTranslations('team-inbox-conversations.list');
+  const th = useTranslations('team-inbox-conversations.handoff.row');
+  const tha = useTranslations('team-inbox-conversations.handoff');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
   const outbound = lastWasOutbound(row);
-  const chip = rowWindowChip(row.windowExpiresAt, nowMs);
+  const chip = rowWindowChip(row.windowExpiresAt, nowMs, hasWindowRule);
   const left = chip?.msLeft != null ? formatWindowLeft(chip.msLeft) : null;
   const assignee = row.assignment.user?.name ?? row.assignment.team?.name ?? null;
+  const ageText = (since: string) => {
+    const age = waitAge(since, nowMs);
+    return tha(AGE_KEY[age.unit], { count: age.count });
+  };
 
   const label = [
     row.title,
@@ -232,7 +242,17 @@ export const ConversationRow = memo(function ConversationRow({
                 {t(`priority.${row.priority}`)}
               </span>
             )}
-            {assignee ? (
+            {row.handling === 'waiting' && !row.assignment.user ? (
+              <span
+                data-testid="inbox-row-waiting"
+                title={assignee ? th('inTeam', { team: assignee }) : undefined}
+                className="rounded-full bg-warning/15 px-1.5 py-0.5 text-[10px] font-medium text-warning"
+              >
+                {row.handlingSince
+                  ? th('waitingFor', { age: ageText(row.handlingSince) })
+                  : th('waiting')}
+              </span>
+            ) : assignee ? (
               <span className="max-w-[9rem] truncate rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
                 {assignee}
               </span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
+import { useLocale, useTimeZone, useTranslations } from 'next-intl';
 import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
@@ -31,6 +31,7 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
   const ts = useTranslations(`${NS}.status`);
   const tp = useTranslations(`${NS}.priority`);
   const locale = useLocale();
+  const timeZone = useTimeZone();
   const qc = useQueryClient();
   const toast = useToast();
   const { operator } = useOperator();
@@ -273,9 +274,9 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
               <Meta label={t('workspace')}>{d.workspace.name}</Meta>
               <Meta label={t('assignedTo')}>{d.assignee?.name ?? t('none')}</Meta>
               <Meta label={t('firstReply')}>
-                {d.firstResponseAt ? formatWhen(d.firstResponseAt, locale) : '—'}
+                {d.firstResponseAt ? formatWhen(d.firstResponseAt, locale, timeZone) : '—'}
               </Meta>
-              <Meta label={t('opened')}>{formatWhen(d.createdAt, locale)}</Meta>
+              <Meta label={t('opened')}>{formatWhen(d.createdAt, locale, timeZone)}</Meta>
             </dl>
 
             <ol className="space-y-2" data-testid="thread">
@@ -284,7 +285,7 @@ export function TicketPanel({ id, onClose }: { id: string; onClose: () => void }
                 <Bubble
                   key={m.id}
                   admin={m.role === 'admin'}
-                  who={`${m.authorName} · ${m.role} · ${formatWhen(m.createdAt, locale)}`}
+                  who={`${m.authorName} · ${m.role} · ${formatWhen(m.createdAt, locale, timeZone)}`}
                   badges={
                     <>
                       {m.isInternalNote && <Badge tone="warning">{t('internal')}</Badge>}

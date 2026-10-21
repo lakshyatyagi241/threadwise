@@ -747,8 +747,10 @@
     "task_outcome": {
       "status": "REVIEWED",
       "reviewedBy": "Vedant Yeole (asked for this migration on 2026-10-12); mapping drafted by Claude from the permission names, please re-check",
-      "use": [],
-      "note": "no WaDesk equivalent"
+      "use": [
+        "settings.task_outcomes.manage"
+      ],
+      "note": "Settings > Task outcomes (migration 20270126090100)"
     },
     "data_management": {
       "status": "REVIEWED",

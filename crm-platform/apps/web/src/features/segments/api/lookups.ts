@@ -3,7 +3,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
 import { useTranslations } from 'next-intl';
+import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import {
+  hasLazyOptions,
   isUsableProperty,
   stageChoices,
   statusChoices,
@@ -45,6 +47,20 @@ export function useTeams(enabled = true) {
     staleTime: 5 * 60_000,
     retry: false,
   });
+}
+
+/**
+ * The teams for a list screen's Team filter (contacts, deals, tasks). The filter shows only when the viewer can read teams
+ * (`team.read`) and the workspace has at least one; otherwise `show` is false and nothing is fetched.
+ */
+export function useTeamFilterOptions() {
+  const canRead = useCan('team.read');
+  const query = useTeams(canRead);
+  const teams = useMemo(
+    () => (canRead ? (query.data ?? []).map((t) => ({ id: t.id, name: t.name })) : []),
+    [canRead, query.data],
+  );
+  return { show: canRead && teams.length > 0, teams };
 }
 
 /** A module's property definitions as the catalog reads them (usable ones only, options in their order, hidden options left out). */
@@ -132,7 +148,8 @@ export function useSegmentCatalog(): SegmentCatalog {
       properties: (fields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
         label: f.label,
-        fieldType: f.fieldType,
+        // A list too long to send with the properties (every City) is typed in the rule instead of picked from a menu.
+        fieldType: hasLazyOptions(f) ? 'text' : f.fieldType,
         options: (f.options ?? [])
           .filter((o) => !o.isHidden)
           .sort((a, b) => a.position - b.position)
@@ -142,7 +159,7 @@ export function useSegmentCatalog(): SegmentCatalog {
       companyProperties: (companyFields.data ?? []).filter(isUsableProperty).map((f) => ({
         key: f.key,
         label: f.label,
-        fieldType: f.fieldType,
+        fieldType: hasLazyOptions(f) ? 'text' : f.fieldType,
         options: (f.options ?? [])
           .filter((o) => !o.isHidden)
           .sort((a, b) => a.position - b.position)

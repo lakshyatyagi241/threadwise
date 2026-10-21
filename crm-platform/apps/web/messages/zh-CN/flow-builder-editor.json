@@ -555,17 +555,13 @@
           "cardCount": "{count} 张卡片",
           "payLink": "支付链接",
           "invoice": "发票",
-          "faqAllFaqs": "所有 FAQ",
-          "faqCategory": "FAQ：{name}",
-          "faqScore": "最低分数 {score}",
-          "faqNotSent": "不发送",
-          "faqWorkspaceScore": "流程得分"
+          "faqRetired": "已停用 · 从“无匹配”离开"
         },
         "overlays": {
           "startPinned": "这是起点（点击取消固定）",
           "startMake": "设为起点",
           "startPoint": "起点",
-          "editTitle": "编辑（打开检查器）",
+          "editTitle": "编辑（打开检查器，也可双击节点或按 Enter）",
           "edit": "编辑",
           "duplicateTitle": "复制（Ctrl+D）",
           "duplicate": "复制",
@@ -581,7 +577,9 @@
           "nothingHint": "点击画布上的节点以编辑其属性，<br/>或从左侧拖入卡片以添加新节点。",
           "nodeFallback": "节点",
           "id": "ID",
-          "noSettings": "此节点没有设置。"
+          "noSettings": "此节点没有设置。",
+          "confirmDeleteTitle": "删除此节点？",
+          "confirmDeleteMessage": "节点及其连线将被移除。在离开构建器之前，可按 Ctrl+Z 撤销。"
         },
         "palette": {
           "modeCall": "通话",
@@ -721,8 +719,7 @@
             "answer": "回答",
             "action": "操作"
           },
-          "blockedTitle": "此步骤会结束这一部分，因此只能放在最后。",
-          "blockedTitleFaq": "“FAQ 回答”有两个出口，因此只能放在最后。"
+          "blockedTitle": "此步骤会结束这一部分，因此只能放在最后。"
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -911,18 +908,12 @@
             "hint": "访客会连同您的备注转交给该团队。此按钮之后无需连接任何内容。"
           },
           "faq": {
-            "exits": {
-              "matched": "如果有 FAQ 已回答，前往",
-              "no_match": "如果没有 FAQ 回答，前往"
-            },
-            "exitsHint": {
-              "matched": "此时文本回答已发送。启动流程的 FAQ 则会改为在该流程中继续。",
-              "no_match": "没有足够接近的内容，或 FAQ 自动回答已关闭。"
-            }
+            "exit": "继续到",
+            "exitHint": "流程始终从这里继续。"
           }
         },
         "branchAdd": "为“{title}”添加步骤",
-        "faqEnds": "此步骤会结束这一部分：接下来发送什么取决于是否有 FAQ 已回答。"
+        "faqEnds": "这个已停用的步骤会结束这一部分：流程始终从它的“无匹配”出口继续。"
       },
       "formsCore": {
         "helpers": {
@@ -1870,43 +1861,7 @@
           "waitUntilPaid": "等待付款后继续"
         },
         "faq": {
-          "intro": {
-            "body": "按语义将消息与此流程的 FAQ 匹配并回答。有 FAQ 应答时从 <mono>answered</mono> 出口离开，否则从 <mono>no match</mono> 出口离开。",
-            "sub": "即使未开启此流程的自动 FAQ 应答也能工作。<link>管理此流程的 FAQ</link>"
-          },
-          "exitsLabel": "出口",
-          "exitMatchedName": "已回答",
-          "exitMatched": "有 FAQ 已回答：其文本已发送（除非已关闭发送），或其流程已接管且不会返回。",
-          "exitNoMatchName": "无匹配",
-          "exitNoMatch": "没有足够接近的内容、平台已关闭 FAQ 回答、关联的流程或步骤已不存在，或消息为空。",
-          "query": "要匹配的消息",
-          "queryHint": "默认为客户的最后一条消息。也可以使用“提问”步骤保存的变量，例如 <mono>{variable}</mono>。输入 / 可插入变量。",
-          "category": "仅限这些 FAQ",
-          "allFaqs": "所有 FAQ",
-          "loadingCategories": "正在加载分类…",
-          "categoryGone": "{name}（没有 FAQ 使用）",
-          "retry": "重试",
-          "minScore": "最低分数",
-          "sendAnswer": "向客户发送回答",
-          "sendAnswerToggle": "将匹配的文本回答作为消息发送",
-          "sendAnswerOnHint": "匹配的文本 FAQ 会发送给客户。启动流程的 FAQ 会在该流程中继续。",
-          "sendAnswerOffHint": "不发送任何内容：回答仅保存在下方的变量中，以便后续步骤自行撰写回复。启动流程的 FAQ 仍会在该流程中继续。",
-          "save": "将结果保存为",
-          "saveHint": "结果保存时使用的名称。后续步骤按下方所示读取。",
-          "variables": {
-            "answer": "回答文本",
-            "matched": "是或否",
-            "question": "匹配到的 FAQ 的问题",
-            "score": "匹配的接近程度",
-            "id": "匹配到的 FAQ 的 ID"
-          },
-          "noFaqs": "此流程还没有 FAQ，因此此步骤始终从 no match 出口离开。<link>添加此流程的第一条 FAQ</link>",
-          "useWorkspaceScore": "使用此流程的设置",
-          "minScoreInvalid": "输入 {min} 到 {max} 之间的数字，或使用此流程的设置。",
-          "saveFlowFirst": "请先保存流程。它的 FAQ 在简易构建器的 FAQ 标签页中编辑，此步骤基于这些 FAQ 作答。",
-          "categoryHint": "只有此类别的 FAQ 才能应答。类别来自此流程的 FAQ。",
-          "categoriesFailed": "无法加载此流程的 FAQ 类别。",
-          "minScoreHint": "仅对此步骤替换此流程的得分，范围为 {min} 到 {max}。得分取决于平台的嵌入模型，因此在选择数字之前，请先在此流程的 <link>FAQ 测试</link>中试一条消息。"
+          "retired": "此步骤已停用，不再查找任何内容。流程始终从“无匹配”继续。若要用你自己的知识回答，请使用 AI 助手步骤并选择一个 AI 智能体。"
         }
       },
       "attrPicker": {
@@ -1977,7 +1932,6 @@
         "customizeFirst": "发布前请先自定义聊天小组件并保存一次。",
         "deploy": "部署",
         "customizeFirstWhatsapp": "发布前，请先自定义 WhatsApp 按钮并保存一次。",
-        "faqs": "FAQ",
         "install": "安装"
       },
       "buttonIcon": {
@@ -2148,8 +2102,8 @@
           "description": "添加或移除标签"
         },
         "assign": {
-          "label": "分配客服",
-          "description": "转交人工"
+          "label": "转人工",
+          "description": "将聊天转给人工或队列"
         },
         "subflow": {
           "label": "运行子流程",
@@ -2499,7 +2453,6 @@
         "noSenderInstagram": "触发器节点未选择 Instagram 账户 — 请在触发步骤中选择一个。",
         "noSenderFacebook": "触发器节点未选择 Facebook 主页 — 请在触发步骤中选择一个。",
         "noSenderNumber": "触发器节点未选择号码 — 请在触发步骤中选择一个。",
-        "faqMinScore": "\"{node}\"的最低分数不在 0.05 到 0.99 范围内——请修正，或留空以使用流程设置。",
         "locationInvalid": "“{node}”没有有效的位置——请粘贴 Google 地图链接，或输入纬度（-90 到 90）和经度（-180 到 180）。",
         "aiNoAgent": "\"{node}\"既没有 AI 智能体也没有提示词——请选择 AI 智能体，或选择自定义设置并编写指令。"
       }
@@ -2510,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "分配给客服",
-          "help": "将对话交给团队或客服"
+          "label": "转人工",
+          "help": "将会话转给人员、团队或分配规则"
         },
         "message": {
           "label": "消息",
@@ -2589,10 +2542,6 @@
           "label": "条件",
           "help": "根据客户所说或保存的内容分支，使用 AND / OR 规则"
         },
-        "faq": {
-          "label": "FAQ 回答",
-          "help": "将客户消息与你的 FAQ 匹配。结束此流程：有 FAQ 已回答走一个出口，否则走另一个"
-        },
         "apiLibrary": {
           "label": "API 调用",
           "help": "调用 API 库中的 API"
@@ -2614,7 +2563,7 @@
         "location": "位置",
         "template": "模板",
         "cta": "链接按钮",
-        "assign": "分配给客服",
+        "assign": "转人工",
         "carousel": "轮播",
         "condition": "条件",
         "faq": "FAQ 回答",
@@ -2661,7 +2610,6 @@
         "carouselCards": "步骤 {stage}：请至少添加一张卡片，并为每张卡片设置标题。",
         "carouselButtons": "步骤 {stage}：请为每个按钮命名，并为会打开内容的按钮填写链接、号码或地址。",
         "conditionIncomplete": "步骤 {stage}：请完善条件的规则（每条规则都要有变量和值）。",
-        "faqMinScore": "步骤 {stage}：最低分数必须在 0.05 到 0.99 之间，或使用流程设置。",
         "optionNotConnected": "步骤 {stage}：{kind, select, row {该行} other {该按钮}}“{label}”没有通向任何地方。请为它添加一个步骤，或为它设置一个操作。",
         "tooManyOptions": "步骤 {stage}：{kind, select, row {列表最多可有 {max} 行} other {一组按钮最多可有 {max} 个按钮}}。",
         "chooseFlow": "步骤 {stage}：请选择该按钮启动的流程。",
@@ -2670,8 +2618,7 @@
         "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。",
         "chooseAiAgent": "步骤 {stage}：请选择负责回复的 AI 智能体，或将此步骤切换为自定义设置。",
         "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。"
-      },
-      "faqSummary": "{hasCategory, select, true {来自你的 FAQ · {category}} other {来自你的 FAQ}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2783,9 +2730,8 @@
       "buttonNotConnected": "按钮 \"{label}\" 未连接 — 停止。",
       "simPurchase": "模拟购买：{name} → 出口 \"purchased\"",
       "simAbandon": "模拟放弃 → 出口 \"abandoned\"",
-      "faqAnswered": "（模拟）针对“{query}”的 FAQ 回答：测试聊天不会查询你的 FAQ，因此不会发送任何内容，{ref} 保持为空。走“已回答”出口。",
-      "faqNoMatch": "（模拟）针对“{query}”的 FAQ 回答：测试聊天不会查询你的 FAQ，且“已回答”出口未连接，因此走“无匹配”出口。{ref} 保持为空。",
-      "locationSkipped": "（位置）已跳过：没有有效的坐标"
+      "locationSkipped": "（位置）已跳过：没有有效的坐标",
+      "faqRetired": "（模拟）“从常见问题回答”已停用：走“无匹配”。"
     }
   }
 }

@@ -48,6 +48,7 @@ import {
   type InviteeFacts,
 } from './contact-link.service';
 import { SlotsService } from './slots.service';
+import { canActOn } from '../../kernel/rbac/scope';
 
 export const APPOINTMENTS_PAGE_LIMIT = 50;
 
@@ -105,7 +106,7 @@ export class AppointmentsService {
       const contact = await this.repo.resolveContact(tx, ctx.orgId, contactUuid);
       try {
         if (!contact) throw AppError.notFound('Contact', contactUuid);
-        await this.assertContactVisible(tx, contact.ownerId);
+        await this.assertContactVisible(tx, contact);
       } catch (err) {
         if (err instanceof AppError && (err.getStatus() === 403 || err.getStatus() === 404)) {
           throw AppError.notFound('Contact', contactUuid);
@@ -175,6 +176,9 @@ export class AppointmentsService {
       row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
     return remindersOf(row, rules, runs, Date.now()).map((r) => ({
       kind: r.kind,
+      stepKind: r.stepKind,
+      attempts: r.attempts,
+      delivery: r.delivery,
       offsetMinutes: r.offsetMinutes,
       label: r.label,
       dueAt: r.dueAt.toISOString(),
@@ -243,7 +247,7 @@ export class AppointmentsService {
       if (input.contactId) {
         const c = await this.repo.resolveContact(tx, ctx.orgId, input.contactId);
         if (!c) throw AppError.notFound('Contact', input.contactId);
-        await this.assertContactVisible(tx, c.ownerId);
+        await this.assertContactVisible(tx, c);
         contact = c;
       }
       const host =
@@ -346,7 +350,7 @@ export class AppointmentsService {
         if (input.contactId !== null) {
           const c = await this.repo.resolveContact(tx, ctx.orgId, input.contactId);
           if (!c) throw AppError.notFound('Contact', input.contactId);
-          await this.assertContactVisible(tx, c.ownerId);
+          await this.assertContactVisible(tx, c);
           contact = c.id;
         }
         if (contact !== row.contactId) {
@@ -654,33 +658,34 @@ export class AppointmentsService {
   /** Not-found, never forbidden: an appointment outside the caller's scope is not revealed to exist. */
   private async assertScope(tx: Tx, scope: RecordScope, row: AppointmentRow): Promise<void> {
     const ctx = RequestContextStore.require();
-    if (scope === 'all') return;
-    const actor = ctx.userId;
-    if (!actor) throw AppError.notFound('Appointment');
-    if (row.hostId === actor || row.createdById === actor) return;
-    if (scope === 'team') {
-      for (const other of [row.hostId, row.createdById]) {
-        if (other !== null && (await this.repo.isInActorTeam(tx, ctx.orgId, actor, other))) return;
-      }
+    // The same rule the list applies, through the one scope resolver (BL-380).
+    if (
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, scope, [
+        row.hostId,
+        row.createdById,
+      ]))
+    ) {
+      throw AppError.notFound('Appointment');
     }
-    throw AppError.notFound('Appointment');
   }
 
   /** The caller may only attach a contact they can read (its own scope applies). */
-  private async assertContactVisible(tx: Tx, ownerId: number | null): Promise<void> {
+  private async assertContactVisible(
+    tx: Tx,
+    contact: { ownerId: number | null; createdBy: number | null },
+  ): Promise<void> {
     const ctx = RequestContextStore.require();
     const read = this.rbac.can(ctx.grants!, 'record.contacts.read');
     if (!read.allowed) throw AppError.forbidden('record.contacts.read');
-    if (read.scope === 'all') return;
-    if (!ctx.userId || ownerId === null) throw AppError.notFound('Contact');
-    if (read.scope === 'own' && ownerId === ctx.userId) return;
+    // The contacts list's own rule (owner or creator, D1), through the one scope resolver (BL-380).
     if (
-      read.scope === 'team' &&
-      (ownerId === ctx.userId ||
-        (await this.repo.isInActorTeam(tx, ctx.orgId, ctx.userId, ownerId)))
-    )
-      return;
-    throw AppError.notFound('Contact');
+      !(await canActOn(tx, { orgId: ctx.orgId, userId: ctx.userId }, read.scope, [
+        contact.ownerId,
+        contact.createdBy,
+      ]))
+    ) {
+      throw AppError.notFound('Contact');
+    }
   }
 
   private async hostId(tx: Tx, orgId: number, uuid: string): Promise<number> {

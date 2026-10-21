@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "转接与分配",
+        "hint": "当机器人、流程或同事将会话转给此团队时使用。",
+        "method": "如何选择人员",
+        "methodHint": "手动：会话在团队队列中等待，直到有人接手。轮询和最少负载会为你自动选择成员，需要包含分配规则的套餐。",
+        "defaultAssignee": "默认负责人",
+        "defaultAssigneeHint": "在无人可接时接手会话。请从团队成员中选择。",
+        "noDefaultAssignee": "不指定",
+        "hours": "营业时间",
+        "hoursHint": "关闭表示全天营业。在这些时间之外，会话仍会在队列中等待，联系人会收到流程中的非营业时间消息。",
+        "timezone": "时区",
+        "dayFrom": "{day}，开始营业",
+        "dayTo": "{day}，结束营业",
+        "hoursProblem": "每个营业日都需要设置不同的开始和结束时间。",
+        "day": {
+          "mon": "星期一",
+          "tue": "星期二",
+          "wed": "星期三",
+          "thu": "星期四",
+          "fri": "星期五",
+          "sat": "星期六",
+          "sun": "星期日"
+        }
+      }
+    }
+  }
+}

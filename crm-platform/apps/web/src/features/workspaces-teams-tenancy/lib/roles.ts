@@ -1,4 +1,5 @@
 import {
+  isUnlimitedLimit,
   WSP_TIER_RANK,
   type WspMember,
   type WspMembersSummary,
@@ -70,6 +71,11 @@ export function canChangeRole(member: WspMember, me: Me): boolean {
   return me.canAssignRoles && (!member.isOwner || me.tier === 'owner') && isActionable(member, me);
 }
 
+/** Change member (phone and chat limit): needs the invite permission; unlike the others it may also be used on oneself. */
+export function canEditDetails(member: Pick<WspMember, 'id' | 'tier'>, me: Me): boolean {
+  return me.canInvite && (member.id === me.id || !outranks(member, me));
+}
+
 export function canRemove(member: WspMember, me: Me): boolean {
   return me.canInvite && !member.isOwner && isActionable(member, me);
 }
@@ -111,6 +117,6 @@ export function initials(name: string): string {
 export function seatsLine(
   seats: WspMembersSummary['seats'] | undefined,
 ): { used: number; limit: number; full: boolean } | null {
-  if (!seats || seats.limit === null) return null;
+  if (!seats || seats.limit === null || isUnlimitedLimit(seats.limit)) return null;
   return { used: seats.used, limit: seats.limit, full: seats.used >= seats.limit };
 }

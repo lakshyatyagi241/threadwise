@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Deployments"
+    },
+    "eyebrow": "Betrieb",
+    "title": "Deployments",
+    "description": "Jeder Flow, der an die Geta-Konsole veröffentlicht wurde: was in der Warteschlange steht, was gerade läuft und was fehlgeschlagen ist, mit Grund. Aktualisiert sich alle paar Sekunden.",
+    "updated": "Live. Aktualisiert {time}",
+    "stale": "Die letzte Aktualisierung ist fehlgeschlagen. Es werden die bisherigen Deployments angezeigt.",
+    "stalledAlert": "{count} Deployment(s) haben sich seit {minutes} Minuten nicht verändert. Ihr Worker ist womöglich gestoppt.",
+    "truncated": "Die ersten {limit} Deployments werden angezeigt. Wählen Sie einen Status, um die übrigen zu sehen.",
+    "kpi": {
+      "running": "Läuft",
+      "queued": "In Warteschlange",
+      "failed": "Fehlgeschlagen",
+      "live": "Live",
+      "stalled": "Hängend"
+    },
+    "filter": {
+      "label": "Nach Status filtern",
+      "all": "Alle",
+      "running": "Läuft",
+      "queued": "In Warteschlange",
+      "failed": "Fehlgeschlagen",
+      "live": "Live"
+    },
+    "cols": {
+      "workspace": "Workspace",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Schritt",
+      "attempted": "Letzter Versuch",
+      "updated": "Letzte Änderung",
+      "error": "Fehler"
+    },
+    "status": {
+      "running": "Läuft",
+      "queued": "In Warteschlange",
+      "failed": "Fehlgeschlagen",
+      "live": "Live"
+    },
+    "steps": {
+      "configuration_update": "Konfigurationsupdate",
+      "publish_bot": "Bot veröffentlichen"
+    },
+    "stalledBadge": "Hängend",
+    "version": "Version {version}",
+    "notStarted": "Noch nicht gestartet",
+    "failedAt": "Fehlgeschlagen bei {step}",
+    "noDetail": "Es wurde kein Fehlertext gespeichert.",
+    "empty": {
+      "title": "Nichts anzuzeigen",
+      "all": "Noch kein Flow wurde an die Geta-Konsole veröffentlicht.",
+      "running": "Gerade läuft keine Veröffentlichung.",
+      "queued": "In der Warteschlange wartet nichts.",
+      "failed": "Keine Veröffentlichung ist fehlgeschlagen.",
+      "live": "Noch kein Flow ist auf der Geta-Konsole live."
+    },
+    "tabs": {
+      "label": "Auswahl der Anzeige",
+      "publishes": "Flow-Veröffentlichungen",
+      "geta": "Geta-Konsole",
+      "releases": "Produktversionen"
+    },
+    "publishes": {
+      "description": "Jede Flow-Veröffentlichung: was der Worker in die Warteschlange gestellt hat, was er gerade abarbeitet und welche Veröffentlichungen aus welchem Grund fehlgeschlagen sind. Aktualisiert sich alle paar Sekunden.",
+      "stalledAlert": "{count} Flow-Veröffentlichung(en) haben sich seit {minutes} Minuten nicht bewegt. Der Worker hat die Outbox womöglich nicht mehr abgearbeitet.",
+      "truncated": "Die ersten {limit} Veröffentlichungen werden angezeigt. Wählen Sie einen Status, um die übrigen zu sehen.",
+      "notProcessed": "Noch nicht",
+      "cols": {
+        "attempts": "Versuche",
+        "queued": "In Warteschlange seit",
+        "finished": "Abgeschlossen am"
+      },
+      "status": {
+        "done": "Fertig"
+      },
+      "empty": {
+        "all": "Noch kein Flow wurde veröffentlicht.",
+        "done": "In den letzten 30 Tagen wurde keine Veröffentlichung abgeschlossen."
+      }
+    },
+    "releases": {
+      "description": "Was auf desk.wabo.ai live ist: die aktuelle Version, eine laufende Version und jeder Versuch mit Schritten und Fehlern. Aktualisiert sich alle paar Sekunden.",
+      "liveLabel": "Jetzt live",
+      "live": "Version {tag}, live seit {time}",
+      "noneLive": "Noch keine Version ist live gegangen.",
+      "inProgress": "Eine Version läuft",
+      "stalledAlert": "{count} Versionsversuch/e haben sich seit {minutes} Minuten nicht verändert. Der Build oder die Veröffentlichung ist womöglich gestoppt.",
+      "empty": "Noch keine Version erfasst. Versionen erscheinen hier ab dem nächsten Deployment.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Status",
+        "step": "Schritt",
+        "started": "Gestartet",
+        "finished": "Beendet",
+        "error": "Fehler"
+      },
+      "state": {
+        "building": "Wird gebaut",
+        "shipping": "Wird übertragen",
+        "releasing": "Wird veröffentlicht",
+        "ok": "Live",
+        "failed": "Fehlgeschlagen",
+        "rolled_back": "Zurückgerollt"
+      }
+    }
+  }
+}

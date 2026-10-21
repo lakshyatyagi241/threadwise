@@ -1,0 +1,175 @@
+{
+  "settings": {
+    "tiles": {
+      "video-meetings": {
+        "label": "视频会议",
+        "description": "连接您自己的 Zoom 或 Microsoft Teams 账户，为会议添加视频链接。",
+        "keywords": "zoom, teams, microsoft teams, 视频, 视频通话, 会议链接, 加入链接, 视频会议, google meet"
+      }
+    }
+  },
+  "meeting-conferencing": {
+    "common": {
+      "dismiss": "关闭"
+    },
+    "form": {
+      "label": "视频会议",
+      "add": {
+        "zoom": "添加 Zoom 链接",
+        "teams": "添加 Teams 链接",
+        "meet": "添加 Google Meet 链接"
+      },
+      "chosen": {
+        "zoom": "Zoom 链接",
+        "teams": "Teams 链接",
+        "meet": "Google Meet 链接"
+      },
+      "remove": "移除视频链接",
+      "needsStart": "请设置开始时间，以添加视频链接或日历条目。",
+      "meetNote": "Google Meet 链接属于日历事件的一部分，因此此会议也会添加到您的日历。",
+      "teamsViaCalendar": "此 Teams 链接由您的 Microsoft 365 日历生成，因此此会议也会添加到该日历。",
+      "calendar": "添加到我的日历（{account}）",
+      "calendarNamed": "添加到我的日历（{account}，{calendar}）",
+      "invite": "向联系人发送日历邀请",
+      "inviteHint": "您的日历会将邀请发送到联系人的电子邮件地址。我们自己的邮件邀请不受影响。",
+      "connectLink": "连接视频会议"
+    },
+    "row": {
+      "join": "加入",
+      "joinAria": "加入 {provider} 会议 {title}",
+      "provider": {
+        "zoom": "Zoom",
+        "teams": "Microsoft Teams",
+        "meet": "Google Meet"
+      },
+      "pending": "正在添加视频链接...",
+      "onCalendar": "已在您的日历中",
+      "invited": "日历已向联系人发送邀请",
+      "retry": "重试",
+      "retrying": "正在重试...",
+      "retried": "已重新检查视频链接和日历条目。",
+      "retryFailed": "操作未成功。会议已保存，您可以重试。",
+      "problem": {
+        "not_installed": "此工作区尚未安装 {provider} 集成。",
+        "not_connected": "您的 {provider} 账户未连接。请在设置的视频会议中连接。",
+        "needs_reconnect": "您的 {provider} 连接需要更新。请在设置的视频会议中重新连接。",
+        "not_configured": "{provider} 尚未为此平台配置。请联系平台管理员。",
+        "calendar_not_connected": "日历未连接，因此无法将会议添加到日历。",
+        "provider_failed": "{provider} 没有响应。会议已保存，请重试。",
+        "no_start_time": "视频链接需要会议有开始时间。"
+      },
+      "calendarProblem": {
+        "calendar_not_connected": "由于没有连接日历，无法将会议添加到日历。",
+        "provider_failed": "日历没有响应，因此会议尚未添加到日历。会议已保存，请重试。",
+        "other": "无法将会议添加到日历。"
+      }
+    },
+    "page": {
+      "eyebrow": "设置",
+      "title": "视频会议",
+      "subtitle": "连接您自己的 Zoom 或 Microsoft Teams 账户。之后添加会议表单会提供视频链接，该链接在您的账户中创建，并在会议上以加入按钮显示。",
+      "loading": "正在加载您的视频连接...",
+      "forbidden": {
+        "title": "您无法使用此页面",
+        "body": "请让工作区管理员为您的角色授予编辑联系人的权限。"
+      },
+      "failure": {
+        "generic": "无法加载您的视频连接。"
+      },
+      "retry": "重试",
+      "providers": {
+        "zoom": {
+          "name": "Zoom",
+          "about": "为您安排的每个会议在您的 Zoom 账户中创建 Zoom 会议，会议改期时同步改期，会议删除时同步删除。"
+        },
+        "teams": {
+          "name": "Microsoft Teams",
+          "about": "为您安排的每个会议在您的 Microsoft 工作或学校账户中创建 Teams 会议，并随会议更新或删除。"
+        }
+      },
+      "status": {
+        "connected": "已连接",
+        "needs_reconnect": "需要重新连接",
+        "disconnected": "已安装",
+        "not_installed": "未安装",
+        "unavailable": "已关闭",
+        "not_available": "暂不可用"
+      },
+      "account": "已作为 {account} 连接",
+      "connectedOn": "连接时间：{when}",
+      "lastError": {
+        "forbidden": "服务提供方拒绝了最近一次请求。您的账户可能无权创建会议。",
+        "rate_limited": "服务提供方目前正在限制请求。",
+        "unavailable": "服务提供方没有响应最近一次请求。"
+      },
+      "actions": {
+        "connect": "连接",
+        "reconnect": "重新连接",
+        "disconnect": "断开连接",
+        "install": "在应用市场中安装"
+      },
+      "notInstalled": {
+        "canInstall": "您的工作区尚未安装 {provider}。请从应用市场安装，然后在此连接您的账户。",
+        "cannotInstall": "您的工作区尚未安装 {provider}。请让工作区管理员从应用市场安装。"
+      },
+      "unavailable": "{provider} 已安装，但平台运营方关闭了它的配置，因此目前无法连接。请联系平台运营方。",
+      "outcome": {
+        "connected": "{provider} 已连接。",
+        "denied": "由于登录已取消，{provider} 未连接。",
+        "failed": "无法连接 {provider}。请重试。",
+        "expired": "该登录耗时过长。请再次点击连接。",
+        "not_configured": "{provider} 尚未为此平台配置。",
+        "notYours": "该登录由其他人发起，因此未连接任何内容。"
+      },
+      "confirming": "正在完成连接...",
+      "disconnected": "{provider} 已断开连接。",
+      "disconnectTitle": "断开 {provider} 的连接？",
+      "disconnectBody": "已有 {provider} 链接的会议会保留该链接，但移动或删除这些会议将不再更改会议室。您可以随时重新连接。",
+      "disconnectConfirm": "断开连接",
+      "keep": "保持连接",
+      "calendarNote": "通过您的日历生成的 Google Meet 和 Teams 链接无需在此连接：它们使用您的工作区已连接的日历。",
+      "notAvailable": "您的平台运营方尚未提供 {provider}：它还需要配置并在应用市场中发布。目前没有可安装的内容，请让平台运营方将其开启。",
+      "installedHint": "您的工作区已安装 {provider}。连接您自己的账户，即可为会议添加 {provider} 链接。"
+    },
+    "operator": {
+      "title": "视频会议设置",
+      "ready": "就绪",
+      "missing": "{count, plural, other {缺少 # 个步骤}}",
+      "loadFailed": "无法加载设置清单。",
+      "fake": "开发模式：已绑定模拟的 Zoom 和 Microsoft Teams 适配器，因此无需真实账户也能连接。下方清单显示真实平台还需要什么。",
+      "intro": {
+        "zoom": "在设置 Zoom 应用凭据并发布此上架信息之前，工作区无法看到或使用 Zoom。",
+        "teams": "在 Microsoft 应用可用并发布此上架信息之前，工作区无法看到或使用 Microsoft Teams。"
+      },
+      "set": "已设置",
+      "notSet": "未设置",
+      "credentials": {
+        "zoom": {
+          "label": "Zoom 应用凭据（环境值）"
+        },
+        "teams": {
+          "label": "Microsoft 应用凭据"
+        }
+      },
+      "teamsFallback": "两者都已设置时，Teams 使用上方自己的值，否则使用控制台中保存的 Microsoft 日历应用。",
+      "source": {
+        "environment": "这些值来自环境。",
+        "console": "这些值来自控制台的 Microsoft 日历页面。"
+      },
+      "switchedOff": "控制台中已关闭 Microsoft 日历集成，Teams 也会随之关闭。",
+      "redirect": {
+        "label": "需要在提供方处注册的重定向地址",
+        "hint": {
+          "zoom": "请将此地址原样添加为 Zoom 应用的重定向 URL。",
+          "teams": "请将此地址原样添加为 Microsoft 应用的重定向 URI，与日历的重定向 URI 并列，并添加委托权限 OnlineMeetings.ReadWrite。"
+        }
+      },
+      "listing": {
+        "label": "应用市场上架信息已发布",
+        "missing": "目录中不存在该上架信息。",
+        "notPublished": "该上架信息尚未发布（状态：{status}）。请在下方批准并发布一个版本，之后工作区即可安装。",
+        "published": "已发布：工作区可以找到并安装。"
+      }
+    }
+  }
+}

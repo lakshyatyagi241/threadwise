@@ -19,7 +19,9 @@ import {
 import { SendWindowService } from '../compliance-center';
 import { ConsentGate } from '../contact-consent';
 import { ContactsRepository } from '../crm';
+import { kindOfButton } from '../../infra/providers/whatsapp/template-vocab';
 import { TemplatesRepository, tokensOf } from '../message-templates';
+import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import {
   digitsOf,
   outcomeOfCode,
@@ -30,7 +32,7 @@ import {
 } from './appointment-reminder.rules';
 
 /** The ConsentGate's channel name for each channel a booking message can use (the Cloud API is the only WhatsApp that has templates). */
-const CONSENT_CHANNEL = { whatsapp: 'whatsapp_cloud', sms: 'sms', email: 'email' } as const;
+const CONSENT_CHANNEL = { whatsapp: 'whatsapp_cloud', email: 'email' } as const;
 const DAY_MS = 24 * 3_600_000;
 /** A reminder is not pushed by quiet hours to within this long of the booking's start: it would arrive as the person walks in. */
 const LATE_MARGIN_MS = 5 * 60_000;
@@ -44,7 +46,7 @@ export function uuidOfKey(key: string): string {
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-4${h.slice(13, 16)}-${variant}${h.slice(18, 20)}-${h.slice(20, 32)}`;
 }
 
-/** What an SMS or email engine says when it cannot send, as an outcome; the engines throw the operator's sentence. */
+/** What the email engine says when it cannot send, as an outcome; the engine throws the operator's sentence. */
 export function outcomeOfEngineError(err: unknown): ChannelOutcome {
   if (err instanceof SenderThrottled) return { status: 'held', reason: 'channel_unavailable' };
   const message = err instanceof Error ? err.message : '';
@@ -86,15 +88,15 @@ const toResult = (o: ChannelOutcome, until?: string): BookingMessageResult => {
  *    checks the connection, the plan's cap, the wallet and the emergency halt again at send time. The Cloud API only allows free text
  *    inside the 24 hour window, so outside it the message needs an approved template; without one WhatsApp is skipped (the run then
  *    falls to its next channel). A QR (unofficial) number sends text anywhere.
- *  - SMS and email go through the engines the broadcast screens use (`EngineSenderRegistry`), which enforce the sender's connection and
- *    the plan's cap and, for email, the bounce list.
+ *  - Email goes through the engine the broadcast screens use (`EngineSenderRegistry`), which enforces the sender's connection and the
+ *    plan's cap and the bounce list. SMS is not a channel of appointment messages (DLT and per-country rules make it unreliable).
  *
  * Before anything is delivered, in this order: the address exists, the quiet hours (reminders and follow-ups only: HOLD, never deny, and a
  * reminder they would push past the booking is skipped instead), and the ConsentGate (withdrawn consent, do-not-call, minors). A
  * confirmation or cancellation is a service message the person asked for and is not held by quiet hours.
  *
- * Idempotent on `idempotencyKey` for WhatsApp (the conversation ledger returns the first message for a repeat). SMS and email have no
- * key at the engines, so the caller never retries a delivery that was interrupted. The message text and the address never reach a result, a run or the timeline; a
+ * Idempotent on `idempotencyKey` for WhatsApp (the conversation ledger returns the first message for a repeat). Email has no key at the
+ * engine, so the caller never retries a delivery that was interrupted. The message text and the address never reach a result, a run or the timeline; a
  * provider's own error sentence goes to the log's error field only.
  */
 @Injectable()
@@ -110,6 +112,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     private readonly channels: ChannelsFacade,
     private readonly engines: EngineSenderRegistry,
     private readonly templates: TemplatesRepository,
+    private readonly channelSettings: AppointmentChannelsRepository,
     @Inject(CONVERSATIONS_FACADE) private readonly conversations: ConversationsFacade,
   ) {}
 
@@ -127,10 +130,16 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
   }
 
   private async attempt(m: BookingMessage): Promise<ChannelOutcome> {
-    if (m.channel !== 'whatsapp' && m.channel !== 'sms' && m.channel !== 'email') {
+    if (m.channel !== 'whatsapp' && m.channel !== 'email') {
       return { status: 'skipped', reason: 'no_channel' };
     }
     const channel = m.channel;
+    // The workspace owner decides which channels carry appointment messages (BL-350). Asked here, at send time, so switching a channel
+    // off also stops what was scheduled before; the run then falls to its next channel.
+    const gate = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
+      this.channelSettings.gate(tx, m.orgId, channel),
+    );
+    if (!gate.enabled) return { status: 'skipped', reason: 'channel_disabled' };
     const phone = digitsOf(m.to.phone);
     if (channel === 'email' ? !m.to.email : phone === '') {
       return { status: 'skipped', reason: 'no_contact_point' };
@@ -144,8 +153,20 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
       return { status: 'skipped', reason: 'no_contact_point' };
 
     // Prepare first (it finds the sender and the template), so the quiet hours and the gate are asked about what will really be sent.
-    const prepared = await this.prepare(m, channel, phone, contact?.uuid ?? null);
+    const prepared = await this.prepare(
+      m,
+      channel,
+      phone,
+      contact?.uuid ?? null,
+      gate.defaultSenderId,
+    );
     if (prepared.kind === 'refused') return prepared.outcome;
+
+    // A test to a staff member's own mailbox is not a message to a customer: no quiet hours, no consent to ask.
+    if (m.isTest) {
+      if (channel !== 'email') return { status: 'skipped', reason: 'no_channel' };
+      return prepared.deliver();
+    }
 
     const quiet = await this.quietHours(m, contact?.id ?? null, phone);
     if (quiet) return quiet;
@@ -176,7 +197,10 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     contactId: number | null,
     phone: string,
   ): Promise<ChannelOutcome | null> {
-    if (m.event !== 'reminder' && m.event !== 'follow_up') return null;
+    // A confirmation, a cancellation and a reschedule notice are service messages the person asked for; everything else waits.
+    if (m.event === 'confirmation' || m.event === 'cancellation' || m.event === 'reschedule') {
+      return null;
+    }
     const decision = await this.sendWindow.check(m.orgId, 'message', {
       contactId,
       phone: phone || null,
@@ -196,53 +220,25 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
 
   private async prepare(
     m: BookingMessage,
-    channel: 'whatsapp' | 'sms' | 'email',
+    channel: 'whatsapp' | 'email',
     phone: string,
     contactUuid: string | null,
+    preferredSenderId: number | null,
   ): Promise<
     | { kind: 'refused'; outcome: ChannelOutcome }
     | { kind: 'ready'; purpose: PurposeInput; deliver: () => Promise<ChannelOutcome> }
   > {
     const fallbackPurpose: PurposeInput =
       m.purpose === 'follow_up' ? 'marketing_messaging' : 'service_messaging';
-    if (channel === 'whatsapp') return this.whatsapp(m, contactUuid!, fallbackPurpose);
+    if (channel === 'whatsapp') {
+      return this.whatsapp(m, contactUuid!, fallbackPurpose, preferredSenderId);
+    }
 
     const engine = this.engines.get(channel);
     if (!engine) return refused({ status: 'skipped', reason: 'no_sender' });
 
-    if (channel === 'sms') {
-      const sender = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
-        this.smsSender(tx, m.orgId),
-      );
-      if (!sender) return refused({ status: 'skipped', reason: 'no_sender' });
-      return {
-        kind: 'ready',
-        purpose: fallbackPurpose,
-        deliver: async () => {
-          try {
-            const opened = await engine.open(m.orgId, {
-              engine: 'sms',
-              id: sender.id,
-              phoneDigits: sender.phoneDigits,
-              label: sender.label,
-            });
-            if (!opened.sendText) return { status: 'failed', reason: 'provider_error' };
-            await opened.sendText({
-              to: phone,
-              text: m.body,
-              clientReference: `appt-msg-${uuidOfKey(m.idempotencyKey).slice(0, 18)}`,
-              screen: { bulk: false, source: 'appointment' },
-            });
-            return { status: 'sent' };
-          } catch (err) {
-            return outcomeOfEngineError(err);
-          }
-        },
-      };
-    }
-
     const mailbox = await this.db.txAs({ orgId: m.orgId, userId: null }, (tx) =>
-      this.mailbox(tx, m.orgId),
+      this.mailbox(tx, m.orgId, preferredSenderId),
     );
     if (!mailbox) return refused({ status: 'skipped', reason: 'no_sender' });
     return {
@@ -276,6 +272,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     m: BookingMessage,
     contactUuid: string,
     fallbackPurpose: PurposeInput,
+    preferredSenderId: number | null,
   ): Promise<
     | { kind: 'refused'; outcome: ChannelOutcome }
     | { kind: 'ready'; purpose: PurposeInput; deliver: () => Promise<ChannelOutcome> }
@@ -333,6 +330,12 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
         );
         // The template's own category decides the purpose: a marketing-category template is gated as marketing whatever the booking
         // says, so a reminder cannot borrow the service purpose to send marketing content.
+        const components = quickReplyComponents(
+          tpl.buttons,
+          tokens,
+          variables,
+          m.quickReplyPayloads,
+        );
         return {
           kind: 'ready',
           purpose,
@@ -347,6 +350,7 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
                 (whole: string, t: string) => variables[t] ?? whole,
               ),
               templateId: tpl.id,
+              ...(components ? { components } : {}),
             }),
         };
       }
@@ -357,7 +361,10 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     }
 
     // Free text: allowed inside the 24 hour window on the Cloud API, anywhere on a QR number.
-    const cloudChannel = found.cloud.find((c) => c.status === 'connected');
+    // The owner's default number first, then any other connected Cloud API number.
+    const cloudChannel =
+      found.cloud.find((c) => c.status === 'connected' && c.wabaConfigId === preferredSenderId) ??
+      found.cloud.find((c) => c.status === 'connected');
     if (cloudChannel) {
       const open = await this.windowOpen(m, contactUuid, cloudChannel.uuid);
       if (open) {
@@ -432,37 +439,19 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     }
   }
 
-  // --- the sender directory (the same tables the broadcast screens read) ------------------------------------------------------
-
-  private async smsSender(
-    tx: Tx,
-    orgId: number,
-  ): Promise<{ id: number; label: string; phoneDigits: string } | undefined> {
-    const res = await tx.execute(sql`
-      SELECT id, phone_number, coalesce(nullif(display_label, ''), phone_number) AS label
-      FROM wa_provider_configs
-      WHERE org_id = ${orgId} AND provider = 'sms' AND status = 'connected'
-      ORDER BY is_primary DESC, id LIMIT 1`);
-    const r = res.rows[0] as Raw | undefined;
-    return r
-      ? {
-          id: Number(r.id),
-          label: (r.label as string | null) ?? '',
-          phoneDigits: String(r.phone_number ?? '').replace(/\D/g, ''),
-        }
-      : undefined;
-  }
+  // --- the sender directory (the same table the broadcast screens read) -------------------------------------------------------
 
   /** Shared mailboxes only: a personal mailbox is one person's address and a system send must never go out from it. */
   private async mailbox(
     tx: Tx,
     orgId: number,
+    preferredId: number | null,
   ): Promise<{ id: number; label: string; address: string } | undefined> {
     const res = await tx.execute(sql`
       SELECT id, address::text AS address, coalesce(nullif(display_name, ''), address::text) AS label
       FROM mail_mailboxes
       WHERE org_id = ${orgId} AND status = 'connected' AND scope = 'shared'
-      ORDER BY created_at, id LIMIT 1`);
+      ORDER BY (id = ${preferredId ?? 0}) DESC, created_at, id LIMIT 1`);
     const r = res.rows[0] as Raw | undefined;
     return r
       ? { id: Number(r.id), label: r.label as string, address: r.address as string }
@@ -471,6 +460,41 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
 }
 
 const refused = (outcome: ChannelOutcome) => ({ kind: 'refused', outcome }) as const;
+
+/**
+ * The component list of a template that has quick-reply buttons: the body values, then each quick-reply button with its payload (a
+ * signed one-time token, in button order). Null when there is nothing to attach (no payloads, or the template has no quick reply): the
+ * message then goes out as a plain template. A payload is never shown to the customer; WhatsApp hands it back when the button is tapped.
+ */
+export function quickReplyComponents(
+  buttons: unknown,
+  tokens: readonly string[],
+  variables: Readonly<Record<string, string>>,
+  payloads: readonly string[] | undefined,
+): Record<string, unknown>[] | null {
+  if (!payloads || payloads.length === 0 || !Array.isArray(buttons)) return null;
+  const indexes: number[] = [];
+  (buttons as unknown[]).forEach((b, i) => {
+    if (kindOfButton(b) === 'quick_reply') indexes.push(i);
+  });
+  if (indexes.length === 0) return null;
+  const components: Record<string, unknown>[] = [];
+  if (tokens.length > 0) {
+    components.push({
+      type: 'body',
+      parameters: tokens.map((t) => ({ type: 'text', text: variables[t] ?? '-' })),
+    });
+  }
+  indexes.slice(0, payloads.length).forEach((buttonIndex, j) => {
+    components.push({
+      type: 'button',
+      sub_type: 'quick_reply',
+      index: buttonIndex,
+      parameters: [{ type: 'payload', payload: payloads[j] }],
+    });
+  });
+  return components;
+}
 
 /** The buttons of a template that carry a variable in their link (they need a value this cannot supply). */
 function dynamicButtons(buttons: unknown): number {

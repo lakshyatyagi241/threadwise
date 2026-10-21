@@ -47,7 +47,8 @@
       "sms_monthly": "SMS mỗi tháng",
       "email_mailboxes": "Hộp thư email",
       "email_monthly": "Email mỗi tháng",
-      "storage_gb": "Dung lượng lưu trữ (GB)"
+      "storage_gb": "Dung lượng lưu trữ (GB)",
+      "teams": "Nhóm"
     },
     "features": {
       "automation": "Tự động hóa",
@@ -85,7 +86,10 @@
       "personal_history_full": "Nhập toàn bộ lịch sử (WhatsApp cá nhân)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "Chấm điểm khách hàng tiềm năng bằng AI",
-      "record_assignment": "Quy tắc phân công bản ghi"
+      "record_assignment": "Quy tắc phân công bản ghi",
+      "team_hierarchy": "Phân cấp nhóm và quản lý",
+      "custom_roles": "Vai trò tùy chỉnh và phạm vi",
+      "inbox_assignment_sticky": "Chủ sở hữu liên hệ và nhân viên cố định"
     },
     "limitGroups": {
       "messaging": "Nhắn tin",
@@ -139,7 +143,8 @@
       "sms_monthly": "Số tin nhắn SMS gửi đi trong tháng dương lịch. 0 = không giới hạn.",
       "email_mailboxes": "Số hộp thư Gmail đã kết nối (hộp thư ngắt kết nối sẽ giải phóng chỗ). 0 = không giới hạn.",
       "email_monthly": "Số email gửi đi trong tháng dương lịch, gồm cả thư trả lời và email chiến dịch. 0 = không giới hạn.",
-      "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả."
+      "storage_gb": "Dung lượng lưu trữ mà không gian làm việc được giữ, tính bằng GB (bản ghi cuộc gọi, phương tiện trò chuyện, tệp đính kèm email và tệp). 0 = không giới hạn. Hiện chỉ đo lường: chưa chặn gì cả.",
+      "teams": "Số nhóm mà không gian làm việc được phép có. Để trống là không giới hạn, 0 là dùng một mình (không có nhóm). Các nhóm hiện có không bao giờ bị xóa."
     },
     "planAddons": {
       "title": "Tiện ích bổ sung có trong gói của bạn",
@@ -304,7 +309,10 @@
       "showUnlimited": "{count, plural, other {Hiện # giới hạn không giới hạn}}",
       "hideUnlimited": "Ẩn giới hạn không giới hạn",
       "groupCount": "{count, plural, other {# giới hạn}}",
-      "groupHidden": "{count, plural, other {# giới hạn khác không giới hạn và đang bị ẩn.}}"
+      "groupHidden": "{count, plural, other {# giới hạn khác không giới hạn và đang bị ẩn.}}",
+      "activatedOn": "Kích hoạt vào {date}",
+      "previousBilling": "Ngày thanh toán trước đó: {date}",
+      "subscriptionId": "Mã đăng ký: {id}"
     },
     "operator": {
       "title": "Gói của không gian làm việc",

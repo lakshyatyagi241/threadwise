@@ -164,7 +164,12 @@
       "change": "Change",
       "terms": "By paying you agree to our <terms>Terms</terms> and <privacy>Privacy policy</privacy>.",
       "refundNote": "Not happy? Email us in the first {days} days and we refund the full amount — no questions, no forms.",
-      "autoRenewTitle": "Auto-renew this plan"
+      "autoRenewTitle": "Auto-renew this plan",
+      "amountSubtitle": "Enter how much you want to add. You will see the final price and the payment methods next.",
+      "amountLabel": "Amount to add",
+      "amountHint": "Digits only, for example 1000 or 250.50.",
+      "amountInvalid": "Enter an amount above zero, such as 500 or 250.50.",
+      "amountContinue": "Continue"
     },
     "orders": {
       "title": "Order history",

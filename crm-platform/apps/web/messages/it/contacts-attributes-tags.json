@@ -130,6 +130,7 @@
       "colLeadScore": "Punteggio lead",
       "colLanguage": "Lingua",
       "colCreatedOn": "Creato il",
+      "colModifiedOn": "Modificato il",
       "pagination": "Paginazione",
       "prevPage": "Pagina precedente",
       "nextPage": "Pagina successiva",
@@ -282,6 +283,7 @@
       "shortStage": "Fase",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Creato",
+      "shortModified": "Modificato",
       "firstRun": {
         "title": "Aggiungi i tuoi primi contatti",
         "message": "Porta dentro le persone con cui parli. I contatti servono per messaggi, campagne, attività e trattative.",
@@ -290,7 +292,11 @@
         "importBody": "Carica un foglio di calcolo e abbina le sue colonne ai campi del contatto.",
         "connect": "Collega WhatsApp",
         "connectBody": "Collega il tuo numero, così i contatti possono rispondere e tu puoi scrivere loro."
-      }
+      },
+      "teamLabel": "Team",
+      "teamFilter": "Filtra per team",
+      "allTeams": "Tutti i team",
+      "teamFormer": "Team precedente"
     },
     "bulk": {
       "label": "Azioni per i contatti selezionati",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Il tuo accesso non ti consente di assegnare questo contatto a quella persona.",
       "company": "Azienda",
       "companyHint": "Raggruppa questo contatto sotto un’organizzazione.",
-      "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo."
+      "companyRefused": "Non puoi usare quell’azienda. Scegline un’altra o svuota il campo.",
+      "searchOptions": "Cerca opzioni",
+      "searchOptionsFor": "Cerca tra le opzioni di {field}",
+      "noOptionsFound": "Nessuna opzione corrisponde alla ricerca."
     },
     "tags": {
       "title": "Tag",
@@ -1225,7 +1234,8 @@
             "duplicate": "Due opzioni hanno lo stesso nome."
           },
           "condition": "Scegli la proprietà e il valore per ogni condizione."
-        }
+        },
+        "optionsLazy": "Questa proprietà ha {count, plural, one {# opzione} other {# opzioni}}, troppe per modificarle qui. Restano invariate; le altre impostazioni si possono modificare."
       },
       "builtinCard": {
         "title": "Proprietà integrate",

@@ -46,7 +46,9 @@
       "catchUp": "Sinkronkan",
       "migrateHint": "Migrasi diawali gladi penuh dan tidak memuat apa pun jika gladi tidak bersih. Uji coba terpisah bersifat opsional.",
       "queued": "Proses masuk antrean.",
-      "scheduled": "Proses dijadwalkan."
+      "scheduled": "Proses dijadwalkan.",
+      "skipWhatsapp": "Jangan migrasikan nomor WhatsApp (untuk pengujian)",
+      "skipWhatsappHint": "Ruang kerja dimigrasikan sepenuhnya, tetapi nomor WhatsApp-nya tidak diimpor atau dihubungkan."
     },
     "confirm": {
       "title": "Migrasikan {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "Migrasikan semua",
       "migrateHint": "Setiap organisasi diawali gladi penuh sendiri dan tidak memuat apa pun jika gladi tidak bersih. Uji coba terpisah bersifat opsional.",
       "queued": "Batch masuk antrean.",
-      "scheduled": "Batch dijadwalkan."
+      "scheduled": "Batch dijadwalkan.",
+      "skipWhatsapp": "Jangan migrasikan nomor WhatsApp (untuk pengujian)",
+      "skipWhatsappHint": "Tidak ada nomor WhatsApp dari ruang kerja ini yang diimpor atau dihubungkan."
     },
     "bulkConfirm": {
       "title": "Migrasikan {count} organisasi",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "Uji coba",
       "load": "Migrasi",
-      "catchup": "Sinkronisasi"
+      "catchup": "Sinkronisasi",
+      "skipWhatsapp": "Tanpa nomor WhatsApp"
     },
     "status": {
       "queued": "Mengantre",
@@ -196,7 +201,8 @@
       "core-load": "Pemuatan inti",
       "flow-state": "Status alur",
       "reconcile": "Rekonsiliasi",
-      "report": "Laporan"
+      "report": "Laporan",
+      "whatsapp": "Nomor WhatsApp"
     },
     "stepStatus": {
       "running": "Berjalan",

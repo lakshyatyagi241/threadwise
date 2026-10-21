@@ -40,6 +40,19 @@ export interface SourceIndex {
   deletedFieldIds: Set<string>;
   /** option id -> label, for the subscription-status and lifecycle properties only. */
   optionLabel: Map<string, string>;
+  /**
+   * The same options per property name (`whatsapp_subscription_status` ...): an option id that two properties use for different labels
+   * (a short sequential id, "1") must read as the label of the property it was chosen in. Optional so a hand-built index still works.
+   */
+  optionLabelByField?: Map<string, Map<string, string>>;
+  /**
+   * EVERY live property's options by property name: option id (either key) -> the option's value and label. A contact stores the option ID
+   * of a dropdown / radio / checkbox property; the app stores the option VALUE (field_options.value = value, else label), so the contacts
+   * loader translates with this. Optional so a hand-built index still works.
+   */
+  optionsByField?: Map<string, Map<string, { value: string; label: string }>>;
+  /** Waboo user id (either key) -> display name: Created By / Updated By of a contact hold a user id; Desk shows the name. */
+  userNames?: Map<string, string>;
   stageByKey: Map<string, StageEntry>;
   stageByLabel: Map<string, StageEntry>;
   stages: StageEntry[];
@@ -89,6 +102,9 @@ export async function buildIndex(
     declaredKeys: new Set(),
     deletedFieldIds: new Set(),
     optionLabel: new Map(),
+    optionLabelByField: new Map(),
+    optionsByField: new Map(),
+    userNames: new Map(),
     stageByKey: new Map(),
     stageByLabel: new Map(),
     stages: [],
@@ -118,13 +134,34 @@ export async function buildIndex(
       if (SUB_FIELDS.has(name) || str(f.lifecycle_type)) keys.forEach((k) => wantedParents.add(k));
     }
   }
-  if (wantedParents.size > 0) {
+  {
     for (const o of await all(source, client, 'contact_properties_field_options')) {
       const parent = str(o.parent_id);
       const label = str(o.label) ?? str(o.value);
+      if (parent && label && !idx.deletedFieldIds.has(parent)) {
+        const pname = str(idx.fieldsById.get(parent)?.name);
+        if (pname) {
+          const m = idx.optionsByField!.get(pname) ?? new Map<string, { value: string; label: string }>();
+          idx.optionsByField!.set(pname, m);
+          for (const k of docKeys(o)) m.set(k.key, { value: str(o.value) ?? label, label });
+        }
+      }
       if (!parent || !wantedParents.has(parent) || !label) continue;
-      docKeys(o).forEach((k) => idx.optionLabel.set(k.key, label));
+      const owner = str(idx.fieldsById.get(parent)?.name);
+      const own = owner ? (idx.optionLabelByField!.get(owner) ?? new Map<string, string>()) : null;
+      if (owner && own) idx.optionLabelByField!.set(owner, own);
+      docKeys(o).forEach((k) => {
+        idx.optionLabel.set(k.key, label);
+        own?.set(k.key, label);
+      });
     }
+  }
+
+  for (const u of await all(source, client, 'user')) {
+    const name = [str(u.first_name), str(u.last_name)].filter(Boolean).join(' ') || str(u.username) || str(u.email);
+    if (!name) continue;
+    for (const k of [str(u.user_id), str(u._id), str(u.id)]) if (k) idx.userNames!.set(k, name);
+    for (const k of docKeys(u)) idx.userNames!.set(k.key, name);
   }
 
   // lifecycle stages and statuses: unique slug per kind, one default per scope

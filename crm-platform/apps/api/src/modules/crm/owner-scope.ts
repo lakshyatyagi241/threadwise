@@ -1,5 +1,5 @@
 import { HttpStatus } from '@nestjs/common';
-import { ERROR_CODES, type RecordScope } from '@crm/contracts';
+import { ERROR_CODES, isTeamScope, type RecordScope } from '@crm/contracts';
 import { AppError } from '../../common/errors/app-error';
 
 /**
@@ -9,6 +9,7 @@ import { AppError } from '../../common/errors/app-error';
  *
  *  - `all`:  anyone in the workspace (the caller has already checked the target is an active member).
  *  - `team`: the caller or a user who shares a team with them; nobody (null) would hide the record, so it is refused.
+ *  - `team_and_below`: the same, and a user in a team under one of the caller's teams (`inActorTeam` gets `below = true`).
  *  - `own`:  only the caller; nobody (null) is refused for the same reason.
  *
  * Callers invoke it only when the owner/assignee CHANGES (keeping the current one is always allowed) and pass the scope
@@ -18,13 +19,18 @@ export async function assertOwnerWithinScope(args: {
   scope: RecordScope;
   actorUserId: number | null | undefined;
   nextOwnerId: number | null;
-  inActorTeam: (userId: number) => Promise<boolean>;
+  inActorTeam: (userId: number, below: boolean) => Promise<boolean>;
   path: 'ownerId' | 'assigneeId';
 }): Promise<void> {
   const { scope, actorUserId, nextOwnerId, inActorTeam, path } = args;
   if (scope === 'all' || !actorUserId) return;
   if (nextOwnerId === actorUserId) return;
-  if (scope === 'team' && nextOwnerId !== null && (await inActorTeam(nextOwnerId))) return;
+  if (
+    isTeamScope(scope) &&
+    nextOwnerId !== null &&
+    (await inActorTeam(nextOwnerId, scope === 'team_and_below'))
+  )
+    return;
   throw new AppError(
     ERROR_CODES.FORBIDDEN,
     'Your record scope does not allow assigning this record to that user.',

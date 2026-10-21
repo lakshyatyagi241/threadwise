@@ -3,7 +3,7 @@
     "back": "Tự động hóa",
     "title": "Quy tắc phân công bản ghi",
     "intro": "Tự động giao {contacts}, công ty và {deals} mới cho đúng người phụ trách bán hàng.",
-    "crossNote": "Mục này phân công {contacts}, công ty và {deals}. Để phân công cuộc trò chuyện cho nhân viên, xem <link>Tự động phân công</link>.",
+    "crossNote": "Mục này phân công {contacts}, công ty và {deals}. Để phân công cuộc trò chuyện cho nhân viên, xem <link>Tự động phân công cuộc trò chuyện</link>.",
     "master": {
       "title": "Bật phân công bản ghi",
       "hint": "Tắt cho đến khi bạn bật. Khi bật, các quy tắc bên dưới sẽ giao {contact}, công ty hoặc {deal} mới chưa có người phụ trách cho một thành viên trong nhóm của bạn.",
@@ -233,7 +233,14 @@
         "nobody": "Khớp, nhưng không có ai sẵn sàng",
         "broken": "Có điều kiện bị lỗi"
       },
-      "skipped": "Bị bỏ qua vì không có ai sẵn sàng: {names}"
+      "skipped": "Bị bỏ qua vì không có ai sẵn sàng: {names}",
+      "excluded": {
+        "label": "Bị loại",
+        "no_access": "{name}: không thể mở loại bản ghi này",
+        "inactive": "{name}: không còn hoạt động",
+        "on_leave": "{name}: nghỉ phép hôm nay",
+        "offline": "{name}: ngoại tuyến"
+      }
     },
     "log": {
       "title": "Nhật ký chạy",
@@ -296,6 +303,7 @@
       "message": "Quy tắc {name} sẽ ngừng phân công. Các bản ghi đã được phân công vẫn giữ nguyên người phụ trách.",
       "confirm": "Xóa",
       "cancel": "Hủy"
-    }
+    },
+    "dismiss": "Bỏ qua"
   }
 }

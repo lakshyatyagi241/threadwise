@@ -17,10 +17,14 @@ export interface TaskFilters {
   priority: TaskPriority | '';
   /** A member id, `none` for unassigned, or empty for everyone. */
   assignee: string;
+  /** The owning team (a team uuid) or empty for every team. */
+  team: string;
   /** Linked contact / deal / company (a uuid) or empty. */
   contact: string;
   deal: string;
   company: string;
+  /** A task outcome (a uuid) or empty for any. */
+  outcome: string;
   view: TasksView;
   /** The task whose drawer is open (`?task=`). */
   task: string;
@@ -32,9 +36,11 @@ export const DEFAULT_FILTERS: TaskFilters = {
   status: 'open',
   priority: '',
   assignee: '',
+  team: '',
   contact: '',
   deal: '',
   company: '',
+  outcome: '',
   view: 'list',
   task: '',
 };
@@ -62,9 +68,11 @@ export function parseFilters(search: SearchLike): TaskFilters {
       ? (priority as TaskPriority)
       : '',
     assignee: assignee === 'none' || UUID.test(assignee) ? assignee : '',
+    team: id(search.get('team')),
     contact: id(search.get('contact')),
     deal: id(search.get('deal')),
     company: id(search.get('company')),
+    outcome: id(search.get('outcome')),
     view: search.get('view') === 'board' ? 'board' : 'list',
     task: id(search.get('task')),
   };
@@ -78,9 +86,11 @@ export function filtersToSearch(f: TaskFilters): string {
   if (f.tab === 'all' && f.status !== 'open') p.set('status', f.status);
   if (f.priority) p.set('priority', f.priority);
   if (f.assignee) p.set('assignee', f.assignee);
+  if (f.team) p.set('team', f.team);
   if (f.contact) p.set('contact', f.contact);
   if (f.deal) p.set('deal', f.deal);
   if (f.company) p.set('company', f.company);
+  if (f.outcome) p.set('outcome', f.outcome);
   if (f.view === 'board') p.set('view', 'board');
   if (f.task) p.set('task', f.task);
   const s = p.toString();
@@ -89,7 +99,11 @@ export function filtersToSearch(f: TaskFilters): string {
 
 /** Anything the toolbar narrowed (the tab and the view do not count). */
 export function hasActiveFilter(
-  f: Pick<TaskFilters, 'q' | 'priority' | 'assignee' | 'contact' | 'deal' | 'company'> & {
+  f: Pick<
+    TaskFilters,
+    'q' | 'priority' | 'assignee' | 'contact' | 'deal' | 'company' | 'outcome'
+  > & {
+    team?: string;
     status?: StatusFilter;
     tab?: TaskTab;
   },
@@ -98,9 +112,11 @@ export function hasActiveFilter(
     f.q.trim() !== '' ||
     f.priority !== '' ||
     f.assignee !== '' ||
+    (f.team ?? '') !== '' ||
     f.contact !== '' ||
     f.deal !== '' ||
     f.company !== '' ||
+    f.outcome !== '' ||
     (f.tab === 'all' && f.status !== undefined && f.status !== 'open')
   );
 }
@@ -114,9 +130,11 @@ export function sharedQuery(f: TaskFilters): QueryValues {
     priority: f.priority || undefined,
     assigneeId: f.assignee && f.assignee !== 'none' ? f.assignee : undefined,
     unassigned: f.assignee === 'none' ? true : undefined,
+    teamId: f.team || undefined,
     contactId: f.contact || undefined,
     dealId: f.deal || undefined,
     companyId: f.company || undefined,
+    outcomeId: f.outcome || undefined,
   };
 }
 

@@ -5,7 +5,8 @@
  *   node pipeline.cjs [--client <key>] --db <waboo database name> --mode dry|load|catchup [--name "Org name"]
  *
  *   dry      export (fresh), ship, preflight, dry run (rolled back, nothing written), stop. Safe to repeat.
- *   load     ship, preflight, a fresh dry run, backup, load, files, core-load (plan, wallet, subscription), wallet-sync, flow-state, reconcile, report.
+ *   load     ship, preflight, a fresh dry run, backup, load, files, core-load (plan, wallet, subscription), wallet-sync, flow-state, reconcile,
+ *            whatsapp (the Meta token of the migrated number is imported and the number connected; --no-whatsapp leaves it out), report.
  *   catchup  an ALREADY-loaded client whose live data moved on: forced export, ship, preflight, dry run, backup, load (new rows only, credits
  *            skipped), update (edits since the load), files, core-load, wallet-sync, reconcile, report. Needs the client's config (refuses a
  *            client that was never loaded); never touches the channel map; never publishes flows again.
@@ -21,7 +22,7 @@
  * (wa-numbers.cjs: the real WhatsApp phone number id, display number and name, keyed by the botid of the chats): organization name, slug, plan
  * facts, wallet opening balance, channel map. Only the owner e-mail stays a placeholder; the WhatsApp number falls back to a placeholder, with a
  * WARNING in the summary, when the source holds no live number. A client that already has rows on staging never gets a new channel map.
- * WhatsApp is never connected here and Waboo is never written to.
+ * Waboo is never written to. In load mode the migrated WhatsApp number is imported and connected (see 'whatsapp' above).
  */
 'use strict';
 const fs = require('fs');
@@ -67,16 +68,6 @@ const warn = (m) => {
   process.stderr.write(`WARNING: ${m}\n`);
   if (preNotes.length < 5) preNotes.push(m.slice(0, 200));
 };
-
-/**
- * The mailbox name of the placeholder owner. `new-client` refuses any plain run of 32+ characters as a possible secret, and a client key (a
- * name plus Waboo's random suffix) is often longer, so a long key is cut to its first 14 characters plus 6 hex characters of a hash of the
- * WHOLE key: two different keys never share a mailbox because they happen to share their first and last characters.
- */
-const ownerLocal = (slug) =>
-  slug.length <= 20
-    ? slug
-    : `${slug.slice(0, 14)}-${require('crypto').createHash('sha1').update(slug).digest('hex').slice(0, 6)}`;
 
 /** a new client: derive the config from geta_core (read-only) instead of asking a person for it */
 function ensureConfig() {
@@ -144,10 +135,6 @@ function ensureConfig() {
       orgName,
       '--slug',
       slug,
-      '--owner-email',
-      `owner-${ownerLocal(slug)}@desk.wabo.ai`,
-      '--owner-name',
-      `${orgName} Owner`,
       ...(realMap ? ['--channel-map-file', waFile] : []),
     ],
     { encoding: 'utf8', timeout: 60000 },
@@ -175,6 +162,7 @@ const PANEL_STEPS = [
   'flow-state',
   'reconcile',
   'report',
+  'whatsapp',
 ];
 const ORDER = [
   'export',
@@ -186,8 +174,16 @@ const ORDER = [
   'flow-state',
   'reconcile',
   'report',
+  'whatsapp',
 ].filter((n) => PANEL_STEPS.includes(n));
-const EVENT_OF = { ship: 'preflight', init: 'preflight', complete: 'report' };
+// the WhatsApp number is two cycle steps (token import, cutover) shown as one panel step: it is done when the cutover is
+const EVENT_OF = {
+  ship: 'preflight',
+  init: 'preflight',
+  complete: 'report',
+  'wa-credentials': 'whatsapp',
+  'wa-cutover': 'whatsapp',
+};
 
 const problem = ensureConfig();
 if (problem) fail(problem);
@@ -203,13 +199,17 @@ const args = [
 ];
 if (mode === 'dry') args.push('--force-export', '--stop-after', 'dry');
 if (mode === 'catchup') args.push('--catch-up');
-// catch-up never runs flow-state (the flows are already live); the panel list is otherwise the same
+// a load moves the WhatsApp number too: its token is imported and the number is connected (cutover) after the verifier. --no-whatsapp leaves it out.
+if (mode === 'load' && !argv.includes('--no-whatsapp')) args.push('--activate-whatsapp');
+// catch-up never runs flow-state or the WhatsApp steps (already live); the panel list is otherwise the same
 const wanted =
   mode === 'dry'
     ? ORDER.slice(0, ORDER.indexOf('dry') + 1)
     : mode === 'catchup'
-      ? ORDER.filter((n) => n !== 'flow-state')
-      : ORDER;
+      ? ORDER.filter((n) => n !== 'flow-state' && n !== 'whatsapp')
+      : argv.includes('--no-whatsapp')
+        ? ORDER.filter((n) => n !== 'whatsapp')
+        : ORDER;
 
 const done = new Set();
 const markRunning = (n) => {
@@ -239,9 +239,13 @@ child.stdout.on('data', (d) => {
     let m;
     if ((m = line.match(/^migrate: (\S+) (ok|failed|skipped) [\d.]+s/))) {
       const step = EVENT_OF[m[1]] || m[1];
+      // a step the panel does not announce (update, files, wallet-sync ...) that FAILS must still name the failed step in the summary
+      if (m[2] === 'failed' && !wanted.includes(step) && !st.failedStep) st.failedStep = m[1];
       if (!wanted.includes(step)) continue;
       const status = m[2] === 'ok' ? 'done' : m[2];
       if (m[1] === 'ship' && status === 'done') continue; // ship and preflight are one step for the panel
+      if (m[1] === 'wa-credentials' && status === 'done') continue; // the WhatsApp step is done when its cutover is
+      if (m[1] === 'wa-credentials' && status === 'skipped') continue; // wa-cutover reports the skip
       done.add(step);
       emit({ event: 'step', name: step, status, message: '' });
       if (status === 'failed') st.failedStep = step;
@@ -259,7 +263,9 @@ child.stdout.on('data', (d) => {
     } else if ((m = line.match(/^\s*done: org (\d+)/))) {
       st.orgId = Number(m[1]);
     } else if (/WARNING:/.test(line)) {
-      if (st.notes.length < 5) st.notes.push(line.replace(/^\s*WARNING:\s*/, '').slice(0, 200));
+      // the same warning repeats once per step that runs the loader (dry load, load ...): show it once
+      const note = line.replace(/^\s*WARNING:\s*/, '').slice(0, 200);
+      if (st.notes.length < 5 && !st.notes.includes(note)) st.notes.push(note);
     }
   }
 });

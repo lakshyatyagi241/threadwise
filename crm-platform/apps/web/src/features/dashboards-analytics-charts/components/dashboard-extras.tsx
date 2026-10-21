@@ -5,6 +5,9 @@ import { useTranslations } from 'next-intl';
 import type { DashWidgets } from '@crm/contracts';
 import { Card, cn } from '@crm/ui';
 import { compact, followersLabel } from '../lib/format';
+import { useBrandName } from '@/components/shell/brand';
+import { useSession } from '@/features/auth-registration-security/shared/session-context';
+import { QUICK_ACTION_PERMISSION, permitted } from '../card-permissions';
 
 const BASE = 'dashboards-analytics-charts.dashboard';
 const IG_GRADIENT = 'linear-gradient(135deg,#833AB4,#E1306C,#F77737)';
@@ -138,7 +141,7 @@ export const COPILOT_EXAMPLE =
 /** "{brand} Copilot" promo card with the flow counters (TW-DASH-017). */
 export function CopilotCard({ data }: { data: DashWidgets['flows'] }) {
   const t = useTranslations(`${BASE}.copilot`);
-  const brand = useTranslations('common')('appName');
+  const brand = useBrandName();
   const stats = [
     ['flows', data.total],
     ['active', data.active],
@@ -287,11 +290,14 @@ const QUICK_ACTIONS = [
 /** Four shortcut buttons (TW-DASH-020). */
 export function QuickActionsCard() {
   const t = useTranslations(`${BASE}.quickActions`);
+  const session = useSession();
+  // an action whose screen the caller cannot open is not offered (`QUICK_ACTION_PERMISSION`)
+  const actions = QUICK_ACTIONS.filter((a) => permitted(session.permissions, QUICK_ACTION_PERMISSION[a.key]));
   return (
     <Card className="space-y-3" data-testid="card-quick-actions">
       <h2 className="font-serif text-[22px] leading-tight">{t('title')}</h2>
       <div className="grid grid-cols-2 gap-2">
-        {QUICK_ACTIONS.map((a) => {
+        {actions.map((a) => {
           const body = (
             <>
               <span aria-hidden className={cn('mb-2 block size-7 rounded-lg', a.tone)} />

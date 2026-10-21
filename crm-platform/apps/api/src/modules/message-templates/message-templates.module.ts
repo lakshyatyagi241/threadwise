@@ -14,8 +14,10 @@ import { TemplatesService } from './templates.service';
  * outbox services, RBAC, the database and the upload guard (AuthModule) are global too. The number a template is sent through
  * comes from `WabaModule`.
  */
+import { PlatformSettingsModule } from '../platform-settings-branding-storage';
+
 @Module({
-  imports: [WabaModule, PlansCoreModule, AiKeysUsageAdminModule],
+  imports: [WabaModule, PlansCoreModule, AiKeysUsageAdminModule, PlatformSettingsModule],
   controllers: [TemplatesController, TemplateAiController],
   providers: [TemplatesRepository, TemplatesService, TemplateSyncService, TemplateAiService],
   exports: [TemplatesService, TemplateSyncService, TemplatesRepository],

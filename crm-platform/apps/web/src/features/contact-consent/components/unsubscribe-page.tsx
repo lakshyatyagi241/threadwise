@@ -36,6 +36,7 @@ export function UnsubscribePage({ token }: { token: string }) {
     try {
       const res = await fetch(base(token), {
         method: 'POST',
+        signal: AbortSignal.timeout(30_000),
         cache: 'no-store',
         credentials: 'omit',
         headers: { 'Idempotency-Key': crypto.randomUUID() },

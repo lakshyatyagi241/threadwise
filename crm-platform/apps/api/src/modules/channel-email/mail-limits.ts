@@ -3,6 +3,9 @@ import { randomUUID } from 'node:crypto';
 import type { Redis } from 'ioredis';
 import { REDIS_CLIENT } from '../../infra/redis/redis.module';
 import { slidingWindow, type WindowVerdict } from './mail-rate-rules';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('mail_bounced_flag');
 
 /**
  * Redis sliding-window counters and the bounced-address flags of the mail limits (TW-MAIL-032). A sorted set per key holds one entry per
@@ -78,8 +81,13 @@ export class MailLimits {
     if (addresses.length === 0) return [];
     try {
       const values = await this.redis.mget(addresses.map((a) => this.bouncedKey(orgId, a)));
-      return addresses.filter((_, i) => values[i] !== null);
+      return addresses.filter((_, i) => {
+        if (values[i] === null) cache.miss();
+        else cache.hit();
+        return values[i] !== null;
+      });
     } catch (err) {
+      cache.error();
       this.logger.warn({ err: String(err) }, 'mail limits failed open');
       return [];
     }

@@ -35,6 +35,8 @@ export interface OrderRow {
   waPaymentTxnId: string | null;
   metaJson: Record<string, unknown> | null;
   recoveryToken: string | null;
+  /** The tracking token sealed with CryptoService; preferred over the legacy plaintext column. */
+  recoveryTokenEnc: string | null;
   storefrontId: number | null;
   storefrontUuid: string | null;
   storefrontName: string | null;
@@ -75,6 +77,7 @@ interface Raw {
   wa_payment_txn_id: string | null;
   meta_json: Record<string, unknown> | null;
   recovery_token: string | null;
+  recovery_token_enc: string | null;
   storefront_id: number | string | null;
   storefront_uuid: string | null;
   shop_name: string | null;
@@ -91,7 +94,7 @@ export const ORDER_COLUMNS = sql`o.id, o.uuid, o.source, o.status, ${PAYMENT_STA
   o.customer_name, o.customer_phone, o.customer_email, o.customer_address, o.items_json,
   CASE WHEN jsonb_typeof(o.items_json) = 'array' THEN jsonb_array_length(o.items_json) ELSE 0 END AS items_count,
   o.total_minor, o.shipping_minor, o.tax_minor, o.tax_inclusive, o.discount_minor, o.coupon_code, o.currency_code,
-  o.payment_link, o.notes, o.rto_score, o.rto_band, o.wa_payment_status, o.wa_payment_txn_id, o.meta_json, o.recovery_token,
+  o.payment_link, o.notes, o.rto_score, o.rto_band, o.wa_payment_status, o.wa_payment_txn_id, o.meta_json, o.recovery_token, o.recovery_token_enc,
   o.storefront_id, s.uuid AS storefront_uuid, s.shop_name,
   c.uuid AS contact_uuid, i.uuid AS invoice_uuid, so.uuid AS sales_order_uuid,
   o.row_version, o.created_at, to_char(o.created_at AT TIME ZONE 'UTC', ${sql.raw(`'${ISO_MICROS}'`)}) AS created_at_iso, o.updated_at`;
@@ -130,6 +133,7 @@ export const toOrderRow = (r: Raw): OrderRow => ({
   waPaymentTxnId: r.wa_payment_txn_id,
   metaJson: r.meta_json,
   recoveryToken: r.recovery_token,
+  recoveryTokenEnc: r.recovery_token_enc,
   storefrontId: r.storefront_id === null ? null : Number(r.storefront_id),
   storefrontUuid: r.storefront_uuid,
   storefrontName: r.shop_name,

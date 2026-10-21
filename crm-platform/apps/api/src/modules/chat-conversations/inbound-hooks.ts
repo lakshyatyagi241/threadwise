@@ -1,4 +1,6 @@
 import { Injectable, Logger, Optional } from '@nestjs/common';
+import { sql } from 'drizzle-orm';
+import { DatabaseService } from '../../infra/db/database.service';
 import { OrgSuspensionService } from '../auth';
 
 /** A customer's message that was just stored, as a domain that reacts to inbound traffic sees it. Plain data: no row, no provider shape. */
@@ -52,6 +54,12 @@ export interface InboundMessageListener {
    * SKIPPED for an email message; only one that does not answer the customer (routing, translation) sets this.
    */
   readonly runsOnEmail?: true;
+  /**
+   * The listener answers the customer as a bot (a flow, the catalog concierge, a shop): it is skipped while the conversation waits for a
+   * person or is with one (`conversations.handling`, BL-400). The flow's run is not cancelled, it stays parked and answers again when the
+   * conversation is given back to the bot.
+   */
+  readonly bot?: true;
   onStored(
     event: InboundStoredEvent,
     prior: { consumed: boolean },
@@ -74,7 +82,28 @@ export class InboundMessageHooks {
   private readonly logger = new Logger(InboundMessageHooks.name);
   private readonly listeners: InboundMessageListener[] = [];
 
-  constructor(@Optional() private readonly suspension?: OrgSuspensionService) {}
+  constructor(
+    @Optional() private readonly suspension?: OrgSuspensionService,
+    @Optional() private readonly db?: DatabaseService,
+  ) {}
+
+  /** True while a person (or the queue for one) holds the thread: the bot must stay silent. */
+  private async botMuted(event: InboundStoredEvent): Promise<boolean> {
+    if (!this.db) return false;
+    try {
+      const res = await this.db.txAs({ orgId: event.orgId }, (tx) =>
+        tx.execute(
+          sql`SELECT handling FROM conversations WHERE org_id = ${event.orgId} AND id = ${event.conversationId}`,
+        ),
+      );
+      const h = (res as unknown as { rows: Array<{ handling: string | null }> }).rows[0]?.handling;
+      return h === 'waiting' || h === 'with_person';
+    } catch (err) {
+      // Never fail ingest for this: when unsure, the bot answers as it always did.
+      this.logger.warn({ orgId: event.orgId, err }, 'could not read the handling state');
+      return false;
+    }
+  }
 
   register(listener: InboundMessageListener): void {
     if (this.listeners.some((l) => l.name === listener.name)) return;
@@ -95,6 +124,7 @@ export class InboundMessageHooks {
     // never answer, still run (those are the ones marked `runsOnEmail`).
     let halted = false;
     const onEmail = event.channelKind === 'email';
+    const muted = await this.botMuted(event);
     const ordered = [
       ...this.listeners.filter((l) => l.first),
       ...this.listeners.filter((l) => !l.first && !l.after),
@@ -102,6 +132,7 @@ export class InboundMessageHooks {
     ].filter((l) => !onEmail || l.runsOnEmail);
     for (const l of ordered) {
       if (halted && !l.runsOnEmail) continue;
+      if (muted && l.bot) continue;
       try {
         const r = await l.onStored(event, { consumed });
         if (r && r.consumed) consumed = true;
@@ -110,6 +141,7 @@ export class InboundMessageHooks {
         this.logger.error({ listener: l.name, orgId: event.orgId, err }, 'inbound listener failed');
       }
     }
-    return { consumed };
+    // A conversation with a person (or waiting for one) is not answered by the auto reply that runs after the listeners either.
+    return { consumed: consumed || muted };
   }
 }

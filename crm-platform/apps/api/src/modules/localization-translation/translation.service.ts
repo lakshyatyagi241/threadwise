@@ -12,6 +12,9 @@ import { detectScriptLanguage } from './language-detector';
 import { ProviderRouterService, type TranslationContext } from './provider-router.service';
 import { cacheKey, normalizeLang, type RoutePolicy } from './translation-policy';
 import { TranslationUsageService } from './translation-usage.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('translation');
 
 const SUCCESS_TTL = 86_400;
 /** A failure is remembered only briefly: a provider that was down a minute ago may be fine now. */
@@ -61,7 +64,11 @@ export class TranslationService {
     const policy = await this.router.policy(ctx);
     const key = cacheKey('pair', `${src}:${dst}`, clean, policy);
     const cached = await this.cache.get(key);
-    if (cached !== null) return cached === FAILED ? null : cached;
+    if (cached !== null) {
+      cache.hit();
+      return cached === FAILED ? null : cached;
+    }
+    cache.miss();
 
     const drivers = await this.router.drivers(policy);
     if (drivers.length === 0) return null;
@@ -107,11 +114,14 @@ export class TranslationService {
     const cached = await this.cache.get(key);
     if (cached !== null) {
       try {
-        return JSON.parse(cached) as DetectedTranslation;
+        const hit = JSON.parse(cached) as DetectedTranslation;
+        cache.hit();
+        return hit;
       } catch {
         /* a corrupt entry is a miss */
       }
     }
+    cache.miss();
 
     const drivers = await this.router.drivers(policy);
     const merged: DetectedTranslation = { language: null, text: null };

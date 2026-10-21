@@ -11,7 +11,12 @@ import { useCan, useSession } from '@/features/auth-registration-security/shared
 import { PageFill } from '@/components/shell/page-fill';
 import { CallingProvider, OnCallPanel } from '@/features/calling-voice';
 import { useLeadScoringEnabled } from '@/features/lead-scoring';
-import { invalidateSegments, useSegments, appliedConditionCount } from '@/features/segments';
+import {
+  invalidateSegments,
+  useSegments,
+  useTeamFilterOptions,
+  appliedConditionCount,
+} from '@/features/segments';
 import { useStoredValue } from '@/lib/use-stored-value';
 import type { ContactTouchChannel } from '@crm/contracts';
 import { bulkSetUncontacted, reportContactTouch } from '../api/lead-handling';
@@ -278,6 +283,7 @@ export function ContactsScreen() {
   const attributes = useAttributes();
   const statusOptions = useStatusOptions();
   const { owners, nameOf: ownerName, loading: ownersLoading } = useOwnerNames();
+  const teamFilter = useTeamFilterOptions();
   const channels = useChannels(canSend);
   const numbers = useMemo(() => whatsappChannels(channels.data?.data ?? []), [channels.data]);
 
@@ -334,7 +340,7 @@ export function ContactsScreen() {
   const showStats = statsRaw === '1';
   const attributeColumns = useMemo(
     () =>
-      (attributes.data ?? []).filter((a) => a.active).map((a) => ({ key: a.key, name: a.name })),
+      (attributes.data ?? []).filter((a) => a.active && !a.hidden).map((a) => ({ key: a.key, name: a.name })),
     [attributes.data],
   );
   // Lead scoring off: no Lead score column, and none in the picker (the choice is kept; it comes back when scoring is switched on).
@@ -433,6 +439,7 @@ export function ContactsScreen() {
     source: filters.source,
     segment: filters.segment,
     owner: filters.owner,
+    team: filters.team,
     rules: filters.rules,
   };
   const target = (): BulkTarget =>
@@ -668,6 +675,7 @@ export function ContactsScreen() {
       group: t('groupLabel'),
       tag: t('tagLabel'),
       owner: t('ownerLabel'),
+      team: t('teamLabel'),
       stage: t('stageLabel'),
       status: t('statusLabel'),
       minor: t('minorLabel'),
@@ -689,6 +697,7 @@ export function ContactsScreen() {
       unassigned: t('unassigned'),
       myContacts: t('myContacts'),
       formerMember: t('ownerFormer'),
+      formerTeam: t('teamFormer'),
       subscribed: t('subscribedOnly'),
       unsubscribed: t('unsubscribedOnly'),
       conditionsValue: (n) => t('conditionsChip', { count: n }),
@@ -697,6 +706,7 @@ export function ContactsScreen() {
     segment: (id) => segmentOptions.find((x) => x.id === id)?.name,
     tag: (id) => (tags.data ?? []).find((x) => x.id === id)?.name,
     owner: (id) => ownerName(id),
+    team: (id) => teamFilter.teams.find((x) => x.id === id)?.name,
     stage: (v) => stages.find((x) => x.value === v)?.label,
     status: (v) => statuses.find((x) => x.value === v)?.label,
     conditionCount: appliedConditionCount,
@@ -810,6 +820,7 @@ export function ContactsScreen() {
               canCreateSegment: canCreateSegments,
               tags: tags.data ?? [],
               owners,
+              teams: teamFilter.teams,
               meId: session.user.id,
               // The shortcut on a one-person filter: select everything the view matches and open the owner change.
               onReassignView:

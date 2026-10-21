@@ -50,6 +50,17 @@ export function TraceList({
               >
                 {t(`test.trace.${status}`)}
               </Badge>
+              {e.excluded.length > 0 && (
+                <p
+                  className="basis-full text-xs text-muted-foreground"
+                  data-testid="ra-trace-excluded"
+                >
+                  <span className="font-medium">{t('test.excluded.label')}: </span>
+                  {e.excluded
+                    .map((x) => t(`test.excluded.${x.reason}`, { name: x.name }))
+                    .join('; ')}
+                </p>
+              )}
             </li>
           );
         })}

@@ -64,7 +64,7 @@ function readFlash(token: string): Flash | null {
 export function PublicManage({ token }: { token: string }) {
   const q = useManageQuery(token);
   return (
-    <PublicShell orgName={q.data?.org.name}>
+    <PublicShell orgName={q.data?.org.name} org={q.data?.org.slug} theme={q.data?.theme}>
       {q.isPending ? (
         <PublicSkeleton />
       ) : q.isError ? (

@@ -7,9 +7,9 @@ import { nav } from './nav';
 import { settings } from './settings';
 
 /**
- * BL-257: the Call logs screen holds every call, not only WhatsApp calls, so it is open to anyone with the log's read right, with or
- * without the plan feature `waba_calling`. The menu entry, the route guard (the paywall reads its gates from the same list) and the
- * API agree; what is WhatsApp's (the calling tile in Settings) keeps its plan gate.
+ * The Call logs screen follows the voice feature: it needs the log's read right AND the plan feature `waba_calling`. A workspace without
+ * the feature gets no menu entry and no route (the app gate closes the address, no paywall). The calling tile in Settings keeps its plan
+ * gate too.
  */
 const caps = (permissions: string[], planFeatures: string[] | null) => ({
   ...CAPABILITIES_UNKNOWN,
@@ -19,26 +19,25 @@ const caps = (permissions: string[], planFeatures: string[] | null) => ({
 const entry = (c: ReturnType<typeof caps>) => resolveNav(NAV, c).find((i) => i.id === 'call-logs');
 
 describe('calling-voice nav', () => {
-  it('is one Inbox & Chat entry gated by the log permission alone', () => {
+  it('is one Inbox & Chat entry gated by the log permission and the voice feature', () => {
     expect(nav).toHaveLength(1);
     expect(nav[0]).toMatchObject({
       id: 'call-logs',
       group: 'inbox',
       href: '/call-logs',
       order: 20,
-      gates: { permission: 'call.logs.read' },
+      gates: { permission: 'call.logs.read', app: 'waba_calling' },
     });
     expect(nav[0]!.gates).not.toHaveProperty('planFeature');
     expect(hasNavIcon(nav[0]!.icon)).toBe(true);
   });
 
-  it('shows the entry, unlocked, to a workspace without WhatsApp calling', () => {
-    const item = entry(caps(['call.logs.read'], ['analytics']));
-    expect(item).toBeDefined();
-    expect(item!.locked).toBe(false);
+  it('removes the entry for a workspace without the voice feature', () => {
+    expect(entry(caps(['call.logs.read'], ['analytics']))).toBeUndefined();
+    expect(entry(caps(['call.logs.read'], []))).toBeUndefined();
   });
 
-  it('shows it unlocked with WhatsApp calling too, and when the plan is not known', () => {
+  it('shows it, unlocked, with the voice feature, and when the plan is not known yet', () => {
     expect(entry(caps(['call.logs.read'], ['waba_calling']))?.locked).toBe(false);
     expect(entry(caps(['call.logs.read'], null))?.locked).toBe(false);
   });
@@ -48,7 +47,7 @@ describe('calling-voice nav', () => {
     expect(entry(caps([], []))).toBeUndefined();
   });
 
-  it('opens no paywall on the call log routes: no plan feature is registered for them', () => {
+  it('closes the routes through the app gate instead of opening a paywall', () => {
     const gates = NAV.filter((n) => n.gates?.planFeature).map((n) => ({
       href: n.href,
       feature: n.gates!.planFeature!,
@@ -56,6 +55,7 @@ describe('calling-voice nav', () => {
     for (const path of ['/call-logs', '/call-logs/analytics', '/call-logs/4f0c1f6e']) {
       expect(gateFor(path, gates), path).toBeNull();
     }
+    expect(NAV.find((n) => n.id === 'call-logs')?.gates?.app).toBe('waba_calling');
   });
 
   it('keeps the WhatsApp calling tile in Settings behind the plan feature', () => {

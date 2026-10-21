@@ -325,7 +325,7 @@ describe('ConversationsSection', () => {
     expect(out).toContain('3 unread messages');
     expect(out).toContain('>Open<');
     expect(out).toContain('Assigned to Asha Rao');
-    expect(out).toContain('06 Mar 2026, 09:30 AM');
+    expect(out).toContain('Mar 6, 2026, 9:30 AM');
     expect(out).toContain(`href="/inbox?c=${MINE.id}"`);
     // Somebody else’s thread that the fuzzy search returned, and a thread with no contact, are not shown.
     expect(out).not.toContain('Priya Verma');
@@ -424,7 +424,7 @@ describe('FieldHistoryPanel', () => {
     // An empty old value is a dash with a spoken "empty".
     expect(out).toContain('—');
     expect(out).toContain('>empty<');
-    expect(out).toContain('06 Mar 2026, 09:30 AM');
+    expect(out).toContain('Mar 6, 2026, 9:30 AM');
     expect(out).toContain('By a user');
     expect(out).toContain('By the system');
     expect(out).toContain('By the API');
@@ -544,8 +544,8 @@ describe('StatsSection', () => {
     // conversations: 2 threads, 4 unread, latest inbound and outbound
     expect(out).toMatch(/Conversations<\/div><div[^>]*>2</);
     expect(out).toMatch(/Unread messages<\/div><div[^>]*>4</);
-    expect(out).toContain('06 Mar 2026, 09:30 AM');
-    expect(out).toContain('07 Mar 2026, 06:45 PM');
+    expect(out).toContain('Mar 6, 2026, 9:30 AM');
+    expect(out).toContain('Mar 7, 2026, 6:45 PM');
     // calls: 3 in all, 2 answered, 1 missed, 185 seconds = 3 minutes
     expect(out).toMatch(/>Calls<\/div><div[^>]*>3</);
     expect(out).toMatch(/Answered calls<\/div><div[^>]*>2</);
@@ -555,8 +555,8 @@ describe('StatsSection', () => {
     // from the contact itself
     expect(out).toMatch(/Lead score<\/div><div[^>]*>72</);
     expect(out).toContain('Last activity');
-    expect(out).toContain('06 Mar 2026, 09:30 AM');
-    expect(out).toContain('05 Mar 2026, 12:00 PM');
+    expect(out).toContain('Mar 6, 2026, 9:30 AM');
+    expect(out).toContain('Mar 5, 2026, 12:00 PM');
     expect(out).toContain('Message figures cover the conversations found for this contact');
     expect(out).not.toContain('More calls matched than could be read');
   });

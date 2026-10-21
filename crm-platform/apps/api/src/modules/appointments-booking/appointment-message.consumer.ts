@@ -12,10 +12,12 @@ import {
   type OutboxEvent,
   type OutboxSubscriber,
 } from '../../kernel/outbox/outbox-subscribers';
+import { AppointmentReminderService } from './appointment-reminder.service';
+import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository, type AppointmentRow } from './appointments.repository';
 import { AppointmentsSupport } from './appointments.support';
 import { BookingTypesRepository, type TemplateRow } from './booking-types.repository';
-import { messageBody, variablesFor } from './message-render';
+import { messageBody, renderTemplate, variablesFor } from './message-render';
 
 export const MESSAGE_EVENTS = [
   'appointment.booked',
@@ -23,11 +25,13 @@ export const MESSAGE_EVENTS = [
   'appointment.declined',
   'appointment.cancelled',
   'appointment.rescheduled',
+  /** A visit was marked no-show: the no-show step of the reminder sequence goes out (BL-421). */
+  'appointment.no_show',
 ] as const;
 
 /** Which lifecycle message an event is, and the status the booking must still have for it to be worth sending. */
 const PLAN: Record<
-  (typeof MESSAGE_EVENTS)[number],
+  Exclude<(typeof MESSAGE_EVENTS)[number], 'appointment.no_show'>,
   { template: BookingTemplateEvent; status: AppointmentRow['status'] }
 > = {
   'appointment.booked': { template: 'confirmation', status: 'confirmed' },
@@ -74,6 +78,8 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
     private readonly types: BookingTypesRepository,
     private readonly support: AppointmentsSupport,
     private readonly registry: OutboxSubscriberRegistry,
+    private readonly sequence: AppointmentReminderService,
+    private readonly runs: AppointmentRemindersRepository,
     @Inject(APPOINTMENT_MESSENGER) private readonly messenger: AppointmentMessenger,
   ) {}
 
@@ -82,9 +88,18 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
   }
 
   async handle(event: OutboxEvent): Promise<void> {
-    const plan = PLAN[event.eventType as (typeof MESSAGE_EVENTS)[number]];
     const uuid = typeof event.payload.uuid === 'string' ? event.payload.uuid : null;
+    if (event.eventType === 'appointment.no_show') {
+      if (uuid && event.payload.notify !== false) await this.eventStep(event, uuid, 'no_show');
+      return;
+    }
+    const plan = PLAN[event.eventType as keyof typeof PLAN];
     if (!plan || !uuid || event.payload.notify === false) return;
+    // The confirmation is a step of the booking type's reminder sequence when the type has one switched on: that step has its own
+    // channel order, message and delivery record, so the single confirmation below is not sent as well.
+    if (plan.template === 'confirmation' && (await this.eventStep(event, uuid, 'confirmation'))) {
+      return;
+    }
 
     const messages = await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
       const row = await this.appts.findByUuid(tx, event.orgId, uuid);
@@ -117,22 +132,29 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
         manageUrl: this.support.manageUrlOf(row),
         joinUrl: row.meetUrl,
       };
-      return channels.map(({ channel, tpl }): BookingMessage & { firstWins: boolean } => ({
-        firstWins: unconfigured,
-        orgId: event.orgId,
-        appointmentId: row.uuid,
-        event: plan.template,
-        channel,
-        to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
-        body: messageBody(plan.template, tpl?.plainBody, facts),
-        subject: `${facts.typeName}: ${SUBJECTS[plan.template]}`,
-        waTemplateId: tpl?.waTemplateUuid ?? null,
-        variableMap: tpl?.variableMap ?? null,
-        idempotencyKey: `${event.id}:${channel}`,
-        contactId: row.contactUuid,
-        variables: variablesFor(facts),
-        purpose: 'service',
-      }));
+      const vars = variablesFor(facts);
+      return channels.map(({ channel, tpl }): BookingMessage & { firstWins: boolean } => {
+        // A message chosen from the library (BL-351) is read now, so editing it changes what is sent; an inactive one is ignored.
+        const lib = tpl?.libraryTemplateId && tpl.libraryActive ? tpl : null;
+        return {
+          firstWins: unconfigured,
+          orgId: event.orgId,
+          appointmentId: row.uuid,
+          event: plan.template,
+          channel,
+          to: { name: row.inviteeName, phone: row.inviteePhone, email: row.inviteeEmail },
+          body: messageBody(plan.template, lib?.libraryBody ?? tpl?.plainBody, facts),
+          subject: lib?.librarySubject
+            ? renderTemplate(lib.librarySubject, vars)
+            : `${facts.typeName}: ${SUBJECTS[plan.template]}`,
+          waTemplateId: lib?.libraryWaUuid ?? tpl?.waTemplateUuid ?? null,
+          variableMap: tpl?.variableMap ?? null,
+          idempotencyKey: `${event.id}:${channel}`,
+          contactId: row.contactUuid,
+          variables: vars,
+          purpose: 'service',
+        };
+      });
     });
 
     let delivered = false;
@@ -155,5 +177,27 @@ export class AppointmentMessageConsumer implements OutboxSubscriber, OnModuleIni
         );
       }
     }
+  }
+
+  /**
+   * Hands an event to the booking type's sequence step for it (the confirmation, the no-show message). True when the type has that step
+   * switched on and it took over; false when the type has none (the older single message is then used, for the confirmation).
+   */
+  private async eventStep(
+    event: OutboxEvent,
+    uuid: string,
+    step: 'confirmation' | 'no_show',
+  ): Promise<boolean> {
+    const found = await this.db.txAs({ orgId: event.orgId, userId: null }, async (tx) => {
+      const row = await this.appts.findByUuid(tx, event.orgId, uuid);
+      if (!row || row.bookingTypeId === null) return null;
+      if (step === 'confirmation' && row.status !== 'confirmed') return null;
+      if (!(await this.runs.hasEventStep(tx, event.orgId, row.bookingTypeId, step))) return null;
+      return row.id;
+    });
+    if (found === null) return false;
+    // The step owns this event now, whether this call took the run or an earlier delivery of the same event already had.
+    await this.sequence.deliverEventStep(event.orgId, found, step);
+    return true;
   }
 }

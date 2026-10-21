@@ -86,9 +86,12 @@ const where = (conds: Array<SQL | undefined>): SQL =>
     sql` AND `,
   );
 
-/** Members of a team, as a sub-select over `team_members`. */
+/**
+ * The people whose PRIMARY team is `teamId` (BL-382, decision D8). An invoice has no stamped owning team, so a report by team reads the
+ * owner's primary team; a person has at most one, so nobody is counted for two teams (they used to be, through every membership row).
+ */
 const teamMembers = (orgId: number, teamId: number) =>
-  sql`(SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.team_id = ${teamId})`;
+  sql`(SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${orgId} AND tm.team_id = ${teamId} AND tm.is_primary)`;
 
 /** The filters of the screen on an invoice (`i.owner_id`, `i.currency`) or a payment (`p.currency`, its invoice's owner). */
 function filterConds(f: RevenueFilter, currencyCol: SQL): SQL[] {
@@ -149,7 +152,7 @@ function dimSql(dim: RevenueGroup | 'none', side: 'invoice' | 'payment'): DimSql
     case 'team':
       return {
         ...nulls,
-        joins: sql`LEFT JOIN team_members otm ON otm.org_id = i.org_id AND otm.user_id = i.owner_id
+        joins: sql`LEFT JOIN team_members otm ON otm.org_id = i.org_id AND otm.user_id = i.owner_id AND otm.is_primary
                    LEFT JOIN teams ot ON ot.org_id = otm.org_id AND ot.id = otm.team_id`,
         key: sql`ot.uuid::text`,
         label: sql`ot.name`,

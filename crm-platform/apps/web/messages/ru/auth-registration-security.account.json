@@ -561,7 +561,10 @@
             "personal_history_full": "Импорт полной истории (личный WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "ИИ-оценка лидов",
-            "record_assignment": "Правила назначения записей"
+            "record_assignment": "Правила назначения записей",
+            "team_hierarchy": "Иерархия команд и руководители",
+            "custom_roles": "Свои роли и области доступа",
+            "inbox_assignment_sticky": "Владелец контакта и закреплённый агент"
           },
           "cta": {
             "continueFree": "Продолжить бесплатно",

@@ -7,6 +7,7 @@ import type {
   PublicBookResponse,
   PublicBookingPage,
   PublicBookingType,
+  PublicBookingTypeView,
   PublicManageView,
   SlotsResponse,
   createBookingTypeSchema,
@@ -179,6 +180,7 @@ export function toBookingType(r: BookingTypeResponse): BookingType {
       event: t.event,
       channel: t.channel,
       waTemplateId: t.waTemplateId,
+      libraryTemplateId: t.libraryTemplateId,
       plainBody: t.plainBody,
     })),
     // Every rule, switched on or off: the editor shows both.
@@ -188,10 +190,21 @@ export function toBookingType(r: BookingTypeResponse): BookingType {
       label: x.label,
       isActive: x.isActive,
       kind: x.kind,
+      stepKind: x.stepKind,
       channels: x.channels,
       subject: x.subject,
       body: x.body,
       waTemplateId: x.waTemplateId,
+      libraryTemplateId: x.libraryTemplateId,
+      waTemplateStatus: x.waTemplateStatus,
+      waTemplateName: x.waTemplateName,
+      buttonsEnabled: x.buttonsEnabled,
+      skipIfConfirmed: x.skipIfConfirmed,
+      undeliveredFallbackMinutes: x.undeliveredFallbackMinutes,
+      serviceLabel: x.serviceLabel,
+      packKey: x.packKey,
+      packVersion: x.packVersion,
+      notice: x.notice,
     })),
     questions: r.questions.map((q) => ({
       id: q.id,
@@ -217,10 +230,18 @@ export function toReminderBody(list: BookingTypeInput['reminders']) {
     label: r.label,
     isActive: r.isActive,
     kind: r.kind,
+    ...(r.stepKind ? { stepKind: r.stepKind } : {}),
     channels: r.channels,
     subject: r.subject,
     body: r.body,
     waTemplateId: r.waTemplateId,
+    libraryTemplateId: r.libraryTemplateId ?? null,
+    buttonsEnabled: r.buttonsEnabled ?? false,
+    skipIfConfirmed: r.skipIfConfirmed ?? false,
+    undeliveredFallbackMinutes: r.undeliveredFallbackMinutes ?? null,
+    serviceLabel: r.serviceLabel ?? null,
+    packKey: r.packKey ?? null,
+    packVersion: r.packVersion ?? null,
   }));
 }
 
@@ -277,6 +298,7 @@ export function toTypeBody(i: BookingTypeInput, rowVersion?: number): CreateBody
         (t.channel as 'whatsapp' | 'email' | 'telegram' | 'instagram' | 'facebook' | undefined) ??
         'whatsapp',
       waTemplateId: t.waTemplateId,
+      ...(t.libraryTemplateId ? { libraryTemplateId: t.libraryTemplateId } : {}),
       plainBody: t.plainBody,
     })),
     payment: {
@@ -435,14 +457,13 @@ export function toPublicType(s: PublicBookingType): PublicType {
 export const toPublicDirectory = (p: PublicBookingPage): PublicDirectory => ({
   org: { name: p.organization.name, slug: p.organization.slug },
   types: p.services.map(toPublicType),
+  theme: p.theme,
 });
 
-export const toPublicTypePage = (p: {
-  organization: { name: string; slug: string };
-  service: PublicBookingType;
-}): PublicTypePage => ({
+export const toPublicTypePage = (p: PublicBookingTypeView): PublicTypePage => ({
   org: { name: p.organization.name, slug: p.organization.slug },
   type: toPublicType(p.service),
+  theme: p.theme,
 });
 
 const manageUrlOf = (token: string): string =>
@@ -451,7 +472,8 @@ const manageUrlOf = (token: string): string =>
 export function toPublicManage(v: PublicManageView, token: string): PublicManage {
   const t = v.bookingType;
   return {
-    org: { name: v.organization.name },
+    org: { name: v.organization.name, slug: v.organization.slug },
+    theme: v.theme,
     booking: {
       status: v.status,
       typeName: t?.name ?? v.title,

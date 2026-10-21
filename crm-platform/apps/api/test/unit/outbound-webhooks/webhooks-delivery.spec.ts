@@ -95,6 +95,7 @@ describe('WebhookDeliveryProcessor', () => {
     error: 'HTTP 500',
     latencyMs: 12,
     permanent: false,
+    retryAfterMs: null,
     responseSnippet: null,
     ...o,
   });

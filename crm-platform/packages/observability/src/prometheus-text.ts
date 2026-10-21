@@ -11,7 +11,7 @@ function escapeLabel(v: string): string {
   return v.replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/"/g, '\\"');
 }
 
-function formatLabels(labels: Labels, extra?: Labels): string {
+export function formatLabels(labels: Labels, extra?: Labels): string {
   const all = { ...labels, ...extra };
   const keys = Object.keys(all);
   if (keys.length === 0) return '';
@@ -32,7 +32,7 @@ function seriesKey(labels: Labels): string {
     .join('\u0000');
 }
 
-interface Family {
+export interface Family {
   name: string;
   help: string;
   type: 'gauge' | 'counter' | 'histogram';
@@ -138,6 +138,11 @@ export class Registry {
   private readonly families: Family[] = [];
   /** Labels stamped on every series: the process identity (`service`, `instance`). */
   constructor(private readonly base: Labels) {}
+
+  /** Adds a family that renders itself (cache-metrics.ts keeps its counts as plain numbers). */
+  add(f: Family): void {
+    this.families.push(f);
+  }
 
   gauge(name: string, help: string): Gauge {
     const g = new Gauge(name, help);

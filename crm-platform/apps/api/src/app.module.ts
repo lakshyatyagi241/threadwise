@@ -1,23 +1,21 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggerModule } from 'nestjs-pino';
-import { stdSerializers } from 'pino';
 import { ConfigService } from '@nestjs/config';
-import { randomUUID } from 'node:crypto';
 import { AppConfigModule } from './config/config.module';
 import type { Env } from './config/env.schema';
 import { CryptoService } from './common/crypto/crypto.service';
-import { maskSecretUrl } from './common/logging/mask-secret-url';
+import { apiHttpLoggerOptions } from './common/logging/http-logger';
 import { ProblemExceptionFilter } from './common/filters/problem-exception.filter';
 import { SlowRequestInterceptor } from './common/interceptors/slow-request.interceptor';
 import { IdempotencyInterceptor } from './common/interceptors/idempotency.interceptor';
 import { RequestContextMiddleware } from './common/middleware/request-context.middleware';
-import { RequestContextStore } from './common/context/request-context';
 import { DbModule } from './infra/db/db.module';
 import { RedisModule } from './infra/redis/redis.module';
 import { QueueModule } from './infra/queue/queue.module';
 import { ProvidersModule } from './infra/providers/providers.module';
 import { KernelModule } from './kernel/kernel.module';
+import { TeamHierarchyGateModule } from './modules/plans-subscriptions-trials/team-hierarchy-gate.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { SendGuardModule } from './modules/auth/security/send-guard.module';
 import { UploadPolicyService } from './modules/auth';
@@ -26,16 +24,13 @@ import { ImpersonationMaskInterceptor } from './modules/auth/guards/impersonatio
 import { ImpersonationGuard } from './modules/auth/guards/impersonation.guard';
 import { JwtAuthGuard } from './modules/auth/guards/jwt-auth.guard';
 import { PermissionsGuard } from './modules/auth/guards/permissions.guard';
-import {
-  LOG_REDACT_PATHS,
-  PlatformInfrastructureModule,
-  ThrottleGuard,
-} from './modules/platform-infrastructure';
+import { PlatformInfrastructureModule, ThrottleGuard } from './modules/platform-infrastructure';
 import { AdminModule } from './modules/admin';
 import { RolesPermissionsModule } from './modules/roles-permissions';
 import { BspBillingEngineModule } from './modules/bsp-billing-engine';
 import { WalletMessageBillingModule } from './modules/wallet-message-billing';
 import { AppointmentsBookingModule } from './modules/appointments-booking';
+import { MeetingConferencingModule } from './modules/meeting-conferencing';
 import { GoogleAccountModule } from './modules/google-account';
 import { BroadcastsModule } from './modules/broadcasts';
 import { CallingVoiceModule } from './modules/calling-voice';
@@ -64,6 +59,7 @@ import { ChatbotWidgetModule } from './modules/chatbot-widget';
 import { CrmModule } from './modules/crm';
 import { LocalizationTranslationModule } from './modules/localization-translation';
 import { PlatformAsyncOpsModule } from './modules/platform-async-ops';
+import { PlatformDeploymentsModule } from './modules/platform-deployments';
 import { PlatformDataRetentionModule } from './modules/platform-data-retention';
 import { FailedOperationsModule } from './modules/failed-operations';
 import { WebhookRetryModule } from './modules/webhook-retry';
@@ -89,7 +85,7 @@ import { WebhookFanoutModule } from './modules/webhook-fanout';
 import { WabooMigrationModule } from './modules/waboo-migration';
 import { OutboundWebhooksModule } from './modules/outbound-webhooks';
 import { ApiLibraryModule } from './modules/api-library';
-import { FaqKnowledgeModule } from './modules/faq-knowledge';
+import { KnowledgeBaseModule } from './modules/knowledge-base';
 import { GrowthPilotModule } from './modules/growth-pilot';
 import { LeadScoringModule } from './modules/lead-scoring';
 import { ContactConsentModule } from './modules/contact-consent';
@@ -141,42 +137,11 @@ import { HealthModule } from './health/health.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({
         pinoHttp: {
-          level: config.get('LOG_LEVEL', { infer: true }),
+          ...apiHttpLoggerOptions(config.get('LOG_LEVEL', { infer: true })),
           transport:
             config.get('NODE_ENV', { infer: true }) === 'development'
               ? { target: 'pino-pretty', options: { singleLine: true, translateTime: 'HH:MM:ss' } }
               : undefined,
-          genReqId: (req) => (req.headers['x-request-id'] as string) ?? randomUUID(),
-          // Every log line carries the tenant and actor, so a production
-          // question ("what did org 42 do at 14:03") is a filter, not a grep.
-          customProps: () => {
-            const ctx = RequestContextStore.peek();
-            return ctx
-              ? {
-                  requestId: ctx.requestId,
-                  orgId: ctx.orgId || undefined,
-                  actorType: ctx.actorType,
-                  actorId: ctx.actorId ?? undefined,
-                }
-              : {};
-          },
-          serializers: {
-            // A push portal's address carries its secret as the last path segment: never in a log line.
-            req: (req: Parameters<typeof stdSerializers.req>[0]) => {
-              const out = stdSerializers.req(req);
-              return { ...out, url: maskSecretUrl(out.url) };
-            },
-          },
-          // Every credential and signature header the API reads (TW-INFRA-028), not just the three that are always there.
-          redact: {
-            paths: LOG_REDACT_PATHS,
-            remove: true,
-          },
-          autoLogging: {
-            // Health probes fire every few seconds; logging them buries
-            // everything that matters.
-            ignore: (req) => req.url === '/health' || req.url === '/ready',
-          },
         },
       }),
     }),
@@ -189,6 +154,7 @@ import { HealthModule } from './health/health.module';
 
     // Platform
     KernelModule,
+    TeamHierarchyGateModule,
     AuthModule,
     PlatformInfrastructureModule,
     PlansModule,
@@ -232,6 +198,7 @@ import { HealthModule } from './health/health.module';
     CrmModule,
     DashboardsAnalyticsChartsModule,
     AppointmentsBookingModule,
+    MeetingConferencingModule,
     GoogleAccountModule,
     NotificationsModule,
     BroadcastsModule,
@@ -257,6 +224,7 @@ import { HealthModule } from './health/health.module';
     DeveloperRestApiV1Module,
     PlatformSupportDeskModule,
     PlatformAsyncOpsModule,
+    PlatformDeploymentsModule,
     PlatformDataRetentionModule,
     FailedOperationsModule,
     WebhookRetryModule,
@@ -265,7 +233,7 @@ import { HealthModule } from './health/health.module';
     WabooMigrationModule,
     OutboundWebhooksModule,
     ApiLibraryModule,
-    FaqKnowledgeModule,
+    KnowledgeBaseModule,
     LeadScoringModule,
     GrowthPilotModule,
     ContactConsentModule,

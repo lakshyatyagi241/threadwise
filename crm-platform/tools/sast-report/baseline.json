@@ -28,5 +28,41 @@
     "file": "apps/api/src/infra/sandbox/code-sandbox.ts",
     "contains": "new vm.Script",
     "reason": "the flow Code node runs author JavaScript in a node:vm context inside a worker thread. No host object, require, process, fs, network, timers, SharedArrayBuffer, Atomics or WebAssembly is reachable; ten escape routes (constructor chains, generators, error constructors, prepareStackTrace getThis, captureStackTrace) are proven to land on the context's own global by test/unit/infra/code-sandbox.spec.ts and integrations-nodes.spec.ts; wall-clock timeout (not catchable from inside), heap cap and a cap on concurrent workers bound CPU and memory. node:vm is NOT a boundary against a V8 escape, which would land in a worker that shares the API's filesystem and network but holds no secrets or database handle; that residual risk is accepted and documented in the file header, with isolated-vm or a no-network sandbox process as the upgrade path. Needs reviewer sign-off; reviewed 2026-10-17"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "packages/db/src/outbox-dead-index.ts",
+    "contains": "DROP INDEX CONCURRENTLY IF EXISTS ${child}",
+    "reason": "child is client.escapeIdentifier() of a partition name read from pg_inherits (not request data); DDL cannot take bind parameters; reviewed 2026-10-19"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "packages/db/src/outbox-dead-index.ts",
+    "contains": "ALTER INDEX ${PARENT} ATTACH PARTITION ${child}",
+    "reason": "PARENT is the module constant 'idx_outbox_dead' and child is client.escapeIdentifier() of a partition name from pg_inherits; DDL cannot take bind parameters; reviewed 2026-10-19"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/src/common/errors/sanitize-error.spec.ts",
+    "contains": "1234567890abcdef",
+    "reason": "fake key used as test input to the log sanitiser; not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SECRET-LITERAL",
+    "file": "apps/api/test/unit/logging/logging.spec.ts",
+    "contains": "SUPERSECRET0123",
+    "reason": "fake secret to prove log redaction; not a credential; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "SELECT count(*)::int AS n",
+    "reason": "identifiers come from the hard-coded sealed-column list and are double-quoted by q(); no request data; reviewed 2026-10-21"
+  },
+  {
+    "rule": "SQL-CONCAT",
+    "file": "apps/api/src/common/crypto/seal-plaintext-secrets.ts",
+    "contains": "UPDATE ${q(t.table)}",
+    "reason": "same: identifiers from the static column list, quoted by q(); reviewed 2026-10-21"
   }
 ]

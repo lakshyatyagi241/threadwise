@@ -1,0 +1,150 @@
+{
+  "appointments": {
+    "channels": {
+      "title": "Nachrichtenkanäle",
+      "description": "Legen Sie fest, welche Kanäle Terminnachrichten an Ihre Kontakte senden dürfen: Bestätigungen, Erinnerungen, Änderungs- und Absageinformationen sowie Nachfassnachrichten nach dem Besuch. Ein Buchungstyp kann einen Kanal nur nutzen, wenn er hier aktiviert und verbunden ist.",
+      "loading": "Kanäle werden geladen ...",
+      "undecidedOwner": "Noch kein Kanal ist aktiviert, daher werden keine Terminnachrichten gesendet. Aktivieren Sie die Kanäle, die Ihr Team nutzen darf.",
+      "undecidedMember": "Noch kein Kanal ist aktiviert, daher werden keine Terminnachrichten gesendet. Bitten Sie den Workspace-Inhaber, die Kanäle auszuwählen.",
+      "readOnly": "Nur der Workspace-Inhaber und Administratoren können dies ändern.",
+      "enableLabel": "{channel} für Terminnachrichten verwenden",
+      "switchedOn": "{channel} ist für Terminnachrichten aktiviert.",
+      "switchedOff": "{channel} ist für Terminnachrichten deaktiviert.",
+      "senderSaved": "Der Standardabsender für {channel} wurde gespeichert.",
+      "defaultSender": "Standardabsender",
+      "defaultSenderOf": "Standardabsender für {channel}",
+      "firstConnected": "Der erste verbundene",
+      "sendsFrom": "Sendet von {sender}",
+      "notConnected": "Für diesen Kanal ist noch nichts verbunden.",
+      "connect": "In den Einstellungen verbinden",
+      "voiceSoon": "Kommt mit dem Voice-Bot: ein ausgehender Erinnerungsanruf, den Sie für jeden Buchungstyp aktivieren können. Er kann noch nicht aktiviert werden.",
+      "names": {
+        "email": "E-Mail",
+        "whatsapp": "WhatsApp",
+        "voice": "Erinnerungsanruf"
+      },
+      "about": {
+        "email": "Von einem gemeinsamen Postfach Ihres Workspace. Nie von einem persönlichen Postfach.",
+        "whatsapp": "Freitext innerhalb des 24-Stunden-Fensters; außerhalb nur eine genehmigte Vorlage.",
+        "voice": "Ein automatischer ausgehender Anruf, der den Kontakt erinnert."
+      },
+      "status": {
+        "usable": "Aktiv und verbunden",
+        "off": "Aus",
+        "notChosen": "Noch nicht gewählt",
+        "not_connected": "Aktiv, nicht verbunden",
+        "coming_soon": "Kommt mit dem Voice-Bot"
+      },
+      "editorTitle": "Kanäle für diesen Buchungstyp",
+      "editorHint": "Nur Kanäle, die der Workspace-Inhaber aktiviert hat und die verbunden sind, können genutzt werden. Die übrigen werden angezeigt, damit Sie den Grund kennen.",
+      "noneUsable": "Noch ist kein Kanal verfügbar, daher kann keine Nachricht dieses Buchungstyps gesendet werden.",
+      "openSettings": "Kanaleinstellungen öffnen",
+      "offByOwner": "Der Workspace-Inhaber hat diesen Kanal nicht aktiviert.",
+      "sendOn": "Senden über",
+      "sendOnAuto": "Kein Kanal gewählt: Der erste verfügbare Kanal wird mit dem Standardtext verwendet.",
+      "sendOnEach": "Die Nachricht geht über jeden hier angehakten Kanal.",
+      "attachedButUnusable": "Dieser Kanal ist derzeit nicht verfügbar, daher wird diese Nachricht darauf übersprungen. Haken entfernen oder den Inhaber bitten, ihn zu aktivieren."
+    },
+    "templates": {
+      "title": "Nachrichtenvorlagen",
+      "description": "Vordefinierte Nachrichten für Bestätigungen, Erinnerungen, Verschiebungen, Absagen und Nachfassnachrichten nach dem Besuch. Mit einem Klick hinzufügen und bearbeiten. E-Mail-Nachrichten liegen hier; WhatsApp-Nachrichten werden zur Genehmigung an Meta gesendet, und nur eine genehmigte kann verwendet werden.",
+      "loading": "Nachrichten werden geladen ...",
+      "readOnly": "Nur Nutzer, die Terminvorlagen verwalten, können dies ändern.",
+      "empty": "Noch keine Nachricht hinzugefügt. Fügen Sie unten eine aus dem vordefinierten Satz hinzu.",
+      "yours": "Ihre Nachrichten",
+      "status": {
+        "draft": "Entwurf",
+        "pending": "Bei Meta in Prüfung",
+        "approved": "Genehmigt",
+        "rejected": "Abgelehnt"
+      },
+      "kinds": {
+        "confirmation": "Buchungsbestätigung",
+        "reminder": "Erinnerung",
+        "reschedule": "Verschoben",
+        "cancellation": "Abgesagt",
+        "follow_up": "Nachfassen nach dem Besuch"
+      },
+      "channels": {
+        "email": "E-Mail",
+        "whatsapp": "WhatsApp"
+      },
+      "usedBy": "{count, plural, other {von # Buchungstypen verwendet}}",
+      "inactive": "ausgeschaltet",
+      "submit": "Zur Genehmigung an Meta senden",
+      "submitting": "Wird gesendet ...",
+      "submitted": "An Meta gesendet. Es wird jetzt geprüft.",
+      "metaRefused": "Gespeichert, aber Meta hat es abgelehnt. Öffnen Sie die Nachricht, um den Grund zu sehen.",
+      "refresh": "Status prüfen",
+      "refreshing": "Wird geprüft ...",
+      "refreshed": "Status aktualisiert.",
+      "edit": "Bearbeiten",
+      "view": "Ansehen",
+      "close": "Schließen",
+      "delete": "Entfernen",
+      "deleteTitle": "„{name}\" entfernen?",
+      "deleteWhatsapp": "Sie wird aus dieser Liste entfernt. Die WhatsApp-Vorlage bleibt in Ihren WhatsApp-Vorlagen; löschen Sie sie dort, wenn Sie sie nicht mehr brauchen.",
+      "deleteBody": "Sie wird aus Ihrer Bibliothek entfernt. Ein Buchungstyp, der sie verwendet, muss zuerst eine andere Nachricht wählen.",
+      "deleted": "Nachricht entfernt.",
+      "cancel": "Abbrechen",
+      "rejectedBecause": "Meta hat sie abgelehnt: {reason}",
+      "pendingNote": "Meta prüft diese Vorlage. Bis zur Genehmigung kann sie weder gewählt noch gesendet werden.",
+      "nameLabel": "Name",
+      "subjectLabel": "Betreff",
+      "bodyLabel": "Nachricht",
+      "textLocked": "Eine Vorlage in Prüfung oder genehmigt kann hier nicht bearbeitet werden.",
+      "placeholders": "Sie können verwenden:",
+      "whatsappPlaceholders": "WhatsApp kann nur diese füllen, in dieser Reihenfolge und ohne eine auszulassen:",
+      "activeLabel": "Zur Auswahl verfügbar",
+      "save": "Speichern",
+      "saving": "Wird gespeichert ...",
+      "saveAndSubmit": "Speichern und an Meta senden",
+      "saved": "Nachricht gespeichert.",
+      "predefinedTitle": "Vordefinierte Nachrichten",
+      "predefinedHint": "Übernehmen Sie eine Nachricht in Ihre Bibliothek und bearbeiten Sie sie dann. Eine WhatsApp-Nachricht entsteht zuerst als Entwurf; Sie entscheiden, wann sie an Meta geht.",
+      "machineNote": "Die vordefinierten Texte sind auf Englisch. Passen Sie sie nach dem Hinzufügen an Ihre Sprache an.",
+      "category": {
+        "UTILITY": "Service",
+        "MARKETING": "Marketing"
+      },
+      "preview": "Vorschau",
+      "hidePreview": "Vorschau ausblenden",
+      "inLibrary": "In Ihrer Bibliothek: {status}",
+      "adopt": "Zu meinen Nachrichten hinzufügen",
+      "adopting": "Wird hinzugefügt ...",
+      "adoptDraft": "Als Entwurf hinzufügen",
+      "adoptSubmit": "Hinzufügen und an Meta senden",
+      "adopted": "Zu Ihren Nachrichten hinzugefügt.",
+      "newEmail": "Neue E-Mail-Nachricht",
+      "kindLabel": "Art",
+      "create": "Erstellen",
+      "created": "Nachricht erstellt.",
+      "chooseLabel": "Zu verwendende Nachricht",
+      "useText": "Der Text oben",
+      "unknownMessage": "Eine nicht mehr verfügbare Nachricht",
+      "noneYet": "Noch keine Nachricht dieser Art.",
+      "openLibrary": "In den Einstellungen hinzufügen",
+      "whatsappApprovedOnly": "Nur von Meta genehmigte Vorlagen können gewählt werden. Außerhalb des 24-Stunden-Fensters sendet WhatsApp nichts anderes."
+    },
+    "reminders": {
+      "channels": {
+        "voice": "Erinnerungsanruf"
+      },
+      "voiceSoon": "Kommt mit dem Voice-Bot: ein ausgehender Erinnerungsanruf. Er kann noch nicht hinzugefügt werden.",
+      "voiceSoonShort": "kommt mit dem Voice-Bot",
+      "channelUnusable": "derzeit nicht verfügbar",
+      "noUsableChannel": "Keiner der Kanäle dieser Regel ist verfügbar, daher kann sie nicht aktiviert werden.",
+      "openChannels": "Kanaleinstellungen öffnen",
+      "fromLibrary": "Eine Nachricht aus der Bibliothek verwenden",
+      "openLibrary": "Nachrichten in den Einstellungen hinzufügen",
+      "reasons": {
+        "channel_disabled": "Der Workspace hat diesen Kanal für Terminnachrichten deaktiviert."
+      }
+    },
+    "editor": {
+      "problems": {
+        "templateNoChannel": "Wählen Sie mindestens einen Kanal für diese Nachricht oder löschen Sie ihren Text."
+      }
+    }
+  }
+}

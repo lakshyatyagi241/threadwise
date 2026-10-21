@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kanäle",
-      "title": "E-Mail",
+      "title": "Support-E-Mail",
       "titleAccent": "Postfächer",
       "intro": "Verbinden Sie Ihr Gmail, Microsoft 365 oder ein beliebiges IMAP-Postfach. Kunden-E-Mails landen im Team-Posteingang, eine Unterhaltung pro E-Mail-Verlauf, und Ihre Antworten gehen von derselben Adresse ab.",
       "inbox": "Posteingang öffnen",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Postfach verbinden",
-          "body": "Melden Sie sich mit Google oder Microsoft an oder geben Sie die Einstellungen Ihres Mailservers ein, und erlauben Sie Threadwise, E-Mails dieser Adresse zu lesen und zu senden."
+          "body": "Melden Sie sich mit Google oder Microsoft an oder geben Sie die Einstellungen Ihres Mailservers ein, und erlauben Sie {app}, E-Mails dieser Adresse zu lesen und zu senden."
         },
         "inbox": {
           "title": "E-Mails landen im Posteingang",

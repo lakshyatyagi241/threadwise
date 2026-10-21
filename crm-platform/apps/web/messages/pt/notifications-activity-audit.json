@@ -513,6 +513,11 @@
           "watch": "Você deve ver um pop-up, e o número do sino e o título da aba devem mudar.",
           "notConnected": "As atualizações em tempo real não estão conectadas nesta página, então o pop-up não pode aparecer aqui. Recarregue a página e tente de novo.",
           "off": "Nenhuma notificação foi criada no sino: o sino está desativado para \"Notificação de teste\" na tabela abaixo, ou pelo proprietário do seu espaço de trabalho."
+        },
+        "prompt": {
+          "message": "Ative as notificações do navegador para receber um aviso dos eventos que escolher, mesmo com o CRM fechado.",
+          "enable": "Permitir notificações",
+          "enabling": "Ativando..."
         }
       }
     },

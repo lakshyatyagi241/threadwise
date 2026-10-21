@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Canali",
-      "title": "Caselle",
+      "title": "Email di supporto",
       "titleAccent": "di posta",
       "intro": "Collega il tuo Gmail, Microsoft 365 o qualsiasi casella IMAP. Le email dei clienti arrivano nella posta in arrivo del team, una conversazione per thread, e le tue risposte partono dallo stesso indirizzo.",
       "inbox": "Apri l’inbox",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Collega una casella",
-          "body": "Accedi con Google o Microsoft, oppure inserisci le impostazioni del tuo server di posta, e consenti a Threadwise di leggere e inviare email per quell'indirizzo."
+          "body": "Accedi con Google o Microsoft, oppure inserisci le impostazioni del tuo server di posta, e consenti a {app} di leggere e inviare email per quell'indirizzo."
         },
         "inbox": {
           "title": "Le email arrivano nell’inbox",

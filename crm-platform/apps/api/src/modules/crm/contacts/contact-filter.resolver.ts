@@ -5,6 +5,7 @@ import type { InvalidCondition } from '@crm/contracts';
 import { resolveTimezone } from '../../../common/workspace-calendar';
 import { compileAdHocRules, loadSegmentFilter } from '../segments/segment-filter';
 import type { ResolvedContactFilter } from './contact-conditions';
+import { resolveTeamId } from '../owning-team';
 
 const { contactGroups, tags, users } = schema;
 
@@ -44,6 +45,7 @@ export async function resolveContactFilter(
     tagMode: input.tagMode ?? 'any',
     imported: input.imported,
     unsubscribed: input.unsubscribed,
+    subscribed: input.subscribed,
     minor: input.minor,
     uncontacted: input.uncontacted,
     source: input.source,
@@ -77,6 +79,12 @@ export async function resolveContactFilter(
       .where(and(eq(users.orgId, orgId), eq(users.uuid, input.ownerId)));
     if (!rows[0]) return { empty: true };
     resolved.ownerId = rows[0].id;
+  }
+
+  if (input.teamId) {
+    const teamId = await resolveTeamId(tx, orgId, input.teamId);
+    if (teamId === undefined) return { empty: true };
+    resolved.teamId = teamId;
   }
 
   const ownerUuids = [...new Set(input.ownerIds ?? [])];

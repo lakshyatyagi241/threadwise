@@ -28,6 +28,24 @@ export interface ListUsersFilter {
   order: 'asc' | 'desc';
   q?: string;
   status?: string;
+  /** Team uuid: only people on it. */
+  teamId?: string;
+}
+
+/** Every team of the workspace with its parent and its active manager: what `managersOf` walks up. */
+export type TeamTree = Map<
+  number,
+  { parentId: number | null; lead: { userId: number; uuid: string; name: string } | null }
+>;
+
+export interface UserTeamRow {
+  userId: number;
+  teamId: number;
+  teamUuid: string;
+  teamName: string;
+  teamColor: string;
+  role: 'member' | 'lead';
+  isPrimary: boolean;
 }
 
 /** Data access for staff users. Mirrors ContactsRepository's shape. */
@@ -51,6 +69,11 @@ export class UsersRepository {
 
     if (filter.status) {
       conditions.push(eq(users.status, filter.status));
+    }
+    if (filter.teamId) {
+      conditions.push(sql`EXISTS (
+        SELECT 1 FROM team_members tm JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id
+        WHERE tm.org_id = ${orgId} AND tm.user_id = ${users.id} AND t.uuid = ${filter.teamId}::uuid)`);
     }
     if (filter.q) {
       const pattern = `%${filter.q}%`;
@@ -85,6 +108,55 @@ export class UsersRepository {
       .limit(filter.limit + 1);
 
     return rows as UserRow[];
+  }
+
+  /** Teams of these users, plus the tree of every team with its active manager. Inactive people have no visible places (the tenant policy). */
+  async teamsForUsers(
+    tx: Tx,
+    orgId: number,
+    userIds: number[],
+  ): Promise<{ rows: UserTeamRow[]; tree: TeamTree }> {
+    const tree: TeamTree = new Map();
+    if (userIds.length === 0) return { rows: [], tree };
+    const teams = await tx.execute(sql`
+      SELECT t.id, t.parent_team_id, lu.id AS lead_user_id, lu.uuid AS lead_uuid, lu.full_name AS lead_name
+      FROM teams t
+      LEFT JOIN users lu ON lu.org_id = t.org_id AND lu.id = t.lead_user_id AND lu.status <> 'inactive'
+      WHERE t.org_id = ${orgId}`);
+    for (const r of teams.rows as Array<Record<string, unknown>>) {
+      tree.set(Number(r.id), {
+        parentId:
+          r.parent_team_id === null || r.parent_team_id === undefined
+            ? null
+            : Number(r.parent_team_id),
+        lead: r.lead_uuid
+          ? {
+              userId: Number(r.lead_user_id),
+              uuid: String(r.lead_uuid),
+              name: String(r.lead_name),
+            }
+          : null,
+      });
+    }
+    const res = await tx.execute(sql`
+      SELECT tm.user_id, t.id AS team_id, t.uuid AS team_uuid, t.name AS team_name, t.color AS team_color, tm.role, tm.is_primary
+      FROM team_members tm
+      JOIN teams t ON t.org_id = tm.org_id AND t.id = tm.team_id
+      WHERE tm.org_id = ${orgId} AND tm.user_id IN (${sql.join(
+        userIds.map((i) => sql`${i}`),
+        sql`, `,
+      )})
+      ORDER BY tm.is_primary DESC, t.sort, lower(t.name)`);
+    const rows = (res.rows as Array<Record<string, unknown>>).map((r) => ({
+      userId: Number(r.user_id),
+      teamId: Number(r.team_id),
+      teamUuid: String(r.team_uuid),
+      teamName: String(r.team_name),
+      teamColor: String(r.team_color),
+      role: r.role === 'lead' ? ('lead' as const) : ('member' as const),
+      isPrimary: Boolean(r.is_primary),
+    }));
+    return { rows, tree };
   }
 
   async findByUuid(tx: Tx, orgId: number, uuid: string): Promise<UserRow | undefined> {

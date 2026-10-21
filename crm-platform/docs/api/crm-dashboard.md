@@ -6,7 +6,7 @@ Reference: `CrmController@dashboard` (plan feature `access_sales_pipeline`). Cod
 
 Auth: user. Capability `record.deals.read` (its record scope applies to deals). Plan: `sales_pipeline` (422 `PLAN_FEATURE_LOCKED` otherwise, reads included, as the other deals routes).
 
-Query: `range` (`month` default, `7d`, `30d`, `90d`, `custom`), `from`/`to` (custom, `YYYY-MM-DD`, inclusive, max 366 days), `pipelineId`, `ownerId`, `teamId`, `convertTo` (ISO currency).
+Query: `range` (`month` default, `7d`, `30d`, `90d`, `custom`), `from`/`to` (custom, `YYYY-MM-DD`, inclusive, max 366 days), `pipelineId`, `ownerId`, `teamId` (records whose owning team is that team: `owning_team_id` on contacts, deals and tasks, the owner's primary team for invoices and payments, so a person on two teams counts once; BL-382), `convertTo` (ISO currency).
 
 The period is cut at local midnights in the viewer's zone (`user_profiles.timezone`, else the workspace's, else UTC); the previous window has the same number of calendar days and ends the day before.
 

@@ -1,7 +1,7 @@
 import type { AccessCtx } from '../transform/access-plan';
 import type { Doc } from '../util';
 import { mask } from '../util';
-import { ORG_COLLECTION } from '../load/org';
+import { ORG_COLLECTION, recordedAdditionalOwner } from '../load/org';
 import { ROLES_VERSION_STEP, seatWarning } from '../load/access';
 import { sql, withTenant, type Database } from '../load/db';
 import { AccessOracle, adminClass, type OEntry, type ORole, type ORoleMap } from './oracle-access';
@@ -46,8 +46,28 @@ export interface AccessVerifyInput {
  */
 export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   const { db, orgId, client, alarm } = a;
+  // the Owner the tool adds to every workspace besides the customer's own (load/org.ts): expected, not an extra row
+  const additionalOwner = await recordedAdditionalOwner(db, client);
+  const isAdditional = (email: unknown): boolean =>
+    additionalOwner !== null && String(email).toLowerCase() === additionalOwner;
   const q = async (text: string): Promise<Row[]> =>
     (await withTenant(db, { orgId }, (tx) => tx.execute(sql.raw(text)))).rows as Row[];
+
+  const loginRow = (
+    await withTenant(db, { orgId }, (tx) =>
+      tx.execute(
+        sql`SELECT counts FROM migration.run_log WHERE source_client = ${client} AND collection = '_org' AND step = 'settings'`,
+      ),
+    )
+  ).rows[0] as
+    { counts?: { plan?: { lastLogins?: Array<{ userId: string; at: string }> } } } | undefined;
+  const loginBy = new Map((loginRow?.counts?.plan?.lastLogins ?? []).map((l) => [l.userId, l.at]));
+  const recordedLogin = (settings: Record<string, unknown>): string | null => {
+    const id = (settings as { legacy?: { waboo?: { sourceUserId?: string } } }).legacy?.waboo
+      ?.sourceUserId;
+    const at = id ? loginBy.get(String(id)) : undefined;
+    return at ? us(new Date(at).toISOString()) : null;
+  };
 
   const oracle = new AccessOracle({
     client,
@@ -75,7 +95,7 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
             ${TS('invited_at')}, ${TS('joined_at')}, ${TS('created_at')}, ${TS('updated_at')} FROM users WHERE org_id = ${orgId}`,
   );
   const profileRows = await q(
-    `SELECT user_id, display_name, phone_e164, ${TS('phone_verified_at')}, locale, theme, row_version, ${TS('created_at')}, ${TS('updated_at')} FROM user_profiles WHERE org_id = ${orgId}`,
+    `SELECT user_id, display_name, phone_e164, ${TS('phone_verified_at')}, chat_limit, locale, theme, row_version, ${TS('created_at')}, ${TS('updated_at')} FROM user_profiles WHERE org_id = ${orgId}`,
   );
   const securityRows = await q(
     `SELECT user_id, ${TS('email_verified_at')}, ${TS('password_changed_at')}, force_password_change, ${TS('last_login_at')}, mfa_enabled,
@@ -134,7 +154,8 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   // --- grants of the custom roles: the exact set, never above the ceiling, never admin-class without an approver ---------------------
   const gotGrants = new Map<string, Map<string, string>>();
   for (const g of grantRows) {
-    if (g.effect !== 'allow')
+    // a deny on a preset role is the closed-module ceiling core-load writes (held by the baseline digest); custom roles only ever get allow
+    if (g.effect !== 'allow' && g.system_key === null)
       alarm(
         `DENY_ROW: a role_grants row has effect ${String(g.effect)}; the migration writes allow only`,
       );
@@ -215,6 +236,8 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
       if (p.display_name !== null) pb.push('display_name');
       if (p.phone_e164 !== u.phone) pb.push('phone_e164');
       if (p.phone_verified_at !== us(u.phoneVerified)) pb.push('phone_verified_at');
+      if ((p.chat_limit === null ? null : Number(p.chat_limit)) !== u.chatLimit)
+        pb.push('chat_limit');
       if (p.locale !== null) pb.push('locale');
       if (p.theme !== 'paper') pb.push('theme');
       if (Number(p.row_version) !== 1) pb.push('row_version');
@@ -229,19 +252,24 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
       if (s.email_verified_at !== us(u.emailVerified)) sb.push('email_verified_at');
       for (const c of [
         'password_changed_at',
-        'last_login_at',
         'mfa_confirmed_at',
         'mfa_last_step',
         'mfa_secret_enc',
       ])
         if (s[c] !== undefined && s[c] !== null) sb.push(c);
+      // last_login_at is written by core-load from the Waboo sign-in log (the log itself is not dumped): it must equal what core-load recorded
+      const wantLogin = recordedLogin(u.settings);
+      if ((s.last_login_at ?? null) !== wantLogin) sb.push('last_login_at');
       if (s.force_password_change !== false) sb.push('force_password_change');
       if (s.mfa_enabled !== false) sb.push('mfa_enabled');
       if (s.has_mfa_secret !== false) sb.push('mfa_secret_enc');
       if (s.mfa_recovery !== '[]') sb.push('mfa_recovery_hashes');
-      if (Number(s.row_version) !== 1) sb.push('row_version');
+      // a recorded last login (core-load) touches the row: version and update time move with it
+      if (recordedLogin(u.settings) === null) {
+        if (Number(s.row_version) !== 1) sb.push('row_version');
+        if (s.updated_at !== us(u.updated)) sb.push('updated_at');
+      }
       if (s.created_at !== us(u.created)) sb.push('created_at');
-      if (s.updated_at !== us(u.updated)) sb.push('updated_at');
     }
     if (sb.length > 0) alarm(`ORACLE_MISMATCH: user_security ${u.key}: ${sb.join(', ')}`);
     const want = expectedRoleRow(u);
@@ -253,15 +281,21 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
   }
   if (!a.allowExtraRows)
     for (const t of userRows)
-      if (String(t.uuid) !== ownerUuid && !wantUuids.has(String(t.uuid)))
+      if (String(t.uuid) !== ownerUuid && !wantUuids.has(String(t.uuid)) && !isAdditional(t.email))
         alarm(
           `EXTRA_ROWS: users: a user (${mask(t.email)}) is neither the owner nor accounted for by a Waboo user`,
         );
 
   // --- the owner: exactly the --owner-email user holds Owner; an adopted Waboo user is that row, untouched -------------------------------
   const ownerRole = presetRole('admin');
+  const additionalIds = new Set(
+    userRows.filter((t) => isAdditional(t.email)).map((t) => Number(t.id)),
+  );
   const holders = userRoleRows.filter(
-    (r) => ownerRole && Number(r.role_id) === Number(ownerRole.id),
+    (r) =>
+      ownerRole &&
+      Number(r.role_id) === Number(ownerRole.id) &&
+      !additionalIds.has(Number(r.user_id)),
   );
   const ownerRow = ownerUuid ? userByUuid.get(ownerUuid) : undefined;
   if (a.access.ownerEmail) {
@@ -306,7 +340,7 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
     );
     if (admin.length === 0) continue;
     holders2.push(`${mask(t.email)} (${admin.map((r) => r.name).join(', ')})`);
-    if (String(t.uuid) === ownerUuid) continue;
+    if (String(t.uuid) === ownerUuid || isAdditional(t.email)) continue;
     const ou = [...oracle.users.values()].find((u) => u.uuid === String(t.uuid));
     const approved =
       ou?.role.kind === 'preset'
@@ -428,7 +462,11 @@ export async function verifyAccess(a: AccessVerifyInput): Promise<void> {
     );
     // the loader's bump must still be in effect. The app may bump it again later (a role edit after the run), so a higher value is
     // fine; only a value below the loader's own bump means the cache key went back.
-    if (!marker?.counts || !(marker.counts.after > marker.counts.before) || cur < marker.counts.after)
+    if (
+      !marker?.counts ||
+      !(marker.counts.after > marker.counts.before) ||
+      cur < marker.counts.after
+    )
       alarm(
         'ROLES_VERSION: organizations.roles_version was not increased after roles and users were written (RBAC could serve a stale grant set)',
       );

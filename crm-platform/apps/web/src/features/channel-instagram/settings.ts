@@ -11,6 +11,6 @@ export const settings = [
     href: '/instagram',
     icon: 'instagram',
     order: 30,
-    gates: { permission: 'ig.accounts.read' },
+    gates: { permission: 'ig.accounts.read', planFeature: 'extra_channels' },
   }),
 ];

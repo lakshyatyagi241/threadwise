@@ -11,6 +11,7 @@ import type {
 import type { Tx } from '@crm/db';
 import { decodeCursor } from '../../../common/pagination/cursor';
 import { DEFAULT_NUMBERING, type NumberingSettings } from './sales-doc-rules';
+import { isTeamPeer, scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 type Raw = Record<string, unknown>;
 const n = (v: unknown): number | null => (v === null || v === undefined ? null : Number(v));
@@ -205,14 +206,10 @@ export function salesDocScopeCondition(
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (!actorUserId) return sql`false`;
-  const own = sql`(d.owner_id = ${actorUserId} OR d.created_by = ${actorUserId})`;
-  if (scope === 'own') return own;
-  const peers = sql`(SELECT tm2.user_id FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId})`;
-  return sql`(${own} OR d.owner_id IN ${peers} OR d.created_by IN ${peers})`;
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`d.owner_id`,
+    sql`d.created_by`,
+  ]);
 }
 
 /** A filter with every uuid already resolved to the internal id the SQL needs. */
@@ -972,13 +969,10 @@ export class SalesDocsRepository {
     orgId: number,
     actorUserId: number,
     userId: number,
+    /** `team_and_below`: a person in a team under one of the actor's teams counts too. */
+    below = false,
   ): Promise<boolean> {
-    const res = await tx.execute(sql`
-      SELECT 1 FROM team_members tm1
-      JOIN team_members tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId} AND tm2.user_id = ${userId} LIMIT 1
-    `);
-    return res.rows.length > 0;
+    return isTeamPeer(tx, orgId, actorUserId, userId, below);
   }
 
   /** The workspace's name, time zone and currency (`settings.currency`, else its default pipeline's, else null). */

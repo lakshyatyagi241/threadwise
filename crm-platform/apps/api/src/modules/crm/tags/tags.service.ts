@@ -188,6 +188,7 @@ export class TagsService {
   private async assertUnderTagLimit(tx: Tx, orgId: number): Promise<void> {
     const cap = await this.entitlements.limit(orgId, 'tags');
     if (cap === 0) return;
+    await this.entitlements.lockLimit(tx, orgId, 'tags');
     await this.entitlements.assertWithinLimit(orgId, 'tags', await this.repo.countAll(tx, orgId));
   }
 
@@ -259,14 +260,7 @@ export class TagsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
 
       // An id that is not a tag in this org falls through to the name, as in Reference; with
       // neither there is nothing to attach.
@@ -363,14 +357,7 @@ export class TagsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.update').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const tag = await this.repo.findByUuid(tx, ctx.orgId, tagUuid);
       if (!tag) throw AppError.notFound('Tag', tagUuid);
 
@@ -398,14 +385,7 @@ export class TagsService {
       const contact = await this.contactsRepo.resolveContactRef(tx, ctx.orgId, contactUuid);
       if (!contact) throw AppError.notFound('Contact', contactUuid);
       const scope = this.rbac.can(ctx.grants!, 'record.contacts.read').scope;
-      await assertContactScope(
-        tx,
-        this.contactsRepo,
-        ctx.orgId,
-        scope,
-        ctx.userId!,
-        contact.ownerId,
-      );
+      await assertContactScope(tx, this.contactsRepo, ctx.orgId, scope, ctx.userId!, contact);
       const rows = await this.repo.listByContact(tx, ctx.orgId, contact.id);
       return rows.map(toTagResponse);
     });

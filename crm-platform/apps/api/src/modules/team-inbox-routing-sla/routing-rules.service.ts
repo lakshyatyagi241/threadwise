@@ -78,8 +78,8 @@ export class RoutingRulesService {
   async create(input: CreateRoutingRuleInput): Promise<RoutingRule> {
     const { orgId } = RequestContextStore.require();
     // The plan's row limit counts every rule, switched off ones too (TW-TIB2-005 rule 4), and is checked before anything else.
-    await this.usage.assertCanAdd(orgId, 'routing_rules');
     return this.db.tx(async (tx) => {
+      await this.usage.assertCanAddIn(tx, orgId, 'routing_rules');
       if (input.assign) await this.assertTargets(tx, orgId, input.assign);
       if (input.escalation?.reassign && !input.assign) {
         throw AppError.validation(
@@ -302,8 +302,8 @@ export class RoutingRulesService {
   /** A copy that goes last, switched off, not the fallback, with its counters at zero. Counts against the plan limit. */
   async duplicate(uuid: string): Promise<RoutingRule> {
     const { orgId } = RequestContextStore.require();
-    await this.usage.assertCanAdd(orgId, 'routing_rules');
     return this.db.tx(async (tx) => {
+      await this.usage.assertCanAddIn(tx, orgId, 'routing_rules');
       const row = await this.repo.byUuid(tx, orgId, uuid);
       if (!row) throw AppError.notFound('Routing rule');
       const src = toRoutingRule(row, 0);
@@ -461,11 +461,17 @@ export class RoutingRulesService {
         );
       }
     }
-    const teams = await this.repo.teams(tx, orgId, assign.teamIds);
+    const teams = await this.repo.teams(tx, orgId, assign.teamIds, { receivingOnly: true });
     if (assign.teamIds.some((t) => !teams.has(t))) {
-      throw AppError.validation('That team is not part of this workspace.', [
-        { path: 'assign.teamIds', message: 'That team is not part of this workspace.' },
-      ]);
+      throw AppError.validation(
+        'That team is not part of this workspace, or it is set not to receive conversations.',
+        [
+          {
+            path: 'assign.teamIds',
+            message: 'Unknown team, or one that does not receive conversations.',
+          },
+        ],
+      );
     }
   }
 }

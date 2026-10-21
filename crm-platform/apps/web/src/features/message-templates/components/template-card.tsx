@@ -42,7 +42,9 @@ export function TemplateCard({
 }) {
   const t = useTranslations('message-templates.card');
   const ts = useTranslations('message-templates.status');
-  const tc = useTranslations('message-templates.category');
+  const tq = useTranslations('message-templates.quality');
+  // the status line shows the quality (the corner pill already shows the category)
+  const quality = (tpl.qualityScore ?? 'UNKNOWN').toUpperCase();
   const group = statusGroupOf(tpl.status);
   return (
     <article
@@ -75,12 +77,8 @@ export function TemplateCard({
         <span>
           {t.has(`type.${tpl.templateType}`) ? t(`type.${tpl.templateType}`) : tpl.templateType}
         </span>
-        {tpl.metaCategory && (
-          <>
-            <span aria-hidden="true">·</span>
-            <span>{tc(tpl.metaCategory)}</span>
-          </>
-        )}
+        <span aria-hidden="true">·</span>
+        <span data-testid="quality-label">{tq.has(quality) ? tq(quality) : tq('UNKNOWN')}</span>
         {connectionLabel && (
           <>
             <span aria-hidden="true">·</span>

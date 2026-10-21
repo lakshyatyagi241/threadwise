@@ -1,0 +1,194 @@
+{
+  "sales-activities": {
+    "defaults": {
+      "activity": {
+        "task": "Task",
+        "meeting": "Meeting",
+        "phone": "Phone",
+        "email": "Email",
+        "reminder": "Reminder",
+        "sms": "SMS",
+        "chat": "Chat"
+      },
+      "option": {
+        "task": {
+          "follow_up": "Follow up",
+          "call_reminder": "Call reminder"
+        },
+        "meeting": {
+          "interested": "Interested",
+          "not_interested": "Not interested",
+          "needs_follow_up": "Needs follow-up",
+          "rescheduled": "Rescheduled",
+          "no_show": "No-show"
+        },
+        "phone": {
+          "connected": "Connected",
+          "no_answer": "No answer",
+          "busy": "Busy",
+          "left_voicemail": "Left voicemail",
+          "wrong_number": "Wrong number",
+          "declined": "Declined",
+          "failed": "Failed"
+        }
+      }
+    },
+    "list": {
+      "back": "Data",
+      "title": "Sales Activities",
+      "intro": "Manage the activities your team logs from one place: tasks, meetings, calls and any activity of your own. Choose what each one can do, its task types and its outcomes.",
+      "create": "Create activity",
+      "loading": "Loading activities…",
+      "loadFailed": "The activities could not be loaded.",
+      "retry": "Try again",
+      "listLabel": "Activities",
+      "default": "Default",
+      "custom": "Custom",
+      "noEditor": "A default activity with nothing to set up.",
+      "edit": "Edit activity",
+      "editNamed": "Edit activity {name}",
+      "chip": {
+        "completable": "Can be completed",
+        "notCompletable": "Cannot be completed",
+        "calendar": "In calendar",
+        "taskTypes": "{count, plural, one {# task type} other {# task types}}",
+        "outcomes": "{count, plural, one {# outcome} other {# outcomes}}"
+      }
+    },
+    "drawer": {
+      "title": "Edit activity: {name}",
+      "close": "Close",
+      "done": "Done",
+      "cancel": "Cancel",
+      "saved": "Saved.",
+      "autosave": "Changes save as you make them.",
+      "readOnly": "You can see these settings but not change them.",
+      "name": "Activity name",
+      "nameLocked": "The name of a default activity cannot be changed.",
+      "mobileCheckIn": "Allow users to check in and check out from the mobile app",
+      "mobileCheckInPending": "Saved, but it has no effect yet: the mobile app does not support meeting check-in. It starts working when the app does.",
+      "showInCalendar": "Show this activity in My calendar on Activities Dashboard",
+      "showInCalendarHint": "Saved, but there is no activities calendar yet. It takes effect when one is added.",
+      "allowComplete": "Allow users to mark this activity as completed",
+      "allowEditCompleted": "Allow users to edit the completed date and time of this activity",
+      "taskTypes": "Task types",
+      "taskTypesHint": "Pick one when you create a task, for example Follow up or Call reminder.",
+      "addTaskType": "Add type",
+      "taskTypePlaceholder": "New task type",
+      "predictOutcomes": "Predict outcomes for this activity",
+      "predictOutcomesHint": "Offer an outcome when the activity is completed.",
+      "outcomes": "Outcomes",
+      "outcomesHint": "Removing an outcome keeps it on the records that already have it.",
+      "phoneOutcomesHint": "Choose how each outcome counts in call reports. Removing an outcome keeps it on the calls that already have it.",
+      "addOutcome": "Add outcome",
+      "outcomePlaceholder": "New outcome",
+      "listEmpty": "Nothing here yet.",
+      "moveUp": "Move {name} up",
+      "moveDown": "Move {name} down",
+      "remove": "Remove {name}",
+      "countsAsShort": "counts as {as}",
+      "countsAsLabel": "Counts as",
+      "countsAsOption": "Counts as {as}",
+      "countsAs": {
+        "connected": "connected",
+        "no_answer": "no answer",
+        "busy": "busy",
+        "left_voicemail": "left voicemail",
+        "wrong_number": "wrong number",
+        "declined": "declined",
+        "failed": "failed"
+      },
+      "removeActivity": "Remove activity",
+      "removeConfirmTitle": "Remove {name}?",
+      "removeConfirmBody": "It leaves the list. Records that used it keep their outcomes.",
+      "removed": "Activity removed.",
+      "noSettings": "This activity has nothing to set up.",
+      "errors": {
+        "nameRequired": "Give the activity a name.",
+        "nameTaken": "That name is already in use here.",
+        "limit": "You have reached the limit for this list.",
+        "conflict": "Someone else changed this activity. It was reloaded; try again.",
+        "forbidden": "You do not have permission to change this.",
+        "failed": "That could not be saved. Try again."
+      },
+      "itemName": "Name",
+      "hiddenInstead": "Tasks still use it, so it was hidden instead. They keep showing it.",
+      "loadingOutcomes": "Loading outcomes…",
+      "outcomesLoadFailed": "The outcomes could not be loaded.",
+      "retry": "Try again"
+    },
+    "create": {
+      "title": "Create activity",
+      "close": "Close",
+      "cancel": "Cancel",
+      "create": "Create",
+      "intro": "Add an activity specific to your business. It starts with the settings of the kind you choose.",
+      "name": "Name",
+      "namePlaceholder": "For example, Site visit",
+      "behavesAs": "Works like",
+      "behavesAsHint": {
+        "task": "Something to do by a date, which can be completed.",
+        "meeting": "Something that happens at a time, which can be completed.",
+        "phone": "A call, with the outcomes of a call."
+      },
+      "behaves": {
+        "task": "A task",
+        "meeting": "A meeting",
+        "phone": "A phone call"
+      },
+      "icon": "Icon",
+      "icons": {
+        "task": "Task",
+        "meeting": "Calendar",
+        "phone": "Phone",
+        "email": "Email",
+        "reminder": "Bell",
+        "sms": "Message",
+        "chat": "Chat",
+        "visit": "Place",
+        "video": "Video",
+        "document": "Document",
+        "flag": "Flag",
+        "star": "Star"
+      },
+      "errors": {
+        "nameRequired": "Give the activity a name.",
+        "nameTaken": "An activity with that name exists already.",
+        "limit": "You have reached the limit of custom activities.",
+        "failed": "The activity could not be created. Try again."
+      }
+    },
+    "picker": {
+      "removedSuffix": "(removed)",
+      "taskType": "Task type",
+      "taskTypeNone": "No type",
+      "outcome": "Outcome",
+      "outcomeNone": "No outcome",
+      "completeOff": "Completing tasks is switched off in Sales Activities."
+    },
+    "meeting": {
+      "saved": "Meeting updated.",
+      "reopened": "Meeting reopened.",
+      "errors": {
+        "disabled": "Completing meetings is switched off in Sales Activities.",
+        "optionGone": "That outcome was removed. Pick another.",
+        "failed": "That could not be saved. Try again."
+      },
+      "outcome": "Outcome",
+      "noOutcome": "No outcome",
+      "removedSuffix": "(removed)",
+      "notes": "Notes",
+      "cancel": "Cancel",
+      "save": "Save",
+      "outcomeChip": "Outcome: {name}",
+      "completed": "Completed",
+      "editAria": "Edit the outcome of {title}",
+      "edit": "Edit",
+      "reopenAria": "Reopen {title}",
+      "reopen": "Reopen",
+      "addAria": "Add an outcome to {title}",
+      "add": "Add outcome",
+      "markCompleted": "Mark completed"
+    }
+  }
+}

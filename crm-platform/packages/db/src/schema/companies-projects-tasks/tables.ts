@@ -3,9 +3,11 @@
  * The SQL migration is the source of truth; `pnpm db:verify-schema` fails if this file and the database disagree.
  */
 import {
+  boolean,
   date,
   foreignKey,
   index,
+  integer,
   pgTable,
   primaryKey,
   smallint,
@@ -85,6 +87,38 @@ export const projects = pgTable(
 export type ProjectsRow = typeof projects.$inferSelect;
 export type NewProjectsRow = typeof projects.$inferInsert;
 
+/**
+ * The workspace's list of task outcomes (Interested, Left message, ...). Mirrors migrations/20270126090000_task_outcomes.sql; the
+ * unique index on (org_id, lower(btrim(name))) is an expression index and lives there.
+ */
+export const taskOutcomes = pgTable(
+  'task_outcomes',
+  {
+    orgId: orgIdColumn(),
+    id: idColumn('id').notNull().generatedByDefaultAsIdentity(),
+    uuid: uuid('uuid').notNull().defaultRandom(),
+    name: text('name').notNull(),
+    sortOrder: integer('sort_order').notNull().default(0),
+    isActive: boolean('is_active').notNull().default(true),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+    rowVersion: rowVersion(),
+  },
+  (t) => [
+    primaryKey({ columns: [t.orgId, t.id] }),
+    unique('uq_task_outcomes_org_id_uuid').on(t.orgId, t.uuid),
+    foreignKey({
+      name: 'fk_task_outcomes_org',
+      columns: [t.orgId],
+      foreignColumns: [organizations.id],
+    }).onDelete('cascade'),
+    index('idx_task_outcomes_order').on(t.orgId, t.sortOrder, t.id),
+  ],
+);
+
+export type TaskOutcomesRow = typeof taskOutcomes.$inferSelect;
+export type NewTaskOutcomesRow = typeof taskOutcomes.$inferInsert;
+
 export const tasks = pgTable(
   'tasks',
   {
@@ -93,6 +127,8 @@ export const tasks = pgTable(
     uuid: uuid('uuid').notNull().defaultRandom(),
     createdBy: idColumn('created_by'),
     assigneeId: idColumn('assignee_id'),
+    /** The assignee's primary team when the assignee was set (BL-382). Stamped by a trigger, for reports and filters only, never access. */
+    owningTeamId: idColumn('owning_team_id'),
     title: text('title').notNull(),
     notes: text('notes'),
     priority: text('priority').notNull().default('medium'),
@@ -100,9 +136,13 @@ export const tasks = pgTable(
     contactId: idColumn('contact_id'),
     dealId: idColumn('deal_id'),
     companyId: idColumn('company_id'),
+    /** The outcome the task ended with (task_outcomes); no ON DELETE action: an outcome in use cannot be deleted. */
+    outcomeId: idColumn('outcome_id'),
     source: text('source').notNull().default('manual'),
     /** BL-291: `follow_up` is a contact's next follow-up (at most one open per contact); every other task is `task`. */
     kind: text('kind').notNull().default('task'),
+    /** Sales activities settings: the task type (activity_type_options). The outcome is `outcomeId` above (task_outcomes). */
+    taskTypeId: idColumn('task_type_id'),
     dueAt: timestamp('due_at', { withTimezone: true }),
     remindedAt: timestamp('reminded_at', { withTimezone: true }),
     doneAt: timestamp('done_at', { withTimezone: true }),
@@ -143,6 +183,11 @@ export const tasks = pgTable(
       columns: [t.orgId, t.companyId],
       foreignColumns: [companies.orgId, companies.id],
     }).onDelete('set null'),
+    foreignKey({
+      name: 'fk_tasks_outcome_id',
+      columns: [t.orgId, t.outcomeId],
+      foreignColumns: [taskOutcomes.orgId, taskOutcomes.id],
+    }),
     index('idx_tasks_org_created').on(t.orgId, t.createdAt, t.id),
     // The open-task, assignee, done, link, created_by and reminder indexes are partial or expression indexes and live in
     // migrations/20261004100000_task_model_reshape.sql; the CHECKs (status, priority, done stamp) live there too.

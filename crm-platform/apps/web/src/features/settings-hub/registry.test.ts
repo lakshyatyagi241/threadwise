@@ -33,6 +33,9 @@ function routes(): string[][] {
   const out: string[][] = [];
   const walk = (dir: string, segs: string[]) => {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
+      // `(app)/[...unknown]` is the "no screen owns this address" page (it only answers 404 inside the shell). Counting it as a route
+      // would make every address look like a real page, so an address is a route only when a screen other than that one owns it.
+      if (e.name === '[...unknown]') continue;
       if (e.isDirectory()) {
         walk(join(dir, e.name), /^\(.*\)$/.test(e.name) ? segs : [...segs, e.name]);
       } else if (e.name === 'page.tsx') out.push(segs);

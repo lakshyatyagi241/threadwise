@@ -193,6 +193,9 @@ export function matchesFilters(
     case 'unread':
       if (row.unreadCount <= 0) return false;
       break;
+    case 'waiting':
+      if (row.handling !== 'waiting') return false;
+      break;
     case 'all':
       break;
   }
@@ -349,7 +352,7 @@ export function listReducer(state: ListState, action: ListAction): ListState {
 
 /** A tab's badge number: the server's count, never below zero; null before the first answer. */
 export function tabCount(counts: InboxCounts | null, tab: InboxTab): number | null {
-  return counts ? Math.max(0, counts[tab]) : null;
+  return counts ? Math.max(0, counts[tab] ?? 0) : null;
 }
 
 /** `99+` for the unread badge of a row. */

@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "przypisano",
+        "waitingInQueue": "czeka w kolejce",
+        "noAgentOutOfHours": "brak agenta / poza godzinami"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Krok {stage}: wybierz osobę, do której trafi rozmowa."
+      }
+    },
+    "simulator": {
+      "handoff": "przekazano osobie (miejsce docelowe: {destination}, zespół „{team}”); czat testowy wybiera wyjście „przypisano”"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Przekaż do",
+          "handoffRules": "Reguły przypisywania",
+          "pickAgent": "— wybierz osobę —"
+        }
+      },
+      "handoff": {
+        "legacy": "Ten krok to starsze „Przypisz agenta”.",
+        "upgradeHint": "Przekazuje czat zespołowi i działa dalej. Przełącz na Przekazanie człowiekowi, aby dodać powód, priorytet, wiadomości dla kontaktu i trzy wyjścia (przypisano, czeka w kolejce, brak agenta lub poza godzinami). Wykonane już połączenia nadal działają.",
+        "upgrade": "Użyj funkcji przekazania",
+        "destination": "Wyślij rozmowę do",
+        "dest": {
+          "team": "Zespół",
+          "person": "Jedna osoba",
+          "rules": "Reguły przypisywania",
+          "rulesLocked": "Reguły przypisywania (nie ma ich w Twoim planie)"
+        },
+        "destHint": {
+          "team": "Trafia do kogoś z zespołu lub czeka w kolejce zespołu.",
+          "person": "Trafia do tej osoby, jeśli może ją przejąć; w przeciwnym razie czeka w kolejce.",
+          "rules": "Używa Twoich reguł automatycznego przypisywania rozmów; gdy żadna nie wskaże osoby, rozmowa czeka w kolejce."
+        },
+        "lockHint": "Twój plan nie obejmuje reguł przypisywania, więc rozmowa wysłana tutaj czeka w kolejce oczekujących, aż współpracownik ją przejmie.",
+        "team": "Zespół",
+        "teamPick": "— wybierz zespół —",
+        "teamNone": "Brak zespołów",
+        "teamOption": "{name} · {count, plural, one {# agent} few {# agentów} many {# agentów} other {# agenta}}",
+        "teamHint": "<link>Zarządzaj zespołami →</link>",
+        "person": "Osoba",
+        "personPick": "— wybierz osobę —",
+        "personHint": "Ktoś z Twoich zespołów.",
+        "unknownMember": "{value} (spoza tego obszaru roboczego)",
+        "reason": "Powód",
+        "reasons": {
+          "customer_asked": "Kontakt poprosił o konsultanta",
+          "bot_could_not_help": "Bot nie mógł pomóc",
+          "sensitive_topic": "Drażliwy temat",
+          "sales_lead": "Lead sprzedażowy",
+          "complaint": "Reklamacja",
+          "other": "Inne"
+        },
+        "priority": "Priorytet",
+        "priorityKeep": "Zachowaj bieżący priorytet",
+        "priorities": {
+          "low": "Niski",
+          "normal": "Normalny",
+          "high": "Wysoki",
+          "urgent": "Pilny"
+        },
+        "note": "Notatka dla agenta",
+        "noteHint": "Wewnętrzna. Wyświetlana na karcie przekazania; '{{'variables'}}' działają. Do 500 znaków.",
+        "customerMessage": "Wiadomość do kontaktu",
+        "customerHint": "Wysyłana, gdy rozmowa jest przekazywana. Zostaw puste, aby nic nie wysyłać.",
+        "offHours": "Wiadomość, gdy nikt nie jest dostępny",
+        "offHoursHint": "Wysyłana zamiast tego, gdy zespół jest nieczynny lub nikt nie może przejąć rozmowy. Rozmowa nadal czeka w kolejce.",
+        "exits": "Ten krok ma trzy wyjścia",
+        "exitAssigned": "przypisano: rozmowę ma już osoba",
+        "exitWaiting": "czeka w kolejce: czeka, aż ktoś ją przejmie",
+        "exitUnavailable": "brak agenta / poza godzinami: nikt nie mógł jej przejąć",
+        "simpleExits": "Następny krok uruchomi się, gdy rozmowę przejmie osoba. Jeśli musi czekać w kolejce lub nikt nie jest dostępny, bot kończy tutaj, a odpowiada osoba. Użyj zaawansowanego kreatora, aby obsłużyć pozostałe wyjścia."
+      }
+    }
+  }
+}

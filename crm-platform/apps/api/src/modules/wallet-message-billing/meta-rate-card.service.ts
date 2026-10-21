@@ -17,6 +17,9 @@ import { cardFreshness, mostPressing } from './meta-card-freshness';
 import { ALL_MARKETS, countriesOf, marketOf, OTHER_MARKET } from './meta-markets';
 import { MetaCardFileError, parseMetaCardFile, type ParsedMetaCard } from './meta-rate-card-file';
 import { WalletSettingsService } from './wallet-settings.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('meta_rate_card');
 
 const BIGGEST = 8;
 const CACHE_MS = 30_000;
@@ -208,6 +211,8 @@ export class MetaRateCardService {
    */
   async lookup(tx: Tx, currency: string): Promise<MetaCostLookup> {
     let hit = this.costs.get(currency);
+    if (hit && Date.now() - hit.at < CACHE_MS) cache.hit();
+    else cache.miss();
     if (!hit || Date.now() - hit.at >= CACHE_MS) {
       const rows = await this.readRows(tx, currency);
       hit = {

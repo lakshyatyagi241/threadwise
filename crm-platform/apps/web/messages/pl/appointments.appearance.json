@@ -1,0 +1,190 @@
+{
+  "appointments": {
+    "appearance": {
+      "title": "Wygląd strony rezerwacji",
+      "subtitle": "Dopasuj stronę, na której klienci umawiają wizyty, do wyglądu Twojej firmy.",
+      "backToSettings": "Ustawienia wizyt",
+      "loading": "Wczytywanie motywu strony rezerwacji",
+      "forbidden": "Nie masz uprawnień do wyświetlania wyglądu strony rezerwacji.",
+      "notAvailable": "Wygląd strony rezerwacji nie jest jeszcze dostępny na tym serwerze.",
+      "readOnly": "Możesz przeglądać wygląd, ale nie możesz go zmieniać. Zmiana wymaga uprawnień do edycji typów rezerwacji.",
+      "fixFirst": "Najpierw popraw zaznaczone pola.",
+      "issues": "{count, plural, one {# pole wymaga uwagi przed zapisaniem.} few {# pola wymagają uwagi przed zapisaniem.} many {# pól wymaga uwagi przed zapisaniem.} other {# pola wymaga uwagi przed zapisaniem.}}",
+      "saved": "Zapisano wygląd strony rezerwacji",
+      "saving": "Zapisywanie...",
+      "unsaved": "Niezapisane zmiany",
+      "allSaved": "Wszystkie zmiany zapisane",
+      "discard": "Odrzuć zmiany",
+      "save": "Zapisz wygląd",
+      "conflict": {
+        "message": "Podczas edycji ktoś inny zmienił wygląd.",
+        "reload": "Wczytaj najnowszą wersję"
+      },
+      "leave": {
+        "title": "Wyjść bez zapisywania?",
+        "message": "Zmiany w wyglądzie strony rezerwacji nie zostały zapisane.",
+        "leave": "Wyjdź",
+        "stay": "Kontynuuj edycję"
+      },
+      "tile": {
+        "label": "Wygląd strony rezerwacji",
+        "description": "Logo, kolory, czcionki i tekst powitalny strony, na której klienci rezerwują",
+        "keywords": "branding, logo, kolory, motyw, strona rezerwacji, wygląd, czcionki, white label"
+      },
+      "card": {
+        "title": "Wygląd strony rezerwacji",
+        "description": "Dodaj logo i kolory, napisz wiadomość powitalną oraz wybierz czcionki i rogi strony, na której klienci rezerwują. Podczas edycji widzisz podgląd na żywo.",
+        "open": "Otwórz wygląd strony rezerwacji"
+      },
+      "editorLink": {
+        "link": "Wygląd strony",
+        "saveFirst": "Najpierw zapisz typ rezerwacji, a potem otwórz wygląd jego strony."
+      },
+      "typesList": {
+        "menu": "Wygląd strony"
+      },
+      "pictures": {
+        "title": "Logo i obraz w tle",
+        "description": "Wyświetlane na górze strony. Zostaw puste, aby użyć ustawień z wyższego poziomu.",
+        "logo": "Logo",
+        "logoHint": "PNG, JPG, WebP lub GIF, do {mb} MB. Najlepiej sprawdza się szerokie logo na przezroczystym tle.",
+        "cover": "Obraz w tle",
+        "coverHint": "PNG, JPG, WebP lub GIF, do {mb} MB. Wyświetlany jako baner, gdy tło ustawiono na obraz.",
+        "useBrand": "Użyj logo i kolorów z Brandingu, gdy pole jest puste",
+        "useBrandHint": "Wszystko, co zostawisz puste, zostanie pobrane z Ustawień, Branding, aby strona rezerwacji pasowała do reszty Twojej marki."
+      },
+      "fields": {
+        "picker": "{name}: wybierz kolor",
+        "clear": "Wyczyść",
+        "noPicture": "Brak obrazu",
+        "upload": "Prześlij",
+        "replace": "Zamień",
+        "remove": "Usuń",
+        "inheritedPicture": "Używany jest obraz ustawiony na wyższym poziomie.",
+        "inheritedColour": "Puste pole używa {colour}.",
+        "productColour": "Puste pole używa koloru domyślnego.",
+        "pictureType": "Użyj obrazu PNG, JPG, WebP lub GIF.",
+        "pictureSize": "Obraz jest za duży. Limit to {mb} MB.",
+        "pictureRejected": "Ten obraz nie został zaakceptowany. Użyj obrazu PNG, JPG, WebP lub GIF w granicach limitu rozmiaru."
+      },
+      "colours": {
+        "title": "Kolory i tło",
+        "description": "Kolory tekstu są dobierane automatycznie, aby wszystko pozostało czytelne.",
+        "primary": "Kolor główny",
+        "typeHint": "Puste pole używa koloru przestrzeni roboczej.",
+        "button": "Kolor przycisków",
+        "buttonHint": "Kolor przycisków i wybranych godzin. Puste pole używa koloru głównego.",
+        "background": "Tło strony",
+        "backgroundHint": "Jednolity kolor, delikatny odcień koloru głównego lub obraz w tle jako baner.",
+        "sameAsWorkspace": "Tak samo jak w przestrzeni roboczej",
+        "backgrounds": {
+          "solid": "Jednolity kolor",
+          "tint": "Delikatny odcień",
+          "image": "Obraz w tle"
+        },
+        "backgroundColour": "Kolor tła",
+        "needCover": "Prześlij obraz w tle, aby użyć tego tła.",
+        "invalid": "Użyj koloru takiego jak #1a73e8."
+      },
+      "checks": {
+        "title": "Kontrola czytelności",
+        "autoText": "Tekst na przyciskach jest czarny lub biały, zależnie od tego, co jest czytelniejsze, a kolor główny jest przyciemniany lub rozjaśniany tam, gdzie służy jako kolor tekstu.",
+        "primaryText": "Kontrast koloru głównego na stronie wynosi {ratio}:1, czyli mniej niż {min}:1, więc jest korygowany tam, gdzie służy jako kolor tekstu.",
+        "button": "Kontrast tekstu przycisku na tle koloru przycisku wynosi {ratio}:1, czyli mniej niż {min}:1.",
+        "buttonEdge": "Kontrast koloru przycisku względem strony wynosi {ratio}:1, czyli mniej niż {min}:1, więc przyciski mogą być słabo widoczne.",
+        "inDark": "(tryb ciemny)"
+      },
+      "wording": {
+        "title": "Teksty",
+        "description": "Tylko zwykły tekst. Klienci zobaczą go w języku, w którym go napiszesz.",
+        "pageTitle": "Tytuł strony",
+        "pageTitleHint": "Wyświetlany na górze strony i na karcie przeglądarki. Puste pole używa nazwy Twojej firmy.",
+        "welcome": "Wiadomość powitalna",
+        "welcomeHint": "{count} z {max} znaków. Wyświetlana nad formularzem rezerwacji.",
+        "button": "Etykieta przycisku potwierdzenia",
+        "buttonHint": "Tekst na ostatnim przycisku, na przykład Zarezerwuj moje miejsce. Prośby wymagające zatwierdzenia zachowują własną etykietę.",
+        "buttonDefault": "Potwierdź rezerwację",
+        "tooLong": "Użyj najwyżej {max} znaków."
+      },
+      "style": {
+        "title": "Czcionki i rogi",
+        "description": "Niewielki zestaw bezpiecznych opcji, które działają na każdym urządzeniu.",
+        "font": "Czcionka",
+        "fontHint": "Używane są czcionki już zainstalowane na urządzeniu klienta, dzięki czemu strona ładuje się szybko.",
+        "fonts": {
+          "default": "Domyślna produktu",
+          "system": "Systemowa",
+          "serif": "Szeryfowa",
+          "rounded": "Zaokrąglona",
+          "humanist": "Humanistyczna"
+        },
+        "corners": "Rogi",
+        "cornerStyles": {
+          "square": "Kwadratowe",
+          "rounded": "Zaokrąglone",
+          "pill": "Pigułka"
+        },
+        "mode": "Jasny lub ciemny",
+        "modes": {
+          "light": "Jasny",
+          "dark": "Ciemny",
+          "auto": "Zgodnie z urządzeniem"
+        }
+      },
+      "options": {
+        "title": "Opcje strony",
+        "description": "Co jeszcze pojawia się wokół formularza rezerwacji.",
+        "language": "Pokaż przełącznik języka",
+        "languageHint": "Pozwala klientom zmienić język strony.",
+        "poweredBy": "Pokaż \"Powered by\" na dole",
+        "poweredByHint": "Wyłącz, aby pokazywać tylko własną markę.",
+        "poweredByLocked": "Usunięcie \"Powered by\" jest częścią brandingu white-label, którego Twój plan nie obejmuje."
+      },
+      "links": {
+        "title": "Adres strony",
+        "description": "Miejsce, w którym klienci otwierają stronę. Zmiany pojawią się tam od razu po zapisaniu.",
+        "page": "Adres strony rezerwacji",
+        "open": "Otwórz stronę",
+        "copy": "Kopiuj",
+        "copied": "Skopiowano",
+        "later": "Użycie własnej domeny i osadzanie strony w innej witrynie nie są jeszcze dostępne."
+      },
+      "type": {
+        "title": "Wygląd strony: {name}",
+        "subtitle": "Nadaj temu typowi rezerwacji własne logo, kolory lub wiadomość powitalną. Wszystko, co zostawisz puste, używa wyglądu przestrzeni roboczej.",
+        "back": "Wróć do typu rezerwacji",
+        "notFoundTitle": "Nie znaleziono typu rezerwacji",
+        "notFound": "Ten typ rezerwacji już nie istnieje.",
+        "resetTitle": "Użyj wyglądu przestrzeni roboczej",
+        "resetDescription": "Usuwa wszystko, co ustawiono dla tego typu rezerwacji, w tym obrazy.",
+        "reset": "Użyj wyglądu przestrzeni roboczej",
+        "resetConfirmTitle": "Użyć wyglądu przestrzeni roboczej?",
+        "resetConfirmMessage": "Logo, obraz w tle, kolory i teksty ustawione dla tego typu rezerwacji zostaną usunięte.",
+        "resetDone": "Ten typ rezerwacji używa teraz wyglądu przestrzeni roboczej"
+      },
+      "preview": {
+        "title": "Podgląd na żywo",
+        "device": "Urządzenie",
+        "desktop": "Komputer",
+        "mobile": "Telefon",
+        "page": "Strona",
+        "servicePage": "Strona rezerwacji",
+        "serviceList": "Lista usług",
+        "scheme": "Tryb kolorów",
+        "asSet": "Jak ustawiono",
+        "light": "Jasny",
+        "dark": "Ciemny",
+        "direction": "Kierunek",
+        "ltr": "Od lewej do prawej",
+        "rtl": "Od prawej do lewej",
+        "frameTitle": "Podgląd strony rezerwacji",
+        "note": "To prawdziwa strona z przykładowymi godzinami. Nic, co tu zrobisz, nie zostanie zarezerwowane.",
+        "sampleName": "Rozmowa wstępna",
+        "sampleName2": "Pełna sesja",
+        "sampleDescription": "Krótka rozmowa, aby zrozumieć Twoje potrzeby i odpowiedzieć na pytania.",
+        "sampleIntro": "Prosimy przyjść kilka minut wcześniej.",
+        "sampleQuestion": "Czy jest coś, co powinniśmy wiedzieć wcześniej?"
+      }
+    }
+  }
+}

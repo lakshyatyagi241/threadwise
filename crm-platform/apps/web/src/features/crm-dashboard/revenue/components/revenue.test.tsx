@@ -390,7 +390,10 @@ describe('the screen parts', () => {
     const team = html(
       <SplitTable data={report({ rows: { ...report().rows, groupBy: 'team' } })} currency="USD" />,
     );
-    expect(team).toContain('counts in both');
+    // BL-382 D8: a person counts for their PRIMARY team only (the report reads team_members.is_primary), so team rows add up to the total;
+    // the note used to warn that a person in two teams "counts in both".
+    expect(team).toContain('primary team only');
+    expect(team).not.toContain('counts in both');
     const product = html(
       <SplitTable
         data={report({ rows: { ...report().rows, groupBy: 'product' } })}

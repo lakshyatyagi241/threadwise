@@ -1,0 +1,165 @@
+{
+  "oom": {
+    "maxmemoryBytes": 12582912,
+    "usedMemoryAtRefusalBytes": 12582736,
+    "keysStoredBeforeRefusal": 8468,
+    "evictedKeys": 0,
+    "refusedCommands": [
+      "SET",
+      "INCR",
+      "MULTI(INCR,EXPIRE)"
+    ],
+    "stillWork": [
+      "GET",
+      "TTL",
+      "EXPIRE",
+      "DEL/UNLINK",
+      "SCAN"
+    ]
+  },
+  "oomServices": {
+    "rateLimiter": "allowed, degraded=true (fails open)",
+    "formThrottle": "resolves (fails open)",
+    "authRateLimitHit": "count 1 every call (fails open)",
+    "lockSkip": "null (work does not run)",
+    "lockProceed": "degraded lease (runs unprotected)",
+    "apiKeyFailureCounter": "not recorded (guessing throttle lapses)"
+  },
+  "oomQueueAdd": {
+    "error": "OOM command not allowed when used memory > 'maxmemory'. script: a2746c9c49a80628d790a3fea39ee283270f25bc, on @user_scrip",
+    "keysLeftBehind": 0
+  },
+  "oomWorkerSpin": {
+    "seconds": 3,
+    "errorLinesPrinted": 2641,
+    "processCpuMs": 2003,
+    "jobsCompleted": 0,
+    "jobsWaiting": 5
+  },
+  "oomWorkerGuarded": {
+    "seconds": 3,
+    "errorLinesPrinted": 0,
+    "pauseWarningsLogged": 3,
+    "processCpuMs": 172,
+    "jobsCompletedWhileFull": 0,
+    "jobsCompletedAfterMemoryReturned": 5,
+    "msFromMemoryReturnedToAllJobsDone": 1007
+  },
+  "oomRunningJob": {
+    "stateWhileFull": {
+      "active": 1,
+      "completed": 0,
+      "waiting": 0,
+      "delayed": 0,
+      "failed": 0
+    },
+    "handlerRuns": 1,
+    "completedAfterMemoryReturned": 1
+  },
+  "slowRedis": {
+    "serverStallSeconds": 3,
+    "commandDeadlineMs": 2000,
+    "requestWaitedMs": 2003,
+    "result": "degraded (failed open)"
+  },
+  "restart": {
+    "persistence": "appendonly yes, appendfsync everysec",
+    "queuedBeforeGracefulRestart": 500,
+    "waitingAfterGracefulRestart": 500,
+    "dockerRestartCommandMs": 588,
+    "ttlAfterRestartSeconds": 3597,
+    "addedImmediatelyBeforeSigkill": 300,
+    "waitingAfterSigkill": 800,
+    "jobsLostToSigkill": 0
+  },
+  "restartResume": {
+    "jobsDoneAfterResume": 100,
+    "jobsAdded": 100,
+    "addBlockedForMs": 1045
+  },
+  "keyHygieneUnderLoad": {
+    "distinctCallersPerFamily": 2000,
+    "families": 12,
+    "keysCreated": 26000,
+    "keysWithoutTtl": 0,
+    "maxTtlSecondsByFamily": {
+      "lock:": 60,
+      "store_rl:": 118,
+      "test:rl:": 120,
+      "segments:rl:": 59,
+      "wfl:link:redirect:": 58,
+      "salesdoc:pub:": 59,
+      "wgt:hits:": 118,
+      "form:pub:ip:": 58,
+      "wa:media-id:": 3600,
+      "rl67:": 120,
+      "lead:hook:ip:": 58,
+      "mkt:hook:ip:": 59
+    },
+    "bytesPerKeyByFamily": {
+      "form:pub:ip:": 69,
+      "lead:hook:ip:": 72,
+      "store_rl:": 88,
+      "wgt:hits:": 72,
+      "wfl:link:redirect:": 72,
+      "mkt:hook:ip:": 69,
+      "salesdoc:pub:": 88,
+      "segments:rl:": 72,
+      "rl67:": 56,
+      "test:rl:": 72,
+      "lock:": 104,
+      "wa:media-id:": 92
+    },
+    "keysByFamily": {
+      "form:pub:ip:": 2000,
+      "lead:hook:ip:": 2000,
+      "store_rl:": 2000,
+      "wgt:hits:": 2000,
+      "wfl:link:redirect:": 2000,
+      "mkt:hook:ip:": 2000,
+      "salesdoc:pub:": 4000,
+      "segments:rl:": 2000,
+      "rl67:": 2000,
+      "test:rl:": 2000,
+      "lock:": 2000,
+      "wa:media-id:": 2000
+    },
+    "memoryBaselineBytes": 1061944,
+    "memoryAfterLoadBytes": 4180776,
+    "memoryAfterExpiryBytes": 1344792,
+    "keysLeftAfterExpiry": 0,
+    "averageBytesPerCallerKey": 130,
+    "note": "expiry brought forward to 1 ms by the test; lifetimes were asserted before that"
+  },
+  "retentionCompleted": {
+    "queue": "campaign (default options)",
+    "jobsRun": 1400,
+    "completedKept": 1000,
+    "configuredCount": 1000,
+    "bytesPerRetainedJob": 2967
+  },
+  "retentionFailed": {
+    "queue": "campaign (default options, attempts 1)",
+    "jobsRun": 800,
+    "failedKept": 500,
+    "configuredCount": 500,
+    "bytesPerRetainedFailedJob": 4260
+  },
+  "retentionBudget": {
+    "queues": 51,
+    "retainedJobsPerQueueMax": 1500,
+    "retainedJobsAllQueuesMax": 76500,
+    "productionMaxmemoryMb": 192
+  },
+  "connections": {
+    "queueCount": 51,
+    "producerConnections": 51,
+    "connectionsPerQueue": 1
+  },
+  "connectionsWorker": {
+    "perWorker": 2
+  },
+  "connectionsAdapter": {
+    "adapter": 2
+  }
+}

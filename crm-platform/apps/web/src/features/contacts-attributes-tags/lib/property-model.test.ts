@@ -13,6 +13,7 @@ import {
   dependentsOf,
   describeCondition,
   detailGroups,
+  withAgentNames,
   diffConditions,
   diffOptions,
   draftFromField,
@@ -454,5 +455,47 @@ describe('detailGroups', () => {
       label,
     );
     expect(groups).toEqual([]);
+  });
+});
+
+describe('withAgentNames', () => {
+  const id = 'cff18ba7-c965-4418-9b09-a23fbf8c289a';
+  const groups = [{ title: null, rows: [{ key: 'last_chat_assigned_to', label: 'x', value: id }] }];
+  it('shows the agent name for an agent id', () => {
+    expect(withAgentNames(groups, () => 'Asha Rao')[0]!.rows[0]!.value).toBe('Asha Rao');
+  });
+  it('finds the agent when the stored id is upper case', () => {
+    const lower = (v: string) => (v === id ? 'Asha Rao' : undefined);
+    expect(
+      withAgentNames(
+        [
+          {
+            title: null,
+            rows: [{ key: 'last_chat_assigned_to', label: 'x', value: id.toUpperCase() }],
+          },
+        ],
+        lower,
+      )[0]!.rows[0]!.value,
+    ).toBe('Asha Rao');
+  });
+  it('keeps the id when nobody answers for it, and leaves other keys alone', () => {
+    expect(withAgentNames(groups, () => undefined)[0]!.rows[0]!.value).toBe(id);
+    const other = [{ title: null, rows: [{ key: 'module', label: 'm', value: id }] }];
+    expect(withAgentNames(other, () => 'Asha Rao')[0]!.rows[0]!.value).toBe(id);
+  });
+});
+
+describe('detailGroups imported values with no property', () => {
+  it('shows an ISO instant as a date and leaves other text alone', () => {
+    const groups = detailGroups(
+      [],
+      [],
+      { created_time: '2026-03-21T15:29:05.374Z', note_text: 'hello' },
+      new Set(),
+      { yes: 'Yes', no: 'No' },
+      (k) => k,
+      { dateTime: () => '21 Mar 2026, 03:29 PM' },
+    );
+    expect(groups[0]!.rows.map((r) => r.value)).toEqual(['21 Mar 2026, 03:29 PM', 'hello']);
   });
 });

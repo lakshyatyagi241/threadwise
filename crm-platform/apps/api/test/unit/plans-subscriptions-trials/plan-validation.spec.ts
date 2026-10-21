@@ -222,7 +222,8 @@ describe('createPlanRequestSchema', () => {
   it('every limit defaults to 0 (unlimited) and every feature to off, each key present', () => {
     const data = ok();
     expect(Object.keys(data.limits).sort()).toEqual([...PLAN_LIMIT_KEYS].sort());
-    expect(Object.values(data.limits).every((v) => v === 0)).toBe(true);
+    // `teams` defaults to the unlimited stand-in: a client that omits it must not make the plan solo.
+    expect(Object.entries(data.limits).every(([k, v]) => v === (k === 'teams' ? 1_000_000 : 0))).toBe(true);
     expect(Object.keys(data.features).sort()).toEqual([...PLAN_FEATURE_KEYS].sort());
     expect(Object.values(data.features).every((v) => v === false)).toBe(true);
   });

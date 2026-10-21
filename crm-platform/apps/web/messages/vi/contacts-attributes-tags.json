@@ -130,6 +130,7 @@
       "colLeadScore": "Điểm khách hàng tiềm năng",
       "colLanguage": "Ngôn ngữ",
       "colCreatedOn": "Ngày tạo",
+      "colModifiedOn": "Ngày sửa",
       "pagination": "Phân trang",
       "prevPage": "Trang trước",
       "nextPage": "Trang sau",
@@ -282,6 +283,7 @@
       "shortStage": "Giai đoạn",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Ngày tạo",
+      "shortModified": "Đã sửa",
       "firstRun": {
         "title": "Thêm liên hệ đầu tiên của bạn",
         "message": "Đưa những người bạn trò chuyện vào đây. Liên hệ được dùng cho tin nhắn, chiến dịch, công việc và giao dịch.",
@@ -290,7 +292,11 @@
         "importBody": "Tải lên bảng tính và ghép các cột với trường liên hệ.",
         "connect": "Kết nối WhatsApp",
         "connectBody": "Kết nối số của bạn để liên hệ có thể trả lời và bạn có thể nhắn tin cho họ."
-      }
+      },
+      "teamLabel": "Nhóm",
+      "teamFilter": "Lọc theo nhóm",
+      "allTeams": "Tất cả nhóm",
+      "teamFormer": "Nhóm cũ"
     },
     "bulk": {
       "label": "Thao tác cho các liên hệ đã chọn",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Quyền truy cập của bạn không cho phép phân công liên hệ này cho người đó.",
       "company": "Công ty",
       "companyHint": "Nhóm liên hệ này vào một tổ chức.",
-      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này."
+      "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này.",
+      "searchOptions": "Tìm tùy chọn",
+      "searchOptionsFor": "Tìm trong các tùy chọn của {field}",
+      "noOptionsFound": "Không có tùy chọn nào khớp với tìm kiếm."
     },
     "tags": {
       "title": "Thẻ",
@@ -1225,7 +1234,8 @@
             "duplicate": "Hai tùy chọn trùng tên."
           },
           "condition": "Chọn thuộc tính và giá trị cho mọi điều kiện."
-        }
+        },
+        "optionsLazy": "Thuộc tính này có {count, plural, other {# tùy chọn}}, quá nhiều để chỉnh sửa tại đây. Các tùy chọn được giữ nguyên; bạn vẫn có thể đổi các cài đặt khác."
       },
       "builtinCard": {
         "title": "Thuộc tính tích hợp sẵn",

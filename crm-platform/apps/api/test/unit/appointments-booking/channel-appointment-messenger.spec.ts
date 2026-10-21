@@ -64,10 +64,11 @@ interface Setup {
   window?: { decision: string; until?: string };
   lastInboundAt?: Date | null;
   enqueue?: () => Promise<unknown>;
-  smsRow?: Record<string, unknown> | undefined;
   mailRow?: Record<string, unknown> | undefined;
   engineSend?: () => Promise<unknown>;
   noEngine?: boolean;
+  /** The workspace owner's choice for the channel (BL-350). Default: on, no default sender. */
+  channelGate?: { enabled: boolean; defaultSenderId: number | null };
 }
 
 function make(s: Setup = {}) {
@@ -94,22 +95,12 @@ function make(s: Setup = {}) {
   const open = vi.fn(async (..._a: unknown[]) => ({ sendText }));
   const engines = {
     get: vi.fn((n: string) =>
-      s.noEngine ? undefined : n === 'sms' || n === 'email' ? { open } : undefined,
+      s.noEngine ? undefined : n === 'email' ? { open } : undefined,
     ),
   };
   const tx = {
     execute: async (q: unknown) => {
       const text = JSON.stringify(q);
-      if (text.includes('wa_provider_configs')) {
-        return {
-          rows:
-            'smsRow' in s
-              ? s.smsRow
-                ? [s.smsRow]
-                : []
-              : [{ id: 8, phone_number: '+14155550100', label: 'Sales' }],
-        };
-      }
       if (text.includes('mail_mailboxes')) {
         return {
           rows:
@@ -123,6 +114,9 @@ function make(s: Setup = {}) {
       return { rows: [] };
     },
   };
+  const channelGate = vi.fn(
+    async (..._a: unknown[]) => s.channelGate ?? { enabled: true, defaultSenderId: null },
+  );
   const messenger = new ChannelAppointmentMessenger(
     { txAs: async (_c: unknown, fn: (t: unknown) => unknown) => fn(tx) } as never,
     {
@@ -138,6 +132,7 @@ function make(s: Setup = {}) {
     } as never,
     engines as never,
     { findByUuid: async () => ('tpl' in s ? s.tpl : template()) } as never,
+    { gate: channelGate } as never,
     { openConversationFor, enqueueOutbound } as never,
   );
   return {
@@ -150,6 +145,7 @@ function make(s: Setup = {}) {
     open,
     purposeOfTemplate,
     engines,
+    channelGate,
   };
 }
 
@@ -309,18 +305,16 @@ describe('WhatsApp', () => {
   });
 });
 
-describe('SMS and email', () => {
-  it('sends an SMS through the SMS engine to the digits of the number, from the connected sender', async () => {
-    const { messenger, open, sendText } = make();
-    const res = await messenger.send(message({ channel: 'sms' }));
-    expect(res.status).toBe('sent');
-    expect(open).toHaveBeenCalledWith(
-      ORG,
-      expect.objectContaining({ engine: 'sms', id: 8, phoneDigits: '14155550100' }),
-    );
-    expect(sendText).toHaveBeenCalledWith(
-      expect.objectContaining({ to: '919876543210', text: 'Reminder: Consultation tomorrow' }),
-    );
+describe('Email, and the removed SMS', () => {
+  it('SMS is not a channel of appointment messages: it is never delivered and nothing is asked first', async () => {
+    const { messenger, open, gateCheck, channelGate } = make();
+    expect(await messenger.send(message({ channel: 'sms' as never }))).toEqual({
+      status: 'skipped',
+      reason: 'no_channel',
+    });
+    expect(open).not.toHaveBeenCalled();
+    expect(gateCheck).not.toHaveBeenCalled();
+    expect(channelGate).not.toHaveBeenCalled();
   });
 
   it('sends an email with its subject from a shared mailbox', async () => {
@@ -331,18 +325,14 @@ describe('SMS and email', () => {
     );
   });
 
-  it('skips with no_sender when no SMS number or mailbox is connected, or the engine is not there', async () => {
-    expect(await make({ smsRow: undefined }).messenger.send(message({ channel: 'sms' }))).toEqual({
-      status: 'skipped',
-      reason: 'no_sender',
-    });
+  it('skips with no_sender when no mailbox is connected, or the engine is not there', async () => {
     expect(
       await make({ mailRow: undefined }).messenger.send(message({ channel: 'email' })),
     ).toEqual({
       status: 'skipped',
       reason: 'no_sender',
     });
-    expect(await make({ noEngine: true }).messenger.send(message({ channel: 'sms' }))).toEqual({
+    expect(await make({ noEngine: true }).messenger.send(message({ channel: 'email' }))).toEqual({
       status: 'skipped',
       reason: 'no_sender',
     });
@@ -438,30 +428,67 @@ describe('the ConsentGate', () => {
     ['no_consent_recorded', 'no_consent'],
   ])('a %s denial skips the send as %s and delivers nothing', async (reason, code) => {
     const { messenger, sendText } = make({ gate: { decision: 'deny', reason } });
-    expect(await messenger.send(message({ channel: 'sms' }))).toEqual({
+    expect(await messenger.send(message({ channel: 'email' }))).toEqual({
       status: 'skipped',
       reason: code,
     });
     expect(sendText).not.toHaveBeenCalled();
   });
 
-  it('asks as a service message for a reminder and as marketing for a follow-up (SMS)', async () => {
+  it('asks as a service message for a reminder and as marketing for a follow-up (email)', async () => {
     const a = make();
-    await a.messenger.send(message({ channel: 'sms' }));
+    await a.messenger.send(message({ channel: 'email' }));
     expect(a.gateCheck.mock.calls[0]![3]).toBe('service_messaging');
     const b = make();
     await b.messenger.send(
-      message({ channel: 'sms', event: 'follow_up', purpose: 'follow_up', notAfter: null }),
+      message({ channel: 'email', event: 'follow_up', purpose: 'follow_up', notAfter: null }),
     );
     expect(b.gateCheck.mock.calls[0]![3]).toBe('marketing_messaging');
   });
 
   it('asks about the contact when there is one, else about the address', async () => {
     const a = make();
-    await a.messenger.send(message({ channel: 'sms' }));
+    await a.messenger.send(message({ channel: 'email' }));
     expect(a.gateCheck.mock.calls[0]![1]).toEqual({ type: 'contact', id: 5 });
     const b = make({ contact: undefined });
-    await b.messenger.send(message({ channel: 'sms', contactId: null }));
-    expect(b.gateCheck.mock.calls[0]![1]).toEqual({ type: 'phone', phone: '919876543210' });
+    await b.messenger.send(message({ channel: 'email', contactId: null }));
+    expect(b.gateCheck.mock.calls[0]![1]).toEqual({ type: 'email', email: 'ada@example.test' });
+  });
+});
+
+describe("the owner's channel choice (BL-350)", () => {
+  it.each(['whatsapp', 'email'] as const)(
+    'skips %s with channel_disabled when the owner has not switched it on, before anything else is asked',
+    async (channel) => {
+      const { messenger, gateCheck, windowCheck, enqueueOutbound, open, channelGate } = make({
+        channelGate: { enabled: false, defaultSenderId: null },
+      });
+      expect(await messenger.send(message({ channel }))).toEqual({
+        status: 'skipped',
+        reason: 'channel_disabled',
+      });
+      expect(channelGate).toHaveBeenCalledWith(expect.anything(), ORG, channel);
+      expect(gateCheck).not.toHaveBeenCalled();
+      expect(windowCheck).not.toHaveBeenCalled();
+      expect(enqueueOutbound).not.toHaveBeenCalled();
+      expect(open).not.toHaveBeenCalled();
+    },
+  );
+
+  it('sends as before when the channel is on', async () => {
+    const { messenger, open } = make({
+      channelGate: { enabled: true, defaultSenderId: null },
+    });
+    expect(await messenger.send(message({ channel: 'email' }))).toEqual({ status: 'sent' });
+    expect(open).toHaveBeenCalled();
+  });
+
+  it('the reserved voice channel is never delivered', async () => {
+    const { messenger, channelGate } = make();
+    expect(await messenger.send(message({ channel: 'voice' as never }))).toEqual({
+      status: 'skipped',
+      reason: 'no_channel',
+    });
+    expect(channelGate).not.toHaveBeenCalled();
   });
 });

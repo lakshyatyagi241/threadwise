@@ -148,6 +148,8 @@ export function toDetail(row: TemplateRow): TemplateDetail {
     codeExpirationMinutes: row.codeExpirationMinutes,
     parameterFormat: parameterFormatOf(row),
     metaPayload: buildMetaTemplate(draftOf(row)) as unknown as Record<string, unknown>,
+    // Set by the service, which can ask storage for the link (see detailWithMedia).
+    headerMediaUrl: null,
     lint: lintOf(row),
   };
 }

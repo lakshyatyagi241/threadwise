@@ -1,6 +1,8 @@
 import { describe, expect, it, vi } from 'vitest';
 
-vi.mock('../../../src/modules/chat-conversations', () => ({}));
+// The service injects ChannelIngestPublisher from this module (its class is read for Nest's constructor metadata when the file loads),
+// so the stub has to export it. Nothing in this spec calls it.
+vi.mock('../../../src/modules/chat-conversations', () => ({ ChannelIngestPublisher: class {} }));
 
 import { WidgetPublicService } from '../../../src/modules/chatbot-widget/widget-public.service';
 
@@ -8,7 +10,12 @@ const make = (rows: unknown[]) => {
   const svc = Object.create(WidgetPublicService.prototype) as any;
   svc.db = { primary: { execute: vi.fn(async () => ({ rows })) } };
   svc.embedScript = vi.fn(async (token: string) => `script:${token}`);
-  return svc as WidgetPublicService & { db: any; embedScript: any };
+  // `db` is a private member of the service, so the stub is typed by what the spec uses instead of intersected with the class
+  return svc as {
+    legacyEmbedScript: WidgetPublicService['legacyEmbedScript'];
+    db: any;
+    embedScript: any;
+  };
 };
 
 describe('legacyEmbedScript: an old embed id resolves to the widget own loader', () => {

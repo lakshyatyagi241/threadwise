@@ -513,7 +513,8 @@
         "profileHint": "Twoje imię, zdjęcie i dane kontaktowe",
         "password": "Hasło i bezpieczeństwo",
         "passwordHint": "Hasło, logowanie dwuskładnikowe i aktywne sesje"
-      }
+      },
+      "searchPage": "Szukaj \"{query}\" na tej stronie"
     },
     "strip": {
       "jump": "Szukaj lub przejdź do...",
@@ -1181,6 +1182,11 @@
       "eyebrow": "Skrzynka",
       "clearAll": "Wyczyść wszystko",
       "viewAll": "Zobacz wszystko →"
+    },
+    "notFound": {
+      "title": "Nie znaleziono strony",
+      "body": "Ta strona nie istnieje lub została przeniesiona. Sprawdź adres albo wróć do pulpitu.",
+      "home": "Przejdź do pulpitu"
     }
   }
 }

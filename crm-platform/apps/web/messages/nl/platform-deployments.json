@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "Deployments"
+    },
+    "eyebrow": "Beheer",
+    "title": "Deployments",
+    "description": "Elke flow die naar de Geta-console is gepubliceerd: wat in de wachtrij staat, wat nu draait, en wat is mislukt en waarom. Ververst elke paar seconden.",
+    "updated": "Live. Bijgewerkt {time}",
+    "stale": "De laatste vernieuwing is mislukt. De vorige deployments worden getoond.",
+    "stalledAlert": "{count} deployment(s) zijn {minutes} minuten niet veranderd. Hun worker is mogelijk gestopt.",
+    "truncated": "De eerste {limit} deployments worden getoond. Kies een status om de rest te zien.",
+    "kpi": {
+      "running": "Actief",
+      "queued": "In wachtrij",
+      "failed": "Mislukt",
+      "live": "Live",
+      "stalled": "Vastgelopen"
+    },
+    "filter": {
+      "label": "Filteren op status",
+      "all": "Alle",
+      "running": "Actief",
+      "queued": "In wachtrij",
+      "failed": "Mislukt",
+      "live": "Live"
+    },
+    "cols": {
+      "workspace": "Werkruimte",
+      "flow": "Flow",
+      "status": "Status",
+      "step": "Stap",
+      "attempted": "Laatste poging",
+      "updated": "Laatste wijziging",
+      "error": "Fout"
+    },
+    "status": {
+      "running": "Actief",
+      "queued": "In wachtrij",
+      "failed": "Mislukt",
+      "live": "Live"
+    },
+    "steps": {
+      "configuration_update": "Configuratie-update",
+      "publish_bot": "Bot publiceren"
+    },
+    "stalledBadge": "Vastgelopen",
+    "version": "Versie {version}",
+    "notStarted": "Nog niet gestart",
+    "failedAt": "Mislukt bij {step}",
+    "noDetail": "Er is geen fouttekst opgeslagen.",
+    "empty": {
+      "title": "Niets om te tonen",
+      "all": "Er is nog geen flow naar de Geta-console gepubliceerd.",
+      "running": "Er draait nu geen publicatie.",
+      "queued": "Er wacht niets in de wachtrij.",
+      "failed": "Geen enkele publicatie is mislukt.",
+      "live": "Er staat nog geen flow live op de Geta-console."
+    },
+    "tabs": {
+      "label": "Kies wat er getoond wordt",
+      "publishes": "Flow-publicaties",
+      "geta": "Geta-console",
+      "releases": "Productreleases"
+    },
+    "publishes": {
+      "description": "Elke flow-publicatie: wat de worker in de wachtrij heeft gezet, wat hij nu verwerkt en welke publicaties waarom zijn mislukt. Ververst elke paar seconden.",
+      "stalledAlert": "{count} flow-publicatie(s) zijn {minutes} minuten niet verder gekomen. De worker verwerkt de wachtrij mogelijk niet meer.",
+      "truncated": "De eerste {limit} publicaties worden getoond. Kies een status om de rest te zien.",
+      "notProcessed": "Nog niet",
+      "cols": {
+        "attempts": "Pogingen",
+        "queued": "In wachtrij sinds",
+        "finished": "Afgerond op"
+      },
+      "status": {
+        "done": "Klaar"
+      },
+      "empty": {
+        "all": "Er is nog geen flow gepubliceerd.",
+        "done": "Er is in de afgelopen 30 dagen geen publicatie afgerond."
+      }
+    },
+    "releases": {
+      "description": "Wat er live staat op desk.wabo.ai: de huidige release, een release die bezig is, en elke poging met zijn stappen en fouten. Ververst elke paar seconden.",
+      "liveLabel": "Nu live",
+      "live": "Release {tag}, live sinds {time}",
+      "noneLive": "Nog geen release is live gegaan.",
+      "inProgress": "Een release is bezig",
+      "stalledAlert": "{count} releasepoging(en) zijn {minutes} minuten niet veranderd. De build of de release is mogelijk gestopt.",
+      "empty": "Nog geen release vastgelegd. Releases verschijnen hier vanaf de volgende deployment.",
+      "cols": {
+        "tag": "Tag",
+        "state": "Status",
+        "step": "Stap",
+        "started": "Gestart",
+        "finished": "Klaar",
+        "error": "Fout"
+      },
+      "state": {
+        "building": "Bouwen",
+        "shipping": "Verzenden",
+        "releasing": "Vrijgeven",
+        "ok": "Live",
+        "failed": "Mislukt",
+        "rolled_back": "Teruggedraaid"
+      }
+    }
+  }
+}

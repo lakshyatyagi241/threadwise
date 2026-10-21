@@ -47,7 +47,8 @@
       "sms_monthly": "月間SMS数",
       "email_mailboxes": "メールボックス数",
       "email_monthly": "月間メール数",
-      "storage_gb": "ストレージ (GB)"
+      "storage_gb": "ストレージ (GB)",
+      "teams": "チーム"
     },
     "features": {
       "automation": "自動化",
@@ -85,7 +86,10 @@
       "personal_history_full": "全履歴インポート(個人用WhatsApp)",
       "ai_crm_copilot": "AI CRM Copilot",
       "lead_scoring": "AIリードスコアリング",
-      "record_assignment": "レコード割り当てルール"
+      "record_assignment": "レコード割り当てルール",
+      "team_hierarchy": "チーム階層とマネージャー",
+      "custom_roles": "カスタムロールとスコープ",
+      "inbox_assignment_sticky": "連絡先の担当者と固定担当"
     },
     "limitGroups": {
       "messaging": "メッセージング",
@@ -139,7 +143,8 @@
       "sms_monthly": "暦月に送信した発信SMSメッセージ数。0 = 無制限。",
       "email_mailboxes": "接続済みのGmailメールボックス(接続解除すると枠が空きます)。0 = 無制限。",
       "email_monthly": "暦月に送信したメールの数(返信とキャンペーンメールの合計)。0 = 無制限。",
-      "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。"
+      "storage_gb": "ワークスペースが保持できるストレージ容量(GB)。通話録音、チャットのメディア、メール添付、ファイルが対象です。0 = 無制限。現在は計測のみで、何もブロックされません。",
+      "teams": "ワークスペースが持てるチーム数。空欄は無制限、0 は個人利用(チームなし)です。既存のチームが削除されることはありません。"
     },
     "planAddons": {
       "title": "お使いのプランで利用できるアドオン",
@@ -304,7 +309,10 @@
       "showUnlimited": "{count, plural, other {無制限の上限を#件表示}}",
       "hideUnlimited": "無制限の上限を非表示",
       "groupCount": "{count, plural, other {上限#件}}",
-      "groupHidden": "{count, plural, other {無制限の上限をあと#件非表示にしています。}}"
+      "groupHidden": "{count, plural, other {無制限の上限をあと#件非表示にしています。}}",
+      "activatedOn": "{date} に有効化",
+      "previousBilling": "前回の請求日: {date}",
+      "subscriptionId": "サブスクリプション ID: {id}"
     },
     "operator": {
       "title": "ワークスペースのプラン",

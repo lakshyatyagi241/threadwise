@@ -7,6 +7,7 @@ import { Badge, Button, EmptyState, Spinner, cn } from '@crm/ui';
 import type {
   ConversationPriority,
   ChannelResponse,
+  ConversationSummary,
   EmailReplyExtras,
   ConversationNote,
   InboxConversationDetail,
@@ -43,6 +44,7 @@ import { SlaBadge } from './sla-badge';
 import { TagMenu } from './tag-menu';
 import { TemplatePicker } from './template-picker';
 import { AssignMenu } from './assign-menu';
+import { HandoffBar, SendToQueueButton } from './handoff-bar';
 import { TriageMenu } from './triage-menu';
 import {
   AlertIcon,
@@ -111,6 +113,13 @@ export interface ThreadPaneProps {
     canAssign: boolean;
     busy: boolean;
     onAssign: (change: { userId: string | null }) => void;
+  };
+  /** Handoff (BL-396): who may claim, send to the queue and give back to the bot, and where the row the server answered goes. */
+  handoff?: {
+    canClaim: boolean;
+    canSend: boolean;
+    canReturn: boolean;
+    onPlaced: (row: ConversationSummary) => void;
   };
   /** Priority, snooze and wake-up of the open conversation (the screen runs the call and shows the refusal). */
   triage?: {
@@ -239,7 +248,10 @@ export function ThreadPane(props: ThreadPaneProps) {
 
   return (
     <section aria-label={detail?.title ?? t('title')} className="flex h-full min-h-0 flex-col">
-      <header className="flex items-center gap-2 border-b border-border px-3 py-2">
+      <header
+        data-testid="inbox-thread-header"
+        className="flex flex-wrap items-center gap-x-2 gap-y-1 border-b border-border px-3 py-2"
+      >
         <button
           type="button"
           aria-label={t('back')}
@@ -252,7 +264,7 @@ export function ThreadPane(props: ThreadPaneProps) {
         {detail ? (
           <>
             <Avatar id={detail.id} name={detail.title} />
-            <div className={cn('min-w-0 flex-1', searching && 'hidden')}>
+            <div className={cn('min-w-[12rem] flex-1 basis-48', searching && 'hidden')}>
               <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
                 <h2 className="truncate text-base font-semibold" data-testid="inbox-thread-title">
                   {detail.title}
@@ -326,7 +338,10 @@ export function ThreadPane(props: ThreadPaneProps) {
             className="flex-1"
           />
         ) : (
-          <div className="flex shrink-0 items-center gap-1">
+          <div
+            data-testid="inbox-thread-actions"
+            className="ms-auto flex max-w-full shrink-0 flex-wrap items-center justify-end gap-1"
+          >
             {detail && (
               <CallButton
                 conversationId={detail.id}
@@ -359,6 +374,9 @@ export function ThreadPane(props: ThreadPaneProps) {
                 onSpam={props.triage.onSpam}
               />
             )}
+            {detail && props.handoff?.canSend && (
+              <SendToQueueButton detail={detail} onPlaced={props.handoff.onPlaced} />
+            )}
             {detail && props.assignMenu && (props.assignMenu.canAssign || props.can.assignSelf) && (
               <AssignMenu
                 current={detail.assignment.user}
@@ -388,7 +406,7 @@ export function ThreadPane(props: ThreadPaneProps) {
                 variant="secondary"
                 size="sm"
                 data-testid="inbox-resolve"
-                className="h-9 gap-1.5 rounded-full px-3"
+                className="h-9 shrink-0 gap-1.5 whitespace-nowrap rounded-full px-3"
                 disabled={props.resolving}
                 onClick={props.onToggleResolved}
                 title={t('resolveShortcut')}
@@ -433,9 +451,21 @@ export function ThreadPane(props: ThreadPaneProps) {
         )}
       </header>
 
+      {detail && props.handoff && (
+        <HandoffBar
+          detail={detail}
+          nowMs={props.nowMs}
+          canClaim={props.handoff.canClaim}
+          canSend={props.handoff.canSend}
+          canReturn={props.handoff.canReturn}
+          onPlaced={props.handoff.onPlaced}
+        />
+      )}
+
       <MessageStream
         conversationId={props.conversationId}
         channelKind={detail?.channel.kind}
+        customerName={detail?.title}
         state={thread.state}
         notes={props.notes}
         progress={thread.progress}

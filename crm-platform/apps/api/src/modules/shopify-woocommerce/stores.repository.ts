@@ -1,3 +1,4 @@
+import type { TokenColumns } from '../../common/crypto/secret-columns';
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
@@ -28,7 +29,9 @@ export interface ShopifyRow extends Sync {
   accessToken: string;
   scopes: string | null;
   status: string;
-  webhookSecret: string;
+  /** Legacy plaintext; NULL once the audit backfill has run. Read `webhookSecretEnc` first (encryption audit E2). */
+  webhookSecret: string | null;
+  webhookSecretEnc: string | null;
   metadata: unknown;
   lastVerifiedAt: Date | null;
   connectedAt: Date | null;
@@ -50,7 +53,9 @@ export interface WooRow extends Sync {
   /** Encrypted. */
   consumerSecret: string;
   status: string;
-  webhookSecret: string;
+  /** Legacy plaintext; NULL once the audit backfill has run. Read `webhookSecretEnc` first (encryption audit E2). */
+  webhookSecret: string | null;
+  webhookSecretEnc: string | null;
   metadata: unknown;
   lastVerifiedAt: Date | null;
   connectedAt: Date | null;
@@ -92,7 +97,8 @@ const toShopify = (r: Raw): ShopifyRow => ({
   accessToken: (r.access_token as string | null) ?? '',
   scopes: s(r.scopes),
   status: r.status as string,
-  webhookSecret: r.webhook_secret as string,
+  webhookSecret: (r.webhook_secret as string | null) ?? null,
+  webhookSecretEnc: (r.webhook_secret_enc as string | null) ?? null,
   metadata: r.metadata,
   lastVerifiedAt: d(r.last_verified_at),
   connectedAt: d(r.connected_at),
@@ -113,7 +119,8 @@ const toWoo = (r: Raw): WooRow => ({
   consumerKey: r.consumer_key as string,
   consumerSecret: r.consumer_secret as string,
   status: r.status as string,
-  webhookSecret: r.webhook_secret as string,
+  webhookSecret: (r.webhook_secret as string | null) ?? null,
+  webhookSecretEnc: (r.webhook_secret_enc as string | null) ?? null,
   metadata: r.metadata,
   lastVerifiedAt: d(r.last_verified_at),
   connectedAt: d(r.connected_at),
@@ -134,7 +141,7 @@ export interface ShopifyValues {
   /** Already encrypted. */
   accessToken: string;
   scopes: string;
-  webhookSecret: string;
+  webhookSecret: TokenColumns;
 }
 
 export interface WooValues {
@@ -148,7 +155,7 @@ export interface WooValues {
   consumerKey: string;
   /** Already encrypted. */
   consumerSecret: string;
-  webhookSecret: string;
+  webhookSecret: TokenColumns;
 }
 
 @Injectable()
@@ -195,14 +202,17 @@ export class StoresRepository {
     const res = await tx.execute(sql`
       INSERT INTO shopify_integrations (org_id, user_id, store_url, store_name, shop_id, shop_email, shop_owner, shop_plan,
                                         shop_currency, shop_country, access_token, scopes, status, webhook_secret,
+                                        webhook_secret_hash, webhook_secret_enc,
                                         last_verified_at, connected_at)
       VALUES (${orgId}, ${v.userId}, ${v.storeUrl}, ${v.storeName}, ${v.shopId}, ${v.shopEmail}, ${v.shopOwner}, ${v.shopPlan},
-              ${v.shopCurrency}, ${v.shopCountry}, ${v.accessToken}, ${v.scopes}, 'active', ${v.webhookSecret}, now(), now())
+              ${v.shopCurrency}, ${v.shopCountry}, ${v.accessToken}, ${v.scopes}, 'active', ${v.webhookSecret.plain},
+              ${v.webhookSecret.hash}, ${v.webhookSecret.enc}, now(), now())
       ON CONFLICT (org_id, store_url) DO UPDATE SET
         user_id = EXCLUDED.user_id, store_name = EXCLUDED.store_name, shop_id = EXCLUDED.shop_id,
         shop_email = EXCLUDED.shop_email, shop_owner = EXCLUDED.shop_owner, shop_plan = EXCLUDED.shop_plan,
         shop_currency = EXCLUDED.shop_currency, shop_country = EXCLUDED.shop_country, access_token = EXCLUDED.access_token,
-        scopes = EXCLUDED.scopes, status = 'active', webhook_secret = EXCLUDED.webhook_secret, last_verified_at = now(),
+        scopes = EXCLUDED.scopes, status = 'active', webhook_secret = EXCLUDED.webhook_secret,
+        webhook_secret_hash = EXCLUDED.webhook_secret_hash, webhook_secret_enc = EXCLUDED.webhook_secret_enc, last_verified_at = now(),
         connected_at = now()
       RETURNING *, (xmax = 0) AS inserted`);
     const raw = res.rows[0] as Raw & { inserted: boolean };
@@ -261,13 +271,16 @@ export class StoresRepository {
   async upsertWoo(tx: Tx, orgId: number, v: WooValues): Promise<{ row: WooRow; created: boolean }> {
     const res = await tx.execute(sql`
       INSERT INTO woocommerce_integrations (org_id, user_id, store_url, store_name, store_currency, store_country, store_version,
-                                            consumer_key, consumer_secret, status, webhook_secret, last_verified_at, connected_at)
+                                            consumer_key, consumer_secret, status, webhook_secret, webhook_secret_hash,
+                                            webhook_secret_enc, last_verified_at, connected_at)
       VALUES (${orgId}, ${v.userId}, ${v.storeUrl}, ${v.storeName}, ${v.storeCurrency}, ${v.storeCountry}, ${v.storeVersion},
-              ${v.consumerKey}, ${v.consumerSecret}, 'active', ${v.webhookSecret}, now(), now())
+              ${v.consumerKey}, ${v.consumerSecret}, 'active', ${v.webhookSecret.plain},
+              ${v.webhookSecret.hash}, ${v.webhookSecret.enc}, now(), now())
       ON CONFLICT (org_id, store_url) DO UPDATE SET
         user_id = EXCLUDED.user_id, store_name = EXCLUDED.store_name, store_currency = EXCLUDED.store_currency,
         store_country = EXCLUDED.store_country, store_version = EXCLUDED.store_version, consumer_key = EXCLUDED.consumer_key,
         consumer_secret = EXCLUDED.consumer_secret, status = 'active', webhook_secret = EXCLUDED.webhook_secret,
+        webhook_secret_hash = EXCLUDED.webhook_secret_hash, webhook_secret_enc = EXCLUDED.webhook_secret_enc,
         last_verified_at = now(), connected_at = now()
       RETURNING *, (xmax = 0) AS inserted`);
     const raw = res.rows[0] as Raw & { inserted: boolean };

@@ -10,7 +10,7 @@ import { schema, type Tx } from '@crm/db';
 import { AppError } from '../../../common/errors/app-error';
 import { decodeCursor } from '../../../common/pagination/cursor';
 
-const { appointments, contactMeetings, contacts, teamMembers, users } = schema;
+const { appointments, contactMeetings, contacts, users } = schema;
 
 export interface ContactMeetingRow {
   id: number;
@@ -379,14 +379,12 @@ export class ContactMeetingsRepository {
     };
   }
 
-  /** The user ids that share a team with `userId` (the caller's own `team` record scope). */
-  async teamPeerIds(tx: Tx, orgId: number, userId: number): Promise<Set<number>> {
-    const rows = await tx.execute(sql`
-      SELECT DISTINCT tm2.user_id
-      FROM ${teamMembers} tm1
-      JOIN ${teamMembers} tm2 ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${userId}`);
-    return new Set(rows.rows.map((r) => Number((r as { user_id: string | number }).user_id)));
+  /** Sets (or clears) the address that joins the call. Written by the meeting-conferencing module after a provider answered. */
+  async setJoinUrl(tx: Tx, orgId: number, id: number, joinUrl: string | null): Promise<void> {
+    await tx
+      .update(contactMeetings)
+      .set({ joinUrl })
+      .where(and(eq(contactMeetings.orgId, orgId), eq(contactMeetings.id, id)));
   }
 }
 

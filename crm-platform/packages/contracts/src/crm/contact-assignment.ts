@@ -323,6 +323,25 @@ export const ASSIGNMENT_REASONS = [
 export const assignmentReasonSchema = z.enum(ASSIGNMENT_REASONS);
 export type AssignmentReason = z.infer<typeof assignmentReasonSchema>;
 
+/** Why a person a rule names was not offered the record. */
+export const ASSIGNMENT_EXCLUDED_REASONS = [
+  /** They do not hold the permission to open this kind of record, so they could not see what they were given (BL-380, gap 9). */
+  'no_access',
+  'inactive',
+  'on_leave',
+  'offline',
+] as const;
+export const assignmentExcludedReasonSchema = z.enum(ASSIGNMENT_EXCLUDED_REASONS);
+export type AssignmentExcludedReason = z.infer<typeof assignmentExcludedReasonSchema>;
+
+export const assignmentExcludedSchema = z.object({
+  /** The person's id. */
+  id: uuidSchema,
+  name: z.string(),
+  reason: assignmentExcludedReasonSchema,
+});
+export type AssignmentExcluded = z.infer<typeof assignmentExcludedSchema>;
+
 export const assignmentTraceEntrySchema = z.object({
   ruleId: uuidSchema,
   name: z.string(),
@@ -332,6 +351,8 @@ export const assignmentTraceEntrySchema = z.object({
   nobody: z.boolean().default(false),
   /** A rule with a condition pointing at something deleted. */
   broken: z.boolean().default(false),
+  /** People the rule names (directly or through a team) who were left out, and why: the answer to "why not them?". */
+  excluded: z.array(assignmentExcludedSchema).default([]),
 });
 export type AssignmentTraceEntry = z.infer<typeof assignmentTraceEntrySchema>;
 

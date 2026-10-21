@@ -20,3 +20,10 @@ export { buildIcs } from './ics';
 export { GoogleCalendarConnectService } from './google-calendar-connect.service';
 export { CalendarNotConnectedError, GoogleCalendarTokens } from './google-calendar-tokens.service';
 export { GoogleConsentService } from './google-consent.service';
+// A contact's meeting is put on the workspace's connected calendar through this seam (the meeting-conferencing module, BL-362).
+export { MeetingCalendarGateway } from './meeting-calendar.gateway';
+export type {
+  MeetingCalendarOption,
+  MeetingEventRequest,
+  MeetingEventResult,
+} from './meeting-calendar.gateway';

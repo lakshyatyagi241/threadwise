@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  isAwaitingAnswer,
   pushUiState,
   readPushEnv,
   safeInternalPath,
@@ -202,5 +203,24 @@ describe('conversions the browser API needs', () => {
     expect(testOutcome({ sent: 1, failed: 1 })).toBe('sent');
     expect(testOutcome({ sent: 0, failed: 2 })).toBe('none_reachable');
     expect(testOutcome({ sent: 0, failed: 0 })).toBe('no_device');
+  });
+});
+
+describe('whether the person still has to answer the browser', () => {
+  it('asks only when push is possible here and the browser has not been answered', () => {
+    expect(isAwaitingAnswer('off', 'default')).toBe(true);
+  });
+
+  it('never asks again once the browser answered, in either direction', () => {
+    expect(isAwaitingAnswer('blocked', 'denied')).toBe(false);
+    expect(isAwaitingAnswer('on', 'granted')).toBe(false);
+    expect(isAwaitingAnswer('off', 'granted')).toBe(false);
+  });
+
+  it('does not ask where push cannot work or the deployment has no keys', () => {
+    expect(isAwaitingAnswer('unsupported', 'default')).toBe(false);
+    expect(isAwaitingAnswer('needs_install', 'default')).toBe(false);
+    expect(isAwaitingAnswer('unconfigured', 'default')).toBe(false);
+    expect(isAwaitingAnswer('checking', 'default')).toBe(false);
   });
 });

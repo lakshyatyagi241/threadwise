@@ -3,7 +3,7 @@
     "back": "Automatización",
     "title": "Reglas de asignación de registros",
     "intro": "Asigna automáticamente los nuevos {contacts}, empresas y {deals} al responsable de ventas adecuado.",
-    "crossNote": "Esto asigna {contacts}, empresas y {deals}. Para asignar conversaciones a agentes, consulta <link>Asignación automática</link>.",
+    "crossNote": "Esto asigna {contacts}, empresas y {deals}. Para asignar conversaciones a agentes, consulta <link>Asignación automática de conversaciones</link>.",
     "master": {
       "title": "Activar la asignación de registros",
       "hint": "Desactivada hasta que la actives. Cuando está activa, las reglas de abajo asignan a alguien de tu equipo cada nuevo {contact}, empresa o {deal} que no tenga responsable.",
@@ -233,7 +233,14 @@
         "nobody": "Coincidió, pero no había nadie disponible",
         "broken": "Tiene una condición rota"
       },
-      "skipped": "Omitida porque no había nadie disponible: {names}"
+      "skipped": "Omitida porque no había nadie disponible: {names}",
+      "excluded": {
+        "label": "Excluidos",
+        "no_access": "{name}: no puede abrir este tipo de registro",
+        "inactive": "{name}: ya no está activo",
+        "on_leave": "{name}: de permiso hoy",
+        "offline": "{name}: sin conexión"
+      }
     },
     "log": {
       "title": "Registro de ejecución",
@@ -296,6 +303,7 @@
       "message": "La regla {name} dejará de asignar. Los registros que ya asignó conservan su responsable.",
       "confirm": "Eliminar",
       "cancel": "Cancelar"
-    }
+    },
+    "dismiss": "Descartar"
   }
 }

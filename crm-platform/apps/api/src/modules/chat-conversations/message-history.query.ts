@@ -8,6 +8,7 @@ import {
   type HistoryCursor,
   type HistoryWindow,
 } from './message-history-rules';
+import { scopeOwnerPredicate } from '../../kernel/rbac/scope';
 
 /**
  * The SQL of Message History: ONE feed over the message stream and the recipient rows of broadcasts, campaigns and scheduled messages.
@@ -24,18 +25,22 @@ import {
  */
 
 export type Level = 'slim' | 'row' | 'detail';
-export type RecordScopeLike = 'all' | 'team' | 'own';
+export type RecordScopeLike = 'all' | 'team' | 'team_and_below' | 'own';
 
 export interface HistoryContext {
   orgId: number;
+  /** Joins the visibility condition needs, placed right after `JOIN conversations c` (empty when the condition is TRUE). */
+  conversationJoins: SQL;
   /** A condition on `conversations c`: the inbox visibility rule of the caller, or TRUE for a caller who reads every conversation. */
   conversationVisible: SQL;
   /** The caller may see broadcast, campaign and scheduled recipient rows. */
   bulk: boolean;
   /** The caller's `record.contacts.read`: its scope (null: not held), who they are and their teams. */
-  contacts: { scope: RecordScopeLike | null; userId: number; teamIds: number[] };
+  contacts: { scope: RecordScopeLike | null; userId: number };
   /** The caller may read the wallet statement: charges are joined to the rows. */
   cost: boolean;
+  /** Channels whose conversations this caller may not see (others' personal mailboxes); the rollup path subtracts them. Only set when `bulk`. */
+  hiddenChannelIds?: number[];
 }
 
 export interface HistorySelection {
@@ -116,27 +121,15 @@ const utcText = (col: SQL): SQL =>
 const digitsOf = (col: SQL): SQL => sql`NULLIF(regexp_replace(${col}, '\\D', '', 'g'), '')`;
 
 /** May the caller read this contact? The contact row is `ct` (possibly NULL: a number with no saved contact). */
-function contactOpen(ctx: HistoryContext, ct: string): SQL {
+export function contactOpen(ctx: HistoryContext, ct: string): SQL {
+  if (ctx.contacts.scope === null) return sql`FALSE`;
   const c = rawIdentifier(ct);
-  switch (ctx.contacts.scope) {
-    case null:
-      return sql`FALSE`;
-    case 'all':
-      return sql`TRUE`;
-    case 'own':
-      return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId}, FALSE)`;
-    case 'team': {
-      if (ctx.contacts.teamIds.length === 0) {
-        return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId}, FALSE)`;
-      }
-      const teams = sql.join(
-        ctx.contacts.teamIds.map((id) => sql`${id}`),
-        sql`, `,
-      );
-      return sql`COALESCE(${c}.owner_id = ${ctx.contacts.userId} OR ${c}.owner_id IN (
-        SELECT tm.user_id FROM team_members tm WHERE tm.org_id = ${ctx.orgId} AND tm.team_id IN (${teams})), FALSE)`;
-    }
-  }
+  // The same rule the contacts list applies (contactScopeCondition: owner or creator, D1), through the one resolver.
+  return scopeOwnerPredicate(
+    { orgId: ctx.orgId, userId: ctx.contacts.userId },
+    ctx.contacts.scope,
+    [sql`${c}.owner_id`, sql`${c}.created_by`],
+  );
 }
 
 /** A saved contact's name: the contact's own, else first and last name. */
@@ -382,12 +375,8 @@ function finish(
   return opts.page ? sql`(${body})` : body;
 }
 
-function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
-  const org = ctx.orgId;
-  const level = o.level;
-  const row = included(level, 'row');
-  const detail = included(level, 'detail');
-  const b: BranchRefs = {
+function messageRefs(ctx: HistoryContext): BranchRefs {
+  return {
     entity: 'message',
     at: sql`m.created_at`,
     id: sql`m.id`,
@@ -403,9 +392,18 @@ function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOpti
     templateMatch: (t) => sql`m.template_id = ${t}`,
     rank: RANK.message,
   };
+}
+
+function messageBranch(ctx: HistoryContext, sel: HistorySelection, o: BranchOptions): SQL {
+  const org = ctx.orgId;
+  const level = o.level;
+  const row = included(level, 'row');
+  const detail = included(level, 'detail');
+  const b = messageRefs(ctx);
   const joins = sql`
     FROM messages m
     JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+    ${ctx.conversationJoins}
     LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
     ${
       row
@@ -713,7 +711,11 @@ export function pageSql(
 }
 
 /** The totals of the KPI cards for one window. */
-export function countsSql(ctx: HistoryContext, sel: HistorySelection): SQL {
+export function countsSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  entities?: BranchOptions['entities'],
+): SQL {
   return sql`SELECT
       count(*)::int AS total,
       count(*) FILTER (WHERE r.direction = 'in')::int AS received,
@@ -722,7 +724,7 @@ export function countsSql(ctx: HistoryContext, sel: HistorySelection): SQL {
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'delivered')::int AS delivered,
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'read')::int AS read,
       count(*) FILTER (WHERE r.direction = 'out' AND r.status = 'failed')::int AS failed
-    FROM (${feedSql(ctx, sel, { level: 'slim', ignoreNarrow: true })}) r`;
+    FROM (${feedSql(ctx, sel, { level: 'slim', ignoreNarrow: true, entities })}) r`;
 }
 
 /** Charged amounts of the rows of the window, by currency. A refunded charge is not counted. */
@@ -734,32 +736,47 @@ export function costSql(ctx: HistoryContext, sel: HistorySelection): SQL {
     GROUP BY u.currency ORDER BY u.currency NULLS FIRST`;
 }
 
-/** Average seconds from a conversation's first customer message to the first reply after it, over the visible conversations of the window. */
+/**
+ * Average seconds from a conversation's first customer message to the first reply after it, over the visible conversations of the window.
+ *
+ * One pass over the window's messages gives, per conversation, its first customer message and its first reply; only a conversation whose
+ * first reply came BEFORE (or with) its first customer message, an agent who wrote first, needs the second look for the first reply after
+ * it. The messages are aggregated before the conversation is joined, so the visibility rule runs on one row per conversation and the scan
+ * of the messages stays parallel.
+ */
 export function firstResponseSql(ctx: HistoryContext, sel: HistorySelection): SQL {
   const channel = sel.scoping.channelId
     ? sql`AND c.channel_id = (SELECT id FROM channels WHERE org_id = ${ctx.orgId} AND uuid = ${sel.scoping.channelId}::uuid)`
     : sql``;
+  const feed = (alias: string) =>
+    sql.join(
+      FEED_MESSAGES(alias).map((c) => sql`(${c})`),
+      sql` AND `,
+    );
   return sql`
-    WITH first_in AS (
-      SELECT m.conversation_id, min(m.created_at) AS at
-      FROM messages m JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
-      WHERE m.org_id = ${ctx.orgId} AND m.direction = 'in' AND ${sql.join(
-        FEED_MESSAGES('m').map((c) => sql`(${c})`),
-        sql` AND `,
-      )}
+    WITH per_conversation AS (
+      SELECT m.conversation_id,
+             min(m.created_at) FILTER (WHERE m.direction = 'in') AS at,
+             min(m.created_at) FILTER (WHERE m.direction = 'out') AS first_out
+      FROM messages m
+      WHERE m.org_id = ${ctx.orgId} AND ${feed('m')}
         AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
-        AND (${ctx.conversationVisible}) ${channel}
-      GROUP BY m.conversation_id)
+      GROUP BY m.conversation_id
+      HAVING bool_or(m.direction = 'in')),
+    first_in AS (
+      SELECT p.conversation_id, p.at, p.first_out
+      FROM per_conversation p
+      JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = p.conversation_id
+      ${ctx.conversationJoins}
+      WHERE (${ctx.conversationVisible}) ${channel})
     SELECT avg(EXTRACT(EPOCH FROM (o.at - f.at)))::int AS seconds
     FROM first_in f
     CROSS JOIN LATERAL (
-      SELECT min(m2.created_at) AS at FROM messages m2
-      WHERE m2.org_id = ${ctx.orgId} AND m2.conversation_id = f.conversation_id AND m2.direction = 'out'
-        AND ${sql.join(
-          FEED_MESSAGES('m2').map((c) => sql`(${c})`),
-          sql` AND `,
-        )}
-        AND m2.created_at > f.at AND m2.created_at < ${sel.window.to}) o
+      SELECT CASE WHEN f.first_out > f.at THEN f.first_out
+        ELSE (SELECT min(m2.created_at) FROM messages m2
+              WHERE m2.org_id = ${ctx.orgId} AND m2.conversation_id = f.conversation_id AND m2.direction = 'out'
+                AND ${feed('m2')}
+                AND m2.created_at > f.at AND m2.created_at < ${sel.window.to}) END AS at) o
     WHERE o.at IS NOT NULL`;
 }
 
@@ -770,10 +787,11 @@ export function volumeSql(
   unit: 'hour' | 'day' | 'week',
   tz: string,
   seriesFrom: Date,
+  entities?: BranchOptions['entities'],
 ): SQL {
   const u = sql.raw(`'${unit}'`);
   return sql`
-    WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim' })}),
+    WITH r AS (${feedSql(ctx, { ...sel, window: { from: seriesFrom, to: sel.window.to } }, { level: 'slim', entities })}),
     agg AS (
       SELECT date_trunc(${u}, r.at AT TIME ZONE ${tz}::text) AS b,
         count(*) FILTER (WHERE r.direction = 'out' AND r.status <> 'failed')::int AS sent,
@@ -791,11 +809,18 @@ export function volumeSql(
 }
 
 /** How many rows of each type the filtered feed has, for the "By message type" card. */
-export function typeMixSql(ctx: HistoryContext, sel: HistorySelection): SQL {
-  return sql`SELECT r.type AS type, count(*)::int AS n FROM (${feedSql(ctx, sel, { level: 'slim' })}) r GROUP BY r.type`;
+export function typeMixSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  entities?: BranchOptions['entities'],
+): SQL {
+  return sql`SELECT r.type AS type, count(*)::int AS n FROM (${feedSql(ctx, sel, { level: 'slim', entities })}) r GROUP BY r.type`;
 }
 
-/** The most active conversations of the window, among the messages the caller may see. */
+/**
+ * The most active conversations of the window, among the messages the caller may see. The messages are counted per conversation first and
+ * only then joined to the conversation, so the sort and the visibility rule work on one row per conversation, not one per message.
+ */
 export function topConversationsSql(
   ctx: HistoryContext,
   sel: HistorySelection,
@@ -805,19 +830,127 @@ export function topConversationsSql(
     ? sql`AND c.channel_id = (SELECT id FROM channels WHERE org_id = ${ctx.orgId} AND uuid = ${sel.scoping.channelId}::uuid)`
     : sql``;
   return sql`
-    SELECT c.uuid AS conversation_uuid, count(*)::int AS n, max(m.created_at) AS last_at,
+    SELECT c.uuid AS conversation_uuid, a.n, a.last_at,
            COALESCE(${contactName('ct')}, NULLIF(c.peer_name, '')) AS name, c.peer_key AS phone,
-           bool_or(${contactOpen(ctx, 'ct')}) AS phone_open
+           ${contactOpen(ctx, 'ct')} AS phone_open
+    FROM (
+      SELECT m.conversation_id, count(*)::int AS n, max(m.created_at) AS last_at
+      FROM messages m
+      WHERE m.org_id = ${ctx.orgId} AND ${sql.join(
+        FEED_MESSAGES('m').map((c) => sql`(${c})`),
+        sql` AND `,
+      )}
+        AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
+      GROUP BY m.conversation_id) a
+    JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = a.conversation_id
+    ${ctx.conversationJoins}
+    LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
+    WHERE (${ctx.conversationVisible}) ${channel}
+    ORDER BY a.n DESC, a.last_at DESC, c.id DESC
+    LIMIT ${limit}`;
+}
+
+// --- one scan for the charts ----------------------------------------------------------------------------------------------------
+//
+// The charts (volume, type mix, most active conversations) each read the window's messages: three scans of 750,000 rows for a busy month,
+// each paying for the visibility join, the feed filter and the CASE on `meta`. `insightsScanSql` reads the message branch ONCE and
+// aggregates the three ways at the same time (GROUPING SETS): 760 ms to 400 ms, provided the sort fits in memory (see the repository's
+// work_mem note; at the default 4 MB it spills and is slower, 944 ms). The KPI cards were tried the same way and are SLOWER (467 ms for
+// the counts pass alone against 314 ms for the two count statements), because GROUPING SETS cannot run in parallel workers and a per-conversation
+// pass pays for ten aggregates per row; they keep one statement per number. The recipient rows of broadcasts, campaigns and scheduled messages stay on their own branches and are
+// added by the caller. The fast path is only valid when the filters are the channel alone: a template, campaign, broadcast or scheduled
+// filter changes which rows the volume and the type mix count but not the top list, and the old statements keep that difference.
+
+/** Whether the shared scan gives the same numbers as the separate statements for this selection. */
+export function sharedScanApplies(sel: HistorySelection): boolean {
+  const s = sel.scoping;
+  return !s.templateId && !s.campaignId && !s.broadcastId && !s.scheduledId;
+}
+
+/** The recipient branches (no conversation): what the caller adds to the shared scan's message numbers. */
+export const BULK_ENTITIES = ['broadcast', 'campaign', 'scheduled'] as const;
+
+interface ScanOptions {
+  from: Date;
+  to: Date;
+  /** Also compute the message type of each row (a CASE over `meta`: only when the type mix is asked for). */
+  wantType?: boolean;
+  /** Also compute whether each row passes the screen's narrowing filters (direction, type, source, status, search). */
+  wantNarrow?: boolean;
+}
+
+/** The message branch of the feed for [from, to), one slim row per message, with the filters as columns instead of as a WHERE. */
+function messageScanSql(ctx: HistoryContext, sel: HistorySelection, o: ScanOptions): SQL {
+  const b = messageRefs(ctx);
+  const conds = [
+    sql`m.org_id = ${ctx.orgId}`,
+    ...FEED_MESSAGES('m'),
+    ctx.conversationVisible,
+    sql`m.created_at >= ${o.from} AND m.created_at < ${o.to}`,
+    ...scopingConditions(ctx, sel, b),
+  ];
+  const narrow = o.wantNarrow ? narrowConditions(ctx, sel, b) : [];
+  const narrowOk = narrow.length
+    ? sql.join(
+        narrow.map((c) => sql`(${c})`),
+        sql` AND `,
+      )
+    : sql`TRUE`;
+  return sql`
+    SELECT m.created_at AS at, m.direction AS direction, m.status AS status, m.conversation_id AS conv,
+           ${o.wantType ? sql`${messageType()}` : sql`NULL::text`} AS type, (${narrowOk}) AS narrow_ok
     FROM messages m
     JOIN conversations c ON c.org_id = m.org_id AND c.id = m.conversation_id
+    ${ctx.conversationJoins}
     LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id
-    WHERE m.org_id = ${ctx.orgId} AND ${sql.join(
-      FEED_MESSAGES('m').map((c) => sql`(${c})`),
+    WHERE ${sql.join(
+      conds.map((c) => sql`(${c})`),
       sql` AND `,
-    )}
-      AND m.created_at >= ${sel.window.from} AND m.created_at < ${sel.window.to}
-      AND (${ctx.conversationVisible}) ${channel}
-    GROUP BY c.org_id, c.id, ct.org_id, ct.id
-    ORDER BY n DESC, last_at DESC, c.id DESC
-    LIMIT ${limit}`;
+    )}`;
+}
+
+/**
+ * The message branch's numbers for the charts, from one scan of the window: the volume per bucket (every bucket of the series, empty ones
+ * included), the type mix and the most active conversations. Rows: kind 'v' (a bucket: k = its time, a/b/c = sent/received/failed), 'm' (a
+ * type: k = the type, a = its count) and 'c' (a conversation: k = its uuid, a = messages, ts = last message, name, phone, open; `ord` = its id
+ * for the tie-break).
+ */
+export function insightsScanSql(
+  ctx: HistoryContext,
+  sel: HistorySelection,
+  o: { unit: 'hour' | 'day' | 'week'; tz: string; seriesFrom: Date; top: number },
+): SQL {
+  const u = sql.raw(`'${o.unit}'`);
+  const { from, to } = sel.window;
+  return sql`
+    WITH g AS (
+      SELECT GROUPING(x.b, x.t, x.conv) AS g, x.b, x.t, x.conv,
+        count(*) FILTER (WHERE x.direction = 'out' AND x.status <> 'failed')::int AS sent,
+        count(*) FILTER (WHERE x.direction = 'in')::int AS received,
+        count(*) FILTER (WHERE x.direction = 'out' AND x.status = 'failed')::int AS failed,
+        count(*)::int AS n, max(x.at) AS last_at
+      FROM (
+        SELECT s.at, s.direction, s.status, s.conv,
+          CASE WHEN s.narrow_ok AND s.at >= ${o.seriesFrom} THEN date_trunc(${u}, s.at AT TIME ZONE ${o.tz}::text) END AS b,
+          CASE WHEN s.narrow_ok THEN s.type END AS t
+        FROM (${messageScanSql(ctx, sel, { from, to, wantType: true, wantNarrow: true })}) s) x
+      GROUP BY GROUPING SETS ((x.b), (x.t), (x.conv)))
+    SELECT 'v' AS kind,
+           to_char((gs.b AT TIME ZONE ${o.tz}::text) AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') AS k,
+           COALESCE(a.sent, 0)::bigint AS a, COALESCE(a.received, 0)::bigint AS b, COALESCE(a.failed, 0)::bigint AS c,
+           NULL::timestamptz AS ts, NULL::text AS name, NULL::text AS phone, NULL::boolean AS open,
+           row_number() OVER (ORDER BY gs.b) AS ord
+    FROM generate_series(
+           date_trunc(${u}, ${o.seriesFrom}::timestamptz AT TIME ZONE ${o.tz}::text),
+           date_trunc(${u}, (${to}::timestamptz - interval '1 microsecond') AT TIME ZONE ${o.tz}::text),
+           ${`1 ${o.unit}`}::interval) AS gs(b)
+    LEFT JOIN (SELECT b, sent, received, failed FROM g WHERE g = 3 AND b IS NOT NULL) a ON a.b = gs.b
+    UNION ALL
+    SELECT 'm', g.t, g.n, 0, 0, NULL, NULL, NULL, NULL, 0 FROM g WHERE g.g = 5 AND g.t IS NOT NULL
+    UNION ALL
+    SELECT 'c', c.uuid::text, a.n, 0, 0, a.last_at,
+           COALESCE(${contactName('ct')}, NULLIF(c.peer_name, '')), c.peer_key, ${contactOpen(ctx, 'ct')}, a.conv
+    FROM (SELECT conv, n, last_at FROM g WHERE g = 6 ORDER BY n DESC, last_at DESC, conv DESC LIMIT ${o.top}) a
+    JOIN conversations c ON c.org_id = ${ctx.orgId} AND c.id = a.conv
+    LEFT JOIN contacts ct ON ct.org_id = c.org_id AND ct.id = c.contact_id`;
 }

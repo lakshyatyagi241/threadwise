@@ -12,10 +12,10 @@ import {
   flbCondProblems,
   flbReadLocation,
 } from '@crm/contracts';
+import { handoffProblem } from './handoff-node';
 import { conditionTreeOf } from './condition-tree';
 import { ctaLinkProblem } from './cta-link';
 import { askInputLabelMsg, nodeLabelMsg } from './contract-text';
-import { minScoreOutOfRange } from './faq-node';
 import { dedupeMsgs, msg, renderMsg, type Msg, type Translate } from './msg';
 
 /**
@@ -53,7 +53,7 @@ export type SimpleType = (typeof SIMPLE_TYPES)[number];
 
 /**
  * The steps that end their journey: what happens next depends on what the customer taps (buttons, list, a carousel's reply buttons),
- * on a condition's answer, or on whether an FAQ answered (`faq`, "Answer from FAQ").
+ * on a condition's answer, or on whether a retired "Answer from FAQ" step answered (`faq`; it now always leaves by no match).
  */
 export const BRANCHING: ReadonlySet<string> = new Set([
   'buttons',
@@ -524,7 +524,6 @@ const nodeKind = (key: string, type: SimpleType, group: StepKind['group']): Step
 });
 
 export const STEP_KINDS: readonly StepKind[] = [
-  kind('faq', 'faq', 'answer'),
   nodeKind('ai', 'ai', 'answer'),
   kind('assign', 'assign', 'handoff'),
   kind('message', 'message', 'send'),
@@ -633,7 +632,6 @@ export function newStep(
   if (type === 'webhook') data.save = fresh('webhook_response');
   if (type === 'code') data.save = fresh('result');
   if (type === 'ai') data.save = fresh('reply');
-  // `faq` keeps the catalogue defaults: the customer's last message, every FAQ, the workspace's score, answer sent, saved as `faq`.
   if (type === 'location')
     Object.assign(data, { locMode: 'link', mapsUrl: '', lat: '', lng: '', title: '', address: '' });
   if (type === 'cta') data.actions = [{ type: 'url', label: 'Visit website', value: '' }];
@@ -954,7 +952,10 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
       }
       if (s.type === 'location' && !flbReadLocation(d).ok) bad('setCoordinates');
       if (s.type === 'template' && !str(d.tpl).trim()) bad('chooseTemplate');
-      if (s.type === 'assign' && !str(d.team).trim()) bad('chooseTeam');
+      if (s.type === 'assign') {
+        const problem = handoffProblem(d);
+        if (problem) bad(problem);
+      }
       if (
         s.type === 'buttons' &&
         Object.values(rec(d.handoffs)).some((h) => !str(rec(h).team).trim())
@@ -993,7 +994,6 @@ export function problems(doc: SimpleDoc, opts: { senderRequired: boolean }): Sim
         )
           bad('carouselButtons');
       }
-      if (s.type === 'faq' && minScoreOutOfRange(d.minScore)) bad('faqMinScore');
       if (s.type === 'ai') {
         const why = flbAiNodeProblem(d);
         if (why) bad(why === 'no_agent' ? 'chooseAiAgent' : 'writeAiPrompt');
@@ -1129,20 +1129,15 @@ export function stepSummary(s: SimpleStep, t: Translate): string {
                         ? delaySummary(t, d)
                         : s.type === 'assign'
                           ? str(d.message)
-                          : s.type === 'faq'
-                            ? t('simpleModel.faqSummary', {
-                                hasCategory: str(d.category).trim() ? 'true' : 'false',
-                                category: str(d.category).trim(),
-                              })
-                            : s.type === 'api_library'
-                              ? str(d.apiName)
-                              : s.type === 'webhook'
-                                ? str(d.url)
-                                : s.type === 'code'
-                                  ? str(d.save)
-                                  : s.type === 'ai'
-                                    ? str(d.prompt)
-                                    : '';
+                          : s.type === 'api_library'
+                            ? str(d.apiName)
+                            : s.type === 'webhook'
+                              ? str(d.url)
+                              : s.type === 'code'
+                                ? str(d.save)
+                                : s.type === 'ai'
+                                  ? str(d.prompt)
+                                  : '';
   const one = raw.replace(/\s+/g, ' ').trim();
   return one.length > 40 ? `${one.slice(0, 40)}…` : one;
 }

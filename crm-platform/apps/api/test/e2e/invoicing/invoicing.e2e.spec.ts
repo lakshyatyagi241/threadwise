@@ -408,13 +408,14 @@ describe('tax rates (TW-INV "tax rates", D-04)', () => {
     }>;
     expect(list.filter((x) => x.isDefault).map((x) => x.id)).toEqual([b.id]);
     expect(list[0]!.id).toBe(b.id); // the default is listed first
+    // Read the row version BEFORE building the PATCH: supertest starts the app's listener when a request is created, and a second
+    // request finishing in between (the GET inside .send(...)) closes it again, so the PATCH then dispatches on a closed server
+    // ("Cannot read properties of null (reading 'address')").
+    const { rowVersion } = (await api.as(t.admin).get(`/v2/tax-rates/${b.id}`)).body;
     const off = await api
       .as(t.admin)
       .patch(`/v2/tax-rates/${b.id}`)
-      .send({
-        rowVersion: (await api.as(t.admin).get(`/v2/tax-rates/${b.id}`)).body.rowVersion,
-        isActive: false,
-      });
+      .send({ rowVersion, isActive: false });
     expect(off.body).toMatchObject({ isActive: false, isDefault: false });
     expect((await api.as(t.admin).post(`/v2/tax-rates/${b.id}/default`).send({})).status).toBe(422);
     expect(a.id).toBeTruthy();

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import type { Tx } from '@crm/db';
 import { PlanEntitlementService } from '../../plans-subscriptions-trials';
 import type { CampaignPlanGate } from './tokens';
 
@@ -13,6 +14,10 @@ export class PlanCampaignGate implements CampaignPlanGate {
 
   assertEnabled(): Promise<void> {
     return Promise.resolve();
+  }
+
+  lockCap(tx: Tx, orgId: number): Promise<void> {
+    return this.entitlements.lockLimit(tx, orgId, 'total_campaigns');
   }
 
   assertWithinCap(orgId: number, live: number): Promise<void> {

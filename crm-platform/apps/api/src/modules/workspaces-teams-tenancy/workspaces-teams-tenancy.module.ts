@@ -1,11 +1,15 @@
 import { Module } from '@nestjs/common';
+import { CrmModule } from '../crm';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSupportDeskModule } from '../platform-support-desk';
 import { RolesPermissionsModule } from '../roles-permissions';
+import { TeamInboxRoutingSlaModule } from '../team-inbox-routing-sla';
 import { WalletMessageBillingModule } from '../wallet-message-billing';
 import { WhatsAppProviderRegistryModule } from '../whatsapp-provider-registry';
 import { InvitationsController } from './invitations.controller';
 import { InvitationsService } from './invitations.service';
+import { MemberHandoverController } from './member-handover.controller';
+import { MemberHandoverService } from './member-handover.service';
 import { MembersController } from './members.controller';
 import { MembersRepository } from './members.repository';
 import { MembersService } from './members.service';
@@ -18,7 +22,11 @@ import { PlatformWorkspaceLifecycleController } from './platform-workspace-lifec
 import { PlatformWorkspacesController } from './platform-workspaces.controller';
 import { PlatformWorkspacesRepository } from './platform-workspaces.repository';
 import { PlatformWorkspacesService } from './platform-workspaces.service';
+import { TeamUsageController } from './team-usage.controller';
+import { TeamUsageRepository } from './team-usage.repository';
+import { TeamUsageService } from './team-usage.service';
 import { TeamsController } from './teams.controller';
+import { TeamsPlanService } from './teams-plan.service';
 import { TeamsRepository } from './teams.repository';
 import { TeamsService } from './teams.service';
 
@@ -30,6 +38,8 @@ import { TeamsService } from './teams.service';
  */
 @Module({
   imports: [
+    CrmModule,
+    TeamInboxRoutingSlaModule,
     PlansCoreModule,
     RolesPermissionsModule,
     PlatformSupportDeskModule,
@@ -38,8 +48,10 @@ import { TeamsService } from './teams.service';
   ],
   controllers: [
     MembersController,
+    MemberHandoverController,
     LeaveController,
     TeamsController,
+    TeamUsageController,
     InvitationsController,
     PlatformWorkspacesController,
     PlatformWorkspaceLifecycleController,
@@ -47,16 +59,20 @@ import { TeamsService } from './teams.service';
   providers: [
     MembersRepository,
     MembersService,
+    MemberHandoverService,
     LeaveRepository,
     LeaveService,
     TeamsRepository,
+    TeamsPlanService,
     TeamsService,
+    TeamUsageRepository,
+    TeamUsageService,
     InvitationsService,
     PlatformWorkspacesRepository,
     PlatformWorkspacesService,
     LifecycleRepository,
     LifecycleService,
   ],
-  exports: [MembersService, TeamsService, PlatformWorkspacesService, LifecycleService],
+  exports: [MembersService, TeamsService, TeamsPlanService, PlatformWorkspacesService, LifecycleService],
 })
 export class WorkspacesTeamsTenancyModule {}

@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Channels",
-      "title": "Email",
+      "title": "Support email",
       "titleAccent": "mailboxes",
       "intro": "Connect your Gmail, Microsoft 365 or any IMAP mailbox. Customer emails arrive in the team inbox, one conversation per email thread, and your replies go out from the same address.",
       "inbox": "Open inbox",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Connect a mailbox",
-          "body": "Sign in with Google or Microsoft, or enter your mail server settings, and allow Threadwise to read and send mail for that address."
+          "body": "Sign in with Google or Microsoft, or enter your mail server settings, and allow {app} to read and send mail for that address."
         },
         "inbox": {
           "title": "Mail arrives in the inbox",

@@ -224,20 +224,20 @@
           "title": "Teks bebas",
           "body": "Tempel cuplikan bantuan atau kebijakan."
         },
-        "qa": {
-          "title": "Pasangan T&J",
-          "body": "Satu pertanyaan dengan jawaban bakunya."
-        },
         "file": {
           "title": "PDF, DOCX, TXT & lainnya",
           "body": "Unggah file. Teksnya diekstrak untuk Anda."
+        },
+        "faq": {
+          "title": "Tambah FAQ",
+          "body": "Pertanyaan dan jawaban yang ingin Anda berikan."
         }
       },
       "panel": {
         "url": "Ambil URL publik",
         "text": "Tempel teks biasa",
-        "qa": "T&J tunggal",
-        "file": "Unggah file pengetahuan"
+        "file": "Unggah file pengetahuan",
+        "faq": "Tambahkan pertanyaan dan jawaban"
       },
       "label": "Label",
       "url": "URL",
@@ -249,21 +249,20 @@
         "label": {
           "url": "Label (mis. Halaman harga)",
           "text": "Label (mis. Ringkasan kebijakan pengembalian dana)",
-          "qa": "Label (mis. Waktu pengembalian dana)",
           "file": "Label (mis. Buku panduan produk)"
         },
         "content": "Tempel teks apa pun yang harus diketahui agen…",
         "question": "Pertanyaan, mis. Berapa lama pengembalian dana diproses?",
         "answer": "Jawaban, mis. Pengembalian dana diselesaikan dalam 3 sampai 5 hari kerja."
       },
-      "urlHint": "Hanya halaman http dan https publik yang dibaca. Halaman diambil di latar belakang, sehingga entri menampilkan Memproses sesaat.",
+      "urlHint": "Hanya halaman publik http dan https yang dibaca. Halaman dibaca di latar belakang, jadi mungkin perlu sesaat.",
       "fileHint": "PDF, DOCX, TXT, Markdown, CSV, atau HTML, hingga 10 MB. Teks diekstrak secara otomatis.",
       "uploading": "Progres unggah",
       "submit": {
         "url": "Ambil & latih",
         "text": "Simpan teks",
-        "qa": "Simpan pasangan",
-        "file": "Unggah"
+        "file": "Unggah",
+        "faq": "Simpan FAQ"
       },
       "cancel": "Batal",
       "added": "Pengetahuan ditambahkan.",
@@ -281,25 +280,6 @@
         "file_empty": "File itu kosong.",
         "tooLarge": "Teks terlalu banyak untuk satu kali tempel. Unggah sebagai file saja."
       },
-      "col": {
-        "kind": "Jenis",
-        "label": "Label",
-        "state": "Status",
-        "actions": "Aksi"
-      },
-      "kind": {
-        "url": "url",
-        "text": "teks",
-        "qa": "t&j",
-        "file": "file"
-      },
-      "state": {
-        "ready": "siap",
-        "processing": "memproses",
-        "failed": "gagal"
-      },
-      "tokens": "sekitar {count} token",
-      "workspaceWide": "seluruh workspace",
       "loading": "Memuat entri",
       "loadError": "Entri tidak dapat dimuat.",
       "retry": "Coba lagi",
@@ -310,7 +290,14 @@
       "removeBody": "Agen akan berhenti menggunakannya untuk balasan baru. Percakapan lama tidak berubah.",
       "keep": "Pertahankan",
       "removed": "Dihapus.",
-      "removeFailed": "Gagal menghapus."
+      "removeFailed": "Gagal menghapus.",
+      "ownedNote": "Pengetahuan ini hanya milik agen ini. Agen lain tidak dapat menggunakannya.",
+      "faq": {
+        "addAnother": "Tambah pertanyaan lain",
+        "removeRow": "Hapus pertanyaan ini"
+      },
+      "reading": "Sedang membaca…",
+      "failed": "Ini tidak dapat dibaca."
     }
   }
 }

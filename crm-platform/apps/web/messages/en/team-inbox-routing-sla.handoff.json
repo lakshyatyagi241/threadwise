@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Automation",
+      "title": "Handoff and assignment",
+      "subtitle": "How a conversation reaches a person once a bot, a flow or a teammate asks for one, and how the contact owner and the chat owner work together.",
+      "noAccess": "You do not have permission to see these settings. Ask a workspace Owner or Admin for the inbox settings permission.",
+      "readOnly": "You can see these settings but not change them.",
+      "loading": "Loading settings",
+      "loadFailed": "The settings could not be loaded.",
+      "retry": "Try again",
+      "saved": "Settings saved.",
+      "saveFailed": "The settings could not be saved.",
+      "notInPlan": "Not in your plan",
+      "upgradeHint": "Your plan does not include this. Ask the account owner to upgrade the plan.",
+      "auto": {
+        "title": "Automatic assignment",
+        "body": "When a person is needed, the assignment rules can pick one for you. Without them, the conversation waits in the Waiting tab until a teammate claims it.",
+        "switch": "Assign automatically",
+        "switchHint": "Turn off to stop the assignment rules from running, both for new conversations and for handoffs. Conversations then wait in the queue or go to the person or team a flow names."
+      },
+      "owner": {
+        "title": "Contact owner and chat owner",
+        "body": "A contact can have an owner, and each conversation has the person who answers it. Choose how the two relate.",
+        "modeLabel": "How the contact owner and the chat owner relate",
+        "modes": {
+          "independent": {
+            "title": "Independent",
+            "body": "The chat owner and the contact owner are separate. Nothing changes one when the other changes."
+          },
+          "owner_first": {
+            "title": "Owner first",
+            "body": "A new chat goes to the contact's owner first when they can take it; otherwise the usual rules decide."
+          },
+          "keep_in_sync": {
+            "title": "Keep in sync",
+            "body": "As owner first, and when a contact's owner changes, their open chats that were assigned automatically follow. A chat a person took is never moved."
+          }
+        },
+        "claimSets": "Claiming makes you the contact owner",
+        "claimSetsHint": "When someone claims a conversation and the contact has no owner yet, they become the owner.",
+        "prompt": "Ask about the contact owner on reassign",
+        "promptHint": "When a chat is given to someone else by hand, offer to make them the contact owner too.",
+        "window": "Keep a returning contact with their last agent",
+        "windowHint": "A contact who writes again goes to the person who handled their last conversation, for this many days. Off means no limit.",
+        "windowDays": "Number of days",
+        "days": "days"
+      },
+      "queue": {
+        "title": "Waiting queue",
+        "body": "Conversations nobody could take wait in the Waiting tab of the inbox, with the reason and how long they have waited.",
+        "notify": "Tell the team when a conversation is waiting",
+        "notifyHint": "Members of the team, or everyone who can answer unassigned chats, get a notification with the reason."
+      },
+      "teams": {
+        "title": "Teams",
+        "body": "Each team has its own assignment method, opening hours, time zone and default assignee. They are used whenever a conversation is handed to that team.",
+        "link": "Open Teams"
+      }
+    }
+  }
+}

@@ -180,10 +180,21 @@ export class RoutingRulesRepository {
     return new Map(rowsOf(res).map((r) => [r.uuid as string, Number(r.id)]));
   }
 
-  async teams(tx: Tx, orgId: number, uuids: readonly string[]): Promise<Map<string, number>> {
+  /**
+   * Teams by uuid. `receivingOnly` keeps out the teams switched to "does not receive conversations" (Teams v2): the engine and
+   * the save check use it, so such a team is neither chosen nor given work; the rules list does not, so it can still count a
+   * rule that points at one.
+   */
+  async teams(
+    tx: Tx,
+    orgId: number,
+    uuids: readonly string[],
+    opts: { receivingOnly?: boolean } = {},
+  ): Promise<Map<string, number>> {
     if (uuids.length === 0) return new Map();
     const res = await tx.execute(sql`
-      SELECT uuid, id FROM teams WHERE org_id = ${orgId} AND uuid IN (${uuidList(uuids)})`);
+      SELECT uuid, id FROM teams WHERE org_id = ${orgId} AND uuid IN (${uuidList(uuids)})
+        ${opts.receivingOnly ? sql`AND receives_conversations` : sql``}`);
     return new Map(rowsOf(res).map((r) => [r.uuid as string, Number(r.id)]));
   }
 
@@ -211,6 +222,23 @@ export class RoutingRulesRepository {
       sql`SELECT routing_keep_contact_agent AS v FROM workspace_settings WHERE org_id = ${orgId}`,
     );
     return rowsOf(res)[0]?.v === true;
+  }
+
+  /** The switches arrival routing reads (BL-402, BL-404): automatic assignment on/off, the owner mode, the last-handler window. */
+  async arrivalSettings(
+    tx: Tx,
+    orgId: number,
+  ): Promise<{ keep: boolean; autoAssign: boolean; ownerMode: string; days: number | null }> {
+    const res = await tx.execute(sql`
+      SELECT routing_keep_contact_agent AS keep, handoff_auto_assign AS auto, handoff_owner_mode AS mode, handoff_continuity_days AS days
+      FROM workspace_settings WHERE org_id = ${orgId}`);
+    const r = rowsOf(res)[0];
+    return {
+      keep: r?.keep === true,
+      autoAssign: r ? r.auto !== false : true,
+      ownerMode: (r?.mode as string | undefined) ?? 'independent',
+      days: r?.days === null || r?.days === undefined ? null : Number(r.days),
+    };
   }
 
   /** A workspace has no settings row until something writes one: upsert (every other column has a default). */
@@ -343,11 +371,13 @@ export class RoutingRulesRepository {
     orgId: number,
     contactId: number,
     exceptConversationId: number,
+    days: number | null = null,
   ): Promise<number | null> {
     const res = await tx.execute(sql`
       SELECT assignee_user_id FROM conversations
       WHERE org_id = ${orgId} AND contact_id = ${contactId} AND id <> ${exceptConversationId}
         AND assignee_user_id IS NOT NULL
+        ${days === null ? sql`` : sql`AND COALESCE(last_message_at, created_at) >= now() - (${days} * interval '1 day')`}
       ORDER BY COALESCE(last_message_at, created_at) DESC, id DESC LIMIT 1`);
     const v = rowsOf(res)[0]?.assignee_user_id;
     return v === null || v === undefined ? null : Number(v);
@@ -416,9 +446,11 @@ export class RoutingRulesRepository {
   }
 
   /**
-   * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody has set a
-   * status until the availability screen exists, and no row counts as available, as Reference's routing did), with the open and
-   * open conversations each holds right now.
+   * Of these people, the ones who can take a conversation now: active members who are not marked offline or busy (nobody who never
+   * switched their status counts as available, as Reference's routing did), who are not on leave, and who have not reached their
+   * own chat limit (`user_profiles.chat_limit`, the Concurrent Chat setting; no limit when empty), with the open conversations each
+   * holds right now. An agent already holding that many open conversations is left out of every strategy, so round robin and least
+   * busy both skip them.
    */
   async available(
     tx: Tx,
@@ -428,21 +460,25 @@ export class RoutingRulesRepository {
   ): Promise<Array<{ id: number; uuid: string; open: number }>> {
     if (userIds.length === 0) return [];
     const res = await tx.execute(sql`
-      SELECT u.id, u.uuid,
-             (SELECT count(*)::int FROM conversations c
-               WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
-                 AND c.status = 'open') AS open
-      FROM users u
-      LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
-      WHERE u.org_id = ${orgId} AND u.status = 'active'
-        AND u.id IN (${sql.join(
-          userIds.map((i) => sql`${i}`),
-          sql`, `,
-        )})
-        AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
-        -- on leave today (the workspace's calendar): never picked by routing (BL-112)
-        AND NOT ${onLeaveOnSql('u', today)}
-      ORDER BY u.id`);
+      SELECT m.id, m.uuid, m.open FROM (
+        SELECT u.id, u.uuid, p.chat_limit,
+               (SELECT count(*)::int FROM conversations c
+                 WHERE c.org_id = u.org_id AND c.assignee_user_id = u.id AND NOT c.archived
+                   AND c.status = 'open') AS open
+        FROM users u
+        LEFT JOIN agent_statuses s ON s.org_id = u.org_id AND s.user_id = u.id
+        LEFT JOIN user_profiles p ON p.org_id = u.org_id AND p.user_id = u.id
+        WHERE u.org_id = ${orgId} AND u.status = 'active'
+          AND u.id IN (${sql.join(
+            userIds.map((i) => sql`${i}`),
+            sql`, `,
+          )})
+          AND COALESCE(s.status, 'online') NOT IN ('offline', 'busy')
+          -- on leave today (the workspace's calendar): never picked by routing (BL-112)
+          AND NOT ${onLeaveOnSql('u', today)}
+      ) m
+      WHERE m.chat_limit IS NULL OR m.open < m.chat_limit
+      ORDER BY m.id`);
     return rowsOf(res).map((r) => ({
       id: Number(r.id),
       uuid: r.uuid as string,

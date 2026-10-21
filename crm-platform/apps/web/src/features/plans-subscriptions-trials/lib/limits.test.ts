@@ -32,9 +32,11 @@ const meter = (
   window,
 });
 
-/** One meter per registry key, all unlimited, then `over` replaces some. */
+/** One meter per registry key, all unlimited, then `over` replaces some. (`teams` is the cap whose 0 is solo: its unlimited is the stand-in value.) */
 const meters = (over: Record<string, [number, number]> = {}): UsageMeter[] =>
-  PLAN_LIMIT_KEYS.map((k) => meter(k, over[k]?.[0] ?? 0, over[k]?.[1] ?? 0));
+  PLAN_LIMIT_KEYS.map((k) =>
+    meter(k, over[k]?.[0] ?? 0, over[k]?.[1] ?? (k === 'teams' ? 1_000_000 : 0)),
+  );
 
 describe('limitTone (normal / warning from 80% / danger at 100%)', () => {
   it('reads the real counts', () => {
@@ -263,5 +265,17 @@ describe('compareSections', () => {
     const s = compareSections([a, b], { onlyDiffering: true });
     expect(s.map((x) => x.id)).toEqual(['limits-workspace', 'features-advanced', 'addons']);
     expect(s.find((x) => x.id === 'addons')!.rows.map((r) => r.key)).toEqual(['x2']);
+  });
+});
+
+describe('unlimited stand-in values', () => {
+  it('shows 1,000,000 and 100,000,000 as unlimited, with no bar', () => {
+    const rows = groupLimits([meter('contacts', 0, 1_000_000), meter('flows', 3, 100_000_000)], {
+      showAll: true,
+    }).flatMap((g) => g.rows);
+    for (const r of rows.filter((x) => x.key === 'contacts' || x.key === 'flows')) {
+      expect(r.unlimited).toBe(true);
+      expect(r.percent).toBeNull();
+    }
   });
 });

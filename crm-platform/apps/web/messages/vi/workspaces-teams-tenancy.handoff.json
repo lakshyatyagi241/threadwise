@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Chuyển giao và giao việc",
+        "hint": "Được dùng khi bot, luồng hoặc đồng nghiệp chuyển cuộc trò chuyện cho nhóm này.",
+        "method": "Cách chọn người",
+        "methodHint": "Thủ công: cuộc trò chuyện chờ trong hàng chờ của nhóm cho đến khi có người nhận. Luân phiên và Ít việc nhất chọn giúp bạn một thành viên và cần gói có quy tắc giao việc.",
+        "defaultAssignee": "Người nhận mặc định",
+        "defaultAssigneeHint": "Nhận cuộc trò chuyện khi không ai khác nhận được. Chọn một thành viên của nhóm.",
+        "noDefaultAssignee": "Không ai cụ thể",
+        "hours": "Giờ làm việc",
+        "hoursHint": "Tắt nghĩa là luôn mở. Ngoài các giờ này, cuộc trò chuyện vẫn chờ trong hàng chờ và liên hệ nhận tin nhắn ngoài giờ của luồng.",
+        "timezone": "Múi giờ",
+        "dayFrom": "{day}, mở cửa",
+        "dayTo": "{day}, đóng cửa",
+        "hoursProblem": "Mỗi ngày mở cửa cần giờ mở và giờ đóng khác nhau.",
+        "day": {
+          "mon": "Thứ Hai",
+          "tue": "Thứ Ba",
+          "wed": "Thứ Tư",
+          "thu": "Thứ Năm",
+          "fri": "Thứ Sáu",
+          "sat": "Thứ Bảy",
+          "sun": "Chủ Nhật"
+        }
+      }
+    }
+  }
+}

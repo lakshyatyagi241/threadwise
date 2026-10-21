@@ -3,6 +3,8 @@ import {
   type AppointmentStatus,
   type BookingReminderChannel,
   type BookingReminderKind,
+  type BookingReminderRecordChannel,
+  type BookingReminderStepKind,
 } from '@crm/contracts';
 
 /**
@@ -39,9 +41,16 @@ export const REMINDER_REASONS = [
   // skipped: it cannot go and will not
   'started',
   'expired',
+  // the step's own skip rules
+  'already_confirmed',
+  'no_join_link',
+  'already_rebooked',
+  'visit_not_completed',
   'no_contact_point',
   'no_channel',
   'no_sender',
+  // the workspace owner has not switched this channel on for appointment messages (BL-350)
+  'channel_disabled',
   'template_required',
   'template_unavailable',
   'quiet_hours_too_late',
@@ -51,11 +60,16 @@ export const REMINDER_REASONS = [
   'minor',
   'processing_restricted',
   'plan_limit',
+  // the plan does not include this kind of step (the rebook steps)
+  'plan_feature_locked',
   // held: it goes by itself later
   'quiet_hours',
   'channel_unavailable',
   'wallet_empty',
   'send_halted',
+  // used only in a step's channel log: why the next channel was used
+  'not_delivered',
+  'send_failed',
   // failed
   'provider_error',
   'interrupted',
@@ -70,6 +84,7 @@ export function dueAtOf(
   endsAt: Date,
   offsetMinutes: number,
 ): Date {
+  if (kind === 'event') return startsAt;
   return kind === 'before'
     ? new Date(startsAt.getTime() - offsetMinutes * 60_000)
     : new Date(endsAt.getTime() + offsetMinutes * 60_000);
@@ -78,8 +93,10 @@ export function dueAtOf(
 export interface RunFacts {
   runStatus: RunStatus;
   kind: BookingReminderKind;
+  /** The step of the sequence (null for a rule saved before steps existed: it is read from its kind). */
+  stepKind: BookingReminderStepKind | null;
   /** The rule as it is now; null when it was deleted since the claim. */
-  rule: { isActive: boolean } | null;
+  rule: { isActive: boolean; skipIfConfirmed: boolean } | null;
   /** The booking's arming when the run was claimed, and now. A reschedule moves it. */
   runArmedAtMs: number;
   bookingArmedAtMs: number;
@@ -87,14 +104,26 @@ export interface RunFacts {
   startsAtMs: number;
   dueAtMs: number;
   nowMs: number;
+  /** The customer tapped Confirm on a reminder. */
+  customerConfirmed?: boolean;
+  /** The visit is online and has a link that opens it (the 15 minute reminder needs one). */
+  hasJoinLink?: boolean;
 }
 
 export type Gate =
   { go: true } | { go: false; status: 'cancelled' | 'skipped'; reason: ReminderReason };
 
+/** A rebook (recall) message may be a day late; a long wait is its whole point. */
+export const REBOOK_GRACE_MS = 24 * 3_600_000;
+
 /**
  * Whether a claimed run should still go out, decided at delivery from the booking and the rule as they are now (a cancel, a decline, a
- * reschedule or a switched-off rule between the claim and the send must stop it).
+ * reschedule or a switched-off rule between the claim and the send must stop it). The skip rules of a step live here:
+ *
+ *  - a cancelled, declined or moved booking stops every step (a cancelled booking never gets a reminder);
+ *  - a reminder is never sent at or after the start; the after-visit, no-show and rebook steps are the ones that come after it;
+ *  - the 15 minute reminder needs an online visit with a join link, the 2 hour reminder can skip itself once the customer confirmed;
+ *  - a rebook only follows a visit that was marked completed.
  */
 export function gateRun(f: RunFacts): Gate {
   if (f.rule === null) return { go: false, status: 'cancelled', reason: 'rule_removed' };
@@ -102,11 +131,40 @@ export function gateRun(f: RunFacts): Gate {
   if (f.runArmedAtMs !== f.bookingArmedAtMs) {
     return { go: false, status: 'cancelled', reason: 'rescheduled' };
   }
+  const step = f.stepKind;
+  if (f.kind === 'event') {
+    if (step === 'no_show') {
+      return f.bookingStatus === 'no_show'
+        ? { go: true }
+        : { go: false, status: 'cancelled', reason: 'booking_not_confirmed' };
+    }
+    // The confirmation: a booking that is confirmed and has not started.
+    if (f.bookingStatus !== 'confirmed') return statusStop(f.bookingStatus);
+    if (f.nowMs >= f.startsAtMs) return { go: false, status: 'skipped', reason: 'started' };
+    return { go: true };
+  }
   if (f.kind === 'before') {
     if (f.bookingStatus !== 'confirmed') return statusStop(f.bookingStatus);
     // Never after (or as) the booking starts.
     if (f.nowMs >= f.startsAtMs - REMINDER_MIN_LEAD_MS) {
       return { go: false, status: 'skipped', reason: 'started' };
+    }
+    if (step === 'reminder_15m' && !f.hasJoinLink) {
+      return { go: false, status: 'skipped', reason: 'no_join_link' };
+    }
+    if (f.rule.skipIfConfirmed && f.customerConfirmed) {
+      return { go: false, status: 'skipped', reason: 'already_confirmed' };
+    }
+    return { go: true };
+  }
+  if (step === 'rebook') {
+    if (f.bookingStatus !== 'completed') {
+      return f.bookingStatus === 'confirmed'
+        ? { go: false, status: 'skipped', reason: 'visit_not_completed' }
+        : statusStop(f.bookingStatus);
+    }
+    if (f.nowMs > f.dueAtMs + REBOOK_GRACE_MS) {
+      return { go: false, status: 'skipped', reason: 'expired' };
     }
     return { go: true };
   }
@@ -185,11 +243,31 @@ export interface Settled {
   until?: Date;
 }
 
+/** One line of a step's channel log: which channel was tried and what came of it. Codes only. */
+export interface AttemptEntry {
+  channel: BookingReminderRecordChannel;
+  status: 'sent' | 'skipped' | 'held' | 'failed';
+  reason: ReminderReason | null;
+}
+
+/** The log of a pass over the channels, in the order they were tried. */
+export function attemptLogOf(
+  tried: ReadonlyArray<{ channel: BookingReminderChannel; outcome: ChannelOutcome }>,
+): AttemptEntry[] {
+  return tried.map(({ channel, outcome }) => ({
+    channel,
+    status: outcome.status,
+    reason: outcome.status === 'sent' ? null : outcome.reason,
+  }));
+}
+
 /**
- * Combines the per-channel outcomes of a rule's ordered preference. The first channel that SENT wins (and is the only one used: a
- * fallback is for a channel that cannot deliver, never a second copy). A held channel stops the run (the same preference is tried again
- * later, so a customer is not moved to a worse channel because of a short hold). Otherwise every channel was skipped and the run says
- * why, preferring the most telling reason.
+ * Combines the per-channel outcomes of a step's ordered preference (the fallback rule). The first channel that SENT wins and is the only
+ * one used: a fallback is for a channel that cannot deliver, never a second copy. A channel that is SKIPPED (no number, no consent, the
+ * WhatsApp template not approved yet) or FAILED (the provider refused it) hands over to the next channel. A HELD channel (quiet hours, a
+ * channel that is down) stops the run: the same preference is tried again later, so a customer is not moved to a worse channel because
+ * of a short hold. When no channel delivered, a failure is reported as the failure, otherwise the run says why it was skipped,
+ * preferring the most telling reason.
  */
 export function settleChannels(
   tried: ReadonlyArray<{ channel: BookingReminderChannel; outcome: ChannelOutcome }>,
@@ -202,13 +280,18 @@ export function settleChannels(
       const until = outcome.until ? new Date(outcome.until) : new Date(now.getTime() + retryMs);
       return { status: 'held', reason: outcome.reason, channel, until };
     }
-    if (outcome.status === 'failed') return { status: 'failed', reason: outcome.reason, channel };
   }
   if (tried.length === 0) return { status: 'skipped', reason: 'no_channel', channel: null };
+  const failed = tried.find((t) => t.outcome.status === 'failed');
+  if (failed && failed.outcome.status === 'failed') {
+    return { status: 'failed', reason: failed.outcome.reason, channel: failed.channel };
+  }
   // Every channel was skipped: the most informative reason is the first channel's that is not "nothing to send to".
   const skips = tried.flatMap((t) => (t.outcome.status === 'skipped' ? [t.outcome.reason] : []));
   const reason =
-    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender') ?? skips[0] ?? 'no_channel';
+    skips.find((r) => r !== 'no_contact_point' && r !== 'no_sender' && r !== 'channel_disabled') ??
+    skips[0] ??
+    'no_channel';
   return { status: 'skipped', reason, channel: null };
 }
 
@@ -271,10 +354,12 @@ export function templateProblem(
 
 // --- the timeline -----------------------------------------------------------------------------------------------------------------
 
-const CHANNEL_NAME: Record<BookingReminderChannel, string> = {
+/** Names for the channels in a delivery record. `sms` stays for the old runs that carry it as history; `voice` is reserved. */
+const CHANNEL_NAME: Record<BookingReminderRecordChannel, string> = {
   whatsapp: 'WhatsApp',
   sms: 'SMS',
   email: 'email',
+  voice: 'a call',
 };
 
 const REASON_TEXT: Record<ReminderReason, string> = {
@@ -287,9 +372,14 @@ const REASON_TEXT: Record<ReminderReason, string> = {
   booking_not_confirmed: 'the booking is not confirmed',
   started: 'the booking had already started',
   expired: 'it was too late to send',
+  already_confirmed: 'the customer had already confirmed',
+  no_join_link: 'the visit has no join link',
+  already_rebooked: 'the customer already has a later booking',
+  visit_not_completed: 'the visit was not marked completed',
   no_contact_point: 'the contact has no number or address for it',
   no_channel: 'no channel could deliver it',
   no_sender: 'no connected sender',
+  channel_disabled: 'the workspace has switched this channel off for appointment messages',
   template_required: 'WhatsApp needs an approved template outside the 24 hour window',
   template_unavailable: 'the chosen template cannot be sent',
   quiet_hours_too_late: 'quiet hours ran past the booking',
@@ -299,24 +389,40 @@ const REASON_TEXT: Record<ReminderReason, string> = {
   minor: 'the contact is flagged as a minor',
   processing_restricted: 'processing of this contact is restricted',
   plan_limit: "the plan's limit is reached",
+  plan_feature_locked: 'the plan does not include this step',
   quiet_hours: 'quiet hours',
   channel_unavailable: 'the channel is not connected',
   wallet_empty: 'the wallet is empty',
   send_halted: 'sending is halted',
+  not_delivered: 'the earlier message was not delivered in time',
+  send_failed: 'the earlier message failed to send',
   provider_error: 'the provider refused it',
   interrupted: 'it was interrupted',
   internal_error: 'an unexpected error',
 };
 
-/** Words on the contact's timeline, in English like every activity title the system writes. Never the message text or an address. */
+/** What a step is called on the timeline, in English like every activity title the system writes. */
+const STEP_NOUN: Record<BookingReminderStepKind, string> = {
+  confirmation: 'Confirmation',
+  reminder_24h: 'Reminder',
+  reminder_2h: 'Reminder',
+  reminder_15m: 'Reminder',
+  reminder: 'Reminder',
+  after_visit: 'Follow-up',
+  no_show: 'No-show message',
+  rebook: 'Rebook message',
+};
+
+/** Words on the contact's timeline. Never the message text or an address. */
 export function timelineEntry(
   kind: BookingReminderKind,
   status: Settled['status'] | 'cancelled',
-  channel: BookingReminderChannel | null,
+  channel: BookingReminderRecordChannel | null,
   reason: ReminderReason | null,
   until?: Date,
+  stepKind?: BookingReminderStepKind | null,
 ): { title: string; body: string | null } {
-  const noun = kind === 'before' ? 'Reminder' : 'Follow-up';
+  const noun = stepKind ? STEP_NOUN[stepKind] : kind === 'before' ? 'Reminder' : 'Follow-up';
   const via = channel ? ` on ${CHANNEL_NAME[channel]}` : '';
   const why = reason ? REASON_TEXT[reason] : null;
   switch (status) {
@@ -342,6 +448,7 @@ const capital = (s: string): string => (s === '' ? s : s.charAt(0).toUpperCase()
 
 export interface PlannedRule {
   kind: BookingReminderKind;
+  stepKind?: BookingReminderStepKind | null;
   offsetMinutes: number;
   label: string | null;
   isActive: boolean;
@@ -349,30 +456,37 @@ export interface PlannedRule {
 
 export interface RecordedRun {
   kind: BookingReminderKind;
+  stepKind?: BookingReminderStepKind | null;
   offsetMinutes: number;
   dueAt: Date;
   armedAt: Date;
   status: RunStatus;
   reason: string | null;
-  channel: BookingReminderChannel | null;
+  channel: BookingReminderRecordChannel | null;
   sentAt: Date | null;
+  attemptLog?: AttemptEntry[];
+  delivery?: 'unknown' | 'delivered' | 'failed' | 'undelivered';
 }
 
 export interface ShownReminder {
   kind: BookingReminderKind;
+  stepKind: BookingReminderStepKind | null;
   offsetMinutes: number;
   label: string | null;
   dueAt: Date;
   status: RunStatus | 'scheduled';
   reason: string | null;
-  channel: BookingReminderChannel | null;
+  channel: BookingReminderRecordChannel | null;
   sentAt: Date | null;
+  attempts: AttemptEntry[];
+  delivery: 'unknown' | 'delivered' | 'failed' | 'undelivered';
 }
 
 /**
- * The reminders and follow-ups of one booking for its detail: for the booking's current arming, every switched-on rule (what was
- * recorded for it, or `scheduled` when its time has not come and it still would fire), plus what an earlier arming really delivered
- * (a reminder sent for the old time is history worth showing; one that was merely cancelled is not).
+ * The steps of one booking for its detail: for the booking's current arming, every switched-on step (what was recorded for it, or
+ * `scheduled` when its time has not come and it still would fire), plus what an earlier arming really delivered (a reminder sent for
+ * the old time is history worth showing; one that was merely cancelled is not). An event step (the confirmation, the no-show message)
+ * is shown only when it has a record: it has no time to be scheduled for.
  */
 export function remindersOf(
   booking: { status: AppointmentStatus; startsAt: Date; endsAt: Date; armedAt: Date },
@@ -382,6 +496,10 @@ export function remindersOf(
 ): ShownReminder[] {
   const out: ShownReminder[] = [];
   const armed = booking.armedAt.getTime();
+  const same = (
+    a: { kind: string; offsetMinutes: number },
+    b: { kind: string; offsetMinutes: number },
+  ) => a.kind === b.kind && a.offsetMinutes === b.offsetMinutes;
   const labelOf = (kind: BookingReminderKind, offset: number) =>
     rules.find((r) => r.kind === kind && r.offsetMinutes === offset)?.label ?? null;
 
@@ -390,6 +508,7 @@ export function remindersOf(
     if (!current && run.status !== 'sent' && run.status !== 'failed') continue;
     out.push({
       kind: run.kind,
+      stepKind: run.stepKind ?? rules.find((r) => same(r, run))?.stepKind ?? null,
       offsetMinutes: run.offsetMinutes,
       label: labelOf(run.kind, run.offsetMinutes),
       dueAt: run.dueAt,
@@ -397,6 +516,8 @@ export function remindersOf(
       reason: run.reason,
       channel: run.channel,
       sentAt: run.sentAt,
+      attempts: run.attemptLog ?? [],
+      delivery: run.delivery ?? 'unknown',
     });
   }
   const open =
@@ -404,27 +525,22 @@ export function remindersOf(
       ? true
       : booking.status === 'completed';
   for (const rule of rules) {
-    if (!rule.isActive) continue;
-    if (
-      runs.some(
-        (r) =>
-          r.kind === rule.kind &&
-          r.offsetMinutes === rule.offsetMinutes &&
-          r.armedAt.getTime() === armed,
-      )
-    ) {
-      continue;
-    }
+    if (!rule.isActive || rule.kind === 'event') continue;
+    if (runs.some((r) => same(r, rule) && r.armedAt.getTime() === armed)) continue;
     const dueAt = dueAtOf(rule.kind, booking.startsAt, booking.endsAt, rule.offsetMinutes);
+    const isRebook = rule.stepKind === 'rebook';
     const stillComing =
       rule.kind === 'before'
         ? (booking.status === 'pending' || booking.status === 'confirmed') &&
           dueAt.getTime() > nowMs &&
           dueAt.getTime() > armed
-        : open && booking.status !== 'pending' && dueAt.getTime() + FOLLOW_UP_GRACE_MS > nowMs;
+        : isRebook
+          ? booking.status === 'completed' && dueAt.getTime() + REBOOK_GRACE_MS > nowMs
+          : open && booking.status !== 'pending' && dueAt.getTime() + FOLLOW_UP_GRACE_MS > nowMs;
     if (!stillComing) continue;
     out.push({
       kind: rule.kind,
+      stepKind: rule.stepKind ?? null,
       offsetMinutes: rule.offsetMinutes,
       label: rule.label,
       dueAt,
@@ -432,6 +548,8 @@ export function remindersOf(
       reason: null,
       channel: null,
       sentAt: null,
+      attempts: [],
+      delivery: 'unknown',
     });
   }
   return out.sort((a, b) => a.dueAt.getTime() - b.dueAt.getTime());

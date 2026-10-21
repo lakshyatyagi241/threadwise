@@ -3,7 +3,7 @@
     "back": "Otomasi",
     "title": "Aturan penugasan data",
     "intro": "Tugaskan {contacts}, perusahaan, dan {deals} baru ke pemilik penjualan yang tepat secara otomatis.",
-    "crossNote": "Ini menugaskan {contacts}, perusahaan, dan {deals}. Untuk menugaskan percakapan ke agen, lihat <link>Penugasan otomatis</link>.",
+    "crossNote": "Ini menugaskan {contacts}, perusahaan, dan {deals}. Untuk menugaskan percakapan ke agen, lihat <link>Penugasan otomatis percakapan</link>.",
     "master": {
       "title": "Aktifkan penugasan data",
       "hint": "Nonaktif sampai Anda mengaktifkannya. Jika aktif, aturan di bawah akan menugaskan {contact}, perusahaan, atau {deal} baru yang belum punya pemilik kepada seseorang di tim Anda.",
@@ -233,7 +233,14 @@
         "nobody": "Cocok, tetapi tidak ada yang tersedia",
         "broken": "Memiliki kondisi rusak"
       },
-      "skipped": "Dilewati karena tidak ada yang tersedia: {names}"
+      "skipped": "Dilewati karena tidak ada yang tersedia: {names}",
+      "excluded": {
+        "label": "Dikecualikan",
+        "no_access": "{name}: tidak dapat membuka jenis data ini",
+        "inactive": "{name}: sudah tidak aktif",
+        "on_leave": "{name}: cuti hari ini",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Log eksekusi",
@@ -296,6 +303,7 @@
       "message": "Aturan {name} akan berhenti menugaskan. Data yang sudah ditugaskannya tetap mempertahankan pemiliknya.",
       "confirm": "Hapus",
       "cancel": "Batal"
-    }
+    },
+    "dismiss": "Tutup"
   }
 }

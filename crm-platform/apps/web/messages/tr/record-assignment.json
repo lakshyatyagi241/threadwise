@@ -3,7 +3,7 @@
     "back": "Otomasyon",
     "title": "Kayıt atama kuralları",
     "intro": "Yeni {contacts}, şirketleri ve {deals} otomatik olarak doğru satış sahibine atayın.",
-    "crossNote": "Bu özellik {contacts}, şirketleri ve {deals} atar. Konuşmaları temsilcilere atamak için <link>Otomatik atama</link> sayfasına bakın.",
+    "crossNote": "Bu özellik {contacts}, şirketleri ve {deals} atar. Konuşmaları temsilcilere atamak için <link>Konuşmalarda otomatik atama</link> sayfasına bakın.",
     "master": {
       "title": "Kayıt atamayı aç",
       "hint": "Siz açana kadar kapalıdır. Açıldığında aşağıdaki kurallar, sahibi olmayan yeni bir {contact}, şirket veya {deal} kaydını ekibinizden birine atar.",
@@ -233,7 +233,14 @@
         "nobody": "Eşleşti ama uygun kimse yoktu",
         "broken": "Bozuk bir koşulu var"
       },
-      "skipped": "Uygun kimse olmadığı için atlandı: {names}"
+      "skipped": "Uygun kimse olmadığı için atlandı: {names}",
+      "excluded": {
+        "label": "Hariç tutuldu",
+        "no_access": "{name}: bu tür kaydı açamıyor",
+        "inactive": "{name}: artık aktif değil",
+        "on_leave": "{name}: bugün izinli",
+        "offline": "{name}: çevrimdışı"
+      }
     },
     "log": {
       "title": "Çalıştırma günlüğü",
@@ -296,6 +303,7 @@
       "message": "{name} kuralı atama yapmayı bırakacak. Daha önce atadığı kayıtlar sahiplerini korur.",
       "confirm": "Sil",
       "cancel": "İptal"
-    }
+    },
+    "dismiss": "Kapat"
   }
 }

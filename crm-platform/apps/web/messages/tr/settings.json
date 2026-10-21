@@ -101,7 +101,7 @@
         "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-posta",
+        "label": "Destek e-postası",
         "description": "Ekibiniz müşteri e-postalarını ortak gelen kutusunda okuyup yanıtlayabilsin diye Gmail veya Google Workspace posta kutularını bağlayın.",
         "keywords": "posta kutusu, gmail, google workspace, ortak gelen kutusu, destek e-postası, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Ekipler",
-        "description": "Yönlendirme ve raporlama için kişileri ekiplere ayırın.",
-        "keywords": "gruplar, departmanlar, atama, yönlendirme"
+        "description": "Kişileri görüşmeler, atamalar ve raporlar için gruplayın.",
+        "keywords": "gruplar, departmanlar, yöneticiler, hiyerarşi, atama, yönlendirme"
       },
       "ai-keys": {
         "label": "AI sağlayıcı anahtarları",
@@ -244,6 +244,11 @@
         "label": "REST API",
         "description": "Ürün üzerine geliştirme yapmak için anahtarlar ve dokümantasyon.",
         "keywords": "api anahtarları, geliştiriciler, tokenlar, dokümanlar, openapi"
+      },
+      "api-keys": {
+        "label": "API anahtarları",
+        "description": "Diğer sistemlerin API'yi çağırmak için kullandığı anahtarları oluşturun ve yönetin.",
+        "keywords": "api anahtarı, jeton, gizli anahtar, geliştiriciler, erişim, entegrasyon"
       },
       "webhooks": {
         "label": "Webhook'lar",
@@ -301,7 +306,7 @@
         "keywords": "geta, yayınla, bot, konsol, canlıya al, sohbet botu"
       },
       "auto-assignment": {
-        "label": "Otomatik atama",
+        "label": "Konuşmalarda otomatik atama",
         "description": "Yeni konuşmaları sıra ile veya kurallara göre otomatik olarak doğru temsilciye verin.",
         "keywords": "yönlendirme, sırayla dağıtım, ata, temsilciler, gelen kutusu kuralları, dağıt, sahip"
       },
@@ -389,6 +394,11 @@
         "label": "Yinelenen potansiyel müşteriler",
         "description": "Bir kişiyle eşleşen yeni kaydın ona birleştirilmesini mi yoksa yeni kişi olmasını mı istediğinizi seçin.",
         "keywords": "yinelenen, birleştir, potansiyel müşteri, aynı telefon, aynı e-posta, yeni kişi, kaynak"
+      },
+      "sales-activities": {
+        "label": "Satış Etkinlikleri",
+        "description": "Görevleri, toplantıları, aramaları ve kendi etkinliklerinizi yönetin: her birinin neler yapabileceği, görev türleri ve sonuçları.",
+        "keywords": "etkinlikler, görev türleri, sonuçlar, toplantı sonucu, arama sonucu, takip, giriş yapma, özel etkinlik, takvim, tamamla"
       }
     },
     "backToMarketplace": "Marketplace'e dön"

@@ -83,6 +83,8 @@ export const attributeResponseSchema = z.object({
   defaultValue: z.string().nullable(),
   description: z.string().nullable(),
   isActive: z.boolean(),
+  /** Hidden in the property registry (an imported leftover nobody defined): kept, but not offered as a column, filter or input. */
+  isHidden: z.boolean().optional(),
   rowVersion: z.number().int(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),

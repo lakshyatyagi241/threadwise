@@ -1,7 +1,7 @@
 'use client';
 
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
@@ -13,9 +13,8 @@ import {
   type FlowType,
   type FlbPortContext,
 } from '@crm/contracts';
+import { ConfirmDialog } from '@crm/ui';
 import { ApiError } from '@/lib/api/errors';
-import { useCan } from '@/features/auth-registration-security/shared/session-context';
-import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { flowsApi } from '../api/flows';
 import { useFlb, useMsg, type Msg } from '../lib/msg';
 import { nodeLabel } from '../lib/contract-text';
@@ -23,13 +22,6 @@ import { validateGraph } from '../lib/validation-text';
 import { getaApi } from '../geta-publish/api';
 import { POLL_EVERY_MS, POLL_MAX_TRIES, viewOf } from '../geta-publish/status-model';
 import { GetaPublishStatus } from '../geta-publish/sync-status';
-import {
-  BuilderTabs,
-  WebBotPanels,
-  useInitialTab,
-  whatsappDefaultsFrom,
-  type BuilderTab,
-} from './web-bot-tabs';
 import { FlowEditorContext } from '../lib/flow-editor-context';
 import { FLB_KEYS, useBuilderContext } from '../api/hooks';
 import {
@@ -61,6 +53,7 @@ import { InspectorPanel, Minimap, NodeActionBar, ValidationPopup } from './overl
 import type { FormEnv } from './inspector/types';
 import { AIGenModal, SaveConfirmModal } from './modals';
 import { Icon } from './node-card';
+import { opensNodeOnEnter } from './node-open';
 import { Palette } from './palette';
 import { QuickAddMenu } from './quick-add';
 import { uploadFlowMedia } from '../lib/upload-media';
@@ -112,6 +105,7 @@ const errMessage = (e: unknown, fallback: string): string =>
  */
 export function BuilderScreen({ flowId: initialFlowId }: { flowId?: string }) {
   const params = useSearchParams();
+  const router = useRouter();
   const flowQuery = useQuery({
     queryKey: initialFlowId ? FLB_KEYS.flow(initialFlowId) : ['flb', 'flow', 'new'],
     queryFn: ({ signal }) => flowsApi.get(initialFlowId!, signal),
@@ -124,8 +118,20 @@ export function BuilderScreen({ flowId: initialFlowId }: { flowId?: string }) {
   const { ctx, loading: ctxLoading, refresh } = useBuilderContext();
   const tb = useTranslations('flb.builder.shell.screen');
 
+  // A website chat bot is built in the Simple builder, so a link to it on the canvas is sent on there.
+  const webBotHref =
+    flowQuery.data?.flowType === 'web'
+      ? `/flows/simple/${flowQuery.data.id}`
+      : !initialFlowId && params.get('type') === 'web'
+        ? '/flows/simple?type=web'
+        : null;
+  useEffect(() => {
+    if (webBotHref) router.replace(webBotHref);
+  }, [webBotHref, router]);
+
   // An unknown or out-of-workspace id gives a blank new-flow canvas (Reference: no 404), so a failed load is not an error screen.
   const ready = !ctxLoading && (!initialFlowId || !flowQuery.isPending);
+  if (webBotHref) return null;
   if (!ready) {
     return (
       <div className="flb-root fixed inset-0 z-40 grid place-items-center bg-background text-[13px] text-muted-foreground">
@@ -168,7 +174,8 @@ function BuilderInner({
   testOpenInitially,
 }: InnerProps) {
   const tb = useTranslations('flb.builder.shell.screen');
-  const tw = useTranslations('flb.builder.webBot');
+  const to = useTranslations('flb.builder.shell.overlays');
+  const tcm = useTranslations('flb.common');
   const tf = useFlb();
   const seed = useMemo<CanvasState>(
     () => ({
@@ -257,16 +264,6 @@ function BuilderInner({
     return ctx.channels.includes(t) ? t : 'chat';
   }, [initial, openedType, ctx.channels]);
   const mode = flbFlowTypeOf(state.nodes, openedAs, ctx.channels);
-  // A website chat or WhatsApp bot has Customize and Deploy beside the canvas; the other channels only build.
-  const widgetChannel: 'web' | 'chat' | null =
-    mode === 'web' ? 'web' : mode === 'chat' ? 'chat' : null;
-  const initialTab = useInitialTab(!!initial);
-  const [tab, setTab] = useState<BuilderTab>(initialTab);
-  // Another channel has no tabs, whatever the link asked for.
-  const shownTab: BuilderTab = widgetChannel ? tab : 'build';
-  const canEditFlow = useCan('flb.flows.update');
-  const widgetQuery = useFlowWidget(widgetChannel ? flowId : null);
-  const needsCustomizing = !!widgetChannel && !!flowId && widgetQuery.data?.widget === null;
   const portCtx = useMemo<FlbPortContext>(
     () => ({ templateButtons: (node) => templateQuickReplies(ctx.templates, node) }),
     [ctx.templates],
@@ -342,6 +339,8 @@ function BuilderInner({
     },
     [doAdd, pan, zoom],
   );
+  // The toolbar's trash button asks first; the Delete key is undoable and stays direct.
+  const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const doDelete = useCallback(
     (id: string) => {
       commit(deleteNode(state, id));
@@ -370,6 +369,8 @@ function BuilderInner({
         t.isContentEditable
       )
         return;
+      // The canvas shortcuts stay off while a dialog is open above it (a Delete in that dialog must not remove a node).
+      if (confirmDeleteId !== null) return;
       const k = e.key.toLowerCase();
       const mod = e.ctrlKey || e.metaKey;
       if (mod && k === 'z' && !e.shiftKey) {
@@ -384,13 +385,17 @@ function BuilderInner({
       } else if ((e.key === 'Backspace' || e.key === 'Delete') && selectedId) {
         e.preventDefault();
         doDelete(selectedId);
+      } else if (e.key === 'Enter' && selectedId && !mod && opensNodeOnEnter(t)) {
+        // Enter on a selected node opens it in the inspector (a double-click does the same); a focused button keeps its own Enter.
+        e.preventDefault();
+        setInsOpen(true);
       } else if (e.key === 'Escape') {
         setSelectedId(null);
       }
     };
     window.addEventListener('keydown', h);
     return () => window.removeEventListener('keydown', h);
-  }, [doUndo, doRedo, doDuplicate, doDelete, selectedId]);
+  }, [doUndo, doRedo, doDuplicate, doDelete, selectedId, confirmDeleteId]);
 
   // --- save / publish -----------------------------------------------------------------------------------------------------
   const senderAvailable = useMemo(() => {
@@ -524,17 +529,6 @@ function BuilderInner({
         const saved = await persist(name.trim() || tb('newFlow'));
         id = saved.id;
       }
-      if (widgetChannel) {
-        // A bot goes live with the widget its owner chose (the chat window, or the WhatsApp button), so Customize has to be saved once first.
-        const widget = !flowId
-          ? null
-          : ((widgetQuery.data ?? (await widgetQuery.refetch()).data)?.widget ?? null);
-        if (!widget) {
-          setTab('customize');
-          toast(tw(widgetChannel === 'web' ? 'customizeFirst' : 'customizeFirstWhatsapp'));
-          return;
-        }
-      }
       const pub = await flowsApi.publish(id);
       setRowVersion(pub.rowVersion);
       setStatus('Published');
@@ -615,19 +609,7 @@ function BuilderInner({
           }
         />
 
-        {widgetChannel ? (
-          // The Advanced builder has no FAQs tab: a flow's FAQs are edited in the Simple builder.
-          <BuilderTabs
-            tab={shownTab}
-            onTab={setTab}
-            saved={!!flowId}
-            needsCustomizing={needsCustomizing}
-            faqs={false}
-            web
-          />
-        ) : null}
-
-        <div className={`relative flex min-h-0 flex-1 ${shownTab === 'build' ? '' : 'hidden'}`}>
+        <div className="relative flex min-h-0 flex-1">
           {sidebarOpen ? (
             <>
               <Palette mode={mode} query={query} onSearch={setQuery} onAddCenter={addAtCenter} />
@@ -682,7 +664,7 @@ function BuilderInner({
                 pan={pan}
                 zoom={zoom}
                 onEdit={() => setInsOpen(true)}
-                onDelete={() => doDelete(selectedNode.id)}
+                onDelete={() => setConfirmDeleteId(selectedNode.id)}
                 onDuplicate={() => doDuplicate(selectedNode.id)}
                 onPin={() => commit(pinStart(state, selectedNode.id))}
               />
@@ -804,21 +786,19 @@ function BuilderInner({
           />
         </div>
 
-        {widgetChannel && flowId ? (
-          <WebBotPanels
-            tab={shownTab}
-            channel={widgetChannel}
-            whatsapp={whatsappDefaultsFrom(
-              state.nodes.find((n) => n.type === 'trigger'),
-              ctx.senders.chat,
-            )}
-            flowId={flowId}
-            flowName={name}
-            published={published}
-            canEdit={canEditFlow}
-          />
-        ) : null}
-
+        <ConfirmDialog
+          open={confirmDeleteId !== null}
+          title={to('confirmDeleteTitle')}
+          message={to('confirmDeleteMessage')}
+          confirmLabel={to('deleteNode')}
+          cancelLabel={tcm('cancel')}
+          tone="danger"
+          onClose={() => setConfirmDeleteId(null)}
+          onConfirm={() => {
+            if (confirmDeleteId) doDelete(confirmDeleteId);
+            setConfirmDeleteId(null);
+          }}
+        />
         <SaveConfirmModal
           open={saveOpen}
           busy={busy}

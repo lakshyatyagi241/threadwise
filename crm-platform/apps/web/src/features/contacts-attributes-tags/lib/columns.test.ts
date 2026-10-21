@@ -53,6 +53,7 @@ describe('columns', () => {
       'lastActivity',
       'nextFollowUp',
       'createdOn',
+      'modifiedOn',
     ]);
   });
 
@@ -76,6 +77,7 @@ describe('columns', () => {
     expect(columnGroup('company')).toBe('related');
     expect(columnGroup('whatsapp')).toBe('consent');
     expect(columnGroup('createdOn')).toBe('activity');
+    expect(columnGroup('modifiedOn')).toBe('activity');
     expect(columnGroup('attr:city')).toBe('custom');
     const groups = addableColumns(allColumns(attrs), defaultColumns(attrs));
     expect(groups.map((g) => g.group)).toEqual([
@@ -147,9 +149,9 @@ describe('formatDmy', () => {
 
 describe('formatDateTime in a zone', () => {
   it('shows the clock of the zone, in English and in another language', () => {
-    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'UTC')).toBe('01 Oct 2026, 08:30 PM');
-    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'Asia/Kolkata')).toBe(
-      '02 Oct 2026, 02:00 AM',
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'UTC')).toMatch(/^Oct 1, 2026,\s8:30\sPM$/);
+    expect(formatDateTime('2026-10-01T20:30:00Z', 'en', 'Asia/Kolkata')).toMatch(
+      /^Oct 2, 2026,\s2:00\sAM$/,
     );
     expect(formatDateTime('2026-10-01T20:30:00Z', 'de', 'Asia/Kolkata')).toMatch(/02\.10\.2026/);
   });
@@ -212,6 +214,7 @@ describe('sortKeyOf', () => {
   it('maps columns to the API sort and refuses the many-valued ones', () => {
     expect(sortKeyOf('name')).toBe('name');
     expect(sortKeyOf('createdOn')).toBe('createdAt');
+    expect(sortKeyOf('modifiedOn')).toBeNull();
     expect(sortKeyOf('attr:order_count')).toBe('attr:order_count');
     expect(sortKeyOf('tags')).toBeNull();
     expect(sortKeyOf('groups')).toBeNull();

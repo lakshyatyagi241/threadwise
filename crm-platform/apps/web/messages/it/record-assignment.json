@@ -3,7 +3,7 @@
     "back": "Automazione",
     "title": "Regole di assegnazione dei record",
     "intro": "Assegna automaticamente i nuovi {contacts}, le aziende e i {deals} al responsabile vendite giusto.",
-    "crossNote": "Questa funzione assegna {contacts}, aziende e {deals}. Per assegnare le conversazioni agli agenti, vedi <link>Assegnazione automatica</link>.",
+    "crossNote": "Questa funzione assegna {contacts}, aziende e {deals}. Per assegnare le conversazioni agli agenti, vedi <link>Assegnazione automatica delle conversazioni</link>.",
     "master": {
       "title": "Attiva l'assegnazione dei record",
       "hint": "Disattivata finché non la attivi. Quando è attiva, le regole qui sotto assegnano a un membro del tuo team ogni nuovo {contact}, azienda o {deal} senza responsabile.",
@@ -233,7 +233,14 @@
         "nobody": "Corrisponde, ma nessuno era disponibile",
         "broken": "Ha una condizione non valida"
       },
-      "skipped": "Saltata perché nessuno era disponibile: {names}"
+      "skipped": "Saltata perché nessuno era disponibile: {names}",
+      "excluded": {
+        "label": "Escluse",
+        "no_access": "{name}: non può aprire questo tipo di record",
+        "inactive": "{name}: non più attivo",
+        "on_leave": "{name}: in ferie oggi",
+        "offline": "{name}: offline"
+      }
     },
     "log": {
       "title": "Registro esecuzioni",
@@ -296,6 +303,7 @@
       "message": "La regola {name} smetterà di assegnare. I record già assegnati mantengono il loro responsabile.",
       "confirm": "Elimina",
       "cancel": "Annulla"
-    }
+    },
+    "dismiss": "Ignora"
   }
 }

@@ -75,18 +75,28 @@ const joinerClass = (active: boolean, or: boolean) =>
       : 'text-foreground/70 hover:bg-background',
   );
 
+/** The operators a rule editor offers and how each one reads. The Condition node uses its own list when none is passed. */
+export interface OperatorSet {
+  ids: readonly string[];
+  label: (id: string) => string;
+}
+/** Operators that compare nothing, so the value box is hidden. */
+const NO_VALUE_OPERATORS = new Set(['exists', 'is_set', 'is_not_set', 'is_empty', 'is_not_empty']);
+
 function RuleCard({
   rule,
   label,
   onPatch,
   onRemove,
   flagged,
+  ops,
 }: {
   rule: FlbCondRule;
   label: string;
   onPatch: (patch: Partial<FlbCondRule>) => void;
   onRemove: () => void;
   flagged: boolean;
+  ops: OperatorSet;
 }) {
   const t = useTranslations('flb.builder.formsCore.logic');
   const operator = rule.operator || 'equals';
@@ -119,13 +129,13 @@ function RuleCard({
         onChange={(e) => onPatch({ operator: e.target.value })}
         className={cn(controlClass, 'mb-1.5')}
       >
-        {OPERATOR_CHOICES.map((o) => (
+        {ops.ids.map((o) => (
           <option key={o} value={o}>
-            {t(`operator.${o}`)}
+            {ops.label(o)}
           </option>
         ))}
       </select>
-      {operator !== 'exists' ? (
+      {!NO_VALUE_OPERATORS.has(operator) ? (
         <input
           type="text"
           value={str(rule.value)}
@@ -143,14 +153,20 @@ function GroupEditor({
   group,
   path,
   onChange,
+  ops,
 }: {
   root: FlbCondGroup;
   group: FlbCondGroup;
   path: CondPath;
   onChange: (next: FlbCondGroup) => void;
+  ops?: OperatorSet;
 }) {
   const t = useTranslations('flb.builder.formsCore.logic');
   const tf = useFlb();
+  const opSet: OperatorSet = ops ?? {
+    ids: OPERATOR_CHOICES,
+    label: (o) => t(`operator.${o as (typeof OPERATOR_CHOICES)[number]}`),
+  };
   const isRoot = path.length === 0;
   const depth = depthAt(path);
   const canRule = canAddRule(root);
@@ -194,7 +210,14 @@ function GroupEditor({
       {group.items.map((item, i) => {
         const childPath = [...path, i];
         return flbIsCondGroup(item) ? (
-          <GroupEditor key={i} root={root} group={item} path={childPath} onChange={onChange} />
+          <GroupEditor
+            key={i}
+            root={root}
+            group={item}
+            path={childPath}
+            onChange={onChange}
+            ops={opSet}
+          />
         ) : (
           <RuleCard
             key={i}
@@ -203,6 +226,7 @@ function GroupEditor({
             flagged={!item.variable.trim()}
             onPatch={(patch) => onChange(patchRule(root, childPath, patch))}
             onRemove={() => onChange(removeAt(root, childPath))}
+            ops={opSet}
           />
         );
       })}
@@ -258,11 +282,14 @@ const conditionRich = {
 export function ConditionGroupEditor({
   tree,
   onChange,
+  ops,
 }: {
   tree: FlbCondGroup;
   onChange: (next: FlbCondGroup) => void;
+  /** The operators to offer; the Condition node's own list when absent. The Trigger node passes its field-match list. */
+  ops?: OperatorSet;
 }) {
-  return <GroupEditor root={tree} group={tree} path={[]} onChange={onChange} />;
+  return <GroupEditor root={tree} group={tree} path={[]} onChange={onChange} ops={ops} />;
 }
 
 export function ConditionForm(props: FormProps) {

@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Automatización",
+      "title": "Traspaso y asignación",
+      "subtitle": "Cómo llega una conversación a una persona cuando un bot, un flujo o un compañero la solicita, y cómo trabajan juntos el propietario del contacto y el responsable del chat.",
+      "noAccess": "No tienes permiso para ver estos ajustes. Pide al propietario o a un administrador del espacio de trabajo el permiso de ajustes de la bandeja.",
+      "readOnly": "Puedes ver estos ajustes, pero no cambiarlos.",
+      "loading": "Cargando ajustes",
+      "loadFailed": "No se pudieron cargar los ajustes.",
+      "retry": "Reintentar",
+      "saved": "Ajustes guardados.",
+      "saveFailed": "No se pudieron guardar los ajustes.",
+      "notInPlan": "No incluido en tu plan",
+      "upgradeHint": "Tu plan no incluye esta función. Pide al propietario de la cuenta que mejore el plan.",
+      "auto": {
+        "title": "Asignación automática",
+        "body": "Cuando se necesita una persona, las reglas de asignación pueden elegirla por ti. Sin ellas, la conversación espera en la pestaña En espera hasta que un compañero la tome.",
+        "switch": "Asignar automáticamente",
+        "switchHint": "Desactívalo para detener las reglas de asignación, tanto en conversaciones nuevas como en traspasos. Las conversaciones esperarán entonces en la cola o irán a la persona o al equipo que indique un flujo."
+      },
+      "owner": {
+        "title": "Propietario del contacto y responsable del chat",
+        "body": "Un contacto puede tener un propietario y cada conversación tiene a la persona que la atiende. Elige cómo se relacionan ambos.",
+        "modeLabel": "Cómo se relacionan el propietario del contacto y el responsable del chat",
+        "modes": {
+          "independent": {
+            "title": "Independientes",
+            "body": "El responsable del chat y el propietario del contacto son independientes. Cambiar uno no modifica al otro."
+          },
+          "owner_first": {
+            "title": "Primero el propietario",
+            "body": "Un chat nuevo va primero al propietario del contacto si puede atenderlo; si no, deciden las reglas habituales."
+          },
+          "keep_in_sync": {
+            "title": "Mantener sincronizados",
+            "body": "Igual que Primero el propietario y, cuando cambia el propietario de un contacto, sus chats abiertos asignados automáticamente lo siguen. Un chat que tomó una persona nunca se mueve."
+          }
+        },
+        "claimSets": "Tomar un chat te convierte en propietario del contacto",
+        "claimSetsHint": "Cuando alguien toma una conversación y el contacto aún no tiene propietario, pasa a ser el propietario.",
+        "prompt": "Preguntar por el propietario del contacto al reasignar",
+        "promptHint": "Cuando un chat se pasa a otra persona manualmente, ofrece convertirla también en propietaria del contacto.",
+        "window": "Mantener a un contacto recurrente con su último agente",
+        "windowHint": "Un contacto que vuelve a escribir va a la persona que atendió su última conversación durante esta cantidad de días. Desactivado significa sin límite.",
+        "windowDays": "Número de días",
+        "days": "días"
+      },
+      "queue": {
+        "title": "Cola de espera",
+        "body": "Las conversaciones que nadie pudo tomar esperan en la pestaña En espera de la bandeja, con el motivo y el tiempo que llevan esperando.",
+        "notify": "Avisar al equipo cuando una conversación está en espera",
+        "notifyHint": "Los miembros del equipo, o todos los que pueden responder chats sin asignar, reciben una notificación con el motivo."
+      },
+      "teams": {
+        "title": "Equipos",
+        "body": "Cada equipo tiene su propio método de asignación, horario de atención, zona horaria y responsable predeterminado. Se usan siempre que se traspasa una conversación a ese equipo.",
+        "link": "Abrir Equipos"
+      }
+    }
+  }
+}

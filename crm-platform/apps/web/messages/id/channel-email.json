@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Kanal",
-      "title": "Email",
+      "title": "Email dukungan",
       "titleAccent": "kotak surat",
       "intro": "Hubungkan Gmail, Microsoft 365, atau kotak surat IMAP apa pun. Email pelanggan masuk ke kotak masuk tim, satu percakapan per utas email, dan balasan Anda keluar dari alamat yang sama.",
       "inbox": "Buka inbox",
@@ -21,7 +21,7 @@
       "how": {
         "connect": {
           "title": "Hubungkan kotak surat",
-          "body": "Masuk dengan Google atau Microsoft, atau isi pengaturan server email Anda, lalu izinkan Threadwise membaca dan mengirim email untuk alamat itu."
+          "body": "Masuk dengan Google atau Microsoft, atau isi pengaturan server email Anda, lalu izinkan {app} membaca dan mengirim email untuk alamat itu."
         },
         "inbox": {
           "title": "Email masuk ke inbox",

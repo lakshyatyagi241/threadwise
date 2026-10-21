@@ -130,6 +130,7 @@
       "colLeadScore": "Potansiyel müşteri puanı",
       "colLanguage": "Dil",
       "colCreatedOn": "Oluşturulma tarihi",
+      "colModifiedOn": "Değiştirilme tarihi",
       "pagination": "Sayfalama",
       "prevPage": "Önceki sayfa",
       "nextPage": "Sonraki sayfa",
@@ -282,6 +283,7 @@
       "shortStage": "Aşama",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Oluşturuldu",
+      "shortModified": "Değiştirildi",
       "firstRun": {
         "title": "İlk kişilerinizi ekleyin",
         "message": "Görüştüğünüz kişileri getirin. Kişiler mesajlar, kampanyalar, görevler ve fırsatlar için kullanılır.",
@@ -290,7 +292,11 @@
         "importBody": "Bir elektronik tablo yükleyin ve sütunlarını kişi alanlarıyla eşleştirin.",
         "connect": "WhatsApp'ı bağla",
         "connectBody": "Numaranızı bağlayın; böylece kişiler yanıt verebilir ve onlara mesaj gönderebilirsiniz."
-      }
+      },
+      "teamLabel": "Ekip",
+      "teamFilter": "Ekibe göre filtrele",
+      "allTeams": "Tüm ekipler",
+      "teamFormer": "Eski ekip"
     },
     "bulk": {
       "label": "Seçilen kişiler için işlemler",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Erişiminiz bu kişiyi o kullanıcıya atamanıza izin vermiyor.",
       "company": "Şirket",
       "companyHint": "Bu kişiyi bir kuruluşun altında gruplar.",
-      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin."
+      "companyRefused": "Bu şirketi kullanamazsınız. Başka birini seçin veya alanı temizleyin.",
+      "searchOptions": "Seçeneklerde ara",
+      "searchOptionsFor": "{field} seçeneklerinde ara",
+      "noOptionsFound": "Aramanızla eşleşen seçenek yok."
     },
     "tags": {
       "title": "Etiketler",
@@ -1225,7 +1234,8 @@
             "duplicate": "İki seçenek aynı ada sahip."
           },
           "condition": "Her koşul için özelliği ve değeri seçin."
-        }
+        },
+        "optionsLazy": "Bu özellikte {count, plural, one {# seçenek} other {# seçenek}} var; burada düzenlemek için çok fazla. Olduğu gibi korunur; diğer ayarlar değiştirilebilir."
       },
       "builtinCard": {
         "title": "Yerleşik özellikler",

@@ -4,6 +4,9 @@ import { ERROR_CODES } from '@crm/contracts';
 import type { Tx } from '@crm/db';
 import { AppError } from '../../common/errors/app-error';
 import { DatabaseService } from '../../infra/db/database.service';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('billing_grace_days');
 
 /**
  * The only door through which this module writes the platform catalogue.
@@ -30,7 +33,11 @@ export class PlanStore {
    * entitlement resolver asks on a hot path (only for a workspace with a live autopay subscription).
    */
   async graceDays(): Promise<number> {
-    if (this.grace && Date.now() - this.grace.at < 30_000) return this.grace.days;
+    if (this.grace && Date.now() - this.grace.at < 30_000) {
+      cache.hit();
+      return this.grace.days;
+    }
+    cache.miss();
     const res = await this.tx((tx) =>
       tx.execute(sql`SELECT value FROM platform_settings WHERE key = 'billing.grace_days'`),
     );

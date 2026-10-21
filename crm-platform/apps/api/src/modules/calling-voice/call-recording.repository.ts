@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
+import { CALL_RECORDING_RETENTION_DEFAULT_DAYS } from '@crm/contracts';
 import type {
   CallRecordingConsentMethod,
   CallRecordingConsentMode,
@@ -74,6 +75,14 @@ const STATE_COLS = sql`id, uuid, status, direction, contact_id, from_phone, to_p
 @Injectable()
 export class CallRecordingRepository {
   // --- the workspace's rules ----------------------------------------------------------------------------------------------
+
+  /** The recording window of a workspace that never chose one: the platform default (retention dashboard), else 90 days. */
+  async platformDefaultDays(tx: Tx): Promise<number> {
+    const res = await tx.execute(
+      sql`SELECT retention_live_days('call_recordings', ${CALL_RECORDING_RETENTION_DEFAULT_DAYS}) AS days`,
+    );
+    return Number(rowsOf(res)[0]!.days);
+  }
 
   async getSettings(tx: Tx, orgId: number): Promise<RecordingSettingsRow | null> {
     const res = await tx.execute(sql`

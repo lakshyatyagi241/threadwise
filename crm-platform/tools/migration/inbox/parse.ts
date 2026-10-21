@@ -215,10 +215,13 @@ export function sentInteractiveFrom(
       .map((b) => ({
         type: str(obj(b)?.type),
         // Waboo's own shape is value.text; the Cloud API's is reply.title (a button saved as sent to Meta)
-        title: str(obj(obj(b)?.value)?.text) ?? str(obj(obj(b)?.reply)?.title) ?? str(obj(b)?.title),
+        title:
+          str(obj(obj(b)?.value)?.text) ?? str(obj(obj(b)?.reply)?.title) ?? str(obj(b)?.title),
         url: str(obj(obj(b)?.value)?.url),
       }))
-      .filter((b): b is { type: string | null; title: string; url: string | null } => b.title !== null);
+      .filter(
+        (b): b is { type: string | null; title: string; url: string | null } => b.title !== null,
+      );
     if (buttons.length === 0 || !body) continue;
     const only = buttons[0]!;
     if (buttons.length === 1 && only.type === 'link' && only.url && isUrl(only.url))
@@ -330,7 +333,14 @@ export function parseTurn(doc: Doc): ParsedTurn {
         reason: 'the document has both bot_response and user_query_object; read as the bot turn',
       });
     const ctype = str(doc.ctype)?.toLowerCase();
-    const senderKind = ctype === 'livechat' ? 'agent' : 'bot';
+    // a live-chat hand-over ("Connected to Aashish", "You are now Connected to WABO DEMO": {type: 'info'} elements of a turn flagged
+    // live_chat_connected) is an event of the conversation, not something an agent or the bot wrote: the inbox shows it as a system notice
+    const liveEvent = br.live_chat_connected === true;
+    const senderKind: ParsedTurn['senderKind'] = liveEvent
+      ? 'system'
+      : ctype === 'livechat'
+        ? 'agent'
+        : 'bot';
     const raw = br.response;
     const parts: string[] = [];
     const media = { url: null as string | null };
@@ -384,7 +394,9 @@ export function parseTurn(doc: Doc): ParsedTurn {
     const typeRaw = str(br.type);
     let kind: MessageKind = 'text';
     const known = kindOfType(typeRaw);
-    if (hasInteractive) {
+    if (liveEvent) {
+      kind = 'system';
+    } else if (hasInteractive) {
       // a header file makes it that file's message (the text is its caption); no file: an interactive message
       kind = iaMediaKind ?? 'interactive';
     } else if (known) kind = known;
@@ -404,7 +416,14 @@ export function parseTurn(doc: Doc): ParsedTurn {
       legacy.interactive = jsonSafe(interactives.length === 1 ? interactives[0] : interactives);
     if (locations.length > 0) legacy.location = jsonSafe(locations[0]);
     const hasPayload = elements > 0 && payload > 0;
-    const empty = body === null && media.url === null && !hasPayload;
+    // the agent-side twin of a hand-over ("You are now Connected to <agent>", isUser false): Waboo's thread shows only the customer-side
+    // line ("Connected to <customer>", isUser true), so the twin is not a message of the conversation
+    const agentSideTwin =
+      liveEvent &&
+      Array.isArray(raw) &&
+      raw.length > 0 &&
+      raw.every((el) => obj(el)?.type === 'info' && obj(el)?.isUser === false);
+    const empty = agentSideTwin || (body === null && media.url === null && !hasPayload);
     if (!empty && body === null && media.url === null)
       soft.push({
         code: 'NO_TEXT',
@@ -484,8 +503,7 @@ export function parseTurn(doc: Doc): ParsedTurn {
       if (kind === 'text') kind = kindOfUrl(mediaUrl);
     }
   }
-  let empty =
-    (body === null || body.trim() === '') && mediaUrl === null && senderKind !== 'system';
+  let empty = (body === null || body.trim() === '') && mediaUrl === null && senderKind !== 'system';
   // A customer turn that Waboo recorded (typed query object, time, phone) but without any text, file or reply payload: the customer did
   // write, only the content is gone. Kept as a placeholder so the thread and its inbound count match the old inbox; the flag lets a
   // later repair find these rows.
@@ -494,7 +512,8 @@ export function parseTurn(doc: Doc): ParsedTurn {
     legacy.contentUnavailable = true;
     soft.push({
       code: 'CONTENT_UNAVAILABLE',
-      reason: 'the customer turn has no text, file or reply payload in the dump; imported as a placeholder message',
+      reason:
+        'the customer turn has no text, file or reply payload in the dump; imported as a placeholder message',
     });
     empty = false;
   }

@@ -104,6 +104,8 @@ export interface CreateOptions {
    * means "tell them" unless the form cannot be shown again (the sign-up code was already used up).
    */
   slugFallback?: boolean;
+  /** Public sign-up (not an extra workspace for an existing person): refuse a taken e-mail or number inside the provisioning transaction. */
+  exclusiveIdentity?: boolean;
 }
 
 /**
@@ -587,7 +589,9 @@ export class SignupService {
     if (!otpActive) {
       return this.create(
         data,
-        emailVerified ? { phoneVerified: false, emailVerified: true } : { phoneVerified: false },
+        emailVerified
+          ? { phoneVerified: false, emailVerified: true, exclusiveIdentity: true }
+          : { phoneVerified: false, exclusiveIdentity: true },
         meta,
       );
     }
@@ -694,6 +698,7 @@ export class SignupService {
       {
         phoneVerified: true,
         slugFallback: true,
+        exclusiveIdentity: true,
         ...(consumed.emailVerified === true ? { emailVerified: true } : {}),
       },
       meta,
@@ -802,6 +807,7 @@ export class SignupService {
               defaultPlanSlug: registration.defaultPlanId,
               trialDays: registration.trialDays,
             },
+            exclusiveIdentity: opts.exclusiveIdentity,
           },
           (tx, r) => this.recordProvisioned(tx, r, data, opts, verifiedNow, registration),
         );

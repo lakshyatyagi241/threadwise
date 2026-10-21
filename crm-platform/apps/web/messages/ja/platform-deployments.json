@@ -1,0 +1,110 @@
+{
+  "platform-deployments": {
+    "nav": {
+      "item": "デプロイ"
+    },
+    "eyebrow": "運用",
+    "title": "デプロイ",
+    "description": "Geta コンソールに公開されたすべてのフローについて、待機中・実行中・失敗した項目とその理由を表示します。数秒ごとに更新されます。",
+    "updated": "ライブ。{time} に更新",
+    "stale": "直近の更新に失敗しました。前回のデプロイを表示しています。",
+    "stalledAlert": "{count} 件のデプロイが {minutes} 分間変化していません。ワーカーが停止している可能性があります。",
+    "truncated": "最初の {limit} 件のデプロイを表示しています。残りは状態で絞り込んでください。",
+    "kpi": {
+      "running": "実行中",
+      "queued": "待機中",
+      "failed": "失敗",
+      "live": "公開中",
+      "stalled": "停止中"
+    },
+    "filter": {
+      "label": "状態で絞り込む",
+      "all": "すべて",
+      "running": "実行中",
+      "queued": "待機中",
+      "failed": "失敗",
+      "live": "公開中"
+    },
+    "cols": {
+      "workspace": "ワークスペース",
+      "flow": "フロー",
+      "status": "状態",
+      "step": "ステップ",
+      "attempted": "最終試行",
+      "updated": "最終変更",
+      "error": "エラー"
+    },
+    "status": {
+      "running": "実行中",
+      "queued": "待機中",
+      "failed": "失敗",
+      "live": "公開中"
+    },
+    "steps": {
+      "configuration_update": "設定の更新",
+      "publish_bot": "ボットの公開"
+    },
+    "stalledBadge": "停止中",
+    "version": "バージョン {version}",
+    "notStarted": "未開始",
+    "failedAt": "{step} で失敗",
+    "noDetail": "エラーの内容は保存されていません。",
+    "empty": {
+      "title": "表示するものがありません",
+      "all": "Geta コンソールにまだフローが公開されていません。",
+      "running": "現在実行中の公開はありません。",
+      "queued": "待機中の項目はありません。",
+      "failed": "失敗した公開はありません。",
+      "live": "Geta コンソールで公開中のフローはまだありません。"
+    },
+    "tabs": {
+      "label": "表示する内容を選択",
+      "publishes": "フローの公開",
+      "geta": "Geta コンソール",
+      "releases": "プロダクトのリリース"
+    },
+    "publishes": {
+      "description": "フローの公開ごとに、ワーカーがキューに入れたもの、現在処理中のもの、失敗した公開とその理由を表示します。数秒ごとに更新されます。",
+      "stalledAlert": "{count} 件のフローの公開が {minutes} 分間進んでいません。ワーカーがアウトボックスの処理を止めている可能性があります。",
+      "truncated": "最初の {limit} 件の公開を表示しています。残りは状態で絞り込んでください。",
+      "notProcessed": "まだ",
+      "cols": {
+        "attempts": "試行回数",
+        "queued": "キュー投入",
+        "finished": "完了日時"
+      },
+      "status": {
+        "done": "完了"
+      },
+      "empty": {
+        "all": "フローはまだ公開されていません。",
+        "done": "過去 30 日間に完了した公開はありません。"
+      }
+    },
+    "releases": {
+      "description": "desk.wabo.ai で公開中のもの: 現在のリリース、進行中のリリース、各試行の手順とエラー。数秒ごとに更新されます。",
+      "liveLabel": "現在公開中",
+      "live": "リリース {tag}、{time} から公開中",
+      "noneLive": "まだ公開されたリリースはありません。",
+      "inProgress": "リリースが進行中です",
+      "stalledAlert": "{count} 件のリリース試行が {minutes} 分間変化していません。ビルドまたはリリースが停止している可能性があります。",
+      "empty": "リリースはまだ記録されていません。次のデプロイからここに表示されます。",
+      "cols": {
+        "tag": "タグ",
+        "state": "状態",
+        "step": "ステップ",
+        "started": "開始",
+        "finished": "完了",
+        "error": "エラー"
+      },
+      "state": {
+        "building": "ビルド中",
+        "shipping": "転送中",
+        "releasing": "リリース中",
+        "ok": "公開中",
+        "failed": "失敗",
+        "rolled_back": "ロールバック済み"
+      }
+    }
+  }
+}

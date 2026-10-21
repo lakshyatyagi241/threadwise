@@ -1,0 +1,7762 @@
+{
+ "GET /health": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 51,
+  "err": null,
+  "n": 7,
+  "p50": 3.987959000000046,
+  "p95": 4.798625000000129,
+  "max": 4.798625000000129
+ },
+ "GET /ready": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 243,
+  "err": null,
+  "n": 7,
+  "p50": 4.752708999999868,
+  "p95": 5.190833999999995,
+  "max": 5.190833999999995
+ },
+ "GET /v2/media/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 203,
+  "err": null,
+  "n": 1,
+  "p50": 4.630042000000003,
+  "p95": 4.630042000000003,
+  "max": 4.630042000000003
+ },
+ "GET /v2/addons": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 42,
+  "err": null,
+  "n": 7,
+  "p50": 5.315499999999929,
+  "p95": 7.0429169999999885,
+  "max": 7.0429169999999885
+ },
+ "GET /v2/platform/addons": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 44,
+  "err": null,
+  "n": 7,
+  "p50": 5.861832999999933,
+  "p95": 6.405124999999998,
+  "max": 6.405124999999998
+ },
+ "GET /v2/platform/addons/fields": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 9267,
+  "err": null,
+  "n": 7,
+  "p50": 6.7345000000000255,
+  "p95": 9.338124999999991,
+  "max": 9.338124999999991
+ },
+ "GET /v2/platform/addons/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 249,
+  "err": null,
+  "n": 1,
+  "p50": 6.613166999999976,
+  "p95": 6.613166999999976,
+  "max": 6.613166999999976
+ },
+ "GET /v2/platform/extensions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 392,
+  "err": null,
+  "n": 7,
+  "p50": 5.714917000000014,
+  "p95": 7.693332999999939,
+  "max": 7.693332999999939
+ },
+ "GET /v2/platform/extensions/nav": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 22,
+  "err": null,
+  "n": 7,
+  "p50": 4.17775000000006,
+  "p95": 4.693625000000111,
+  "max": 4.693625000000111
+ },
+ "GET /v2/permissions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 55322,
+  "err": null,
+  "n": 7,
+  "p50": 22.723833000000013,
+  "p95": 25.51650000000018,
+  "max": 25.51650000000018
+ },
+ "GET /v2/roles": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 70128,
+  "err": null,
+  "n": 7,
+  "p50": 11.558582999999999,
+  "p95": 12.381249999999909,
+  "max": 12.381249999999909
+ },
+ "GET /v2/roles/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 28928,
+  "err": null,
+  "n": 7,
+  "p50": 9.422415999999885,
+  "p95": 10.600332999999864,
+  "max": 10.600332999999864
+ },
+ "GET /v2/users/me": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 275,
+  "err": null,
+  "n": 7,
+  "p50": 6.302000000000135,
+  "p95": 6.492999999999938,
+  "max": 6.492999999999938
+ },
+ "GET /v2/users": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 340,
+  "err": null,
+  "n": 7,
+  "p50": 6.586166999999932,
+  "p95": 7.1649170000000595,
+  "max": 7.1649170000000595
+ },
+ "GET /v2/users/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 275,
+  "err": null,
+  "n": 7,
+  "p50": 6.125375000000076,
+  "p95": 6.923749999999927,
+  "max": 6.923749999999927
+ },
+ "GET /v2/platform/notifications/recent": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 499,
+  "err": null,
+  "n": 7,
+  "p50": 7.741875000000164,
+  "p95": 9.65216700000019,
+  "max": 9.65216700000019
+ },
+ "GET /v2/platform/notifications": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 568,
+  "err": null,
+  "n": 7,
+  "p50": 9.391582999999628,
+  "p95": 11.09704099999999,
+  "max": 11.09704099999999
+ },
+ "GET /v2/shell/config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 422,
+  "err": null,
+  "n": 7,
+  "p50": 5.82320800000025,
+  "p95": 6.185750000000098,
+  "max": 6.185750000000098
+ },
+ "GET /v2/shell/overview-stats": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1136,
+  "err": null,
+  "n": 7,
+  "p50": 265.0980410000002,
+  "p95": 444.2109999999998,
+  "max": 444.2109999999998
+ },
+ "GET /v2/shell/announcements": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.035666000000674,
+  "p95": 5.211624999999913,
+  "max": 5.211624999999913
+ },
+ "GET /v2/shell/quick-access": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1257,
+  "err": null,
+  "n": 7,
+  "p50": 5.348292000000583,
+  "p95": 5.505374999999731,
+  "max": 5.505374999999731
+ },
+ "GET /v2/shell/nav-layout": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 332,
+  "err": null,
+  "n": 7,
+  "p50": 3.3799159999998665,
+  "p95": 3.9450419999993755,
+  "max": 3.9450419999993755
+ },
+ "GET /v2/shell/workspace": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1698,
+  "err": null,
+  "n": 7,
+  "p50": 6.058458000000428,
+  "p95": 6.423041999999441,
+  "max": 6.423041999999441
+ },
+ "GET /v2/shell/workspace/working-hours": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 423,
+  "err": null,
+  "n": 7,
+  "p50": 5.9012500000008,
+  "p95": 7.619249999999738,
+  "max": 7.619249999999738
+ },
+ "GET /v2/shell/workspace/notifications": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1861,
+  "err": null,
+  "n": 7,
+  "p50": 5.733916999999565,
+  "p95": 6.5353329999998095,
+  "max": 6.5353329999998095
+ },
+ "GET /v2/shell/workspace/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 75,
+  "err": null,
+  "n": 7,
+  "p50": 104.18479200000002,
+  "p95": 105.15962500000023,
+  "max": 105.15962500000023
+ },
+ "GET /v2/shell/workspace/export/:type": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 385,
+  "err": null,
+  "n": 1,
+  "p50": 3.7702079999999114,
+  "p95": 3.7702079999999114,
+  "max": 3.7702079999999114
+ },
+ "GET /v2/shell/workspace/integrations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 39,
+  "err": null,
+  "n": 7,
+  "p50": 4.826125000000502,
+  "p95": 5.182082999999693,
+  "max": 5.182082999999693
+ },
+ "GET /v2/shell/workspace/data-residency": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 34,
+  "err": null,
+  "n": 7,
+  "p50": 5.231582999999773,
+  "p95": 7.0216669999999795,
+  "max": 7.0216669999999795
+ },
+ "GET /v2/shell/workspace/branding": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 144,
+  "err": null,
+  "n": 7,
+  "p50": 4.968042000000423,
+  "p95": 5.41858400000001,
+  "max": 5.41858400000001
+ },
+ "GET /v2/shell/workspace/branding/:slot": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 74,
+  "err": null,
+  "n": 1,
+  "p50": 3.101459000000432,
+  "p95": 3.101459000000432,
+  "max": 3.101459000000432
+ },
+ "GET /v2/ai-training/assistants": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 116,
+  "err": null,
+  "n": 7,
+  "p50": 7.3533330000000205,
+  "p95": 9.257666999999856,
+  "max": 9.257666999999856
+ },
+ "GET /v2/ai-training/assistants/picker": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.177332999999635,
+  "p95": 8.987374999999702,
+  "max": 8.987374999999702
+ },
+ "GET /v2/ai-training/assistants/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 7.467124999999214,
+  "p95": 7.467124999999214,
+  "max": 7.467124999999214
+ },
+ "GET /v2/ai-training/assistants/:id/sources": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 304,
+  "err": null,
+  "n": 1,
+  "p50": 6.843249999999898,
+  "p95": 6.843249999999898,
+  "max": 6.843249999999898
+ },
+ "GET /v2/ai-training/responder": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 51,
+  "err": null,
+  "n": 7,
+  "p50": 6.892875000000458,
+  "p95": 8.288915999999517,
+  "max": 8.288915999999517
+ },
+ "GET /v2/ai-crm": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 63,
+  "err": null,
+  "n": 7,
+  "p50": 8.164416999999958,
+  "p95": 17.1397079999997,
+  "max": 17.1397079999997
+ },
+ "GET /v2/platform/ai-keys": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11460,
+  "err": null,
+  "n": 7,
+  "p50": 5.656208000000333,
+  "p95": 7.972082999999657,
+  "max": 7.972082999999657
+ },
+ "GET /v2/ai/provider-keys": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 43,
+  "err": null,
+  "n": 7,
+  "p50": 8.44708300000002,
+  "p95": 9.689290999999685,
+  "max": 9.689290999999685
+ },
+ "GET /v2/api-library/apis": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.08324999999968,
+  "p95": 5.389958000000661,
+  "max": 5.389958000000661
+ },
+ "GET /v2/api-library/apis/options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.564666999999645,
+  "p95": 6.007834000000003,
+  "max": 6.007834000000003
+ },
+ "GET /v2/api-library/apis/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 5.358000000000175,
+  "p95": 5.358000000000175,
+  "max": 5.358000000000175
+ },
+ "GET /v2/api-library/apis/:id/usage": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 5.428541000000223,
+  "p95": 5.428541000000223,
+  "max": 5.428541000000223
+ },
+ "GET /v2/api-library/apis/:id/logs": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 5.283374999999978,
+  "p95": 5.283374999999978,
+  "max": 5.283374999999978
+ },
+ "GET /v2/api-library/logs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.2640420000007,
+  "p95": 7.082416999999623,
+  "max": 7.082416999999623
+ },
+ "GET /v2/api-library/logs/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 5.904167000000598,
+  "p95": 5.904167000000598,
+  "max": 5.904167000000598
+ },
+ "GET /v2/api-library/contact-properties": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 372,
+  "err": null,
+  "n": 7,
+  "p50": 5.5671250000004875,
+  "p95": 6.643167000000176,
+  "max": 6.643167000000176
+ },
+ "GET /v2/appointment-channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 665,
+  "err": null,
+  "n": 7,
+  "p50": 7.891040999999859,
+  "p95": 8.194208000000799,
+  "max": 8.194208000000799
+ },
+ "GET /v2/appointment-channels/predefined": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 232,
+  "err": null,
+  "n": 1,
+  "p50": 4.139291999999841,
+  "p95": 4.139291999999841,
+  "max": 4.139291999999841
+ },
+ "GET /v2/appointment-channels/:id": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 2.571125000000393,
+  "p95": 2.571125000000393,
+  "max": 2.571125000000393
+ },
+ "GET /v2/appointments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.41412499999933,
+  "p95": 9.603374999999687,
+  "max": 9.603374999999687
+ },
+ "GET /v2/appointments/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 149,
+  "err": null,
+  "n": 7,
+  "p50": 7.7366669999992155,
+  "p95": 9.033457999999882,
+  "max": 9.033457999999882
+ },
+ "GET /v2/appointments/calendar": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 134,
+  "err": null,
+  "n": 7,
+  "p50": 7.651707999999417,
+  "p95": 9.175540999999612,
+  "max": 9.175540999999612
+ },
+ "GET /v2/appointments/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 8.21545800000058,
+  "p95": 8.21545800000058,
+  "max": 8.21545800000058
+ },
+ "GET /v2/appointments/:id/ics": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 7.571541999999681,
+  "p95": 7.571541999999681,
+  "max": 7.571541999999681
+ },
+ "GET /v2/booking-page/theme": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1169,
+  "err": null,
+  "n": 7,
+  "p50": 10.093542000000525,
+  "p95": 11.995832999999948,
+  "max": 11.995832999999948
+ },
+ "GET /v2/booking-types": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 8.529749999999694,
+  "p95": 10.256124999999884,
+  "max": 10.256124999999884
+ },
+ "GET /v2/booking-types/options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 7.972875000000386,
+  "p95": 9.024249999999483,
+  "max": 9.024249999999483
+ },
+ "GET /v2/booking-types/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 7.774750000000495,
+  "p95": 7.774750000000495,
+  "max": 7.774750000000495
+ },
+ "GET /v2/booking-types/:id/slots": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 9.776915999999801,
+  "p95": 9.776915999999801,
+  "max": 9.776915999999801
+ },
+ "GET /v2/appointments/calendar/ics-feeds": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.736041999999543,
+  "p95": 7.661084000000301,
+  "max": 7.661084000000301
+ },
+ "GET /v2/appointments/calendar/ics-feeds/:file": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 306,
+  "err": null,
+  "n": 1,
+  "p50": 2.8262910000003103,
+  "p95": 2.8262910000003103,
+  "max": 2.8262910000003103
+ },
+ "GET /v2/appointments/calendar/google/calendars": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 316,
+  "err": null,
+  "n": 1,
+  "p50": 5.067541999999776,
+  "p95": 5.067541999999776,
+  "max": 5.067541999999776
+ },
+ "GET /v2/appointments/calendar/google/spreadsheets": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 319,
+  "err": null,
+  "n": 1,
+  "p50": 8.38195799999994,
+  "p95": 8.38195799999994,
+  "max": 8.38195799999994
+ },
+ "GET /v2/appointments/calendar/microsoft/calendars": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 327,
+  "err": null,
+  "n": 1,
+  "p50": 4.761541999999281,
+  "p95": 4.761541999999281,
+  "max": 4.761541999999281
+ },
+ "GET /v2/appointments/calendar/microsoft/overview": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 250,
+  "err": null,
+  "n": 1,
+  "p50": 2.5811670000002778,
+  "p95": 2.5811670000002778,
+  "max": 2.5811670000002778
+ },
+ "GET /v2/public/booking/:orgSlug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 219,
+  "err": null,
+  "n": 1,
+  "p50": 2.885750000000371,
+  "p95": 2.885750000000371,
+  "max": 2.885750000000371
+ },
+ "GET /v2/public/booking/:orgSlug/:typeSlug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 221,
+  "err": null,
+  "n": 1,
+  "p50": 4.37658300000021,
+  "p95": 4.37658300000021,
+  "max": 4.37658300000021
+ },
+ "GET /v2/public/booking/:orgSlug/:typeSlug/slots": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 227,
+  "err": null,
+  "n": 1,
+  "p50": 4.216625000000022,
+  "p95": 4.216625000000022,
+  "max": 4.216625000000022
+ },
+ "GET /v2/public/booking/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 219,
+  "err": null,
+  "n": 1,
+  "p50": 4.305999999999585,
+  "p95": 4.305999999999585,
+  "max": 4.305999999999585
+ },
+ "GET /v2/public/booking/:token/slots": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 225,
+  "err": null,
+  "n": 1,
+  "p50": 4.323291000000609,
+  "p95": 4.323291000000609,
+  "max": 4.323291000000609
+ },
+ "GET /v2/public/booking/:token/ics": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 223,
+  "err": null,
+  "n": 1,
+  "p50": 5.35254200000054,
+  "p95": 5.35254200000054,
+  "max": 5.35254200000054
+ },
+ "GET /v2/public/booking/:orgSlug/:assetId": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 256,
+  "err": null,
+  "n": 1,
+  "p50": 3.67699999999968,
+  "p95": 3.67699999999968,
+  "max": 3.67699999999968
+ },
+ "GET /v2/audit-log": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 17447,
+  "err": null,
+  "n": 7,
+  "p50": 7.6475829999999405,
+  "p95": 9.242416000000048,
+  "max": 9.242416000000048
+ },
+ "GET /v2/audit-log/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 55,
+  "err": null,
+  "n": 7,
+  "p50": 5.184457999999722,
+  "p95": 5.474040999999488,
+  "max": 5.474040999999488
+ },
+ "GET /v2/audit-log/facets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 203,
+  "err": null,
+  "n": 7,
+  "p50": 5.722249999998894,
+  "p95": 6.255457999999635,
+  "max": 6.255457999999635
+ },
+ "GET /v2/audit-log/exports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.811041999999361,
+  "p95": 5.071083000000726,
+  "max": 5.071083000000726
+ },
+ "GET /v2/audit-log/exports/:id/download": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 286,
+  "err": null,
+  "n": 1,
+  "p50": 5.9455830000006245,
+  "p95": 5.9455830000006245,
+  "max": 5.9455830000006245
+ },
+ "GET /v2/audit-log/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 272,
+  "err": null,
+  "n": 1,
+  "p50": 4.418666999999914,
+  "p95": 4.418666999999914,
+  "max": 4.418666999999914
+ },
+ "GET /v2/auth/registration-config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1233,
+  "err": null,
+  "n": 7,
+  "p50": 2.3954589999993914,
+  "p95": 2.6167500000010477,
+  "max": 2.6167500000010477
+ },
+ "GET /v2/auth/password-policy": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 83,
+  "err": null,
+  "n": 7,
+  "p50": 2.056750000001557,
+  "p95": 2.1329159999986587,
+  "max": 2.1329159999986587
+ },
+ "GET /v2/auth/session": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11641,
+  "err": null,
+  "n": 7,
+  "p50": 6.59479199999987,
+  "p95": 9.456583999999566,
+  "max": 9.456583999999566
+ },
+ "GET /v2/auth/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 63,
+  "err": null,
+  "n": 7,
+  "p50": 4.947750000001179,
+  "p95": 5.344166999999288,
+  "max": 5.344166999999288
+ },
+ "GET /v2/account/profile": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 294,
+  "err": null,
+  "n": 7,
+  "p50": 5.394207999999708,
+  "p95": 6.879291999999623,
+  "max": 6.879291999999623
+ },
+ "GET /v2/account/avatar": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 74,
+  "err": null,
+  "n": 1,
+  "p50": 3.6026250000013533,
+  "p95": 3.6026250000013533,
+  "max": 3.6026250000013533
+ },
+ "GET /v2/account/branding": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 96,
+  "err": null,
+  "n": 7,
+  "p50": 7.256290999999692,
+  "p95": 8.113250000000335,
+  "max": 8.113250000000335
+ },
+ "GET /v2/account/mfa": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 80,
+  "err": null,
+  "n": 7,
+  "p50": 3.9102079999993293,
+  "p95": 4.310124999999971,
+  "max": 4.310124999999971
+ },
+ "GET /v2/account/passkeys": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 3.674084000000221,
+  "p95": 5.388166000000638,
+  "max": 5.388166000000638
+ },
+ "GET /v2/account/sessions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1322,
+  "err": null,
+  "n": 7,
+  "p50": 5.2650419999990845,
+  "p95": 6.013042000000496,
+  "max": 6.013042000000496
+ },
+ "GET /v2/auth/impersonation": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 101,
+  "err": null,
+  "n": 7,
+  "p50": 2.5727919999990263,
+  "p95": 2.931040999999823,
+  "max": 2.931040999999823
+ },
+ "GET /v2/onboarding": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 366,
+  "err": null,
+  "n": 7,
+  "p50": 6.465250000001106,
+  "p95": 8.52100000000064,
+  "max": 8.52100000000064
+ },
+ "GET /v2/platform/auth/session": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 226,
+  "err": null,
+  "n": 7,
+  "p50": 4.346125000000029,
+  "p95": 6.559957999999824,
+  "max": 6.559957999999824
+ },
+ "GET /v2/platform/auth/passkeys": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.055040999999619,
+  "p95": 6.52849999999853,
+  "max": 6.52849999999853
+ },
+ "GET /v2/platform/auth": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 196,
+  "err": null,
+  "n": 1,
+  "p50": 2.8704170000000886,
+  "p95": 2.8704170000000886,
+  "max": 2.8704170000000886
+ },
+ "GET /v2/platform/auth/events": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 210,
+  "err": null,
+  "n": 1,
+  "p50": 2.945332999999664,
+  "p95": 2.945332999999664,
+  "max": 2.945332999999664
+ },
+ "GET /v2/platform/auth/registration": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 222,
+  "err": null,
+  "n": 1,
+  "p50": 3.0652919999993173,
+  "p95": 3.0652919999993173,
+  "max": 3.0652919999993173
+ },
+ "GET /v2/platform/auth/senders": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 212,
+  "err": null,
+  "n": 1,
+  "p50": 2.9230420000003505,
+  "p95": 2.9230420000003505,
+  "max": 2.9230420000003505
+ },
+ "GET /v2/platform/auth/registration/otp-templates": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 250,
+  "err": null,
+  "n": 1,
+  "p50": 2.6421250000003056,
+  "p95": 2.6421250000003056,
+  "max": 2.6421250000003056
+ },
+ "GET /v2/platform/auth/social-captcha": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 226,
+  "err": null,
+  "n": 1,
+  "p50": 2.748749999998836,
+  "p95": 2.748749999998836,
+  "max": 2.748749999998836
+ },
+ "GET /v2/platform/auth/branding-footer": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 228,
+  "err": null,
+  "n": 1,
+  "p50": 2.770375000000058,
+  "p95": 2.770375000000058,
+  "max": 2.770375000000058
+ },
+ "GET /v2/platform/auth/auth-pages": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 218,
+  "err": null,
+  "n": 1,
+  "p50": 2.5672080000003916,
+  "p95": 2.5672080000003916,
+  "max": 2.5672080000003916
+ },
+ "GET /v2/auth/social/:provider/start": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 315,
+  "err": null,
+  "n": 1,
+  "p50": 2.3642499999987194,
+  "p95": 2.3642499999987194,
+  "max": 2.3642499999987194
+ },
+ "GET /v2/broadcasts/:id/export": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 291,
+  "err": null,
+  "n": 1,
+  "p50": 5.803250000000844,
+  "p95": 5.803250000000844,
+  "max": 5.803250000000844
+ },
+ "GET /v2/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.406750000000102,
+  "p95": 7.03741699999955,
+  "max": 7.03741699999955
+ },
+ "GET /v2/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 63,
+  "err": null,
+  "n": 7,
+  "p50": 5.710708000000523,
+  "p95": 7.8588330000002316,
+  "max": 7.8588330000002316
+ },
+ "GET /v2/broadcasts/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 264,
+  "err": null,
+  "n": 7,
+  "p50": 5.19262499999968,
+  "p95": 5.68224999999984,
+  "max": 5.68224999999984
+ },
+ "GET /v2/broadcasts/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 5.804583999999522,
+  "p95": 5.804583999999522,
+  "max": 5.804583999999522
+ },
+ "GET /v2/broadcasts/:id/recipients": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 5.1507499999988795,
+  "p95": 5.1507499999988795,
+  "max": 5.1507499999988795
+ },
+ "GET /v2/broadcasts/:id/live": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 5.1403340000015305,
+  "p95": 5.1403340000015305,
+  "max": 5.1403340000015305
+ },
+ "GET /v2/broadcasts/:id/statistics": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 5.1993750000001455,
+  "p95": 5.1993750000001455,
+  "max": 5.1993750000001455
+ },
+ "GET /r/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 195,
+  "err": null,
+  "n": 1,
+  "p50": 2.5010409999995318,
+  "p95": 2.5010409999995318,
+  "max": 2.5010409999995318
+ },
+ "GET /v2/bsp/billing-mode": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 62,
+  "err": null,
+  "n": 7,
+  "p50": 4.6174580000006245,
+  "p95": 6.35845800000061,
+  "max": 6.35845800000061
+ },
+ "GET /v2/platform/bsp/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 84,
+  "err": null,
+  "n": 7,
+  "p50": 4.112083999998504,
+  "p95": 4.523666000000958,
+  "max": 4.523666000000958
+ },
+ "GET /v2/platform/bsp/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 238,
+  "err": null,
+  "n": 7,
+  "p50": 3.3885000000009313,
+  "p95": 5.077417000000423,
+  "max": 5.077417000000423
+ },
+ "GET /v2/platform/bsp/waba-candidates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.789292000001296,
+  "p95": 5.234000000000378,
+  "max": 5.234000000000378
+ },
+ "GET /v2/platform/bsp/allocations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.720665999999255,
+  "p95": 6.2965839999997115,
+  "max": 6.2965839999997115
+ },
+ "GET /v2/platform/bsp/dashboard": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 305,
+  "err": null,
+  "n": 7,
+  "p50": 6.285958000000392,
+  "p95": 6.665166999999201,
+  "max": 6.665166999999201
+ },
+ "GET /v2/calling/call-logs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 213,
+  "err": null,
+  "n": 7,
+  "p50": 7.020249999999578,
+  "p95": 9.250792000000729,
+  "max": 9.250792000000729
+ },
+ "GET /v2/calling/call-logs/filters": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 26,
+  "err": null,
+  "n": 7,
+  "p50": 7.898417000000336,
+  "p95": 9.92016700000022,
+  "max": 9.92016700000022
+ },
+ "GET /v2/calling/call-logs/analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1847,
+  "err": null,
+  "n": 7,
+  "p50": 11.05174999999872,
+  "p95": 11.591707999999926,
+  "max": 11.591707999999926
+ },
+ "GET /v2/calling/call-logs/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 259,
+  "err": null,
+  "n": 1,
+  "p50": 10.46849999999904,
+  "p95": 10.46849999999904,
+  "max": 10.46849999999904
+ },
+ "GET /v2/public/webhooks/wa-calling": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 226,
+  "err": null,
+  "n": 1,
+  "p50": 2.3121249999985594,
+  "p95": 2.3121249999985594,
+  "max": 2.3121249999985594
+ },
+ "GET /v2/calling/numbers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.720334000001458,
+  "p95": 6.98083299999962,
+  "max": 6.98083299999962
+ },
+ "GET /v2/calling/readiness": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.390375000000859,
+  "p95": 6.491667000000234,
+  "max": 6.491667000000234
+ },
+ "GET /v2/calling/numbers/:id/readiness": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 283,
+  "err": null,
+  "n": 1,
+  "p50": 3.565958999999566,
+  "p95": 3.565958999999566,
+  "max": 3.565958999999566
+ },
+ "GET /v2/calling/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 64,
+  "err": null,
+  "n": 7,
+  "p50": 4.864125000000058,
+  "p95": 5.392707999999402,
+  "max": 5.392707999999402
+ },
+ "GET /v2/calling/recording-settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 133,
+  "err": null,
+  "n": 7,
+  "p50": 7.687875000001441,
+  "p95": 8.802166999999827,
+  "max": 8.802166999999827
+ },
+ "GET /v2/calling/calls/:id/recording-gate": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 270,
+  "err": null,
+  "n": 1,
+  "p50": 7.697792000000845,
+  "p95": 7.697792000000845,
+  "max": 7.697792000000845
+ },
+ "GET /v2/calling/ice-servers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 14,
+  "err": null,
+  "n": 7,
+  "p50": 6.56000000000131,
+  "p95": 8.186417000000802,
+  "max": 8.186417000000802
+ },
+ "GET /v2/calling/eligibility": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 318,
+  "err": null,
+  "n": 1,
+  "p50": 4.074249999999665,
+  "p95": 4.074249999999665,
+  "max": 4.074249999999665
+ },
+ "GET /v2/calling/calls/pending": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12,
+  "err": null,
+  "n": 7,
+  "p50": 8.018667000000278,
+  "p95": 8.170584000001327,
+  "max": 8.170584000001327
+ },
+ "GET /v2/calling/calls/:id/progress": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 264,
+  "err": null,
+  "n": 1,
+  "p50": 5.352249999999913,
+  "p95": 5.352249999999913,
+  "max": 5.352249999999913
+ },
+ "GET /v2/calling/calls/:id/recording": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 265,
+  "err": null,
+  "n": 1,
+  "p50": 7.450124999999389,
+  "p95": 7.450124999999389,
+  "max": 7.450124999999389
+ },
+ "GET /v2/calls/logging-settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 98,
+  "err": null,
+  "n": 7,
+  "p50": 5.3503749999999854,
+  "p95": 5.709124999999403,
+  "max": 5.709124999999403
+ },
+ "GET /v2/calls/telephony/providers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 91,
+  "err": null,
+  "n": 7,
+  "p50": 3.7581669999999576,
+  "p95": 4.3911669999997684,
+  "max": 4.3911669999997684
+ },
+ "GET /v2/calls/telephony/connections": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.444250000000466,
+  "p95": 6.927834000000075,
+  "max": 6.927834000000075
+ },
+ "GET /v2/calls": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 180,
+  "err": null,
+  "n": 1,
+  "p50": 3.059291999999914,
+  "p95": 3.059291999999914,
+  "max": 3.059291999999914
+ },
+ "GET /v2/campaigns/:id/export": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 8.757125000000087,
+  "p95": 8.757125000000087,
+  "max": 8.757125000000087
+ },
+ "GET /v2/campaigns": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 562,
+  "err": null,
+  "n": 7,
+  "p50": 9.193542000000889,
+  "p95": 11.119249999999738,
+  "max": 11.119249999999738
+ },
+ "GET /v2/campaigns/builder": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4966,
+  "err": null,
+  "n": 7,
+  "p50": 12.401958000000377,
+  "p95": 13.396749999999884,
+  "max": 13.396749999999884
+ },
+ "GET /v2/campaigns/sample-csv": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 77,
+  "err": null,
+  "n": 7,
+  "p50": 3.6747080000004644,
+  "p95": 4.0787079999990965,
+  "max": 4.0787079999990965
+ },
+ "GET /v2/campaigns/summary/forms": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.549957999999606,
+  "p95": 5.696749999999156,
+  "max": 5.696749999999156
+ },
+ "GET /v2/campaigns/:id/summary": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 8.222499999999854,
+  "p95": 8.222499999999854,
+  "max": 8.222499999999854
+ },
+ "GET /v2/campaigns/:id/summary/people": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 350,
+  "err": null,
+  "n": 1,
+  "p50": 4.75933299999997,
+  "p95": 4.75933299999997,
+  "max": 4.75933299999997
+ },
+ "GET /v2/campaigns/:id/config": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 8.223792000000685,
+  "p95": 8.223792000000685,
+  "max": 8.223792000000685
+ },
+ "GET /v2/campaigns/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 8.075124999999389,
+  "p95": 8.075124999999389,
+  "max": 8.075124999999389
+ },
+ "GET /v2/campaigns/:id/live": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 287,
+  "err": null,
+  "n": 1,
+  "p50": 8.306000000000495,
+  "p95": 8.306000000000495,
+  "max": 8.306000000000495
+ },
+ "GET /v2/campaigns/:id/statistics": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 8.442333999999391,
+  "p95": 8.442333999999391,
+  "max": 8.442333999999391
+ },
+ "GET /v2/campaigns/:id/recipients": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 8.122666999999637,
+  "p95": 8.122666999999637,
+  "max": 8.122666999999637
+ },
+ "GET /v2/broadcasts/:id/summary": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 6.181874999998399,
+  "p95": 6.181874999998399,
+  "max": 6.181874999998399
+ },
+ "GET /v2/broadcasts/:id/summary/people": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 351,
+  "err": null,
+  "n": 1,
+  "p50": 4.680624999999054,
+  "p95": 4.680624999999054,
+  "max": 4.680624999999054
+ },
+ "GET /v2/broadcast-wizard/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.9103330000016285,
+  "p95": 6.421582999999373,
+  "max": 6.421582999999373
+ },
+ "GET /v2/broadcast-wizard/senders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 23,
+  "err": null,
+  "n": 7,
+  "p50": 6.962832999999591,
+  "p95": 9.119375000000218,
+  "max": 9.119375000000218
+ },
+ "GET /v2/broadcast-wizard/audience-sources": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 46,
+  "err": null,
+  "n": 7,
+  "p50": 7.426041999999143,
+  "p95": 7.885874999999942,
+  "max": 7.885874999999942
+ },
+ "GET /v2/broadcast-wizard/csv/template": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 83,
+  "err": null,
+  "n": 7,
+  "p50": 3.908332999999402,
+  "p95": 4.538332999998602,
+  "max": 4.538332999998602
+ },
+ "GET /v2/broadcast-wizard/csv/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 5.897708000000421,
+  "p95": 5.897708000000421,
+  "max": 5.897708000000421
+ },
+ "GET /v2/broadcast-wizard/csv/:id/errors": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 302,
+  "err": null,
+  "n": 1,
+  "p50": 4.790499999999156,
+  "p95": 4.790499999999156,
+  "max": 4.790499999999156
+ },
+ "GET /v2/broadcast-wizard/drafts/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 303,
+  "err": null,
+  "n": 1,
+  "p50": 5.328166999999667,
+  "p95": 5.328166999999667,
+  "max": 5.328166999999667
+ },
+ "GET /v2/broadcast-wizard/drafts/:id/test-sends": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 314,
+  "err": null,
+  "n": 1,
+  "p50": 5.972667000000001,
+  "p95": 5.972667000000001,
+  "max": 5.972667000000001
+ },
+ "GET /v2/broadcast-wizard/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.602042000000438,
+  "p95": 8.388708000000406,
+  "max": 8.388708000000406
+ },
+ "GET /v2/broadcast-wizard/history": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.394874999999956,
+  "p95": 7.238542000000962,
+  "max": 7.238542000000962
+ },
+ "GET /v2/broadcast-wizard/broadcasts/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 301,
+  "err": null,
+  "n": 1,
+  "p50": 6.338458000000173,
+  "p95": 6.338458000000173,
+  "max": 6.338458000000173
+ },
+ "GET /v2/broadcast-wizard/broadcasts/:id/export": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 308,
+  "err": null,
+  "n": 1,
+  "p50": 6.460209000000759,
+  "p95": 6.460209000000759,
+  "max": 6.460209000000759
+ },
+ "GET /v2/platform/settings/catalog": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 222,
+  "err": null,
+  "n": 7,
+  "p50": 6.897667000001093,
+  "p95": 8.062082999998893,
+  "max": 8.062082999998893
+ },
+ "GET /v2/catalog/overview": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 230,
+  "err": null,
+  "n": 7,
+  "p50": 9.989416000000347,
+  "p95": 11.266916000000492,
+  "max": 11.266916000000492
+ },
+ "GET /v2/catalog/send-options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 49254,
+  "err": null,
+  "n": 7,
+  "p50": 10.887542000000394,
+  "p95": 13.27179199999955,
+  "max": 13.27179199999955
+ },
+ "GET /v2/catalog/activity": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.478124999999636,
+  "p95": 9.041333000001032,
+  "max": 9.041333000001032
+ },
+ "GET /v2/catalog/login-config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 67,
+  "err": null,
+  "n": 7,
+  "p50": 6.576917000000321,
+  "p95": 6.930833000000348,
+  "max": 6.930833000000348
+ },
+ "GET /v2/catalog": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 184,
+  "err": null,
+  "n": 1,
+  "p50": 3.094042000000627,
+  "p95": 3.094042000000627,
+  "max": 3.094042000000627
+ },
+ "GET /v2/catalog/products": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.930291999999099,
+  "p95": 7.835166999999274,
+  "max": 7.835166999999274
+ },
+ "GET /v2/catalog/products/picker": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 15,
+  "err": null,
+  "n": 7,
+  "p50": 5.593915999999808,
+  "p95": 6.231125000000247,
+  "max": 6.231125000000247
+ },
+ "GET /v2/catalog/products/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 5.432999999999083,
+  "p95": 5.432999999999083,
+  "max": 5.432999999999083
+ },
+ "GET /v2/catalog/products/:id/share-links": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 5.7239169999993464,
+  "p95": 5.7239169999993464,
+  "max": 5.7239169999993464
+ },
+ "GET /v2/email/attachments/:conversationId/:messageId/:attachmentId": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 329,
+  "err": null,
+  "n": 1,
+  "p50": 6.805916999999681,
+  "p95": 6.805916999999681,
+  "max": 6.805916999999681
+ },
+ "GET /v2/email/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 112,
+  "err": null,
+  "n": 7,
+  "p50": 7.638875000000553,
+  "p95": 7.834584000000177,
+  "max": 7.834584000000177
+ },
+ "GET /v2/email/signatures": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.590791000000536,
+  "p95": 9.168958000000202,
+  "max": 9.168958000000202
+ },
+ "GET /v2/email/providers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 419,
+  "err": null,
+  "n": 7,
+  "p50": 6.641125000000102,
+  "p95": 7.196416999999201,
+  "max": 7.196416999999201
+ },
+ "GET /v2/facebook/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 27,
+  "err": null,
+  "n": 7,
+  "p50": 8.229041000000507,
+  "p95": 9.589208999999755,
+  "max": 9.589208999999755
+ },
+ "GET /v2/facebook/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 88,
+  "err": null,
+  "n": 7,
+  "p50": 8.37879200000134,
+  "p95": 10.33691700000054,
+  "max": 10.33691700000054
+ },
+ "GET /v2/facebook/insights": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 250,
+  "err": null,
+  "n": 7,
+  "p50": 7.400915999998688,
+  "p95": 8.052625000000262,
+  "max": 8.052625000000262
+ },
+ "GET /v2/facebook/config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 130,
+  "err": null,
+  "n": 7,
+  "p50": 6.586166999999477,
+  "p95": 9.626916999999594,
+  "max": 9.626916999999594
+ },
+ "GET /v2/facebook/pages": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.0570000000006985,
+  "p95": 7.591083000001163,
+  "max": 7.591083000001163
+ },
+ "GET /v2/facebook/posts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 212,
+  "err": null,
+  "n": 7,
+  "p50": 9.692500000001019,
+  "p95": 10.023791999999958,
+  "max": 10.023791999999958
+ },
+ "GET /v2/facebook/my-posts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 35,
+  "err": null,
+  "n": 7,
+  "p50": 7.673790999999255,
+  "p95": 9.09454100000039,
+  "max": 9.09454100000039
+ },
+ "GET /v2/facebook/setup": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 121,
+  "err": null,
+  "n": 7,
+  "p50": 6.960291000001234,
+  "p95": 8.700957999999446,
+  "max": 8.700957999999446
+ },
+ "GET /v2/facebook/webhook": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 9,
+  "err": null,
+  "n": 1,
+  "p50": 2.4811250000002474,
+  "p95": 2.4811250000002474,
+  "max": 2.4811250000002474
+ },
+ "GET /v2/instagram/accounts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 74,
+  "err": null,
+  "n": 7,
+  "p50": 7.392040999999153,
+  "p95": 7.960000000000946,
+  "max": 7.960000000000946
+ },
+ "GET /v2/instagram/accounts/available": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.46599999999853,
+  "p95": 7.988499999999476,
+  "max": 7.988499999999476
+ },
+ "GET /v2/instagram/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 43,
+  "err": null,
+  "n": 7,
+  "p50": 7.532250000000204,
+  "p95": 7.633125000000291,
+  "max": 7.633125000000291
+ },
+ "GET /v2/instagram/flows": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 29,
+  "err": null,
+  "n": 7,
+  "p50": 7.470584000000599,
+  "p95": 8.453583000000435,
+  "max": 8.453583000000435
+ },
+ "GET /v2/line/channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.146333000000595,
+  "p95": 8.994416999999885,
+  "max": 8.994416999999885
+ },
+ "GET /v2/line/channels/:id/audience": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 7.0613329999996495,
+  "p95": 7.0613329999996495,
+  "max": 7.0613329999996495
+ },
+ "GET /v2/line/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 7.33929100000023,
+  "p95": 8.000915999999052,
+  "max": 8.000915999999052
+ },
+ "GET /v2/line/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 88,
+  "err": null,
+  "n": 7,
+  "p50": 7.904958000000988,
+  "p95": 8.553667000000132,
+  "max": 8.553667000000132
+ },
+ "GET /v2/platform/sms": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 17,
+  "err": null,
+  "n": 7,
+  "p50": 5.474583999999595,
+  "p95": 6.663832999998704,
+  "max": 6.663832999998704
+ },
+ "GET /v2/sms/senders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 94,
+  "err": null,
+  "n": 7,
+  "p50": 7.702916999998706,
+  "p95": 7.947915999999168,
+  "max": 7.947915999999168
+ },
+ "GET /v2/telegram/bots": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.510583000001134,
+  "p95": 9.390707999998995,
+  "max": 9.390707999998995
+ },
+ "GET /v2/telegram/bots/:id/chats": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 7.485125000001062,
+  "p95": 7.485125000001062,
+  "max": 7.485125000001062
+ },
+ "GET /v2/telegram/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 26,
+  "err": null,
+  "n": 7,
+  "p50": 7.807834000001094,
+  "p95": 9.218000000000757,
+  "max": 9.218000000000757
+ },
+ "GET /v2/telegram/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 88,
+  "err": null,
+  "n": 7,
+  "p50": 8.114125000000058,
+  "p95": 8.378499999998894,
+  "max": 8.378499999998894
+ },
+ "GET /v2/viber/channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.259667000000263,
+  "p95": 9.46704200000022,
+  "max": 9.46704200000022
+ },
+ "GET /v2/viber/insights": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 370,
+  "err": null,
+  "n": 7,
+  "p50": 7.531041000000187,
+  "p95": 9.684792000000016,
+  "max": 9.684792000000016
+ },
+ "GET /v2/viber/channels/:id/users": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 298,
+  "err": null,
+  "n": 1,
+  "p50": 7.347334000000046,
+  "p95": 7.347334000000046,
+  "max": 7.347334000000046
+ },
+ "GET /v2/viber/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 7.886124999999083,
+  "p95": 8.364541000000827,
+  "max": 8.364541000000827
+ },
+ "GET /v2/viber/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 99,
+  "err": null,
+  "n": 7,
+  "p50": 8.202957999999853,
+  "p95": 8.54895899999974,
+  "max": 8.54895899999974
+ },
+ "GET /v2/wechat/channels/:id/chats": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 7.774707999999009,
+  "p95": 7.774707999999009,
+  "max": 7.774707999999009
+ },
+ "GET /v2/wechat/broadcasts/compose": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 8.060708000000886,
+  "p95": 8.998541999999361,
+  "max": 8.998541999999361
+ },
+ "GET /v2/wechat/broadcasts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.709084000000075,
+  "p95": 9.902084000001196,
+  "max": 9.902084000001196
+ },
+ "GET /v2/wechat/channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 60,
+  "err": null,
+  "n": 7,
+  "p50": 7.705541999999696,
+  "p95": 8.452541999999085,
+  "max": 8.452541999999085
+ },
+ "GET /v2/wechat/channels/:id/server-config": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 308,
+  "err": null,
+  "n": 1,
+  "p50": 8.125833000000057,
+  "p95": 8.125833000000057,
+  "max": 8.125833000000057
+ },
+ "GET /v2/wechat/inbound/:token": {
+  "status": 200,
+  "resolved": false,
+  "bytes": 7,
+  "err": null,
+  "n": 7,
+  "p50": 2.7442920000012236,
+  "p95": 3.4327920000014274,
+  "max": 3.4327920000014274
+ },
+ "GET /v2/webhooks/channels/:channelUuid": {
+  "status": 401,
+  "resolved": true,
+  "bytes": 271,
+  "err": null,
+  "n": 1,
+  "p50": 3.7497500000008586,
+  "p95": 3.7497500000008586,
+  "max": 3.7497500000008586
+ },
+ "GET /v2/channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 656,
+  "err": null,
+  "n": 7,
+  "p50": 7.726582999999664,
+  "p95": 8.765999999999622,
+  "max": 8.765999999999622
+ },
+ "GET /v2/channels/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 645,
+  "err": null,
+  "n": 7,
+  "p50": 7.91137499999968,
+  "p95": 8.326375000000553,
+  "max": 8.326375000000553
+ },
+ "GET /v2/flows/:flowId/widget": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 281,
+  "err": null,
+  "n": 1,
+  "p50": 7.468541000000187,
+  "p95": 7.468541000000187,
+  "max": 7.468541000000187
+ },
+ "GET /v2/flows/:flowId/widget/preview-page": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 294,
+  "err": null,
+  "n": 1,
+  "p50": 5.5740829999995185,
+  "p95": 5.5740829999995185,
+  "max": 5.5740829999995185
+ },
+ "GET /widget-legacy/:id/output.js": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 38,
+  "err": null,
+  "n": 1,
+  "p50": 4.345833999999741,
+  "p95": 4.345833999999741,
+  "max": 4.345833999999741
+ },
+ "GET /widget-legacy/output.js": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 38,
+  "err": null,
+  "n": 1,
+  "p50": 3.2966660000001866,
+  "p95": 3.2966660000001866,
+  "max": 3.2966660000001866
+ },
+ "GET /widget-legacy/chat": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 200,
+  "err": null,
+  "n": 1,
+  "p50": 2.6194159999995463,
+  "p95": 2.6194159999995463,
+  "max": 2.6194159999995463
+ },
+ "GET /widget-legacy/api/config": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 212,
+  "err": null,
+  "n": 1,
+  "p50": 2.3452500000003056,
+  "p95": 2.3452500000003056,
+  "max": 2.3452500000003056
+ },
+ "GET /widget-legacy/api/history": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 214,
+  "err": null,
+  "n": 1,
+  "p50": 3.2594159999989643,
+  "p95": 3.2594159999989643,
+  "max": 3.2594159999989643
+ },
+ "GET /widget-legacy/api/media/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 2.88550000000032,
+  "p95": 2.88550000000032,
+  "max": 2.88550000000032
+ },
+ "GET /widget-legacy/:flowId/:slot": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 338,
+  "err": null,
+  "n": 1,
+  "p50": 2.709332999998878,
+  "p95": 2.709332999998878,
+  "max": 2.709332999998878
+ },
+ "GET /v2/widgets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 128,
+  "err": null,
+  "n": 7,
+  "p50": 8.602666999999201,
+  "p95": 10.734458000000814,
+  "max": 10.734458000000814
+ },
+ "GET /v2/widgets/assistants": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 7.0807499999991705,
+  "p95": 7.582500000000437,
+  "max": 7.582500000000437
+ },
+ "GET /v2/widgets/flow-bots": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 21,
+  "err": null,
+  "n": 7,
+  "p50": 5.867624999998952,
+  "p95": 7.393708999999944,
+  "max": 7.393708999999944
+ },
+ "GET /v2/widgets/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 278,
+  "err": null,
+  "n": 1,
+  "p50": 6.582417000001442,
+  "p95": 6.582417000001442,
+  "max": 6.582417000001442
+ },
+ "GET /v2/store/gateways/drivers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 19904,
+  "err": null,
+  "n": 7,
+  "p50": 4.123750000000655,
+  "p95": 4.983000000000175,
+  "max": 4.983000000000175
+ },
+ "GET /v2/store/gateways/resolved": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 17,
+  "err": null,
+  "n": 7,
+  "p50": 5.173749999999927,
+  "p95": 6.714917000001151,
+  "max": 6.714917000001151
+ },
+ "GET /v2/store/gateways": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 64,
+  "err": null,
+  "n": 7,
+  "p50": 5.150374999999258,
+  "p95": 5.7667920000003505,
+  "max": 5.7667920000003505
+ },
+ "GET /v2/companies/:id/brief": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 126,
+  "err": null,
+  "n": 7,
+  "p50": 41.95349999999962,
+  "p95": 49.81108400000085,
+  "max": 49.81108400000085
+ },
+ "GET /v2/compliance/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 728,
+  "err": null,
+  "n": 7,
+  "p50": 5.263415999999779,
+  "p95": 7.169750000000931,
+  "max": 7.169750000000931
+ },
+ "GET /v2/compliance/links": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 53,
+  "err": null,
+  "n": 7,
+  "p50": 5.161000000000058,
+  "p95": 5.406624999999622,
+  "max": 5.406624999999622
+ },
+ "GET /v2/compliance/checklist": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1268,
+  "err": null,
+  "n": 7,
+  "p50": 6.838041999999405,
+  "p95": 7.5587500000001455,
+  "max": 7.5587500000001455
+ },
+ "GET /v2/compliance/subprocessors": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.160541999999623,
+  "p95": 5.579042000001209,
+  "max": 5.579042000001209
+ },
+ "GET /v2/compliance/dnc": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 75,
+  "err": null,
+  "n": 7,
+  "p50": 5.832958000000872,
+  "p95": 7.68670800000109,
+  "max": 7.68670800000109
+ },
+ "GET /v2/public/compliance/trust/:slug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 4.0960830000003625,
+  "p95": 4.0960830000003625,
+  "max": 4.0960830000003625
+ },
+ "GET /v2/contact-consent/notices/:scope/:ref": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 368,
+  "err": null,
+  "n": 1,
+  "p50": 3.1956669999999576,
+  "p95": 3.1956669999999576,
+  "max": 3.1956669999999576
+ },
+ "GET /v2/consent/purposes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4508,
+  "err": null,
+  "n": 7,
+  "p50": 3.7253340000006574,
+  "p95": 3.8146250000008877,
+  "max": 3.8146250000008877
+ },
+ "GET /v2/public/consent/unsubscribe/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 2.7129170000007434,
+  "p95": 2.7129170000007434,
+  "max": 2.7129170000007434
+ },
+ "GET /v2/contact-consent/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1025,
+  "err": null,
+  "n": 7,
+  "p50": 5.4227500000015425,
+  "p95": 7.06066600000122,
+  "max": 7.06066600000122
+ },
+ "GET /v2/contact-consent/composer-config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 357,
+  "err": null,
+  "n": 7,
+  "p50": 3.3087500000001455,
+  "p95": 3.870291000001089,
+  "max": 3.870291000001089
+ },
+ "GET /v2/contact-consent/events": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.348458000000392,
+  "p95": 7.508874999999534,
+  "max": 7.508874999999534
+ },
+ "GET /v2/contact-consent/export": {
+  "status": 429,
+  "resolved": true,
+  "bytes": 260,
+  "err": null,
+  "n": 6,
+  "p50": 5.251624999998967,
+  "p95": 5.557082999999693,
+  "max": 5.557082999999693
+ },
+ "GET /v2/contact-consent/exports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 45,
+  "err": null,
+  "n": 7,
+  "p50": 5.2988750000004075,
+  "p95": 5.556375000000116,
+  "max": 5.556375000000116
+ },
+ "GET /v2/contact-consent/exports/:id/download": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 5.676666999999725,
+  "p95": 5.676666999999725,
+  "max": 5.676666999999725
+ },
+ "GET /v2/contact-consent/contacts/:uuid": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 344,
+  "err": null,
+  "n": 7,
+  "p50": 7.23541699999987,
+  "p95": 7.5150830000002316,
+  "max": 7.5150830000002316
+ },
+ "GET /v2/contact-consent/contacts/:uuid/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 92,
+  "err": null,
+  "n": 7,
+  "p50": 6.011916999999812,
+  "p95": 7.838666999999987,
+  "max": 7.838666999999987
+ },
+ "GET /v2/platform/coupons": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 211,
+  "err": null,
+  "n": 7,
+  "p50": 6.327917000000525,
+  "p95": 6.827917000000525,
+  "max": 6.827917000000525
+ },
+ "GET /v2/platform/billing-options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2044,
+  "err": null,
+  "n": 7,
+  "p50": 5.852874999998676,
+  "p95": 8.125,
+  "max": 8.125
+ },
+ "GET /v2/platform/coupons/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 250,
+  "err": null,
+  "n": 1,
+  "p50": 5.169291999998677,
+  "p95": 5.169291999998677,
+  "max": 5.169291999998677
+ },
+ "GET /v2/platform/currencies": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4874,
+  "err": null,
+  "n": 7,
+  "p50": 6.634082999999009,
+  "p95": 9.45679199999904,
+  "max": 9.45679199999904
+ },
+ "GET /v2/me/referral": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 220,
+  "err": null,
+  "n": 7,
+  "p50": 5.671125000000757,
+  "p95": 6.063459000000876,
+  "max": 6.063459000000876
+ },
+ "GET /v2/me/referrals": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1164,
+  "err": null,
+  "n": 7,
+  "p50": 7.420042000001558,
+  "p95": 8.808415999999852,
+  "max": 8.808415999999852
+ },
+ "GET /v2/me/referrals/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 84,
+  "err": null,
+  "n": 7,
+  "p50": 5.052208000000974,
+  "p95": 5.489790999999968,
+  "max": 5.489790999999968
+ },
+ "GET /v2/attributes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 108,
+  "err": null,
+  "n": 7,
+  "p50": 5.504166000000623,
+  "p95": 7.530875000000378,
+  "max": 7.530875000000378
+ },
+ "GET /v2/attributes/picker": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 792,
+  "err": null,
+  "n": 7,
+  "p50": 4.886333000000377,
+  "p95": 5.780124999999316,
+  "max": 5.780124999999316
+ },
+ "GET /v2/attributes/catalog": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1416,
+  "err": null,
+  "n": 7,
+  "p50": 98.02495900000031,
+  "p95": 99.51825000000099,
+  "max": 99.51825000000099
+ },
+ "GET /v2/attributes/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 5.259665999999925,
+  "p95": 5.259665999999925,
+  "max": 5.259665999999925
+ },
+ "GET /v2/companies": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 21293,
+  "err": null,
+  "n": 7,
+  "p50": 11.46362500000032,
+  "p95": 13.096999999999753,
+  "max": 13.096999999999753
+ },
+ "GET /v2/companies/stats": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 46,
+  "err": null,
+  "n": 7,
+  "p50": 10.220666000001074,
+  "p95": 12.71875,
+  "max": 12.71875
+ },
+ "GET /v2/companies/industries": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.131457999999839,
+  "p95": 8.143959000000905,
+  "max": 8.143959000000905
+ },
+ "GET /v2/companies/select-data": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1765,
+  "err": null,
+  "n": 7,
+  "p50": 6.619958000001134,
+  "p95": 8.63012499999968,
+  "max": 8.63012499999968
+ },
+ "GET /v2/companies/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 249970,
+  "err": null,
+  "n": 7,
+  "p50": 37.84349999999904,
+  "p95": 38.86137500000041,
+  "max": 38.86137500000041
+ },
+ "GET /v2/companies/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 419,
+  "err": null,
+  "n": 7,
+  "p50": 7.354458000001614,
+  "p95": 9.397666000000754,
+  "max": 9.397666000000754
+ },
+ "GET /v2/companies/:id/contacts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2844,
+  "err": null,
+  "n": 7,
+  "p50": 7.821583999997529,
+  "p95": 9.289207999998325,
+  "max": 9.289207999998325
+ },
+ "GET /v2/companies/:id/activity": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.278040999997756,
+  "p95": 7.834999999999127,
+  "max": 7.834999999999127
+ },
+ "GET /v2/contacts/:contactId/activities": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.5824590000011085,
+  "p95": 7.561582999998791,
+  "max": 7.561582999998791
+ },
+ "GET /v2/assignment/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 40,
+  "err": null,
+  "n": 7,
+  "p50": 6.004666000000725,
+  "p95": 8.71612499999901,
+  "max": 8.71612499999901
+ },
+ "GET /v2/assignment/rules": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.159458000001905,
+  "p95": 6.561499999999796,
+  "max": 6.561499999999796
+ },
+ "GET /v2/assignment/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 29,
+  "err": null,
+  "n": 7,
+  "p50": 6.535124999998516,
+  "p95": 8.779624999999214,
+  "max": 8.779624999999214
+ },
+ "GET /v2/contacts/stats": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 134,
+  "err": null,
+  "n": 7,
+  "p50": 28.843583000001672,
+  "p95": 29.417958000001818,
+  "max": 29.417958000001818
+ },
+ "GET /v2/contacts/exports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.543750000000728,
+  "p95": 5.054333000000042,
+  "max": 5.054333000000042
+ },
+ "GET /v2/contacts/exports/:id/download": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 3.244749999998021,
+  "p95": 3.244749999998021,
+  "max": 3.244749999998021
+ },
+ "GET /v2/contacts/duplicates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 45,
+  "err": null,
+  "n": 7,
+  "p50": 175.73741700000028,
+  "p95": 184.94554199999766,
+  "max": 184.94554199999766
+ },
+ "GET /v2/contacts/:contactId/files": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.8990000000012515,
+  "p95": 5.217207999998209,
+  "max": 5.217207999998209
+ },
+ "GET /v2/contact-groups": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 3.961874999997235,
+  "p95": 4.25025000000096,
+  "max": 4.25025000000096
+ },
+ "GET /v2/contact-groups/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 3.9767920000012964,
+  "p95": 3.9767920000012964,
+  "max": 3.9767920000012964
+ },
+ "GET /v2/contact-groups/:id/groups": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 286,
+  "err": null,
+  "n": 1,
+  "p50": 2.39574999999968,
+  "p95": 2.39574999999968,
+  "max": 2.39574999999968
+ },
+ "GET /v2/contacts/import/sample": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 191,
+  "err": null,
+  "n": 7,
+  "p50": 2.8205420000012964,
+  "p95": 3.473666999998386,
+  "max": 3.473666999998386
+ },
+ "GET /v2/contacts/import/jobs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.229959000000235,
+  "p95": 4.442291999999725,
+  "max": 4.442291999999725
+ },
+ "GET /v2/contacts/import/jobs/:id": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 291,
+  "err": null,
+  "n": 1,
+  "p50": 4.4337090000008175,
+  "p95": 4.4337090000008175,
+  "max": 4.4337090000008175
+ },
+ "GET /v2/contacts/import/jobs/:id/rejects": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 4.425417000002199,
+  "p95": 4.425417000002199,
+  "max": 4.425417000002199
+ },
+ "GET /v2/contacts/:contactId/meetings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.190708000001905,
+  "p95": 5.632957999998325,
+  "max": 5.632957999998325
+ },
+ "GET /v2/contacts/:contactId/message-stats/whatsapp": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 69,
+  "err": null,
+  "n": 7,
+  "p50": 5.972125000000233,
+  "p95": 7.2959999999984575,
+  "max": 7.2959999999984575
+ },
+ "GET /v2/contacts/:contactId/notes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.058291999997891,
+  "p95": 5.5570000000006985,
+  "max": 5.5570000000006985
+ },
+ "GET /v2/contact-views": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.54374999999709,
+  "p95": 5.693624999999884,
+  "max": 5.693624999999884
+ },
+ "GET /v2/contacts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 52184,
+  "err": null,
+  "n": 7,
+  "p50": 7.491750000001048,
+  "p95": 7.912583000001177,
+  "max": 7.912583000001177
+ },
+ "GET /v2/contacts/select-data": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2769,
+  "err": null,
+  "n": 7,
+  "p50": 28.717625000001135,
+  "p95": 29.13087500000256,
+  "max": 29.13087500000256
+ },
+ "GET /v2/contacts/filter-values": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 97,
+  "err": null,
+  "n": 7,
+  "p50": 54.257916999999,
+  "p95": 54.69537499999933,
+  "max": 54.69537499999933
+ },
+ "GET /v2/contacts/assignees": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 112,
+  "err": null,
+  "n": 7,
+  "p50": 4.848541999999725,
+  "p95": 5.340167000002111,
+  "max": 5.340167000002111
+ },
+ "GET /v2/contacts/:id/send-window": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 209,
+  "err": null,
+  "n": 7,
+  "p50": 10.742833000000246,
+  "p95": 11.084290999999212,
+  "max": 11.084290999999212
+ },
+ "GET /v2/contacts/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1029,
+  "err": null,
+  "n": 7,
+  "p50": 7.530917000000045,
+  "p95": 7.705167000000074,
+  "max": 7.705167000000074
+ },
+ "GET /v2/contacts/:id/tags": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.942082999998092,
+  "p95": 6.669415999997,
+  "max": 6.669415999997
+ },
+ "GET /v2/contacts/:id/field-history": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.674042000002373,
+  "p95": 7.466791000002559,
+  "max": 7.466791000002559
+ },
+ "GET /v2/crm/dashboard": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 3861,
+  "err": null,
+  "n": 7,
+  "p50": 66.68937500000175,
+  "p95": 67.68920900000012,
+  "max": 67.68920900000012
+ },
+ "GET /v2/deals": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.97070900000108,
+  "p95": 9.216833999998926,
+  "max": 9.216833999998926
+ },
+ "GET /v2/deals/board": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1877,
+  "err": null,
+  "n": 7,
+  "p50": 24.33087499999965,
+  "p95": 25.290124999999534,
+  "max": 25.290124999999534
+ },
+ "GET /v2/deals/board/stages/:stageId/deals": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 294,
+  "err": null,
+  "n": 1,
+  "p50": 7.924707999998645,
+  "p95": 7.924707999998645,
+  "max": 7.924707999998645
+ },
+ "GET /v2/deals/reports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2197,
+  "err": null,
+  "n": 7,
+  "p50": 9.883291999998619,
+  "p95": 11.43945800000074,
+  "max": 11.43945800000074
+ },
+ "GET /v2/deals/tasks": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.169958000002225,
+  "p95": 7.990249999998923,
+  "max": 7.990249999998923
+ },
+ "GET /v2/deals/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 274,
+  "err": null,
+  "n": 1,
+  "p50": 8.635624999998981,
+  "p95": 8.635624999998981,
+  "max": 8.635624999998981
+ },
+ "GET /v2/deals/:id/activities": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 285,
+  "err": null,
+  "n": 1,
+  "p50": 8.522541000002093,
+  "p95": 8.522541000002093,
+  "max": 8.522541000002093
+ },
+ "GET /v2/field-sections": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 308,
+  "err": null,
+  "n": 1,
+  "p50": 3.5054999999993015,
+  "p95": 3.5054999999993015,
+  "max": 3.5054999999993015
+ },
+ "GET /v2/fields": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 3.601708999998664,
+  "p95": 3.601708999998664,
+  "max": 3.601708999998664
+ },
+ "GET /v2/fields/usage": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 306,
+  "err": null,
+  "n": 1,
+  "p50": 3.4571670000004815,
+  "p95": 3.4571670000004815,
+  "max": 3.4571670000004815
+ },
+ "GET /v2/fields/dependencies": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 313,
+  "err": null,
+  "n": 1,
+  "p50": 3.4886250000017753,
+  "p95": 3.4886250000017753,
+  "max": 3.4886250000017753
+ },
+ "GET /v2/fields/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 276,
+  "err": null,
+  "n": 1,
+  "p50": 4.848582999999053,
+  "p95": 4.848582999999053,
+  "max": 4.848582999999053
+ },
+ "GET /v2/fields/:id/options": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 5.371833000001061,
+  "p95": 5.371833000001061,
+  "max": 5.371833000001061
+ },
+ "GET /v2/fields/:id/option-search": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 5.40087499999936,
+  "p95": 5.40087499999936,
+  "max": 5.40087499999936
+ },
+ "GET /v2/fields/:id/dependencies": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 4.7135830000006536,
+  "p95": 4.7135830000006536,
+  "max": 4.7135830000006536
+ },
+ "GET /v2/fields/options/:optionId/dependencies": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 303,
+  "err": null,
+  "n": 1,
+  "p50": 4.165750000000116,
+  "p95": 4.165750000000116,
+  "max": 4.165750000000116
+ },
+ "GET /v2/credit-notes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.199500000002445,
+  "p95": 7.4991250000020955,
+  "max": 7.4991250000020955
+ },
+ "GET /v2/credit-notes/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 8.915832999999111,
+  "p95": 8.915832999999111,
+  "max": 8.915832999999111
+ },
+ "GET /v2/credit-notes/:id/pdf": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 6.9030840000013995,
+  "p95": 6.9030840000013995,
+  "max": 6.9030840000013995
+ },
+ "GET /v2/public/invoices/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 215,
+  "err": null,
+  "n": 1,
+  "p50": 2.67254099999991,
+  "p95": 2.67254099999991,
+  "max": 2.67254099999991
+ },
+ "GET /v2/public/invoices/:token/print": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 221,
+  "err": null,
+  "n": 1,
+  "p50": 2.775666999998066,
+  "p95": 2.775666999998066,
+  "max": 2.775666999998066
+ },
+ "GET /v2/public/invoices/:token/pdf": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 219,
+  "err": null,
+  "n": 1,
+  "p50": 3.134874999999738,
+  "p95": 3.134874999999738,
+  "max": 3.134874999999738
+ },
+ "GET /v2/invoice-settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 649,
+  "err": null,
+  "n": 7,
+  "p50": 6.819999999999709,
+  "p95": 7.252167000002373,
+  "max": 7.252167000002373
+ },
+ "GET /v2/invoice-settings/gateway": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 130,
+  "err": null,
+  "n": 7,
+  "p50": 6.554250000001048,
+  "p95": 8.29191599999831,
+  "max": 8.29191599999831
+ },
+ "GET /v2/invoices": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 11.182041000000027,
+  "p95": 12.24199999999837,
+  "max": 12.24199999999837
+ },
+ "GET /v2/invoices/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 114,
+  "err": null,
+  "n": 7,
+  "p50": 7.71849999999904,
+  "p95": 8.378916999998182,
+  "max": 8.378916999998182
+ },
+ "GET /v2/invoices/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 280,
+  "err": null,
+  "n": 1,
+  "p50": 10.451875000002474,
+  "p95": 10.451875000002474,
+  "max": 10.451875000002474
+ },
+ "GET /v2/invoices/:id/events": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 287,
+  "err": null,
+  "n": 1,
+  "p50": 10.370665999998891,
+  "p95": 10.370665999998891,
+  "max": 10.370665999998891
+ },
+ "GET /v2/invoices/:id/payments": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 10.119542000000365,
+  "p95": 10.119542000000365,
+  "max": 10.119542000000365
+ },
+ "GET /v2/invoices/:id/pdf": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 10.521792000003188,
+  "p95": 10.521792000003188,
+  "max": 10.521792000003188
+ },
+ "GET /v2/payments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.239042000001064,
+  "p95": 8.859416999999667,
+  "max": 8.859416999999667
+ },
+ "GET /v2/payments/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 70,
+  "err": null,
+  "n": 7,
+  "p50": 8.08075000000099,
+  "p95": 9.591625000000931,
+  "max": 9.591625000000931
+ },
+ "GET /v2/payments/aging": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 37,
+  "err": null,
+  "n": 7,
+  "p50": 7.48725000000195,
+  "p95": 8.064457999997103,
+  "max": 8.064457999997103
+ },
+ "GET /v2/payments/outstanding": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.685750000000553,
+  "p95": 8.02612500000032,
+  "max": 8.02612500000032
+ },
+ "GET /v2/payments/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 280,
+  "err": null,
+  "n": 1,
+  "p50": 8.193665999999212,
+  "p95": 8.193665999999212,
+  "max": 8.193665999999212
+ },
+ "GET /v2/payments/:id/receipt": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 8.53925000000163,
+  "p95": 8.53925000000163,
+  "max": 8.53925000000163
+ },
+ "GET /v2/recurring-invoices": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.536874999997963,
+  "p95": 8.325290999997378,
+  "max": 8.325290999997378
+ },
+ "GET /v2/recurring-invoices/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 7.821625000000495,
+  "p95": 7.821625000000495,
+  "max": 7.821625000000495
+ },
+ "GET /v2/recurring-invoices/:id/runs": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 305,
+  "err": null,
+  "n": 1,
+  "p50": 6.8727079999989655,
+  "p95": 6.8727079999989655,
+  "max": 6.8727079999989655
+ },
+ "GET /v2/sales-orders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.03150000000096,
+  "p95": 8.784583000000566,
+  "max": 8.784583000000566
+ },
+ "GET /v2/sales-orders/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 100,
+  "err": null,
+  "n": 7,
+  "p50": 7.451749999996537,
+  "p95": 8.127167000002373,
+  "max": 8.127167000002373
+ },
+ "GET /v2/sales-orders/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 8.977124999997613,
+  "p95": 8.977124999997613,
+  "max": 8.977124999997613
+ },
+ "GET /v2/tax-rates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.3495419999999285,
+  "p95": 7.6340000000018335,
+  "max": 7.6340000000018335
+ },
+ "GET /v2/tax-rates/presets": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 309,
+  "err": null,
+  "n": 1,
+  "p50": 5.726458999997703,
+  "p95": 5.726458999997703,
+  "max": 5.726458999997703
+ },
+ "GET /v2/tax-rates/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 7.015625,
+  "p95": 7.015625,
+  "max": 7.015625
+ },
+ "GET /v2/lead-handling/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 483,
+  "err": null,
+  "n": 7,
+  "p50": 4.4349160000019765,
+  "p95": 6.254249999998137,
+  "max": 6.254249999998137
+ },
+ "GET /v2/owner-reassignments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.740207999999257,
+  "p95": 5.329374999997526,
+  "max": 5.329374999997526
+ },
+ "GET /v2/owner-reassignments/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 5.280500000000757,
+  "p95": 5.280500000000757,
+  "max": 5.280500000000757
+ },
+ "GET /v2/pipelines": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1947,
+  "err": null,
+  "n": 7,
+  "p50": 7.659208000000945,
+  "p95": 9.088415999998688,
+  "max": 9.088415999998688
+ },
+ "GET /v2/pipelines/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1945,
+  "err": null,
+  "n": 7,
+  "p50": 7.776292000002286,
+  "p95": 8.08204200000182,
+  "max": 8.08204200000182
+ },
+ "GET /v2/crm/revenue": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2757,
+  "err": null,
+  "n": 7,
+  "p50": 14.275166999999783,
+  "p95": 15.061792000000423,
+  "max": 15.061792000000423
+ },
+ "GET /v2/crm/revenue/exports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.137875000000349,
+  "p95": 8.306417000003421,
+  "max": 8.306417000003421
+ },
+ "GET /v2/crm/revenue/exports/:id/download": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 7.665458999999828,
+  "p95": 7.665458999999828,
+  "max": 7.665458999999828
+ },
+ "GET /v2/public/sales-docs/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 218,
+  "err": null,
+  "n": 1,
+  "p50": 2.5911249999990105,
+  "p95": 2.5911249999990105,
+  "max": 2.5911249999990105
+ },
+ "GET /v2/public/sales-docs/:token/print": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 224,
+  "err": null,
+  "n": 1,
+  "p50": 2.478792000001704,
+  "p95": 2.478792000001704,
+  "max": 2.478792000001704
+ },
+ "GET /v2/sales-docs/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 196,
+  "err": null,
+  "n": 7,
+  "p50": 7.257292000002053,
+  "p95": 8.068208000000595,
+  "max": 8.068208000000595
+ },
+ "GET /v2/sales-docs/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 6.519041999999899,
+  "p95": 7.224915999999212,
+  "max": 7.224915999999212
+ },
+ "GET /v2/sales-docs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 10.1506249999984,
+  "p95": 11.04516700000022,
+  "max": 11.04516700000022
+ },
+ "GET /v2/sales-docs/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 121,
+  "err": null,
+  "n": 7,
+  "p50": 7.563041000001249,
+  "p95": 7.997416999998677,
+  "max": 7.997416999998677
+ },
+ "GET /v2/sales-docs/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 283,
+  "err": null,
+  "n": 1,
+  "p50": 9.07258400000137,
+  "p95": 9.07258400000137,
+  "max": 9.07258400000137
+ },
+ "GET /v2/sales-docs/:id/print": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 8.904083000001265,
+  "p95": 8.904083000001265,
+  "max": 8.904083000001265
+ },
+ "GET /v2/sales-docs/:id/events": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 290,
+  "err": null,
+  "n": 1,
+  "p50": 8.408541999997396,
+  "p95": 8.408541999997396,
+  "max": 8.408541999997396
+ },
+ "GET /v2/sales-docs/:id/events/:eventId": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 327,
+  "err": null,
+  "n": 1,
+  "p50": 9.238792000000103,
+  "p95": 9.238792000000103,
+  "max": 9.238792000000103
+ },
+ "GET /v2/sales-docs/:id/revisions": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 9.1306250000016,
+  "p95": 9.1306250000016,
+  "max": 9.1306250000016
+ },
+ "GET /v2/sales-docs/:id/revisions/:revision": {
+  "status": 400,
+  "resolved": false,
+  "bytes": 305,
+  "err": null,
+  "n": 1,
+  "p50": 6.240250000002561,
+  "p95": 6.240250000002561,
+  "max": 6.240250000002561
+ },
+ "GET /v2/sales-docs/:id/link": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 8.867957999998907,
+  "p95": 8.867957999998907,
+  "max": 8.867957999998907
+ },
+ "GET /v2/segments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.144291999997222,
+  "p95": 6.533208000000741,
+  "max": 6.533208000000741
+ },
+ "GET /v2/segments/usage": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 339,
+  "err": null,
+  "n": 1,
+  "p50": 3.9269160000003467,
+  "p95": 3.9269160000003467,
+  "max": 3.9269160000003467
+ },
+ "GET /v2/segments/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 280,
+  "err": null,
+  "n": 1,
+  "p50": 5.07587500000227,
+  "p95": 5.07587500000227,
+  "max": 5.07587500000227
+ },
+ "GET /v2/segments/:id/contacts": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 5.6539169999996375,
+  "p95": 5.6539169999996375,
+  "max": 5.6539169999996375
+ },
+ "GET /v2/status-options": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 308,
+  "err": null,
+  "n": 1,
+  "p50": 3.437625000002299,
+  "p95": 3.437625000002299,
+  "max": 3.437625000002299
+ },
+ "GET /v2/status-options/usage": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 358,
+  "err": null,
+  "n": 1,
+  "p50": 3.548917000000074,
+  "p95": 3.548917000000074,
+  "max": 3.548917000000074
+ },
+ "GET /v2/tags": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 8955,
+  "err": null,
+  "n": 7,
+  "p50": 5.660790999998426,
+  "p95": 7.103500000001077,
+  "max": 7.103500000001077
+ },
+ "GET /v2/task-outcomes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.272624999997788,
+  "p95": 5.120125000001281,
+  "max": 5.120125000001281
+ },
+ "GET /v2/tasks": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 20729,
+  "err": null,
+  "n": 7,
+  "p50": 10.195417000002635,
+  "p95": 12.76666699999987,
+  "max": 12.76666699999987
+ },
+ "GET /v2/tasks/my": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.8897499999984575,
+  "p95": 8.76512499999808,
+  "max": 8.76512499999808
+ },
+ "GET /v2/tasks/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 103,
+  "err": null,
+  "n": 7,
+  "p50": 23.04729199999929,
+  "p95": 23.531584000000294,
+  "max": 23.531584000000294
+ },
+ "GET /v2/tasks/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 411,
+  "err": null,
+  "n": 7,
+  "p50": 8.3249590000014,
+  "p95": 9.131916999998793,
+  "max": 9.131916999998793
+ },
+ "GET /v2/platform/dashboard/overview": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1100,
+  "err": null,
+  "n": 7,
+  "p50": 149.4119589999973,
+  "p95": 151.260542,
+  "max": 151.260542
+ },
+ "GET /v2/platform/dashboard/analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1347,
+  "err": null,
+  "n": 7,
+  "p50": 100.31787500000064,
+  "p95": 101.93191600000137,
+  "max": 101.93191600000137
+ },
+ "GET /v2/platform/dashboard/analytics/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 26,
+  "err": null,
+  "n": 7,
+  "p50": 5.51379199999792,
+  "p95": 6.0584579999995185,
+  "max": 6.0584579999995185
+ },
+ "GET /v2/dashboard/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1294,
+  "err": null,
+  "n": 7,
+  "p50": 227.28845800000272,
+  "p95": 236.7194159999999,
+  "max": 236.7194159999999
+ },
+ "GET /v2/dashboard/widgets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2083,
+  "err": null,
+  "n": 7,
+  "p50": 113.20166700000118,
+  "p95": 117.00400000000081,
+  "max": 117.00400000000081
+ },
+ "GET /v2/dashboard/throughput": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 490,
+  "err": null,
+  "n": 7,
+  "p50": 65.14762500000143,
+  "p95": 66.96170800000255,
+  "max": 66.96170800000255
+ },
+ "GET /v2/dashboard/overview": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 206,
+  "err": null,
+  "n": 1,
+  "p50": 3.115040999997291,
+  "p95": 3.115040999997291,
+  "max": 3.115040999997291
+ },
+ "GET /v2/dashboard/panels": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 202,
+  "err": null,
+  "n": 1,
+  "p50": 2.91570800000045,
+  "p95": 2.91570800000045,
+  "max": 2.91570800000045
+ },
+ "GET /v2/dashboard/export": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 202,
+  "err": null,
+  "n": 1,
+  "p50": 2.2791660000002594,
+  "p95": 2.2791660000002594,
+  "max": 2.2791660000002594
+ },
+ "GET /v2/dashboard": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 188,
+  "err": null,
+  "n": 1,
+  "p50": 3.0640839999978198,
+  "p95": 3.0640839999978198,
+  "max": 3.0640839999978198
+ },
+ "GET /v2/platform/health": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4832,
+  "err": null,
+  "n": 7,
+  "p50": 4.685292000001937,
+  "p95": 6.40454200000022,
+  "max": 6.40454200000022
+ },
+ "GET /docs/api.json": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 28667,
+  "err": null,
+  "n": 7,
+  "p50": 4.125041999999667,
+  "p95": 6.1368340000008175,
+  "max": 6.1368340000008175
+ },
+ "GET /v2/developer/keys": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.735625000001164,
+  "p95": 6.586250000000291,
+  "max": 6.586250000000291
+ },
+ "GET /v2/platform/dpdp-register": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11817,
+  "err": null,
+  "n": 7,
+  "p50": 6.371666999999434,
+  "p95": 7.818833999997878,
+  "max": 7.818833999997878
+ },
+ "GET /v2/platform/dpdp-register/checks/:key/history": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 577,
+  "err": null,
+  "n": 1,
+  "p50": 4.404332999998587,
+  "p95": 4.404332999998587,
+  "max": 4.404332999998587
+ },
+ "GET /v2/email/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 81,
+  "err": null,
+  "n": 7,
+  "p50": 7.22675000000163,
+  "p95": 7.7441669999971054,
+  "max": 7.7441669999971054
+ },
+ "GET /v2/email/templates/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 287,
+  "err": null,
+  "n": 1,
+  "p50": 6.922915999999532,
+  "p95": 6.922915999999532,
+  "max": 6.922915999999532
+ },
+ "GET /v2/platform/failed-operations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.907833000001119,
+  "p95": 6.543874999999389,
+  "max": 6.543874999999389
+ },
+ "GET /v2/platform/failed-operations/:uuid": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 5.3370839999988675,
+  "p95": 5.3370839999988675,
+  "max": 5.3370839999988675
+ },
+ "GET /v2/platform/faq": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1104,
+  "err": null,
+  "n": 7,
+  "p50": 8.023165999999037,
+  "p95": 9.82941700000083,
+  "max": 9.82941700000083
+ },
+ "GET /v2/platform/faq/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 177,
+  "err": null,
+  "n": 7,
+  "p50": 5.798917000000074,
+  "p95": 6.1027920000015,
+  "max": 6.1027920000015
+ },
+ "GET /v2/faq/flows/:flowId/entries": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 286,
+  "err": null,
+  "n": 1,
+  "p50": 5.217791999999463,
+  "p95": 5.217791999999463,
+  "max": 5.217791999999463
+ },
+ "GET /v2/faq/flows/:flowId/entries/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 323,
+  "err": null,
+  "n": 1,
+  "p50": 5.110375000000204,
+  "p95": 5.110375000000204,
+  "max": 5.110375000000204
+ },
+ "GET /v2/faq/flow-nodes/:flowId": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 5.161000000000058,
+  "p95": 5.161000000000058,
+  "max": 5.161000000000058
+ },
+ "GET /v2/faq/flows/:flowId/insights/summary": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 4.823541000001569,
+  "p95": 4.823541000001569,
+  "max": 4.823541000001569
+ },
+ "GET /v2/faq/flows/:flowId/insights/log": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 291,
+  "err": null,
+  "n": 1,
+  "p50": 5.177917000000889,
+  "p95": 5.177917000000889,
+  "max": 5.177917000000889
+ },
+ "GET /v2/faq/flows/:flowId/settings": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 287,
+  "err": null,
+  "n": 1,
+  "p50": 4.597290999998222,
+  "p95": 4.597290999998222,
+  "max": 4.597290999998222
+ },
+ "GET /v2/flow-media/:org/:name": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 74,
+  "err": null,
+  "n": 1,
+  "p50": 2.4693330000009155,
+  "p95": 2.4693330000009155,
+  "max": 2.4693330000009155
+ },
+ "GET /v2/flows": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.192250000000058,
+  "p95": 5.68870799999786,
+  "max": 5.68870799999786
+ },
+ "GET /v2/flows/overview": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 200,
+  "err": null,
+  "n": 7,
+  "p50": 6.402999999998428,
+  "p95": 8.361457999999402,
+  "max": 8.361457999999402
+ },
+ "GET /v2/flows/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.554541999998037,
+  "p95": 5.009457999996812,
+  "max": 5.009457999996812
+ },
+ "GET /v2/flows/builder-context": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 5182,
+  "err": null,
+  "n": 7,
+  "p50": 12.231000000003405,
+  "p95": 14.59087499999805,
+  "max": 14.59087499999805
+ },
+ "GET /v2/flows/builder-context/commerce-products": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 332,
+  "err": null,
+  "n": 1,
+  "p50": 4.013249999999971,
+  "p95": 4.013249999999971,
+  "max": 4.013249999999971
+ },
+ "GET /v2/flows/builder-context/google/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 37,
+  "err": null,
+  "n": 7,
+  "p50": 4.885041000001365,
+  "p95": 5.229874999997264,
+  "max": 5.229874999997264
+ },
+ "GET /v2/flows/builder-context/google/:kind": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 377,
+  "err": null,
+  "n": 1,
+  "p50": 3.4948329999970156,
+  "p95": 3.4948329999970156,
+  "max": 3.4948329999970156
+ },
+ "GET /v2/flows/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 274,
+  "err": null,
+  "n": 1,
+  "p50": 5.2352499999979045,
+  "p95": 5.2352499999979045,
+  "max": 5.2352499999979045
+ },
+ "GET /v2/flows/:id/export": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 281,
+  "err": null,
+  "n": 1,
+  "p50": 5.164667000000918,
+  "p95": 5.164667000000918,
+  "max": 5.164667000000918
+ },
+ "GET /v2/flows/geta-publish/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 143,
+  "err": null,
+  "n": 7,
+  "p50": 4.511458999997558,
+  "p95": 5.445833000001585,
+  "max": 5.445833000001585
+ },
+ "GET /v2/flows/:id/publish-sync": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 287,
+  "err": null,
+  "n": 1,
+  "p50": 4.977167000000918,
+  "p95": 4.977167000000918,
+  "max": 4.977167000000918
+ },
+ "GET /v2/platform/flow-templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 108,
+  "err": null,
+  "n": 7,
+  "p50": 5.775625000002037,
+  "p95": 6.943041999998968,
+  "max": 6.943041999998968
+ },
+ "GET /v2/platform/flow-templates/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 5.282374999998865,
+  "p95": 5.282374999998865,
+  "max": 5.282374999998865
+ },
+ "GET /public/v1/flows": {
+  "status": 401,
+  "resolved": true,
+  "bytes": 223,
+  "err": null,
+  "n": 1,
+  "p50": 2.620458999997936,
+  "p95": 2.620458999997936,
+  "max": 2.620458999997936
+ },
+ "GET /public/v1/flows/:id": {
+  "status": 401,
+  "resolved": false,
+  "bytes": 260,
+  "err": null,
+  "n": 1,
+  "p50": 2.729084000002331,
+  "p95": 2.729084000002331,
+  "max": 2.729084000002331
+ },
+ "GET /public/v1/flows/:id/subscribers": {
+  "status": 401,
+  "resolved": false,
+  "bytes": 272,
+  "err": null,
+  "n": 1,
+  "p50": 2.6636250000010477,
+  "p95": 2.6636250000010477,
+  "max": 2.6636250000010477
+ },
+ "GET /v2/flow-runtime/flows": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 4.855542000001151,
+  "p95": 5.376334000000497,
+  "max": 5.376334000000497
+ },
+ "GET /v2/flow-runtime/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 30,
+  "err": null,
+  "n": 7,
+  "p50": 5.750458999998955,
+  "p95": 6.441374999998516,
+  "max": 6.441374999998516
+ },
+ "GET /v2/flow-runtime/history": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 96,
+  "err": null,
+  "n": 7,
+  "p50": 6.162833000002138,
+  "p95": 6.616541999999754,
+  "max": 6.616541999999754
+ },
+ "GET /v2/flow-runtime/errors": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 106,
+  "err": null,
+  "n": 7,
+  "p50": 6.093541999998706,
+  "p95": 7.726916999999958,
+  "max": 7.726916999999958
+ },
+ "GET /v2/flow-runtime/retries": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 97,
+  "err": null,
+  "n": 7,
+  "p50": 5.918375000001106,
+  "p95": 6.555083999999624,
+  "max": 6.555083999999624
+ },
+ "GET /v2/flow-runtime/runs/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 264,
+  "err": null,
+  "n": 1,
+  "p50": 5.8194169999987935,
+  "p95": 5.8194169999987935,
+  "max": 5.8194169999987935
+ },
+ "GET /v2/flow-runtime/flows/:flowId/subscribers": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 280,
+  "err": null,
+  "n": 1,
+  "p50": 7.235541000001831,
+  "p95": 7.235541000001831,
+  "max": 7.235541000001831
+ },
+ "GET /v2/flow-runtime/analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 353,
+  "err": null,
+  "n": 7,
+  "p50": 7.809083000000101,
+  "p95": 8.235000000000582,
+  "max": 8.235000000000582
+ },
+ "GET /v2/forms/:id/submissions": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 286,
+  "err": null,
+  "n": 1,
+  "p50": 8.231834000001982,
+  "p95": 8.231834000001982,
+  "max": 8.231834000001982
+ },
+ "GET /v2/forms/:id/submissions/:sid": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 323,
+  "err": null,
+  "n": 1,
+  "p50": 7.132041000000754,
+  "p95": 7.132041000000754,
+  "max": 7.132041000000754
+ },
+ "GET /v2/forms/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 10819,
+  "err": null,
+  "n": 7,
+  "p50": 6.9334170000001905,
+  "p95": 7.301958000000013,
+  "max": 7.301958000000013
+ },
+ "GET /v2/forms/meta/properties": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 312,
+  "err": null,
+  "n": 1,
+  "p50": 6.60895900000105,
+  "p95": 6.60895900000105,
+  "max": 6.60895900000105
+ },
+ "GET /v2/forms/meta/protection": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 138,
+  "err": null,
+  "n": 7,
+  "p50": 8.204499999999825,
+  "p95": 9.33258399999977,
+  "max": 9.33258399999977
+ },
+ "GET /v2/forms/meta/payment-gateway": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 77,
+  "err": null,
+  "n": 7,
+  "p50": 7.427999999999884,
+  "p95": 8.030957999999373,
+  "max": 8.030957999999373
+ },
+ "GET /v2/forms": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.452958999998373,
+  "p95": 8.669083000000683,
+  "max": 8.669083000000683
+ },
+ "GET /v2/forms/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 274,
+  "err": null,
+  "n": 1,
+  "p50": 8.541707999997016,
+  "p95": 8.541707999997016,
+  "max": 8.541707999997016
+ },
+ "GET /v2/forms/:id/versions": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 283,
+  "err": null,
+  "n": 1,
+  "p50": 7.9644159999988915,
+  "p95": 7.9644159999988915,
+  "max": 7.9644159999988915
+ },
+ "GET /v2/public/forms/:publicKey": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 209,
+  "err": null,
+  "n": 1,
+  "p50": 2.8007500000021537,
+  "p95": 2.8007500000021537,
+  "max": 2.8007500000021537
+ },
+ "GET /v2/public/forms/:publicKey/submissions/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 223,
+  "err": null,
+  "n": 1,
+  "p50": 3.6628329999985,
+  "p95": 3.6628329999985,
+  "max": 3.6628329999985
+ },
+ "GET /v2/public/forms/:publicKey/embed.js": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 216,
+  "err": null,
+  "n": 1,
+  "p50": 2.6740829999980633,
+  "p95": 2.6740829999980633,
+  "max": 2.6740829999980633
+ },
+ "GET /l/:slug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 25,
+  "err": null,
+  "n": 1,
+  "p50": 3.653874999999971,
+  "p95": 3.653874999999971,
+  "max": 3.653874999999971
+ },
+ "GET /v2/wa-links": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 130,
+  "err": null,
+  "n": 7,
+  "p50": 7.504625000001397,
+  "p95": 9.663000000000466,
+  "max": 9.663000000000466
+ },
+ "GET /v2/wa-links/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 277,
+  "err": null,
+  "n": 1,
+  "p50": 7.3223330000000715,
+  "p95": 7.3223330000000715,
+  "max": 7.3223330000000715
+ },
+ "GET /v2/wa-forms": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 124,
+  "err": null,
+  "n": 7,
+  "p50": 8.262167000000773,
+  "p95": 10.096084000000701,
+  "max": 10.096084000000701
+ },
+ "GET /v2/wa-forms/picker": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12,
+  "err": null,
+  "n": 7,
+  "p50": 7.240958000002138,
+  "p95": 7.7228329999998095,
+  "max": 7.7228329999998095
+ },
+ "GET /v2/wa-forms/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 277,
+  "err": null,
+  "n": 1,
+  "p50": 7.12395800000013,
+  "p95": 7.12395800000013,
+  "max": 7.12395800000013
+ },
+ "GET /v2/wa-forms/:id/submissions": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 8.038042000000132,
+  "p95": 8.038042000000132,
+  "max": 8.038042000000132
+ },
+ "GET /v2/wa-forms/:id/submissions/export": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 296,
+  "err": null,
+  "n": 1,
+  "p50": 10.511000000002241,
+  "p95": 10.511000000002241,
+  "max": 10.511000000002241
+ },
+ "GET /v2/google-account": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 412,
+  "err": null,
+  "n": 7,
+  "p50": 4.636958999999479,
+  "p95": 5.183666999997513,
+  "max": 5.183666999997513
+ },
+ "GET /v2/google-account/calendars": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 302,
+  "err": null,
+  "n": 1,
+  "p50": 4.146749999999884,
+  "p95": 4.146749999999884,
+  "max": 4.146749999999884
+ },
+ "GET /v2/google-account/consent/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 325,
+  "err": null,
+  "n": 1,
+  "p50": 4.716083000002982,
+  "p95": 4.716083000002982,
+  "max": 4.716083000002982
+ },
+ "GET /v2/growth/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 839,
+  "err": null,
+  "n": 7,
+  "p50": 5.253082999999606,
+  "p95": 7.3052500000012515,
+  "max": 7.3052500000012515
+ },
+ "GET /v2/growth/overview": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 264,
+  "err": null,
+  "n": 1,
+  "p50": 5.417833999999857,
+  "p95": 5.417833999999857,
+  "max": 5.417833999999857
+ },
+ "GET /v2/growth/campaigns/report": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 272,
+  "err": null,
+  "n": 1,
+  "p50": 5.431249999997817,
+  "p95": 5.431249999997817,
+  "max": 5.431249999997817
+ },
+ "GET /v2/growth/audiences": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 265,
+  "err": null,
+  "n": 1,
+  "p50": 4.989207999999053,
+  "p95": 4.989207999999053,
+  "max": 4.989207999999053
+ },
+ "GET /v2/growth/send-times": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 266,
+  "err": null,
+  "n": 1,
+  "p50": 5.3669170000030135,
+  "p95": 5.3669170000030135,
+  "max": 5.3669170000030135
+ },
+ "GET /v2/growth/propensity": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 266,
+  "err": null,
+  "n": 1,
+  "p50": 5.753834000002826,
+  "p95": 5.753834000002826,
+  "max": 5.753834000002826
+ },
+ "GET /v2/growth/contacts/:uuid": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 301,
+  "err": null,
+  "n": 1,
+  "p50": 4.885042000001704,
+  "p95": 4.885042000001704,
+  "max": 4.885042000001704
+ },
+ "GET /v2/growth/quality": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 263,
+  "err": null,
+  "n": 1,
+  "p50": 4.734583000001294,
+  "p95": 4.734583000001294,
+  "max": 4.734583000001294
+ },
+ "GET /v2/growth/digest": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 262,
+  "err": null,
+  "n": 1,
+  "p50": 5.034292000000278,
+  "p95": 5.034292000000278,
+  "max": 5.034292000000278
+ },
+ "GET /v2/growth/actions": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 263,
+  "err": null,
+  "n": 1,
+  "p50": 4.927875000001222,
+  "p95": 4.927875000001222,
+  "max": 4.927875000001222
+ },
+ "GET /v2/growth/auto-stage": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 266,
+  "err": null,
+  "n": 1,
+  "p50": 5.011791999997513,
+  "p95": 5.011791999997513,
+  "max": 5.011791999997513
+ },
+ "GET /v2/growth/enrichment": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 266,
+  "err": null,
+  "n": 1,
+  "p50": 5.145000000000437,
+  "p95": 5.145000000000437,
+  "max": 5.145000000000437
+ },
+ "GET /v2/help-agent/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 97,
+  "err": null,
+  "n": 7,
+  "p50": 7.739542000002984,
+  "p95": 9.099958000002516,
+  "max": 9.099958000002516
+ },
+ "GET /v2/help-agent/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 17,
+  "err": null,
+  "n": 7,
+  "p50": 7.085417000002053,
+  "p95": 7.488666999997804,
+  "max": 7.488666999997804
+ },
+ "GET /v2/setup/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 137,
+  "err": null,
+  "n": 7,
+  "p50": 3.6030419999988226,
+  "p95": 4.6030420000024606,
+  "max": 4.6030420000024606
+ },
+ "GET /v2/platform/system": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 46794,
+  "err": null,
+  "n": 7,
+  "p50": 7.933916000001773,
+  "p95": 9.02495799999815,
+  "max": 9.02495799999815
+ },
+ "GET /v2/platform/lead-scoring": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1127,
+  "err": null,
+  "n": 7,
+  "p50": 21.04741699999795,
+  "p95": 21.455042000001413,
+  "max": 21.455042000001413
+ },
+ "GET /v2/platform/lead-scoring/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 158,
+  "err": null,
+  "n": 7,
+  "p50": 25.551250000000437,
+  "p95": 26.093832999998995,
+  "max": 26.093832999998995
+ },
+ "GET /v2/platform/lead-scoring/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.738583000002109,
+  "p95": 6.448166999998648,
+  "max": 6.448166999998648
+ },
+ "GET /v2/lead-scoring/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 458,
+  "err": null,
+  "n": 7,
+  "p50": 29.062833999996656,
+  "p95": 29.88000000000102,
+  "max": 29.88000000000102
+ },
+ "GET /v2/lead-scoring/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 17,
+  "err": null,
+  "n": 7,
+  "p50": 7.261249999999563,
+  "p95": 7.759666000001744,
+  "max": 7.759666000001744
+ },
+ "GET /v2/lead-scoring/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.466208000001643,
+  "p95": 9.211207999996986,
+  "max": 9.211207999996986
+ },
+ "GET /v2/lead-scoring/contacts/:uuid/insight": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 48,
+  "err": null,
+  "n": 7,
+  "p50": 8.580625000002328,
+  "p95": 9.614000000001397,
+  "max": 9.614000000001397
+ },
+ "GET /v2/lead-scoring/suggestions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.790165999998862,
+  "p95": 9.537749999999505,
+  "max": 9.537749999999505
+ },
+ "GET /v2/contacts/:contactId/attribution": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 51,
+  "err": null,
+  "n": 7,
+  "p50": 6.292124999999942,
+  "p95": 7.033791999998357,
+  "max": 7.033791999998357
+ },
+ "GET /v2/lead-inbox": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.509374999997817,
+  "p95": 10.010666999998648,
+  "max": 10.010666999998648
+ },
+ "GET /v2/lead-inbox/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 159,
+  "err": null,
+  "n": 7,
+  "p50": 7.442208000000392,
+  "p95": 8.20537499999773,
+  "max": 8.20537499999773
+ },
+ "GET /v2/lead-inbox/sources": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.886833000004117,
+  "p95": 8.594333000000915,
+  "max": 8.594333000000915
+ },
+ "GET /v2/lead-inbox/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.778459000001021,
+  "p95": 8.961209000000963,
+  "max": 8.961209000000963
+ },
+ "GET /v2/lead-inbox/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 285,
+  "err": null,
+  "n": 1,
+  "p50": 8.489291999998386,
+  "p95": 8.489291999998386,
+  "max": 8.489291999998386
+ },
+ "GET /v2/lead-sources": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 74,
+  "err": null,
+  "n": 7,
+  "p50": 7.474000000001979,
+  "p95": 7.675999999999476,
+  "max": 7.675999999999476
+ },
+ "GET /v2/lead-sources/speed-to-lead/options": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 326,
+  "err": null,
+  "n": 1,
+  "p50": 6.709999999999127,
+  "p95": 6.709999999999127,
+  "max": 6.709999999999127
+ },
+ "GET /v2/lead-sources/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 7.690333000005921,
+  "p95": 7.690333000005921,
+  "max": 7.690333000005921
+ },
+ "GET /v2/lead-sources/:id/events": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 6.2529170000052545,
+  "p95": 6.2529170000052545,
+  "max": 6.2529170000052545
+ },
+ "GET /v2/lead-sources/:id/events/:eventId": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 332,
+  "err": null,
+  "n": 1,
+  "p50": 8.244916000003286,
+  "p95": 8.244916000003286,
+  "max": 8.244916000003286
+ },
+ "GET /v2/platform/i18n/languages": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 3916,
+  "err": null,
+  "n": 7,
+  "p50": 4.891582999996899,
+  "p95": 5.182582999994338,
+  "max": 5.182582999994338
+ },
+ "GET /v2/platform/i18n/languages/languages": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 236,
+  "err": null,
+  "n": 1,
+  "p50": 3.0279999999984284,
+  "p95": 3.0279999999984284,
+  "max": 3.0279999999984284
+ },
+ "GET /v2/platform/i18n/translation-providers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2693,
+  "err": null,
+  "n": 7,
+  "p50": 4.580583000002662,
+  "p95": 5.271374999996624,
+  "max": 5.271374999996624
+ },
+ "GET /v2/platform/i18n/translation-usage": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 206,
+  "err": null,
+  "n": 7,
+  "p50": 6.467999999993481,
+  "p95": 7.661958000004233,
+  "max": 7.661958000004233
+ },
+ "GET /v2/workspace/translation-settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 289,
+  "err": null,
+  "n": 7,
+  "p50": 7.911916999997629,
+  "p95": 12.282374999995227,
+  "max": 12.282374999995227
+ },
+ "GET /v2/platform/cms/content": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 49,
+  "err": null,
+  "n": 7,
+  "p50": 4.802624999996624,
+  "p95": 5.0020000000004075,
+  "max": 5.0020000000004075
+ },
+ "GET /v2/platform/cms/legal": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 7661,
+  "err": null,
+  "n": 7,
+  "p50": 5.437667000005604,
+  "p95": 5.666582999998354,
+  "max": 5.666582999998354
+ },
+ "GET /v2/platform/cms/legal/:slug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 223,
+  "err": null,
+  "n": 1,
+  "p50": 4.536707999999635,
+  "p95": 4.536707999999635,
+  "max": 4.536707999999635
+ },
+ "GET /v2/platform/cms/legal/categories": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 241,
+  "err": null,
+  "n": 1,
+  "p50": 4.284041999999317,
+  "p95": 4.284041999999317,
+  "max": 4.284041999999317
+ },
+ "GET /v2/platform/cms/legal/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 6.177084000002651,
+  "p95": 6.177084000002651,
+  "max": 6.177084000002651
+ },
+ "GET /v2/platform/cms/announcements": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 137,
+  "err": null,
+  "n": 7,
+  "p50": 4.847958000005747,
+  "p95": 5.17829100000381,
+  "max": 5.17829100000381
+ },
+ "GET /v2/platform/cms/announcements/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 303,
+  "err": null,
+  "n": 1,
+  "p50": 4.761040999997931,
+  "p95": 4.761040999997931,
+  "max": 4.761040999997931
+ },
+ "GET /v2/public/cms/content": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 86,
+  "err": null,
+  "n": 7,
+  "p50": 2.730999999999767,
+  "p95": 2.914541999998619,
+  "max": 2.914541999998619
+ },
+ "GET /v2/public/cms/pricing": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 56,
+  "err": null,
+  "n": 7,
+  "p50": 2.720041000000492,
+  "p95": 2.804792000002635,
+  "max": 2.804792000002635
+ },
+ "GET /v2/public/cms/legal": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 253,
+  "err": null,
+  "n": 7,
+  "p50": 2.6548750000001746,
+  "p95": 2.923625000003085,
+  "max": 2.923625000003085
+ },
+ "GET /v2/public/cms/legal/:slug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 221,
+  "err": null,
+  "n": 1,
+  "p50": 2.4017499999972642,
+  "p95": 2.4017499999972642,
+  "max": 2.4017499999972642
+ },
+ "GET /v2/public/cms/blog": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 96,
+  "err": null,
+  "n": 7,
+  "p50": 3.1132919999945443,
+  "p95": 4.777249999999185,
+  "max": 4.777249999999185
+ },
+ "GET /v2/public/cms/blog/:slug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 219,
+  "err": null,
+  "n": 1,
+  "p50": 3.2354580000028363,
+  "p95": 3.2354580000028363,
+  "max": 3.2354580000028363
+ },
+ "GET /v2/public/cms/sitemap": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 137,
+  "err": null,
+  "n": 7,
+  "p50": 2.677332999999635,
+  "p95": 3.088000000003376,
+  "max": 3.088000000003376
+ },
+ "GET /v2/public/cms/announcements": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 2.4668749999982538,
+  "p95": 2.7554999999993015,
+  "max": 2.7554999999993015
+ },
+ "GET /v2/public/cms/site-info": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 128,
+  "err": null,
+  "n": 7,
+  "p50": 2.526458000000275,
+  "p95": 2.72529200000281,
+  "max": 2.72529200000281
+ },
+ "GET /v2/cms/announcements": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 3.5756660000042757,
+  "p95": 3.740249999995285,
+  "max": 3.740249999995285
+ },
+ "GET /v2/marketplace/categories": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4500,
+  "err": null,
+  "n": 7,
+  "p50": 10.295583999999508,
+  "p95": 12.257166999996116,
+  "max": 12.257166999996116
+ },
+ "GET /v2/marketplace/shelves": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 308,
+  "err": null,
+  "n": 1,
+  "p50": 5.313207999999577,
+  "p95": 5.313207999999577,
+  "max": 5.313207999999577
+ },
+ "GET /v2/marketplace/apps": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 7654,
+  "err": null,
+  "n": 7,
+  "p50": 16.922915999995894,
+  "p95": 19.381459000003815,
+  "max": 19.381459000003815
+ },
+ "GET /v2/marketplace/apps/:ref": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 263,
+  "err": null,
+  "n": 1,
+  "p50": 10.845667000001413,
+  "p95": 10.845667000001413,
+  "max": 10.845667000001413
+ },
+ "GET /v2/marketplace/subscriptions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 7.483707999999751,
+  "p95": 8.103084000002127,
+  "max": 8.103084000002127
+ },
+ "GET /v2/marketplace/installations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 45,
+  "err": null,
+  "n": 7,
+  "p50": 14.36662499999511,
+  "p95": 15.25391700000182,
+  "max": 15.25391700000182
+ },
+ "GET /v2/marketplace/installations/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 281,
+  "err": null,
+  "n": 1,
+  "p50": 9.243374999998196,
+  "p95": 9.243374999998196,
+  "max": 9.243374999998196
+ },
+ "GET /v2/marketplace/installations/:id/events": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 9.508541000002879,
+  "p95": 9.508541000002879,
+  "max": 9.508541000002879
+ },
+ "GET /v2/marketplace/requests": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.214249999997264,
+  "p95": 7.872458000005281,
+  "max": 7.872458000005281
+ },
+ "GET /v2/platform/marketplace/categories": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 5152,
+  "err": null,
+  "n": 7,
+  "p50": 6.386124999997264,
+  "p95": 8.363790999996127,
+  "max": 8.363790999996127
+ },
+ "GET /v2/platform/marketplace/requests": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.487124999999651,
+  "p95": 6.006541000002471,
+  "max": 6.006541000002471
+ },
+ "GET /v2/platform/marketplace/usage": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 13960,
+  "err": null,
+  "n": 7,
+  "p50": 7.604541000000609,
+  "p95": 7.877542000001995,
+  "max": 7.877542000001995
+ },
+ "GET /v2/platform/marketplace/apps": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 31760,
+  "err": null,
+  "n": 7,
+  "p50": 7.718375000004016,
+  "p95": 9.894999999996799,
+  "max": 9.894999999996799
+ },
+ "GET /v2/platform/marketplace/apps/:ref": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 272,
+  "err": null,
+  "n": 1,
+  "p50": 6.7071670000004815,
+  "p95": 6.7071670000004815,
+  "max": 6.7071670000004815
+ },
+ "GET /v2/platform/marketplace/subscriptions/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2630,
+  "err": null,
+  "n": 7,
+  "p50": 7.27833400000236,
+  "p95": 7.656041999995068,
+  "max": 7.656041999995068
+ },
+ "GET /v2/platform/marketplace/subscriptions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 19.029417000005196,
+  "p95": 33.89604099999997,
+  "max": 33.89604099999997
+ },
+ "GET /v2/conferencing/capabilities": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 83,
+  "err": null,
+  "n": 7,
+  "p50": 10.704040999997233,
+  "p95": 12.992417000001296,
+  "max": 12.992417000001296
+ },
+ "GET /v2/conferencing/connections": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 229,
+  "err": null,
+  "n": 7,
+  "p50": 5.980958000000101,
+  "p95": 7.135333999998693,
+  "max": 7.135333999998693
+ },
+ "GET /v2/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 7.515791999998328,
+  "p95": 11.438874999999825,
+  "max": 11.438874999999825
+ },
+ "GET /v2/templates/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 96,
+  "err": null,
+  "n": 7,
+  "p50": 5.5726250000006985,
+  "p95": 5.859334000000672,
+  "max": 5.859334000000672
+ },
+ "GET /v2/templates/gallery": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 10274,
+  "err": null,
+  "n": 7,
+  "p50": 3.8592500000013388,
+  "p95": 4.257709000004979,
+  "max": 4.257709000004979
+ },
+ "GET /v2/templates/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 253,
+  "err": null,
+  "n": 1,
+  "p50": 7.062833000003593,
+  "p95": 7.062833000003593,
+  "max": 7.062833000003593
+ },
+ "GET /v2/meta-lead-ads": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 252,
+  "err": null,
+  "n": 7,
+  "p50": 10.256249999998545,
+  "p95": 11.071167000001878,
+  "max": 11.071167000001878
+ },
+ "GET /v2/meta-lead-ads/pages/:id/forms": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 303,
+  "err": null,
+  "n": 1,
+  "p50": 10.256708000000799,
+  "p95": 10.256708000000799,
+  "max": 10.256708000000799
+ },
+ "GET /v2/meta-lead-ads/sources/:id/health": {
+  "status": 200,
+  "resolved": false,
+  "bytes": 179,
+  "err": null,
+  "n": 7,
+  "p50": 9.455832999999984,
+  "p95": 10.313625000002503,
+  "max": 10.313625000002503
+ },
+ "GET /v2/platform/node-bridge": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 197,
+  "err": null,
+  "n": 7,
+  "p50": 5.365042000004905,
+  "p95": 8.544792000000598,
+  "max": 8.544792000000598
+ },
+ "GET /v2/platform/node-bridge/unofficial/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.431000000004133,
+  "p95": 6.506124999999884,
+  "max": 6.506124999999884
+ },
+ "GET /v2/platform/node-bridge/unofficial/workspace-options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 170,
+  "err": null,
+  "n": 7,
+  "p50": 5.157165999997233,
+  "p95": 6.2954160000008414,
+  "max": 6.2954160000008414
+ },
+ "GET /api/whatsapp-message-settings": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 244,
+  "err": null,
+  "n": 1,
+  "p50": 2.386832999996841,
+  "p95": 2.386832999996841,
+  "max": 2.386832999996841
+ },
+ "GET /v2/notifications": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 85,
+  "err": null,
+  "n": 7,
+  "p50": 5.3642909999980475,
+  "p95": 7.397375000000466,
+  "max": 7.397375000000466
+ },
+ "GET /v2/notifications/unread-count": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12,
+  "err": null,
+  "n": 7,
+  "p50": 4.25,
+  "p95": 5.652041000001191,
+  "max": 5.652041000001191
+ },
+ "GET /v2/notifications/preferences": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11101,
+  "err": null,
+  "n": 7,
+  "p50": 8.110417000003508,
+  "p95": 8.575916000001598,
+  "max": 8.575916000001598
+ },
+ "GET /v2/notifications/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 64,
+  "err": null,
+  "n": 7,
+  "p50": 5.3322079999998095,
+  "p95": 28.718583000001672,
+  "max": 28.718583000001672
+ },
+ "GET /v2/notifications/push/public-key": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 34,
+  "err": null,
+  "n": 7,
+  "p50": 3.0231669999993755,
+  "p95": 4.00537500000064,
+  "max": 4.00537500000064
+ },
+ "GET /v2/notifications/push/subscriptions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12,
+  "err": null,
+  "n": 7,
+  "p50": 2.8267909999995027,
+  "p95": 3.092499999998836,
+  "max": 3.092499999998836
+ },
+ "GET /v2/webhooks": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 250,
+  "err": null,
+  "n": 7,
+  "p50": 4.669208999999682,
+  "p95": 5.861457999999402,
+  "max": 5.861457999999402
+ },
+ "GET /v2/webhooks/:id/deliveries": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 291,
+  "err": null,
+  "n": 1,
+  "p50": 5.994542000000365,
+  "p95": 5.994542000000365,
+  "max": 5.994542000000365
+ },
+ "GET /v2/partner/leads": {
+  "status": 401,
+  "resolved": true,
+  "bytes": 233,
+  "err": null,
+  "n": 1,
+  "p50": 3.6650829999998678,
+  "p95": 3.6650829999998678,
+  "max": 3.6650829999998678
+ },
+ "GET /v2/partner/leads/:id": {
+  "status": 401,
+  "resolved": false,
+  "bytes": 270,
+  "err": null,
+  "n": 1,
+  "p50": 2.622709000002942,
+  "p95": 2.622709000002942,
+  "max": 2.622709000002942
+ },
+ "GET /v2/persona/vocabulary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 433,
+  "err": null,
+  "n": 7,
+  "p50": 5.923917000000074,
+  "p95": 7.2838750000009895,
+  "max": 7.2838750000009895
+ },
+ "GET /v2/billing/plans": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 295,
+  "err": null,
+  "n": 7,
+  "p50": 8.568583000000217,
+  "p95": 11.931292000001122,
+  "max": 11.931292000001122
+ },
+ "GET /v2/billing/entitlements": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 578,
+  "err": null,
+  "n": 7,
+  "p50": 5.807166999999026,
+  "p95": 6.796916999999667,
+  "max": 6.796916999999667
+ },
+ "GET /v2/billing/status": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 170,
+  "err": null,
+  "n": 7,
+  "p50": 6.621957999996084,
+  "p95": 10.080916999999317,
+  "max": 10.080916999999317
+ },
+ "GET /v2/billing/usage": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4367,
+  "err": null,
+  "n": 7,
+  "p50": 80.36545800000022,
+  "p95": 87.04754200000025,
+  "max": 87.04754200000025
+ },
+ "GET /v2/billing/subscriptions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.648791999999958,
+  "p95": 5.0292090000002645,
+  "max": 5.0292090000002645
+ },
+ "GET /v2/billing/subscriptions/:id/charges": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 306,
+  "err": null,
+  "n": 1,
+  "p50": 5.03437500000291,
+  "p95": 5.03437500000291,
+  "max": 5.03437500000291
+ },
+ "GET /v2/platform/plan-analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 895,
+  "err": null,
+  "n": 7,
+  "p50": 14.101834000000963,
+  "p95": 16.70245799999975,
+  "max": 16.70245799999975
+ },
+ "GET /v2/platform/plan-analytics/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 367,
+  "err": null,
+  "n": 7,
+  "p50": 13.885667000002286,
+  "p95": 15.34729199999856,
+  "max": 15.34729199999856
+ },
+ "GET /v2/platform/financial": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1679,
+  "err": null,
+  "n": 7,
+  "p50": 9.264917000000423,
+  "p95": 10.4184580000001,
+  "max": 10.4184580000001
+ },
+ "GET /v2/platform/premium": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1390,
+  "err": null,
+  "n": 7,
+  "p50": 8.708542000000307,
+  "p95": 11.43124999999418,
+  "max": 11.43124999999418
+ },
+ "GET /v2/plans": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 54,
+  "err": null,
+  "n": 7,
+  "p50": 7.004790999999386,
+  "p95": 9.342333000000508,
+  "max": 9.342333000000508
+ },
+ "GET /v2/platform/plans": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 109,
+  "err": null,
+  "n": 7,
+  "p50": 5.286083999999391,
+  "p95": 5.56395799999882,
+  "max": 5.56395799999882
+ },
+ "GET /v2/platform/plans/addon-options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.981082999998762,
+  "p95": 6.5995830000028946,
+  "max": 6.5995830000028946
+ },
+ "GET /v2/platform/plans/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 246,
+  "err": null,
+  "n": 1,
+  "p50": 4.434833999999682,
+  "p95": 4.434833999999682,
+  "max": 4.434833999999682
+ },
+ "GET /v2/platform/workspace-plans": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1960,
+  "err": null,
+  "n": 7,
+  "p50": 7.726042000002053,
+  "p95": 11.084875000000466,
+  "max": 11.084875000000466
+ },
+ "GET /v2/platform/workspace-plans/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 261,
+  "err": null,
+  "n": 1,
+  "p50": 8.778958000002604,
+  "p95": 8.778958000002604,
+  "max": 8.778958000002604
+ },
+ "GET /v2/platform/async-ops/outbox/dead": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 5.689750000005006,
+  "p95": 6.076999999997497,
+  "max": 6.076999999997497
+ },
+ "GET /v2/platform/async-ops/waba-ingest/failed": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.975583000006736,
+  "p95": 5.292708000000857,
+  "max": 5.292708000000857
+ },
+ "GET /v2/platform/async-ops/webhook-retry/failed": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.951332999997248,
+  "p95": 6.248291999996582,
+  "max": 6.248291999996582
+ },
+ "GET /v2/platform/data-retention": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1697,
+  "err": null,
+  "n": 7,
+  "p50": 8.60137499999837,
+  "p95": 8.869167000004381,
+  "max": 8.869167000004381
+ },
+ "GET /v2/platform/billing/orders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 390,
+  "err": null,
+  "n": 7,
+  "p50": 8.285083000002487,
+  "p95": 10.605583000004117,
+  "max": 10.605583000004117
+ },
+ "GET /v2/platform/billing/orders/analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1063,
+  "err": null,
+  "n": 7,
+  "p50": 10.172167000004265,
+  "p95": 10.919834000000264,
+  "max": 10.919834000000264
+ },
+ "GET /v2/platform/billing/orders/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 151,
+  "err": null,
+  "n": 7,
+  "p50": 6.086083000001963,
+  "p95": 7.654500000004191,
+  "max": 7.654500000004191
+ },
+ "GET /v2/platform/billing/orders/:id/proof": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 3.9652920000007725,
+  "p95": 3.9652920000007725,
+  "max": 3.9652920000007725
+ },
+ "GET /v2/platform/billing/orders/:id/refunds": {
+  "status": 200,
+  "resolved": false,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.9357920000038575,
+  "p95": 5.871041999998852,
+  "max": 5.871041999998852
+ },
+ "GET /v2/platform/billing/subscriptions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 89,
+  "err": null,
+  "n": 7,
+  "p50": 5.785374999999476,
+  "p95": 5.978250000000116,
+  "max": 5.978250000000116
+ },
+ "GET /v2/platform/billing/subscriptions/:id/charges": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 315,
+  "err": null,
+  "n": 1,
+  "p50": 7.169041000001016,
+  "p95": 7.169041000001016,
+  "max": 7.169041000001016
+ },
+ "GET /v2/platform/billing/subscriptions/:id/refunds": {
+  "status": 200,
+  "resolved": false,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.74550000000454,
+  "p95": 6.502667000000656,
+  "max": 6.502667000000656
+ },
+ "GET /v2/platform/billing/history": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 590,
+  "err": null,
+  "n": 7,
+  "p50": 7.663375000003725,
+  "p95": 8.807000000000698,
+  "max": 8.807000000000698
+ },
+ "GET /v2/platform/billing/history/analytics": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 742,
+  "err": null,
+  "n": 7,
+  "p50": 8.593207999998413,
+  "p95": 11.129790999999386,
+  "max": 11.129790999999386
+ },
+ "GET /v2/platform/billing/history/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 143,
+  "err": null,
+  "n": 7,
+  "p50": 5.322165999998106,
+  "p95": 5.674624999999651,
+  "max": 5.674624999999651
+ },
+ "GET /v2/platform/billing/invoices": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 358,
+  "err": null,
+  "n": 7,
+  "p50": 5.758084000000963,
+  "p95": 7.404834000000847,
+  "max": 7.404834000000847
+ },
+ "GET /v2/platform/billing/invoices/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 139,
+  "err": null,
+  "n": 7,
+  "p50": 5.157958000003418,
+  "p95": 9.176541999993788,
+  "max": 9.176541999993788
+ },
+ "GET /v2/platform/billing/invoices/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 297,
+  "err": null,
+  "n": 1,
+  "p50": 5.184958000005281,
+  "p95": 5.184958000005281,
+  "max": 5.184958000005281
+ },
+ "GET /v2/platform/billing/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 445,
+  "err": null,
+  "n": 7,
+  "p50": 5.500417000002926,
+  "p95": 7.267584000001079,
+  "max": 7.267584000001079
+ },
+ "GET /v2/platform/billing/settings/logo": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 238,
+  "err": null,
+  "n": 1,
+  "p50": 5.26520800000435,
+  "p95": 5.26520800000435,
+  "max": 5.26520800000435
+ },
+ "GET /v2/billing/checkout/wallet/quote": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 320,
+  "err": null,
+  "n": 1,
+  "p50": 3.8420420000038575,
+  "p95": 3.8420420000038575,
+  "max": 3.8420420000038575
+ },
+ "GET /v2/billing/checkout/plans/:planSlug/quote": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 227,
+  "err": null,
+  "n": 1,
+  "p50": 4.751415999999153,
+  "p95": 4.751415999999153,
+  "max": 4.751415999999153
+ },
+ "GET /v2/billing/orders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 84,
+  "err": null,
+  "n": 7,
+  "p50": 4.83454100000381,
+  "p95": 6.397417000000132,
+  "max": 6.397417000000132
+ },
+ "GET /v2/billing/orders/:id/invoice": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 4.778749999997672,
+  "p95": 4.778749999997672,
+  "max": 4.778749999997672
+ },
+ "GET /v2/platform/payment-gateways": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 27179,
+  "err": null,
+  "n": 7,
+  "p50": 10.923875000000407,
+  "p95": 13.669999999998254,
+  "max": 13.669999999998254
+ },
+ "GET /v2/public/site-config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1230,
+  "err": null,
+  "n": 7,
+  "p50": 2.4508330000026035,
+  "p95": 2.77216700000281,
+  "max": 2.77216700000281
+ },
+ "GET /v2/public/manifest.webmanifest": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 191,
+  "err": null,
+  "n": 1,
+  "p50": 1.9255830000038259,
+  "p95": 1.9255830000038259,
+  "max": 1.9255830000038259
+ },
+ "GET /v2/public/robots.txt": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 55,
+  "err": null,
+  "n": 7,
+  "p50": 2.0894590000025346,
+  "p95": 2.330167000000074,
+  "max": 2.330167000000074
+ },
+ "GET /v2/public/team-inbox-manifest.webmanifest": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 202,
+  "err": null,
+  "n": 1,
+  "p50": 2.1799170000012964,
+  "p95": 2.1799170000012964,
+  "max": 2.1799170000012964
+ },
+ "GET /v2/public/brand/:slot": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 213,
+  "err": null,
+  "n": 1,
+  "p50": 2.071917000001122,
+  "p95": 2.071917000001122,
+  "max": 2.071917000001122
+ },
+ "GET /v2/platform/settings/groups": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1660,
+  "err": null,
+  "n": 7,
+  "p50": 5.7838750000009895,
+  "p95": 8.64929100000154,
+  "max": 8.64929100000154
+ },
+ "GET /v2/platform/settings/groups/:group": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 652,
+  "err": null,
+  "n": 1,
+  "p50": 3.8788750000021537,
+  "p95": 3.8788750000021537,
+  "max": 3.8788750000021537
+ },
+ "GET /v2/platform/settings/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 153,
+  "err": null,
+  "n": 7,
+  "p50": 5.498333000003186,
+  "p95": 7.577999999994063,
+  "max": 7.577999999994063
+ },
+ "GET /v2/support/tickets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 55,
+  "err": null,
+  "n": 7,
+  "p50": 4.999499999998079,
+  "p95": 6.086957999999868,
+  "max": 6.086957999999868
+ },
+ "GET /v2/support/tickets/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 286,
+  "err": null,
+  "n": 1,
+  "p50": 4.803291999996873,
+  "p95": 4.803291999996873,
+  "max": 4.803291999996873
+ },
+ "GET /v2/platform/support/board": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 84,
+  "err": null,
+  "n": 7,
+  "p50": 4.632958000001963,
+  "p95": 4.939707999998063,
+  "max": 4.939707999998063
+ },
+ "GET /v2/platform/support/agents": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 175,
+  "err": null,
+  "n": 7,
+  "p50": 5.065083000001323,
+  "p95": 6.613666999997804,
+  "max": 6.613666999997804
+ },
+ "GET /v2/platform/support/sla": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 98,
+  "err": null,
+  "n": 7,
+  "p50": 4.927582999996957,
+  "p95": 5.379750000000058,
+  "max": 5.379750000000058
+ },
+ "GET /v2/platform/support/customers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 61,
+  "err": null,
+  "n": 7,
+  "p50": 4.630749999996624,
+  "p95": 6.929625000004307,
+  "max": 6.929625000004307
+ },
+ "GET /v2/platform/support/customers/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 4.368249999999534,
+  "p95": 4.368249999999534,
+  "max": 4.368249999999534
+ },
+ "GET /v2/platform/support/playbooks": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 50,
+  "err": null,
+  "n": 7,
+  "p50": 4.288000000000466,
+  "p95": 4.604083999998693,
+  "max": 4.604083999998693
+ },
+ "GET /v2/platform/support/playbooks/runnable": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.297082999997656,
+  "p95": 6.129542000002402,
+  "max": 6.129542000002402
+ },
+ "GET /v2/platform/support/reports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1115,
+  "err": null,
+  "n": 7,
+  "p50": 5.991208999999799,
+  "p95": 6.639624999996158,
+  "max": 6.639624999996158
+ },
+ "GET /v2/platform/support/reports/export.csv": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 110,
+  "err": null,
+  "n": 7,
+  "p50": 4.8318339999968885,
+  "p95": 6.744874999996682,
+  "max": 6.744874999996682
+ },
+ "GET /v2/platform/support/tickets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 124,
+  "err": null,
+  "n": 7,
+  "p50": 4.585042000006069,
+  "p95": 5.037540999997873,
+  "max": 5.037540999997873
+ },
+ "GET /v2/platform/support/tickets/assignees": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.228125000001455,
+  "p95": 6.420124999996915,
+  "max": 6.420124999996915
+ },
+ "GET /v2/platform/support/tickets/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 295,
+  "err": null,
+  "n": 1,
+  "p50": 4.36904200000572,
+  "p95": 4.36904200000572,
+  "max": 4.36904200000572
+ },
+ "GET /v2/platform/inbox/bootstrap": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1154,
+  "err": null,
+  "n": 7,
+  "p50": 40.668416000000434,
+  "p95": 43.22820900000079,
+  "max": 43.22820900000079
+ },
+ "GET /v2/platform/inbox/queue": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 75,
+  "err": null,
+  "n": 7,
+  "p50": 19.368125000000873,
+  "p95": 20.484708000003593,
+  "max": 20.484708000003593
+ },
+ "GET /v2/platform/inbox/conversations/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 5468,
+  "err": null,
+  "n": 7,
+  "p50": 10.143917000001238,
+  "p95": 11.894709000000148,
+  "max": 11.894709000000148
+ },
+ "GET /v2/platform/inbox/audit": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 7350,
+  "err": null,
+  "n": 7,
+  "p50": 5.734292000001005,
+  "p95": 6.150000000001455,
+  "max": 6.150000000001455
+ },
+ "GET /v2/privacy/legal-holds": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.095374999997148,
+  "p95": 5.807666000000609,
+  "max": 5.807666000000609
+ },
+ "GET /v2/privacy/legal-holds/status": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 350,
+  "err": null,
+  "n": 1,
+  "p50": 3.088499999998021,
+  "p95": 3.088499999998021,
+  "max": 3.088499999998021
+ },
+ "GET /v2/privacy/legal-holds/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 188,
+  "err": null,
+  "n": 7,
+  "p50": 5.542249999998603,
+  "p95": 6.025374999997439,
+  "max": 6.025374999997439
+ },
+ "GET /v2/privacy/legal-holds/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 279,
+  "err": null,
+  "n": 1,
+  "p50": 4.843249999998079,
+  "p95": 4.843249999998079,
+  "max": 4.843249999998079
+ },
+ "GET /v2/privacy/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 46,
+  "err": null,
+  "n": 7,
+  "p50": 4.3637090000047465,
+  "p95": 5.666749999996682,
+  "max": 5.666749999996682
+ },
+ "GET /v2/privacy/subjects": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 302,
+  "err": null,
+  "n": 1,
+  "p50": 3.0657089999949676,
+  "p95": 3.0657089999949676,
+  "max": 3.0657089999949676
+ },
+ "GET /v2/privacy/requests": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.721874999995634,
+  "p95": 5.094041999996989,
+  "max": 5.094041999996989
+ },
+ "GET /v2/privacy/requests/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 4.594041999996989,
+  "p95": 4.594041999996989,
+  "max": 4.594041999996989
+ },
+ "GET /v2/privacy/requests/:id/exports/:exportId/download": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 342,
+  "err": null,
+  "n": 1,
+  "p50": 4.240708000004815,
+  "p95": 4.240708000004815,
+  "max": 4.240708000004815
+ },
+ "GET /public/v1/leads/:id": {
+  "status": 401,
+  "resolved": false,
+  "bytes": 260,
+  "err": null,
+  "n": 1,
+  "p50": 2.409584000000905,
+  "p95": 2.409584000000905,
+  "max": 2.409584000000905
+ },
+ "GET /v2/platform/me/permissions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 943,
+  "err": null,
+  "n": 7,
+  "p50": 4.885708000001614,
+  "p95": 5.705290999998397,
+  "max": 5.705290999998397
+ },
+ "GET /v2/platform/roles": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1542,
+  "err": null,
+  "n": 7,
+  "p50": 5.429291000000376,
+  "p95": 7.484292000001005,
+  "max": 7.484292000001005
+ },
+ "GET /v2/platform/roles/:id": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 283,
+  "err": null,
+  "n": 1,
+  "p50": 4.932458000002953,
+  "p95": 4.932458000002953,
+  "max": 4.932458000002953
+ },
+ "GET /v2/platform/permissions": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 18836,
+  "err": null,
+  "n": 7,
+  "p50": 6.208375000001979,
+  "p95": 6.338999999999942,
+  "max": 6.338999999999942
+ },
+ "GET /v2/platform/staff": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 616,
+  "err": null,
+  "n": 7,
+  "p50": 5.037125000002561,
+  "p95": 6.713458999998693,
+  "max": 6.713458999998693
+ },
+ "GET /v2/scheduled": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 115,
+  "err": null,
+  "n": 7,
+  "p50": 4.836209000000963,
+  "p95": 4.927500000005239,
+  "max": 4.927500000005239
+ },
+ "GET /v2/scheduled/options": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 4072,
+  "err": null,
+  "n": 7,
+  "p50": 7.085500000001048,
+  "p95": 8.890375000002678,
+  "max": 8.890375000002678
+ },
+ "GET /v2/scheduled/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 4.818958000003477,
+  "p95": 4.818958000003477,
+  "max": 4.818958000003477
+ },
+ "GET /v2/scheduled/:id/draft": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 4.973207999995793,
+  "p95": 4.973207999995793,
+  "max": 4.973207999995793
+ },
+ "GET /v2/scheduled/:id/recipients": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 4.7028750000026776,
+  "p95": 4.7028750000026776,
+  "max": 4.7028750000026776
+ },
+ "GET /v2/scheduled/:id/funnel": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 4.123417000002519,
+  "p95": 4.123417000002519,
+  "max": 4.123417000002519
+ },
+ "GET /v2/warmer": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 168,
+  "err": null,
+  "n": 7,
+  "p50": 6.239667000001646,
+  "p95": 9.037082999995619,
+  "max": 9.037082999995619
+ },
+ "GET /v2/shopify/stores/:id/automations": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 304,
+  "err": null,
+  "n": 1,
+  "p50": 6.483832999998413,
+  "p95": 6.483832999998413,
+  "max": 6.483832999998413
+ },
+ "GET /v2/woocommerce/stores/:id/automations": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 312,
+  "err": null,
+  "n": 1,
+  "p50": 5.707084000001487,
+  "p95": 5.707084000001487,
+  "max": 5.707084000001487
+ },
+ "GET /v2/shopify/stores/:id/dashboard": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 302,
+  "err": null,
+  "n": 1,
+  "p50": 6.0821670000004815,
+  "p95": 6.0821670000004815,
+  "max": 6.0821670000004815
+ },
+ "GET /v2/woocommerce/stores/:id/dashboard": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 310,
+  "err": null,
+  "n": 1,
+  "p50": 6.062375000001339,
+  "p95": 6.062375000001339,
+  "max": 6.062375000001339
+ },
+ "GET /v2/shopify/embedded/config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 36,
+  "err": null,
+  "n": 7,
+  "p50": 2.3611670000027516,
+  "p95": 2.660582999997132,
+  "max": 2.660582999997132
+ },
+ "GET /v2/shopify/stores/:id/invoice-policy": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 6.818041999998968,
+  "p95": 6.818041999998968,
+  "max": 6.818041999998968
+ },
+ "GET /v2/woocommerce/stores/:id/invoice-policy": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 315,
+  "err": null,
+  "n": 1,
+  "p50": 6.017833000005339,
+  "p95": 6.017833000005339,
+  "max": 6.017833000005339
+ },
+ "GET /v2/platform/ecom/shopify": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 260,
+  "err": null,
+  "n": 7,
+  "p50": 4.5963750000009895,
+  "p95": 4.991167000000132,
+  "max": 4.991167000000132
+ },
+ "GET /v2/platform/ecom/woocommerce": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 69,
+  "err": null,
+  "n": 7,
+  "p50": 4.852000000006228,
+  "p95": 6.350375000001804,
+  "max": 6.350375000001804
+ },
+ "GET /v2/shopify": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 361,
+  "err": null,
+  "n": 7,
+  "p50": 5.93933300000208,
+  "p95": 6.283750000002328,
+  "max": 6.283750000002328
+ },
+ "GET /v2/woocommerce": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 171,
+  "err": null,
+  "n": 7,
+  "p50": 5.8081249999959255,
+  "p95": 7.562540999999328,
+  "max": 7.562540999999328
+ },
+ "GET /v2/woocommerce/:id/plugin": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 5.937083999997412,
+  "p95": 5.937083999997412,
+  "max": 5.937083999997412
+ },
+ "GET /v2/platform/storage/fleet": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 280,
+  "err": null,
+  "n": 7,
+  "p50": 6.485042000000249,
+  "p95": 6.675041999995301,
+  "max": 6.675041999995301
+ },
+ "GET /v2/platform/storage/workspaces/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 301,
+  "err": null,
+  "n": 1,
+  "p50": 4.807332999997016,
+  "p95": 4.807332999997016,
+  "max": 4.807332999997016
+ },
+ "GET /v2/contacts/:contactId/store-orders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 27,
+  "err": null,
+  "n": 7,
+  "p50": 4.981916000004276,
+  "p95": 5.407584000000497,
+  "max": 5.407584000000497
+ },
+ "GET /v2/store/coupons": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.9930419999946025,
+  "p95": 9.05829200000153,
+  "max": 9.05829200000153
+ },
+ "GET /v2/store/coupons/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 284,
+  "err": null,
+  "n": 1,
+  "p50": 7.441333000002487,
+  "p95": 7.441333000002487,
+  "max": 7.441333000002487
+ },
+ "GET /v2/store/coupons/:id/usages": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 291,
+  "err": null,
+  "n": 1,
+  "p50": 7.793875000003027,
+  "p95": 7.793875000003027,
+  "max": 7.793875000003027
+ },
+ "GET /v2/store/customers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.340625000004366,
+  "p95": 6.918625000005704,
+  "max": 6.918625000005704
+ },
+ "GET /v2/store/customers/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 288,
+  "err": null,
+  "n": 1,
+  "p50": 5.872500000004948,
+  "p95": 5.872500000004948,
+  "max": 5.872500000004948
+ },
+ "GET /v2/store/groups": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 5.083249999996042,
+  "p95": 5.875415999995312,
+  "max": 5.875415999995312
+ },
+ "GET /v2/store/groups/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 38,
+  "err": null,
+  "n": 7,
+  "p50": 5.491542000003392,
+  "p95": 6.147750000003725,
+  "max": 6.147750000003725
+ },
+ "GET /v2/store/groups/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 5.018457999998645,
+  "p95": 5.018457999998645,
+  "max": 5.018457999998645
+ },
+ "GET /v2/store/orders": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 8.278041000005032,
+  "p95": 9.859958000000915,
+  "max": 9.859958000000915
+ },
+ "GET /v2/store/orders/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 107,
+  "err": null,
+  "n": 7,
+  "p50": 7.103750000002037,
+  "p95": 9.27020800000173,
+  "max": 9.27020800000173
+ },
+ "GET /v2/store/orders/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 8.698916999994253,
+  "p95": 8.698916999994253,
+  "max": 8.698916999994253
+ },
+ "GET /v2/store/payments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.074000000000524,
+  "p95": 6.281084000002011,
+  "max": 6.281084000002011
+ },
+ "GET /v2/store/payments/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 57,
+  "err": null,
+  "n": 7,
+  "p50": 4.962625000000116,
+  "p95": 7.203125,
+  "max": 7.203125
+ },
+ "GET /v2/store/payments/whatsapp-pay": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 64,
+  "err": null,
+  "n": 7,
+  "p50": 4.9525419999990845,
+  "p95": 5.1270000000004075,
+  "max": 5.1270000000004075
+ },
+ "GET /v2/store-public/host": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 306,
+  "err": null,
+  "n": 1,
+  "p50": 2.625,
+  "p95": 2.625,
+  "max": 2.625
+ },
+ "GET /v2/store-public/:slug/home": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 248,
+  "err": null,
+  "n": 1,
+  "p50": 2.980415999998513,
+  "p95": 2.980415999998513,
+  "max": 2.980415999998513
+ },
+ "GET /v2/store-public/:slug/products/:productSlug": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 254,
+  "err": null,
+  "n": 1,
+  "p50": 2.70391699999891,
+  "p95": 2.70391699999891,
+  "max": 2.70391699999891
+ },
+ "GET /v2/store-public/:slug/orders/:token": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 252,
+  "err": null,
+  "n": 1,
+  "p50": 2.5707079999992857,
+  "p95": 2.5707079999992857,
+  "max": 2.5707079999992857
+ },
+ "GET /v2/store/overview": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 234,
+  "err": null,
+  "n": 1,
+  "p50": 4.897792000003392,
+  "p95": 4.897792000003392,
+  "max": 4.897792000003392
+ },
+ "GET /v2/store/shops": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 43,
+  "err": null,
+  "n": 7,
+  "p50": 5.80158400000073,
+  "p95": 7.59337499999674,
+  "max": 7.59337499999674
+ },
+ "GET /v2/store/shops/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 280,
+  "err": null,
+  "n": 1,
+  "p50": 4.864916999998968,
+  "p95": 4.864916999998968,
+  "max": 4.864916999998968
+ },
+ "GET /v2/team-chat/channels": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 390,
+  "err": null,
+  "n": 7,
+  "p50": 7.812458000000333,
+  "p95": 8.051375000002736,
+  "max": 8.051375000002736
+ },
+ "GET /v2/team-chat/members": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 100,
+  "err": null,
+  "n": 7,
+  "p50": 6.496374999995169,
+  "p95": 8.65625,
+  "max": 8.65625
+ },
+ "GET /v2/team-chat/channels/:id/members": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 298,
+  "err": null,
+  "n": 1,
+  "p50": 6.220332999997481,
+  "p95": 6.220332999997481,
+  "max": 6.220332999997481
+ },
+ "GET /v2/team-chat/channels/:id/messages": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 6.790084000000206,
+  "p95": 6.790084000000206,
+  "max": 6.790084000000206
+ },
+ "GET /v2/team-chat/channels/:id/pinned": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 297,
+  "err": null,
+  "n": 1,
+  "p50": 6.824708000000101,
+  "p95": 6.824708000000101,
+  "max": 6.824708000000101
+ },
+ "GET /v2/team-chat/channels/:id/search": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 348,
+  "err": null,
+  "n": 1,
+  "p50": 5.512209000000439,
+  "p95": 5.512209000000439,
+  "max": 5.512209000000439
+ },
+ "GET /v2/team-chat/channels/:id/activity": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 6.479374999995343,
+  "p95": 6.479374999995343,
+  "max": 6.479374999995343
+ },
+ "GET /v2/team-chat/messages/:id/attachment": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 304,
+  "err": null,
+  "n": 1,
+  "p50": 6.820333999996365,
+  "p95": 6.820333999996365,
+  "max": 6.820333999996365
+ },
+ "GET /v2/team-chat/invitations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 43,
+  "err": null,
+  "n": 7,
+  "p50": 15.859542000005604,
+  "p95": 36.5213750000039,
+  "max": 36.5213750000039
+ },
+ "GET /v2/inbox/conversations": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 39484,
+  "err": null,
+  "n": 7,
+  "p50": 80.7965419999964,
+  "p95": 97.8168749999968,
+  "max": 97.8168749999968
+ },
+ "GET /v2/inbox/counts": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 69,
+  "err": null,
+  "n": 7,
+  "p50": 76.13458399999945,
+  "p95": 80.34225000000151,
+  "max": 80.34225000000151
+ },
+ "GET /v2/inbox/messages/:id/log": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 238,
+  "err": null,
+  "n": 7,
+  "p50": 9.079791999996814,
+  "p95": 12.44970900000044,
+  "max": 12.44970900000044
+ },
+ "GET /v2/inbox/message-logs/exports": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.735458000002836,
+  "p95": 6.981124999998428,
+  "max": 6.981124999998428
+ },
+ "GET /v2/inbox/message-logs/exports/:id/download": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 4.617000000005646,
+  "p95": 4.617000000005646,
+  "max": 4.617000000005646
+ },
+ "GET /v2/inbox/conversations/:id": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1689,
+  "err": null,
+  "n": 7,
+  "p50": 12.307165999998688,
+  "p95": 14.184624999994412,
+  "max": 14.184624999994412
+ },
+ "GET /v2/inbox/conversations/:id/group-members": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 24,
+  "err": null,
+  "n": 7,
+  "p50": 7.573583000004874,
+  "p95": 10.499750000002678,
+  "max": 10.499750000002678
+ },
+ "GET /v2/inbox/conversations/:id/messages": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 15625,
+  "err": null,
+  "n": 7,
+  "p50": 12.017832999998063,
+  "p95": 13.685624999998254,
+  "max": 13.685624999998254
+ },
+ "GET /v2/inbox/conversations/:id/templates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 27,
+  "err": null,
+  "n": 7,
+  "p50": 8.662833000002138,
+  "p95": 9.904040999994322,
+  "max": 9.904040999994322
+ },
+ "GET /v2/inbox/conversations/:id/notes": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.3041250000023865,
+  "p95": 7.0625,
+  "max": 7.0625
+ },
+ "GET /v2/inbox/conversations/:id/events": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 6.1797090000036405,
+  "p95": 6.767207999997481,
+  "max": 6.767207999997481
+ },
+ "GET /v2/message-history": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 15104,
+  "err": null,
+  "n": 7,
+  "p50": 15.895833999995375,
+  "p95": 16.47116599999572,
+  "max": 16.47116599999572
+ },
+ "GET /v2/message-history/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 353,
+  "err": null,
+  "n": 7,
+  "p50": 817.3250419999968,
+  "p95": 841.1285829999979,
+  "max": 841.1285829999979
+ },
+ "GET /v2/message-history/insights": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2893,
+  "err": null,
+  "n": 7,
+  "p50": 407.55733399999735,
+  "p95": 419.8657919999969,
+  "max": 419.8657919999969
+ },
+ "GET /v2/message-history/:id": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 345,
+  "err": null,
+  "n": 1,
+  "p50": 5.504750000000058,
+  "p95": 5.504750000000058,
+  "max": 5.504750000000058
+ },
+ "GET /v2/inbox/saved-replies/export": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 50,
+  "err": null,
+  "n": 7,
+  "p50": 4.061416999997164,
+  "p95": 4.512334000006376,
+  "max": 4.512334000006376
+ },
+ "GET /v2/inbox/saved-replies": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 143,
+  "err": null,
+  "n": 7,
+  "p50": 6.435999999994237,
+  "p95": 9.484583000004932,
+  "max": 9.484583000004932
+ },
+ "GET /v2/inbox/saved-replies/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 282,
+  "err": null,
+  "n": 1,
+  "p50": 3.9303750000035507,
+  "p95": 3.9303750000035507,
+  "max": 3.9303750000035507
+ },
+ "GET /v2/inbox/assignees": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 186,
+  "err": null,
+  "n": 7,
+  "p50": 5.89104199999565,
+  "p95": 6.140499999994063,
+  "max": 6.140499999994063
+ },
+ "GET /v2/inbox/routing/rules": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 88,
+  "err": null,
+  "n": 7,
+  "p50": 7.622792000001937,
+  "p95": 8.601834000000963,
+  "max": 8.601834000000963
+ },
+ "GET /v2/inbox/routing/rules/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 259,
+  "err": null,
+  "n": 1,
+  "p50": 5.9053750000020955,
+  "p95": 5.9053750000020955,
+  "max": 5.9053750000020955
+ },
+ "GET /v2/inbox/routing/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 26,
+  "err": null,
+  "n": 7,
+  "p50": 5.625917000004847,
+  "p95": 7.469250000001921,
+  "max": 7.469250000001921
+ },
+ "GET /v2/inbox/routing/business-hours": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 423,
+  "err": null,
+  "n": 7,
+  "p50": 6.68525000000227,
+  "p95": 7.270665999996709,
+  "max": 7.270665999996709
+ },
+ "GET /v2/inbox/sla/policies": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 6.330999999998312,
+  "p95": 6.698458999999275,
+  "max": 6.698458999999275
+ },
+ "GET /v2/inbox/analytics/team": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 143,
+  "err": null,
+  "n": 7,
+  "p50": 76.67941599999904,
+  "p95": 102.39512500000274,
+  "max": 102.39512500000274
+ },
+ "GET /v2/platform/waboo-migration/runner": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 60,
+  "err": null,
+  "n": 7,
+  "p50": 4.97245799999655,
+  "p95": 6.348875000003318,
+  "max": 6.348875000003318
+ },
+ "GET /v2/platform/waboo-migration/runs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.80487500000163,
+  "p95": 7.180041999999958,
+  "max": 7.180041999999958
+ },
+ "GET /v2/platform/waboo-migration/runs/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 307,
+  "err": null,
+  "n": 1,
+  "p50": 4.5963750000009895,
+  "p95": 4.5963750000009895,
+  "max": 4.5963750000009895
+ },
+ "GET /v2/platform/waboo-migration/batches": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 5.767791000005673,
+  "p95": 7.142291999996814,
+  "max": 7.142291999996814
+ },
+ "GET /v2/platform/waboo-migration/batches/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 312,
+  "err": null,
+  "n": 1,
+  "p50": 5.328208999999333,
+  "p95": 5.328208999999333,
+  "max": 5.328208999999333
+ },
+ "GET /v2/platform/wallet/overview": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 248,
+  "err": null,
+  "n": 7,
+  "p50": 5.790832999999111,
+  "p95": 8.00633299999754,
+  "max": 8.00633299999754
+ },
+ "GET /v2/platform/wallet/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 232,
+  "err": null,
+  "n": 7,
+  "p50": 5.803166999998211,
+  "p95": 6.872708999995666,
+  "max": 6.872708999995666
+ },
+ "GET /v2/platform/wallet/rates": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12191,
+  "err": null,
+  "n": 7,
+  "p50": 5.605833000001439,
+  "p95": 8.769958000004408,
+  "max": 8.769958000004408
+ },
+ "GET /v2/platform/wallet/meta-cards": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 774,
+  "err": null,
+  "n": 7,
+  "p50": 5.275999999998021,
+  "p95": 5.4991249999948195,
+  "max": 5.4991249999948195
+ },
+ "GET /v2/platform/wallet/meta-cards/:currency": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 268,
+  "err": null,
+  "n": 1,
+  "p50": 6.504249999998137,
+  "p95": 6.504249999998137,
+  "max": 6.504249999998137
+ },
+ "GET /v2/platform/wallet/margins": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 8426,
+  "err": null,
+  "n": 7,
+  "p50": 6.084125000001222,
+  "p95": 6.869582999999693,
+  "max": 6.869582999999693
+ },
+ "GET /v2/platform/wallet/workspaces/:id/margins": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 271,
+  "err": null,
+  "n": 1,
+  "p50": 3.954291000001831,
+  "p95": 3.954291000001831,
+  "max": 3.954291000001831
+ },
+ "GET /v2/platform/wallet/pricing/preview": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 205,
+  "err": null,
+  "n": 7,
+  "p50": 4.506583000002138,
+  "p95": 5.876875000001746,
+  "max": 5.876875000001746
+ },
+ "GET /v2/platform/wallet/packages": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1126,
+  "err": null,
+  "n": 7,
+  "p50": 5.582332999998471,
+  "p95": 6.907291999996232,
+  "max": 6.907291999996232
+ },
+ "GET /v2/platform/wallet/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 353,
+  "err": null,
+  "n": 7,
+  "p50": 6.062624999998661,
+  "p95": 7.892207999997481,
+  "max": 7.892207999997481
+ },
+ "GET /v2/platform/wallet/workspaces/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 263,
+  "err": null,
+  "n": 1,
+  "p50": 4.676500000001397,
+  "p95": 4.676500000001397,
+  "max": 4.676500000001397
+ },
+ "GET /v2/platform/wallet/logs": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.640458000001672,
+  "p95": 6.173917000000074,
+  "max": 6.173917000000074
+ },
+ "GET /v2/wallet/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 441,
+  "err": null,
+  "n": 7,
+  "p50": 53.052874999993946,
+  "p95": 54.350957999995444,
+  "max": 54.350957999995444
+ },
+ "GET /v2/wallet/snapshot": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 215,
+  "err": null,
+  "n": 7,
+  "p50": 53.7585409999956,
+  "p95": 54.711332999999286,
+  "max": 54.711332999999286
+ },
+ "GET /v2/wallet/ledger": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.394749999999476,
+  "p95": 5.0272079999995185,
+  "max": 5.0272079999995185
+ },
+ "GET /v2/wallet/statement": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 268,
+  "err": null,
+  "n": 7,
+  "p50": 4.741374999997788,
+  "p95": 6.505749999996624,
+  "max": 6.505749999996624
+ },
+ "GET /v2/wallet/statement.csv": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 128,
+  "err": null,
+  "n": 7,
+  "p50": 8.288749999999709,
+  "p95": 20.729707999998936,
+  "max": 20.729707999998936
+ },
+ "GET /v2/wallet/pricing": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 316,
+  "err": null,
+  "n": 7,
+  "p50": 4.315500000004249,
+  "p95": 4.5737499999959255,
+  "max": 4.5737499999959255
+ },
+ "GET /v2/platform/webhook-targets": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.076709000000847,
+  "p95": 5.408708000002662,
+  "max": 5.408708000002662
+ },
+ "GET /v2/platform/webhook-targets/failures": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 11,
+  "err": null,
+  "n": 7,
+  "p50": 4.178250000004482,
+  "p95": 4.431917000001704,
+  "max": 4.431917000001704
+ },
+ "GET /v2/waba/customers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 45,
+  "err": null,
+  "n": 7,
+  "p50": 4.063583000002836,
+  "p95": 4.371999999995751,
+  "max": 4.371999999995751
+ },
+ "GET /v2/waba/readiness": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 369,
+  "err": null,
+  "n": 7,
+  "p50": 4.224540999995952,
+  "p95": 4.672708000005514,
+  "max": 4.672708000005514
+ },
+ "GET /v2/waba/numbers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 12,
+  "err": null,
+  "n": 7,
+  "p50": 3.82958299999882,
+  "p95": 4.188874999999825,
+  "max": 4.188874999999825
+ },
+ "GET /v2/waba/numbers/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 292,
+  "err": null,
+  "n": 1,
+  "p50": 3.8958329999950365,
+  "p95": 3.8958329999950365,
+  "max": 3.8958329999950365
+ },
+ "GET /v2/waba/numbers/:id/health": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 4.853166000000783,
+  "p95": 4.853166000000783,
+  "max": 4.853166000000783
+ },
+ "GET /v2/waba/numbers/:id/profile": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 300,
+  "err": null,
+  "n": 1,
+  "p50": 4.385332999998354,
+  "p95": 4.385332999998354,
+  "max": 4.385332999998354
+ },
+ "GET /v2/waba/webhook-config": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 189,
+  "err": null,
+  "n": 7,
+  "p50": 2.898541999995359,
+  "p95": 3.8220409999994445,
+  "max": 3.8220409999994445
+ },
+ "GET /v2/waba/numbers/:id/inbound-check": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 306,
+  "err": null,
+  "n": 1,
+  "p50": 3.0918749999982538,
+  "p95": 3.0918749999982538,
+  "max": 3.0918749999982538
+ },
+ "GET /v2/waba/webhook-status": {
+  "status": 404,
+  "resolved": true,
+  "bytes": 208,
+  "err": null,
+  "n": 1,
+  "p50": 2.0115829999995185,
+  "p95": 2.0115829999995185,
+  "max": 2.0115829999995185
+ },
+ "GET /v2/waba/numbers/:id/group-count": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 304,
+  "err": null,
+  "n": 1,
+  "p50": 3.9190830000006827,
+  "p95": 3.9190830000006827,
+  "max": 3.9190830000006827
+ },
+ "GET /v2/waba/numbers/:id/username": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 301,
+  "err": null,
+  "n": 1,
+  "p50": 4.065000000002328,
+  "p95": 4.065000000002328,
+  "max": 4.065000000002328
+ },
+ "GET /v2/waba/numbers/:id/qr-codes": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 301,
+  "err": null,
+  "n": 1,
+  "p50": 4.24054199999955,
+  "p95": 4.24054199999955,
+  "max": 4.24054199999955
+ },
+ "GET /v2/waba/numbers/:id/groups/state": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 305,
+  "err": null,
+  "n": 1,
+  "p50": 5.7612499999959255,
+  "p95": 5.7612499999959255,
+  "max": 5.7612499999959255
+ },
+ "GET /v2/waba/numbers/:id/groups": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 299,
+  "err": null,
+  "n": 1,
+  "p50": 6.04158300000563,
+  "p95": 6.04158300000563,
+  "max": 6.04158300000563
+ },
+ "GET /v2/waba/numbers/:id/groups/:gid/participants": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 349,
+  "err": null,
+  "n": 1,
+  "p50": 5.884749999997439,
+  "p95": 5.884749999997439,
+  "max": 5.884749999997439
+ },
+ "GET /v2/platform/waba/throughput": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 384,
+  "err": null,
+  "n": 7,
+  "p50": 4.943459000001894,
+  "p95": 5.233333000003768,
+  "max": 5.233333000003768
+ },
+ "GET /v2/platform/waba/throughput/settings": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 178,
+  "err": null,
+  "n": 7,
+  "p50": 3.860459000003175,
+  "p95": 5.504124999999476,
+  "max": 5.504124999999476
+ },
+ "GET /v2/platform/waba/throughput/numbers/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 312,
+  "err": null,
+  "n": 1,
+  "p50": 5.092749999996158,
+  "p95": 5.092749999996158,
+  "max": 5.092749999996158
+ },
+ "GET /v2/public/webhooks/whatsapp": {
+  "status": 403,
+  "resolved": true,
+  "bytes": 224,
+  "err": null,
+  "n": 1,
+  "p50": 2.1325419999993755,
+  "p95": 2.1325419999993755,
+  "max": 2.1325419999993755
+ },
+ "GET /v2/devices/:id/groups/state": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 370,
+  "err": null,
+  "n": 1,
+  "p50": 2.7513749999998254,
+  "p95": 2.7513749999998254,
+  "max": 2.7513749999998254
+ },
+ "GET /v2/devices/:id/groups": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 364,
+  "err": null,
+  "n": 1,
+  "p50": 3.116249999999127,
+  "p95": 3.116249999999127,
+  "max": 3.116249999999127
+ },
+ "GET /v2/devices/:id/groups/:gid": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 401,
+  "err": null,
+  "n": 1,
+  "p50": 2.8690829999977723,
+  "p95": 2.8690829999977723,
+  "max": 2.8690829999977723
+ },
+ "GET /v2/devices/:id/groups/:gid/participants": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 414,
+  "err": null,
+  "n": 1,
+  "p50": 2.7324999999982538,
+  "p95": 2.7324999999982538,
+  "max": 2.7324999999982538
+ },
+ "GET /v2/devices/:id/groups/:gid/join-requests": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 415,
+  "err": null,
+  "n": 1,
+  "p50": 2.7944579999966663,
+  "p95": 2.7944579999966663,
+  "max": 2.7944579999966663
+ },
+ "GET /v2/devices/:id/groups/:gid/invite-link": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 413,
+  "err": null,
+  "n": 1,
+  "p50": 2.9595830000034766,
+  "p95": 2.9595830000034766,
+  "max": 2.9595830000034766
+ },
+ "GET /v2/devices": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 320,
+  "err": null,
+  "n": 1,
+  "p50": 2.645749999996042,
+  "p95": 2.645749999996042,
+  "max": 2.645749999996042
+ },
+ "GET /v2/devices/risk-notice": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 332,
+  "err": null,
+  "n": 1,
+  "p50": 2.8856250000026193,
+  "p95": 2.8856250000026193,
+  "max": 2.8856250000026193
+ },
+ "GET /v2/devices/:id": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 357,
+  "err": null,
+  "n": 1,
+  "p50": 2.809332999997423,
+  "p95": 2.809332999997423,
+  "max": 2.809332999997423
+ },
+ "GET /v2/devices/:id/pairing": {
+  "status": 429,
+  "resolved": false,
+  "bytes": 289,
+  "err": null,
+  "n": 1,
+  "p50": 2.7067499999975553,
+  "p95": 2.7067499999975553,
+  "max": 2.7067499999975553
+ },
+ "GET /v2/devices/:id/history-import": {
+  "status": 422,
+  "resolved": false,
+  "bytes": 372,
+  "err": null,
+  "n": 1,
+  "p50": 2.6437499999956344,
+  "p95": 2.6437499999956344,
+  "max": 2.6437499999956344
+ },
+ "GET /v2/waba/provider-info": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 204,
+  "err": null,
+  "n": 7,
+  "p50": 6.039292000001296,
+  "p95": 6.8194169999987935,
+  "max": 6.8194169999987935
+ },
+ "GET /v2/platform/whatsapp-providers": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 2476,
+  "err": null,
+  "n": 7,
+  "p50": 5.4395409999997355,
+  "p95": 5.655208000003768,
+  "max": 5.655208000003768
+ },
+ "GET /v2/platform/whatsapp-providers/assignments": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 427,
+  "err": null,
+  "n": 7,
+  "p50": 5.813458000004175,
+  "p95": 5.910250000000815,
+  "max": 5.910250000000815
+ },
+ "GET /v2/platform/whatsapp-providers/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 309,
+  "err": null,
+  "n": 1,
+  "p50": 6.2370000000009895,
+  "p95": 6.2370000000009895,
+  "max": 6.2370000000009895
+ },
+ "GET /v2/workspace/invitations/preview": {
+  "status": 422,
+  "resolved": true,
+  "bytes": 359,
+  "err": null,
+  "n": 1,
+  "p50": 2.5002090000052704,
+  "p95": 2.5002090000052704,
+  "max": 2.5002090000052704
+ },
+ "GET /v2/workspace/leaves": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 49,
+  "err": null,
+  "n": 7,
+  "p50": 5.267584000001079,
+  "p95": 6.093375000004016,
+  "max": 6.093375000004016
+ },
+ "GET /v2/workspace/members/:id/leave": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 294,
+  "err": null,
+  "n": 1,
+  "p50": 4.994582999999693,
+  "p95": 4.994582999999693,
+  "max": 4.994582999999693
+ },
+ "GET /v2/workspace/members": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 502,
+  "err": null,
+  "n": 7,
+  "p50": 5.244334000002709,
+  "p95": 6.66874999999709,
+  "max": 6.66874999999709
+ },
+ "GET /v2/workspace/members/summary": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 736,
+  "err": null,
+  "n": 7,
+  "p50": 8.70274999999674,
+  "p95": 9.006333000004815,
+  "max": 9.006333000004815
+ },
+ "GET /v2/workspace/members/me/availability": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 19,
+  "err": null,
+  "n": 7,
+  "p50": 4.156667000002926,
+  "p95": 5.39533400000073,
+  "max": 5.39533400000073
+ },
+ "GET /v2/platform/workspace-lifecycle": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 613,
+  "err": null,
+  "n": 7,
+  "p50": 5.92537500000617,
+  "p95": 6.347583000002487,
+  "max": 6.347583000002487
+ },
+ "GET /v2/platform/workspace-lifecycle/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 302,
+  "err": null,
+  "n": 1,
+  "p50": 5.703041000000667,
+  "p95": 5.703041000000667,
+  "max": 5.703041000000667
+ },
+ "GET /v2/platform/workspace-lifecycle/:id/log": {
+  "status": 200,
+  "resolved": false,
+  "bytes": 2,
+  "err": null,
+  "n": 7,
+  "p50": 4.857041000002937,
+  "p95": 5.861875000002328,
+  "max": 5.861875000002328
+ },
+ "GET /v2/platform/workspaces": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 1138,
+  "err": null,
+  "n": 7,
+  "p50": 51.63408299999719,
+  "p95": 54.02904200000194,
+  "max": 54.02904200000194
+ },
+ "GET /v2/platform/workspaces/:id": {
+  "status": 404,
+  "resolved": false,
+  "bytes": 293,
+  "err": null,
+  "n": 1,
+  "p50": 9.469959000001836,
+  "p95": 9.469959000001836,
+  "max": 9.469959000001836
+ },
+ "GET /v2/workspace/teams": {
+  "status": 200,
+  "resolved": true,
+  "bytes": 65,
+  "err": null,
+  "n": 7,
+  "p50": 4.000333000003593,
+  "p95": 4.243458000004466,
+  "max": 4.243458000004466
+ }
+}

@@ -561,7 +561,10 @@
             "personal_history_full": "সম্পূর্ণ ইতিহাস ইমপোর্ট (ব্যক্তিগত WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI লিড স্কোরিং",
-            "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম"
+            "record_assignment": "রেকর্ড অ্যাসাইনমেন্ট নিয়ম",
+            "team_hierarchy": "টিম শ্রেণিবিন্যাস ও ম্যানেজার",
+            "custom_roles": "কাস্টম ভূমিকা ও পরিসর",
+            "inbox_assignment_sticky": "কন্টাক্টের মালিক ও স্টিকি এজেন্ট"
           },
           "cta": {
             "continueFree": "ফ্রি-তে চালিয়ে যান",

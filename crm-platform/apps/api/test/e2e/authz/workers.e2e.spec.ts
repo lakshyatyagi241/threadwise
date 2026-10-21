@@ -1453,7 +1453,7 @@ describe('AUTHZ-083 web push worker', () => {
 
   beforeAll(() => {
     const subs = h.app.get(PushSubscriptionsRepository, { strict: false });
-    const sender = new WebPushSender(provider, db as never, subs);
+    const sender = new WebPushSender(provider, db as never, subs, h.app.get(CryptoService));
     const delivery = new WebPushDeliveryService(
       db,
       h.app.get(NotificationsRepository, { strict: false }),

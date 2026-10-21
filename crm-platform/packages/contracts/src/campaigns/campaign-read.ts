@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { uuidSchema } from '../common/ids';
 import { previousSendOptionSchema } from '../broadcasts/previous-sends';
 import { sendHoldReasonSchema } from '../compliance/send-window';
+import { calendarDaySchema } from '../sales-docs/input-guards';
 import { senderBreakdownLineSchema } from './sender-split';
 import {
   composeSenderSchema,
@@ -19,7 +20,7 @@ import {
 /** What the campaign screens read: the list with its tiles, the builder's pickers, the detail page and its tabs. */
 
 export const CAMPAIGN_PAGE_SIZE = 12;
-export const CAMPAIGN_RANGES = ['all', '7d', '30d', '90d'] as const;
+export const CAMPAIGN_RANGES = ['all', '7d', '30d', '90d', 'custom'] as const;
 /** Reference's sidebar types: `text` stands for text, custom, media and button. */
 export const CAMPAIGN_TYPE_FILTERS = ['all', 'text', 'template', 'flow'] as const;
 export const CAMPAIGN_STATUS_VIEWS = [
@@ -46,6 +47,9 @@ export const listCampaignsQuerySchema = z.object({
   status: z.enum(CAMPAIGN_STATUS_VIEWS).default('all'),
   type: z.enum(CAMPAIGN_TYPE_FILTERS).default('all'),
   range: z.enum(CAMPAIGN_RANGES).default('all'),
+  /** `range=custom` only: the first and the last day of the window (workspace days, both included); a missing side is open. */
+  from: calendarDaySchema.optional(),
+  to: calendarDaySchema.optional(),
   q: z.string().trim().max(191).default(''),
   page: z.coerce.number().int().min(1).default(1),
 });

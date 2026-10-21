@@ -7,16 +7,34 @@ import {
   ICS_FEED_FETCHER,
   MicrosoftCalendarClient,
 } from '../../infra/providers/appointments-booking';
+import { UploadPolicyService } from '../auth';
 import { ContactConsentModule } from '../contact-consent';
 import { CrmModule } from '../crm';
+import { MessageTemplatesModule } from '../message-templates';
 import { PlansCoreModule } from '../plans-subscriptions-trials';
 import { PlatformSettingsModule } from '../platform-settings-branding-storage';
 import { AppointmentsController, ContactAppointmentsController } from './appointments.controller';
+import {
+  AppointmentChannelsController,
+  AppointmentTemplatesController,
+} from './appointment-channels.controller';
+import { AppointmentChannelsRepository } from './appointment-channels.repository';
+import { AppointmentChannelsService } from './appointment-channels.service';
+import { AppointmentTemplatesService } from './appointment-templates.service';
 import { AppointmentRemindersRepository } from './appointment-reminders.repository';
 import { AppointmentsRepository } from './appointments.repository';
+import {
+  ReminderPacksController,
+  ReminderReportController,
+  ReminderTestSendController,
+} from './reminder-sequence.controller';
+import { ReminderPacksService } from './reminder-packs.service';
+import { ReminderReportService } from './reminder-report.service';
+import { ReminderTestSendService } from './reminder-test-send';
 import { AppointmentsService } from './appointments.service';
 import { AppointmentCalendarSyncService } from './appointment-calendar-sync.service';
 import { AppointmentCalendarWriter } from './appointment-calendar-writer.service';
+import { MeetingCalendarGateway } from './meeting-calendar.gateway';
 import { AppointmentMeetingMirror } from './appointment-meeting-mirror.service';
 import { AppointmentsSupport } from './appointments.support';
 import { AppointmentBookingGuard, AppointmentPlan } from './booking-plan';
@@ -61,9 +79,17 @@ import {
 import { MicrosoftCalendarTokens } from './microsoft-calendar-tokens.service';
 import { MultiCalendarAdapter } from './multi-calendar.adapter';
 import {
+  PublicBookingAssetsController,
   PublicBookingController,
   PublicBookingManageController,
 } from './public-booking.controller';
+import { BookingPageThemesCache } from './booking-page-themes.cache';
+import {
+  BookingPageThemeController,
+  BookingTypePageThemeController,
+} from './booking-page-themes.controller';
+import { BookingPageThemesRepository } from './booking-page-themes.repository';
+import { BookingPageThemesService } from './booking-page-themes.service';
 import { PublicBookingService } from './public-booking.service';
 import { BookingPublicThrottle } from './public-throttle';
 import { SlotsService } from './slots.service';
@@ -82,15 +108,33 @@ import { SlotsService } from './slots.service';
 @Module({
   // CrmModule: contacts (find-or-create by phone and email). PlansCoreModule: the `appointment_booking` flag and the `appointments` cap.
   // PlatformSettingsModule: the operator's Google and Microsoft OAuth clients (console, Google Calendar / Microsoft Calendar).
-  imports: [ContactConsentModule, CrmModule, PlansCoreModule, PlatformSettingsModule],
+  // MessageTemplatesModule: the appointment message library creates and submits its WhatsApp templates through the template library.
+  imports: [
+    ContactConsentModule,
+    CrmModule,
+    MessageTemplatesModule,
+    PlansCoreModule,
+    PlatformSettingsModule,
+  ],
   controllers: [
     // `booking-types/options`, `preview-slots` and `appointments/counts`, `calendar` are literal paths declared before `:id` inside
     // their controllers. The public controllers are unauthenticated (a public page, a bearer token).
     BookingTypesController,
+    // `appointment-channels` and `appointment-message-templates` (BL-350, BL-351).
+    AppointmentChannelsController,
+    AppointmentTemplatesController,
+    // Reminder packs, the email test of a step and the delivery report (BL-424, BL-425, BL-429).
+    ReminderPacksController,
+    ReminderReportController,
+    ReminderTestSendController,
     AppointmentsController,
     ContactAppointmentsController,
     PublicBookingController,
     PublicBookingManageController,
+    PublicBookingAssetsController,
+    // The booking page's look (BL-355..358): the workspace theme and one service's override.
+    BookingPageThemeController,
+    BookingTypePageThemeController,
     // `appointments/calendar/google/...` (staff) and the public OAuth callback.
     GoogleCalendarController,
     GoogleCalendarCallbackController,
@@ -110,6 +154,12 @@ import { SlotsService } from './slots.service';
     BookingTypesRepository,
     AppointmentsRepository,
     AppointmentRemindersRepository,
+    AppointmentChannelsRepository,
+    AppointmentChannelsService,
+    AppointmentTemplatesService,
+    ReminderPacksService,
+    ReminderReportService,
+    ReminderTestSendService,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentCalendarSyncService,
@@ -122,6 +172,10 @@ import { SlotsService } from './slots.service';
     ContactLinkService,
     PublicBookingService,
     BookingPublicThrottle,
+    BookingPageThemesRepository,
+    BookingPageThemesCache,
+    BookingPageThemesService,
+    UploadPolicyService,
     BookingOffersService,
     GoogleCalendarClient,
     GoogleCalendarConfig,
@@ -138,6 +192,7 @@ import { SlotsService } from './slots.service';
     MicrosoftCalendarAdapter,
     MicrosoftCalendarConnectService,
     CalendarProviders,
+    MeetingCalendarGateway,
     CalendarBackfillService,
     CalendarBackfillQueue,
     CalendarOverviewService,
@@ -157,6 +212,8 @@ import { SlotsService } from './slots.service';
     BookingTypesRepository,
     AppointmentsRepository,
     AppointmentRemindersRepository,
+    // The worker's sender asks the owner's channel choice before it sends.
+    AppointmentChannelsRepository,
     AppointmentsSupport,
     AppointmentCalendarWriter,
     AppointmentMeetingMirror,
@@ -168,6 +225,8 @@ import { SlotsService } from './slots.service';
     GoogleCalendarTokens,
     GoogleCalendarConnectionRepository,
     CalendarProviders,
+    // A contact's meeting uses the workspace's connected calendar through this seam (BL-362).
+    MeetingCalendarGateway,
     CalendarBackfillQueue,
     // The worker's back-fill job runs it.
     CalendarBackfillService,

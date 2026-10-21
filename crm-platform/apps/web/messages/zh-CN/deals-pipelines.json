@@ -128,7 +128,9 @@
         "list": "列表"
       },
       "reports": "报表",
-      "settings": "管道设置"
+      "settings": "管道设置",
+      "team": "团队",
+      "allTeams": "所有团队"
     },
     "kpi": {
       "openPipeline": "进行中的管道",

@@ -208,8 +208,8 @@ export const REGISTRY: RegistryEntry[] = [
   ),
   m(
     'faq_variations',
-    ['keyword_replies', 'faqs', 'faq_variations', 'faq_settings'],
-    'extra FAQ phrases of a journey -> keyword_replies (reply_type flow, status FALSE, no contents, matching exact), one row per 255 characters of comma-joined phrases. A journey inside a flow cannot be addressed: the reply starts the whole flow (QID_NOT_ADDRESSABLE). SECOND CONSUMER of the same collection: the derived step faq_knowledge (own id_map collection, virtual, like flow_bots) builds the FAQ-feature rows from these phrases plus the question and answer in the Intent / FAQ records -> faqs (PAUSED) + faq_variations (source import, embedding pending) + faq_settings (enabled false). The registry model has one handler per collection, so only faq_replies is named here',
+    ['keyword_replies', 'ai_training_sources'],
+    'extra FAQ phrases of a journey -> keyword_replies (reply_type flow, status FALSE, no contents, matching exact), one row per 255 characters of comma-joined phrases. A journey inside a flow cannot be addressed: the reply starts the whole flow (QID_NOT_ADDRESSABLE). SECOND CONSUMER of the same collection: the derived step faq_knowledge (own id_map collection, virtual, like flow_bots) builds the knowledge-base entry from these phrases plus the question and answer in the Intent / FAQ records -> ONE text entry labelled FAQ per AI agent in ai_training_sources (ADR-0021 addendum 3; the faq_* tables are retired), a flow answer is not carried (FLOW_ANSWER_NOT_CARRIED). The registry model has one handler per collection, so only faq_replies is named here',
     'faq_replies',
   ),
   m(
@@ -295,7 +295,7 @@ export const REGISTRY: RegistryEntry[] = [
   m(
     'automation_metadata',
     ['flows'],
-    'advanced flows (one document per automation, node map + UI layout): one flows row per automation (category "Waboo automation"), converted by automation/convert.ts. Nodes WaDesk has no equivalent for become inert placeholders that keep their type and scrubbed config; every loss is a counted soft issue. is_published false AND is_active false, always (nothing is armed). Latest document per automationId; empty drafts excluded NO_NODES. Manager to confirm automations are in scope (spec C Q4)',
+    'advanced flows (one document per automation, node map + UI layout): one flows row per automation (category "Waboo automation"), converted by automation/convert.ts. Nodes WaDesk has no equivalent for become inert placeholders that keep their type and scrubbed config; every loss is a counted soft issue. is_published false AND is_active false, always (nothing is armed). Latest document per automationId; an empty draft (no nodes) is loaded as an empty flow with a manual_enroll trigger. Manager to confirm automations are in scope (spec C Q4)',
     'automation_flows',
   ),
   m(
@@ -452,7 +452,7 @@ export const REGISTRY: RegistryEntry[] = [
   // --- real data with no table in crm-platform --------------------------------------------------------------------------------------
   gap(
     'contact_task_config',
-    'task/reminder action configuration; no matching table. no team decision: ask manager',
+    'task configuration: the task_outcomes document is carried by core-load into task_outcomes (core-opening.cjs reads it from the tenant database); the priority, type and reminder documents have no table in crm-platform',
   ),
 ];
 

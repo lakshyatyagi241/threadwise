@@ -44,7 +44,8 @@
       "notDeletable": "Không thể xóa khi còn các lịch đặt sắp tới.",
       "notDrifted": "Lịch hẹn này đã khớp với sự kiện trên Google. Dữ liệu đã được tải lại.",
       "calendarNotConnected": "Google Calendar chưa được kết nối. Hãy kết nối lại tại trang tài khoản Google rồi thử lại.",
-      "calendarFailed": "Google không phản hồi hoặc đã từ chối thay đổi. Vui lòng thử lại sau giây lát."
+      "calendarFailed": "Google không phản hồi hoặc đã từ chối thay đổi. Vui lòng thử lại sau giây lát.",
+      "whatsappNotConnected": "Hãy kết nối trước một số WhatsApp Cloud API trong Cài đặt: tin nhắn WhatsApp được gửi qua số đó."
     },
     "picker": {
       "timeZone": "Múi giờ",
@@ -1306,7 +1307,8 @@
       },
       "kind": {
         "before": "trước khi cuộc hẹn bắt đầu",
-        "after": "sau khi cuộc hẹn kết thúc"
+        "after": "sau khi cuộc hẹn kết thúc",
+        "event": "khi có sự việc xảy ra"
       },
       "editMessage": "Tin nhắn và kênh",
       "hideMessage": "Ẩn",
@@ -1316,7 +1318,6 @@
       "channelsHint": "Kênh đầu tiên có thể gửi được sẽ được dùng, các kênh sau là dự phòng. Không ai nhận cùng một lời nhắc hai lần.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Email"
       },
       "moveUp": "Thử {channel} sớm hơn",
@@ -1375,7 +1376,8 @@
         "bodyTooLong": "Tin nhắn quá dài.",
         "subjectTooLong": "Tiêu đề quá dài.",
         "labelTooLong": "Nhãn quá dài.",
-        "tooMany": "Tối đa 8 lời nhắc và tin nhắn theo dõi cho một loại lịch hẹn."
+        "tooMany": "Tối đa {max} nhắc hẹn và tin theo dõi có thời gian cho mỗi loại lịch hẹn.",
+        "fallbackInvalid": "Nhập số phút nguyên từ {min} đến {maxMinutes}, hoặc để trống."
       },
       "noneOn": "Loại lịch hẹn này chưa bật lời nhắc hay tin nhắn theo dõi nào.",
       "when": {
@@ -1422,7 +1424,18 @@
         "provider_error": "Nhà cung cấp đã từ chối.",
         "interrupted": "Bị gián đoạn và không thử lại.",
         "internal_error": "Đã xảy ra lỗi."
-      }
+      },
+      "steps": {
+        "confirmation": "Xác nhận đặt lịch",
+        "no_show": "Tin nhắn vắng mặt"
+      },
+      "notice": {
+        "smsRemoved": "Nhắc hẹn qua SMS đã bị gỡ bỏ. Bước này đã được chuyển sang email (hoặc tắt); hãy chọn WhatsApp hoặc Email."
+      },
+      "buttonsTitle": "Thêm các nút Xác nhận, Đổi lịch và Hủy (WhatsApp)",
+      "skipIfConfirmed": "Bỏ qua nếu khách đã xác nhận",
+      "fallbackTitle": "Nếu chưa gửi được, thử kênh tiếp theo sau (phút)",
+      "fallbackHint": "Để trống để tắt. Từ {min} đến {maxMinutes} phút."
     }
   }
 }

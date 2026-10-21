@@ -23,11 +23,12 @@ describe('quick access (TW-DASH-009)', () => {
     expect((await api.http().get('/v2/quick-access')).status).toBe(401);
   });
 
-  it('never customised: the ten default tiles', async () => {
+  it('never customised: the nine default tiles (no Broadcasts, it lives under Campaigns)', async () => {
     const res = await api.as(a.admin).get('/v2/quick-access');
     expect(res.status).toBe(200);
     const body = quickAccessResponseSchema.parse(res.body);
-    expect(body.tiles).toHaveLength(10);
+    expect(body.tiles).toHaveLength(9);
+    expect(body.tiles.map((t) => t.key)).not.toContain('broadcasts');
     expect(body.tiles[0]).toMatchObject({ key: 'inbox', url: '/inbox', custom: false });
   });
 
@@ -62,7 +63,7 @@ describe('quick access (TW-DASH-009)', () => {
     const body = quickAccessResponseSchema.parse(
       (await api.as(a.admin).get('/v2/quick-access')).body,
     );
-    expect(body.tiles).toHaveLength(10);
+    expect(body.tiles).toHaveLength(9);
     expect(body.tiles[0]!.key).toBe('inbox');
   });
 
@@ -78,6 +79,6 @@ describe('quick access (TW-DASH-009)', () => {
       (await api.as(b.admin).get('/v2/quick-access')).body,
     );
     expect(mine.tiles).toHaveLength(1);
-    expect(theirs.tiles).toHaveLength(10);
+    expect(theirs.tiles).toHaveLength(9);
   });
 });

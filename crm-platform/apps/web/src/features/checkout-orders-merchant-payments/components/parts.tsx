@@ -4,10 +4,8 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { useEffect, useId, useRef, type ComponentProps, type ReactNode } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { storeOverviewSchema } from '@crm/contracts';
 import { Alert, Button, EmptyState, Spinner, cn } from '@crm/ui';
-import { apiFetch } from '@/lib/api/client';
+import { useStoreOverview } from '@/features/storefront-builder';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { errorKind } from '../lib/errors';
 import { TONE_CLASS, orderTone, paymentTone, type Tone } from '../lib/status';
@@ -22,17 +20,7 @@ export function useShopParam(): string | undefined {
  * request). Used for the shop pickers (gateway scope, coupon scope, orders shop filter) and the shop's currency.
  */
 export function useStoreShops(shopParam: string | undefined) {
-  return useQuery({
-    queryKey: ['store', 'overview', shopParam ?? ''],
-    queryFn: ({ signal }) =>
-      apiFetch('/store/overview', {
-        query: { shopId: shopParam },
-        schema: storeOverviewSchema,
-        signal,
-      }),
-    retry: false,
-    staleTime: 15_000,
-  });
+  return useStoreOverview(shopParam);
 }
 
 /** The caller's permissions on one resource of the store, by action: `can('manage')` is `store.<resource>.manage`. */

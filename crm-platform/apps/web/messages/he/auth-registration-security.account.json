@@ -561,7 +561,10 @@
             "personal_history_full": "ייבוא היסטוריה מלאה (WhatsApp אישי)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "דירוג לידים באמצעות AI",
-            "record_assignment": "כללי הקצאת רשומות"
+            "record_assignment": "כללי הקצאת רשומות",
+            "team_hierarchy": "היררכיית צוותים ומנהלים",
+            "custom_roles": "תפקידים מותאמים וטווחים",
+            "inbox_assignment_sticky": "בעלים של איש קשר ונציג קבוע"
           },
           "cta": {
             "continueFree": "המשך בחינם",

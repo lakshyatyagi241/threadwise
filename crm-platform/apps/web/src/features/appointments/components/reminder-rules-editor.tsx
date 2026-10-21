@@ -1,41 +1,32 @@
 'use client';
 
-import { useLocale, useTranslations } from 'next-intl';
-import { useId, useRef, useState } from 'react';
-import { Alert, Button, Input, Select, Switch, Textarea, cn } from '@crm/ui';
+import Link from 'next/link';
+import { useTranslations } from 'next-intl';
+import { useId, useState } from 'react';
+import type { AppointmentChannelState, AppointmentTemplate } from '@crm/contracts';
+import { Alert, Button, Input, Select, Switch, cn } from '@crm/ui';
 import type { WaTemplateOption } from '../api/schemas';
-import { insertAtRange } from '../lib/editor';
+import { usableChannels } from '../lib/channel-availability';
 import {
   QUICK_FOLLOW_UPS,
   QUICK_REMINDERS,
-  REMINDER_BODY_MAX,
   REMINDER_CHANNELS,
-  REMINDER_LABEL_MAX,
   REMINDER_MAX_RULES,
-  REMINDER_PLACEHOLDERS,
-  REMINDER_SUBJECT_MAX,
   REMINDER_UNITS,
-  STANDARD_TEXT,
   addReminder,
   minutesOf,
-  moveChannel,
   newReminder,
-  previewOf,
-  toggleChannel,
-  type PreviewSample,
-  type ReminderChannel,
+  timedCount,
   type ReminderDraft,
   type ReminderKind,
   type ReminderUnit,
 } from '../lib/reminder-rules';
 import { chipClass, iconButtonClass } from './editor-shared';
-import { BellIcon, ChevronDownIcon, MinusIcon, PlusIcon } from './icons';
+import { ChevronDownIcon, MinusIcon, PlusIcon } from './icons';
+import { StepDetails } from './reminder-step-parts';
 
 const QUICK_KEYS: Record<number, string> = { 1440: 'h24', 180: 'h3', 60: 'h1', 15: 'm15' };
 const FOLLOW_KEYS: Record<number, string> = { 120: 'after2h', 1440: 'afterDay' };
-
-/** The placeholder tokens as literal text (a value is never read as message syntax). */
-const token = (name: string): string => `{{${name}}}`;
 
 export interface ReminderRulesEditorProps {
   rules: readonly ReminderDraft[];
@@ -47,6 +38,14 @@ export interface ReminderRulesEditorProps {
   typeName: string;
   /** Approved WhatsApp templates to pick from. */
   templates?: readonly WaTemplateOption[];
+  /**
+   * What the workspace owner allows (BL-350). A channel that is off or not connected cannot be added to a rule, a new rule starts with the
+   * usable ones, and a rule with no usable channel cannot be switched on. Left out = every channel is offered (the API still refuses one
+   * that is off).
+   */
+  channelStates?: readonly AppointmentChannelState[];
+  /** The appointment message library (BL-351): an email message can be copied into a rule. */
+  library?: readonly AppointmentTemplate[];
   /** Makes element ids unique when several editors are on one page. */
   idPrefix?: string;
 }
@@ -64,15 +63,15 @@ export function ReminderRulesEditor({
   errorOf,
   typeName,
   templates = [],
+  channelStates,
+  library = [],
   idPrefix,
 }: ReminderRulesEditorProps) {
   const t = useTranslations('appointments.reminders');
-  const locale = useLocale();
   const auto = useId();
   const prefix = idPrefix ?? auto;
-  const full = rules.length >= REMINDER_MAX_RULES;
+  const full = timedCount(rules) >= REMINDER_MAX_RULES;
   const [open, setOpen] = useState<ReadonlySet<string>>(new Set());
-  const refs = useRef<Record<string, HTMLTextAreaElement | null>>({});
 
   const patch = (id: string, change: Partial<ReminderDraft>) =>
     onChange(rules.map((r) => (r.id === id ? { ...r, ...change } : r)));
@@ -84,53 +83,22 @@ export function ReminderRulesEditor({
       else next.add(id);
       return next;
     });
+  const usableNow = usableChannels(channelStates, REMINDER_CHANNELS);
   const add = (
     fn: () => ReminderDraft[],
     opened?: (next: ReminderDraft[]) => string | undefined,
   ) => {
-    const next = fn();
+    const before = new Set(rules.map((r) => r.id));
+    // A rule that is new starts with the channels the owner allows, so switching it on is never refused for a channel nobody chose.
+    const next = fn().map((r) =>
+      before.has(r.id) || usableNow.length === 0 || channelStates === undefined
+        ? r
+        : { ...r, channels: r.channels.filter((c) => usableNow.includes(c)) },
+    );
     onChange(next);
     const id = opened?.(next);
     if (id) setOpen((cur) => new Set(cur).add(id));
   };
-
-  const sample = (): PreviewSample => {
-    const when = new Date(Date.UTC(2030, 0, 15, 10, 0, 0));
-    const date = new Intl.DateTimeFormat(locale, {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      timeZone: 'UTC',
-    }).format(when);
-    const time = new Intl.DateTimeFormat(locale, {
-      hour: 'numeric',
-      minute: '2-digit',
-      timeZone: 'UTC',
-    }).format(when);
-    return {
-      name: t('sample.name'),
-      type: typeName.trim() || t('sample.type'),
-      slot: `${date} · ${time}`,
-      date,
-      time,
-      location: t('sample.location'),
-      join_link: 'https://meet.example.com/abc-defg',
-      manage_link: 'https://example.com/manage/xyz',
-    };
-  };
-
-  function insert(rule: ReminderDraft, name: string) {
-    const el = refs.current[rule.id];
-    const start = el?.selectionStart ?? rule.body.length;
-    const end = el?.selectionEnd ?? rule.body.length;
-    const result = insertAtRange(rule.body, token(name), start, end, REMINDER_BODY_MAX);
-    if (!result) return;
-    patch(rule.id, { body: result.text });
-    window.requestAnimationFrame(() => {
-      el?.focus();
-      el?.setSelectionRange(result.caret, result.caret);
-    });
-  }
 
   const used = new Set(
     rules.flatMap((r) => {
@@ -139,7 +107,6 @@ export function ReminderRulesEditor({
     }),
   );
   const listError = errorOf?.('reminders');
-
   return (
     <div className="space-y-3">
       <div className="flex flex-wrap items-center gap-2" role="group" aria-label={t('quickAdd')}>
@@ -203,8 +170,6 @@ export function ReminderRulesEditor({
             const error = errorOf?.(`reminder:${r.id}`);
             const expanded = open.has(r.id);
             const detailsId = `${prefix}-details-${r.id}`;
-            const text = previewOf(r, sample());
-            const usesEmail = r.channels.includes('email');
             const usesWhatsapp = r.channels.includes('whatsapp');
             return (
               <li
@@ -218,9 +183,21 @@ export function ReminderRulesEditor({
                   <Switch
                     id={`${prefix}-on-${r.id}`}
                     checked={r.enabled}
-                    disabled={disabled}
+                    disabled={
+                      disabled || (!r.enabled && !r.channels.some((c) => usableNow.includes(c)))
+                    }
                     label={t('enabledOf', { n })}
-                    onCheckedChange={(on) => patch(r.id, { enabled: on })}
+                    onCheckedChange={(on) =>
+                      patch(
+                        r.id,
+                        on && channelStates !== undefined
+                          ? {
+                              enabled: true,
+                              channels: r.channels.filter((c) => usableNow.includes(c)),
+                            }
+                          : { enabled: on },
+                      )
+                    }
                   />
                   <span
                     className={cn(
@@ -230,41 +207,50 @@ export function ReminderRulesEditor({
                   >
                     {r.enabled ? t('on') : t('off')}
                   </span>
-                  <Input
-                    id={`${prefix}-offset-${r.id}`}
-                    value={r.offset}
-                    invalid={!!error}
-                    disabled={disabled}
-                    inputMode="numeric"
-                    dir="ltr"
-                    placeholder="1"
-                    aria-label={t('offsetOf', { n })}
-                    onChange={(e) => patch(r.id, { offset: e.target.value })}
-                    className="w-20 tabular-nums"
-                  />
-                  <Select
-                    value={r.unit}
-                    disabled={disabled}
-                    aria-label={t('unitOf', { n })}
-                    onChange={(e) => patch(r.id, { unit: e.target.value as ReminderUnit })}
-                    className="w-28"
-                  >
-                    {REMINDER_UNITS.map((u) => (
-                      <option key={u} value={u}>
-                        {t(`units.${u}`)}
-                      </option>
-                    ))}
-                  </Select>
-                  <Select
-                    value={r.kind}
-                    disabled={disabled}
-                    aria-label={t('kindOf', { n })}
-                    onChange={(e) => patch(r.id, { kind: e.target.value as ReminderKind })}
-                    className="w-56 max-w-full"
-                  >
-                    <option value="before">{t('kind.before')}</option>
-                    <option value="after">{t('kind.after')}</option>
-                  </Select>
+                  {r.kind === 'event' ? (
+                    <span className="text-sm font-medium">
+                      {t(`steps.${r.stepKind}`)}{' '}
+                      <span className="font-normal text-muted-foreground">{t('kind.event')}</span>
+                    </span>
+                  ) : (
+                    <>
+                      <Input
+                        id={`${prefix}-offset-${r.id}`}
+                        value={r.offset}
+                        invalid={!!error}
+                        disabled={disabled}
+                        inputMode="numeric"
+                        dir="ltr"
+                        placeholder="1"
+                        aria-label={t('offsetOf', { n })}
+                        onChange={(e) => patch(r.id, { offset: e.target.value })}
+                        className="w-20 tabular-nums"
+                      />
+                      <Select
+                        value={r.unit}
+                        disabled={disabled}
+                        aria-label={t('unitOf', { n })}
+                        onChange={(e) => patch(r.id, { unit: e.target.value as ReminderUnit })}
+                        className="w-28"
+                      >
+                        {REMINDER_UNITS.map((u) => (
+                          <option key={u} value={u}>
+                            {t(`units.${u}`)}
+                          </option>
+                        ))}
+                      </Select>
+                      <Select
+                        value={r.kind}
+                        disabled={disabled}
+                        aria-label={t('kindOf', { n })}
+                        onChange={(e) => patch(r.id, { kind: e.target.value as ReminderKind })}
+                        className="w-56 max-w-full"
+                      >
+                        <option value="before">{t('kind.before')}</option>
+                        <option value="after">{t('kind.after')}</option>
+                      </Select>
+                    </>
+                  )}
                   <div className="ms-auto flex items-center gap-1">
                     <button
                       type="button"
@@ -288,204 +274,47 @@ export function ReminderRulesEditor({
                     </button>
                   </div>
                 </div>
+                {r.notice === 'sms_removed' && (
+                  <Alert tone="warning" className="mt-2 text-xs">
+                    {t('notice.smsRemoved')}
+                  </Alert>
+                )}
                 {error && (
                   <p role="alert" className="mt-1 text-xs text-danger">
                     {error}
                   </p>
                 )}
+                {!r.enabled &&
+                  channelStates !== undefined &&
+                  !r.channels.some((c) => usableNow.includes(c)) && (
+                    <p className="mt-1 text-xs text-warning">
+                      {t('noUsableChannel')}{' '}
+                      <Link
+                        href="/appointments/settings#channels"
+                        className="font-medium underline"
+                      >
+                        {t('openChannels')}
+                      </Link>
+                    </p>
+                  )}
                 <p className="mt-2 text-xs text-muted-foreground">
                   {r.channels.map((c) => t(`channels.${c}`)).join(' › ')}
                   {r.waTemplateId && usesWhatsapp ? ` · ${t('withTemplate')}` : ''}
                 </p>
 
                 {expanded && (
-                  <div id={detailsId} className="mt-3 space-y-4 border-t border-border pt-3">
-                    <fieldset className="space-y-1.5">
-                      <legend className="text-xs font-medium">{t('channelsTitle')}</legend>
-                      <p className="text-xs text-muted-foreground">{t('channelsHint')}</p>
-                      <ul className="space-y-1">
-                        {r.channels.map((c, ci) => (
-                          <li
-                            key={c}
-                            className="flex items-center gap-2 rounded-md border border-border px-2 py-1"
-                          >
-                            <span
-                              aria-hidden="true"
-                              className="flex size-5 items-center justify-center rounded-full bg-muted text-[11px] font-semibold tabular-nums"
-                            >
-                              {ci + 1}
-                            </span>
-                            <span className="flex-1 text-sm">{t(`channels.${c}`)}</span>
-                            <button
-                              type="button"
-                              disabled={disabled || ci === 0}
-                              onClick={() =>
-                                patch(r.id, { channels: moveChannel(r.channels, ci, -1) })
-                              }
-                              aria-label={t('moveUp', { channel: t(`channels.${c}`) })}
-                              title={t('moveUp', { channel: t(`channels.${c}`) })}
-                              className={iconButtonClass}
-                            >
-                              <ChevronDownIcon className="rotate-180" />
-                            </button>
-                            <button
-                              type="button"
-                              disabled={disabled || ci === r.channels.length - 1}
-                              onClick={() =>
-                                patch(r.id, { channels: moveChannel(r.channels, ci, 1) })
-                              }
-                              aria-label={t('moveDown', { channel: t(`channels.${c}`) })}
-                              title={t('moveDown', { channel: t(`channels.${c}`) })}
-                              className={iconButtonClass}
-                            >
-                              <ChevronDownIcon />
-                            </button>
-                            <button
-                              type="button"
-                              disabled={disabled || r.channels.length <= 1}
-                              onClick={() =>
-                                patch(r.id, { channels: toggleChannel(r.channels, c) })
-                              }
-                              aria-label={t('removeChannel', { channel: t(`channels.${c}`) })}
-                              title={t('removeChannel', { channel: t(`channels.${c}`) })}
-                              className={cn(iconButtonClass, 'hover:text-danger')}
-                            >
-                              <MinusIcon />
-                            </button>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="flex flex-wrap gap-2">
-                        {REMINDER_CHANNELS.filter((c) => !r.channels.includes(c)).map(
-                          (c: ReminderChannel) => (
-                            <button
-                              key={c}
-                              type="button"
-                              disabled={disabled}
-                              onClick={() =>
-                                patch(r.id, { channels: toggleChannel(r.channels, c) })
-                              }
-                              className={chipClass}
-                            >
-                              <PlusIcon className="size-3" /> {t(`channels.${c}`)}
-                            </button>
-                          ),
-                        )}
-                      </div>
-                    </fieldset>
-
-                    <div className="space-y-1.5">
-                      <label htmlFor={`${prefix}-body-${r.id}`} className="text-xs font-medium">
-                        {t('messageTitle')}
-                      </label>
-                      <div className="flex flex-wrap gap-1.5">
-                        {REMINDER_PLACEHOLDERS.map((p) => (
-                          <button
-                            key={p}
-                            type="button"
-                            disabled={disabled}
-                            onMouseDown={(e) => e.preventDefault()}
-                            onClick={() => insert(r, p)}
-                            title={t(`placeholderMeaning.${p}`)}
-                            className={cn(chipClass, 'h-7 font-mono')}
-                          >
-                            {token(p)}
-                          </button>
-                        ))}
-                      </div>
-                      <Textarea
-                        id={`${prefix}-body-${r.id}`}
-                        ref={(el) => {
-                          refs.current[r.id] = el;
-                        }}
-                        rows={4}
-                        value={r.body}
-                        maxLength={REMINDER_BODY_MAX}
-                        disabled={disabled}
-                        placeholder={STANDARD_TEXT[r.kind]}
-                        onChange={(e) => patch(r.id, { body: e.target.value })}
-                      />
-                      <div className="flex items-start justify-between gap-2 text-xs text-muted-foreground">
-                        <span>
-                          {r.kind === 'before' ? t('bodyHintBefore') : t('bodyHintAfter')}
-                        </span>
-                        <span className="tabular-nums" dir="ltr">
-                          {r.body.length} / {REMINDER_BODY_MAX}
-                        </span>
-                      </div>
-                    </div>
-
-                    {usesEmail && (
-                      <div className="space-y-1.5">
-                        <label
-                          htmlFor={`${prefix}-subject-${r.id}`}
-                          className="text-xs font-medium"
-                        >
-                          {t('subjectTitle')}
-                        </label>
-                        <Input
-                          id={`${prefix}-subject-${r.id}`}
-                          value={r.subject}
-                          maxLength={REMINDER_SUBJECT_MAX}
-                          disabled={disabled}
-                          placeholder={t('subjectPlaceholder')}
-                          onChange={(e) => patch(r.id, { subject: e.target.value })}
-                        />
-                      </div>
-                    )}
-
-                    {usesWhatsapp && (
-                      <div className="space-y-1.5">
-                        <label
-                          htmlFor={`${prefix}-template-${r.id}`}
-                          className="text-xs font-medium"
-                        >
-                          {t('templateTitle')}
-                        </label>
-                        <Select
-                          id={`${prefix}-template-${r.id}`}
-                          value={r.waTemplateId}
-                          disabled={disabled}
-                          onChange={(e) => patch(r.id, { waTemplateId: e.target.value })}
-                        >
-                          <option value="">{t('templateNone')}</option>
-                          {r.waTemplateId !== '' &&
-                            !templates.some((x) => x.id === r.waTemplateId) && (
-                              <option value={r.waTemplateId}>{t('templateUnknown')}</option>
-                            )}
-                          {templates.map((x) => (
-                            <option key={x.id} value={x.id}>
-                              {x.name} ({x.language})
-                            </option>
-                          ))}
-                        </Select>
-                        <p className="text-xs text-muted-foreground">{t('templateHint')}</p>
-                      </div>
-                    )}
-
-                    <div className="space-y-1.5">
-                      <label htmlFor={`${prefix}-label-${r.id}`} className="text-xs font-medium">
-                        {t('labelTitle')}
-                      </label>
-                      <Input
-                        id={`${prefix}-label-${r.id}`}
-                        value={r.label}
-                        maxLength={REMINDER_LABEL_MAX}
-                        disabled={disabled}
-                        placeholder={t('labelPlaceholder')}
-                        onChange={(e) => patch(r.id, { label: e.target.value })}
-                        className="max-w-xs"
-                      />
-                    </div>
-
-                    <div className="rounded-md bg-muted/50 p-3">
-                      <div className="flex items-center gap-1.5 text-xs font-medium">
-                        <BellIcon className="size-3.5" /> {t('previewTitle')}
-                      </div>
-                      <p className="mt-1.5 whitespace-pre-wrap break-words text-sm">{text}</p>
-                      <p className="mt-1.5 text-xs text-muted-foreground">{t('previewNote')}</p>
-                    </div>
-                  </div>
+                  <StepDetails
+                    id={detailsId}
+                    rule={r}
+                    patch={(change) => patch(r.id, change)}
+                    prefix={prefix}
+                    disabled={disabled}
+                    typeName={typeName}
+                    templates={templates}
+                    channelStates={channelStates}
+                    library={library}
+                    withOptions
+                  />
                 )}
               </li>
             );
@@ -494,7 +323,7 @@ export function ReminderRulesEditor({
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-        <span>{t('count', { count: rules.length, max: REMINDER_MAX_RULES })}</span>
+        <span>{t('count', { count: timedCount(rules), max: REMINDER_MAX_RULES })}</span>
         {listError && (
           <span role="alert" className="text-danger">
             {listError}

@@ -92,7 +92,8 @@
         "contact": "Kontakt",
         "deal": "Szansa sprzedaży",
         "created": "Utworzono",
-        "completed": "Ukończono"
+        "completed": "Ukończono",
+        "outcome": "Wynik"
       },
       "refresh": "Odśwież",
       "shortcuts": "Skróty klawiaturowe",
@@ -101,7 +102,11 @@
         "list": "Lista",
         "board": "Tablica wg terminu"
       },
-      "linkCompany": "Firma"
+      "linkCompany": "Firma",
+      "outcome": "Wynik",
+      "allOutcomes": "Wszystkie wyniki",
+      "team": "Zespół",
+      "allTeams": "Wszystkie zespoły"
     },
     "table": {
       "scrollArea": "Tabela zadań",
@@ -115,7 +120,8 @@
         "contact": "Kontakt",
         "deal": "Szansa sprzedaży",
         "created": "Utworzono",
-        "completed": "Ukończono"
+        "completed": "Ukończono",
+        "outcome": "Wynik"
       }
     },
     "row": {
@@ -205,9 +211,11 @@
         "titleTooLong": "Zadanie jest za długie (maksymalnie 255 znaków).",
         "notesTooLong": "Notatki są za długie (maksymalnie 5000 znaków).",
         "dueInvalid": "Ta data jest nieprawidłowa.",
-        "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej."
+        "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
+        "outcomeInvalid": "Ten wynik jest niedostępny. Wybierz jeden z listy."
       },
-      "company": "Firma"
+      "company": "Firma",
+      "outcome": "Wynik"
     },
     "drawer": {
       "loading": "Wczytywanie zadania",
@@ -236,7 +244,8 @@
       },
       "deleteTitle": "Usunąć to zadanie?",
       "deleteMessage": "„{title}” zostanie usunięte dla wszystkich. Tej operacji nie można cofnąć.",
-      "cancel": "Zachowaj"
+      "cancel": "Zachowaj",
+      "outcomeChip": "Wynik: {name}"
     },
     "board": {
       "buckets": {
@@ -286,7 +295,11 @@
       "planDisabled": "Twój plan nie obejmuje zadań. Ulepsz plan, aby je odblokować.",
       "assigneeInvalid": "Ta osoba nie jest aktywnym członkiem tej przestrzeni roboczej.",
       "unexpected": "Coś poszło nie tak. Spróbuj ponownie za chwilę.",
-      "retry": "Spróbuj ponownie"
+      "retry": "Spróbuj ponownie",
+      "outcomeInvalid": "Ten wynik jest niedostępny. Wybierz jeden z listy.",
+      "outcomeNameTaken": "Inny wynik ma już tę nazwę.",
+      "outcomeInUse": "Zadania nadal używają tego wyniku, więc nie można go usunąć. Ukryj go zamiast tego.",
+      "completionDisabled": "Kończenie zadań jest wyłączone w Aktywnościach sprzedażowych."
     },
     "toast": {
       "completed": "Zadanie ukończone.",
@@ -342,6 +355,28 @@
       "save": "Dodaj zadanie",
       "cancel": "Anuluj",
       "failed": "Nie udało się zapisać zadania. Wpisany tekst został przywrócony w polu."
+    },
+    "outcomes": {
+      "title": "Wyniki zadań",
+      "subtitle": "Wyniki wybierane podczas kończenia lub rejestrowania zadania, na przykład Zainteresowany lub Zostawiono wiadomość.",
+      "loading": "Wczytywanie wyników",
+      "empty": "Brak wyników. Dodaj pierwszy poniżej.",
+      "add": "Dodaj wynik",
+      "failed": "To się nie udało.",
+      "conflict": "Ktoś inny zmienił ten wynik. Listę wczytano ponownie. Spróbuj jeszcze raz.",
+      "saved": "Zapisano wynik.",
+      "deleted": "Usunięto wynik.",
+      "deleteTitle": "Usunąć {name}?",
+      "deleteMessage": "Wynik zostanie usunięty z listy. Żadne zadanie go nie używa.",
+      "delete": "Usuń",
+      "cancel": "Zachowaj",
+      "problems": {
+        "nameRequired": "Wpisz nazwę wyniku.",
+        "nameTooLong": "Nazwa jest za długa (maksymalnie 191 znaków)."
+      },
+      "none": "Brak wyniku",
+      "hiddenName": "{name} (ukryty)",
+      "completeWith": "Zakończ z wynikiem"
     }
   }
 }

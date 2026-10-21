@@ -1,6 +1,7 @@
 import { HttpStatus, Injectable, Logger } from '@nestjs/common';
-import { randomInt } from 'node:crypto';
+import { randomInt, randomUUID } from 'node:crypto';
 import { ConfigService } from '@nestjs/config';
+import { legacyValue, tokenHash } from '../../common/crypto/secret-columns';
 import { sql } from 'drizzle-orm';
 import {
   ERROR_CODES,
@@ -745,6 +746,21 @@ export class CheckoutService {
     };
   }
 
+  private async assertCouponUseFree(tx: Tx, couponId: number, key: string | null): Promise<void> {
+    await tx.execute(
+      sql`SELECT pg_advisory_xact_lock(hashtextextended(${`coupon-use:${couponId}`}, 0))`,
+    );
+    const { maxUses, taken } = await this.coupons.usesTaken(couponId, key);
+    if (maxUses === null || taken < maxUses) return;
+    const message = 'This coupon is fully used.';
+    throw new AppError(
+      ERROR_CODES.PAYGW_COUPON_REJECTED,
+      message,
+      HttpStatus.UNPROCESSABLE_ENTITY,
+      [{ path: 'coupon', message }],
+    );
+  }
+
   private async insertOrder(
     orgId: number,
     userId: number,
@@ -765,8 +781,12 @@ export class CheckoutService {
       const orderNumber = newOrderNumber(new Date(), (n) =>
         Array.from({ length: n }, () => 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[randomInt(32)]).join(''),
       );
+      const returnToken = randomUUID().replace(/-/g, '');
       try {
         return await this.db.tx(async (tx) => {
+          // One buyer at a time per coupon from here to the commit, so the last uses cannot be handed out twice (QA Sheet3 #15, D-06).
+          if (coupon?.ok && coupon.couponId !== null)
+            await this.assertCouponUseFree(tx, coupon.couponId, idempotencyKey ?? null);
           const order = await this.orders.insert(tx, {
             orgId,
             userId,
@@ -796,9 +816,11 @@ export class CheckoutService {
             idempotencyKey: idempotencyKey ?? null,
             couponId: coupon?.ok ? coupon.couponId : null,
             couponCode: coupon?.ok ? coupon.code : null,
+            returnToken: { plain: legacyValue(returnToken), hash: tokenHash(returnToken) },
           });
           await recordOrderEvent(tx, this.outbox, order, 'created', { gateway: gateway.slug });
-          return order;
+          // The return URL needs the token once, now; the row may hold only its hash.
+          return { ...order, returnToken };
         });
       } catch (err) {
         const e = err as { code?: string; constraint?: string };

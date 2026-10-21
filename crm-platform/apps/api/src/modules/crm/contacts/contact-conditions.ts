@@ -9,6 +9,7 @@ import {
   phoneDigits,
   tagsPredicate,
 } from './contact-predicates';
+import { scopeOwnerCondition } from '../../../kernel/rbac/scope';
 
 export { escapeLike };
 
@@ -40,13 +41,29 @@ export function minorCondition(isMinor: boolean): SQL {
   return isMinor ? exists : sql`NOT ${exists}`;
 }
 
-const { contacts, teamMembers } = schema;
+const { contacts } = schema;
 
 /**
  * The digits of a contact's phone, written exactly as idx_contacts_phone_digits is (and as the broadcast CSV match writes it), so
  * "+91 88751 37569", "+918875137569" and "918875137569" are one key and an equality on it can use the index.
  */
 export const contactPhoneDigits: SQL = sql`regexp_replace(coalesce(${contacts.normalizedPhone}, ${contacts.phone}, ''), ${NON_DIGIT}, '', 'g')`;
+
+/**
+ * When the contact was last heard from or answered: the stamp on the contact (moved by every chat message and by notes, meetings and
+ * files) or, when that is older or missing, the latest message of any of its conversations. A contact that came in through a migration
+ * has the conversations but not the stamp, so the list, the "Never contacted" / "Inactive" views and the segment rules read this
+ * instead of the bare column. GREATEST ignores a null, so either side alone is enough.
+ */
+export const contactLastActivity: SQL = sql`GREATEST(${contacts.lastActivityAt}, (
+  SELECT max(cv.last_message_at) FROM conversations cv WHERE cv.org_id = ${contacts.orgId} AND cv.contact_id = ${contacts.id}
+))`;
+
+/**
+ * "Subscribed" the way the list's WhatsApp opt-in column says it: the WhatsApp subscription label is "subscribed" and the contact has
+ * not opted out of marketing. A contact with no label recorded is not subscribed (the column shows No for it).
+ */
+export const whatsappSubscribedSql: SQL = sql`(lower(btrim(coalesce(${contacts.whatsappSubscriptionStatus}, ''))) = 'subscribed' AND NOT ${contacts.isUnsubscribed})`;
 
 /**
  * A contact filter with every uuid already turned into the internal id the SQL needs. Producing one
@@ -57,6 +74,8 @@ export const contactPhoneDigits: SQL = sql`regexp_replace(coalesce(${contacts.no
 export interface ResolvedContactFilter {
   q?: string;
   ownerId?: number;
+  /** The record's owning team (BL-382): the owner's primary team when the owner was set. */
+  teamId?: number;
   /** Owned by any of `ids`, or (with `unassigned`) by nobody: the owner multi-select of the Contact Hub. */
   ownerAny?: { ids: number[]; unassigned: boolean };
   lifecycleStage?: string;
@@ -67,6 +86,8 @@ export interface ResolvedContactFilter {
   tagMode: 'any' | 'all';
   imported?: boolean;
   unsubscribed?: boolean;
+  /** true: subscribed as the WhatsApp opt-in column says (label "subscribed", not opted out); false: everyone else. */
+  subscribed?: boolean;
   /** true: flagged as a minor; false: not flagged (BL-190). */
   minor?: boolean;
   /** true: uncontacted; false: contacted (BL-290). */
@@ -96,26 +117,17 @@ export interface ResolvedContactFilter {
   excludeUuids?: string[];
 }
 
-/** Record scope as a WHERE condition on `contacts.owner_id`. 'all' adds nothing. */
+/** Record scope as a WHERE condition on the contact's owner and creator (D1). 'all' adds nothing. */
 export function contactScopeCondition(
   orgId: number,
   scope: RecordScope,
   actorUserId: number | null,
 ): SQL | undefined {
-  if (scope === 'all') return undefined;
-  if (scope === 'own') {
-    return actorUserId ? eq(contacts.ownerId, actorUserId) : sql`false`;
-  }
-  if (!actorUserId) return sql`false`;
-  return sql`
-    ${contacts.ownerId} IN (
-      SELECT tm2.user_id
-      FROM ${teamMembers} tm1
-      JOIN ${teamMembers} tm2
-        ON tm2.org_id = tm1.org_id AND tm2.team_id = tm1.team_id
-      WHERE tm1.org_id = ${orgId} AND tm1.user_id = ${actorUserId}
-    )
-  `;
+  // D1 (BL-380): the person who created the contact counts like its owner, in `own` and in `team`.
+  return scopeOwnerCondition({ orgId, userId: actorUserId }, scope, [
+    sql`${contacts.ownerId}`,
+    sql`${contacts.createdBy}`,
+  ]);
 }
 
 /** Words of the search box. */
@@ -171,6 +183,7 @@ export function contactConditions(
 
   if (!f.includeArchived) c.push(eq(contacts.isArchived, false));
   if (f.ownerId !== undefined) c.push(eq(contacts.ownerId, f.ownerId));
+  if (f.teamId !== undefined) c.push(eq(contacts.owningTeamId, f.teamId));
   if (f.ownerAny) {
     const parts: SQL[] = [];
     if (f.ownerAny.ids.length > 0) parts.push(inArray(contacts.ownerId, f.ownerAny.ids));
@@ -202,7 +215,7 @@ export function contactConditions(
   for (const [column, from, to] of [
     [contacts.createdAt, f.createdFrom, f.createdTo],
     [contacts.updatedAt, f.updatedFrom, f.updatedTo],
-    [contacts.lastActivityAt, f.lastActivityFrom, f.lastActivityTo],
+    [contactLastActivity, f.lastActivityFrom, f.lastActivityTo],
   ] as const) {
     const window = dateWindowPredicate(sql`${column}`, from, to);
     if (window) c.push(window);
@@ -215,6 +228,8 @@ export function contactConditions(
     );
   }
   if (f.unsubscribed !== undefined) c.push(eq(contacts.isUnsubscribed, f.unsubscribed));
+  if (f.subscribed !== undefined)
+    c.push(f.subscribed ? whatsappSubscribedSql : sql`NOT ${whatsappSubscribedSql}`);
   if (f.minor !== undefined) c.push(minorCondition(f.minor));
   if (f.followUp) c.push(followUpCondition(f.followUp.state, f.followUp.timeZone));
   if (f.uncontacted !== undefined) {

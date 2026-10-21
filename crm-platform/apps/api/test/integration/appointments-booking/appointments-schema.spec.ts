@@ -547,9 +547,10 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
           `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes) VALUES ($1,$2,$3,$4)`,
           [orgA, typeA2, i, m],
         );
-      await rejects(rem(0, 0), /chk_booking_reminders_offset/);
-      await rejects(rem(0, 43_201), /chk_booking_reminders_offset/);
-      await rejects(rem(8, 60), /chk_booking_reminders_offset/);
+      // Offset 0 is the fixed offset of the confirmation event step; a rebook may wait up to a year (525600 minutes); 16 positions.
+      await rejects(rem(0, -1), /chk_booking_reminders_offset/);
+      await rejects(rem(0, 525_601), /chk_booking_reminders_offset/);
+      await rejects(rem(16, 60), /chk_booking_reminders_offset/);
       await rem(0, 1440);
       await rem(1, 180);
       await rejects(rem(2, 180), /uq_booking_reminders_booking_type_id_kind_offset/);
@@ -576,7 +577,8 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
         tpl('confirmation', 'email'),
         /uq_booking_templates_booking_type_id_event_channel/,
       );
-      await rejects(tpl('confirmation', 'sms'), /chk_booking_templates_channel/);
+      // The old CHECK keeps accepting 'sms' as history (expand-only); the API contract refuses it. An unknown channel is refused here.
+      await rejects(tpl('confirmation', 'fax'), /chk_booking_templates_channel/);
       await rejects(
         owner.query(
           `INSERT INTO booking_financials (org_id, booking_type_id, fee_minor) VALUES ($1,$2,-1)`,
@@ -686,6 +688,57 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
         /chk_appointment_reminder_runs_kind/,
       );
     });
+
+    it('a run carries the sequence record: an empty channel log, delivery unknown, an event kind, and only known steps and delivery states (BL-421)', async () => {
+      const a = Number((await appt(orgA, typeA, 24, 25)).rows[0].id);
+      const run = await owner.query(
+        `${insert} VALUES ($1,$2,'before',45, now(), now()) RETURNING attempt_log, delivery, step_kind, message_ref, delivery_check_at`,
+        [orgA, a],
+      );
+      expect(run.rows[0]).toMatchObject({
+        attempt_log: [],
+        delivery: 'unknown',
+        step_kind: null,
+        message_ref: null,
+        delivery_check_at: null,
+      });
+      const log = [
+        { channel: 'whatsapp', status: 'skipped', reason: 'no_consent' },
+        { channel: 'email', status: 'sent', reason: null },
+      ];
+      await owner.query(
+        `UPDATE appointment_reminder_runs SET attempt_log = $2::jsonb, step_kind = 'reminder_2h' WHERE appointment_id = $1`,
+        [a, JSON.stringify(log)],
+      );
+      expect(
+        (
+          await owner.query(
+            `SELECT attempt_log FROM appointment_reminder_runs WHERE appointment_id = $1`,
+            [a],
+          )
+        ).rows[0].attempt_log,
+      ).toEqual(log);
+      await rejects(
+        owner.query(
+          `UPDATE appointment_reminder_runs SET delivery = 'read' WHERE appointment_id = $1`,
+          [a],
+        ),
+        /chk_appointment_reminder_runs_delivery/,
+      );
+      await rejects(
+        owner.query(
+          `UPDATE appointment_reminder_runs SET step_kind = 'reminder_3h' WHERE appointment_id = $1`,
+          [a],
+        ),
+        /chk_appointment_reminder_runs_step_kind/,
+      );
+      // The event kind is a run kind now (the confirmation and the no-show message are claimed when the event happens).
+      const ev = await owner.query(
+        `${insert} VALUES ($1,$2,'event',0, now(), now()) RETURNING kind`,
+        [orgA, a],
+      );
+      expect(ev.rows[0].kind).toBe('event');
+    });
   });
 
   describe('the reminder rules (BL-283)', () => {
@@ -702,7 +755,7 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
       expect(r.rows[0]).toMatchObject({
         is_active: false,
         kind: 'before',
-        channels: ['whatsapp', 'sms', 'email'],
+        channels: ['whatsapp', 'email'],
         body: null,
         wa_template_id: null,
       });
@@ -716,6 +769,63 @@ describe('appointments: schema, constraints, isolation and the double-booking gu
           [orgA, t],
         ),
         /uq_booking_reminders_booking_type_id_kind_offset/,
+      );
+    });
+
+    it('SMS left appointment reminders: new rules default to whatsapp then email, old SMS history still reads, steps keep their own rules (BL-420, BL-421)', async () => {
+      const t = await one(
+        `INSERT INTO booking_types (org_id, name, slug) VALUES ($1,'rules-seq','rules-seq') RETURNING id`,
+        [orgA],
+      );
+      // The expand-only migration keeps the old CHECK values, so a stored 'sms' (history) is still storable and the API reads it away.
+      const old = await owner.query(
+        `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, channels, notice_code)
+         VALUES ($1,$2,0,60,'{sms}','sms_removed') RETURNING channels, notice_code, step_kind, buttons_enabled, skip_if_confirmed`,
+        [orgA, t],
+      );
+      expect(old.rows[0]).toMatchObject({
+        channels: ['sms'],
+        notice_code: 'sms_removed',
+        step_kind: null,
+        buttons_enabled: false,
+        skip_if_confirmed: false,
+      });
+      await rejects(
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, notice_code) VALUES ($1,$2,1,61,'other')`,
+          [orgA, t],
+        ),
+        /chk_booking_reminders_notice/,
+      );
+      // An event step has the kind 'event' and only the two event step kinds; a timed step cannot be an event step.
+      await owner.query(
+        `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, kind, step_kind)
+         VALUES ($1,$2,2,0,'event','confirmation')`,
+        [orgA, t],
+      );
+      await rejects(
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, kind, step_kind)
+           VALUES ($1,$2,3,0,'event','reminder_2h')`,
+          [orgA, t],
+        ),
+        /chk_booking_reminders_step_kind/,
+      );
+      await rejects(
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, kind, step_kind)
+           VALUES ($1,$2,4,30,'before','no_show')`,
+          [orgA, t],
+        ),
+        /chk_booking_reminders_step_kind/,
+      );
+      await rejects(
+        owner.query(
+          `INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, undelivered_fallback_minutes)
+           VALUES ($1,$2,5,31,4)`,
+          [orgA, t],
+        ),
+        /chk_booking_reminders_undelivered/,
       );
     });
 

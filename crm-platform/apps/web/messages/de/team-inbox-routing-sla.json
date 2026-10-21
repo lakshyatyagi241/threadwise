@@ -18,7 +18,7 @@
     },
     "page": {
       "back": "Automatisierung und KI",
-      "title": "Automatische Zuweisung",
+      "title": "Automatische Zuweisung von Unterhaltungen",
       "subtitle": "Jede neue Unterhaltung automatisch dem passenden Agenten zuweisen. Die Regeln werden der Reihe nach von oben geprüft.",
       "noAccess": "Sie sind nicht berechtigt, die Einstellungen der automatischen Zuweisung anzusehen.",
       "create": "Regel erstellen",
@@ -100,7 +100,7 @@
       "autoReplySummary": "Sendet die Antwort: {body}"
     },
     "form": {
-      "back": "Automatische Zuweisung",
+      "back": "Automatische Zuweisung von Unterhaltungen",
       "noAccess": "Sie sind nicht berechtigt, die Regeln für die automatische Zuweisung zu ändern.",
       "loading": "Regel wird geladen",
       "notFound": "Diese Regel existiert nicht mehr.",
@@ -312,7 +312,7 @@
       }
     },
     "businessHours": {
-      "eyebrow": "Automatische Zuweisung",
+      "eyebrow": "Automatische Zuweisung von Unterhaltungen",
       "title": "Geschäftszeiten",
       "subtitle": "Regeln und SLA-Ziele, die Geschäftszeiten berücksichtigen, zählen nur die Zeit innerhalb dieser Zeiten.",
       "close": "Schließen",

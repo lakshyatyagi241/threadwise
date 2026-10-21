@@ -1099,9 +1099,10 @@ describe('the query plan', () => {
     const dialect = new PgDialect();
     const ctx = {
       orgId: t.orgId,
+      conversationJoins: sql``,
       conversationVisible: sql`TRUE`,
       bulk: true,
-      contacts: { scope: 'all' as const, userId: t.adminUserId, teamIds: [] },
+      contacts: { scope: 'all' as const, userId: t.adminUserId },
       cost: false,
     };
     const sel = {

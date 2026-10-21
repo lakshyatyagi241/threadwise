@@ -10,7 +10,7 @@ import {
   type FlbNodeData,
 } from '@crm/contracts';
 import { condSummary } from '../lib/contract-text';
-import { FAQ_DEFAULT_QUERY, faqSaveName, hasOwnMinScore } from '../lib/faq-node';
+import { destinationOf, isHandoffNode, peopleOf } from '../lib/handoff-node';
 import { useFlb } from '../lib/msg';
 import { findTemplate } from '../lib/templates';
 import { FlowImage } from './flow-image';
@@ -404,6 +404,30 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
           ? (team.members.find((m) => m.id === str(d.userId))?.name ??
             tp('agentNumber', { id: str(d.userId) }))
           : null;
+      const handoff = isHandoffNode(d);
+      const kind = destinationOf(d);
+      if (handoff && kind !== 'team') {
+        // Human handoff to one person or to the assignment rules: the card says where, not which team.
+        const person = peopleOf(ctx.teams).find((m) => m.id === str(d.userId));
+        return (
+          <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
+            <div className="flex items-center gap-2">
+              <Muted>{tp('handoffTo')}</Muted>
+              <Mono cls="truncate">
+                {kind === 'rules'
+                  ? tp('handoffRules')
+                  : (person?.name ??
+                    (d.userId ? tp('agentNumber', { id: str(d.userId) }) : tp('pickAgent')))}
+              </Mono>
+            </div>
+            {d.message ? (
+              <div className="mt-1 truncate text-[10.5px] italic text-muted-foreground">
+                &quot;{cut(d.message, 40)}&quot;
+              </div>
+            ) : null}
+          </div>
+        );
+      }
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
           <div className="flex items-center gap-2">
@@ -424,6 +448,14 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
+    case 'update_contact':
+      return (
+        <div className="flex items-center gap-2 px-3 pt-2 pb-1.5 text-[11.5px]">
+          <Mono cls="shrink-0">{str(d.field).trim() || '—'}</Mono>
+          <Muted>=</Muted>
+          <Mono cls="truncate">{str(d.value) || '—'}</Mono>
+        </div>
+      );
     case 'subflow': {
       const sub = d.flow ? ctx.flows.find((f) => f.id === str(d.flow)) : null;
       const lbl = d.flow ? (sub?.name ?? tp('flowNumber', { id: str(d.flow) })) : tp('pickFlow');
@@ -637,26 +669,12 @@ export function NodePreview({ node, ctx }: { node: FlowNode; ctx: FlbBuilderCont
         </div>
       );
     }
-    case 'faq': {
-      const query = str(d.query) || FAQ_DEFAULT_QUERY;
-      const category = str(d.category).trim();
-      const own = hasOwnMinScore(d.minScore);
+    case 'faq':
       return (
         <div className="px-3 pt-2 pb-1.5 text-[11.5px]">
-          <div className="truncate font-mono text-[11px] text-foreground">{query}</div>
-          <Count>
-            {category ? tp('faqCategory', { name: category }) : tp('faqAllFaqs')}
-            {' · '}
-            {own ? tp('faqScore', { score: str(d.minScore) }) : tp('faqWorkspaceScore')}
-            {d.sendAnswer === false ? ` · ${tp('faqNotSent')}` : ''}
-          </Count>
-          <div className="truncate text-[12px] text-foreground">
-            <Muted>{tp('saveTo')}</Muted>{' '}
-            <Mono cls="text-[11px]">{`{{${faqSaveName(d.save)}}}`}</Mono>
-          </div>
+          <Count>{tp('faqRetired')}</Count>
         </div>
       );
-    }
     case 'api_library': {
       const api = str(d.apiName);
       const overrides = asArr(d.inputs).length;

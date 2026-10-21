@@ -1,11 +1,10 @@
-import { readFileSync } from 'node:fs';
-import { join } from 'node:path';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { NextIntlClientProvider } from 'next-intl';
 import type { ReactElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it, vi } from 'vitest';
 import type { MessageResponse } from '@crm/contracts';
+import { loadMessages } from '@/i18n/messages';
 import { detail, id, message, note, outbound, summary } from '../lib/fixtures';
 import { DEFAULT_FILTERS, EMPTY_COUNTS, EMPTY_LIST, listReducer } from '../lib/list';
 import { Composer } from './composer';
@@ -15,13 +14,9 @@ import { MessageBubble, NoteBubble, PendingBubble } from './message-bubble';
 import { Ticks } from './parts';
 import { LocationCard } from './media';
 
-const messages = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'en', 'team-inbox-conversations.json'), 'utf8'),
-) as Record<string, unknown>;
-
-const messagesAr = JSON.parse(
-  readFileSync(join(process.cwd(), 'messages', 'ar', 'team-inbox-conversations.json'), 'utf8'),
-) as Record<string, unknown>;
+// The merged messages of the locale, as the app loads them (the main file and the slices: Imported marker, handoff queue).
+const messages = loadMessages('en') as Record<string, unknown>;
+const messagesAr = loadMessages('ar') as Record<string, unknown>;
 
 const html = (el: ReactElement) =>
   renderToStaticMarkup(
@@ -52,6 +47,29 @@ describe('ConversationRow', () => {
         />
       </ul>,
     );
+
+  it('puts the same Window closed chip on a row whose customer never wrote, when the channel has a window rule', () => {
+    const never = { windowExpiresAt: null, lastInboundAt: null };
+    const withRule = html(
+      <ul>
+        <ConversationRow
+          row={summary(never)}
+          active={false}
+          nowMs={NOW}
+          showChannel={false}
+          hasWindowRule
+          onOpen={noop}
+        />
+      </ul>,
+    );
+    expect(withRule).toContain('Window closed');
+    expect(row(never)).not.toContain('Window closed');
+  });
+
+  it('draws one mark for every nameless contact, not a slice of the number', () => {
+    expect(row({ title: '+919218467176' })).toContain('>#<');
+    expect(row({ title: '+919218467175' })).toContain('>#<');
+  });
 
   it('shows the name, the preview and the unread badge', () => {
     const out = row({ unreadCount: 3, preview: 'Can I get a refund?' });
@@ -117,6 +135,43 @@ describe('MessageBubble', () => {
     expect(out).toContain('On my way');
     expect(out).toContain('data-direction="out"');
     expect(out).toContain('aria-label="Read"');
+  });
+
+  it('draws a stored system line (a live-chat "Connected to ..." event) as a centred notice, not an agent bubble', () => {
+    const out = bubble(
+      outbound(4, {
+        kind: 'system',
+        body: 'Connected to Aashish',
+        sender: { kind: 'system', userId: null, name: null },
+        status: 'sent',
+      }),
+    );
+    expect(out).toContain('Connected to Aashish');
+    expect(out).toContain('justify-center');
+    expect(out).not.toContain('data-direction');
+    expect(out).not.toContain('aria-label="Sent"');
+  });
+
+  it('labels the customer bubble with the customer name, like the old inbox', () => {
+    const out = html(
+      <ul>
+        <MessageBubble
+          message={message(5)}
+          quoted={null}
+          onRetry={asyncNoop}
+          customerName="Sumeet Bhise"
+        />
+      </ul>,
+    );
+    expect(out).toContain('data-testid="inbox-customer-name"');
+    expect(out).toContain('Sumeet Bhise');
+  });
+
+  it('shows the sent, delivered, read and failed marks by status on an outbound bubble', () => {
+    expect(bubble(outbound(6, { status: 'sent' }))).toContain('aria-label="Sent"');
+    expect(bubble(outbound(7, { status: 'delivered' }))).toContain('aria-label="Delivered"');
+    expect(bubble(outbound(8, { status: 'read' }))).toContain('#53bdeb');
+    expect(bubble(outbound(9, { status: 'failed' }))).toContain('Not sent');
   });
 
   it('names the member who wrote in a WhatsApp group, with their number', () => {
@@ -499,7 +554,9 @@ describe('ConversationList states', () => {
   });
 
   it('says there are no conversations yet once a channel exists', () => {
-    const out = render(props({ channels: [{ id: id(900) } as never] }));
+    const out = render(
+      props({ channels: [{ id: id(900), capabilities: { windowHours: null } } as never] }),
+    );
     expect(out).toContain('No conversations yet');
   });
 

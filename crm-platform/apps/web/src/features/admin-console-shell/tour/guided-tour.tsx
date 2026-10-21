@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import { useEffect, useEffectEvent, useRef, useState } from 'react';
 import { Button } from '@crm/ui';
 import { apiFetch } from '@/lib/api/client';
+import { useBrandName } from '@/components/shell/brand';
 import {
   TOUR_DELAY_MS,
   TOUR_START_EVENT,
@@ -27,7 +28,7 @@ const visible = (selector: string): boolean => {
  */
 export function GuidedTour({ run }: { run: boolean }) {
   const t = useTranslations(NS);
-  const app = useTranslations('common')('appName');
+  const app = useBrandName();
   const router = useRouter();
   const pathname = usePathname();
   const params = useSearchParams();

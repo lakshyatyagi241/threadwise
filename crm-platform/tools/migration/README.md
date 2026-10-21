@@ -421,6 +421,7 @@ A dump with no `user` collection leaves `owner_id` empty and reports nothing.
 - **No admin.** Only the `--owner-email` user holds Owner. `preset:admin` is refused at startup, with or without an approver; `preset:workspace_admin` and every other preset need
   `approvedBy` and `evidence`. `is_staff` and role NAMES are never privilege (a role called "Admin" becomes a custom role "Admin (Waboo)"). A user with a missing, null, non-string,
   unknown, deleted or unloaded role gets **Viewer** (`ROLE_MISSING`, `ROLE_DELETED`, `ROLE_NOT_LOADED`).
+  A Waboo role named `admin` gets the **Owner** preset (`ADMIN_IS_OWNER`): the owner's decision of 2026-10-21 for every migrated admin. The role map still refuses `preset:admin`; this rule is the only route to Owner.
 - **Users** are created like an invited member: `status` active (inactive only when `is_active` is false; `workspace_enabled` is history only, see OQ-7), `invited_at` = created, `joined_at` only when the email
   was verified, **no password hash, no auth_subject, no token, no mail, no outbox row**. Waboo `password` is never read, copied, quarantined or logged; reconcile searches the target
   for the dump's password strings (`PASSWORD_LEAK`). Emails are trimmed and lower-cased; two documents with one email: the active, then newest one wins, the other is `DUPLICATE_EMAIL`.
@@ -1477,77 +1478,20 @@ Empty on all three clients (no shape seen) and conversations are keyed by phone 
 Staging checks: `node pilot/staging/cycle.cjs dry --client iskm --steps wa_forms`, `... --client karma --steps api_library`, and `--steps outbound_webhooks,chat_labels` (expect 0 documents).
 
 
-# Stage 2: FAQ knowledge ("RAG FAQ") -> faqs, faq_variations, faq_settings
+# Stage 2: FAQ knowledge -> one "FAQ" text entry per AI agent (knowledge base)
 
-Handler `faq_knowledge` (step `faq_knowledge`, groups `faq` and `flows`), a DERIVED step like `flow_bots`. Code: `flows/faq.ts` (the builder, pure), `transform/faq.ts` (the step), `load/faq.ts` + the hook in `load/flows.ts` (settings rows), `reconcile/faq.ts` (verifier). Tests: `test/faq.pure.spec.ts` (no database: `node node_modules/vitest/vitest.mjs run --config vitest.pure.config.ts test/faq.pure.spec.ts`, 13 tests passed here) and `test/faq.spec.ts` (needs the Docker database AND a schema with the FAQ migrations; NOT run: this checkout's `packages/db/migrations` stops before them).
+The FAQ engine is retired (ADR-0021 addendum 3): a FAQ is text in an AI agent's knowledge base (`ai_training_sources`, indexed into `ai_training_chunks` by the application's own worker). The old `faqs` / `faq_variations` / `faq_settings` / `faq_match_logs` tables are dropped by migration `20270206090000_drop_faq_tables.sql`; nothing in this tool reads or writes them.
 
-## Widget link and launcher look (the Customize tab of a migrated bot)
+Handler `faq_knowledge` (step `faq_knowledge`, groups `faq` and `flows`), a DERIVED step like `flow_bots`. Code: `flows/faq.ts` (the per-question builder and `buildKbFaqDocs`, both pure), `transform/faq.ts` (the step), `load/faq.ts` (agent choice, run from the `beforeInsert` hook in `load/flows.ts`), `reconcile/faq.ts` (verifier). Tests: `test/faq.pure.spec.ts` (no database: `node node_modules/vitest/vitest.mjs run --config vitest.pure.config.ts test/faq.pure.spec.ts`) and `test/faq.spec.ts` (needs the Docker database).
 
-A widget of a bot that became a flow is written with `flow_id` (the flow) and `customized_at` (= its `updated_at`), because the bot's Customize and Deploy tabs read the button by `flow_id`: without it they find no widget and open on the defaults of a new bot (ripple, popup on, text button, 60 px mobile gap, the keyword as the message). `widgets` therefore depends on `flow_bots`. The launcher JSON also carries the button type (`button_type` / `launcher_type` / theme `button.button_type`: icon or text), the animation (`widget_animation`: bounce, ripple, none), the popup (`tooltip`: on or off, top or side, text; OFF unless the source says on) and each part of the desktop and mobile placement the source states (a missing part keeps the application's default for that part only). A value the tool does not recognise keeps the default and is listed as the soft issue `LAUNCHER_LOOK_UNRECOGNISED`. UNVERIFIED: the source key names above are read from the discovery notes, not from a dump; check them against the key names in `CONFIG_NOT_PRESENT` of a real run. FAQs built only from Intent records carry the soft issue `INTENT_ONLY`, so each paused FAQ can be traced to its source.
-
-## Source and target
-
-- Source: `faq_variations` `{_id, botid, qid, phrases[]}` (iskm 1, rhythm 5, karma 16 documents) plus the bot's `bot_workspace` records of type Intent / FAQ, which hold what the phrases belong to: the question (`question`, else `query`, a string or a list), an `intent` label, a `journey` `{qid, name, nodeId}` when the question starts a flow, or an inline `response[]` (the same message objects the flow steps use) when it answers itself. The shapes come from `_work/migration/discovery` (the counts fit: karma FAQ 18 + Intent 6 records, 10 with a journey and 14 with a response; rhythm FAQ 5 + Intent 3). Mongo was unreachable, so the grouping rule below is a reading of the shapes, not of values (see UNVERIFIED).
-- Target (WaDesk on main: migrations `20261114090000_faq_core`, `20261114090100_faq_permissions`, `20261116090000_faq_flow_node_verify`, `20261118090000_faq_per_flow`): `faqs`, `faq_variations`, `faq_settings`. `faq_match_logs` is not migrated and stays empty.
-- Why a second step on the same collection: the registry holds ONE handler per collection, so `faq_variations` stays registered to `faq_replies` (the inactive keyword replies, unchanged; the flows verifier's oracle still expects them) and `faq_knowledge` is a virtual step with its own `id_map` collection `faq_knowledge` (the same pattern as `flow_bots` next to `chatbots`). Both run in the standard chain; a client that does not want the keyword replies can `--skip-steps faq_replies`.
-
-## One question = one FAQ
-
-Intent / FAQ records of a bot that share a `qid` (top-level, else `journey.qid`) are ONE FAQ, with the `faq_variations` documents of that `qid` (or of a record's `journey.qid`) attached. An Intent that starts a journey shares the qid of that journey's steps; an FAQ that answers inline has its own. An FAQ record with no `faq_variations` document is migrated too (karma has 18 FAQ records and 16 variation documents). Intent records alone are flow trigger words and stay that (they already become the trigger of the flow).
-
-| Waboo | WaDesk |
-| --- | --- |
-| the flow the bot became (`flow_bots`) | `faqs.owner_flow_id` (FAQs are per flow). No flow for the bot (WEB_BOT_NO_FLOW, BOT_INACTIVE, NO_NODES ...): quarantined `NO_OWNER_FLOW`, the plan's code in the reason |
-| first `question` (else `query`) string of the records, whitespace collapsed | `faqs.question`, and the same text as ONE `faq_variations` row with `source = 'question'`: the application keeps its own question as a variation so a match reads one table (and rewrites it when the question is renamed); without it the FAQ would not match its own wording |
-| the other question strings, then every `phrases[]` string | `faq_variations` rows, `source = 'import'`, `embed_state = 'pending'`, `embedding` / `embedding_model` / `embedded_at` NULL, `embed_attempts` 0 |
-| inline `response[]` (text; HTML turned into lines; a file as caption + link; an interactive message as body + footer) | `answer_type = 'text'`, `answer_text`, parts joined with a blank line, credential-looking parts `[redacted]` (ANSWER_REDACTED), buttons lost and counted (ANSWER_PARTS_LOST), at most 4096 characters |
-| no `response`, a `journey` | `answer_type = 'flow'`, `flow_id` = the owner flow, `flow_node_id` NULL. The journey inside the flow CANNOT be addressed (the finding of the keyword replies, QID_NOT_ADDRESSABLE): the FAQ starts the whole flow from its trigger. Check each one before enabling. (Pointing `flow_node_id` at the converted first node of the journey is possible later; it is deliberately not guessed.) |
-| both a `response` and a journey | the text wins, soft ANSWER_ALSO_FLOW |
-| createdAt / updatedAt of the records (earliest / latest) | `created_at` / `updated_at` through `times()`; a display date "dd Mon, yyyy h:mm:ss AM" is read as UTC (DATE_ZONE_ASSUMED); only when no record has a date, the ObjectId time of the variations document |
-| (none) | `status = 'paused'` always; `category`, `threshold_override`, `created_by`, `flow_node_id` NULL |
-| (none) | `faq_settings`: one row per flow that owns at least one migrated FAQ, `enabled = false`, the other columns at the table defaults (threshold 0.450, min_margin 0, log_queries true, verify off). A settings row that already exists is never touched |
-
-Dropped with a reason in `fields`: `records`, `soft`, `problem` (builder bookkeeping). The Intent `intent` label and the journey `name` are not stored (no category is invented).
-
-## Limits the application enforces (from `FAQ_LIMITS` / `FAQ_PLATFORM_DEFAULTS` on main, counted in UTF-16 units like the zod schemas)
-
-question 500 (over: quarantine `QUESTION_TOO_LONG`), answer 4096 (over: quarantine `ANSWER_TOO_LONG`, never cut), variation 500 (over: dropped, soft VARIATION_TOO_LONG_DROPPED with the count), 60 variations per FAQ with the question included (the rest dropped in order, soft VARIATIONS_CAPPED), 500 FAQs per flow (the rest quarantined `FAQ_LIMIT`). The platform operator can change the last two in the platform config; the tool uses the defaults. Phrases that repeat ignoring case and spacing are merged silently (uq_faq_variations_text).
-
-## Quarantine (never guessed)
-
-`NO_OWNER_FLOW`, `NO_QUESTION` (no record names the question: phrases alone are not a question; this includes a `faq_variations` document whose qid matches no Intent / FAQ record), `NO_ANSWER` (no inline response and no journey), `QUESTION_TOO_LONG`, `ANSWER_TOO_LONG`, `FAQ_LIMIT`, plus the loader's `UNIQUE_CONFLICT`.
-
-## The same question twice in one flow
-
-`uq_faqs_question` is unique per flow on `lower(btrim(question))`. In load order (first appearance in `bot_workspace`) the first keeps its text; a later one is numbered ("Hours? (2)", "Hours? (3)"), its own wording stays as a variation, and the soft issue QUESTION_DUPLICATE_RENAMED is recorded. Nothing is merged and nothing is lost; merge or reword before enabling.
-
-## Embeddings, and what makes the vectors appear (read from the worker on main)
-
-No vector is copied (Waboo's are in an external store and a different model) and this tool makes NO outbound call and writes NO `event_outbox` row. The application's `FaqEmbedWorker` (`faq-embed.worker.ts`, imported only by the WORKER process through `FaqKnowledgeWorkerModule`) runs `@Interval(5000)`, asks `orgsWithPending` (`SELECT DISTINCT org_id FROM faq_variations WHERE embed_state = 'pending' AND embed_attempts < 5`) and embeds batches of 64. It needs no event and does NOT look at `faq_settings.enabled`. It does need: the worker process running with Redis, the platform embedding model on the allow-list, and an OpenRouter key that `AiKeyResolver` finds for the organization (its own key under AI keys, or the shared platform key). **Without a key every attempt fails and a variation turns `failed` after 5 attempts (about 25 seconds)**; the screen shows it with a Retry (`retryFailed`), so set the key first or press Retry afterwards. Until a variation is `ready` it cannot match semantically.
-
-## Enabling FAQ after review (a person, in WaDesk)
-
-1. Open the flow's FAQ screen: read each FAQ (question, answer, variations), merge the numbered duplicates, check every flow-answer FAQ (it starts the whole flow, not the journey).
-2. Make sure the AI key exists and the variations are `ready` (Retry for `failed`).
-3. Activate the FAQs (status `paused` to `active`) and switch the flow's FAQ answering on (`faq_settings.enabled`). Nothing in this tool does either, for any client.
-
-## Not carried
-
-Vectors; `faq_match_logs`; per-journey addressing (`flow_node_id` stays empty); the Intent `intent` label and journey `name`; buttons and list rows of an interactive answer; phrases beyond the limits above. Everything counted is in `migration.quarantine` (collection `faq_knowledge`; soft issues as `<key>#CODE`).
-
-## Order, steps, new clients
-
-After the flow steps (`faq_knowledge` needs `flow_bots`). `cycle.cjs migrate` and `pipeline.cjs run` select every registered step by default, so a NEW client picks it up with no flag. What can stop it: (1) the target must have the four FAQ migrations: preflight check b fails with `table faqs: MISSING` on a server that is behind main, and check a fails the other way round (`applied migration(s) with no file here`) when the bundle is built from a checkout that lacks them, so build from a checkout that contains them; (2) the bot must have become a flow (otherwise NO_OWNER_FLOW, counted); (3) the new bundle must be built and shipped before the dry run; (4) FAQs are not a plan limit (the per-flow cap above is the application's own).
-
-Staging: `node pilot/staging/cycle.cjs dry --client iskm --steps flows` (the group includes `faq_replies` and `faq_knowledge`; a dry run has nothing loaded, so the flow steps it depends on must be selected too), then the real run through the usual `migrate` / `load`, then `reconcile`. New alarms: `FAQ_VARIATIONS_MISMATCH`, `FAQ_SAFETY`, `FAQ_SETTINGS_MISSING`, `EXTRA_ROWS` (faq tables). After people start using FAQ, reconcile with `--allow-extra-rows`, which turns the paused / pending / disabled checks off.
-
-## UNVERIFIED
-
-- The grouping key (top-level `qid`, else `journey.qid`) and that an FAQ answers inline through `response[]` are read from the discovery shapes (field frequencies), not from values. If the qid of a `faq_variations` document matches no record, the document is quarantined `NO_QUESTION` (counted, nothing guessed), never attached to a wrong question.
-- That the inline `response[]` of an FAQ record uses the element shapes of the flow steps (string value, `{text, url}` value, `interactive`).
-- The platform limits (500 FAQs per flow, 60 variations) are the defaults; an operator may have changed them on staging.
-- `test/faq.spec.ts` was written against the fixtures of `test/flows-fixtures.ts` and was not run (no Docker database here; vitest ran the pure tests only). `test/portables.pure.spec.ts` had a failing assertion BEFORE this work.
-- `pilot/staging/raw-writes.json` was already out of date for `flows`, `plans`, `role_grants` and `subscriptions` (hand-written SQL of other work in `load/`): only `faq_settings` was added by this step; regenerate with `tsx pilot/staging/raw-writes.ts` when that work lands.
+- Source: `faq_variations` `{botid, qid, phrases[]}` plus the bot's `bot_workspace` records of type Intent / FAQ (question, `intent`, `journey`, inline `response[]`). One question = the Intent / FAQ records of a bot that share a `qid` (else `journey.qid`) with the `faq_variations` documents of that qid; the builder, its limits (question 500, answer 4096, variation 500, 60 per question, 500 per bot) and its quarantine codes (`NO_OWNER_FLOW`, `NO_QUESTION`, `NO_ANSWER`, `QUESTION_TOO_LONG`, `ANSWER_TOO_LONG`, `FAQ_LIMIT`) are unchanged.
+- Target: ONE `ai_training_sources` row per AI agent: `kind 'text'`, `label 'FAQ'`, `status 'ready'`, `tokens_estimate` = length / 4, `content` = blocks `Q: question\nAlso asked as: a | b\nA: answer` (no `Also asked as` line when there is no other phrasing) separated by a blank line, in the format of migration `20270205090000_kb_per_agent_vector_faq_merge.sql`. No chunk and no vector is written; the application's worker cuts and embeds the entry (`kb-chunk.repository.ts`). At most 200000 characters: the questions that do not fit are left out (soft `FAQ_BODY_CAPPED`).
+- Which agent, the way that migration chooses: the questions of a bot go to the bot's own assistant (`widget_assistants` row, so the step runs after it); the questions of bots without an assistant share ONE entry that goes to the workspace's first active agent, else its first agent, else a new "FAQ assistant" (`load/faq.ts`, the same row the migration inserts). The widgets step loads assistants PAUSED, so nothing answers a customer until a person enables an agent. The verifier checks that every entry sits on an agent, on the bot's own one when it has one, and that no agent holds two tool-made FAQ entries.
+- Not carried: a question that answers by starting a flow (no text to keep) is quarantined `FLOW_ANSWER_NOT_CARRIED`, as the merge migration leaves those behind; per-journey addressing; the Intent `intent` label and journey `name`; buttons and list rows of an interactive answer; vectors; `faq_match_logs`.
+- The bot's fallback message (the "did not understand" reply) now goes to `ai_chat_assistants.fallback_message` of the bot's assistant (`widget_assistants`); it used to go to `faq_settings.fallback_message`. A bot without an assistant has nowhere to keep it.
+- `faq_variations` stays registered to `faq_replies` (the inactive keyword replies, unchanged); `faq_knowledge` has its own `id_map` collection `faq_knowledge`.
+- The flow-state command no longer arms FAQs: there is no per-FAQ or per-flow switch left.
+- UNVERIFIED: `test/faq.spec.ts` was written without a Docker database here (the pure tests ran); run it before the first real load.
 
 # Migrating a new client (what the admin panel runs)
 
@@ -1555,7 +1499,9 @@ One command per client, no hand-run repair: `node pilot/staging/pipeline.cjs --d
 
 **Config of a new client, derived (read-only), nothing typed:** `core-opening.cjs` reads `geta_core` (organization name, plan facts, the confirmed wallet balance); `wa-numbers.cjs` reads the tenant database through the read-only kit and writes the **channel map with the real WhatsApp phone number id, display number and name**, keyed by the botid of the chats (it selects `chatbot_id`, `phoneID`, `display_number` / `whatsapp_no`, `display_name` of the live `META_WHATSAPP_CONFIG` documents and `distinct botid` of `chathistory`; never the access token). A botid is paired by `chatbot_id`; a workspace with one botid and one number is paired without it; anything ambiguous is NOT guessed. Only when no live number exists does `new-client` fall back to the old PLACEHOLDER map, and the pipeline then puts a `WARNING:` line in the report summary (every chat of that botid is quarantined `NO_CHANNEL` until a person sets the real one). The map is written once, by `new-client`, which never overwrites; `cycle.cjs loaded-check` (read-only count of `migration.run_log`) refuses to create a config for a client that already has rows on staging, because its conversation keys were derived from the old map. The WhatsApp credential (token) is still imported separately with `pilot/credentials/import-whatsapp-credentials.cjs` (no tokens in the map or in any output).
 
-The chain (`MIG_STEPS`): `export, ship, preflight, dry, backup, load, files, core-load, wallet-sync, flow-state, reconcile, report, complete`.
+The chain (`MIG_STEPS`): `export, ship, preflight, dry, backup, load, template-quality, files, core-load, wallet-sync, flow-state, reconcile, report, complete`, then `wa-credentials` and `wa-cutover` only with `--activate-whatsapp`.
+
+The runner's copy of the tool must be rebuilt from the checkout before a run: `bash pilot/staging/refresh-runner.sh` builds the bundle, overlays the tool tree on the runner and checks the runner's `BUILD-INFO.json` names the same commit. Preflight check `a` now FAILs (it used to WARN) when the bundle's migrations differ from the deployed directory, so a stale runner stops the run.
 
 | Command | In a fresh-client chain? | Why |
 | --- | --- | --- |

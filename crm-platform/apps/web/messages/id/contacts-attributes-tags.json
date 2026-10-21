@@ -130,6 +130,7 @@
       "colLeadScore": "Skor prospek",
       "colLanguage": "Bahasa",
       "colCreatedOn": "Dibuat Pada",
+      "colModifiedOn": "Diubah Pada",
       "pagination": "Paginasi",
       "prevPage": "Halaman sebelumnya",
       "nextPage": "Halaman berikutnya",
@@ -282,6 +283,7 @@
       "shortStage": "Tahap",
       "shortWhatsapp": "WhatsApp",
       "shortCreated": "Dibuat",
+      "shortModified": "Diubah",
       "firstRun": {
         "title": "Tambahkan kontak pertama Anda",
         "message": "Bawa masuk orang-orang yang Anda ajak bicara. Kontak dipakai untuk pesan, kampanye, tugas, dan deal.",
@@ -290,7 +292,11 @@
         "importBody": "Unggah spreadsheet dan cocokkan kolomnya dengan kolom kontak.",
         "connect": "Hubungkan WhatsApp",
         "connectBody": "Hubungkan nomor Anda agar kontak bisa membalas dan Anda bisa mengirim pesan kepada mereka."
-      }
+      },
+      "teamLabel": "Tim",
+      "teamFilter": "Filter menurut tim",
+      "allTeams": "Semua tim",
+      "teamFormer": "Tim sebelumnya"
     },
     "bulk": {
       "label": "Tindakan untuk kontak terpilih",
@@ -439,7 +445,10 @@
       "ownerOutOfScope": "Akses Anda tidak mengizinkan kontak ini ditetapkan ke orang tersebut.",
       "company": "Perusahaan",
       "companyHint": "Mengelompokkan kontak ini di bawah sebuah organisasi.",
-      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom."
+      "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom.",
+      "searchOptions": "Cari opsi",
+      "searchOptionsFor": "Cari opsi {field}",
+      "noOptionsFound": "Tidak ada opsi yang cocok dengan pencarian Anda."
     },
     "tags": {
       "title": "Tag",
@@ -1225,7 +1234,8 @@
             "duplicate": "Dua opsi memiliki nama yang sama."
           },
           "condition": "Pilih properti dan nilai untuk setiap kondisi."
-        }
+        },
+        "optionsLazy": "Properti ini memiliki {count, plural, other {# opsi}}, terlalu banyak untuk diedit di sini. Opsi dibiarkan apa adanya; pengaturan lainnya dapat diubah."
       },
       "builtinCard": {
         "title": "Properti bawaan",

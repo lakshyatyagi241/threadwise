@@ -44,7 +44,8 @@
       "notDeletable": "Impossible de le supprimer tant qu’il a des réservations à venir.",
       "notDrifted": "Cette réservation correspond déjà à son événement Google. Elle a été rechargée.",
       "calendarNotConnected": "Google Calendar n'est pas connecté. Reconnectez-le depuis la page du compte Google, puis réessayez.",
-      "calendarFailed": "Google n'a pas répondu ou a refusé la modification. Réessayez dans un instant."
+      "calendarFailed": "Google n'a pas répondu ou a refusé la modification. Réessayez dans un instant.",
+      "whatsappNotConnected": "Connectez d'abord un numéro WhatsApp Cloud API dans les paramètres : un message WhatsApp est soumis via un tel numéro."
     },
     "picker": {
       "timeZone": "Fuseau horaire",
@@ -1306,7 +1307,8 @@
       },
       "kind": {
         "before": "avant le début du rendez-vous",
-        "after": "après la fin du rendez-vous"
+        "after": "après la fin du rendez-vous",
+        "event": "quand un événement se produit"
       },
       "editMessage": "Message et canaux",
       "hideMessage": "Masquer",
@@ -1316,7 +1318,6 @@
       "channelsHint": "Le premier canal capable de livrer est utilisé, les suivants servent de secours. Personne ne reçoit deux fois le même rappel.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-mail"
       },
       "moveUp": "Essayer {channel} plus tôt",
@@ -1375,7 +1376,8 @@
         "bodyTooLong": "Le message est trop long.",
         "subjectTooLong": "L'objet est trop long.",
         "labelTooLong": "Le libellé est trop long.",
-        "tooMany": "Au maximum 8 rappels et suivis pour un type de rendez-vous."
+        "tooMany": "Au maximum {max} rappels et relances avec une heure par type de réservation.",
+        "fallbackInvalid": "Saisissez un nombre entier de minutes de {min} à {maxMinutes}, ou laissez vide."
       },
       "noneOn": "Aucun rappel ni suivi n'est activé pour ce type de rendez-vous.",
       "when": {
@@ -1422,7 +1424,18 @@
         "provider_error": "Le fournisseur l'a refusé.",
         "interrupted": "Il a été interrompu et non relancé.",
         "internal_error": "Une erreur s'est produite."
-      }
+      },
+      "steps": {
+        "confirmation": "Confirmation de réservation",
+        "no_show": "Message d’absence"
+      },
+      "notice": {
+        "smsRemoved": "Les rappels par SMS ont été supprimés. Cette étape a été déplacée vers l’e-mail (ou désactivée) ; choisissez WhatsApp ou e-mail."
+      },
+      "buttonsTitle": "Ajouter les boutons Confirmer, Reporter et Annuler (WhatsApp)",
+      "skipIfConfirmed": "Ignorer si le client a déjà confirmé",
+      "fallbackTitle": "Si le message n’est pas remis, essayer le canal suivant après (minutes)",
+      "fallbackHint": "Laissez vide pour désactiver. De {min} à {maxMinutes} minutes."
     }
   }
 }

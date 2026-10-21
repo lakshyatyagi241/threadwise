@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, type QueryClient } from '@tanstack/react-query';
+import { keepPreviousData, useQuery, useQueries, type QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
 import {
   fieldDependencyResponseSchema,
@@ -54,6 +54,71 @@ export function useModuleFields(
       ),
     staleTime: 60_000,
   });
+}
+
+/**
+ * A property with a very long option list (every City, State and Country) comes without its options: `optionCount` says how many
+ * there are and `useFieldOptionSearch` reads them a page at a time. Short lists stay inline in `options`.
+ */
+export const hasLazyOptions = (f: Pick<FieldResponse, 'options' | 'optionCount'>): boolean =>
+  (f.optionCount ?? 0) > (f.options?.length ?? 0);
+
+const OPTION_SEARCH = ['cat', 'field-option-search'] as const;
+const optionPage = z.object({ data: z.array(fieldOptionResponseSchema) });
+
+/** One page of a lazy property's options, filtered by what the person typed. Waits for the property to be chosen. */
+export function useFieldOptionSearch(fieldId: string | null, q: string, enabled = true) {
+  const term = q.trim();
+  return useQuery<FieldOptionResponse[]>({
+    enabled: enabled && fieldId !== null,
+    queryKey: [...OPTION_SEARCH, fieldId, term],
+    queryFn: ({ signal }) =>
+      apiFetch(`/fields/${fieldId}/option-search`, {
+        query: { q: term || undefined, limit: 50 },
+        schema: optionPage,
+        signal,
+      }).then((r): FieldOptionResponse[] => r.data),
+    placeholderData: keepPreviousData,
+    staleTime: 5 * 60_000,
+  });
+}
+
+/**
+ * The labels of the values some contacts hold for lazy properties, as `field key -> stored value -> label`. One small request per
+ * property (not per value); a value that is not an option (free text) has no entry and is shown as stored.
+ */
+export function useLazyOptionLabels(
+  fields: readonly FieldResponse[],
+  stored: Readonly<Record<string, unknown>>,
+): ReadonlyMap<string, ReadonlyMap<string, string>> {
+  const wanted = fields.flatMap((f) => {
+    if (!hasLazyOptions(f)) return [];
+    const raw = stored[f.key];
+    const values = (Array.isArray(raw) ? raw : [raw])
+      .filter((v): v is string | number => typeof v === 'string' || typeof v === 'number')
+      .map(String)
+      .filter((v) => v !== '');
+    return values.length > 0 ? [{ field: f, values: [...new Set(values)].slice(0, 200) }] : [];
+  });
+  const results = useQueries({
+    queries: wanted.map(({ field, values }) => ({
+      queryKey: [...OPTION_SEARCH, field.id, 'values', values.join('\u0000')],
+      queryFn: ({ signal }: { signal: AbortSignal }) =>
+        apiFetch(`/fields/${field.id}/option-search`, {
+          query: { values: values.join(','), limit: 200 },
+          schema: optionPage,
+          signal,
+        }).then((r) => r.data),
+      staleTime: 5 * 60_000,
+      retry: false,
+    })),
+  });
+  const out = new Map<string, ReadonlyMap<string, string>>();
+  wanted.forEach(({ field }, i) => {
+    const rows = results[i]?.data;
+    if (rows) out.set(field.key, new Map(rows.map((o) => [o.value, o.label])));
+  });
+  return out;
 }
 
 export const useContactFields = (includeInactive = false) =>

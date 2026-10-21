@@ -101,7 +101,7 @@
         "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail de suporte",
         "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
         "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },
@@ -197,8 +197,8 @@
       },
       "teams": {
         "label": "Equipes",
-        "description": "Agrupe pessoas em equipes para roteamento e relatórios.",
-        "keywords": "grupos, departamentos, atribuição, roteamento"
+        "description": "Agrupe pessoas para conversas, atribuições e relatórios.",
+        "keywords": "grupos, departamentos, gerentes, hierarquia, atribuição, roteamento"
       },
       "ai-keys": {
         "label": "Chaves de provedores de IA",
@@ -244,6 +244,11 @@
         "label": "API REST",
         "description": "Chaves e documentação para criar sobre o produto.",
         "keywords": "chaves de API, desenvolvedores, tokens, docs, openapi"
+      },
+      "api-keys": {
+        "label": "Chaves de API",
+        "description": "Crie e gerencie as chaves que outros sistemas usam para chamar a API.",
+        "keywords": "chave api, token, segredo, desenvolvedores, acesso, integração"
       },
       "webhooks": {
         "label": "Webhooks",
@@ -301,7 +306,7 @@
         "keywords": "geta, publicar, bot, console, colocar no ar, chatbot"
       },
       "auto-assignment": {
-        "label": "Atribuição automática",
+        "label": "Atribuição automática de conversas",
         "description": "Atribua novas conversas ao agente certo automaticamente, em rodízio ou por regras.",
         "keywords": "roteamento, rodízio, atribuir, agentes, regras da caixa de entrada, distribuir, responsável"
       },
@@ -389,6 +394,11 @@
         "label": "Leads duplicados",
         "description": "Escolha se um novo lead que coincide com um contato é mesclado a ele ou vira um novo contato.",
         "keywords": "duplicado, mesclar, lead, mesmo telefone, mesmo e-mail, novo contato, fonte de leads"
+      },
+      "sales-activities": {
+        "label": "Atividades de vendas",
+        "description": "Gerencie tarefas, reuniões, ligações e atividades próprias: o que cada uma pode fazer, seus tipos de tarefa e seus resultados.",
+        "keywords": "atividades, tipos de tarefa, resultados, resultado da reunião, resultado da ligação, acompanhamento, check-in, atividade personalizada, calendário, concluir"
       }
     },
     "backToMarketplace": "Voltar ao Marketplace"

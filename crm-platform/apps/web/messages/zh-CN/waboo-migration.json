@@ -46,7 +46,9 @@
       "catchUp": "增量同步",
       "migrateHint": "迁移会先进行完整预演，若未通过则不会加载任何数据。单独的试运行是可选的。",
       "queued": "运行已加入队列。",
-      "scheduled": "运行已计划。"
+      "scheduled": "运行已计划。",
+      "skipWhatsapp": "不迁移 WhatsApp 号码（用于测试）",
+      "skipWhatsappHint": "工作区将完整迁移，但不会导入或连接其 WhatsApp 号码。"
     },
     "confirm": {
       "title": "迁移 {org}",
@@ -76,7 +78,9 @@
       "migrateAll": "全部迁移",
       "migrateHint": "每个组织都会先进行各自的完整预演，若未通过则不会加载任何数据。单独的试运行是可选的。",
       "queued": "批次已加入队列。",
-      "scheduled": "批次已计划。"
+      "scheduled": "批次已计划。",
+      "skipWhatsapp": "不迁移 WhatsApp 号码（用于测试）",
+      "skipWhatsappHint": "这些工作区都不会导入或连接各自的 WhatsApp 号码。"
     },
     "bulkConfirm": {
       "title": "迁移 {count} 个组织",
@@ -174,7 +178,8 @@
     "mode": {
       "dry": "试运行",
       "load": "迁移",
-      "catchup": "增量同步"
+      "catchup": "增量同步",
+      "skipWhatsapp": "无 WhatsApp 号码"
     },
     "status": {
       "queued": "排队中",
@@ -196,7 +201,8 @@
       "core-load": "核心加载",
       "flow-state": "流程状态",
       "reconcile": "核对",
-      "report": "报告"
+      "report": "报告",
+      "whatsapp": "WhatsApp 号码"
     },
     "stepStatus": {
       "running": "运行中",

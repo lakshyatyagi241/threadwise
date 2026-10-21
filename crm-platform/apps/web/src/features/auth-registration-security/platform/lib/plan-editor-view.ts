@@ -1,6 +1,7 @@
 import {
   PLAN_FEATURE_KEYS,
   PLAN_LIMIT_KEYS,
+  isLimitCapped,
   type PlanAddonOption,
   type PlanAdminItem,
   type PlanLimitKey,
@@ -85,6 +86,7 @@ export const LIMIT_UNITS: Record<PlanLimitKey, LimitUnit> = {
   email_mailboxes: 'total',
   email_monthly: 'perMonth',
   storage_gb: 'total',
+  teams: 'total',
 };
 
 /** The api rate limit is the one cap where 0 does not mean unlimited: its checkbox says "Platform default". */
@@ -158,7 +160,7 @@ export function planCounts(plan: Pick<PlanAdminItem, 'features' | 'limits' | 'vi
   return {
     featuresOn: PLAN_FEATURE_KEYS.filter((k) => plan.features[k]).length,
     featuresTotal: PLAN_FEATURE_KEYS.length,
-    limitsSet: PLAN_LIMIT_KEYS.filter((k) => plan.limits[k] > 0).length,
+    limitsSet: PLAN_LIMIT_KEYS.filter((k) => isLimitCapped(k, plan.limits[k])).length,
     limitsTotal: PLAN_LIMIT_KEYS.length,
     addons: plan.visibleAddons.length,
   };

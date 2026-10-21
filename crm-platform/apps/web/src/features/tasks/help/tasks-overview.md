@@ -20,10 +20,11 @@ keywords: [to-do, follow-up, reminder, due date, priority, assign, overdue, chec
 4. Tick the circle at the start of a row to complete a task. On a completed task the same control reopens it.
 5. Select a task to open its panel, where you can edit, add notes, complete, reopen or delete it.
 6. Tick several rows to complete, assign or delete them together.
-7. Narrow the list with the search box, **Priority**, **Assignee** and **Linked to**. **Linked to** can point at a contact, a deal or a company (the company choice needs permission to read companies). A company's page has its own **Tasks** card; **View all** there opens this screen filtered to that company.
+7. Narrow the list with the search box, **Priority**, **Assignee**, **Team** and **Linked to**. **Team** shows only when your role can see teams and the workspace has at least one; it lists the tasks whose owning team is the one you pick (the assignee's primary team when the assignee was set). The counts on the tabs follow it. **Linked to** can point at a contact, a deal or a company (the company choice needs permission to read companies). A company's page has its own **Tasks** card; **View all** there opens this screen filtered to that company.
 
 ## Options and settings
 
+- **Outcome** is a result you can record when you complete a task, such as Interested or Left message. It shows as a field on the task, a column and a filter once your workspace has outcomes; the list is edited in the **Task** drawer of **Settings > Data > Sales Activities** (see [Sales Activities](help:sales-activities)).
 - **Board by due date** groups open tasks into Overdue, Today, Upcoming and No date.
 - **Modify columns** chooses which optional columns show. Your choice is remembered in your browser.
 - Keyboard shortcuts work outside text fields: j and k move between tasks, Enter opens one, e completes or reopens it, x selects it, n starts a new task, / goes to search and ? lists all shortcuts.

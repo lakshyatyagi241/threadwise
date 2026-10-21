@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import type { ReactNode, RefObject } from 'react';
 import { cn } from '@crm/ui';
 import type { ResolvedNavItem } from '@/features/_registry/types';
+import { useBrandName } from './brand';
 import { BrandMark, MenuIcon, NavIcon } from './nav-icons';
 import { UserMenu, type ShellUser } from './user-menu';
 
@@ -124,6 +125,7 @@ export function TopBar({
   helpItems,
 }: TopBarProps) {
   const t = useTranslations();
+  const brand = useBrandName();
   return (
     <header className="sticky top-0 z-40 flex h-14 items-center gap-2 border-b border-border bg-background px-3 sm:gap-3 sm:px-4">
       <button
@@ -140,9 +142,7 @@ export function TopBar({
         className="flex shrink-0 items-center gap-2 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-primary md:hidden"
       >
         <BrandMark className="size-8" />
-        <span className="hidden text-base font-semibold tracking-tight sm:inline">
-          {t('common.appName')}
-        </span>
+        <span className="hidden text-base font-semibold tracking-tight sm:inline">{brand}</span>
       </Link>
       {headerStart && <div className="min-w-0 max-w-[40vw] sm:max-w-none">{headerStart}</div>}
 

@@ -4,7 +4,7 @@ title: LINE channels and broadcasts
 summary: Connect a LINE Official Account, check its webhook, pause it or turn on token rotation, and send broadcasts to the people who chat with it.
 area: settings
 order: 80
-documents: [tile:line]
+documents: [tile:line, nav:line]
 keywords:
   [
     line,

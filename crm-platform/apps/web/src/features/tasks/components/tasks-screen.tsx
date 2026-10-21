@@ -380,9 +380,11 @@ export function TasksScreen() {
                             status: 'open',
                             priority: '',
                             assignee: '',
+                            team: '',
                             contact: '',
                             deal: '',
                             company: '',
+                            outcome: '',
                           });
                         }}
                       >

@@ -54,6 +54,12 @@ export const MAPPING: MappingRow[] = [
     note: 'the list through id_map (marketing_list); unresolved: kept as soft LIST_UNRESOLVED',
   },
   {
+    key: 'trigger|contact|added',
+    target: 'trigger kind contact_created',
+    status: 'mapped',
+    note: 'Waboo "Contact Created - Any Contact Created": the same event in WaDesk (a new contact is added)',
+  },
+  {
     key: 'trigger|google|google_sheet_events',
     target: 'trigger kind manual_enroll (placeholder)',
     status: 'unsupported',
@@ -241,8 +247,7 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
       data: obj(n.nodeObjectData),
     });
   }
-  if (nodes.length === 0)
-    return { ok: false, code: 'NO_NODES', reason: 'the automation has no nodes' };
+  // an empty draft (no nodes) is converted too: it becomes a flow with the manual_enroll trigger (NO_TRIGGER), so every automation of the old workspace exists
   if (nodes.length > MAX_NODES)
     return {
       ok: false,
@@ -466,6 +471,11 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
         built.set(n.id, { entry: id, from: outOf(id) });
         return;
       }
+      case 'trigger|contact|added': {
+        addNode(id, 'trigger', p.x, p.y, { kind: 'contact_created' }, waboo);
+        built.set(n.id, { entry: id, from: outOf(id) });
+        return;
+      }
       case 'trigger|contact|added_to_list': {
         const ref = inp.list(s(n.data.marketing_list_id));
         if (!ref) bump('listUnresolved');
@@ -647,6 +657,7 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
   for (const n of nodes) {
     const b = built.get(n.id)!;
     const seen = new Map<string, number>();
+    const linked = new Set<string>();
     for (const e of n.edges) {
       const target = built.get(e.to);
       if (!target) {
@@ -654,6 +665,10 @@ export function convertAutomation(inp: ConvertInput): ConvertOutput {
         continue;
       }
       const f = b.from(e.port);
+      // Several Waboo ports can leave by the same graph port (a trigger has one `out`): a link to the same step twice is one link.
+      const same = `${f.source}\u0000${f.handle}\u0000${target.entry}`;
+      if (linked.has(same)) continue; // the same link again: nothing is lost by keeping one
+      linked.add(same);
       const k = `${f.source}\u0000${f.handle}`;
       const c = (seen.get(k) ?? 0) + 1;
       seen.set(k, c);

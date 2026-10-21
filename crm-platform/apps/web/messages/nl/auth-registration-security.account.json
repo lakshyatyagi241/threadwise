@@ -561,7 +561,10 @@
             "personal_history_full": "Volledige geschiedenis importeren (persoonlijke WhatsApp)",
             "ai_crm_copilot": "AI CRM Copilot",
             "lead_scoring": "AI-leadscoring",
-            "record_assignment": "Regels voor recordtoewijzing"
+            "record_assignment": "Regels voor recordtoewijzing",
+            "team_hierarchy": "Teamhiërarchie en managers",
+            "custom_roles": "Eigen rollen en bereiken",
+            "inbox_assignment_sticky": "Contacteigenaar en vaste medewerker"
           },
           "cta": {
             "continueFree": "Gratis doorgaan",

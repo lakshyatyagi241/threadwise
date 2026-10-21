@@ -180,7 +180,14 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
 
   it('meta.counts and GET /counts equal what the tabs list, and the archived count is separate', async () => {
     const p = await list(agent.token);
-    expect(p.meta.counts).toEqual({ all: 4, mine: 1, unassigned: 2, unread: 1, archived: 1 });
+    expect(p.meta.counts).toEqual({
+      all: 4,
+      mine: 1,
+      unassigned: 2,
+      unread: 1,
+      waiting: 0,
+      archived: 1,
+    });
     const res = await api.as(agent.token).get('/v2/inbox/counts');
     expect(res.status).toBe(200);
     expect(res.body).toEqual(p.meta.counts);
@@ -189,7 +196,14 @@ describe('list: tabs, status, channel, archive and the counts that match them', 
     }
     // Narrowed by channel, the badges follow.
     const second = await list(agent.token, `?channelId=${ch2.id}`);
-    expect(second.meta.counts).toEqual({ all: 1, mine: 0, unassigned: 0, unread: 0, archived: 0 });
+    expect(second.meta.counts).toEqual({
+      all: 1,
+      mine: 0,
+      unassigned: 0,
+      unread: 0,
+      waiting: 0,
+      archived: 0,
+    });
   });
 
   it('a limit above the maximum is a validation error, and limit 2 pages the whole set without repeats or gaps', async () => {
@@ -342,7 +356,11 @@ describe('scope: all, team and own see the same conversations in the list, the c
     t = await api.signup('ibs');
     ch = await inbox.channel(t.admin);
     all = await api.member(t, 'all', [['inbox.conversation.read', 'all']]);
-    teamer = await api.member(t, 'teamer', [['inbox.conversation.read', 'team']]);
+    // The migration of BL-382 gives every role that read at `team` the unassigned queue as a permission; this member is such a role.
+    teamer = await api.member(t, 'teamer', [
+      ['inbox.conversation.read', 'team'],
+      ['inbox.conversation.read_unassigned'],
+    ]);
     own = await api.member(t, 'own', [['inbox.conversation.read', 'own']]);
     none = await api.member(t, 'none', []);
     const mk = async (name: string) =>
@@ -511,6 +529,58 @@ describe('the conversation header', () => {
     expect(res.status).toBe(200);
     expect(res.body.contactSummary).toBeNull();
     expect(res.body.contact.id).toBe(contactUuid);
+  });
+
+  it('applies the caller contact scope to the contact panel, like the message history does (BL-380, gap 10)', async () => {
+    // An agent who reads only the contacts they own or created: the thread is theirs, the contact is somebody else's.
+    const scoped = await api.member(t, 'scoped', [...AGENT, ['record.contacts.read', 'own']]);
+    const mine = await inbox.conversation(t, ch.id, {
+      contactId: Number(
+        (await h.owner.query(`SELECT id FROM contacts WHERE uuid = $1`, [contactUuid])).rows[0].id,
+      ),
+      assigneeUserId: scoped.userId,
+    });
+    const panel = async () =>
+      (await api.as(scoped.token).get(`/v2/inbox/conversations/${mine.uuid}`)).body;
+    const before = (
+      await h.owner.query(`SELECT owner_id, created_by FROM contacts WHERE uuid = $1`, [
+        contactUuid,
+      ])
+    ).rows[0] as { owner_id: number | null; created_by: number | null };
+
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $2 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+    ]);
+    const hidden = await panel();
+    expect(hidden.contactSummary).toBeNull();
+    // The thread itself still opens, and still names the contact: only the contact's own details are held back.
+    expect(hidden.contact.id).toBe(contactUuid);
+
+    // Owned by the agent: the panel shows.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2 WHERE uuid = $1`, [
+      contactUuid,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    // Created by the agent but owned by a colleague: D1, the creator still sees it.
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      t.adminUserId,
+      scoped.userId,
+    ]);
+    expect((await panel()).contactSummary).toMatchObject({ id: contactUuid });
+
+    await h.owner.query(`UPDATE contacts SET owner_id = NULL, created_by = NULL WHERE uuid = $1`, [
+      contactUuid,
+    ]);
+    expect((await panel()).contactSummary).toBeNull();
+    await h.owner.query(`UPDATE contacts SET owner_id = $2, created_by = $3 WHERE uuid = $1`, [
+      contactUuid,
+      before.owner_id,
+      before.created_by,
+    ]);
   });
 
   it('shows a closed window and when it closed, for a customer who last wrote two days ago', async () => {

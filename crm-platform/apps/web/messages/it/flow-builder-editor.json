@@ -574,43 +574,7 @@
           "waitUntilPaid": "Attendi il pagamento, poi continua"
         },
         "faq": {
-          "intro": {
-            "body": "Confronta un messaggio con le FAQ di questo flusso in base al significato e gli risponde. Esce da <mono>risposto</mono> quando una FAQ ha risposto, e da <mono>nessuna corrispondenza</mono> altrimenti.",
-            "sub": "Funziona anche senza attivare la risposta FAQ automatica di questo flusso. <link>Gestisci le FAQ di questo flusso</link>"
-          },
-          "exitsLabel": "Uscite",
-          "exitMatchedName": "Risposta data",
-          "exitMatched": "una FAQ ha risposto: il suo testo è stato inviato (a meno che l'invio sia disattivato), oppure il suo flusso ha preso il controllo e non torna indietro.",
-          "exitNoMatchName": "Nessuna corrispondenza",
-          "exitNoMatch": "nessuna FAQ era abbastanza vicina, la risposta con FAQ è disattivata per la piattaforma, il flusso o il passaggio collegato non esiste più, oppure il messaggio era vuoto.",
-          "query": "Messaggio da confrontare",
-          "queryHint": "Per impostazione predefinita è l'ultimo messaggio del cliente. Funziona anche una variabile salvata da un passaggio Domanda, ad esempio <mono>{variable}</mono>. Digita / per inserirne una.",
-          "category": "Solo queste FAQ",
-          "allFaqs": "Tutte le FAQ",
-          "loadingCategories": "Caricamento categorie…",
-          "categoryGone": "{name} (nessuna FAQ la usa)",
-          "retry": "Riprova",
-          "minScore": "Punteggio minimo",
-          "sendAnswer": "Invia la risposta al cliente",
-          "sendAnswerToggle": "Invia come messaggio una risposta testuale corrispondente",
-          "sendAnswerOnHint": "Una FAQ testuale corrispondente viene inviata al cliente. Una FAQ che avvia un flusso continua in quel flusso.",
-          "sendAnswerOffHint": "Non viene inviato nulla: la risposta è salvata solo nelle variabili qui sotto, così un passaggio successivo può formulare la risposta da sé. Una FAQ che avvia un flusso continua comunque in quel flusso.",
-          "save": "Salva il risultato come",
-          "saveHint": "Il nome con cui viene salvato il risultato. I passaggi successivi lo leggono come mostrato qui sotto.",
-          "variables": {
-            "answer": "il testo della risposta",
-            "matched": "sì o no",
-            "question": "la domanda della FAQ corrispondente",
-            "score": "quanto era vicina la corrispondenza",
-            "id": "l'ID della FAQ corrispondente"
-          },
-          "noFaqs": "Questo flusso non ha ancora FAQ, quindi questo passaggio esce sempre da nessuna corrispondenza. <link>Aggiungi la prima FAQ di questo flusso</link>",
-          "useWorkspaceScore": "Usa l’impostazione di questo flusso",
-          "minScoreInvalid": "Inserisci un numero da {min} a {max}, oppure usa l’impostazione di questo flusso.",
-          "saveFlowFirst": "Salva prima il flusso. Le sue FAQ si modificano nella scheda FAQ del builder semplice, e questo passaggio risponde da esse.",
-          "categoryHint": "Possono rispondere solo le FAQ di questa categoria. Le categorie provengono dalle FAQ di questo flusso.",
-          "categoriesFailed": "Impossibile caricare le categorie FAQ di questo flusso.",
-          "minScoreHint": "Sostituisce il punteggio di questo flusso solo per questo passaggio, da {min} a {max}. I punteggi dipendono dal modello di embedding della piattaforma, quindi prova un messaggio nel <link>test FAQ</link> di questo flusso prima di scegliere un numero."
+          "retired": "Questo passaggio è ritirato e non cerca più nulla. Il flusso prosegue sempre da Nessuna corrispondenza. Per rispondere con la tua conoscenza, usa un passaggio assistente IA e scegli un agente IA."
         }
       },
       "attrPicker": {
@@ -938,17 +902,13 @@
           "cardCount": "{count} card",
           "payLink": "Link di pagamento",
           "invoice": "Fattura",
-          "faqAllFaqs": "Tutte le FAQ",
-          "faqCategory": "FAQ: {name}",
-          "faqScore": "punteggio min. {score}",
-          "faqNotSent": "non inviata",
-          "faqWorkspaceScore": "punteggio del flusso"
+          "faqRetired": "Ritirato · esce da nessuna corrispondenza"
         },
         "overlays": {
           "startPinned": "Questo è il punto di partenza (clicca per rimuoverlo)",
           "startMake": "Imposta come punto di partenza",
           "startPoint": "Punto di partenza",
-          "editTitle": "Modifica (apri l’ispettore)",
+          "editTitle": "Modifica (apri l'ispettore, o doppio clic sul nodo, o premi Invio)",
           "edit": "Modifica",
           "duplicateTitle": "Duplica (Ctrl+D)",
           "duplicate": "Duplica",
@@ -964,7 +924,9 @@
           "nothingHint": "Clicca un nodo sulla tela per modificarne le proprietà,<br/>oppure trascina una card da sinistra per aggiungere un nuovo nodo.",
           "nodeFallback": "Nodo",
           "id": "id",
-          "noSettings": "Questo nodo non ha impostazioni."
+          "noSettings": "Questo nodo non ha impostazioni.",
+          "confirmDeleteTitle": "Eliminare questo nodo?",
+          "confirmDeleteMessage": "Il nodo e le sue connessioni vengono rimossi. Premi Ctrl+Z per annullare finché non esci dall'editor."
         },
         "palette": {
           "modeCall": "Chiamata",
@@ -1104,8 +1066,7 @@
             "answer": "Risposta",
             "action": "Azioni"
           },
-          "blockedTitle": "Questo passaggio chiude questa parte, quindi può stare solo per ultimo.",
-          "blockedTitleFaq": "Rispondi da FAQ ha due uscite, quindi può stare solo alla fine."
+          "blockedTitle": "Questo passaggio chiude questa parte, quindi può stare solo per ultimo."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -1294,18 +1255,12 @@
             "hint": "Il visitatore passa a questo team con la tua nota. Dopo questo pulsante non serve collegare nulla."
           },
           "faq": {
-            "exits": {
-              "matched": "Se una FAQ ha risposto, vai a",
-              "no_match": "Se nessuna FAQ ha risposto, vai a"
-            },
-            "exitsHint": {
-              "matched": "A quel punto è stata inviata una risposta testuale. Una FAQ che avvia un flusso continua invece in quel flusso.",
-              "no_match": "Nessuna FAQ era abbastanza vicina, oppure la risposta automatica con FAQ è disattivata."
-            }
+            "exit": "Continua con",
+            "exitHint": "Il flusso prosegue sempre qui."
           }
         },
         "branchAdd": "Aggiungi un passaggio per «{title}»",
-        "faqEnds": "Questo passaggio chiude questa parte: ciò che viene inviato dopo dipende dal fatto che una FAQ abbia risposto."
+        "faqEnds": "Questo passaggio ritirato chiude questa parte: il flusso prosegue sempre dalla sua uscita Nessuna corrispondenza."
       },
       "formsCore": {
         "helpers": {
@@ -1835,7 +1790,6 @@
         "customizeFirst": "Personalizza il widget di chat e salvalo una volta prima di pubblicare.",
         "deploy": "Deploy",
         "customizeFirstWhatsapp": "Personalizza il pulsante WhatsApp e salvalo una volta prima di pubblicare.",
-        "faqs": "FAQ",
         "install": "Installa"
       },
       "buttonIcon": {
@@ -2006,8 +1960,8 @@
           "description": "Aggiungi o rimuovi un tag"
         },
         "assign": {
-          "label": "Assegna operatore",
-          "description": "Passa a un operatore umano"
+          "label": "Passaggio a un umano",
+          "description": "Passa la chat a una persona o a una coda"
         },
         "subflow": {
           "label": "Esegui sotto-Flow",
@@ -2357,7 +2311,6 @@
         "noSenderInstagram": "Il nodo Trigger non ha un account Instagram selezionato — scegline uno nel passo Trigger.",
         "noSenderFacebook": "Il nodo Trigger non ha una Pagina Facebook selezionata — scegline una nel passo Trigger.",
         "noSenderNumber": "Il nodo Trigger non ha un numero selezionato — scegline uno nel passo Trigger.",
-        "faqMinScore": "\"{node}\" ha un punteggio minimo fuori dall'intervallo da 0.05 a 0.99 — correggilo o lascialo vuoto per usare l'impostazione del flusso.",
         "locationInvalid": "«{node}» non ha una posizione valida: incolla un link di Google Maps o inserisci latitudine (-90 a 90) e longitudine (-180 a 180).",
         "aiNoAgent": "\"{node}\" non ha né un agente AI né un prompt: scegli un agente AI oppure Configurazione personalizzata e scrivi le istruzioni."
       }
@@ -2368,8 +2321,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Assegna a un operatore",
-          "help": "Passa la conversazione a un team o a un operatore"
+          "label": "Passaggio a un umano",
+          "help": "Passa la conversazione a una persona, a un team o alle regole di assegnazione"
         },
         "message": {
           "label": "Messaggio",
@@ -2447,10 +2400,6 @@
           "label": "Condizione",
           "help": "Ramifica in base a ciò che il cliente ha detto o salvato, con regole AND / OR"
         },
-        "faq": {
-          "label": "Rispondi da FAQ",
-          "help": "Confronta il messaggio del cliente con le tue FAQ. Termina questo flusso: un'uscita se una FAQ ha risposto, un'altra in caso contrario"
-        },
         "apiLibrary": {
           "label": "Chiamata API",
           "help": "Chiama un'API dalla tua libreria di API"
@@ -2472,7 +2421,7 @@
         "location": "Posizione",
         "template": "Template",
         "cta": "Pulsante link",
-        "assign": "Assegna a un operatore",
+        "assign": "Passaggio a un umano",
         "carousel": "Carosello",
         "condition": "Condizione",
         "faq": "Rispondi da FAQ",
@@ -2519,7 +2468,6 @@
         "carouselCards": "Passaggio {stage}: aggiungi almeno una scheda e dai un titolo a ogni scheda.",
         "carouselButtons": "Passaggio {stage}: dai un nome a ogni pulsante, e un link, un numero o un indirizzo dove apre qualcosa.",
         "conditionIncomplete": "Passaggio {stage}: completa le regole della condizione (una variabile e un valore in ciascuna).",
-        "faqMinScore": "Passaggio {stage}: il punteggio minimo deve essere da 0.05 a 0.99, oppure usa l'impostazione del flusso.",
         "optionNotConnected": "Passaggio {stage}: {kind, select, row {la riga} other {il pulsante}} \"{label}\" non porta da nessuna parte. Aggiungi un passaggio o assegnagli un'azione.",
         "tooManyOptions": "Passaggio {stage}: {kind, select, row {un elenco può avere al massimo {max} righe} other {un gruppo di pulsanti può avere al massimo {max} pulsanti}}.",
         "chooseFlow": "Passo {stage}: scegli il flusso che il pulsante avvia.",
@@ -2528,8 +2476,7 @@
         "webhookUrl": "Passaggio {stage}: aggiungi l'indirizzo (URL) da chiamare.",
         "chooseAiAgent": "Passo {stage}: scegli l’agente AI che risponde o passa il passo a una configurazione personalizzata.",
         "writeAiPrompt": "Passo {stage}: scrivi le istruzioni per l’AI o scegli un agente AI."
-      },
-      "faqSummary": "{hasCategory, select, true {Dalle tue FAQ · {category}} other {Dalle tue FAQ}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2641,9 +2588,8 @@
       "buttonNotConnected": "Pulsante «{label}» non collegato — stop.",
       "simPurchase": "Acquisto simulato: {name} → porta «acquistato»",
       "simAbandon": "Abbandono simulato → porta «abbandonato»",
-      "faqAnswered": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ, quindi non viene inviato nulla e {ref} resta vuoto. Si segue l'uscita \"risposta data\".",
-      "faqNoMatch": "(simulato) Rispondi da FAQ per \"{query}\": la chat di prova non cerca nelle tue FAQ e l'uscita \"risposta data\" non è collegata, quindi si segue \"nessuna corrispondenza\". {ref} resta vuoto.",
-      "locationSkipped": "(posizione) saltata: nessuna coordinata valida"
+      "locationSkipped": "(posizione) saltata: nessuna coordinata valida",
+      "faqRetired": "(simulato) Rispondi dalle FAQ è ritirato: si prende \"nessuna corrispondenza\"."
     },
     "templates": {
       "eyebrow": "Modelli di partenza",

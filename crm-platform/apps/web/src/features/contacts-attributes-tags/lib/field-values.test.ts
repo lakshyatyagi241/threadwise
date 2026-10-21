@@ -191,3 +191,16 @@ describe('isFieldApplicable', () => {
     ).toBe(false);
   });
 });
+
+describe('displayValue ISO instants', () => {
+  it('shows an imported ISO timestamp through the workspace date format', () => {
+    const f = { fieldType: 'text', options: [], isMasked: false } as never;
+    const out = displayValue(
+      f,
+      '2026-03-21T15:29:05.374Z',
+      { yes: 'Yes', no: 'No' },
+      { dateTime: () => '21 Mar 2026, 03:29 PM' },
+    );
+    expect(out).toBe('21 Mar 2026, 03:29 PM');
+  });
+});

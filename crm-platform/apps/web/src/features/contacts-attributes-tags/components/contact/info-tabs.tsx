@@ -1,10 +1,10 @@
 'use client';
 
-import { useFormatter, useNow, useTranslations } from 'next-intl';
+import { useFormatter, useLocale, useNow, useTimeZone, useTranslations } from 'next-intl';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { CompanyLink } from '@/features/companies';
 import { attributionView, useContactAttribution, type TouchView } from '@/features/lead-sources';
-import { useContactFields, useFieldSections } from '../../api/properties';
+import { useContactFields, useFieldSections, useLazyOptionLabels } from '../../api/properties';
 import type { ContactRow } from '../../api/schemas';
 import {
   EXTRA_KEYS,
@@ -13,7 +13,9 @@ import {
   titleCaseKey,
 } from '../../lib/contact-model';
 import { jobTitleField, jobTitleOf, socialLinks } from '../../lib/contact-overview';
-import { detailGroups } from '../../lib/property-model';
+import { formatDateTime } from '../../lib/format';
+import { detailGroups, withAgentNames } from '../../lib/property-model';
+import { useOwnerNames } from '../../api/owners';
 import { EmptyLine, KeyValueList, type KeyValueRow } from './shared';
 
 const text = (c: Pick<ContactRow, 'customFields'>, key: string): string =>
@@ -89,19 +91,37 @@ export function useInfoRows(contact: ContactRow, opts: { full?: boolean } = {}):
   return rows;
 }
 
+/**
+ * Keys the Details tab draws itself from the contact (Original lifecycle stage, Created by, Updated by): the custom property list
+ * leaves them out so a workspace that lists them as properties does not show them twice.
+ */
+export const DETAIL_ROW_KEYS: ReadonlySet<string> = new Set([
+  'original_lifecycle_stage',
+  'created_by',
+  'updated_by',
+]);
+
 /** The custom property groups of a contact (the workspace's own sections), as rows ready to draw. */
 export function useCustomGroups(contact: ContactRow) {
   const t = useTranslations('contacts-attributes-tags.detail');
+  const locale = useLocale();
+  const timeZone = useTimeZone();
   const registry = useContactFields();
   const sections = useFieldSections();
-  return detailGroups(
-    registry.data ?? [],
+  const { nameOf } = useOwnerNames();
+  const fields = (registry.data ?? []).filter((f) => !DETAIL_ROW_KEYS.has(f.key));
+  // Lists too long to send with the properties (every City) are read for the values this contact holds only.
+  const optionLabels = useLazyOptionLabels(fields, contact.customFields);
+  const groups = detailGroups(
+    fields,
     sections.data ?? [],
     contact.customFields,
-    RESERVED_CUSTOM_KEYS,
+    new Set([...RESERVED_CUSTOM_KEYS, ...DETAIL_ROW_KEYS]),
     { yes: t('yes'), no: t('no') },
     titleCaseKey,
+    { dateTime: (iso) => formatDateTime(iso, locale, timeZone), optionLabels },
   );
+  return withAgentNames(groups, nameOf);
 }
 
 export function CustomFields({ contact }: { contact: ContactRow }) {

@@ -555,17 +555,13 @@
           "cardCount": "{count} card(s)",
           "payLink": "Pay link",
           "invoice": "Invoice",
-          "faqAllFaqs": "All FAQs",
-          "faqCategory": "FAQs: {name}",
-          "faqScore": "min score {score}",
-          "faqWorkspaceScore": "flow score",
-          "faqNotSent": "not sent"
+          "faqRetired": "Retired · leaves by no match"
         },
         "overlays": {
           "startPinned": "This is the start point (click to unpin)",
           "startMake": "Make this the start point",
           "startPoint": "Start point",
-          "editTitle": "Edit (open inspector)",
+          "editTitle": "Edit (open inspector, or double-click the node, or press Enter)",
           "edit": "Edit",
           "duplicateTitle": "Duplicate (Ctrl+D)",
           "duplicate": "Duplicate",
@@ -581,7 +577,9 @@
           "nothingHint": "Click a node on the canvas to edit its properties,<br/>or drag a card from the left to add a new node.",
           "nodeFallback": "Node",
           "id": "id",
-          "noSettings": "This node has no settings."
+          "noSettings": "This node has no settings.",
+          "confirmDeleteTitle": "Delete this node?",
+          "confirmDeleteMessage": "The node and its connections are removed. Press Ctrl+Z to undo it until you leave the builder."
         },
         "palette": {
           "modeCall": "Call",
@@ -638,8 +636,7 @@
         "needsCustomizing": "Customize is not saved yet. Open Customize.",
         "customizeFirst": "Customize your chat widget and save it once before publishing.",
         "deploy": "Deploy",
-        "customizeFirstWhatsapp": "Customize your WhatsApp button and save it once before publishing.",
-        "faqs": "FAQs"
+        "customizeFirstWhatsapp": "Customize your WhatsApp button and save it once before publishing."
       },
       "simple": {
         "loading": "Loading the flow…",
@@ -732,8 +729,7 @@
             "answer": "Answer",
             "action": "Actions"
           },
-          "blockedTitle": "This step ends this part, so it can only go last.",
-          "blockedTitleFaq": "Answer from FAQ has two exits, so it can only go last."
+          "blockedTitle": "This step ends this part, so it can only go last."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -922,18 +918,12 @@
             "hint": "The visitor is passed to this team with your note. Nothing needs to be connected after this button."
           },
           "faq": {
-            "exits": {
-              "matched": "If an FAQ answered, go to",
-              "no_match": "If no FAQ answered, go to"
-            },
-            "exitsHint": {
-              "matched": "By then a text answer has been sent. An FAQ that starts a flow continues in that flow instead.",
-              "no_match": "Nothing was close enough, or FAQ answering is switched off."
-            }
+            "exit": "Carry on with",
+            "exitHint": "The flow always continues here."
           }
         },
         "branchAdd": "Add a step for “{title}”",
-        "faqEnds": "This step ends this part: what is sent next depends on whether an FAQ answered."
+        "faqEnds": "This retired step ends this part: the flow always carries on by its No match exit."
       },
       "askAge": {
         "minAge": "Minimum age",
@@ -1893,43 +1883,7 @@
           "waitUntilPaid": "Wait until paid, then continue"
         },
         "faq": {
-          "intro": {
-            "body": "Matches a message against this flow's FAQs by meaning and answers it. It leaves by <mono>answered</mono> when an FAQ answered, and by <mono>no match</mono> otherwise.",
-            "sub": "Works without switching this flow's automatic FAQ answering on. <link>Manage this flow's FAQs</link>"
-          },
-          "exitsLabel": "Exits",
-          "exitMatchedName": "Answered",
-          "exitMatched": "an FAQ answered: its text was sent (unless sending is off), or its flow took over and does not come back.",
-          "exitNoMatchName": "No match",
-          "exitNoMatch": "nothing was close enough, FAQ answering is switched off for the platform, the linked flow or step is gone, or the message was empty.",
-          "noFaqs": "This flow has no FAQs yet, so this step always leaves by no match. <link>Add the first FAQ of this flow</link>",
-          "query": "Message to match",
-          "queryHint": "Defaults to the customer's last message. A variable a Question step saved works too, for example <mono>{variable}</mono>. Type / to insert one.",
-          "category": "Only these FAQs",
-          "allFaqs": "All FAQs",
-          "loadingCategories": "Loading categories…",
-          "categoryGone": "{name} (no FAQ uses it)",
-          "categoryHint": "Only FAQs of this category can answer. The categories come from this flow's FAQs.",
-          "categoriesFailed": "This flow's FAQ categories could not be loaded.",
-          "retry": "Try again",
-          "minScore": "Minimum score",
-          "useWorkspaceScore": "Use this flow's setting",
-          "minScoreHint": "Replaces this flow's score for this step only, from {min} to {max}. Scores depend on the platform's embedding model, so try a message on the <link>FAQ test</link> of this flow before choosing a number.",
-          "minScoreInvalid": "Enter a number from {min} to {max}, or use this flow's setting.",
-          "sendAnswer": "Send the answer to the customer",
-          "sendAnswerToggle": "Send a matching text answer as a message",
-          "sendAnswerOnHint": "A matching text FAQ is sent to the customer. An FAQ that starts a flow continues in that flow.",
-          "sendAnswerOffHint": "Nothing is sent: the answer is only saved in the variables below, so a later step can word the reply itself. An FAQ that starts a flow still continues in that flow.",
-          "save": "Save the result as",
-          "saveHint": "The name the result is saved under. Later steps read it as shown below.",
-          "variables": {
-            "answer": "the answer text",
-            "matched": "yes or no",
-            "question": "the question of the FAQ that matched",
-            "score": "how close the match was",
-            "id": "the id of the FAQ that matched"
-          },
-          "saveFlowFirst": "Save the flow first. Its FAQs are edited on the FAQs tab of the Simple builder, and this step answers from them."
+          "retired": "This step is retired and no longer looks anything up. The flow always carries on by No match. To answer from your own knowledge, use an AI assistant step and pick an AI agent."
         }
       },
       "attrPicker": {
@@ -2147,8 +2101,8 @@
           "description": "Add or remove a tag"
         },
         "assign": {
-          "label": "Assign agent",
-          "description": "Hand off to a human"
+          "label": "Human handoff",
+          "description": "Hand the chat to a person or a queue"
         },
         "subflow": {
           "label": "Run sub-flow",
@@ -2498,7 +2452,6 @@
         "noSenderInstagram": "The Trigger node has no Instagram account selected — pick one on the Trigger step.",
         "noSenderFacebook": "The Trigger node has no Facebook Page selected — pick one on the Trigger step.",
         "noSenderNumber": "The Trigger node has no number selected — pick one on the Trigger step.",
-        "faqMinScore": "\"{node}\" has a minimum score outside 0.05 to 0.99 — fix it or leave it blank to use the flow's setting.",
         "locationInvalid": "\"{node}\" has no valid location — paste a Google Maps link or enter a latitude (-90 to 90) and longitude (-180 to 180).",
         "aiNoAgent": "\"{node}\" has no AI agent and no prompt — pick an AI agent, or choose Custom setup and write the instructions."
       }
@@ -2509,8 +2462,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Assign to an agent",
-          "help": "Hand the conversation to a team or an agent"
+          "label": "Human handoff",
+          "help": "Hand the conversation to a person, a team or the assignment rules"
         },
         "message": {
           "label": "Message",
@@ -2588,10 +2541,6 @@
           "label": "Condition",
           "help": "Branch on what the customer said or saved, with AND / OR rules"
         },
-        "faq": {
-          "label": "Answer from FAQ",
-          "help": "Match the customer's message to your FAQs. Ends this flow: one exit if an FAQ answered, another if not"
-        },
         "apiLibrary": {
           "label": "API call",
           "help": "Call an API from your API library"
@@ -2613,7 +2562,7 @@
         "location": "Location",
         "template": "Template",
         "cta": "Link button",
-        "assign": "Assign to an agent",
+        "assign": "Human handoff",
         "carousel": "Carousel",
         "condition": "Condition",
         "faq": "Answer from FAQ",
@@ -2660,7 +2609,6 @@
         "carouselCards": "Step {stage}: add at least one card and give every card a title.",
         "carouselButtons": "Step {stage}: give every button a name, and a link, number or address where it opens one.",
         "conditionIncomplete": "Step {stage}: finish the rules of the condition (a variable and a value in each).",
-        "faqMinScore": "Step {stage}: the minimum score must be from 0.05 to 0.99, or use the flow's setting.",
         "optionNotConnected": "Step {stage}: {kind, select, row {the row} other {the button}} \"{label}\" leads nowhere. Add a step for it, or give it an action.",
         "tooManyOptions": "Step {stage}: {kind, select, row {a list can have at most {max} rows} other {a set of buttons can have at most {max} buttons}}.",
         "chooseFlow": "Step {stage}: choose the flow the button starts.",
@@ -2669,8 +2617,7 @@
         "webhookUrl": "Step {stage}: add the address (URL) to call.",
         "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
         "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent."
-      },
-      "faqSummary": "{hasCategory, select, true {From your FAQs · {category}} other {From your FAQs}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2782,9 +2729,8 @@
       "buttonNotConnected": "Button \"{label}\" not connected — stop.",
       "simPurchase": "Simulated purchase: {name} → port \"purchased\"",
       "simAbandon": "Simulated abandon → port \"abandoned\"",
-      "faqAnswered": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, so nothing is sent and {ref} stays empty. Taking the \"answered\" exit.",
-      "faqNoMatch": "(simulated) Answer from FAQ for \"{query}\": the test chat does not look up your FAQs, and the \"answered\" exit is not connected, so taking \"no match\". {ref} stays empty.",
-      "locationSkipped": "(location) skipped: no valid coordinates"
+      "locationSkipped": "(location) skipped: no valid coordinates",
+      "faqRetired": "(simulated) Answer from FAQ is retired: taking \"no match\"."
     }
   }
 }

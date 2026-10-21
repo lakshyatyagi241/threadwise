@@ -3,6 +3,9 @@ import { sql } from 'drizzle-orm';
 import type { Tx } from '@crm/db';
 import { CryptoService } from '../../../common/crypto/crypto.service';
 import { PlatformStore } from './platform-store';
+import { cacheMetrics } from '@crm/observability';
+
+const cache = cacheMetrics('platform_settings');
 
 interface Row {
   value: unknown;
@@ -36,7 +39,11 @@ export class PlatformSettingsService {
 
   private async load(): Promise<Map<string, Row>> {
     const now = Date.now();
-    if (this.snapshot && now - this.snapshot.at < CACHE_MS) return this.snapshot.rows;
+    if (this.snapshot && now - this.snapshot.at < CACHE_MS) {
+      cache.hit();
+      return this.snapshot.rows;
+    }
+    cache.miss();
     if (this.inflight) return this.inflight;
 
     this.inflight = this.store

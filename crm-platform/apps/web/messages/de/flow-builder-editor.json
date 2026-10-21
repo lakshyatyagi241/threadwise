@@ -555,17 +555,13 @@
           "cardCount": "{count} Karte(n)",
           "payLink": "Zahlungslink",
           "invoice": "Rechnung",
-          "faqAllFaqs": "Alle FAQs",
-          "faqCategory": "FAQ-Kategorie: {name}",
-          "faqScore": "Mindestscore {score}",
-          "faqNotSent": "nicht gesendet",
-          "faqWorkspaceScore": "Flow-Score"
+          "faqRetired": "Eingestellt · verlässt über „Keine Übereinstimmung“"
         },
         "overlays": {
           "startPinned": "Dies ist der Startpunkt (zum Lösen anklicken)",
           "startMake": "Als Startpunkt festlegen",
           "startPoint": "Startpunkt",
-          "editTitle": "Bearbeiten (Inspektor öffnen)",
+          "editTitle": "Bearbeiten (Inspektor öffnen, oder Doppelklick auf den Knoten, oder Eingabetaste)",
           "edit": "Bearbeiten",
           "duplicateTitle": "Duplizieren (Strg+D)",
           "duplicate": "Duplizieren",
@@ -581,7 +577,9 @@
           "nothingHint": "Klicken Sie auf einen Knoten im Arbeitsbereich, um seine Eigenschaften zu bearbeiten,<br/>oder ziehen Sie links eine Karte, um einen neuen Knoten hinzuzufügen.",
           "nodeFallback": "Knoten",
           "id": "ID",
-          "noSettings": "Dieser Knoten hat keine Einstellungen."
+          "noSettings": "Dieser Knoten hat keine Einstellungen.",
+          "confirmDeleteTitle": "Diesen Knoten löschen?",
+          "confirmDeleteMessage": "Der Knoten und seine Verbindungen werden entfernt. Mit Strg+Z lässt sich das rückgängig machen, solange Sie den Builder nicht verlassen."
         },
         "palette": {
           "modeCall": "Anruf",
@@ -721,8 +719,7 @@
             "answer": "Antwort",
             "action": "Aktionen"
           },
-          "blockedTitle": "Dieser Schritt beendet diesen Teil und kann deshalb nur ganz am Ende stehen.",
-          "blockedTitleFaq": "„Antwort aus FAQ“ hat zwei Ausgänge und kann daher nur als Letztes stehen."
+          "blockedTitle": "Dieser Schritt beendet diesen Teil und kann deshalb nur ganz am Ende stehen."
         },
         "card": {
           "branchLabel": "{title} → {target}",
@@ -911,18 +908,12 @@
             "hint": "Der Besucher wird mit Ihrer Notiz an dieses Team übergeben. Nach dieser Schaltfläche muss nichts verbunden werden."
           },
           "faq": {
-            "exits": {
-              "matched": "Wenn eine FAQ geantwortet hat, weiter zu",
-              "no_match": "Wenn keine FAQ geantwortet hat, weiter zu"
-            },
-            "exitsHint": {
-              "matched": "Bis dahin wurde eine Textantwort gesendet. Eine FAQ, die einen Flow startet, wird stattdessen in diesem Flow fortgesetzt.",
-              "no_match": "Nichts war nah genug, oder die automatische FAQ-Antwort ist ausgeschaltet."
-            }
+            "exit": "Weiter mit",
+            "exitHint": "Der Ablauf geht immer hier weiter."
           }
         },
         "branchAdd": "Schritt für „{title}“ hinzufügen",
-        "faqEnds": "Dieser Schritt beendet diesen Abschnitt: Was als Nächstes gesendet wird, hängt davon ab, ob eine FAQ geantwortet hat."
+        "faqEnds": "Dieser eingestellte Schritt beendet diesen Abschnitt: Der Ablauf geht immer über seinen Ausgang „Keine Übereinstimmung“ weiter."
       },
       "formsCore": {
         "helpers": {
@@ -1870,43 +1861,7 @@
           "waitUntilPaid": "Bis zur Zahlung warten, dann fortfahren"
         },
         "faq": {
-          "intro": {
-            "body": "Gleicht eine Nachricht inhaltlich mit den FAQs dieses Flows ab und beantwortet sie. Verlässt den Schritt über <mono>beantwortet</mono>, wenn eine FAQ geantwortet hat, sonst über <mono>kein Treffer</mono>.",
-            "sub": "Funktioniert auch ohne eingeschaltete automatische FAQ-Antworten für diesen Flow. <link>FAQs dieses Flows verwalten</link>"
-          },
-          "exitsLabel": "Ausgänge",
-          "exitMatchedName": "Beantwortet",
-          "exitMatched": "eine FAQ hat geantwortet: Ihr Text wurde gesendet (außer das Senden ist aus), oder ihr Flow hat übernommen und kehrt nicht zurück.",
-          "exitNoMatchName": "Kein Treffer",
-          "exitNoMatch": "nichts war nah genug, die automatische FAQ-Antwort ist für die Plattform ausgeschaltet, der verknüpfte Flow oder Schritt existiert nicht mehr, oder die Nachricht war leer.",
-          "query": "Zu prüfende Nachricht",
-          "queryHint": "Standardmäßig die letzte Nachricht des Kunden. Eine von einem Frage-Schritt gespeicherte Variable funktioniert ebenfalls, zum Beispiel <mono>{variable}</mono>. Mit / fügen Sie eine ein.",
-          "category": "Nur diese FAQs",
-          "allFaqs": "Alle FAQs",
-          "loadingCategories": "Kategorien werden geladen …",
-          "categoryGone": "{name} (keine FAQ nutzt sie)",
-          "retry": "Erneut versuchen",
-          "minScore": "Mindestscore",
-          "sendAnswer": "Antwort an den Kunden senden",
-          "sendAnswerToggle": "Passende Textantwort als Nachricht senden",
-          "sendAnswerOnHint": "Eine passende Text-FAQ wird an den Kunden gesendet. Eine FAQ, die einen Flow startet, wird in diesem Flow fortgesetzt.",
-          "sendAnswerOffHint": "Es wird nichts gesendet: Die Antwort wird nur in den Variablen unten gespeichert, sodass ein späterer Schritt die Antwort selbst formulieren kann. Eine FAQ, die einen Flow startet, wird weiterhin in diesem Flow fortgesetzt.",
-          "save": "Ergebnis speichern als",
-          "saveHint": "Der Name, unter dem das Ergebnis gespeichert wird. Spätere Schritte lesen es wie unten gezeigt.",
-          "variables": {
-            "answer": "der Antworttext",
-            "matched": "ja oder nein",
-            "question": "die Frage der passenden FAQ",
-            "score": "wie gut der Treffer war",
-            "id": "die ID der passenden FAQ"
-          },
-          "noFaqs": "Dieser Flow hat noch keine FAQs, daher verlässt dieser Schritt immer über kein Treffer. <link>Erste FAQ dieses Flows hinzufügen</link>",
-          "useWorkspaceScore": "Einstellung dieses Flows verwenden",
-          "minScoreInvalid": "Geben Sie eine Zahl von {min} bis {max} ein oder verwenden Sie die Einstellung dieses Flows.",
-          "saveFlowFirst": "Speichern Sie zuerst den Flow. Seine FAQs bearbeiten Sie im Tab FAQs des einfachen Builders, und dieser Schritt antwortet aus ihnen.",
-          "categoryHint": "Nur FAQs dieser Kategorie können antworten. Die Kategorien stammen aus den FAQs dieses Flows.",
-          "categoriesFailed": "Die FAQ-Kategorien dieses Flows konnten nicht geladen werden.",
-          "minScoreHint": "Ersetzt den Score dieses Flows nur für diesen Schritt, von {min} bis {max}. Scores hängen vom Embedding-Modell der Plattform ab. Probieren Sie daher eine Nachricht im <link>FAQ-Test</link> dieses Flows aus, bevor Sie eine Zahl wählen."
+          "retired": "Dieser Schritt ist eingestellt und sucht nichts mehr. Der Ablauf geht immer über „Keine Übereinstimmung“ weiter. Um aus Ihrem eigenen Wissen zu antworten, nutzen Sie einen KI-Assistenten-Schritt und wählen Sie einen KI-Agenten."
         }
       },
       "attrPicker": {
@@ -1977,7 +1932,6 @@
         "customizeFirst": "Passen Sie Ihr Chat-Widget an und speichern Sie es einmal, bevor Sie veröffentlichen.",
         "deploy": "Bereitstellen",
         "customizeFirstWhatsapp": "Passen Sie Ihren WhatsApp-Button an und speichern Sie ihn einmal, bevor Sie veröffentlichen.",
-        "faqs": "FAQs",
         "install": "Installieren"
       },
       "buttonIcon": {
@@ -2148,8 +2102,8 @@
           "description": "Tag hinzufügen oder entfernen"
         },
         "assign": {
-          "label": "Agenten zuweisen",
-          "description": "An einen Menschen übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "description": "Chat an eine Person oder eine Warteschlange übergeben"
         },
         "subflow": {
           "label": "Unter-Flow ausführen",
@@ -2499,7 +2453,6 @@
         "noSenderInstagram": "Der Auslöser-Knoten hat kein Instagram-Konto ausgewählt. Wählen Sie eines im Auslöser-Schritt.",
         "noSenderFacebook": "Der Auslöser-Knoten hat keine Facebook-Seite ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
         "noSenderNumber": "Der Auslöser-Knoten hat keine Nummer ausgewählt. Wählen Sie eine im Auslöser-Schritt.",
-        "faqMinScore": "„{node}“ hat einen Mindestscore außerhalb von 0.05 bis 0.99. Korrigieren Sie ihn, oder lassen Sie das Feld leer, um die Einstellung des Flows zu verwenden.",
         "locationInvalid": "„{node}“ hat keinen gültigen Standort – fügen Sie einen Google-Maps-Link ein oder geben Sie Breitengrad (-90 bis 90) und Längengrad (-180 bis 180) ein.",
         "aiNoAgent": "„{node}“ hat weder einen KI-Agenten noch einen Prompt – wähle einen KI-Agenten oder „Eigene Einrichtung“ und schreibe die Anweisungen."
       }
@@ -2510,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Einem Agenten zuweisen",
-          "help": "Die Unterhaltung an ein Team oder einen Agenten übergeben"
+          "label": "Übergabe an Mitarbeiter",
+          "help": "Die Unterhaltung an eine Person, ein Team oder die Zuweisungsregeln übergeben"
         },
         "message": {
           "label": "Nachricht",
@@ -2589,10 +2542,6 @@
           "label": "Bedingung",
           "help": "Verzweigen nach dem, was der Kunde gesagt oder gespeichert hat, mit AND-/OR-Regeln"
         },
-        "faq": {
-          "label": "Antwort aus FAQ",
-          "help": "Die Nachricht des Kunden mit Ihren FAQs abgleichen. Beendet diesen Flow: ein Ausgang, wenn eine FAQ geantwortet hat, ein anderer, wenn nicht"
-        },
         "apiLibrary": {
           "label": "API-Aufruf",
           "help": "Einen API aus deiner API-Bibliothek aufrufen"
@@ -2614,7 +2563,7 @@
         "location": "Standort",
         "template": "Vorlage",
         "cta": "Link-Schaltfläche",
-        "assign": "Einem Agenten zuweisen",
+        "assign": "Übergabe an Mitarbeiter",
         "carousel": "Karussell",
         "condition": "Bedingung",
         "faq": "Antwort aus FAQ",
@@ -2661,7 +2610,6 @@
         "carouselCards": "Schritt {stage}: Fügen Sie mindestens eine Karte hinzu und geben Sie jeder Karte einen Titel.",
         "carouselButtons": "Schritt {stage}: Geben Sie jeder Schaltfläche einen Namen sowie einen Link, eine Nummer oder eine Adresse, wo sie etwas öffnet.",
         "conditionIncomplete": "Schritt {stage}: Vervollständigen Sie die Regeln der Bedingung (jeweils eine Variable und ein Wert).",
-        "faqMinScore": "Schritt {stage}: Der Mindestscore muss zwischen 0.05 und 0.99 liegen, oder verwenden Sie die Einstellung des Flows.",
         "optionNotConnected": "Schritt {stage}: {kind, select, row {Die Zeile} other {Die Schaltfläche}} „{label}\" führt nirgendwohin. Füge einen Schritt dafür hinzu oder gib ihr eine Aktion.",
         "tooManyOptions": "Schritt {stage}: {kind, select, row {Eine Liste kann höchstens {max} Zeilen haben} other {Eine Gruppe von Schaltflächen kann höchstens {max} Schaltflächen haben}}.",
         "chooseFlow": "Schritt {stage}: Wähle den Flow, den die Schaltfläche startet.",
@@ -2670,8 +2618,7 @@
         "webhookUrl": "Schritt {stage}: Fügen Sie die aufzurufende Adresse (URL) hinzu.",
         "chooseAiAgent": "Schritt {stage}: Wähle den KI-Agenten, der antwortet, oder stelle den Schritt auf eine eigene Einrichtung um.",
         "writeAiPrompt": "Schritt {stage}: Schreibe die Anweisungen für die KI oder wähle einen KI-Agenten."
-      },
-      "faqSummary": "{hasCategory, select, true {Aus Ihren FAQs · {category}} other {Aus Ihren FAQs}}"
+      }
     },
     "waboImport": {
       "notes": {
@@ -2783,9 +2730,8 @@
       "buttonNotConnected": "Schaltfläche „{label}“ nicht verbunden, Ende.",
       "simPurchase": "Simulierter Kauf: {name} → Ausgang „gekauft“",
       "simAbandon": "Simulierter Abbruch → Ausgang „abgebrochen“",
-      "faqAnswered": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, daher wird nichts gesendet und {ref} bleibt leer. Ausgang „Beantwortet“ wird genommen.",
-      "faqNoMatch": "(simuliert) Antwort aus FAQ für „{query}“: Der Test-Chat durchsucht Ihre FAQs nicht, und der Ausgang „Beantwortet“ ist nicht verbunden, daher wird „Kein Treffer“ genommen. {ref} bleibt leer.",
-      "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten"
+      "locationSkipped": "(Standort) übersprungen: keine gültigen Koordinaten",
+      "faqRetired": "(simuliert) Antwort aus FAQ ist eingestellt: „Keine Übereinstimmung“ wird genommen."
     }
   }
 }
