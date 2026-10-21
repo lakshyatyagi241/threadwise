@@ -560,6 +560,36 @@ describe('ConversationList states', () => {
     expect(out).toContain('No conversations yet');
   });
 
+  it('lists the channel box as All channels, one heading per chat kind, then the email heading', () => {
+    const channel = (n: number, kind: string, name: string) =>
+      ({ id: id(n), kind, name, capabilities: { windowHours: null } }) as never;
+    const out = render(
+      props({
+        channels: [
+          channel(1, 'whatsapp_cloud', 'Sales line'),
+          channel(2, 'email', 'hello@x.test'),
+          channel(3, 'webchat', 'Web bot'),
+          channel(4, 'whatsapp_cloud', 'Support line'),
+        ],
+      }),
+    );
+    const from = out.indexOf('All channels</option>');
+    const select = out.slice(out.lastIndexOf('<option', from), out.indexOf('</select>', from));
+    const tokens = [
+      ...select.matchAll(/<optgroup label="([^"]*)"|<option[^>]*>([^<]*)<\/option>/g),
+    ].map((m) => m[1] ?? m[2]);
+    expect(tokens).toEqual([
+      'All channels',
+      'WhatsApp Cloud API',
+      'Sales line',
+      'Support line',
+      'Website chat',
+      'Web bot',
+      'Email',
+      'hello@x.test',
+    ]);
+  });
+
   it('shows the four tabs with their counts and the unread badge', () => {
     const list = listReducer(EMPTY_LIST, {
       type: 'loaded',

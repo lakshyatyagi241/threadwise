@@ -1,0 +1,10 @@
+# QA task 26: SAST before code leaves the machine, because the repo's Actions workflows do not start on this account.
+# Runs only when the commits being pushed touch apps/ or packages/ (about a minute; offline: no dependency audit). Skip once with SKIP_SAST=1.
+# A finding is resolved by a fix or by a reasoned entry in tools/sast-report/baseline.json.
+[ "${SKIP_SAST:-}" = "1" ] && exit 0
+base=$(git rev-parse --verify -q '@{upstream}' || git rev-parse --verify -q origin/main || echo "")
+[ -n "$base" ] || exit 0
+git diff --name-only "$base"..HEAD | grep -qE '(^|/)(apps|packages)/' || exit 0
+root=$(git rev-parse --show-toplevel)
+dir="$root"; [ -f "$dir/tools/sast-report/run.mjs" ] || dir="$root/crm-platform"
+cd "$dir" && node tools/sast-report/run.mjs --no-deps --fail-on high

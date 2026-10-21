@@ -24,6 +24,7 @@ import {
   startRuntimeMonitor,
 } from './modules/platform-infrastructure';
 import { buildOpenApiDocument } from './common/openapi';
+import { overloadGuard } from './common/http/overload-guard';
 import { responseCompression } from './common/http/response-compression';
 import type { Env } from './config/env.schema';
 
@@ -61,6 +62,9 @@ async function bootstrap(): Promise<void> {
 
   // Times every response by route template, so a loop stall can be matched to the requests that were running.
   if (runtimeMonitor) app.use(httpMetricsMiddleware(runtimeMonitor));
+
+  // Load shedding (QA 54): past the cap a request gets an immediate 503 + Retry-After instead of joining an unbounded queue.
+  app.use(overloadGuard(config.get('API_MAX_INFLIGHT', { infer: true })));
 
   // Smaller responses on the wire (QA 63): before the routes, after the metrics middleware so the timing still covers the handler.
   if (config.get('RESPONSE_COMPRESSION', { infer: true })) app.use(responseCompression());

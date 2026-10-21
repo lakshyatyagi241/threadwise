@@ -816,20 +816,20 @@
         }
       }
     },
+    "channelKind": {
+      "simulator": "المحاكي (للتجربة)",
+      "whatsapp_cloud": "واجهة واتساب السحابية",
+      "whatsapp_qr": "واتساب (رمز QR)",
+      "webchat": "دردشة الموقع",
+      "telegram": "تيليجرام",
+      "facebook": "فيسبوك ماسنجر",
+      "instagram": "إنستجرام",
+      "email": "البريد الإلكتروني",
+      "line": "LINE",
+      "viber": "Viber",
+      "wechat": "WeChat"
+    },
     "savedReplies": {
-      "channelKind": {
-        "simulator": "المحاكي (للتجربة)",
-        "whatsapp_cloud": "واجهة واتساب السحابية",
-        "whatsapp_qr": "واتساب (رمز QR)",
-        "webchat": "دردشة الموقع",
-        "telegram": "تيليجرام",
-        "facebook": "فيسبوك ماسنجر",
-        "instagram": "إنستجرام",
-        "email": "البريد الإلكتروني",
-        "line": "LINE",
-        "viber": "Viber",
-        "wechat": "WeChat"
-      },
       "variableGroup": {
         "contact": "جهة الاتصال",
         "agent": "أنت",
