@@ -15,7 +15,7 @@ import {
   type ListKind,
   type MarkKind,
 } from '../lib/message-tools';
-import { htmlToMarks, marksToHtml, placeCaret } from '../lib/rich-text';
+import { htmlToMarks, marksToHtml, placeCaret, RICH_TEXT_CLASS } from '../lib/rich-text';
 
 type Panel = 'format' | 'emoji' | 'variable' | null;
 
@@ -279,7 +279,7 @@ export function MessageField({
               sync();
               remember();
             }}
-            className="block w-full resize-y overflow-auto whitespace-pre-wrap break-words rounded-t-lg bg-transparent px-3 pb-1 pt-2.5 text-[13px] outline-none [&_code]:rounded [&_code]:bg-muted [&_code]:px-1 [&_code]:font-mono [&_code]:text-[12px]"
+            className={`block w-full resize-y overflow-auto whitespace-pre-wrap break-words rounded-t-lg bg-transparent px-3 pb-1 pt-2.5 text-[13px] outline-none ${RICH_TEXT_CLASS}`}
           />
         </div>
         <div
