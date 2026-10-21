@@ -20,6 +20,15 @@ type Raw = Record<string, unknown>;
 const s = (v: unknown): string | null => (v === null || v === undefined ? null : (v as string));
 const d = (v: unknown): Date | null => (v ? new Date(v as string) : null);
 
+/** The three buttons of a reminder, and what a run remembers of each: a random nonce, when it was used and what came of it. */
+export type ReplyAction = 'confirm' | 'reschedule' | 'cancel';
+export interface ReplyEntry {
+  nonce: string;
+  usedAt: string | null;
+  outcome: string | null;
+}
+export type ReplyState = Partial<Record<ReplyAction, ReplyEntry>>;
+
 export type DeliveryState = 'unknown' | 'delivered' | 'failed' | 'undelivered';
 
 /** A run the sweep has just claimed (for the outbox announcement). */
@@ -75,9 +84,13 @@ export interface RuleRow {
   waTemplateUuid: string | null;
   /** The step's WhatsApp template body (numbered placeholders), for the free-text form inside the 24 hour window. */
   waTemplateBody: string | null;
+  /** The language of the step's WhatsApp template (the language of the reply to a button tap). */
+  waTemplateLanguage: string | null;
   buttonsEnabled: boolean;
   skipIfConfirmed: boolean;
   undeliveredFallbackMinutes: number | null;
+  /** The word this step uses instead of the service's name, or null. */
+  serviceLabel: string | null;
   /** The email message of the library this step sends, read now. Null = none chosen (or it was deleted). */
   library: { active: boolean; subject: string | null; body: string } | null;
 }
@@ -303,10 +316,18 @@ export class AppointmentRemindersRepository {
   }
 
   /** The rule a run came from, as it is now; undefined when it was deleted. */
+  async findRuleByUuid(tx: Tx, orgId: number, uuid: string): Promise<RuleRow | undefined> {
+    const res = await tx.execute(
+      sql`SELECT id FROM booking_reminders WHERE org_id = ${orgId} AND uuid = ${uuid}::uuid`,
+    );
+    const id = (res.rows as Raw[])[0]?.id;
+    return id === undefined ? undefined : this.findRule(tx, orgId, Number(id));
+  }
+
   async findRule(tx: Tx, orgId: number, reminderId: number | null): Promise<RuleRow | undefined> {
     if (reminderId === null) return undefined;
     const res = await tx.execute(sql`
-      SELECT br.*, w.uuid AS wa_uuid, w.template_body AS wa_body,
+      SELECT br.*, w.uuid AS wa_uuid, w.template_body AS wa_body, w.language AS wa_lang,
              lt.is_active AS lib_active, lt.subject AS lib_subject, lt.body AS lib_body
       FROM booking_reminders br
       LEFT JOIN wa_templates w ON w.org_id = br.org_id AND w.id = br.wa_template_id
@@ -330,12 +351,14 @@ export class AppointmentRemindersRepository {
       body: s(r.body),
       waTemplateUuid: s(r.wa_uuid),
       waTemplateBody: s(r.wa_body),
+      waTemplateLanguage: s(r.wa_lang),
       buttonsEnabled: (r.buttons_enabled as boolean | null) ?? false,
       skipIfConfirmed: (r.skip_if_confirmed as boolean | null) ?? false,
       undeliveredFallbackMinutes:
         r.undelivered_fallback_minutes === null || r.undelivered_fallback_minutes === undefined
           ? null
           : Number(r.undelivered_fallback_minutes),
+      serviceLabel: s(r.service_label),
       library:
         r.lib_body === null || r.lib_body === undefined
           ? null
@@ -345,6 +368,30 @@ export class AppointmentRemindersRepository {
               body: r.lib_body as string,
             },
     };
+  }
+
+  /** The reply tokens of a run, locked for the rest of the transaction. Undefined when the run does not exist. */
+  async lockReply(
+    tx: Tx,
+    orgId: number,
+    runId: number,
+  ): Promise<{ appointmentId: number; stepKind: BookingReminderStepKind | null; state: ReplyState } | undefined> {
+    const res = await tx.execute(sql`
+      SELECT appointment_id, step_kind, reply_state FROM appointment_reminder_runs
+      WHERE org_id = ${orgId} AND id = ${runId} FOR UPDATE`);
+    const r = (res.rows as Raw[])[0];
+    if (!r) return undefined;
+    return {
+      appointmentId: Number(r.appointment_id),
+      stepKind: (r.step_kind as BookingReminderStepKind | null) ?? null,
+      state: (r.reply_state && typeof r.reply_state === 'object' ? r.reply_state : {}) as ReplyState,
+    };
+  }
+
+  async saveReply(tx: Tx, orgId: number, runId: number, state: ReplyState): Promise<void> {
+    await tx.execute(sql`
+      UPDATE appointment_reminder_runs SET reply_state = ${JSON.stringify(state)}::jsonb, updated_at = now()
+      WHERE org_id = ${orgId} AND id = ${runId}`);
   }
 
   /** Whether the contact has another booking that starts after this one ended (a rebook message would be pointless). */

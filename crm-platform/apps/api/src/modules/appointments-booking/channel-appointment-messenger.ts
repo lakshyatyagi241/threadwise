@@ -162,6 +162,12 @@ export class ChannelAppointmentMessenger implements AppointmentMessenger {
     );
     if (prepared.kind === 'refused') return prepared.outcome;
 
+    // A test to a staff member's own mailbox is not a message to a customer: no quiet hours, no consent to ask.
+    if (m.isTest) {
+      if (channel !== 'email') return { status: 'skipped', reason: 'no_channel' };
+      return prepared.deliver();
+    }
+
     const quiet = await this.quietHours(m, contact?.id ?? null, phone);
     if (quiet) return quiet;
 

@@ -98,6 +98,9 @@ export interface ReminderRow {
   buttonsEnabled: boolean;
   skipIfConfirmed: boolean;
   undeliveredFallbackMinutes: number | null;
+  serviceLabel: string | null;
+  packKey: string | null;
+  packVersion: number | null;
   /** `sms_removed`: the step only had SMS, which was removed. */
   notice: 'sms_removed' | null;
 }
@@ -394,6 +397,9 @@ export class BookingTypesRepository {
         buttonsEnabled: (r.buttons_enabled as boolean | null) ?? false,
         skipIfConfirmed: (r.skip_if_confirmed as boolean | null) ?? false,
         undeliveredFallbackMinutes: n(r.undelivered_fallback_minutes),
+        serviceLabel: s(r.service_label),
+        packKey: s(r.pack_key),
+        packVersion: n(r.pack_version),
         notice: r.notice_code === 'sms_removed' ? 'sms_removed' : null,
       });
 
@@ -546,6 +552,9 @@ export class BookingTypesRepository {
       buttonsEnabled: boolean;
       skipIfConfirmed: boolean;
       undeliveredFallbackMinutes: number | null;
+      serviceLabel: string | null;
+      packKey: string | null;
+      packVersion: number | null;
     }>,
   ): Promise<void> {
     const keep = list.filter((r) => r.uuid).map((r) => r.uuid!);
@@ -568,16 +577,17 @@ export class BookingTypesRepository {
           channels = ${channelsArray(r.channels)},
           subject = ${r.subject}, body = ${r.body}, wa_template_id = ${r.waTemplateId}, library_template_id = ${r.libraryTemplateId},
           buttons_enabled = ${r.buttonsEnabled}, skip_if_confirmed = ${r.skipIfConfirmed},
-          undelivered_fallback_minutes = ${r.undeliveredFallbackMinutes},
+          undelivered_fallback_minutes = ${r.undeliveredFallbackMinutes}, service_label = ${r.serviceLabel},
+          pack_key = ${r.packKey}, pack_version = ${r.packVersion},
           notice_code = CASE WHEN ${r.isActive} OR channels IS DISTINCT FROM ${channelsArray(r.channels)} THEN NULL ELSE notice_code END
           WHERE org_id = ${orgId} AND booking_type_id = ${typeId} AND uuid = ${r.uuid}::uuid`);
       } else {
         await tx.execute(sql`INSERT INTO booking_reminders (org_id, booking_type_id, offset_index, offset_minutes, label, is_active,
             kind, step_kind, channels, subject, body, wa_template_id, library_template_id, buttons_enabled, skip_if_confirmed,
-            undelivered_fallback_minutes)
+            undelivered_fallback_minutes, service_label, pack_key, pack_version)
           VALUES (${orgId}, ${typeId}, ${i}, ${r.offsetMinutes}, ${r.label}, ${r.isActive}, ${r.kind}, ${r.stepKind},
             ${channelsArray(r.channels)}, ${r.subject}, ${r.body}, ${r.waTemplateId}, ${r.libraryTemplateId}, ${r.buttonsEnabled},
-            ${r.skipIfConfirmed}, ${r.undeliveredFallbackMinutes})`);
+            ${r.skipIfConfirmed}, ${r.undeliveredFallbackMinutes}, ${r.serviceLabel}, ${r.packKey}, ${r.packVersion})`);
       }
       i++;
     }

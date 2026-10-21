@@ -2,6 +2,8 @@ import { HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import {
   ERROR_CODES,
+  REMINDER_CONFIRM_BUTTONS_FEATURE,
+  REMINDER_REBOOK_FEATURE,
   defaultStepKind,
   type AppointmentMessageKind,
   type BookingReminderStepKind,
@@ -24,7 +26,7 @@ import type { Env } from '../../config/env.schema';
 import { DatabaseService } from '../../infra/db/database.service';
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
-import { PlanUsageService } from '../plans-subscriptions-trials';
+import { PlanEntitlementService, PlanUsageService } from '../plans-subscriptions-trials';
 import { AppointmentChannelsRepository } from './appointment-channels.repository';
 import { AppointmentChannelsService } from './appointment-channels.service';
 import { toApiTemplate } from './appointment-template.mapper';
@@ -85,6 +87,7 @@ export class BookingTypesService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly planUsage: PlanUsageService,
+    private readonly entitlements: PlanEntitlementService,
     private readonly channels: AppointmentChannelsService,
     private readonly library: AppointmentChannelsRepository,
     config: ConfigService<Env, true>,
@@ -445,6 +448,27 @@ export class BookingTypesService {
           if (!had.has(c)) added.push({ channel: c, path: `reminders.${i}.channels` });
       });
       await this.channels.assertEnabled(tx, orgId, added);
+      // Two parts of a sequence are plan features (default on): the Confirm / Reschedule / Cancel buttons and the rebook (recall) steps.
+      // Asked only for what is being switched on, so a plan that lost one still saves everything else.
+      for (const r of input.reminders) {
+        if (!r.isActive) continue;
+        const before = r.id ? existing.find((e) => e.uuid === r.id) : undefined;
+        const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
+        if (step === 'rebook' && !(before?.isActive && before.stepKind === 'rebook')) {
+          await this.entitlements.assertFeature(
+            orgId,
+            REMINDER_REBOOK_FEATURE,
+            "Your plan doesn't include rebook messages. Upgrade to unlock them.",
+          );
+        }
+        if (r.buttonsEnabled && !(before?.isActive && before.buttonsEnabled)) {
+          await this.entitlements.assertFeature(
+            orgId,
+            REMINDER_CONFIRM_BUTTONS_FEATURE,
+            "Your plan doesn't include Confirm, Reschedule and Cancel buttons. Upgrade to unlock them.",
+          );
+        }
+      }
       const waIds = await this.repo.resolveWaTemplates(
         tx,
         orgId,
@@ -500,6 +524,9 @@ export class BookingTypesService {
             buttonsEnabled: r.buttonsEnabled && r.kind === 'before',
             skipIfConfirmed: r.skipIfConfirmed && r.kind === 'before',
             undeliveredFallbackMinutes: r.undeliveredFallbackMinutes ?? null,
+            serviceLabel: r.serviceLabel && r.serviceLabel.trim() !== '' ? r.serviceLabel.trim() : null,
+            packKey: r.packKey ?? null,
+            packVersion: r.packKey ? (r.packVersion ?? 1) : null,
           };
         }),
       );

@@ -17,6 +17,11 @@ export interface MessageFacts {
   manageUrl: string | null;
   /** The link that opens the visit when it is online (a Meet or Teams link), apart from `location`. */
   joinUrl?: string | null;
+  /** The host (the agent): name and number, for the messages that give the customer someone to call. */
+  hostName?: string | null;
+  hostPhone?: string | null;
+  /** A step's own word for the service (a medical practice: "appointment"), used instead of the booking type's name. */
+  serviceLabel?: string | null;
 }
 
 export const DEFAULT_TEXTS: Record<BookingTemplateEvent, string> = {
@@ -30,8 +35,9 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
   const slot = formatSlotLabel(f.startsAtMs, f.timezone);
   const date = formatDateLong(f.startsAtMs, f.timezone);
   const time = formatClock(f.startsAtMs, f.timezone);
+  const place = f.joinUrl ? null : (f.location ?? '').trim();
   return {
-    type: f.typeName,
+    type: f.serviceLabel && f.serviceLabel.trim() !== '' ? f.serviceLabel.trim() : f.typeName,
     title: f.title,
     name: f.inviteeName ?? '',
     slot,
@@ -40,6 +46,10 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
     location: f.location ?? '',
     join_link: f.joinUrl ?? '',
     manage_link: f.manageUrl ?? '',
+    host_name: f.hostName ?? '',
+    host_phone: f.hostPhone ?? '',
+    // A link that opens the place on a map; only for a visit at an address (an online visit has no place to show).
+    map_link: place ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}` : '',
     manage_hint: f.manageUrl ? `\n\nReschedule or cancel: ${f.manageUrl}` : '',
   };
 }

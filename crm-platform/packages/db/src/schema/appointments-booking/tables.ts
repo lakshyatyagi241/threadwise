@@ -511,6 +511,11 @@ export const bookingReminders = pgTable(
     libraryTemplateId: idColumn('library_template_id'),
     /** `sms_removed`: the rule listed only SMS, which was removed; shown to the owner until the rule is saved again. */
     noticeCode: text('notice_code'),
+    /** The word this step uses instead of the booking type's name (a medical practice: "appointment"). */
+    serviceLabel: text('service_label'),
+    /** The reminder pack this step was made from, and its version; null when the owner wrote it. */
+    packKey: text('pack_key'),
+    packVersion: smallint('pack_version'),
     createdAt: createdAt(),
     updatedAt: updatedAt(),
     rowVersion: rowVersion(),
@@ -649,6 +654,8 @@ export const appointmentReminderRuns = pgTable(
     delivery: text('delivery').notNull().default('unknown'),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     deliveryCheckAt: timestamp('delivery_check_at', { withTimezone: true }),
+    /** The one-time reply tokens of a step with quick-reply buttons (nonce, used-at, outcome). Codes only. */
+    replyState: jsonb('reply_state').notNull().default(sql`'{}'::jsonb`),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),

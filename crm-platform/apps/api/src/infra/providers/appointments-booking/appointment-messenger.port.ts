@@ -58,6 +58,11 @@ export interface BookingMessage {
    * Used only with a WhatsApp template that has quick-reply buttons.
    */
   quickReplyPayloads?: string[];
+  /**
+   * A test of a step sent to a staff member's own email (BL-425): quiet hours and the customer consent check do not apply (it is not a
+   * customer), the owner's channel choice still does. Email only.
+   */
+  isTest?: boolean;
 }
 
 export interface BookingMessageResult {

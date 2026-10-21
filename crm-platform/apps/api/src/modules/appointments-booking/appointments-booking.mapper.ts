@@ -95,6 +95,9 @@ export function toBookingTypeResponse(
       buttonsEnabled: r.buttonsEnabled,
       skipIfConfirmed: r.skipIfConfirmed,
       undeliveredFallbackMinutes: r.undeliveredFallbackMinutes,
+      serviceLabel: r.serviceLabel,
+      packKey: r.packKey,
+      packVersion: r.packVersion,
       notice: r.notice,
     })),
     templates: c.templates.map((t) => ({
@@ -189,6 +192,7 @@ export function toAppointmentResponse(
     checkedInAt: row.checkedInAt ? row.checkedInAt.toISOString() : null,
     statusChangedAt: row.statusChangedAt.toISOString(),
     cancelledAt: row.cancelledAt ? row.cancelledAt.toISOString() : null,
+    customerConfirmedAt: row.customerConfirmedAt ? row.customerConfirmedAt.toISOString() : null,
     cancelledBy: row.cancelledBy,
     cancelReason: row.cancelReason,
     calendar: {

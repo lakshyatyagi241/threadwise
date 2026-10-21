@@ -270,6 +270,10 @@ export const BOOKING_REMINDER_PLACEHOLDERS = [
   'location',
   'join_link',
   'manage_link',
+  // Email and WhatsApp free text only (a WhatsApp template's numbered variables stop at manage_link): the host and a map link.
+  'host_name',
+  'host_phone',
+  'map_link',
 ] as const;
 
 export const BOOKING_REMINDER_BODY_MAX = 2000;
@@ -278,6 +282,7 @@ export const BOOKING_REMINDER_SUBJECT_MAX = 191;
 export const BOOKING_UNDELIVERED_MIN = 5;
 export const BOOKING_UNDELIVERED_MAX = 720;
 export const BOOKING_UNDELIVERED_DEFAULT = 30;
+export const BOOKING_SERVICE_LABEL_MAX = 40;
 
 export const bookingReminderInputSchema = z
   .object({
@@ -316,6 +321,11 @@ export const bookingReminderInputSchema = z
       .min(BOOKING_UNDELIVERED_MIN)
       .max(BOOKING_UNDELIVERED_MAX)
       .nullish(),
+    /** The word this step uses instead of the service's name (a medical practice: "appointment"). Blank = the service's name. */
+    serviceLabel: z.string().trim().max(BOOKING_SERVICE_LABEL_MAX).nullish(),
+    /** Set when the step came from a reminder pack: sent back unchanged by the editor, so the next preview knows. */
+    packKey: z.string().max(40).nullish(),
+    packVersion: z.number().int().positive().nullish(),
   })
   .superRefine((r, ctx) => {
     const step = r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes);
@@ -518,6 +528,10 @@ export const bookingReminderSchema = z.object({
   buttonsEnabled: z.boolean(),
   skipIfConfirmed: z.boolean(),
   undeliveredFallbackMinutes: z.number().int().nullable(),
+  serviceLabel: z.string().nullable(),
+  /** The reminder pack this step was made from, and the version of the pack at that time; null when the owner wrote it. */
+  packKey: z.string().nullable(),
+  packVersion: z.number().int().nullable(),
   /** `sms_removed`: SMS reminders were removed; the step was moved to email or switched off, and the owner chooses WhatsApp or email. */
   notice: z.enum(['sms_removed']).nullable(),
 });

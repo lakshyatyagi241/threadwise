@@ -60,6 +60,8 @@ export const REMINDER_REASONS = [
   'minor',
   'processing_restricted',
   'plan_limit',
+  // the plan does not include this kind of step (the rebook steps)
+  'plan_feature_locked',
   // held: it goes by itself later
   'quiet_hours',
   'channel_unavailable',
@@ -388,6 +390,7 @@ const REASON_TEXT: Record<ReminderReason, string> = {
   minor: 'the contact is flagged as a minor',
   processing_restricted: 'processing of this contact is restricted',
   plan_limit: "the plan's limit is reached",
+  plan_feature_locked: 'the plan does not include this step',
   quiet_hours: 'quiet hours',
   channel_unavailable: 'the channel is not connected',
   wallet_empty: 'the wallet is empty',

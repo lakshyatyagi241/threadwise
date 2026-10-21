@@ -1,5 +1,6 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import {
+  REMINDER_REBOOK_FEATURE,
   defaultStepKind,
   type BookingReminderChannel,
   type BookingReminderKind,
@@ -17,6 +18,7 @@ import {
 import { AuditService } from '../../kernel/audit/audit.service';
 import { OutboxService } from '../../kernel/outbox/outbox.service';
 import { ContactActivitiesRepository } from '../crm';
+import { PlanEntitlementService } from '../plans-subscriptions-trials';
 import { APPOINTMENT_MODULE } from './appointment-rules';
 import {
   REMINDER_MAX_ATTEMPTS,
@@ -40,6 +42,7 @@ import { AppointmentsRepository, type AppointmentRow } from './appointments.repo
 import { AppointmentsSupport } from './appointments.support';
 import { BookingTypesRepository } from './booking-types.repository';
 import { renderTemplate, stepBody, variablesFor, type MessageFacts } from './message-render';
+import { ReminderReplyService } from './reminder-reply.service';
 
 /** The audit module key of a reminder run. */
 const RUN_MODULE = 'appointment_reminder_runs';
@@ -86,7 +89,7 @@ export function outcomeOfResult(res: BookingMessageResult): ChannelOutcome {
 }
 
 /** The booking message event a step is sent as. */
-function eventOf(step: BookingReminderStepKind): BookingMessageEvent {
+export function eventOf(step: BookingReminderStepKind): BookingMessageEvent {
   switch (step) {
     case 'confirmation':
       return 'confirmation';
@@ -146,6 +149,8 @@ export class AppointmentReminderService {
     private readonly audit: AuditService,
     private readonly outbox: OutboxService,
     private readonly activities: ContactActivitiesRepository,
+    private readonly replies: ReminderReplyService,
+    private readonly entitlements: PlanEntitlementService,
     @Inject(APPOINTMENT_MESSENGER) private readonly messenger: AppointmentMessenger,
   ) {}
 
@@ -268,6 +273,15 @@ export class AppointmentReminderService {
       });
       return;
     }
+    // The rebook (recall) steps are a plan feature: a plan without it never sends one, and the run says why.
+    if (step === 'rebook' && !(await this.entitlements.featureEnabled(orgId, REMINDER_REBOOK_FEATURE))) {
+      await this.finish(orgId, run.id, row, run.kind, step, {
+        status: 'skipped',
+        reason: 'plan_feature_locked',
+        channel: null,
+      });
+      return;
+    }
     if (laterBooking) {
       await this.finish(orgId, run.id, row, run.kind, step, {
         status: 'skipped',
@@ -324,9 +338,17 @@ export class AppointmentReminderService {
       location: row.meetUrl ?? row.location,
       manageUrl: this.support.manageUrlOf(row),
       joinUrl: row.meetUrl,
+      hostName: row.hostName,
+      hostPhone: row.hostPhone,
+      serviceLabel: rule.serviceLabel,
     };
     const vars = variablesFor(facts);
     const tried: Array<{ channel: BookingReminderChannel; outcome: ChannelOutcome }> = [];
+    // Confirm / Reschedule / Cancel buttons: only on a WhatsApp template, and only when the plan has them.
+    const quickReplyPayloads =
+      channels.includes('whatsapp') && rule.buttonsEnabled && rule.waTemplateUuid
+        ? ((await this.replies.buttonsAllowed(orgId)) ? await this.replies.payloadsFor(orgId, run.id) : undefined)
+        : undefined;
     for (const channel of channels) {
       const { body, subject } = this.textFor(channel, rule, step, typeReminderBody, facts, vars);
       const message: BookingMessage = {
@@ -345,6 +367,7 @@ export class AppointmentReminderService {
         variables: vars,
         purpose: purposeOf(step),
         notAfter: run.kind === 'before' ? row.startsAt.toISOString() : null,
+        ...(channel === 'whatsapp' && quickReplyPayloads ? { quickReplyPayloads } : {}),
       };
       let outcome: ChannelOutcome;
       try {
@@ -367,7 +390,7 @@ export class AppointmentReminderService {
    * step's own text, else the built-in one. WhatsApp free text (inside the 24 hour window): the step's own text, else the words of its
    * template, else the built-in one.
    */
-  private textFor(
+  textFor(
     channel: BookingReminderChannel,
     rule: RuleRow,
     step: BookingReminderStepKind,

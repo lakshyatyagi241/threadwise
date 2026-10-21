@@ -146,9 +146,12 @@ export type ReminderPackAdoptResult = z.infer<typeof reminderPackAdoptResultSche
 
 // --- test-send -----------------------------------------------------------------------------------------------------------------
 
-/** An email-only test of one step, sent to the signed-in user's own address. There is no WhatsApp test-send. */
+/**
+ * An email-only test of one step, sent to the signed-in user's own address. There is no WhatsApp test-send. The email is sent by the
+ * worker a moment later (`queued`); the result comes back as a notification. `skipped`: the signed-in user has no email address.
+ */
 export const reminderTestSendResultSchema = z.object({
-  status: z.enum(['sent', 'skipped', 'failed']),
+  status: z.enum(['queued', 'skipped']),
   reason: z.string().nullable(),
   /** The address it went to, masked (`a***@example.com`). */
   sentTo: z.string().nullable(),
