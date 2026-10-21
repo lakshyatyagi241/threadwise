@@ -1,0 +1,18 @@
+{
+  "item": "Sheet3 #74 Centralized structured logging",
+  "target": "100% backend services; correlation/request/tenant IDs on applicable events",
+  "legend": { "pass": "tested and green", "partial": "works with a stated gap", "fail": "defect, open", "na": "not applicable", "untested": "not verified here" },
+  "requirements": ["json_one_line", "stable_fields", "request_id", "tenant_id", "redaction", "level_volume", "injection_safe"],
+  "services": {
+    "api": { "json_one_line": "pass", "stable_fields": "pass", "request_id": "partial", "tenant_id": "partial", "redaction": "partial", "level_volume": "partial", "injection_safe": "pass",
+      "notes": "request id: header, all lines of a request; NOT sent on outbound HTTP calls or put into queue jobs. tenant: tested with a simulated guard, not a real JWT. redaction: headers, URL, query, error text; free-text business logs not scanned. volume: 2556 Nest route-mapping lines at every boot." },
+    "worker": { "json_one_line": "pass", "stable_fields": "pass", "request_id": "partial", "tenant_id": "partial", "redaction": "partial", "level_volume": "untested", "injection_safe": "pass",
+      "notes": "same base options (service=worker), asserted by unit test, worker process not booted here. Outbox lines now carry the id of the request that wrote the event. BullMQ jobs carry no request id." },
+    "node_bridge": { "json_one_line": "pass", "stable_fields": "pass", "request_id": "partial", "tenant_id": "partial", "redaction": "partial", "level_volume": "untested", "injection_safe": "pass",
+      "notes": "a module inside the API process (apps/api/src/modules/node-bridge-runtime), not a separate service: it logs through the API logger. No outbound id propagation." },
+    "web_nextjs": { "json_one_line": "fail", "stable_fields": "fail", "request_id": "partial", "tenant_id": "na", "redaction": "untested", "level_volume": "untested", "injection_safe": "untested",
+      "notes": "no server logger; 6 files use console.* (mostly browser side). The auth route handlers forward or create x-request-id; the proxy does not. Open." },
+    "partner_app": { "json_one_line": "na", "stable_fields": "na", "request_id": "na", "tenant_id": "na", "redaction": "na", "level_volume": "na", "injection_safe": "na", "notes": "apps/partner does not exist in this checkout." },
+    "cli_tools": { "json_one_line": "na", "stable_fields": "na", "request_id": "na", "tenant_id": "na", "redaction": "untested", "level_volume": "na", "injection_safe": "na", "notes": "terminal tools (console.* allowed by the ratchet test). The fatal process handler writes the same JSON shape." }
+  }
+}
