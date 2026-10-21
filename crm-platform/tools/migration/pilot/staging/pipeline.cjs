@@ -7,7 +7,7 @@
  *   dry      export (fresh), ship, preflight, dry run (rolled back, nothing written), stop. Safe to repeat.
  *   load     ship, preflight, a fresh dry run, backup, load, files, core-load (plan, wallet, subscription), wallet-sync, flow-state, reconcile,
  *            whatsapp (the Meta token of the migrated number is imported and the number connected; --no-whatsapp leaves it out), report.
- *   catchup  an ALREADY-loaded client whose live data moved on: forced export, ship, preflight, dry run, backup, load (new rows only, credits
+ *   catchup  an ALREADY-loaded client whose live data moved on: forced export, geta_core snapshot (core-snapshot, read right after the export), ship, preflight, dry run, backup, load (new rows only, credits
  *            skipped), update (edits since the load), files, core-load, wallet-sync, reconcile, report. Needs the client's config (refuses a
  *            client that was never loaded); never touches the channel map; never publishes flows again.
  *

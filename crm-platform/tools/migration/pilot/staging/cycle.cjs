@@ -32,8 +32,9 @@
  *   new-client       writes clients/<key>.json + a channel map: --client k --name N --slug s --owner-email e --owner-name n [--plan p]
  *                    [--channel-id bot=phoneid,... | --channel-map-file <real numbers, from wa-numbers.cjs>] [--db <waboo db>]
  *   loaded-check     read-only: refuses (exit 2) when --client already has migration.run_log rows on staging
- *   migrate --catch-up   re-run for an ALREADY-loaded client whose live data moved on: forced export, ship, preflight, dry, backup, load (new rows;
- *                    credits group skipped), update (edits), files, core-load, wallet-sync, usage-append (new billing-log charges + token rows only), reconcile, report. Never flow-state, never a 2nd wallet opening.
+ *   migrate --catch-up   re-run for an ALREADY-loaded client whose live data moved on: forced export, core-snapshot (geta_core read right after the export),
+ *                    ship, preflight, dry, backup, load (new rows; credits group skipped), update (edits), files, core-load, wallet-sync, wallet-history,
+ *                    usage-append (new billing-log charges + token rows only), reconcile, report. Never flow-state, never a 2nd wallet opening.
  *   (every command prints "timing: <command> <s>s"; load also prints a per-step table)
  *
  * Server: STAGING_SERVER_ENV (default D:\wadesk-vedant\db-migration\server-access\server.env: SERVER_HOST, SERVER_USER, SSH_KEY, SERVER_APP_DIR).
@@ -46,7 +47,8 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
-const { spawn } = require('child_process');
+const os = require('os');
+const { spawn, spawnSync } = require('child_process');
 
 const HERE = __dirname;
 const TOOL = path.resolve(HERE, '../..');
@@ -1265,8 +1267,10 @@ function printStepStats(steps) {
 
 // ---------- orchestration: migrate / batch / new-client -------------------------------------------------------------------------------
 // core-load (plan, subscription, role grants from geta_core) and flow-state (publish what is live in Waboo) run after the load and before the verifier
+// core-snapshot reads geta_core right after the export, so its readAt is never older than the dump (see coreSnapshot)
 const MIG_STEPS = [
   'export',
+  'core-snapshot',
   'ship',
   'preflight',
   'dry',
@@ -1426,6 +1430,46 @@ function runExport(client, db, force = false) {
   })();
 }
 
+/**
+ * geta_core snapshot (core-opening.cjs writes the client's core.json: the live wallet balance, top-ups, purchases, plan facts), taken right
+ * AFTER the export of this run and shipped with it. The wallet statement counts only what happened up to the snapshot's readAt and chains it
+ * to the balance read then, so a snapshot older than the dump drops every charge in between. ISKM: a catch-up re-exported the charges up to
+ * Oct 21 but kept the core.json read on Oct 19, and the WaDesk statement stopped on Oct 19. The credit-opening file is not touched: the first
+ * load reads it and its sha256 is checked.
+ */
+function coreSnapshot(cfg, db) {
+  const bin = process.env.CORE_OPENING_BIN || path.join(HERE, 'core-opening.cjs');
+  if (!fs.existsSync(bin)) refuse(`the geta_core reader ${bin} does not exist (set CORE_OPENING_BIN)`);
+  const out = fs.mkdtempSync(path.join(os.tmpdir(), 'core-snapshot-'));
+  try {
+    const r = spawnSync(
+      process.execPath,
+      [bin, '--client', cfg.client, '--workspace', db, '--out', out],
+      { encoding: 'utf8', timeout: 600_000 },
+    );
+    for (const l of `${r.stdout || ''}${r.stderr || ''}`.split('\n').filter(Boolean))
+      console.log('  core-snapshot: ' + maskPII(l));
+    const fresh = path.join(out, `${cfg.client}-core.json`);
+    if (r.status !== 0 || !fs.existsSync(fresh)) {
+      console.log(`core-snapshot: geta_core was not read (core-opening exit ${r.status})`);
+      return 1;
+    }
+    const { readAt } = JSON.parse(fs.readFileSync(fresh, 'utf8'));
+    if (!readAt) {
+      console.log('core-snapshot: core-opening wrote no readAt; core.json is not replaced');
+      return 1;
+    }
+    // same directory, then rename: a kill mid-copy must not leave a truncated core.json behind
+    const staged = `${cfg.coreFile}.${process.pid}.tmp`;
+    fs.copyFileSync(fresh, staged);
+    fs.renameSync(staged, cfg.coreFile);
+    console.log(`core-snapshot: geta_core read at ${readAt}, ${cfg.coreFile} replaced`);
+    return 0;
+  } finally {
+    fs.rmSync(out, { recursive: true, force: true });
+  }
+}
+
 function runComplete(client) {
   const bin =
     process.env.CYCLE_COMPLETE_BIN || path.join(TOOL, 'pilot', 'report', 'migration-complete.cjs');
@@ -1569,7 +1613,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       ].join(',');
       flags = { ...flags, 'force-export': true, 'with-dry-run': true, 'skip-steps': skip };
       console.log(
-        'migrate: CATCH-UP of an already-loaded client: forced export, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, usage-append',
+        'migrate: CATCH-UP of an already-loaded client: forced export, core-snapshot, load (new rows; credits skipped), update, chat-status, files, core-load, wallet-sync, wallet-history, usage-append',
       );
     }
     if (!shared.memChecked) {
@@ -1587,6 +1631,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
       (!CATCHUP_SKIPPED.has(s) || !catchUp) &&
       (s !== 'dry' || withDry) &&
       (s !== 'core-load' || cfg.coreFile) && // needs the geta_core snapshot (core-opening.cjs) named in the client config
+      (s !== 'core-snapshot' || cfg.coreFile) && // the snapshot the config names is read right after the export (coreSnapshot)
       (s !== 'files' || cfg.files !== 'off') && // the media copy; "files": "off" in the client config skips it
       (s !== 'wallet-sync' || cfg.coreFile) && // needs the same geta_core snapshot
       (s !== 'wallet-history' || cfg.coreFile) && // the live balance, top-ups and purchases come from the same snapshot
@@ -1603,7 +1648,10 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
         console.log('export: skipped (--skip-export)');
         return 'skipped';
       }
-      if (!flags['force-export']) {
+      // a client with a geta_core snapshot always exports afresh: core-snapshot reads geta_core right after this export, and a reused dump is
+      // older than that snapshot, so every charge in between would be left out of the wallet statement
+      const force = !!flags['force-export'] || !!cfg.coreFile;
+      if (!flags['force-export'] && !cfg.coreFile) {
         const m = await manifestFresh(srv, cfg.client);
         if (m.ok) {
           console.log(`export: skipped, the server already has it: ${m.msg}`);
@@ -1611,11 +1659,26 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
         }
         console.log(`export: needed (${m.msg})`);
       }
+      if (!flags['force-export'] && cfg.coreFile)
+        console.log('export: forced, the geta_core snapshot is taken right after it');
       if (!rec.db)
         refuse(
           'no Mongo database name: pass --db <waboo db> or set "mongoDb" in the client config',
         );
-      return runExport(cfg.client, rec.db, !!flags['force-export']);
+      return runExport(cfg.client, rec.db, force);
+    },
+    'core-snapshot': () => {
+      if (flags['skip-export']) {
+        console.log(
+          'core-snapshot: skipped (--skip-export): core.json is kept as it is; wallet history counts only what happened up to its readAt',
+        );
+        return 'skipped';
+      }
+      if (!rec.db)
+        refuse(
+          'no Mongo database name: pass --db <waboo db> or set "mongoDb" in the client config',
+        );
+      return coreSnapshot(cfg, rec.db);
     },
     ship: async () => {
       if (flags.build) {
