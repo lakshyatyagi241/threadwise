@@ -39,13 +39,22 @@ function flatten(tree: Tree, prefix = ''): Record<string, string> {
 const placeholders = (message: string) =>
   [...new Set([...message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((m) => m[1]!))].sort();
 
-/** The "Imported" marker strings are a slice of their own (messages/<locale>/team-inbox-conversations.imported.json), merged at runtime. */
-const loadSlice = (locale: string): Tree =>
+/**
+ * Two domain slices of their own (messages/<locale>/team-inbox-conversations.<slice>.json), merged at runtime: the "Imported" marker and
+ * the handoff queue (BL-396).
+ */
+const loadSlice = (locale: string, slice: string): Tree =>
   JSON.parse(
-    readFileSync(join(WEB, 'messages', locale, 'team-inbox-conversations.imported.json'), 'utf8'),
+    readFileSync(join(WEB, 'messages', locale, `team-inbox-conversations.${slice}.json`), 'utf8'),
   ) as Tree;
-const en = { ...flatten(load('en')), ...flatten(loadSlice('en')) };
-const ar = { ...flatten(load('ar')), ...flatten(loadSlice('ar')) };
+const SLICES = ['imported', 'handoff'] as const;
+const withSlices = (locale: string) =>
+  Object.assign(
+    flatten(load(locale)),
+    ...SLICES.map((slice) => flatten(loadSlice(locale, slice))),
+  ) as Record<string, string>;
+const en = withSlices('en');
+const ar = withSlices('ar');
 
 describe('team-inbox-conversations messages', () => {
   it('Arabic has exactly the keys English has', () => {

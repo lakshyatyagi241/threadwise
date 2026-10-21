@@ -8,6 +8,7 @@ import {
   type ConversationPriority,
   type ConversationSummary,
 } from '@crm/contracts';
+import { waitAge } from '../lib/handoff';
 import { badgeText } from '../lib/list';
 import { fullStamp, listTime, snoozeLeft, snoozeLeftMessage } from '../lib/time';
 import { formatWindowLeft, rowWindowChip } from '../lib/window';
@@ -70,6 +71,7 @@ export const ConversationRow = memo(function ConversationRow({
 }: ConversationRowProps) {
   const [menu, setMenu] = useState(false);
   const t = useTranslations('team-inbox-conversations.list');
+  const th = useTranslations('team-inbox-conversations.handoff.row');
   const locale = useLocale();
   const timeZone = useTimeZone();
   const unread = row.unreadCount > 0;
@@ -235,7 +237,17 @@ export const ConversationRow = memo(function ConversationRow({
                 {t(`priority.${row.priority}`)}
               </span>
             )}
-            {assignee ? (
+            {row.handling === 'waiting' && !row.assignment.user ? (
+              <span
+                data-testid="inbox-row-waiting"
+                title={assignee ? th('inTeam', { team: assignee }) : undefined}
+                className="rounded-full bg-warning/15 px-1.5 py-0.5 text-[10px] font-medium text-warning"
+              >
+                {row.handlingSince
+                  ? th('waitingFor', waitAge(row.handlingSince, nowMs))
+                  : th('waiting')}
+              </span>
+            ) : assignee ? (
               <span className="max-w-[9rem] truncate rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-medium text-primary">
                 {assignee}
               </span>

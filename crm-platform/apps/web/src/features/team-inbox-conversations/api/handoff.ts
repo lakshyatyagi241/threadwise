@@ -5,8 +5,11 @@ import { z } from 'zod';
 import {
   conversationHandoffResponseSchema,
   conversationSummarySchema,
+  handoffCardSchema,
+  handoffOutcomeSchema,
   handoffSettingsSchema,
   type HandoffSettings,
+  type RequestHandoffInput,
   type UpdateHandoffSettingsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -14,6 +17,13 @@ import { apiFetch } from '@/lib/api/client';
 /** The handoff calls of the inbox (BL-396..BL-404). Everything is parsed with the shared contracts. */
 const claimResponse = z.object({ conversation: conversationSummarySchema, ownerSet: z.boolean() });
 const returnResponse = z.object({ conversation: conversationSummarySchema });
+/** `refused` is the reason the service gave when it did nothing (an archived thread, spam); the screen shows it as a message. */
+const sendResponse = z.object({
+  outcome: handoffOutcomeSchema,
+  refused: z.string().nullable().optional(),
+  conversation: conversationSummarySchema,
+  handoff: handoffCardSchema.nullable(),
+});
 
 export const handoffApi = {
   card: (conversationId: string, signal?: AbortSignal) =>
@@ -26,6 +36,12 @@ export const handoffApi = {
       method: 'POST',
       body: { rowVersion },
       schema: claimResponse,
+    }),
+  send: (conversationId: string, input: RequestHandoffInput) =>
+    apiFetch(`/inbox/conversations/${conversationId}/handoff`, {
+      method: 'POST',
+      body: input,
+      schema: sendResponse,
     }),
   returnToBot: (conversationId: string) =>
     apiFetch(`/inbox/conversations/${conversationId}/return-to-bot`, {
@@ -59,7 +75,7 @@ export function useHandoffCard(conversationId: string | null, enabled: boolean) 
   });
 }
 
-/** Claim and return to bot: both change the row, the card, the tab counts, so every inbox query is refreshed. */
+/** Claim, send to the queue and return to bot: each changes the row, the card and the tab counts, so every inbox query is refreshed. */
 export function useHandoffActions(conversationId: string) {
   const qc = useQueryClient();
   const done = () => qc.invalidateQueries({ queryKey: ['inbox'] });
@@ -67,11 +83,15 @@ export function useHandoffActions(conversationId: string) {
     mutationFn: (rowVersion: number) => handoffApi.claim(conversationId, rowVersion),
     onSettled: done,
   });
+  const send = useMutation({
+    mutationFn: (input: RequestHandoffInput) => handoffApi.send(conversationId, input),
+    onSettled: done,
+  });
   const giveBack = useMutation({
     mutationFn: () => handoffApi.returnToBot(conversationId),
     onSettled: done,
   });
-  return { claim, giveBack };
+  return { claim, send, giveBack };
 }
 
 export function useHandoffSettings(enabled: boolean) {
