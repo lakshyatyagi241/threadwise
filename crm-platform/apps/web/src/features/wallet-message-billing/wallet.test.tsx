@@ -97,6 +97,8 @@ describe('messages', () => {
     for (const c of ['campaign', 'broadcast', 'flow', 'scheduled', 'auto_reply', 'chat', 'api'])
       want.push(`statement.channels.${c}`);
     for (const e of ['waba', 'baileys', 'twilio']) want.push(`statement.engines.${e}`);
+    for (const c of ['channel', 'recipient', 'template', 'country', 'category', 'engine'])
+      want.push(`statement.columns.${c}`);
     for (const m of ['wallet', 'plan']) want.push(`modes.${m}`);
     for (const s of ['perCountryEnabled', 'payPerMessage'])
       for (const k of [
@@ -372,6 +374,7 @@ describe('statement', () => {
       netMinor: 9950,
       count: 2,
     },
+    detailColumns: ['channel', 'recipient', 'template', 'country', 'category', 'engine'],
     data: [
       {
         ...tx(),
@@ -411,15 +414,40 @@ describe('statement', () => {
     expect(html).toContain('2 transactions');
   });
 
-  it('puts the money in the column of its direction and shows context chips', () => {
-    const html = wrap(<StatementTable rows={statement.data} currency="USD" />);
+  it('puts the money in the column of its direction and shows the context in its own columns', () => {
+    const html = wrap(
+      <StatementTable
+        rows={statement.data}
+        currency="USD"
+        detailColumns={statement.detailColumns}
+      />,
+    );
     expect(html).toContain('Diwali sale');
-    expect(html).toContain('To: +919876543210');
-    expect(html).toContain('Template: offer_v2');
+    expect(html).toContain('+919876543210');
+    expect(html).toContain('offer_v2');
     for (const chip of ['Campaign', 'IN', 'Marketing', 'WhatsApp Cloud'])
       expect(html).toContain(`>${chip}<`);
     expect(html).toContain('$0.50');
     expect(html).toContain('$1,000.00');
+  });
+
+  it('shows only the optional columns the server reports, in the CSV order', () => {
+    const html = wrap(
+      <StatementTable
+        rows={statement.data}
+        currency="USD"
+        detailColumns={['recipient', 'country']}
+      />,
+    );
+    expect(html).toContain('>Recipient<');
+    expect(html).toContain('>Country<');
+    expect(html).not.toContain('>Channel<');
+    expect(html).not.toContain('>Engine<');
+    const at = (label: string) => html.indexOf(`>${label}<`);
+    expect(at('Type')).toBeLessThan(at('Description'));
+    expect(at('Description')).toBeLessThan(at('Recipient'));
+    expect(at('Recipient')).toBeLessThan(at('Country'));
+    expect(at('Country')).toBeLessThan(at('Money in'));
   });
 });
 

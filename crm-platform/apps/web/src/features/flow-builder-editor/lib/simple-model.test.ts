@@ -722,6 +722,7 @@ describe('steps per channel', () => {
         'delay',
         'cta',
         'webhook',
+        'ai',
       ]),
     );
   });
@@ -790,6 +791,54 @@ describe('the carousel step', () => {
       ['p0', a.id],
       ['p1', b.id],
     ]);
+  });
+
+  it('goes anywhere: a step may follow it, and a reply button can carry on with that step', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const first = newStep('message', []);
+    d = insertStep(d, 0, 0, first);
+    const c = newStep('carousel', allSteps(d));
+    d = insertStep(d, 0, 1, c);
+    d = updateStep(d, c.id, { data: two() });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 2, after);
+    // Inserted at the end after the carousel: every reply that led nowhere carries on with it.
+    expect(allSteps(d).find((x) => x.id === c.id)!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([
+      ['p0', after.id],
+      ['p1', after.id],
+    ]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) {
+      expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([first.id, c.id, after.id]);
+      expect(back.doc.journeys[0]!.steps[1]!.links).toEqual([LINK_NEXT, LINK_NEXT]);
+    }
+  });
+
+  it('a carousel with only link buttons carries on by its next wire', () => {
+    let d = emptyDoc();
+    d.trigger.data.keywords = 'hi';
+    const c = newStep('carousel', []);
+    d = insertStep(d, 0, 0, c);
+    d = updateStep(d, c.id, {
+      data: {
+        cards: [{ title: 'A', buttons: [{ type: 'url', label: 'Open', value: 'https://a.b' }] }],
+      },
+    });
+    const after = newStep('message', allSteps(d));
+    d = insertStep(d, 0, 1, after);
+    const g = toGraph(d);
+    expect(
+      g.flowEdges.filter((e) => e.source === c.id).map((e) => [e.sourceHandle, e.target]),
+    ).toEqual([['next', after.id]]);
+    const back = toSimple(g);
+    expect(back.ok).toBe(true);
+    if (back.ok) expect(back.doc.journeys[0]!.steps.map((x) => x.id)).toEqual([c.id, after.id]);
   });
 
   it('asks for a card with a title, and for a name and an address on every button', () => {

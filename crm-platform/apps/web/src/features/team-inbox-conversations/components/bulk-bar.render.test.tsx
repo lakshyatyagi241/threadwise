@@ -212,6 +212,11 @@ describe('the bulk bar', () => {
     expect(
       (host.querySelector('[data-testid="inbox-bulk-resolve"]') as HTMLButtonElement).disabled,
     ).toBe(true);
+    for (const name of ['assign', 'priority', 'snooze', 'tag']) {
+      const select = host.querySelector(`[data-testid="inbox-bulk-${name}"]`) as HTMLSelectElement;
+      expect(select.disabled).toBe(true);
+      expect(select.className).toContain('disabled:opacity-50');
+    }
   });
 
   it('reads in Arabic, not in English', () => {

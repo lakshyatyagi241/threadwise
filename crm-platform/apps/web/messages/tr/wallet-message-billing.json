@@ -164,12 +164,16 @@
         "in": "Gelen tutar",
         "out": "Çıkan tutar",
         "balance": "Bakiye",
-        "none": "Yok"
+        "none": "Yok",
+        "channel": "Kanal",
+        "recipient": "Alıcı",
+        "template": "Şablon",
+        "country": "Ülke",
+        "category": "Kategori",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Neden",
-        "to": "Alıcı",
-        "template": "Şablon"
+        "reason": "Neden"
       },
       "channels": {
         "campaign": "Kampanya",

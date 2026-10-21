@@ -12,6 +12,7 @@ export function Select({ className, invalid, ...rest }: SelectProps) {
       className={cn(
         'h-10 w-full rounded-md border bg-background px-3 text-sm text-foreground outline-none',
         'focus-visible:ring-2 focus-visible:ring-primary',
+        'disabled:cursor-not-allowed disabled:opacity-50',
         invalid ? 'border-danger' : 'border-border',
         className,
       )}
