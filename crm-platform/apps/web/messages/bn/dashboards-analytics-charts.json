@@ -320,6 +320,7 @@
         "replyRate": "উত্তরের হার",
         "received": "প্রাপ্ত বার্তা",
         "conversationsOpen": "চলমান কথোপকথন",
+        "conversationsResolved": "সমাধান হওয়া কথোপকথন",
         "conversationsClosed": "বন্ধ কথোপকথন",
         "conversationsAssigned": "অ্যাসাইন করা",
         "conversationsUnassigned": "অ্যাসাইন করা হয়নি",

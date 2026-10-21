@@ -320,6 +320,7 @@
         "replyRate": "Reply rate",
         "received": "Received messages",
         "conversationsOpen": "Open conversations",
+        "conversationsResolved": "Resolved conversations",
         "conversationsClosed": "Closed conversations",
         "conversationsAssigned": "Assigned",
         "conversationsUnassigned": "Unassigned",

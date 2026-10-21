@@ -320,6 +320,7 @@
         "replyRate": "Yanıt oranı",
         "received": "Alınan mesajlar",
         "conversationsOpen": "Açık görüşmeler",
+        "conversationsResolved": "Çözülen görüşmeler",
         "conversationsClosed": "Kapatılan görüşmeler",
         "conversationsAssigned": "Atanmış",
         "conversationsUnassigned": "Atanmamış",

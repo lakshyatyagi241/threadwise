@@ -320,6 +320,7 @@
         "replyRate": "回复率",
         "received": "收到的消息",
         "conversationsOpen": "进行中的对话",
+        "conversationsResolved": "已解决的对话",
         "conversationsClosed": "已关闭的对话",
         "conversationsAssigned": "已分配",
         "conversationsUnassigned": "未分配",

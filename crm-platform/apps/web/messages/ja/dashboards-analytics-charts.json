@@ -320,6 +320,7 @@
         "replyRate": "返信率",
         "received": "受信メッセージ",
         "conversationsOpen": "進行中の会話",
+        "conversationsResolved": "解決済みの会話",
         "conversationsClosed": "クローズ済みの会話",
         "conversationsAssigned": "割り当て済み",
         "conversationsUnassigned": "未割り当て",

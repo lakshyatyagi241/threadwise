@@ -320,6 +320,7 @@
         "replyRate": "معدل الرد",
         "received": "الرسائل المستلمة",
         "conversationsOpen": "المحادثات المفتوحة",
+        "conversationsResolved": "المحادثات المحلولة",
         "conversationsClosed": "المحادثات المغلقة",
         "conversationsAssigned": "المعيّنة",
         "conversationsUnassigned": "غير المعيّنة",
