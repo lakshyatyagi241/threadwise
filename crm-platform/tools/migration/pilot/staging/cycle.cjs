@@ -1660,7 +1660,9 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
         console.log(`export: needed (${m.msg})`);
       }
       if (!flags['force-export'] && cfg.coreFile)
-        console.log('export: forced, the geta_core snapshot is taken right after it');
+        console.log(
+          'export: forced, the geta_core snapshot is taken right after it (full re-export: a reused dump would be older than the snapshot; costs roughly twice the export time after a dry run)',
+        );
       if (!rec.db)
         refuse(
           'no Mongo database name: pass --db <waboo db> or set "mongoDb" in the client config',

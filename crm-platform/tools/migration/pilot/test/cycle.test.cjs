@@ -710,7 +710,8 @@ test('migrate with a geta_core snapshot: export forced, snapshot read right afte
 
   // a reader that writes no readAt is refused and the operator's core.json stays as it was
   reset();
-  r = cycle([...MIG_CORE, '--stop-after', 'ship'], { ...env, FAKE_CORE_READAT: '' });
+  const { FAKE_CORE_READAT: _unset, ...noReadAt } = env;
+  r = cycle([...MIG_CORE, '--stop-after', 'ship'], noReadAt);
   assert.equal(r.status, 1);
   assert.match(r.stdout, /core-snapshot: core-opening wrote no readAt; core\.json is not replaced/);
   assert.equal(JSON.parse(fs.readFileSync(coreFile, 'utf8')).stale, true);
