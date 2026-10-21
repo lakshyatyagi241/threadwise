@@ -1302,7 +1302,8 @@
       },
       "kind": {
         "before": "antes do início do agendamento",
-        "after": "depois do fim do agendamento"
+        "after": "depois do fim do agendamento",
+        "event": "quando algo acontece"
       },
       "editMessage": "Mensagem e canais",
       "hideMessage": "Ocultar",
@@ -1311,7 +1312,6 @@
       "channelsHint": "Usa-se o primeiro canal que consegue entregar, os seguintes são alternativas. Ninguém recebe o mesmo lembrete duas vezes.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-mail"
       },
       "messageTitle": "Mensagem",
@@ -1363,8 +1363,9 @@
         "bodyTooLong": "A mensagem é muito longa.",
         "subjectTooLong": "O assunto é muito longo.",
         "labelTooLong": "O rótulo é muito longo.",
-        "tooMany": "No máximo 8 lembretes e acompanhamentos para um tipo de agendamento.",
-        "channelsNone": "Escolha pelo menos um canal."
+        "tooMany": "No máximo {max} lembretes e acompanhamentos com horário por tipo de reserva.",
+        "channelsNone": "Escolha pelo menos um canal.",
+        "fallbackInvalid": "Informe um número inteiro de minutos de {min} a {maxMinutes}, ou deixe vazio."
       },
       "noneOn": "Nenhum lembrete ou acompanhamento está ativado para este tipo de agendamento.",
       "status": {
@@ -1423,7 +1424,18 @@
         "before": "{count, plural, one {# minuto antes} other {# minutos antes}}",
         "after": "{count, plural, one {# minuto depois} other {# minutos depois}}"
       },
-      "sentOn": "Enviado por {channel}"
+      "sentOn": "Enviado por {channel}",
+      "steps": {
+        "confirmation": "Confirmação da reserva",
+        "no_show": "Mensagem de não comparecimento"
+      },
+      "notice": {
+        "smsRemoved": "Os lembretes por SMS foram removidos. Esta etapa foi movida para e-mail (ou desativada); escolha WhatsApp ou e-mail."
+      },
+      "buttonsTitle": "Adicionar os botões Confirmar, Reagendar e Cancelar (WhatsApp)",
+      "skipIfConfirmed": "Ignorar se o cliente já confirmou",
+      "fallbackTitle": "Se não for entregue, tentar o próximo canal após (minutos)",
+      "fallbackHint": "Deixe vazio para desativar. De {min} a {maxMinutes} minutos."
     }
   }
 }

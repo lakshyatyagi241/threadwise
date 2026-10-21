@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "prima dell'inizio dell'appuntamento",
-        "after": "dopo la fine dell'appuntamento"
+        "after": "dopo la fine dell'appuntamento",
+        "event": "quando succede qualcosa"
       },
       "editMessage": "Messaggio e canali",
       "hideMessage": "Nascondi",
@@ -1317,7 +1318,6 @@
       "channelsHint": "Viene usato il primo canale in grado di consegnare, gli altri fanno da riserva. Nessuno riceve lo stesso promemoria due volte.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Email"
       },
       "moveUp": "Prova {channel} prima",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "Il messaggio è troppo lungo.",
         "subjectTooLong": "L'oggetto è troppo lungo.",
         "labelTooLong": "L'etichetta è troppo lunga.",
-        "tooMany": "Al massimo 8 promemoria e follow-up per tipo di prenotazione."
+        "tooMany": "Al massimo {max} promemoria e follow-up con orario per tipo di prenotazione.",
+        "fallbackInvalid": "Inserisci un numero intero di minuti da {min} a {maxMinutes}, oppure lascia vuoto."
       },
       "noneOn": "Nessun promemoria o follow-up è attivo per questo tipo di prenotazione.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "Il provider lo ha rifiutato.",
         "interrupted": "È stato interrotto e non ritentato.",
         "internal_error": "Qualcosa è andato storto."
-      }
+      },
+      "steps": {
+        "confirmation": "Conferma della prenotazione",
+        "no_show": "Messaggio di mancata presentazione"
+      },
+      "notice": {
+        "smsRemoved": "I promemoria via SMS sono stati rimossi. Questo passaggio è stato spostato sull’e-mail (o disattivato); scegli WhatsApp o e-mail."
+      },
+      "buttonsTitle": "Aggiungi i pulsanti Conferma, Riprogramma e Annulla (WhatsApp)",
+      "skipIfConfirmed": "Salta se il cliente ha già confermato",
+      "fallbackTitle": "Se non consegnato, prova il canale successivo dopo (minuti)",
+      "fallbackHint": "Lascia vuoto per disattivare. Da {min} a {maxMinutes} minuti."
     }
   }
 }

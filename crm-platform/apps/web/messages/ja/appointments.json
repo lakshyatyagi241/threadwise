@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "予定の開始前",
-        "after": "予定の終了後"
+        "after": "予定の終了後",
+        "event": "何かが起きたとき"
       },
       "editMessage": "メッセージとチャネル",
       "hideMessage": "閉じる",
@@ -1317,7 +1318,6 @@
       "channelsHint": "配信できる最初のチャネルが使われ、以降のチャネルは代替になります。同じリマインダーが2回届くことはありません。",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "メール"
       },
       "moveUp": "{channel}を先に試す",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "メッセージが長すぎます。",
         "subjectTooLong": "件名が長すぎます。",
         "labelTooLong": "ラベルが長すぎます。",
-        "tooMany": "1つの予約タイプにつきリマインダーとフォローアップは最大8件です。"
+        "tooMany": "1つの予約タイプにつき、時刻のあるリマインダーとフォローアップは最大{max}件です。",
+        "fallbackInvalid": "{min}～{maxMinutes}の整数（分）を入力するか、空欄のままにしてください。"
       },
       "noneOn": "この予約タイプにはオンのリマインダーやフォローアップがありません。",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "プロバイダーに拒否されました。",
         "interrupted": "中断され、再試行されませんでした。",
         "internal_error": "問題が発生しました。"
-      }
+      },
+      "steps": {
+        "confirmation": "予約の確認",
+        "no_show": "無断欠席のメッセージ"
+      },
+      "notice": {
+        "smsRemoved": "SMSリマインダーは廃止されました。このステップはメールに変更されました（またはオフになりました）。WhatsAppまたはメールを選択してください。"
+      },
+      "buttonsTitle": "「確認」「日時変更」「キャンセル」ボタンを追加（WhatsApp）",
+      "skipIfConfirmed": "顧客がすでに確認済みの場合はスキップ",
+      "fallbackTitle": "未配信の場合、次のチャネルを試すまでの時間（分）",
+      "fallbackHint": "オフにするには空欄のままにします。{min}～{maxMinutes}分。"
     }
   }
 }

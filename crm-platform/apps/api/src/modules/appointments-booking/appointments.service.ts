@@ -176,6 +176,9 @@ export class AppointmentsService {
       row.bookingTypeId === null ? [] : (children?.get(row.bookingTypeId)?.reminders ?? []);
     return remindersOf(row, rules, runs, Date.now()).map((r) => ({
       kind: r.kind,
+      stepKind: r.stepKind,
+      attempts: r.attempts,
+      delivery: r.delivery,
       offsetMinutes: r.offsetMinutes,
       label: r.label,
       dueAt: r.dueAt.toISOString(),

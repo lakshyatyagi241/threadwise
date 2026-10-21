@@ -21,13 +21,11 @@
       "names": {
         "email": "Correo electrónico",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Llamada de recordatorio"
       },
       "about": {
         "email": "Desde un buzón compartido de tu espacio. Nunca desde un buzón personal.",
         "whatsapp": "Texto libre dentro de la ventana de 24 horas; fuera de ella, solo una plantilla aprobada.",
-        "sms": "Texto sin formato desde tu remitente de SMS conectado.",
         "voice": "Una llamada saliente automática que recuerda al contacto."
       },
       "status": {

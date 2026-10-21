@@ -21,13 +21,11 @@
       "names": {
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Panggilan pengingat"
       },
       "about": {
         "email": "Dari kotak surat bersama ruang kerja Anda. Tidak pernah dari kotak surat pribadi.",
         "whatsapp": "Teks bebas dalam jendela 24 jam; di luar itu hanya templat yang disetujui.",
-        "sms": "Teks biasa dari pengirim SMS Anda yang terhubung.",
         "voice": "Panggilan keluar otomatis yang mengingatkan kontak."
       },
       "status": {

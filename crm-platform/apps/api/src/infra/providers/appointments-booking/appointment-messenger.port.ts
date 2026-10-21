@@ -17,9 +17,13 @@ export type BookingMessageEvent =
   | 'cancellation'
   | 'reschedule'
   /** The after-visit follow-up of a reminder rule (BL-283). */
-  | 'follow_up';
-export type BookingMessageChannel =
-  'whatsapp' | 'sms' | 'email' | 'telegram' | 'instagram' | 'facebook';
+  | 'follow_up'
+  /** The no-show message of a reminder sequence (BL-421). */
+  | 'no_show'
+  /** The rebook (recall) message of a reminder sequence (BL-421). */
+  | 'rebook';
+/** SMS was removed from appointment messages: WhatsApp and email carry them (the other values are not addressable by a booking). */
+export type BookingMessageChannel = 'whatsapp' | 'email' | 'telegram' | 'instagram' | 'facebook';
 
 export interface BookingMessage {
   orgId: number;
@@ -43,11 +47,22 @@ export interface BookingMessage {
   variables?: Record<string, string>;
   /**
    * `service`: the booking's own notices and reminders (asked of the ConsentGate as service messages). `follow_up`: an after-visit
-   * follow-up, asked as marketing (it needs consent where the workspace requires it).
+   * follow-up or a rebook message, asked as marketing (it needs consent where the workspace requires it).
    */
   purpose?: 'service' | 'follow_up';
   /** A reminder that quiet hours would push past this instant (the booking's start) is skipped instead of held. */
   notAfter?: string | null;
+  /**
+   * The payloads of the template's quick-reply buttons, in button order (Confirm, Reschedule, Cancel). Each is a signed one-time token
+   * bound to this booking and step; the messenger sends them as the buttons' payload so the customer's tap comes back to the booking.
+   * Used only with a WhatsApp template that has quick-reply buttons.
+   */
+  quickReplyPayloads?: string[];
+  /**
+   * A test of a step sent to a staff member's own email (BL-425): quiet hours and the customer consent check do not apply (it is not a
+   * customer), the owner's channel choice still does. Email only.
+   */
+  isTest?: boolean;
 }
 
 export interface BookingMessageResult {

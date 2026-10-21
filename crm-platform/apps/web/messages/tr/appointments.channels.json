@@ -21,13 +21,11 @@
       "names": {
         "email": "E-posta",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Hatırlatma araması"
       },
       "about": {
         "email": "Çalışma alanınızın paylaşılan bir posta kutusundan. Asla kişisel posta kutusundan değil.",
         "whatsapp": "24 saatlik pencere içinde serbest metin; dışında yalnızca onaylı şablon.",
-        "sms": "Bağlı SMS göndericinizden düz metin.",
         "voice": "Kişiyi hatırlatan otomatik giden arama."
       },
       "status": {

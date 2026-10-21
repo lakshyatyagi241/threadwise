@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "预约开始前",
-        "after": "预约结束后"
+        "after": "预约结束后",
+        "event": "发生某事时"
       },
       "editMessage": "消息和渠道",
       "hideMessage": "隐藏",
@@ -1317,7 +1318,6 @@
       "channelsHint": "使用第一个可送达的渠道，其余作为备用。同一条提醒不会重复发送。",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "邮件"
       },
       "moveUp": "将 {channel} 提前",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "消息过长。",
         "subjectTooLong": "主题过长。",
         "labelTooLong": "标签过长。",
-        "tooMany": "每个预约类型最多 8 条提醒和跟进。"
+        "tooMany": "每种预约类型最多 {max} 条带时间的提醒和跟进。",
+        "fallbackInvalid": "请输入 {min} 到 {maxMinutes} 之间的整数分钟数，或留空。"
       },
       "noneOn": "此预约类型未开启任何提醒或跟进。",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "服务商拒绝了请求。",
         "interrupted": "已中断且未重试。",
         "internal_error": "出了点问题。"
-      }
+      },
+      "steps": {
+        "confirmation": "预约确认",
+        "no_show": "未到场消息"
+      },
+      "notice": {
+        "smsRemoved": "短信提醒已移除。此步骤已改为邮件（或已关闭）；请选择 WhatsApp 或邮件。"
+      },
+      "buttonsTitle": "添加“确认”“改期”和“取消”按钮（WhatsApp）",
+      "skipIfConfirmed": "如果客户已确认则跳过",
+      "fallbackTitle": "若未送达，则在以下时间后尝试下一渠道（分钟）",
+      "fallbackHint": "留空则关闭。范围为 {min} 到 {maxMinutes} 分钟。"
     }
   }
 }

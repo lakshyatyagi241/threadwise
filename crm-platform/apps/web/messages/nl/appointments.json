@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "voordat de afspraak begint",
-        "after": "nadat de afspraak eindigt"
+        "after": "nadat de afspraak eindigt",
+        "event": "wanneer er iets gebeurt"
       },
       "editMessage": "Bericht en kanalen",
       "hideMessage": "Verbergen",
@@ -1317,7 +1318,6 @@
       "channelsHint": "Het eerste kanaal dat kan bezorgen wordt gebruikt, de volgende zijn reserve. Niemand krijgt dezelfde herinnering twee keer.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-mail"
       },
       "moveUp": "{channel} eerder proberen",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "Het bericht is te lang.",
         "subjectTooLong": "Het onderwerp is te lang.",
         "labelTooLong": "Het label is te lang.",
-        "tooMany": "Maximaal 8 herinneringen en opvolgingen voor één boekingstype."
+        "tooMany": "Maximaal {max} herinneringen en vervolgberichten met een tijd per boekingstype.",
+        "fallbackInvalid": "Voer een geheel aantal minuten in van {min} tot {maxMinutes}, of laat het leeg."
       },
       "noneOn": "Er staan geen herinneringen of opvolgingen aan voor dit boekingstype.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "De provider heeft het geweigerd.",
         "interrupted": "Het is onderbroken en niet opnieuw geprobeerd.",
         "internal_error": "Er is iets misgegaan."
-      }
+      },
+      "steps": {
+        "confirmation": "Boekingsbevestiging",
+        "no_show": "Bericht bij niet-verschijnen"
+      },
+      "notice": {
+        "smsRemoved": "Sms-herinneringen zijn verwijderd. Deze stap is verplaatst naar e-mail (of uitgeschakeld); kies WhatsApp of e-mail."
+      },
+      "buttonsTitle": "Knoppen Bevestigen, Verplaatsen en Annuleren toevoegen (WhatsApp)",
+      "skipIfConfirmed": "Overslaan als de klant al heeft bevestigd",
+      "fallbackTitle": "Als niet bezorgd, volgend kanaal proberen na (minuten)",
+      "fallbackHint": "Laat leeg om uit te schakelen. Van {min} tot {maxMinutes} minuten."
     }
   }
 }

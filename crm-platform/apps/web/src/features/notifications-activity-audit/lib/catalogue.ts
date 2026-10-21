@@ -116,6 +116,8 @@ const LOOK: Record<NotificationPrefType, Look> = {
   member_leave_started: look('assign', 'info'),
   assignment_blocked_by_leave: look('waiting', 'danger', 'conversation'),
   appointment_calendar_drift: look('waiting', 'danger'),
+  appointment_cancelled_by_customer: look('waiting', 'info'),
+  appointment_reminder_test: look('generic', 'info'),
   waba_group_join_request: look('group', 'info', 'waba_group'),
   waba_group_suspended: look('group', 'danger', 'waba_group'),
   waba_group_suspension_cleared: look('group', 'success', 'waba_group'),

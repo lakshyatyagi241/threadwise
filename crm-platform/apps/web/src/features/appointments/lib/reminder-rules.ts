@@ -1,3 +1,9 @@
+import {
+  BOOKING_TIMED_STEPS_MAX,
+  EVENT_STEP_OFFSET,
+  defaultStepKind,
+  type BookingReminderStepKind,
+} from '@crm/contracts';
 import { newId } from './availability';
 
 /**
@@ -8,10 +14,20 @@ import { newId } from './availability';
  * sent until someone switches it on.
  */
 
-export const REMINDER_KINDS = ['before', 'after'] as const;
+/** `event` steps (the confirmation, the no-show message) go out when something happens and have no time of their own. */
+export const REMINDER_KINDS = ['before', 'after', 'event'] as const;
 export type ReminderKind = (typeof REMINDER_KINDS)[number];
+/** The kinds a person can pick for a step with a time. */
+export const TIMED_REMINDER_KINDS = ['before', 'after'] as const;
 
-export const REMINDER_CHANNELS = ['whatsapp', 'sms', 'email'] as const;
+export type ReminderStepKind = BookingReminderStepKind;
+
+/** What Meta decided about a WhatsApp template (`draft` = not sent to Meta yet). */
+export const WA_TEMPLATE_STATUSES = ['draft', 'pending', 'approved', 'rejected'] as const;
+export type WaTemplateStatus = (typeof WA_TEMPLATE_STATUSES)[number];
+
+/** SMS was removed from appointment reminders: WhatsApp and email only (voice is reserved and cannot be chosen). */
+export const REMINDER_CHANNELS = ['whatsapp', 'email'] as const;
 export type ReminderChannel = (typeof REMINDER_CHANNELS)[number];
 
 export const REMINDER_UNITS = ['minutes', 'hours', 'days'] as const;
@@ -21,10 +37,15 @@ const UNIT_MINUTES: Record<ReminderUnit, number> = { minutes: 1, hours: 60, days
 
 /** The API keeps an offset of up to 30 days. */
 export const REMINDER_MAX_MINUTES = 43_200;
-export const REMINDER_MAX_RULES = 8;
+/** At most this many steps with a time; the event steps come on top. */
+export const REMINDER_MAX_RULES = BOOKING_TIMED_STEPS_MAX;
+export const UNDELIVERED_MIN = 5;
+export const UNDELIVERED_MAX = 720;
 export const REMINDER_BODY_MAX = 2000;
 export const REMINDER_SUBJECT_MAX = 191;
 export const REMINDER_LABEL_MAX = 40;
+/** A rebook step can wait up to a year after the visit. */
+export const REBOOK_MAX_MINUTES = 525_600;
 
 /** What a run can say about why it did not go (the API's stable codes); each has a sentence under `appointments.reminders.reasons`. */
 export const REMINDER_REASON_CODES = [
@@ -57,6 +78,13 @@ export const REMINDER_REASON_CODES = [
   'provider_error',
   'interrupted',
   'internal_error',
+  'already_confirmed',
+  'no_join_link',
+  'already_rebooked',
+  'visit_not_completed',
+  'plan_feature_locked',
+  'not_delivered',
+  'send_failed',
 ] as const;
 export type ReminderReasonCode = (typeof REMINDER_REASON_CODES)[number];
 
@@ -96,6 +124,25 @@ export interface ReminderDraft {
   body: string;
   /** The uuid of an approved WhatsApp template, or ''. */
   waTemplateId: string;
+  /** Which step of the sequence this is; carried through load, edit and save. */
+  stepKind: ReminderStepKind;
+  /** The WhatsApp message carries Confirm, Reschedule and Cancel buttons. */
+  buttonsEnabled: boolean;
+  /** Skip the step when the customer has already confirmed. */
+  skipIfConfirmed: boolean;
+  /** Minutes to wait before trying the next channel when not delivered, as typed; '' = off. */
+  undeliveredFallbackMinutes: string;
+  /** An email message of the appointment library, or ''. */
+  libraryTemplateId: string;
+  /** Read live from the chosen WhatsApp template by the server (never sent back); null = no template. */
+  waTemplateStatus: WaTemplateStatus | null;
+  waTemplateName: string | null;
+  /** `sms_removed` when the server moved this step off SMS; the owner is asked to choose WhatsApp or email. */
+  notice: 'sms_removed' | null;
+  /** Kept as the server sent them and sent back unchanged. */
+  serviceLabel: string | null;
+  packKey: string | null;
+  packVersion: number | null;
 }
 
 export const newReminder = (
@@ -113,7 +160,25 @@ export const newReminder = (
   subject: '',
   body: '',
   waTemplateId: '',
+  stepKind: kind === 'after' ? 'after_visit' : 'reminder',
+  buttonsEnabled: false,
+  skipIfConfirmed: false,
+  undeliveredFallbackMinutes: '',
+  libraryTemplateId: '',
+  waTemplateStatus: null,
+  waTemplateName: null,
+  notice: null,
+  serviceLabel: null,
+  packKey: null,
+  packVersion: null,
 });
+
+/** The step kind a draft stands for: its own, adjusted when the time or kind was edited (the usual offsets get their name). */
+export function stepKindOf(r: ReminderDraft): ReminderStepKind {
+  if (r.kind === 'event') return r.stepKind;
+  if (r.kind === 'after') return r.stepKind === 'rebook' ? 'rebook' : 'after_visit';
+  return defaultStepKind('before', minutesOf(r) ?? 0);
+}
 
 /** Minutes of a typed amount and unit, or null when it is not a whole positive number. */
 export function minutesOf(r: Pick<ReminderDraft, 'offset' | 'unit'>): number | null {
@@ -148,6 +213,10 @@ export function reminderKeys(list: readonly ReminderDraft[]): Set<string> {
   return out;
 }
 
+/** Steps that have a time (the event steps do not count towards the limit). */
+export const timedCount = (list: readonly ReminderDraft[]): number =>
+  list.filter((r) => r.kind !== 'event' && r.offset.trim() !== '').length;
+
 /** Quick-add chips. */
 export const QUICK_REMINDERS = [1440, 180, 60, 15] as const;
 export const QUICK_FOLLOW_UPS = [120, 1440] as const;
@@ -169,7 +238,7 @@ export function addReminder(
       i === blank ? { ...withMinutes(r, minutes), label: r.label || label } : r,
     );
   }
-  if (list.length >= REMINDER_MAX_RULES) return [...list];
+  if (list.filter((r) => r.kind !== 'event').length >= REMINDER_MAX_RULES) return [...list];
   return [...list, { ...withMinutes(newReminder('', label, kind), minutes) }];
 }
 
@@ -208,7 +277,17 @@ export type ReminderProblem =
   | 'bodyTooLong'
   | 'subjectTooLong'
   | 'labelTooLong'
+  | 'fallbackInvalid'
   | 'tooMany';
+
+/** The undelivered-fallback wait is blank (off) or a whole number of minutes in the API's range. */
+function fallbackOk(r: Pick<ReminderDraft, 'undeliveredFallbackMinutes'>): boolean {
+  const t = r.undeliveredFallbackMinutes.trim();
+  if (t === '') return true;
+  if (!/^\d{1,4}$/.test(t)) return false;
+  const n = Number(t);
+  return n >= UNDELIVERED_MIN && n <= UNDELIVERED_MAX;
+}
 
 /**
  * Problems by key: `reminder:<id>` for a row, `reminders` for the list. A row with an empty amount is a row nobody filled in and is
@@ -218,19 +297,28 @@ export function validateReminders(list: readonly ReminderDraft[]): Record<string
   const p: Record<string, ReminderProblem> = {};
   const seen = new Set<string>();
   for (const r of list) {
-    if (r.offset.trim() === '') continue;
+    if (r.kind !== 'event' && r.offset.trim() === '') continue;
     const key = `reminder:${r.id}`;
     const m = minutesOf(r);
-    if (m === null || m < 1 || m > REMINDER_MAX_MINUTES) p[key] = 'offsetInvalid';
+    const maxMinutes = r.stepKind === 'rebook' ? REBOOK_MAX_MINUTES : REMINDER_MAX_MINUTES;
+    if (r.kind === 'event') {
+      if (r.channels.length === 0) p[key] = 'channelsNone';
+      else if (r.body.length > REMINDER_BODY_MAX) p[key] = 'bodyTooLong';
+      else if (r.subject.length > REMINDER_SUBJECT_MAX) p[key] = 'subjectTooLong';
+      else if (r.label.length > REMINDER_LABEL_MAX) p[key] = 'labelTooLong';
+      else if (!fallbackOk(r)) p[key] = 'fallbackInvalid';
+      continue;
+    }
+    if (m === null || m < 1 || m > maxMinutes) p[key] = 'offsetInvalid';
     else if (seen.has(ruleKey(r.kind, m))) p[key] = 'duplicate';
     else if (r.channels.length === 0) p[key] = 'channelsNone';
     else if (r.body.length > REMINDER_BODY_MAX) p[key] = 'bodyTooLong';
     else if (r.subject.length > REMINDER_SUBJECT_MAX) p[key] = 'subjectTooLong';
     else if (r.label.length > REMINDER_LABEL_MAX) p[key] = 'labelTooLong';
+    else if (!fallbackOk(r)) p[key] = 'fallbackInvalid';
     if (m !== null) seen.add(ruleKey(r.kind, m));
   }
-  if (list.filter((r) => r.offset.trim() !== '').length > REMINDER_MAX_RULES)
-    p.reminders = 'tooMany';
+  if (timedCount(list) > REMINDER_MAX_RULES) p.reminders = 'tooMany';
   return p;
 }
 
@@ -241,10 +329,18 @@ export interface ReminderInput {
   label: string | null;
   isActive: boolean;
   kind: ReminderKind;
+  stepKind: ReminderStepKind;
   channels: ReminderChannel[];
   subject: string | null;
   body: string | null;
   waTemplateId: string | null;
+  libraryTemplateId: string | null;
+  buttonsEnabled: boolean;
+  skipIfConfirmed: boolean;
+  undeliveredFallbackMinutes: number | null;
+  serviceLabel: string | null;
+  packKey: string | null;
+  packVersion: number | null;
 }
 
 const orNull = (v: string): string | null => (v.trim() === '' ? null : v.trim());
@@ -252,33 +348,47 @@ const orNull = (v: string): string | null => (v.trim() === '' ? null : v.trim())
 export function remindersToInput(list: readonly ReminderDraft[]): ReminderInput[] {
   const out: ReminderInput[] = [];
   const used = new Set<string>();
+  let timed = 0;
   for (const r of list) {
-    const m = minutesOf(r);
-    if (m === null || m < 1 || used.has(ruleKey(r.kind, m)) || out.length >= REMINDER_MAX_RULES)
-      continue;
-    used.add(ruleKey(r.kind, m));
+    const event = r.kind === 'event';
+    const step = stepKindOf(r);
+    const m = event ? EVENT_STEP_OFFSET[step as 'confirmation' | 'no_show'] : minutesOf(r);
+    if (m === null || m === undefined) continue;
+    if (!event && (m < 1 || timed >= REMINDER_MAX_RULES)) continue;
+    const key = event ? `event:${step}` : ruleKey(r.kind, m);
+    if (used.has(key)) continue;
+    used.add(key);
+    if (!event) timed += 1;
+    const fb = r.undeliveredFallbackMinutes.trim();
     out.push({
       ...(r.serverId ? { id: r.serverId } : {}),
       offsetMinutes: m,
       label: orNull(r.label),
       isActive: r.enabled,
       kind: r.kind,
+      stepKind: step,
       channels: r.channels.length > 0 ? [...r.channels] : [...REMINDER_CHANNELS],
       subject: orNull(r.subject),
       body: orNull(r.body),
       waTemplateId: orNull(r.waTemplateId),
+      libraryTemplateId: orNull(r.libraryTemplateId),
+      buttonsEnabled: r.buttonsEnabled,
+      skipIfConfirmed: r.skipIfConfirmed,
+      undeliveredFallbackMinutes: fb === '' || !/^\d+$/.test(fb) ? null : Number(fb),
+      serviceLabel: r.serviceLabel,
+      packKey: r.packKey,
+      packVersion: r.packVersion,
     });
   }
-  // before-rules first, furthest from the start first; then the follow-ups, soonest first
-  return out.sort((a, b) =>
-    a.kind === b.kind
-      ? a.kind === 'before'
-        ? b.offsetMinutes - a.offsetMinutes
-        : a.offsetMinutes - b.offsetMinutes
-      : a.kind === 'before'
-        ? -1
-        : 1,
-  );
+  // event steps first (confirmation, then no-show), then the before-rules (furthest from the start first), then the follow-ups (soonest first)
+  const rank = (r: ReminderInput): number => (r.kind === 'event' ? 0 : r.kind === 'before' ? 1 : 2);
+  return out.sort((a, b) => {
+    if (rank(a) !== rank(b)) return rank(a) - rank(b);
+    if (a.kind === 'event') return a.offsetMinutes - b.offsetMinutes;
+    return a.kind === 'before'
+      ? b.offsetMinutes - a.offsetMinutes
+      : a.offsetMinutes - b.offsetMinutes;
+  });
 }
 
 /** The rules of a saved type as drafts. */
@@ -289,10 +399,21 @@ export function remindersFromType(
     label: string | null;
     isActive: boolean;
     kind: ReminderKind;
+    stepKind?: ReminderStepKind | undefined;
     channels: ReminderChannel[];
     subject: string | null;
     body: string | null;
     waTemplateId: string | null;
+    libraryTemplateId?: string | null | undefined;
+    waTemplateStatus?: WaTemplateStatus | null | undefined;
+    waTemplateName?: string | null | undefined;
+    buttonsEnabled?: boolean | undefined;
+    skipIfConfirmed?: boolean | undefined;
+    undeliveredFallbackMinutes?: number | null | undefined;
+    serviceLabel?: string | null | undefined;
+    packKey?: string | null | undefined;
+    packVersion?: number | null | undefined;
+    notice?: 'sms_removed' | null | undefined;
   }>,
 ): ReminderDraft[] {
   return rules.map((r) => ({
@@ -306,6 +427,18 @@ export function remindersFromType(
     subject: r.subject ?? '',
     body: r.body ?? '',
     waTemplateId: r.waTemplateId ?? '',
+    stepKind: r.stepKind ?? defaultStepKind(r.kind, r.offsetMinutes),
+    buttonsEnabled: r.buttonsEnabled ?? false,
+    skipIfConfirmed: r.skipIfConfirmed ?? false,
+    undeliveredFallbackMinutes:
+      r.undeliveredFallbackMinutes == null ? '' : String(r.undeliveredFallbackMinutes),
+    libraryTemplateId: r.libraryTemplateId ?? '',
+    waTemplateStatus: r.waTemplateStatus ?? null,
+    waTemplateName: r.waTemplateName ?? null,
+    notice: r.notice ?? null,
+    serviceLabel: r.serviceLabel ?? null,
+    packKey: r.packKey ?? null,
+    packVersion: r.packVersion ?? null,
   }));
 }
 
@@ -323,6 +456,7 @@ export function remindersChanged(
 
 /** The standard texts the API uses when a rule has none (they are what the contact would get). */
 export const STANDARD_TEXT: Record<ReminderKind, string> = {
+  event: 'Hi {{name}}, your {{type}} on {{slot}} is booked. See you then!',
   before: 'Reminder: you have {{type}} coming up on {{slot}}. See you then!',
   after:
     'Thank you for {{type}} on {{slot}}. If you have any questions, just reply to this message.',

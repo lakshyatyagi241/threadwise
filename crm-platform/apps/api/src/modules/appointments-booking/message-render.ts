@@ -1,4 +1,4 @@
-import type { BookingTemplateEvent } from '@crm/contracts';
+import type { BookingReminderStepKind, BookingTemplateEvent } from '@crm/contracts';
 import { formatClock, formatDateLong, formatSlotLabel } from './tz';
 
 /**
@@ -17,6 +17,11 @@ export interface MessageFacts {
   manageUrl: string | null;
   /** The link that opens the visit when it is online (a Meet or Teams link), apart from `location`. */
   joinUrl?: string | null;
+  /** The host (the agent): name and number, for the messages that give the customer someone to call. */
+  hostName?: string | null;
+  hostPhone?: string | null;
+  /** A step's own word for the service (a medical practice: "appointment"), used instead of the booking type's name. */
+  serviceLabel?: string | null;
 }
 
 export const DEFAULT_TEXTS: Record<BookingTemplateEvent, string> = {
@@ -30,8 +35,9 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
   const slot = formatSlotLabel(f.startsAtMs, f.timezone);
   const date = formatDateLong(f.startsAtMs, f.timezone);
   const time = formatClock(f.startsAtMs, f.timezone);
+  const place = f.joinUrl ? null : (f.location ?? '').trim();
   return {
-    type: f.typeName,
+    type: f.serviceLabel && f.serviceLabel.trim() !== '' ? f.serviceLabel.trim() : f.typeName,
     title: f.title,
     name: f.inviteeName ?? '',
     slot,
@@ -40,6 +46,12 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
     location: f.location ?? '',
     join_link: f.joinUrl ?? '',
     manage_link: f.manageUrl ?? '',
+    host_name: f.hostName ?? '',
+    host_phone: f.hostPhone ?? '',
+    // A link that opens the place on a map; only for a visit at an address (an online visit has no place to show).
+    map_link: place
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+      : '',
     manage_hint: f.manageUrl ? `\n\nReschedule or cancel: ${f.manageUrl}` : '',
   };
 }
@@ -101,4 +113,42 @@ export function reminderBody(
   const text =
     own ?? inherited ?? (kind === 'before' ? DEFAULT_TEXTS.reminder : DEFAULT_FOLLOW_UP_TEXT);
   return renderTemplate(text, vars);
+}
+
+/**
+ * The built-in text of each step of a reminder sequence, used when a step has no message of its own. Neutral on purpose: "your {{type}}"
+ * carries the workspace's own noun, and nothing here says what the visit is for.
+ */
+export const DEFAULT_STEP_TEXT: Record<BookingReminderStepKind, string> = {
+  confirmation: 'Booked: {{type}} on {{slot}}.{{manage_hint}}',
+  reminder_24h: DEFAULT_TEXTS.reminder,
+  reminder_2h: DEFAULT_TEXTS.reminder,
+  reminder_15m: DEFAULT_TEXTS.reminder,
+  reminder: DEFAULT_TEXTS.reminder,
+  after_visit: DEFAULT_FOLLOW_UP_TEXT,
+  no_show:
+    'We missed you for {{type}} on {{slot}}. Reply to this message and we will help you find a new time.',
+  rebook:
+    'It has been a while since your {{type}}. Reply to this message when you would like to book again.',
+};
+
+/**
+ * The text of one step: its own body, else (for a reminder) the type's reminder message, else the step's built-in text. The same
+ * placeholders as the other booking messages.
+ */
+export function stepBody(
+  step: BookingReminderStepKind,
+  ruleBody: string | null | undefined,
+  typeReminderBody: string | null | undefined,
+  facts: MessageFacts,
+): string {
+  const own = ruleBody && ruleBody.trim() !== '' ? ruleBody : null;
+  const isReminder =
+    step === 'reminder' ||
+    step === 'reminder_24h' ||
+    step === 'reminder_2h' ||
+    step === 'reminder_15m';
+  const inherited =
+    isReminder && typeReminderBody && typeReminderBody.trim() !== '' ? typeReminderBody : null;
+  return renderTemplate(own ?? inherited ?? DEFAULT_STEP_TEXT[step], variablesFor(facts));
 }

@@ -69,6 +69,8 @@ export interface AppointmentRow {
   feeRecordedMinor: bigint;
   holdExpiresAt: Date | null;
   armedAt: Date;
+  /** When the customer tapped Confirm on a reminder; null until they do. */
+  customerConfirmedAt: Date | null;
   rowVersion: number;
   createdAt: Date;
   updatedAt: Date;
@@ -84,6 +86,8 @@ export interface AppointmentRow {
   hostId: number | null;
   hostUuid: string | null;
   hostName: string | null;
+  /** The host's own number (their profile), for a message that gives the customer the agent's contact. */
+  hostPhone: string | null;
   createdById: number | null;
 }
 
@@ -138,6 +142,7 @@ const toRow = (r: Raw): AppointmentRow => ({
   feeRecordedMinor: big(r.fee_recorded_minor),
   holdExpiresAt: d(r.hold_expires_at),
   armedAt: new Date(r.armed_at as string),
+  customerConfirmedAt: r.customer_confirmed_at ? new Date(r.customer_confirmed_at as string) : null,
   rowVersion: Number(r.row_version),
   createdAt: new Date(r.created_at as string),
   updatedAt: new Date(r.updated_at as string),
@@ -153,6 +158,7 @@ const toRow = (r: Raw): AppointmentRow => ({
   hostId: n(r.user_id),
   hostUuid: s(r.host_uuid),
   hostName: s(r.host_name),
+  hostPhone: s(r.host_phone),
   createdById: n(r.created_by),
 });
 
@@ -163,11 +169,12 @@ const SELECT = sql`
          bt.uuid AS type_uuid, bt.name AS type_name, bt.color AS type_color, bt.duration_minutes AS type_duration,
          bt.location_type AS type_location,
          c.uuid AS contact_uuid, c.name AS contact_name,
-         u.uuid AS host_uuid, u.full_name AS host_name
+         u.uuid AS host_uuid, u.full_name AS host_name, up.phone_e164 AS host_phone
   FROM appointments a
   LEFT JOIN booking_types bt ON bt.org_id = a.org_id AND bt.id = a.booking_type_id
   LEFT JOIN contacts c ON c.org_id = a.org_id AND c.id = a.contact_id
-  LEFT JOIN users u ON u.org_id = a.org_id AND u.id = a.user_id`;
+  LEFT JOIN users u ON u.org_id = a.org_id AND u.id = a.user_id
+  LEFT JOIN user_profiles up ON up.org_id = a.org_id AND up.user_id = a.user_id`;
 
 /**
  * The record scope of an appointment is a condition on the PEOPLE of the booking: `own` is "I host it or I booked it", `team` adds
