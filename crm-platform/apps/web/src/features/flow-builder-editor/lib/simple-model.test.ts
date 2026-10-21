@@ -328,6 +328,24 @@ describe('checks', () => {
     ]);
   });
 
+  it('asks for a header file when the chosen template has a picture header with no file of its own', () => {
+    const templates = [
+      { name: 'promo', attachmentType: 'image', attachmentFile: 'meta-handle-123' },
+      { name: 'sample', attachmentType: 'IMAGE', attachmentFile: 'https://cdn.example/a.png' },
+      { name: 'plain', attachmentType: null, attachmentFile: null },
+    ];
+    const run = (data: Record<string, unknown>) => {
+      let d = emptyDoc();
+      d = insertStep(d, 0, 0, { ...newStep('template', []), data });
+      d.trigger.data.keywords = 'hi';
+      return problems(d, { senderRequired: false, templates }).map((p) => en(p.message));
+    };
+    expect(run({ tpl: 'promo' })).toEqual(["Step 1.1: add the template's header file."]);
+    expect(run({ tpl: 'promo', tplMedia: 'https://a.b/c.png' })).toEqual([]);
+    expect(run({ tpl: 'sample' })).toEqual([]);
+    expect(run({ tpl: 'plain' })).toEqual([]);
+  });
+
   it('flags a Location step until it has real coordinates, and keeps a saved one valid', () => {
     const run = (data: Record<string, unknown>) => {
       let d = emptyDoc();

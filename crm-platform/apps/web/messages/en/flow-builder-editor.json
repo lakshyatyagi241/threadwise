@@ -868,7 +868,13 @@
             "choose": "Choose a template…",
             "buttons": "Buttons",
             "variables": "Filled in from the contact",
-            "variablesHint": "Each number is filled in when the message is sent, from the contact detail named here. Change this on the template."
+            "variablesHint": "Each number is filled in when the message is sent, from the contact detail named here. Change this on the template.",
+            "fills": "What fills each number",
+            "fillsHint": "Pick a contact detail or a flow variable, or type your own text. Leave empty to use what the template says.",
+            "fillPick": "Insert a detail…",
+            "headerMedia": "Header file",
+            "headerMediaHint": "The picture, video or file in this template's header. Needed when the template has no file of its own.",
+            "headerMediaMissing": "Add the header file: this template has none, and WhatsApp will not send it without one."
           },
           "cta": {
             "buttonText": "Button text",
@@ -2592,7 +2598,8 @@
         "writeCode": "Step {stage}: write the code to run.",
         "webhookUrl": "Step {stage}: add the address (URL) to call.",
         "chooseAiAgent": "Step {stage}: choose the AI agent that answers, or switch the step to a custom setup.",
-        "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent."
+        "writeAiPrompt": "Step {stage}: write the instructions for the AI, or choose an AI agent.",
+        "templateFile": "Step {stage}: add the template's header file."
       }
     },
     "waboImport": {

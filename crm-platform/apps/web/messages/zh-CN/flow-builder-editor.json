@@ -858,7 +858,13 @@
             "choose": "选择模板…",
             "buttons": "按钮",
             "variables": "由联系人信息填充",
-            "variablesHint": "每个编号会在发送消息时用此处所示的联系人信息填充。请在模板中修改。"
+            "variablesHint": "每个编号会在发送消息时用此处所示的联系人信息填充。请在模板中修改。",
+            "fills": "每个编号填入的内容",
+            "fillsHint": "选择联系人信息或流程变量，或输入你自己的文本。留空则使用模板中的设置。",
+            "fillPick": "插入信息…",
+            "headerMedia": "标题文件",
+            "headerMediaHint": "此模板标题中的图片、视频或文件。模板没有自带文件时必须提供。",
+            "headerMediaMissing": "请添加标题文件：此模板没有文件，没有它 WhatsApp 不会发送。"
           },
           "cta": {
             "buttonText": "按钮文字",
@@ -2593,7 +2599,8 @@
         "writeCode": "步骤 {stage}：请编写要运行的代码。",
         "webhookUrl": "步骤 {stage}：添加要调用的地址（URL）。",
         "chooseAiAgent": "步骤 {stage}：请选择负责回复的 AI 智能体，或将此步骤切换为自定义设置。",
-        "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。"
+        "writeAiPrompt": "步骤 {stage}：请编写给 AI 的指令，或选择一个 AI 智能体。",
+        "templateFile": "步骤 {stage}：添加模板的标题文件。"
       }
     },
     "waboImport": {
