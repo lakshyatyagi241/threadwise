@@ -72,6 +72,8 @@ export interface PropertyModalProps {
   dependencies: readonly FieldDependencyResponse[];
   /** The module the property belongs to (default contacts). */
   moduleKey?: ModuleKey;
+  /** Called with the property once it is saved (made or changed), before the dialog closes. */
+  onSaved?: (field: FieldResponse) => void;
   onClose: () => void;
 }
 
@@ -99,6 +101,7 @@ function PropertyForm({
   fields,
   dependencies,
   moduleKey = 'contacts',
+  onSaved,
   onClose,
 }: PropertyModalProps) {
   const t = useTranslations('contacts-attributes-tags.properties');
@@ -162,9 +165,10 @@ function PropertyForm({
       }
       return target;
     },
-    onSuccess: async () => {
+    onSuccess: async (saved) => {
       await invalidateProperties(qc);
       toast(editing ? t('modal.updated') : t('modal.created'), 'success');
+      onSaved?.(saved);
       onClose();
     },
     onError: () => void invalidateProperties(qc),
