@@ -148,5 +148,10 @@
     "status": "reviewed",
     "reason": "the table and owner column identifiers come from the closed OWNING_TEAM_TABLES list in the same file (a job payload carries only a table NAME, looked up in that list and refused when absent), quoted, never from a request; the cursor values are bound parameters",
     "reviewedOn": "2026-10-20"
+  },
+  "modules/analytics/query/message-feed.service.ts": {
+    "status": "reviewed",
+    "reason": "edge() passes only literal range expressions (w.has_hours, w.f, w.h0, w.h1, w.t, NOT w.has_hours) to sql.raw; volume() takes a unit typed 'hour' | 'day' | 'week' and its only caller passes bucketUnit(), which maps every bucket to one of those three constants",
+    "reviewedOn": "2026-10-21"
   }
 }
