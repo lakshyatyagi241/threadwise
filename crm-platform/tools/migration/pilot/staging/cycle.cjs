@@ -317,6 +317,8 @@ async function cmdShip(srv, cfg, { skipBundle } = {}) {
         [path.join(DIST, 'BUILD-INFO.json'), 'bundle/BUILD-INFO.json'],
         [path.join(HERE, 'set-owner-password.cjs'), 'bundle/set-owner-password.cjs'],
         [path.join(HERE, 'rollback-org.sql'), 'bundle/rollback-org.sql'],
+        // the template-quality step's server side (pilot/templates): writes the ratings the runner read from Meta; runs in the desk-api image
+        [path.join(HERE, '..', 'templates', 'apply-quality.cjs'), 'bundle/apply-quality.cjs'],
         // the WhatsApp token import of the wa-credentials step (pilot/credentials); runs in the desk-api image, which has `pg`
         [
           path.join(HERE, '..', 'credentials', 'import-whatsapp-credentials.cjs'),
@@ -702,6 +704,71 @@ function waExportArgs(client, db) {
     '--force',
     '--no-manifest', // the manifest of the real export must stay the one of the whole dump
   ];
+}
+
+/**
+ * template-quality: the rating of each migrated template as Meta has it now (Waboo never stored it). The runner reads the WABA token into
+ * memory and asks Meta, read-only (pilot/templates/quality.cjs); only names, languages and ratings go to the server, and the server writes
+ * the ones that differ (pilot/templates/apply-quality.cjs). A Meta refusal does not stop the migration: the templates keep Unknown until a
+ * Refresh. Runs for every client, number or not: no WhatsApp number is connected here.
+ */
+async function cmdTemplateQuality(srv, cfg, db) {
+  await assertStaging(srv);
+  if (!db) {
+    console.log('template-quality: skipped, no Mongo database name (pass --db <waboo db>)');
+    return 0;
+  }
+  const script = path.resolve(HERE, '..', 'templates', 'quality.cjs');
+  const read = await new Promise((res) => {
+    const c = spawn(process.execPath, [script, '--client', cfg.client, '--db', db], {
+      stdio: ['ignore', 'pipe', 'pipe'],
+    });
+    let out = '';
+    let err = '';
+    c.stdout.on('data', (d) => (out += d.toString('utf8')));
+    c.stderr.on('data', (d) => (err += d.toString('utf8')));
+    c.on('error', () => res({ code: 1, out, err }));
+    c.on('close', (code) => res({ code, out, err }));
+  });
+  const keep = 'the templates keep Unknown until a Refresh';
+  if (read.code !== 0) {
+    const why = read.err.trim().split('\n').pop() || `exit ${read.code}`;
+    console.log(`template-quality: could not read the ratings (${why}); ${keep}`);
+    return 0;
+  }
+  let report;
+  try {
+    report = JSON.parse(read.out.trim().split('\n').pop());
+  } catch {
+    console.log(`template-quality: the ratings output was not readable; ${keep}`);
+    return 0;
+  }
+  console.log(
+    `template-quality: ${report.wabas} WABA(s) asked, ${report.failedWabas} refused, ${report.rows.length} rating(s) read`,
+  );
+  const sent = await upload(
+    srv,
+    `${srv.mig}/dumps/${cfg.client}/template-quality.json`,
+    Buffer.from(JSON.stringify({ client: cfg.client, rows: report.rows }) + '\n'),
+  );
+  if (sent.code !== 0) {
+    console.log(`template-quality: could not send the ratings to the server; ${keep}`);
+    return 0;
+  }
+  const inner = `TARGET_DATABASE_URL="$DATABASE_URL" exec node /app/apply-quality.cjs ${[
+    '--org-slug',
+    cfg.orgSlug,
+    '--client',
+    cfg.client,
+    '--input',
+    `/mig/dumps/${cfg.client}/template-quality.json`,
+    '--apply',
+  ]
+    .map(shq)
+    .join(' ')}`;
+  const mounts = [`${srv.mig}/bundle/apply-quality.cjs:/app/apply-quality.cjs:ro`];
+  const ap = await runShown(srv, containerRun(srv, inner, { mounts }), 'template-quality apply');
+  return ap.code === 0 ? 0 : 1;
 }
 
 /**
@@ -1204,6 +1271,7 @@ const MIG_STEPS = [
   'dry',
   'backup',
   'load',
+  'template-quality',
   'update',
   'chat-status',
   'chat-buttons',
@@ -1571,6 +1639,7 @@ async function migrateRun(srv, cfg, flags, shared = {}) {
     'flow-state': () => cmdFlowState(srv, cfg, { ...flags, apply: true }),
     load: () => cmdLoad(srv, cfg, flags, ctxL),
     reconcile: () => cmdReconcile(srv, cfg, { ...flags, alarmsOk: true }),
+    'template-quality': () => cmdTemplateQuality(srv, cfg, rec.db),
     'wa-credentials': () => cmdWaCredentials(srv, cfg, rec.db),
     'wa-cutover': () => cmdWaCutover(srv, cfg, flags),
     report: async () => {
