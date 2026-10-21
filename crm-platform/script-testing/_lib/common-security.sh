@@ -158,4 +158,18 @@ console.log("\n=== "+a[3]+": "+a[5]+" ===");for(const c of checks)console.log(" 
 console.log("tests "+a[8]+" passed "+a[9]+" failed "+a[10]+" known-baseline "+a[11]+" | "+a[7]+"s\nresult: "+a[0]+"/result.json\nre-run: "+a[12]);
 ' "$SEC_OUT" "$SEC_NAME" "$SEC_SHEET" "$SEC_TITLE" "$SEC_MODE" "$status" "$SEC_START_ISO" "$((end-SEC_START_EPOCH))" "$SEC_TESTS" "$SEC_PASSED" "$SEC_FAILED" "$SEC_BASE" "$SEC_RERUN" || true
 }
+# Live API: own throwaway DB + shared Redis db index 9 with a random key prefix. Ports: SEC_API_PORT (default 3931), SEC_METRICS_PORT (59531).
+# usage: sec_boot_api [VAR=val ...]   -> sets SEC_API (base url), SEC_API_LOG; extra env is passed to the API process
+sec_boot_api() {
+  sec_build_packages; sec_build_api
+  SEC_API_PORT=$(sec_free_port "${SEC_API_PORT:-3931}"); SEC_API="http://127.0.0.1:$SEC_API_PORT"
+  SEC_REDIS_PREFIX="qa-$SEC_SUFFIX:"
+  sec_db_create; sec_db_migrate
+  local redis; redis="$(sec_envval REDIS_URL)"; redis="${redis%/}"; redis="${redis%/[0-9]*}/$SEC_REDIS_DB"
+  sec_spawn api-server PORT="$SEC_API_PORT" DATABASE_URL="$SEC_DB_URL" MIGRATION_DATABASE_URL="$SEC_DB_ADMIN_URL" REDIS_URL="$redis" \
+    REDIS_KEY_PREFIX="$SEC_REDIS_PREFIX" "$@" node dist/src/main.js
+  SEC_API_PID=${SEC_PIDS[${#SEC_PIDS[@]}-1]}
+  sec_wait_http "$SEC_API/health" 90 '^200$' || { tail -n 15 "$SEC_OUT/logs/api-server.log" >&2; sec_fatal "API did not become healthy on $SEC_API_PORT, see logs/api-server.log"; }
+  sec_check api-boot PASS "port $SEC_API_PORT, database $SEC_DB, redis db $SEC_REDIS_DB"
+}
 sec_finish() { exit 0; } # the EXIT trap turns recorded failures into exit 1
