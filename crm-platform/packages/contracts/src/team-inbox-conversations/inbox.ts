@@ -136,6 +136,8 @@ export const CONVERSATION_EVENT_TYPES = [
   'tag_removed',
   'first_response',
   'sla_breach',
+  'handoff_returned',
+  'bot_resumed',
 ] as const;
 export type ConversationEventType = (typeof CONVERSATION_EVENT_TYPES)[number];
 
