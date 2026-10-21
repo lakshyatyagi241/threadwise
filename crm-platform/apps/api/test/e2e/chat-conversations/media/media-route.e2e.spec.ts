@@ -14,6 +14,7 @@ import {
   type Harness,
   type Tenant,
 } from '../../contacts-attributes-tags/support';
+import { pngWithText, jpegOfSize } from '../../../support/images';
 
 /**
  * The chat media door end to end: the platform's real storage service and upload policy behind `ChatMediaStore`, local disk as the
@@ -41,10 +42,7 @@ afterAll(async () => {
   delete process.env.MEDIA_LOCAL_DIR;
 });
 
-const PNG = Buffer.concat([
-  Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]),
-  Buffer.from('0123456789abcdefghijklmnopqrstuvwxyz'),
-]);
+const PNG = pngWithText('0123456789abcdefghijklmnopqrstuvwxyz');
 const PDF = Buffer.concat([Buffer.from('%PDF-1.7\n'), Buffer.from('some document bytes')]);
 const ZIP = Buffer.concat([Buffer.from([0x50, 0x4b, 3, 4]), Buffer.alloc(40, 9)]);
 
@@ -111,10 +109,7 @@ describe('storing: the real upload policy and storage settings', () => {
   });
 
   it('refuses an image over its 5 MB limit and an inbound file whose bytes are markup', async () => {
-    const big = Buffer.concat([
-      Buffer.from([0xff, 0xd8, 0xff, 0xe0]),
-      Buffer.alloc(5 * 1024 * 1024),
-    ]);
+    const big = jpegOfSize(5 * 1024 * 1024 + 4);
     await expect(
       store.store({ orgId: t.orgId, filename: 'big.jpg', buffer: big }),
     ).rejects.toMatchObject({ code: 'AUTH_UPLOAD_REJECTED' });

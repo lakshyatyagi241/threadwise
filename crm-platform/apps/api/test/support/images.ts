@@ -61,3 +61,10 @@ export function webpOfSize(): Buffer {
   b.writeUInt32LE(10, 16);
   return b;
 }
+/** A valid PNG whose tEXt chunk carries `text` (distinct bytes per fixture). */
+export function pngWithText(text: string): Buffer {
+  const u = (n: number) => { const b = Buffer.alloc(4); b.writeUInt32BE(n); return b; };
+  const ihdr = Buffer.concat([u(13), Buffer.from('IHDR'), u(1), u(1), Buffer.from([8, 2, 0, 0, 0]), u(0)]);
+  const t = Buffer.from(text);
+  return Buffer.concat([Buffer.from('89504e470d0a1a0a', 'hex'), ihdr, u(t.length), Buffer.from('tEXt'), t, u(0), u(0), Buffer.from('IEND'), u(0)]);
+}
