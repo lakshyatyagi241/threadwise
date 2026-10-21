@@ -65,7 +65,7 @@ export function HandoffBar({
     return e instanceof ApiError && e.message ? e.message : fallback;
   };
   const onClaim = () =>
-    claim.mutate(detail.rowVersion, {
+    claim.mutate(undefined, {
       onSuccess: (r) => {
         onPlaced(r.conversation);
         toast(r.ownerSet ? t('claim.doneOwner') : t('claim.done'));

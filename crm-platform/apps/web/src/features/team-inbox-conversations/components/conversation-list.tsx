@@ -425,7 +425,7 @@ function TabBar({
     <div
       role="tablist"
       aria-label={t('tabsLabel')}
-      className="flex gap-0.5 rounded-lg bg-muted p-0.5"
+      className="flex gap-0.5 overflow-x-auto rounded-lg bg-muted p-0.5 thin-scrollbar"
     >
       {INBOX_TABS.map((tab, i) => {
         const n = tabCount(list.counts, tab);
@@ -443,7 +443,7 @@ function TabBar({
             onClick={() => onChange(tab)}
             onKeyDown={(e) => onKey(e, i)}
             className={cn(
-              'flex min-w-fit flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-md px-1.5 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
+              'flex min-w-fit flex-1 items-center justify-center gap-1 whitespace-nowrap rounded-md px-1 py-1.5 text-xs font-medium transition focus-visible:ring-2 focus-visible:ring-primary',
               selected
                 ? 'bg-background text-foreground shadow-sm'
                 : 'text-muted-foreground hover:text-foreground',

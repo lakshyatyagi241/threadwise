@@ -1177,7 +1177,7 @@ function HandoffEditor({ step, ctx, set }: EditorProps) {
           </Select>
         </Field>
       )}
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid gap-3">
         <Field label={t('reason')}>
           <Select
             value={str(d.reason) || 'other'}

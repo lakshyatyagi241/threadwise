@@ -55,7 +55,7 @@ describe('HandoffBar', () => {
   it('hides Claim when somebody holds the thread or the viewer may not claim', () => {
     const held = bar({
       handling: 'waiting',
-      assignment: { user: { id: 'u1', name: 'Ben' }, team: null, agent: null },
+      assignment: { user: { id: 'u1', name: 'Ben' }, team: null, aiAgent: null },
     });
     expect(held).not.toContain('data-testid="inbox-claim"');
     const noRight = bar({ handling: 'waiting' }, { claim: false, send: false, back: false });

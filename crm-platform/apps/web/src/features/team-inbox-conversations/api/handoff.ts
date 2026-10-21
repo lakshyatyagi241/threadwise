@@ -13,6 +13,7 @@ import {
   type UpdateHandoffSettingsInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
+import { inboxApi } from './service';
 
 /** The handoff calls of the inbox (BL-396..BL-404). Everything is parsed with the shared contracts. */
 const claimResponse = z.object({ conversation: conversationSummarySchema, ownerSet: z.boolean() });
@@ -79,8 +80,13 @@ export function useHandoffCard(conversationId: string | null, enabled: boolean) 
 export function useHandoffActions(conversationId: string) {
   const qc = useQueryClient();
   const done = () => qc.invalidateQueries({ queryKey: ['inbox'] });
+  // A claim is "take it if nobody holds it": it asks for the row's current version first, so opening the thread (which marks it read and
+  // moves the version) never makes the first click a conflict.
   const claim = useMutation({
-    mutationFn: (rowVersion: number) => handoffApi.claim(conversationId, rowVersion),
+    mutationFn: async () => {
+      const fresh = await inboxApi.conversation(conversationId);
+      return handoffApi.claim(conversationId, fresh.rowVersion);
+    },
     onSettled: done,
   });
   const send = useMutation({
