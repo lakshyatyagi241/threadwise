@@ -12,6 +12,7 @@
 //    TTL arguments are in `files[].writes`;
 //  - value size classes are heuristics from the command; real bytes per key are measured by the integration tests.
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
+import { format as prettierFormat, resolveConfig } from 'prettier';
 import { join, dirname } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import {
@@ -348,7 +349,12 @@ export async function render() {
 }
 
 if (import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const doc = JSON.stringify(await render(), null, 2) + '\n';
+  // Formatted with the repo's prettier config, the same formatter the pre-PR gate checks changed JSON with, so the committed file
+  // and this output are the same bytes.
+  const doc = await prettierFormat(JSON.stringify(await render(), null, 2) + '\n', {
+    ...(await resolveConfig(OUT)),
+    parser: 'json',
+  });
   if (process.argv.includes('--check')) {
     let cur = '';
     try {

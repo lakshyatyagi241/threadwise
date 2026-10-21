@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { isSafeSvg } from '../../../src/modules/chatbot-widget/svg-safe';
+import { isSafeSvg } from '../../../src/common/svg-safe';
 
 const svg = (inner: string, attrs = '') =>
   Buffer.from(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"${attrs}>${inner}</svg>`);

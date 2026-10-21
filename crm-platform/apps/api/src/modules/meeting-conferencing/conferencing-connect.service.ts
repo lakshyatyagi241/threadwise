@@ -48,7 +48,8 @@ import { CONFERENCING_AUDIT_MODULE, ConferencingTokens } from './conferencing-to
 @Injectable()
 export class ConferencingConnectService {
   private readonly logger = new Logger(ConferencingConnectService.name);
-  private readonly key: Buffer;
+  private readonly credentialsKey: string;
+  private stateKeyPromise?: Promise<Buffer>;
   private readonly webUrl: string;
 
   constructor(
@@ -61,8 +62,13 @@ export class ConferencingConnectService {
     private readonly rbac: RbacService,
     env: ConfigService<Env, true>,
   ) {
-    this.key = deriveStateKey(env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true }));
+    this.credentialsKey = env.get('CREDENTIALS_ENCRYPTION_KEY', { infer: true });
     this.webUrl = env.get('WEB_APP_URL', { infer: true }).replace(/\/$/, '');
+  }
+
+  /** Derived once, on the first request that needs it: the HKDF runs on the libuv pool, not on the event loop. */
+  private stateKey(): Promise<Buffer> {
+    return (this.stateKeyPromise ??= deriveStateKey(this.credentialsKey));
   }
 
   // --- staff -----------------------------------------------------------------------------------------------------------
@@ -146,7 +152,7 @@ export class ConferencingConnectService {
       Date.now(),
     );
     return {
-      url: await adapter.authorizeUrl(signState(state, this.key)),
+      url: await adapter.authorizeUrl(signState(state, await this.stateKey())),
       expiresInSeconds: STATE_TTL_SECONDS,
     };
   }
@@ -187,7 +193,7 @@ export class ConferencingConnectService {
     provider: ConnectedVideoProvider,
     query: ConferencingCallbackQuery,
   ): Promise<string> {
-    const checked = verifyState(query.state ?? '', this.key, Date.now());
+    const checked = verifyState(query.state ?? '', await this.stateKey(), Date.now());
     if (!checked.ok || checked.value.provider !== provider) {
       this.logger.warn(
         { provider, reason: checked.ok ? 'provider' : checked.reason },
@@ -213,7 +219,7 @@ export class ConferencingConnectService {
         sealedCode: this.crypto.encrypt(query.code),
         expiresAt: Date.now() + TICKET_TTL_SECONDS * 1000,
       },
-      this.key,
+      await this.stateKey(),
     );
     return returnUrl(this.webUrl, returnTo, {
       video: CONFERENCING_CONFIRM_OUTCOME,
@@ -232,7 +238,7 @@ export class ConferencingConnectService {
   ): Promise<ConferencingConnection> {
     const ctx = RequestContextStore.require();
     if (ctx.userId === null) throw AppError.unauthenticated();
-    const checked = verifyTicket(input.ticket, this.key, Date.now());
+    const checked = verifyTicket(input.ticket, await this.stateKey(), Date.now());
     if (!checked.ok || checked.value.provider !== provider) {
       throw new AppError(
         ERROR_CODES.CONF_CONFIRM_INVALID,

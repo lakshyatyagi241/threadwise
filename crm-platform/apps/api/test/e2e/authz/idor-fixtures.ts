@@ -133,13 +133,34 @@ export async function fire(
   return { status: res.status, text: typeof res.text === 'string' ? res.text : '', json: res.body };
 }
 
+/** What the fixtures read off a created object. A call site that reads more names those fields in the mk type argument. */
+interface Created {
+  id: string;
+  rowVersion: number;
+}
+
+/** A pipeline stage, as the pipeline routes return it. */
+interface Stage {
+  id: string;
+  name: string;
+  kind: string;
+  rowVersion: number;
+}
+
+/** A pipeline, as GET /v2/pipelines returns it. */
+interface Pipeline {
+  id: string;
+  isDefault: boolean;
+  stages: Stage[];
+}
+
 /** Create through the API as the tenant's admin; throws (so the family is reported as not covered) on anything but 2xx. */
-async function mk(c: Ctx, t: Tenant, path: string, body: unknown): Promise<any> {
+async function mk<T = Created>(c: Ctx, t: Tenant, path: string, body: unknown): Promise<T> {
   const res = await fire(c.h, 'post', path, t.admin, body);
   if (res.status < 200 || res.status >= 300) {
     throw new Error(`setup POST ${path} -> ${res.status} ${res.text.slice(0, 300)}`);
   }
-  return res.json;
+  return res.json as T;
 }
 
 export const fill = (url: string, values: Record<string, string>): string | null => {
@@ -761,10 +782,13 @@ const segments: Spec = {
 async function pipelineOf(
   c: Ctx,
   t: Tenant,
-): Promise<{ pipeline: any; stage: Record<string, any> }> {
+): Promise<{ pipeline: Pipeline; stage: Record<string, Stage> }> {
   const res = await fire(c.h, 'get', '/v2/pipelines', t.admin);
-  const p = (res.json as any[]).find((x) => x.isDefault);
-  return { pipeline: p, stage: Object.fromEntries((p.stages as any[]).map((s) => [s.name, s])) };
+  const p = (res.json as Pipeline[]).find((x) => x.isDefault) as Pipeline;
+  return {
+    pipeline: p,
+    stage: Object.fromEntries(p.stages.map((s): [string, Stage] => [s.name, s])),
+  };
 }
 
 const deals: Spec = {
@@ -793,7 +817,7 @@ const deals: Spec = {
     const m = markerOf('deal', label);
     const { pipeline, stage } = await pipelineOf(c, t);
     const ct = await newContact(c, t, `${m}-ct`, o.ownerUuid);
-    const stageId = Object.values(stage).find((s: any) => s.kind === 'open').id as string;
+    const stageId = (Object.values(stage).find((s) => s.kind === 'open') as Stage).id;
     const d = await mk(c, t, '/v2/deals', {
       title: m,
       pipelineId: pipeline.id,
@@ -907,11 +931,11 @@ const pipelines: Spec = {
   lists: ['/v2/pipelines', '/v2/deal-lost-reasons'],
   async create(c, t, label) {
     const m = markerOf('pipeline', label);
-    const p = await mk(c, t, '/v2/pipelines', { name: m });
+    const p = await mk<Created & { stages: Stage[] }>(c, t, '/v2/pipelines', { name: m });
     return base(m, {
       ids: { id: p.id },
       rv: p.rowVersion,
-      extra: { stageIds: (p.stages as any[]).map((s) => s.id) },
+      extra: { stageIds: p.stages.map((s) => s.id) },
     });
   },
   bodies: [
@@ -947,8 +971,8 @@ const stages: Spec = {
   detail: '/v2/pipelines',
   async create(c, t, label) {
     const m = markerOf('stage', label);
-    const p = await mk(c, t, '/v2/pipelines', { name: m });
-    const st = (p.stages as any[]).find((s) => s.kind === 'open');
+    const p = await mk<{ stages: Stage[] }>(c, t, '/v2/pipelines', { name: m });
+    const st = p.stages.find((s) => s.kind === 'open') as Stage;
     return base(m, { ids: { id: st.id }, rv: st.rowVersion });
   },
   bodies: [
@@ -1076,7 +1100,12 @@ const devKeys: Spec = {
   lists: ['/v2/developer/keys'],
   async create(c, t, label) {
     const m = markerOf('apikey', label);
-    const k = await mk(c, t, '/v2/developer/keys', { name: m });
+    const k = await mk<{ key: { id: string; prefix: string }; secret: string }>(
+      c,
+      t,
+      '/v2/developer/keys',
+      { name: m },
+    );
     return base(m, { ids: { id: k.key.id }, secrets: [k.secret, k.key.prefix].filter(Boolean) });
   },
 };
@@ -1110,7 +1139,7 @@ const widgets: Spec = {
       targetWhatsappNumber: '9876543210',
       prefilledMessage: 'Hi there',
     };
-    const w = await mk(c, t, '/v2/widgets', body);
+    const w = await mk<Created & { embedToken: string }>(c, t, '/v2/widgets', body);
     return base(m, {
       ids: { id: w.id },
       secrets: [w.embedToken].filter(Boolean),
@@ -1140,7 +1169,12 @@ const leadSources: Spec = {
   lists: ['/v2/lead-sources'],
   async create(c, t, label) {
     const m = markerOf('leadsrc', label);
-    const s = await mk(c, t, '/v2/lead-sources', { name: m });
+    const s = await mk<Created & { token: string; hookPath: string; hookUrl: string }>(
+      c,
+      t,
+      '/v2/lead-sources',
+      { name: m },
+    );
     return base(m, {
       ids: { id: s.id, eventId: randomUUID() },
       secrets: [s.token, s.hookPath, s.hookUrl].filter(
@@ -1219,7 +1253,9 @@ const appointments: Spec = {
       availability: ALL_DAY,
     });
     const slots = await fire(c.h, 'get', `/v2/booking-types/${bt.id}/slots`, t.admin);
-    const start = (slots.json.days as any[]).flatMap((d) => d.slots)[next() % 5].start as string;
+    const start = (slots.json as { days: Array<{ slots: Array<{ start: string }> }> }).days.flatMap(
+      (d) => d.slots,
+    )[next() % 5].start;
     const ct = await newContact(c, t, `${m}-ct`, o.ownerUuid);
     const ap = await mk(c, t, '/v2/appointments', {
       bookingTypeId: bt.id,
@@ -1324,7 +1360,9 @@ const forms: Spec = {
         after: { tags: ['Website'] },
       },
     });
-    const pub = await mk(c, t, `/v2/forms/${f.id}/publish`, { rowVersion: f.rowVersion });
+    const pub = await mk<Created & { publicKey: string }>(c, t, `/v2/forms/${f.id}/publish`, {
+      rowVersion: f.rowVersion,
+    });
     const sub = await fire(c.h, 'post', `/v2/public/forms/${pub.publicKey}/submit`, null, {
       idempotencyKey: `idem-${m}`,
       answers: { name: m, email: emailOf(m) },
@@ -1531,11 +1569,16 @@ const members: Spec = {
         t.orgId,
       ])
     ).rows[0].uuid as string;
-    const inv = await mk(c, t, '/v2/workspace/members/invite', {
-      fullName: m,
-      email: emailOf(m),
-      roleId: role,
-    });
+    const inv = await mk<{ member: Created; inviteLink: string }>(
+      c,
+      t,
+      '/v2/workspace/members/invite',
+      {
+        fullName: m,
+        email: emailOf(m),
+        roleId: role,
+      },
+    );
     return base(m, {
       ids: { id: inv.member.id },
       secrets: [inv.inviteLink].filter((x) => typeof x === 'string' && x.length > 6),
@@ -1676,7 +1719,7 @@ const tickets: Spec = {
   lists: ['/v2/support/tickets'],
   async create(c, t, label) {
     const m = markerOf('ticket', label);
-    const tk = await mk(c, t, '/v2/support/tickets', {
+    const tk = await mk<Created & { ticketNumber: string }>(c, t, '/v2/support/tickets', {
       reason: 'billing',
       name: m,
       email: emailOf(m),
@@ -1727,7 +1770,7 @@ const broadcasts: Spec = {
     const tpl = await seedTemplate(c, t, `${m}-tpl`);
     const dev = await seedDevice(c, t);
     const ct = await newContact(c, t, `${m}-ct`);
-    const b = await mk(c, t, '/v2/broadcasts', {
+    const b = await mk<{ broadcasts: Created[] }>(c, t, '/v2/broadcasts', {
       name: m,
       templateId: tpl,
       contactIds: [ct.id],
@@ -1805,7 +1848,7 @@ const campaigns: Spec = {
   async create(c, t, label) {
     const m = markerOf('campaign', label);
     const ct = await newContact(c, t, `${m}-ct`);
-    const r = await mk(c, t, '/v2/campaigns', {
+    const r = await mk<{ campaign: Created }>(c, t, '/v2/campaigns', {
       name: m,
       type: 'text',
       customMessage: m,
@@ -1875,7 +1918,7 @@ const scheduled: Spec = {
   async create(c, t, label) {
     const m = markerOf('sched', label);
     const dev = await seedDevice(c, t);
-    const r = await mk(c, t, '/v2/scheduled', {
+    const r = await mk<{ ids: string[] }>(c, t, '/v2/scheduled', {
       name: m,
       scheduleType: 'once',
       sendDate: '2031-03-10',
@@ -1980,7 +2023,10 @@ const storeOrders: Spec = {
   async create(c, t, label) {
     const m = markerOf('order', label);
     const dev = await seedDevice(c, t);
-    const shop = await mk(c, t, '/v2/store/shops', { shopName: `Shop ${m}`, deviceId: dev });
+    const shop = await mk<Created & { slug: string }>(c, t, '/v2/store/shops', {
+      shopName: `Shop ${m}`,
+      deviceId: dev,
+    });
     const prod = await c.h.owner.query(
       `INSERT INTO wa_products (org_id, name, slug, price_minor, stock_qty, in_stock, status, currency_code) VALUES ($1,'Tea','tea-' || $2,10000,NULL,true,'active','INR') RETURNING uuid`,
       [t.orgId, String(next())],
