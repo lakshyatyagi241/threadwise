@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
+import { baseLoggerOptions } from './common/logging/http-logger';
 import { AppConfigModule } from './config/config.module';
 import type { Env } from './config/env.schema';
 import { DbModule } from './infra/db/db.module';
@@ -39,7 +40,7 @@ import { WorkersModule } from './workers/workers.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService<Env, true>) => ({
         pinoHttp: {
-          level: config.get('LOG_LEVEL', { infer: true }),
+          ...baseLoggerOptions('worker', config.get('LOG_LEVEL', { infer: true })),
           transport:
             config.get('NODE_ENV', { infer: true }) === 'development'
               ? { target: 'pino-pretty', options: { singleLine: true } }

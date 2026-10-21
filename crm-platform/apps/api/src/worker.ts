@@ -1,6 +1,7 @@
 import 'reflect-metadata';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { Logger as PinoLogger } from 'nestjs-pino';
 import {
   initSentry,
   installProcessHandlers,
@@ -20,6 +21,8 @@ async function bootstrap(): Promise<void> {
   // bufferLogs holds every log line in memory until a logger is attached or the buffer is flushed. Nothing here attaches one,
   // and unlike NestFactory.create the application-context path does not flush on its own, so without this every Logger call in
   // the worker (outbox failures, dead-lettered events, processor warnings) was neither printed nor released.
+  // Every Nest `Logger` call goes through pino (JSON, redaction, service field); without this they print as coloured text.
+  app.useLogger(app.get(PinoLogger));
   app.flushLogs();
 
   // In-flight jobs need to finish before the process exits, or a deploy leaves

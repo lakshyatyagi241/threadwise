@@ -1,5 +1,5 @@
 import { Injectable, type NestMiddleware } from '@nestjs/common';
-import { randomUUID } from 'node:crypto';
+import { resolveRequestId } from '../logging/http-logger';
 import type { NextFunction, Request, Response } from 'express';
 import { RequestContextStore, type RequestContext } from '../context/request-context';
 
@@ -16,8 +16,9 @@ import { RequestContextStore, type RequestContext } from '../context/request-con
 @Injectable()
 export class RequestContextMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction): void {
-    const incoming = req.header('x-request-id');
-    const requestId = incoming && incoming.length <= 128 ? incoming : randomUUID();
+    // pino-http may have named the request already (it runs first in some module orders): one id per request, never two.
+    const requestId =
+      typeof req.id === 'string' ? req.id : resolveRequestId(req.header('x-request-id'));
 
     const ctx: RequestContext = {
       requestId,
