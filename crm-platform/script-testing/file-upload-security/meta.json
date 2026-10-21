@@ -1,0 +1,12 @@
+{
+  "id": "file-upload-security",
+  "sheetItem": 34,
+  "title": "File-upload security",
+  "script": "run.sh",
+  "estMinutes": { "quick": 3, "full": 3 },
+  "heavy": false,
+  "needs": ["node22", "pnpm", "docker", "curl", "postgres", "redis"],
+  "proves": "Hostile files (spoofed extensions, HTML or script bytes, active SVG, traversal names, padded markup, a zip that inflates past its declared size) are refused by the shared upload guards; every upload route is size-capped and on a reviewed list (a new route fails the ratchet); on the booted API no multipart operation accepts an unauthenticated upload.",
+  "doesNotProve": "No authenticated live upload per route, no cross-tenant download or delete test, no real object store (S3), no antivirus scan (none exists), no image pixel-dimension limit, no CSV formula injection on import (export side is covered by vapt).",
+  "report": "docs/security/file-upload/Sheet3-34-file-upload-security-REPORT.html"
+}

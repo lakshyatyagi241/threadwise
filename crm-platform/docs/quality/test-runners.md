@@ -16,6 +16,7 @@ One folder per tested area under [script-testing/](../../script-testing/), each 
 | ssrf | PASS | 9 | |
 | session-token-security | PASS | 9 | |
 | csrf-cors-headers | PASS | 37 | |
+| file-upload-security | PASS | 31 | new (Sheet3 #34); `--quick`: 45 in-process tests plus 40 unauthenticated multipart operations refused live |
 | security-fuzz | PASS | 54 | |
 | cache-audit | PASS | 46 | |
 | cache-hit-rate | PASS | 101 | |
