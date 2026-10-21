@@ -16,5 +16,10 @@ API on :3960, web on :3961, Docker-free shared Postgres. Real WhatsApp delivery 
 | 4c | Bot muted while with a person; Return to bot resumes it | PASS | Customer "hello" while with a person: no bot reply. After Return to bot the same keyword runs the flow again |
 | 3c | Exit "assigned": team round robin picks an agent, follow-up message sent | PASS | Handoff 2 assigned to Asha in Sales, `assigned_source=rule`; exits waiting (4a) and assigned verified |
 | 4d | Send to queue on a chat somebody already holds | FAIL then FIXED (D2) | The dialog said "Send to queue again" but the API answered with the old assignment and changed nothing (any repeat was absorbed). A person's manual send now retargets the card and moves the chat; bot repeats are still absorbed. e2e test added in `handoff.e2e.spec.ts` |
+| 3d | Flow exits "waiting" and "unavailable" (Advanced graph with the three exits wired to three messages) | PASS | Support team manual: customer gets the contact message then the "waiting" branch. Team closed: the off-hours message then the "unavailable" branch, chat still queued (trace `team_hours:out_of_hours`) |
+| 6a | Nobody available (team has no active member who can open the inbox) | PASS | Exit "unavailable", trace `no_agent_could_take_it`, chat queued |
+| 6b | Outside opening hours | PASS | As 3d; team hours + time zone from the Teams editor are honoured |
+| 6c | Duplicate handoff (same idempotency key twice) | PASS | Same handoff id, one card row |
+| 6d | Handoff on a resolved conversation | FAIL then FIXED (D3) | The chat stayed resolved but `handling=waiting` (a done chat parked in the Waiting tab). Now refused with `refused: resolved`; the customer writing again reopens it first. e2e test added |
 
 Environment notes: the API keeps at most 5 live sessions per user; scripts that log in repeatedly sign the browser out (not a product defect).

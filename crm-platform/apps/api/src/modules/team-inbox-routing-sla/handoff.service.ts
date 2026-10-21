@@ -196,6 +196,8 @@ export class HandoffService {
       }
       if (facts.archived) return { refused: 'archived' as const };
       if (facts.status === 'spam') return { refused: 'spam' as const };
+      // A resolved thread is finished: queueing it would park a done chat in the Waiting tab. The customer writing again reopens it first.
+      if (facts.status === 'resolved') return { refused: 'resolved' as const };
       // A personal mailbox's mail is its owner's: a handoff never hands it to the workspace (as routing never does, TW-MAIL-035).
       if (locked.channelOwnerUserId !== null) return { refused: 'personal_mailbox' as const };
 

@@ -254,6 +254,25 @@ describe('handoff: queue, claim, named person (every plan)', () => {
     expect(Number(r.assignee_team_id)).toBe(Number(other.id));
   });
 
+  it('a resolved conversation is not queued: the handoff is refused and nothing changes', async () => {
+    const c = await thread(t, ch);
+    await p.h.owner.query(`UPDATE conversations SET status = 'resolved' WHERE id = $1`, [c.id]);
+    const out = await asUser(t.orgId, a1.userId, () =>
+      get(HandoffService).handoff({
+        orgId: t.orgId,
+        conversationUuid: c.uuid,
+        source: 'manual',
+        reason: 'other',
+        destination: { kind: 'rules' },
+        actor: { kind: 'user', userId: a1.userId },
+      }),
+    );
+    expect(out.refused).toBe('resolved');
+    const r = await row(c.id);
+    expect(r.handling).toBeNull();
+    expect(r.assignee_team_id).toBeNull();
+  });
+
   it('without the plan the "assignment rules" destination waits in the queue and the trace says why', async () => {
     const c = await thread(t, ch);
     const res = await handoff(t.admin, c.uuid, { destination: { kind: 'rules' } });
