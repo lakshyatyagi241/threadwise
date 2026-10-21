@@ -439,10 +439,7 @@ describe('TW-MAIL-034: live mail', () => {
         {
           name: 'logo.png',
           mime: 'image/png',
-          data: Buffer.from(
-            '89504e470d0a1a0a0000000d49484452000000010000000108060000001f15c4890000000d4944415478da63f8ffff3f0005fe02fea7d6050000000049454e44ae426082',
-            'hex',
-          ),
+          data: pngOfSize(),
           contentId: 'logo1',
           inline: true,
         },

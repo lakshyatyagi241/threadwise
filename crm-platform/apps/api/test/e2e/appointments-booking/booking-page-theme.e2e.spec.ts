@@ -1,5 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { pngWithText } from '../../support/images';
+import { pngOfSize, pngWithText } from '../../support/images';
 import {
   AppointmentsApi,
   bearer,
@@ -274,17 +274,14 @@ describe('a service override', () => {
   });
 
   it('a stale version is 409; an unknown service is 404', async () => {
-    const stale = await api
-      .as(t.admin)
-      .put(typeUrl(a.id))
-      .send({
-        primaryColor: null,
-        accentColor: null,
-        backgroundStyle: null,
-        welcomeText: null,
-        buttonLabel: null,
-        rowVersion: 50,
-      });
+    const stale = await api.as(t.admin).put(typeUrl(a.id)).send({
+      primaryColor: null,
+      accentColor: null,
+      backgroundStyle: null,
+      welcomeText: null,
+      buttonLabel: null,
+      rowVersion: 50,
+    });
     expect(stale.status).toBe(409);
     const missing = await api.as(t.admin).get(typeUrl('00000000-0000-4000-8000-000000000000'));
     expect(missing.status).toBe(404);
@@ -502,7 +499,7 @@ describe('pictures', () => {
     const cover = await upload(
       t.admin,
       `${THEME}/assets/cover`,
-      Buffer.concat([PNG, Buffer.alloc(1024 * 1024 + 10)]),
+      pngOfSize(1024 * 1024 + 10),
       'cover.png',
     );
     expect(cover.status, JSON.stringify(cover.body)).toBe(200);
@@ -571,17 +568,14 @@ describe('access', () => {
   it('another workspace cannot read or change this one, or reach its services', async () => {
     const res = await api.as(other.admin).get(`/v2/booking-types/${type.id}/page-theme`);
     expect(res.status).toBe(404);
-    const put = await api
-      .as(other.admin)
-      .put(`/v2/booking-types/${type.id}/page-theme`)
-      .send({
-        primaryColor: '#000000',
-        accentColor: null,
-        backgroundStyle: null,
-        welcomeText: null,
-        buttonLabel: null,
-        rowVersion: null,
-      });
+    const put = await api.as(other.admin).put(`/v2/booking-types/${type.id}/page-theme`).send({
+      primaryColor: '#000000',
+      accentColor: null,
+      backgroundStyle: null,
+      welcomeText: null,
+      buttonLabel: null,
+      rowVersion: null,
+    });
     expect(put.status).toBe(404);
     // their own workspace theme is theirs alone
     expect((await save(other.admin, { primaryColor: '#abcdef' })).status).toBe(200);

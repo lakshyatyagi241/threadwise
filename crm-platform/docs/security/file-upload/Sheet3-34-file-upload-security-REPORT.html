@@ -33,7 +33,7 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <main>
 <header>
 <h1>File-upload security</h1>
-<p><span class="badge partly">In process: partly met</span> &nbsp; Sheet3 item #34 &middot; P1 &middot; effort 2</p>
+<p><span class="badge partly">Partly met: 7 of 7 fixed, e2e carries 9 failures that also fail on main</span> &nbsp; Sheet3 item #34 &middot; P1 &middot; effort 2</p>
 <p class="meta">Owner: Vedant &middot; Date: 2026-10-21 &middot; Branch: <code>vedant/security/file-upload</code> &middot; Commits: <code>0f15b7f70</code> (fixes and tests), <code>96c20dce9</code> (runner) &middot; PR: see the pull request titled "test(security): file-upload security suite, fixes and runner (Sheet3 #34)"</p>
 <blockquote>Sheet target, word for word: "Automated on PR/daily/pre-release as applicable; zero Critical/High release blockers"</blockquote>
 </header>
@@ -41,11 +41,11 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <h2>2. In 60 seconds</h2>
 <div class="tiles">
 <div class="tile"><b>25</b><span>files with an upload route in <code>apps/api</code>, all now on a reviewed list (ratchet)</span></div>
-<div class="tile"><b>6 / 5</b><span>findings found / fixed (1 still open: UP-6b e2e fixtures)</span></div>
+<div class="tile"><b>7 / 7</b><span>findings found / fixed (UP-6b fixed in round 3)</span></div>
 <div class="tile"><b>70</b><span>new automated tests, 70 passing; 13 existing spec fixtures updated</span></div>
 <div class="tile"><b>40</b><span>upload-named operations posted without credentials on the live API; 0 accepted</span></div>
 </div>
-<p><strong>Verdict: Partly met (round 2).</strong> UP-3, UP-4 and UP-5 are now fixed (see the table). One new risk is open: 24 end-to-end specs upload signature-only fake images and will now be refused by the stricter image check; they were not updated or run (they need the Docker test stack). Do not merge before they are migrated to <code>test/support/images.ts</code>. No Critical or High finding was found, and the runner passes in <code>--quick</code>. It is not marked Delivered because part of the requested scope was not tested (see section 8). It is not wired into CI yet.</p>
+<p><strong>Verdict: Partly met (round 3).</strong> All 7 findings are fixed and the 24 upload e2e specs were migrated and run. Not marked Delivered: 9 e2e tests in 7 spec files fail, and they fail identically on a pristine <code>origin/main</code> run (ai-training picker, cache-and-races keyspace audit, messaging, 3 in flows, message-templates header media, scheduled-content recipients filter, device-groups prune). Scope items listed in section 8 remain untested.</p>
 <div class="box"><strong>Decisions needed from you</strong>
 <ol>
 <li>Add <code>file-upload-security/run.sh --quick</code> to the PR and the daily pipeline (the sheet asks for automation; this task only provides the runner).</li>
@@ -100,9 +100,9 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <tr><td>UP-4</td><td><span class="chip sev-m">Medium</span></td><td>No antivirus hook.</td><td>Infected documents reach agents.</td><td><b>Fixed (round 2), off by default.</b> <code>UploadScanner</code> + clamd INSTREAM client, <code>UPLOAD_SCAN_MODE</code>, fail-open or fail-closed; called from <code>validateScanned</code>, the chat media store and team chat. Tested against a fake clamd only. The synchronous template header-media guard is not scanned.</td><td>file-upload-hardening.spec.ts</td></tr>
 <tr><td>UP-5</td><td><span class="chip sev-l">Low</span></td><td>No pixel-dimension limit.</td><td>Decompression bombs.</td><td><b>Fixed (round 2).</b> Header dimensions read; 16384 px a side and 100 MP by default, env overridable.</td><td>file-upload-hardening.spec.ts</td></tr>
 <tr><td>UP-6</td><td><span class="chip sev-l">Low</span></td><td>Team chat attachments used their own sniffer outside the shared policy (no image structure check, no scan).</td><td>Same polyglot and bomb exposure.</td><td><b>Fixed (round 2).</b> Image check and scan added.</td><td>ratchet in file-upload-security.spec.ts</td></tr>
-<tr><td>UP-6b</td><td><span class="chip sev-m">Medium</span></td><td>24 e2e specs use signature-only fake images that the stricter check now refuses.</td><td>CI would go red.</td><td><b>Open.</b> Not migrated or run.</td><td>none</td></tr>
+<tr><td>UP-6b</td><td><span class="chip sev-m">Medium</span></td><td>24 e2e specs used signature-only or malformed fake images that the stricter check refused (and one real-looking PNG with a wrong chunk length, and one with a trailing byte).</td><td>CI would go red.</td><td><b>Fixed (round 3).</b> Fixtures moved to <code>test/support/images.ts</code>; three byte-exact assertions updated.</td><td>the e2e specs themselves</td></tr>
 </tbody></table>
-<p>Found 7 in total: fixed 6, open 1 (UP-6b). Critical 0, High 0. Checked and fine: names never reach storage (<code>storedName</code> is time plus 24 random hex characters; traversal, absolute, NUL and RTL names tested), the zip readers cap inflation, <code>servableMime</code> never echoes <code>text/html</code> or SVG, and the file serving routes inspected set <code>nosniff</code> and a sandbox CSP.</p>
+<p>Found 7 in total: fixed 7, open 0. Critical 0, High 0. Checked and fine: names never reach storage (<code>storedName</code> is time plus 24 random hex characters; traversal, absolute, NUL and RTL names tested), the zip readers cap inflation, <code>servableMime</code> never echoes <code>text/html</code> or SVG, and the file serving routes inspected set <code>nosniff</code> and a sandbox CSP.</p>
 
 <h2>8. What this does NOT prove</h2>
 <ul>
@@ -126,7 +126,7 @@ code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
 <tr><td><code>pnpm exec tsc -p tsconfig.json --noEmit</code> (apps/api)</td><td>no errors</td></tr>
 <tr><td><code>bash script-testing/file-upload-security/run.sh --quick</code></td><td>PASS (round 2): 70 of 70 tests, 40 operations refused without credentials</td></tr>
 <tr><td>18 related unit spec files (upload policy, media, brand, whatsapp media, storage quota, chat media) + boundaries.matrix</td><td>391 passed; boundaries.matrix 327 passed (cross-module <code>isSafeSvg</code> import is allowed)</td></tr>
-<tr><td>e2e specs with fake image fixtures (24 files)</td><td>not run, not migrated</td></tr>
+<tr><td>24 e2e specs with image fixtures, 3 parallel groups, then re-runs of the fixed ones</td><td>All upload-related failures fixed (mail-sync, microsoft-mail, booking-page-theme, flows media, media-route, line-inbound, team-chat, others pass). Remaining 9 failing tests in 7 files are identical on pristine origin/main (same files run there: 9 failed, 431 passed). Not all 24 files were re-run in one final pass.</td></tr>
 </tbody></table>
 <p class="meta">Files changed: upload-policy.service.ts, media-types.ts, image-sniff.ts, brand-assets.service.ts; new test/security/file-upload/file-upload-security.spec.ts; new script-testing/file-upload-security/; script-testing/README.md; docs/quality/test-runners.md. Full unit suite not run (17 minutes); not run twice, so flakiness not measured.</p>
 </main>

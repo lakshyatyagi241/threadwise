@@ -17,6 +17,6 @@
     "redis"
   ],
   "proves": "Hostile files (spoofed extensions, HTML or script bytes, polyglot GIF/PNG/JPEG/WebP, pixel and decompression-bomb headers, active SVG, traversal names, a zip that inflates past its declared size) are refused by the shared upload guards; the antivirus hook works against a fake clamd (clean, infected, timeout, fail-open and fail-closed); chat media keys are not readable across tenants; CSV cells are formula-guarded; every upload route is size-capped, reviewed and on the shared policy (a new route fails the ratchet); on the booted API no upload-named operation accepts an unauthenticated upload.",
-  "doesNotProve": "No authenticated live upload per route, no live cross-tenant HTTP download test (key ownership is tested in process), no real clamd, no real S3, no CSV import end to end, no JPEG trailer check beyond a markup scan (phone photos append data), the 24 e2e specs that upload signature-only fake images were not updated or run.",
+  "doesNotProve": "No authenticated live upload per route, no live cross-tenant HTTP download test (key ownership is tested in process), no real clamd, no real S3, no CSV import end to end, no JPEG trailer check beyond a markup scan (phone photos append data).",
   "report": "docs/security/file-upload/Sheet3-34-file-upload-security-REPORT.html"
 }

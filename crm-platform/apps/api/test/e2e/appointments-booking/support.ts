@@ -25,7 +25,10 @@ import {
 export { Api, bearer, startHarness, type Grant, type Harness, type Tenant };
 
 /** The reminder delivery service built from the app's own parts with a fake customer messenger (no provider is ever called). */
-export function buildReminderService(h: Harness, messenger: AppointmentMessenger): AppointmentReminderService {
+export function buildReminderService(
+  h: Harness,
+  messenger: AppointmentMessenger,
+): AppointmentReminderService {
   // The reply service lives in the worker process only (not in the HTTP app): built here from the app's parts. It is never registered
   // as an inbound hook, and the delivery tests only use its outbound side (buttons and the plan gate).
   const get = <T>(token: new (...a: never[]) => T): T => h.app.get(token, { strict: false });
