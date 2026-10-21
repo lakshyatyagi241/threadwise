@@ -126,14 +126,32 @@ function massAssignment() {
   const files = walk(dir, (p) => p.endsWith('.ts') && !p.endsWith('.d.ts'));
   const re =
     /^\s*(orgId|org_id|tenantId|workspaceId|isAdmin|is_admin|isOwner|isSuperAdmin|passwordHash|roleId|roleIds|permissions?|ownerId|createdBy)\??\s*:/;
-  const hits = files.flatMap((f) => grepLines(f, re));
+  // Every hit is keyed file:SchemaName:field and must be reviewed in policy/mass-assignment-reviewed.json (with a reason); a new one fails.
+  const reviewed = JSON.parse(readFileSync(join(import.meta.dirname, '../policy/mass-assignment-reviewed.json'), 'utf8')).reviewed;
+  const hits = files.flatMap((f) => {
+    const lines = read(f).split('\n');
+    return lines.flatMap((line, i) => {
+      const m = line.match(re);
+      if (!m) return [];
+      let name = '?';
+      for (let j = i; j >= 0; j--) {
+        const k = lines[j].match(/^export (?:const|interface|type) (\w+)/);
+        if (k) {
+          name = k[1];
+          break;
+        }
+      }
+      const key = `${relative(dir, f).split(sep).join('/')}:${name}:${m[1]}`;
+      return reviewed[key] ? [] : [`${key} (${rel(f)}:${i + 1})`];
+    });
+  });
   return res({
     id: 'mass-assignment',
     controls: ['AUTHZ-041', 'AUTHZ-042', 'AUTHZ-045', 'AUTHZ-046'],
     title: 'Contract fields naming a tenant or privilege attribute',
     status: files.length < 50 ? 'error' : hits.length ? 'needs-decision' : 'pass',
     severity: 'high',
-    summary: `${files.length} contract files scanned, ${hits.length} lines name a tenant/privilege field. Each must be a legitimate input to a privileged route (role assignment, owner reassignment guarded by a permission) or be a response-only field. Request schemas must also be strict (reject unknown keys); the dynamic field-level spec sends injected fields to every create/update route.`,
+    summary: `${files.length} contract files scanned; ${Object.keys(reviewed).length} tenant/privilege field declarations are reviewed (policy/mass-assignment-reviewed.json), ${hits.length} are not. A new one must be a legitimate input to a privileged route or a response-only field, then be added there with a reason. Dynamic field-level coverage: the authz field-level e2e spec and the VAPT live suite.`,
     evidence: hits.slice(0, 120),
   });
 }
@@ -212,11 +230,17 @@ function apiKeyScopes() {
   const emptyMeansAll = files.flatMap((f) =>
     grepLines(f, /scopes?\.length\s*===?\s*0|!.*scopes?\.length|empty.*scope|scope.*empty/i),
   );
+  const has = (f, t) => existsSync(join(SRC, f)) && read(join(SRC, f)).includes(t);
+  const capped =
+    has('modules/developer-rest-api-v1/auth/bearer-api-key.guard.ts', 'capGrantsToOwner(') &&
+    has('modules/developer-rest-api-v1/keys/api-keys.service.ts', 'assertCreatorHolds(') &&
+    existsSync(join(SRC, '../test/unit/developer-rest-api-v1/api-key-owner-cap.spec.ts'));
   return res({
     id: 'api-key-scopes',
     controls: ['AUTHZ-060', 'AUTHZ-067'],
     title: 'API key scope semantics',
-    status: emptyMeansAll.length ? 'needs-decision' : 'info',
+    // Resolved when the unrestricted key is capped to its owner at use (guard), creation checks the creator's grants (service), and a spec pins both.
+    status: emptyMeansAll.length && !capped ? 'needs-decision' : 'pass',
     severity: 'high',
     summary:
       'An empty scope list historically means unrestricted. A restricted key with no granted permissions must be distinguishable from an unrestricted key, and editing scopes must never broaden access. Dynamic coverage: test/e2e/authz/api-key-scopes.e2e.spec.ts.',
