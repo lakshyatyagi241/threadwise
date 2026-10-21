@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { normalizeQuality, wabaCredentials, fetchQualities } = require('./quality.cjs');
+const { normalizeQuality, wabaCredentials, fetchQualities, parseWabaOutput } = require('./quality.cjs');
 
 test('a rating is stored as Meta words it, uppercase; anything else is UNKNOWN', () => {
   assert.equal(normalizeQuality('GREEN'), 'GREEN');
@@ -62,4 +62,11 @@ test('a refused WABA fails without the token in the message', async () => {
     fetchQualities({ wabaId: '1', accessToken: 'SECRET' }, refused),
     (e) => /401/.test(e.message) && !e.message.includes('SECRET'),
   );
+});
+
+test('the marker is found after the shell prompt the query output starts with', () => {
+  const docs = parseWabaOutput('> @@WABA@@{"docs":[{"is_active":true,"config_value":{"waba_id":"1"}}]}\n');
+  assert.equal(docs.length, 1);
+  assert.equal(docs[0].is_active, true);
+  assert.throws(() => parseWabaOutput('no marker here\n'), /no WhatsApp document list/);
 });
