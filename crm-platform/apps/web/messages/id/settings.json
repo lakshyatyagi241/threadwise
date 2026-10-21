@@ -65,6 +65,11 @@
         "description": "Hubungkan nomor WhatsApp Business Anda untuk chat dengan pelanggan.",
         "keywords": "wa, whatsapp business, cloud api, nomor, qr"
       },
+      "whatsapp-profile": {
+        "label": "Profil bisnis WhatsApp",
+        "description": "Logo, teks tentang bisnis, detail kontak, dan informasi kepatuhan yang diminta Meta.",
+        "keywords": "profil bisnis, logo, foto profil, tentang, kontak, kepatuhan, nama legal, layanan pelanggan, petugas pengaduan"
+      },
       "unofficial-whatsapp": {
         "label": "API WhatsApp tidak resmi",
         "description": "Tautkan nomor WhatsApp pribadi lewat kode QR dan panaskan agar pengiriman aman.",

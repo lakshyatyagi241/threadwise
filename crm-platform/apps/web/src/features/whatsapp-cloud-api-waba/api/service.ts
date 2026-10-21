@@ -4,6 +4,7 @@ import {
   wabaConnectionListSchema,
   wabaConnectionSchema,
   wabaBusinessProfileSchema,
+  wabaComplianceInfoSchema,
   wabaHealthSchema,
   wabaInboundCheckSchema,
   wabaWebhookConfigSchema,
@@ -15,6 +16,7 @@ import {
   type ConnectEmbeddedInput,
   type ConnectManualInput,
   type UpdateBusinessProfileInput,
+  type UpdateComplianceInfoInput,
   type VerifyTokenInput,
 } from '@crm/contracts';
 import { apiFetch } from '@/lib/api/client';
@@ -80,6 +82,14 @@ export const wabaApi = {
       method: 'PUT',
       body: patch,
       schema: wabaBusinessProfileSchema,
+    }),
+  compliance: (id: string, signal?: AbortSignal) =>
+    apiFetch(`${base}/numbers/${id}/compliance`, { schema: wabaComplianceInfoSchema, signal }),
+  updateCompliance: (id: string, input: UpdateComplianceInfoInput) =>
+    apiFetch(`${base}/numbers/${id}/compliance`, {
+      method: 'PUT',
+      body: input,
+      schema: wabaComplianceInfoSchema,
     }),
   remove: (id: string) => apiFetch(`${base}/numbers/${id}`, { method: 'DELETE' }),
   inboundCheck: (id: string) =>

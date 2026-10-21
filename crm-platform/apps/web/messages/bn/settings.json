@@ -65,6 +65,11 @@
         "description": "গ্রাহকদের সঙ্গে চ্যাট করতে আপনার WhatsApp Business নম্বর যুক্ত করুন।",
         "keywords": "wa, whatsapp business, cloud api, নম্বর, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp বিজনেস প্রোফাইল",
+        "description": "আপনার লোগো, পরিচিতি, যোগাযোগের তথ্য এবং Meta-র চাওয়া সম্মতির তথ্য।",
+        "keywords": "বিজনেস প্রোফাইল, লোগো, প্রোফাইল ছবি, সম্পর্কে, যোগাযোগ, সম্মতি, আইনি নাম, গ্রাহক সেবা, অভিযোগ নিষ্পত্তি কর্মকর্তা"
+      },
       "unofficial-whatsapp": {
         "label": "Unofficial WhatsApp API",
         "description": "QR কোড দিয়ে ব্যক্তিগত WhatsApp নম্বর যুক্ত করুন এবং নিরাপদে পাঠানোর জন্য প্রস্তুত করুন।",

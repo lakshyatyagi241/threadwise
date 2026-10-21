@@ -65,6 +65,11 @@
         "description": "Müşterilerle sohbet etmek için WhatsApp Business numaranızı bağlayın.",
         "keywords": "wa, whatsapp business, cloud api, numara, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp işletme profili",
+        "description": "Logonuz, hakkında metniniz, iletişim bilgileriniz ve Meta'nın istediği uyumluluk bilgileri.",
+        "keywords": "işletme profili, logo, profil resmi, hakkında, iletişim, uyumluluk, yasal ad, müşteri hizmetleri, şikayet sorumlusu"
+      },
       "unofficial-whatsapp": {
         "label": "Resmi olmayan WhatsApp API",
         "description": "Kişisel bir WhatsApp numarasını QR kodla bağlayın ve güvenli gönderim için ısıtın.",

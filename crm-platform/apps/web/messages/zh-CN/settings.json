@@ -65,6 +65,11 @@
         "description": "连接您的 WhatsApp Business 号码，与客户聊天。",
         "keywords": "wa, WhatsApp Business, cloud api, 号码, 二维码"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp 商业资料",
+        "description": "您的标志、简介文字、联系方式，以及 Meta 要求的合规信息。",
+        "keywords": "商业资料, 标志, 头像, 简介, 联系, 合规, 法定名称, 客户服务, 投诉负责人"
+      },
       "unofficial-whatsapp": {
         "label": "非官方 WhatsApp API",
         "description": "通过二维码关联个人 WhatsApp 号码，并进行养号以确保安全发送。",

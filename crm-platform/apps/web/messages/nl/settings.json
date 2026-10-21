@@ -49,6 +49,11 @@
         "description": "Verbind je WhatsApp Business-nummer om met klanten te chatten.",
         "keywords": "wa, whatsapp business, cloud api, nummer, qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp-bedrijfsprofiel",
+        "description": "Je logo, over-tekst, contactgegevens en de compliancegegevens die Meta vraagt.",
+        "keywords": "bedrijfsprofiel, logo, profielfoto, over, contact, compliance, wettelijke naam, klantenservice, klachtenfunctionaris"
+      },
       "unofficial-whatsapp": {
         "label": "Onofficiële WhatsApp API",
         "description": "Koppel een persoonlijk WhatsApp-nummer via QR-code en warm het op voor veilig verzenden.",

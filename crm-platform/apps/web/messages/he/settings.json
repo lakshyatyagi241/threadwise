@@ -65,6 +65,11 @@
         "description": "חבר את מספר WhatsApp Business שלך כדי לשוחח עם לקוחות.",
         "keywords": "wa, whatsapp business, cloud api, מספר, qr"
       },
+      "whatsapp-profile": {
+        "label": "פרופיל עסקי ב-WhatsApp",
+        "description": "הלוגו, הטקסט אודות, פרטי ההתקשרות ופרטי הציות לרגולציה שמבקשת Meta.",
+        "keywords": "פרופיל עסקי, לוגו, תמונת פרופיל, אודות, התקשרות, ציות, שם משפטי, שירות לקוחות, ממונה תלונות"
+      },
       "unofficial-whatsapp": {
         "label": "ממשק WhatsApp לא רשמי",
         "description": "קשר מספר WhatsApp אישי באמצעות קוד QR וחמם אותו לשליחה בטוחה.",

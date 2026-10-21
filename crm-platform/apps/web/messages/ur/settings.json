@@ -65,6 +65,11 @@
         "description": "صارفین سے بات چیت کے لیے اپنا WhatsApp Business نمبر جوڑیں۔",
         "keywords": "wa، whatsapp business، cloud api، نمبر، qr"
       },
+      "whatsapp-profile": {
+        "label": "WhatsApp بزنس پروفائل",
+        "description": "آپ کا لوگو، تعارف، رابطے کی تفصیلات اور Meta کی مانگی ہوئی تعمیل کی معلومات۔",
+        "keywords": "بزنس پروفائل، لوگو، پروفائل تصویر، تعارف، رابطہ، تعمیل، قانونی نام، کسٹمر کیئر، شکایات کا افسر"
+      },
       "unofficial-whatsapp": {
         "label": "غیر سرکاری WhatsApp API",
         "description": "ذاتی WhatsApp نمبر کو QR کوڈ سے جوڑیں اور محفوظ ارسال کے لیے اسے گرم کریں۔",
