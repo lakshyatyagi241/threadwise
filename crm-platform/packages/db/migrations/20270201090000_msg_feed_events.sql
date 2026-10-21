@@ -1,3 +1,4 @@
+-- bluegreen-ok: an_base_replies is a TEMP table created and dropped inside this migration; no persistent table is dropped and the old slot never sees it.
 -- msg-feed: the event writer and the rebuild for the message-count rollup (docs/superpowers/specs/2026-10-19-message-count-rollup-design.md).
 --
 -- What it does. A trigger on `messages` writes one MSG_STATE event (analytics event type 7) when a message is created and one when its status

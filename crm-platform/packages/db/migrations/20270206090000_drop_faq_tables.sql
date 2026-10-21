@@ -1,3 +1,4 @@
+-- bluegreen-ok: the FAQ engine is retired (ADR-0021 addendum 3); no running code reads or writes these tables, so the old slot never queries them, and the pre-release dump keeps every row.
 -- Drops the retired FAQ engine tables.
 --
 -- 20270205090000_kb_per_agent_vector_faq_merge moved every active text FAQ into one "FAQ" text entry per AI agent and kept the faq_*
