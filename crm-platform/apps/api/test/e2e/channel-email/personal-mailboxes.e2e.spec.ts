@@ -3,7 +3,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import request from 'supertest';
 import { RequestContextStore } from '../../../src/common/context/request-context';
 import { MailSyncService } from '../../../src/modules/channel-email/mail-sync.service';
-import { AGENT } from '../team-inbox-conversations/support';
+import { AGENT, type Grant } from '../team-inbox-conversations/support';
 import {
   eventsOf,
   joinConversation,
@@ -47,11 +47,7 @@ let sharedConv = { id: 0, uuid: '' };
 const as = (u: User | string) => rig.p.api.as(typeof u === 'string' ? u : u.token);
 const idem = () => `pm-${randomUUID()}`;
 
-const userOf = async (
-  tenant: Tenant,
-  name: string,
-  grants: Array<[string, ('all' | 'team' | 'own')?]>,
-) => {
+const userOf = async (tenant: Tenant, name: string, grants: Grant[]) => {
   const m = await rig.p.api.member(tenant, name, grants);
   const row = await rig.p.h.owner.query(`SELECT uuid FROM users WHERE id = $1`, [m.userId]);
   return { token: m.token, userId: m.userId, uuid: row.rows[0].uuid as string } satisfies User;
@@ -111,7 +107,7 @@ beforeAll(async () => {
   rig = await startMailRig();
   t = await mailWorkspace(rig.p, 'pmt', 6);
   x = await mailWorkspace(rig.p, 'pmx', 6);
-  const personalKeys: Array<[string]> = [['mail.mailboxes.manage_personal']];
+  const personalKeys: Grant[] = [['mail.mailboxes.manage_personal']];
   A = await userOf(t, 'agentA', [...AGENT, ['inbox.conversation.assign'], ...personalKeys]);
   B = await userOf(t, 'agentB', [...AGENT, ...personalKeys]);
   D = await userOf(t, 'agentD', AGENT);

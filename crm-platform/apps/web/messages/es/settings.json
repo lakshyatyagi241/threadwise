@@ -101,7 +101,7 @@
         "keywords": "mensaje de texto, id de remitente, dlt, twilio, móvil"
       },
       "email": {
-        "label": "Correo electrónico",
+        "label": "Correo de soporte",
         "description": "Conecta buzones de Gmail o Google Workspace para que tu equipo lea y responda los correos de clientes en la bandeja compartida.",
         "keywords": "buzón, gmail, google workspace, bandeja compartida, correo de soporte, outlook, imap"
       },

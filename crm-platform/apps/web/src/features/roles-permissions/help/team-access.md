@@ -1,7 +1,7 @@
 ---
 id: team-access
 title: How team access works
-summary: What "My records", "My team's records", "My team and sub-teams" and "All records" mean for chats and the CRM, what the owning team is, and why a colleague's item may not show.
+summary: What My records, My team's records, My team and sub-teams and All records mean for chats and the CRM, what the owning team is, and why an item may not show.
 area: settings
 order: 65
 documents: [tile:teams]

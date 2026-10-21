@@ -40,6 +40,8 @@ describe('health rules (TW-DASH-048)', () => {
 
 const queue = (counts: Record<string, number>) => ({
   getJobCounts: async () => counts,
+  // the probe reads the newest failed job (only when there is one) to show the operator what to fix
+  getJobs: async () => [{ failedReason: 'connect ECONNREFUSED\nparams: +15551234567' }],
   drain: async () => undefined,
   clean: async () => [],
 });
@@ -119,6 +121,8 @@ describe('health probes (TW-DASH-048)', () => {
     expect(q.state).toBe('warn');
     expect(q.detail).toMatch(new RegExp(` ${QUEUE_COUNT * 3} failed$`)); // every queue x 3
     expect(r.overall).toBe('warn');
+    // the newest failure is shown as its first line only: the parameters below it can hold phone numbers
+    expect(r.queues.every((row) => row.lastFailure === 'connect ECONNREFUSED')).toBe(true);
   });
 
   it('a bridge answering 404 is up; refusing connections is down; unset is degraded', async () => {

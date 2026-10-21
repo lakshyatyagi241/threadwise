@@ -1,4 +1,3 @@
-import { FAILURE_POLICIES } from '../../modules/failed-operations/failure-policy';
 import { QUEUES } from './queues';
 
 /** Share of Redis `maxmemory` in use above which the guard starts trimming finished-job history. */
@@ -41,15 +40,18 @@ export interface TrimStep {
   graceMs: number;
 }
 
-const CAPTURED = new Set<string>(FAILURE_POLICIES.map((p) => p.queue));
-
-/** What to remove at a tier, per queue. Active, waiting and delayed jobs are never in it. */
-export function trimPlan(tier: PressureTier): TrimStep[] {
+/**
+ * What to remove at a tier, per queue. Active, waiting and delayed jobs are never in it.
+ *
+ * `capturedQueues` names the queues whose failed jobs the dead-letter sweep copies to the database (the failed-operations module owns
+ * that list). The caller passes it in: infra/ has no knowledge of any domain, so the worker module wires the two together.
+ */
+export function trimPlan(tier: PressureTier, capturedQueues: ReadonlySet<string>): TrimStep[] {
   if (tier === 0) return [];
   const steps: TrimStep[] = [];
   for (const queue of Object.values(QUEUES)) {
     steps.push({ queue, type: 'completed', graceMs: 0 });
-    const captured = CAPTURED.has(queue);
+    const captured = capturedQueues.has(queue);
     if (tier === 2 || !captured) {
       steps.push({
         queue,

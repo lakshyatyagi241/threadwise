@@ -44,7 +44,9 @@ describe('quick access (TW-DASH-009)', () => {
   });
 
   it('an empty saved list reads as never customised (Reference quirk, kept)', () => {
-    expect(effectiveQuickAccess([])).toHaveLength(10);
+    // the same nine defaults as a user who never saved (10 was the count while Broadcasts had a tile; it moved under Campaigns)
+    expect(effectiveQuickAccess([])).toHaveLength(9);
+    expect(effectiveQuickAccess([])).toEqual(effectiveQuickAccess(null));
   });
 
   it('keeps duplicates and turns items into tiles with catalog copy', () => {

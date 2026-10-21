@@ -135,7 +135,7 @@ export class MediaStorageService {
    * Writes an object to the bucket. Returns null when media is local, so the caller writes it to its own disk; a bucket
    * that refuses the write throws (the caller decides whether to fall back).
    *
-   * A key of a workspace area written straight through here (`marketing/`, `scheduled/`, `telegram/`, `ai-training/`) is metered by the
+   * A key of a workspace area written straight through here (`marketing/`, `template-media/`, `scheduled/`, `telegram/`, `ai-training/`) is metered by the
    * storage quota guard: reserve, write, commit once the bucket took it (observe mode; it never refuses and never fails the write).
    * `chat/` keys are metered by `ChatMediaStore`, which also covers local disk, so they are skipped here to count a file once.
    */

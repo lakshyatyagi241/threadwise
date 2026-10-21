@@ -101,7 +101,7 @@
         "keywords": "kısa mesaj, gönderen kimliği, dlt, twilio, mobil"
       },
       "email": {
-        "label": "E-posta",
+        "label": "Destek e-postası",
         "description": "Ekibiniz müşteri e-postalarını ortak gelen kutusunda okuyup yanıtlayabilsin diye Gmail veya Google Workspace posta kutularını bağlayın.",
         "keywords": "posta kutusu, gmail, google workspace, ortak gelen kutusu, destek e-postası, outlook, imap"
       },

@@ -101,7 +101,7 @@
         "keywords": "текстовое сообщение, sender id, dlt, twilio, мобильный"
       },
       "email": {
-        "label": "Email",
+        "label": "Почта поддержки",
         "description": "Подключайте почтовые ящики Gmail или Google Workspace, чтобы команда читала письма клиентов и отвечала на них в общем инбоксе.",
         "keywords": "почтовый ящик, gmail, google workspace, общий инбокс, почта поддержки, outlook, imap"
       },

@@ -34,6 +34,10 @@ const SELF_SERVICE_HANDLERS: ReadonlyArray<string> = [
   // the member and team directories every workspace member can open (Reference shows them to any signed-in member); every write is gated
   'modules/workspaces-teams-tenancy/members.controller.ts#list',
   'modules/workspaces-teams-tenancy/members.controller.ts#summary',
+  // the caller's own Available / Offline switch: both handlers read and write only the row of the signed-in user (ctx.userId in the service,
+  // never an id from the request), so there is no one else's data to protect; a key would only make some role unable to go offline
+  'modules/workspaces-teams-tenancy/members.controller.ts#myAvailability',
+  'modules/workspaces-teams-tenancy/members.controller.ts#setMyAvailability',
   'modules/workspaces-teams-tenancy/teams.controller.ts#list',
   // the plan picker: viewing the plans is open to every member (Reference: Authenticate only); changing the plan needs plan.subscription.manage
   'modules/plans-subscriptions-trials/billing.controller.ts#plans',

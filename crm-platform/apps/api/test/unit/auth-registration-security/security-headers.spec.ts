@@ -37,7 +37,9 @@ describe('response hardening headers', () => {
   it.each([{ authorization: 'Bearer t' }, { cookie: 'sid=1' }])(
     'a request that carries a credential (%o) is private and not stored by a shared cache',
     (rh) => {
-      const cc = run('/v2/contacts', false, rh).get('cache-control');
+      const cc = run('/v2/contacts', false, rh as unknown as Record<string, string>).get(
+        'cache-control',
+      );
       expect(cc).toBe('private, no-store');
     },
   );

@@ -5,7 +5,7 @@
     },
     "hub": {
       "kicker": "Channels",
-      "title": "Email",
+      "title": "Support email",
       "titleAccent": "mailboxes",
       "intro": "Connect your Gmail, Microsoft 365 or any IMAP mailbox. Customer emails arrive in the team inbox, one conversation per email thread, and your replies go out from the same address.",
       "inbox": "Open inbox",

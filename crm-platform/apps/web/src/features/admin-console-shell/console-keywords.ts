@@ -112,6 +112,8 @@ export const CONSOLE_KEYWORDS: Readonly<Record<string, string>> = {
   'settings-storage': 'cloud storage s3 bucket files uploads r2 spaces',
 
   system: 'system status version update updater license install server php',
+  deployments:
+    'deployments published flows geta console publish queued running failed live stalled worker status workspace flow',
   'i18n-languages': 'languages translations locales rtl arabic default language',
   currencies: 'currencies currency exchange rate symbol money',
   'i18n-providers': 'translation providers google deepl machine translate api',

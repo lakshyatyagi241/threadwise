@@ -101,7 +101,7 @@
         "keywords": "mensagem de texto, id do remetente, dlt, twilio, celular"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail de suporte",
         "description": "Conecte caixas de e-mail do Gmail ou Google Workspace para que sua equipe leia e responda os e-mails de clientes na caixa de entrada compartilhada.",
         "keywords": "caixa de e-mail, gmail, google workspace, caixa de entrada compartilhada, e-mail de suporte, outlook, imap"
       },

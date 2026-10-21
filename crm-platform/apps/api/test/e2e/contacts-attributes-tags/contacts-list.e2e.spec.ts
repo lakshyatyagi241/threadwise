@@ -284,6 +284,9 @@ describe('stat tiles (TW-CON-006)', () => {
         name: `S${i}`,
         phone: `+9160000000${String(i).padStart(2, '0')}`,
         isUnsubscribed: i < 2,
+        // "Subscribed" is the WhatsApp opt-in the list column shows (label "subscribed" and not opted out); a contact written
+        // with no consent label is not subscribed (contact-consent policy: a grant exists only because the person agreed).
+        ...(i < 2 ? {} : { whatsappSubscriptionStatus: 'subscribed' }),
       })),
     );
     const stats = await api.as(t.admin).get('/v2/contacts/stats');
@@ -458,7 +461,17 @@ describe('marketing opt-out write path (TW-CON-017)', () => {
       .send({ name: 'Opted out', phone: '+919990002001', isUnsubscribed: true });
     expect(made.status, JSON.stringify(made.body)).toBe(201);
     expect(made.body.isUnsubscribed).toBe(true);
-    await api.as(t.admin).post('/v2/contacts').send({ name: 'Subscribed', phone: '+919990002002' });
+    const sub = await api
+      .as(t.admin)
+      .post('/v2/contacts')
+      .send({
+        name: 'Subscribed',
+        phone: '+919990002002',
+        whatsappSubscriptionStatus: 'subscribed',
+        // a "subscribed" label is not proof: it needs the note of how the person agreed, or the write is refused (contact-consent policy)
+        consent: { note: 'Agreed at the front desk' },
+      });
+    expect(sub.status, JSON.stringify(sub.body)).toBe(201);
 
     const stats = await api.as(t.admin).get('/v2/contacts/stats');
     expect(stats.body).toMatchObject({ total: 2, unsubscribed: 1, subscribed: 1 });

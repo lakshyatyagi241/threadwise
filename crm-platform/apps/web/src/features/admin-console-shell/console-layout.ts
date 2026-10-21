@@ -172,6 +172,7 @@ export const CONSOLE_LAYOUT: readonly ConsoleHub[] = [
     icon: 'gear',
     tabs: [
       'system',
+      'deployments',
       'data-retention',
       'i18n-languages',
       'currencies',

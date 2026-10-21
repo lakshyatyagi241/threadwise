@@ -444,6 +444,8 @@ export class PlatformRatesService {
           },
         });
       });
+      // replace() invalidated inside the transaction; a lookup before the commit re-cached the old card, so drop it again now.
+      this.cards.invalidate();
     }
     if (appliesToPricing) {
       // On a dry run nothing is stored yet, so the entries come from the parsed file; either way the same expansion.

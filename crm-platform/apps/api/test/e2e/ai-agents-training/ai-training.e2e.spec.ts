@@ -10,7 +10,7 @@ import type {
 import { SourceIngestConsumer } from '../../../src/modules/ai-agents-training/source-ingest.consumer';
 import { SOURCE_REQUESTED } from '../../../src/modules/ai-agents-training/source-events';
 import { SourcesRepository } from '../../../src/modules/ai-agents-training/sources.repository';
-import { KbRetrievalService } from '../../../src/modules/knowledge-base';
+import { KbIndexService, KbRetrievalService } from '../../../src/modules/knowledge-base';
 import { OutboxSubscriberRegistry } from '../../../src/kernel/outbox/outbox-subscribers';
 import { makeDocx, makePdf } from '../../unit/ai-agents-training/fixtures';
 import {
@@ -660,6 +660,7 @@ describe('the worker reads a URL entry (TW-AIAG-007)', () => {
       new OutboxSubscriberRegistry(),
       h.app.get(DatabaseService),
       new SourcesRepository(),
+      h.app.get(KbIndexService),
       fetcher,
     );
   });

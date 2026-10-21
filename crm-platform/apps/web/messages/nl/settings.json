@@ -85,7 +85,7 @@
         "keywords": "sms, afzender-id, dlt, twilio, mobiel"
       },
       "email": {
-        "label": "E-mail",
+        "label": "Support-e-mail",
         "description": "Verbind Gmail- of Google Workspace-mailboxen zodat je team klant-e-mail in de gedeelde inbox kan lezen en beantwoorden.",
         "keywords": "mailbox, gmail, google workspace, gedeelde inbox, support-e-mail, outlook, imap"
       },

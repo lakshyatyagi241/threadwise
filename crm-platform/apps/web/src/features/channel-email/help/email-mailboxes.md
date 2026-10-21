@@ -1,6 +1,6 @@
 ---
 id: email-mailboxes
-title: Email mailboxes
+title: Support email mailboxes
 summary: Connect Gmail, Microsoft 365 or IMAP mailboxes, shared or personal, check their health, and answer customer email in the team inbox.
 area: settings
 order: 70

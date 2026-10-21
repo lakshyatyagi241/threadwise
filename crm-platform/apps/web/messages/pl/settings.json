@@ -101,7 +101,7 @@
         "keywords": "wiadomość tekstowa, identyfikator nadawcy, dlt, twilio, komórka"
       },
       "email": {
-        "label": "E-mail",
+        "label": "E-mail wsparcia",
         "description": "Połącz skrzynki Gmail lub Google Workspace, aby zespół mógł czytać i odpowiadać na e-maile klientów we wspólnej skrzynce odbiorczej.",
         "keywords": "skrzynka pocztowa, gmail, google workspace, wspólna skrzynka, e-mail do wsparcia, outlook, imap"
       },
