@@ -94,7 +94,6 @@ export function RetentionTable({
   const ts = useTranslations('workspaces-hub.retention.status');
   const ta = useTranslations('workspaces-hub.retention.actions');
   const locale = useLocale();
-  const timeZone = useTimeZone();
   const num = new Intl.NumberFormat(locale);
   const cols = [
     'workspace',

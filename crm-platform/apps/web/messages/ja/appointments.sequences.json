@@ -1,0 +1,188 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "プランをアップグレード",
+      "buttonsLocked": "確認、日時変更、キャンセルのボタンは、お使いのプランには含まれていません。",
+      "timeline": {
+        "label": "リマインダーのタイムライン",
+        "addMenu": "ステップを追加",
+        "addStep": "ステップを追加",
+        "count": "時刻を設定したステップ: {max}件中{count}件。予約確認と無断欠席のメッセージは数えません。",
+        "capReached": "時刻を設定したステップが上限の{max}件に達しています。別のステップを追加するには、1件削除してください。",
+        "rebookLocked": "再予約のメッセージは、お使いのプランには含まれていません。ステップは設定できますが、プランをアップグレードするまでオフのままになります。",
+        "rebookLockedStep": "現在のプランではこのステップをオンにできません。",
+        "empty": "まだステップがありません。最初のステップを追加するか、すぐに使えるシーケンスから始めてください。",
+        "lane": {
+          "booked": "予約されたとき",
+          "before": "予定の前",
+          "after": "予定の後"
+        },
+        "laneHint": {
+          "booked": "予約されるとすぐに送信されます。",
+          "before": "予定が始まる前に送信され、開始後には送信されません。",
+          "after": "予定が終わった後、または無断欠席として記録されたときに送信されます。"
+        },
+        "laneEmpty": "まだ何もありません。",
+        "step": {
+          "confirmation": "予約確認",
+          "reminder_24h": "24時間前のリマインダー",
+          "reminder_2h": "2時間前のリマインダー",
+          "reminder_15m": "15分前のリマインダー",
+          "reminder": "リマインダー",
+          "after_visit": "予定後のメッセージ",
+          "no_show": "無断欠席のメッセージ",
+          "rebook": "再予約のメッセージ"
+        },
+        "stepHint": {
+          "confirmation": "予約が確定するとすぐに送信されます。",
+          "reminder_24h": "前日に送信されます。確認、日時変更、キャンセルのボタンを付けられます。",
+          "reminder_2h": "数時間前に送る短いリマインダーです。",
+          "reminder_15m": "参加リンクがあるオンライン予定のみ対象です。",
+          "reminder": "指定した時刻に送るリマインダーです。",
+          "after_visit": "予定が終わった後に送る、お礼やフォローアップのメッセージです。",
+          "no_show": "予定を無断欠席として記録したときに送信されます。",
+          "rebook": "予定の完了から数日後に、再予約を促します。マーケティングメッセージとして扱われます。"
+        },
+        "choice": {
+          "confirmation": "予約確認",
+          "reminder_24h": "24時間前",
+          "reminder_2h": "2時間前",
+          "reminder_15m": "15分前",
+          "custom": "別の時刻のリマインダー",
+          "after_visit": "予定後のメッセージ",
+          "no_show": "無断欠席のメッセージ",
+          "rebook": "再予約のメッセージ（数日後）"
+        },
+        "choiceHint": {
+          "present": "追加済み",
+          "cap": "上限に達しました",
+          "locked": "オンにするにはプランのアップグレードが必要です",
+          "online": "オンライン予定"
+        },
+        "enabledOf": "送信: {step}",
+        "remove": "削除: {step}",
+        "offsetOf": "時刻: {step}",
+        "unitOf": "時間の単位: {step}",
+        "beforeStart": "予定の開始前",
+        "afterEnd": "予定の終了後",
+        "setTime": "時刻を入力",
+        "templateName": "WhatsAppテンプレート: {name}",
+        "wa": {
+          "none": "テンプレートなし",
+          "draft": "テンプレートはMetaに送信されていません",
+          "pending": "Metaの承認待ち",
+          "approved": "テンプレートは承認されました",
+          "rejected": "Metaにより却下"
+        },
+        "fallback": {
+          "email": "WhatsAppテンプレートが承認されるまで、このステップはemailで送信されます。",
+          "window": "ここではWhatsAppだけが送信手段のため、24時間の対応時間外は、テンプレートが承認されるまで何も送信されません。予備としてemailを追加してください。"
+        },
+        "when": {
+          "before": "開始の{amount}前",
+          "after": "終了の{amount}後"
+        },
+        "amount": {
+          "minutes": "{count, plural, other {#分}}",
+          "hours": "{count, plural, other {#時間}}",
+          "days": "{count, plural, other {#日}}"
+        }
+      },
+      "reasons": {
+        "already_confirmed": "連絡先は、すでに確認済みでした。",
+        "no_join_link": "予定に参加リンクがありません。",
+        "already_rebooked": "連絡先は再予約済みです。",
+        "visit_not_completed": "予定が完了していませんでした。",
+        "plan_feature_locked": "お使いのプランにはこのステップが含まれていません。",
+        "not_delivered": "WhatsAppが期限内に配信しなかったため、次のチャネルが使われました。",
+        "send_failed": "送信に失敗したため、次のチャネルが使われました。"
+      },
+      "packs": {
+        "open": "すぐに使えるシーケンス",
+        "eyebrow": "{name}向け",
+        "title": "すぐに使えるリマインダーのシーケンス",
+        "close": "閉じる",
+        "intro": "業種に合ったシーケンスを選んでください。予約確認、リマインダー、フォローアップ、再予約のメッセージをまとめて設定します。WhatsAppのメッセージは送信前にMetaの承認が必要です。承認されるまで、各ステップはemailで送信されます。",
+        "loading": "シーケンスを読み込んでいます",
+        "choose": "シーケンスを選ぶ",
+        "stepsCount": "{count, plural, other {#ステップ}}",
+        "language": "メッセージの言語",
+        "machineDraft": "ヒンディー語の文面は機械翻訳による下書きです。ステップをオンにする前に、ヒンディー語を読める人に確認してもらってください。",
+        "previewLoading": "プレビューを読み込んでいます",
+        "previewTitle": "変更される内容",
+        "summary": "追加: {add}件、置き換え: {replace}件、変更なし: {unchanged}件",
+        "timedOf": "時刻を設定したステップ: {max}件中{count}件",
+        "blocked": "このシーケンスを適用すると、時刻を設定したステップの上限{max}件を超えてしまいます。先にステップを1つ削除してください。",
+        "confirmTitle": "既存のステップを置き換えます",
+        "confirmBody": "この予約タイプの{count, plural, other {#件のステップ}}が、入力したテキストを含めてシーケンスの内容に置き換わります。",
+        "confirmCheck": "置き換える",
+        "action": {
+          "add": "新規",
+          "replace": "既存のものを置き換え",
+          "unchanged": "変更なし"
+        },
+        "starts": {
+          "on": "オンの状態で開始",
+          "off": "オフの状態で開始"
+        },
+        "category": {
+          "UTILITY": "サービスメッセージ",
+          "MARKETING": "マーケティングメッセージ"
+        },
+        "onlineOnly": "オンライン予定のみ",
+        "hasButtons": "確認、日時変更、キャンセルのボタン",
+        "wa": {
+          "new": "Metaに送信されます"
+        },
+        "replaceOwnText": "このステップには独自のテキストが入力されています。置き換えられます。",
+        "planNotes": {
+          "rebook": "お使いのプランには再予約のメッセージが含まれないため、このステップはオフにして保存されます。",
+          "buttons": "お使いのプランには返信ボタンが含まれないため、ボタンは除外されます。"
+        },
+        "showMessages": "メッセージを表示",
+        "hideMessages": "メッセージを隠す",
+        "kept": "既存の{count, plural, other {#件のステップ}}は変更されません。",
+        "sample": {
+          "title": "サンプルの値",
+          "hint": "メッセージは架空の値で表示されています。値を変えると、名前が長い場合や別の場所の場合の表示を確認できます。",
+          "reset": "値をリセット",
+          "labels": {
+            "name": "連絡先の名前",
+            "service": "サービス",
+            "date": "日付",
+            "time": "時間",
+            "place": "場所",
+            "join_link": "参加リンク",
+            "manage_link": "管理リンク"
+          }
+        },
+        "submitToMeta": "WhatsAppのメッセージを今すぐMetaに送って承認を依頼する",
+        "submitHint": "{count, plural, other {新しいWhatsAppメッセージを#件作成します。}} 承認のタイミングはMetaが決めます。それまでステップはemailで送信されます。下書きとして残す場合はオフのままにしてください。",
+        "submitHintNone": "WhatsAppのメッセージはワークスペースにすでにあるため、新しく作成されるものはありません。",
+        "apply": "シーケンスを適用",
+        "applying": "適用中",
+        "cancel": "キャンセル",
+        "block": {
+          "readOnly": "シーケンスは閲覧できますが、適用はできません。",
+          "unsaved": "先に、この予約タイプのステップへの変更を保存するか破棄してください。",
+          "cap": "先にステップを1つ削除してください。時刻を設定したステップの上限を超えてしまいます。",
+          "confirm": "続けるには「置き換える」にチェックを入れてください。"
+        },
+        "errors": {
+          "needsConfirm": "適用するとステップが置き換わるため、確認が必要です。プレビューを読み込み直しました。",
+          "cap": "このシーケンスを適用すると、この予約タイプで時刻を設定したステップの上限を超えてしまいます。"
+        },
+        "result": {
+          "title": "シーケンスを適用しました",
+          "summary": "{added}件を追加、{replaced}件を置き換えました。ステップはシーケンスの設定どおりに開始されます。",
+          "templatesTitle": "WhatsAppのメッセージ",
+          "templatesNone": "WhatsAppのメッセージは作成されませんでした。WhatsAppを使うには、WhatsApp Cloud APIの番号を接続してください。それまではemailを使用します。",
+          "waiting": "Metaがメッセージを承認するまで、そのステップはemailで送信されます。",
+          "metaError": "Metaが却下しました: {error}",
+          "refresh": "ステータスを更新",
+          "refreshing": "更新中"
+        }
+      }
+    }
+  }
+}

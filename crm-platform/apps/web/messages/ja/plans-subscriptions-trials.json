@@ -60,6 +60,8 @@
       "remove_branding": "ブランディングの削除",
       "sales_pipeline": "営業パイプライン",
       "appointment_booking": "予約受付",
+      "appointment_confirm_buttons": "リマインダーのボタン（確認・日時変更・キャンセル）",
+      "appointment_rebook_steps": "再予約（リコール）ステップ",
       "chatbot_widgets": "チャットボットウィジェット",
       "wa_storefront": "WhatsAppカタログ",
       "inbox_sla": "SLAポリシー",

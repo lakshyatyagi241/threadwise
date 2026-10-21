@@ -535,6 +535,8 @@
             "remove_branding": "Marca blanca",
             "sales_pipeline": "Embudo de ventas",
             "appointment_booking": "Citas",
+            "appointment_confirm_buttons": "Botones del recordatorio",
+            "appointment_rebook_steps": "Pasos de nueva reserva",
             "chatbot_widgets": "Widgets de chatbot",
             "wa_storefront": "Catálogo de WhatsApp",
             "inbox_sla": "SLA de la bandeja",

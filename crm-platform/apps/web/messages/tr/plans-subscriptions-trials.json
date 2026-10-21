@@ -60,6 +60,8 @@
       "remove_branding": "Markalamayı kaldır",
       "sales_pipeline": "Satış hattı",
       "appointment_booking": "Randevu alma",
+      "appointment_confirm_buttons": "Hatırlatma düğmeleri (Onayla / Yeniden planla / İptal et)",
+      "appointment_rebook_steps": "Yeniden randevu (hatırlatma) adımları",
       "chatbot_widgets": "Sohbet botu widget'ları",
       "wa_storefront": "WhatsApp kataloğu",
       "inbox_sla": "SLA politikaları",

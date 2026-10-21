@@ -535,6 +535,8 @@
             "remove_branding": "White-label",
             "sales_pipeline": "Verkooppijplijn",
             "appointment_booking": "Afspraken",
+            "appointment_confirm_buttons": "Herinneringsknoppen",
+            "appointment_rebook_steps": "Stappen voor opnieuw boeken",
             "chatbot_widgets": "Chatbotwidgets",
             "wa_storefront": "WhatsApp-catalogus",
             "inbox_sla": "Inbox-SLA",

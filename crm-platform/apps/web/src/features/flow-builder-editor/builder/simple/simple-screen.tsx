@@ -2,7 +2,15 @@
 
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useEffectEvent,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
@@ -438,10 +446,13 @@ function Editor({
   const testGraph = useMemo(() => toGraph(doc), [doc]);
 
   // --- save / publish -------------------------------------------------------------------------------------------------
+  // A queued save reads the latest doc and name when it runs, so the refs follow each commit (set in a layout effect, not in render).
   const docRef = useRef(doc);
-  docRef.current = doc;
   const nameRef = useRef(name);
-  nameRef.current = name;
+  useLayoutEffect(() => {
+    docRef.current = doc;
+    nameRef.current = name;
+  }, [doc, name]);
   const payload = () => {
     const g = toGraph(docRef.current);
     return {
@@ -1379,14 +1390,16 @@ function AddMenu({
     setQ('');
     modal?.onDismiss();
   };
+  // An effect event always runs the latest close, so the listeners below do not need it in their dependencies.
+  const closeFromPage = useEffectEvent(() => close());
   // The menu closes when the page outside it is clicked, or on Escape (a click inside it, on a step or the + button, is handled there).
   useEffect(() => {
     if (!open) return;
     const onDown = (e: MouseEvent) => {
-      if (!box.current?.contains(e.target as Node)) close();
+      if (!box.current?.contains(e.target as Node)) closeFromPage();
     };
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
+      if (e.key === 'Escape') closeFromPage();
     };
     document.addEventListener('mousedown', onDown);
     document.addEventListener('keydown', onKey);

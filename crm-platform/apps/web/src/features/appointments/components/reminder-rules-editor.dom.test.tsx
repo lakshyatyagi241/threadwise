@@ -152,7 +152,7 @@ describe('the reminder rules editor', () => {
   it('never offers SMS as a channel', () => {
     mount([{ ...newReminder('15'), channels: ['whatsapp'] }]);
     click(byText('Message and channels'));
-    expect(document.body.textContent).not.toMatch(/SMS/);
+    expect(document.body.textContent).not.toMatch(/\bSMS\b/);
   });
 
   it('shows the notice on a step the server moved off SMS, and keeps the step settings', () => {

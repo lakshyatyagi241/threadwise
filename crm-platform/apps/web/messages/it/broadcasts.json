@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Chiudi"
     },
+    "list": {
+      "unofficialDisabled": "Non ufficiale (disattivato)"
+    },
     "detail": {
       "back": "Indietro",
       "crumb": "Broadcast / Analisi / #{ref}",
