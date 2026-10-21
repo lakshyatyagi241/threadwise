@@ -1,3 +1,4 @@
+import { isSafeSvg } from '../chatbot-widget/svg-safe';
 import { createHash } from 'node:crypto';
 import { Injectable } from '@nestjs/common';
 import { sql } from 'drizzle-orm';
@@ -54,7 +55,7 @@ export function sniffImage(buf: Buffer): string | null {
     return 'image/x-icon';
   const head = buf.subarray(0, 512).toString('utf8').trimStart().toLowerCase();
   if (/^(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)?(<!doctype svg[^>]*>\s*)?<svg[\s>]/.test(head))
-    return 'image/svg+xml';
+    return isSafeSvg(buf) ? 'image/svg+xml' : null; // active SVG (script, links, entities) is refused (SEC-UPLOAD-1)
   return null;
 }
 
