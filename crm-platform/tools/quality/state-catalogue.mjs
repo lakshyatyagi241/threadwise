@@ -287,7 +287,7 @@ const walk = (d) =>
         return statSync(p).isDirectory() ? walk(p) : [p];
       })
     : [];
-const isTest = (f) => /\.(test|spec)\.(ts|tsx)$|\.twin\.mjs$|\.dom\.test\./.test(f);
+const isTest = (f) => /\.(test|spec)\.(ts|tsx)$|\.dom\.test\./.test(f);
 
 function tierOf(feature) {
   const f = join(API_EDGE, `${feature}.json`);
