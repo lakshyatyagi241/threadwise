@@ -45,12 +45,16 @@
         "in": "כסף שנכנס",
         "out": "כסף שיצא",
         "balance": "יתרה",
-        "none": "אין"
+        "none": "אין",
+        "channel": "ערוץ",
+        "recipient": "נמען",
+        "template": "תבנית",
+        "country": "מדינה",
+        "category": "קטגוריה",
+        "engine": "מנוע"
       },
       "context": {
-        "reason": "סיבה",
-        "to": "אל",
-        "template": "תבנית"
+        "reason": "סיבה"
       },
       "channels": {
         "campaign": "קמפיין",

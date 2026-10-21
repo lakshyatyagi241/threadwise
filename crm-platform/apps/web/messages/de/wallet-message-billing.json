@@ -164,12 +164,16 @@
         "in": "Geldeingang",
         "out": "Geldausgang",
         "balance": "Saldo",
-        "none": "Keine"
+        "none": "Keine",
+        "channel": "Kanal",
+        "recipient": "Empfänger",
+        "template": "Vorlage",
+        "country": "Land",
+        "category": "Kategorie",
+        "engine": "Motor"
       },
       "context": {
-        "reason": "Grund",
-        "to": "An",
-        "template": "Vorlage"
+        "reason": "Grund"
       },
       "channels": {
         "campaign": "Kampagne",
