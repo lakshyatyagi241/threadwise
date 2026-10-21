@@ -35,7 +35,9 @@ export class WorkerHeartbeatService implements OnApplicationBootstrap, OnApplica
   private readonly id = instanceId(hostname(), process.pid);
   private timer: NodeJS.Timeout | undefined;
   private readonly monitor = getRuntimeMonitor();
-  private readonly outboxGauges = this.monitor ? createDbSaturationMetrics(this.monitor.metrics) : undefined;
+  private readonly outboxGauges = this.monitor
+    ? createDbSaturationMetrics(this.monitor.metrics)
+    : undefined;
 
   constructor(
     private readonly db: DatabaseService,

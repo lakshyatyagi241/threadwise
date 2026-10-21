@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sheet3 #75 Metrics golden signals - report</title>
+<style>
+:root{--bg:#fff;--fg:#1b1f24;--mut:#59636e;--card:#f4f6f8;--line:#d0d7de;--a:#1f5fbf;--ok:#1a7f37;--warn:#9a6700;--bad:#cf222e}
+@media (prefers-color-scheme:dark){:root{--bg:#0d1117;--fg:#e6edf3;--mut:#9aa4af;--card:#161b22;--line:#30363d;--a:#6ea8fe;--ok:#3fb950;--warn:#d29922;--bad:#ff7b72}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif}
+main{max-width:980px;margin:0 auto;padding:16px}
+h1{font-size:1.7rem;margin:.2em 0}h2{font-size:1.3rem;margin:1.8em 0 .5em;border-bottom:1px solid var(--line);padding-bottom:.2em}
+.badge{display:inline-block;padding:.1em .6em;border-radius:1em;font-weight:600;font-size:.85rem;border:1px solid currentColor}
+.partly{color:var(--warn)}.ok{color:var(--ok)}.bad{color:var(--bad)}
+.meta{color:var(--mut);font-size:.92rem}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin:12px 0}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.tile b{display:block;font-size:1.7rem;line-height:1.1}.tile span{color:var(--mut);font-size:.88rem}
+.box{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:10px 14px;margin:10px 0}
+blockquote{margin:8px 0;padding:6px 12px;border-left:4px solid var(--a);background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:5px 8px;text-align:left;vertical-align:top}th{background:var(--card)}
+td.p{color:var(--ok);font-weight:600}td.m{color:var(--bad);font-weight:600}td.n{color:var(--mut)}
+svg{max-width:100%;height:auto}svg text{fill:var(--fg);font:12px system-ui,sans-serif}
+code{background:var(--card);padding:0 .25em;border-radius:3px;font-size:.88em}
+figcaption{color:var(--mut);font-size:.88rem}
+</style>
+</head>
+<body>
+<main>
+<header>
+<h1>Metrics: golden signals</h1>
+<p><span class="badge partly">Partly met</span> &nbsp; Sheet3 item #75 &middot; P1 &middot; effort 6</p>
+<p class="meta">Owner: Vedant &middot; Date: 2026-10-21 &middot; Branch: <code>vedant/perf/metrics-golden-signals</code> &middot; PR: none (local branch, not pushed)</p>
+<blockquote>Sheet target, word for word: "100% services expose golden signals: latency, traffic, errors, saturation"</blockquote>
+</header>
+
+<h2>In 60 seconds</h2>
+<div class="tiles">
+<div class="tile"><b>28 of 32</b><span>applicable service x signal cells covered (4 missing, listed below; 4 more are n/a)</span></div>
+<div class="tile"><b>6</b><span>new gauges: Postgres pool (3) and outbox backlog (3)</span></div>
+<div class="tile"><b>2</b><span>new tests: matrix ratchet, and read-back of the new metrics</span></div>
+<div class="tile"><b>0</b><span>new dependencies</span></div>
+</div>
+<p><strong>Verdict: Partly met.</strong> Most of the product already exposed all four signals (HTTP histogram on API and web, job histograms and counters on the worker, queue depth, Redis, realtime). The real holes were saturation of Postgres (pool usage) and the outbox backlog, and these are now exported. Postgres latency, traffic and errors, and outbox throughput, are still missing: they cannot be had cheaply from inside the app (they need postgres_exporter or a per-query hook). The API process was not booted in this run; the worker was.</p>
+<div class="box"><strong>Decisions needed</strong><ol>
+<li>Add <code>postgres_exporter</code> (or <code>pg_stat_statements</code>) to the compose stack to close Postgres latency, traffic and errors. Default: not done here.</li>
+<li>Edits in other owners' zones: <code>apps/api/src/infra/db/database.service.ts</code> (about 15 lines) and <code>worker-heartbeat.service.ts</code> (4 lines). Tell the owners before merging.</li>
+</ol></div>
+
+<h2>What is this, in plain words</h2>
+<p>The four golden signals are the four questions you ask of any service: how long does it take (latency), how much is it doing (traffic), how often does it fail (errors), how full is it (saturation). A restaurant analogy: waiting time at the table, covers per hour, dishes sent back, and how many tables are taken. We checked every service for all four, and added the "how full" gauges that were missing for the database connection pool and the outbox (the to-do list of events waiting to be delivered).</p>
+
+<h2>How it was tested</h2>
+<ol>
+<li>Read the metric definitions in <code>packages/observability/src</code>, the API observability modules, the web runtime monitor and the realtime metrics, and listed every metric name per service in <code>golden-signals.json</code>.</li>
+<li>Built the API and booted the worker locally (private Redis db 15, port 19475) and fetched <code>/metrics</code>: 24 metric families, including the new ones (see appendix).</li>
+<li>Unit test <code>golden-signals.spec.ts</code>: the ratchet fails if a signal marked present lists a metric name that is not in the code, or a missing/n-a cell has no reason; and the new gauges are written then read back from the exposition text.</li>
+<li>Type check of the API.</li>
+</ol>
+
+<h2>Results at a glance</h2>
+<figure>
+<svg role="img" aria-label="Signal coverage per service" viewBox="0 0 900 270" width="900"><title>Golden signals present per service (of 4)</title><desc>api 4, web 4, worker 4, realtime 4, redis 4, bullmq 4, outbox 3, postgres 1, node-bridge n/a</desc>
+<g>
+<text x="150" y="30" text-anchor="end">api</text><rect x="160" y="16" width="600" height="18" fill="var(--a)"/><text x="768" y="30">4</text>
+<text x="150" y="58" text-anchor="end">web</text><rect x="160" y="44" width="600" height="18" fill="var(--a)"/><text x="768" y="58">4</text>
+<text x="150" y="86" text-anchor="end">worker</text><rect x="160" y="72" width="600" height="18" fill="var(--a)"/><text x="768" y="86">4</text>
+<text x="150" y="114" text-anchor="end">realtime</text><rect x="160" y="100" width="600" height="18" fill="var(--a)"/><text x="768" y="114">4</text>
+<text x="150" y="142" text-anchor="end">redis</text><rect x="160" y="128" width="600" height="18" fill="var(--a)"/><text x="768" y="142">4 (latency indirect)</text>
+<text x="150" y="170" text-anchor="end">bullmq queues</text><rect x="160" y="156" width="600" height="18" fill="var(--a)"/><text x="768" y="170">4</text>
+<text x="150" y="198" text-anchor="end">outbox</text><rect x="160" y="184" width="450" height="18" fill="var(--a)"/><text x="618" y="198">3 (new), traffic missing</text>
+<text x="150" y="226" text-anchor="end">postgres</text><rect x="160" y="212" width="150" height="18" fill="var(--a)"/><text x="318" y="226">1 (new), 3 missing</text>
+<text x="150" y="254" text-anchor="end">node-bridge</text><text x="160" y="254">n/a: does not exist, Baileys runs inside the API process</text>
+</g></svg>
+<figcaption>Bar length is the number of signals present out of 4. Data: <code>golden-signals.json</code>.</figcaption></figure>
+
+<h2>Findings</h2>
+<table>
+<thead><tr><th>Finding</th><th>Status</th><th>Detail</th></tr></thead>
+<tbody>
+<tr><td>No Postgres pool saturation metric</td><td class="p">Fixed</td><td><code>crm_db_pool_connections{pool,state}</code>, <code>crm_db_pool_waiting{pool}</code>, <code>crm_db_pool_max{pool}</code>, sampled every 10 s in both API and worker from <code>DatabaseService</code></td></tr>
+<tr><td>No outbox backlog metric (only a Redis sample for /ready)</td><td class="p">Fixed</td><td><code>crm_outbox_ready</code>, <code>crm_outbox_oldest_due_seconds</code>, <code>crm_outbox_dead</code>, set from the existing worker heartbeat sample (no new query)</td></tr>
+<tr><td>HTTP latency, traffic, errors on API and web</td><td class="p">Already present</td><td><code>crm_http_request_duration_seconds{method,route,status}</code>, route template and status class, service label tells api from web</td></tr>
+<tr><td>Postgres latency, traffic, errors</td><td class="m">Open (medium)</td><td>No per-query metric. Needs postgres_exporter or a query hook</td></tr>
+<tr><td>Outbox throughput counter</td><td class="m">Open (low)</td><td>The drain logs but exposes no processed-events counter</td></tr>
+<tr><td>Redis command latency</td><td class="m">Open (low)</td><td>Only the readiness probe round trip stands in</td></tr>
+<tr><td>node-bridge</td><td class="n">n/a</td><td>No such service in this repo</td></tr>
+</tbody></table>
+
+<h2>What this does NOT prove</h2>
+<ul>
+<li>Nothing was scraped by Prometheus or shown in Grafana (another agent owns <code>deploy/observability/</code>).</li>
+<li>The API process was not booted, so the API-side series (<code>service="api"</code> pool gauges, HTTP histogram under load) were not read live. The pool code is shared with the worker, where it was.</li>
+<li>The worker run was idle: pool total and idle read 0 and the outbox was empty, so non-zero values are only proven by the unit test, not by load.</li>
+<li>Pool values are the client's view (this process), not the server's <code>max_connections</code>.</li>
+<li>No overhead benchmark; the cost is one timer per process every 10 s and four property reads.</li>
+</ul>
+
+<h2>Appendix: commands and results</h2>
+<table>
+<thead><tr><th>Command</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td><code>apps/api: tsc -p tsconfig.json --noEmit</code></td><td>no errors</td></tr>
+<tr><td><code>apps/api: vitest run test/unit/platform-infrastructure/golden-signals.spec.ts</code></td><td>2 passed</td></tr>
+<tr><td><code>apps/api: vitest run test/unit/platform-infrastructure</code> (touched area)</td><td>19 files, 256 tests passed</td></tr>
+<tr><td><code>nest build -b swc</code>, then worker boot with <code>OBS_METRICS_PORT=19475</code>, Redis db 15, <code>curl /metrics</code></td><td>24 families; <code>crm_db_pool_max{pool="primary"} 20</code>, <code>crm_outbox_ready 0</code>, <code>crm_queue_jobs_pending</code> per queue</td></tr>
+<tr><td>ESLint / Prettier on changed files</td><td>not run (time box)</td></tr>
+<tr><td>Security review gate, ownership guard</td><td>not run (time box)</td></tr>
+</tbody></table>
+<p class="meta">New metric names for the Grafana work are in <code>docs/performance/metrics/golden-signals.json</code> (<code>newMetrics</code>).</p>
+</main>
+</body>
+</html>

@@ -1,4 +1,10 @@
-import { Inject, Injectable, Logger, type OnApplicationShutdown, type OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  type OnApplicationShutdown,
+  type OnModuleInit,
+} from '@nestjs/common';
 import { createDbSaturationMetrics, getRuntimeMonitor } from '@crm/observability';
 import {
   withPrivileged,
@@ -99,7 +105,8 @@ export class DatabaseService implements OnModuleInit, OnApplicationShutdown {
     const m = createDbSaturationMetrics(monitor.metrics);
     const tick = () => {
       m.recordPool('primary', this.clients.primary.pool);
-      if (this.clients.replica !== this.clients.primary) m.recordPool('replica', this.clients.replica.pool);
+      if (this.clients.replica !== this.clients.primary)
+        m.recordPool('replica', this.clients.replica.pool);
     };
     tick();
     this.poolTimer = setInterval(tick, 10_000);

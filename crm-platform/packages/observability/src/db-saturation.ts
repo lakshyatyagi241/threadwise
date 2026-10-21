@@ -13,12 +13,27 @@ export interface PoolLike {
  * (primary or replica), never a tenant. `waiting` > 0 is the queue of callers behind an exhausted pool.
  */
 export function createDbSaturationMetrics(registry: Registry) {
-  const conns = registry.gauge('crm_db_pool_connections', 'Pool connections by pool and state (total, idle)');
-  const waiting = registry.gauge('crm_db_pool_waiting', 'Callers waiting for a pool connection, by pool');
+  const conns = registry.gauge(
+    'crm_db_pool_connections',
+    'Pool connections by pool and state (total, idle)',
+  );
+  const waiting = registry.gauge(
+    'crm_db_pool_waiting',
+    'Callers waiting for a pool connection, by pool',
+  );
   const max = registry.gauge('crm_db_pool_max', 'Configured pool size, by pool');
-  const ready = registry.gauge('crm_outbox_ready', 'Outbox events due and not yet picked up (capped at 10000)');
-  const lag = registry.gauge('crm_outbox_oldest_due_seconds', 'Seconds the oldest due outbox event has been due (0 when none)');
-  const dead = registry.gauge('crm_outbox_dead', 'Outbox events that exhausted their retries (capped at 10000)');
+  const ready = registry.gauge(
+    'crm_outbox_ready',
+    'Outbox events due and not yet picked up (capped at 10000)',
+  );
+  const lag = registry.gauge(
+    'crm_outbox_oldest_due_seconds',
+    'Seconds the oldest due outbox event has been due (0 when none)',
+  );
+  const dead = registry.gauge(
+    'crm_outbox_dead',
+    'Outbox events that exhausted their retries (capped at 10000)',
+  );
   return {
     recordPool(pool: string, p: PoolLike): void {
       conns.set(p.totalCount, { pool, state: 'total' });
