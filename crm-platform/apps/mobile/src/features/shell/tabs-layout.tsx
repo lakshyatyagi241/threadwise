@@ -11,10 +11,15 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 const FADED = 0.4;
 
 /**
- * The bar is the theme's blue (`primary`), with `onPrimary` for the icons and words on it. A tab that is not the current one is drawn
- * a little softer than the current one, and only the current one has bold words; 0.8 keeps its text above 4.5:1 contrast on the blue in both the light and the dark theme.
+ * Light theme: the bar is the theme's blue (`primary`), with `onPrimary` for the icons and words on it. A tab that is not the current
+ * one is drawn a little softer than the current one (0.8 keeps its text above 4.5:1 contrast on the blue), and only the current one has
+ * bold words.
+ *
+ * Dark theme (an experiment, to see how it looks): a light bar under the dark app, the dark palette's own near-white (`text`) with its
+ * near-black navy (`onPrimary`) for the icons and words, drawn like the light theme's bar: the open tab bold and full strength, the others
+ * a little softer.
  */
-const INACTIVE = 0.8;
+const INACTIVE_LIGHT = 0.8;
 
 interface TabSpec {
   name: string;
@@ -61,7 +66,11 @@ const BACK_BEHAVIOR = 'fullHistory';
 
 export function TabsLayout() {
   const { t } = useTranslation();
-  const { colors } = useTheme();
+  const { colors, scheme } = useTheme();
+  const dark = scheme === 'dark';
+  const activeColor = 'onPrimary';
+  const inactiveColor = 'onPrimary';
+  const inactive = INACTIVE_LIGHT;
   const insets = useSafeAreaInsets();
   const session = useSession();
 
@@ -70,12 +79,12 @@ export function TabsLayout() {
       backBehavior={BACK_BEHAVIOR}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.onPrimary,
-        tabBarInactiveTintColor: colors.onPrimary,
+        tabBarActiveTintColor: colors[activeColor],
+        tabBarInactiveTintColor: colors[inactiveColor],
         tabBarStyle: {
           height: 56 + insets.bottom,
           paddingHorizontal: 8,
-          backgroundColor: colors.primary,
+          backgroundColor: dark ? colors.text : colors.primary,
           borderTopWidth: 0,
         },
         tabBarItemStyle: { paddingBottom: 8, gap: 3 },
@@ -96,18 +105,22 @@ export function TabsLayout() {
               title: label,
               tabBarAccessibilityLabel: label,
               tabBarIcon: ({ focused }) => (
-                <View style={{ opacity: focused ? 1 : INACTIVE }}>
-                  <Icon name={focused ? tab.iconFocused : tab.icon} size={22} color="onPrimary" />
+                <View style={{ opacity: focused ? 1 : inactive }}>
+                  <Icon
+                    name={focused ? tab.iconFocused : tab.icon}
+                    size={22}
+                    color={focused ? activeColor : inactiveColor}
+                  />
                 </View>
               ),
               tabBarLabel: ({ focused }) => (
                 <Text
                   variant="caption"
-                  color="onPrimary"
+                  color={focused ? activeColor : inactiveColor}
                   preventClip
                   style={{
                     fontWeight: focused ? '700' : undefined,
-                    opacity: (focused ? 1 : INACTIVE) * (faded ? FADED : 1),
+                    opacity: (focused ? 1 : inactive) * (faded ? FADED : 1),
                   }}
                 >
                   {label}

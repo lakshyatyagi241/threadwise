@@ -10,6 +10,11 @@ import { palette } from '@/lib/theme/tokens';
 import { session } from '@/test/dashboard-fixtures';
 import { TabsLayout } from './tabs-layout';
 
+let mockScheme: 'light' | 'dark' = 'light';
+jest.mock('@/lib/theme/use-theme', () => {
+  const { palette, spacing, radius } = jest.requireActual('@/lib/theme/tokens');
+  return { useTheme: () => ({ scheme: mockScheme, colors: palette[mockScheme], spacing, radius }) };
+});
 jest.mock('@/lib/session/api');
 
 const page = (name: string) => () => <Text>{name}</Text>;
@@ -91,6 +96,10 @@ describe('the tabs and the Back button', () => {
   });
 });
 
+beforeEach(() => {
+  mockScheme = 'light';
+});
+
 describe('the look of the tab bar', () => {
   it('is the theme blue, with the words on it in the colour made for that blue', async () => {
     await renderRouter(structure, { initialUrl: '/' });
@@ -127,5 +136,46 @@ describe('the look of the tab bar', () => {
     expect(familyOf('Inbox')).toBe(FONT_FAMILY.bold);
     expect(familyOf('Dashboard')).not.toBe(FONT_FAMILY.bold);
     expect(familyOf('Contacts')).not.toBe(FONT_FAMILY.bold);
+  });
+});
+
+describe('the tab bar in the dark theme', () => {
+  const barBackground = () => {
+    for (let node = screen.getByLabelText('Inbox').parent; node; node = node.parent) {
+      if (typeof node.type !== 'string') continue;
+      const flat = StyleSheet.flatten(node.props.style);
+      if (flat?.backgroundColor !== undefined && flat?.height !== undefined) return flat;
+    }
+    return undefined;
+  };
+  const colorOf = (name: string) =>
+    StyleSheet.flatten(screen.getByText(name).props.style).color as string;
+
+  it("is a light bar (the dark palette's near-white), not the pale blue made for text on a dark page", async () => {
+    mockScheme = 'dark';
+    await renderRouter(structure, { initialUrl: '/' });
+    const bar = barBackground();
+    expect(bar?.backgroundColor).toBe(palette.dark.text);
+    expect(bar?.backgroundColor).not.toBe(palette.dark.primary);
+  });
+
+  it('writes the words in the near-black navy, bold for the open tab and a little softer for the others', async () => {
+    mockScheme = 'dark';
+    await renderRouter(structure, { initialUrl: '/' });
+    expect(colorOf('Dashboard')).toBe(palette.dark.onPrimary);
+    expect(colorOf('Inbox')).toBe(palette.dark.onPrimary);
+    const opacityOf = (name: string) =>
+      StyleSheet.flatten(screen.getByText(name).props.style).opacity as number;
+    expect(opacityOf('Dashboard')).toBe(1);
+    expect(opacityOf('Inbox')).toBeLessThan(1);
+    await tab('Inbox');
+    expect(opacityOf('Inbox')).toBe(1);
+  });
+
+  it('keeps the light theme as it was: the blue bar with white words', async () => {
+    await renderRouter(structure, { initialUrl: '/' });
+    expect(barBackground()?.backgroundColor).toBe(palette.light.primary);
+    expect(colorOf('Inbox')).toBe(palette.light.onPrimary);
+    expect(colorOf('Dashboard')).toBe(palette.light.onPrimary);
   });
 });
