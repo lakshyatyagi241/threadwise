@@ -1,0 +1,90 @@
+{
+  "feature": "privacy-requests",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-privacy-requests-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/components/detail-sections.tsx",
+        "apps/web/src/features/privacy-requests/components/erase-section.tsx",
+        "apps/web/src/features/privacy-requests/components/hold-dialogs.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-privacy-requests-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/components/contact-legal-hold.tsx",
+        "apps/web/src/features/privacy-requests/components/contact-privacy-menu.tsx",
+        "apps/web/src/features/privacy-requests/components/legal-holds-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-privacy-requests-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/components/contact-privacy-menu.tsx",
+        "apps/web/src/features/privacy-requests/components/detail-sections.tsx",
+        "apps/web/src/features/privacy-requests/components/erase-section.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-privacy-requests-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/lib/errors.ts",
+        "apps/web/src/features/privacy-requests/lib/legal-hold-model.ts",
+        "apps/web/src/features/privacy-requests/testing.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-privacy-requests-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/components/erase-section.tsx",
+        "apps/web/src/features/privacy-requests/lib/errors.ts",
+        "apps/web/src/features/privacy-requests/lib/legal-hold-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-privacy-requests-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/privacy-requests/components/restricted-section.tsx",
+        "apps/web/src/features/privacy-requests/lib/errors.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

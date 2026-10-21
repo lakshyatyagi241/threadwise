@@ -1,0 +1,124 @@
+{
+  "feature": "notifications-activity-audit",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-notifications-activity-audit-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-detail.tsx",
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-exports.tsx",
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-log-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/notifications-activity-audit/components/browser-notifications-card.render.test.tsx",
+          "match": "still shows the devices when blocked, so a stale one can be removed, and says when they fail to load"
+        },
+        {
+          "file": "apps/web/src/features/notifications-activity-audit/components/preferences-screen.render.test.tsx",
+          "match": "words the disabled and error states in Arabic"
+        }
+      ]
+    },
+    {
+      "id": "ES-notifications-activity-audit-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-log-screen.tsx",
+        "apps/web/src/features/notifications-activity-audit/audit/lib/errors.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/notifications-activity-audit/audit/components/audit-log-screen.render.test.tsx",
+          "match": "shows a plain \"no access\" panel and loads nothing without audit.log.read"
+        }
+      ]
+    },
+    {
+      "id": "ES-notifications-activity-audit-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/lib/errors.ts",
+        "apps/web/src/features/notifications-activity-audit/push/use-browser-push.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/notifications-activity-audit/push/support.test.ts",
+          "match": "does not exist when the deployment has no push keys"
+        }
+      ]
+    },
+    {
+      "id": "ES-notifications-activity-audit-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-detail.tsx",
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-exports.tsx",
+        "apps/web/src/features/notifications-activity-audit/audit/components/audit-log-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/notifications-activity-audit/prefs/model.test.ts",
+          "match": "keeps what is in force, the default and the person own choices"
+        }
+      ]
+    },
+    {
+      "id": "ES-notifications-activity-audit-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-notifications-activity-audit-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-notifications-activity-audit-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/notifications-activity-audit/audit/lib/errors.ts",
+        "apps/web/src/features/notifications-activity-audit/live/claim.ts",
+        "apps/web/src/features/notifications-activity-audit/live/controller.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

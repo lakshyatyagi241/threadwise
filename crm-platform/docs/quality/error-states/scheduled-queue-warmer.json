@@ -1,0 +1,109 @@
+{
+  "feature": "scheduled-queue-warmer",
+  "tier": "P2",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-scheduled-queue-warmer-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-steps.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/detail-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/scheduled-queue-warmer/components/components.test.tsx",
+          "match": "needs the manage permission, and shows a load failure"
+        }
+      ]
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/detail-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/scheduled-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/api/schedules.ts",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-steps.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-steps.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/schedule-actions.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/scheduled-queue-warmer/lib/composer-model.test.ts",
+          "match": "server field errors"
+        }
+      ]
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/composer-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-scheduled-queue-warmer-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/scheduled-queue-warmer/components/engagement.tsx",
+        "apps/web/src/features/scheduled-queue-warmer/components/scheduled-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

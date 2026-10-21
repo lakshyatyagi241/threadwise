@@ -1,0 +1,121 @@
+{
+  "feature": "whatsapp-devices-baileys",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-whatsapp-devices-baileys-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/devices-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/group-number-rail.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/groups-model.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/components.render.test.tsx",
+          "match": "empty state names the next action; without permission it says who to ask"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups.render.test.tsx",
+          "match": "says \"No groups yet\" for an empty list and \"No group matches\" is for a filtered one"
+        }
+      ]
+    },
+    {
+      "id": "EM-whatsapp-devices-baileys-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/devices-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/groups-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/members-modal.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-whatsapp-devices-baileys-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/connect-wizard.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-dialogs.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/components.render.test.tsx",
+          "match": "shows the notice-changed banner, the worker line and the loading state"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/history.render.test.tsx",
+          "match": "renders nothing while loading or when the read failed"
+        }
+      ]
+    },
+    {
+      "id": "EM-whatsapp-devices-baileys-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/components/device-detail-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/devices-screen.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/components/unofficial-tabs.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/components/components.render.test.tsx",
+          "match": "detail without permissions has no edit button and no danger zone"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups-model.test.ts",
+          "match": "follows the permissions: read only means no change, no members, no leave"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups.render.test.tsx",
+          "match": "explains that the role may not read groups, with no controls"
+        }
+      ]
+    },
+    {
+      "id": "EM-whatsapp-devices-baileys-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/whatsapp-devices-baileys/groups/groups-context.tsx",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/groups-model.ts",
+        "apps/web/src/features/whatsapp-devices-baileys/groups/groups-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/groups/groups-model.test.ts",
+          "match": "counts the seconds until a time, never below zero, and is null without one"
+        },
+        {
+          "file": "apps/web/src/features/whatsapp-devices-baileys/lib/models.test.ts",
+          "match": "shows no cap for a missing, zero or negative limit"
+        }
+      ]
+    }
+  ]
+}

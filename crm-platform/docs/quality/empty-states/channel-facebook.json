@@ -1,0 +1,75 @@
+{
+  "feature": "channel-facebook",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-channel-facebook-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-facebook/components/broadcasts-screen.tsx",
+        "apps/web/src/features/channel-facebook/components/compose-post-screen.tsx",
+        "apps/web/src/features/channel-facebook/components/insights-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-facebook-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-facebook/components/posts-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-facebook-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-facebook/components/broadcasts-screen.tsx",
+        "apps/web/src/features/channel-facebook/components/compose-post-screen.tsx",
+        "apps/web/src/features/channel-facebook/components/hub-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-facebook-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-facebook/components/compose-post-screen.tsx",
+        "apps/web/src/features/channel-facebook/nav.ts",
+        "apps/web/src/features/channel-facebook/settings.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-facebook-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-facebook/components/broadcasts-screen.tsx",
+        "apps/web/src/features/channel-facebook/components/posts-screen.tsx",
+        "apps/web/src/features/channel-facebook/lib/format.ts"
+      ],
+      "status": "gap"
+    }
+  ]
+}

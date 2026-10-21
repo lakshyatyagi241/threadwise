@@ -1,0 +1,97 @@
+{
+  "feature": "wallet-message-billing",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-wallet-message-billing-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/logs-page.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/margins-page.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/meta-cards.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/components/states.test.tsx",
+          "match": "shows the empty state, not the filtered message, when there are no transactions yet"
+        },
+        {
+          "file": "apps/web/src/features/wallet-message-billing/margins-packages.test.tsx",
+          "match": "has an empty state, and no actions for a read-only operator"
+        }
+      ]
+    },
+    {
+      "id": "EM-wallet-message-billing-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "no",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/components/states.test.tsx",
+          "match": "shows no results with a way to clear the filters when the filters match nothing"
+        }
+      ]
+    },
+    {
+      "id": "EM-wallet-message-billing-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/adjust-dialog.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/billing-currency-card.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/economics-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-wallet-message-billing-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/api.ts",
+        "apps/web/src/features/wallet-message-billing/components/admin/logs-page.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/margin-grid.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-wallet-message-billing-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/wallet-message-billing/components/admin/adjust-dialog.tsx",
+        "apps/web/src/features/wallet-message-billing/components/admin/meta-cards.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/wallet-message-billing/forms.test.ts",
+          "match": "flags a zero flat price and a coverage outside 0 to 100"
+        },
+        {
+          "file": "apps/web/src/features/wallet-message-billing/margins-packages.test.tsx",
+          "match": "charges at least 0.01 for a sub-cent cost, but nothing for a zero cost or a -100% margin"
+        }
+      ]
+    }
+  ]
+}

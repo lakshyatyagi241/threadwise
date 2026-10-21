@@ -1,0 +1,7 @@
+{
+  "feature": "settings-hub",
+  "tier": "P1",
+  "applicable": false,
+  "reason": "The feature shows no list, table or chart fed by a query",
+  "cases": []
+}

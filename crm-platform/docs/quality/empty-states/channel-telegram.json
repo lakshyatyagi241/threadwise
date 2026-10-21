@@ -1,0 +1,61 @@
+{
+  "feature": "channel-telegram",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-channel-telegram-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-telegram/components/broadcasts-screen.tsx",
+        "apps/web/src/features/channel-telegram/components/compose-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-telegram-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-telegram/components/broadcasts-screen.tsx",
+        "apps/web/src/features/channel-telegram/components/compose-screen.tsx",
+        "apps/web/src/features/channel-telegram/components/hub-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-telegram-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-telegram/components/compose-screen.tsx",
+        "apps/web/src/features/channel-telegram/nav.ts",
+        "apps/web/src/features/channel-telegram/settings.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-telegram-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-telegram/components/bot-card.tsx",
+        "apps/web/src/features/channel-telegram/components/broadcasts-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}
