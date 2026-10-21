@@ -52,7 +52,7 @@ export function parseArgs(argv) {
     else if (k === 'profile')
       o.profile = true; // writes memory-profile.json: boot sample, p50/p95/p99, heap spaces, per-endpoint delta
     else if (k === 'snapshots')
-      o.snapshots = true; // opt in: writing a snapshot of a big heap pauses the process for seconds
+      o.snapshots = true; // opt in: a snapshot pauses the process for seconds AND leaves RSS ~1 GB higher afterwards: never combine with RSS percentiles
     else if (k in NUM) o[NUM[k]] = Number(argv[++i]);
     else if (k in STR) o[STR[k]] = argv[++i];
     else throw new Error(`unknown option ${argv[i]}`);
@@ -106,8 +106,7 @@ export function snapshotByName(path) {
   return m;
 }
 export function diffSnapshots(a, b, top = 15) {
-  const rows = [],
-    lastSpaces = {};
+  const rows = [];
   for (const [k, e] of b) {
     const p = a.get(k) || { n: 0, bytes: 0 };
     rows.push({ name: k, dCount: e.n - p.n, dBytes: e.bytes - p.bytes });
@@ -305,7 +304,8 @@ async function main() {
   const rd = new Redis(env.REDIS_URL),
     pg = new Client({ connectionString: `postgres://crm:crm@localhost:5432/${db}` });
   await pg.connect();
-  const rows = [];
+  const rows = [],
+    lastSpaces = {};
   const t0 = Date.now();
   const total = o.minutes * 60e3;
   let n = 0,

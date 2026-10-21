@@ -31,11 +31,23 @@ jobs:
         env:
           MIGRATION_DATABASE_URL: postgres://crm:crm@localhost:5432/crm_soak_mem
           DATABASE_URL: postgres://crm_app_user:crm_app_dev@localhost:5432/crm_soak_mem
-      - run: node tools/perf/soak.mjs --profile --snapshots --minutes ${{ github.event.inputs.minutes }} --interval 5 --out perf/results/memory
+      # production refuses the dev placeholder secrets: generate throwaway ones for this run only
+      - run: |
+          echo "JWT_ACCESS_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          echo "JWT_REFRESH_SECRET=$(openssl rand -hex 32)" >> "$GITHUB_ENV"
+          echo "CREDENTIALS_ENCRYPTION_KEY=$(openssl rand -base64 32)" >> "$GITHUB_ENV"
+      # Run 1: clean numbers. Run 2: heap snapshots (writing a snapshot leaves RSS about 1 GB higher for the rest of that run, so it is a separate short run).
+      - run: node tools/perf/soak.mjs --profile --minutes ${{ github.event.inputs.minutes }} --interval 5 --out perf/results/memory
         env:
           NODE_ENV: production
+          CHANNEL_SIMULATOR_ENABLED: 'false'
         continue-on-error: true # soak exits 1 on growth; the budget check below is this workflow's gate
+      - run: node tools/perf/soak.mjs --profile --snapshots --minutes 4 --warmup 2 --interval 5 --out perf/results/memory-snapshots
+        env:
+          NODE_ENV: production
+          CHANNEL_SIMULATOR_ENABLED: 'false'
+        continue-on-error: true
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: memory-profile, path: perf/results/memory, retention-days: 30 }
+        with: { name: memory-profile, path: perf/results, retention-days: 30 }
       - run: node tools/perf/memory-budget-check.mjs perf/results/memory/memory-profile.json perf/memory-budget.json
