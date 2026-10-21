@@ -181,6 +181,7 @@ describe('source guards', () => {
       'modules/platform-infrastructure/offsite-backup/sync.ts', // S3 Content-MD5
       'modules/localization-translation/translation-policy.ts', // cache key of a text
       'modules/storefront-builder/cli/demo-seeder.ts', // deterministic demo id
+      'modules/team-inbox-routing-sla/handoff.service.ts', // a uuid derived from a seed so a retry sends nothing twice; protects nothing
       'infra/providers/channel-email/graph-normalise.ts', // synthetic message id
       'infra/providers/channel-email/mime-parse.ts', // synthetic message id
       'infra/providers/auth-registration-security/avatar-download.ts', // ETag of an avatar
