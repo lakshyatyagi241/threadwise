@@ -785,6 +785,14 @@
     {
       "key": "apps/api/src/modules/storage-quota/storage-quota.repository.ts await tx.execute",
       "reason": "one upsert per storage category of ONE workspace's recount (the rows come from a GROUP BY category, a fixed handful of categories); an operator/cron recount, not request traffic; reviewed 2026-10-19"
+    },
+    {
+      "key": "apps/api/src/common/crypto/seal-plaintext-secrets.ts await db.query",
+      "reason": "a maintenance backfill: one statement per registry target, and per page of 500 rows inside a target (keyset paging), run by an operator, never on a request; reviewed 2026-10-21"
+    },
+    {
+      "key": "apps/api/src/modules/analytics/cli/backfill-message-feed.ts await db.query",
+      "reason": "an operator CLI: one statement per workspace and calendar month on purpose, so each statement stays short and a failure is reported per workspace and month; reviewed 2026-10-21"
     }
   ],
   "36": [
