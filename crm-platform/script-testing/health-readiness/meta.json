@@ -1,0 +1,12 @@
+{
+  "id": "health-readiness",
+  "sheetItem": 73,
+  "title": "Health and readiness (coverage matrix, compose ratchet, live fault proxy)",
+  "script": "run.sh",
+  "estMinutes": { "quick": 3, "full": 4 },
+  "heavy": false,
+  "needs": ["docker", "node22", "pnpm", "postgres", "redis", "built apps/api"],
+  "proves": "Every service in the production compose files has a sane healthcheck or a documented exemption, an owner, a runbook and an existing alert (or a named gap); on a local API behind TCP fault proxies /health stays 200 and /ready goes 503 within the 2 s deadline with a fixed-word, secret-free body when Postgres or Redis is refused or black-holed, and recovers; the worker probe fails when Redis is unreachable; the web /api/ready reflects API reachability.",
+  "doesNotProve": "Anything on staging or production, Traefik, real container health transitions, the object store, backup freshness alerts (no metric), or that the Prometheus alerts fire (covered by the alerting runner).",
+  "report": "docs/performance/health/Sheet3-73-health-readiness-REPORT.html"
+}
