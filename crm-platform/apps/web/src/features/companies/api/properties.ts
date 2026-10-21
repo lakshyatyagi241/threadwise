@@ -3,6 +3,7 @@
 // The registry hooks are imported from their own file, not from the contacts domain's index (see `lib/properties.ts`).
 import {
   useFieldDependencies,
+  useFieldOptionDependencies,
   useFieldSections,
   useModuleFields,
 } from '@/features/contacts-attributes-tags/api/properties';
@@ -18,11 +19,18 @@ export function useCompanyProperties() {
   const fields = useModuleFields('companies', false, can);
   const sections = useFieldSections('companies', can);
   const dependencies = useFieldDependencies('companies', can);
+  const optionDependencies = useFieldOptionDependencies('companies', can);
   return {
     fields: fields.data ?? [],
     sections: sections.data ?? [],
     dependencies: dependencies.data ?? [],
+    optionDependencies: optionDependencies.data ?? [],
     /** The definitions are still on their way (the form waits so it never saves without a required property it could not see). */
-    loading: can && (fields.isPending || sections.isPending || dependencies.isPending),
+    loading:
+      can &&
+      (fields.isPending ||
+        sections.isPending ||
+        dependencies.isPending ||
+        optionDependencies.isPending),
   };
 }

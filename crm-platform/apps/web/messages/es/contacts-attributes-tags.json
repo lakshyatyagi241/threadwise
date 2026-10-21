@@ -448,7 +448,8 @@
       "companyRefused": "No puedes usar esa empresa. Elige otra o vacía el campo.",
       "searchOptions": "Buscar opciones",
       "searchOptionsFor": "Buscar entre las opciones de {field}",
-      "noOptionsFound": "Ninguna opción coincide con la búsqueda."
+      "noOptionsFound": "Ninguna opción coincide con la búsqueda.",
+      "cascadeWaiting": "Elija primero {parent} para ver las opciones."
     },
     "tags": {
       "title": "Etiquetas",
@@ -1087,7 +1088,8 @@
         "moveDown": "Bajar {name}",
         "edit": "Editar {name}",
         "deactivate": "Desactivar {name}",
-        "reactivate": "Reactivar"
+        "reactivate": "Reactivar",
+        "dependsOn": "Las opciones dependen de {field}"
       },
       "toast": {
         "conflict": "Otra persona cambió esto. La lista se actualizó; inténtalo de nuevo.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Administrar etapas",
         "manageGroups": "Administrar grupos",
         "locked": "Fija"
+      },
+      "cascade": {
+        "open": "Campos dependientes",
+        "title": "Campos dependientes",
+        "close": "Cerrar",
+        "intro": "Un campo dependiente siempre se muestra. Sus opciones dependen de la opción elegida en su campo principal: para cada opción del principal, marque las opciones del campo dependiente que permite.",
+        "empty": "Todavía no hay campos dependientes.",
+        "add": "Añadir campo dependiente",
+        "needTwoChoiceFields": "Los campos dependientes necesitan al menos dos propiedades con una lista de opciones (desplegable, selección múltiple o radio).",
+        "dependsOn": "depende de {parent}",
+        "editLabel": "Editar {name}",
+        "removeLabel": "Quitar {name}",
+        "parent": "Campo principal",
+        "child": "Campo dependiente",
+        "pickParent": "Elija el campo principal",
+        "pickChild": "Elija el campo dependiente",
+        "allowed": "Opciones de {child} permitidas con cada opción de {parent}",
+        "noParentChoices": "El campo principal aún no tiene opciones.",
+        "noChildChoices": "El campo dependiente aún no tiene opciones.",
+        "cancel": "Cancelar",
+        "save": "Guardar",
+        "saved": "Campo dependiente guardado.",
+        "cycle": "Esa dependencia haría que dos campos esperaran uno al otro.",
+        "removeTitle": "¿Quitar {name} de los campos dependientes?",
+        "removeMessage": "Volverá a mostrar todas sus opciones. Las opciones que tenía bajo el campo principal se olvidan; los valores que tienen los contactos se conservan.",
+        "removeConfirm": "Quitar",
+        "removed": "Campo dependiente quitado.",
+        "removeFailed": "No se pudo quitar el campo dependiente. Inténtelo de nuevo."
       }
     },
     "lost": {

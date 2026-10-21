@@ -448,7 +448,8 @@
       "companyRefused": "Vous ne pouvez pas utiliser cette entreprise. Choisissez-en une autre ou videz le champ.",
       "searchOptions": "Rechercher des options",
       "searchOptionsFor": "Rechercher dans les options de {field}",
-      "noOptionsFound": "Aucune option ne correspond à votre recherche."
+      "noOptionsFound": "Aucune option ne correspond à votre recherche.",
+      "cascadeWaiting": "Choisissez d'abord {parent} pour voir les choix."
     },
     "tags": {
       "title": "Étiquettes",
@@ -1087,7 +1088,8 @@
         "moveDown": "Descendre {name}",
         "edit": "Modifier {name}",
         "deactivate": "Désactiver {name}",
-        "reactivate": "Réactiver"
+        "reactivate": "Réactiver",
+        "dependsOn": "Choix dépendant de {field}"
       },
       "toast": {
         "conflict": "Quelqu’un d’autre a modifié ceci. La liste a été actualisée ; réessayez.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Gérer les étapes",
         "manageGroups": "Gérer les groupes",
         "locked": "Fixe"
+      },
+      "cascade": {
+        "open": "Champs dépendants",
+        "title": "Champs dépendants",
+        "close": "Fermer",
+        "intro": "Un champ dépendant est toujours affiché. Ses choix dépendent du choix fait dans le champ parent : pour chaque choix du parent, cochez les choix du champ dépendant qu'il autorise.",
+        "empty": "Aucun champ dépendant pour l'instant.",
+        "add": "Ajouter un champ dépendant",
+        "needTwoChoiceFields": "Les champs dépendants nécessitent au moins deux propriétés avec une liste de choix (liste déroulante, sélection multiple ou radio).",
+        "dependsOn": "dépend de {parent}",
+        "editLabel": "Modifier {name}",
+        "removeLabel": "Retirer {name}",
+        "parent": "Propriété parente",
+        "child": "Propriété dépendante",
+        "pickParent": "Choisissez la propriété parente",
+        "pickChild": "Choisissez la propriété dépendante",
+        "allowed": "Choix de {child} autorisés pour chaque choix de {parent}",
+        "noParentChoices": "La propriété parente n'a pas encore de choix.",
+        "noChildChoices": "La propriété dépendante n'a pas encore de choix.",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "saved": "Champ dépendant enregistré.",
+        "cycle": "Cette dépendance ferait que deux propriétés s'attendraient mutuellement.",
+        "removeTitle": "Retirer {name} des champs dépendants ?",
+        "removeMessage": "Il affichera à nouveau tous ses choix. Les choix liés au parent seront oubliés ; les valeurs enregistrées sur les contacts sont conservées.",
+        "removeConfirm": "Retirer",
+        "removed": "Champ dépendant retiré.",
+        "removeFailed": "Impossible de retirer le champ dépendant. Réessayez."
       }
     },
     "lost": {

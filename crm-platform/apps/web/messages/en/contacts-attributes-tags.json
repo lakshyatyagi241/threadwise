@@ -448,7 +448,8 @@
       "companyRefused": "You cannot use that company. Pick another one or clear the field.",
       "searchOptions": "Search options",
       "searchOptionsFor": "Search the options of {field}",
-      "noOptionsFound": "No option matches your search."
+      "noOptionsFound": "No option matches your search.",
+      "cascadeWaiting": "Choose {parent} first to see the choices."
     },
     "tags": {
       "title": "Tags",
@@ -1087,7 +1088,8 @@
         "moveDown": "Move {name} down",
         "edit": "Edit {name}",
         "deactivate": "Deactivate {name}",
-        "reactivate": "Reactivate"
+        "reactivate": "Reactivate",
+        "dependsOn": "Choices depend on {field}"
       },
       "toast": {
         "conflict": "Someone else changed this. The list was refreshed; try again.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Manage stages",
         "manageGroups": "Manage groups",
         "locked": "Fixed"
+      },
+      "cascade": {
+        "open": "Dependent fields",
+        "title": "Dependent fields",
+        "close": "Close",
+        "intro": "A dependent field always shows. Its choices depend on the choice made in its parent property: for each parent choice, tick the choices of the dependent field it allows.",
+        "empty": "No dependent fields yet.",
+        "add": "Add dependent field",
+        "needTwoChoiceFields": "Dependent fields need at least two properties with a choice list (dropdown, multi-select or radio).",
+        "dependsOn": "depends on {parent}",
+        "editLabel": "Edit {name}",
+        "removeLabel": "Remove {name}",
+        "parent": "Parent property",
+        "child": "Dependent property",
+        "pickParent": "Choose the parent property",
+        "pickChild": "Choose the dependent property",
+        "allowed": "Choices of {child} allowed under each choice of {parent}",
+        "noParentChoices": "The parent property has no choices yet.",
+        "noChildChoices": "The dependent property has no choices yet.",
+        "cancel": "Cancel",
+        "save": "Save",
+        "saved": "Dependent field saved.",
+        "cycle": "That dependency would make two properties wait for each other.",
+        "removeTitle": "Remove {name} from dependent fields?",
+        "removeMessage": "It shows all its choices again. The choices it had under the parent are forgotten; the values contacts hold are kept.",
+        "removeConfirm": "Remove",
+        "removed": "Dependent field removed.",
+        "removeFailed": "The dependent field could not be removed. Try again."
       }
     },
     "lost": {

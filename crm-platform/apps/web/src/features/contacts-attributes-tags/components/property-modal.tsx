@@ -42,6 +42,7 @@ import {
   LABEL_MAX,
   OPTION_LABEL_MAX,
   checkDraft,
+  conditionRulesOf,
   diffConditions,
   diffOptions,
   draftFromField,
@@ -122,7 +123,8 @@ function PropertyForm({
   const takenKeys = useMemo(() => new Set(fields.map((f) => f.key)), [fields]);
   const problems = shown ? checkDraft(draft, { editing, takenKeys, lazyOptions }) : {};
   const others = fields.filter((f) => f.id !== field?.id && f.isActive);
-  const savedDeps = dependencies.filter((d) => d.fieldId === field?.id);
+  // The saved "show only when" rules; a cascade link is left alone by this form (the Dependent fields dialog owns it).
+  const savedDeps = field ? conditionRulesOf(field.id, dependencies) : [];
 
   const save = useMutation({
     mutationFn: async () => {

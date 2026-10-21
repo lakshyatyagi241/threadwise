@@ -448,7 +448,8 @@
       "companyRefused": "Bạn không thể dùng công ty đó. Hãy chọn công ty khác hoặc xóa trường này.",
       "searchOptions": "Tìm tùy chọn",
       "searchOptionsFor": "Tìm trong các tùy chọn của {field}",
-      "noOptionsFound": "Không có tùy chọn nào khớp với tìm kiếm."
+      "noOptionsFound": "Không có tùy chọn nào khớp với tìm kiếm.",
+      "cascadeWaiting": "Chọn {parent} trước để xem các lựa chọn."
     },
     "tags": {
       "title": "Thẻ",
@@ -1087,7 +1088,8 @@
         "moveDown": "Chuyển {name} xuống",
         "edit": "Sửa {name}",
         "deactivate": "Hủy kích hoạt {name}",
-        "reactivate": "Kích hoạt lại"
+        "reactivate": "Kích hoạt lại",
+        "dependsOn": "Lựa chọn phụ thuộc vào {field}"
       },
       "toast": {
         "conflict": "Người khác đã thay đổi mục này. Danh sách đã được làm mới; hãy thử lại.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Quản lý giai đoạn",
         "manageGroups": "Quản lý nhóm",
         "locked": "Cố định"
+      },
+      "cascade": {
+        "open": "Trường phụ thuộc",
+        "title": "Trường phụ thuộc",
+        "close": "Đóng",
+        "intro": "Trường phụ thuộc luôn được hiển thị. Các lựa chọn của nó phụ thuộc vào lựa chọn ở thuộc tính cha: với mỗi lựa chọn của thuộc tính cha, hãy đánh dấu các lựa chọn của trường phụ thuộc mà nó cho phép.",
+        "empty": "Chưa có trường phụ thuộc nào.",
+        "add": "Thêm trường phụ thuộc",
+        "needTwoChoiceFields": "Trường phụ thuộc cần ít nhất hai thuộc tính có danh sách lựa chọn (danh sách thả xuống, chọn nhiều hoặc nút radio).",
+        "dependsOn": "phụ thuộc vào {parent}",
+        "editLabel": "Sửa {name}",
+        "removeLabel": "Xóa {name}",
+        "parent": "Thuộc tính cha",
+        "child": "Thuộc tính phụ thuộc",
+        "pickParent": "Chọn thuộc tính cha",
+        "pickChild": "Chọn thuộc tính phụ thuộc",
+        "allowed": "Lựa chọn của {child} được phép với mỗi lựa chọn của {parent}",
+        "noParentChoices": "Thuộc tính cha chưa có lựa chọn nào.",
+        "noChildChoices": "Thuộc tính phụ thuộc chưa có lựa chọn nào.",
+        "cancel": "Hủy",
+        "save": "Lưu",
+        "saved": "Đã lưu trường phụ thuộc.",
+        "cycle": "Phụ thuộc này sẽ khiến hai thuộc tính chờ nhau.",
+        "removeTitle": "Xóa {name} khỏi trường phụ thuộc?",
+        "removeMessage": "Nó sẽ hiển thị lại tất cả lựa chọn. Các lựa chọn của nó dưới thuộc tính cha sẽ bị xóa; giá trị mà liên hệ đang giữ vẫn được giữ nguyên.",
+        "removeConfirm": "Xóa",
+        "removed": "Đã xóa trường phụ thuộc.",
+        "removeFailed": "Không thể xóa trường phụ thuộc. Vui lòng thử lại."
       }
     },
     "lost": {
