@@ -2173,12 +2173,20 @@
     "lifecycle": {
       "stage": "שלב במחזור החיים",
       "status": "סטטוס",
-      "change": "שינוי שלב במחזור החיים",
-      "changeStatus": "שינוי סטטוס",
+      "statusField": "סטטוס שלב במחזור החיים",
+      "edit": "עריכת שלב/סטטוס במחזור החיים",
+      "choose": "בחירה…",
+      "selectReason": "בחירת סיבת אובדן…",
       "dropdownHint": "פותח את הרשימה לבחירה",
       "lostReason": "סיבת האובדן",
       "otherReason": "אחר",
-      "otherLabel": "תארו את הסיבה"
+      "otherLabel": "תארו את הסיבה",
+      "fallbackStatus": {
+        "active": "פעיל",
+        "prospect": "לקוח פוטנציאלי",
+        "customer": "לקוח",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

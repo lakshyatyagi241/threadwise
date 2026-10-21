@@ -5,39 +5,66 @@ import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Banner } from '@/components/ui/banner';
 import { Icon } from '@/components/ui/icon';
+import { SelectField } from '@/components/ui/select-field';
 import { Text } from '@/components/ui/text';
 import { TextField } from '@/components/ui/text-field';
 import { can, useSession } from '@/lib/session/use-session';
 import { MIN_TOUCH_TARGET, spacing } from '@/lib/theme/tokens';
-import { ChoiceRow, EditSheet } from './field-editor';
+import { EditSheet } from './field-editor';
 import {
   LOST_REASON_GROUP,
   NO_VALUE,
   OTHER_REASON,
   STAGE_GROUP,
-  STATUS_GROUPS,
+  firstStatusOf,
   lifecycleChanges,
   optionsOfGroup,
+  stageChoices,
+  statusChoices,
   statusFitsStage,
-  statusesForStage,
   titleCaseKey,
 } from './property-values';
 import { contactKey, useUpdateContact } from './use-contacts';
 import { describeEditFailure, useStatusOptions } from './use-properties';
 
-/** Which of the two dropdowns opened the sheet: each one lists only its own choices. */
-type Focus = 'stage' | 'status';
+/** The names of the platform's built-in stages and statuses, for a workspace that has not configured its own. */
+function useLifecycleLabels() {
+  const { t } = useTranslation();
+  return {
+    stageLabel: (value: string) =>
+      t(`contacts.stage.${value}`, { defaultValue: titleCaseKey(value) }),
+    statusLabel: (value: string) =>
+      t(`contactProps.lifecycle.fallbackStatus.${value}`, { defaultValue: titleCaseKey(value) }),
+  };
+}
 
 interface SheetProps {
   contact: ContactResponse;
   options: readonly StatusOptionResponse[];
-  focus: Focus;
   onClose: () => void;
 }
 
-/** The sheet behind a dropdown: the stage (and, for a move into a lost stage, why) or the status. It is mounted fresh each time it opens, so it starts from the contact. */
-function LifecycleSheet({ contact, options, focus, onClose }: SheetProps) {
+/** A dropdown's label with the red star of a required field. */
+function RequiredLabel({ children }: { children: string }) {
+  return (
+    <Text variant="label">
+      {children}
+      <Text variant="label" danger>
+        {' *'}
+      </Text>
+    </Text>
+  );
+}
+
+/**
+ * "Edit lifecycle stage/status", the one sheet behind both dropdowns of the strip (the Geta app's popup): two required dropdowns, the
+ * stage and its status (which lists only the stage's own statuses and starts at the stage's first when the stage changes), and, for a
+ * move into a lost stage, the lost reason (a dropdown with "Other", which asks for words). Save stays off until the form is complete.
+ * It is mounted fresh each time it opens, so it starts from the contact.
+ */
+function LifecycleSheet({ contact, options, onClose }: SheetProps) {
   const { t } = useTranslation();
+  const { stageLabel, statusLabel } = useLifecycleLabels();
   const queryClient = useQueryClient();
   const update = useUpdateContact(contact.id);
   const stages = optionsOfGroup(options, [STAGE_GROUP]);
@@ -54,26 +81,39 @@ function LifecycleSheet({ contact, options, focus, onClose }: SheetProps) {
   const [notice, setNotice] = useState<string | null>(null);
 
   const stage = pickedStage ?? contact.lifecycleStage;
-  // A status that does not belong to the stage is shown unticked; the API then gives the stage's own default.
+  const stageList = stageChoices(options, stageLabel, contact.lifecycleStage);
+  const chosen = stages.find((o) => o.value === stage);
+  const statuses = statusChoices(options, chosen, statusLabel, contact.status);
+  // A status that does not belong to the stage is not kept: the stage's first one stands in, as the API would give its default.
   const status =
     pickedStatus !== undefined
       ? pickedStatus
       : stage !== null && statusFitsStage(options, contact.status, stage)
         ? contact.status
-        : null;
-  const chosen = stages.find((o) => o.value === stage);
-  const statuses = statusesForStage(options, chosen);
+        : firstStatusOf(statuses);
   // A move into a lost stage asks why; staying in one does not.
   const askReason = chosen?.isLost === true && stage !== contact.lifecycleStage;
   const showWords = reasons.length === 0 || reason === OTHER_REASON;
+  const complete =
+    stage !== null &&
+    (statuses.length === 0 || status !== null) &&
+    (!askReason ||
+      (showWords ? reasonText.trim() !== '' : reason !== null && reason !== OTHER_REASON));
 
   const pickStage = (value: string) => {
     setPickedStage(value);
-    setPickedStatus((current) =>
-      current !== undefined && current !== null && !statusFitsStage(options, current, value)
-        ? undefined
-        : current,
+    setPickedStatus(
+      firstStatusOf(
+        statusChoices(
+          options,
+          stages.find((o) => o.value === value),
+          statusLabel,
+          null,
+        ),
+      ),
     );
+    setReason(null);
+    setReasonText('');
     setProblem(null);
   };
 
@@ -113,98 +153,77 @@ function LifecycleSheet({ contact, options, focus, onClose }: SheetProps) {
 
   return (
     <EditSheet
-      title={
-        focus === 'stage'
-          ? t('contactProps.lifecycle.change')
-          : t('contactProps.lifecycle.changeStatus')
-      }
+      title={t('contactProps.lifecycle.edit')}
       onClose={onClose}
       onSave={save}
       saving={update.isPending}
+      saveDisabled={!complete}
     >
       {notice ? <Banner tone="warning" message={notice} /> : null}
       {banner ? <Banner tone="danger" message={banner} /> : null}
 
-      {focus === 'stage' && stages.length > 0 ? (
-        <View accessibilityRole="radiogroup">
-          <Text variant="label" muted>
-            {t('contactProps.lifecycle.stage')}
-          </Text>
-          {stages.map((option) => (
-            <ChoiceRow
-              key={option.id}
-              label={option.label}
-              role="radio"
-              selected={option.value === stage}
-              onPress={() => pickStage(option.value)}
-            />
-          ))}
+      <View style={styles.field}>
+        <RequiredLabel>{t('contactProps.lifecycle.stage')}</RequiredLabel>
+        <SelectField
+          label={t('contactProps.lifecycle.stage')}
+          placeholder={t('contactProps.lifecycle.choose')}
+          options={stageList}
+          value={stage ?? undefined}
+          onChange={pickStage}
+        />
+      </View>
+
+      <View style={styles.field}>
+        {statuses.length > 0 ? (
+          <RequiredLabel>{t('contactProps.lifecycle.statusField')}</RequiredLabel>
+        ) : (
+          <Text variant="label">{t('contactProps.lifecycle.statusField')}</Text>
+        )}
+        <SelectField
+          label={t('contactProps.lifecycle.statusField')}
+          placeholder={statuses.length === 0 ? NO_VALUE : t('contactProps.lifecycle.choose')}
+          options={statuses}
+          value={status ?? undefined}
+          onChange={(value) => setPickedStatus(value)}
+          disabled={statuses.length === 0}
+        />
+      </View>
+
+      {askReason && reasons.length > 0 ? (
+        <View style={styles.field}>
+          <RequiredLabel>{t('contactProps.lifecycle.lostReason')}</RequiredLabel>
+          <SelectField
+            label={t('contactProps.lifecycle.lostReason')}
+            placeholder={t('contactProps.lifecycle.selectReason')}
+            options={[
+              ...reasons.map((o) => ({ value: o.value, label: o.label })),
+              { value: OTHER_REASON, label: t('contactProps.lifecycle.otherReason') },
+            ]}
+            value={reason ?? undefined}
+            onChange={(value) => {
+              setReason(value);
+              setProblem(null);
+            }}
+          />
         </View>
       ) : null}
 
-      {focus === 'status' && statuses.length > 0 ? (
-        <View accessibilityRole="radiogroup">
-          <Text variant="label" muted>
-            {t('contactProps.lifecycle.status')}
-          </Text>
-          {statuses.map((option) => (
-            <ChoiceRow
-              key={option.id}
-              label={option.label}
-              role="radio"
-              selected={option.value === status}
-              onPress={() => setPickedStatus(option.value)}
-            />
-          ))}
-        </View>
+      {askReason && showWords ? (
+        <TextField
+          label={t('contactProps.lifecycle.otherLabel')}
+          value={reasonText}
+          onChangeText={(text) => {
+            setReasonText(text);
+            setProblem(null);
+          }}
+          maxLength={500}
+          multiline
+        />
       ) : null}
-
-      {focus === 'stage' && askReason ? (
-        <View accessibilityRole="radiogroup">
-          <Text variant="label" muted>
-            {t('contactProps.lifecycle.lostReason')}
-          </Text>
-          {reasons.map((option) => (
-            <ChoiceRow
-              key={option.id}
-              label={option.label}
-              role="radio"
-              selected={option.value === reason}
-              onPress={() => {
-                setReason(option.value);
-                setProblem(null);
-              }}
-            />
-          ))}
-          {reasons.length > 0 ? (
-            <ChoiceRow
-              label={t('contactProps.lifecycle.otherReason')}
-              role="radio"
-              selected={reason === OTHER_REASON}
-              onPress={() => {
-                setReason(OTHER_REASON);
-                setProblem(null);
-              }}
-            />
-          ) : null}
-          {showWords ? (
-            <TextField
-              label={t('contactProps.lifecycle.otherLabel')}
-              value={reasonText}
-              onChangeText={(text) => {
-                setReasonText(text);
-                setProblem(null);
-              }}
-              maxLength={500}
-              multiline
-            />
-          ) : null}
-          {problem ? (
-            <Text variant="caption" danger accessibilityRole="alert">
-              {problem}
-            </Text>
-          ) : null}
-        </View>
+      {problem ? (
+        <Text variant="caption" danger accessibilityRole="alert">
+          {problem}
+        </Text>
       ) : null}
     </EditSheet>
   );
@@ -262,19 +281,22 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
   // A refused or failed read leaves `data` empty, which is the read-only strip.
   const query = useStatusOptions(canReadOptions);
   const options = query.data ?? [];
-  const [open, setOpen] = useState<Focus | null>(null);
+  const [open, setOpen] = useState(false);
 
-  const stages = optionsOfGroup(options, [STAGE_GROUP]);
-  const statuses = optionsOfGroup(options, STATUS_GROUPS);
+  const { stageLabel, statusLabel } = useLifecycleLabels();
+  // The lists are the workspace's own, or the built-in ones when it has none (as on the web); they are offered once the options were
+  // read, so a person who may not read them, or a failed read, sees the values with no caret.
+  const editable = canUpdate && canReadOptions && query.isSuccess;
 
   const stageText = contact.lifecycleStage
-    ? (stages.find((o) => o.value === contact.lifecycleStage)?.label ??
-      t(`contacts.stage.${contact.lifecycleStage}`, {
-        defaultValue: titleCaseKey(contact.lifecycleStage),
-      }))
+    ? (stageChoices(options, stageLabel, contact.lifecycleStage).find(
+        (c) => c.value === contact.lifecycleStage,
+      )?.label ?? stageLabel(contact.lifecycleStage))
     : NO_VALUE;
   const statusText = contact.status
-    ? (statuses.find((o) => o.value === contact.status)?.label ?? contact.status)
+    ? (statusChoices(options, undefined, statusLabel, contact.status).find(
+        (c) => c.value === contact.status,
+      )?.label ?? contact.status)
     : NO_VALUE;
   const scoreText = contact.leadScore !== null ? String(contact.leadScore) : NO_VALUE;
 
@@ -284,12 +306,12 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
         <Dropdown
           label={t('contactProps.lifecycle.stage')}
           value={stageText}
-          onPress={canUpdate && stages.length > 0 ? () => setOpen('stage') : null}
+          onPress={editable ? () => setOpen(true) : null}
         />
         <Dropdown
           label={t('contactProps.lifecycle.status')}
           value={statusText}
-          onPress={canUpdate && statuses.length > 0 ? () => setOpen('status') : null}
+          onPress={editable ? () => setOpen(true) : null}
         />
         <View style={[styles.cell, styles.touch]}>
           <Text variant="caption" color="onBrandMuted">
@@ -301,18 +323,14 @@ export function LifecycleCard({ contact }: { contact: ContactResponse }) {
         </View>
       </View>
       {open ? (
-        <LifecycleSheet
-          contact={contact}
-          options={options}
-          focus={open}
-          onClose={() => setOpen(null)}
-        />
+        <LifecycleSheet contact={contact} options={options} onClose={() => setOpen(false)} />
       ) : null}
     </>
   );
 }
 
 const styles = StyleSheet.create({
+  field: { gap: spacing.xs },
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.lg, alignSelf: 'stretch' },
   cell: { flex: 1, gap: spacing.xs },
   touch: { minHeight: MIN_TOUCH_TARGET, justifyContent: 'center' },

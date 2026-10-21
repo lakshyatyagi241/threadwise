@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "ขั้นตอนวงจรชีวิต",
       "status": "สถานะ",
-      "change": "เปลี่ยนขั้นตอนวงจรชีวิต",
-      "changeStatus": "เปลี่ยนสถานะ",
+      "statusField": "สถานะของขั้นตอนวงจรชีวิต",
+      "edit": "แก้ไขขั้นตอน/สถานะวงจรชีวิต",
+      "choose": "เลือก…",
+      "selectReason": "เลือกเหตุผลที่สูญเสีย…",
       "dropdownHint": "เปิดรายการให้เลือก",
       "lostReason": "เหตุผลที่สูญเสีย",
       "otherReason": "อื่นๆ",
-      "otherLabel": "อธิบายเหตุผล"
+      "otherLabel": "อธิบายเหตุผล",
+      "fallbackStatus": {
+        "active": "ใช้งานอยู่",
+        "prospect": "ผู้มุ่งหวัง",
+        "customer": "ลูกค้า",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

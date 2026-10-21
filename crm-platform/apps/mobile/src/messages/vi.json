@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "Giai đoạn vòng đời",
       "status": "Trạng thái",
-      "change": "Đổi giai đoạn vòng đời",
-      "changeStatus": "Đổi trạng thái",
+      "statusField": "Trạng thái giai đoạn vòng đời",
+      "edit": "Sửa giai đoạn/trạng thái vòng đời",
+      "choose": "Chọn…",
+      "selectReason": "Chọn lý do thất bại…",
       "dropdownHint": "Mở danh sách để chọn",
       "lostReason": "Lý do mất",
       "otherReason": "Khác",
-      "otherLabel": "Mô tả lý do"
+      "otherLabel": "Mô tả lý do",
+      "fallbackStatus": {
+        "active": "Đang hoạt động",
+        "prospect": "Tiềm năng",
+        "customer": "Khách hàng",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

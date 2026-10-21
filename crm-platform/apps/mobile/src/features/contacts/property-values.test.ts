@@ -43,6 +43,7 @@ import {
   currentValueOf,
   draftOf,
   editorKindOf,
+  firstStatusOf,
   formatPropertyValue,
   groupRows,
   initialDraftOf,
@@ -55,6 +56,8 @@ import {
   parseEdit,
   parseStandard,
   sameValue,
+  stageChoices,
+  statusChoices,
   searchRows,
   standardText,
   statusFitsStage,
@@ -690,5 +693,66 @@ describe('groupRows and searchRows', () => {
     expect(searchRows(rows, ' PLAN ').map((r) => r.id)).toEqual(['b']);
     expect(searchRows(rows, 'nothing')).toEqual([]);
     expect(searchRows(rows, '  ').map((r) => r.id)).toEqual(['a', 'b', 'c']);
+  });
+});
+
+describe('stageChoices and statusChoices', () => {
+  const label = (value: string) => `<${value}>`;
+
+  it("offers the workspace's own stages, with a stage the contact holds but the list lacks first", () => {
+    expect(stageChoices(statusOptions, label, 'qualified').map((c) => c.value)).toEqual([
+      'new',
+      'qualified',
+      'lost',
+      'enrolled',
+    ]);
+    expect(stageChoices(statusOptions, label, 'on_hold').map((c) => c.label)).toEqual([
+      '<on_hold>',
+      'New lead',
+      'Qualified',
+      'Lost',
+      'Enrolled',
+    ]);
+  });
+
+  it("offers the platform's ten stages when the workspace has none", () => {
+    const stages = stageChoices([], label, 'new');
+    expect(stages).toHaveLength(10);
+    expect(stages[0]).toEqual({ value: 'new', label: '<new>' });
+    expect(stages.at(-1)?.value).toBe('lost');
+  });
+
+  it("offers the workspace's statuses valid in the stage, never the built-in four beside them", () => {
+    const hot = statusChoices(statusOptions, stageQualified, label, null);
+    expect(hot.map((c) => c.value)).toEqual(['Open', 'Hot']);
+    const lost = statusChoices(statusOptions, stageLost, label, null);
+    expect(lost.map((c) => c.value)).toEqual(['Open', 'Closed']);
+  });
+
+  it('offers the four built-in statuses when the workspace has none, and keeps the one the contact holds', () => {
+    const none = statusOptions.filter((o) => o.optionGroup !== 'status');
+    expect(statusChoices(none, stageQualified, label, null).map((c) => c.value)).toEqual([
+      'active',
+      'prospect',
+      'customer',
+      'vip',
+    ]);
+    expect(statusChoices(none, undefined, label, 'Won').map((c) => c.value)[0]).toBe('Won');
+  });
+
+  it('starts a stage at its default status, else the first one', () => {
+    expect(firstStatusOf([])).toBeNull();
+    expect(
+      firstStatusOf([
+        { value: 'a', label: 'A' },
+        { value: 'b', label: 'B', isDefault: true },
+      ]),
+    ).toBe('b');
+    expect(
+      firstStatusOf([
+        { value: 'a', label: 'A' },
+        { value: 'b', label: 'B' },
+      ]),
+    ).toBe('a');
   });
 });

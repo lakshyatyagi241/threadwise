@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "لائف سائیکل مرحلہ",
       "status": "حالت",
-      "change": "لائف سائیکل مرحلہ بدلیں",
-      "changeStatus": "حالت بدلیں",
+      "statusField": "لائف سائیکل مرحلے کی حالت",
+      "edit": "لائف سائیکل مرحلہ/حالت میں ترمیم",
+      "choose": "منتخب کریں…",
+      "selectReason": "کھونے کی وجہ منتخب کریں…",
       "dropdownHint": "منتخب کرنے کے لیے فہرست کھولتا ہے",
       "lostReason": "کھونے کی وجہ",
       "otherReason": "دیگر",
-      "otherLabel": "وجہ بیان کریں"
+      "otherLabel": "وجہ بیان کریں",
+      "fallbackStatus": {
+        "active": "فعال",
+        "prospect": "ممکنہ گاہک",
+        "customer": "کسٹمر",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "Yaşam döngüsü aşaması",
       "status": "Durum",
-      "change": "Yaşam döngüsü aşamasını değiştir",
-      "changeStatus": "Durumu değiştir",
+      "statusField": "Yaşam döngüsü aşaması durumu",
+      "edit": "Yaşam döngüsü aşamasını/durumunu düzenle",
+      "choose": "Seçin…",
+      "selectReason": "Kayıp nedenini seçin…",
       "dropdownHint": "Seçim yapmak için listeyi açar",
       "lostReason": "Kaybedilme nedeni",
       "otherReason": "Diğer",
-      "otherLabel": "Nedeni açıklayın"
+      "otherLabel": "Nedeni açıklayın",
+      "fallbackStatus": {
+        "active": "Etkin",
+        "prospect": "Aday",
+        "customer": "Müşteri",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

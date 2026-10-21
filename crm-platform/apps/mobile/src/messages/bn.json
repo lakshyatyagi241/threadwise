@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "লাইফসাইকেল স্টেজ",
       "status": "স্ট্যাটাস",
-      "change": "লাইফসাইকেল স্টেজ বদলান",
-      "changeStatus": "স্ট্যাটাস বদলান",
+      "statusField": "লাইফসাইকেল স্টেজের স্ট্যাটাস",
+      "edit": "লাইফসাইকেল স্টেজ/স্ট্যাটাস সম্পাদনা",
+      "choose": "বেছে নিন…",
+      "selectReason": "হারানোর কারণ বেছে নিন…",
       "dropdownHint": "বেছে নেওয়ার তালিকা খোলে",
       "lostReason": "হারানোর কারণ",
       "otherReason": "অন্য",
-      "otherLabel": "কারণটি লিখুন"
+      "otherLabel": "কারণটি লিখুন",
+      "fallbackStatus": {
+        "active": "সক্রিয়",
+        "prospect": "সম্ভাব্য",
+        "customer": "গ্রাহক",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "Lebenszyklusphase",
       "status": "Status",
-      "change": "Lebenszyklusphase ändern",
-      "changeStatus": "Status ändern",
+      "statusField": "Status der Lebenszyklusphase",
+      "edit": "Lebenszyklusphase/Status bearbeiten",
+      "choose": "Auswählen…",
+      "selectReason": "Verlustgrund auswählen…",
       "dropdownHint": "Öffnet die Auswahlliste",
       "lostReason": "Verlustgrund",
       "otherReason": "Sonstiges",
-      "otherLabel": "Grund beschreiben"
+      "otherLabel": "Grund beschreiben",
+      "fallbackStatus": {
+        "active": "Aktiv",
+        "prospect": "Interessent",
+        "customer": "Kunde",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "Tahap siklus hidup",
       "status": "Status",
-      "change": "Ubah tahap siklus hidup",
-      "changeStatus": "Ubah status",
+      "statusField": "Status tahap siklus hidup",
+      "edit": "Ubah tahap/status siklus hidup",
+      "choose": "Pilih…",
+      "selectReason": "Pilih alasan kehilangan…",
       "dropdownHint": "Membuka daftar pilihan",
       "lostReason": "Alasan kalah",
       "otherReason": "Lainnya",
-      "otherLabel": "Jelaskan alasannya"
+      "otherLabel": "Jelaskan alasannya",
+      "fallbackStatus": {
+        "active": "Aktif",
+        "prospect": "Prospek",
+        "customer": "Pelanggan",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

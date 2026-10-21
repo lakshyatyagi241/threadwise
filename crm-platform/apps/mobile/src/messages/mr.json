@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "जीवनचक्र टप्पा",
       "status": "स्थिती",
-      "change": "जीवनचक्र टप्पा बदला",
-      "changeStatus": "स्टेटस बदला",
+      "statusField": "जीवनचक्र टप्प्याची स्थिती",
+      "edit": "जीवनचक्र टप्पा/स्थिती संपादित करा",
+      "choose": "निवडा…",
+      "selectReason": "गमावण्याचे कारण निवडा…",
       "dropdownHint": "निवडण्यासाठी यादी उघडते",
       "lostReason": "गमावण्याचे कारण",
       "otherReason": "इतर",
-      "otherLabel": "कारण लिहा"
+      "otherLabel": "कारण लिहा",
+      "fallbackStatus": {
+        "active": "सक्रिय",
+        "prospect": "संभाव्य ग्राहक",
+        "customer": "ग्राहक",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

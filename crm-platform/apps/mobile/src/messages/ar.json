@@ -2260,12 +2260,20 @@
     "lifecycle": {
       "stage": "مرحلة دورة الحياة",
       "status": "الحالة",
-      "change": "تغيير مرحلة دورة الحياة",
-      "changeStatus": "تغيير الحالة",
+      "statusField": "حالة مرحلة دورة الحياة",
+      "edit": "تعديل مرحلة دورة الحياة/الحالة",
+      "choose": "اختر…",
+      "selectReason": "اختر سبب الفقدان…",
       "dropdownHint": "يفتح القائمة للاختيار منها",
       "lostReason": "سبب الفقدان",
       "otherReason": "أخرى",
-      "otherLabel": "صف السبب"
+      "otherLabel": "صف السبب",
+      "fallbackStatus": {
+        "active": "نشط",
+        "prospect": "محتمل",
+        "customer": "عميل",
+        "vip": "مميز"
+      }
     }
   },
   "summary": {

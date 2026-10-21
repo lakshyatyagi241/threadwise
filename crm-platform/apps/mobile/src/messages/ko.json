@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "라이프사이클 단계",
       "status": "상태",
-      "change": "라이프사이클 단계 변경",
-      "changeStatus": "상태 변경",
+      "statusField": "라이프사이클 단계 상태",
+      "edit": "라이프사이클 단계/상태 편집",
+      "choose": "선택…",
+      "selectReason": "손실 사유 선택…",
       "dropdownHint": "선택할 목록을 엽니다",
       "lostReason": "실패 사유",
       "otherReason": "기타",
-      "otherLabel": "사유를 입력하세요"
+      "otherLabel": "사유를 입력하세요",
+      "fallbackStatus": {
+        "active": "활성",
+        "prospect": "잠재 고객",
+        "customer": "고객",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

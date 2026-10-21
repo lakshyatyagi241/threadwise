@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "Levenscyclusfase",
       "status": "Status",
-      "change": "Levenscyclusfase wijzigen",
-      "changeStatus": "Status wijzigen",
+      "statusField": "Status van de levenscyclusfase",
+      "edit": "Levenscyclusfase/status bewerken",
+      "choose": "Selecteren…",
+      "selectReason": "Verliesreden selecteren…",
       "dropdownHint": "Opent de lijst om uit te kiezen",
       "lostReason": "Reden van verlies",
       "otherReason": "Anders",
-      "otherLabel": "Beschrijf de reden"
+      "otherLabel": "Beschrijf de reden",
+      "fallbackStatus": {
+        "active": "Actief",
+        "prospect": "Prospect",
+        "customer": "Klant",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

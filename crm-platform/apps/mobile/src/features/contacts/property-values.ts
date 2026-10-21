@@ -1,6 +1,7 @@
 import {
   emailSchema,
   isStatusValidForStage,
+  lifecycleStageSchema,
   phoneSchema,
   type ContactResponse,
   type FieldOptionResponse,
@@ -638,6 +639,68 @@ export function statusesForStage(
     (o) => o.stageOptionId === null || stage === undefined || o.stageOptionId === stage.id,
   );
 }
+
+/** The statuses offered when the workspace has configured none: the web's own four (Reference's fixed list), which the API accepts in every stage. */
+export const FALLBACK_STATUSES = ['active', 'prospect', 'customer', 'vip'] as const;
+
+/** One entry of the stage or status dropdown. */
+export interface LifecycleChoice {
+  value: string;
+  label: string;
+  /** A status scoped to a stage that is that stage's default: where a contact lands when it enters the stage. */
+  isDefault?: boolean;
+}
+
+/**
+ * The stages to offer, as the web does: the workspace's own when it has any, otherwise the platform's built-in ones. A stage the
+ * contact already holds but the list lacks (the platform default `new` in a workspace with its own stages, or a removed option) is put
+ * first, so the dropdown never shows "Select…" for a stage the contact has.
+ */
+export function stageChoices(
+  options: readonly StatusOptionResponse[] | undefined,
+  label: (value: string) => string,
+  current: string | null,
+): LifecycleChoice[] {
+  const configured = optionsOfGroup(options, [STAGE_GROUP]).map((o) => ({
+    value: o.value,
+    label: o.label,
+  }));
+  const base =
+    configured.length > 0
+      ? configured
+      : lifecycleStageSchema.options.map((value) => ({ value, label: label(value) }));
+  return current !== null && !base.some((c) => c.value === current)
+    ? [{ value: current, label: label(current) }, ...base]
+    : base;
+}
+
+/**
+ * The statuses to offer in `stage` (a stage option, or undefined for any): the workspace's own that are valid there, or the four
+ * built-in ones when it configured none (a workspace that did is never shown the four, even when none fits the stage). A status the
+ * contact already holds but the list lacks is put first.
+ */
+export function statusChoices(
+  options: readonly StatusOptionResponse[] | undefined,
+  stage: StatusOptionResponse | undefined,
+  label: (value: string) => string,
+  current: string | null,
+): LifecycleChoice[] {
+  const base: LifecycleChoice[] =
+    optionsOfGroup(options, STATUS_GROUPS).length > 0
+      ? statusesForStage(options, stage).map((o) => ({
+          value: o.value,
+          label: o.label,
+          isDefault: o.isDefault && o.stageOptionId !== null,
+        }))
+      : FALLBACK_STATUSES.map((value) => ({ value, label: label(value) }));
+  return current !== null && current !== '' && !base.some((c) => c.value === current)
+    ? [{ value: current, label: label(current) }, ...base]
+    : base;
+}
+
+/** The status a contact gets on entering a stage: the stage's own default, else the first one it may have (the Geta app picks the first). */
+export const firstStatusOf = (choices: readonly LifecycleChoice[]): string | null =>
+  (choices.find((c) => c.isDefault) ?? choices[0])?.value ?? null;
 
 /** Whether a status may stay on a contact moved to `stageValue` (the API resets it when it may not). */
 export const statusFitsStage = (

@@ -2173,12 +2173,20 @@
     "lifecycle": {
       "stage": "Étape du cycle de vie",
       "status": "Statut",
-      "change": "Changer l’étape du cycle de vie",
-      "changeStatus": "Changer le statut",
+      "statusField": "Statut de l’étape du cycle de vie",
+      "edit": "Modifier l’étape/le statut du cycle de vie",
+      "choose": "Sélectionner…",
+      "selectReason": "Sélectionner le motif de perte…",
       "dropdownHint": "Ouvre la liste de choix",
       "lostReason": "Motif de perte",
       "otherReason": "Autre",
-      "otherLabel": "Décrivez le motif"
+      "otherLabel": "Décrivez le motif",
+      "fallbackStatus": {
+        "active": "Actif",
+        "prospect": "Prospect",
+        "customer": "Client",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

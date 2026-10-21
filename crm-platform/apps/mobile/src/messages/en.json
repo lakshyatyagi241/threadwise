@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "Lifecycle stage",
       "status": "Status",
-      "change": "Change lifecycle stage",
-      "changeStatus": "Change status",
+      "statusField": "Lifecycle stage status",
+      "edit": "Edit lifecycle stage/status",
+      "choose": "Select…",
+      "selectReason": "Select lost reason…",
       "dropdownHint": "Opens the list to choose from",
       "lostReason": "Lost reason",
       "otherReason": "Other",
-      "otherLabel": "Describe the reason"
+      "otherLabel": "Describe the reason",
+      "fallbackStatus": {
+        "active": "Active",
+        "prospect": "Prospect",
+        "customer": "Customer",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

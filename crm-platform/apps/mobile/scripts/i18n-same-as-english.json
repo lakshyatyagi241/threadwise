@@ -1,6 +1,7 @@
 {
   "hi": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
     "dashboard.activity.by",
@@ -35,6 +36,7 @@
   ],
   "mr": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
     "dashboard.activity.by",
@@ -99,6 +101,7 @@
   ],
   "bn": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -151,6 +154,7 @@
     "contactNotes.activity.source.system",
     "contactNotes.activity.types.meeting",
     "contactProps.fields.name",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.lifecycle.status",
     "contacts.detail.actions.chat",
     "contacts.detail.actions.sms",
@@ -264,6 +268,7 @@
   "es": [
     "auth.emailPlaceholder",
     "contactNotes.activity.source.bot",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.no",
     "contacts.detail.actions.chat",
     "contacts.detail.actions.sms",
@@ -341,6 +346,8 @@
     "contactNotes.title",
     "contactProps.editor.date",
     "contactProps.fields.source",
+    "contactProps.lifecycle.fallbackStatus.prospect",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.notes",
     "contacts.detail.actions.sms",
     "contacts.detail.score",
@@ -454,6 +461,7 @@
   ],
   "he": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -504,6 +512,7 @@
     "contactNotes.activity.types.email",
     "contactProps.editor.title",
     "contactProps.fields.email",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.lifecycle.status",
     "contacts.detail.actions.chat",
     "contacts.detail.actions.email",
@@ -615,6 +624,7 @@
     "contactNotes.activity.types.email",
     "contactNotes.activity.types.task",
     "contactProps.fields.email",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.no",
     "contacts.detail.actions.chat",
     "contacts.detail.actions.email",
@@ -712,6 +722,7 @@
   ],
   "ja": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "dashboard.activity.by",
@@ -743,6 +754,7 @@
   ],
   "ko": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -791,6 +803,8 @@
     "contactNotes.activity.form.details",
     "contactNotes.activity.form.type",
     "contactNotes.activity.source.bot",
+    "contactProps.lifecycle.fallbackStatus.prospect",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.lifecycle.status",
     "contacts.detail.actions.chat",
     "contacts.detail.more.account",
@@ -928,6 +942,7 @@
     "calls.summary.purposes.demo",
     "contactNotes.activity.source.bot",
     "contactNotes.activity.source.system",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.lifecycle.status",
     "contacts.detail.actions.sms",
     "contacts.detail.status",
@@ -1006,6 +1021,7 @@
   ],
   "pt": [
     "contactNotes.activity.source.bot",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contactProps.lifecycle.status",
     "contacts.detail.actions.chat",
     "contacts.detail.actions.sms",
@@ -1084,6 +1100,7 @@
   ],
   "ru": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -1130,6 +1147,7 @@
   ],
   "th": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -1174,6 +1192,7 @@
     "auth.emailPlaceholder",
     "calls.summary.purposes.demo",
     "contactNotes.activity.source.bot",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.detail.summary.rowLabel",
@@ -1220,6 +1239,7 @@
   ],
   "ur": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.sms",
     "contacts.detail.summary.atLeast",
     "contacts.row.actionFor",
@@ -1261,6 +1281,7 @@
     "contactNotes.activity.source.bot",
     "contactNotes.activity.types.email",
     "contactProps.fields.email",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.actions.email",
     "contacts.detail.actions.sms",
     "contacts.detail.email",
@@ -1312,6 +1333,7 @@
   ],
   "zh-CN": [
     "auth.emailPlaceholder",
+    "contactProps.lifecycle.fallbackStatus.vip",
     "contacts.detail.summary.atLeast",
     "contacts.row.actionFor",
     "dashboard.activity.by",

@@ -22,6 +22,8 @@ interface Props {
   onChange: (value: string) => void;
   /** `plain` has no border or fill: the value and its chevron sit in a form row that draws its own lines. */
   variant?: 'box' | 'plain';
+  /** Greyed out and not openable, for a list that has no choices (the status of a stage without statuses). */
+  disabled?: boolean;
 }
 
 /** A boxed dropdown: the chosen label (or the placeholder) with a chevron, opening a list of choices; the chosen one carries a tick. */
@@ -32,6 +34,7 @@ export function SelectField({
   value,
   onChange,
   variant = 'box',
+  disabled = false,
 }: Props) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
@@ -43,7 +46,8 @@ export function SelectField({
         accessibilityRole="button"
         accessibilityLabel={label}
         accessibilityValue={{ text: current?.label ?? placeholder }}
-        accessibilityState={{ expanded: open }}
+        accessibilityState={{ expanded: open, disabled }}
+        disabled={disabled}
         onPress={() => setOpen(true)}
         style={
           variant === 'plain'
@@ -51,7 +55,7 @@ export function SelectField({
             : [
                 styles.box,
                 {
-                  backgroundColor: colors.surface,
+                  backgroundColor: disabled ? colors.surfaceMuted : colors.surface,
                   borderColor: open ? colors.primary : colors.borderStrong,
                 },
               ]

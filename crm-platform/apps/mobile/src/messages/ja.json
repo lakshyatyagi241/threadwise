@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "ライフサイクルステージ",
       "status": "ステータス",
-      "change": "ライフサイクルステージを変更",
-      "changeStatus": "ステータスを変更",
+      "statusField": "ライフサイクルステージのステータス",
+      "edit": "ライフサイクルステージ/ステータスを編集",
+      "choose": "選択…",
+      "selectReason": "失注理由を選択…",
       "dropdownHint": "選択リストを開きます",
       "lostReason": "失注の理由",
       "otherReason": "その他",
-      "otherLabel": "理由を入力"
+      "otherLabel": "理由を入力",
+      "fallbackStatus": {
+        "active": "アクティブ",
+        "prospect": "見込み客",
+        "customer": "顧客",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

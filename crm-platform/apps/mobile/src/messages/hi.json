@@ -2144,12 +2144,20 @@
     "lifecycle": {
       "stage": "जीवनचक्र चरण",
       "status": "स्थिति",
-      "change": "जीवनचक्र चरण बदलें",
-      "changeStatus": "स्टेटस बदलें",
+      "statusField": "जीवनचक्र चरण की स्थिति",
+      "edit": "जीवनचक्र चरण/स्थिति संपादित करें",
+      "choose": "चुनें…",
+      "selectReason": "खोने का कारण चुनें…",
       "dropdownHint": "चुनने के लिए सूची खोलता है",
       "lostReason": "खोने का कारण",
       "otherReason": "अन्य",
-      "otherLabel": "कारण लिखें"
+      "otherLabel": "कारण लिखें",
+      "fallbackStatus": {
+        "active": "सक्रिय",
+        "prospect": "संभावित ग्राहक",
+        "customer": "ग्राहक",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {

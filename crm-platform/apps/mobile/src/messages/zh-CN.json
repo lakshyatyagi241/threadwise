@@ -2115,12 +2115,20 @@
     "lifecycle": {
       "stage": "生命周期阶段",
       "status": "状态",
-      "change": "更改生命周期阶段",
-      "changeStatus": "更改状态",
+      "statusField": "生命周期阶段状态",
+      "edit": "编辑生命周期阶段/状态",
+      "choose": "选择…",
+      "selectReason": "选择流失原因…",
       "dropdownHint": "打开列表进行选择",
       "lostReason": "流失原因",
       "otherReason": "其他",
-      "otherLabel": "说明原因"
+      "otherLabel": "说明原因",
+      "fallbackStatus": {
+        "active": "活跃",
+        "prospect": "潜在客户",
+        "customer": "客户",
+        "vip": "VIP"
+      }
     }
   },
   "summary": {
