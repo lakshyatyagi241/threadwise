@@ -12,5 +12,9 @@ API on :3960, web on :3961, Docker-free shared Postgres. Real WhatsApp delivery 
 | 3a | Simple builder: Human handoff step first/mid flow, destination team, reason, priority, note with `{{name}}`, both messages; save | PASS | Saved graph has `handoff: 2`; note resolves to the contact name on the card |
 | 3b | Simple builder: publish | PASS (with a plan note) | Publishing a Simple flow saves the WhatsApp button widget first; a plan without `chatbot_widgets` gets 422 and cannot publish (pre-existing, not handoff) |
 | 4a | Inbox: Waiting tab + count, "Waiting 2m" chip with priority, strip, handoff card (reason, answers, trace) | PASS | Flow fired by a simulator "hello"; conversation waiting in the Sales queue; contact received the handoff message |
+| 4b | Claim race: two agents claim the same waiting chat at once | PASS | Same row version, parallel requests: one 200 (claim, `assigned_source=claim`), the other 409 "Somebody else has taken this conversation." |
+| 4c | Bot muted while with a person; Return to bot resumes it | PASS | Customer "hello" while with a person: no bot reply. After Return to bot the same keyword runs the flow again |
+| 3c | Exit "assigned": team round robin picks an agent, follow-up message sent | PASS | Handoff 2 assigned to Asha in Sales, `assigned_source=rule`; exits waiting (4a) and assigned verified |
+| 4d | Send to queue on a chat somebody already holds | FAIL then FIXED (D2) | The dialog said "Send to queue again" but the API answered with the old assignment and changed nothing (any repeat was absorbed). A person's manual send now retargets the card and moves the chat; bot repeats are still absorbed. e2e test added in `handoff.e2e.spec.ts` |
 
 Environment notes: the API keeps at most 5 live sessions per user; scripts that log in repeatedly sign the browser out (not a product defect).

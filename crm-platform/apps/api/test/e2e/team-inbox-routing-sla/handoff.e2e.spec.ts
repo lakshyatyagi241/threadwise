@@ -212,6 +212,48 @@ describe('handoff: queue, claim, named person (every plan)', () => {
     expect(card.answers).toEqual({ name: 'Asha', budget: '5000' });
   });
 
+  it('"Send to queue" by a person on a chat somebody holds moves it to the chosen team queue; a bot repeat changes nothing', async () => {
+    const c = await thread(t, ch);
+    const svc = get(HandoffService);
+    const named = {
+      orgId: t.orgId,
+      conversationUuid: c.uuid,
+      source: 'flow' as const,
+      reason: 'other' as const,
+      destination: { kind: 'person' as const, userId: await uuidOf(a2.userId) },
+      actor: { kind: 'flow' as const },
+    };
+    expect((await asUser(t.orgId, a2.userId, () => svc.handoff(named))).outcome).toBe('assigned');
+    const other = (
+      await p.h.owner.query(
+        `INSERT INTO teams (org_id, name) VALUES ($1, 'Other') RETURNING id, uuid`,
+        [t.orgId],
+      )
+    ).rows[0];
+    await p.h.owner.query(
+      `INSERT INTO team_members (org_id, team_id, user_id) VALUES ($1,$2,$3)`,
+      [t.orgId, other.id, a1.userId],
+    );
+    // a bot asking again (no key) leaves the holder alone
+    await asUser(t.orgId, a2.userId, () => svc.handoff({ ...named }));
+    expect(Number((await row(c.id)).assignee_user_id)).toBe(a2.userId);
+    // a person sending it to another team's queue is obeyed
+    await asUser(t.orgId, a1.userId, () =>
+      svc.handoff({
+        orgId: t.orgId,
+        conversationUuid: c.uuid,
+        source: 'manual',
+        reason: 'other',
+        destination: { kind: 'team', teamId: other.uuid },
+        actor: { kind: 'user', userId: a1.userId },
+      }),
+    );
+    const r = await row(c.id);
+    expect(r.handling).toBe('waiting');
+    expect(r.assignee_user_id).toBeNull();
+    expect(Number(r.assignee_team_id)).toBe(Number(other.id));
+  });
+
   it('without the plan the "assignment rules" destination waits in the queue and the trace says why', async () => {
     const c = await thread(t, ch);
     const res = await handoff(t.admin, c.uuid, { destination: { kind: 'rules' } });

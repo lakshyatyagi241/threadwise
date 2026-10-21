@@ -206,9 +206,15 @@ export class HandoffService {
         blocked: new Set<number>(),
       };
 
-      // A repeat while a person already holds it changes nothing; while it only waits, the same card is retargeted.
+      // A repeat from a bot (a flow looping, a retried AI marker) while a person already holds it changes nothing; while it only waits, the
+      // same card is retargeted. A person pressing "Send to queue" on a held chat means it: the card is retargeted and the chat moves.
       const live = await this.repo.liveFor(tx, orgId, locked.id);
-      if (live && live.status === 'assigned' && locked.handling === 'with_person') {
+      if (
+        live &&
+        live.status === 'assigned' &&
+        locked.handling === 'with_person' &&
+        input.source !== 'manual'
+      ) {
         return { replay: await this.replayOf(tx, orgId, locked, live) };
       }
 
