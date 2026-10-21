@@ -49,7 +49,7 @@ export function htmlToMarks(root: Node): string {
   let out = '';
   const walk = (node: Node, isLast: boolean): void => {
     if (node.nodeType === 3) {
-      out += (node.nodeValue ?? '').replace(/ /g, ' ');
+      out += (node.nodeValue ?? '').replace(/\u00a0/g, ' ');
       return;
     }
     if (node.nodeType !== 1) return;

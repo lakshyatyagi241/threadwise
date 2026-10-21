@@ -60,6 +60,8 @@
       "remove_branding": "นำตราสินค้าออก",
       "sales_pipeline": "ไปป์ไลน์การขาย",
       "appointment_booking": "การจองนัดหมาย",
+      "appointment_confirm_buttons": "ปุ่มแจ้งเตือนนัดหมาย (ยืนยัน / เลื่อนนัด / ยกเลิก)",
+      "appointment_rebook_steps": "ขั้นตอนการนัดซ้ำ (เรียกกลับมา)",
       "chatbot_widgets": "วิดเจ็ตแชทบอท",
       "wa_storefront": "แค็ตตาล็อก WhatsApp",
       "inbox_sla": "นโยบาย SLA",

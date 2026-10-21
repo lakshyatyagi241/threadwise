@@ -535,6 +535,8 @@
             "remove_branding": "מיתוג White-label",
             "sales_pipeline": "צינור מכירות",
             "appointment_booking": "פגישות",
+            "appointment_confirm_buttons": "כפתורי תזכורת",
+            "appointment_rebook_steps": "שלבי הזמנה מחדש",
             "chatbot_widgets": "ווידג'טים של צ'אטבוט",
             "wa_storefront": "קטלוג WhatsApp",
             "inbox_sla": "SLA בתיבת הדואר",

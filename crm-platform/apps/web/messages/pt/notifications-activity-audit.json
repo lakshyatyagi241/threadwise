@@ -414,6 +414,14 @@
           "label": "Agendamento fora de sincronia com o Google Calendar",
           "hint": "O evento do Google Calendar de um agendamento futuro foi excluído, movido ou teve os convidados alterados. O agendamento não é alterado; você escolhe o que fazer."
         },
+        "appointment_cancelled_by_customer": {
+          "label": "Agendamento cancelado pelo cliente",
+          "hint": "Um cliente cancelou o agendamento ao tocar em Cancelar num lembrete. O responsável pelo agendamento é avisado."
+        },
+        "appointment_reminder_test": {
+          "label": "Resultado do teste de e-mail do lembrete",
+          "hint": "O resultado do e-mail de teste que você envia para uma etapa de lembrete: enviado, ou não enviado e o motivo."
+        },
         "snooze_wake": {
           "label": "Chat adiado volta",
           "hint": "Um chat adiado reabre na hora marcada e é enviado a você ou à sua equipe."

@@ -60,6 +60,8 @@
       "remove_branding": "Branding verwijderen",
       "sales_pipeline": "Verkooppipeline",
       "appointment_booking": "Afspraken boeken",
+      "appointment_confirm_buttons": "Herinneringsknoppen (Bevestigen / Verplaatsen / Annuleren)",
+      "appointment_rebook_steps": "Stappen voor opnieuw boeken (herinnering)",
       "chatbot_widgets": "Chatbotwidgets",
       "wa_storefront": "WhatsApp-catalogus",
       "inbox_sla": "SLA-beleid",

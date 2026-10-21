@@ -6,6 +6,9 @@
     "common": {
       "dismiss": "Kapat"
     },
+    "list": {
+      "unofficialDisabled": "Resmî olmayan (devre dışı)"
+    },
     "detail": {
       "back": "Geri",
       "crumb": "Toplu gönderimler / Analiz / #{ref}",

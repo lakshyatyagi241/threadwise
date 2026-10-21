@@ -1,5 +1,8 @@
 {
   "broadcasts": {
+    "list": {
+      "unofficialDisabled": "غير رسمي (معطّل)"
+    },
     "detail": {
       "unofficialDisabled": "غير رسمي (معطّل)",
       "back": "رجوع",

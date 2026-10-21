@@ -60,6 +60,8 @@
       "remove_branding": "移除品牌标识",
       "sales_pipeline": "销售管道",
       "appointment_booking": "预约预订",
+      "appointment_confirm_buttons": "提醒按钮（确认 / 改期 / 取消）",
+      "appointment_rebook_steps": "再预约（召回）步骤",
       "chatbot_widgets": "聊天机器人小组件",
       "wa_storefront": "WhatsApp 目录",
       "inbox_sla": "SLA 策略",

@@ -10,7 +10,6 @@ import { EMOJIS, searchEmoji } from '../lib/emoji-data';
 import {
   clip,
   toggleList,
-  toggleMark,
   variableToken,
   type ListKind,
   type MarkKind,

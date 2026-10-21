@@ -60,6 +60,8 @@
       "remove_branding": "Rimuovi branding",
       "sales_pipeline": "Pipeline di vendita",
       "appointment_booking": "Prenotazione appuntamenti",
+      "appointment_confirm_buttons": "Pulsanti del promemoria (Conferma / Riprogramma / Annulla)",
+      "appointment_rebook_steps": "Passaggi di riprenotazione (richiamo)",
       "chatbot_widgets": "Widget chatbot",
       "wa_storefront": "Catalogo WhatsApp",
       "inbox_sla": "Policy SLA",

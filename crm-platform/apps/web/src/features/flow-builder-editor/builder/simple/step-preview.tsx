@@ -16,7 +16,6 @@ export function StepPreview({ step }: { step: SimpleStep }) {
     if (!url) return null;
     const kind = str(d.kind) || 'image';
     if (kind === 'image')
-      // eslint-disable-next-line @next/next/no-img-element
       return (
         <img
           src={url}
@@ -53,7 +52,6 @@ export function StepPreview({ step }: { step: SimpleStep }) {
     return (
       <div className="mt-3 flex items-center gap-2">
         {image ? (
-          // eslint-disable-next-line @next/next/no-img-element
           <img
             src={image}
             alt=""
