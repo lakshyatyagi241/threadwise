@@ -12,7 +12,7 @@ import { useUnofficialWhatsapp } from '@/lib/use-unofficial-whatsapp';
 import { useSummary, useThroughput, useWidgets } from '../api/hooks';
 import { flash } from '@/features/admin-console-shell/flash/flash-store';
 import type { CustomDates } from '../api/service';
-import { compact, greetingKey, isForbidden, throughputCsv } from '../lib/format';
+import { compact, greetingKey, isForbidden, throughputCsv, tzChip } from '../lib/format';
 import { BarChart, Sparkline, Legend } from './charts';
 import {
   ActivityCard,
@@ -100,6 +100,34 @@ export function RangePicker({
   );
 }
 
+/**
+ * The "synced N seconds ago" chip. It owns the one-second tick so only this chip re-renders each second, not the whole
+ * dashboard (every card and chart) with it.
+ */
+function SyncedChip({ updatedAt }: { updatedAt: number }) {
+  const t = useTranslations('dashboards-analytics-charts.dashboard');
+  const [nowMs, setNowMs] = useState(0);
+  useEffect(() => {
+    const id = setInterval(() => setNowMs(Date.now()), 1000);
+    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
+    return () => {
+      clearInterval(id);
+      clearTimeout(t0);
+    };
+  }, []);
+  if (!updatedAt || nowMs <= 0) return null;
+  const syncedAgo = Math.max(0, Math.round((nowMs - updatedAt) / 1000));
+  return (
+    <>
+      <span aria-hidden className="size-1 rounded-full bg-muted-foreground/50" />
+      <span className="flex items-center gap-1.5" data-testid="live-chip">
+        <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-success" />
+        {t('synced', { s: syncedAgo })}
+      </span>
+    </>
+  );
+}
+
 /** `/dashboard` (TW-DASH-001..021): the operator dashboard, cards in the order Reference shows them. */
 export function DashboardScreen() {
   const t = useTranslations('dashboards-analytics-charts.dashboard');
@@ -127,18 +155,6 @@ export function DashboardScreen() {
     flash('roleDenied', 'warning', { role });
     router.replace('/inbox');
   }, [bounced, role, router]);
-  const [nowMs, setNowMs] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setNowMs(Date.now()), 1000);
-    const t0 = setTimeout(() => setNowMs(Date.now()), 0);
-    return () => {
-      clearInterval(id);
-      clearTimeout(t0);
-    };
-  }, []);
-  const syncedAgo = summary.dataUpdatedAt
-    ? Math.max(0, Math.round((nowMs - summary.dataUpdatedAt) / 1000))
-    : null;
   const tz = session.org.timezone ?? 'UTC';
   const name = session.user.displayName ?? session.user.fullName;
 
@@ -180,15 +196,7 @@ export function DashboardScreen() {
         <div className="space-y-1.5 font-[family-name:var(--font-inter)] font-semibold">
           <p className="flex items-center gap-3 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>{t('kicker')}</span>
-            {syncedAgo !== null && nowMs > 0 && (
-              <>
-                <span aria-hidden className="size-1 rounded-full bg-muted-foreground/50" />
-                <span className="flex items-center gap-1.5" data-testid="live-chip">
-                  <span aria-hidden className="size-1.5 animate-pulse rounded-full bg-success" />
-                  {t('synced', { s: syncedAgo })}
-                </span>
-              </>
-            )}
+            <SyncedChip updatedAt={summary.dataUpdatedAt} />
           </p>
           <h1 className="text-[32px] leading-tight">
             {t(`greeting.${greetingKey(new Date(), tz)}`, { name })}{' '}
@@ -554,18 +562,6 @@ function ReadRing({ pct, label }: { pct: number; label: string }) {
       </text>
     </svg>
   );
-}
-
-/** "UTC+1" style label of a zone, as Reference's chip. */
-function tzChip(zone: string): string {
-  try {
-    const part = new Intl.DateTimeFormat('en', { timeZone: zone, timeZoneName: 'shortOffset' })
-      .formatToParts(new Date())
-      .find((p) => p.type === 'timeZoneName')?.value;
-    return (part ?? 'UTC').replace('GMT', 'UTC');
-  } catch {
-    return 'UTC';
-  }
 }
 
 function Tile({ label, value }: { label: string; value: string }) {

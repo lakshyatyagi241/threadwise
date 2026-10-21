@@ -3,6 +3,7 @@ import type {
   RealtimeEventPayload,
   NotificationResponse,
 } from '@crm/contracts';
+import { splitTitleBadge } from '@/lib/tab-title';
 import { mayAlert, type PrefEntry } from '../prefs/model';
 
 /**
@@ -69,11 +70,9 @@ export function isOnConversation(
 
 // --- tab title --------------------------------------------------------------------------------------------------------------
 
-const BADGE_PREFIX = /^\(\d+\+?\)\s+/;
-
 /** The title without a badge this module added. */
 export function stripTitleBadge(title: string): string {
-  return title.replace(BADGE_PREFIX, '');
+  return splitTitleBadge(title).base;
 }
 
 /** `(3) Inbox`; nothing in front at zero; `(99+)` past 99. A badge already there is replaced, never doubled. */
