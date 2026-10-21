@@ -3,8 +3,9 @@
 # The key can do exactly three things, chosen by the command the client sends; nothing else is reachable with it.
 #   load             docker image tarball (gzip) on stdin -> docker load
 #   sync             tar on stdin with the deploy files -> /opt/desk (only the allow-listed names are extracted)
-#   release <tag> [attempt]  blue-green: start the IDLE slot (api + web) on <tag>, wait until healthy, move traffic to it, then restart
-#                    the worker on <tag> and stop the old slot. Migrations run first (they must be expand-only, see the build server's
+#   release <tag> [attempt]  blue-green: start the IDLE slot (api + web) on <tag>, wait until healthy, restart the webhook API
+#                    (api-hooks, outside the slots) on <tag>, move traffic to the slot, then restart the worker on <tag> and stop the
+#                    old slot. Migrations run first (they must be expand-only, see the build server's
 #                    migration lint). Any failure moves traffic back to the live slot and leaves it running. Every step and the outcome
 #                    are recorded in platform_releases (the operator console's release history) under <attempt> (a uuid; made here when
 #                    the caller gives none). Recording never blocks a release.
@@ -118,10 +119,22 @@ public_ok() {
 live_slot() {
   local rec routed
   rec=$(cat .slot 2>/dev/null || true)
-  routed=$(grep -o 'desk-api-[a-z]*:3000' "$TRAEFIK_DYN" 2>/dev/null | head -1 | sed -e 's/^desk-api-//' -e 's/:3000$//' || true)
+  routed=$(grep -oE 'desk-api-(blue|green):3000' "$TRAEFIK_DYN" 2>/dev/null | head -1 | sed -e 's/^desk-api-//' -e 's/:3000$//' || true)
   case "$routed" in blue | green) echo "$routed"; return ;; esac
   case "$rec" in blue | green) [ -f "$TRAEFIK_DYN" ] && { echo "$rec"; return; } ;; esac
   echo legacy
+}
+
+# The webhook API (api-hooks) is outside the slots and only a fast path: Traefik falls back to the live slot's API while it is not healthy
+# (traefik-desk.yml.template), so failing to bring it up never fails a release. Its tag is HOOKS_TAG; a failed start puts the previous
+# tag back, so the container a later `compose up` recreates is not left on an image the release is about to drop.
+hooks_up() { # hooks_up <tag> <previous tag or empty>
+  local new=$1 old=$2
+  envset HOOKS_TAG "$new"
+  if compose up -d --no-deps api-hooks && wait_healthy desk-api-hooks 36; then return 0; fi
+  echo "warning: the webhook API did not become healthy on $new; webhooks stay on the slot API" >&2
+  if [ -n "$old" ]; then envset HOOKS_TAG "$old"; compose up -d --no-deps api-hooks >/dev/null 2>&1 || true; fi
+  return 1
 }
 
 stop_slot() { # stop_slot <slot>: stop the api and web containers of one slot, keeping their images for a rollback
@@ -230,6 +243,12 @@ case "$action" in
       stop_slot "$idle"; die failed "slot $idle did not become healthy; stopping it, the live slot is untouched"
     fi
 
+    # 1b. The webhook API moves to the new image while the live slot still serves everything else; if it does not come up healthy,
+    # Traefik keeps the webhooks on the slot's API (a warning, not a failed release).
+    step=hooks
+    record "$attempt" "$arg" releasing hooks
+    hooks_up "$arg" "$(envget HOOKS_TAG)" || true
+
     # 2. Traffic moves to the new slot. Checked through the public address; any failure puts it back.
     step=switch
     record "$attempt" "$arg" releasing switch
@@ -237,6 +256,7 @@ case "$action" in
     sleep 5
     if ! public_ok; then
       route_back "$active"; sleep 5; stop_slot "$idle"
+      [ -n "$prev" ] && { hooks_up "$prev" "" || true; }
       die rolled_back "public check failed after the switch to $idle; traffic moved back to $active"
     fi
 
@@ -247,6 +267,7 @@ case "$action" in
     if ! compose up -d --no-deps worker || ! worker_ready; then
       if [ -n "$prev" ]; then envset IMAGE_TAG "$prev"; compose up -d --no-deps worker >/dev/null 2>&1 || true; fi
       route_back "$active"; sleep 5; stop_slot "$idle"
+      [ -n "$prev" ] && { hooks_up "$prev" "" || true; }
       die rolled_back "worker did not become ready on $arg; rolled back to ${prev:-none}"
     fi
 

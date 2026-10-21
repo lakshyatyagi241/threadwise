@@ -1,6 +1,9 @@
 # Public routing for the desk host, written by ci-entry.sh on every release (route_to). The API paths go to the live API slot and
 # everything else to the live web slot. Traefik watches its dynamic directory, so rewriting this file moves traffic with no restart.
 # ci-entry.sh fills in __DOMAIN__ and __SLOT__ (blue or green).
+# The public webhook receiver has its own container (desk-api-hooks, not in a slot). Its service is a failover: while that container
+# answers /health it takes the traffic, and while it does not (a restart, a failed start) the live slot's API takes it, so a webhook is
+# never refused for want of it. /health is the liveness probe, not /ready: a database blip must not move the webhooks onto the slot.
 http:
   routers:
     desk-api:
@@ -8,6 +11,13 @@ http:
       entryPoints: [websecure]
       service: desk-api
       priority: 100
+      tls:
+        certResolver: letsencrypt
+    desk-hooks:
+      rule: Host(`__DOMAIN__`) && PathPrefix(`/v2/public/webhooks`)
+      entryPoints: [websecure]
+      service: desk-hooks
+      priority: 200
       tls:
         certResolver: letsencrypt
     desk-web:
@@ -35,3 +45,15 @@ http:
       loadBalancer:
         servers:
           - url: http://desk-web-__SLOT__:3001
+    desk-hooks:
+      failover:
+        service: desk-hooks-main
+        fallback: desk-api
+    desk-hooks-main:
+      loadBalancer:
+        healthCheck:
+          path: /health
+          interval: 10s
+          timeout: 3s
+        servers:
+          - url: http://desk-api-hooks:3000
