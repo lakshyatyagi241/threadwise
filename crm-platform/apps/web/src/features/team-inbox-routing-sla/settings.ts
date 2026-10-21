@@ -10,10 +10,6 @@ import { settingsTile } from '../_registry/settings-types';
  * `settings.tiles.assignment-settings`.
  *
  * Record assignment rules (contacts, companies and deals) are a tile of the record-assignment domain.
- *
- * Team performance (TW-TIB2-034): how fast the team replied, resolved and answered first, per agent. A tile under Data and security for
- * roles that hold `inbox.analytics.view`; a plan without Team performance sees it locked. Copy lives in `messages/<locale>/settings.json`
- * under `settings.tiles.team-performance`.
  */
 export const settings = [
   settingsTile({
@@ -42,14 +38,5 @@ export const settings = [
     order: 27,
     shortcutFrom: ['/inbox'],
     gates: { permission: 'inbox.sla.manage', planFeature: 'inbox_sla' },
-  }),
-  settingsTile({
-    id: 'team-performance',
-    section: 'data',
-    href: '/inbox/analytics/team',
-    icon: 'sliders',
-    order: 55,
-    shortcutFrom: ['/inbox'],
-    gates: { permission: 'inbox.analytics.view', planFeature: 'team_performance' },
   }),
 ];
