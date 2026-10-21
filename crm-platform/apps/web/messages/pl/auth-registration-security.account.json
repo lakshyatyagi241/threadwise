@@ -563,7 +563,8 @@
             "lead_scoring": "Ocenianie leadów przez AI",
             "record_assignment": "Reguły przypisywania rekordów",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
-            "custom_roles": "Własne role i zakresy"
+            "custom_roles": "Własne role i zakresy",
+            "inbox_assignment_sticky": "Właściciel kontaktu i stały agent"
           },
           "cta": {
             "continueFree": "Kontynuuj za darmo",

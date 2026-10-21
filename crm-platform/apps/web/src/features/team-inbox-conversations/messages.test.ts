@@ -4,6 +4,10 @@ import {
   CHANNEL_KINDS,
   CONVERSATION_EVENT_TYPES,
   CONVERSATION_STATUSES,
+  HANDOFF_OUTCOMES,
+  HANDOFF_REASONS,
+  HANDOFF_SOURCES,
+  HANDOFF_TRACE_RESULTS,
   INBOX_TABS,
   INBOX_TEMPLATE_BLOCK_REASONS,
   SAVED_REPLY_VARIABLES,
@@ -39,13 +43,22 @@ function flatten(tree: Tree, prefix = ''): Record<string, string> {
 const placeholders = (message: string) =>
   [...new Set([...message.matchAll(/\{\s*([A-Za-z_]\w*)\s*[,}]/g)].map((m) => m[1]!))].sort();
 
-/** The "Imported" marker strings are a slice of their own (messages/<locale>/team-inbox-conversations.imported.json), merged at runtime. */
-const loadSlice = (locale: string): Tree =>
+/**
+ * Two domain slices of their own (messages/<locale>/team-inbox-conversations.<slice>.json), merged at runtime: the "Imported" marker and
+ * the handoff queue (BL-396).
+ */
+const loadSlice = (locale: string, slice: string): Tree =>
   JSON.parse(
-    readFileSync(join(WEB, 'messages', locale, 'team-inbox-conversations.imported.json'), 'utf8'),
+    readFileSync(join(WEB, 'messages', locale, `team-inbox-conversations.${slice}.json`), 'utf8'),
   ) as Tree;
-const en = { ...flatten(load('en')), ...flatten(loadSlice('en')) };
-const ar = { ...flatten(load('ar')), ...flatten(loadSlice('ar')) };
+const SLICES = ['imported', 'handoff'] as const;
+const withSlices = (locale: string) =>
+  Object.assign(
+    flatten(load(locale)),
+    ...SLICES.map((slice) => flatten(loadSlice(locale, slice))),
+  ) as Record<string, string>;
+const en = withSlices('en');
+const ar = withSlices('ar');
 
 describe('team-inbox-conversations messages', () => {
   it('Arabic has exactly the keys English has', () => {
@@ -133,6 +146,12 @@ const DYNAMIC = [
   ...INBOX_TEMPLATE_BLOCK_REASONS.map((r) => `templates.reason.${r}`),
   ...(['required', 'format'] as const).map((p) => `templates.problem.${p}`),
   'panel.timeline.events.unknown',
+  ...(['with_bot', 'waiting', 'with_person'] as const).map((s) => `handoff.state.${s}`),
+  ...HANDOFF_REASONS.map((s) => `handoff.reason.${s}`),
+  ...HANDOFF_SOURCES.map((s) => `handoff.source.${s}`),
+  ...HANDOFF_OUTCOMES.map((s) => `handoff.send.done.${s}`),
+  ...HANDOFF_TRACE_RESULTS.map((s) => `handoff.trace.${s}`),
+  ...(['low', 'normal', 'high', 'urgent'] as const).map((s) => `handoff.priority.${s}`),
   ...CHANNEL_KINDS.map((k) => `savedReplies.channelKind.${k}`),
   ...SAVED_REPLY_VARIABLES.map((v) => `savedReplies.variable.${v.key}`),
   ...SAVED_REPLY_VARIABLE_GROUPS.map((g) => `savedReplies.variableGroup.${g}`),

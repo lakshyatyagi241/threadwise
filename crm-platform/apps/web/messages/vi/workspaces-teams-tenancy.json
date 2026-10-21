@@ -201,12 +201,8 @@
       },
       "notUsed": {
         "title": "Đã lưu, chưa được dùng",
-        "body": "Các cài đặt này được lưu trên nhóm nhưng chưa có gì đọc chúng. Chúng sẽ bắt đầu áp dụng cùng bản cập nhật định tuyến.",
-        "strategy": "Chiến lược tự động phân công: {value}",
-        "devices": "{count, plural, one {Giới hạn # thiết bị} other {Giới hạn # thiết bị}}",
-        "businessHours": "Giờ làm việc: đã lưu",
-        "timezone": "Múi giờ: {value}",
-        "defaultAssignee": "Người nhận mặc định: {name}"
+        "body": "Cài đặt này được lưu trên nhóm, nhưng hiện chưa có gì đọc nó.",
+        "devices": "{count, plural, one {Giới hạn # thiết bị} other {Giới hạn # thiết bị}}"
       },
       "deleteUsage": {
         "title": "Những gì sẽ thay đổi",

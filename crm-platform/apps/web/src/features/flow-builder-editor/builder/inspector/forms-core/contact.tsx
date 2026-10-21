@@ -1,6 +1,18 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { usePlanFeature } from '@/lib/plan-features';
+import {
+  destinationOf,
+  HANDOFF_DESTINATIONS,
+  HANDOFF_MESSAGE_MAX,
+  HANDOFF_NOTE_MAX,
+  HANDOFF_PRIORITY_CHOICES,
+  HANDOFF_REASON_CHOICES,
+  isHandoffNode,
+  peopleOf,
+  upgradeLegacy,
+} from '../../../lib/handoff-node';
 import { Field, SelectInput, TextArea, TextInput } from '../kit';
 import type { FormProps } from '../types';
 import { agentLabel, str, withCurrent } from './helpers';
@@ -48,7 +60,154 @@ export function TagForm({ data: d, set, setMany, env }: FormProps) {
   );
 }
 
-export function AssignForm({ data: d, set, env }: FormProps) {
+export function AssignForm(props: FormProps) {
+  const t = useTranslations('flb.builder.handoff');
+  const { data: d, setMany } = props;
+  if (isHandoffNode(d)) return <HandoffForm {...props} />;
+  return (
+    <>
+      <div className="mb-4 rounded-lg border border-border bg-muted/40 p-3 text-[11.5px]">
+        <p className="font-semibold">{t('legacy')}</p>
+        <p className="mt-1 text-muted-foreground">{t('upgradeHint')}</p>
+        <button
+          type="button"
+          data-testid="flb-handoff-upgrade"
+          onClick={() => setMany(upgradeLegacy(d))}
+          className="mt-2 rounded-md bg-brand px-3 py-1.5 text-[11.5px] font-semibold text-brand-foreground hover:opacity-90"
+        >
+          {t('upgrade')}
+        </button>
+      </div>
+      <LegacyAssignForm {...props} />
+    </>
+  );
+}
+
+function HandoffForm({ data: d, set, setMany, env }: FormProps) {
+  const t = useTranslations('flb.builder.handoff');
+  const teams = env.ctx.teams;
+  const rulesInPlan = usePlanFeature('inbox_routing');
+  const kind = destinationOf(d);
+  const notInWorkspace = (v: string) => t('unknownMember', { value: v });
+  const teamOpts = withCurrent(
+    [
+      { v: '', l: teams.length ? t('teamPick') : t('teamNone') },
+      ...teams.map((team) => ({
+        v: team.id,
+        l: team.members.length
+          ? t('teamOption', { name: team.name, count: team.members.length })
+          : team.name,
+      })),
+    ],
+    d.team,
+    notInWorkspace,
+  );
+  const people = peopleOf(teams);
+  const personOpts = withCurrent(
+    [{ v: '', l: t('personPick') }, ...people.map((m) => ({ v: m.id, l: m.name }))],
+    d.userId,
+    notInWorkspace,
+  );
+  const reasonOpts = HANDOFF_REASON_CHOICES.map((r) => ({ v: r, l: t(`reasons.${r}`) }));
+  const priorityOpts = HANDOFF_PRIORITY_CHOICES.map((p) => ({
+    v: p,
+    l: p === '' ? t('priorityKeep') : t(`priorities.${p}`),
+  }));
+  return (
+    <>
+      <Field label={t('destination')} hint={t(`destHint.${kind}`)}>
+        <SelectInput
+          value={kind}
+          options={HANDOFF_DESTINATIONS.map((k) => ({
+            v: k,
+            l: k === 'rules' && !rulesInPlan ? t('dest.rulesLocked') : t(`dest.${k}`),
+          }))}
+          onChange={(v) => set('destination', v)}
+        />
+      </Field>
+      {kind === 'rules' && !rulesInPlan && (
+        <p
+          role="note"
+          data-testid="flb-handoff-plan-lock"
+          className="-mt-2 mb-4 rounded-lg bg-warning/10 p-2.5 text-[11px]"
+        >
+          {t('lockHint')}
+        </p>
+      )}
+      {kind === 'team' && (
+        <Field
+          label={t('team')}
+          hint={t.rich('teamHint', { link: (chunks) => <Link href="/teams">{chunks}</Link> })}
+        >
+          <SelectInput
+            value={d.team}
+            options={teamOpts}
+            onChange={(v) => setMany({ team: v, userId: '' })}
+          />
+        </Field>
+      )}
+      {kind === 'person' && (
+        <Field label={t('person')} hint={t('personHint')}>
+          <SelectInput
+            value={d.userId}
+            options={personOpts}
+            onChange={(v) => {
+              const owner = teams.find((tm) => tm.members.some((m) => m.id === v));
+              setMany({ userId: v, team: owner?.id ?? str(d.team) });
+            }}
+          />
+        </Field>
+      )}
+      <Field label={t('reason')}>
+        <SelectInput value={d.reason} options={reasonOpts} onChange={(v) => set('reason', v)} />
+      </Field>
+      <Field label={t('priority')}>
+        <SelectInput
+          value={d.priority}
+          options={priorityOpts}
+          onChange={(v) => set('priority', v)}
+        />
+      </Field>
+      <Field label={t('note')} hint={t('noteHint')}>
+        <TextArea
+          value={d.message}
+          rows={3}
+          maxLength={HANDOFF_NOTE_MAX}
+          onChange={(v) => set('message', v)}
+        />
+      </Field>
+      <Field label={t('customerMessage')} hint={t('customerHint')}>
+        <TextArea
+          value={d.customerMessage}
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          onChange={(v) => set('customerMessage', v)}
+        />
+      </Field>
+      <Field label={t('offHours')} hint={t('offHoursHint')}>
+        <TextArea
+          value={d.offHoursMessage}
+          rows={3}
+          maxLength={HANDOFF_MESSAGE_MAX}
+          onChange={(v) => set('offHoursMessage', v)}
+        />
+      </Field>
+      <div
+        className="mb-4 rounded-lg border border-border p-3 text-[11px]"
+        data-testid="flb-handoff-exits"
+      >
+        <p className="font-semibold">{t('exits')}</p>
+        <ul className="mt-1 space-y-0.5 text-muted-foreground">
+          <li>{t('exitAssigned')}</li>
+          <li>{t('exitWaiting')}</li>
+          <li>{t('exitUnavailable')}</li>
+        </ul>
+      </div>
+    </>
+  );
+}
+
+function LegacyAssignForm({ data: d, set, env }: FormProps) {
   const t = useTranslations('flb.builder.formsCore.contact');
   const teams = env.ctx.teams;
   const notInWorkspace = (v: string) => t('notInWorkspace', { value: v });

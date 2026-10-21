@@ -130,6 +130,8 @@ export class TeamsService {
         parentId,
         receivesConversations: input.receivesConversations,
         receivesRecords: input.receivesRecords,
+        businessHours: input.businessHours ?? null,
+        timezone: input.timezone ?? null,
       });
       const touched = await this.repo.syncMembers(tx, ctx.orgId, id, memberIds);
       if (leadUserId !== null) {
@@ -138,6 +140,15 @@ export class TeamsService {
         touched.push(leadUserId);
       }
       await this.repo.settlePrimary(tx, ctx.orgId, touched);
+      if (input.defaultAssigneeId) {
+        const assignee = await this.resolveDefaultAssignee(
+          tx,
+          ctx.orgId,
+          id,
+          input.defaultAssigneeId,
+        );
+        await this.repo.setDefaultAssignee(tx, ctx.orgId, id, assignee);
+      }
 
       const team = (await this.repo.byId(tx, ctx.orgId, id))!;
       await this.members.audit(tx, {
@@ -206,6 +217,8 @@ export class TeamsService {
         leadUserId,
         receivesConversations: input.receivesConversations,
         receivesRecords: input.receivesRecords,
+        businessHours: input.businessHours,
+        timezone: input.timezone,
       };
       // Read before the update writes the new manager, so the old one can be demoted.
       const previousLead = await this.previousLead(tx, ctx.orgId, team);
@@ -241,6 +254,14 @@ export class TeamsService {
         }
       }
       await this.repo.settlePrimary(tx, ctx.orgId, touched);
+      // The default assignee is checked against the team as saved just now (a person taken off the team cannot stay the default).
+      if (input.defaultAssigneeId !== undefined) {
+        const assignee =
+          input.defaultAssigneeId === null
+            ? null
+            : await this.resolveDefaultAssignee(tx, ctx.orgId, team.id, input.defaultAssigneeId);
+        await this.repo.setDefaultAssignee(tx, ctx.orgId, team.id, assignee);
+      }
 
       const after = (await this.repo.byId(tx, ctx.orgId, team.id))!;
       const delta: Record<string, { old: unknown; new: unknown }> = {};
@@ -261,6 +282,15 @@ export class TeamsService {
         };
       }
       if (deviceIds !== undefined) delta.deviceIds = { old: team.deviceIds, new: after.deviceIds };
+      if (input.timezone !== undefined && (input.timezone ?? null) !== team.timezone)
+        delta.timezone = { old: team.timezone, new: input.timezone ?? null };
+      if (input.businessHours !== undefined)
+        delta.businessHours = {
+          old: team.businessHours !== null,
+          new: input.businessHours !== null,
+        };
+      if (after.defaultAssigneeUuid !== team.defaultAssigneeUuid)
+        delta.defaultAssignee = { old: team.defaultAssigneeUuid, new: after.defaultAssigneeUuid };
       if (memberIds !== undefined) delta.members = { old: null, new: memberIds.length };
       if (after.parentUuid !== team.parentUuid)
         delta.parent = { old: team.parentUuid, new: after.parentUuid };
@@ -454,6 +484,26 @@ export class TeamsService {
       );
     }
     return unique.map((u) => found.get(u)!);
+  }
+
+  /** The default assignee as an internal id: an active member who is on the team (they take what nobody else can). */
+  private async resolveDefaultAssignee(
+    tx: Tx,
+    orgId: number,
+    teamId: number,
+    uuid: string,
+  ): Promise<number> {
+    const found = await this.repo.activeUserIds(tx, orgId, [uuid]);
+    const id = found.get(uuid);
+    if (id === undefined || !(await this.repo.isMember(tx, orgId, teamId, id))) {
+      throw new AppError(
+        ERROR_CODES.WSP_TEAM_MEMBER_UNKNOWN,
+        'The default assignee must be an active member of this team.',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        [{ path: 'defaultAssigneeId', message: `${uuid} is not an active member of the team` }],
+      );
+    }
+    return id;
   }
 
   private async resolveLead(tx: Tx, orgId: number, uuid: string | null): Promise<number | null> {

@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Oczekujące"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Nikt nie czeka na konsultanta",
+          "message": "Gdy bot, przepływ lub współpracownik poprosi o konsultanta, rozmowa czeka tutaj, aż ktoś ją przejmie."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Odpowiada bot",
+        "waiting": "Czeka na konsultanta",
+        "with_person": "U konsultanta"
+      },
+      "ageMinutes": "{count}min",
+      "ageHours": "{count}godz.",
+      "ageDays": "{count}d",
+      "row": {
+        "waiting": "Oczekuje",
+        "waitingFor": "Czeka {age}",
+        "inTeam": "W kolejce zespołu {team}"
+      },
+      "assignedTo": "teraz u: {name}",
+      "inTeamQueue": "kolejka zespołu {team}",
+      "cardFailed": "Nie udało się wczytać szczegółów przekazania.",
+      "claim": {
+        "button": "Przejmij",
+        "done": "Przejęto tę rozmowę.",
+        "doneOwner": "Przejęto tę rozmowę i jesteś teraz właścicielem kontaktu.",
+        "failed": "Nie udało się przejąć rozmowy.",
+        "taken": "Ktoś inny przejął tę rozmowę wcześniej."
+      },
+      "giveBack": {
+        "button": "Zwróć botowi",
+        "done": "Bot znowu odpowiada w tej rozmowie.",
+        "failed": "Nie udało się zwrócić rozmowy botowi."
+      },
+      "send": {
+        "button": "Wyślij do kolejki",
+        "buttonAgain": "Wyślij do kolejki ponownie",
+        "title": "Wyślij do konsultanta",
+        "close": "Zamknij",
+        "cancel": "Anuluj",
+        "submit": "Wyślij",
+        "intro": "Bot przestaje odpowiadać temu kontaktowi. Rozmowa trafia do wybranej osoby lub zespołu albo czeka w kolejce, aż ktoś ją przejmie.",
+        "where": "Wyślij do",
+        "whereRules": "Reguły przypisywania, a w razie braku – kolejka oczekujących",
+        "whereQueueOnly": "Kolejka oczekujących (reguły przypisywania nie są w Twoim planie)",
+        "whereTeam": "Zespół",
+        "wherePerson": "Jedna osoba",
+        "team": "Zespół",
+        "pickTeam": "Wybierz zespół",
+        "person": "Osoba",
+        "pickPerson": "Wybierz osobę",
+        "reason": "Dlaczego potrzebny jest konsultant",
+        "note": "Notatka dla osoby, która przejmie rozmowę",
+        "noteHint": "Wyświetlana na karcie przekazania. Do 500 znaków.",
+        "refused": "Tej rozmowy nie można przekazać (jest zarchiwizowana, to spam lub osobista skrzynka).",
+        "failed": "Nie udało się wysłać rozmowy.",
+        "done": {
+          "assigned": "Wysłano: ktoś już ją ma.",
+          "waiting": "Wysłano: czeka w kolejce.",
+          "unavailable": "Wysłano do kolejki: nikt nie jest teraz dostępny."
+        }
+      },
+      "details": {
+        "show": "Szczegóły",
+        "hide": "Ukryj szczegóły"
+      },
+      "card": {
+        "source": "Poprosił(a)",
+        "reason": "Powód",
+        "priority": "Priorytet",
+        "summary": "Podsumowanie",
+        "answers": "Co kontakt powiedział botowi",
+        "trace": "Jak przypisano"
+      },
+      "source": {
+        "flow": "Przepływ",
+        "ai_agent": "Agent AI",
+        "keyword": "Własna prośba kontaktu",
+        "bot_failure": "Bot, który nie mógł pomóc",
+        "manual": "Współpracownik"
+      },
+      "reason": {
+        "customer_asked": "Kontakt poprosił o konsultanta",
+        "bot_could_not_help": "Bot nie mógł pomóc",
+        "sensitive_topic": "Drażliwy temat",
+        "sales_lead": "Lead sprzedażowy",
+        "complaint": "Reklamacja",
+        "other": "Inne"
+      },
+      "priority": {
+        "low": "Niski",
+        "normal": "Normalny",
+        "high": "Wysoki",
+        "urgent": "Pilny"
+      },
+      "trace": {
+        "chosen": "Wybrano",
+        "skipped": "Pominięto",
+        "info": "Notatka"
+      }
+    }
+  }
+}

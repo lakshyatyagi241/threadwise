@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Serah terima dan penugasan",
+        "description": "Tentukan bagaimana percakapan sampai ke seseorang setelah bot memintanya, dan bagaimana pemilik kontak dan pemilik chat bekerja bersama.",
+        "keywords": "serah terima, alihkan, antrean tunggu, ambil, manusia, agen, tugaskan, penugasan, pemilik kontak, pemilik chat, agen tetap, kesinambungan, kembalikan ke bot"
+      }
+    }
+  }
+}

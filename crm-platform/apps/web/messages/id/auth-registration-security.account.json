@@ -563,7 +563,8 @@
             "lead_scoring": "Penilaian prospek dengan AI",
             "record_assignment": "Aturan penugasan data",
             "team_hierarchy": "Hierarki tim dan manajer",
-            "custom_roles": "Peran kustom dan cakupan"
+            "custom_roles": "Peran kustom dan cakupan",
+            "inbox_assignment_sticky": "Pemilik kontak dan agen tetap"
           },
           "cta": {
             "continueFree": "Lanjut gratis",

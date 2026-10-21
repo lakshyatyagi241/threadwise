@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Serah terima dan penugasan",
+        "hint": "Dipakai saat bot, alur, atau rekan tim menyerahkan percakapan ke tim ini.",
+        "method": "Cara memilih orang",
+        "methodHint": "Manual: percakapan menunggu di antrean tim sampai ada yang mengambilnya. Round robin dan Paling sedikit beban memilihkan anggota untuk Anda dan memerlukan paket dengan aturan penugasan.",
+        "defaultAssignee": "Penerima default",
+        "defaultAssigneeHint": "Mengambil percakapan saat tidak ada orang lain yang bisa. Pilih salah satu anggota tim.",
+        "noDefaultAssignee": "Tidak ada yang khusus",
+        "hours": "Jam buka",
+        "hoursHint": "Nonaktif berarti selalu buka. Di luar jam ini percakapan tetap menunggu di antrean dan kontak menerima pesan di luar jam kerja dari alur.",
+        "timezone": "Zona waktu",
+        "dayFrom": "{day}, buka",
+        "dayTo": "{day}, tutup",
+        "hoursProblem": "Setiap hari buka memerlukan jam buka dan jam tutup yang berbeda.",
+        "day": {
+          "mon": "Senin",
+          "tue": "Selasa",
+          "wed": "Rabu",
+          "thu": "Kamis",
+          "fri": "Jumat",
+          "sat": "Sabtu",
+          "sun": "Minggu"
+        }
+      }
+    }
+  }
+}

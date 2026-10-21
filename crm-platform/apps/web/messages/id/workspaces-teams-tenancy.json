@@ -201,12 +201,8 @@
       },
       "notUsed": {
         "title": "Disimpan, belum digunakan",
-        "body": "Pengaturan ini disimpan pada tim, tetapi belum ada yang membacanya. Pengaturan mulai berlaku dengan pembaruan perutean.",
-        "strategy": "Strategi penugasan otomatis: {value}",
-        "devices": "{count, plural, one {Dibatasi # perangkat} other {Dibatasi # perangkat}}",
-        "businessHours": "Jam kerja: tersimpan",
-        "timezone": "Zona waktu: {value}",
-        "defaultAssignee": "Penerima tugas default: {name}"
+        "body": "Pengaturan ini disimpan di tim, tetapi belum ada yang membacanya.",
+        "devices": "{count, plural, one {Dibatasi # perangkat} other {Dibatasi # perangkat}}"
       },
       "deleteUsage": {
         "title": "Apa yang akan berubah",

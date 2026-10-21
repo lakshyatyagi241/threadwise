@@ -563,7 +563,8 @@
             "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
             "record_assignment": "Kayıt atama kuralları",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
-            "custom_roles": "Özel roller ve kapsamlar"
+            "custom_roles": "Özel roller ve kapsamlar",
+            "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
           },
           "cta": {
             "continueFree": "Ücretsiz devam et",

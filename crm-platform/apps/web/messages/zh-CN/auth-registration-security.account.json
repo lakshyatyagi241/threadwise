@@ -563,7 +563,8 @@
             "lead_scoring": "AI 线索评分",
             "record_assignment": "记录分配规则",
             "team_hierarchy": "团队层级与经理",
-            "custom_roles": "自定义角色与范围"
+            "custom_roles": "自定义角色与范围",
+            "inbox_assignment_sticky": "联系人负责人与粘性客服"
           },
           "cta": {
             "continueFree": "继续免费使用",

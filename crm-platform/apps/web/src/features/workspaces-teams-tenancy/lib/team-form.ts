@@ -1,6 +1,9 @@
 import {
+  BUSINESS_HOURS_DAY_KEYS,
+  businessHoursDaysSchema,
   WSP_TEAM_DEFAULT_COLOR,
   WSP_TEAM_NAME_MAX,
+  type BusinessHoursDay,
   type CreateWspTeamInput,
   type UpdateWspTeamInput,
   type WspAssignmentStrategy,
@@ -18,12 +21,58 @@ export const TEAM_SWATCHES = [
   '#0C7A65',
 ] as const;
 
+/** One day of the team's opening hours as the form holds it (the time boxes are text until they are checked). */
+export interface HoursDayDraft {
+  enabled: boolean;
+  from: string;
+  to: string;
+}
+export type HoursDraft = Record<BusinessHoursDay, HoursDayDraft>;
+
+/** Monday to Friday, 09:00 to 18:00: what a team starts from when its owner switches opening hours on. */
+export const defaultHours = (): HoursDraft =>
+  Object.fromEntries(
+    BUSINESS_HOURS_DAY_KEYS.map((k) => [
+      k,
+      { enabled: k !== 'sat' && k !== 'sun', from: '09:00', to: '18:00' },
+    ]),
+  ) as HoursDraft;
+
+/** The team's saved schedule as a draft; a stored value this build cannot read starts from the default week rather than failing. */
+function hoursFromTeam(team: WspTeam): HoursDraft | null {
+  const raw = team.unusedSettings.businessHours;
+  if (raw === null || raw === undefined) return null;
+  const parsed = businessHoursDaysSchema.safeParse((raw as { days?: unknown }).days);
+  if (!parsed.success) return defaultHours();
+  return Object.fromEntries(
+    BUSINESS_HOURS_DAY_KEYS.map((k) => {
+      const d = parsed.data[k];
+      return [k, { enabled: d.enabled, from: d.from, to: d.to }];
+    }),
+  ) as HoursDraft;
+}
+
+/** Whether every enabled day has two different, filled-in times (the server checks the rest). */
+export function hoursProblem(hours: HoursDraft | null): boolean {
+  if (hours === null) return false;
+  return BUSINESS_HOURS_DAY_KEYS.some((k) => {
+    const d = hours[k];
+    return d.enabled && (d.from === '' || d.to === '' || d.from === d.to);
+  });
+}
+
 export interface TeamForm {
   name: string;
   color: string;
   description: string;
-  /** Kept as the team has it and sent unchanged: routing does not read it yet, so the screen only shows it. */
+  /** How a conversation handed to the team picks a person: by hand (it waits in the team's queue), in turn, or the least busy. */
   assignmentStrategy: WspAssignmentStrategy;
+  /** Who takes a conversation handed to the team when nobody else can (a member's id); null = nobody in particular. */
+  defaultAssigneeId: string | null;
+  /** The time zone the opening hours are read in (switching the hours on starts from the browser's zone). */
+  timezone: string;
+  /** The team's opening hours; null = always open. */
+  hours: HoursDraft | null;
   /** The parent team's id; null = a top-level team. */
   parentId: string | null;
   /** The manager's member id; null = none. A manager is always on the team and a lead. */
@@ -43,6 +92,9 @@ export const emptyTeamForm = (): TeamForm => ({
   color: WSP_TEAM_DEFAULT_COLOR,
   description: '',
   assignmentStrategy: 'manual',
+  defaultAssigneeId: null,
+  timezone: '',
+  hours: null,
   parentId: null,
   leadId: null,
   receivesConversations: true,
@@ -59,6 +111,9 @@ export function formFromTeam(team: WspTeam): TeamForm {
     color: team.color,
     description: team.description ?? '',
     assignmentStrategy: team.assignmentStrategy,
+    defaultAssigneeId: team.unusedSettings.defaultAssignee?.id ?? null,
+    timezone: team.unusedSettings.timezone ?? '',
+    hours: hoursFromTeam(team),
     parentId: team.parentId,
     leadId: team.lead?.id ?? null,
     receivesConversations: team.receivesConversations,
@@ -130,12 +185,29 @@ export function withMemberRole(form: TeamForm, id: string, role: WspTeamMemberRo
 
 const descriptionOf = (form: TeamForm): string | null => form.description.trim() || null;
 
+/** The handoff settings of the form as the server takes them: hours off = null (always open), a cleared time zone = null. */
+const routingOf = (form: TeamForm) => ({
+  defaultAssigneeId:
+    form.defaultAssigneeId && form.memberIds.includes(form.defaultAssigneeId)
+      ? form.defaultAssigneeId
+      : null,
+  timezone: form.hours && form.timezone ? form.timezone : null,
+  businessHours: form.hours
+    ? {
+        days: Object.fromEntries(
+          BUSINESS_HOURS_DAY_KEYS.map((k) => [k, { ...form.hours![k] }]),
+        ) as Record<BusinessHoursDay, HoursDayDraft>,
+      }
+    : null,
+});
+
 export function toCreateInput(form: TeamForm): CreateWspTeamInput {
   return {
     name: form.name.trim(),
     color: form.color,
     description: descriptionOf(form),
     assignmentStrategy: form.assignmentStrategy,
+    ...routingOf(form),
     memberIds: form.memberIds,
     deviceIds: form.deviceIds,
     parentId: form.parentId,
@@ -159,6 +231,7 @@ export function toUpdateInput(
     color: form.color,
     description: descriptionOf(form),
     assignmentStrategy: form.assignmentStrategy,
+    ...routingOf(form),
     memberIds: form.memberIds,
     ...(devicesShown ? { deviceIds: form.deviceIds } : {}),
     parentId: form.parentId,

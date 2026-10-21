@@ -1444,7 +1444,8 @@
             "lead_scoring": "Puntúa los contactos con IA y da soporte al piloto de crecimiento. La app Puntuación de leads con IA controla este interruptor.",
             "record_assignment": "Asigna los nuevos contactos, empresas y negocios al responsable de ventas adecuado mediante reglas por prioridad.",
             "team_hierarchy": "Equipos padre, líderes de equipo y gerentes que ven su equipo y los equipos inferiores.",
-            "custom_roles": "Crea y edita roles, y elige un alcance (propios, del equipo o todos los registros) para cada permiso."
+            "custom_roles": "Crea y edita roles, y elige un alcance (propios, del equipo o todos los registros) para cada permiso.",
+            "inbox_assignment_sticky": "Asignación con prioridad al propietario y sincronizada entre el propietario del contacto y el responsable del chat, la ventana de contacto recurrente y el aviso de reasignación. Funciona junto con el enrutamiento de la bandeja."
           },
           "units": {
             "days": "Días",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Puntuación de leads con IA",
             "record_assignment": "Reglas de asignación de registros (asignar automáticamente contactos, empresas y negocios)",
             "team_hierarchy": "Jerarquía de equipos y gerentes",
-            "custom_roles": "Roles personalizados y alcances"
+            "custom_roles": "Roles personalizados y alcances",
+            "inbox_assignment_sticky": "Propietario del contacto y agente fijo"
           },
           "problems": {
             "required": "Este campo es obligatorio.",

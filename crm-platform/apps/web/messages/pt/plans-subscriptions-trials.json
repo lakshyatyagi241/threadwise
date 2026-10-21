@@ -88,7 +88,8 @@
       "lead_scoring": "Pontuação de leads com IA",
       "record_assignment": "Regras de atribuição de registros",
       "team_hierarchy": "Hierarquia de equipes e gestores",
-      "custom_roles": "Funções personalizadas e escopos"
+      "custom_roles": "Funções personalizadas e escopos",
+      "inbox_assignment_sticky": "Responsável pelo contato e agente fixo"
     },
     "limitGroups": {
       "messaging": "Mensagens",

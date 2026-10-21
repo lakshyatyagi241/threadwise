@@ -1444,7 +1444,8 @@
             "lead_scoring": "Ocenia kontakty za pomocą AI i zasila pilotaż wzrostu. Tym przełącznikiem zarządza aplikacja Ocenianie leadów przez AI.",
             "record_assignment": "Przypisuje nowe kontakty, firmy i transakcje właściwemu opiekunowi sprzedaży według reguł priorytetu.",
             "team_hierarchy": "Zespoły nadrzędne, liderzy zespołów i menedżerowie, którzy widzą swój zespół i zespoły poniżej.",
-            "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia."
+            "custom_roles": "Twórz i edytuj role oraz wybierz zakres (własne, zespołu lub wszystkie rekordy) dla każdego uprawnienia.",
+            "inbox_assignment_sticky": "Przypisywanie „najpierw właściciel” i synchronizacja między właścicielem kontaktu a właścicielem czatu, okno dla powracających kontaktów i pytanie przy zmianie przypisania. Działa razem z routingiem skrzynki."
           },
           "units": {
             "days": "Dni",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Ocenianie leadów przez AI",
             "record_assignment": "Reguły przypisywania rekordów (automatyczne przypisywanie kontaktów, firm i transakcji)",
             "team_hierarchy": "Hierarchia zespołów i menedżerowie",
-            "custom_roles": "Własne role i zakresy"
+            "custom_roles": "Własne role i zakresy",
+            "inbox_assignment_sticky": "Właściciel kontaktu i stały agent"
           },
           "problems": {
             "required": "To pole jest wymagane.",

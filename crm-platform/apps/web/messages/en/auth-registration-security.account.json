@@ -578,6 +578,7 @@
             "wa_storefront": "WhatsApp catalog",
             "inbox_sla": "Inbox SLA",
             "inbox_routing": "Inbox routing",
+            "inbox_assignment_sticky": "Contact owner and sticky agent",
             "waba_calling": "WhatsApp calling",
             "inbox_kanban": "Inbox Kanban",
             "team_performance": "Team performance",

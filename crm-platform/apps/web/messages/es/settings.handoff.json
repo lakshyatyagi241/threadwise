@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Traspaso y asignación",
+        "description": "Decide cómo llega una conversación a una persona después de que un bot la pida, y cómo trabajan juntos el propietario del contacto y el responsable del chat.",
+        "keywords": "traspaso, derivar, cola de espera, tomar, humano, agente, asignar, asignación, propietario del contacto, responsable del chat, agente fijo, continuidad, devolver al bot"
+      }
+    }
+  }
+}

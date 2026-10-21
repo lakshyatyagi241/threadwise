@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "ditugaskan",
+        "waitingInQueue": "menunggu di antrean",
+        "noAgentOutOfHours": "tidak ada agen / di luar jam kerja"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "Langkah {stage}: pilih orang tujuan percakapan."
+      }
+    },
+    "simulator": {
+      "handoff": "diserahkan ke seseorang (tujuan: {destination}, tim \"{team}\"); chat uji mengambil jalur keluar \"ditugaskan\""
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "Serahkan ke",
+          "handoffRules": "Aturan penugasan",
+          "pickAgent": "— pilih orang —"
+        }
+      },
+      "handoff": {
+        "legacy": "Langkah ini adalah “Tugaskan agen” versi lama.",
+        "upgradeHint": "Langkah ini memberikan chat ke tim lalu melanjutkan. Beralihlah ke Serah terima ke manusia untuk menambahkan alasan, prioritas, pesan untuk kontak, dan tiga jalur keluar (ditugaskan, menunggu di antrean, tidak ada agen atau di luar jam kerja). Sambungan yang sudah Anda buat tetap berfungsi.",
+        "upgrade": "Gunakan fitur serah terima",
+        "destination": "Kirim percakapan ke",
+        "dest": {
+          "team": "Sebuah tim",
+          "person": "Satu orang",
+          "rules": "Aturan penugasan",
+          "rulesLocked": "Aturan penugasan (tidak ada di paket Anda)"
+        },
+        "destHint": {
+          "team": "Percakapan diberikan ke seseorang di tim, atau menunggu di antrean tim.",
+          "person": "Percakapan diberikan ke orang ini jika bisa menerimanya; jika tidak, menunggu di antrean.",
+          "rules": "Memakai aturan penugasan otomatis percakapan Anda; jika tidak ada yang menemukan orang, percakapan menunggu di antrean."
+        },
+        "lockHint": "Paket Anda tidak mencakup aturan penugasan, jadi percakapan yang dikirim ke sini menunggu di antrean Menunggu sampai rekan tim mengambilnya.",
+        "team": "Tim",
+        "teamPick": "— pilih tim —",
+        "teamNone": "Belum ada tim",
+        "teamOption": "{name} · {count, plural, other {# agen}}",
+        "teamHint": "<link>Kelola tim →</link>",
+        "person": "Orang",
+        "personPick": "— pilih orang —",
+        "personHint": "Seseorang dari tim Anda.",
+        "unknownMember": "{value} (tidak ada di workspace ini)",
+        "reason": "Alasan",
+        "reasons": {
+          "customer_asked": "Kontak meminta bicara dengan orang",
+          "bot_could_not_help": "Bot tidak dapat membantu",
+          "sensitive_topic": "Topik sensitif",
+          "sales_lead": "Prospek penjualan",
+          "complaint": "Keluhan",
+          "other": "Lainnya"
+        },
+        "priority": "Prioritas",
+        "priorityKeep": "Pertahankan prioritas saat ini",
+        "priorities": {
+          "low": "Rendah",
+          "normal": "Normal",
+          "high": "Tinggi",
+          "urgent": "Mendesak"
+        },
+        "note": "Catatan untuk agen",
+        "noteHint": "Internal. Ditampilkan di kartu serah terima; '{{'variables'}}' dapat dipakai. Maksimal 500 karakter.",
+        "customerMessage": "Pesan untuk kontak",
+        "customerHint": "Dikirim saat percakapan diserahkan. Kosongkan jika tidak ingin mengirim apa pun.",
+        "offHours": "Pesan saat tidak ada yang tersedia",
+        "offHoursHint": "Dikirim sebagai pengganti saat tim tutup atau tidak ada yang bisa mengambil. Percakapan tetap menunggu di antrean.",
+        "exits": "Langkah ini memiliki tiga jalur keluar",
+        "exitAssigned": "ditugaskan: sekarang sudah ada orang yang memegang percakapan",
+        "exitWaiting": "menunggu di antrean: menunggu sampai ada yang mengambil",
+        "exitUnavailable": "tidak ada agen / di luar jam kerja: tidak ada yang bisa mengambil",
+        "simpleExits": "Langkah berikutnya berjalan setelah seseorang memegang percakapan. Jika harus menunggu di antrean, atau tidak ada yang tersedia, bot berhenti di sini dan seseorang menjawab. Gunakan pembuat Lanjutan untuk mengikuti jalur keluar lainnya."
+      }
+    }
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Transfert et assignation",
+        "description": "Définissez comment une conversation parvient à une personne après la demande d’un bot, et comment le propriétaire du contact et le responsable du chat travaillent ensemble.",
+        "keywords": "transfert, transférer, file d’attente, prendre, humain, agent, assigner, assignation, propriétaire du contact, responsable du chat, agent fidélisé, continuité, rendre au bot"
+      }
+    }
+  }
+}

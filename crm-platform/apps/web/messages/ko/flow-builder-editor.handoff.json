@@ -1,0 +1,83 @@
+{
+  "flb": {
+    "contracts": {
+      "ports": {
+        "assigned": "배정됨",
+        "waitingInQueue": "대기열에서 대기 중",
+        "noAgentOutOfHours": "상담원 없음 / 운영 시간 외"
+      }
+    },
+    "simpleModel": {
+      "problems": {
+        "choosePerson": "{stage}단계: 대화를 전달할 담당자를 선택하세요."
+      }
+    },
+    "simulator": {
+      "handoff": "상담원에게 인계됨 (대상: {destination}, 팀 \"{team}\"). 테스트 채팅은 \"배정됨\" 출구로 이동합니다"
+    },
+    "builder": {
+      "shell": {
+        "nodePreview": {
+          "handoffTo": "인계 대상",
+          "handoffRules": "배정 규칙",
+          "pickAgent": "— 담당자 선택 —"
+        }
+      },
+      "handoff": {
+        "legacy": "이 단계는 이전 방식인 \"상담원 배정\"입니다.",
+        "upgradeHint": "채팅을 팀에 배정하고 다음으로 진행합니다. \"상담원 인계\"로 바꾸면 사유, 우선순위, 연락처에게 보낼 메시지, 세 가지 출구(배정됨, 대기열에서 대기 중, 상담원 없음 또는 운영 시간 외)를 추가할 수 있습니다. 이미 연결해 둔 구성은 계속 동작합니다.",
+        "upgrade": "인계 기능 사용",
+        "destination": "대화를 보낼 대상",
+        "dest": {
+          "team": "팀",
+          "person": "한 명",
+          "rules": "배정 규칙",
+          "rulesLocked": "배정 규칙 (현재 요금제에 없음)"
+        },
+        "destHint": {
+          "team": "팀의 누군가에게 전달되거나 팀 대기열에서 기다립니다.",
+          "person": "맡을 수 있으면 이 담당자에게 전달되고, 그렇지 않으면 대기열에서 기다립니다.",
+          "rules": "대화 자동 배정 규칙을 사용합니다. 어떤 규칙도 담당자를 찾지 못하면 대기열에서 기다립니다."
+        },
+        "lockHint": "현재 요금제에는 배정 규칙이 포함되어 있지 않으므로, 여기로 보낸 대화는 팀원이 맡을 때까지 대기열에서 기다립니다.",
+        "team": "팀",
+        "teamPick": "— 팀 선택 —",
+        "teamNone": "아직 팀이 없습니다",
+        "teamOption": "{name} · {count, plural, other {상담원 #명}}",
+        "teamHint": "<link>팀 관리 →</link>",
+        "person": "담당자",
+        "personPick": "— 담당자 선택 —",
+        "personHint": "팀 소속 중 한 명.",
+        "unknownMember": "{value} (이 워크스페이스에 없음)",
+        "reason": "사유",
+        "reasons": {
+          "customer_asked": "연락처가 상담원을 요청했습니다",
+          "bot_could_not_help": "봇이 도움을 주지 못했습니다",
+          "sensitive_topic": "민감한 주제",
+          "sales_lead": "영업 리드",
+          "complaint": "불만",
+          "other": "기타"
+        },
+        "priority": "우선순위",
+        "priorityKeep": "현재 우선순위 유지",
+        "priorities": {
+          "low": "낮음",
+          "normal": "보통",
+          "high": "높음",
+          "urgent": "긴급"
+        },
+        "note": "상담원에게 남기는 메모",
+        "noteHint": "내부용입니다. 인계 카드에 표시되며 '{{'variables'}}'를 사용할 수 있습니다. 최대 500자.",
+        "customerMessage": "연락처에게 보낼 메시지",
+        "customerHint": "대화가 인계될 때 전송됩니다. 비워 두면 아무것도 보내지 않습니다.",
+        "offHours": "응대 가능한 사람이 없을 때의 메시지",
+        "offHoursHint": "팀이 운영 중이 아니거나 아무도 맡을 수 없을 때 대신 전송됩니다. 대화는 계속 대기열에서 기다립니다.",
+        "exits": "이 단계에는 출구가 세 개 있습니다",
+        "exitAssigned": "배정됨: 이제 담당자가 대화를 맡고 있습니다",
+        "exitWaiting": "대기열에서 대기 중: 누군가 맡기를 기다립니다",
+        "exitUnavailable": "상담원 없음 / 운영 시간 외: 맡을 수 있는 사람이 없었습니다",
+        "simpleExits": "다음 단계는 상담원이 대화를 맡은 뒤에 실행됩니다. 대기열에서 기다려야 하거나 응대 가능한 사람이 없으면 봇은 여기서 멈추고 상담원이 응답합니다. 다른 출구를 따라가려면 고급 빌더를 사용하세요."
+      }
+    }
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "team-inbox-routing-sla": {
+    "handoffSettings": {
+      "back": "Tự động hóa",
+      "title": "Chuyển giao và giao việc",
+      "subtitle": "Cách cuộc trò chuyện đến tay một người khi bot, luồng hoặc đồng nghiệp yêu cầu, và cách chủ sở hữu liên hệ và người phụ trách chat phối hợp với nhau.",
+      "noAccess": "Bạn không có quyền xem các cài đặt này. Hãy nhờ Chủ sở hữu hoặc Quản trị viên của không gian làm việc cấp quyền cài đặt hộp thư.",
+      "readOnly": "Bạn có thể xem các cài đặt này nhưng không thể thay đổi.",
+      "loading": "Đang tải cài đặt",
+      "loadFailed": "Không thể tải cài đặt.",
+      "retry": "Thử lại",
+      "saved": "Đã lưu cài đặt.",
+      "saveFailed": "Không thể lưu cài đặt.",
+      "notInPlan": "Không có trong gói của bạn",
+      "upgradeHint": "Gói của bạn không bao gồm tính năng này. Hãy nhờ chủ tài khoản nâng cấp gói.",
+      "auto": {
+        "title": "Tự động giao việc",
+        "body": "Khi cần một người, quy tắc giao việc có thể chọn giúp bạn. Nếu không có quy tắc, cuộc trò chuyện sẽ chờ ở tab Đang chờ cho đến khi một đồng nghiệp nhận.",
+        "switch": "Tự động giao",
+        "switchHint": "Tắt để quy tắc giao việc ngừng chạy, cả với cuộc trò chuyện mới và chuyển giao. Khi đó cuộc trò chuyện chờ trong hàng chờ hoặc chuyển đến người hay nhóm mà luồng chỉ định."
+      },
+      "owner": {
+        "title": "Chủ sở hữu liên hệ và người phụ trách chat",
+        "body": "Một liên hệ có thể có chủ sở hữu, và mỗi cuộc trò chuyện có người trả lời. Chọn cách hai vai trò này liên quan với nhau.",
+        "modeLabel": "Mối liên hệ giữa chủ sở hữu liên hệ và người phụ trách chat",
+        "modes": {
+          "independent": {
+            "title": "Độc lập",
+            "body": "Người phụ trách chat và chủ sở hữu liên hệ tách biệt. Thay đổi bên này không làm đổi bên kia."
+          },
+          "owner_first": {
+            "title": "Ưu tiên chủ sở hữu",
+            "body": "Chat mới được chuyển cho chủ sở hữu liên hệ trước nếu họ có thể nhận; nếu không, các quy tắc thông thường sẽ quyết định."
+          },
+          "keep_in_sync": {
+            "title": "Giữ đồng bộ",
+            "body": "Như ưu tiên chủ sở hữu, và khi chủ sở hữu của liên hệ thay đổi, các chat đang mở được giao tự động sẽ chuyển theo. Chat do một người đã nhận thì không bao giờ bị chuyển."
+          }
+        },
+        "claimSets": "Nhận chat sẽ trở thành chủ sở hữu liên hệ",
+        "claimSetsHint": "Khi ai đó nhận một cuộc trò chuyện và liên hệ chưa có chủ sở hữu, người đó trở thành chủ sở hữu.",
+        "prompt": "Hỏi về chủ sở hữu liên hệ khi giao lại",
+        "promptHint": "Khi chat được giao thủ công cho người khác, đề nghị đặt họ làm chủ sở hữu liên hệ luôn.",
+        "window": "Giữ liên hệ quay lại với nhân viên gần nhất",
+        "windowHint": "Liên hệ nhắn lại sẽ được chuyển cho người đã xử lý cuộc trò chuyện gần nhất, trong số ngày này. Tắt nghĩa là không giới hạn.",
+        "windowDays": "Số ngày",
+        "days": "ngày"
+      },
+      "queue": {
+        "title": "Hàng chờ",
+        "body": "Các cuộc trò chuyện không ai nhận được sẽ chờ ở tab Đang chờ của hộp thư, kèm lý do và thời gian đã chờ.",
+        "notify": "Báo cho nhóm khi có cuộc trò chuyện đang chờ",
+        "notifyHint": "Thành viên của nhóm, hoặc mọi người có thể trả lời chat chưa giao, sẽ nhận được thông báo kèm lý do."
+      },
+      "teams": {
+        "title": "Nhóm",
+        "body": "Mỗi nhóm có phương thức giao việc, giờ làm việc, múi giờ và người nhận mặc định riêng. Chúng được dùng mỗi khi một cuộc trò chuyện được chuyển cho nhóm đó.",
+        "link": "Mở Nhóm"
+      }
+    }
+  }
+}

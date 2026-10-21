@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Đang chờ"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Không có ai đang chờ người xử lý",
+          "message": "Khi bot, luồng hoặc đồng nghiệp yêu cầu một người, cuộc trò chuyện sẽ chờ tại đây cho đến khi có người nhận."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Bot đang trả lời",
+        "waiting": "Chờ người xử lý",
+        "with_person": "Đang có người xử lý"
+      },
+      "ageMinutes": "{count}p",
+      "ageHours": "{count}g",
+      "ageDays": "{count}ng",
+      "row": {
+        "waiting": "Đang chờ",
+        "waitingFor": "Đã chờ {age}",
+        "inTeam": "Trong hàng chờ của {team}"
+      },
+      "assignedTo": "hiện do {name} xử lý",
+      "inTeamQueue": "hàng chờ của {team}",
+      "cardFailed": "Không thể tải chi tiết chuyển giao.",
+      "claim": {
+        "button": "Nhận",
+        "done": "Bạn đã nhận cuộc trò chuyện này.",
+        "doneOwner": "Bạn đã nhận cuộc trò chuyện này và hiện là chủ sở hữu của liên hệ.",
+        "failed": "Không thể nhận cuộc trò chuyện.",
+        "taken": "Người khác đã nhận cuộc trò chuyện này trước."
+      },
+      "giveBack": {
+        "button": "Trả lại cho bot",
+        "done": "Bot trả lời lại cuộc trò chuyện này.",
+        "failed": "Không thể trả cuộc trò chuyện lại cho bot."
+      },
+      "send": {
+        "button": "Gửi vào hàng chờ",
+        "buttonAgain": "Gửi lại vào hàng chờ",
+        "title": "Gửi cho một người",
+        "close": "Đóng",
+        "cancel": "Hủy",
+        "submit": "Gửi",
+        "intro": "Bot sẽ ngừng trả lời liên hệ này. Cuộc trò chuyện chuyển đến người hoặc nhóm bạn chọn, hoặc chờ trong hàng chờ cho đến khi có người nhận.",
+        "where": "Gửi tới",
+        "whereRules": "Quy tắc giao việc, nếu không có thì hàng chờ",
+        "whereQueueOnly": "Hàng chờ (gói của bạn không có quy tắc giao việc)",
+        "whereTeam": "Một nhóm",
+        "wherePerson": "Một người",
+        "team": "Nhóm",
+        "pickTeam": "Chọn một nhóm",
+        "person": "Người",
+        "pickPerson": "Chọn một người",
+        "reason": "Vì sao cần một người",
+        "note": "Ghi chú cho người nhận",
+        "noteHint": "Hiển thị trên thẻ chuyển giao. Tối đa 500 ký tự.",
+        "refused": "Không thể chuyển giao cuộc trò chuyện này (đã lưu trữ, là spam hoặc là hộp thư cá nhân).",
+        "failed": "Không thể gửi cuộc trò chuyện.",
+        "done": {
+          "assigned": "Đã gửi: hiện đã có người xử lý.",
+          "waiting": "Đã gửi: đang chờ trong hàng chờ.",
+          "unavailable": "Đã gửi vào hàng chờ: hiện không có ai sẵn sàng."
+        }
+      },
+      "details": {
+        "show": "Chi tiết",
+        "hide": "Ẩn chi tiết"
+      },
+      "card": {
+        "source": "Người yêu cầu",
+        "reason": "Lý do",
+        "priority": "Mức ưu tiên",
+        "summary": "Tóm tắt",
+        "answers": "Những gì liên hệ đã nói với bot",
+        "trace": "Cách được giao"
+      },
+      "source": {
+        "flow": "Một luồng",
+        "ai_agent": "Một tác nhân AI",
+        "keyword": "Yêu cầu của chính liên hệ",
+        "bot_failure": "Một bot không thể hỗ trợ",
+        "manual": "Một đồng nghiệp"
+      },
+      "reason": {
+        "customer_asked": "Liên hệ yêu cầu gặp người thật",
+        "bot_could_not_help": "Bot không thể hỗ trợ",
+        "sensitive_topic": "Chủ đề nhạy cảm",
+        "sales_lead": "Khách hàng tiềm năng",
+        "complaint": "Khiếu nại",
+        "other": "Khác"
+      },
+      "priority": {
+        "low": "Thấp",
+        "normal": "Bình thường",
+        "high": "Cao",
+        "urgent": "Khẩn cấp"
+      },
+      "trace": {
+        "chosen": "Đã chọn",
+        "skipped": "Đã bỏ qua",
+        "info": "Ghi chú"
+      }
+    }
+  }
+}

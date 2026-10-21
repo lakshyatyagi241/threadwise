@@ -563,7 +563,8 @@
             "lead_scoring": "Puntuación de leads con IA",
             "record_assignment": "Reglas de asignación de registros",
             "team_hierarchy": "Jerarquía de equipos y gerentes",
-            "custom_roles": "Roles personalizados y alcances"
+            "custom_roles": "Roles personalizados y alcances",
+            "inbox_assignment_sticky": "Propietario del contacto y agente fijo"
           },
           "cta": {
             "continueFree": "Continuar gratis",

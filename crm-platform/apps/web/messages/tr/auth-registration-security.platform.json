@@ -1444,7 +1444,8 @@
             "lead_scoring": "Kişileri yapay zekayla puanlar ve büyüme pilotunu çalıştırır. Bu anahtarın sahibi Yapay zeka ile potansiyel müşteri puanlama uygulamasıdır.",
             "record_assignment": "Yeni kişileri, şirketleri ve fırsatları öncelik kurallarına göre doğru satış sahibine atar.",
             "team_hierarchy": "Kendi ekibini ve altındaki ekipleri gören üst ekipler, ekip liderleri ve yöneticiler.",
-            "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar)."
+            "custom_roles": "Rolleri oluşturun ve düzenleyin, her izin için bir kapsam seçin (kendi, ekip veya tüm kayıtlar).",
+            "inbox_assignment_sticky": "Kişi sahibi ile sohbet sahibi arasında önce sahip ve senkronize tut atamaları, geri dönen kişi süresi ve yeniden atama istemi. Gelen kutusu yönlendirmesiyle birlikte çalışır."
           },
           "units": {
             "days": "Gün",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Yapay zeka ile potansiyel müşteri puanlama",
             "record_assignment": "Kayıt atama kuralları (kişileri, şirketleri ve fırsatları otomatik atayın)",
             "team_hierarchy": "Ekip hiyerarşisi ve yöneticiler",
-            "custom_roles": "Özel roller ve kapsamlar"
+            "custom_roles": "Özel roller ve kapsamlar",
+            "inbox_assignment_sticky": "Kişi sahibi ve sabit temsilci"
           },
           "problems": {
             "required": "Bu alan zorunludur.",

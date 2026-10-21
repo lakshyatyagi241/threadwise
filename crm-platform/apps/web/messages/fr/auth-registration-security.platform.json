@@ -1444,7 +1444,8 @@
             "lead_scoring": "Note les contacts avec l’IA et alimente le pilote de croissance. L’application Scoring des leads par IA gère ce commutateur.",
             "record_assignment": "Attribue les nouveaux contacts, entreprises et affaires au bon responsable commercial selon des règles de priorité.",
             "team_hierarchy": "Équipes parentes, responsables d'équipe et managers qui voient leur équipe et les équipes en dessous.",
-            "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation."
+            "custom_roles": "Créez et modifiez des rôles, et choisissez un périmètre (les siens, l'équipe ou tous les enregistrements) pour chaque autorisation.",
+            "inbox_assignment_sticky": "Assignation propriétaire d’abord et synchronisée entre le propriétaire du contact et le responsable du chat, fenêtre des contacts récurrents et invite de réassignation. Fonctionne avec le routage de la boîte de réception."
           },
           "units": {
             "days": "Jours",
@@ -1636,7 +1637,8 @@
             "lead_scoring": "Scoring des leads par IA",
             "record_assignment": "Règles d'attribution des enregistrements (attribution automatique des contacts, entreprises et affaires)",
             "team_hierarchy": "Hiérarchie des équipes et managers",
-            "custom_roles": "Rôles personnalisés et périmètres"
+            "custom_roles": "Rôles personnalisés et périmètres",
+            "inbox_assignment_sticky": "Propriétaire du contact et agent fidélisé"
           },
           "problems": {
             "required": "Ce champ est obligatoire.",

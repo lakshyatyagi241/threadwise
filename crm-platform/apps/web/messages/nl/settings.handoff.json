@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Overdracht en toewijzing",
+        "description": "Bepaal hoe een gesprek bij een medewerker terechtkomt nadat een bot erom vraagt, en hoe de contacteigenaar en de gesprekseigenaar samenwerken.",
+        "keywords": "overdracht, overdragen, wachtrij, overnemen, mens, medewerker, toewijzen, toewijzing, contacteigenaar, gesprekseigenaar, vaste medewerker, continuïteit, terug naar bot"
+      }
+    }
+  }
+}

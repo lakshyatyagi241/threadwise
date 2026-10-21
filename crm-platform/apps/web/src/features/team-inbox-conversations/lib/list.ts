@@ -193,6 +193,9 @@ export function matchesFilters(
     case 'unread':
       if (row.unreadCount <= 0) return false;
       break;
+    case 'waiting':
+      if (row.handling !== 'waiting') return false;
+      break;
     case 'all':
       break;
   }

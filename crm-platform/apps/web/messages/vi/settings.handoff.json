@@ -1,0 +1,11 @@
+{
+  "settings": {
+    "tiles": {
+      "assignment-settings": {
+        "label": "Chuyển giao và giao việc",
+        "description": "Quyết định cách cuộc trò chuyện đến tay một người sau khi bot yêu cầu, và cách chủ sở hữu liên hệ và người phụ trách chat phối hợp với nhau.",
+        "keywords": "chuyển giao, bàn giao, hàng chờ, nhận, người thật, nhân viên, giao việc, phân công, chủ sở hữu liên hệ, người phụ trách chat, nhân viên cố định, liên tục, trả lại cho bot"
+      }
+    }
+  }
+}

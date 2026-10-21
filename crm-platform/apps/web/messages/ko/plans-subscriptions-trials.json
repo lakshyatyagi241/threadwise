@@ -88,7 +88,8 @@
       "lead_scoring": "AI 리드 스코어링",
       "record_assignment": "레코드 배정 규칙",
       "team_hierarchy": "팀 계층 및 매니저",
-      "custom_roles": "사용자 지정 역할 및 범위"
+      "custom_roles": "사용자 지정 역할 및 범위",
+      "inbox_assignment_sticky": "연락처 담당자와 고정 배정"
     },
     "limitGroups": {
       "messaging": "메시징",

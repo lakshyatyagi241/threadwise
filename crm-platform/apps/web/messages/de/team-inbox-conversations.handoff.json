@@ -1,0 +1,111 @@
+{
+  "team-inbox-conversations": {
+    "list": {
+      "tabs": {
+        "waiting": "Wartend"
+      },
+      "empty": {
+        "waiting": {
+          "title": "Niemand wartet auf einen Mitarbeiter",
+          "message": "Wenn ein Bot, ein Flow oder ein Teamkollege einen Mitarbeiter anfordert, wartet die Unterhaltung hier, bis jemand sie übernimmt."
+        }
+      }
+    },
+    "handoff": {
+      "state": {
+        "with_bot": "Der Bot antwortet",
+        "waiting": "Wartet auf einen Mitarbeiter",
+        "with_person": "Bei einem Mitarbeiter"
+      },
+      "ageMinutes": "{count}Min.",
+      "ageHours": "{count}Std.",
+      "ageDays": "{count}T",
+      "row": {
+        "waiting": "Wartend",
+        "waitingFor": "Wartet seit {age}",
+        "inTeam": "In der Warteschlange von {team}"
+      },
+      "assignedTo": "jetzt bei {name}",
+      "inTeamQueue": "Warteschlange von {team}",
+      "cardFailed": "Die Übergabedetails konnten nicht geladen werden.",
+      "claim": {
+        "button": "Übernehmen",
+        "done": "Du hast diese Unterhaltung übernommen.",
+        "doneOwner": "Du hast diese Unterhaltung übernommen und bist jetzt Besitzer des Kontakts.",
+        "failed": "Die Unterhaltung konnte nicht übernommen werden.",
+        "taken": "Jemand anderes hat diese Unterhaltung zuerst übernommen."
+      },
+      "giveBack": {
+        "button": "An Bot zurückgeben",
+        "done": "Der Bot beantwortet diese Unterhaltung wieder.",
+        "failed": "Die Unterhaltung konnte nicht an den Bot zurückgegeben werden."
+      },
+      "send": {
+        "button": "In die Warteschlange senden",
+        "buttonAgain": "Erneut in die Warteschlange senden",
+        "title": "An einen Mitarbeiter senden",
+        "close": "Schließen",
+        "cancel": "Abbrechen",
+        "submit": "Senden",
+        "intro": "Der Bot antwortet diesem Kontakt nicht mehr. Die Unterhaltung geht an die Person oder das Team, das du auswählst, oder wartet in der Warteschlange, bis jemand sie übernimmt.",
+        "where": "Senden an",
+        "whereRules": "Die Zuweisungsregeln, sonst die Warteschlange",
+        "whereQueueOnly": "Die Warteschlange (Zuweisungsregeln sind nicht in deinem Tarif enthalten)",
+        "whereTeam": "Ein Team",
+        "wherePerson": "Eine Person",
+        "team": "Team",
+        "pickTeam": "Team auswählen",
+        "person": "Person",
+        "pickPerson": "Person auswählen",
+        "reason": "Warum ein Mitarbeiter benötigt wird",
+        "note": "Notiz für die Person, die übernimmt",
+        "noteHint": "Wird auf der Übergabekarte angezeigt. Bis zu 500 Zeichen.",
+        "refused": "Diese Unterhaltung kann nicht übergeben werden (sie ist archiviert, Spam oder ein persönliches Postfach).",
+        "failed": "Die Unterhaltung konnte nicht gesendet werden.",
+        "done": {
+          "assigned": "Gesendet: Jemand hat sie jetzt.",
+          "waiting": "Gesendet: Sie wartet in der Warteschlange.",
+          "unavailable": "In die Warteschlange gesendet: Gerade ist niemand verfügbar."
+        }
+      },
+      "details": {
+        "show": "Details",
+        "hide": "Details ausblenden"
+      },
+      "card": {
+        "source": "Angefordert von",
+        "reason": "Grund",
+        "priority": "Priorität",
+        "summary": "Zusammenfassung",
+        "answers": "Was der Kontakt dem Bot mitgeteilt hat",
+        "trace": "Wie zugewiesen wurde"
+      },
+      "source": {
+        "flow": "Ein Flow",
+        "ai_agent": "Ein KI-Agent",
+        "keyword": "Der Wunsch des Kontakts",
+        "bot_failure": "Ein Bot, der nicht helfen konnte",
+        "manual": "Ein Teamkollege"
+      },
+      "reason": {
+        "customer_asked": "Der Kontakt hat einen Mitarbeiter verlangt",
+        "bot_could_not_help": "Der Bot konnte nicht helfen",
+        "sensitive_topic": "Sensibles Thema",
+        "sales_lead": "Vertriebslead",
+        "complaint": "Beschwerde",
+        "other": "Sonstiges"
+      },
+      "priority": {
+        "low": "Niedrig",
+        "normal": "Normal",
+        "high": "Hoch",
+        "urgent": "Dringend"
+      },
+      "trace": {
+        "chosen": "Ausgewählt",
+        "skipped": "Übersprungen",
+        "info": "Notiz"
+      }
+    }
+  }
+}

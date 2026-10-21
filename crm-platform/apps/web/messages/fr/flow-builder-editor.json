@@ -2102,8 +2102,8 @@
           "description": "Ajouter ou retirer une étiquette"
         },
         "assign": {
-          "label": "Assigner un agent",
-          "description": "Transférer à un humain"
+          "label": "Transfert à un humain",
+          "description": "Confier le chat à une personne ou à une file"
         },
         "subflow": {
           "label": "Exécuter un sous-flux",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Assigner à un agent",
-          "help": "Transférer la conversation à une équipe ou à un agent"
+          "label": "Transfert à un humain",
+          "help": "Confier la conversation à une personne, une équipe ou aux règles d’assignation"
         },
         "message": {
           "label": "Message",
@@ -2563,7 +2563,7 @@
         "location": "Localisation",
         "template": "Modèle",
         "cta": "Bouton lien",
-        "assign": "Assigner à un agent",
+        "assign": "Transfert à un humain",
         "carousel": "Carrousel",
         "condition": "Condition",
         "faq": "Réponse depuis la FAQ",

@@ -2102,8 +2102,8 @@
           "description": "Thêm hoặc xóa thẻ"
         },
         "assign": {
-          "label": "Gán nhân viên",
-          "description": "Chuyển cho nhân viên"
+          "label": "Chuyển giao cho người thật",
+          "description": "Chuyển chat cho một người hoặc hàng chờ"
         },
         "subflow": {
           "label": "Chạy luồng con",
@@ -2463,8 +2463,8 @@
       "delaySummary": "{amount} {unit}",
       "kinds": {
         "assign": {
-          "label": "Gán cho nhân viên",
-          "help": "Chuyển cuộc trò chuyện cho một nhóm hoặc nhân viên"
+          "label": "Chuyển giao cho người thật",
+          "help": "Chuyển cuộc trò chuyện cho một người, một nhóm hoặc quy tắc giao việc"
         },
         "message": {
           "label": "Tin nhắn",
@@ -2563,7 +2563,7 @@
         "location": "Vị trí",
         "template": "Mẫu",
         "cta": "Nút liên kết",
-        "assign": "Gán cho nhân viên",
+        "assign": "Chuyển giao cho người thật",
         "carousel": "Băng chuyền",
         "condition": "Điều kiện",
         "faq": "Trả lời từ FAQ",

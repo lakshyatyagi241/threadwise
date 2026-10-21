@@ -1,0 +1,30 @@
+{
+  "workspaces-teams-tenancy": {
+    "teamDialog": {
+      "handoff": {
+        "title": "Devir ve atama",
+        "hint": "Bir bot, akış veya ekip arkadaşı konuşmayı bu ekibe devrettiğinde kullanılır.",
+        "method": "Kişi nasıl seçilir",
+        "methodHint": "Manuel: konuşma, biri üstlenene kadar ekibin kuyruğunda bekler. Sırayla dağıtım ve En az yüklü sizin için bir üye seçer ve atama kuralları içeren bir plan gerektirir.",
+        "defaultAssignee": "Varsayılan atanan",
+        "defaultAssigneeHint": "Başka kimse alamadığında konuşmayı üstlenir. Ekip üyelerinden birini seçin.",
+        "noDefaultAssignee": "Belirli biri değil",
+        "hours": "Çalışma saatleri",
+        "hoursHint": "Kapalı olması her zaman açık demektir. Bu saatlerin dışında konuşma yine kuyrukta bekler ve kişi, akışın mesai dışı mesajını alır.",
+        "timezone": "Saat dilimi",
+        "dayFrom": "{day}, açılış",
+        "dayTo": "{day}, kapanış",
+        "hoursProblem": "Her açık gün için birbirinden farklı bir açılış ve kapanış saati gerekir.",
+        "day": {
+          "mon": "Pazartesi",
+          "tue": "Salı",
+          "wed": "Çarşamba",
+          "thu": "Perşembe",
+          "fri": "Cuma",
+          "sat": "Cumartesi",
+          "sun": "Pazar"
+        }
+      }
+    }
+  }
+}
