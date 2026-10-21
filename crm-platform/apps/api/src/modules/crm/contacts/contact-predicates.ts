@@ -198,34 +198,35 @@ export type DateOperator =
   | 'is_not_empty';
 
 /** Midnight UTC of a `YYYY-MM-DD` day, whatever the session time zone is. */
-const dayStart = (day: string): SQL => sql`((${day}::date)::timestamp AT TIME ZONE 'UTC')`;
-const dayEnd = (day: string): SQL => sql`(${dayStart(day)} + interval '1 day')`;
+const dayStart = (day: string, tz: string): SQL => sql`((${day}::date)::timestamp AT TIME ZONE ${tz})`;
+const dayEnd = (day: string, tz: string): SQL => sql`(${dayStart(day, tz)} + interval '1 day')`;
 
 /**
- * A bare day covers that whole day in UTC: `before 2026-10-03` is strictly before its first
- * instant, `on_or_before` includes the whole day, `after` starts at the next day. A full instant is
+ * A bare day covers that whole day in `tz` (UTC unless the caller says so; segments pass the workspace's zone): `before 2026-10-03`
+ * is strictly before its first instant, `on_or_before` includes the whole day, `after` starts at the next day. A full instant is
  * compared exactly. `equals` is "on that day".
  */
 function bound(
   col: SQL,
   op: 'equals' | 'before' | 'after' | 'on_or_before' | 'on_or_after',
   raw: unknown,
+  tz = 'UTC',
 ): SQL {
   const d = parseDateValue(raw);
   if (!d) return sql`false`; // unreachable after validation; fails closed rather than casting garbage
   const day = d.kind === 'day' ? d.iso : d.iso.slice(0, 10);
   const instant = sql`${d.iso}::timestamptz`;
-  if (op === 'equals') return sql`(${col} >= ${dayStart(day)} AND ${col} < ${dayEnd(day)})`;
+  if (op === 'equals') return sql`(${col} >= ${dayStart(day, tz)} AND ${col} < ${dayEnd(day, tz)})`;
   if (d.kind === 'day') {
     switch (op) {
       case 'before':
-        return sql`${col} < ${dayStart(day)}`;
+        return sql`${col} < ${dayStart(day, tz)}`;
       case 'on_or_before':
-        return sql`${col} < ${dayEnd(day)}`;
+        return sql`${col} < ${dayEnd(day, tz)}`;
       case 'after':
-        return sql`${col} >= ${dayEnd(day)}`;
+        return sql`${col} >= ${dayEnd(day, tz)}`;
       case 'on_or_after':
-        return sql`${col} >= ${dayStart(day)}`;
+        return sql`${col} >= ${dayStart(day, tz)}`;
     }
   }
   switch (op) {
@@ -241,7 +242,7 @@ function bound(
 }
 
 /** `column` must be a timestamptz (a column, or `segment_safe_timestamptz(...)` for a custom property). */
-export function datePredicate(column: SQL, op: DateOperator, value: unknown): SQL {
+export function datePredicate(column: SQL, op: DateOperator, value: unknown, tz = 'UTC'): SQL {
   const col = sql`(${column})`;
   switch (op) {
     case 'is_empty':
@@ -250,14 +251,14 @@ export function datePredicate(column: SQL, op: DateOperator, value: unknown): SQ
       return sql`${col} IS NOT NULL`;
     case 'between': {
       const { from, to } = value as { from: string; to: string };
-      return sql`(${bound(col, 'on_or_after', from)} AND ${bound(col, 'on_or_before', to)})`;
+      return sql`(${bound(col, 'on_or_after', from, tz)} AND ${bound(col, 'on_or_before', to, tz)})`;
     }
     case 'in_last_days':
       return sql`(${col} >= now() - make_interval(days => ${Number(value)}::int) AND ${col} <= now())`;
     case 'more_than_days_ago':
       return sql`${col} < now() - make_interval(days => ${Number(value)}::int)`;
     default:
-      return bound(col, op, value);
+      return bound(col, op, value, tz);
   }
 }
 

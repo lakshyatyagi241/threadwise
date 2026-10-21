@@ -2,6 +2,7 @@ import { and, eq, inArray } from 'drizzle-orm';
 import { schema, type Tx } from '@crm/db';
 import { fieldTypeSchema, lifecycleStageSchema, type FieldType } from '@crm/contracts';
 import { stagesInUse, statusesInUse } from '../contacts/contact-values-in-use';
+import { loadWorkspaceCalendar } from '../../../common/workspace-calendar';
 import { emptyRuleContext, type RuleContext, type RuleRefs } from './segment-compiler';
 
 const { fields, statusOptions, tags, contactGroups, users } = schema;
@@ -32,6 +33,7 @@ async function hasConfiguredOptions(tx: Tx, orgId: number, groups: string[]): Pr
  */
 export async function loadRuleContext(tx: Tx, orgId: number, refs: RuleRefs): Promise<RuleContext> {
   const rc = emptyRuleContext();
+  rc.timezone = (await loadWorkspaceCalendar(tx, orgId)).timezone;
 
   if (refs.tagUuids.size > 0) {
     const rows = await tx
