@@ -1,4 +1,5 @@
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import { pngWithText } from '../../support/images';
 import {
   AppointmentsApi,
   bearer,
@@ -462,7 +463,7 @@ describe('pictures', () => {
 
   it('replacing keeps the address and changes the version; removing makes the page forget it', async () => {
     const before = (await api.as(t.admin).get(THEME)).body.theme.logo as { id: string; v: string };
-    const other = Buffer.concat([PNG, Buffer.from([0])]);
+    const other = pngWithText('v2');
     const up = await upload(t.admin, `${THEME}/assets/logo`, other, 'logo2.png');
     expect(up.status).toBe(200);
     expect(up.body.theme.logo.id).toBe(before.id);

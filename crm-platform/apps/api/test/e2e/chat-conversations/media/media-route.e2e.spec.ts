@@ -165,7 +165,7 @@ describe('GET /v2/media/:token', () => {
     const res = await get(linkFor(image, me()), a.member.token, { range: 'bytes=8-17' });
     expect(res.status).toBe(206);
     expect(res.headers['content-range']).toBe(`bytes 8-17/${PNG.length}`);
-    expect((res.body as Buffer).toString()).toBe('0123456789');
+    expect((res.body as Buffer).equals(PNG.subarray(8, 18))).toBe(true);
 
     const open = await get(linkFor(image, me()), a.member.token, { range: 'bytes=40-' });
     expect(open.status).toBe(206);
