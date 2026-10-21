@@ -29,7 +29,14 @@ describe('lanes', () => {
   });
 
   it('orders reminders furthest first and the after lane as follow-up, no-show, rebook', () => {
-    const rules = built('reminder_15m', 'rebook', 'reminder_24h', 'no_show', 'after_visit', 'reminder_2h');
+    const rules = built(
+      'reminder_15m',
+      'rebook',
+      'reminder_24h',
+      'no_show',
+      'after_visit',
+      'reminder_2h',
+    );
     const g = groupTimeline(rules);
     expect(g.before.map(stepKindOf)).toEqual(['reminder_24h', 'reminder_2h', 'reminder_15m']);
     expect(g.after.map(stepKindOf)).toEqual(['after_visit', 'no_show', 'rebook']);
@@ -75,7 +82,17 @@ describe('the Add step menu', () => {
 
 describe('a built step', () => {
   it('starts OFF, with both channels, and saves as the step it names', () => {
-    const input = remindersToInput(built('confirmation', 'reminder_24h', 'reminder_2h', 'reminder_15m', 'after_visit', 'no_show', 'rebook'));
+    const input = remindersToInput(
+      built(
+        'confirmation',
+        'reminder_24h',
+        'reminder_2h',
+        'reminder_15m',
+        'after_visit',
+        'no_show',
+        'rebook',
+      ),
+    );
     expect(input.map((i) => [i.stepKind, i.kind, i.offsetMinutes, i.isActive])).toEqual([
       ['confirmation', 'event', 0, false],
       ['no_show', 'event', 1, false],
@@ -128,13 +145,19 @@ describe('options and the WhatsApp state', () => {
   });
 
   it('reads the template state live, and falls back for the unapproved', () => {
-    const base = { channels: ['whatsapp', 'email'] as ('whatsapp' | 'email')[], waTemplateId: '', waTemplateStatus: null };
+    const base = {
+      channels: ['whatsapp', 'email'] as ('whatsapp' | 'email')[],
+      waTemplateId: '',
+      waTemplateStatus: null,
+    };
     expect(whatsappState(base)).toBe('none');
     expect(whatsappState({ ...base, waTemplateStatus: 'pending' })).toBe('pending');
     expect(whatsappState({ ...base, waTemplateId: 'x' })).toBe('approved');
     expect(whatsappState({ ...base, channels: ['email'] })).toBe('na');
     expect(fallbackNote({ ...base, waTemplateStatus: 'pending' })).toBe('email');
-    expect(fallbackNote({ ...base, waTemplateStatus: 'rejected', channels: ['whatsapp'] })).toBe('window');
+    expect(fallbackNote({ ...base, waTemplateStatus: 'rejected', channels: ['whatsapp'] })).toBe(
+      'window',
+    );
     expect(fallbackNote({ ...base, waTemplateStatus: 'approved' })).toBe('ok');
     expect(fallbackNote({ ...base, channels: ['email'] })).toBe('ok');
   });

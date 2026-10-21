@@ -30,10 +30,16 @@ export function laneOf(r: Pick<ReminderDraft, 'kind' | 'stepKind'>): TimelineLan
 }
 
 /** The order of the after-visit lane: the follow-up, the no-show message (a branch), then the rebook message. */
-const AFTER_RANK: Partial<Record<ReminderStepKind, number>> = { after_visit: 0, no_show: 1, rebook: 2 };
+const AFTER_RANK: Partial<Record<ReminderStepKind, number>> = {
+  after_visit: 0,
+  no_show: 1,
+  rebook: 2,
+};
 
 /** The steps of each lane, in the order they happen (the furthest reminder first). A row with no time yet comes last of its lane. */
-export function groupTimeline(rules: readonly ReminderDraft[]): Record<TimelineLane, ReminderDraft[]> {
+export function groupTimeline(
+  rules: readonly ReminderDraft[],
+): Record<TimelineLane, ReminderDraft[]> {
   const out: Record<TimelineLane, ReminderDraft[]> = { booked: [], before: [], after: [] };
   for (const r of rules) out[laneOf(r)].push(r);
   const minutes = (r: ReminderDraft, blank: number) => minutesOf(r) ?? blank;
@@ -41,7 +47,9 @@ export function groupTimeline(rules: readonly ReminderDraft[]): Record<TimelineL
   out.after.sort((a, b) => {
     const ra = AFTER_RANK[stepKindOf(a)] ?? 0;
     const rb = AFTER_RANK[stepKindOf(b)] ?? 0;
-    return ra !== rb ? ra - rb : minutes(a, Number.MAX_SAFE_INTEGER) - minutes(b, Number.MAX_SAFE_INTEGER);
+    return ra !== rb
+      ? ra - rb
+      : minutes(a, Number.MAX_SAFE_INTEGER) - minutes(b, Number.MAX_SAFE_INTEGER);
   });
   return out;
 }
@@ -78,10 +86,14 @@ export const timedSteps = (rules: readonly ReminderDraft[]): number =>
 
 export function choiceState(rules: readonly ReminderDraft[], choice: StepChoice): ChoiceState {
   if (choice === 'confirmation') {
-    return rules.some((r) => r.kind === 'event' && r.stepKind === 'confirmation') ? 'present' : 'available';
+    return rules.some((r) => r.kind === 'event' && r.stepKind === 'confirmation')
+      ? 'present'
+      : 'available';
   }
   if (choice === 'no_show') {
-    return rules.some((r) => r.kind === 'event' && r.stepKind === 'no_show') ? 'present' : 'available';
+    return rules.some((r) => r.kind === 'event' && r.stepKind === 'no_show')
+      ? 'present'
+      : 'available';
   }
   const present = (m: number, kind: 'before' | 'after') =>
     rules.some((r) => r.kind === kind && minutesOf(r) === m);
@@ -123,7 +135,11 @@ export function buildStep(choice: StepChoice): ReminderDraft {
 }
 
 /** The list with the step added, or unchanged when it cannot be added. */
-export function addStep(rules: readonly ReminderDraft[], choice: StepChoice, step = buildStep(choice)): ReminderDraft[] {
+export function addStep(
+  rules: readonly ReminderDraft[],
+  choice: StepChoice,
+  step = buildStep(choice),
+): ReminderDraft[] {
   return choiceState(rules, choice) === 'available' ? [...rules, step] : [...rules];
 }
 
@@ -141,7 +157,8 @@ export function offsetParts(r: ReminderDraft): { count: number; unit: ReminderUn
 export const hasReplyOptions = (r: Pick<ReminderDraft, 'kind'>): boolean => r.kind === 'before';
 
 /** The wait before the next channel only matters when there is a next channel. */
-export const hasFallbackWait = (r: Pick<ReminderDraft, 'channels'>): boolean => r.channels.length > 1;
+export const hasFallbackWait = (r: Pick<ReminderDraft, 'channels'>): boolean =>
+  r.channels.length > 1;
 
 export const DEFAULT_FALLBACK_MINUTES = 30;
 export { UNDELIVERED_MIN };
@@ -149,7 +166,9 @@ export { UNDELIVERED_MIN };
 /** The state of the WhatsApp message of a step, for its badge. `na`: the step does not use WhatsApp. */
 export type WhatsappState = WaTemplateStatus | 'none' | 'na';
 
-export function whatsappState(r: Pick<ReminderDraft, 'channels' | 'waTemplateId' | 'waTemplateStatus'>): WhatsappState {
+export function whatsappState(
+  r: Pick<ReminderDraft, 'channels' | 'waTemplateId' | 'waTemplateStatus'>,
+): WhatsappState {
   if (!r.channels.includes('whatsapp')) return 'na';
   if (r.waTemplateStatus) return r.waTemplateStatus;
   return r.waTemplateId.trim() === '' ? 'none' : 'approved';

@@ -3,7 +3,11 @@
 import Link from 'next/link';
 import { useLocale, useTranslations } from 'next-intl';
 import { useId, useRef } from 'react';
-import { PLAN_UPGRADE_PATH, type AppointmentChannelState, type AppointmentTemplate } from '@crm/contracts';
+import {
+  PLAN_UPGRADE_PATH,
+  type AppointmentChannelState,
+  type AppointmentTemplate,
+} from '@crm/contracts';
 import { Input, Select, Switch, Textarea, cn } from '@crm/ui';
 import { usePlanFeature } from '@/lib/plan-features';
 import type { WaTemplateOption } from '../api/schemas';

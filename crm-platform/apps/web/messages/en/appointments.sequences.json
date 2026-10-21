@@ -1,0 +1,93 @@
+{
+  "appointments": {
+    "reminders": {
+      "upgrade": "Upgrade your plan",
+      "buttonsLocked": "The Confirm, Reschedule and Cancel buttons are not part of your plan.",
+      "timeline": {
+        "label": "Reminder timeline",
+        "addMenu": "Add a step",
+        "addStep": "Add step",
+        "count": "{count} of {max} steps with a time. The booking confirmation and the no-show message do not count.",
+        "capReached": "You have reached {max} steps with a time. Remove one to add another.",
+        "rebookLocked": "Rebook messages are not part of your plan. You can set the step up, but it stays off until you upgrade.",
+        "rebookLockedStep": "This step cannot be switched on with your current plan.",
+        "empty": "No steps yet. Add the first step, or start from a ready-made sequence.",
+        "lane": {
+          "booked": "When it is booked",
+          "before": "Before the appointment",
+          "after": "After the appointment"
+        },
+        "laneHint": {
+          "booked": "Sent as soon as the booking is made.",
+          "before": "Sent before the appointment starts, never after it.",
+          "after": "Sent after the appointment ends, or when it is marked as a no-show."
+        },
+        "laneEmpty": "Nothing here yet.",
+        "step": {
+          "confirmation": "Booking confirmation",
+          "reminder_24h": "24 hour reminder",
+          "reminder_2h": "2 hour reminder",
+          "reminder_15m": "15 minute reminder",
+          "reminder": "Reminder",
+          "after_visit": "After-appointment message",
+          "no_show": "No-show message",
+          "rebook": "Rebook message"
+        },
+        "stepHint": {
+          "confirmation": "Sent right after the booking is confirmed.",
+          "reminder_24h": "The day before. It can carry the Confirm, Reschedule and Cancel buttons.",
+          "reminder_2h": "A short reminder a couple of hours before.",
+          "reminder_15m": "For online appointments with a join link only.",
+          "reminder": "A reminder at a time you choose.",
+          "after_visit": "A thank-you or follow-up after the appointment ends.",
+          "no_show": "Sent when you mark the appointment as a no-show.",
+          "rebook": "Asks the contact to book again some days after a completed appointment. Counts as marketing."
+        },
+        "choice": {
+          "confirmation": "Booking confirmation",
+          "reminder_24h": "24 hours before",
+          "reminder_2h": "2 hours before",
+          "reminder_15m": "15 minutes before",
+          "custom": "Reminder at another time",
+          "after_visit": "After-appointment message",
+          "no_show": "No-show message",
+          "rebook": "Rebook message, some days later"
+        },
+        "choiceHint": {
+          "present": "Already added",
+          "cap": "Limit reached",
+          "locked": "Plan upgrade needed to switch on",
+          "online": "Online appointments"
+        },
+        "enabledOf": "Send: {step}",
+        "remove": "Remove: {step}",
+        "offsetOf": "Time of: {step}",
+        "unitOf": "Unit of time of: {step}",
+        "beforeStart": "before the appointment starts",
+        "afterEnd": "after the appointment ends",
+        "setTime": "Enter a time",
+        "templateName": "WhatsApp template: {name}",
+        "wa": {
+          "none": "No template",
+          "draft": "Template not sent to Meta",
+          "pending": "Waiting for Meta approval",
+          "approved": "Template approved",
+          "rejected": "Rejected by Meta"
+        },
+        "fallback": {
+          "email": "Until the WhatsApp template is approved, this step goes out by email.",
+          "window": "WhatsApp is the only channel here, so outside the 24 hour window nothing is sent until a template is approved. Add email as a fallback."
+        }
+      },
+      "reasons": {
+        "already_confirmed": "The contact had already confirmed.",
+        "no_join_link": "The appointment has no join link.",
+        "already_rebooked": "The contact has booked again.",
+        "visit_not_completed": "The appointment was not completed.",
+        "plan_feature_locked": "Your plan does not include this step.",
+        "not_delivered": "WhatsApp did not deliver it in time, so the next channel was used.",
+        "send_failed": "The send failed, so the next channel was used."
+      }
+    }
+  }
+}

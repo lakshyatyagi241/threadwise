@@ -2,7 +2,6 @@ import {
   BOOKING_TIMED_STEPS_MAX,
   EVENT_STEP_OFFSET,
   defaultStepKind,
-  reminderKindOfStep,
   type BookingReminderStepKind,
 } from '@crm/contracts';
 import { newId } from './availability';

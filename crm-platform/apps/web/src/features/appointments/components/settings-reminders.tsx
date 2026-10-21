@@ -27,7 +27,7 @@ import {
 } from '../lib/reminder-rules';
 import { ChevronDownIcon } from './icons';
 import { ErrorLine, TypeDot, useAppointmentsCan } from './parts';
-import { ReminderRulesEditor } from './reminder-rules-editor';
+import { ReminderTimeline } from './reminder-timeline';
 import { SettingsCard } from './settings-parts';
 
 /**
@@ -175,7 +175,7 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
             </Alert>
           )}
           {error !== null && !conflict && <ErrorLine error={error} />}
-          <ReminderRulesEditor
+          <ReminderTimeline
             rules={rules}
             onChange={setRules}
             disabled={disabled}
