@@ -1,0 +1,78 @@
+{
+  "feature": "developer-rest-api-v1",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-developer-rest-api-v1-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/components/developer-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-developer-rest-api-v1-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/components/developer-screen.tsx",
+        "apps/web/src/features/developer-rest-api-v1/lib/keys-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-developer-rest-api-v1-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/api/keys.ts",
+        "apps/web/src/features/developer-rest-api-v1/components/developer-screen.tsx",
+        "apps/web/src/features/developer-rest-api-v1/lib/keys-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-developer-rest-api-v1-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/lib/keys-model.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-developer-rest-api-v1-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/developer-rest-api-v1/api/keys.ts",
+        "apps/web/src/features/developer-rest-api-v1/components/copy-button.tsx",
+        "apps/web/src/features/developer-rest-api-v1/docs/lib/load-spec.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/developer-rest-api-v1/docs/lib/load-spec.test.ts",
+          "match": "is unavailable on a network error, a timeout, a non-200 or a body that is not an OpenAPI object"
+        }
+      ]
+    }
+  ]
+}

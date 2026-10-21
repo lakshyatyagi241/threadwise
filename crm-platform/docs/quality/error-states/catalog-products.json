@@ -1,0 +1,119 @@
+{
+  "feature": "catalog-products",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-catalog-products-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/activity-tab.tsx",
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/catalog-shell.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-catalog-products-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/collections-tab.tsx",
+        "apps/web/src/features/catalog-products/components/connect-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-catalog-products-003",
+      "key": "NOTFOUND",
+      "scenario": "A detail screen opens an id that is gone or belongs to another workspace",
+      "expected": "A not-found state, not a blank page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-catalog-products-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/catalog-manage.tsx",
+        "apps/web/src/features/catalog-products/components/collection-editor.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/catalog-products/lib/sync-model.test.ts",
+          "match": "keeps what was pushed before a failure and reports the error"
+        },
+        {
+          "file": "apps/web/src/features/catalog-products/lib/variants-model.test.ts",
+          "match": "keeps what was typed for a combination that survives, matched by title"
+        }
+      ]
+    },
+    {
+      "id": "ES-catalog-products-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/collection-editor.tsx",
+        "apps/web/src/features/catalog-products/components/connect-form.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-catalog-products-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/collection-editor.tsx",
+        "apps/web/src/features/catalog-products/components/connect-form.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/catalog-products/lib/errors.test.ts",
+          "match": "detects plan lock and row-version conflicts"
+        }
+      ]
+    },
+    {
+      "id": "ES-catalog-products-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/catalog-products/components/admin-settings.tsx",
+        "apps/web/src/features/catalog-products/components/product-share-modal.tsx",
+        "apps/web/src/features/catalog-products/components/send-products.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

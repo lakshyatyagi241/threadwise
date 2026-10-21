@@ -1,0 +1,102 @@
+{
+  "feature": "web-forms",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-web-forms-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/build-palette.tsx",
+        "apps/web/src/features/web-forms/components/build-tab.tsx",
+        "apps/web/src/features/web-forms/components/builder-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/components/forms-screens.render.test.tsx",
+          "match": "puts the three starts in the empty state, and hides them without the create permission"
+        },
+        {
+          "file": "apps/web/src/features/web-forms/components/submissions-screen.render.test.tsx",
+          "match": "shows the empty state with a link to share the form"
+        }
+      ]
+    },
+    {
+      "id": "EM-web-forms-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/forms-screen.tsx",
+        "apps/web/src/features/web-forms/components/submissions-screen.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/components/submissions-screen.render.test.tsx",
+          "match": "asks to clear filters when the filters empty the list"
+        }
+      ]
+    },
+    {
+      "id": "EM-web-forms-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/forms-screen.tsx",
+        "apps/web/src/features/web-forms/components/new-form-dialog.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/web-forms/components/forms-screens.render.test.tsx",
+          "match": "shows a spinner while loading"
+        },
+        {
+          "file": "apps/web/src/features/web-forms/components/submissions-screen.render.test.tsx",
+          "match": "shows the loading state"
+        }
+      ]
+    },
+    {
+      "id": "EM-web-forms-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/build-inspector.tsx",
+        "apps/web/src/features/web-forms/components/share-tab.tsx",
+        "apps/web/src/features/web-forms/components/submissions-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-web-forms-005",
+      "key": "ZERO",
+      "scenario": "A counter or chart has no data",
+      "expected": "Shows 0 or a flat chart, never NaN or a blank box",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/web-forms/components/build-inspector.tsx",
+        "apps/web/src/features/web-forms/components/builder-screen.tsx",
+        "apps/web/src/features/web-forms/components/form-renderer.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

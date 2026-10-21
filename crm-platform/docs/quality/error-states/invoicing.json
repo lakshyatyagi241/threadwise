@@ -1,0 +1,91 @@
+{
+  "feature": "invoicing",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-invoicing-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/aging-report.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-gateway.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-invoicing-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/business-profile-screen.tsx",
+        "apps/web/src/features/invoicing/components/parts.tsx",
+        "apps/web/src/features/invoicing/lib/errors.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-invoicing-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/api/http.ts",
+        "apps/web/src/features/invoicing/components/aging-report.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-branding.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-invoicing-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/components/business-profile-screen.tsx",
+        "apps/web/src/features/invoicing/components/invoice-builder.tsx",
+        "apps/web/src/features/invoicing/components/invoice-dialogs.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-invoicing-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/api/service.ts",
+        "apps/web/src/features/invoicing/components/bulk-bar.tsx",
+        "apps/web/src/features/invoicing/components/business-profile-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-invoicing-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/invoicing/api/http.ts",
+        "apps/web/src/features/invoicing/components/business-profile-gateway.tsx",
+        "apps/web/src/features/invoicing/components/contact-picker.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "feature": "channel-email",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-channel-email-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-email/components/attachment-tray.tsx",
+        "apps/web/src/features/channel-email/components/channel-options.tsx",
+        "apps/web/src/features/channel-email/components/hub-screen.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-email-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-email/components/hub-screen.tsx",
+        "apps/web/src/features/channel-email/components/imap-connect-dialog.tsx",
+        "apps/web/src/features/channel-email/components/sharing-panel.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "EM-channel-email-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/channel-email/components/hub-screen.tsx",
+        "apps/web/src/features/channel-email/components/imap-connect-dialog.tsx",
+        "apps/web/src/features/channel-email/components/mailbox-card.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "feature": "workspaces-teams-tenancy",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "EM-workspaces-teams-tenancy-001",
+      "key": "FIRST",
+      "scenario": "No rows exist yet",
+      "expected": "A title, one line of why and the primary action",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/invite-dialog.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/member-account.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/members-table.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/states.test.tsx",
+          "match": "shows the empty state with the invite action when there are no members yet"
+        }
+      ]
+    },
+    {
+      "id": "EM-workspaces-teams-tenancy-002",
+      "key": "FILTERED",
+      "scenario": "Filters or search match nothing",
+      "expected": "\"No results\" with a way to clear the filters, never the first-use message",
+      "priority": "P0",
+      "handled": "no",
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/states.test.tsx",
+          "match": "shows no results, not the first-use message, when the filters match nothing"
+        }
+      ]
+    },
+    {
+      "id": "EM-workspaces-teams-tenancy-003",
+      "key": "LOADING",
+      "scenario": "The list is still loading",
+      "expected": "A skeleton or spinner, never the empty state",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/api/hooks.ts",
+        "apps/web/src/features/workspaces-teams-tenancy/components/accept-invite-form.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/availability-row.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/components.test.tsx",
+          "match": "shows skeleton rows while loading"
+        },
+        {
+          "file": "apps/web/src/features/workspaces-teams-tenancy/components/states.test.tsx",
+          "match": "shows skeleton rows while loading, not the empty state"
+        }
+      ]
+    },
+    {
+      "id": "EM-workspaces-teams-tenancy-004",
+      "key": "SCOPE",
+      "scenario": "The user's role shows nothing",
+      "expected": "Says so; does not look like a broken page",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/workspaces-teams-tenancy/components/members-table.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/parts.tsx",
+        "apps/web/src/features/workspaces-teams-tenancy/components/teams-screen.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

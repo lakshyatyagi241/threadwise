@@ -1,0 +1,125 @@
+{
+  "feature": "auth-registration-security",
+  "tier": "P1",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-auth-registration-security-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/account-banners.tsx",
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx",
+        "apps/web/src/features/auth-registration-security/account/delete/delete-account-view.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-auth-registration-security-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/api.ts",
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx",
+        "apps/web/src/features/auth-registration-security/account/hub/avatar-problem.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/account/hub/avatar-problem.test.ts",
+          "match": "maps an ended sign-in (401, 419) and a refusal (403)"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/guest/errors.test.ts",
+          "match": "keeps a refused request (403) apart from an expired one"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/api-errors.test.ts",
+          "match": "is true only for a 403 that names the role requirement"
+        }
+      ]
+    },
+    {
+      "id": "ES-auth-registration-security-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/account-banners.tsx",
+        "apps/web/src/features/auth-registration-security/account/api.ts",
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/guest/referral.test.ts",
+          "match": "keeps what the visitor typed, even when a cookie exists"
+        }
+      ]
+    },
+    {
+      "id": "ES-auth-registration-security-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/branding/branding-view.tsx",
+        "apps/web/src/features/auth-registration-security/account/delete/delete-rules.ts",
+        "apps/web/src/features/auth-registration-security/account/hub/avatar-problem.ts"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/api-errors.test.ts",
+          "match": "reads the lockout wait from the field errors"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/platform/lib/ip-blocked.test.ts",
+          "match": "reads the address from the ip field error"
+        },
+        {
+          "file": "apps/web/src/features/auth-registration-security/shared/error-utils.test.ts",
+          "match": "field errors"
+        }
+      ]
+    },
+    {
+      "id": "ES-auth-registration-security-006",
+      "key": "CONFLICT",
+      "scenario": "The row changed under the user (409, ROW_VERSION_CONFLICT)",
+      "expected": "A reload prompt, never a silent overwrite",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/security/mfa-panel.tsx",
+        "apps/web/src/features/auth-registration-security/guest/signup-form.tsx",
+        "apps/web/src/features/auth-registration-security/platform/account/operator-mfa-enrolment.tsx"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-auth-registration-security-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P2",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/auth-registration-security/account/account-banners.tsx",
+        "apps/web/src/features/auth-registration-security/account/api.ts",
+        "apps/web/src/features/auth-registration-security/account/delete/delete-account-view.tsx"
+      ],
+      "status": "gap"
+    }
+  ]
+}

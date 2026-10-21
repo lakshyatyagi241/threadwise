@@ -1,0 +1,66 @@
+{
+  "feature": "broadcasts",
+  "tier": "P0",
+  "applicable": true,
+  "cases": [
+    {
+      "id": "ES-broadcasts-001",
+      "key": "LOAD",
+      "scenario": "A read fails (5xx or network)",
+      "expected": "An in-place error with a retry; no blank screen, crash or raw error text",
+      "priority": "P0",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-broadcasts-002",
+      "key": "FORBIDDEN",
+      "scenario": "A read or an action returns 403",
+      "expected": "A permission message and no data shown",
+      "priority": "P1",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/broadcasts/api/channels.ts"
+      ],
+      "status": "gap"
+    },
+    {
+      "id": "ES-broadcasts-004",
+      "key": "MUTATE",
+      "scenario": "A save, create or delete fails",
+      "expected": "The error is shown, typed values are kept, the button works again",
+      "priority": "P0",
+      "handled": "yes",
+      "handledIn": [
+        "apps/web/src/features/broadcasts/api/marketing-media.ts",
+        "apps/web/src/features/broadcasts/components/upload-media-button.tsx"
+      ],
+      "status": "covered",
+      "tests": [
+        {
+          "file": "apps/web/src/features/broadcasts/components/states.test.tsx",
+          "match": "keeps the values: the upload request rejects with an ApiError the button turns into its alert (alert needs a click, so only the api layer is checked)"
+        }
+      ],
+      "partial": "Only the upload request is checked (rejects with an ApiError). The alert needs a click, so the component state is not tested."
+    },
+    {
+      "id": "ES-broadcasts-005",
+      "key": "VALIDATION",
+      "scenario": "The API returns field errors (422)",
+      "expected": "Each error appears on its own field",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    },
+    {
+      "id": "ES-broadcasts-007",
+      "key": "OFFLINE",
+      "scenario": "The browser is offline or the request times out",
+      "expected": "A retryable message",
+      "priority": "P1",
+      "handled": "no",
+      "status": "gap"
+    }
+  ]
+}
