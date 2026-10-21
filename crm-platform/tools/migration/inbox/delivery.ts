@@ -4,7 +4,8 @@ import { str, type Doc } from '../util';
 /**
  * What Waboo's delivery log knows about ONE outbound message. The chat history carries no receipt: the loader writes every outbound turn
  * `sent` (so nothing is ever re-dispatched), and the receipts live in the billing log (`whatsapp_broadcasting_data`, one row per sent
- * message, keyed by the WhatsApp message id = chathistory.meta_msg_id) as one date per step: sent, delivered, seen, replied, failed.
+ * message, keyed by the WhatsApp message id) as one date per step: sent, delivered, seen, replied, failed. The chat dumps checked carry no
+ * outbound WhatsApp message id (README section 9, "Delivery state"), so this join is not usable on them yet.
  * The step rules are the broadcast recipients' (broadcast/rules.ts deriveStatus); a customer's reply is proof the message was read.
  */
 export interface Receipt {
