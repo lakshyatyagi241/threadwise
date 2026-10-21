@@ -35,6 +35,9 @@ export const FLOW_IMPORT_MAX_BYTES = 4096 * 1024;
 export const FLOW_EXPORT_MARKER = '_threadwise_flow_export';
 
 export const flowTypeSchema = z.enum(FLOW_TYPES);
+/** The builder a flow was made in; the list draws an Advanced messaging flow differently from a Simple WhatsApp bot. */
+export const flowBuilderSchema = z.enum(['simple', 'advanced']);
+export type FlowBuilder = z.infer<typeof flowBuilderSchema>;
 export const flowStateSchema = z.enum(['live', 'paused', 'draft']);
 export type FlowState = z.infer<typeof flowStateSchema>;
 export const flowStatusFilterSchema = z.enum(['all', 'live', 'paused', 'draft']);
@@ -91,6 +94,7 @@ export const flowSummarySchema = z.object({
   id: uuidSchema,
   name: z.string(),
   flowType: flowTypeSchema,
+  builder: flowBuilderSchema,
   category: z.string().nullable(),
   state: flowStateSchema,
   isPublished: z.boolean(),
@@ -186,6 +190,8 @@ export const saveFlowRequestSchema = z.object({
   name: z.string().trim().min(1, 'Flow name is required').superRefine(flbMaxChars(FLOW_NAME_MAX)),
   category: z.string().trim().superRefine(flbMaxChars(FLOW_CATEGORY_MAX)).nullish(),
   flowType: flowTypeSchema.nullish(),
+  /** Set when a flow is made (the Advanced canvas sends 'advanced'); a save that leaves it out keeps what the flow has. */
+  builder: flowBuilderSchema.nullish(),
   graph: flowGraphInputSchema,
 });
 export type SaveFlowRequest = z.infer<typeof saveFlowRequestSchema>;
