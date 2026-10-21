@@ -5,6 +5,7 @@ import { ERROR_CODES } from '@crm/contracts';
 import { RequestContextStore } from '../../../common/context/request-context';
 import { AppError } from '../../../common/errors/app-error';
 import { INFRA_ENV, type InfraEnv } from '../../../config/domains/platform-infrastructure.env';
+import { clientKey } from './client-address';
 import type { ThrottleSpec } from './rate-limit.policies';
 import { RateLimiter } from './rate-limiter';
 import { SKIP_THROTTLE_KEY, THROTTLE_KEY } from './throttle.decorators';
@@ -73,7 +74,7 @@ export class ThrottleGuard implements CanActivate {
   }
 
   private subjectOf(spec: ThrottleSpec, req: Request): string {
-    const ip = `ip:${req.ip ?? 'unknown'}`;
+    const ip = `ip:${clientKey(req.ip)}`;
     if (spec.by === 'ip') return ip;
     const actor = RequestContextStore.peek();
     if (!actor || actor.actorId == null) return ip;
