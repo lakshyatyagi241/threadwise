@@ -44,6 +44,7 @@ const until = async (fn, ms) => { const end = Date.now() + ms; while (Date.now()
 const leaks = ['crm_app_user', 'crm_app_dev', E.HR_DB, 'postgres://', 'redis://', String(pgProxyPort), String(redisProxyPort), os.hostname()].filter(Boolean);
 const leaked = (text) => leaks.filter((l) => text.includes(l));
 
+const pgUp = async () => { try { const t = await (await fetch(`http://127.0.0.1:${E.HR_METRICS_PORT}/metrics`, { signal: AbortSignal.timeout(3000) })).text(); return /^crm_postgres_up\S* (\d)/m.exec(t)?.[1] ?? null; } catch { return null; } };
 const pg = new Proxy(pgProxyPort, adminUrl.hostname, +(adminUrl.port || 5432));
 const rd = new Proxy(redisProxyPort, '127.0.0.1', +E.HR_REDIS_PORT);
 await pg.start(); await rd.start();
@@ -80,11 +81,16 @@ try {
       check(`${dep} ${mode}: /health stays 200 (liveness independent)`, hh.status === 200, `${hh.ms} ms`);
       check(`${dep} ${mode}: /ready is 503 within deadline+slack`, rr.status === 503 && rr.ms <= DEADLINE_MS + SLACK_MS, `${rr.status} in ${rr.ms} ms`);
       check(`${dep} ${mode}: body names the failed check with a fixed word and leaks nothing`, rr.body?.checks?.[key]?.status === 'down' && ['timeout', 'unreachable', 'error'].includes(rr.body.checks[key].error) && leaked(rr.text).length === 0, `${key}=${rr.body?.checks?.[key]?.error}`);
+      if (dep === 'postgres') {
+        const down = await until(async () => (await pgUp()) === '0', 25000);
+        check(`postgres ${mode}: crm_postgres_up goes to 0 within 25 s`, !!down, `value ${await pgUp()}`);
+      }
       const par = await Promise.all(Array.from({ length: 20 }, () => get('/ready')));
       check(`${dep} ${mode}: 20 concurrent /ready never hang`, par.every((x) => x.status === 503 && x.ms <= DEADLINE_MS + SLACK_MS * 2), `max ${Math.max(...par.map((x) => x.ms))} ms`);
       await proxy.set('pass');
       const rec = await until(async () => (await get('/ready', 4000)).status === 200, 30000);
       check(`${dep} after ${mode}: /ready recovers to 200`, !!rec);
+      if (dep === 'postgres') { const back = await until(async () => (await pgUp()) === '1', 25000); check(`postgres after ${mode}: crm_postgres_up returns to 1`, !!back); }
     }
   }
 

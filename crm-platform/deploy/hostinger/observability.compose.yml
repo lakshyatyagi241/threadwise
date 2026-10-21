@@ -52,6 +52,9 @@ services:
     restart: unless-stopped
     mem_limit: 128m
     logging: *obs-logging
+    volumes:
+      - ./backups:/backups:ro
+      - offsite_state:/offsite:ro
     environment:
       NODE_ENV: production
       TZ: UTC
@@ -60,7 +63,11 @@ services:
       # probe also times a request that goes out of the stack and back through Traefik. ApiCallerLatencyHigh covers every target. From the
       # host itself this includes the ingress but not the internet; to see the internet, run this probe on a second host with only the
       # public URLs in PROBE_TARGETS and scrape it from here.
-      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt,webready=http://web:3001/api/ready${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
+      PROBE_TARGETS: health=http://api:3000/health,ready=http://api:3000/ready,web=http://web:3001/robots.txt,webready=http://web:3001/api/ready${PROBE_S3_URL:+,s3=}${PROBE_S3_URL:-}${PROBE_EXTRA_TARGETS:+,}${PROBE_EXTRA_TARGETS:-}
+      # Marker files: last good dump (backup) and last whole offsite pass. `s3` = the object store (R2), reachable if it answers anything.
+      # Deliberately NOT part of /ready: an object-store outage must not pull the API out of rotation.
+      PROBE_FILES: backup=/backups/.last-ok,offsite=/offsite/offsite-ok
+      PROBE_REACHABLE: s3
       PROBE_INTERVAL_SECONDS: '10'
       PROBE_TIMEOUT_SECONDS: '10'
       OBS_METRICS_PORT: '9464'
@@ -84,8 +91,15 @@ services:
       - ../observability/resource-limits.rules.yml:/etc/prometheus/resource-limits.rules.yml:ro
       - ../observability/cache-hit-rate.rules.yml:/etc/prometheus/cache-hit-rate.rules.yml:ro
       - ../observability/p0-failure-modes.rules.yml:/etc/prometheus/p0-failure-modes.rules.yml:ro
+      - ../observability/health.rules.yml:/etc/prometheus/health.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:9090/-/healthy']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
     depends_on:
       - alertmanager
 
@@ -103,6 +117,12 @@ services:
       - ../observability/${ALERTMANAGER_FILE:-alertmanager.yml}:/etc/alertmanager/alertmanager.yml:ro
       - amdata:/alertmanager
     secrets: [alert_webhook_url]
+    healthcheck:
+      test: ['CMD', 'wget', '-q', '--spider', 'http://127.0.0.1:9093/-/ready']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   grafana:
     image: grafana/grafana-oss:11.3.0
@@ -136,6 +156,8 @@ secrets:
     file: ./secrets/alert_webhook_url
 
 volumes:
+  # Same project as docker-compose.yml: this is the volume the offsite service writes its marker to.
+  offsite_state:
   promdata:
   amdata:
   grafanadata:

@@ -7,7 +7,7 @@ export PATH="$HOME/.local/bin:$PATH"
 MODE=full; OUT=""
 usage() { cat <<'U'
 run.sh [--quick] [--out DIR] [--help]
-Runs: tools/health-readiness/check.mjs (+ its node tests), web route tests, live fault-proxy test. --quick skips the promtool rules check (needs docker pull).
+Runs: tools/health-readiness/check.mjs (+ node tests), web route and API probe unit tests, the alert-runbook ratchet, promtool check+test of EVERY rules file, amtool check-config of all Alertmanager files, live fault-proxy test (incl. crm_postgres_up). Full adds tsc.
 Needs: docker (shared dev Postgres crm-platform-postgres and Redis on 56379 are only READ through proxies, never stopped), node 22, pnpm, built packages and apps/api (dist).
 Ports (own): API 3931, metrics 59531, Postgres proxy 59534, Redis proxy 59535. Known baseline: none of these files is in script-testing/known-failures.json.
 U
@@ -29,9 +29,13 @@ for p in 3931 59531 59534 59535; do (exec 3<>"/dev/tcp/127.0.0.1/$p") 2>/dev/nul
 step ratchet node tools/health-readiness/check.mjs . --json "$OUT/coverage-matrix.result.json"
 step ratchet_test node --test tools/health-readiness/check.test.mjs
 step web_routes pnpm --filter @crm/web exec vitest run src/app/api/ready
-if [ "$MODE" = full ]; then
-  step promtool docker run --rm -v "$ROOT/deploy/observability:/r" -w /r --entrypoint promtool prom/prometheus:v2.55.0 check rules /r/event-loop.rules.yml /r/p0-failure-modes.rules.yml
-fi
+step api_unit pnpm --filter @crm/api exec vitest run test/unit/health-readiness test/unit/platform-infrastructure/probe.spec.ts
+step alert_ratchet node tools/alerting/check-alert-runbooks.mjs
+OBS="$ROOT/deploy/observability"; PT="docker run --rm -v $OBS:/r -w /r --entrypoint promtool prom/prometheus:v2.55.0"
+step promtool_check sh -c "$PT check rules \$(cd $OBS && ls *.rules.yml | sed 's#^#/r/#' | tr '\n' ' ')"
+step promtool_test sh -c "for f in \$(cd $OBS && ls *.rules.test.yml); do $PT test rules \$f || exit 1; done"
+step amtool sh -c "for f in alertmanager alertmanager.slack alertmanager.pagerduty; do docker run --rm -v $OBS:/r --entrypoint amtool prom/alertmanager:v0.27.0 check-config /r/\$f.yml || exit 1; done"
+[ "$MODE" = full ] && step tsc sh -c "cd apps/api && npx tsc -p tsconfig.json --noEmit"
 echo "==> live (throwaway database $DB)"
 docker exec crm-platform-postgres psql -U crm -d postgres -c "CREATE DATABASE $DB" >/dev/null || err "cannot create database"
 MIGRATION_DATABASE_URL="$ADMIN/$DB" DATABASE_URL="$ADMIN/$DB" pnpm db:migrate > "$OUT/logs/migrate.log" 2>&1 || err "migration failed (logs/migrate.log)"
@@ -40,7 +44,7 @@ sed -n '/PASS\|FAIL/p' "$OUT/logs/live.log"
 
 node - "$OUT" "$MODE" <<'N'
 const fs = require('fs'), [out, mode] = process.argv.slice(2);
-const steps = ['ratchet', 'ratchet_test', 'web_routes', 'promtool', 'live'].filter((n) => fs.existsSync(`${out}/logs/${n}.exit`)).map((n) => ({ name: n, pass: Number(fs.readFileSync(`${out}/logs/${n}.exit`, 'utf8')) === 0 }));
+const steps = ['ratchet', 'ratchet_test', 'web_routes', 'api_unit', 'alert_ratchet', 'promtool_check', 'promtool_test', 'amtool', 'tsc', 'live'].filter((n) => fs.existsSync(`${out}/logs/${n}.exit`)).map((n) => ({ name: n, pass: Number(fs.readFileSync(`${out}/logs/${n}.exit`, 'utf8')) === 0 }));
 let live = []; try { live = JSON.parse(fs.readFileSync(`${out}/live-results.json`, 'utf8')).results; } catch {}
 if (!live.length) steps.find((s) => s.name === 'live').pass = false;
 const status = steps.every((s) => s.pass) ? 'PASS' : 'FAIL';

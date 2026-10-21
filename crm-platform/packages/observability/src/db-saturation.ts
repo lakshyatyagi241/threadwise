@@ -34,7 +34,11 @@ export function createDbSaturationMetrics(registry: Registry) {
     'crm_outbox_dead',
     'Outbox events that exhausted their retries (capped at 10000)',
   );
+  const up = registry.gauge('crm_postgres_up', '1 when SELECT 1 on the primary answered within 2 s, else 0');
   return {
+    recordUp(ok: boolean): void {
+      up.set(ok ? 1 : 0);
+    },
     recordPool(pool: string, p: PoolLike): void {
       conns.set(p.totalCount, { pool, state: 'total' });
       conns.set(p.idleCount, { pool, state: 'idle' });

@@ -31,7 +31,30 @@ No HTTP port: the compose healthcheck runs `worker-probe.js`, which asks Redis w
 
 See `docs/runbooks/p0-failure-modes.md#redisdown`.
 
-## Not covered by an alert (open)
+## PostgresDown
 
-Backup and offsite containers go unhealthy but no metric pages anyone. Prometheus and Alertmanager are not watched by a dead-man's-switch. The external
-object store (R2) has no probe. Traefik is outside this repository.
+`crm_postgres_up` is 0: the API's `SELECT 1` (2 s deadline, every 10 s) failed for 2 minutes. `/ready` is 503 on that instance. **Check:** `docker compose ps postgres`, `docker compose logs --tail=100 postgres`, disk space on the data volume. **Fix:** restart the container only if it is stopped or hung; never delete the volume. See `docs/runbooks/p0-failure-modes.md#dbpoolexhausted` and `docs/runbooks/backup-restore.md`.
+
+## BackupStale
+
+The marker `/backups/.last-ok` is older than 26 hours (`crm_probe_file_age_seconds{file="backup"}`). **Check:** `docker compose logs --tail=200 backup`, free disk, `docker inspect backup --format '{{.State.Health.Status}}'`. **Fix:** run a dump by hand per `docs/runbooks/backup-restore.md`, then fix the cause. **Escalate:** platform owner if two dump cycles fail.
+
+## BackupMarkerMissing
+
+No marker visible to the probe for 30 minutes: either no dump ever succeeded, or the probe lost its read-only mount of `./backups`. **Check:** `ls -la backups/` on the host; `docker inspect probe` mounts.
+
+## OffsiteBackupStale
+
+No whole offsite pass in 3 hours. The marker lives in the `offsite_state` volume. Silent when offsite is not configured. **Check:** `docker compose logs --tail=100 offsite`, bucket credentials in `.env`, `ObjectStoreUnreachable`.
+
+## ObjectStoreUnreachable
+
+The `s3` probe target (set `PROBE_S3_URL` in `.env` to the `S3_ENDPOINT`) got no HTTP answer for 10 minutes. Uploads and offsite backup fail; the app still serves. **Check:** provider status page, DNS and egress from the host.
+
+## Watchdog
+
+Always firing on purpose. Alertmanager sends it hourly to the default receiver in `alertmanager.yml` (webhook). Point that URL, or add a receiver, at a heartbeat service that alerts when the heartbeat STOPS; that is what notices a dead Prometheus or Alertmanager. In `alertmanager.slack.yml` and `alertmanager.pagerduty.yml` the Watchdog route is dropped (it would otherwise page every hour), so those variants have no dead-man's-switch until a heartbeat receiver is added.
+
+## Still open
+
+Traefik is outside this repository. The routing of Watchdog to an external heartbeat service is a deployment step (no such service is configured here).
