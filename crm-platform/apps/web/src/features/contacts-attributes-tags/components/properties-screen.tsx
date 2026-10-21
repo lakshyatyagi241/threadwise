@@ -15,6 +15,7 @@ import {
   reorderSections,
   updateField,
   useFieldDependencies,
+  useFieldOptionDependencies,
   useFieldSections,
   useFieldUsage,
   useModuleFields,
@@ -23,6 +24,8 @@ import { errorKind } from '../lib/errors';
 import { propertyPermissionSegment, useModuleCopy } from '../lib/module-copy';
 import {
   BUILT_IN_PROPERTIES,
+  cascadeParentLabels,
+  conditionRulesOf,
   describeCondition,
   dependentsOf,
   groupBySection,
@@ -31,6 +34,7 @@ import {
   type SectionGroup,
 } from '../lib/property-model';
 import { moveItem } from '../lib/stage-model';
+import { CascadeDialog } from './cascade-dialog';
 import { ErrorLine } from './error-line';
 import {
   ArrowDownIcon,
@@ -71,6 +75,7 @@ export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: Modul
   const sections = useFieldSections(moduleKey);
   const usage = useFieldUsage(true, moduleKey);
   const deps = useFieldDependencies(moduleKey);
+  const optionDeps = useFieldOptionDependencies(moduleKey);
 
   const [query, setQuery] = useState('');
   const [showInactive, setShowInactive] = useState(false);
@@ -79,6 +84,7 @@ export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: Modul
     null,
   );
   const [sectionEditing, setSectionEditing] = useState<FieldSectionResponse | 'new' | null>(null);
+  const [cascadeOpen, setCascadeOpen] = useState(false);
   const [deactivating, setDeactivating] = useState<FieldResponse | null>(null);
   const [deletingSection, setDeletingSection] = useState<SectionGroup | null>(null);
   /** Sections the owner folded away (by id); a section is open until they do. */
@@ -261,6 +267,11 @@ export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: Modul
             className="h-9 ps-9"
           />
         </div>
+        {canUpdate && (
+          <Button variant="secondary" size="sm" onClick={() => setCascadeOpen(true)}>
+            {t('cascade.open')}
+          </Button>
+        )}
         <label className="inline-flex cursor-pointer items-center gap-2 text-sm">
           <input
             type="checkbox"
@@ -432,9 +443,10 @@ export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: Modul
                             f={f}
                             moduleKey={moduleKey}
                             holders={heldBy(f)}
-                            conditions={dependencies
-                              .filter((d) => d.fieldId === f.id)
-                              .flatMap((d) => describeCondition(d, fieldsById) ?? [])}
+                            conditions={conditionRulesOf(f.id, dependencies).flatMap(
+                              (d) => describeCondition(d, fieldsById) ?? [],
+                            )}
+                            dependsOn={cascadeParentLabels(f.id, dependencies, fieldsById)}
                             canUpdate={canUpdate}
                             canDelete={canDelete}
                             canReorder={canUpdate && section !== null && !searching}
@@ -472,6 +484,14 @@ export function PropertiesScreen({ moduleKey = 'contacts' }: { moduleKey?: Modul
         dependencies={dependencies}
         moduleKey={moduleKey}
         onClose={() => setEditing(null)}
+      />
+      <CascadeDialog
+        open={cascadeOpen}
+        fields={allFields}
+        dependencies={dependencies}
+        optionDependencies={optionDeps.data ?? []}
+        canEdit={canUpdate}
+        onClose={() => setCascadeOpen(false)}
       />
       <SectionModal
         open={sectionEditing !== null}
@@ -633,6 +653,7 @@ function PropertyRow({
   moduleKey,
   holders,
   conditions,
+  dependsOn,
   canUpdate,
   canDelete,
   canReorder,
@@ -648,6 +669,7 @@ function PropertyRow({
   moduleKey: ModuleKey;
   holders: number | undefined;
   conditions: Array<{ field: string; value: string }>;
+  dependsOn: string[];
   canUpdate: boolean;
   canDelete: boolean;
   canReorder: boolean;
@@ -723,6 +745,11 @@ function PropertyRow({
                 {t('row.shownWhen', { field: c.field, value: c.value })}
               </p>
             ))}
+            {dependsOn.length > 0 && (
+              <p className="text-xs text-muted-foreground">
+                {t('row.dependsOn', { field: dependsOn.join(', ') })}
+              </p>
+            )}
           </div>
         </div>
       </td>

@@ -448,7 +448,8 @@
       "companyRefused": "Anda tidak dapat menggunakan perusahaan itu. Pilih yang lain atau kosongkan kolom.",
       "searchOptions": "Cari opsi",
       "searchOptionsFor": "Cari opsi {field}",
-      "noOptionsFound": "Tidak ada opsi yang cocok dengan pencarian Anda."
+      "noOptionsFound": "Tidak ada opsi yang cocok dengan pencarian Anda.",
+      "cascadeWaiting": "Pilih {parent} dulu untuk melihat pilihan."
     },
     "tags": {
       "title": "Tag",
@@ -1087,7 +1088,8 @@
         "moveDown": "Turunkan {name}",
         "edit": "Ubah {name}",
         "deactivate": "Nonaktifkan {name}",
-        "reactivate": "Aktifkan kembali"
+        "reactivate": "Aktifkan kembali",
+        "dependsOn": "Pilihan bergantung pada {field}"
       },
       "toast": {
         "conflict": "Orang lain telah mengubah ini. Daftar dimuat ulang; coba lagi.",
@@ -1243,6 +1245,34 @@
         "manageStages": "Kelola tahap",
         "manageGroups": "Kelola grup",
         "locked": "Tetap"
+      },
+      "cascade": {
+        "open": "Bidang bergantung",
+        "title": "Bidang bergantung",
+        "close": "Tutup",
+        "intro": "Bidang bergantung selalu ditampilkan. Pilihannya bergantung pada pilihan di properti induk: untuk setiap pilihan induk, centang pilihan bidang bergantung yang diizinkannya.",
+        "empty": "Belum ada bidang bergantung.",
+        "add": "Tambah bidang bergantung",
+        "needTwoChoiceFields": "Bidang bergantung memerlukan minimal dua properti dengan daftar pilihan (dropdown, multi-pilih, atau radio).",
+        "dependsOn": "bergantung pada {parent}",
+        "editLabel": "Edit {name}",
+        "removeLabel": "Hapus {name}",
+        "parent": "Properti induk",
+        "child": "Properti bergantung",
+        "pickParent": "Pilih properti induk",
+        "pickChild": "Pilih properti bergantung",
+        "allowed": "Pilihan {child} yang diizinkan untuk setiap pilihan {parent}",
+        "noParentChoices": "Properti induk belum punya pilihan.",
+        "noChildChoices": "Properti bergantung belum punya pilihan.",
+        "cancel": "Batal",
+        "save": "Simpan",
+        "saved": "Bidang bergantung disimpan.",
+        "cycle": "Dependensi itu akan membuat dua properti saling menunggu.",
+        "removeTitle": "Hapus {name} dari bidang bergantung?",
+        "removeMessage": "Semua pilihannya akan ditampilkan lagi. Pilihan yang dimilikinya di bawah induk akan dilupakan; nilai yang dimiliki kontak tetap disimpan.",
+        "removeConfirm": "Hapus",
+        "removed": "Bidang bergantung dihapus.",
+        "removeFailed": "Bidang bergantung tidak bisa dihapus. Coba lagi."
       }
     },
     "lost": {

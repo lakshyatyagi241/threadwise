@@ -30,7 +30,12 @@ import {
   updateContact,
 } from '../api/contacts';
 import { useStatusOptions } from '../api/attributes';
-import { useContactFields, useFieldDependencies, useFieldSections } from '../api/properties';
+import {
+  useContactFields,
+  useFieldDependencies,
+  useFieldOptionDependencies,
+  useFieldSections,
+} from '../api/properties';
 import { setContactGroups, useGroups } from '../api/groups';
 import { useOwners } from '../api/owners';
 import { attachTagToContact, detachTag, useContactTags, useTags } from '../api/tags';
@@ -45,6 +50,7 @@ import {
   type ContactFormValues,
 } from '../lib/contact-model';
 import { fieldErrors, errorKind } from '../lib/errors';
+import { attributesAfterChange } from '../lib/cascade';
 import { checkValue, isFieldApplicable } from '../lib/field-values';
 import { stageChoices, statusChoices } from '../lib/option-sets';
 import {
@@ -157,6 +163,7 @@ function ContactForm({
   const registry = useContactFields();
   const sections = useFieldSections();
   const dependencies = useFieldDependencies();
+  const optionDependencies = useFieldOptionDependencies();
   const statusOptions = useStatusOptions();
   const groups = useGroups();
   const owners = useOwners();
@@ -800,11 +807,25 @@ function ContactForm({
         fields={formFields}
         sections={sections.data ?? []}
         dependencies={dependencies.data ?? []}
+        optionDependencies={optionDependencies.data ?? []}
         values={values.attributes}
         errors={fieldProblems}
         idPrefix={uid}
         onChange={(key, value) => {
-          set('attributes', { ...values.attributes, [key]: value });
+          // Until the cascades are loaded nothing can be told apart from "no cascade", so no value is cleared on that account.
+          set(
+            'attributes',
+            optionDependencies.data
+              ? attributesAfterChange(
+                  values.attributes,
+                  key,
+                  value,
+                  formFields,
+                  dependencies.data ?? [],
+                  optionDependencies.data,
+                )
+              : { ...values.attributes, [key]: value },
+          );
           if (fieldProblems[key]) setFieldProblems(({ [key]: _gone, ...rest }) => rest);
         }}
       />
