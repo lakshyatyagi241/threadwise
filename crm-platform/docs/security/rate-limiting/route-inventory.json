@@ -1,0 +1,3482 @@
+{
+  "generatedBy": "tools/rate-limit/audit.mjs",
+  "policies": {
+    "auth": {
+      "limit": 10,
+      "windowSeconds": 60,
+      "by": "ip"
+    },
+    "public-form": {
+      "limit": 20,
+      "windowSeconds": 60,
+      "by": "ip"
+    },
+    "webhook": {
+      "limit": 300,
+      "windowSeconds": 60,
+      "by": "ip"
+    },
+    "ui-poll": {
+      "limit": 120,
+      "windowSeconds": 60,
+      "by": "actor-or-ip"
+    }
+  },
+  "summary": {
+    "routes": 2055,
+    "public": 220,
+    "withThrottle": 76,
+    "skippedByDesign": 64,
+    "byClass": {
+      "credential": {
+        "routes": 30,
+        "declared": 18,
+        "undeclared": 12
+      },
+      "public-write": {
+        "routes": 70,
+        "declared": 41,
+        "undeclared": 29
+      },
+      "webhook": {
+        "routes": 31,
+        "declared": 3,
+        "undeclared": 28
+      },
+      "public-read": {
+        "routes": 89,
+        "declared": 39,
+        "undeclared": 50
+      },
+      "costly": {
+        "routes": 136,
+        "declared": 8,
+        "undeclared": 128
+      }
+    }
+  },
+  "deploy": {
+    "found": [
+      {
+        "file": "deploy/hostinger/docker-compose.yml",
+        "name": "TRUST_PROXY",
+        "value": "loopback,linklocal,uniquelocal"
+      },
+      {
+        "file": ".env.example",
+        "name": "TRUST_PROXY",
+        "value": "loopback"
+      }
+    ],
+    "problems": []
+  },
+  "routes": [
+    {
+      "key": "DELETE /api/v1/campaigns/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/companies/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/contact-groups/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/contacts/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/deals/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/scheduled/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/scheduled.controller.ts"
+    },
+    {
+      "key": "DELETE /api/v1/templates/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/ai-training/assistants/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/ai-training/sources/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/ai/provider-keys/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-keys-usage-admin/workspace-ai.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/broadcast-wizard/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/broadcasts-actions.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/facebook/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/flows/:flowId/widget/assets/:slot",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/flow-widget.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/line/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-line/line-broadcasts.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/platform/settings/senders/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/sms/senders/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-sms/sms-senders.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/telegram/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/viber/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-viber/vib-broadcasts.controller.ts"
+    },
+    {
+      "key": "DELETE /v2/wechat/broadcasts/:id",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-wechat/broadcasts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/broadcasts",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/broadcasts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/broadcasts/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/broadcasts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/broadcasts/:id/recipients",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/broadcasts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/campaigns",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/campaigns/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/campaigns/statistics",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/companies",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/companies/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/contact-groups",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/contacts",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/contacts/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/contacts/:id/consent",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contact-consent.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/contacts/:id/privacy",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contact-consent.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/conversations",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/conversations.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/conversations/:id/messages",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/conversations.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/deals",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/deals/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/devices",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/devices.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/devices/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/devices.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/flows",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/flows/flows.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/flows/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/flows/flows.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/flows/:id/subscribers",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/flows/flows.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/me",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/account/account.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/media/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/media.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/messages",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/messages.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/messages/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/messages.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/scheduled",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/scheduled.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/scheduled/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/scheduled.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/templates",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/templates/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/templates/categories",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "GET /api/v1/usage",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/account/account.controller.ts"
+    },
+    {
+      "key": "GET /api/whatsapp-message-settings",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/node-bridge-runtime/node-internal.controller.ts"
+    },
+    {
+      "key": "GET /docs/api.json",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/developer-rest-api-v1/docs/api-v1-docs.controller.ts"
+    },
+    {
+      "key": "GET /form-embed/:publicKey/embed.js",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts"
+    },
+    {
+      "key": "GET /health",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/health/health.controller.ts"
+    },
+    {
+      "key": "GET /l/:slug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/forms-links-groups/wa-chat-link-redirect.controller.ts"
+    },
+    {
+      "key": "GET /r/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/tracking/link-redirect.controller.ts"
+    },
+    {
+      "key": "GET /ready",
+      "class": "public-read",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/health/health.controller.ts"
+    },
+    {
+      "key": "GET /v2/audit-log",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "120/60s by actor",
+      "effective": "120/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
+    },
+    {
+      "key": "GET /v2/audit-log/:id",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "120/60s by actor",
+      "effective": "120/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
+    },
+    {
+      "key": "GET /v2/audit-log/exports/:id/download",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
+    },
+    {
+      "key": "GET /v2/auth/password-policy",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "GET /v2/auth/registration-config",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "GET /v2/auth/social/:provider/start",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "GET /v2/contact-consent/contacts/:uuid/export",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "GET /v2/contact-consent/export",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "GET /v2/contact-consent/exports/:id/download",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "GET /v2/crm/revenue",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/crm/revenue-report/revenue-report.controller.ts"
+    },
+    {
+      "key": "GET /v2/crm/revenue/exports/:id/download",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/crm/revenue-report/revenue-report.controller.ts"
+    },
+    {
+      "key": "GET /v2/devices/:id/pairing",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "1/1s by actor",
+      "effective": "1/1s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/devices.controller.ts"
+    },
+    {
+      "key": "GET /v2/facebook/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-facebook/webhook.controller.ts"
+    },
+    {
+      "key": "GET /v2/facebook/webhook",
+      "class": "credential",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/channel-facebook/webhook.controller.ts"
+    },
+    {
+      "key": "GET /v2/flow-media/:org/:name",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/flow-builder-editor/flow-media.controller.ts"
+    },
+    {
+      "key": "GET /v2/help-agent/status",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "ui-poll",
+      "effective": "120/60s by actor-or-ip",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/help-agent/help-agent.controller.ts"
+    },
+    {
+      "key": "GET /v2/i18n/languages",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/localization-translation/languages.controller.ts"
+    },
+    {
+      "key": "GET /v2/inbox/saved-replies/export",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "10/60s by actor",
+      "effective": "10/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/team-inbox-conversations/saved-replies/saved-replies-transfer.controller.ts"
+    },
+    {
+      "key": "GET /v2/privacy/legal-holds/export",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "10/60s by actor",
+      "effective": "10/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts"
+    },
+    {
+      "key": "GET /v2/privacy/requests/:id/exports/:exportId/download",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "GET /v2/privacy/subjects",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/appointments/calendar/google/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/appointments-booking/google-calendar-callback.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/appointments/calendar/microsoft/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/appointments-booking/microsoft-calendar.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/appointments/feed/:file",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/calendar-feeds.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking-assets/:orgSlug/:assetId",
+      "class": "public-read",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "600/60s by ip",
+      "effective": "600/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking-manage/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking-manage/:token/ics",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking-manage/:token/slots",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking/:orgSlug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking/:orgSlug/:typeSlug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/booking/:orgSlug/:typeSlug/slots",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/brand/:slot",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/announcements",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/blog",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/blog/:slug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/content",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/legal",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/legal/:slug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/pricing",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/site-info",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/cms/sitemap",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/compliance/trust/:slug",
+      "class": "webhook",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/compliance-center/public-trust.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/conferencing/:provider/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "300/60s by ip",
+      "effective": "300/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/meeting-conferencing/conferencing-callback.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/consent/unsubscribe/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/contact-consent/consent-unsubscribe.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/email/google/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-email/mail-callback.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/email/microsoft/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-email/mail-callback.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/forms/:publicKey",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/forms/:publicKey/submissions/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/invoices/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/invoicing/invoice-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/invoices/:token/pdf",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/invoicing/invoice-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/invoices/:token/print",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/invoicing/invoice-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/manifest.webmanifest",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/marketplace/hooks/:publicKey",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketplace/hook.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/robots.txt",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/sales-docs/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/sales-docs/:token/print",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/site-config",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/team-inbox-manifest.webmanifest",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/public.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/webhooks/wa-calling",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/calling-voice/calling-webhook.controller.ts"
+    },
+    {
+      "key": "GET /v2/public/webhooks/whatsapp",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.controller.ts"
+    },
+    {
+      "key": "GET /v2/setup/status",
+      "class": "public-read",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "GET /v2/shopify/embedded/config",
+      "class": "public-read",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "public-form",
+      "effective": "20/60s by ip",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/shopify-woocommerce/embedded.controller.ts"
+    },
+    {
+      "key": "GET /v2/shopify/oauth/callback",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/shopify-woocommerce/ecom-public.controller.ts"
+    },
+    {
+      "key": "GET /v2/store-public/:slug/home",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "GET /v2/store-public/:slug/orders/:token",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "GET /v2/store-public/:slug/products/:productSlug",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "GET /v2/store-public/host",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "GET /v2/webhooks/channels/:channelUuid",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chat-conversations/channel-webhooks.controller.ts"
+    },
+    {
+      "key": "GET /v2/wechat/inbound/:token",
+      "class": "credential",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/channel-wechat/webhook.controller.ts"
+    },
+    {
+      "key": "GET /v2/workspace/invitations/preview",
+      "class": "credential",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/invitations.controller.ts"
+    },
+    {
+      "key": "GET /widget-assets/:flowId/:slot",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget-legacy/:id/output.js",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget-legacy/output.js",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget/:token/api/config",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget/:token/api/history",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget/:token/api/media/:id",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget/:token/chat",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "GET /widget/:token/embed",
+      "class": "public-read",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "PATCH /api/v1/companies/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "PATCH /api/v1/contacts/:id",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1UpdateContactSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "PATCH /api/v1/deals/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/ai-training/assistants/:id",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "updateAiagAssistantSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/ai/provider-keys/:id/active",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "setWorkspaceAiKeyActiveSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-keys-usage-admin/workspace-ai.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/platform/ai-keys/:id",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "updatePlatformAiKeySchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-keys-usage-admin/platform-ai.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/platform/ai-keys/:id/active",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "setAiKeyActiveSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-keys-usage-admin/platform-ai.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/platform/settings/senders/:id",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "otpSenderPatchSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "PATCH /v2/sms/senders/:id",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "toggleSmsSenderSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-sms/sms-senders.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/broadcasts",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateBroadcastSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/broadcasts/:id/stop",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/campaigns",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateCampaignSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/campaigns/:id/stop",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/campaigns.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/companies",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateCompanySchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/contact-groups",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateContactGroupSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contact-groups/contact-groups.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/contacts",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateContactSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/contacts/:id/consent",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "recordConsentSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contact-consent.v1.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/contacts/:id/privacy",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "recordPrivacyFlagSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contact-consent.v1.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/deals",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateDealSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/flows/:id/enroll",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1EnrollSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/flows/flows.v1.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/media",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/media.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/messages",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1SendMessageSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/messaging/messages.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/scheduled",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateScheduledSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/bulk/scheduled.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/templates",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1CreateTemplateSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "POST /api/v1/templates/:id/send",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1SendTemplateSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "POST /v2/account/email-change/confirm",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "confirmEmailChangeRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
+    },
+    {
+      "key": "POST /v2/account/mfa/recovery-codes",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "regenerateRecoveryCodesRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/account.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-crm/message",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "aiCrmMessageInputSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-crm/reset",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-crm/settings",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "aiCrmSettingsInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-copilot-lead-finder/ai-crm.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-training/assistants",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createAiagAssistantSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-training/assistants/:id/duplicate",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-training/assistants/:id/sources",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "addAiagSourceSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "POST /v2/ai-training/assistants/:id/sources/file",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "uploadAiagSourceFieldsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "POST /v2/audit-log/exports",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "requestAuditLogExportSchema",
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/audit-log/audit-log.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/clerk/session",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "clerkSessionSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/find-workspaces",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "findWorkspacesRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/forgot-password",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "forgotPasswordRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/impersonation/redeem",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "redeemImpersonationRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/controllers/impersonation.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "loginRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/mfa",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "mfaLoginRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/mfa/webauthn-options",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "passkeyLoginOptionsRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/login/workspace",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "selectWorkspaceRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/logout",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "logoutRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/partner/login",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "partnerLoginSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/refresh",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "refreshRequestSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/reset-password",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "resetPasswordRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/resend-email-code",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupResendEmailCodeRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/resend-otp",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupResendOtpRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/set-password",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupSetPasswordRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/start",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupStartRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/verify-email-code",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupVerifyEmailCodeRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/signup/verify-otp",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "signupVerifyOtpRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/social/:provider/callback",
+      "class": "webhook",
+      "public": true,
+      "bodySchema": "socialCallbackRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/staff/login",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "loginRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/auth.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/verify-email",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "verifyEmailRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/auth/verify-email/resend",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/registration.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/audience/count",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardAudienceCountRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/broadcasts/:id/cancel",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/broadcasts/:id/pause",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/broadcasts/:id/resume",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/broadcasts/:id/retry-failed",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/contacts/query",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardContactsQuerySchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/credit-check",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardCreditCheckRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/csv",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/drafts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "saveWizardDraftSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/drafts/:id/launch",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardLaunchRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/test-send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardTestSendRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcast-wizard/variables/preview",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "wizardVariablePreviewRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcasts",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcasts/:id/resume",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/broadcasts-actions.controller.ts"
+    },
+    {
+      "key": "POST /v2/broadcasts/:id/retry-failed",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/broadcasts-actions.controller.ts"
+    },
+    {
+      "key": "POST /v2/calling/calls/:id/recording",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/calling-voice/calling.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/:id/resend",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "resendCampaignSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/campaigns-actions.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/:id/send-now",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/campaigns-actions.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/ai-generate",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "campaignAiGenerateSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/campaign-ai.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/ai-image",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "campaignAiImageSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/campaign-ai-image.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/bulk-delete",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkDeleteCampaignsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/campaigns.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/drain",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/track-response",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/unsubscribe",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/update-contact-status",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/update-status",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/campaigns/node/update-status-by-id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/campaigns/campaign-callbacks.controller.ts"
+    },
+    {
+      "key": "POST /v2/catalog/import",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/catalog-products/catalog.controller.ts"
+    },
+    {
+      "key": "POST /v2/catalog/products/:id/send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendProductSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/catalog-products/products.controller.ts"
+    },
+    {
+      "key": "POST /v2/catalog/send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendCatalogSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/catalog-products/catalog.controller.ts"
+    },
+    {
+      "key": "POST /v2/companies/:id/brief",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "generateCompanyBriefSchema",
+      "limiter": "throttle",
+      "throttle": "20/3600s by actor",
+      "effective": "20/3600s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/company-briefs/company-briefs.controller.ts"
+    },
+    {
+      "key": "POST /v2/companies/bulk/delete",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkCompanyIdsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "POST /v2/companies/import",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "importCompaniesSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "POST /v2/compliance/dnc/import",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "importDncSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/compliance-center/compliance.controller.ts"
+    },
+    {
+      "key": "POST /v2/contact-consent/contacts/:uuid/events",
+      "class": "other",
+      "public": false,
+      "bodySchema": "recordConsentSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "POST /v2/contact-consent/contacts/:uuid/privacy-events",
+      "class": "other",
+      "public": false,
+      "bodySchema": "recordPrivacyFlagSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "POST /v2/contact-consent/exports",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "POST /v2/contact-consent/settings/test",
+      "class": "other",
+      "public": false,
+      "bodySchema": "testConsentMessageSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/contact-consent/consent.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/delete",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkDeleteContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/group",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkGroupContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/owner",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkOwnerContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/tag",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkTagContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/uncontacted",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkSetUncontactedSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/bulk/update",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkUpdateContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/export",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "exportContactsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-bulk/contact-bulk.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/import",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-import/contact-import.controller.ts"
+    },
+    {
+      "key": "POST /v2/contacts/import/preview",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/contact-import/contact-import.controller.ts"
+    },
+    {
+      "key": "POST /v2/crm/revenue/exports",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "requestRevenueExportSchema",
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/revenue-report/revenue-report.controller.ts"
+    },
+    {
+      "key": "POST /v2/devices/:id/history-import/cancel",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/whatsapp-devices-baileys/devices.controller.ts"
+    },
+    {
+      "key": "POST /v2/email/attachments/upload",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "uploadMailAttachmentFieldsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-email/mail-outbound-attachments.controller.ts"
+    },
+    {
+      "key": "POST /v2/facebook/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createFbBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/facebook/broadcasts/:id/pause",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/facebook/broadcasts/:id/retry",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/facebook/broadcasts/:id/start",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-facebook/fb-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/facebook/webhook",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-facebook/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/flows/:flowId/widget/assets/:slot",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/chatbot-widget/flow-widget.controller.ts"
+    },
+    {
+      "key": "POST /v2/flows/ai-generate",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "flbAiGenerateRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts"
+    },
+    {
+      "key": "POST /v2/flows/import",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "importFlowRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts"
+    },
+    {
+      "key": "POST /v2/flows/upload-media",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/flow-builder-editor/flows.controller.ts"
+    },
+    {
+      "key": "POST /v2/forms/:id/submissions/export",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "exportFormSubmissionsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/forms-builder/form-submissions.controller.ts"
+    },
+    {
+      "key": "POST /v2/growth/assistant/broadcast",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "broadcastAssistantSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/growth-pilot/growth.controller.ts"
+    },
+    {
+      "key": "POST /v2/help-agent/chat/completions",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "60/60s by actor",
+      "effective": "60/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/help-agent/help-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/help-agent/tasks",
+      "class": "other",
+      "public": false,
+      "bodySchema": "startHelpAgentTaskSchema",
+      "limiter": "throttle",
+      "throttle": "20/60s by actor",
+      "effective": "20/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/help-agent/help-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/help-agent/tasks/:id/finish",
+      "class": "other",
+      "public": false,
+      "bodySchema": "finishHelpAgentTaskSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/help-agent/help-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/ai/rewrite",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "inboxRewriteSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox-ai.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/conversations/:id/messages",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendMessageSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/conversations/bulk",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkConversationsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-routing-sla/assignment.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/email-templates/:id/render",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "renderEmailTemplateSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/email-templates/inbox-email-templates.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/media",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/message-logs/exports",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createMessageLogExportSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/inbox.controller.ts"
+    },
+    {
+      "key": "POST /v2/inbox/saved-replies/import",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "10/60s by actor",
+      "effective": "10/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/saved-replies/saved-replies-transfer.controller.ts"
+    },
+    {
+      "key": "POST /v2/instaflow/inbound",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-instagram/inbound.controller.ts"
+    },
+    {
+      "key": "POST /v2/instagram/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendIgBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-instagram/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/instagram/composer/send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendIgComposerSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-instagram/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/invoices/:id/public-link/regenerate",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "publicLinkSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts"
+    },
+    {
+      "key": "POST /v2/invoices/:id/send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendInvoiceSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/invoicing/invoices.controller.ts"
+    },
+    {
+      "key": "POST /v2/line/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createLineBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-line/line-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/line/broadcasts/:id/pause",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-line/line-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/line/broadcasts/:id/retry",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-line/line-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/line/broadcasts/:id/start",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-line/line-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/line/inbound/:token",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-line/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/media/marketing",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/broadcasts/marketing-media.controller.ts"
+    },
+    {
+      "key": "POST /v2/message-history/exports",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createMessageHistoryExportSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/team-inbox-conversations/message-history.controller.ts"
+    },
+    {
+      "key": "POST /v2/payments/webhook/:slug",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/platform-payment-gateways/payments.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/auth/login",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "operatorLoginRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/auth/login/mfa",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "mfaLoginRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/auth/login/mfa/webauthn-options",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "passkeyLoginOptionsRequestSchema",
+      "limiter": "throttle",
+      "throttle": "auth",
+      "effective": "10/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/auth/logout",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "logoutRequestSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/auth/refresh",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "refreshRequestSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/billing/settings/logo",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-payment-gateways/admin-billing.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/cms/content/upload",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/marketing-site-cms/operator-content.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/extensions/upload",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/addons-extension-registry/platform-extensions.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/security/danger/halt-sends",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/security/danger/resume-sends",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/settings/assets/:slot",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/settings.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/settings/senders",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "otpSenderCreateSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/auth/controllers/platform.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/settings/tiPwa/generate-keys",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/platform-settings-branding-storage/settings.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/waboo-migration/runner/claim",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "wabooMigrationRunnerClaimSchema",
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/waboo-migration/runner/jobs/:id/finish",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "wabooMigrationRunnerFinishSchema",
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/waboo-migration/runner/jobs/:id/report",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "wabooMigrationRunnerReportSchema",
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/waboo-migration/runner-agent.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/wallet/meta-cards/import",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "importMetaCardSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.controller.ts"
+    },
+    {
+      "key": "POST /v2/platform/wallet/rates/import",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "importRatesSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/wallet-message-billing/platform-wallet.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/legal-holds",
+      "class": "other",
+      "public": false,
+      "bodySchema": "placeLegalHoldSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/legal-holds/:id/extend",
+      "class": "other",
+      "public": false,
+      "bodySchema": "extendLegalHoldSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/legal-holds/:id/release",
+      "class": "other",
+      "public": false,
+      "bodySchema": "releaseLegalHoldSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/legal-holds/:id/review",
+      "class": "other",
+      "public": false,
+      "bodySchema": "reviewLegalHoldSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/legal-holds/legal-holds.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests",
+      "class": "other",
+      "public": false,
+      "bodySchema": "createPrivacyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/complete",
+      "class": "other",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/erase",
+      "class": "other",
+      "public": false,
+      "bodySchema": "erasePrivacyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/export",
+      "class": "costly",
+      "public": false,
+      "limiter": "throttle",
+      "throttle": "6/60s by actor",
+      "effective": "6/60s by actor",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/hold",
+      "class": "other",
+      "public": false,
+      "bodySchema": "holdPrivacyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/reject",
+      "class": "other",
+      "public": false,
+      "bodySchema": "rejectPrivacyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/privacy/requests/:id/verify",
+      "class": "other",
+      "public": false,
+      "bodySchema": "verifyPrivacyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/privacy/requests/privacy-requests.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/booking-manage/:token/cancel",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicCancelInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/booking-manage/:token/reschedule",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicRescheduleInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/booking/:orgSlug/:typeSlug/book",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicBookInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/appointments-booking/public-booking.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/cms/contact",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/marketing-site-cms/public-cms.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/consent/unsubscribe/:token",
+      "class": "public-write",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "20/60s by ip",
+      "effective": "20/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/contact-consent/consent-unsubscribe.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/email/google/push",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-email/mail-push.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/email/microsoft/push",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-email/mail-graph-push.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/forms/:publicKey/events",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicFormEventSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/forms/:publicKey/submit",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicFormSubmitSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/forms-builder/public-forms.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/invoices/:token/pay",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicPaySchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/crm/invoicing/invoice-public.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/lead-hooks/:token",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/leads/lead-hooks.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/marketplace/hooks/:publicKey",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/marketplace/hook.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/sales-docs/:token/accept",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "publicAcceptSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs-public.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/sales-docs/:token/decline",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicDeclineSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs-public.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/webhooks/invoice-payments/:endpointId",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/crm/invoicing/invoice-gateway-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/webhooks/telephony/:connectionId",
+      "class": "webhook",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/calling-voice/logging/telephony-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/webhooks/wa-calling",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/calling-voice/calling-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/public/webhooks/whatsapp",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/whatsapp-cloud-api-waba/waba-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/sales-docs/:id/link/regenerate",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "regenerateLinkSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs.controller.ts"
+    },
+    {
+      "key": "POST /v2/sales-docs/:id/send",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendSalesDocSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/sales-docs/sales-docs.controller.ts"
+    },
+    {
+      "key": "POST /v2/scheduled/media",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/scheduled-queue-warmer/scheduled.controller.ts"
+    },
+    {
+      "key": "POST /v2/segments/:id/export",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "exportSegmentSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/segments/segments.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/bootstrap",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "setupBootstrapRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/database-defaults",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "verifySetupTokenRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/requirements",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "verifySetupTokenRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/run",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "setupRunRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/test-database",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "setupDatabaseTestRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/verify-licence",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "licenceVerifyRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/setup/verify-token",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "verifySetupTokenRequestSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by ip",
+      "effective": "30/60s by ip",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/install-update-licensing/setup.controller.ts"
+    },
+    {
+      "key": "POST /v2/shopify/compliance",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/shopify-woocommerce/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/shopify/embedded/session",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "shopifyEmbeddedSessionInputSchema",
+      "limiter": "throttle",
+      "throttle": "60/60s by ip",
+      "effective": "60/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/shopify-woocommerce/embedded.controller.ts"
+    },
+    {
+      "key": "POST /v2/shopify/webhook/:secret",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/shopify-woocommerce/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/sms/lookup",
+      "class": "other",
+      "public": false,
+      "bodySchema": "lookupSmsNumberSchema",
+      "limiter": "throttle",
+      "throttle": "30/60s by actor",
+      "effective": "30/60s by actor",
+      "severityIfUnlimited": "Info",
+      "file": "apps/api/src/modules/channel-sms/sms-senders.controller.ts"
+    },
+    {
+      "key": "POST /v2/sms/senders",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "connectSmsSenderSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-sms/sms-senders.controller.ts"
+    },
+    {
+      "key": "POST /v2/sms/status",
+      "class": "public-write",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-sms/sms-status.controller.ts"
+    },
+    {
+      "key": "POST /v2/sms/status/:secret",
+      "class": "public-write",
+      "public": true,
+      "limiter": "throttle",
+      "throttle": "240/60s by ip",
+      "effective": "240/60s by ip",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-sms/sms-status.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/:slug/abandon",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "abandonCartSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/:slug/checkout",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "checkoutSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/:slug/coupon",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "couponQuoteSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/:slug/review",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "publicReviewInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/storefront-builder/public/public-store.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/webhooks/gateway/:gatewayId",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/checkout-orders-merchant-payments/gateways/gateway-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/store-public/webhooks/razorpay",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/storefront-builder/payments/payment-webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/store/orders/:id/generate-payment-link",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "generateStoreOrderPaymentLinkSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/admin/store-orders.controller.ts"
+    },
+    {
+      "key": "POST /v2/store/orders/:id/payment-link",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "sendStoreOrderPaymentLinkSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/storefront-builder/admin/store-orders.controller.ts"
+    },
+    {
+      "key": "POST /v2/tasks/bulk/assign",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkAssignTasksSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
+    },
+    {
+      "key": "POST /v2/tasks/bulk/complete",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkTaskIdsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
+    },
+    {
+      "key": "POST /v2/tasks/bulk/delete",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkTaskIdsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
+    },
+    {
+      "key": "POST /v2/tasks/bulk/reopen",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "bulkTaskIdsSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/crm/tasks/tasks.controller.ts"
+    },
+    {
+      "key": "POST /v2/telegram/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createTgBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/telegram/broadcasts/:id/pause",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/telegram/broadcasts/:id/retry",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/telegram/broadcasts/:id/start",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-telegram/tg-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/telegram/inbound/:token",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-telegram/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/templates/ai-generate",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "tplAiGenerateSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/message-templates/template-ai.controller.ts"
+    },
+    {
+      "key": "POST /v2/templates/media",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "uploadTemplateMediaInputSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/message-templates/templates.controller.ts"
+    },
+    {
+      "key": "POST /v2/viber/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createVibBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-viber/vib-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/viber/broadcasts/:id/pause",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-viber/vib-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/viber/broadcasts/:id/retry",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-viber/vib-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/viber/broadcasts/:id/start",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-viber/vib-broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/viber/inbound/:token",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-viber/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/webhooks/channels/:channelUuid",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chat-conversations/channel-webhooks.controller.ts"
+    },
+    {
+      "key": "POST /v2/wechat/broadcasts",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "createWechatBroadcastSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-wechat/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/wechat/broadcasts/:id/retry",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-wechat/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/wechat/broadcasts/:id/start",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/channel-wechat/broadcasts.controller.ts"
+    },
+    {
+      "key": "POST /v2/wechat/inbound/:token",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/channel-wechat/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/woocommerce/webhook/:secret",
+      "class": "webhook",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/shopify-woocommerce/webhook.controller.ts"
+    },
+    {
+      "key": "POST /v2/workspace/invitations/accept",
+      "class": "credential",
+      "public": true,
+      "bodySchema": "acceptWspInviteSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Critical",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/invitations.controller.ts"
+    },
+    {
+      "key": "POST /v2/workspace/members/:id/resend-invite",
+      "class": "costly",
+      "public": false,
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/workspaces-teams-tenancy/members.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/feedback",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/message",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/restart",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "POST /widget/:token/api/upload",
+      "class": "public-write",
+      "public": true,
+      "limiter": "none",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/chatbot-widget/widget-public.controller.ts"
+    },
+    {
+      "key": "PUT /api/v1/companies/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/companies/companies.controller.ts"
+    },
+    {
+      "key": "PUT /api/v1/contacts/:id",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1UpdateContactSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/contacts/contacts.controller.ts"
+    },
+    {
+      "key": "PUT /api/v1/deals/:id",
+      "class": "public-write",
+      "public": true,
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/crm/deals/deals.controller.ts"
+    },
+    {
+      "key": "PUT /api/v1/templates/:id",
+      "class": "public-write",
+      "public": true,
+      "bodySchema": "v1UpdateTemplateSchema",
+      "limiter": "skipped",
+      "severityIfUnlimited": "High",
+      "file": "apps/api/src/modules/developer-rest-api-v1/resources/automation/templates/templates.v1.controller.ts"
+    },
+    {
+      "key": "PUT /v2/ai-training/responder",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "saveAiagResponderSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-agents-training/ai-training.controller.ts"
+    },
+    {
+      "key": "PUT /v2/ai/provider-keys/:provider",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "saveWorkspaceAiKeySchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/ai-keys-usage-admin/workspace-ai.controller.ts"
+    },
+    {
+      "key": "PUT /v2/broadcast-wizard/drafts/:id",
+      "class": "costly",
+      "public": false,
+      "bodySchema": "updateWizardDraftSchema",
+      "limiter": "none",
+      "severityIfUnlimited": "Medium",
+      "file": "apps/api/src/modules/campaigns/wizard/wizard.controller.ts"
+    }
+  ]
+}

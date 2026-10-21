@@ -37,6 +37,7 @@ import { SignupService } from '../flows/signup.service';
 import { SocialAuthService } from '../flows/social-auth.service';
 import { AllowWhileGated } from '../guards/auth-gates';
 import { clientMeta } from '../support/client-meta';
+import { Throttle } from '../../platform-infrastructure';
 
 const provider = (raw: string) => {
   const parsed = socialProviderSchema.safeParse(raw);
@@ -55,6 +56,7 @@ export class RegistrationController {
   ) {}
 
   @Public()
+  @Throttle('auth')
   @Post('signup')
   @ApiOperation({
     summary: 'Create an organization and its first user',
@@ -80,6 +82,7 @@ export class RegistrationController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('signup/start')
   @ApiOperation({ summary: 'Start email-verified sign-up: stage the account and email a code' })
   async signupStart(@Body(zodPipe(signupStartRequestSchema)) body: SignupStartRequest) {
@@ -106,6 +109,7 @@ export class RegistrationController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('signup/set-password')
   @ApiOperation({ summary: 'Choose a password and create the account after email verification' })
   async signupSetPassword(
@@ -123,6 +127,7 @@ export class RegistrationController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('reset-password')
   @ApiOperation({ summary: 'Choose a new password with the emailed token' })
   async reset(@Body(zodPipe(resetPasswordRequestSchema)) body: ResetPasswordRequest) {
@@ -131,6 +136,7 @@ export class RegistrationController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('verify-email')
   @ApiOperation({ summary: 'Confirm an email address with the emailed token (does not sign in)' })
   async verifyEmail(@Body(zodPipe(verifyEmailRequestSchema)) body: VerifyEmailRequest) {
@@ -147,6 +153,7 @@ export class RegistrationController {
   }
 
   @Public()
+  @Throttle('auth')
   @Post('find-workspaces')
   @ApiOperation({ summary: 'Email the workspaces that use this address (always answers the same)' })
   async findWorkspaces(@Body(zodPipe(findWorkspacesRequestSchema)) body: FindWorkspacesRequest) {
