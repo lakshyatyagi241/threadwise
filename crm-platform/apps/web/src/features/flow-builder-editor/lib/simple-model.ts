@@ -68,10 +68,11 @@ export const BRANCHING: ReadonlySet<string> = new Set([
  * the step's `links`. The other branching steps have one exit per button / row, on ports `p0`, `p1`, ...
  */
 /**
- * Buttons and list: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the step
- * that follows in the same chain (`LINK_NEXT`). The other branching steps end their chain: nothing follows them.
+ * Buttons, list and carousel: the customer's tap picks the exit, and an exit that leads nowhere in particular can carry on with the
+ * step that follows in the same chain (`LINK_NEXT`). A carousel with no reply button (only links) just carries on, by its `next`
+ * port. The other branching steps (condition, FAQ) end their chain: nothing follows them.
  */
-export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list']);
+export const OPTION_STEPS: ReadonlySet<string> = new Set(['buttons', 'list', 'carousel']);
 export const endsChain = (type: string): boolean => BRANCHING.has(type) && !OPTION_STEPS.has(type);
 /** A button / row link that means "carry on with the next step of this chain" (never a step id). */
 export const LINK_NEXT = '__next';
@@ -282,6 +283,9 @@ export function toSimple(graph: Pick<FlowGraph, 'flowNodes' | 'flowEdges' | 'var
         next.set(src.id, dst.id);
         feeders.set(dst.id, [...(feeders.get(dst.id) ?? []), src.id]);
       }
+    } else if (src.type === 'carousel' && e.sourceHandle === 'next') {
+      // A carousel with no reply button carries on by this wire; the step it reaches rides on the node (`carryOn`).
+      continue;
     } else if (!branching && e.sourceHandle === 'out') {
       if (next.has(src.id)) reasons.push(msg('simpleModel.reasons.multiNext'));
       next.set(src.id, dst.id);
@@ -448,6 +452,8 @@ export function toGraph(doc: SimpleDoc): FlowGraph {
       if (!BRANCHING.has(s.type) && nextStep) for (const h of exits) edge(s.id, h, nextStep.id);
       else if (!BRANCHING.has(s.type) && s.goto && known.has(s.goto))
         for (const h of exits) edge(s.id, h, s.goto);
+      if (s.type === 'carousel' && optionCount(s) === 0 && following)
+        edge(s.id, 'next', following.id);
       if (BRANCHING.has(s.type)) {
         s.links.forEach((link, i) => {
           const target = link === LINK_NEXT ? following?.id : link;
@@ -556,6 +562,7 @@ const WEB_STEP_TYPES: ReadonlySet<SimpleType> = new Set([
   'delay',
   'cta',
   'webhook',
+  'ai',
 ]);
 
 /** The "+" menu entries for a channel: a website chat bot only offers what the widget can render. */

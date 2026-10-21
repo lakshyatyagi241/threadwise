@@ -1105,7 +1105,7 @@ function Editor({
                                 })}
                           </p>
                         ) : null}
-                        {s.type === 'buttons' || s.type === 'list' ? (
+                        {OPTION_STEPS.has(s.type) ? (
                           <>
                             <AddMenu
                               channel={channel}
