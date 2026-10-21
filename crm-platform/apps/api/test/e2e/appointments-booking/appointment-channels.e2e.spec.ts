@@ -15,10 +15,11 @@ import {
   type OutboxEvent,
 } from '../../../src/kernel/outbox/outbox-subscribers';
 import { AppointmentMessageConsumer } from '../../../src/modules/appointments-booking/appointment-message.consumer';
+import { AppointmentRemindersRepository } from '../../../src/modules/appointments-booking/appointment-reminders.repository';
 import { AppointmentsRepository } from '../../../src/modules/appointments-booking/appointments.repository';
 import { AppointmentsSupport } from '../../../src/modules/appointments-booking/appointments.support';
 import { BookingTypesRepository } from '../../../src/modules/appointments-booking/booking-types.repository';
-import { AppointmentsApi, bearer, startHarness, type Harness, type Tenant } from './support';
+import { AppointmentsApi, bearer, buildReminderService, startHarness, type Harness, type Tenant } from './support';
 
 /**
  * Owner-enabled appointment channels and the predefined message library end to end (BL-350..BL-352): the real API, a real Postgres with
@@ -90,12 +91,16 @@ afterEach(async () => {
 });
 
 let seq = 0;
-async function seedWaba(t: Tenant): Promise<{ id: number; uuid: string }> {
+async function seedWaba(
+  t: Tenant,
+  label = 'Front desk',
+  primary = true,
+): Promise<{ id: number; uuid: string }> {
   const n = ++seq;
   const crypto = h.app.get(CryptoService, { strict: false });
   const res = await h.owner.query(
     `INSERT INTO wa_provider_configs (org_id, provider, status, credentials_json, meta_json, phone_number, display_label, is_primary, connected_at)
-     VALUES ($1, 'waba', 'connected', $2, $3::jsonb, '+919112290122', 'Front desk', true, now()) RETURNING id, uuid`,
+     VALUES ($1, 'waba', 'connected', $2, $3::jsonb, $4, $5, $6, now()) RETURNING id, uuid`,
     [
       t.orgId,
       crypto.encrypt(JSON.stringify({ access_token: 'TOKEN-1' })),
@@ -104,16 +109,10 @@ async function seedWaba(t: Tenant): Promise<{ id: number; uuid: string }> {
         phone_number_id: `8000${n}`,
         provider: 'meta',
       }),
+      primary ? '+919112290122' : `+9191122901${String(10 + n).slice(-2)}`,
+      label,
+      primary,
     ],
-  );
-  return { id: Number(res.rows[0].id), uuid: res.rows[0].uuid as string };
-}
-
-async function seedSms(t: Tenant, label = 'Sales SMS'): Promise<{ id: number; uuid: string }> {
-  const res = await h.owner.query(
-    `INSERT INTO wa_provider_configs (org_id, provider, status, phone_number, display_label, is_primary, connected_at)
-     VALUES ($1, 'sms', 'connected', $3, $2, false, now()) RETURNING id, uuid`,
-    [t.orgId, label, `+1415555${String(1000 + ++seq)}`],
   );
   return { id: Number(res.rows[0].id), uuid: res.rows[0].uuid as string };
 }
@@ -139,17 +138,16 @@ const channelOf = (body: { data: Array<{ channel: string }> }, c: string) =>
   body.data.find((x) => x.channel === c) as Record<string, unknown>;
 
 describe('the channels the owner allows (BL-350)', () => {
-  it('a new workspace has chosen nothing; voice is listed as coming soon', async () => {
+  it('a new workspace has chosen nothing; SMS is not a channel any more and voice is listed as coming soon', async () => {
     const t = await api.signupUndecided('chn');
     const res = await api.as(t.admin).get('/v2/appointment-channels');
     expect(res.status, JSON.stringify(res.body)).toBe(200);
     expect(res.body.data.map((c: { channel: string }) => c.channel)).toEqual([
       'email',
       'whatsapp',
-      'sms',
       'voice',
     ]);
-    for (const c of ['email', 'whatsapp', 'sms']) {
+    for (const c of ['email', 'whatsapp']) {
       expect(channelOf(res.body, c)).toMatchObject({
         enabled: false,
         decided: false,
@@ -166,10 +164,10 @@ describe('the channels the owner allows (BL-350)', () => {
 
   it('the owner switches a channel on; it is usable only once a sender is connected', async () => {
     const t = await api.signupUndecided('chn');
-    const on = await put(t.admin, '/v2/appointment-channels/sms', { enabled: true });
+    const on = await put(t.admin, '/v2/appointment-channels/whatsapp', { enabled: true });
     expect(on.status, JSON.stringify(on.body)).toBe(200);
     expect(on.body).toMatchObject({
-      channel: 'sms',
+      channel: 'whatsapp',
       enabled: true,
       decided: true,
       source: 'owner',
@@ -177,21 +175,38 @@ describe('the channels the owner allows (BL-350)', () => {
       usable: false,
     });
 
-    await seedSms(t);
+    await seedWaba(t);
     const list = await api.as(t.admin).get('/v2/appointment-channels');
-    expect(channelOf(list.body, 'sms')).toMatchObject({
+    expect(channelOf(list.body, 'whatsapp')).toMatchObject({
       enabled: true,
       connection: 'connected',
       usable: true,
     });
     // Connected but not chosen is not usable either.
-    await seedWaba(t);
-    const again = await api.as(t.admin).get('/v2/appointment-channels');
+    const other = await api.signupUndecided('chn3');
+    await seedWaba(other);
+    const again = await api.as(other.admin).get('/v2/appointment-channels');
     expect(channelOf(again.body, 'whatsapp')).toMatchObject({
       enabled: false,
       connection: 'connected',
       usable: false,
     });
+  });
+
+  it('SMS was removed from appointment messages (BL-420): the channel cannot be switched on or off, is not listed, and nothing is stored for it', async () => {
+    const t = await api.signupUndecided('chn');
+    for (const body of [{ enabled: true }, { enabled: false }]) {
+      const res = await put(t.admin, '/v2/appointment-channels/sms', body);
+      expect(res.status, JSON.stringify(res.body)).toBe(422);
+      expect(res.body.code).toBe('VALIDATION_FAILED');
+    }
+    const rows = await h.owner.query(
+      `SELECT 1 FROM appointment_channel_settings WHERE org_id = $1 AND channel = 'sms'`,
+      [t.orgId],
+    );
+    expect(rows.rowCount).toBe(0);
+    const list = await api.as(t.admin).get('/v2/appointment-channels');
+    expect(list.body.data.some((c: { channel: string }) => c.channel === 'sms')).toBe(false);
   });
 
   it('voice cannot be switched on (reserved for the Voice bot)', async () => {
@@ -218,15 +233,15 @@ describe('the channels the owner allows (BL-350)', () => {
 
   it('a default sender must be a connected sender of that channel; null goes back to the first one', async () => {
     const t = await api.signupUndecided('chn');
-    const a = await seedSms(t, 'First');
-    const b = await seedSms(t, 'Second');
-    const bad = await put(t.admin, '/v2/appointment-channels/sms', {
+    const a = await seedWaba(t, 'First');
+    const b = await seedWaba(t, 'Second', false);
+    const bad = await put(t.admin, '/v2/appointment-channels/whatsapp', {
       enabled: true,
       defaultSenderId: crypto.randomUUID(),
     });
     expect(bad.status).toBe(422);
     expect(bad.body.code).toBe('APPT_CHANNEL_SENDER_INVALID');
-    const ok = await put(t.admin, '/v2/appointment-channels/sms', {
+    const ok = await put(t.admin, '/v2/appointment-channels/whatsapp', {
       enabled: true,
       defaultSenderId: b.uuid,
     });
@@ -234,17 +249,17 @@ describe('the channels the owner allows (BL-350)', () => {
     expect(ok.body.defaultSenderId).toBe(b.uuid);
     expect(ok.body.senders.map((s: { id: string }) => s.id)).toEqual([a.uuid, b.uuid]);
     // Switching it off keeps the chosen sender (left out = unchanged); null clears it.
-    const off = await put(t.admin, '/v2/appointment-channels/sms', { enabled: false });
+    const off = await put(t.admin, '/v2/appointment-channels/whatsapp', { enabled: false });
     expect(off.body).toMatchObject({ enabled: false, defaultSenderId: b.uuid });
-    const cleared = await put(t.admin, '/v2/appointment-channels/sms', {
+    const cleared = await put(t.admin, '/v2/appointment-channels/whatsapp', {
       enabled: false,
       defaultSenderId: null,
     });
     expect(cleared.body.defaultSenderId).toBeNull();
     // A sender of another workspace is not a sender here.
     const other = await api.signupUndecided('chn2');
-    const foreign = await seedSms(other);
-    const x = await put(t.admin, '/v2/appointment-channels/sms', {
+    const foreign = await seedWaba(other);
+    const x = await put(t.admin, '/v2/appointment-channels/whatsapp', {
       enabled: true,
       defaultSenderId: foreign.uuid,
     });
@@ -689,10 +704,22 @@ describe('a booking type uses only what the owner allows (BL-350)', () => {
     const rem = await api.post(
       t.admin,
       '/v2/booking-types',
-      typeBody({ reminders: [{ offsetMinutes: 60, isActive: true, channels: ['email', 'sms'] }] }),
+      typeBody({
+        reminders: [{ offsetMinutes: 60, isActive: true, channels: ['email', 'whatsapp'] }],
+      }),
     );
     expect(rem.status).toBe(422);
     expect(rem.body.code).toBe('APPT_CHANNEL_NOT_ENABLED');
+    // SMS is no longer a channel of a reminder at all: the contract refuses it, switched on or not, active or not.
+    for (const isActive of [true, false]) {
+      const sms = await api.post(
+        t.admin,
+        '/v2/booking-types',
+        typeBody({ reminders: [{ offsetMinutes: 60, isActive, channels: ['email', 'sms'] }] }),
+      );
+      expect(sms.status, JSON.stringify(sms.body)).toBe(422);
+      expect(sms.body.code).toBe('VALIDATION_FAILED');
+    }
     // A rule that is off names no channel for real, and email is on.
     const ok = await api.post(
       t.admin,
@@ -701,7 +728,7 @@ describe('a booking type uses only what the owner allows (BL-350)', () => {
         templates: [{ event: 'confirmation', channel: 'email', plainBody: 'Hi' }],
         reminders: [
           { offsetMinutes: 60, isActive: true, channels: ['email'] },
-          { offsetMinutes: 30, isActive: false, channels: ['whatsapp', 'sms'] },
+          { offsetMinutes: 30, isActive: false, channels: ['whatsapp', 'email'] },
         ],
       }),
     );
@@ -722,15 +749,14 @@ describe('a booking type uses only what the owner allows (BL-350)', () => {
     const t = await api.signup('gate');
     const type = await api.type(t.admin, {
       name: 'Before',
-      reminders: [{ offsetMinutes: 60, isActive: true, channels: ['sms'] }],
+      reminders: [{ offsetMinutes: 60, isActive: true, channels: ['whatsapp'] }],
       templates: [{ event: 'reminder', channel: 'whatsapp', plainBody: 'See you' }],
     });
-    await put(t.admin, '/v2/appointment-channels/sms', { enabled: false });
     await put(t.admin, '/v2/appointment-channels/whatsapp', { enabled: false });
     const same = await patch(t.admin, `/v2/booking-types/${type.id}`, {
       name: 'Renamed',
       reminders: [
-        { id: type.reminders[0]!.id, offsetMinutes: 60, isActive: true, channels: ['sms'] },
+        { id: type.reminders[0]!.id, offsetMinutes: 60, isActive: true, channels: ['whatsapp'] },
       ],
       templates: [{ event: 'reminder', channel: 'whatsapp', plainBody: 'See you!' }],
       rowVersion: type.rowVersion,
@@ -820,6 +846,8 @@ describe('the booking message uses the library message that was chosen (BL-351)'
       h.app.get(BookingTypesRepository),
       h.app.get(AppointmentsSupport),
       new OutboxSubscriberRegistry(),
+      buildReminderService(h, messenger),
+      h.app.get(AppointmentRemindersRepository),
       messenger,
     );
     const adopted = await api.post(t.admin, '/v2/appointment-message-templates/adopt', {

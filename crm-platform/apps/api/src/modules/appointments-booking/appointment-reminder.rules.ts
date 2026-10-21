@@ -90,7 +90,6 @@ export function dueAtOf(
     : new Date(endsAt.getTime() + offsetMinutes * 60_000);
 }
 
-
 export interface RunFacts {
   runStatus: RunStatus;
   kind: BookingReminderKind;
@@ -497,8 +496,10 @@ export function remindersOf(
 ): ShownReminder[] {
   const out: ShownReminder[] = [];
   const armed = booking.armedAt.getTime();
-  const same = (a: { kind: string; offsetMinutes: number }, b: { kind: string; offsetMinutes: number }) =>
-    a.kind === b.kind && a.offsetMinutes === b.offsetMinutes;
+  const same = (
+    a: { kind: string; offsetMinutes: number },
+    b: { kind: string; offsetMinutes: number },
+  ) => a.kind === b.kind && a.offsetMinutes === b.offsetMinutes;
   const labelOf = (kind: BookingReminderKind, offset: number) =>
     rules.find((r) => r.kind === kind && r.offsetMinutes === offset)?.label ?? null;
 
@@ -507,10 +508,7 @@ export function remindersOf(
     if (!current && run.status !== 'sent' && run.status !== 'failed') continue;
     out.push({
       kind: run.kind,
-      stepKind:
-        run.stepKind ??
-        rules.find((r) => same(r, run))?.stepKind ??
-        null,
+      stepKind: run.stepKind ?? rules.find((r) => same(r, run))?.stepKind ?? null,
       offsetMinutes: run.offsetMinutes,
       label: labelOf(run.kind, run.offsetMinutes),
       dueAt: run.dueAt,
@@ -538,9 +536,7 @@ export function remindersOf(
           dueAt.getTime() > armed
         : isRebook
           ? booking.status === 'completed' && dueAt.getTime() + REBOOK_GRACE_MS > nowMs
-          : open &&
-            booking.status !== 'pending' &&
-            dueAt.getTime() + FOLLOW_UP_GRACE_MS > nowMs;
+          : open && booking.status !== 'pending' && dueAt.getTime() + FOLLOW_UP_GRACE_MS > nowMs;
     if (!stillComing) continue;
     out.push({
       kind: rule.kind,

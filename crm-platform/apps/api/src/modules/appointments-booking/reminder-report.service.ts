@@ -115,7 +115,10 @@ export class ReminderReportService {
         const reason = (r.reason as string | null) ?? 'unknown';
         e.step.skippedReasons[reason] = (e.step.skippedReasons[reason] ?? 0) + num(r.n);
       }
-      const stepTotals = new Map<string, { total: number; confirmed: number; cancelled: number; noShow: number }>();
+      const stepTotals = new Map<
+        string,
+        { total: number; confirmed: number; cancelled: number; noShow: number }
+      >();
       for (const r of outcomes) {
         const t = stepTotals.get(key(r)) ?? { total: 0, confirmed: 0, cancelled: 0, noShow: 0 };
         t.total += num(r.total);

@@ -21,13 +21,11 @@
       "names": {
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Reminder call"
       },
       "about": {
         "email": "From a shared mailbox of your workspace. Never from a personal mailbox.",
         "whatsapp": "Free text inside the 24 hour window; outside it only an approved template.",
-        "sms": "Plain text from your connected SMS sender.",
         "voice": "An automatic outbound call that reminds the contact."
       },
       "status": {

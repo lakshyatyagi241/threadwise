@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "vor Beginn des Termins",
-        "after": "nach Ende des Termins"
+        "after": "nach Ende des Termins",
+        "event": "wenn etwas passiert"
       },
       "editMessage": "Nachricht und Kanäle",
       "hideMessage": "Ausblenden",
@@ -1317,7 +1318,6 @@
       "channelsHint": "Es wird der erste Kanal verwendet, über den zugestellt werden kann; die weiteren sind Ersatz. Niemand erhält dieselbe Erinnerung zweimal.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-Mail"
       },
       "moveUp": "{channel} früher versuchen",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "Die Nachricht ist zu lang.",
         "subjectTooLong": "Der Betreff ist zu lang.",
         "labelTooLong": "Die Bezeichnung ist zu lang.",
-        "tooMany": "Höchstens 8 Erinnerungen und Nachfassaktionen pro Buchungsart."
+        "tooMany": "Höchstens {max} Erinnerungen und Nachfassnachrichten mit Zeitpunkt pro Buchungstyp.",
+        "fallbackInvalid": "Geben Sie eine ganze Zahl von Minuten von {min} bis {maxMinutes} ein oder lassen Sie das Feld leer."
       },
       "noneOn": "Für diese Buchungsart sind keine Erinnerungen oder Nachfassaktionen eingeschaltet.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "Der Anbieter hat es abgelehnt.",
         "interrupted": "Es wurde unterbrochen und nicht erneut versucht.",
         "internal_error": "Etwas ist schiefgelaufen."
-      }
+      },
+      "steps": {
+        "confirmation": "Buchungsbestätigung",
+        "no_show": "Nachricht bei Nichterscheinen"
+      },
+      "notice": {
+        "smsRemoved": "SMS-Erinnerungen wurden entfernt. Dieser Schritt wurde auf E-Mail umgestellt (oder ausgeschaltet); wählen Sie WhatsApp oder E-Mail."
+      },
+      "buttonsTitle": "Schaltflächen „Bestätigen“, „Verschieben“ und „Absagen“ hinzufügen (WhatsApp)",
+      "skipIfConfirmed": "Überspringen, wenn der Kunde bereits bestätigt hat",
+      "fallbackTitle": "Wenn nicht zugestellt, nächsten Kanal versuchen nach (Minuten)",
+      "fallbackHint": "Leer lassen zum Ausschalten. Von {min} bis {maxMinutes} Minuten."
     }
   }
 }

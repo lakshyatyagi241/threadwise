@@ -30,7 +30,10 @@ export function sealReplyToken(seal: (plain: string) => string, t: ReplyToken): 
 }
 
 /** The token a button payload carries, or null when it is not ours or has been tampered with. */
-export function openReplyToken(open: (cipher: string) => string, payload: string): ReplyToken | null {
+export function openReplyToken(
+  open: (cipher: string) => string,
+  payload: string,
+): ReplyToken | null {
   if (!payload.startsWith(REPLY_PREFIX)) return null;
   try {
     const t = JSON.parse(open(payload.slice(REPLY_PREFIX.length))) as Partial<ReplyToken>;
@@ -95,7 +98,8 @@ export function decideReply(f: ReplyFacts): ReplyDecision {
     return { kind: 'act', outcome: 'not_available', effect: 'none', remember: false };
   }
   // At or after the start nothing can be changed from a reminder.
-  if (f.nowMs >= f.startsAtMs) return { kind: 'act', outcome: 'expired', effect: 'none', remember: false };
+  if (f.nowMs >= f.startsAtMs)
+    return { kind: 'act', outcome: 'expired', effect: 'none', remember: false };
   switch (f.action) {
     case 'confirm':
       return f.customerConfirmed
@@ -126,7 +130,9 @@ export function replyText(
         ? `${v.date} को ${v.time} बजे का आपका अपॉइंटमेंट रद्द कर दिया गया है।`
         : `Your appointment on ${v.date} at ${v.time} has been cancelled.`;
     case 'already_cancelled':
-      return hi ? 'यह अपॉइंटमेंट पहले ही रद्द हो चुका है।' : 'This appointment was already cancelled.';
+      return hi
+        ? 'यह अपॉइंटमेंट पहले ही रद्द हो चुका है।'
+        : 'This appointment was already cancelled.';
     case 'reschedule_link':
       return v.manageLink
         ? hi

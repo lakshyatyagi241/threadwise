@@ -110,10 +110,12 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
     });
     if (!state) return [];
     return ORDER.map((a) => {
-      const payload = sealReplyToken(
-        (plain) => this.crypto.encrypt(plain, ctxOf(orgId)),
-        { o: orgId, r: runId, a, n: state[a]!.nonce },
-      );
+      const payload = sealReplyToken((plain) => this.crypto.encrypt(plain, ctxOf(orgId)), {
+        o: orgId,
+        r: runId,
+        a,
+        n: state[a]!.nonce,
+      });
       if (payload.length > REPLY_PAYLOAD_MAX) throw new Error('reply payload too long');
       return payload;
     });
@@ -129,7 +131,10 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
     if (!payload.startsWith('ap1:')) return { consumed: false };
     // Ours but not valid (forged, edited, another workspace's): answered with nothing, and no bot answers it either.
     if (!token || token.o !== e.orgId || !REPLY_ACTIONS.includes(token.a)) {
-      this.logger.warn({ orgId: e.orgId }, 'a reminder button came back with a token that is not valid');
+      this.logger.warn(
+        { orgId: e.orgId },
+        'a reminder button came back with a token that is not valid',
+      );
       return { consumed: true, halt: true };
     }
     try {
@@ -152,7 +157,12 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
     return { consumed: true, halt: true };
   }
 
-  private async apply(e: InboundStoredEvent, runId: number, action: ReplyAction, nonce: string): Promise<void> {
+  private async apply(
+    e: InboundStoredEvent,
+    runId: number,
+    action: ReplyAction,
+    nonce: string,
+  ): Promise<void> {
     const orgId = e.orgId;
     const nowMs = Date.now();
     const done = await this.db.txAs({ orgId, userId: null }, async (tx) => {
@@ -164,12 +174,18 @@ export class ReminderReplyService implements InboundMessageListener, OnModuleIni
       if (!probe) return null;
       const row = await this.appts.findByUuid(tx, orgId, probe.uuid, true);
       if (!row) return null;
-      const rule = await this.runs.findRule(tx, orgId, (await this.runs.findRun(tx, orgId, runId))?.reminderId ?? null);
+      const rule = await this.runs.findRule(
+        tx,
+        orgId,
+        (await this.runs.findRun(tx, orgId, runId))?.reminderId ?? null,
+      );
 
       const decision = decideReply({
         action,
         sameContact: row.contactId !== null && row.contactId === e.contactId,
-        usedOutcome: entry.usedAt ? ((entry.outcome as ReplyOutcome | null) ?? 'not_available') : null,
+        usedOutcome: entry.usedAt
+          ? ((entry.outcome as ReplyOutcome | null) ?? 'not_available')
+          : null,
         status: row.status,
         startsAtMs: row.startsAt.getTime(),
         nowMs,

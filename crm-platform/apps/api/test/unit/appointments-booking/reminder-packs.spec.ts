@@ -106,7 +106,9 @@ describe('the seven packs', () => {
           const t = s.text[l];
           for (const text of [t.subject, t.email, t.wa]) {
             expect(text).not.toMatch(/\{\{\s*title\s*\}\}/);
-            expect(text).not.toMatch(/doctor|dentist|treatment|diagnos|prescription|surgery|therapy/i);
+            expect(text).not.toMatch(
+              /doctor|dentist|treatment|diagnos|prescription|surgery|therapy/i,
+            );
           }
         }
       }
@@ -214,7 +216,9 @@ describe('what applying a pack does to a step the service already has', () => {
     ).toBe('unchanged');
   });
   it("replaces (after a confirm) the owner's own step, another pack's step, an older version and a moved time", () => {
-    expect(actionFor({ packKey: null, packVersion: null, offsetMinutes: 1440 }, p, s)).toBe('replace');
+    expect(actionFor({ packKey: null, packVersion: null, offsetMinutes: 1440 }, p, s)).toBe(
+      'replace',
+    );
     expect(
       actionFor({ packKey: 'dental', packVersion: PACKS_VERSION, offsetMinutes: 1440 }, p, s),
     ).toBe('replace');

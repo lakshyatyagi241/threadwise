@@ -21,13 +21,11 @@
       "names": {
         "email": "E-mail",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Appel de rappel"
       },
       "about": {
         "email": "Depuis une boîte partagée de votre espace. Jamais depuis une boîte personnelle.",
         "whatsapp": "Texte libre dans la fenêtre de 24 heures ; en dehors, seulement un modèle approuvé.",
-        "sms": "Texte brut depuis votre expéditeur SMS connecté.",
         "voice": "Un appel sortant automatique qui rappelle le contact."
       },
       "status": {

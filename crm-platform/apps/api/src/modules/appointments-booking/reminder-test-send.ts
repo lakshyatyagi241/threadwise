@@ -54,7 +54,8 @@ export class ReminderTestSendService {
       const type = await this.types.findByUuid(tx, ctx.orgId, typeUuid);
       if (!type) throw AppError.notFound('Booking type', typeUuid);
       const rule = await this.runs.findRuleByUuid(tx, ctx.orgId, reminderUuid);
-      if (!rule || rule.bookingTypeId !== type.id) throw AppError.notFound('Reminder', reminderUuid);
+      if (!rule || rule.bookingTypeId !== type.id)
+        throw AppError.notFound('Reminder', reminderUuid);
       const res = await tx.execute(
         sql`SELECT email::text AS email FROM users WHERE org_id = ${ctx.orgId} AND id = ${ctx.userId}`,
       );

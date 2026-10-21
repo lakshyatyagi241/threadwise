@@ -1302,7 +1302,8 @@
       },
       "kind": {
         "before": "przed rozpoczęciem spotkania",
-        "after": "po zakończeniu spotkania"
+        "after": "po zakończeniu spotkania",
+        "event": "gdy coś się wydarzy"
       },
       "editMessage": "Wiadomość i kanały",
       "hideMessage": "Ukryj",
@@ -1311,7 +1312,6 @@
       "channelsHint": "Używany jest pierwszy kanał, który może dostarczyć wiadomość, kolejne są zapasowe. Nikt nie dostanie tego samego przypomnienia dwa razy.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-mail"
       },
       "messageTitle": "Wiadomość",
@@ -1363,8 +1363,9 @@
         "bodyTooLong": "Wiadomość jest za długa.",
         "subjectTooLong": "Temat jest za długi.",
         "labelTooLong": "Etykieta jest za długa.",
-        "tooMany": "Maksymalnie 8 przypomnień i wiadomości następczych dla jednego typu rezerwacji.",
-        "channelsNone": "Wybierz co najmniej jeden kanał."
+        "tooMany": "Co najwyżej {max} przypomnień i wiadomości uzupełniających z godziną dla jednego typu rezerwacji.",
+        "channelsNone": "Wybierz co najmniej jeden kanał.",
+        "fallbackInvalid": "Wpisz całkowitą liczbę minut od {min} do {maxMinutes} lub zostaw puste."
       },
       "noneOn": "Dla tego typu rezerwacji nie włączono żadnych przypomnień ani wiadomości następczych.",
       "status": {
@@ -1423,7 +1424,18 @@
         "before": "{count, plural, one {# minuta przed} few {# minuty przed} many {# minut przed} other {# minuty przed}}",
         "after": "{count, plural, one {# minuta po} few {# minuty po} many {# minut po} other {# minuty po}}"
       },
-      "sentOn": "Wysłano przez {channel}"
+      "sentOn": "Wysłano przez {channel}",
+      "steps": {
+        "confirmation": "Potwierdzenie rezerwacji",
+        "no_show": "Wiadomość o nieobecności"
+      },
+      "notice": {
+        "smsRemoved": "Przypomnienia SMS zostały usunięte. Ten krok przeniesiono na e-mail (lub wyłączono); wybierz WhatsApp lub e-mail."
+      },
+      "buttonsTitle": "Dodaj przyciski Potwierdź, Zmień termin i Anuluj (WhatsApp)",
+      "skipIfConfirmed": "Pomiń, jeśli klient już potwierdził",
+      "fallbackTitle": "Jeśli nie dostarczono, spróbuj kolejnego kanału po (minutach)",
+      "fallbackHint": "Zostaw puste, aby wyłączyć. Od {min} do {maxMinutes} minut."
     }
   }
 }

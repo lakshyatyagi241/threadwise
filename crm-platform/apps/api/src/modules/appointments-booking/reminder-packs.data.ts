@@ -60,8 +60,13 @@ const MIN = { day: 1440 };
 
 // --- the steps every pack shares in shape -------------------------------------------------------------------------------------
 
-type Draft = Omit<PackStepData, 'kind' | 'skipIfConfirmed' | 'onlineOnly' | 'category' | 'buttons' | 'isActive'> &
-  Partial<Pick<PackStepData, 'skipIfConfirmed' | 'onlineOnly' | 'category' | 'buttons' | 'isActive'>>;
+type Draft = Omit<
+  PackStepData,
+  'kind' | 'skipIfConfirmed' | 'onlineOnly' | 'category' | 'buttons' | 'isActive'
+> &
+  Partial<
+    Pick<PackStepData, 'skipIfConfirmed' | 'onlineOnly' | 'category' | 'buttons' | 'isActive'>
+  >;
 
 const step = (d: Draft): PackStepData => ({
   kind:
@@ -225,12 +230,14 @@ const SALON: Record<string, PackStepData['text']> = {
   twoHours: {
     en: {
       subject: 'See you soon for your {{type}}',
-      email: 'Hi {{name}},\n\nSee you soon! Your {{type}} is on {{date}} at {{time}}.\n\nWhere: {{location}}',
+      email:
+        'Hi {{name}},\n\nSee you soon! Your {{type}} is on {{date}} at {{time}}.\n\nWhere: {{location}}',
       wa: 'Hi {{name}}, see you soon! Your {{type}} is on {{date}} at {{time}}. We cannot wait to welcome you.',
     },
     hi: {
       subject: 'आपकी {{type}} के लिए जल्द मिलते हैं',
-      email: 'नमस्ते {{name}},\n\nजल्द मिलते हैं! आपकी {{type}} {{date}} को {{time}} बजे है।\n\nस्थान: {{location}}',
+      email:
+        'नमस्ते {{name}},\n\nजल्द मिलते हैं! आपकी {{type}} {{date}} को {{time}} बजे है।\n\nस्थान: {{location}}',
       wa: 'नमस्ते {{name}}, जल्द मिलते हैं! आपकी {{type}} दिनांक {{date}} को {{time}} बजे है। हम आपके स्वागत के लिए तैयार हैं।',
     },
   },
@@ -448,12 +455,14 @@ const FITNESS: Record<string, PackStepData['text']> = {
   twoHours: {
     en: {
       subject: 'Your {{type}} is in about 2 hours',
-      email: 'Hi {{name}},\n\nYour {{type}} is in about 2 hours, on {{date}} at {{time}}.\n\nWhere: {{location}}\n\nSee you there!',
+      email:
+        'Hi {{name}},\n\nYour {{type}} is in about 2 hours, on {{date}} at {{time}}.\n\nWhere: {{location}}\n\nSee you there!',
       wa: 'Hi {{name}}, your {{type}} is in about 2 hours, on {{date}} at {{time}}. See you at the studio!',
     },
     hi: {
       subject: 'आपका {{type}} लगभग 2 घंटे में है',
-      email: 'नमस्ते {{name}},\n\nआपका {{type}} लगभग 2 घंटे में है: {{date}} को {{time}} बजे।\n\nस्थान: {{location}}\n\nवहाँ मिलते हैं!',
+      email:
+        'नमस्ते {{name}},\n\nआपका {{type}} लगभग 2 घंटे में है: {{date}} को {{time}} बजे।\n\nस्थान: {{location}}\n\nवहाँ मिलते हैं!',
       wa: 'नमस्ते {{name}}, आपका {{type}} लगभग 2 घंटे में है, {{date}} को {{time}} बजे। स्टूडियो में मिलते हैं!',
     },
   },

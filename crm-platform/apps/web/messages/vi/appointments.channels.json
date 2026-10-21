@@ -21,13 +21,11 @@
       "names": {
         "email": "Email",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Cuộc gọi nhắc nhở"
       },
       "about": {
         "email": "Từ hộp thư dùng chung của không gian làm việc. Không bao giờ từ hộp thư cá nhân.",
         "whatsapp": "Văn bản tự do trong khung 24 giờ; ngoài khung chỉ dùng mẫu đã duyệt.",
-        "sms": "Văn bản thuần từ người gửi SMS đã kết nối.",
         "voice": "Cuộc gọi đi tự động nhắc nhở liên hệ."
       },
       "status": {

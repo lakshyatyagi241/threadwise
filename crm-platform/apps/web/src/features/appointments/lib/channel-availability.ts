@@ -10,7 +10,6 @@ export type ChannelUse = 'usable' | 'off' | 'not_connected' | 'coming_soon';
 /** Where the owner connects each channel (Settings > Channels). Voice has no page yet. */
 export const CONNECT_HREF: Record<AppointmentChannel, string | null> = {
   whatsapp: '/channels/whatsapp',
-  sms: '/sms',
   email: '/email',
   voice: null,
 };
@@ -19,7 +18,6 @@ export const CONNECT_HREF: Record<AppointmentChannel, string | null> = {
 export const CHANNEL_ORDER = [
   'whatsapp',
   'email',
-  'sms',
   'voice',
 ] as const satisfies readonly AppointmentChannel[];
 

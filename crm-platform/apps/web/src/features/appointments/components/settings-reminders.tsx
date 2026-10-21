@@ -15,6 +15,9 @@ import type { BookingType } from '../api/schemas';
 import { appointmentsApi } from '../api/service';
 import { errorKind } from '../lib/errors';
 import {
+  REMINDER_MAX_RULES,
+  UNDELIVERED_MAX,
+  UNDELIVERED_MIN,
   remindersChanged,
   remindersFromType,
   remindersToInput,
@@ -89,7 +92,13 @@ function TypeReminders({ type, canEdit }: { type: BookingType; canEdit: boolean 
   const problemCount = Object.keys(problems).length;
   const errorOf = (key: string): string | undefined => {
     const p: ReminderProblem | undefined = tried ? problems[key] : undefined;
-    return p ? t(`problems.${p}`) : undefined;
+    return p
+      ? t(`problems.${p}`, {
+          max: REMINDER_MAX_RULES,
+          min: UNDELIVERED_MIN,
+          maxMinutes: UNDELIVERED_MAX,
+        })
+      : undefined;
   };
   const on = rules.filter((r) => r.enabled).length;
   const disabled = !canEdit || saving;

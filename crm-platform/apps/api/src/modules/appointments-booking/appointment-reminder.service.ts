@@ -227,7 +227,8 @@ export class AppointmentReminderService {
           .filter((t) => t.event === 'reminder')
           .map((t) => (t.libraryActive && t.libraryBody?.trim() ? t.libraryBody : t.plainBody))
           .find((b) => b?.trim()) ?? null;
-      const stepOfRun = run.stepKind ?? rule?.stepKind ?? defaultStepKind(run.kind, run.offsetMinutes);
+      const stepOfRun =
+        run.stepKind ?? rule?.stepKind ?? defaultStepKind(run.kind, run.offsetMinutes);
       const laterBooking =
         stepOfRun === 'rebook' && row?.contactId != null
           ? await this.runs.hasLaterBooking(tx, orgId, row.id, row.contactId, row.endsAt)
@@ -274,7 +275,10 @@ export class AppointmentReminderService {
       return;
     }
     // The rebook (recall) steps are a plan feature: a plan without it never sends one, and the run says why.
-    if (step === 'rebook' && !(await this.entitlements.featureEnabled(orgId, REMINDER_REBOOK_FEATURE))) {
+    if (
+      step === 'rebook' &&
+      !(await this.entitlements.featureEnabled(orgId, REMINDER_REBOOK_FEATURE))
+    ) {
       await this.finish(orgId, run.id, row, run.kind, step, {
         status: 'skipped',
         reason: 'plan_feature_locked',
@@ -299,7 +303,15 @@ export class AppointmentReminderService {
       return;
     }
 
-    const tried = await this.tryChannels(orgId, run, row, rule, step, typeReminderBody, rule.channels);
+    const tried = await this.tryChannels(
+      orgId,
+      run,
+      row,
+      rule,
+      step,
+      typeReminderBody,
+      rule.channels,
+    );
     const settled = settleChannels(tried, now);
     const sent = tried.find((t) => t.outcome.status === 'sent');
     const messageRef =
@@ -347,7 +359,9 @@ export class AppointmentReminderService {
     // Confirm / Reschedule / Cancel buttons: only on a WhatsApp template, and only when the plan has them.
     const quickReplyPayloads =
       channels.includes('whatsapp') && rule.buttonsEnabled && rule.waTemplateUuid
-        ? ((await this.replies.buttonsAllowed(orgId)) ? await this.replies.payloadsFor(orgId, run.id) : undefined)
+        ? (await this.replies.buttonsAllowed(orgId))
+          ? await this.replies.payloadsFor(orgId, run.id)
+          : undefined
         : undefined;
     for (const channel of channels) {
       const { body, subject } = this.textFor(channel, rule, step, typeReminderBody, facts, vars);
@@ -442,7 +456,8 @@ export class AppointmentReminderService {
   private async checkDelivery(orgId: number, id: number, now: Date): Promise<void> {
     const loaded = await this.db.txAs({ orgId, userId: null }, async (tx) => {
       const run = await this.runs.findRun(tx, orgId, id);
-      if (!run || run.status !== 'sent' || run.delivery !== 'unknown' || !run.messageRef) return null;
+      if (!run || run.status !== 'sent' || run.delivery !== 'unknown' || !run.messageRef)
+        return null;
       const state = await this.runs.messageState(tx, orgId, run.messageRef);
       return { run, state };
     });
@@ -450,7 +465,11 @@ export class AppointmentReminderService {
     const { run, state } = loaded;
     const stop = (delivery: 'unknown' | 'delivered' | 'failed' | 'undelivered', at?: Date | null) =>
       this.db.txAs({ orgId, userId: null }, (tx) =>
-        this.runs.recordDelivery(tx, orgId, id, { delivery, deliveredAt: at ?? null, checkAt: null }),
+        this.runs.recordDelivery(tx, orgId, id, {
+          delivery,
+          deliveredAt: at ?? null,
+          checkAt: null,
+        }),
       );
 
     if (!state) return stop('unknown');
@@ -495,7 +514,11 @@ export class AppointmentReminderService {
     const log: AttemptEntry[] = run.attemptLog.map((e) =>
       e.channel === run.channel && e.status === 'sent' ? { ...e, status: 'failed', reason } : e,
     );
-    const done = (v: { status?: 'failed'; channel?: BookingReminderChannel; messageRef?: string }) =>
+    const done = (v: {
+      status?: 'failed';
+      channel?: BookingReminderChannel;
+      messageRef?: string;
+    }) =>
       this.db.txAs({ orgId, userId: null }, async (tx) => {
         await this.runs.recordDelivery(tx, orgId, run.id, {
           delivery,

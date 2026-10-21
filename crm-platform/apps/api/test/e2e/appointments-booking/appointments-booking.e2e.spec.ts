@@ -353,7 +353,7 @@ describe('booking types (TW-APPT-005..015)', () => {
         {
           offsetMinutes: 60,
           kind: 'after',
-          channels: ['email', 'sms'],
+          channels: ['email', 'whatsapp'],
           body: 'Thanks {{name}}',
           subject: 'Thanks',
         },
@@ -362,7 +362,7 @@ describe('booking types (TW-APPT-005..015)', () => {
     expect(type.reminders.map((r: { isActive: boolean }) => r.isActive)).toEqual([false, false]);
     const after = type.reminders.find((r: { kind: string }) => r.kind === 'after')!;
     expect(after).toMatchObject({
-      channels: ['email', 'sms'],
+      channels: ['email', 'whatsapp'],
       body: 'Thanks {{name}}',
       subject: 'Thanks',
     });
@@ -380,7 +380,7 @@ describe('booking types (TW-APPT-005..015)', () => {
           })),
         ].map((r, i) =>
           i === 0
-            ? { ...r, kind: 'before', channels: ['sms', 'whatsapp'], waTemplateId: waId }
+            ? { ...r, kind: 'before', channels: ['email', 'whatsapp'], waTemplateId: waId }
             : { ...r, kind: 'after', channels: ['email'] },
         ),
       });
@@ -390,7 +390,7 @@ describe('booking types (TW-APPT-005..015)', () => {
     const before = res.body.reminders.find((r: { kind: string }) => r.kind === 'before');
     expect(before).toMatchObject({
       isActive: true,
-      channels: ['sms', 'whatsapp'],
+      channels: ['email', 'whatsapp'],
       waTemplateId: waId,
     });
   });
@@ -406,7 +406,9 @@ describe('booking types (TW-APPT-005..015)', () => {
     for (const bad of [
       { channels: ['fax'] },
       { channels: [] },
-      { channels: ['sms', 'sms'] },
+      { channels: ['sms'] }, // SMS was removed from appointment reminders (BL-420)
+      { channels: ['email', 'sms'] },
+      { channels: ['whatsapp', 'whatsapp'] },
       { kind: 'during' },
       { body: 'x'.repeat(2001) },
     ]) {
@@ -463,10 +465,21 @@ describe('booking types (TW-APPT-005..015)', () => {
         label: null,
         isActive: false,
         kind: 'before',
-        channels: ['whatsapp', 'sms', 'email'],
+        stepKind: 'reminder',
+        channels: ['whatsapp', 'email'],
         subject: null,
         body: null,
         waTemplateId: null,
+        waTemplateStatus: null,
+        waTemplateName: null,
+        libraryTemplateId: null,
+        buttonsEnabled: false,
+        skipIfConfirmed: false,
+        undeliveredFallbackMinutes: null,
+        notice: null,
+        serviceLabel: null,
+        packKey: null,
+        packVersion: null,
       },
     ]);
     expect(res.body.availability).toEqual([{ weekday: 2, from: '10:00', to: '11:00' }]);
@@ -1584,6 +1597,7 @@ describe("the customer's booking page (EXT-APPT-01, TW-APPT-024..026)", () => {
       'organization',
       'startsAt',
       'status',
+      'theme',
       'timezone',
       'title',
     ]);

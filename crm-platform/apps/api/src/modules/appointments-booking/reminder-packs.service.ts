@@ -148,7 +148,8 @@ export class ReminderPacksService {
               id: existing.uuid,
               isActive: existing.isActive,
               offsetMinutes: existing.offsetMinutes,
-              hasOwnText: !!existing.body || !!existing.subject || existing.libraryTemplateId !== null,
+              hasOwnText:
+                !!existing.body || !!existing.subject || existing.libraryTemplateId !== null,
             }
           : null,
         email: { subject: text.subject, body: text.email },
@@ -168,7 +169,11 @@ export class ReminderPacksService {
       language: input.language,
       bookingType: { id: load.uuid, name: load.name, online: load.online },
       steps,
-      kept: keptRows.map((r) => ({ id: r.uuid, stepKind: r.stepKind, offsetMinutes: r.offsetMinutes })),
+      kept: keptRows.map((r) => ({
+        id: r.uuid,
+        stepKind: r.stepKind,
+        offsetMinutes: r.offsetMinutes,
+      })),
       timedSteps: timed,
       timedStepsMax: BOOKING_TIMED_STEPS_MAX,
       blocked: timed > BOOKING_TIMED_STEPS_MAX ? 'cap_exceeded' : null,
@@ -179,7 +184,10 @@ export class ReminderPacksService {
   async adopt(key: string, input: ReminderPackAdoptInput): Promise<ReminderPackAdoptResult> {
     const pack = this.pack(key);
     const ctx = RequestContextStore.require();
-    const view = await this.preview(key, { bookingTypeId: input.bookingTypeId, language: input.language });
+    const view = await this.preview(key, {
+      bookingTypeId: input.bookingTypeId,
+      language: input.language,
+    });
     if (view.blocked) {
       throw AppError.validation(
         `A service can have at most ${BOOKING_TIMED_STEPS_MAX} steps with a time. Remove one first, then apply the pack.`,
@@ -203,8 +211,14 @@ export class ReminderPacksService {
       const rows = await this.channels.settings(tx, ctx.orgId);
       return new Set(rows.filter((r) => r.enabled).map((r) => r.channel));
     });
-    const hasButtonsPlan = await this.entitlements.featureEnabled(ctx.orgId, REMINDER_CONFIRM_BUTTONS_FEATURE);
-    const hasRebookPlan = await this.entitlements.featureEnabled(ctx.orgId, REMINDER_REBOOK_FEATURE);
+    const hasButtonsPlan = await this.entitlements.featureEnabled(
+      ctx.orgId,
+      REMINDER_CONFIRM_BUTTONS_FEATURE,
+    );
+    const hasRebookPlan = await this.entitlements.featureEnabled(
+      ctx.orgId,
+      REMINDER_REBOOK_FEATURE,
+    );
     const waReady = await this.templates.hasWhatsappConnection();
 
     const made: ReminderPackAdoptResult['templates'] = [];
@@ -250,7 +264,11 @@ export class ReminderPacksService {
         } catch (err) {
           // A template Meta's rules or the plan refuse leaves the step on email; the sentence is told to the owner.
           this.logger.warn(
-            { orgId: ctx.orgId, templateName, err: err instanceof Error ? err.message : String(err) },
+            {
+              orgId: ctx.orgId,
+              templateName,
+              err: err instanceof Error ? err.message : String(err),
+            },
             'a reminder pack template could not be created',
           );
           made.push({
@@ -281,7 +299,9 @@ export class ReminderPacksService {
         libraryTemplateId: email.uuid,
         buttonsEnabled: s.buttons && hasButtonsPlan && waUuid !== null,
         skipIfConfirmed: s.skipIfConfirmed,
-        undeliveredFallbackMinutes: usable.includes('whatsapp') ? BOOKING_UNDELIVERED_DEFAULT : null,
+        undeliveredFallbackMinutes: usable.includes('whatsapp')
+          ? BOOKING_UNDELIVERED_DEFAULT
+          : null,
         serviceLabel: pack.serviceLabel ? pack.serviceLabel[lang] : null,
         packKey: pack.key,
         packVersion: PACKS_VERSION,

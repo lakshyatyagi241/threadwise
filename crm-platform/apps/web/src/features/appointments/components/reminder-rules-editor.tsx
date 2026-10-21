@@ -15,6 +15,8 @@ import {
   REMINDER_CHANNELS,
   REMINDER_LABEL_MAX,
   REMINDER_MAX_RULES,
+  UNDELIVERED_MAX,
+  UNDELIVERED_MIN,
   REMINDER_PLACEHOLDERS,
   REMINDER_SUBJECT_MAX,
   REMINDER_UNITS,
@@ -24,6 +26,7 @@ import {
   moveChannel,
   newReminder,
   previewOf,
+  timedCount,
   toggleChannel,
   type PreviewSample,
   type ReminderChannel,
@@ -83,7 +86,7 @@ export function ReminderRulesEditor({
   const locale = useLocale();
   const auto = useId();
   const prefix = idPrefix ?? auto;
-  const full = rules.length >= REMINDER_MAX_RULES;
+  const full = timedCount(rules) >= REMINDER_MAX_RULES;
   const [open, setOpen] = useState<ReadonlySet<string>>(new Set());
   const refs = useRef<Record<string, HTMLTextAreaElement | null>>({});
 
@@ -165,7 +168,16 @@ export function ReminderRulesEditor({
       (m) =>
         m.channel === 'email' &&
         m.usable &&
-        m.kind === (r.kind === 'before' ? 'reminder' : 'follow_up'),
+        m.kind ===
+          (r.kind === 'before'
+            ? 'reminder'
+            : r.kind === 'event'
+              ? r.stepKind === 'no_show'
+                ? 'no_show'
+                : 'confirmation'
+              : r.stepKind === 'rebook'
+                ? 'rebook'
+                : 'follow_up'),
     );
 
   return (
@@ -270,41 +282,50 @@ export function ReminderRulesEditor({
                   >
                     {r.enabled ? t('on') : t('off')}
                   </span>
-                  <Input
-                    id={`${prefix}-offset-${r.id}`}
-                    value={r.offset}
-                    invalid={!!error}
-                    disabled={disabled}
-                    inputMode="numeric"
-                    dir="ltr"
-                    placeholder="1"
-                    aria-label={t('offsetOf', { n })}
-                    onChange={(e) => patch(r.id, { offset: e.target.value })}
-                    className="w-20 tabular-nums"
-                  />
-                  <Select
-                    value={r.unit}
-                    disabled={disabled}
-                    aria-label={t('unitOf', { n })}
-                    onChange={(e) => patch(r.id, { unit: e.target.value as ReminderUnit })}
-                    className="w-28"
-                  >
-                    {REMINDER_UNITS.map((u) => (
-                      <option key={u} value={u}>
-                        {t(`units.${u}`)}
-                      </option>
-                    ))}
-                  </Select>
-                  <Select
-                    value={r.kind}
-                    disabled={disabled}
-                    aria-label={t('kindOf', { n })}
-                    onChange={(e) => patch(r.id, { kind: e.target.value as ReminderKind })}
-                    className="w-56 max-w-full"
-                  >
-                    <option value="before">{t('kind.before')}</option>
-                    <option value="after">{t('kind.after')}</option>
-                  </Select>
+                  {r.kind === 'event' ? (
+                    <span className="text-sm font-medium">
+                      {t(`steps.${r.stepKind}`)}{' '}
+                      <span className="font-normal text-muted-foreground">{t('kind.event')}</span>
+                    </span>
+                  ) : (
+                    <>
+                      <Input
+                        id={`${prefix}-offset-${r.id}`}
+                        value={r.offset}
+                        invalid={!!error}
+                        disabled={disabled}
+                        inputMode="numeric"
+                        dir="ltr"
+                        placeholder="1"
+                        aria-label={t('offsetOf', { n })}
+                        onChange={(e) => patch(r.id, { offset: e.target.value })}
+                        className="w-20 tabular-nums"
+                      />
+                      <Select
+                        value={r.unit}
+                        disabled={disabled}
+                        aria-label={t('unitOf', { n })}
+                        onChange={(e) => patch(r.id, { unit: e.target.value as ReminderUnit })}
+                        className="w-28"
+                      >
+                        {REMINDER_UNITS.map((u) => (
+                          <option key={u} value={u}>
+                            {t(`units.${u}`)}
+                          </option>
+                        ))}
+                      </Select>
+                      <Select
+                        value={r.kind}
+                        disabled={disabled}
+                        aria-label={t('kindOf', { n })}
+                        onChange={(e) => patch(r.id, { kind: e.target.value as ReminderKind })}
+                        className="w-56 max-w-full"
+                      >
+                        <option value="before">{t('kind.before')}</option>
+                        <option value="after">{t('kind.after')}</option>
+                      </Select>
+                    </>
+                  )}
                   <div className="ms-auto flex items-center gap-1">
                     <button
                       type="button"
@@ -328,6 +349,11 @@ export function ReminderRulesEditor({
                     </button>
                   </div>
                 </div>
+                {r.notice === 'sms_removed' && (
+                  <Alert tone="warning" className="mt-2 text-xs">
+                    {t('notice.smsRemoved')}
+                  </Alert>
+                )}
                 {error && (
                   <p role="alert" className="mt-1 text-xs text-danger">
                     {error}
@@ -436,6 +462,46 @@ export function ReminderRulesEditor({
                         </span>
                       </div>
                     </fieldset>
+
+                    <div className="space-y-2">
+                      <Switch
+                        id={`${prefix}-buttons-${r.id}`}
+                        checked={r.buttonsEnabled}
+                        disabled={disabled}
+                        label={t('buttonsTitle')}
+                        onCheckedChange={(on) => patch(r.id, { buttonsEnabled: on })}
+                      />
+                      <Switch
+                        id={`${prefix}-skip-${r.id}`}
+                        checked={r.skipIfConfirmed}
+                        disabled={disabled}
+                        label={t('skipIfConfirmed')}
+                        onCheckedChange={(on) => patch(r.id, { skipIfConfirmed: on })}
+                      />
+                      <div className="space-y-1">
+                        <label
+                          htmlFor={`${prefix}-fallback-${r.id}`}
+                          className="text-xs font-medium"
+                        >
+                          {t('fallbackTitle')}
+                        </label>
+                        <Input
+                          id={`${prefix}-fallback-${r.id}`}
+                          value={r.undeliveredFallbackMinutes}
+                          disabled={disabled}
+                          inputMode="numeric"
+                          dir="ltr"
+                          placeholder="30"
+                          onChange={(e) =>
+                            patch(r.id, { undeliveredFallbackMinutes: e.target.value })
+                          }
+                          className="w-24 tabular-nums"
+                        />
+                        <p className="text-xs text-muted-foreground">
+                          {t('fallbackHint', { min: UNDELIVERED_MIN, max: UNDELIVERED_MAX })}
+                        </p>
+                      </div>
+                    </div>
 
                     <div className="space-y-1.5">
                       <label htmlFor={`${prefix}-body-${r.id}`} className="text-xs font-medium">
@@ -583,7 +649,7 @@ export function ReminderRulesEditor({
       )}
 
       <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-muted-foreground">
-        <span>{t('count', { count: rules.length, max: REMINDER_MAX_RULES })}</span>
+        <span>{t('count', { count: timedCount(rules), max: REMINDER_MAX_RULES })}</span>
         {listError && (
           <span role="alert" className="text-danger">
             {listError}

@@ -19,7 +19,10 @@ export function customerCancelCopy(startsAtIso: string | null): { title: string;
 }
 
 /** The wording of the answer to an email test of a reminder step. */
-export function testResultCopy(status: string, reason: string | null): { title: string; body: string } {
+export function testResultCopy(
+  status: string,
+  reason: string | null,
+): { title: string; body: string } {
   if (status === 'sent') {
     return {
       title: 'Test email sent',
@@ -100,6 +103,7 @@ export class AppointmentReplyNotificationConsumer implements OutboxSubscriber, O
       );
     });
     await this.fanout.publish(event.orgId, pending);
-    if (pending.length > 0) this.logger.debug({ orgId: event.orgId }, 'customer cancel told to the host');
+    if (pending.length > 0)
+      this.logger.debug({ orgId: event.orgId }, 'customer cancel told to the host');
   }
 }

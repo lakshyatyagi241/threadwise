@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "before the appointment starts",
-        "after": "after the appointment ends"
+        "after": "after the appointment ends",
+        "event": "when something happens"
       },
       "editMessage": "Message and channels",
       "hideMessage": "Hide",
@@ -1317,7 +1318,6 @@
       "channelsHint": "The first channel that can deliver is used, the next ones are fallbacks. Nobody gets the same reminder twice.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "Email"
       },
       "moveUp": "Try {channel} earlier",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "The message is too long.",
         "subjectTooLong": "The subject is too long.",
         "labelTooLong": "The label is too long.",
-        "tooMany": "At most 8 reminders and follow-ups for one booking type."
+        "tooMany": "At most {max} reminders and follow-ups with a time for one booking type.",
+        "fallbackInvalid": "Enter a whole number of minutes from {min} to {maxMinutes}, or leave it empty."
       },
       "noneOn": "No reminders or follow-ups are switched on for this booking type.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "The provider refused it.",
         "interrupted": "It was interrupted and not retried.",
         "internal_error": "Something went wrong."
-      }
+      },
+      "steps": {
+        "confirmation": "Booking confirmation",
+        "no_show": "No-show message"
+      },
+      "notice": {
+        "smsRemoved": "SMS reminders were removed. This step was moved to email (or switched off); choose WhatsApp or Email."
+      },
+      "buttonsTitle": "Add Confirm, Reschedule and Cancel buttons (WhatsApp)",
+      "skipIfConfirmed": "Skip if the customer already confirmed",
+      "fallbackTitle": "If not delivered, try the next channel after (minutes)",
+      "fallbackHint": "Leave empty to switch off. From {min} to {maxMinutes} minutes."
     }
   }
 }

@@ -524,7 +524,8 @@ export class BookingTypesService {
             buttonsEnabled: r.buttonsEnabled && r.kind === 'before',
             skipIfConfirmed: r.skipIfConfirmed && r.kind === 'before',
             undeliveredFallbackMinutes: r.undeliveredFallbackMinutes ?? null,
-            serviceLabel: r.serviceLabel && r.serviceLabel.trim() !== '' ? r.serviceLabel.trim() : null,
+            serviceLabel:
+              r.serviceLabel && r.serviceLabel.trim() !== '' ? r.serviceLabel.trim() : null,
             packKey: r.packKey ?? null,
             packVersion: r.packKey ? (r.packVersion ?? 1) : null,
           };
@@ -636,8 +637,7 @@ export class BookingTypesService {
       tx,
       orgId,
       added.filter(
-        (a) =>
-          a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'voice',
+        (a) => a.channel === 'whatsapp' || a.channel === 'email' || a.channel === 'voice',
       ),
     );
 

@@ -82,7 +82,7 @@ describe('the reminder rules editor', () => {
     click(byText('24 hours before'));
     expect(latest).toHaveLength(1);
     expect(latest[0]).toMatchObject({ kind: 'before', offset: '1', unit: 'days', enabled: false });
-    expect(latest[0]!.channels).toEqual(['whatsapp', 'sms', 'email']);
+    expect(latest[0]!.channels).toEqual(['whatsapp', 'email']);
     // a chip is used once
     expect((byText('24 hours before') as HTMLButtonElement).disabled).toBe(true);
 
@@ -135,18 +135,50 @@ describe('the reminder rules editor', () => {
     expect(document.querySelector('input#t-subject-' + latest[0]!.id)).not.toBeNull();
     // dropping WhatsApp removes the picker
     click(byLabel('Do not use WhatsApp'));
-    expect(latest[0]!.channels).toEqual(['sms', 'email']);
+    expect(latest[0]!.channels).toEqual(['email']);
     expect(document.querySelector('select#t-template-' + latest[0]!.id)).toBeNull();
   });
 
   it('reorders the channels and never removes the last one', () => {
-    mount([{ ...newReminder('15'), channels: ['whatsapp', 'sms'] }]);
+    mount([{ ...newReminder('15'), channels: ['whatsapp', 'email'] }]);
     click(byText('Message and channels'));
-    click(byLabel('Try SMS earlier'));
-    expect(latest[0]!.channels).toEqual(['sms', 'whatsapp']);
-    click(byLabel('Do not use SMS'));
+    click(byLabel('Try Email earlier'));
+    expect(latest[0]!.channels).toEqual(['email', 'whatsapp']);
+    click(byLabel('Do not use Email'));
     expect(latest[0]!.channels).toEqual(['whatsapp']);
     expect((byLabel('Do not use WhatsApp') as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it('never offers SMS as a channel', () => {
+    mount([{ ...newReminder('15'), channels: ['whatsapp'] }]);
+    click(byText('Message and channels'));
+    expect(document.body.textContent).not.toMatch(/SMS/);
+  });
+
+  it('shows the notice on a step the server moved off SMS, and keeps the step settings', () => {
+    mount([
+      {
+        ...newReminder('1', '', 'before'),
+        stepKind: 'reminder_24h',
+        unit: 'days',
+        channels: ['email'],
+        buttonsEnabled: true,
+        skipIfConfirmed: true,
+        undeliveredFallbackMinutes: '30',
+        libraryTemplateId: 'lib-1',
+        notice: 'sms_removed',
+      },
+    ]);
+    expect(document.body.textContent).toContain('SMS reminders were removed');
+    const [out] = remindersToInput(latest);
+    expect(out).toMatchObject({
+      stepKind: 'reminder_24h',
+      buttonsEnabled: true,
+      skipIfConfirmed: true,
+      undeliveredFallbackMinutes: 30,
+      libraryTemplateId: 'lib-1',
+      channels: ['email'],
+    });
   });
 
   it('inserts a placeholder into the message and removes a rule', () => {

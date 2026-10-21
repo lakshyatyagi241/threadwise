@@ -1307,7 +1307,8 @@
       },
       "kind": {
         "before": "randevu başlamadan önce",
-        "after": "randevu bittikten sonra"
+        "after": "randevu bittikten sonra",
+        "event": "bir olay gerçekleştiğinde"
       },
       "editMessage": "Mesaj ve kanallar",
       "hideMessage": "Gizle",
@@ -1317,7 +1318,6 @@
       "channelsHint": "Teslim edebilen ilk kanal kullanılır, sonrakiler yedektir. Aynı hatırlatma kimseye iki kez gönderilmez.",
       "channels": {
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "email": "E-posta"
       },
       "moveUp": "{channel} kanalını öne al",
@@ -1376,7 +1376,8 @@
         "bodyTooLong": "Mesaj çok uzun.",
         "subjectTooLong": "Konu çok uzun.",
         "labelTooLong": "Etiket çok uzun.",
-        "tooMany": "Bir randevu türü için en fazla 8 hatırlatma ve takip."
+        "tooMany": "Bir rezervasyon türü için zamanlı en fazla {max} hatırlatma ve takip mesajı.",
+        "fallbackInvalid": "{min} ile {maxMinutes} arasında tam sayı olarak dakika girin veya boş bırakın."
       },
       "noneOn": "Bu randevu türü için açık hatırlatma veya takip yok.",
       "when": {
@@ -1423,7 +1424,18 @@
         "provider_error": "Sağlayıcı reddetti.",
         "interrupted": "Kesintiye uğradı ve yeniden denenmedi.",
         "internal_error": "Bir şeyler ters gitti."
-      }
+      },
+      "steps": {
+        "confirmation": "Rezervasyon onayı",
+        "no_show": "Gelmeme mesajı"
+      },
+      "notice": {
+        "smsRemoved": "SMS hatırlatmaları kaldırıldı. Bu adım e-postaya taşındı (veya kapatıldı); WhatsApp veya e-posta seçin."
+      },
+      "buttonsTitle": "Onayla, Yeniden planla ve İptal et düğmelerini ekle (WhatsApp)",
+      "skipIfConfirmed": "Müşteri zaten onayladıysa atla",
+      "fallbackTitle": "İletilmezse şu süre sonra sonraki kanalı dene (dakika)",
+      "fallbackHint": "Kapatmak için boş bırakın. {min} ile {maxMinutes} dakika arası."
     }
   }
 }

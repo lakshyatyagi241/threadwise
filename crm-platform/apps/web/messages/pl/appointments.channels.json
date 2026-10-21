@@ -21,13 +21,11 @@
       "names": {
         "email": "E-mail",
         "whatsapp": "WhatsApp",
-        "sms": "SMS",
         "voice": "Połączenie przypominające"
       },
       "about": {
         "email": "Ze współdzielonej skrzynki Twojej przestrzeni. Nigdy z osobistej skrzynki.",
         "whatsapp": "Dowolny tekst w oknie 24 godzin; poza nim tylko zatwierdzony szablon.",
-        "sms": "Zwykły tekst z podłączonego nadawcy SMS.",
         "voice": "Automatyczne połączenie wychodzące, które przypomina kontaktowi."
       },
       "status": {

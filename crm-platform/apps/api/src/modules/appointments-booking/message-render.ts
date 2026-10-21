@@ -49,7 +49,9 @@ export function variablesFor(f: MessageFacts): Record<string, string> {
     host_name: f.hostName ?? '',
     host_phone: f.hostPhone ?? '',
     // A link that opens the place on a map; only for a visit at an address (an online visit has no place to show).
-    map_link: place ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}` : '',
+    map_link: place
+      ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(place)}`
+      : '',
     manage_hint: f.manageUrl ? `\n\nReschedule or cancel: ${f.manageUrl}` : '',
   };
 }
@@ -142,7 +144,10 @@ export function stepBody(
 ): string {
   const own = ruleBody && ruleBody.trim() !== '' ? ruleBody : null;
   const isReminder =
-    step === 'reminder' || step === 'reminder_24h' || step === 'reminder_2h' || step === 'reminder_15m';
+    step === 'reminder' ||
+    step === 'reminder_24h' ||
+    step === 'reminder_2h' ||
+    step === 'reminder_15m';
   const inherited =
     isReminder && typeReminderBody && typeReminderBody.trim() !== '' ? typeReminderBody : null;
   return renderTemplate(own ?? inherited ?? DEFAULT_STEP_TEXT[step], variablesFor(facts));

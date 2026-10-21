@@ -100,6 +100,8 @@ const stored: PlanAdminItem = {
     remove_branding: false,
     sales_pipeline: true,
     appointment_booking: true,
+    appointment_confirm_buttons: true,
+    appointment_rebook_steps: true,
     chatbot_widgets: false,
     wa_storefront: false,
     inbox_sla: false,
@@ -529,12 +531,18 @@ describe('the teams cap (0 is solo, blank is unlimited)', () => {
 
   it('saves blank as unlimited, 0 as solo and a number as itself; other caps keep blank = 0', () => {
     const d = planToDraft(stored);
-    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '' } }).body?.limits).toMatchObject({
+    expect(
+      buildPlanRequest({ ...d, limits: { ...d.limits, teams: '' } }).body?.limits,
+    ).toMatchObject({
       teams: 1_000_000,
       users: 0,
     });
-    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits.teams).toBe(0);
-    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits.teams).toBe(7);
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '0' } }).body?.limits.teams).toBe(
+      0,
+    );
+    expect(buildPlanRequest({ ...d, limits: { ...d.limits, teams: '7' } }).body?.limits.teams).toBe(
+      7,
+    );
   });
 
   it('only a blank teams box counts as unlimited; a typed 0 is a cap', () => {

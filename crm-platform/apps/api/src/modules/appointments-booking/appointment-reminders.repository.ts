@@ -375,7 +375,10 @@ export class AppointmentRemindersRepository {
     tx: Tx,
     orgId: number,
     runId: number,
-  ): Promise<{ appointmentId: number; stepKind: BookingReminderStepKind | null; state: ReplyState } | undefined> {
+  ): Promise<
+    | { appointmentId: number; stepKind: BookingReminderStepKind | null; state: ReplyState }
+    | undefined
+  > {
     const res = await tx.execute(sql`
       SELECT appointment_id, step_kind, reply_state FROM appointment_reminder_runs
       WHERE org_id = ${orgId} AND id = ${runId} FOR UPDATE`);
@@ -384,7 +387,9 @@ export class AppointmentRemindersRepository {
     return {
       appointmentId: Number(r.appointment_id),
       stepKind: (r.step_kind as BookingReminderStepKind | null) ?? null,
-      state: (r.reply_state && typeof r.reply_state === 'object' ? r.reply_state : {}) as ReplyState,
+      state: (r.reply_state && typeof r.reply_state === 'object'
+        ? r.reply_state
+        : {}) as ReplyState,
     };
   }
 
@@ -463,12 +468,7 @@ export class AppointmentRemindersRepository {
   }
 
   /** A message that was handed over and then failed, with no channel left to try: the run is a failed one. */
-  async failAfterSend(
-    tx: Tx,
-    orgId: number,
-    id: number,
-    reason: ReminderReason,
-  ): Promise<void> {
+  async failAfterSend(tx: Tx, orgId: number, id: number, reason: ReminderReason): Promise<void> {
     await tx.execute(sql`
       UPDATE appointment_reminder_runs SET status = 'failed', reason = ${reason}, updated_at = now()
       WHERE org_id = ${orgId} AND id = ${id} AND status = 'sent'`);

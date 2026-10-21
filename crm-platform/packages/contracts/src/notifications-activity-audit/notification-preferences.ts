@@ -93,7 +93,12 @@ export const NOTIFICATION_CATALOG: Record<NotificationPrefType, NotificationCata
   // TW-GACC-011: one note per appointment when its Google event first stops matching; quiet like the other alerts of the group.
   appointment_calendar_drift: { group: 'conversations', toast: true, sound: false, push: false },
   // BL-426: a customer cancelled from a reminder; the host wants to know (and may free the slot): toast and push on, no sound.
-  appointment_cancelled_by_customer: { group: 'conversations', toast: true, sound: false, push: true },
+  appointment_cancelled_by_customer: {
+    group: 'conversations',
+    toast: true,
+    sound: false,
+    push: true,
+  },
   // BL-425: the answer to a test the person asked for; a toast is the point, no push.
   appointment_reminder_test: { group: 'conversations', toast: true, sound: false, push: false },
   waba_group_join_request: { group: 'whatsapp_groups', toast: true, sound: false, push: false },

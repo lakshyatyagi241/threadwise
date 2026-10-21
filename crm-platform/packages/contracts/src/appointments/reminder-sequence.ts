@@ -108,7 +108,13 @@ export const reminderPackPreviewSchema = z.object({
   bookingType: z.object({ id: uuidSchema, name: z.string(), online: z.boolean() }),
   steps: z.array(reminderPackPreviewStepSchema),
   /** Steps the type has that the pack does not touch (kept as they are). */
-  kept: z.array(z.object({ id: uuidSchema, stepKind: bookingReminderStepKindSchema, offsetMinutes: z.number().int() })),
+  kept: z.array(
+    z.object({
+      id: uuidSchema,
+      stepKind: bookingReminderStepKindSchema,
+      offsetMinutes: z.number().int(),
+    }),
+  ),
   timedSteps: z.number().int(),
   timedStepsMax: z.number().int(),
   /** `cap_exceeded`: applying the pack would pass the limit of steps with a time; nothing can be applied until one is removed. */

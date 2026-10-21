@@ -649,13 +649,17 @@ export const appointmentReminderRuns = pgTable(
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
     stepKind: text('step_kind'),
     /** Every channel the step tried, in order: `{channel, status, reason}`. Codes only. */
-    attemptLog: jsonb('attempt_log').notNull().default(sql`'[]'::jsonb`),
+    attemptLog: jsonb('attempt_log')
+      .notNull()
+      .default(sql`'[]'::jsonb`),
     messageRef: uuid('message_ref'),
     delivery: text('delivery').notNull().default('unknown'),
     deliveredAt: timestamp('delivered_at', { withTimezone: true }),
     deliveryCheckAt: timestamp('delivery_check_at', { withTimezone: true }),
     /** The one-time reply tokens of a step with quick-reply buttons (nonce, used-at, outcome). Codes only. */
-    replyState: jsonb('reply_state').notNull().default(sql`'{}'::jsonb`),
+    replyState: jsonb('reply_state')
+      .notNull()
+      .default(sql`'{}'::jsonb`),
   },
   (t) => [
     primaryKey({ columns: [t.orgId, t.id] }),
