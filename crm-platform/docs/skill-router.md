@@ -31,7 +31,6 @@ in the line (`new-module → add-migration — schema change needed`).
 | inbound webhook endpoint, provider callback                                                                                               | `webhook-handler`              |
 | frontend fetch from apps/web or apps/partner, data hook, form submit to API                                                               | `frontend-api-call`            |
 | "open a PR", "is this ready", "run the checks"                                                                                            | `pre-pr`                       |
-| any feature, screen, endpoint, contract, migration or worker job just built or changed; "compare with threadwise", "parity", "playwright" | `threadwise-playwright-parity` |
 | mobile app: any screen, feature, hook or fix in `apps/mobile` ("add X to the app", "mobile", "iOS", "Android", "Expo", "React Native")    | `mobile-feature-port`          |
 | mobile: set up the toolchain / first run / "app won't start"                                                                              | `mobile-setup`                 |
 | mobile: build, submit, OTA update, store release, "ship the app"                                                                          | `mobile-release`               |

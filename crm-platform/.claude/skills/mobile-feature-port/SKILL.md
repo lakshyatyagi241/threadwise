@@ -29,8 +29,7 @@ Anything you cannot build now (missing API, owner decision, design) is recorded 
 
 ## 3. Does the API already do it?
 
-If the screen needs a route, a field or a permission that does not exist, stop and do that first with the existing skills (`contracts-change`, `new-module`, `add-migration`, `rbac-permission`, `outbox-event`, `worker-job`), with their own parity run
-(`threadwise-playwright-parity`). Mobile never gets a private API rule the web does not have. If the work belongs to the owner's decision (ADR-0027 questions), ask before building.
+If the screen needs a route, a field or a permission that does not exist, stop and do that first with the existing skills (`contracts-change`, `new-module`, `add-migration`, `rbac-permission`, `outbox-event`, `worker-job`). Mobile never gets a private API rule the web does not have. If the work belongs to the owner's decision (ADR-0027 questions), ask before building.
 
 ## 4. Build, in this order (invoke each skill with the Skill tool)
 

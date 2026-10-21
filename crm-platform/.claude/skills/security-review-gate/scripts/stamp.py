@@ -48,7 +48,7 @@ def cmd_write(a):
         print("refused: blocked-env needs --note saying which check could not run and why.", file=sys.stderr)
         return 3
     data = {"status": a.status, "confirmed": a.confirmed, "fixed": a.fixed, "dismissed": a.dismissed, "note": a.note,
-            "files": len(sc["files"]), "branch": S.P.git("rev-parse", "--abbrev-ref", "HEAD").strip()}
+            "files": len(sc["files"]), "branch": S.git("rev-parse", "--abbrev-ref", "HEAD").strip()}
     if a.user_approved:
         data["user_approved"] = a.user_approved
     S.write_stamp(sc["fingerprint"], data)

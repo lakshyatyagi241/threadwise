@@ -9,19 +9,11 @@ wrote them.
 [CONTRIBUTING.md](CONTRIBUTING.md) — the non-negotiable rules and why each
 one exists. [docs/README.md](docs/README.md) — the map of everything else.
 
-## Reference port: HARD RULES (every session, every chat, no exceptions)
+## Reference app: removed
 
-Any work that ports a Reference feature follows [docs/threadwise-port/PORTING_RULES.md](docs/threadwise-port/PORTING_RULES.md). That file
-wins over any skill that says otherwise about features or UI. In short:
-
-1. **No feature is lost, changed, merged, renamed or "improved".** Same behavior, same screens, same flows as the running reference.
-2. **Same UI**, rewritten on our stack (Next.js, Tailwind, `@crm/ui`); the licensed source is the reference, no PHP/Blade pasted.
-3. **Dig before you build.** Read the feature's inventory entry **and** its wiring map in `docs/threadwise-port/wiring/` (route,
-   permission, tables, settings, upstream feeders, every place it is used), then open it in the reference. Port every consumer, not only the screen.
-4. **Real wiring only.** Migration (RLS) -> service -> controller -> contract -> web page -> worker job. No mocks, no dead buttons.
-5. **Anything you cannot port yet is recorded as `blocked` with its id, never silently dropped.** If you find a feature or
-   consumer that no inventory/wiring file lists, add it to the wiring file in the same change.
-6. Unsure whether something is a feature or an accident? Keep it and ask; do not delete it.
+The licensed Laravel app (`reference/`) is gone from this repo and no session runs it. Nothing is ported from it any more.
+The features it had are recorded in [docs/threadwise-port/](docs/threadwise-port/) (wiring maps, specs, inventory). Those docs
+describe what the product does; they are not a live reference.
 
 ## Use the project skills
 
@@ -40,15 +32,6 @@ the `X` skill now," actually do it via the Skill tool rather than treating it
 as a reading suggestion — that's what keeps a multi-step task (new table →
 new module → new permission → verify) from drifting off the rails partway
 through.
-
-## Every feature gets a Reference parity run (automatic)
-
-After you build or change **any** feature, small or big (an endpoint, a screen, a contract, a migration, a worker
-job), invoke the `threadwise-playwright-parity` skill before saying it is done. It runs the same scenarios on the
-running Reference reference and on our app in Playwright, compares UI, UX and functionality with the full set of edge
-cases, reports every difference, spawns fix sub-agents for the defects and records a stamp. A Stop hook in
-`.claude/settings.json` blocks the end of the turn until a stamp covers the current state of the feature files, so
-do not wait for it. Skip only on the user's explicit word (`stamp.py write --status skipped --user-approved "..."`).
 
 ## Every change gets a security review (mandatory)
 
@@ -82,8 +65,8 @@ you touched has a missing or still-English key in any locale. English-only is ne
 
 The iOS/Android app has its own project skills (`mobile-*`, index in `.claude/skills/README.md`), its own rules in `apps/mobile/CLAUDE.md`, and its own gate
 (`bash .claude/skills/mobile-pre-pr/scripts/gate.sh`; `pre-pr` calls it when `apps/mobile` changed). Start at `docs/mobile/README.md`; decisions are ADR-0021 to 0027.
-How the porting rules above apply to a phone (behaviour is the contract, the UI is a mobile adaptation, scope is the backlog in `docs/mobile/backlog.md`): ADR-0027, still awaiting the
-owner's answers. The parity Stop hook watches web, API and contract files, not `apps/mobile`; for a mobile feature the `mobile-feature-port` skill asks for the Maestro flow and the manual comparison instead.
+How the web feature rules apply to a phone (behaviour is the contract, the UI is a mobile adaptation, scope is the backlog in `docs/mobile/backlog.md`): ADR-0027, still awaiting the
+owner's answers. The `mobile-feature-port` skill asks for a Maestro flow for each mobile feature.
 Use `mobile-feature-port` for any unit of mobile work; it chains the rest. Expo changes every release: read the versioned Expo docs, do not answer from memory.
 
 ## Before calling anything done

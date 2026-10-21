@@ -1,5 +1,8 @@
 # Reference port: rules
 
+> **Reference removed (2026-10-21).** Porting from Reference has stopped: its source and running app are no longer in the repo.
+> Kept as history. Section 1 (the running reference) and any rule that needs Reference to be running no longer apply.
+
 Binding for every person and every Claude Code session that builds a Reference feature in `crm-platform`.
 If a skill or older doc says something different about **features** or **UI**, this file wins. Everything else
 (RLS, tenancy, ownership zones, branches, gate) stays as in [CONTRIBUTING.md](../../CONTRIBUTING.md) and
