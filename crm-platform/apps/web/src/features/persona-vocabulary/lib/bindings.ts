@@ -100,15 +100,14 @@ export const BOUND_SURFACES: readonly BoundSurface[] = [
     ],
   },
   {
-    // The inbox handoff queue (BL-396): the strip above a thread, the Send to queue dialog and the handoff settings. Written with the
+    // The inbox handoff queue (BL-396): the strip above a thread, the Send to queue dialog and the handoff settings, now the Auto-assignment page. Written with the
     // default noun (contact) so a workspace that says Patient or Client reads its own word in "The contact asked for a person".
     id: 'handoff',
-    prefixes: ['team-inbox-conversations.handoff', 'team-inbox-routing-sla.handoffSettings'],
-  },
-  {
-    // The Auto-assignment page (four switches, rules, Try it): written with the default noun (contact) like the handoff surface above.
-    id: 'auto-assignment',
-    prefixes: ['team-inbox-routing-sla.assign'],
+    prefixes: [
+      'team-inbox-conversations.handoff',
+      'team-inbox-routing-sla.handoffSettings',
+      'team-inbox-routing-sla.assign',
+    ],
   },
   {
     id: 'deals',
