@@ -421,6 +421,7 @@ A dump with no `user` collection leaves `owner_id` empty and reports nothing.
 - **No admin.** Only the `--owner-email` user holds Owner. `preset:admin` is refused at startup, with or without an approver; `preset:workspace_admin` and every other preset need
   `approvedBy` and `evidence`. `is_staff` and role NAMES are never privilege (a role called "Admin" becomes a custom role "Admin (Waboo)"). A user with a missing, null, non-string,
   unknown, deleted or unloaded role gets **Viewer** (`ROLE_MISSING`, `ROLE_DELETED`, `ROLE_NOT_LOADED`).
+  A Waboo role named `admin` gets the **Owner** preset (`ADMIN_IS_OWNER`): the owner's decision of 2026-10-21 for every migrated admin. The role map still refuses `preset:admin`; this rule is the only route to Owner.
 - **Users** are created like an invited member: `status` active (inactive only when `is_active` is false; `workspace_enabled` is history only, see OQ-7), `invited_at` = created, `joined_at` only when the email
   was verified, **no password hash, no auth_subject, no token, no mail, no outbox row**. Waboo `password` is never read, copied, quarantined or logged; reconcile searches the target
   for the dump's password strings (`PASSWORD_LEAK`). Emails are trimmed and lower-cased; two documents with one email: the active, then newest one wins, the other is `DUPLICATE_EMAIL`.

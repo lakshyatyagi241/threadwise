@@ -64,6 +64,13 @@ const USER_FIELDS: Record<string, string> = {
 
 const present = (v: unknown): boolean => v !== undefined && v !== null && v !== '';
 
+/**
+ * A Waboo role named `admin` (case and spaces ignored). Its users become Owners of the migrated workspace: the owner's decision of
+ * 2026-10-21 (see the admin branch of the role step below).
+ */
+export const isWabooAdminRole = (name: string | null | undefined): boolean =>
+  (name ?? '').trim().toLowerCase() === 'admin';
+
 /** Waboo "Concurrent Chat": a whole number from 1; missing, empty, 0 or not a number = no limit; above 1000 is 1000 (the column's cap). */
 export const chatLimitOf = (v: unknown): number | null => {
   const n = typeof v === 'string' ? Number(v.trim()) : typeof v === 'number' ? v : NaN;
@@ -231,7 +238,15 @@ export const users: HandlerSpec = {
         code: 'ROLE_DELETED',
         reason: 'the role is soft-deleted: the user gets Viewer',
       });
-    else {
+    else if (isWabooAdminRole(plan.renamedFrom ?? plan.name) && acc.presets.admin) {
+      // The owner's decision (2026-10-21): the old account's admins are Owners of the migrated workspace, the locked top preset, not a
+      // custom role called "admin". Only this rule gives Owner: the role map still refuses preset:admin (access/config.ts).
+      role = acc.presets.admin;
+      soft.push({
+        code: 'ADMIN_IS_OWNER',
+        reason: 'a Waboo admin becomes an Owner of the migrated workspace (the owner decided this for every migrated admin)',
+      });
+    } else {
       const ref = ctx.ref('roles', roleKey);
       if (!ref || ref.uuid === acc.presets.admin?.uuid)
         soft.push({
