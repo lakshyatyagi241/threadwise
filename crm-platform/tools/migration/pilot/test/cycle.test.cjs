@@ -339,7 +339,7 @@ test('migrate refusals: flag, override pair, bad --from, low memory, no db', () 
   r = cycle([...MIG, '--skip-dry-run-check'], M_ENV);
   assert.match(r.stdout, /--i-accept-no-dry-run/);
   r = cycle([...MIG, '--from', 'bogus'], M_ENV);
-  assert.match(r.stdout, /--from must be one of export, ship/);
+  assert.match(r.stdout, /--from must be one of export, core-snapshot, ship/);
   r = cycle(MIG, { ...M_ENV, CYCLE_MEM_CMD: 'echo 300' });
   assert.notEqual(r.status, 0);
   assert.match(r.stdout, /only 300 MB of memory available.*700 MB needed/);
@@ -652,6 +652,69 @@ test('migrate --catch-up: forced export, load without credits, update, files; no
   const bad = cycle([...MIG, '--catch-up', '--steps', 'access'], M_ENV);
   assert.match(bad.stdout, /do not combine it with --steps/);
   assert.match(lib.resumeCmd({ client: 'acme', 'catch-up': true }, 'update'), /--catch-up --from update/);
+});
+
+// geta_core reader stand-in for core-snapshot: writes <client>-core.json into --out with the readAt the test chose
+const coreLog = path.join(base, 'core-opening.log');
+const fakeCore = path.join(base, 'fake-core-opening.cjs');
+fs.writeFileSync(
+  fakeCore,
+  `const fs=require('fs'),path=require('path');const a=process.argv.slice(2);
+fs.appendFileSync(${JSON.stringify(coreLog)},JSON.stringify(a)+'\\n');
+if(Number(process.env.FAKE_CORE_RC||0))process.exit(Number(process.env.FAKE_CORE_RC));
+const c=a[a.indexOf('--client')+1];const out=a[a.indexOf('--out')+1];
+fs.writeFileSync(path.join(out,c+'-core.json'),JSON.stringify({readOn:'2026-10-21',readAt:process.env.FAKE_CORE_READAT,workspace:{}}));
+fs.writeFileSync(path.join(out,c+'-credit-opening.json'),'{}');
+console.log('core-opening: '+c+': balance 1.00 INR');`,
+);
+
+test('migrate with a geta_core snapshot: export forced, snapshot read right after it and shipped with the dump', () => {
+  reset();
+  const coreFile = path.join(base, 'acmecore-core.json');
+  fs.writeFileSync(coreFile, JSON.stringify({ readOn: '2026-10-19', readAt: '2026-10-19T13:18:00.000Z', stale: true }));
+  fs.writeFileSync(path.join(clients, 'acmecore.json'), JSON.stringify({ ...CFG, orgSlug: 'acme-core', coreFile }));
+  fs.writeFileSync(coreLog, '');
+  const env = { ...M_ENV, CORE_OPENING_BIN: fakeCore, FAKE_CORE_READAT: '2026-10-21T13:59:00.000Z' };
+  const MIG_CORE = ['migrate', '--client', 'acmecore', '--db', 'acme_waboo', '--yes-load-into-staging', '--with-dry-run'];
+  let r = cycle([...MIG_CORE, '--stop-after', 'ship'], env);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.deepEqual(
+    [...r.stdout.matchAll(/^migrate: ([\w-]+) ok/gm)].map((m) => m[1]),
+    ['export', 'core-snapshot', 'ship'],
+  );
+  assert.match(r.stdout, /export: forced, the geta_core snapshot is taken right after it/);
+  assert.ok(lines(exportLog)[0].includes('--force'), 'a client with a snapshot never reuses its dump');
+  const [call] = lines(coreLog);
+  assert.equal(call[call.indexOf('--workspace') + 1], 'acme_waboo');
+  assert.equal(call[call.indexOf('--client') + 1], 'acmecore');
+  const shipped = JSON.parse(fs.readFileSync(path.join(root, 'migration/dumps/acmecore/core.json'), 'utf8'));
+  assert.equal(shipped.readAt, '2026-10-21T13:59:00.000Z', 'the shipped core.json is the fresh snapshot');
+  assert.equal(shipped.stale, undefined);
+
+  // --skip-export keeps the snapshot the config names: nothing is read from geta_core
+  reset();
+  fs.writeFileSync(coreLog, '');
+  fs.writeFileSync(coreFile, JSON.stringify({ readOn: '2026-10-19', readAt: '2026-10-19T13:18:00.000Z', stale: true }));
+  r = cycle([...MIG_CORE, '--skip-export', '--stop-after', 'ship'], env);
+  assert.equal(r.status, 0, r.stdout + r.stderr);
+  assert.match(r.stdout, /core-snapshot: skipped \(--skip-export\)/);
+  assert.equal(lines(coreLog).length, 0);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(root, 'migration/dumps/acmecore/core.json'), 'utf8')).stale, true);
+
+  // a failing reader stops the run before anything is shipped
+  reset();
+  r = cycle([...MIG_CORE, '--stop-after', 'ship'], { ...env, FAKE_CORE_RC: '1' });
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /core-snapshot: geta_core was not read \(core-opening exit 1\)/);
+  assert.doesNotMatch(r.stdout, /migrate: ship ok/);
+
+  // a reader that writes no readAt is refused and the operator's core.json stays as it was
+  reset();
+  const { FAKE_CORE_READAT: _unset, ...noReadAt } = env;
+  r = cycle([...MIG_CORE, '--stop-after', 'ship'], noReadAt);
+  assert.equal(r.status, 1);
+  assert.match(r.stdout, /core-snapshot: core-opening wrote no readAt; core\.json is not replaced/);
+  assert.equal(JSON.parse(fs.readFileSync(coreFile, 'utf8')).stale, true);
 });
 
 test('new-client --channel-map-file: the real number is the channel map; bad entries are refused', () => {

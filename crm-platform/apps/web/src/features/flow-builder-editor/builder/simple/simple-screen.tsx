@@ -6,7 +6,19 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { FlowEditorContext } from '../../lib/flow-editor-context';
 import { useQuery } from '@tanstack/react-query';
 import type { FlbBuilderContext, FlowDetail } from '@crm/contracts';
-import { Badge, Button, ConfirmDialog, Drawer, Field, Input, Select, useToast } from '@crm/ui';
+import {
+  Badge,
+  Button,
+  ConfirmDialog,
+  Drawer,
+  Field,
+  Input,
+  Menu,
+  MenuItem,
+  Modal,
+  Select,
+  useToast,
+} from '@crm/ui';
 import { useCan } from '@/features/auth-registration-security/shared/session-context';
 import { useFlowWidget } from '@/features/chatbot-widget/api/widgets';
 import { ApiError } from '@/lib/api/errors';
@@ -30,7 +42,6 @@ import {
   groupText,
   insertStep,
   moveStep,
-  LIMITS,
   newStep,
   problems,
   removeGroup,
@@ -224,7 +235,6 @@ function Editor({
 }) {
   const t = useTranslations('flb.builder.simple');
   const tw = useTranslations('flb.builder.webBot');
-  const tEd = useTranslations('flb.builder.simple.editors');
   const tCommon = useTranslations('flb.common');
   const tTool = useTranslations('flb.builder.shell.toolbar');
   const m = useMsg();
@@ -259,6 +269,8 @@ function Editor({
   const [activeId, setActiveId] = useState<string | null>(null);
   const [showProblems, setShowProblems] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState<number | null>(null);
+  /** The flow being renamed from the sidebar's ⋮ menu, with the name as typed. */
+  const [renaming, setRenaming] = useState<{ index: number; name: string } | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
   const [pendingImport, setPendingImport] = useState<{
     doc: SimpleDoc;
@@ -362,36 +374,6 @@ function Editor({
       return;
     }
     linkTo(id, i, target);
-  };
-
-  /**
-   * The "+" under a set of buttons or a list: the chosen step starts a new part, tied to the first button that leads nowhere yet. When
-   * every button already leads somewhere, a new button (or row) is added for it, up to the limit.
-   */
-  const addBranch = (stepId: string, kind: StepKind) => {
-    const step = allSteps(doc).find((x) => x.id === stepId);
-    if (!step) return;
-    const options = Array.isArray(step.data.options) ? (step.data.options as unknown[]) : [];
-    let idx = options.findIndex((_, i) => !step.links[i] || step.links[i] === LINK_NEXT);
-    let data: Record<string, unknown> | undefined;
-    if (idx < 0) {
-      const max = step.type === 'list' ? LIMITS.rows : LIMITS.buttons;
-      if (options.length >= max) return;
-      idx = options.length;
-      const added =
-        step.type === 'list'
-          ? { title: `Item ${idx + 1}`, description: '', section: '' }
-          : tEd('buttons.placeholder', { n: idx + 1 });
-      data = { options: [...options, added] };
-    }
-    const first = newStep(kind.type, allSteps(doc), kind.preset);
-    let next = addJourney(doc, first);
-    const links = step.links.slice();
-    links[idx] = first.id;
-    next = updateStep(next, stepId, { ...(data ? { data } : {}), links });
-    change(next);
-    setGi(groupsOf(next).length - 1);
-    setActiveId(first.id);
   };
 
   /** Where the last step of a part carries on (a "node to node" connection). */
@@ -859,7 +841,7 @@ function Editor({
                 return (
                   <div
                     key={g.key}
-                    className={`mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
+                    className={`group mb-0.5 flex items-center gap-2 rounded-xl px-2 py-1 ${
                       i === gIndex ? 'bg-muted font-semibold' : 'hover:bg-muted/60'
                     }`}
                   >
@@ -882,6 +864,77 @@ function Editor({
                         </span>
                       ) : null}
                     </button>
+                    {/* Out of the row until it is hovered or focused, so it leaves no gap and the duplicate icon and the count stay where they are. */}
+                    <div className="hidden group-focus-within:block group-hover:block">
+                      <Menu
+                        label={t('flowMenu', { name: groupText(g, tf) })}
+                        align="end"
+                        className="w-max min-w-0 rounded-xl p-1 shadow-xl"
+                        triggerClassName="size-7 rounded-md border-transparent px-0"
+                        triggerProps={{ 'aria-label': t('flowMenu', { name: groupText(g, tf) }) }}
+                        trigger={
+                          <svg
+                            viewBox="0 0 16 16"
+                            className="size-4 text-muted-foreground"
+                            fill="currentColor"
+                            aria-hidden="true"
+                          >
+                            <circle cx="8" cy="3" r="1.3" />
+                            <circle cx="8" cy="8" r="1.3" />
+                            <circle cx="8" cy="13" r="1.3" />
+                          </svg>
+                        }
+                      >
+                        <div className="flex gap-1">
+                          <MenuItem
+                            className="relative size-9 justify-center rounded-lg p-0 text-foreground"
+                            onSelect={() =>
+                              setRenaming({
+                                index: i,
+                                name: g.placeholder && i > 0 ? '' : groupText(g, tf),
+                              })
+                            }
+                          >
+                            <svg
+                              viewBox="0 0 16 16"
+                              className="size-[18px]"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              aria-hidden="true"
+                            >
+                              <path d="M10.5 2.5l3 3L5.5 13.5l-3.5.5.5-3.5 8-8z" />
+                            </svg>
+                            <span className="absolute inset-0" title={t('renameFlow')} />
+                            <span className="sr-only">{t('renameFlow')}</span>
+                          </MenuItem>
+                          {i > 0 ? (
+                            <MenuItem
+                              danger
+                              className="relative size-9 justify-center rounded-lg p-0 hover:bg-danger/10 focus-visible:bg-danger/10"
+                              onSelect={() => setConfirmDelete(i)}
+                            >
+                              <svg
+                                viewBox="0 0 16 16"
+                                className="size-4"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="1.5"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                aria-hidden="true"
+                              >
+                                <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                              </svg>
+                              <span className="absolute inset-0" title={t('deleteFlow')} />
+                              <span className="sr-only">{t('deleteFlow')}</span>
+                            </MenuItem>
+                          ) : null}
+                        </div>
+                      </Menu>
+                    </div>
                     <button
                       type="button"
                       aria-label={t('duplicateNamed', { name: groupText(g, tf) })}
@@ -956,9 +1009,26 @@ function Editor({
                   />
                 </Field>
                 {gIndex > 0 ? (
-                  <Button variant="secondary" size="sm" onClick={() => setConfirmDelete(gIndex)}>
-                    {t('deleteFlow')}
-                  </Button>
+                  <button
+                    type="button"
+                    aria-label={t('deleteFlow')}
+                    title={t('deleteFlow')}
+                    onClick={() => setConfirmDelete(gIndex)}
+                    className="grid size-10 shrink-0 place-items-center rounded-lg border border-border bg-background text-muted-foreground outline-none transition hover:border-danger hover:text-danger focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    <svg
+                      viewBox="0 0 16 16"
+                      className="size-4"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M2.5 4h11M6 4V2.5h4V4M4 4l.6 9a1 1 0 0 0 1 .9h4.8a1 1 0 0 0 1-.9L12 4M6.8 7v4M9.2 7v4" />
+                    </svg>
+                  </button>
                 ) : null}
               </div>
 
@@ -1026,47 +1096,17 @@ function Editor({
                             setActiveId(null);
                           }}
                         />
-                        {BRANCHING.has(s.type) ? (
+                        {BRANCHING.has(s.type) && !OPTION_STEPS.has(s.type) ? (
                           <p className="my-3 text-center text-[11.5px] text-muted-foreground">
                             {s.type === 'faq'
                               ? t('faqEnds')
-                              : OPTION_STEPS.has(s.type)
-                                ? t('optionsCarryOn', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })
-                                : t('branchingEnds', {
-                                    kind: s.type === 'list' ? 'list' : 'buttons',
-                                  })}
+                              : t('branchingEnds', {
+                                  kind: s.type === 'list' ? 'list' : 'buttons',
+                                })}
                           </p>
                         ) : null}
                         {s.type === 'buttons' || s.type === 'list' ? (
                           <>
-                            <div
-                              className="mb-3 flex flex-wrap justify-center gap-2"
-                              data-testid="branch-adders"
-                            >
-                              {(Array.isArray(s.data.options) ? s.data.options : []).map(
-                                (o: unknown, i: number) => {
-                                  // A button that already leads somewhere has its step; one that ends gets a quick way to start one.
-                                  if (s.links[i] && s.links[i] !== LINK_NEXT) return null;
-                                  const label =
-                                    typeof o === 'string'
-                                      ? o
-                                      : str((o as Record<string, unknown>).title);
-                                  return (
-                                    <button
-                                      key={i}
-                                      type="button"
-                                      onClick={() => link(s.id, i, NEW_JOURNEY)}
-                                      className="rounded-full border border-dashed border-border px-3.5 py-1.5 text-[12px] font-semibold text-brand hover:bg-muted"
-                                    >
-                                      + {t('branchAdd', { title: label || `#${i + 1}` })}
-                                    </button>
-                                  );
-                                },
-                              )}
-                            </div>
-                            <AddMenu channel={channel} onPick={(k) => addBranch(s.id, k)} atEnd />
                             <AddMenu
                               channel={channel}
                               onPick={(k) => add(ci, si + 1, k)}
@@ -1157,6 +1197,44 @@ function Editor({
             canEdit={canEditFlow}
           />
         ) : null}
+
+        <Modal
+          open={renaming !== null}
+          onClose={() => setRenaming(null)}
+          title={t('renameFlow')}
+          closeLabel={tCommon('dismiss')}
+          footer={
+            <>
+              <Button variant="secondary" onClick={() => setRenaming(null)}>
+                {tCommon('cancel')}
+              </Button>
+              <Button
+                onClick={() => {
+                  if (renaming) change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }}
+              >
+                {t('save')}
+              </Button>
+            </>
+          }
+        >
+          <Field label={t('flowName')}>
+            <Input
+              autoFocus
+              value={renaming?.name ?? ''}
+              placeholder={t('flowPlaceholder', { n: (renaming?.index ?? 0) + 1 })}
+              onChange={(e) => setRenaming((r) => (r ? { ...r, name: e.target.value } : r))}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && renaming) {
+                  e.preventDefault();
+                  change(renameGroup(doc, renaming.index, renaming.name));
+                  setRenaming(null);
+                }
+              }}
+            />
+          </Field>
+        </Modal>
 
         <ConfirmDialog
           open={confirmDelete !== null}
@@ -1386,7 +1464,8 @@ function AddMenu({
             />
           </div>
           <div className="min-h-0 flex-1 overflow-y-auto px-5 pb-4">
-            {(['send', 'ask', 'logic', 'action', 'answer', 'handoff'] as const).map((group) => {
+            {/* Conditions and actions (wait, API call, webhook, JS function) are not listed here: they are added from the step's own shortcuts, so they land right under it. */}
+            {(['send', 'ask', 'answer', 'handoff'] as const).map((group) => {
               const kinds = stepKindsFor(channel).filter(
                 (k) =>
                   k.group === group &&

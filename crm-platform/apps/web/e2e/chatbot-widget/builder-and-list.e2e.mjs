@@ -1,13 +1,13 @@
 // Browser run of the chatbot widget screens against a running web app + API (see docs/threadwise-port/parity/chatbot-widget.md).
 //   WEB=http://localhost:3107 WGT_EMAIL=... WGT_PASSWORD=... CHROME=/path/to/chrome node builder-and-list.e2e.mjs
-// Needs `playwright-core` (the parity harness installs it) and a workspace admin whose onboarding is finished.
+// Needs `@playwright/test` (an apps/web dependency) and a workspace admin whose onboarding is finished.
 // The smart-agent steps need one assistant row: this script inserts it with `psql` through `docker exec crm-postgres`
 // (override the whole command with PSQL='["psql","-U","crm","-d","crm_wgt","-tAc"]') and removes it at the end.
 // The customer-site stand-in is started by this script on :3999; wa.me is answered locally, nothing leaves the machine.
 import http from 'node:http';
 import assert from 'node:assert/strict';
 import { execFileSync } from 'node:child_process';
-import { chromium } from 'playwright-core';
+import { chromium } from '@playwright/test';
 
 const WEB = process.env.WEB ?? 'http://localhost:3107';
 const EMAIL = process.env.WGT_EMAIL ?? 'wgt-admin@example.test';

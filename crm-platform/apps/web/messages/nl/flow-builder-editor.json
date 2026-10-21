@@ -1266,7 +1266,9 @@
           }
         },
         "branchAdd": "Stap toevoegen voor “{title}”",
-        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst."
+        "faqEnds": "Deze stap die buiten gebruik is, beëindigt dit deel: de flow gaat altijd verder via de uitgang Geen overeenkomst.",
+        "flowMenu": "Opties voor {name}",
+        "renameFlow": "Flow hernoemen"
       },
       "formsCore": {
         "helpers": {

@@ -80,3 +80,12 @@ so it can no longer be found or replayed (the BullMQ failed set is the only copy
 **Check:** worker logs around the failure; Postgres reachable (`DbPoolExhausted`, `ApiProbeFailing`); `select count(*) from failed_operations;` works; table locks (`pg_locks`).
 **Fix:** restore the database; then list failed jobs still in Redis (`docs/runbooks/failed-background-work.md`) and capture or replay them by hand before the queue trims them.
 **Escalate:** platform owner immediately if the database is healthy and captures still fail (a code or schema bug).
+
+## WebhookFlood
+
+Alerts: `WebhookRateHigh`, `WebhookLatencyHigh`, `DbPoolSaturated`, `WabaIngestBacklogGrowing`. The public webhook path takes far more requests than usual, or answers slowly, and the DB pools or the `waba-ingest` queue behind it are filling. Without a guard this takes `/ready` down (its DB check queues behind the pool) and slows the dashboard.
+
+1. Webhooks have their own container (`desk-api-hooks`, route `/v2/public/webhooks`) and their own small DB pools, so the dashboard API should stay up. If `/ready` on the slot API is still failing, look at the slot's pool (`crm_db_pool_waiting`) and `DbPoolExhausted`.
+2. Find the sender: `docker logs --since 5m desk-api-hooks | grep webhooks | grep -o 'x-real-ip":"[0-9.]*' | sort | uniq -c | sort -rn | head`. A workspace being migrated, or a provider replaying a backlog, is the usual cause. Ask the sender to stop the replay.
+3. Check the queue: `WabaIngestBacklogGrowing` means the worker is behind (`desk-worker-1` CPU, then Postgres). The jobs are not lost; Meta and providers retry anything not answered with 200.
+4. Do not restart the API to clear it: the stuck connections come back with the next burst.

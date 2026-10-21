@@ -919,7 +919,9 @@
           }
         },
         "branchAdd": "Dodaj krok dla „{title}”",
-        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania."
+        "faqEnds": "Ten wycofany krok kończy tę część: przepływ zawsze idzie dalej wyjściem Brak dopasowania.",
+        "flowMenu": "Opcje: {name}",
+        "renameFlow": "Zmień nazwę przepływu"
       },
       "formsCore": {
         "helpers": {

@@ -84,6 +84,7 @@ services:
       - ../observability/resource-limits.rules.yml:/etc/prometheus/resource-limits.rules.yml:ro
       - ../observability/cache-hit-rate.rules.yml:/etc/prometheus/cache-hit-rate.rules.yml:ro
       - ../observability/p0-failure-modes.rules.yml:/etc/prometheus/p0-failure-modes.rules.yml:ro
+      - ../observability/webhook-ingest.rules.yml:/etc/prometheus/webhook-ingest.rules.yml:ro
       - promdata:/prometheus
     secrets: [obs_metrics_token]
     depends_on:

@@ -52,6 +52,16 @@ before it migrates and stops if that dump fails.
 
 Keep `.env` safe: losing `CREDENTIALS_ENCRYPTION_KEY` makes stored channel credentials unreadable.
 
+## Webhook API (`desk-api-hooks`)
+
+The public webhook receiver runs in its own container, outside the blue/green slots, so a webhook flood cannot slow the dashboard API (and the reverse).
+
+- **Route:** Traefik sends `/v2/public/webhooks/*` to `desk-api-hooks` (`traefik-desk.yml.template`, priority 200). The service is a failover: while the container answers `/health` it gets the traffic; otherwise the live slot's API does, so a restart or a failed start never refuses a webhook.
+- **Release:** `ci-entry.sh` restarts it on the new tag (`HOOKS_TAG` in `.env`) after the idle slot is healthy and before the traffic switch. It is a warning, not a failure, if it does not come up; a rollback puts it back on the previous tag.
+- **Pools:** every API process has two small extra DB pools, `WEBHOOK_DB_POOL_MAX` (6) and `HEALTH_DB_POOL_MAX` (2), so webhooks and `/ready` do not queue behind the dashboard's pool. Postgres `max_connections=100` covers both slots, the hooks container and the worker at these sizes.
+- **Memory:** API slots 1536m, hooks 1g, Postgres 2g (`PG_SHARED_BUFFERS=512MB`, `PG_EFFECTIVE_CACHE_SIZE=1536MB` in `.env.example`; set the same in the server's `.env`). The first `compose up` after this change recreates Postgres (a few seconds of downtime): take it at a quiet hour.
+- **Alerts:** `deploy/observability/webhook-ingest.rules.yml` (webhook rate and p95, DB pool full, `waba-ingest` backlog); Prometheus scrapes the container as job `crm-api-hooks`. Runbook: `docs/runbooks/p0-failure-modes.md#webhookflood`. Connections idle in a transaction are not alerted: no Postgres exporter is deployed.
+
 ## Not set up
 
 Outgoing mail (set `SMTP_*` in `.env`, then `docker compose up -d api worker`): until then sign-up verification and password
