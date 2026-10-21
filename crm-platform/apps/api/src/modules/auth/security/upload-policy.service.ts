@@ -188,7 +188,8 @@ const MOV_FIRST_ATOMS = new Set(['ftyp', 'moov', 'wide', 'mdat', 'free', 'skip',
 
 /** Text that is really markup or script is refused even under a .txt name. */
 function looksLikeText(b: Buffer): boolean {
-  const head = b.subarray(0, 1024).toString('utf8').toLowerCase();
+  // 64 KB, not 1 KB: padding must not hide markup from the check (SEC-UPLOAD-2)
+  const head = b.subarray(0, 65536).toString('utf8').toLowerCase();
   if (/<\s*(html|script|svg|\?php|iframe|object|embed)/.test(head)) return false;
   return !b.subarray(0, 1024).includes(0); // NUL bytes: binary
 }

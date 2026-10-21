@@ -1,3 +1,4 @@
+import { isSafeSvg } from '../chatbot-widget/svg-safe';
 /**
  * The file's real type from its first bytes (the client's claimed type and file name are never trusted). Used for the invoice
  * logo upload (TW-PAYGW-007): png, jpeg, webp and svg, the types Reference's form accepts.
@@ -21,6 +22,6 @@ export function sniffImage(buf: Buffer): string | null {
     return 'image/webp';
   const head = buf.subarray(0, 512).toString('utf8').trimStart().toLowerCase();
   if (/^(<\?xml[^>]*>\s*)?(<!--[\s\S]*?-->\s*)?(<!doctype svg[^>]*>\s*)?<svg[\s>]/.test(head))
-    return 'image/svg+xml';
+    return isSafeSvg(buf) ? 'image/svg+xml' : null; // active SVG (script, links, entities) is refused (SEC-UPLOAD-1)
   return null;
 }
